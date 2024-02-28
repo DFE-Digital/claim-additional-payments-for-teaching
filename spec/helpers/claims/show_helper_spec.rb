@@ -13,7 +13,7 @@ RSpec.describe Claims::ShowHelper do
     end
 
     context "with a EarlyCareerPayments policy" do
-      let(:policy) { EarlyCareerPayments }
+      let(:policy) { Policies::EarlyCareerPayments }
 
       it "returns the correct content block" do
         expect(helper.claim_submitted_title(claim)).to include("You applied for an early-career payment")
@@ -39,7 +39,7 @@ RSpec.describe Claims::ShowHelper do
     end
 
     context "with a EarlyCareerPayments policy" do
-      let(:policy) { EarlyCareerPayments }
+      let(:policy) { Policies::EarlyCareerPayments }
 
       it "returns the correct css sizing" do
         expect(helper.shared_view_css_class_size(claim)).to eq "l"
@@ -57,7 +57,7 @@ RSpec.describe Claims::ShowHelper do
     end
 
     context "with a EarlyCareerPayments policy" do
-      let(:policy) { EarlyCareerPayments }
+      let(:policy) { Policies::EarlyCareerPayments }
 
       it { is_expected.to eq "early-career payment" }
     end

@@ -14,9 +14,9 @@ RSpec.feature "Admin claim filtering" do
 
   let!(:student_loans_claims_for_mette) { create_list(:claim, 4, :submitted, policy: StudentLoans, assigned_to: mette) }
   let!(:student_loans_claims_for_valentino) { create_list(:claim, 1, :submitted, policy: StudentLoans, assigned_to: valentino) }
-  let!(:early_career_payments_claims_for_mary) { create_list(:claim, 2, :submitted, policy: EarlyCareerPayments, assigned_to: mary) }
-  let!(:early_career_payments_claims_for_mette) { create_list(:claim, 6, :submitted, policy: EarlyCareerPayments, assigned_to: mette) }
-  let!(:early_career_payments_claims_failed_bank_validation) { create_list(:claim, 2, :submitted, :bank_details_not_validated, policy: EarlyCareerPayments, assigned_to: mette) }
+  let!(:early_career_payments_claims_for_mary) { create_list(:claim, 2, :submitted, policy: Policies::EarlyCareerPayments, assigned_to: mary) }
+  let!(:early_career_payments_claims_for_mette) { create_list(:claim, 6, :submitted, policy: Policies::EarlyCareerPayments, assigned_to: mette) }
+  let!(:early_career_payments_claims_failed_bank_validation) { create_list(:claim, 2, :submitted, :bank_details_not_validated, policy: Policies::EarlyCareerPayments, assigned_to: mette) }
   let!(:lup_claims_unassigned) { create_list(:claim, 2, :submitted, policy: LevellingUpPremiumPayments) }
   let!(:held_claims) { create_list(:claim, 2, :submitted, :held) }
   let!(:approved_awaiting_qa_claims) { create_list(:claim, 2, :approved, :flagged_for_qa, policy: LevellingUpPremiumPayments) }

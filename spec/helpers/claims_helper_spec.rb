@@ -113,7 +113,7 @@ describe ClaimsHelper do
     end
 
     context "for a claim with a policy of EarlyCareerPayments" do
-      let(:policy) { EarlyCareerPayments }
+      let(:policy) { Policies::EarlyCareerPayments }
 
       context "logged in with tid" do
         let(:logged_in_with_tid) { true }
@@ -293,7 +293,7 @@ describe ClaimsHelper do
     end
 
     context "Early-Career Payment policy" do
-      let(:policy) { EarlyCareerPayments }
+      let(:policy) { Policies::EarlyCareerPayments }
       let(:eligibility) { build(:early_career_payments_eligibility) }
       let(:masters_doctoral_trait) { :with_postgraduate_doctoral_loan_without_postgraduate_masters_loan_when_has_student_loan }
 
@@ -346,7 +346,7 @@ describe ClaimsHelper do
       end
 
       context "when claimant answered 'No' to 'Paying off Student Loan' and 'Yes' to 'Take out a Postgraduate Masters or Doctoral Loan'" do
-        let(:claim) { build(:claim, student_loan_trait, masters_doctoral_trait, policy: EarlyCareerPayments, has_masters_doctoral_loan: true, eligibility: eligibility) }
+        let(:claim) { build(:claim, student_loan_trait, masters_doctoral_trait, policy: Policies::EarlyCareerPayments, has_masters_doctoral_loan: true, eligibility: eligibility) }
         let(:eligibility) { build(:early_career_payments_eligibility) }
         let(:student_loan_trait) { :with_no_student_loan }
 
@@ -363,7 +363,7 @@ describe ClaimsHelper do
       end
 
       context "when claimant answered 'No' to 'Paying off Student Loan' and 'No' to 'Take out a Postgraduate Masters or Doctoral Loan'" do
-        let(:claim) { build(:claim, student_loan_trait, masters_doctoral_trait, policy: EarlyCareerPayments, has_masters_doctoral_loan: false, eligibility: eligibility) }
+        let(:claim) { build(:claim, student_loan_trait, masters_doctoral_trait, policy: Policies::EarlyCareerPayments, has_masters_doctoral_loan: false, eligibility: eligibility) }
         let(:eligibility) { build(:early_career_payments_eligibility) }
         let(:student_loan_trait) { :with_no_student_loan }
 

@@ -94,7 +94,7 @@ RSpec.describe JourneySubjectEligibilityChecker do
     subject { described_class.new(claim_year: claim_year, itt_year: itt_year).current_subject_symbols(policy) }
 
     context "ECP" do
-      let(:policy) { EarlyCareerPayments }
+      let(:policy) { Policies::EarlyCareerPayments }
 
       context "2022 claim year" do
         let(:claim_year) { AcademicYear.new(2022) }
@@ -338,7 +338,7 @@ RSpec.describe JourneySubjectEligibilityChecker do
     subject { described_class.new(claim_year: claim_year, itt_year: itt_year).future_subject_symbols(policy) }
 
     context "ECP" do
-      let(:policy) { EarlyCareerPayments }
+      let(:policy) { Policies::EarlyCareerPayments }
 
       context "2022 claim year" do
         let(:claim_year) { AcademicYear.new(2022) }
@@ -563,7 +563,7 @@ RSpec.describe JourneySubjectEligibilityChecker do
     subject { described_class.new(claim_year: claim_year, itt_year: itt_year).current_and_future_subject_symbols(policy) }
 
     context "ECP" do
-      let(:policy) { EarlyCareerPayments }
+      let(:policy) { Policies::EarlyCareerPayments }
 
       context "2022 claim year" do
         let(:claim_year) { AcademicYear.new(2022) }
@@ -791,10 +791,10 @@ RSpec.describe JourneySubjectEligibilityChecker do
     let(:ineligible_ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible, itt_academic_year: itt_year) }
     let(:ineligible_lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible, itt_academic_year: itt_year) }
 
-    let(:eligible_ecp_claim) { build(:claim, :first_lup_claim_year, policy: EarlyCareerPayments, eligibility: eligible_ecp_eligibility) }
+    let(:eligible_ecp_claim) { build(:claim, :first_lup_claim_year, policy: Policies::EarlyCareerPayments, eligibility: eligible_ecp_eligibility) }
     let(:eligible_lup_claim) { build(:claim, :first_lup_claim_year, policy: LevellingUpPremiumPayments, eligibility: eligible_lup_eligibility) }
 
-    let(:ineligible_ecp_claim) { build(:claim, :first_lup_claim_year, policy: EarlyCareerPayments, eligibility: ineligible_ecp_eligibility) }
+    let(:ineligible_ecp_claim) { build(:claim, :first_lup_claim_year, policy: Policies::EarlyCareerPayments, eligibility: ineligible_ecp_eligibility) }
     let(:ineligible_lup_claim) { build(:claim, :first_lup_claim_year, policy: LevellingUpPremiumPayments, eligibility: ineligible_lup_eligibility) }
 
     context "when academic year is 2022" do
@@ -906,7 +906,7 @@ RSpec.describe JourneySubjectEligibilityChecker do
         let(:ineligible_ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible, eligible_itt_subject: :mathematics, itt_academic_year: itt_year) }
         let(:ineligible_lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible, eligible_itt_subject: :mathematics, itt_academic_year: itt_year) }
 
-        let(:ineligible_ecp_claim) { build(:claim, :first_lup_claim_year, policy: EarlyCareerPayments, eligibility: ineligible_ecp_eligibility) }
+        let(:ineligible_ecp_claim) { build(:claim, :first_lup_claim_year, policy: Policies::EarlyCareerPayments, eligibility: ineligible_ecp_eligibility) }
         let(:ineligible_lup_claim) { build(:claim, :first_lup_claim_year, policy: LevellingUpPremiumPayments, eligibility: ineligible_lup_eligibility) }
 
         subject { described_class.new(claim_year: claim_year, itt_year: itt_year).next_eligible_claim_year_after_current_claim_year(CurrentClaim.new(claims: [ineligible_ecp_claim, ineligible_lup_claim])) }
@@ -920,7 +920,7 @@ RSpec.describe JourneySubjectEligibilityChecker do
         let(:ineligible_ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible, eligible_itt_subject: :mathematics, itt_academic_year: itt_year) }
         let(:ineligible_lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible, eligible_itt_subject: :mathematics, itt_academic_year: itt_year) }
 
-        let(:ineligible_ecp_claim) { build(:claim, :first_lup_claim_year, policy: EarlyCareerPayments, eligibility: ineligible_ecp_eligibility) }
+        let(:ineligible_ecp_claim) { build(:claim, :first_lup_claim_year, policy: Policies::EarlyCareerPayments, eligibility: ineligible_ecp_eligibility) }
         let(:ineligible_lup_claim) { build(:claim, :first_lup_claim_year, policy: LevellingUpPremiumPayments, eligibility: ineligible_lup_eligibility) }
 
         subject { described_class.new(claim_year: claim_year, itt_year: itt_year).next_eligible_claim_year_after_current_claim_year(CurrentClaim.new(claims: [ineligible_ecp_claim, ineligible_lup_claim])) }
@@ -938,7 +938,7 @@ RSpec.describe JourneySubjectEligibilityChecker do
         let(:ineligible_ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible, eligible_itt_subject: :mathematics, itt_academic_year: itt_year) }
         let(:ineligible_lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible, eligible_itt_subject: :mathematics, itt_academic_year: itt_year) }
 
-        let(:ineligible_ecp_claim) { build(:claim, :first_lup_claim_year, policy: EarlyCareerPayments, eligibility: ineligible_ecp_eligibility) }
+        let(:ineligible_ecp_claim) { build(:claim, :first_lup_claim_year, policy: Policies::EarlyCareerPayments, eligibility: ineligible_ecp_eligibility) }
         let(:ineligible_lup_claim) { build(:claim, :first_lup_claim_year, policy: LevellingUpPremiumPayments, eligibility: ineligible_lup_eligibility) }
 
         subject { described_class.new(claim_year: claim_year, itt_year: itt_year).next_eligible_claim_year_after_current_claim_year(CurrentClaim.new(claims: [ineligible_ecp_claim, ineligible_lup_claim])) }
@@ -952,11 +952,11 @@ RSpec.describe JourneySubjectEligibilityChecker do
     subject { described_class.first_eligible_itt_year_for_subject(policy: policy, claim_year: claim_year, subject_symbol: subject_symbol) }
 
     context "string instead of symbol" do
-      specify { expect { described_class.first_eligible_itt_year_for_subject(policy: EarlyCareerPayments, claim_year: AcademicYear.new(2022), subject_symbol: "mathematics") }.to raise_error "[mathematics] is not a symbol" }
+      specify { expect { described_class.first_eligible_itt_year_for_subject(policy: Policies::EarlyCareerPayments, claim_year: AcademicYear.new(2022), subject_symbol: "mathematics") }.to raise_error "[mathematics] is not a symbol" }
     end
 
     context "ECP" do
-      let(:policy) { EarlyCareerPayments }
+      let(:policy) { Policies::EarlyCareerPayments }
 
       context "2022 claim year" do
         let(:claim_year) { AcademicYear.new(2022) }

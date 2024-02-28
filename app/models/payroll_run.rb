@@ -73,7 +73,7 @@ class PayrollRun < ApplicationRecord
 
     payments.includes(claims: [:eligibility]).includes(:topups).map do |payment|
       payment.claims.each do |claim|
-        if policy == :all || claim.eligibility_type == policy::Eligibility.to_s
+        if policy == :all || claim.eligibility_type == "#{policy}::Eligibility"
           topup_claim_ids = payment.topups.pluck(:claim_id)
           line_item = topup_claim_ids.include?(claim.id) ? payment.topups.find { |t| t.claim_id == claim.id } : claim
           case filter

@@ -3,7 +3,7 @@ require "ineligibility_reason_checker"
 
 RSpec.describe IneligibilityReasonChecker do
   let(:academic_year) { AcademicYear.new(2022) }
-  let(:ecp_claim) { build(:claim, policy: EarlyCareerPayments, academic_year:, eligibility: ecp_eligibility, logged_in_with_tid:, qualifications_details_check:) }
+  let(:ecp_claim) { build(:claim, policy: Policies::EarlyCareerPayments, academic_year:, eligibility: ecp_eligibility, logged_in_with_tid:, qualifications_details_check:) }
   let(:lup_claim) { build(:claim, policy: LevellingUpPremiumPayments, academic_year:, eligibility: lup_eligibility, logged_in_with_tid:, qualifications_details_check:) }
   let(:logged_in_with_tid) { nil }
   let(:qualifications_details_check) { nil }
@@ -14,10 +14,10 @@ RSpec.describe IneligibilityReasonChecker do
   before { create(:policy_configuration, :additional_payments, current_academic_year: academic_year) }
 
   # sanity check of factories
-  specify { expect(EarlyCareerPayments::SchoolEligibility.new(school_eligible_for_ecp_but_not_lup)).to be_eligible }
+  specify { expect(Policies::EarlyCareerPayments::SchoolEligibility.new(school_eligible_for_ecp_but_not_lup)).to be_eligible }
   specify { expect(LevellingUpPremiumPayments::SchoolEligibility.new(school_eligible_for_ecp_but_not_lup)).not_to be_eligible }
 
-  specify { expect(EarlyCareerPayments::SchoolEligibility.new(school_ineligible_for_both_ecp_and_lup)).not_to be_eligible }
+  specify { expect(Policies::EarlyCareerPayments::SchoolEligibility.new(school_ineligible_for_both_ecp_and_lup)).not_to be_eligible }
   specify { expect(LevellingUpPremiumPayments::SchoolEligibility.new(school_ineligible_for_both_ecp_and_lup)).not_to be_eligible }
 
   let(:current_claim) { CurrentClaim.new(claims: [ecp_claim, lup_claim]) }
@@ -167,7 +167,7 @@ RSpec.describe IneligibilityReasonChecker do
       let(:school) { build(:school, :combined_journey_eligibile_for_all) }
       let(:ecp_eligibility) { build(:early_career_payments_eligibility, :trainee_teacher, current_school: school) }
       let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :trainee_teacher, current_school: school) }
-      let(:ecp_claim) { build(:claim, policy: EarlyCareerPayments, academic_year: "2024/2025", eligibility: ecp_eligibility) }
+      let(:ecp_claim) { build(:claim, policy: Policies::EarlyCareerPayments, academic_year: "2024/2025", eligibility: ecp_eligibility) }
       let(:lup_claim) { build(:claim, policy: LevellingUpPremiumPayments, academic_year: "2024/2025", eligibility: lup_eligibility) }
 
       it { is_expected.to eq(:trainee_in_last_policy_year) }

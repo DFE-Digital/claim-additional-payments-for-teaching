@@ -18,7 +18,7 @@ module AutomatedChecks
 
       let(:claim_arg) { ecp_claim }
       let(:ecp_claim) { create(:claim, :submitted, policy: policy) }
-      let(:policy) { EarlyCareerPayments }
+      let(:policy) { Policies::EarlyCareerPayments }
 
       before do
         if defined?(data) && data

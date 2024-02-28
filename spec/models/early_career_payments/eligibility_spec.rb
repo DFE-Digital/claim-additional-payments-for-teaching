@@ -7,7 +7,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     let(:early_career_payments_eligibility) { build(:early_career_payments_eligibility) }
 
     it "has a policy class of 'EarlyCareerPayments'" do
-      expect(early_career_payments_eligibility.policy).to eq EarlyCareerPayments
+      expect(early_career_payments_eligibility.policy).to eq Policies::EarlyCareerPayments
     end
   end
 
@@ -469,7 +469,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
 
   describe "#set_qualifications_from_dqt_record" do
     let(:eligibility) { build(:early_career_payments_eligibility, claim:, itt_academic_year:, eligible_itt_subject:, qualification:) }
-    let(:claim) { build(:claim, policy: EarlyCareerPayments, qualifications_details_check:) }
+    let(:claim) { build(:claim, policy: Policies::EarlyCareerPayments, qualifications_details_check:) }
     let(:itt_academic_year) { AcademicYear.new(2021) }
     let(:eligible_itt_subject) { :mathematics }
     let(:qualification) { :postgraduate_itt }

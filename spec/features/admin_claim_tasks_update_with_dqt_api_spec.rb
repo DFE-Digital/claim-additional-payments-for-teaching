@@ -21,7 +21,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
       jump_to_claim_journey_page(claim, "check-your-answers")
 
-      (claim_attributes[:policy] == EarlyCareerPayments) ? click_on("Accept and send") : click_on("Confirm and send")
+      (claim_attributes[:policy] == Policies::EarlyCareerPayments) ? click_on("Accept and send") : click_on("Confirm and send")
     end
 
     claim
@@ -131,7 +131,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
   end
 
   context "with EarlyCareerPayments policy" do
-    let(:policy) { EarlyCareerPayments }
+    let(:policy) { Policies::EarlyCareerPayments }
 
     context "with submitted claim" do
       let(:claim) do
@@ -700,7 +700,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             itt_start_date: Date.new(claim.eligibility.first_eligible_itt_academic_year.start_year, 9, 1),
             qts_award_date: Date.new(claim.eligibility.first_eligible_itt_academic_year.start_year, 9, 2),
             itt_subjects: ["mathematics"],
-            itt_subject_codes: [EarlyCareerPayments::DqtRecord::ELIGIBLE_HECOS_CODES[:mathematics].first]
+            itt_subject_codes: [Policies::EarlyCareerPayments::DqtRecord::ELIGIBLE_HECOS_CODES[:mathematics].first]
           }
         end
 
@@ -757,7 +757,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
                 1
               ),
               itt_subjects: ["applied mathematics", "maths and statistics", :maths],
-              itt_subject_codes: [EarlyCareerPayments::DqtRecord::ELIGIBLE_HECOS_CODES[:mathematics].first]
+              itt_subject_codes: [Policies::EarlyCareerPayments::DqtRecord::ELIGIBLE_HECOS_CODES[:mathematics].first]
             }
           end
 

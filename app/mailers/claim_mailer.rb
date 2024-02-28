@@ -6,8 +6,7 @@ class ClaimMailer < ApplicationMailer
   def submitted(claim)
     unknown_policy_check(claim)
     set_common_instance_variables(claim)
-
-    if [StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
+    if [StudentLoans, Policies::EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
       personalisation = {
         first_name: @claim.first_name,
         ref_number: @claim.reference,
@@ -22,7 +21,7 @@ class ClaimMailer < ApplicationMailer
     unknown_policy_check(claim)
     set_common_instance_variables(claim)
 
-    if [StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
+    if [StudentLoans, Policies::EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
       personalisation = {
         first_name: @claim.first_name,
         ref_number: @claim.reference,
@@ -37,7 +36,7 @@ class ClaimMailer < ApplicationMailer
     unknown_policy_check(claim)
     set_common_instance_variables(claim)
 
-    if [StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
+    if [StudentLoans, Policies::EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
       personalisation = {
         first_name: @claim.first_name,
         ref_number: @claim.reference,
@@ -54,7 +53,7 @@ class ClaimMailer < ApplicationMailer
     unknown_policy_check(claim)
     set_common_instance_variables(claim)
 
-    if [StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
+    if [StudentLoans, Policies::EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
       personalisation = {
         first_name: @claim.first_name,
         ref_number: @claim.reference,
@@ -117,7 +116,7 @@ class ClaimMailer < ApplicationMailer
   end
 
   def unknown_policy_check(claim)
-    return if [StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
+    return if [StudentLoans, Policies::EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
     raise ArgumentError, "Unknown claim policy: #{claim.policy}"
   end
 end

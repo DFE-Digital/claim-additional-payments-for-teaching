@@ -25,7 +25,7 @@ RSpec.feature "Backlinking during a claim" do
     create(:policy_configuration, :additional_payments)
     lup_school = create(:school, :levelling_up_premium_payments_eligible)
 
-    visit new_claim_path(EarlyCareerPayments.routing_name)
+    visit new_claim_path(Policies::EarlyCareerPayments.routing_name)
     # - Sign in or continue page
     expect(page).to have_text("Use DfE Identity to sign in")
     expect(page).to have_link("Back")
@@ -50,7 +50,7 @@ RSpec.feature "Backlinking during a claim" do
     create(:policy_configuration, :additional_payments)
     lup_school = create(:school, :levelling_up_premium_payments_eligible)
 
-    visit new_claim_path(EarlyCareerPayments.routing_name)
+    visit new_claim_path(Policies::EarlyCareerPayments.routing_name)
 
     # - Sign in or continue page
     expect(page).to have_text("Use DfE Identity to sign in")

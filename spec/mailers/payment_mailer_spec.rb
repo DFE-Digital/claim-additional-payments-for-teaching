@@ -107,7 +107,7 @@ RSpec.describe PaymentMailer, type: :mailer do
         }
         [
           build(:claim, :approved, personal_details.merge(eligibility: student_loans_eligibility)),
-          build(:claim, :approved, personal_details.merge(policy: EarlyCareerPayments))
+          build(:claim, :approved, personal_details.merge(policy: Policies::EarlyCareerPayments))
         ]
       end
       let(:mail) { PaymentMailer.confirmation(payment) }

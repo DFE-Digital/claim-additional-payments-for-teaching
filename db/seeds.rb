@@ -8,7 +8,7 @@
 
 if Rails.env.development? || ENV["ENVIRONMENT_NAME"] == "review"
   PolicyConfiguration.create!(policy_types: [StudentLoans], current_academic_year: AcademicYear.current)
-  PolicyConfiguration.create!(policy_types: [EarlyCareerPayments, LevellingUpPremiumPayments], current_academic_year: AcademicYear.current)
+  PolicyConfiguration.create!(policy_types: [Policies::EarlyCareerPayments, LevellingUpPremiumPayments], current_academic_year: AcademicYear.current)
 
   ENV["FIXTURES_PATH"] = "spec/fixtures"
   ENV["FIXTURES"] = "local_authorities,local_authority_districts,schools"
@@ -67,7 +67,7 @@ if Rails.env.development?
       create_list(:claim, 1, :rejected, policy: policy)
       create_list(:claim, 1, :unverified, policy: policy)
 
-      policy = EarlyCareerPayments
+      policy = Policies::EarlyCareerPayments
       create_list(:claim, 12, :approved, policy: policy)
       create_list(:claim, 1, :submitted, policy: policy)
       create_list(:claim, 1, :rejected, policy: policy)

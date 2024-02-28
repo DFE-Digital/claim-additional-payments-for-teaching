@@ -67,7 +67,7 @@ module AutomatedChecks
         subject(:perform) { identity.perform }
 
         [
-          EarlyCareerPayments,
+          Policies::EarlyCareerPayments,
           StudentLoans
         ].each do |policy|
           context "with policy #{policy}" do

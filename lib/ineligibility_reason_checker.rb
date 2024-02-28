@@ -40,7 +40,7 @@ class IneligibilityReasonChecker
 
     [
       school.present?,
-      !EarlyCareerPayments::SchoolEligibility.new(school).eligible?,
+      !Policies::EarlyCareerPayments::SchoolEligibility.new(school).eligible?,
       !LevellingUpPremiumPayments::SchoolEligibility.new(school).eligible?
     ].all?
   end
@@ -95,7 +95,7 @@ class IneligibilityReasonChecker
   end
 
   def would_be_eligible_for_one_policy_only_except_for_insufficient_teaching?(policy)
-    other_policy = (policy == EarlyCareerPayments) ? LevellingUpPremiumPayments : EarlyCareerPayments
+    other_policy = (policy == Policies::EarlyCareerPayments) ? LevellingUpPremiumPayments : Policies::EarlyCareerPayments
 
     [
       eligible_with_sufficient_teaching?(policy),
@@ -119,12 +119,12 @@ class IneligibilityReasonChecker
   end
 
   def would_be_eligible_for_ecp_only_except_for_insufficient_teaching?
-    would_be_eligible_for_one_policy_only_except_for_insufficient_teaching?(EarlyCareerPayments)
+    would_be_eligible_for_one_policy_only_except_for_insufficient_teaching?(Policies::EarlyCareerPayments)
   end
 
   def would_be_eligible_for_both_ecp_and_lup_except_for_insufficient_teaching?
     [
-      eligible_with_sufficient_teaching?(EarlyCareerPayments),
+      eligible_with_sufficient_teaching?(Policies::EarlyCareerPayments),
       eligible_with_sufficient_teaching?(LevellingUpPremiumPayments)
     ].all?
   end
@@ -134,7 +134,7 @@ class IneligibilityReasonChecker
   end
 
   def ecp_subject_options
-    JourneySubjectEligibilityChecker.new(claim_year: @current_claim.policy_year, itt_year: @current_claim.eligibility.itt_academic_year).current_and_future_subject_symbols(EarlyCareerPayments)
+    JourneySubjectEligibilityChecker.new(claim_year: @current_claim.policy_year, itt_year: @current_claim.eligibility.itt_academic_year).current_and_future_subject_symbols(Policies::EarlyCareerPayments)
   end
 
   def bad_itt_year_for_ecp?
@@ -146,7 +146,7 @@ class IneligibilityReasonChecker
   end
 
   def school_eligible_for_ecp_but_not_lup?(school)
-    EarlyCareerPayments::SchoolEligibility.new(school).eligible? && !LevellingUpPremiumPayments::SchoolEligibility.new(school).eligible?
+    Policies::EarlyCareerPayments::SchoolEligibility.new(school).eligible? && !LevellingUpPremiumPayments::SchoolEligibility.new(school).eligible?
   end
 
   def bad_itt_subject_for_ecp?

@@ -5,7 +5,9 @@ module Policies
     LevellingUpPremiumPayments
   ].freeze
 
-  AMENDABLE_ELIGIBILITY_ATTRIBUTES = POLICIES.map { |policy| policy::Eligibility::AMENDABLE_ATTRIBUTES }.flatten.freeze
+  AMENDABLE_ELIGIBILITY_ATTRIBUTES = POLICIES.map do |policy|
+    "#{policy}::Eligibility::AMENDABLE_ATTRIBUTES".constantize
+  end.flatten.freeze
 
   def self.all
     POLICIES
@@ -25,5 +27,15 @@ module Policies
   #
   def self.[](policy_type)
     POLICIES.find { |policy| policy.policy_type == policy_type }
+  end
+
+  # Map PolicyConfiguration.policy_types and Claim.policy_options_provided to the Policies namespace
+  #
+  def self.constantize(policy)
+    if %w[EarlyCareerPayments].include?(policy)
+      "Policies::#{policy}"
+    else
+      policy
+    end.constantize
   end
 end

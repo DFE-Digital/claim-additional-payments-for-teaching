@@ -7,8 +7,8 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
     before { create(:policy_configuration, :additional_payments) }
 
     scenario "ECP-only school with trainee teacher" do
-      visit landing_page_path(EarlyCareerPayments.routing_name)
-      expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
+      visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
+      expect(page).to have_link(href: "mailto:#{Policies::EarlyCareerPayments.feedback_email}")
 
       # - Landing (start)
       expect(page).to have_text(I18n.t("early_career_payments.landing_page"))

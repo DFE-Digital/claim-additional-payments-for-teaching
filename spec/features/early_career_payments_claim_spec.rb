@@ -11,9 +11,9 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
   let(:itt_year) { current_academic_year - 3 }
 
   scenario "Teacher makes claim for 'Early-Career Payments' claim" do
-    visit landing_page_path(EarlyCareerPayments.routing_name)
+    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
     expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
-    expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
+    expect(page).to have_link(href: "mailto:#{Policies::EarlyCareerPayments.feedback_email}")
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
@@ -32,7 +32,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     choose "Yes"
     click_on "Continue"
 
-    claim = Claim.by_policy(EarlyCareerPayments).order(:created_at).last
+    claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
     eligibility = claim.eligibility
 
     expect(eligibility.nqt_in_academic_year_after_itt).to eql true
@@ -159,7 +159,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
     # - What is your home address
     expect(page).to have_text(I18n.t("questions.address.home.title"))
-    expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+    expect(page).to have_link(href: claim_path(Policies::EarlyCareerPayments.routing_name, "address"))
 
     click_link(I18n.t("questions.address.home.link_to_manual_address"))
 
@@ -342,8 +342,8 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
   end
 
   scenario "Supply Teacher makes claim for 'Early Career Payments' with a contract to teach for entire term & employed directly by school" do
-    visit landing_page_path(EarlyCareerPayments.routing_name)
-    expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
+    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
+    expect(page).to have_link(href: "mailto:#{Policies::EarlyCareerPayments.feedback_email}")
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
@@ -362,7 +362,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     choose "Yes"
     click_on "Continue"
 
-    claim = Claim.by_policy(EarlyCareerPayments).order(:created_at).last
+    claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
     eligibility = claim.eligibility
 
     expect(eligibility.nqt_in_academic_year_after_itt).to eql true
@@ -500,8 +500,8 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
   end
 
   scenario "Teacher makes claim for 'Early Career Payments' without uplift school" do
-    visit landing_page_path(EarlyCareerPayments.routing_name)
-    expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
+    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
+    expect(page).to have_link(href: "mailto:#{Policies::EarlyCareerPayments.feedback_email}")
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
@@ -520,7 +520,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     choose "Yes"
     click_on "Continue"
 
-    claim = Claim.by_policy(EarlyCareerPayments).order(:created_at).last
+    claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
     eligibility = claim.eligibility
 
     expect(eligibility.nqt_in_academic_year_after_itt).to eql true
@@ -645,7 +645,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
     # - What is your home address
     expect(page).to have_text(I18n.t("questions.address.home.title"))
-    expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+    expect(page).to have_link(href: claim_path(Policies::EarlyCareerPayments.routing_name, "address"))
 
     click_link(I18n.t("questions.address.home.link_to_manual_address"))
 
@@ -1018,7 +1018,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
       # - What is your home address
       expect(page).to have_text(I18n.t("questions.address.home.title"))
-      expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+      expect(page).to have_link(href: claim_path(Policies::EarlyCareerPayments.routing_name, "address"))
 
       fill_in "Postcode", with: "SO16 9FX"
       click_on "Search"
@@ -1195,7 +1195,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     let!(:school) { create(:school, :early_career_payments_eligible) }
 
     scenario "Prevent eligible itt subject page loading form from browser Back navigation causing errors", js: true, flaky: true do
-      visit landing_page_path(EarlyCareerPayments.routing_name)
+      visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
       click_on "Start now"
 
       skip_tid

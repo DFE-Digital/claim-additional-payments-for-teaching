@@ -185,7 +185,7 @@ class CurrentClaim
   def main_policy
     return claims.first.policy if single_claim?
     return selected_policy if selected_policy.present?
-    return EarlyCareerPayments if ecp_or_lupp_claims?
+    return Policies::EarlyCareerPayments if ecp_or_lupp_claims?
 
     raise UnselectablePolicyError
   end

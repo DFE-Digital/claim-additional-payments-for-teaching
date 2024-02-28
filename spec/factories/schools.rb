@@ -53,7 +53,7 @@ FactoryBot.define do
     trait :early_career_payments_explicitly_eligible do
       early_career_payments_eligible
       local_authority_district { nil }
-      urn { EarlyCareerPayments::SchoolEligibility::SCHOOL_URNS_CONSIDERED_AS_ELIGIBLE_LOCAL_AUTHORITY_DISTRICT.sample }
+      urn { Policies::EarlyCareerPayments::SchoolEligibility::SCHOOL_URNS_CONSIDERED_AS_ELIGIBLE_LOCAL_AUTHORITY_DISTRICT.sample }
     end
 
     trait :early_career_payments_ineligible do

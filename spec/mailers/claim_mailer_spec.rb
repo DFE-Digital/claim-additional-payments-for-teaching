@@ -57,7 +57,7 @@ RSpec.describe ClaimMailer, type: :mailer do
   end
 
   # Characteristics common to all policies
-  [EarlyCareerPayments, StudentLoans, LevellingUpPremiumPayments].each do |policy|
+  [Policies::EarlyCareerPayments, StudentLoans, LevellingUpPremiumPayments].each do |policy|
     context "with a #{policy} claim" do
       let!(:policy_configuration) { create(:policy_configuration, policy.to_s.underscore) }
 
@@ -67,7 +67,7 @@ RSpec.describe ClaimMailer, type: :mailer do
 
         it_behaves_like "an email related to a claim using GOVUK Notify templates", policy
 
-        context "when EarlyCareerPayments", if: policy == EarlyCareerPayments do
+        context "when EarlyCareerPayments", if: policy == Policies::EarlyCareerPayments do
           it "uses the correct template" do
             expect(mail[:template_id].decoded).to eq "cb319af7-a769-42e4-8f01-5cbb9fc24846"
           end
@@ -92,7 +92,7 @@ RSpec.describe ClaimMailer, type: :mailer do
 
         it_behaves_like "an email related to a claim using GOVUK Notify templates", policy
 
-        context "when EarlyCareerPayments", if: policy == EarlyCareerPayments do
+        context "when EarlyCareerPayments", if: policy == Policies::EarlyCareerPayments do
           it "uses the correct template" do
             expect(mail[:template_id].decoded).to eq "3974db1c-c7dd-44cf-97b9-bb96d211a996"
           end
@@ -158,7 +158,7 @@ RSpec.describe ClaimMailer, type: :mailer do
           end
         end
 
-        context "when EarlyCareerPayments", if: policy == EarlyCareerPayments do
+        context "when EarlyCareerPayments", if: policy == Policies::EarlyCareerPayments do
           let(:expected_template_id) { "b78ffea4-a3d7-4c4a-b0f7-066744c6e79f" }
 
           include_examples "template id and personalisation keys"
@@ -183,7 +183,7 @@ RSpec.describe ClaimMailer, type: :mailer do
 
         it_behaves_like "an email related to a claim using GOVUK Notify templates", policy
 
-        context "when EarlyCareerPayments", if: policy == EarlyCareerPayments do
+        context "when EarlyCareerPayments", if: policy == Policies::EarlyCareerPayments do
           it "uses the correct template" do
             expect(mail[:template_id].decoded).to eq "0ef1e702-ea64-43a5-a084-330f2f51836e"
           end
@@ -260,7 +260,7 @@ RSpec.describe ClaimMailer, type: :mailer do
     before { create(:policy_configuration, policy.to_s.underscore) }
 
     context "with an EarlyCareerPayments claim" do
-      let(:policy) { EarlyCareerPayments }
+      let(:policy) { Policies::EarlyCareerPayments }
 
       it "has personalisation keys for: one time password, validity_duration,first_name and support_email_address" do
         expect(mail[:personalisation].decoded).to eq("{:email_subject=>\"Early-career payment email verification\", :first_name=>\"Ellie\", :one_time_password=>123124, :support_email_address=>\"earlycareerteacherpayments@digital.education.gov.uk\", :validity_duration=>\"15 minutes\"}")

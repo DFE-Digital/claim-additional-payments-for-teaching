@@ -39,7 +39,7 @@ module AutomatedChecks
           reference: "AB123456",
           surname: "ELIGIBLE",
           teacher_reference_number: "1234567",
-          policy: EarlyCareerPayments
+          policy: Policies::EarlyCareerPayments
         )
 
         claim.eligibility.update!(
@@ -324,7 +324,7 @@ module AutomatedChecks
               create(
                 :claim,
                 :submitted,
-                policy: EarlyCareerPayments,
+                policy: Policies::EarlyCareerPayments,
                 date_of_birth: Date.new(1990, 8, 23),
                 first_name: "Fred",
                 national_insurance_number: "QQ100000C",

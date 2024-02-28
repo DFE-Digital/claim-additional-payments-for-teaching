@@ -41,7 +41,7 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
   end
 
   [
-    {policy: EarlyCareerPayments, mobile_number: "07123456789", otp_code: "097543"},
+    {policy: Policies::EarlyCareerPayments, mobile_number: "07123456789", otp_code: "097543"},
     {policy: StudentLoans, mobile_number: "07723190022", otp_code: "123347"}
   ].each do |scenario|
     context "when claimant opts to provide a mobile number" do
@@ -62,7 +62,7 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
 
       scenario "when making a #{scenario[:policy]} claim" do
         claim = send(:"start_#{scenario[:policy].to_s.underscore}_claim")
-        if scenario[:policy] == EarlyCareerPayments
+        if scenario[:policy] == Policies::EarlyCareerPayments
           claim.eligibility = EarlyCareerPayments::Eligibility.new
           claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
           claim.update!(early_career_payments_personal_details_attributes)

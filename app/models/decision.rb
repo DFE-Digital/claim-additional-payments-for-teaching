@@ -38,7 +38,7 @@ class Decision < ApplicationRecord
 
   def self.rejected_reasons_for(policy)
     REJECTED_REASONS.dup.tap do |reasons|
-      reasons.delete(:induction) unless policy == EarlyCareerPayments
+      reasons.delete(:induction) unless policy == Policies::EarlyCareerPayments
     end
   end
 

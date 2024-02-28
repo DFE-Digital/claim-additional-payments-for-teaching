@@ -67,7 +67,7 @@ RSpec.feature "Combined journey with Teacher ID mobile check" do
   end
 
   def navigate_to_check_mobile_page
-    visit landing_page_path(EarlyCareerPayments.routing_name)
+    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
 
     # - Landing (start)
     click_on "Start now"

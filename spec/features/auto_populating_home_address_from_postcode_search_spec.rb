@@ -277,7 +277,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
 
       # - What is your home address
       expect(page).to have_text(I18n.t("questions.address.home.title"))
-      expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+      expect(page).to have_link(href: claim_path(Policies::EarlyCareerPayments.routing_name, "address"))
 
       fill_in "Postcode", with: "SO16 9FX"
       click_on "Search"
@@ -306,7 +306,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
 
       # - What is your home address
       expect(page).to have_text(I18n.t("questions.address.home.title"))
-      expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+      expect(page).to have_link(href: claim_path(Policies::EarlyCareerPayments.routing_name, "address"))
 
       fill_in "Postcode", with: "SO16 9FX"
       click_on "Search"
@@ -315,7 +315,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       expect(page).to have_text("SO16 9FX Change")
       expect(page).to have_text(I18n.t("questions.address.home.title"))
       expect(page).to have_text("Flat 11, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX")
-      expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+      expect(page).to have_link(href: claim_path(Policies::EarlyCareerPayments.routing_name, "address"))
 
       click_link(I18n.t("questions.address.home.i_cannot_find"))
 
@@ -346,7 +346,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
 
       # - What is your home address
       expect(page).to have_text(I18n.t("questions.address.home.title"))
-      expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+      expect(page).to have_link(href: claim_path(Policies::EarlyCareerPayments.routing_name, "address"))
 
       fill_in "Postcode", with: "SO16 9FX"
       click_on "Search"
@@ -355,7 +355,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       expect(page).to have_text("SO16 9FX Change")
       expect(page).to have_text(I18n.t("questions.address.home.title"))
       expect(page).to have_text("Flat 11, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX")
-      expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+      expect(page).to have_link(href: claim_path(Policies::EarlyCareerPayments.routing_name, "address"))
 
       click_link(I18n.t("questions.address.home.i_cannot_find"))
       click_link("Back")
@@ -370,23 +370,23 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
 
       # - What is your home address (1st time before making the request to change)
       expect(page).to have_text(I18n.t("questions.address.home.title"))
-      expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+      expect(page).to have_link(href: claim_path(Policies::EarlyCareerPayments.routing_name, "address"))
 
       fill_in "Postcode", with: "SO16 9FX"
       click_on "Search"
 
       # - Select your home address
       expect(page).to have_text(I18n.t("questions.address.home.title"))
-      expect(page).to have_link("Change", href: claim_path(EarlyCareerPayments.routing_name, "postcode-search"))
+      expect(page).to have_link("Change", href: claim_path(Policies::EarlyCareerPayments.routing_name, "postcode-search"))
       expect(page).to have_text("Flat 11, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX")
-      expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+      expect(page).to have_link(href: claim_path(Policies::EarlyCareerPayments.routing_name, "address"))
 
-      click_link("Change", href: claim_path(EarlyCareerPayments.routing_name, "postcode-search"))
+      click_link("Change", href: claim_path(Policies::EarlyCareerPayments.routing_name, "postcode-search"))
 
       # - What is your home address - Back to make the requested change
       expect(page).not_to have_text(I18n.t("questions.address.generic.title"))
       expect(page).to have_text(I18n.t("questions.address.home.title"))
-      expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+      expect(page).to have_link(href: claim_path(Policies::EarlyCareerPayments.routing_name, "address"))
 
       expect(page).to have_field("Postcode", with: "SO16 9FX")
 
@@ -395,11 +395,11 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
 
       # - Select your home address
       expect(page).to have_text(I18n.t("questions.address.home.title"))
-      expect(page).to have_link("Change", href: claim_path(EarlyCareerPayments.routing_name, "postcode-search"))
+      expect(page).to have_link("Change", href: claim_path(Policies::EarlyCareerPayments.routing_name, "postcode-search"))
       expect(page).to have_text("4, Wearside Road, London, SE13 7UN")
       expect(page).to have_text("5, Wearside Road, London, SE13 7UN")
       expect(page).to have_text("6, Wearside Road, London, SE13 7UN")
-      expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+      expect(page).to have_link(href: claim_path(Policies::EarlyCareerPayments.routing_name, "address"))
 
       choose "5_wearside_road_london_se13_7un"
       click_on "Continue"
@@ -434,7 +434,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
 
       # - What is your home address
       expect(page).to have_text(I18n.t("questions.address.home.title"))
-      expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+      expect(page).to have_link(href: claim_path(Policies::EarlyCareerPayments.routing_name, "address"))
 
       fill_in "Postcode", with: "DA1 5FZ"
       click_on "Search"

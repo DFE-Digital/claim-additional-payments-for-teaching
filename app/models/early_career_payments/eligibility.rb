@@ -70,7 +70,7 @@ module EarlyCareerPayments
     }, _prefix: :itt_subject
 
     def self.max_award_amount_in_pounds
-      AwardAmountCalculator.max_award_amount_in_pounds
+      Policies::EarlyCareerPayments::AwardAmountCalculator.max_award_amount_in_pounds
     end
 
     has_one :claim, as: :eligibility, inverse_of: :eligibility
@@ -98,7 +98,7 @@ module EarlyCareerPayments
     delegate :name, to: :current_school, prefix: true, allow_nil: true
 
     def policy
-      EarlyCareerPayments
+      Policies::EarlyCareerPayments
     end
 
     # Rescues from errors for assignments coming from LUP-only fields
@@ -157,7 +157,7 @@ module EarlyCareerPayments
     end
 
     def ecp_only_school?
-      EarlyCareerPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible? &&
+      Policies::EarlyCareerPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible? &&
         !LevellingUpPremiumPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible?
     end
 
@@ -179,7 +179,7 @@ module EarlyCareerPayments
       if args.values.any?(&:blank?)
         0
       else
-        AwardAmountCalculator.new(**args).amount_in_pounds
+        Policies::EarlyCareerPayments::AwardAmountCalculator.new(**args).amount_in_pounds
       end
     end
 

@@ -18,7 +18,7 @@ describe EarlyCareerPaymentsHelper do
   end
 
   describe "#eligible_itt_subject_translation" do
-    let(:ecp_claim) { build(:claim, :first_lup_claim_year, policy: EarlyCareerPayments, eligibility: ecp_eligibility) }
+    let(:ecp_claim) { build(:claim, :first_lup_claim_year, policy: Policies::EarlyCareerPayments, eligibility: ecp_eligibility) }
     let(:lup_claim) { build(:claim, :first_lup_claim_year, policy: LevellingUpPremiumPayments, eligibility: lup_eligibility) }
 
     subject { helper.eligible_itt_subject_translation(CurrentClaim.new(claims: [ecp_claim, lup_claim])) }

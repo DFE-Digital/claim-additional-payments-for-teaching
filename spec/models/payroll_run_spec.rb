@@ -69,7 +69,7 @@ RSpec.describe PayrollRun, type: :model do
         build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1500))
       ])
       payment_2 = build(:payment, claims: [
-        build(:claim, :approved, policy: EarlyCareerPayments, eligibility: build(:early_career_payments_eligibility, :eligible))
+        build(:claim, :approved, policy: Policies::EarlyCareerPayments, eligibility: build(:early_career_payments_eligibility, :eligible))
       ])
       payment_3 = build(:payment, claims: [
         build(:claim, :approved, policy: LevellingUpPremiumPayments, eligibility: build(:levelling_up_premium_payments_eligibility, :eligible))
@@ -78,7 +78,7 @@ RSpec.describe PayrollRun, type: :model do
       payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2, payment_3])
 
       expect(payroll_run.number_of_claims_for_policy(StudentLoans)).to eq(1)
-      expect(payroll_run.number_of_claims_for_policy(EarlyCareerPayments)).to eq(1)
+      expect(payroll_run.number_of_claims_for_policy(Policies::EarlyCareerPayments)).to eq(1)
       expect(payroll_run.number_of_claims_for_policy(LevellingUpPremiumPayments)).to eq(1)
     end
   end
@@ -89,10 +89,10 @@ RSpec.describe PayrollRun, type: :model do
         build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1500))
       ])
       payment_2 = build(:payment, claims: [
-        build(:claim, :approved, policy: EarlyCareerPayments, eligibility: build(:early_career_payments_eligibility, :eligible))
+        build(:claim, :approved, policy: Policies::EarlyCareerPayments, eligibility: build(:early_career_payments_eligibility, :eligible))
       ])
       payment_3 = build(:payment, claims: [
-        build(:claim, :approved, policy: EarlyCareerPayments, eligibility: build(:early_career_payments_eligibility, :eligible))
+        build(:claim, :approved, policy: Policies::EarlyCareerPayments, eligibility: build(:early_career_payments_eligibility, :eligible))
       ])
       payment_4 = build(:payment, claims: [
         build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1000))
@@ -105,7 +105,7 @@ RSpec.describe PayrollRun, type: :model do
       payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2, payment_3, payment_4, payment_5])
 
       expect(payroll_run.total_claim_amount_for_policy(StudentLoans)).to eq(3500)
-      expect(payroll_run.total_claim_amount_for_policy(EarlyCareerPayments)).to eq(4000)
+      expect(payroll_run.total_claim_amount_for_policy(Policies::EarlyCareerPayments)).to eq(4000)
       expect(payroll_run.total_claim_amount_for_policy(LevellingUpPremiumPayments)).to eq(2000)
     end
   end
@@ -137,7 +137,7 @@ RSpec.describe PayrollRun, type: :model do
       let(:matching_claims) do
         [
           create(:claim, :approved, personal_details.merge(policy: StudentLoans)),
-          create(:claim, :approved, personal_details.merge(policy: EarlyCareerPayments))
+          create(:claim, :approved, personal_details.merge(policy: Policies::EarlyCareerPayments))
         ]
       end
       let(:other_claim) { create(:claim, :approved) }

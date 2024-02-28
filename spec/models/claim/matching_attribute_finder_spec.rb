@@ -11,7 +11,7 @@ RSpec.describe Claim::MatchingAttributeFinder do
         bank_sort_code: "972654",
         academic_year: AcademicYear.new("2019"),
         building_society_roll_number: "123456789/ABCD",
-        policy: EarlyCareerPayments)
+        policy: Policies::EarlyCareerPayments)
     }
 
     let!(:student_loans_claim) {

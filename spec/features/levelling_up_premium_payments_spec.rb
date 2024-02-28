@@ -151,7 +151,7 @@ RSpec.feature "Levelling up premium payments claims" do
 
     # - What is your home address
     expect(page).to have_text(I18n.t("questions.address.home.title"))
-    expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+    expect(page).to have_link(href: claim_path(Policies::EarlyCareerPayments.routing_name, "address"))
 
     click_link(I18n.t("questions.address.home.link_to_manual_address"))
 

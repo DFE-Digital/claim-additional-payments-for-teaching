@@ -18,7 +18,7 @@ module AutomatedChecks
           policy: policy
         )
 
-        if policy == EarlyCareerPayments
+        if policy == Policies::EarlyCareerPayments
           claim.eligibility.update!(
             attributes_for(
               :"#{policy_underscored}_eligibility",
@@ -59,7 +59,7 @@ module AutomatedChecks
         subject(:perform) { census_subjects_taught.perform }
 
         [
-          EarlyCareerPayments,
+          Policies::EarlyCareerPayments,
           StudentLoans,
           LevellingUpPremiumPayments
         ].each do |policy|
@@ -68,7 +68,7 @@ module AutomatedChecks
             let(:policy_underscored) { policy.to_s.underscore }
             let(:teacher_reference_number) do
               case policy
-              when EarlyCareerPayments
+              when Policies::EarlyCareerPayments
                 9855512
               when LevellingUpPremiumPayments
                 1560179
@@ -93,7 +93,7 @@ module AutomatedChecks
                   policy: policy
                 )
 
-                if policy == EarlyCareerPayments
+                if policy == Policies::EarlyCareerPayments
                   claim.eligibility.update!(
                     attributes_for(
                       :"#{policy_underscored}_eligibility",
@@ -179,7 +179,7 @@ module AutomatedChecks
                 describe "#body" do
                   subject(:body) { note.body }
 
-                  it "returns 'Eligible' with the school workforce census subjects", if: policy == EarlyCareerPayments do
+                  it "returns 'Eligible' with the school workforce census subjects", if: policy == Policies::EarlyCareerPayments do
                     expect(subject).to eq("[School Workforce Census] - Eligible:\n<pre>Subject 1: Mathematics\nSubject 2: Mathematics\n</pre>\n")
                   end
 
@@ -249,7 +249,7 @@ module AutomatedChecks
                 describe "#body" do
                   subject(:body) { note.body }
 
-                  it "returns 'Ineligible' with the school workforce census subjects", if: policy == EarlyCareerPayments do
+                  it "returns 'Ineligible' with the school workforce census subjects", if: policy == Policies::EarlyCareerPayments do
                     expect(subject).to eq("[School Workforce Census] - Ineligible:\n<pre>Subject 1: Problem Solving, Reasoning and Numeracy\n</pre>\n")
                   end
 

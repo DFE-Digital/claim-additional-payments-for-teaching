@@ -1,12 +1,12 @@
 require "rails_helper"
 
-RSpec.describe EarlyCareerPayments::SlugSequence do
-  subject(:slug_sequence) { EarlyCareerPayments::SlugSequence.new(current_claim) }
+RSpec.describe Policies::EarlyCareerPayments::SlugSequence do
+  subject(:slug_sequence) { Policies::EarlyCareerPayments::SlugSequence.new(current_claim) }
 
   let(:eligibility) { create(:early_career_payments_eligibility, :eligible) }
   let(:eligibility_lup) { create(:levelling_up_premium_payments_eligibility, :eligible) }
 
-  let(:claim) { create(:claim, :skipped_tid, policy: EarlyCareerPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility, logged_in_with_tid:, details_check:, dqt_teacher_status:, qualifications_details_check:) }
+  let(:claim) { create(:claim, :skipped_tid, policy: Policies::EarlyCareerPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility, logged_in_with_tid:, details_check:, dqt_teacher_status:, qualifications_details_check:) }
   let(:lup_claim) { create(:claim, :skipped_tid, policy: LevellingUpPremiumPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility_lup) }
   let(:current_claim) { CurrentClaim.new(claims: [claim, lup_claim]) }
   let(:teacher_id_enabled) { true }
@@ -466,7 +466,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
   end
 
   describe "eligibility affect on slugs" do
-    let(:ecp_claim) { build(:claim, policy: EarlyCareerPayments, eligibility_trait: ecp_eligibility) }
+    let(:ecp_claim) { build(:claim, policy: Policies::EarlyCareerPayments, eligibility_trait: ecp_eligibility) }
     let(:lup_claim) { build(:claim, policy: LevellingUpPremiumPayments, eligibility_trait: lup_eligibility) }
     let(:current_claim) { CurrentClaim.new(claims: [ecp_claim, lup_claim]) }
 

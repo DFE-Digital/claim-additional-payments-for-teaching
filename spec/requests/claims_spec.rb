@@ -24,9 +24,9 @@ RSpec.describe "Claims", type: :request do
 
       it "redirects to the existing claim interruption page if a claim for another policy is already in progress" do
         start_student_loans_claim
-        get new_claim_path(EarlyCareerPayments.routing_name)
+        get new_claim_path(Policies::EarlyCareerPayments.routing_name)
 
-        expect(response).to redirect_to(existing_session_path(EarlyCareerPayments.routing_name))
+        expect(response).to redirect_to(existing_session_path(Policies::EarlyCareerPayments.routing_name))
       end
     end
   end
@@ -41,7 +41,7 @@ RSpec.describe "Claims", type: :request do
       current_claim = CurrentClaim.new(claims: claims)
 
       current_claim.claims.each_with_index do |claim, i|
-        expect(claim.eligibility).to be_kind_of(@policy_configuration.policies[i]::Eligibility)
+        expect(claim.eligibility).to be_kind_of("#{@policy_configuration.policies[i]}::Eligibility".constantize)
         expect(claim.academic_year).to eq(@policy_configuration.current_academic_year)
       end
     end

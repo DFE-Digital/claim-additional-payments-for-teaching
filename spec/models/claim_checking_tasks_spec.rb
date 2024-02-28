@@ -12,7 +12,7 @@ RSpec.describe ClaimCheckingTasks do
     end
 
     it "includes tasks for induction and school workforce census check for a EarlyCareerPayments claim" do
-      ecp_claim = create(:claim, :submitted, :verified, policy: EarlyCareerPayments)
+      ecp_claim = create(:claim, :submitted, :verified, policy: Policies::EarlyCareerPayments)
       ecp_tasks = ClaimCheckingTasks.new(ecp_claim)
 
       expect(ecp_tasks.applicable_task_names).to eq %w[identity_confirmation qualifications induction_confirmation census_subjects_taught employment]

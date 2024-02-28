@@ -226,7 +226,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
 
   scenario "when subject for undergraduate ITT or postgraduate ITT is 'none of the above'" do
     start_early_career_payments_claim
-    claim = Claim.by_policy(EarlyCareerPayments).order(:created_at).last
+    claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
 
     skip_tid
 
@@ -289,7 +289,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
 
   scenario "when no longer teaching an eligible ITT subject" do
     start_early_career_payments_claim
-    claim = Claim.by_policy(EarlyCareerPayments).order(:created_at).last
+    claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
 
     skip_tid
 
@@ -361,7 +361,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
 
   scenario "when academic year completed undergraduate ITT or started postgraduate ITT is 'none of the above'" do
     start_early_career_payments_claim
-    claim = Claim.by_policy(EarlyCareerPayments).order(:created_at).last
+    claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
 
     skip_tid
 

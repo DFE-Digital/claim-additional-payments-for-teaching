@@ -79,7 +79,7 @@
 
     <% if session[:selected_claim_policy] == "EarlyCareerPayments" %>
       <p class="govuk-body">
-        For more details, you can read about payments and deductions for the <%= link_to "early-career payment (opens in new tab)", EarlyCareerPayments.eligibility_page_url + "#paying-income-tax-and-national-insurance", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>.
+        For more details, you can read about payments and deductions for the <%= link_to "early-career payment (opens in new tab)", Policies::EarlyCareerPayments.eligibility_page_url + "#paying-income-tax-and-national-insurance", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>.
       </p>
     <% elsif session[:selected_claim_policy] == "LevellingUpPremiumPayments" %>
       <p class="govuk-body">

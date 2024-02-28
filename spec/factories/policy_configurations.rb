@@ -7,7 +7,7 @@ FactoryBot.define do
     end
 
     trait :additional_payments do
-      policy_types { [EarlyCareerPayments, LevellingUpPremiumPayments] }
+      policy_types { [Policies::EarlyCareerPayments, LevellingUpPremiumPayments] }
     end
 
     trait :early_career_payments do

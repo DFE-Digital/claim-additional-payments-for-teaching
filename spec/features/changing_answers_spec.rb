@@ -374,7 +374,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
         new_email = "fiona.adouboux@protonmail.com"
 
         expect {
-          page.first("a[href='#{claim_path(EarlyCareerPayments.routing_name, "email-address")}']", minimum: 1).click
+          page.first("a[href='#{claim_path(Policies::EarlyCareerPayments.routing_name, "email-address")}']", minimum: 1).click
           fill_in "Email address", with: new_email
           click_on "Continue"
         }.to change {
@@ -420,7 +420,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
       scenario "is asked to provide the OTP challenge code for validation" do
         expect {
-          page.first("a[href='#{claim_path(EarlyCareerPayments.routing_name, "provide-mobile-number")}']", minimum: 1).click
+          page.first("a[href='#{claim_path(Policies::EarlyCareerPayments.routing_name, "provide-mobile-number")}']", minimum: 1).click
           choose "Yes"
           click_on "Continue"
         }.to change {
@@ -478,7 +478,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
         old_mobile = claim.mobile_number
 
         expect {
-          page.first("a[href='#{claim_path(EarlyCareerPayments.routing_name, "mobile-number")}']", minimum: 1).click
+          page.first("a[href='#{claim_path(Policies::EarlyCareerPayments.routing_name, "mobile-number")}']", minimum: 1).click
           fill_in "Mobile number", with: new_mobile
           click_on "Continue"
         }.to change {

@@ -40,7 +40,7 @@ RSpec.feature "Admin rejects a claim" do
   end
 
   scenario "Rejecting an ECP claim with Induction - ECP only" do
-    claim = create(:claim, :submitted, policy: EarlyCareerPayments)
+    claim = create(:claim, :submitted, policy: Policies::EarlyCareerPayments)
 
     visit admin_claim_tasks_path(claim)
     click_on "Approve or reject this claim"

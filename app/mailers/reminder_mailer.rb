@@ -37,7 +37,7 @@ class ReminderMailer < ApplicationMailer
   def reminder(reminder)
     @reminder = reminder
     support_email_address = translate("early_career_payments.support_email_address")
-    service_start_page_url = EarlyCareerPayments.start_page_url
+    service_start_page_url = Policies::EarlyCareerPayments.start_page_url
     personalisation = {
       first_name: extract_first_name(@reminder.full_name),
       support_email_address: support_email_address,
@@ -65,7 +65,7 @@ class ReminderMailer < ApplicationMailer
       template_mail(
         template_id,
         to: @reminder.email_address,
-        reply_to_id: EarlyCareerPayments.notify_reply_to_id,
+        reply_to_id: Policies::EarlyCareerPayments.notify_reply_to_id,
         subject: @subject,
         personalisation: personalisation
       )

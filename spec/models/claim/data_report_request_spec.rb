@@ -6,7 +6,7 @@ RSpec.describe Claim::DataReportRequest do
     let(:claims) do
       [
         create(:claim, :submitted, policy: StudentLoans),
-        create(:claim, :submitted, policy: EarlyCareerPayments)
+        create(:claim, :submitted, policy: Policies::EarlyCareerPayments)
       ]
     end
 
@@ -37,9 +37,9 @@ RSpec.describe Claim::DataReportRequest do
   context "when there is a single quatation sign in name field" do
     let(:claims) do
       [
-        create(:claim, :submitted, policy: EarlyCareerPayments, first_name: "Kevin", middle_name: "O'Hara"),
-        create(:claim, :submitted, policy: EarlyCareerPayments, first_name: "Kevin", middle_name: "O'Hara", surname: "Brooks"),
-        create(:claim, :submitted, policy: EarlyCareerPayments, first_name: "Kevin", middle_name: "O'Brian", surname: "O'Hara")
+        create(:claim, :submitted, policy: Policies::EarlyCareerPayments, first_name: "Kevin", middle_name: "O'Hara"),
+        create(:claim, :submitted, policy: Policies::EarlyCareerPayments, first_name: "Kevin", middle_name: "O'Hara", surname: "Brooks"),
+        create(:claim, :submitted, policy: Policies::EarlyCareerPayments, first_name: "Kevin", middle_name: "O'Brian", surname: "O'Hara")
       ]
     end
 

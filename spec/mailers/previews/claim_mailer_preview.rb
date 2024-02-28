@@ -1,6 +1,6 @@
 class ClaimMailerPreview < ActionMailer::Preview
   def submitted_ecp
-    ClaimMailer.submitted(claim_for(Claim.submitted.by_policy(EarlyCareerPayments)))
+    ClaimMailer.submitted(claim_for(Claim.submitted.by_policy(Policies::EarlyCareerPayments)))
   end
 
   def submitted_lup
@@ -8,7 +8,7 @@ class ClaimMailerPreview < ActionMailer::Preview
   end
 
   def approved_ecp
-    ClaimMailer.approved(claim_for(Claim.approved.by_policy(EarlyCareerPayments)))
+    ClaimMailer.approved(claim_for(Claim.approved.by_policy(Policies::EarlyCareerPayments)))
   end
 
   def approved_lup
@@ -16,7 +16,7 @@ class ClaimMailerPreview < ActionMailer::Preview
   end
 
   def rejected_ecp
-    ClaimMailer.rejected(claim_for(Claim.rejected.by_policy(EarlyCareerPayments)))
+    ClaimMailer.rejected(claim_for(Claim.rejected.by_policy(Policies::EarlyCareerPayments)))
   end
 
   def rejected_lup
@@ -24,7 +24,7 @@ class ClaimMailerPreview < ActionMailer::Preview
   end
 
   def update_after_three_weeks_ecp
-    ClaimMailer.update_after_three_weeks(claim_for(Claim.approved.by_policy(EarlyCareerPayments)))
+    ClaimMailer.update_after_three_weeks(claim_for(Claim.approved.by_policy(Policies::EarlyCareerPayments)))
   end
 
   def update_after_three_weeks_lup

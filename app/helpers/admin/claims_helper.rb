@@ -22,7 +22,8 @@ module Admin
 
     def admin_policy_options_provided(claim)
       claim.policy_options_provided.map do |option|
-        label = t(:payment_name, scope: option["policy"].constantize.locale_key)
+        policy = Policies.constantize(option["policy"])
+        label = t(:payment_name, scope: policy.locale_key)
         answer = number_to_currency(option["award_amount"], precision: 0)
 
         [label, answer]

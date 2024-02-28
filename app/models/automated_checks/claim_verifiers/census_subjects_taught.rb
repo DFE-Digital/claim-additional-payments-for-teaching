@@ -57,7 +57,7 @@ module AutomatedChecks
         return false if school_workforce_census.empty?
 
         match_against = case claim.policy
-        when EarlyCareerPayments
+        when Policies::EarlyCareerPayments
           early_career_payments_policy_subjects
         when LevellingUpPremiumPayments
           levelling_up_premium_payments_policy_subjects
