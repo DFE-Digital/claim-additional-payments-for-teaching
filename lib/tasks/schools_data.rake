@@ -26,9 +26,4 @@ namespace :schools_data do
   task "export:student_loans": :environment do
     export_school_data(:student_loans, as: :claim_school)
   end
-
-  desc "Export schools eligible for Maths and Physics to CSV"
-  task "export:maths_and_physics": :environment do
-    export_school_data(:maths_and_physics)
-  end
 end

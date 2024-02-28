@@ -26,18 +26,6 @@ FactoryBot.define do
       not_secondary_equivalent
     end
 
-    trait :maths_and_physics_eligible do
-      association :local_authority_district, :maths_and_physics_eligible
-      state_funded
-      secondary_equivalent
-      open
-    end
-
-    trait :maths_and_physics_ineligible do
-      maths_and_physics_eligible
-      association :local_authority_district, :maths_and_physics_ineligible
-    end
-
     trait :early_career_payments_eligible do
       association :local_authority_district, :early_career_payments_no_uplift
       state_funded
