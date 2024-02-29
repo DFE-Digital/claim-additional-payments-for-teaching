@@ -2,6 +2,6 @@
 
 # Put your Ruby code here
 JourneyConfiguration.create!(
-  policy_type: EarlyCareerPayments,
+  policy_type: Policies::EarlyCareerPayments,
   current_academic_year: AcademicYear.new("2021/2022")
 )
