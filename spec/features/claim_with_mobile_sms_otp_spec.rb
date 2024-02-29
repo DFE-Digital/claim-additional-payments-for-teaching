@@ -29,16 +29,6 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
       email_verified: true
     }
   end
-  let(:maths_and_physics_personal_details_attributes) do
-    {
-      first_name: "Joe",
-      surname: "Richards",
-      date_of_birth: Date.new(1990, 9, 20),
-      national_insurance_number: "AC874112C",
-      provide_mobile_number: true,
-      email_verified: true
-    }
-  end
 
   [
     {policy: Policies::EarlyCareerPayments, mobile_number: "07123456789", otp_code: "097543"},

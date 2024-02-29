@@ -14,11 +14,6 @@ module FeatureHelpers
     click_on "Continue"
   end
 
-  def choose_maths_and_physics_degree(response = "Yes")
-    choose response
-    click_on "Continue"
-  end
-
   def start_student_loans_claim
     visit new_claim_path(StudentLoans.routing_name)
     skip_tid
