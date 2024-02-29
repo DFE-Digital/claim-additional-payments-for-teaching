@@ -1,9 +1,11 @@
+class PolicyConfiguration < ApplicationRecord; end
+
 class ChangePolicyConfigurationPolicyType < ActiveRecord::Migration[6.0]
   def up
     add_column :policy_configurations, :policy_types, :text, array: true, default: []
 
-    JourneyConfiguration.reset_column_information
-    JourneyConfiguration.all.each do |pc|
+    PolicyConfiguration.reset_column_information
+    PolicyConfiguration.all.each do |pc|
       policy_types = [pc.policy_type]
       policy_types << "LevellingUpPremiumPayments" if pc.policy_type == "EarlyCareerPayments"
       pc.update!(policy_types: policy_types)
@@ -15,8 +17,8 @@ class ChangePolicyConfigurationPolicyType < ActiveRecord::Migration[6.0]
   def down
     add_column :policy_configurations, :policy_type, :text
 
-    JourneyConfiguration.reset_column_information
-    JourneyConfiguration.all.each do |pc|
+    PolicyConfiguration.reset_column_information
+    PolicyConfiguration.all.each do |pc|
       pc.update!(policy_type: pc.policy_types.first)
     end
 
