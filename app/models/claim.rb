@@ -167,7 +167,7 @@ class Claim < ApplicationRecord
     male: 2
   }
 
-  validates :academic_year_before_type_cast, format: {with: PolicyConfiguration::ACADEMIC_YEAR_REGEXP}
+  validates :academic_year_before_type_cast, format: {with: JourneyConfiguration::ACADEMIC_YEAR_REGEXP}
 
   validates :payroll_gender, on: [:gender, :submit], presence: {message: "Select the gender recorded on your school’s payroll system or select whether you do not know"}
 

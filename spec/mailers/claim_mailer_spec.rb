@@ -59,7 +59,7 @@ RSpec.describe ClaimMailer, type: :mailer do
   # Characteristics common to all policies
   [Policies::EarlyCareerPayments, StudentLoans, LevellingUpPremiumPayments].each do |policy|
     context "with a #{policy} claim" do
-      let!(:policy_configuration) { create(:policy_configuration, policy.to_s.underscore) }
+      let!(:journey_configuration) { create(:journey_configuration, policy.to_s.underscore) }
 
       describe "#submitted" do
         let(:claim) { build(:claim, :submitted, policy: policy) }
@@ -257,7 +257,7 @@ RSpec.describe ClaimMailer, type: :mailer do
     let(:one_time_password) { 123124 }
     let(:claim) { build(:claim, policy: policy, first_name: "Ellie") }
 
-    before { create(:policy_configuration, policy.to_s.underscore) }
+    before { create(:journey_configuration, policy.to_s.underscore) }
 
     context "with an EarlyCareerPayments claim" do
       let(:policy) { Policies::EarlyCareerPayments }

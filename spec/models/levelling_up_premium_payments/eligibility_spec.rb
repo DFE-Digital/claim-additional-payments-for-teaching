@@ -14,7 +14,7 @@ RSpec.describe LevellingUpPremiumPayments::Eligibility, type: :model do
 
   describe "#ineligible?" do
     context "when current academic year is 2022/23" do
-      before { create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
+      before { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
       specify { expect(subject).to respond_to(:ineligible?) }
 
       context "when ITT year is 2017" do
@@ -44,7 +44,7 @@ RSpec.describe LevellingUpPremiumPayments::Eligibility, type: :model do
   end
 
   describe "#eligible_now?" do
-    before { create(:policy_configuration, :additional_payments) }
+    before { create(:journey_configuration, :additional_payments) }
 
     context "eligible now" do
       subject { build(:levelling_up_premium_payments_eligibility, :eligible_now) }
@@ -60,7 +60,7 @@ RSpec.describe LevellingUpPremiumPayments::Eligibility, type: :model do
   end
 
   describe "#eligible_later?" do
-    before { create(:policy_configuration, :additional_payments) }
+    before { create(:journey_configuration, :additional_payments) }
 
     context "eligible now" do
       subject { build(:levelling_up_premium_payments_eligibility, :eligible_now) }
@@ -77,7 +77,7 @@ RSpec.describe LevellingUpPremiumPayments::Eligibility, type: :model do
 
   describe "#award_amount" do
     before do
-      create(:policy_configuration, :additional_payments)
+      create(:journey_configuration, :additional_payments)
       create(:levelling_up_premium_payments_award, award_amount: 3_000)
     end
 
@@ -88,7 +88,7 @@ RSpec.describe LevellingUpPremiumPayments::Eligibility, type: :model do
   it_behaves_like "Eligibility status", :levelling_up_premium_payments
 
   context "LUP-specific eligibility" do
-    before { create(:policy_configuration, :additional_payments) }
+    before { create(:journey_configuration, :additional_payments) }
 
     subject { eligibility.status }
 

@@ -8,7 +8,7 @@ module LevellingUpPremiumPayments
     attribute :academic_year, :string
     attr_accessor :csv_data
 
-    validates :academic_year, format: {with: PolicyConfiguration::ACADEMIC_YEAR_REGEXP}, presence: true
+    validates :academic_year, format: {with: JourneyConfiguration::ACADEMIC_YEAR_REGEXP}, presence: true
     validates :csv_data, presence: {message: "Choose a CSV file to upload"}
     validate :csv_can_be_parsed, if: -> { csv_data.present? }
     validate :validate_csv_headers, if: -> { csv_data.present? }

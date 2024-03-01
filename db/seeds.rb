@@ -7,8 +7,8 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 if Rails.env.development? || ENV["ENVIRONMENT_NAME"] == "review"
-  PolicyConfiguration.create!(policy_types: [StudentLoans], current_academic_year: AcademicYear.current)
-  PolicyConfiguration.create!(policy_types: [Policies::EarlyCareerPayments, LevellingUpPremiumPayments], current_academic_year: AcademicYear.current)
+  JourneyConfiguration.create!(policy_types: [StudentLoans], current_academic_year: AcademicYear.current)
+  JourneyConfiguration.create!(policy_types: [Policies::EarlyCareerPayments, LevellingUpPremiumPayments], current_academic_year: AcademicYear.current)
 
   ENV["FIXTURES_PATH"] = "spec/fixtures"
   ENV["FIXTURES"] = "local_authorities,local_authority_districts,schools"

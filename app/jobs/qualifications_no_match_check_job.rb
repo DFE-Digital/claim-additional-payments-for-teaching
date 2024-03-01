@@ -48,6 +48,6 @@ class QualificationsNoMatchCheckJob < ApplicationJob
   end
 
   def current_academic_year
-    PolicyConfiguration.for(Policies::EarlyCareerPayments).current_academic_year
+    JourneyConfiguration.for(Policies::EarlyCareerPayments).current_academic_year
   end
 end

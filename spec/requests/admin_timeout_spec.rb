@@ -25,7 +25,7 @@ RSpec.describe "Admin session timing out", type: :request do
 
   it "does not extend the session when the user performs a claim action" do
     travel after_expiry do
-      create(:policy_configuration, :student_loans)
+      create(:journey_configuration, :student_loans)
 
       start_student_loans_claim
       get admin_claims_path

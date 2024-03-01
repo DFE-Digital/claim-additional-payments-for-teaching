@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Managing Levelling Up Premium Payments school awards" do
-  let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+  let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
 
   let(:csv_file) { "spec/fixtures/files/lupp_school_awards_good.csv" }
   let(:csv_file_with_bad_data) { "spec/fixtures/files/lupp_school_awards_bad.csv" }
@@ -14,7 +14,7 @@ RSpec.feature "Managing Levelling Up Premium Payments school awards" do
     click_on "Manage services"
 
     expect(page).to have_content("Claim additional payments for teaching")
-    within(find("tr[data-policy-configuration-id=\"#{policy_configuration.id}\"]")) do
+    within(find("tr[data-policy-configuration-id=\"#{journey_configuration.id}\"]")) do
       click_on "Change"
     end
   end
@@ -25,17 +25,17 @@ RSpec.feature "Managing Levelling Up Premium Payments school awards" do
 
     # When awards exist
     freeze_time do
-      award = create(:levelling_up_premium_payments_award, academic_year: policy_configuration.current_academic_year)
-      create(:levelling_up_premium_payments_award, academic_year: policy_configuration.current_academic_year - 1)
+      award = create(:levelling_up_premium_payments_award, academic_year: journey_configuration.current_academic_year)
+      create(:levelling_up_premium_payments_award, academic_year: journey_configuration.current_academic_year - 1)
 
       visit current_path
-      expect(page).to have_text "The Levelling Up Premium Payments school award amounts for academic year #{policy_configuration.current_academic_year} were updated on #{Time.zone.now.strftime("%-d %B %Y")}"
+      expect(page).to have_text "The Levelling Up Premium Payments school award amounts for academic year #{journey_configuration.current_academic_year} were updated on #{Time.zone.now.strftime("%-d %B %Y")}"
 
       within "#download" do
-        expect(page).to have_select "Academic year", options: [policy_configuration.current_academic_year, policy_configuration.current_academic_year - 1]
+        expect(page).to have_select "Academic year", options: [journey_configuration.current_academic_year, journey_configuration.current_academic_year - 1]
         expect(page).to have_button "Download CSV"
 
-        select policy_configuration.current_academic_year.to_s, from: "download_academic_year"
+        select journey_configuration.current_academic_year.to_s, from: "download_academic_year"
         click_button "Download CSV"
 
         expect(page.body).to eq("school_urn,award_amount\n#{award.school_urn},#{award.award_amount}\n")
@@ -45,7 +45,7 @@ RSpec.feature "Managing Levelling Up Premium Payments school awards" do
 
   scenario "uploading school awards" do
     # When no awards exist
-    expect(page).to have_text "No Levelling Up Premium Payments school award data has been uploaded for academic year #{policy_configuration.current_academic_year}."
+    expect(page).to have_text "No Levelling Up Premium Payments school award data has been uploaded for academic year #{journey_configuration.current_academic_year}."
 
     # No CSV file
     within "#upload" do
@@ -57,13 +57,13 @@ RSpec.feature "Managing Levelling Up Premium Payments school awards" do
 
     # Good CSV file
     within "#upload" do
-      select policy_configuration.current_academic_year.to_s, from: "upload_academic_year"
+      select journey_configuration.current_academic_year.to_s, from: "upload_academic_year"
 
       attach_file("CSV file", csv_file)
       click_button "Upload CSV"
     end
 
-    expect(page).to have_text "Award amounts for #{policy_configuration.current_academic_year} successfully updated."
+    expect(page).to have_text "Award amounts for #{journey_configuration.current_academic_year} successfully updated."
 
     # Different academic year
 
@@ -78,7 +78,7 @@ RSpec.feature "Managing Levelling Up Premium Payments school awards" do
 
     # CSV file with bad data
     within "#upload" do
-      select policy_configuration.current_academic_year.to_s, from: "upload_academic_year"
+      select journey_configuration.current_academic_year.to_s, from: "upload_academic_year"
 
       attach_file("CSV file", csv_file_with_bad_data)
       click_button "Upload CSV"
@@ -89,7 +89,7 @@ RSpec.feature "Managing Levelling Up Premium Payments school awards" do
 
     # CSV file with extra columns
     within "#upload" do
-      select policy_configuration.current_academic_year.to_s, from: "upload_academic_year"
+      select journey_configuration.current_academic_year.to_s, from: "upload_academic_year"
 
       attach_file("CSV file", csv_file_with_extra_columns)
       click_button "Upload CSV"
@@ -100,7 +100,7 @@ RSpec.feature "Managing Levelling Up Premium Payments school awards" do
 
     # CSV file with no headers
     within "#upload" do
-      select policy_configuration.current_academic_year.to_s, from: "upload_academic_year"
+      select journey_configuration.current_academic_year.to_s, from: "upload_academic_year"
 
       attach_file("CSV file", csv_file_without_headers)
       click_button "Upload CSV"

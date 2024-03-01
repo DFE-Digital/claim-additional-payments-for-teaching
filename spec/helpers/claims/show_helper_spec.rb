@@ -74,7 +74,7 @@ RSpec.describe Claims::ShowHelper do
     let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, award_amount: award_amount) }
     let(:award_amount) { 2000.0 }
 
-    before { create(:policy_configuration, :additional_payments) }
+    before { create(:journey_configuration, :additional_payments) }
 
     it "returns a string currency representation" do
       expect(helper.award_amount(claim)).to eq("£2,000")

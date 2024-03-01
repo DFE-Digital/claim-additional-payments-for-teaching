@@ -1,3 +1,5 @@
+class PolicyConfiguration < ApplicationRecord; end
+
 class ChangePolicyConfigurationPolicyType < ActiveRecord::Migration[6.0]
   def up
     add_column :policy_configurations, :policy_types, :text, array: true, default: []

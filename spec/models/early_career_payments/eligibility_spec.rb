@@ -109,7 +109,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
 
     context "when academic year is 2022/23" do
-      before { create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
+      before { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
 
       context "when claim is eligible later" do
         [
@@ -173,7 +173,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
   end
 
   describe "#reset_dependent_answers" do
-    let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+    let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
     let!(:claim) { build_stubbed(:claim, :with_student_loan, eligibility: eligibility) }
 
     let(:eligibility) do
@@ -243,7 +243,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
   describe "#trainee_teacher?" do
     let(:eligibility) { build_stubbed(:early_career_payments_eligibility, nqt_in_academic_year_after_itt: false) }
 
-    before { create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
+    before { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
 
     it "returns true" do
       expect(eligibility).to be_a_trainee_teacher
@@ -280,7 +280,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
 
   describe "#ecp_only_school?" do
     subject { eligibility.ecp_only_school? }
-    let!(:policy_config) { create(:policy_configuration, :additional_payments) }
+    let!(:policy_config) { create(:journey_configuration, :additional_payments) }
     let!(:claim) { build_stubbed(:claim, eligibility: eligibility) }
 
     context "when the current school is eligible for ECP and LUP" do
@@ -373,7 +373,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
 
     context "when saving in the 'eligible_itt_subject' context" do
-      before { create(:policy_configuration, :additional_payments) }
+      before { create(:journey_configuration, :additional_payments) }
 
       it "is not valid without a value for 'eligible_itt_subject'" do
         expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:"eligible-itt-subject")
@@ -416,7 +416,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
   context "ECP-specific eligibility" do
     subject { eligibility.status }
 
-    before { create(:policy_configuration, :additional_payments) }
+    before { create(:journey_configuration, :additional_payments) }
 
     # By the 2022 policy year it's too late for this to apply to LUP so is ECP-specific now but
     # technically this check is generally needed for all policies

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe EarlyCareerPaymentsHelper do
+describe AdditionalPaymentsHelper do
   describe "#one_time_password_validity_duration" do
     context "with 'DRIFT' constant set" do
       it "reports '1 minute' when 60 (seconds)" do

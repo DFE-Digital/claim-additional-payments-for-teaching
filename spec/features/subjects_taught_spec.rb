@@ -5,7 +5,7 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
 
   let!(:school) { create(:school, :student_loans_eligible) }
   before do
-    create(:policy_configuration, :student_loans)
+    create(:journey_configuration, :student_loans)
     start_student_loans_claim
     choose_school school
   end

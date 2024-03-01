@@ -23,7 +23,7 @@ module ApplicationHelper
   def support_email_address(routing_name = nil)
     return t("support_email_address") unless routing_name
 
-    namespace = PolicyConfiguration.i18n_namespace_for_routing_name(routing_name)
+    namespace = JourneyConfiguration.i18n_namespace_for_routing_name(routing_name)
     t("#{namespace}.support_email_address")
   end
 
@@ -37,12 +37,12 @@ module ApplicationHelper
   def policy_service_name(routing_name = nil)
     return t("service_name") unless routing_name
 
-    namespace = PolicyConfiguration.i18n_namespace_for_routing_name(routing_name)
-    t("#{namespace}.policy_name")
+    namespace = JourneyConfiguration.i18n_namespace_for_routing_name(routing_name)
+    t("#{namespace}.journey_name")
   end
 
   def policy_description(routing_name)
-    namespace = PolicyConfiguration.i18n_namespace_for_routing_name(routing_name)
+    namespace = JourneyConfiguration.i18n_namespace_for_routing_name(routing_name)
     t("#{namespace}.claim_description")
   end
 

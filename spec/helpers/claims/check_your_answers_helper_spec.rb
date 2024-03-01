@@ -16,7 +16,7 @@ RSpec.describe Claims::CheckYourAnswersHelper do
       let(:policy) { Policies::EarlyCareerPayments }
 
       it "returns the correct content block" do
-        expect(helper.send_your_application(claim)).to include(I18n.t("early_career_payments.check_your_answers.heading_send_application"), "h2", "govuk-heading-m")
+        expect(helper.send_your_application(claim)).to include(I18n.t("additional_payments.check_your_answers.heading_send_application"), "h2", "govuk-heading-m")
       end
     end
   end
@@ -34,7 +34,7 @@ RSpec.describe Claims::CheckYourAnswersHelper do
       let(:policy) { Policies::EarlyCareerPayments }
 
       it "returns the correct content block" do
-        expect(helper.statement(claim)).to include(I18n.t("early_career_payments.check_your_answers.statement"), "p", "govuk-body")
+        expect(helper.statement(claim)).to include(I18n.t("additional_payments.check_your_answers.statement"), "p", "govuk-body")
       end
     end
   end
@@ -52,7 +52,7 @@ RSpec.describe Claims::CheckYourAnswersHelper do
       let(:policy) { Policies::EarlyCareerPayments }
 
       it "returns the correct content block" do
-        expect(helper.submit_text(claim)).to include(I18n.t("early_career_payments.check_your_answers.btn_text"))
+        expect(helper.submit_text(claim)).to include(I18n.t("additional_payments.check_your_answers.btn_text"))
       end
     end
   end

@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Current school with closed claim school" do
   let!(:claim_school) { create(:school, :student_loans_eligible, :closed) }
 
-  before { create(:policy_configuration, :student_loans) }
+  before { create(:journey_configuration, :student_loans) }
 
   scenario "Still teaching only has two options" do
     claim = start_student_loans_claim

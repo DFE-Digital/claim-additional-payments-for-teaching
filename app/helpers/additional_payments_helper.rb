@@ -1,4 +1,4 @@
-module EarlyCareerPaymentsHelper
+module AdditionalPaymentsHelper
   include ActionView::Helpers::TextHelper
 
   def one_time_password_validity_duration
@@ -7,17 +7,17 @@ module EarlyCareerPaymentsHelper
 
   def eligible_itt_subject_translation(claim)
     if claim.eligibility.trainee_teacher?
-      return I18n.t("early_career_payments.questions.eligible_itt_subject_trainee_teacher")
+      return I18n.t("additional_payments.questions.eligible_itt_subject_trainee_teacher")
     end
 
     qualification_symbol = claim.eligibility.qualification.to_sym
     subjects = subject_symbols(claim)
 
     if subjects.many?
-      I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_to_substring(qualification_symbol))
+      I18n.t("additional_payments.questions.eligible_itt_subject", qualification: qualification_to_substring(qualification_symbol))
     else
       subject_symbol = subjects.first
-      I18n.t("early_career_payments.questions.eligible_itt_subject_one_option", qualification: qualification_to_substring(qualification_symbol), subject: subject_symbol)
+      I18n.t("additional_payments.questions.eligible_itt_subject_one_option", qualification: qualification_to_substring(qualification_symbol), subject: subject_symbol)
     end
   end
 

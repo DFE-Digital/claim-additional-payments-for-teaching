@@ -5,7 +5,7 @@ RSpec.shared_examples "Eligible later" do |opts|
     let(:policy_year) { opts[:policy_year] }
     let(:qualification) { opts[:qualification] }
     let(:eligibility_attrs) { attributes_for(:early_career_payments_eligibility, :eligible, qualification: qualification).merge(current_school:) }
-    let!(:policy_configuration) { create(:policy_configuration, :additional_payments, current_academic_year: policy_year) }
+    let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: policy_year) }
 
     scenario "with ITT subject mathematics in ITT academic year #{opts[:itt_academic_year]} with a #{opts[:qualification]} qualification" do
       claim.eligibility.update!(
@@ -16,9 +16,9 @@ RSpec.shared_examples "Eligible later" do |opts|
 
       jump_to_claim_journey_page(claim, "check-your-answers-part-one")
 
-      expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
-      expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.secondary_heading"))
-      expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.confirmation_notice"))
+      expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
+      expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.secondary_heading"))
+      expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
 
       %w[Identity\ details Payment\ details Student\ loan\ details].each do |section_heading|
         expect(page).not_to have_text section_heading
@@ -57,18 +57,18 @@ RSpec.shared_examples "Eligible later" do |opts|
       skip_tid
 
       # - Which school do you teach at
-      expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+      expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
 
       choose_school current_school
 
       # - Have you started your first year as a newly qualified teacher?
-      expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
+      expect(page).to have_text(I18n.t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"))
 
       choose "Yes"
       click_on "Continue"
 
       # - Have you completed your induction as an early-career teacher?
-      expect(page).to have_text(I18n.t("early_career_payments.questions.induction_completed.heading"))
+      expect(page).to have_text(I18n.t("additional_payments.questions.induction_completed.heading"))
 
       choose "No"
       click_on "Continue"

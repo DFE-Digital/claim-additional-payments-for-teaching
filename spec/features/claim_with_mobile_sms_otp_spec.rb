@@ -36,7 +36,7 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
   ].each do |scenario|
     context "when claimant opts to provide a mobile number" do
       before do
-        create(:policy_configuration, scenario[:policy].to_s.underscore)
+        create(:journey_configuration, scenario[:policy].to_s.underscore)
 
         allow(NotifySmsMessage).to receive(:new).with(
           phone_number: mobile_number,

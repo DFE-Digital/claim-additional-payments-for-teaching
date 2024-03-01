@@ -19,7 +19,7 @@ RSpec.feature "Admin amends a claim" do
   let(:date_of_birth) { 25.years.ago.to_date }
 
   before do
-    create(:policy_configuration, :student_loans)
+    create(:journey_configuration, :student_loans)
     @signed_in_user = sign_in_as_service_operator
   end
 

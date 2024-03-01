@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Admin checking a claim with personal data removed" do
   before do
-    create(:policy_configuration, :student_loans)
+    create(:journey_configuration, :student_loans)
     sign_in_as_service_operator
   end
 

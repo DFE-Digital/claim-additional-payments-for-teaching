@@ -9,7 +9,7 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
     {subject: "mathematics", cohort: "2019 to 2020", academic_year: AcademicYear.new(2019), next_year: 2024, frozen_year: Date.new(2023, 9, 1)}
   ].each do |args|
     context "claim in year #{args[:frozen_year].year}" do
-      before { create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(args[:frozen_year].year)) }
+      before { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(args[:frozen_year].year)) }
 
       scenario "Claimant enters personal details and OTP for #{args[:subject]} for #{args[:cohort]}" do
         travel_to args[:frozen_year] do
@@ -32,7 +32,7 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           click_on "Continue"
 
           # - Which subject did you do your postgraduate initial teacher training (ITT) in?
-          choose I18n.t("early_career_payments.answers.eligible_itt_subject.#{args[:subject]}")
+          choose I18n.t("additional_payments.answers.eligible_itt_subject.#{args[:subject]}")
           click_on "Continue"
 
           # - Do you teach subject now?
@@ -42,9 +42,9 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           expect(claim.eligibility.reload.itt_academic_year).to eql args[:academic_year]
 
           # - Check your answers for eligibility
-          expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
-          expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.secondary_heading"))
-          expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.confirmation_notice"))
+          expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
+          expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.secondary_heading"))
+          expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
 
           expect(claim.eligibility.itt_academic_year).to eq args[:academic_year]
           expect(claim.errors.messages).to be_empty
@@ -78,7 +78,7 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
   end
 
   context "Claimant re-requests the OTP 6-digit password after entering their Personal Details" do
-    before { create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
+    before { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
 
     [
       {subject: "mathematics", cohort: "2018 to 2019", academic_year: AcademicYear.new(2018), next_year: 2023, frozen_year: Date.new(2022, 10, 5)}
@@ -105,7 +105,7 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
 
           expect(claim.eligibility.reload.itt_academic_year).to eql args[:academic_year]
 
-          choose I18n.t("early_career_payments.answers.eligible_itt_subject.#{args[:subject]}")
+          choose I18n.t("additional_payments.answers.eligible_itt_subject.#{args[:subject]}")
           click_on "Continue"
 
           # - Do you teach subject now?
@@ -113,9 +113,9 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           click_on "Continue"
 
           # - Check your answers for eligibility
-          expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
-          expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.secondary_heading"))
-          expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.confirmation_notice"))
+          expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
+          expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.secondary_heading"))
+          expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
 
           expect(claim.eligibility.itt_academic_year).to eq args[:academic_year]
           expect(claim.errors.messages).to be_empty

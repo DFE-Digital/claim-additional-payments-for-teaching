@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Claims" do
-  before { create(:policy_configuration, :additional_payments) }
+  before { create(:journey_configuration, :additional_payments) }
 
   describe "#create" do
     let(:submit_form) { post reminders_path("additional-payments", params: form_params) }

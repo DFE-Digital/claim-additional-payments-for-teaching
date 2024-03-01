@@ -1,6 +1,6 @@
 ---
 shared:
-  :policy_configurations:
+  :journey_configurations:
     - id
     - open_for_submissions
     - availability_message

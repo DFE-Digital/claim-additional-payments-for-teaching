@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :policy_configuration do
+  factory :journey_configuration do
     current_academic_year { AcademicYear.current }
 
     trait :student_loans do

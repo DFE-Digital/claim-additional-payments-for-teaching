@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_validation_enabled do
   let(:claim) { Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last }
   let(:eligibility) { claim.eligibility }
-  let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+  let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
   let(:bank_name) { "Jo Bloggs" }
   let(:sort_code) { "123456" }

@@ -4,9 +4,9 @@ RSpec.feature "TSLR journey with Teacher ID" do
   include OmniauthMockHelper
   include StudentLoansHelper
 
-  let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
+  let!(:journey_configuration) { create(:journey_configuration, :student_loans) }
   let!(:school) { create(:school, :student_loans_eligible) }
-  let(:eligible_itt_years) { JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(policy_configuration.current_academic_year) }
+  let(:eligible_itt_years) { JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(journey_configuration.current_academic_year) }
   let(:academic_date) { Date.new(eligible_itt_years.first.start_year, 12, 1) }
   let(:itt_year) { AcademicYear.for(academic_date) }
   let(:trn) { 1234567 }

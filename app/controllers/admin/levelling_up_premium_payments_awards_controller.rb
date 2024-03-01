@@ -1,6 +1,6 @@
 module Admin
   class LevellingUpPremiumPaymentsAwardsController < BaseAdminController
-    helper_method :policy_configuration
+    helper_method :journey_configuration
 
     def index
       send_data LevellingUpPremiumPayments::Award.csv_for_academic_year(academic_year), type: "text/csv", filename: "awards_#{academic_year}.csv"
@@ -11,10 +11,10 @@ module Admin
 
       if @csv_upload.process
         flash[:notice] = "Award amounts for #{@csv_upload.academic_year} successfully updated."
-        return redirect_to edit_admin_policy_configuration_path(policy_configuration)
+        return redirect_to edit_admin_journey_configuration_path(journey_configuration)
       end
 
-      render "admin/policy_configurations/edit"
+      render "admin/journey_configurations/edit"
     end
 
     private
@@ -27,8 +27,8 @@ module Admin
       AcademicYear.new(params.require(:levelling_up_premium_payments_award).require(:academic_year))
     end
 
-    def policy_configuration
-      @policy_configuration ||= PolicyConfiguration.for(LevellingUpPremiumPayments)
+    def journey_configuration
+      @journey_configuration ||= JourneyConfiguration.for(LevellingUpPremiumPayments)
     end
   end
 end

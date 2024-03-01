@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Claims", type: :request do
   describe "claims#new request" do
-    before { create(:policy_configuration, :student_loans) }
+    before { create(:journey_configuration, :student_loans) }
 
     context "the user has not already started a claim" do
       it "renders the first page in the sequence" do
@@ -20,7 +20,7 @@ RSpec.describe "Claims", type: :request do
     end
 
     context "switching claim policies" do
-      before { create(:policy_configuration, :additional_payments) }
+      before { create(:journey_configuration, :additional_payments) }
 
       it "redirects to the existing claim interruption page if a claim for another policy is already in progress" do
         start_student_loans_claim
@@ -33,26 +33,26 @@ RSpec.describe "Claims", type: :request do
 
   describe "claims#create request" do
     def check_claims_created
-      expect { start_claim(@policy_configuration.routing_name) }.to change { Claim.count }.by(@policy_configuration.policies.count)
+      expect { start_claim(@journey_configuration.routing_name) }.to change { Claim.count }.by(@journey_configuration.policies.count)
     end
 
     def check_claims_eligibility_created
-      claims = @policy_configuration.policies.map { |p| Claim.by_policy(p).order(:created_at).last }
+      claims = @journey_configuration.policies.map { |p| Claim.by_policy(p).order(:created_at).last }
       current_claim = CurrentClaim.new(claims: claims)
 
       current_claim.claims.each_with_index do |claim, i|
-        expect(claim.eligibility).to be_kind_of("#{@policy_configuration.policies[i]}::Eligibility".constantize)
-        expect(claim.academic_year).to eq(@policy_configuration.current_academic_year)
+        expect(claim.eligibility).to be_kind_of("#{@journey_configuration.policies[i]}::Eligibility".constantize)
+        expect(claim.academic_year).to eq(@journey_configuration.current_academic_year)
       end
     end
 
     def check_slug_redirection
-      expect(response).to redirect_to(claim_path(@policy_configuration.routing_name, @policy_configuration.slugs.first))
+      expect(response).to redirect_to(claim_path(@journey_configuration.routing_name, @journey_configuration.slugs.first))
     end
 
     context "student loans claim" do
       it "created for the current academic year and redirects to the next question in the sequence" do
-        @policy_configuration = create(:policy_configuration, :student_loans)
+        @journey_configuration = create(:journey_configuration, :student_loans)
 
         check_claims_created
         check_claims_eligibility_created
@@ -62,7 +62,7 @@ RSpec.describe "Claims", type: :request do
 
     context "ecp and lup combined claim" do
       it "created for the current academic year and redirects to the next question in the sequence" do
-        @policy_configuration = create(:policy_configuration, :additional_payments)
+        @journey_configuration = create(:journey_configuration, :additional_payments)
 
         check_claims_created
         check_claims_eligibility_created
@@ -72,7 +72,7 @@ RSpec.describe "Claims", type: :request do
   end
 
   describe "claims#show request" do
-    before { create(:policy_configuration, :student_loans) }
+    before { create(:journey_configuration, :student_loans) }
 
     context "when a claim is already in progress" do
       let(:in_progress_claim) { Claim.by_policy(StudentLoans).order(:created_at).last }
@@ -137,7 +137,7 @@ RSpec.describe "Claims", type: :request do
   end
 
   describe "the claims ineligible page" do
-    before { create(:policy_configuration, :student_loans) }
+    before { create(:journey_configuration, :student_loans) }
 
     context "when a claim is already in progress" do
       before { start_student_loans_claim }
@@ -161,7 +161,7 @@ RSpec.describe "Claims", type: :request do
   end
 
   describe "claims#timeout" do
-    before { create(:policy_configuration, :student_loans) }
+    before { create(:journey_configuration, :student_loans) }
 
     it "displays session timeout content" do
       get timeout_claim_path(StudentLoans.routing_name)
@@ -170,7 +170,7 @@ RSpec.describe "Claims", type: :request do
   end
 
   describe "claims#update request" do
-    before { create(:policy_configuration, :student_loans) }
+    before { create(:journey_configuration, :student_loans) }
 
     context "when a claim is already in progress" do
       let(:in_progress_claim) { Claim.by_policy(StudentLoans).order(:created_at).last }

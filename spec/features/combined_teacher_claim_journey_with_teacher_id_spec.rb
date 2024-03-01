@@ -5,9 +5,9 @@ RSpec.feature "Combined journey with Teacher ID" do
 
   let(:notify) { instance_double("NotifySmsMessage", deliver!: true) }
 
-  let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+  let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
-  let(:eligible_itt_years) { JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(policy_configuration.current_academic_year) }
+  let(:eligible_itt_years) { JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(journey_configuration.current_academic_year) }
   let(:academic_date) { Date.new(eligible_itt_years.first.start_year, 12, 1) }
   let(:itt_year) { AcademicYear.for(academic_date) }
   let(:trn) { 1234567 }
@@ -48,7 +48,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     expect(page).to have_link(href: "mailto:#{Policies::EarlyCareerPayments.feedback_email}")
 
     # - Landing (start)
-    expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
+    expect(page).to have_text(I18n.t("additional_payments.landing_page"))
     click_on "Start now"
 
     # - Sign in or continue page
@@ -66,7 +66,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     click_on "Continue"
 
     # - Which school do you teach at
-    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
     expect(page.title).to have_text(I18n.t("questions.current_school"))
 
     choose_school school
@@ -74,7 +74,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     click_on "Continue"
 
     # - NQT in Academic Year after ITT
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"))
 
     choose "Yes"
     click_on "Continue"
@@ -84,13 +84,13 @@ RSpec.feature "Combined journey with Teacher ID" do
     expect(eligibility.nqt_in_academic_year_after_itt).to eql true
 
     # - Have you completed your induction as an early-career teacher
-    expect(page).to have_text(I18n.t("early_career_payments.questions.induction_completed.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.induction_completed.heading"))
 
     choose "Yes"
     click_on "Continue"
 
     # - Are you currently employed as a supply teacher
-    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.employed_as_supply_teacher"))
 
     choose "No"
     click_on "Continue"
@@ -98,15 +98,15 @@ RSpec.feature "Combined journey with Teacher ID" do
     expect(claim.eligibility.reload.employed_as_supply_teacher).to eql false
 
     # - Performance Issues
-    expect(page).to have_text(I18n.t("early_career_payments.questions.poor_performance"))
-    expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
-    expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action_hint"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.poor_performance"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.formal_performance_action"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.formal_performance_action_hint"))
 
     # No
     choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
-    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action_hint"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.disciplinary_action"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.disciplinary_action_hint"))
 
     # "No"
     choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
@@ -129,15 +129,15 @@ RSpec.feature "Combined journey with Teacher ID" do
 
     # Qualification pages are skipped
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
 
     choose "Yes"
     click_on "Continue"
 
     # - Check your answers for eligibility
-    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
-    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.secondary_heading"))
-    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.confirmation_notice"))
+    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
+    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.secondary_heading"))
+    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
 
     ["Identity details", "Payment details", "Student loan details"].each do |section_heading|
       expect(page).not_to have_text section_heading
@@ -149,15 +149,15 @@ RSpec.feature "Combined journey with Teacher ID" do
     end
 
     # Check your answers page does not include qualifications questions
-    expect(page).not_to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
-    expect(page).not_to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: "undergraduate initial teacher training (ITT)"))
-    expect(page).not_to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
-    expect(page).not_to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
+    expect(page).not_to have_text(I18n.t("additional_payments.questions.qualification.heading"))
+    expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_itt_subject", qualification: "undergraduate initial teacher training (ITT)"))
+    expect(page).not_to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
+    expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
 
     # Go back to the qualification details page
     click_link "Back"
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
     click_link "Back"
 
     expect(page).to have_text(I18n.t("questions.check_and_confirm_qualification_details"))
@@ -171,7 +171,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     expect(claim.eligibility.qualification).to be nil
 
     # - What route into teaching did you take?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
 
     choose "Undergraduate initial teacher training (ITT)"
     click_on "Continue"
@@ -179,7 +179,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     expect(claim.eligibility.reload.qualification).to eq "undergraduate_itt"
 
     # - In which academic year did you start your undergraduate ITT
-    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
     expect(page).to have_text("2018 to 2019")
     expect(page).to have_text("2019 to 2020")
     expect(page).to have_text("2020 to 2021")
@@ -193,19 +193,19 @@ RSpec.feature "Combined journey with Teacher ID" do
     choose "Mathematics"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
 
     choose "Yes"
     click_on "Continue"
 
     # - Check your answers for eligibility
-    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
+    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
 
     # Check your answers page includes qualifications questions
-    expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject_one_option", qualification: "undergraduate initial teacher training (ITT)", subject: "mathematics"))
-    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
-    expect(page).not_to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.eligible_itt_subject_one_option", qualification: "undergraduate initial teacher training (ITT)", subject: "mathematics"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
+    expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
 
     click_on("Continue")
 
@@ -330,10 +330,10 @@ RSpec.feature "Combined journey with Teacher ID" do
     click_on "Continue"
 
     # Qualification pages are not skipped
-    expect(page).not_to have_text(I18n.t("early_career_payments.questions.check_and_confirm_qualification_details"))
+    expect(page).not_to have_text(I18n.t("additional_payments.questions.check_and_confirm_qualification_details"))
 
     # - What route into teaching did you take?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
 
     choose "Undergraduate initial teacher training (ITT)"
     click_on "Continue"
@@ -347,16 +347,16 @@ RSpec.feature "Combined journey with Teacher ID" do
     choose "Mathematics"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
 
     choose "Yes"
     click_on "Continue"
 
     # Check your answers page includes qualifications questions
-    expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject_one_option", qualification: "undergraduate initial teacher training (ITT)", subject: "mathematics"))
-    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
-    expect(page).not_to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.eligible_itt_subject_one_option", qualification: "undergraduate initial teacher training (ITT)", subject: "mathematics"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
+    expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
   end
 
   scenario "When user is logged in with Teacher ID and NINO is not supplied" do
@@ -386,7 +386,7 @@ RSpec.feature "Combined journey with Teacher ID" do
 
     # Qualification pages are skipped
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
 
     choose "Yes"
     click_on "Continue"
@@ -475,7 +475,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     click_on "Continue"
 
     # Asks user for the missing information
-    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
 
     choose "2020 to 2021"
     click_on "Continue"
@@ -483,19 +483,19 @@ RSpec.feature "Combined journey with Teacher ID" do
     # Skips subject question as supplied by DQT
 
     # - Do you teach subject now?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
 
     choose "Yes"
     click_on "Continue"
 
     # - Check your answers for eligibility
-    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
+    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
 
     # Check your answers page only includes missing qualifications questions
-    expect(page).not_to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
-    expect(page).not_to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: "undergraduate initial teacher training (ITT)"))
-    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
-    expect(page).not_to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
+    expect(page).not_to have_text(I18n.t("additional_payments.questions.qualification.heading"))
+    expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_itt_subject", qualification: "undergraduate initial teacher training (ITT)"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
+    expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
   end
 
   scenario "When user is logged in with Teacher ID and the ITT subject is ineligible" do

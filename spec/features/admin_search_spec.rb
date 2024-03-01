@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Admin search" do
   before do
-    create(:policy_configuration)
+    create(:journey_configuration)
     sign_in_as_service_operator
   end
 

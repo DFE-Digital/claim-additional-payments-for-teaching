@@ -5,7 +5,7 @@ RSpec.describe "Admin decisions", type: :request do
     let(:claim) { create(:claim, :submitted, policy: Policies::EarlyCareerPayments) }
 
     before do
-      create(:policy_configuration, :early_career_payments)
+      create(:journey_configuration, :early_career_payments)
       @signed_in_user = sign_in_as_service_operator
     end
 

@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Trainee teacher subjourney for LUP schools" do
-  let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
-  let(:academic_year) { policy_configuration.current_academic_year }
+  let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
+  let(:academic_year) { journey_configuration.current_academic_year }
 
   scenario "non-LUP school" do
     non_lup_school = create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible)
@@ -16,12 +16,12 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
 
     choose_school non_lup_school
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"))
 
     choose "No"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.ineligible.heading"))
     expect(page).to have_no_link("Back")
   end
 
@@ -31,7 +31,7 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     choose "Mathematics"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.trainee_teacher_future_eligibility"))
+    expect(page).to have_text(I18n.t("additional_payments.ineligible.reason.trainee_teacher_future_eligibility"))
 
     click_on "Set reminder"
 
@@ -61,12 +61,12 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     choose "None of the above"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
 
     choose "Yes"
     click_on "Continue"
 
-    I18n.t("early_career_payments.ineligible.reason.trainee_teacher_future_eligibility")
+    I18n.t("additional_payments.ineligible.reason.trainee_teacher_future_eligibility")
 
     click_on "Set reminder"
 
@@ -96,12 +96,12 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     choose "None of the above"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
 
     choose "No"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.ineligible.heading"))
     expect(page).to have_no_link("Back")
   end
 
@@ -119,11 +119,11 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
 
     choose_school lup_school
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"))
 
     choose "No"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject_trainee_teacher"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.eligible_itt_subject_trainee_teacher"))
   end
 end

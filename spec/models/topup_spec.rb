@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Topup, type: :model do
   let(:user) { create(:dfe_signin_user) }
-  let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+  let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
   let(:lup_claim) { create(:claim, :approved, policy: LevellingUpPremiumPayments, eligibility: lup_eligibility) }
   let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, award_amount: 2000.0) }
   let!(:payment) { create(:payment, claims: [lup_claim]) }

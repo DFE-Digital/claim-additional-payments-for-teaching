@@ -2,7 +2,7 @@ module Policies
   module EarlyCareerPayments
     class EligibilityAnswersPresenter
       include ActionView::Helpers::TranslationHelper
-      include EarlyCareerPaymentsHelper
+      include AdditionalPaymentsHelper
       include Claims::IttSubjectHelper
 
       attr_reader :eligibility
@@ -44,7 +44,7 @@ module Policies
 
       def has_entire_term_contract
         [
-          translate("early_career_payments.questions.has_entire_term_contract"),
+          translate("additional_payments.questions.has_entire_term_contract"),
           (eligibility.has_entire_term_contract? ? "Yes" : "No"),
           "entire-term-contract"
         ]
@@ -52,7 +52,7 @@ module Policies
 
       def current_school
         [
-          translate("early_career_payments.questions.current_school_search"),
+          translate("additional_payments.questions.current_school_search"),
           eligibility.current_school_name,
           (eligibility.school_somewhere_else == false) ? "correct-school" : "current-school"
         ]
@@ -60,7 +60,7 @@ module Policies
 
       def nqt_in_academic_year_after_itt
         [
-          translate("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"),
+          translate("additional_payments.questions.nqt_in_academic_year_after_itt.heading"),
           (eligibility.nqt_in_academic_year_after_itt? ? "Yes" : "No"),
           "nqt-in-academic-year-after-itt"
         ]
@@ -68,7 +68,7 @@ module Policies
 
       def induction_completed
         [
-          translate("early_career_payments.questions.induction_completed.heading"),
+          translate("additional_payments.questions.induction_completed.heading"),
           (eligibility.induction_completed? ? "Yes" : "No"),
           "induction-completed"
         ]
@@ -76,7 +76,7 @@ module Policies
 
       def employed_as_supply_teacher
         [
-          translate("early_career_payments.questions.employed_as_supply_teacher"),
+          translate("additional_payments.questions.employed_as_supply_teacher"),
           (eligibility.employed_as_supply_teacher? ? "Yes" : "No"),
           "supply-teacher"
         ]
@@ -84,7 +84,7 @@ module Policies
 
       def employed_directly
         [
-          translate("early_career_payments.questions.employed_directly"),
+          translate("additional_payments.questions.employed_directly"),
           (eligibility.employed_directly? ? "Yes" : "No"),
           "employed-directly"
         ]
@@ -92,7 +92,7 @@ module Policies
 
       def subject_to_formal_performance_action
         [
-          translate("early_career_payments.questions.formal_performance_action"),
+          translate("additional_payments.questions.formal_performance_action"),
           (eligibility.subject_to_formal_performance_action? ? "Yes" : "No"),
           "poor-performance"
         ]
@@ -100,7 +100,7 @@ module Policies
 
       def subject_to_disciplinary_action
         [
-          translate("early_career_payments.questions.disciplinary_action"),
+          translate("additional_payments.questions.disciplinary_action"),
           (eligibility.subject_to_disciplinary_action? ? "Yes" : "No"),
           "poor-performance"
         ]
@@ -110,7 +110,7 @@ module Policies
         return if eligibility.claim.qualifications_details_check && eligibility.claim.dqt_teacher_record&.route_into_teaching
 
         [
-          translate("early_career_payments.questions.qualification.heading"),
+          translate("additional_payments.questions.qualification.heading"),
           translate("early_career_payments.answers.qualification.#{eligibility.qualification}"),
           "qualification"
         ]
@@ -130,7 +130,7 @@ module Policies
         return if !eligibility.respond_to?(:eligible_degree_subject) || !eligibility.eligible_degree_subject? || (eligibility.claim.qualifications_details_check && eligibility.claim.dqt_teacher_record&.eligible_degree_code?)
 
         [
-          translate("early_career_payments.questions.eligible_degree_subject"),
+          translate("additional_payments.questions.eligible_degree_subject"),
           "Yes",
           "eligible-degree-subject"
         ]
@@ -138,7 +138,7 @@ module Policies
 
       def teaching_subject_now
         [
-          translate("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: eligibility.eligible_itt_subject),
+          translate("additional_payments.questions.teaching_subject_now", eligible_itt_subject: eligibility.eligible_itt_subject),
           (eligibility.teaching_subject_now? ? "Yes" : "No"),
           "teaching-subject-now"
         ]
@@ -148,7 +148,7 @@ module Policies
         return if eligibility.claim.qualifications_details_check && eligibility.claim.dqt_teacher_record&.itt_academic_year_for_claim
 
         [
-          I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{eligibility.qualification}"),
+          I18n.t("additional_payments.questions.itt_academic_year.qualification.#{eligibility.qualification}"),
           eligibility.itt_academic_year.to_s.gsub("/", " - "),
           "itt-year"
         ]
@@ -156,7 +156,7 @@ module Policies
 
       def text_for_subject_answer
         policy = eligibility.policy
-        subjects = JourneySubjectEligibilityChecker.new(claim_year: PolicyConfiguration.for(policy).current_academic_year,
+        subjects = JourneySubjectEligibilityChecker.new(claim_year: JourneyConfiguration.for(policy).current_academic_year,
           itt_year: eligibility.itt_academic_year).current_and_future_subject_symbols(policy)
 
         if subjects.many?

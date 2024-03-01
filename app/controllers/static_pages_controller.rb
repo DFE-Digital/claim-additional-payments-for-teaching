@@ -15,9 +15,9 @@ class StaticPagesController < BasePublicController
   end
 
   def landing_page
-    pc = PolicyConfiguration.for(current_policy)
-    @academic_year = pc.current_academic_year
+    jc = JourneyConfiguration.for(current_policy)
+    @academic_year = jc.current_academic_year
 
-    render "#{PolicyConfiguration.view_path(pc.routing_name)}/landing_page"
+    render "#{JourneyConfiguration.view_path(jc.routing_name)}/landing_page"
   end
 end

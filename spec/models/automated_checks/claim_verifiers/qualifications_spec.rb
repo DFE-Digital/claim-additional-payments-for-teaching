@@ -3,7 +3,7 @@ require "rails_helper"
 module AutomatedChecks
   module ClaimVerifiers
     describe Qualifications do
-      let(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+      let(:journey_configuration) { create(:journey_configuration, :additional_payments) }
 
       before do
         if data

@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.feature "Eligible now can set a reminder for next year." do
-  let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+  let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
   let(:eligibility_attributes) { attributes_for(:early_career_payments_eligibility, :eligible, current_school_id: school.id) }
-  let(:academic_year) { policy_configuration.current_academic_year }
+  let(:academic_year) { journey_configuration.current_academic_year }
   let(:school) { create(:school, :early_career_payments_eligible) }
 
   it "auto-sets a reminders email and name from claim params and displays the correct year" do
@@ -56,8 +56,8 @@ RSpec.feature "Completed Applications - Reminders" do
     }
   ].each do |policy|
     context "when accepting claims for AcademicYear #{policy[:policy_year]}" do
-      let!(:policy_configuration) { create(:policy_configuration, :additional_payments, current_academic_year: policy[:policy_year]) }
-      let(:academic_year) { policy_configuration.current_academic_year }
+      let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: policy[:policy_year]) }
+      let(:academic_year) { journey_configuration.current_academic_year }
       let(:school) { create(:school, :early_career_payments_eligible) }
 
       let(:claim) do

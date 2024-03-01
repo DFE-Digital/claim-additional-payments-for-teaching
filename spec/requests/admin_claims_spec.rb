@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe "Admin claims", type: :request do
   before do
-    create(:policy_configuration, :student_loans)
-    create(:policy_configuration, :additional_payments)
+    create(:journey_configuration, :student_loans)
+    create(:journey_configuration, :additional_payments)
     sign_in_as_service_operator
   end
 

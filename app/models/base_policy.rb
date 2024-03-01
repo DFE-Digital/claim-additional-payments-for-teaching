@@ -18,10 +18,10 @@ module BasePolicy
   end
 
   def routing_name
-    PolicyConfiguration.routing_name_for_policy(self)
+    JourneyConfiguration.routing_name_for_policy(self)
   end
 
   def configuration
-    PolicyConfiguration.for(self)
+    JourneyConfiguration.for(self)
   end
 end

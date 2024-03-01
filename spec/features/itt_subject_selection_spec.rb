@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "ITT subject selection", slow: true do
-  before { create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
+  before { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
 
   # Note: If we ever change the UI to show all the options in all cases,
   # you *should* choose a subject instead of "None of the above" in the specs below.
@@ -22,10 +22,10 @@ RSpec.feature "ITT subject selection", slow: true do
         scenario "handles eligible and ineligible subject options" do
           expect_displayed_subjects(["Chemistry", "Computing", "Mathematics", "Physics"])
           select_subject("Mathematics")
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
           click_link "Back"
           select_subject("None of the above")
-          expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
+          expect(page).to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
         end
       end
 
@@ -35,10 +35,10 @@ RSpec.feature "ITT subject selection", slow: true do
         scenario "handles eligible and ineligible subject options" do
           expect_displayed_subjects(["Chemistry", "Computing", "Mathematics", "Physics"])
           select_subject("Mathematics")
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
           click_link "Back"
           select_subject("None of the above")
-          expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
+          expect(page).to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
         end
       end
 
@@ -49,15 +49,15 @@ RSpec.feature "ITT subject selection", slow: true do
           expect_displayed_subjects(["Chemistry", "Computing", "Mathematics", "Physics"])
           # choose subject eligible for LUP only
           select_subject("Chemistry")
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
           click_link "Back"
           # choose subject eligible for both LUP and ECP
           select_subject("Mathematics")
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
           click_link "Back"
           # choose ineligible subject for both ECP and LUP
           select_subject("None of the above")
-          expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
+          expect(page).to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
         end
       end
 
@@ -68,15 +68,15 @@ RSpec.feature "ITT subject selection", slow: true do
           expect_displayed_subjects(["Chemistry", "Computing", "Languages", "Mathematics", "Physics"])
           # choose subject ineligible for LUP
           select_subject("Languages")
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
           click_link "Back"
           # choose eligible subject
           select_subject("Mathematics")
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
           click_link "Back"
           # choose none of the above
           select_subject("None of the above")
-          expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
+          expect(page).to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
         end
       end
 
@@ -86,10 +86,10 @@ RSpec.feature "ITT subject selection", slow: true do
         scenario "subject options" do
           expect_displayed_subjects(["Chemistry", "Computing", "Mathematics", "Physics"])
           select_subject("Mathematics")
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
           click_link "Back"
           select_subject("None of the above")
-          expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
+          expect(page).to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
         end
       end
     end
@@ -101,7 +101,7 @@ RSpec.feature "ITT subject selection", slow: true do
         let(:itt_year) { AcademicYear.new(2017) }
 
         scenario "no subject options" do
-          expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
+          expect(page).to have_text(I18n.t("additional_payments.ineligible.heading"))
         end
       end
 
@@ -114,12 +114,12 @@ RSpec.feature "ITT subject selection", slow: true do
 
         scenario "choose ineligible subject" do
           select_subject("No")
-          expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
+          expect(page).to have_text(I18n.t("additional_payments.ineligible.heading"))
         end
 
         scenario "choose eligible subject and teach now" do
           select_subject("Yes")
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
 
           choose "Yes"
           click_on "Continue"
@@ -131,12 +131,12 @@ RSpec.feature "ITT subject selection", slow: true do
 
         scenario "choose eligible subject but don't teach now" do
           select_subject("Yes")
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
 
           choose "No"
           click_on "Continue"
 
-          expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
+          expect(page).to have_text(I18n.t("additional_payments.ineligible.heading"))
         end
       end
 
@@ -146,10 +146,10 @@ RSpec.feature "ITT subject selection", slow: true do
         scenario "subject options" do
           expect_displayed_subjects(["Mathematics"])
           select_subject("Yes")
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
           click_link "Back"
           select_subject("No")
-          expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
+          expect(page).to have_text(I18n.t("additional_payments.ineligible.heading"))
         end
       end
 
@@ -159,10 +159,10 @@ RSpec.feature "ITT subject selection", slow: true do
         scenario "subject options" do
           expect_displayed_subjects(["Chemistry", "Languages", "Mathematics", "Physics"])
           select_subject("Mathematics")
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
           click_link "Back"
           select_subject("None of the above")
-          expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
+          expect(page).to have_text(I18n.t("additional_payments.ineligible.heading"))
         end
       end
 
@@ -170,7 +170,7 @@ RSpec.feature "ITT subject selection", slow: true do
         let(:itt_year) { AcademicYear.new(2021) }
 
         scenario "no subject options" do
-          expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
+          expect(page).to have_text(I18n.t("additional_payments.ineligible.heading"))
         end
       end
     end
@@ -183,38 +183,38 @@ RSpec.feature "ITT subject selection", slow: true do
     skip_tid
 
     # - Which school do you teach at
-    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
     choose_school school
     click_on "Continue"
 
     # - Have you started your first year as a newly qualified teacher?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"))
 
     choose "Yes"
     click_on "Continue"
 
     # - Have you completed your induction as an early-career teacher?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.induction_completed.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.induction_completed.heading"))
 
     choose "Yes"
     click_on "Continue"
 
     # - Are you currently employed as a supply teacher
-    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.employed_as_supply_teacher"))
 
     choose "No"
     click_on "Continue"
 
     # - Poor performance
-    expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
-    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.formal_performance_action"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.disciplinary_action"))
 
     choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
     choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
     click_on "Continue"
 
     # - What route into teaching did you take?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
 
     choose "Undergraduate initial teacher training (ITT)"
 

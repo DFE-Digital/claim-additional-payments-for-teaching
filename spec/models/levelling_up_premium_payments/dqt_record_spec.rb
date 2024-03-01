@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe LevellingUpPremiumPayments::DqtRecord do
-  before { create(:policy_configuration, :additional_payments, current_academic_year: claim_year) }
+  before { create(:journey_configuration, :additional_payments, current_academic_year: claim_year) }
 
   subject(:dqt_record) do
     described_class.new(

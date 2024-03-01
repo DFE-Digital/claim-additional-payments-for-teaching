@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Ineligibility reason", slow: true do
-  let!(:policy_configuration) { create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
+  let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
   let!(:lup_and_ecp_school) { create(:school, :combined_journey_eligibile_for_all) }
   let!(:ecp_only_school) { create(:school, :early_career_payments_eligible) }
 
@@ -310,7 +310,7 @@ RSpec.feature "Ineligibility reason", slow: true do
     click_on "Continue"
 
     # - What route into teaching did you take?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
 
     choose "Undergraduate initial teacher training (ITT)"
 

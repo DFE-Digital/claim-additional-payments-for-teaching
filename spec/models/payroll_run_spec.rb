@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe PayrollRun, type: :model do
   before do
-    create(:policy_configuration, :student_loans)
-    create(:policy_configuration, :additional_payments)
+    create(:journey_configuration, :student_loans)
+    create(:journey_configuration, :additional_payments)
   end
 
   let(:user) { create(:dfe_signin_user) }

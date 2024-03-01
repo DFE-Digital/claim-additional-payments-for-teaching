@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Backlinking during a claim" do
   scenario "Student Loans journey" do
-    create(:policy_configuration, :student_loans)
+    create(:journey_configuration, :student_loans)
     school = create(:school, :student_loans_eligible)
     visit new_claim_path(StudentLoans.routing_name)
     skip_tid
@@ -22,7 +22,7 @@ RSpec.feature "Backlinking during a claim" do
   end
 
   scenario "ECP/LUP journey" do
-    create(:policy_configuration, :additional_payments)
+    create(:journey_configuration, :additional_payments)
     lup_school = create(:school, :levelling_up_premium_payments_eligible)
 
     visit new_claim_path(Policies::EarlyCareerPayments.routing_name)
@@ -47,7 +47,7 @@ RSpec.feature "Backlinking during a claim" do
   end
 
   scenario "ECP/LUP trainee mini journey" do
-    create(:policy_configuration, :additional_payments)
+    create(:journey_configuration, :additional_payments)
     lup_school = create(:school, :levelling_up_premium_payments_eligible)
 
     visit new_claim_path(Policies::EarlyCareerPayments.routing_name)

@@ -6,7 +6,7 @@ RSpec.shared_examples "ECP and LUP Combined Journey Admin Tasks Presenter" do |p
   subject(:presenter) { described_class.new(claim) }
 
   describe "attributes" do
-    let!(:policy_configuration) { create(:policy_configuration, policy.to_s.underscore) }
+    let!(:journey_configuration) { create(:journey_configuration, policy.to_s.underscore) }
     let(:expected_itt_year) { eligibility.itt_academic_year }
 
     it {
@@ -60,7 +60,7 @@ RSpec.shared_examples "ECP and LUP Combined Journey Admin Tasks Presenter" do |p
 
         it "returns array with subject #{spec[:subject_text]}" do
           expect(presenter.qualifications).to include(
-            ["ITT subject", I18n.t("early_career_payments.answers.eligible_itt_subject.#{spec[:subject_text]}")]
+            ["ITT subject", I18n.t("additional_payments.answers.eligible_itt_subject.#{spec[:subject_text]}")]
           )
         end
       end

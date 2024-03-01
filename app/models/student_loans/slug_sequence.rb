@@ -81,7 +81,7 @@ module StudentLoans
 
     def slugs
       SLUGS.dup.tap do |sequence|
-        if !PolicyConfiguration.for(claim.policy).teacher_id_enabled?
+        if !JourneyConfiguration.for(claim.policy).teacher_id_enabled?
           sequence.delete("sign-in-or-continue")
           sequence.delete("teacher-detail")
           sequence.delete("reset-claim")

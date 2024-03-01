@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Admin claim allocation and deallocation" do
   let!(:admin_user) { sign_in_as_service_operator }
 
-  before { create(:policy_configuration) }
+  before { create(:journey_configuration) }
 
   context "when viewing an individual claim" do
     let!(:claim) { create(:claim, :submitted, assigned_to: other_user) }

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Admin::PolicyConfigurationsHelper, type: :helper do
+RSpec.describe Admin::JourneyConfigurationsHelper, type: :helper do
   describe "#options_for_academic_year" do
     it "returns the current and next academic year (based on September 1st being the start of the year)" do
       travel_to Date.new(2018, 8, 31) do

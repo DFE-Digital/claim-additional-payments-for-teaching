@@ -40,7 +40,7 @@ describe ApplicationHelper do
 
     it "returns a policy-specific email address based on routing path" do
       expect(support_email_address("student-loans")).to eq t("student_loans.support_email_address")
-      expect(support_email_address("additional-payments")).to eq t("early_career_payments.support_email_address")
+      expect(support_email_address("additional-payments")).to eq t("additional_payments.support_email_address")
     end
   end
 
@@ -62,11 +62,11 @@ describe ApplicationHelper do
     end
 
     it "returns a policy-specific service name for student loans" do
-      expect(policy_service_name("student-loans")).to eq t("student_loans.policy_name")
+      expect(policy_service_name("student-loans")).to eq t("student_loans.journey_name")
     end
 
     it "returns a policy-specific service name for additional payments" do
-      expect(policy_service_name("additional-payments")).to eq t("early_career_payments.policy_name")
+      expect(policy_service_name("additional-payments")).to eq t("additional_payments.journey_name")
     end
   end
 
@@ -76,7 +76,7 @@ describe ApplicationHelper do
     end
 
     it "returns description for early career payments" do
-      expect(policy_description("additional-payments")).to eq t("early_career_payments.claim_description")
+      expect(policy_description("additional-payments")).to eq t("additional_payments.claim_description")
     end
   end
 end

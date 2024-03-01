@@ -4,9 +4,9 @@ RSpec.feature "Teacher Identity Sign in" do
   include OmniauthMockHelper
 
   # create a school eligible for ECP and LUP so can walk the whole journey
-  let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+  let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
-  let(:current_academic_year) { policy_configuration.current_academic_year }
+  let(:current_academic_year) { journey_configuration.current_academic_year }
   let(:trn) { 1234567 }
   let(:date_of_birth) { "1981-01-01" }
   let(:nino) { "AB123123A" }
@@ -25,14 +25,14 @@ RSpec.feature "Teacher Identity Sign in" do
     expect(page).to have_link(href: "mailto:#{Policies::EarlyCareerPayments.feedback_email}")
 
     # - Landing (start)
-    expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
+    expect(page).to have_text(I18n.t("additional_payments.landing_page"))
     click_on "Start now"
 
     # - Sign in or continue page
     click_on "Continue without signing in"
 
     # - Which school do you teach at
-    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
     expect(page.title).to have_text(I18n.t("questions.current_school"))
 
     # - Teacher makes claim after signing in
@@ -48,7 +48,7 @@ RSpec.feature "Teacher Identity Sign in" do
     click_on "Continue"
 
     # - Which school do you teach at
-    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
     expect(page.title).to have_text(I18n.t("questions.current_school"))
   end
 end

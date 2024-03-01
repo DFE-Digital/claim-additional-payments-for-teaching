@@ -4,16 +4,16 @@ RSpec.feature "Switching policies" do
   include StudentLoansHelper
 
   before do
-    create(:policy_configuration, :student_loans)
-    create(:policy_configuration, :early_career_payments)
+    create(:journey_configuration, :student_loans)
+    create(:journey_configuration, :early_career_payments)
 
     start_student_loans_claim
     visit new_claim_path(Policies::EarlyCareerPayments.routing_name)
   end
 
   scenario "a user can switch to a different policy after starting a claim on another" do
-    expect(page.title).to have_text(I18n.t("early_career_payments.policy_name"))
-    expect(page.find("header")).to have_text(I18n.t("early_career_payments.policy_name"))
+    expect(page.title).to have_text(I18n.t("additional_payments.journey_name"))
+    expect(page.find("header")).to have_text(I18n.t("additional_payments.journey_name"))
 
     choose "Yes, start claim for an additional payment for teaching and lose my progress on my first claim"
     click_on "Submit"
