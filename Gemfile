@@ -112,6 +112,8 @@ group :development do
   gem "foreman"
 
   gem "lefthook"
+  # Provides a detailed speed badge for every HTML page to aid performance optimisation.
+  gem "rack-mini-profiler"
 end
 
 group :test do

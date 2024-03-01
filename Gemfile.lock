@@ -317,6 +317,8 @@ GEM
     raabro (1.4.0)
     racc (1.7.3)
     rack (2.2.8.1)
+    rack-mini-profiler (3.3.1)
+      rack (>= 1.2.0)
     rack-oauth2 (1.21.3)
       activesupport
       attr_required
@@ -557,6 +559,7 @@ DEPENDENCIES
   pg (>= 0.18, < 2.0)
   pry
   puma (~> 6.4)
+  rack-mini-profiler
   rack_session_access
   rails (~> 7.0.8)
   rails_semantic_logger
