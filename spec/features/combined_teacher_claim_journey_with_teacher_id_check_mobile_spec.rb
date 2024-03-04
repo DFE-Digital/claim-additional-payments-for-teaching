@@ -85,10 +85,6 @@ RSpec.feature "Combined journey with Teacher ID mobile check" do
     choose "Yes"
     click_on "Continue"
 
-    # - Have you completed your induction as an early-career teacher?
-    choose "Yes"
-    click_on "Continue"
-
     # - Are you currently employed as a supply teacher
     choose "No"
     click_on "Continue"

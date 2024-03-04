@@ -3,7 +3,7 @@ module StubbingHelpers
     stub_const("Claim::MIN_QA_THRESHOLD", 0)
   end
 
-  def stub_otp_verification(otp_code:, valid: true)
+  def stub_otp_verification(otp_code: "123456", valid: true)
     allow_any_instance_of(NotifySmsMessage).to receive(:deliver!)
     allow_any_instance_of(OneTimePassword::Generator).to receive(:code).and_return(otp_code)
     allow_any_instance_of(OneTimePassword::Validator).to receive(:valid?).and_return(valid)

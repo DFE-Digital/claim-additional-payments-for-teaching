@@ -34,18 +34,47 @@ RSpec.describe Policies::EarlyCareerPayments::SlugSequence do
       expect(slug_sequence.slugs).to include("entire-term-contract", "employed-directly")
     end
 
-    context "when logged_in_with_tid and details_check are true" do
+    shared_context "logged in with Teacher ID and DQT qualifications retrieved" do
       let(:logged_in_with_tid) { true }
-      let(:details_check) { true }
       let(:itt_academic_year_for_claim) { "test" }
       let(:route_into_teaching) { "test" }
       let(:eligible_itt_subject_for_claim) { "test" }
-      let(:eligible_degree_code) { true }
+      let(:eligible_degree_code?) { true }
+      let(:has_no_data_for_claim?) { false }
+      let(:eligible_induction?) { true }
+
+      let(:ecp_dqt_record_double) { double(itt_academic_year_for_claim:, route_into_teaching:, eligible_itt_subject_for_claim:, has_no_data_for_claim?: has_no_data_for_claim?, eligible_induction?: eligible_induction?) }
+      let(:lup_dqt_record_double) { double(itt_academic_year_for_claim:, route_into_teaching:, eligible_itt_subject_for_claim:, has_no_data_for_claim?: has_no_data_for_claim?, eligible_degree_code?: eligible_degree_code?) }
 
       before do
-        allow(claim).to receive(:dqt_teacher_record).and_return(double(itt_academic_year_for_claim:, route_into_teaching:, eligible_itt_subject_for_claim:, has_no_data_for_claim?: false))
-        allow(lup_claim).to receive(:dqt_teacher_record).and_return(double(itt_academic_year_for_claim:, route_into_teaching:, eligible_itt_subject_for_claim:, eligible_degree_code?: eligible_degree_code, has_no_data_for_claim?: false))
+        allow(claim).to receive(:dqt_teacher_record).and_return(ecp_dqt_record_double)
+        allow(lup_claim).to receive(:dqt_teacher_record).and_return(lup_dqt_record_double)
       end
+    end
+
+    context "when logged_in_with_tid is true" do
+      include_context "logged in with Teacher ID and DQT qualifications retrieved"
+
+      context "when the ECP DQT record does not contain eligible induction data" do
+        let(:eligible_induction?) { false }
+
+        it "includes the induction completed question" do
+          expect(slug_sequence.slugs).to include("induction-completed")
+        end
+      end
+
+      context "when the ECP DQT record contains eligible induction data" do
+        let(:eligible_induction?) { true }
+
+        it "removes the induction completed question" do
+          expect(slug_sequence.slugs).not_to include("induction-completed")
+        end
+      end
+    end
+
+    context "when logged_in_with_tid and details_check are true" do
+      include_context "logged in with Teacher ID and DQT qualifications retrieved"
+      let(:details_check) { true }
 
       context "when DQT returns some data" do
         let(:dqt_teacher_status) { {"test" => "test"} }
@@ -55,7 +84,7 @@ RSpec.describe Policies::EarlyCareerPayments::SlugSequence do
         end
 
         context "when the DQT payload is missing all required data" do
-          before { allow(current_claim).to receive(:has_no_dqt_data_for_claim?).and_return(true) }
+          let(:has_no_data_for_claim?) { true }
 
           it "removes the qualification details page" do
             expect(slug_sequence.slugs).not_to include("qualification-details")

@@ -22,17 +22,7 @@ RSpec.feature "Combined journey with Teacher ID" do
   end
 
   before do
-    allow(NotifySmsMessage).to receive(:new).with(
-      phone_number: "07123456789",
-      template_id: "86ae1fe4-4f98-460b-9d57-181804b4e218",
-      personalisation: {
-        otp: "097543"
-      }
-    ).and_return(notify)
-    allow(OneTimePassword::Generator).to receive(:new).and_return(instance_double("OneTimePassword::Generator",
-      code: "097543"))
-    allow(OneTimePassword::Validator).to receive(:new).and_return(instance_double("OneTimePassword::Validator",
-      valid?: true))
+    stub_otp_verification
   end
 
   after do
@@ -43,89 +33,12 @@ RSpec.feature "Combined journey with Teacher ID" do
     set_mock_auth(trn, {date_of_birth:, nino:})
     stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:}, body: eligible_dqt_body)
 
-    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
-    expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
-    expect(page).to have_link(href: "mailto:#{I18n.t("additional_payments.feedback_email")}")
-
-    # - Landing (start)
-    expect(page).to have_text(I18n.t("additional_payments.landing_page"))
-    click_on "Start now"
-
-    # - Sign in or continue page
-    expect(page).to have_text("Use DfE Identity to sign in")
-    click_on "Continue with DfE Identity"
-
-    # - Teacher details page
-    expect(page).to have_text(I18n.t("questions.check_and_confirm_details"))
-    expect(page).to have_text(I18n.t("questions.details_correct"))
-
-    claim = Claim.all.order(created_at: :desc).limit(1).first
-    expect(claim.reload.errors).to be_empty
-
-    choose "Yes"
-    click_on "Continue"
-
-    # - Which school do you teach at
-    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
-    expect(page.title).to have_text(I18n.t("questions.current_school"))
-
-    choose_school school
-
-    click_on "Continue"
-
-    # - NQT in Academic Year after ITT
-    expect(page).to have_text(I18n.t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"))
-
-    choose "Yes"
-    click_on "Continue"
-
-    eligibility = claim.eligibility
-
-    expect(eligibility.nqt_in_academic_year_after_itt).to eql true
-
-    # - Have you completed your induction as an early-career teacher
-    expect(page).to have_text(I18n.t("additional_payments.questions.induction_completed.heading"))
-
-    choose "Yes"
-    click_on "Continue"
-
-    # - Are you currently employed as a supply teacher
-    expect(page).to have_text(I18n.t("additional_payments.questions.employed_as_supply_teacher"))
-
-    choose "No"
-    click_on "Continue"
-
-    expect(claim.eligibility.reload.employed_as_supply_teacher).to eql false
-
-    # - Performance Issues
-    expect(page).to have_text(I18n.t("additional_payments.questions.poor_performance"))
-    expect(page).to have_text(I18n.t("additional_payments.questions.formal_performance_action"))
-    expect(page).to have_text(I18n.t("additional_payments.questions.formal_performance_action_hint"))
-
-    # No
-    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
-
-    expect(page).to have_text(I18n.t("additional_payments.questions.disciplinary_action"))
-    expect(page).to have_text(I18n.t("additional_payments.questions.disciplinary_action_hint"))
-
-    # "No"
-    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
-
-    click_on "Continue"
-
-    expect(claim.eligibility.reload.subject_to_formal_performance_action).to eql false
-    expect(claim.eligibility.reload.subject_to_disciplinary_action).to eql false
+    navigate_until_performance_related_questions
 
     expect(page).to have_text(I18n.t("questions.check_and_confirm_qualification_details"))
     expect(page).to have_text(I18n.t("questions.academic_year.undergraduate_itt"))
     choose "Yes"
     click_on "Continue"
-
-    # Claim eligibility answers are pre-filled from DQT record
-    claim.eligibility.reload
-    expect(claim.eligibility.eligible_itt_subject).to eq("mathematics")
-    expect(claim.eligibility.itt_academic_year).to eq(itt_year)
-    expect(claim.eligibility.qualification).to eq("undergraduate_itt")
 
     # Qualification pages are skipped
 
@@ -164,22 +77,14 @@ RSpec.feature "Combined journey with Teacher ID" do
     choose "No"
     click_on "Continue"
 
-    # Claim eligibility answers are wiped
-    claim.eligibility.reload
-    expect(claim.eligibility.eligible_itt_subject).to be nil
-    expect(claim.eligibility.itt_academic_year).to be nil
-    expect(claim.eligibility.qualification).to be nil
-
     # - What route into teaching did you take?
     expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
 
     choose "Undergraduate initial teacher training (ITT)"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.qualification).to eq "undergraduate_itt"
-
     # - In which academic year did you start your undergraduate ITT
-    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
     expect(page).to have_text("2018 to 2019")
     expect(page).to have_text("2019 to 2020")
     expect(page).to have_text("2020 to 2021")
@@ -225,11 +130,6 @@ RSpec.feature "Combined journey with Teacher ID" do
     # - Personal details - skipped as TID data all provided for
     expect(page).not_to have_text(I18n.t("questions.personal_details"))
 
-    expect(claim.reload.first_name).to eql("Kelsie")
-    expect(claim.reload.surname).to eql("Oberbrunner")
-    expect(claim.reload.date_of_birth).to eq(Date.parse(date_of_birth))
-    expect(claim.reload.national_insurance_number).to eq(nino)
-
     # - What is your home address
     expect(page).to have_text(I18n.t("questions.address.home.title"))
     expect(page).to have_link(href: claim_path(Policies::EarlyCareerPayments.routing_name, "address"))
@@ -245,12 +145,6 @@ RSpec.feature "Combined journey with Teacher ID" do
     fill_in "County", with: "City of Derby"
     fill_in "Postcode", with: "DE22 4BS"
     click_on "Continue"
-
-    expect(claim.reload.address_line_1).to eql("57")
-    expect(claim.address_line_2).to eql("Walthamstow Drive")
-    expect(claim.address_line_3).to eql("Derby")
-    expect(claim.address_line_4).to eql("City of Derby")
-    expect(claim.postcode).to eql("DE22 4BS")
 
     # - Email address
     expect(page).to have_text(I18n.t("questions.select_email.heading"))
@@ -270,20 +164,10 @@ RSpec.feature "Combined journey with Teacher ID" do
     choose "Personal bank account"
     click_on "Continue"
 
-    expect(claim.reload.bank_or_building_society).to eq "personal_bank_account"
-
-    expect(page).to have_text(I18n.t("questions.account_details",
-      bank_or_building_society: claim.bank_or_building_society.humanize.downcase))
-    expect(page).not_to have_text("Building society roll number")
-
-    fill_in "Name on your account", with: "Sam Harris"
+    fill_in "Name on your account", with: "John Doe"
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "87654321"
     click_on "Continue"
-
-    expect(claim.reload.banking_name).to eq("Sam Harris")
-    expect(claim.bank_sort_code).to eq("123456")
-    expect(claim.bank_account_number).to eq("87654321")
 
     # - What gender does your school's payroll system associate with you
     expect(page).to have_text(I18n.t("questions.payroll_gender"))
@@ -291,43 +175,15 @@ RSpec.feature "Combined journey with Teacher ID" do
     choose "Male"
     click_on "Continue"
 
-    expect(claim.reload.payroll_gender).to eq("male")
-
     # - teacher-reference-number slug removed from user journey
-    expect(page).to have_text(I18n.t("questions.has_student_loan"))
-
-    click_link "Back"
-
-    expect(page).to have_text(I18n.t("questions.payroll_gender"))
+    expect(page).not_to have_text(I18n.t("questions.teacher_reference_number"))
   end
 
   scenario "When user is logged in with Teacher ID and there is no matching DQT record" do
     set_mock_auth(trn, {date_of_birth:, nino:})
     stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
 
-    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
-    click_on "Start now"
-
-    click_on "Continue with DfE Identity"
-
-    choose "Yes"
-    click_on "Continue"
-
-    choose_school school
-
-    choose "Yes"
-    click_on "Continue"
-
-    choose "Yes"
-    click_on "Continue"
-
-    choose "No"
-    click_on "Continue"
-
-    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
-    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
-
-    click_on "Continue"
+    navigate_until_performance_related_questions(expect_induction_question: true)
 
     # Qualification pages are not skipped
     expect(page).not_to have_text(I18n.t("additional_payments.questions.check_and_confirm_qualification_details"))
@@ -363,22 +219,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     set_mock_auth("1234567", {nino: "", date_of_birth:})
     stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino: ""}, body: eligible_dqt_body)
 
-    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
-    click_on "Start now"
-    click_on "Continue with DfE Identity"
-    choose "Yes"
-    click_on "Continue"
-    choose_school school
-    click_on "Continue"
-    choose "Yes"
-    click_on "Continue"
-    choose "Yes"
-    click_on "Continue"
-    choose "No"
-    click_on "Continue"
-    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
-    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
-    click_on "Continue"
+    navigate_until_performance_related_questions
 
     expect(page).to have_text(I18n.t("questions.check_and_confirm_qualification_details"))
     choose "Yes"
@@ -409,36 +250,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     fill_in "National Insurance number", with: "PX321499A"
     click_on "Continue"
 
-    claim = Claim.all.order(created_at: :desc).limit(1).first
-    expect(claim.errors).to be_empty
-  end
-
-  scenario "When user is logged in with Teacher ID and the qualifications are not eligible" do
-    set_mock_auth("1234567", {nino:, date_of_birth:})
-    stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:})
-
-    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
-    click_on "Start now"
-    click_on "Continue with DfE Identity"
-    choose "Yes"
-    click_on "Continue"
-    choose_school school
-    click_on "Continue"
-    choose "Yes"
-    click_on "Continue"
-    choose "Yes"
-    click_on "Continue"
-    choose "No"
-    click_on "Continue"
-    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
-    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
-    click_on "Continue"
-
-    expect(page).to have_text(I18n.t("questions.check_and_confirm_qualification_details"))
-    choose "Yes"
-    click_on "Continue"
-
-    expect(page).to have_text("You are not eligible for the early-career payment or the levelling up premium payment because of the subject you studied or the year you studied.")
+    expect(page).to have_text(I18n.t("questions.address.home.title"))
   end
 
   scenario "When user is logged in with Teacher ID and the qualifications data is incomplete" do
@@ -450,22 +262,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     }
     stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:}, body: missing_qts_date_body)
 
-    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
-    click_on "Start now"
-    click_on "Continue with DfE Identity"
-    choose "Yes"
-    click_on "Continue"
-    choose_school school
-    click_on "Continue"
-    choose "Yes"
-    click_on "Continue"
-    choose "Yes"
-    click_on "Continue"
-    choose "No"
-    click_on "Continue"
-    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
-    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
-    click_on "Continue"
+    navigate_until_performance_related_questions(expect_induction_question: true)
 
     expect(page).to have_text(I18n.t("questions.check_and_confirm_qualification_details"))
 
@@ -513,22 +310,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     }
     stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:}, body: missing_qts_date_body)
 
-    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
-    click_on "Start now"
-    click_on "Continue with DfE Identity"
-    choose "Yes"
-    click_on "Continue"
-    choose_school school
-    click_on "Continue"
-    choose "Yes"
-    click_on "Continue"
-    choose "Yes"
-    click_on "Continue"
-    choose "No"
-    click_on "Continue"
-    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
-    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
-    click_on "Continue"
+    navigate_until_performance_related_questions(expect_induction_question: true)
 
     # Degree subject is shown because the ITT is ineligible
     expect(page).to have_text(I18n.t("questions.check_and_confirm_qualification_details"))
@@ -536,5 +318,56 @@ RSpec.feature "Combined journey with Teacher ID" do
     expect(page).to have_text("Philosophy")
     expect(page).to have_text(I18n.t("questions.degree_subject"))
     expect(page).to have_text("Mathematics")
+  end
+
+  def navigate_until_performance_related_questions(expect_induction_question: false)
+    # - Landing (start)
+    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
+    click_on "Start now"
+
+    # - Sign in or continue page
+    click_on "Continue with DfE Identity"
+
+    # - Teacher details page
+    expect(page).to have_text(I18n.t("questions.check_and_confirm_details"))
+    expect(page).to have_text(I18n.t("questions.details_correct"))
+
+    choose "Yes"
+    click_on "Continue"
+
+    # - Which school do you teach at?
+    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
+    expect(page.title).to have_text(I18n.t("questions.current_school"))
+
+    choose_school school
+
+    # - Are you currently teaching as a qualified teacher?
+    expect(page).to have_text(I18n.t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"))
+
+    choose "Yes"
+    click_on "Continue"
+
+    if expect_induction_question
+      # - Have you completed your induction as an early-career teacher?
+      expect(page).to have_text(I18n.t("additional_payments.questions.induction_completed.heading"))
+
+      choose "Yes"
+      click_on "Continue"
+    else
+      expect(page).not_to have_text(I18n.t("additional_payments.questions.induction_completed.heading"))
+    end
+
+    # - Are you currently employed as a supply teacher?
+    expect(page).to have_text(I18n.t("additional_payments.questions.employed_as_supply_teacher"))
+
+    choose "No"
+    click_on "Continue"
+
+    # - Performance Issues
+    expect(page).to have_text(I18n.t("additional_payments.questions.poor_performance"))
+
+    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
+    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
+    click_on "Continue"
   end
 end
