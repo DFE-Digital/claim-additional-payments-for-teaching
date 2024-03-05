@@ -32,7 +32,7 @@ module Policies
   # Map PolicyConfiguration.policy_types and Claim.policy_options_provided to the Policies namespace
   #
   def self.constantize(policy)
-    if %w[EarlyCareerPayments].include?(policy)
+    if %w[StudentLoans EarlyCareerPayments].include?(policy)
       "Policies::#{policy}"
     else
       policy
