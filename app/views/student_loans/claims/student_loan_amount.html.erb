@@ -16,7 +16,7 @@
             </legend>
 
             <p class="govuk-hint" id="student_loan_repayment_amount-hint">
-              This will relate to the period you were employed as a teacher between <%= StudentLoans.current_financial_year %>.
+              This will relate to the period you were employed as a teacher between <%= Policies::StudentLoans.current_financial_year %>.
               <% if current_claim.postgraduate_masters_loan == true || current_claim.postgraduate_doctoral_loan == true %>
                 You must include any postgraduate masters and doctoral loans when calculating the amount you have repaid.
               <% end %>
@@ -52,7 +52,7 @@
                   </p>
                   <ul class="govuk-list govuk-list--bullet">
                     <li>logging into your <%= link_to "student loan account",
-                      StudentLoans.student_loan_balance_url,
+                      Policies::StudentLoans.student_loan_balance_url,
                         class: "govuk-link",
                         title: "govuk-link (opens in new tab)",
                         rel: "noreferrer noopener",

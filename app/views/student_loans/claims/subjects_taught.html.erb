@@ -20,7 +20,7 @@
 
             <div class="govuk-checkboxes">
 
-              <%- StudentLoans::Eligibility::SUBJECT_ATTRIBUTES.each do |subject| %>
+              <%- Policies::StudentLoans::Eligibility::SUBJECT_ATTRIBUTES.each do |subject| %>
                 <div class="govuk-checkboxes__item">
                   <%= fields.hidden_field subject, value: false %>
                   <%= fields.check_box subject, class: "govuk-checkboxes__input subject", id: "eligible_subjects_#{subject}" %>
