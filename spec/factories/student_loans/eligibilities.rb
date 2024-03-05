@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :student_loans_eligibility, class: "StudentLoans::Eligibility" do
+  factory :student_loans_eligibility, class: "Policies::StudentLoans::Eligibility" do
     trait :eligible do
       association :current_school, factory: [:school, :student_loans_eligible]
       qts_award_year { :on_or_after_cut_off_date }

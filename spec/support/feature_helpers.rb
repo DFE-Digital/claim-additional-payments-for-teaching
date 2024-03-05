@@ -15,10 +15,10 @@ module FeatureHelpers
   end
 
   def start_student_loans_claim
-    visit new_claim_path(StudentLoans.routing_name)
+    visit new_claim_path(Policies::StudentLoans.routing_name)
     skip_tid
     choose_qts_year
-    Claim.by_policy(StudentLoans).order(:created_at).last
+    Claim.by_policy(Policies::StudentLoans).order(:created_at).last
   end
 
   def choose_qts_year(option = :on_or_after_cut_off_date)
