@@ -8,7 +8,7 @@ RSpec.feature "Admin checking a claim missing a payroll gender" do
   end
 
   scenario "service operator can add a payroll gender as part of the checking process" do
-    claim = create(:claim, :submitted, policy: StudentLoans, payroll_gender: :dont_know)
+    claim = create(:claim, :submitted, policy: Policies::StudentLoans, payroll_gender: :dont_know)
 
     visit admin_claims_path
     find("a[href='#{admin_claim_tasks_path(claim)}']").click

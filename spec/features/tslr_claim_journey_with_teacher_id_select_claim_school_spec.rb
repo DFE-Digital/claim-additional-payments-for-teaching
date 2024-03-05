@@ -32,7 +32,7 @@ RSpec.feature "TSLR journey with Teacher ID school playback" do
     navigate_to_claim_school_page(tps: :inside_window, school: eligible_school)
 
     expect(current_path).to eq("/student-loans/select-claim-school")
-    expect(page).to have_text(I18n.t("student_loans.questions.claim_school", financial_year: StudentLoans.current_financial_year))
+    expect(page).to have_text(I18n.t("student_loans.questions.claim_school", financial_year: Policies::StudentLoans.current_financial_year))
 
     choose(eligible_school.name)
     click_on "Continue"
@@ -51,7 +51,7 @@ RSpec.feature "TSLR journey with Teacher ID school playback" do
     navigate_to_claim_school_page(tps: :inside_window, school: ineligible_school)
 
     expect(current_path).to eq("/student-loans/select-claim-school")
-    expect(page).to have_text(I18n.t("student_loans.questions.claim_school", financial_year: StudentLoans.current_financial_year))
+    expect(page).to have_text(I18n.t("student_loans.questions.claim_school", financial_year: Policies::StudentLoans.current_financial_year))
 
     choose(ineligible_school.name)
     click_on "Continue"
@@ -68,7 +68,7 @@ RSpec.feature "TSLR journey with Teacher ID school playback" do
     expect(page).to have_text("You're not eligible for this payment")
 
     # - Go back one
-    visit claim_path(StudentLoans.routing_name, "ineligible")
+    visit claim_path(Policies::StudentLoans.routing_name, "ineligible")
 
     # - Try another school
     click_on "Enter another school"
@@ -91,7 +91,7 @@ RSpec.feature "TSLR journey with Teacher ID school playback" do
       create(:teachers_pensions_service, teacher_reference_number: trn, start_date: before_beginning_of_month, end_date: before_end_of_month, school_urn: school.establishment_number, la_urn: school.local_authority.code)
     end
 
-    visit landing_page_path(StudentLoans.routing_name)
+    visit landing_page_path(Policies::StudentLoans.routing_name)
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("student_loans.landing_page"))
