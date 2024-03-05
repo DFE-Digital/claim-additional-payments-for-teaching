@@ -141,7 +141,7 @@
       </div>
     </div>
 
-    <% if @amendment.claim.policy == StudentLoans %>
+    <% if @amendment.claim.policy == Policies::StudentLoans %>
       <%= claim_form.fields_for :eligibility, @amendment.claim.eligibility, include_id: false do |eligibility_form| %>
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-one-third">

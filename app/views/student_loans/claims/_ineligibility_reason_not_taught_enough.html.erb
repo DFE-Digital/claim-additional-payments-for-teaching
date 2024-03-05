@@ -4,12 +4,12 @@
 
 <p class="govuk-body">
   You can only get this payment if you spent less than half your working hours
-  performing leadership duties between <%= StudentLoans.current_financial_year %>.
+  performing leadership duties between <%= Policies::StudentLoans.current_financial_year %>.
 </p>
 
 <p class="govuk-body">
   For more information, including employment eligibility criteria for this
   payment, visit the
-  <%= link_to "‘Claim back your student loan repayments’", "#{StudentLoans.eligibility_page_url}#eligible-subject", class: "govuk-link" %>
+  <%= link_to "‘Claim back your student loan repayments’", "#{Policies::StudentLoans.eligibility_page_url}#eligible-subject", class: "govuk-link" %>
   guidance.
 </p>
