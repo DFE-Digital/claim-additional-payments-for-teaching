@@ -957,7 +957,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
   end
 
   context "with StudentLoans policy" do
-    let(:policy) { StudentLoans }
+    let(:policy) { Policies::StudentLoans }
 
     context "with submitted claim" do
       let(:claim) do

@@ -9,8 +9,8 @@ RSpec.feature "Payroll" do
   scenario "Service operator creates a payroll run" do
     click_on "Payroll"
 
-    create(:claim, :approved, policy: StudentLoans)
-    create(:claim, :approved, policy: StudentLoans)
+    create(:claim, :approved, policy: Policies::StudentLoans)
+    create(:claim, :approved, policy: Policies::StudentLoans)
     create(:claim, :approved, policy: Policies::EarlyCareerPayments)
     create(:claim, :approved, policy: LevellingUpPremiumPayments)
 
@@ -51,7 +51,7 @@ RSpec.feature "Payroll" do
 
   context "when a payroll run already exists for the month" do
     scenario "Service operator cannot create a new payroll run" do
-      create(:payroll_run, claims_counts: {StudentLoans => 2}, created_at: 5.minutes.ago)
+      create(:payroll_run, claims_counts: {Policies::StudentLoans => 2}, created_at: 5.minutes.ago)
 
       visit admin_payroll_runs_path
 
@@ -112,7 +112,7 @@ RSpec.feature "Payroll" do
   end
 
   scenario "Service operator can view a payroll run" do
-    payroll_run = create(:payroll_run, claims_counts: {Policies::EarlyCareerPayments => 1, StudentLoans => 1})
+    payroll_run = create(:payroll_run, claims_counts: {Policies::EarlyCareerPayments => 1, Policies::StudentLoans => 1})
 
     click_on "Payroll"
     click_on "View #{I18n.l(payroll_run.created_at.to_date, format: :month_year)} payroll run"
@@ -130,7 +130,7 @@ RSpec.feature "Payroll" do
   end
 
   scenario "Service operator can remove a payment from a payroll run" do
-    payroll_run = create(:payroll_run, claims_counts: {Policies::EarlyCareerPayments => 1, StudentLoans => 1})
+    payroll_run = create(:payroll_run, claims_counts: {Policies::EarlyCareerPayments => 1, Policies::StudentLoans => 1})
     payment_to_delete = payroll_run.payments.first
     claim_reference = payment_to_delete.claims.first.reference
 
@@ -152,7 +152,7 @@ RSpec.feature "Payroll" do
   end
 
   scenario "Service operator can upload a Payment Confirmation Report multiple times against a payroll run" do
-    payroll_run = create(:payroll_run, claims_counts: {StudentLoans => 3})
+    payroll_run = create(:payroll_run, claims_counts: {Policies::StudentLoans => 3})
     first_payment = payroll_run.payments.ordered[0]
     second_payment = payroll_run.payments.ordered[1]
     third_payment = payroll_run.payments.ordered[2]
@@ -250,7 +250,7 @@ RSpec.feature "Payroll" do
   end
 
   scenario "Payments can be browsed using pagination" do
-    payroll_run = create(:payroll_run, claims_counts: {StudentLoans => 7})
+    payroll_run = create(:payroll_run, claims_counts: {Policies::StudentLoans => 7})
 
     stub_const("Pagy::DEFAULT", Pagy::DEFAULT.merge(items: 5))
 

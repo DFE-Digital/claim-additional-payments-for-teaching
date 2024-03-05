@@ -28,7 +28,7 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
       click_on "Continue"
 
       expect(page).to have_text("You did not select an eligible subject")
-      expect(page).to have_text("You can only get this payment if you taught one or more of the following subjects between #{StudentLoans.current_financial_year}:")
+      expect(page).to have_text("You can only get this payment if you taught one or more of the following subjects between #{Policies::StudentLoans.current_financial_year}:")
     end
 
     scenario "checks not applicable and then chooses a subject" do
@@ -59,7 +59,7 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
       click_on "Continue"
 
       expect(page).to have_text("You did not select an eligible subject")
-      expect(page).to have_text("You can only get this payment if you taught one or more of the following subjects between #{StudentLoans.current_financial_year}:")
+      expect(page).to have_text("You can only get this payment if you taught one or more of the following subjects between #{Policies::StudentLoans.current_financial_year}:")
     end
 
     scenario "checks not applicable and then chooses a subject" do
@@ -69,7 +69,7 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
       click_on "Continue"
 
       expect(page).to have_text("You did not select an eligible subject")
-      expect(page).to have_text("You can only get this payment if you taught one or more of the following subjects between #{StudentLoans.current_financial_year}:")
+      expect(page).to have_text("You can only get this payment if you taught one or more of the following subjects between #{Policies::StudentLoans.current_financial_year}:")
     end
   end
 end

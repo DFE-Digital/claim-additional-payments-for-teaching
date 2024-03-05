@@ -43,7 +43,7 @@ RSpec.feature "TSLR journey with Teacher ID" do
     # Qualification pages are skipped
 
     # - Which school do you teach at
-    expect(page).to have_text(I18n.t("student_loans.questions.claim_school", financial_year: StudentLoans.current_financial_year))
+    expect(page).to have_text(I18n.t("student_loans.questions.claim_school", financial_year: Policies::StudentLoans.current_financial_year))
     click_link "Back"
 
     expect(page).to have_text(I18n.t("questions.check_and_confirm_qualification_details"))
@@ -104,7 +104,7 @@ RSpec.feature "TSLR journey with Teacher ID" do
   end
 
   def navigate_past_teacher_details_page
-    visit landing_page_path(StudentLoans.routing_name)
+    visit landing_page_path(Policies::StudentLoans.routing_name)
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("student_loans.landing_page"))

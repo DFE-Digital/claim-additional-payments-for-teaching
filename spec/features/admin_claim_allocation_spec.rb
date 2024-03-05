@@ -9,19 +9,19 @@ RSpec.feature "Claims awaiting a decision" do
     @signed_in_user = sign_in_as_service_operator
 
     # index: 0-1
-    submitted_claims << create_list(:claim, 2, :submitted, policy: StudentLoans)
+    submitted_claims << create_list(:claim, 2, :submitted, policy: Policies::StudentLoans)
 
     # index: 2-14
     submitted_claims << create_list(:claim, 13, :submitted, policy: Policies::EarlyCareerPayments)
 
     # index: 15-18
-    submitted_claims << create_list(:claim, 4, :submitted, policy: StudentLoans)
+    submitted_claims << create_list(:claim, 4, :submitted, policy: Policies::StudentLoans)
 
     # index: 19
     submitted_claims << create_list(:claim, 1, :submitted, policy: Policies::EarlyCareerPayments)
 
     # index: 20-22
-    submitted_claims << create_list(:claim, 3, :submitted, policy: StudentLoans)
+    submitted_claims << create_list(:claim, 3, :submitted, policy: Policies::StudentLoans)
 
     # index: 23-34
     submitted_claims << create_list(:claim, 12, :submitted, policy: Policies::EarlyCareerPayments)
@@ -200,7 +200,7 @@ RSpec.feature "Claims awaiting a decision" do
 
       [first_claim, second_claim].each do |claim|
         expect(claim.reload.assigned_to.full_name).to eq "Frank Yee"
-        expect(claim.policy).to eq StudentLoans
+        expect(claim.policy).to eq Policies::StudentLoans
       end
       [twenty_sixth_claim, thirtieth_claim, thirty_fifth_claim].each do |claim|
         expect(claim.reload.assigned_to).to be_nil

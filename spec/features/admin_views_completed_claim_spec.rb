@@ -28,7 +28,7 @@ RSpec.feature "Admin can view completed claims" do
   end
 
   scenario "Viewing an approved claim which has a payment" do
-    payroll_run = create(:payroll_run, claims_counts: {StudentLoans => 1})
+    payroll_run = create(:payroll_run, claims_counts: {Policies::StudentLoans => 1})
     claim_with_payment = payroll_run.claims.first
 
     visit admin_claim_tasks_path(claim_with_payment)
