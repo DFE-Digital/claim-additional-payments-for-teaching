@@ -5,7 +5,7 @@ FactoryBot.define do
 
   factory :claim do
     transient do
-      policy { StudentLoans }
+      policy { Policies::StudentLoans }
       eligibility_factory { :"#{policy.to_s.underscore}_eligibility" }
       eligibility_trait { nil }
       eligibility_attributes { nil }
