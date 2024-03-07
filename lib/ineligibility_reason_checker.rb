@@ -168,7 +168,7 @@ class IneligibilityReasonChecker
     [
       @current_claim.eligibility.nqt_in_academic_year_after_itt == false,
       @current_claim.academic_year >= AcademicYear.new(LevellingUpPremiumPayments::Eligibility::LAST_POLICY_YEAR),
-      @current_claim.academic_year >= AcademicYear.new(EarlyCareerPayments::Eligibility::LAST_POLICY_YEAR)
+      @current_claim.academic_year >= AcademicYear.new(Policies::EarlyCareerPayments::Eligibility::LAST_POLICY_YEAR)
     ].all?
   end
 end

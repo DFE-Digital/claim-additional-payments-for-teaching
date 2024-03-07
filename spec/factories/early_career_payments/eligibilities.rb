@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :early_career_payments_eligibility, class: "EarlyCareerPayments::Eligibility" do
+  factory :early_career_payments_eligibility, class: "Policies::EarlyCareerPayments::Eligibility" do
     trait :eligible do
       eligible_now
     end

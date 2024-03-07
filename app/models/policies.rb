@@ -6,7 +6,7 @@ module Policies
   ].freeze
 
   AMENDABLE_ELIGIBILITY_ATTRIBUTES = POLICIES.map do |policy|
-    "#{policy}::Eligibility::AMENDABLE_ATTRIBUTES".constantize
+    policy::Eligibility::AMENDABLE_ATTRIBUTES
   end.flatten.freeze
 
   def self.all
