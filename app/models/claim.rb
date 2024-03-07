@@ -523,7 +523,7 @@ class Claim < ApplicationRecord
   end
 
   def has_tslr_policy?
-    policy == StudentLoans
+    policy == Policies::StudentLoans
   end
 
   def has_lupp_policy?

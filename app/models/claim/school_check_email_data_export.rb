@@ -23,11 +23,11 @@ class Claim
         claims.each do |claim|
           csv << [
             claim.reference,
-            claim.policy.name,
+            claim.policy.to_s,
             claim.eligibility.current_school.urn,
             claim.eligibility.current_school.name,
-            (claim.eligibility.claim_school.urn if claim.policy.is_a? StudentLoans),
-            (claim.eligibility.claim_school.name if claim.policy.is_a? StudentLoans),
+            (claim.eligibility.claim_school.urn if claim.policy.is_a? Policies::StudentLoans),
+            (claim.eligibility.claim_school.name if claim.policy.is_a? Policies::StudentLoans),
             claimant_name(claim),
             subject(claim)
           ]
