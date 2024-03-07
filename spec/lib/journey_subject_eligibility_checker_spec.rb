@@ -320,7 +320,7 @@ RSpec.describe JourneySubjectEligibilityChecker do
     end
 
     context "unsupported policy" do
-      let(:policy) { StudentLoans }
+      let(:policy) { Policies::StudentLoans }
 
       context "2022 claim year" do
         let(:claim_year) { AcademicYear.new(2022) }
@@ -545,7 +545,7 @@ RSpec.describe JourneySubjectEligibilityChecker do
     end
 
     context "unsupported policy" do
-      let(:policy) { StudentLoans }
+      let(:policy) { Policies::StudentLoans }
 
       context "2022 claim year" do
         let(:claim_year) { AcademicYear.new(2022) }
@@ -770,7 +770,7 @@ RSpec.describe JourneySubjectEligibilityChecker do
     end
 
     context "unsupported policy" do
-      let(:policy) { StudentLoans }
+      let(:policy) { Policies::StudentLoans }
 
       context "2022 claim year" do
         let(:claim_year) { AcademicYear.new(2022) }
