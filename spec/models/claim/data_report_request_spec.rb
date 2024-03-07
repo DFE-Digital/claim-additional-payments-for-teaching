@@ -5,7 +5,7 @@ RSpec.describe Claim::DataReportRequest do
   describe "#to_csv" do
     let(:claims) do
       [
-        create(:claim, :submitted, policy: StudentLoans),
+        create(:claim, :submitted, policy: Policies::StudentLoans),
         create(:claim, :submitted, policy: Policies::EarlyCareerPayments)
       ]
     end

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe StudentLoans::SchoolEligibility do
+RSpec.describe Policies::StudentLoans::SchoolEligibility do
   subject(:eligibility) { described_class.new(school) }
 
   describe "#eligible_claim_school?" do
@@ -11,12 +11,12 @@ RSpec.describe StudentLoans::SchoolEligibility do
       end
 
       context "when closed before the policy start date" do
-        let(:school) { build(:school, :student_loans_eligible, :closed, close_date: StudentLoans::SchoolEligibility::POLICY_START_DATE - 1.month) }
+        let(:school) { build(:school, :student_loans_eligible, :closed, close_date: Policies::StudentLoans::SchoolEligibility::POLICY_START_DATE - 1.month) }
         it { is_expected.not_to be_eligible_claim_school }
       end
 
       context "when closed after the policy start date" do
-        let(:school) { build(:school, :student_loans_eligible, :closed, close_date: StudentLoans::SchoolEligibility::POLICY_START_DATE + 1.month) }
+        let(:school) { build(:school, :student_loans_eligible, :closed, close_date: Policies::StudentLoans::SchoolEligibility::POLICY_START_DATE + 1.month) }
         it { is_expected.to be_eligible_claim_school }
       end
 
@@ -38,12 +38,12 @@ RSpec.describe StudentLoans::SchoolEligibility do
       end
 
       context "when closed before the policy start date" do
-        let(:school) { build(:school, :student_loans_eligible, :special_school, :closed, close_date: StudentLoans::SchoolEligibility::POLICY_START_DATE - 1.month) }
+        let(:school) { build(:school, :student_loans_eligible, :special_school, :closed, close_date: Policies::StudentLoans::SchoolEligibility::POLICY_START_DATE - 1.month) }
         it { is_expected.not_to be_eligible_claim_school }
       end
 
       context "when closed after the policy start date" do
-        let(:school) { build(:school, :student_loans_eligible, :special_school, :closed, close_date: StudentLoans::SchoolEligibility::POLICY_START_DATE + 1.month) }
+        let(:school) { build(:school, :student_loans_eligible, :special_school, :closed, close_date: Policies::StudentLoans::SchoolEligibility::POLICY_START_DATE + 1.month) }
         it { is_expected.to be_eligible_claim_school }
       end
 
@@ -70,12 +70,12 @@ RSpec.describe StudentLoans::SchoolEligibility do
       end
 
       context "when closed before the policy start date" do
-        let(:school) { build(:school, :student_loans_eligible, :alternative_provision, :closed, close_date: StudentLoans::SchoolEligibility::POLICY_START_DATE - 1.month) }
+        let(:school) { build(:school, :student_loans_eligible, :alternative_provision, :closed, close_date: Policies::StudentLoans::SchoolEligibility::POLICY_START_DATE - 1.month) }
         it { is_expected.not_to be_eligible_claim_school }
       end
 
       context "when closed after the policy start date" do
-        let(:school) { build(:school, :student_loans_eligible, :alternative_provision, :closed, close_date: StudentLoans::SchoolEligibility::POLICY_START_DATE + 1.month) }
+        let(:school) { build(:school, :student_loans_eligible, :alternative_provision, :closed, close_date: Policies::StudentLoans::SchoolEligibility::POLICY_START_DATE + 1.month) }
         it { is_expected.to be_eligible_claim_school }
       end
 
@@ -102,12 +102,12 @@ RSpec.describe StudentLoans::SchoolEligibility do
       end
 
       context "when closed before the policy start date" do
-        let(:school) { build(:school, :student_loans_eligible, :city_technology_college, :closed, close_date: StudentLoans::SchoolEligibility::POLICY_START_DATE - 1.month) }
+        let(:school) { build(:school, :student_loans_eligible, :city_technology_college, :closed, close_date: Policies::StudentLoans::SchoolEligibility::POLICY_START_DATE - 1.month) }
         it { is_expected.not_to be_eligible_claim_school }
       end
 
       context "when closed after the policy start date" do
-        let(:school) { build(:school, :student_loans_eligible, :city_technology_college, :closed, close_date: StudentLoans::SchoolEligibility::POLICY_START_DATE + 1.month) }
+        let(:school) { build(:school, :student_loans_eligible, :city_technology_college, :closed, close_date: Policies::StudentLoans::SchoolEligibility::POLICY_START_DATE + 1.month) }
         it { is_expected.to be_eligible_claim_school }
       end
 

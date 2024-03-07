@@ -24,7 +24,7 @@ RSpec.describe Claim::MatchingAttributeFinder do
         bank_sort_code: "972654",
         academic_year: AcademicYear.new("2019"),
         building_society_roll_number: "123456789/ABCD",
-        policy: StudentLoans)
+        policy: Policies::StudentLoans)
     }
 
     let!(:lup_claim) {
@@ -57,7 +57,7 @@ RSpec.describe Claim::MatchingAttributeFinder do
         bank_sort_code: "972654",
         academic_year: AcademicYear.new("2019"),
         building_society_roll_number: "123456789/ABCD",
-        policy: StudentLoans)
+        policy: Policies::StudentLoans)
     }
 
     subject(:matching_claims) { Claim::MatchingAttributeFinder.new(source_claim).matching_claims }
@@ -79,7 +79,7 @@ RSpec.describe Claim::MatchingAttributeFinder do
     end
 
     it "does not include claims that match, but have a different policy" do
-      student_loans_claim = create(:claim, :submitted, teacher_reference_number: source_claim.teacher_reference_number, policy: StudentLoans)
+      student_loans_claim = create(:claim, :submitted, teacher_reference_number: source_claim.teacher_reference_number, policy: Policies::StudentLoans)
 
       expect(matching_claims).to contain_exactly(student_loans_claim)
     end

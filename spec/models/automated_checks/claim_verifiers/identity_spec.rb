@@ -68,7 +68,7 @@ module AutomatedChecks
 
         [
           Policies::EarlyCareerPayments,
-          StudentLoans
+          Policies::StudentLoans
         ].each do |policy|
           context "with policy #{policy}" do
             let(:policy) { policy }

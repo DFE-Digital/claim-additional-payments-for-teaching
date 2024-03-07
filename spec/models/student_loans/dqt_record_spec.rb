@@ -1,10 +1,10 @@
 require "rails_helper"
 
-RSpec.describe StudentLoans::DqtRecord do
+RSpec.describe Policies::StudentLoans::DqtRecord do
   let!(:journey_configuration) { create(:journey_configuration, :student_loans) }
 
   describe "#eligble?" do
-    subject(:result) { StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date:})).eligible? }
+    subject(:result) { described_class.new(OpenStruct.new({qts_award_date:})).eligible? }
 
     context "QTS award date is after the first eligible academic year" do
       let(:qts_award_date) { Date.new(2017, 3, 19) }
@@ -33,7 +33,7 @@ RSpec.describe StudentLoans::DqtRecord do
   end
 
   describe "#eligible_qts_award_date?" do
-    subject(:result) { StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date:})).eligible_qts_award_date? }
+    subject(:result) { described_class.new(OpenStruct.new({qts_award_date:})).eligible_qts_award_date? }
 
     context "QTS award date is after the first eligible academic year" do
       let(:qts_award_date) { Date.new(2017, 3, 19) }

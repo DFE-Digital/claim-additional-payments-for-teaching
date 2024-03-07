@@ -9,7 +9,7 @@ module AutomatedChecks
 
       let(:claim_arg) { claim }
       let(:claim) { create(:claim, :submitted, policy:) }
-      let(:policy) { StudentLoans }
+      let(:policy) { Policies::StudentLoans }
 
       shared_examples :successful_execution do
         let(:saved_task) { claim_arg.tasks.find_by(name: "student_loan_amount") }

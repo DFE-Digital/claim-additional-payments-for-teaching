@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe StudentLoans::EligibilityAnswersPresenter, type: :model do
+RSpec.describe Policies::StudentLoans::EligibilityAnswersPresenter, type: :model do
   include StudentLoansHelper
 
   let(:subject_attributes) { {chemistry_taught: true, physics_taught: true} }

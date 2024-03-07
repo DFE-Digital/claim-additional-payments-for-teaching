@@ -4,7 +4,7 @@ RSpec.describe Payroll::PaymentsCsv do
   subject(:generator) { described_class.new(payroll_run) }
 
   let(:payroll_run) do
-    create(:payroll_run, claims_counts: {StudentLoans => 1, Policies::EarlyCareerPayments => 2}, created_at: creation_date)
+    create(:payroll_run, claims_counts: {Policies::StudentLoans => 1, Policies::EarlyCareerPayments => 2}, created_at: creation_date)
   end
   let(:creation_date) { "2023-07-17" }
 

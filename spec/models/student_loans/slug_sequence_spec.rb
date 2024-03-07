@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe StudentLoans::SlugSequence do
-  subject(:slug_sequence) { StudentLoans::SlugSequence.new(current_claim) }
+RSpec.describe Policies::StudentLoans::SlugSequence do
+  subject(:slug_sequence) { described_class.new(current_claim) }
 
   let(:eligibility) { create(:student_loans_eligibility, :eligible) }
   let(:claim) { build(:claim, eligibility:, logged_in_with_tid:, details_check:, qualifications_details_check:, dqt_teacher_status:) }
