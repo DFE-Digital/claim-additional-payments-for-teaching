@@ -1,6 +1,6 @@
 module RequestHelpers
   def start_student_loans_claim
-    start_claim(StudentLoans.routing_name)
+    start_claim(Policies::StudentLoans.routing_name)
   end
 
   def start_claim(routing_name)
