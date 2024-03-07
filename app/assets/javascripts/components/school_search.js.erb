@@ -126,14 +126,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
       schoolIdInput.value = school.id;
 
-      if (currentPolicy == "additional-payments") {
-        methodInput.value = "patch";
-        setSubmitValue(defaultFormSubmitValue);
-      } else {
-        form.method = "post";
-        methodInput.value = "patch";
-        setSubmitValue("Continue");
-      }
+      methodInput.value = "patch";
+      setSubmitValue(defaultFormSubmitValue);
     }
   });
 

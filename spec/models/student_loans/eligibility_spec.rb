@@ -278,13 +278,6 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
     end
   end
 
-  context "when saving in the “current-school” context" do
-    it "validates the presence of the current_school" do
-      expect(described_class.new).not_to be_valid(:"current-school")
-      expect(described_class.new(current_school: eligible_school)).to be_valid(:"current-school")
-    end
-  end
-
   context "when saving in the “subjects-taught” context" do
     it "is not valid if none of the subjects-taught attributes are true" do
       expect(described_class.new).not_to be_valid(:"subjects-taught")

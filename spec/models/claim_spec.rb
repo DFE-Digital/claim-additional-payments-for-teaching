@@ -165,30 +165,6 @@ RSpec.describe Claim, type: :model do
     expect(claim).to be_valid(:submit)
   end
 
-  context "with an open school" do
-    it "is submittable" do
-      claim = build(:claim, :submittable)
-      claim.eligibility.current_school = build(:school, :open)
-      expect(claim).to be_valid(:submit)
-    end
-  end
-
-  context "with no school" do
-    it "is not submittable" do
-      claim = build(:claim, :submittable)
-      claim.eligibility.current_school = nil
-      expect(claim).not_to be_valid(:submit)
-    end
-  end
-
-  context "with a closed school" do
-    it "is not submittable" do
-      claim = build(:claim, :submittable)
-      claim.eligibility.current_school = build(:school, :closed)
-      expect(claim).not_to be_valid(:submit)
-    end
-  end
-
   context "with student loans policy eligibility" do
     let(:claim) { build(:claim, policy: Policies::StudentLoans) }
 

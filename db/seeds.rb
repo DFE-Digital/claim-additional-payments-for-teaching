@@ -44,6 +44,8 @@ if Rails.env.development?
         create_list(:claim, 1, :unverified, policy: policy)
       end
 
+      create(:school, :early_career_payments_eligible, :not_state_funded)
+
     # TODO: Remove this or configure for this and future years
     elsif ENV["SEED_ACADEMIC_YEAR"] == "2021"
       # This should probably be updated each year to:

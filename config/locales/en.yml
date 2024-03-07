@@ -55,7 +55,6 @@ en:
   questions:
     check_and_confirm_details: "Check and confirm your personal details"
     details_correct: "Are these details correct?"
-    current_school: "Which school are you currently employed to teach at?"
     qts_award_year: "When did you complete your initial teacher training (ITT)?"
     name: "What is your full name?"
     address:
@@ -219,6 +218,16 @@ en:
     address: "address"
     full_name: "Full name"
   student_loans:
+    forms:
+      current_school:
+        questions:
+          current_school_search: "Which school are you currently employed to teach at?"
+          current_school_results: "Which school are you currently employed to teach at?"
+        errors:
+          enter_a_school_or_postcode: "Enter a school or postcode"
+          select_the_school_you_teach_at: "Select the school you teach at"
+          the_selected_school_is_closed: "The selected school is closed"
+          school_not_found: "School not found"
     journey_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"
     policy_acronym: "TSLR"
@@ -277,6 +286,16 @@ en:
         payroll_details:
           title: "The claimant’s %{bank_or_building_society} details have not been automatically validated. Has the claimant confirmed their %{bank_or_building_society} details?"
   additional_payments: &additional_payments
+    forms:
+      current_school:
+        questions:
+          current_school_search: "Which school do you teach at?"
+          current_school_results: "Select the school you teach at"
+        errors:
+          enter_a_school_or_postcode: "Enter a school or postcode"
+          select_the_school_you_teach_at: "Select the school you teach at"
+          the_selected_school_is_closed: "The selected school is closed"
+          school_not_found: "School not found"
     check_your_answers:
       part_one:
         primary_heading: Check your answers
@@ -301,8 +320,6 @@ en:
     questions:
       check_and_confirm_details: "Check and confirm your personal details"
       details_correct: "Are these details correct?"
-      current_school_search: "Which school do you teach at?"
-      current_school_results: "Select the school you teach at"
       employed_as_supply_teacher: "Are you currently employed as a supply teacher?"
       has_entire_term_contract: "Do you have a contract to teach at the same school for an entire term or longer?"
       employed_directly: "Are you employed directly by your school?"

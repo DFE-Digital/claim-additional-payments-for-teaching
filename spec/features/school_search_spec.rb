@@ -34,25 +34,6 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
       expect(page).to have_text(subjects_taught_question(school_name: duplicate_school.name))
     end
 
-    scenario "searches again to find school" do
-      another_school = create(:school, :student_loans_eligible)
-      claim = start_student_loans_claim
-
-      fill_in :school_search, with: search_keywords(another_school)
-      click_on "Continue"
-
-      click_on "Search again"
-
-      fill_in :school_search, with: search_keywords(school)
-      click_on "Continue"
-
-      choose school.name
-      click_on "Continue"
-
-      expect(claim.eligibility.reload.claim_school).to eql school
-      expect(page).to have_text(subjects_taught_question(school_name: school.name))
-    end
-
     scenario "Claim school search with autocomplete", js: true, flaky: true do
       start_student_loans_claim
 
@@ -63,6 +44,13 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
       find("li", text: school.name).click
 
       expect(page).to have_button("Continue")
+
+      click_button "Continue"
+
+      # flaky test workaround in case the first click on Continue submitted the form
+      click_button "Continue" unless /current-school\?_method=patch/.match?(current_url)
+
+      choose school.name
 
       click_button "Continue"
 
@@ -77,13 +65,18 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
 
       choose_still_teaching "Yes, at another school"
 
-      expect(page).to have_text(I18n.t("questions.current_school"))
+      expect(page).to have_text(I18n.t("student_loans.forms.current_school.questions.current_school_search"))
       expect(page).to have_button("Continue")
 
       fill_in :school_search, with: search_keywords(school)
       find("li", text: school.name).click
 
       expect(page).to have_button("Continue")
+
+      click_button "Continue"
+
+      # flaky test workaround in case the first click on Continue submitted the form
+      click_button "Continue" unless /current-school\?_method=patch/.match?(current_url)
 
       click_button "Continue"
 
@@ -125,6 +118,13 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
 
       click_button "Continue"
 
+      # flaky test workaround in case the first click on Continue submitted the form
+      click_button "Continue" unless /current-school\?_method=patch/.match?(current_url)
+
+      choose another_school.name
+
+      click_button "Continue"
+
       expect(page).to have_text("Which of the following subjects did you teach at #{another_school.name}")
     end
 
@@ -149,7 +149,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
         choose_subjects_taught
         choose_still_teaching "Yes, at another school"
 
-        expect(page).to have_text(I18n.t("questions.current_school"))
+        expect(page).to have_text(I18n.t("student_loans.forms.current_school.questions.current_school_search"))
         expect(page).to have_button("Continue")
 
         fill_in :school_search, with: search_keywords(closed_school)
@@ -175,7 +175,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
         choose_subjects_taught
         choose_still_teaching "Yes, at another school"
 
-        expect(page).to have_text(I18n.t("questions.current_school"))
+        expect(page).to have_text(I18n.t("student_loans.forms.current_school.questions.current_school_search"))
         expect(page).to have_button("Continue")
 
         fill_in :school_search, with: search_keywords(closed_school)

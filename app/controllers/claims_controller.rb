@@ -12,6 +12,10 @@ class ClaimsController < BasePublicController
   before_action :clear_claim_session, only: [:new]
   before_action :prepend_view_path_for_journey
 
+  SLUG_TO_FORM = {
+    "current-school" => CurrentSchoolForm
+  }
+
   def new
     persist
   end
@@ -21,7 +25,12 @@ class ClaimsController < BasePublicController
   end
 
   def show
-    search_schools if params[:school_search]
+    if @form ||= form_from_slug(params)
+      set_any_backlink_override
+      render current_template
+
+      return
+    end
 
     if params[:slug] == "teacher-detail"
       save_and_set_teacher_id_user_info
@@ -61,7 +70,9 @@ class ClaimsController < BasePublicController
       session[:claim_address_line_1] = nil
       redirect_to claim_path(current_journey_routing_name, "postcode-search") and return
     elsif ["personal-bank-account", "building-society-account"].include?(params[:slug])
-      @form ||= BankDetailsForm.new(claim: current_claim)
+      @bank_details_form ||= BankDetailsForm.new(claim: current_claim)
+    elsif params[:slug] == "claim-school" && params[:school_search]
+      search_schools
     end
 
     render current_template
@@ -72,6 +83,17 @@ class ClaimsController < BasePublicController
   end
 
   def update
+    if (@form = form_from_slug(params))
+      if @form.save
+        redirect_to claim_path(current_journey_routing_name, next_slug)
+      else
+        set_any_backlink_override
+        show
+      end
+
+      return
+    end
+
     case params[:slug]
     when "sign-in-or-continue"
       return skip_teacher_id
@@ -155,6 +177,10 @@ class ClaimsController < BasePublicController
   def set_backlink_path
     previous_slug = previous_slug()
     @backlink_path = claim_path(current_journey_routing_name, previous_slug) if previous_slug.present?
+  end
+
+  def set_any_backlink_override
+    @backlink_path = @form.backlink_path if @form.backlink_path
   end
 
   def previous_slug
@@ -290,17 +316,17 @@ class ClaimsController < BasePublicController
   end
 
   def bank_account
-    @form = BankDetailsForm.new(claim_params.merge(claim: current_claim, hmrc_validation_attempt_count: session[:bank_validation_attempt_count]))
+    @bank_details_form = BankDetailsForm.new(claim_params.merge(claim: current_claim, hmrc_validation_attempt_count: session[:bank_validation_attempt_count]))
 
-    @form.validate!
+    @bank_details_form.validate!
 
-    current_claim.attributes = claim_params.merge({hmrc_bank_validation_succeeded: @form.hmrc_api_validation_succeeded?})
+    current_claim.attributes = claim_params.merge({hmrc_bank_validation_succeeded: @bank_details_form.hmrc_api_validation_succeeded?})
     current_claim.save!(context: page_sequence.current_slug.to_sym)
 
     redirect_to claim_path(current_journey_routing_name, next_slug)
   rescue ActiveModel::ValidationError
     current_claim.attributes = claim_params
-    session[:bank_validation_attempt_count] = (session[:bank_validation_attempt_count] || 1) + 1 if @form.hmrc_api_validation_attempted?
+    session[:bank_validation_attempt_count] = (session[:bank_validation_attempt_count] || 1) + 1 if @bank_details_form.hmrc_api_validation_attempted?
     show
   end
 
@@ -420,5 +446,11 @@ class ClaimsController < BasePublicController
         current_claim.logged_in_with_tid? && current_claim.has_all_valid_personal_details?)
       ClaimStudentLoanDetailsUpdater.call(current_claim)
     end
+  end
+
+  def form_from_slug(params)
+    form = SLUG_TO_FORM[params[:slug]]
+
+    form&.new(journey: journey, claim: current_claim, params: params)
   end
 end
