@@ -18,7 +18,7 @@ RSpec.describe "Admin Payment Confirmation Report upload" do
       let(:file) { Rack::Test::UploadedFile.new(StringIO.new(csv), "text/csv", original_filename: "payments.csv") }
 
       context "the claims in the CSV match the claims of the payroll run" do
-        let(:payroll_run) { create(:payroll_run, claims_counts: {StudentLoans => 2}) }
+        let(:payroll_run) { create(:payroll_run, claims_counts: {Policies::StudentLoans => 2}) }
         let(:csv) do
           <<~CSV
             Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies,Postgraduate Loans,Payment Date
@@ -44,7 +44,7 @@ RSpec.describe "Admin Payment Confirmation Report upload" do
       end
 
       context "the CSV has invalid data" do
-        let(:payroll_run) { create(:payroll_run, claims_counts: {StudentLoans => 2}) }
+        let(:payroll_run) { create(:payroll_run, claims_counts: {Policies::StudentLoans => 2}) }
         let(:csv) do
           <<~CSV
             Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies,Postgraduate Loans,Payment Date

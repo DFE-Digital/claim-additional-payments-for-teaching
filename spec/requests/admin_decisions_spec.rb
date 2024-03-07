@@ -90,7 +90,7 @@ RSpec.describe "Admin decisions", type: :request do
         end
 
         context "when adding a QA decision" do
-          let(:claim) { create(:claim, :approved, :flagged_for_qa, policy: StudentLoans) }
+          let(:claim) { create(:claim, :approved, :flagged_for_qa, policy: Policies::StudentLoans) }
 
           it "can undo the previous decision and approve the claim", :aggregate_failures do
             post admin_claim_decisions_path(qa: true, claim_id: claim.id, decision: {result: "approved"})

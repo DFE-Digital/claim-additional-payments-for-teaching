@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Claim session timing out", type: :request do
   let(:timeout_length_in_minutes) { BasePublicController::CLAIM_TIMEOUT_LENGTH_IN_MINUTES }
-  let(:current_claim) { CurrentClaim.new(claims: [Claim.by_policy(StudentLoans).order(:created_at).last]) }
+  let(:current_claim) { CurrentClaim.new(claims: [Claim.by_policy(Policies::StudentLoans).order(:created_at).last]) }
   before { create(:journey_configuration, :student_loans) }
 
   context "no actions performed for more than the timeout period" do
@@ -16,7 +16,7 @@ RSpec.describe "Claim session timing out", type: :request do
       expect(session[:claim_id]).to eql current_claim.claim_ids
 
       travel after_expiry do
-        put claim_path(StudentLoans.routing_name, "qts-year"), params: {claim: {qts_award_year: "on_or_after_cut_off_date"}}
+        put claim_path(Policies::StudentLoans.routing_name, "qts-year"), params: {claim: {qts_award_year: "on_or_after_cut_off_date"}}
 
         expect(response).to redirect_to(timeout_claim_path)
         expect(session[:claim_id]).to be_nil
@@ -34,9 +34,9 @@ RSpec.describe "Claim session timing out", type: :request do
 
     it "does not timeout the session" do
       travel before_expiry do
-        put claim_path(StudentLoans.routing_name, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "on_or_after_cut_off_date"}}}
+        put claim_path(Policies::StudentLoans.routing_name, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "on_or_after_cut_off_date"}}}
 
-        expect(response).to redirect_to(claim_path(StudentLoans.routing_name, "claim-school"))
+        expect(response).to redirect_to(claim_path(Policies::StudentLoans.routing_name, "claim-school"))
       end
     end
   end

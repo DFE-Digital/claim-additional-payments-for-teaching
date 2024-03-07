@@ -5,13 +5,13 @@ RSpec.describe "Maintenance Mode", type: :request do
     let!(:journey_configuration) { create(:journey_configuration, :student_loans, :closed) }
 
     it "shows the policy closed page for GET requests" do
-      get new_claim_path(StudentLoans.routing_name)
+      get new_claim_path(Policies::StudentLoans.routing_name)
       expect(response).to have_http_status(:service_unavailable)
       expect(response.body).to include("service is unavailable")
     end
 
     it "shows the policy closed page for POST requests" do
-      post claims_path(StudentLoans.routing_name)
+      post claims_path(Policies::StudentLoans.routing_name)
       expect(response).to have_http_status(:service_unavailable)
       expect(response.body).to include("service is unavailable")
     end
@@ -34,7 +34,7 @@ RSpec.describe "Maintenance Mode", type: :request do
     end
 
     it "still allows access to the static pages" do
-      get privacy_notice_path(StudentLoans.routing_name)
+      get privacy_notice_path(Policies::StudentLoans.routing_name)
       expect(response).to have_http_status(:ok)
     end
 
@@ -43,7 +43,7 @@ RSpec.describe "Maintenance Mode", type: :request do
       before { journey_configuration.update(availability_message: availability_message) }
 
       it "shows the time it will be available from" do
-        get new_claim_path(StudentLoans.routing_name)
+        get new_claim_path(Policies::StudentLoans.routing_name)
         expect(response.body).to include(availability_message)
       end
     end

@@ -22,8 +22,8 @@ RSpec.describe "Sessions", type: :request do
         get refresh_session_path
         expect(session[:claim_id]).to be_nil
 
-        get claim_path(StudentLoans.routing_name, "qts-year")
-        expect(response).to redirect_to(new_claim_path(StudentLoans.routing_name))
+        get claim_path(Policies::StudentLoans.routing_name, "qts-year")
+        expect(response).to redirect_to(new_claim_path(Policies::StudentLoans.routing_name))
       end
     end
   end
