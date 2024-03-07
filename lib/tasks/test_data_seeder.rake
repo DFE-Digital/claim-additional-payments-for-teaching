@@ -11,7 +11,7 @@ namespace :test_data_seeder do
 
     logger = Logger.new($stdout)
     logger.info "Importing EarlyCareerPayments DqT seed data, this may take a couple minutes..."
-    DataImporter.new(policies: [EarlyCareerPayments], test_type: :dqt_csv, quantities: {early_career_payments: nil}).run
+    DataImporter.new(policies: [Policies::EarlyCareerPayments], test_type: :dqt_csv, quantities: {early_career_payments: nil}).run
     logger.info "Seeding data import complete!"
   end
 
@@ -36,7 +36,7 @@ namespace :test_data_seeder do
     early_career_payments_volume = args[:early_career_payments]
     student_loans_volume = args[:student_loans]
     if early_career_payments_volume.to_i > 0
-      policies << EarlyCareerPayments
+      policies << Policies::EarlyCareerPayments
       quantities[:early_career_payments] = early_career_payments_volume
     end
     if student_loans_volume.to_i > 0
