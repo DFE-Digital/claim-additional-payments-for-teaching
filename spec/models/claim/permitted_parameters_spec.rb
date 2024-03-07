@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Claim::PermittedParameters do
-  let(:student_loan_claim) { Claim.new(eligibility: StudentLoans::Eligibility.new) }
+  let(:student_loan_claim) { Claim.new(eligibility: Policies::StudentLoans::Eligibility.new) }
   let(:current_claim) { CurrentClaim.new(claims: [student_loan_claim]) }
   let(:editable_attributes_for_student_loans_claim) do
     [

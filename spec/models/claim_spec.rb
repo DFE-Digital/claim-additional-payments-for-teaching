@@ -1,6 +1,45 @@
 require "rails_helper"
 
 RSpec.describe Claim, type: :model do
+  describe "scopes" do
+    describe "::by_policy" do
+      context "with Policies::EarlyCareerPayments" do
+        let(:claim_1) { create(:claim, policy: Policies::StudentLoans) }
+        let(:claim_2) { create(:claim, policy: Policies::EarlyCareerPayments) }
+        let(:claim_3) { create(:claim, policy: LevellingUpPremiumPayments) }
+
+        it do
+          expect(Claim.by_policy(Policies::EarlyCareerPayments)).to contain_exactly(claim_2)
+        end
+      end
+
+      context "with Policies::StudentLoans" do
+        let(:claim_1) { create(:claim, policy: Policies::StudentLoans) }
+        let(:claim_2) { create(:claim, policy: Policies::StudentLoans) }
+        let(:claim_3) { create(:claim, policy: Policies::EarlyCareerPayments) }
+        let(:claim_4) { create(:claim, policy: LevellingUpPremiumPayments) }
+
+        before do
+          claim_2.update!(eligibility_type: "StudentLoans::Eligibility")
+        end
+
+        it do
+          expect(Claim.by_policy(Policies::StudentLoans)).to contain_exactly(claim_1, claim_2)
+        end
+      end
+
+      context "with LevellingUpPremiumPayments" do
+        let(:claim_1) { create(:claim, policy: Policies::StudentLoans) }
+        let(:claim_2) { create(:claim, policy: Policies::EarlyCareerPayments) }
+        let(:claim_3) { create(:claim, policy: LevellingUpPremiumPayments) }
+
+        it do
+          expect(Claim.by_policy(LevellingUpPremiumPayments)).to contain_exactly(claim_3)
+        end
+      end
+    end
+  end
+
   it "validates academic years are formated like '2020/2021'" do
     expect(build(:claim, academic_year: "2022/2023")).to be_valid
     expect(build(:claim, academic_year: "2020-2021")).not_to be_valid
@@ -160,7 +199,7 @@ RSpec.describe Claim, type: :model do
   end
 
   context "with student loans policy eligibility" do
-    let(:claim) { build(:claim, policy: StudentLoans) }
+    let(:claim) { build(:claim, policy: Policies::StudentLoans) }
 
     # Tests a single attribute, possibly should test multiple attributes
     it "validates eligibility" do
@@ -266,7 +305,7 @@ RSpec.describe Claim, type: :model do
         first_name: "Molly",
         surname: "Ringwald",
         national_insurance_number: "EF755003B",
-        policy: StudentLoans,
+        policy: Policies::StudentLoans,
         date_of_birth: date_of_birth
       )
     end
@@ -308,11 +347,11 @@ RSpec.describe Claim, type: :model do
     end
 
     it "must include day/month/year" do
-      expect { build(:claim, first_name: "Grace", surname: "Hollywell", national_insurance_number: "TX668003B", policy: StudentLoans, date_of_birth: Date.new(2021, 31)) }.to raise_error(ArgumentError)
+      expect { build(:claim, first_name: "Grace", surname: "Hollywell", national_insurance_number: "TX668003B", policy: Policies::StudentLoans, date_of_birth: Date.new(2021, 31)) }.to raise_error(ArgumentError)
     end
 
     it "must be in the right format" do
-      expect { build(:claim, first_name: "Lara", surname: "Royce-Simmones", national_insurance_number: "TX113203D", policy: StudentLoans, date_of_birth: Date.new(1994, 14, 10)) }.to raise_error("invalid date")
+      expect { build(:claim, first_name: "Lara", surname: "Royce-Simmones", national_insurance_number: "TX113203D", policy: Policies::StudentLoans, date_of_birth: Date.new(1994, 14, 10)) }.to raise_error("invalid date")
     end
   end
 
@@ -425,7 +464,7 @@ RSpec.describe Claim, type: :model do
 
   context "with student loans policy" do
     describe "when saving in the 'postgraduate_masters_loan' context" do
-      let(:claim) { build(:claim, :submittable, postgraduate_masters_loan: nil, policy: StudentLoans) }
+      let(:claim) { build(:claim, :submittable, postgraduate_masters_loan: nil, policy: Policies::StudentLoans) }
 
       context "with claim having a masters and/or doctoral loan(s)" do
         it "is not valid without a value for 'postgraduate_masters_loan'" do
@@ -445,7 +484,7 @@ RSpec.describe Claim, type: :model do
     end
 
     describe "when saving in the 'postgraduate_doctoral_loan' context" do
-      let(:claim) { build(:claim, :submittable, postgraduate_doctoral_loan: nil, policy: StudentLoans) }
+      let(:claim) { build(:claim, :submittable, postgraduate_doctoral_loan: nil, policy: Policies::StudentLoans) }
 
       context "with claim having a masters and/or doctoral loan(s)" do
         it "is not valid without a value for 'postgraduate_doctoral_loan'" do
@@ -630,7 +669,7 @@ RSpec.describe Claim, type: :model do
 
   describe "#policy" do
     it "returns the claim’s policy namespace" do
-      expect(Claim.new(eligibility: StudentLoans::Eligibility.new).policy).to eq StudentLoans
+      expect(Claim.new(eligibility: Policies::StudentLoans::Eligibility.new).policy).to eq Policies::StudentLoans
     end
 
     it "returns nil if no eligibility is set" do
@@ -642,7 +681,7 @@ RSpec.describe Claim, type: :model do
     let(:school) { build(:school) }
 
     it "returns the current_school of the claim eligiblity" do
-      claim = Claim.new(eligibility: StudentLoans::Eligibility.new(current_school: school))
+      claim = Claim.new(eligibility: Policies::StudentLoans::Eligibility.new(current_school: school))
       expect(claim.school).to eq school
     end
 
@@ -786,7 +825,7 @@ RSpec.describe Claim, type: :model do
 
   describe "#submittable?" do
     context "with student loans policy eligibility" do
-      let(:policy) { StudentLoans }
+      let(:policy) { Policies::StudentLoans }
 
       context "when submittable" do
         subject(:claim) { build(:claim, :submittable, policy:) }
@@ -1332,7 +1371,7 @@ RSpec.describe Claim, type: :model do
   describe ".payrollable" do
     subject { described_class.payrollable }
 
-    let(:payroll_run) { create(:payroll_run, claims_counts: {StudentLoans => 1}) }
+    let(:payroll_run) { create(:payroll_run, claims_counts: {Policies::StudentLoans => 1}) }
     let!(:submitted_claim) { create(:claim, :submitted) }
     let!(:first_unpayrolled_claim) { create(:claim, :approved) }
     let!(:second_unpayrolled_claim) { create(:claim, :approved) }
@@ -1522,7 +1561,7 @@ RSpec.describe Claim, type: :model do
     let(:claim) { create(:claim, policy: policy) }
 
     context "with student loans policy" do
-      let(:policy) { StudentLoans }
+      let(:policy) { Policies::StudentLoans }
 
       it "returns false" do
         expect(claim.has_ecp_policy?).to eq(false)
@@ -1542,7 +1581,7 @@ RSpec.describe Claim, type: :model do
     let(:claim) { create(:claim, policy: policy) }
 
     context "with student loans policy" do
-      let(:policy) { StudentLoans }
+      let(:policy) { Policies::StudentLoans }
 
       it "returns true" do
         expect(claim.has_tslr_policy?).to eq(true)
@@ -1563,7 +1602,7 @@ RSpec.describe Claim, type: :model do
     let(:claim) { create(:claim, policy: policy) }
 
     context "with student loans policy" do
-      let(:policy) { StudentLoans }
+      let(:policy) { Policies::StudentLoans }
 
       it { is_expected.to be false }
     end
@@ -1586,7 +1625,7 @@ RSpec.describe Claim, type: :model do
     let(:claim) { create(:claim, policy: policy) }
 
     context "with student loans policy" do
-      let(:policy) { StudentLoans }
+      let(:policy) { Policies::StudentLoans }
 
       it { is_expected.to be false }
     end

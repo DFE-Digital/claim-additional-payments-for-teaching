@@ -2,17 +2,17 @@
 
 require "rails_helper"
 
-RSpec.describe StudentLoans::Eligibility, type: :model do
+RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
   let(:eligible_school) { build(:school, :student_loans_eligible) }
   let(:ineligible_school) { build(:school, :student_loans_ineligible) }
 
   describe "qts_award_year attribute" do
     it "rejects invalid values" do
-      expect { StudentLoans::Eligibility.new(qts_award_year: "non-existence") }.to raise_error(ArgumentError)
+      expect { described_class.new(qts_award_year: "non-existence") }.to raise_error(ArgumentError)
     end
 
     it "has handily named boolean methods for the possible values" do
-      eligibility = StudentLoans::Eligibility.new(qts_award_year: "on_or_after_cut_off_date")
+      eligibility = described_class.new(qts_award_year: "on_or_after_cut_off_date")
 
       expect(eligibility.awarded_qualified_status_on_or_after_cut_off_date?).to eq true
       expect(eligibility.awarded_qualified_status_before_cut_off_date?).to eq false
@@ -21,11 +21,11 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
 
   describe "employment_status attribute" do
     it "rejects invalid values" do
-      expect { StudentLoans::Eligibility.new(employment_status: "non-existence") }.to raise_error(ArgumentError)
+      expect { described_class.new(employment_status: "non-existence") }.to raise_error(ArgumentError)
     end
 
     it "has handily named boolean methods for the possible values" do
-      eligibility = StudentLoans::Eligibility.new(employment_status: :claim_school)
+      eligibility = described_class.new(employment_status: :claim_school)
 
       expect(eligibility.employed_at_claim_school?).to eq true
       expect(eligibility.employed_at_different_school?).to eq false
@@ -34,71 +34,71 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
 
   describe "student_loan_repayment_amount attribute" do
     it "validates that the loan repayment amount is numerical" do
-      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "don’t know")).not_to be_valid
-      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "£1,234.56")).not_to be_valid
+      expect(described_class.new(student_loan_repayment_amount: "don’t know")).not_to be_valid
+      expect(described_class.new(student_loan_repayment_amount: "£1,234.56")).not_to be_valid
     end
 
     it "validates that the loan repayment is under £99,999" do
-      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: 100_000)).not_to be_valid
-      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: 99_999)).to be_valid
+      expect(described_class.new(student_loan_repayment_amount: 100_000)).not_to be_valid
+      expect(described_class.new(student_loan_repayment_amount: 99_999)).to be_valid
     end
 
     it "validates that the loan repayment a positive number" do
-      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "-99")).not_to be_valid
-      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "150")).to be_valid
+      expect(described_class.new(student_loan_repayment_amount: "-99")).not_to be_valid
+      expect(described_class.new(student_loan_repayment_amount: "150")).to be_valid
     end
 
     it "validates that the loan repayment is not zero" do
-      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "0")).not_to be_valid
+      expect(described_class.new(student_loan_repayment_amount: "0")).not_to be_valid
     end
 
     it "validates that the loan repayment less than £5000 when amending a claim" do
-      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "5001")).not_to be_valid(:amendment)
-      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "1200")).to be_valid(:amendment)
+      expect(described_class.new(student_loan_repayment_amount: "5001")).not_to be_valid(:amendment)
+      expect(described_class.new(student_loan_repayment_amount: "1200")).to be_valid(:amendment)
     end
   end
 
   describe "#claim_school_name" do
     it "returns the name of the claim school" do
-      eligibility = StudentLoans::Eligibility.new(claim_school: eligible_school)
+      eligibility = described_class.new(claim_school: eligible_school)
       expect(eligibility.claim_school_name).to eq eligible_school.name
     end
 
     it "does not error if the claim school is not set" do
-      expect(StudentLoans::Eligibility.new.claim_school_name).to be_nil
+      expect(described_class.new.claim_school_name).to be_nil
     end
   end
 
   describe "#current_school_name" do
     it "returns the name of the current school" do
-      claim = StudentLoans::Eligibility.new(current_school: eligible_school)
+      claim = described_class.new(current_school: eligible_school)
       expect(claim.current_school_name).to eq eligible_school.name
     end
 
     it "does not error if the current school is not set" do
-      expect(StudentLoans::Eligibility.new.current_school_name).to be_nil
+      expect(described_class.new.current_school_name).to be_nil
     end
   end
 
   describe "#subjects_taught" do
     it "returns an array of the subject attributes that are true" do
-      expect(StudentLoans::Eligibility.new.subjects_taught).to eq []
-      expect(StudentLoans::Eligibility.new(biology_taught: true, physics_taught: true, chemistry_taught: false).subjects_taught).to eq [:biology_taught, :physics_taught]
+      expect(described_class.new.subjects_taught).to eq []
+      expect(described_class.new(biology_taught: true, physics_taught: true, chemistry_taught: false).subjects_taught).to eq [:biology_taught, :physics_taught]
     end
   end
 
   describe "#ineligible?" do
     it "returns false when the eligibility cannot be determined" do
-      expect(StudentLoans::Eligibility.new.ineligible?).to eql false
+      expect(described_class.new.ineligible?).to eql false
     end
 
     it "returns true when the qts_award_year is before the qualifying cut-off" do
-      expect(StudentLoans::Eligibility.new(qts_award_year: "before_cut_off_date").ineligible?).to eql true
-      expect(StudentLoans::Eligibility.new(qts_award_year: "on_or_after_cut_off_date").ineligible?).to eql false
+      expect(described_class.new(qts_award_year: "before_cut_off_date").ineligible?).to eql true
+      expect(described_class.new(qts_award_year: "on_or_after_cut_off_date").ineligible?).to eql false
     end
 
     describe "claim_school eligibility" do
-      subject(:eligibility) { StudentLoans::Eligibility.new(claim_school: school) }
+      subject(:eligibility) { described_class.new(claim_school: school) }
 
       context "when the claim_school is not eligible" do
         let(:school) { ineligible_school }
@@ -114,7 +114,7 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     end
 
     describe "current_school eligibility" do
-      subject(:eligibility) { StudentLoans::Eligibility.new(current_school: school) }
+      subject(:eligibility) { described_class.new(current_school: school) }
 
       context "when the current_school is not eligible" do
         let(:school) { ineligible_school }
@@ -130,39 +130,39 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     end
 
     it "returns true when no longer teaching" do
-      expect(StudentLoans::Eligibility.new(employment_status: :no_school).ineligible?).to eql true
-      expect(StudentLoans::Eligibility.new(employment_status: :claim_school).ineligible?).to eql false
+      expect(described_class.new(employment_status: :no_school).ineligible?).to eql true
+      expect(described_class.new(employment_status: :claim_school).ineligible?).to eql false
     end
 
     it "returns true when not teaching an eligible subject" do
-      expect(StudentLoans::Eligibility.new(taught_eligible_subjects: false).ineligible?).to eql true
-      expect(StudentLoans::Eligibility.new(biology_taught: true).ineligible?).to eql false
+      expect(described_class.new(taught_eligible_subjects: false).ineligible?).to eql true
+      expect(described_class.new(biology_taught: true).ineligible?).to eql false
     end
 
     it "returns true when more than half time is spent performing leadership duties" do
-      expect(StudentLoans::Eligibility.new(mostly_performed_leadership_duties: true).ineligible?).to eql true
-      expect(StudentLoans::Eligibility.new(mostly_performed_leadership_duties: false).ineligible?).to eql false
+      expect(described_class.new(mostly_performed_leadership_duties: true).ineligible?).to eql true
+      expect(described_class.new(mostly_performed_leadership_duties: false).ineligible?).to eql false
     end
   end
 
   describe "#ineligibility_reason" do
     it "returns nil when the reason for ineligibility cannot be determined" do
-      expect(StudentLoans::Eligibility.new.ineligibility_reason).to be_nil
+      expect(described_class.new.ineligibility_reason).to be_nil
     end
 
     it "returns a symbol indicating the reason for ineligibility" do
-      expect(StudentLoans::Eligibility.new(qts_award_year: "before_cut_off_date").ineligibility_reason).to eq :ineligible_qts_award_year
-      expect(StudentLoans::Eligibility.new(claim_school: ineligible_school).ineligibility_reason).to eq :ineligible_claim_school
-      expect(StudentLoans::Eligibility.new(employment_status: :no_school).ineligibility_reason).to eq :employed_at_no_school
-      expect(StudentLoans::Eligibility.new(current_school: ineligible_school).ineligibility_reason).to eq :ineligible_current_school
-      expect(StudentLoans::Eligibility.new(taught_eligible_subjects: false).ineligibility_reason).to eq :not_taught_eligible_subjects
-      expect(StudentLoans::Eligibility.new(mostly_performed_leadership_duties: true).ineligibility_reason).to eq :not_taught_enough
+      expect(described_class.new(qts_award_year: "before_cut_off_date").ineligibility_reason).to eq :ineligible_qts_award_year
+      expect(described_class.new(claim_school: ineligible_school).ineligibility_reason).to eq :ineligible_claim_school
+      expect(described_class.new(employment_status: :no_school).ineligibility_reason).to eq :employed_at_no_school
+      expect(described_class.new(current_school: ineligible_school).ineligibility_reason).to eq :ineligible_current_school
+      expect(described_class.new(taught_eligible_subjects: false).ineligibility_reason).to eq :not_taught_eligible_subjects
+      expect(described_class.new(mostly_performed_leadership_duties: true).ineligibility_reason).to eq :not_taught_enough
     end
   end
 
   describe "#award_amount" do
     it "returns the student loan repayment amount" do
-      eligibility = StudentLoans::Eligibility.new(student_loan_repayment_amount: 1000)
+      eligibility = described_class.new(student_loan_repayment_amount: 1000)
       expect(eligibility.award_amount).to eq(1000)
     end
   end
@@ -229,25 +229,25 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
   # Validation contexts
   context "when saving in the “qts-year” context" do
     it "is not valid without a value for qts_award_year" do
-      expect(StudentLoans::Eligibility.new).not_to be_valid(:"qts-year")
+      expect(described_class.new).not_to be_valid(:"qts-year")
 
-      StudentLoans::Eligibility.qts_award_years.each_key do |academic_year|
-        expect(StudentLoans::Eligibility.new(qts_award_year: academic_year)).to be_valid(:"qts-year")
+      described_class.qts_award_years.each_key do |academic_year|
+        expect(described_class.new(qts_award_year: academic_year)).to be_valid(:"qts-year")
       end
     end
   end
 
   context "when saving in the “claim-school” context" do
     it "validates the presence of the claim_school" do
-      expect(StudentLoans::Eligibility.new).not_to be_valid(:"claim-school")
-      expect(StudentLoans::Eligibility.new(claim_school: eligible_school)).to be_valid(:"claim-school")
+      expect(described_class.new).not_to be_valid(:"claim-school")
+      expect(described_class.new(claim_school: eligible_school)).to be_valid(:"claim-school")
     end
   end
 
   context "when saving in the “still-teaching” context" do
     it "validates the presence of employment_status" do
-      expect(StudentLoans::Eligibility.new).not_to be_valid(:"still-teaching")
-      expect(StudentLoans::Eligibility.new(employment_status: :claim_school)).to be_valid(:"still-teaching")
+      expect(described_class.new).not_to be_valid(:"still-teaching")
+      expect(described_class.new(employment_status: :claim_school)).to be_valid(:"still-teaching")
     end
 
     it "includes the claim school name in the error message" do
@@ -260,54 +260,54 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
 
   context "when saving in the “current-school” context" do
     it "validates the presence of the current_school" do
-      expect(StudentLoans::Eligibility.new).not_to be_valid(:"current-school")
-      expect(StudentLoans::Eligibility.new(current_school: eligible_school)).to be_valid(:"current-school")
+      expect(described_class.new).not_to be_valid(:"current-school")
+      expect(described_class.new(current_school: eligible_school)).to be_valid(:"current-school")
     end
   end
 
   context "when saving in the “subjects-taught” context" do
     it "is not valid if none of the subjects-taught attributes are true" do
-      expect(StudentLoans::Eligibility.new).not_to be_valid(:"subjects-taught")
-      expect(StudentLoans::Eligibility.new(biology_taught: false)).not_to be_valid(:"subjects-taught")
-      expect(StudentLoans::Eligibility.new(biology_taught: false, physics_taught: false)).not_to be_valid(:"subjects-taught")
+      expect(described_class.new).not_to be_valid(:"subjects-taught")
+      expect(described_class.new(biology_taught: false)).not_to be_valid(:"subjects-taught")
+      expect(described_class.new(biology_taught: false, physics_taught: false)).not_to be_valid(:"subjects-taught")
     end
 
     it "is valid when one or more of the subjects-taught attributes are true" do
-      expect(StudentLoans::Eligibility.new(biology_taught: true)).to be_valid(:"subjects-taught")
-      expect(StudentLoans::Eligibility.new(biology_taught: true, computing_taught: false)).to be_valid(:"subjects-taught")
-      expect(StudentLoans::Eligibility.new(chemistry_taught: true, languages_taught: true)).to be_valid(:"subjects-taught")
+      expect(described_class.new(biology_taught: true)).to be_valid(:"subjects-taught")
+      expect(described_class.new(biology_taught: true, computing_taught: false)).to be_valid(:"subjects-taught")
+      expect(described_class.new(chemistry_taught: true, languages_taught: true)).to be_valid(:"subjects-taught")
     end
 
     it "is valid with no subjects present if taught_eligible_subjects is false" do
-      expect(StudentLoans::Eligibility.new(taught_eligible_subjects: false)).to be_valid(:"subjects-taught")
-      expect(StudentLoans::Eligibility.new(taught_eligible_subjects: true)).not_to be_valid(:"subjects-taught")
+      expect(described_class.new(taught_eligible_subjects: false)).to be_valid(:"subjects-taught")
+      expect(described_class.new(taught_eligible_subjects: true)).not_to be_valid(:"subjects-taught")
     end
   end
 
   context "when saving in the “leadership-position” context" do
     it "is not valid without a value for had_leadership_position" do
-      expect(StudentLoans::Eligibility.new).not_to be_valid(:"leadership-position")
-      expect(StudentLoans::Eligibility.new(had_leadership_position: true)).to be_valid(:"leadership-position")
-      expect(StudentLoans::Eligibility.new(had_leadership_position: false)).to be_valid(:"leadership-position")
+      expect(described_class.new).not_to be_valid(:"leadership-position")
+      expect(described_class.new(had_leadership_position: true)).to be_valid(:"leadership-position")
+      expect(described_class.new(had_leadership_position: false)).to be_valid(:"leadership-position")
     end
   end
 
   context "when saving in the “mostly-performed-leadership-duties” context" do
     it "is valid when mostly_performed_leadership_duties is present as a boolean value and had_leadership_position is true" do
-      expect(StudentLoans::Eligibility.new(had_leadership_position: true)).not_to be_valid(:"mostly-performed-leadership-duties")
-      expect(StudentLoans::Eligibility.new(had_leadership_position: true, mostly_performed_leadership_duties: true)).to be_valid(:"mostly-performed-leadership-duties")
-      expect(StudentLoans::Eligibility.new(had_leadership_position: true, mostly_performed_leadership_duties: false)).to be_valid(:"mostly-performed-leadership-duties")
+      expect(described_class.new(had_leadership_position: true)).not_to be_valid(:"mostly-performed-leadership-duties")
+      expect(described_class.new(had_leadership_position: true, mostly_performed_leadership_duties: true)).to be_valid(:"mostly-performed-leadership-duties")
+      expect(described_class.new(had_leadership_position: true, mostly_performed_leadership_duties: false)).to be_valid(:"mostly-performed-leadership-duties")
     end
 
     it "is valid when missing if had_leadership_position is false" do
-      expect(StudentLoans::Eligibility.new(had_leadership_position: false)).to be_valid(:"mostly-performed-leadership-duties")
+      expect(described_class.new(had_leadership_position: false)).to be_valid(:"mostly-performed-leadership-duties")
     end
   end
 
   context "when saving in the “student-loan-amount” validation context" do
     it "validates the presence of student_loan_repayment_amount" do
-      expect(StudentLoans::Eligibility.new).not_to be_valid(:"student-loan-amount")
-      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: 1_100)).to be_valid(:"student-loan-amount")
+      expect(described_class.new).not_to be_valid(:"student-loan-amount")
+      expect(described_class.new(student_loan_repayment_amount: 1_100)).to be_valid(:"student-loan-amount")
     end
   end
 
@@ -319,7 +319,7 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     it "is not valid without a value for qts_award_year" do
       expect(build(:student_loans_eligibility, :eligible, qts_award_year: nil)).not_to be_valid(:submit)
 
-      StudentLoans::Eligibility.qts_award_years.each_key do |academic_year|
+      described_class.qts_award_years.each_key do |academic_year|
         expect(build(:student_loans_eligibility, :eligible, qts_award_year: academic_year)).to be_valid(:submit)
       end
     end
@@ -358,7 +358,7 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
 
   describe "#eligible_itt_subject" do
     it "returns nil" do
-      expect(StudentLoans::Eligibility.new.eligible_itt_subject).to be(nil)
+      expect(described_class.new.eligible_itt_subject).to be(nil)
     end
   end
 
@@ -380,7 +380,7 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
 
   describe "#set_qualifications_from_dqt_record" do
     let(:eligibility) { build(:student_loans_eligibility, claim:, qts_award_year:) }
-    let(:claim) { build(:claim, policy: StudentLoans, qualifications_details_check:) }
+    let(:claim) { build(:claim, policy: Policies::StudentLoans, qualifications_details_check:) }
     let(:qts_award_year) { nil }
 
     context "when user has confirmed their qualification details" do

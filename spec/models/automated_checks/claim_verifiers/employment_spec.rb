@@ -132,7 +132,7 @@ module AutomatedChecks
                 local_authority: local_authority_camden)
             end
 
-            let(:policy) { StudentLoans }
+            let(:policy) { Policies::StudentLoans }
 
             before { claim_arg.eligibility.update!(claim_school: school) }
 

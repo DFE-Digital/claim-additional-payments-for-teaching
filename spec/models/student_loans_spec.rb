@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe StudentLoans, type: :model do
+RSpec.describe Policies::StudentLoans, type: :model do
   let!(:journey_configuration) { create(:journey_configuration, :student_loans) }
 
   it { is_expected.to include(BasePolicy) }
@@ -18,20 +18,20 @@ RSpec.describe StudentLoans, type: :model do
   describe ".first_eligible_qts_award_year" do
     it "returns 11 years prior to the currently configured academic year, with a floor of the 2013/2014 academic year" do
       journey_configuration.update!(current_academic_year: "2031/2032")
-      expect(StudentLoans.first_eligible_qts_award_year).to eq AcademicYear.new(2020)
+      expect(described_class.first_eligible_qts_award_year).to eq AcademicYear.new(2020)
 
       journey_configuration.update!(current_academic_year: "2027/2028")
-      expect(StudentLoans.first_eligible_qts_award_year).to eq AcademicYear.new(2016)
+      expect(described_class.first_eligible_qts_award_year).to eq AcademicYear.new(2016)
 
       journey_configuration.update!(current_academic_year: "2024/2025")
-      expect(StudentLoans.first_eligible_qts_award_year).to eq AcademicYear.new(2013)
+      expect(described_class.first_eligible_qts_award_year).to eq AcademicYear.new(2013)
 
       journey_configuration.update!(current_academic_year: "2023/2024")
-      expect(StudentLoans.first_eligible_qts_award_year).to eq AcademicYear.new(2013)
+      expect(described_class.first_eligible_qts_award_year).to eq AcademicYear.new(2013)
     end
 
     it "can return the AcademicYear based on a passed-in academic year" do
-      expect(StudentLoans.first_eligible_qts_award_year(AcademicYear.new(2030))).to eq AcademicYear.new(2019)
+      expect(described_class.first_eligible_qts_award_year(AcademicYear.new(2030))).to eq AcademicYear.new(2019)
     end
   end
 
@@ -43,7 +43,7 @@ RSpec.describe StudentLoans, type: :model do
   describe ".current_financial_year" do
     it "returns a human-friendly string for the financial year the policy is currently accepting claims for" do
       journey_configuration.update!(current_academic_year: "2020/2021")
-      expect(StudentLoans.current_financial_year).to eq "6 April 2019 and 5 April 2020"
+      expect(described_class.current_financial_year).to eq "6 April 2019 and 5 April 2020"
     end
   end
 end

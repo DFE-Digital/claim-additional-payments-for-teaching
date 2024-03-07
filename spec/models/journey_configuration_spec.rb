@@ -9,7 +9,7 @@ RSpec.describe JourneyConfiguration do
 
     describe ".for" do
       it "returns the configuration for a given policy" do
-        expect(described_class.for(StudentLoans)).to eq student_loans
+        expect(described_class.for(Policies::StudentLoans)).to eq student_loans
 
         # Same JourneyConfiguration for ECP and LUP
         expect(described_class.for(Policies::EarlyCareerPayments)).to eq additional_payments
@@ -28,14 +28,14 @@ RSpec.describe JourneyConfiguration do
 
     describe "#policies" do
       it "returns the policies" do
-        expect(described_class.for(StudentLoans).policies).to eq [StudentLoans]
+        expect(described_class.for(Policies::StudentLoans).policies).to eq [Policies::StudentLoans]
         expect(described_class.for(Policies::EarlyCareerPayments).policies).to eq [Policies::EarlyCareerPayments, LevellingUpPremiumPayments]
       end
     end
 
     describe "#routing_name" do
       it "returns routing for JourneyConfiguration" do
-        expect(described_class.for(StudentLoans).routing_name).to eq "student-loans"
+        expect(described_class.for(Policies::StudentLoans).routing_name).to eq "student-loans"
 
         # Same routing_name for ECP and LUP
         expect(described_class.for(Policies::EarlyCareerPayments).routing_name).to eq "additional-payments"
@@ -62,14 +62,14 @@ RSpec.describe JourneyConfiguration do
 
   describe ".policy_for_routing_name" do
     it "returns the first policy for that routing name" do
-      expect(described_class.policy_for_routing_name("student-loans")).to eq StudentLoans
+      expect(described_class.policy_for_routing_name("student-loans")).to eq Policies::StudentLoans
       expect(described_class.policy_for_routing_name("additional-payments")).to eq Policies::EarlyCareerPayments
     end
   end
 
   describe ".policies_for_routing_name" do
     it "returns the policies for that routing name" do
-      expect(described_class.policies_for_routing_name("student-loans")).to eq [StudentLoans]
+      expect(described_class.policies_for_routing_name("student-loans")).to eq [Policies::StudentLoans]
       expect(described_class.policies_for_routing_name("additional-payments")).to eq [Policies::EarlyCareerPayments, LevellingUpPremiumPayments]
     end
   end
@@ -92,7 +92,7 @@ RSpec.describe JourneyConfiguration do
 
   describe ".routing_name_for_policy" do
     it "returns the routing name" do
-      expect(described_class.routing_name_for_policy(StudentLoans)).to eq "student-loans"
+      expect(described_class.routing_name_for_policy(Policies::StudentLoans)).to eq "student-loans"
 
       # Same routing_name for ECP and LUP
       expect(described_class.routing_name_for_policy(Policies::EarlyCareerPayments)).to eq "additional-payments"
@@ -101,8 +101,8 @@ RSpec.describe JourneyConfiguration do
   end
 
   it "validates academic years are formated like '2020/2021'" do
-    expect(described_class.new(policy_types: [StudentLoans])).not_to be_valid
-    expect(described_class.new(policy_types: [StudentLoans], current_academic_year: "2020-2021")).not_to be_valid
-    expect(described_class.new(policy_types: [StudentLoans], current_academic_year: "2020/2021")).to be_valid
+    expect(described_class.new(policy_types: [Policies::StudentLoans])).not_to be_valid
+    expect(described_class.new(policy_types: [Policies::StudentLoans], current_academic_year: "2020-2021")).not_to be_valid
+    expect(described_class.new(policy_types: [Policies::StudentLoans], current_academic_year: "2020/2021")).to be_valid
   end
 end

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe StudentLoans::PresenterMethods, type: :helper do
+RSpec.describe Policies::StudentLoans::PresenterMethods, type: :helper do
   describe ".qts_award_year_answer" do
     [
       {

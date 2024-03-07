@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe StudentLoans::AdminTasksPresenter, type: :model do
+RSpec.describe Policies::StudentLoans::AdminTasksPresenter, type: :model do
   let(:eligibility) { claim.eligibility }
   let(:claim) do
     build(:claim,

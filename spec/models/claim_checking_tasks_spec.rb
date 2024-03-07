@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe ClaimCheckingTasks do
-  let(:claim) { create(:claim, :submitted, :verified, policy: StudentLoans) }
+  let(:claim) { create(:claim, :submitted, :verified, policy: Policies::StudentLoans) }
   let(:checking_tasks) { ClaimCheckingTasks.new(claim) }
 
   describe "#applicable_task_names" do
@@ -20,7 +20,7 @@ RSpec.describe ClaimCheckingTasks do
 
     it "includes the matching details task when there are claims with matching details" do
       create(:claim, :submitted,
-        policy: StudentLoans,
+        policy: Policies::StudentLoans,
         teacher_reference_number: claim.teacher_reference_number)
 
       expect(checking_tasks.applicable_task_names).to eq %w[identity_confirmation qualifications census_subjects_taught employment student_loan_amount matching_details]

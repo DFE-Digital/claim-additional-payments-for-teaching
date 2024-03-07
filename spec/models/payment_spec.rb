@@ -212,7 +212,7 @@ RSpec.describe Payment do
 
     it "returns the correct string for a payment with one claim" do
       payment = create(:payment, claims: [
-        create(:claim, :approved, personal_details.merge(policy: StudentLoans))
+        create(:claim, :approved, personal_details.merge(policy: Policies::StudentLoans))
       ])
 
       expect(payment.policies_in_payment).to eq("StudentLoans")
@@ -220,8 +220,8 @@ RSpec.describe Payment do
 
     it "returns the correct string for a payment with multiple claims under one policy" do
       payment = create(:payment, claims: [
-        create(:claim, :approved, personal_details.merge(policy: StudentLoans)),
-        create(:claim, :approved, personal_details.merge(policy: StudentLoans))
+        create(:claim, :approved, personal_details.merge(policy: Policies::StudentLoans)),
+        create(:claim, :approved, personal_details.merge(policy: Policies::StudentLoans))
       ])
 
       expect(payment.policies_in_payment).to eq("StudentLoans")
@@ -229,7 +229,7 @@ RSpec.describe Payment do
 
     it "returns the correct string for a payment with multiple claims under different policies" do
       payment = create(:payment, claims: [
-        create(:claim, :approved, personal_details.merge(policy: StudentLoans)),
+        create(:claim, :approved, personal_details.merge(policy: Policies::StudentLoans)),
         create(:claim, :approved, personal_details.merge(policy: Policies::EarlyCareerPayments))
       ])
 

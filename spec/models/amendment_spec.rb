@@ -225,7 +225,7 @@ RSpec.describe Amendment, type: :model do
       end
 
       context "when the claim would no longer be valid in the submit context" do
-        let(:claim) { create(:claim, :submitted, policy: StudentLoans) }
+        let(:claim) { create(:claim, :submitted, policy: Policies::StudentLoans) }
         let(:ineligible_school) { create(:school, :student_loans_ineligible) }
 
         let(:claim_attributes) do

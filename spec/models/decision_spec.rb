@@ -139,7 +139,7 @@ RSpec.describe Decision, type: :model do
     end
 
     context "when the claim policy is TSLR" do
-      let(:policy) { StudentLoans }
+      let(:policy) { Policies::StudentLoans }
 
       it { is_expected.to eq(expected_reasons_non_ecp) }
     end

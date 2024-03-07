@@ -5,7 +5,7 @@ RSpec.describe CurrentClaim, type: :model do
 
   let(:ecp_policy) { Policies::EarlyCareerPayments }
   let(:lup_policy) { LevellingUpPremiumPayments }
-  let(:student_loans_policy) { StudentLoans }
+  let(:student_loans_policy) { Policies::StudentLoans }
 
   let(:school) { create(:school) }
 
