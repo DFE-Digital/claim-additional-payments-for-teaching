@@ -4,15 +4,11 @@ class ChangeClaimsEligibilityTypeToPoliciesEarlyCareerPaymentsEligibility < Acti
   def change
     reversible do |dir|
       dir.up do
-        Claim.where(eligibility_type: "EarlyCareerPayments::Eligibility").find_each do |claim|
-          claim.update!(eligibility_type: "Policies::EarlyCareerPayments::Eligibility")
-        end
+        Claim.where(eligibility_type: "EarlyCareerPayments::Eligibility").update_all(eligibility_type: "Policies::EarlyCareerPayments::Eligibility")
       end
 
       dir.down do
-        Claim.where(eligibility_type: "Policies::EarlyCareerPayments::Eligibility").find_each do |claim|
-          claim.update!(eligibility_type: "EarlyCareerPayments::Eligibility")
-        end
+        Claim.where(eligibility_type: "Policies::EarlyCareerPayments::Eligibility").update_all(eligibility_type: "EarlyCareerPayments::Eligibility")
       end
     end
   end
