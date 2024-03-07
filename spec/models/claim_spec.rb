@@ -20,7 +20,7 @@ RSpec.describe Claim, type: :model do
         let(:claim_4) { create(:claim, policy: LevellingUpPremiumPayments) }
 
         before do
-          claim_2.update!(eligibility_type: "StudentLoans::Eligibility")
+          claim_2.update!(eligibility_type: "Policies::StudentLoans::Eligibility")
         end
 
         it do
