@@ -67,7 +67,7 @@ RSpec.describe "Admin claim allocations", type: :request do
       context "when no claims can be unassigned from a team member" do
         let(:another_team_member) { create(:dfe_signin_user, :service_operator) }
         let!(:claims_assigned_to_another_team_member) do
-          create_list(:claim, 3, :submitted, policy: StudentLoans, assigned_to: another_team_member)
+          create_list(:claim, 3, :submitted, policy: Policies::StudentLoans, assigned_to: another_team_member)
         end
 
         include_examples :flashing_relevant_message, "admin.allocations.bulk_deallocate.info"
@@ -76,10 +76,10 @@ RSpec.describe "Admin claim allocations", type: :request do
       context "when claims can be unassigned from the user" do
         let(:another_team_member) { create(:dfe_signin_user, :service_operator) }
         let!(:claims_assigned_to_team_member) do
-          create_list(:claim, 3, :submitted, policy: StudentLoans, assigned_to: team_member)
+          create_list(:claim, 3, :submitted, policy: Policies::StudentLoans, assigned_to: team_member)
         end
         let!(:claims_assigned_to_another_team_member) do
-          create_list(:claim, 3, :submitted, policy: StudentLoans, assigned_to: another_team_member)
+          create_list(:claim, 3, :submitted, policy: Policies::StudentLoans, assigned_to: another_team_member)
         end
 
         before { call_endpoint }
@@ -101,7 +101,7 @@ RSpec.describe "Admin claim allocations", type: :request do
         let(:allocation_policy) { "student-loans" }
 
         let!(:student_loans_assigned_claims) do
-          create_list(:claim, 3, :submitted, policy: StudentLoans, assigned_to: team_member)
+          create_list(:claim, 3, :submitted, policy: Policies::StudentLoans, assigned_to: team_member)
         end
         let!(:early_career_payments_assigned_claims) do
           create_list(:claim, 3, :submitted, policy: Policies::EarlyCareerPayments, assigned_to: team_member)

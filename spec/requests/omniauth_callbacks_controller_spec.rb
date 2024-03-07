@@ -33,7 +33,7 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
       before do
         set_mock_auth(nil)
 
-        allow_any_instance_of(OmniauthCallbacksController).to receive(:policy).and_return(StudentLoans)
+        allow_any_instance_of(OmniauthCallbacksController).to receive(:policy).and_return(Policies::StudentLoans)
       end
 
       it "redirects to the claim path with correct parameters" do
