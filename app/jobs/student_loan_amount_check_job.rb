@@ -23,10 +23,10 @@ class StudentLoanAmountCheckJob < ApplicationJob
   end
 
   def current_year_tslr_claims
-    Claim.by_academic_year(current_academic_year).by_policy(StudentLoans)
+    Claim.by_academic_year(current_academic_year).by_policy(Policies::StudentLoans)
   end
 
   def current_academic_year
-    JourneyConfiguration.for(StudentLoans).current_academic_year
+    JourneyConfiguration.for(Policies::StudentLoans).current_academic_year
   end
 end
