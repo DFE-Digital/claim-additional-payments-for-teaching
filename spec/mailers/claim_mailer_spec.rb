@@ -57,7 +57,7 @@ RSpec.describe ClaimMailer, type: :mailer do
   end
 
   # Characteristics common to all policies
-  [Policies::EarlyCareerPayments, StudentLoans, LevellingUpPremiumPayments].each do |policy|
+  [Policies::EarlyCareerPayments, Policies::StudentLoans, LevellingUpPremiumPayments].each do |policy|
     context "with a #{policy} claim" do
       let!(:journey_configuration) { create(:journey_configuration, policy.to_s.underscore) }
 
@@ -79,7 +79,7 @@ RSpec.describe ClaimMailer, type: :mailer do
           end
         end
 
-        context "when StudentLoans", if: policy == StudentLoans do
+        context "when StudentLoans", if: policy == Policies::StudentLoans do
           it "uses the correct template" do
             expect(mail[:template_id].decoded).to eq "f9e39fcd-301a-4427-9159-6831fd484e39"
           end
@@ -104,7 +104,7 @@ RSpec.describe ClaimMailer, type: :mailer do
           end
         end
 
-        context "when StudentLoans", if: policy == StudentLoans do
+        context "when StudentLoans", if: policy == Policies::StudentLoans do
           it "uses the correct template" do
             expect(mail[:template_id].decoded).to eq "2032be01-6aee-4a1a-81ce-cf91e09de8d7"
           end
@@ -123,7 +123,7 @@ RSpec.describe ClaimMailer, type: :mailer do
               first_name: claim.first_name,
               ref_number: claim.reference,
               support_email_address: I18n.t("#{claim.policy.locale_key}.support_email_address"),
-              current_financial_year: (policy == StudentLoans) ? StudentLoans.current_financial_year : ""
+              current_financial_year: (policy == Policies::StudentLoans) ? Policies::StudentLoans.current_financial_year : ""
             }
           end
           let(:expected_rejected_reasons_keys) do
@@ -170,7 +170,7 @@ RSpec.describe ClaimMailer, type: :mailer do
           include_examples "template id and personalisation keys"
         end
 
-        context "when StudentLoans", if: policy == StudentLoans do
+        context "when StudentLoans", if: policy == Policies::StudentLoans do
           let(:expected_template_id) { "f719237d-6b2a-42d6-98f2-3d5b6585f32b" }
 
           include_examples "template id and personalisation keys"
@@ -195,7 +195,7 @@ RSpec.describe ClaimMailer, type: :mailer do
           end
         end
 
-        context "when StudentLoans", if: policy == StudentLoans do
+        context "when StudentLoans", if: policy == Policies::StudentLoans do
           it "uses the correct template" do
             expect(mail[:template_id].decoded).to eq "c43bac94-67ff-4440-8f26-506eb4c232e8"
           end
