@@ -38,7 +38,7 @@ RSpec.feature "Teacher Identity Sign in" do
     choose "Yes"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
     expect(page).to have_text("Enter the school name or postcode. Use at least three characters.")
 
     # check the teacher_id_user_info details are saved to the claim
@@ -57,7 +57,7 @@ RSpec.feature "Teacher Identity Sign in" do
 
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
 
     # check the teacher_id_user_info details are saved to the claim
     claim = Claim.order(:created_at).last

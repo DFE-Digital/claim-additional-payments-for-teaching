@@ -32,8 +32,8 @@ RSpec.feature "Teacher Identity Sign in" do
     click_on "Continue without signing in"
 
     # - Which school do you teach at
-    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
-    expect(page.title).to have_text(I18n.t("questions.current_school"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
+    expect(page.title).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
 
     # - Teacher makes claim after signing in
     click_on "Back"
@@ -48,7 +48,7 @@ RSpec.feature "Teacher Identity Sign in" do
     click_on "Continue"
 
     # - Which school do you teach at
-    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
-    expect(page.title).to have_text(I18n.t("questions.current_school"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
+    expect(page.title).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
   end
 end

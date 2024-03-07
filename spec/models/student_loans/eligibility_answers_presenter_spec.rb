@@ -15,7 +15,7 @@ RSpec.describe Policies::StudentLoans::EligibilityAnswersPresenter, type: :model
     expected_answers = [
       [I18n.t("student_loans.questions.qts_award_year"), "Between the start of the 2013 to 2014 academic year and the end of the 2020 to 2021 academic year", "qts-year"],
       [claim_school_question, eligibility.claim_school.name, "claim-school"],
-      [I18n.t("questions.current_school"), eligibility.current_school.name, "still-teaching"],
+      [I18n.t("student_loans.forms.current_school.questions.current_school_search"), eligibility.current_school.name, "still-teaching"],
       [subjects_taught_question(school_name: eligibility.current_school.name), "Chemistry and Physics", "subjects-taught"],
       [leadership_position_question, "Yes", "leadership-position"],
       [mostly_performed_leadership_duties_question, "No", "mostly-performed-leadership-duties"]

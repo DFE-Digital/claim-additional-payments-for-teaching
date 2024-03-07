@@ -14,7 +14,7 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
     click_on "Continue without signing in"
 
     # - Which school do you teach at
-    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
     expect(eligibility.ineligible?).to be false
     choose_school school
     click_on "Continue"
@@ -32,7 +32,7 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
     click_on "Continue without signing in"
 
     # - Which school do you teach at
-    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
     expect(eligibility.ineligible?).to be false
     choose_school school
     click_on "Continue"
@@ -51,7 +51,7 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
     click_on "Continue without signing in"
 
     # - Which school do you teach at
-    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
     choose_school school
     click_on "Continue"
 
