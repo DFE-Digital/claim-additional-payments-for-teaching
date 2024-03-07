@@ -6,7 +6,7 @@ FactoryBot.define do
     initialize_with { LocalAuthority.find_or_create_by(code: code) }
 
     trait :student_loans_eligible do
-      code { StudentLoans::SchoolEligibility::ELIGIBLE_LOCAL_AUTHORITY_CODES.sample }
+      code { Policies::StudentLoans::SchoolEligibility::ELIGIBLE_LOCAL_AUTHORITY_CODES.sample }
     end
 
     trait :student_loans_ineligible do

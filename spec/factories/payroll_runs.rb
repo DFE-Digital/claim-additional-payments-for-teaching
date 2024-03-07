@@ -15,7 +15,7 @@ FactoryBot.define do
       # - 10 payments each of which has a single StudentLoans claim;
       # - 15 payments each of which has a single EarlyCareerPayments claim;
       # - 5 payments each of which has two claims: one for StudentLoans and one for EarlyCareerPayments.
-      claims_counts { {StudentLoans => 0} }
+      claims_counts { {Policies::StudentLoans => 0} }
       payment_traits { [] }
       batch_size { 2 }
       confirmed_batches { nil }
