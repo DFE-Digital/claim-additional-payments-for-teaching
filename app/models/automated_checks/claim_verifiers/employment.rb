@@ -39,7 +39,7 @@ module AutomatedChecks
       end
 
       def teachers_pensions_service_claim_schools
-        return [] unless teachers_pensions_service.any? && claim.policy == StudentLoans
+        return [] unless teachers_pensions_service.any? && claim.policy == Policies::StudentLoans
 
         @teachers_pensions_service_claim_schools ||= begin
           latest_start_date = end_of_previous_financial_year - 1.month
@@ -53,12 +53,12 @@ module AutomatedChecks
       end
 
       def start_of_previous_financial_year
-        previous_academic_year = JourneyConfiguration.for(StudentLoans).current_academic_year - 1
+        previous_academic_year = JourneyConfiguration.for(Policies::StudentLoans).current_academic_year - 1
         Date.new(previous_academic_year.start_year, 4, 6)
       end
 
       def end_of_previous_financial_year
-        Date.new(JourneyConfiguration.for(StudentLoans).current_academic_year.start_year, 4, 5)
+        Date.new(JourneyConfiguration.for(Policies::StudentLoans).current_academic_year.start_year, 4, 5)
       end
 
       def no_data
@@ -82,7 +82,7 @@ module AutomatedChecks
       def eligible?
         eligible_current_school = eligible_school?(teachers_pensions_service_schools, claim.eligibility.current_school)
 
-        return eligible_current_school unless claim.policy == StudentLoans && eligible_current_school
+        return eligible_current_school unless claim.policy == Policies::StudentLoans && eligible_current_school
 
         eligible_school?(teachers_pensions_service_claim_schools, claim.eligibility.claim_school)
       end
