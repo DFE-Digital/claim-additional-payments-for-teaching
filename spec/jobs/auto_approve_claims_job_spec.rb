@@ -17,15 +17,15 @@ RSpec.describe AutoApproveClaimsJob do
 
     let(:claims_awaiting_decision_current_ay) do
       (
-        create_list(:claim, 2, :submitted, academic_year: current_academic_year, policy: StudentLoans) +
+        create_list(:claim, 2, :submitted, academic_year: current_academic_year, policy: Policies::StudentLoans) +
         create_list(:claim, 2, :submitted, academic_year: current_academic_year, policy: Policies::EarlyCareerPayments) +
         create_list(:claim, 2, :submitted, academic_year: current_academic_year, policy: LevellingUpPremiumPayments)
       )
     end
-    let(:claims_awaiting_decision_previous_ay) { create_list(:claim, 2, :submitted, academic_year: previous_academic_year, policy: StudentLoans) }
-    let(:claims_awaiting_qa_current_ay) { create_list(:claim, 2, :submitted, :flagged_for_qa, academic_year: previous_academic_year, policy: StudentLoans) }
-    let(:claims_rejected_current_ay) { create_list(:claim, 2, :rejected, academic_year: current_academic_year, policy: StudentLoans) }
-    let(:claims_held_current_ay) { create_list(:claim, 2, :submitted, held: true, academic_year: current_academic_year, policy: StudentLoans) }
+    let(:claims_awaiting_decision_previous_ay) { create_list(:claim, 2, :submitted, academic_year: previous_academic_year, policy: Policies::StudentLoans) }
+    let(:claims_awaiting_qa_current_ay) { create_list(:claim, 2, :submitted, :flagged_for_qa, academic_year: previous_academic_year, policy: Policies::StudentLoans) }
+    let(:claims_rejected_current_ay) { create_list(:claim, 2, :rejected, academic_year: current_academic_year, policy: Policies::StudentLoans) }
+    let(:claims_held_current_ay) { create_list(:claim, 2, :submitted, held: true, academic_year: current_academic_year, policy: Policies::StudentLoans) }
 
     shared_examples "excluding claims from auto-approval" do
       it "does not enqueue the job for auto-approval", :aggregate_failures do
