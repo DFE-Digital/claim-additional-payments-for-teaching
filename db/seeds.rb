@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 if Rails.env.development? || ENV["ENVIRONMENT_NAME"] == "review"
-  JourneyConfiguration.create!(policy_types: [StudentLoans], current_academic_year: AcademicYear.current)
+  JourneyConfiguration.create!(policy_types: [Policies::StudentLoans], current_academic_year: AcademicYear.current)
   JourneyConfiguration.create!(policy_types: [Policies::EarlyCareerPayments, LevellingUpPremiumPayments], current_academic_year: AcademicYear.current)
 
   ENV["FIXTURES_PATH"] = "spec/fixtures"
@@ -27,13 +27,13 @@ if Rails.env.development?
     if ENV["SEED_ACADEMIC_YEAR"].nil?
       # use original project defaults
       create(:payroll_run, :confirmation_report_uploaded,
-        claims_counts: {StudentLoans => 2, Policies::EarlyCareerPayments => 2, LevellingUpPremiumPayments => 2, [StudentLoans, Policies::EarlyCareerPayments] => 2, [StudentLoans, LevellingUpPremiumPayments] => 2},
+        claims_counts: {Policies::StudentLoans => 2, Policies::EarlyCareerPayments => 2, LevellingUpPremiumPayments => 2, [Policies::StudentLoans, Policies::EarlyCareerPayments] => 2, [Policies::StudentLoans, LevellingUpPremiumPayments] => 2},
         created_at: 3.months.ago - 10.days)
       create(:payroll_run, :confirmation_report_uploaded,
-        claims_counts: {StudentLoans => 2, Policies::EarlyCareerPayments => 2, LevellingUpPremiumPayments => 2, [StudentLoans, Policies::EarlyCareerPayments] => 2, [StudentLoans, LevellingUpPremiumPayments] => 2},
+        claims_counts: {Policies::StudentLoans => 2, Policies::EarlyCareerPayments => 2, LevellingUpPremiumPayments => 2, [Policies::StudentLoans, Policies::EarlyCareerPayments] => 2, [Policies::StudentLoans, LevellingUpPremiumPayments] => 2},
         created_at: 2.months.ago - 5.days)
       create(:payroll_run, :confirmation_report_uploaded,
-        claims_counts: {StudentLoans => 2, Policies::EarlyCareerPayments => 2, LevellingUpPremiumPayments => 2, [StudentLoans, Policies::EarlyCareerPayments] => 2, [StudentLoans, LevellingUpPremiumPayments] => 2},
+        claims_counts: {Policies::StudentLoans => 2, Policies::EarlyCareerPayments => 2, LevellingUpPremiumPayments => 2, [Policies::StudentLoans, Policies::EarlyCareerPayments] => 2, [Policies::StudentLoans, LevellingUpPremiumPayments] => 2},
         created_at: 1.months.ago - 3.days)
 
       Policies.all.each do |policy|
@@ -52,16 +52,16 @@ if Rails.env.development?
       #    There cannot be teachers claiming TSLR & ECP as the 2020/2021 Physics cohort is not eligible
 
       create(:payroll_run, :confirmation_report_uploaded,
-        claims_counts: {StudentLoans => 10, Policies::EarlyCareerPayments => 15},
+        claims_counts: {Policies::StudentLoans => 10, Policies::EarlyCareerPayments => 15},
         created_at: 3.months.ago - 10.days)
       create(:payroll_run, :confirmation_report_uploaded,
-        claims_counts: {StudentLoans => 8, Policies::EarlyCareerPayments => 25},
+        claims_counts: {Policies::StudentLoans => 8, Policies::EarlyCareerPayments => 25},
         created_at: 2.months.ago - 5.days)
       create(:payroll_run, :confirmation_report_uploaded,
-        claims_counts: {StudentLoans => 2, Policies::EarlyCareerPayments => 10},
+        claims_counts: {Policies::StudentLoans => 2, Policies::EarlyCareerPayments => 10},
         created_at: 1.months.ago - 3.days)
 
-      policy = StudentLoans
+      policy = Policies::StudentLoans
       create_list(:claim, 4, :approved, policy: policy)
       create_list(:claim, 1, :submitted, policy: policy)
       create_list(:claim, 1, :rejected, policy: policy)
