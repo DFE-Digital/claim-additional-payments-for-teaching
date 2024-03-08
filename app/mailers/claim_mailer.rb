@@ -6,63 +6,53 @@ class ClaimMailer < ApplicationMailer
   def submitted(claim)
     unknown_policy_check(claim)
     set_common_instance_variables(claim)
-    if [StudentLoans, Policies::EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
-      personalisation = {
-        first_name: @claim.first_name,
-        ref_number: @claim.reference,
-        support_email_address: @support_email_address
-      }
+    personalisation = {
+      first_name: @claim.first_name,
+      ref_number: @claim.reference,
+      support_email_address: @support_email_address
+    }
 
-      send_mail(template_ids(claim)[:CLAIM_RECEIVED_NOTIFY_TEMPLATE_ID], personalisation)
-    end
+    send_mail(template_ids(claim)[:CLAIM_RECEIVED_NOTIFY_TEMPLATE_ID], personalisation)
   end
 
   def approved(claim)
     unknown_policy_check(claim)
     set_common_instance_variables(claim)
+    personalisation = {
+      first_name: @claim.first_name,
+      ref_number: @claim.reference,
+      support_email_address: @support_email_address
+    }
 
-    if [StudentLoans, Policies::EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
-      personalisation = {
-        first_name: @claim.first_name,
-        ref_number: @claim.reference,
-        support_email_address: @support_email_address
-      }
-
-      send_mail(template_ids(claim)[:CLAIM_APPROVED_NOTIFY_TEMPLATE_ID], personalisation)
-    end
+    send_mail(template_ids(claim)[:CLAIM_APPROVED_NOTIFY_TEMPLATE_ID], personalisation)
   end
 
   def rejected(claim)
     unknown_policy_check(claim)
     set_common_instance_variables(claim)
+    personalisation = {
+      first_name: @claim.first_name,
+      ref_number: @claim.reference,
+      support_email_address: @support_email_address,
+      current_financial_year: (claim.policy == StudentLoans) ? StudentLoans.current_financial_year : "",
+      **rejected_reasons_personalisation(@claim.latest_decision&.rejected_reasons_hash)
+    }
 
-    if [StudentLoans, Policies::EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
-      personalisation = {
-        first_name: @claim.first_name,
-        ref_number: @claim.reference,
-        support_email_address: @support_email_address,
-        current_financial_year: (claim.policy == StudentLoans) ? StudentLoans.current_financial_year : "",
-        **rejected_reasons_personalisation(@claim.latest_decision&.rejected_reasons_hash)
-      }
-
-      send_mail(template_ids(claim)[:CLAIM_REJECTED_NOTIFY_TEMPLATE_ID], personalisation)
-    end
+    send_mail(template_ids(claim)[:CLAIM_REJECTED_NOTIFY_TEMPLATE_ID], personalisation)
   end
 
   def update_after_three_weeks(claim)
     unknown_policy_check(claim)
     set_common_instance_variables(claim)
 
-    if [StudentLoans, Policies::EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
-      personalisation = {
-        first_name: @claim.first_name,
-        ref_number: @claim.reference,
-        support_email_address: @support_email_address,
-        application_date: l(@claim.submitted_at.to_date)
-      }
+    personalisation = {
+      first_name: @claim.first_name,
+      ref_number: @claim.reference,
+      support_email_address: @support_email_address,
+      application_date: l(@claim.submitted_at.to_date)
+    }
 
-      send_mail(template_ids(claim)[:CLAIM_UPDATE_AFTER_THREE_WEEKS_NOTIFY_TEMPLATE_ID], personalisation)
-    end
+    send_mail(template_ids(claim)[:CLAIM_UPDATE_AFTER_THREE_WEEKS_NOTIFY_TEMPLATE_ID], personalisation)
   end
 
   def email_verification(claim, one_time_password)
