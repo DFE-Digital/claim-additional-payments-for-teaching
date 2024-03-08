@@ -21,7 +21,7 @@ module Policies
   #
   # For example:
   #
-  #   Policies["student-loans"] #=> StudentLoans
+  #   Policies["student-loans"] #=> Policies::StudentLoans
   #
   # Use StudentLoans#policy_type to get "student-loans"
   #
