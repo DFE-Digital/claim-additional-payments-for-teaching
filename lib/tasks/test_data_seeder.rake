@@ -21,7 +21,7 @@ namespace :test_data_seeder do
 
     logger = Logger.new($stdout)
     logger.info "Importing StudentLoans DqT seed data, this may take a couple minutes..."
-    DataImporter.new(policies: [StudentLoans], test_type: :dqt_csv, quantities: {student_loans: nil}).run
+    DataImporter.new(policies: [Policies::StudentLoans], test_type: :dqt_csv, quantities: {student_loans: nil}).run
     logger.info "Seeding data import complete!"
   end
 

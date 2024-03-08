@@ -23,7 +23,7 @@ module TestSeeders
         route_into_teaching_mismatch(data, eligibility, record)
         eligible_itt_subject_mismatch(data, eligibility, record)
         itt_academic_year_mismatch(data, eligibility, record)
-      elsif eligibility.policy == StudentLoans
+      elsif eligibility.policy == Policies::StudentLoans
         subject_taught_mismatch(data, eligibility, record)
       end
       unmatched_records << data if data.size > 2

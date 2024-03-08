@@ -42,7 +42,7 @@ module TestSeeders
         # to solve this we use the student_loan_repayment_amount method to update
         # all of the student loans with a random value less than 5000
         def insert_eligibilities
-          StudentLoans::Eligibility.copy_from_client ELIGIBILITY_COLUMNS do |copy|
+          Policies::StudentLoans::Eligibility.copy_from_client ELIGIBILITY_COLUMNS do |copy|
             records.each do |data|
               time = Time.now.getutc
 

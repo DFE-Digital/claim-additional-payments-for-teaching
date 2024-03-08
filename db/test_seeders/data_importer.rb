@@ -19,7 +19,7 @@ class DataImporter < BaseImporter
   def run
     policies.each do |policy|
       logger.info BOLD_LINE
-      if [Policies::EarlyCareerPayments, StudentLoans].include?(policy)
+      if [Policies::EarlyCareerPayments, Policies::StudentLoans].include?(policy)
         @policy = policy
         logger.info policy.to_s
       else
@@ -64,7 +64,7 @@ class DataImporter < BaseImporter
       @eligibilities = Policies::EarlyCareerPayments::Eligibility.order(created_at: :asc).to_a
     when StudentLoans
       TestSeeders::Eligibilities::StudentLoans::Importer.new(records).run
-      @eligibilities = StudentLoans::Eligibility.order(created_at: :asc).to_a
+      @eligibilities = Policies::StudentLoans::Eligibility.order(created_at: :asc).to_a
     end
   end
 
