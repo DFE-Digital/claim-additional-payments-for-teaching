@@ -45,7 +45,7 @@ RSpec.feature "Combined journey with Teacher ID" do
 
     visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
     expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
-    expect(page).to have_link(href: "mailto:#{Policies::EarlyCareerPayments.feedback_email}")
+    expect(page).to have_link(href: "mailto:#{I18n.t("additional_payments.feedback_email")}")
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("additional_payments.landing_page"))

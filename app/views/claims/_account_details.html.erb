@@ -1,7 +1,7 @@
 <% account_hint = bank_or_building_society == "personal bank account" ? "bank" : bank_or_building_society %>
 <% account_card = account_hint == "bank" ? account_hint : "" %>
 
-<%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
+<%= form_for current_claim, url: claim_path(current_journey_routing_name) do |form| %>
   <fieldset class="govuk-fieldset" aria-describedby="bank_details-hint" role="group">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_class_size(current_claim) %>">
       <h1 class="govuk-fieldset__heading">

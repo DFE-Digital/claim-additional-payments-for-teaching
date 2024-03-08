@@ -131,7 +131,7 @@ RSpec.describe "Claims", type: :request do
     context "when a claim hasn’t been started yet" do
       it "redirects to the start page indicated by the routing" do
         get claim_path(StudentLoans.routing_name, "qts-year")
-        expect(response).to redirect_to(StudentLoans.start_page_url)
+        expect(response).to redirect_to(JourneyConfiguration.start_page_url("student-loans"))
       end
     end
   end
@@ -155,7 +155,7 @@ RSpec.describe "Claims", type: :request do
     context "when a claim hasn’t been started yet" do
       it "redirects to the start page indicated by the routing" do
         get claim_path(StudentLoans.routing_name, "ineligible")
-        expect(response).to redirect_to(StudentLoans.start_page_url)
+        expect(response).to redirect_to(JourneyConfiguration.start_page_url("student-loans"))
       end
     end
   end
@@ -250,7 +250,7 @@ RSpec.describe "Claims", type: :request do
     context "when a claim hasn’t been started yet" do
       it "redirects to the start page indicated by the routing" do
         put claim_path(StudentLoans.routing_name, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "on_or_after_cut_off_date"}}}
-        expect(response).to redirect_to(StudentLoans.start_page_url)
+        expect(response).to redirect_to(JourneyConfiguration.start_page_url("student-loans"))
       end
     end
   end

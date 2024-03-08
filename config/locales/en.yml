@@ -227,6 +227,7 @@ en:
     claim_action: "claim back student loan repayments"
     award_description: "claim payment"
     support_email_address: "studentloanteacherpayment@digital.education.gov.uk"
+    feedback_email: "studentloanteacherpayment@digital.education.gov.uk"
     landing_page: "Claim back student loan repayments if you're a teacher"
     questions:
       qts_award_year: "When did you complete your initial teacher training (ITT)?"
@@ -287,6 +288,7 @@ en:
     claim_description: "for an additional payment for teaching"
     landing_page: "Find out if you are eligible for any additional payments"
     support_email_address: "additionalteachingpayment@digital.education.gov.uk"
+    feedback_email: "additionalteachingpayment@digital.education.gov.uk"
     ineligible:
       heading: "You are not eligible"
       school_heading: "The school you have selected is not eligible"

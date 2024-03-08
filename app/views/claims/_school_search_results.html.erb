@@ -2,7 +2,7 @@
 %>
 <% shared_view_css_size = current_claim.policy == Policies::EarlyCareerPayments ? "l" : "xl" %>
 
-<%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
+<%= form_for current_claim, url: claim_path(current_journey_routing_name) do |form| %>
   <%= form_group_tag current_claim do %>
     <fieldset class="govuk-fieldset" aria-describedby="school-search-result-hint">
 

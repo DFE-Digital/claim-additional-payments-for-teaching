@@ -1,3 +1,5 @@
+# TODO: Move this into an additional-payments journey specific namespace
+#
 class JourneySubjectEligibilityChecker
   def initialize(claim_year:, itt_year:)
     raise "Claim year #{claim_year} is after ECP and LUP both ended" if claim_year > EligibilityCheckable::FINAL_COMBINED_ECP_AND_LUP_POLICY_YEAR

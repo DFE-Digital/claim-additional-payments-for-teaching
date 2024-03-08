@@ -53,8 +53,7 @@ module ClaimsHelper
   end
 
   def additional_payments_open?
-    policy = JourneyConfiguration.policy_for_routing_name("additional-payments")
-    JourneyConfiguration.for(policy).open_for_submissions?
+    JourneyConfiguration.for_routing_name("additional-payments").open_for_submissions?
   end
 
   def show_name(claim)

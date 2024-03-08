@@ -19,16 +19,16 @@ describe ApplicationHelper do
 
   describe "page_title" do
     it "returns a title for the page that follows the guidance of the design system" do
-      expected_title = page_title("Title", policy: "student-loans")
+      expected_title = page_title("Title", journey: "student-loans")
       expect(expected_title).to eq("Title — Teachers: claim back your student loan repayments — GOV.UK")
     end
 
     it "uses the generic service name if a specific policy isn't available" do
-      expect(page_title("Some Title", policy: nil)).to eq("Some Title — Claim additional payments for teaching — GOV.UK")
+      expect(page_title("Some Title", journey: nil)).to eq("Some Title — Claim additional payments for teaching — GOV.UK")
     end
 
     it "includes an optional error prefix" do
-      expected_title = page_title("Some Title", show_error: true, policy: "student-loans")
+      expected_title = page_title("Some Title", show_error: true, journey: "student-loans")
       expect(expected_title).to eq("Error — Some Title — Teachers: claim back your student loan repayments — GOV.UK")
     end
   end
@@ -56,27 +56,27 @@ describe ApplicationHelper do
     end
   end
 
-  describe "#policy_service_name" do
+  describe "#journey_service_name" do
     it "defaults to the generic service name" do
-      expect(policy_service_name).to eq t("service_name")
+      expect(journey_service_name).to eq t("service_name")
     end
 
     it "returns a policy-specific service name for student loans" do
-      expect(policy_service_name("student-loans")).to eq t("student_loans.journey_name")
+      expect(journey_service_name("student-loans")).to eq t("student_loans.journey_name")
     end
 
     it "returns a policy-specific service name for additional payments" do
-      expect(policy_service_name("additional-payments")).to eq t("additional_payments.journey_name")
+      expect(journey_service_name("additional-payments")).to eq t("additional_payments.journey_name")
     end
   end
 
-  describe "#policy_description" do
+  describe "#journey_description" do
     it "returns description for student loans" do
-      expect(policy_description("student-loans")).to eq t("student_loans.claim_description")
+      expect(journey_description("student-loans")).to eq t("student_loans.claim_description")
     end
 
     it "returns description for early career payments" do
-      expect(policy_description("additional-payments")).to eq t("additional_payments.claim_description")
+      expect(journey_description("additional-payments")).to eq t("additional_payments.claim_description")
     end
   end
 end

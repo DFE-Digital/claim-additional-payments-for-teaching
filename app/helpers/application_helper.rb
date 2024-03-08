@@ -1,9 +1,9 @@
 module ApplicationHelper
-  def page_title(title, policy: nil, show_error: false)
+  def page_title(title, journey: nil, show_error: false)
     [].tap do |a|
       a << "Error" if show_error
       a << title
-      a << policy_service_name(policy)
+      a << journey_service_name(journey)
       a << "GOV.UK"
     end.join(" — ")
   end
@@ -18,8 +18,6 @@ module ApplicationHelper
     number_to_currency(value, delimiter: "", unit: "")
   end
 
-  # TODO: routing_name is not best way to do this due to the combined journey
-  # This remains for backwards compatibility of the existing mailers without a refactor
   def support_email_address(routing_name = nil)
     return t("support_email_address") unless routing_name
 
@@ -34,28 +32,29 @@ module ApplicationHelper
     t("support_email_address")
   end
 
-  def policy_service_name(routing_name = nil)
+  def journey_service_name(routing_name = nil)
     return t("service_name") unless routing_name
 
     namespace = JourneyConfiguration.i18n_namespace_for_routing_name(routing_name)
     t("#{namespace}.journey_name")
   end
 
-  def policy_description(routing_name)
+  def journey_description(routing_name)
     namespace = JourneyConfiguration.i18n_namespace_for_routing_name(routing_name)
     t("#{namespace}.claim_description")
   end
 
-  def feedback_url
-    current_policy.feedback_url
+  def feedback_email(routing_name)
+    namespace = JourneyConfiguration.i18n_namespace_for_routing_name(routing_name)
+    t("#{namespace}.feedback_email")
   end
 
-  def feedback_email
-    current_policy.feedback_email
+  def start_page_url(routing_name)
+    JourneyConfiguration.start_page_url(routing_name)
   end
 
-  def start_page_url
-    current_policy.start_page_url
+  def eligibility_page_url
+    current_claim.policy.eligibility_page_url
   end
 
   def claim_decision_deadline_in_weeks

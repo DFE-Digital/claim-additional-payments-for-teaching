@@ -22,7 +22,7 @@ Rails.application.routes.draw do
   get "refresh-session", to: "sessions#refresh", as: :refresh_session
 
   # Used to constrain claim journey routing so only slugs
-  # that are part of a policy’s slug sequence are routed.
+  # that are part of a journey's slug sequence are routed.
   restrict_to_sequence_slugs = Class.new {
     attr_reader :journey
 
@@ -31,20 +31,21 @@ Rails.application.routes.draw do
     end
 
     def matches?(request)
-      request["policy"] == journey[:routing_name] && journey[:slugs].include?(request["slug"])
+      request["journey"] == journey[:routing_name] && journey[:slug_sequence]::SLUGS.include?(request["slug"])
     end
   }
 
-  # Define routes that are specific to each Policy's page sequence
+  # Define routes that are specific to each journey's page sequence
   JourneyConfiguration::SERVICES.each do |journey|
     constraints(restrict_to_sequence_slugs.new(journey)) do
-      scope path: ":policy" do
+      scope path: ":journey" do
         resources :claims, only: [:show, :update], param: :slug, path: "/"
       end
     end
   end
-  # Define the generic routes that aren't specific to any given policy
-  scope path: ":policy", constraints: {policy: %r{#{JourneyConfiguration.all_routing_names.join("|")}}} do
+
+  # Define the generic routes that aren't specific to any given journey
+  scope path: ":journey", constraints: {journey: %r{#{JourneyConfiguration.all_routing_names.join("|")}}} do
     get "claim", as: :new_claim, to: "claims#new"
     post "claim", as: :claims, to: "claims#create"
     post "claim/submit", as: :claim_submission, to: "submissions#create"
@@ -59,13 +60,13 @@ Rails.application.routes.draw do
       get page_name.dasherize, to: "static_pages##{page_name}", as: page_name
     end
 
-    scope constraints: {policy: "additional-payments"} do
+    scope constraints: {journey: "additional-payments"} do
       get "reminders/personal-details", as: :new_reminder, to: "reminders#new"
       post "reminders/personal-details", as: :reminders, to: "reminders#create"
       resources :reminders, only: [:show, :update], param: :slug, constraints: {slug: %r{#{Reminder::SLUGS.join("|")}}}
     end
 
-    scope path: "/", constraints: {policy: /student-loans|additional-payments/} do
+    scope path: "/", constraints: {journey: /student-loans|additional-payments/} do
       get "landing-page", to: "static_pages#landing_page", as: :landing_page
     end
   end

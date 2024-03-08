@@ -15,14 +15,14 @@ class JourneyConfiguration < ApplicationRecord
   SERVICES = [
     {
       routing_name: "student-loans",
-      slugs: StudentLoans::SlugSequence::SLUGS,
+      slug_sequence: StudentLoans::SlugSequence,
       policies: [StudentLoans],
       view_path: "student_loans",
       i18n_namespace: "student_loans"
     },
     {
       routing_name: "additional-payments",
-      slugs: Policies::EarlyCareerPayments::SlugSequence::SLUGS,
+      slug_sequence: Policies::EarlyCareerPayments::SlugSequence,
       policies: [Policies::EarlyCareerPayments, LevellingUpPremiumPayments],
       view_path: "additional_payments",
       i18n_namespace: "additional_payments"
@@ -72,6 +72,10 @@ class JourneyConfiguration < ApplicationRecord
     SERVICES.detect { |j| policy.in? j[:policies] }[:routing_name]
   end
 
+  def self.start_page_url(routing_name)
+    service_for_routing_name(routing_name)[:slug_sequence].start_page_url
+  end
+
   def policies
     policy_types.map(&Policies.method(:constantize))
   end
@@ -81,7 +85,7 @@ class JourneyConfiguration < ApplicationRecord
   end
 
   def slugs
-    SERVICES.detect { |j| policies.first.in? j[:policies] }[:slugs]
+    SERVICES.detect { |j| policies.first.in? j[:policies] }[:slug_sequence]::SLUGS
   end
 
   def additional_payments?

@@ -182,6 +182,10 @@ module Policies
         end
       end
 
+      def self.start_page_url
+        Rails.application.routes.url_helpers.landing_page_path("additional-payments")
+      end
+
       private
 
       def remove_student_loan_slugs(sequence, slugs = nil)

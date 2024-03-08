@@ -24,14 +24,6 @@ module StudentLoans
   POLICY_END_YEAR = AcademicYear.new(2020).freeze
   ACADEMIC_YEARS_QUALIFIED_TEACHERS_CAN_CLAIM_FOR = 11
 
-  def start_page_url
-    if Rails.env.production?
-      "https://www.gov.uk/guidance/teachers-claim-back-your-student-loan-repayments"
-    else
-      "/#{routing_name}/claim"
-    end
-  end
-
   def eligibility_page_url
     "https://www.gov.uk/guidance/teachers-claim-back-your-student-loan-repayments"
   end
@@ -42,14 +34,6 @@ module StudentLoans
 
   def notify_reply_to_id
     "962b3044-cdd4-4dbe-b6ea-c461530b3dc6"
-  end
-
-  def feedback_url
-    "https://docs.google.com/forms/d/e/1FAIpQLSdAyOxHme39E8lMnD2qY029mmk4Lpn84soYg2vLrT5BV9IUSg/viewform?usp=sf_link"
-  end
-
-  def feedback_email
-    "studentloanteacherpayment@digital.education.gov.uk"
   end
 
   # Returns the AcademicYear during or after which teachers must have completed

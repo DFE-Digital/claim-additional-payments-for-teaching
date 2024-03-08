@@ -137,8 +137,54 @@
         89
       ],
       "note": "The concetenated attributes in the CONCAT operation are not user-generated, so this can be safely ignored"
+    },
+    {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "b838db1b7beff28cdeff71a154a46d7c57062fb11aebf82f0487a9991445bea5",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/concerns/part_of_claim_journey.rb",
+      "line": 25,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(JourneyConfiguration.start_page_url(current_journey_routing_name), :allow_other_host => true)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "PartOfClaimJourney",
+        "method": "send_unstarted_claimants_to_the_start"
+      },
+      "user_input": "JourneyConfiguration.start_page_url(current_journey_routing_name)",
+      "confidence": "Weak",
+      "cwe_id": [
+        601
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "d7efbb65a649f824e34aa86f2d844a9d5ffac945eea04198f59418ac1998721c",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/submissions_controller.rb",
+      "line": 22,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(JourneyConfiguration.start_page_url(current_journey_routing_name), :allow_other_host => true)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "SubmissionsController",
+        "method": "show"
+      },
+      "user_input": "JourneyConfiguration.start_page_url(current_journey_routing_name)",
+      "confidence": "Weak",
+      "cwe_id": [
+        601
+      ],
+      "note": ""
     }
   ],
-  "updated": "2023-11-23 09:43:08 +0000",
-  "brakeman_version": "6.0.1"
+  "updated": "2024-03-07 12:34:07 +0000",
+  "brakeman_version": "6.1.2"
 }

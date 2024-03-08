@@ -7,7 +7,7 @@ RSpec.feature "Landing page - Early Career Payments - journey" do
 
   scenario "navigate to first page in ECP journey" do
     visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
-    expect(page).to have_link(href: "mailto:#{Policies::EarlyCareerPayments.feedback_email}")
+    expect(page).to have_link(href: "mailto:#{I18n.t("additional_payments.feedback_email")}")
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("additional_payments.landing_page"))

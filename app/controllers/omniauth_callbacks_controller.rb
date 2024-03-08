@@ -8,7 +8,7 @@ class OmniauthCallbacksController < ApplicationController
 
     session[:user_info] = auth.extra.raw_info
 
-    redirect_to claim_path(policy: policy.routing_name, slug: "teacher-detail")
+    redirect_to claim_path(journey: policy.routing_name, slug: "teacher-detail")
   end
 
   def failure
@@ -19,5 +19,9 @@ class OmniauthCallbacksController < ApplicationController
 
   def policy
     @policy ||= current_claim.policy
+  end
+
+  def current_journey_routing_name
+    policy.routing_name
   end
 end

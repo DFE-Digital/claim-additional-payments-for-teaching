@@ -1,4 +1,4 @@
-<% content_for(:page_title) { page_title("Claim #{@claim.reference} checks for #{policy_service_name(@claim.policy.routing_name)}") } %>
+<% content_for(:page_title) { page_title("Claim #{@claim.reference} checks for #{@claim.policy.short_name}") } %>
 
 <%= link_to "Back", claims_backlink_path, class: "govuk-back-link" %>
 

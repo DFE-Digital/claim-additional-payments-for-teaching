@@ -1,10 +1,10 @@
-<% content_for(:page_title, page_title(t("questions.has_student_loan"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(t("questions.has_student_loan"), journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { has_student_loan: "claim_has_student_loan_true" }) if current_claim.errors.any? %>
 
-    <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
+    <%= form_for current_claim, url: claim_path(current_journey_routing_name) do |form| %>
       <%= form.hidden_field :has_student_loan %>
         <%= form_group_tag current_claim do %>
           <fieldset class="govuk-fieldset" role="group">

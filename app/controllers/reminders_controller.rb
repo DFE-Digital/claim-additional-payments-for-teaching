@@ -7,7 +7,7 @@ class RemindersController < BasePublicController
     # - transfer the email_verified state to the reminder (done in #current_reminder)
     # - jump straight to reminder set
     if current_reminder.email_verified? && current_reminder.save
-      redirect_to reminder_path(current_policy_routing_name, "set")
+      redirect_to reminder_path(current_journey_routing_name, "set")
       return
     end
 
@@ -30,7 +30,7 @@ class RemindersController < BasePublicController
 
     if current_reminder.save(context: current_slug.to_sym)
       session[:reminder_id] = current_reminder.to_param
-      redirect_to reminder_path(current_policy_routing_name, next_slug)
+      redirect_to reminder_path(current_journey_routing_name, next_slug)
     else
       render first_template_in_sequence
     end
@@ -44,7 +44,7 @@ class RemindersController < BasePublicController
     current_reminder.attributes = reminder_params
     one_time_password
     if current_reminder.save(context: current_slug.to_sym)
-      redirect_to reminder_path(current_policy_routing_name, next_slug)
+      redirect_to reminder_path(current_journey_routing_name, next_slug)
     else
       show
     end
@@ -76,12 +76,12 @@ class RemindersController < BasePublicController
     Reminder::SLUGS.index(params[:slug]) || 0
   end
 
-  def current_policy_routing_name
+  def current_journey_routing_name
     "additional-payments"
   end
 
   def journey_configuration
-    @journey_configuration ||= JourneyConfiguration.for_routing_name(current_policy_routing_name)
+    @journey_configuration ||= JourneyConfiguration.for_routing_name(current_journey_routing_name)
   end
 
   def current_reminder

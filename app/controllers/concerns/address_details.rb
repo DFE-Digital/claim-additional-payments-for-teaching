@@ -47,7 +47,7 @@ module AddressDetails
 
   def save_address_to_claim
     session[:no_address_selected] = "Select an address"
-    redirect_to claim_path(current_policy_routing_name, "select-home-address", {"claim[postcode]": params[:postcode]}) and return if params[:address].nil?
+    redirect_to claim_path(current_journey_routing_name, "select-home-address", {"claim[postcode]": params[:postcode]}) and return if params[:address].nil?
 
     address_parts = params[:address].split(":")
     current_claim.attributes = {
