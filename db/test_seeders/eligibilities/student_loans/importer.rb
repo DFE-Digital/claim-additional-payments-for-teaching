@@ -68,7 +68,7 @@ module TestSeeders
         end
 
         def student_loan_repayment_amount
-          StudentLoans::Eligibility.all.each do |tslr_eligibility|
+          Policies::StudentLoans::Eligibility.all.each do |tslr_eligibility|
             tslr_eligibility.student_loan_repayment_amount = rand(4999)
             tslr_eligibility.save
           end
