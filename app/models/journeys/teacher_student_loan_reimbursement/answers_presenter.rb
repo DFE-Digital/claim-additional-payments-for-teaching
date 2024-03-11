@@ -29,7 +29,7 @@ module Journeys
 
       def qts_award_year
         [
-          translate("student_loans.questions.qts_award_year"),
+          t("student_loans.questions.qts_award_year"),
           qts_award_year_answer(eligibility),
           "qts-year"
         ]
@@ -45,7 +45,7 @@ module Journeys
 
       def current_school
         [
-          translate("student_loans.forms.still_teaching.questions.which_school_currently"),
+          t("student_loans.forms.still_teaching.questions.which_school_currently"),
           eligibility.current_school_name,
           "still-teaching"
         ]

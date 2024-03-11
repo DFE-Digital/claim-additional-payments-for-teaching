@@ -9,20 +9,20 @@ module Journeys
 
     def identity_answers
       [].tap do |a|
-        a << [translate("questions.name"), claim.full_name, "personal-details"] if show_name?
-        a << [translate("questions.address.generic.title"), claim.address, "address"] unless claim.address_from_govuk_verify?
-        a << [translate("questions.date_of_birth"), date_of_birth_string, "personal-details"] if show_dob?
-        a << [translate("questions.payroll_gender"), t("answers.payroll_gender.#{claim.payroll_gender}"), "gender"] unless claim.payroll_gender_verified?
-        a << [translate("questions.teacher_reference_number"), claim.teacher_reference_number, "teacher-reference-number"] if show_trn?
-        a << [translate("questions.national_insurance_number"), claim.national_insurance_number, "personal-details"] if show_nino?
-        a << [translate("questions.email_address"), claim.email_address, claim.email_address_check? ? "select-email" : "email-address"]
+        a << [t("questions.name"), claim.full_name, "personal-details"] if show_name?
+        a << [t("questions.address.generic.title"), claim.address, "address"] unless claim.address_from_govuk_verify?
+        a << [t("questions.date_of_birth"), date_of_birth_string, "personal-details"] if show_dob?
+        a << [t("questions.payroll_gender"), t("answers.payroll_gender.#{claim.payroll_gender}"), "gender"] unless claim.payroll_gender_verified?
+        a << [t("questions.teacher_reference_number"), claim.teacher_reference_number, "teacher-reference-number"] if show_trn?
+        a << [t("questions.national_insurance_number"), claim.national_insurance_number, "personal-details"] if show_nino?
+        a << [t("questions.email_address"), claim.email_address, claim.email_address_check? ? "select-email" : "email-address"]
       end
     end
 
     def payment_answers
       change_slug = claim.building_society? ? "building-society-account" : "personal-bank-account"
       [].tap do |a|
-        a << [translate("questions.bank_or_building_society"), claim.bank_or_building_society.to_s.humanize, "bank-or-building-society"]
+        a << [t("questions.bank_or_building_society"), claim.bank_or_building_society.to_s.humanize, "bank-or-building-society"]
         a << ["Name on bank account", claim.banking_name, change_slug]
         a << ["Bank sort code", claim.bank_sort_code, change_slug]
         a << ["Bank account number", claim.bank_account_number, change_slug]

@@ -36,8 +36,8 @@ module Journeys
 
       def identity_answers
         super.tap do |a|
-          a << [translate("questions.provide_mobile_number"), (claim.provide_mobile_number ? "Yes" : "No"), "provide-mobile-number"]
-          a << [translate("questions.mobile_number"), claim.mobile_number, "mobile-number"] if claim.provide_mobile_number?
+          a << [t("questions.provide_mobile_number"), (claim.provide_mobile_number ? "Yes" : "No"), "provide-mobile-number"]
+          a << [t("questions.mobile_number"), claim.mobile_number, "mobile-number"] if claim.provide_mobile_number?
         end
       end
 
@@ -45,7 +45,7 @@ module Journeys
 
       def has_entire_term_contract
         [
-          translate("additional_payments.forms.entire_term_contract.questions.has_entire_term_contract"),
+          t("additional_payments.forms.entire_term_contract.questions.has_entire_term_contract"),
           (eligibility.has_entire_term_contract? ? "Yes" : "No"),
           "entire-term-contract"
         ]
@@ -53,7 +53,7 @@ module Journeys
 
       def current_school
         [
-          translate("additional_payments.forms.current_school.questions.current_school_search"),
+          t("additional_payments.forms.current_school.questions.current_school_search"),
           eligibility.current_school_name,
           (eligibility.school_somewhere_else == false) ? "correct-school" : "current-school"
         ]
@@ -61,7 +61,7 @@ module Journeys
 
       def nqt_in_academic_year_after_itt
         [
-          translate("additional_payments.questions.nqt_in_academic_year_after_itt.heading"),
+          t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"),
           (eligibility.nqt_in_academic_year_after_itt? ? "Yes" : "No"),
           "nqt-in-academic-year-after-itt"
         ]
@@ -69,7 +69,7 @@ module Journeys
 
       def induction_completed
         [
-          translate("additional_payments.questions.induction_completed.heading"),
+          t("additional_payments.questions.induction_completed.heading"),
           (eligibility.induction_completed? ? "Yes" : "No"),
           "induction-completed"
         ]
@@ -77,7 +77,7 @@ module Journeys
 
       def employed_as_supply_teacher
         [
-          translate("additional_payments.forms.supply_teacher.questions.employed_as_supply_teacher"),
+          t("additional_payments.forms.supply_teacher.questions.employed_as_supply_teacher"),
           (eligibility.employed_as_supply_teacher? ? "Yes" : "No"),
           "supply-teacher"
         ]
@@ -85,7 +85,7 @@ module Journeys
 
       def employed_directly
         [
-          translate("additional_payments.forms.employed_directly.questions.employed_directly"),
+          t("additional_payments.forms.employed_directly.questions.employed_directly"),
           (eligibility.employed_directly? ? "Yes" : "No"),
           "employed-directly"
         ]
@@ -93,7 +93,7 @@ module Journeys
 
       def subject_to_formal_performance_action
         [
-          translate("additional_payments.forms.poor_performance.questions.formal_performance_action"),
+          t("additional_payments.forms.poor_performance.questions.formal_performance_action"),
           (eligibility.subject_to_formal_performance_action? ? "Yes" : "No"),
           "poor-performance"
         ]
@@ -101,7 +101,7 @@ module Journeys
 
       def subject_to_disciplinary_action
         [
-          translate("additional_payments.forms.poor_performance.questions.disciplinary_action"),
+          t("additional_payments.forms.poor_performance.questions.disciplinary_action"),
           (eligibility.subject_to_disciplinary_action? ? "Yes" : "No"),
           "poor-performance"
         ]
@@ -111,8 +111,8 @@ module Journeys
         return if eligibility.claim.qualifications_details_check && eligibility.claim.dqt_teacher_record&.route_into_teaching
 
         [
-          translate("additional_payments.forms.qualification.questions.which_route"),
-          translate("early_career_payments.forms.qualification.answers.#{eligibility.qualification}"),
+          t("additional_payments.forms.qualification.questions.which_route"),
+          t("early_career_payments.forms.qualification.answers.#{eligibility.qualification}"),
           "qualification"
         ]
       end
@@ -131,7 +131,7 @@ module Journeys
         return if !eligibility.respond_to?(:eligible_degree_subject) || !eligibility.eligible_degree_subject? || (eligibility.claim.qualifications_details_check && eligibility.claim.dqt_teacher_record&.eligible_degree_code?)
 
         [
-          translate("additional_payments.questions.eligible_degree_subject"),
+          t("additional_payments.questions.eligible_degree_subject"),
           "Yes",
           "eligible-degree-subject"
         ]
@@ -139,7 +139,7 @@ module Journeys
 
       def teaching_subject_now
         [
-          translate("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now", eligible_itt_subject: eligibility.eligible_itt_subject),
+          t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now", eligible_itt_subject: eligibility.eligible_itt_subject),
           (eligibility.teaching_subject_now? ? "Yes" : "No"),
           "teaching-subject-now"
         ]
@@ -161,7 +161,7 @@ module Journeys
           itt_year: eligibility.itt_academic_year).current_and_future_subject_symbols(policy)
 
         if subjects.many?
-          translate("early_career_payments.answers.eligible_itt_subject.#{eligibility.eligible_itt_subject}")
+          t("early_career_payments.answers.eligible_itt_subject.#{eligibility.eligible_itt_subject}")
         else
           subject_symbol = subjects.first
           (subject_symbol == eligibility.eligible_itt_subject.to_sym) ? "Yes" : "No"
