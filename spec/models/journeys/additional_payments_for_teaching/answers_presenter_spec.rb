@@ -251,37 +251,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
     end
   end
 
-  describe "#identity_answers" do
-    let(:claim) { build(:claim, policy:, logged_in_with_tid:, provide_mobile_number:, mobile_number:) }
-    let(:provide_mobile_number) { nil }
-    let(:mobile_number) { nil }
-
-    subject(:answers) { described_class.new(current_claim).identity_answers }
-
-    context "logged in with Teacher ID" do
-      let(:logged_in_with_tid) { true }
-
-      it "excludes answers provided by Teacher ID" do
-        expect(answers).to include([I18n.t("questions.provide_mobile_number"), "No", "provide-mobile-number"])
-      end
-    end
-
-    context "not logged in with Teacher ID" do
-      let(:logged_in_with_tid) { false }
-      let(:provide_mobile_number) { "Yes" }
-      let(:mobile_number) { "01234567899" }
-
-      it "returns an array of identity-related questions and answers for displaying to the user for review" do
-        expected_answers = [
-          [I18n.t("questions.provide_mobile_number"), "Yes", "provide-mobile-number"],
-          [I18n.t("questions.mobile_number"), "01234567899", "mobile-number"]
-        ]
-
-        expect(answers).to include(*expected_answers)
-      end
-    end
-  end
-
   def questions(questions_and_answers_array)
     questions_and_answers_array.collect(&:first)
   end

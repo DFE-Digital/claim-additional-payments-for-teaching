@@ -15,7 +15,11 @@ module Journeys
         a << [t("questions.payroll_gender"), t("answers.payroll_gender.#{claim.payroll_gender}"), "gender"] unless claim.payroll_gender_verified?
         a << [t("questions.teacher_reference_number"), claim.teacher_reference_number, "teacher-reference-number"] if show_trn?
         a << [t("questions.national_insurance_number"), claim.national_insurance_number, "personal-details"] if show_nino?
-        a << [t("questions.email_address"), claim.email_address, claim.email_address_check? ? "select-email" : "email-address"]
+        a << [t("questions.email_address"), claim.email_address, "email-address"] unless show_email_select?
+        a << [t("questions.select_email.heading"), claim.email_address, "select-email"] if show_email_select?
+        a << [t("questions.provide_mobile_number"), claim.provide_mobile_number? ? "Yes" : "No", "provide-mobile-number"] unless show_mobile_select?
+        a << [t("questions.mobile_number"), claim.mobile_number, "mobile-number"] unless show_mobile_select? || !claim.provide_mobile_number?
+        a << [t("questions.select_phone_number.heading"), claim.mobile_number? ? claim.mobile_number : t("questions.select_phone_number.decline"), "select-mobile"] if show_mobile_select?
       end
     end
 
@@ -50,6 +54,14 @@ module Journeys
 
     def show_trn?
       !(claim.logged_in_with_tid? && claim.trn_same_as_tid?)
+    end
+
+    def show_email_select?
+      claim.logged_in_with_tid? && claim.email_address_check?
+    end
+
+    def show_mobile_select?
+      claim.logged_in_with_tid? && claim.mobile_check.present?
     end
   end
 end

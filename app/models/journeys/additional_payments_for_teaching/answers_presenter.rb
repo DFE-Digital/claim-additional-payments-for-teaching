@@ -34,13 +34,6 @@ module Journeys
         end.compact
       end
 
-      def identity_answers
-        super.tap do |a|
-          a << [t("questions.provide_mobile_number"), (claim.provide_mobile_number ? "Yes" : "No"), "provide-mobile-number"]
-          a << [t("questions.mobile_number"), claim.mobile_number, "mobile-number"] if claim.provide_mobile_number?
-        end
-      end
-
       private
 
       def has_entire_term_contract

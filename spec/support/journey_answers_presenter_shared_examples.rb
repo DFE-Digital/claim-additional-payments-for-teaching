@@ -24,6 +24,10 @@ RSpec.shared_examples "journey answers presenter" do
         teacher_reference_number: trn,
         national_insurance_number: nino,
         email_address: "test@email.com",
+        email_address_check: logged_in_with_tid ? true : false,
+        mobile_check: logged_in_with_tid ? "use" : nil,
+        provide_mobile_number: true,
+        mobile_number: "01234567890",
         payroll_gender: :dont_know,
         logged_in_with_tid:,
         teacher_id_user_info:
@@ -40,18 +44,97 @@ RSpec.shared_examples "journey answers presenter" do
           "family_name" => surname,
           "trn" => trn,
           "birthdate" => dob.to_s,
-          "ni_number" => nino
+          "ni_number" => nino,
+          "phone_number" => "01234567890",
+          "email" => "test@email.com"
         }
       }
 
       it "returns an array of identity-related questions and answers for displaying to the user for review" do
         expected_answers = [
           [I18n.t("questions.address.generic.title"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
-          [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
-          [I18n.t("questions.email_address"), "test@email.com", "email-address"]
+          [I18n.t("questions.payroll_gender"), "Don’t know", "gender"]
         ]
 
         expect(answers).to include(*expected_answers)
+      end
+
+      context "when the user selected the email provided by Teacher ID" do
+        before do
+          claim.email_address_check = true
+        end
+
+        it "includes the selected email and the change slug is `select-email`" do
+          expect(answers).to include([I18n.t("questions.select_email.heading"), "test@email.com", "select-email"])
+        end
+      end
+
+      context "when the user selected to provide an alternative email" do
+        before do
+          claim.email_address_check = true
+        end
+
+        it "includes the user-provided email and the change slug is `select-email`" do
+          expect(answers).to include([I18n.t("questions.select_email.heading"), "test@email.com", "select-email"])
+        end
+      end
+
+      context "when the email was not provided by Teacher ID" do
+        before do
+          claim.email_address_check = false
+        end
+
+        it "includes the user-provided email and the change slug is `email-address`" do
+          expect(answers).to include([I18n.t("questions.email_address"), "test@email.com", "email-address"])
+        end
+      end
+
+      context "when the user selected the mobile provided by Teacher ID" do
+        before do
+          claim.mobile_number = "01234567890"
+          claim.mobile_check = "use"
+          claim.provide_mobile_number = true
+        end
+
+        it "includes the selected mobile and the change slug is `select-mobile`" do
+          expect(answers).to include([I18n.t("questions.select_phone_number.heading"), "01234567890", "select-mobile"])
+        end
+
+        it "excludes the answer to `provide-mobile-number`" do
+          expect(answers.map(&:third)).not_to include("provide-mobile-number")
+        end
+      end
+
+      context "when the user selected to provide an alternative mobile" do
+        before do
+          claim.mobile_number = "01234567891"
+          claim.mobile_check = "alternative"
+          claim.provide_mobile_number = true
+        end
+
+        it "includes the user-provided mobile and the change slug is `select-mobile`" do
+          expect(answers).to include([I18n.t("questions.select_phone_number.heading"), "01234567891", "select-mobile"])
+        end
+
+        it "excludes the answer to `provide-mobile-number`" do
+          expect(answers.map(&:third)).not_to include("provide-mobile-number")
+        end
+      end
+
+      context "when the user declined to be contacted by mobile" do
+        before do
+          claim.mobile_number = nil
+          claim.mobile_check = "declined"
+          claim.provide_mobile_number = false
+        end
+
+        it "includes the answer to decline and the change slug is `select-mobile`" do
+          expect(answers).to include([I18n.t("questions.select_phone_number.heading"), "I do not want to be contacted by mobile", "select-mobile"])
+        end
+
+        it "excludes the answer to `provide-mobile-number`" do
+          expect(answers.map(&:third)).not_to include("provide-mobile-number")
+        end
       end
 
       it "excludes answers provided by Teacher ID" do
@@ -71,10 +154,23 @@ RSpec.shared_examples "journey answers presenter" do
           [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
           [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
           [I18n.t("questions.national_insurance_number"), "QQ123456C", "personal-details"],
-          [I18n.t("questions.email_address"), "test@email.com", "email-address"]
+          [I18n.t("questions.email_address"), "test@email.com", "email-address"],
+          [I18n.t("questions.provide_mobile_number"), "Yes", "provide-mobile-number"],
+          [I18n.t("questions.mobile_number"), "01234567890", "mobile-number"]
         ]
 
         expect(answers).to include(*expected_answers)
+      end
+
+      context "when the user declined to be contacted by mobile" do
+        before do
+          claim.mobile_number = nil
+          claim.provide_mobile_number = false
+        end
+
+        it "excludes the answer to `mobile-number`" do
+          expect(answers.map(&:third)).not_to include("mobile-number")
+        end
       end
 
       it "copes with a blank date of birth" do
