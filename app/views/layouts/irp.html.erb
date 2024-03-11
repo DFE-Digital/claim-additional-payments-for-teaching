@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" class="govuk-template app-html-class">
+  <head>
+    <meta charset="utf-8" />
+    <title>Get an International Relocation Payment</title>
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="blue" />
+
+    <%= favicon_link_tag %>
+    <%= favicon_link_tag 'govuk-mask-icon.svg', rel: 'mask-icon', type: 'image/svg+xml', color: '#0b0c0c' %>
+    <%= favicon_link_tag 'govuk-apple-touch-icon-180x180.png', rel: 'apple-touch-icon', type: 'image/png', sizes: '180x180' %>
+    <%= favicon_link_tag 'govuk-apple-touch-icon-167x167.png', rel: 'apple-touch-icon', type: 'image/png', sizes: '167x167' %>
+    <%= favicon_link_tag 'govuk-apple-touch-icon-152x152.png', rel: 'apple-touch-icon', type: 'image/png', sizes: '152x152' %>
+    <%= favicon_link_tag 'govuk-apple-touch-icon.png', rel: 'apple-touch-icon', type: 'image/png' %>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <%= stylesheet_link_tag 'application', 'data-turbolinks-track': 'reload' %>
+<!--    <meta property="og:image" content="<%#= asset_path('images/govuk-opengraph-image.png') %>">-->
+  </head>
+
+  <body class="govuk-template__body app-body-class">
+    <script>
+      document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
+    </script>
+
+    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+    <%= govuk_header(service_name: "Get an international relocation payment") %>
+
+    <div class="govuk-width-container app-width-container--wide">
+      <%= govuk_phase_banner(tag: { text: "Private Beta" }) do %>
+      This is a new service, your <%= banner_feedback_form %> will help us improve it.
+      <% end %>
+      <div class="govuk-width-container">
+        <%= yield :breadcrumbs %>
+      </div>
+      <% if content_for?(:back_link) %>
+        <%= yield :back_link %>
+      <% end %>
+
+      <main class="govuk-main-wrapper app-main-class" id="main-content" role="main">
+        <%= yield %>
+      </main>
+    </div>
+
+    <%= govuk_footer(meta_items_title: "Helpful links", meta_items: { 
+      "Help" => "#", "Cookies" => "#", "Contact" => "#", "Terms and Conditions" => "#", "Privacy" => irp_privacy_path
+      }) 
+    %>
+  </body>
+
+</html>

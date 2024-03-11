@@ -9,6 +9,7 @@ class ClaimCheckingTasks
     @claim = claim
   end
 
+  # TODO: Add Irp Specific tasks!
   def applicable_task_names
     @applicable_task_names ||= Task::NAMES.dup.tap do |task_names|
       task_names.delete("induction_confirmation") unless claim.policy == EarlyCareerPayments
@@ -16,6 +17,15 @@ class ClaimCheckingTasks
       task_names.delete("payroll_details") unless claim.must_manually_validate_bank_details?
       task_names.delete("matching_details") unless matching_claims.exists?
       task_names.delete("payroll_gender") unless claim.payroll_gender_missing? || task_names_for_claim.include?("payroll_gender")
+      task_names.delete("qualifications") if claim.policy == Irp
+      %w[
+        irp_initial_checks irp_home_office_checks
+        irp_home_office_investigation
+        irp_school_checks irp_bank_approval
+        irp_payment_confirmation irp_paid irp_rejected
+      ].each do |irp_task|
+        task_names.delete(irp_task) unless claim.policy == Irp
+      end
     end
   end
 

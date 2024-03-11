@@ -1,0 +1,6 @@
+<% if flash[:alert] %>
+  <%= content_tag :div, flash[:alert].html_safe, class: "flash alert govuk-body" %>
+<% end %>
+<% if flash[:notice] %>
+  <%= content_tag :div, flash[:notice], class: "flash notice govuk-body" %>
+<% end %>

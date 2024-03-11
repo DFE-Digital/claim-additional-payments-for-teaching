@@ -1,0 +1,290 @@
+en:
+  summary:
+    address_line_1: Address line 1
+    address_line_2: Address line 2 (optional)
+    application_route: Application route
+    city: Town or city
+    date_of_birth: Date of birth
+    date_of_entry: Date of entry
+    email_address: Email address
+    family_name: Family name
+    given_name: Given name
+    middle_name: Middle name
+    nationality: Nationality
+    one_year: Employed for at least a year
+    passport_number: Passport number
+    phone_number: Telephone
+    postcode: Postcode
+    school_address_line_1: Address line 1
+    school_address_line_2: Address line 2 (optional)
+    school_city: Town or city
+    school_headteacher_name: Headteacher name
+    school_name: School name
+    school_postcode: Postcode
+    sex: Sex
+    start_date: Contract start date
+    state_funded_secondary_school: State funded secondary school
+    subject: Subject
+    visa_type: Visa type
+    student_loan: Student loan
+
+  steps:
+    back: Back
+    true: 'Yes'
+    false: 'No'
+    summary: Summary
+    application_route:
+      question: What is your employment status?
+      hint: Select one of the following options.
+      answers:
+        teacher:
+          text: I am employed as a teacher in a school in England
+        salaried_trainee:
+          text: I am enrolled on a salaried teacher training course in England
+          hint: ‘Salaried’ means a course where you are paid a wage to work while you train.
+        other:
+          text: Other
+
+    trainee_details:
+      question: Are you on a teacher training course in England which meets the following conditions?
+      hint: |
+        The course must:
+          <ul class="govuk-hint govuk-list govuk-list--bullet">
+          <li>pay a salary</li>
+          <li>lead to qualified teacher status (QTS)</li>
+          <li>be accredited by the UK government</li>
+         </ul>
+        Check with your training provider if you're not sure.
+
+    school_details:
+      question: Are you employed by an English state secondary school?
+      hint: State schools receive funding from the UK government. Secondary schools teach children aged 11 to 16, or 11 to 18. 
+      answers:
+        'yes':
+          text: 'Yes'
+        'no':
+          text: 'No'
+
+    contract_details:
+      question: Are you employed on a contract lasting at least one year?
+      hint: Your contract can also be ongoing or permanent.
+      answers:
+        'yes':
+          text: 'Yes'
+        'no':
+          text: 'No'
+
+    start_date:
+      question: Enter the start date of your contract
+
+    subject:
+      question:
+        teacher: What subject are you employed to teach at your school?
+        salaried_trainee: What subject are you training to teach?
+      hint:
+        teacher:
+          Physics, general or combined science including physics, and languages can be combined with other subjects but must make up at least 50% of your time in the classroom. 
+        salaried_trainee:
+          Physics or languages can be combined with other subjects but must make up at least 50% of your course content.
+      answers:
+        physics:
+          text: Physics
+        combined_with_physics:
+          text: General or combined science, including physics
+        languages:
+          text: Languages
+        other:
+          text: Other
+          
+    visa:
+      question: Select the visa you used to move to England
+
+    entry_date:
+      question:
+        teacher: Enter the date you moved to England to start your teaching job
+        salaried_trainee: Enter the date you moved to England to start your teacher training course
+
+    personal_details:
+      question: Personal information
+      given_name:
+        text: Enter your given name, as it appears on your passport
+      middle_name:
+        text: Enter your middle name, as it appears on your passport (optional)
+      family_name:
+        text: Enter your family name, as it appears on your passport
+      email_address:
+        text: Enter your current email address
+        hint: We will use this to contact you so please make sure you have entered it correctly
+      phone_number:
+        text: Enter your current phone number
+        hint: For international numbers include the country code. We will use this to contact you so please make sure you have entered it correctly.
+      date_of_birth:
+        text: Enter your date of birth, as it appears on your passport
+      address:
+        text: Enter your address in England
+      address_line_1:
+        text: Address line 1
+      address_line_2:
+        text: Address line 2 (optional)
+      city:
+        text: Town or city
+      postcode:
+        text: Postcode
+      nationality:
+        text: Select your nationality
+      sex:
+        text: Select your sex
+      passport_number:
+        text: Enter your passport number, as it appears on your passport
+      student_loan:
+        text: Are you currently repaying a student loan in England?
+        hint: Tell us if you have previously had a student loan in England that you have not already paid back. If you do, there'll be a deduction from your payment. This goes towards repaying your student loan.
+    employment_details:
+      question: Employment information
+      school_name:
+        text: Enter the name of the school
+      school_headteacher_name:
+        text: Enter the name of the headteacher of the school where you are employed as a teacher
+      address:
+        text: Enter the school address
+      school_address_line_1:
+        text: Address line 1
+      school_address_line_2:
+        text: Address line 2 (optional)
+      school_city:
+        text: Town or city
+      school_postcode:
+        text: Postcode
+
+  activerecord:
+    errors:
+      models:
+        form:
+          attributes:
+            base:
+              eligibility: Your application form is not eligible
+              completeness: Your application form is not complete
+            application_route:
+              blank: Select the option that applies to you
+            state_funded_secondary_school:
+              blank: Choose the option that applies to you
+            one_year:
+              blank: Choose the option that applies to you
+            start_date:
+              blank: Enter your contract start date
+              not_in_future: Start date cannot be in the future
+            subject:
+              blank: Choose a subject
+            visa_type:
+              blank: Choose your visa type
+            date_of_entry:
+              blank: Enter your entry date
+              not_in_future: Date of entry cannot be in the future
+            given_name:
+              blank: Enter your given name(s)
+            middle_name:
+              blank: Enter your middle name(s)
+            family_name:
+              blank: Enter your family name(s)
+            email_address:
+              blank: Enter your email address
+              invalid: Enter an email address in the correct format, like name@example.com
+            phone_number:
+              blank: Enter your phone number
+              invalid: Enter a valid telephone number, for example, 07700 900 982 or +34 626 587 210
+            date_of_birth:
+              blank: Enter your date of birth
+              not_in_future: Date of birth cannot be in the future
+              over_max_age: Age must be below 80
+              below_min_age: Age must be above 21
+            sex:
+              blank: Enter your sex
+              inclusion: Enter your sex 
+            passport_number:
+              blank: Enter your passport number
+              invalid: Invalid passport number
+              too_long: Invalid passport number
+            nationality:
+              blank: Choose your nationality
+              inclusion: Choose your nationality
+            address_line_1:
+              blank: Enter your address
+            city:
+              blank: Enter your city
+            postcode:
+              blank: Enter your postcode
+              invalid: Enter a valid postcode, for example, BN1 1AA
+            student_loan:
+              blank: Choose the student loan option that applies to you
+            school_postcode:
+              blank: Enter your school's postcode
+              invalid: Enter a valid postcode, for example, BN1 1AA
+            school_headteacher_name:
+              blank: Enter the headteachers name
+            school_name:
+              blank: Enter the school name
+            school_address_line_1:
+              blank: Enter your school's address
+            school_city:
+              blank: Enter your school's city
+  contract_must_start_within_months: "contract must start within the last %{count} months"
+  application_route_other_not_accepted: "application route other not accepted"
+  teacher_contract_duration_of_less_than_one_year_no: "teacher contract duration of less than one year not accepted"
+  school_not_state_funded: "school not state funded"
+  taught_subject_not_accepted: "taught subject not accepted"
+  visa_not_accepted: "visa not accepted"
+  cannot_enter_the_uk_more_than_3_months_before_your: "cannot enter the UK more than 3 months before your contract start date"
+  irp:
+    policy_short_name: "International Relocation Payment"
+    policy_name: International Relocation Payment
+    feedback_email: "irp@feedback.email - change this!"
+    feedback_url: "Fix this to be correct feedback url"
+    admin:
+      task_questions:
+        identity_confirmation:
+          title: Has the school confirmed the claimants details?
+          body: "The claimant’s identity matches DQT records. See %{link}."
+          notes: "notes"
+        census_subjects_taught:
+          title: Is this a valid subject for IRP?
+        employment:
+          title: Does the claimant’s current school match the above information from their claim?
+        irp_initial_checks:
+          title: Has the school confirmed the claimants details?
+        irp_home_office_checks:
+          title: Has the Home Office check been successful?
+        irp_home_office_investigation:
+          title: Is a Home Office investigation required?
+        irp_school_checks:
+          title: Has the school confirmed the claimants details?
+        irp_bank_approval:
+          title: Have the bank details been approved?
+        payroll_details:
+          title: "The claimant’s %{bank_or_building_society} details have not been automatically validated. Has the claimant confirmed their %{bank_or_building_society} details?"
+        matching_details:
+          title: "Is this claim still valid despite having matching details with other claims?"
+    policy_acronym:
+      IRP
+  admin:
+    decision:
+      rejected_reasons:
+        suspected_fraud: Suspected fraud
+        duplicate_submission: Duplication submission
+        home_office_checks_failed: Home Office checks failed
+        school_checks_failed: School checks failed
+        standing_data_checks_failed: Standing data checks failed
+        no_longer_in_post: No longer in post
+        request_to_re_submit: Request to re-submit
+        school_checks_unverifiable: School check unverifiable
+    tasks:
+      irp_initial_checks: Initial checks completed?
+      irp_home_office_checks: Home Office checks completed?
+      irp_home_office_investigation: Home Office investigation required?
+      irp_school_checks: School checks
+      irp_bank_approval: Bank approval
+      irp_payment_confirmation: Payment details confirmed
+      irp_paid: The teacher been paid
+      irp_rejected: The claim has been rejected
+  home_office_nationality: "Nationality"
+  home_office_passport_number: "Passport number"
+

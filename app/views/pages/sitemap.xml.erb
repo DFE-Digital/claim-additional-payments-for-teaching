@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc><%= SITEMAP[:base_url] %></loc>
+    <lastmod><%= SITEMAP[:lastmod] %></lastmod>
+  </url>
+  <% SITEMAP[:paths].each do |path| %>
+    <url>
+      <loc><%= [SITEMAP[:base_url], path].join %></loc>
+      <lastmod><%= SITEMAP[:lastmod] %></lastmod>
+    </url>
+  <% end %>
+</urlset>

@@ -40,6 +40,9 @@ module DfeTeachersPaymentService
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.eager_load_paths << Rails.root.join('lib/irp')
+    config.eager_load_paths << Rails.root.join('lib/irp/steps')
+    config.eager_load_paths << Rails.root.join('lib/irp/steps/base_step')
 
     # Don't generate system test files.
     config.generators.system_tests = nil
@@ -71,5 +74,8 @@ module DfeTeachersPaymentService
     config.active_record.yaml_column_permitted_classes = [BigDecimal, Date, Symbol]
 
     config.email_regexp = /\A[a-zA-Z0-9.!\#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+\z/
+
+    # IRP
+    config.x.form_eligibility.contract_start_months_limit = 6
   end
 end

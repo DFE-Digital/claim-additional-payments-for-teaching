@@ -1,0 +1,108 @@
+<%= render 'shared/notices' %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-xl">Apply for the international relocation payment</h1>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <p class="govuk-body">
+      The international relocation payment (IRP) is a single payment of £10,000,
+      funded by the UK government, which is available to eligible non-UK trainees and teachers of:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>languages</li>
+      <li>physics</li>
+      <li>general or combined science when that includes physics</li>
+    </ul>
+
+    <p class="govuk-body">
+      Only teachers and salaried trainees need to complete this form.
+      <%= govuk_link_to(
+          "If you are a fee-paying trainee, you do not need to apply to receive the IRP.",
+          "https://getintoteaching.education.gov.uk/non-uk-teachers/get-an-international-relocation-payment/#criteria-for-trainee-teachers-fee-paying-and-salaried",
+          { target: "_blank" })
+      %>
+    </p>
+
+    <p class="govuk-body">
+      Before starting your application,
+      <%= govuk_link_to(
+            "check the criteria you must meet to receive the IRP.",
+            "https://getintoteaching.education.gov.uk/non-uk-teachers/get-an-international-relocation-payment",
+            { target: "_blank" })
+      %>
+      You need to have started your job or course before you can apply.
+    </p>
+
+    <p class="govuk-body">
+      You should also get your documents and information ready, as you will not be able to save your entries and return to the form later. It should take approximately 15 minutes to complete.
+    </p>
+
+    <h2 class="govuk-heading-l">Not ready to apply?</h2>
+    <p class="govuk-body">
+      If you plan to start your job or course later in 2024, you can
+      <%= govuk_link_to("express your interest in applying for the international relocation payment.",
+                        "mailto:IRP.ExpressInterest@education.gov.uk") %>
+    </p>
+
+    <h2 class="govuk-heading-l">Documents and information to get ready</h2>
+
+    <p class="govuk-body">
+      You will need:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        if you are a teacher, your teaching subject and the terms of your employment contract
+      </li>
+      <li>
+        if you are a salaried trainee, details of your teacher training course, including
+        teaching subject and start date
+      </li>
+      <li>
+        your visa type and when you entered the UK
+      </li>
+      <li>
+        your passport
+      </li>
+      <li>
+        your address in England
+      </li>
+      <li>
+        contact details for the school where you are employed as a teacher or trainee
+      </li>
+    </ul>
+
+    <p class="govuk-body">
+      <%= govuk_link_to("Start", ApplicationRouteStep.path, { class: "govuk-button" })%>
+    </p>
+
+    <h2 class="govuk-heading-l">Deadline for applications</h2>
+    <p class="govuk-body">
+      Applications for the international relocation payment (IRP) are open from:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>2 January to 29 February 2024</li>
+    </ul>
+    <p class="govuk-body">
+      If you have started your teaching job or salaried teacher training course, you should apply now.
+      If you are eligible, you should receive the money by the end of May 2024.
+    </p>
+    <p class="govuk-body">
+      To remain eligible for the IRP, you must apply in either the first or second term of your employment as a teacher or salaried trainee.
+    </p>
+    <p class="govuk-body">
+      Applications for teachers and salaried trainees will re-open between May and June 2024.
+    </p>
+
+    <h2 class="govuk-heading-m">Contact us</h2>
+
+    <p class="govuk-body">
+      For help, please email us at
+      <%= govuk_link_to("teach.inengland@education.gov.uk", "mailto:teach.inengland@education.gov.uk")%>.
+    </p>
+  </div>
+</div>

@@ -63,9 +63,6 @@ gem "httpclient"
 # Allow delayed_job to spawn multiple processes
 gem "daemons"
 
-# Gov form builder to structure claims
-gem "govuk_design_system_formbuilder", "~> 3.3.0"
-
 # See https://github.com/typhoeus/ethon/issues/185
 gem "ethon", "~> 0.16.0"
 gem "typhoeus", "~> 1.4.1"
@@ -123,3 +120,8 @@ end
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.11.6"
+
+# IRP
+gem 'govuk-components', '>= 4.1.2', '< 5.0.0'
+gem 'govuk_design_system_formbuilder', '>= 4.1.1'
+gem "phonelib"

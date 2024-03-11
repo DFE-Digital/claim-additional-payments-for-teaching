@@ -6,6 +6,7 @@
 #
 # It records who completed the task and the date/time the action was carried
 # out.
+# TODO: Add Irp Specific tasks
 class Task < ApplicationRecord
   NAMES = %w[
     identity_confirmation
@@ -17,6 +18,14 @@ class Task < ApplicationRecord
     payroll_details
     matching_details
     payroll_gender
+    irp_initial_checks
+    irp_home_office_checks
+    irp_home_office_investigation
+    irp_school_checks
+    irp_bank_approval
+    irp_payment_confirmation
+    irp_paid
+    irp_rejected
   ].freeze
 
   belongs_to :claim
