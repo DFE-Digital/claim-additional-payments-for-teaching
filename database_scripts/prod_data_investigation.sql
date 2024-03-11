@@ -7,13 +7,13 @@ select *
 --View a list of submitted ECP claims
 select * 
   from public.claims
- where eligibility_type = 'EarlyCareerPayments::Eligibility'
+ where eligibility_type = 'Policies::EarlyCareerPayments::Eligibility'
  order by created_at;
 
 --Get total number of submitted ECP claims
 select count(*) 
   from public.claims 
- where eligibility_type = 'EarlyCareerPayments::Eligibility';
+ where eligibility_type = 'Policies::EarlyCareerPayments::Eligibility';
 
 --Get total number of submitted ECP claims
 select count(*), eligibility_type 
@@ -40,7 +40,7 @@ select eligibility_type
 	   , count(*) 
   from public.claims 
  group by eligibility_type;
--- where eligibility_type = 'EarlyCareerPayments::Eligibility';
+-- where eligibility_type = 'Policies::EarlyCareerPayments::Eligibility';
 
 --View a list of submitted ECP claims' eligibility criteria
 select c.first_name, 
@@ -65,7 +65,7 @@ where a.id = c.eligibility_id
 
 --View a list of submitted ECP claims
 select * from 
-where eligibility_type = 'EarlyCareerPayments::Eligibility'
+where eligibility_type = 'Policies::EarlyCareerPayments::Eligibility'
 order by created_at;
 
 rollback;

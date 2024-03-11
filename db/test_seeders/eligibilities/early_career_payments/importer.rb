@@ -41,7 +41,7 @@ module TestSeeders
         # claimants award_amount might change between submission, approval and then
         # being added to a payroll run
         def insert_eligibilities
-          ::EarlyCareerPayments::Eligibility.copy_from_client ELIGIBILITY_COLUMNS do |copy|
+          Policies::EarlyCareerPayments::Eligibility.copy_from_client ELIGIBILITY_COLUMNS do |copy|
             records.each do |data|
               time = Time.now.getutc
 

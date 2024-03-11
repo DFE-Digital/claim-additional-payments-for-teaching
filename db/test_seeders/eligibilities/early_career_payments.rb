@@ -4,7 +4,7 @@ module TestSeeders
       extend self
 
       def qualification(route_into_teaching)
-        ::EarlyCareerPayments::Eligibility.qualifications.find do |k, v|
+        Policies::EarlyCareerPayments::Eligibility.qualifications.find do |k, v|
           k.starts_with?(route_into_teaching.downcase.split.first)
         end
       end
@@ -28,7 +28,7 @@ module TestSeeders
       end
 
       def map_eligible_itt_subject_to_enum(itt_subject)
-        ::EarlyCareerPayments::Eligibility.eligible_itt_subjects.find do |key, values|
+        Policies::EarlyCareerPayments::Eligibility.eligible_itt_subjects.find do |key, values|
           key.include?(itt_subject.to_s)
         end
       end

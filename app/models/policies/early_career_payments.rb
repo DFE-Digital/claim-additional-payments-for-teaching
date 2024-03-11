@@ -6,7 +6,7 @@
 # in the Academic Years 2018 to 2019, 2019 to 2020 or 2020 to 2021 academic year.
 # This is in addition to receiving a bursary or scholarship during ITT.
 # Full details of the eligibility criteria can be found at the URL
-# defined by `EarlyCareerPayments.eligibility_page_url`.
+# defined by `Policies::EarlyCareerPayments.eligibility_page_url`.
 module Policies
   module EarlyCareerPayments
     include BasePolicy

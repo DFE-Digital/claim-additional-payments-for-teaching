@@ -14,7 +14,7 @@
 # 2) - take all remaining claims and at the time of running call the dynamic claim.eligibility.award_amount
 #      method to populate the award_amount.
 
-# This will mean going forwards that with the new code every EarlyCareerPayments::Eligibility will have the
+# This will mean going forwards that with the new code every Policies::EarlyCareerPayments::Eligibility will have the
 # award_amount set at the time the claimant chooses to 'Continue' on the journey on the 'Eligibility Confirmed' screen
 
 private
@@ -59,7 +59,7 @@ def other_claims(claims)
   claims.each do |claim|
     puts "claim reference: #{claim.reference}"
     if claim.eligibility.read_attribute(:award_amount).nil?
-      puts "Back-filling using dynamic look-up for EarlyCareerPayments::Eligibility.award_amount"
+      puts "Back-filling using dynamic look-up for Policies::EarlyCareerPayments::Eligibility.award_amount"
       claim.eligibility.update_column(:award_amount, claim.eligibility.award_amount)
       processed += 1
     elsif claim.eligibility.read_attribute(:award_amount) < 1
