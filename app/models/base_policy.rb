@@ -18,7 +18,7 @@ module BasePolicy
   end
 
   def routing_name
-    JourneyConfiguration.routing_name_for_policy(self)
+    Journeys::Configuration.routing_name_for_policy(self)
   end
 
   def locale_key
@@ -26,6 +26,6 @@ module BasePolicy
   end
 
   def configuration
-    JourneyConfiguration.for(self)
+    Journeys::Configuration.for(self)
   end
 end

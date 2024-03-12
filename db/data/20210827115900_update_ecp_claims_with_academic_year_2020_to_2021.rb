@@ -31,11 +31,11 @@ puts <<~PART_TWO_BACKGOUND
       - current_academic_year: AcademicYear.new(2021)
 PART_TWO_BACKGOUND
 
-pc_for_ecp = JourneyConfiguration.find_by(policy_type: "EarlyCareerPayments")
+pc_for_ecp = Journeys::Configuration.find_by(policy_type: "EarlyCareerPayments")
 pc_for_ecp.current_academic_year = AcademicYear.new(2021)
 pc_for_ecp.save
 
-pc_ecp_current_academic_year = JourneyConfiguration.find_by(policy_type: "EarlyCareerPayments").current_academic_year
+pc_ecp_current_academic_year = Journeys::Configuration.find_by(policy_type: "EarlyCareerPayments").current_academic_year
 
 if cecp_2020_after.size == 0 && pc_ecp_current_academic_year == "2021/2022"
   puts "     ***  Migration finished ***"

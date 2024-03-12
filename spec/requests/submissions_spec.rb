@@ -76,7 +76,7 @@ RSpec.describe "Submissions", type: :request do
 
     it "redirects to the start page if there is no claim actually in progress" do
       post claim_submission_path(Policies::StudentLoans.routing_name)
-      expect(response).to redirect_to(JourneyConfiguration.start_page_url("student-loans"))
+      expect(response).to redirect_to(Journeys::Configuration.start_page_url("student-loans"))
     end
   end
 
@@ -102,7 +102,7 @@ RSpec.describe "Submissions", type: :request do
     context "when the user has not followed the slug sequence" do
       it "redirect to the start page" do
         get claim_confirmation_path(Policies::StudentLoans.routing_name)
-        expect(response).to redirect_to(JourneyConfiguration.start_page_url("student-loans"))
+        expect(response).to redirect_to(Journeys::Configuration.start_page_url("student-loans"))
       end
     end
   end

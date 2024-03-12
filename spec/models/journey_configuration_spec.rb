@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe JourneyConfiguration do
+RSpec.describe Journeys::Configuration do
   context "with journey configuration records" do
     let!(:student_loans) { create(:journey_configuration, :student_loans) }
     let!(:additional_payments) { create(:journey_configuration, :additional_payments) }
@@ -11,7 +11,7 @@ RSpec.describe JourneyConfiguration do
       it "returns the configuration for a given policy" do
         expect(described_class.for(Policies::StudentLoans)).to eq student_loans
 
-        # Same JourneyConfiguration for ECP and LUP
+        # Same Journeys::Configuration for ECP and LUP
         expect(described_class.for(Policies::EarlyCareerPayments)).to eq additional_payments
         expect(described_class.for(LevellingUpPremiumPayments)).to eq additional_payments
       end
@@ -21,7 +21,7 @@ RSpec.describe JourneyConfiguration do
       it "returns the configuration for a given routing name" do
         expect(described_class.for_routing_name("student-loans")).to eq student_loans
 
-        # ECP and LUP use the same routing name and share the same JourneyConfiguration
+        # ECP and LUP use the same routing name and share the same Journeys::Configuration
         expect(described_class.for_routing_name("additional-payments")).to eq additional_payments
       end
     end
@@ -34,7 +34,7 @@ RSpec.describe JourneyConfiguration do
     end
 
     describe "#routing_name" do
-      it "returns routing for JourneyConfiguration" do
+      it "returns routing for Journeys::Configuration" do
         expect(described_class.for(Policies::StudentLoans).routing_name).to eq "student-loans"
 
         # Same routing_name for ECP and LUP

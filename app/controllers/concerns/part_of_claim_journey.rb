@@ -22,7 +22,7 @@ module PartOfClaimJourney
   end
 
   def send_unstarted_claimants_to_the_start
-    redirect_to JourneyConfiguration.start_page_url(current_journey_routing_name), allow_other_host: true
+    redirect_to Journeys::Configuration.start_page_url(current_journey_routing_name), allow_other_host: true
   end
 
   def current_claim_persisted?
@@ -71,7 +71,7 @@ module PartOfClaimJourney
   end
 
   def journey_configuration
-    @journey_configuration ||= JourneyConfiguration.for_routing_name(current_journey_routing_name)
+    @journey_configuration ||= Journeys::Configuration.for_routing_name(current_journey_routing_name)
   end
 
   def set_cache_headers

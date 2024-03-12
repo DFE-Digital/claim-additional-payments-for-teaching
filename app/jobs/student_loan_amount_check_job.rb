@@ -27,6 +27,6 @@ class StudentLoanAmountCheckJob < ApplicationJob
   end
 
   def current_academic_year
-    JourneyConfiguration.for(Policies::StudentLoans).current_academic_year
+    Journeys::Configuration.for(Policies::StudentLoans).current_academic_year
   end
 end

@@ -81,7 +81,7 @@ class RemindersController < BasePublicController
   end
 
   def journey_configuration
-    @journey_configuration ||= JourneyConfiguration.for_routing_name(current_journey_routing_name)
+    @journey_configuration ||= Journeys::Configuration.for_routing_name(current_journey_routing_name)
   end
 
   def current_reminder
