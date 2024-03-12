@@ -13,7 +13,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
   scenario "Teacher makes claim for 'Early-Career Payments' claim" do
     visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
     expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
-    expect(page).to have_link(href: "mailto:#{Policies::EarlyCareerPayments.feedback_email}")
+    expect(page).to have_link(href: "mailto:#{I18n.t("additional_payments.feedback_email")}")
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("additional_payments.landing_page"))
@@ -343,7 +343,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
   scenario "Supply Teacher makes claim for 'Early Career Payments' with a contract to teach for entire term & employed directly by school" do
     visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
-    expect(page).to have_link(href: "mailto:#{Policies::EarlyCareerPayments.feedback_email}")
+    expect(page).to have_link(href: "mailto:#{I18n.t("additional_payments.feedback_email")}")
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("additional_payments.landing_page"))
@@ -501,7 +501,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
   scenario "Teacher makes claim for 'Early Career Payments' without uplift school" do
     visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
-    expect(page).to have_link(href: "mailto:#{Policies::EarlyCareerPayments.feedback_email}")
+    expect(page).to have_link(href: "mailto:#{I18n.t("additional_payments.feedback_email")}")
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("additional_payments.landing_page"))

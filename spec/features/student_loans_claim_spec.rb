@@ -25,7 +25,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(page).to have_current_path("/#{StudentLoans.routing_name}/qts-year")
 
       expect(page).to have_text(I18n.t("student_loans.questions.qts_award_year"))
-      expect(page).to have_link(href: "mailto:#{StudentLoans.feedback_email}")
+      expect(page).to have_link(href: "mailto:#{I18n.t("student_loans.feedback_email")}")
 
       choose_qts_year
       claim = Claim.by_policy(StudentLoans).order(:created_at).last
@@ -250,7 +250,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
         visit new_claim_path(StudentLoans.routing_name)
         skip_tid
         expect(page).to have_text(I18n.t("questions.qts_award_year"))
-        expect(page).to have_link(href: "mailto:#{StudentLoans.feedback_email}")
+        expect(page).to have_link(href: "mailto:#{I18n.t("student_loans.feedback_email")}")
 
         choose_qts_year
         claim = Claim.by_policy(StudentLoans).order(:created_at).last

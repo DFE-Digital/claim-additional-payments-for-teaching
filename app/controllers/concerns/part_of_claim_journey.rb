@@ -3,15 +3,15 @@ module PartOfClaimJourney
 
   included do
     before_action :set_cache_headers
-    before_action :check_whether_closed_for_submissions, if: :current_policy_routing_name
+    before_action :check_whether_closed_for_submissions, if: :current_journey_routing_name
     before_action :send_unstarted_claimants_to_the_start, if: :send_to_start?
     helper_method :current_claim, :submitted_claim
   end
 
   private
 
-  def current_policy_routing_name
-    super || current_claim.policy&.routing_name
+  def current_journey_routing_name
+    super || current_claim.policy.routing_name
   end
 
   def check_whether_closed_for_submissions
@@ -22,7 +22,7 @@ module PartOfClaimJourney
   end
 
   def send_unstarted_claimants_to_the_start
-    redirect_to current_policy.start_page_url, allow_other_host: true
+    redirect_to JourneyConfiguration.start_page_url(current_journey_routing_name), allow_other_host: true
   end
 
   def current_claim_persisted?
@@ -71,7 +71,7 @@ module PartOfClaimJourney
   end
 
   def journey_configuration
-    @journey_configuration ||= JourneyConfiguration.for_routing_name(current_policy_routing_name)
+    @journey_configuration ||= JourneyConfiguration.for_routing_name(current_journey_routing_name)
   end
 
   def set_cache_headers

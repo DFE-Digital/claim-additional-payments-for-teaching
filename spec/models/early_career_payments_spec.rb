@@ -21,19 +21,6 @@ RSpec.describe Policies::EarlyCareerPayments, type: :model do
       eligibility_criteria_url: "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools#eligibility-criteria")
   }
 
-  describe ".start_page_url" do
-    it "returns a url containing '/additional-payments/landing-page'" do
-      expect(subject.start_page_url).to include("/additional-payments/landing-page")
-    end
-  end
-
-  describe ".feedback_url" do
-    it "returns a 'docs.google.com/forms/<slug>/viewform' url" do
-      # TODO: get proper feedback URL - ECP-509
-      expect(subject.feedback_url).to include("https://docs.google.com/forms/TO-BE-REPLACED-by-response-to-ECP-509/viewform")
-    end
-  end
-
   describe ".notify_reply_to_id" do
     let(:ecp_notify_reply_to_id) { "3f85a1f7-9400-4b48-9a31-eaa643d6b977" }
 

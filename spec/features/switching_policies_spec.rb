@@ -8,7 +8,7 @@ RSpec.feature "Switching policies" do
     create(:journey_configuration, :early_career_payments)
 
     start_student_loans_claim
-    visit new_claim_path(Policies::EarlyCareerPayments.routing_name)
+    visit new_claim_path("additional-payments")
   end
 
   scenario "a user can switch to a different policy after starting a claim on another" do

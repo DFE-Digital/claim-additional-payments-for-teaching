@@ -10,7 +10,7 @@ class ClaimsController < BasePublicController
   before_action :set_backlink_path, only: [:show]
   before_action :check_claim_not_in_progress, only: [:new]
   before_action :clear_claim_session, only: [:new]
-  before_action :prepend_view_path_for_policy
+  before_action :prepend_view_path_for_journey
 
   def new
     persist
@@ -26,9 +26,9 @@ class ClaimsController < BasePublicController
     if params[:slug] == "teacher-detail"
       save_and_set_teacher_id_user_info
     elsif params[:slug] == "qualification-details"
-      return redirect_to claim_path(current_policy_routing_name, next_slug) if current_claim.has_no_dqt_data_for_claim?
+      return redirect_to claim_path(current_journey_routing_name, next_slug) if current_claim.has_no_dqt_data_for_claim?
     elsif params[:slug] == "teaching-subject-now" && no_eligible_itt_subject?
-      return redirect_to claim_path(current_policy_routing_name, "eligible-itt-subject")
+      return redirect_to claim_path(current_journey_routing_name, "eligible-itt-subject")
     elsif params[:slug] == "sign-in-or-continue"
       update_session_with_current_slug
 
@@ -38,28 +38,28 @@ class ClaimsController < BasePublicController
     elsif params[:slug] == "correct-school"
       update_session_with_tps_school(current_claim.recent_tps_school)
     elsif params[:slug] == "nqt-in-academic-year-after-itt" && page_sequence.in_sequence?("correct-school")
-      @backlink_path = claim_path(current_policy_routing_name, "correct-school")
+      @backlink_path = claim_path(current_journey_routing_name, "correct-school")
     elsif params[:slug] == "select-claim-school"
       update_session_with_tps_school(current_claim.tps_school_for_student_loan_in_previous_financial_year)
     elsif params[:slug] == "subjects-taught" && page_sequence.in_sequence?("select-claim-school")
-      @backlink_path = claim_path(current_policy_routing_name, "select-claim-school")
+      @backlink_path = claim_path(current_journey_routing_name, "select-claim-school")
     elsif params[:slug] == "select-mobile"
       session[:phone_number] = current_claim.teacher_id_user_info["phone_number"]
     elsif params[:slug] == "postcode-search" && postcode
-      redirect_to claim_path(current_policy_routing_name, "select-home-address", {"claim[postcode]": params[:claim][:postcode], "claim[address_line_1]": params[:claim][:address_line_1]}) and return unless invalid_postcode?
+      redirect_to claim_path(current_journey_routing_name, "select-home-address", {"claim[postcode]": params[:claim][:postcode], "claim[address_line_1]": params[:claim][:address_line_1]}) and return unless invalid_postcode?
     elsif params[:slug] == "select-home-address" && postcode
       session[:claim_postcode] = params[:claim][:postcode]
       session[:claim_address_line_1] = params[:claim][:address_line_1]
       if address_data.nil?
-        redirect_to claim_path(current_policy_routing_name, "no-address-found") and return
+        redirect_to claim_path(current_journey_routing_name, "no-address-found") and return
       else
         # otherwise it takes you to "no-address-found" on the backlink from the slug sequence
-        @backlink_path = claim_path(current_policy_routing_name, "postcode-search")
+        @backlink_path = claim_path(current_journey_routing_name, "postcode-search")
       end
     elsif params[:slug] == "select-home-address" && !postcode.present?
       session[:claim_postcode] = nil
       session[:claim_address_line_1] = nil
-      redirect_to claim_path(current_policy_routing_name, "postcode-search") and return
+      redirect_to claim_path(current_journey_routing_name, "postcode-search") and return
     elsif ["personal-bank-account", "building-society-account"].include?(params[:slug])
       @form ||= BankDetailsForm.new(claim: current_claim)
     end
@@ -68,7 +68,7 @@ class ClaimsController < BasePublicController
   rescue OrdnanceSurvey::Client::ResponseError => e
     Rollbar.error(e)
     flash[:notice] = "Please enter your address manually"
-    redirect_to claim_path(current_policy_routing_name, "address")
+    redirect_to claim_path(current_journey_routing_name, "address")
   end
 
   def update
@@ -83,7 +83,7 @@ class ClaimsController < BasePublicController
     when "personal-details"
       check_date_params
     when "eligibility-confirmed"
-      return select_claim if current_policy_routing_name == "additional-payments"
+      return select_claim if current_journey_routing_name == "additional-payments"
     when "personal-bank-account", "building-society-account"
       return bank_account
     when "correct-school"
@@ -109,7 +109,7 @@ class ClaimsController < BasePublicController
     one_time_password
 
     if current_claim.save(context: page_sequence.current_slug.to_sym)
-      redirect_to claim_path(current_policy_routing_name, next_slug)
+      redirect_to claim_path(current_journey_routing_name, next_slug)
     else
       show
     end
@@ -122,13 +122,13 @@ class ClaimsController < BasePublicController
   end
 
   def start_new
-    new_policy_description = translate("#{params[:policy].underscore}.claim_description")
+    new_journey_description = translate("#{current_journey_routing_name.underscore}.claim_description")
 
-    return redirect_to existing_session_path, alert: "Select yes if you want to start a claim #{new_policy_description}" unless params[:start_new_claim].present?
+    return redirect_to existing_session_path, alert: "Select yes if you want to start a claim #{new_journey_description}" unless params[:start_new_claim].present?
 
     if ActiveModel::Type::Boolean.new.cast(params[:start_new_claim]) == true
       clear_claim_session
-      redirect_to(new_claim_path(params[:policy]))
+      redirect_to(new_claim_path(current_journey_routing_name))
     else
       redirect_to(claim_path(current_claim.policy.routing_name, slug: slug_to_redirect_to))
     end
@@ -143,7 +143,7 @@ class ClaimsController < BasePublicController
 
   def set_backlink_path
     previous_slug = previous_slug()
-    @backlink_path = claim_path(current_policy_routing_name, previous_slug) if previous_slug.present?
+    @backlink_path = claim_path(current_journey_routing_name, previous_slug) if previous_slug.present?
   end
 
   def previous_slug
@@ -155,7 +155,7 @@ class ClaimsController < BasePublicController
 
     current_claim.save!
     session[:claim_id] = current_claim.claim_ids
-    redirect_to claim_path(current_policy_routing_name, page_sequence.slugs.first.to_sym)
+    redirect_to claim_path(current_journey_routing_name, page_sequence.slugs.first.to_sym)
   end
 
   def search_schools
@@ -195,7 +195,7 @@ class ClaimsController < BasePublicController
 
     raise ActionController::RoutingError.new("Not Found") unless page_sequence.in_sequence?(params[:slug])
 
-    redirect_to claim_path(current_policy_routing_name, slug_to_redirect_to) unless page_sequence.has_completed_journey_until?(params[:slug])
+    redirect_to claim_path(current_journey_routing_name, slug_to_redirect_to) unless page_sequence.has_completed_journey_until?(params[:slug])
   end
 
   def initialize_session_slug_history
@@ -211,7 +211,7 @@ class ClaimsController < BasePublicController
   end
 
   def check_claim_not_in_progress
-    redirect_to(existing_session_path(policy: params[:policy])) if claim_in_progress?
+    redirect_to(existing_session_path(journey: current_journey_routing_name)) if claim_in_progress?
   end
 
   def claim_in_progress?
@@ -226,8 +226,8 @@ class ClaimsController < BasePublicController
     current_claim.policy::SlugSequence.new(current_claim)
   end
 
-  def prepend_view_path_for_policy
-    prepend_view_path("app/views/#{current_policy_routing_name.underscore}")
+  def prepend_view_path_for_journey
+    prepend_view_path("app/views/#{current_journey_routing_name.underscore}")
   end
 
   def one_time_password
@@ -275,7 +275,7 @@ class ClaimsController < BasePublicController
 
     session[:selected_claim_policy] = policy
 
-    redirect_to claim_path(current_policy_routing_name, next_slug)
+    redirect_to claim_path(current_journey_routing_name, next_slug)
   end
 
   def bank_account
@@ -286,7 +286,7 @@ class ClaimsController < BasePublicController
     current_claim.attributes = claim_params.merge({hmrc_bank_validation_succeeded: @form.hmrc_api_validation_succeeded?})
     current_claim.save!(context: page_sequence.current_slug.to_sym)
 
-    redirect_to claim_path(current_policy_routing_name, next_slug)
+    redirect_to claim_path(current_journey_routing_name, next_slug)
   rescue ActiveModel::ValidationError
     current_claim.attributes = claim_params
     session[:bank_validation_attempt_count] = (session[:bank_validation_attempt_count] || 1) + 1 if @form.hmrc_api_validation_attempted?
@@ -294,7 +294,7 @@ class ClaimsController < BasePublicController
   end
 
   def correct_policy_namespace?
-    JourneyConfiguration.policies_for_routing_name(params[:policy]).include?(current_claim.policy)
+    JourneyConfiguration.policies_for_routing_name(current_journey_routing_name).include?(current_claim.policy)
   end
 
   def failed_details_check_with_teacher_id?
@@ -365,7 +365,7 @@ class ClaimsController < BasePublicController
 
   def skip_teacher_id
     DfeIdentity::ClaimUserDetailsReset.call(current_claim, :skipped_tid)
-    redirect_to claim_path(current_policy_routing_name, next_slug)
+    redirect_to claim_path(current_journey_routing_name, next_slug)
   end
 
   def set_dqt_data_as_answers
@@ -374,6 +374,6 @@ class ClaimsController < BasePublicController
   end
 
   def journey_configuration
-    @journey_configuration ||= JourneyConfiguration.for_routing_name(current_policy_routing_name)
+    @journey_configuration ||= JourneyConfiguration.for_routing_name(current_journey_routing_name)
   end
 end

@@ -23,10 +23,6 @@ module Policies
 
     POLICY_START_YEAR = AcademicYear.new(2021).freeze
 
-    def start_page_url
-      Rails.application.routes.url_helpers.landing_page_path(routing_name)
-    end
-
     def eligibility_page_url
       "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools"
     end
@@ -37,14 +33,6 @@ module Policies
 
     def notify_reply_to_id
       "3f85a1f7-9400-4b48-9a31-eaa643d6b977"
-    end
-
-    def feedback_url
-      "https://docs.google.com/forms/TO-BE-REPLACED-by-response-to-ECP-509/viewform"
-    end
-
-    def feedback_email
-      "earlycareerteacherpayments@digital.education.gov.uk"
     end
 
     def first_eligible_qts_award_year(claim_year = nil)
