@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe Policies::EarlyCareerPayments::SlugSequence do
-  subject(:slug_sequence) { Policies::EarlyCareerPayments::SlugSequence.new(current_claim) }
+RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
+  subject(:slug_sequence) { described_class.new(current_claim) }
 
   let(:eligibility) { create(:early_career_payments_eligibility, :eligible) }
   let(:eligibility_lup) { create(:levelling_up_premium_payments_eligibility, :eligible) }

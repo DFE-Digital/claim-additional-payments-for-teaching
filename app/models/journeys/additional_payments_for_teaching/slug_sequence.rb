@@ -1,5 +1,5 @@
-module Policies
-  module EarlyCareerPayments
+module Journeys
+  module AdditionalPaymentsForTeaching
     # Determines the slugs that make up the claim process for a Early-Career Payments
     # claim. Based on the existing answers on the claim, the sequence of slugs
     # will change. For example, if the claimant has said they are not a supply teacher
@@ -97,7 +97,7 @@ module Policies
         ecp_claim = claim.for_policy(Policies::EarlyCareerPayments)
 
         SLUGS.dup.tap do |sequence|
-          if !Journeys::Configuration.for(claim.policy).teacher_id_enabled?
+          if !Journeys::AdditionalPaymentsForTeaching.configuration.teacher_id_enabled?
             sequence.delete("sign-in-or-continue")
             sequence.delete("teacher-detail")
             sequence.delete("reset-claim")

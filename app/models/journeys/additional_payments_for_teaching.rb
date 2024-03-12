@@ -2,9 +2,12 @@
 
 module Journeys
   module AdditionalPaymentsForTeaching
+    extend Base
+    extend self
+
     ROUTING_NAME = "additional-payments"
     VIEW_PATH = "additional_payments"
-    I8N_NAMESPACE = "additional_payments"
+    I18N_NAMESPACE = "additional_payments"
     POLICIES = [Policies::EarlyCareerPayments, LevellingUpPremiumPayments]
   end
 end

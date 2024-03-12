@@ -11,7 +11,7 @@ module PartOfClaimJourney
   private
 
   def current_journey_routing_name
-    super || current_claim.policy.routing_name
+    super || Journeys.for_policy(current_claim.policy)::ROUTING_NAME
   end
 
   def check_whether_closed_for_submissions
@@ -22,7 +22,7 @@ module PartOfClaimJourney
   end
 
   def send_unstarted_claimants_to_the_start
-    redirect_to Journeys::Configuration.start_page_url(current_journey_routing_name), allow_other_host: true
+    redirect_to Journeys.for_routing_name(current_journey_routing_name).start_page_url, allow_other_host: true
   end
 
   def current_claim_persisted?
@@ -62,7 +62,7 @@ module PartOfClaimJourney
   end
 
   def build_new_claims
-    journey_configuration.policies.map do |policy|
+    journey::POLICIES.map do |policy|
       Claim.new(
         eligibility: policy::Eligibility.new,
         academic_year: journey_configuration.current_academic_year
@@ -70,8 +70,12 @@ module PartOfClaimJourney
     end
   end
 
+  def journey
+    Journeys.for_routing_name(current_journey_routing_name)
+  end
+
   def journey_configuration
-    @journey_configuration ||= Journeys::Configuration.for_routing_name(current_journey_routing_name)
+    journey.configuration
   end
 
   def set_cache_headers

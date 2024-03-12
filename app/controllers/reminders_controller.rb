@@ -80,8 +80,12 @@ class RemindersController < BasePublicController
     "additional-payments"
   end
 
+  def journey
+    Journeys.for_routing_name(current_journey_routing_name)
+  end
+
   def journey_configuration
-    @journey_configuration ||= Journeys::Configuration.for_routing_name(current_journey_routing_name)
+    journey.configuration
   end
 
   def current_reminder

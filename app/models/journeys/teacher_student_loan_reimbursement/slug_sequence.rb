@@ -1,5 +1,5 @@
-module Policies
-  module StudentLoans
+module Journeys
+  module TeacherStudentLoanReimbursement
     # Determines the slugs that make up the claim process for a Student Loans
     # claim. Based on the existing answers on the claim, the sequence of slugs
     # will change. For example, if the claimant has said they are not paying off a
@@ -82,7 +82,7 @@ module Policies
 
       def slugs
         SLUGS.dup.tap do |sequence|
-          if !Journeys::Configuration.for(claim.policy).teacher_id_enabled?
+          if !Journeys.for_policy(claim.policy).configuration.teacher_id_enabled?
             sequence.delete("sign-in-or-continue")
             sequence.delete("teacher-detail")
             sequence.delete("reset-claim")

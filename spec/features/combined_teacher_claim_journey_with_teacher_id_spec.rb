@@ -43,7 +43,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     set_mock_auth(trn, {date_of_birth:, nino:})
     stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:}, body: eligible_dqt_body)
 
-    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
+    visit landing_page_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
     expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
     expect(page).to have_link(href: "mailto:#{I18n.t("additional_payments.feedback_email")}")
 
@@ -232,7 +232,7 @@ RSpec.feature "Combined journey with Teacher ID" do
 
     # - What is your home address
     expect(page).to have_text(I18n.t("questions.address.home.title"))
-    expect(page).to have_link(href: claim_path(Policies::EarlyCareerPayments.routing_name, "address"))
+    expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
 
     click_link(I18n.t("questions.address.home.link_to_manual_address"))
 
@@ -305,7 +305,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     set_mock_auth(trn, {date_of_birth:, nino:})
     stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
 
-    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
+    visit landing_page_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
     click_on "Start now"
 
     click_on "Continue with DfE Identity"
@@ -363,7 +363,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     set_mock_auth("1234567", {nino: "", date_of_birth:})
     stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino: ""}, body: eligible_dqt_body)
 
-    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
+    visit landing_page_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
     click_on "Start now"
     click_on "Continue with DfE Identity"
     choose "Yes"
@@ -417,7 +417,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     set_mock_auth("1234567", {nino:, date_of_birth:})
     stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:})
 
-    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
+    visit landing_page_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
     click_on "Start now"
     click_on "Continue with DfE Identity"
     choose "Yes"
@@ -450,7 +450,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     }
     stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:}, body: missing_qts_date_body)
 
-    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
+    visit landing_page_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
     click_on "Start now"
     click_on "Continue with DfE Identity"
     choose "Yes"
@@ -513,7 +513,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     }
     stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:}, body: missing_qts_date_body)
 
-    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
+    visit landing_page_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
     click_on "Start now"
     click_on "Continue with DfE Identity"
     choose "Yes"

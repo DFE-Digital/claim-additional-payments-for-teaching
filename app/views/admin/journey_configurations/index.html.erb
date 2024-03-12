@@ -26,13 +26,13 @@
       </thead>
       <tbody class="govuk-table__body">
         <% @journey_configurations.each do |journey_configuration| %>
-          <tr class="govuk-table__row" data-policy-configuration-id="<%= journey_configuration.id %>">
-            <th scope="row" class="govuk-table__header"><%= journey_service_name(journey_configuration.routing_name) %></th>
+          <tr class="govuk-table__row" data-policy-configuration-routing-name="<%= journey_configuration.routing_name %>">
+            <th scope="row" class="govuk-table__header"><%= journey_service_name(journey_configuration.journey::ROUTING_NAME) %></th>
             <td class="govuk-table__cell"><%= journey_configuration.current_academic_year %></td>
             <td class="govuk-table__cell"><%= journey_configuration.open_for_submissions? ? "Open" : "Closed" %></td>
             <td class="govuk-table__cell">
               <%= link_to edit_admin_journey_configuration_path(journey_configuration), class: "govuk-link" do %>
-                Change <span class="govuk-visually-hidden"><%= journey_service_name(journey_configuration.routing_name) %></span>
+                Change <span class="govuk-visually-hidden"><%= journey_service_name(journey_configuration.journey::ROUTING_NAME) %></span>
               <% end %>
             </td>
           </tr>

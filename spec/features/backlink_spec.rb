@@ -4,7 +4,7 @@ RSpec.feature "Backlinking during a claim" do
   scenario "Student Loans journey" do
     create(:journey_configuration, :student_loans)
     school = create(:school, :student_loans_eligible)
-    visit new_claim_path(Policies::StudentLoans.routing_name)
+    visit new_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
     skip_tid
     expect(page).to have_link("Back")
     choose_qts_year
@@ -25,7 +25,7 @@ RSpec.feature "Backlinking during a claim" do
     create(:journey_configuration, :additional_payments)
     lup_school = create(:school, :levelling_up_premium_payments_eligible)
 
-    visit new_claim_path(Policies::EarlyCareerPayments.routing_name)
+    visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
     # - Sign in or continue page
     expect(page).to have_text("Use DfE Identity to sign in")
     expect(page).to have_link("Back")
@@ -50,7 +50,7 @@ RSpec.feature "Backlinking during a claim" do
     create(:journey_configuration, :additional_payments)
     lup_school = create(:school, :levelling_up_premium_payments_eligible)
 
-    visit new_claim_path(Policies::EarlyCareerPayments.routing_name)
+    visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
 
     # - Sign in or continue page
     expect(page).to have_text("Use DfE Identity to sign in")

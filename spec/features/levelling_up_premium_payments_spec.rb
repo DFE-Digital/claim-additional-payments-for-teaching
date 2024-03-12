@@ -151,7 +151,7 @@ RSpec.feature "Levelling up premium payments claims" do
 
     # - What is your home address
     expect(page).to have_text(I18n.t("questions.address.home.title"))
-    expect(page).to have_link(href: claim_path(Policies::EarlyCareerPayments.routing_name, "address"))
+    expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
 
     click_link(I18n.t("questions.address.home.link_to_manual_address"))
 
@@ -377,7 +377,7 @@ RSpec.feature "Levelling up premium payments claims" do
     before do
       claim_up_to_check_your_answers
 
-      first("a[href='#{claim_path(LevellingUpPremiumPayments.routing_name, "personal-details")}']", minimum: 1).click
+      first("a[href='#{claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "personal-details")}']", minimum: 1).click
       fill_in "Last name", with: new_last_name
     end
 

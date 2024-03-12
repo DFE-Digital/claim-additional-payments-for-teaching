@@ -41,7 +41,7 @@ module Policies
 
         return :none_of_the_above if itt_subject_groups.empty? || !year
 
-        itt_subject_checker = JourneySubjectEligibilityChecker.new(claim_year: claim.policy.configuration.current_academic_year, itt_year: year)
+        itt_subject_checker = JourneySubjectEligibilityChecker.new(claim_year: Journeys.for_policy(claim.policy).configuration.current_academic_year, itt_year: year)
 
         itt_subject_groups.delete_if do |itt_subject_group|
           !itt_subject_group.in?(itt_subject_checker.current_and_future_subject_symbols(claim.policy))

@@ -104,7 +104,7 @@ RSpec.feature "TSLR journey with Teacher ID" do
   end
 
   def navigate_past_teacher_details_page
-    visit landing_page_path(Policies::StudentLoans.routing_name)
+    visit landing_page_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("student_loans.landing_page"))

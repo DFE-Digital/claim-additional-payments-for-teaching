@@ -130,7 +130,7 @@ class ClaimsController < BasePublicController
       clear_claim_session
       redirect_to(new_claim_path(current_journey_routing_name))
     else
-      redirect_to(claim_path(current_claim.policy.routing_name, slug: slug_to_redirect_to))
+      redirect_to(claim_path(Journeys.for_policy(current_claim.policy)::ROUTING_NAME, slug: slug_to_redirect_to))
     end
   end
 
@@ -223,7 +223,7 @@ class ClaimsController < BasePublicController
   end
 
   def claim_slug_sequence
-    current_claim.policy::SlugSequence.new(current_claim)
+    journey.slug_sequence.new(current_claim)
   end
 
   def prepend_view_path_for_journey
@@ -294,7 +294,7 @@ class ClaimsController < BasePublicController
   end
 
   def correct_policy_namespace?
-    Journeys::Configuration.policies_for_routing_name(current_journey_routing_name).include?(current_claim.policy)
+    Journeys.for_routing_name(current_journey_routing_name)::POLICIES.include?(current_claim.policy)
   end
 
   def failed_details_check_with_teacher_id?
@@ -373,7 +373,11 @@ class ClaimsController < BasePublicController
     current_claim.claims.each { |claim| claim.eligibility.set_qualifications_from_dqt_record }
   end
 
+  def journey
+    Journeys.for_routing_name(current_journey_routing_name)
+  end
+
   def journey_configuration
-    @journey_configuration ||= Journeys::Configuration.for_routing_name(current_journey_routing_name)
+    journey.configuration
   end
 end

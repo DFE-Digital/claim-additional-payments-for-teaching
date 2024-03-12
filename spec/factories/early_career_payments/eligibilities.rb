@@ -18,12 +18,12 @@ FactoryBot.define do
 
     trait :ineligible_now_but_eligible_next_year do
       eligible_now_with_mathematics
-      itt_academic_year { Journeys::Configuration.for(Policies::EarlyCareerPayments).current_academic_year - 4 } # this makes it ineligible
+      itt_academic_year { Journeys.for_policy(Policies::EarlyCareerPayments).configuration.current_academic_year - 4 } # this makes it ineligible
     end
 
     trait :eligible_now_and_again_but_two_years_later do
       eligible_now_with_mathematics
-      itt_academic_year { Journeys::Configuration.for(Policies::EarlyCareerPayments).current_academic_year - 3 }
+      itt_academic_year { Journeys.for_policy(Policies::EarlyCareerPayments).configuration.current_academic_year - 3 }
     end
 
     trait :eligible_school_ecp_only do
@@ -43,12 +43,12 @@ FactoryBot.define do
     end
 
     trait :eligible_itt_subject_now do
-      itt_academic_year { Journeys::Configuration.for(Policies::EarlyCareerPayments).current_academic_year - 3 }
+      itt_academic_year { Journeys.for_policy(Policies::EarlyCareerPayments).configuration.current_academic_year - 3 }
       eligible_itt_subject { :mathematics }
     end
 
     trait :eligible_itt_subject_later do
-      itt_academic_year { Journeys::Configuration.for(Policies::EarlyCareerPayments).current_academic_year - 4 }
+      itt_academic_year { Journeys.for_policy(Policies::EarlyCareerPayments).configuration.current_academic_year - 4 }
       eligible_itt_subject { :mathematics }
     end
 
@@ -58,7 +58,7 @@ FactoryBot.define do
 
     trait :no_eligible_subjects do
       eligible_now
-      itt_academic_year { Journeys::Configuration.for(Policies::EarlyCareerPayments).current_academic_year - 1 }
+      itt_academic_year { Journeys.for_policy(Policies::EarlyCareerPayments).configuration.current_academic_year - 1 }
     end
 
     trait :ineligible do

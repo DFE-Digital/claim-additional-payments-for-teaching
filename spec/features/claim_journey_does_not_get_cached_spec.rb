@@ -15,7 +15,7 @@ RSpec.feature "Claim journey does not get cached" do
 
     click_on "Confirm and send"
 
-    expect(current_path).to eq(claim_confirmation_path(claim.policy.routing_name))
+    expect(current_path).to eq(claim_confirmation_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME))
 
     jump_to_claim_journey_page(claim, "check-your-answers")
 

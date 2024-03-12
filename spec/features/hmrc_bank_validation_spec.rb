@@ -10,7 +10,7 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
   let(:account_number) { "87654321" }
 
   def get_to_bank_details_page
-    visit new_claim_path(Policies::EarlyCareerPayments.routing_name)
+    visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
 
     # - Sign in or continue page
     expect(page).to have_text("Use DfE Identity to sign in")

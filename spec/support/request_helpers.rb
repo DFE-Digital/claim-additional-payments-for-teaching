@@ -1,6 +1,6 @@
 module RequestHelpers
   def start_student_loans_claim
-    start_claim(Policies::StudentLoans.routing_name)
+    start_claim(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
   end
 
   def start_claim(routing_name)
@@ -29,7 +29,7 @@ module RequestHelpers
 
   def set_slug_sequence_in_session(claim, slug)
     current_claim = CurrentClaim.new(claims: [claim])
-    slug_sequence = claim.policy::SlugSequence.new(current_claim).slugs
+    slug_sequence = Journeys.for_policy(claim.policy).slug_sequence.new(current_claim).slugs
     slug_index = slug_sequence.index(slug)
     visited_slugs = slug_sequence.slice(0, slug_index)
 
