@@ -23,7 +23,7 @@ RSpec.describe "Sessions", type: :request do
         expect(session[:claim_id]).to be_nil
 
         get claim_path(Policies::StudentLoans.routing_name, "qts-year")
-        expect(response).to redirect_to(JourneyConfiguration.start_page_url("student-loans"))
+        expect(response).to redirect_to(Journeys::Configuration.start_page_url("student-loans"))
       end
     end
   end

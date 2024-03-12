@@ -5,7 +5,7 @@ module Admin
     after_action :send_reminders, only: [:update]
 
     def index
-      @journey_configurations = JourneyConfiguration.order(created_at: :desc)
+      @journey_configurations = Journeys::Configuration.order(created_at: :desc)
     end
 
     def edit
@@ -22,7 +22,7 @@ module Admin
     def journey_configuration
       return unless params[:id].present?
 
-      @journey_configuration ||= JourneyConfiguration.find(params[:id])
+      @journey_configuration ||= Journeys::Configuration.find(params[:id])
     end
 
     def journey_configuration_params

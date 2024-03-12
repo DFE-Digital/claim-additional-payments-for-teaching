@@ -110,7 +110,7 @@ class JourneySubjectEligibilityChecker
   end
 
   def subject_symbols(policy:, claim_year:, itt_year:)
-    raise "Unsupported policy: #{policy}" unless policy.in?(JourneyConfiguration.policies_for_routing_name("additional-payments"))
+    raise "Unsupported policy: #{policy}" unless policy.in?(Journeys::Configuration.policies_for_routing_name("additional-payments"))
 
     case policy
     when Policies::EarlyCareerPayments

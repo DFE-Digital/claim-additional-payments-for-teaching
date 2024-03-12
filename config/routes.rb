@@ -36,7 +36,7 @@ Rails.application.routes.draw do
   }
 
   # Define routes that are specific to each journey's page sequence
-  JourneyConfiguration::SERVICES.each do |journey|
+  Journeys::Configuration::SERVICES.each do |journey|
     constraints(restrict_to_sequence_slugs.new(journey)) do
       scope path: ":journey" do
         resources :claims, only: [:show, :update], param: :slug, path: "/"
@@ -45,7 +45,7 @@ Rails.application.routes.draw do
   end
 
   # Define the generic routes that aren't specific to any given journey
-  scope path: ":journey", constraints: {journey: %r{#{JourneyConfiguration.all_routing_names.join("|")}}} do
+  scope path: ":journey", constraints: {journey: %r{#{Journeys::Configuration.all_routing_names.join("|")}}} do
     get "claim", as: :new_claim, to: "claims#new"
     post "claim", as: :claims, to: "claims#create"
     post "claim/submit", as: :claim_submission, to: "submissions#create"

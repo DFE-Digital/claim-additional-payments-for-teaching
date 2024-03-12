@@ -294,7 +294,7 @@ class ClaimsController < BasePublicController
   end
 
   def correct_policy_namespace?
-    JourneyConfiguration.policies_for_routing_name(current_journey_routing_name).include?(current_claim.policy)
+    Journeys::Configuration.policies_for_routing_name(current_journey_routing_name).include?(current_claim.policy)
   end
 
   def failed_details_check_with_teacher_id?
@@ -374,6 +374,6 @@ class ClaimsController < BasePublicController
   end
 
   def journey_configuration
-    @journey_configuration ||= JourneyConfiguration.for_routing_name(current_journey_routing_name)
+    @journey_configuration ||= Journeys::Configuration.for_routing_name(current_journey_routing_name)
   end
 end

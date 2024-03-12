@@ -37,7 +37,7 @@ class ReminderMailer < ApplicationMailer
   def reminder(reminder)
     @reminder = reminder
     support_email_address = translate("additional_payments.support_email_address")
-    service_start_page_url = JourneyConfiguration.start_page_url("additional-payments")
+    service_start_page_url = Journeys::Configuration.start_page_url("additional-payments")
     personalisation = {
       first_name: extract_first_name(@reminder.full_name),
       support_email_address: support_email_address,

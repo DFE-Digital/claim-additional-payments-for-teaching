@@ -97,7 +97,7 @@ module Policies
         ecp_claim = claim.for_policy(Policies::EarlyCareerPayments)
 
         SLUGS.dup.tap do |sequence|
-          if !JourneyConfiguration.for(claim.policy).teacher_id_enabled?
+          if !Journeys::Configuration.for(claim.policy).teacher_id_enabled?
             sequence.delete("sign-in-or-continue")
             sequence.delete("teacher-detail")
             sequence.delete("reset-claim")

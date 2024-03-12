@@ -39,9 +39,9 @@ class TeachersPensionsService < ApplicationRecord
   end
 
   def self.tps_school_for_student_loan_in_previous_financial_year(claim)
-    previous_academic_year = JourneyConfiguration.for(Policies::StudentLoans).current_academic_year - 1
+    previous_academic_year = Journeys::Configuration.for(Policies::StudentLoans).current_academic_year - 1
     start_of_previous_financial_year = Date.new(previous_academic_year.start_year, 4, 6)
-    end_of_previous_financial_year = Date.new(JourneyConfiguration.for(Policies::StudentLoans).current_academic_year.start_year, 4, 5)
+    end_of_previous_financial_year = Date.new(Journeys::Configuration.for(Policies::StudentLoans).current_academic_year.start_year, 4, 5)
 
     tps_records = where(teacher_reference_number: claim.teacher_reference_number)
       .employed_between(start_of_previous_financial_year, end_of_previous_financial_year)

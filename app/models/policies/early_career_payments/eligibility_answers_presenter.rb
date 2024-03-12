@@ -156,7 +156,7 @@ module Policies
 
       def text_for_subject_answer
         policy = eligibility.policy
-        subjects = JourneySubjectEligibilityChecker.new(claim_year: JourneyConfiguration.for(policy).current_academic_year,
+        subjects = JourneySubjectEligibilityChecker.new(claim_year: Journeys::Configuration.for(policy).current_academic_year,
           itt_year: eligibility.itt_academic_year).current_and_future_subject_symbols(policy)
 
         if subjects.many?
