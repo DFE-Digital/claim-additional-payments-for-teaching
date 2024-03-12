@@ -28,7 +28,7 @@ module Admin
     end
 
     def journey_configuration
-      @journey_configuration ||= Journeys::Configuration.for(LevellingUpPremiumPayments)
+      @journey_configuration ||= Journeys.for_policy(LevellingUpPremiumPayments).configuration
     end
   end
 end

@@ -6,7 +6,7 @@ RSpec.describe "Claims", type: :request do
 
     context "the user has not already started a claim" do
       it "renders the first page in the sequence" do
-        get new_claim_path(Policies::StudentLoans.routing_name)
+        get new_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
         follow_redirect!
         expect(response.body).to include("Use DfE Identity to sign in")
       end
@@ -14,9 +14,9 @@ RSpec.describe "Claims", type: :request do
 
     it "redirects to the existing claim interruption page if another claim for the same policy is already in progress" do
       start_student_loans_claim
-      get new_claim_path(Policies::StudentLoans.routing_name)
+      get new_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
 
-      expect(response).to redirect_to(existing_session_path(Policies::StudentLoans.routing_name))
+      expect(response).to redirect_to(existing_session_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME))
     end
 
     context "switching claim policies" do
@@ -24,30 +24,30 @@ RSpec.describe "Claims", type: :request do
 
       it "redirects to the existing claim interruption page if a claim for another policy is already in progress" do
         start_student_loans_claim
-        get new_claim_path(Policies::EarlyCareerPayments.routing_name)
+        get new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
 
-        expect(response).to redirect_to(existing_session_path(Policies::EarlyCareerPayments.routing_name))
+        expect(response).to redirect_to(existing_session_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME))
       end
     end
   end
 
   describe "claims#create request" do
     def check_claims_created
-      expect { start_claim(@journey_configuration.routing_name) }.to change { Claim.count }.by(@journey_configuration.policies.count)
+      expect { start_claim(@journey_configuration.journey::ROUTING_NAME) }.to change { Claim.count }.by(@journey_configuration.journey::POLICIES.count)
     end
 
     def check_claims_eligibility_created
-      claims = @journey_configuration.policies.map { |p| Claim.by_policy(p).order(:created_at).last }
+      claims = @journey_configuration.journey::POLICIES.map { |p| Claim.by_policy(p).order(:created_at).last }
       current_claim = CurrentClaim.new(claims: claims)
 
       current_claim.claims.each_with_index do |claim, i|
-        expect(claim.eligibility).to be_kind_of(@journey_configuration.policies[i]::Eligibility)
+        expect(claim.eligibility).to be_kind_of(@journey_configuration.journey::POLICIES[i]::Eligibility)
         expect(claim.academic_year).to eq(@journey_configuration.current_academic_year)
       end
     end
 
     def check_slug_redirection
-      expect(response).to redirect_to(claim_path(@journey_configuration.routing_name, @journey_configuration.slugs.first))
+      expect(response).to redirect_to(claim_path(@journey_configuration.journey::ROUTING_NAME, @journey_configuration.journey.slug_sequence::SLUGS.first))
     end
 
     context "student loans claim" do
@@ -81,11 +81,11 @@ RSpec.describe "Claims", type: :request do
 
       context "when the user has not completed the journey in the correct slug sequence" do
         it "redirects to the correct page in the sequence" do
-          get claim_path(Policies::StudentLoans.routing_name, "sign-in-or-continue")
+          get claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "sign-in-or-continue")
           expect(response.body).to include("Use DfE Identity to sign in")
 
-          get claim_path(Policies::StudentLoans.routing_name, "claim-school")
-          expect(response).to redirect_to(claim_path(Policies::StudentLoans.routing_name, "qts-year"))
+          get claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school")
+          expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "qts-year"))
         end
       end
 
@@ -93,7 +93,7 @@ RSpec.describe "Claims", type: :request do
         before { set_slug_sequence_in_session(in_progress_claim, "claim-school") }
 
         it "renders the requested page in the sequence" do
-          get claim_path(Policies::StudentLoans.routing_name, "claim-school")
+          get claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school")
           expect(response.body).to include("Which school were you employed to teach at")
         end
 
@@ -102,7 +102,7 @@ RSpec.describe "Claims", type: :request do
           let!(:school_2) { create(:school) }
 
           it "searches for schools using the search term" do
-            get claim_path(Policies::StudentLoans.routing_name, "claim-school"), params: {school_search: school_1.name}
+            get claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"), params: {school_search: school_1.name}
 
             # Issues with e.g. "O&#39;Kon and Sons School" matching "O'Kon and Sons School", quickfix escape html
             expect(response.body).to include CGI.escapeHTML(school_1.name)
@@ -112,7 +112,7 @@ RSpec.describe "Claims", type: :request do
           end
 
           it "only returns results if the search term is more than two characters" do
-            get claim_path(Policies::StudentLoans.routing_name, "claim-school"), params: {school_search: "ab"}
+            get claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"), params: {school_search: "ab"}
 
             expect(response.body).to include("There is a problem")
             expect(response.body).to include("Enter a school or postcode")
@@ -120,7 +120,7 @@ RSpec.describe "Claims", type: :request do
           end
 
           it "shows an appropriate message when there are no search results" do
-            get claim_path(Policies::StudentLoans.routing_name, "claim-school"), params: {school_search: "crocodile"}
+            get claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"), params: {school_search: "crocodile"}
 
             expect(response.body).to include("No results match that search term")
           end
@@ -130,8 +130,8 @@ RSpec.describe "Claims", type: :request do
 
     context "when a claim hasn’t been started yet" do
       it "redirects to the start page indicated by the routing" do
-        get claim_path(Policies::StudentLoans.routing_name, "qts-year")
-        expect(response).to redirect_to(Journeys::Configuration.start_page_url("student-loans"))
+        get claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "qts-year")
+        expect(response).to redirect_to(Journeys::TeacherStudentLoanReimbursement.start_page_url)
       end
     end
   end
@@ -145,7 +145,7 @@ RSpec.describe "Claims", type: :request do
       it "renders a static ineligibility page" do
         Claim.by_policy(Policies::StudentLoans).order(:created_at).last.eligibility.update(employment_status: "no_school")
 
-        get claim_path(Policies::StudentLoans.routing_name, "ineligible")
+        get claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "ineligible")
 
         expect(response.body).to include("You’re not eligible")
         expect(response.body).to include("You can only get this payment if you’re still employed to teach at a state-funded secondary school.")
@@ -154,8 +154,8 @@ RSpec.describe "Claims", type: :request do
 
     context "when a claim hasn’t been started yet" do
       it "redirects to the start page indicated by the routing" do
-        get claim_path(Policies::StudentLoans.routing_name, "ineligible")
-        expect(response).to redirect_to(Journeys::Configuration.start_page_url("student-loans"))
+        get claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "ineligible")
+        expect(response).to redirect_to(Journeys::TeacherStudentLoanReimbursement.start_page_url)
       end
     end
   end
@@ -164,7 +164,7 @@ RSpec.describe "Claims", type: :request do
     before { create(:journey_configuration, :student_loans) }
 
     it "displays session timeout content" do
-      get timeout_claim_path(Policies::StudentLoans.routing_name)
+      get timeout_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
       expect(response.body).to include("Your session has ended due to inactivity")
     end
   end
@@ -181,21 +181,21 @@ RSpec.describe "Claims", type: :request do
       }
 
       it "updates the claim with the submitted form data" do
-        put claim_path(Policies::StudentLoans.routing_name, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "on_or_after_cut_off_date"}}}
+        put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "on_or_after_cut_off_date"}}}
 
-        expect(response).to redirect_to(claim_path(Policies::StudentLoans.routing_name, "claim-school"))
+        expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"))
         expect(in_progress_claim.reload.eligibility.qts_award_year).to eq "on_or_after_cut_off_date"
       end
 
       it "makes sure validations appropriate to the context are run" do
-        put claim_path(Policies::StudentLoans.routing_name, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: nil}}}
+        put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: nil}}}
         expect(response.body).to include("Select when you completed your initial teacher training")
       end
 
       context "when the user has not completed the journey in the correct slug sequence" do
         it "redirects to the start of the journey" do
-          put claim_path(Policies::StudentLoans.routing_name, "student-loan"), params: {claim: {has_student_loan: true}}
-          expect(response).to redirect_to(claim_path(Policies::StudentLoans.routing_name, "qts-year"))
+          put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "student-loan"), params: {claim: {has_student_loan: true}}
+          expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "qts-year"))
         end
       end
 
@@ -204,9 +204,9 @@ RSpec.describe "Claims", type: :request do
 
         it "resets dependent claim attributes when appropriate" do
           in_progress_claim.update!(has_student_loan: false, student_loan_plan: Claim::NO_STUDENT_LOAN)
-          put claim_path(Policies::StudentLoans.routing_name, "student-loan"), params: {claim: {has_student_loan: true}}
+          put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "student-loan"), params: {claim: {has_student_loan: true}}
 
-          expect(response).to redirect_to(claim_path(Policies::StudentLoans.routing_name, "student-loan-country"))
+          expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "student-loan-country"))
           expect(in_progress_claim.reload.student_loan_plan).to be_nil
         end
       end
@@ -214,9 +214,9 @@ RSpec.describe "Claims", type: :request do
       it "resets depenent eligibility attributes when appropriate" do
         in_progress_claim.update!(eligibility_attributes: {had_leadership_position: true, mostly_performed_leadership_duties: false})
         set_slug_sequence_in_session(in_progress_claim, "leadership-position")
-        put claim_path(Policies::StudentLoans.routing_name, "leadership-position"), params: {claim: {eligibility_attributes: {had_leadership_position: false}}}
+        put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "leadership-position"), params: {claim: {eligibility_attributes: {had_leadership_position: false}}}
 
-        expect(response).to redirect_to(claim_path(Policies::StudentLoans.routing_name, "eligibility-confirmed"))
+        expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "eligibility-confirmed"))
         expect(in_progress_claim.eligibility.reload.mostly_performed_leadership_duties).to be_nil
       end
 
@@ -226,7 +226,7 @@ RSpec.describe "Claims", type: :request do
         before { set_slug_sequence_in_session(in_progress_claim, "claim-school") }
 
         it "re-renders the school search results with an error message" do
-          put claim_path(Policies::StudentLoans.routing_name, "claim-school"), params: {school_search: school.name, claim: {eligibility_attributes: {claim_school_id: ""}}}
+          put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"), params: {school_search: school.name, claim: {eligibility_attributes: {claim_school_id: ""}}}
 
           expect(response).to be_successful
           expect(response.body).to include("There is a problem")
@@ -240,17 +240,17 @@ RSpec.describe "Claims", type: :request do
 
         it "redirects to the “ineligible” page" do
           set_slug_sequence_in_session(in_progress_claim, "claim-school")
-          put claim_path(Policies::StudentLoans.routing_name, "claim-school"), params: {claim: {eligibility_attributes: {claim_school_id: ineligible_school.to_param}}}
+          put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"), params: {claim: {eligibility_attributes: {claim_school_id: ineligible_school.to_param}}}
 
-          expect(response).to redirect_to(claim_path(Policies::StudentLoans.routing_name, "ineligible"))
+          expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "ineligible"))
         end
       end
     end
 
     context "when a claim hasn’t been started yet" do
       it "redirects to the start page indicated by the routing" do
-        put claim_path(Policies::StudentLoans.routing_name, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "on_or_after_cut_off_date"}}}
-        expect(response).to redirect_to(Journeys::Configuration.start_page_url("student-loans"))
+        put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "on_or_after_cut_off_date"}}}
+        expect(response).to redirect_to(Journeys::TeacherStudentLoanReimbursement.start_page_url)
       end
     end
   end

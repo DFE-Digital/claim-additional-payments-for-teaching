@@ -147,10 +147,10 @@ class CurrentClaim
 
   # No specific spec for this, but if this is wrong the other specs will show it up
   def policy_year
-    raise "nil academic year" if policies.any? { |policy| Journeys::Configuration.for(policy).current_academic_year.nil? }
-    raise "none academic year" if policies.any? { |policy| Journeys::Configuration.for(policy).current_academic_year == AcademicYear.new }
+    raise "nil academic year" if policies.any? { |policy| Journeys.for_policy(policy).configuration.current_academic_year.nil? }
+    raise "none academic year" if policies.any? { |policy| Journeys.for_policy(policy).configuration.current_academic_year == AcademicYear.new }
 
-    policy_year_values_set = policies.collect { |policy| Journeys::Configuration.for(policy).current_academic_year }.to_set
+    policy_year_values_set = policies.collect { |policy| Journeys.for_policy(policy).configuration.current_academic_year }.to_set
 
     if policy_year_values_set.one?
       policy_year_values_set.first

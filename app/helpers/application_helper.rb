@@ -21,7 +21,7 @@ module ApplicationHelper
   def support_email_address(routing_name = nil)
     return t("support_email_address") unless routing_name
 
-    namespace = Journeys::Configuration.i18n_namespace_for_routing_name(routing_name)
+    namespace = Journeys.for_routing_name(routing_name)::I18N_NAMESPACE
     t("#{namespace}.support_email_address")
   end
 
@@ -35,22 +35,22 @@ module ApplicationHelper
   def journey_service_name(routing_name = nil)
     return t("service_name") unless routing_name
 
-    namespace = Journeys::Configuration.i18n_namespace_for_routing_name(routing_name)
+    namespace = Journeys.for_routing_name(routing_name)::I18N_NAMESPACE
     t("#{namespace}.journey_name")
   end
 
   def journey_description(routing_name)
-    namespace = Journeys::Configuration.i18n_namespace_for_routing_name(routing_name)
+    namespace = Journeys.for_routing_name(routing_name)::I18N_NAMESPACE
     t("#{namespace}.claim_description")
   end
 
   def feedback_email(routing_name)
-    namespace = Journeys::Configuration.i18n_namespace_for_routing_name(routing_name)
+    namespace = Journeys.for_routing_name(routing_name)::I18N_NAMESPACE
     t("#{namespace}.feedback_email")
   end
 
   def start_page_url(routing_name)
-    Journeys::Configuration.start_page_url(routing_name)
+    Journeys.for_routing_name(routing_name).start_page_url
   end
 
   def eligibility_page_url

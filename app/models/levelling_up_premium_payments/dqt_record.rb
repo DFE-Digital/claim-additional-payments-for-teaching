@@ -96,7 +96,7 @@ module LevellingUpPremiumPayments
     end
 
     def itt_year_within_allowed_range?(year = itt_year)
-      policy_year = Journeys::Configuration.for(claim.policy).current_academic_year
+      policy_year = Journeys.for_policy(claim.policy).configuration.current_academic_year
       eligible_itt_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(policy_year)
       eligible_itt_years.include?(year)
     end

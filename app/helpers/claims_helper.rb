@@ -53,7 +53,7 @@ module ClaimsHelper
   end
 
   def additional_payments_open?
-    Journeys::Configuration.for_routing_name("additional-payments").open_for_submissions?
+    Journeys::AdditionalPaymentsForTeaching.configuration.open_for_submissions?
   end
 
   def show_name(claim)

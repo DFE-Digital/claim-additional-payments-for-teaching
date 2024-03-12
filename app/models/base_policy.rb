@@ -17,15 +17,7 @@ module BasePolicy
     I18n.t("#{locale_key}.support_email_address")
   end
 
-  def routing_name
-    Journeys::Configuration.routing_name_for_policy(self)
-  end
-
   def locale_key
     to_s.underscore
-  end
-
-  def configuration
-    Journeys::Configuration.for(self)
   end
 end

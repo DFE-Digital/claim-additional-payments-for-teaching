@@ -15,11 +15,9 @@ class StaticPagesController < BasePublicController
   end
 
   def landing_page
-    current_policy = Journeys::Configuration.policy_for_routing_name(current_journey_routing_name)
+    journey = Journeys.for_routing_name(current_journey_routing_name)
+    @academic_year = journey.configuration.current_academic_year
 
-    jc = Journeys::Configuration.for(current_policy)
-    @academic_year = jc.current_academic_year
-
-    render "#{Journeys::Configuration.view_path(current_journey_routing_name)}/landing_page"
+    render "#{journey::VIEW_PATH}/landing_page"
   end
 end

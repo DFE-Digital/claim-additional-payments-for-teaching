@@ -15,7 +15,7 @@ module FeatureHelpers
   end
 
   def start_student_loans_claim
-    visit new_claim_path(Policies::StudentLoans.routing_name)
+    visit new_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
     skip_tid
     choose_qts_year
     Claim.by_policy(Policies::StudentLoans).order(:created_at).last
@@ -105,12 +105,12 @@ module FeatureHelpers
 
   # Early-Career Payment Policy specific helpers
   def start_early_career_payments_claim
-    visit new_claim_path(Policies::EarlyCareerPayments.routing_name)
+    visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
     Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
   end
 
   def start_levelling_up_premium_payments_claim
-    visit new_claim_path(LevellingUpPremiumPayments.routing_name)
+    visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
     Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last
   end
 
@@ -132,12 +132,12 @@ module FeatureHelpers
   # TODO: refactor all old feature specs which use this method
   def jump_to_claim_journey_page(claim, slug)
     set_slug_sequence_in_session(claim, slug)
-    visit claim_path(claim.policy.routing_name, slug)
+    visit claim_path(Journeys.for_policy(claim.policy)::ROUTING_NAME, slug)
   end
 
   def set_slug_sequence_in_session(claim, slug)
     current_claim = CurrentClaim.new(claims: [claim])
-    slug_sequence = claim.policy::SlugSequence.new(current_claim).slugs
+    slug_sequence = Journeys.for_policy(claim.policy).slug_sequence.new(current_claim).slugs
     slug_index = slug_sequence.index(slug)
     visited_slugs = slug_sequence.slice(0, slug_index)
 

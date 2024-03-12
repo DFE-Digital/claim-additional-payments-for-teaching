@@ -9,7 +9,7 @@ RSpec.feature "Service configuration" do
     click_on "Manage services"
 
     expect(page).to have_content("Teachers: claim back your student loan repayments")
-    within(find("tr[data-policy-configuration-id=\"#{journey_configuration.id}\"]")) do
+    within(find("tr[data-policy-configuration-routing-name=\"#{journey_configuration.routing_name}\"]")) do
       expect(page).to have_content("Open")
       expect(page).not_to have_content("Closed")
       click_on "Change"
@@ -28,7 +28,7 @@ RSpec.feature "Service configuration" do
 
     # - Service operator opens a service for submissions
 
-    within(find("tr[data-policy-configuration-id=\"#{journey_configuration.id}\"]")) do
+    within(find("tr[data-policy-configuration-routing-name=\"#{journey_configuration.routing_name}\"]")) do
       expect(page).to have_content("Closed")
       expect(page).not_to have_content("Open")
 
@@ -41,7 +41,7 @@ RSpec.feature "Service configuration" do
 
     expect(current_path).to eq(admin_journey_configurations_path)
 
-    within(find("tr[data-policy-configuration-id=\"#{journey_configuration.id}\"]")) do
+    within(find("tr[data-policy-configuration-routing-name=\"#{journey_configuration.routing_name}\"]")) do
       expect(page).to have_content("Open")
       expect(page).not_to have_content("Closed")
     end
@@ -68,7 +68,7 @@ RSpec.feature "Service configuration" do
       click_on "Manage services"
 
       expect(page).to have_content("Claim additional payments for teaching")
-      within(find("tr[data-policy-configuration-id=\"#{journey_configuration.id}\"]")) do
+      within(find("tr[data-policy-configuration-routing-name=\"#{journey_configuration.routing_name}\"]")) do
         expect(page).to have_content("Closed")
         expect(page).not_to have_content("Open")
         click_on "Change"
@@ -84,7 +84,7 @@ RSpec.feature "Service configuration" do
       expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob)
       expect(current_path).to eq(admin_journey_configurations_path)
 
-      within(find("tr[data-policy-configuration-id=\"#{journey_configuration.id}\"]")) do
+      within(find("tr[data-policy-configuration-routing-name=\"#{journey_configuration.routing_name}\"]")) do
         expect(page).to have_content("Open")
         expect(page).not_to have_content("Closed")
       end
@@ -99,14 +99,14 @@ RSpec.feature "Service configuration" do
 
       click_on "Manage services"
 
-      within(find("tr[data-policy-configuration-id=\"#{journey_configuration.id}\"]")) do
+      within(find("tr[data-policy-configuration-routing-name=\"#{journey_configuration.routing_name}\"]")) do
         click_on "Change"
       end
 
       select "2023/2024", from: "Accepting claims for academic year"
       expect { click_on "Save" }.to_not enqueue_job(SendReminderEmailsJob)
 
-      within(find("tr[data-policy-configuration-id=\"#{journey_configuration.id}\"]")) do
+      within(find("tr[data-policy-configuration-routing-name=\"#{journey_configuration.routing_name}\"]")) do
         expect(page).to have_content("2023/2024")
       end
 
