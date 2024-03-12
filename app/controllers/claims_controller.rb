@@ -78,6 +78,9 @@ class ClaimsController < BasePublicController
     when "teacher-detail"
       save_details_check
       Dqt::RetrieveClaimQualificationsData.call(current_claim) if current_claim.details_check?
+    when "nqt-in-academic-year-after-itt"
+      current_claim.attributes = claim_params
+      determine_induction_answer_from_dqt_record if current_journey_routing_name == "additional-payments"
     when "qualification-details"
       set_dqt_data_as_answers
     when "personal-details"
@@ -301,6 +304,10 @@ class ClaimsController < BasePublicController
     !current_claim.details_check? && current_claim.logged_in_with_tid?
   end
 
+  def passed_details_check_with_teacher_id?
+    current_claim.logged_in_with_tid? && current_claim.details_check?
+  end
+
   def no_eligible_itt_subject?
     !current_claim.eligible_itt_subject
   end
@@ -366,6 +373,17 @@ class ClaimsController < BasePublicController
   def skip_teacher_id
     DfeIdentity::ClaimUserDetailsReset.call(current_claim, :skipped_tid)
     redirect_to claim_path(current_journey_routing_name, next_slug)
+  end
+
+  def determine_induction_answer_from_dqt_record
+    return unless passed_details_check_with_teacher_id?
+
+    # We can derive the induction_completed value for current_claim using the ECP DQT record
+    # Remember: even if it's only relevant to ECP, the induction question is asked at the beginning
+    # of the combined journey, and the applicant may end up applying for ECP or LUPP only at a later
+    # stage in the journey, hence we need to store the answer on both eligibilities.
+    induction_completed = current_claim.for_policy(Policies::EarlyCareerPayments).dqt_teacher_record&.eligible_induction?
+    current_claim.attributes = claim_params.merge!({eligibility_attributes: {induction_completed:}})
   end
 
   def set_dqt_data_as_answers

@@ -161,6 +161,8 @@ module Policies
             sequence.delete("eligible-degree-subject") unless ecp_claim&.eligibility&.status == :ineligible && lup_claim&.eligibility&.indicated_ineligible_itt_subject?
           end
 
+          sequence.delete("induction-completed") unless induction_question_required?
+
           if ecp_claim.eligibility.induction_not_completed? && ecp_claim.eligibility.ecp_only_school?
             replace_ecp_only_induction_not_completed_slugs(sequence)
           end
@@ -245,6 +247,26 @@ module Policies
         ]
 
         [sequence.dup - trainee_slugs].flatten.each { |slug| sequence.delete(slug) }
+      end
+
+      def induction_question_required?
+        # Induction question is not required if an ECP-eligible school is not selected.
+        return false unless ecp_school_selected?
+
+        # If the claimant is logged in with their Teacher ID, check the DQT record directly.
+        if claim.logged_in_with_tid?
+          # If the DQT record confirms induction eligibility, the question is not required.
+          return false if claim.for_policy(Policies::EarlyCareerPayments).dqt_teacher_record&.eligible_induction?
+        end
+
+        # In all other cases, the induction question is required.
+        true
+      end
+
+      def ecp_school_selected?
+        return false unless claim.eligibility.current_school
+
+        Policies::EarlyCareerPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible?
       end
     end
   end

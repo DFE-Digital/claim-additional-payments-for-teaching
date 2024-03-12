@@ -7,7 +7,7 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
 
   before do
     claim.update!(attributes_for(:claim, :submittable))
-    claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
+    claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible, :eligible_school_ecp_and_lup))
   end
 
   context "when ECP and LUP eligible" do
@@ -33,16 +33,7 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
   end
 
   context "when eligible only for ECP" do
-    let!(:school) { create(:school, :early_career_payments_eligible) }
-
-    before do
-      claim.eligibility.update!(itt_academic_year: AcademicYear.new(2020))
-    end
-
     it "has the correct subjects" do
-      jump_to_claim_journey_page(claim, "current-school")
-      choose_school school
-
       jump_to_claim_journey_page(claim, "nqt-in-academic-year-after-itt")
       choose "Yes"
       click_on "Continue"
@@ -52,7 +43,7 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
       click_on "Continue"
 
       jump_to_claim_journey_page(claim, "eligible-itt-subject")
-      choose "Mathematics"
+      choose "Languages" # ECP-only subject
       click_on "Continue"
 
       jump_to_claim_journey_page(claim, "teaching-subject-now")
