@@ -19,10 +19,6 @@ RSpec.describe Claim, type: :model do
         let(:claim_3) { create(:claim, policy: Policies::EarlyCareerPayments) }
         let(:claim_4) { create(:claim, policy: LevellingUpPremiumPayments) }
 
-        before do
-          claim_2.update!(eligibility_type: "StudentLoans::Eligibility")
-        end
-
         it do
           expect(Claim.by_policy(Policies::StudentLoans)).to contain_exactly(claim_1, claim_2)
         end
