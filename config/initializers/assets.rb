@@ -8,10 +8,10 @@ Rails.application.config.assets.version = "1.0"
 
 # Because these paths are searched in order, we want the assets to come first
 # Add the GOVUK Frontend images path
-Rails.application.config.assets.paths << Rails.root.join("node_modules", "govuk-frontend", "govuk", "assets", "images")
+Rails.application.config.assets.paths << Rails.root.join("node_modules", "govuk-frontend", "dist", "govuk", "assets", "images")
 
 # Add the GOVUK Frontend fonts path
-Rails.application.config.assets.paths << Rails.root.join("node_modules", "govuk-frontend", "govuk", "assets", "fonts")
+Rails.application.config.assets.paths << Rails.root.join("node_modules", "govuk-frontend", "dist", "govuk", "assets", "fonts")
 
 # Add Yarn node_modules folder to the asset load path.
 Rails.application.config.assets.paths << Rails.root.join("node_modules")
@@ -25,14 +25,13 @@ Rails.application.config.assets.precompile += %w[js_check.js google_analytics.js
 # Add GOVUK assets by name, these are assets not loaded via sass
 Rails.application.config.assets.precompile += [
   "favicon.ico",
-  "govuk-apple-touch-icon-152x152.png",
-  "govuk-apple-touch-icon-167x167.png",
-  "govuk-apple-touch-icon-180x180.png",
-  "govuk-apple-touch-icon.png",
+  "favicon.svg",
   "govuk-crest-2x.png",
   "govuk-crest.png",
-  "govuk-logotype-crown.png",
-  "govuk-mask-icon.svg",
+  "govuk-icon-180.png",
+  "govuk-icon-192.png",
+  "govuk-icon-512.png",
+  "govuk-icon-mask.svg",
   "govuk-opengraph-image.png"
 ]
 
