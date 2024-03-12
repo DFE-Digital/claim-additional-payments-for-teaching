@@ -141,7 +141,7 @@ RSpec.feature "Admin amends a claim" do
   end
 
   context "with a submitted claim that would now fail validation on submit context" do
-    let(:claim) { create(:claim, :submitted, policy: StudentLoans) }
+    let(:claim) { create(:claim, :submitted, policy: Policies::StudentLoans) }
 
     before do
       claim.eligibility.claim_school = create(:school, :student_loans_ineligible)

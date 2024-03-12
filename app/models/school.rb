@@ -142,11 +142,11 @@ class School < ApplicationRecord
   end
 
   def eligible_for_student_loans_as_claim_school?
-    StudentLoans::SchoolEligibility.new(self).eligible_claim_school?
+    Policies::StudentLoans::SchoolEligibility.new(self).eligible_claim_school?
   end
 
   def eligible_for_student_loans_as_current_school?
-    StudentLoans::SchoolEligibility.new(self).eligible_current_school?
+    Policies::StudentLoans::SchoolEligibility.new(self).eligible_current_school?
   end
 
   def eligible_for_early_career_payments?

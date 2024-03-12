@@ -9,13 +9,13 @@ FactoryBot.define do
       # objects, each of whose policy can be specified.
       #
       # You should pass a Hash. For example:
-      # { StudentLoans => 10, EarlyCareerPayments => 15, [EarlyCareerPayments, StudentLoans] => 5 }
+      # { Policies::StudentLoans => 10, Policies::EarlyCareerPayments => 15, [Policies::EarlyCareerPayments, Policies::StudentLoans] => 5 }
       #
       # This will create a payroll run with:
       # - 10 payments each of which has a single StudentLoans claim;
       # - 15 payments each of which has a single EarlyCareerPayments claim;
       # - 5 payments each of which has two claims: one for StudentLoans and one for EarlyCareerPayments.
-      claims_counts { {StudentLoans => 0} }
+      claims_counts { {Policies::StudentLoans => 0} }
       payment_traits { [] }
       batch_size { 2 }
       confirmed_batches { nil }

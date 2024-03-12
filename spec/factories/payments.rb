@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :payment do
     transient do
-      claim_policies { [StudentLoans] }
+      claim_policies { [Policies::StudentLoans] }
     end
 
     claims do

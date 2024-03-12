@@ -168,7 +168,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
 
   def expect_page_to_have_policy_sections(policy)
     sections = case policy
-    when StudentLoans
+    when Policies::StudentLoans
       ["Identity confirmation", "Qualifications", "Census subjects taught", "Employment", "Student loan amount", "Decision"]
     when LevellingUpPremiumPayments
       ["Identity confirmation", "Qualifications", "Census subjects taught", "Employment", "Decision"]

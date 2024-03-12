@@ -4,7 +4,7 @@ RSpec.feature "Backlinking during a claim" do
   scenario "Student Loans journey" do
     create(:journey_configuration, :student_loans)
     school = create(:school, :student_loans_eligible)
-    visit new_claim_path(StudentLoans.routing_name)
+    visit new_claim_path(Policies::StudentLoans.routing_name)
     skip_tid
     expect(page).to have_link("Back")
     choose_qts_year

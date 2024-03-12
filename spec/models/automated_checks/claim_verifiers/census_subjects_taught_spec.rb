@@ -34,7 +34,7 @@ module AutomatedChecks
               eligible_itt_subject: :computing
             )
           )
-        elsif policy == StudentLoans
+        elsif policy == Policies::StudentLoans
           claim.eligibility.update!(
             attributes_for(
               :"#{policy_underscored}_eligibility",
@@ -60,7 +60,7 @@ module AutomatedChecks
 
         [
           Policies::EarlyCareerPayments,
-          StudentLoans,
+          Policies::StudentLoans,
           LevellingUpPremiumPayments
         ].each do |policy|
           context "with policy #{policy}" do
@@ -72,7 +72,7 @@ module AutomatedChecks
                 9855512
               when LevellingUpPremiumPayments
                 1560179
-              when StudentLoans
+              when Policies::StudentLoans
                 2109438
               end
             end
@@ -109,7 +109,7 @@ module AutomatedChecks
                       eligible_itt_subject: :none_of_the_above
                     )
                   )
-                elsif policy == StudentLoans
+                elsif policy == Policies::StudentLoans
                   claim.eligibility.update!(
                     attributes_for(
                       :"#{policy_underscored}_eligibility",
@@ -187,7 +187,7 @@ module AutomatedChecks
                     expect(subject).to eq("[School Workforce Census] - Eligible:\n<pre>Subject 1: ICT\nSubject 2: ICT\n</pre>\n")
                   end
 
-                  it "returns 'Eligible' with the school workforce census subjects", if: policy == StudentLoans do
+                  it "returns 'Eligible' with the school workforce census subjects", if: policy == Policies::StudentLoans do
                     expect(subject).to eq("[School Workforce Census] - Eligible:\n<pre>Subject 1: Biology\nSubject 2: Biology\n</pre>\n")
                   end
                 end
@@ -257,7 +257,7 @@ module AutomatedChecks
                     expect(subject).to eq("[School Workforce Census] - Ineligible:\n<pre>Subject 1: Problem Solving, Reasoning and Numeracy\n</pre>\n")
                   end
 
-                  it "returns 'Ineligible' with the school workforce census subjects", if: policy == StudentLoans do
+                  it "returns 'Ineligible' with the school workforce census subjects", if: policy == Policies::StudentLoans do
                     expect(subject).to eq("[School Workforce Census] - Ineligible:\n<pre>Subject 1: Other Mathematical Subject\n</pre>\n")
                   end
                 end
@@ -406,7 +406,7 @@ module AutomatedChecks
               reference: "QKCVAQ3K",
               surname: "Bonnet-Fontaine",
               teacher_reference_number: teacher_reference_number,
-              policy: StudentLoans
+              policy: Policies::StudentLoans
             )
 
             claim.eligibility.update!(

@@ -183,7 +183,7 @@ RSpec.describe "TPS data upload" do
           create(
             :claim,
             :submitted,
-            policy: StudentLoans,
+            policy: Policies::StudentLoans,
             teacher_reference_number: 1000106,
             submitted_at: Date.new(2022, 7, 15),
             academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
@@ -198,7 +198,7 @@ RSpec.describe "TPS data upload" do
           create(
             :claim,
             :submitted,
-            policy: StudentLoans,
+            policy: Policies::StudentLoans,
             teacher_reference_number: 1000107,
             submitted_at: Date.new(2022, 7, 15),
             academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021))

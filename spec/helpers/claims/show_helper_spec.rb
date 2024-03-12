@@ -5,7 +5,7 @@ RSpec.describe Claims::ShowHelper do
 
   describe "#claim_submitted_title(claim)" do
     context "with a StudentLoans policy" do
-      let(:policy) { StudentLoans }
+      let(:policy) { Policies::StudentLoans }
 
       it "returns the correct content block" do
         expect(helper.claim_submitted_title(claim)).to include("Claim submitted")
@@ -31,7 +31,7 @@ RSpec.describe Claims::ShowHelper do
 
   describe "#shared_view_css_class_size(claim)" do
     context "with a StudentLoans policy" do
-      let(:policy) { StudentLoans }
+      let(:policy) { Policies::StudentLoans }
 
       it "returns the correct css sizing" do
         expect(helper.shared_view_css_class_size(claim)).to eq "xl"
@@ -51,7 +51,7 @@ RSpec.describe Claims::ShowHelper do
     subject(:name) { helper.policy_name(claim) }
 
     context "with a StudentLoans policy" do
-      let(:policy) { StudentLoans }
+      let(:policy) { Policies::StudentLoans }
 
       it { is_expected.to eq "student loan" }
     end

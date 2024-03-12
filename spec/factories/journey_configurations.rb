@@ -3,7 +3,7 @@ FactoryBot.define do
     current_academic_year { AcademicYear.current }
 
     trait :student_loans do
-      policy_types { [StudentLoans] }
+      policy_types { [Policies::StudentLoans] }
     end
 
     trait :additional_payments do

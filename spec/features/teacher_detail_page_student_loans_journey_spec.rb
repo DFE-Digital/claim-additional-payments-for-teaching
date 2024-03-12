@@ -19,7 +19,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     set_mock_auth(trn, {date_of_birth:, nino:})
     stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
 
-    visit landing_page_path(StudentLoans.routing_name)
+    visit landing_page_path(Policies::StudentLoans.routing_name)
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("student_loans.landing_page"))
@@ -56,7 +56,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     choose "No"
     click_on "Continue"
 
-    expect(page).to have_text("you can claim back the student loan repayments you made between #{StudentLoans.current_financial_year}.")
+    expect(page).to have_text("you can claim back the student loan repayments you made between #{Policies::StudentLoans.current_financial_year}.")
     click_on "Continue"
 
     expect(page).to have_text("How we will use the information you provide")
@@ -90,7 +90,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
   scenario "Teacher makes claim for 'Student Loans' by logging in with teacher_id and selects no to details confirm" do
     set_mock_auth(trn, {date_of_birth:, nino:})
 
-    visit landing_page_path(StudentLoans.routing_name)
+    visit landing_page_path(Policies::StudentLoans.routing_name)
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("student_loans.landing_page"))
@@ -128,7 +128,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
   end
 
   scenario "Teacher makes claim for 'Student Loans' selects not to log in with teacher_id" do
-    visit landing_page_path(StudentLoans.routing_name)
+    visit landing_page_path(Policies::StudentLoans.routing_name)
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("student_loans.landing_page"))
@@ -157,7 +157,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     set_mock_auth(trn, {date_of_birth:, nino: nil})
     stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino: ""})
 
-    visit landing_page_path(StudentLoans.routing_name)
+    visit landing_page_path(Policies::StudentLoans.routing_name)
     click_on "Start now"
     click_on "Continue with DfE Identity"
     choose "Yes"

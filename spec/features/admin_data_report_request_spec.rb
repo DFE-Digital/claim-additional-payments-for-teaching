@@ -8,7 +8,7 @@ RSpec.feature "Data report request" do
     sign_in_as_service_operator
 
     claims = [
-      create(:claim, :submitted, policy: StudentLoans),
+      create(:claim, :submitted, policy: Policies::StudentLoans),
       create(:claim, :submitted, policy: Policies::EarlyCareerPayments),
       create(:claim, :submitted, policy: LevellingUpPremiumPayments),
       create(:claim, :submitted, :held, policy: LevellingUpPremiumPayments) # includes held claims

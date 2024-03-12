@@ -77,7 +77,7 @@ RSpec.describe PayrollRun, type: :model do
 
       payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2, payment_3])
 
-      expect(payroll_run.number_of_claims_for_policy(StudentLoans)).to eq(1)
+      expect(payroll_run.number_of_claims_for_policy(Policies::StudentLoans)).to eq(1)
       expect(payroll_run.number_of_claims_for_policy(Policies::EarlyCareerPayments)).to eq(1)
       expect(payroll_run.number_of_claims_for_policy(LevellingUpPremiumPayments)).to eq(1)
     end
@@ -104,7 +104,7 @@ RSpec.describe PayrollRun, type: :model do
 
       payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2, payment_3, payment_4, payment_5])
 
-      expect(payroll_run.total_claim_amount_for_policy(StudentLoans)).to eq(3500)
+      expect(payroll_run.total_claim_amount_for_policy(Policies::StudentLoans)).to eq(3500)
       expect(payroll_run.total_claim_amount_for_policy(Policies::EarlyCareerPayments)).to eq(4000)
       expect(payroll_run.total_claim_amount_for_policy(LevellingUpPremiumPayments)).to eq(2000)
     end
@@ -136,7 +136,7 @@ RSpec.describe PayrollRun, type: :model do
       end
       let(:matching_claims) do
         [
-          create(:claim, :approved, personal_details.merge(policy: StudentLoans)),
+          create(:claim, :approved, personal_details.merge(policy: Policies::StudentLoans)),
           create(:claim, :approved, personal_details.merge(policy: Policies::EarlyCareerPayments))
         ]
       end
@@ -162,7 +162,7 @@ RSpec.describe PayrollRun, type: :model do
   describe "#payments_in_batches" do
     subject(:batches) { payroll_run.payments_in_batches }
 
-    let(:payroll_run) { create(:payroll_run, claims_counts: {StudentLoans => 5}) }
+    let(:payroll_run) { create(:payroll_run, claims_counts: {Policies::StudentLoans => 5}) }
     let(:batch_size) { 2 }
     let(:expected_batches) { payroll_run.payments.ordered.each_slice(batch_size).to_a }
 
@@ -180,7 +180,7 @@ RSpec.describe PayrollRun, type: :model do
   describe "#total_batches" do
     subject(:total) { payroll_run.total_batches }
 
-    let(:payroll_run) { create(:payroll_run, claims_counts: {StudentLoans => 5}) }
+    let(:payroll_run) { create(:payroll_run, claims_counts: {Policies::StudentLoans => 5}) }
     let(:batch_size) { 2 }
 
     before do
@@ -195,7 +195,7 @@ RSpec.describe PayrollRun, type: :model do
 
     let(:payroll_run) do
       create(:payroll_run, :with_confirmations, confirmed_batches: 2, claims_counts: {
-        StudentLoans => 5
+        Policies::StudentLoans => 5
       })
     end
     let(:batch_size) { 2 }
@@ -214,7 +214,7 @@ RSpec.describe PayrollRun, type: :model do
       create(:payroll_run,
         :with_confirmations,
         confirmed_batches: confirmed_batches,
-        claims_counts: {StudentLoans => 5})
+        claims_counts: {Policies::StudentLoans => 5})
     end
     let(:batch_size) { 2 }
 

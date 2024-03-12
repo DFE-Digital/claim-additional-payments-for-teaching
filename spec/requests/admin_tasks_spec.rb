@@ -34,7 +34,7 @@ RSpec.describe "Admin tasks", type: :request do
     end
 
     # Compatible with claims from each policy
-    [StudentLoans, Policies::EarlyCareerPayments, LevellingUpPremiumPayments].each do |policy|
+    [Policies::StudentLoans, Policies::EarlyCareerPayments, LevellingUpPremiumPayments].each do |policy|
       context "with a #{policy} claim" do
         let(:claim) { create(:claim, :submitted, policy: policy) }
 
@@ -47,7 +47,7 @@ RSpec.describe "Admin tasks", type: :request do
         end
 
         describe "tasks#create" do
-          it "creates a new passed task and redirects to the next task", if: policy == "StudentLoans" do
+          it "creates a new passed task and redirects to the next task", if: policy == Policies::StudentLoans do
             expect {
               post admin_claim_tasks_path(claim, params: {task: {name: "qualifications", passed: "true"}})
             }.to change { Task.count }.by(1)

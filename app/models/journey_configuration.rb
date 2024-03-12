@@ -15,8 +15,8 @@ class JourneyConfiguration < ApplicationRecord
   SERVICES = [
     {
       routing_name: "student-loans",
-      slug_sequence: StudentLoans::SlugSequence,
-      policies: [StudentLoans],
+      slug_sequence: Policies::StudentLoans::SlugSequence,
+      policies: [Policies::StudentLoans],
       view_path: "student_loans",
       i18n_namespace: "student_loans"
     },

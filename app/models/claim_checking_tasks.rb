@@ -12,7 +12,7 @@ class ClaimCheckingTasks
   def applicable_task_names
     @applicable_task_names ||= Task::NAMES.dup.tap do |task_names|
       task_names.delete("induction_confirmation") unless claim.policy == Policies::EarlyCareerPayments
-      task_names.delete("student_loan_amount") unless claim.policy == StudentLoans
+      task_names.delete("student_loan_amount") unless claim.policy == Policies::StudentLoans
       task_names.delete("payroll_details") unless claim.must_manually_validate_bank_details?
       task_names.delete("matching_details") unless matching_claims.exists?
       task_names.delete("payroll_gender") unless claim.payroll_gender_missing? || task_names_for_claim.include?("payroll_gender")

@@ -65,7 +65,7 @@ module StudentLoans
     delegate :academic_year, to: :claim, prefix: true
 
     def policy
-      StudentLoans
+      Policies::StudentLoans
     end
 
     def subjects_taught

@@ -61,7 +61,7 @@ module AutomatedChecks
           early_career_payments_policy_subjects
         when LevellingUpPremiumPayments
           levelling_up_premium_payments_policy_subjects
-        when StudentLoans
+        when Policies::StudentLoans
           student_loans_policy_subjects
         else
           return false

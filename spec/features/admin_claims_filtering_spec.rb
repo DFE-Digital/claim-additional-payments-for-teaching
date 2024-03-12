@@ -12,8 +12,8 @@ RSpec.feature "Admin claim filtering" do
   let!(:deleted_user) { create(:dfe_signin_user, :deleted, given_name: "Deleted", family_name: "User", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
   let!(:raj) { create(:dfe_signin_user, given_name: "raj", family_name: "sathikumar", organisation_name: "DfE Payroll", role_codes: [DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
 
-  let!(:student_loans_claims_for_mette) { create_list(:claim, 4, :submitted, policy: StudentLoans, assigned_to: mette) }
-  let!(:student_loans_claims_for_valentino) { create_list(:claim, 1, :submitted, policy: StudentLoans, assigned_to: valentino) }
+  let!(:student_loans_claims_for_mette) { create_list(:claim, 4, :submitted, policy: Policies::StudentLoans, assigned_to: mette) }
+  let!(:student_loans_claims_for_valentino) { create_list(:claim, 1, :submitted, policy: Policies::StudentLoans, assigned_to: valentino) }
   let!(:early_career_payments_claims_for_mary) { create_list(:claim, 2, :submitted, policy: Policies::EarlyCareerPayments, assigned_to: mary) }
   let!(:early_career_payments_claims_for_mette) { create_list(:claim, 6, :submitted, policy: Policies::EarlyCareerPayments, assigned_to: mette) }
   let!(:early_career_payments_claims_failed_bank_validation) { create_list(:claim, 2, :submitted, :bank_details_not_validated, policy: Policies::EarlyCareerPayments, assigned_to: mette) }
@@ -24,7 +24,7 @@ RSpec.feature "Admin claim filtering" do
   let!(:approved_claim) { create(:claim, :approved, policy: LevellingUpPremiumPayments, assigned_to: mette, decision_creator: mary) }
 
   scenario "the service operator can filter claims by policy" do
-    student_loan_claims = create_list(:claim, 2, :submitted, policy: StudentLoans) + student_loans_claims_for_mette + student_loans_claims_for_valentino
+    student_loan_claims = create_list(:claim, 2, :submitted, policy: Policies::StudentLoans) + student_loans_claims_for_mette + student_loans_claims_for_valentino
     ecp_claims = early_career_payments_claims_for_mary + early_career_payments_claims_for_mette + early_career_payments_claims_failed_bank_validation
     lup_claims = lup_claims_unassigned
 

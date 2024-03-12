@@ -34,7 +34,7 @@ class ClaimMailer < ApplicationMailer
       first_name: @claim.first_name,
       ref_number: @claim.reference,
       support_email_address: @support_email_address,
-      current_financial_year: (claim.policy == StudentLoans) ? StudentLoans.current_financial_year : "",
+      current_financial_year: (claim.policy == Policies::StudentLoans) ? Policies::StudentLoans.current_financial_year : "",
       **rejected_reasons_personalisation(@claim.latest_decision&.rejected_reasons_hash)
     }
 
@@ -97,7 +97,7 @@ class ClaimMailer < ApplicationMailer
   end
 
   def unknown_policy_check(claim)
-    return if [StudentLoans, Policies::EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
+    return if [Policies::StudentLoans, Policies::EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
     raise ArgumentError, "Unknown claim policy: #{claim.policy}"
   end
 end

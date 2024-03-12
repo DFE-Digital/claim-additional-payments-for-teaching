@@ -50,7 +50,7 @@ describe ClaimsHelper do
     end
 
     context "for a claim with a policy of StudentLoans" do
-      let(:policy) { StudentLoans }
+      let(:policy) { Policies::StudentLoans }
 
       context "logged in with tid" do
         let(:logged_in_with_tid) { true }
@@ -230,7 +230,7 @@ describe ClaimsHelper do
     let(:student_loan_trait) { :with_student_loan }
 
     context "TSLR (Student Loans) policy" do
-      let(:policy) { StudentLoans }
+      let(:policy) { Policies::StudentLoans }
       let(:eligibility) { build(:student_loans_eligibility, student_loan_repayment_amount: 1987.65) }
       let(:masters_doctoral_trait) { :with_postgraduate_masters_loan_without_postgraduate_doctoral_loan_when_has_student_loan }
 
@@ -248,7 +248,7 @@ describe ClaimsHelper do
           ],
           [t("questions.postgraduate_masters_loan"), "Yes", "masters-loan"],
           [t("questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"],
-          [t("student_loans.questions.student_loan_amount", financial_year: StudentLoans.current_financial_year), "£1,987.65", "student-loan-amount"]
+          [t("student_loans.questions.student_loan_amount", financial_year: Policies::StudentLoans.current_financial_year), "£1,987.65", "student-loan-amount"]
         ]
 
         expect(helper.student_loan_answers(claim)).to eq expected_answers
@@ -269,7 +269,7 @@ describe ClaimsHelper do
             ],
             [t("questions.postgraduate_masters_loan"), "Yes", "masters-loan"],
             [t("questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"],
-            [t("student_loans.questions.student_loan_amount", financial_year: StudentLoans.current_financial_year), "£1,987.65", "student-loan-amount"]
+            [t("student_loans.questions.student_loan_amount", financial_year: Policies::StudentLoans.current_financial_year), "£1,987.65", "student-loan-amount"]
           ]
 
           expect(helper.student_loan_answers(claim)).to eq expected_answers
@@ -284,7 +284,7 @@ describe ClaimsHelper do
           expected_answers = [
             [t("questions.has_student_loan"), "Yes", "student-loan"],
             [t("questions.student_loan_country"), "Scotland", "student-loan-country"],
-            [t("student_loans.questions.student_loan_amount", financial_year: StudentLoans.current_financial_year), "£1,987.65", "student-loan-amount"]
+            [t("student_loans.questions.student_loan_amount", financial_year: Policies::StudentLoans.current_financial_year), "£1,987.65", "student-loan-amount"]
           ]
 
           expect(helper.student_loan_answers(claim)).to eq expected_answers

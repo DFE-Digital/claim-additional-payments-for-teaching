@@ -28,7 +28,7 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
   end
 
   def navigate_to_teacher_reference_number_page(school:)
-    visit landing_page_path(StudentLoans.routing_name)
+    visit landing_page_path(Policies::StudentLoans.routing_name)
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("student_loans.landing_page"))
@@ -50,7 +50,7 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
     click_on "Continue"
 
     # - Which school do you teach at
-    expect(page).to have_text(I18n.t("student_loans.questions.claim_school", financial_year: StudentLoans.current_financial_year))
+    expect(page).to have_text(I18n.t("student_loans.questions.claim_school", financial_year: Policies::StudentLoans.current_financial_year))
     choose_school school
 
     # - Which subject do you teach
@@ -72,7 +72,7 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
     click_on "Continue"
 
     # - student-loan-amount page
-    expect(page).to have_text("you can claim back the student loan repayments you made between #{StudentLoans.current_financial_year}.")
+    expect(page).to have_text("you can claim back the student loan repayments you made between #{Policies::StudentLoans.current_financial_year}.")
     click_on "Continue"
 
     # - How we will use the information you provide
@@ -83,7 +83,7 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
 
     # - What is your home address
     expect(page).to have_text(I18n.t("questions.address.home.title"))
-    expect(page).to have_link(href: claim_path(StudentLoans.routing_name, "address"))
+    expect(page).to have_link(href: claim_path(Policies::StudentLoans.routing_name, "address"))
 
     fill_in "Postcode", with: "SO16 9FX"
     click_on "Search"
