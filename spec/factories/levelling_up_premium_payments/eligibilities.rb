@@ -20,7 +20,7 @@ FactoryBot.define do
     end
 
     trait :itt_year_good_for_life_of_lup_policy do
-      itt_academic_year { Journeys::Configuration.for(LevellingUpPremiumPayments).current_academic_year - 1 }
+      itt_academic_year { Journeys.for_policy(LevellingUpPremiumPayments).configuration.current_academic_year - 1 }
     end
 
     trait :lup_itt_subject do

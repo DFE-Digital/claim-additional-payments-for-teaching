@@ -18,7 +18,7 @@ module LevellingUpPremiumPayments
     private
 
     def current_academic_year
-      Journeys::Configuration.for(LevellingUpPremiumPayments).current_academic_year
+      Journeys.for_policy(LevellingUpPremiumPayments).configuration.current_academic_year
     end
   end
 end

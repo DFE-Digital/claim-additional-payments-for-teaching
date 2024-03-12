@@ -13,7 +13,7 @@ RSpec.describe LevellingUpPremiumPayments, type: :model do
   end
 
   specify {
-    expect(subject).to have_attributes(routing_name: "additional-payments",
+    expect(subject).to have_attributes(
       short_name: "Levelling Up Premium Payments",
       locale_key: "levelling_up_premium_payments",
       notify_reply_to_id: "03ece7eb-2a5b-461b-9c91-6630d0051aa6",

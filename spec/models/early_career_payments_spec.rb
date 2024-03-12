@@ -14,7 +14,7 @@ RSpec.describe Policies::EarlyCareerPayments, type: :model do
   end
 
   specify {
-    expect(subject).to have_attributes(routing_name: "additional-payments",
+    expect(subject).to have_attributes(
       short_name: "Early-Career Payments",
       locale_key: "early_career_payments",
       eligibility_page_url: "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools",

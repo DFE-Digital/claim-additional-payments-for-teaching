@@ -86,10 +86,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_12_150455) do
     t.boolean "hmrc_bank_validation_succeeded", default: false
     t.json "hmrc_bank_validation_responses", default: []
     t.boolean "logged_in_with_tid"
-    t.boolean "qa_required", default: false
-    t.datetime "qa_completed_at"
     t.boolean "details_check"
     t.jsonb "teacher_id_user_info", default: {}
+    t.boolean "qa_required", default: false
+    t.datetime "qa_completed_at"
     t.boolean "email_address_check"
     t.string "mobile_check"
     t.jsonb "dqt_teacher_status"

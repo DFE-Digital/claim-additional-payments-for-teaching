@@ -134,7 +134,7 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
           click_on "Continue"
 
-          expect(page).to have_link("Resend passcode (you will be sent back to the email address page)", href: new_reminder_path(journey: claim.policy.routing_name))
+          expect(page).to have_link("Resend passcode (you will be sent back to the email address page)", href: new_reminder_path(journey: Journeys.for_policy(claim.policy)::ROUTING_NAME))
 
           click_link "Resend passcode"
           expect(page).to have_text("Personal details")

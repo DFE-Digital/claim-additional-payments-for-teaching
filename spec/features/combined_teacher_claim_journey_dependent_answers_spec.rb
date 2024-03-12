@@ -5,7 +5,7 @@ RSpec.feature "Combined claim journey dependent answers" do
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
 
   scenario "Dependent answers reset" do
-    visit new_claim_path(Policies::EarlyCareerPayments.routing_name)
+    visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
 
     # - Sign in or continue page
     expect(page).to have_text("Use DfE Identity to sign in")
@@ -59,7 +59,7 @@ RSpec.feature "Combined claim journey dependent answers" do
     click_on "Continue"
 
     # User goes back in the journey and changes their answer to a question which resets other dependent answers
-    visit claim_path(Policies::EarlyCareerPayments.routing_name, "qualification")
+    visit claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "qualification")
     expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
     choose "Undergraduate initial teacher training (ITT)"
     click_on "Continue"
@@ -72,7 +72,7 @@ RSpec.feature "Combined claim journey dependent answers" do
     expect(page).to have_text("Which subject")
 
     # User tries to skip ahead and not answer the question
-    visit claim_path(Policies::EarlyCareerPayments.routing_name, "teaching-subject-now")
+    visit claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "teaching-subject-now")
 
     # User should be redirected to the dependent question still unanswered
     expect(page).to have_text("Which subject")

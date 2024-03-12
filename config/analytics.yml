@@ -1,13 +1,12 @@
 ---
 shared:
   :journey_configurations:
-    - id
+    - routing_name
     - open_for_submissions
     - availability_message
     - created_at
     - updated_at
     - current_academic_year
-    - policy_types
     - teacher_id_enabled
   :reminders:
     - id

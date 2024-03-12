@@ -6,7 +6,7 @@ RSpec.feature "Ineligibility reason", slow: true do
   let!(:ecp_only_school) { create(:school, :early_career_payments_eligible) }
 
   before do
-    visit new_claim_path(LevellingUpPremiumPayments.routing_name)
+    visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
     skip_tid
   end
 

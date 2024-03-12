@@ -26,7 +26,7 @@ class BasePublicController < ApplicationController
   end
 
   def add_view_paths
-    path = Journeys::Configuration.view_path(current_journey_routing_name)
-    prepend_view_path(Rails.root.join("app", "views", path)) if path
+    journey = Journeys.for_routing_name(current_journey_routing_name)
+    prepend_view_path(Rails.root.join("app", "views", journey::VIEW_PATH)) if journey
   end
 end
