@@ -24,7 +24,7 @@ module Claims
 
       if current_claim.eligibility.nqt_in_academic_year_after_itt
         ecp_eligibility_status = current_claim.for_policy(Policies::EarlyCareerPayments).eligibility.status
-        lup_eligibility_status = current_claim.for_policy(LevellingUpPremiumPayments).eligibility.status
+        lup_eligibility_status = current_claim.for_policy(Policies::LevellingUpPremiumPayments).eligibility.status
 
         potentially_eligible_for_lup = lup_eligibility_status != :ineligible
         potentially_eligible_for_ecp = ecp_eligibility_status != :ineligible
