@@ -3,11 +3,11 @@ module Admin
     helper_method :journey_configuration
 
     def index
-      send_data LevellingUpPremiumPayments::Award.csv_for_academic_year(academic_year), type: "text/csv", filename: "awards_#{academic_year}.csv"
+      send_data Policies::LevellingUpPremiumPayments::Award.csv_for_academic_year(academic_year), type: "text/csv", filename: "awards_#{academic_year}.csv"
     end
 
     def create
-      @csv_upload = LevellingUpPremiumPayments::AwardCsvImporter.new(**upload_params.to_h.symbolize_keys)
+      @csv_upload = Policies::LevellingUpPremiumPayments::AwardCsvImporter.new(**upload_params.to_h.symbolize_keys)
 
       if @csv_upload.process
         flash[:notice] = "Award amounts for #{@csv_upload.academic_year} successfully updated."
@@ -20,15 +20,15 @@ module Admin
     private
 
     def upload_params
-      params.require(:levelling_up_premium_payments_award_csv_importer).permit(:academic_year, :csv_data)
+      params.require(:policies_levelling_up_premium_payments_award_csv_importer).permit(:academic_year, :csv_data)
     end
 
     def academic_year
-      AcademicYear.new(params.require(:levelling_up_premium_payments_award).require(:academic_year))
+      AcademicYear.new(params.require(:policies_levelling_up_premium_payments_award).require(:academic_year))
     end
 
     def journey_configuration
-      @journey_configuration ||= Journeys.for_policy(LevellingUpPremiumPayments).configuration
+      @journey_configuration ||= Journeys.for_policy(Policies::LevellingUpPremiumPayments).configuration
     end
   end
 end
