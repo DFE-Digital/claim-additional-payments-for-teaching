@@ -17,8 +17,9 @@ class OmniauthCallbacksController < ApplicationController
 
   private
 
+  # If for some reason the session is empty, redirect the user to the first available user journey
   def policy
-    @policy ||= current_claim.policy
+    @policy ||= claim_from_session&.policy || Policies.all.first
   end
 
   def current_journey_routing_name
