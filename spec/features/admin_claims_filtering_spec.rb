@@ -17,11 +17,11 @@ RSpec.feature "Admin claim filtering" do
   let!(:early_career_payments_claims_for_mary) { create_list(:claim, 2, :submitted, policy: Policies::EarlyCareerPayments, assigned_to: mary) }
   let!(:early_career_payments_claims_for_mette) { create_list(:claim, 6, :submitted, policy: Policies::EarlyCareerPayments, assigned_to: mette) }
   let!(:early_career_payments_claims_failed_bank_validation) { create_list(:claim, 2, :submitted, :bank_details_not_validated, policy: Policies::EarlyCareerPayments, assigned_to: mette) }
-  let!(:lup_claims_unassigned) { create_list(:claim, 2, :submitted, policy: LevellingUpPremiumPayments) }
+  let!(:lup_claims_unassigned) { create_list(:claim, 2, :submitted, policy: Policies::LevellingUpPremiumPayments) }
   let!(:held_claims) { create_list(:claim, 2, :submitted, :held) }
-  let!(:approved_awaiting_qa_claims) { create_list(:claim, 2, :approved, :flagged_for_qa, policy: LevellingUpPremiumPayments) }
-  let!(:auto_approved_awaiting_payroll_claims) { create_list(:claim, 2, :auto_approved, policy: LevellingUpPremiumPayments) }
-  let!(:approved_claim) { create(:claim, :approved, policy: LevellingUpPremiumPayments, assigned_to: mette, decision_creator: mary) }
+  let!(:approved_awaiting_qa_claims) { create_list(:claim, 2, :approved, :flagged_for_qa, policy: Policies::LevellingUpPremiumPayments) }
+  let!(:auto_approved_awaiting_payroll_claims) { create_list(:claim, 2, :auto_approved, policy: Policies::LevellingUpPremiumPayments) }
+  let!(:approved_claim) { create(:claim, :approved, policy: Policies::LevellingUpPremiumPayments, assigned_to: mette, decision_creator: mary) }
 
   scenario "the service operator can filter claims by policy" do
     student_loan_claims = create_list(:claim, 2, :submitted, policy: Policies::StudentLoans) + student_loans_claims_for_mette + student_loans_claims_for_valentino

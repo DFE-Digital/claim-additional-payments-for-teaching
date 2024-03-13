@@ -27,7 +27,7 @@ RSpec.feature "Claims awaiting a decision" do
     submitted_claims << create_list(:claim, 12, :submitted, policy: Policies::EarlyCareerPayments)
 
     # index: 35-38
-    submitted_claims << create_list(:claim, 4, :submitted, policy: LevellingUpPremiumPayments)
+    submitted_claims << create_list(:claim, 4, :submitted, policy: Policies::LevellingUpPremiumPayments)
 
     @submitted_claims = submitted_claims.flatten
   end

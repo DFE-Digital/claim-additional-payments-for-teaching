@@ -5,7 +5,7 @@ RSpec.feature "Eligible later Teacher Early-Career Payments" do
 
   describe "claim" do
     let(:claim) { start_early_career_payments_claim }
-    let(:lup_claim) { Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last }
+    let(:lup_claim) { Claim.by_policy(Policies::LevellingUpPremiumPayments).order(:created_at).last }
     let(:current_school) { create(:school, :early_career_payments_eligible) }
     let(:itt_subject) { "mathematics" }
 

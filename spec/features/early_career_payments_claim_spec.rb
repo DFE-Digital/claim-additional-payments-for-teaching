@@ -410,7 +410,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     end
 
     let!(:lup_claim) do
-      lup_claim = Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last
+      lup_claim = Claim.by_policy(Policies::LevellingUpPremiumPayments).order(:created_at).last
       lup_claim.eligibility.update!(attributes_for(:levelling_up_premium_payments_eligibility, :eligible))
       lup_claim.eligibility.update!(current_school: school)
       lup_claim
@@ -956,7 +956,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     end
 
     let!(:lup_claim) do
-      lup_claim = Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last
+      lup_claim = Claim.by_policy(Policies::LevellingUpPremiumPayments).order(:created_at).last
       lup_claim.eligibility.update!(attributes_for(:levelling_up_premium_payments_eligibility, :eligible))
       lup_claim.eligibility.update!(current_school: school)
       lup_claim

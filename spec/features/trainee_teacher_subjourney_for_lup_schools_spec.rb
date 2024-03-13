@@ -6,7 +6,7 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
 
   scenario "non-LUP school" do
     non_lup_school = create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible)
-    expect(LevellingUpPremiumPayments::SchoolEligibility.new(non_lup_school)).not_to be_eligible
+    expect(Policies::LevellingUpPremiumPayments::SchoolEligibility.new(non_lup_school)).not_to be_eligible
 
     visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
 
@@ -109,7 +109,7 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
 
   def get_to_itt_subject_question
     lup_school = create(:school, :combined_journey_eligibile_for_all)
-    expect(LevellingUpPremiumPayments::SchoolEligibility.new(lup_school)).to be_eligible
+    expect(Policies::LevellingUpPremiumPayments::SchoolEligibility.new(lup_school)).to be_eligible
 
     visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
 

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Ineligible Levelling up premium payments claims" do
-  let(:eligibility) { LevellingUpPremiumPayments::Eligibility.order(:created_at).last }
+  let(:eligibility) { Policies::LevellingUpPremiumPayments::Eligibility.order(:created_at).last }
 
   before { create(:journey_configuration, :additional_payments) }
 
