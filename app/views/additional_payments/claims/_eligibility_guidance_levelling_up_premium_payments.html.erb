@@ -5,5 +5,5 @@
 <%= button_to "Apply now", claim_path(current_journey_routing_name), method: :patch, class: "govuk-button", role: :button, data: { module: "govuk-button"}, params: { claim: { policy: claim.policy } } %>
 
 <p class="govuk-body">
-  For more information about why you are eligible, read about the <%= link_to "levelling up premium payment (opens in new tab)", LevellingUpPremiumPayments.eligibility_page_url, class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>.
+  For more information about why you are eligible, read about the <%= link_to "levelling up premium payment (opens in new tab)", Policies::LevellingUpPremiumPayments.eligibility_page_url, class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>.
 </p>

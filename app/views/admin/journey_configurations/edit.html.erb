@@ -109,7 +109,7 @@
       </h2>
 
       <% if lupp_awards_academic_years.any? %>
-        <%= form_with model: [:admin, LevellingUpPremiumPayments::Award], method: :get do |form| %>
+        <%= form_with model: [:admin, Policies::LevellingUpPremiumPayments::Award], method: :get, url: admin_levelling_up_premium_payments_awards_path do |form| %>
         <div class="govuk-form-group">
           <label class="govuk-label" for="download_academic_year">
             Academic year
