@@ -136,7 +136,7 @@ class JourneySubjectEligibilityChecker
       else
         []
       end
-    when LevellingUpPremiumPayments
+    when Policies::LevellingUpPremiumPayments
       case claim_year
       when EligibilityCheckable::COMBINED_ECP_AND_LUP_POLICY_YEARS
         year = itt_year.is_a?(AcademicYear) ? itt_year : AcademicYear.new(itt_year)
