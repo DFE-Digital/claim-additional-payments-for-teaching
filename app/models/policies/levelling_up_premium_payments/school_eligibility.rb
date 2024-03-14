@@ -19,7 +19,7 @@ module Policies
       private
 
       def current_academic_year
-        Journeys.for_policy(LevellingUpPremiumPayments).current_academic_year
+        Journeys.for_policy(LevellingUpPremiumPayments).configuration.current_academic_year
       end
     end
   end

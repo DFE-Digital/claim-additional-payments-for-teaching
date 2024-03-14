@@ -1,4 +1,4 @@
-<% claim = current_claim.for_policy(LevellingUpPremiumPayments) %>
+<% claim = current_claim.for_policy(Policies::LevellingUpPremiumPayments) %>
 
 <% content_for(:page_title, page_title(t("additional_payments.questions.eligible_degree_subject"), journey: current_journey_routing_name, show_error: claim.errors.any?)) %>
 

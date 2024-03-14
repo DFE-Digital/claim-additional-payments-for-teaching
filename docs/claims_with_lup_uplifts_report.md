@@ -24,12 +24,12 @@ school_urns = %w(
 ).uniq
 
 school_ids = School.where(urn: school_urns).pluck(:id)
-elig_ids = LevellingUpPremiumPayments::Eligibility.where(current_school_id: school_ids).pluck(:id)
+elig_ids = Policies:LevellingUpPremiumPayments::Eligibility.where(current_school_id: school_ids).pluck(:id)
 
 csv_output = CSV.generate(headers: true) do |csv|
   csv << ["claim_reference", "full_name", "trn", "school_urn", "school_name", "submitted_date", "claim_status", "award_amount", "new_award_amount"]
 
-  current_academic_year = Journeys.for_policy(LevellingUpPremiumPayments).configuration.current_academic_year
+  current_academic_year = Journeys.for_policy(Policies::LevellingUpPremiumPayments).configuration.current_academic_year
 
   elig_ids.each do |elig_id|
     elig = LevellingUpPremiumPayments::Eligibility.find(elig_id)

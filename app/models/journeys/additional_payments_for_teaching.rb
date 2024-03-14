@@ -8,6 +8,6 @@ module Journeys
     ROUTING_NAME = "additional-payments"
     VIEW_PATH = "additional_payments"
     I18N_NAMESPACE = "additional_payments"
-    POLICIES = [Policies::EarlyCareerPayments, LevellingUpPremiumPayments]
+    POLICIES = [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments]
   end
 end
