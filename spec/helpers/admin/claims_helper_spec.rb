@@ -611,7 +611,7 @@ describe Admin::ClaimsHelper do
     end
 
     context "Eligible for LUP only" do
-      let(:claim) { create(:claim, :submitted, :policy_options_provided_lup_only, policy: LevellingUpPremiumPayments) }
+      let(:claim) { create(:claim, :submitted, :policy_options_provided_lup_only, policy: Policies::LevellingUpPremiumPayments) }
 
       it "returns LUP only" do
         answers = [["Levelling up premium payment", "£2,000"]]
