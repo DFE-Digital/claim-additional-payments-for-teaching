@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe LevellingUpPremiumPayments::SchoolEligibility do
+RSpec.describe Policies::LevellingUpPremiumPayments::SchoolEligibility do
   let(:eligible_school) { build(:school, :levelling_up_premium_payments_eligible) }
   let(:ineligible_school) { build(:school, :levelling_up_premium_payments_ineligible) }
 

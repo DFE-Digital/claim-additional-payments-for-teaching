@@ -4,7 +4,7 @@ RSpec.describe CurrentClaim, type: :model do
   subject(:current_claim) { described_class.new(claims: claims, selected_policy: selected_policy) }
 
   let(:ecp_policy) { Policies::EarlyCareerPayments }
-  let(:lup_policy) { LevellingUpPremiumPayments }
+  let(:lup_policy) { Policies::LevellingUpPremiumPayments }
   let(:student_loans_policy) { Policies::StudentLoans }
 
   let(:school) { create(:school) }
@@ -250,7 +250,7 @@ RSpec.describe CurrentClaim, type: :model do
     let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
 
     let(:ecp_claim) { build(:claim, policy: Policies::EarlyCareerPayments, eligibility: ecp_eligibility) }
-    let(:lup_claim) { build(:claim, policy: LevellingUpPremiumPayments, eligibility: lup_eligibility) }
+    let(:lup_claim) { build(:claim, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility) }
 
     context "when both claims are eligible" do
       it { is_expected.to be true }
@@ -285,7 +285,7 @@ RSpec.describe CurrentClaim, type: :model do
     let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
 
     let(:ecp_claim) { build(:claim, policy: Policies::EarlyCareerPayments, academic_year: "2022/2023", eligibility: ecp_eligibility) }
-    let(:lup_claim) { build(:claim, policy: LevellingUpPremiumPayments, academic_year: "2022/2023", eligibility: lup_eligibility) }
+    let(:lup_claim) { build(:claim, policy: Policies::LevellingUpPremiumPayments, academic_year: "2022/2023", eligibility: lup_eligibility) }
 
     context "when current claim has both ECP and LUP claims" do
       expected = [
@@ -363,7 +363,7 @@ RSpec.describe CurrentClaim, type: :model do
     let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
 
     let(:ecp_claim) { create(:claim, policy: Policies::EarlyCareerPayments, eligibility: ecp_eligibility) }
-    let(:lup_claim) { create(:claim, policy: LevellingUpPremiumPayments, eligibility: lup_eligibility) }
+    let(:lup_claim) { create(:claim, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility) }
 
     context "when one claim is eligible and one is ineligible" do
       it "returns only the eligible claim" do
@@ -392,7 +392,7 @@ RSpec.describe CurrentClaim, type: :model do
     let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
 
     let(:ecp_claim) { create(:claim, policy: Policies::EarlyCareerPayments, eligibility: ecp_eligibility) }
-    let(:lup_claim) { create(:claim, policy: LevellingUpPremiumPayments, eligibility: lup_eligibility) }
+    let(:lup_claim) { create(:claim, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility) }
     let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible, award_amount: ecp_amount) }
     let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, award_amount: lup_amount) }
 
@@ -465,7 +465,7 @@ RSpec.describe CurrentClaim, type: :model do
 
     context "when only ECP is eligible" do
       let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
-      let!(:lup_claim) { create(:claim, :submittable, policy: LevellingUpPremiumPayments, eligibility: lup_eligibility) }
+      let!(:lup_claim) { create(:claim, :submittable, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility) }
       let(:policy) { ecp_claim.policy }
 
       before { submit! }

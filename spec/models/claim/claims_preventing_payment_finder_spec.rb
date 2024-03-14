@@ -43,7 +43,7 @@ RSpec.describe Claim::ClaimsPreventingPaymentFinder do
 
       it "includes the other claim where a topup is payrollable" do
         lup_eligibility = create(:levelling_up_premium_payments_eligibility, :eligible, award_amount: 1500.0)
-        other_claim = create(:claim, :approved, inconsistent_personal_details.merge(policy: LevellingUpPremiumPayments, eligibility: lup_eligibility))
+        other_claim = create(:claim, :approved, inconsistent_personal_details.merge(policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility))
         create(:payment, claims: [other_claim])
         other_claim.topups.create(award_amount: "500.00", created_by: user)
 

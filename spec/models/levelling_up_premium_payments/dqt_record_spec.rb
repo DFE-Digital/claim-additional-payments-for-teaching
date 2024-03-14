@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe LevellingUpPremiumPayments::DqtRecord do
+RSpec.describe Policies::LevellingUpPremiumPayments::DqtRecord do
   before { create(:journey_configuration, :additional_payments, current_academic_year: claim_year) }
 
   subject(:dqt_record) do
@@ -13,7 +13,7 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
   let(:claim) do
     build(
       :claim,
-      policy: LevellingUpPremiumPayments,
+      policy: Policies::LevellingUpPremiumPayments,
       academic_year: AcademicYear.new(2022),
       eligibility: eligibility
     )

@@ -6,7 +6,7 @@ RSpec.describe Claim, type: :model do
       context "with Policies::EarlyCareerPayments" do
         let(:claim_1) { create(:claim, policy: Policies::StudentLoans) }
         let(:claim_2) { create(:claim, policy: Policies::EarlyCareerPayments) }
-        let(:claim_3) { create(:claim, policy: LevellingUpPremiumPayments) }
+        let(:claim_3) { create(:claim, policy: Policies::LevellingUpPremiumPayments) }
 
         it do
           expect(Claim.by_policy(Policies::EarlyCareerPayments)).to contain_exactly(claim_2)
@@ -17,7 +17,7 @@ RSpec.describe Claim, type: :model do
         let(:claim_1) { create(:claim, policy: Policies::StudentLoans) }
         let(:claim_2) { create(:claim, policy: Policies::StudentLoans) }
         let(:claim_3) { create(:claim, policy: Policies::EarlyCareerPayments) }
-        let(:claim_4) { create(:claim, policy: LevellingUpPremiumPayments) }
+        let(:claim_4) { create(:claim, policy: Policies::LevellingUpPremiumPayments) }
 
         it do
           expect(Claim.by_policy(Policies::StudentLoans)).to contain_exactly(claim_1, claim_2)
@@ -27,10 +27,10 @@ RSpec.describe Claim, type: :model do
       context "with LevellingUpPremiumPayments" do
         let(:claim_1) { create(:claim, policy: Policies::StudentLoans) }
         let(:claim_2) { create(:claim, policy: Policies::EarlyCareerPayments) }
-        let(:claim_3) { create(:claim, policy: LevellingUpPremiumPayments) }
+        let(:claim_3) { create(:claim, policy: Policies::LevellingUpPremiumPayments) }
 
         it do
-          expect(Claim.by_policy(LevellingUpPremiumPayments)).to contain_exactly(claim_3)
+          expect(Claim.by_policy(Policies::LevellingUpPremiumPayments)).to contain_exactly(claim_3)
         end
       end
     end
@@ -692,7 +692,7 @@ RSpec.describe Claim, type: :model do
     end
 
     context "when the claim is submittable" do
-      let(:claim) { build(:claim, :submittable, policy: LevellingUpPremiumPayments, eligibility: eligibility) }
+      let(:claim) { build(:claim, :submittable, policy: Policies::LevellingUpPremiumPayments, eligibility: eligibility) }
       let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
 
       before do
@@ -1610,7 +1610,7 @@ RSpec.describe Claim, type: :model do
     end
 
     context "with levelling-up premium payments policy" do
-      let(:policy) { LevellingUpPremiumPayments }
+      let(:policy) { Policies::LevellingUpPremiumPayments }
 
       it { is_expected.to be true }
     end
@@ -1633,7 +1633,7 @@ RSpec.describe Claim, type: :model do
     end
 
     context "with levelling-up premium payments policy" do
-      let(:policy) { LevellingUpPremiumPayments }
+      let(:policy) { Policies::LevellingUpPremiumPayments }
 
       it { is_expected.to be true }
     end

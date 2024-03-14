@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe LevellingUpPremiumPayments::Eligibility, type: :model do
+RSpec.describe Policies::LevellingUpPremiumPayments::Eligibility, type: :model do
   subject { build(:levelling_up_premium_payments_eligibility) }
 
   describe "associations" do
@@ -9,7 +9,7 @@ RSpec.describe LevellingUpPremiumPayments::Eligibility, type: :model do
   end
 
   describe "#policy" do
-    specify { expect(subject.policy).to eq(LevellingUpPremiumPayments) }
+    specify { expect(subject.policy).to eq(Policies::LevellingUpPremiumPayments) }
   end
 
   describe "#ineligible?" do
@@ -141,7 +141,7 @@ RSpec.describe LevellingUpPremiumPayments::Eligibility, type: :model do
 
   describe "#set_qualifications_from_dqt_record" do
     let(:eligibility) { build(:levelling_up_premium_payments_eligibility, claim:, itt_academic_year:, eligible_itt_subject:, qualification:, eligible_degree_subject:) }
-    let(:claim) { build(:claim, policy: LevellingUpPremiumPayments, qualifications_details_check:) }
+    let(:claim) { build(:claim, policy: Policies::LevellingUpPremiumPayments, qualifications_details_check:) }
     let(:itt_academic_year) { AcademicYear.new(2021) }
     let(:eligible_itt_subject) { :mathematics }
     let(:qualification) { :postgraduate_itt }
