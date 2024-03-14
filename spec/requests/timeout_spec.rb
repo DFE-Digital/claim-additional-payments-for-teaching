@@ -16,7 +16,7 @@ RSpec.describe "Claim session timing out", type: :request do
       expect(session[:claim_id]).to eql current_claim.claim_ids
 
       travel after_expiry do
-        put claim_path(Policies::StudentLoans.routing_name, "qts-year"), params: {claim: {qts_award_year: "on_or_after_cut_off_date"}}
+        put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "qts-year"), params: {claim: {qts_award_year: "on_or_after_cut_off_date"}}
 
         expect(response).to redirect_to(timeout_claim_path)
         expect(session[:claim_id]).to be_nil
@@ -34,9 +34,9 @@ RSpec.describe "Claim session timing out", type: :request do
 
     it "does not timeout the session" do
       travel before_expiry do
-        put claim_path(Policies::StudentLoans.routing_name, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "on_or_after_cut_off_date"}}}
+        put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "on_or_after_cut_off_date"}}}
 
-        expect(response).to redirect_to(claim_path(Policies::StudentLoans.routing_name, "claim-school"))
+        expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"))
       end
     end
   end

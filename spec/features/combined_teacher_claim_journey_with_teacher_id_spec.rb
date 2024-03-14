@@ -132,7 +132,7 @@ RSpec.feature "Combined journey with Teacher ID" do
 
     # - What is your home address
     expect(page).to have_text(I18n.t("questions.address.home.title"))
-    expect(page).to have_link(href: claim_path(Policies::EarlyCareerPayments.routing_name, "address"))
+    expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
 
     click_link(I18n.t("questions.address.home.link_to_manual_address"))
 
@@ -322,7 +322,7 @@ RSpec.feature "Combined journey with Teacher ID" do
 
   def navigate_until_performance_related_questions(expect_induction_question: false)
     # - Landing (start)
-    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
+    visit landing_page_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
     click_on "Start now"
 
     # - Sign in or continue page

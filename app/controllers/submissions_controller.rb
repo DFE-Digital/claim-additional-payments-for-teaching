@@ -19,6 +19,6 @@ class SubmissionsController < BasePublicController
   end
 
   def show
-    redirect_to JourneyConfiguration.start_page_url(current_journey_routing_name), allow_other_host: true unless submitted_claim
+    redirect_to Journeys.for_routing_name(current_journey_routing_name).start_page_url, allow_other_host: true unless submitted_claim
   end
 end

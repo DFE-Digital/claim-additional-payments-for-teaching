@@ -8,7 +8,7 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     non_lup_school = create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible)
     expect(LevellingUpPremiumPayments::SchoolEligibility.new(non_lup_school)).not_to be_eligible
 
-    visit new_claim_path(LevellingUpPremiumPayments.routing_name)
+    visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
 
     # - Sign in or continue page
     expect(page).to have_text("Use DfE Identity to sign in")
@@ -111,7 +111,7 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     lup_school = create(:school, :combined_journey_eligibile_for_all)
     expect(LevellingUpPremiumPayments::SchoolEligibility.new(lup_school)).to be_eligible
 
-    visit new_claim_path(Policies::EarlyCareerPayments.routing_name)
+    visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
 
     # - Sign in or continue page
     expect(page).to have_text("Use DfE Identity to sign in")

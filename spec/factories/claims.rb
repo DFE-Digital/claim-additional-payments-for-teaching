@@ -14,7 +14,13 @@ FactoryBot.define do
     end
 
     after(:build) do |claim, evaluator|
-      create(:journey_configuration, evaluator.policy.to_s.underscore) unless JourneyConfiguration.for(evaluator.policy).present?
+      journey = Journeys.for_policy(evaluator.policy)
+
+      begin
+        Journeys.for_policy(evaluator.policy)&.configuration.present?
+      rescue ActiveRecord::RecordNotFound
+        create(:journey_configuration, journey::I18N_NAMESPACE)
+      end
 
       claim.eligibility = build(evaluator.eligibility_factory, evaluator.eligibility_trait, **evaluator.eligibility_attributes || {}) unless claim.eligibility
 
@@ -22,7 +28,7 @@ FactoryBot.define do
 
       claim_academic_year =
         if [Policies::EarlyCareerPayments, LevellingUpPremiumPayments].include?(evaluator.policy)
-          JourneyConfiguration.for(evaluator.policy).current_academic_year
+          Journeys::AdditionalPaymentsForTeaching.configuration.current_academic_year
         else
           AcademicYear::Type.new.serialize(AcademicYear.new(2019))
         end

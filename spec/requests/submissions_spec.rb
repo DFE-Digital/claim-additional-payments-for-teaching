@@ -24,8 +24,8 @@ RSpec.describe "Submissions", type: :request do
       end
 
       it "submits the claim, sends a confirmation email and redirects to the confirmation page and clears the session data" do
-        perform_enqueued_jobs { post claim_submission_path(Policies::StudentLoans.routing_name) }
-        expect(response).to redirect_to(claim_confirmation_path(Policies::StudentLoans.routing_name))
+        perform_enqueued_jobs { post claim_submission_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME) }
+        expect(response).to redirect_to(claim_confirmation_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME))
 
         expect(in_progress_claim.reload.submitted_at).to be_present
 
@@ -51,7 +51,7 @@ RSpec.describe "Submissions", type: :request do
       # This spec at least tests the right thing even if it's still in the
       # wrong place.
       it "enqueues ClaimVerifierJob" do
-        expect { post claim_submission_path(Policies::StudentLoans.routing_name) }.to(
+        expect { post claim_submission_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME) }.to(
           have_enqueued_job(ClaimVerifierJob)
         )
       end
@@ -63,7 +63,7 @@ RSpec.describe "Submissions", type: :request do
         # Make the claim _almost_ submittable
         in_progress_claim.update!(attributes_for(:claim, :submittable, email_address: nil))
 
-        perform_enqueued_jobs { post claim_submission_path(Policies::StudentLoans.routing_name) }
+        perform_enqueued_jobs { post claim_submission_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME) }
       end
 
       it "doesn't submit the claim and renders the check-your-answers page with the reasons why" do
@@ -75,8 +75,8 @@ RSpec.describe "Submissions", type: :request do
     end
 
     it "redirects to the start page if there is no claim actually in progress" do
-      post claim_submission_path(Policies::StudentLoans.routing_name)
-      expect(response).to redirect_to(JourneyConfiguration.start_page_url("student-loans"))
+      post claim_submission_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
+      expect(response).to redirect_to(Journeys::TeacherStudentLoanReimbursement.start_page_url)
     end
   end
 
@@ -92,7 +92,7 @@ RSpec.describe "Submissions", type: :request do
       it "renders the claim confirmation screen, including identity checking content" do
         in_progress_claim.update!(govuk_verify_fields: [])
 
-        get claim_confirmation_path(Policies::StudentLoans.routing_name)
+        get claim_confirmation_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
 
         expect(response.body).to include("Claim submitted")
         expect(response.body).to include("Your application will be reviewed by the Department for Education")
@@ -101,8 +101,8 @@ RSpec.describe "Submissions", type: :request do
 
     context "when the user has not followed the slug sequence" do
       it "redirect to the start page" do
-        get claim_confirmation_path(Policies::StudentLoans.routing_name)
-        expect(response).to redirect_to(JourneyConfiguration.start_page_url("student-loans"))
+        get claim_confirmation_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
+        expect(response).to redirect_to(Journeys::TeacherStudentLoanReimbursement.start_page_url)
       end
     end
   end

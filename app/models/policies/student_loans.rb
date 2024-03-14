@@ -54,7 +54,7 @@ module Policies
     # claims up to 2024/2025, and a teacher qualifying in 2014/2015 can make
     # claims up to 2025/2026 and so on.
     def first_eligible_qts_award_year(claim_year = nil)
-      claim_year ||= configuration.current_academic_year
+      claim_year ||= Journeys::TeacherStudentLoanReimbursement.configuration.current_academic_year
       [
         POLICY_START_YEAR,
         (claim_year - ACADEMIC_YEARS_QUALIFIED_TEACHERS_CAN_CLAIM_FOR)
@@ -71,7 +71,7 @@ module Policies
     #
     #   "6 April 2018 and 5 April 2019"
     def current_financial_year(format = :default)
-      end_year = configuration.current_academic_year.start_year
+      end_year = Journeys::TeacherStudentLoanReimbursement.configuration.current_academic_year.start_year
       start_year = end_year - 1
 
       if format == :short

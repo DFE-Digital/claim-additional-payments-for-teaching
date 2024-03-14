@@ -190,7 +190,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     let!(:closed_school) { create(:school, :combined_journey_eligibile_for_all, :closed) }
 
     scenario "doesn't select a school from the search results the first time around" do
-      visit new_claim_path(LevellingUpPremiumPayments.routing_name)
+      visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
 
       # - Sign in or continue page
       expect(page).to have_text("Use DfE Identity to sign in")

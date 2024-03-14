@@ -10,7 +10,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   scenario "qualified before the first eligible QTS year" do
     journey_configuration.update!(current_academic_year: "2025/2026")
 
-    visit new_claim_path(Policies::StudentLoans.routing_name)
+    visit new_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
     skip_tid
     choose_qts_year(:before_cut_off_date)
     claim = Claim.by_policy(Policies::StudentLoans).order(:created_at).last
@@ -20,12 +20,12 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     expect(page).to have_text("You can only get this payment if you completed your initial teacher training between the start of the 2014 to 2015 academic year and the end of the 2020 to 2021 academic year.")
 
     # Check we can go back and change the answer
-    visit claim_path(Policies::StudentLoans.routing_name, "qts-year")
-    expect(page).to have_current_path("/#{Policies::StudentLoans.routing_name}/qts-year")
+    visit claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "qts-year")
+    expect(page).to have_current_path("/#{Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME}/qts-year")
 
     choose_qts_year
 
-    expect(page).to have_current_path("/#{Policies::StudentLoans.routing_name}/claim-school")
+    expect(page).to have_current_path("/#{Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME}/claim-school")
   end
 
   scenario "chooses an ineligible claim school" do
@@ -99,7 +99,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     choose_school ineligible_school
     expect(page).to have_text("This school is not eligible")
 
-    visit new_claim_path(Policies::StudentLoans.routing_name)
+    visit new_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
 
     expect(page).to_not have_content("You have a claim in progress")
 

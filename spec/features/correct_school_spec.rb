@@ -102,7 +102,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
       create(:teachers_pensions_service, teacher_reference_number: trn, end_date: (recent_tps_full_months + 2.months).ago, school_urn: school.establishment_number, la_urn: school.local_authority.code)
     end
 
-    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
+    visit landing_page_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("additional_payments.landing_page"))

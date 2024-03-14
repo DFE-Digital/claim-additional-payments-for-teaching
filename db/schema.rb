@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_08_131101) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_12_150455) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -86,10 +86,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_08_131101) do
     t.boolean "hmrc_bank_validation_succeeded", default: false
     t.json "hmrc_bank_validation_responses", default: []
     t.boolean "logged_in_with_tid"
-    t.boolean "qa_required", default: false
-    t.datetime "qa_completed_at"
     t.boolean "details_check"
     t.jsonb "teacher_id_user_info", default: {}
+    t.boolean "qa_required", default: false
+    t.datetime "qa_completed_at"
     t.boolean "email_address_check"
     t.string "mobile_check"
     t.jsonb "dqt_teacher_status"
@@ -176,16 +176,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_08_131101) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "journey_configurations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "journey_configurations", primary_key: "routing_name", id: :string, force: :cascade do |t|
     t.boolean "open_for_submissions", default: true, null: false
     t.string "availability_message"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.string "current_academic_year", limit: 9
-    t.text "policy_types", default: [], array: true
     t.boolean "teacher_id_enabled", default: true
     t.index ["created_at"], name: "index_journey_configurations_on_created_at"
-    t.index ["policy_types"], name: "index_journey_configurations_on_policy_types"
   end
 
   create_table "levelling_up_premium_payments_awards", force: :cascade do |t|

@@ -3,8 +3,6 @@ require "rails_helper"
 RSpec.feature "Admin claim allocation and deallocation" do
   let!(:admin_user) { sign_in_as_service_operator }
 
-  before { create(:journey_configuration) }
-
   context "when viewing an individual claim" do
     let!(:claim) { create(:claim, :submitted, assigned_to: other_user) }
     let!(:other_user) { create(:dfe_signin_user, given_name: "Colin", family_name: "Claimhandler", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }

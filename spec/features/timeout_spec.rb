@@ -20,12 +20,12 @@ RSpec.feature "Teacher Student Loan Repayments claims", js: true do
     expect(page).to have_content("Your session will expire in #{one_second_in_minutes} minutes")
     expect_any_instance_of(SessionsController).to receive(:update_last_seen_at)
     click_on "Continue session"
-    expect(current_path).to eql(claim_path(Policies::StudentLoans.routing_name, "claim-school"))
+    expect(current_path).to eql(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"))
     expect(page).not_to have_content("Your session will expire in #{one_second_in_minutes} minutes")
   end
 
   scenario "Claimants are automatically redirected to the timeout page" do
     wait_until_visible { find("h1", text: "Your session has ended due to inactivity") }
-    expect(current_path).to eql(timeout_claim_path(Policies::StudentLoans.routing_name))
+    expect(current_path).to eql(timeout_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME))
   end
 end

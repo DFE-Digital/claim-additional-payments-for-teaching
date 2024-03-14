@@ -13,6 +13,8 @@
 class AcademicYear
   include Comparable
 
+  ACADEMIC_YEAR_REGEXP = /\A20\d{2}\/20\d{2}\z/
+
   attr_reader :start_year, :end_year
 
   # Defines a custom ActiveRecord::Type for AcademicYear that means we can

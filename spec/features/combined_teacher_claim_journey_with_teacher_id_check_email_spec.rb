@@ -64,7 +64,7 @@ RSpec.feature "Combined journey with Teacher ID email check" do
   end
 
   def navigate_to_check_email_page(school:)
-    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
+    visit landing_page_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("additional_payments.landing_page"))
@@ -148,7 +148,7 @@ RSpec.feature "Combined journey with Teacher ID email check" do
 
     # - What is your home address
     expect(page).to have_text(I18n.t("questions.address.home.title"))
-    expect(page).to have_link(href: claim_path(Policies::EarlyCareerPayments.routing_name, "address"))
+    expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
 
     fill_in "Postcode", with: "SO16 9FX"
     click_on "Search"
