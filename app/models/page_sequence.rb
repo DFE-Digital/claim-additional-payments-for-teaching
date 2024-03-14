@@ -63,11 +63,11 @@ class PageSequence
   end
 
   def lup_policy_and_trainee_teacher_at_lup_school?
-    LevellingUpPremiumPayments.in?(claim.policies) && lup_teacher_at_lup_school
+    Policies::LevellingUpPremiumPayments.in?(claim.policies) && lup_teacher_at_lup_school
   end
 
   def lup_teacher_at_lup_school
-    claim.eligibility.nqt_in_academic_year_after_itt == false && LevellingUpPremiumPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible?
+    claim.eligibility.nqt_in_academic_year_after_itt == false && Policies::LevellingUpPremiumPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible?
   end
 
   def handle_trainee_teacher
@@ -85,7 +85,7 @@ class PageSequence
         "eligible-degree-subject"
       end
     when "eligible-degree-subject"
-      lup_claim = claim.for_policy(LevellingUpPremiumPayments)
+      lup_claim = claim.for_policy(Policies::LevellingUpPremiumPayments)
 
       if lup_claim.eligibility.eligible_degree_subject?
         "future-eligibility"

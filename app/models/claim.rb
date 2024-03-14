@@ -527,7 +527,7 @@ class Claim < ApplicationRecord
   end
 
   def has_lupp_policy?
-    policy == LevellingUpPremiumPayments
+    policy == Policies::LevellingUpPremiumPayments
   end
 
   def has_ecp_or_lupp_policy?

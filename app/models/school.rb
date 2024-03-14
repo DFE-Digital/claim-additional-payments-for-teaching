@@ -7,7 +7,7 @@ class School < ApplicationRecord
 
   belongs_to :local_authority
   belongs_to :local_authority_district
-  has_many :levelling_up_premium_payments_awards, primary_key: :urn, foreign_key: :school_urn, dependent: :destroy, inverse_of: :school, class_name: "LevellingUpPremiumPayments::Award"
+  has_many :levelling_up_premium_payments_awards, primary_key: :urn, foreign_key: :school_urn, dependent: :destroy, inverse_of: :school, class_name: "Policies::LevellingUpPremiumPayments::Award"
 
   validates :urn, presence: true
   validates :name, presence: true
