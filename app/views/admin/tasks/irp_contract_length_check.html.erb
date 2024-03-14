@@ -1,0 +1,21 @@
+<% content_for(:page_title) { page_title("Claim #{@claim.reference} Contract length check for #{policy_service_name(@claim.policy.routing_name)}") } %>
+<%= link_to "Back", admin_claim_tasks_path(claim_id: @claim.id), class: "govuk-back-link" %>
+<%= render "shared/error_summary", instance: @task, errored_field_id_overrides: { "passed": "task_passed_true" } if @task.errors.any? %>
+
+<div class="govuk-grid-row">
+
+  <%= render "claim_summary", claim: @claim, heading: "Contract length check" %>
+
+  <%# Requirement: no details to be displayed for contract length check %>
+
+  <div class="govuk-grid-column-two-thirds">
+    <% if !@task.passed.nil? %>
+      <%= render "task_outcome", task: @task do %>
+      <% end %>
+    <% else %>
+      <%= render "form", task_name: "irp_contract_length_check", claim: @claim %>
+    <% end %>
+
+    <%= render partial: "admin/task_pagination" %>
+  </div>
+</div>

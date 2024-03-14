@@ -1,0 +1,28 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-l">
+      <%= t("steps.summary") %>
+    </h1>
+
+    <p class="govuk-body">
+      Please check and make a note of your answers, as you may need to refer to
+      them during the application process.
+    </p>
+
+    <%= form_with(model: @summary, url: irp_new_submission_path, local: true) do |f| %>
+      <%= f.govuk_error_summary link_base_errors_to: :email_address %>
+
+      <%= govuk_summary_list(rows: @summary.rows) %>
+      <%= govuk_summary_list(
+          card: @summary.personal_card { link_to(_1, _2) },
+          rows: @summary.personal_rows
+          ) %>
+      <%= govuk_summary_list(
+          card: @summary.employment_card { link_to(_1, _2) },
+          rows: @summary.employment_rows
+          ) %>
+ 
+        <%= f.govuk_submit "Submit Application" %>
+    <% end %>
+  </div>
+</div>

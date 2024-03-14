@@ -2,6 +2,17 @@ class Decision < ApplicationRecord
   belongs_to :claim
   belongs_to :created_by, class_name: "DfeSignIn::User", optional: true
 
+  IRP_REJECTED_REASONS = [
+    :suspected_fraud,
+    :duplicate_submission,
+    :home_office_checks_failed,
+    :school_checks_failed,
+    :standing_data_checks_failed,
+    :no_longer_in_post,
+    :request_to_re_submit,
+    :school_checks_unverifiable
+  ].freeze
+
   # NOTE: remember en.yml -> admin.decision.rejected_reasons
   REJECTED_REASONS = [
     :ineligible_subject,
@@ -15,7 +26,9 @@ class Decision < ApplicationRecord
     :other
   ]
 
-  store_accessor :rejected_reasons, *REJECTED_REASONS, prefix: true
+  ALL_REJECTED_REASONS = REJECTED_REASONS + IRP_REJECTED_REASONS
+
+  store_accessor :rejected_reasons, *ALL_REJECTED_REASONS, prefix: true
 
   # NOTE: Don't store the rejected_reasons data params from the form when Approve is selected
   before_validation :clear_rejected_reasons, unless: :rejected?
@@ -37,9 +50,15 @@ class Decision < ApplicationRecord
   }
 
   def self.rejected_reasons_for(policy)
-    REJECTED_REASONS.dup.tap do |reasons|
-      reasons.delete(:induction) unless policy == Policies::EarlyCareerPayments
+    reasons = REJECTED_REASONS.dup
+
+    if policy == Policies::EarlyCareerPayments
+      reasons.delete(:induction)
+    elsif policy == Irp
+      reasons = IRP_REJECTED_REASONS + [:ineligible_school]
     end
+
+    reasons
   end
 
   def readonly?

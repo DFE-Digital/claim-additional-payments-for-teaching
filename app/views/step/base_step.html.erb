@@ -1,0 +1,58 @@
+<% content_for :back_link do %>
+<%= back_link(@step) %>
+<% end %>
+<% if flash[:alert] %>
+  <%= content_tag :div, flash[:alert].html_safe, class: "flash alert" %>
+<% end %>
+<% if flash[:error] %>
+  <%= govuk_warning_text(text: flash[:error]) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= form_with(url: @step.path, model: @step, method: form_method(@step), local: true) do |f| %>
+    <%= f.govuk_error_summary %>
+
+    <% if @step.radio_field? %>
+       <%= f.govuk_radio_buttons_fieldset(@step.fields.first,
+           legend: { text: @step.question, tag: "h1", size: "l" },
+           hint: { text: @step.question_hint.html_safe },
+           ) do %>
+
+       <% @step.valid_answers.each do |answer| %>
+         <%= f.govuk_radio_button(
+             @step.fields.first,
+             answer.value,
+             label: { text: answer.label },
+             hint: { text: answer.hint },
+             link_errors: true,
+             ) %>
+
+       <% end %>
+       <% end %>
+    <% end %>
+
+    <%# if @add_invisible_captcha %>
+    <%#= invisible_captcha :application_username %>
+    <%# end %>
+
+    <% if @step.date_field? %>
+      <%= f.govuk_date_field @step.fields.first, legend: { text: @step.question, tag: "h1", size: "l" } %>
+
+    <% end %>
+
+    <% if @step.select_field? %>
+      <%= f.govuk_collection_select(
+            @step.fields.first,
+            @step.valid_answers,
+            :value,
+            :label,
+            label: { text: @step.question, tag: "h1", size: "l" },
+            options: { include_blank: true }
+          ) %>
+    <% end %>
+
+    <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

@@ -1,27 +1,21 @@
 module StudentLoans
   # Used to display the information a claim checker needs to check to either
   # approve or reject a claim.
-  class AdminTasksPresenter
+  class AdminTasksPresenter < BaseAdminTasksPresenter
     include StudentLoans::PresenterMethods
     include Admin::PresenterMethods
     include ActionView::Helpers::NumberHelper
-
-    attr_reader :claim
-
-    def initialize(claim)
-      @claim = claim
-    end
-
-    def qualifications
-      [
-        ["Award year", qts_award_year_answer(eligibility)]
-      ]
-    end
 
     def employment
       [
         [financial_year_for_academic_year(claim.academic_year), display_school(eligibility.claim_school)],
         [translate("admin.current_school"), display_school(eligibility.current_school)]
+      ]
+    end
+
+    def qualifications
+      [
+        ["Award year", qts_award_year_answer(eligibility)]
       ]
     end
 
@@ -32,13 +26,6 @@ module StudentLoans
       ]
     end
 
-    def identity_confirmation
-      [
-        ["Current school", eligibility.current_school.name],
-        ["Contact number", eligibility.current_school.phone_number]
-      ]
-    end
-
     def census_subjects_taught
       [
         ["Subjects taught", subject_list(eligibility.subjects_taught)]
@@ -46,10 +33,6 @@ module StudentLoans
     end
 
     private
-
-    def eligibility
-      claim.eligibility
-    end
 
     def financial_year_for_academic_year(academic_year)
       end_year = academic_year.start_year

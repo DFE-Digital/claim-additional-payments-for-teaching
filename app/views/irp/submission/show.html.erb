@@ -1,0 +1,44 @@
+<div class="govuk-width-container">
+  <main class="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <div class="govuk-panel govuk-panel--confirmation">
+          <h1 class="govuk-panel__title">
+            Application submitted
+          </h1>
+          <div class="govuk-panel__body">
+            Your reference number<br><strong><%= @urn %></strong>
+          </div>
+        </div>
+
+        <p class="govuk-body">
+          You have successfully submitted your international relocation payment application form. You will receive a
+          confirmation email from <a href="https://gov.uk">GOV.UK</a> Notify. We will now validate the information you
+          have given us. We will email you if we have any questions.
+        </p>
+
+        <p class="govuk-body">
+          Your international relocation payment (IRP) application reference number is:
+        </p>
+
+        <p class="govuk-body">
+          <strong><%= @urn %></strong>
+        </p>
+
+        <p class="govuk-body">
+          Keep this safe, as you will need it if your application is successful.
+        </p>
+
+        <p class="govuk-body">
+          We’ll let you know the outcome of your application as soon as we’ve checked your eligibility. We aim to do
+          this within 30 days. If you are eligible, you should be paid by 31 May 2024.
+        </p>
+
+        <p class="govuk-body">
+          For help, you can contact us on
+          <%= govuk_link_to("IRP.Mailbox@education.gov.uk", "mailto:IRP.Mailbox@education.gov.uk") %>.
+        </p>
+      </div>
+    </div>
+  </main>
+</div>

@@ -26,6 +26,13 @@ class JourneyConfiguration < ApplicationRecord
       policies: [Policies::EarlyCareerPayments, LevellingUpPremiumPayments],
       view_path: "additional_payments",
       i18n_namespace: "additional_payments"
+    },
+    {
+      routing_name: "irp",
+      slugs: [],
+      policies: [Irp],
+      view_path: "irp",
+      i18n_namespace: "irp"
     }
   ].freeze
 

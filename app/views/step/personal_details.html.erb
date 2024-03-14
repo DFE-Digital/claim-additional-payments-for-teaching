@@ -1,0 +1,50 @@
+<% content_for :back_link do %>
+<%= back_link(@step) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= form_with(url: @step.path, model: @step, method: :patch, local: true) do |f| %>
+    <%= f.govuk_error_summary %>
+    <h1 class="govuk-heading-l">
+      <%= @step.question %>
+    </h1>
+
+    <%= f.govuk_text_field :given_name, label: { text: @step.given_name_label, size: "s" } %>
+    <%= f.govuk_text_field :middle_name, label: { text: @step.middle_name_label, size: "s" } %>
+    <%= f.govuk_text_field :family_name, label: { text: @step.family_name_label, size: "s" } %>
+    <%= f.govuk_text_field :email_address, label: { text: @step.email_address_label, size: "s" }, hint: { text: t("steps.personal_details.email_address.hint") } %>
+    <%= f.govuk_text_field :phone_number,
+        label: { text: @step.phone_number_label, size: "s" },
+        hint: { text:  t("steps.personal_details.phone_number.hint") }
+        %>
+    <%= f.govuk_date_field :date_of_birth, date_of_birth: true, legend: { text: @step.date_of_birth_label, size: "s" } %>
+
+    <%= f.govuk_fieldset legend: { text: t("steps.personal_details.address.text"), size: 's' } do %>
+      <%= f.govuk_text_field :address_line_1, label: { text: @step.address_line_1_label, size: "s" } %>
+      <%= f.govuk_text_field :address_line_2, label: { text: @step.address_line_2_label, size: "s" } %>
+      <%= f.govuk_text_field :city, label: { text: @step.city_label, size: "s" } %>
+      <%= f.govuk_text_field :postcode, label: { text: @step.postcode_label, size: "s" } %>
+    <% end %>
+
+    <%= f.govuk_select(:nationality, NATIONALITIES, label: { text: @step.nationality_label, size: "s" }, options: { include_blank: true }) %>
+
+    <%= f.govuk_radio_buttons_fieldset(:sex, legend: { text: @step.sex_label, size: "s" }) do %>
+      <% @step.class::SEX_OPTIONS.each_with_index do |value, i| %>
+        <%= f.govuk_radio_button :sex, value, label: { text: value.humanize }, link_errors: i.zero? %>
+      <% end %>
+    <% end %>
+
+    <%= f.govuk_text_field :passport_number, label: { text: @step.passport_number_label, size: "s" } %>
+
+    <%= f.govuk_radio_buttons_fieldset(:student_loan, legend: { text: @step.student_loan_label, size: "s" }) do %>
+      <div class="govuk-hint" id="personal-details-step-student-loan-hint"><%= t('steps.personal_details.student_loan.hint') %></div>
+      <% @step.student_loan_valid_answers.each_with_index do |answer, i| %>
+        <%= f.govuk_radio_button :student_loan, answer.value, label: { text: answer.label }, link_errors: i.zero? %>
+      <% end %>
+    <% end %>
+
+    <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

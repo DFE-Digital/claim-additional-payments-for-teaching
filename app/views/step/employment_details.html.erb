@@ -1,0 +1,27 @@
+<% content_for :back_link do %>
+<%= back_link(@step) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= form_with(url: @step.path, model: @step, method: :patch, local: true) do |f| %>
+    <%= f.govuk_error_summary %>
+      <h1 class="govuk-heading-l">
+        <%= @step.question %>
+      </h1>
+
+      <%= f.govuk_text_field :school_headteacher_name, label: { text: @step.school_headteacher_name_label, size: "s" } %>
+
+      <%= f.govuk_text_field :school_name, label: { text: @step.school_name_label, size: "s" } %>
+      <%= f.govuk_fieldset legend: { text: t("steps.employment_details.address.text"), size: 's' } do %>
+        <%= f.govuk_text_field :school_address_line_1, label: { text: @step.school_address_line_1_label, size: "s"} %>
+        <%= f.govuk_text_field :school_address_line_2, label: { text: @step.school_address_line_2_label, size: "s"} %>
+        <%= f.govuk_text_field :school_city, label: { text: @step.school_city_label, size: "s"} %>
+        <%= f.govuk_text_field :school_postcode, label: { text: @step.school_postcode_label, size: "s"} %>
+      <% end %>
+
+
+    <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>
