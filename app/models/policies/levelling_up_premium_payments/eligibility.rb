@@ -80,7 +80,7 @@ module Policies
       before_save :set_qualification_if_trainee_teacher, if: :nqt_in_academic_year_after_itt_changed?
 
       def policy
-        LevellingUpPremiumPayments
+        Policies::LevellingUpPremiumPayments
       end
 
       def award_amount
