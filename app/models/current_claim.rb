@@ -162,9 +162,7 @@ class CurrentClaim
   end
 
   def eligible_eligibility
-    # TODO: Remove the gsub after all Policies are namespaced
-    #
-    claims.sort_by { |c| c.eligibility_type.gsub("Policies::", "") }.each do |claim|
+    claims.sort_by(&:eligibility_type).each do |claim|
       return claim.eligibility unless claim.eligibility.ineligible?
     end
 
