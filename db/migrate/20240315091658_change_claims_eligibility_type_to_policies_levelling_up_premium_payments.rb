@@ -9,5 +9,7 @@ class ChangeClaimsEligibilityTypeToPoliciesLevellingUpPremiumPayments < ActiveRe
         Claim.where(eligibility_type: "Policies::LevellingUpPremiumPayments::Eligibility").update_all(eligibility_type: "LevellingUpPremiumPayments::Eligibility")
       end
     end
+
+    DfE::Analytics::LoadEntities.new(entity_name: "claims").run
   end
 end
