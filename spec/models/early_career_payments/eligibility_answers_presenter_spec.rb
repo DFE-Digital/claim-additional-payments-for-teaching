@@ -123,7 +123,7 @@ RSpec.describe Policies::EarlyCareerPayments::EligibilityAnswersPresenter do
     end
 
     context "LUP" do
-      let(:policy) { LevellingUpPremiumPayments }
+      let(:policy) { Policies::LevellingUpPremiumPayments }
 
       context "entire output" do
         let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :long_term_directly_employed_supply_teacher, :ineligible_itt_subject, :relevant_degree) }

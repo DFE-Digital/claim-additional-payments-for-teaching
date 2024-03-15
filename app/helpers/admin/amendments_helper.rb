@@ -14,7 +14,7 @@ module Admin
     end
 
     def editable_award_amount_policy?(policy)
-      policy.in? [Policies::EarlyCareerPayments, LevellingUpPremiumPayments]
+      policy.in? [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments]
     end
   end
 end

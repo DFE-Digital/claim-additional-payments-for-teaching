@@ -4,7 +4,7 @@ class ClaimMailerPreview < ActionMailer::Preview
   end
 
   def submitted_lup
-    ClaimMailer.submitted(claim_for(Claim.submitted.by_policy(LevellingUpPremiumPayments)))
+    ClaimMailer.submitted(claim_for(Claim.submitted.by_policy(Policies::LevellingUpPremiumPayments)))
   end
 
   def approved_ecp
@@ -12,7 +12,7 @@ class ClaimMailerPreview < ActionMailer::Preview
   end
 
   def approved_lup
-    ClaimMailer.approved(claim_for(Claim.approved.by_policy(LevellingUpPremiumPayments)))
+    ClaimMailer.approved(claim_for(Claim.approved.by_policy(Policies::LevellingUpPremiumPayments)))
   end
 
   def rejected_ecp
@@ -20,7 +20,7 @@ class ClaimMailerPreview < ActionMailer::Preview
   end
 
   def rejected_lup
-    ClaimMailer.rejected(claim_for(Claim.rejected.by_policy(LevellingUpPremiumPayments)))
+    ClaimMailer.rejected(claim_for(Claim.rejected.by_policy(Policies::LevellingUpPremiumPayments)))
   end
 
   def update_after_three_weeks_ecp
@@ -28,7 +28,7 @@ class ClaimMailerPreview < ActionMailer::Preview
   end
 
   def update_after_three_weeks_lup
-    ClaimMailer.update_after_three_weeks(claim_for(Claim.approved.by_policy(LevellingUpPremiumPayments)))
+    ClaimMailer.update_after_three_weeks(claim_for(Claim.approved.by_policy(Policies::LevellingUpPremiumPayments)))
   end
 
   def email_verification

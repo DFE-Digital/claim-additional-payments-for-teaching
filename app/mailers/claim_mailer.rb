@@ -97,7 +97,7 @@ class ClaimMailer < ApplicationMailer
   end
 
   def unknown_policy_check(claim)
-    return if [Policies::StudentLoans, Policies::EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
+    return if [Policies::StudentLoans, Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments].include?(claim.policy)
     raise ArgumentError, "Unknown claim policy: #{claim.policy}"
   end
 end

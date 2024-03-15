@@ -1,12 +1,12 @@
 require "rails_helper"
 
-RSpec.describe LevellingUpPremiumPayments::EligibilityAdminAnswersPresenter, type: :model do
+RSpec.describe Policies::LevellingUpPremiumPayments::EligibilityAdminAnswersPresenter, type: :model do
   let(:eligibility) { claim.eligibility }
   let(:claim) do
     build(
       :claim,
       :submittable,
-      policy: LevellingUpPremiumPayments,
+      policy: Policies::LevellingUpPremiumPayments,
       academic_year: "2021/2022"
     )
   end

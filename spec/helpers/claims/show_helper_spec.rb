@@ -21,7 +21,7 @@ RSpec.describe Claims::ShowHelper do
     end
 
     context "with a LevellingUpPremiumPayments policy" do
-      let(:policy) { LevellingUpPremiumPayments }
+      let(:policy) { Policies::LevellingUpPremiumPayments }
 
       it "returns the correct content block" do
         expect(helper.claim_submitted_title(claim)).to include("You applied for a levelling up premium payment")
@@ -63,14 +63,14 @@ RSpec.describe Claims::ShowHelper do
     end
 
     context "with a LevellingUpPremiumPayments policy" do
-      let(:policy) { LevellingUpPremiumPayments }
+      let(:policy) { Policies::LevellingUpPremiumPayments }
 
       it { is_expected.to eq "levelling up premium payment" }
     end
   end
 
   describe "#award_amount" do
-    let(:claim) { build(:claim, policy: LevellingUpPremiumPayments, eligibility: eligibility) }
+    let(:claim) { build(:claim, policy: Policies::LevellingUpPremiumPayments, eligibility: eligibility) }
     let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, award_amount: award_amount) }
     let(:award_amount) { 2000.0 }
 

@@ -6,7 +6,7 @@ RSpec.describe Policies, type: :model do
       expect(described_class::POLICIES).to eq([
         Policies::StudentLoans,
         Policies::EarlyCareerPayments,
-        LevellingUpPremiumPayments
+        Policies::LevellingUpPremiumPayments
       ])
     end
   end
@@ -44,7 +44,7 @@ RSpec.describe Policies, type: :model do
   end
 
   describe "::constantize" do
-    [Policies::StudentLoans, Policies::EarlyCareerPayments, LevellingUpPremiumPayments].each do |policy|
+    [Policies::StudentLoans, Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments].each do |policy|
       context "when #{policy}" do
         it do
           expect(described_class.constantize(policy.to_s)).to eq(policy)

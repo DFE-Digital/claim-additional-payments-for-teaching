@@ -22,7 +22,7 @@
         </dt>
 
         <dd class="govuk-summary-list__value">
-          <%= @payroll_run.number_of_claims_for_policy(LevellingUpPremiumPayments, filter: :topups) %>
+          <%= @payroll_run.number_of_claims_for_policy(Policies::LevellingUpPremiumPayments, filter: :topups) %>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -85,8 +85,8 @@
         <% end %>
         <tr class="govuk-table__row">
           <th scope="row" class="govuk-table__header">Levelling Up Premium Payments Top Ups</th>
-          <td class="govuk-table__cell"><%= @payroll_run.number_of_claims_for_policy(LevellingUpPremiumPayments, filter: :topups) %></td>
-          <td class="govuk-table__cell"><%= number_to_currency(@payroll_run.total_claim_amount_for_policy(LevellingUpPremiumPayments, filter: :topups)) %></td>
+          <td class="govuk-table__cell"><%= @payroll_run.number_of_claims_for_policy(Policies::LevellingUpPremiumPayments, filter: :topups) %></td>
+          <td class="govuk-table__cell"><%= number_to_currency(@payroll_run.total_claim_amount_for_policy(Policies::LevellingUpPremiumPayments, filter: :topups)) %></td>
           </tr>
       </thead>
       <tbody class="govuk-table__body">

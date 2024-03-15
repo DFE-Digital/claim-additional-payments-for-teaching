@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Levelling up premium payments and early-career payments combined claim journey", :with_stubbed_hmrc_client, :with_hmrc_bank_validation_enabled do
-  let(:claim) { Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last }
+  let(:claim) { Claim.by_policy(Policies::LevellingUpPremiumPayments).order(:created_at).last }
   let(:eligibility) { claim.eligibility }
 
   before { create(:journey_configuration, :additional_payments) }

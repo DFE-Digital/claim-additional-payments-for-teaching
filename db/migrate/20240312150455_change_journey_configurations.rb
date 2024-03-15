@@ -19,7 +19,7 @@ class ChangeJourneyConfigurations < ActiveRecord::Migration[7.0]
     add_column(:journey_configurations, :id, :uuid, default: -> { "gen_random_uuid()" })
     add_column(:journey_configurations, :policy_types, :text, array: true, default: [])
 
-    Journeys::Configuration.where(routing_name: Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME).update_all(policy_types: [Policies::EarlyCareerPayments, LevellingUpPremiumPayments])
+    Journeys::Configuration.where(routing_name: Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME).update_all(policy_types: [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments])
     Journeys::Configuration.where(routing_name: Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME).update_all(policy_types: [Policies::StudentLoans])
 
     remove_column(:journey_configurations, :routing_name, :string)

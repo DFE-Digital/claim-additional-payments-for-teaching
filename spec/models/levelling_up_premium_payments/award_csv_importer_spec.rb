@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe LevellingUpPremiumPayments::AwardCsvImporter do
+RSpec.describe Policies::LevellingUpPremiumPayments::AwardCsvImporter do
   let(:csv_file) { File.new("spec/fixtures/files/lupp_school_awards_good.csv") }
   let(:csv_file_with_bad_data) { File.new("spec/fixtures/files/lupp_school_awards_bad.csv") }
   let(:csv_file_with_extra_columns) { File.new("spec/fixtures/files/lupp_school_awards_additional_columns.csv") }
@@ -74,12 +74,12 @@ RSpec.describe LevellingUpPremiumPayments::AwardCsvImporter do
 
       it "populates the table with the CSV data" do
         importer.process
-        expect(LevellingUpPremiumPayments::Award.where(academic_year: academic_year.to_s).count).to eq 8
+        expect(Policies::LevellingUpPremiumPayments::Award.where(academic_year: academic_year.to_s).count).to eq 8
       end
 
       it "skips rows where the award amount is zero" do
         importer.process
-        expect(LevellingUpPremiumPayments::Award.where(award_amount: 0).count).to eq 0
+        expect(Policies::LevellingUpPremiumPayments::Award.where(award_amount: 0).count).to eq 0
       end
 
       context "when there are errors" do
@@ -96,7 +96,7 @@ RSpec.describe LevellingUpPremiumPayments::AwardCsvImporter do
 
         it "does not populate the table with the CSV data" do
           importer.process
-          expect(LevellingUpPremiumPayments::Award.where(academic_year: academic_year.to_s).count).to eq 1
+          expect(Policies::LevellingUpPremiumPayments::Award.where(academic_year: academic_year.to_s).count).to eq 1
         end
       end
     end

@@ -55,7 +55,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
 
   it "does not delete details from a claim that has a payment, but has a payrollable topup" do
     lup_eligibility = create(:levelling_up_premium_payments_eligibility, :eligible, award_amount: 1500.0)
-    claim = create(:claim, :approved, policy: LevellingUpPremiumPayments, eligibility: lup_eligibility)
+    claim = create(:claim, :approved, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility)
     create(:payment, :confirmed, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
     create(:topup, payment: nil, claim: claim, award_amount: 500, created_by: user)
 
@@ -67,7 +67,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
 
     travel_to 2.months.ago do
       lup_eligibility = create(:levelling_up_premium_payments_eligibility, :eligible, award_amount: 1500.0)
-      claim = create(:claim, :approved, policy: LevellingUpPremiumPayments, eligibility: lup_eligibility)
+      claim = create(:claim, :approved, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility)
       create(:payment, :confirmed, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
     end
 
@@ -82,7 +82,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
 
     travel_to 2.months.ago do
       lup_eligibility = create(:levelling_up_premium_payments_eligibility, :eligible, award_amount: 1500.0)
-      claim = create(:claim, :approved, policy: LevellingUpPremiumPayments, eligibility: lup_eligibility)
+      claim = create(:claim, :approved, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility)
       create(:payment, :confirmed, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
     end
 

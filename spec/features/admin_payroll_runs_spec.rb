@@ -12,12 +12,12 @@ RSpec.feature "Payroll" do
     create(:claim, :approved, policy: Policies::StudentLoans)
     create(:claim, :approved, policy: Policies::StudentLoans)
     create(:claim, :approved, policy: Policies::EarlyCareerPayments)
-    create(:claim, :approved, policy: LevellingUpPremiumPayments)
+    create(:claim, :approved, policy: Policies::LevellingUpPremiumPayments)
 
     paid_lup_claim = nil
     travel_to 2.months.ago do
       lup_eligibility = create(:levelling_up_premium_payments_eligibility, :eligible, award_amount: 1500.0)
-      paid_lup_claim = create(:claim, :approved, policy: LevellingUpPremiumPayments, eligibility: lup_eligibility)
+      paid_lup_claim = create(:claim, :approved, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility)
       create(:payment, :with_figures, claims: [paid_lup_claim])
     end
 

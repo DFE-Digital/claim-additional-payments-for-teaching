@@ -24,15 +24,15 @@ school_urns = %w(
 ).uniq
 
 school_ids = School.where(urn: school_urns).pluck(:id)
-elig_ids = LevellingUpPremiumPayments::Eligibility.where(current_school_id: school_ids).pluck(:id)
+elig_ids = Policies::LevellingUpPremiumPayments::Eligibility.where(current_school_id: school_ids).pluck(:id)
 
 csv_output = CSV.generate(headers: true) do |csv|
   csv << ["claim_reference", "full_name", "trn", "school_urn", "school_name", "submitted_date", "claim_status", "award_amount", "new_award_amount"]
 
-  current_academic_year = Journeys.for_policy(LevellingUpPremiumPayments).configuration.current_academic_year
+  current_academic_year = Journeys.for_policy(Policies::LevellingUpPremiumPayments).configuration.current_academic_year
 
   elig_ids.each do |elig_id|
-    elig = LevellingUpPremiumPayments::Eligibility.find(elig_id)
+    elig = Policies::LevellingUpPremiumPayments::Eligibility.find(elig_id)
     claim = elig.claim
 
     next unless claim.submitted?
@@ -48,7 +48,7 @@ csv_output = CSV.generate(headers: true) do |csv|
       status = "awaiting_decision"
     end
 
-    new_award_amount = LevellingUpPremiumPayments::Award.where(school: claim.eligibility.current_school, academic_year: current_academic_year.to_s).first.award_amount
+    new_award_amount = Policies::LevellingUpPremiumPayments::Award.where(school: claim.eligibility.current_school, academic_year: current_academic_year.to_s).first.award_amount
 
     csv << [claim.reference, claim.full_name, claim.teacher_reference_number, elig.current_school.urn, elig.current_school.name, claim.submitted_at.strftime("%d/%m/%Y"), status, claim.award_amount_with_topups, new_award_amount]
   end

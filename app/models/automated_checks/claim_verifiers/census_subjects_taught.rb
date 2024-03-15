@@ -59,7 +59,7 @@ module AutomatedChecks
         match_against = case claim.policy
         when Policies::EarlyCareerPayments
           early_career_payments_policy_subjects
-        when LevellingUpPremiumPayments
+        when Policies::LevellingUpPremiumPayments
           levelling_up_premium_payments_policy_subjects
         when Policies::StudentLoans
           student_loans_policy_subjects

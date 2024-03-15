@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe LevellingUpPremiumPayments::Award do
+RSpec.describe Policies::LevellingUpPremiumPayments::Award do
   describe ".csv_for_academic_year" do
     let(:academic_year) { AcademicYear.current }
     let!(:award) { create(:levelling_up_premium_payments_award, academic_year: academic_year) }

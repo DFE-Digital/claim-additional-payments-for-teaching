@@ -72,14 +72,14 @@ RSpec.describe PayrollRun, type: :model do
         build(:claim, :approved, policy: Policies::EarlyCareerPayments, eligibility: build(:early_career_payments_eligibility, :eligible))
       ])
       payment_3 = build(:payment, claims: [
-        build(:claim, :approved, policy: LevellingUpPremiumPayments, eligibility: build(:levelling_up_premium_payments_eligibility, :eligible))
+        build(:claim, :approved, policy: Policies::LevellingUpPremiumPayments, eligibility: build(:levelling_up_premium_payments_eligibility, :eligible))
       ])
 
       payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2, payment_3])
 
       expect(payroll_run.number_of_claims_for_policy(Policies::StudentLoans)).to eq(1)
       expect(payroll_run.number_of_claims_for_policy(Policies::EarlyCareerPayments)).to eq(1)
-      expect(payroll_run.number_of_claims_for_policy(LevellingUpPremiumPayments)).to eq(1)
+      expect(payroll_run.number_of_claims_for_policy(Policies::LevellingUpPremiumPayments)).to eq(1)
     end
   end
 
@@ -98,7 +98,7 @@ RSpec.describe PayrollRun, type: :model do
         build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1000))
       ])
       payment_5 = build(:payment, claims: [
-        build(:claim, :approved, policy: LevellingUpPremiumPayments, teacher_reference_number: "1234567", bank_sort_code: "123456", bank_account_number: "12345678", eligibility: build(:levelling_up_premium_payments_eligibility, :eligible)),
+        build(:claim, :approved, policy: Policies::LevellingUpPremiumPayments, teacher_reference_number: "1234567", bank_sort_code: "123456", bank_account_number: "12345678", eligibility: build(:levelling_up_premium_payments_eligibility, :eligible)),
         build(:claim, :approved, teacher_reference_number: "1234567", bank_sort_code: "123456", bank_account_number: "12345678", eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1000))
       ])
 
@@ -106,7 +106,7 @@ RSpec.describe PayrollRun, type: :model do
 
       expect(payroll_run.total_claim_amount_for_policy(Policies::StudentLoans)).to eq(3500)
       expect(payroll_run.total_claim_amount_for_policy(Policies::EarlyCareerPayments)).to eq(4000)
-      expect(payroll_run.total_claim_amount_for_policy(LevellingUpPremiumPayments)).to eq(2000)
+      expect(payroll_run.total_claim_amount_for_policy(Policies::LevellingUpPremiumPayments)).to eq(2000)
     end
   end
 

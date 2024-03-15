@@ -41,7 +41,7 @@ class IneligibilityReasonChecker
     [
       school.present?,
       !Policies::EarlyCareerPayments::SchoolEligibility.new(school).eligible?,
-      !LevellingUpPremiumPayments::SchoolEligibility.new(school).eligible?
+      !Policies::LevellingUpPremiumPayments::SchoolEligibility.new(school).eligible?
     ].all?
   end
 
@@ -68,21 +68,21 @@ class IneligibilityReasonChecker
 
   def ecp_only_trainee_teacher?
     [
-      !LevellingUpPremiumPayments::SchoolEligibility.new(@current_claim.eligibility.current_school).eligible?,
+      !Policies::LevellingUpPremiumPayments::SchoolEligibility.new(@current_claim.eligibility.current_school).eligible?,
       @current_claim.eligibility.nqt_in_academic_year_after_itt == false
     ].all?
   end
 
   def trainee_teaching_lacking_both_valid_itt_subject_and_degree?
     [
-      LevellingUpPremiumPayments::SchoolEligibility.new(@current_claim.eligibility.current_school).eligible?,
+      Policies::LevellingUpPremiumPayments::SchoolEligibility.new(@current_claim.eligibility.current_school).eligible?,
       @current_claim.eligibility.nqt_in_academic_year_after_itt == false,
       lack_both_valid_itt_subject_and_degree?
     ].all?
   end
 
   def lack_both_valid_itt_subject_and_degree?
-    lup_claim = @current_claim.for_policy(LevellingUpPremiumPayments)
+    lup_claim = @current_claim.for_policy(Policies::LevellingUpPremiumPayments)
 
     [
       subject_invalid_for_ecp?,
@@ -91,11 +91,11 @@ class IneligibilityReasonChecker
   end
 
   def would_be_eligible_for_lup_only_except_for_insufficient_teaching?
-    would_be_eligible_for_one_policy_only_except_for_insufficient_teaching?(LevellingUpPremiumPayments)
+    would_be_eligible_for_one_policy_only_except_for_insufficient_teaching?(Policies::LevellingUpPremiumPayments)
   end
 
   def would_be_eligible_for_one_policy_only_except_for_insufficient_teaching?(policy)
-    other_policy = (policy == Policies::EarlyCareerPayments) ? LevellingUpPremiumPayments : Policies::EarlyCareerPayments
+    other_policy = (policy == Policies::EarlyCareerPayments) ? Policies::LevellingUpPremiumPayments : Policies::EarlyCareerPayments
 
     [
       eligible_with_sufficient_teaching?(policy),
@@ -125,7 +125,7 @@ class IneligibilityReasonChecker
   def would_be_eligible_for_both_ecp_and_lup_except_for_insufficient_teaching?
     [
       eligible_with_sufficient_teaching?(Policies::EarlyCareerPayments),
-      eligible_with_sufficient_teaching?(LevellingUpPremiumPayments)
+      eligible_with_sufficient_teaching?(Policies::LevellingUpPremiumPayments)
     ].all?
   end
 
@@ -146,7 +146,7 @@ class IneligibilityReasonChecker
   end
 
   def school_eligible_for_ecp_but_not_lup?(school)
-    Policies::EarlyCareerPayments::SchoolEligibility.new(school).eligible? && !LevellingUpPremiumPayments::SchoolEligibility.new(school).eligible?
+    Policies::EarlyCareerPayments::SchoolEligibility.new(school).eligible? && !Policies::LevellingUpPremiumPayments::SchoolEligibility.new(school).eligible?
   end
 
   def bad_itt_subject_for_ecp?
@@ -167,7 +167,7 @@ class IneligibilityReasonChecker
   def trainee_teacher_last_policy_year?
     [
       @current_claim.eligibility.nqt_in_academic_year_after_itt == false,
-      @current_claim.academic_year >= AcademicYear.new(LevellingUpPremiumPayments::Eligibility::LAST_POLICY_YEAR),
+      @current_claim.academic_year >= AcademicYear.new(Policies::LevellingUpPremiumPayments::Eligibility::LAST_POLICY_YEAR),
       @current_claim.academic_year >= AcademicYear.new(Policies::EarlyCareerPayments::Eligibility::LAST_POLICY_YEAR)
     ].all?
   end

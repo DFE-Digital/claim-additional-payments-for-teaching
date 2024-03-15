@@ -159,7 +159,7 @@ module Policies
 
       def ecp_only_school?
         Policies::EarlyCareerPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible? &&
-          !LevellingUpPremiumPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible?
+          !Policies::LevellingUpPremiumPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible?
       end
 
       def set_qualifications_from_dqt_record

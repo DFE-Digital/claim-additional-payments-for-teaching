@@ -133,7 +133,7 @@ RSpec.describe Decision, type: :model do
     end
 
     context "when the claim policy is LUP" do
-      let(:policy) { LevellingUpPremiumPayments }
+      let(:policy) { Policies::LevellingUpPremiumPayments }
 
       it { is_expected.to eq(expected_reasons_non_ecp) }
     end

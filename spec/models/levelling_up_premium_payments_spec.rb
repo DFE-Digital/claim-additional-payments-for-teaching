@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe LevellingUpPremiumPayments, type: :model do
+RSpec.describe Policies::LevellingUpPremiumPayments, type: :model do
   it { is_expected.to include(BasePolicy) }
 
   it do

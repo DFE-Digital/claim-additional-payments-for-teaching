@@ -7,7 +7,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
   let(:eligibility_lup) { create(:levelling_up_premium_payments_eligibility, :eligible) }
 
   let(:claim) { create(:claim, :skipped_tid, policy: Policies::EarlyCareerPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility, logged_in_with_tid:, details_check:, dqt_teacher_status:, qualifications_details_check:) }
-  let(:lup_claim) { create(:claim, :skipped_tid, policy: LevellingUpPremiumPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility_lup) }
+  let(:lup_claim) { create(:claim, :skipped_tid, policy: Policies::LevellingUpPremiumPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility_lup) }
   let(:current_claim) { CurrentClaim.new(claims: [claim, lup_claim]) }
   let(:teacher_id_enabled) { true }
   let(:logged_in_with_tid) { nil }
@@ -496,7 +496,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
 
   describe "eligibility affect on slugs" do
     let(:ecp_claim) { build(:claim, policy: Policies::EarlyCareerPayments, eligibility_trait: ecp_eligibility) }
-    let(:lup_claim) { build(:claim, policy: LevellingUpPremiumPayments, eligibility_trait: lup_eligibility) }
+    let(:lup_claim) { build(:claim, policy: Policies::LevellingUpPremiumPayments, eligibility_trait: lup_eligibility) }
     let(:current_claim) { CurrentClaim.new(claims: [ecp_claim, lup_claim]) }
 
     subject { described_class.new(current_claim).slugs }

@@ -93,7 +93,7 @@ module Journeys
       # slug sequence of both LUP and ECP claims
       def slugs
         overall_eligibility_status = claim.eligibility_status
-        lup_claim = claim.for_policy(LevellingUpPremiumPayments)
+        lup_claim = claim.for_policy(Policies::LevellingUpPremiumPayments)
         ecp_claim = claim.for_policy(Policies::EarlyCareerPayments)
 
         SLUGS.dup.tap do |sequence|
@@ -174,7 +174,7 @@ module Journeys
               sequence.delete("qualification") if claim.dqt_teacher_record&.route_into_teaching
               sequence.delete("itt-year") if claim.dqt_teacher_record&.itt_academic_year_for_claim
               sequence.delete("eligible-itt-subject") if claim.dqt_teacher_record&.eligible_itt_subject_for_claim
-              sequence.delete("eligible-degree-subject") if claim.for_policy(LevellingUpPremiumPayments)&.dqt_teacher_record&.eligible_degree_code?
+              sequence.delete("eligible-degree-subject") if claim.for_policy(Policies::LevellingUpPremiumPayments)&.dqt_teacher_record&.eligible_degree_code?
             elsif claim.dqt_teacher_status && (!claim.has_dqt_record? || claim.has_no_dqt_data_for_claim?)
               sequence.delete("qualification-details")
             end
