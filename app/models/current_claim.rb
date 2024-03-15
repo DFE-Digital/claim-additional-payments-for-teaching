@@ -24,10 +24,7 @@ class CurrentClaim
 
   def for_policy(policy)
     claims.find do |c|
-      [
-        Policies.constantize(policy.to_s)::Eligibility.to_s,
-        "#{policy}::Eligibility"
-      ].include?(c.eligibility_type)
+      c.eligibility_type == Policies.constantize(policy)::Eligibility.to_s
     end
   end
 
@@ -165,9 +162,7 @@ class CurrentClaim
   end
 
   def eligible_eligibility
-    # TODO: Remove the gsub after all Policies are namespaced
-    #
-    claims.sort_by { |c| c.eligibility_type.gsub("Policies::", "") }.each do |claim|
+    claims.sort_by(&:eligibility_type).each do |claim|
       return claim.eligibility unless claim.eligibility.ineligible?
     end
 
