@@ -8,9 +8,6 @@ class StaticPagesController < BasePublicController
   def cookies
   end
 
-  def privacy_notice
-  end
-
   def terms_conditions
   end
 

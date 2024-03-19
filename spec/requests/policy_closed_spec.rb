@@ -34,7 +34,7 @@ RSpec.describe "Maintenance Mode", type: :request do
     end
 
     it "still allows access to the static pages" do
-      get privacy_notice_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
+      get terms_conditions_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
       expect(response).to have_http_status(:ok)
     end
 

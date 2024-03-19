@@ -56,7 +56,7 @@ Rails.application.routes.draw do
     get "existing-session", as: :existing_session, to: "claims#existing_session"
     post "start-new", to: "claims#start_new", as: :start_new
 
-    %w[privacy_notice terms_conditions contact_us cookies accessibility_statement].each do |page_name|
+    %w[terms_conditions contact_us cookies accessibility_statement].each do |page_name|
       get page_name.dasherize, to: "static_pages##{page_name}", as: page_name
     end
 
