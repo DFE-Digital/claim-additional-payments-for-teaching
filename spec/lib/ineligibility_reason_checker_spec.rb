@@ -3,11 +3,13 @@ require "ineligibility_reason_checker"
 
 RSpec.describe IneligibilityReasonChecker do
   let(:academic_year) { AcademicYear.new(2022) }
+  let(:none_of_the_above_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new("None")) }
   let(:ecp_claim) { build(:claim, policy: Policies::EarlyCareerPayments, academic_year:, eligibility: ecp_eligibility, logged_in_with_tid:, qualifications_details_check:) }
   let(:lup_claim) { build(:claim, policy: Policies::LevellingUpPremiumPayments, academic_year:, eligibility: lup_eligibility, logged_in_with_tid:, qualifications_details_check:) }
   let(:logged_in_with_tid) { nil }
   let(:qualifications_details_check) { nil }
 
+  let(:school_eligible_for_ecp_and_lup) { build(:school, :early_career_payments_eligible, :levelling_up_premium_payments_eligible) }
   let(:school_eligible_for_ecp_but_not_lup) { build(:school, :early_career_payments_eligible) }
   let(:school_ineligible_for_both_ecp_and_lup) { build(:school, :early_career_payments_ineligible) }
 
@@ -74,12 +76,18 @@ RSpec.describe IneligibilityReasonChecker do
       it { is_expected.to eq(:generic) }
     end
 
-    context "None of the above ITT year" do
-      let(:none_of_the_above_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new("None")) }
+    context "eligible for both ECP and LUP but 'None of the above' ITT year" do
+      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible, current_school: school_eligible_for_ecp_and_lup, itt_academic_year: none_of_the_above_academic_year) }
+      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, current_school: school_eligible_for_ecp_and_lup, itt_academic_year: none_of_the_above_academic_year) }
+
+      it { is_expected.to eq(:generic) }
+    end
+
+    context "eligible for ECP only but 'None of the above' ITT year" do
       let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible, itt_academic_year: none_of_the_above_academic_year) }
       let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, itt_academic_year: none_of_the_above_academic_year) }
 
-      it { is_expected.to eq(:generic) }
+      it { is_expected.to eq(:ecp_only_teacher_with_ineligible_itt_year) }
     end
 
     context "eligible for LUP only but insufficient teaching" do

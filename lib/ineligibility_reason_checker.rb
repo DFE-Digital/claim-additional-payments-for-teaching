@@ -8,6 +8,8 @@ class IneligibilityReasonChecker
       :current_school
     elsif dqt_data_ineligible?
       :dqt_data_ineligible
+    elsif ecp_only_teacher_with_ineligible_itt_year?
+      :ecp_only_teacher_with_ineligible_itt_year
     elsif generic?
       :generic
     elsif trainee_teacher_last_policy_year?
@@ -54,6 +56,13 @@ class IneligibilityReasonChecker
       lack_both_valid_itt_subject_and_degree?,
       trainee_teaching_lacking_both_valid_itt_subject_and_degree?
     ].any?
+  end
+
+  def ecp_only_teacher_with_ineligible_itt_year?
+    [
+      school_eligible_for_ecp_but_not_lup?(@current_claim.eligibility.current_school),
+      @current_claim.eligibility.itt_academic_year == AcademicYear.new
+    ].all?
   end
 
   def generic?

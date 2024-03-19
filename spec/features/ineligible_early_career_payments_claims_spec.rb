@@ -413,6 +413,6 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.itt_academic_year).to eql AcademicYear.new
 
     expect(page).to have_text(I18n.t("additional_payments.ineligible.heading"))
-    expect(page).to have_css("div#generic")
+    expect(page).to have_css("div#ecp_only_teacher_with_ineligible_itt_year")
   end
 end
