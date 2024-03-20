@@ -147,7 +147,7 @@ class ClaimsController < BasePublicController
   def redirect_to_existing_claim_journey
     new_journey = Journeys.for_policy(current_claim.policy)
     new_claim_slug_sequence = new_journey.slug_sequence.new(current_claim)
-    new_page_sequence = PageSequence.new(current_claim, new_claim_slug_sequence, session[:slugs], params[:slug])
+    new_page_sequence = Journeys::PageSequence.new(current_claim, new_claim_slug_sequence, session[:slugs], params[:slug])
     redirect_to(claim_path(new_journey::ROUTING_NAME, slug: new_page_sequence.next_required_slug))
   end
 
@@ -213,7 +213,7 @@ class ClaimsController < BasePublicController
   end
 
   def update_session_with_current_slug
-    session[:slugs] << params[:slug] unless PageSequence::DEAD_END_SLUGS.include?(params[:slug])
+    session[:slugs] << params[:slug] unless Journeys::PageSequence::DEAD_END_SLUGS.include?(params[:slug])
   end
 
   def slug_to_redirect_to
@@ -229,7 +229,7 @@ class ClaimsController < BasePublicController
   end
 
   def page_sequence
-    @page_sequence ||= PageSequence.new(current_claim, claim_slug_sequence, session[:slugs], params[:slug])
+    @page_sequence ||= Journeys::PageSequence.new(current_claim, claim_slug_sequence, session[:slugs], params[:slug])
   end
 
   def claim_slug_sequence
