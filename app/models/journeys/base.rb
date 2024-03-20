@@ -11,5 +11,9 @@ module Journeys
     def slug_sequence
       self::SlugSequence
     end
+
+    def page_sequence_for_claim(claim, completed_slugs, current_slug)
+      PageSequence.new(claim, slug_sequence.new(claim), completed_slugs, current_slug)
+    end
   end
 end
