@@ -1,6 +1,6 @@
 module ClaimsHelper
-  def eligibility_answers(current_claim)
-    current_claim.policy::EligibilityAnswersPresenter.new(current_claim.eligible_eligibility).answers
+  def eligibility_answers(journey, current_claim)
+    journey.answers_presenter.new(current_claim.eligible_eligibility).answers
   end
 
   def identity_answers(claim)
