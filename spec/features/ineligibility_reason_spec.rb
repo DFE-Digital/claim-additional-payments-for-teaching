@@ -73,7 +73,7 @@ RSpec.feature "Ineligibility reason", slow: true do
         choose "None of the above"
         click_on "Continue"
 
-        expect(page).to have_css("div#generic")
+        expect(page).to have_css("div#teacher_with_ineligible_itt_year")
       end
     end
   end
