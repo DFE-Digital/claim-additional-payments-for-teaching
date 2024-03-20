@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Policies::EarlyCareerPayments::EligibilityAnswersPresenter do
+RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
   describe "#answers" do
     let(:policy_year) { AcademicYear.new(2022) }
     let(:policy) { Policies::EarlyCareerPayments }

@@ -1,8 +1,8 @@
-module Policies
-  module StudentLoans
-    class EligibilityAnswersPresenter
+module Journeys
+  module TeacherStudentLoanReimbursement
+    class AnswersPresenter
       include StudentLoansHelper
-      include StudentLoans::PresenterMethods
+      include Policies::StudentLoans::PresenterMethods
       include ActiveSupport::NumberHelper
 
       attr_reader :eligibility

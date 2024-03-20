@@ -1,6 +1,6 @@
-module Policies
-  module EarlyCareerPayments
-    class EligibilityAnswersPresenter
+module Journeys
+  module AdditionalPaymentsForTeaching
+    class AnswersPresenter
       include ActionView::Helpers::TranslationHelper
       include AdditionalPaymentsHelper
       include Claims::IttSubjectHelper

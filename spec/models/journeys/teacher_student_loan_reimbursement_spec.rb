@@ -53,4 +53,10 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement do
       page_sequence
     end
   end
+
+  describe ".answers_presenter" do
+    subject(:presenter) { described_class.answers_presenter }
+
+    it { is_expected.to eq(Journeys::TeacherStudentLoanReimbursement::AnswersPresenter) }
+  end
 end
