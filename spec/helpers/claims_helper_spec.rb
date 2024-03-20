@@ -10,14 +10,13 @@ describe ClaimsHelper do
         qts_award_year: "on_or_after_cut_off_date"
       )
     end
-    let(:claim) do
-      build(:claim, eligibility: eligibility)
-    end
+    let(:claim) { build(:claim, eligibility:) }
+    let(:journey) { Journeys::TeacherStudentLoanReimbursement }
 
     let(:current_claim) { CurrentClaim.new(claims: [claim]) }
 
     it "returns the correct answers for the eligibility's policy" do
-      answers = helper.eligibility_answers(current_claim)
+      answers = helper.eligibility_answers(journey, current_claim)
       expect(answers.first).to eq [I18n.t("student_loans.questions.qts_award_year"), "Between the start of the 2013 to 2014 academic year and the end of the 2020 to 2021 academic year", "qts-year"]
     end
   end

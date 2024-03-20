@@ -15,5 +15,9 @@ module Journeys
     def page_sequence_for_claim(claim, completed_slugs, current_slug)
       PageSequence.new(claim, slug_sequence.new(claim), completed_slugs, current_slug)
     end
+
+    def answers_presenter
+      self::AnswersPresenter
+    end
   end
 end
