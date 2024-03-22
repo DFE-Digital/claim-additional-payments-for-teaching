@@ -14,9 +14,7 @@ RSpec.describe StudentLoanAmountCheckJob do
       allow(ClaimStudentLoanDetailsUpdater).to receive(:call)
     end
 
-    context "when the previous student loan amount check was run manually" do
-      let!(:previous_task) { create(:task, claim: claim, name: "student_loan_amount", claim_verifier_match: nil, manual: true) }
-
+    shared_examples :skip_check do
       before do
         allow(AutomatedChecks::ClaimVerifiers::StudentLoanAmount).to receive(:new)
       end
@@ -28,18 +26,24 @@ RSpec.describe StudentLoanAmountCheckJob do
       end
     end
 
+    context "when the previous student loan amount check was run manually" do
+      let!(:previous_task) { create(:task, claim: claim, name: "student_loan_amount", claim_verifier_match: nil, manual: true) }
+
+      include_examples :skip_check
+    end
+
     context "when a claim is not awaiting decision" do
       let(:claim_status) { :approved }
 
+      include_examples :skip_check
+    end
+
+    context "when a claim was submitted using the student loan questions" do
       before do
-        allow(AutomatedChecks::ClaimVerifiers::StudentLoanAmount).to receive(:new)
+        claim.update!(submitted_using_slc_data: nil)
       end
 
-      it "excludes the claim from the check", :aggregate_failures do
-        expect(ClaimStudentLoanDetailsUpdater).not_to receive(:call).with(claim)
-        expect(AutomatedChecks::ClaimVerifiers::StudentLoanAmount).not_to receive(:new).with(claim: claim)
-        perform_job
-      end
+      include_examples :skip_check
     end
 
     context "when the student loan amount check did not run before" do
