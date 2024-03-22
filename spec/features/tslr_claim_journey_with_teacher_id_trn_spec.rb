@@ -71,7 +71,7 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
     choose "No"
     click_on "Continue"
 
-    # - student-loan-amount page
+    # - Information provided
     expect(page).to have_text("you can claim back the student loan repayments you made between #{Policies::StudentLoans.current_financial_year}.")
     click_on "Continue"
 
