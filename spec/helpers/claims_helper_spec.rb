@@ -25,159 +25,173 @@ describe ClaimsHelper do
   describe "#identity_answers" do
     let(:first_name) { "Jo" }
     let(:surname) { "Bloggs" }
-    let(:trn) { "1234567" }
-    let(:nino) { "QQ123456C" }
-    let(:dob) { Date.new(1980, 1, 10) }
+    let(:teacher_reference_number) { "1234567" }
+    let(:national_insurance_number) { "QQ123456C" }
+    let(:date_of_birth) { Date.new(1980, 1, 10) }
 
     let(:claim) do
       build(
         :claim,
-        policy: policy,
-        first_name: first_name,
-        surname: surname,
+        policy:,
+        first_name:,
+        surname:,
         address_line_1: "Flat 1",
         address_line_2: "1 Test Road",
         address_line_3: "Test Town",
         postcode: "AB1 2CD",
-        date_of_birth: dob,
-        teacher_reference_number: trn,
-        national_insurance_number: nino,
+        date_of_birth:,
+        teacher_reference_number:,
+        national_insurance_number:,
+        email_address_check:,
         email_address: "test@email.com",
+        mobile_check:,
+        provide_mobile_number: true,
+        mobile_number: "01234567890",
         payroll_gender: :dont_know,
-        logged_in_with_tid: logged_in_with_tid,
-        teacher_id_user_info: teacher_id_user_info
+        logged_in_with_tid:,
+        teacher_id_user_info:
       )
     end
 
-    context "for a claim with a policy of StudentLoans" do
-      let(:policy) { Policies::StudentLoans }
+    let(:teacher_id_user_info) {
+      {
+        "given_name" => first_name,
+        "family_name" => surname,
+        "trn" => teacher_reference_number,
+        "birthdate" => date_of_birth.to_s,
+        "ni_number" => national_insurance_number,
+        "phone_number" => "01234567890",
+        "email" => "test@email.com"
+      }
+    }
 
-      context "logged in with tid" do
-        let(:logged_in_with_tid) { true }
+    [Policies::StudentLoans, Policies::EarlyCareerPayments].each do |policy|
+      context "for a claim with a policy of #{policy}" do
+        let(:policy) { policy }
 
-        let(:teacher_id_user_info) {
-          {
-            "given_name" => first_name,
-            "family_name" => surname,
-            "trn" => trn,
-            "birthdate" => dob.to_s,
-            "ni_number" => nino
-          }
-        }
+        context "logged in with Teacher ID" do
+          let(:logged_in_with_tid) { true }
 
-        it "excludes answers provided by tid" do
-          expected_answers = [
-            [I18n.t("questions.address.generic.title"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
-            [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
-            [I18n.t("questions.email_address"), "test@email.com", "email-address"]
-          ]
+          context "when the user could make a selection for email and phone number" do
+            let(:email_address_check) { true }
+            let(:mobile_check) { "use" }
 
-          expect(helper.identity_answers(claim)).to eq expected_answers
-        end
-      end
+            it "includes only answers provided by the user, including the email and mobile number from Teacher ID" do
+              expected_answers = [
+                [I18n.t("questions.address.generic.title"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
+                [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
+                [I18n.t("questions.select_email.heading"), "test@email.com", "select-email"],
+                [I18n.t("questions.select_phone_number.heading"), "01234567890", "select-mobile"]
+              ]
 
-      context "not logged in with tid" do
-        let(:logged_in_with_tid) { false }
-        let(:teacher_id_user_info) { {} }
+              expect(helper.identity_answers(claim)).to eq expected_answers
+            end
 
-        it "returns an array of identity-related questions and answers for displaying to the user for review" do
-          expected_answers = [
-            [I18n.t("questions.name"), "Jo Bloggs", "personal-details"],
-            [I18n.t("questions.address.generic.title"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
-            [I18n.t("questions.date_of_birth"), "10 January 1980", "personal-details"],
-            [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
-            [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
-            [I18n.t("questions.national_insurance_number"), "QQ123456C", "personal-details"],
-            [I18n.t("questions.email_address"), "test@email.com", "email-address"]
-          ]
+            it "does not display the mobile number when the user declined to be contacted by mobile" do
+              claim.provide_mobile_number = false
+              claim.mobile_number = nil
+              claim.mobile_check = "decline"
 
-          expect(helper.identity_answers(claim)).to eq expected_answers
-        end
+              expected_answers = [
+                [I18n.t("questions.address.generic.title"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
+                [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
+                [I18n.t("questions.select_email.heading"), "test@email.com", "select-email"],
+                [I18n.t("questions.select_phone_number.heading"), "I do not want to be contacted by mobile", "select-mobile"]
+              ]
 
-        it "copes with a blank date of birth" do
-          claim.date_of_birth = nil
+              expect(helper.identity_answers(claim)).to eq expected_answers
+            end
+          end
 
-          expected_answers = [
-            [I18n.t("questions.name"), "Jo Bloggs", "personal-details"],
-            [I18n.t("questions.address.generic.title"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
-            [I18n.t("questions.date_of_birth"), nil, "personal-details"],
-            [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
-            [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
-            [I18n.t("questions.national_insurance_number"), "QQ123456C", "personal-details"],
-            [I18n.t("questions.email_address"), "test@email.com", "email-address"]
-          ]
+          context "when the user could not make a selection for email and phone number" do
+            let(:email_address_check) { nil }
+            let(:mobile_check) { nil }
 
-          expect(helper.identity_answers(claim)).to eq expected_answers
-        end
-      end
-    end
+            it "includes only answers provided by the user, including the email and mobile number provided manually" do
+              expected_answers = [
+                [I18n.t("questions.address.generic.title"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
+                [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
+                [I18n.t("questions.email_address"), "test@email.com", "email-address"],
+                [I18n.t("questions.provide_mobile_number"), "Yes", "provide-mobile-number"],
+                [I18n.t("questions.mobile_number"), "01234567890", "mobile-number"]
+              ]
 
-    context "for a claim with a policy of EarlyCareerPayments" do
-      let(:policy) { Policies::EarlyCareerPayments }
+              expect(helper.identity_answers(claim)).to eq expected_answers
+            end
 
-      context "logged in with tid" do
-        let(:logged_in_with_tid) { true }
+            it "does not display the mobile number when the user declined to be contacted by mobile" do
+              claim.provide_mobile_number = false
+              claim.mobile_number = nil
 
-        let(:teacher_id_user_info) {
-          {
-            "given_name" => first_name,
-            "family_name" => surname,
-            "trn" => trn,
-            "birthdate" => dob.to_s,
-            "ni_number" => nino
-          }
-        }
+              expected_answers = [
+                [I18n.t("questions.address.generic.title"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
+                [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
+                [I18n.t("questions.email_address"), "test@email.com", "email-address"],
+                [I18n.t("questions.provide_mobile_number"), "No", "provide-mobile-number"]
+              ]
 
-        it "excludes answers provided by tid" do
-          expected_answers = [
-            [I18n.t("questions.address.generic.title"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
-            [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
-            [I18n.t("questions.email_address"), "test@email.com", "email-address"],
-            [I18n.t("questions.provide_mobile_number"), "No", "provide-mobile-number"]
-          ]
-
-          expect(helper.identity_answers(claim)).to eq expected_answers
-        end
-      end
-
-      context "not logged in with tid" do
-        let(:logged_in_with_tid) { false }
-        let(:teacher_id_user_info) { {} }
-
-        it "returns an array of identity-related questions and answers for displaying to the user for review" do
-          claim.provide_mobile_number = "Yes"
-          claim.mobile_number = "01234567899"
-
-          expected_answers = [
-            [I18n.t("questions.name"), "Jo Bloggs", "personal-details"],
-            [I18n.t("questions.address.generic.title"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
-            [I18n.t("questions.date_of_birth"), "10 January 1980", "personal-details"],
-            [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
-            [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
-            [I18n.t("questions.national_insurance_number"), "QQ123456C", "personal-details"],
-            [I18n.t("questions.email_address"), "test@email.com", "email-address"],
-            [I18n.t("questions.provide_mobile_number"), "Yes", "provide-mobile-number"],
-            [I18n.t("questions.mobile_number"), "01234567899", "mobile-number"]
-          ]
-
-          expect(helper.identity_answers(claim)).to eq expected_answers
+              expect(helper.identity_answers(claim)).to eq expected_answers
+            end
+          end
         end
 
-        it "copes with a blank date of birth" do
-          claim.date_of_birth = nil
+        context "not logged in with Teacher ID" do
+          let(:logged_in_with_tid) { false }
+          let(:teacher_id_user_info) { {} }
+          let(:email_address_check) { nil }
+          let(:mobile_check) { nil }
 
-          expected_answers = [
-            [I18n.t("questions.name"), "Jo Bloggs", "personal-details"],
-            [I18n.t("questions.address.generic.title"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
-            [I18n.t("questions.date_of_birth"), nil, "personal-details"],
-            [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
-            [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
-            [I18n.t("questions.national_insurance_number"), "QQ123456C", "personal-details"],
-            [I18n.t("questions.email_address"), "test@email.com", "email-address"],
-            [I18n.t("questions.provide_mobile_number"), "No", "provide-mobile-number"]
-          ]
+          it "returns an array of identity-related questions and answers for displaying to the user for review" do
+            expected_answers = [
+              [I18n.t("questions.name"), "Jo Bloggs", "personal-details"],
+              [I18n.t("questions.address.generic.title"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
+              [I18n.t("questions.date_of_birth"), "10 January 1980", "personal-details"],
+              [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
+              [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
+              [I18n.t("questions.national_insurance_number"), "QQ123456C", "personal-details"],
+              [I18n.t("questions.email_address"), "test@email.com", "email-address"],
+              [I18n.t("questions.provide_mobile_number"), "Yes", "provide-mobile-number"],
+              [I18n.t("questions.mobile_number"), "01234567890", "mobile-number"]
+            ]
 
-          expect(helper.identity_answers(claim)).to eq expected_answers
+            expect(helper.identity_answers(claim)).to eq expected_answers
+          end
+
+          it "copes with a blank date of birth" do
+            claim.date_of_birth = nil
+
+            expected_answers = [
+              [I18n.t("questions.name"), "Jo Bloggs", "personal-details"],
+              [I18n.t("questions.address.generic.title"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
+              [I18n.t("questions.date_of_birth"), nil, "personal-details"],
+              [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
+              [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
+              [I18n.t("questions.national_insurance_number"), "QQ123456C", "personal-details"],
+              [I18n.t("questions.email_address"), "test@email.com", "email-address"],
+              [I18n.t("questions.provide_mobile_number"), "Yes", "provide-mobile-number"],
+              [I18n.t("questions.mobile_number"), "01234567890", "mobile-number"]
+            ]
+
+            expect(helper.identity_answers(claim)).to eq expected_answers
+          end
+
+          it "does not display the mobile number when one has not been provided" do
+            claim.provide_mobile_number = false
+            claim.mobile_number = nil
+
+            expected_answers = [
+              [I18n.t("questions.name"), "Jo Bloggs", "personal-details"],
+              [I18n.t("questions.address.generic.title"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
+              [I18n.t("questions.date_of_birth"), "10 January 1980", "personal-details"],
+              [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
+              [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
+              [I18n.t("questions.national_insurance_number"), "QQ123456C", "personal-details"],
+              [I18n.t("questions.email_address"), "test@email.com", "email-address"],
+              [I18n.t("questions.provide_mobile_number"), "No", "provide-mobile-number"]
+            ]
+
+            expect(helper.identity_answers(claim)).to eq expected_answers
+          end
         end
       end
     end

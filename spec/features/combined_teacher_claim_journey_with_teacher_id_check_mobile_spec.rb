@@ -35,35 +35,77 @@ RSpec.feature "Combined journey with Teacher ID mobile check" do
 
   scenario "User chooses the mobile number from Teacher ID" do
     navigate_to_check_mobile_page
-
-    find("#claim_mobile_check_use").click
-    click_on "Continue"
-
-    fill_in_remaining_details_and_submit_claim
+    mobile_number_selection(:use)
+    fill_in_remaining_details
+    review_and_submit
   end
 
   scenario "User chooses an alternative mobile number" do
     navigate_to_check_mobile_page
-
-    find("#claim_mobile_check_alternative").click
-    click_on "Continue"
-
-    fill_in "claim_mobile_number", with: alt_phone_number
-    click_on "Continue"
-
-    fill_in "claim_one_time_password", with: otp_code
-    click_on "Confirm"
-
-    fill_in_remaining_details_and_submit_claim
+    mobile_number_selection(:alternative)
+    fill_in_remaining_details
+    review_and_submit
   end
 
   scenario "User chooses not to be contacted by mobile" do
     navigate_to_check_mobile_page
+    mobile_number_selection(:declined)
+    fill_in_remaining_details
+    review_and_submit
+  end
 
-    find("#claim_mobile_check_declined").click
-    click_on "Continue"
+  scenario "Changing answer from 'Teacher ID number' to 'A different mobile number'" do
+    navigate_to_check_mobile_page
+    mobile_number_selection(:use)
+    fill_in_remaining_details
+    go_back_to_mobile_selection
+    mobile_number_selection(:alternative)
+    review_and_submit
+  end
 
-    fill_in_remaining_details_and_submit_claim
+  scenario "Changing answer from 'Teacher ID number' to 'I do not want to be contacted by mobile'" do
+    navigate_to_check_mobile_page
+    mobile_number_selection(:use)
+    fill_in_remaining_details
+    go_back_to_mobile_selection
+    mobile_number_selection(:declined)
+    review_and_submit
+  end
+
+  scenario "Changing answer from 'A different mobile number' to 'Teacher ID number'" do
+    navigate_to_check_mobile_page
+    mobile_number_selection(:alternative)
+    fill_in_remaining_details
+    go_back_to_mobile_selection
+    mobile_number_selection(:use)
+    review_and_submit
+  end
+
+  scenario "Changing answer from 'A different mobile number' to 'I do not want to be contacted by mobile'" do
+    navigate_to_check_mobile_page
+    mobile_number_selection(:alternative)
+    fill_in_remaining_details
+    go_back_to_mobile_selection
+    mobile_number_selection(:declined)
+    review_and_submit
+  end
+
+  scenario "Changing answer from 'I do not want to be contacted by mobile' to 'Teacher ID number'" do
+    navigate_to_check_mobile_page
+    mobile_number_selection(:declined)
+    fill_in_remaining_details
+    go_back_to_mobile_selection
+    mobile_number_selection(:use)
+    review_and_submit
+  end
+
+  scenario "Changing answer from 'I do not want to be contacted by mobile' to 'A different mobile number'" do
+    navigate_to_check_mobile_page
+    mobile_number_selection(:declined)
+    fill_in_remaining_details
+    go_back_to_mobile_selection
+    mobile_number_selection(:use)
+    review_and_submit
   end
 
   def navigate_to_check_mobile_page
@@ -121,7 +163,7 @@ RSpec.feature "Combined journey with Teacher ID mobile check" do
     click_on "Continue"
   end
 
-  def fill_in_remaining_details_and_submit_claim
+  def fill_in_remaining_details
     choose "Building society"
     click_on "Continue"
 
@@ -142,9 +184,48 @@ RSpec.feature "Combined journey with Teacher ID mobile check" do
     # - Did you take out a Postgraduate Masters or a Postgraduate Doctoral loan?
     choose "No"
     click_on "Continue"
+  end
 
+  def review_and_submit
     click_on "Accept and send"
-
     expect(page).to have_text("We have sent you a confirmation email")
+  end
+
+  def mobile_number_selection(choice)
+    case choice
+    when :use
+      use_teacher_id_number
+    when :alternative
+      provide_alternative_number
+    when :declined
+      decline_to_be_contacted_by_mobile
+    else
+      raise "Invalid argument '#{choice}'"
+    end
+  end
+
+  def use_teacher_id_number
+    find("#claim_mobile_check_use").click
+    click_on "Continue"
+  end
+
+  def provide_alternative_number
+    find("#claim_mobile_check_alternative").click
+    click_on "Continue"
+
+    fill_in "claim_mobile_number", with: alt_phone_number
+    click_on "Continue"
+
+    fill_in "claim_one_time_password", with: otp_code
+    click_on "Confirm"
+  end
+
+  def decline_to_be_contacted_by_mobile
+    find("#claim_mobile_check_declined").click
+    click_on "Continue"
+  end
+
+  def go_back_to_mobile_selection
+    page.first("a[href='#{claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "select-mobile")}']", minimum: 1).click
   end
 end
