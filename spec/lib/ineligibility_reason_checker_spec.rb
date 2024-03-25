@@ -80,7 +80,7 @@ RSpec.describe IneligibilityReasonChecker do
       let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible, current_school: school_eligible_for_ecp_and_lup, itt_academic_year: none_of_the_above_academic_year) }
       let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, current_school: school_eligible_for_ecp_and_lup, itt_academic_year: none_of_the_above_academic_year) }
 
-      it { is_expected.to eq(:generic) }
+      it { is_expected.to eq(:teacher_with_ineligible_itt_year) }
     end
 
     context "eligible for ECP only but 'None of the above' ITT year" do
