@@ -18,7 +18,7 @@ module PartOfClaimJourney
   end
 
   def send_unstarted_claimants_to_the_start
-    redirect_to Journeys.for_routing_name(current_journey_routing_name).start_page_url, allow_other_host: true
+    redirect_to journey.start_page_url, allow_other_host: true
   end
 
   def skip_landing_page?
