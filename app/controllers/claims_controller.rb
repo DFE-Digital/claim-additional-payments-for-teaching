@@ -198,7 +198,7 @@ class ClaimsController < BasePublicController
   end
 
   def check_page_is_in_sequence
-    unless correct_policy_namespace?
+    unless correct_journey_for_claim_in_progress?
       clear_claim_session
       return redirect_to new_claim_path
     end
@@ -299,8 +299,8 @@ class ClaimsController < BasePublicController
     show
   end
 
-  def correct_policy_namespace?
-    Journeys.for_routing_name(current_journey_routing_name)::POLICIES.include?(current_claim.policy)
+  def correct_journey_for_claim_in_progress?
+    journey::POLICIES.include?(current_claim.policy)
   end
 
   def failed_details_check_with_teacher_id?
