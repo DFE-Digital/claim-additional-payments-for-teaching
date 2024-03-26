@@ -5,22 +5,10 @@ module PartOfClaimJourney
     before_action :set_cache_headers
     before_action :check_whether_closed_for_submissions, if: :current_journey_routing_name
     before_action :send_unstarted_claimants_to_the_start, if: :send_to_start?
-    helper_method :current_claim, :submitted_claim, :journey, :journey_configuration
+    helper_method :submitted_claim
   end
 
   private
-
-  def current_journey_routing_name
-    super || Journeys.for_policy(current_claim.policy)::ROUTING_NAME
-  end
-
-  def journey
-    Journeys.for_routing_name(current_journey_routing_name)
-  end
-
-  def journey_configuration
-    journey.configuration
-  end
 
   def check_whether_closed_for_submissions
     unless journey_configuration.open_for_submissions?
@@ -45,37 +33,9 @@ module PartOfClaimJourney
     !skip_landing_page? && !current_claim_persisted?
   end
 
-  def current_claim
-    @current_claim ||= claim_from_session || build_new_claim
-  end
-
   def submitted_claim
     return unless session[:submitted_claim_id]
     CurrentClaim.new(claims: Claim.where(id: session[:submitted_claim_id]))
-  end
-
-  def claim_from_session
-    return unless session.key?(:claim_id)
-
-    selected_policy = if session[:selected_claim_policy].present?
-      Policies.constantize(session[:selected_claim_policy])
-    end
-
-    claims = Claim.includes(:eligibility).where(id: session[:claim_id])
-    claims.present? ? CurrentClaim.new(claims: claims, selected_policy: selected_policy) : nil
-  end
-
-  def build_new_claim
-    CurrentClaim.new(claims: build_new_claims)
-  end
-
-  def build_new_claims
-    journey::POLICIES.map do |policy|
-      Claim.new(
-        eligibility: policy::Eligibility.new,
-        academic_year: journey_configuration.current_academic_year
-      )
-    end
   end
 
   def set_cache_headers

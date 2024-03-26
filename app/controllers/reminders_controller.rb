@@ -76,18 +76,6 @@ class RemindersController < BasePublicController
     Reminder::SLUGS.index(params[:slug]) || 0
   end
 
-  def current_journey_routing_name
-    "additional-payments"
-  end
-
-  def journey
-    Journeys.for_routing_name(current_journey_routing_name)
-  end
-
-  def journey_configuration
-    journey.configuration
-  end
-
   def current_reminder
     @current_reminder ||=
       reminder_from_session ||
