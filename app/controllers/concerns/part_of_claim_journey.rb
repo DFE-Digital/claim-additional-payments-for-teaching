@@ -5,13 +5,21 @@ module PartOfClaimJourney
     before_action :set_cache_headers
     before_action :check_whether_closed_for_submissions, if: :current_journey_routing_name
     before_action :send_unstarted_claimants_to_the_start, if: :send_to_start?
-    helper_method :current_claim, :submitted_claim
+    helper_method :current_claim, :submitted_claim, :journey, :journey_configuration
   end
 
   private
 
   def current_journey_routing_name
     super || Journeys.for_policy(current_claim.policy)::ROUTING_NAME
+  end
+
+  def journey
+    Journeys.for_routing_name(current_journey_routing_name)
+  end
+
+  def journey_configuration
+    journey.configuration
   end
 
   def check_whether_closed_for_submissions
@@ -68,14 +76,6 @@ module PartOfClaimJourney
         academic_year: journey_configuration.current_academic_year
       )
     end
-  end
-
-  def journey
-    Journeys.for_routing_name(current_journey_routing_name)
-  end
-
-  def journey_configuration
-    journey.configuration
   end
 
   def set_cache_headers
