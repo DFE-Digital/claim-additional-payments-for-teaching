@@ -52,8 +52,12 @@ class RemindersController < BasePublicController
 
   private
 
+  def slugs
+    Journeys::AdditionalPaymentsForTeaching::REMINDER_SLUGS
+  end
+
   def first_template_in_sequence
-    Reminder::SLUGS.first.underscore
+    slugs.first.underscore
   end
 
   def current_template
@@ -65,15 +69,15 @@ class RemindersController < BasePublicController
   end
 
   def next_slug
-    Reminder::SLUGS[current_slug_index + 1]
+    slugs[current_slug_index + 1]
   end
 
   def current_slug
-    Reminder::SLUGS[current_slug_index]
+    slugs[current_slug_index]
   end
 
   def current_slug_index
-    Reminder::SLUGS.index(params[:slug]) || 0
+    slugs.index(params[:slug]) || 0
   end
 
   def current_reminder
