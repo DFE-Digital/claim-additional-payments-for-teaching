@@ -19,5 +19,9 @@ module Journeys
     def answers_presenter
       self::AnswersPresenter
     end
+
+    def answers_for_claim(claim)
+      answers_presenter.new(claim)
+    end
   end
 end
