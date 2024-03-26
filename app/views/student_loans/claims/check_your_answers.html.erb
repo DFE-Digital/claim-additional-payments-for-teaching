@@ -8,19 +8,19 @@
       Check your answers before sending your application
     </h1>
 
-    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Eligibility details", answers: journey.answers_for_claim(current_claim).eligibility_answers} unless current_claim.has_ecp_or_lupp_policy? %>
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Eligibility details", answers: journey.answers_for_claim(current_claim).eligibility_answers} %>
 
     <%= render partial: "claims/check_your_answers_section", locals: {heading: "Identity details", answers: journey.answers_for_claim(current_claim).identity_answers} %>
 
     <%= render partial: "claims/check_your_answers_section", locals: {heading: "Payment details", answers: journey.answers_for_claim(current_claim).payment_answers} %>
 
     <%= form_with url: claim_submission_path do |form| %>
-      <%= send_your_application(current_claim) %>
+      <h2 class="govuk-heading-m"><%= t("check_your_answers.heading_send_application") %></h2>
 
-      <%= statement(current_claim) %>
+      <p class="govuk-body"><%= t("check_your_answers.statement") %></p>
 
       <div class="govuk-form-group">
-        <%= form.submit submit_text(current_claim), class: "govuk-button" %>
+        <%= form.submit t("check_your_answers.btn_text"), class: "govuk-button" %>
       </div>
     <% end %>
   </div>
