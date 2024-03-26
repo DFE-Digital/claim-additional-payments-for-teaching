@@ -39,10 +39,6 @@ module ClaimsHelper
     claim.date_of_birth && l(claim.date_of_birth)
   end
 
-  def additional_payments_open?
-    Journeys::AdditionalPaymentsForTeaching.configuration.open_for_submissions?
-  end
-
   def show_name(claim)
     !(claim.logged_in_with_tid? && claim.name_same_as_tid?)
   end
