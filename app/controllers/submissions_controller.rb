@@ -12,7 +12,7 @@ class SubmissionsController < BasePublicController
     session[:submitted_claim_id] = current_claim.id
     clear_claim_session
 
-    redirect_to submitted_claim.has_ecp_or_lupp_policy? ? claim_completion_path : claim_confirmation_path
+    redirect_to claim_confirmation_path
   rescue Claim::NotSubmittable
     current_claim.valid?(:submit)
     render "claims/check_your_answers"
