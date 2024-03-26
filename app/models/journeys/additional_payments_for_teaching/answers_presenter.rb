@@ -1,15 +1,9 @@
 module Journeys
   module AdditionalPaymentsForTeaching
-    class AnswersPresenter
+    class AnswersPresenter < BaseAnswersPresenter
       include ActionView::Helpers::TranslationHelper
       include AdditionalPaymentsHelper
       include Claims::IttSubjectHelper
-
-      attr_reader :eligibility
-
-      def initialize(eligibility)
-        @eligibility = eligibility
-      end
 
       # Formats the eligibility as a list of questions and answers, each
       # accompanied by a slug for changing the answer. Suitable for playback to
@@ -20,7 +14,7 @@ module Journeys
       # [0]: question text;
       # [1]: answer text;
       # [2]: slug for changing the answer.
-      def answers
+      def eligibility_answers
         [].tap do |a|
           a << current_school
           a << nqt_in_academic_year_after_itt
@@ -38,6 +32,13 @@ module Journeys
 
           a << teaching_subject_now
         end.compact
+      end
+
+      def identity_answers
+        super.tap do |a|
+          a << [translate("questions.provide_mobile_number"), (claim.provide_mobile_number ? "Yes" : "No"), "provide-mobile-number"]
+          a << [translate("questions.mobile_number"), claim.mobile_number, "mobile-number"] if claim.provide_mobile_number?
+        end
       end
 
       private
