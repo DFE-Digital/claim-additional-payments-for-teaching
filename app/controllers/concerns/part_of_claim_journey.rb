@@ -21,16 +21,12 @@ module PartOfClaimJourney
     redirect_to Journeys.for_routing_name(current_journey_routing_name).start_page_url, allow_other_host: true
   end
 
-  def current_claim_persisted?
-    current_claim.persisted?
-  end
-
   def skip_landing_page?
     params[:skip_landing_page] == "true"
   end
 
   def send_to_start?
-    !skip_landing_page? && !current_claim_persisted?
+    !skip_landing_page? && !current_claim.persisted?
   end
 
   def submitted_claim
