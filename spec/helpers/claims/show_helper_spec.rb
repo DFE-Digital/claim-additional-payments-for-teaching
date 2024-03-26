@@ -3,21 +3,19 @@ require "rails_helper"
 RSpec.describe Claims::ShowHelper do
   let(:claim) { build(:claim, policy: policy) }
 
-  describe "#shared_view_css_class_size(claim)" do
-    context "with a StudentLoans policy" do
-      let(:policy) { Policies::StudentLoans }
+  describe "#fieldset_legend_css_class_for_journey" do
+    subject(:css_class) { helper.fieldset_legend_css_class_for_journey(journey) }
 
-      it "returns the correct css sizing" do
-        expect(helper.shared_view_css_class_size(claim)).to eq "xl"
-      end
+    context "for Journeys::AdditionalPaymentsForTeaching" do
+      let(:journey) { Journeys::AdditionalPaymentsForTeaching }
+
+      it { is_expected.to eq("govuk-fieldset__legend--l") }
     end
 
-    context "with a EarlyCareerPayments policy" do
-      let(:policy) { Policies::EarlyCareerPayments }
+    context "for Journeys::TeacherStudentLoanRepayment" do
+      let(:journey) { Journeys::TeacherStudentLoanReimbursement }
 
-      it "returns the correct css sizing" do
-        expect(helper.shared_view_css_class_size(claim)).to eq "l"
-      end
+      it { is_expected.to eq("govuk-fieldset__legend--xl") }
     end
   end
 

@@ -7,13 +7,13 @@
     <fieldset class="govuk-fieldset" aria-describedby="school-search-result-hint">
 
       <% if current_claim.has_ecp_or_lupp_policy? %>
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_class_size(current_claim) %>">
+        <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">
           <h1 class="govuk-fieldset__heading">
             <%= ecp_question %>
           </h1>
         </legend>
       <% else %>
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_class_size(current_claim) %>">
+        <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">
           <h1 class="govuk-fieldset__heading">
             <%= question %>
           </h1>
