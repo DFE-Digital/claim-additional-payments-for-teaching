@@ -1573,26 +1573,6 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe "#has_tslr_policy?" do
-    let(:claim) { create(:claim, policy: policy) }
-
-    context "with student loans policy" do
-      let(:policy) { Policies::StudentLoans }
-
-      it "returns true" do
-        expect(claim.has_tslr_policy?).to eq(true)
-      end
-    end
-
-    context "with early-career payments policy" do
-      let(:policy) { Policies::EarlyCareerPayments }
-
-      it "returns false" do
-        expect(claim.has_tslr_policy?).to eq(false)
-      end
-    end
-  end
-
   describe "#has_lupp_policy?" do
     subject(:result) { claim.has_lupp_policy? }
     let(:claim) { create(:claim, policy: policy) }
