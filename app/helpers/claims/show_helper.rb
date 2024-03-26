@@ -1,7 +1,11 @@
 module Claims
   module ShowHelper
-    def shared_view_css_class_size(claim)
-      claim.has_ecp_or_lupp_policy? ? "l" : "xl"
+    def fieldset_legend_css_class_for_journey(journey)
+      (journey == Journeys::AdditionalPaymentsForTeaching) ? "govuk-fieldset__legend--l" : "govuk-fieldset__legend--xl"
+    end
+
+    def label_css_class_for_journey(journey)
+      (journey == Journeys::AdditionalPaymentsForTeaching) ? "govuk-label--l" : "govuk-label--xl"
     end
 
     def policy_name(claim)

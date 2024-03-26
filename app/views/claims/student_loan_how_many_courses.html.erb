@@ -1,5 +1,4 @@
 <% content_for(:page_title, page_title(t("questions.student_loan_how_many_courses"), journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
-<% shared_view_css_size = current_claim.policy == Policies::EarlyCareerPayments ? "l" : "xl" %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -9,7 +8,7 @@
       <%= form.hidden_field :student_loan_courses %>
         <%= form_group_tag current_claim do %>
           <fieldset class="govuk-fieldset" role="group", aria-describedby="student_loan_courses-hint">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_size %>">
+            <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">
               <span class="govuk-caption-xl">About your student loans</span>
               <h1 class="govuk-fieldset__heading">
                 <%= t("questions.student_loan_how_many_courses") %>
