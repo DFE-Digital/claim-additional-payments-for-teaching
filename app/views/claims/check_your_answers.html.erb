@@ -8,11 +8,11 @@
       Check your answers before sending your application
     </h1>
 
-    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Eligibility details", answers: eligibility_answers(journey, current_claim)} unless current_claim.has_ecp_or_lupp_policy? %>
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Eligibility details", answers: journey.answers_for_claim(current_claim).eligibility_answers} unless current_claim.has_ecp_or_lupp_policy? %>
 
-    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Identity details", answers: identity_answers(current_claim)} %>
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Identity details", answers: journey.answers_for_claim(current_claim).identity_answers} %>
 
-    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Payment details", answers: payment_answers(current_claim)} %>
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Payment details", answers: journey.answers_for_claim(current_claim).payment_answers} %>
 
     <%= form_with url: claim_submission_path do |form| %>
       <%= send_your_application(current_claim) %>
