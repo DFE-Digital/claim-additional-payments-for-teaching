@@ -64,6 +64,12 @@ module Journeys
         "ineligible"
       ].freeze
 
+      REMINDER_SLUGS = %w[
+        personal-details
+        email-verification
+        set
+      ].freeze
+
       SLUGS = (
         ELIGIBILITY_SLUGS +
         PERSONAL_DETAILS_SLUGS +
