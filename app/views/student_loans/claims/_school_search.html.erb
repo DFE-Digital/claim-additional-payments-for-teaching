@@ -22,15 +22,9 @@
 
     <%= hidden_field_tag :exclude_closed, exclude_closed, id: nil %>
 
-   <% if current_claim.has_ecp_or_lupp_policy? %>
-     <h1 class="govuk-label-wrapper">
-      <%= label_tag :school_search, ecp_question, class: "govuk-label govuk-label--#{shared_view_css_size}" %>
-     </h1>
-   <% else %>
-     <h1 class="govuk-label-wrapper">
-       <%= label_tag :school_search, question, class: "govuk-label govuk-label--#{shared_view_css_size}" %>
-     </h1>
-   <% end %>
+   <h1 class="govuk-label-wrapper">
+     <%= label_tag :school_search, question, class: "govuk-label govuk-label--#{shared_view_css_size}" %>
+   </h1>
 
     <% if params[:school_search].present? && current_claim.errors.empty? %>
       <p class="govuk-body">
@@ -57,19 +51,6 @@
                          "aria-describedby" => "school_search-hint" %>
 
     </div>
-  <% end %>
-
-  <% if current_claim.has_ecp_or_lupp_policy? %>
-    <details class="govuk-details" data-module="govuk-details">
-      <summary class="govuk-details__summary">
-        <span class="govuk-details__summary-text">
-          If you are a trainee teacher not employed by a school
-        </span>
-      </summary>
-      <div class="govuk-details__text">
-        Trainee teachers who are not currently employed in an eligible state-funded secondary school in England cannot receive an additional payment. Check back again in your first year of teaching to see if you are eligible.
-      </div>
-    </details>
   <% end %>
 
   <%= submit_tag "Continue", class: "govuk-button" %>

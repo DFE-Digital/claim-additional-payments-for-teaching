@@ -5,24 +5,15 @@
 <%= form_for current_claim, url: claim_path(current_journey_routing_name) do |form| %>
   <%= form_group_tag current_claim do %>
     <fieldset class="govuk-fieldset" aria-describedby="school-search-result-hint">
+      <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">
+        <h1 class="govuk-fieldset__heading">
+          <%= question %>
+        </h1>
+      </legend>
 
-      <% if current_claim.has_ecp_or_lupp_policy? %>
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_class_size(current_claim) %>">
-          <h1 class="govuk-fieldset__heading">
-            <%= ecp_question %>
-          </h1>
-        </legend>
-      <% else %>
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_class_size(current_claim) %>">
-          <h1 class="govuk-fieldset__heading">
-            <%= question %>
-          </h1>
-        </legend>
-      <% end %>
-
-        <div id="school-search-result-hint" class="govuk-hint">
-          Select your school from the search results.
-        </div>
+      <div id="school-search-result-hint" class="govuk-hint">
+        Select your school from the search results.
+      </div>
 
       <%= hidden_field_tag :school_search, params[:school_search] %>
       <%= hidden_field_tag :exclude_closed, exclude_closed %>
