@@ -25,6 +25,7 @@ class ClaimsController < BasePublicController
   end
 
   def show
+    # TODO: Migrate the remaining slugs to form objects.
     if @form ||= form_from_slug(params)
       set_any_backlink_override
       render current_template
@@ -83,6 +84,7 @@ class ClaimsController < BasePublicController
   end
 
   def update
+    # TODO: Migrate the remaining slugs to form objects.
     if (@form = form_from_slug(params))
       if @form.save
         redirect_to claim_path(current_journey_routing_name, next_slug)
