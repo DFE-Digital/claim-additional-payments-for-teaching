@@ -12,6 +12,8 @@ class ClaimsController < BasePublicController
   before_action :clear_claim_session, only: [:new]
   before_action :prepend_view_path_for_journey
 
+  helper_method :next_slug
+
   def new
     persist
   end
@@ -139,7 +141,6 @@ class ClaimsController < BasePublicController
 
   private
 
-  helper_method :next_slug
   def next_slug
     page_sequence.next_slug
   end
@@ -391,13 +392,5 @@ class ClaimsController < BasePublicController
   def set_dqt_data_as_answers
     current_claim.attributes = claim_params
     current_claim.claims.each { |claim| claim.eligibility.set_qualifications_from_dqt_record }
-  end
-
-  def journey
-    Journeys.for_routing_name(current_journey_routing_name)
-  end
-
-  def journey_configuration
-    journey.configuration
   end
 end
