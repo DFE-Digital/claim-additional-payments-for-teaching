@@ -175,10 +175,10 @@ RSpec.feature "Combined journey with Teacher ID" do
     choose "Male"
     click_on "Continue"
 
-    expect(claim.reload.payroll_gender).to eq("male")
+    # - Check your answers instead of teacher-reference-number (removed slug)
+    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
 
     click_link "Back"
-
     expect(page).to have_text(I18n.t("questions.payroll_gender"))
   end
 
