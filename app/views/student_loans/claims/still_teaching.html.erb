@@ -10,7 +10,7 @@
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
               <% if current_claim.logged_in_with_tid_and_has_recent_tps_school? %>
-                <h1 class="govuk-fieldset__heading"><%= t("student_loans.forms.current_school.questions.current_school_search") %></h1>
+                <h1 class="govuk-fieldset__heading"><%= t("student_loans.forms.still_teaching.questions.which_school_currently") %></h1>
               <% else %>
                 <h1 class="govuk-fieldset__heading"><%= t("student_loans.questions.employment_status") %></h1>
               <% end %>

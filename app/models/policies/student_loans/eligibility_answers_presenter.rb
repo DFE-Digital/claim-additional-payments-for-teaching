@@ -51,7 +51,7 @@ module Policies
 
       def current_school
         [
-          translate("student_loans.forms.current_school.questions.current_school_search"),
+          translate("student_loans.forms.still_teaching.questions.which_school_currently"),
           eligibility.current_school_name,
           "still-teaching"
         ]
