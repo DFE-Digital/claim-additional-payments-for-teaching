@@ -26,4 +26,14 @@ class Form
   def backlink_path
     nil
   end
+
+  def i18n_errors_path(msg)
+    I18n.t("#{i18n_namespace}.forms.#{i18n_form_namespace}.errors.#{msg}")
+  end
+
+  private
+
+  def i18n_form_namespace
+    raise "Form#i18n_form_namespace requires all sub-classes to override"
+  end
 end

@@ -28,11 +28,11 @@ class CurrentSchoolForm < Form
     claim.eligibility.current_school_name
   end
 
-  def i18n_errors_path(msg)
-    I18n.t("#{view_path}.forms.current_school.errors.#{msg}")
-  end
-
   private
+
+  def i18n_form_namespace
+    "current_school"
+  end
 
   def permitted_params
     @permitted_params ||= params.fetch(:claim, {}).permit(:current_school_id)
