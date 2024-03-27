@@ -13,7 +13,7 @@
 
           <fieldset class="govuk-fieldset">
 
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_class_size(current_claim) %>">
+            <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">
               <h1 class="govuk-fieldset__heading">
                 <%= t("additional_payments.questions.disciplinary_action") %>
               </h1>

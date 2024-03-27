@@ -1536,6 +1536,7 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+<<<<<<< HEAD
   describe "#has_tslr_policy?" do
     let(:claim) { create(:claim, policy:) }
 

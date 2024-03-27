@@ -32,4 +32,31 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement do
 
     it { is_expected.to eq(Journeys::TeacherStudentLoanReimbursement::SlugSequence) }
   end
+
+  describe ".page_sequence_for_claim" do
+    let(:completed_slugs) { [:test] }
+    let(:current_slug) { [:test2] }
+    let(:claim) { double }
+
+    subject(:page_sequence) { described_class.page_sequence_for_claim(claim, completed_slugs, current_slug) }
+
+    it { is_expected.to be_a(Journeys::PageSequence) }
+
+    it "populates the page sequence attributes" do
+      expect(page_sequence.claim).to eq(claim)
+      expect(page_sequence.current_slug).to eq(current_slug)
+      expect(page_sequence.completed_slugs).to eq(completed_slugs)
+    end
+
+    it "creates a slug sequence" do
+      expect(Journeys::TeacherStudentLoanReimbursement::SlugSequence).to receive(:new).with(claim)
+      page_sequence
+    end
+  end
+
+  describe ".answers_presenter" do
+    subject(:presenter) { described_class.answers_presenter }
+
+    it { is_expected.to eq(Journeys::TeacherStudentLoanReimbursement::AnswersPresenter) }
+  end
 end

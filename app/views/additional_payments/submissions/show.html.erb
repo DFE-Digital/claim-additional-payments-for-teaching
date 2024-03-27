@@ -4,7 +4,12 @@
   <div class="govuk-grid-column-two-thirds">
 
     <div class="govuk-panel govuk-panel--confirmation">
-      <%= claim_submitted_title(submitted_claim) %>
+      <h1 class="govuk-panel__title" id="submitted-title">
+        You applied for
+        <%= "an early-career payment" if claim.has_ecp_policy? %>
+        <%= "a levelling up premium payment" if claim.has_lupp_policy? %>
+      </h1>
+
       <div class="govuk-panel__body">
         Your reference number<br>
         <strong><%= submitted_claim.reference %></strong>
@@ -17,10 +22,10 @@
 
     <h2 class="govuk-heading-m">What happens next</h2>
 
-    <%= render partial: "confirmation" %>
+    <%= render partial: "submissions/confirmation" %>
 
-    <% if submitted_claim.has_ecp_or_lupp_policy? && submitted_claim.set_a_reminder? %>
-      <%= render partial: "reminder" %>
+    <% if submitted_claim.set_a_reminder? %>
+      <%= render partial: "submissions/reminder" %>
     <% end %>
 
     <p class="govuk-body">

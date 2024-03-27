@@ -531,10 +531,6 @@ class Claim < ApplicationRecord
     policy == Policies::EarlyCareerPayments
   end
 
-  def has_tslr_policy?
-    policy == Policies::StudentLoans
-  end
-
   def has_lupp_policy?
     policy == Policies::LevellingUpPremiumPayments
   end

@@ -1,0 +1,27 @@
+<% content_for(:page_title, page_title("Check your answers before sending your application", journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
+
+    <h1 class="govuk-heading-xl">
+      Check your answers before sending your application
+    </h1>
+
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Eligibility details", answers: journey.answers_for_claim(current_claim).eligibility_answers} %>
+
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Identity details", answers: journey.answers_for_claim(current_claim).identity_answers} %>
+
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Payment details", answers: journey.answers_for_claim(current_claim).payment_answers} %>
+
+    <%= form_with url: claim_submission_path do |form| %>
+      <h2 class="govuk-heading-m"><%= t("check_your_answers.heading_send_application") %></h2>
+
+      <p class="govuk-body"><%= t("check_your_answers.statement") %></p>
+
+      <div class="govuk-form-group">
+        <%= form.submit t("check_your_answers.btn_text"), class: "govuk-button" %>
+      </div>
+    <% end %>
+  </div>
+</div>

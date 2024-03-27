@@ -2,12 +2,13 @@
 
 require "rails_helper"
 
-RSpec.describe PageSequence do
+RSpec.describe Journeys::PageSequence do
   let(:claim) { build(:claim) }
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
   let(:slug_sequence) { OpenStruct.new(slugs: ["first-slug", "second-slug", "third-slug"]) }
   let(:completed_slugs) { [] }
-  subject(:page_sequence) { PageSequence.new(current_claim, slug_sequence, completed_slugs, current_slug) }
+
+  subject(:page_sequence) { described_class.new(current_claim, slug_sequence, completed_slugs, current_slug) }
 
   describe "#next_slug" do
     subject(:next_slug) { page_sequence.next_slug }
