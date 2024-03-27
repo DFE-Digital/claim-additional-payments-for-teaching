@@ -12,10 +12,6 @@ class ClaimsController < BasePublicController
   before_action :clear_claim_session, only: [:new]
   before_action :prepend_view_path_for_journey
 
-  SLUG_TO_FORM = {
-    "current-school" => CurrentSchoolForm
-  }
-
   def new
     persist
   end
@@ -26,7 +22,7 @@ class ClaimsController < BasePublicController
 
   def show
     # TODO: Migrate the remaining slugs to form objects.
-    if @form ||= form_from_slug(params)
+    if @form ||= journey.form(claim: current_claim, params: params)
       set_any_backlink_override
       render current_template
 
@@ -85,7 +81,7 @@ class ClaimsController < BasePublicController
 
   def update
     # TODO: Migrate the remaining slugs to form objects.
-    if (@form = form_from_slug(params))
+    if (@form = journey.form(claim: current_claim, params: params))
       if @form.save
         redirect_to claim_path(current_journey_routing_name, next_slug)
       else
@@ -448,11 +444,5 @@ class ClaimsController < BasePublicController
         current_claim.logged_in_with_tid? && current_claim.has_all_valid_personal_details?)
       ClaimStudentLoanDetailsUpdater.call(current_claim)
     end
-  end
-
-  def form_from_slug(params)
-    form = SLUG_TO_FORM[params[:slug]]
-
-    form&.new(journey: journey, claim: current_claim, params: params)
   end
 end
