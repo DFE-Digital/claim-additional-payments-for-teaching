@@ -150,11 +150,6 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  it "is not submittable without a value for the student_loan_plan present" do
-    expect(build(:claim, :submittable, student_loan_plan: nil)).not_to be_valid(:submit)
-    expect(build(:claim, :submittable, student_loan_plan: Claim::NO_STUDENT_LOAN)).to be_valid(:submit)
-  end
-
   it "is submittable with optional student loan questions not answered" do
     claim = build(
       :claim,
@@ -370,10 +365,10 @@ RSpec.describe Claim, type: :model do
   end
 
   context "when saving in the “student-loan” validation context" do
-    it "validates the presence of student_loan" do
-      expect(build(:claim)).not_to be_valid(:"student-loan")
-      expect(build(:claim, has_student_loan: true)).to be_valid(:"student-loan")
-      expect(build(:claim, has_student_loan: false)).to be_valid(:"student-loan")
+    it "validates the presence of has_student_loan" do
+      expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1, has_student_loan: nil)).not_to be_valid(:"student-loan")
+      expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1, has_student_loan: true)).to be_valid(:"student-loan")
+      expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1, has_student_loan: false)).to be_valid(:"student-loan")
     end
   end
 
@@ -1157,74 +1152,8 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#reset_dependent_answers" do
-    let(:claim) { create(:claim, :submittable, :with_no_postgraduate_masters_doctoral_loan, bank_or_building_society: "building_society") }
-
-    it "redetermines the student_loan_plan and resets loan plan answers when has_student_loan changes" do
-      claim.has_student_loan = true
-      expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
-
-      claim.has_student_loan = false
-      claim.reset_dependent_answers
-
-      expect(claim.has_student_loan).to eq false
-      expect(claim.student_loan_country).to be_nil
-      expect(claim.student_loan_courses).to be_nil
-      expect(claim.student_loan_start_date).to be_nil
-      expect(claim.student_loan_plan).to eq Claim::NO_STUDENT_LOAN
-      expect(claim.has_masters_doctoral_loan).to be_nil
-      expect(claim.postgraduate_masters_loan).to be_nil
-      expect(claim.postgraduate_doctoral_loan).to be_nil
-    end
-
-    it "redetermines the postgraduate masters and doctoral loans and resets subsequent two answers when has_student_loan changes" do
-      claim.has_masters_doctoral_loan = nil
-      expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
-
-      claim.has_student_loan = false
-      claim.reset_dependent_answers
-
-      expect(claim.postgraduate_masters_loan).to be_nil
-      expect(claim.postgraduate_doctoral_loan).to be_nil
-    end
-
-    it "redetermines the student_loan_plan and resets subsequent loan plan answers when student_loan_country changes" do
-      claim.student_loan_country = :england
-      expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
-
-      claim.student_loan_country = :scotland
-      claim.reset_dependent_answers
-      expect(claim.has_student_loan).to eq true
-      expect(claim.student_loan_country).to eq "scotland"
-      expect(claim.student_loan_courses).to be_nil
-      expect(claim.student_loan_start_date).to be_nil
-      expect(claim.student_loan_plan).to eq StudentLoan::PLAN_4
-    end
-
-    it "redetermines the student_loan_plan and resets subsequent loan plan answers when student_loan_courses changes" do
-      claim.student_loan_courses = :one_course
-      expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
-
-      claim.student_loan_courses = :two_or_more_courses
-      claim.reset_dependent_answers
-      expect(claim.has_student_loan).to eq true
-      expect(claim.student_loan_country).to eq "england"
-      expect(claim.student_loan_courses).to eq "two_or_more_courses"
-      expect(claim.student_loan_start_date).to be_nil
-      expect(claim.student_loan_plan).to be_nil
-    end
-
-    it "redetermines the student_loan_plan when the value of student_loan_start_date changes" do
-      claim.student_loan_start_date = StudentLoan::BEFORE_1_SEPT_2012
-      expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
-
-      claim.student_loan_start_date = StudentLoan::ON_OR_AFTER_1_SEPT_2012
-      claim.reset_dependent_answers
-      expect(claim.has_student_loan).to eq true
-      expect(claim.student_loan_country).to eq "england"
-      expect(claim.student_loan_courses).to eq "one_course"
-      expect(claim.student_loan_start_date).to eq StudentLoan::ON_OR_AFTER_1_SEPT_2012
-      expect(claim.student_loan_plan).to eq StudentLoan::PLAN_2
-    end
+    let(:claim) { create(:claim, :submittable, :with_no_postgraduate_masters_doctoral_loan, policy:, bank_or_building_society: "building_society") }
+    let(:policy) { Policies::LevellingUpPremiumPayments }
 
     it "redetermines the bank_details when the value of bank_or_building_society changes" do
       expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
@@ -1258,6 +1187,40 @@ RSpec.describe Claim, type: :model do
 
       expect(claim.mobile_number).to eq "07425999124"
       expect(claim.mobile_verified).to be_nil
+    end
+
+    [Policies::StudentLoans, Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments].each do |policy|
+      context "when the policy is #{policy}" do
+        let(:policy) { policy }
+
+        before do
+          claim.has_student_loan = true
+          claim.student_loan_plan = StudentLoan::PLAN_1
+          claim.eligibility.student_loan_repayment_amount = 100 if policy == Policies::StudentLoans
+        end
+
+        it "resets student loan attributes when the value of national_insurance_number changes" do
+          expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
+
+          claim.national_insurance_number = "AB123456X"
+          claim.reset_dependent_answers
+
+          expect(claim.has_student_loan).to be_nil
+          expect(claim.student_loan_plan).to be_nil
+          expect(claim.eligibility.student_loan_repayment_amount).to be_nil if policy == Policies::StudentLoans
+        end
+
+        it "resets student loan attributes when the value of date_of_birth changes" do
+          expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
+
+          claim.date_of_birth = "1/1/1991"
+          claim.reset_dependent_answers
+
+          expect(claim.has_student_loan).to be_nil
+          expect(claim.student_loan_plan).to be_nil
+          expect(claim.eligibility.student_loan_repayment_amount).to be_nil if policy == Policies::StudentLoans
+        end
+      end
     end
   end
 
@@ -1554,7 +1517,7 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#has_ecp_policy?" do
-    let(:claim) { create(:claim, policy: policy) }
+    let(:claim) { create(:claim, policy:) }
 
     context "with student loans policy" do
       let(:policy) { Policies::StudentLoans }
@@ -1574,7 +1537,7 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#has_tslr_policy?" do
-    let(:claim) { create(:claim, policy: policy) }
+    let(:claim) { create(:claim, policy:) }
 
     context "with student loans policy" do
       let(:policy) { Policies::StudentLoans }
@@ -1595,7 +1558,7 @@ RSpec.describe Claim, type: :model do
 
   describe "#has_lupp_policy?" do
     subject(:result) { claim.has_lupp_policy? }
-    let(:claim) { create(:claim, policy: policy) }
+    let(:claim) { create(:claim, policy:) }
 
     context "with student loans policy" do
       let(:policy) { Policies::StudentLoans }
@@ -1618,7 +1581,7 @@ RSpec.describe Claim, type: :model do
 
   describe "#has_ecp_or_lupp_policy?" do
     subject(:result) { claim.has_ecp_or_lupp_policy? }
-    let(:claim) { create(:claim, policy: policy) }
+    let(:claim) { create(:claim, policy:) }
 
     context "with student loans policy" do
       let(:policy) { Policies::StudentLoans }
@@ -1768,6 +1731,26 @@ RSpec.describe Claim, type: :model do
     context "when bank details have not been validated" do
       subject(:claim) { build(:claim, :bank_details_not_validated) }
       it { is_expected.to be_must_manually_validate_bank_details }
+    end
+  end
+
+  describe "#submitted_without_slc_data?" do
+    context "when `submitted_using_slc_data` is `true`" do
+      subject(:claim) { build(:claim, submitted_using_slc_data: true) }
+
+      it { is_expected.not_to be_submitted_without_slc_data }
+    end
+
+    context "when `submitted_using_slc_data` is `false`" do
+      subject(:claim) { build(:claim, submitted_using_slc_data: false) }
+
+      it { is_expected.to be_submitted_without_slc_data }
+    end
+
+    context "when `submitted_using_slc_data` is `nil`" do
+      subject(:claim) { build(:claim, submitted_using_slc_data: nil) }
+
+      it { is_expected.not_to be_submitted_without_slc_data }
     end
   end
 

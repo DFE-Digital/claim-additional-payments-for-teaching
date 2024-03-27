@@ -24,19 +24,6 @@ module ClaimsHelper
     end
   end
 
-  def student_loan_answers(claim)
-    [].tap do |a|
-      a << [translate("questions.has_student_loan"), (claim.has_student_loan ? "Yes" : "No"), "student-loan"]
-      a << [translate("questions.student_loan_country"), claim.student_loan_country.titleize, "student-loan-country"] if claim.student_loan_country.present?
-      a << [translate("questions.student_loan_how_many_courses"), claim.student_loan_courses.humanize, "student-loan-how-many-courses"] if claim.student_loan_courses.present?
-      a << [translate("questions.student_loan_start_date.#{claim.student_loan_courses}"), t("answers.student_loan_start_date.#{claim.student_loan_courses}.#{claim.student_loan_start_date}"), "student-loan-start-date"] if claim.student_loan_courses.present?
-      a << [translate("questions.has_masters_and_or_doctoral_loan"), (claim.has_masters_doctoral_loan ? "Yes" : "No"), "masters-doctoral-loan"] if claim.no_student_loan?
-      a << [translate("questions.postgraduate_masters_loan"), (claim.postgraduate_masters_loan ? "Yes" : "No"), "masters-loan"] unless claim.no_masters_doctoral_loan?
-      a << [translate("questions.postgraduate_doctoral_loan"), (claim.postgraduate_doctoral_loan ? "Yes" : "No"), "doctoral-loan"] unless claim.no_masters_doctoral_loan?
-      a << [translate("student_loans.questions.student_loan_amount", financial_year: Policies::StudentLoans.current_financial_year), number_to_currency(claim.eligibility.student_loan_repayment_amount), "student-loan-amount"] if claim.has_tslr_policy?
-    end
-  end
-
   def payment_answers(claim)
     change_slug = claim.building_society? ? "building-society-account" : "personal-bank-account"
     [].tap do |a|

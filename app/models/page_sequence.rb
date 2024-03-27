@@ -24,7 +24,11 @@ class PageSequence
     end
 
     return "ineligible" if claim.ineligible?
-    return "check-your-answers" if claim.submittable?
+
+    if claim.submittable?
+      return "student-loan-amount" if updating_personal_details? && in_sequence?("student-loan-amount")
+      return "check-your-answers"
+    end
 
     return slugs[current_slug_index + 2] if can_skip_next_slug?
 
@@ -51,6 +55,10 @@ class PageSequence
   end
 
   private
+
+  def updating_personal_details?
+    current_slug == "personal-details"
+  end
 
   def incomplete_slugs
     (slugs.slice(0, current_slug_index) - OPTIONAL_SLUGS - completed_slugs)

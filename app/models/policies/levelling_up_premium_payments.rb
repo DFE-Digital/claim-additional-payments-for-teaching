@@ -8,7 +8,8 @@ module Policies
       AutomatedChecks::ClaimVerifiers::Identity,
       AutomatedChecks::ClaimVerifiers::Qualifications,
       AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
-      AutomatedChecks::ClaimVerifiers::Employment
+      AutomatedChecks::ClaimVerifiers::Employment,
+      AutomatedChecks::ClaimVerifiers::StudentLoanPlan
     ].freeze
 
     def notify_reply_to_id

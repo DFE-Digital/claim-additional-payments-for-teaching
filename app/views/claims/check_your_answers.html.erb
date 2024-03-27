@@ -12,15 +12,7 @@
 
     <%= render partial: "claims/check_your_answers_section", locals: {heading: "Identity details", answers: identity_answers(current_claim)} %>
 
-    <% if current_claim.has_ecp_or_lupp_policy? %>
-      <%= render partial: "claims/check_your_answers_section", locals: {heading: "Payment details", answers: payment_answers(current_claim)} %>
-
-      <%= render partial: "claims/check_your_answers_section", locals: {heading: "Student loan details", answers: student_loan_answers(current_claim)} %>
-    <% else %>
-      <%= render partial: "claims/check_your_answers_section", locals: {heading: "Student loan details", answers: student_loan_answers(current_claim)} %>
-
-      <%= render partial: "claims/check_your_answers_section", locals: {heading: "Payment details", answers: payment_answers(current_claim)} %>
-    <% end %>
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Payment details", answers: payment_answers(current_claim)} %>
 
     <%= form_with url: claim_submission_path do |form| %>
       <%= send_your_application(current_claim) %>

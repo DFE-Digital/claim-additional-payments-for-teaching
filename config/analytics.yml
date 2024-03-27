@@ -102,6 +102,7 @@ shared:
     - mobile_check
     - qualifications_details_check
     - dqt_teacher_status
+    - submitted_using_slc_data
   :decisions:
     - id
     - result

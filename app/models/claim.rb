@@ -21,7 +21,7 @@ class Claim < ApplicationRecord
     :payroll_gender,
     :teacher_reference_number,
     :national_insurance_number,
-    :has_student_loan,
+    :has_student_loan, # TODO: remove this and remaining student loan attributes when M&P is removed
     :student_loan_country,
     :student_loan_courses,
     :student_loan_start_date,
@@ -112,11 +112,14 @@ class Claim < ApplicationRecord
     qa_required: false,
     qa_completed_at: false,
     qualifications_details_check: true,
-    dqt_teacher_status: false
+    dqt_teacher_status: false,
+    submitted_using_slc_data: false
   }.freeze
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
   ATTRIBUTE_DEPENDENCIES = {
+    "national_insurance_number" => ["has_student_loan", "student_loan_plan", "eligibility.student_loan_repayment_amount"],
+    "date_of_birth" => ["has_student_loan", "student_loan_plan", "eligibility.student_loan_repayment_amount"],
     "has_student_loan" => ["student_loan_country", "has_masters_doctoral_loan", "postgraduate_masters_loan", "postgraduate_doctoral_loan"],
     "student_loan_country" => ["student_loan_courses"],
     "student_loan_courses" => ["student_loan_start_date"],
@@ -239,16 +242,16 @@ class Claim < ApplicationRecord
   validates :national_insurance_number, on: [:"personal-details-nino", :"personal-details", :submit, :amendment], presence: {message: "Enter a National Insurance number in the correct format"}
   validate :ni_number_is_correct_format
 
-  validates :has_student_loan, on: [:"student-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a student loan"}
+  validates :has_student_loan, on: [:"student-loan"], inclusion: {in: [true, false]}
   validates :student_loan_country, on: [:"student-loan-country"], presence: {message: "Select where your home address was when you applied for your student loan"}
   validates :student_loan_courses, on: [:"student-loan-how-many-courses"], presence: {message: "Select how many higher education courses you took out a student loan for"}
   validates :student_loan_start_date, on: [:"student-loan-start-date"], presence: {message: ->(object, data) { I18n.t("validation_errors.student_loan_start_date.#{object.student_loan_courses}") }}
-  validates :student_loan_plan, on: [:submit, :amendment], presence: {message: "We have not been able determined your student loan repayment plan. Answer all questions about your student loan."}
   validates :student_loan_plan, inclusion: {in: STUDENT_LOAN_PLAN_OPTIONS}, allow_nil: true
+  validates :student_loan_plan, on: [:"student-loan", :amendment], presence: {message: "Enter a valid student loan plan"}
 
-  validates :has_masters_doctoral_loan, on: [:"masters-doctoral-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a postgraduate masters and/or doctoral loan"}, if: :no_student_loan?
-  validates :postgraduate_masters_loan, on: [:"masters-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a Postgraduate Master’s Loan"}, unless: -> { no_masters_doctoral_loan? }
-  validates :postgraduate_doctoral_loan, on: [:"doctoral-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a Postgraduate Doctoral Loan"}, unless: -> { no_masters_doctoral_loan? }
+  validates :has_masters_doctoral_loan, on: [:"masters-doctoral-loan"], inclusion: {in: [true, false], message: "Select yes if you have a postgraduate masters and/or doctoral loan"}, if: :no_student_loan?
+  validates :postgraduate_masters_loan, on: [:"masters-loan"], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a Postgraduate Master’s Loan"}, unless: -> { no_masters_doctoral_loan? }
+  validates :postgraduate_doctoral_loan, on: [:"doctoral-loan"], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a Postgraduate Doctoral Loan"}, unless: -> { no_masters_doctoral_loan? }
 
   validates :email_address, on: [:"email-address", :submit], presence: {message: "Enter an email address"}
   validates :email_address, format: {with: Rails.application.config.email_regexp, message: "Enter an email address in the correct format, like name@example.com"},
@@ -496,10 +499,16 @@ class Claim < ApplicationRecord
   def reset_dependent_answers
     ATTRIBUTE_DEPENDENCIES.each do |attribute_name, dependent_attribute_names|
       dependent_attribute_names.each do |dependent_attribute_name|
-        write_attribute(dependent_attribute_name, nil) if changed.include?(attribute_name)
+        next unless changed.include?(attribute_name)
+
+        target_model, dependent_attribute_name = dependent_attribute_name.split(".") if dependent_attribute_name.include?(".")
+        target_model ||= "itself"
+
+        next unless send(target_model).has_attribute?(dependent_attribute_name)
+
+        send(target_model).write_attribute(dependent_attribute_name, nil)
       end
     end
-    self.student_loan_plan = determine_student_loan_plan
   end
 
   def policy
@@ -548,6 +557,10 @@ class Claim < ApplicationRecord
 
   def must_manually_validate_bank_details?
     !hmrc_bank_validation_succeeded?
+  end
+
+  def submitted_without_slc_data?
+    submitted_using_slc_data == false
   end
 
   def has_recent_tps_school?

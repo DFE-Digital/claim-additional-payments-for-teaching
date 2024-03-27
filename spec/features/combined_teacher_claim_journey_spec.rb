@@ -91,7 +91,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.secondary_heading"))
     expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
 
-    ["Identity details", "Payment details", "Student loan details"].each do |section_heading|
+    ["Identity details", "Payment details"].each do |section_heading|
       expect(page).not_to have_text section_heading
     end
 
@@ -212,28 +212,11 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     fill_in :claim_teacher_reference_number, with: "1234567"
     click_on "Continue"
 
-    # - Are you currently paying off your student loan
-    expect(page).to have_text(I18n.t("questions.has_student_loan"))
-
-    choose "No"
-    click_on "Continue"
-
-    # - Did you take out a postgraduate doctoral loan on or after 1 August 2016
-    expect(page).to have_text(I18n.t("questions.has_masters_and_or_doctoral_loan"))
-
-    choose "No"
-    click_on "Continue"
-
     # - Check your answers before sending your application
     expect(page).to have_text("Check your answers before sending your application")
     expect(page).not_to have_text("Eligibility details")
-    %w[Identity\ details Payment\ details Student\ loan\ details].each do |section_heading|
+    %w[Identity\ details Payment\ details].each do |section_heading|
       expect(page).to have_text section_heading
-    end
-
-    within(".govuk-summary-list:nth-of-type(3)") do
-      expect(page).to have_text(I18n.t("questions.has_student_loan"))
-      expect(page).to have_text(I18n.t("questions.has_masters_and_or_doctoral_loan"))
     end
 
     click_on "Accept and send"
@@ -325,7 +308,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.secondary_heading"))
     expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
 
-    ["Identity details", "Payment details", "Student loan details"].each do |section_heading|
+    ["Identity details", "Payment details"].each do |section_heading|
       expect(page).not_to have_text section_heading
     end
 

@@ -137,20 +137,26 @@ RSpec.feature "Changing the answers on a submittable claim" do
     expect(page).not_to have_text("Languages")
   end
 
-  scenario "when changing the student loan repayment amount the user can change answer and it preserves two decimal places" do
+  scenario "Teacher edits personal details, triggering the update of student loan details" do
     claim = start_student_loans_claim
+    eligibility = claim.eligibility
+
     claim.update!(attributes_for(:claim, :submittable))
-    claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 100.1, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
+    eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id, student_loan_repayment_amount: 100))
     jump_to_claim_journey_page(claim, "check-your-answers")
 
-    expect(page).to have_content("£100.10")
-    first("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "student-loan-amount")}']").click
+    # Add student loans data for the applicant's NINO and DoB
+    create(:student_loans_data, nino: "AB123456C", date_of_birth: claim.date_of_birth, plan_type_of_deduction: 1, amount: 50)
 
-    expect(find("#claim_eligibility_attributes_student_loan_repayment_amount").value).to eq("100.10")
-    fill_in student_loan_amount_question, with: "150.20"
+    page.first("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "personal-details")}']", minimum: 1).click
+    fill_in "National Insurance number", with: "AB123456C"
     click_on "Continue"
 
-    expect(page).to have_content("£150.20")
+    # - student-loan-amount is re-displayed for TSLR
+    expect(page).to have_content("Your student loan repayment amount is £50")
+    click_on "Continue"
+
+    expect(page).to have_content("Check your answers before sending your application")
   end
 
   context "User changes fields that aren't related to eligibility" do
@@ -164,141 +170,21 @@ RSpec.feature "Changing the answers on a submittable claim" do
     end
 
     scenario "Teacher can change a field that isn't related to eligibility" do
-      old_number = claim.national_insurance_number
-      new_number = "AB123456C"
+      old_middle_name = claim.middle_name
+      new_middle_name = "Janet #{old_middle_name}"
 
       expect {
         page.first("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "personal-details")}']", minimum: 1).click
-        fill_in "National Insurance number", with: new_number
+        fill_in "Middle names", with: new_middle_name
         click_on "Continue"
       }.to change {
-        claim.reload.national_insurance_number
-      }.from(old_number).to(new_number)
+        claim.reload.middle_name
+      }.from(old_middle_name).to(new_middle_name)
+
+      # - student-loan-amount is re-displayed for TSLR
+      click_on "Continue"
 
       expect(page).to have_content("Check your answers before sending your application")
-    end
-
-    context "when changing student loan answer to “No” resets the other" do
-      scenario "student loan and postgraduate masters/doctoral loan related answers" do
-        jump_to_claim_journey_page(claim, "check-your-answers")
-
-        find("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "student-loan")}']").click
-
-        choose "No"
-        click_on "Continue"
-
-        expect(claim.reload.has_student_loan).to eq false
-        expect(claim.student_loan_country).to be_nil
-        expect(claim.student_loan_courses).to be_nil
-        expect(claim.student_loan_start_date).to be_nil
-        expect(claim.student_loan_plan).to eq Claim::NO_STUDENT_LOAN
-
-        expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "masters-doctoral-loan"))
-        expect(page).to have_text(I18n.t("questions.has_masters_and_or_doctoral_loan"))
-
-        choose "No"
-        click_on "Continue"
-
-        expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "check-your-answers"))
-        expect(claim.reload.has_masters_doctoral_loan).to eq false
-        expect(claim.postgraduate_masters_loan).to be_nil
-        expect(claim.postgraduate_doctoral_loan).to be_nil
-      end
-    end
-
-    context "when changing student loan answer to “Yes” resets the other" do
-      scenario "student loan and postgraduate masters/doctoral loan related answers" do
-        claim.update!(attributes_for(:claim, :submittable, :with_no_student_loan))
-        jump_to_claim_journey_page(claim, "check-your-answers")
-
-        find("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "student-loan")}']").click
-
-        choose "Yes"
-        click_on "Continue"
-
-        expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "student-loan-country"))
-        expect(claim.reload.has_student_loan).to eq true
-        expect(claim.student_loan_country).to be_nil
-        expect(claim.student_loan_courses).to be_nil
-        expect(claim.student_loan_start_date).to be_nil
-        expect(claim.student_loan_plan).to be_nil
-        expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(1000.00)
-        expect(claim.reload.has_masters_doctoral_loan).to be_nil
-        expect(claim.postgraduate_masters_loan).to be_nil
-        expect(claim.postgraduate_doctoral_loan).to be_nil
-      end
-
-      scenario "answer student loan and postgraduate masters/doctoral loans" do
-        claim.update!(attributes_for(:claim, :submittable, :with_no_student_loan, :with_no_postgraduate_masters_doctoral_loan))
-        jump_to_claim_journey_page(claim, "check-your-answers")
-
-        find("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "student-loan")}']").click
-
-        choose "Yes"
-        click_on "Continue"
-
-        expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "student-loan-country"))
-        expect(claim.reload.has_student_loan).to eq true
-        expect(claim.student_loan_country).to be_nil
-        expect(claim.student_loan_courses).to be_nil
-        expect(claim.student_loan_start_date).to be_nil
-        expect(claim.student_loan_plan).to be_nil
-
-        expect(page).to have_text(I18n.t("questions.student_loan_country"))
-
-        choose "Northern Ireland"
-        click_on "Continue"
-
-        expect(claim.reload.student_loan_country).to eql StudentLoan::NORTHERN_IRELAND
-        expect(claim.student_loan_courses).to be_nil
-        expect(claim.student_loan_start_date).to be_nil
-        expect(claim.student_loan_plan).to eq StudentLoan::PLAN_1
-
-        expect(current_path).not_to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "masters-doctoral-loan"))
-        expect(page).not_to have_text(I18n.t("questions.has_masters_and_or_doctoral_loan"))
-        expect(claim.reload.has_masters_doctoral_loan).to be_nil
-
-        expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "masters-loan"))
-        expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
-
-        choose "Yes"
-        click_on "Continue"
-
-        expect(claim.reload.postgraduate_masters_loan).to eq true
-
-        expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "doctoral-loan"))
-        expect(page).to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
-
-        choose "No"
-        click_on "Continue"
-
-        expect(claim.reload.postgraduate_doctoral_loan).to eq false
-
-        expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "check-your-answers"))
-      end
-    end
-
-    scenario "changing student loan country forces dependent questions to be re-answered" do
-      claim.update!(attributes_for(:claim, :submittable, :with_no_postgraduate_masters_doctoral_loan))
-      jump_to_claim_journey_page(claim, "check-your-answers")
-
-      find("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "student-loan-country")}']").click
-
-      choose "Wales"
-      click_on "Continue"
-
-      choose "1"
-      click_on "Continue"
-
-      choose "Before 1 September 2012"
-      click_on "Continue"
-
-      expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "check-your-answers"))
-      expect(claim.reload.has_student_loan).to eq true
-      expect(claim.student_loan_country).to eq StudentLoan::WALES
-      expect(claim.student_loan_courses).to eq "one_course"
-      expect(claim.student_loan_start_date).to eq StudentLoan::BEFORE_1_SEPT_2012
-      expect(claim.student_loan_plan).to eq StudentLoan::PLAN_1
     end
 
     scenario "user can change the answer to identity details" do
@@ -315,6 +201,9 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
       page.first("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "personal-details")}']", minimum: 1).click
       fill_in "First name", with: "Bobby"
+      click_on "Continue"
+
+      # - student-loan-amount is re-displayed for TSLR
       click_on "Continue"
 
       expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "check-your-answers"))
