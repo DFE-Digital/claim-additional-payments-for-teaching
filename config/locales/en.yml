@@ -228,6 +228,9 @@ en:
           select_the_school_you_teach_at: "Select the school you teach at"
           the_selected_school_is_closed: "The selected school is closed"
           school_not_found: "School not found"
+      still_teaching:
+        questions:
+          which_school_currently: "Which school are you currently employed to teach at?"
     journey_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"
     policy_acronym: "TSLR"
@@ -287,6 +290,9 @@ en:
           title: "The claimant’s %{bank_or_building_society} details have not been automatically validated. Has the claimant confirmed their %{bank_or_building_society} details?"
   additional_payments: &additional_payments
     forms:
+      correct_school:
+        questions:
+          which_school: "Which school do you teach at?"
       current_school:
         questions:
           current_school_search: "Which school do you teach at?"
