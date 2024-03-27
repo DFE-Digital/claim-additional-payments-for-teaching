@@ -10,7 +10,10 @@ Rollbar.configure do |config|
   # removing personal data
   config.collect_user_ip = false
   config.scrub_headers |= ["X-Client-Ip", "Client-Ip"]
-  config.scrub_fields |= Rails.application.config.filter_parameters
+
+  Rails.application.config.after_initialize do
+    config.scrub_fields |= Rails.application.config.filter_parameters
+  end
 
   # By default, Rollbar will try to call the `current_user` controller method
   # to fetch the logged-in user object, and then call that object"s `id`
