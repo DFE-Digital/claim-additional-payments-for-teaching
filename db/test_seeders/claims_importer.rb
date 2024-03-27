@@ -24,12 +24,6 @@ module TestSeeders
       :address_line_4,
       :postcode,
       :has_student_loan,
-      :student_loan_country,
-      :student_loan_courses,
-      :student_loan_start_date,
-      :has_masters_doctoral_loan,
-      :postgraduate_masters_loan,
-      :postgraduate_doctoral_loan,
       :student_loan_plan,
       :created_at,
       :updated_at
@@ -88,12 +82,6 @@ module TestSeeders
             nil,
             address[:postcode],
             student_loans[:has_student_loan],
-            student_loans[:student_loan_country],
-            student_loans[:student_loan_courses],
-            student_loans[:student_loan_start_date],
-            student_loans[:has_masters_doctoral_loan],
-            student_loans[:postgraduate_masters_loan],
-            student_loans[:postgraduate_doctoral_loan],
             student_loans[:student_loan_plan],
             time,
             time
@@ -140,37 +128,15 @@ module TestSeeders
     def build_student_loans
       student_loan_details = {
         has_student_loan: nil,
-        student_loan_country: nil,
-        student_loan_courses: nil,
-        student_loan_start_date: nil,
-        has_masters_doctoral_loan: nil,
-        postgraduate_masters_loan: nil,
-        postgraduate_doctoral_loan: nil,
         student_loan_plan: Claim::NO_STUDENT_LOAN
       }
       if rand(100) < 85
         student_loan_details[:has_student_loan] = true
-        student_loan_details[:student_loan_country] = StudentLoan::COUNTRIES.sample
-        unless StudentLoan::PLAN_1_COUNTRIES.include?(student_loan_details[:student_loan_country]) ||
-            StudentLoan::PLAN_4_COUNTRIES.include?(student_loan_details[:student_loan_country])
-          student_loan_details[:student_loan_courses] = [0, 1].sample
-          student_loan_details[:student_loan_start_date] = StudentLoan::COURSE_START_DATES.slice(0, student_loan_details[:student_loan_courses] + 1).sample
-        end
-        student_loan_details[:has_masters_doctoral_loan] = false
+        student_loan_details[:student_loan_plan] = StudentLoan::PLAN.sample
       else
         student_loan_details[:has_student_loan] = false
-        student_loan_details[:has_masters_doctoral_loan] = true
-
-        student_loan_details[:postgraduate_masters_loan] = rand(1000) < 200
-        student_loan_details[:postgraduate_doctoral_loan] = rand(1000).between?(500, 575)
       end
 
-      student_loan_details[:student_loan_plan] = StudentLoan.determine_plan(
-        student_loan_details[:has_student_loan],
-        student_loan_details[:has_masters_doctoral_loan],
-        student_loan_details[:student_loan_country],
-        student_loan_details[:student_loan_start_date]
-      )
       student_loan_details
     end
 

@@ -17,13 +17,6 @@ RSpec.describe Claim::PermittedParameters do
       :payroll_gender,
       :teacher_reference_number,
       :national_insurance_number,
-      :has_student_loan,
-      :student_loan_country,
-      :student_loan_courses,
-      :student_loan_start_date,
-      :has_masters_doctoral_loan,
-      :postgraduate_masters_loan,
-      :postgraduate_doctoral_loan,
       :email_address,
       :provide_mobile_number,
       :mobile_number,
@@ -55,7 +48,7 @@ RSpec.describe Claim::PermittedParameters do
     ]
   end
 
-  subject(:permitted_parameters) { Claim::PermittedParameters.new(current_claim) }
+  subject(:permitted_parameters) { described_class.new(current_claim) }
 
   describe "#keys" do
     it "returns all the editable attributes for a claim, including those for its eligibility" do
