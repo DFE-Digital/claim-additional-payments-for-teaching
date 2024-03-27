@@ -33,12 +33,12 @@ resources:
 steps:
     - checkout: claim
 
-    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+    - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@2
       displayName: Pin terraform version
       inputs:
         terraformVersion: 1.2.4
 
-    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+    - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@2
       displayName: Terraform Init
       inputs:
         command: init
@@ -76,7 +76,7 @@ steps:
           While ($null -eq $AccessAllowed -and $LoopCount -lt 6)
         preferredAzurePowerShellVersion: 3.1.0
 
-    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+    - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@2
       displayName: Terraform destroy
       inputs:
         command: destroy
