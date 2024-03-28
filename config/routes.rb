@@ -60,9 +60,9 @@ Rails.application.routes.draw do
     end
 
     scope constraints: {journey: "additional-payments"} do
-      get "reminders/personal-details", as: :new_reminder, to: "reminders#new"
-      post "reminders/personal-details", as: :reminders, to: "reminders#create"
-      resources :reminders, only: [:show, :update], param: :slug, constraints: {slug: %r{#{Journeys::AdditionalPaymentsForTeaching::REMINDER_SLUGS.join("|")}}}
+      get "reminders/personal-details", as: :new_reminder, to: "journeys/additional_payments_for_teaching/reminders#new"
+      post "reminders/personal-details", as: :reminders, to: "journeys/additional_payments_for_teaching/reminders#create"
+      resources :reminders, only: [:show, :update], param: :slug, constraints: {slug: %r{#{Journeys::AdditionalPaymentsForTeaching::SlugSequence::REMINDER_SLUGS.join("|")}}}, controller: "journeys/additional_payments_for_teaching/reminders"
     end
 
     scope path: "/", constraints: {journey: /student-loans|additional-payments/} do
