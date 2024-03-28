@@ -15,6 +15,10 @@ class Form
     super
   end
 
+  def update!(attrs)
+    claim.update!(attrs)
+  end
+
   def view_path
     journey::VIEW_PATH
   end
