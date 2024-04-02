@@ -89,13 +89,17 @@ RSpec.feature "TSLR journey with Teacher ID mobile check" do
     choose "No"
     click_on "Continue"
 
-    # - student-loan-amount page
+    # - Eligibility confirmed
     click_on "Continue"
 
     # - How we will use the information you provide
     click_on "Continue"
 
     # - Personal details - skipped
+
+    # - Student loan amount details
+    expect(page).to have_title(I18n.t("student_loans.questions.student_loan_amount"))
+    click_on "Continue"
 
     # - What is your home address
     click_link(I18n.t("questions.address.home.link_to_manual_address"))
@@ -107,6 +111,9 @@ RSpec.feature "TSLR journey with Teacher ID mobile check" do
   end
 
   def fill_in_remaining_details_and_submit_claim
+    # - student-loan-amount page
+    click_on "Continue"
+
     choose "Building society"
     click_on "Continue"
 
@@ -118,18 +125,6 @@ RSpec.feature "TSLR journey with Teacher ID mobile check" do
 
     # - What gender does your school's payroll system associate with you
     choose "Male"
-    click_on "Continue"
-
-    # - Are you currently repaying a student loan?
-    choose "No"
-    click_on "Continue"
-
-    # - Did you take out a Postgraduate Masters or a Postgraduate Doctoral loan?
-    choose "No"
-    click_on "Continue"
-
-    # - Student loan amount
-    fill_in student_loan_amount_question, with: "1100"
     click_on "Continue"
 
     click_on "Confirm and send"

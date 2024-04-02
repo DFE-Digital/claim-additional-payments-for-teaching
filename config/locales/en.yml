@@ -55,7 +55,6 @@ en:
   questions:
     check_and_confirm_details: "Check and confirm your personal details"
     details_correct: "Are these details correct?"
-    current_school: "Which school are you currently employed to teach at?"
     qts_award_year: "When did you complete your initial teacher training (ITT)?"
     name: "What is your full name?"
     address:
@@ -163,6 +162,7 @@ en:
       identity_confirmation: "Confirm the claimant made the claim"
       payroll_gender: "Add a payroll gender for HMRC"
       student_loan_amount: "Check student loan amount"
+      student_loan_plan: "Check student loan plan"
       payroll_details: "Check bank/building society account details"
       census_subjects_taught: "Check eligible subjects are taught"
     undo_decision:
@@ -218,6 +218,19 @@ en:
     address: "address"
     full_name: "Full name"
   student_loans:
+    forms:
+      current_school:
+        questions:
+          current_school_search: "Which school are you currently employed to teach at?"
+          current_school_results: "Which school are you currently employed to teach at?"
+        errors:
+          enter_a_school_or_postcode: "Enter a school or postcode"
+          select_the_school_you_teach_at: "Select the school you teach at"
+          the_selected_school_is_closed: "The selected school is closed"
+          school_not_found: "School not found"
+      still_teaching:
+        questions:
+          which_school_currently: "Which school are you currently employed to teach at?"
     journey_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"
     policy_acronym: "TSLR"
@@ -246,7 +259,7 @@ en:
         computing_taught: "Computing"
         languages_taught: "Languages"
         none_taught: "I did not teach any of these subjects"
-      student_loan_amount: "Exactly how much student loan did you repay in the %{financial_year} financial year?"
+      student_loan_amount: Student loan amount
     answers:
       qts_award_years:
         before_cut_off_date: A different academic year
@@ -276,6 +289,19 @@ en:
         payroll_details:
           title: "The claimant’s %{bank_or_building_society} details have not been automatically validated. Has the claimant confirmed their %{bank_or_building_society} details?"
   additional_payments: &additional_payments
+    forms:
+      correct_school:
+        questions:
+          which_school: "Which school do you teach at?"
+      current_school:
+        questions:
+          current_school_search: "Which school do you teach at?"
+          current_school_results: "Select the school you teach at"
+        errors:
+          enter_a_school_or_postcode: "Enter a school or postcode"
+          select_the_school_you_teach_at: "Select the school you teach at"
+          the_selected_school_is_closed: "The selected school is closed"
+          school_not_found: "School not found"
     check_your_answers:
       part_one:
         primary_heading: Check your answers
@@ -300,8 +326,6 @@ en:
     questions:
       check_and_confirm_details: "Check and confirm your personal details"
       details_correct: "Are these details correct?"
-      current_school_search: "Which school do you teach at?"
-      current_school_results: "Select the school you teach at"
       employed_as_supply_teacher: "Are you currently employed as a supply teacher?"
       has_entire_term_contract: "Do you have a contract to teach at the same school for an entire term or longer?"
       employed_directly: "Are you employed directly by your school?"
@@ -367,6 +391,8 @@ en:
           title: "Does the claimant’s initial teacher training (ITT) start/end year and subject match the above information from their claim?"
         induction_confirmation:
           title: "Is the claimant’s induction data valid?"
+        student_loan_plan:
+          title: "Does the claimant’s student loan plan match the information we hold about their loan?"
         census_subjects_taught:
           title: Does the claimant's subject match the schools workforce census subjects
         matching_details:

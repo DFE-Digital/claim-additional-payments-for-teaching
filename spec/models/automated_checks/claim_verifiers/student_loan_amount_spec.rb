@@ -11,7 +11,7 @@ module AutomatedChecks
       let(:claim) { create(:claim, :submitted, policy:) }
       let(:policy) { Policies::StudentLoans }
 
-      shared_examples :successful_execution do
+      shared_examples :execution_with_an_outcome do
         let(:saved_task) { claim_arg.tasks.find_by(name: "student_loan_amount") }
         let(:saved_note) { claim_arg.notes.last }
 
@@ -50,7 +50,7 @@ module AutomatedChecks
         end
       end
 
-      shared_examples :unsuccessful_execution do
+      shared_examples :execution_without_an_outcome do
         it "does not save anything and returns immediately", :aggregate_failures do
           is_expected.to be_nil
 
@@ -67,7 +67,7 @@ module AutomatedChecks
             context "when the policy is #{policy}" do
               let(:policy) { policy }
 
-              it_behaves_like :unsuccessful_execution
+              it_behaves_like :execution_without_an_outcome
             end
           end
         end
@@ -75,7 +75,7 @@ module AutomatedChecks
         context "when the claim policy is TSLR" do
           let(:claim) { create(:claim, :submitted, policy:, national_insurance_number: "QQ123456A", has_student_loan: true, student_loan_plan: claim_student_loan_plan, eligibility:) }
           let(:eligibility) { create(:student_loans_eligibility, student_loan_repayment_amount: claim_student_loan_repayment_amount) }
-          let(:imported_slc_data) { create(:student_loans_data, nino: claim.national_insurance_number, plan_type_of_deduction: slc_student_loan_plan, amount: slc_student_loan_repayment_amount) }
+          let(:imported_slc_data) { create(:student_loans_data, nino: claim.national_insurance_number, date_of_birth: claim.date_of_birth, plan_type_of_deduction: slc_student_loan_plan, amount: slc_student_loan_repayment_amount) }
 
           let(:claim_student_loan_plan) { StudentLoan::PLAN_1 }
           let(:slc_student_loan_plan) { 1 }
@@ -87,7 +87,7 @@ module AutomatedChecks
             let(:expected_match_value) { nil }
             let(:expected_note) { "[SLC Student loan amount] - No data" }
 
-            it_behaves_like :successful_execution
+            it_behaves_like :execution_with_an_outcome
           end
 
           context "when the amount on the claim is equal to the SLC value" do
@@ -100,7 +100,20 @@ module AutomatedChecks
             let(:expected_match_value) { "all" }
             let(:expected_note) { "[SLC Student loan amount] - Matched" }
 
-            it_behaves_like :successful_execution
+            it_behaves_like :execution_with_an_outcome
+          end
+
+          context "when the amount on the claim is equal to the SLC value but it's zero" do
+            before { imported_slc_data }
+
+            let(:claim_student_loan_repayment_amount) { 0 }
+            let(:slc_student_loan_repayment_amount) { 0 }
+
+            let(:expected_to_pass?) { nil }
+            let(:expected_match_value) { "none" }
+            let(:expected_note) { "[SLC Student loan amount] - The total SLC repayment amount is £0" }
+
+            it_behaves_like :execution_with_an_outcome
           end
 
           context "when the amount on the claim is less than the SLC value" do
@@ -113,7 +126,7 @@ module AutomatedChecks
             let(:expected_match_value) { "all" }
             let(:expected_note) { "[SLC Student loan amount] - Matched" }
 
-            it_behaves_like :successful_execution
+            it_behaves_like :execution_with_an_outcome
           end
 
           context "when the amount on the claim is greater than the SLC value" do
@@ -126,7 +139,7 @@ module AutomatedChecks
             let(:expected_match_value) { "none" }
             let(:expected_note) { "[SLC Student loan amount] - The amount on the claim (100.01) exceeded the SLC value (100.00)" }
 
-            it_behaves_like :successful_execution
+            it_behaves_like :execution_with_an_outcome
           end
 
           context "when the plan type on the claim does not match that from SLC" do
@@ -137,7 +150,7 @@ module AutomatedChecks
             let(:claim_student_loan_repayment_amount) { 100 }
             let(:slc_student_loan_repayment_amount) { 100 }
 
-            it_behaves_like :unsuccessful_execution
+            it_behaves_like :execution_without_an_outcome
           end
         end
       end

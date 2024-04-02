@@ -18,7 +18,6 @@ module Policies
         :had_leadership_position,
         :taught_eligible_subjects,
         :mostly_performed_leadership_duties,
-        :student_loan_repayment_amount,
         SUBJECT_ATTRIBUTES
       ].flatten.freeze
       AMENDABLE_ATTRIBUTES = %i[student_loan_repayment_amount].freeze
@@ -53,12 +52,10 @@ module Policies
       validates :claim_school, on: [:"claim-school", :submit], presence: {message: "Select a school from the list or search again for a different school"}
       validates :claim_school, on: [:"select-claim-school"], presence: {message: ->(object, _data) { object.select_claim_school_presence_error_message }}, unless: :claim_school_somewhere_else?
       validates :employment_status, on: [:"still-teaching", :submit], presence: {message: ->(object, _data) { "Select if you still work at #{object.claim_school_name}, another school or no longer teach in England" }}
-      validates :current_school, on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
       validate :one_subject_must_be_selected, on: [:"subjects-taught", :submit], unless: :not_taught_eligible_subjects?
       validates :had_leadership_position, on: [:"leadership-position", :submit], inclusion: {in: [true, false], message: "Select yes if you were employed in a leadership position"}
       validates :mostly_performed_leadership_duties, on: [:"mostly-performed-leadership-duties", :submit], inclusion: {in: [true, false], message: "Select yes if you spent more than half your working hours on leadership duties"}, if: :had_leadership_position?
-      validates :student_loan_repayment_amount, on: [:"student-loan-amount", :submit], presence: {message: "Enter your student loan repayment amount"}
-      validates_numericality_of :student_loan_repayment_amount, message: "Enter a valid monetary amount", allow_nil: true, greater_than: 0, less_than_or_equal_to: 99999
+      validates_numericality_of :student_loan_repayment_amount, message: "Enter a valid monetary amount", allow_nil: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 99999
       validates :student_loan_repayment_amount, on: :amendment, award_range: {max: 5_000}
 
       delegate :name, to: :claim_school, prefix: true, allow_nil: true
@@ -79,7 +76,8 @@ module Policies
           employed_at_no_school? ||
           ineligible_current_school? ||
           not_taught_eligible_subjects? ||
-          not_taught_enough?
+          not_taught_enough? ||
+          made_zero_repayments?
       end
 
       def ineligibility_reason
@@ -89,7 +87,8 @@ module Policies
           :employed_at_no_school,
           :ineligible_current_school,
           :not_taught_eligible_subjects,
-          :not_taught_enough
+          :not_taught_enough,
+          :made_zero_repayments
         ].find { |eligibility_check| send(:"#{eligibility_check}?") }
       end
 
@@ -139,6 +138,10 @@ module Policies
 
       def not_taught_enough?
         mostly_performed_leadership_duties == true
+      end
+
+      def made_zero_repayments?
+        claim.present? && claim.has_student_loan == true && student_loan_repayment_amount == 0
       end
 
       def one_subject_must_be_selected

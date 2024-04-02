@@ -175,8 +175,11 @@ RSpec.feature "Combined journey with Teacher ID" do
     choose "Male"
     click_on "Continue"
 
-    # - teacher-reference-number slug removed from user journey
-    expect(page).not_to have_text(I18n.t("questions.teacher_reference_number"))
+    # - Check your answers instead of teacher-reference-number (removed slug)
+    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
+
+    click_link "Back"
+    expect(page).to have_text(I18n.t("questions.payroll_gender"))
   end
 
   scenario "When user is logged in with Teacher ID and there is no matching DQT record" do
@@ -336,8 +339,8 @@ RSpec.feature "Combined journey with Teacher ID" do
     click_on "Continue"
 
     # - Which school do you teach at?
-    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
-    expect(page.title).to have_text(I18n.t("questions.current_school"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
+    expect(page.title).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
 
     choose_school school
 

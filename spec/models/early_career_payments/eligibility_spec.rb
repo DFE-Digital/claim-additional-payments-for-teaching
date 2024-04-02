@@ -47,25 +47,6 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
     end
   end
 
-  describe "current-school submit" do
-    let(:school) { create(:school, :early_career_payments_eligible) }
-
-    context "school_somewhere_else is already true and set a school" do
-      it "is valid" do
-        eligibility = Policies::EarlyCareerPayments::Eligibility.new(current_school: school, school_somewhere_else: true)
-
-        expect(eligibility).to be_valid(:"current-school")
-      end
-
-      it "returns an error if current_school is not set" do
-        eligibility = Policies::EarlyCareerPayments::Eligibility.new(current_school: nil, school_somewhere_else: true)
-
-        expect(eligibility).not_to be_valid(:"current-school")
-        expect(eligibility.errors.messages[:current_school]).to eq(["Select the school you teach at"])
-      end
-    end
-  end
-
   describe "qualification attribute" do
     it "rejects invalid values" do
       expect { Policies::EarlyCareerPayments::Eligibility.new(qualification: "non-existance") }.to raise_error(ArgumentError)

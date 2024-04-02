@@ -22,7 +22,7 @@ RSpec.feature "Early-Career Payments claims with school ineligible for Levelling
     skip_tid
 
     # - Which school do you teach at
-    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
 
     choose_school school
 

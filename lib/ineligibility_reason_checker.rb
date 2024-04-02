@@ -8,6 +8,10 @@ class IneligibilityReasonChecker
       :current_school
     elsif dqt_data_ineligible?
       :dqt_data_ineligible
+    elsif ecp_only_teacher_with_ineligible_itt_year?
+      :ecp_only_teacher_with_ineligible_itt_year
+    elsif teacher_with_ineligible_itt_year?
+      :teacher_with_ineligible_itt_year
     elsif generic?
       :generic
     elsif trainee_teacher_last_policy_year?
@@ -56,13 +60,26 @@ class IneligibilityReasonChecker
     ].any?
   end
 
+  def ecp_only_teacher_with_ineligible_itt_year?
+    [
+      @current_claim.eligibility.itt_academic_year == AcademicYear.new,
+      school_eligible_for_ecp_but_not_lup?(@current_claim.eligibility.current_school)
+    ].all?
+  end
+
+  def teacher_with_ineligible_itt_year?
+    [
+      @current_claim.eligibility.itt_academic_year == AcademicYear.new,
+      Policies::LevellingUpPremiumPayments::SchoolEligibility.new(@current_claim.eligibility.current_school).eligible?
+    ].all?
+  end
+
   def generic?
     [
       @current_claim.eligibility.has_entire_term_contract == false,
       @current_claim.eligibility.employed_directly == false,
       @current_claim.eligibility.subject_to_formal_performance_action?,
-      @current_claim.eligibility.subject_to_disciplinary_action?,
-      @current_claim.eligibility.itt_academic_year == AcademicYear.new
+      @current_claim.eligibility.subject_to_disciplinary_action?
     ].any?
   end
 

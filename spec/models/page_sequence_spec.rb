@@ -7,7 +7,7 @@ RSpec.describe PageSequence do
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
   let(:slug_sequence) { OpenStruct.new(slugs: ["first-slug", "second-slug", "third-slug"]) }
   let(:completed_slugs) { [] }
-  let(:page_sequence) { PageSequence.new(current_claim, slug_sequence, completed_slugs, current_slug) }
+  subject(:page_sequence) { PageSequence.new(current_claim, slug_sequence, completed_slugs, current_slug) }
 
   describe "#next_slug" do
     subject(:next_slug) { page_sequence.next_slug }
@@ -47,6 +47,15 @@ RSpec.describe PageSequence do
       let(:completed_slugs) { ["first-slug", "second-slug", "third-slug"] }
 
       it { is_expected.to eq("check-your-answers") }
+
+      context "when student-loan-amount is in the sequence and the current slug is personal-details" do
+        let(:claim) { build(:claim, :submittable) }
+        let(:slug_sequence) { OpenStruct.new(slugs: ["personal-details", "student-loan-amount"]) }
+        let(:current_slug) { "personal-details" }
+        let(:completed_slugs) { ["personal-details", "student-loan-amount"] }
+
+        it { is_expected.to eq("student-loan-amount") }
+      end
     end
 
     context "when address is populated from 'select-home-address'" do

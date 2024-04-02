@@ -1,5 +1,9 @@
 FactoryBot.define do
   factory :school do
+    transient do
+      journey { nil }
+    end
+
     sequence(:urn)
     name { "#{Faker::Company.unique.name} School" }
     school_type { :community_school }
@@ -11,6 +15,19 @@ FactoryBot.define do
 
     local_authority
     association :local_authority_district
+
+    trait :eligible_for_journey do
+      after(:build) do |school, evaluator|
+        case evaluator.journey
+        when Journeys::AdditionalPaymentsForTeaching
+          build(:school, :combined_journey_eligibile_for_all)
+        when Journeys::TeacherStudentLoanReimbursement
+          build(:school, :student_loans_eligible)
+        else
+          raise "school trait :eligible_for_journey not available for #{evaluator.journey} "
+        end
+      end
+    end
 
     trait :student_loans_eligible do
       association :local_authority, :student_loans_eligible

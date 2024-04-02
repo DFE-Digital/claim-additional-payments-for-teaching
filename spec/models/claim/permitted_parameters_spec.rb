@@ -46,7 +46,6 @@ RSpec.describe Claim::PermittedParameters do
         :had_leadership_position,
         :taught_eligible_subjects,
         :mostly_performed_leadership_duties,
-        :student_loan_repayment_amount,
         :biology_taught,
         :chemistry_taught,
         :physics_taught,

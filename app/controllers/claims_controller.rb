@@ -21,7 +21,13 @@ class ClaimsController < BasePublicController
   end
 
   def show
-    search_schools if params[:school_search]
+    # TODO: Migrate the remaining slugs to form objects.
+    if @form ||= journey.form(claim: current_claim, params: params)
+      set_any_backlink_override
+      render current_template
+
+      return
+    end
 
     if params[:slug] == "teacher-detail"
       save_and_set_teacher_id_user_info
@@ -61,7 +67,9 @@ class ClaimsController < BasePublicController
       session[:claim_address_line_1] = nil
       redirect_to claim_path(current_journey_routing_name, "postcode-search") and return
     elsif ["personal-bank-account", "building-society-account"].include?(params[:slug])
-      @form ||= BankDetailsForm.new(claim: current_claim)
+      @bank_details_form ||= BankDetailsForm.new(claim: current_claim)
+    elsif params[:slug] == "claim-school" && params[:school_search]
+      search_schools
     end
 
     render current_template
@@ -72,6 +80,18 @@ class ClaimsController < BasePublicController
   end
 
   def update
+    # TODO: Migrate the remaining slugs to form objects.
+    if (@form = journey.form(claim: current_claim, params: params))
+      if @form.save
+        redirect_to claim_path(current_journey_routing_name, next_slug)
+      else
+        set_any_backlink_override
+        show
+      end
+
+      return
+    end
+
     case params[:slug]
     when "sign-in-or-continue"
       return skip_teacher_id
@@ -112,6 +132,7 @@ class ClaimsController < BasePublicController
     one_time_password
 
     if current_claim.save(context: page_sequence.current_slug.to_sym)
+      retrieve_student_loan_details
       redirect_to claim_path(current_journey_routing_name, next_slug)
     else
       show
@@ -154,6 +175,10 @@ class ClaimsController < BasePublicController
   def set_backlink_path
     previous_slug = previous_slug()
     @backlink_path = claim_path(current_journey_routing_name, previous_slug) if previous_slug.present?
+  end
+
+  def set_any_backlink_override
+    @backlink_path = @form.backlink_path if @form.backlink_path
   end
 
   def previous_slug
@@ -289,17 +314,17 @@ class ClaimsController < BasePublicController
   end
 
   def bank_account
-    @form = BankDetailsForm.new(claim_params.merge(claim: current_claim, hmrc_validation_attempt_count: session[:bank_validation_attempt_count]))
+    @bank_details_form = BankDetailsForm.new(claim_params.merge(claim: current_claim, hmrc_validation_attempt_count: session[:bank_validation_attempt_count]))
 
-    @form.validate!
+    @bank_details_form.validate!
 
-    current_claim.attributes = claim_params.merge({hmrc_bank_validation_succeeded: @form.hmrc_api_validation_succeeded?})
+    current_claim.attributes = claim_params.merge({hmrc_bank_validation_succeeded: @bank_details_form.hmrc_api_validation_succeeded?})
     current_claim.save!(context: page_sequence.current_slug.to_sym)
 
     redirect_to claim_path(current_journey_routing_name, next_slug)
   rescue ActiveModel::ValidationError
     current_claim.attributes = claim_params
-    session[:bank_validation_attempt_count] = (session[:bank_validation_attempt_count] || 1) + 1 if @form.hmrc_api_validation_attempted?
+    session[:bank_validation_attempt_count] = (session[:bank_validation_attempt_count] || 1) + 1 if @bank_details_form.hmrc_api_validation_attempted?
     show
   end
 
@@ -404,5 +429,20 @@ class ClaimsController < BasePublicController
 
   def journey_configuration
     journey.configuration
+  end
+
+  def retrieve_student_loan_details
+    # student loan details are currently retrieved for TSLR and ECP/LUPP journeys only
+    return unless ["student-loans", "additional-payments"].include?(current_journey_routing_name)
+
+    # Applicants' student loan details must be retrieved any time their personal details are
+    # updated using the `personal-details` page. This is normally the case when using the non-TID
+    # route, or when using the TID-route but not all personal details came through/are valid.
+    # For claims being submitted using the TID-route and where all personal details came through/are
+    # valid, the student loan details must be retrieved after the `information-provided` page instead.
+    if params[:slug] == "personal-details" || (params[:slug] == "information-provided" &&
+        current_claim.logged_in_with_tid? && current_claim.has_all_valid_personal_details?)
+      ClaimStudentLoanDetailsUpdater.call(current_claim)
+    end
   end
 end

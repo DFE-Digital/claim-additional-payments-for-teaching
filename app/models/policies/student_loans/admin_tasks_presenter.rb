@@ -29,7 +29,7 @@ module Policies
       def student_loan_amount
         [
           ["Student loan repayment amount", number_to_currency(eligibility.student_loan_repayment_amount)],
-          ["Student loan plan", claim.student_loan_plan.humanize]
+          ["Student loan plan", claim.student_loan_plan&.humanize]
         ]
       end
 

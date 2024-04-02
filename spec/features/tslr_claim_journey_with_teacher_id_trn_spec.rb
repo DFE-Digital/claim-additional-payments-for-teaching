@@ -24,7 +24,7 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
 
   scenario "teacher reference page skipped" do
     navigate_to_teacher_reference_number_page(school:)
-    expect(current_path).to eq("/student-loans/student-loan")
+    expect(current_path).to eq("/student-loans/check-your-answers")
   end
 
   def navigate_to_teacher_reference_number_page(school:)
@@ -71,7 +71,7 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
     choose "No"
     click_on "Continue"
 
-    # - student-loan-amount page
+    # - Information provided
     expect(page).to have_text("you can claim back the student loan repayments you made between #{Policies::StudentLoans.current_financial_year}.")
     click_on "Continue"
 
@@ -80,6 +80,9 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
     click_on "Continue"
 
     # - Personal details - skipped
+
+    # - Student loan amount details
+    click_on "Continue"
 
     # - What is your home address
     expect(page).to have_text(I18n.t("questions.address.home.title"))
