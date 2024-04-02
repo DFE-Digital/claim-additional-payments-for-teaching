@@ -1,15 +1,9 @@
-module Policies
-  module StudentLoans
-    class EligibilityAnswersPresenter
+module Journeys
+  module TeacherStudentLoanReimbursement
+    class AnswersPresenter < BaseAnswersPresenter
       include StudentLoansHelper
-      include StudentLoans::PresenterMethods
+      include Policies::StudentLoans::PresenterMethods
       include ActiveSupport::NumberHelper
-
-      attr_reader :eligibility
-
-      def initialize(eligibility)
-        @eligibility = eligibility
-      end
 
       # Formats the eligibility as a list of questions and answers, each
       # accompanied by a slug for changing the answer. Suitable for playback to
@@ -20,7 +14,7 @@ module Policies
       # [0]: question text;
       # [1]: answer text;
       # [2]: slug for changing the answer.
-      def answers
+      def eligibility_answers
         [].tap do |a|
           a << qts_award_year unless eligibility.claim.qualifications_details_check
           a << claim_school

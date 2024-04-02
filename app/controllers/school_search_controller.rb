@@ -1,4 +1,7 @@
-class SchoolSearchController < BasePublicController
+class SchoolSearchController < ApplicationController
+  include DfE::Analytics::Requests
+  include HttpAuthConcern
+
   def create
     search_schools
     render status: errors.blank? ? :ok : :bad_request

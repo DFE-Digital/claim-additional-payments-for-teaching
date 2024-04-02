@@ -1,5 +1,4 @@
 <% content_for(:page_title, page_title(t("questions.mobile_number"), journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
-<% shared_view_css_size = current_claim.policy == Policies::EarlyCareerPayments ? "l" : "xl" %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -9,7 +8,7 @@
       <span class="govuk-caption-xl"><%= t("questions.personal_details") %></span>
       <%= form_group_tag current_claim do %>
         <h1 class="govuk-label-wrapper">
-          <%= form.label :mobile_number, t("questions.mobile_number"), class: "govuk-label govuk-label--#{shared_view_css_size}" %>
+          <%= form.label :mobile_number, t("questions.mobile_number"), class: "govuk-label #{label_css_class_for_journey(journey)}" %>
         </h1>
 
         <div id="mobile-number-hint" class="govuk-hint">

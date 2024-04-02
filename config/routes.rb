@@ -50,7 +50,6 @@ Rails.application.routes.draw do
     post "claim", as: :claims, to: "claims#create"
     post "claim/submit", as: :claim_submission, to: "submissions#create"
     get "claims/confirmation", as: :claim_confirmation, to: "submissions#show"
-    get "claims/completion", as: :claim_completion, to: "submissions#show"
     get "timeout", to: "claims#timeout", as: :timeout_claim
     get "reset-claim", as: :reset_claim, to: "claims#reset_claim"
     get "existing-session", as: :existing_session, to: "claims#existing_session"
@@ -61,9 +60,9 @@ Rails.application.routes.draw do
     end
 
     scope constraints: {journey: "additional-payments"} do
-      get "reminders/personal-details", as: :new_reminder, to: "reminders#new"
-      post "reminders/personal-details", as: :reminders, to: "reminders#create"
-      resources :reminders, only: [:show, :update], param: :slug, constraints: {slug: %r{#{Reminder::SLUGS.join("|")}}}
+      get "reminders/personal-details", as: :new_reminder, to: "journeys/additional_payments_for_teaching/reminders#new"
+      post "reminders/personal-details", as: :reminders, to: "journeys/additional_payments_for_teaching/reminders#create"
+      resources :reminders, only: [:show, :update], param: :slug, constraints: {slug: %r{#{Journeys::AdditionalPaymentsForTeaching::SlugSequence::REMINDER_SLUGS.join("|")}}}, controller: "journeys/additional_payments_for_teaching/reminders"
     end
 
     scope path: "/", constraints: {journey: /student-loans|additional-payments/} do
