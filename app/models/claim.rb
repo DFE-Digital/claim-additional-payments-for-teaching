@@ -280,8 +280,6 @@ class Claim < ApplicationRecord
 
   validate :claim_must_not_be_ineligible, on: :submit
 
-  validate :school_must_be_open, on: :submit
-
   before_save :normalise_trn, if: :teacher_reference_number_changed?
   before_save :normalise_ni_number, if: :national_insurance_number_changed?
   before_save :normalise_bank_account_number, if: :bank_account_number_changed?
@@ -727,10 +725,6 @@ class Claim < ApplicationRecord
 
   def claim_must_not_be_ineligible
     errors.add(:base, "You’re not eligible for this payment") if eligibility.ineligible?
-  end
-
-  def school_must_be_open
-    errors.add(:base, "The selected school is closed") if !school&.open?
   end
 
   def determine_student_loan_plan

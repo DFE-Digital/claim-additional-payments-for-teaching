@@ -21,8 +21,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var excludeClosedSchools = form.getAttribute("data-exclude-closed") || false;
 
-  var currentPolicy = form.getAttribute("data-current-policy");
-
   var methodInput = form.querySelector('input[name="_method"]');
   var formSubmit = form.querySelector('input[type="submit"]');
 
@@ -126,14 +124,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
       schoolIdInput.value = school.id;
 
-      if (currentPolicy == "additional-payments") {
-        methodInput.value = "patch";
-        setSubmitValue(defaultFormSubmitValue);
-      } else {
-        form.method = "post";
-        methodInput.value = "patch";
-        setSubmitValue("Continue");
-      }
+      methodInput.value = "patch";
+      setSubmitValue(defaultFormSubmitValue);
     }
   });
 
