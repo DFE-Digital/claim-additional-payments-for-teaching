@@ -12,7 +12,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
 
     # Check we can't skip ahead pages in the journey
-    visit claim_completion_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
+    visit claim_confirmation_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
     expect(page).to have_current_path("/#{Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME}/landing-page")
 
     click_on "Start now"

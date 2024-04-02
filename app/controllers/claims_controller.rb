@@ -12,6 +12,8 @@ class ClaimsController < BasePublicController
   before_action :clear_claim_session, only: [:new]
   before_action :prepend_view_path_for_journey
 
+  helper_method :next_slug
+
   def new
     persist
   end
@@ -160,15 +162,13 @@ class ClaimsController < BasePublicController
 
   private
 
-  helper_method :next_slug
   def next_slug
     page_sequence.next_slug
   end
 
   def redirect_to_existing_claim_journey
     new_journey = Journeys.for_policy(current_claim.policy)
-    new_claim_slug_sequence = new_journey.slug_sequence.new(current_claim)
-    new_page_sequence = PageSequence.new(current_claim, new_claim_slug_sequence, session[:slugs], params[:slug])
+    new_page_sequence = new_journey.page_sequence_for_claim(current_claim, session[:slugs], params[:slug])
     redirect_to(claim_path(new_journey::ROUTING_NAME, slug: new_page_sequence.next_required_slug))
   end
 
@@ -223,7 +223,7 @@ class ClaimsController < BasePublicController
   end
 
   def check_page_is_in_sequence
-    unless correct_policy_namespace?
+    unless correct_journey_for_claim_in_progress?
       clear_claim_session
       return redirect_to new_claim_path
     end
@@ -238,7 +238,7 @@ class ClaimsController < BasePublicController
   end
 
   def update_session_with_current_slug
-    session[:slugs] << params[:slug] unless PageSequence::DEAD_END_SLUGS.include?(params[:slug])
+    session[:slugs] << params[:slug] unless Journeys::PageSequence::DEAD_END_SLUGS.include?(params[:slug])
   end
 
   def slug_to_redirect_to
@@ -254,11 +254,7 @@ class ClaimsController < BasePublicController
   end
 
   def page_sequence
-    @page_sequence ||= PageSequence.new(current_claim, claim_slug_sequence, session[:slugs], params[:slug])
-  end
-
-  def claim_slug_sequence
-    journey.slug_sequence.new(current_claim)
+    @page_sequence ||= journey.page_sequence_for_claim(current_claim, session[:slugs], params[:slug])
   end
 
   def prepend_view_path_for_journey
@@ -328,8 +324,8 @@ class ClaimsController < BasePublicController
     show
   end
 
-  def correct_policy_namespace?
-    Journeys.for_routing_name(current_journey_routing_name)::POLICIES.include?(current_claim.policy)
+  def correct_journey_for_claim_in_progress?
+    journey::POLICIES.include?(current_claim.policy)
   end
 
   def failed_details_check_with_teacher_id?
@@ -421,14 +417,6 @@ class ClaimsController < BasePublicController
   def set_dqt_data_as_answers
     current_claim.attributes = claim_params
     current_claim.claims.each { |claim| claim.eligibility.set_qualifications_from_dqt_record }
-  end
-
-  def journey
-    Journeys.for_routing_name(current_journey_routing_name)
-  end
-
-  def journey_configuration
-    journey.configuration
   end
 
   def retrieve_student_loan_details

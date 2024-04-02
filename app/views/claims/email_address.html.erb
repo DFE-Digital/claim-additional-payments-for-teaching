@@ -1,5 +1,4 @@
 <% content_for(:page_title, page_title(t("questions.email_address"), journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
-<% shared_view_css_size = current_claim.policy == Policies::EarlyCareerPayments ? "l" : "xl" %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -9,7 +8,7 @@
       <%= personal_details_caption(current_claim) %>
       <%= form_group_tag current_claim do %>
         <h1 class="govuk-label-wrapper">
-          <%= form.label :email_address, t("questions.email_address"), class: "govuk-label govuk-label--#{shared_view_css_size}" %>
+          <%= form.label :email_address, t("questions.email_address"), class: "govuk-label #{label_css_class_for_journey(journey)}" %>
         </h1>
 
         <%= email_govuk_hint(current_claim) %>

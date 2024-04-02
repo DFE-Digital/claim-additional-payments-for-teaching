@@ -25,5 +25,17 @@ module Journeys
 
       form&.new(journey: self, claim: claim, params: params)
     end
+
+    def page_sequence_for_claim(claim, completed_slugs, current_slug)
+      PageSequence.new(claim, slug_sequence.new(claim), completed_slugs, current_slug)
+    end
+
+    def answers_presenter
+      self::AnswersPresenter
+    end
+
+    def answers_for_claim(claim)
+      answers_presenter.new(claim)
+    end
   end
 end
