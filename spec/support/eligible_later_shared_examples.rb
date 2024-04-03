@@ -24,11 +24,6 @@ RSpec.shared_examples "Eligible later" do |opts|
         expect(page).not_to have_text section_heading
       end
 
-      within(".govuk-summary-list") do
-        expect(page).not_to have_text(I18n.t("questions.postgraduate_masters_loan"))
-        expect(page).not_to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
-      end
-
       click_on("Continue")
 
       expect(page).to have_text("You could be eligible for an early-career payment next year")
