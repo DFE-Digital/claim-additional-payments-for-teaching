@@ -1,4 +1,4 @@
-<% content_for(:page_title, page_title(t("additional_payments.questions.employed_as_supply_teacher"), journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(t("#{@form.i18n_namespace}.forms.supply_teacher.questions.employed_as_supply_teacher"), journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
 <% path_for_form = current_claim.persisted? ? claim_path(current_journey_routing_name) : claims_path(current_journey_routing_name) %>
 
 <div class="govuk-grid-row">
@@ -9,10 +9,9 @@
         <%= hidden_field_tag :employed_as_supply_teacher, params[:employed_as_supply_teacher] %>
 
         <fieldset class="govuk-fieldset">
-
           <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">
             <h1 class="govuk-fieldset__heading">
-              <%= t("additional_payments.questions.employed_as_supply_teacher") %>
+              <%= t("#{@form.i18n_namespace}.forms.supply_teacher.questions.employed_as_supply_teacher") %>
             </h1>
           </legend>
 
@@ -32,7 +31,7 @@
         </fieldset>
       <% end %>
 
-      <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
+      <%= form.submit "Continue", class: "govuk-button", data: { module: "govuk-button" } %>
     <% end %>
   </div>
 </div>

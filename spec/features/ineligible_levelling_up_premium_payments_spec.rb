@@ -62,7 +62,7 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
     click_on "Continue"
 
     # - Are you currently employed as a supply teacher
-    expect(page).to have_text(I18n.t("additional_payments.questions.employed_as_supply_teacher"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.supply_teacher.questions.employed_as_supply_teacher"))
 
     choose "No"
     click_on "Continue"

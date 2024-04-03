@@ -280,13 +280,22 @@ en:
           select_the_school_you_teach_at: "Select the school you teach at"
           the_selected_school_is_closed: "The selected school is closed"
           school_not_found: "School not found"
+      supply_teacher:
+        questions:
+          employed_as_supply_teacher: Are you currently employed as a supply teacher?
+        errors:
+          select_employed_as_supply_teacher: Select yes if you are a supply teacher
     check_your_answers:
       part_one:
         primary_heading: Check your answers
         secondary_heading: Eligibility details
-        confirmation_notice: By selecting continue you are confirming that, to the best of your knowledge, the details you are providing are correct.
+        confirmation_notice:
+          By selecting continue you are confirming that, to the best of your knowledge, the details you are providing
+          are correct.
       heading_send_application: Now send your application
-      statement: By submitting this you are confirming that, to the best of your knowledge, the details you are providing are correct.
+      statement:
+        By submitting this you are confirming that, to the best of your knowledge, the details you are providing are
+        correct.
       btn_text: Accept and send
     journey_name: "Claim additional payments for teaching"
     claim_description: "for an additional payment for teaching"
@@ -298,13 +307,13 @@ en:
       school_heading: "The school you have selected is not eligible"
       reason:
         itt_subject: "Early-career payments are only available for teachers who did their ITT in:"
-        not_teaching_subject: "You are only eligible for this payment if you are qualified in, and are currently teaching either:"
+        not_teaching_subject:
+          "You are only eligible for this payment if you are qualified in, and are currently teaching either:"
         trainee_teacher_future_eligibility: "You are not eligible this year"
         generic: "Based on the answers you have provided you are not eligible for an early-career payment"
     questions:
       check_and_confirm_details: "Check and confirm your personal details"
       details_correct: "Are these details correct?"
-      employed_as_supply_teacher: "Are you currently employed as a supply teacher?"
       has_entire_term_contract: "Do you have a contract to teach at the same school for an entire term or longer?"
       employed_directly: "Are you employed directly by your school?"
       eligible_degree_subject: "Do you have a degree in an eligible subject?"

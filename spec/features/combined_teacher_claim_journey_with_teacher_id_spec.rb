@@ -356,7 +356,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     end
 
     # - Are you currently employed as a supply teacher?
-    expect(page).to have_text(I18n.t("additional_payments.questions.employed_as_supply_teacher"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.supply_teacher.questions.employed_as_supply_teacher"))
 
     choose "No"
     click_on "Continue"
