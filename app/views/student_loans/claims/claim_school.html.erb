@@ -4,7 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
     <% if @schools.blank? %>
 
-      <%= render "school_search",
+      <%= render "claim_school_search",
                  question: claim_school_question(additional_school: params[:additional_school]),
                  school_param: :claim_school,
                  school_id_param: :claim_school_id,
@@ -13,7 +13,7 @@
       %>
 
     <% else %>
-      <%= render "school_search_results",
+      <%= render "claim_school_search_results",
                  question: claim_school_question(additional_school: params[:additional_school]),
                  school_param: :claim_school,
                  school_id_param: :claim_school_id,
