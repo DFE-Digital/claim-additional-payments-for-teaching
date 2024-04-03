@@ -3,7 +3,8 @@ module Journeys
     # TODO: move app/forms/*_forms to shared and journey specific folders
     # but needs load_paths sorting
     SHARED_FORMS = {
-      "current-school" => CurrentSchoolForm
+      "current-school" => CurrentSchoolForm,
+      "supply-teacher" => SupplyTeacherForm
     }
 
     def configuration
