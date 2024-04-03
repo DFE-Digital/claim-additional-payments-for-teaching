@@ -300,14 +300,6 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
       end
     end
 
-    context "when saving in the 'nqt_in_academic_year_after_itt' context" do
-      it "is not valid without a value for 'nqt_in_academic_year_after_itt'" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new).not_to be_valid(:"nqt-in-academic-year-after-itt")
-        expect(Policies::EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: true)).to be_valid(:"nqt-in-academic-year-after-itt")
-        expect(Policies::EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: false)).to be_valid(:"nqt-in-academic-year-after-itt")
-      end
-    end
-
     context "when saving in the 'has_entire_term_contract' context" do
       it "is not valid without a value for 'has_entire_term_contract'" do
         expect(Policies::EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true)).not_to be_valid(:"entire-term-contract")

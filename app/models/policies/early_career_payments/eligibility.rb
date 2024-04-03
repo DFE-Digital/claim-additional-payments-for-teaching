@@ -77,7 +77,6 @@ module Policies
       has_one :claim, as: :eligibility, inverse_of: :eligibility
       belongs_to :current_school, optional: true, class_name: "School"
 
-      validates :nqt_in_academic_year_after_itt, on: [:"nqt-in-academic-year-after-itt", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently teaching as a qualified teacher"}
       validates :current_school, on: [:"correct-school"], presence: {message: "Select the school you teach at or choose somewhere else"}, unless: :school_somewhere_else?
       validates :induction_completed, on: [:"induction-completed", :submit], inclusion: {in: [true, false], message: "Select yes if you have completed your induction"}
       validates :has_entire_term_contract, on: [:"entire-term-contract", :submit], inclusion: {in: [true, false], message: "Select yes if you have a contract to teach at the same school for an entire term or longer"}, if: :employed_as_supply_teacher?
