@@ -1,7 +1,9 @@
 class SupplyTeacherForm < Form
   attribute :employed_as_supply_teacher
 
-  # TODO validations
+  # TODO: validations
+  # validates :employed_as_supply_teacher,
+  #           inclusion: { in: [true, false], message: "Select yes if you are a supply teacher" }
 
   def initialize(claim:, journey:, params:)
     super
