@@ -9,5 +9,11 @@ module Journeys
     VIEW_PATH = "additional_payments"
     I18N_NAMESPACE = "additional_payments"
     POLICIES = [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments]
+
+    def forms
+      {
+        "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm
+      }
+    end
   end
 end

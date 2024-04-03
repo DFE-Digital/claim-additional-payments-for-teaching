@@ -18,12 +18,16 @@ module Journeys
       self::SlugSequence
     end
 
-    # TODO: make this work for journey specific forms
-    # that list of forms should be defined in the specific journey
     def form(claim:, params:)
-      form = SHARED_FORMS[params[:slug]]
+      avaliable_forms = SHARED_FORMS.merge(forms)
+
+      form = avaliable_forms[params[:slug]]
 
       form&.new(journey: self, claim: claim, params: params)
+    end
+
+    def forms
+      {}
     end
 
     def page_sequence_for_claim(claim, completed_slugs, current_slug)
