@@ -1,9 +1,7 @@
 require "rails_helper"
 
 RSpec.describe SupplyTeacherForm do
-  before {
-    create(:journey_configuration, :additional_payments)
-  }
+  before { create(:journey_configuration, :additional_payments) }
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
 
@@ -27,13 +25,13 @@ RSpec.describe SupplyTeacherForm do
   describe "#employed_as_supply_teacher" do
     let(:params) { ActionController::Parameters.new({ slug:, claim: {} }) }
 
-    context "claim eligibility DOES NOT have employed_as_supply_teacher" do
+    context "when claim eligibility is missing employed_as_supply_teacher" do
       it "returns nil" do
         expect(form.employed_as_supply_teacher).to be_nil
       end
     end
 
-    context "claim eligibility DOES have employed_as_supply_teacher" do
+    context "when claim eligibility has employed_as_supply_teacher" do
       let(:current_claim) do
         claims = journey::POLICIES.map do |policy|
           create(:claim, policy:, eligibility_attributes: { employed_as_supply_teacher: true })
@@ -41,17 +39,17 @@ RSpec.describe SupplyTeacherForm do
         CurrentClaim.new(claims:)
       end
 
-      it "returns employed_as_supply_teacher" do
+      it "returns existing value for employed_as_supply_teacher" do
         expect(form.employed_as_supply_teacher).to be_truthy
       end
     end
   end
 
   describe "#save" do
-    context "employed_as_supply_teacher submitted" do
+    context "when a valid employed_as_supply_teacher is submitted" do
       let(:params) { ActionController::Parameters.new({ slug:, claim: { employed_as_supply_teacher: "Yes" } }) }
 
-      context "claim eligibility didn't have employed_as_supply_teacher" do
+      context "when claim eligibility is missing employed_as_supply_teacher" do
         let(:current_claim) do
           claims = journey::POLICIES.map { |policy| create(:claim, policy:) }
           CurrentClaim.new(claims:)
@@ -68,7 +66,7 @@ RSpec.describe SupplyTeacherForm do
         end
       end
 
-      context "claim eligibility already had a employed_as_supply_teacher" do
+      context "when claim eligibility has employed_as_supply_teacher" do
         let(:current_claim) do
           claims = journey::POLICIES.map do |policy|
             create(:claim, policy:, eligibility_attributes: { employed_as_supply_teacher: false })
@@ -87,7 +85,7 @@ RSpec.describe SupplyTeacherForm do
         end
       end
 
-      context "claim model fails validation unexpectedly" do
+      context "when claim model fails validation unexpectedly" do
         it "raises an error" do
           allow(current_claim).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
 
@@ -96,7 +94,7 @@ RSpec.describe SupplyTeacherForm do
       end
     end
 
-    context "employed_as_supply_teacher missing" do
+    context "when employed_as_supply_teacher is not provided" do
       let(:params) { ActionController::Parameters.new({ slug:, claim: { employed_as_supply_teacher: nil } }) }
 
       it "does not save and adds error to form" do
