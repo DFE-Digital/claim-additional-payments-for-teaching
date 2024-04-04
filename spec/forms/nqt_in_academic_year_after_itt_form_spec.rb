@@ -60,7 +60,7 @@ RSpec.describe NqtInAcademicYearAfterIttForm, type: :model do
   describe "#save" do
     let(:form) do
       described_class.new(
-        journey: journey,
+        journey: additional_payments_journey,
         claim: current_claim,
         params: params
       )
@@ -69,8 +69,6 @@ RSpec.describe NqtInAcademicYearAfterIttForm, type: :model do
     before { form.save }
 
     context "when invalid" do
-      let(:journey) { additional_payments_journey }
-
       let(:claim) { create(:claim, policy: Policies::EarlyCareerPayments) }
 
       let(:params) do
@@ -97,10 +95,15 @@ RSpec.describe NqtInAcademicYearAfterIttForm, type: :model do
         )
       end
 
-      context "when the current journey is not `additional-payments`" do
-        let(:journey) { Journeys::TeacherStudentLoanReimbursement }
-
-        let(:claim) { create(:claim, policy: Policies::EarlyCareerPayments) }
+      context "when the teacher has not passed the tid details check" do
+        let(:claim) do
+          create(
+            :claim,
+            :logged_in_with_tid,
+            details_check: false,
+            policy: Policies::EarlyCareerPayments
+          )
+        end
 
         it "sets the nqt_in_academic_year_after_itt attribute" do
           expect(claim.eligibility.nqt_in_academic_year_after_itt).to be true
@@ -111,21 +114,22 @@ RSpec.describe NqtInAcademicYearAfterIttForm, type: :model do
         end
       end
 
-      context "when the current journey is `additional-payments`" do
-        let(:journey) { additional_payments_journey }
-
-        context "when the teacher has not passed the tid details check" do
+      context "when the teacher has passed the tid details check" do
+        context "when there is not an eligible induction" do
           let(:claim) do
             create(
               :claim,
               :logged_in_with_tid,
-              details_check: false,
-              policy: Policies::EarlyCareerPayments
+              policy: Policies::EarlyCareerPayments,
+              details_check: true,
+              dqt_teacher_status: nil
             )
           end
 
           it "sets the nqt_in_academic_year_after_itt attribute" do
-            expect(claim.eligibility.nqt_in_academic_year_after_itt).to be true
+            expect(
+              claim.eligibility.nqt_in_academic_year_after_itt
+            ).to be true
           end
 
           it "does not set the induction as complete" do
@@ -133,85 +137,25 @@ RSpec.describe NqtInAcademicYearAfterIttForm, type: :model do
           end
         end
 
-        context "when the teacher has passed the tid details check" do
-          context "when there is not an eligible induction" do
-            let(:claim) do
-              create(
-                :claim,
-                :logged_in_with_tid,
-                policy: Policies::EarlyCareerPayments,
-                details_check: true,
-                dqt_teacher_status: nil
-              )
-            end
-
-            it "sets the nqt_in_academic_year_after_itt attribute" do
-              expect(
-                claim.eligibility.nqt_in_academic_year_after_itt
-              ).to be true
-            end
-
-            it "does not set the induction as complete" do
-              expect(claim.eligibility.induction_completed).to be nil
-            end
+        context "when there is an eligible induction" do
+          let(:claim) do
+            create(
+              :claim,
+              :logged_in_with_tid,
+              :with_dqt_teacher_status,
+              policy: Policies::EarlyCareerPayments,
+              details_check: true
+            )
           end
 
-          context "when there is an eligible induction" do
-            let(:claim) do
-              create(
-                :claim,
-                :logged_in_with_tid,
-                policy: Policies::EarlyCareerPayments,
-                details_check: true,
-                dqt_teacher_status: {
-                  trn: 1234567,
-                  ni_number: "AB123123A",
-                  name: "Rick Sanchez",
-                  dob: "66-06-06T00:00:00",
-                  active_alert: false,
-                  state: 0,
-                  state_name: "Active",
-                  qualified_teacher_status: {
-                    name: "Qualified teacher (trained)",
-                    qts_date: "2018-12-01",
-                    state: 0,
-                    state_name: "Active"
-                  },
-                  induction: {
-                    start_date: "2021-07-01T00:00:00Z",
-                    completion_date: "2021-07-05T00:00:00Z",
-                    status: "Pass",
-                    state: 0,
-                    state_name: "Active"
-                  },
-                  initial_teacher_training: {
-                    programme_start_date: "666-06-06T00:00:00",
-                    programme_end_date: "2021-07-04T00:00:00Z",
-                    programme_type: "Overseas Trained Teacher Programme",
-                    result: "Pass",
-                    subject1: "mathematics",
-                    subject1_code: "G100",
-                    subject2: nil,
-                    subject2_code: nil,
-                    subject3: nil,
-                    subject3_code: nil,
-                    qualification: "BA (Hons)",
-                    state: 0,
-                    state_name: "Active"
-                  }
-                }
-              )
-            end
+          it "sets the nqt_in_academic_year_after_itt attribute" do
+            expect(
+              claim.eligibility.nqt_in_academic_year_after_itt
+            ).to be true
+          end
 
-            it "sets the nqt_in_academic_year_after_itt attribute" do
-              expect(
-                claim.eligibility.nqt_in_academic_year_after_itt
-              ).to be true
-            end
-
-            it "sets the induction as complete" do
-              expect(claim.eligibility.induction_completed).to be true
-            end
+          it "sets the induction as complete" do
+            expect(claim.eligibility.induction_completed).to be true
           end
         end
       end

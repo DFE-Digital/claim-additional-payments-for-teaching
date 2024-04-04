@@ -15,6 +15,10 @@ class Form
     super
   end
 
+  def persisted?
+    true
+  end
+
   def update!(attrs)
     claim.update!(attrs)
   end
@@ -39,5 +43,14 @@ class Form
 
   def i18n_form_namespace
     raise "Form#i18n_form_namespace requires all sub-classes to override"
+  end
+
+  def page_sequence
+    @page_sequence ||= Journeys::PageSequence.new(
+      claim,
+      journey.slug_sequence.new(claim),
+      nil,
+      params[:slug]
+    )
   end
 end

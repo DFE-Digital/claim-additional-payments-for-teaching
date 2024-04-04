@@ -16,10 +16,6 @@ class NqtInAcademicYearAfterIttForm < Form
     )
   end
 
-  def persisted?
-    true
-  end
-
   def save
     return false unless valid?
 
@@ -51,17 +47,7 @@ class NqtInAcademicYearAfterIttForm < Form
     )
   end
 
-  def page_sequence
-    @page_sequence ||= Journeys::PageSequence.new(
-      claim,
-      journey.slug_sequence.new(claim),
-      nil,
-      nil
-    )
-  end
-
   def determine_induction_answer_from_dqt_record
-    return unless additional_payments_journey?
     return unless passed_details_check_with_teacher_id?
     # We can derive the induction_completed value for current_claim using the
     # ECP DQT record Remember: even if it's only relevant to ECP, the induction
@@ -71,10 +57,6 @@ class NqtInAcademicYearAfterIttForm < Form
     claim_for_policy = claim.for_policy(Policies::EarlyCareerPayments)
     dqt_teacher_record = claim_for_policy.dqt_teacher_record
     dqt_teacher_record&.eligible_induction?
-  end
-
-  def additional_payments_journey?
-    journey::ROUTING_NAME == "additional-payments"
   end
 
   def passed_details_check_with_teacher_id?
