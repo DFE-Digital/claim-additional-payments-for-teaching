@@ -41,7 +41,7 @@ RSpec.describe SupplyTeacherForm do
         CurrentClaim.new(claims:)
       end
 
-      xit "returns employed_as_supply_teacher" do
+      it "returns employed_as_supply_teacher" do
         expect(form.employed_as_supply_teacher).to be_truthy
       end
     end
