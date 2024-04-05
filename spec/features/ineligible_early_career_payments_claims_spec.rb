@@ -170,7 +170,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
     click_on "Continue"
 
     # - Do you have a contract to teach at the same school for an entire term or longer
-    expect(page).to have_text(I18n.t("additional_payments.questions.has_entire_term_contract"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.entire_term_contract.questions.has_entire_term_contract"))
 
     choose "No"
     click_on "Continue"
@@ -209,7 +209,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
     click_on "Continue"
 
     # - Do you have a contract to teach at the same school for an entire term or longer
-    expect(page).to have_text(I18n.t("additional_payments.questions.has_entire_term_contract"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.entire_term_contract.questions.has_entire_term_contract"))
 
     choose "Yes"
     click_on "Continue"
