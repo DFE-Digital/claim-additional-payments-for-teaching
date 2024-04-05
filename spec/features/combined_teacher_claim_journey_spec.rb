@@ -56,11 +56,11 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     click_on "Continue"
 
     # - Poor performance
-    expect(page).to have_text(I18n.t("additional_payments.questions.formal_performance_action"))
-    expect(page).to have_text(I18n.t("additional_payments.questions.disciplinary_action"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.formal_performance_action"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.disciplinary_action"))
 
-    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
-    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
+    choose "claim_subject_to_formal_performance_action_false"
+    choose "claim_subject_to_disciplinary_action_false"
     click_on "Continue"
 
     # - What route into teaching did you take?
@@ -274,11 +274,11 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     click_on "Continue"
 
     # - Poor performance
-    expect(page).to have_text(I18n.t("additional_payments.questions.formal_performance_action"))
-    expect(page).to have_text(I18n.t("additional_payments.questions.disciplinary_action"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.formal_performance_action"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.disciplinary_action"))
 
-    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
-    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
+    choose "claim_subject_to_formal_performance_action_false"
+    choose "claim_subject_to_disciplinary_action_false"
     click_on "Continue"
 
     # - What route into teaching did you take?

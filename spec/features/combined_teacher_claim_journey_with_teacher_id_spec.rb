@@ -362,10 +362,10 @@ RSpec.feature "Combined journey with Teacher ID" do
     click_on "Continue"
 
     # - Performance Issues
-    expect(page).to have_text(I18n.t("additional_payments.questions.poor_performance"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.poor_performance"))
 
-    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
-    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
+    choose "claim_subject_to_formal_performance_action_false"
+    choose "claim_subject_to_disciplinary_action_false"
     click_on "Continue"
   end
 end
