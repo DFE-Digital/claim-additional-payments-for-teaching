@@ -38,6 +38,10 @@ class QualificationForm < Form
     true
   end
 
+  def save!
+    raise ActiveRecord::RecordInvalid.new unless save
+  end
+
   def backlink_path
     Rails
       .application
