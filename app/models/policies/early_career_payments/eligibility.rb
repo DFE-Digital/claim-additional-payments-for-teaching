@@ -87,8 +87,6 @@ module Policies
       validates_numericality_of :award_amount, message: "Enter a valid monetary amount", allow_nil: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 7500
       validates :award_amount, on: :amendment, award_range: {max: max_award_amount_in_pounds}
 
-      before_save :set_qualification_if_trainee_teacher, if: :nqt_in_academic_year_after_itt_changed?
-
       delegate :name, to: :current_school, prefix: true, allow_nil: true
 
       def policy
@@ -236,12 +234,6 @@ module Policies
           itt_subject_symbol = itt_subject.to_sym
           !itt_subject_symbol.in?(itt_subject_checker.current_and_future_subject_symbols(policy))
         end
-      end
-
-      def set_qualification_if_trainee_teacher
-        return unless trainee_teacher?
-
-        self.qualification = :postgraduate_itt
       end
     end
   end

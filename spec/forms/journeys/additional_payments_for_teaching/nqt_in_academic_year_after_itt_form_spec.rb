@@ -95,41 +95,23 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
         )
       end
 
-      context "when the teacher has not passed the tid details check" do
-        let(:claim) do
-          create(
-            :claim,
-            :logged_in_with_tid,
-            details_check: false,
-            policy: Policies::EarlyCareerPayments
-          )
-        end
+      describe "nqt_in_academic_year_after_itt" do
+        let(:claim) { create(:claim, policy: Policies::EarlyCareerPayments) }
 
-        it "sets the nqt_in_academic_year_after_itt attribute" do
+        it "sets the value on the claim's eligibility" do
           expect(claim.eligibility.nqt_in_academic_year_after_itt).to be true
-        end
-
-        it "does not set the induction as complete" do
-          expect(claim.eligibility.induction_completed).to be nil
         end
       end
 
-      context "when the teacher has passed the tid details check" do
-        context "when there is not an eligible induction" do
+      describe "induction_completed" do
+        context "when the teacher has not passed the tid details check" do
           let(:claim) do
             create(
               :claim,
               :logged_in_with_tid,
-              policy: Policies::EarlyCareerPayments,
-              details_check: true,
-              dqt_teacher_status: nil
+              details_check: false,
+              policy: Policies::EarlyCareerPayments
             )
-          end
-
-          it "sets the nqt_in_academic_year_after_itt attribute" do
-            expect(
-              claim.eligibility.nqt_in_academic_year_after_itt
-            ).to be true
           end
 
           it "does not set the induction as complete" do
@@ -137,25 +119,69 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
           end
         end
 
-        context "when there is an eligible induction" do
-          let(:claim) do
-            create(
-              :claim,
-              :logged_in_with_tid,
-              :with_dqt_teacher_status,
-              policy: Policies::EarlyCareerPayments,
-              details_check: true
+        context "when the teacher has passed the tid details check" do
+          context "when there is not an eligible induction" do
+            let(:claim) do
+              create(
+                :claim,
+                :logged_in_with_tid,
+                policy: Policies::EarlyCareerPayments,
+                details_check: true,
+                dqt_teacher_status: nil
+              )
+            end
+
+            it "does not set the induction as complete" do
+              expect(claim.eligibility.induction_completed).to be nil
+            end
+          end
+
+          context "when there is an eligible induction" do
+            let(:claim) do
+              create(
+                :claim,
+                :logged_in_with_tid,
+                :with_dqt_teacher_status,
+                policy: Policies::EarlyCareerPayments,
+                details_check: true
+              )
+            end
+
+            it "sets the induction as complete" do
+              expect(claim.eligibility.induction_completed).to be true
+            end
+          end
+        end
+      end
+
+      describe "qualification" do
+        let(:claim) { create(:claim, policy: Policies::EarlyCareerPayments) }
+
+        context "when the claim is not from a trainee teacher" do
+          let(:params) do
+            ActionController::Parameters.new(
+              claim: {
+                nqt_in_academic_year_after_itt: true
+              }
             )
           end
 
-          it "sets the nqt_in_academic_year_after_itt attribute" do
-            expect(
-              claim.eligibility.nqt_in_academic_year_after_itt
-            ).to be true
+          it "does not set the qualification" do
+            expect(claim.eligibility.qualification).to be nil
+          end
+        end
+
+        context "when the clian is from a trainee teacher" do
+          let(:params) do
+            ActionController::Parameters.new(
+              claim: {
+                nqt_in_academic_year_after_itt: false
+              }
+            )
           end
 
-          it "sets the induction as complete" do
-            expect(claim.eligibility.induction_completed).to be true
+          it "sets the qualification and resets dependent answers" do
+            expect(claim.eligibility.qualification).to eq "postgraduate_itt"
           end
         end
       end
