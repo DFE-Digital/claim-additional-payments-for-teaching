@@ -15,7 +15,7 @@ RSpec.describe SupplyTeacherForm do
   subject(:form) { described_class.new(claim: current_claim, journey:, params:) }
 
   context "unpermitted claim param" do
-    let(:params) { ActionController::Parameters.new({ slug:, claim: { random_param: 1 } }) }
+    let(:params) { ActionController::Parameters.new({slug:, claim: {random_param: 1}}) }
 
     it "raises an error" do
       expect { form }.to raise_error ActionController::UnpermittedParameters
@@ -23,7 +23,7 @@ RSpec.describe SupplyTeacherForm do
   end
 
   describe "#employed_as_supply_teacher" do
-    let(:params) { ActionController::Parameters.new({ slug:, claim: {} }) }
+    let(:params) { ActionController::Parameters.new({slug:, claim: {}}) }
 
     context "when claim eligibility is missing employed_as_supply_teacher" do
       it "returns nil" do
@@ -34,7 +34,7 @@ RSpec.describe SupplyTeacherForm do
     context "when claim eligibility has employed_as_supply_teacher" do
       let(:current_claim) do
         claims = journey::POLICIES.map do |policy|
-          create(:claim, policy:, eligibility_attributes: { employed_as_supply_teacher: true })
+          create(:claim, policy:, eligibility_attributes: {employed_as_supply_teacher: true})
         end
         CurrentClaim.new(claims:)
       end
@@ -47,7 +47,7 @@ RSpec.describe SupplyTeacherForm do
 
   describe "#save" do
     context "when a valid employed_as_supply_teacher is submitted" do
-      let(:params) { ActionController::Parameters.new({ slug:, claim: { employed_as_supply_teacher: "Yes" } }) }
+      let(:params) { ActionController::Parameters.new({slug:, claim: {employed_as_supply_teacher: "Yes"}}) }
 
       context "when claim eligibility is missing employed_as_supply_teacher" do
         let(:current_claim) do
@@ -69,7 +69,7 @@ RSpec.describe SupplyTeacherForm do
       context "when claim eligibility has employed_as_supply_teacher" do
         let(:current_claim) do
           claims = journey::POLICIES.map do |policy|
-            create(:claim, policy:, eligibility_attributes: { employed_as_supply_teacher: false })
+            create(:claim, policy:, eligibility_attributes: {employed_as_supply_teacher: false})
           end
           CurrentClaim.new(claims:)
         end
@@ -95,7 +95,7 @@ RSpec.describe SupplyTeacherForm do
     end
 
     context "when employed_as_supply_teacher is not provided" do
-      let(:params) { ActionController::Parameters.new({ slug:, claim: { employed_as_supply_teacher: nil } }) }
+      let(:params) { ActionController::Parameters.new({slug:, claim: {employed_as_supply_teacher: nil}}) }
 
       it "does not save and adds error to form" do
         expect(form.save).to be false
