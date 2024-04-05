@@ -3,9 +3,11 @@ class Form
   include ActiveModel::Attributes
   include ActiveModel::Serialization
 
-  attribute :claim
-  attribute :journey
-  attribute :params
+  attr_accessor :claim
+  attr_accessor :journey
+  attr_accessor :params
+
+  delegate :persisted?, to: :claim
 
   def self.model_name
     Claim.model_name

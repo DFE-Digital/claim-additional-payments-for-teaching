@@ -21,7 +21,7 @@ class CurrentSchoolForm < Form
   def save
     return false unless valid?
 
-    update!({eligibility_attributes: {current_school_id: current_school_id}})
+    update!({eligibility_attributes: {current_school_id:}})
   end
 
   def current_school_name
