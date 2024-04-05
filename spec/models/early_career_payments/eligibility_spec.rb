@@ -322,23 +322,6 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
       end
     end
 
-    context "when saving in the 'poor-peformance' context" do
-      it "is not valid without a value for 'subject_to_disciplinary_action" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new).not_to be_valid(:"poor-performance")
-      end
-
-      it "is not valid without a value for 'subject_to_formal_performance_action'" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new).not_to be_valid(:"poor-performance")
-      end
-
-      it "is valid when the values are not nil" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: true, subject_to_formal_performance_action: false)).to be_valid(:"poor-performance")
-        expect(Policies::EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: false, subject_to_formal_performance_action: false)).to be_valid(:"poor-performance")
-        expect(Policies::EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: true, subject_to_formal_performance_action: true)).to be_valid(:"poor-performance")
-        expect(Policies::EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: true, subject_to_formal_performance_action: true)).to be_valid(:"poor-performance")
-      end
-    end
-
     context "when saving in the 'qualification' context" do
       it "is not valid without a value for 'qualification'" do
         expect(Policies::EarlyCareerPayments::Eligibility.new).not_to be_valid(:qualification)

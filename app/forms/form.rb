@@ -17,10 +17,6 @@ class Form
     super
   end
 
-  def persisted?
-    true
-  end
-
   def update!(attrs)
     claim.update!(attrs)
   end

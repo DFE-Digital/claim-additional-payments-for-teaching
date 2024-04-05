@@ -10,7 +10,8 @@ module Journeys
     I18N_NAMESPACE = "additional_payments"
     POLICIES = [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments]
     FORMS = {
-      "supply-teacher" => SupplyTeacherForm
+      "supply-teacher" => SupplyTeacherForm,
+      "poor-performance" => PoorPerformanceForm
     }.freeze
   end
 end
