@@ -339,12 +339,6 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
       end
     end
 
-    context "when saving in the 'qualification' context" do
-      it "is not valid without a value for 'qualification'" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new).not_to be_valid(:qualification)
-      end
-    end
-
     context "when saving in the 'eligible_itt_subject' context" do
       before { create(:journey_configuration, :additional_payments) }
 

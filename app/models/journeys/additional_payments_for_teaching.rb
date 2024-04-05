@@ -12,7 +12,8 @@ module Journeys
 
     def forms
       {
-        "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm
+        "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm,
+        "qualification" => QualificationForm
       }
     end
   end
