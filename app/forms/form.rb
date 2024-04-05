@@ -15,6 +15,10 @@ class Form
     super
   end
 
+  def persisted?
+    true
+  end
+
   def update!(attrs)
     claim.update!(attrs)
   end
@@ -35,9 +39,13 @@ class Form
     I18n.t("#{i18n_namespace}.forms.#{i18n_form_namespace}.errors.#{msg}")
   end
 
+  def permitted_params
+    @permitted_params ||= params.fetch(:claim, {}).permit(*attributes)
+  end
+
   private
 
   def i18n_form_namespace
-    raise "Form#i18n_form_namespace requires all sub-classes to override"
+    self.class.name.demodulize.gsub("Form", "").underscore
   end
 end

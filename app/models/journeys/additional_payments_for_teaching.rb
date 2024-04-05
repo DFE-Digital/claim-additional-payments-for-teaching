@@ -9,11 +9,8 @@ module Journeys
     VIEW_PATH = "additional_payments"
     I18N_NAMESPACE = "additional_payments"
     POLICIES = [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments]
-
-    def forms
-      {
-        "supply-teacher" => SupplyTeacherForm
-      }
-    end
+    FORMS = {
+      "supply-teacher" => SupplyTeacherForm
+    }.freeze
   end
 end

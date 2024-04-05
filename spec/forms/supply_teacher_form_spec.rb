@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe SupplyTeacherForm do
+RSpec.describe Journeys::AdditionalPaymentsForTeaching::SupplyTeacherForm do
   before { create(:journey_configuration, :additional_payments) }
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }

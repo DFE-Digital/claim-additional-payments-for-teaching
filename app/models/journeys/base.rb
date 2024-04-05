@@ -25,7 +25,7 @@ module Journeys
     end
 
     def forms
-      {}
+      defined?(self::FORMS) ? self::FORMS : {}
     end
 
     def page_sequence_for_claim(claim, completed_slugs, current_slug)
