@@ -8,9 +8,9 @@ module StudentLoansHelper
   # additional school.
   def claim_school_question(additional_school: false)
     if additional_school
-      translate("student_loans.questions.additional_school", financial_year: Policies::StudentLoans.current_financial_year)
+      t("student_loans.forms.claim_school.questions.additional_school", financial_year: Policies::StudentLoans.current_financial_year)
     else
-      translate("student_loans.questions.claim_school", financial_year: Policies::StudentLoans.current_financial_year)
+      t("student_loans.forms.claim_school.questions.claim_school", financial_year: Policies::StudentLoans.current_financial_year)
     end
   end
 

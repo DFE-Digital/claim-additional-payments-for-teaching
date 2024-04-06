@@ -18,7 +18,11 @@ class Form
   end
 
   def update!(attrs)
-    claim.update!(attrs)
+    ActiveRecord::Base.transaction do
+      claim.attributes = attrs
+      reset_eligibility_dependent_answers(attrs)
+      claim.save!
+    end
   end
 
   def view_path
@@ -47,6 +51,20 @@ class Form
   end
 
   private
+
+  # TODO: this probably shouldn't belong in the eligibility but more in the journey
+  # leaving it here for now
+  def reset_eligibility_dependent_answers(attrs)
+    return if params[:slug] == "qualification-details"
+
+    claim.reset_eligibility_dependent_answers(reset_attrs(attrs))
+  end
+
+  def reset_attrs(attrs)
+    return [] unless attrs["eligibility_attributes"]
+
+    attrs["eligibility_attributes"].keys
+  end
 
   def i18n_form_namespace
     self.class.name.demodulize.gsub("Form", "").underscore

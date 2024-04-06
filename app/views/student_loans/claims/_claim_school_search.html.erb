@@ -1,38 +1,35 @@
-<%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { school_search: "school_search" }) if current_claim.errors.any? %>
+<% content_for(:page_title, page_title(question, journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+<%= render("shared/error_summary", instance: @form, errored_field_id_overrides: { school_search: "school_search" }) if @form.errors.any? %>
 
-<%= form_for current_claim,
+<%= form_for @form,
              url: claim_path(current_journey_routing_name),
              method: :get,
              data: {
-               "school-id-param": "claim_eligibility_attributes_#{school_id_param}",
-               "exclude-closed": exclude_closed,
+               "school-id-param": "claim_claim_school_id",
+               "exclude-closed": false,
                "current-policy": current_journey_routing_name
              },
              html: { class: "school_search_form" } do |form|
 %>
   <%= hidden_field_tag :_method, "get", id: nil %>
   <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+  <%= form.hidden_field :claim_school_id %>
 
-  <%= form.fields_for :eligibility, include_id: false do |fields| %>
-    <%= fields.hidden_field school_id_param %>
-  <% end %>
-
-  <%= form_group_tag current_claim, :school_search do %>
-
-    <%= hidden_field_tag :exclude_closed, exclude_closed, id: nil %>
+  <%= form_group_tag @form, :school_search do %>
+    <%= hidden_field_tag :exclude_closed, false, id: nil %>
 
    <h1 class="govuk-label-wrapper">
      <%= label_tag :school_search, question, class: "govuk-label #{label_css_class_for_journey(journey)}" %>
    </h1>
 
-    <% if params[:school_search].present? && current_claim.errors.empty? %>
+    <% if params[:school_search].present? && @form.errors.empty? %>
       <p class="govuk-body">
         <strong>No results match that search term. Try again.</strong>
       </p>
     <% else %>
       <div class="govuk-hint" id="school_search-hint">
         Enter the school name or postcode. Use at least three characters.
-        <% if school_id_param == :claim_school_id && !params.has_key?(:additional_school) %>
+        <% if !params.has_key?(:additional_school) %>
           <br><br>
           If you taught at multiple schools during this period, enter the first school you think might be eligible.
         <% end %>
@@ -40,15 +37,13 @@
     <% end %>
 
     <div id="school-search-container">
-
-      <%= errors_tag current_claim, :school_search %>
+      <%= errors_tag @form, :school_search %>
       <%= text_field_tag :school_search,
                          params[:school_search],
                          id: :school_search,
-                         class: css_classes_for_input(current_claim, :school_search),
+                         class: css_classes_for_input(@form, :school_search),
                          value: school_search_value,
                          "aria-describedby" => "school_search-hint" %>
-
     </div>
   <% end %>
 

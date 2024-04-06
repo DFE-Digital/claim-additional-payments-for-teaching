@@ -1,23 +1,14 @@
-<% content_for(:page_title, page_title(claim_school_question(additional_school: params[:additional_school]), journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% if @schools.blank? %>
-
+    <% if @form.schools.blank? %>
       <%= render "claim_school_search",
                  question: claim_school_question(additional_school: params[:additional_school]),
-                 school_param: :claim_school,
-                 school_id_param: :claim_school_id,
-                 school_search_value: (current_claim.eligibility.claim_school_name unless params[:additional_school]),
-                 exclude_closed: false
+                 school_search_value: (@form.claim_school_name unless params[:additional_school])
       %>
 
     <% else %>
       <%= render "claim_school_search_results",
-                 question: claim_school_question(additional_school: params[:additional_school]),
-                 school_param: :claim_school,
-                 school_id_param: :claim_school_id,
-                 exclude_closed: false
+                 question: claim_school_question(additional_school: params[:additional_school])
       %>
     <% end %>
   </div>

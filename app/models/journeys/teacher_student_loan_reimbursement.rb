@@ -9,5 +9,9 @@ module Journeys
     VIEW_PATH = "student_loans"
     I18N_NAMESPACE = "student_loans"
     POLICIES = [Policies::StudentLoans]
+
+    FORMS = {
+      "claim-school" => ClaimSchoolForm
+    }
   end
 end

@@ -1,5 +1,4 @@
 class CurrentSchoolForm < Form
-  attribute :school_search
   attribute :current_school_id
 
   attr_reader :schools
@@ -21,7 +20,7 @@ class CurrentSchoolForm < Form
   def save
     return false unless valid?
 
-    update!({eligibility_attributes: {current_school_id:}})
+    update!({"eligibility_attributes" => {"current_school_id" => current_school_id}})
   end
 
   def current_school_name
