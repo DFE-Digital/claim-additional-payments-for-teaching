@@ -72,17 +72,6 @@ module FeatureHelpers
     click_on "Continue"
   end
 
-  def answer_student_loan_plan_questions
-    choose("Yes")
-    click_on "Continue"
-    choose("England")
-    click_on "Continue"
-    choose("1")
-    click_on "Continue"
-    choose I18n.t("answers.student_loan_start_date.one_course.before_first_september_2012")
-    click_on "Continue"
-  end
-
   # Signs in as a user with the service operator role. Returns the signed-in User record.
   def sign_in_as_service_operator
     user = create(:dfe_signin_user)

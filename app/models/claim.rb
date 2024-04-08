@@ -21,13 +21,6 @@ class Claim < ApplicationRecord
     :payroll_gender,
     :teacher_reference_number,
     :national_insurance_number,
-    :has_student_loan, # TODO: remove this and remaining student loan attributes when M&P is removed
-    :student_loan_country,
-    :student_loan_courses,
-    :student_loan_start_date,
-    :has_masters_doctoral_loan,
-    :postgraduate_masters_loan,
-    :postgraduate_doctoral_loan,
     :email_address,
     :provide_mobile_number,
     :mobile_number,
@@ -120,9 +113,6 @@ class Claim < ApplicationRecord
   ATTRIBUTE_DEPENDENCIES = {
     "national_insurance_number" => ["has_student_loan", "student_loan_plan", "eligibility.student_loan_repayment_amount"],
     "date_of_birth" => ["has_student_loan", "student_loan_plan", "eligibility.student_loan_repayment_amount"],
-    "has_student_loan" => ["student_loan_country", "has_masters_doctoral_loan", "postgraduate_masters_loan", "postgraduate_doctoral_loan"],
-    "student_loan_country" => ["student_loan_courses"],
-    "student_loan_courses" => ["student_loan_start_date"],
     "bank_or_building_society" => ["banking_name", "bank_account_number", "bank_sort_code", "building_society_roll_number"],
     "provide_mobile_number" => ["mobile_number"],
     "mobile_number" => ["mobile_verified"],
@@ -243,15 +233,8 @@ class Claim < ApplicationRecord
   validate :ni_number_is_correct_format
 
   validates :has_student_loan, on: [:"student-loan"], inclusion: {in: [true, false]}
-  validates :student_loan_country, on: [:"student-loan-country"], presence: {message: "Select where your home address was when you applied for your student loan"}
-  validates :student_loan_courses, on: [:"student-loan-how-many-courses"], presence: {message: "Select how many higher education courses you took out a student loan for"}
-  validates :student_loan_start_date, on: [:"student-loan-start-date"], presence: {message: ->(object, data) { I18n.t("validation_errors.student_loan_start_date.#{object.student_loan_courses}") }}
   validates :student_loan_plan, inclusion: {in: STUDENT_LOAN_PLAN_OPTIONS}, allow_nil: true
   validates :student_loan_plan, on: [:"student-loan", :amendment], presence: {message: "Enter a valid student loan plan"}
-
-  validates :has_masters_doctoral_loan, on: [:"masters-doctoral-loan"], inclusion: {in: [true, false], message: "Select yes if you have a postgraduate masters and/or doctoral loan"}, if: :no_student_loan?
-  validates :postgraduate_masters_loan, on: [:"masters-loan"], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a Postgraduate Master’s Loan"}, unless: -> { no_masters_doctoral_loan? }
-  validates :postgraduate_doctoral_loan, on: [:"doctoral-loan"], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a Postgraduate Doctoral Loan"}, unless: -> { no_masters_doctoral_loan? }
 
   validates :email_address, on: [:"email-address", :submit], presence: {message: "Enter an email address"}
   validates :email_address, format: {with: Rails.application.config.email_regexp, message: "Enter an email address in the correct format, like name@example.com"},
@@ -432,18 +415,6 @@ class Claim < ApplicationRecord
     Claim::ADDRESS_ATTRIBUTES.map { |attr| send(attr) }.reject(&:blank?).join(separator)
   end
 
-  def no_student_loan?
-    !has_student_loan?
-  end
-
-  def no_masters_doctoral_loan?
-    has_masters_doctoral_loan == false
-  end
-
-  def student_loan_country_with_one_plan?
-    StudentLoan::PLAN_1_COUNTRIES.include?(student_loan_country) || StudentLoan::PLAN_4_COUNTRIES.include?(student_loan_country)
-  end
-
   # Returns true if the claim has a verified identity received from GOV.UK Verify.
   # TODO: We no longer use GOV.UK Verify these verified? methods aren't used anymore.
   def identity_verified?
@@ -543,10 +514,6 @@ class Claim < ApplicationRecord
 
   def important_notes
     notes&.where(important: true)
-  end
-
-  def has_postgraduate_loan?
-    [postgraduate_masters_loan, postgraduate_doctoral_loan].any?
   end
 
   def award_amount_with_topups
@@ -672,8 +639,7 @@ class Claim < ApplicationRecord
   end
 
   def ni_number_is_correct_format
-    errors.add(:national_insurance_number, "Enter a National Insurance number in the correct format") \
-      if national_insurance_number.present? && !normalised_ni_number.match(/\A[A-Z]{2}[0-9]{6}[A-D]{1}\Z/)
+    errors.add(:national_insurance_number, "Enter a National Insurance number in the correct format") if national_insurance_number.present? && !normalised_ni_number.match(/\A[A-Z]{2}[0-9]{6}[A-D]{1}\Z/)
   end
 
   def normalise_bank_account_number
@@ -695,25 +661,21 @@ class Claim < ApplicationRecord
   def building_society_roll_number_must_be_between_one_and_eighteen_digits
     return unless building_society_roll_number.present?
 
-    errors.add(:building_society_roll_number, "Building society roll number must be between 1 and 18 characters") \
-      if building_society_roll_number.length > 18
+    errors.add(:building_society_roll_number, "Building society roll number must be between 1 and 18 characters") if building_society_roll_number.length > 18
   end
 
   def building_society_roll_number_must_be_in_a_valid_format
     return unless building_society_roll_number.present?
 
-    errors.add(:building_society_roll_number, "Building society roll number must only include letters a to z, numbers, hyphens, spaces, forward slashes and full stops") \
-      unless /\A[a-z0-9\-\s.\/]{1,18}\z/i.match?(building_society_roll_number)
+    errors.add(:building_society_roll_number, "Building society roll number must only include letters a to z, numbers, hyphens, spaces, forward slashes and full stops") unless /\A[a-z0-9\-\s.\/]{1,18}\z/i.match?(building_society_roll_number)
   end
 
   def bank_account_number_must_be_eight_digits
-    errors.add(:bank_account_number, "Account number must be 8 digits") \
-      if bank_account_number.present? && normalised_bank_detail(bank_account_number) !~ /\A\d{8}\z/
+    errors.add(:bank_account_number, "Account number must be 8 digits") if bank_account_number.present? && normalised_bank_detail(bank_account_number) !~ /\A\d{8}\z/
   end
 
   def bank_sort_code_must_be_six_digits
-    errors.add(:bank_sort_code, "Sort code must be 6 digits") \
-      if bank_sort_code.present? && normalised_bank_detail(bank_sort_code) !~ /\A\d{6}\z/
+    errors.add(:bank_sort_code, "Sort code must be 6 digits") if bank_sort_code.present? && normalised_bank_detail(bank_sort_code) !~ /\A\d{6}\z/
   end
 
   def unique_reference
@@ -725,10 +687,6 @@ class Claim < ApplicationRecord
 
   def claim_must_not_be_ineligible
     errors.add(:base, "You’re not eligible for this payment") if eligibility.ineligible?
-  end
-
-  def determine_student_loan_plan
-    StudentLoan.determine_plan(has_student_loan?, has_postgraduate_loan?, student_loan_country, student_loan_start_date)
   end
 
   def postcode_is_valid

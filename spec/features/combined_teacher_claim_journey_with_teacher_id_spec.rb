@@ -56,11 +56,6 @@ RSpec.feature "Combined journey with Teacher ID" do
       expect(page).not_to have_text section_heading
     end
 
-    within(".govuk-summary-list") do
-      expect(page).not_to have_text(I18n.t("questions.postgraduate_masters_loan"))
-      expect(page).not_to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
-    end
-
     # Check your answers page does not include qualifications questions
     expect(page).not_to have_text(I18n.t("additional_payments.questions.qualification.heading"))
     expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_itt_subject", qualification: "undergraduate initial teacher training (ITT)"))

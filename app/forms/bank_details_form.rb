@@ -43,27 +43,23 @@ class BankDetailsForm
   end
 
   def bank_account_number_must_be_eight_digits
-    errors.add(:bank_account_number, "Account number must be 8 digits") \
-      if bank_account_number.present? && normalised_bank_detail(bank_account_number) !~ /\A\d{8}\z/
+    errors.add(:bank_account_number, "Account number must be 8 digits") if bank_account_number.present? && normalised_bank_detail(bank_account_number) !~ /\A\d{8}\z/
   end
 
   def bank_sort_code_must_be_six_digits
-    errors.add(:bank_sort_code, "Sort code must be 6 digits") \
-      if bank_sort_code.present? && normalised_bank_detail(bank_sort_code) !~ /\A\d{6}\z/
+    errors.add(:bank_sort_code, "Sort code must be 6 digits") if bank_sort_code.present? && normalised_bank_detail(bank_sort_code) !~ /\A\d{6}\z/
   end
 
   def building_society_roll_number_must_be_between_one_and_eighteen_digits
     return unless building_society_roll_number.present?
 
-    errors.add(:building_society_roll_number, "Building society roll number must be between 1 and 18 characters") \
-      if building_society_roll_number.length > 18
+    errors.add(:building_society_roll_number, "Building society roll number must be between 1 and 18 characters") if building_society_roll_number.length > 18
   end
 
   def building_society_roll_number_must_be_in_a_valid_format
     return unless building_society_roll_number.present?
 
-    errors.add(:building_society_roll_number, "Building society roll number must only include letters a to z, numbers, hyphens, spaces, forward slashes and full stops") \
-      unless /\A[a-z0-9\-\s.\/]{1,18}\z/i.match?(building_society_roll_number)
+    errors.add(:building_society_roll_number, "Building society roll number must only include letters a to z, numbers, hyphens, spaces, forward slashes and full stops") unless /\A[a-z0-9\-\s.\/]{1,18}\z/i.match?(building_society_roll_number)
   end
 
   def bank_account_is_valid
