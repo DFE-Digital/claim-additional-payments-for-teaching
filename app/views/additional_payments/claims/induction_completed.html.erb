@@ -1,42 +1,38 @@
-<% content_for(:page_title, page_title(t("additional_payments.questions.induction_completed.heading"), journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
-<% path_for_form = current_claim.persisted? ? claim_path(current_journey_routing_name) : claims_path(current_journey_routing_name) %>
+<% content_for(:page_title, page_title(t("additional_payments.questions.induction_completed.heading"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+<% path_for_form = @form.persisted? ? claim_path(current_journey_routing_name) : claims_path(current_journey_routing_name) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.induction_completed": "claim_eligibility_attributes_induction_completed_true" }) if current_claim.errors.any? %>
-    <%= form_for current_claim, url: path_for_form do |form| %>
-      <%= form_group_tag current_claim do %>
-        <%= form.fields_for :eligibility, include_id: false do |fields| %>
+    <%= render("shared/error_summary", instance: @form, errored_field_id_overrides: { "induction_completed": "claim_induction_completed-error" }) if @form.errors.any? %>
+    <%= form_for @form, url: path_for_form do |f| %>
+      <%= form_group_tag @form do %>
+        <%= f.hidden_field :induction_completed %>
 
-          <%= fields.hidden_field :induction_completed %>
+        <fieldset class="govuk-fieldset">
 
-          <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">
+            <h1 class="govuk-fieldset__heading">
+              <%= t("additional_payments.questions.induction_completed.heading") %>
+            </h1>
+          </legend>
 
-            <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">
-              <h1 class="govuk-fieldset__heading">
-                <%= t("additional_payments.questions.induction_completed.heading") %>
-              </h1>
-            </legend>
+          <%= errors_tag f.object, :induction_completed %>
 
-            <%= errors_tag current_claim.eligibility, :induction_completed %>
+          <div class="govuk-radios">
 
-            <div class="govuk-radios">
-
-              <div class="govuk-radios__item">
-                <%= fields.radio_button(:induction_completed, true, class: "govuk-radios__input") %>
-                <%= fields.label :induction_completed_true, "Yes", class: "govuk-label govuk-radios__label" %>
-              </div>
-
-              <div class="govuk-radios__item">
-                <%= fields.radio_button(:induction_completed, false, class: "govuk-radios__input") %>
-                <%= fields.label :induction_completed_false, "No", class: "govuk-label govuk-radios__label" %>
-              </div>
-
+            <div class="govuk-radios__item">
+              <%= f.radio_button(:induction_completed, true, class: "govuk-radios__input") %>
+              <%= f.label :induction_completed_true, "Yes", class: "govuk-label govuk-radios__label" %>
             </div>
 
-          </fieldset>
+            <div class="govuk-radios__item">
+              <%= f.radio_button(:induction_completed, false, class: "govuk-radios__input") %>
+              <%= f.label :induction_completed_false, "No", class: "govuk-label govuk-radios__label" %>
+            </div>
 
-        <% end %>
+          </div>
+
+        </fieldset>
 
         <br/>
         <br/>
@@ -68,7 +64,7 @@
         </details>
       <% end %>
 
-      <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
+      <%= f.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
     <% end %>
   </div>
 </div>

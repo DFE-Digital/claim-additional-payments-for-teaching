@@ -302,6 +302,9 @@ en:
           select_the_school_you_teach_at: "Select the school you teach at"
           the_selected_school_is_closed: "The selected school is closed"
           school_not_found: "School not found"
+      induction_completed:
+        errors:
+          select_yes_if_completed: "Select yes if you have completed your induction"
     check_your_answers:
       part_one:
         primary_heading: Check your answers

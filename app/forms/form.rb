@@ -7,6 +7,8 @@ class Form
   attribute :journey
   attribute :params
 
+  delegate :persisted?, to: :claim
+
   def self.model_name
     Claim.model_name
   end
