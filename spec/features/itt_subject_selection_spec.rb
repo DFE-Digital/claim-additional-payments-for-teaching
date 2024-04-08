@@ -22,7 +22,7 @@ RSpec.feature "ITT subject selection", slow: true do
         scenario "handles eligible and ineligible subject options" do
           expect_displayed_subjects(["Chemistry", "Computing", "Mathematics", "Physics"])
           select_subject("Mathematics")
-          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
           click_link "Back"
           select_subject("None of the above")
           expect(page).to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
@@ -35,7 +35,7 @@ RSpec.feature "ITT subject selection", slow: true do
         scenario "handles eligible and ineligible subject options" do
           expect_displayed_subjects(["Chemistry", "Computing", "Mathematics", "Physics"])
           select_subject("Mathematics")
-          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
           click_link "Back"
           select_subject("None of the above")
           expect(page).to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
@@ -49,11 +49,11 @@ RSpec.feature "ITT subject selection", slow: true do
           expect_displayed_subjects(["Chemistry", "Computing", "Mathematics", "Physics"])
           # choose subject eligible for LUP only
           select_subject("Chemistry")
-          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
           click_link "Back"
           # choose subject eligible for both LUP and ECP
           select_subject("Mathematics")
-          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
           click_link "Back"
           # choose ineligible subject for both ECP and LUP
           select_subject("None of the above")
@@ -68,11 +68,11 @@ RSpec.feature "ITT subject selection", slow: true do
           expect_displayed_subjects(["Chemistry", "Computing", "Languages", "Mathematics", "Physics"])
           # choose subject ineligible for LUP
           select_subject("Languages")
-          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
           click_link "Back"
           # choose eligible subject
           select_subject("Mathematics")
-          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
           click_link "Back"
           # choose none of the above
           select_subject("None of the above")
@@ -86,7 +86,7 @@ RSpec.feature "ITT subject selection", slow: true do
         scenario "subject options" do
           expect_displayed_subjects(["Chemistry", "Computing", "Mathematics", "Physics"])
           select_subject("Mathematics")
-          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
           click_link "Back"
           select_subject("None of the above")
           expect(page).to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
@@ -119,7 +119,7 @@ RSpec.feature "ITT subject selection", slow: true do
 
         scenario "choose eligible subject and teach now" do
           select_subject("Yes")
-          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
 
           choose "Yes"
           click_on "Continue"
@@ -131,7 +131,7 @@ RSpec.feature "ITT subject selection", slow: true do
 
         scenario "choose eligible subject but don't teach now" do
           select_subject("Yes")
-          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
 
           choose "No"
           click_on "Continue"
@@ -146,7 +146,7 @@ RSpec.feature "ITT subject selection", slow: true do
         scenario "subject options" do
           expect_displayed_subjects(["Mathematics"])
           select_subject("Yes")
-          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
           click_link "Back"
           select_subject("No")
           expect(page).to have_text(I18n.t("additional_payments.ineligible.heading"))
@@ -159,7 +159,7 @@ RSpec.feature "ITT subject selection", slow: true do
         scenario "subject options" do
           expect_displayed_subjects(["Chemistry", "Languages", "Mathematics", "Physics"])
           select_subject("Mathematics")
-          expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
+          expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
           click_link "Back"
           select_subject("None of the above")
           expect(page).to have_text(I18n.t("additional_payments.ineligible.heading"))

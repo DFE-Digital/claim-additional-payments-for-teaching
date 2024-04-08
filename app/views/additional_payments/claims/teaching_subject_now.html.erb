@@ -1,52 +1,64 @@
-<% eligible_itt_subject = current_claim.eligibility.eligible_itt_subject %>
-<% translated_eligible_itt_subject = t("additional_payments.answers.eligible_itt_subject.#{eligible_itt_subject}").downcase %>
-<% content_for(:page_title, page_title(t("additional_payments.questions.teaching_subject_now", eligible_itt_subject: eligible_itt_subject), journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
-<% path_for_form = current_claim.persisted? ? claim_path(current_journey_routing_name) : claims_path(current_journey_routing_name) %>
+<% content_for(
+  :page_title,
+  page_title(
+    t(
+      "additional_payments.forms.teaching_subject_now.questions.teaching_subject_now",
+      eligible_itt_subject: @form.eligible_itt_subject
+    )
+  ),
+  journey: current_journey_routing_name,
+  show_error: @form.errors.any?
+) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.teaching_subject_now": "claim_eligibility_attributes_teaching_subject_now_true" }) if current_claim.errors.any? %>
+    <% if @form.errors.any? %>
+      <%= render(
+        "shared/error_summary",
+        instance: @form,
+        errored_field_id_overrides: {
+          "teaching_subject_now": "claim_teaching_subject_now_true"
+        }
+      ) %>
+    <% end %>
 
-    <%= form_for current_claim, url: path_for_form  do |form| %>
-      <%= form_group_tag current_claim do %>
-        <%= form.fields_for :eligibility, include_id: false do |fields| %>
+    <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
+      <%= form_group_tag f.object do %>
+        <%= f.hidden_field :teaching_subject_now %>
 
-          <%= fields.hidden_field :teaching_subject_now %>
+        <fieldset class="govuk-fieldset" aria-describedby="teaching_subject_now-hint" role="group">
 
-          <fieldset class="govuk-fieldset" aria-describedby="teaching_subject_now-hint" role="group">
+          <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(f.object.journey) %>">
+            <h1 class="govuk-fieldset__heading">
+              <%= t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now") %>
+            </h1>
+          </legend>
 
-            <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">
-              <h1 class="govuk-fieldset__heading">
-                <%= t("additional_payments.questions.teaching_subject_now") %>
-              </h1>
-            </legend>
+          <div class="govuk-hint" id="teaching_subject_now-hint">
+           At least 50% of your contracted hours allocated to teaching must be spent
+           teaching <%= subjects_to_sentence_for_hint_text(f.object.claim) %>.
+          </div>
 
-            <div class="govuk-hint" id="teaching_subject_now-hint">
-             At least 50% of your contracted hours allocated to teaching must be spent
-             teaching <%= subjects_to_sentence_for_hint_text(current_claim) %>.
+          <%= errors_tag f.object, :teaching_subject_now %>
+
+          <div class="govuk-radios">
+
+            <div class="govuk-radios__item">
+              <%= f.radio_button(:teaching_subject_now, true, class: "govuk-radios__input") %>
+              <%= f.label :teaching_subject_now_true, "Yes", class: "govuk-label govuk-radios__label" %>
             </div>
 
-            <%= errors_tag current_claim.eligibility, :teaching_subject_now %>
-
-            <div class="govuk-radios">
-
-              <div class="govuk-radios__item">
-                <%= fields.radio_button(:teaching_subject_now, true, class: "govuk-radios__input") %>
-                <%= fields.label :teaching_subject_now_true, "Yes", class: "govuk-label govuk-radios__label" %>
-              </div>
-
-              <div class="govuk-radios__item">
-                <%= fields.radio_button(:teaching_subject_now, false, class: "govuk-radios__input") %>
-                <%= fields.label :teaching_subject_now_false, "No", class: "govuk-label govuk-radios__label" %>
-              </div>
-
+            <div class="govuk-radios__item">
+              <%= f.radio_button(:teaching_subject_now, false, class: "govuk-radios__input") %>
+              <%= f.label :teaching_subject_now_false, "No", class: "govuk-label govuk-radios__label" %>
             </div>
 
-          </fieldset>
+          </div>
 
-        <% end %>
+        </fieldset>
 
-        <% if translated_eligible_itt_subject == "physics" || translated_eligible_itt_subject == "chemistry" %>
+
+        <% if f.object.teaching_physics_or_chemistry? %>
           <br/>
           <details class="govuk-details" data-module="govuk-details">
             <summary class="govuk-details__summary">
@@ -64,7 +76,7 @@
         <% end %>
       <% end %>
 
-      <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
+      <%= f.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
     <% end %>
   </div>
 </div>

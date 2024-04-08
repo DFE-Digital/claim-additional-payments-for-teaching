@@ -139,7 +139,7 @@ module Journeys
 
       def teaching_subject_now
         [
-          translate("additional_payments.questions.teaching_subject_now", eligible_itt_subject: eligibility.eligible_itt_subject),
+          translate("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now", eligible_itt_subject: eligibility.eligible_itt_subject),
           (eligibility.teaching_subject_now? ? "Yes" : "No"),
           "teaching-subject-now"
         ]

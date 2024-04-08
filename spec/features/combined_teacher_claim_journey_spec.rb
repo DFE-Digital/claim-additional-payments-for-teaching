@@ -82,7 +82,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     click_on "Continue"
 
     # - Do you teach mathematics now?
-    expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
     choose "Yes"
     click_on "Continue"
 
@@ -299,7 +299,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     click_on "Continue"
 
     # - Do you teach mathematics now?
-    expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
     choose "Yes"
     click_on "Continue"
 
