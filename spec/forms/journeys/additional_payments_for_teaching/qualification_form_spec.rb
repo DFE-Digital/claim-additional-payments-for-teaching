@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe QualificationForm, type: :model do
+RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationForm, type: :model do
   before { create(:journey_configuration, :additional_payments) }
 
   let(:additional_payments_journey) { Journeys::AdditionalPaymentsForTeaching }
