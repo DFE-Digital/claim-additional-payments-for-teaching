@@ -85,7 +85,7 @@ module Journeys
 
       def employed_directly
         [
-          translate("additional_payments.questions.employed_directly"),
+          translate("additional_payments.forms.employed_directly.questions.employed_directly"),
           (eligibility.employed_directly? ? "Yes" : "No"),
           "employed-directly"
         ]

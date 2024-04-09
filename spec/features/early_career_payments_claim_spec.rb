@@ -328,7 +328,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.has_entire_term_contract).to eql true
 
     # - Are you employed directly by your school
-    expect(page).to have_text(I18n.t("additional_payments.questions.employed_directly"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.employed_directly.questions.employed_directly"))
 
     choose "Yes, I'm employed by my school"
     click_on "Continue"

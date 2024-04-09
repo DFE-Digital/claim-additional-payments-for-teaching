@@ -300,13 +300,6 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
       end
     end
 
-    context "when saving in the 'employed_directly' context" do
-      it "is not valid without a value for 'employed_directly'" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true)).not_to be_valid(:"employed-directly")
-        expect(Policies::EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, employed_directly: false)).to be_valid(:"employed-directly")
-      end
-    end
-
     context "when saving in the 'eligible_itt_subject' context" do
       before { create(:journey_configuration, :additional_payments) }
 
