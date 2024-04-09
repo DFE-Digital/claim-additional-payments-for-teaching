@@ -46,4 +46,13 @@ class Form
   def i18n_form_namespace
     self.class.name.demodulize.gsub("Form", "").underscore
   end
+
+  def page_sequence
+    @page_sequence ||= Journeys::PageSequence.new(
+      claim,
+      journey.slug_sequence.new(claim),
+      nil,
+      params[:slug]
+    )
+  end
 end

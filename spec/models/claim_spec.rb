@@ -165,8 +165,8 @@ RSpec.describe Claim, type: :model do
 
     # Tests a single attribute, possibly should test multiple attributes
     it "validates eligibility" do
-      expect(claim).not_to be_valid(:"nqt-in-academic-year-after-itt")
-      expect(claim.errors.first.message).to eq("Select yes if you are currently teaching as a qualified teacher")
+      expect(claim).not_to be_valid(:"teaching-subject-now")
+      expect(claim.errors.first.message).to eq("Select yes if you spend at least half of your contracted hours teaching eligible subjects")
     end
   end
 

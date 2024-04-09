@@ -10,6 +10,7 @@ module Journeys
     I18N_NAMESPACE = "additional_payments"
     POLICIES = [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments]
     FORMS = {
+      "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm,
       "supply-teacher" => SupplyTeacherForm,
       "poor-performance" => PoorPerformanceForm
     }.freeze
