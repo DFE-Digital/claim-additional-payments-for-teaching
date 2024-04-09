@@ -9,5 +9,11 @@ module Journeys
     VIEW_PATH = "additional_payments"
     I18N_NAMESPACE = "additional_payments"
     POLICIES = [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments]
+    FORMS = {
+      "induction-completed" => InductionCompletedForm,
+      "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm,
+      "supply-teacher" => SupplyTeacherForm,
+      "poor-performance" => PoorPerformanceForm
+    }.freeze
   end
 end

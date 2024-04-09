@@ -21,7 +21,7 @@ class CurrentSchoolForm < Form
   def save
     return false unless valid?
 
-    update!({eligibility_attributes: {current_school_id: current_school_id}})
+    update!({eligibility_attributes: {current_school_id:}})
   end
 
   def current_school_name
@@ -29,14 +29,6 @@ class CurrentSchoolForm < Form
   end
 
   private
-
-  def i18n_form_namespace
-    "current_school"
-  end
-
-  def permitted_params
-    @permitted_params ||= params.fetch(:claim, {}).permit(:current_school_id)
-  end
 
   def load_schools
     return unless params[:school_search]

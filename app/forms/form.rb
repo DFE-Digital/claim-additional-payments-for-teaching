@@ -3,9 +3,9 @@ class Form
   include ActiveModel::Attributes
   include ActiveModel::Serialization
 
-  attribute :claim
-  attribute :journey
-  attribute :params
+  attr_accessor :claim
+  attr_accessor :journey
+  attr_accessor :params
 
   delegate :persisted?, to: :claim
 
@@ -37,9 +37,22 @@ class Form
     I18n.t("#{i18n_namespace}.forms.#{i18n_form_namespace}.errors.#{msg}")
   end
 
+  def permitted_params
+    @permitted_params ||= params.fetch(:claim, {}).permit(*attributes)
+  end
+
   private
 
   def i18n_form_namespace
-    raise "Form#i18n_form_namespace requires all sub-classes to override"
+    self.class.name.demodulize.gsub("Form", "").underscore
+  end
+
+  def page_sequence
+    @page_sequence ||= Journeys::PageSequence.new(
+      claim,
+      journey.slug_sequence.new(claim),
+      nil,
+      params[:slug]
+    )
   end
 end

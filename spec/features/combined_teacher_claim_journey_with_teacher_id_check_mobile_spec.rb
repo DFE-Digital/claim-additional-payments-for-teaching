@@ -90,8 +90,8 @@ RSpec.feature "Combined journey with Teacher ID mobile check" do
     click_on "Continue"
 
     # - Performance Issues
-    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
-    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
+    choose "claim_subject_to_formal_performance_action_false"
+    choose "claim_subject_to_disciplinary_action_false"
     click_on "Continue"
 
     # - Check and confirm qualifications

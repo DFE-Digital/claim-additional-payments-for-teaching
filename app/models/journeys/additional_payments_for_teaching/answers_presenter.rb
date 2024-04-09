@@ -77,7 +77,7 @@ module Journeys
 
       def employed_as_supply_teacher
         [
-          translate("additional_payments.questions.employed_as_supply_teacher"),
+          translate("additional_payments.forms.supply_teacher.questions.employed_as_supply_teacher"),
           (eligibility.employed_as_supply_teacher? ? "Yes" : "No"),
           "supply-teacher"
         ]
@@ -93,7 +93,7 @@ module Journeys
 
       def subject_to_formal_performance_action
         [
-          translate("additional_payments.questions.formal_performance_action"),
+          translate("additional_payments.forms.poor_performance.questions.formal_performance_action"),
           (eligibility.subject_to_formal_performance_action? ? "Yes" : "No"),
           "poor-performance"
         ]
@@ -101,7 +101,7 @@ module Journeys
 
       def subject_to_disciplinary_action
         [
-          translate("additional_payments.questions.disciplinary_action"),
+          translate("additional_payments.forms.poor_performance.questions.disciplinary_action"),
           (eligibility.subject_to_disciplinary_action? ? "Yes" : "No"),
           "poor-performance"
         ]

@@ -300,22 +300,6 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
       end
     end
 
-    context "when saving in the 'nqt_in_academic_year_after_itt' context" do
-      it "is not valid without a value for 'nqt_in_academic_year_after_itt'" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new).not_to be_valid(:"nqt-in-academic-year-after-itt")
-        expect(Policies::EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: true)).to be_valid(:"nqt-in-academic-year-after-itt")
-        expect(Policies::EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: false)).to be_valid(:"nqt-in-academic-year-after-itt")
-      end
-    end
-
-    context "when saving in the 'employed_as_supply_teacher' context" do
-      it "is not valid without a value for 'employed_as_supply_teacher'" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new).not_to be_valid(:"supply-teacher")
-        expect(Policies::EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true)).to be_valid(:"supply-teacher")
-        expect(Policies::EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: false)).to be_valid(:"supply-teacher")
-      end
-    end
-
     context "when saving in the 'has_entire_term_contract' context" do
       it "is not valid without a value for 'has_entire_term_contract'" do
         expect(Policies::EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true)).not_to be_valid(:"entire-term-contract")
@@ -327,23 +311,6 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
       it "is not valid without a value for 'employed_directly'" do
         expect(Policies::EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true)).not_to be_valid(:"employed-directly")
         expect(Policies::EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, employed_directly: false)).to be_valid(:"employed-directly")
-      end
-    end
-
-    context "when saving in the 'poor-peformance' context" do
-      it "is not valid without a value for 'subject_to_disciplinary_action" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new).not_to be_valid(:"poor-performance")
-      end
-
-      it "is not valid without a value for 'subject_to_formal_performance_action'" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new).not_to be_valid(:"poor-performance")
-      end
-
-      it "is valid when the values are not nil" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: true, subject_to_formal_performance_action: false)).to be_valid(:"poor-performance")
-        expect(Policies::EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: false, subject_to_formal_performance_action: false)).to be_valid(:"poor-performance")
-        expect(Policies::EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: true, subject_to_formal_performance_action: true)).to be_valid(:"poor-performance")
-        expect(Policies::EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: true, subject_to_formal_performance_action: true)).to be_valid(:"poor-performance")
       end
     end
 

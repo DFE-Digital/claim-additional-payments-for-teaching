@@ -283,13 +283,32 @@ en:
       induction_completed:
         errors:
           select_yes_if_completed: "Select yes if you have completed your induction"
+      supply_teacher:
+        questions:
+          employed_as_supply_teacher: Are you currently employed as a supply teacher?
+        errors:
+          select_employed_as_supply_teacher: Select yes if you are a supply teacher
+      poor_performance:
+        questions:
+          poor_performance: Tell us if you are currently under any performance measures or disciplinary action
+          disciplinary_action: "Are you currently subject to disciplinary action?"
+          disciplinary_action_hint: "This is more serious than performance measures and could be because of misconduct. It is something we may check with your school as it will affect your eligibility."
+          formal_performance_action: "Have any performance measures been started against you?"
+          formal_performance_action_hint: "This will be as a result of your underperformance as a teacher over a period of time. It could put your employment at the school at risk and is something we may check with your school as it will affect your eligibility."
+        errors:
+          select_subject_to_formal_performance_action: Select yes if you are subject to formal action for poor performance at work
+          select_subject_to_disciplinary_action: Select yes if you are subject to disciplinary action
     check_your_answers:
       part_one:
         primary_heading: Check your answers
         secondary_heading: Eligibility details
-        confirmation_notice: By selecting continue you are confirming that, to the best of your knowledge, the details you are providing are correct.
+        confirmation_notice:
+          By selecting continue you are confirming that, to the best of your knowledge, the details you are providing
+          are correct.
       heading_send_application: Now send your application
-      statement: By submitting this you are confirming that, to the best of your knowledge, the details you are providing are correct.
+      statement:
+        By submitting this you are confirming that, to the best of your knowledge, the details you are providing are
+        correct.
       btn_text: Accept and send
     journey_name: "Claim additional payments for teaching"
     claim_description: "for an additional payment for teaching"
@@ -301,13 +320,13 @@ en:
       school_heading: "The school you have selected is not eligible"
       reason:
         itt_subject: "Early-career payments are only available for teachers who did their ITT in:"
-        not_teaching_subject: "You are only eligible for this payment if you are qualified in, and are currently teaching either:"
+        not_teaching_subject:
+          "You are only eligible for this payment if you are qualified in, and are currently teaching either:"
         trainee_teacher_future_eligibility: "You are not eligible this year"
         generic: "Based on the answers you have provided you are not eligible for an early-career payment"
     questions:
       check_and_confirm_details: "Check and confirm your personal details"
       details_correct: "Are these details correct?"
-      employed_as_supply_teacher: "Are you currently employed as a supply teacher?"
       has_entire_term_contract: "Do you have a contract to teach at the same school for an entire term or longer?"
       employed_directly: "Are you employed directly by your school?"
       eligible_degree_subject: "Do you have a degree in an eligible subject?"
@@ -329,11 +348,6 @@ en:
               Select yes if you have more than 2 years experience as a teacher.<br/>
               Select no if you have less than 2 years experience as a teacher.<br/>
               Further information can be found at <a href="https://www.gov.uk/government/publications/apply-for-qualified-teacher-status-qts-if-you-teach-outside-the-uk/routes-to-qualified-teacher-status-qts-for-teachers-and-those-with-teaching-experience-outside-the-uk#early-career-teacher-ect-induction" class="govuk-link govuk-link--no-visited-state" target="_blank">early-career teacher (ECT) induction periods for teachers who qualified overseas</a>
-      poor_performance: Tell us if you are currently under any performance measures or disciplinary action
-      disciplinary_action: "Are you currently subject to disciplinary action?"
-      disciplinary_action_hint: "This is more serious than performance measures and could be because of misconduct. It is something we may check with your school as it will affect your eligibility."
-      formal_performance_action: "Have any performance measures been started against you?"
-      formal_performance_action_hint: "This will be as a result of your underperformance as a teacher over a period of time. It could put your employment at the school at risk and is something we may check with your school as it will affect your eligibility."
       qualification:
         heading: "Which route into teaching did you take?"
         hint:

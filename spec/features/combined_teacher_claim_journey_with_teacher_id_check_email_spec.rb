@@ -98,17 +98,17 @@ RSpec.feature "Combined journey with Teacher ID email check" do
     click_on "Continue"
 
     # - Are you currently employed as a supply teacher
-    expect(page).to have_text(I18n.t("additional_payments.questions.employed_as_supply_teacher"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.supply_teacher.questions.employed_as_supply_teacher"))
 
     choose "No"
     click_on "Continue"
 
     # - Poor performance
-    expect(page).to have_text(I18n.t("additional_payments.questions.formal_performance_action"))
-    expect(page).to have_text(I18n.t("additional_payments.questions.disciplinary_action"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.formal_performance_action"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.disciplinary_action"))
 
-    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
-    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
+    choose "claim_subject_to_formal_performance_action_false"
+    choose "claim_subject_to_disciplinary_action_false"
     click_on "Continue"
 
     # - What route into teaching did you take?
