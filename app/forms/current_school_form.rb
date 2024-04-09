@@ -30,14 +30,6 @@ class CurrentSchoolForm < Form
 
   private
 
-  def i18n_form_namespace
-    "current_school"
-  end
-
-  def permitted_params
-    @permitted_params ||= params.fetch(:claim, {}).permit(:current_school_id)
-  end
-
   def load_schools
     return unless params[:school_search]
 

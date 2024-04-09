@@ -77,7 +77,7 @@ module Journeys
 
       def employed_as_supply_teacher
         [
-          translate("additional_payments.questions.employed_as_supply_teacher"),
+          translate("additional_payments.forms.supply_teacher.questions.employed_as_supply_teacher"),
           (eligibility.employed_as_supply_teacher? ? "Yes" : "No"),
           "supply-teacher"
         ]
