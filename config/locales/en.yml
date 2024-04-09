@@ -285,6 +285,16 @@ en:
           employed_as_supply_teacher: Are you currently employed as a supply teacher?
         errors:
           select_employed_as_supply_teacher: Select yes if you are a supply teacher
+      poor_performance:
+        questions:
+          poor_performance: Tell us if you are currently under any performance measures or disciplinary action
+          disciplinary_action: "Are you currently subject to disciplinary action?"
+          disciplinary_action_hint: "This is more serious than performance measures and could be because of misconduct. It is something we may check with your school as it will affect your eligibility."
+          formal_performance_action: "Have any performance measures been started against you?"
+          formal_performance_action_hint: "This will be as a result of your underperformance as a teacher over a period of time. It could put your employment at the school at risk and is something we may check with your school as it will affect your eligibility."
+        errors:
+          select_subject_to_formal_performance_action: Select yes if you are subject to formal action for poor performance at work
+          select_subject_to_disciplinary_action: Select yes if you are subject to disciplinary action
     check_your_answers:
       part_one:
         primary_heading: Check your answers
@@ -335,11 +345,6 @@ en:
               Select yes if you have more than 2 years experience as a teacher.<br/>
               Select no if you have less than 2 years experience as a teacher.<br/>
               Further information can be found at <a href="https://www.gov.uk/government/publications/apply-for-qualified-teacher-status-qts-if-you-teach-outside-the-uk/routes-to-qualified-teacher-status-qts-for-teachers-and-those-with-teaching-experience-outside-the-uk#early-career-teacher-ect-induction" class="govuk-link govuk-link--no-visited-state" target="_blank">early-career teacher (ECT) induction periods for teachers who qualified overseas</a>
-      poor_performance: Tell us if you are currently under any performance measures or disciplinary action
-      disciplinary_action: "Are you currently subject to disciplinary action?"
-      disciplinary_action_hint: "This is more serious than performance measures and could be because of misconduct. It is something we may check with your school as it will affect your eligibility."
-      formal_performance_action: "Have any performance measures been started against you?"
-      formal_performance_action_hint: "This will be as a result of your underperformance as a teacher over a period of time. It could put your employment at the school at risk and is something we may check with your school as it will affect your eligibility."
       qualification:
         heading: "Which route into teaching did you take?"
         hint:

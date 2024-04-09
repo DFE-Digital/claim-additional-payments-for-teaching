@@ -52,18 +52,18 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.employed_as_supply_teacher).to eql false
 
     # - Performance Issues
-    expect(page).to have_text(I18n.t("additional_payments.questions.poor_performance"))
-    expect(page).to have_text(I18n.t("additional_payments.questions.formal_performance_action"))
-    expect(page).to have_text(I18n.t("additional_payments.questions.formal_performance_action_hint"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.poor_performance"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.formal_performance_action"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.formal_performance_action_hint"))
 
     # No
-    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
+    choose "claim_subject_to_formal_performance_action_false"
 
-    expect(page).to have_text(I18n.t("additional_payments.questions.disciplinary_action"))
-    expect(page).to have_text(I18n.t("additional_payments.questions.disciplinary_action_hint"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.disciplinary_action"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.disciplinary_action_hint"))
 
     # "No"
-    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
+    choose "claim_subject_to_disciplinary_action_false"
 
     click_on "Continue"
 
@@ -336,7 +336,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.employed_directly).to eql true
 
     # - Are you currently subject to action for poor performance
-    expect(page).to have_text(I18n.t("additional_payments.questions.formal_performance_action"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.formal_performance_action"))
   end
 
   context "Route into teaching" do
@@ -478,18 +478,18 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.employed_as_supply_teacher).to eql false
 
     # - Performance Issues
-    expect(page).to have_text(I18n.t("additional_payments.questions.poor_performance"))
-    expect(page).to have_text(I18n.t("additional_payments.questions.formal_performance_action"))
-    expect(page).to have_text(I18n.t("additional_payments.questions.formal_performance_action_hint"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.poor_performance"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.formal_performance_action"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.formal_performance_action_hint"))
 
     # No
-    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
+    choose "claim_subject_to_formal_performance_action_false"
 
-    expect(page).to have_text(I18n.t("additional_payments.questions.disciplinary_action"))
-    expect(page).to have_text(I18n.t("additional_payments.questions.disciplinary_action_hint"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.disciplinary_action"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.disciplinary_action_hint"))
 
     # "No"
-    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
+    choose "claim_subject_to_disciplinary_action_false"
     click_on "Continue"
 
     expect(claim.eligibility.reload.subject_to_formal_performance_action).to eql false
@@ -1033,9 +1033,9 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
       # - Performance Issues
       # No
-      choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
+      choose "claim_subject_to_formal_performance_action_false"
       # "No"
-      choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
+      choose "claim_subject_to_disciplinary_action_false"
       click_on "Continue"
 
       # - What route into teaching did you take?

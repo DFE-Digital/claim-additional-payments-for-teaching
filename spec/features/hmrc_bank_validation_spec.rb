@@ -33,8 +33,8 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
     click_on "Continue"
 
     # - Poor performance
-    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
-    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
+    choose "claim_subject_to_formal_performance_action_false"
+    choose "claim_subject_to_disciplinary_action_false"
     click_on "Continue"
 
     # - What route into teaching did you take?
