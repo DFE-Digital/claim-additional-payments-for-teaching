@@ -64,7 +64,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     click_on "Continue"
 
     # - What route into teaching did you take?
-    expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
 
     choose "Postgraduate initial teacher training (ITT)"
 
@@ -282,7 +282,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     click_on "Continue"
 
     # - What route into teaching did you take?
-    expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
 
     choose "Postgraduate initial teacher training (ITT)"
 

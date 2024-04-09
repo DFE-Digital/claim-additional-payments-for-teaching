@@ -1,4 +1,4 @@
-<% content_for(:page_title, page_title(t("additional_payments.questions.qualification.heading"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+<% content_for(:page_title, page_title(t("additional_payments.forms.qualification.questions.which_route"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -20,7 +20,7 @@
 
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
             <h1 class="govuk-fieldset__heading">
-              <%= t("additional_payments.questions.qualification.heading") %>
+              <%= t("additional_payments.forms.qualification.questions.which_route") %>
             </h1>
           </legend>
 
@@ -30,25 +30,25 @@
 
             <div class="govuk-radios__item">
               <%= f.radio_button(:qualification, :postgraduate_itt, class: "govuk-radios__input") %>
-              <%= f.label :qualification_postgraduate_itt, t("additional_payments.answers.qualification.postgraduate_itt"), class: "govuk-label govuk-radios__label" %>
-              <div class="govuk-hint govuk-radios__hint"><%= t("additional_payments.questions.qualification.hint.postgraduate_itt") %></div>
+              <%= f.label :qualification_postgraduate_itt, t("additional_payments.forms.qualification.answers.postgraduate_itt"), class: "govuk-label govuk-radios__label" %>
+              <div class="govuk-hint govuk-radios__hint"><%= t("additional_payments.forms.qualification.hints.postgraduate_itt") %></div>
             </div>
 
             <div class="govuk-radios__item">
               <%= f.radio_button(:qualification, :undergraduate_itt, class: "govuk-radios__input") %>
-              <%= f.label :qualification_undergraduate_itt, t("additional_payments.answers.qualification.undergraduate_itt"), class: "govuk-label govuk-radios__label" %>
-              <div class="govuk-hint govuk-radios__hint"><%= t("additional_payments.questions.qualification.hint.undergraduate_itt") %></div>
+              <%= f.label :qualification_undergraduate_itt, t("additional_payments.forms.qualification.answers.undergraduate_itt"), class: "govuk-label govuk-radios__label" %>
+              <div class="govuk-hint govuk-radios__hint"><%= t("additional_payments.forms.qualification.hints.undergraduate_itt") %></div>
             </div>
 
 
             <div class="govuk-radios__item">
               <%= f.radio_button(:qualification, :assessment_only, class: "govuk-radios__input") %>
-              <%= f.label :qualification_assessment_only, t("additional_payments.answers.qualification.assessment_only"), class: "govuk-label govuk-radios__label" %>
+              <%= f.label :qualification_assessment_only, t("additional_payments.forms.qualification.answers.assessment_only"), class: "govuk-label govuk-radios__label" %>
             </div>
 
             <div class="govuk-radios__item">
               <%= f.radio_button(:qualification, :overseas_recognition, class: "govuk-radios__input") %>
-              <%= f.label :qualification_overseas_recognition, t("additional_payments.answers.qualification.overseas_recognition"), class: "govuk-label govuk-radios__label" %>
+              <%= f.label :qualification_overseas_recognition, t("additional_payments.forms.qualification.answers.overseas_recognition"), class: "govuk-label govuk-radios__label" %>
             </div>
 
           </div>

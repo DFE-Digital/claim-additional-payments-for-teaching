@@ -43,20 +43,6 @@ module Journeys
       def save!
         raise ActiveRecord::RecordInvalid.new unless save
       end
-
-      def backlink_path
-        Rails
-          .application
-          .routes
-          .url_helpers
-          .claim_path(params[:journey], page_sequence.previous_slug)
-      end
-
-      private
-
-      def permitted_params
-        @permitted_params ||= params.fetch(:claim, {}).permit(:qualification)
-      end
     end
   end
 end

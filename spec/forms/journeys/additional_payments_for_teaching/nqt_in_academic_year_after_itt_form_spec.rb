@@ -171,7 +171,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
           end
         end
 
-        context "when the clian is from a trainee teacher" do
+        context "when the claim is from a trainee teacher" do
           let(:params) do
             ActionController::Parameters.new(
               claim: {
