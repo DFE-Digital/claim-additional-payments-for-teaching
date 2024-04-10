@@ -45,7 +45,7 @@ module Journeys
 
       def has_entire_term_contract
         [
-          translate("additional_payments.questions.has_entire_term_contract"),
+          translate("additional_payments.forms.entire_term_contract.questions.has_entire_term_contract"),
           (eligibility.has_entire_term_contract? ? "Yes" : "No"),
           "entire-term-contract"
         ]

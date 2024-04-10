@@ -78,7 +78,6 @@ module Policies
       belongs_to :current_school, optional: true, class_name: "School"
 
       validates :current_school, on: [:"correct-school"], presence: {message: "Select the school you teach at or choose somewhere else"}, unless: :school_somewhere_else?
-      validates :has_entire_term_contract, on: [:"entire-term-contract", :submit], inclusion: {in: [true, false], message: "Select yes if you have a contract to teach at the same school for an entire term or longer"}, if: :employed_as_supply_teacher?
       validates :employed_directly, on: [:"employed-directly", :submit], inclusion: {in: [true, false], message: "Select yes if you are directly employed by your school"}, if: :employed_as_supply_teacher?
       validates :qualification, on: [:qualification, :submit], presence: {message: "Select the route you took into teaching"}
       validates :eligible_itt_subject, on: [:"eligible-itt-subject", :submit], presence: {message: ->(object, data) { I18n.t("activerecord.errors.models.early_career_payments_eligibilities.attributes.eligible_itt_subject.blank.qualification") }}

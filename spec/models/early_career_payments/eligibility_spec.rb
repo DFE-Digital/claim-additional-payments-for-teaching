@@ -300,13 +300,6 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
       end
     end
 
-    context "when saving in the 'has_entire_term_contract' context" do
-      it "is not valid without a value for 'has_entire_term_contract'" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true)).not_to be_valid(:"entire-term-contract")
-        expect(Policies::EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: false)).to be_valid(:"entire-term-contract")
-      end
-    end
-
     context "when saving in the 'employed_directly' context" do
       it "is not valid without a value for 'employed_directly'" do
         expect(Policies::EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true)).not_to be_valid(:"employed-directly")

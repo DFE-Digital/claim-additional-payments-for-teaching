@@ -13,7 +13,8 @@ module Journeys
       "induction-completed" => InductionCompletedForm,
       "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm,
       "supply-teacher" => SupplyTeacherForm,
-      "poor-performance" => PoorPerformanceForm
+      "poor-performance" => PoorPerformanceForm,
+      "entire-term-contract" => EntireTermContractForm
     }.freeze
   end
 end

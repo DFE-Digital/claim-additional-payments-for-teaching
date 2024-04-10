@@ -320,7 +320,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.employed_as_supply_teacher).to eql true
 
     # - Do you have a contract to teach at the same school for an entire term or longer
-    expect(page).to have_text(I18n.t("additional_payments.questions.has_entire_term_contract"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.entire_term_contract.questions.has_entire_term_contract"))
 
     choose "Yes"
     click_on "Continue"
