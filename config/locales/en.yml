@@ -280,6 +280,12 @@ en:
           select_the_school_you_teach_at: "Select the school you teach at"
           the_selected_school_is_closed: "The selected school is closed"
           school_not_found: "School not found"
+      entire_term_contract:
+        questions:
+          has_entire_term_contract: Do you have a contract to teach at the same school for an entire term or longer?
+        errors:
+          select_entire_term_contract:
+            Select yes if you have a contract to teach at the same school for an entire term or longer
       supply_teacher:
         questions:
           employed_as_supply_teacher: Are you currently employed as a supply teacher?
@@ -324,7 +330,6 @@ en:
     questions:
       check_and_confirm_details: "Check and confirm your personal details"
       details_correct: "Are these details correct?"
-      has_entire_term_contract: "Do you have a contract to teach at the same school for an entire term or longer?"
       employed_directly: "Are you employed directly by your school?"
       eligible_degree_subject: "Do you have a degree in an eligible subject?"
       nqt_in_academic_year_after_itt:
