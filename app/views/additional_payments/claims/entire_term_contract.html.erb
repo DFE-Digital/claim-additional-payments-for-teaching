@@ -2,7 +2,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: @form, errored_field_id_overrides: { "eligibility.has_entire_term_contract": "claim_eligibility_attributes_has_entire_term_contract_true" }) if @form.errors.any? %>
+    <%= render("shared/error_summary", instance: @form, errored_field_id_overrides: { "has_entire_term_contract": "claim_has_entire_term_contract_true" }) if @form.errors.any? %>
 
     <%= form_for @form, url: claim_path(current_journey_routing_name) do |form| %>
       <%= form_group_tag @form do %>
