@@ -16,16 +16,12 @@ class InductionCompletedForm < Form
   def save
     return false unless valid?
 
-    update!({"eligibility_attributes" => {"induction_completed" => induction_completed}})
+    update!({eligibility_attributes: {induction_completed:}})
   end
 
   private
 
   def i18n_form_namespace
     "induction_completed"
-  end
-
-  def permitted_params
-    @permitted_params ||= params.fetch(:claim, {}).permit(:induction_completed)
   end
 end
