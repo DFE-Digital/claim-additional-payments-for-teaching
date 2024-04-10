@@ -30,7 +30,12 @@ class Form
   end
 
   def backlink_path
-    nil
+    return unless page_sequence.previous_slug
+    Rails
+      .application
+      .routes
+      .url_helpers
+      .claim_path(params[:journey], page_sequence.previous_slug)
   end
 
   def i18n_errors_path(msg)

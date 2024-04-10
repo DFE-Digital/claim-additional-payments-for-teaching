@@ -71,7 +71,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.subject_to_disciplinary_action).to eql false
 
     # - What route into teaching did you take?
-    expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
 
     choose "Undergraduate initial teacher training (ITT)"
     click_on "Continue"
@@ -358,7 +358,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       jump_to_claim_journey_page(claim, "qualification")
 
       # - What route into teaching did you take?
-      expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
+      expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
 
       choose "Assessment only"
       click_on "Continue"
@@ -400,7 +400,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       jump_to_claim_journey_page(claim, "qualification")
 
       # - What route into teaching did you take?
-      expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
+      expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
 
       choose "Overseas recognition"
       click_on "Continue"
@@ -496,7 +496,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.subject_to_disciplinary_action).to eql false
 
     # - What route into teaching did you take?
-    expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
 
     choose "Postgraduate initial teacher training (ITT)"
     click_on "Continue"

@@ -14,6 +14,20 @@ module Journeys
   end
 end
 
+module Journeys
+  module TestJourney
+    class SlugSequence
+      def initialize(claim)
+        # NOOP
+      end
+
+      def slugs
+        []
+      end
+    end
+  end
+end
+
 RSpec.describe Form, type: :model do
   describe ".model_name" do
     it { expect(TestSlugForm.model_name).to eq(Claim.model_name) }

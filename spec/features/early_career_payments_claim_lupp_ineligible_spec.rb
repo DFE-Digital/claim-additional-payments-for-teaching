@@ -63,7 +63,7 @@ RSpec.feature "Early-Career Payments claims with school ineligible for Levelling
     click_on "Continue"
 
     # - What route into teaching did you take?
-    expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
 
     choose "Undergraduate initial teacher training (ITT)"
     click_on "Continue"

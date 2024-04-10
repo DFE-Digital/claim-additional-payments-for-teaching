@@ -57,7 +57,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     end
 
     # Check your answers page does not include qualifications questions
-    expect(page).not_to have_text(I18n.t("additional_payments.questions.qualification.heading"))
+    expect(page).not_to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
     expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_itt_subject", qualification: "undergraduate initial teacher training (ITT)"))
     expect(page).not_to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
     expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
@@ -73,7 +73,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     click_on "Continue"
 
     # - What route into teaching did you take?
-    expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
 
     choose "Undergraduate initial teacher training (ITT)"
     click_on "Continue"
@@ -102,7 +102,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
 
     # Check your answers page includes qualifications questions
-    expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
     expect(page).to have_text(I18n.t("additional_payments.questions.eligible_itt_subject_one_option", qualification: "undergraduate initial teacher training (ITT)", subject: "mathematics"))
     expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
     expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
@@ -187,7 +187,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     expect(page).not_to have_text(I18n.t("additional_payments.questions.check_and_confirm_qualification_details"))
 
     # - What route into teaching did you take?
-    expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
 
     choose "Undergraduate initial teacher training (ITT)"
     click_on "Continue"
@@ -207,7 +207,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     click_on "Continue"
 
     # Check your answers page includes qualifications questions
-    expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
     expect(page).to have_text(I18n.t("additional_payments.questions.eligible_itt_subject_one_option", qualification: "undergraduate initial teacher training (ITT)", subject: "mathematics"))
     expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
     expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
@@ -287,7 +287,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
 
     # Check your answers page only includes missing qualifications questions
-    expect(page).not_to have_text(I18n.t("additional_payments.questions.qualification.heading"))
+    expect(page).not_to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
     expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_itt_subject", qualification: "undergraduate initial teacher training (ITT)"))
     expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
     expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))

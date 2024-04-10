@@ -13,7 +13,8 @@ module Journeys
       "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm,
       "supply-teacher" => SupplyTeacherForm,
       "poor-performance" => PoorPerformanceForm,
-      "entire-term-contract" => EntireTermContractForm
+      "entire-term-contract" => EntireTermContractForm,
+      "qualification" => QualificationForm
     }.freeze
   end
 end
