@@ -39,7 +39,7 @@ RSpec.feature "Combined claim journey dependent answers" do
     click_on "Continue"
 
     # - What route into teaching did you take?
-    expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
     choose "Postgraduate initial teacher training (ITT)"
     click_on "Continue"
 
@@ -60,7 +60,7 @@ RSpec.feature "Combined claim journey dependent answers" do
 
     # User goes back in the journey and changes their answer to a question which resets other dependent answers
     visit claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "qualification")
-    expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
     choose "Undergraduate initial teacher training (ITT)"
     click_on "Continue"
 

@@ -111,8 +111,8 @@ module Journeys
         return if eligibility.claim.qualifications_details_check && eligibility.claim.dqt_teacher_record&.route_into_teaching
 
         [
-          translate("additional_payments.questions.qualification.heading"),
-          translate("early_career_payments.answers.qualification.#{eligibility.qualification}"),
+          translate("additional_payments.forms.qualification.questions.which_route"),
+          translate("early_career_payments.forms.qualification.answers.#{eligibility.qualification}"),
           "qualification"
         ]
       end

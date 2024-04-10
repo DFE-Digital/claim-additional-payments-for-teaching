@@ -34,7 +34,7 @@ module Policies
         [].tap do |a|
           a << [
             "Qualification",
-            I18n.t("early_career_payments.answers.qualification.#{eligibility.qualification}")
+            I18n.t("early_career_payments.forms.qualification.answers.#{eligibility.qualification}")
           ]
 
           year_type = eligibility.postgraduate_itt? ? "start" : "end"

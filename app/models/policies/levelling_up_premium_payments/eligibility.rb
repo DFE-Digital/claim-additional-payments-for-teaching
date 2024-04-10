@@ -77,8 +77,6 @@ module Policies
         computing: 5
       }, _prefix: :itt_subject
 
-      before_save :set_qualification_if_trainee_teacher, if: :nqt_in_academic_year_after_itt_changed?
-
       def policy
         Policies::LevellingUpPremiumPayments
       end
@@ -188,12 +186,6 @@ module Policies
 
       def calculate_award_amount
         current_school.levelling_up_premium_payments_awards.find_by(academic_year: claim_year.to_s).award_amount if current_school.present?
-      end
-
-      def set_qualification_if_trainee_teacher
-        return unless trainee_teacher?
-
-        self.qualification = :postgraduate_itt
       end
 
       def award_amount_must_be_in_range

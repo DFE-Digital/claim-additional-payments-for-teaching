@@ -304,6 +304,17 @@ en:
         errors:
           select_subject_to_formal_performance_action: Select yes if you are subject to formal action for poor performance at work
           select_subject_to_disciplinary_action: Select yes if you are subject to disciplinary action
+      qualification:
+        questions:
+          which_route: "Which route into teaching did you take?"
+        hints:
+          postgraduate_itt: "Postgraduate Certificate of Education (PGCE), Teach First, School Direct ITT and School Centered ITT (SCITT)."
+          undergraduate_itt: "Bachelor of Arts (BA) or Bachelor of Science (BSc) degrees."
+        answers:
+          postgraduate_itt: "Postgraduate initial teacher training (ITT)"
+          undergraduate_itt: "Undergraduate initial teacher training (ITT)"
+          assessment_only: "Assessment only"
+          overseas_recognition: "Overseas recognition"
     check_your_answers:
       part_one:
         primary_heading: Check your answers
@@ -353,11 +364,6 @@ en:
               Select yes if you have more than 2 years experience as a teacher.<br/>
               Select no if you have less than 2 years experience as a teacher.<br/>
               Further information can be found at <a href="https://www.gov.uk/government/publications/apply-for-qualified-teacher-status-qts-if-you-teach-outside-the-uk/routes-to-qualified-teacher-status-qts-for-teachers-and-those-with-teaching-experience-outside-the-uk#early-career-teacher-ect-induction" class="govuk-link govuk-link--no-visited-state" target="_blank">early-career teacher (ECT) induction periods for teachers who qualified overseas</a>
-      qualification:
-        heading: "Which route into teaching did you take?"
-        hint:
-          postgraduate_itt: "Postgraduate Certificate of Education (PGCE), Teach First, School Direct ITT and School Centered ITT (SCITT)."
-          undergraduate_itt: "Bachelor of Arts (BA) or Bachelor of Science (BSc) degrees."
       eligible_itt_subject: "Which subject did you do your %{qualification} in?"
       eligible_itt_subject_one_option: "Did you do your %{qualification} in %{subject}?"
       eligible_itt_subject_trainee_teacher: "Which subject are you currently doing your initial teacher training (ITT) in?"
@@ -400,11 +406,6 @@ en:
         payroll_details:
           title: "The claimant’s %{bank_or_building_society} details have not been automatically validated. Has the claimant confirmed their %{bank_or_building_society} details?"
     answers:
-      qualification:
-        postgraduate_itt: "Postgraduate initial teacher training (ITT)"
-        undergraduate_itt: "Undergraduate initial teacher training (ITT)"
-        assessment_only: "Assessment only"
-        overseas_recognition: "Overseas recognition"
       eligible_itt_subject:
         chemistry: "Chemistry"
         computing: "Computing"
