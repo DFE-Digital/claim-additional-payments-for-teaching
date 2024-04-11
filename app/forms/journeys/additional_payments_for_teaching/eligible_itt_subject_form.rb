@@ -20,8 +20,22 @@ module Journeys
         )
       end
 
+      def available_subjects
+        @available_subjects ||= subject_symbols(claim).map(&:to_s)
+      end
+
       def available_options
-        subject_symbols(claim).map(&:to_s) + ["none_of_the_above"]
+        available_subjects + ["none_of_the_above"]
+      end
+
+      def show_hint_text?
+        claim.eligibility.nqt_in_academic_year_after_itt && \
+          available_subjects.many?
+      end
+
+      def chemistry_or_physics_available?
+        available_subjects.include?("chemistry") || \
+          available_subjects.include?("physics")
       end
 
       def save
