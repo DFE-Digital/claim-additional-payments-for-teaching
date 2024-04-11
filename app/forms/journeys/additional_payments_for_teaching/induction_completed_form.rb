@@ -16,12 +16,6 @@ module Journeys
 
         update!({eligibility_attributes: {induction_completed:}})
       end
-
-      private
-
-      def i18n_form_namespace
-        "induction_completed"
-      end
     end
   end
 end
