@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe InductionCompletedForm do
+RSpec.describe Journeys::AdditionalPaymentsForTeaching::InductionCompletedForm do
   shared_examples "induction_completed_form" do |journey|
     before {
       create(:journey_configuration, :additional_payments)
