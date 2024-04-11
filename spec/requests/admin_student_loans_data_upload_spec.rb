@@ -63,7 +63,7 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
             claim_reference: "TESTREF01",
             nino: "QQ123456A",
             full_name: "John Doe",
-            date_of_birth: "12/1/1989",
+            date_of_birth: "1/12/1989",
             policy_name: "EarlyCareerPayments",
             no_of_plans_currently_repaying: "1",
             plan_type_of_deduction: "1",
@@ -73,7 +73,7 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
             claim_reference: "TESTREF02",
             nino: "QQ123456B",
             full_name: "Agata Christie",
-            date_of_birth: "3/20/1977",
+            date_of_birth: "20/03/1977",
             policy_name: "LevellingUpPremiumPayments",
             no_of_plans_currently_repaying: "1",
             plan_type_of_deduction: "2",
@@ -88,7 +88,7 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
             claim_reference: row[:claim_reference],
             nino: row[:nino],
             full_name: row[:full_name],
-            date_of_birth: Date.strptime(row[:date_of_birth], "%m/%d/%Y"),
+            date_of_birth: Date.strptime(row[:date_of_birth], "%d/%m/%Y"),
             policy_name: row[:policy_name],
             no_of_plans_currently_repaying: row[:no_of_plans_currently_repaying].to_i,
             plan_type_of_deduction: row[:plan_type_of_deduction].to_i,
@@ -107,6 +107,24 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
           expect(StudentLoansData.where(nino: "QQ123456A").first).to have_attributes(expected_records[0])
           expect(StudentLoansData.where(nino: "QQ123456B").first).to have_attributes(expected_records[1])
         end
+      end
+
+      shared_examples :no_upload do
+        it "does not upload the rows" do
+          expect { perform_enqueued_jobs { upload } }.not_to change(StudentLoansData, :count)
+        end
+      end
+
+      context "with rows with blank 'NINO'" do
+        let(:rows) { super().map { |row| row.merge(nino: "") } }
+
+        include_examples :no_upload
+      end
+
+      context "with rows with invalid 'Date of Birth'" do
+        let(:rows) { super().map { |row| row.merge(date_of_birth: "12/20/1999") } }
+
+        include_examples :no_upload
       end
     end
   end
