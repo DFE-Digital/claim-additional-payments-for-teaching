@@ -15,6 +15,7 @@ module Journeys
       "supply-teacher" => SupplyTeacherForm,
       "poor-performance" => PoorPerformanceForm,
       "entire-term-contract" => EntireTermContractForm,
+      "employed-directly" => EmployedDirectlyForm,
       "qualification" => QualificationForm
     }.freeze
   end

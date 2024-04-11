@@ -215,7 +215,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
     click_on "Continue"
 
     # - Are you employed directly by your school
-    expect(page).to have_text(I18n.t("additional_payments.questions.employed_directly"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.employed_directly.questions.employed_directly"))
 
     choose "No"
     click_on "Continue"
