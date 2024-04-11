@@ -286,6 +286,9 @@ en:
         errors:
           select_entire_term_contract:
             Select yes if you have a contract to teach at the same school for an entire term or longer
+      induction_completed:
+        errors:
+          select_yes_if_completed: "Select yes if you have completed your induction"
       supply_teacher:
         questions:
           employed_as_supply_teacher: Are you currently employed as a supply teacher?
