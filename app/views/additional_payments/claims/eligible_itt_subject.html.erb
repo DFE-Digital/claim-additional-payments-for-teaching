@@ -1,61 +1,96 @@
-<% content_for(:page_title, page_title(eligible_itt_subject_translation(current_claim), journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
-<% path_for_form = current_claim.persisted? ? claim_path(current_journey_routing_name) : claims_path(current_journey_routing_name) %>
+<% content_for(
+  :page_title,
+  page_title(
+    eligible_itt_subject_translation(current_claim),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
 <% subject_symbols = subject_symbols(current_claim) %>
 
 <% if subject_symbols.present? %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.eligible_itt_subject": "claim_eligibility_attributes_eligible_itt_subject_#{subject_symbols.first}" }) if current_claim.errors.any? %>
-    <%= form_for current_claim, url: path_for_form  do |form| %>
-      <%= form_group_tag current_claim do %>
-        <%= form.fields_for :eligibility, include_id: false do |fields| %>
-          <%= fields.hidden_field :eligible_itt_subject %>
+    <% if @form.errors.any? %>
+      <%= render(
+        "shared/error_summary",
+        instance: @form,
+        errored_field_id_overrides: {
+          "eligible_itt_subject": "claim_eligible_itt_subject_#{subject_symbols.first}"
+        }
+      ) %>
+    <% end %>
 
-          <fieldset class="govuk-fieldset" aria-describedby="eligible_itt_subject-hint" role="group">
+    <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
+      <%= form_group_tag f.object.claim do %>
 
-            <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">
-              <h1 class="govuk-fieldset__heading">
-                <%= eligible_itt_subject_translation(current_claim) %>
-              </h1>
-            </legend>
+        <%= f.hidden_field :eligible_itt_subject %>
 
-            <% if current_claim.eligibility.nqt_in_academic_year_after_itt && subject_symbols.many? %>
-              <div class="govuk-hint">
-                <%= t("additional_payments.questions.eligible_itt_subject_hint") %>
-              </div>
-            <% end %>
+        <fieldset class="govuk-fieldset" aria-describedby="eligible_itt_subject-hint" role="group">
 
-            <%= errors_tag current_claim.eligibility, :eligible_itt_subject %>
+          <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(f.object.journey) %>">
+            <h1 class="govuk-fieldset__heading">
+              <%= eligible_itt_subject_translation(f.object.claim) %>
+            </h1>
+          </legend>
 
-            <div class="govuk-radios">
-              <% if subject_symbols.many? %>
-                <% subject_symbols.each do |option| %>
-                  <div class="govuk-radios__item">
-                    <%= fields.radio_button(:eligible_itt_subject, option, class: "govuk-radios__input") %>
-                    <%= fields.label "eligible_itt_subject_#{option}", t("additional_payments.answers.eligible_itt_subject.#{option}"), class: "govuk-label govuk-radios__label" %>
-                  </div>
-                <% end %>
+          <% if f.object.claim.eligibility.nqt_in_academic_year_after_itt && subject_symbols.many? %>
+            <div class="govuk-hint">
+              <%= t("additional_payments.forms.eligible_itt_subject.hints.subject") %>
+            </div>
+          <% end %>
 
-                <div class="govuk-radios__divider">or</div>
+          <%= errors_tag f.object, :eligible_itt_subject %>
 
+          <div class="govuk-radios">
+            <% if subject_symbols.many? %>
+              <% subject_symbols.each do |option| %>
                 <div class="govuk-radios__item">
-                  <%= fields.radio_button(:eligible_itt_subject, :none_of_the_above, class: "govuk-radios__input") %>
-                  <%= fields.label "eligible_itt_subject_none_of_the_above", t("additional_payments.answers.eligible_itt_subject.none_of_the_above"), class: "govuk-label govuk-radios__label" %>
-                </div>
-              <% else %>
-                <% subject_symbol = subject_symbols.first %>
-                <div class="govuk-radios__item">
-                  <%= fields.radio_button(:eligible_itt_subject, subject_symbol, class: "govuk-radios__input") %>
-                  <%= fields.label "eligible_itt_subject_#{subject_symbol}", "Yes", class: "govuk-label govuk-radios__label" %>
-                </div>
-                <div class="govuk-radios__item">
-                  <%= fields.radio_button(:eligible_itt_subject, :none_of_the_above, class: "govuk-radios__input") %>
-                  <%= fields.label "eligible_itt_subject_none_of_the_above", "No", class: "govuk-label govuk-radios__label" %>
+                  <%= f.radio_button(:eligible_itt_subject, option, class: "govuk-radios__input") %>
+                  <%= f.label(
+                    :eligible_itt_subject,
+                    t("additional_payments.forms.eligible_itt_subject.answers.#{option}"),
+                    value: option,
+                    class: "govuk-label govuk-radios__label"
+                  ) %>
                 </div>
               <% end %>
-            </div>
-          </fieldset>
-        <% end %>
+
+              <div class="govuk-radios__divider">or</div>
+
+              <div class="govuk-radios__item">
+                <%= f.radio_button(:eligible_itt_subject, :none_of_the_above, class: "govuk-radios__input") %>
+                <%= f.label(
+                  :eligible_itt_subject,
+                  t("additional_payments.forms.eligible_itt_subject.answers.none_of_the_above"),
+                  value: :none_of_the_above,
+                  class: "govuk-label govuk-radios__label"
+                ) %>
+              </div>
+            <% else %>
+              <% subject_symbol = subject_symbols.first %>
+              <div class="govuk-radios__item">
+                <%= f.radio_button(:eligible_itt_subject, subject_symbol, class: "govuk-radios__input") %>
+                <%= f.label(
+                  :eligible_itt_subject,
+                  "Yes",
+                  value: subject_symbol,
+                  class: "govuk-label govuk-radios__label"
+                ) %>
+              </div>
+              <div class="govuk-radios__item">
+                <%= f.radio_button(:eligible_itt_subject, :none_of_the_above, class: "govuk-radios__input") %>
+                <%= f.label(
+                  :eligible_itt_subject,
+                  "No",
+                  value: :none_of_the_above,
+                  class: "govuk-label govuk-radios__label",
+                ) %>
+              </div>
+            <% end %>
+          </div>
+        </fieldset>
 
         <% if (subject_symbols & [:chemistry, :physics]).any? %>
           <br/>
@@ -89,7 +124,7 @@
         <% end %>
       <% end %>
 
-      <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
+      <%= f.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
     <% end %>
   </div>
 </div>

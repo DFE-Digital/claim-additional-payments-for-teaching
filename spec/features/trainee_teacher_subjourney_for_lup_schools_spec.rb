@@ -124,6 +124,6 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     choose "No"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("additional_payments.questions.eligible_itt_subject_trainee_teacher"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.eligible_itt_subject.questions.which_subject_trainee_teacher"))
   end
 end
