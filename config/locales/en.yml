@@ -294,11 +294,6 @@ en:
       induction_completed:
         errors:
           select_yes_if_completed: "Select yes if you have completed your induction"
-      supply_teacher:
-        questions:
-          employed_as_supply_teacher: Are you currently employed as a supply teacher?
-        errors:
-          select_employed_as_supply_teacher: Select yes if you are a supply teacher
       poor_performance:
         questions:
           poor_performance: Tell us if you are currently under any performance measures or disciplinary action
@@ -320,6 +315,14 @@ en:
           undergraduate_itt: "Undergraduate initial teacher training (ITT)"
           assessment_only: "Assessment only"
           overseas_recognition: "Overseas recognition"
+      supply_teacher:
+        questions:
+          employed_as_supply_teacher: Are you currently employed as a supply teacher?
+        errors:
+          select_employed_as_supply_teacher: Select yes if you are a supply teacher
+      teaching_subject_now:
+        questions:
+          teaching_subject_now: "Do you spend at least half of your contracted hours teaching eligible subjects?"
     check_your_answers:
       part_one:
         primary_heading: Check your answers
@@ -372,7 +375,6 @@ en:
       eligible_itt_subject_one_option: "Did you do your %{qualification} in %{subject}?"
       eligible_itt_subject_trainee_teacher: "Which subject are you currently doing your initial teacher training (ITT) in?"
       eligible_itt_subject_hint: "The subjects listed are eligible for additional payment based on the school you teach in and the year you studied."
-      teaching_subject_now: "Do you spend at least half of your contracted hours teaching eligible subjects?"
       itt_academic_year:
         qualification:
           undergraduate_itt: In which academic year did you complete your undergraduate initial teacher training (ITT)?

@@ -42,7 +42,7 @@ RSpec.feature "Combined journey with Teacher ID" do
 
     # Qualification pages are skipped
 
-    expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
 
     choose "Yes"
     click_on "Continue"
@@ -65,7 +65,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     # Go back to the qualification details page
     click_link "Back"
 
-    expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
     click_link "Back"
 
     expect(page).to have_text(I18n.t("questions.check_and_confirm_qualification_details"))
@@ -93,7 +93,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     choose "Mathematics"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
 
     choose "Yes"
     click_on "Continue"
@@ -201,7 +201,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     choose "Mathematics"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
 
     choose "Yes"
     click_on "Continue"
@@ -225,7 +225,7 @@ RSpec.feature "Combined journey with Teacher ID" do
 
     # Qualification pages are skipped
 
-    expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
 
     choose "Yes"
     click_on "Continue"
@@ -278,7 +278,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     # Skips subject question as supplied by DQT
 
     # - Do you teach subject now?
-    expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
 
     choose "Yes"
     click_on "Continue"

@@ -23,6 +23,10 @@ class ClaimsController < BasePublicController
   end
 
   def show
+    if params[:slug] == "teaching-subject-now" && no_eligible_itt_subject?
+      return redirect_to claim_path(current_journey_routing_name, "eligible-itt-subject")
+    end
+
     # TODO: Migrate the remaining slugs to form objects.
     if @form ||= journey.form(claim: current_claim, params: params)
       set_any_backlink_override
@@ -35,8 +39,7 @@ class ClaimsController < BasePublicController
       save_and_set_teacher_id_user_info
     elsif params[:slug] == "qualification-details"
       return redirect_to claim_path(current_journey_routing_name, next_slug) if current_claim.has_no_dqt_data_for_claim?
-    elsif params[:slug] == "teaching-subject-now" && no_eligible_itt_subject?
-      return redirect_to claim_path(current_journey_routing_name, "eligible-itt-subject")
+
     elsif params[:slug] == "sign-in-or-continue"
       update_session_with_current_slug
 

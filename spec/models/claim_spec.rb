@@ -165,8 +165,8 @@ RSpec.describe Claim, type: :model do
 
     # Tests a single attribute, possibly should test multiple attributes
     it "validates eligibility" do
-      expect(claim).not_to be_valid(:"teaching-subject-now")
-      expect(claim.errors.first.message).to eq("Select yes if you spend at least half of your contracted hours teaching eligible subjects")
+      expect(claim).not_to be_valid(:amendment)
+      expect(claim.errors.first.message).to eq("Enter a positive amount up to £7,500.00 (inclusive)")
     end
   end
 

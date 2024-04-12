@@ -86,7 +86,7 @@ RSpec.feature "Levelling up premium payments claims" do
 
   def check_eligibility_after_itt_subject
     # - Do you spend at least half of your contracted hours teaching eligible subjects?
-    expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
 
     choose "Yes"
     click_on "Continue"

@@ -319,14 +319,6 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
       end
     end
 
-    context "when saving in the 'teaching_subject_now' context" do
-      it "is not valid without a value for 'teaching_subject_now'" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new).not_to be_valid(:"teaching-subject-now")
-        expect(Policies::EarlyCareerPayments::Eligibility.new(teaching_subject_now: true)).to be_valid(:"teaching-subject-now")
-        expect(Policies::EarlyCareerPayments::Eligibility.new(teaching_subject_now: false)).to be_valid(:"teaching-subject-now")
-      end
-    end
-
     context "when saving in the 'itt_academic_year' context" do
       it "is not valid without a value for 'itt_academic_year'" do
         expect(Policies::EarlyCareerPayments::Eligibility.new).not_to be_valid(:"itt-year")

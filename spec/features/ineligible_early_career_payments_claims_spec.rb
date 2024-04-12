@@ -348,7 +348,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
 
     # - Do you teach the eligible ITT subject now
-    expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
 
     choose "No"
     click_on "Continue"
