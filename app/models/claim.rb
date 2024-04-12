@@ -114,7 +114,7 @@ class Claim < ApplicationRecord
     "national_insurance_number" => ["has_student_loan", "student_loan_plan", "eligibility.student_loan_repayment_amount"],
     "date_of_birth" => ["has_student_loan", "student_loan_plan", "eligibility.student_loan_repayment_amount"],
     "bank_or_building_society" => ["banking_name", "bank_account_number", "bank_sort_code", "building_society_roll_number"],
-    "provide_mobile_number" => ["mobile_number"],
+    "provide_mobile_number" => ["mobile_number", "mobile_verified"],
     "mobile_number" => ["mobile_verified"],
     "email_address" => ["email_verified"]
   }.freeze
@@ -741,7 +741,6 @@ class Claim < ApplicationRecord
   end
 
   def submittable_mobile_details?
-    return true unless has_ecp_or_lupp_policy?
     return true if using_mobile_number_from_tid?
     return true if provide_mobile_number && mobile_number.present? && mobile_verified == true
     return true if provide_mobile_number == false && mobile_number.nil? && mobile_verified == false

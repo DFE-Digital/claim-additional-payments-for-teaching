@@ -11,7 +11,8 @@ RSpec.describe SelectMobileNumberForm do
         expect(form.extract_attributes).to eq({
           mobile_number: "123-456-7890",
           provide_mobile_number: true,
-          mobile_check: "use"
+          mobile_check: "use",
+          mobile_verified: nil
         })
       end
     end
@@ -23,7 +24,8 @@ RSpec.describe SelectMobileNumberForm do
         expect(form.extract_attributes).to eq({
           mobile_number: nil,
           provide_mobile_number: true,
-          mobile_check: "alternative"
+          mobile_check: "alternative",
+          mobile_verified: nil
         })
       end
     end
@@ -35,7 +37,8 @@ RSpec.describe SelectMobileNumberForm do
         expect(form.extract_attributes).to eq({
           mobile_number: nil,
           provide_mobile_number: false,
-          mobile_check: "declined"
+          mobile_check: "declined",
+          mobile_verified: nil
         })
       end
     end
