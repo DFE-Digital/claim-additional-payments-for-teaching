@@ -22,7 +22,7 @@
      <%= label_tag :school_search, question, class: "govuk-label #{label_css_class_for_journey(journey)}" %>
    </h1>
 
-    <% if params[:school_search].present? && @form.errors.empty? %>
+    <% if @form.no_search_results? %>
       <p class="govuk-body">
         <strong>No results match that search term. Try again.</strong>
       </p>

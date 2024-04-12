@@ -31,6 +31,10 @@ class ClaimSchoolForm < Form
     claim.eligibility.claim_school_name
   end
 
+  def no_search_results?
+    params[:school_search].present? && errors.empty?
+  end
+
   private
 
   def i18n_form_namespace

@@ -27,6 +27,10 @@ class CurrentSchoolForm < Form
     claim.eligibility.current_school_name
   end
 
+  def no_search_results?
+    params[:school_search].present? && errors.empty?
+  end
+
   private
 
   def load_schools

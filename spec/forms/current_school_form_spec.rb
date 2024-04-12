@@ -166,6 +166,26 @@ RSpec.describe CurrentSchoolForm do
         end
       end
     end
+
+    describe "no_search_results?" do
+      context "no schools found" do
+        let(:params) { ActionController::Parameters.new({slug: slug, claim: {}, school_search: "Some school name"}) }
+
+        it "returns true" do
+          allow(School).to receive(:search).with("Some school name").and_return([])
+
+          expect(form.no_search_results?).to be true
+        end
+      end
+
+      context "school_search less than 3 characters" do
+        let(:params) { ActionController::Parameters.new({slug: slug, claim: {}, school_search: "Ab"}) }
+
+        it "returns false" do
+          expect(form.no_search_results?).to be false
+        end
+      end
+    end
   end
 
   describe "for TeacherStudentLoanReimbursement journey" do
