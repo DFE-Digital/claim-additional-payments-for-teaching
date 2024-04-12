@@ -20,7 +20,11 @@ class ClaimSchoolForm < Form
   def save
     return false unless valid?
 
-    update!({"eligibility_attributes" => {"claim_school_id" => claim_school_id}})
+    attrs = {"eligibility_attributes" => {"claim_school_id" => claim_school_id}}
+    claim.assign_attributes(attrs)
+    claim.reset_eligibility_dependent_answers(["claim_school_id"])
+
+    claim.save!
   end
 
   def claim_school_name
