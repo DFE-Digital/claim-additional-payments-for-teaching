@@ -41,10 +41,6 @@ class ClaimSchoolForm < Form
 
   private
 
-  def permitted_params
-    @permitted_params ||= params.fetch(:claim, {}).permit(:claim_school_id)
-  end
-
   def load_schools
     return unless params[:school_search]
 
