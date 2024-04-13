@@ -41,10 +41,6 @@ class ClaimSchoolForm < Form
 
   private
 
-  def i18n_form_namespace
-    "claim_school"
-  end
-
   def permitted_params
     @permitted_params ||= params.fetch(:claim, {}).permit(:claim_school_id)
   end
