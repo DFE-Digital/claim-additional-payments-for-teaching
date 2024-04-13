@@ -167,6 +167,14 @@ class School < ApplicationRecord
     (open_date.nil? || open_date <= Date.current) && (close_date.nil? || close_date >= Date.current)
   end
 
+  def closed?
+    closed_before_date?(Date.current)
+  end
+
+  def closed_before_date?(date)
+    close_date.present? && close_date < date
+  end
+
   def dfe_number
     [
       local_authority.code,
