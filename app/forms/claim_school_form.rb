@@ -35,6 +35,10 @@ class ClaimSchoolForm < Form
     params[:school_search].present? && errors.empty?
   end
 
+  def show_multiple_schools_content?
+    !params.has_key?(:additional_school)
+  end
+
   private
 
   def i18n_form_namespace

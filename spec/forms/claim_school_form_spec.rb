@@ -173,4 +173,22 @@ RSpec.describe ClaimSchoolForm do
       end
     end
   end
+
+  describe "show_multiple_schools_content?" do
+    context "additional-school params set" do
+      let(:params) { ActionController::Parameters.new({slug: slug, claim: {}, additional_school: true}) }
+
+      it "returns false" do
+        expect(form.show_multiple_schools_content?).to be false
+      end
+    end
+
+    context "additional-school params NOT set" do
+      let(:params) { ActionController::Parameters.new({slug: slug, claim: {}}) }
+
+      it "returns true" do
+        expect(form.show_multiple_schools_content?).to be true
+      end
+    end
+  end
 end
