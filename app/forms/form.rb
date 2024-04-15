@@ -43,7 +43,7 @@ class Form
   end
 
   def permitted_params
-    @permitted_params ||= params.fetch(:claim, {}).permit(*attributes)
+    @permitted_params ||= params.fetch(:claim, {}).permit(*attribute_names)
   end
 
   private
@@ -59,5 +59,29 @@ class Form
       nil,
       params[:slug]
     )
+  end
+
+  def attributes_with_current_value
+    attributes.each_with_object({}) do |(attribute, _), attributes|
+      attributes[attribute] = permitted_params[attribute]
+      next unless attributes[attribute].nil?
+
+      attributes[attribute] = load_current_value(attribute)
+    end
+  end
+
+  def load_current_value(attribute)
+    # TODO: re-implement when the underlying claim and eligibility data sources
+    # are moved to an alternative place e.g. a session hash
+
+    # Some, but not all attributes are present directly on the claim record.
+    return claim.public_send(attribute) if claim.has_attribute?(attribute)
+
+    # At the moment, some attributes are unique to a policy eligibility record,
+    # so we need to loop through all the claims in the wrapper and check each
+    # eligibility individually; if the search fails, it should return `nil`.
+    claim.claims.each do |c|
+      return c.eligibility.public_send(attribute) if c.eligibility.has_attribute?(attribute)
+    end
   end
 end

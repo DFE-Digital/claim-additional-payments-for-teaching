@@ -101,6 +101,20 @@ RSpec.describe Form, type: :model do
   end
 
   describe "#permitted_params" do
-    it { expect(form.permitted_params.to_h).to eq("first_name" => "test-name") }
+    let(:claim_params) { {first_name: "test-value"} }
+
+    context "with params containing attributes defined on the form" do
+      it "permits the attributes in the params" do
+        expect(form.permitted_params).to eq(claim_params.stringify_keys)
+      end
+    end
+
+    context "with params containing attributes not defined on the form" do
+      let(:claim_params) { super().merge(unpermitted_attribute: "test-value") }
+
+      it "raises an error" do
+        expect { form.permitted_params }.to raise_error(ActionController::UnpermittedParameters)
+      end
+    end
   end
 end
