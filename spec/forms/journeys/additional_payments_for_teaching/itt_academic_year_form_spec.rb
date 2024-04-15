@@ -58,7 +58,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::IttAcademicYearForm do
 
     describe "#save" do
       context "itt_academic_year submitted" do
-        let(:new_value) { AcademicYear.new(2.years.ago.year) }
+        let(:new_value) { AcademicYear.new(2.years.ago.year).to_s }
 
         let(:params) { ActionController::Parameters.new({slug: slug, claim: {itt_academic_year: new_value}}) }
 
@@ -80,7 +80,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::IttAcademicYearForm do
         end
 
         context "claim eligibility already had a itt_academic_year" do
-          let(:new_value) { AcademicYear.new(2.years.ago.year) }
+          let(:new_value) { AcademicYear.new(2.years.ago.year).to_s }
 
           let(:current_claim) do
             claims = journey::POLICIES.map { |policy| create(:claim, policy: policy, eligibility_attributes: {itt_academic_year: AcademicYear.new(4.years.ago.year)}) }
