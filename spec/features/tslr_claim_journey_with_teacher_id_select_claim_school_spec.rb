@@ -32,7 +32,7 @@ RSpec.feature "TSLR journey with Teacher ID school playback" do
     navigate_to_claim_school_page(tps: :inside_window, school: eligible_school)
 
     expect(current_path).to eq("/student-loans/select-claim-school")
-    expect(page).to have_text(I18n.t("student_loans.questions.claim_school", financial_year: Policies::StudentLoans.current_financial_year))
+    expect(page).to have_text(I18n.t("student_loans.forms.claim_school.questions.claim_school", financial_year: Policies::StudentLoans.current_financial_year))
 
     choose(eligible_school.name)
     click_on "Continue"
@@ -51,7 +51,7 @@ RSpec.feature "TSLR journey with Teacher ID school playback" do
     navigate_to_claim_school_page(tps: :inside_window, school: ineligible_school)
 
     expect(current_path).to eq("/student-loans/select-claim-school")
-    expect(page).to have_text(I18n.t("student_loans.questions.claim_school", financial_year: Policies::StudentLoans.current_financial_year))
+    expect(page).to have_text(I18n.t("student_loans.forms.claim_school.questions.claim_school", financial_year: Policies::StudentLoans.current_financial_year))
 
     choose(ineligible_school.name)
     click_on "Continue"

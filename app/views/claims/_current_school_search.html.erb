@@ -18,7 +18,7 @@
   <%= form_group_tag @form, :school_search do %>
     <%= render "#{@form.view_path}/claims/current_school_question", question: question %>
 
-    <% if params[:school_search].present? && @form.errors.empty? %>
+    <% if @form.no_search_results? %>
       <p class="govuk-body">
         <strong>No results match that search term. Try again.</strong>
       </p>
@@ -29,7 +29,6 @@
     <% end %>
 
     <div id="school-search-container">
-
       <%= errors_tag @form, :school_search %>
       <%= text_field_tag :school_search,
                          params[:school_search],
@@ -37,7 +36,6 @@
                          class: css_classes_for_input(@form, :school_search),
                          value: school_search_value,
                          "aria-describedby" => "school_search-hint" %>
-
     </div>
   <% end %>
 

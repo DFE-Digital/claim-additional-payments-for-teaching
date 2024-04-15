@@ -130,7 +130,7 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
     click_on "Continue"
 
     # - Which school do you teach at
-    expect(page).to have_text(I18n.t("student_loans.questions.claim_school", financial_year: Policies::StudentLoans.current_financial_year))
+    expect(page).to have_text(I18n.t("student_loans.forms.claim_school.questions.claim_school", financial_year: Policies::StudentLoans.current_financial_year))
     choose_school school
 
     # - Which subject do you teach

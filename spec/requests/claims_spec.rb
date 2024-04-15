@@ -315,7 +315,7 @@ RSpec.describe "Claims", type: :request do
         before { set_slug_sequence_in_session(in_progress_claim, "claim-school") }
 
         it "re-renders the school search results with an error message" do
-          put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"), params: {school_search: school.name, claim: {eligibility_attributes: {claim_school_id: ""}}}
+          put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"), params: {school_search: school.name, claim: {claim_school_id: ""}}
 
           expect(response).to be_successful
           expect(response.body).to include("There is a problem")
@@ -329,7 +329,7 @@ RSpec.describe "Claims", type: :request do
 
         it "redirects to the “ineligible” page" do
           set_slug_sequence_in_session(in_progress_claim, "claim-school")
-          put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"), params: {claim: {eligibility_attributes: {claim_school_id: ineligible_school.to_param}}}
+          put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"), params: {claim: {claim_school_id: ineligible_school.to_param}}
 
           expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "ineligible"))
         end

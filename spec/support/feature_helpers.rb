@@ -29,10 +29,10 @@ module FeatureHelpers
   def choose_school(school)
     fill_in :school_search, with: school.name.sub("The ", "").split(" ").first
 
-    # Clears the autocomplete when JS is enabled
-    click_button "Continue" if RSpec.current_example.metadata[:js].present?
-
     click_button "Continue"
+
+    # flaky test workaround in case the first click on Continue submitted the form
+    click_button "Continue" unless /(claim|current)-school\?_method=patch/.match?(current_url)
 
     choose school.name
     click_button "Continue"
