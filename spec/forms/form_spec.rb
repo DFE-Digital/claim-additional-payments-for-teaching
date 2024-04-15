@@ -2,6 +2,7 @@ require "rails_helper"
 
 class TestSlugForm < Form
   attribute :first_name
+  attribute :student_loan_repayment_amount
 end
 
 module Journeys
@@ -27,13 +28,48 @@ RSpec.describe Form, type: :model do
 
   subject(:form) { TestSlugForm.new(claim:, journey:, params:) }
 
-  let(:claim) { CurrentClaim.new(claims: [build(:claim, policy: Policies::StudentLoans)]) }
+  let(:claim) { CurrentClaim.new(claims:) }
+  let(:claims) { [build(:claim, policy: Policies::StudentLoans)] }
   let(:journey) { Journeys::TestJourney }
   let(:params) { ActionController::Parameters.new({journey: "test-journey", slug: "test_slug", claim: claim_params}) }
   let(:claim_params) { {first_name: "test-name"} }
 
   describe "#initialize" do
-    # TODO
+    context "with unpermitted params" do
+      let(:claim_params) { {unpermitted: "my-name"} }
+
+      it "raises an error" do
+        expect { form }.to raise_error(ActionController::UnpermittedParameters)
+      end
+    end
+
+    context "with valid params" do
+      let(:claim_params) { {first_name: "my-name"} }
+
+      it "initialises the attributes with values from the params" do
+        expect(form).to have_attributes(first_name: "my-name")
+      end
+    end
+
+    context "with no params" do
+      let(:claim_params) { {} }
+
+      context "when an existing value can be found on the claim or eligibility record" do
+        let(:claims) { [build(:claim, first_name: "existing-name", eligibility_attributes: {student_loan_repayment_amount: 100}, policy: Policies::StudentLoans)] }
+
+        it "initialises the attributes with values from the claim" do
+          expect(form).to have_attributes(first_name: "existing-name", student_loan_repayment_amount: 100)
+        end
+      end
+
+      context "when an existing value cannot be found on the claim nor eligibility" do
+        let(:claims) { [build(:claim, first_name: nil, policy: Policies::StudentLoans)] }
+
+        it "initialises the attributes with nil" do
+          expect(form).to have_attributes(first_name: nil, student_loan_repayment_amount: nil)
+        end
+      end
+    end
   end
 
   describe "#persisted?" do

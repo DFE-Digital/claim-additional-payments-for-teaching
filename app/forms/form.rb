@@ -15,6 +15,8 @@ class Form
 
   def initialize(claim:, journey:, params:)
     super
+
+    assign_attributes(attributes_with_current_value)
   end
 
   def update!(attrs)
@@ -83,5 +85,6 @@ class Form
     claim.claims.each do |c|
       return c.eligibility.public_send(attribute) if c.eligibility.has_attribute?(attribute)
     end
+    nil
   end
 end
