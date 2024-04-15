@@ -29,7 +29,7 @@ RSpec.feature "Levelling up premium payments claims" do
       raise "`eligible_degree?` must be defined" unless defined?(eligible_degree?)
 
       # - Do you have an undergraduate or postgraduate degree in an eligible subject?
-      expect(page).to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
+      expect(page).to have_text(I18n.t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"))
       choose eligible_degree?
       click_on "Continue"
     end
@@ -97,7 +97,7 @@ RSpec.feature "Levelling up premium payments claims" do
     expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
 
     if itt_subject == "None of the above"
-      expect(page).to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
+      expect(page).to have_text(I18n.t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"))
     end
 
     ["Identity details", "Payment details"].each do |section_heading|

@@ -25,7 +25,7 @@ RSpec.feature "ITT subject selection", slow: true do
           expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
           click_link "Back"
           select_subject("None of the above")
-          expect(page).to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
+          expect(page).to have_text(I18n.t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"))
         end
       end
 
@@ -38,7 +38,7 @@ RSpec.feature "ITT subject selection", slow: true do
           expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
           click_link "Back"
           select_subject("None of the above")
-          expect(page).to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
+          expect(page).to have_text(I18n.t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"))
         end
       end
 
@@ -57,7 +57,7 @@ RSpec.feature "ITT subject selection", slow: true do
           click_link "Back"
           # choose ineligible subject for both ECP and LUP
           select_subject("None of the above")
-          expect(page).to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
+          expect(page).to have_text(I18n.t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"))
         end
       end
 
@@ -76,7 +76,7 @@ RSpec.feature "ITT subject selection", slow: true do
           click_link "Back"
           # choose none of the above
           select_subject("None of the above")
-          expect(page).to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
+          expect(page).to have_text(I18n.t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"))
         end
       end
 
@@ -89,7 +89,7 @@ RSpec.feature "ITT subject selection", slow: true do
           expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
           click_link "Back"
           select_subject("None of the above")
-          expect(page).to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
+          expect(page).to have_text(I18n.t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"))
         end
       end
     end
