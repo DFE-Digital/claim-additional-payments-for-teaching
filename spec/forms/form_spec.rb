@@ -11,18 +11,10 @@ module Journeys
 
     VIEW_PATH = "test_view_path"
     I18N_NAMESPACE = "test_i18n_ns"
-  end
-end
 
-module Journeys
-  module TestJourney
     class SlugSequence
       def initialize(claim)
         # NOOP
-      end
-
-      def slugs
-        []
       end
     end
   end
@@ -37,7 +29,12 @@ RSpec.describe Form, type: :model do
 
   let(:claim) { CurrentClaim.new(claims: [build(:claim, policy: Policies::StudentLoans)]) }
   let(:journey) { Journeys::TestJourney }
-  let(:params) { ActionController::Parameters.new({slug: "test_slug", claim: {first_name: "test-name"}}) }
+  let(:params) { ActionController::Parameters.new({journey: "test-journey", slug: "test_slug", claim: claim_params}) }
+  let(:claim_params) { {first_name: "test-name"} }
+
+  describe "#initialize" do
+    # TODO
+  end
 
   describe "#persisted?" do
     before do
@@ -76,20 +73,21 @@ RSpec.describe Form, type: :model do
   end
 
   describe "#backlink_path" do
-    context "when the subclass does not define it" do
-      it { expect(form.backlink_path).to be_nil }
+    before do
+      allow_any_instance_of(Journeys::PageSequence).to receive(:previous_slug)
+        .and_return(previous_slug)
     end
 
-    context "when the subclass defines it" do
-      before do
-        form.instance_eval do
-          def backlink_path
-            "/custom-path"
-          end
-        end
-      end
+    describe "when the previous slug is present" do
+      let(:previous_slug) { "previous-slug" }
 
-      it { expect(form.backlink_path).to eq("/custom-path") }
+      it { expect(form.backlink_path).to eq("/test-journey/previous-slug") }
+    end
+
+    describe "when the previous slug is not present" do
+      let(:previous_slug) { nil }
+
+      it { expect(form.backlink_path).to be_nil }
     end
   end
 
