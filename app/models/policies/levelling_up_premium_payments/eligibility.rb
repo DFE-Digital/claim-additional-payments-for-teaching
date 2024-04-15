@@ -122,15 +122,6 @@ module Policies
         end
       end
 
-      def set_qualifications_from_dqt_record
-        self.attributes = {
-          itt_academic_year: claim.qualifications_details_check ? (claim.dqt_teacher_record&.itt_academic_year_for_claim || itt_academic_year) : nil,
-          eligible_itt_subject: claim.qualifications_details_check ? (claim.dqt_teacher_record&.eligible_itt_subject_for_claim || eligible_itt_subject) : nil,
-          qualification: claim.qualifications_details_check ? (claim.dqt_teacher_record&.route_into_teaching || qualification) : nil,
-          eligible_degree_subject: claim.qualifications_details_check ? (claim.dqt_teacher_record&.eligible_degree_code? || eligible_degree_subject) : nil
-        }
-      end
-
       private
 
       def indicated_ecp_only_itt_subject?

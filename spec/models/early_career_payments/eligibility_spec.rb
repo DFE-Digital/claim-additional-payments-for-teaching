@@ -360,48 +360,4 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
       end
     end
   end
-
-  describe "#set_qualifications_from_dqt_record" do
-    let(:eligibility) { build(:early_career_payments_eligibility, claim:, itt_academic_year:, eligible_itt_subject:, qualification:) }
-    let(:claim) { build(:claim, policy: Policies::EarlyCareerPayments, qualifications_details_check:) }
-    let(:itt_academic_year) { AcademicYear.new(2021) }
-    let(:eligible_itt_subject) { :mathematics }
-    let(:qualification) { :postgraduate_itt }
-
-    context "when user has confirmed their qualification details" do
-      let(:qualifications_details_check) { true }
-      let(:dbl) { double(itt_academic_year_for_claim:, eligible_itt_subject_for_claim:, route_into_teaching:) }
-      let(:itt_academic_year_for_claim) { AcademicYear.new(2022) }
-      let(:eligible_itt_subject_for_claim) { :computing }
-      let(:route_into_teaching) { :undergraduate_itt }
-
-      before { allow(claim).to receive(:dqt_teacher_record).and_return(dbl) }
-
-      it "sets the qualification answers to those returned by LevellingUpPremiumPayments::DqtRecord" do
-        expect { eligibility.set_qualifications_from_dqt_record }.to change { eligibility.itt_academic_year }.from(itt_academic_year).to(itt_academic_year_for_claim)
-          .and change { eligibility.eligible_itt_subject }.from(eligible_itt_subject.to_s).to(eligible_itt_subject_for_claim.to_s)
-          .and change { eligibility.qualification }.from(qualification.to_s).to(route_into_teaching.to_s)
-      end
-
-      context "when the DQT record is missing data" do
-        let(:itt_academic_year_for_claim) { nil }
-        let(:eligible_itt_subject_for_claim) { nil }
-        let(:route_into_teaching) { nil }
-
-        it "does not change the answers" do
-          expect(eligibility.set_qualifications_from_dqt_record).to eq(eligibility.attributes.symbolize_keys.slice(:itt_academic_year, :eligible_itt_subject, :qualification).transform_values(&:to_s))
-        end
-      end
-    end
-
-    context "when user has not confirmed their qualification details" do
-      let(:qualifications_details_check) { false }
-
-      it "sets the qualification answers to nil" do
-        expect { eligibility.set_qualifications_from_dqt_record }.to change { eligibility.itt_academic_year }.from(itt_academic_year).to(nil)
-          .and change { eligibility.eligible_itt_subject }.from(eligible_itt_subject.to_s).to(nil)
-          .and change { eligibility.qualification }.from(qualification.to_s).to(nil)
-      end
-    end
-  end
 end

@@ -148,14 +148,6 @@ module Policies
           !Policies::LevellingUpPremiumPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible?
       end
 
-      def set_qualifications_from_dqt_record
-        self.attributes = {
-          itt_academic_year: claim.qualifications_details_check ? (claim.dqt_teacher_record&.itt_academic_year_for_claim || itt_academic_year) : nil,
-          eligible_itt_subject: claim.qualifications_details_check ? (claim.dqt_teacher_record&.eligible_itt_subject_for_claim || eligible_itt_subject) : nil,
-          qualification: claim.qualifications_details_check ? (claim.dqt_teacher_record&.route_into_teaching || qualification) : nil
-        }
-      end
-
       private
 
       def calculate_award_amount

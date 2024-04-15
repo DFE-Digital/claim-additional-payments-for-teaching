@@ -3,6 +3,7 @@ module Journeys
     SHARED_FORMS = {
       "sign-in-or-continue" => SignInOrContinueForm,
       "current-school" => CurrentSchoolForm,
+      "qualification-details" => QualificationDetailsForm,
       "personal-details" => PersonalDetailsForm,
       "select-email" => SelectEmailForm,
       "provide-mobile-number" => ProvideMobileNumberForm

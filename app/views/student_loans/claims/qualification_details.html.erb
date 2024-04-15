@@ -1,6 +1,14 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { details_check: "qualifications_details_check_true" }) if current_claim.errors.any? %>
+    <% if @form.errors.any? %>
+      <%= render(
+        "shared/error_summary",
+        instance: @form,
+        errored_field_id_overrides: {
+          qualifications_details_check: "claim_qualifications_details_check_true"
+        }
+      ) %>
+    <% end %>
   </div>
 </div>
 
@@ -15,7 +23,7 @@
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key"><%= t("student_loans.questions.academic_year") %></dt>
             <dd class="govuk-summary-list__value">
-              <%= AcademicYear.for(current_claim.dqt_teacher_record.qts_award_date) %>
+              <%= AcademicYear.for(@form.claim.dqt_teacher_record.qts_award_date) %>
             </dd>
           </div>
         </dl>
@@ -24,25 +32,24 @@
   </div>
 </div>
 
-<% path_for_form = current_claim.persisted? ? claim_path(current_journey_routing_name) : claims_path(current_journey_routing_name) %>
-  <%= form_for current_claim, url: path_for_form do |form| %>
-    <%= form.hidden_field :qualifications_details_check %>
-    <%= form_group_tag current_claim do %>
+  <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
+    <%= f.hidden_field :qualifications_details_check %>
+    <%= form_group_tag f.object.claim do %>
 
     <div class="govuk-radios">
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m"><%= t("questions.details_correct") %></legend>
 
-        <%= errors_tag current_claim, :qualifications_details_check %>
+        <%= errors_tag f.object, :qualifications_details_check %>
 
         <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
           <div class="govuk-radios__item">
-            <%= form.radio_button(:qualifications_details_check, true, class: "govuk-radios__input") %>
-            <%= form.label :qualifications_details_check_true, t("questions.radio_yes"), class: "govuk-label govuk-radios__label" %>
+            <%= f.radio_button(:qualifications_details_check, true, class: "govuk-radios__input") %>
+            <%= f.label :qualifications_details_check_true, t("questions.radio_yes"), class: "govuk-label govuk-radios__label" %>
           </div>
           <div class="govuk-radios__item">
-          <%= form.radio_button(:qualifications_details_check, false, class: "govuk-radios__input") %>
-          <%= form.label :qualifications_details_check_false, t("questions.radio_no"), class: "govuk-label govuk-radios__label" %>
+          <%= f.radio_button(:qualifications_details_check, false, class: "govuk-radios__input") %>
+          <%= f.label :qualifications_details_check_false, t("questions.radio_no"), class: "govuk-label govuk-radios__label" %>
           </div>
         </div>
       </fieldset>
@@ -53,6 +60,6 @@
   <p class="govuk-body"><%= t("questions.select_yes_confirm") %></p>
 
   <div class="govuk-form-group">
-    <%= form.submit t("questions.continue"), class: "govuk-button", data: {module: "govuk-button"} %>
+    <%= f.submit t("questions.continue"), class: "govuk-button", data: {module: "govuk-button"} %>
   </div>
 <% end %>
