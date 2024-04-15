@@ -20,38 +20,38 @@
       <div class="personal-details-section">
         <h2 class="govuk-heading-m"><%= t("questions.qualification_details") %></h2>
         <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-          <% if @form.claim.dqt_teacher_record.route_into_teaching %>
+          <% if @form.dqt_route_into_teaching %>
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key"><%= t("questions.teacher_route") %></dt>
               <dd class="govuk-summary-list__value">
-                <%= t("#{current_claim.policy.locale_key}.forms.qualification.answers.#{current_claim.dqt_teacher_record.route_into_teaching}") %>
+                <%= t("#{current_claim.policy.locale_key}.forms.qualification.answers.#{@form.dqt_route_into_teaching}") %>
               </dd>
             </div>
           <% end %>
 
-          <% if @form.claim.dqt_teacher_record.academic_date %>
+          <% if @form.dqt_academic_date %>
             <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key"><%= t("questions.academic_year.#{@form.claim.dqt_teacher_record.route_into_teaching}") %></dt>
+              <dt class="govuk-summary-list__key"><%= t("questions.academic_year.#{@form.dqt_route_into_teaching}") %></dt>
               <dd class="govuk-summary-list__value">
-                <%= AcademicYear.for(@form.claim.dqt_teacher_record.academic_date) %>
+                <%= @form.dqt_academic_date %>
               </dd>
             </div>
           <% end %>
 
-          <% unless @form.claim.dqt_teacher_record.itt_subjects.empty? %>
+          <% if @form.dqt_itt_subjects.present? %>
             <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key"><%= t("questions.itt_subject.#{@form.claim.dqt_teacher_record.route_into_teaching}") %></dt>
+              <dt class="govuk-summary-list__key"><%= t("questions.itt_subject.#{@form.dqt_route_into_teaching}") %></dt>
               <dd class="govuk-summary-list__value">
-                <%= dqt_subjects_playback(@form.claim) %>
+                <%= @form.dqt_itt_subjects %>
               </dd>
             </div>
           <% end %>
 
-          <% if @form.claim.claims.any? { |c| c.dqt_teacher_record.eligible_itt_subject_for_claim == :none_of_the_above } && current_claim.dqt_teacher_record.degree_names.any? %>
+          <% if @form.show_degree_subjects? %>
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key"><%= t("questions.degree_subject") %></dt>
               <dd class="govuk-summary-list__value">
-                <%= dqt_degree_subjects_playback(@form.claim) %>
+                <%= @form.dqt_degree_subjects %>
               </dd>
             </div>
           <% end %>

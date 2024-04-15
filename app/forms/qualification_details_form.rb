@@ -36,6 +36,37 @@ class QualificationDetailsForm < Form
     claim.save!
   end
 
+  def dqt_route_into_teaching
+    claim.dqt_teacher_record.route_into_teaching
+  end
+
+  def dqt_academic_date
+    AcademicYear.for(claim.dqt_teacher_record.academic_date)
+  end
+
+  # Often the DQT record will represent subject names in all lowercase
+  def dqt_itt_subjects
+    claim.dqt_teacher_record.itt_subjects.map do |subject|
+      (subject.downcase == subject) ? subject.titleize : subject
+    end.join(", ")
+  end
+
+  def show_degree_subjects?
+    claim.claims.any? do |c|
+      c.dqt_teacher_record.eligible_itt_subject_for_claim == :none_of_the_above
+    end && claim.dqt_teacher_record.degree_names.any?
+  end
+
+  def dqt_degree_subjects
+    claim.dqt_teacher_record.degree_names.map do |subject|
+      (subject.downcase == subject) ? subject.titleize : subject
+    end.join(", ")
+  end
+
+  def dqt_qts_award_date
+    AcademicYear.for(claim.dqt_teacher_record.qts_award_date)
+  end
+
   private
 
   def set_qualifications_from_dqt_record(eligibility)

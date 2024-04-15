@@ -118,6 +118,168 @@ RSpec.describe QualificationDetailsForm do
     end
   end
 
+  describe "#dqt_academic_date" do
+    let(:params) { ActionController::Parameters.new(claim: {}) }
+
+    let(:journey) { additional_payments_journey }
+
+    let(:current_claim) { additional_payments_current_claim }
+
+    subject { form.dqt_academic_date }
+
+    context "when there is no academic_date" do
+      let(:dqt_teacher_status) { {trn: 123456} }
+
+      it { is_expected.to eq nil }
+    end
+
+    context "when there is an academic_date" do
+      let(:dqt_teacher_status) do
+        {
+          initial_teacher_training: {
+            programme_start_date: "2021-01-01T00:00:00"
+          }
+        }
+      end
+
+      it { is_expected.to eq AcademicYear.for(Date.new(2021, 1, 1)) }
+    end
+  end
+
+  describe "#dqt_itt_subjects" do
+    let(:params) { ActionController::Parameters.new(claim: {}) }
+
+    let(:journey) { additional_payments_journey }
+
+    let(:current_claim) { additional_payments_current_claim }
+
+    let(:dqt_teacher_status) do
+      {
+        initial_teacher_training: {
+          subject1: "mathematics",
+          subject2: "physics",
+          subject3: "chemistry"
+        }
+      }
+    end
+
+    subject { form.dqt_itt_subjects }
+
+    it { is_expected.to eq("Mathematics, Physics, Chemistry") }
+  end
+
+  describe "#show_degree_subjects?" do
+    let(:params) { ActionController::Parameters.new(claim: {}) }
+
+    let(:journey) { additional_payments_journey }
+
+    let(:current_claim) { additional_payments_current_claim }
+
+    subject { form.show_degree_subjects? }
+
+    context "when none of the claims have `none_of_the_above` as eligible_itt_subject" do
+      let(:early_career_payments_eligibility) do
+        create(
+          :early_career_payments_eligibility,
+          itt_academic_year: AcademicYear.new(2020)
+        )
+      end
+
+      let(:dqt_teacher_status) do
+        {
+          initial_teacher_training: {
+            subject1: "mathematics"
+          },
+          qualifications: [
+            {
+              he_subject1: "mathematics"
+            }
+          ]
+        }
+      end
+
+      it { is_expected.to be false }
+    end
+
+    context "when one of the claims has `none_of_the_above` as eligible_itt_subject" do
+      let(:early_career_payments_eligibility) do
+        create(
+          :early_career_payments_eligibility,
+          itt_academic_year: AcademicYear.new(2023)
+        )
+      end
+
+      context "when there is no degree names" do
+        let(:dqt_teacher_status) do
+          {
+            qualifications: []
+          }
+        end
+
+        it { is_expected.to be false }
+      end
+
+      context "when there is a degree name" do
+        let(:dqt_teacher_status) do
+          {
+            qualifications: [
+              {
+                he_subject1: "mathematics"
+              }
+            ]
+          }
+        end
+
+        it { is_expected.to be true }
+      end
+    end
+  end
+
+  describe "#dqt_degree_subjects" do
+    let(:params) { ActionController::Parameters.new(claim: {}) }
+
+    let(:journey) { additional_payments_journey }
+
+    let(:current_claim) { additional_payments_current_claim }
+
+    let(:dqt_teacher_status) do
+      {
+        qualifications: [
+          {
+            he_subject1: "chemistry",
+            he_subject2: "mathematics",
+            he_subject3: "physics"
+          }
+        ]
+      }
+    end
+
+    subject { form.dqt_degree_subjects }
+
+    it { is_expected.to eq "Chemistry, Mathematics, Physics" }
+  end
+
+  describe "#dqt_qts_award_date" do
+    let(:params) { ActionController::Parameters.new(claim: {}) }
+
+    let(:journey) { student_loans_journey }
+
+    let(:current_claim) { additional_payments_current_claim }
+
+    let(:dqt_teacher_status) do
+      {
+        qualified_teacher_status: {
+          name: "Qualified teacher (trained)",
+          qts_date: "2019-01-01"
+        }
+      }
+    end
+
+    subject { form.dqt_qts_award_date }
+
+    it { is_expected.to eq AcademicYear.for(Date.new(2019, 1, 1)) }
+  end
+
   describe "#save" do
     context "when invalid" do
       let(:journey) { additional_payments_journey }
