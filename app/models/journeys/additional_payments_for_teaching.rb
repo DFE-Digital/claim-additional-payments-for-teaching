@@ -11,6 +11,7 @@ module Journeys
     POLICIES = [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments]
     FORMS = {
       "induction-completed" => InductionCompletedForm,
+      "itt-year" => IttAcademicYearForm,
       "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm,
       "supply-teacher" => SupplyTeacherForm,
       "poor-performance" => PoorPerformanceForm,
