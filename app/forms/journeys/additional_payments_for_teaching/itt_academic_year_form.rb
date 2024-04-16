@@ -3,7 +3,7 @@ module Journeys
     class IttAcademicYearForm < Form
       attribute :itt_academic_year
 
-      validates :itt_academic_year, presence: {message: ->(object, _) { I18n.t("activerecord.errors.models.early_career_payments_eligibilities.attributes.itt_academic_year.blank.qualification.#{object.qualification}") }}
+      validates :itt_academic_year, presence: {message: ->(object, _) { object.i18n_errors_path(object.qualification) }}
 
       def initialize(claim:, journey:, params:)
         super
