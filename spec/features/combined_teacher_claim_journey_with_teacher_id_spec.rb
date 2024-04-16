@@ -58,7 +58,7 @@ RSpec.feature "Combined journey with Teacher ID" do
 
     # Check your answers page does not include qualifications questions
     expect(page).not_to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
-    expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_itt_subject", qualification: "undergraduate initial teacher training (ITT)"))
+    expect(page).not_to have_text(I18n.t("additional_payments.forms.eligible_itt_subject.questions.which_subject", qualification: "undergraduate initial teacher training (ITT)"))
     expect(page).not_to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
     expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
 
@@ -103,7 +103,7 @@ RSpec.feature "Combined journey with Teacher ID" do
 
     # Check your answers page includes qualifications questions
     expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
-    expect(page).to have_text(I18n.t("additional_payments.questions.eligible_itt_subject_one_option", qualification: "undergraduate initial teacher training (ITT)", subject: "mathematics"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.eligible_itt_subject.questions.single_subject", qualification: "undergraduate initial teacher training (ITT)", subject: "mathematics"))
     expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
     expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
 
@@ -208,7 +208,7 @@ RSpec.feature "Combined journey with Teacher ID" do
 
     # Check your answers page includes qualifications questions
     expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
-    expect(page).to have_text(I18n.t("additional_payments.questions.eligible_itt_subject_one_option", qualification: "undergraduate initial teacher training (ITT)", subject: "mathematics"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.eligible_itt_subject.questions.single_subject", qualification: "undergraduate initial teacher training (ITT)", subject: "mathematics"))
     expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
     expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
   end
@@ -288,7 +288,7 @@ RSpec.feature "Combined journey with Teacher ID" do
 
     # Check your answers page only includes missing qualifications questions
     expect(page).not_to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
-    expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_itt_subject", qualification: "undergraduate initial teacher training (ITT)"))
+    expect(page).not_to have_text(I18n.t("additional_payments.forms.eligible_itt_subject.questions.which_subject", qualification: "undergraduate initial teacher training (ITT)"))
     expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
     expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
   end

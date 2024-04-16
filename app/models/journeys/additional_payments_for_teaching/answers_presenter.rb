@@ -154,7 +154,7 @@ module Journeys
           itt_year: eligibility.itt_academic_year).current_and_future_subject_symbols(policy)
 
         if subjects.many?
-          t("early_career_payments.answers.eligible_itt_subject.#{eligibility.eligible_itt_subject}")
+          t("additional_payments.forms.eligible_itt_subject.answers.#{eligibility.eligible_itt_subject}")
         else
           subject_symbol = subjects.first
           (subject_symbol == eligibility.eligible_itt_subject.to_sym) ? "Yes" : "No"
