@@ -55,7 +55,7 @@ module Policies
       end
 
       def closed_before_policy_start?
-        @school.close_date.present? && @school.close_date < POLICY_START_DATE
+        @school.closed_before_date?(POLICY_START_DATE)
       end
     end
   end

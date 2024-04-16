@@ -257,13 +257,6 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
     end
   end
 
-  context "when saving in the “claim-school” context" do
-    it "validates the presence of the claim_school" do
-      expect(described_class.new).not_to be_valid(:"claim-school")
-      expect(described_class.new(claim_school: eligible_school)).to be_valid(:"claim-school")
-    end
-  end
-
   context "when saving in the “still-teaching” context" do
     it "validates the presence of employment_status" do
       expect(described_class.new).not_to be_valid(:"still-teaching")
@@ -330,16 +323,8 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
       end
     end
 
-    it "is not valid without a value for claim_school" do
-      expect(build(:student_loans_eligibility, :eligible, claim_school: nil)).not_to be_valid(:submit)
-    end
-
     it "is not valid without a value for employment_status" do
       expect(build(:student_loans_eligibility, :eligible, employment_status: nil)).not_to be_valid(:submit)
-    end
-
-    it "is not valid without a value for current_school" do
-      expect(build(:student_loans_eligibility, :eligible, current_school: nil)).not_to be_valid(:submit)
     end
 
     it "is not valid without at least one subject being taught selected" do

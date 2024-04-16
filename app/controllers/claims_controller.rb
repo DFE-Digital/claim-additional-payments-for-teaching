@@ -71,8 +71,6 @@ class ClaimsController < BasePublicController
       redirect_to claim_path(current_journey_routing_name, "postcode-search") and return
     elsif ["personal-bank-account", "building-society-account"].include?(params[:slug])
       @bank_details_form ||= BankDetailsForm.new(claim: current_claim)
-    elsif params[:slug] == "claim-school" && params[:school_search]
-      search_schools
     end
 
     render current_template
@@ -189,16 +187,6 @@ class ClaimsController < BasePublicController
     current_claim.save!
     session[:claim_id] = current_claim.claim_ids
     redirect_to claim_path(current_journey_routing_name, page_sequence.slugs.first.to_sym)
-  end
-
-  def search_schools
-    @backlink_path = page_sequence.current_slug
-    schools = ActiveModel::Type::Boolean.new.cast(params[:exclude_closed]) ? School.open : School
-    @schools = schools.search(params[:school_search])
-  rescue ArgumentError => e
-    raise unless e.message == School::SEARCH_NOT_ENOUGH_CHARACTERS_ERROR
-
-    current_claim.errors.add(:school_search, "Enter a school or postcode")
   end
 
   def claim_params

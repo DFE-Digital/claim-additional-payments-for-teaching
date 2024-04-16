@@ -48,7 +48,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
       click_button "Continue"
 
       # flaky test workaround in case the first click on Continue submitted the form
-      click_button "Continue" unless /current-school\?_method=patch/.match?(current_url)
+      click_button "Continue" unless /claim-school\?_method=patch/.match?(current_url)
 
       choose school.name
 
@@ -119,7 +119,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
       click_button "Continue"
 
       # flaky test workaround in case the first click on Continue submitted the form
-      click_button "Continue" unless /current-school\?_method=patch/.match?(current_url)
+      click_button "Continue" unless /claim-school\?_method=patch/.match?(current_url)
 
       choose another_school.name
 

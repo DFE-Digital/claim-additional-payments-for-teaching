@@ -214,6 +214,38 @@ RSpec.describe School, type: :model do
     end
   end
 
+  describe "#closed?" do
+    context "closed school" do
+      subject(:school) { build(:school, :closed) }
+
+      it { is_expected.to be_closed }
+    end
+
+    context "open school" do
+      subject(:school) { build(:school, :open) }
+
+      it { is_expected.not_to be_closed }
+    end
+  end
+
+  describe "#closed_before_date?" do
+    subject(:school) { build(:school, open_date: open_date, close_date: close_date) }
+
+    context "close_date earlier than date" do
+      let(:open_date) { 100.days.ago }
+      let(:close_date) { 10.days.ago }
+
+      it { is_expected.to be_closed_before_date(Date.current) }
+    end
+
+    context "close_date after date" do
+      let(:open_date) { 100.days.ago }
+      let(:close_date) { 10.days.from_now }
+
+      it { is_expected.not_to be_closed_before_date(Date.current) }
+    end
+  end
+
   describe "callbacks" do
     before { expect(school.postcode_sanitised).to be_nil }
 
