@@ -18,6 +18,7 @@ module Journeys
       "entire-term-contract" => EntireTermContractForm,
       "employed-directly" => EmployedDirectlyForm,
       "qualification" => QualificationForm,
+      "eligible-itt-subject" => EligibleIttSubjectForm,
       "teaching-subject-now" => TeachingSubjectNowForm
     }.freeze
   end

@@ -300,25 +300,6 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
       end
     end
 
-    context "when saving in the 'eligible_itt_subject' context" do
-      before { create(:journey_configuration, :additional_payments) }
-
-      it "is not valid without a value for 'eligible_itt_subject'" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new).not_to be_valid(:"eligible-itt-subject")
-      end
-
-      it "is not valid when the value for 'eligible_itt_subject' is 'none of the above'" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :none_of_the_above)).to be_valid(:"eligible-itt-subject")
-      end
-
-      it "is valid when the value for 'eligible_itt_subject' is one of 'chemistry, foreign_languages, mathematics or physics'" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :chemistry)).to be_valid(:"eligible-itt-subject")
-        expect(Policies::EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :physics)).to be_valid(:"eligible-itt-subject")
-        expect(Policies::EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :foreign_languages)).to be_valid(:"eligible-itt-subject")
-        expect { Policies::EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :languages) }.to raise_error(ArgumentError)
-      end
-    end
-
     context "when saving in the 'itt_academic_year' context" do
       it "is not valid without a value for 'itt_academic_year'" do
         expect(Policies::EarlyCareerPayments::Eligibility.new).not_to be_valid(:"itt-year")

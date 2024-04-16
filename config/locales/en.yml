@@ -286,6 +286,22 @@ en:
           select_the_school_you_teach_at: "Select the school you teach at"
           the_selected_school_is_closed: "The selected school is closed"
           school_not_found: "School not found"
+      eligible_itt_subject:
+        questions:
+          which_subject: "Which subject did you do your %{qualification} in?"
+          single_subject: "Did you do your %{qualification} in %{subject}?"
+          which_subject_trainee_teacher: "Which subject are you currently doing your initial teacher training (ITT) in?"
+        answers:
+          chemistry: "Chemistry"
+          computing: "Computing"
+          mathematics: "Mathematics"
+          foreign_languages: "Languages"
+          physics: "Physics"
+          none_of_the_above: "None of the above"
+        hints:
+          subject: "The subjects listed are eligible for additional payment based on the school you teach in and the year you studied."
+        errors:
+          inclusion: "Select a subject"
       employed_directly:
         questions:
           employed_directly: Are you employed directly by your school?
@@ -377,10 +393,6 @@ en:
               Select yes if you have more than 2 years experience as a teacher.<br/>
               Select no if you have less than 2 years experience as a teacher.<br/>
               Further information can be found at <a href="https://www.gov.uk/government/publications/apply-for-qualified-teacher-status-qts-if-you-teach-outside-the-uk/routes-to-qualified-teacher-status-qts-for-teachers-and-those-with-teaching-experience-outside-the-uk#early-career-teacher-ect-induction" class="govuk-link govuk-link--no-visited-state" target="_blank">early-career teacher (ECT) induction periods for teachers who qualified overseas</a>
-      eligible_itt_subject: "Which subject did you do your %{qualification} in?"
-      eligible_itt_subject_one_option: "Did you do your %{qualification} in %{subject}?"
-      eligible_itt_subject_trainee_teacher: "Which subject are you currently doing your initial teacher training (ITT) in?"
-      eligible_itt_subject_hint: "The subjects listed are eligible for additional payment based on the school you teach in and the year you studied."
       itt_academic_year:
         qualification:
           undergraduate_itt: In which academic year did you complete your undergraduate initial teacher training (ITT)?
@@ -417,14 +429,6 @@ en:
           title: "Is this claim still valid despite having matching details with other claims?"
         payroll_details:
           title: "The claimant’s %{bank_or_building_society} details have not been automatically validated. Has the claimant confirmed their %{bank_or_building_society} details?"
-    answers:
-      eligible_itt_subject:
-        chemistry: "Chemistry"
-        computing: "Computing"
-        mathematics: "Mathematics"
-        foreign_languages: "Languages"
-        physics: "Physics"
-        none_of_the_above: "None of the above"
     reminders:
       full_name: Full name
   early_career_payments:
@@ -461,6 +465,3 @@ en:
                   postgraduate_itt: "Select the academic year you started your postgraduate ITT"
                   assessment_only: "Select the academic year you earned your QTS"
                   overseas_recognition: "Select the academic year you earned your QTS"
-            eligible_itt_subject:
-              blank:
-                qualification: "Select a subject"

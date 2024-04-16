@@ -46,7 +46,7 @@ module Policies
 
           a << [
             "ITT subject",
-            I18n.t("early_career_payments.answers.eligible_itt_subject.#{eligibility.eligible_itt_subject}")
+            I18n.t("early_career_payments.forms.eligible_itt_subject.answers.#{eligibility.eligible_itt_subject}")
           ]
         end
       end
