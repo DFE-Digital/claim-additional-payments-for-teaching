@@ -3,7 +3,6 @@ class ClaimsController < BasePublicController
   include AddressDetails
 
   skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create, :timeout]
-  before_action :check_and_reset_if_new_tid_user_info
   before_action :initialize_session_slug_history
   before_action :check_page_is_in_sequence, only: [:show, :update]
   before_action :update_session_with_current_slug, only: [:update]
@@ -36,7 +35,8 @@ class ClaimsController < BasePublicController
     end
 
     if params[:slug] == "teacher-detail"
-      save_and_set_teacher_id_user_info
+      # TODO RL: remove this once we have the form object
+      @teacher_id_user_info = current_claim.teacher_id_user_info
     elsif params[:slug] == "qualification-details"
       return redirect_to claim_path(current_journey_routing_name, next_slug) if current_claim.has_no_dqt_data_for_claim?
 
@@ -322,28 +322,7 @@ class ClaimsController < BasePublicController
     !current_claim.eligible_itt_subject
   end
 
-  # NOTE: needs to be done before the slug_sequence is generated.
-  # `logged_in_with_tid: false` means the user had pressed "Continue without signing in", reset it to `true`.
-  # `logged_in_with_tid: false` is used to reject "teacher-details" and "qualification-details" from the slug_sequence.
-  # Handles user somehow using Back button to go back and choose "Continue with DfE Identity" option.
-  # Or they sign in a second time, `details_check` needs resetting in case details are different.
-  def check_and_reset_if_new_tid_user_info
-    DfeIdentity::ClaimUserDetailsReset.call(current_claim, :new_user_info) if session[:user_info]
-  end
-
-  def save_and_set_teacher_id_user_info
-    @teacher_id_user_info = session[:user_info]
-    if @teacher_id_user_info
-      current_claim.update(teacher_id_user_info: @teacher_id_user_info)
-      session.delete(:user_info)
-    end
-    set_teacher_id_user_info
-  end
-
-  def set_teacher_id_user_info
-    @teacher_id_user_info ||= current_claim.teacher_id_user_info
-  end
-
+  # TODO RL: momve this into the form object
   def save_details_check
     details_check = params.dig(:claim, :details_check)
     DfeIdentity::ClaimUserDetailsCheck.call(current_claim, details_check)
