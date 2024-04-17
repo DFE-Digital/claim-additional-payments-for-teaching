@@ -22,7 +22,7 @@ module Journeys
     def form(claim:, params:)
       form = SHARED_FORMS.merge(forms)[params[:slug]]
 
-      form&.new(journey: self, claim: claim, params: params)
+      form&.new(journey: self, claim:, params:)
     end
 
     def forms

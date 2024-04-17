@@ -27,7 +27,7 @@ class ClaimsController < BasePublicController
     end
 
     # TODO: Migrate the remaining slugs to form objects.
-    if @form ||= journey.form(claim: current_claim, params: params)
+    if @form ||= journey.form(claim: current_claim, params:)
       set_any_backlink_override
       render current_template
       return
@@ -73,9 +73,10 @@ class ClaimsController < BasePublicController
 
   def update
     # TODO: Migrate the remaining slugs to form objects.
-    if (@form = journey.form(claim: current_claim, params: params))
+    if (@form = journey.form(claim: current_claim, params:))
       if @form.save
         retrieve_student_loan_details
+        update_session_with_selected_policy
         redirect_to claim_path(current_journey_routing_name, next_slug)
       else
         set_any_backlink_override
@@ -88,8 +89,6 @@ class ClaimsController < BasePublicController
     case params[:slug]
     when "qualification-details"
       set_dqt_data_as_answers
-    when "eligibility-confirmed"
-      return select_claim if current_journey_routing_name == "additional-payments"
     when "personal-bank-account", "building-society-account"
       return bank_account
     when "correct-school"
@@ -160,6 +159,17 @@ class ClaimsController < BasePublicController
 
   def set_any_backlink_override
     @backlink_path = @form.backlink_path if @form.backlink_path
+  end
+
+  def update_session_with_selected_policy
+    # The following is a journey-specific behaviour that cannot be encapsulated inside
+    # the relevant form. The claimant answers are stored on the claim in the database,
+    # but `selected_claim_policy` is not an answer we need to persist, not at the moment.
+    # TODO: revisit this once the claimant's answers are all moved to the session, as at
+    # that point we can probably encapsulate this behaviour somewhere else
+    if current_journey_routing_name == "additional-payments" && params[:slug] == "eligibility-confirmed"
+      session[:selected_claim_policy] = @form.selected_claim_policy
+    end
   end
 
   def previous_slug
@@ -254,19 +264,6 @@ class ClaimsController < BasePublicController
     return [] unless claim_params["eligibility_attributes"]
 
     claim_params["eligibility_attributes"].keys
-  end
-
-  def select_claim
-    policy = params.fetch(:claim, {}).permit(:policy)[:policy]
-
-    unless policy
-      current_claim.errors.add(:policy, "Select an additional payment")
-      return show
-    end
-
-    session[:selected_claim_policy] = policy
-
-    redirect_to claim_path(current_journey_routing_name, next_slug)
   end
 
   def bank_account
