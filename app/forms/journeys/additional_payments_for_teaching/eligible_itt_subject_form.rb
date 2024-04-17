@@ -11,15 +11,6 @@ module Journeys
           message: ->(form, _) { form.i18n_errors_path(:inclusion) }
         }
 
-      def initialize(journey:, claim:, params:)
-        super
-
-        self.eligible_itt_subject = permitted_params.fetch(
-          :eligible_itt_subject,
-          claim.eligibility.eligible_itt_subject
-        )
-      end
-
       def available_subjects
         @available_subjects ||= subject_symbols(claim).map(&:to_s)
       end

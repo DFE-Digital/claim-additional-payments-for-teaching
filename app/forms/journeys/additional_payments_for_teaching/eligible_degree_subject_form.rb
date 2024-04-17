@@ -8,15 +8,6 @@ module Journeys
         message: ->(object, _) { object.i18n_errors_path("select_eligible_degree_subject") }
       }
 
-      def initialize(claim:, journey:, params:)
-        super
-
-        self.eligible_degree_subject = permitted_params.fetch(
-          :eligible_degree_subject,
-          lupp_claim.eligibility.eligible_degree_subject
-        )
-      end
-
       def save
         return false unless valid?
 
