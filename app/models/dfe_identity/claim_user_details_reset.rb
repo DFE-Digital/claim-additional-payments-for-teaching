@@ -31,11 +31,6 @@ module DfeIdentity
           details_check: nil,
           teacher_id_user_info: {}
         )
-      when :new_user_info
-        @claim.update(
-          details_check: nil,
-          logged_in_with_tid: true
-        )
       end
     end
   end
