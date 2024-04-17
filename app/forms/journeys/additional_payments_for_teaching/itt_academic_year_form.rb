@@ -14,7 +14,9 @@ module Journeys
       def save
         return false unless valid?
 
-        update!({eligibility_attributes: {itt_academic_year:}})
+        claim.assign_attributes(eligibility_attributes: {itt_academic_year:})
+        claim.reset_eligibility_dependent_answers(["itt_academic_year"])
+        claim.save!
       end
 
       def qualification
