@@ -100,7 +100,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::IttAcademicYearForm do
 
         context "claim model fails validation unexpectedly" do
           it "raises an error" do
-            allow(current_claim).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
+            allow(current_claim).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
 
             expect { form.save }.to raise_error(ActiveRecord::RecordInvalid)
           end
