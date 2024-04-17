@@ -89,7 +89,7 @@ class QualificationDetailsForm < Form
     when Policies::StudentLoans::Eligibility
       eligibility.qts_award_year = qts_award_year(dqt_record, eligibility)
     else
-      fail "Unknown eligibility type #{claim.eligibility}"
+      fail "Unknown eligibility type #{eligibility.class}"
     end
   end
 
@@ -111,7 +111,7 @@ class QualificationDetailsForm < Form
     when Policies::StudentLoans::Eligibility
       eligibility.qts_award_year = nil
     else
-      fail "Unknown eligibility type #{claim.eligibility}"
+      fail "Unknown eligibility type #{eligibility.class}"
     end
   end
 
