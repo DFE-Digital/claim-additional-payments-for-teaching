@@ -1,5 +1,7 @@
 require "rails_helper"
 
+class TestForm < Form; end
+
 class TestSlugForm < Form
   attribute :first_name
   attribute :student_loan_repayment_amount
@@ -18,12 +20,26 @@ module Journeys
         # NOOP
       end
     end
+
+    class TestForm < Form; end
   end
 end
 
 RSpec.describe Form, type: :model do
   describe ".model_name" do
     it { expect(TestSlugForm.model_name).to eq(Claim.model_name) }
+  end
+
+  describe ".slug_name" do
+    it { expect(TestSlugForm.slug_name).to eq("test-slug") }
+    it { expect(Journeys::TestJourney::TestForm.slug_name).to eq("test") }
+  end
+
+  describe ".all_shared_forms" do
+    it "returns only forms outside of a journey namespace" do
+      expect(described_class.all_shared_forms).to include(TestForm, TestSlugForm)
+      expect(described_class.all_shared_forms).not_to include(Journeys::TestJourney::TestForm)
+    end
   end
 
   subject(:form) { TestSlugForm.new(claim:, journey:, params:) }

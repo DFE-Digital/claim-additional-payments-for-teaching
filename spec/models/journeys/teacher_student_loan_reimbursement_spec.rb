@@ -2,6 +2,18 @@
 
 require "rails_helper"
 
+class TestForm < Form; end
+
+class AnotherForm < Form; end
+
+module Journeys
+  module TeacherStudentLoanReimbursement
+    class TestForm < Form; end
+
+    class TestJourneyForm < Form; end
+  end
+end
+
 RSpec.describe Journeys::TeacherStudentLoanReimbursement do
   describe ".configuration" do
     context "with journey configuration record" do
@@ -58,5 +70,19 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement do
     subject(:presenter) { described_class.answers_presenter }
 
     it { is_expected.to eq(Journeys::TeacherStudentLoanReimbursement::AnswersPresenter) }
+  end
+
+  describe ".all_forms" do
+    it "prioritises the class in the journey namespace" do
+      expect(described_class.all_forms["test"]).to eq(Journeys::TeacherStudentLoanReimbursement::TestForm)
+    end
+
+    it "returns forms that only exist in the journey namespace" do
+      expect(described_class.all_forms["test-journey"]).to eq(Journeys::TeacherStudentLoanReimbursement::TestJourneyForm)
+    end
+
+    it "returns forms that only exist outside the journey namespace" do
+      expect(described_class.all_forms["another"]).to eq(AnotherForm)
+    end
   end
 end

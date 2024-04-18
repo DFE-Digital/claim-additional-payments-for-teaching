@@ -9,8 +9,22 @@ class Form
 
   delegate :persisted?, to: :claim
 
-  def self.model_name
-    Claim.model_name
+  class << self
+    def model_name
+      Claim.model_name
+    end
+
+    def slug_name
+      name.demodulize.delete_suffix("Form").underscore.dasherize
+    end
+
+    # Returns form classes outside of any journey-specific namespace
+    def all_shared_forms
+      ObjectSpace
+        .each_object(Class)
+        .select { |klass| klass < self }
+        .reject { |klass| klass.to_s.start_with?("Journeys::") }
+    end
   end
 
   def initialize(claim:, journey:, params:)

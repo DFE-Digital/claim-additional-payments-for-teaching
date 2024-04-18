@@ -1,11 +1,5 @@
 module Journeys
   module Base
-    # TODO: move app/forms/*_forms to shared and journey specific folders
-    # but needs load_paths sorting
-    SHARED_FORMS = {
-      "current-school" => CurrentSchoolForm
-    }
-
     def configuration
       Configuration.find(self::ROUTING_NAME)
     end
@@ -19,13 +13,18 @@ module Journeys
     end
 
     def form(claim:, params:)
-      form = SHARED_FORMS.merge(forms)[params[:slug]]
-
+      form = all_forms[params[:slug]]
       form&.new(journey: self, claim: claim, params: params)
     end
 
-    def forms
-      defined?(self::FORMS) ? self::FORMS : {}
+    # Returns a Hash of slug => class pairs of form classes automatically determined
+    def all_forms
+      Form.all_shared_forms.concat(constants
+          .select { |c| const_get(c).is_a?(Class) }
+          .map { |c| const_get(c) }
+          .select { |klass| klass < Form })
+        .map { |klass| [klass.slug_name, klass] }
+        .to_h
     end
 
     def page_sequence_for_claim(claim, completed_slugs, current_slug)

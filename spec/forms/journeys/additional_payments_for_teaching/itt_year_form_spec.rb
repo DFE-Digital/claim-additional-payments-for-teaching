@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Journeys::AdditionalPaymentsForTeaching::IttAcademicYearForm do
+RSpec.describe Journeys::AdditionalPaymentsForTeaching::IttYearForm do
   shared_examples "itt_academic_year_form" do |journey|
     before {
       create(:journey_configuration, :additional_payments)

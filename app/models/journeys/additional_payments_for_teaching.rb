@@ -9,18 +9,5 @@ module Journeys
     VIEW_PATH = "additional_payments"
     I18N_NAMESPACE = "additional_payments"
     POLICIES = [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments]
-    FORMS = {
-      "induction-completed" => InductionCompletedForm,
-      "itt-year" => IttAcademicYearForm,
-      "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm,
-      "eligible-degree-subject" => EligibleDegreeSubjectForm,
-      "supply-teacher" => SupplyTeacherForm,
-      "poor-performance" => PoorPerformanceForm,
-      "entire-term-contract" => EntireTermContractForm,
-      "employed-directly" => EmployedDirectlyForm,
-      "qualification" => QualificationForm,
-      "eligible-itt-subject" => EligibleIttSubjectForm,
-      "teaching-subject-now" => TeachingSubjectNowForm
-    }.freeze
   end
 end

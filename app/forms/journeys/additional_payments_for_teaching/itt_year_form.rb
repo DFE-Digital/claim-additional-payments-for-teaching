@@ -1,6 +1,6 @@
 module Journeys
   module AdditionalPaymentsForTeaching
-    class IttAcademicYearForm < Form
+    class IttYearForm < Form
       attribute :itt_academic_year
 
       validates :itt_academic_year, presence: {message: ->(object, _) { object.i18n_errors_path(object.qualification) }}
