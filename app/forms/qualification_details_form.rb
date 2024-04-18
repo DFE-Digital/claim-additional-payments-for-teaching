@@ -4,7 +4,7 @@ class QualificationDetailsForm < Form
   validates :qualifications_details_check,
     inclusion: {
       in: [true, false],
-      message: "Select yes if your qualification details are correct"
+      message: ->(form, _) { form.i18n_errors_path("qualifications_details_check") }
     }
 
   def initialize(claim:, journey:, params:)
