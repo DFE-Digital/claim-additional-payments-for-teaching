@@ -1,22 +1,21 @@
-<% path_for_form = current_claim.persisted? ? claim_path(current_journey_routing_name) : claims_path(current_journey_routing_name) %>
-  <%= form_for current_claim, url: path_for_form do |form| %>
-    <%= form.hidden_field :details_check %>
-    <%= form_group_tag current_claim do %>
+  <%= form_for form, url: claim_path(current_journey_routing_name) do |f| %>
+    <%= f.hidden_field :details_check %>
+    <%= form_group_tag f.object do %>
 
     <div class="govuk-radios">
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Are these details correct?</legend>
 
-        <%= errors_tag current_claim, :details_check %>
+        <%= errors_tag f.object, :details_check %>
 
         <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
           <div class="govuk-radios__item">
-            <%= form.radio_button(:details_check, true, class: "govuk-radios__input") %>
-            <%= form.label :details_check_true, "Yes", class: "govuk-label govuk-radios__label" %>
+            <%= f.radio_button(:details_check, true, class: "govuk-radios__input") %>
+            <%= f.label :details_check_true, "Yes", class: "govuk-label govuk-radios__label" %>
           </div>
           <div class="govuk-radios__item">
-          <%= form.radio_button(:details_check, false, class: "govuk-radios__input") %>
-          <%= form.label :details_check_false, "No", class: "govuk-label govuk-radios__label" %>
+          <%= f.radio_button(:details_check, false, class: "govuk-radios__input") %>
+          <%= f.label :details_check_false, "No", class: "govuk-label govuk-radios__label" %>
           </div>
         </div>
       </fieldset>
@@ -27,6 +26,6 @@
   <p class="govuk-body">By selecting yes you are confirming that, to the best of your knowledge, the details above are correct.</p>
 
   <div class="govuk-form-group">
-    <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
+    <%= f.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
   </div>
 <% end %>

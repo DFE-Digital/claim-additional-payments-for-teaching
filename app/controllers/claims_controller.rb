@@ -34,10 +34,7 @@ class ClaimsController < BasePublicController
       return
     end
 
-    if params[:slug] == "teacher-detail"
-      # TODO RL: remove this once we have the form object
-      @teacher_id_user_info = current_claim.teacher_id_user_info
-    elsif params[:slug] == "qualification-details"
+    if params[:slug] == "qualification-details"
       return redirect_to claim_path(current_journey_routing_name, next_slug) if current_claim.has_no_dqt_data_for_claim?
 
     elsif params[:slug] == "sign-in-or-continue"
@@ -96,9 +93,6 @@ class ClaimsController < BasePublicController
     case params[:slug]
     when "sign-in-or-continue"
       return skip_teacher_id
-    when "teacher-detail"
-      save_details_check
-      Dqt::RetrieveClaimQualificationsData.call(current_claim) if current_claim.details_check?
     when "qualification-details"
       set_dqt_data_as_answers
     when "personal-details"
@@ -320,12 +314,6 @@ class ClaimsController < BasePublicController
 
   def no_eligible_itt_subject?
     !current_claim.eligible_itt_subject
-  end
-
-  # TODO RL: momve this into the form object
-  def save_details_check
-    details_check = params.dig(:claim, :details_check)
-    DfeIdentity::ClaimUserDetailsCheck.call(current_claim, details_check)
   end
 
   def check_email_params

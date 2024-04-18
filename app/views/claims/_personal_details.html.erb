@@ -4,28 +4,28 @@
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">Name</dt>
       <dd class="govuk-summary-list__value">
-        <%= @teacher_id_user_info["given_name"] %>
-          <%= @teacher_id_user_info["family_name"] %>
+        <%= form.given_name %>
+          <%= form.family_name %>
       </dd>
     </div>
-    <% if @teacher_id_user_info["birthdate"] %>
+    <% if form.birthdate.present? %>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Date of birth</dt>
         <dd class="govuk-summary-list__value">
-          <%= l(Date.parse(@teacher_id_user_info["birthdate"])) %>
+          <%= l(form.birthdate) %>
         </dd>
       </div>
     <% end %>
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">Teacher reference number (TRN)</dt>
       <dd class="govuk-summary-list__value">
-        <%= @teacher_id_user_info["trn"] %>
+        <%= form.trn %>
       </dd>
     </div>
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">National Insurance number</dt>
       <dd class="govuk-summary-list__value">
-        <%= @teacher_id_user_info["ni_number"] %>
+        <%= form.national_insurance_number %>
       </dd>
     </div>
   </dl>
