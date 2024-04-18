@@ -1,5 +1,4 @@
 module Dqt
-  # can remove this or just call it from form?
   class RetrieveClaimQualificationsData
     def self.call(claim)
       new(claim).save_qualifications_result
