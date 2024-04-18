@@ -9,15 +9,6 @@ module Journeys
           message: ->(object, _) { object.i18n_errors_path("select_employed_as_supply_teacher") }
         }
 
-      def initialize(claim:, journey:, params:)
-        super
-
-        self.employed_as_supply_teacher = permitted_params.fetch(
-          :employed_as_supply_teacher,
-          claim.eligibility.employed_as_supply_teacher
-        )
-      end
-
       def save
         return false unless valid?
 

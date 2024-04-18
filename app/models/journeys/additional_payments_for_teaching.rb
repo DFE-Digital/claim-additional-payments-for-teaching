@@ -12,6 +12,7 @@ module Journeys
     FORMS = {
       "induction-completed" => InductionCompletedForm,
       "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm,
+      "eligible-degree-subject" => EligibleDegreeSubjectForm,
       "supply-teacher" => SupplyTeacherForm,
       "poor-performance" => PoorPerformanceForm,
       "entire-term-contract" => EntireTermContractForm,

@@ -2,6 +2,7 @@ require "rails_helper"
 
 class TestSlugForm < Form
   attribute :first_name
+  attribute :student_loan_repayment_amount
 end
 
 module Journeys
@@ -11,18 +12,10 @@ module Journeys
 
     VIEW_PATH = "test_view_path"
     I18N_NAMESPACE = "test_i18n_ns"
-  end
-end
 
-module Journeys
-  module TestJourney
     class SlugSequence
       def initialize(claim)
         # NOOP
-      end
-
-      def slugs
-        []
       end
     end
   end
@@ -35,9 +28,49 @@ RSpec.describe Form, type: :model do
 
   subject(:form) { TestSlugForm.new(claim:, journey:, params:) }
 
-  let(:claim) { CurrentClaim.new(claims: [build(:claim, policy: Policies::StudentLoans)]) }
+  let(:claim) { CurrentClaim.new(claims:) }
+  let(:claims) { [build(:claim, policy: Policies::StudentLoans)] }
   let(:journey) { Journeys::TestJourney }
-  let(:params) { ActionController::Parameters.new({slug: "test_slug", claim: {first_name: "test-name"}}) }
+  let(:params) { ActionController::Parameters.new({journey: "test-journey", slug: "test_slug", claim: claim_params}) }
+  let(:claim_params) { {first_name: "test-name"} }
+
+  describe "#initialize" do
+    context "with unpermitted params" do
+      let(:claim_params) { {unpermitted: "my-name"} }
+
+      it "raises an error" do
+        expect { form }.to raise_error(ActionController::UnpermittedParameters)
+      end
+    end
+
+    context "with valid params" do
+      let(:claim_params) { {first_name: "my-name"} }
+
+      it "initialises the attributes with values from the params" do
+        expect(form).to have_attributes(first_name: "my-name")
+      end
+    end
+
+    context "with no params" do
+      let(:claim_params) { {} }
+
+      context "when an existing value can be found on the claim or eligibility record" do
+        let(:claims) { [build(:claim, first_name: "existing-name", eligibility_attributes: {student_loan_repayment_amount: 100}, policy: Policies::StudentLoans)] }
+
+        it "initialises the attributes with values from the claim" do
+          expect(form).to have_attributes(first_name: "existing-name", student_loan_repayment_amount: 100)
+        end
+      end
+
+      context "when an existing value cannot be found on the claim nor eligibility" do
+        let(:claims) { [build(:claim, first_name: nil, policy: Policies::StudentLoans)] }
+
+        it "initialises the attributes with nil" do
+          expect(form).to have_attributes(first_name: nil, student_loan_repayment_amount: nil)
+        end
+      end
+    end
+  end
 
   describe "#persisted?" do
     before do
@@ -76,20 +109,21 @@ RSpec.describe Form, type: :model do
   end
 
   describe "#backlink_path" do
-    context "when the subclass does not define it" do
-      it { expect(form.backlink_path).to be_nil }
+    before do
+      allow_any_instance_of(Journeys::PageSequence).to receive(:previous_slug)
+        .and_return(previous_slug)
     end
 
-    context "when the subclass defines it" do
-      before do
-        form.instance_eval do
-          def backlink_path
-            "/custom-path"
-          end
-        end
-      end
+    describe "when the previous slug is present" do
+      let(:previous_slug) { "previous-slug" }
 
-      it { expect(form.backlink_path).to eq("/custom-path") }
+      it { expect(form.backlink_path).to eq("/test-journey/previous-slug") }
+    end
+
+    describe "when the previous slug is not present" do
+      let(:previous_slug) { nil }
+
+      it { expect(form.backlink_path).to be_nil }
     end
   end
 
@@ -103,6 +137,20 @@ RSpec.describe Form, type: :model do
   end
 
   describe "#permitted_params" do
-    it { expect(form.permitted_params.to_h).to eq("first_name" => "test-name") }
+    let(:claim_params) { {first_name: "test-value"} }
+
+    context "with params containing attributes defined on the form" do
+      it "permits the attributes in the params" do
+        expect(form.permitted_params).to eq(claim_params.stringify_keys)
+      end
+    end
+
+    context "with params containing attributes not defined on the form" do
+      let(:claim_params) { super().merge(unpermitted_attribute: "test-value") }
+
+      it "raises an error" do
+        expect { form.permitted_params }.to raise_error(ActionController::UnpermittedParameters)
+      end
+    end
   end
 end
