@@ -19,10 +19,8 @@ module Journeys
 
     # Returns a Hash of slug => class pairs of form classes automatically determined
     def all_forms
-      Form.all_shared_forms.concat(constants
-          .select { |c| const_get(c).is_a?(Class) }
-          .map { |c| const_get(c) }
-          .select { |klass| klass < Form })
+      @@all_forms ||= Form.all_shared_forms
+        .concat(journey_forms)
         .map { |klass| [klass.slug_name, klass] }
         .to_h
     end
@@ -37,6 +35,15 @@ module Journeys
 
     def answers_for_claim(claim)
       answers_presenter.new(claim)
+    end
+
+    private
+
+    def journey_forms
+      @@journey_forms ||= constants
+        .select { |c| const_get(c).is_a?(Class) }
+        .map { |c| const_get(c) }
+        .select { |klass| klass < Form }
     end
   end
 end

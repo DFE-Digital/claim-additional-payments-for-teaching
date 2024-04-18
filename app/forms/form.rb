@@ -20,7 +20,7 @@ class Form
 
     # Returns form classes outside of any journey-specific namespace
     def all_shared_forms
-      ObjectSpace
+      @@all_shared_forms ||= ObjectSpace
         .each_object(Class)
         .select { |klass| klass < self }
         .reject { |klass| klass.to_s.start_with?("Journeys::") }
