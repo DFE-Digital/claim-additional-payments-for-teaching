@@ -1,4 +1,4 @@
-class DfeIdentityCallbackForm < Form
+class SignInWithDfeIdentityForm < Form
   def save!
     # Handles user somehow using Back button to go back and choose "Continue
     # with DfE Identity" option. Or they sign in a second time,

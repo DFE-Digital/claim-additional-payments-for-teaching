@@ -4,7 +4,7 @@ class OmniauthCallbacksController < ApplicationController
   def callback
     auth = request.env["omniauth.auth"]
 
-    DfeIdentityCallbackForm.new(
+    SignInWithDfeIdentityForm.new(
       claim: current_claim,
       journey: journey,
       params: {

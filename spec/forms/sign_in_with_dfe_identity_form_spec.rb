@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe DfeIdentityCallbackForm do
+RSpec.describe SignInWithDfeIdentityForm do
   before do
     create(:journey_configuration, :additional_payments)
     create(:journey_configuration, :student_loans)
