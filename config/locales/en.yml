@@ -318,6 +318,12 @@ en:
         errors:
           select_entire_term_contract:
             Select yes if you have a contract to teach at the same school for an entire term or longer
+      itt_academic_year:
+        errors:
+          undergraduate_itt: "Select the academic year you completed your undergraduate ITT"
+          postgraduate_itt: "Select the academic year you started your postgraduate ITT"
+          assessment_only: "Select the academic year you earned your QTS"
+          overseas_recognition: "Select the academic year you earned your QTS"
       induction_completed:
         errors:
           select_yes_if_completed: "Select yes if you have completed your induction"
@@ -460,12 +466,3 @@ en:
           attributes:
             scheduled_payment_date:
               blank: can't be blank or in a format other than DD/MM/YYYY
-        early_career_payments_eligibilities:
-          attributes:
-            itt_academic_year:
-              blank:
-                qualification:
-                  undergraduate_itt: "Select the academic year you completed your undergraduate ITT"
-                  postgraduate_itt: "Select the academic year you started your postgraduate ITT"
-                  assessment_only: "Select the academic year you earned your QTS"
-                  overseas_recognition: "Select the academic year you earned your QTS"

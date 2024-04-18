@@ -299,13 +299,6 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
         expect(Policies::EarlyCareerPayments::Eligibility.new(award_amount: 7_499)).to be_valid(:amendment)
       end
     end
-
-    context "when saving in the 'itt_academic_year' context" do
-      it "is not valid without a value for 'itt_academic_year'" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new).not_to be_valid(:"itt-year")
-        expect(Policies::EarlyCareerPayments::Eligibility.new(itt_academic_year: AcademicYear.new(2020))).to be_valid(:"itt-year")
-      end
-    end
   end
 
   describe ".max_award_amount_in_pounds" do

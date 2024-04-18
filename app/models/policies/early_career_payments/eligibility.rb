@@ -78,7 +78,6 @@ module Policies
       belongs_to :current_school, optional: true, class_name: "School"
 
       validates :current_school, on: [:"correct-school"], presence: {message: "Select the school you teach at or choose somewhere else"}, unless: :school_somewhere_else?
-      validates :itt_academic_year, on: [:"itt-year", :submit], presence: {message: ->(object, data) { I18n.t("activerecord.errors.models.early_career_payments_eligibilities.attributes.itt_academic_year.blank.qualification.#{object.qualification}") }}
       validates :award_amount, on: [:submit], presence: {message: "Enter an award amount"}
       validates_numericality_of :award_amount, message: "Enter a valid monetary amount", allow_nil: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 7500
       validates :award_amount, on: :amendment, award_range: {max: max_award_amount_in_pounds}
