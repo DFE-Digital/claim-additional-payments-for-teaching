@@ -6,4 +6,5 @@ Rails.application.config.filter_parameters += [:password]
 # Personal data in a claim
 Rails.application.config.after_initialize do
   Rails.application.config.filter_parameters += Claim.filtered_params
+  Rails.application.config.filter_parameters += SignInOrContinueForm::TeacherIdUserInfoForm::DFE_IDENTITY_ATTRIBUTES
 end

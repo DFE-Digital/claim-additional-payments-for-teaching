@@ -12,7 +12,6 @@ module Journeys
     class SlugSequence
       ELIGIBILITY_SLUGS = [
         "sign-in-or-continue",
-        "teacher-detail",
         "reset-claim",
         "qualification-details",
         "qts-year",
@@ -73,14 +72,12 @@ module Journeys
         SLUGS.dup.tap do |sequence|
           if !Journeys.for_policy(claim.policy).configuration.teacher_id_enabled?
             sequence.delete("sign-in-or-continue")
-            sequence.delete("teacher-detail")
             sequence.delete("reset-claim")
             sequence.delete("qualification-details")
             sequence.delete("select-email")
             sequence.delete("select-mobile")
           end
 
-          sequence.delete("teacher-detail") unless claim.logged_in_with_tid?
           sequence.delete("reset-claim") if (!claim.logged_in_with_tid? && claim.details_check.nil?) || claim.details_check?
           sequence.delete("current-school") if claim.eligibility.employed_at_claim_school? || claim.eligibility.employed_at_recent_tps_school?
           sequence.delete("mostly-performed-leadership-duties") unless claim.eligibility.had_leadership_position?

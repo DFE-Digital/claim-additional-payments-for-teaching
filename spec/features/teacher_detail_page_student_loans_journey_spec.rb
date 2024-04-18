@@ -68,7 +68,17 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
 
     # check the teacher_id_user_info details are saved to the claim
     claim = Claim.order(:created_at).last
-    expect(claim.teacher_id_user_info).to eq({"trn" => "1234567", "birthdate" => date_of_birth, "given_name" => "Kelsie", "family_name" => "Oberbrunner", "ni_number" => nino, "phone_number" => "01234567890", "trn_match_ni_number" => "True", "email" => "kelsie.oberbrunner@example.com"})
+    expect(claim.teacher_id_user_info).to eq({
+      "trn" => "1234567",
+      "birthdate" => date_of_birth,
+      "given_name" => "Kelsie",
+      "family_name" => "Oberbrunner",
+      "ni_number" => nino,
+      "phone_number" => "01234567890",
+      "trn_match_ni_number" => "True",
+      "email" => "kelsie.oberbrunner@example.com",
+      "email_verified" => ""
+    })
 
     # check the user_info details from teacher id are saved to the claim
     expect(claim.first_name).to eq("Kelsie")
@@ -115,7 +125,17 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
 
     # check the teacher_id_user_info details are saved to the claim
     claim = Claim.order(:created_at).last
-    expect(claim.teacher_id_user_info).to eq({"trn" => "1234567", "birthdate" => date_of_birth, "given_name" => "Kelsie", "family_name" => "Oberbrunner", "ni_number" => nino, "phone_number" => "01234567890", "trn_match_ni_number" => "True", "email" => "kelsie.oberbrunner@example.com"})
+    expect(claim.teacher_id_user_info).to eq({
+      "trn" => "1234567",
+      "birthdate" => date_of_birth,
+      "given_name" => "Kelsie",
+      "family_name" => "Oberbrunner",
+      "ni_number" => nino,
+      "phone_number" => "01234567890",
+      "trn_match_ni_number" => "True",
+      "email" => "kelsie.oberbrunner@example.com",
+      "email_verified" => ""
+    })
 
     # check the user_info details from teacher id are not saved to the claim
     expect(claim.first_name).to eq("")
@@ -191,7 +211,17 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
 
     # check the teacher_id_user_info details are saved to the claim
     claim = Claim.order(:created_at).last
-    expect(claim.teacher_id_user_info).to eq({"trn" => "1234567", "birthdate" => date_of_birth, "given_name" => "Kelsie", "family_name" => "Oberbrunner", "ni_number" => "", "phone_number" => "01234567890", "trn_match_ni_number" => "True", "email" => "kelsie.oberbrunner@example.com"})
+    expect(claim.teacher_id_user_info).to eq({
+      "trn" => "1234567",
+      "birthdate" => date_of_birth,
+      "given_name" => "Kelsie",
+      "family_name" => "Oberbrunner",
+      "ni_number" => "",
+      "phone_number" => "01234567890",
+      "trn_match_ni_number" => "True",
+      "email" => "kelsie.oberbrunner@example.com",
+      "email_verified" => ""
+    })
 
     # check the user_info details from teacher id are saved to the claim
     expect(claim.first_name).to eq("Kelsie")

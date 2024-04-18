@@ -298,7 +298,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
       let(:teacher_id_enabled) { false }
 
       it "removes the Teacher ID-dependant slugs" do
-        slugs = %w[sign-in-or-continue teacher-detail reset-claim qualification-details correct-school select-email select-mobile]
+        slugs = %w[sign-in-or-continue reset-claim qualification-details correct-school select-email select-mobile]
         expect(slug_sequence.slugs).not_to include(*slugs)
       end
     end
