@@ -105,4 +105,26 @@ RSpec.describe Form, type: :model do
   describe "#permitted_params" do
     it { expect(form.permitted_params.to_h).to eq("first_name" => "test-name") }
   end
+
+  describe "force_update_session_with_current_slug" do
+    it { expect(form.force_update_session_with_current_slug).to be false }
+  end
+
+  describe "redirect_to_next_slug" do
+    context "@redirect_to_next_slug is nil or not set" do
+      it { expect(form.redirect_to_next_slug).to be false }
+    end
+
+    context "@redirect_to_next_slug false" do
+      before { form.instance_variable_set(:@redirect_to_next_slug, false) }
+
+      it { expect(form.redirect_to_next_slug).to be false }
+    end
+
+    context "@redirect_to_next_slug true" do
+      before { form.instance_variable_set(:@redirect_to_next_slug, true) }
+
+      it { expect(form.redirect_to_next_slug).to be true }
+    end
+  end
 end

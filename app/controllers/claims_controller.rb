@@ -29,9 +29,10 @@ class ClaimsController < BasePublicController
 
     # TODO: Migrate the remaining slugs to form objects.
     if @form ||= journey.form(claim: current_claim, params: params)
+      return if redirect_to_next_slug
+
       set_any_backlink_override
       render current_template
-
       return
     end
 
@@ -39,11 +40,6 @@ class ClaimsController < BasePublicController
       save_and_set_teacher_id_user_info
     elsif params[:slug] == "qualification-details"
       return redirect_to claim_path(current_journey_routing_name, next_slug) if current_claim.has_no_dqt_data_for_claim?
-
-    elsif params[:slug] == "sign-in-or-continue"
-      update_session_with_current_slug
-
-      return skip_teacher_id if !journey_configuration.teacher_id_enabled?
     elsif params[:slug] == "select-email"
       session[:email_address] = current_claim.teacher_id_user_info["email"]
     elsif params[:slug] == "correct-school"
@@ -94,8 +90,6 @@ class ClaimsController < BasePublicController
     end
 
     case params[:slug]
-    when "sign-in-or-continue"
-      return skip_teacher_id
     when "teacher-detail"
       save_details_check
       Dqt::RetrieveClaimQualificationsData.call(current_claim) if current_claim.details_check?
@@ -380,9 +374,15 @@ class ClaimsController < BasePublicController
     current_claim.attributes = updated_claim_params
   end
 
-  def skip_teacher_id
-    DfeIdentity::ClaimUserDetailsReset.call(current_claim, :skipped_tid)
-    redirect_to claim_path(current_journey_routing_name, next_slug)
+  def redirect_to_next_slug
+    update_session_with_current_slug if @form.force_update_session_with_current_slug
+
+    if @form.redirect_to_next_slug
+      redirect_to claim_path(current_journey_routing_name, next_slug)
+      true
+    else
+      false
+    end
   end
 
   def set_dqt_data_as_answers
