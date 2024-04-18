@@ -11,6 +11,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::PoorPerformanceForm do
   let(:params) { ActionController::Parameters.new({slug:, claim: claim_params}) }
   let(:claim_params) { {subject_to_formal_performance_action: "true", subject_to_disciplinary_action: "false"} }
 
+  it { expect(form).to be_a(Form) }
+
   context "with unpermitted params" do
     let(:claim_params) { {unpermitted_param: ""} }
 

@@ -9,7 +9,6 @@ module Policies
       belongs_to :current_school, optional: true, class_name: "School"
 
       validate :award_amount_must_be_in_range, on: :amendment
-      validates :eligible_degree_subject, on: [:"eligible-degree-subject"], inclusion: {in: [true, false], message: "Select yes if you have a degree in an eligible subject"}
 
       delegate :name, to: :current_school, prefix: true, allow_nil: true
 

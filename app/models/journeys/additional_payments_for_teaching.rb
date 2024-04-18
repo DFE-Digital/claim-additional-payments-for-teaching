@@ -13,6 +13,7 @@ module Journeys
       "induction-completed" => InductionCompletedForm,
       "itt-year" => IttAcademicYearForm,
       "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm,
+      "eligible-degree-subject" => EligibleDegreeSubjectForm,
       "supply-teacher" => SupplyTeacherForm,
       "poor-performance" => PoorPerformanceForm,
       "entire-term-contract" => EntireTermContractForm,

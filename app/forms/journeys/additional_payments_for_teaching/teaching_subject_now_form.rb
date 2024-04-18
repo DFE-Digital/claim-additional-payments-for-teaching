@@ -9,15 +9,6 @@ module Journeys
           message: "Select yes if you spend at least half of your contracted hours teaching eligible subjects"
         }
 
-      def initialize(journey:, claim:, params:)
-        super
-
-        self.teaching_subject_now = permitted_params.fetch(
-          :teaching_subject_now,
-          claim.eligibility.teaching_subject_now
-        )
-      end
-
       def eligible_itt_subject
         @eligible_itt_subject ||= claim.eligibility.eligible_itt_subject
       end

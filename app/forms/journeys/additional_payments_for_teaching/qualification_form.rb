@@ -16,15 +16,6 @@ module Journeys
           message: "Select the route you took into teaching"
         }
 
-      def initialize(journey:, claim:, params:)
-        super
-
-        self.qualification = permitted_params.fetch(
-          :qualification,
-          claim.eligibility.qualification
-        )
-      end
-
       def save
         return false unless valid?
 

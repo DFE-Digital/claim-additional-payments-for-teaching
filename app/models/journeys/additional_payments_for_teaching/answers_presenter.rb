@@ -124,7 +124,7 @@ module Journeys
         return if !eligibility.respond_to?(:eligible_degree_subject) || !eligibility.eligible_degree_subject? || (eligibility.claim.qualifications_details_check && eligibility.claim.dqt_teacher_record&.eligible_degree_code?)
 
         [
-          t("additional_payments.questions.eligible_degree_subject"),
+          t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"),
           "Yes",
           "eligible-degree-subject"
         ]

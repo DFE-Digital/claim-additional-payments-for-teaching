@@ -11,15 +11,6 @@ module Journeys
           message: "Select yes if you are currently teaching as a qualified teacher"
         }
 
-      def initialize(journey:, claim:, params:)
-        super
-
-        self.nqt_in_academic_year_after_itt = permitted_params.fetch(
-          :nqt_in_academic_year_after_itt,
-          claim.eligibility.nqt_in_academic_year_after_itt
-        )
-      end
-
       def save
         return false unless valid?
 
