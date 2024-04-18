@@ -33,15 +33,25 @@ class TeacherDetailForm < Form
     return false unless valid?
 
     if details_check
-      ApplicationRecord.transaction do
-        claim.update!(details_check: true)
-        DfeIdentity::ClaimUserDetailsUpdater.call(claim)
-      end
+      if DfeIdentity::UserInfo.validated?(claim.teacher_id_user_info)
+        claim.update!(
+          first_name: claim.teacher_id_user_info["given_name"],
+          surname: claim.teacher_id_user_info["family_name"],
+          teacher_reference_number: claim.teacher_id_user_info["trn"],
+          date_of_birth: claim.teacher_id_user_info["birthdate"],
+          national_insurance_number: claim.teacher_id_user_info["ni_number"],
+          logged_in_with_tid: true,
+          dqt_teacher_status: nil,
+          details_check: true
+        )
 
-      # Reset by ClaimUserDetailsUpdater
-      # FIXME inline all this into this form
-      if claim.reload.details_check?
         Dqt::RetrieveClaimQualificationsData.call(claim)
+      else
+        claim.update!(
+          logged_in_with_tid: true,
+          details_check: false,
+          dqt_teacher_status: nil
+        )
       end
     else
       claim.update!(
