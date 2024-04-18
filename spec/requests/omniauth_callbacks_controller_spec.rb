@@ -42,14 +42,14 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
 
   describe "#callback" do
     def set_mock_auth(trn)
-      OmniAuth.config.mock_auth[:default] = OmniAuth::AuthHash.new(
+      OmniAuth.config.mock_auth[:tid] = OmniAuth::AuthHash.new(
         "extra" => {
           "raw_info" => {
             "trn" => trn
           }
         }
       )
-      Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:default]
+      Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:tid]
     end
 
     before do
@@ -157,7 +157,7 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
 
     context "auth failure csrf detected" do
       it "redirects to /auth/failure" do
-        OmniAuth.config.mock_auth[:default] = :csrf_detected
+        OmniAuth.config.mock_auth[:tid] = :csrf_detected
 
         get claim_auth_tid_callback_path
 
