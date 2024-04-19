@@ -4,19 +4,21 @@ class OmniauthCallbacksController < ApplicationController
   def callback
     auth = request.env["omniauth.auth"]
 
-    SignInWithDfeIdentityForm.new(
-      claim: current_claim,
-      journey: journey,
-      params: {
-        teacher_id_user_info: auth.extra.raw_info.to_h.with_indifferent_access
-      }
-    ).save!
+    # Only keep the attributes permitted by the form
+    teacher_id_user_info = auth.extra.raw_info.to_h.slice(
+      SignOrContinueForm::DFE_IDENTITY_ATTRIBUTES
+    )
 
-    # We get here after clicking a link on the "sign-in-or-continue"
-    session[:slugs] ||= []
-    session[:slugs] << "sign-in-or-continue"
-
-    redirect_to claim_path(journey: current_journey_routing_name, slug: "teacher-detail")
+    redirect_to(
+      claim_path(
+        journey: current_journey_routing_name,
+        slug: "sign-in-or-continue",
+        claim: {
+          logged_in_with_tid: true,
+          teacher_id_user_info: teacher_id_user_info
+        },
+      ),
+    )
   end
 
   def failure

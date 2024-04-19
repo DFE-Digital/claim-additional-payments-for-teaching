@@ -1,21 +1,47 @@
 <%= link_to "Back", landing_page_path, class: "govuk-back-link" %>
 <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
   <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <% if @form.errors.any? %>
+        <%= render(
+          "shared/error_summary",
+          instance: @form,
+          errored_field_id_overrides: { details_check: "claim_details_check_true" }
+        ) %>
+      <% end %>
+    </div>
+  </div>
+  <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds govuk-body">
-      <h1 class="govuk-heading-l">
-        Use DfE Identity to sign in
-      </h1>
-      <p>
-        You can sign in or set up a DfE Identity account to make it easier to claim additional payments.
-      </p>
-      <p>
-        You will need your National Insurance number and teacher reference number (TRN) to create an account.
-      </p>
+      <% if @form.signed_in_with_dfe_identity? %>
+          <h1 class="govuk-heading-l"><%=t "questions.check_and_confirm_details" %></h1>
+          <p>We have used your DfE Identity account to retrieve your personal details.</p>
+          <p>You must check that all details are correct and confirm they are correct to continue.</p>
 
-      <div class="govuk-button-group">
-        <%= button_to "Continue with DfE Identity", "/auth/tid", class: "govuk-button", method: :post %>
-        <%= button_to "Continue without signing in", claim_path(current_journey_routing_name, "sign-in-or-continue"), method: :patch, class: "govuk-button govuk-button--secondary"%>
-      </div>
+          <%= render partial: "personal_details", locals: { form: @form} %>
+          <%= render partial: "confirmation_form", locals: { form: @form} %>
+      <% else %>
+        <h1 class="govuk-heading-l">
+          Use DfE Identity to sign in
+        </h1>
+        <p>
+          You can sign in or set up a DfE Identity account to make it easier to claim additional payments.
+        </p>
+        <p>
+          You will need your National Insurance number and teacher reference number (TRN) to create an account.
+        </p>
+
+        <div class="govuk-button-group">
+          <%= button_to "Continue with DfE Identity", "/auth/tid", class: "govuk-button", method: :post %>
+          <%= button_to(
+            "Continue without signing in",
+            claim_path(current_journey_routing_name, "sign-in-or-continue"),
+            method: :patch,
+            params: { claim: { logged_in_with_tid: false, details_check: nil } },
+            class: "govuk-button govuk-button--secondary"
+          ) %>
+        </div>
+      <% end %>
     </div>
   </div>
 </main>
