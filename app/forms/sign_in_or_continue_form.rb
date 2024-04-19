@@ -14,13 +14,6 @@ class SignInOrContinueForm < Form
     true
   end
 
-  # This is needed because logging in with Teacher ID doesn't submit to this form.
-  # Therefore the slug/page needs to be considered submitted to avoid it being the next slug
-  # after callback redirect back to Claim from Teacher ID.
-  def force_update_session_with_current_slug
-    true
-  end
-
   private
 
   def skip_form_if_teacher_id_not_enabled_for_journey

@@ -342,8 +342,6 @@ class ClaimsController < BasePublicController
   end
 
   def redirect_to_next_slug
-    update_session_with_current_slug if @form.force_update_session_with_current_slug
-
     if @form.redirect_to_next_slug
       redirect_to claim_path(current_journey_routing_name, next_slug)
       true

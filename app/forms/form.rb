@@ -48,10 +48,6 @@ class Form
     @permitted_params ||= params.fetch(:claim, {}).permit(*attribute_names)
   end
 
-  def force_update_session_with_current_slug
-    false
-  end
-
   def redirect_to_next_slug
     !!@redirect_to_next_slug
   end

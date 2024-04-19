@@ -12,6 +12,10 @@ class OmniauthCallbacksController < ApplicationController
       }
     ).save!
 
+    # We get here after clicking a link on the "sign-in-or-continue"
+    session[:slugs] ||= []
+    session[:slugs] << "sign-in-or-continue"
+
     redirect_to claim_path(journey: current_journey_routing_name, slug: "teacher-detail")
   end
 

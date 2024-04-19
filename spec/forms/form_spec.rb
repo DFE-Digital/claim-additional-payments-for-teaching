@@ -154,10 +154,6 @@ RSpec.describe Form, type: :model do
     end
   end
 
-  describe "force_update_session_with_current_slug" do
-    it { expect(form.force_update_session_with_current_slug).to be false }
-  end
-
   describe "redirect_to_next_slug" do
     context "@redirect_to_next_slug is nil or not set" do
       it { expect(form.redirect_to_next_slug).to be false }

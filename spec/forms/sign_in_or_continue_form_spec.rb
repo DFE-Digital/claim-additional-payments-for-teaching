@@ -39,22 +39,6 @@ RSpec.describe SignInOrContinueForm do
       end
     end
 
-    describe "force_update_session_with_current_slug" do
-      context "teacher id enabled" do
-        it "returns true" do
-          expect(form.force_update_session_with_current_slug).to be true
-        end
-      end
-
-      context "teacher id disabled" do
-        let(:teacher_id_enabled) { false }
-
-        it "returns true" do
-          expect(form.force_update_session_with_current_slug).to be true
-        end
-      end
-    end
-
     describe "redirect_to_next_slug" do
       context "teacher id enabled" do
         it "returns false" do
