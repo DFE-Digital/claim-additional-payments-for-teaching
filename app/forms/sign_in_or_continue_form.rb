@@ -7,10 +7,16 @@ class SignInOrContinueForm < Form
   end
 
   def save
-    # This reset is called from multiple places.
-    # The smell here is we are updating the claim on initialisation when teacher id is disabled.
-    # Leaving this here for now, until/if we decide to address approach.
-    DfeIdentity::ClaimUserDetailsReset.call(claim, :skipped_tid)
+    update!(
+      first_name: "",
+      surname: "",
+      teacher_reference_number: "",
+      date_of_birth: nil,
+      national_insurance_number: "",
+      logged_in_with_tid: false,
+      details_check: nil,
+      teacher_id_user_info: {}
+    )
 
     true
   end

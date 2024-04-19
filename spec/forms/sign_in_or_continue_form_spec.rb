@@ -11,7 +11,9 @@ RSpec.describe SignInOrContinueForm do
     }
 
     let(:current_claim) do
-      claims = journey::POLICIES.map { |policy| create(:claim, policy: policy) }
+      claims = journey::POLICIES.map do |policy|
+        create(:claim, :with_details_from_dfe_identity, policy: policy)
+      end
       CurrentClaim.new(claims: claims)
     end
 
@@ -20,11 +22,19 @@ RSpec.describe SignInOrContinueForm do
     subject(:form) { described_class.new(claim: current_claim, journey: journey, params: params) }
 
     describe "save" do
+      before { form.save }
       context "user selects to continue without teacher id explicitely" do
-        it "calls ClaimUserDetailsReset with :skipped_tid" do
-          expect(DfeIdentity::ClaimUserDetailsReset).to receive(:call).with(current_claim, :skipped_tid)
-
-          form.save
+        it "resets any details from teacher id" do
+          current_claim.claims.each do |claim|
+            expect(claim.first_name).to eq("")
+            expect(claim.surname).to eq("")
+            expect(claim.teacher_reference_number).to eq("")
+            expect(claim.date_of_birth).to be_nil
+            expect(claim.national_insurance_number).to eq("")
+            expect(claim.logged_in_with_tid).to be false
+            expect(claim.details_check).to be_nil
+            expect(claim.teacher_id_user_info).to eq({})
+          end
         end
       end
     end
