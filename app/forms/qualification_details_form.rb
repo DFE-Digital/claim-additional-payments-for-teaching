@@ -116,35 +116,19 @@ class QualificationDetailsForm < Form
   end
 
   def itt_academic_year(dqt_teacher_record, eligibility)
-    if dqt_teacher_record&.itt_academic_year_for_claim
-      dqt_teacher_record.itt_academic_year_for_claim
-    else
-      eligibility.itt_academic_year
-    end
+    dqt_teacher_record&.itt_academic_year_for_claim || eligibility.itt_academic_year
   end
 
   def eligible_itt_subject(dqt_teacher_record, eligibility)
-    if dqt_teacher_record&.eligible_itt_subject_for_claim
-      dqt_teacher_record.eligible_itt_subject_for_claim
-    else
-      eligibility.eligible_itt_subject
-    end
+    dqt_teacher_record&.eligible_itt_subject_for_claim || eligibility.eligible_itt_subject
   end
 
   def qualification(dqt_teacher_record, eligibility)
-    if dqt_teacher_record&.route_into_teaching
-      dqt_teacher_record.route_into_teaching
-    else
-      eligibility.qualification
-    end
+    dqt_teacher_record&.route_into_teaching || eligibility.qualification
   end
 
   def eligible_degree_subject(dqt_teacher_record, eligibility)
-    if dqt_teacher_record&.eligible_degree_code?
-      dqt_teacher_record.eligible_degree_code?
-    else
-      eligibility.eligible_degree_subject
-    end
+    dqt_teacher_record&.eligible_degree_code? || eligibility.eligible_degree_subject
   end
 
   def qts_award_year(dqt_teacher_record, eligibility)
