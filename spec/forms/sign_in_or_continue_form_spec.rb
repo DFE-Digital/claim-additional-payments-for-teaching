@@ -19,42 +19,6 @@ RSpec.describe SignInOrContinueForm do
 
     subject(:form) { described_class.new(claim: current_claim, journey: journey, params: params) }
 
-    describe "initialize" do
-      context "teacher id enabled" do
-        it "does not call ClaimUserDetailsReset with :skipped_tid" do
-          expect(DfeIdentity::ClaimUserDetailsReset).not_to receive(:call).with(current_claim, :skipped_tid)
-
-          form
-        end
-      end
-
-      context "teacher id disabled" do
-        let(:teacher_id_enabled) { false }
-
-        it "calls ClaimUserDetailsReset with :skipped_tid" do
-          expect(DfeIdentity::ClaimUserDetailsReset).to receive(:call).with(current_claim, :skipped_tid)
-
-          form
-        end
-      end
-    end
-
-    describe "redirect_to_next_slug" do
-      context "teacher id enabled" do
-        it "returns false" do
-          expect(form.redirect_to_next_slug).to be false
-        end
-      end
-
-      context "teacher id disabled" do
-        let(:teacher_id_enabled) { false }
-
-        it "returns true" do
-          expect(form.redirect_to_next_slug).to be true
-        end
-      end
-    end
-
     describe "save" do
       context "user selects to continue without teacher id explicitely" do
         it "calls ClaimUserDetailsReset with :skipped_tid" do

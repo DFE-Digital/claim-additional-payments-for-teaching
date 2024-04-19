@@ -28,8 +28,6 @@ class ClaimsController < BasePublicController
 
     # TODO: Migrate the remaining slugs to form objects.
     if @form ||= journey.form(claim: current_claim, params: params)
-      return if redirect_to_next_slug
-
       set_any_backlink_override
       render current_template
       return
@@ -339,15 +337,6 @@ class ClaimsController < BasePublicController
   def check_still_teaching_params
     updated_claim_params = StillTeachingForm.extract_params(claim_params)
     current_claim.attributes = updated_claim_params
-  end
-
-  def redirect_to_next_slug
-    if @form.redirect_to_next_slug
-      redirect_to claim_path(current_journey_routing_name, next_slug)
-      true
-    else
-      false
-    end
   end
 
   def set_dqt_data_as_answers

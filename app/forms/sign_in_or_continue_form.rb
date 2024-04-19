@@ -4,33 +4,14 @@ class SignInOrContinueForm < Form
 
   def initialize(claim:, journey:, params:)
     super
-
-    skip_form_if_teacher_id_not_enabled_for_journey
   end
 
   def save
-    continue_without_teacher_id
-
-    true
-  end
-
-  private
-
-  def skip_form_if_teacher_id_not_enabled_for_journey
-    if !journey.configuration.teacher_id_enabled?
-      update_claim_with_teacher_id_was_skipped
-      @redirect_to_next_slug = true
-    end
-  end
-
-  def continue_without_teacher_id
-    update_claim_with_teacher_id_was_skipped
-  end
-
-  def update_claim_with_teacher_id_was_skipped
     # This reset is called from multiple places.
     # The smell here is we are updating the claim on initialisation when teacher id is disabled.
     # Leaving this here for now, until/if we decide to address approach.
     DfeIdentity::ClaimUserDetailsReset.call(claim, :skipped_tid)
+
+    true
   end
 end

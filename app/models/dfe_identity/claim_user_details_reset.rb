@@ -9,6 +9,7 @@ module DfeIdentity
       @reset_type = reset_type
     end
 
+    # TODO RL: inline this into sign in or continue form
     def reset_teacher_id_user_info
       case @reset_type
       when :skipped_tid
