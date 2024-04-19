@@ -121,7 +121,6 @@ class Claim < ApplicationRecord
 
   # The idea is to filter things that in a CSV export might be malicious in MS Excel
   # A whitelist would be inappropiate as these fields could contain valid special letters e.g. accents and umlauts
-  NAME_REGEX_FILTER = /\A[^"=$%#&*+\/\\()@?!<>0-9]*\z/
   ADDRESS_REGEX_FILTER = /\A[^'"=$%#*+\/\\()@?!<>]*\z/
 
   # Use AcademicYear as custom ActiveRecord attribute type
@@ -164,44 +163,6 @@ class Claim < ApplicationRecord
 
   validates :payroll_gender, on: [:gender, :submit], presence: {message: "Select the gender recorded on your school’s payroll system or select whether you do not know"}
 
-  validates :first_name, on: [:"personal-details-name", :"personal-details", :submit], presence: {message: "Enter your first name"}
-  validates :first_name,
-    on: [:"personal-details-name", :"personal-details", :submit],
-    length: {
-      in: 1..100,
-      message: "First name must be between 2 and 30 characters"
-    },
-    format: {
-      with: NAME_REGEX_FILTER,
-      message: "First name cannot contain special characters"
-    },
-    if: -> { first_name.present? }
-
-  validates :middle_name,
-    on: [:"personal-details", :submit],
-    length: {
-      maximum: 61,
-      message: "Middle names must be less than 61 characters"
-    },
-    format: {
-      with: NAME_REGEX_FILTER,
-      message: "Middle names cannot contain special characters"
-    },
-    if: -> { middle_name.present? }
-
-  validates :surname, on: [:"personal-details-name", :"personal-details", :submit], presence: {message: "Enter your last name"}
-  validates :surname,
-    on: [:"personal-details-name", :"personal-details", :submit],
-    length: {
-      in: 1..100,
-      message: "Last name must be between 2 and 30 characters"
-    },
-    format: {
-      with: NAME_REGEX_FILTER,
-      message: "Last name cannot contain special characters"
-    },
-    if: -> { surname.present? }
-
   validates :qualifications_details_check, on: [:"qualification-details"], inclusion: {in: [true, false], message: "Select yes if your qualification details are correct"}
   validates :email_address_check, on: [:"select-email"], inclusion: {in: [true, false], message: "Select an option to indicate whether the email is correct or not"}
   validates :mobile_check, on: [:"select-mobile"], inclusion: {in: ["use", "alternative", "declined"], message: "Select an option to indicate whether the mobile number is correct or not"}
@@ -223,13 +184,8 @@ class Claim < ApplicationRecord
   validates :postcode, length: {maximum: 11, message: "Postcode must be 11 characters or less"}
   validate :postcode_is_valid, if: -> { postcode.present? }
 
-  validate :date_of_birth_criteria, on: [:"personal-details-dob", :"personal-details", :submit, :amendment]
-
   validates :teacher_reference_number, on: [:"teacher-reference-number", :submit, :amendment], presence: {message: "Enter your teacher reference number"}
   validate :trn_must_be_seven_digits
-
-  validates :national_insurance_number, on: [:"personal-details-nino", :"personal-details", :submit, :amendment], presence: {message: "Enter a National Insurance number in the correct format"}
-  validate :ni_number_is_correct_format
 
   validates :has_student_loan, on: [:"student-loan"], inclusion: {in: [true, false]}
   validates :student_loan_plan, inclusion: {in: STUDENT_LOAN_PLAN_OPTIONS}, allow_nil: true
@@ -567,30 +523,6 @@ class Claim < ApplicationRecord
     teacher_id_user_info["ni_number"] == national_insurance_number
   end
 
-  # dup - because we don't want to pollute the claim.errors by calling this method
-  # Check errors hash for key because we don't care about the non-context validation errors
-  def has_valid_name?
-    claim_dup = dup
-    claim_dup.valid?(:"personal-details-name")
-    !(claim_dup.errors.include?(:first_name) || claim_dup.errors.include?(:surname))
-  end
-
-  # dup - because we don't want to pollute the claim.errors by calling this method
-  # Check errors hash for key because we don't care about the non-context validation errors
-  def has_valid_date_of_birth?
-    claim_dup = dup
-    claim_dup.valid?(:"personal-details-dob")
-    !claim_dup.errors.include?(:date_of_birth)
-  end
-
-  # dup - because we don't want to pollute the claim.errors by calling this method
-  # Check errors hash for key because we don't care about the non-context validation errors
-  def has_valid_nino?
-    claim_dup = dup
-    claim_dup.valid?(:"personal-details-nino")
-    !claim_dup.errors.include?(:national_insurance_number)
-  end
-
   def trn_same_as_tid?
     teacher_id_user_info["trn"] == teacher_reference_number
   end
@@ -635,10 +567,6 @@ class Claim < ApplicationRecord
 
   def normalise_surname
     surname.strip!
-  end
-
-  def ni_number_is_correct_format
-    errors.add(:national_insurance_number, "Enter a National Insurance number in the correct format") if national_insurance_number.present? && !normalised_ni_number.match(/\A[A-Z]{2}[0-9]{6}[A-D]{1}\Z/)
   end
 
   def normalise_bank_account_number
@@ -696,43 +624,6 @@ class Claim < ApplicationRecord
 
   def postcode_is_valid?
     UKPostcode.parse(postcode).full_valid?
-  end
-
-  def date_has_day_month_year_components
-    [
-      date_of_birth_day,
-      date_of_birth_month,
-      date_of_birth_year
-    ].compact.size
-  end
-
-  def date_of_birth_criteria
-    if date_of_birth.present?
-      errors.add(:date_of_birth, "Date of birth must be in the past") if date_of_birth > Time.zone.today
-    else
-
-      errors.add(:date_of_birth, "Date of birth must include a day, month and year in the correct format, for example 01 01 1980") if date_has_day_month_year_components.between?(1, 2)
-
-      begin
-        Date.new(date_of_birth_year, date_of_birth_month, date_of_birth_day) if date_has_day_month_year_components == 3
-      rescue ArgumentError
-        errors.add(:date_of_birth, "Enter a date of birth in the correct format")
-      end
-
-      errors.add(:date_of_birth, "Enter your date of birth") if errors[:date_of_birth].empty?
-    end
-
-    year = date_of_birth_year || date_of_birth&.year
-
-    if year.present?
-      if year < 1000
-        errors.add(:date_of_birth, "Year must include 4 numbers")
-      elsif year <= 1900
-        errors.add(:date_of_birth, "Year must be after 1900")
-      end
-    end
-
-    errors[:date_of_birth].empty?
   end
 
   def using_mobile_number_from_tid?

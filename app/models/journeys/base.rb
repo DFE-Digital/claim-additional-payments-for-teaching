@@ -4,7 +4,8 @@ module Journeys
     # but needs load_paths sorting
     SHARED_FORMS = {
       "sign-in-or-continue" => SignInOrContinueForm,
-      "current-school" => CurrentSchoolForm
+      "current-school" => CurrentSchoolForm,
+      "personal-details" => PersonalDetailsForm
     }
 
     def configuration
