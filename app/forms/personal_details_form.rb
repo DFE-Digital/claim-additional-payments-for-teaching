@@ -1,4 +1,10 @@
 class PersonalDetailsForm < Form
+  InvalidDate = Struct.new(:day, :month, :year, keyword_init: true) do
+    def future?
+      false
+    end
+  end
+
   NAME_REGEX_FILTER = /\A[^"=$%#&*+\/\\()@?!<>0-9]*\z/
   NINO_REGEX_FILTER = /\A[A-Z]{2}[0-9]{6}[A-D]{1}\Z/
   DOB_PARAM_CONVERSION = {
@@ -94,7 +100,7 @@ class PersonalDetailsForm < Form
       errors.add(:date_of_birth, "Date of birth must be in the past")
     elsif number_of_date_components.between?(1, 2)
       errors.add(:date_of_birth, "Date of birth must include a day, month and year in the correct format, for example 01 01 1980")
-    elsif !date_of_birth.is_a?(Date) && number_of_date_components == 3
+    elsif date_of_birth.is_a?(InvalidDate) && number_of_date_components == 3
       errors.add(:date_of_birth, "Enter a date of birth in the correct format")
     elsif number_of_date_components.zero?
       errors.add(:date_of_birth, "Enter your date of birth")
