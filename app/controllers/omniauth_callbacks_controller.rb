@@ -4,7 +4,13 @@ class OmniauthCallbacksController < ApplicationController
   def callback
     auth = request.env["omniauth.auth"]
 
-    session[:user_info] = auth.extra.raw_info
+    SignInWithDfeIdentityForm.new(
+      claim: current_claim,
+      journey: journey,
+      params: {
+        teacher_id_user_info: auth.extra.raw_info.to_h.with_indifferent_access
+      }
+    ).save!
 
     redirect_to claim_path(journey: current_journey_routing_name, slug: "teacher-detail")
   end

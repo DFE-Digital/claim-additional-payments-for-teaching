@@ -61,7 +61,7 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     choose "None of the above"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"))
 
     choose "Yes"
     click_on "Continue"
@@ -96,7 +96,7 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     choose "None of the above"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"))
 
     choose "No"
     click_on "Continue"

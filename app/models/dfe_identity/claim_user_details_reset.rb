@@ -11,15 +11,6 @@ module DfeIdentity
 
     def reset_teacher_id_user_info
       case @reset_type
-      when :details_incorrect
-        @claim.update(
-          first_name: "",
-          surname: "",
-          teacher_reference_number: "",
-          date_of_birth: nil,
-          national_insurance_number: "",
-          logged_in_with_tid: false
-        )
       when :skipped_tid
         @claim.update(
           first_name: "",
@@ -30,11 +21,6 @@ module DfeIdentity
           logged_in_with_tid: false,
           details_check: nil,
           teacher_id_user_info: {}
-        )
-      when :new_user_info
-        @claim.update(
-          details_check: nil,
-          logged_in_with_tid: true
         )
       end
     end

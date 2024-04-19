@@ -217,6 +217,9 @@ en:
       still_teaching:
         questions:
           which_school_currently: "Which school are you currently employed to teach at?"
+      teacher_detail:
+        errors:
+          details_check: "Select an option to whether the details are correct or not"
     journey_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"
     policy_acronym: "TSLR"
@@ -302,6 +305,11 @@ en:
           subject: "The subjects listed are eligible for additional payment based on the school you teach in and the year you studied."
         errors:
           inclusion: "Select a subject"
+      eligible_degree_subject:
+        questions:
+          eligible_degree_subject: Do you have a degree in an eligible subject?
+        errors:
+          select_eligible_degree_subject: Select yes if you have a degree in an eligible subject
       employed_directly:
         questions:
           employed_directly: Are you employed directly by your school?
@@ -313,6 +321,12 @@ en:
         errors:
           select_entire_term_contract:
             Select yes if you have a contract to teach at the same school for an entire term or longer
+      itt_academic_year:
+        errors:
+          undergraduate_itt: "Select the academic year you completed your undergraduate ITT"
+          postgraduate_itt: "Select the academic year you started your postgraduate ITT"
+          assessment_only: "Select the academic year you earned your QTS"
+          overseas_recognition: "Select the academic year you earned your QTS"
       induction_completed:
         errors:
           select_yes_if_completed: "Select yes if you have completed your induction"
@@ -342,6 +356,9 @@ en:
           employed_as_supply_teacher: Are you currently employed as a supply teacher?
         errors:
           select_employed_as_supply_teacher: Select yes if you are a supply teacher
+      teacher_detail:
+        errors:
+          details_check: "Select an option to whether the details are correct or not"
       teaching_subject_now:
         questions:
           teaching_subject_now: "Do you spend at least half of your contracted hours teaching eligible subjects?"
@@ -374,7 +391,6 @@ en:
     questions:
       check_and_confirm_details: "Check and confirm your personal details"
       details_correct: "Are these details correct?"
-      eligible_degree_subject: "Do you have a degree in an eligible subject?"
       nqt_in_academic_year_after_itt:
         heading: Are you currently teaching as a qualified teacher?
         hint: Your induction years count as long as you have your qualified teacher status (QTS).
@@ -456,12 +472,3 @@ en:
           attributes:
             scheduled_payment_date:
               blank: can't be blank or in a format other than DD/MM/YYYY
-        early_career_payments_eligibilities:
-          attributes:
-            itt_academic_year:
-              blank:
-                qualification:
-                  undergraduate_itt: "Select the academic year you completed your undergraduate ITT"
-                  postgraduate_itt: "Select the academic year you started your postgraduate ITT"
-                  assessment_only: "Select the academic year you earned your QTS"
-                  overseas_recognition: "Select the academic year you earned your QTS"

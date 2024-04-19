@@ -93,7 +93,7 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
     click_on "Continue"
 
     # Do you have an undergraduate or postgraduate degree in an eligible subject?
-    expect(page).to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"))
     click_on "Continue"
     expect(page).to have_text("Select yes if you have a degree in an eligible subject")
 
