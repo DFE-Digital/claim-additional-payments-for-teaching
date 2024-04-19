@@ -38,7 +38,7 @@
 
 <div class="govuk-!-padding-bottom-6">
   <% if current_claim.eligibility.school_somewhere_else == false %>
-    <%= button_to "Change school", claim_path(current_journey_routing_name, "correct-school", change_school: true), method: :patch, class: "govuk-button", role: :button, data: { module: "govuk-button" } %>
+    <%= button_to "Change school", claim_path(current_journey_routing_name, "correct-school", claim: { change_school: true }), method: :patch, class: "govuk-button", role: :button, data: { module: "govuk-button" } %>
   <% else %>
     <%= link_to "Change school", claim_path(current_journey_routing_name, "current-school"), class: "govuk-button", role: "button", draggable: false, data: {module: "govuk-button"} %>
   <% end %>
