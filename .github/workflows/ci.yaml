@@ -1,0 +1,86 @@
+name: CI
+
+on: push
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: yarn
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Linting - ShellCheck
+        run: bin/rake shellcheck
+      - name: Linting - Brakeman
+        run: bundle exec brakeman -c config/brakeman.ignore
+      - name: Linting - Standardrb
+        run: bin/rails standard
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ci_node_total: [8]
+        ci_node_index: [0, 1, 2, 3, 4, 5, 6, 7]
+    services:
+      postgres:
+        image: postgres:11-alpine
+        ports:
+          - '5432:5432'
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+    env:
+      RAILS_ENV: test
+      DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME: postgres
+      DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_PASSWORD: password
+      DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST: localhost
+      CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
+      CI_NODE_INDEX: ${{ matrix.ci_node_index }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: yarn
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Restore assets cache
+        id: assets-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            public/assets
+          key: assets-${{ hashFiles('**/app/assets/**/*', '**/app/javascript/**/*') }}
+          restore-keys: |
+            ${{ runner.os }}-assets-
+      - name: Prepare assets
+        if: ${{ steps.assets-cache.outputs.cache-hit != 'true' }}
+        run: bin/rails assets:precompile
+      - name: Save assets cache
+        if: ${{ steps.assets-cache.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            public/assets
+          key: ${{ steps.assets-cache.outputs.cache-primary-key }}
+      - name: Prepare DB
+        run: bin/rails db:prepare
+      - name: Run unit tests
+        env:
+          SPEC_TYPE: unit
+        run: bundle exec rspec $(bin/test_splitter)
+      - name: Run feature tests
+        env:
+          SPEC_TYPE: feature
+        run: bundle exec rspec $(bin/test_splitter)
