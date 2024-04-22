@@ -97,10 +97,10 @@ class PersonalDetailsForm < Form
       errors.add(:date_of_birth, "Date of birth must be in the past")
     elsif number_of_date_components.between?(1, 2)
       errors.add(:date_of_birth, "Date of birth must include a day, month and year in the correct format, for example 01 01 1980")
-    elsif date_of_birth.is_a?(InvalidDate) && number_of_date_components == 3
-      errors.add(:date_of_birth, "Enter a date of birth in the correct format")
     elsif number_of_date_components.zero?
       errors.add(:date_of_birth, "Enter your date of birth")
+    elsif date_of_birth.is_a?(InvalidDate)
+      errors.add(:date_of_birth, "Enter a date of birth in the correct format")
     elsif date_of_birth.year < 1000
       errors.add(:date_of_birth, "Year must include 4 numbers")
     elsif date_of_birth.year <= 1900
