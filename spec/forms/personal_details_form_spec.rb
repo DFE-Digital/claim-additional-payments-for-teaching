@@ -25,72 +25,178 @@ RSpec.describe PersonalDetailsForm, type: :model do
       end
     end
 
-    describe "#has_valid_name?" do
-      context "valid" do
-        let(:params) { {first_name: "John", surname: "Doe"} }
-
+    describe "#show_name_section?" do
+      context "when not logged_in_with_tid" do
         it "returns true" do
-          expect(form.has_valid_name?).to be true
+          expect(form.show_name_section?).to be_truthy
         end
       end
 
-      context "invalid first_name" do
-        let(:params) { {first_name: "J@hn", surname: "Doe"} }
+      context "when logged_in_with_tid" do
+        let(:logged_in_with_tid) { true }
+        let(:teacher_id_user_info) {
+          {
+            "given_name" => given_name,
+            "family_name" => family_name
+          }
+        }
 
-        it "returns false" do
-          expect(form.has_valid_name?).to be false
+        context "when the name is different to TID" do
+          let(:given_name) { "John" }
+          let(:family_name) { "Doe" }
+
+          let(:current_claim) do
+            claims = journey::POLICIES.map { |policy| create(:claim, policy:, first_name: "Different", surname: "Doe", logged_in_with_tid:, teacher_id_user_info:) }
+            CurrentClaim.new(claims: claims)
+          end
+
+          it "returns true" do
+            expect(form.show_name_section?).to be_truthy
+          end
         end
-      end
 
-      context "invalid surname" do
-        let(:params) { {first_name: "J@hn", surname: "D@e"} }
+        context "when the name is the same as TID" do
+          let(:current_claim) do
+            claims = journey::POLICIES.map { |policy| create(:claim, policy:, first_name: given_name, surname: family_name, logged_in_with_tid:, teacher_id_user_info:) }
+            CurrentClaim.new(claims: claims)
+          end
 
-        it "returns false" do
-          expect(form.has_valid_name?).to be false
-        end
-      end
+          context "when the name is not valid" do
+            let(:given_name) { "John" }
+            let(:family_name) { "D@e" }
 
-      context "blank" do
-        let(:params) { {first_name: "", surname: ""} }
+            it "returns true" do
+              expect(form.show_name_section?).to be_truthy
+            end
+          end
 
-        it "returns false" do
-          expect(form.has_valid_name?).to be false
+          context "when the name is blank" do
+            let(:given_name) { "" }
+            let(:family_name) { "Doe" }
+
+            it "returns true" do
+              expect(form.show_name_section?).to be_truthy
+            end
+          end
+
+          context "when the name is valid" do
+            let(:given_name) { "John" }
+            let(:family_name) { "Doe" }
+
+            it "returns false" do
+              expect(form.show_name_section?).to be_falsey
+            end
+          end
         end
       end
     end
 
-    describe "#has_valid_date_of_birth?" do
-      context "valid" do
-        let(:params) { {day: 11, month: 1, year: 1980} }
-
+    describe "#show_date_of_birth_section?" do
+      context "when not logged_in_with_tid" do
         it "returns true" do
-          expect(form.has_valid_date_of_birth?).to be true
+          expect(form.show_date_of_birth_section?).to be_truthy
         end
       end
 
-      context "nil" do
-        let(:params) { {day: nil, month: nil, year: nil} }
+      context "when logged_in_with_tid" do
+        let(:logged_in_with_tid) { true }
+        let(:teacher_id_user_info) {
+          {
+            "birthdate" => birthdate
+          }
+        }
 
-        it "returns false" do
-          expect(form.has_valid_date_of_birth?).to be false
+        context "when the date_of_birth is different to TID" do
+          let(:birthdate) { "1990-01-01" }
+
+          let(:current_claim) do
+            claims = journey::POLICIES.map { |policy| create(:claim, policy:, date_of_birth: Date.new(1990, 2, 2), logged_in_with_tid:, teacher_id_user_info:) }
+            CurrentClaim.new(claims: claims)
+          end
+
+          it "returns true" do
+            expect(form.show_date_of_birth_section?).to be_truthy
+          end
+        end
+
+        context "when the date_of_birth is the same as TID" do
+          let(:current_claim) do
+            claims = journey::POLICIES.map { |policy| create(:claim, policy:, date_of_birth:, logged_in_with_tid:, teacher_id_user_info:) }
+            CurrentClaim.new(claims: claims)
+          end
+
+          context "when the date_of_birth is blank" do
+            let(:birthdate) { "" }
+            let(:date_of_birth) { nil }
+
+            it "returns true" do
+              expect(form.show_date_of_birth_section?).to be_truthy
+            end
+          end
+
+          context "when the date_of_birth is valid" do
+            let(:birthdate) { "1990-01-01" }
+            let(:date_of_birth) { Date.new(1990, 1, 1) }
+
+            it "returns false" do
+              expect(form.show_date_of_birth_section?).to be_falsey
+            end
+          end
         end
       end
     end
 
-    describe "#has_valid_nino?" do
-      context "valid" do
-        let(:params) { {national_insurance_number: "JH001234D"} }
-
+    describe "#show_nino_section?" do
+      context "when not logged_in_with_tid" do
         it "returns true" do
-          expect(form.has_valid_nino?).to be true
+          expect(form.show_nino_section?).to be_truthy
         end
       end
 
-      context "nil" do
-        let(:nino) { nil }
+      context "when logged_in_with_tid" do
+        let(:logged_in_with_tid) { true }
+        let(:teacher_id_user_info) {
+          {
+            "ni_number" => ni_number
+          }
+        }
 
-        it "returns false" do
-          expect(form.has_valid_nino?).to be false
+        context "when the national_insurance_number is different to TID" do
+          let(:ni_number) { "AB123456C" }
+
+          let(:current_claim) do
+            claims = journey::POLICIES.map { |policy| create(:claim, policy:, national_insurance_number: "AB123456D", logged_in_with_tid:, teacher_id_user_info:) }
+            CurrentClaim.new(claims: claims)
+          end
+
+          it "returns true" do
+            expect(form.show_nino_section?).to be_truthy
+          end
+        end
+
+        context "when the national_insurance_number is the same as TID" do
+          let(:current_claim) do
+            claims = journey::POLICIES.map { |policy| create(:claim, policy:, national_insurance_number:, logged_in_with_tid:, teacher_id_user_info:) }
+            CurrentClaim.new(claims: claims)
+          end
+
+          context "when the national_insurance_number is blank" do
+            let(:ni_number) { "" }
+            let(:national_insurance_number) { nil }
+
+            it "returns true" do
+              expect(form.show_nino_section?).to be_truthy
+            end
+          end
+
+          context "when the national_insurance_number is valid" do
+            let(:ni_number) { "AB123456C" }
+            let(:national_insurance_number) { ni_number }
+
+            it "returns false" do
+              expect(form.show_nino_section?).to be_falsey
+            end
+          end
         end
       end
     end

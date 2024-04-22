@@ -58,19 +58,16 @@ class PersonalDetailsForm < Form
     update!({first_name:, middle_name:, surname:, date_of_birth:, national_insurance_number:})
   end
 
-  def has_valid_name?
-    valid?
-    errors.exclude?(:first_name) && errors.exclude?(:surname)
+  def show_name_section?
+    !(claim.logged_in_with_tid? && claim.name_same_as_tid? && has_valid_name?)
   end
 
-  def has_valid_date_of_birth?
-    valid?
-    errors.exclude?(:date_of_birth)
+  def show_date_of_birth_section?
+    !(claim.logged_in_with_tid? && claim.dob_same_as_tid? && has_valid_date_of_birth?)
   end
 
-  def has_valid_nino?
-    valid?
-    errors.exclude?(:national_insurance_number)
+  def show_nino_section?
+    !(claim.logged_in_with_tid? && claim.nino_same_as_tid? && has_valid_nino?)
   end
 
   private
@@ -115,5 +112,20 @@ class PersonalDetailsForm < Form
 
   def number_of_date_components
     [day, month, year].compact_blank.size
+  end
+
+  def has_valid_name?
+    valid?
+    errors.exclude?(:first_name) && errors.exclude?(:surname)
+  end
+
+  def has_valid_date_of_birth?
+    valid?
+    errors.exclude?(:date_of_birth)
+  end
+
+  def has_valid_nino?
+    valid?
+    errors.exclude?(:national_insurance_number)
   end
 end
