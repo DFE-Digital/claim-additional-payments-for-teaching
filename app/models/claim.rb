@@ -499,12 +499,6 @@ class Claim < ApplicationRecord
     TeachersPensionsService.tps_school_for_student_loan_in_previous_financial_year(self)
   end
 
-  # dup - because we don't want to pollute the claim.errors by calling this method
-  # Used to not show the personal-details page if everything is all valid
-  def has_all_valid_personal_details?
-    dup.valid?(:"personal-details") && all_personal_details_same_as_tid?
-  end
-
   # This is used to ensure we still show the forms if the personal-details are valid
   # but are valid because they were susequently provided/changed from what was in TID
   def all_personal_details_same_as_tid?

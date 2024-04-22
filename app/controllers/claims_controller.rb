@@ -345,7 +345,7 @@ class ClaimsController < BasePublicController
     # For claims being submitted using the TID-route and where all personal details came through/are
     # valid, the student loan details must be retrieved after the `information-provided` page instead.
     if params[:slug] == "personal-details" || (params[:slug] == "information-provided" &&
-        current_claim.logged_in_with_tid? && current_claim.has_all_valid_personal_details?)
+        current_claim.logged_in_with_tid? && current_claim.all_personal_details_same_as_tid?)
       ClaimStudentLoanDetailsUpdater.call(current_claim)
     end
   end

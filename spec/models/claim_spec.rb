@@ -1440,59 +1440,6 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe "#has_all_valid_personal_details?" do
-    context "first_name, surname, dob and nino are the same as tid" do
-      let(:claim) {
-        create(
-          :claim,
-          :submitted,
-          first_name: "John", surname: "Doe",
-          date_of_birth: Date.new(1980, 1, 11),
-          national_insurance_number: "JH001234D",
-          teacher_id_user_info: {"given_name" => "John", "family_name" => "Doe", "birthdate" => "1980-01-11", "ni_number" => "JH001234D"}
-        )
-      }
-
-      it "returns true" do
-        expect(claim.has_all_valid_personal_details?).to be true
-      end
-    end
-
-    context "nino is empty" do
-      let(:claim) {
-        create(
-          :claim,
-          :submitted,
-          first_name: "John", surname: "Doe",
-          date_of_birth: Date.new(1980, 1, 11),
-          national_insurance_number: "JH001234D",
-          teacher_id_user_info: {"given_name" => "John", "family_name" => "Doe", "birthdate" => "1980-01-11", "ni_number" => nil}
-        )
-      }
-
-      it "returns false" do
-        expect(claim.has_all_valid_personal_details?).to be false
-      end
-    end
-
-    context "first_name and surname is invalid" do
-      let(:claim) {
-        create(
-          :claim,
-          :submitted,
-          first_name: "J@hn", surname: "D@e",
-          date_of_birth: Date.new(1980, 1, 11),
-          national_insurance_number: "JH001234D",
-          teacher_id_user_info: {"given_name" => "John", "family_name" => "Doe", "birthdate" => "1980-01-11", "ni_number" => "JH001234D"}
-        )
-      }
-
-      it "returns false" do
-        expect(claim.has_all_valid_personal_details?).to be false
-      end
-    end
-  end
-
   describe "#has_dqt_record?" do
     let(:claim) { build(:claim, dqt_teacher_status:) }
     subject(:result) { claim.has_dqt_record? }

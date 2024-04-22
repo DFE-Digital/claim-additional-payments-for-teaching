@@ -154,7 +154,7 @@ module Journeys
             replace_ecp_only_induction_not_completed_slugs(sequence)
           end
 
-          sequence.delete("personal-details") if claim.logged_in_with_tid? && claim.has_all_valid_personal_details?
+          sequence.delete("personal-details") if claim.logged_in_with_tid? && personal_details_form.valid? && claim.all_personal_details_same_as_tid?
 
           if claim.logged_in_with_tid? && claim.details_check?
             if claim.qualifications_details_check
@@ -176,6 +176,14 @@ module Journeys
       end
 
       private
+
+      def personal_details_form
+        PersonalDetailsForm.new(
+          claim:,
+          journey: Journeys::AdditionalPaymentsForTeaching,
+          params: ActionController::Parameters.new
+        )
+      end
 
       def replace_ecp_only_induction_not_completed_slugs(sequence)
         slugs = %w[
