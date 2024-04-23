@@ -2,6 +2,7 @@ class Form
   include ActiveModel::Model
   include ActiveModel::Attributes
   include ActiveModel::Serialization
+  include ActiveModel::Validations::Callbacks
 
   attr_accessor :claim
   attr_accessor :journey
@@ -41,7 +42,8 @@ class Form
   end
 
   def i18n_errors_path(msg)
-    I18n.t("#{i18n_namespace}.forms.#{i18n_form_namespace}.errors.#{msg}")
+    base_key = :"forms.#{i18n_form_namespace}.errors.#{msg}"
+    I18n.t("#{i18n_namespace}.#{base_key}", default: base_key)
   end
 
   def permitted_params

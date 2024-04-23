@@ -70,10 +70,6 @@ en:
     email_address: "Email address"
     email_address_hint1: "We recommend you use a non-work email address in case your circumstances change while we process your payment."
     email_address_hint2: "To verify your email address we will send you an email with a 6-digit passcode. You can enter the passcode on the next screen."
-    select_email:
-        heading: "Which email address should we use to contact you?"
-        hint: "We recommend you use a non-work email address in case your circumstances change while we process your payment."
-        different_email: "A different email address"
     provide_mobile_number: "Would you like to provide your mobile number?"
     mobile_number: "Mobile number"
     select_phone_number:
@@ -195,6 +191,15 @@ en:
     payroll_gender: "gender"
     address: "address"
     full_name: "Full name"
+  forms:
+    select_email:
+      questions:
+        select_email: Which email address should we use to contact you?
+      hints:
+        non_work_email_address: We recommend you use a non-work email address in case your circumstances change while we process your payment.
+      errors:
+        select_email: Select an option to indicate whether the email is correct or not
+        invalid_email: Invalid email address. Please select a different email address
   student_loans:
     forms:
       claim_school:

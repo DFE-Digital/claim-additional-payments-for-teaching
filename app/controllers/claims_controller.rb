@@ -35,8 +35,6 @@ class ClaimsController < BasePublicController
 
     if params[:slug] == "qualification-details"
       return redirect_to claim_path(current_journey_routing_name, next_slug) if current_claim.has_no_dqt_data_for_claim?
-    elsif params[:slug] == "select-email"
-      session[:email_address] = current_claim.teacher_id_user_info["email"]
     elsif params[:slug] == "correct-school"
       update_session_with_tps_school(current_claim.recent_tps_school)
     elsif params[:slug] == "select-claim-school"
@@ -95,8 +93,6 @@ class ClaimsController < BasePublicController
       check_correct_school_params
     when "select-claim-school"
       check_select_claim_school_params
-    when "select-email"
-      check_email_params
     when "select-mobile"
       check_mobile_number_params
     when "still-teaching"
@@ -109,7 +105,7 @@ class ClaimsController < BasePublicController
       set_dqt_data_as_answers if current_claim.qualifications_details_check
     end
 
-    current_claim.reset_dependent_answers unless params[:slug] == "select-email" || params[:slug] == "select-mobile"
+    current_claim.reset_dependent_answers unless params[:slug] == "select-mobile"
     current_claim.reset_eligibility_dependent_answers(reset_attrs) unless params[:slug] == "qualification-details"
     one_time_password
 
@@ -291,10 +287,6 @@ class ClaimsController < BasePublicController
 
   def no_eligible_itt_subject?
     !current_claim.eligible_itt_subject
-  end
-
-  def check_email_params
-    current_claim.attributes = SelectEmailForm.extract_attributes(current_claim, email_address_check: params.dig(:claim, :email_address_check))
   end
 
   def check_mobile_number_params

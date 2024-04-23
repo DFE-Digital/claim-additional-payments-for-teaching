@@ -4,6 +4,7 @@ module Journeys
       "sign-in-or-continue" => SignInOrContinueForm,
       "current-school" => CurrentSchoolForm,
       "personal-details" => PersonalDetailsForm,
+      "select-email" => SelectEmailForm,
       "provide-mobile-number" => ProvideMobileNumberForm
     }
 

@@ -133,7 +133,10 @@ RSpec.describe Form, type: :model do
       form.i18n_errors_path("message")
     end
 
-    it { expect(I18n).to have_received(:t).with("test_i18n_ns.forms.test_slug.errors.message") }
+    it do
+      expect(I18n).to have_received(:t)
+        .with("test_i18n_ns.forms.test_slug.errors.message", default: :"forms.test_slug.errors.message")
+    end
   end
 
   describe "#permitted_params" do
