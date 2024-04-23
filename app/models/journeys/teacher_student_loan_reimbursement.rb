@@ -11,7 +11,8 @@ module Journeys
     POLICIES = [Policies::StudentLoans]
 
     FORMS = {
-      "claim-school" => ClaimSchoolForm
+      "claim-school" => ClaimSchoolForm,
+      "qualification-details" => QualificationDetailsForm
     }
   end
 end

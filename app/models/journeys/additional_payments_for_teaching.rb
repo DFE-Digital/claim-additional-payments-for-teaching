@@ -19,6 +19,7 @@ module Journeys
       "entire-term-contract" => EntireTermContractForm,
       "employed-directly" => EmployedDirectlyForm,
       "qualification" => QualificationForm,
+      "qualification-details" => QualificationDetailsForm,
       "eligible-itt-subject" => EligibleIttSubjectForm,
       "teaching-subject-now" => TeachingSubjectNowForm,
       "eligibility-confirmed" => EligibilityConfirmedForm,
