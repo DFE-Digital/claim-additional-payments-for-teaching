@@ -5,12 +5,6 @@ module Journeys
 
       validates :itt_academic_year, presence: {message: ->(object, _) { object.i18n_errors_path(object.qualification) }}
 
-      def initialize(claim:, journey:, params:)
-        super
-
-        self.itt_academic_year = permitted_params.fetch(:itt_academic_year, claim.eligibility.itt_academic_year)
-      end
-
       def save
         return false unless valid?
 

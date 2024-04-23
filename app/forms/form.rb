@@ -14,6 +14,10 @@ class Form
     Claim.model_name
   end
 
+  def self.i18n_error_message(path)
+    ->(object, _) { object.i18n_errors_path(path) }
+  end
+
   def initialize(claim:, journey:, params:)
     super
 

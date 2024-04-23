@@ -26,6 +26,20 @@ RSpec.describe Form, type: :model do
     it { expect(TestSlugForm.model_name).to eq(Claim.model_name) }
   end
 
+  describe ".i18n_error_message" do
+    let(:form_double) { instance_double(TestSlugForm) }
+
+    it "returns a lambda function for generating error messages" do
+      path = :test_error_path
+      error_message_lambda = described_class.i18n_error_message(path)
+
+      allow(form_double).to receive(:i18n_errors_path).with(path).and_return("Test error message")
+
+      result = error_message_lambda.call(form_double, nil)
+      expect(result).to eq("Test error message")
+    end
+  end
+
   subject(:form) { TestSlugForm.new(claim:, journey:, params:) }
 
   let(:claim) { CurrentClaim.new(claims:) }

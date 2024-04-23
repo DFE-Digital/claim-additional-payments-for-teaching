@@ -5,11 +5,7 @@ module Journeys
 
       attribute :nqt_in_academic_year_after_itt, :boolean
 
-      validates :nqt_in_academic_year_after_itt,
-        inclusion: {
-          in: [true, false],
-          message: "Select yes if you are currently teaching as a qualified teacher"
-        }
+      validates :nqt_in_academic_year_after_itt, inclusion: {in: [true, false], message: i18n_error_message(:inclusion)}
 
       def save
         return false unless valid?
@@ -39,12 +35,6 @@ module Journeys
       end
 
       private
-
-      def permitted_params
-        @permitted_params ||= params.fetch(:claim, {}).permit(
-          :nqt_in_academic_year_after_itt
-        )
-      end
 
       def determine_induction_answer_from_dqt_record
         return unless passed_details_check_with_teacher_id?
