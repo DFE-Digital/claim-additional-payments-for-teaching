@@ -332,9 +332,6 @@ class ClaimsController < BasePublicController
     current_claim.claims.each { |claim| claim.eligibility.set_qualifications_from_dqt_record }
   end
 
-  # TODO: should calling `ClaimStudentLoanDetailsUpdater.call(current_claim)` be the responsibility
-  # of the PersonalDetailsForm? Then when we have a InformationProvidedForm it could use a
-  # PersonalDetailsForm to check the validity?
   def retrieve_student_loan_details
     # student loan details are currently retrieved for TSLR and ECP/LUPP journeys only
     return unless ["student-loans", "additional-payments"].include?(current_journey_routing_name)
