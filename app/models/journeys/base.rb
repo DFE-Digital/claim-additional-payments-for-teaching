@@ -3,6 +3,7 @@ module Journeys
     # TODO: move app/forms/*_forms to shared and journey specific folders
     # but needs load_paths sorting
     SHARED_FORMS = {
+      "sign-in-or-continue" => SignInOrContinueForm,
       "current-school" => CurrentSchoolForm
     }
 

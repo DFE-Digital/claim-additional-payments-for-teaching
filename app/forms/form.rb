@@ -45,10 +45,14 @@ class Form
   end
 
   def permitted_params
-    @permitted_params ||= params.fetch(:claim, {}).permit(*attribute_names)
+    @permitted_params ||= params.fetch(:claim, {}).permit(*permitted_attributes)
   end
 
   private
+
+  def permitted_attributes
+    attribute_names
+  end
 
   def i18n_form_namespace
     self.class.name.demodulize.gsub("Form", "").underscore

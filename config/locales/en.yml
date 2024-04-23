@@ -214,6 +214,9 @@ en:
           select_the_school_you_teach_at: "Select the school you teach at"
           the_selected_school_is_closed: "The selected school is closed"
           school_not_found: "School not found"
+      sign_in_or_continue:
+        errors:
+          details_check: "Select an option to whether the details are correct or not"
       still_teaching:
         questions:
           which_school_currently: "Which school are you currently employed to teach at?"
@@ -348,6 +351,9 @@ en:
           undergraduate_itt: "Undergraduate initial teacher training (ITT)"
           assessment_only: "Assessment only"
           overseas_recognition: "Overseas recognition"
+      sign_in_or_continue:
+        errors:
+          details_check: "Select an option to whether the details are correct or not"
       supply_teacher:
         questions:
           employed_as_supply_teacher: Are you currently employed as a supply teacher?

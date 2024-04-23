@@ -83,6 +83,7 @@ RSpec.describe "Claims", type: :request do
         it "redirects to the correct page in the sequence" do
           get claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "sign-in-or-continue")
           expect(response.body).to include("Use DfE Identity to sign in")
+          patch claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "sign-in-or-continue")
 
           get claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school")
           expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "qts-year"))
