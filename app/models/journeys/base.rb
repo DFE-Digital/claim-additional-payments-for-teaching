@@ -5,7 +5,8 @@ module Journeys
       "current-school" => CurrentSchoolForm,
       "personal-details" => PersonalDetailsForm,
       "select-email" => SelectEmailForm,
-      "provide-mobile-number" => ProvideMobileNumberForm
+      "provide-mobile-number" => ProvideMobileNumberForm,
+      "select-mobile" => SelectMobileForm
     }
 
     def configuration

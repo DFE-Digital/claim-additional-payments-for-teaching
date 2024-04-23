@@ -35,7 +35,7 @@ RSpec.feature "Combined journey with Teacher ID email check" do
     choose(email)
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("questions.select_phone_number.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.select_mobile_form.questions.which_number"))
 
     claims = Claim.order(created_at: :desc).limit(2)
 

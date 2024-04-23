@@ -19,7 +19,7 @@ module Journeys
         a << [text_for(:select_email), claim.email_address, "select-email"] if show_email_select?
         a << [t("questions.provide_mobile_number"), claim.provide_mobile_number? ? "Yes" : "No", "provide-mobile-number"] unless show_mobile_select?
         a << [t("questions.mobile_number"), claim.mobile_number, "mobile-number"] unless show_mobile_select? || !claim.provide_mobile_number?
-        a << [t("questions.select_phone_number.heading"), claim.mobile_number? ? claim.mobile_number : t("questions.select_phone_number.decline"), "select-mobile"] if show_mobile_select?
+        a << [t("additional_payments.forms.select_mobile_form.questions.which_number"), claim.mobile_number? ? claim.mobile_number : t("additional_payments.forms.select_mobile_form.answers.decline"), "select-mobile"] if show_mobile_select?
       end
     end
 

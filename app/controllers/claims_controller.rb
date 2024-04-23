@@ -41,8 +41,6 @@ class ClaimsController < BasePublicController
       update_session_with_tps_school(current_claim.tps_school_for_student_loan_in_previous_financial_year)
     elsif params[:slug] == "subjects-taught" && page_sequence.in_sequence?("select-claim-school")
       @backlink_path = claim_path(current_journey_routing_name, "select-claim-school")
-    elsif params[:slug] == "select-mobile"
-      session[:phone_number] = current_claim.teacher_id_user_info["phone_number"]
     elsif params[:slug] == "postcode-search" && postcode
       redirect_to claim_path(current_journey_routing_name, "select-home-address", {"claim[postcode]": params[:claim][:postcode], "claim[address_line_1]": params[:claim][:address_line_1]}) and return unless invalid_postcode?
     elsif params[:slug] == "select-home-address" && postcode
@@ -93,8 +91,6 @@ class ClaimsController < BasePublicController
       check_correct_school_params
     when "select-claim-school"
       check_select_claim_school_params
-    when "select-mobile"
-      check_mobile_number_params
     when "still-teaching"
       check_still_teaching_params
     else
@@ -287,10 +283,6 @@ class ClaimsController < BasePublicController
 
   def no_eligible_itt_subject?
     !current_claim.eligible_itt_subject
-  end
-
-  def check_mobile_number_params
-    current_claim.attributes = SelectMobileNumberForm.extract_attributes(current_claim, mobile_check: params.dig(:claim, :mobile_check))
   end
 
   def update_session_with_tps_school(school)
