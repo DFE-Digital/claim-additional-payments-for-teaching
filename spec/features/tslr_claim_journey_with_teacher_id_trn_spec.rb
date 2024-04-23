@@ -104,7 +104,7 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
     find("#claim_email_address_check_true").click
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("questions.select_phone_number.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.select_mobile_form.questions.which_number"))
 
     # - Select the suggested phone number
     find("#claim_mobile_check_use").click

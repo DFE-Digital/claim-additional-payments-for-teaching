@@ -6,6 +6,7 @@ module Journeys
       "personal-details" => PersonalDetailsForm,
       "select-email" => SelectEmailForm,
       "provide-mobile-number" => ProvideMobileNumberForm,
+      "select-mobile" => SelectMobileForm,
       "teacher-reference-number" => TeacherReferenceNumberForm
     }
 
