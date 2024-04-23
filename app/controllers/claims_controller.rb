@@ -75,6 +75,7 @@ class ClaimsController < BasePublicController
     # TODO: Migrate the remaining slugs to form objects.
     if (@form = journey.form(claim: current_claim, params: params))
       if @form.save
+        retrieve_student_loan_details
         redirect_to claim_path(current_journey_routing_name, next_slug)
       else
         set_any_backlink_override
@@ -87,8 +88,6 @@ class ClaimsController < BasePublicController
     case params[:slug]
     when "qualification-details"
       set_dqt_data_as_answers
-    when "personal-details"
-      check_date_params
     when "eligibility-confirmed"
       return select_claim if current_journey_routing_name == "additional-payments"
     when "personal-bank-account", "building-society-account"
@@ -177,17 +176,6 @@ class ClaimsController < BasePublicController
 
   def claim_params
     params.fetch(:claim, {}).permit(Claim::PermittedParameters.new(current_claim).keys)
-  end
-
-  def check_date_params
-    dob_params = {
-      "date_of_birth_day" => claim_params.dig("date_of_birth(3i)").to_s,
-      "date_of_birth_month" => claim_params.dig("date_of_birth(2i)").to_s,
-      "date_of_birth_year" => claim_params.dig("date_of_birth(1i)").to_s
-    }
-    current_claim.attributes = claim_params.merge!(dob_params)
-  rescue ActiveRecord::MultiparameterAssignmentErrors
-    current_claim.attributes = claim_params.except("date_of_birth(3i)", "date_of_birth(2i)", "date_of_birth(1i)") if params[:slug] == "personal-details"
   end
 
   def current_template
@@ -354,7 +342,7 @@ class ClaimsController < BasePublicController
     # For claims being submitted using the TID-route and where all personal details came through/are
     # valid, the student loan details must be retrieved after the `information-provided` page instead.
     if params[:slug] == "personal-details" || (params[:slug] == "information-provided" &&
-        current_claim.logged_in_with_tid? && current_claim.has_all_valid_personal_details?)
+        current_claim.logged_in_with_tid? && current_claim.all_personal_details_same_as_tid?)
       ClaimStudentLoanDetailsUpdater.call(current_claim)
     end
   end

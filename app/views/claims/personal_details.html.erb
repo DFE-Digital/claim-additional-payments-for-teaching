@@ -1,104 +1,103 @@
-<% content_for(:page_title, page_title(t("questions.personal_details"), journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(t("questions.personal_details"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { date_of_birth: "claim_date_of_birth_3i"}) if current_claim.errors.any? %>
-    <%= form_for current_claim, url: claim_path(current_journey_routing_name) do |form| %>
+    <%= render("shared/error_summary", instance: @form, errored_field_id_overrides: { date_of_birth: "claim_date_of_birth_3i"}) if @form.errors.any? %>
+    <%= form_for @form, url: claim_path(current_journey_routing_name) do |form| %>
       <h1 class="govuk-heading-xl">
         <%= t("questions.personal_details") %>
       </h1>
 
-      <% unless current_claim.logged_in_with_tid? && current_claim.has_valid_name? && current_claim.name_same_as_tid? %>
-      <div class="govuk-form-group govuk-!-padding-bottom-6">
-        <fieldset class="govuk-fieldset" role="group" aria-describedby="full-name-hint" id="full-name-fieldset">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-            <h2 class="govuk-fieldset__heading govuk-!-padding-bottom-3" id="full-name-hint">
-              <%= t("questions.name") %>
-            </h2>
-          </legend>
-
-          <%= form_group_tag current_claim, :first_name do %>
-            <%= form.label :first_name, "First name", class: "govuk-label" %>
-            <%= errors_tag current_claim, :first_name %>
-            <%= form.text_field :first_name, class: css_classes_for_input(current_claim, :first_name), autocomplete: "given-name" %>
-          <% end %>
-          <%= form_group_tag current_claim, :middle_name do %>
-            <%= form.label :middle_name, "Middle names", class: "govuk-label" %>
-            <%= errors_tag current_claim, :middle_name %>
-            <%= form.text_field :middle_name, class: css_classes_for_input(current_claim, :middle_name), autocomplete: "additional-name" %>
-          <% end %>
-          <%= form_group_tag current_claim, :surname do %>
-            <%= form.label :surname, "Last name", class: "govuk-label" %>
-            <%= errors_tag current_claim, :surname %>
-            <%= form.text_field :surname, class: css_classes_for_input(current_claim, :surname), autocomplete: "family-name" %>
-          <% end %>
-        </fieldset>
-      </div>
-      <% end %>
-
-      <% unless current_claim.logged_in_with_tid? && current_claim.has_valid_date_of_birth? && current_claim.dob_same_as_tid? %>
-      <div class="govuk-!-padding-bottom-6">
-        <%= form_group_tag current_claim, :date_of_birth do %>
-          <fieldset class="govuk-fieldset" role="group" aria-describedby="date-of-birth-hint" id="date-of-birth-fieldset">
+      <% if @form.show_name_section? %>
+        <div class="govuk-form-group govuk-!-padding-bottom-6">
+          <fieldset class="govuk-fieldset" role="group" aria-describedby="full-name-hint" id="full-name-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-              <h2 class="govuk-fieldset__heading">
-                <%= t("questions.date_of_birth") %>
+              <h2 class="govuk-fieldset__heading govuk-!-padding-bottom-3" id="full-name-hint">
+                <%= t("questions.name") %>
               </h2>
             </legend>
 
-            <div id="date-of-birth-hint" class="govuk-hint">
-              For example, 31 03 1980. We need this information to verify your identity.
-            </div>
-
-            <%= errors_tag current_claim, :date_of_birth %>
-            <%
-              dob_class = current_claim.errors[:date_of_birth].any? ? "govuk-input--error" : ""
-            %>
-            <div class="govuk-date-input">
-              <div class="govuk-date-input__item">
-                <div class="govuk-form-group">
-                  <%= label_tag :"claim_date_of_birth_3i", "Day", class: "govuk-label govuk-date-input__label" %>
-                  <%= text_field_tag :"claim[date_of_birth(3i)]", form.object.date_of_birth.try(:day) || form.object.date_of_birth_day, id: "claim_date_of_birth_3i", class: "govuk-input govuk-date-input__input govuk-input--width-2 #{dob_class}", type: "number", autocomplete: "bday-day", pattern: "[0-9]*" %>
-                </div>
-              </div>
-              <div class="govuk-date-input__item">
-                <div class="govuk-form-group">
-                  <%= label_tag :"claim_date_of_birth_2i", "Month", class: "govuk-label govuk-date-input__label" %>
-                  <%= text_field_tag :"claim[date_of_birth(2i)]", form.object.date_of_birth.try(:month) || form.object.date_of_birth_month, id: "claim_date_of_birth_2i", class: "govuk-input govuk-date-input__input govuk-input--width-2 #{dob_class}", type: "number", autocomplete: "bday-month", pattern: "[0-9]*" %>
-                </div>
-              </div>
-              <div class="govuk-date-input__item">
-                <div class="govuk-form-group">
-                  <%= label_tag :"claim_date_of_birth_1i", "Year", class: "govuk-label govuk-date-input__label" %>
-                  <%= text_field_tag :"claim[date_of_birth(1i)]", form.object.date_of_birth.try(:year) || form.object.date_of_birth_year, id: "claim_date_of_birth_1i", class: "govuk-input govuk-date-input__input govuk-input--width-4 #{dob_class}", type: "number", autocomplete: "bday-year", pattern: "[0-9]*" %>
-                </div>
-              </div>
-            </div>
+            <%= form_group_tag @form, :first_name do %>
+              <%= form.label :first_name, "First name", class: "govuk-label" %>
+              <%= errors_tag @form, :first_name %>
+              <%= form.text_field :first_name, class: css_classes_for_input(@form, :first_name), autocomplete: "given-name" %>
+            <% end %>
+            <%= form_group_tag @form, :middle_name do %>
+              <%= form.label :middle_name, "Middle names", class: "govuk-label" %>
+              <%= errors_tag @form, :middle_name %>
+              <%= form.text_field :middle_name, class: css_classes_for_input(@form, :middle_name), autocomplete: "additional-name" %>
+            <% end %>
+            <%= form_group_tag @form, :surname do %>
+              <%= form.label :surname, "Last name", class: "govuk-label" %>
+              <%= errors_tag @form, :surname %>
+              <%= form.text_field :surname, class: css_classes_for_input(@form, :surname), autocomplete: "family-name" %>
+            <% end %>
           </fieldset>
-        <% end %>
-      </div>
+        </div>
       <% end %>
 
-      <% unless current_claim.logged_in_with_tid? && current_claim.has_valid_nino? && current_claim.nino_same_as_tid? %>
-      <div class="govuk-!-padding-bottom-6">
-        <%= form_group_tag current_claim, :national_insurance_number do %>
-          <h2 class="govuk-label-wrapper">
-            <%= form.label :national_insurance_number, t("questions.national_insurance_number"), {class: "govuk-label govuk-label--l"}  %>
-          </h2>
+      <% if @form.show_date_of_birth_section? %>
+        <div class="govuk-!-padding-bottom-6">
+          <%= form_group_tag @form, :date_of_birth do %>
+            <fieldset class="govuk-fieldset" role="group" aria-describedby="date-of-birth-hint" id="date-of-birth-fieldset">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h2 class="govuk-fieldset__heading">
+                  <%= t("questions.date_of_birth") %>
+                </h2>
+              </legend>
 
-          <div class="govuk-hint" id="national_insurance_number-hint">
-            It's on your National Insurance card, benefit letter, payslip or P60. For
-            example 'QQ123456C'.
-          </div>
+              <div id="date-of-birth-hint" class="govuk-hint">
+                For example, 31 03 1980. We need this information to verify your identity.
+              </div>
 
-          <%= errors_tag current_claim, :national_insurance_number %>
-          <%= form.text_field :national_insurance_number,
-                spellcheck: "false",
-                autocomplete: "off",
-                class: css_classes_for_input(current_claim, :national_insurance_number, 'govuk-input--width-10'),
-                "aria-describedby" => "national_insurance_number-hint" %>
+              <%= errors_tag @form, :date_of_birth %>
+              <%
+                dob_class = @form.errors[:date_of_birth].any? ? "govuk-input--error" : ""
+              %>
+              <div class="govuk-date-input">
+                <div class="govuk-date-input__item">
+                  <div class="govuk-form-group">
+                    <%= label_tag :"claim_date_of_birth_3i", "Day", class: "govuk-label govuk-date-input__label" %>
+                    <%= text_field_tag :"claim[date_of_birth(3i)]", @form.date_of_birth.day, id: "claim_date_of_birth_3i", class: "govuk-input govuk-date-input__input govuk-input--width-2 #{dob_class}", type: "number", autocomplete: "bday-day", pattern: "[0-9]*" %>
+                  </div>
+                </div>
+                <div class="govuk-date-input__item">
+                  <div class="govuk-form-group">
+                    <%= label_tag :"claim_date_of_birth_2i", "Month", class: "govuk-label govuk-date-input__label" %>
+                    <%= text_field_tag :"claim[date_of_birth(2i)]", @form.date_of_birth.month, id: "claim_date_of_birth_2i", class: "govuk-input govuk-date-input__input govuk-input--width-2 #{dob_class}", type: "number", autocomplete: "bday-month", pattern: "[0-9]*" %>
+                  </div>
+                </div>
+                <div class="govuk-date-input__item">
+                  <div class="govuk-form-group">
+                    <%= label_tag :"claim_date_of_birth_1i", "Year", class: "govuk-label govuk-date-input__label" %>
+                    <%= text_field_tag :"claim[date_of_birth(1i)]", @form.date_of_birth.year, id: "claim_date_of_birth_1i", class: "govuk-input govuk-date-input__input govuk-input--width-4 #{dob_class}", type: "number", autocomplete: "bday-year", pattern: "[0-9]*" %>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
           <% end %>
-      </div>
+        </div>
+      <% end %>
+
+      <% if @form.show_nino_section? %>
+        <div class="govuk-!-padding-bottom-6">
+          <%= form_group_tag @form, :national_insurance_number do %>
+            <h2 class="govuk-label-wrapper">
+              <%= form.label :national_insurance_number, t("questions.national_insurance_number"), {class: "govuk-label govuk-label--l"}  %>
+            </h2>
+
+            <div class="govuk-hint" id="national_insurance_number-hint">
+              It's on your National Insurance card, benefit letter, payslip or P60. For example 'QQ123456C'.
+            </div>
+
+            <%= errors_tag @form, :national_insurance_number %>
+            <%= form.text_field :national_insurance_number,
+                  spellcheck: "false",
+                  autocomplete: "off",
+                  class: css_classes_for_input(@form, :national_insurance_number, 'govuk-input--width-10'),
+                  "aria-describedby" => "national_insurance_number-hint" %>
+            <% end %>
+        </div>
       <% end %>
 
       <%= form.submit "Continue", class: "govuk-button" %>

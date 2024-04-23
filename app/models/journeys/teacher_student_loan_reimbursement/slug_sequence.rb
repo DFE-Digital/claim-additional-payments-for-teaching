@@ -86,7 +86,7 @@ module Journeys
           sequence.delete("mobile-number") if claim.provide_mobile_number == false
           sequence.delete("mobile-verification") if claim.provide_mobile_number == false
           sequence.delete("ineligible") unless claim.eligibility&.ineligible?
-          sequence.delete("personal-details") if claim.logged_in_with_tid? && claim.has_all_valid_personal_details?
+          sequence.delete("personal-details") if claim.logged_in_with_tid? && personal_details_form.valid? && claim.all_personal_details_same_as_tid?
           sequence.delete("select-email") if (claim.logged_in_with_tid == false) || claim.teacher_id_user_info["email"].nil?
           if claim.logged_in_with_tid? && claim.email_address_check?
             sequence.delete("email-address")
@@ -126,6 +126,16 @@ module Journeys
         else
           "/student-loans/claim"
         end
+      end
+
+      private
+
+      def personal_details_form
+        PersonalDetailsForm.new(
+          claim:,
+          journey: Journeys::TeacherStudentLoanReimbursement,
+          params: ActionController::Parameters.new
+        )
       end
     end
   end
