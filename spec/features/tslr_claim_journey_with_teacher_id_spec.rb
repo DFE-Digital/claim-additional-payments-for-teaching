@@ -28,7 +28,7 @@ RSpec.feature "TSLR journey with Teacher ID" do
     set_mock_auth(trn, {date_of_birth:, nino:})
     stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:}, body: eligible_dqt_body)
 
-    navigate_past_teacher_details_page
+    navigate_past_sign_in_page
 
     expect(page).to have_text(I18n.t("questions.check_and_confirm_qualification_details"))
     expect(page).to have_text(I18n.t("student_loans.questions.academic_year"))
@@ -64,7 +64,7 @@ RSpec.feature "TSLR journey with Teacher ID" do
     set_mock_auth(trn, {date_of_birth:, nino:})
     stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
 
-    navigate_past_teacher_details_page
+    navigate_past_sign_in_page
 
     # Qualification pages are not skipped
 
@@ -76,7 +76,7 @@ RSpec.feature "TSLR journey with Teacher ID" do
     set_mock_auth(trn, {nino:, date_of_birth:})
     stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:})
 
-    navigate_past_teacher_details_page
+    navigate_past_sign_in_page
 
     expect(page).to have_text(I18n.t("questions.check_and_confirm_qualification_details"))
     choose "Yes"
@@ -95,7 +95,7 @@ RSpec.feature "TSLR journey with Teacher ID" do
     }
     stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:}, body: missing_qts_date_body)
 
-    navigate_past_teacher_details_page
+    navigate_past_sign_in_page
 
     # Qualification pages are not skipped
 
@@ -103,7 +103,7 @@ RSpec.feature "TSLR journey with Teacher ID" do
     expect(page).to have_text(I18n.t("questions.qts_award_year"))
   end
 
-  def navigate_past_teacher_details_page
+  def navigate_past_sign_in_page
     visit landing_page_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
 
     # - Landing (start)
