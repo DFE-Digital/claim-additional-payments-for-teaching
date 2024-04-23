@@ -177,13 +177,6 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  context "when saving in the “teacher-reference-number” validation context" do
-    it "validates the presence of teacher_reference_number" do
-      expect(build(:claim)).not_to be_valid(:"teacher-reference-number")
-      expect(build(:claim, teacher_reference_number: "1234567")).to be_valid(:"teacher-reference-number")
-    end
-  end
-
   context "when saving in the “student-loan” validation context" do
     it "validates the presence of has_student_loan" do
       expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1, has_student_loan: nil)).not_to be_valid(:"student-loan")

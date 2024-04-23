@@ -225,6 +225,12 @@ en:
       still_teaching:
         questions:
           which_school_currently: "Which school are you currently employed to teach at?"
+      teacher_reference_number:
+        questions:
+          teacher_reference_number: "What is your teacher reference number (TRN)?"
+        errors:
+          blank: "Enter your teacher reference number"
+          length: "Teacher reference number must be 7 digits long"
       qualification_details:
         errors:
           qualifications_details_check: "Select yes if your qualification details are correct"
@@ -376,6 +382,12 @@ en:
           employed_as_supply_teacher: Are you currently employed as a supply teacher?
         errors:
           inclusion: Select yes if you are a supply teacher
+      teacher_reference_number:
+        questions:
+          teacher_reference_number: "What is your teacher reference number (TRN)?"
+        errors:
+          blank: "Enter your teacher reference number"
+          length: "Teacher reference number must be 7 digits long"
       teaching_subject_now:
         questions:
           teaching_subject_now: "Do you spend at least half of your contracted hours teaching eligible subjects?"
