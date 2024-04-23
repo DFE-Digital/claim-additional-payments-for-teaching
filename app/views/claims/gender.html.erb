@@ -1,15 +1,15 @@
-<% content_for(:page_title, page_title(t("questions.payroll_gender"), journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(@form.t("questions.payroll_gender"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { payroll_gender: "claim_payroll_gender_female" }) if current_claim.errors.any? %>
-    <%= form_for current_claim, url: claim_path(current_journey_routing_name) do |form| %>
-      <%= form_group_tag current_claim do %>
+    <%= render("shared/error_summary", instance: @form, errored_field_id_overrides: { payroll_gender: "claim_payroll_gender_female" }) if @form.errors.any? %>
+    <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
+      <%= form_group_tag @form.claim do %>
         <fieldset class="govuk-fieldset" aria-describedby="payroll_gender-hint" role="group">
 
           <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">
             <h1 class="govuk-fieldset__heading">
-              <%= t("questions.payroll_gender") %>
+              <%= f.object.t("questions.payroll_gender") %>
             </h1>
           </legend>
 
@@ -20,28 +20,28 @@
             Teachers Pension Scheme.
           </div>
 
-          <%= errors_tag current_claim, :payroll_gender %>
+          <%= errors_tag @form.claim, :payroll_gender %>
 
           <div class="govuk-radios">
             <div class="govuk-radios__item">
-              <%= form.radio_button(:payroll_gender, :female, class: "govuk-radios__input") %>
-              <%= form.label :payroll_gender_female, "Female", class: "govuk-label govuk-radios__label" %>
+              <%= f.radio_button(:payroll_gender, :female, class: "govuk-radios__input") %>
+              <%= f.label :payroll_gender_female, "Female", class: "govuk-label govuk-radios__label" %>
             </div>
             <div class="govuk-radios__item">
-              <%= form.radio_button(:payroll_gender, :male, class: "govuk-radios__input") %>
-              <%= form.label :payroll_gender_male, "Male", class: "govuk-label govuk-radios__label" %>
+              <%= f.radio_button(:payroll_gender, :male, class: "govuk-radios__input") %>
+              <%= f.label :payroll_gender_male, "Male", class: "govuk-label govuk-radios__label" %>
             </div>
             <div class="govuk-radios__divider">or</div>
             <div class="govuk-radios__item">
-              <%= form.radio_button(:payroll_gender, :dont_know, class: "govuk-radios__input") %>
-              <%= form.label :payroll_gender_dont_know, "I don't know", class: "govuk-label govuk-radios__label" %>
+              <%= f.radio_button(:payroll_gender, :dont_know, class: "govuk-radios__input") %>
+              <%= f.label :payroll_gender_dont_know, "I don't know", class: "govuk-label govuk-radios__label" %>
             </div>
           </div>
 
         </fieldset>
       <% end %>
 
-      <%= form.submit "Continue", class: "govuk-button" %>
+      <%= f.submit "Continue", class: "govuk-button" %>
 
     <% end %>
   </div>
