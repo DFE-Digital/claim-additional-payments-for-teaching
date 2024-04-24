@@ -193,13 +193,6 @@ class Claim < ApplicationRecord
   validates :email_address, format: {with: Rails.application.config.email_regexp, message: "Enter an email address in the correct format, like name@example.com"},
     length: {maximum: 256, message: "Email address must be 256 characters or less"}, if: -> { email_address.present? }
 
-  validates :mobile_number, on: [:"mobile-number", :submit], presence: {message: "Enter a mobile number, like 07700 900 982 or +44 7700 900 982"}, if: -> { provide_mobile_number == true && has_ecp_or_lupp_policy? }
-  validates :mobile_number,
-    format: {
-      with: /\A(\+44\s?)?(?:\d\s?){10,11}\z/,
-      message: "Enter a valid mobile number, like 07700 900 982 or +44 7700 900 982"
-    }, if: -> { provide_mobile_number == true && mobile_number.present? }
-
   validates :bank_or_building_society, on: [:"bank-or-building-society", :submit], presence: {message: "Select if you want the money paid in to a personal bank account or building society"}
   validates :banking_name, on: [:"personal-bank-account", :"building-society-account", :submit, :amendment], presence: {message: "Enter a name on the account"}
   validates :bank_sort_code, on: [:"personal-bank-account", :"building-society-account", :submit, :amendment], presence: {message: "Enter a sort code"}
