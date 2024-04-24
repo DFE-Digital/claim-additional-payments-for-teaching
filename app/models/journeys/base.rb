@@ -6,7 +6,8 @@ module Journeys
       "personal-details" => PersonalDetailsForm,
       "select-email" => SelectEmailForm,
       "provide-mobile-number" => ProvideMobileNumberForm,
-      "select-mobile" => SelectMobileForm
+      "select-mobile" => SelectMobileForm,
+      "mobile-number" => MobileNumberForm
     }
 
     def configuration

@@ -230,21 +230,10 @@ class ClaimsController < BasePublicController
         ClaimMailer.email_verification(current_claim, otp.code).deliver_now
         session[:sent_one_time_password_at] = Time.now
       end
-    when "mobile-number"
-      if current_claim.valid?(:"mobile-number") && current_claim.mobile_number_changed?
-        response = NotifySmsMessage.new(
-          phone_number: current_claim.mobile_number,
-          template_id: "86ae1fe4-4f98-460b-9d57-181804b4e218",
-          personalisation: {
-            otp: otp.code
-          }
-        ).deliver!
-      end
-      session[:sent_one_time_password_at] = Time.now unless response.nil?
     when "email-verification"
       current_claim.update(sent_one_time_password_at: session[:sent_one_time_password_at], one_time_password_category: :claim_email)
     when "mobile-verification"
-      current_claim.update(sent_one_time_password_at: session[:sent_one_time_password_at], one_time_password_category: :claim_mobile)
+      current_claim.update(one_time_password_category: :claim_mobile)
     end
   end
 
