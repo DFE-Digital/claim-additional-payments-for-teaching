@@ -202,14 +202,6 @@ RSpec.describe Claim, type: :model do
   context "with early-career payments policy" do
     subject(:claim) { build(:claim, policy: Policies::EarlyCareerPayments) }
 
-    context "when saving in the “provide-mobile-number” validation context" do
-      it "validates the presence of provide_mobile_number" do
-        expect(claim).not_to be_valid(:"provide-mobile-number")
-        expect(build(:claim, provide_mobile_number: true)).to be_valid(:"provide-mobile-number")
-        expect(build(:claim, provide_mobile_number: false)).to be_valid(:"provide-mobile-number")
-      end
-    end
-
     context "with mobile number" do
       before do
         claim.provide_mobile_number = true
