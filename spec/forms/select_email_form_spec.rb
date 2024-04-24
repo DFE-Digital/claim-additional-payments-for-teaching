@@ -23,16 +23,16 @@ RSpec.describe SelectEmailForm, type: :model do
       it "cannot be nil" do
         form.email_address_check = nil
 
-        expect(form).to be_invalid
+        is_expected.to be_invalid
         expect(form.errors[:email_address_check]).to eq([form.i18n_errors_path(:select_email)])
       end
 
       it "can be true or false" do
         form.email_address_check = true
-        expect(form).to be_valid
+        is_expected.to be_valid
 
         form.email_address_check = false
-        expect(form).to be_valid
+        is_expected.to be_valid
       end
     end
 
@@ -80,7 +80,7 @@ RSpec.describe SelectEmailForm, type: :model do
 
         before { form.save }
 
-        it { expect(form).to have_received(:update!).with(expected_saved_attributes) }
+        it { is_expected.to have_received(:update!).with(expected_saved_attributes) }
       end
 
       context "when the user selected to provide a different email address" do
@@ -95,7 +95,7 @@ RSpec.describe SelectEmailForm, type: :model do
 
         before { form.save }
 
-        it { expect(form).to have_received(:update!).with(expected_saved_attributes) }
+        it { is_expected.to have_received(:update!).with(expected_saved_attributes) }
       end
     end
 
