@@ -195,7 +195,6 @@ class Claim < ApplicationRecord
   validates :email_address, format: {with: Rails.application.config.email_regexp, message: "Enter an email address in the correct format, like name@example.com"},
     length: {maximum: 256, message: "Email address must be 256 characters or less"}, if: -> { email_address.present? }
 
-  validates :provide_mobile_number, on: [:"provide-mobile-number", :submit], inclusion: {in: [true, false], message: "Select yes if you would like to provide your mobile number"}, if: :has_ecp_or_lupp_policy?
   validates :mobile_number, on: [:"mobile-number", :submit], presence: {message: "Enter a mobile number, like 07700 900 982 or +44 7700 900 982"}, if: -> { provide_mobile_number == true && has_ecp_or_lupp_policy? }
   validates :mobile_number,
     format: {
