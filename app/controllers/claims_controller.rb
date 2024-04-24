@@ -232,8 +232,6 @@ class ClaimsController < BasePublicController
       end
     when "email-verification"
       current_claim.update(sent_one_time_password_at: session[:sent_one_time_password_at], one_time_password_category: :claim_email)
-    when "mobile-verification"
-      current_claim.update(one_time_password_category: :claim_mobile)
     end
   end
 
