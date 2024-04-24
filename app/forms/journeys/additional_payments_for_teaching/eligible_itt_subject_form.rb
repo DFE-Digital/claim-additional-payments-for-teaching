@@ -5,11 +5,7 @@ module Journeys
 
       attribute :eligible_itt_subject, :string
 
-      validates :eligible_itt_subject,
-        inclusion: {
-          in: :available_options,
-          message: ->(form, _) { form.i18n_errors_path(:inclusion) }
-        }
+      validates :eligible_itt_subject, inclusion: {in: :available_options, message: i18n_error_message(:inclusion)}
 
       def available_subjects
         @available_subjects ||= subject_symbols(claim).map(&:to_s)

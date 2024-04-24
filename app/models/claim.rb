@@ -164,7 +164,6 @@ class Claim < ApplicationRecord
   validates :payroll_gender, on: [:gender, :submit], presence: {message: "Select the gender recorded on your school’s payroll system or select whether you do not know"}
 
   validates :qualifications_details_check, on: [:"qualification-details"], inclusion: {in: [true, false], message: "Select yes if your qualification details are correct"}
-  validates :email_address_check, on: [:"select-email"], inclusion: {in: [true, false], message: "Select an option to indicate whether the email is correct or not"}
   validates :mobile_check, on: [:"select-mobile"], inclusion: {in: ["use", "alternative", "declined"], message: "Select an option to indicate whether the mobile number is correct or not"}
   validates :address_line_1, on: [:address], presence: {message: "Enter a house number or name"}, if: :has_ecp_or_lupp_policy?
   validates :address_line_1, on: [:address, :submit], presence: {message: "Enter a building and street address"}, unless: :has_ecp_or_lupp_policy?
@@ -191,6 +190,7 @@ class Claim < ApplicationRecord
   validates :student_loan_plan, inclusion: {in: STUDENT_LOAN_PLAN_OPTIONS}, allow_nil: true
   validates :student_loan_plan, on: [:"student-loan", :amendment], presence: {message: "Enter a valid student loan plan"}
 
+  # TODO: remove when a form object is created for email-address
   validates :email_address, on: [:"email-address", :submit], presence: {message: "Enter an email address"}
   validates :email_address, format: {with: Rails.application.config.email_regexp, message: "Enter an email address in the correct format, like name@example.com"},
     length: {maximum: 256, message: "Email address must be 256 characters or less"}, if: -> { email_address.present? }

@@ -70,10 +70,6 @@ en:
     email_address: "Email address"
     email_address_hint1: "We recommend you use a non-work email address in case your circumstances change while we process your payment."
     email_address_hint2: "To verify your email address we will send you an email with a 6-digit passcode. You can enter the passcode on the next screen."
-    select_email:
-        heading: "Which email address should we use to contact you?"
-        hint: "We recommend you use a non-work email address in case your circumstances change while we process your payment."
-        different_email: "A different email address"
     provide_mobile_number: "Would you like to provide your mobile number?"
     mobile_number: "Mobile number"
     select_phone_number:
@@ -195,6 +191,15 @@ en:
     payroll_gender: "gender"
     address: "address"
     full_name: "Full name"
+  forms:
+    select_email:
+      questions:
+        select_email: Which email address should we use to contact you?
+      hints:
+        non_work_email_address: We recommend you use a non-work email address in case your circumstances change while we process your payment.
+      errors:
+        select_email: Select an option to indicate whether the email is correct or not
+        invalid_email: Invalid email address. Please select a different email address
   student_loans:
     forms:
       claim_school:
@@ -289,6 +294,9 @@ en:
           select_the_school_you_teach_at: "Select the school you teach at"
           the_selected_school_is_closed: "The selected school is closed"
           school_not_found: "School not found"
+      nqt_in_academic_year_after_itt:
+        errors:
+          inclusion: Select yes if you are currently teaching as a qualified teacher
       eligible_itt_subject:
         questions:
           which_subject: "Which subject did you do your %{qualification} in?"
@@ -309,18 +317,17 @@ en:
         questions:
           eligible_degree_subject: Do you have a degree in an eligible subject?
         errors:
-          select_eligible_degree_subject: Select yes if you have a degree in an eligible subject
+          inclusion: Select yes if you have a degree in an eligible subject
       employed_directly:
         questions:
           employed_directly: Are you employed directly by your school?
         errors:
-          select_employed_directly: Select yes if you are directly employed by your school
+          inclusion: Select yes if you are directly employed by your school
       entire_term_contract:
         questions:
           has_entire_term_contract: Do you have a contract to teach at the same school for an entire term or longer?
         errors:
-          select_entire_term_contract:
-            Select yes if you have a contract to teach at the same school for an entire term or longer
+          inclusion: Select yes if you have a contract to teach at the same school for an entire term or longer
       itt_academic_year:
         errors:
           undergraduate_itt: "Select the academic year you completed your undergraduate ITT"
@@ -329,7 +336,7 @@ en:
           overseas_recognition: "Select the academic year you earned your QTS"
       induction_completed:
         errors:
-          select_yes_if_completed: "Select yes if you have completed your induction"
+          blank: "Select yes if you have completed your induction"
       poor_performance:
         questions:
           poor_performance: Tell us if you are currently under any performance measures or disciplinary action
@@ -338,11 +345,15 @@ en:
           formal_performance_action: "Have any performance measures been started against you?"
           formal_performance_action_hint: "This will be as a result of your underperformance as a teacher over a period of time. It could put your employment at the school at risk and is something we may check with your school as it will affect your eligibility."
         errors:
-          select_subject_to_formal_performance_action: Select yes if you are subject to formal action for poor performance at work
-          select_subject_to_disciplinary_action: Select yes if you are subject to disciplinary action
+          subject_to_formal_performance_action:
+            inclusion: Select yes if you are subject to formal action for poor performance at work
+          subject_to_disciplinary_action:
+            inclusion: Select yes if you are subject to disciplinary action
       qualification:
         questions:
           which_route: "Which route into teaching did you take?"
+        errors:
+          inclusion: Select the route you took into teaching
         hints:
           postgraduate_itt: "Postgraduate Certificate of Education (PGCE), Teach First, School Direct ITT and School Centered ITT (SCITT)."
           undergraduate_itt: "Bachelor of Arts (BA) or Bachelor of Science (BSc) degrees."
@@ -358,10 +369,12 @@ en:
         questions:
           employed_as_supply_teacher: Are you currently employed as a supply teacher?
         errors:
-          select_employed_as_supply_teacher: Select yes if you are a supply teacher
+          inclusion: Select yes if you are a supply teacher
       teaching_subject_now:
         questions:
           teaching_subject_now: "Do you spend at least half of your contracted hours teaching eligible subjects?"
+        errors:
+          inclusion: Select yes if you spend at least half of your contracted hours teaching eligible subjects
       eligibility_confirmed:
         errors:
           blank: Select an additional payment

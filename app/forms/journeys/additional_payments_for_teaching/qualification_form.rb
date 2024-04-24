@@ -10,11 +10,7 @@ module Journeys
 
       attribute :qualification, :string
 
-      validates :qualification,
-        inclusion: {
-          in: QUALIFICATION_OPTIONS,
-          message: "Select the route you took into teaching"
-        }
+      validates :qualification, inclusion: {in: QUALIFICATION_OPTIONS, message: i18n_error_message(:inclusion)}
 
       def save
         return false unless valid?

@@ -3,7 +3,7 @@ class ClaimSchoolForm < Form
 
   attr_reader :schools
 
-  validates :claim_school_id, presence: {message: ->(object, data) { object.i18n_errors_path("select_a_school") }}
+  validates :claim_school_id, presence: {message: i18n_error_message(:select_a_school)}
   validate :claim_school_must_exist, if: -> { claim_school_id.present? }
 
   def initialize(claim:, journey:, params:)
