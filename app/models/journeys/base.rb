@@ -8,6 +8,7 @@ module Journeys
       "provide-mobile-number" => ProvideMobileNumberForm,
       "select-mobile" => SelectMobileForm,
       "mobile-number" => MobileNumberForm,
+      "mobile-verification" => MobileVerificationForm,
       "teacher-reference-number" => TeacherReferenceNumberForm
     }
 
