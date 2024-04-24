@@ -9,7 +9,7 @@ module AddressDetails
   private
 
   def address_data
-    if postcode.present? && params[:claim][:address_line_1].present?
+    if postcode.present? && params.dig(:claim, :address_line_1).present?
       return @address_data = OrdnanceSurvey::Client.new.api.search_places.show(
         params: {address_line_1: params[:claim][:address_line_1], postcode: postcode}
       )
@@ -29,20 +29,8 @@ module AddressDetails
     end
   end
 
-  def invalid_postcode?
-    if postcode.blank? || !UKPostcode.parse(postcode).full_valid?
-      invalid_postcode
-      return true
-    end
-    false
-  end
-
-  def invalid_postcode
-    current_claim.errors.add(:postcode, "Enter a real postcode")
-  end
-
   def postcode
-    params.dig(:claim, :postcode)
+    params.dig(:claim, :postcode) || current_claim.postcode
   end
 
   def save_address_to_claim

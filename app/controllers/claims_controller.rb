@@ -39,11 +39,9 @@ class ClaimsController < BasePublicController
 
     if params[:slug] == "select-claim-school"
       update_session_with_tps_school(current_claim.tps_school_for_student_loan_in_previous_financial_year)
-    elsif params[:slug] == "postcode-search" && postcode
-      redirect_to claim_path(current_journey_routing_name, "select-home-address", {"claim[postcode]": params[:claim][:postcode], "claim[address_line_1]": params[:claim][:address_line_1]}) and return unless invalid_postcode?
     elsif params[:slug] == "select-home-address" && postcode
-      session[:claim_postcode] = params[:claim][:postcode]
-      session[:claim_address_line_1] = params[:claim][:address_line_1]
+      session[:claim_postcode] = postcode
+      session[:claim_address_line_1] = params.dig(:claim, :address_line_1)
       if address_data.nil?
         redirect_to claim_path(current_journey_routing_name, "no-address-found") and return
       else
@@ -100,6 +98,10 @@ class ClaimsController < BasePublicController
     else
       show
     end
+  rescue OrdnanceSurvey::Client::ResponseError => e
+    Rollbar.error(e)
+    flash[:notice] = "Please enter your address manually"
+    redirect_to claim_path(current_journey_routing_name, "address")
   end
 
   def timeout

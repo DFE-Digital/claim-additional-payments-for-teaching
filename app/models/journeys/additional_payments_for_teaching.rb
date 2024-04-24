@@ -24,7 +24,8 @@ module Journeys
       "teaching-subject-now" => TeachingSubjectNowForm,
       "eligibility-confirmed" => EligibilityConfirmedForm,
       "correct-school" => CorrectSchoolForm,
-      "reset-claim" => ResetClaimForm
+      "reset-claim" => ResetClaimForm,
+      "postcode-search" => PostcodeSearchForm
     }.freeze
   end
 end

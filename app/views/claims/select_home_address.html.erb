@@ -9,11 +9,11 @@
         <h1 class="govuk-heading-xl"><%= t("questions.address.home.title") %></h1>
         <h2 class="govuk-heading-l govuk-!-margin-bottom-1">Postcode</h2>
         <p class="govuk-body">
-          <%= params["claim"]["postcode"] %>
+          <%= current_claim.postcode %>
           <%= link_to "Change", claim_path(current_journey_routing_name, "postcode-search"), class: "govuk-link govuk-!-margin-left-3", "aria-label": "Change" %>
         </p>
         <%= form_group_tag current_claim do %>
-          <%= hidden_field_tag :postcode, params["claim"]["postcode"] %>
+          <%= form.hidden_field :postcode %>
           <fieldset class="govuk-fieldset" aria-describedby="address-search-result-hint">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
               <h2 class="govuk-fieldset__heading govuk-!-margin-top-3">
@@ -24,7 +24,7 @@
             <%= errors_tag current_claim, :address %>
 
             <div class="govuk-radios">
-              <% @address_data.each do |option| %>
+              <% @address_data&.each do |option| %>
                 <% address = option[:address].gsub(",", "").gsub(" ", "_").downcase %>
                 <% checked = params.dig(:claim, :address_line_1) == option[:address_line_1] %>
 

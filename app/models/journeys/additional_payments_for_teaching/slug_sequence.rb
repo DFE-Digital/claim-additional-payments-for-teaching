@@ -38,7 +38,6 @@ module Journeys
         "information-provided",
         "personal-details",
         "postcode-search",
-        "no-address-found",
         "select-home-address",
         "address",
         "select-email",

@@ -6,7 +6,7 @@ module Journeys
     attr_reader :claim, :current_slug, :completed_slugs
 
     DEAD_END_SLUGS = %w[complete existing-session eligible-later future-eligibility ineligible]
-    OPTIONAL_SLUGS = %w[postcode-search no-address-found select-home-address reset-claim]
+    OPTIONAL_SLUGS = %w[postcode-search select-home-address reset-claim]
 
     def initialize(claim, slug_sequence, completed_slugs, current_slug)
       @claim = claim
