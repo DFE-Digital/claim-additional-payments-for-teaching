@@ -362,6 +362,10 @@ en:
       teaching_subject_now:
         questions:
           teaching_subject_now: "Do you spend at least half of your contracted hours teaching eligible subjects?"
+      eligibility_confirmed:
+        errors:
+          blank: Select an additional payment
+          inclusion: Select a valid additional payment
     check_your_answers:
       part_one:
         primary_heading: Check your answers

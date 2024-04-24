@@ -44,7 +44,12 @@ FactoryBot.define do
       national_insurance_number { generate(:national_insurance_number) }
     end
 
+    trait :eligible do
+      eligibility_trait { :eligible }
+    end
+
     trait :submittable do
+      eligible
       with_details_from_dfe_identity
       with_student_loan
       with_bank_details
@@ -57,8 +62,6 @@ FactoryBot.define do
       payroll_gender { :female }
       provide_mobile_number { false }
       details_check { true }
-
-      eligibility_trait { :eligible }
 
       after(:build) do |claim, evaluator|
         if claim.has_ecp_or_lupp_policy?

@@ -2,4 +2,4 @@
 
 <p class="govuk-heading-l"><%= number_to_currency(claim.award_amount, precision: 0) %></p>
 
-<%= render partial: "eligibility_guidance_#{claim.policy.locale_key}", locals: { claim: claim } %>
+<%= render partial: "eligibility_guidance_#{claim.policy.locale_key}", locals: { selected_claim_policy: claim.policy } %>

@@ -20,7 +20,8 @@ module Journeys
       "employed-directly" => EmployedDirectlyForm,
       "qualification" => QualificationForm,
       "eligible-itt-subject" => EligibleIttSubjectForm,
-      "teaching-subject-now" => TeachingSubjectNowForm
+      "teaching-subject-now" => TeachingSubjectNowForm,
+      "eligibility-confirmed" => EligibilityConfirmedForm
     }.freeze
   end
 end
