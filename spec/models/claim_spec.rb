@@ -81,16 +81,6 @@ RSpec.describe Claim, type: :model do
   context "that has bank details" do
     let(:claim) { build(:claim, policy: Policies::EarlyCareerPayments) }
 
-    it "validates which type of payment account was specified" do
-      expect(claim).not_to be_valid(:"bank-or-building-society")
-
-      expect { claim.bank_or_building_society = "paypal" }.to raise_error(ArgumentError)
-
-      claim.bank_or_building_society = :building_society
-
-      expect(claim).to be_valid(:"bank-or-building-society")
-    end
-
     it "does not validate which type of payment account was specified" do
       expect { claim.bank_or_building_society = "visa" }.to raise_error(ArgumentError)
     end
