@@ -1,10 +1,8 @@
-<% content_for(:page_title, page_title("How we will use the information you provide", journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title("How we will use the information you provide", journey: current_journey_routing_name)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-
     <h1 class="govuk-heading-xl">How we will use the information you provide</h1>
-
     <h2 class="govuk-heading-m">To process your application</h2>
 
     <p class="govuk-body">
@@ -47,11 +45,11 @@
           Where can I find my teacher reference number (TRN)?
         </span>
       </summary>
+
       <div class="govuk-details__text">
         <p class="govuk-body">
           Your TRN may be shown on a:
         </p>
-
 
         <ul class="govuk-list govuk-list--bullet">
           <li>payslip</li>
@@ -77,19 +75,9 @@
       The Department for Education is not liable to reimburse tax at the higher rate.
     </p>
 
-    <% if session[:selected_claim_policy] == "EarlyCareerPayments" %>
-      <p class="govuk-body">
-        For more details, you can read about payments and deductions for the <%= link_to "early-career payment (opens in new tab)", Policies::EarlyCareerPayments.eligibility_page_url + "#paying-income-tax-and-national-insurance", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>.
-      </p>
-    <% elsif session[:selected_claim_policy] == "LevellingUpPremiumPayments" %>
-      <p class="govuk-body">
-        For more details, you can read about payments and deductions for the <%= link_to "levelling up premium payment (opens in new tab)", Policies::LevellingUpPremiumPayments.eligibility_page_url + "#payments-and-deductions", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>.
-      </p>
-    <% else %>
-      <p class="govuk-body">
-        For more details, you can read about payments and deductions when <%= link_to "claiming back your student loan repayments (opens in new tab)", "https://www.gov.uk/guidance/teachers-claim-back-your-student-loan-repayments#payment", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>.
-      </p>
-    <% end %>
+    <p class="govuk-body">
+      <%= information_provided_further_details_with_link(session[:selected_claim_policy]) %>
+    </p>
 
     <%= button_to "Continue", claim_path(current_journey_routing_name), method: :patch, class: "govuk-button", role: :button, data: { module: "govuk-button" } %>
   </div>

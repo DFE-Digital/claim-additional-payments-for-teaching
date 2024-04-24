@@ -23,5 +23,9 @@ module Policies
     def eligibility_criteria_url
       eligibility_page_url + "#eligibility-criteria-for-teachers"
     end
+
+    def payment_and_deductions_info_url
+      eligibility_page_url + "#payments-and-deductions"
+    end
   end
 end

@@ -47,5 +47,9 @@ module Policies
     def student_loan_balance_url
       "https://www.gov.uk/sign-in-to-manage-your-student-loan-balance"
     end
+
+    def payment_and_deductions_info_url
+      eligibility_page_url + "#paying-income-tax-and-national-insurance"
+    end
   end
 end

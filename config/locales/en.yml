@@ -273,6 +273,8 @@ en:
       qts_award_years:
         before_cut_off_date: A different academic year
         on_or_after_cut_off_date: Between the start of the %{year} academic year and the end of the 2020 to 2021 academic year
+    information_provided_further_details: For more details, you can read about payments and deductions when %{link}
+    information_provided_further_details_link_text: claiming back your student loan repayments (opens in new tab)
     admin:
       claim_school: "Claim school"
       subjects_taught: "Subjects taught"
@@ -503,6 +505,7 @@ en:
           title: "The claimant’s %{bank_or_building_society} details have not been automatically validated. Has the claimant confirmed their %{bank_or_building_society} details?"
     reminders:
       full_name: Full name
+    information_provided_further_details: For more details, you can read about payments and deductions for the %{link}
   early_career_payments:
     <<: *additional_payments
     purpose: "For early career teachers who teach certain subjects."
@@ -512,6 +515,7 @@ en:
     claim_subject: "Early-career payment"
     claim_amount_description: "Additional payment for teaching"
     support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
+    information_provided_further_details_link_text: early-career payment (opens in new tab)
   levelling_up_premium_payments:
     <<: *additional_payments
     purpose: For early career teachers who teach certain subjects and work in disadvantaged schools.
@@ -521,6 +525,7 @@ en:
     claim_subject: "Levelling up premium payment"
     claim_amount_description: "Additional payment for teaching"
     support_email_address: "levellinguppremiumpayments@digital.education.gov.uk"
+    information_provided_further_details_link_text: levelling up premium payment (opens in new tab)
   activerecord:
     errors:
       models:
