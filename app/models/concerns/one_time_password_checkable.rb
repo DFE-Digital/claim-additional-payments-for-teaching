@@ -10,7 +10,6 @@ module OneTimePasswordCheckable
   included do
     attribute :one_time_password, :string, limit: 6
     attribute :one_time_password_category, :string
-    attribute :sent_one_time_password_at, :datetime
     validate :otp_validate, on: [:"email-verification", :"mobile-verification"]
     before_save :normalise_one_time_password, if: :one_time_password_changed?
   end
