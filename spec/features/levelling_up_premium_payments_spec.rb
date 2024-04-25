@@ -225,7 +225,7 @@ RSpec.feature "Levelling up premium payments claims" do
     expect(claim.bank_account_number).to eq("87654321")
 
     # - What gender does your school's payroll system associate with you
-    expect(page).to have_text(I18n.t("questions.payroll_gender"))
+    expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
 
     choose "Female"
     click_on "Continue"

@@ -161,13 +161,6 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  context "when saving in the “gender” validation context" do
-    it "validates the presence of gender" do
-      expect(build(:claim)).not_to be_valid(:gender)
-      expect(build(:claim, payroll_gender: :male)).to be_valid(:gender)
-    end
-  end
-
   context "when saving in the “address” validation context" do
     it "validates the presence of address_line_1 and postcode" do
       expect(build(:claim)).not_to be_valid(:address)

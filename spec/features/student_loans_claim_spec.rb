@@ -160,7 +160,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(claim.bank_account_number).to eq("87654321")
     expect(claim.building_society_roll_number).to eq("1234/123456789")
 
-    expect(page).to have_text(I18n.t("questions.payroll_gender"))
+    expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
     choose "Male"
     click_on "Continue"
 

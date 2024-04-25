@@ -201,7 +201,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     click_on "Continue"
 
     # - What gender does your school's payroll system associate with you
-    expect(page).to have_text(I18n.t("questions.payroll_gender"))
+    expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
 
     choose "Female"
     click_on "Continue"
