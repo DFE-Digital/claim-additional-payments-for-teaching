@@ -9,15 +9,6 @@ module Journeys
           message: ->(form, _) { form.i18n_errors_path("qualifications_details_check") }
         }
 
-      def initialize(claim:, journey:, params:)
-        super
-
-        self.qualifications_details_check = permitted_params.fetch(
-          :qualifications_details_check,
-          claim.qualifications_details_check
-        )
-      end
-
       def save
         return false unless valid?
 
