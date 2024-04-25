@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Claim < ApplicationRecord
+  # TODO RL remove this from claim
   include ::OneTimePasswordCheckable
 
   MIN_QA_THRESHOLD = 10
@@ -165,9 +166,7 @@ class Claim < ApplicationRecord
   validates :student_loan_plan, on: [:"student-loan", :amendment], presence: {message: "Enter a valid student loan plan"}
 
   # TODO: remove when a form object is created for email-address
-  validates :email_address, on: [:"email-address", :submit], presence: {message: "Enter an email address"}
-  validates :email_address, format: {with: Rails.application.config.email_regexp, message: "Enter an email address in the correct format, like name@example.com"},
-    length: {maximum: 256, message: "Email address must be 256 characters or less"}, if: -> { email_address.present? }
+  validates :email_address, on: [:submit], presence: {message: "Enter an email address"}
 
   validates :bank_sort_code, on: [:submit, :amendment], presence: {message: "Enter a sort code"}
   validates :bank_account_number, on: [:submit, :amendment], presence: {message: "Enter an account number"}

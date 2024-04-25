@@ -218,18 +218,9 @@ class ClaimsController < BasePublicController
 
   def one_time_password
     case params[:slug]
-    when "email-address"
-      if current_claim.valid?(:"email-address")
-        ClaimMailer.email_verification(current_claim, otp.code).deliver_now
-        session[:sent_one_time_password_at] = Time.now
-      end
     when "email-verification"
-      current_claim.update(sent_one_time_password_at: session[:sent_one_time_password_at], one_time_password_category: :claim_email)
+      current_claim.update(one_time_password_category: :claim_email)
     end
-  end
-
-  def otp
-    @otp ||= OneTimePassword::Generator.new
   end
 
   def reset_attrs
