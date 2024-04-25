@@ -804,7 +804,9 @@ RSpec.describe Claim, type: :model do
 
   describe "::FILTER_PARAMS" do
     it "has a value for every claim attribute" do
-      expect(Claim::FILTER_PARAMS.keys).to match_array(Claim.new.attribute_names.map(&:to_sym))
+      expect(Claim::FILTER_PARAMS.keys).to match_array(
+        Claim.new.attribute_names.map(&:to_sym) + [:one_time_password]
+      )
     end
   end
 

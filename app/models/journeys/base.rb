@@ -9,6 +9,7 @@ module Journeys
       "provide-mobile-number" => ProvideMobileNumberForm,
       "select-mobile" => SelectMobileForm,
       "email-address" => EmailAddressForm,
+      "email-verification" => EmailVerificationForm,
       "mobile-number" => MobileNumberForm,
       "mobile-verification" => MobileVerificationForm,
       "bank-or-building-society" => BankOrBuildingSocietyForm,

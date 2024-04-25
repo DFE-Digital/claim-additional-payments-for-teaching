@@ -92,7 +92,6 @@ class ClaimsController < BasePublicController
 
     current_claim.reset_dependent_answers unless params[:slug] == "select-mobile"
     current_claim.reset_eligibility_dependent_answers(reset_attrs) unless params[:slug] == "qualification-details"
-    one_time_password
 
     if current_claim.save(context: page_sequence.current_slug.to_sym)
       retrieve_student_loan_details
@@ -214,13 +213,6 @@ class ClaimsController < BasePublicController
 
   def on_banking_page?
     %w[personal-bank-account building-society-account].include?(params[:slug])
-  end
-
-  def one_time_password
-    case params[:slug]
-    when "email-verification"
-      current_claim.update(one_time_password_category: :claim_email)
-    end
   end
 
   def reset_attrs

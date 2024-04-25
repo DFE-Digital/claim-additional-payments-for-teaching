@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class Claim < ApplicationRecord
-  # TODO RL remove this from claim
-  include ::OneTimePasswordCheckable
-
   MIN_QA_THRESHOLD = 10
   TRN_LENGTH = 7
   NO_STUDENT_LOAN = "not_applicable"
@@ -92,7 +89,6 @@ class Claim < ApplicationRecord
     one_time_password: true,
     sent_one_time_password_at: false,
     mobile_verified: false,
-    one_time_password_category: false,
     assigned_to_id: true,
     policy_options_provided: false,
     held: false,
