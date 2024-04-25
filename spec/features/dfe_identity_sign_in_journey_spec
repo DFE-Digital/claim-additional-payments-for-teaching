@@ -43,7 +43,17 @@ RSpec.feature "Teacher Identity Sign in" do
 
     # check the teacher_id_user_info details are saved to the claim
     claim = Claim.order(:created_at).last
-    expect(claim.teacher_id_user_info).to eq({"trn" => "1234567", "birthdate" => "1981-01-01", "email" => "kelsie.oberbrunner@example.com", "phone_number" => "01234567890", "given_name" => "Kelsie", "family_name" => "Oberbrunner", "ni_number" => "AB123123A", "trn_match_ni_number" => "True"})
+    expect(claim.teacher_id_user_info).to eq({
+      "trn" => "1234567",
+      "birthdate" => "1981-01-01",
+      "email" => "kelsie.oberbrunner@example.com",
+      "email_verified" => "",
+      "phone_number" => "01234567890",
+      "given_name" => "Kelsie",
+      "family_name" => "Oberbrunner",
+      "ni_number" => "AB123123A",
+      "trn_match_ni_number" => "True"
+    })
 
     # - Teacher selects no to details confirm
     click_on "Back"
@@ -61,7 +71,17 @@ RSpec.feature "Teacher Identity Sign in" do
 
     # check the teacher_id_user_info details are saved to the claim
     claim = Claim.order(:created_at).last
-    expect(claim.teacher_id_user_info).to eq({"trn" => "1234567", "birthdate" => "1981-01-01", "given_name" => "Kelsie", "family_name" => "Oberbrunner", "ni_number" => "AB123123A", "phone_number" => "01234567890", "trn_match_ni_number" => "True", "email" => "kelsie.oberbrunner@example.com"})
+    expect(claim.teacher_id_user_info).to eq({
+      "trn" => "1234567",
+      "birthdate" => "1981-01-01",
+      "given_name" => "Kelsie",
+      "family_name" => "Oberbrunner",
+      "ni_number" => "AB123123A",
+      "phone_number" => "01234567890",
+      "trn_match_ni_number" => "True",
+      "email" => "kelsie.oberbrunner@example.com",
+      "email_verified" => ""
+    })
   end
 
   scenario "Teacher makes claim for 'Early-Career Payments' by logging in with teacher_id and selects yes to details confirm but trn missing" do

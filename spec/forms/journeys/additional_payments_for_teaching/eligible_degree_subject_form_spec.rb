@@ -19,8 +19,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleDegreeSubjectFor
         form.eligible_degree_subject = nil
 
         expect(form).to be_invalid
-        expect(form.errors[:eligible_degree_subject])
-          .to eq([form.i18n_errors_path("select_eligible_degree_subject")])
+        expect(form.errors[:eligible_degree_subject]).to eq([form.i18n_errors_path(:inclusion)])
       end
 
       it "can be true or false" do

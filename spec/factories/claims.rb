@@ -36,25 +36,32 @@ FactoryBot.define do
       claim.academic_year = claim_academic_year unless claim.academic_year_before_type_cast
     end
 
+    trait :with_details_from_dfe_identity do
+      first_name { "Jo" }
+      surname { "Bloggs" }
+      teacher_reference_number { generate(:teacher_reference_number) }
+      date_of_birth { 20.years.ago.to_date }
+      national_insurance_number { generate(:national_insurance_number) }
+    end
+
+    trait :eligible do
+      eligibility_trait { :eligible }
+    end
+
     trait :submittable do
+      eligible
+      with_details_from_dfe_identity
       with_student_loan
       with_bank_details
       bank_details_validated
 
-      first_name { "Jo" }
-      surname { "Bloggs" }
       address_line_1 { "1 Test Road" }
       postcode { "WIA OAA" }
-      date_of_birth { 20.years.ago.to_date }
-      teacher_reference_number { generate(:teacher_reference_number) }
-      national_insurance_number { generate(:national_insurance_number) }
       email_address { generate(:email_address) }
       email_verified { true }
       payroll_gender { :female }
       provide_mobile_number { false }
       details_check { true }
-
-      eligibility_trait { :eligible }
 
       after(:build) do |claim, evaluator|
         if claim.has_ecp_or_lupp_policy?

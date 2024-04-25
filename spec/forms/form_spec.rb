@@ -26,6 +26,20 @@ RSpec.describe Form, type: :model do
     it { expect(TestSlugForm.model_name).to eq(Claim.model_name) }
   end
 
+  describe ".i18n_error_message" do
+    let(:form_double) { instance_double(TestSlugForm) }
+
+    it "returns a lambda function for generating error messages" do
+      path = :test_error_path
+      error_message_lambda = described_class.i18n_error_message(path)
+
+      allow(form_double).to receive(:i18n_errors_path).with(path).and_return("Test error message")
+
+      result = error_message_lambda.call(form_double, nil)
+      expect(result).to eq("Test error message")
+    end
+  end
+
   subject(:form) { TestSlugForm.new(claim:, journey:, params:) }
 
   let(:claim) { CurrentClaim.new(claims:) }
@@ -133,7 +147,10 @@ RSpec.describe Form, type: :model do
       form.i18n_errors_path("message")
     end
 
-    it { expect(I18n).to have_received(:t).with("test_i18n_ns.forms.test_slug.errors.message") }
+    it do
+      expect(I18n).to have_received(:t)
+        .with("test_i18n_ns.forms.test_slug.errors.message", default: :"forms.test_slug.errors.message")
+    end
   end
 
   describe "#permitted_params" do

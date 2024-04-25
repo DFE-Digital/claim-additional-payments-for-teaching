@@ -3,16 +3,12 @@ module Journeys
     class EntireTermContractForm < Form
       attribute :has_entire_term_contract, :boolean
 
-      validates :has_entire_term_contract,
-        inclusion: {
-          in: [true, false],
-          message: ->(object, _) { object.i18n_errors_path("select_entire_term_contract") }
-        }
+      validates :has_entire_term_contract, inclusion: {in: [true, false], message: i18n_error_message(:inclusion)}
 
       def save
         return false unless valid?
 
-        update!({eligibility_attributes: {has_entire_term_contract:}})
+        update!(eligibility_attributes: attributes)
       end
     end
   end

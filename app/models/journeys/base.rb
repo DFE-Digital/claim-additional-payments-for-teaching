@@ -1,10 +1,12 @@
 module Journeys
   module Base
-    # TODO: move app/forms/*_forms to shared and journey specific folders
-    # but needs load_paths sorting
     SHARED_FORMS = {
+      "sign-in-or-continue" => SignInOrContinueForm,
       "current-school" => CurrentSchoolForm,
-      "gender" => GenderForm
+      "gender" => GenderForm,
+      "personal-details" => PersonalDetailsForm,
+      "select-email" => SelectEmailForm,
+      "provide-mobile-number" => ProvideMobileNumberForm
     }
 
     def configuration
@@ -22,7 +24,7 @@ module Journeys
     def form(claim:, params:)
       form = SHARED_FORMS.merge(forms)[params[:slug]]
 
-      form&.new(journey: self, claim: claim, params: params)
+      form&.new(journey: self, claim:, params:)
     end
 
     def forms

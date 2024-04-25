@@ -98,7 +98,7 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
     click_on "Continue"
 
     # - select-email page
-    expect(page).to have_text(I18n.t("questions.select_email.heading"))
+    expect(page).to have_text(I18n.t("forms.select_email.questions.select_email"))
 
     # - Select the suggested email address
     find("#claim_email_address_check_true").click

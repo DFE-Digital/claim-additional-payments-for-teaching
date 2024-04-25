@@ -1,4 +1,4 @@
-<% content_for(:page_title, page_title("You’re eligible for an additional payment", journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title("You’re eligible for an additional payment", journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -6,10 +6,10 @@
       <h1 class="govuk-panel__title">You’re eligible for an additional payment</h1>
     </div>
 
-    <% if current_claim.eligible_now.one? %>
-      <%= render partial: "eligibility_confirmed_single", locals: { claim: current_claim.eligible_now.first } %>
+    <% if @form.single_choice_only? %>
+      <%= render partial: "eligibility_confirmed_single", locals: { claim: @form.claims_eligible_now.first } %>
     <% else %>
-      <%= render partial: "eligibility_confirmed_multiple", locals: { claims: current_claim.eligible_now_and_sorted } %>
+      <%= render partial: "eligibility_confirmed_multiple", locals: { claims: @form.claims_eligible_now_and_sorted } %>
     <% end %>
   </div>
 </div>

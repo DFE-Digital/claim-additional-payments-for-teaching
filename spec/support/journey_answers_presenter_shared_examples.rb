@@ -65,7 +65,7 @@ RSpec.shared_examples "journey answers presenter" do
         end
 
         it "includes the selected email and the change slug is `select-email`" do
-          expect(answers).to include([I18n.t("questions.select_email.heading"), "test@email.com", "select-email"])
+          expect(answers).to include([I18n.t("forms.select_email.questions.select_email"), "test@email.com", "select-email"])
         end
       end
 
@@ -75,7 +75,7 @@ RSpec.shared_examples "journey answers presenter" do
         end
 
         it "includes the user-provided email and the change slug is `select-email`" do
-          expect(answers).to include([I18n.t("questions.select_email.heading"), "test@email.com", "select-email"])
+          expect(answers).to include([I18n.t("forms.select_email.questions.select_email"), "test@email.com", "select-email"])
         end
       end
 

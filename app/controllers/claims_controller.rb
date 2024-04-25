@@ -3,7 +3,6 @@ class ClaimsController < BasePublicController
   include AddressDetails
 
   skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create, :timeout]
-  before_action :check_and_reset_if_new_tid_user_info
   before_action :initialize_session_slug_history
   before_action :check_page_is_in_sequence, only: [:show, :update]
   before_action :update_session_with_current_slug, only: [:update]
@@ -28,24 +27,14 @@ class ClaimsController < BasePublicController
     end
 
     # TODO: Migrate the remaining slugs to form objects.
-    if @form ||= journey.form(claim: current_claim, params: params)
+    if @form ||= journey.form(claim: current_claim, params:)
       set_any_backlink_override
       render current_template
-
       return
     end
 
-    if params[:slug] == "teacher-detail"
-      save_and_set_teacher_id_user_info
-    elsif params[:slug] == "qualification-details"
+    if params[:slug] == "qualification-details"
       return redirect_to claim_path(current_journey_routing_name, next_slug) if current_claim.has_no_dqt_data_for_claim?
-
-    elsif params[:slug] == "sign-in-or-continue"
-      update_session_with_current_slug
-
-      return skip_teacher_id if !journey_configuration.teacher_id_enabled?
-    elsif params[:slug] == "select-email"
-      session[:email_address] = current_claim.teacher_id_user_info["email"]
     elsif params[:slug] == "correct-school"
       update_session_with_tps_school(current_claim.recent_tps_school)
     elsif params[:slug] == "select-claim-school"
@@ -82,8 +71,10 @@ class ClaimsController < BasePublicController
 
   def update
     # TODO: Migrate the remaining slugs to form objects.
-    if (@form = journey.form(claim: current_claim, params: params))
+    if (@form = journey.form(claim: current_claim, params:))
       if @form.save
+        retrieve_student_loan_details
+        update_session_with_selected_policy
         redirect_to claim_path(current_journey_routing_name, next_slug)
       else
         set_any_backlink_override
@@ -94,25 +85,14 @@ class ClaimsController < BasePublicController
     end
 
     case params[:slug]
-    when "sign-in-or-continue"
-      return skip_teacher_id
-    when "teacher-detail"
-      save_details_check
-      Dqt::RetrieveClaimQualificationsData.call(current_claim) if current_claim.details_check?
     when "qualification-details"
       set_dqt_data_as_answers
-    when "personal-details"
-      check_date_params
-    when "eligibility-confirmed"
-      return select_claim if current_journey_routing_name == "additional-payments"
     when "personal-bank-account", "building-society-account"
       return bank_account
     when "correct-school"
       check_correct_school_params
     when "select-claim-school"
       check_select_claim_school_params
-    when "select-email"
-      check_email_params
     when "select-mobile"
       check_mobile_number_params
     when "still-teaching"
@@ -125,7 +105,7 @@ class ClaimsController < BasePublicController
       set_dqt_data_as_answers if current_claim.qualifications_details_check
     end
 
-    current_claim.reset_dependent_answers unless params[:slug] == "select-email" || params[:slug] == "select-mobile"
+    current_claim.reset_dependent_answers unless params[:slug] == "select-mobile"
     current_claim.reset_eligibility_dependent_answers(reset_attrs) unless params[:slug] == "qualification-details"
     one_time_password
 
@@ -177,6 +157,17 @@ class ClaimsController < BasePublicController
     @backlink_path = @form.backlink_path if @form.backlink_path
   end
 
+  def update_session_with_selected_policy
+    # The following is a journey-specific behaviour that cannot be encapsulated inside
+    # the relevant form. The claimant answers are stored on the claim in the database,
+    # but `selected_claim_policy` is not an answer we need to persist, not at the moment.
+    # TODO: revisit this once the claimant's answers are all moved to the session, as at
+    # that point we can probably encapsulate this behaviour somewhere else
+    if current_journey_routing_name == "additional-payments" && params[:slug] == "eligibility-confirmed"
+      session[:selected_claim_policy] = @form.selected_claim_policy
+    end
+  end
+
   def previous_slug
     page_sequence.previous_slug
   end
@@ -191,17 +182,6 @@ class ClaimsController < BasePublicController
 
   def claim_params
     params.fetch(:claim, {}).permit(Claim::PermittedParameters.new(current_claim).keys)
-  end
-
-  def check_date_params
-    dob_params = {
-      "date_of_birth_day" => claim_params.dig("date_of_birth(3i)").to_s,
-      "date_of_birth_month" => claim_params.dig("date_of_birth(2i)").to_s,
-      "date_of_birth_year" => claim_params.dig("date_of_birth(1i)").to_s
-    }
-    current_claim.attributes = claim_params.merge!(dob_params)
-  rescue ActiveRecord::MultiparameterAssignmentErrors
-    current_claim.attributes = claim_params.except("date_of_birth(3i)", "date_of_birth(2i)", "date_of_birth(1i)") if params[:slug] == "personal-details"
   end
 
   def current_template
@@ -282,19 +262,6 @@ class ClaimsController < BasePublicController
     claim_params["eligibility_attributes"].keys
   end
 
-  def select_claim
-    policy = params.fetch(:claim, {}).permit(:policy)[:policy]
-
-    unless policy
-      current_claim.errors.add(:policy, "Select an additional payment")
-      return show
-    end
-
-    session[:selected_claim_policy] = policy
-
-    redirect_to claim_path(current_journey_routing_name, next_slug)
-  end
-
   def bank_account
     @bank_details_form = BankDetailsForm.new(claim_params.merge(claim: current_claim, hmrc_validation_attempt_count: session[:bank_validation_attempt_count]))
 
@@ -320,37 +287,6 @@ class ClaimsController < BasePublicController
 
   def no_eligible_itt_subject?
     !current_claim.eligible_itt_subject
-  end
-
-  # NOTE: needs to be done before the slug_sequence is generated.
-  # `logged_in_with_tid: false` means the user had pressed "Continue without signing in", reset it to `true`.
-  # `logged_in_with_tid: false` is used to reject "teacher-details" and "qualification-details" from the slug_sequence.
-  # Handles user somehow using Back button to go back and choose "Continue with DfE Identity" option.
-  # Or they sign in a second time, `details_check` needs resetting in case details are different.
-  def check_and_reset_if_new_tid_user_info
-    DfeIdentity::ClaimUserDetailsReset.call(current_claim, :new_user_info) if session[:user_info]
-  end
-
-  def save_and_set_teacher_id_user_info
-    @teacher_id_user_info = session[:user_info]
-    if @teacher_id_user_info
-      current_claim.update(teacher_id_user_info: @teacher_id_user_info)
-      session.delete(:user_info)
-    end
-    set_teacher_id_user_info
-  end
-
-  def set_teacher_id_user_info
-    @teacher_id_user_info ||= current_claim.teacher_id_user_info
-  end
-
-  def save_details_check
-    details_check = params.dig(:claim, :details_check)
-    DfeIdentity::ClaimUserDetailsCheck.call(current_claim, details_check)
-  end
-
-  def check_email_params
-    current_claim.attributes = SelectEmailForm.extract_attributes(current_claim, email_address_check: params.dig(:claim, :email_address_check))
   end
 
   def check_mobile_number_params
@@ -380,11 +316,6 @@ class ClaimsController < BasePublicController
     current_claim.attributes = updated_claim_params
   end
 
-  def skip_teacher_id
-    DfeIdentity::ClaimUserDetailsReset.call(current_claim, :skipped_tid)
-    redirect_to claim_path(current_journey_routing_name, next_slug)
-  end
-
   def set_dqt_data_as_answers
     current_claim.attributes = claim_params
     current_claim.claims.each { |claim| claim.eligibility.set_qualifications_from_dqt_record }
@@ -400,7 +331,7 @@ class ClaimsController < BasePublicController
     # For claims being submitted using the TID-route and where all personal details came through/are
     # valid, the student loan details must be retrieved after the `information-provided` page instead.
     if params[:slug] == "personal-details" || (params[:slug] == "information-provided" &&
-        current_claim.logged_in_with_tid? && current_claim.has_all_valid_personal_details?)
+        current_claim.logged_in_with_tid? && current_claim.all_personal_details_same_as_tid?)
       ClaimStudentLoanDetailsUpdater.call(current_claim)
     end
   end

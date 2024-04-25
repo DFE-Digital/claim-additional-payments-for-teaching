@@ -13,7 +13,6 @@ module Journeys
     class SlugSequence
       ELIGIBILITY_SLUGS = [
         "sign-in-or-continue",
-        "teacher-detail",
         "reset-claim",
         "correct-school",
         "current-school",
@@ -94,7 +93,6 @@ module Journeys
         SLUGS.dup.tap do |sequence|
           if !Journeys::AdditionalPaymentsForTeaching.configuration.teacher_id_enabled?
             sequence.delete("sign-in-or-continue")
-            sequence.delete("teacher-detail")
             sequence.delete("reset-claim")
             sequence.delete("qualification-details")
             sequence.delete("correct-school")
@@ -102,7 +100,6 @@ module Journeys
             sequence.delete("select-mobile")
           end
 
-          sequence.delete("teacher-detail") unless claim.logged_in_with_tid?
           sequence.delete("reset-claim") if (!claim.logged_in_with_tid? && claim.details_check.nil?) || claim.details_check?
 
           sequence.delete("select-email") if (claim.logged_in_with_tid == false) || claim.teacher_id_user_info["email"].nil?
@@ -157,7 +154,7 @@ module Journeys
             replace_ecp_only_induction_not_completed_slugs(sequence)
           end
 
-          sequence.delete("personal-details") if claim.logged_in_with_tid? && claim.has_all_valid_personal_details?
+          sequence.delete("personal-details") if claim.logged_in_with_tid? && personal_details_form.valid? && claim.all_personal_details_same_as_tid?
 
           if claim.logged_in_with_tid? && claim.details_check?
             if claim.qualifications_details_check
@@ -179,6 +176,14 @@ module Journeys
       end
 
       private
+
+      def personal_details_form
+        PersonalDetailsForm.new(
+          claim:,
+          journey: Journeys::AdditionalPaymentsForTeaching,
+          params: ActionController::Parameters.new
+        )
+      end
 
       def replace_ecp_only_induction_not_completed_slugs(sequence)
         slugs = %w[
