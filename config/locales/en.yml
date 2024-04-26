@@ -214,6 +214,9 @@ en:
           select_the_school_you_teach_at: "Select the school you teach at"
           the_selected_school_is_closed: "The selected school is closed"
           school_not_found: "School not found"
+      mobile_number:
+        errors:
+          invalid: "Enter a mobile number, like 07700 900 982 or +44 7700 900 982"
       select_mobile_form:
         questions:
           which_number: "Which mobile number should we use to contact you?"
@@ -308,6 +311,9 @@ en:
           select_the_school_you_teach_at: "Select the school you teach at"
           the_selected_school_is_closed: "The selected school is closed"
           school_not_found: "School not found"
+      mobile_number:
+        errors:
+          invalid: "Enter a mobile number, like 07700 900 982 or +44 7700 900 982"
       nqt_in_academic_year_after_itt:
         errors:
           inclusion: Select yes if you are currently teaching as a qualified teacher

@@ -3,13 +3,13 @@ class MobileNumberForm < Form
 
   validates :mobile_number,
     presence: {
-      message: "Enter a mobile number, like 07700 900 982 or +44 7700 900 982"
+      message: ->(form, _) { form.i18n_errors_path("invalid") }
     }
 
   validates :mobile_number,
     format: {
       with: /\A(\+44\s?)?(?:\d\s?){10,11}\z/,
-      message: "Enter a valid mobile number, like 07700 900 982 or +44 7700 900 982"
+      message: ->(form, _) { form.i18n_errors_path("invalid") }
     },
     if: -> { mobile_number.present? }
 
