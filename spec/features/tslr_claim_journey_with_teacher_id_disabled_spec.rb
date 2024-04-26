@@ -11,7 +11,7 @@ RSpec.feature "TSLR journey" do
     click_on "Start now"
 
     # - Select qts year
-    expect(page).to have_text(I18n.t("questions.qts_award_year"))
+    expect(page).to have_text(I18n.t("student_loans.forms.qts_year.questions.qts_award_year"))
 
     expect(page).not_to have_link "Back"
   end

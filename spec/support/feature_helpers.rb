@@ -22,7 +22,7 @@ module FeatureHelpers
   end
 
   def choose_qts_year(option = :on_or_after_cut_off_date)
-    choose "claim_eligibility_attributes_qts_award_year_#{option}"
+    choose "claim_qts_award_year_#{option}"
     click_on "Continue"
   end
 

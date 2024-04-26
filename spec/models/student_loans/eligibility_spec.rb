@@ -246,17 +246,6 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
     end
   end
 
-  # Validation contexts
-  context "when saving in the “qts-year” context" do
-    it "is not valid without a value for qts_award_year" do
-      expect(described_class.new).not_to be_valid(:"qts-year")
-
-      described_class.qts_award_years.each_key do |academic_year|
-        expect(described_class.new(qts_award_year: academic_year)).to be_valid(:"qts-year")
-      end
-    end
-  end
-
   context "when saving in the “still-teaching” context" do
     it "validates the presence of employment_status" do
       expect(described_class.new).not_to be_valid(:"still-teaching")
@@ -313,14 +302,6 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
   context "when saving in the “submit” context" do
     it "is valid when all attributes are present" do
       expect(build(:student_loans_eligibility, :eligible)).to be_valid(:submit)
-    end
-
-    it "is not valid without a value for qts_award_year" do
-      expect(build(:student_loans_eligibility, :eligible, qts_award_year: nil)).not_to be_valid(:submit)
-
-      described_class.qts_award_years.each_key do |academic_year|
-        expect(build(:student_loans_eligibility, :eligible, qts_award_year: academic_year)).to be_valid(:submit)
-      end
     end
 
     it "is not valid without a value for employment_status" do

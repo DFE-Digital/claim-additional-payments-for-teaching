@@ -48,7 +48,6 @@ module Policies
       belongs_to :claim_school, optional: true, class_name: "School"
       belongs_to :current_school, optional: true, class_name: "School"
 
-      validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select when you completed your initial teacher training"}
       validates :claim_school, on: [:"select-claim-school"], presence: {message: ->(object, _data) { object.select_claim_school_presence_error_message }}, unless: :claim_school_somewhere_else?
       validates :employment_status, on: [:"still-teaching", :submit], presence: {message: ->(object, _data) { "Select if you still work at #{object.claim_school_name}, another school or no longer teach in England" }}
       validate :one_subject_must_be_selected, on: [:"subjects-taught", :submit], unless: :not_taught_eligible_subjects?
