@@ -21,7 +21,8 @@ module Journeys
       "qualification" => QualificationForm,
       "eligible-itt-subject" => EligibleIttSubjectForm,
       "teaching-subject-now" => TeachingSubjectNowForm,
-      "eligibility-confirmed" => EligibilityConfirmedForm
+      "eligibility-confirmed" => EligibilityConfirmedForm,
+      "correct-school" => CorrectSchoolForm
     }.freeze
   end
 end

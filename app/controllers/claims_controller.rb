@@ -35,8 +35,6 @@ class ClaimsController < BasePublicController
 
     if params[:slug] == "qualification-details"
       return redirect_to claim_path(current_journey_routing_name, next_slug) if current_claim.has_no_dqt_data_for_claim?
-    elsif params[:slug] == "correct-school"
-      update_session_with_tps_school(current_claim.recent_tps_school)
     elsif params[:slug] == "select-claim-school"
       update_session_with_tps_school(current_claim.tps_school_for_student_loan_in_previous_financial_year)
     elsif params[:slug] == "subjects-taught" && page_sequence.in_sequence?("select-claim-school")
@@ -89,8 +87,6 @@ class ClaimsController < BasePublicController
       set_dqt_data_as_answers
     when "personal-bank-account", "building-society-account"
       return bank_account
-    when "correct-school"
-      check_correct_school_params
     when "select-claim-school"
       check_select_claim_school_params
     when "select-mobile"
@@ -299,11 +295,6 @@ class ClaimsController < BasePublicController
       session[:tps_school_name] = school.name
       session[:tps_school_address] = school.address
     end
-  end
-
-  def check_correct_school_params
-    updated_claim_params = CorrectSchoolForm.extract_params(claim_params, change_school: params[:change_school])
-    current_claim.attributes = updated_claim_params
   end
 
   def check_select_claim_school_params
