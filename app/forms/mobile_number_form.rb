@@ -33,7 +33,7 @@ class MobileNumberForm < Form
   def send_sms_message
     NotifySmsMessage.new(
       phone_number: mobile_number,
-      template_id: "86ae1fe4-4f98-460b-9d57-181804b4e218",
+      template_id: NotifySmsMessage::OTP_PROMPT_TEMPLATE_ID,
       personalisation: {otp: OneTimePassword::Generator.new.code}
     ).deliver!
   end

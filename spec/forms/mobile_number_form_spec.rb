@@ -110,7 +110,7 @@ RSpec.describe MobileNumberForm do
         it "sends a text message" do
           expect(NotifySmsMessage).to have_received(:new).with(
             phone_number: mobile_number,
-            template_id: "86ae1fe4-4f98-460b-9d57-181804b4e218",
+            template_id: NotifySmsMessage::OTP_PROMPT_TEMPLATE_ID,
             personalisation: {
               otp: "111111"
             }
@@ -148,7 +148,7 @@ RSpec.describe MobileNumberForm do
         it "sends a text message" do
           expect(NotifySmsMessage).to have_received(:new).with(
             phone_number: mobile_number,
-            template_id: "86ae1fe4-4f98-460b-9d57-181804b4e218",
+            template_id: NotifySmsMessage::OTP_PROMPT_TEMPLATE_ID,
             personalisation: {
               otp: "111111"
             }
