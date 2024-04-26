@@ -1,15 +1,18 @@
 class EmailAddressForm < Form
   attribute :email_address
 
-  validates :email_address, presence: {message: "Enter an email address"} # TODO RL: i18n
+  validates :email_address,
+    presence: {
+      message: ->(form, _) { form.i18n_errors_path("presence") }
+    }
   validates :email_address,
     format: {
       with: Rails.application.config.email_regexp,
-      message: "Enter an email address in the correct format, like name@example.com"
+      message: ->(form, _) { form.i18n_errors_path("format") }
     },
     length: {
       maximum: 256,
-      message: "Email address must be 256 characters or less"
+      message: ->(form, _) { form.i18n_errors_path("length") }
     },
     if: -> { email_address.present? }
 
