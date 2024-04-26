@@ -54,8 +54,6 @@ class ClaimsController < BasePublicController
       session[:claim_postcode] = nil
       session[:claim_address_line_1] = nil
       redirect_to claim_path(current_journey_routing_name, "postcode-search") and return
-    elsif ["personal-bank-account", "building-society-account"].include?(params[:slug])
-      @bank_details_form ||= BankDetailsForm.new(claim: current_claim)
     end
 
     render current_template
@@ -81,8 +79,6 @@ class ClaimsController < BasePublicController
     end
 
     case params[:slug]
-    when "personal-bank-account", "building-society-account"
-      return bank_account
     when "select-claim-school"
       check_select_claim_school_params
     when "still-teaching"
@@ -233,21 +229,6 @@ class ClaimsController < BasePublicController
     return [] unless claim_params["eligibility_attributes"]
 
     claim_params["eligibility_attributes"].keys
-  end
-
-  def bank_account
-    @bank_details_form = BankDetailsForm.new(claim_params.merge(claim: current_claim, hmrc_validation_attempt_count: session[:bank_validation_attempt_count]))
-
-    @bank_details_form.validate!
-
-    current_claim.attributes = claim_params.merge({hmrc_bank_validation_succeeded: @bank_details_form.hmrc_api_validation_succeeded?})
-    current_claim.save!(context: page_sequence.current_slug.to_sym)
-
-    redirect_to claim_path(current_journey_routing_name, next_slug)
-  rescue ActiveModel::ValidationError
-    current_claim.attributes = claim_params
-    session[:bank_validation_attempt_count] = (session[:bank_validation_attempt_count] || 1) + 1 if @bank_details_form.hmrc_api_validation_attempted?
-    show
   end
 
   def correct_journey_for_claim_in_progress?

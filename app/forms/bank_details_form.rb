@@ -1,12 +1,7 @@
-class BankDetailsForm
-  include ActiveModel::Model
-  include ActiveModel::Attributes
-  include ActiveModel::Serialization
-
+class BankDetailsForm < Form
   # Only validate against HMRC API if number of attempts is below threshold
   MAX_HMRC_API_VALIDATION_ATTEMPTS = 3
 
-  attribute :claim
   attribute :hmrc_validation_attempt_count
   attribute :banking_name, :string
   attribute :bank_sort_code, :string
@@ -27,6 +22,30 @@ class BankDetailsForm
 
   # This should be the last validation specified to prevent unnecessary API calls
   validate :bank_account_is_valid
+
+  def initialize(claim:, journey:, params:)
+    super
+    self.hmrc_validation_attempt_count = 0
+  end
+
+  def save
+    if valid?
+      update!(
+        banking_name:,
+        bank_sort_code:,
+        bank_account_number:,
+        building_society_roll_number:,
+        hmrc_bank_validation_succeeded:
+      )
+    else
+      @hmrc_validation_attempt_count += 1 if hmrc_api_validation_attempted?
+      false
+    end
+  end
+
+  def hmrc_bank_validation_succeeded
+    hmrc_api_validation_succeeded?
+  end
 
   def hmrc_api_validation_attempted?
     @hmrc_api_validation_attempted == true && @hmrc_api_response_error != true
