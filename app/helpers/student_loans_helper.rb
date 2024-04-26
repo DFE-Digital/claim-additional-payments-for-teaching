@@ -26,7 +26,7 @@ module StudentLoansHelper
   # Returns the question for the leadership-position question in the Student
   # Loans journey.
   def leadership_position_question
-    translate("student_loans.questions.leadership_position", financial_year: Policies::StudentLoans.current_financial_year)
+    translate("student_loans.forms.leadership_position.questions.leadership_position", financial_year: Policies::StudentLoans.current_financial_year)
   end
 
   # Returns the question for the mostly-performed-leadership-duties question in

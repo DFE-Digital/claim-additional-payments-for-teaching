@@ -1,50 +1,62 @@
-<% content_for(:page_title, page_title(leadership_position_question, journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(
+  :page_title,
+  page_title(
+    leadership_position_question,
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.had_leadership_position": "claim_eligibility_attributes_had_leadership_position_true" }) if current_claim.errors.any? %>
+    <% if @form.errors.any? %>
+      <%= render(
+        "shared/error_summary",
+        instance: @form,
+        errored_field_id_overrides: {
+          "eligibility.had_leadership_position": "claim_eligibility_attributes_had_leadership_position_true"
+        }
+      ) %>
+    <% end %>
 
-    <%= form_for current_claim, url: claim_path(current_journey_routing_name) do |form| %>
-      <%= form_group_tag current_claim do %>
-        <%= form.fields_for :eligibility, include_id: false do |fields| %>
+    <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
+      <%= form_group_tag f.object do %>
 
-          <%= fields.hidden_field :had_leadership_position %>
+        <%= f.hidden_field :had_leadership_position %>
 
-          <fieldset class="govuk-fieldset" aria-describedby="had_leadership_position-hint" role="group">
+        <fieldset class="govuk-fieldset" aria-describedby="had_leadership_position-hint" role="group">
 
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-              <h1 class="govuk-fieldset__heading">
-                <%= leadership_position_question %>
-              </h1>
-            </legend>
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading">
+              <%= leadership_position_question %>
+            </h1>
+          </legend>
 
-            <div class="govuk-hint" id="had_leadership_position-hint">
-              This includes head of subject, head of year, head of department,
-              deputy head, head teacher or other middle leader role.
+          <div class="govuk-hint" id="had_leadership_position-hint">
+            <%= t("student_loans.forms.leadership_position.hints.leadership_position") %>
+          </div>
+
+          <%= errors_tag f.object, :had_leadership_position %>
+
+          <div class="govuk-radios govuk-radios--inline">
+
+            <div class="govuk-radios__item">
+              <%= f.radio_button(:had_leadership_position, true, class: "govuk-radios__input") %>
+              <%= f.label :had_leadership_position_true, "Yes", class: "govuk-label govuk-radios__label" %>
             </div>
 
-            <%= errors_tag current_claim.eligibility, :had_leadership_position %>
-
-            <div class="govuk-radios govuk-radios--inline">
-
-              <div class="govuk-radios__item">
-                <%= fields.radio_button(:had_leadership_position, true, class: "govuk-radios__input") %>
-                <%= fields.label :had_leadership_position_true, "Yes", class: "govuk-label govuk-radios__label" %>
-              </div>
-
-              <div class="govuk-radios__item">
-                <%= fields.radio_button(:had_leadership_position, false, class: "govuk-radios__input") %>
-                <%= fields.label :had_leadership_position_false, "No", class: "govuk-label govuk-radios__label" %>
-              </div>
-
+            <div class="govuk-radios__item">
+              <%= f.radio_button(:had_leadership_position, false, class: "govuk-radios__input") %>
+              <%= f.label :had_leadership_position_false, "No", class: "govuk-label govuk-radios__label" %>
             </div>
 
-          </fieldset>
+          </div>
 
-        <% end %>
+        </fieldset>
+
       <% end %>
 
-      <%= form.submit "Continue", class: "govuk-button" %>
+      <%= f.submit "Continue", class: "govuk-button" %>
     <% end %>
   </div>
 </div>

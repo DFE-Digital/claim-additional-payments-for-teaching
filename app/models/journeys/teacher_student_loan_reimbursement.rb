@@ -13,7 +13,8 @@ module Journeys
     FORMS = {
       "claim-school" => ClaimSchoolForm,
       "qualification-details" => QualificationDetailsForm,
-      "qts-year" => QtsYearForm
+      "qts-year" => QtsYearForm,
+      "leadership-position" => LeadershipPositionForm
     }
   end
 end
