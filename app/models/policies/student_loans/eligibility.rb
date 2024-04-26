@@ -119,12 +119,6 @@ module Policies
         I18n.t("student_loans.questions.claim_school_select_error", financial_year: StudentLoans.current_financial_year)
       end
 
-      def set_qualifications_from_dqt_record
-        self.qts_award_year = if claim.qualifications_details_check && claim.dqt_teacher_record&.qts_award_date
-          claim.dqt_teacher_record.eligible_qts_award_date? ? :on_or_after_cut_off_date : :before_cut_off_date
-        end
-      end
-
       private
 
       def ineligible_claim_school?

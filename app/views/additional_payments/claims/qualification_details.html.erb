@@ -1,6 +1,14 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { details_check: "qualifications_details_check_true" }) if current_claim.errors.any? %>
+    <% if @form.errors.any? %>
+      <%= render(
+        "shared/error_summary",
+        instance: @form,
+        errored_field_id_overrides: {
+          qualifications_details_check: "claim_qualifications_details_check_true"
+        }
+      ) %>
+    <% end %>
   </div>
 </div>
 
@@ -12,38 +20,38 @@
       <div class="personal-details-section">
         <h2 class="govuk-heading-m"><%= t("questions.qualification_details") %></h2>
         <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-          <% if current_claim.dqt_teacher_record.route_into_teaching %>
+          <% if @form.dqt_route_into_teaching %>
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key"><%= t("questions.teacher_route") %></dt>
               <dd class="govuk-summary-list__value">
-                <%= t("#{current_claim.policy.locale_key}.forms.qualification.answers.#{current_claim.dqt_teacher_record.route_into_teaching}") %>
+                <%= t("#{current_claim.policy.locale_key}.forms.qualification.answers.#{@form.dqt_route_into_teaching}") %>
               </dd>
             </div>
           <% end %>
 
-          <% if current_claim.dqt_teacher_record.academic_date %>
+          <% if @form.dqt_academic_date %>
             <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key"><%= t("questions.academic_year.#{current_claim.dqt_teacher_record.route_into_teaching}") %></dt>
+              <dt class="govuk-summary-list__key"><%= t("questions.academic_year.#{@form.dqt_route_into_teaching}") %></dt>
               <dd class="govuk-summary-list__value">
-                <%= AcademicYear.for(current_claim.dqt_teacher_record.academic_date) %>
+                <%= @form.dqt_academic_date %>
               </dd>
             </div>
           <% end %>
 
-          <% unless current_claim.dqt_teacher_record.itt_subjects.empty? %>
+          <% if @form.dqt_itt_subjects.present? %>
             <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key"><%= t("questions.itt_subject.#{current_claim.dqt_teacher_record.route_into_teaching}") %></dt>
+              <dt class="govuk-summary-list__key"><%= t("questions.itt_subject.#{@form.dqt_route_into_teaching}") %></dt>
               <dd class="govuk-summary-list__value">
-                <%= dqt_subjects_playback(current_claim) %>
+                <%= @form.dqt_itt_subjects %>
               </dd>
             </div>
           <% end %>
 
-          <% if current_claim.claims.any? { |c| c.dqt_teacher_record.eligible_itt_subject_for_claim == :none_of_the_above } && current_claim.dqt_teacher_record.degree_names.any? %>
+          <% if @form.show_degree_subjects? %>
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key"><%= t("questions.degree_subject") %></dt>
               <dd class="govuk-summary-list__value">
-                <%= dqt_degree_subjects_playback(current_claim) %>
+                <%= @form.dqt_degree_subjects %>
               </dd>
             </div>
           <% end %>
@@ -53,25 +61,34 @@
   </div>
 </div>
 
-<% path_for_form = current_claim.persisted? ? claim_path(current_journey_routing_name) : claims_path(current_journey_routing_name) %>
-  <%= form_for current_claim, url: path_for_form do |form| %>
-    <%= form.hidden_field :qualifications_details_check %>
-    <%= form_group_tag current_claim do %>
+  <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
+    <%= f.hidden_field :qualifications_details_check %>
+    <%= form_group_tag f.object do %>
 
     <div class="govuk-radios">
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m"><%= t("questions.details_correct") %></legend>
 
-        <%= errors_tag current_claim, :qualifications_details_check %>
+        <%= errors_tag f.object.claim, :qualifications_details_check %>
 
         <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
           <div class="govuk-radios__item">
-            <%= form.radio_button(:qualifications_details_check, true, class: "govuk-radios__input") %>
-            <%= form.label :qualifications_details_check_true, t("questions.radio_yes"), class: "govuk-label govuk-radios__label" %>
+            <%= f.radio_button(:qualifications_details_check, true, class: "govuk-radios__input") %>
+            <%= f.label(
+              :qualifications_details_check,
+              t("questions.radio_yes"),
+              value: true,
+              class: "govuk-label govuk-radios__label"
+            ) %>
           </div>
           <div class="govuk-radios__item">
-          <%= form.radio_button(:qualifications_details_check, false, class: "govuk-radios__input") %>
-          <%= form.label :qualifications_details_check_false, t("questions.radio_no"), class: "govuk-label govuk-radios__label" %>
+          <%= f.radio_button(:qualifications_details_check, false, class: "govuk-radios__input") %>
+          <%= f.label(
+            :qualifications_details_check,
+            t("questions.radio_no"),
+            value: false,
+            class: "govuk-label govuk-radios__label"
+          ) %>
           </div>
         </div>
       </fieldset>
@@ -82,6 +99,6 @@
   <p class="govuk-body"><%= t("questions.select_yes_confirm") %></p>
 
   <div class="govuk-form-group">
-    <%= form.submit t("questions.continue"), class: "govuk-button", data: {module: "govuk-button"} %>
+    <%= f.submit t("questions.continue"), class: "govuk-button", data: {module: "govuk-button"} %>
   </div>
 <% end %>

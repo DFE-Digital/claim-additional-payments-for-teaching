@@ -225,6 +225,9 @@ en:
       still_teaching:
         questions:
           which_school_currently: "Which school are you currently employed to teach at?"
+      qualification_details:
+        errors:
+          qualifications_details_check: "Select yes if your qualification details are correct"
     journey_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"
     policy_acronym: "TSLR"
@@ -362,6 +365,9 @@ en:
           undergraduate_itt: "Undergraduate initial teacher training (ITT)"
           assessment_only: "Assessment only"
           overseas_recognition: "Overseas recognition"
+      qualification_details:
+        errors:
+          qualifications_details_check: "Select yes if your qualification details are correct"
       sign_in_or_continue:
         errors:
           details_check: "Select an option to whether the details are correct or not"
