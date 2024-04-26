@@ -1,35 +1,30 @@
 <%= render("shared/error_summary", instance: current_claim.eligibility) if current_claim.eligibility.errors.any? %>
 
-<%= form_for current_claim, url: claim_path(current_journey_routing_name) do |form| %>
+<%= form_for @form, url: claim_path(current_journey_routing_name) do |form| %>
   <%= form_group_tag current_claim do %>
     <fieldset class="govuk-fieldset" aria-describedby="school-search-result-hint">
+      <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">
+        <h1 class="govuk-fieldset__heading">
+          <%= t("additional_payments.forms.correct_school.questions.which_school") %>
+        </h1>
+      </legend>
 
-    <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">
-      <h1 class="govuk-fieldset__heading">
-        <%= t("additional_payments.forms.correct_school.questions.which_school") %>
-      </h1>
-    </legend>
+      <%= errors_tag @form, :current_school %>
 
-    <%= errors_tag current_claim.eligibility, :current_school %>
-
-    <div class="govuk-radios">
-      <%= form.fields_for :eligibility, include_id: false do |fields| %>
+      <div class="govuk-radios">
         <div class="govuk-radios__item">
-          <%= fields.radio_button(:current_school_id, session[:tps_school_id], class: "govuk-radios__input") %>
-          <%= fields.label "current_school_id_#{session[:tps_school_id]}", session[:tps_school_name], class: "govuk-label govuk-radios__label" %>
+          <%= form.radio_button(:current_school_id, @form.current_school_id, class: "govuk-radios__input") %>
+          <%= form.label "current_school_id_#{@form.current_school_id}", @form.current_school_name, class: "govuk-label govuk-radios__label" %>
           <div id="school-checker-item-hint" class="govuk-hint govuk-radios__hint">
-            <%= session[:tps_school_address] %>
+            <%= @form.current_school_address %>
           </div>
         </div>
         <div class="govuk-radios__divider">or</div>
         <div class="govuk-radios__item">
-          <%= fields.radio_button(:current_school_id, "somewhere_else", checked: current_claim.eligibility.school_somewhere_else?, class: "govuk-radios__input") %>
-          <%= fields.label "current_school_id_somewhere_else", "Somewhere else", class: "govuk-label govuk-radios__label" %>
+          <%= form.radio_button(:current_school_id, "somewhere_else", checked: @form.school_somewhere_else?, class: "govuk-radios__input") %>
+          <%= form.label "current_school_id_somewhere_else", "Somewhere else", class: "govuk-label govuk-radios__label" %>
         </div>
-      <% end %>
-    </div>
-
-
+      </div>
     </fieldset>
   <% end %>
 
