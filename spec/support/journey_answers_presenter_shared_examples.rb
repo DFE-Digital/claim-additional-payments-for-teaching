@@ -97,7 +97,7 @@ RSpec.shared_examples "journey answers presenter" do
         end
 
         it "includes the selected mobile and the change slug is `select-mobile`" do
-          expect(answers).to include([I18n.t("questions.select_phone_number.heading"), "01234567890", "select-mobile"])
+          expect(answers).to include([I18n.t("additional_payments.forms.select_mobile_form.questions.which_number"), "01234567890", "select-mobile"])
         end
 
         it "excludes the answer to `provide-mobile-number`" do
@@ -113,7 +113,7 @@ RSpec.shared_examples "journey answers presenter" do
         end
 
         it "includes the user-provided mobile and the change slug is `select-mobile`" do
-          expect(answers).to include([I18n.t("questions.select_phone_number.heading"), "01234567891", "select-mobile"])
+          expect(answers).to include([I18n.t("additional_payments.forms.select_mobile_form.questions.which_number"), "01234567891", "select-mobile"])
         end
 
         it "excludes the answer to `provide-mobile-number`" do
@@ -129,7 +129,7 @@ RSpec.shared_examples "journey answers presenter" do
         end
 
         it "includes the answer to decline and the change slug is `select-mobile`" do
-          expect(answers).to include([I18n.t("questions.select_phone_number.heading"), "I do not want to be contacted by mobile", "select-mobile"])
+          expect(answers).to include([I18n.t("additional_payments.forms.select_mobile_form.questions.which_number"), "I do not want to be contacted by mobile", "select-mobile"])
         end
 
         it "excludes the answer to `provide-mobile-number`" do

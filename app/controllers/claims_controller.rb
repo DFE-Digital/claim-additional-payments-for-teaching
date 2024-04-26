@@ -41,8 +41,6 @@ class ClaimsController < BasePublicController
       update_session_with_tps_school(current_claim.tps_school_for_student_loan_in_previous_financial_year)
     elsif params[:slug] == "subjects-taught" && page_sequence.in_sequence?("select-claim-school")
       @backlink_path = claim_path(current_journey_routing_name, "select-claim-school")
-    elsif params[:slug] == "select-mobile"
-      session[:phone_number] = current_claim.teacher_id_user_info["phone_number"]
     elsif params[:slug] == "postcode-search" && postcode
       redirect_to claim_path(current_journey_routing_name, "select-home-address", {"claim[postcode]": params[:claim][:postcode], "claim[address_line_1]": params[:claim][:address_line_1]}) and return unless invalid_postcode?
     elsif params[:slug] == "select-home-address" && postcode
@@ -89,8 +87,6 @@ class ClaimsController < BasePublicController
       return bank_account
     when "select-claim-school"
       check_select_claim_school_params
-    when "select-mobile"
-      check_mobile_number_params
     when "still-teaching"
       check_still_teaching_params
     else
@@ -226,21 +222,8 @@ class ClaimsController < BasePublicController
         ClaimMailer.email_verification(current_claim, otp.code).deliver_now
         session[:sent_one_time_password_at] = Time.now
       end
-    when "mobile-number"
-      if current_claim.valid?(:"mobile-number") && current_claim.mobile_number_changed?
-        response = NotifySmsMessage.new(
-          phone_number: current_claim.mobile_number,
-          template_id: "86ae1fe4-4f98-460b-9d57-181804b4e218",
-          personalisation: {
-            otp: otp.code
-          }
-        ).deliver!
-      end
-      session[:sent_one_time_password_at] = Time.now unless response.nil?
     when "email-verification"
       current_claim.update(sent_one_time_password_at: session[:sent_one_time_password_at], one_time_password_category: :claim_email)
-    when "mobile-verification"
-      current_claim.update(sent_one_time_password_at: session[:sent_one_time_password_at], one_time_password_category: :claim_mobile)
     end
   end
 
@@ -279,10 +262,6 @@ class ClaimsController < BasePublicController
 
   def no_eligible_itt_subject?
     !current_claim.eligible_itt_subject
-  end
-
-  def check_mobile_number_params
-    current_claim.attributes = SelectMobileNumberForm.extract_attributes(current_claim, mobile_check: params.dig(:claim, :mobile_check))
   end
 
   def update_session_with_tps_school(school)

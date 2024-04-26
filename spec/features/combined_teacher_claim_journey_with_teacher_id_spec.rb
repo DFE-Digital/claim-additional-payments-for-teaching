@@ -149,7 +149,7 @@ RSpec.feature "Combined journey with Teacher ID" do
 
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("questions.select_phone_number.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.select_mobile_form.questions.which_number"))
 
     # - Select the suggested phone number
     choose "01234567890"

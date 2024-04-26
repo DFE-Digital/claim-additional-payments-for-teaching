@@ -3,15 +3,13 @@ module OneTimePasswordCheckable
 
   CATEGORIES = %w[
     claim_email
-    claim_mobile
     reminder_email
   ].freeze
 
   included do
     attribute :one_time_password, :string, limit: 6
     attribute :one_time_password_category, :string
-    attribute :sent_one_time_password_at, :datetime
-    validate :otp_validate, on: [:"email-verification", :"mobile-verification"]
+    validate :otp_validate, on: [:"email-verification"]
     before_save :normalise_one_time_password, if: :one_time_password_changed?
   end
 
@@ -24,7 +22,6 @@ module OneTimePasswordCheckable
   def otp_validate
     return unless CATEGORIES.include?(one_time_password_category)
     return write_attribute(:email_verified, true) if otp.valid? && %w[claim_email reminder_email].include?(one_time_password_category)
-    return write_attribute(:mobile_verified, true) if otp.valid? && one_time_password_category == "claim_mobile"
 
     errors.add(:one_time_password, otp.warning)
   end

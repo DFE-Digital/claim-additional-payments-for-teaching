@@ -108,7 +108,7 @@ module Journeys
             sequence.delete("email-verification")
           end
 
-          if (claim.logged_in_with_tid == false) || claim.teacher_id_user_info["phone_number"].nil?
+          if (claim.logged_in_with_tid == false) || claim.teacher_id_user_info["phone_number"].blank?
             sequence.delete("select-mobile")
           else
             sequence.delete("provide-mobile-number")

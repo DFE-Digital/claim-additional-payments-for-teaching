@@ -3,6 +3,8 @@ require "notifications/client"
 class NotifySmsMessage
   class NotifySmsError < StandardError; end
 
+  OTP_PROMPT_TEMPLATE_ID = "86ae1fe4-4f98-460b-9d57-181804b4e218".freeze
+
   attr_reader :phone_number, :template_id, :personalisation
 
   def initialize(phone_number:, template_id:, personalisation:)

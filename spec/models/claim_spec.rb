@@ -192,42 +192,6 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  context "with early-career payments policy" do
-    subject(:claim) { build(:claim, policy: Policies::EarlyCareerPayments) }
-
-    context "with mobile number" do
-      before do
-        claim.provide_mobile_number = true
-        claim.mobile_number = mobile_number
-      end
-
-      context "with UK number without spaces" do
-        let(:mobile_number) { "07474000123" }
-        it { is_expected.to be_valid(:mobile_number) }
-      end
-
-      context "with UK number with spaces" do
-        let(:mobile_number) { "07474 000 123" }
-        it { is_expected.to be_valid(:mobile_number) }
-      end
-
-      context "with international format number without spaces" do
-        let(:mobile_number) { "+447474000123" }
-        it { is_expected.to be_valid(:mobile_number) }
-      end
-
-      context "with international format number with spaces" do
-        let(:mobile_number) { "+44 7474 000 123" }
-        it { is_expected.to be_valid(:mobile_number) }
-      end
-
-      context "with international format non-UK number" do
-        let(:mobile_number) { "+33 12 34 56 78" }
-        it { is_expected.not_to be_valid(:mobile_number) }
-      end
-    end
-  end
-
   context "when saving in the “personal-bank-account” validation context" do
     it "validates that the bank_account_number and bank_sort_code are present" do
       invalid_claim = build(:claim)

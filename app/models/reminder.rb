@@ -1,6 +1,8 @@
 class Reminder < ApplicationRecord
   include ::OneTimePasswordCheckable
 
+  attribute :sent_one_time_password_at, :datetime
+
   validates :full_name, on: [:"personal-details"], presence: {message: "Enter full name"}
   validates :full_name, length: {maximum: 100, message: "Full name must be 100 characters or less"}
 
