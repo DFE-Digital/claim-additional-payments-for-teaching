@@ -1,13 +1,25 @@
-<% content_for(:page_title, page_title(t("questions.teacher_reference_number"), journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(
+  :page_title,
+  page_title(
+    t("additional_payments.forms.teacher_reference_number.questions.teacher_reference_number"),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?)
+) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
+    <% if @form.errors.any? %>
+      <%= render("shared/error_summary", instance: @form) %>
+    <% end %>
 
-    <%= form_for current_claim, url: claim_path(current_journey_routing_name) do |form| %>
-      <%= form_group_tag current_claim do %>
+    <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
+      <%= form_group_tag f.object do %>
         <h1 class="govuk-label-wrapper">
-          <%= form.label :teacher_reference_number, t("questions.teacher_reference_number"), class: "govuk-label #{label_css_class_for_journey(journey)}" %>
+          <%= f.label(
+            :teacher_reference_number,
+            t("additional_payments.forms.teacher_reference_number.questions.teacher_reference_number"),
+            class: "govuk-label #{label_css_class_for_journey(f.object.journey)}"
+          ) %>
         </h1>
 
         <div class="govuk-hint" id="teacher_reference_number-hint">
@@ -15,12 +27,14 @@
         </div>
 
         <div class="govuk-form-group">
-          <%= errors_tag current_claim, :teacher_reference_number %>
-          <%= form.text_field :teacher_reference_number,
-                              spellcheck: "false",
-                              autocomplete: "off",
-                              class: css_classes_for_input(current_claim, :teacher_reference_number, 'govuk-input--width-10'),
-                              "aria-describedby" => "teacher_reference_number-hint" %>
+          <%= errors_tag f.object, :teacher_reference_number %>
+          <%= f.text_field(
+            :teacher_reference_number,
+            spellcheck: "false",
+            autocomplete: "off",
+            class: css_classes_for_input(f.object.claim, :teacher_reference_number, 'govuk-input--width-10'),
+            "aria-describedby" => "teacher_reference_number-hint"
+          ) %>
         </div>
       <% end %>
       <details class="govuk-details" data-module="govuk-details">
@@ -37,7 +51,7 @@
           </p>
         </div>
       </details>
-      <%= form.submit "Continue", class: "govuk-button" %>
+      <%= f.submit "Continue", class: "govuk-button" %>
     <% end %>
   </div>
 </div>

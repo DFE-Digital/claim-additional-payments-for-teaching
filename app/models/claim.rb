@@ -182,7 +182,7 @@ class Claim < ApplicationRecord
   validates :postcode, length: {maximum: 11, message: "Postcode must be 11 characters or less"}
   validate :postcode_is_valid, if: -> { postcode.present? }
 
-  validates :teacher_reference_number, on: [:"teacher-reference-number", :submit, :amendment], presence: {message: "Enter your teacher reference number"}
+  validates :teacher_reference_number, on: [:submit, :amendment], presence: {message: "Enter your teacher reference number"}
   validate :trn_must_be_seven_digits
 
   validates :has_student_loan, on: [:"student-loan"], inclusion: {in: [true, false]}
