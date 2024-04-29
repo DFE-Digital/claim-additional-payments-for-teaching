@@ -14,7 +14,8 @@ module Journeys
       "claim-school" => ClaimSchoolForm,
       "qualification-details" => QualificationDetailsForm,
       "qts-year" => QtsYearForm,
-      "leadership-position" => LeadershipPositionForm
+      "leadership-position" => LeadershipPositionForm,
+      "mostly-performed-leadership-duties" => MostlyPerformedLeadershipDutiesForm
     }
   end
 end

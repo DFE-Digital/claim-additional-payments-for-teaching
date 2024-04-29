@@ -304,7 +304,7 @@ RSpec.describe "Claims", type: :request do
       it "resets depenent eligibility attributes when appropriate" do
         in_progress_claim.update!(eligibility_attributes: {had_leadership_position: true, mostly_performed_leadership_duties: false})
         set_slug_sequence_in_session(in_progress_claim, "leadership-position")
-        put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "leadership-position"), params: {claim: {eligibility_attributes: {had_leadership_position: false}}}
+        put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "leadership-position"), params: {claim: {had_leadership_position: false}}
 
         expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "eligibility-confirmed"))
         expect(in_progress_claim.eligibility.reload.mostly_performed_leadership_duties).to be_nil
