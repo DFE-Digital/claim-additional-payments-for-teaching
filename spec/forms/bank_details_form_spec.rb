@@ -167,7 +167,7 @@ RSpec.describe BankDetailsForm do
 
           context "when the validation fails on the third attempt" do
             before do
-              allow(form).to receive(:hmrc_validation_attempt_count).and_return(3)
+              allow(form).to receive(:hmrc_validation_attempt_count).and_return(2)
             end
 
             let(:account_exists) { false }

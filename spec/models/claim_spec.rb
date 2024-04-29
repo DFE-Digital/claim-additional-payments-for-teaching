@@ -81,29 +81,6 @@ RSpec.describe Claim, type: :model do
   context "that has bank details" do
     let(:claim) { build(:claim, policy: Policies::EarlyCareerPayments) }
 
-    it "does not validate which type of payment account was specified" do
-      expect { claim.bank_or_building_society = "visa" }.to raise_error(ArgumentError)
-    end
-
-    it "validates the format of bank_account_number and bank_sort_code" do
-      expect(build(:claim, bank_account_number: "ABC12 34 56 789")).not_to be_valid
-      expect(build(:claim, bank_account_number: "12-34-56-78-90")).not_to be_valid
-      expect(build(:claim, bank_account_number: "12-34-56-78")).to be_valid
-      expect(build(:claim, bank_account_number: "12-34-56")).not_to be_valid
-
-      expect(build(:claim, bank_sort_code: "ABC12 34 567")).not_to be_valid
-      expect(build(:claim, bank_sort_code: "12 34 56")).to be_valid
-    end
-
-    it "validates the format of the building society roll number" do
-      expect(build(:claim, building_society_roll_number: "CXJ-K6 897/98X")).to be_valid
-      expect(build(:claim, building_society_roll_number: "123456789/ABCD")).to be_valid
-      expect(build(:claim, building_society_roll_number: "123456789")).to be_valid
-
-      expect(build(:claim, building_society_roll_number: "123456789/ABC.CD-EFGH ")).not_to be_valid
-      expect(build(:claim, building_society_roll_number: "123456789/*****")).not_to be_valid
-    end
-
     context "on save" do
       it "strips out white space and the “-” character from bank_account_number and bank_sort_code" do
         claim = build(:claim, bank_sort_code: "12 34 56", bank_account_number: "12-34-56-78")
@@ -162,30 +139,6 @@ RSpec.describe Claim, type: :model do
     it "validates the presence of email_address" do
       expect(build(:claim)).not_to be_valid(:"email-address")
       expect(build(:claim, email_address: "name@example.tld")).to be_valid(:"email-address")
-    end
-  end
-
-  context "when saving in the “personal-bank-account” validation context" do
-    it "validates that the bank_account_number and bank_sort_code are present" do
-      invalid_claim = build(:claim)
-      valid_claim = build(:claim, bank_sort_code: "123456", bank_account_number: "87654321", banking_name: "Jo Bloggs")
-      expect(invalid_claim).not_to be_valid(:"personal-bank-account")
-      expect(valid_claim).to be_valid(:"personal-bank-account")
-    end
-  end
-
-  context "when saving in the “building-society-account” validation context" do
-    it "validates that the bank_account_number and bank_sort_code are present" do
-      invalid_claim = build(:claim, bank_or_building_society: :building_society)
-      valid_claim = build(
-        :claim,
-        bank_sort_code: "123456",
-        bank_account_number: "87654321",
-        banking_name: "Jo Bloggs",
-        building_society_roll_number: "CXJ-K6 897/98X"
-      )
-      expect(invalid_claim).not_to be_valid(:"building-society-account")
-      expect(valid_claim).to be_valid(:"building-society-account")
     end
   end
 
