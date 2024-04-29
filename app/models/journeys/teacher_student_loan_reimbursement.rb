@@ -16,7 +16,8 @@ module Journeys
       "qts-year" => QtsYearForm,
       "subjects-taught" => SubjectsTaughtForm,
       "leadership-position" => LeadershipPositionForm,
-      "mostly-performed-leadership-duties" => MostlyPerformedLeadershipDutiesForm
+      "mostly-performed-leadership-duties" => MostlyPerformedLeadershipDutiesForm,
+      "reset-claim" => ResetClaimForm
     }
   end
 end
