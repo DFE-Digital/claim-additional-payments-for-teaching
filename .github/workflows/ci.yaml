@@ -11,6 +11,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           cache: yarn
+      - name: Install js packages
+        run: yarn install
       - name: Install Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -51,6 +53,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           cache: yarn
+      - name: Install js packages
+        run: yarn install
       - name: Install Ruby
         uses: ruby/setup-ruby@v1
         with:
