@@ -11,7 +11,7 @@ class BankOrBuildingSocietyForm < Form
     return false unless valid?
 
     claim.assign_attributes(bank_or_building_society:)
-    claim.reset_eligibility_dependent_answers(["bank_or_building_society"])
+    claim.reset_dependent_answers
     claim.save!
   end
 end
