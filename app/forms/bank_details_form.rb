@@ -2,7 +2,7 @@ class BankDetailsForm < Form
   # Only validate against HMRC API if number of attempts is below threshold
   MAX_HMRC_API_VALIDATION_ATTEMPTS = 3
 
-  attribute :hmrc_validation_attempt_count
+  attribute :hmrc_validation_attempt_count, :integer
   attribute :banking_name, :string
   attribute :bank_sort_code, :string
   attribute :bank_account_number, :string
@@ -25,7 +25,7 @@ class BankDetailsForm < Form
 
   def initialize(claim:, journey:, params:)
     super
-    self.hmrc_validation_attempt_count = 0
+    self.hmrc_validation_attempt_count ||= 0
   end
 
   def save
@@ -38,7 +38,7 @@ class BankDetailsForm < Form
         hmrc_bank_validation_succeeded:
       )
     else
-      @hmrc_validation_attempt_count += 1 if hmrc_api_validation_attempted?
+      self.hmrc_validation_attempt_count += 1 if hmrc_api_validation_attempted?
       false
     end
   end
@@ -111,10 +111,10 @@ class BankDetailsForm < Form
   end
 
   def within_maximum_attempts?
-    (hmrc_validation_attempt_count || 1) <= MAX_HMRC_API_VALIDATION_ATTEMPTS
+    (hmrc_validation_attempt_count + 1) <= MAX_HMRC_API_VALIDATION_ATTEMPTS
   end
 
   def met_maximum_attempts?
-    (hmrc_validation_attempt_count || 1) >= MAX_HMRC_API_VALIDATION_ATTEMPTS
+    (hmrc_validation_attempt_count + 1) >= MAX_HMRC_API_VALIDATION_ATTEMPTS
   end
 end

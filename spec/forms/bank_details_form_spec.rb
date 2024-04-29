@@ -157,6 +157,12 @@ RSpec.describe BankDetailsForm do
               form.valid?
               expect(form).not_to be_hmrc_api_validation_succeeded
             end
+
+            it "increments hmrc_validation_attempt_count" do
+              expect {
+                form.save
+              }.to change { form.hmrc_validation_attempt_count }.from(0).to(1)
+            end
           end
 
           context "when the validation fails on the third attempt" do
