@@ -36,6 +36,8 @@ module Journeys
             }
           )
         else
+          # FIXME RL: decide how to handle resetting `eligible_degree_subject`
+          # and add test for it - only LUP eligibility has this field
           update!(
             eligibility_attributes: {
               eligible_itt_subject: eligible_itt_subject,
