@@ -86,7 +86,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     claim = start_student_loans_claim
     choose_school school
 
-    choose I18n.t("student_loans.questions.eligible_subjects.none_taught")
+    check I18n.t("student_loans.forms.subjects_taught.answers.none_taught")
     click_on "Continue"
 
     expect(claim.eligibility.reload.taught_eligible_subjects?).to eq(false)

@@ -44,7 +44,7 @@ RSpec.feature "Applicant worked at multiple schools" do
   scenario "didn't teach eligible subjects, but taught eligible subjects at a different eligible school" do
     choose_school eligible_school
 
-    choose I18n.t("student_loans.questions.eligible_subjects.none_taught")
+    check I18n.t("student_loans.forms.subjects_taught.answers.none_taught")
     click_on "Continue"
 
     expect(page).to have_text("You did not select an eligible subject")
@@ -57,8 +57,8 @@ RSpec.feature "Applicant worked at multiple schools" do
 
     choose_school eligible_school
 
-    check I18n.t("student_loans.questions.eligible_subjects.biology_taught")
-    check I18n.t("student_loans.questions.eligible_subjects.physics_taught")
+    check I18n.t("student_loans.forms.subjects_taught.answers.biology_taught")
+    check I18n.t("student_loans.forms.subjects_taught.answers.physics_taught")
     click_on "Continue"
 
     expect(claim.eligibility.reload.taught_eligible_subjects).to eq(true)
@@ -69,14 +69,14 @@ RSpec.feature "Applicant worked at multiple schools" do
   scenario "didn't teach eligible subjects and did not teach eligible subjects at a different eligible school" do
     choose_school eligible_school
 
-    choose I18n.t("student_loans.questions.eligible_subjects.none_taught")
+    check I18n.t("student_loans.forms.subjects_taught.answers.none_taught")
     click_on "Continue"
 
     click_on "Enter another school"
 
     choose_school eligible_school
 
-    choose I18n.t("student_loans.questions.eligible_subjects.none_taught")
+    check I18n.t("student_loans.forms.subjects_taught.answers.none_taught")
     click_on "Continue"
 
     expect(page).to have_text("You did not select an eligible subject")

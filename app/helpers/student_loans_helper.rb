@@ -20,7 +20,7 @@ module StudentLoansHelper
   # Accepts a `school_name` named parameter that is the school that the claimant
   # was teaching at during the financial year.
   def subjects_taught_question(school_name:)
-    translate("student_loans.questions.subjects_taught", school: school_name, financial_year: Policies::StudentLoans.current_financial_year)
+    translate("student_loans.forms.subjects_taught.questions.subjects_taught", school: school_name, financial_year: Policies::StudentLoans.current_financial_year)
   end
 
   # Returns the question for the leadership-position question in the Student

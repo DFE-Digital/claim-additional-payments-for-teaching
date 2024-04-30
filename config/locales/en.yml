@@ -252,6 +252,18 @@ en:
           qts_award_year: When did you complete your initial teacher training (ITT)?
         errors:
           select_itt_year: Select when you completed your initial teacher training
+      subjects_taught:
+        questions:
+          subjects_taught: Which of the following subjects did you teach at %{school} between %{financial_year}?
+        answers:
+          biology_taught: Biology
+          chemistry_taught: Chemistry
+          physics_taught: Physics
+          computing_taught: Computing
+          languages_taught: Languages
+          none_taught: I did not teach any of these subjects
+        errors:
+          select_subject: Select if you taught Biology, Chemistry, Physics, Computing, Languages or you did not teach any of these subjects
       still_teaching:
         questions:
           which_school_currently: "Which school are you currently employed to teach at?"

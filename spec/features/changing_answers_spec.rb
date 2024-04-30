@@ -20,7 +20,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     find("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "subjects-taught")}']").click
 
-    expect(find("#eligible_subjects_physics_taught").checked?).to eq(true)
+    expect(find("#claim_physics_taught").checked?).to eq(true)
 
     check "Biology"
     click_on "Continue"
@@ -73,8 +73,8 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "subjects-taught"))
 
-    check I18n.t("student_loans.questions.eligible_subjects.biology_taught"), visible: false
-    check I18n.t("student_loans.questions.eligible_subjects.chemistry_taught"), visible: false
+    check I18n.t("student_loans.forms.subjects_taught.answers.biology_taught"), visible: false
+    check I18n.t("student_loans.forms.subjects_taught.answers.chemistry_taught"), visible: false
 
     click_on "Continue"
 
@@ -123,7 +123,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     find("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "subjects-taught")}']").click
 
-    expect(find("#eligible_subjects_physics_taught").checked?).to eq(true)
+    expect(find("#claim_physics_taught").checked?).to eq(true)
 
     click_on "Continue"
 
