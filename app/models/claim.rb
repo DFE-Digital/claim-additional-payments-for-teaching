@@ -191,7 +191,16 @@ class Claim < ApplicationRecord
   validates :email_address, format: {with: Rails.application.config.email_regexp, message: "Enter an email address in the correct format, like name@example.com"},
     length: {maximum: 256, message: "Email address must be 256 characters or less"}, if: -> { email_address.present? }
 
+  validates :bank_sort_code, on: [:submit, :amendment], presence: {message: "Enter a sort code"}
+  validates :bank_account_number, on: [:submit, :amendment], presence: {message: "Enter an account number"}
+  validates :building_society_roll_number, on: [:submit, :amendment], presence: {message: "Enter a roll number"}, if: -> { building_society? }
+
   validates :payroll_gender, on: [:"payroll-gender-task", :submit], presence: {message: "You must select a gender that will be passed to HMRC"}
+
+  validate :bank_account_number_must_be_eight_digits
+  validate :bank_sort_code_must_be_six_digits
+  validate :building_society_roll_number_must_be_between_one_and_eighteen_digits
+  validate :building_society_roll_number_must_be_in_a_valid_format
 
   validate :claim_must_not_be_ineligible, on: :submit
 
@@ -554,6 +563,26 @@ class Claim < ApplicationRecord
 
   def normalised_bank_detail(bank_detail)
     bank_detail.gsub(/\s|-/, "")
+  end
+
+  def building_society_roll_number_must_be_between_one_and_eighteen_digits
+    return unless building_society_roll_number.present?
+
+    errors.add(:building_society_roll_number, "Building society roll number must be between 1 and 18 characters") if building_society_roll_number.length > 18
+  end
+
+  def building_society_roll_number_must_be_in_a_valid_format
+    return unless building_society_roll_number.present?
+
+    errors.add(:building_society_roll_number, "Building society roll number must only include letters a to z, numbers, hyphens, spaces, forward slashes and full stops") unless /\A[a-z0-9\-\s.\/]{1,18}\z/i.match?(building_society_roll_number)
+  end
+
+  def bank_account_number_must_be_eight_digits
+    errors.add(:bank_account_number, "Account number must be 8 digits") if bank_account_number.present? && normalised_bank_detail(bank_account_number) !~ /\A\d{8}\z/
+  end
+
+  def bank_sort_code_must_be_six_digits
+    errors.add(:bank_sort_code, "Sort code must be 6 digits") if bank_sort_code.present? && normalised_bank_detail(bank_sort_code) !~ /\A\d{6}\z/
   end
 
   def unique_reference
