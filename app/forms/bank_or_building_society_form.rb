@@ -4,7 +4,7 @@ class BankOrBuildingSocietyForm < Form
   validates :bank_or_building_society,
     inclusion: {
       in: Claim.bank_or_building_societies.keys,
-      message: "Select if you want the money paid in to a personal bank account or building society"
+      message: i18n_error_message(:select_bank_or_building_society)
     }
 
   def save
