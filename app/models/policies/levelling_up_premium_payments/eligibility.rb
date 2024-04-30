@@ -31,13 +31,6 @@ module Policies
 
       AMENDABLE_ATTRIBUTES = [:award_amount].freeze
 
-      ATTRIBUTE_DEPENDENCIES = {
-        "employed_as_supply_teacher" => ["has_entire_term_contract", "employed_directly"],
-        "qualification" => ["eligible_itt_subject", "teaching_subject_now"],
-        "eligible_itt_subject" => ["teaching_subject_now", "eligible_degree_subject"],
-        "itt_academic_year" => ["eligible_itt_subject"]
-      }.freeze
-
       FIRST_ITT_AY = "2017/2018"
       LAST_POLICY_YEAR = "2024/2025"
 
@@ -84,23 +77,10 @@ module Policies
         super || BigDecimal(calculate_award_amount || 0)
       end
 
+      # FIXME RL: Once we've remove resetting dependent answers from the
+      # tslr eligibility, we can remove this method
       def reset_dependent_answers(reset_attrs = [])
-        attrs = ineligible? ? changed.concat(reset_attrs) : changed
-
-        dependencies = ATTRIBUTE_DEPENDENCIES.dup
-
-        # If some data was derived from DQT we do not want to reset these.
-        if claim.qualifications_details_check
-          dependencies.delete("qualification")
-          dependencies.delete("eligible_itt_subject")
-          dependencies.delete("itt_academic_year")
-        end
-
-        dependencies.each do |attribute_name, dependent_attribute_names|
-          dependent_attribute_names.each do |dependent_attribute_name|
-            write_attribute(dependent_attribute_name, nil) if attrs.include?(attribute_name)
-          end
-        end
+        # NOOP
       end
 
       def submit!

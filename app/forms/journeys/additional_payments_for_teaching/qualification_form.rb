@@ -14,21 +14,35 @@ module Journeys
 
       def save
         return false unless valid?
+        return true unless qualification_changed?
 
-        # We set the attribute like this, rather than using `update!` from the
-        # superclass, as we need "qualification" to be in the `Eligibility#changed`
-        # list of attributes for the `reset_dependent_answers` method to work
-        claim.assign_attributes(
-          eligibility_attributes: {qualification: qualification}
-        )
-        claim.reset_eligibility_dependent_answers(["qualification"])
-        claim.save!
+        if claim.qualifications_details_check?
+          update!(
+            eligibility_attributes: {
+              qualification: qualification
+            }
+          )
+        else
+          update!(
+            eligibility_attributes: {
+              qualification: qualification,
+              eligible_itt_subject: nil,
+              teaching_subject_now: nil
+            }
+          )
+        end
 
         true
       end
 
       def save!
         raise ActiveRecord::RecordInvalid.new unless save
+      end
+
+      private
+
+      def qualification_changed?
+        claim.eligibility.qualification != qualification
       end
     end
   end

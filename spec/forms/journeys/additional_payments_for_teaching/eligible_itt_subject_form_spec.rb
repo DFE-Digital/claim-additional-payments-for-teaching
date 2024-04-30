@@ -47,16 +47,28 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
 
+  let(:params) do
+    ActionController::Parameters.new(
+      claim: {
+        eligible_itt_subject: eligible_itt_subject
+      }
+    )
+  end
+
+  let(:form) do
+    described_class.new(
+      journey: additional_payments_journey,
+      claim: current_claim,
+      params: params
+    )
+  end
+
   describe "validations" do
+    subject { form }
+
     let(:claim) { ecp_qualified_teacher_claim }
 
-    subject(:form) do
-      described_class.new(
-        journey: additional_payments_journey,
-        claim: current_claim,
-        params: ActionController::Parameters.new
-      )
-    end
+    let(:eligible_itt_subject) { nil }
 
     it do
       is_expected.to validate_inclusion_of(:eligible_itt_subject)
@@ -66,13 +78,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
   end
 
   describe "#available_subjects" do
-    let(:form) do
-      described_class.new(
-        journey: additional_payments_journey,
-        claim: current_claim,
-        params: ActionController::Parameters.new
-      )
-    end
+    let(:eligible_itt_subject) { nil }
 
     subject(:available_subjects) { form.available_subjects }
 
@@ -120,13 +126,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
   end
 
   describe "#show_hint_text?" do
-    let(:form) do
-      described_class.new(
-        journey: additional_payments_journey,
-        claim: current_claim,
-        params: ActionController::Parameters.new
-      )
-    end
+    let(:eligible_itt_subject) { nil }
 
     subject { form.show_hint_text? }
 
@@ -161,13 +161,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
   end
 
   describe "#chemistry_or_physics_available?" do
-    let(:form) do
-      described_class.new(
-        journey: additional_payments_journey,
-        claim: current_claim,
-        params: ActionController::Parameters.new
-      )
-    end
+    let(:eligible_itt_subject) { nil }
 
     let(:claim) { ecp_trainee_teacher_claim }
 
@@ -207,22 +201,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
   describe "#save" do
     let(:claim) { ecp_qualified_teacher_claim }
 
-    let(:form) do
-      described_class.new(
-        journey: additional_payments_journey,
-        claim: current_claim,
-        params: params
-      )
-    end
-
     context "when invalid" do
-      let(:params) do
-        ActionController::Parameters.new(
-          claim: {
-            eligible_itt_subject: "invalid"
-          }
-        )
-      end
+      let(:eligible_itt_subject) { "invalid" }
 
       it "returns false" do
         expect(form.save).to be(false)
@@ -230,28 +210,44 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
     end
 
     context "when valid" do
-      let(:params) do
-        ActionController::Parameters.new(
-          claim: {
-            eligible_itt_subject: "chemistry"
-          }
-        )
+      let(:eligible_itt_subject) { "chemistry" }
+
+      context "when the claim has approved details from DQT" do
+        before do
+          claim.update!(qualifications_details_check: true)
+        end
+
+        it "returns true and updates the claim's eligibility" do
+          expect { expect(form.save).to be true }.to(
+            change { claim.eligibility.eligible_itt_subject }
+            .from("mathematics")
+            .to("chemistry")
+          )
+        end
+
+        it "does not reset dependent attributes" do
+          expect { form.save }.not_to(
+            change { claim.eligibility.teaching_subject_now }
+          )
+        end
       end
 
-      it "returns true and updates the claim's eligibility" do
-        expect { expect(form.save).to be true }.to(
-          change { claim.eligibility.eligible_itt_subject }
-          .from("mathematics")
-          .to("chemistry")
-        )
-      end
+      context "when the claim does not have approved details from DQT" do
+        it "returns true and updates the claim's eligibility" do
+          expect { expect(form.save).to be true }.to(
+            change { claim.eligibility.eligible_itt_subject }
+            .from("mathematics")
+            .to("chemistry")
+          )
+        end
 
-      it "resets dependent attributes" do
-        expect { form.save }.to(
-          change { claim.eligibility.teaching_subject_now }
-          .from(true)
-          .to(nil)
-        )
+        it "resets dependent attributes" do
+          expect { form.save }.to(
+            change { claim.eligibility.teaching_subject_now }
+            .from(true)
+            .to(nil)
+          )
+        end
       end
     end
   end

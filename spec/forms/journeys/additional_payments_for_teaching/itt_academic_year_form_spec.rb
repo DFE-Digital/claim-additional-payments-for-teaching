@@ -92,6 +92,18 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::IttAcademicYearForm do
               expect(eligibility.eligible_itt_subject).to eq nil
             end
           end
+
+          it "doesn't reset the the eligible_itt_subject if data from DQT" do
+            current_claim.claims.each do |claim|
+              claim.update!(qualifications_details_check: true)
+            end
+
+            form.save
+
+            current_claim.claims.map(&:eligibility).each do |eligibility|
+              expect(eligibility.eligible_itt_subject).to eq "mathematics"
+            end
+          end
         end
 
         context "claim eligibility already had a itt_academic_year" do
@@ -126,6 +138,18 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::IttAcademicYearForm do
 
             current_claim.claims.map(&:eligibility).each do |eligibility|
               expect(eligibility.eligible_itt_subject).to eq nil
+            end
+          end
+
+          it "doesn't reset the the eligible_itt_subject if data from DQT" do
+            current_claim.claims.each do |claim|
+              claim.update!(qualifications_details_check: true)
+            end
+
+            form.save
+
+            current_claim.claims.map(&:eligibility).each do |eligibility|
+              expect(eligibility.eligible_itt_subject).to eq "mathematics"
             end
           end
         end

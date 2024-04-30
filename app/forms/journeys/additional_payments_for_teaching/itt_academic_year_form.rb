@@ -7,10 +7,22 @@ module Journeys
 
       def save
         return false unless valid?
+        return true unless itt_academic_year_changed?
 
-        claim.assign_attributes(eligibility_attributes: {itt_academic_year:})
-        claim.reset_eligibility_dependent_answers(["itt_academic_year"])
-        claim.save!
+        if claim.qualifications_details_check?
+          update!(
+            eligibility_attributes: {
+              itt_academic_year: itt_academic_year
+            }
+          )
+        else
+          update!(
+            eligibility_attributes: {
+              itt_academic_year: itt_academic_year,
+              eligible_itt_subject: nil
+            }
+          )
+        end
       end
 
       def qualification
@@ -23,6 +35,12 @@ module Journeys
 
       def selectable_itt_years_for_claim_year
         JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year journey.configuration.current_academic_year
+      end
+
+      private
+
+      def itt_academic_year_changed?
+        claim.eligibility.itt_academic_year != itt_academic_year
       end
     end
   end

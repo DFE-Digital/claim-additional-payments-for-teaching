@@ -64,6 +64,24 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SupplyTeacherForm do
             expect(eligibility.employed_as_supply_teacher).to be_truthy
           end
         end
+
+        it "resets depenent attributes" do
+          current_claim.claims.each do |claim|
+            claim.eligibility.update!(
+              has_entire_term_contract: true,
+              employed_directly: true
+            )
+          end
+
+          expect(form.save).to be true
+
+          current_claim.claims.each do |claim|
+            eligibility = claim.eligibility.reload
+
+            expect(eligibility.has_entire_term_contract).to be nil
+            expect(eligibility.employed_directly).to be nil
+          end
+        end
       end
 
       context "when claim eligibility has employed_as_supply_teacher" do
@@ -81,6 +99,24 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SupplyTeacherForm do
             eligibility = claim.eligibility.reload
 
             expect(eligibility.employed_as_supply_teacher).to be_truthy
+          end
+        end
+
+        it "resets depenent attributes" do
+          current_claim.claims.each do |claim|
+            claim.eligibility.update!(
+              has_entire_term_contract: true,
+              employed_directly: true
+            )
+          end
+
+          expect(form.save).to be true
+
+          current_claim.claims.each do |claim|
+            eligibility = claim.eligibility.reload
+
+            expect(eligibility.has_entire_term_contract).to be nil
+            expect(eligibility.employed_directly).to be nil
           end
         end
       end

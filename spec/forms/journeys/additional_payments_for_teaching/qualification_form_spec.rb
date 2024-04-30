@@ -5,18 +5,44 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationForm, type:
 
   let(:additional_payments_journey) { Journeys::AdditionalPaymentsForTeaching }
 
-  let(:claim) { create(:claim, policy: Policies::EarlyCareerPayments) }
+  let(:eligibility) do
+    create(
+      :early_career_payments_eligibility,
+      eligible_itt_subject: "mathematics",
+      teaching_subject_now: true
+    )
+  end
+
+  let(:claim) do
+    create(
+      :claim,
+      policy: Policies::EarlyCareerPayments,
+      eligibility: eligibility
+    )
+  end
 
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
 
+  let(:params) do
+    ActionController::Parameters.new(
+      claim: {
+        qualification: qualification
+      }
+    )
+  end
+
+  let(:form) do
+    described_class.new(
+      journey: additional_payments_journey,
+      claim: current_claim,
+      params: params
+    )
+  end
+
   describe "validations" do
-    subject(:form) do
-      described_class.new(
-        journey: additional_payments_journey,
-        claim: current_claim,
-        params: ActionController::Parameters.new
-      )
-    end
+    let(:qualification) { nil }
+
+    subject { form }
 
     it do
       is_expected.to(
@@ -28,53 +54,55 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationForm, type:
   end
 
   describe "#save" do
-    let(:form) do
-      described_class.new(
-        journey: additional_payments_journey,
-        claim: current_claim,
-        params: params
-      )
-    end
-
     context "when invalid" do
-      let(:params) do
-        ActionController::Parameters.new(claim: {qualification: "invalid"})
-      end
+      let(:qualification) { "invalid" }
 
       it "returns false" do
         expect { expect(form.save).to be false }.not_to(
-          change { claim.eligibility.reload.qualification }
+          change { eligibility.reload.qualification }
         )
       end
     end
 
     context "when valid" do
-      let(:params) do
-        ActionController::Parameters.new(
-          claim: {qualification: "postgraduate_itt"}
-        )
-      end
+      let(:qualification) { "postgraduate_itt" }
 
-      it "updates the claim's eligibility" do
-        expect { expect(form.save).to be true }.to(
-          change { claim.eligibility.reload.qualification }
-          .from(nil).to("postgraduate_itt")
-        )
-      end
-
-      it "resets dependent answers" do
-        claim.eligibility.update!(
-          eligible_itt_subject: "mathematics",
-          teaching_subject_now: true
-        )
-
-        expect { expect(form.save).to be true }.to(
-          change { claim.eligibility.reload.eligible_itt_subject }
-          .from("mathematics").to(nil).and(
-            change { claim.eligibility.reload.teaching_subject_now }
-              .from(true).to(nil)
+      context "when the claim has details from DQT" do
+        it "updates the claim's eligibility" do
+          expect { expect(form.save).to be true }.to(
+            change { eligibility.reload.qualification }
+            .from(nil).to("postgraduate_itt")
           )
-        )
+        end
+
+        it "resets dependent answers" do
+          claim.update!(qualifications_details_check: true)
+
+          form.save
+
+          expect(eligibility.reload.eligible_itt_subject).to eq("mathematics")
+
+          expect(eligibility.reload.teaching_subject_now).to eq(true)
+        end
+      end
+
+      context "when the claim does not have details from DQT" do
+        it "updates the claim's eligibility" do
+          expect { expect(form.save).to be true }.to(
+            change { eligibility.reload.qualification }
+            .from(nil).to("postgraduate_itt")
+          )
+        end
+
+        it "resets dependent answers" do
+          expect { expect(form.save).to be true }.to(
+            change { eligibility.reload.eligible_itt_subject }
+            .from("mathematics").to(nil).and(
+              change { eligibility.reload.teaching_subject_now }
+                .from(true).to(nil)
+            )
+          )
+        end
       end
     end
   end

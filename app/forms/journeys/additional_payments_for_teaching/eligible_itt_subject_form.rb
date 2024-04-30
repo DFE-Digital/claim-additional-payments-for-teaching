@@ -27,14 +27,30 @@ module Journeys
 
       def save
         return false unless valid?
+        return true unless eligible_itt_subject_changed?
 
-        claim.assign_attributes(
-          eligibility_attributes: {eligible_itt_subject: eligible_itt_subject}
-        )
-        claim.reset_eligibility_dependent_answers(["eligible_itt_subject"])
-        claim.save!
+        if claim.qualifications_details_check?
+          update!(
+            eligibility_attributes: {
+              eligible_itt_subject: eligible_itt_subject
+            }
+          )
+        else
+          update!(
+            eligibility_attributes: {
+              eligible_itt_subject: eligible_itt_subject,
+              teaching_subject_now: nil
+            }
+          )
+        end
 
         true
+      end
+
+      private
+
+      def eligible_itt_subject_changed?
+        claim.eligibility.eligible_itt_subject != eligible_itt_subject
       end
     end
   end

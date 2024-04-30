@@ -7,8 +7,21 @@ module Journeys
 
       def save
         return false unless valid?
+        return true unless employed_as_supply_teacher_changed?
 
-        update!(eligibility_attributes: attributes)
+        update!(
+          eligibility_attributes: {
+            employed_as_supply_teacher: employed_as_supply_teacher,
+            has_entire_term_contract: nil,
+            employed_directly: nil
+          }
+        )
+      end
+
+      private
+
+      def employed_as_supply_teacher_changed?
+        claim.eligibility.employed_as_supply_teacher != employed_as_supply_teacher
       end
     end
   end
