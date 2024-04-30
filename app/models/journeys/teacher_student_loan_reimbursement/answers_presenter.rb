@@ -29,7 +29,7 @@ module Journeys
 
       def qts_award_year
         [
-          t("student_loans.questions.qts_award_year"),
+          t("student_loans.forms.qts_year.questions.qts_award_year"),
           qts_award_year_answer(eligibility),
           "qts-year"
         ]

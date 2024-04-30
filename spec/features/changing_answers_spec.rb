@@ -42,7 +42,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     find("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "qts-year")}']").click
 
-    expect(find("#claim_eligibility_attributes_qts_award_year_on_or_after_cut_off_date").checked?).to eq(true)
+    expect(find("#claim_qts_award_year_on_or_after_cut_off_date").checked?).to eq(true)
 
     choose_qts_year :before_cut_off_date
     click_on "Continue"

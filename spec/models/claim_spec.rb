@@ -141,16 +141,6 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  context "with student loans policy eligibility" do
-    let(:claim) { build(:claim, policy: Policies::StudentLoans) }
-
-    # Tests a single attribute, possibly should test multiple attributes
-    it "validates eligibility" do
-      expect(claim).not_to be_valid(:"qts-year")
-      expect(claim.errors.first.message).to eq("Select when you completed your initial teacher training")
-    end
-  end
-
   context "with early-career payments policy eligibility" do
     let(:claim) { build(:claim, policy: Policies::EarlyCareerPayments) }
 

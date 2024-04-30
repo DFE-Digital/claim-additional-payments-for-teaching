@@ -13,7 +13,7 @@ RSpec.feature "Backlinking during a claim" do
     click_on "Back"
     expect(page).to have_current_path("/student-loans/claim-school", ignore_query: true)
     click_on "Back"
-    expect(page).to have_text(I18n.t("questions.qts_award_year"))
+    expect(page).to have_text(I18n.t("student_loans.forms.qts_year.questions.qts_award_year"))
     click_on "Back"
     expect(page).to have_text("Use DfE Identity to sign in")
     expect(page).to have_link("Back")

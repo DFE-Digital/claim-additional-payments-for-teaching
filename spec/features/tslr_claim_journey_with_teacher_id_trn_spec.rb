@@ -45,7 +45,7 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
     click_on "Continue"
 
     # - Select qts year
-    expect(page).to have_text(I18n.t("questions.qts_award_year"))
+    expect(page).to have_text(I18n.t("student_loans.forms.qts_year.questions.qts_award_year"))
     choose_qts_year
     click_on "Continue"
 
