@@ -15,6 +15,16 @@ RSpec.describe Policies::StudentLoans, type: :model do
     ])
   end
 
+  specify {
+    expect(subject).to have_attributes(
+      short_name: "Student Loans",
+      locale_key: "student_loans",
+      notify_reply_to_id: "962b3044-cdd4-4dbe-b6ea-c461530b3dc6",
+      eligibility_page_url: "https://www.gov.uk/guidance/teachers-claim-back-your-student-loan-repayments",
+      payment_and_deductions_info_url: "https://www.gov.uk/guidance/teachers-claim-back-your-student-loan-repayments#payment"
+    )
+  }
+
   describe ".first_eligible_qts_award_year" do
     it "returns 11 years prior to the currently configured academic year, with a floor of the 2013/2014 academic year" do
       journey_configuration.update!(current_academic_year: "2031/2032")
