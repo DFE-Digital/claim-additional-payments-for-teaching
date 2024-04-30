@@ -64,7 +64,14 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::IttAcademicYearForm do
 
         context "claim eligibility didn't have itt_academic_year" do
           let(:current_claim) do
-            claims = journey::POLICIES.map { |policy| create(:claim, policy: policy) }
+            claims = journey::POLICIES.map do |policy|
+              create(
+                :claim,
+                policy: policy,
+                eligibility_attributes: {eligible_itt_subject: "mathematics"}
+              )
+            end
+
             CurrentClaim.new(claims: claims)
           end
 
@@ -75,6 +82,14 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::IttAcademicYearForm do
               eligibility = claim.eligibility.reload
 
               expect(eligibility.itt_academic_year).to eq new_value
+            end
+          end
+
+          it "resets the eligible_itt_subject" do
+            form.save
+
+            current_claim.claims.map(&:eligibility).each do |eligibility|
+              expect(eligibility.eligible_itt_subject).to eq nil
             end
           end
         end
@@ -83,7 +98,16 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::IttAcademicYearForm do
           let(:new_value) { AcademicYear.new(2.years.ago.year).to_s }
 
           let(:current_claim) do
-            claims = journey::POLICIES.map { |policy| create(:claim, policy: policy, eligibility_attributes: {itt_academic_year: AcademicYear.new(4.years.ago.year)}) }
+            claims = journey::POLICIES.map do |policy|
+              create(
+                :claim,
+                policy: policy,
+                eligibility_attributes: {
+                  itt_academic_year: AcademicYear.new(4.years.ago.year),
+                  eligible_itt_subject: "mathematics"
+                }
+              )
+            end
             CurrentClaim.new(claims: claims)
           end
 
@@ -96,13 +120,13 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::IttAcademicYearForm do
               expect(eligibility.itt_academic_year).to eq new_value
             end
           end
-        end
 
-        context "claim model fails validation unexpectedly" do
-          it "raises an error" do
-            allow(current_claim).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
+          it "resets the eligible_itt_subject" do
+            form.save
 
-            expect { form.save }.to raise_error(ActiveRecord::RecordInvalid)
+            current_claim.claims.map(&:eligibility).each do |eligibility|
+              expect(eligibility.eligible_itt_subject).to eq nil
+            end
           end
         end
       end

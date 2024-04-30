@@ -63,11 +63,17 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationForm, type:
       end
 
       it "resets dependent answers" do
-        claim.eligibility.update!(eligible_itt_subject: "mathematics")
+        claim.eligibility.update!(
+          eligible_itt_subject: "mathematics",
+          teaching_subject_now: true
+        )
 
         expect { expect(form.save).to be true }.to(
           change { claim.eligibility.reload.eligible_itt_subject }
-          .from("mathematics").to(nil)
+          .from("mathematics").to(nil).and(
+            change { claim.eligibility.reload.teaching_subject_now }
+              .from(true).to(nil)
+          )
         )
       end
     end
