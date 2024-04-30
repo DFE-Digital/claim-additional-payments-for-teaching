@@ -37,9 +37,7 @@ class ClaimsController < BasePublicController
       return
     end
 
-    if params[:slug] == "select-claim-school"
-      update_session_with_tps_school(current_claim.tps_school_for_student_loan_in_previous_financial_year)
-    elsif params[:slug] == "postcode-search" && postcode
+    if params[:slug] == "postcode-search" && postcode
       redirect_to claim_path(current_journey_routing_name, "select-home-address", {"claim[postcode]": params[:claim][:postcode], "claim[address_line_1]": params[:claim][:address_line_1]}) and return unless invalid_postcode?
     elsif params[:slug] == "select-home-address" && postcode
       session[:claim_postcode] = params[:claim][:postcode]
@@ -82,8 +80,6 @@ class ClaimsController < BasePublicController
     end
 
     case params[:slug]
-    when "select-claim-school"
-      check_select_claim_school_params
     when "still-teaching"
       check_still_teaching_params
     else
@@ -248,19 +244,6 @@ class ClaimsController < BasePublicController
 
   def no_eligible_itt_subject?
     !current_claim.eligible_itt_subject
-  end
-
-  def update_session_with_tps_school(school)
-    if school
-      session[:tps_school_id] = school.id
-      session[:tps_school_name] = school.name
-      session[:tps_school_address] = school.address
-    end
-  end
-
-  def check_select_claim_school_params
-    updated_claim_params = SelectClaimSchoolForm.extract_params(claim_params, change_school: params[:additional_school])
-    current_claim.attributes = updated_claim_params
   end
 
   def check_still_teaching_params
