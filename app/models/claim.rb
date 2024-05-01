@@ -161,8 +161,6 @@ class Claim < ApplicationRecord
 
   validates :academic_year_before_type_cast, format: {with: AcademicYear::ACADEMIC_YEAR_REGEXP}
 
-  validates :payroll_gender, on: [:gender, :submit], presence: {message: "Select the gender recorded on your school’s payroll system or select whether you do not know"}
-
   validates :address_line_1, on: [:address], presence: {message: "Enter a house number or name"}, if: :has_ecp_or_lupp_policy?
   validates :address_line_1, on: [:address, :submit], presence: {message: "Enter a building and street address"}, unless: :has_ecp_or_lupp_policy?
   validates :address_line_1, length: {maximum: 100, message: "Address lines must be 100 characters or less"}

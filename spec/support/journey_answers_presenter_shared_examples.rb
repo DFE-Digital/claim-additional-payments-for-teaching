@@ -53,7 +53,7 @@ RSpec.shared_examples "journey answers presenter" do
       it "returns an array of identity-related questions and answers for displaying to the user for review" do
         expected_answers = [
           [I18n.t("questions.address.generic.title"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
-          [I18n.t("questions.payroll_gender"), "Don’t know", "gender"]
+          [I18n.t("forms.gender.questions.payroll_gender"), "Don’t know", "gender"]
         ]
 
         expect(answers).to include(*expected_answers)
@@ -151,7 +151,7 @@ RSpec.shared_examples "journey answers presenter" do
           [I18n.t("questions.name"), "Jo Bloggs", "personal-details"],
           [I18n.t("questions.address.generic.title"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
           [I18n.t("questions.date_of_birth"), "10 January 1980", "personal-details"],
-          [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
+          [I18n.t("forms.gender.questions.payroll_gender"), "Don’t know", "gender"],
           [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
           [I18n.t("questions.national_insurance_number"), "QQ123456C", "personal-details"],
           [I18n.t("questions.email_address"), "test@email.com", "email-address"],

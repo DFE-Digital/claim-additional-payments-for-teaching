@@ -165,7 +165,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     click_on "Continue"
 
     # - What gender does your school's payroll system associate with you
-    expect(page).to have_text(I18n.t("questions.payroll_gender"))
+    expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
 
     choose "Male"
     click_on "Continue"
@@ -174,7 +174,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
 
     click_link "Back"
-    expect(page).to have_text(I18n.t("questions.payroll_gender"))
+    expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
   end
 
   scenario "When user is logged in with Teacher ID and there is no matching DQT record" do

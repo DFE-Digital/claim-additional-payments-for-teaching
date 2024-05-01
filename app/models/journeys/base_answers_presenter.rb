@@ -12,7 +12,7 @@ module Journeys
         a << [t("questions.name"), claim.full_name, "personal-details"] if show_name?
         a << [t("questions.address.generic.title"), claim.address, "address"] unless claim.address_from_govuk_verify?
         a << [t("questions.date_of_birth"), date_of_birth_string, "personal-details"] if show_dob?
-        a << [t("questions.payroll_gender"), t("answers.payroll_gender.#{claim.payroll_gender}"), "gender"] unless claim.payroll_gender_verified?
+        a << [t("forms.gender.questions.payroll_gender"), t("answers.payroll_gender.#{claim.payroll_gender}"), "gender"] unless claim.payroll_gender_verified?
         a << [t("questions.teacher_reference_number"), claim.teacher_reference_number, "teacher-reference-number"] if show_trn?
         a << [t("questions.national_insurance_number"), claim.national_insurance_number, "personal-details"] if show_nino?
         a << [t("questions.email_address"), claim.email_address, "email-address"] unless show_email_select?

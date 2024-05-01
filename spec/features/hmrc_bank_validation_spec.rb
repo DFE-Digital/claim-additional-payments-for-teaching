@@ -126,7 +126,7 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
 
         click_on "Continue"
 
-        expect(page).to have_text(I18n.t("questions.payroll_gender"))
+        expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
 
         expect(claim.reload).to be_hmrc_bank_validation_succeeded
         expect(claim.hmrc_bank_validation_responses).not_to be_empty
@@ -155,7 +155,7 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
         click_on "Continue"
 
         # Third attempt succeeds.
-        expect(page).to have_text(I18n.t("questions.payroll_gender"))
+        expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
 
         expect(claim.reload).not_to be_hmrc_bank_validation_succeeded
         expect(claim.hmrc_bank_validation_responses).not_to be_empty
@@ -174,7 +174,7 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
 
       click_on "Continue"
 
-      expect(page).to have_text(I18n.t("questions.payroll_gender"))
+      expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
 
       expect(claim.reload).not_to be_hmrc_bank_validation_succeeded
     end
