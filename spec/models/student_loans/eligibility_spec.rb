@@ -279,26 +279,6 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
     end
   end
 
-  context "when saving in the “leadership-position” context" do
-    it "is not valid without a value for had_leadership_position" do
-      expect(described_class.new).not_to be_valid(:"leadership-position")
-      expect(described_class.new(had_leadership_position: true)).to be_valid(:"leadership-position")
-      expect(described_class.new(had_leadership_position: false)).to be_valid(:"leadership-position")
-    end
-  end
-
-  context "when saving in the “mostly-performed-leadership-duties” context" do
-    it "is valid when mostly_performed_leadership_duties is present as a boolean value and had_leadership_position is true" do
-      expect(described_class.new(had_leadership_position: true)).not_to be_valid(:"mostly-performed-leadership-duties")
-      expect(described_class.new(had_leadership_position: true, mostly_performed_leadership_duties: true)).to be_valid(:"mostly-performed-leadership-duties")
-      expect(described_class.new(had_leadership_position: true, mostly_performed_leadership_duties: false)).to be_valid(:"mostly-performed-leadership-duties")
-    end
-
-    it "is valid when missing if had_leadership_position is false" do
-      expect(described_class.new(had_leadership_position: false)).to be_valid(:"mostly-performed-leadership-duties")
-    end
-  end
-
   context "when saving in the “submit” context" do
     it "is valid when all attributes are present" do
       expect(build(:student_loans_eligibility, :eligible)).to be_valid(:submit)
@@ -310,17 +290,6 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
 
     it "is not valid without at least one subject being taught selected" do
       expect(build(:student_loans_eligibility, :eligible, physics_taught: nil)).not_to be_valid(:submit)
-    end
-
-    it "is not valid without a value for had_leadership_position" do
-      expect(build(:student_loans_eligibility, :eligible, had_leadership_position: nil)).not_to be_valid(:submit)
-
-      expect(build(:student_loans_eligibility, :eligible, had_leadership_position: true)).to be_valid(:submit)
-      expect(build(:student_loans_eligibility, :eligible, had_leadership_position: false)).to be_valid(:submit)
-    end
-
-    it "is not valid without a value for mostly_performed_leadership_duties" do
-      expect(build(:student_loans_eligibility, :eligible, mostly_performed_leadership_duties: nil)).not_to be_valid(:submit)
     end
 
     it "is not valid without a value for student_loan_repayment_amount" do
