@@ -80,14 +80,4 @@ RSpec.describe Claims::IttSubjectHelper do
       it { is_expected.to eq("chemistry, languages, mathematics or physics") }
     end
   end
-
-  describe "#dqt_subjects_playback" do
-    let(:dbl) { double(dqt_teacher_record: double(itt_subjects:)) }
-
-    let(:itt_subjects) { ["test test", "Test McTest", "TEST"] }
-
-    it "titleizes the subjects which are all lowercase and joins with commas" do
-      expect(helper.dqt_subjects_playback(dbl)).to eq("Test Test, Test McTest, TEST")
-    end
-  end
 end

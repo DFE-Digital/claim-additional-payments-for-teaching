@@ -57,7 +57,7 @@ RSpec.feature "TSLR journey with Teacher ID" do
     # Qualification pages are no longer skipped
 
     # - Select qts year
-    expect(page).to have_text(I18n.t("questions.qts_award_year"))
+    expect(page).to have_text(I18n.t("student_loans.forms.qts_year.questions.qts_award_year"))
   end
 
   scenario "When user is logged in with Teacher ID and there is no matching DQT record" do
@@ -69,7 +69,7 @@ RSpec.feature "TSLR journey with Teacher ID" do
     # Qualification pages are not skipped
 
     # - Select qts year
-    expect(page).to have_text(I18n.t("questions.qts_award_year"))
+    expect(page).to have_text(I18n.t("student_loans.forms.qts_year.questions.qts_award_year"))
   end
 
   scenario "When user is logged in with Teacher ID and the qualifications are not eligible" do
@@ -100,7 +100,7 @@ RSpec.feature "TSLR journey with Teacher ID" do
     # Qualification pages are not skipped
 
     # - Select qts year
-    expect(page).to have_text(I18n.t("questions.qts_award_year"))
+    expect(page).to have_text(I18n.t("student_loans.forms.qts_year.questions.qts_award_year"))
   end
 
   def navigate_past_sign_in_page

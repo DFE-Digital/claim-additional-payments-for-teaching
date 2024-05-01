@@ -34,7 +34,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
 
     choose "Yes"
     click_on "Continue"
-    expect(page).to have_text(I18n.t("questions.qts_award_year"))
+    expect(page).to have_text(I18n.t("student_loans.forms.qts_year.questions.qts_award_year"))
 
     choose_qts_year
     expect(page).to have_text(claim_school_question)
@@ -121,7 +121,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
 
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("questions.qts_award_year"))
+    expect(page).to have_text(I18n.t("student_loans.forms.qts_year.questions.qts_award_year"))
 
     # check the teacher_id_user_info details are saved to the claim
     claim = Claim.order(:created_at).last
@@ -157,7 +157,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue without signing in"
 
-    expect(page).to have_text(I18n.t("questions.qts_award_year"))
+    expect(page).to have_text(I18n.t("student_loans.forms.qts_year.questions.qts_award_year"))
 
     # check the teacher_id_user_info details are not saved to the claim
     claim = Claim.order(:created_at).last

@@ -79,4 +79,29 @@ describe ApplicationHelper do
       expect(journey_description("additional-payments")).to eq t("additional_payments.claim_description")
     end
   end
+
+  describe "#information_provided_further_details_with_link" do
+    subject { information_provided_further_details_with_link }
+
+    context "policy is nil and falls back to the current claim policy" do
+      let(:current_claim) { double(selected_policy: nil, policy: policy) }
+      let(:policy) { Policies::StudentLoans }
+
+      it { is_expected.to eq('For more details, you can read about payments and deductions when <a class="govuk-link govuk-link--no-visited-state" target="_blank" href="https://www.gov.uk/guidance/teachers-claim-back-your-student-loan-repayments#payment">claiming back your student loan repayments (opens in new tab)</a>') }
+    end
+
+    context "policy is LevellingUpPremiumPayments" do
+      let(:policy) { Policies::LevellingUpPremiumPayments }
+      let(:current_claim) { double(selected_policy: policy) }
+
+      it { is_expected.to eq('For more details, you can read about payments and deductions for the <a class="govuk-link govuk-link--no-visited-state" target="_blank" href="https://www.gov.uk/guidance/levelling-up-premium-payments-for-teachers#payments-and-deductions">levelling up premium payment (opens in new tab)</a>') }
+    end
+
+    context "policy is EarlyCareerPayments" do
+      let(:policy) { Policies::EarlyCareerPayments }
+      let(:current_claim) { double(selected_policy: policy) }
+
+      it { is_expected.to eq('For more details, you can read about payments and deductions for the <a class="govuk-link govuk-link--no-visited-state" target="_blank" href="https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools#paying-income-tax-and-national-insurance">early-career payment (opens in new tab)</a>') }
+    end
+  end
 end

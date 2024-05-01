@@ -20,7 +20,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     visit claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "leadership-position")
     expect(page).to have_current_path("/#{Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME}/qts-year")
 
-    expect(page).to have_text(I18n.t("student_loans.questions.qts_award_year"))
+    expect(page).to have_text(I18n.t("student_loans.forms.qts_year.questions.qts_award_year"))
     expect(page).to have_link(href: "mailto:#{I18n.t("student_loans.feedback_email")}")
 
     choose_qts_year
@@ -258,7 +258,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       scenario "Teacher claims back student loan repayments" do
         visit new_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
         skip_tid
-        expect(page).to have_text(I18n.t("questions.qts_award_year"))
+        expect(page).to have_text(I18n.t("student_loans.forms.qts_year.questions.qts_award_year"))
         expect(page).to have_link(href: "mailto:#{I18n.t("student_loans.feedback_email")}")
 
         choose_qts_year

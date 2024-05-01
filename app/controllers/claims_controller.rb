@@ -26,6 +26,10 @@ class ClaimsController < BasePublicController
       return redirect_to claim_path(current_journey_routing_name, "eligible-itt-subject")
     end
 
+    if params[:slug] == "qualification-details"
+      return redirect_to claim_path(current_journey_routing_name, next_slug) if current_claim.has_no_dqt_data_for_claim?
+    end
+
     # TODO: Migrate the remaining slugs to form objects.
     if @form ||= journey.form(claim: current_claim, params:)
       set_any_backlink_override
@@ -33,14 +37,10 @@ class ClaimsController < BasePublicController
       return
     end
 
-    if params[:slug] == "qualification-details"
-      return redirect_to claim_path(current_journey_routing_name, next_slug) if current_claim.has_no_dqt_data_for_claim?
-    elsif params[:slug] == "select-claim-school"
+    if params[:slug] == "select-claim-school"
       update_session_with_tps_school(current_claim.tps_school_for_student_loan_in_previous_financial_year)
     elsif params[:slug] == "subjects-taught" && page_sequence.in_sequence?("select-claim-school")
       @backlink_path = claim_path(current_journey_routing_name, "select-claim-school")
-    elsif params[:slug] == "select-mobile"
-      session[:phone_number] = current_claim.teacher_id_user_info["phone_number"]
     elsif params[:slug] == "postcode-search" && postcode
       redirect_to claim_path(current_journey_routing_name, "select-home-address", {"claim[postcode]": params[:claim][:postcode], "claim[address_line_1]": params[:claim][:address_line_1]}) and return unless invalid_postcode?
     elsif params[:slug] == "select-home-address" && postcode
@@ -83,22 +83,14 @@ class ClaimsController < BasePublicController
     end
 
     case params[:slug]
-    when "qualification-details"
-      set_dqt_data_as_answers
     when "personal-bank-account", "building-society-account"
       return bank_account
     when "select-claim-school"
       check_select_claim_school_params
-    when "select-mobile"
-      check_mobile_number_params
     when "still-teaching"
       check_still_teaching_params
     else
       current_claim.attributes = claim_params
-
-      # If some DQT data was missing and the user fills them manually we need
-      # to re-populate those answers which depend on the manually-entered answer
-      set_dqt_data_as_answers if current_claim.qualifications_details_check
     end
 
     current_claim.reset_dependent_answers unless params[:slug] == "select-mobile"
@@ -230,21 +222,8 @@ class ClaimsController < BasePublicController
         ClaimMailer.email_verification(current_claim, otp.code).deliver_now
         session[:sent_one_time_password_at] = Time.now
       end
-    when "mobile-number"
-      if current_claim.valid?(:"mobile-number") && current_claim.mobile_number_changed?
-        response = NotifySmsMessage.new(
-          phone_number: current_claim.mobile_number,
-          template_id: "86ae1fe4-4f98-460b-9d57-181804b4e218",
-          personalisation: {
-            otp: otp.code
-          }
-        ).deliver!
-      end
-      session[:sent_one_time_password_at] = Time.now unless response.nil?
     when "email-verification"
       current_claim.update(sent_one_time_password_at: session[:sent_one_time_password_at], one_time_password_category: :claim_email)
-    when "mobile-verification"
-      current_claim.update(sent_one_time_password_at: session[:sent_one_time_password_at], one_time_password_category: :claim_mobile)
     end
   end
 
@@ -285,10 +264,6 @@ class ClaimsController < BasePublicController
     !current_claim.eligible_itt_subject
   end
 
-  def check_mobile_number_params
-    current_claim.attributes = SelectMobileNumberForm.extract_attributes(current_claim, mobile_check: params.dig(:claim, :mobile_check))
-  end
-
   def update_session_with_tps_school(school)
     if school
       session[:tps_school_id] = school.id
@@ -305,11 +280,6 @@ class ClaimsController < BasePublicController
   def check_still_teaching_params
     updated_claim_params = StillTeachingForm.extract_params(claim_params)
     current_claim.attributes = updated_claim_params
-  end
-
-  def set_dqt_data_as_answers
-    current_claim.attributes = claim_params
-    current_claim.claims.each { |claim| claim.eligibility.set_qualifications_from_dqt_record }
   end
 
   def retrieve_student_loan_details

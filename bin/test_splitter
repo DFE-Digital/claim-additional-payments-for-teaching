@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+# Use on ci to split tests by file type and split them across ci nodes
+
+all_specs = Dir["spec/**/*_spec.rb"]
+
+case ENV["SPEC_TYPE"]
+when "unit"
+  specs = all_specs.reject { |path| /\Aspec\/features\//.match? path }
+when "feature"
+  specs = all_specs.select { |path| /\Aspec\/features\//.match? path }
+else
+  specs = all_specs
+end
+
+number_of_ci_nodes = ENV.fetch("CI_NODE_TOTAL").to_i
+
+this_ci_node = ENV.fetch("CI_NODE_INDEX").to_i
+
+number_of_slices = (specs.size / number_of_ci_nodes.to_f).ceil
+
+specs_split_across_nodes = specs.each_slice(number_of_slices).to_a
+
+specs_to_run_on_this_node = specs_split_across_nodes[this_ci_node]
+
+print specs_to_run_on_this_node.join(" ")

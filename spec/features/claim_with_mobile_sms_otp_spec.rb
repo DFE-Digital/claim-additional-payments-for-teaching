@@ -40,7 +40,7 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
 
         allow(NotifySmsMessage).to receive(:new).with(
           phone_number: mobile_number,
-          template_id: "86ae1fe4-4f98-460b-9d57-181804b4e218",
+          template_id: NotifySmsMessage::OTP_PROMPT_TEMPLATE_ID,
           personalisation: {
             otp: scenario[:otp_code]
           }

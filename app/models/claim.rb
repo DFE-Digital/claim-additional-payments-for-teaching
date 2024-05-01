@@ -161,8 +161,6 @@ class Claim < ApplicationRecord
 
   validates :academic_year_before_type_cast, format: {with: AcademicYear::ACADEMIC_YEAR_REGEXP}
 
-  validates :qualifications_details_check, on: [:"qualification-details"], inclusion: {in: [true, false], message: "Select yes if your qualification details are correct"}
-  validates :mobile_check, on: [:"select-mobile"], inclusion: {in: ["use", "alternative", "declined"], message: "Select an option to indicate whether the mobile number is correct or not"}
   validates :address_line_1, on: [:address], presence: {message: "Enter a house number or name"}, if: :has_ecp_or_lupp_policy?
   validates :address_line_1, on: [:address, :submit], presence: {message: "Enter a building and street address"}, unless: :has_ecp_or_lupp_policy?
   validates :address_line_1, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
@@ -181,7 +179,7 @@ class Claim < ApplicationRecord
   validates :postcode, length: {maximum: 11, message: "Postcode must be 11 characters or less"}
   validate :postcode_is_valid, if: -> { postcode.present? }
 
-  validates :teacher_reference_number, on: [:"teacher-reference-number", :submit, :amendment], presence: {message: "Enter your teacher reference number"}
+  validates :teacher_reference_number, on: [:submit, :amendment], presence: {message: "Enter your teacher reference number"}
   validate :trn_must_be_seven_digits
 
   validates :has_student_loan, on: [:"student-loan"], inclusion: {in: [true, false]}
@@ -192,13 +190,6 @@ class Claim < ApplicationRecord
   validates :email_address, on: [:"email-address", :submit], presence: {message: "Enter an email address"}
   validates :email_address, format: {with: Rails.application.config.email_regexp, message: "Enter an email address in the correct format, like name@example.com"},
     length: {maximum: 256, message: "Email address must be 256 characters or less"}, if: -> { email_address.present? }
-
-  validates :mobile_number, on: [:"mobile-number", :submit], presence: {message: "Enter a mobile number, like 07700 900 982 or +44 7700 900 982"}, if: -> { provide_mobile_number == true && has_ecp_or_lupp_policy? }
-  validates :mobile_number,
-    format: {
-      with: /\A(\+44\s?)?(?:\d\s?){10,11}\z/,
-      message: "Enter a valid mobile number, like 07700 900 982 or +44 7700 900 982"
-    }, if: -> { provide_mobile_number == true && mobile_number.present? }
 
   validates :bank_or_building_society, on: [:"bank-or-building-society", :submit], presence: {message: "Select if you want the money paid in to a personal bank account or building society"}
   validates :banking_name, on: [:"personal-bank-account", :"building-society-account", :submit, :amendment], presence: {message: "Enter a name on the account"}

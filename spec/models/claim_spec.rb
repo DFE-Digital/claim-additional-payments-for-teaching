@@ -141,16 +141,6 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  context "with student loans policy eligibility" do
-    let(:claim) { build(:claim, policy: Policies::StudentLoans) }
-
-    # Tests a single attribute, possibly should test multiple attributes
-    it "validates eligibility" do
-      expect(claim).not_to be_valid(:"qts-year")
-      expect(claim.errors.first.message).to eq("Select when you completed your initial teacher training")
-    end
-  end
-
   context "with early-career payments policy eligibility" do
     let(:claim) { build(:claim, policy: Policies::EarlyCareerPayments) }
 
@@ -170,13 +160,6 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  context "when saving in the “teacher-reference-number” validation context" do
-    it "validates the presence of teacher_reference_number" do
-      expect(build(:claim)).not_to be_valid(:"teacher-reference-number")
-      expect(build(:claim, teacher_reference_number: "1234567")).to be_valid(:"teacher-reference-number")
-    end
-  end
-
   context "when saving in the “student-loan” validation context" do
     it "validates the presence of has_student_loan" do
       expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1, has_student_loan: nil)).not_to be_valid(:"student-loan")
@@ -189,42 +172,6 @@ RSpec.describe Claim, type: :model do
     it "validates the presence of email_address" do
       expect(build(:claim)).not_to be_valid(:"email-address")
       expect(build(:claim, email_address: "name@example.tld")).to be_valid(:"email-address")
-    end
-  end
-
-  context "with early-career payments policy" do
-    subject(:claim) { build(:claim, policy: Policies::EarlyCareerPayments) }
-
-    context "with mobile number" do
-      before do
-        claim.provide_mobile_number = true
-        claim.mobile_number = mobile_number
-      end
-
-      context "with UK number without spaces" do
-        let(:mobile_number) { "07474000123" }
-        it { is_expected.to be_valid(:mobile_number) }
-      end
-
-      context "with UK number with spaces" do
-        let(:mobile_number) { "07474 000 123" }
-        it { is_expected.to be_valid(:mobile_number) }
-      end
-
-      context "with international format number without spaces" do
-        let(:mobile_number) { "+447474000123" }
-        it { is_expected.to be_valid(:mobile_number) }
-      end
-
-      context "with international format number with spaces" do
-        let(:mobile_number) { "+44 7474 000 123" }
-        it { is_expected.to be_valid(:mobile_number) }
-      end
-
-      context "with international format non-UK number" do
-        let(:mobile_number) { "+33 12 34 56 78" }
-        it { is_expected.not_to be_valid(:mobile_number) }
-      end
     end
   end
 

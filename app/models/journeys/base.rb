@@ -6,7 +6,11 @@ module Journeys
       "gender" => GenderForm,
       "personal-details" => PersonalDetailsForm,
       "select-email" => SelectEmailForm,
-      "provide-mobile-number" => ProvideMobileNumberForm
+      "provide-mobile-number" => ProvideMobileNumberForm,
+      "select-mobile" => SelectMobileForm,
+      "mobile-number" => MobileNumberForm,
+      "mobile-verification" => MobileVerificationForm,
+      "teacher-reference-number" => TeacherReferenceNumberForm
     }
 
     def configuration

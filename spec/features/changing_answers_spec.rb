@@ -42,7 +42,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     find("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "qts-year")}']").click
 
-    expect(find("#claim_eligibility_attributes_qts_award_year_on_or_after_cut_off_date").checked?).to eq(true)
+    expect(find("#claim_qts_award_year_on_or_after_cut_off_date").checked?).to eq(true)
 
     choose_qts_year :before_cut_off_date
     click_on "Continue"
@@ -289,7 +289,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       before do
         allow(NotifySmsMessage).to receive(:new).with(
           phone_number: new_mobile,
-          template_id: "86ae1fe4-4f98-460b-9d57-181804b4e218",
+          template_id: NotifySmsMessage::OTP_PROMPT_TEMPLATE_ID,
           personalisation: {
             otp: otp_code
           }
@@ -342,7 +342,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       before do
         allow(NotifySmsMessage).to receive(:new).with(
           phone_number: new_mobile,
-          template_id: "86ae1fe4-4f98-460b-9d57-181804b4e218",
+          template_id: NotifySmsMessage::OTP_PROMPT_TEMPLATE_ID,
           personalisation: {
             otp: otp_code
           }

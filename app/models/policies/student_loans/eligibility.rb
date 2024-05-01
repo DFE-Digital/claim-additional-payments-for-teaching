@@ -48,7 +48,6 @@ module Policies
       belongs_to :claim_school, optional: true, class_name: "School"
       belongs_to :current_school, optional: true, class_name: "School"
 
-      validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select when you completed your initial teacher training"}
       validates :claim_school, on: [:"select-claim-school"], presence: {message: ->(object, _data) { object.select_claim_school_presence_error_message }}, unless: :claim_school_somewhere_else?
       validates :employment_status, on: [:"still-teaching", :submit], presence: {message: ->(object, _data) { "Select if you still work at #{object.claim_school_name}, another school or no longer teach in England" }}
       validate :one_subject_must_be_selected, on: [:"subjects-taught", :submit], unless: :not_taught_eligible_subjects?
@@ -117,12 +116,6 @@ module Policies
 
       def select_claim_school_presence_error_message
         I18n.t("student_loans.questions.claim_school_select_error", financial_year: StudentLoans.current_financial_year)
-      end
-
-      def set_qualifications_from_dqt_record
-        self.qts_award_year = if claim.qualifications_details_check && claim.dqt_teacher_record&.qts_award_date
-          claim.dqt_teacher_record.eligible_qts_award_date? ? :on_or_after_cut_off_date : :before_cut_off_date
-        end
       end
 
       private

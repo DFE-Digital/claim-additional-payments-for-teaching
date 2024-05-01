@@ -35,7 +35,7 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
     find("#claim_email_address_check_true").click
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("questions.select_phone_number.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.select_mobile_form.questions.which_number"))
 
     Claim.order(created_at: :desc).limit(2).each do |c|
       expect(c.email_address).to eq("kelsie.oberbrunner@example.com")
@@ -125,7 +125,7 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
     click_on "Continue"
 
     # - Select qts year
-    expect(page).to have_text(I18n.t("questions.qts_award_year"))
+    expect(page).to have_text(I18n.t("student_loans.forms.qts_year.questions.qts_award_year"))
     choose_qts_year
     click_on "Continue"
 

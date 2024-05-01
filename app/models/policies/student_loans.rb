@@ -33,6 +33,10 @@ module Policies
       "https://www.gov.uk/sign-in-to-manage-your-student-loan-balance"
     end
 
+    def payment_and_deductions_info_url
+      eligibility_page_url + "#payment"
+    end
+
     def notify_reply_to_id
       "962b3044-cdd4-4dbe-b6ea-c461530b3dc6"
     end

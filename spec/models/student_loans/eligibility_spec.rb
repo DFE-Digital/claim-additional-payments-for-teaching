@@ -246,17 +246,6 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
     end
   end
 
-  # Validation contexts
-  context "when saving in the “qts-year” context" do
-    it "is not valid without a value for qts_award_year" do
-      expect(described_class.new).not_to be_valid(:"qts-year")
-
-      described_class.qts_award_years.each_key do |academic_year|
-        expect(described_class.new(qts_award_year: academic_year)).to be_valid(:"qts-year")
-      end
-    end
-  end
-
   context "when saving in the “still-teaching” context" do
     it "validates the presence of employment_status" do
       expect(described_class.new).not_to be_valid(:"still-teaching")
@@ -315,14 +304,6 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
       expect(build(:student_loans_eligibility, :eligible)).to be_valid(:submit)
     end
 
-    it "is not valid without a value for qts_award_year" do
-      expect(build(:student_loans_eligibility, :eligible, qts_award_year: nil)).not_to be_valid(:submit)
-
-      described_class.qts_award_years.each_key do |academic_year|
-        expect(build(:student_loans_eligibility, :eligible, qts_award_year: academic_year)).to be_valid(:submit)
-      end
-    end
-
     it "is not valid without a value for employment_status" do
       expect(build(:student_loans_eligibility, :eligible, employment_status: nil)).not_to be_valid(:submit)
     end
@@ -366,53 +347,6 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
       let(:qts_award_year) { "before_cut_off_date" }
 
       it { is_expected.to eq(true) }
-    end
-  end
-
-  describe "#set_qualifications_from_dqt_record" do
-    let(:eligibility) { build(:student_loans_eligibility, claim:, qts_award_year:) }
-    let(:claim) { build(:claim, policy: Policies::StudentLoans, qualifications_details_check:) }
-    let(:qts_award_year) { nil }
-
-    context "when user has confirmed their qualification details" do
-      let(:qualifications_details_check) { true }
-      let(:qts_award_date) { Date.new(1981, 1, 1) }
-
-      before { allow(claim).to receive(:dqt_teacher_record).and_return(double(eligible_qts_award_date?: eligible, qts_award_date:)) }
-
-      context "when the DQT payload QTS award date is eligible" do
-        let(:eligible) { true }
-
-        it "sets the qts_award_year to on_or_after_cut_off_date" do
-          expect { eligibility.set_qualifications_from_dqt_record }.to change { eligibility.qts_award_year }.from(qts_award_year).to("on_or_after_cut_off_date")
-        end
-      end
-
-      context "when the DQT payload QTS award date is not eligible" do
-        let(:eligible) { false }
-
-        it "sets the qts_award_year to before_cut_off_date" do
-          expect { eligibility.set_qualifications_from_dqt_record }.to change { eligibility.qts_award_year }.from(qts_award_year).to("before_cut_off_date")
-        end
-      end
-
-      context "when the DQT payload QTS award date is nil" do
-        let(:eligible) { nil }
-        let(:qts_award_date) { nil }
-
-        it "does not change the qts_award_year" do
-          expect { eligibility.set_qualifications_from_dqt_record }.not_to change { eligibility.qts_award_year }
-        end
-      end
-    end
-
-    context "when user has not confirmed their qualification details" do
-      let(:qualifications_details_check) { false }
-      let(:qts_award_year) { :on_or_after_cut_off_date }
-
-      it "sets the qts_award_year to nil" do
-        expect { eligibility.set_qualifications_from_dqt_record }.to change { eligibility.qts_award_year }.from(qts_award_year.to_s).to(nil)
-      end
     end
   end
 end
