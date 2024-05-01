@@ -78,6 +78,8 @@ RSpec.configure do |config|
     clear_enqueued_jobs
     ActionMailer::Base.deliveries.clear
     OmniAuth.config.mock_auth[:dfe] = nil
+    OmniAuth.config.mock_auth[:tid] = nil
+    OmniAuth.config.mock_auth[:default] = nil
   end
 
   config.filter_run_excluding flaky: true unless ENV["RUN_FLAKY_SPECS"] == "true"
