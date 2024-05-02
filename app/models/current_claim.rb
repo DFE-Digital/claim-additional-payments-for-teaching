@@ -55,6 +55,8 @@ class CurrentClaim
     end
   end
 
+  # TODO RL: can we move this into the submission form?
+  # generate_policy_options_provided is tricky though
   def submit!(policy)
     policy ||= main_claim.policy
 

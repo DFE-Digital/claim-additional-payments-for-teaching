@@ -202,6 +202,7 @@ class Claim < ApplicationRecord
   validate :building_society_roll_number_must_be_between_one_and_eighteen_digits
   validate :building_society_roll_number_must_be_in_a_valid_format
 
+  # TODO RL: Can remove this once we're happy with the submission form
   validate :claim_must_not_be_ineligible, on: :submit
 
   before_save :normalise_trn, if: :teacher_reference_number_changed?
@@ -592,6 +593,7 @@ class Claim < ApplicationRecord
     }
   end
 
+  # TODO RL: Can remove this once we're happy with the submission form
   def claim_must_not_be_ineligible
     errors.add(:base, "You’re not eligible for this payment") if eligibility.ineligible?
   end

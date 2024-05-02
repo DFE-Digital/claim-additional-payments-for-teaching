@@ -4,21 +4,34 @@ class SubmissionsController < BasePublicController
   skip_before_action :send_unstarted_claimants_to_the_start, only: [:show]
 
   def create
-    current_claim.submit!(session[:selected_claim_policy])
+    @form = ClaimSubmissionForm.new(
+      journey: journey,
+      claim: current_claim,
+      params: selected_claim_params
+    )
 
-    ClaimMailer.submitted(current_claim.main_claim).deliver_later
-    ClaimVerifierJob.perform_later(current_claim.main_claim)
-
-    session[:submitted_claim_id] = current_claim.id
-    clear_claim_session
-
-    redirect_to claim_confirmation_path
-  rescue Claim::NotSubmittable
-    current_claim.valid?(:submit)
-    render "claims/check_your_answers"
+    if @form.save
+      session[:submitted_claim_id] = current_claim.id
+      clear_claim_session
+      redirect_to claim_confirmation_path
+    else
+      render "claims/check_your_answers"
+    end
   end
 
   def show
     redirect_to journey.start_page_url, allow_other_host: true unless submitted_claim
+  end
+
+  private
+
+  def selected_claim_params
+    ActionController::Parameters.new(
+      {
+        claim: {
+          selected_claim_policy: session[:selected_claim_policy]
+        }
+      }
+    )
   end
 end
