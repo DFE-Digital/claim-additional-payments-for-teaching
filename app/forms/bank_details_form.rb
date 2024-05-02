@@ -23,24 +23,16 @@ class BankDetailsForm < Form
   # This should be the last validation specified to prevent unnecessary API calls
   validate :bank_account_is_valid
 
-  def initialize(claim:, journey:, params:)
-    super
-    self.hmrc_validation_attempt_count ||= 0
-  end
-
   def save
-    if valid?
-      update!(
-        banking_name:,
-        bank_sort_code:,
-        bank_account_number:,
-        building_society_roll_number:,
-        hmrc_bank_validation_succeeded:
-      )
-    else
-      self.hmrc_validation_attempt_count += 1 if hmrc_api_validation_attempted?
-      false
-    end
+    return false unless valid?
+
+    update!(
+      banking_name:,
+      bank_sort_code:,
+      bank_account_number:,
+      building_society_roll_number:,
+      hmrc_bank_validation_succeeded:
+    )
   end
 
   def hmrc_bank_validation_succeeded
@@ -111,10 +103,10 @@ class BankDetailsForm < Form
   end
 
   def within_maximum_attempts?
-    (hmrc_validation_attempt_count + 1) <= MAX_HMRC_API_VALIDATION_ATTEMPTS
+    hmrc_validation_attempt_count + 1 <= MAX_HMRC_API_VALIDATION_ATTEMPTS
   end
 
   def met_maximum_attempts?
-    (hmrc_validation_attempt_count + 1) >= MAX_HMRC_API_VALIDATION_ATTEMPTS
+    hmrc_validation_attempt_count + 1 >= MAX_HMRC_API_VALIDATION_ATTEMPTS
   end
 end

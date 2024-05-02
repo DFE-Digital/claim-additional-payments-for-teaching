@@ -64,6 +64,8 @@ class ClaimsController < BasePublicController
   end
 
   def update
+    params[:claim][:hmrc_validation_attempt_count] = session[:hmrc_validation_attempt_count] || 0 if on_banking_page?
+
     # TODO: Migrate the remaining slugs to form objects.
     if (@form = journey.form(claim: current_claim, params:))
       if @form.save
@@ -71,6 +73,7 @@ class ClaimsController < BasePublicController
         update_session_with_selected_policy
         redirect_to claim_path(current_journey_routing_name, next_slug)
       else
+        session[:hmrc_validation_attempt_count] = (session[:hmrc_validation_attempt_count] || 0) + 1 if on_banking_page? && @form.hmrc_api_validation_attempted?
         set_any_backlink_override
         show
       end
@@ -207,6 +210,10 @@ class ClaimsController < BasePublicController
 
   def prepend_view_path_for_journey
     prepend_view_path("app/views/#{current_journey_routing_name.underscore}")
+  end
+
+  def on_banking_page?
+    %w[personal-bank-account building-society-account].include?(params[:slug])
   end
 
   def one_time_password

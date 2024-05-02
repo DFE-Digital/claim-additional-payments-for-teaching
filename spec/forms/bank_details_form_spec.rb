@@ -14,7 +14,7 @@ RSpec.describe BankDetailsForm do
 
     let(:slug) { "personal-bank-account" }
     let(:params) do
-      {banking_name:, bank_sort_code:, bank_account_number:, building_society_roll_number:}
+      {banking_name:, bank_sort_code:, bank_account_number:, building_society_roll_number:, hmrc_validation_attempt_count:}
     end
 
     subject(:form) { described_class.new(claim: current_claim, journey: journey, params: ActionController::Parameters.new(slug:, claim: params)) }
@@ -23,6 +23,7 @@ RSpec.describe BankDetailsForm do
     let(:bank_sort_code) { rand(100000..999999) }
     let(:bank_account_number) { rand(10000000..99999999) }
     let(:building_society_roll_number) { nil }
+    let(:hmrc_validation_attempt_count) { 0 }
 
     describe "#valid?" do
       context "with 200 code HMRC API response", :with_stubbed_hmrc_client do
@@ -157,19 +158,10 @@ RSpec.describe BankDetailsForm do
               form.valid?
               expect(form).not_to be_hmrc_api_validation_succeeded
             end
-
-            it "increments hmrc_validation_attempt_count" do
-              expect {
-                form.save
-              }.to change { form.hmrc_validation_attempt_count }.from(0).to(1)
-            end
           end
 
           context "when the validation fails on the third attempt" do
-            before do
-              allow(form).to receive(:hmrc_validation_attempt_count).and_return(2)
-            end
-
+            let(:hmrc_validation_attempt_count) { 2 }
             let(:account_exists) { false }
 
             it "contacts the HMRC API" do
