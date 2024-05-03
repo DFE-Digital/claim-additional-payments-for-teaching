@@ -208,7 +208,7 @@ GEM
       multi_json (~> 1.11)
       os (>= 0.9, < 2.0)
       signet (>= 0.16, < 2.a)
-    govuk_design_system_formbuilder (5.2.0)
+    govuk_design_system_formbuilder (5.3.3)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
@@ -547,7 +547,7 @@ DEPENDENCIES
   faker (~> 3.3)
   faraday_middleware
   foreman
-  govuk_design_system_formbuilder
+  govuk_design_system_formbuilder (~> 5.3.2)
   httpclient
   jbuilder (~> 2.11)
   jwt
