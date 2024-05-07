@@ -45,9 +45,9 @@ class Form
       .claim_path(params[:journey], page_sequence.previous_slug)
   end
 
-  def i18n_errors_path(msg)
+  def i18n_errors_path(msg, args = {})
     base_key = :"forms.#{i18n_form_namespace}.errors.#{msg}"
-    I18n.t("#{i18n_namespace}.#{base_key}", default: base_key)
+    I18n.t("#{i18n_namespace}.#{base_key}", default: base_key, **args)
   end
 
   def permitted_params

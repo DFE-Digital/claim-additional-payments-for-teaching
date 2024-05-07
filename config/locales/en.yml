@@ -326,6 +326,9 @@ en:
       still_teaching:
         questions:
           which_school_currently: "Which school are you currently employed to teach at?"
+        errors:
+          select_which_school_currently:
+            Select if you still work at %{school_name}, another school or no longer teach in England
       teacher_reference_number:
         questions:
           teacher_reference_number: "What is your teacher reference number (TRN)?"
