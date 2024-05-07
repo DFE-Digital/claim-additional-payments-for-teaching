@@ -1,4 +1,4 @@
-<% content_for(:page_title, page_title(t("student_loans.questions.employment_status"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+<% content_for(:page_title, page_title(t("student_loans.forms.still_teaching.questions.#{@form.tps_or_claim_school}"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -8,11 +8,7 @@
       <%= form_group_tag @form do %>
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-            <% if current_claim.logged_in_with_tid_and_has_recent_tps_school? %>
-              <h1 class="govuk-fieldset__heading"><%= t("student_loans.forms.still_teaching.questions.which_school_currently") %></h1>
-            <% else %>
-              <h1 class="govuk-fieldset__heading"><%= t("student_loans.questions.employment_status") %></h1>
-            <% end %>
+            <h1 class="govuk-fieldset__heading"><%= t("student_loans.forms.still_teaching.questions.#{@form.tps_or_claim_school}") %></h1>
           </legend>
 
           <%= errors_tag @form, :employment_status %>
@@ -20,10 +16,10 @@
           <div class="govuk-radios">
             <%= form.hidden_field :employment_status %>
 
-            <% if current_claim.logged_in_with_tid_and_has_recent_tps_school? %>
-              <%= render partial: "still_teaching_with_tps_school", locals: { current_claim: current_claim, form: form, current_school: current_claim.recent_tps_school }  %>
+            <% if @form.logged_in_with_tid_and_has_recent_tps_school? %>
+              <%= render partial: "still_teaching_with_tps_school", locals: { current_claim: @form.claim, form: form, current_school: @form.claim.recent_tps_school }  %>
             <% else %>
-              <%= render partial: "still_teaching_with_claim_school", locals: { current_claim: current_claim, form: form, claim_school: current_claim.eligibility.claim_school }  %>
+              <%= render partial: "still_teaching_with_claim_school", locals: { current_claim: @form.claim, form: form, claim_school: @form.claim.eligibility.claim_school }  %>
             <% end %>
           </div>
         </fieldset>

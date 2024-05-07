@@ -6,8 +6,10 @@ module Journeys
 
       validates :employment_status,
         presence: {
-          message: ->(form, _) { form.i18n_errors_path("select_which_school_currently", school_name: form.school_name) }
+          message: ->(form, _) { form.i18n_errors_path("select_which_school_currently", school_name: form.claim_school_name) }
         }
+
+      delegate :logged_in_with_tid_and_has_recent_tps_school?, to: :claim
 
       def save
         return false unless valid?
@@ -20,8 +22,12 @@ module Journeys
         )
       end
 
-      def school_name
+      def claim_school_name
         claim.eligibility.claim_school_name
+      end
+
+      def tps_or_claim_school
+        logged_in_with_tid_and_has_recent_tps_school? ? "tps_school" : "claim_school"
       end
 
       private
