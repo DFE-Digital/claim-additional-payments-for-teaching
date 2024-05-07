@@ -15,15 +15,15 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
       check "Biology"
       check "Physics"
 
-      expect(page).to have_checked_field("eligible_subjects_biology_taught", visible: false)
-      expect(page).to have_checked_field("eligible_subjects_physics_taught", visible: false)
+      expect(page).to have_checked_field("claim_biology_taught", visible: false)
+      expect(page).to have_checked_field("claim_physics_taught", visible: false)
 
-      choose I18n.t("student_loans.questions.eligible_subjects.none_taught")
+      check I18n.t("student_loans.forms.subjects_taught.answers.none_taught")
 
-      expect(page).to have_checked_field("claim_eligibility_attributes_taught_eligible_subjects_false", visible: false)
+      expect(page).to have_checked_field("claim_taught_eligible_subjects", visible: false)
 
-      expect(page).to_not have_checked_field("eligible_subjects_biology_taught", visible: false)
-      expect(page).to_not have_checked_field("eligible_subjects_physics_taught", visible: false)
+      expect(page).to_not have_checked_field("claim_biology_taught", visible: false)
+      expect(page).to_not have_checked_field("claim_physics_taught", visible: false)
 
       click_on "Continue"
 
@@ -32,14 +32,14 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
     end
 
     scenario "checks not applicable and then chooses a subject" do
-      choose I18n.t("student_loans.questions.eligible_subjects.none_taught")
+      check I18n.t("student_loans.forms.subjects_taught.answers.none_taught")
 
-      expect(page).to have_checked_field("claim_eligibility_attributes_taught_eligible_subjects_false", visible: false)
+      expect(page).to have_checked_field("claim_taught_eligible_subjects", visible: false)
 
       check "Biology"
 
-      expect(page).to have_checked_field("eligible_subjects_biology_taught", visible: false)
-      expect(page).to_not have_checked_field("claim_eligibility_attributes_taught_eligible_subjects_false", visible: false)
+      expect(page).to have_checked_field("claim_biology_taught", visible: false)
+      expect(page).to_not have_checked_field("claim_taught_eligible_subjects", visible: false)
 
       click_on "Continue"
 
@@ -55,7 +55,7 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
       check "Biology"
       check "Physics"
 
-      choose I18n.t("student_loans.questions.eligible_subjects.none_taught")
+      check I18n.t("student_loans.forms.subjects_taught.answers.none_taught")
       click_on "Continue"
 
       expect(page).to have_text("You did not select an eligible subject")
@@ -63,7 +63,7 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
     end
 
     scenario "checks not applicable and then chooses a subject" do
-      choose I18n.t("student_loans.questions.eligible_subjects.none_taught")
+      check I18n.t("student_loans.forms.subjects_taught.answers.none_taught")
 
       check "Biology"
       click_on "Continue"

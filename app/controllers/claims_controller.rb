@@ -39,8 +39,6 @@ class ClaimsController < BasePublicController
 
     if params[:slug] == "select-claim-school"
       update_session_with_tps_school(current_claim.tps_school_for_student_loan_in_previous_financial_year)
-    elsif params[:slug] == "subjects-taught" && page_sequence.in_sequence?("select-claim-school")
-      @backlink_path = claim_path(current_journey_routing_name, "select-claim-school")
     elsif params[:slug] == "postcode-search" && postcode
       redirect_to claim_path(current_journey_routing_name, "select-home-address", {"claim[postcode]": params[:claim][:postcode], "claim[address_line_1]": params[:claim][:address_line_1]}) and return unless invalid_postcode?
     elsif params[:slug] == "select-home-address" && postcode

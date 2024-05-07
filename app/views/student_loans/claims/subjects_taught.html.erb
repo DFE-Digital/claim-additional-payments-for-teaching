@@ -1,48 +1,44 @@
-<% content_for(:page_title, page_title(subjects_taught_question(school_name: current_claim.eligibility.claim_school_name), journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(subjects_taught_question(school_name: @form.claim_school_name), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.subjects_taught": "eligible_subjects_biology_taught" }) if current_claim.errors.any? %>
+    <%= render("shared/error_summary", instance: @form, errored_field_id_overrides: { "subjects_taught": "claim_biology_taught" }) if @form.errors.any? %>
 
-    <%= form_for current_claim, url: claim_path(current_journey_routing_name) do |form| %>
+    <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
 
-      <%= form_group_tag current_claim do %>
-        <%= form.fields_for :eligibility, include_id: false do |fields| %>
-          <fieldset class="govuk-fieldset" id="claim_subjects_taught">
+      <%= form_group_tag @form do %>
+        <fieldset class="govuk-fieldset">
 
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-              <h1 class="govuk-fieldset__heading">
-                <%= subjects_taught_question(school_name: current_claim.eligibility.claim_school_name) %>
-              </h1>
-            </legend>
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading">
+              <%= subjects_taught_question(school_name: f.object.claim_school_name) %>
+            </h1>
+          </legend>
 
-            <%= errors_tag current_claim.eligibility, :subjects_taught %>
+          <%= errors_tag f.object, :subjects_taught %>
 
-            <div class="govuk-checkboxes">
+          <div class="govuk-checkboxes" data-module="govuk-checkboxes">
 
-              <%- Policies::StudentLoans::Eligibility::SUBJECT_ATTRIBUTES.each do |subject| %>
-                <div class="govuk-checkboxes__item">
-                  <%= fields.hidden_field subject, value: false %>
-                  <%= fields.check_box subject, class: "govuk-checkboxes__input subject", id: "eligible_subjects_#{subject}" %>
-                  <%= fields.label subject, t("student_loans.questions.eligible_subjects.#{subject}"), class: "govuk-label govuk-checkboxes__label", for: "eligible_subjects_#{subject}" %>
-                </div>
-              <% end %>
-
-              <div class="govuk-radios__divider">or</div>
-
-              <div class="govuk-radios__item">
-                <%= fields.hidden_field :taught_eligible_subjects, value: true %>
-                <%= fields.radio_button :taught_eligible_subjects, false, class: "govuk-radios__input" %>
-                <%= fields.label :taught_eligible_subjects_false, t('student_loans.questions.eligible_subjects.none_taught'), class: "govuk-label govuk-radios__label" %>
+            <%- f.object.subject_attributes.each do |subject| %>
+              <div class="govuk-checkboxes__item">
+                <%= f.check_box :subjects_taught, { class: "govuk-checkboxes__input", id: "claim_#{subject}", include_hidden: false, checked: f.object.subject_taught_selected?(subject), multiple: true }, subject %>
+                <%= f.label :subjects_taught, t("student_loans.forms.subjects_taught.answers.#{subject}"), class: "govuk-label govuk-checkboxes__label", for: "claim_#{subject}" %>
               </div>
+            <% end %>
 
+            <div class="govuk-checkboxes__divider">or</div>
+
+            <div class="govuk-checkboxes__item">
+              <%= f.check_box :subjects_taught, { class: "govuk-checkboxes__input", id: "claim_taught_eligible_subjects", include_hidden: false, multiple: true, data: { behaviour: "exclusive" } }, "none_taught" %>
+              <%= f.label :subjects_taught, t("student_loans.forms.subjects_taught.answers.none_taught"), class: "govuk-label govuk-checkboxes__label", for: "claim_taught_eligible_subjects" %>
             </div>
 
-          </fieldset>
-        <% end %>
+          </div>
+
+        </fieldset>
       <% end %>
 
-      <%= form.submit "Continue", class: "govuk-button" %>
+      <%= f.submit "Continue", class: "govuk-button" %>
 
     <% end %>
   </div>

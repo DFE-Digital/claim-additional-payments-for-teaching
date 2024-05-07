@@ -260,25 +260,6 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
     end
   end
 
-  context "when saving in the “subjects-taught” context" do
-    it "is not valid if none of the subjects-taught attributes are true" do
-      expect(described_class.new).not_to be_valid(:"subjects-taught")
-      expect(described_class.new(biology_taught: false)).not_to be_valid(:"subjects-taught")
-      expect(described_class.new(biology_taught: false, physics_taught: false)).not_to be_valid(:"subjects-taught")
-    end
-
-    it "is valid when one or more of the subjects-taught attributes are true" do
-      expect(described_class.new(biology_taught: true)).to be_valid(:"subjects-taught")
-      expect(described_class.new(biology_taught: true, computing_taught: false)).to be_valid(:"subjects-taught")
-      expect(described_class.new(chemistry_taught: true, languages_taught: true)).to be_valid(:"subjects-taught")
-    end
-
-    it "is valid with no subjects present if taught_eligible_subjects is false" do
-      expect(described_class.new(taught_eligible_subjects: false)).to be_valid(:"subjects-taught")
-      expect(described_class.new(taught_eligible_subjects: true)).not_to be_valid(:"subjects-taught")
-    end
-  end
-
   context "when saving in the “submit” context" do
     it "is valid when all attributes are present" do
       expect(build(:student_loans_eligibility, :eligible)).to be_valid(:submit)
@@ -286,10 +267,6 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
 
     it "is not valid without a value for employment_status" do
       expect(build(:student_loans_eligibility, :eligible, employment_status: nil)).not_to be_valid(:submit)
-    end
-
-    it "is not valid without at least one subject being taught selected" do
-      expect(build(:student_loans_eligibility, :eligible, physics_taught: nil)).not_to be_valid(:submit)
     end
 
     it "is not valid without a value for student_loan_repayment_amount" do
