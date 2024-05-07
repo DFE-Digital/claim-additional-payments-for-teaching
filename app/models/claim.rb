@@ -202,9 +202,6 @@ class Claim < ApplicationRecord
   validate :building_society_roll_number_must_be_between_one_and_eighteen_digits
   validate :building_society_roll_number_must_be_in_a_valid_format
 
-  # TODO RL: Can remove this once we're happy with the submission form
-  validate :claim_must_not_be_ineligible, on: :submit
-
   before_save :normalise_trn, if: :teacher_reference_number_changed?
   before_save :normalise_ni_number, if: :national_insurance_number_changed?
   before_save :normalise_bank_account_number, if: :bank_account_number_changed?
@@ -268,15 +265,6 @@ class Claim < ApplicationRecord
     return true if claims_approved_so_far.zero?
 
     (current_academic_year.approved.qa_required.count.to_f / claims_approved_so_far) * 100 <= MIN_QA_THRESHOLD
-  end
-
-  def submit!
-    raise NotSubmittable unless submittable?
-
-    self.submitted_at = Time.zone.now
-    self.reference = unique_reference
-    eligibility&.submit!
-    save!
   end
 
   def hold!(reason:, user:)
@@ -586,18 +574,6 @@ class Claim < ApplicationRecord
     errors.add(:bank_sort_code, "Sort code must be 6 digits") if bank_sort_code.present? && normalised_bank_detail(bank_sort_code) !~ /\A\d{6}\z/
   end
 
-  def unique_reference
-    loop {
-      ref = Reference.new.to_s
-      break ref unless self.class.exists?(reference: ref)
-    }
-  end
-
-  # TODO RL: Can remove this once we're happy with the submission form
-  def claim_must_not_be_ineligible
-    errors.add(:base, "You’re not eligible for this payment") if eligibility.ineligible?
-  end
-
   def postcode_is_valid
     unless postcode_is_valid?
       errors.add(:postcode, "Enter a postcode in the correct format")
@@ -612,6 +588,8 @@ class Claim < ApplicationRecord
     logged_in_with_tid? && mobile_check == "use" && provide_mobile_number && mobile_number.present?
   end
 
+  # TODO RL: Move this into the claim submission form once `submittable?` is no
+  # longer required on claim
   def submittable_mobile_details?
     return true if using_mobile_number_from_tid?
     return true if provide_mobile_number && mobile_number.present? && mobile_verified == true

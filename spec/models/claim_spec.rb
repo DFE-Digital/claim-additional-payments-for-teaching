@@ -147,14 +147,6 @@ RSpec.describe Claim, type: :model do
       expect(build(:claim)).not_to be_valid(:submit)
       expect(build(:claim, :submittable)).to be_valid(:submit)
     end
-
-    it "validates the claim’s eligibility" do
-      ineligible_claim = build(:claim, :submittable)
-      ineligible_claim.eligibility.mostly_performed_leadership_duties = true
-
-      expect(ineligible_claim).not_to be_valid(:submit)
-      expect(ineligible_claim.errors.messages[:base]).to include("You’re not eligible for this payment")
-    end
   end
 
   describe "#teacher_reference_number" do
@@ -204,71 +196,6 @@ RSpec.describe Claim, type: :model do
 
     it "returns nil if no eligibility is set" do
       expect(Claim.new.school).to be_nil
-    end
-  end
-
-  describe "#submit!" do
-    around do |example|
-      freeze_time { example.run }
-    end
-
-    context "when the claim is submittable" do
-      let(:claim) { build(:claim, :submittable, policy: Policies::LevellingUpPremiumPayments, eligibility: eligibility) }
-      let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
-
-      before do
-        create(:journey_configuration, :additional_payments)
-        claim.submit!
-      end
-
-      it "sets submitted_at to now" do
-        expect(claim.submitted_at).to eq Time.zone.now
-      end
-
-      it "generates a reference" do
-        expect(claim.reference).to_not eq nil
-      end
-
-      it "sets the eligibility award amount" do
-        expect(claim.eligibility.attributes["award_amount"]).to be_a(BigDecimal).and be_positive
-      end
-    end
-
-    context "when a Reference clash with an existing claim occurs" do
-      let(:claim) { create(:claim, :submittable) }
-
-      before do
-        other_claim = create(:claim, :submittable, reference: "12345678")
-        expect(Reference).to receive(:new).once.and_return(double(to_s: other_claim.reference), double(to_s: "87654321"))
-        claim.submit!
-      end
-
-      it "generates a unique reference" do
-        expect(claim.reference).to eq("87654321")
-      end
-    end
-
-    context "when the claim is ineligible" do
-      let(:claim) { create(:claim, :ineligible) }
-
-      it "raises an exception and adds an error" do
-        expect { claim.submit! }
-          .to raise_error(Claim::NotSubmittable)
-          .and not_change { claim.reference }
-          .and not_change { claim.submitted_at }
-        expect(claim.errors.messages[:base]).to include("You’re not eligible for this payment")
-      end
-    end
-
-    context "when the claim has already been submitted" do
-      let(:claim) { create(:claim, :submitted, submitted_at: 2.days.ago) }
-
-      it "raises an exception" do
-        expect { claim.submit! }
-          .to raise_error(Claim::NotSubmittable)
-          .and not_change { claim.reference }
-          .and not_change { claim.submitted_at }
-      end
     end
   end
 

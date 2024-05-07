@@ -5,14 +5,15 @@ class SubmissionsController < BasePublicController
 
   def create
     @form = ClaimSubmissionForm.new(
-      journey: journey,
       claim: current_claim,
-      params: selected_claim_params
+      params: selected_claim_policy_params,
+      journey: nil # Not used but needed to match base form signature
     )
 
     if @form.save
-      session[:submitted_claim_id] = current_claim.id
+      session[:submitted_claim_id] = @form.main_claim.id
       clear_claim_session
+
       redirect_to claim_confirmation_path
     else
       render "claims/check_your_answers"
@@ -25,12 +26,10 @@ class SubmissionsController < BasePublicController
 
   private
 
-  def selected_claim_params
+  def selected_claim_policy_params
     ActionController::Parameters.new(
-      {
-        claim: {
-          selected_claim_policy: session[:selected_claim_policy]
-        }
+      claim: {
+        selected_claim_policy: session[:selected_claim_policy]
       }
     )
   end

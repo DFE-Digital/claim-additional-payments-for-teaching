@@ -112,11 +112,28 @@ RSpec.describe ClaimSubmissionForm do
       )
     end
 
+    let(:ecp_eligibility) do
+      build(
+        :early_career_payments_eligibility,
+        :eligible,
+        award_amount: 1000.0
+      )
+    end
+
     let(:ecp_claim) do
       create(
         :claim,
         :submittable,
-        policy: Policies::EarlyCareerPayments
+        policy: Policies::EarlyCareerPayments,
+        eligibility: ecp_eligibility
+      )
+    end
+
+    let(:lup_eligibility) do
+      build(
+        :levelling_up_premium_payments_eligibility,
+        :eligible,
+        award_amount: 2000.0
       )
     end
 
@@ -136,16 +153,8 @@ RSpec.describe ClaimSubmissionForm do
       )
     end
 
-    around do |example|
-      travel_to(DateTime.new(2024, 3, 1, 9, 0, 0)) { example.run }
-    end
-
     before do
-      allow(ClaimMailer).to receive(:submitted).and_return(
-        double(deliver_later: true)
-      )
-
-      allow(ClaimVerifierJob).to receive(:perform_later)
+      allow(ClaimSubmissionJob).to receive(:perform_now)
 
       form.save
     end
@@ -156,15 +165,7 @@ RSpec.describe ClaimSubmissionForm do
         let(:claims) { [incomplete_claim] }
 
         it "doesn't submit the claim and returns errors" do
-          expect(incomplete_claim.submitted_at).to eq nil
-
-          expect(ClaimMailer).not_to(
-            have_received(:submitted).with(incomplete_claim)
-          )
-
-          expect(ClaimVerifierJob).not_to(
-            have_received(:perform_later).with(incomplete_claim)
-          )
+          expect(ClaimSubmissionJob).not_to(have_received(:perform_now))
 
           expect(form.errors[:base]).to include("Postcode Enter a real postcode")
         end
@@ -175,21 +176,10 @@ RSpec.describe ClaimSubmissionForm do
         let(:claims) { [tslr_claim] }
 
         it "submits the claim" do
-          tslr_claim.reload
-
-          expect(tslr_claim.submitted_at).to eq(
-            DateTime.new(2024, 3, 1, 9, 0, 0)
-          )
-
-          expect(tslr_claim.reference).to be_present
-
-          # student_loans/eligibility#submit! is a noop
-
-          expect(ClaimMailer).to have_received(:submitted).with(tslr_claim)
-
-          expect(ClaimVerifierJob).to(
-            have_received(:perform_later).with(tslr_claim)
-          )
+          expect(ClaimSubmissionJob).to(have_received(:perform_now).with(
+            main_claim: tslr_claim,
+            other_claims: []
+          ))
         end
       end
 
@@ -198,25 +188,10 @@ RSpec.describe ClaimSubmissionForm do
         let(:claims) { [ecp_claim, lup_claim] }
 
         it "submits the claim that matches that policy" do
-          lup_claim.reload
-
-          expect(lup_claim.submitted_at).to eq(
-            DateTime.new(2024, 3, 1, 9, 0, 0)
-          )
-
-          expect(lup_claim.reference).to be_present
-
-          expect(lup_claim.eligibility.award_amount).to eq 2_000
-
-          expect(ClaimMailer).to have_received(:submitted).with(lup_claim)
-
-          expect(ClaimVerifierJob).to(
-            have_received(:perform_later).with(lup_claim)
-          )
-        end
-
-        it "removes the other claims" do
-          expect(Claim.where(id: ecp_claim.id)).to be_empty
+          expect(ClaimSubmissionJob).to(have_received(:perform_now).with(
+            main_claim: lup_claim,
+            other_claims: [ecp_claim]
+          ))
         end
       end
 
@@ -225,25 +200,10 @@ RSpec.describe ClaimSubmissionForm do
         let(:claims) { [ecp_claim, lup_claim] }
 
         it "submits the main claim" do
-          ecp_claim.reload
-
-          expect(ecp_claim.submitted_at).to(
-            eq(DateTime.new(2024, 3, 1, 9, 0, 0))
-          )
-
-          expect(ecp_claim.reference).to be_present
-
-          expect(ecp_claim.eligibility.award_amount).to eq 2_000
-
-          expect(ClaimMailer).to have_received(:submitted).with(ecp_claim)
-
-          expect(ClaimVerifierJob).to(
-            have_received(:perform_later).with(ecp_claim)
-          )
-        end
-
-        it "removes the other claims" do
-          expect(Claim.where(id: lup_claim.id)).to be_empty
+          expect(ClaimSubmissionJob).to(have_received(:perform_now).with(
+            main_claim: ecp_claim,
+            other_claims: [lup_claim]
+          ))
         end
       end
     end

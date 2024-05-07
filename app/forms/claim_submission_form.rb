@@ -1,46 +1,42 @@
 class ClaimSubmissionForm < Form
-  attribute :selected_claim_policy
+  attribute :selected_claim_policy, :string
 
   validate :not_already_submitted
   validate :email_address_provided
   validate :email_address_verified, if: :email_address_provided?
   validate :mobile_number_verified
-  validate :claim_is_eligible
+  validate :main_claim_is_eligible
+  validate :main_claim_is_submittable
 
   def save
     return false unless valid?
 
-    # Move more current claim stuff into here then extract it into a job
-    current_claim.submit!(selected_claim_policy)
+    ClaimSubmissionJob.perform_now(
+      main_claim: main_claim,
+      other_claims: other_claims
+    )
 
-    ClaimMailer.submitted(current_claim.main_claim).deliver_later
-    ClaimVerifierJob.perform_later(current_claim.main_claim)
-  rescue Claim::NotSubmittable
-    # Probably not needed but replicating the existing behaviour
-    main_claim.valid?(:submit)
-    main_claim.errors.full_messages.each do |message|
-      errors.add(:base, message)
+    true
+  end
+
+  def main_claim
+    return @main_claim if defined?(@main_claim)
+
+    if selected_claim_policy
+      current_claim.for_policy(selected_claim_policy)
+    else
+      current_claim.main_claim
     end
+  end
 
-    false
+  def other_claims
+    current_claim.claims - [main_claim]
   end
 
   private
 
   def current_claim
     claim
-  end
-
-  # Duplicates knowledge of which claim is being submitted between current
-  # claim and here
-  def main_claim
-    return @main_claim if defined?(@main_claim)
-
-    @main_claim = if selected_claim_policy
-      current_claim.for_policy(selected_claim_policy)
-    else
-      current_claim.main_claim
-    end
   end
 
   def not_already_submitted
@@ -82,9 +78,16 @@ class ClaimSubmissionForm < Form
     main_claim.send(:submittable_mobile_details?)
   end
 
-  def claim_is_eligible
+  def main_claim_is_eligible
     if main_claim.eligibility.ineligible?
       errors.add(:base, "You’re not eligible for this payment")
     end
+  end
+
+  # Probably not needed but replicating the existing behaviour
+  def main_claim_is_submittable
+    return if main_claim.valid?(:submit)
+
+    main_claim.errors.full_messages.each { |message| errors.add(:base, message) }
   end
 end

@@ -103,11 +103,6 @@ module Policies
         end
       end
 
-      def submit!
-        self.award_amount = award_amount
-        save!
-      end
-
       def indicated_ineligible_itt_subject?
         return false if eligible_itt_subject.blank?
 
@@ -120,6 +115,10 @@ module Policies
           itt_subject_checker = JourneySubjectEligibilityChecker.new(**args)
           eligible_itt_subject.present? && !eligible_itt_subject.to_sym.in?(itt_subject_checker.current_subject_symbols(policy))
         end
+      end
+
+      def calculate_award_amount
+        current_school.levelling_up_premium_payments_awards.find_by(academic_year: claim_year.to_s).award_amount if current_school.present?
       end
 
       private
@@ -172,10 +171,6 @@ module Policies
 
       def lacks_eligible_degree?
         eligible_degree_subject == false
-      end
-
-      def calculate_award_amount
-        current_school.levelling_up_premium_payments_awards.find_by(academic_year: claim_year.to_s).award_amount if current_school.present?
       end
 
       def award_amount_must_be_in_range
