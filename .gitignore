@@ -52,3 +52,10 @@ coverage/
 # Editor specific files
 .vscode/
 .rspec-local
+
+.terraform
+terraform/application/vendor
+terraform/domains/environment_domains/vendor
+terraform.tfstate*
+bin/terrafile
+bin/konduit.sh
