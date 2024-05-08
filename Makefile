@@ -55,26 +55,62 @@ terraform-init: set-azure-account
 		-backend-config=container_name=${CONTAINER_NAME} \
 		${BACKEND_KEY}
 
+terraform-init-aks: composed-variables bin/terrafile set-azure-account-aks
+	$(if ${DOCKER_IMAGE_TAG}, , $(eval DOCKER_IMAGE_TAG=main))
+
+	./bin/terrafile -p terraform/application/vendor/modules -f terraform/application/config/$(CONFIG)_Terrafile
+	terraform -chdir=terraform/application init -upgrade -reconfigure \
+		-backend-config=resource_group_name=${RESOURCE_GROUP_NAME} \
+		-backend-config=storage_account_name=${STORAGE_ACCOUNT_NAME} \
+		-backend-config=key=${ENVIRONMENT}_kubernetes.tfstate
+
+	$(eval export TF_VAR_azure_resource_prefix=${AZURE_RESOURCE_PREFIX})
+	$(eval export TF_VAR_config_short=${CONFIG_SHORT})
+	$(eval export TF_VAR_service_name=${SERVICE_NAME})
+	$(eval export TF_VAR_service_short=${SERVICE_SHORT})
+	$(eval export TF_VAR_docker_image=${DOCKER_REPOSITORY}:${DOCKER_IMAGE_TAG})
+
 terraform-plan: terraform-init
 	terraform -chdir=azure/terraform plan \
 		-var="input_container_version=${IMAGE_TAG}" \
 		-var-file workspace_variables/${DEPLOY_ENV}.tfvars.json
+
+terraform-plan-aks: terraform-init-aks
+	terraform -chdir=terraform/application plan -var-file "config/${CONFIG}.tfvars.json"
 
 terraform-apply: terraform-init
 	terraform -chdir=azure/terraform apply \
 		-var="input_container_version=${IMAGE_TAG}" \
 		-var-file workspace_variables/${DEPLOY_ENV}.tfvars.json
 
+terraform-apply-aks: terraform-init-aks
+	terraform -chdir=terraform/application apply -var-file "config/${CONFIG}.tfvars.json" ${AUTO_APPROVE}
+
 terraform-destroy: terraform-init
 	terraform -chdir=azure/terraform destroy \
 		-var="input_container_version=${IMAGE_TAG}" \
 		-var-file workspace_variables/${DEPLOY_ENV}.tfvars.json
+
+terraform-destroy-aks: terraform-init-aks
+	terraform -chdir=terraform/application destroy -var-file "config/${CONFIG}.tfvars.json" ${AUTO_APPROVE}
+
+domains:
+	$(eval include global_config/domains.sh)
 
 composed-variables:
 	$(eval RESOURCE_GROUP_NAME=${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-rg)
 	$(eval KEYVAULT_NAMES='("${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-app-kv", "${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-inf-kv")')
 	$(eval STORAGE_ACCOUNT_NAME=${AZURE_RESOURCE_PREFIX}${SERVICE_SHORT}${CONFIG_SHORT}tfsa)
 	$(eval LOG_ANALYTICS_WORKSPACE_NAME=${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-log)
+
+ci:
+	$(eval AUTO_APPROVE=-auto-approve)
+	$(eval SKIP_AZURE_LOGIN=true)
+	$(eval SKIP_CONFIRM=true)
+
+bin/terrafile: ## Install terrafile to manage terraform modules
+	curl -sL https://github.com/coretech/terrafile/releases/download/v${TERRAFILE_VERSION}/terrafile_${TERRAFILE_VERSION}_$$(uname)_x86_64.tar.gz \
+		| tar xz -C ./bin terrafile
 
 set-what-if:
 	$(eval WHAT_IF=--what-if)
@@ -96,6 +132,46 @@ deploy-arm-resources: arm-deployment ## Validate ARM resource deployment. Usage:
 
 validate-arm-resources: set-what-if arm-deployment ## Validate ARM resource deployment. Usage: make domains validate-arm-resources
 
+domains-infra-init: bin/terrafile domains composed-variables set-azure-account-aks
+	./bin/terrafile -p terraform/domains/infrastructure/vendor/modules -f terraform/domains/infrastructure/config/zones_Terrafile
+
+	terraform -chdir=terraform/domains/infrastructure init -reconfigure -upgrade \
+		-backend-config=resource_group_name=${RESOURCE_GROUP_NAME} \
+		-backend-config=storage_account_name=${STORAGE_ACCOUNT_NAME} \
+		-backend-config=key=domains_infrastructure.tfstate
+
+domains-infra-plan: domains domains-infra-init  ## Terraform plan for DNS infrastructure (DNS zone and front door). Usage: make domains-infra-plan
+	terraform -chdir=terraform/domains/infrastructure plan -var-file config/zones.tfvars.json
+
+domains-infra-apply: domains domains-infra-init  ## Terraform apply for DNS infrastructure (DNS zone and front door). Usage: make domains-infra-apply
+	terraform -chdir=terraform/domains/infrastructure apply -var-file config/zones.tfvars.json ${AUTO_APPROVE}
+
+domains-init: bin/terrafile domains composed-variables set-azure-account-aks
+	./bin/terrafile -p terraform/domains/environment_domains/vendor/modules -f terraform/domains/environment_domains/config/${CONFIG}_Terrafile
+
+	terraform -chdir=terraform/domains/environment_domains init -upgrade -reconfigure \
+		-backend-config=resource_group_name=${RESOURCE_GROUP_NAME} \
+		-backend-config=storage_account_name=${STORAGE_ACCOUNT_NAME} \
+		-backend-config=key=${ENVIRONMENT}.tfstate
+
+domains-plan: domains-init  ## Terraform plan for DNS environment domains. Usage: make development domains-plan
+	terraform -chdir=terraform/domains/environment_domains plan -var-file config/${CONFIG}.tfvars.json
+
+domains-apply: domains-init ## Terraform apply for DNS environment domains. Usage: make development domains-apply
+	terraform -chdir=terraform/domains/environment_domains apply -var-file config/${CONFIG}.tfvars.json ${AUTO_APPROVE}
+
 test-cluster:
 	$(eval CLUSTER_RESOURCE_GROUP_NAME=s189t01-tsc-ts-rg)
 	$(eval CLUSTER_NAME=s189t01-tsc-test-aks)
+
+production-cluster:
+	$(eval CLUSTER_RESOURCE_GROUP_NAME=s189p01-tsc-pd-rg)
+	$(eval CLUSTER_NAME=s189p01-tsc-production-aks)
+
+get-cluster-credentials: set-azure-account-aks
+	az aks get-credentials --overwrite-existing -g ${CLUSTER_RESOURCE_GROUP_NAME} -n ${CLUSTER_NAME}
+	kubelogin convert-kubeconfig -l $(if ${GITHUB_ACTIONS},spn,azurecli)
+
+bin/konduit.sh:
+	curl -s https://raw.githubusercontent.com/DFE-Digital/teacher-services-cloud/main/scripts/konduit.sh -o bin/konduit.sh \
+		&& chmod +x bin/konduit.sh
