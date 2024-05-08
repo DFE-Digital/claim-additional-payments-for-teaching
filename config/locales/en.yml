@@ -46,11 +46,15 @@ en:
   support_email_address: "additionalteachingpayment@digital.education.gov.uk"
   check_your_answers:
     heading_send_application: Confirm and send your application
-    statement: By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct.
+    statement:
+      By submitting this notification you are confirming that, to the best of your knowledge, the details you are
+      providing are correct.
     btn_text: Confirm and send
   one_time_password:
     title: "Enter the 6-digit passcode"
-    hint1_html: "We have sent %{email_or_mobile_message} to <b><strong>%{email_or_mobile_value}</strong></b> with a 6-digit passcode."
+    hint1_html:
+      "We have sent %{email_or_mobile_message} to <b><strong>%{email_or_mobile_value}</strong></b> with a 6-digit
+      passcode."
     validity_duration: "The passcode will expire %{duration_valid} after you receive it."
   questions:
     check_and_confirm_details: "Check and confirm your personal details"
@@ -67,8 +71,11 @@ en:
     date_of_birth: "What is your date of birth?"
     teacher_reference_number: "What is your teacher reference number (TRN)?"
     email_address: "Email address"
-    email_address_hint1: "We recommend you use a non-work email address in case your circumstances change while we process your payment."
-    email_address_hint2: "To verify your email address we will send you an email with a 6-digit passcode. You can enter the passcode on the next screen."
+    email_address_hint1:
+      "We recommend you use a non-work email address in case your circumstances change while we process your payment."
+    email_address_hint2:
+      "To verify your email address we will send you an email with a 6-digit passcode. You can enter the passcode on the
+      next screen."
     provide_mobile_number: "Would you like to provide your mobile number?"
     mobile_number: "Mobile number"
     personal_details: "Personal details"
@@ -92,7 +99,8 @@ en:
       assessment_only: Subject you did your teaching qualification in
       overseas_recognition: Subject you did your teaching qualification in
     degree_subject: Subject you did your degree in
-    select_yes_confirm: By selecting yes you are confirming that, to the best of your knowledge, the details above are correct.
+    select_yes_confirm:
+      By selecting yes you are confirming that, to the best of your knowledge, the details above are correct.
     continue: Continue
     radio_yes: "Yes"
     radio_no: "No"
@@ -159,7 +167,9 @@ en:
     allocations:
       bulk_allocate:
         success: "Assigned %{quantity} %{allocate_to_policy} %{pluralized_or_singular_claim} to %{dfe_user}"
-        info: "No additional claims were assigned to %{dfe_user}. There are not any %{allocate_to_policy} awaiting assignment"
+        info:
+          "No additional claims were assigned to %{dfe_user}. There are not any %{allocate_to_policy} awaiting
+          assignment"
       bulk_deallocate:
         confirmation: Are you sure you want to unassign %{allocate_to_policy} claims from %{dfe_user}?
         success: All %{allocate_to_policy} claims for %{dfe_user} have been unassigned
@@ -190,11 +200,31 @@ en:
         payroll_gender: "How is your gender recorded on your school’s payroll system?"
       errors:
         select_gender: "Select the gender recorded on your school’s payroll system or select whether you do not know"
+    bank_details:
+      errors:
+        enter_account_number: Enter an account number
+        enter_banking_name: Enter a name on the account
+        enter_sort_code: Enter a sort code
+        enter_roll_number: Enter a roll number
+        format_account_number: Account number must be 8 digits
+        format_sort_code: Sort code must be 6 digits
+        format_roll_number:
+          Building society roll number must only include letters a to z, numbers, hyphens, spaces, forward slashes and
+          full stops
+        invalid_sort_code: Enter a valid sort code
+        invalid_account_number: Enter the account number associated with the name on the account and/or sort code
+        invalid_banking_name: Enter a valid name on the account
+        length_roll_number: Building society roll number must be between 1 and 18 characters
+    bank_or_building_society:
+      errors:
+        select_bank_or_building_society:
+          Select if you want the money paid in to a personal bank account or building society
     select_email:
       questions:
         select_email: Which email address should we use to contact you?
       hints:
-        non_work_email_address: We recommend you use a non-work email address in case your circumstances change while we process your payment.
+        non_work_email_address:
+          We recommend you use a non-work email address in case your circumstances change while we process your payment.
       errors:
         select_email: Select an option to indicate whether the email is correct or not
         invalid_email: Invalid email address. Please select a different email address
@@ -221,7 +251,9 @@ en:
         questions:
           leadership_position: "Were you employed in a leadership position between %{financial_year}?"
         hints:
-          leadership_position: "This includes head of subject, head of year, head of department, deputy head, head teacher or other middle leader role."
+          leadership_position:
+            "This includes head of subject, head of year, head of department, deputy head, head teacher or other middle
+            leader role."
         errors:
           inclusion: "Select yes if you were employed in a leadership position"
       mobile_number:
@@ -229,9 +261,11 @@ en:
           invalid: "Enter a mobile number, like 07700 900 982 or +44 7700 900 982"
       mostly_performed_leadership_duties:
         questions:
-          mostly_performed_leadership_duties: "Were more than half your working hours spent on leadership duties between %{financial_year}?"
+          mostly_performed_leadership_duties:
+            "Were more than half your working hours spent on leadership duties between %{financial_year}?"
         hints:
-          mostly_performed_leadership_duties: "If you were off on long-term leave or sick, include the time you would have spent."
+          mostly_performed_leadership_duties:
+            "If you were off on long-term leave or sick, include the time you would have spent."
         errors:
           inclusion: "Select yes if you spent more than half your working hours on leadership duties"
       select_mobile_form:
@@ -241,7 +275,9 @@ en:
           alternative: "A different mobile number"
           decline: "I do not want to be contacted by mobile"
         hints:
-          usage: "We will only use this number if we are unable to contact you via email. It may slow down your application if we are unable to reach you."
+          usage:
+            "We will only use this number if we are unable to contact you via email. It may slow down your application
+            if we are unable to reach you."
         errors:
           mobile_check: "Select an option to indicate whether the mobile number is correct or not"
       sign_in_or_continue:
@@ -303,7 +339,8 @@ en:
     answers:
       qts_award_years:
         before_cut_off_date: A different academic year
-        on_or_after_cut_off_date: Between the start of the %{year} academic year and the end of the 2020 to 2021 academic year
+        on_or_after_cut_off_date:
+          Between the start of the %{year} academic year and the end of the 2020 to 2021 academic year
     information_provided_further_details: For more details, you can read about payments and deductions when %{link}
     information_provided_further_details_link_text: claiming back your student loan repayments (opens in new tab)
     admin:
@@ -319,7 +356,9 @@ en:
           body: "The claimant’s identity matches DQT records. See %{link}."
           notes: "notes"
         qualifications:
-          title: "Does the claimant’s initial teacher training (ITT) qualification year match the above information from their claim?"
+          title:
+            "Does the claimant’s initial teacher training (ITT) qualification year match the above information from
+            their claim?"
         census_subjects_taught:
           title: Does the claimant’s subject match the schools workforce census subjects
         employment:
@@ -329,7 +368,9 @@ en:
         matching_details:
           title: "Is this claim still valid despite having matching details with other claims?"
         payroll_details:
-          title: "The claimant’s %{bank_or_building_society} details have not been automatically validated. Has the claimant confirmed their %{bank_or_building_society} details?"
+          title:
+            "The claimant’s %{bank_or_building_society} details have not been automatically validated. Has the claimant
+            confirmed their %{bank_or_building_society} details?"
   additional_payments: &additional_payments
     forms:
       correct_school:
@@ -363,7 +404,9 @@ en:
           physics: "Physics"
           none_of_the_above: "None of the above"
         hints:
-          subject: "The subjects listed are eligible for additional payment based on the school you teach in and the year you studied."
+          subject:
+            "The subjects listed are eligible for additional payment based on the school you teach in and the year you
+            studied."
         errors:
           inclusion: "Select a subject"
       eligible_degree_subject:
@@ -394,9 +437,14 @@ en:
         questions:
           poor_performance: Tell us if you are currently under any performance measures or disciplinary action
           disciplinary_action: "Are you currently subject to disciplinary action?"
-          disciplinary_action_hint: "This is more serious than performance measures and could be because of misconduct. It is something we may check with your school as it will affect your eligibility."
+          disciplinary_action_hint:
+            "This is more serious than performance measures and could be because of misconduct. It is something we may
+            check with your school as it will affect your eligibility."
           formal_performance_action: "Have any performance measures been started against you?"
-          formal_performance_action_hint: "This will be as a result of your underperformance as a teacher over a period of time. It could put your employment at the school at risk and is something we may check with your school as it will affect your eligibility."
+          formal_performance_action_hint:
+            "This will be as a result of your underperformance as a teacher over a period of time. It could put your
+            employment at the school at risk and is something we may check with your school as it will affect your
+            eligibility."
         errors:
           subject_to_formal_performance_action:
             inclusion: Select yes if you are subject to formal action for poor performance at work
@@ -408,7 +456,9 @@ en:
         errors:
           inclusion: Select the route you took into teaching
         hints:
-          postgraduate_itt: "Postgraduate Certificate of Education (PGCE), Teach First, School Direct ITT and School Centered ITT (SCITT)."
+          postgraduate_itt:
+            "Postgraduate Certificate of Education (PGCE), Teach First, School Direct ITT and School Centered ITT
+            (SCITT)."
           undergraduate_itt: "Bachelor of Arts (BA) or Bachelor of Science (BSc) degrees."
         answers:
           postgraduate_itt: "Postgraduate initial teacher training (ITT)"
@@ -425,7 +475,9 @@ en:
           alternative: "A different mobile number"
           decline: "I do not want to be contacted by mobile"
         hints:
-          usage: "We will only use this number if we are unable to contact you via email. It may slow down your application if we are unable to reach you."
+          usage:
+            "We will only use this number if we are unable to contact you via email. It may slow down your application
+            if we are unable to reach you."
         errors:
           mobile_check: "Select an option to indicate whether the mobile number is correct or not"
       sign_in_or_continue:
@@ -490,14 +542,19 @@ en:
             title: If you qualified as a teacher in the 2020 to 2021 academic year
             text_html: >
               Select yes if you have completed at least 1 year of your induction period as an early-career teacher.<br/>
-              Select no if you have not completed 1 year of your induction period.<br/>
-              Further information about induction periods can be found at <a href="https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools" class="govuk-link govuk-link--no-visited-state" target="_blank">Early-career payments guidance for teachers and schools</a>
+              Select no if you have not completed 1 year of your induction period.<br/> Further information about
+              induction periods can be found at <a
+              href="https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools"
+              class="govuk-link govuk-link--no-visited-state" target="_blank">Early-career payments guidance for
+              teachers and schools</a>
           overseas:
             title: If you qualified overseas
             text_html: >
-              Select yes if you have more than 2 years experience as a teacher.<br/>
-              Select no if you have less than 2 years experience as a teacher.<br/>
-              Further information can be found at <a href="https://www.gov.uk/government/publications/apply-for-qualified-teacher-status-qts-if-you-teach-outside-the-uk/routes-to-qualified-teacher-status-qts-for-teachers-and-those-with-teaching-experience-outside-the-uk#early-career-teacher-ect-induction" class="govuk-link govuk-link--no-visited-state" target="_blank">early-career teacher (ECT) induction periods for teachers who qualified overseas</a>
+              Select yes if you have more than 2 years experience as a teacher.<br/> Select no if you have less than 2
+              years experience as a teacher.<br/> Further information can be found at <a
+              href="https://www.gov.uk/government/publications/apply-for-qualified-teacher-status-qts-if-you-teach-outside-the-uk/routes-to-qualified-teacher-status-qts-for-teachers-and-those-with-teaching-experience-outside-the-uk#early-career-teacher-ect-induction"
+              class="govuk-link govuk-link--no-visited-state" target="_blank">early-career teacher (ECT) induction
+              periods for teachers who qualified overseas</a>
       itt_academic_year:
         qualification:
           undergraduate_itt: In which academic year did you complete your undergraduate initial teacher training (ITT)?
@@ -523,7 +580,9 @@ en:
           body: "The claimant’s identity matches DQT records. See %{link}."
           notes: "notes"
         qualifications:
-          title: "Does the claimant’s initial teacher training (ITT) start/end year and subject match the above information from their claim?"
+          title:
+            "Does the claimant’s initial teacher training (ITT) start/end year and subject match the above information
+            from their claim?"
         induction_confirmation:
           title: "Is the claimant’s induction data valid?"
         student_loan_plan:
@@ -533,7 +592,9 @@ en:
         matching_details:
           title: "Is this claim still valid despite having matching details with other claims?"
         payroll_details:
-          title: "The claimant’s %{bank_or_building_society} details have not been automatically validated. Has the claimant confirmed their %{bank_or_building_society} details?"
+          title:
+            "The claimant’s %{bank_or_building_society} details have not been automatically validated. Has the claimant
+            confirmed their %{bank_or_building_society} details?"
     reminders:
       full_name: Full name
     information_provided_further_details: For more details, you can read about payments and deductions for the %{link}

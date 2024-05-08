@@ -191,11 +191,9 @@ class Claim < ApplicationRecord
   validates :email_address, format: {with: Rails.application.config.email_regexp, message: "Enter an email address in the correct format, like name@example.com"},
     length: {maximum: 256, message: "Email address must be 256 characters or less"}, if: -> { email_address.present? }
 
-  validates :bank_or_building_society, on: [:"bank-or-building-society", :submit], presence: {message: "Select if you want the money paid in to a personal bank account or building society"}
-  validates :banking_name, on: [:"personal-bank-account", :"building-society-account", :submit, :amendment], presence: {message: "Enter a name on the account"}
-  validates :bank_sort_code, on: [:"personal-bank-account", :"building-society-account", :submit, :amendment], presence: {message: "Enter a sort code"}
-  validates :bank_account_number, on: [:"personal-bank-account", :"building-society-account", :submit, :amendment], presence: {message: "Enter an account number"}
-  validates :building_society_roll_number, on: [:"building-society-account", :submit, :amendment], presence: {message: "Enter a roll number"}, if: -> { building_society? }
+  validates :bank_sort_code, on: [:submit, :amendment], presence: {message: "Enter a sort code"}
+  validates :bank_account_number, on: [:submit, :amendment], presence: {message: "Enter an account number"}
+  validates :building_society_roll_number, on: [:submit, :amendment], presence: {message: "Enter a roll number"}, if: -> { building_society? }
 
   validates :payroll_gender, on: [:"payroll-gender-task", :submit], presence: {message: "You must select a gender that will be passed to HMRC"}
 
