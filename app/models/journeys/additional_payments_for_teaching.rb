@@ -23,7 +23,8 @@ module Journeys
       "eligible-itt-subject" => EligibleIttSubjectForm,
       "teaching-subject-now" => TeachingSubjectNowForm,
       "eligibility-confirmed" => EligibilityConfirmedForm,
-      "correct-school" => CorrectSchoolForm
+      "correct-school" => CorrectSchoolForm,
+      "reset-claim" => ResetClaimForm
     }.freeze
   end
 end
