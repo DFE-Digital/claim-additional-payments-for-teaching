@@ -330,6 +330,7 @@ en:
         errors:
           select_which_school_currently:
             Select if you still work at %{school_name}, another school or no longer teach in England
+          select_are_you_still_employed: Select yes if you are still employed to teach at a school in England
       teacher_reference_number:
         questions:
           teacher_reference_number: "What is your teacher reference number (TRN)?"

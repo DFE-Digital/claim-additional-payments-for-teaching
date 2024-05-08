@@ -16,11 +16,7 @@
           <div class="govuk-radios">
             <%= form.hidden_field :employment_status %>
 
-            <% if @form.logged_in_with_tid_and_has_recent_tps_school? %>
-              <%= render partial: "still_teaching_with_tps_school", locals: { current_claim: @form.claim, form: form, current_school: @form.claim.recent_tps_school }  %>
-            <% else %>
-              <%= render partial: "still_teaching_with_claim_school", locals: { current_claim: @form.claim, form: form, claim_school: @form.claim.eligibility.claim_school }  %>
-            <% end %>
+            <%= render partial: "still_teaching_with_#{@form.tps_or_claim_school}", locals: { current_claim: @form.claim, form: form, school: @form.school }  %>
           </div>
         </fieldset>
       <% end %>

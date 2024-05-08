@@ -25,6 +25,16 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::StillTeachingForm, typ
     end
   end
 
+  describe "#error_message" do
+    context "when the school is closed" do
+      let(:claim_school) { build(:school, :student_loans_eligible, close_date: Date.yesterday) }
+
+      it "does not contain the school name" do
+        expect(form.error_message).to eq("Select yes if you are still employed to teach at a school in England")
+      end
+    end
+  end
+
   describe "#save" do
     context "when no_school is submitted" do
       let(:claim_params) { {employment_status: "no_school"} }
