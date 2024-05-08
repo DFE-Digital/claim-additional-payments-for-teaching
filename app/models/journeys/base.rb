@@ -10,6 +10,9 @@ module Journeys
       "select-mobile" => SelectMobileForm,
       "mobile-number" => MobileNumberForm,
       "mobile-verification" => MobileVerificationForm,
+      "bank-or-building-society" => BankOrBuildingSocietyForm,
+      "personal-bank-account" => BankDetailsForm,
+      "building-society-account" => BankDetailsForm,
       "teacher-reference-number" => TeacherReferenceNumberForm
     }
 
