@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ClaimSubmissionJob do
+RSpec.describe ClaimSubmissionService do
   before do
     create(:journey_configuration, :student_loans)
     create(:journey_configuration, :additional_payments)
@@ -51,7 +51,7 @@ RSpec.describe ClaimSubmissionJob do
     )
   end
 
-  describe "#perform" do
+  describe ".call" do
     around do |example|
       travel_to(DateTime.new(2024, 3, 1, 9, 0, 0)) { example.run }
     end
@@ -67,7 +67,7 @@ RSpec.describe ClaimSubmissionJob do
 
       allow(ClaimVerifierJob).to receive(:perform_later)
 
-      described_class.perform_now(
+      described_class.call(
         main_claim: main_claim,
         other_claims: other_claims
       )

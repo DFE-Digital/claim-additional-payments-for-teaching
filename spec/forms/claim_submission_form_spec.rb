@@ -154,7 +154,7 @@ RSpec.describe ClaimSubmissionForm do
     end
 
     before do
-      allow(ClaimSubmissionJob).to receive(:perform_now)
+      allow(ClaimSubmissionService).to receive(:call)
 
       form.save
     end
@@ -165,7 +165,7 @@ RSpec.describe ClaimSubmissionForm do
         let(:claims) { [incomplete_claim] }
 
         it "doesn't submit the claim and returns errors" do
-          expect(ClaimSubmissionJob).not_to(have_received(:perform_now))
+          expect(ClaimSubmissionService).not_to(have_received(:call))
 
           expect(form.errors[:base]).to include("Postcode Enter a real postcode")
         end
@@ -176,7 +176,7 @@ RSpec.describe ClaimSubmissionForm do
         let(:claims) { [tslr_claim] }
 
         it "submits the claim" do
-          expect(ClaimSubmissionJob).to(have_received(:perform_now).with(
+          expect(ClaimSubmissionService).to(have_received(:call).with(
             main_claim: tslr_claim,
             other_claims: []
           ))
@@ -188,7 +188,7 @@ RSpec.describe ClaimSubmissionForm do
         let(:claims) { [ecp_claim, lup_claim] }
 
         it "submits the claim that matches that policy" do
-          expect(ClaimSubmissionJob).to(have_received(:perform_now).with(
+          expect(ClaimSubmissionService).to(have_received(:call).with(
             main_claim: lup_claim,
             other_claims: [ecp_claim]
           ))
@@ -200,7 +200,7 @@ RSpec.describe ClaimSubmissionForm do
         let(:claims) { [ecp_claim, lup_claim] }
 
         it "submits the main claim" do
-          expect(ClaimSubmissionJob).to(have_received(:perform_now).with(
+          expect(ClaimSubmissionService).to(have_received(:call).with(
             main_claim: ecp_claim,
             other_claims: [lup_claim]
           ))

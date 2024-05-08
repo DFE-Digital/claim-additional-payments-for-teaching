@@ -11,7 +11,7 @@ class ClaimSubmissionForm < Form
   def save
     return false unless valid?
 
-    ClaimSubmissionJob.perform_now(
+    ClaimSubmissionService.call(
       main_claim: main_claim,
       other_claims: other_claims
     )

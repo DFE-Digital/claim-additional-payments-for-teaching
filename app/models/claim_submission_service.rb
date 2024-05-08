@@ -1,5 +1,5 @@
-class ClaimSubmissionJob < ApplicationJob
-  def perform(main_claim:, other_claims:)
+class ClaimSubmissionService
+  def self.call(main_claim:, other_claims:)
     main_claim.submitted_at = Time.zone.now
     main_claim.reference = unique_reference
 
@@ -24,9 +24,7 @@ class ClaimSubmissionJob < ApplicationJob
     ClaimVerifierJob.perform_later(main_claim)
   end
 
-  private
-
-  def generate_policy_options_provided(main_claim:, other_claims:)
+  def self.generate_policy_options_provided(main_claim:, other_claims:)
     claims = [main_claim] + other_claims
 
     eligible_now_and_sorted(claims).map do |c|
@@ -37,17 +35,17 @@ class ClaimSubmissionJob < ApplicationJob
     end
   end
 
-  def eligible_now_and_sorted(claims)
+  def self.eligible_now_and_sorted(claims)
     eligible_now(claims).sort_by do |c|
       [-c.award_amount.to_i, c.policy.short_name]
     end
   end
 
-  def eligible_now(claims)
+  def self.eligible_now(claims)
     claims.select { |c| c.eligibility.status == :eligible_now }
   end
 
-  def unique_reference
+  def self.unique_reference
     loop {
       ref = Reference.new.to_s
       break ref unless Claim.exists?(reference: ref)
