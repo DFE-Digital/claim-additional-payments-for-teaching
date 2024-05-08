@@ -6,7 +6,7 @@ class CurrentSchoolForm < Form
   validates :current_school_id, presence: {message: i18n_error_message(:select_the_school_you_teach_at)}
   validate :current_school_must_be_open, if: -> { current_school_id.present? }
 
-  def initialize(claim:, journey:, params:)
+  def initialize(claim:, journey_session:, journey:, params:)
     super
 
     load_schools

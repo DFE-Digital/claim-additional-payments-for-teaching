@@ -6,6 +6,7 @@ class Form
 
   attr_accessor :claim
   attr_accessor :journey
+  attr_accessor :journey_session
   attr_accessor :params
 
   delegate :persisted?, to: :claim
@@ -18,7 +19,8 @@ class Form
     ->(object, _) { object.i18n_errors_path(path) }
   end
 
-  def initialize(claim:, journey:, params:)
+  # TODO RL: remove journey param and pull it from the journey_session
+  def initialize(claim:, journey_session:, journey:, params:)
     super
 
     assign_attributes(attributes_with_current_value)
@@ -67,7 +69,7 @@ class Form
   def page_sequence
     @page_sequence ||= Journeys::PageSequence.new(
       claim,
-      journey.slug_sequence.new(claim),
+      journey.slug_sequence.new(claim, journey_session),
       nil,
       params[:slug]
     )

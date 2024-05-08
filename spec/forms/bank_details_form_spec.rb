@@ -12,12 +12,23 @@ RSpec.describe BankDetailsForm do
       CurrentClaim.new(claims: claims)
     end
 
+    let(:journey_session) do
+      build(:journeys_session, journey: journey::ROUTING_NAME)
+    end
+
     let(:slug) { "personal-bank-account" }
     let(:params) do
       {banking_name:, bank_sort_code:, bank_account_number:, building_society_roll_number:, hmrc_validation_attempt_count:}
     end
 
-    subject(:form) { described_class.new(claim: current_claim, journey: journey, params: ActionController::Parameters.new(slug:, claim: params)) }
+    subject(:form) do
+      described_class.new(
+        claim: current_claim,
+        journey_session: journey_session,
+        journey: journey,
+        params: ActionController::Parameters.new(slug:, claim: params)
+      )
+    end
 
     let(:banking_name) { "Jo Bloggs" }
     let(:bank_sort_code) { rand(100000..999999) }

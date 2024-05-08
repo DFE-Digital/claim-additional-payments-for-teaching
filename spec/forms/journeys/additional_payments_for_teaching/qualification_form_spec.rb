@@ -3,7 +3,11 @@ require "rails_helper"
 RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationForm, type: :model do
   before { create(:journey_configuration, :additional_payments) }
 
-  let(:additional_payments_journey) { Journeys::AdditionalPaymentsForTeaching }
+  let(:journey) { Journeys::AdditionalPaymentsForTeaching }
+
+  let(:journey_session) do
+    build(:journeys_session, journey: journey::ROUTING_NAME)
+  end
 
   let(:claim) { create(:claim, policy: Policies::EarlyCareerPayments) }
 
@@ -12,7 +16,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationForm, type:
   describe "validations" do
     subject(:form) do
       described_class.new(
-        journey: additional_payments_journey,
+        journey: journey,
+        journey_session: journey_session,
         claim: current_claim,
         params: ActionController::Parameters.new
       )
@@ -30,7 +35,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationForm, type:
   describe "#save" do
     let(:form) do
       described_class.new(
-        journey: additional_payments_journey,
+        journey: journey,
+        journey_session: journey_session,
         claim: current_claim,
         params: params
       )
@@ -76,7 +82,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationForm, type:
   describe "#backlink_path" do
     let(:form) do
       described_class.new(
-        journey: additional_payments_journey,
+        journey: journey,
+        journey_session: journey_session,
         claim: current_claim,
         params: ActionController::Parameters.new(
           {

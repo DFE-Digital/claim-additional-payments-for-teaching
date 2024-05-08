@@ -1,9 +1,14 @@
 require "rails_helper"
 
 RSpec.describe Journeys::TeacherStudentLoanReimbursement::QtsYearForm, type: :model do
-  subject(:form) { described_class.new(claim:, journey:, params:) }
+  subject(:form) do
+    described_class.new(claim:, journey_session:, journey:, params:)
+  end
 
   let(:journey) { Journeys::TeacherStudentLoanReimbursement }
+  let(:journey_session) do
+    build(:journeys_session, journey: journey::ROUTING_NAME)
+  end
   let(:claim) { CurrentClaim.new(claims: [build(:claim, policy: Policies::StudentLoans)]) }
   let(:slug) { "qts-year" }
   let(:params) { ActionController::Parameters.new({slug:, claim: claim_params}) }

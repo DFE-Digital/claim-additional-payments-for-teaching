@@ -31,7 +31,7 @@ class ClaimsController < BasePublicController
     end
 
     # TODO: Migrate the remaining slugs to form objects.
-    if @form ||= journey.form(claim: current_claim, params:)
+    if @form ||= journey.form(claim: current_claim, journey_session:, params:)
       set_any_backlink_override
       render current_template
       return
@@ -63,7 +63,7 @@ class ClaimsController < BasePublicController
     params[:claim][:hmrc_validation_attempt_count] = session[:hmrc_validation_attempt_count] || 0 if on_banking_page?
 
     # TODO: Migrate the remaining slugs to form objects.
-    if (@form = journey.form(claim: current_claim, params:))
+    if (@form = journey.form(claim: current_claim, journey_session:, params:))
       if @form.save
         retrieve_student_loan_details
         update_session_with_selected_policy
@@ -120,7 +120,12 @@ class ClaimsController < BasePublicController
 
   def redirect_to_existing_claim_journey
     new_journey = Journeys.for_policy(current_claim.policy)
-    new_page_sequence = new_journey.page_sequence_for_claim(current_claim, session[:slugs], params[:slug])
+    new_page_sequence = new_journey.page_sequence_for_claim(
+      current_claim,
+      journey_session,
+      session[:slugs],
+      params[:slug]
+    )
     redirect_to(claim_path(new_journey::ROUTING_NAME, slug: new_page_sequence.next_required_slug))
   end
 
@@ -197,7 +202,12 @@ class ClaimsController < BasePublicController
   end
 
   def page_sequence
-    @page_sequence ||= journey.page_sequence_for_claim(current_claim, session[:slugs], params[:slug])
+    @page_sequence ||= journey.page_sequence_for_claim(
+      current_claim,
+      journey_session,
+      session[:slugs],
+      params[:slug]
+    )
   end
 
   def prepend_view_path_for_journey

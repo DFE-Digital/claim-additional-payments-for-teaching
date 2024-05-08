@@ -58,6 +58,7 @@ module Journeys
       def set_qualification!
         QualificationForm.new(
           journey: journey,
+          journey_session: journey_session,
           claim: claim,
           params: ActionController::Parameters.new(
             claim: {

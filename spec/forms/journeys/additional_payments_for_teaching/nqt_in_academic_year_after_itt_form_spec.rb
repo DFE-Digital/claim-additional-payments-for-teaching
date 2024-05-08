@@ -3,7 +3,11 @@ require "rails_helper"
 RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIttForm do
   before { create(:journey_configuration, :additional_payments) }
 
-  let(:additional_payments_journey) { Journeys::AdditionalPaymentsForTeaching }
+  let(:journey) { Journeys::AdditionalPaymentsForTeaching }
+
+  let(:journey_session) do
+    build(:journeys_session, journey: journey::ROUTING_NAME)
+  end
 
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
 
@@ -13,7 +17,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
     describe "#nqt_in_academic_year_after_itt" do
       subject(:form) do
         described_class.new(
-          journey: additional_payments_journey,
+          journey: journey,
+          journey_session: journey_session,
           claim: current_claim,
           params: params
         )
@@ -60,7 +65,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
   describe "#save" do
     let(:form) do
       described_class.new(
-        journey: additional_payments_journey,
+        journey: journey,
+        journey_session: journey_session,
         claim: current_claim,
         params: params
       )
@@ -194,7 +200,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
 
       let(:form) do
         described_class.new(
-          journey: additional_payments_journey,
+          journey: journey,
+          journey_session: journey_session,
           claim: current_claim,
           params: ActionController::Parameters.new({})
         )
@@ -235,7 +242,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
 
       let(:form) do
         described_class.new(
-          journey: additional_payments_journey,
+          journey: journey,
+          journey_session: journey_session,
           claim: current_claim,
           params: ActionController::Parameters.new({
             journey: "additional-payments"

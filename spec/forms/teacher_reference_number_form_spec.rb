@@ -9,6 +9,10 @@ RSpec.describe TeacherReferenceNumberForm do
 
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
 
+  let(:journey_session) do
+    build(:journeys_session, journey: journey::ROUTING_NAME)
+  end
+
   let(:params) do
     ActionController::Parameters.new(
       claim: {
@@ -20,6 +24,7 @@ RSpec.describe TeacherReferenceNumberForm do
   let(:form) do
     described_class.new(
       journey: journey,
+      journey_session: journey_session,
       claim: current_claim,
       params: params
     )

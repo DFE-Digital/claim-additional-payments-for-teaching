@@ -14,7 +14,7 @@ module Journeys
     I18N_NAMESPACE = "test_i18n_ns"
 
     class SlugSequence
-      def initialize(claim)
+      def initialize(claim, journey_session)
         # NOOP
       end
     end
@@ -40,11 +40,12 @@ RSpec.describe Form, type: :model do
     end
   end
 
-  subject(:form) { TestSlugForm.new(claim:, journey:, params:) }
+  subject(:form) { TestSlugForm.new(claim:, journey:, journey_session:, params:) }
 
   let(:claim) { CurrentClaim.new(claims:) }
   let(:claims) { [build(:claim, policy: Policies::StudentLoans)] }
   let(:journey) { Journeys::TestJourney }
+  let(:journey_session) { build(:journeys_session) }
   let(:params) { ActionController::Parameters.new({journey: "test-journey", slug: "test_slug", claim: claim_params}) }
   let(:claim_params) { {first_name: "test-name"} }
 

@@ -14,6 +14,10 @@ RSpec.describe MobileVerificationForm do
 
     let(:current_claim) { CurrentClaim.new(claims: claims) }
 
+    let(:journey_session) do
+      build(:journeys_session, journey: journey::ROUTING_NAME)
+    end
+
     let(:params) do
       ActionController::Parameters.new(
         claim: {
@@ -23,7 +27,12 @@ RSpec.describe MobileVerificationForm do
     end
 
     let(:form) do
-      described_class.new(journey: journey, claim: current_claim, params: params)
+      described_class.new(
+        journey: journey,
+        journey_session: journey_session,
+        claim: current_claim,
+        params: params
+      )
     end
 
     around do |example|
