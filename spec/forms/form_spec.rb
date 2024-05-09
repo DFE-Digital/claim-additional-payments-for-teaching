@@ -139,12 +139,7 @@ RSpec.describe Form, type: :model do
   end
 
   describe "#persisted?" do
-    before do
-      allow(claim).to receive(:persisted?)
-      form.persisted?
-    end
-
-    it { expect(claim).to have_received(:persisted?) }
+    it { expect(form.persisted?).to eq(true) }
   end
 
   describe "#update!" do
