@@ -53,7 +53,7 @@ class Form
   end
 
   def permitted_params
-    @permitted_params ||= params.fetch(:claim, {}).permit(*permitted_attributes)
+    @permitted_params ||= params.fetch(model_name.param_key, {}).permit(*permitted_attributes)
   end
 
   private
