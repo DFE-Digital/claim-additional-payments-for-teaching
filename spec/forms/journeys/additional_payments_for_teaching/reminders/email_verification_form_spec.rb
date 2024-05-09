@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe Journeys::AdditionalPaymentsForTeaching::Reminders::EmailVerificationForm do
-  subject(:form) { described_class.new(claim: form_data_object, journey:, params:) }
+  subject(:form) { described_class.new(claim: form_data_object, journey:, journey_session:, params:) }
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
+  let(:journey_session) { build(:journeys_session, journey: journey::ROUTING_NAME) }
   let(:form_data_object) { Reminder.new }
   let(:slug) { "email-verification" }
   let(:params) { ActionController::Parameters.new({slug:, form: form_params}) }

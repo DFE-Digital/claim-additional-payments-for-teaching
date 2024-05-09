@@ -1,25 +1,25 @@
-<% content_for(:page_title, page_title(t("questions.personal_details"), journey: current_journey_routing_name, show_error: current_reminder.errors.any?)) %>
+<% content_for(:page_title, page_title(t("questions.personal_details"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_reminder) if current_reminder.errors.any? %>
+    <%= render("shared/error_summary", instance: @form) if @form.errors.any? %>
 
-    <%= form_for current_reminder, url: reminders_path(current_journey_routing_name) do |form| %>
+    <%= form_for @form, url: reminder_path(current_journey_routing_name) do |f| %>
       <h1 class="govuk-heading-xl">
         <%= t("questions.personal_details") %>
       </h1>
 
-      <%= form_group_tag current_reminder, :full_name do %>
+      <%= form_group_tag @form, :full_name do %>
         <h1 class="govuk-label-wrapper">
-          <%= form.label :full_name, t("additional_payments.reminders.full_name"), {class: "govuk-label govuk-label--l"}  %>
+          <%= f.label :full_name, t("additional_payments.reminders.full_name"), {class: "govuk-label govuk-label--l"}  %>
         </h1>
-        <%= errors_tag current_reminder, :full_name %>
-        <%= form.text_field :full_name, class: css_classes_for_input(current_reminder, :full_name), type: "text", spellcheck: "false", autocomplete: "name" %>
+        <%= errors_tag @form, :full_name %>
+        <%= f.text_field :full_name, class: css_classes_for_input(@form, :full_name), type: "text", spellcheck: "false", autocomplete: "name" %>
       <% end %>
 
-      <%= form_group_tag current_reminder, :email_address do %>
+      <%= form_group_tag @form, :email_address do %>
         <h1 class="govuk-label-wrapper">
-          <%= form.label :email_address, t("questions.email_address"), {class: "govuk-label govuk-label--l"}  %>
+          <%= f.label :email_address, t("questions.email_address"), {class: "govuk-label govuk-label--l"}  %>
         </h1>
         <div class="govuk-hint" id="email_address-hint">
           <p>
@@ -31,8 +31,8 @@
             You can enter the passcode on the next screen.
           </p>
         </div>
-        <%= errors_tag current_reminder, :email_address %>
-         <%= form.text_field :email_address, class: css_classes_for_input(current_reminder, :email_address), type: "text", spellcheck: "false", autocomplete: "email" %>
+        <%= errors_tag @form, :email_address %>
+         <%= f.text_field :email_address, class: css_classes_for_input(@form, :email_address), type: "text", spellcheck: "false", autocomplete: "email" %>
       <% end %>
 
       <details class="govuk-details" data-module="govuk-details">
@@ -47,7 +47,7 @@
         </div>
       </details>
 
-      <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
+      <%= f.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
     <% end %>
   </div>
 </div>
