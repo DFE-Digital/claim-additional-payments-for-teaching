@@ -37,9 +37,7 @@ class ClaimsController < BasePublicController
       return
     end
 
-    if params[:slug] == "select-claim-school"
-      update_session_with_tps_school(current_claim.tps_school_for_student_loan_in_previous_financial_year)
-    elsif params[:slug] == "select-home-address" && postcode
+    if params[:slug] == "select-home-address" && postcode
       session[:claim_postcode] = postcode
       session[:claim_address_line_1] = params.dig(:claim, :address_line_1)
       if address_data.nil?
@@ -79,13 +77,7 @@ class ClaimsController < BasePublicController
       return
     end
 
-    case params[:slug]
-    when "select-claim-school"
-      check_select_claim_school_params
-    else
-      current_claim.attributes = claim_params
-    end
-
+    current_claim.attributes = claim_params
     current_claim.reset_dependent_answers unless params[:slug] == "select-mobile"
     current_claim.reset_eligibility_dependent_answers(reset_attrs) unless params[:slug] == "qualification-details"
 
@@ -161,6 +153,7 @@ class ClaimsController < BasePublicController
 
     current_claim.save!
     session[:claim_id] = current_claim.claim_ids
+    session[journey_session_key] = journey_session.id
     redirect_to claim_path(current_journey_routing_name, page_sequence.slugs.first.to_sym)
   end
 
@@ -231,19 +224,6 @@ class ClaimsController < BasePublicController
 
   def no_eligible_itt_subject?
     !current_claim.eligible_itt_subject
-  end
-
-  def update_session_with_tps_school(school)
-    if school
-      session[:tps_school_id] = school.id
-      session[:tps_school_name] = school.name
-      session[:tps_school_address] = school.address
-    end
-  end
-
-  def check_select_claim_school_params
-    updated_claim_params = SelectClaimSchoolForm.extract_params(claim_params, change_school: params[:additional_school])
-    current_claim.attributes = updated_claim_params
   end
 
   def retrieve_student_loan_details
