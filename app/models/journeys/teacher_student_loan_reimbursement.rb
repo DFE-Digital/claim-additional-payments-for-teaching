@@ -18,7 +18,8 @@ module Journeys
       "still-teaching" => StillTeachingForm,
       "leadership-position" => LeadershipPositionForm,
       "mostly-performed-leadership-duties" => MostlyPerformedLeadershipDutiesForm,
-      "reset-claim" => ResetClaimForm
+      "reset-claim" => ResetClaimForm,
+      "select-claim-school" => SelectClaimSchoolForm
     }
   end
 end
