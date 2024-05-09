@@ -418,6 +418,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       # Check postcode search field retains the user's last input if the address was saved on the claim
       click_link "Back"
       click_link "Back"
+      click_link "Back"
 
       expect(page).to have_field("Postcode", with: "SE13 7UN")
       fill_in "Postcode", with: "SO16 9FX"

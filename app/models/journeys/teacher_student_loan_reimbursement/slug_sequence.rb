@@ -30,7 +30,6 @@ module Journeys
         "personal-details",
         "student-loan-amount",
         "postcode-search",
-        "no-address-found",
         "select-home-address",
         "address",
         "select-email",

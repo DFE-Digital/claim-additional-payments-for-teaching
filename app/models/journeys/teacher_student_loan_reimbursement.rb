@@ -19,6 +19,7 @@ module Journeys
       "leadership-position" => LeadershipPositionForm,
       "mostly-performed-leadership-duties" => MostlyPerformedLeadershipDutiesForm,
       "reset-claim" => ResetClaimForm,
+      "postcode-search" => PostcodeSearchForm,
       "select-claim-school" => SelectClaimSchoolForm
     }
   end
