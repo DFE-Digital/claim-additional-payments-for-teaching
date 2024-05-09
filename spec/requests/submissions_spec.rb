@@ -27,16 +27,17 @@ RSpec.describe "Submissions", type: :request do
         perform_enqueued_jobs { post claim_submission_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME) }
         expect(response).to redirect_to(claim_confirmation_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME))
 
-        expect(in_progress_claim.reload.submitted_at).to be_present
+        submitted_claim = Claim.by_policy(Policies::StudentLoans).order(:created_at).last
+        expect(submitted_claim.submitted_at).to be_present
 
         email = ActionMailer::Base.deliveries.first
-        expect(email.to).to eql([in_progress_claim.email_address])
+        expect(email.to).to eql([submitted_claim.email_address])
         expect(email[:personalisation].decoded).to include("ref_number")
-        expect(email[:personalisation].decoded).to include(in_progress_claim.reference)
+        expect(email[:personalisation].decoded).to include(submitted_claim.reference)
 
         expect(session[:claim_id]).to be_nil
         expect(session[:slugs]).to be_nil
-        expect(session[:submitted_claim_id]).to eq(in_progress_claim.id)
+        expect(session[:submitted_claim_id]).to eq(submitted_claim.id)
       end
 
       # TODO: one of these specs should be here, should be in features.
