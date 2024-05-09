@@ -4,6 +4,10 @@ module Claims
       (journey == Journeys::AdditionalPaymentsForTeaching) ? "govuk-fieldset__legend--l" : "govuk-fieldset__legend--xl"
     end
 
+    def heading_css_class_for_journey(journey)
+      (journey == Journeys::AdditionalPaymentsForTeaching) ? "govuk-heading-xl" : "govuk-fieldset__heading"
+    end
+
     def label_css_class_for_journey(journey)
       (journey == Journeys::AdditionalPaymentsForTeaching) ? "govuk-label--l" : "govuk-label--xl"
     end

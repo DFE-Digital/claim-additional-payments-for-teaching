@@ -1,0 +1,67 @@
+<% content_for(:page_title, page_title(t("forms.address.questions.your_address"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: @form) if @form.errors.any? %>
+
+    <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">
+          <span class="govuk-caption-xl"><%= t("questions.personal_details") %></span>
+          <h1 class="<%= heading_css_class_for_journey(journey) %>">
+            <%= t("forms.address.questions.your_address") %>
+          </h1>
+        </legend>
+
+        <%= form_group_tag @form, :address_line_1 do %>
+          <%= f.label :address_line_1, class: "govuk-label" do %>
+            <%= t("forms.address.answers.address_line_1") %>
+            <span class="govuk-visually-hidden"><%= t("forms.address.answers.address_line_1_visually_hidden") %></span>
+          <% end %>
+          <%= errors_tag f.object, :address_line_1 %>
+          <%= f.text_field :address_line_1, autocomplete: "address-line1",
+            class: css_classes_for_input(@form, :address_line_1) %>
+        <% end %>
+
+        <%= form_group_tag @form, :address_line_2 do %>
+          <%= f.label :address_line_2, class: "govuk-label" do %>
+            <%= t("forms.address.answers.address_line_2") %>
+            <span class="govuk-visually-hidden"><%= t("forms.address.answers.address_line_2_visually_hidden") %></span>
+          <% end %>
+          <%= errors_tag f.object, :address_line_2 %>
+          <%= f.text_field :address_line_2, autocomplete: "address-line2",
+            class: css_classes_for_input(@form, :address_line_2) %>
+        <% end %>
+
+        <%= form_group_tag @form, :address_line_3 do %>
+          <%= f.label :address_line_3, class: "govuk-label" do %>
+            <%= t("forms.address.answers.address_line_3") %>
+          <% end %>
+          <%= errors_tag f.object, :address_line_3 %>
+          <%= f.text_field :address_line_3, autocomplete: "address-level2",
+            class: css_classes_for_input(@form, :address_line_3, "govuk-!-width-two-thirds") %>
+        <% end %>
+
+        <%= form_group_tag @form, :address_line_4 do %>
+          <%= f.label :address_line_4, class: "govuk-label" do %>
+            <%= t("forms.address.answers.address_line_4") %>
+          <% end %>
+          <%= errors_tag f.object, :address_line_4 %>
+          <%= f.text_field :address_line_4, autocomplete: "off",
+            class: css_classes_for_input(@form, :address_line_4, "govuk-input govuk-!-width-two-thirds") %>
+        <% end %>
+
+        <%= form_group_tag @form, :postcode do %>
+          <%= f.label :postcode, class: "govuk-label" do %>
+            <%= t("forms.address.answers.postcode") %>
+          <% end %>
+          <%= errors_tag f.object, :postcode %>
+          <%= f.text_field :postcode, autocomplete: "postal-code",
+            class: css_classes_for_input(@form, :postcode, "govuk-input--width-10") %>
+        <% end %>
+      </fieldset>
+
+      <%= f.submit "Continue", class: "govuk-button" %>
+    <% end %>
+  </div>
+</div>
