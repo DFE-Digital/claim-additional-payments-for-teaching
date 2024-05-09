@@ -151,6 +151,17 @@ RSpec.describe Form, type: :model do
       expect(I18n).to have_received(:t)
         .with("test_i18n_ns.forms.test_slug.errors.message", default: :"forms.test_slug.errors.message")
     end
+
+    context "when more arguments are supplied" do
+      before do
+        form.i18n_errors_path("message", school_name: "Academy for Lizards")
+      end
+
+      it do
+        expect(I18n).to have_received(:t)
+          .with("test_i18n_ns.forms.test_slug.errors.message", default: :"forms.test_slug.errors.message", school_name: "Academy for Lizards")
+      end
+    end
   end
 
   describe "#permitted_params" do

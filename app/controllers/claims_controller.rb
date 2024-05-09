@@ -79,13 +79,7 @@ class ClaimsController < BasePublicController
       return
     end
 
-    case params[:slug]
-    when "still-teaching"
-      check_still_teaching_params
-    else
-      current_claim.attributes = claim_params
-    end
-
+    current_claim.attributes = claim_params
     current_claim.reset_dependent_answers unless params[:slug] == "select-mobile"
     current_claim.reset_eligibility_dependent_answers(reset_attrs) unless params[:slug] == "qualification-details"
 
@@ -227,11 +221,6 @@ class ClaimsController < BasePublicController
 
   def no_eligible_itt_subject?
     !current_claim.eligible_itt_subject
-  end
-
-  def check_still_teaching_params
-    updated_claim_params = StillTeachingForm.extract_params(claim_params)
-    current_claim.attributes = updated_claim_params
   end
 
   def retrieve_student_loan_details
