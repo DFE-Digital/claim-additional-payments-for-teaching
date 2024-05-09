@@ -21,6 +21,10 @@ module JourneyConcern
     @current_claim ||= claim_from_session || build_new_claim
   end
 
+  def journey_session
+    @journey_session ||= find_journey_session || create_journey_session!
+  end
+
   private
 
   def claim_from_session
@@ -45,5 +49,17 @@ module JourneyConcern
         academic_year: journey_configuration.current_academic_year
       )
     end
+  end
+
+  def find_journey_session
+    Journeys::Session.find_by(id: session[journey_session_key])
+  end
+
+  def create_journey_session!
+    Journeys::Session.create!(journey: params[:journey])
+  end
+
+  def journey_session_key
+    :"#{params[:journey]}_journeys_session_id"
   end
 end
