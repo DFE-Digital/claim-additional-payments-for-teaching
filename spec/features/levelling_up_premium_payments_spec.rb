@@ -138,11 +138,6 @@ RSpec.feature "Levelling up premium payments claims" do
     fill_in "National Insurance number", with: "PX321499A"
     click_on "Continue"
 
-    expect(claim.reload.first_name).to eql("Russell")
-    expect(claim.reload.surname).to eql("Wong")
-    expect(claim.reload.date_of_birth).to eq(Date.new(1988, 2, 28))
-    expect(claim.reload.national_insurance_number).to eq("PX321499A")
-
     # - What is your home address
     expect(page).to have_text(I18n.t("questions.address.home.title"))
     expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
@@ -159,19 +154,11 @@ RSpec.feature "Levelling up premium payments claims" do
     fill_in "Postcode", with: "DE22 4BS"
     click_on "Continue"
 
-    expect(claim.reload.address_line_1).to eql("57")
-    expect(claim.address_line_2).to eql("Walthamstow Drive")
-    expect(claim.address_line_3).to eql("Derby")
-    expect(claim.address_line_4).to eql("City of Derby")
-    expect(claim.postcode).to eql("DE22 4BS")
-
     # - Email address
     expect(page).to have_text(I18n.t("questions.email_address"))
 
     fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
     click_on "Continue"
-
-    expect(claim.reload.email_address).to eql("david.tau1988@hotmail.co.uk")
 
     # - One time password
     expect(page).to have_text("Email address verification")
@@ -195,8 +182,6 @@ RSpec.feature "Levelling up premium payments claims" do
     choose "No"
     click_on "Continue"
 
-    expect(claim.reload.provide_mobile_number).to eql false
-
     # - Mobile number
     expect(page).not_to have_text(I18n.t("questions.mobile_number"))
 
@@ -209,8 +194,6 @@ RSpec.feature "Levelling up premium payments claims" do
     choose "Personal bank account"
     click_on "Continue"
 
-    expect(claim.reload.bank_or_building_society).to eq "personal_bank_account"
-
     # - Enter bank account details
     expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: claim.bank_or_building_society.humanize.downcase))
     expect(page).not_to have_text("Building society roll number")
@@ -220,25 +203,17 @@ RSpec.feature "Levelling up premium payments claims" do
     fill_in "Account number", with: "87654321"
     click_on "Continue"
 
-    expect(claim.reload.banking_name).to eq("Jo Bloggs")
-    expect(claim.bank_sort_code).to eq("123456")
-    expect(claim.bank_account_number).to eq("87654321")
-
     # - What gender does your school's payroll system associate with you
     expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
 
     choose "Female"
     click_on "Continue"
 
-    expect(claim.reload.payroll_gender).to eq("female")
-
     # - What is your teacher reference number
     expect(page).to have_text(I18n.t("questions.teacher_reference_number"))
 
     fill_in :claim_teacher_reference_number, with: "1234567"
     click_on "Continue"
-
-    expect(claim.reload.teacher_reference_number).to eql("1234567")
 
     # - Check your answers before sending your application
     expect(page).to have_text("Check your answers before sending your application")
@@ -252,22 +227,43 @@ RSpec.feature "Levelling up premium payments claims" do
     freeze_time do
       click_on "Accept and send"
 
-      expect(claim.reload.submitted_at).to eq(Time.zone.now)
+      expect(Claim.count).to eq 1
+
+      submitted_claim = Claim.by_policy(Policies::LevellingUpPremiumPayments).order(:created_at).last
+
+      expect(submitted_claim.submitted_at).to eq(Time.zone.now)
+      expect(submitted_claim.first_name).to eql("Russell")
+      expect(submitted_claim.surname).to eql("Wong")
+      expect(submitted_claim.date_of_birth).to eq(Date.new(1988, 2, 28))
+      expect(submitted_claim.national_insurance_number).to eq("PX321499A")
+      expect(submitted_claim.address_line_1).to eql("57")
+      expect(submitted_claim.address_line_2).to eql("Walthamstow Drive")
+      expect(submitted_claim.address_line_3).to eql("Derby")
+      expect(submitted_claim.address_line_4).to eql("City of Derby")
+      expect(submitted_claim.postcode).to eql("DE22 4BS")
+      expect(submitted_claim.email_address).to eql("david.tau1988@hotmail.co.uk")
+      expect(submitted_claim.provide_mobile_number).to eql false
+      expect(submitted_claim.bank_or_building_society).to eq "personal_bank_account"
+      expect(submitted_claim.banking_name).to eq("Jo Bloggs")
+      expect(submitted_claim.bank_sort_code).to eq("123456")
+      expect(submitted_claim.bank_account_number).to eq("87654321")
+      expect(submitted_claim.payroll_gender).to eq("female")
+      expect(submitted_claim.teacher_reference_number).to eql("1234567")
+
+      # - Application complete (make sure its Word for Word and styling matches)
+      expect(page).to have_text("You applied for a levelling up premium payment")
+      expect(page).to have_text("What happens next")
+      expect(page).to have_text("Set a reminder to apply next year")
+      expect(page).to have_text("Apply for additional payment each academic year")
+      expect(page).to have_text("What do you think of this service?")
+      expect(page).to have_text(submitted_claim.reference)
+
+      policy_options_provided = [
+        {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+      ]
+
+      expect(submitted_claim.policy_options_provided).to eq policy_options_provided
     end
-
-    # - Application complete (make sure its Word for Word and styling matches)
-    expect(page).to have_text("You applied for a levelling up premium payment")
-    expect(page).to have_text("What happens next")
-    expect(page).to have_text("Set a reminder to apply next year")
-    expect(page).to have_text("Apply for additional payment each academic year")
-    expect(page).to have_text("What do you think of this service?")
-    expect(page).to have_text(claim.reference)
-
-    policy_options_provided = [
-      {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
-    ]
-
-    expect(claim.reload.policy_options_provided).to eq policy_options_provided
   end
 
   shared_examples "submittable claim" do
