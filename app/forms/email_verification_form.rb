@@ -18,10 +18,14 @@ class EmailVerificationForm < Form
 
   private
 
+  def sent_one_time_password_at
+    claim.sent_one_time_password_at
+  end
+
   def otp_validate
     otp = OneTimePassword::Validator.new(
       one_time_password,
-      claim.sent_one_time_password_at
+      sent_one_time_password_at
     )
 
     errors.add(:one_time_password, otp.warning) unless otp.valid?

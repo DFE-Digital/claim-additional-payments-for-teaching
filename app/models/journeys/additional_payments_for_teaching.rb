@@ -10,23 +10,29 @@ module Journeys
     I18N_NAMESPACE = "additional_payments"
     POLICIES = [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments]
     FORMS = {
-      "induction-completed" => InductionCompletedForm,
-      "itt-year" => IttAcademicYearForm,
-      "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm,
-      "eligible-degree-subject" => EligibleDegreeSubjectForm,
-      "supply-teacher" => SupplyTeacherForm,
-      "poor-performance" => PoorPerformanceForm,
-      "entire-term-contract" => EntireTermContractForm,
-      "employed-directly" => EmployedDirectlyForm,
-      "qualification" => QualificationForm,
-      "qualification-details" => QualificationDetailsForm,
-      "eligible-itt-subject" => EligibleIttSubjectForm,
-      "teaching-subject-now" => TeachingSubjectNowForm,
-      "eligibility-confirmed" => EligibilityConfirmedForm,
-      "correct-school" => CorrectSchoolForm,
-      "reset-claim" => ResetClaimForm,
-      "postcode-search" => PostcodeSearchForm,
-      "select-home-address" => SelectHomeAddressForm
+      "claims" => {
+        "induction-completed" => InductionCompletedForm,
+        "itt-year" => IttAcademicYearForm,
+        "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm,
+        "eligible-degree-subject" => EligibleDegreeSubjectForm,
+        "supply-teacher" => SupplyTeacherForm,
+        "poor-performance" => PoorPerformanceForm,
+        "entire-term-contract" => EntireTermContractForm,
+        "employed-directly" => EmployedDirectlyForm,
+        "qualification" => QualificationForm,
+        "qualification-details" => QualificationDetailsForm,
+        "eligible-itt-subject" => EligibleIttSubjectForm,
+        "teaching-subject-now" => TeachingSubjectNowForm,
+        "eligibility-confirmed" => EligibilityConfirmedForm,
+        "correct-school" => CorrectSchoolForm,
+        "reset-claim" => ResetClaimForm,
+        "postcode-search" => PostcodeSearchForm,
+        "select-home-address" => SelectHomeAddressForm
+      },
+      "reminders" => {
+        "personal-details" => Reminders::PersonalDetailsForm,
+        "email-verification" => Reminders::EmailVerificationForm
+      }
     }.freeze
   end
 end
