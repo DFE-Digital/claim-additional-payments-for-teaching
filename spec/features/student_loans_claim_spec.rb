@@ -36,7 +36,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     check "Physics"
     click_on "Continue"
-    expect(page).to have_text(I18n.t("student_loans.questions.employment_status"))
+    expect(page).to have_text(I18n.t("student_loans.forms.still_teaching.questions.claim_school"))
 
     choose_still_teaching("Yes, at #{school.name}")
     expect(claim.eligibility.reload.employment_status).to eql("claim_school")
@@ -274,7 +274,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
         check "Physics"
         click_on "Continue"
-        expect(page).to have_text(I18n.t("student_loans.questions.employment_status"))
+        expect(page).to have_text(I18n.t("student_loans.forms.still_teaching.questions.claim_school"))
 
         choose_still_teaching("Yes, at #{school.name}")
         expect(claim.eligibility.reload.employment_status).to eql("claim_school")
