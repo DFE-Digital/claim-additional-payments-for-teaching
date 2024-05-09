@@ -1,28 +1,37 @@
-<% content_for(:page_title, page_title(t("questions.email_address"), journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(
+  :page_title,
+  page_title(
+    t("questions.email_address"),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
+    <%= render("shared/error_summary", instance: @form) if @form.errors.any? %>
 
-    <%= form_for current_claim, url: claim_path(current_journey_routing_name), html: { novalidate: false } do |form| %>
-      <%= personal_details_caption(current_claim) %>
-      <%= form_group_tag current_claim do %>
+    <%= form_for @form, url: claim_path(current_journey_routing_name), html: { novalidate: false } do |f| %>
+      <%= personal_details_caption(f.object.claim) %>
+      <%= form_group_tag f.object do %>
         <h1 class="govuk-label-wrapper">
-          <%= form.label :email_address, t("questions.email_address"), class: "govuk-label #{label_css_class_for_journey(journey)}" %>
+          <%= f.label :email_address, t("questions.email_address"), class: "govuk-label #{label_css_class_for_journey(f.object.journey)}" %>
         </h1>
 
-        <%= email_govuk_hint(current_claim) %>
+        <%= email_govuk_hint(f.object.claim) %>
 
-        <%= errors_tag current_claim, :email_address %>
+        <%= errors_tag f.object, :email_address %>
 
-        <%= form.text_field :email_address,
-                             autocomplete: "email",
-                             spellcheck: "false",
-                             class: css_classes_for_input(current_claim, :email_address),
-                             "aria-describedby" => "email-address-hint" %>
+        <%= f.text_field(
+          :email_address,
+          autocomplete: "email",
+          spellcheck: "false",
+          class: css_classes_for_input(f.object, :email_address),
+          "aria-describedby" => "email-address-hint"
+        ) %>
       <% end %>
       <%= render "help_with_access_codes", communication_type: "Email" %>
-      <%= form.submit "Continue", class: "govuk-button" %>
+      <%= f.submit "Continue", class: "govuk-button" %>
     <% end %>
   </div>
 </div>
