@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_24_134854) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_08_081918) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -186,6 +186,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_24_134854) do
     t.string "current_academic_year", limit: 9
     t.boolean "teacher_id_enabled", default: true
     t.index ["created_at"], name: "index_journey_configurations_on_created_at"
+  end
+
+  create_table "journeys_sessions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.jsonb "answers", default: {}
+    t.string "journey", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "levelling_up_premium_payments_awards", force: :cascade do |t|

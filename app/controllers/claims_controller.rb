@@ -151,6 +151,7 @@ class ClaimsController < BasePublicController
 
     current_claim.save!
     session[:claim_id] = current_claim.claim_ids
+    session[journey_session_key] = journey_session.id
     redirect_to claim_path(current_journey_routing_name, page_sequence.slugs.first.to_sym)
   end
 
