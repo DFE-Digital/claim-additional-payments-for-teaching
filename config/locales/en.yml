@@ -61,8 +61,6 @@ en:
     details_correct: "Are these details correct?"
     name: "What is your full name?"
     address:
-      generic:
-        title: "What is your address?"
       home:
         title: "What is your home address?"
         link_to_manual_address: "Enter your address manually"
@@ -219,6 +217,26 @@ en:
       errors:
         select_bank_or_building_society:
           Select if you want the money paid in to a personal bank account or building society
+    address:
+      questions:
+        your_address: What is your address?
+      answers:
+        address_line_1: House number or name
+        address_line_1_visually_hidden: House number or name line 1 of 2
+        address_line_2: Building and street
+        address_line_2_visually_hidden: Building and street line 2 of 2
+        address_line_3: Town or city
+        address_line_4: County
+        postcode: Postcode
+      errors:
+        address_line_1_blank: Enter a house number or name
+        address_line_2_blank: Enter a building and street address
+        address_line_3_blank: Enter a town or city
+        address_line_max_chars: Address lines must be 100 characters or less
+        address_format: Address lines cannot contain special characters
+        postcode_blank: Enter a real postcode
+        postcode_max_chars: Postcode must be 11 characters or less
+        postcode_format: Enter a postcode in the correct format
     select_email:
       questions:
         select_email: Which email address should we use to contact you?

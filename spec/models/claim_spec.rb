@@ -62,22 +62,6 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  context "that has a postcode" do
-    it "validates the length of postcode is not greater than 11" do
-      expect(build(:claim, postcode: "M12345 23453WD")).not_to be_valid
-      expect(build(:claim, postcode: "M1 2WD")).to be_valid
-    end
-  end
-
-  context "that has an address" do
-    it "validates the length of each address line is not greater than 100 characters" do
-      %i[address_line_1 address_line_2 address_line_3 address_line_4].each do |attribute_name|
-        expect(build(:claim, attribute_name => "X" + "ABCD" * 25)).not_to be_valid
-        expect(build(:claim, attribute_name => "ABCD" * 25)).to be_valid
-      end
-    end
-  end
-
   context "that has bank details" do
     let(:claim) { build(:claim, policy: Policies::EarlyCareerPayments) }
 
@@ -115,15 +99,6 @@ RSpec.describe Claim, type: :model do
     it "validates eligibility" do
       expect(claim).not_to be_valid(:amendment)
       expect(claim.errors.first.message).to eq("Enter a positive amount up to £7,500.00 (inclusive)")
-    end
-  end
-
-  context "when saving in the “address” validation context" do
-    it "validates the presence of address_line_1 and postcode" do
-      expect(build(:claim)).not_to be_valid(:address)
-
-      valid_address_attributes = {address_line_1: "123 Main Street", address_line_3: "City", address_line_4: "County", postcode: "PE11 3EW"}
-      expect(build(:claim, valid_address_attributes)).to be_valid(:address)
     end
   end
 

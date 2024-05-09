@@ -13,7 +13,8 @@ module Journeys
       "bank-or-building-society" => BankOrBuildingSocietyForm,
       "personal-bank-account" => BankDetailsForm,
       "building-society-account" => BankDetailsForm,
-      "teacher-reference-number" => TeacherReferenceNumberForm
+      "teacher-reference-number" => TeacherReferenceNumberForm,
+      "address" => AddressForm
     }
 
     def configuration

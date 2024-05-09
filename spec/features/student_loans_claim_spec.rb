@@ -102,7 +102,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     click_link(I18n.t("questions.address.home.link_to_manual_address"))
 
-    expect(page).to have_text(I18n.t("questions.address.generic.title"))
+    expect(page).to have_text(I18n.t("forms.address.questions.your_address"))
     fill_in_address
 
     expect(claim.reload.address_line_1).to eql("123 Main Street")
