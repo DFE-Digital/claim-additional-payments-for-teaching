@@ -139,7 +139,7 @@ module Journeys
             session[:sent_one_time_password_at] = Time.now
           end
         when "email-verification"
-          current_reminder.update(sent_one_time_password_at: session[:sent_one_time_password_at], one_time_password_category: :reminder_email)
+          current_reminder.update(sent_one_time_password_at: session[:sent_one_time_password_at])
         end
       end
 

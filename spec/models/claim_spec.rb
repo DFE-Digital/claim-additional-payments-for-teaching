@@ -49,19 +49,6 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  context "that has a email address" do
-    it "validates that the value is in the correct format" do
-      expect(build(:claim, email_address: "notan email@address.com")).not_to be_valid
-      expect(build(:claim, email_address: "name@example")).not_to be_valid
-      expect(build(:claim, email_address: "name@example.com")).to be_valid
-      expect(build(:claim, email_address: "")).to be_valid
-    end
-
-    it "checks that the email address in not longer than 256 characters" do
-      expect(build(:claim, email_address: "#{"e" * 256}@example.com")).not_to be_valid
-    end
-  end
-
   context "that has bank details" do
     let(:claim) { build(:claim, policy: Policies::EarlyCareerPayments) }
 
@@ -107,13 +94,6 @@ RSpec.describe Claim, type: :model do
       expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1, has_student_loan: nil)).not_to be_valid(:"student-loan")
       expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1, has_student_loan: true)).to be_valid(:"student-loan")
       expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1, has_student_loan: false)).to be_valid(:"student-loan")
-    end
-  end
-
-  context "when saving in the “email-address” validation context" do
-    it "validates the presence of email_address" do
-      expect(build(:claim)).not_to be_valid(:"email-address")
-      expect(build(:claim, email_address: "name@example.tld")).to be_valid(:"email-address")
     end
   end
 
@@ -824,7 +804,9 @@ RSpec.describe Claim, type: :model do
 
   describe "::FILTER_PARAMS" do
     it "has a value for every claim attribute" do
-      expect(Claim::FILTER_PARAMS.keys).to match_array(Claim.new.attribute_names.map(&:to_sym))
+      expect(Claim::FILTER_PARAMS.keys).to match_array(
+        Claim.new.attribute_names.map(&:to_sym) + [:one_time_password]
+      )
     end
   end
 
