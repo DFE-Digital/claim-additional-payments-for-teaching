@@ -44,7 +44,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
 
     check "Physics"
     click_on "Continue"
-    expect(page).to have_text(I18n.t("student_loans.questions.employment_status"))
+    expect(page).to have_text(I18n.t("student_loans.forms.still_teaching.questions.claim_school"))
 
     choose_still_teaching("Yes, at #{school.name}")
     expect(page).to have_text(leadership_position_question)

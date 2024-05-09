@@ -58,7 +58,7 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
     click_on "Continue"
 
     #  - Are you still employed to teach at
-    expect(page).to have_text(I18n.t("student_loans.questions.employment_status"))
+    expect(page).to have_text(I18n.t("student_loans.forms.still_teaching.questions.claim_school"))
     choose_still_teaching("Yes, at #{school.name}")
 
     #  - leadership-position question
