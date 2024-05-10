@@ -40,6 +40,7 @@ review_aks: test-cluster
 	$(eval ENVIRONMENT=review-${PR_NUMBER})
 	$(eval export TF_VAR_environment=${ENVIRONMENT})
 	$(eval include global_config/review.sh)
+	echo https://claim-additional-payments-for-teaching-$(PR_NUMBER).test.teacherservices.cloud will be created in aks
 
 set-azure-account:
 	az account set -s ${AZ_SUBSCRIPTION}
