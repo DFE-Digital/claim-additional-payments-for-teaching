@@ -1,6 +1,5 @@
 class ClaimsController < BasePublicController
   include PartOfClaimJourney
-  include AddressDetails
 
   skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create, :timeout]
   before_action :initialize_session_slug_history
@@ -37,26 +36,7 @@ class ClaimsController < BasePublicController
       return
     end
 
-    if params[:slug] == "select-home-address" && postcode
-      session[:claim_postcode] = postcode
-      session[:claim_address_line_1] = params.dig(:claim, :address_line_1)
-      if address_data.nil?
-        redirect_to claim_path(current_journey_routing_name, "no-address-found") and return
-      else
-        # otherwise it takes you to "no-address-found" on the backlink from the slug sequence
-        @backlink_path = claim_path(current_journey_routing_name, "postcode-search")
-      end
-    elsif params[:slug] == "select-home-address" && !postcode.present?
-      session[:claim_postcode] = nil
-      session[:claim_address_line_1] = nil
-      redirect_to claim_path(current_journey_routing_name, "postcode-search") and return
-    end
-
     render current_template
-  rescue OrdnanceSurvey::Client::ResponseError => e
-    Rollbar.error(e)
-    flash[:notice] = "Please enter your address manually"
-    redirect_to claim_path(current_journey_routing_name, "address")
   end
 
   def update

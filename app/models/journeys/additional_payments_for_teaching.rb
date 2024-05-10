@@ -25,7 +25,8 @@ module Journeys
       "eligibility-confirmed" => EligibilityConfirmedForm,
       "correct-school" => CorrectSchoolForm,
       "reset-claim" => ResetClaimForm,
-      "postcode-search" => PostcodeSearchForm
+      "postcode-search" => PostcodeSearchForm,
+      "select-home-address" => SelectHomeAddressForm
     }.freeze
   end
 end
