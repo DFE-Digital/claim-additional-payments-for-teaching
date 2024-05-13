@@ -85,6 +85,8 @@ class Form
   end
 
   def load_current_value(attribute)
+    return journey_session.answers[attribute] if journey_session.answers.key?(attribute)
+
     # TODO: re-implement when the underlying claim and eligibility data sources
     # are moved to an alternative place e.g. a session hash
 
