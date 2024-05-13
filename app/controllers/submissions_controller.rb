@@ -18,7 +18,6 @@ class SubmissionsController < BasePublicController
       clear_claim_session
       redirect_to claim_confirmation_path
     else
-      current_claim.valid?(:submit)
       render "claims/check_your_answers"
     end
   end
