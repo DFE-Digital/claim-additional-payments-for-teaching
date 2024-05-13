@@ -4,7 +4,12 @@ module Journeys
 
     def initialize(claim)
       @claim = claim
-      @eligibility = claim.eligible_eligibility
+
+      @eligibility = if @claim.is_a?(CurrentClaim)
+        claim.eligible_eligibility
+      else
+        claim.eligibility
+      end
     end
 
     def identity_answers
