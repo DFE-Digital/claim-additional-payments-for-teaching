@@ -69,6 +69,57 @@ RSpec.describe Form, type: :model do
     context "with no params" do
       let(:claim_params) { {} }
 
+      context "when an existing value can be found on the journey session" do
+        let(:journey_session) do
+          build(
+            :journeys_session,
+            answers: {
+              first_name: "existing-name",
+              student_loan_repayment_amount: 2000
+            }
+          )
+        end
+
+        it "initialises the attributes with values from the journey session" do
+          expect(form).to have_attributes(
+            first_name: "existing-name",
+            student_loan_repayment_amount: 2000
+          )
+        end
+      end
+
+      context "when an existing `nil` value can be found on the journey session" do
+        let(:claims) do
+          [
+            build(
+              :claim,
+              first_name: "existing-name",
+              eligibility_attributes: {
+                student_loan_repayment_amount: 100
+              },
+              policy: Policies::StudentLoans
+            )
+          ]
+        end
+
+        let(:journey_session) do
+          build(
+            :journeys_session,
+            answers: {
+              first_name: "existing-name",
+              student_loan_repayment_amount: nil
+            }
+          )
+        end
+
+        it "initialises the attributes with values from the journey session" do
+          expect(form).to have_attributes(
+            first_name: "existing-name",
+            student_loan_repayment_amount: nil
+          )
+        end
+      end
+
       context "when an existing value can be found on the claim or eligibility record" do
         let(:claims) { [build(:claim, first_name: "existing-name", eligibility_attributes: {student_loan_repayment_amount: 100}, policy: Policies::StudentLoans)] }
 
@@ -77,7 +128,7 @@ RSpec.describe Form, type: :model do
         end
       end
 
-      context "when an existing value cannot be found on the claim nor eligibility" do
+      context "when an existing value cannot be found on the claim nor eligibility nor journey session" do
         let(:claims) { [build(:claim, first_name: nil, policy: Policies::StudentLoans)] }
 
         it "initialises the attributes with nil" do
