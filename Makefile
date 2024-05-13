@@ -4,7 +4,7 @@ RG_TAGS={"Product" : "Claim Additional Payments for teaching"}
 REGION=UK South
 SERVICE_NAME=claim-additional-payments-for-teaching
 SERVICE_SHORT=capt
-DOCKER_REPOSITORY=ghcr.io/dfe-digital/claim-additional-payments-for-teaching
+DOCKER_REPOSITORY=dfedigital/teacher-payments-service
 
 help:
 	@grep -E '^[a-zA-Z\._\-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
@@ -57,7 +57,7 @@ terraform-init: set-azure-account
 		${BACKEND_KEY}
 
 terraform-init-aks: composed-variables bin/terrafile set-azure-account-aks
-	$(if ${DOCKER_IMAGE_TAG}, , $(eval DOCKER_IMAGE_TAG=main))
+	$(if ${DOCKER_IMAGE_TAG}, , $(eval DOCKER_IMAGE_TAG=web-master))
 
 	./bin/terrafile -p terraform/application/vendor/modules -f terraform/application/config/$(CONFIG)_Terrafile
 	terraform -chdir=terraform/application init -upgrade -reconfigure \
