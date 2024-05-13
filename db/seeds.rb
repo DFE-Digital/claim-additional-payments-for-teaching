@@ -6,7 +6,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-if Rails.env.development? || ENV["ENVIRONMENT_NAME"] == "review"
+if Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?('review')
   Journeys::Configuration.create!(routing_name: Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, current_academic_year: AcademicYear.current)
   Journeys::Configuration.create!(routing_name: Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, current_academic_year: AcademicYear.current)
 
