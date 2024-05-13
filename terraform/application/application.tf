@@ -8,7 +8,6 @@ module "application_configuration" {
   config_short           = var.config_short
   secret_key_vault_short = "app"
 
-  # Delete for non rails apps
   is_rails_application = true
 
   config_variables = {
@@ -34,4 +33,5 @@ module "web_application" {
   kubernetes_secret_name     = module.application_configuration.kubernetes_secret_name
 
   docker_image = var.docker_image
+  command      = var.startup_command
 }
