@@ -57,7 +57,7 @@ terraform-init: set-azure-account
 		${BACKEND_KEY}
 
 terraform-init-aks: composed-variables bin/terrafile set-azure-account-aks
-	$(if ${DOCKER_IMAGE_TAG}, , $(eval DOCKER_IMAGE_TAG=web-master))
+	$(if ${DOCKER_IMAGE_TAG}, , $(eval DOCKER_IMAGE_TAG=web-capt-1632-implement-review-apps))
 
 	./bin/terrafile -p terraform/application/vendor/modules -f terraform/application/config/$(CONFIG)_Terrafile
 	terraform -chdir=terraform/application init -upgrade -reconfigure \
