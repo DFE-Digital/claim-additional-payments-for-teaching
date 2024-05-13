@@ -12,10 +12,21 @@ RSpec.describe PersonalDetailsForm, type: :model do
       CurrentClaim.new(claims: claims)
     end
 
+    let(:journey_session) do
+      build(:journeys_session, journey: journey::ROUTING_NAME)
+    end
+
     let(:slug) { "personal-details" }
     let(:params) { {} }
 
-    subject(:form) { described_class.new(claim: current_claim, journey: journey, params: ActionController::Parameters.new(slug:, claim: params)) }
+    subject(:form) do
+      described_class.new(
+        claim: current_claim,
+        journey_session: journey_session,
+        journey: journey,
+        params: ActionController::Parameters.new(slug:, claim: params)
+      )
+    end
 
     context "unpermitted claim param" do
       let(:params) { {nonsense_id: 1} }

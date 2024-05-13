@@ -17,12 +17,21 @@ RSpec.describe SelectMobileForm do
 
     let(:current_claim) { CurrentClaim.new(claims: claims) }
 
+    let(:journey_session) do
+      build(:journeys_session, journey: journey::ROUTING_NAME)
+    end
+
     let(:params) do
       ActionController::Parameters.new(claim: {mobile_check: mobile_check})
     end
 
     let(:form) do
-      described_class.new(journey: journey, claim: current_claim, params: params)
+      described_class.new(
+        journey: journey,
+        journey_session: journey_session,
+        claim: current_claim,
+        params: params
+      )
     end
 
     describe "validations" do

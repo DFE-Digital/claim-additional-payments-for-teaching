@@ -11,9 +11,20 @@ RSpec.describe GenderForm do
       CurrentClaim.new(claims: claims)
     end
 
+    let(:journey_session) do
+      build(:journeys_session, journey: journey::ROUTING_NAME)
+    end
+
     let(:slug) { "gender" }
 
-    subject(:form) { described_class.new(claim: current_claim, journey: journey, params: params) }
+    subject(:form) do
+      described_class.new(
+        claim: current_claim,
+        journey_session: journey_session,
+        journey: journey,
+        params: params
+      )
+    end
 
     context "unpermitted claim param" do
       let(:params) { ActionController::Parameters.new({slug: slug, claim: {nonsense_id: 1}}) }

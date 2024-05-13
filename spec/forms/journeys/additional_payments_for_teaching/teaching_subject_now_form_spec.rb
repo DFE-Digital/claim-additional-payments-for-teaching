@@ -3,6 +3,9 @@ require "rails_helper"
 RSpec.describe Journeys::AdditionalPaymentsForTeaching::TeachingSubjectNowForm do
   before { create(:journey_configuration, :additional_payments) }
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
+  let(:journey_session) do
+    build(:journeys_session, journey: journey::ROUTING_NAME)
+  end
   let(:eligibility) { create(:early_career_payments_eligibility) }
   let(:claim) do
     create(
@@ -15,6 +18,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::TeachingSubjectNowForm d
   let(:form) do
     described_class.new(
       journey: journey,
+      journey_session: journey_session,
       claim: current_claim,
       params: params
     )
