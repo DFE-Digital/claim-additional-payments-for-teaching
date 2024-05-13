@@ -417,6 +417,10 @@ en:
           presence: "Enter an email address"
           format: "Enter an email address in the correct format, like name@example.com"
           length: "Email address must be 256 characters or less"
+      email_verification:
+        errors:
+          one_time_password:
+            invalid: An error occured while validating the passcode, please try generating a new one
       mobile_number:
         errors:
           invalid: "Enter a mobile number, like 07700 900 982 or +44 7700 900 982"
