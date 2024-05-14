@@ -280,21 +280,12 @@ https://test.additional-teaching-payment.education.gov.uk.
 The release process for Production is documented in
 [`docs/release-process.md`](docs/release-process.md)
 
-### Heroku Review Apps
-
-Pull requests in the
-[GitHub Repository](https://github.com/DFE-Digital/dfe-teachers-payment-service)
-will automatically have a
-[review app](https://devcenter.heroku.com/articles/github-integration-review-apps)
-created in Heroku once CI has passed.
-
-For more information, see the [app's Heroku docs](docs/heroku.md)
-
 ### Azure review apps
 
-Pull requests automatically build a review app in Azure using the same
-technologies as the production environment. Each one can be accessed via this
-URL: `https://s118d02-app-pr-<PR NUMBER>-as.azurewebsites.net`
+Adding the 'deploy' label to pull requests builds a review app in Azure using
+the same technologies as the production environment. Each one can be accessed
+via this URL:
+`https://claim-additional-payments-for-teaching-review-<PR_NUMBER>.test.teacherservices.cloud`
 
 The review app is then destroyed when the PR is closed or merged.
 
