@@ -54,7 +54,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Seed Review App
+      - name: Seed review app
         shell: bash
         if: github.event.number != ''
         run: |
