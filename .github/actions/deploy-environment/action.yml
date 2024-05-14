@@ -35,3 +35,10 @@ runs:
       env:
         DOCKER_IMAGE_TAG: ${{ inputs.docker-image }}
         PR_NUMBER: ${{ inputs.pull-request-number }}
+
+    - name: Extract Terraform outputs
+      shell: bash
+      id: set_outputs
+      run: |
+        output=$(terraform -chdir=terraform/application output -json url)
+        echo "APP_URL=$output" >> $GITHUB_ENV
