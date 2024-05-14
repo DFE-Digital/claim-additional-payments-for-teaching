@@ -58,7 +58,7 @@ jobs:
         shell: bash
         if: github.event.number != ''
         run: |
-          make ci review get-cluster-credentials
+          make ci review-aks get-cluster-credentials
           kubectl exec -n bat-qa deployment/claim-additional-payments-for-teaching-${{ github.event.number }} -- sh -c "cd /app && bundle exec rake db:schema:load db:seed"
         env:
           PR_NUMBER: ${{ github.event.number }}

@@ -34,8 +34,8 @@ production:
 	$(eval CONTAINER_NAME=s118p01conttfstate)
 	$(eval DEPLOY_ENV=production)
 
-.PHONY: review_aks
-review_aks: test-cluster
+.PHONY: review-aks
+review-aks: test-cluster
 	$(if ${PR_NUMBER},,$(error Missing PR_NUMBER))
 	$(eval ENVIRONMENT=review-${PR_NUMBER})
 	$(eval export TF_VAR_environment=${ENVIRONMENT})
