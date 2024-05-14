@@ -71,7 +71,7 @@ jobs:
           message: |
             ### Deployments
 
-            | Journey             | URL                                                                                                                                           |
-            | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+            | Journey             | URL                                                                                                                                                  |
+            | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
             | Additional Payments | <https://claim-additional-payments-for-teaching-review-${{ github.event.pull_request.number }}.test.teacherservices.cloud/additional-payments/claim> |
             | Student Loans       | <https://claim-additional-payments-for-teaching-review-${{ github.event.pull_request.number }}.test.teacherservices.cloud/student-loans/claim>       |
