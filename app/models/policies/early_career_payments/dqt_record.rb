@@ -70,6 +70,10 @@ module Policies
         Journeys::AdditionalPaymentsForTeaching.configuration.current_academic_year
       end
 
+      def eligible_itt_year?
+        AcademicYear.new(itt_year).eql?(claim.eligibility.itt_academic_year)
+      end
+
       def award_due?
         award_args = {policy_year: claim.academic_year, itt_year: itt_year, subject_symbol: eligible_itt_subject_group}
 

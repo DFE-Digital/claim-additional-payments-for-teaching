@@ -87,10 +87,6 @@ module Dqt
         QUALIFICATION_MATCHING_TYPE[claim.eligibility.qualification.to_sym].include?(qualification_name)
       end
 
-      def eligible_itt_year?
-        AcademicYear.new(itt_year).eql?(claim.eligibility.itt_academic_year)
-      end
-
       def qts_award_date_after_itt_start_date?
         return true unless route_into_teaching == :postgraduate_itt
         return false if qts_award_date.blank?

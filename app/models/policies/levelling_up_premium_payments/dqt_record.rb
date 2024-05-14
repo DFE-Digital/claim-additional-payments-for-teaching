@@ -81,9 +81,7 @@ module Policies
       end
 
       def eligible_itt_year?
-        return unless super
-
-        itt_year_within_allowed_range?
+        AcademicYear.new(itt_year).eql?(itt_academic_year) && itt_year_within_allowed_range?
       end
 
       def applicable_eligible_subjects

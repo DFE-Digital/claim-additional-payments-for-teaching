@@ -163,30 +163,6 @@ RSpec.describe Dqt::Matchers::General do
     end
   end
 
-  describe ".eligible_itt_year?" do
-    subject { described_class.eligible_itt_year? }
-
-    let(:claim) { build_stubbed(:claim, eligibility: build(:early_career_payments_eligibility, itt_academic_year:)) }
-
-    before do
-      allow(described_class).to receive(:itt_year).and_return(calculated_itt_year)
-    end
-
-    context "when the calculated ITT academic year matches the one on the claim" do
-      let(:calculated_itt_year) { itt_academic_year }
-      let(:itt_academic_year) { AcademicYear.new("2022/2023") }
-
-      it { is_expected.to eq(true) }
-    end
-
-    context "when the calculated ITT academic year does not match the one on the claim" do
-      let(:calculated_itt_year) { itt_academic_year - 1 }
-      let(:itt_academic_year) { AcademicYear.new("2022/2023") }
-
-      it { is_expected.to eq(false) }
-    end
-  end
-
   describe ".qts_award_date_after_itt_start_date?" do
     subject { described_class.qts_award_date_after_itt_start_date? }
 
