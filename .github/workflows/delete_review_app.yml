@@ -1,0 +1,34 @@
+name: Delete review app on AKS
+
+on:
+  pull_request:
+    branches:
+      - master
+    types:
+      - closed
+
+jobs:
+  delete-review-app:
+    name: Delete review app ${{ github.event.pull_request.number }}
+    concurrency: deploy_review_${{ github.event.pull_request.number }}
+    runs-on: ubuntu-latest
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
+    environment: review-aks
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.4
+          terraform_wrapper: false
+
+      - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
+        with:
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Terraform destroy
+        run: |
+          make ci review-aks terraform-destroy-aks
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
