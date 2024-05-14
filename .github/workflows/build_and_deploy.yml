@@ -48,7 +48,7 @@ jobs:
           environment: review-aks
           docker-image: ${{ needs.build.outputs.docker-image-tag }}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
-          pull-request-number: ${{ github.event.number }}
+          pull-request-number: ${{ github.event.pull_request.number }}
 
       - uses: azure/login@v2
         with:
@@ -59,9 +59,9 @@ jobs:
         if: github.event.number != ''
         run: |
           make ci review-aks get-cluster-credentials
-          kubectl exec -n bat-qa deployment/claim-additional-payments-for-teaching-${{ github.event.number }} -- sh -c "cd /app && bundle exec rake db:schema:load db:seed"
+          kubectl exec -n bat-qa deployment/claim-additional-payments-for-teaching-${{ github.event.pull_request.number }} -- sh -c "cd /app && bundle exec rake db:schema:load db:seed"
         env:
-          PR_NUMBER: ${{ github.event.number }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
 
       - name: Post comment to Pull Request ${{ github.event.number }}
         if: ${{ github.event_name == 'pull_request' }}
@@ -71,4 +71,4 @@ jobs:
           message: |
             ### Deployment
 
-            https://claim-additional-payments-for-teaching-${{ github.event.number }}.test.teacherservices.cloud
+            https://claim-additional-payments-for-teaching-${{ github.event.pull_request.number }}.test.teacherservices.cloud/additional-payments/claim
