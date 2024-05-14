@@ -73,5 +73,5 @@ jobs:
 
             | Journey             | URL                                  |
             | ------------------- | ------------------------------------ |
-            | Additional Payments | <$APP_URL/additional-payments/claim> |
-            | Student Loans       | <$APP_URL/student-loans/claim>       |
+            | Additional Payments | <${{ env.APP_URL }}/additional-payments/claim> |
+            | Student Loans       | <${{ env.APP_URL }}/student-loans/claim>       |
