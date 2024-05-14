@@ -1,0 +1,74 @@
+name: Build and deploy to AKS cluster
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    types: [labeled, opened, reopened, synchronize]
+
+concurrency: deploy-${{ github.ref }}
+
+permissions:
+  packages: write
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      docker-image-tag: ${{ steps.build-image.outputs.tag }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build and push docker image
+        id: build-image
+        uses: DFE-Digital/github-actions/build-docker-image@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          context: .
+
+  deploy_review:
+    name: Deploy to review environment
+    concurrency: deploy_review_${{ github.event.pull_request.number }}
+    runs-on: ubuntu-latest
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
+    needs: [build]
+    environment:
+      name: review
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/deploy-environment
+        id: deploy
+        with:
+          environment: review
+          docker-image: ${{ needs.build.outputs.docker-image-tag }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          pull-request-number: ${{ github.event.number }}
+
+      - uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Seed Review App
+        shell: bash
+        if: github.event.number != ''
+        run: |
+          make ci review get-cluster-credentials
+          kubectl exec -n bat-qa deployment/claim-additional-payments-for-teaching-${{ github.event.number }} -- sh -c "cd /app && bundle exec rake db:schema:load db:seed"
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+
+      - name: Post comment to Pull Request ${{ github.event.number }}
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: aks
+          message: |
+            ### Deployment
+
+            https://claim-additional-payments-for-teaching-${{ github.event.number }}.test.teacherservices.cloud
