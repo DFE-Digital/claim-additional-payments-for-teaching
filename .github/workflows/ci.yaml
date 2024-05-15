@@ -24,6 +24,33 @@ jobs:
       - name: Linting - Standardrb
         run: bin/rails standard
 
+  lint-dfe-analytics:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:11-alpine
+        ports:
+          - '5432:5432'
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+    env:
+      RAILS_ENV: test
+      DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME: postgres
+      DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_PASSWORD: password
+      DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST: localhost
+    steps:
+     - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Prepare DB
+        run: bin/rails db:prepare
+      - name: Linting - DfE::Analytics
+        run: bin/rails dfe:analytics:check
+
   test:
     runs-on: ubuntu-latest
     strategy:
