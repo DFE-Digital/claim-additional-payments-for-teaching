@@ -40,7 +40,7 @@ jobs:
       DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_PASSWORD: password
       DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST: localhost
     steps:
-     - name: Checkout code
+      - name: Checkout code
         uses: actions/checkout@v4
       - name: Install Ruby
         uses: ruby/setup-ruby@v1
