@@ -9,7 +9,7 @@ class SubmissionsController < BasePublicController
       journey_session: journey_session
     )
 
-    @form = ClaimSubmissionForm.new(journey_session: shim)
+    @form = journey::ClaimSubmissionForm.new(journey_session: shim)
 
     if @form.save
       current_claim.claims.each(&:destroy!)

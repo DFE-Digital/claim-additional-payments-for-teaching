@@ -1,21 +1,17 @@
 require "rails_helper"
 
-RSpec.describe ClaimSubmissionForm do
+RSpec.describe Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm do
   before do
     create(:journey_configuration, :additional_payments)
-    create(:journey_configuration, :student_loans)
   end
 
-  let(:additional_payments_journey) { Journeys::AdditionalPaymentsForTeaching }
-
-  let(:student_loans_journey) { Journeys::TeacherStudentLoanReimbursement }
+  let(:journey) { Journeys::AdditionalPaymentsForTeaching }
 
   let(:school) do
     create(
       :school,
       :early_career_payments_eligible,
-      :levelling_up_premium_payments_eligible,
-      :student_loans_eligible
+      :levelling_up_premium_payments_eligible
     )
   end
 
@@ -63,7 +59,7 @@ RSpec.describe ClaimSubmissionForm do
     }
   end
 
-  let(:additional_payments_eligibility_answers) do
+  let(:eligibility_answers) do
     {
       nqt_in_academic_year_after_itt: true,
       employed_as_supply_teacher: false,
@@ -75,29 +71,10 @@ RSpec.describe ClaimSubmissionForm do
       eligible_itt_subject: "mathematics",
       eligible_degree_subject: "mathematics",
       teaching_subject_now: true,
-      itt_academic_year: (additional_payments_journey.configuration.current_academic_year - 3).to_s,
+      itt_academic_year: (journey.configuration.current_academic_year - 3).to_s,
       current_school_id: school.id,
       induction_completed: true,
       school_somewhere_else: nil
-    }
-  end
-
-  let(:student_loans_elgibility_answers) do
-    {
-      qts_award_year: "on_or_after_cut_off_date",
-      claim_school_id: school.id,
-      current_school_id: school.id,
-      employment_status: "claim_school",
-      biology_taught: false,
-      chemistry_taught: false,
-      computing_taught: false,
-      languages_taught: false,
-      physics_taught: true,
-      taught_eligible_subjects: true,
-      student_loan_repayment_amount: 1000,
-      had_leadership_position: true,
-      mostly_performed_leadership_duties: false,
-      claim_school_somewhere_else: false
     }
   end
 
@@ -108,8 +85,6 @@ RSpec.describe ClaimSubmissionForm do
   let(:form) { described_class.new(journey_session: journey_session) }
 
   describe "validations" do
-    let(:journey) { additional_payments_journey }
-
     subject { form }
 
     before { form.valid? }
@@ -171,7 +146,7 @@ RSpec.describe ClaimSubmissionForm do
 
     describe "claim eligibility" do
       let(:answers) do
-        claim_answers.merge(additional_payments_eligibility_answers).merge(
+        claim_answers.merge(eligibility_answers).merge(
           nqt_in_academic_year_after_itt: false
         )
       end
@@ -218,101 +193,71 @@ RSpec.describe ClaimSubmissionForm do
       form.save
     end
 
-    context "when on the additional payments journey" do
-      let(:journey) { additional_payments_journey }
-
-      let(:eligibility_answers) { additional_payments_eligibility_answers }
-
-      context "when a policy is not selected" do
-        it "submits the claim for the default policy" do
-          claim = form.claim
-
-          expect(claim).to be_persisted
-
-          expect(claim.policy_options_provided).to eq(
-            [
-              {
-                "award_amount" => "2000.0",
-                "policy" => "EarlyCareerPayments"
-              },
-              {
-                "award_amount" => "2000.0",
-                "policy" => "LevellingUpPremiumPayments"
-              }
-            ]
-          )
-
-          expect(claim.reference).to match(/([A-HJ-NP-Z]|\d){8}/)
-          expect(claim.submitted_at).to eq DateTime.new(2024, 3, 1, 9, 0, 0)
-
-          expect(claim.eligibility_type).to(
-            eq("Policies::EarlyCareerPayments::Eligibility")
-          )
-
-          expect(journey_session.claim).to eq(claim)
-
-          expect(ClaimMailer).to have_received(:submitted).with(claim)
-          expect(ClaimVerifierJob).to have_received(:perform_later).with(claim)
-        end
-      end
-
-      context "when a policy is selected" do
-        let(:eligibility_answers) do
-          additional_payments_eligibility_answers.merge(
-            selected_policy: "LevellingUpPremiumPayments"
-          )
-        end
-
-        it "submits the claim for the selected policy" do
-          claim = form.claim
-
-          expect(claim).to be_persisted
-
-          expect(claim.policy_options_provided).to eq(
-            [
-              {
-                "award_amount" => "2000.0",
-                "policy" => "EarlyCareerPayments"
-              },
-              {
-                "award_amount" => "2000.0",
-                "policy" => "LevellingUpPremiumPayments"
-              }
-            ]
-          )
-
-          expect(claim.reference).to match(/([A-HJ-NP-Z]|\d){8}/)
-          expect(claim.submitted_at).to eq DateTime.new(2024, 3, 1, 9, 0, 0)
-
-          expect(claim.eligibility_type).to(
-            eq("Policies::LevellingUpPremiumPayments::Eligibility")
-          )
-
-          expect(journey_session.claim).to eq(claim)
-
-          expect(ClaimMailer).to have_received(:submitted).with(claim)
-          expect(ClaimVerifierJob).to have_received(:perform_later).with(claim)
-        end
-      end
-    end
-
-    context "when on the student loans journey" do
-      let(:journey) { student_loans_journey }
-
-      let(:eligibility_answers) { student_loans_elgibility_answers }
-
-      it "submits the claim" do
+    context "when a policy is not selected" do
+      it "submits the claim for the default policy" do
         claim = form.claim
 
         expect(claim).to be_persisted
 
-        expect(claim.policy_options_provided).to eq([])
+        expect(claim.policy_options_provided).to eq(
+          [
+            {
+              "award_amount" => "2000.0",
+              "policy" => "EarlyCareerPayments"
+            },
+            {
+              "award_amount" => "2000.0",
+              "policy" => "LevellingUpPremiumPayments"
+            }
+          ]
+        )
 
         expect(claim.reference).to match(/([A-HJ-NP-Z]|\d){8}/)
         expect(claim.submitted_at).to eq DateTime.new(2024, 3, 1, 9, 0, 0)
 
         expect(claim.eligibility_type).to(
-          eq("Policies::StudentLoans::Eligibility")
+          eq("Policies::EarlyCareerPayments::Eligibility")
+        )
+
+        expect(journey_session.claim).to eq(claim)
+
+        expect(ClaimMailer).to have_received(:submitted).with(claim)
+        expect(ClaimVerifierJob).to have_received(:perform_later).with(claim)
+      end
+    end
+
+    context "when a policy is selected" do
+      let(:answers) do
+        claim_answers.merge(
+          eligibility_answers.merge(
+            selected_policy: "LevellingUpPremiumPayments"
+          )
+        )
+      end
+
+      it "submits the claim for the selected policy" do
+        claim = form.claim
+
+        expect(claim).to be_persisted
+
+        expect(claim.policy_options_provided).to eq(
+          [
+            {
+              "award_amount" => "2000.0",
+              "policy" => "EarlyCareerPayments"
+            },
+            {
+              "award_amount" => "2000.0",
+              "policy" => "LevellingUpPremiumPayments"
+            }
+          ]
+        )
+
+        expect(claim.reference).to match(/([A-HJ-NP-Z]|\d){8}/)
+        expect(claim.submitted_at).to eq DateTime.new(2024, 3, 1, 9, 0, 0)
+
+        expect(claim.eligibility_type).to(
+          eq("Policies::LevellingUpPremiumPayments::Eligibility")
         )
 
         expect(journey_session.claim).to eq(claim)
