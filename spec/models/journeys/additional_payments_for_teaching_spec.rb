@@ -37,8 +37,16 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching do
     let(:completed_slugs) { [:test] }
     let(:current_slug) { [:test2] }
     let(:claim) { double }
+    let(:journey_session) { build(:journeys_session) }
 
-    subject(:page_sequence) { described_class.page_sequence_for_claim(claim, completed_slugs, current_slug) }
+    subject(:page_sequence) do
+      described_class.page_sequence_for_claim(
+        claim,
+        journey_session,
+        completed_slugs,
+        current_slug
+      )
+    end
 
     it { is_expected.to be_a(Journeys::PageSequence) }
 
@@ -49,7 +57,9 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching do
     end
 
     it "creates a slug sequence" do
-      expect(Journeys::AdditionalPaymentsForTeaching::SlugSequence).to receive(:new).with(claim)
+      expect(Journeys::AdditionalPaymentsForTeaching::SlugSequence).to(
+        receive(:new).with(claim, journey_session)
+      )
       page_sequence
     end
   end

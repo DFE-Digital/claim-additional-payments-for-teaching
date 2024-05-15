@@ -49,70 +49,8 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  context "that has a email address" do
-    it "validates that the value is in the correct format" do
-      expect(build(:claim, email_address: "notan email@address.com")).not_to be_valid
-      expect(build(:claim, email_address: "name@example")).not_to be_valid
-      expect(build(:claim, email_address: "name@example.com")).to be_valid
-      expect(build(:claim, email_address: "")).to be_valid
-    end
-
-    it "checks that the email address in not longer than 256 characters" do
-      expect(build(:claim, email_address: "#{"e" * 256}@example.com")).not_to be_valid
-    end
-  end
-
-  context "that has a postcode" do
-    it "validates the length of postcode is not greater than 11" do
-      expect(build(:claim, postcode: "M12345 23453WD")).not_to be_valid
-      expect(build(:claim, postcode: "M1 2WD")).to be_valid
-    end
-  end
-
-  context "that has an address" do
-    it "validates the length of each address line is not greater than 100 characters" do
-      %i[address_line_1 address_line_2 address_line_3 address_line_4].each do |attribute_name|
-        expect(build(:claim, attribute_name => "X" + "ABCD" * 25)).not_to be_valid
-        expect(build(:claim, attribute_name => "ABCD" * 25)).to be_valid
-      end
-    end
-  end
-
   context "that has bank details" do
     let(:claim) { build(:claim, policy: Policies::EarlyCareerPayments) }
-
-    it "validates which type of payment account was specified" do
-      expect(claim).not_to be_valid(:"bank-or-building-society")
-
-      expect { claim.bank_or_building_society = "paypal" }.to raise_error(ArgumentError)
-
-      claim.bank_or_building_society = :building_society
-
-      expect(claim).to be_valid(:"bank-or-building-society")
-    end
-
-    it "does not validate which type of payment account was specified" do
-      expect { claim.bank_or_building_society = "visa" }.to raise_error(ArgumentError)
-    end
-
-    it "validates the format of bank_account_number and bank_sort_code" do
-      expect(build(:claim, bank_account_number: "ABC12 34 56 789")).not_to be_valid
-      expect(build(:claim, bank_account_number: "12-34-56-78-90")).not_to be_valid
-      expect(build(:claim, bank_account_number: "12-34-56-78")).to be_valid
-      expect(build(:claim, bank_account_number: "12-34-56")).not_to be_valid
-
-      expect(build(:claim, bank_sort_code: "ABC12 34 567")).not_to be_valid
-      expect(build(:claim, bank_sort_code: "12 34 56")).to be_valid
-    end
-
-    it "validates the format of the building society roll number" do
-      expect(build(:claim, building_society_roll_number: "CXJ-K6 897/98X")).to be_valid
-      expect(build(:claim, building_society_roll_number: "123456789/ABCD")).to be_valid
-      expect(build(:claim, building_society_roll_number: "123456789")).to be_valid
-
-      expect(build(:claim, building_society_roll_number: "123456789/ABC.CD-EFGH ")).not_to be_valid
-      expect(build(:claim, building_society_roll_number: "123456789/*****")).not_to be_valid
-    end
 
     context "on save" do
       it "strips out white space and the “-” character from bank_account_number and bank_sort_code" do
@@ -151,51 +89,11 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  context "when saving in the “address” validation context" do
-    it "validates the presence of address_line_1 and postcode" do
-      expect(build(:claim)).not_to be_valid(:address)
-
-      valid_address_attributes = {address_line_1: "123 Main Street", address_line_3: "City", address_line_4: "County", postcode: "PE11 3EW"}
-      expect(build(:claim, valid_address_attributes)).to be_valid(:address)
-    end
-  end
-
   context "when saving in the “student-loan” validation context" do
     it "validates the presence of has_student_loan" do
       expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1, has_student_loan: nil)).not_to be_valid(:"student-loan")
       expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1, has_student_loan: true)).to be_valid(:"student-loan")
       expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1, has_student_loan: false)).to be_valid(:"student-loan")
-    end
-  end
-
-  context "when saving in the “email-address” validation context" do
-    it "validates the presence of email_address" do
-      expect(build(:claim)).not_to be_valid(:"email-address")
-      expect(build(:claim, email_address: "name@example.tld")).to be_valid(:"email-address")
-    end
-  end
-
-  context "when saving in the “personal-bank-account” validation context" do
-    it "validates that the bank_account_number and bank_sort_code are present" do
-      invalid_claim = build(:claim)
-      valid_claim = build(:claim, bank_sort_code: "123456", bank_account_number: "87654321", banking_name: "Jo Bloggs")
-      expect(invalid_claim).not_to be_valid(:"personal-bank-account")
-      expect(valid_claim).to be_valid(:"personal-bank-account")
-    end
-  end
-
-  context "when saving in the “building-society-account” validation context" do
-    it "validates that the bank_account_number and bank_sort_code are present" do
-      invalid_claim = build(:claim, bank_or_building_society: :building_society)
-      valid_claim = build(
-        :claim,
-        bank_sort_code: "123456",
-        bank_account_number: "87654321",
-        banking_name: "Jo Bloggs",
-        building_society_roll_number: "CXJ-K6 897/98X"
-      )
-      expect(invalid_claim).not_to be_valid(:"building-society-account")
-      expect(valid_claim).to be_valid(:"building-society-account")
     end
   end
 
@@ -906,7 +804,9 @@ RSpec.describe Claim, type: :model do
 
   describe "::FILTER_PARAMS" do
     it "has a value for every claim attribute" do
-      expect(Claim::FILTER_PARAMS.keys).to match_array(Claim.new.attribute_names.map(&:to_sym))
+      expect(Claim::FILTER_PARAMS.keys).to match_array(
+        Claim.new.attribute_names.map(&:to_sym) + [:one_time_password]
+      )
     end
   end
 

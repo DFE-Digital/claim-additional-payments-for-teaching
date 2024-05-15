@@ -1,6 +1,10 @@
 module Journeys
   extend self
 
+  def self.table_name_prefix
+    "journeys_"
+  end
+
   JOURNEYS = [
     AdditionalPaymentsForTeaching,
     TeacherStudentLoanReimbursement

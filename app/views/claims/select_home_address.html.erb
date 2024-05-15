@@ -4,16 +4,15 @@
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "address": "#{@address_data.first[:address].gsub(",", "").gsub(" ", "_").downcase}"}) if current_claim.errors.any? %>
 
-    <%= form_for current_claim, url: claim_path(current_journey_routing_name) do |form| %>
+    <%= form_for @form, url: claim_path(current_journey_routing_name) do |form| %>
       <div class="govuk-!-margin-bottom-5">
         <h1 class="govuk-heading-xl"><%= t("questions.address.home.title") %></h1>
         <h2 class="govuk-heading-l govuk-!-margin-bottom-1">Postcode</h2>
         <p class="govuk-body">
-          <%= params["claim"]["postcode"] %>
+          <%= @form.postcode %>
           <%= link_to "Change", claim_path(current_journey_routing_name, "postcode-search"), class: "govuk-link govuk-!-margin-left-3", "aria-label": "Change" %>
         </p>
-        <%= form_group_tag current_claim do %>
-          <%= hidden_field_tag :postcode, params["claim"]["postcode"] %>
+        <%= form_group_tag @form do %>
           <fieldset class="govuk-fieldset" aria-describedby="address-search-result-hint">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
               <h2 class="govuk-fieldset__heading govuk-!-margin-top-3">
@@ -21,16 +20,16 @@
               </h2>
             </legend>
 
-            <%= errors_tag current_claim, :address %>
+            <%= errors_tag @form, :address %>
 
             <div class="govuk-radios">
-              <% @address_data.each do |option| %>
+              <% @form.address_data.each do |option| %>
                 <% address = option[:address].gsub(",", "").gsub(" ", "_").downcase %>
                 <% checked = params.dig(:claim, :address_line_1) == option[:address_line_1] %>
 
                 <div class="govuk-radios__item">
-                  <%= radio_button_tag :address, [option[:address], option[:address_line_1], option[:address_line_2], option[:address_line_3], option[:postcode]].join(":"), checked, class: "govuk-radios__input", id: address %>
-                  <%= label_tag address, "#{option[:address]}", class: "govuk-label govuk-radios__label", id: address %>
+                  <%= form.radio_button :address, [option[:address], option[:address_line_1], option[:address_line_2], option[:address_line_3], option[:postcode]].join(":"), { checked:, class: "govuk-radios__input", id: address } %>
+                  <%= form.label address, "#{option[:address]}", class: "govuk-label govuk-radios__label", id: address %>
                 </div>
               <% end %>
             </div>

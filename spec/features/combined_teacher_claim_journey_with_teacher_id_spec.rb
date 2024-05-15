@@ -132,7 +132,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     click_link(I18n.t("questions.address.home.link_to_manual_address"))
 
     # - What is your address
-    expect(page).to have_text(I18n.t("questions.address.generic.title"))
+    expect(page).to have_text(I18n.t("forms.address.questions.your_address"))
 
     fill_in :claim_address_line_1, with: "57"
     fill_in :claim_address_line_2, with: "Walthamstow Drive"

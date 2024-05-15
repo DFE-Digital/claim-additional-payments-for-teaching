@@ -15,8 +15,17 @@ RSpec.describe SignInOrContinueForm do
       CurrentClaim.new(claims: claims)
     end
 
+    let(:journey_session) do
+      build(:journeys_session, journey: journey::ROUTING_NAME)
+    end
+
     let(:form) do
-      described_class.new(journey: journey, claim: current_claim, params: params)
+      described_class.new(
+        journey: journey,
+        journey_session: journey_session,
+        claim: current_claim,
+        params: params
+      )
     end
 
     describe "validations" do

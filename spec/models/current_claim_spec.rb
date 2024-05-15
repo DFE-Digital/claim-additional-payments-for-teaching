@@ -48,7 +48,7 @@ RSpec.describe CurrentClaim, type: :model do
     subject(:save) { current_claim.save }
 
     context "when claim attributes are invalid" do
-      let(:lup_claim) { build(:claim, academic_year: "2022/2023", policy: lup_policy, email_address: "invalid") }
+      let(:lup_claim) { build(:claim, academic_year: "2022/2023", policy: lup_policy, teacher_reference_number: "1") }
 
       it "calls save on both claims" do
         expect(lup_claim).to receive(:save)
@@ -61,7 +61,7 @@ RSpec.describe CurrentClaim, type: :model do
     end
 
     context "when claim attributes are valid" do
-      let(:lup_claim) { build(:claim, academic_year: "2022/2023", policy: lup_policy, email_address: "email@example.com") }
+      let(:lup_claim) { build(:claim, academic_year: "2022/2023", policy: lup_policy, teacher_reference_number: "1234567") }
 
       it "calls save on both claims" do
         expect(lup_claim).to receive(:save)

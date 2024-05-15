@@ -1,10 +1,10 @@
 <% bank_or_building_society = current_claim.bank_or_building_society.humanize.downcase %>
-<% content_for(:page_title, page_title(t("questions.account_details", bank_or_building_society: bank_or_building_society), journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(t("questions.account_details", bank_or_building_society: bank_or_building_society), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <%= render("shared/error_summary", instance: @bank_details_form ) if @bank_details_form.errors.any? %>
+    <%= render("shared/error_summary", instance: @form ) if @form.errors.any? %>
 
     <%= render partial: "account_details", locals: { current_claim: current_claim, bank_or_building_society: bank_or_building_society, current_journey_routing_name: current_journey_routing_name} %>
 

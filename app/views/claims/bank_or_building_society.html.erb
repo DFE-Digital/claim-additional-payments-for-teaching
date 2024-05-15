@@ -1,11 +1,12 @@
-<% content_for(:page_title, page_title(t("questions.bank_or_building_society"), journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(t("questions.bank_or_building_society"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { bank_or_building_society: "claim_bank_or_building_society_personal_bank_account" }) if current_claim.errors.any? %>
-    <%= form_for current_claim, url: claim_path(current_journey_routing_name) do |form| %>
+    <%= render("shared/error_summary", instance: @form, errored_field_id_overrides: { bank_or_building_society: "claim_bank_or_building_society_personal_bank_account" }) if @form.errors.any? %>
+
+    <%= form_for @form, url: claim_path(current_journey_routing_name) do |form| %>
       <%= form.hidden_field :bank_or_building_society %>
-      <%= form_group_tag current_claim do %>
+      <%= form_group_tag @form do %>
         <fieldset class="govuk-fieldset" role="group" aria-describedby="bank_details-hint">
 
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
@@ -15,10 +16,12 @@
           </legend>
 
           <div class="govuk-hint" id="bank_details-hint">
-            Some places are both a bank and a building society. If your account requires a roll number your account with them is through the building society.
+            Some places are both a bank and a building society. If your account
+            requires a roll number your account with them is through the
+            building society.
           </div>
 
-          <%= errors_tag current_claim, :bank_or_building_society %>
+          <%= errors_tag @form, :bank_or_building_society %>
 
           <div class="govuk-radios">
             <div class="govuk-radios__item">

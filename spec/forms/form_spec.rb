@@ -14,7 +14,7 @@ module Journeys
     I18N_NAMESPACE = "test_i18n_ns"
 
     class SlugSequence
-      def initialize(claim)
+      def initialize(claim, journey_session)
         # NOOP
       end
     end
@@ -40,11 +40,12 @@ RSpec.describe Form, type: :model do
     end
   end
 
-  subject(:form) { TestSlugForm.new(claim:, journey:, params:) }
+  subject(:form) { TestSlugForm.new(claim:, journey:, journey_session:, params:) }
 
   let(:claim) { CurrentClaim.new(claims:) }
   let(:claims) { [build(:claim, policy: Policies::StudentLoans)] }
   let(:journey) { Journeys::TestJourney }
+  let(:journey_session) { build(:journeys_session) }
   let(:params) { ActionController::Parameters.new({journey: "test-journey", slug: "test_slug", claim: claim_params}) }
   let(:claim_params) { {first_name: "test-name"} }
 
@@ -68,6 +69,57 @@ RSpec.describe Form, type: :model do
     context "with no params" do
       let(:claim_params) { {} }
 
+      context "when an existing value can be found on the journey session" do
+        let(:journey_session) do
+          build(
+            :journeys_session,
+            answers: {
+              first_name: "existing-name",
+              student_loan_repayment_amount: 2000
+            }
+          )
+        end
+
+        it "initialises the attributes with values from the journey session" do
+          expect(form).to have_attributes(
+            first_name: "existing-name",
+            student_loan_repayment_amount: 2000
+          )
+        end
+      end
+
+      context "when an existing `nil` value can be found on the journey session" do
+        let(:claims) do
+          [
+            build(
+              :claim,
+              first_name: "existing-name",
+              eligibility_attributes: {
+                student_loan_repayment_amount: 100
+              },
+              policy: Policies::StudentLoans
+            )
+          ]
+        end
+
+        let(:journey_session) do
+          build(
+            :journeys_session,
+            answers: {
+              first_name: "existing-name",
+              student_loan_repayment_amount: nil
+            }
+          )
+        end
+
+        it "initialises the attributes with values from the journey session" do
+          expect(form).to have_attributes(
+            first_name: "existing-name",
+            student_loan_repayment_amount: nil
+          )
+        end
+      end
+
       context "when an existing value can be found on the claim or eligibility record" do
         let(:claims) { [build(:claim, first_name: "existing-name", eligibility_attributes: {student_loan_repayment_amount: 100}, policy: Policies::StudentLoans)] }
 
@@ -76,7 +128,7 @@ RSpec.describe Form, type: :model do
         end
       end
 
-      context "when an existing value cannot be found on the claim nor eligibility" do
+      context "when an existing value cannot be found on the claim nor eligibility nor journey session" do
         let(:claims) { [build(:claim, first_name: nil, policy: Policies::StudentLoans)] }
 
         it "initialises the attributes with nil" do
@@ -150,6 +202,17 @@ RSpec.describe Form, type: :model do
     it do
       expect(I18n).to have_received(:t)
         .with("test_i18n_ns.forms.test_slug.errors.message", default: :"forms.test_slug.errors.message")
+    end
+
+    context "when more arguments are supplied" do
+      before do
+        form.i18n_errors_path("message", school_name: "Academy for Lizards")
+      end
+
+      it do
+        expect(I18n).to have_received(:t)
+          .with("test_i18n_ns.forms.test_slug.errors.message", default: :"forms.test_slug.errors.message", school_name: "Academy for Lizards")
+      end
     end
   end
 

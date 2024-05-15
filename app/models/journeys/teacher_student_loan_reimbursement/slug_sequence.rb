@@ -30,7 +30,6 @@ module Journeys
         "personal-details",
         "student-loan-amount",
         "postcode-search",
-        "no-address-found",
         "select-home-address",
         "address",
         "select-email",
@@ -62,10 +61,11 @@ module Journeys
         RESULTS_SLUGS
       ).freeze
 
-      attr_reader :claim
+      attr_reader :claim, :journey_session
 
-      def initialize(claim)
+      def initialize(claim, journey_session)
         @claim = claim
+        @journey_session = journey_session
       end
 
       def slugs
@@ -133,6 +133,7 @@ module Journeys
       def personal_details_form
         PersonalDetailsForm.new(
           claim:,
+          journey_session:,
           journey: Journeys::TeacherStudentLoanReimbursement,
           params: ActionController::Parameters.new
         )

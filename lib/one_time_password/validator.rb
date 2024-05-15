@@ -1,6 +1,6 @@
 module OneTimePassword
   class Validator < Base
-    def initialize(code, generated_at, otp_category = nil)
+    def initialize(code, generated_at)
       @code = code
       @generated_at = generated_at
     end
@@ -18,7 +18,7 @@ module OneTimePassword
 
     private
 
-    attr_reader :code, :generated_at, :otp_category
+    attr_reader :code, :generated_at
 
     def wrong_length?
       return @wrong_length if defined?(@wrong_length)

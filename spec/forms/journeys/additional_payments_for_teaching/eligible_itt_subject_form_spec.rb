@@ -9,7 +9,11 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
     )
   end
 
-  let(:additional_payments_journey) { Journeys::AdditionalPaymentsForTeaching }
+  let(:journey) { Journeys::AdditionalPaymentsForTeaching }
+
+  let(:journey_session) do
+    build(:journeys_session, journey: journey::ROUTING_NAME)
+  end
 
   let(:ecp_trainee_teacher_eligibility) do
     create(
@@ -52,7 +56,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
     subject(:form) do
       described_class.new(
-        journey: additional_payments_journey,
+        journey: journey,
+        journey_session: journey_session,
         claim: current_claim,
         params: ActionController::Parameters.new
       )
@@ -68,7 +73,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
   describe "#available_subjects" do
     let(:form) do
       described_class.new(
-        journey: additional_payments_journey,
+        journey: journey,
+        journey_session: journey_session,
         claim: current_claim,
         params: ActionController::Parameters.new
       )
@@ -122,7 +128,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
   describe "#show_hint_text?" do
     let(:form) do
       described_class.new(
-        journey: additional_payments_journey,
+        journey: journey,
+        journey_session: journey_session,
         claim: current_claim,
         params: ActionController::Parameters.new
       )
@@ -163,7 +170,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
   describe "#chemistry_or_physics_available?" do
     let(:form) do
       described_class.new(
-        journey: additional_payments_journey,
+        journey: journey,
+        journey_session: journey_session,
         claim: current_claim,
         params: ActionController::Parameters.new
       )
@@ -209,7 +217,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
     let(:form) do
       described_class.new(
-        journey: additional_payments_journey,
+        journey: journey,
+        journey_session: journey_session,
         claim: current_claim,
         params: params
       )

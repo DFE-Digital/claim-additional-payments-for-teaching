@@ -19,7 +19,7 @@
 
   <div class="govuk-button-group">
     <% if current_claim.eligibility.claim_school_somewhere_else == false %>
-      <%= button_to "Enter another school", claim_path(current_journey_routing_name, "select-claim-school", additional_school: true), method: :patch, class: "govuk-button", role: :button, data: { module: "govuk-button" } %>
+      <%= button_to "Enter another school", claim_path(current_journey_routing_name, "select-claim-school", claim: { change_school: true }), method: :patch, class: "govuk-button", role: :button, data: { module: "govuk-button" } %>
     <% else %>
       <div><%= link_to "Enter another school", claim_path(current_journey_routing_name, "claim-school", additional_school: true), class: "govuk-button", role: "button", data: {module: "govuk-button"} %></div>
     <% end %>

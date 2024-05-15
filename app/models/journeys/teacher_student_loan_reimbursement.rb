@@ -15,8 +15,13 @@ module Journeys
       "qualification-details" => QualificationDetailsForm,
       "qts-year" => QtsYearForm,
       "subjects-taught" => SubjectsTaughtForm,
+      "still-teaching" => StillTeachingForm,
       "leadership-position" => LeadershipPositionForm,
-      "mostly-performed-leadership-duties" => MostlyPerformedLeadershipDutiesForm
+      "mostly-performed-leadership-duties" => MostlyPerformedLeadershipDutiesForm,
+      "reset-claim" => ResetClaimForm,
+      "postcode-search" => PostcodeSearchForm,
+      "select-claim-school" => SelectClaimSchoolForm,
+      "select-home-address" => SelectHomeAddressForm
     }
   end
 end

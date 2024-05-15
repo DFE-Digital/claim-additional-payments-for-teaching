@@ -1,9 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Journeys::AdditionalPaymentsForTeaching::PoorPerformanceForm do
-  subject(:form) { described_class.new(claim:, journey:, params:) }
+  subject(:form) { described_class.new(claim:, journey_session:, journey:, params:) }
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
+  let(:journey_session) do
+    build(:journeys_session, journey: journey::ROUTING_NAME)
+  end
   let(:ecp_claim) { build(:claim, policy: Policies::EarlyCareerPayments) }
   let(:lupp_claim) { build(:claim, policy: Policies::LevellingUpPremiumPayments) }
   let(:claim) { CurrentClaim.new(claims: [ecp_claim, lupp_claim]) }

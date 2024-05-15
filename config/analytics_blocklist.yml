@@ -16,24 +16,14 @@
   - cron
   :dfe_sign_in_users:
   - session_token
-  :school_workforce_censuses:
+  :schools:
+  - postcode_sanitised
+  :file_uploads:
   - id
-  - teacher_reference_number
-  - subject_1
-  - subject_2
-  - subject_3
-  - subject_4
-  - subject_5
-  - subject_6
-  - subject_7
-  - subject_8
-  - subject_9
-  - subject_10
-  - subject_11
-  - subject_12
-  - subject_13
-  - subject_14
-  - subject_15
+  - uploaded_by_id
+  - body
+  - created_at
+  - updated_at
   :student_loans_data:
   - id
   - claim_reference
@@ -46,11 +36,6 @@
   - amount
   - created_at
   - updated_at
-  :schools:
-  - postcode_sanitised
-  :file_uploads:
+  :school_workforce_censuses:
   - id
-  - uploaded_by_id
-  - body
-  - created_at
-  - updated_at
+  - teacher_reference_number
