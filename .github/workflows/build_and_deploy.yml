@@ -75,3 +75,4 @@ jobs:
             | ------------------- | ------------------------------------ |
             | Additional Payments | <${{ env.APP_URL }}/additional-payments/claim> |
             | Student Loans       | <${{ env.APP_URL }}/student-loans/claim>       |
+            | Admin               | <${{ env.APP_URL }}/admin>                     |
