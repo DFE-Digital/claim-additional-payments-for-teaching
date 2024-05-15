@@ -27,8 +27,6 @@ RUN_FLAKY_SPECS: true
 RUN_JS_SPECS: true
 RUN_SLOW_SPECS: true
 
-SUPPRESS_DFE_ANALYTICS_INIT: true
-
 HMRC_API_BASE_URL: https://test-api.service.hmrc.gov.uk
 HMRC_API_BANK_VALIDATION_ENABLED: false
 HMRC_API_CLIENT_ID: test
