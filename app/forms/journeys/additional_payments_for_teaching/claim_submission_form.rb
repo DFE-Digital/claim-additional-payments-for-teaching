@@ -46,7 +46,7 @@ module Journeys
         end
       end
 
-      def calculate_reward_amount(eligibility)
+      def calculate_award_amount(eligibility)
         eligibility.award_amount = eligibility.calculate_award_amount
       end
 

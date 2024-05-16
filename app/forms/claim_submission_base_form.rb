@@ -64,16 +64,7 @@ class ClaimSubmissionBaseForm
   def initialize(journey_session:)
     @journey_session = journey_session
 
-    attrs = journey_session
-      .answers
-      .with_indifferent_access
-      .slice(
-        *claim_attribute_names,
-        *eligibility_attribute_names,
-        :selected_policy
-      )
-
-    super(attrs)
+    super(journey_session.answers.attributes)
   end
 
   def save
@@ -134,7 +125,7 @@ class ClaimSubmissionBaseForm
     @eligibilities ||= journey::POLICIES.map do |policy|
       policy::Eligibility.new.tap do |eligibility|
         set_eligibility_attributes(eligibility)
-        calculate_reward_amount(eligibility)
+        calculate_award_amount(eligibility)
       end
     end
   end

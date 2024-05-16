@@ -32,7 +32,7 @@ module Journeys
         @main_eligibility ||= eligibilities.first
       end
 
-      def calculate_reward_amount(eligibility)
+      def calculate_award_amount(eligibility)
         # NOOP
       end
 
