@@ -52,11 +52,11 @@ module JourneyConcern
   end
 
   def find_journey_session
-    Journeys::Session.find_by(id: session[journey_session_key])
+    journey::Session.find_by(id: session[journey_session_key])
   end
 
   def create_journey_session!
-    Journeys::Session.create!(journey: params[:journey])
+    journey::Session.create!(journey: params[:journey])
   end
 
   def journey_session_key

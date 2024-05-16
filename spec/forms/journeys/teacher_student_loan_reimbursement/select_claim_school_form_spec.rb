@@ -14,9 +14,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SelectClaimSchoolForm,
 
     let(:claim) { CurrentClaim.new(claims: [create(:claim, policy: Policies::StudentLoans)]) }
     let(:journey) { Journeys::TeacherStudentLoanReimbursement }
-    let(:journey_session) do
-      build(:journeys_session, journey: journey::ROUTING_NAME)
-    end
+    let(:journey_session) { build(:student_loans_session) }
     let(:params) { ActionController::Parameters.new }
     let(:form) { described_class.new(claim:, journey:, journey_session:, params:) }
     let!(:school) { create(:school, :eligible_for_journey, journey:) }

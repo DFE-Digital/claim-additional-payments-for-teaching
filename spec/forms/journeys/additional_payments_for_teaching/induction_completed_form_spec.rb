@@ -13,9 +13,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::InductionCompletedForm d
 
     let(:slug) { "induction_completed" }
 
-    let(:journey_session) do
-      build(:journeys_session, journey: journey::ROUTING_NAME)
-    end
+    let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
 
     subject(:form) do
       described_class.new(

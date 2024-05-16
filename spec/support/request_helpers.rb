@@ -30,7 +30,7 @@ module RequestHelpers
   def set_slug_sequence_in_session(claim, slug)
     current_claim = CurrentClaim.new(claims: [claim])
     journey = Journeys.for_policy(claim.policy)
-    journey_session = build(:journeys_session, journey: journey::ROUTING_NAME)
+    journey_session = build(:"#{journey::I18N_NAMESPACE}_session")
     slug_sequence = journey.slug_sequence.new(current_claim, journey_session).slugs
     slug_index = slug_sequence.index(slug)
     visited_slugs = slug_sequence.slice(0, slug_index)

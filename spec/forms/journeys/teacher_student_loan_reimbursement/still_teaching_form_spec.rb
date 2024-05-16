@@ -9,9 +9,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::StillTeachingForm, typ
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
   let(:claim_params) { {} }
   let(:journey) { Journeys::TeacherStudentLoanReimbursement }
-  let(:journey_session) do
-    build(:journeys_session, journey: journey::ROUTING_NAME)
-  end
+  let(:journey_session) { build(:student_loans_session) }
 
   subject(:form) do
     described_class.new(
