@@ -1,8 +1,6 @@
 name: Build and deploy to AKS cluster
 
 on:
-  push:
-    branches: [master]
   pull_request:
     types: [labeled, opened, reopened, synchronize]
 
@@ -15,6 +13,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
     outputs:
       docker-image-tag: ${{ steps.build-image.outputs.tag }}
 
@@ -33,7 +32,6 @@ jobs:
     name: Deploy to review environment
     concurrency: deploy_review_${{ github.event.pull_request.number }}
     runs-on: ubuntu-latest
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
     needs: [build]
     environment:
       name: review-aks
