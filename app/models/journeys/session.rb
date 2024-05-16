@@ -1,5 +1,7 @@
 module Journeys
   class Session < ApplicationRecord
+    self.abstract_class = true
+
     has_one :claim,
       dependent: :nullify,
       inverse_of: :journeys_session,
@@ -8,10 +10,6 @@ module Journeys
     validates :journey,
       presence: true,
       inclusion: {in: Journeys.all_routing_names}
-
-    def journey_module
-      Journeys.for_routing_name(journey)
-    end
 
     def submitted?
       claim.present?

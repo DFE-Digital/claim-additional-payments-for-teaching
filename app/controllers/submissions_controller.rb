@@ -4,7 +4,7 @@ class SubmissionsController < BasePublicController
   skip_before_action :send_unstarted_claimants_to_the_start, only: [:show]
 
   def create
-    shim = ClaimJourneySessionShim.new(
+    shim = journey::ClaimJourneySessionShim.new(
       current_claim: current_claim,
       journey_session: journey_session
     )

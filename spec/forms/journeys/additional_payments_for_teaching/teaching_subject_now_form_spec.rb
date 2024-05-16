@@ -3,9 +3,7 @@ require "rails_helper"
 RSpec.describe Journeys::AdditionalPaymentsForTeaching::TeachingSubjectNowForm do
   before { create(:journey_configuration, :additional_payments) }
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
-  let(:journey_session) do
-    build(:journeys_session, journey: journey::ROUTING_NAME)
-  end
+  let(:journey_session) { build(:additional_payments_session) }
   let(:eligibility) { create(:early_career_payments_eligibility) }
   let(:claim) do
     create(

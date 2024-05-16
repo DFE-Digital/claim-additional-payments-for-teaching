@@ -14,9 +14,7 @@ RSpec.describe MobileVerificationForm do
 
     let(:current_claim) { CurrentClaim.new(claims: claims) }
 
-    let(:journey_session) do
-      build(:journeys_session, journey: journey::ROUTING_NAME)
-    end
+    let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
 
     let(:params) do
       ActionController::Parameters.new(

@@ -79,7 +79,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm do
   end
 
   let(:journey_session) do
-    build(:journeys_session, journey: journey::ROUTING_NAME, answers: answers)
+    build(:additional_payments_session, journey: journey::ROUTING_NAME, answers: answers)
   end
 
   let(:form) { described_class.new(journey_session: journey_session) }

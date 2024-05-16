@@ -72,9 +72,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::ClaimSubmissionForm do
     }
   end
 
-  let(:journey_session) do
-    build(:journeys_session, journey: journey::ROUTING_NAME, answers: answers)
-  end
+  let(:journey_session) { build(:student_loans_session, answers: answers) }
 
   let(:form) { described_class.new(journey_session: journey_session) }
 

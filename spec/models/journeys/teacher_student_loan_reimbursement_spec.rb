@@ -36,7 +36,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement do
   describe ".page_sequence_for_claim" do
     let(:completed_slugs) { [:test] }
     let(:current_slug) { [:test2] }
-    let(:journey_session) { build(:journeys_session) }
+    let(:journey_session) { build(:student_loans_session) }
     let(:claim) { double }
 
     subject(:page_sequence) do

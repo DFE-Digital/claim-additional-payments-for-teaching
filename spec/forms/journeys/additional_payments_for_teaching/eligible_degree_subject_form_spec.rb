@@ -6,9 +6,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleDegreeSubjectFor
   end
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
-  let(:journey_session) do
-    build(:journeys_session, journey: journey::ROUTING_NAME)
-  end
+  let(:journey_session) { build(:additional_payments_session) }
   let(:ecp_claim) { build(:claim, policy: Policies::EarlyCareerPayments) }
   let(:lupp_claim) { build(:claim, policy: Policies::LevellingUpPremiumPayments) }
   let(:claim) { CurrentClaim.new(claims: [ecp_claim, lupp_claim]) }

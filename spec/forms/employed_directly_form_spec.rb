@@ -5,9 +5,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EmployedDirectlyForm do
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
 
-  let(:journey_session) do
-    build(:journeys_session, journey: journey::ROUTING_NAME)
-  end
+  let(:journey_session) { build(:additional_payments_session) }
 
   let(:current_claim) do
     claims = journey::POLICIES.map { |policy| create(:claim, policy:) }

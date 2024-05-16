@@ -9,7 +9,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
   let(:claim) { create(:claim, :skipped_tid, policy: Policies::EarlyCareerPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility, logged_in_with_tid:, details_check:, dqt_teacher_status:, qualifications_details_check:) }
   let(:lup_claim) { create(:claim, :skipped_tid, policy: Policies::LevellingUpPremiumPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility_lup) }
   let(:current_claim) { CurrentClaim.new(claims: [claim, lup_claim]) }
-  let(:journey_session) { build(:journeys_session) }
+  let(:journey_session) { build(:additional_payments_session) }
   let(:teacher_id_enabled) { true }
   let(:logged_in_with_tid) { nil }
   let(:details_check) { nil }
@@ -309,7 +309,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
     let(:ecp_claim) { build(:claim, policy: Policies::EarlyCareerPayments, eligibility_trait: ecp_eligibility) }
     let(:lup_claim) { build(:claim, policy: Policies::LevellingUpPremiumPayments, eligibility_trait: lup_eligibility) }
     let(:current_claim) { CurrentClaim.new(claims: [ecp_claim, lup_claim]) }
-    let(:journey_session) { build(:journeys_session) }
+    let(:journey_session) { build(:additional_payments_session) }
 
     subject { described_class.new(current_claim, journey_session).slugs }
 
