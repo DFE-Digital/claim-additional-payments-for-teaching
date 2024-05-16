@@ -85,7 +85,9 @@ class Form
   end
 
   def load_current_value(attribute)
-    return journey_session.answers[attribute] if journey_session.answers.key?(attribute)
+    if journey_session.answered?(attribute)
+      return journey_session.answers.public_send(attribute)
+    end
 
     # TODO: re-implement when the underlying claim and eligibility data sources
     # are moved to an alternative place e.g. a session hash

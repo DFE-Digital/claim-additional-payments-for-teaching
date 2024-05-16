@@ -55,131 +55,131 @@ class ClaimJourneySessionShim
   private
 
   def selected_policy
-    journey_session.answers[:selected_policy] || current_claim.selected_policy
+    journey_session.answers.selected_policy || current_claim.selected_policy
   end
 
   def address_line_1
-    journey_session.answers[:address_line_1] || current_claim.address_line_1
+    journey_session.answers.address_line_1 || current_claim.address_line_1
   end
 
   def address_line_2
-    journey_session.answers[:address_line_2] || current_claim.address_line_2
+    journey_session.answers.address_line_2 || current_claim.address_line_2
   end
 
   def address_line_3
-    journey_session.answers[:address_line_3] || current_claim.address_line_3
+    journey_session.answers.address_line_3 || current_claim.address_line_3
   end
 
   def address_line_4
-    journey_session.answers[:address_line_4] || current_claim.address_line_4
+    journey_session.answers.address_line_4 || current_claim.address_line_4
   end
 
   def postcode
-    journey_session.answers[:postcode] || current_claim.postcode
+    journey_session.answers.postcode || current_claim.postcode
   end
 
   def date_of_birth
-    journey_session.answers[:date_of_birth] || current_claim.date_of_birth
+    journey_session.answers.date_of_birth || current_claim.date_of_birth
   end
 
   def teacher_reference_number
-    journey_session.answers[:teacher_reference_number] || current_claim.teacher_reference_number
+    journey_session.answers.teacher_reference_number || current_claim.teacher_reference_number
   end
 
   def national_insurance_number
-    journey_session.answers[:national_insurance_number] || current_claim.national_insurance_number
+    journey_session.answers.national_insurance_number || current_claim.national_insurance_number
   end
 
   def email_address
-    journey_session.answers[:email_address] || current_claim.email_address
+    journey_session.answers.email_address || current_claim.email_address
   end
 
   def bank_sort_code
-    journey_session.answers[:bank_sort_code] || current_claim.bank_sort_code
+    journey_session.answers.bank_sort_code || current_claim.bank_sort_code
   end
 
   def bank_account_number
-    journey_session.answers[:bank_account_number] || current_claim.bank_account_number
+    journey_session.answers.bank_account_number || current_claim.bank_account_number
   end
 
   def details_check
-    journey_session.answers[:details_check] || current_claim.details_check
+    journey_session.answers.details_check || current_claim.details_check
   end
 
   def payroll_gender
-    journey_session.answers[:payroll_gender] || current_claim.payroll_gender
+    journey_session.answers.payroll_gender || current_claim.payroll_gender
   end
 
   def first_name
-    journey_session.answers[:first_name] || current_claim.first_name
+    journey_session.answers.first_name || current_claim.first_name
   end
 
   def middle_name
-    journey_session.answers[:middle_name] || current_claim.middle_name
+    journey_session.answers.middle_name || current_claim.middle_name
   end
 
   def surname
-    journey_session.answers[:surname] || current_claim.surname
+    journey_session.answers.surname || current_claim.surname
   end
 
   def banking_name
-    journey_session.answers[:banking_name] || current_claim.banking_name
+    journey_session.answers.banking_name || current_claim.banking_name
   end
 
   def building_society_roll_number
-    journey_session.answers[:building_society_roll_number] || current_claim.building_society_roll_number
+    journey_session.answers.building_society_roll_number || current_claim.building_society_roll_number
   end
 
   def academic_year
-    journey_session.answers[:academic_year] || current_claim.academic_year
+    journey_session.answers.academic_year || current_claim.academic_year
   end
 
   def bank_or_building_society
-    journey_session.answers[:bank_or_building_society] || current_claim.bank_or_building_society
+    journey_session.answers.bank_or_building_society || current_claim.bank_or_building_society
   end
 
   def provide_mobile_number
-    journey_session.answers[:provide_mobile_number] || current_claim.provide_mobile_number
+    journey_session.answers.provide_mobile_number || current_claim.provide_mobile_number
   end
 
   def mobile_number
-    journey_session.answers[:mobile_number] || current_claim.mobile_number
+    journey_session.answers.mobile_number || current_claim.mobile_number
   end
 
   def email_verified
-    journey_session.answers[:email_verified] || current_claim.email_verified
+    journey_session.answers.email_verified || current_claim.email_verified
   end
 
   def mobile_verified
-    journey_session.answers[:mobile_verified] || current_claim.mobile_verified
+    journey_session.answers.mobile_verified || current_claim.mobile_verified
   end
 
   def hmrc_bank_validation_succeeded
-    journey_session.answers[:hmrc_bank_validation_succeeded] || current_claim.hmrc_bank_validation_succeeded
+    journey_session.answers.hmrc_bank_validation_succeeded || current_claim.hmrc_bank_validation_succeeded
   end
 
   def hmrc_bank_validation_responses
-    journey_session.answers[:hmrc_bank_validation_responses] || current_claim.hmrc_bank_validation_responses
+    journey_session.answers.hmrc_bank_validation_responses || current_claim.hmrc_bank_validation_responses
   end
 
   def logged_in_with_tid
-    journey_session.answers[:logged_in_with_tid] || current_claim.logged_in_with_tid
+    journey_session.answers.logged_in_with_tid || current_claim.logged_in_with_tid
   end
 
   def teacher_id_user_info
-    journey_session.answers[:teacher_id_user_info] || current_claim.teacher_id_user_info
+    journey_session.answers.teacher_id_user_info || current_claim.teacher_id_user_info
   end
 
   def email_address_check
-    journey_session.answers[:email_address_check] || current_claim.email_address_check
+    journey_session.answers.email_address_check || current_claim.email_address_check
   end
 
   def mobile_check
-    journey_session.answers[:mobile_check] || current_claim.mobile_check
+    journey_session.answers.mobile_check || current_claim.mobile_check
   end
 
   def qualifications_details_check
-    journey_session.answers[:qualifications_details_check] || current_claim.qualifications_details_check
+    journey_session.answers.qualifications_details_check || current_claim.qualifications_details_check
   end
 
   def eligibilities
