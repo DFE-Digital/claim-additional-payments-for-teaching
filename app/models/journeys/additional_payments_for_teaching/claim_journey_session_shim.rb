@@ -1,10 +1,16 @@
+# Temp class to allow working with the current_claims and the journey_session.
+# As each form is updated to write to the journey_session rather than the
+# current_claim we can remove the corresponding methods and update the answers
+# hash to pull it's answer directly from the journey_session. When all answers
+# in the answers hash have been updated to only refer to the journey_session
+# this class can be removed.
+
 module Journeys
   module AdditionalPaymentsForTeaching
     class ClaimJourneySessionShim < ClaimJourneySessionShim
       def answers
-        # NOTE RL: Call this out in commit message
-        OpenStruct.new(
-          attributes: super.merge(
+        SessionAnswers.new(
+          super.merge(
             {
               nqt_in_academic_year_after_itt: nqt_in_academic_year_after_itt,
               employed_as_supply_teacher: employed_as_supply_teacher,

@@ -30,7 +30,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::ClaimSubmissionForm do
       banking_name: "Seymour W Skinner",
       building_society_roll_number: "12345678",
       academic_year: journey.configuration.current_academic_year.to_s,
-      bank_or_building_society: "First bank of Springfield",
+      bank_or_building_society: "personal_bank_account",
       provide_mobile_number: true,
       mobile_number: "07123456789",
       email_verified: true,
