@@ -3,10 +3,6 @@ module Journeys
     class ClaimSubmissionForm < ::ClaimSubmissionBaseForm
       private
 
-      def journey
-        Journeys::TeacherStudentLoanReimbursement
-      end
-
       def main_eligibility
         @main_eligibility ||= eligibilities.first
       end
