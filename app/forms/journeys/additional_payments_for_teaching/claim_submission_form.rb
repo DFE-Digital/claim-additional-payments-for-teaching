@@ -3,13 +3,16 @@ module Journeys
     class ClaimSubmissionForm < ::ClaimSubmissionBaseForm
       private
 
-      def journey
-        Journeys::AdditionalPaymentsForTeaching
-      end
-
       def selected_claim_policy
-        if answers.selected_policy.present?
-          "Policies::#{answers.selected_policy}".constantize
+        case answers.selected_policy
+        when "EarlyCareerPayments"
+          Policies::EarlyCareerPayments
+        when "LevellingUpPremiumPayments"
+          Policies::LevellingUpPremiumPayments
+        when nil
+          nil
+        else
+          fail "Invalid policy selected: #{answers.selected_policy}"
         end
       end
 

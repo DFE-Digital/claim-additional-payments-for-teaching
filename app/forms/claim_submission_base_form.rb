@@ -130,4 +130,8 @@ class ClaimSubmissionBaseForm
   def i18n_error_message(attr)
     I18n.t("#{journey::I18N_NAMESPACE}.forms.claim_submission_form.errors.#{attr}")
   end
+
+  def journey
+    self.class.module_parent
+  end
 end
