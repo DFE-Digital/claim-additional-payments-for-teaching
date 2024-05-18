@@ -19,9 +19,16 @@ module Policies
         to: :record
       )
 
-      def initialize(record, claim)
+      delegate(
+        :qualification,
+        :itt_academic_year,
+        :eligible_itt_subject,
+        to: :answers
+      )
+
+      def initialize(record, answers)
         @record = record
-        @claim = claim
+        @answers = answers
       end
 
       def eligible?
@@ -59,7 +66,11 @@ module Policies
 
       private
 
-      attr_reader :record, :claim
+      attr_reader :record, :answers
+
+      def itt_subject_none_of_the_above?
+        eligible_itt_subject&.to_sym == :none_of_the_above
+      end
 
       def current_academic_year
         Journeys.for_policy(LevellingUpPremiumPayments).configuration.current_academic_year
@@ -74,8 +85,8 @@ module Policies
       end
 
       def eligible_subject_and_none_of_the_above?
-        return false if claim.eligibility.itt_subject_none_of_the_above? && eligible_subject?
-        return true if claim.eligibility.itt_subject_none_of_the_above?
+        return false if itt_subject_none_of_the_above? && eligible_subject?
+        return true if itt_subject_none_of_the_above?
 
         eligible_subject?
       end
@@ -85,9 +96,9 @@ module Policies
       end
 
       def applicable_eligible_subjects
-        return ELIGIBLE_ITT_SUBJECTS.values.flatten if claim.eligibility.itt_subject_none_of_the_above?
+        return ELIGIBLE_ITT_SUBJECTS.values.flatten if itt_subject_none_of_the_above?
 
-        ELIGIBLE_ITT_SUBJECTS[claim.eligibility.eligible_itt_subject.to_sym]
+        ELIGIBLE_ITT_SUBJECTS[eligible_itt_subject&.to_sym]
       end
 
       def eligible_subject?

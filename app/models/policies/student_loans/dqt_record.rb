@@ -27,7 +27,7 @@ module Policies
       # The record transformed from a DQTReportCsv. Expected to contain the keys:
       # :qts_date - The date the teacher achieved qualified teacher status.
       #             Format: %d/%m/%Y
-      def initialize(record, _ = nil)
+      def initialize(record, answers = nil)
         @record = record
       end
 

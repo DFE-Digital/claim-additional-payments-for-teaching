@@ -18,9 +18,17 @@ module Policies
         to: :record
       )
 
-      def initialize(record, claim)
-        @claim = claim
+      delegate(
+        :qualification,
+        :itt_academic_year,
+        :academic_year,
+        :eligible_itt_subject,
+        to: :answers
+      )
+
+      def initialize(record, answers)
         @record = record
+        @answers = answers
       end
 
       def eligible?
@@ -37,7 +45,7 @@ module Policies
 
       # TODO: May need to prioritise subject chosen by highest award amount?
       def eligible_itt_subject_for_claim
-        year = itt_year || claim.eligibility.itt_academic_year # The user may have supplied this manually if it was missing from the DQT record
+        year = itt_year || itt_academic_year # The user may have supplied this manually if it was missing from the DQT record
 
         return :none_of_the_above if itt_subject_groups.empty? || !year
 
@@ -64,18 +72,18 @@ module Policies
 
       private
 
-      attr_reader :claim, :record
+      attr_reader :record, :answers
 
       def current_academic_year
         Journeys::AdditionalPaymentsForTeaching.configuration.current_academic_year
       end
 
       def eligible_itt_year?
-        AcademicYear.new(itt_year).eql?(claim.eligibility.itt_academic_year)
+        AcademicYear.new(itt_year).eql?(itt_academic_year)
       end
 
       def award_due?
-        award_args = {policy_year: claim.academic_year, itt_year: itt_year, subject_symbol: eligible_itt_subject_group}
+        award_args = {policy_year: academic_year, itt_year: itt_year, subject_symbol: eligible_itt_subject_group}
 
         if award_args.values.any?(&:blank?)
           false
@@ -94,11 +102,11 @@ module Policies
       end
 
       def eligible_itt_subject_group
-        itt_subject_groups.find { |group| group == claim.eligibility.eligible_itt_subject.to_sym }
+        itt_subject_groups.find { |group| group == eligible_itt_subject&.to_sym }
       end
 
       def eligible_subject?
-        (ELIGIBLE_ITT_SUBJECTS[claim.eligibility.eligible_itt_subject.to_sym] & itt_subjects).any?
+        (ELIGIBLE_ITT_SUBJECTS[eligible_itt_subject&.to_sym] & itt_subjects).any?
       end
     end
   end

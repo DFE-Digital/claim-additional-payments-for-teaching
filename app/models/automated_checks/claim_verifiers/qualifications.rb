@@ -88,7 +88,7 @@ module AutomatedChecks
           dqt_teacher_status
         end
 
-        @dqt_teacher_status = claim.policy::DqtRecord.new(dqt_teacher_status, claim)
+        @dqt_teacher_status = claim.policy::DqtRecord.new(dqt_teacher_status, claim.eligibility)
       end
 
       def no_match

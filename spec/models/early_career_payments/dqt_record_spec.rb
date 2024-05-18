@@ -1,31 +1,11 @@
 require "rails_helper"
 
 RSpec.describe Policies::EarlyCareerPayments::DqtRecord do
-  subject(:dqt_record) do
-    described_class.new(
-      record,
-      claim
-    )
+  before do
+    create(:journey_configuration, :additional_payments)
   end
 
-  let(:claim) do
-    build(
-      :claim,
-      policy: Policies::EarlyCareerPayments,
-      academic_year: claim_academic_year,
-      eligibility: eligibility
-    )
-  end
-
-  let(:eligibility) do
-    build(
-      :early_career_payments_eligibility,
-      :eligible,
-      eligible_itt_subject: eligible_itt_subject,
-      qualification: qualification,
-      itt_academic_year: itt_academic_year
-    )
-  end
+  subject(:dqt_record) { described_class.new(record, claim) }
 
   let(:eligible_itt_subject) { :mathematics }
   let(:qualification) { :undergraduate_itt }
@@ -40,6 +20,17 @@ RSpec.describe Policies::EarlyCareerPayments::DqtRecord do
         itt_start_date: record_itt_date,
         qts_award_date: record_qts_date,
         qualification_name: record_qualification_name
+      }
+    )
+  end
+
+  let(:claim) do
+    OpenStruct.new(
+      {
+        qualification: qualification,
+        itt_academic_year: itt_academic_year,
+        academic_year: claim_academic_year,
+        eligible_itt_subject: eligible_itt_subject
       }
     )
   end

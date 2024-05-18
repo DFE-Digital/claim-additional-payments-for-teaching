@@ -458,7 +458,7 @@ class Claim < ApplicationRecord
   end
 
   def dqt_teacher_record
-    policy::DqtRecord.new(Dqt::Teacher.new(dqt_teacher_status), self) if has_dqt_record?
+    policy::DqtRecord.new(Dqt::Teacher.new(dqt_teacher_status), eligibility) if has_dqt_record?
   end
 
   private
