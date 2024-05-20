@@ -26,6 +26,7 @@ jobs:
         uses: DFE-Digital/github-actions/build-docker-image@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          dockerfile-path: ./Dockerfile.aks
           context: .
 
   deploy_review:
