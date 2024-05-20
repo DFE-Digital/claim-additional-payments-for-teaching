@@ -9,8 +9,6 @@ class Form
   attr_accessor :journey_session
   attr_accessor :params
 
-  delegate :persisted?, to: :claim
-
   def self.model_name
     Claim.model_name
   end
@@ -53,7 +51,11 @@ class Form
   end
 
   def permitted_params
-    @permitted_params ||= params.fetch(:claim, {}).permit(*permitted_attributes)
+    @permitted_params ||= params.fetch(model_name.param_key, {}).permit(*permitted_attributes)
+  end
+
+  def persisted?
+    true
   end
 
   private

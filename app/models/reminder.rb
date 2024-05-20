@@ -2,17 +2,6 @@ class Reminder < ApplicationRecord
   attribute :sent_one_time_password_at, :datetime
   attribute :one_time_password, :string, limit: 6
 
-  validates :full_name, on: [:"personal-details"], presence: {message: "Enter full name"}
-  validates :full_name, length: {maximum: 100, message: "Full name must be 100 characters or less"}
-
-  validates :email_address, on: [:"personal-details"], presence: {message: "Enter an email address"}
-  validates :email_address, format: {with: Rails.application.config.email_regexp, message: "Enter an email address in the correct format, like name@example.com"},
-    length: {maximum: 256, message: "Email address must be 256 characters or less"}, if: -> { email_address.present? }
-
-  validate :otp_validate, on: [:"email-verification"]
-
-  before_save :normalise_one_time_password, if: :one_time_password_changed?
-
   scope :email_verified, -> { where(email_verified: true) }
   scope :not_yet_sent, -> { where(email_sent_at: nil) }
   scope :inside_academic_year, -> { where(itt_academic_year: AcademicYear.current.to_s) }
@@ -34,23 +23,5 @@ class Reminder < ApplicationRecord
     AcademicYear.new(
       read_attribute(:itt_academic_year)
     )
-  end
-
-  def add_invalid_email_error(msg)
-    errors.add(:email_address, :invalid, message: msg)
-  end
-
-  def normalise_one_time_password
-    self.one_time_password = one_time_password.gsub(/\D/, "")
-  end
-
-  def otp_validate
-    return write_attribute(:email_verified, true) if otp.valid?
-
-    errors.add(:one_time_password, otp.warning)
-  end
-
-  def otp
-    @otp ||= OneTimePassword::Validator.new(one_time_password, sent_one_time_password_at)
   end
 end

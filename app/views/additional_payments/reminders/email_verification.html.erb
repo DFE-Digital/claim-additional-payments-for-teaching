@@ -1,3 +1,3 @@
-<% content_for(:page_title, page_title(t("one_time_password.title"), journey: current_journey_routing_name, show_error: current_reminder.errors.any?)) %>
+<% content_for(:page_title, page_title(t("one_time_password.title"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
-<%= render partial: "reminders/one_time_password", locals: {current_reminder: current_reminder, current_journey_routing_name: current_journey_routing_name} %>
+<%= render partial: "reminders/one_time_password", locals: {current_journey_routing_name: current_journey_routing_name} %>

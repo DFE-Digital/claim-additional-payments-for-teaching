@@ -11,17 +11,19 @@ module Journeys
     POLICIES = [Policies::StudentLoans]
 
     FORMS = {
-      "claim-school" => ClaimSchoolForm,
-      "qualification-details" => QualificationDetailsForm,
-      "qts-year" => QtsYearForm,
-      "subjects-taught" => SubjectsTaughtForm,
-      "still-teaching" => StillTeachingForm,
-      "leadership-position" => LeadershipPositionForm,
-      "mostly-performed-leadership-duties" => MostlyPerformedLeadershipDutiesForm,
-      "reset-claim" => ResetClaimForm,
-      "postcode-search" => PostcodeSearchForm,
-      "select-claim-school" => SelectClaimSchoolForm,
-      "select-home-address" => SelectHomeAddressForm
-    }
+      "claims" => {
+        "claim-school" => ClaimSchoolForm,
+        "qualification-details" => QualificationDetailsForm,
+        "qts-year" => QtsYearForm,
+        "subjects-taught" => SubjectsTaughtForm,
+        "still-teaching" => StillTeachingForm,
+        "leadership-position" => LeadershipPositionForm,
+        "mostly-performed-leadership-duties" => MostlyPerformedLeadershipDutiesForm,
+        "reset-claim" => ResetClaimForm,
+        "postcode-search" => PostcodeSearchForm,
+        "select-claim-school" => SelectClaimSchoolForm,
+        "select-home-address" => SelectHomeAddressForm
+      }
+    }.freeze
   end
 end

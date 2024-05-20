@@ -74,6 +74,12 @@ RSpec.describe EmailVerificationForm do
           it { is_expected.not_to be_valid }
         end
 
+        context "when the code generation timestamp is missing" do
+          let(:one_time_password) { OneTimePassword::Generator.new.code }
+          let(:sent_one_time_password_at) { nil }
+          it { is_expected.not_to be_valid }
+        end
+
         context "when correct code" do
           let(:one_time_password) { OneTimePassword::Generator.new.code }
           let(:sent_one_time_password_at) { Time.now }

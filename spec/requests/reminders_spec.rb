@@ -4,10 +4,14 @@ RSpec.describe "Claims" do
   before { create(:journey_configuration, :additional_payments) }
 
   describe "#create" do
+    before do
+      allow_any_instance_of(BasePublicController).to receive(:current_claim).and_return(current_claim)
+    end
+    let(:current_claim) { create(:claim, policy: Policies::LevellingUpPremiumPayments) }
     let(:submit_form) { post reminders_path("additional-payments", params: form_params) }
 
     context "with full name and valid email address" do
-      let(:form_params) { {reminder: {full_name: "Joe Bloggs", email_address: "joe.bloggs@example.com"}} }
+      let(:form_params) { {form: {full_name: "Joe Bloggs", email_address: "joe.bloggs@example.com"}} }
 
       it "redirects to /email-verfication slug" do
         submit_form
@@ -16,7 +20,7 @@ RSpec.describe "Claims" do
     end
 
     context "with empty form" do
-      let(:form_params) { {reminder: {full_name: "", email_address: ""}} }
+      let(:form_params) { {form: {full_name: "", email_address: ""}} }
 
       before { submit_form }
 
@@ -30,7 +34,7 @@ RSpec.describe "Claims" do
     end
 
     context "invalid email address" do
-      let(:form_params) { {reminder: {full_name: "Joe Bloggs", email_address: "joe.bloggs.example.com"}} }
+      let(:form_params) { {form: {full_name: "Joe Bloggs", email_address: "joe.bloggs.example.com"}} }
 
       it "renders errors containing invalid email address" do
         submit_form
@@ -39,7 +43,7 @@ RSpec.describe "Claims" do
     end
 
     context "Notify returns an error about email address is required" do
-      let(:form_params) { {reminder: {full_name: "Joe Bloggs", email_address: "joe.bloggs@example.com"}} }
+      let(:form_params) { {form: {full_name: "Joe Bloggs", email_address: "joe.bloggs@example.com"}} }
 
       let(:mailer) { double("notify") }
       let(:notifications_error_response) { double("response", code: 400, body: "ValidationError: email_address is a required property") }
@@ -56,7 +60,7 @@ RSpec.describe "Claims" do
     end
 
     context "Notify returns an error about team only API key" do
-      let(:form_params) { {reminder: {full_name: "Joe Bloggs", email_address: "joe.bloggs@example.com"}} }
+      let(:form_params) { {form: {full_name: "Joe Bloggs", email_address: "joe.bloggs@example.com"}} }
 
       let(:mailer) { double("notify") }
       let(:notifications_error_response) { double("response", code: 400, body: "BadRequestError: Can’t send to this recipient using a team-only API key") }
@@ -73,7 +77,7 @@ RSpec.describe "Claims" do
     end
 
     context "Notify returns an unknown error" do
-      let(:form_params) { {reminder: {full_name: "Joe Bloggs", email_address: "joe.bloggs@example.com"}} }
+      let(:form_params) { {form: {full_name: "Joe Bloggs", email_address: "joe.bloggs@example.com"}} }
 
       let(:mailer) { double("notify") }
       let(:notifications_error_response) { double("response", code: 400, body: "Something unexpected") }
