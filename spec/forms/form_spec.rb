@@ -75,7 +75,8 @@ RSpec.describe Form, type: :model do
             :student_loans_session,
             answers: {
               first_name: "existing-name",
-              student_loan_repayment_amount: 2000
+              student_loan_repayment_amount: 2000,
+              answered: %w[first_name student_loan_repayment_amount]
             }
           )
         end
@@ -107,7 +108,8 @@ RSpec.describe Form, type: :model do
             :student_loans_session,
             answers: {
               first_name: "existing-name",
-              student_loan_repayment_amount: nil
+              student_loan_repayment_amount: nil,
+              answered: %w[first_name student_loan_repayment_amount]
             }
           )
         end

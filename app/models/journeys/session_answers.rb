@@ -2,6 +2,7 @@ module Journeys
   class SessionAnswers
     include ActiveModel::Model
     include ActiveModel::Attributes
+    include ActiveModel::Dirty
 
     attribute :current_school_id, :string # UUID
     attribute :selected_policy, :string
@@ -36,6 +37,7 @@ module Journeys
     attribute :email_address_check, :boolean
     attribute :mobile_check, :string
     attribute :qualifications_details_check, :boolean
+    attribute :answered, default: []
 
     def has_attribute?(name)
       attribute_names.include?(name.to_s)
