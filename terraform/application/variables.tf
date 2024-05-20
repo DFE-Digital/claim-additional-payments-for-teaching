@@ -49,12 +49,7 @@ variable "enable_monitoring" {
   default     = false
   description = "Enable monitoring and alerting"
 }
-variable "config" {
-  type = string
-}
 
 locals {
   postgres_ssl_mode = var.enable_postgres_ssl ? "require" : "disable"
-  app_env_values_from_yml = yamldecode(file("${path.module}/config/${var.config}_app_env.yml"))
-  app_env_values = merge(local.app_env_values_from_yml)
 }
