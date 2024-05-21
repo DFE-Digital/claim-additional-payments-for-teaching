@@ -12,31 +12,23 @@ class ClaimsController < BasePublicController
 
   helper_method :next_slug
 
+  include FormSubmittable
+  include ClaimsFormCallbacks
+
+  skip_before_action :before_update, only: [:update, :create]
+  skip_before_action :load_form_if_exists, only:[:update, :create]
+  skip_around_action :handle_form_submission, only: [:update, :create]
+
+  def current_data_object
+    current_claim
+  end
+
   def new
     persist
   end
 
   def create
     persist
-  end
-
-  def show
-    if params[:slug] == "teaching-subject-now" && no_eligible_itt_subject?
-      return redirect_to claim_path(current_journey_routing_name, "eligible-itt-subject")
-    end
-
-    if params[:slug] == "qualification-details"
-      return redirect_to claim_path(current_journey_routing_name, next_slug) if current_claim.has_no_dqt_data_for_claim?
-    end
-
-    # TODO: Migrate the remaining slugs to form objects.
-    if @form ||= journey.form(claim: current_claim, journey_session:, params:)
-      set_any_backlink_override
-      render current_template
-      return
-    end
-
-    render current_template
   end
 
   def update
@@ -146,6 +138,10 @@ class ClaimsController < BasePublicController
     params.fetch(:claim, {}).permit(Claim::PermittedParameters.new(current_claim).keys)
   end
 
+  def current_slug
+    page_sequence.current_slug
+  end
+
   def current_template
     page_sequence.current_slug.underscore
   end
@@ -210,10 +206,6 @@ class ClaimsController < BasePublicController
 
   def failed_details_check_with_teacher_id?
     !current_claim.details_check? && current_claim.logged_in_with_tid?
-  end
-
-  def no_eligible_itt_subject?
-    !current_claim.eligible_itt_subject
   end
 
   def retrieve_student_loan_details

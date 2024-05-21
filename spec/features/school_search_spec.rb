@@ -50,6 +50,9 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
       # flaky test workaround in case the first click on Continue submitted the form
       click_button "Continue" unless /claim-school\?_method=patch/.match?(current_url)
 
+      # Backlink is to the same slug as current (claim-school)
+      expect(page).to have_link("Back", href: claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"))
+
       choose school.name
 
       click_button "Continue"
@@ -74,9 +77,11 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
       expect(page).to have_button("Continue")
 
       click_button "Continue"
-
       # flaky test workaround in case the first click on Continue submitted the form
       click_button "Continue" unless /current-school\?_method=patch/.match?(current_url)
+
+      # Backlink is to the same slug as current (current-school)
+      expect(page).to have_link("Back", href: claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "current-school"))
 
       click_button "Continue"
 
@@ -202,7 +207,8 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
       fill_in :school_search, with: search_keywords(school)
       click_on "Continue"
 
-      expect(page).to have_link("Back")
+      # Backlink is to the same slug as current (current-school)
+      expect(page).to have_link("Back", href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "current-school"))
 
       click_on "Continue"
 
