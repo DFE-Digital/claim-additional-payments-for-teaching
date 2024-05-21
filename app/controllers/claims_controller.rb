@@ -15,9 +15,9 @@ class ClaimsController < BasePublicController
   include FormSubmittable
   include ClaimsFormCallbacks
 
-  skip_before_action :before_update, only: [:update, :create]
-  skip_before_action :load_form_if_exists, only:[:update, :create]
-  skip_around_action :handle_form_submission, only: [:update, :create]
+  skip_before_action :before_update, only: [:create]
+  skip_before_action :load_form_if_exists, only: [:create]
+  skip_around_action :handle_form_submission, only: [:create]
 
   def current_data_object
     current_claim
@@ -29,40 +29,6 @@ class ClaimsController < BasePublicController
 
   def create
     persist
-  end
-
-  def update
-    params[:claim][:hmrc_validation_attempt_count] = session[:hmrc_validation_attempt_count] || 0 if on_banking_page?
-
-    # TODO: Migrate the remaining slugs to form objects.
-    if (@form = journey.form(claim: current_claim, journey_session:, params:))
-      if @form.save
-        retrieve_student_loan_details
-        update_session_with_selected_policy
-        redirect_to claim_path(current_journey_routing_name, next_slug)
-      else
-        session[:hmrc_validation_attempt_count] = (session[:hmrc_validation_attempt_count] || 0) + 1 if on_banking_page? && @form.hmrc_api_validation_attempted?
-        set_any_backlink_override
-        show
-      end
-
-      return
-    end
-
-    current_claim.attributes = claim_params
-    current_claim.reset_dependent_answers unless params[:slug] == "select-mobile"
-    current_claim.reset_eligibility_dependent_answers(reset_attrs) unless params[:slug] == "qualification-details"
-
-    if current_claim.save(context: page_sequence.current_slug.to_sym)
-      retrieve_student_loan_details
-      redirect_to claim_path(current_journey_routing_name, next_slug)
-    else
-      show
-    end
-  rescue OrdnanceSurvey::Client::ResponseError => e
-    Rollbar.error(e)
-    flash[:notice] = "Please enter your address manually"
-    redirect_to claim_path(current_journey_routing_name, "address")
   end
 
   def timeout
@@ -108,17 +74,6 @@ class ClaimsController < BasePublicController
 
   def set_any_backlink_override
     @backlink_path = @form.backlink_path if @form.backlink_path
-  end
-
-  def update_session_with_selected_policy
-    # The following is a journey-specific behaviour that cannot be encapsulated inside
-    # the relevant form. The claimant answers are stored on the claim in the database,
-    # but `selected_claim_policy` is not an answer we need to persist, not at the moment.
-    # TODO: revisit this once the claimant's answers are all moved to the session, as at
-    # that point we can probably encapsulate this behaviour somewhere else
-    if current_journey_routing_name == "additional-payments" && params[:slug] == "eligibility-confirmed"
-      session[:selected_claim_policy] = @form.selected_claim_policy
-    end
   end
 
   def previous_slug
@@ -190,10 +145,6 @@ class ClaimsController < BasePublicController
     prepend_view_path("app/views/#{current_journey_routing_name.underscore}")
   end
 
-  def on_banking_page?
-    %w[personal-bank-account building-society-account].include?(params[:slug])
-  end
-
   def reset_attrs
     return [] unless claim_params["eligibility_attributes"]
 
@@ -206,20 +157,5 @@ class ClaimsController < BasePublicController
 
   def failed_details_check_with_teacher_id?
     !current_claim.details_check? && current_claim.logged_in_with_tid?
-  end
-
-  def retrieve_student_loan_details
-    # student loan details are currently retrieved for TSLR and ECP/LUPP journeys only
-    return unless ["student-loans", "additional-payments"].include?(current_journey_routing_name)
-
-    # Applicants' student loan details must be retrieved any time their personal details are
-    # updated using the `personal-details` page. This is normally the case when using the non-TID
-    # route, or when using the TID-route but not all personal details came through/are valid.
-    # For claims being submitted using the TID-route and where all personal details came through/are
-    # valid, the student loan details must be retrieved after the `information-provided` page instead.
-    if params[:slug] == "personal-details" || (params[:slug] == "information-provided" &&
-        current_claim.logged_in_with_tid? && current_claim.all_personal_details_same_as_tid?)
-      ClaimStudentLoanDetailsUpdater.call(current_claim)
-    end
   end
 end

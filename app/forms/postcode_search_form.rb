@@ -28,6 +28,9 @@ class PostcodeSearchForm < Form
     return unless address_data.nil?
 
     errors.add(:postcode, "Address not found")
+  rescue OrdnanceSurvey::Client::ResponseError => e
+    Rollbar.error(e)
+    errors.add(:base, "Please enter your address manually")
   end
 
   def postcode_is_valid
