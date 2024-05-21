@@ -9,6 +9,21 @@ module Journeys
           message: ->(form, _) { form.i18n_errors_path("qualifications_details_check") }
         }
 
+      def initialize(...)
+        super
+
+        # FIXME RL: This is a hack to avoid having to change too much in one
+        # commit (we're already changing a lot). The DQT record checks these
+        # attributes we're setting to determine it's answers, however we've not
+        # migrated the forms that set these attributes to write to the journey
+        # session ansswers, so we need to set these values from the elgiibility
+        # here.
+        journey_session.answers.itt_academic_year = claim.eligibility.itt_academic_year
+        journey_session.answers.eligible_itt_subject = claim.eligibility.eligible_itt_subject
+        journey_session.answers.qualification = claim.eligibility.qualification
+        journey_session.answers.eligible_degree_subject = claim.for_policy(Policies::LevellingUpPremiumPayments).eligibility.eligible_degree_subject
+      end
+
       def save
         return false unless valid?
 
@@ -30,32 +45,41 @@ module Journeys
       end
 
       def dqt_route_into_teaching
-        claim.dqt_teacher_record.route_into_teaching
+        main_dqt_teacher_record.route_into_teaching
       end
 
       def dqt_academic_date
-        AcademicYear.for(claim.dqt_teacher_record.academic_date)
+        AcademicYear.for(main_dqt_teacher_record.academic_date)
       end
 
       def dqt_itt_subjects
-        claim.dqt_teacher_record.itt_subjects.map do |subject|
+        main_dqt_teacher_record.itt_subjects.map do |subject|
           format_subject(subject)
         end.join(", ")
       end
 
       def show_degree_subjects?
-        claim.claims.any? do |c|
-          c.dqt_teacher_record.eligible_itt_subject_for_claim == :none_of_the_above
-        end && claim.dqt_teacher_record.degree_names.any?
+        [
+          answers.ecp_dqt_teacher_record,
+          answers.lup_dqt_teacher_record
+        ].any? do |dqt_teacher_record|
+          dqt_teacher_record.eligible_itt_subject_for_claim == :none_of_the_above
+        end && main_dqt_teacher_record.degree_names.any?
       end
 
       def dqt_degree_subjects
-        claim.dqt_teacher_record.degree_names.map do |subject|
+        main_dqt_teacher_record.degree_names.map do |subject|
           format_subject(subject)
         end.join(", ")
       end
 
       private
+
+      # Current claim delegates missing methods to ecp eligibility by default
+      # so we'll assume that's the "main" dqt record
+      def main_dqt_teacher_record
+        answers.ecp_dqt_teacher_record
+      end
 
       # Often the DQT record will represent subject names in all lowercase
       def format_subject(string)
@@ -63,21 +87,19 @@ module Journeys
       end
 
       def set_qualifications_from_dqt_record(eligibility)
-        dqt_record = eligibility.claim.dqt_teacher_record
-
         case eligibility
         when Policies::EarlyCareerPayments::Eligibility
           eligibility.assign_attributes(
-            itt_academic_year: itt_academic_year(dqt_record, eligibility),
-            eligible_itt_subject: eligible_itt_subject(dqt_record, eligibility),
-            qualification: qualification(dqt_record, eligibility)
+            itt_academic_year: itt_academic_year(answers.ecp_dqt_teacher_record, eligibility),
+            eligible_itt_subject: eligible_itt_subject(answers.ecp_dqt_teacher_record, eligibility),
+            qualification: qualification(answers.ecp_dqt_teacher_record, eligibility)
           )
         when Policies::LevellingUpPremiumPayments::Eligibility
           eligibility.assign_attributes(
-            itt_academic_year: itt_academic_year(dqt_record, eligibility),
-            eligible_itt_subject: eligible_itt_subject(dqt_record, eligibility),
-            qualification: qualification(dqt_record, eligibility),
-            eligible_degree_subject: eligible_degree_subject(dqt_record, eligibility)
+            itt_academic_year: itt_academic_year(answers.lup_dqt_teacher_record, eligibility),
+            eligible_itt_subject: eligible_itt_subject(answers.lup_dqt_teacher_record, eligibility),
+            qualification: qualification(answers.lup_dqt_teacher_record, eligibility),
+            eligible_degree_subject: eligible_degree_subject(answers.lup_dqt_teacher_record, eligibility)
           )
         else
           fail "Unknown eligibility type #{eligibility.class}"

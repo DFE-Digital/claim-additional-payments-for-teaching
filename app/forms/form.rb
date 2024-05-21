@@ -9,6 +9,8 @@ class Form
   attr_accessor :journey_session
   attr_accessor :params
 
+  delegate :answers, to: :journey_session
+
   def self.model_name
     Claim.model_name
   end

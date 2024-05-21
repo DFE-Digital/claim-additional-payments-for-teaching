@@ -10,7 +10,7 @@ module Journeys
         }
 
       def dqt_qts_award_date
-        AcademicYear.for(dqt_teacher_record.qts_award_date)
+        AcademicYear.for(answers.dqt_teacher_record.qts_award_date)
       end
 
       def save
@@ -24,18 +24,14 @@ module Journeys
 
       private
 
-      def dqt_teacher_record
-        @dqt_teacher_record ||= claim.eligibility.claim.dqt_teacher_record
-      end
-
       def qts_award_year
         # Teacher has said the details don't match what they expected so
         # nullify them
         return nil unless qualifications_details_check
 
-        return nil unless dqt_teacher_record&.qts_award_date
+        return nil unless answers.dqt_teacher_record&.qts_award_date
 
-        if dqt_teacher_record.eligible_qts_award_date?
+        if answers.dqt_teacher_record.eligible_qts_award_date?
           :on_or_after_cut_off_date
         else
           :before_cut_off_date

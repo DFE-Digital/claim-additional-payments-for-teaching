@@ -1,9 +1,12 @@
 module Journeys
   class BaseAnswersPresenter
-    attr_reader :claim, :eligibility
+    attr_reader :claim, :eligibility, :journey_session
 
-    def initialize(claim)
+    delegate :answers, to: :journey_session
+
+    def initialize(claim, journey_session)
       @claim = claim
+      @journey_session = journey_session
 
       @eligibility = if @claim.is_a?(CurrentClaim)
         claim.eligible_eligibility
@@ -50,27 +53,27 @@ module Journeys
     end
 
     def show_name?
-      !(claim.logged_in_with_tid? && claim.name_same_as_tid?)
+      !(answers.logged_in_with_tid? && answers.name_same_as_tid?(claim))
     end
 
     def show_dob?
-      !(claim.logged_in_with_tid? && claim.dob_same_as_tid?)
+      !(answers.logged_in_with_tid? && answers.dob_same_as_tid?(claim))
     end
 
     def show_nino?
-      !(claim.logged_in_with_tid? && claim.nino_same_as_tid?)
+      !(answers.logged_in_with_tid? && answers.nino_same_as_tid?(claim))
     end
 
     def show_trn?
-      !(claim.logged_in_with_tid? && claim.trn_same_as_tid?)
+      !(answers.logged_in_with_tid? && answers.trn_same_as_tid?(claim))
     end
 
     def show_email_select?
-      claim.logged_in_with_tid? && claim.email_address_check?
+      answers.logged_in_with_tid? && claim.email_address_check?
     end
 
     def show_mobile_select?
-      claim.logged_in_with_tid? && claim.mobile_check.present?
+      answers.logged_in_with_tid? && claim.mobile_check.present?
     end
   end
 end

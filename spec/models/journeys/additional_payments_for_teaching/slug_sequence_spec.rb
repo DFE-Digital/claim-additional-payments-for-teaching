@@ -6,10 +6,28 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
   let(:eligibility) { create(:early_career_payments_eligibility, :eligible) }
   let(:eligibility_lup) { create(:levelling_up_premium_payments_eligibility, :eligible) }
 
-  let(:claim) { create(:claim, :skipped_tid, policy: Policies::EarlyCareerPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility, logged_in_with_tid:, details_check:, dqt_teacher_status:, qualifications_details_check:) }
+  let(:claim) do
+    create(
+      :claim,
+      :skipped_tid,
+      policy: Policies::EarlyCareerPayments,
+      academic_year: AcademicYear.new(2021),
+      eligibility: eligibility,
+      qualifications_details_check:
+    )
+  end
   let(:lup_claim) { create(:claim, :skipped_tid, policy: Policies::LevellingUpPremiumPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility_lup) }
   let(:current_claim) { CurrentClaim.new(claims: [claim, lup_claim]) }
-  let(:journey_session) { build(:additional_payments_session) }
+  let(:journey_session) do
+    create(
+      :additional_payments_session,
+      answers: {
+        logged_in_with_tid: logged_in_with_tid,
+        details_check: details_check,
+        dqt_teacher_status: dqt_teacher_status
+      }
+    )
+  end
   let(:teacher_id_enabled) { true }
   let(:logged_in_with_tid) { nil }
   let(:details_check) { nil }
@@ -48,8 +66,12 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
       let(:lup_dqt_record_double) { double(itt_academic_year_for_claim:, route_into_teaching:, eligible_itt_subject_for_claim:, has_no_data_for_claim?: has_no_data_for_claim?, eligible_degree_code?: eligible_degree_code?) }
 
       before do
-        allow(claim).to receive(:dqt_teacher_record).and_return(ecp_dqt_record_double)
-        allow(lup_claim).to receive(:dqt_teacher_record).and_return(lup_dqt_record_double)
+        allow_any_instance_of(
+          Journeys::AdditionalPaymentsForTeaching::SessionAnswers
+        ).to(receive(:ecp_dqt_teacher_record).and_return(ecp_dqt_record_double))
+        allow_any_instance_of(
+          Journeys::AdditionalPaymentsForTeaching::SessionAnswers
+        ).to(receive(:lup_dqt_teacher_record).and_return(lup_dqt_record_double))
       end
     end
 
@@ -136,20 +158,25 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
       end
 
       it "includes teacher reference number slug if teacher reference number is nil" do
-        claim.teacher_reference_number = nil
+        journey_session.answers.teacher_reference_number = nil
 
         expect(slug_sequence.slugs).to include("teacher-reference-number")
       end
 
       it "does not include teacher reference number slug if teacher reference number is not nil" do
-        claim.teacher_reference_number = "1234567"
+        journey_session.answers.teacher_reference_number = "1234567"
 
         expect(slug_sequence.slugs).not_to include("teacher-reference-number")
       end
 
       it "skips personal-details page if all details were provided and valid from TID" do
         dob = 30.years.ago.to_date
-        claim.teacher_id_user_info = {"given_name" => "John", "family_name" => "Doe", "birthdate" => dob.to_s, "ni_number" => "JH001234D"}
+        journey_session.answers.teacher_id_user_info = {
+          "given_name" => "John",
+          "family_name" => "Doe",
+          "birthdate" => dob.to_s,
+          "ni_number" => "JH001234D"
+        }
 
         claim.first_name = "John"
         claim.surname = "Doe"

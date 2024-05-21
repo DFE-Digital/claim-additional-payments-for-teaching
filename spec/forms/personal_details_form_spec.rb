@@ -12,7 +12,15 @@ RSpec.describe PersonalDetailsForm, type: :model do
       CurrentClaim.new(claims: claims)
     end
 
-    let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
+    let(:journey_session) do
+      build(
+        :"#{journey::I18N_NAMESPACE}_session",
+        answers: {
+          logged_in_with_tid: logged_in_with_tid,
+          teacher_id_user_info: teacher_id_user_info
+        }
+      )
+    end
 
     let(:slug) { "personal-details" }
     let(:params) { {} }
@@ -28,6 +36,8 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
     context "unpermitted claim param" do
       let(:params) { {nonsense_id: 1} }
+      let(:logged_in_with_tid) { nil }
+      let(:teacher_id_user_info) { {} }
 
       it "raises an error" do
         expect { form }.to raise_error ActionController::UnpermittedParameters
@@ -36,6 +46,9 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
     describe "#show_name_section?" do
       context "when not logged_in_with_tid" do
+        let(:logged_in_with_tid) { nil }
+        let(:teacher_id_user_info) { {} }
+
         it "returns true" do
           expect(form.show_name_section?).to be_truthy
         end
@@ -55,7 +68,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
           let(:family_name) { "Doe" }
 
           let(:current_claim) do
-            claims = journey::POLICIES.map { |policy| create(:claim, policy:, first_name: "Different", surname: "Doe", logged_in_with_tid:, teacher_id_user_info:) }
+            claims = journey::POLICIES.map { |policy| create(:claim, policy:, first_name: "Different", surname: "Doe") }
             CurrentClaim.new(claims: claims)
           end
 
@@ -66,7 +79,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
         context "when the name is the same as TID" do
           let(:current_claim) do
-            claims = journey::POLICIES.map { |policy| create(:claim, policy:, first_name: given_name, surname: family_name, logged_in_with_tid:, teacher_id_user_info:) }
+            claims = journey::POLICIES.map { |policy| create(:claim, policy:, first_name: given_name, surname: family_name) }
             CurrentClaim.new(claims: claims)
           end
 
@@ -102,6 +115,9 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
     describe "#show_date_of_birth_section?" do
       context "when not logged_in_with_tid" do
+        let(:logged_in_with_tid) { nil }
+        let(:teacher_id_user_info) { {} }
+
         it "returns true" do
           expect(form.show_date_of_birth_section?).to be_truthy
         end
@@ -119,7 +135,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
           let(:birthdate) { "1990-01-01" }
 
           let(:current_claim) do
-            claims = journey::POLICIES.map { |policy| create(:claim, policy:, date_of_birth: Date.new(1990, 2, 2), logged_in_with_tid:, teacher_id_user_info:) }
+            claims = journey::POLICIES.map { |policy| create(:claim, policy:, date_of_birth: Date.new(1990, 2, 2)) }
             CurrentClaim.new(claims: claims)
           end
 
@@ -130,7 +146,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
         context "when the date_of_birth is the same as TID" do
           let(:current_claim) do
-            claims = journey::POLICIES.map { |policy| create(:claim, policy:, date_of_birth:, logged_in_with_tid:, teacher_id_user_info:) }
+            claims = journey::POLICIES.map { |policy| create(:claim, policy:, date_of_birth:) }
             CurrentClaim.new(claims: claims)
           end
 
@@ -157,6 +173,9 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
     describe "#show_nino_section?" do
       context "when not logged_in_with_tid" do
+        let(:logged_in_with_tid) { nil }
+        let(:teacher_id_user_info) { {} }
+
         it "returns true" do
           expect(form.show_nino_section?).to be_truthy
         end
@@ -174,7 +193,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
           let(:ni_number) { "AB123456C" }
 
           let(:current_claim) do
-            claims = journey::POLICIES.map { |policy| create(:claim, policy:, national_insurance_number: "AB123456D", logged_in_with_tid:, teacher_id_user_info:) }
+            claims = journey::POLICIES.map { |policy| create(:claim, policy:, national_insurance_number: "AB123456D") }
             CurrentClaim.new(claims: claims)
           end
 
@@ -185,7 +204,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
         context "when the national_insurance_number is the same as TID" do
           let(:current_claim) do
-            claims = journey::POLICIES.map { |policy| create(:claim, policy:, national_insurance_number:, logged_in_with_tid:, teacher_id_user_info:) }
+            claims = journey::POLICIES.map { |policy| create(:claim, policy:, national_insurance_number:) }
             CurrentClaim.new(claims: claims)
           end
 
@@ -211,6 +230,9 @@ RSpec.describe PersonalDetailsForm, type: :model do
     end
 
     describe "validations" do
+      let(:logged_in_with_tid) { nil }
+      let(:teacher_id_user_info) { {} }
+
       it { should validate_presence_of(:first_name).with_message("Enter your first name") }
       it { should validate_length_of(:first_name).is_at_most(100).with_message("First name must be less than 100 characters") }
       it { should_not allow_value("*").for(:first_name).with_message("First name cannot contain special characters") }
@@ -287,6 +309,9 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
     describe "#save" do
       context "with valid params" do
+        let(:logged_in_with_tid) { nil }
+        let(:teacher_id_user_info) { {} }
+
         let(:params) do
           {
             first_name: "Dr",

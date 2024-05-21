@@ -68,6 +68,9 @@ class AcademicYear
     elsif year_or_academic_year_or_string.is_a? Integer
       @start_year = year_or_academic_year_or_string
       @end_year = @start_year + 1
+    elsif year_or_academic_year_or_string.is_a? Hash
+      @start_year = year_or_academic_year_or_string.with_indifferent_access[:start_year]
+      @end_year = year_or_academic_year_or_string.with_indifferent_access[:end_year]
     elsif year_or_academic_year_or_string.is_a? AcademicYear
       @start_year = year_or_academic_year_or_string.start_year
       @end_year = year_or_academic_year_or_string.end_year

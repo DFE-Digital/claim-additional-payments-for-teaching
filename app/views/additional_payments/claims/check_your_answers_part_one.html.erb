@@ -6,7 +6,7 @@
       <%= t("additional_payments.check_your_answers.part_one.primary_heading") %>
     </h1>
 
-    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Eligibility details", answers: journey.answers_for_claim(current_claim).eligibility_answers} %>
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Eligibility details", answers: journey.answers_for_claim(current_claim, journey_session).eligibility_answers} %>
 
     <p class="govuk-body"><%= t("additional_payments.check_your_answers.part_one.confirmation_notice") %></p>
 

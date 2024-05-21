@@ -25,6 +25,30 @@ module Journeys
       attribute :eligible_degree_subject, :boolean
       attribute :induction_completed, :boolean
       attribute :school_somewhere_else, :boolean
+
+      def ecp_dqt_teacher_record
+        return unless dqt_teacher_status.present?
+
+        @ecp_dqt_teacher_record ||= Policies::EarlyCareerPayments::DqtRecord.new(
+          Dqt::Teacher.new(dqt_teacher_status),
+          self
+        )
+      end
+
+      def lup_dqt_teacher_record
+        return unless dqt_teacher_status.present?
+
+        @lup_dqt_teacher_record ||= Policies::LevellingUpPremiumPayments::DqtRecord.new(
+          Dqt::Teacher.new(dqt_teacher_status),
+          self
+        )
+      end
+
+      def has_no_dqt_data_for_claim?
+        dqt_teacher_status.blank? || \
+          lup_dqt_teacher_record.has_no_data_for_claim? || \
+          ecp_dqt_teacher_record.has_no_data_for_claim?
+      end
     end
   end
 end

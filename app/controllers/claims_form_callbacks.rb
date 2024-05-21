@@ -88,7 +88,7 @@ module ClaimsFormCallbacks
   end
 
   def no_dqt_data?
-    current_claim.has_no_dqt_data_for_claim?
+    journey_session.answers.has_no_dqt_data_for_claim?
   end
 
   def no_postcode?
@@ -122,7 +122,7 @@ module ClaimsFormCallbacks
   end
 
   def on_tid_route?
-    current_claim.logged_in_with_tid? && current_claim.all_personal_details_same_as_tid?
+    journey_session.answers.logged_in_with_tid? && journey_session.answers.all_personal_details_same_as_tid?(current_claim)
   end
 
   def journey_requires_student_loan_details?

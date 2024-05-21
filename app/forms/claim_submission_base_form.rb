@@ -1,6 +1,8 @@
 class ClaimSubmissionBaseForm
   include ActiveModel::Model
 
+  attr_reader :journey_session
+
   validate :not_already_submitted
   validate :email_address_is_preesent
   validate :email_address_verified
@@ -29,8 +31,6 @@ class ClaimSubmissionBaseForm
   end
 
   private
-
-  attr_reader :journey_session
 
   delegate :answers, to: :journey_session
 

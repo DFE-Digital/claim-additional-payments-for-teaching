@@ -79,15 +79,15 @@ class ClaimJourneySessionShim
   end
 
   def date_of_birth
-    journey_session.answers.date_of_birth || current_claim.date_of_birth
+    journey_session.answers.date_of_birth.presence || current_claim.date_of_birth
   end
 
   def teacher_reference_number
-    journey_session.answers.teacher_reference_number || current_claim.teacher_reference_number
+    journey_session.answers.teacher_reference_number.presence || current_claim.teacher_reference_number
   end
 
   def national_insurance_number
-    journey_session.answers.national_insurance_number || current_claim.national_insurance_number
+    journey_session.answers.national_insurance_number.presence || current_claim.national_insurance_number
   end
 
   def email_address
@@ -111,7 +111,7 @@ class ClaimJourneySessionShim
   end
 
   def first_name
-    journey_session.answers.first_name || current_claim.first_name
+    journey_session.answers.first_name.presence || current_claim.first_name
   end
 
   def middle_name
@@ -119,7 +119,7 @@ class ClaimJourneySessionShim
   end
 
   def surname
-    journey_session.answers.surname || current_claim.surname
+    journey_session.answers.surname.presence || current_claim.surname
   end
 
   def banking_name

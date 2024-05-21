@@ -101,7 +101,7 @@ module Journeys
       end
 
       def qualification
-        return if eligibility.claim.qualifications_details_check && eligibility.claim.dqt_teacher_record&.route_into_teaching
+        return if eligibility.claim.qualifications_details_check && answers.ecp_dqt_teacher_record&.route_into_teaching
 
         [
           t("additional_payments.forms.qualification.questions.which_route"),
@@ -111,7 +111,7 @@ module Journeys
       end
 
       def eligible_itt_subject
-        return if eligibility.claim.qualifications_details_check && eligibility.claim.dqt_teacher_record&.eligible_itt_subject_for_claim
+        return if eligibility.claim.qualifications_details_check && answers.ecp_dqt_teacher_record&.eligible_itt_subject_for_claim
 
         [
           eligible_itt_subject_translation(CurrentClaim.new(claims: [eligibility.claim])),
@@ -121,7 +121,7 @@ module Journeys
       end
 
       def eligible_degree_subject
-        return if !eligibility.respond_to?(:eligible_degree_subject) || !eligibility.eligible_degree_subject? || (eligibility.claim.qualifications_details_check && eligibility.claim.dqt_teacher_record&.eligible_degree_code?)
+        return if !eligibility.respond_to?(:eligible_degree_subject) || !eligibility.eligible_degree_subject? || (eligibility.claim.qualifications_details_check && answers.lup_dqt_teacher_record&.eligible_degree_code?)
 
         [
           t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"),
@@ -139,7 +139,7 @@ module Journeys
       end
 
       def itt_academic_year
-        return if eligibility.claim.qualifications_details_check && eligibility.claim.dqt_teacher_record&.itt_academic_year_for_claim
+        return if eligibility.claim.qualifications_details_check && answers.ecp_dqt_teacher_record&.itt_academic_year_for_claim
 
         [
           I18n.t("additional_payments.questions.itt_academic_year.qualification.#{eligibility.qualification}"),

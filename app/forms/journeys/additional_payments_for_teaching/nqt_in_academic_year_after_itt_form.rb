@@ -43,13 +43,11 @@ module Journeys
         # question is asked at the beginning of the combined journey, and the
         # applicant may end up applying for ECP or LUPP only at a later stage in
         # the journey, hence we need to store the answer on both eligibilities.
-        claim_for_policy = claim.for_policy(Policies::EarlyCareerPayments)
-        dqt_teacher_record = claim_for_policy.dqt_teacher_record
-        dqt_teacher_record&.eligible_induction?
+        journey_session.answers.ecp_dqt_teacher_record&.eligible_induction?
       end
 
       def passed_details_check_with_teacher_id?
-        claim.logged_in_with_tid? && claim.details_check?
+        journey_session.answers.passed_details_check_with_teacher_id?
       end
 
       # We can't just update the eligibility's qualification as there's

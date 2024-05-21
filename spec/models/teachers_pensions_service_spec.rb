@@ -11,23 +11,13 @@ RSpec.describe TeachersPensionsService do
   let(:teacher_reference_number) { claim.teacher_reference_number }
   let(:start_date) { end_date - 1.week }
 
-  describe ".has_recent_tps_school?" do
-    subject(:has_recent_tps_school) { described_class.has_recent_tps_school?(claim) }
-
-    context "when there is a matching TPS record" do
-      let(:end_date) { Time.zone.now - 1.day }
-      let!(:tps_record) { create(:teachers_pensions_service, teacher_reference_number:, la_urn:, school_urn:, start_date:, end_date:) }
-
-      it { is_expected.to be true }
-    end
-
-    context "when there is no matching TPS record" do
-      it { is_expected.to be false }
-    end
-  end
-
   describe ".recent_tps_school" do
-    subject(:recent_tps_school) { described_class.recent_tps_school(claim) }
+    subject(:recent_tps_school) do
+      described_class.recent_tps_school(
+        claim_date: claim.created_at,
+        teacher_reference_number: teacher_reference_number
+      )
+    end
 
     context "when there is a TPS record matching the TRN" do
       let!(:closed_school) { create(:school, :closed, local_authority:, establishment_number:) }
@@ -92,7 +82,11 @@ RSpec.describe TeachersPensionsService do
         end_of_month = Date.new(previous_academic_year.start_year, 11, 30)
         create(:teachers_pensions_service, teacher_reference_number: trn, start_date: beginning_of_month, end_date: end_of_month, school_urn: ineligible_school.establishment_number, la_urn: ineligible_school.local_authority.code)
 
-        expect(described_class.tps_school_for_student_loan_in_previous_financial_year(claim)).to eq eligible_school2
+        expect(
+          described_class.tps_school_for_student_loan_in_previous_financial_year(
+            teacher_reference_number: teacher_reference_number
+          )
+        ).to eq eligible_school2
       end
     end
 
@@ -108,13 +102,21 @@ RSpec.describe TeachersPensionsService do
         end_of_month = Date.new(previous_academic_year.start_year, 10, 31)
         create(:teachers_pensions_service, teacher_reference_number: trn, start_date: beginning_of_month, end_date: end_of_month, school_urn: ineligible_school2.establishment_number, la_urn: ineligible_school2.local_authority.code)
 
-        expect(described_class.tps_school_for_student_loan_in_previous_financial_year(claim)).to eq ineligible_school2
+        expect(
+          described_class.tps_school_for_student_loan_in_previous_financial_year(
+            teacher_reference_number: teacher_reference_number
+          )
+        ).to eq ineligible_school2
       end
     end
 
     context "previous financial year no tps records" do
       it "returns nil" do
-        expect(described_class.tps_school_for_student_loan_in_previous_financial_year(claim)).to be_nil
+        expect(
+          described_class.tps_school_for_student_loan_in_previous_financial_year(
+            teacher_reference_number: teacher_reference_number
+          )
+        ).to be_nil
       end
     end
   end

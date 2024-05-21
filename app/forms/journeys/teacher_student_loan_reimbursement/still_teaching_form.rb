@@ -18,7 +18,11 @@ module Journeys
       end
 
       def school
-        claim.logged_in_with_tid_and_has_recent_tps_school? ? claim.recent_tps_school : claim.eligibility.claim_school
+        if journey_session.logged_in_with_tid_and_has_recent_tps_school?
+          journey_session.recent_tps_school
+        else
+          claim.eligibility.claim_school
+        end
       end
 
       def error_message
@@ -31,7 +35,11 @@ module Journeys
 
       # Helper used in the view to choose partials and locale keys
       def tps_or_claim_school
-        claim.logged_in_with_tid_and_has_recent_tps_school? ? "tps_school" : "claim_school"
+        if journey_session.logged_in_with_tid_and_has_recent_tps_school?
+          "tps_school"
+        else
+          "claim_school"
+        end
       end
 
       private
