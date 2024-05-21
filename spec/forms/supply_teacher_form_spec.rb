@@ -5,6 +5,10 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SupplyTeacherForm do
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
 
+  let(:journey_session) do
+    build(:journeys_session, journey: journey::ROUTING_NAME)
+  end
+
   let(:current_claim) do
     claims = journey::POLICIES.map { |policy| create(:claim, policy:) }
     CurrentClaim.new(claims:)
@@ -12,7 +16,14 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SupplyTeacherForm do
 
   let(:slug) { "supply-teacher" }
 
-  subject(:form) { described_class.new(claim: current_claim, journey:, params:) }
+  subject(:form) do
+    described_class.new(
+      claim: current_claim,
+      journey_session:,
+      journey:,
+      params:
+    )
+  end
 
   context "unpermitted claim param" do
     let(:params) { ActionController::Parameters.new({slug:, claim: {random_param: 1}}) }

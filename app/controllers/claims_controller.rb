@@ -1,6 +1,5 @@
 class ClaimsController < BasePublicController
   include PartOfClaimJourney
-  include AddressDetails
 
   skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create, :timeout]
   before_action :initialize_session_slug_history
@@ -31,43 +30,20 @@ class ClaimsController < BasePublicController
     end
 
     # TODO: Migrate the remaining slugs to form objects.
-    if @form ||= journey.form(claim: current_claim, params:)
+    if @form ||= journey.form(claim: current_claim, journey_session:, params:)
       set_any_backlink_override
       render current_template
       return
     end
 
-    if params[:slug] == "select-claim-school"
-      update_session_with_tps_school(current_claim.tps_school_for_student_loan_in_previous_financial_year)
-    elsif params[:slug] == "postcode-search" && postcode
-      redirect_to claim_path(current_journey_routing_name, "select-home-address", {"claim[postcode]": params[:claim][:postcode], "claim[address_line_1]": params[:claim][:address_line_1]}) and return unless invalid_postcode?
-    elsif params[:slug] == "select-home-address" && postcode
-      session[:claim_postcode] = params[:claim][:postcode]
-      session[:claim_address_line_1] = params[:claim][:address_line_1]
-      if address_data.nil?
-        redirect_to claim_path(current_journey_routing_name, "no-address-found") and return
-      else
-        # otherwise it takes you to "no-address-found" on the backlink from the slug sequence
-        @backlink_path = claim_path(current_journey_routing_name, "postcode-search")
-      end
-    elsif params[:slug] == "select-home-address" && !postcode.present?
-      session[:claim_postcode] = nil
-      session[:claim_address_line_1] = nil
-      redirect_to claim_path(current_journey_routing_name, "postcode-search") and return
-    end
-
     render current_template
-  rescue OrdnanceSurvey::Client::ResponseError => e
-    Rollbar.error(e)
-    flash[:notice] = "Please enter your address manually"
-    redirect_to claim_path(current_journey_routing_name, "address")
   end
 
   def update
     params[:claim][:hmrc_validation_attempt_count] = session[:hmrc_validation_attempt_count] || 0 if on_banking_page?
 
     # TODO: Migrate the remaining slugs to form objects.
-    if (@form = journey.form(claim: current_claim, params:))
+    if (@form = journey.form(claim: current_claim, journey_session:, params:))
       if @form.save
         retrieve_student_loan_details
         update_session_with_selected_policy
@@ -81,18 +57,9 @@ class ClaimsController < BasePublicController
       return
     end
 
-    case params[:slug]
-    when "select-claim-school"
-      check_select_claim_school_params
-    when "still-teaching"
-      check_still_teaching_params
-    else
-      current_claim.attributes = claim_params
-    end
-
+    current_claim.attributes = claim_params
     current_claim.reset_dependent_answers unless params[:slug] == "select-mobile"
     current_claim.reset_eligibility_dependent_answers(reset_attrs) unless params[:slug] == "qualification-details"
-    one_time_password
 
     if current_claim.save(context: page_sequence.current_slug.to_sym)
       retrieve_student_loan_details
@@ -100,6 +67,10 @@ class ClaimsController < BasePublicController
     else
       show
     end
+  rescue OrdnanceSurvey::Client::ResponseError => e
+    Rollbar.error(e)
+    flash[:notice] = "Please enter your address manually"
+    redirect_to claim_path(current_journey_routing_name, "address")
   end
 
   def timeout
@@ -129,7 +100,12 @@ class ClaimsController < BasePublicController
 
   def redirect_to_existing_claim_journey
     new_journey = Journeys.for_policy(current_claim.policy)
-    new_page_sequence = new_journey.page_sequence_for_claim(current_claim, session[:slugs], params[:slug])
+    new_page_sequence = new_journey.page_sequence_for_claim(
+      current_claim,
+      journey_session,
+      session[:slugs],
+      params[:slug]
+    )
     redirect_to(claim_path(new_journey::ROUTING_NAME, slug: new_page_sequence.next_required_slug))
   end
 
@@ -162,6 +138,7 @@ class ClaimsController < BasePublicController
 
     current_claim.save!
     session[:claim_id] = current_claim.claim_ids
+    session[journey_session_key] = journey_session.id
     redirect_to claim_path(current_journey_routing_name, page_sequence.slugs.first.to_sym)
   end
 
@@ -205,7 +182,12 @@ class ClaimsController < BasePublicController
   end
 
   def page_sequence
-    @page_sequence ||= journey.page_sequence_for_claim(current_claim, session[:slugs], params[:slug])
+    @page_sequence ||= journey.page_sequence_for_claim(
+      current_claim,
+      journey_session,
+      session[:slugs],
+      params[:slug]
+    )
   end
 
   def prepend_view_path_for_journey
@@ -214,22 +196,6 @@ class ClaimsController < BasePublicController
 
   def on_banking_page?
     %w[personal-bank-account building-society-account].include?(params[:slug])
-  end
-
-  def one_time_password
-    case params[:slug]
-    when "email-address"
-      if current_claim.valid?(:"email-address")
-        ClaimMailer.email_verification(current_claim, otp.code).deliver_now
-        session[:sent_one_time_password_at] = Time.now
-      end
-    when "email-verification"
-      current_claim.update(sent_one_time_password_at: session[:sent_one_time_password_at], one_time_password_category: :claim_email)
-    end
-  end
-
-  def otp
-    @otp ||= OneTimePassword::Generator.new
   end
 
   def reset_attrs
@@ -248,24 +214,6 @@ class ClaimsController < BasePublicController
 
   def no_eligible_itt_subject?
     !current_claim.eligible_itt_subject
-  end
-
-  def update_session_with_tps_school(school)
-    if school
-      session[:tps_school_id] = school.id
-      session[:tps_school_name] = school.name
-      session[:tps_school_address] = school.address
-    end
-  end
-
-  def check_select_claim_school_params
-    updated_claim_params = SelectClaimSchoolForm.extract_params(claim_params, change_school: params[:additional_school])
-    current_claim.attributes = updated_claim_params
-  end
-
-  def check_still_teaching_params
-    updated_claim_params = StillTeachingForm.extract_params(claim_params)
-    current_claim.attributes = updated_claim_params
   end
 
   def retrieve_student_loan_details

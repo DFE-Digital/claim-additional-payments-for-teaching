@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Claim < ApplicationRecord
-  include ::OneTimePasswordCheckable
-
   MIN_QA_THRESHOLD = 10
   TRN_LENGTH = 7
   NO_STUDENT_LOAN = "not_applicable"
@@ -91,7 +89,6 @@ class Claim < ApplicationRecord
     one_time_password: true,
     sent_one_time_password_at: false,
     mobile_verified: false,
-    one_time_password_category: false,
     assigned_to_id: true,
     policy_options_provided: false,
     held: false,
@@ -118,10 +115,6 @@ class Claim < ApplicationRecord
     "mobile_number" => ["mobile_verified"],
     "email_address" => ["email_verified"]
   }.freeze
-
-  # The idea is to filter things that in a CSV export might be malicious in MS Excel
-  # A whitelist would be inappropiate as these fields could contain valid special letters e.g. accents and umlauts
-  ADDRESS_REGEX_FILTER = /\A[^'"=$%#*+\/\\()@?!<>]*\z/
 
   # Use AcademicYear as custom ActiveRecord attribute type
   attribute :academic_year, AcademicYear::Type.new
@@ -161,24 +154,6 @@ class Claim < ApplicationRecord
 
   validates :academic_year_before_type_cast, format: {with: AcademicYear::ACADEMIC_YEAR_REGEXP}
 
-  validates :address_line_1, on: [:address], presence: {message: "Enter a house number or name"}, if: :has_ecp_or_lupp_policy?
-  validates :address_line_1, on: [:address, :submit], presence: {message: "Enter a building and street address"}, unless: :has_ecp_or_lupp_policy?
-  validates :address_line_1, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
-  validates :address_line_1, on: [:address], format: {with: ADDRESS_REGEX_FILTER, message: "Address lines cannot contain special characters"}
-  validates :address_line_2, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
-  validates :address_line_2, on: [:address], presence: {message: "Enter a building and street address"}, if: :has_ecp_or_lupp_policy?
-  validates :address_line_2, on: [:address], format: {with: ADDRESS_REGEX_FILTER, message: "Address lines cannot contain special characters"}
-  validates :address_line_3, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
-  validates :address_line_3, on: [:address], presence: {message: "Enter a town or city"}
-  validates :address_line_3, on: [:address], format: {with: ADDRESS_REGEX_FILTER, message: "Address lines cannot contain special characters"}
-  validates :address_line_4, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
-  validates :address_line_4, on: [:address], presence: {message: "Enter a county"}
-  validates :address_line_4, on: [:address], format: {with: ADDRESS_REGEX_FILTER, message: "Address lines cannot contain special characters"}
-
-  validates :postcode, on: [:address, :submit], presence: {message: "Enter a real postcode"}
-  validates :postcode, length: {maximum: 11, message: "Postcode must be 11 characters or less"}
-  validate :postcode_is_valid, if: -> { postcode.present? }
-
   validates :teacher_reference_number, on: [:submit, :amendment], presence: {message: "Enter your teacher reference number"}
   validate :trn_must_be_seven_digits
 
@@ -187,9 +162,7 @@ class Claim < ApplicationRecord
   validates :student_loan_plan, on: [:"student-loan", :amendment], presence: {message: "Enter a valid student loan plan"}
 
   # TODO: remove when a form object is created for email-address
-  validates :email_address, on: [:"email-address", :submit], presence: {message: "Enter an email address"}
-  validates :email_address, format: {with: Rails.application.config.email_regexp, message: "Enter an email address in the correct format, like name@example.com"},
-    length: {maximum: 256, message: "Email address must be 256 characters or less"}, if: -> { email_address.present? }
+  validates :email_address, on: [:submit], presence: {message: "Enter an email address"}
 
   validates :bank_sort_code, on: [:submit, :amendment], presence: {message: "Enter a sort code"}
   validates :bank_account_number, on: [:submit, :amendment], presence: {message: "Enter an account number"}
@@ -594,16 +567,6 @@ class Claim < ApplicationRecord
 
   def claim_must_not_be_ineligible
     errors.add(:base, "You’re not eligible for this payment") if eligibility.ineligible?
-  end
-
-  def postcode_is_valid
-    unless postcode_is_valid?
-      errors.add(:postcode, "Enter a postcode in the correct format")
-    end
-  end
-
-  def postcode_is_valid?
-    UKPostcode.parse(postcode).full_valid?
   end
 
   def using_mobile_number_from_tid?

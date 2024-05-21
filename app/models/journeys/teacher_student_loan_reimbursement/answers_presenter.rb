@@ -45,7 +45,7 @@ module Journeys
 
       def current_school
         [
-          t("student_loans.forms.still_teaching.questions.which_school_currently"),
+          t("student_loans.forms.still_teaching.questions.tps_school"),
           eligibility.current_school_name,
           "still-teaching"
         ]

@@ -246,20 +246,6 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
     end
   end
 
-  context "when saving in the “still-teaching” context" do
-    it "validates the presence of employment_status" do
-      expect(described_class.new).not_to be_valid(:"still-teaching")
-      expect(described_class.new(employment_status: :claim_school)).to be_valid(:"still-teaching")
-    end
-
-    it "includes the claim school name in the error message" do
-      eligibility = build(:student_loans_eligibility, claim_school: eligible_school, employment_status: nil)
-
-      expect(eligibility).not_to be_valid(:"still-teaching")
-      expect(eligibility.errors[:employment_status]).to eq(["Select if you still work at #{eligible_school.name}, another school or no longer teach in England"])
-    end
-  end
-
   context "when saving in the “submit” context" do
     it "is valid when all attributes are present" do
       expect(build(:student_loans_eligibility, :eligible)).to be_valid(:submit)

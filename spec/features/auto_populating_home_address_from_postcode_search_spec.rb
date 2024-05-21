@@ -294,7 +294,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       expect(claim.postcode).to eql "SO16 9FX"
 
       # - What is your address
-      expect(page).not_to have_text(I18n.t("questions.address.generic.title"))
+      expect(page).not_to have_text(I18n.t("forms.address.questions.your_address"))
 
       # - Email address
       expect(page).to have_text(I18n.t("questions.email_address"))
@@ -320,7 +320,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       click_link(I18n.t("questions.address.home.i_cannot_find"))
 
       # - What is your address
-      expect(page).to have_text(I18n.t("questions.address.generic.title"))
+      expect(page).to have_text(I18n.t("forms.address.questions.your_address"))
 
       fill_in :claim_address_line_1, with: "Penthouse Apartment, Millbrook Tower"
       fill_in :claim_address_line_2, with: "Windermere Avenue"
@@ -384,7 +384,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       click_link("Change", href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "postcode-search"))
 
       # - What is your home address - Back to make the requested change
-      expect(page).not_to have_text(I18n.t("questions.address.generic.title"))
+      expect(page).not_to have_text(I18n.t("forms.address.questions.your_address"))
       expect(page).to have_text(I18n.t("questions.address.home.title"))
       expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
 
@@ -410,12 +410,13 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       expect(claim.postcode).to eql("SE13 7UN")
 
       # - What is your address
-      expect(page).not_to have_text(I18n.t("questions.address.generic.title"))
+      expect(page).not_to have_text(I18n.t("forms.address.questions.your_address"))
 
       # - Email address
       expect(page).to have_text(I18n.t("questions.email_address"))
 
       # Check postcode search field retains the user's last input if the address was saved on the claim
+      click_link "Back"
       click_link "Back"
       click_link "Back"
 

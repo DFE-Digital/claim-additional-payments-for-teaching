@@ -1,58 +1,20 @@
 module Journeys
   module AdditionalPaymentsForTeaching
     class RemindersController < BasePublicController
+      include PartOfClaimJourney
+
+      after_action :clear_sessions, only: :show
       helper_method :current_reminder
-      after_action :reminder_set_email, :clear_sessions, only: [:show]
 
-      def new
-        # Skip the OTP process if the current_claim already has email_verified
-        # - transfer the email_verified state to the reminder (done in #current_reminder)
-        # - jump straight to reminder set
-        if current_reminder.email_verified? && current_reminder.save
-          redirect_to reminder_path(current_journey_routing_name, "set")
-          return
-        end
-
-        render "reminders/#{first_template_in_sequence}"
-      end
-
-      def create
-        current_reminder.attributes = reminder_params
-
-        begin
-          one_time_password
-        rescue Notifications::Client::BadRequestError => e
-          if notify_email_error?(e.message)
-            render "reminders/#{first_template_in_sequence}"
-            return
-          else
-            raise
-          end
-        end
-
-        if current_reminder.save(context: current_slug.to_sym)
-          session[:reminder_id] = current_reminder.to_param
-          redirect_to reminder_path(current_journey_routing_name, next_slug)
-        else
-          render "reminders/#{first_template_in_sequence}"
-        end
-      end
-
-      def show
-        render "reminders/#{current_template}"
-      end
-
-      def update
-        current_reminder.attributes = reminder_params
-        one_time_password
-        if current_reminder.save(context: current_slug.to_sym)
-          redirect_to reminder_path(current_journey_routing_name, next_slug)
-        else
-          show
-        end
-      end
+      include FormSubmittable
+      include RemindersFormCallbacks
 
       private
+
+      # Wrapping `current_reminder` with an abstract method that is fed to the form object.
+      def current_data_object
+        current_reminder
+      end
 
       def claim_from_session
         return unless session.key?(:claim_id) || session.key?(:submitted_claim_id)
@@ -69,18 +31,6 @@ module Journeys
         journey.slug_sequence::REMINDER_SLUGS
       end
 
-      def first_template_in_sequence
-        slugs.first.underscore
-      end
-
-      def current_template
-        current_slug.underscore
-      end
-
-      def next_template
-        next_slug.underscore
-      end
-
       def next_slug
         slugs[current_slug_index + 1]
       end
@@ -91,6 +41,10 @@ module Journeys
 
       def current_slug_index
         slugs.index(params[:slug]) || 0
+      end
+
+      def current_template
+        "reminders/#{current_slug.underscore}"
       end
 
       def current_reminder
@@ -127,50 +81,11 @@ module Journeys
         journey_configuration.current_academic_year + 1
       end
 
-      def reminder_params
-        params.require(:reminder).permit(:full_name, :email_address, :one_time_password)
-      end
-
-      def one_time_password
-        case current_slug
-        when "personal-details"
-          if current_reminder.valid?(:"personal-details")
-            ReminderMailer.email_verification(current_reminder, otp.code).deliver_now
-            session[:sent_one_time_password_at] = Time.now
-          end
-        when "email-verification"
-          current_reminder.update(sent_one_time_password_at: session[:sent_one_time_password_at], one_time_password_category: :reminder_email)
-        end
-      end
-
-      def otp
-        @otp ||= OneTimePassword::Generator.new
-      end
-
-      def reminder_set_email
-        return unless current_slug == "set" && current_reminder.email_verified?
-
-        ReminderMailer.reminder_set(current_reminder).deliver_now
-      end
-
       def clear_sessions
-        return unless current_template == "set"
+        return unless current_slug == "set"
 
         session.delete(:claim_id)
         session.delete(:reminder_id)
-      end
-
-      def notify_email_error?(msg)
-        case msg
-        when "ValidationError: email_address is a required property"
-          current_reminder.add_invalid_email_error("Enter an email address in the correct format, like name@example.com")
-          true
-        when "BadRequestError: Can’t send to this recipient using a team-only API key"
-          current_reminder.add_invalid_email_error("Only authorised email addresses can be used when using a team-only API key")
-          true
-        else
-          false
-        end
       end
     end
   end

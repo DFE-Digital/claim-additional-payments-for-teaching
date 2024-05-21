@@ -12,6 +12,7 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
   let(:nino) { "AB123123A" }
   let(:email) { "kelsie.oberbrunner@example.com" }
   let(:new_email) { "new.email@example" }
+  let(:postcode) { "SO16 9FX" }
 
   before do
     freeze_time
@@ -138,7 +139,7 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
     click_on "Continue"
 
     #  - Are you still employed to teach at
-    expect(page).to have_text(I18n.t("student_loans.questions.employment_status"))
+    expect(page).to have_text(I18n.t("student_loans.forms.still_teaching.questions.claim_school"))
     choose_still_teaching("Yes, at #{school.name}")
 
     #  - leadership-position question
@@ -169,7 +170,7 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
     expect(page).to have_text(I18n.t("questions.address.home.title"))
     expect(page).to have_link(href: claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "address"))
 
-    fill_in "Postcode", with: "SO16 9FX"
+    fill_in "Postcode", with: postcode
     click_on "Search"
 
     # - Select your home address
@@ -182,10 +183,9 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
   private
 
   def mock_address_details_address_data
-    allow_any_instance_of(ClaimsController).to receive(:address_data) do |controller|
-      controller.instance_variable_set(:@address_data, address_data)
-      address_data
-    end
+    allow_any_instance_of(OrdnanceSurvey::Client)
+      .to receive_message_chain(:api, :search_places, :index)
+      .and_return(address_data)
   end
 
   def address_data
@@ -195,21 +195,21 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
         address_line_1: "FLAT 1, MILLBROOK TOWER",
         address_line_2: "WINDERMERE AVENUE",
         address_line_3: "SOUTHAMPTON",
-        postcode: "SO16 9FX"
+        postcode:
       },
       {
         address: "Flat 10, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX",
         address_line_1: "FLAT 10, MILLBROOK TOWER",
         address_line_2: "WINDERMERE AVENUE",
         address_line_3: "SOUTHAMPTON",
-        postcode: "SO16 9FX"
+        postcode:
       },
       {
         address: "Flat 11, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX",
         address_line_1: "FLAT 11, MILLBROOK TOWER",
         address_line_2: "WINDERMERE AVENUE",
         address_line_3: "SOUTHAMPTON",
-        postcode: "SO16 9FX"
+        postcode:
       }
     ]
   end

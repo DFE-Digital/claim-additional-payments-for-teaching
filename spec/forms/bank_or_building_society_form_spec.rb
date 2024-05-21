@@ -12,10 +12,21 @@ RSpec.describe BankOrBuildingSocietyForm, type: :model do
       CurrentClaim.new(claims:)
     end
 
+    let(:journey_session) do
+      build(:journeys_session, journey: journey::ROUTING_NAME)
+    end
+
     let(:slug) { "bank-or-building-society-form" }
     let(:claim_params) { {} }
 
-    subject(:form) { described_class.new(claim: current_claim, journey: journey, params: ActionController::Parameters.new({slug:, claim: claim_params})) }
+    subject(:form) do
+      described_class.new(
+        claim: current_claim,
+        journey_session: journey_session,
+        journey: journey,
+        params: ActionController::Parameters.new({slug:, claim: claim_params})
+      )
+    end
 
     describe "validations" do
       it { should allow_value(%w[personal_bank_account building_society]).for(:bank_or_building_society).with_message("Select if you want the money paid in to a personal bank account or building society") }

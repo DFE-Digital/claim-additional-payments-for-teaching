@@ -6,9 +6,8 @@ class Form
 
   attr_accessor :claim
   attr_accessor :journey
+  attr_accessor :journey_session
   attr_accessor :params
-
-  delegate :persisted?, to: :claim
 
   def self.model_name
     Claim.model_name
@@ -18,7 +17,8 @@ class Form
     ->(object, _) { object.i18n_errors_path(path) }
   end
 
-  def initialize(claim:, journey:, params:)
+  # TODO RL: remove journey param and pull it from the journey_session
+  def initialize(claim:, journey_session:, journey:, params:)
     super
 
     assign_attributes(attributes_with_current_value)
@@ -45,13 +45,17 @@ class Form
       .claim_path(params[:journey], page_sequence.previous_slug)
   end
 
-  def i18n_errors_path(msg)
+  def i18n_errors_path(msg, args = {})
     base_key = :"forms.#{i18n_form_namespace}.errors.#{msg}"
-    I18n.t("#{i18n_namespace}.#{base_key}", default: base_key)
+    I18n.t("#{i18n_namespace}.#{base_key}", default: base_key, **args)
   end
 
   def permitted_params
-    @permitted_params ||= params.fetch(:claim, {}).permit(*permitted_attributes)
+    @permitted_params ||= params.fetch(model_name.param_key, {}).permit(*permitted_attributes)
+  end
+
+  def persisted?
+    true
   end
 
   private
@@ -67,7 +71,7 @@ class Form
   def page_sequence
     @page_sequence ||= Journeys::PageSequence.new(
       claim,
-      journey.slug_sequence.new(claim),
+      journey.slug_sequence.new(claim, journey_session),
       nil,
       params[:slug]
     )
@@ -83,6 +87,8 @@ class Form
   end
 
   def load_current_value(attribute)
+    return journey_session.answers[attribute] if journey_session.answers.key?(attribute)
+
     # TODO: re-implement when the underlying claim and eligibility data sources
     # are moved to an alternative place e.g. a session hash
 

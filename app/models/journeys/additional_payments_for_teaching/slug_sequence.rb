@@ -38,7 +38,6 @@ module Journeys
         "information-provided",
         "personal-details",
         "postcode-search",
-        "no-address-found",
         "select-home-address",
         "address",
         "select-email",
@@ -76,11 +75,12 @@ module Journeys
         RESULTS_SLUGS
       ).freeze
 
-      attr_reader :claim
+      attr_reader :claim, :journey_session
 
       # Really this is a combined CurrentClaim
-      def initialize(claim)
+      def initialize(claim, journey_session)
         @claim = claim
+        @journey_session = journey_session
       end
 
       # Even though we are inside the ECP namespace, this method can modify the
@@ -180,6 +180,7 @@ module Journeys
       def personal_details_form
         PersonalDetailsForm.new(
           claim:,
+          journey_session:,
           journey: Journeys::AdditionalPaymentsForTeaching,
           params: ActionController::Parameters.new
         )

@@ -19,6 +19,22 @@ RSpec.describe Claims::ShowHelper do
     end
   end
 
+  describe "#heading_css_class_for_journey" do
+    subject(:css_class) { helper.heading_css_class_for_journey(journey) }
+
+    context "for Journeys::AdditionalPaymentsForTeaching" do
+      let(:journey) { Journeys::AdditionalPaymentsForTeaching }
+
+      it { is_expected.to eq("govuk-heading-xl") }
+    end
+
+    context "for Journeys::TeacherStudentLoanRepayment" do
+      let(:journey) { Journeys::TeacherStudentLoanReimbursement }
+
+      it { is_expected.to eq("govuk-fieldset__heading") }
+    end
+  end
+
   describe "#policy_name" do
     subject(:name) { helper.policy_name(claim) }
 

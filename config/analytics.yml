@@ -19,7 +19,6 @@ shared:
     - itt_academic_year
     - itt_subject
     - one_time_password
-    - one_time_password_category
     - sent_one_time_password_at
   :tasks:
     - id
@@ -84,8 +83,6 @@ shared:
     - mobile_verified
     - assigned_to_id
     - policy_options_provided
-    - one_time_password
-    - one_time_password_category
     - sent_one_time_password_at
     - date_of_birth_day
     - date_of_birth_month
@@ -297,5 +294,11 @@ shared:
     - subject_description_sfr
     - general_subject_code
     - hours_taught
+    - created_at
+    - updated_at
+  :journeys_sessions:
+    - id
+    - answers
+    - journey
     - created_at
     - updated_at
