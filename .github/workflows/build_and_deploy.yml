@@ -26,6 +26,7 @@ jobs:
         uses: DFE-Digital/github-actions/build-docker-image@docker-build-target
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          target: web
           context: .
 
   deploy_review:
