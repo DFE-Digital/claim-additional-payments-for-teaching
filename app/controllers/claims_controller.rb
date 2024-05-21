@@ -9,24 +9,13 @@ class ClaimsController < BasePublicController
   before_action :check_claim_not_in_progress, only: [:new]
   before_action :clear_claim_session, only: [:new]
   before_action :prepend_view_path_for_journey
+  before_action :persist_claim, only: [:new, :create]
 
   include FormSubmittable
   include ClaimsFormCallbacks
 
-  skip_before_action :before_update, only: [:create]
-  skip_before_action :load_form_if_exists, only: [:create]
-  skip_around_action :handle_form_submission, only: [:create]
-
   def current_data_object
     current_claim
-  end
-
-  def new
-    persist
-  end
-
-  def create
-    persist
   end
 
   def timeout
@@ -50,9 +39,7 @@ class ClaimsController < BasePublicController
 
   private
 
-  def next_slug
-    page_sequence.next_slug
-  end
+  delegate :slugs, :current_slug, :previous_slug, :next_slug, :next_required_slug, to: :page_sequence
 
   def redirect_to_existing_claim_journey
     new_journey = Journeys.for_policy(current_claim.policy)
@@ -70,33 +57,10 @@ class ClaimsController < BasePublicController
     @backlink_path = claim_path(current_journey_routing_name, previous_slug) if previous_slug.present?
   end
 
-  def set_any_backlink_override
-    @backlink_path = @form.backlink_path if @form.backlink_path
-  end
-
-  def previous_slug
-    page_sequence.previous_slug
-  end
-
-  def persist
-    current_claim.attributes = claim_params
-
+  def persist_claim
     current_claim.save!
     session[:claim_id] = current_claim.claim_ids
     session[journey_session_key] = journey_session.id
-    redirect_to claim_path(current_journey_routing_name, page_sequence.slugs.first.to_sym)
-  end
-
-  def claim_params
-    params.fetch(:claim, {}).permit(Claim::PermittedParameters.new(current_claim).keys)
-  end
-
-  def current_slug
-    page_sequence.current_slug
-  end
-
-  def current_template
-    page_sequence.current_slug.underscore
   end
 
   def check_page_is_in_sequence
@@ -107,7 +71,7 @@ class ClaimsController < BasePublicController
 
     raise ActionController::RoutingError.new("Not Found") unless page_sequence.in_sequence?(params[:slug])
 
-    redirect_to claim_path(current_journey_routing_name, slug_to_redirect_to) unless page_sequence.has_completed_journey_until?(params[:slug])
+    redirect_to claim_path(current_journey_routing_name, next_required_slug) unless page_sequence.has_completed_journey_until?(params[:slug])
   end
 
   def initialize_session_slug_history
@@ -116,10 +80,6 @@ class ClaimsController < BasePublicController
 
   def update_session_with_current_slug
     session[:slugs] << params[:slug] unless Journeys::PageSequence::DEAD_END_SLUGS.include?(params[:slug])
-  end
-
-  def slug_to_redirect_to
-    page_sequence.next_required_slug
   end
 
   def check_claim_not_in_progress
@@ -141,12 +101,6 @@ class ClaimsController < BasePublicController
 
   def prepend_view_path_for_journey
     prepend_view_path("app/views/#{current_journey_routing_name.underscore}")
-  end
-
-  def reset_attrs
-    return [] unless claim_params["eligibility_attributes"]
-
-    claim_params["eligibility_attributes"].keys
   end
 
   def correct_journey_for_claim_in_progress?
