@@ -38,7 +38,7 @@ class ClaimSubmissionBaseForm
     claim = Claim.new
 
     # Temp conditional while we're working with the shim
-    claim.journeys_session = if journey_session.is_a?(ClaimJourneySessionShim)
+    claim.journey_session = if journey_session.is_a?(ClaimJourneySessionShim)
       journey_session.journey_session
     else
       journey_session

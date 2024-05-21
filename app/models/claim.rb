@@ -138,10 +138,11 @@ class Claim < ApplicationRecord
 
   belongs_to :eligibility, polymorphic: true, inverse_of: :claim, dependent: :destroy
 
-  belongs_to :journeys_session,
+  belongs_to :journey_session,
     optional: true,
     class_name: "Journeys::Session",
-    inverse_of: :claim
+    inverse_of: :claim,
+    foreign_key: :journeys_session_id
 
   accepts_nested_attributes_for :eligibility, update_only: true
   delegate :eligible_itt_subject, to: :eligibility, allow_nil: true

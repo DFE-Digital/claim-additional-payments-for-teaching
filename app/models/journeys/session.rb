@@ -4,7 +4,7 @@ module Journeys
 
     has_one :claim,
       dependent: :nullify,
-      inverse_of: :journeys_session,
+      inverse_of: :journey_session,
       foreign_key: :journeys_session_id
 
     validates :journey,

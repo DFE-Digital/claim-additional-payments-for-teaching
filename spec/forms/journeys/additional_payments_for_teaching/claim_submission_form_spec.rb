@@ -163,7 +163,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm do
         let(:answers) { {} }
 
         before do
-          build(:claim, journeys_session: journey_session)
+          build(:claim, journey_session: journey_session)
           form.valid?
         end
 
