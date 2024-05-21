@@ -53,8 +53,15 @@ variable "config" {
   type = string
 }
 
+variable "canonical_hostname" {
+  type        = string
+  description = "External domain name for the app service"
+  default     = null
+}
+
 locals {
   postgres_ssl_mode = var.enable_postgres_ssl ? "require" : "disable"
+  canonical_hostname = var.canonical_hostname != null ? var.canonical_hostname : "${var.service_name}-${var.environment}.test.teacherservices.cloud"
   app_env_values_from_yml = yamldecode(file("${path.module}/config/${var.config}_app_env.yml"))
   app_env_values = merge(local.app_env_values_from_yml)
 }

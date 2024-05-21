@@ -15,7 +15,8 @@ module "application_configuration" {
     {
       ENVIRONMENT_NAME = var.environment
       PGSSLMODE        = local.postgres_ssl_mode
-  })
+      CANONICAL_HOSTNAME = local.canonical_hostname
+    })
   secret_variables = {
     DATABASE_URL = module.postgres.url
   }
