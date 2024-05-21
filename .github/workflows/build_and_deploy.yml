@@ -23,10 +23,11 @@ jobs:
 
       - name: Build and push docker image
         id: build-image
-        uses: DFE-Digital/github-actions/build-docker-image@master
+        uses: DFE-Digital/github-actions/build-docker-image@docker-build-target
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           dockerfile-path: ./Dockerfile.aks
+          target: web
           context: .
 
   deploy_review:
