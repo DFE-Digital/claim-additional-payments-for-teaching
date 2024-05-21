@@ -10,16 +10,6 @@ module Policies
         :computing_taught,
         :languages_taught
       ].freeze
-      EDITABLE_ATTRIBUTES = [
-        :qts_award_year,
-        :claim_school_id,
-        :employment_status,
-        :current_school_id,
-        :had_leadership_position,
-        :taught_eligible_subjects,
-        :mostly_performed_leadership_duties,
-        SUBJECT_ATTRIBUTES
-      ].flatten.freeze
       AMENDABLE_ATTRIBUTES = %i[student_loan_repayment_amount].freeze
       ATTRIBUTE_DEPENDENCIES = {
         "claim_school_id" => ["taught_eligible_subjects", *SUBJECT_ATTRIBUTES, "employment_status", "current_school_id"],

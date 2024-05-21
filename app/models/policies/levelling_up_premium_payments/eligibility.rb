@@ -12,23 +12,6 @@ module Policies
 
       delegate :name, to: :current_school, prefix: true, allow_nil: true
 
-      EDITABLE_ATTRIBUTES = [
-        :nqt_in_academic_year_after_itt,
-        :current_school_id,
-        :induction_completed,
-        :school_somewhere_else,
-        :employed_as_supply_teacher,
-        :has_entire_term_contract,
-        :employed_directly,
-        :subject_to_formal_performance_action,
-        :subject_to_disciplinary_action,
-        :qualification,
-        :eligible_itt_subject,
-        :teaching_subject_now,
-        :itt_academic_year,
-        :eligible_degree_subject
-      ].freeze
-
       AMENDABLE_ATTRIBUTES = [:award_amount].freeze
 
       ATTRIBUTE_DEPENDENCIES = {
