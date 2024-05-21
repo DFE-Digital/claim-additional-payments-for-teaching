@@ -10,8 +10,6 @@ class ClaimsController < BasePublicController
   before_action :clear_claim_session, only: [:new]
   before_action :prepend_view_path_for_journey
 
-  helper_method :next_slug
-
   include FormSubmittable
   include ClaimsFormCallbacks
 
