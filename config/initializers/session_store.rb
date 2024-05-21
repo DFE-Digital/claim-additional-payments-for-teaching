@@ -1,4 +1,4 @@
-domain = if ENV["ENVIRONMENT_NAME"] == "review"
+domain = if ENV["ENVIRONMENT_NAME"].start_with?("review")
   ENV["CANONICAL_HOSTNAME"]
 elsif !ENV["TID_BASE_URL"].nil?
   URI.parse(ENV["TID_BASE_URL"]).host
