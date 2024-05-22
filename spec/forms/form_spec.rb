@@ -171,25 +171,6 @@ RSpec.describe Form, type: :model do
     it { expect(form.i18n_namespace).to eq("test_i18n_ns") }
   end
 
-  describe "#backlink_path" do
-    before do
-      allow_any_instance_of(Journeys::PageSequence).to receive(:previous_slug)
-        .and_return(previous_slug)
-    end
-
-    describe "when the previous slug is present" do
-      let(:previous_slug) { "previous-slug" }
-
-      it { expect(form.backlink_path).to eq("/test-journey/previous-slug") }
-    end
-
-    describe "when the previous slug is not present" do
-      let(:previous_slug) { nil }
-
-      it { expect(form.backlink_path).to be_nil }
-    end
-  end
-
   describe "#i18n_errors_path" do
     before do
       allow(I18n).to receive(:t)

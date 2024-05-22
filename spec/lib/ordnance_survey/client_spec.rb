@@ -10,7 +10,7 @@ module OrdnanceSurvey
         expect(stub).to have_been_requested
       end
 
-      it "add content type header" do
+      it "adds content type header" do
         stub = stub_request(method, %r{test}).with(
           headers: {
             "Content-Type": "application/json"
@@ -76,6 +76,18 @@ module OrdnanceSurvey
           stub = stub_request(method, %r{test}).with(
             query: hash_including({some_param: "somevalue"})
           )
+
+          client.public_send(method)
+
+          expect(stub).to have_been_requested
+        end
+      end
+
+      context "without config params" do
+        before { client_args[:params] = nil }
+
+        it "makes a request without those params" do
+          stub = stub_request(method, %r{test}).with(query: nil)
 
           client.public_send(method)
 
