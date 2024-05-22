@@ -32,11 +32,6 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     choose "Yes"
     click_on "Continue"
 
-    claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
-    eligibility = claim.eligibility
-
-    expect(eligibility.nqt_in_academic_year_after_itt).to eql true
-
     # - Have you completed your induction as an early-career teacher?
     expect(page).to have_text(I18n.t("additional_payments.questions.induction_completed.heading"))
 
@@ -48,8 +43,6 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
     choose "No"
     click_on "Continue"
-
-    expect(claim.eligibility.reload.employed_as_supply_teacher).to eql false
 
     # - Performance Issues
     expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.poor_performance"))
@@ -67,19 +60,14 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
     click_on "Continue"
 
-    expect(claim.eligibility.reload.subject_to_formal_performance_action).to eql false
-    expect(claim.eligibility.reload.subject_to_disciplinary_action).to eql false
-
     # - What route into teaching did you take?
     expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
 
     choose "Undergraduate initial teacher training (ITT)"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.qualification).to eq "undergraduate_itt"
-
     # - In which academic year did you start your undergraduate ITT
-    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
     expect(page).to have_text("2017 to 2018")
     expect(page).to have_text("2018 to 2019")
     expect(page).to have_text("2019 to 2020")
@@ -94,17 +82,11 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     choose "Mathematics"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
-
     # - Do you teach maths now
     expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
 
     choose "Yes"
     click_on "Continue"
-
-    expect(claim.eligibility.reload.teaching_subject_now).to eql true
-
-    expect(claim.eligibility.reload.itt_academic_year).to eql itt_year
 
     # - Check your answers for eligibility
     expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
@@ -148,11 +130,6 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     fill_in "National Insurance number", with: "PX321499A"
     click_on "Continue"
 
-    expect(claim.reload.first_name).to eql("Russell")
-    expect(claim.reload.surname).to eql("Wong")
-    expect(claim.reload.date_of_birth).to eq(Date.new(1988, 2, 28))
-    expect(claim.reload.national_insurance_number).to eq("PX321499A")
-
     # - What is your home address
     expect(page).to have_text(I18n.t("questions.address.home.title"))
     expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
@@ -169,19 +146,11 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     fill_in "Postcode", with: "DE22 4BS"
     click_on "Continue"
 
-    expect(claim.reload.address_line_1).to eql("57")
-    expect(claim.address_line_2).to eql("Walthamstow Drive")
-    expect(claim.address_line_3).to eql("Derby")
-    expect(claim.address_line_4).to eql("City of Derby")
-    expect(claim.postcode).to eql("DE22 4BS")
-
     # - Email address
     expect(page).to have_text(I18n.t("questions.email_address"))
 
     fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
     click_on "Continue"
-
-    expect(claim.reload.email_address).to eql("david.tau1988@hotmail.co.uk")
 
     # - One time password
     expect(page).to have_text("Email address verification")
@@ -205,8 +174,6 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     choose "No"
     click_on "Continue"
 
-    expect(claim.reload.provide_mobile_number).to eql false
-
     # - Mobile number
     expect(page).not_to have_text(I18n.t("questions.mobile_number"))
 
@@ -219,10 +186,8 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     choose "Personal bank account"
     click_on "Continue"
 
-    expect(claim.reload.bank_or_building_society).to eq "personal_bank_account"
-
     # - Enter bank account details
-    expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: claim.bank_or_building_society.humanize.downcase))
+    expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: "personal bank account"))
     expect(page).not_to have_text("Building society roll number")
 
     fill_in "Name on your account", with: "Jo Bloggs"
@@ -230,25 +195,17 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     fill_in "Account number", with: "87654321"
     click_on "Continue"
 
-    expect(claim.reload.banking_name).to eq("Jo Bloggs")
-    expect(claim.bank_sort_code).to eq("123456")
-    expect(claim.bank_account_number).to eq("87654321")
-
     # - What gender does your school's payroll system associate with you
     expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
 
     choose "Female"
     click_on "Continue"
 
-    expect(claim.reload.payroll_gender).to eq("female")
-
     # - What is your teacher reference number
     expect(page).to have_text(I18n.t("questions.teacher_reference_number"))
 
     fill_in :claim_teacher_reference_number, with: "1234567"
     click_on "Continue"
-
-    expect(claim.reload.teacher_reference_number).to eql("1234567")
 
     # - Check your answers before sending your application
     expect(page).to have_text("Check your answers before sending your application")
@@ -260,23 +217,50 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     freeze_time do
       click_on "Accept and send"
 
+      expect(Claim.count).to eq 1
+
+      claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
+      eligibility = claim.eligibility
+      expect(eligibility.nqt_in_academic_year_after_itt).to eq true
+      expect(claim.eligibility.employed_as_supply_teacher).to eq false
+      expect(claim.eligibility.subject_to_formal_performance_action).to eq false
+      expect(claim.eligibility.subject_to_disciplinary_action).to eq false
+      expect(claim.eligibility.qualification).to eq "undergraduate_itt"
+      expect(claim.eligibility.eligible_itt_subject).to eq "mathematics"
+      expect(claim.eligibility.teaching_subject_now).to eq true
+      expect(claim.eligibility.itt_academic_year).to eq itt_year
+      expect(claim.first_name).to eq("Russell")
+      expect(claim.surname).to eq("Wong")
+      expect(claim.date_of_birth).to eq(Date.new(1988, 2, 28))
+      expect(claim.national_insurance_number).to eq("PX321499A")
+      expect(claim.address_line_1).to eq("57")
+      expect(claim.address_line_2).to eq("Walthamstow Drive")
+      expect(claim.address_line_3).to eq("Derby")
+      expect(claim.address_line_4).to eq("City of Derby")
+      expect(claim.postcode).to eq("DE22 4BS")
+      expect(claim.email_address).to eq("david.tau1988@hotmail.co.uk")
+      expect(claim.provide_mobile_number).to eq false
+      expect(claim.bank_or_building_society).to eq "personal_bank_account"
+      expect(claim.banking_name).to eq("Jo Bloggs")
+      expect(claim.bank_sort_code).to eq("123456")
+      expect(claim.bank_account_number).to eq("87654321")
+      expect(claim.payroll_gender).to eq("female")
+      expect(claim.teacher_reference_number).to eq("1234567")
       expect(claim.reload.submitted_at).to eq(Time.zone.now)
+      policy_options_provided = [
+        {"policy" => "EarlyCareerPayments", "award_amount" => "5000.0"},
+        {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+      ]
+      expect(claim.policy_options_provided).to eq policy_options_provided
+
+      # - Application complete (make sure its Word for Word and styling matches)
+      expect(page).to have_text("You applied for an early-career payment")
+      expect(page).to have_text("What happens next")
+      expect(page).to have_text("Set a reminder to apply next year")
+      expect(page).to have_text("Apply for additional payment each academic year")
+      expect(page).to have_text("What do you think of this service?")
+      expect(page).to have_text(claim.reference)
     end
-
-    # - Application complete (make sure its Word for Word and styling matches)
-    expect(page).to have_text("You applied for an early-career payment")
-    expect(page).to have_text("What happens next")
-    expect(page).to have_text("Set a reminder to apply next year")
-    expect(page).to have_text("Apply for additional payment each academic year")
-    expect(page).to have_text("What do you think of this service?")
-    expect(page).to have_text(claim.reference)
-
-    policy_options_provided = [
-      {"policy" => "EarlyCareerPayments", "award_amount" => "5000.0"},
-      {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
-    ]
-
-    expect(claim.reload.policy_options_provided).to eq policy_options_provided
   end
 
   scenario "Supply Teacher makes claim for 'Early Career Payments' with a contract to teach for entire term & employed directly by school" do
@@ -458,11 +442,6 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     choose "Yes"
     click_on "Continue"
 
-    claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
-    eligibility = claim.eligibility
-
-    expect(eligibility.nqt_in_academic_year_after_itt).to eql true
-
     # - Have you completed your induction as an early-career teacher?
     expect(page).to have_text(I18n.t("additional_payments.questions.induction_completed.heading"))
 
@@ -474,8 +453,6 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
     choose "No"
     click_on "Continue"
-
-    expect(claim.eligibility.reload.employed_as_supply_teacher).to eql false
 
     # - Performance Issues
     expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.poor_performance"))
@@ -492,19 +469,14 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     choose "claim_subject_to_disciplinary_action_false"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.subject_to_formal_performance_action).to eql false
-    expect(claim.eligibility.reload.subject_to_disciplinary_action).to eql false
-
     # - What route into teaching did you take?
     expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
 
     choose "Postgraduate initial teacher training (ITT)"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.qualification).to eq "postgraduate_itt"
-
     # - In which academic year did you start your postgraduate ITT
-    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.postgraduate_itt"))
     expect(page).to have_text("2017 to 2018")
     expect(page).to have_text("2018 to 2019")
     expect(page).to have_text("2019 to 2020")
@@ -519,17 +491,11 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     choose "Mathematics"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
-
     # - Do you teach maths now
     expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
 
     choose "Yes"
     click_on "Continue"
-
-    expect(claim.eligibility.reload.teaching_subject_now).to eql true
-
-    expect(claim.eligibility.reload.itt_academic_year).to eql itt_year
 
     # - Check your answers for eligibility
     expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
@@ -571,11 +537,6 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     fill_in "National Insurance number", with: "PX321499A"
     click_on "Continue"
 
-    expect(claim.reload.first_name).to eql("Russell")
-    expect(claim.reload.surname).to eql("Wong")
-    expect(claim.reload.date_of_birth).to eq(Date.new(1988, 2, 28))
-    expect(claim.reload.national_insurance_number).to eq("PX321499A")
-
     # - What is your home address
     expect(page).to have_text(I18n.t("questions.address.home.title"))
     expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
@@ -592,19 +553,11 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     fill_in "Postcode", with: "M1 7HL"
     click_on "Continue"
 
-    expect(claim.reload.address_line_1).to eql("88")
-    expect(claim.address_line_2).to eql("Deanborough Street")
-    expect(claim.address_line_3).to eql("Nottingham")
-    expect(claim.address_line_4).to eql("Nottinghamshire")
-    expect(claim.postcode).to eql("M1 7HL")
-
     # - Email address
     expect(page).to have_text(I18n.t("questions.email_address"))
 
     fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
     click_on "Continue"
-
-    expect(claim.reload.email_address).to eql("david.tau1988@hotmail.co.uk")
 
     # - One time password
     expect(page).to have_text("Email address verification")
@@ -622,8 +575,6 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     choose "No"
     click_on "Continue"
 
-    expect(claim.reload.provide_mobile_number).to eql false
-
     # - Mobile number
     expect(page).not_to have_text(I18n.t("questions.mobile_number"))
 
@@ -636,10 +587,8 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     choose "Personal bank account"
     click_on "Continue"
 
-    expect(claim.reload.bank_or_building_society).to eq "personal_bank_account"
-
     # - Enter bank account details
-    expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: claim.bank_or_building_society.humanize.downcase))
+    expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: "personal bank account"))
     expect(page).not_to have_text("Building society roll number")
 
     fill_in "Name on your account", with: "Jo Bloggs"
@@ -647,25 +596,17 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     fill_in "Account number", with: "87654321"
     click_on "Continue"
 
-    expect(claim.reload.banking_name).to eq("Jo Bloggs")
-    expect(claim.bank_sort_code).to eq("123456")
-    expect(claim.bank_account_number).to eq("87654321")
-
     # - What gender does your school's payroll system associate with you
     expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
 
     choose "Female"
     click_on "Continue"
 
-    expect(claim.reload.payroll_gender).to eq("female")
-
     # - What is your teacher reference number
     expect(page).to have_text(I18n.t("questions.teacher_reference_number"))
 
     fill_in :claim_teacher_reference_number, with: "1234567"
     click_on "Continue"
-
-    expect(claim.reload.teacher_reference_number).to eql("1234567")
 
     # - Check your answers before sending your application
     expect(page).to have_text("Check your answers before sending your application")
@@ -677,22 +618,49 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     freeze_time do
       click_on "Accept and send"
 
-      expect(claim.reload.submitted_at).to eq(Time.zone.now)
+      # We create a new claim in the submission controller
+      expect(Claim.count).to eq 1
+      claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
+      eligibility = claim.eligibility
+      expect(eligibility.nqt_in_academic_year_after_itt).to eql true
+      expect(eligibility.employed_as_supply_teacher).to eql false
+      expect(eligibility.subject_to_formal_performance_action).to eql false
+      expect(eligibility.subject_to_disciplinary_action).to eql false
+      expect(eligibility.qualification).to eq "postgraduate_itt"
+      expect(eligibility.eligible_itt_subject).to eql "mathematics"
+      expect(eligibility.teaching_subject_now).to eql true
+      expect(eligibility.itt_academic_year).to eql itt_year
+      expect(claim.email_address).to eql("david.tau1988@hotmail.co.uk")
+      expect(claim.first_name).to eql("Russell")
+      expect(claim.surname).to eql("Wong")
+      expect(claim.date_of_birth).to eq(Date.new(1988, 2, 28))
+      expect(claim.national_insurance_number).to eq("PX321499A")
+      expect(claim.address_line_1).to eql("88")
+      expect(claim.address_line_2).to eql("Deanborough Street")
+      expect(claim.address_line_3).to eql("Nottingham")
+      expect(claim.address_line_4).to eql("Nottinghamshire")
+      expect(claim.postcode).to eql("M1 7HL")
+      expect(claim.provide_mobile_number).to eql false
+      expect(claim.bank_or_building_society).to eq "personal_bank_account"
+      expect(claim.banking_name).to eq("Jo Bloggs")
+      expect(claim.bank_sort_code).to eq("123456")
+      expect(claim.bank_account_number).to eq("87654321")
+      expect(claim.payroll_gender).to eq("female")
+      expect(claim.teacher_reference_number).to eql("1234567")
+      expect(claim.submitted_at).to eq(Time.zone.now)
+      policy_options_provided = [
+        {"policy" => "EarlyCareerPayments", "award_amount" => "5000.0"},
+        {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+      ]
+      expect(claim.reload.policy_options_provided).to eq policy_options_provided
+
+      # - Application complete (make sure its Word for Word and styling matches)
+      expect(page).to have_text("You applied for an early-career payment")
+      expect(page).to have_text("What happens next")
+      expect(page).to have_text("Set a reminder to apply next year")
+      expect(page).to have_text("What do you think of this service?")
+      expect(page).to have_text(claim.reference)
     end
-
-    # - Application complete (make sure its Word for Word and styling matches)
-    expect(page).to have_text("You applied for an early-career payment")
-    expect(page).to have_text("What happens next")
-    expect(page).to have_text("Set a reminder to apply next year")
-    expect(page).to have_text("What do you think of this service?")
-    expect(page).to have_text(claim.reference)
-
-    policy_options_provided = [
-      {"policy" => "EarlyCareerPayments", "award_amount" => "5000.0"},
-      {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
-    ]
-
-    expect(claim.reload.policy_options_provided).to eq policy_options_provided
   end
 
   context "When auto-populating address details" do
@@ -883,11 +851,6 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       fill_in "National Insurance number", with: "PX321499A"
       click_on "Continue"
 
-      expect(claim.reload.first_name).to eql("Russell")
-      expect(claim.reload.surname).to eql("Wong")
-      expect(claim.reload.date_of_birth).to eq(Date.new(1988, 2, 28))
-      expect(claim.reload.national_insurance_number).to eq("PX321499A")
-
       # - What is your home address
       expect(page).to have_text(I18n.t("questions.address.home.title"))
       expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
@@ -901,11 +864,6 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       choose "flat_11_millbrook_tower_windermere_avenue_southampton_so16_9fx"
       click_on "Continue"
 
-      expect(claim.reload.address_line_1).to eql "Flat 11, Millbrook Tower"
-      expect(claim.address_line_2).to eql "Windermere Avenue"
-      expect(claim.address_line_3).to eql "Southampton"
-      expect(claim.postcode).to eql "SO16 9FX"
-
       # - What is your address
       expect(page).not_to have_text(I18n.t("forms.address.questions.your_address"))
 
@@ -914,8 +872,6 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
       fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
       click_on "Continue"
-
-      expect(claim.reload.email_address).to eql("david.tau1988@hotmail.co.uk")
 
       # - One time password
       expect(page).to have_text("Email address verification")
@@ -933,8 +889,6 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       choose "No"
       click_on "Continue"
 
-      expect(claim.reload.provide_mobile_number).to eql false
-
       # - Mobile number
       expect(page).not_to have_text(I18n.t("questions.mobile_number"))
 
@@ -947,10 +901,8 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       choose "Personal bank account"
       click_on "Continue"
 
-      expect(claim.reload.bank_or_building_society).to eq "personal_bank_account"
-
       # - Enter bank account details
-      expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: claim.bank_or_building_society.humanize.downcase))
+      expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: "personal bank account"))
       expect(page).not_to have_text("Building society roll number")
 
       fill_in "Name on your account", with: "Jo Bloggs"
@@ -958,25 +910,17 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       fill_in "Account number", with: "87654321"
       click_on "Continue"
 
-      expect(claim.reload.banking_name).to eq("Jo Bloggs")
-      expect(claim.bank_sort_code).to eq("123456")
-      expect(claim.bank_account_number).to eq("87654321")
-
       # - What gender does your school's payroll system associate with you
       expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
 
       choose "Female"
       click_on "Continue"
 
-      expect(claim.reload.payroll_gender).to eq("female")
-
       # - What is your teacher reference number
       expect(page).to have_text(I18n.t("questions.teacher_reference_number"))
 
       fill_in :claim_teacher_reference_number, with: "1234567"
       click_on "Continue"
-
-      expect(claim.reload.teacher_reference_number).to eql("1234567")
 
       # - Check your answers before sending your application
       expect(page).to have_text("Check your answers before sending your application")
@@ -988,22 +932,38 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       freeze_time do
         click_on "Accept and send"
 
-        expect(claim.reload.submitted_at).to eq(Time.zone.now)
+        expect(Claim.count).to eq 1
+        submitted_claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
+        expect(submitted_claim.first_name).to eql("Russell")
+        expect(submitted_claim.surname).to eql("Wong")
+        expect(submitted_claim.date_of_birth).to eq(Date.new(1988, 2, 28))
+        expect(submitted_claim.national_insurance_number).to eq("PX321499A")
+        expect(submitted_claim.address_line_1).to eql "Flat 11, Millbrook Tower"
+        expect(submitted_claim.address_line_2).to eql "Windermere Avenue"
+        expect(submitted_claim.address_line_3).to eql "Southampton"
+        expect(submitted_claim.postcode).to eql "SO16 9FX"
+        expect(submitted_claim.email_address).to eql("david.tau1988@hotmail.co.uk")
+        expect(submitted_claim.provide_mobile_number).to eql false
+        expect(submitted_claim.bank_or_building_society).to eq "personal_bank_account"
+        expect(submitted_claim.banking_name).to eq("Jo Bloggs")
+        expect(submitted_claim.bank_sort_code).to eq("123456")
+        expect(submitted_claim.bank_account_number).to eq("87654321")
+        expect(submitted_claim.payroll_gender).to eq("female")
+        expect(submitted_claim.teacher_reference_number).to eql("1234567")
+        expect(submitted_claim.submitted_at).to eq(Time.zone.now)
+
+        policy_options_provided = [
+          {"policy" => "EarlyCareerPayments", "award_amount" => "5000.0"},
+          {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+        ]
+        expect(submitted_claim.policy_options_provided).to eq policy_options_provided
+        # - Application complete (make sure its Word for Word and styling matches)
+        expect(page).to have_text("You applied for an early-career payment")
+        expect(page).to have_text("What happens next")
+        expect(page).to have_text("Set a reminder to apply next year")
+        expect(page).to have_text("What do you think of this service?")
+        expect(page).to have_text(submitted_claim.reference)
       end
-
-      # - Application complete (make sure its Word for Word and styling matches)
-      expect(page).to have_text("You applied for an early-career payment")
-      expect(page).to have_text("What happens next")
-      expect(page).to have_text("Set a reminder to apply next year")
-      expect(page).to have_text("What do you think of this service?")
-      expect(page).to have_text(claim.reference)
-
-      policy_options_provided = [
-        {"policy" => "EarlyCareerPayments", "award_amount" => "5000.0"},
-        {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
-      ]
-
-      expect(claim.reload.policy_options_provided).to eq policy_options_provided
     end
   end
 

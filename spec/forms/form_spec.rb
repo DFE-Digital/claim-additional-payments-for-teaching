@@ -45,7 +45,7 @@ RSpec.describe Form, type: :model do
   let(:claim) { CurrentClaim.new(claims:) }
   let(:claims) { [build(:claim, policy: Policies::StudentLoans)] }
   let(:journey) { Journeys::TestJourney }
-  let(:journey_session) { build(:journeys_session) }
+  let(:journey_session) { build(:student_loans_session) }
   let(:params) { ActionController::Parameters.new({journey: "test-journey", slug: "test_slug", claim: claim_params}) }
   let(:claim_params) { {first_name: "test-name"} }
 
@@ -72,10 +72,11 @@ RSpec.describe Form, type: :model do
       context "when an existing value can be found on the journey session" do
         let(:journey_session) do
           build(
-            :journeys_session,
+            :student_loans_session,
             answers: {
               first_name: "existing-name",
-              student_loan_repayment_amount: 2000
+              student_loan_repayment_amount: 2000,
+              answered: %w[first_name student_loan_repayment_amount]
             }
           )
         end
@@ -104,10 +105,11 @@ RSpec.describe Form, type: :model do
 
         let(:journey_session) do
           build(
-            :journeys_session,
+            :student_loans_session,
             answers: {
               first_name: "existing-name",
-              student_loan_repayment_amount: nil
+              student_loan_repayment_amount: nil,
+              answered: %w[first_name student_loan_repayment_amount]
             }
           )
         end
@@ -167,25 +169,6 @@ RSpec.describe Form, type: :model do
 
   describe "#i18n_namespace" do
     it { expect(form.i18n_namespace).to eq("test_i18n_ns") }
-  end
-
-  describe "#backlink_path" do
-    before do
-      allow_any_instance_of(Journeys::PageSequence).to receive(:previous_slug)
-        .and_return(previous_slug)
-    end
-
-    describe "when the previous slug is present" do
-      let(:previous_slug) { "previous-slug" }
-
-      it { expect(form.backlink_path).to eq("/test-journey/previous-slug") }
-    end
-
-    describe "when the previous slug is not present" do
-      let(:previous_slug) { nil }
-
-      it { expect(form.backlink_path).to be_nil }
-    end
   end
 
   describe "#i18n_errors_path" do

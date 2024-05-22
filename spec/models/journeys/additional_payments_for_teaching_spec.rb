@@ -37,7 +37,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching do
     let(:completed_slugs) { [:test] }
     let(:current_slug) { [:test2] }
     let(:claim) { double }
-    let(:journey_session) { build(:journeys_session) }
+    let(:journey_session) { build(:additional_payments_session) }
 
     subject(:page_sequence) do
       described_class.page_sequence_for_claim(

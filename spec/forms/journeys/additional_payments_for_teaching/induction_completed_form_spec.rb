@@ -13,9 +13,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::InductionCompletedForm d
 
     let(:slug) { "induction_completed" }
 
-    let(:journey_session) do
-      build(:journeys_session, journey: journey::ROUTING_NAME)
-    end
+    let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
 
     subject(:form) do
       described_class.new(
@@ -31,16 +29,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::InductionCompletedForm d
 
       it "raises an error" do
         expect { form }.to raise_error ActionController::UnpermittedParameters
-      end
-    end
-
-    describe "#backlink_path" do
-      context "new form" do
-        let(:params) { ActionController::Parameters.new({slug: slug, claim: {}}) }
-
-        it "returns nil" do
-          expect(form.backlink_path).to be_nil
-        end
       end
     end
 

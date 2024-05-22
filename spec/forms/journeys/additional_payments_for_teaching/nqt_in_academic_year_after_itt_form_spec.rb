@@ -5,9 +5,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
 
-  let(:journey_session) do
-    build(:journeys_session, journey: journey::ROUTING_NAME)
-  end
+  let(:journey_session) { build(:additional_payments_session) }
 
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
 
@@ -191,69 +189,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
           end
         end
       end
-    end
-  end
-
-  describe "#backlink_path" do
-    context "when the page sequence does not include 'correct-school'" do
-      let(:claim) { create(:claim, policy: Policies::EarlyCareerPayments) }
-
-      let(:form) do
-        described_class.new(
-          journey: journey,
-          journey_session: journey_session,
-          claim: current_claim,
-          params: ActionController::Parameters.new({})
-        )
-      end
-
-      subject(:backlink_path) { form.backlink_path }
-
-      it { is_expected.to be_nil }
-    end
-
-    context "when the page sequence includes 'correct-school'" do
-      before do
-        tps_record = create(
-          :teachers_pensions_service,
-          :early_career_payments_matched_first,
-          teacher_reference_number: "1234567",
-          end_date: 1.year.from_now
-        )
-
-        local_authority = create(:local_authority, code: tps_record.la_urn)
-
-        create(
-          :school,
-          :open,
-          local_authority: local_authority,
-          establishment_number: tps_record.school_urn
-        )
-      end
-
-      let(:claim) do
-        create(
-          :claim,
-          policy: Policies::EarlyCareerPayments,
-          logged_in_with_tid: true,
-          teacher_reference_number: "1234567"
-        )
-      end
-
-      let(:form) do
-        described_class.new(
-          journey: journey,
-          journey_session: journey_session,
-          claim: current_claim,
-          params: ActionController::Parameters.new({
-            journey: "additional-payments"
-          })
-        )
-      end
-
-      subject(:backlink_path) { form.backlink_path }
-
-      it { is_expected.to eq("/additional-payments/correct-school") }
     end
   end
 end

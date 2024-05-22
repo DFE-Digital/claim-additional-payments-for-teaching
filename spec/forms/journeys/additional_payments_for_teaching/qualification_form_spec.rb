@@ -5,9 +5,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationForm, type:
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
 
-  let(:journey_session) do
-    build(:journeys_session, journey: journey::ROUTING_NAME)
-  end
+  let(:journey_session) { build(:additional_payments_session) }
 
   let(:claim) { create(:claim, policy: Policies::EarlyCareerPayments) }
 
@@ -76,26 +74,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationForm, type:
           .from("mathematics").to(nil)
         )
       end
-    end
-  end
-
-  describe "#backlink_path" do
-    let(:form) do
-      described_class.new(
-        journey: journey,
-        journey_session: journey_session,
-        claim: current_claim,
-        params: ActionController::Parameters.new(
-          {
-            journey: "additional-payments",
-            slug: "qualification"
-          }
-        )
-      )
-    end
-
-    it "returns the previous page in the journey" do
-      expect(form.backlink_path).to eq("/additional-payments/poor-performance")
     end
   end
 end

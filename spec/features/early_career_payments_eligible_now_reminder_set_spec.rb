@@ -4,7 +4,7 @@ RSpec.feature "Eligible now can set a reminder for next year." do
   let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
   let(:eligibility_attributes) { attributes_for(:early_career_payments_eligibility, :eligible, current_school_id: school.id) }
   let(:academic_year) { journey_configuration.current_academic_year }
-  let(:school) { create(:school, :early_career_payments_eligible) }
+  let(:school) { create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_eligible) }
 
   it "auto-sets a reminders email and name from claim params and displays the correct year" do
     claim = start_early_career_payments_claim
@@ -58,7 +58,7 @@ RSpec.feature "Completed Applications - Reminders" do
     context "when accepting claims for AcademicYear #{policy[:policy_year]}" do
       let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: policy[:policy_year]) }
       let(:academic_year) { journey_configuration.current_academic_year }
-      let(:school) { create(:school, :early_career_payments_eligible) }
+      let(:school) { create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_eligible) }
 
       let(:claim) do
         claim = start_early_career_payments_claim
@@ -83,7 +83,9 @@ RSpec.feature "Completed Applications - Reminders" do
 
           expect(page).to have_text("You applied for an early-career payment")
           expect(page).to have_text("Your reference number")
-          expect(page).to have_text(claim.reload.reference.to_s)
+          expect(Claim.count).to eq 1
+          submitted_claim = Claim.last
+          expect(page).to have_text(submitted_claim.reference.to_s)
 
           if scenario[:invited_to_set_reminder] == true
             expect(page).to have_text("Set a reminder to apply next year")

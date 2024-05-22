@@ -8,7 +8,7 @@ RSpec.describe SelectHomeAddressForm, type: :model do
     let(:claim) { CurrentClaim.new(claims: [build(:claim, policy: Policies::StudentLoans)]) }
     let(:form) { described_class.new(claim:, journey:, journey_session:, params:) }
     let(:journey) { Journeys::TeacherStudentLoanReimbursement }
-    let(:journey_session) { build(:journeys_session, journey: journey::ROUTING_NAME) }
+    let(:journey_session) { build(:student_loans_session) }
     let(:params) { ActionController::Parameters.new(claim: {address:}) }
 
     it { is_expected.to be_truthy }

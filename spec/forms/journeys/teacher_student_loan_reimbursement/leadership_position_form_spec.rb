@@ -21,9 +21,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::LeadershipPositionForm
 
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
 
-  let(:journey_session) do
-    build(:journeys_session, journey: journey::ROUTING_NAME)
-  end
+  let(:journey_session) { build(:student_loans_session) }
 
   let(:params) do
     ActionController::Parameters.new(

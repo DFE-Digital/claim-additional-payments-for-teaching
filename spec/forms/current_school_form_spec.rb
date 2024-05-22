@@ -12,9 +12,7 @@ RSpec.describe CurrentSchoolForm do
       CurrentClaim.new(claims: claims)
     end
 
-    let(:journey_session) do
-      build(:journeys_session, journey: journey::ROUTING_NAME)
-    end
+    let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
 
     let(:slug) { "current-school" }
 
@@ -32,24 +30,6 @@ RSpec.describe CurrentSchoolForm do
 
       it "raises an error" do
         expect { form }.to raise_error ActionController::UnpermittedParameters
-      end
-    end
-
-    describe "#backlink_path" do
-      context "new form" do
-        let(:params) { ActionController::Parameters.new({slug: slug, claim: {}}) }
-
-        it "returns nil" do
-          expect(form.backlink_path).to be_nil
-        end
-      end
-
-      context "searching for a school" do
-        let(:params) { ActionController::Parameters.new({slug: slug, claim: {}, school_search: "Some school name"}) }
-
-        it "returns current-school" do
-          expect(form.backlink_path).to eq "current-school"
-        end
       end
     end
 

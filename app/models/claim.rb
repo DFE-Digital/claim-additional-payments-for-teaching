@@ -6,34 +6,6 @@ class Claim < ApplicationRecord
   NO_STUDENT_LOAN = "not_applicable"
   STUDENT_LOAN_PLAN_OPTIONS = StudentLoan::PLANS.dup << NO_STUDENT_LOAN
   ADDRESS_ATTRIBUTES = %w[address_line_1 address_line_2 address_line_3 address_line_4 postcode].freeze
-  EDITABLE_ATTRIBUTES = [
-    :first_name,
-    :middle_name,
-    :surname,
-    :address_line_1,
-    :address_line_2,
-    :address_line_3,
-    :address_line_4,
-    :postcode,
-    :date_of_birth,
-    :payroll_gender,
-    :teacher_reference_number,
-    :national_insurance_number,
-    :email_address,
-    :provide_mobile_number,
-    :mobile_number,
-    :bank_or_building_society,
-    :bank_sort_code,
-    :bank_account_number,
-    :banking_name,
-    :building_society_roll_number,
-    :one_time_password,
-    :logged_in_with_tid,
-    :details_check,
-    :email_address_check,
-    :mobile_check,
-    :qualifications_details_check
-  ].freeze
   AMENDABLE_ATTRIBUTES = %i[
     teacher_reference_number
     national_insurance_number
@@ -103,7 +75,8 @@ class Claim < ApplicationRecord
     qa_completed_at: false,
     qualifications_details_check: true,
     dqt_teacher_status: false,
-    submitted_using_slc_data: false
+    submitted_using_slc_data: false,
+    journeys_session_id: false
   }.freeze
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
@@ -136,6 +109,13 @@ class Claim < ApplicationRecord
   has_one :support_ticket, dependent: :destroy
 
   belongs_to :eligibility, polymorphic: true, inverse_of: :claim, dependent: :destroy
+
+  belongs_to :journey_session,
+    optional: true,
+    class_name: "Journeys::Session",
+    inverse_of: :claim,
+    foreign_key: :journeys_session_id
+
   accepts_nested_attributes_for :eligibility, update_only: true
   delegate :eligible_itt_subject, to: :eligibility, allow_nil: true
 
@@ -174,8 +154,6 @@ class Claim < ApplicationRecord
   validate :bank_sort_code_must_be_six_digits
   validate :building_society_roll_number_must_be_between_one_and_eighteen_digits
   validate :building_society_roll_number_must_be_in_a_valid_format
-
-  validate :claim_must_not_be_ineligible, on: :submit
 
   before_save :normalise_trn, if: :teacher_reference_number_changed?
   before_save :normalise_ni_number, if: :national_insurance_number_changed?
@@ -240,15 +218,6 @@ class Claim < ApplicationRecord
     return true if claims_approved_so_far.zero?
 
     (current_academic_year.approved.qa_required.count.to_f / claims_approved_so_far) * 100 <= MIN_QA_THRESHOLD
-  end
-
-  def submit!
-    raise NotSubmittable unless submittable?
-
-    self.submitted_at = Time.zone.now
-    self.reference = unique_reference
-    eligibility&.submit!
-    save!
   end
 
   def hold!(reason:, user:)
@@ -556,17 +525,6 @@ class Claim < ApplicationRecord
 
   def bank_sort_code_must_be_six_digits
     errors.add(:bank_sort_code, "Sort code must be 6 digits") if bank_sort_code.present? && normalised_bank_detail(bank_sort_code) !~ /\A\d{6}\z/
-  end
-
-  def unique_reference
-    loop {
-      ref = Reference.new.to_s
-      break ref unless self.class.exists?(reference: ref)
-    }
-  end
-
-  def claim_must_not_be_ineligible
-    errors.add(:base, "You’re not eligible for this payment") if eligibility.ineligible?
   end
 
   def using_mobile_number_from_tid?

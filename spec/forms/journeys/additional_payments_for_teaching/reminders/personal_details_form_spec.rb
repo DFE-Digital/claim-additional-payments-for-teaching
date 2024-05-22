@@ -4,7 +4,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::Reminders::PersonalDetai
   subject(:form) { described_class.new(claim: form_data_object, journey:, journey_session:, params:) }
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
-  let(:journey_session) { build(:journeys_session, journey: journey::ROUTING_NAME) }
+  let(:journey_session) { build(:additional_payments_session) }
   let(:form_data_object) { Reminder.new }
   let(:slug) { "personal-details" }
   let(:params) { ActionController::Parameters.new({slug:, form: form_params}) }

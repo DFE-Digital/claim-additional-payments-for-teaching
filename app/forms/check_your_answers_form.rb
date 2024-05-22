@@ -1,0 +1,2 @@
+class CheckYourAnswersForm < Form
+end

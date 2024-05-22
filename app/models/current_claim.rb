@@ -55,17 +55,6 @@ class CurrentClaim
     end
   end
 
-  def submit!(policy)
-    policy ||= main_claim.policy
-
-    ActiveRecord::Base.transaction do
-      claim = for_policy(policy)
-      claim.policy_options_provided = generate_policy_options_provided
-      claim.submit!
-      destroy_claims_except!(claim)
-    end
-  end
-
   def method_missing(method_name, ...)
     if [:attributes=, :save!, :update, :update!, :reset_dependent_answers, :update_attribute, :assign_attributes].include?(method_name)
       claims.each do |c|
@@ -124,10 +113,6 @@ class CurrentClaim
   # be using `eligibility_status` instead of this.
   def eligible_later?
     claims.any? { |c| c.eligibility.eligible_later? }
-  end
-
-  def editable_attributes
-    claims.flat_map { |c| c.eligibility.class::EDITABLE_ATTRIBUTES }.uniq
   end
 
   def eligible_now
@@ -202,21 +187,5 @@ class CurrentClaim
 
   def everything_ineligible?
     claims.all? { |claim| claim.eligibility.status == :ineligible }
-  end
-
-  def destroy_claims_except!(claim)
-    claims.where.not(id: claim.id).destroy_all
-    claims.reload
-  end
-
-  def generate_policy_options_provided
-    return [] unless main_claim.has_ecp_or_lupp_policy?
-
-    eligible_now_and_sorted.map do |c|
-      {
-        "policy" => c.policy.to_s,
-        "award_amount" => BigDecimal(c.award_amount)
-      }
-    end
   end
 end

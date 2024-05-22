@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_08_081918) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_10_144004) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -96,10 +96,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_08_081918) do
     t.boolean "qualifications_details_check"
     t.boolean "submitted_using_slc_data", default: false
     t.datetime "sent_one_time_password_at"
+    t.uuid "journeys_session_id"
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
     t.index ["held"], name: "index_claims_on_held"
+    t.index ["journeys_session_id"], name: "index_claims_on_journeys_session_id"
     t.index ["qa_required", "qa_completed_at"], name: "index_claims_on_qa_required_and_qa_completed_at", where: "qa_required"
     t.index ["reference"], name: "index_claims_on_reference", unique: true
     t.index ["submitted_at"], name: "index_claims_on_submitted_at"
@@ -450,6 +452,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_08_081918) do
   add_foreign_key "amendments", "dfe_sign_in_users", column: "dfe_sign_in_users_id"
   add_foreign_key "claim_payments", "claims"
   add_foreign_key "claim_payments", "payments"
+  add_foreign_key "claims", "journeys_sessions"
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "early_career_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "levelling_up_premium_payments_eligibilities", "schools", column: "current_school_id"

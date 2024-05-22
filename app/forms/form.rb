@@ -36,15 +36,6 @@ class Form
     journey::I18N_NAMESPACE
   end
 
-  def backlink_path
-    return unless page_sequence.previous_slug
-    Rails
-      .application
-      .routes
-      .url_helpers
-      .claim_path(params[:journey], page_sequence.previous_slug)
-  end
-
   def i18n_errors_path(msg, args = {})
     base_key = :"forms.#{i18n_form_namespace}.errors.#{msg}"
     I18n.t("#{i18n_namespace}.#{base_key}", default: base_key, **args)
@@ -87,7 +78,9 @@ class Form
   end
 
   def load_current_value(attribute)
-    return journey_session.answers[attribute] if journey_session.answers.key?(attribute)
+    if journey_session.answered?(attribute)
+      return journey_session.answers.public_send(attribute)
+    end
 
     # TODO: re-implement when the underlying claim and eligibility data sources
     # are moved to an alternative place e.g. a session hash
