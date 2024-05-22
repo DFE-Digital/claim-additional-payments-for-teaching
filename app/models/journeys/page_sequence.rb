@@ -8,11 +8,12 @@ module Journeys
     DEAD_END_SLUGS = %w[complete existing-session eligible-later future-eligibility ineligible]
     OPTIONAL_SLUGS = %w[postcode-search select-home-address reset-claim]
 
-    def initialize(claim, slug_sequence, completed_slugs, current_slug)
+    def initialize(claim, slug_sequence, completed_slugs, current_slug, journey_session)
       @claim = claim
       @current_slug = current_slug
       @slug_sequence = slug_sequence
       @completed_slugs = completed_slugs
+      @journey_session = journey_session
     end
 
     def slugs
@@ -26,7 +27,7 @@ module Journeys
 
       return "ineligible" if claim.ineligible?
 
-      if claim.submittable?
+      if claim_submittable?
         return "student-loan-amount" if updating_personal_details? && in_sequence?("student-loan-amount")
         return "check-your-answers"
       end
@@ -106,6 +107,19 @@ module Journeys
 
     def current_slug_index
       slugs.index(current_slug) || 0
+    end
+
+    def journey
+      @journey_session.class.module_parent
+    end
+
+    def claim_submittable?
+      journey::ClaimSubmissionForm.new(
+        journey_session: journey::ClaimJourneySessionShim.new(
+          current_claim: @claim,
+          journey_session: @journey_session
+        )
+      ).valid?
     end
   end
 end

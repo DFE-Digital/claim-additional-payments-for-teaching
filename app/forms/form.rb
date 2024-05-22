@@ -66,7 +66,8 @@ class Form
       claim,
       journey.slug_sequence.new(claim, journey_session),
       nil,
-      params[:slug]
+      params[:slug],
+      journey_session
     )
   end
 
