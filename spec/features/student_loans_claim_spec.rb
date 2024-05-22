@@ -189,12 +189,12 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
         }.to change { ActionMailer::Base.deliveries.count }.by(1)
       end
 
-      expect(claim.reload.submitted_at).to eq(Time.zone.now)
+      submitted_claim = Claim.by_policy(Policies::StudentLoans).order(:created_at).last
+      expect(submitted_claim.submitted_at).to eq(Time.zone.now)
+      expect(page).to have_text("Claim submitted")
+      expect(page).to have_text(submitted_claim.reference)
+      expect(page).to have_text(submitted_claim.email_address)
     end
-
-    expect(page).to have_text("Claim submitted")
-    expect(page).to have_text(claim.reference)
-    expect(page).to have_text(claim.email_address)
 
     # Check we can't skip to pages in middle of page sequence after claim is submitted
     visit claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "still-teaching")

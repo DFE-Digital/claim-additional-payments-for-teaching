@@ -256,6 +256,13 @@ en:
           enter_a_school_or_postcode: "Enter a school or postcode"
           select_a_school: "Select a school from the list or search again for a different school"
           school_not_found: "School not found"
+      claim_submission_form:
+        errors:
+          email_verified: "You must verify your email address before you can submit your claim"
+          email_address: "Enter an email address"
+          ineligible: "You’re not eligible for this payment"
+          mobile_number_verified: "You must verify your mobile number before you can submit your claim"
+          already_submitted: "You have already submitted this claim"
       current_school:
         questions:
           current_school_search: "Which school are you currently employed to teach at?"
@@ -400,6 +407,13 @@ en:
             confirmed their %{bank_or_building_society} details?"
   additional_payments: &additional_payments
     forms:
+      claim_submission_form:
+        errors:
+          email_verified: "You must verify your email address before you can submit your claim"
+          email_address: "Enter an email address"
+          ineligible: "You’re not eligible for this payment"
+          mobile_number_verified: "You must verify your mobile number before you can submit your claim"
+          already_submitted: "You have already submitted this claim"
       correct_school:
         questions:
           which_school: "Which school do you teach at?"

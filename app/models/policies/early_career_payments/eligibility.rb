@@ -78,7 +78,6 @@ module Policies
       belongs_to :current_school, optional: true, class_name: "School"
 
       validates :current_school, on: [:"correct-school"], presence: {message: "Select the school you teach at or choose somewhere else"}, unless: :school_somewhere_else?
-      validates :award_amount, on: [:submit], presence: {message: "Enter an award amount"}
       validates_numericality_of :award_amount, message: "Enter a valid monetary amount", allow_nil: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 7500
       validates :award_amount, on: :amendment, award_range: {max: max_award_amount_in_pounds}
 
@@ -134,11 +133,6 @@ module Policies
         end
       end
 
-      def submit!
-        self.award_amount = award_amount
-        save!
-      end
-
       def induction_not_completed?
         !induction_completed.nil? && !induction_completed?
       end
@@ -147,8 +141,6 @@ module Policies
         Policies::EarlyCareerPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible? &&
           !Policies::LevellingUpPremiumPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible?
       end
-
-      private
 
       def calculate_award_amount
         return 0 if eligible_itt_subject.blank?
@@ -161,6 +153,8 @@ module Policies
           Policies::EarlyCareerPayments::AwardAmountCalculator.new(**args).amount_in_pounds
         end
       end
+
+      private
 
       def specific_eligible_now_attributes?
         induction_completed? && itt_subject_eligible_now?

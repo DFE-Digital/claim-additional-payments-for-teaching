@@ -103,11 +103,6 @@ module Policies
         end
       end
 
-      def submit!
-        self.award_amount = award_amount
-        save!
-      end
-
       def indicated_ineligible_itt_subject?
         return false if eligible_itt_subject.blank?
 
@@ -122,7 +117,19 @@ module Policies
         end
       end
 
+      def calculate_award_amount
+        premium_payment_award&.award_amount
+      end
+
       private
+
+      def premium_payment_award
+        return unless current_school.present?
+
+        current_school.levelling_up_premium_payments_awards.find_by(
+          academic_year: claim_year.to_s
+        )
+      end
 
       def indicated_ecp_only_itt_subject?
         eligible_itt_subject.present? && (eligible_itt_subject.to_sym == :foreign_languages)
@@ -172,10 +179,6 @@ module Policies
 
       def lacks_eligible_degree?
         eligible_degree_subject == false
-      end
-
-      def calculate_award_amount
-        current_school.levelling_up_premium_payments_awards.find_by(academic_year: claim_year.to_s).award_amount if current_school.present?
       end
 
       def award_amount_must_be_in_range

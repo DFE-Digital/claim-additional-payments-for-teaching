@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Admin claim tasks update with DQT API" do
-  def claimant_submits_claim(claim_attributes:)
+  def claimant_submits_claim(claim_attributes:, post_submission_claim_attributes: {})
     claim = nil
 
     in_browser(:claimant) do
@@ -24,7 +24,11 @@ RSpec.feature "Admin claim tasks update with DQT API" do
       (claim_attributes[:policy] == Policies::EarlyCareerPayments) ? click_on("Accept and send") : click_on("Confirm and send")
     end
 
-    claim
+    submitted_claim = Claim.by_policy(claim_attributes[:policy]).order(:created_at).last
+
+    submitted_claim.update!(post_submission_claim_attributes)
+
+    submitted_claim
   end
 
   def in_browser(name)
@@ -512,8 +516,10 @@ RSpec.feature "Admin claim tasks update with DQT API" do
                 policy: policy,
                 reference: "AB123456",
                 surname: "ELIGIBLE",
-                tasks: [build(:task, name: :identity_confirmation)],
                 teacher_reference_number: "1234567"
+              },
+              post_submission_claim_attributes: {
+                tasks: [build(:task, name: :identity_confirmation)]
               }
             )
           end
@@ -865,9 +871,11 @@ RSpec.feature "Admin claim tasks update with DQT API" do
                 policy: policy,
                 reference: "AB123456",
                 surname: "ELIGIBLE",
-                tasks: [build(:task, name: "qualifications")], # manual: true in factory!
-                notes: [build(:note, :automated, body: note_body, label: "qualifications")],
                 teacher_reference_number: "1234567"
+              },
+              post_submission_claim_attributes: {
+                tasks: [build(:task, name: "qualifications")], # manual: true in factory!
+                notes: [build(:note, :automated, body: note_body, label: "qualifications")]
               }
             )
           end
@@ -1341,8 +1349,10 @@ RSpec.feature "Admin claim tasks update with DQT API" do
                 policy: policy,
                 reference: "AB123456",
                 surname: "ELIGIBLE",
-                tasks: [build(:task, name: :identity_confirmation)],
                 teacher_reference_number: "1234567"
+              },
+              post_submission_claim_attributes: {
+                tasks: [build(:task, name: :identity_confirmation)]
               }
             )
           end
@@ -1642,9 +1652,11 @@ RSpec.feature "Admin claim tasks update with DQT API" do
                 policy: policy,
                 reference: "AB123456",
                 surname: "ELIGIBLE",
-                tasks: [build(:task, name: "qualifications")],
-                notes: [build(:note, :automated, body: note_body, label: "qualifications")],
                 teacher_reference_number: "1234567"
+              },
+              post_submission_claim_attributes: {
+                tasks: [build(:task, name: "qualifications")],
+                notes: [build(:note, :automated, body: note_body, label: "qualifications")]
               }
             )
           end

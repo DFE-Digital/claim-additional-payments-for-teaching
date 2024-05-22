@@ -22,9 +22,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::QualificationDetailsFo
 
   let(:journey) { Journeys::TeacherStudentLoanReimbursement }
 
-  let(:journey_session) do
-    build(:journeys_session, journey: journey::ROUTING_NAME)
-  end
+  let(:journey_session) { build(:student_loans_session) }
 
   let(:form) do
     described_class.new(

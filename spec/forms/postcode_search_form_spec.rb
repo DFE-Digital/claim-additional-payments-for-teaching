@@ -5,9 +5,7 @@ RSpec.describe PostcodeSearchForm, type: :model do
 
   let(:claim) { CurrentClaim.new(claims: [create(:claim)]) }
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
-  let(:journey_session) do
-    build(:journeys_session, journey: journey::ROUTING_NAME)
-  end
+  let(:journey_session) { build(:additional_payments_session) }
   let(:params) { ActionController::Parameters.new }
 
   before do

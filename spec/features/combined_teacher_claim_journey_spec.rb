@@ -221,20 +221,21 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
 
     click_on "Accept and send"
 
+    submitted_claim = Claim.by_policy(Policies::LevellingUpPremiumPayments).order(:created_at).last
     # - Application complete
     expect(page).to have_text("You applied for a levelling up premium payment")
     expect(page).to have_text("What happens next")
     expect(page).to have_text("Set a reminder to apply next year")
     expect(page).to have_text("Apply for additional payment each academic year")
     expect(page).to have_text("What do you think of this service?")
-    expect(page).to have_text(claim.reload.reference)
+    expect(page).to have_text(submitted_claim.reference)
 
     policy_options_provided = [
       {"policy" => "EarlyCareerPayments", "award_amount" => "2000.0"},
       {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
     ]
 
-    expect(claim.reload.policy_options_provided).to eq policy_options_provided
+    expect(submitted_claim.policy_options_provided).to eq policy_options_provided
 
     # Check we can't skip to pages in middle of page sequence after claim is submitted
     visit claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "qualification")

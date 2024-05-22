@@ -6,9 +6,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::QtsYearForm, type: :mo
   end
 
   let(:journey) { Journeys::TeacherStudentLoanReimbursement }
-  let(:journey_session) do
-    build(:journeys_session, journey: journey::ROUTING_NAME)
-  end
+  let(:journey_session) { build(:student_loans_session) }
   let(:claim) { CurrentClaim.new(claims: [build(:claim, policy: Policies::StudentLoans)]) }
   let(:slug) { "qts-year" }
   let(:params) { ActionController::Parameters.new({slug:, claim: claim_params}) }

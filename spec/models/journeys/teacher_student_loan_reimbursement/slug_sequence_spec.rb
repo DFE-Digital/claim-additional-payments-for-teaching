@@ -6,7 +6,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
   let(:eligibility) { create(:student_loans_eligibility, :eligible) }
   let(:claim) { build(:claim, eligibility:, logged_in_with_tid:, details_check:, qualifications_details_check:, dqt_teacher_status:) }
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
-  let(:journey_session) { build(:journeys_session) }
+  let(:journey_session) { build(:student_loans_session) }
   let(:logged_in_with_tid) { nil }
   let(:details_check) { nil }
   let(:qualifications_details_check) { nil }
