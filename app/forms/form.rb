@@ -36,15 +36,6 @@ class Form
     journey::I18N_NAMESPACE
   end
 
-  def backlink_path
-    return unless page_sequence.previous_slug
-    Rails
-      .application
-      .routes
-      .url_helpers
-      .claim_path(params[:journey], page_sequence.previous_slug)
-  end
-
   def i18n_errors_path(msg, args = {})
     base_key = :"forms.#{i18n_form_namespace}.errors.#{msg}"
     I18n.t("#{i18n_namespace}.#{base_key}", default: base_key, **args)

@@ -94,15 +94,23 @@ RSpec.describe FormSubmittable, type: :request do
   end
 
   shared_examples :form_submission do
+    method ||= nil
     def submit(slug)
       send(method, slug, params: {})
     end
 
     context "when a form object is not present for the current slug" do
       context "when the `{current_slug}_before_update` filter is not defined" do
-        it "redirects to the next slug" do
-          submit "/additional-payments/first-slug"
-          expect(response).to redirect_to("/additional-payments/second-slug")
+        if method == :post
+          it "redirects to the first slug" do
+            submit "/additional-payments/first-slug"
+            expect(response).to redirect_to("/additional-payments/first-slug")
+          end
+        elsif method == :patch
+          it "redirects to the next slug" do
+            submit "/additional-payments/first-slug"
+            expect(response).to redirect_to("/additional-payments/second-slug")
+          end
         end
       end
 

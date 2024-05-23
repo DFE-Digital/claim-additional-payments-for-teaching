@@ -129,6 +129,8 @@ module FormSubmittable
     end
 
     def execute_callback_if_exists(callback_name)
+      return false unless current_slug
+
       callback_name = :"#{current_slug.underscore}_#{callback_name}"
       if respond_to?(callback_name)
         log_event(callback_name) { send(callback_name) }
@@ -149,10 +151,18 @@ module FormSubmittable
           render_template_for_current_slug
         end
       else
-        redirect_to_next_slug
+        no_form_fallback
       end
 
       yield
+    end
+
+    def no_form_fallback
+      if action_name == "create"
+        redirect_to_first_slug
+      elsif action_name == "update"
+        redirect_to_next_slug
+      end
     end
 
     def log_event(callback_name)

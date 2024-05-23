@@ -1,8 +1,8 @@
-<% content_for(:page_title, page_title(t("questions.address.home.title"), journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(t("questions.address.home.title"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "address": "#{@address_data.first[:address].gsub(",", "").gsub(" ", "_").downcase}"}) if current_claim.errors.any? %>
+    <%= render("shared/error_summary", instance: @form, errored_field_id_overrides: { "address": "#{@address_data.first[:address].gsub(",", "").gsub(" ", "_").downcase}"}) if @form.errors.any? %>
 
     <%= form_for @form, url: claim_path(current_journey_routing_name) do |form| %>
       <div class="govuk-!-margin-bottom-5">
