@@ -68,24 +68,29 @@ RSpec.describe EmailAddressForm do
           instance_double(OneTimePassword::Generator, code: "111111")
         )
 
-        allow(ClaimMailer).to receive(:email_verification).and_return(
-          claim_mailer_double
-        )
-
         form.save
       end
-
-      let(:claim_mailer_double) { double(deliver_now: true) }
 
       let(:email_address) { "test@example.com" }
 
       it "sends an email" do
-        expect(ClaimMailer).to have_received(:email_verification).with(
-          current_claim,
-          "111111"
+        policy = current_claim.policy
+
+        support_email_address = I18n.t(
+          "#{policy.locale_key}.support_email_address"
         )
 
-        expect(claim_mailer_double).to have_received(:deliver_now)
+        claim_subject = I18n.t("#{policy.locale_key}.claim_subject")
+
+        email_subject = "#{claim_subject} email verification"
+
+        expect(email_address).to have_received_email(
+          "89e8c33a-1863-4fdd-a73c-1ca01efc0c76",
+          email_subject: email_subject,
+          first_name: current_claim.first_name,
+          one_time_password: "111111",
+          support_email_address: support_email_address
+        )
       end
 
       it "updates sent_one_time_password_at" do
