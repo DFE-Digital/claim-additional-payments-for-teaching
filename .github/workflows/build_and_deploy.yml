@@ -26,6 +26,7 @@ jobs:
         uses: DFE-Digital/github-actions/build-docker-image@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          target: web
           context: .
 
   deploy_review:
@@ -57,7 +58,7 @@ jobs:
         if: github.event.number != ''
         run: |
           make ci review-aks get-cluster-credentials
-          kubectl exec -n srtl-development deployment/claim-additional-payments-for-teaching-review-${{ github.event.pull_request.number }} -- sh -c "cd /app && bundle exec rake db:schema:load db:seed"
+          kubectl exec -n srtl-development deployment/claim-additional-payments-for-teaching-review-${{ github.event.pull_request.number }} -- sh -c "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/rails db:schema:load db:seed"
         env:
           PR_NUMBER: ${{ github.event.pull_request.number }}
 
