@@ -88,7 +88,7 @@ module Journeys
           sequence.delete("mobile-number") if claim.provide_mobile_number == false
           sequence.delete("mobile-verification") if claim.provide_mobile_number == false
           sequence.delete("ineligible") unless claim.eligibility&.ineligible?
-          sequence.delete("personal-details") if answers.logged_in_with_tid? && personal_details_form.valid? && answers.all_personal_details_same_as_tid?(claim)
+          sequence.delete("personal-details") if answers.logged_in_with_tid? && personal_details_form.valid? && answers.all_personal_details_same_as_tid?
           sequence.delete("select-email") unless set_by_teacher_id?("email")
           if answers.logged_in_with_tid? && claim.email_address_check?
             sequence.delete("email-address")

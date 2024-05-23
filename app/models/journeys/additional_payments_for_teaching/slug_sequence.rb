@@ -106,7 +106,7 @@ module Journeys
 
           sequence.delete("select-email") unless set_by_teacher_id?("email")
 
-          if claim.logged_in_with_tid? && claim.email_address_check
+          if answers.logged_in_with_tid? && claim.email_address_check
             sequence.delete("email-address")
             sequence.delete("email-verification")
           end
@@ -158,7 +158,7 @@ module Journeys
             replace_ecp_only_induction_not_completed_slugs(sequence)
           end
 
-          sequence.delete("personal-details") if answers.logged_in_with_tid? && personal_details_form.valid? && answers.all_personal_details_same_as_tid?(claim)
+          sequence.delete("personal-details") if answers.logged_in_with_tid? && personal_details_form.valid? && answers.all_personal_details_same_as_tid?
 
           if answers.logged_in_with_tid? && answers.details_check?
             if claim.qualifications_details_check

@@ -5,6 +5,9 @@ RSpec.feature "Levelling up premium payments claims" do
   let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
   let!(:school) { create(:school, :levelling_up_premium_payments_eligible) }
   let(:itt_subject) { "Mathematics" }
+  let(:journey_session) do
+    Journeys::AdditionalPaymentsForTeaching::Session.order(:created_at).last
+  end
 
   def check_eligibility_up_to_apply(expect_to_fail: false)
     start_levelling_up_premium_payments_claim
@@ -303,7 +306,7 @@ RSpec.feature "Levelling up premium payments claims" do
   end
 
   context "when updating personal details fields" do
-    let(:old_last_name) { claim.reload.surname }
+    let(:old_last_name) { journey_session.reload.answers.surname }
     let(:new_last_name) { "#{old_last_name}-McRandom" }
 
     before do
@@ -315,7 +318,7 @@ RSpec.feature "Levelling up premium payments claims" do
 
     scenario "user is then redirected to check your answers" do
       expect { click_on "Continue" }
-        .to change { claim.reload.surname }
+        .to change { journey_session.reload.answers.surname }
         .from(old_last_name).to(new_last_name)
 
       expect(page).to have_content("Check your answers before sending your application")

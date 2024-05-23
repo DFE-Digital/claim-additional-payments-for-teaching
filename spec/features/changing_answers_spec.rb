@@ -140,13 +140,29 @@ RSpec.feature "Changing the answers on a submittable claim" do
   scenario "Teacher edits personal details, triggering the update of student loan details" do
     claim = start_student_loans_claim
     eligibility = claim.eligibility
+    journey_session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
+
+    journey_session.update!(
+      answers: attributes_for(
+        :student_loans_answers,
+        :with_personal_details
+      )
+    )
+
+    answers = journey_session.answers
 
     claim.update!(attributes_for(:claim, :submittable))
     eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id, student_loan_repayment_amount: 100))
     jump_to_claim_journey_page(claim, "check-your-answers")
 
     # Add student loans data for the applicant's NINO and DoB
-    create(:student_loans_data, nino: "AB123456C", date_of_birth: claim.date_of_birth, plan_type_of_deduction: 1, amount: 50)
+    create(
+      :student_loans_data,
+      nino: "AB123456C",
+      date_of_birth: answers.date_of_birth,
+      plan_type_of_deduction: 1,
+      amount: 50
+    )
 
     page.first("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "personal-details")}']", minimum: 1).click
     fill_in "National Insurance number", with: "AB123456C"
@@ -162,15 +178,26 @@ RSpec.feature "Changing the answers on a submittable claim" do
   context "User changes fields that aren't related to eligibility" do
     let!(:claim) { start_student_loans_claim }
     let(:eligibility) { claim.eligibility }
+    let(:journey_session) do
+      Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
+    end
+    let(:answers) { journey_session.answers }
 
     before do
       claim.update!(attributes_for(:claim, :submittable))
       eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
+      journey_session.update!(
+        answers: attributes_for(
+          :student_loans_answers,
+          :with_personal_details,
+          middle_name: "Jay"
+        )
+      )
       jump_to_claim_journey_page(claim, "check-your-answers")
     end
 
     scenario "Teacher can change a field that isn't related to eligibility" do
-      old_middle_name = claim.middle_name
+      old_middle_name = answers.middle_name
       new_middle_name = "Janet #{old_middle_name}"
 
       expect {
@@ -178,7 +205,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
         fill_in "Middle names", with: new_middle_name
         click_on "Continue"
       }.to change {
-        claim.reload.middle_name
+        journey_session.reload.answers.middle_name
       }.from(old_middle_name).to(new_middle_name)
 
       # - student-loan-amount is re-displayed for TSLR
@@ -207,7 +234,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       click_on "Continue"
 
       expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "check-your-answers"))
-      expect(claim.reload.first_name).to eq("Bobby")
+      expect(journey_session.reload.answers.first_name).to eq("Bobby")
     end
 
     scenario "user can change the answer to payment details" do

@@ -245,14 +245,11 @@ RSpec.describe "Claims", type: :request do
 
           context "when the claim has all valid personal details" do
             before do
-              in_progress_claim.update!(
+              journey_session.answers.assign_attributes(
                 first_name: "John",
                 surname: "Doe",
                 date_of_birth: "1/1/1990",
-                national_insurance_number: "QQ123456C"
-              )
-
-              journey_session.answers.assign_attributes(
+                national_insurance_number: "QQ123456C",
                 teacher_id_user_info: {
                   "given_name" => "John",
                   "family_name" => "Doe",
@@ -272,14 +269,11 @@ RSpec.describe "Claims", type: :request do
 
           context "when the claim does not have all valid personal details" do
             before do
-              in_progress_claim.update!(
+              journey_session.answers.assign_attributes(
                 first_name: "John",
                 surname: "Doe",
                 date_of_birth: "1/1/1990",
-                national_insurance_number: "QQ123456C"
-              )
-
-              journey_session.answers.assign_attributes(
+                national_insurance_number: "QQ123456C",
                 teacher_id_user_info: {
                   "given_name" => "Not John",
                   "family_name" => "Doe",

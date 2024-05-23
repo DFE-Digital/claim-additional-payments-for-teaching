@@ -144,8 +144,8 @@ RSpec.feature "Combined journey with Teacher ID" do
     # - Email address
     expect(page).to have_text(I18n.t("forms.select_email.questions.select_email"))
 
-    claim = Claim.all.order(created_at: :desc).limit(1).first
-    choose claim.teacher_id_user_info["email"]
+    session = Journeys::AdditionalPaymentsForTeaching::Session.order(created_at: :desc).last
+    choose session.answers.teacher_id_user_info["email"]
 
     click_on "Continue"
 

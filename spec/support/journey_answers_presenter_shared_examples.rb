@@ -39,7 +39,12 @@ RSpec.shared_examples "journey answers presenter" do
         :additional_payments_session,
         answers: {
           logged_in_with_tid: logged_in_with_tid,
-          teacher_id_user_info: teacher_id_user_info
+          teacher_id_user_info: teacher_id_user_info,
+          first_name: first_name,
+          surname: surname,
+          teacher_reference_number: trn,
+          date_of_birth: dob,
+          national_insurance_number: nino
         }
       )
     end

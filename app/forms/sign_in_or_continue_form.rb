@@ -74,8 +74,6 @@ class SignInOrContinueForm < Form
 
   def update_from_dfe_identity_sign_in!
     if details_check
-      # FIXME: RL can we inline DfeIdentity::UserInfo's responsibilities into
-      # TeacherIdUserInfoForm?
       if DfeIdentity::UserInfo.validated?(teacher_id_user_info.attributes)
         journey_session.answers.assign_attributes(
           first_name: teacher_id_user_info.given_name,
@@ -89,22 +87,9 @@ class SignInOrContinueForm < Form
           teacher_id_user_info: teacher_id_user_info.attributes
         )
 
-        # FIXME RL: Hack to avoid having to update the personal details form
-        # in this commit. When the personal details form is writing to the
-        # journey session updating the claim can be removed.
-        # Required as the slug sequence checks the details on the claim are
-        # the same as those on the journey session
-        update!(
-          first_name: teacher_id_user_info.given_name,
-          surname: teacher_id_user_info.family_name,
-          teacher_reference_number: teacher_id_user_info.trn,
-          date_of_birth: teacher_id_user_info.birthdate,
-          national_insurance_number: teacher_id_user_info.ni_number,
-          logged_in_with_tid: true,
-          dqt_teacher_status: nil,
-          details_check: true,
-          teacher_id_user_info: teacher_id_user_info.attributes
-        )
+        # FIXME RL: Remove this once we update the teacher reference number
+        # form to write to the journey session
+        update!(teacher_reference_number: teacher_id_user_info.trn)
 
         journey_session.save!
 
@@ -117,28 +102,9 @@ class SignInOrContinueForm < Form
           teacher_id_user_info: teacher_id_user_info.attributes
         )
 
-        # FIXME RL: Hack to avoid having to update the personal details form
-        # in this commit. When the personal details form is writing to the
-        # journey session updating the claim can be removed.
-        # Required as the slug sequence checks the details on the claim are
-        # the same as those on the journey session
-        update!(
-          logged_in_with_tid: true,
-          details_check: false,
-          dqt_teacher_status: nil,
-          teacher_id_user_info: teacher_id_user_info.attributes
-        )
-
         journey_session.save!
       end
     else
-      # NOTE The exisitng behaviour is to set attributes to `""`, however we
-      # don't want to treat these questions as answered. I'm not sure why we
-      # don't just nuliify the attributes.
-      # We use the `answered` attribute to determine if we need to check the
-      # journey session or current claim for answers to a question, and this
-      # functionality will be removed once the migration to journey session
-      # is complete.
       journey_session.answers.assign_attributes(
         first_name: "",
         surname: "",
@@ -147,23 +113,6 @@ class SignInOrContinueForm < Form
         national_insurance_number: "",
         logged_in_with_tid: false,
         details_check: false,
-        teacher_id_user_info: teacher_id_user_info.attributes,
-        answered: [
-          "logged_in_with_tid",
-          "details_check",
-          "teacher_id_user_info_attributes"
-        ]
-      )
-
-      # FIXME RL: Hack to avoid having to update the personal details form
-      # in this commit. When the personal details form is writing to the
-      # journey session updating the claim can be removed.
-      # Required as the slug sequence checks the details on the claim are
-      # the same as those on the journey session
-      update!(
-        logged_in_with_tid: true,
-        details_check: false,
-        dqt_teacher_status: nil,
         teacher_id_user_info: teacher_id_user_info.attributes
       )
 
@@ -173,26 +122,6 @@ class SignInOrContinueForm < Form
 
   def update_from_skipped_dfe_identity_sign_in!
     journey_session.answers.assign_attributes(
-      first_name: "",
-      surname: "",
-      teacher_reference_number: "",
-      date_of_birth: nil,
-      national_insurance_number: "",
-      logged_in_with_tid: false,
-      details_check: nil,
-      teacher_id_user_info: {},
-      answered: [
-        "logged_in_with_tid",
-        "details_check"
-      ]
-    )
-
-    # FIXME RL: Hack to avoid having to update the personal details form
-    # in this commit. When the personal details form is writing to the
-    # journey session updating the claim can be removed.
-    # Required as the slug sequence checks the details on the claim are
-    # the same as those on the journey session
-    update!(
       first_name: "",
       surname: "",
       teacher_reference_number: "",

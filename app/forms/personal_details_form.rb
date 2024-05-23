@@ -52,24 +52,35 @@ class PersonalDetailsForm < Form
     Date.valid_date?(*date_args) ? Date.new(*date_args) : InvalidDate.new(date_hash)
   end
 
-  # FIXME RL Update the signin or continue form to not write answers to the
-  # claim when migrating this form to write to the journey session
   def save
     return false unless valid?
 
-    update!({first_name:, middle_name:, surname:, date_of_birth:, national_insurance_number:})
+    journey_session.answers.assign_attributes(
+      first_name:,
+      middle_name:,
+      surname:,
+      date_of_birth:,
+      national_insurance_number:
+    )
+
+    reset_depenent_answers_attributes
+
+    ApplicationRecord.transaction do
+      journey_session.save!
+      claim.save!
+    end
   end
 
   def show_name_section?
-    !(answers.logged_in_with_tid? && answers.name_same_as_tid?(claim) && has_valid_name?)
+    !(answers.logged_in_with_tid? && answers.name_same_as_tid? && has_valid_name?)
   end
 
   def show_date_of_birth_section?
-    !(answers.logged_in_with_tid? && answers.dob_same_as_tid?(claim) && has_valid_date_of_birth?)
+    !(answers.logged_in_with_tid? && answers.dob_same_as_tid? && has_valid_date_of_birth?)
   end
 
   def show_nino_section?
-    !(answers.logged_in_with_tid? && answers.nino_same_as_tid?(claim) && has_valid_nino?)
+    !(answers.logged_in_with_tid? && answers.nino_same_as_tid? && has_valid_nino?)
   end
 
   private
@@ -81,10 +92,9 @@ class PersonalDetailsForm < Form
   end
 
   def assign_date_attributes
-    dob = answers.date_of_birth.presence || claim.date_of_birth
-    self.day = permitted_params.fetch(:day, dob&.day)
-    self.month = permitted_params.fetch(:month, dob&.month)
-    self.year = permitted_params.fetch(:year, dob&.year)
+    self.day = permitted_params.fetch(:day, answers.date_of_birth&.day)
+    self.month = permitted_params.fetch(:month, answers.date_of_birth&.month)
+    self.year = permitted_params.fetch(:year, answers.date_of_birth&.year)
   end
 
   def ni_number_is_correct_format
@@ -130,5 +140,24 @@ class PersonalDetailsForm < Form
   def has_valid_nino?
     valid?
     errors.exclude?(:national_insurance_number)
+  end
+
+  # FIXME RL: Remove reseting claim attributes once we've migrated student loan
+  # data to the answers model
+  def reset_depenent_answers_attributes
+    journey_session.answers.assign_attributes(
+      has_student_loan: nil,
+      student_loan_plan: nil
+    )
+
+    claim.assign_attributes(has_student_loan: nil, student_loan_plan: nil)
+
+    if journey == Journeys::TeacherStudentLoanReimbursement
+      journey_session.answers.assign_attributes(
+        student_loan_repayment_amount: nil
+      )
+
+      claim.eligibility.assign_attributes(student_loan_repayment_amount: nil)
+    end
   end
 end
