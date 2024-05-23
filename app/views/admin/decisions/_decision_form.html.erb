@@ -2,7 +2,7 @@
   <div class="govuk-warning-text">
     <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
     <strong class="govuk-warning-text__text">
-      <span class="govuk-warning-text__assistive">Warning</span>
+      <span class="govuk-visually-hidden">Warning</span>
       <p class="govuk-!-margin-top-0">
         This claim cannot currently be approved because we’re already paying
         <%= claims_preventing_payment.one? ? "another claim" : "other claims" %>
@@ -21,7 +21,7 @@
   <div class="govuk-warning-text">
     <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
     <strong class="govuk-warning-text__text">
-      <span class="govuk-warning-text__assistive">Warning</span>
+      <span class="govuk-visually-hidden">Warning</span>
       <p class="govuk-!-margin-top-0">
         You cannot approve or reject a claim that is on hold
       </p>

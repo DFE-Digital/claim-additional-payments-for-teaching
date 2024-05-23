@@ -28,7 +28,7 @@
 
     <%= render "admin/claims/tabs", claim: @claim %>
 
-    <section class="govuk-tabs__panel" role="tabpanel" aria-labelledby="tab_tasks">
+    <div class="govuk-tabs__panel">
       <ol class="app-task-list">
 
         <% @claim_checking_tasks.applicable_task_names.each_with_index do |task_name, index| %>
@@ -89,6 +89,6 @@
           </li>
         <% end %>
       </ol>
-    </section>
+    </div>
   </div>
 </div>

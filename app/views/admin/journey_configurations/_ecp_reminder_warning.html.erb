@@ -4,7 +4,7 @@
         <div class="govuk-warning-text" id="ecp-reminder-count-warning">
         <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
           <strong class="govuk-warning-text__text">
-            <span class="govuk-warning-text__assistive">Warning</span>
+            <span class="govuk-visually-hidden">Warning</span>
             <%= t("admin.journey_configuration.reminder_warning", count: Reminder.to_be_sent.count) %>
           </strong>
         </div>
