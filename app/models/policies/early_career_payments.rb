@@ -23,6 +23,7 @@ module Policies
     ].freeze
 
     POLICY_START_YEAR = AcademicYear.new(2021).freeze
+    POLICY_END_YEAR = AcademicYear.new(2024).freeze
 
     # Used in
     #  - checking payments with multiple policies: ClaimsPreventingPaymentFinder
