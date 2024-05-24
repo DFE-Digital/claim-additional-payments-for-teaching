@@ -7,10 +7,24 @@ RSpec.feature "Confirming Claimant Contact details" do
     claim = start_early_career_payments_claim
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
-    claim.update!(email_address: "david.tau@gmail.com")
 
-    expect(claim.reload.email_address).to eql("david.tau@gmail.com")
-    expect(claim.email_address).not_to eql("david.tau1988@hotmail.co.uk")
+    journey_session = Journeys::AdditionalPaymentsForTeaching::Session.last
+    journey_session.answers.assign_attributes(
+      attributes_for(
+        :additional_payments_answers,
+        :with_personal_details,
+        :with_email_details
+      ).merge(email_address: "david.tau@gmail.com")
+    )
+    journey_session.save!
+
+    expect(journey_session.reload.answers.email_address).to(
+      eq("david.tau@gmail.com")
+    )
+
+    expect(journey_session.answers.email_address).not_to(
+      eq("david.tau1988@hotmail.co.uk")
+    )
 
     jump_to_claim_journey_page(claim, "email-verification")
 
@@ -26,7 +40,11 @@ RSpec.feature "Confirming Claimant Contact details" do
 
     click_on "Continue"
 
-    expect(claim.reload.email_address).not_to eql("david.tau@gmail.com")
-    expect(claim.email_address).to eql("david.tau1988@hotmail.co.uk")
+    expect(journey_session.reload.answers.email_address).not_to(
+      eq("david.tau@gmail.com")
+    )
+    expect(journey_session.answers.email_address).to(
+      eql("david.tau1988@hotmail.co.uk")
+    )
   end
 end

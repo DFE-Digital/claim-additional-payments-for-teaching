@@ -22,7 +22,8 @@ RSpec.describe "Submissions", type: :request do
         journey_session.update!(
           answers: attributes_for(
             :student_loans_answers,
-            :with_personal_details
+            :with_personal_details,
+            :with_email_details
           )
         )
 

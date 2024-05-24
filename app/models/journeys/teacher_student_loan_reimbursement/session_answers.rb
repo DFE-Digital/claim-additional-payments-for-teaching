@@ -26,6 +26,10 @@ module Journeys
       def has_no_dqt_data_for_claim?
         dqt_teacher_status.blank? || dqt_teacher_record.has_no_data_for_claim?
       end
+
+      def policy
+        Policies::StudentLoans
+      end
     end
   end
 end

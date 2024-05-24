@@ -91,6 +91,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
   def fill_in_remaining_personal_details_and_submit
     claim = Claim.by_policy(Policies::StudentLoans).order(:created_at).last
+    session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
 
     expect(page).to have_text(I18n.t("questions.address.home.title"))
 
@@ -118,7 +119,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     fill_in I18n.t("questions.email_address"), with: "name@example.tld"
     click_on "Continue"
 
-    expect(claim.reload.email_address).to eq("name@example.tld")
+    expect(session.reload.answers.email_address).to eq("name@example.tld")
 
     # - One time password
     expect(page).to have_text("Enter the 6-digit passcode")

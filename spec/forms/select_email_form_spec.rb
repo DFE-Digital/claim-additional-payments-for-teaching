@@ -93,6 +93,16 @@ RSpec.describe SelectEmailForm, type: :model do
         before { form.save }
 
         it { is_expected.to have_received(:update!).with(expected_saved_attributes) }
+
+        it "updates the session" do
+          expect(journey_session.reload.answers.email_address).to(
+            eq(email_from_teacher_id)
+          )
+
+          expect(journey_session.reload.answers.email_verified).to eq(true)
+
+          expect(journey_session.reload.answers.email_address_check).to eq(true)
+        end
       end
 
       context "when the user selected to provide a different email address" do
@@ -108,6 +118,12 @@ RSpec.describe SelectEmailForm, type: :model do
         before { form.save }
 
         it { is_expected.to have_received(:update!).with(expected_saved_attributes) }
+
+        it "updates the session" do
+          expect(journey_session.reload.answers.email_address).to eq(nil)
+          expect(journey_session.reload.answers.email_verified).to eq(nil)
+          expect(journey_session.reload.answers.email_address_check).to eq(false)
+        end
       end
     end
 

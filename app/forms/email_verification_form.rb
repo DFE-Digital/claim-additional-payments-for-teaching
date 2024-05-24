@@ -2,7 +2,7 @@ class EmailVerificationForm < Form
   attribute :one_time_password
 
   # Required for shared partial in the view
-  delegate :email_address, to: :claim
+  delegate :email_address, to: :answers
 
   validate :sent_one_time_password_must_be_valid
   validate :otp_must_be_valid, if: :sent_one_time_password_at?

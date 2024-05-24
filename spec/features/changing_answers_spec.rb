@@ -16,6 +16,16 @@ RSpec.feature "Changing the answers on a submittable claim" do
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
 
+    session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
+    session.answers.assign_attributes(
+      attributes_for(
+        :student_loans_answers,
+        :with_personal_details,
+        :with_email_details
+      )
+    )
+    session.save!
+
     jump_to_claim_journey_page(claim, "check-your-answers")
 
     find("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "subjects-taught")}']").click
@@ -57,6 +67,17 @@ RSpec.feature "Changing the answers on a submittable claim" do
     claim = start_student_loans_claim
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
+
+    session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
+    session.answers.assign_attributes(
+      attributes_for(
+        :student_loans_answers,
+        :with_personal_details,
+        :with_email_details
+      )
+    )
+    session.save!
+
     jump_to_claim_journey_page(claim, "check-your-answers")
 
     new_claim_school = create(:school, :student_loans_eligible, name: "Claim School")
@@ -95,6 +116,16 @@ RSpec.feature "Changing the answers on a submittable claim" do
     claim = start_student_loans_claim
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, had_leadership_position: false, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
+    session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
+    session.answers.assign_attributes(
+      attributes_for(
+        :student_loans_answers,
+        :with_personal_details,
+        :with_email_details
+      )
+    )
+    session.save!
+
     jump_to_claim_journey_page(claim, "check-your-answers")
 
     find("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "leadership-position")}']").click
@@ -118,6 +149,16 @@ RSpec.feature "Changing the answers on a submittable claim" do
     claim = start_student_loans_claim
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
+
+    session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
+    session.answers.assign_attributes(
+      attributes_for(
+        :student_loans_answers,
+        :with_personal_details,
+        :with_email_details
+      )
+    )
+    session.save!
 
     jump_to_claim_journey_page(claim, "check-your-answers")
 
@@ -145,7 +186,8 @@ RSpec.feature "Changing the answers on a submittable claim" do
     journey_session.update!(
       answers: attributes_for(
         :student_loans_answers,
-        :with_personal_details
+        :with_personal_details,
+        :with_email_details
       )
     )
 
@@ -190,6 +232,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
         answers: attributes_for(
           :student_loans_answers,
           :with_personal_details,
+          :with_email_details,
           middle_name: "Jay"
         )
       )
@@ -273,11 +316,23 @@ RSpec.feature "Changing the answers on a submittable claim" do
   describe "Teacher changes a field that requires OTP validation" do
     let!(:claim) { start_early_career_payments_claim }
     let(:eligibility) { claim.eligibility }
+    let(:session) do
+      Journeys::AdditionalPaymentsForTeaching::Session.order(:created_at).last
+    end
 
     before do
       claim.update!(attributes_for(:claim, :submittable))
       eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible, current_school_id: ecp_school.id))
       claim.update!(personal_details_attributes)
+
+      session.answers.assign_attributes(
+        attributes_for(
+          :student_loans_answers,
+          :with_personal_details,
+          :with_email_details
+        )
+      )
+      session.save!
 
       jump_to_claim_journey_page(claim, "check-your-answers")
     end
@@ -286,7 +341,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       let(:personal_details_attributes) { {} }
 
       scenario "is asked to provide the OTP challenge code for validation" do
-        old_email = claim.email_address
+        old_email = session.answers.email_address
         new_email = "fiona.adouboux@protonmail.com"
 
         expect {
@@ -294,7 +349,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
           fill_in "Email address", with: new_email
           click_on "Continue"
         }.to change {
-          claim.reload.email_address
+          session.reload.answers.email_address
         }.from(old_email).to(new_email)
 
         expect(page).not_to have_content("Check your answers before sending your application")

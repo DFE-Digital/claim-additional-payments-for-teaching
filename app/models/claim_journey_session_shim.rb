@@ -26,7 +26,7 @@ class ClaimJourneySessionShim
       date_of_birth: journey_session.answers.date_of_birth,
       teacher_reference_number: teacher_reference_number,
       national_insurance_number: journey_session.answers.national_insurance_number,
-      email_address: email_address,
+      email_address: journey_session.answers.email_address,
       bank_sort_code: bank_sort_code,
       bank_account_number: bank_account_number,
       details_check: details_check,
@@ -80,10 +80,6 @@ class ClaimJourneySessionShim
 
   def teacher_reference_number
     journey_session.answers.teacher_reference_number.presence || current_claim.teacher_reference_number
-  end
-
-  def email_address
-    journey_session.answers.email_address || current_claim.email_address
   end
 
   def bank_sort_code
