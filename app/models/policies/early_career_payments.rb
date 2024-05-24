@@ -49,14 +49,6 @@ module Policies
       "3f85a1f7-9400-4b48-9a31-eaa643d6b977"
     end
 
-    def first_eligible_qts_award_year(claim_year = nil)
-      POLICY_START_YEAR
-    end
-
-    def last_ineligible_qts_award_year
-      first_eligible_qts_award_year - 1
-    end
-
     def student_loan_balance_url
       "https://www.gov.uk/sign-in-to-manage-your-student-loan-balance"
     end
