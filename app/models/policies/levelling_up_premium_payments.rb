@@ -24,6 +24,9 @@ module Policies
 
     SEARCHABLE_ELIGIBILITY_ATTRIBUTES = %w[teacher_reference_number].freeze
 
+    POLICY_START_YEAR = AcademicYear.new(2022).freeze
+    POLICY_END_YEAR = AcademicYear.new(2024).freeze
+
     def notify_reply_to_id
       "03ece7eb-2a5b-461b-9c91-6630d0051aa6"
     end
