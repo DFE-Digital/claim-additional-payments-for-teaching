@@ -72,7 +72,9 @@ RSpec.describe Policies::EarlyCareerPayments::PolicyEligibilityChecker, type: :m
   end
 
   describe "#status" do
-    before { create(:journey_configuration, :additional_payments) }
+    let(:claim_year) { AcademicYear.new(2022) }
+
+    before { create(:journey_configuration, :additional_payments, current_academic_year: claim_year) }
 
     subject { policy_eligibility_checker.status }
 
@@ -111,14 +113,16 @@ RSpec.describe Policies::EarlyCareerPayments::PolicyEligibilityChecker, type: :m
     end
 
     context "induction not completed" do
-      context "with an ECP-only eligible school" do
-        let(:answers) { build(:additional_payments_answers, :ecp_eligible, induction_completed: false) }
+      let(:answers) { build(:additional_payments_answers, :ecp_eligible, :eligible_school_ecp_only, induction_completed: false) }
+
+      context "when the claim year is not the same as the end policy year" do
+        let(:claim_year) { Policies::EarlyCareerPayments::POLICY_END_YEAR - 1 }
 
         it { is_expected.to eq(:eligible_later) }
       end
 
-      context "with an ECP and LUP eligible school" do
-        let(:answers) { build(:additional_payments_answers, :ecp_eligible, :eligible_school_ecp_and_lup, induction_completed: false) }
+      context "when the claim year is the same as the end policy year" do
+        let(:claim_year) { Policies::EarlyCareerPayments::POLICY_END_YEAR }
 
         it { is_expected.to eq(:ineligible) }
       end

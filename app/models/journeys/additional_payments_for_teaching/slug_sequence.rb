@@ -183,13 +183,14 @@ module Journeys
         )
       end
 
-      def replace_ecp_only_induction_not_completed_slugs(sequence)
+      def replace_ecp_only_induction_not_completed_slugs(sequence, ecp_claim)
+        dead_end_slug = (ecp_claim.eligibility.status == :eligible_later) ? "eligible-later" : "ineligible"
+
         slugs = %w[
           current-school
           nqt-in-academic-year-after-itt
           induction-completed
-          eligible-later
-        ]
+        ] << dead_end_slug
 
         sequence.replace(slugs)
       end
