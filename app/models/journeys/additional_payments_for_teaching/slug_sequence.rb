@@ -162,10 +162,10 @@ module Journeys
 
           if answers.logged_in_with_tid? && answers.details_check?
             if claim.qualifications_details_check
-              sequence.delete("qualification") if answers.ecp_dqt_teacher_record&.route_into_teaching
-              sequence.delete("itt-year") if answers.ecp_dqt_teacher_record&.itt_academic_year_for_claim
-              sequence.delete("eligible-itt-subject") if answers.ecp_dqt_teacher_record&.eligible_itt_subject_for_claim
-              sequence.delete("eligible-degree-subject") if answers.lup_dqt_teacher_record&.eligible_degree_code?
+              sequence.delete("qualification") if answers.early_career_payments_dqt_teacher_record&.route_into_teaching
+              sequence.delete("itt-year") if answers.early_career_payments_dqt_teacher_record&.itt_academic_year_for_claim
+              sequence.delete("eligible-itt-subject") if answers.early_career_payments_dqt_teacher_record&.eligible_itt_subject_for_claim
+              sequence.delete("eligible-degree-subject") if answers.levelling_up_premium_payments_dqt_reacher_record&.eligible_degree_code?
             elsif signed_in_with_dfe_identity_and_details_match? && answers.has_no_dqt_data_for_claim?
               sequence.delete("qualification-details")
             end
@@ -223,7 +223,7 @@ module Journeys
         # If the claimant is logged in with their Teacher ID, check the DQT record directly.
         if answers.logged_in_with_tid?
           # If the DQT record confirms induction eligibility, the question is not required.
-          return false if answers.ecp_dqt_teacher_record&.eligible_induction?
+          return false if answers.early_career_payments_dqt_teacher_record&.eligible_induction?
         end
 
         # In all other cases, the induction question is required.

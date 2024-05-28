@@ -43,7 +43,7 @@ module Journeys
         # question is asked at the beginning of the combined journey, and the
         # applicant may end up applying for ECP or LUPP only at a later stage in
         # the journey, hence we need to store the answer on both eligibilities.
-        journey_session.answers.ecp_dqt_teacher_record&.eligible_induction?
+        journey_session.answers.early_career_payments_dqt_teacher_record&.eligible_induction?
       end
 
       def passed_details_check_with_teacher_id?

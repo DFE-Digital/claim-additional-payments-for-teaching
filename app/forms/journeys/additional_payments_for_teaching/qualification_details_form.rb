@@ -60,8 +60,8 @@ module Journeys
 
       def show_degree_subjects?
         [
-          answers.ecp_dqt_teacher_record,
-          answers.lup_dqt_teacher_record
+          answers.early_career_payments_dqt_teacher_record,
+          answers.levelling_up_premium_payments_dqt_reacher_record
         ].any? do |dqt_teacher_record|
           dqt_teacher_record.eligible_itt_subject_for_claim == :none_of_the_above
         end && main_dqt_teacher_record.degree_names.any?
@@ -78,7 +78,7 @@ module Journeys
       # Current claim delegates missing methods to ecp eligibility by default
       # so we'll assume that's the "main" dqt record
       def main_dqt_teacher_record
-        answers.ecp_dqt_teacher_record
+        answers.early_career_payments_dqt_teacher_record
       end
 
       # Often the DQT record will represent subject names in all lowercase
@@ -90,16 +90,16 @@ module Journeys
         case eligibility
         when Policies::EarlyCareerPayments::Eligibility
           eligibility.assign_attributes(
-            itt_academic_year: itt_academic_year(answers.ecp_dqt_teacher_record, eligibility),
-            eligible_itt_subject: eligible_itt_subject(answers.ecp_dqt_teacher_record, eligibility),
-            qualification: qualification(answers.ecp_dqt_teacher_record, eligibility)
+            itt_academic_year: itt_academic_year(answers.early_career_payments_dqt_teacher_record, eligibility),
+            eligible_itt_subject: eligible_itt_subject(answers.early_career_payments_dqt_teacher_record, eligibility),
+            qualification: qualification(answers.early_career_payments_dqt_teacher_record, eligibility)
           )
         when Policies::LevellingUpPremiumPayments::Eligibility
           eligibility.assign_attributes(
-            itt_academic_year: itt_academic_year(answers.lup_dqt_teacher_record, eligibility),
-            eligible_itt_subject: eligible_itt_subject(answers.lup_dqt_teacher_record, eligibility),
-            qualification: qualification(answers.lup_dqt_teacher_record, eligibility),
-            eligible_degree_subject: eligible_degree_subject(answers.lup_dqt_teacher_record, eligibility)
+            itt_academic_year: itt_academic_year(answers.levelling_up_premium_payments_dqt_reacher_record, eligibility),
+            eligible_itt_subject: eligible_itt_subject(answers.levelling_up_premium_payments_dqt_reacher_record, eligibility),
+            qualification: qualification(answers.levelling_up_premium_payments_dqt_reacher_record, eligibility),
+            eligible_degree_subject: eligible_degree_subject(answers.levelling_up_premium_payments_dqt_reacher_record, eligibility)
           )
         else
           fail "Unknown eligibility type #{eligibility.class}"

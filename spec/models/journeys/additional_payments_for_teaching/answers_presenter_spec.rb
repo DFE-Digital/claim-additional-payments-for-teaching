@@ -101,7 +101,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
       context "qualifications retrieved from DQT" do
         let(:qualifications_details_check) { true }
         let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
-        let(:ecp_dqt_teacher_record) do
+        let(:early_career_payments_dqt_teacher_record) do
           double(
             itt_academic_year_for_claim:,
             eligible_itt_subject_for_claim:,
@@ -116,7 +116,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
           allow_any_instance_of(
             Journeys::AdditionalPaymentsForTeaching::SessionAnswers
           ).to(
-            receive(:ecp_dqt_teacher_record).and_return(ecp_dqt_teacher_record)
+            receive(:early_career_payments_dqt_teacher_record).and_return(early_career_payments_dqt_teacher_record)
           )
         end
 
@@ -175,14 +175,14 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
       context "qualifications retrieved from DQT" do
         let(:qualifications_details_check) { true }
         let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :relevant_degree) }
-        let(:ecp_dqt_teacher_record) do
+        let(:early_career_payments_dqt_teacher_record) do
           double(
             itt_academic_year_for_claim:,
             eligible_itt_subject_for_claim:,
             route_into_teaching:
           )
         end
-        let(:lup_dqt_teacher_record) do
+        let(:levelling_up_premium_payments_dqt_reacher_record) do
           double(
             itt_academic_year_for_claim:,
             eligible_itt_subject_for_claim:,
@@ -199,13 +199,15 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
           allow_any_instance_of(
             Journeys::AdditionalPaymentsForTeaching::SessionAnswers
           ).to(
-            receive(:ecp_dqt_teacher_record).and_return(ecp_dqt_teacher_record)
+            receive(:early_career_payments_dqt_teacher_record)
+              .and_return(early_career_payments_dqt_teacher_record)
           )
 
           allow_any_instance_of(
             Journeys::AdditionalPaymentsForTeaching::SessionAnswers
           ).to(
-            receive(:lup_dqt_teacher_record).and_return(lup_dqt_teacher_record)
+            receive(:levelling_up_premium_payments_dqt_reacher_record)
+              .and_return(levelling_up_premium_payments_dqt_reacher_record)
           )
         end
 

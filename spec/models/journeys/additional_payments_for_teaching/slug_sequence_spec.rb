@@ -62,16 +62,22 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
       let(:has_no_data_for_claim?) { false }
       let(:eligible_induction?) { true }
 
-      let(:ecp_dqt_record_double) { double(itt_academic_year_for_claim:, route_into_teaching:, eligible_itt_subject_for_claim:, has_no_data_for_claim?: has_no_data_for_claim?, eligible_induction?: eligible_induction?) }
-      let(:lup_dqt_record_double) { double(itt_academic_year_for_claim:, route_into_teaching:, eligible_itt_subject_for_claim:, has_no_data_for_claim?: has_no_data_for_claim?, eligible_degree_code?: eligible_degree_code?) }
+      let(:early_career_payments_dqt_record_double) { double(itt_academic_year_for_claim:, route_into_teaching:, eligible_itt_subject_for_claim:, has_no_data_for_claim?: has_no_data_for_claim?, eligible_induction?: eligible_induction?) }
+      let(:levelling_up_premium_payments_dqt_record_double) { double(itt_academic_year_for_claim:, route_into_teaching:, eligible_itt_subject_for_claim:, has_no_data_for_claim?: has_no_data_for_claim?, eligible_degree_code?: eligible_degree_code?) }
 
       before do
         allow_any_instance_of(
           Journeys::AdditionalPaymentsForTeaching::SessionAnswers
-        ).to(receive(:ecp_dqt_teacher_record).and_return(ecp_dqt_record_double))
+        ).to(
+          receive(:early_career_payments_dqt_teacher_record)
+          .and_return(early_career_payments_dqt_record_double)
+        )
         allow_any_instance_of(
           Journeys::AdditionalPaymentsForTeaching::SessionAnswers
-        ).to(receive(:lup_dqt_teacher_record).and_return(lup_dqt_record_double))
+        ).to(
+          receive(:levelling_up_premium_payments_dqt_reacher_record)
+          .and_return(levelling_up_premium_payments_dqt_record_double)
+        )
       end
     end
 
