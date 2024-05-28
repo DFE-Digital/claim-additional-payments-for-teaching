@@ -45,15 +45,15 @@ module Journeys
       end
 
       def dqt_route_into_teaching
-        main_dqt_teacher_record.route_into_teaching
+        dqt_teacher_record.route_into_teaching
       end
 
       def dqt_academic_date
-        AcademicYear.for(main_dqt_teacher_record.academic_date)
+        AcademicYear.for(dqt_teacher_record.academic_date)
       end
 
       def dqt_itt_subjects
-        main_dqt_teacher_record.itt_subjects.map do |subject|
+        dqt_teacher_record.itt_subjects.map do |subject|
           format_subject(subject)
         end.join(", ")
       end
@@ -64,11 +64,11 @@ module Journeys
           answers.levelling_up_premium_payments_dqt_reacher_record
         ].any? do |dqt_teacher_record|
           dqt_teacher_record.eligible_itt_subject_for_claim == :none_of_the_above
-        end && main_dqt_teacher_record.degree_names.any?
+        end && dqt_teacher_record.degree_names.any?
       end
 
       def dqt_degree_subjects
-        main_dqt_teacher_record.degree_names.map do |subject|
+        dqt_teacher_record.degree_names.map do |subject|
           format_subject(subject)
         end.join(", ")
       end
@@ -77,7 +77,7 @@ module Journeys
 
       # Current claim delegates missing methods to ecp eligibility by default
       # so we'll assume that's the "main" dqt record
-      def main_dqt_teacher_record
+      def dqt_teacher_record
         answers.early_career_payments_dqt_teacher_record
       end
 
