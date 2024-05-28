@@ -16,12 +16,12 @@ module Journeys
       end
 
       def show_hint_text?
-        claim.eligibility.nqt_in_academic_year_after_itt && \
+        claim.eligibility.nqt_in_academic_year_after_itt &&
           available_subjects.many?
       end
 
       def chemistry_or_physics_available?
-        available_subjects.include?("chemistry") || \
+        available_subjects.include?("chemistry") ||
           available_subjects.include?("physics")
       end
 

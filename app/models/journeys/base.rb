@@ -50,7 +50,8 @@ module Journeys
         claim,
         slug_sequence.new(claim, journey_session),
         completed_slugs,
-        current_slug
+        current_slug,
+        journey_session
       )
     end
 

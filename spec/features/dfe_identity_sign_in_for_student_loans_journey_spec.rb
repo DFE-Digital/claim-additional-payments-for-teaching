@@ -230,13 +230,13 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     })
 
     # check the user_info details from teacher id are saved to the claim
-    expect(claim.first_name).to eq("Kelsie")
-    expect(claim.surname).to eq("Oberbrunner")
-    expect(claim.date_of_birth).to eq(Date.parse(date_of_birth))
-    expect(claim.national_insurance_number).to eq(updated_nino)
-    expect(claim.teacher_reference_number).to eq("1234567")
-    expect(claim.logged_in_with_tid?).to eq(true)
-    expect(claim.details_check).to eq(true)
+    expect(answers.first_name).to eq("Kelsie")
+    expect(answers.surname).to eq("Oberbrunner")
+    expect(answers.date_of_birth).to eq(Date.parse(date_of_birth))
+    expect(answers.national_insurance_number).to eq(updated_nino)
+    expect(answers.teacher_reference_number).to eq("1234567")
+    expect(answers.logged_in_with_tid?).to eq(true)
+    expect(answers.details_check).to eq(true)
     expect(claim.eligibility.qts_award_year).to eql("on_or_after_cut_off_date")
     expect(claim.eligibility.claim_school).to eql school
     expect(claim.eligibility.employment_status).to eql("claim_school")

@@ -53,15 +53,15 @@ module Journeys
     end
 
     def show_name?
-      !(answers.logged_in_with_tid? && answers.name_same_as_tid?(claim))
+      !(answers.logged_in_with_tid? && answers.name_same_as_tid?)
     end
 
     def show_dob?
-      !(answers.logged_in_with_tid? && answers.dob_same_as_tid?(claim))
+      !(answers.logged_in_with_tid? && answers.dob_same_as_tid?)
     end
 
     def show_nino?
-      !(answers.logged_in_with_tid? && answers.nino_same_as_tid?(claim))
+      !(answers.logged_in_with_tid? && answers.nino_same_as_tid?)
     end
 
     def show_trn?

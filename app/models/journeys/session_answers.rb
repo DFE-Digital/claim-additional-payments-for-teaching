@@ -39,6 +39,8 @@ module Journeys
     attribute :mobile_check, :string
     attribute :qualifications_details_check, :boolean
     attribute :dqt_teacher_status, default: {}
+    attribute :has_student_loan, :boolean
+    attribute :student_loan_plan, :string
     attribute :answered, default: []
 
     def has_attribute?(name)

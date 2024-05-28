@@ -23,17 +23,17 @@ class ClaimJourneySessionShim
       address_line_3: address_line_3,
       address_line_4: address_line_4,
       postcode: postcode,
-      date_of_birth: date_of_birth,
+      date_of_birth: journey_session.answers.date_of_birth,
       teacher_reference_number: teacher_reference_number,
-      national_insurance_number: national_insurance_number,
+      national_insurance_number: journey_session.answers.national_insurance_number,
       email_address: email_address,
       bank_sort_code: bank_sort_code,
       bank_account_number: bank_account_number,
       details_check: details_check,
       payroll_gender: payroll_gender,
-      first_name: first_name,
-      middle_name: middle_name,
-      surname: surname,
+      first_name: journey_session.answers.first_name,
+      middle_name: journey_session.answers.middle_name,
+      surname: journey_session.answers.surname,
       banking_name: banking_name,
       building_society_roll_number: building_society_roll_number,
       academic_year: academic_year,
@@ -78,16 +78,8 @@ class ClaimJourneySessionShim
     journey_session.answers.postcode || current_claim.postcode
   end
 
-  def date_of_birth
-    journey_session.answers.date_of_birth.presence || current_claim.date_of_birth
-  end
-
   def teacher_reference_number
     journey_session.answers.teacher_reference_number.presence || current_claim.teacher_reference_number
-  end
-
-  def national_insurance_number
-    journey_session.answers.national_insurance_number.presence || current_claim.national_insurance_number
   end
 
   def email_address
@@ -108,18 +100,6 @@ class ClaimJourneySessionShim
 
   def payroll_gender
     journey_session.answers.payroll_gender || current_claim.payroll_gender
-  end
-
-  def first_name
-    journey_session.answers.first_name.presence || current_claim.first_name
-  end
-
-  def middle_name
-    journey_session.answers.middle_name || current_claim.middle_name
-  end
-
-  def surname
-    journey_session.answers.surname.presence || current_claim.surname
   end
 
   def banking_name

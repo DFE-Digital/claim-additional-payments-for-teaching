@@ -27,6 +27,6 @@ class SelectEmailForm < Form
   end
 
   def email_address_from_teacher_id
-    claim.teacher_id_user_info["email"]
+    answers.teacher_id_user_info["email"]
   end
 end

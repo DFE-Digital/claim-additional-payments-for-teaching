@@ -4,7 +4,16 @@ RSpec.describe SelectEmailForm, type: :model do
   subject(:form) { described_class.new(claim:, journey_session:, journey:, params:) }
 
   let(:journey) { Journeys::TeacherStudentLoanReimbursement }
-  let(:journey_session) { build(:student_loans_session) }
+  let(:journey_session) do
+    create(
+      :student_loans_session,
+      answers: {
+        teacher_id_user_info: {
+          "email" => email_from_teacher_id
+        }
+      }
+    )
+  end
   let(:claim) { CurrentClaim.new(claims: [build(:claim, policy: Policies::StudentLoans)]) }
   let(:slug) { "select-email" }
   let(:params) { ActionController::Parameters.new({slug:, claim: claim_params}) }
@@ -12,7 +21,9 @@ RSpec.describe SelectEmailForm, type: :model do
   let(:email_from_teacher_id) { "test@email.com" }
 
   def stub_email(email)
-    allow(claim).to receive(:teacher_id_user_info).and_return({"email" => email})
+    allow_any_instance_of(journey::SessionAnswers).to(
+      receive(:teacher_id_user_info).and_return({"email" => email})
+    )
   end
 
   before { stub_email(email_from_teacher_id) }

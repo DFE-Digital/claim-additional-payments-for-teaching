@@ -8,7 +8,7 @@ class SelectMobileForm < Form
     }
 
   def phone_number
-    claim.teacher_id_user_info["phone_number"]
+    answers.teacher_id_user_info["phone_number"]
   end
 
   def save

@@ -184,37 +184,65 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
           "ni_number" => "JH001234D"
         }
 
-        claim.first_name = "John"
-        claim.surname = "Doe"
-        claim.date_of_birth = dob
-        claim.national_insurance_number = "JH001234D"
+        journey_session.answers.first_name = "John"
+        journey_session.answers.surname = "Doe"
+        journey_session.answers.date_of_birth = dob
+        journey_session.answers.national_insurance_number = "JH001234D"
+
+        journey_session.answers.answered = %w[
+          first_name
+          surname
+          date_of_birth
+          national_insurance_number
+        ]
 
         expect(slug_sequence.slugs).not_to include("personal-details")
       end
 
       it "includes personal-details page if nino is missing" do
-        claim.first_name = "John"
-        claim.surname = "Doe"
-        claim.date_of_birth = 30.years.ago.to_date
-        claim.national_insurance_number = nil
+        journey_session.answers.first_name = "John"
+        journey_session.answers.surname = "Doe"
+        journey_session.answers.date_of_birth = 30.years.ago.to_date
+        journey_session.answers.national_insurance_number = nil
+
+        journey_session.answers.answered = %w[
+          first_name
+          surname
+          date_of_birth
+          national_insurance_number
+        ]
 
         expect(slug_sequence.slugs).to include("personal-details")
       end
 
       it "includes personal-details page if name is missing" do
-        claim.first_name = nil
-        claim.surname = nil
-        claim.date_of_birth = 30.years.ago.to_date
-        claim.national_insurance_number = "JH001234D"
+        journey_session.answers.first_name = nil
+        journey_session.answers.surname = nil
+        journey_session.answers.date_of_birth = 30.years.ago.to_date
+        journey_session.answers.national_insurance_number = "JH001234D"
+
+        journey_session.answers.answered = %w[
+          first_name
+          surname
+          date_of_birth
+          national_insurance_number
+        ]
 
         expect(slug_sequence.slugs).to include("personal-details")
       end
 
       it "includes personal-details page if dob is missing" do
-        claim.first_name = "John"
-        claim.surname = "Doe"
-        claim.date_of_birth = nil
-        claim.national_insurance_number = "JH001234D"
+        journey_session.answers.first_name = "John"
+        journey_session.answers.surname = "Doe"
+        journey_session.answers.date_of_birth = nil
+        journey_session.answers.national_insurance_number = "JH001234D"
+
+        journey_session.answers.answered = %w[
+          first_name
+          surname
+          date_of_birth
+          national_insurance_number
+        ]
 
         expect(slug_sequence.slugs).to include("personal-details")
       end
