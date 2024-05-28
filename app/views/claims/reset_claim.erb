@@ -6,7 +6,7 @@
       </h1>
 
       <%# Teacher selected YES however TRN was missing %>
-      <% if !current_claim.details_check? && DfeIdentity::UserInfo.trn_missing?(current_claim.teacher_id_user_info) %>
+      <% if @form.reset_claim_trn_missing? %>
         <%= render partial: "claims/reset_claim_trn_missing" %>
       <% else %>
         <%= render partial: "claims/reset_claim_default" %>

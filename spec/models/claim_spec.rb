@@ -1164,41 +1164,6 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe "#recent_tps_school" do
-    before { freeze_time }
-    after { travel_back }
-
-    let(:trn) { "7654321" }
-    let(:establishment_number) { 1234 }
-
-    let!(:claim) { create(:claim, teacher_reference_number: trn, created_at: Time.zone.now) }
-    let!(:school) { create(:school, establishment_number:) }
-
-    context "when there is a tps record within 2 full months" do
-      it "returns a school" do
-        # This is how it's stored in imported TPS records!
-        start_date = (Time.zone.now - 2.months).beginning_of_month
-        end_date = start_date.end_of_month.beginning_of_day
-
-        create(:teachers_pensions_service, start_date: start_date, end_date: end_date, school_urn: establishment_number, la_urn: school.local_authority.code, teacher_reference_number: trn)
-
-        expect(claim.recent_tps_school.establishment_number).to be(establishment_number)
-      end
-    end
-
-    context "when the last tps record is earlier than 2 full months ago" do
-      it "returns nil" do
-        # This is how it's stored in imported TPS records!
-        start_date = (Time.zone.now - 3.months).beginning_of_month
-        end_date = start_date.end_of_month.beginning_of_day
-
-        create(:teachers_pensions_service, start_date: start_date, end_date: end_date, school_urn: establishment_number, teacher_reference_number: trn)
-
-        expect(claim.recent_tps_school).to be_nil
-      end
-    end
-  end
-
   describe "#has_dqt_record?" do
     let(:claim) { build(:claim, dqt_teacher_status:) }
     subject(:result) { claim.has_dqt_record? }

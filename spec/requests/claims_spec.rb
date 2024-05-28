@@ -176,6 +176,10 @@ RSpec.describe "Claims", type: :request do
     context "when a claim is already in progress" do
       let(:in_progress_claim) { Claim.by_policy(Policies::StudentLoans).order(:created_at).last }
 
+      let(:journey_session) do
+        Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
+      end
+
       before {
         start_student_loans_claim
         set_slug_sequence_in_session(in_progress_claim, "qts-year")
@@ -220,7 +224,10 @@ RSpec.describe "Claims", type: :request do
         let(:request) { put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "information-provided"), params: {} }
 
         before do
-          in_progress_claim.update!(logged_in_with_tid: true) if tid_journey?
+          if tid_journey?
+            journey_session.answers.assign_attributes(logged_in_with_tid: true)
+            journey_session.save!
+          end
           set_slug_sequence_in_session(in_progress_claim, "information-provided")
         end
 
@@ -242,7 +249,10 @@ RSpec.describe "Claims", type: :request do
                 first_name: "John",
                 surname: "Doe",
                 date_of_birth: "1/1/1990",
-                national_insurance_number: "QQ123456C",
+                national_insurance_number: "QQ123456C"
+              )
+
+              journey_session.answers.assign_attributes(
                 teacher_id_user_info: {
                   "given_name" => "John",
                   "family_name" => "Doe",
@@ -250,6 +260,8 @@ RSpec.describe "Claims", type: :request do
                   "ni_number" => "QQ123456C"
                 }
               )
+
+              journey_session.save!
             end
 
             it "updates the student loan details" do
@@ -264,7 +276,10 @@ RSpec.describe "Claims", type: :request do
                 first_name: "John",
                 surname: "Doe",
                 date_of_birth: "1/1/1990",
-                national_insurance_number: "QQ123456C",
+                national_insurance_number: "QQ123456C"
+              )
+
+              journey_session.answers.assign_attributes(
                 teacher_id_user_info: {
                   "given_name" => "Not John",
                   "family_name" => "Doe",
@@ -272,6 +287,8 @@ RSpec.describe "Claims", type: :request do
                   "ni_number" => "QQ123456C"
                 }
               )
+
+              journey_session.save!
             end
 
             it "does not update the student loan details" do

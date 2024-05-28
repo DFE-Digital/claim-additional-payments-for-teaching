@@ -5,7 +5,14 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
 
-  let(:journey_session) { build(:additional_payments_session) }
+  let(:journey_session) do
+    build(
+      :additional_payments_session,
+      answers: {
+        dqt_teacher_status: dqt_teacher_status
+      }
+    )
+  end
 
   let(:early_career_payments_eligibility) do
     create(

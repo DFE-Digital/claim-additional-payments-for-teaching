@@ -4,18 +4,21 @@ RSpec.describe SignInOrContinueForm do
   shared_examples "sign_in_or_continue_form" do |journey|
     let(:current_claim) do
       claims = journey::POLICIES.map do |policy|
-        create(
-          :claim,
-          :with_details_from_dfe_identity,
-          policy: policy,
-          teacher_id_user_info: teacher_id_user_info
-        )
+        create(:claim, policy: policy)
       end
 
       CurrentClaim.new(claims: claims)
     end
 
-    let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
+    let(:journey_session) do
+      build(
+        :"#{journey::I18N_NAMESPACE}_session",
+        answers: attributes_for(
+          :"#{journey::I18N_NAMESPACE}_answers",
+          :with_details_from_dfe_identity
+        )
+      )
+    end
 
     let(:form) do
       described_class.new(
@@ -109,31 +112,23 @@ RSpec.describe SignInOrContinueForm do
         end
 
         it "sets logged in with tid to false" do
-          current_claim.claims.each do |claim|
-            expect(claim.logged_in_with_tid).to eq(false)
-          end
+          expect(journey_session.answers.logged_in_with_tid).to eq(false)
         end
 
         it "leaves details check as nil" do
-          current_claim.claims.each do |claim|
-            expect(claim.details_check).to eq(nil)
-          end
+          expect(journey_session.answers.details_check).to eq(nil)
         end
 
         it "resets any attributes that were set from dfe identity" do
-          current_claim.claims.each do |claim|
-            expect(claim.first_name).to eq("")
-            expect(claim.surname).to eq("")
-            expect(claim.teacher_reference_number).to eq("")
-            expect(claim.date_of_birth).to eq(nil)
-            expect(claim.national_insurance_number).to eq("")
-          end
+          expect(journey_session.answers.first_name).to eq("")
+          expect(journey_session.answers.surname).to eq("")
+          expect(journey_session.answers.teacher_reference_number).to eq("")
+          expect(journey_session.answers.date_of_birth).to eq(nil)
+          expect(journey_session.answers.national_insurance_number).to eq("")
         end
 
         it "resets teacher_id_user_info" do
-          current_claim.claims.each do |claim|
-            expect(claim.teacher_id_user_info).to eq({})
-          end
+          expect(journey_session.answers.teacher_id_user_info).to eq({})
         end
 
         it "doesn't retrieve the claim's qualifications data" do
@@ -172,35 +167,27 @@ RSpec.describe SignInOrContinueForm do
           # Unsure if we should keep this behaviour but this is what it
           # currently does
           it "sets logged in with tid to false" do
-            current_claim.claims.each do |claim|
-              expect(claim.logged_in_with_tid).to eq(false)
-            end
+            expect(journey_session.answers.logged_in_with_tid).to eq(false)
           end
 
           it "sets details check to false" do
-            current_claim.claims.each do |claim|
-              expect(claim.details_check).to eq(false)
-            end
+            expect(journey_session.answers.details_check).to eq(false)
           end
 
           it "resets any attributes that were set from dfe identity" do
-            current_claim.claims.each do |claim|
-              expect(claim.first_name).to eq("")
-              expect(claim.surname).to eq("")
-              expect(claim.teacher_reference_number).to eq("")
-              expect(claim.date_of_birth).to eq(nil)
-              expect(claim.national_insurance_number).to eq("")
-            end
+            expect(journey_session.answers.first_name).to eq("")
+            expect(journey_session.answers.surname).to eq("")
+            expect(journey_session.answers.teacher_reference_number).to eq("")
+            expect(journey_session.answers.date_of_birth).to eq(nil)
+            expect(journey_session.answers.national_insurance_number).to eq("")
           end
 
           # Unsure if we should keep this behaviour but this is what it
           # currently does
           it "keeps the details from teacher_id_user_info" do
-            current_claim.claims.each do |claim|
-              expect(claim.teacher_id_user_info.symbolize_keys).to(
-                eq(teacher_id_user_info)
-              )
-            end
+            expect(
+              journey_session.answers.teacher_id_user_info.symbolize_keys
+            ).to(eq(teacher_id_user_info))
           end
 
           it "doesn't retrieve the claim's qualifications data" do
@@ -237,37 +224,35 @@ RSpec.describe SignInOrContinueForm do
             end
 
             it "sets logged in with tid to true" do
-              current_claim.claims.each do |claim|
-                expect(claim.logged_in_with_tid).to eq(true)
-              end
+              expect(journey_session.answers.logged_in_with_tid).to eq(true)
             end
 
             # Unsure if we should keep this behaviour but this is what it
             # currently does
             it "sets details check to false" do
-              current_claim.claims.each do |claim|
-                expect(claim.details_check).to eq(false)
-              end
+              expect(journey_session.answers.details_check).to eq(false)
             end
 
             # Unsure if we should keep this behaviour but this is what it
             # currently does
             it "doesnt resets any attributes that were set from dfe identity" do
-              current_claim.claims.each do |claim|
-                expect(claim.first_name).to eq("Jo")
-                expect(claim.surname).to eq("Bloggs")
-                expect(claim.teacher_reference_number).to be_present
-                expect(claim.date_of_birth).to eq(20.years.ago.to_date)
-                expect(claim.national_insurance_number).to be_present
-              end
+              expect(journey_session.answers.first_name).to eq("Jo")
+              expect(journey_session.answers.surname).to eq("Bloggs")
+              expect(
+                journey_session.answers.teacher_reference_number
+              ).to be_present
+              expect(
+                journey_session.answers.date_of_birth
+              ).to eq(20.years.ago.to_date)
+              expect(
+                journey_session.answers.national_insurance_number
+              ).to be_present
             end
 
             it "keeps the details from teacher_id_user_info" do
-              current_claim.claims.each do |claim|
-                expect(claim.teacher_id_user_info.symbolize_keys).to(
-                  eq(teacher_id_user_info)
-                )
-              end
+              expect(
+                journey_session.answers.teacher_id_user_info.symbolize_keys
+              ).to(eq(teacher_id_user_info))
             end
 
             it "doesn't retrieve the claim's qualifications data" do
@@ -293,38 +278,36 @@ RSpec.describe SignInOrContinueForm do
             end
 
             it "sets logged in with tid to true" do
-              current_claim.claims.each do |claim|
-                expect(claim.logged_in_with_tid).to eq(true)
-              end
+              expect(journey_session.answers.logged_in_with_tid).to eq(true)
             end
 
             it "sets details check to true" do
-              current_claim.claims.each do |claim|
-                expect(claim.details_check).to eq(true)
-              end
+              expect(journey_session.answers.details_check).to eq(true)
             end
 
             it "updates the claim with details from dfe identity" do
-              current_claim.claims.each do |claim|
-                expect(claim.first_name).to eq("Seymour")
-                expect(claim.surname).to eq("Skinner")
-                expect(claim.teacher_reference_number).to eq("1234567")
-                expect(claim.date_of_birth).to eq(Date.new(1953, 10, 30))
-                expect(claim.national_insurance_number).to eq("AB123456C")
-              end
+              expect(journey_session.answers.first_name).to eq("Seymour")
+              expect(journey_session.answers.surname).to eq("Skinner")
+              expect(
+                journey_session.answers.teacher_reference_number
+              ).to(eq("1234567"))
+              expect(
+                journey_session.answers.date_of_birth
+              ).to(eq(Date.new(1953, 10, 30)))
+              expect(
+                journey_session.answers.national_insurance_number
+              ).to(eq("AB123456C"))
             end
 
             it "keeps the details from teacher_id_user_info" do
-              current_claim.claims.each do |claim|
-                expect(claim.teacher_id_user_info.symbolize_keys).to(
-                  eq(teacher_id_user_info)
-                )
-              end
+              expect(
+                journey_session.answers.teacher_id_user_info.symbolize_keys
+              ).to(eq(teacher_id_user_info))
             end
 
             it "retrieves the claim's qualifications data" do
               expect(Dqt::RetrieveClaimQualificationsData).to(
-                have_received(:call).with(current_claim)
+                have_received(:call).with(journey_session)
               )
             end
           end

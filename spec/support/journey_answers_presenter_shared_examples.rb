@@ -34,7 +34,19 @@ RSpec.shared_examples "journey answers presenter" do
       )
     end
 
-    subject(:answers) { described_class.new(current_claim).identity_answers }
+    let(:journey_session) do
+      build(
+        :additional_payments_session,
+        answers: {
+          logged_in_with_tid: logged_in_with_tid,
+          teacher_id_user_info: teacher_id_user_info
+        }
+      )
+    end
+
+    subject(:answers) do
+      described_class.new(current_claim, journey_session).identity_answers
+    end
 
     context "logged in with Teacher ID" do
       let(:logged_in_with_tid) { true }
@@ -183,7 +195,7 @@ RSpec.shared_examples "journey answers presenter" do
   describe "#payment_answers" do
     let(:claim) { create(:claim, bank_or_building_society: :personal_bank_account, bank_sort_code: "12 34 56", bank_account_number: "12 34 56 78", banking_name: "Jo Bloggs") }
 
-    subject(:answers) { described_class.new(current_claim).payment_answers }
+    subject(:answers) { described_class.new(current_claim, nil).payment_answers }
 
     context "when a personal bank account is selected" do
       it "returns an array of questions and answers for displaying to the user for review" do

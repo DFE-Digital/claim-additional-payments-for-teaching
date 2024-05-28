@@ -52,6 +52,8 @@ class PersonalDetailsForm < Form
     Date.valid_date?(*date_args) ? Date.new(*date_args) : InvalidDate.new(date_hash)
   end
 
+  # FIXME RL Update the signin or continue form to not write answers to the
+  # claim when migrating this form to write to the journey session
   def save
     return false unless valid?
 
@@ -59,15 +61,15 @@ class PersonalDetailsForm < Form
   end
 
   def show_name_section?
-    !(claim.logged_in_with_tid? && claim.name_same_as_tid? && has_valid_name?)
+    !(answers.logged_in_with_tid? && answers.name_same_as_tid?(claim) && has_valid_name?)
   end
 
   def show_date_of_birth_section?
-    !(claim.logged_in_with_tid? && claim.dob_same_as_tid? && has_valid_date_of_birth?)
+    !(answers.logged_in_with_tid? && answers.dob_same_as_tid?(claim) && has_valid_date_of_birth?)
   end
 
   def show_nino_section?
-    !(claim.logged_in_with_tid? && claim.nino_same_as_tid? && has_valid_nino?)
+    !(answers.logged_in_with_tid? && answers.nino_same_as_tid?(claim) && has_valid_nino?)
   end
 
   private
@@ -79,9 +81,10 @@ class PersonalDetailsForm < Form
   end
 
   def assign_date_attributes
-    self.day = permitted_params.fetch(:day, claim.date_of_birth&.day)
-    self.month = permitted_params.fetch(:month, claim.date_of_birth&.month)
-    self.year = permitted_params.fetch(:year, claim.date_of_birth&.year)
+    dob = answers.date_of_birth.presence || claim.date_of_birth
+    self.day = permitted_params.fetch(:day, dob&.day)
+    self.month = permitted_params.fetch(:month, dob&.month)
+    self.year = permitted_params.fetch(:year, dob&.year)
   end
 
   def ni_number_is_correct_format

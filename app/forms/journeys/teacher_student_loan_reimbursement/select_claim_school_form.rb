@@ -21,7 +21,7 @@ module Journeys
       private
 
       def claim_school
-        @claim_school ||= claim.tps_school_for_student_loan_in_previous_financial_year || claim.eligibility.claim_school
+        @claim_school ||= journey_session.tps_school_for_student_loan_in_previous_financial_year || claim.eligibility.claim_school
       end
 
       def change_school?

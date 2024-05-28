@@ -1,11 +1,16 @@
 require "rails_helper"
 
 RSpec.describe Dqt::Matchers::General do
+  before do
+    create(:journey_configuration, :additional_payments)
+  end
+
   subject(:described_class) do
     Class.new do
       include Dqt::Matchers::General
 
       attr_reader :record, :claim
+
       def initialize(record, claim)
         @record = record
         @claim = claim
@@ -19,6 +24,14 @@ RSpec.describe Dqt::Matchers::General do
         qts_award_date
         qualification_name
       ], to: :record)
+
+      delegate(
+        :qualification,
+        :itt_academic_year,
+        :academic_year,
+        :eligible_itt_subject,
+        to: :claim
+      )
     end.new(record, claim)
   end
 
@@ -42,7 +55,26 @@ RSpec.describe Dqt::Matchers::General do
     )
   end
 
-  let(:claim) { build_stubbed(:claim) }
+  let(:claim) do
+    OpenStruct.new(
+      {
+        qualification: qualification,
+        itt_academic_year: itt_academic_year,
+        academic_year: claim_academic_year,
+        eligible_itt_subject: eligible_itt_subject
+      }
+    )
+  end
+
+  let(:claim_academic_year) do
+    Journeys::AdditionalPaymentsForTeaching.configuration.current_academic_year
+  end
+
+  let(:itt_academic_year) { claim_academic_year - 1 }
+
+  let(:qualification) { "postgraduate_itt" }
+
+  let(:eligible_itt_subject) { "mathematics" }
 
   describe ".academic_date" do
     subject { described_class.academic_date }
@@ -146,8 +178,6 @@ RSpec.describe Dqt::Matchers::General do
   describe ".eligible_qualification?" do
     subject { described_class.eligible_qualification? }
 
-    let(:claim) { build_stubbed(:claim, eligibility: build(:early_career_payments_eligibility, qualification:)) }
-
     context "when the qualification name belongs to the qualification category on the claim" do
       let(:qualification_name) { "BA" }
       let(:qualification) { :undergraduate_itt }
@@ -158,30 +188,6 @@ RSpec.describe Dqt::Matchers::General do
     context "when the qualification name does not belong to the qualification category on the claim" do
       let(:qualification_name) { "Degree" }
       let(:qualification) { :undergraduate_itt }
-
-      it { is_expected.to eq(false) }
-    end
-  end
-
-  describe ".eligible_itt_year?" do
-    subject { described_class.eligible_itt_year? }
-
-    let(:claim) { build_stubbed(:claim, eligibility: build(:early_career_payments_eligibility, itt_academic_year:)) }
-
-    before do
-      allow(described_class).to receive(:itt_year).and_return(calculated_itt_year)
-    end
-
-    context "when the calculated ITT academic year matches the one on the claim" do
-      let(:calculated_itt_year) { itt_academic_year }
-      let(:itt_academic_year) { AcademicYear.new("2022/2023") }
-
-      it { is_expected.to eq(true) }
-    end
-
-    context "when the calculated ITT academic year does not match the one on the claim" do
-      let(:calculated_itt_year) { itt_academic_year - 1 }
-      let(:itt_academic_year) { AcademicYear.new("2022/2023") }
 
       it { is_expected.to eq(false) }
     end

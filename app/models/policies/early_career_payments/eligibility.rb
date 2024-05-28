@@ -68,6 +68,8 @@ module Policies
 
       delegate :name, to: :current_school, prefix: true, allow_nil: true
 
+      delegate :academic_year, to: :claim
+
       def policy
         Policies::EarlyCareerPayments
       end
