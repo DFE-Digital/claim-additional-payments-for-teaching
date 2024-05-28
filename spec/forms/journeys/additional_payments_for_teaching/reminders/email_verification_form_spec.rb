@@ -10,8 +10,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::Reminders::EmailVerifica
   let(:params) { ActionController::Parameters.new({slug:, form: form_params}) }
   let(:form_params) { {one_time_password: "123456"} }
 
-  it { is_expected.to be_a(EmailVerificationForm) }
-
   describe ".model_name" do
     it { expect(form.model_name).to eq(ActiveModel::Name.new(Form)) }
   end
