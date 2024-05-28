@@ -20,13 +20,6 @@ class EmailAddressForm < Form
     return false unless valid?
     return true unless email_address_changed?
 
-    # FIXME RL: Remove this once the email verification form no longer needs to
-    # access the claim
-    update!(
-      email_verified: email_verified,
-      sent_one_time_password_at: Time.now
-    )
-
     journey_session.answers.assign_attributes(
       email_address: email_address,
       email_verified: email_verified,

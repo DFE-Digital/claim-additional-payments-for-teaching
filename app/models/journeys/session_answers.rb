@@ -51,5 +51,9 @@ module Journeys
     def details_check?
       !!details_check
     end
+
+    def email_address_check?
+      !!email_address_check
+    end
   end
 end

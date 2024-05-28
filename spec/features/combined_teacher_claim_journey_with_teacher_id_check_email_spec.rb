@@ -37,13 +37,11 @@ RSpec.feature "Combined journey with Teacher ID email check" do
 
     expect(page).to have_text(I18n.t("additional_payments.forms.select_mobile_form.questions.which_number"))
 
-    claims = Claim.order(created_at: :desc).limit(2)
+    session = Journeys::AdditionalPaymentsForTeaching::Session.order(created_at: :desc).last
 
-    claims.each do |c|
-      expect(c.email_address).to eq("kelsie.oberbrunner@example.com")
-      expect(c.email_address_check).to eq(true)
-      expect(c.email_verified).to eq(true)
-    end
+    expect(session.answers.email_address).to eq("kelsie.oberbrunner@example.com")
+    expect(session.answers.email_address_check).to eq(true)
+    expect(session.answers.email_verified).to eq(true)
 
     # - Select a different email address
     click_on "Back"
@@ -56,11 +54,11 @@ RSpec.feature "Combined journey with Teacher ID email check" do
 
     expect(page).to have_text(I18n.t("questions.email_address_hint1"))
 
-    claims.reload.each do |c|
-      expect(c.email_address).to eq(nil)
-      expect(c.email_address_check).to eq(false)
-      expect(c.email_verified).to eq(nil)
-    end
+    session.reload
+
+    expect(session.answers.email_address).to eq(nil)
+    expect(session.answers.email_address_check).to eq(false)
+    expect(session.answers.email_verified).to eq(nil)
   end
 
   def navigate_to_check_email_page(school:)

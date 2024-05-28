@@ -82,17 +82,8 @@ RSpec.describe SelectEmailForm, type: :model do
     context "valid params" do
       context "when the user selected to use the email address from Teacher ID" do
         let(:claim_params) { {email_address_check: "true"} }
-        let(:expected_saved_attributes) do
-          {
-            "email_address_check" => true,
-            "email_address" => email_from_teacher_id,
-            "email_verified" => true
-          }
-        end
 
         before { form.save }
-
-        it { is_expected.to have_received(:update!).with(expected_saved_attributes) }
 
         it "updates the session" do
           expect(journey_session.reload.answers.email_address).to(
@@ -107,17 +98,8 @@ RSpec.describe SelectEmailForm, type: :model do
 
       context "when the user selected to provide a different email address" do
         let(:claim_params) { {email_address_check: "false"} }
-        let(:expected_saved_attributes) do
-          {
-            "email_address_check" => false,
-            "email_address" => nil,
-            "email_verified" => nil
-          }
-        end
 
         before { form.save }
-
-        it { is_expected.to have_received(:update!).with(expected_saved_attributes) }
 
         it "updates the session" do
           expect(journey_session.reload.answers.email_address).to eq(nil)

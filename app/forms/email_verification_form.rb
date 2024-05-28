@@ -14,13 +14,14 @@ class EmailVerificationForm < Form
   def save
     return false unless valid?
 
-    update!(email_verified: true)
+    journey_session.answers.assign_attributes(email_verified: true)
+    journey_session.save!
   end
 
   private
 
   def sent_one_time_password_at
-    claim.sent_one_time_password_at
+    answers.sent_one_time_password_at
   end
 
   def sent_one_time_password_must_be_valid

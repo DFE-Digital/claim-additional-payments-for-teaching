@@ -103,22 +103,12 @@ RSpec.describe EmailAddressForm do
       end
 
       it "updates sent_one_time_password_at" do
-        claims.each do |claim|
-          expect(claim.sent_one_time_password_at).to(
-            eq(DateTime.new(2024, 1, 1, 12, 0, 0))
-          )
-        end
-
         expect(journey_session.answers.sent_one_time_password_at).to(
           eq(DateTime.new(2024, 1, 1, 12, 0, 0))
         )
       end
 
       it "resets email_verified" do
-        claims.each do |claim|
-          expect(claim.email_verified).to be_nil
-        end
-
         expect(journey_session.answers.email_verified).to be_nil
       end
     end

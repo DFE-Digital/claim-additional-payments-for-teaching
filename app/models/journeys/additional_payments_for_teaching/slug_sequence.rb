@@ -106,7 +106,7 @@ module Journeys
 
           sequence.delete("select-email") unless set_by_teacher_id?("email")
 
-          if answers.logged_in_with_tid? && claim.email_address_check
+          if answers.logged_in_with_tid? && answers.email_address_check
             sequence.delete("email-address")
             sequence.delete("email-verification")
           end

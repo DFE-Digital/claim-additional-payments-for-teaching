@@ -40,13 +40,13 @@ class ClaimJourneySessionShim
       bank_or_building_society: bank_or_building_society,
       provide_mobile_number: provide_mobile_number,
       mobile_number: mobile_number,
-      email_verified: email_verified,
+      email_verified: journey_session.answers.email_verified,
       mobile_verified: mobile_verified,
       hmrc_bank_validation_succeeded: hmrc_bank_validation_succeeded,
       hmrc_bank_validation_responses: hmrc_bank_validation_responses,
       logged_in_with_tid: logged_in_with_tid,
       teacher_id_user_info: teacher_id_user_info,
-      email_address_check: email_address_check,
+      email_address_check: journey_session.answers.email_address_check,
       mobile_check: mobile_check,
       qualifications_details_check: qualifications_details_check
     }
@@ -122,10 +122,6 @@ class ClaimJourneySessionShim
     journey_session.answers.mobile_number || current_claim.mobile_number
   end
 
-  def email_verified
-    journey_session.answers.email_verified || current_claim.email_verified
-  end
-
   def mobile_verified
     journey_session.answers.mobile_verified || current_claim.mobile_verified
   end
@@ -144,10 +140,6 @@ class ClaimJourneySessionShim
 
   def teacher_id_user_info
     journey_session.answers.teacher_id_user_info || current_claim.teacher_id_user_info
-  end
-
-  def email_address_check
-    journey_session.answers.email_address_check || current_claim.email_address_check
   end
 
   def mobile_check

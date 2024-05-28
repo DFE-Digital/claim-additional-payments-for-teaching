@@ -19,8 +19,6 @@ class SelectEmailForm < Form
       email_address_check: email_address_check
     )
     journey_session.save!
-    # TODO RL: remove this once email verification is writing to the session
-    update!(attributes)
   end
 
   def determine_dependant_attributes
