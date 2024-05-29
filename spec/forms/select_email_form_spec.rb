@@ -4,7 +4,16 @@ RSpec.describe SelectEmailForm, type: :model do
   subject(:form) { described_class.new(claim:, journey_session:, journey:, params:) }
 
   let(:journey) { Journeys::TeacherStudentLoanReimbursement }
-  let(:journey_session) { build(:student_loans_session) }
+  let(:journey_session) do
+    create(
+      :student_loans_session,
+      answers: {
+        teacher_id_user_info: {
+          "email" => email_from_teacher_id
+        }
+      }
+    )
+  end
   let(:claim) { CurrentClaim.new(claims: [build(:claim, policy: Policies::StudentLoans)]) }
   let(:slug) { "select-email" }
   let(:params) { ActionController::Parameters.new({slug:, claim: claim_params}) }
@@ -12,7 +21,9 @@ RSpec.describe SelectEmailForm, type: :model do
   let(:email_from_teacher_id) { "test@email.com" }
 
   def stub_email(email)
-    allow(claim).to receive(:teacher_id_user_info).and_return({"email" => email})
+    allow_any_instance_of(journey::SessionAnswers).to(
+      receive(:teacher_id_user_info).and_return({"email" => email})
+    )
   end
 
   before { stub_email(email_from_teacher_id) }
@@ -71,32 +82,30 @@ RSpec.describe SelectEmailForm, type: :model do
     context "valid params" do
       context "when the user selected to use the email address from Teacher ID" do
         let(:claim_params) { {email_address_check: "true"} }
-        let(:expected_saved_attributes) do
-          {
-            "email_address_check" => true,
-            "email_address" => email_from_teacher_id,
-            "email_verified" => true
-          }
-        end
 
         before { form.save }
 
-        it { is_expected.to have_received(:update!).with(expected_saved_attributes) }
+        it "updates the session" do
+          expect(journey_session.reload.answers.email_address).to(
+            eq(email_from_teacher_id)
+          )
+
+          expect(journey_session.reload.answers.email_verified).to eq(true)
+
+          expect(journey_session.reload.answers.email_address_check).to eq(true)
+        end
       end
 
       context "when the user selected to provide a different email address" do
         let(:claim_params) { {email_address_check: "false"} }
-        let(:expected_saved_attributes) do
-          {
-            "email_address_check" => false,
-            "email_address" => nil,
-            "email_verified" => nil
-          }
-        end
 
         before { form.save }
 
-        it { is_expected.to have_received(:update!).with(expected_saved_attributes) }
+        it "updates the session" do
+          expect(journey_session.reload.answers.email_address).to eq(nil)
+          expect(journey_session.reload.answers.email_verified).to eq(nil)
+          expect(journey_session.reload.answers.email_address_check).to eq(false)
+        end
       end
     end
 

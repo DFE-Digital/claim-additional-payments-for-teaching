@@ -38,11 +38,12 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
 
     expect(page).to have_text(I18n.t("additional_payments.forms.select_mobile_form.questions.which_number"))
 
-    Claim.order(created_at: :desc).limit(2).each do |c|
-      expect(c.email_address).to eq("kelsie.oberbrunner@example.com")
-      expect(c.email_address_check).to eq(true)
-      expect(c.email_verified).to eq(true)
-    end
+    session = Journeys::TeacherStudentLoanReimbursement::Session.order(created_at: :desc).last
+    answers = session.answers
+
+    expect(answers.email_address).to eq("kelsie.oberbrunner@example.com")
+    expect(answers.email_address_check).to eq(true)
+    expect(answers.email_verified).to eq(true)
   end
 
   scenario "Select a different email address" do
@@ -57,11 +58,12 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
 
     expect(page).to have_text(I18n.t("questions.email_address_hint1"))
 
-    Claim.order(created_at: :desc).limit(2).each do |c|
-      expect(c.email_address).to eq(nil)
-      expect(c.email_address_check).to eq(false)
-      expect(c.email_verified).to eq(nil)
-    end
+    session = Journeys::TeacherStudentLoanReimbursement::Session.order(created_at: :desc).last
+    answers = session.answers
+
+    expect(answers.email_address).to eq(nil)
+    expect(answers.email_address_check).to eq(false)
+    expect(answers.email_verified).to eq(nil)
   end
 
   scenario "Selects suggested email address and then changes to a different email address" do
@@ -79,11 +81,12 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
     find("#claim_email_address_check_false").click
     click_on "Continue"
 
-    Claim.order(created_at: :desc).limit(2).each do |c|
-      expect(c.email_address).to eq(nil)
-      expect(c.email_address_check).to eq(false)
-      expect(c.email_verified).to eq(nil)
-    end
+    session = Journeys::TeacherStudentLoanReimbursement::Session.order(created_at: :desc).last
+    answers = session.answers
+
+    expect(answers.email_address).to eq(nil)
+    expect(answers.email_address_check).to eq(false)
+    expect(answers.email_verified).to eq(nil)
   end
 
   scenario "Selects a different email address and then changes to the suggested email address" do
@@ -101,11 +104,12 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
     find("#claim_email_address_check_true").click
     click_on "Continue"
 
-    Claim.order(created_at: :desc).limit(2).each do |c|
-      expect(c.email_address).to eq(email)
-      expect(c.email_address_check).to eq(true)
-      expect(c.email_verified).to eq(true)
-    end
+    session = Journeys::TeacherStudentLoanReimbursement::Session.order(created_at: :desc).last
+    answers = session.answers
+
+    expect(answers.email_address).to eq(email)
+    expect(answers.email_address_check).to eq(true)
+    expect(answers.email_verified).to eq(true)
   end
 
   def navigate_to_check_email_page(school:)

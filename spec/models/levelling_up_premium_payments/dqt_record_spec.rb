@@ -3,31 +3,7 @@ require "rails_helper"
 RSpec.describe Policies::LevellingUpPremiumPayments::DqtRecord do
   before { create(:journey_configuration, :additional_payments, current_academic_year: claim_year) }
 
-  subject(:dqt_record) do
-    described_class.new(
-      record,
-      claim
-    )
-  end
-
-  let(:claim) do
-    build(
-      :claim,
-      policy: Policies::LevellingUpPremiumPayments,
-      academic_year: AcademicYear.new(2022),
-      eligibility: eligibility
-    )
-  end
-
-  let(:eligibility) do
-    build(
-      :levelling_up_premium_payments_eligibility,
-      :eligible,
-      eligible_itt_subject: eligible_itt_subject,
-      qualification: qualification,
-      itt_academic_year: itt_academic_year
-    )
-  end
+  subject(:dqt_record) { described_class.new(record, claim) }
 
   let(:claim_year) { AcademicYear.new(2022) }
 
@@ -44,6 +20,16 @@ RSpec.describe Policies::LevellingUpPremiumPayments::DqtRecord do
         itt_start_date: itt_start_date,
         qts_award_date: qts_award_date,
         qualification_name: qualification_name
+      }
+    )
+  end
+
+  let(:claim) do
+    OpenStruct.new(
+      {
+        qualification: qualification,
+        itt_academic_year: itt_academic_year,
+        eligible_itt_subject: eligible_itt_subject
       }
     )
   end

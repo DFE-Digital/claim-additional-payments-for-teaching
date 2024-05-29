@@ -8,6 +8,9 @@ module Journeys
       def save
         return false unless valid?
 
+        # FIXME RL: Once this method writes to the journey session answers we
+        # update the initializer in
+        # AdditionalPaymentsForTeaching::QualificationDetailsForm
         claim.assign_attributes(eligibility_attributes: {itt_academic_year:})
         claim.reset_eligibility_dependent_answers(["itt_academic_year"])
         claim.save!

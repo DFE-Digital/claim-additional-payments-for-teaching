@@ -4,9 +4,18 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
   subject(:slug_sequence) { described_class.new(current_claim, journey_session) }
 
   let(:eligibility) { create(:student_loans_eligibility, :eligible) }
-  let(:claim) { build(:claim, eligibility:, logged_in_with_tid:, details_check:, qualifications_details_check:, dqt_teacher_status:) }
+  let(:claim) { build(:claim, eligibility:, qualifications_details_check:) }
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
-  let(:journey_session) { build(:student_loans_session) }
+  let(:journey_session) do
+    build(
+      :student_loans_session,
+      answers: {
+        logged_in_with_tid: logged_in_with_tid,
+        details_check: details_check,
+        dqt_teacher_status: dqt_teacher_status
+      }
+    )
+  end
   let(:logged_in_with_tid) { nil }
   let(:details_check) { nil }
   let(:qualifications_details_check) { nil }
@@ -87,7 +96,11 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
       let(:qts_award_date) { "test" }
 
       before do
-        allow(claim).to receive(:dqt_teacher_record).and_return(double(qts_award_date:, has_no_data_for_claim?: false))
+        allow_any_instance_of(
+          Journeys::TeacherStudentLoanReimbursement::SessionAnswers
+        ).to receive(:dqt_teacher_record).and_return(
+          double(qts_award_date:, has_no_data_for_claim?: false)
+        )
       end
 
       context "when DQT returns some data" do
@@ -98,7 +111,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
         end
 
         context "when the DQT payload is missing all required data" do
-          before { allow(current_claim).to receive(:has_no_dqt_data_for_claim?).and_return(true) }
+          let(:dqt_teacher_status) { {} }
 
           it "removes the qualification details page" do
             expect(slug_sequence.slugs).not_to include("qualification-details")

@@ -3,17 +3,20 @@ require "rails_helper"
 RSpec.describe EmailAddressForm do
   shared_examples "email_address_form" do |journey|
     let(:claims) do
-      journey::POLICIES.map do |policy|
-        create(
-          :claim,
-          :with_details_from_dfe_identity,
-          policy: policy,
-          email_verified: true
-        )
-      end
+      journey::POLICIES.map { |policy| create(:claim, policy: policy) }
     end
 
-    let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
+    let(:journey_session) do
+      create(
+        :"#{journey::I18N_NAMESPACE}_session",
+        answers: attributes_for(
+          :"#{journey::I18N_NAMESPACE}_answers",
+          :with_personal_details,
+          email_verified: true,
+          first_name: "Jo"
+        )
+      )
+    end
 
     let(:current_claim) { CurrentClaim.new(claims: claims) }
 
@@ -68,38 +71,45 @@ RSpec.describe EmailAddressForm do
           instance_double(OneTimePassword::Generator, code: "111111")
         )
 
-        allow(ClaimMailer).to receive(:email_verification).and_return(
-          claim_mailer_double
-        )
-
         form.save
       end
 
-      let(:claim_mailer_double) { double(deliver_now: true) }
-
       let(:email_address) { "test@example.com" }
 
+      it "sets the email address" do
+        expect(journey_session.reload.answers.email_address).to(
+          eq(email_address)
+        )
+      end
+
       it "sends an email" do
-        expect(ClaimMailer).to have_received(:email_verification).with(
-          current_claim,
-          "111111"
+        policy = journey_session.answers.policy
+
+        support_email_address = I18n.t(
+          "#{policy.locale_key}.support_email_address"
         )
 
-        expect(claim_mailer_double).to have_received(:deliver_now)
+        claim_subject = I18n.t("#{policy.locale_key}.claim_subject")
+
+        email_subject = "#{claim_subject} email verification"
+
+        expect(email_address).to have_received_email(
+          "89e8c33a-1863-4fdd-a73c-1ca01efc0c76",
+          email_subject: email_subject,
+          first_name: "Jo",
+          one_time_password: "111111",
+          support_email_address: support_email_address
+        )
       end
 
       it "updates sent_one_time_password_at" do
-        claims.each do |claim|
-          expect(claim.sent_one_time_password_at).to(
-            eq(DateTime.new(2024, 1, 1, 12, 0, 0))
-          )
-        end
+        expect(journey_session.answers.sent_one_time_password_at).to(
+          eq(DateTime.new(2024, 1, 1, 12, 0, 0))
+        )
       end
 
       it "resets email_verified" do
-        claims.each do |claim|
-          expect(claim.email_verified).to be_nil
-        end
+        expect(journey_session.answers.email_verified).to be_nil
       end
     end
   end

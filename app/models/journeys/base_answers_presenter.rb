@@ -1,9 +1,12 @@
 module Journeys
   class BaseAnswersPresenter
-    attr_reader :claim, :eligibility
+    attr_reader :claim, :eligibility, :journey_session
 
-    def initialize(claim)
+    delegate :answers, to: :journey_session
+
+    def initialize(claim, journey_session)
       @claim = claim
+      @journey_session = journey_session
 
       @eligibility = if @claim.is_a?(CurrentClaim)
         claim.eligible_eligibility
@@ -20,8 +23,8 @@ module Journeys
         a << [t("forms.gender.questions.payroll_gender"), t("answers.payroll_gender.#{claim.payroll_gender}"), "gender"] unless claim.payroll_gender_verified?
         a << [t("questions.teacher_reference_number"), claim.teacher_reference_number, "teacher-reference-number"] if show_trn?
         a << [t("questions.national_insurance_number"), claim.national_insurance_number, "personal-details"] if show_nino?
-        a << [t("questions.email_address"), claim.email_address, "email-address"] unless show_email_select?
-        a << [text_for(:select_email), claim.email_address, "select-email"] if show_email_select?
+        a << [t("questions.email_address"), answers.email_address, "email-address"] unless show_email_select?
+        a << [text_for(:select_email), answers.email_address, "select-email"] if show_email_select?
         a << [t("questions.provide_mobile_number"), claim.provide_mobile_number? ? "Yes" : "No", "provide-mobile-number"] unless show_mobile_select?
         a << [t("questions.mobile_number"), claim.mobile_number, "mobile-number"] unless show_mobile_select? || !claim.provide_mobile_number?
         a << [t("additional_payments.forms.select_mobile_form.questions.which_number"), claim.mobile_number? ? claim.mobile_number : t("additional_payments.forms.select_mobile_form.answers.decline"), "select-mobile"] if show_mobile_select?
@@ -50,27 +53,27 @@ module Journeys
     end
 
     def show_name?
-      !(claim.logged_in_with_tid? && claim.name_same_as_tid?)
+      !(answers.logged_in_with_tid? && answers.name_same_as_tid?)
     end
 
     def show_dob?
-      !(claim.logged_in_with_tid? && claim.dob_same_as_tid?)
+      !(answers.logged_in_with_tid? && answers.dob_same_as_tid?)
     end
 
     def show_nino?
-      !(claim.logged_in_with_tid? && claim.nino_same_as_tid?)
+      !(answers.logged_in_with_tid? && answers.nino_same_as_tid?)
     end
 
     def show_trn?
-      !(claim.logged_in_with_tid? && claim.trn_same_as_tid?)
+      !(answers.logged_in_with_tid? && answers.trn_same_as_tid?(claim))
     end
 
     def show_email_select?
-      claim.logged_in_with_tid? && claim.email_address_check?
+      answers.logged_in_with_tid? && answers.email_address_check?
     end
 
     def show_mobile_select?
-      claim.logged_in_with_tid? && claim.mobile_check.present?
+      answers.logged_in_with_tid? && claim.mobile_check.present?
     end
   end
 end

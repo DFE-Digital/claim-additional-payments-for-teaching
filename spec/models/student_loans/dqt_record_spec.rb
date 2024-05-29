@@ -3,8 +3,12 @@ require "rails_helper"
 RSpec.describe Policies::StudentLoans::DqtRecord do
   let!(:journey_configuration) { create(:journey_configuration, :student_loans) }
 
+  let(:dqt_record) do
+    described_class.new(OpenStruct.new({qts_award_date:}))
+  end
+
   describe "#eligble?" do
-    subject(:result) { described_class.new(OpenStruct.new({qts_award_date:})).eligible? }
+    subject(:result) { dqt_record.eligible? }
 
     context "QTS award date is after the first eligible academic year" do
       let(:qts_award_date) { Date.new(2017, 3, 19) }
@@ -33,7 +37,7 @@ RSpec.describe Policies::StudentLoans::DqtRecord do
   end
 
   describe "#eligible_qts_award_date?" do
-    subject(:result) { described_class.new(OpenStruct.new({qts_award_date:})).eligible_qts_award_date? }
+    subject(:result) { dqt_record.eligible_qts_award_date? }
 
     context "QTS award date is after the first eligible academic year" do
       let(:qts_award_date) { Date.new(2017, 3, 19) }
@@ -74,7 +78,7 @@ RSpec.describe Policies::StudentLoans::DqtRecord do
   end
 
   describe "#has_no_data_for_claim?" do
-    subject(:dqt_record) { described_class.new(nil) }
+    subject(:dqt_record) { described_class.new(record: nil) }
 
     context "when one or more required data are present" do
       before { allow(dqt_record).to receive(:qts_award_date).and_return("test") }

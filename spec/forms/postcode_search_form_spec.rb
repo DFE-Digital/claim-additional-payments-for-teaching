@@ -56,4 +56,20 @@ RSpec.describe PostcodeSearchForm, type: :model do
       expect(subject.errors[:postcode]).to include("Address not found")
     end
   end
+
+  context "when the postcode lookup failed" do
+    let(:params) { ActionController::Parameters.new(claim: {postcode: "SW1B 1AA"}) }
+
+    before do
+      allow_any_instance_of(OrdnanceSurvey::Client).to receive_message_chain(:api, :search_places, :index)
+        .and_raise(OrdnanceSurvey::Client::ResponseError)
+    end
+
+    it { is_expected.to be_invalid }
+
+    it "adds an error to base" do
+      subject.validate
+      expect(subject.errors[:base]).to include("Please enter your address manually")
+    end
+  end
 end

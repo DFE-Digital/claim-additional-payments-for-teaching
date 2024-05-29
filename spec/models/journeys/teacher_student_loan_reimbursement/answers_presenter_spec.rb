@@ -15,7 +15,16 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::AnswersPresenter, type
     let(:claim) { build(:claim, policy:, eligibility: build(:student_loans_eligibility, :eligible, subject_attributes), qualifications_details_check:) }
     let(:qualifications_details_check) { false }
 
-    subject(:answers) { described_class.new(current_claim).eligibility_answers }
+    let(:journey_session) do
+      build(
+        :student_loans_session,
+        answers: {}
+      )
+    end
+
+    subject(:answers) do
+      described_class.new(current_claim, journey_session).eligibility_answers
+    end
 
     it "returns an array of questions, answers, and slugs for displaying to the user for review" do
       expected_answers = [

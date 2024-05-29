@@ -63,6 +63,8 @@ module Journeys
 
       attr_reader :claim, :journey_session
 
+      delegate :answers, to: :journey_session
+
       def initialize(claim, journey_session)
         @claim = claim
         @journey_session = journey_session
@@ -78,7 +80,7 @@ module Journeys
             sequence.delete("select-mobile")
           end
 
-          sequence.delete("reset-claim") if (!claim.logged_in_with_tid? && claim.details_check.nil?) || claim.details_check?
+          sequence.delete("reset-claim") if skipped_dfe_sign_in? || answers.details_check?
           sequence.delete("current-school") if claim.eligibility.employed_at_claim_school? || claim.eligibility.employed_at_recent_tps_school?
           sequence.delete("mostly-performed-leadership-duties") unless claim.eligibility.had_leadership_position?
           sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
@@ -86,32 +88,32 @@ module Journeys
           sequence.delete("mobile-number") if claim.provide_mobile_number == false
           sequence.delete("mobile-verification") if claim.provide_mobile_number == false
           sequence.delete("ineligible") unless claim.eligibility&.ineligible?
-          sequence.delete("personal-details") if claim.logged_in_with_tid? && personal_details_form.valid? && claim.all_personal_details_same_as_tid?
-          sequence.delete("select-email") if (claim.logged_in_with_tid == false) || claim.teacher_id_user_info["email"].nil?
-          if claim.logged_in_with_tid? && claim.email_address_check?
+          sequence.delete("personal-details") if answers.logged_in_with_tid? && personal_details_form.valid? && answers.all_personal_details_same_as_tid?
+          sequence.delete("select-email") unless set_by_teacher_id?("email")
+          if answers.logged_in_with_tid? && answers.email_address_check?
             sequence.delete("email-address")
             sequence.delete("email-verification")
           end
 
-          if (claim.logged_in_with_tid == false) || claim.teacher_id_user_info["phone_number"].blank?
-            sequence.delete("select-mobile")
-          else
+          if set_by_teacher_id?("phone_number")
             sequence.delete("provide-mobile-number")
+          else
+            sequence.delete("select-mobile")
           end
-          if claim.logged_in_with_tid? && (claim.mobile_check == "use" || claim.mobile_check == "declined")
+          if answers.logged_in_with_tid? && (claim.mobile_check == "use" || claim.mobile_check == "declined")
             sequence.delete("mobile-number")
             sequence.delete("mobile-verification")
           end
-          unless claim.logged_in_with_tid? && claim.teacher_reference_number.present? && claim.has_tps_school_for_student_loan_in_previous_financial_year?
+          unless answers.trn_from_tid? && journey_session.has_tps_school_for_student_loan_in_previous_financial_year?
             sequence.delete("select-claim-school")
           end
           sequence.delete("claim-school") if claim.eligibility.claim_school_somewhere_else == false
-          sequence.delete("teacher-reference-number") if claim.logged_in_with_tid? && claim.teacher_reference_number.present?
+          sequence.delete("teacher-reference-number") if answers.logged_in_with_tid? && answers.teacher_reference_number.present?
 
-          if claim.logged_in_with_tid? && claim.details_check?
+          if answers.logged_in_with_tid? && answers.details_check?
             if claim.qualifications_details_check
-              sequence.delete("qts-year") if claim.dqt_teacher_record&.qts_award_date
-            elsif claim.dqt_teacher_status && (!claim.has_dqt_record? || claim.has_no_dqt_data_for_claim?)
+              sequence.delete("qts-year") if answers.dqt_teacher_record&.qts_award_date
+            elsif signed_in_with_dfe_identity_and_details_match? && answers.has_no_dqt_data_for_claim?
               sequence.delete("qualification-details")
             end
           else
@@ -133,10 +135,28 @@ module Journeys
       def personal_details_form
         PersonalDetailsForm.new(
           claim:,
-          journey_session:,
+          journey_session: journey_session,
           journey: Journeys::TeacherStudentLoanReimbursement,
           params: ActionController::Parameters.new
         )
+      end
+
+      def signed_in_with_dfe_identity_and_details_match?
+        !!answers.dqt_teacher_status
+      end
+
+      def skipped_dfe_sign_in?
+        !answers.logged_in_with_tid? && answers.details_check.nil?
+      end
+
+      def skipped_dfe_sign_in_or_details_did_not_match?
+        answers.logged_in_with_tid == false
+      end
+
+      def set_by_teacher_id?(field)
+        return false if skipped_dfe_sign_in_or_details_did_not_match?
+
+        answers.teacher_id_user_info[field].present?
       end
     end
   end

@@ -16,14 +16,10 @@ class TeachersPensionsService < ApplicationRecord
   scope :ended_on_or_after, ->(earliest_end_date) { where(end_date: earliest_end_date..) }
   scope :employed_between, ->(start_date, end_date) { where(end_date: start_date..).and(where(start_date: ..end_date)) }
 
-  def self.has_recent_tps_school?(claim)
-    recent_tps_school(claim).present?
-  end
+  def self.recent_tps_school(claim_date:, teacher_reference_number:)
+    earliest_end_date = (claim_date - RECENT_TPS_FULL_MONTHS).beginning_of_month
 
-  def self.recent_tps_school(claim)
-    earliest_end_date = (claim.created_at - RECENT_TPS_FULL_MONTHS).beginning_of_month
-
-    tps_record = where(teacher_reference_number: claim.teacher_reference_number)
+    tps_record = where(teacher_reference_number: teacher_reference_number)
       .ended_on_or_after(earliest_end_date)
       .order(end_date: :desc)
       .limit(1)
@@ -34,16 +30,12 @@ class TeachersPensionsService < ApplicationRecord
     school_for_tps_record(tps_record)
   end
 
-  def self.has_tps_school_for_student_loan_in_previous_financial_year?(claim)
-    tps_school_for_student_loan_in_previous_financial_year(claim).present?
-  end
-
-  def self.tps_school_for_student_loan_in_previous_financial_year(claim)
+  def self.tps_school_for_student_loan_in_previous_financial_year(teacher_reference_number:)
     previous_academic_year = Journeys.for_policy(Policies::StudentLoans).configuration.current_academic_year - 1
     start_of_previous_financial_year = Date.new(previous_academic_year.start_year, 4, 6)
     end_of_previous_financial_year = Date.new(Journeys.for_policy(Policies::StudentLoans).configuration.current_academic_year.start_year, 4, 5)
 
-    tps_records = where(teacher_reference_number: claim.teacher_reference_number)
+    tps_records = where(teacher_reference_number: teacher_reference_number)
       .employed_between(start_of_previous_financial_year, end_of_previous_financial_year)
       .order(end_date: :desc)
 

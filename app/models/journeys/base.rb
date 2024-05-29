@@ -50,7 +50,8 @@ module Journeys
         claim,
         slug_sequence.new(claim, journey_session),
         completed_slugs,
-        current_slug
+        current_slug,
+        journey_session
       )
     end
 
@@ -58,8 +59,8 @@ module Journeys
       self::AnswersPresenter
     end
 
-    def answers_for_claim(claim)
-      answers_presenter.new(claim)
+    def answers_for_claim(claim, journey_session)
+      answers_presenter.new(claim, journey_session)
     end
   end
 end

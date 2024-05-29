@@ -115,10 +115,6 @@ class CurrentClaim
     claims.any? { |c| c.eligibility.eligible_later? }
   end
 
-  def editable_attributes
-    claims.flat_map { |c| c.eligibility.class::EDITABLE_ATTRIBUTES }.uniq
-  end
-
   def eligible_now
     claims.select { |c| c.eligibility.status == :eligible_now }
   end

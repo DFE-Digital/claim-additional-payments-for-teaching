@@ -31,24 +31,6 @@ RSpec.describe ClaimSchoolForm do
     end
   end
 
-  describe "#backlink_path" do
-    context "new form" do
-      let(:params) { ActionController::Parameters.new({slug: slug, claim: {}}) }
-
-      it "returns nil" do
-        expect(form.backlink_path).to be_nil
-      end
-    end
-
-    context "searching for a school" do
-      let(:params) { ActionController::Parameters.new({slug: slug, claim: {}, school_search: "Some school name"}) }
-
-      it "returns claim-school" do
-        expect(form.backlink_path).to eq "claim-school"
-      end
-    end
-  end
-
   describe "#schools" do
     context "new form" do
       let(:params) { ActionController::Parameters.new({slug: slug, claim: {}}) }

@@ -12,7 +12,17 @@ RSpec.describe PersonalDetailsForm, type: :model do
       CurrentClaim.new(claims: claims)
     end
 
-    let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
+    let(:journey_session) do
+      build(
+        :"#{journey::I18N_NAMESPACE}_session",
+        answers: {
+          logged_in_with_tid: logged_in_with_tid,
+          teacher_id_user_info: teacher_id_user_info,
+          has_student_loan: true,
+          student_loan_plan: StudentLoan::PLAN_1
+        }
+      )
+    end
 
     let(:slug) { "personal-details" }
     let(:params) { {} }
@@ -28,6 +38,8 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
     context "unpermitted claim param" do
       let(:params) { {nonsense_id: 1} }
+      let(:logged_in_with_tid) { nil }
+      let(:teacher_id_user_info) { {} }
 
       it "raises an error" do
         expect { form }.to raise_error ActionController::UnpermittedParameters
@@ -36,6 +48,9 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
     describe "#show_name_section?" do
       context "when not logged_in_with_tid" do
+        let(:logged_in_with_tid) { nil }
+        let(:teacher_id_user_info) { {} }
+
         it "returns true" do
           expect(form.show_name_section?).to be_truthy
         end
@@ -54,9 +69,16 @@ RSpec.describe PersonalDetailsForm, type: :model do
           let(:given_name) { "John" }
           let(:family_name) { "Doe" }
 
-          let(:current_claim) do
-            claims = journey::POLICIES.map { |policy| create(:claim, policy:, first_name: "Different", surname: "Doe", logged_in_with_tid:, teacher_id_user_info:) }
-            CurrentClaim.new(claims: claims)
+          let(:journey_session) do
+            build(
+              :"#{journey::I18N_NAMESPACE}_session",
+              answers: {
+                first_name: "Different",
+                surname: "Doe",
+                logged_in_with_tid: logged_in_with_tid,
+                teacher_id_user_info: teacher_id_user_info
+              }
+            )
           end
 
           it "returns true" do
@@ -65,9 +87,16 @@ RSpec.describe PersonalDetailsForm, type: :model do
         end
 
         context "when the name is the same as TID" do
-          let(:current_claim) do
-            claims = journey::POLICIES.map { |policy| create(:claim, policy:, first_name: given_name, surname: family_name, logged_in_with_tid:, teacher_id_user_info:) }
-            CurrentClaim.new(claims: claims)
+          let(:journey_session) do
+            create(
+              :"#{journey::I18N_NAMESPACE}_session",
+              answers: {
+                first_name: given_name,
+                surname: family_name,
+                logged_in_with_tid: logged_in_with_tid,
+                teacher_id_user_info: teacher_id_user_info
+              }
+            )
           end
 
           context "when the name is not valid" do
@@ -102,6 +131,9 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
     describe "#show_date_of_birth_section?" do
       context "when not logged_in_with_tid" do
+        let(:logged_in_with_tid) { nil }
+        let(:teacher_id_user_info) { {} }
+
         it "returns true" do
           expect(form.show_date_of_birth_section?).to be_truthy
         end
@@ -118,9 +150,15 @@ RSpec.describe PersonalDetailsForm, type: :model do
         context "when the date_of_birth is different to TID" do
           let(:birthdate) { "1990-01-01" }
 
-          let(:current_claim) do
-            claims = journey::POLICIES.map { |policy| create(:claim, policy:, date_of_birth: Date.new(1990, 2, 2), logged_in_with_tid:, teacher_id_user_info:) }
-            CurrentClaim.new(claims: claims)
+          let(:journey_session) do
+            create(
+              :"#{journey::I18N_NAMESPACE}_session",
+              answers: {
+                date_of_birth: Date.new(1990, 2, 2),
+                logged_in_with_tid: logged_in_with_tid,
+                teacher_id_user_info: teacher_id_user_info
+              }
+            )
           end
 
           it "returns true" do
@@ -129,9 +167,15 @@ RSpec.describe PersonalDetailsForm, type: :model do
         end
 
         context "when the date_of_birth is the same as TID" do
-          let(:current_claim) do
-            claims = journey::POLICIES.map { |policy| create(:claim, policy:, date_of_birth:, logged_in_with_tid:, teacher_id_user_info:) }
-            CurrentClaim.new(claims: claims)
+          let(:journey_session) do
+            create(
+              :"#{journey::I18N_NAMESPACE}_session",
+              answers: {
+                date_of_birth: date_of_birth,
+                logged_in_with_tid: logged_in_with_tid,
+                teacher_id_user_info: teacher_id_user_info
+              }
+            )
           end
 
           context "when the date_of_birth is blank" do
@@ -157,6 +201,9 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
     describe "#show_nino_section?" do
       context "when not logged_in_with_tid" do
+        let(:logged_in_with_tid) { nil }
+        let(:teacher_id_user_info) { {} }
+
         it "returns true" do
           expect(form.show_nino_section?).to be_truthy
         end
@@ -173,9 +220,15 @@ RSpec.describe PersonalDetailsForm, type: :model do
         context "when the national_insurance_number is different to TID" do
           let(:ni_number) { "AB123456C" }
 
-          let(:current_claim) do
-            claims = journey::POLICIES.map { |policy| create(:claim, policy:, national_insurance_number: "AB123456D", logged_in_with_tid:, teacher_id_user_info:) }
-            CurrentClaim.new(claims: claims)
+          let(:journey_session) do
+            create(
+              :"#{journey::I18N_NAMESPACE}_session",
+              answers: {
+                national_insurance_number: "AB123456D",
+                logged_in_with_tid: logged_in_with_tid,
+                teacher_id_user_info: teacher_id_user_info
+              }
+            )
           end
 
           it "returns true" do
@@ -184,9 +237,15 @@ RSpec.describe PersonalDetailsForm, type: :model do
         end
 
         context "when the national_insurance_number is the same as TID" do
-          let(:current_claim) do
-            claims = journey::POLICIES.map { |policy| create(:claim, policy:, national_insurance_number:, logged_in_with_tid:, teacher_id_user_info:) }
-            CurrentClaim.new(claims: claims)
+          let(:journey_session) do
+            create(
+              :"#{journey::I18N_NAMESPACE}_session",
+              answers: {
+                national_insurance_number: national_insurance_number,
+                logged_in_with_tid: logged_in_with_tid,
+                teacher_id_user_info: teacher_id_user_info
+              }
+            )
           end
 
           context "when the national_insurance_number is blank" do
@@ -211,6 +270,9 @@ RSpec.describe PersonalDetailsForm, type: :model do
     end
 
     describe "validations" do
+      let(:logged_in_with_tid) { nil }
+      let(:teacher_id_user_info) { {} }
+
       it { should validate_presence_of(:first_name).with_message("Enter your first name") }
       it { should validate_length_of(:first_name).is_at_most(100).with_message("First name must be less than 100 characters") }
       it { should_not allow_value("*").for(:first_name).with_message("First name cannot contain special characters") }
@@ -287,6 +349,9 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
     describe "#save" do
       context "with valid params" do
+        let(:logged_in_with_tid) { nil }
+        let(:teacher_id_user_info) { {} }
+
         let(:params) do
           {
             first_name: "Dr",
@@ -299,15 +364,29 @@ RSpec.describe PersonalDetailsForm, type: :model do
           }
         end
 
-        it "updates the claim" do
+        it "updates the session" do
           expect(form.save).to be true
 
+          answers = journey_session.answers
+
+          expect(answers.first_name).to eq "Dr"
+          expect(answers.middle_name).to eq "Bob"
+          expect(answers.surname).to eq "Loblaw"
+          expect(answers.date_of_birth).to eq Date.new(1990, 1, 1)
+          expect(answers.national_insurance_number).to eq "QQ123456C"
+        end
+
+        it "resets depenent answers" do
+          form.save
+
+          answers = journey_session.answers
+
+          expect(answers.has_student_loan).to be nil
+          expect(answers.student_loan_plan).to be nil
+
           current_claim.claims.each do |claim|
-            expect(claim.first_name).to eq "Dr"
-            expect(claim.middle_name).to eq "Bob"
-            expect(claim.surname).to eq "Loblaw"
-            expect(claim.date_of_birth).to eq Date.new(1990, 1, 1)
-            expect(claim.national_insurance_number).to eq "QQ123456C"
+            expect(claim.has_student_loan).to be nil
+            expect(claim.student_loan_plan).to be nil
           end
         end
       end
@@ -316,6 +395,47 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
   describe "for TeacherStudentLoanReimbursement journey" do
     include_examples "personal_details_form", Journeys::TeacherStudentLoanReimbursement
+
+    describe "resetting depenedent answers" do
+      let(:logged_in_with_tid) { nil }
+      let(:teacher_id_user_info) { {} }
+
+      let(:params) do
+        {
+          first_name: "Dr",
+          middle_name: "Bob",
+          surname: "Loblaw",
+          day: 1,
+          month: 1,
+          year: 1990,
+          national_insurance_number: "QQ123456C"
+        }
+      end
+
+      before do
+        current_claim.claims.each do |claim|
+          claim.eligibility.update!(student_loan_repayment_amount: 2000)
+        end
+
+        journey_session.answers.assign_attributes(
+          student_loan_repayment_amount: 2000
+        )
+
+        journey_session.save!
+      end
+
+      it "resets tslr specific depenent answers" do
+        form.save
+
+        answers = journey_session.answers
+
+        expect(answers.student_loan_repayment_amount).to be nil
+
+        current_claim.claims.each do |claim|
+          expect(claim.eligibility.student_loan_repayment_amount).to be nil
+        end
+      end
+    end
   end
 
   describe "for AdditionalPaymentsForTeaching journey" do

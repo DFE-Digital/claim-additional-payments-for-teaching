@@ -5,23 +5,27 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
 
-  let(:journey_session) { build(:additional_payments_session) }
+  let(:journey_session) do
+    create(:additional_payments_session, answers: answers)
+  end
+
+  let(:claim) { create(:claim, policy: Policies::EarlyCareerPayments) }
 
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
 
+  subject(:form) do
+    described_class.new(
+      journey: journey,
+      journey_session: journey_session,
+      claim: current_claim,
+      params: params
+    )
+  end
+
   describe "validations" do
-    let(:claim) { create(:claim, policy: Policies::EarlyCareerPayments) }
+    let(:answers) { {} }
 
     describe "#nqt_in_academic_year_after_itt" do
-      subject(:form) do
-        described_class.new(
-          journey: journey,
-          journey_session: journey_session,
-          claim: current_claim,
-          params: params
-        )
-      end
-
       context "when `true`" do
         let(:params) do
           ActionController::Parameters.new(
@@ -61,19 +65,10 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
   end
 
   describe "#save" do
-    let(:form) do
-      described_class.new(
-        journey: journey,
-        journey_session: journey_session,
-        claim: current_claim,
-        params: params
-      )
-    end
-
     before { form.save }
 
     context "when invalid" do
-      let(:claim) { create(:claim, policy: Policies::EarlyCareerPayments) }
+      let(:answers) { {} }
 
       let(:params) do
         ActionController::Parameters.new(
@@ -100,7 +95,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
       end
 
       describe "nqt_in_academic_year_after_itt" do
-        let(:claim) { create(:claim, policy: Policies::EarlyCareerPayments) }
+        let(:answers) { {} }
 
         it "sets the value on the claim's eligibility" do
           expect(claim.eligibility.nqt_in_academic_year_after_itt).to be true
@@ -109,13 +104,11 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
 
       describe "induction_completed" do
         context "when the teacher has not passed the tid details check" do
-          let(:claim) do
-            create(
-              :claim,
-              :logged_in_with_tid,
-              details_check: false,
-              policy: Policies::EarlyCareerPayments
-            )
+          let(:answers) do
+            {
+              logged_in_with_tid: true,
+              details_check: false
+            }
           end
 
           it "does not set the induction as complete" do
@@ -125,14 +118,12 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
 
         context "when the teacher has passed the tid details check" do
           context "when there is not an eligible induction" do
-            let(:claim) do
-              create(
-                :claim,
-                :logged_in_with_tid,
-                policy: Policies::EarlyCareerPayments,
+            let(:answers) do
+              {
                 details_check: true,
+                logged_in_with_tid: true,
                 dqt_teacher_status: nil
-              )
+              }
             end
 
             it "does not set the induction as complete" do
@@ -141,14 +132,11 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
           end
 
           context "when there is an eligible induction" do
-            let(:claim) do
-              create(
-                :claim,
-                :logged_in_with_tid,
-                :with_dqt_teacher_status,
-                policy: Policies::EarlyCareerPayments,
-                details_check: true
-              )
+            let(:answers) do
+              {
+                details_check: true,
+                logged_in_with_tid: true
+              }.merge(attributes_for(:claim, :with_dqt_teacher_status))
             end
 
             it "sets the induction as complete" do
@@ -159,7 +147,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
       end
 
       describe "qualification" do
-        let(:claim) { create(:claim, policy: Policies::EarlyCareerPayments) }
+        let(:answers) { {} }
 
         context "when the claim is not from a trainee teacher" do
           let(:params) do
@@ -189,69 +177,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
           end
         end
       end
-    end
-  end
-
-  describe "#backlink_path" do
-    context "when the page sequence does not include 'correct-school'" do
-      let(:claim) { create(:claim, policy: Policies::EarlyCareerPayments) }
-
-      let(:form) do
-        described_class.new(
-          journey: journey,
-          journey_session: journey_session,
-          claim: current_claim,
-          params: ActionController::Parameters.new({})
-        )
-      end
-
-      subject(:backlink_path) { form.backlink_path }
-
-      it { is_expected.to be_nil }
-    end
-
-    context "when the page sequence includes 'correct-school'" do
-      before do
-        tps_record = create(
-          :teachers_pensions_service,
-          :early_career_payments_matched_first,
-          teacher_reference_number: "1234567",
-          end_date: 1.year.from_now
-        )
-
-        local_authority = create(:local_authority, code: tps_record.la_urn)
-
-        create(
-          :school,
-          :open,
-          local_authority: local_authority,
-          establishment_number: tps_record.school_urn
-        )
-      end
-
-      let(:claim) do
-        create(
-          :claim,
-          policy: Policies::EarlyCareerPayments,
-          logged_in_with_tid: true,
-          teacher_reference_number: "1234567"
-        )
-      end
-
-      let(:form) do
-        described_class.new(
-          journey: journey,
-          journey_session: journey_session,
-          claim: current_claim,
-          params: ActionController::Parameters.new({
-            journey: "additional-payments"
-          })
-        )
-      end
-
-      subject(:backlink_path) { form.backlink_path }
-
-      it { is_expected.to eq("/additional-payments/correct-school") }
     end
   end
 end

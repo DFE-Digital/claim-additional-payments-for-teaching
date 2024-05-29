@@ -36,18 +36,6 @@ class AddressForm < Form
     update!(attributes)
   end
 
-  def backlink_path
-    unless claim.postcode
-      return Rails
-          .application
-          .routes
-          .url_helpers
-          .claim_path(params[:journey], "postcode-search")
-    end
-
-    super
-  end
-
   private
 
   def postcode_is_valid

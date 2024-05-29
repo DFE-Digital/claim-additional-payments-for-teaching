@@ -16,18 +16,21 @@ module Journeys
       end
 
       def show_hint_text?
-        claim.eligibility.nqt_in_academic_year_after_itt && \
+        claim.eligibility.nqt_in_academic_year_after_itt &&
           available_subjects.many?
       end
 
       def chemistry_or_physics_available?
-        available_subjects.include?("chemistry") || \
+        available_subjects.include?("chemistry") ||
           available_subjects.include?("physics")
       end
 
       def save
         return false unless valid?
 
+        # FIXME RL: Once this method writes to the journey session answers we
+        # update the initializer in
+        # AdditionalPaymentsForTeaching::QualificationDetailsForm
         claim.assign_attributes(
           eligibility_attributes: {eligible_itt_subject: eligible_itt_subject}
         )

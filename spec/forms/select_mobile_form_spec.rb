@@ -3,21 +3,23 @@ require "rails_helper"
 RSpec.describe SelectMobileForm do
   shared_examples "select_mobile_form" do |journey|
     let(:claims) do
-      journey::POLICIES.map do |policy|
-        create(
-          :claim,
-          :with_details_from_dfe_identity,
-          policy: policy,
-          teacher_id_user_info: {
-            phone_number: "07123456789"
-          }
-        )
-      end
+      journey::POLICIES.map { |policy| create(:claim, policy: policy) }
     end
 
     let(:current_claim) { CurrentClaim.new(claims: claims) }
 
-    let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
+    let(:journey_session) do
+      create(
+        :"#{journey::I18N_NAMESPACE}_session",
+        answers: attributes_for(
+          :"#{journey::I18N_NAMESPACE}_answers",
+          :with_personal_details,
+          teacher_id_user_info: {
+            phone_number: "07123456789"
+          }
+        )
+      )
+    end
 
     let(:params) do
       ActionController::Parameters.new(claim: {mobile_check: mobile_check})

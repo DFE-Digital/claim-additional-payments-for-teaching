@@ -84,11 +84,7 @@ module Dqt
       end
 
       def eligible_qualification?
-        QUALIFICATION_MATCHING_TYPE[claim.eligibility.qualification.to_sym].include?(qualification_name)
-      end
-
-      def eligible_itt_year?
-        AcademicYear.new(itt_year).eql?(claim.eligibility.itt_academic_year)
+        QUALIFICATION_MATCHING_TYPE[qualification.to_sym].include?(qualification_name)
       end
 
       def qts_award_date_after_itt_start_date?

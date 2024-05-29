@@ -23,8 +23,6 @@ RSpec.shared_examples "journey answers presenter" do
         date_of_birth: dob,
         teacher_reference_number: trn,
         national_insurance_number: nino,
-        email_address: "test@email.com",
-        email_address_check: logged_in_with_tid ? true : false,
         mobile_check: logged_in_with_tid ? "use" : nil,
         provide_mobile_number: true,
         mobile_number: "01234567890",
@@ -34,7 +32,26 @@ RSpec.shared_examples "journey answers presenter" do
       )
     end
 
-    subject(:answers) { described_class.new(current_claim).identity_answers }
+    let(:journey_session) do
+      build(
+        :additional_payments_session,
+        answers: {
+          logged_in_with_tid: logged_in_with_tid,
+          teacher_id_user_info: teacher_id_user_info,
+          first_name: first_name,
+          surname: surname,
+          teacher_reference_number: trn,
+          date_of_birth: dob,
+          national_insurance_number: nino,
+          email_address: "test@email.com",
+          email_address_check: logged_in_with_tid ? true : false
+        }
+      )
+    end
+
+    subject(:answers) do
+      described_class.new(current_claim, journey_session).identity_answers
+    end
 
     context "logged in with Teacher ID" do
       let(:logged_in_with_tid) { true }
@@ -61,7 +78,7 @@ RSpec.shared_examples "journey answers presenter" do
 
       context "when the user selected the email provided by Teacher ID" do
         before do
-          claim.email_address_check = true
+          journey_session.answers.email_address_check = true
         end
 
         it "includes the selected email and the change slug is `select-email`" do
@@ -71,7 +88,7 @@ RSpec.shared_examples "journey answers presenter" do
 
       context "when the user selected to provide an alternative email" do
         before do
-          claim.email_address_check = true
+          journey_session.answers.email_address_check = true
         end
 
         it "includes the user-provided email and the change slug is `select-email`" do
@@ -81,7 +98,7 @@ RSpec.shared_examples "journey answers presenter" do
 
       context "when the email was not provided by Teacher ID" do
         before do
-          claim.email_address_check = false
+          journey_session.answers.email_address_check = false
         end
 
         it "includes the user-provided email and the change slug is `email-address`" do
@@ -183,7 +200,7 @@ RSpec.shared_examples "journey answers presenter" do
   describe "#payment_answers" do
     let(:claim) { create(:claim, bank_or_building_society: :personal_bank_account, bank_sort_code: "12 34 56", bank_account_number: "12 34 56 78", banking_name: "Jo Bloggs") }
 
-    subject(:answers) { described_class.new(current_claim).payment_answers }
+    subject(:answers) { described_class.new(current_claim, nil).payment_answers }
 
     context "when a personal bank account is selected" do
       it "returns an array of questions and answers for displaying to the user for review" do

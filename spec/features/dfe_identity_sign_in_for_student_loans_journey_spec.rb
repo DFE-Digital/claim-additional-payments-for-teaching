@@ -66,9 +66,11 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     # - Personal details - skipped as TID data all provided for
     expect(page).not_to have_text(I18n.t("questions.personal_details"))
 
-    # check the teacher_id_user_info details are saved to the claim
+    # check the teacher_id_user_info details are saved to the session
     claim = Claim.order(:created_at).last
-    expect(claim.teacher_id_user_info).to eq({
+    journey_session = Journeys::TeacherStudentLoanReimbursement::Session.last
+    answers = journey_session.answers
+    expect(answers.teacher_id_user_info).to eq({
       "trn" => "1234567",
       "birthdate" => date_of_birth,
       "given_name" => "Kelsie",
@@ -81,13 +83,13 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     })
 
     # check the user_info details from teacher id are saved to the claim
-    expect(claim.first_name).to eq("Kelsie")
-    expect(claim.surname).to eq("Oberbrunner")
-    expect(claim.date_of_birth).to eq(Date.parse(date_of_birth))
-    expect(claim.national_insurance_number).to eq(nino)
-    expect(claim.teacher_reference_number).to eq("1234567")
-    expect(claim.logged_in_with_tid?).to eq(true)
-    expect(claim.details_check).to eq(true)
+    expect(answers.first_name).to eq("Kelsie")
+    expect(answers.surname).to eq("Oberbrunner")
+    expect(answers.date_of_birth).to eq(Date.parse(date_of_birth))
+    expect(answers.national_insurance_number).to eq(nino)
+    expect(answers.teacher_reference_number).to eq("1234567")
+    expect(answers.logged_in_with_tid?).to eq(true)
+    expect(answers.details_check).to eq(true)
     expect(claim.eligibility.qts_award_year).to eql("on_or_after_cut_off_date")
     expect(claim.eligibility.claim_school).to eql school
     expect(claim.eligibility.employment_status).to eql("claim_school")
@@ -123,9 +125,10 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
 
     expect(page).to have_text(I18n.t("student_loans.forms.qts_year.questions.qts_award_year"))
 
-    # check the teacher_id_user_info details are saved to the claim
-    claim = Claim.order(:created_at).last
-    expect(claim.teacher_id_user_info).to eq({
+    # check the teacher_id_user_info details are saved to the session
+    journey_session = Journeys::TeacherStudentLoanReimbursement::Session.last
+    answers = journey_session.answers
+    expect(answers.teacher_id_user_info).to eq({
       "trn" => "1234567",
       "birthdate" => date_of_birth,
       "given_name" => "Kelsie",
@@ -137,14 +140,14 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
       "email_verified" => ""
     })
 
-    # check the user_info details from teacher id are not saved to the claim
-    expect(claim.first_name).to eq("")
-    expect(claim.surname).to eq("")
-    expect(claim.date_of_birth).to eq(nil)
-    expect(claim.national_insurance_number).to eq("")
-    expect(claim.teacher_reference_number).to eq("")
-    expect(claim.logged_in_with_tid?).to eq(false)
-    expect(claim.details_check).to eq(false)
+    # check the user_info details from teacher id are not saved to the sesssion
+    expect(answers.first_name).to eq("")
+    expect(answers.surname).to eq("")
+    expect(answers.date_of_birth).to eq(nil)
+    expect(answers.national_insurance_number).to eq("")
+    expect(answers.teacher_reference_number).to eq("")
+    expect(answers.logged_in_with_tid?).to eq(false)
+    expect(answers.details_check).to eq(false)
   end
 
   scenario "Teacher makes claim for 'Student Loans' selects not to log in with teacher_id" do
@@ -160,17 +163,18 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     expect(page).to have_text(I18n.t("student_loans.forms.qts_year.questions.qts_award_year"))
 
     # check the teacher_id_user_info details are not saved to the claim
-    claim = Claim.order(:created_at).last
-    expect(claim.teacher_id_user_info).to eq({})
+    session = Journeys::TeacherStudentLoanReimbursement::Session.last
+    answers = session.answers
+    expect(answers.teacher_id_user_info).to eq({})
 
     # check the user_info details from teacher id are not saved to the claim
-    expect(claim.first_name).to eq("")
-    expect(claim.surname).to eq("")
-    # expect(claim.date_of_birth).to eq(nil)
-    # expect(claim.national_insurance_number).to eq("")
-    # expect(claim.teacher_reference_number).to eq("")
-    # expect(claim.logged_in_with_tid?).to eq(nil)
-    # expect(claim.details_check).to eq(nil)
+    expect(answers.first_name).to eq("")
+    expect(answers.surname).to eq("")
+    # expect(answers.date_of_birth).to eq(nil)
+    # expect(answers.national_insurance_number).to eq("")
+    # expect(answers.teacher_reference_number).to eq("")
+    # expect(answers.logged_in_with_tid?).to eq(nil)
+    # expect(answers.details_check).to eq(nil)
   end
 
   scenario "When user is logged in with Teacher ID and NINO is not supplied" do
@@ -209,9 +213,11 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     fill_in "National Insurance number", with: updated_nino
     click_on "Continue"
 
-    # check the teacher_id_user_info details are saved to the claim
+    # check the teacher_id_user_info details are saved to the session
     claim = Claim.order(:created_at).last
-    expect(claim.teacher_id_user_info).to eq({
+    session = Journeys::TeacherStudentLoanReimbursement::Session.last
+    answers = session.answers
+    expect(answers.teacher_id_user_info).to eq({
       "trn" => "1234567",
       "birthdate" => date_of_birth,
       "given_name" => "Kelsie",
@@ -224,13 +230,13 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     })
 
     # check the user_info details from teacher id are saved to the claim
-    expect(claim.first_name).to eq("Kelsie")
-    expect(claim.surname).to eq("Oberbrunner")
-    expect(claim.date_of_birth).to eq(Date.parse(date_of_birth))
-    expect(claim.national_insurance_number).to eq(updated_nino)
-    expect(claim.teacher_reference_number).to eq("1234567")
-    expect(claim.logged_in_with_tid?).to eq(true)
-    expect(claim.details_check).to eq(true)
+    expect(answers.first_name).to eq("Kelsie")
+    expect(answers.surname).to eq("Oberbrunner")
+    expect(answers.date_of_birth).to eq(Date.parse(date_of_birth))
+    expect(answers.national_insurance_number).to eq(updated_nino)
+    expect(answers.teacher_reference_number).to eq("1234567")
+    expect(answers.logged_in_with_tid?).to eq(true)
+    expect(answers.details_check).to eq(true)
     expect(claim.eligibility.qts_award_year).to eql("on_or_after_cut_off_date")
     expect(claim.eligibility.claim_school).to eql school
     expect(claim.eligibility.employment_status).to eql("claim_school")

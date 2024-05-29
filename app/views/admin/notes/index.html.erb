@@ -10,12 +10,12 @@
 </div>
 
 <div class="govuk-grid-row">
-  <div class="govuk-tabs" data-module="govuk-tabs">
+  <div class="govuk-tabs">
     <h2 class="govuk-tabs__title">Contents</h2>
 
     <%= render "admin/claims/tabs", claim: @claim %>
 
-    <section class="govuk-tabs__panel" role="tabpanel" aria-labelledby="tab_tasks">
+    <div class="govuk-tabs__panel">
       <div class="govuk-grid-row">
        <div class="govuk-grid-column-two-thirds">
           <%= render "admin/support_tickets/widget", claim: @claim, support_ticket: (@claim.support_ticket || SupportTicket.new) %>
@@ -52,6 +52,6 @@
           <%= render "admin/notes/form", claim: @claim, note: @note || Note.new %>
         </div>
       </div>
-    </section>
+    </div>
   </div>
 </div>

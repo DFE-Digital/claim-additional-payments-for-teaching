@@ -53,6 +53,10 @@ coverage/
 .vscode/
 .rspec-local
 
+# Assets
+public/assets
+
+# AKS deployment
 .terraform
 terraform/application/vendor
 terraform/domains/environment_domains/vendor

@@ -19,9 +19,16 @@ module Policies
         to: :record
       )
 
-      def initialize(record, claim)
+      delegate(
+        :qualification,
+        :itt_academic_year,
+        :eligible_itt_subject,
+        to: :answers
+      )
+
+      def initialize(record, answers)
         @record = record
-        @claim = claim
+        @answers = answers
       end
 
       def eligible?
@@ -59,7 +66,15 @@ module Policies
 
       private
 
-      attr_reader :record, :claim
+      attr_reader :record, :answers
+
+      def itt_subject_none_of_the_above?
+        eligible_itt_subject&.to_sym == :none_of_the_above
+      end
+
+      def current_academic_year
+        Journeys.for_policy(LevellingUpPremiumPayments).configuration.current_academic_year
+      end
 
       def eligible_code?(codes)
         (ELIGIBLE_CODES & codes).any?
@@ -70,22 +85,20 @@ module Policies
       end
 
       def eligible_subject_and_none_of_the_above?
-        return false if claim.eligibility.itt_subject_none_of_the_above? && eligible_subject?
-        return true if claim.eligibility.itt_subject_none_of_the_above?
+        return false if itt_subject_none_of_the_above? && eligible_subject?
+        return true if itt_subject_none_of_the_above?
 
         eligible_subject?
       end
 
       def eligible_itt_year?
-        return unless super
-
-        itt_year_within_allowed_range?
+        AcademicYear.new(itt_year).eql?(itt_academic_year) && itt_year_within_allowed_range?
       end
 
       def applicable_eligible_subjects
-        return ELIGIBLE_ITT_SUBJECTS.values.flatten if claim.eligibility.itt_subject_none_of_the_above?
+        return ELIGIBLE_ITT_SUBJECTS.values.flatten if itt_subject_none_of_the_above?
 
-        ELIGIBLE_ITT_SUBJECTS[claim.eligibility.eligible_itt_subject.to_sym]
+        ELIGIBLE_ITT_SUBJECTS[eligible_itt_subject&.to_sym]
       end
 
       def eligible_subject?
@@ -97,8 +110,7 @@ module Policies
       end
 
       def itt_year_within_allowed_range?(year = itt_year)
-        policy_year = Journeys.for_policy(claim.policy).configuration.current_academic_year
-        eligible_itt_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(policy_year)
+        eligible_itt_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(current_academic_year)
         eligible_itt_years.include?(year)
       end
     end

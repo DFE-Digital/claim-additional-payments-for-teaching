@@ -12,7 +12,19 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
     let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: policy_year) }
     let(:qualifications_details_check) { false }
 
-    subject(:answers) { described_class.new(current_claim).eligibility_answers }
+    let(:journey_session) do
+      build(
+        :additional_payments_session,
+        answers: {}
+      )
+    end
+
+    subject(:answers) do
+      described_class.new(
+        current_claim,
+        journey_session
+      ).eligibility_answers
+    end
 
     context "ECP" do
       context "long-term directly employed supply teacher" do
@@ -89,7 +101,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
       context "qualifications retrieved from DQT" do
         let(:qualifications_details_check) { true }
         let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
-        let(:dbl) do
+        let(:early_career_payments_dqt_teacher_record) do
           double(
             itt_academic_year_for_claim:,
             eligible_itt_subject_for_claim:,
@@ -100,7 +112,13 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
         let(:eligible_itt_subject_for_claim) { :mathematics }
         let(:route_into_teaching) { :postgraduate_itt }
 
-        before { allow(claim).to receive(:dqt_teacher_record).and_return(dbl) }
+        before do
+          allow_any_instance_of(
+            Journeys::AdditionalPaymentsForTeaching::SessionAnswers
+          ).to(
+            receive(:early_career_payments_dqt_teacher_record).and_return(early_career_payments_dqt_teacher_record)
+          )
+        end
 
         context "all data is present" do
           it { is_expected.not_to include(["Which route into teaching did you take?", "Postgraduate initial teacher training (ITT)", "qualification"]) }
@@ -157,7 +175,14 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
       context "qualifications retrieved from DQT" do
         let(:qualifications_details_check) { true }
         let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :relevant_degree) }
-        let(:dbl) do
+        let(:early_career_payments_dqt_teacher_record) do
+          double(
+            itt_academic_year_for_claim:,
+            eligible_itt_subject_for_claim:,
+            route_into_teaching:
+          )
+        end
+        let(:levelling_up_premium_payments_dqt_reacher_record) do
           double(
             itt_academic_year_for_claim:,
             eligible_itt_subject_for_claim:,
@@ -170,7 +195,21 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
         let(:route_into_teaching) { :postgraduate_itt }
         let(:eligible_degree_code) { true }
 
-        before { allow(claim).to receive(:dqt_teacher_record).and_return(dbl) }
+        before do
+          allow_any_instance_of(
+            Journeys::AdditionalPaymentsForTeaching::SessionAnswers
+          ).to(
+            receive(:early_career_payments_dqt_teacher_record)
+              .and_return(early_career_payments_dqt_teacher_record)
+          )
+
+          allow_any_instance_of(
+            Journeys::AdditionalPaymentsForTeaching::SessionAnswers
+          ).to(
+            receive(:levelling_up_premium_payments_dqt_reacher_record)
+              .and_return(levelling_up_premium_payments_dqt_reacher_record)
+          )
+        end
 
         context "all data is present" do
           it { is_expected.not_to include(["Which route into teaching did you take?", "Postgraduate initial teacher training (ITT)", "qualification"]) }
