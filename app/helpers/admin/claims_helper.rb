@@ -276,7 +276,7 @@ module Admin
     end
 
     def zendesk_email_search_url(email_address)
-      "https://additional-teaching-payment.zendesk.com/agent/search/1?copy&type=ticket&q=#{CGI.escape(email_address)}"
+      "https://becomingateacher.zendesk.com/agent/search/1?copy&type=ticket&q=#{CGI.escape(email_address)}"
     end
   end
 end
