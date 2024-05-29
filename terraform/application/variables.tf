@@ -63,7 +63,7 @@ variable "canonical_hostname" {
 
 locals {
   postgres_ssl_mode = var.enable_postgres_ssl ? "require" : "disable"
-  canonical_hostname = var.canonical_hostname != null ? var.canonical_hostname : "${var.service_name}-${var.environment}.test.teacherservices.cloud"
+  canonical_hostname = var.canonical_hostname != null ? var.canonical_hostname : "${var.service_name}-${var.environment}-web.test.teacherservices.cloud"
   app_env_values_from_yml = yamldecode(file("${path.module}/config/${var.config}_app_env.yml"))
   app_env_values = merge(local.app_env_values_from_yml)
 }
