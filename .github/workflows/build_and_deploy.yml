@@ -58,7 +58,7 @@ jobs:
         if: github.event.number != ''
         run: |
           make ci review-aks get-cluster-credentials
-          kubectl exec -n srtl-development deployment/claim-additional-payments-for-teaching-review-${{ github.event.pull_request.number }} -- sh -c "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/rails db:schema:load db:seed"
+          kubectl exec -n srtl-development deployment/claim-additional-payments-for-teaching-review-${{ github.event.pull_request.number }} -- sh -c "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/prepare-database"
         env:
           PR_NUMBER: ${{ github.event.pull_request.number }}
 
