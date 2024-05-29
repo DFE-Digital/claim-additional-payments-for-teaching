@@ -8,7 +8,15 @@ RSpec.describe BankOrBuildingSocietyForm, type: :model do
     }
 
     let(:current_claim) do
-      claims = journey::POLICIES.map { |policy| create(:claim, policy: policy) }
+      claims = journey::POLICIES.map do |policy|
+        create(
+          :claim,
+          :with_bank_details,
+          building_society_roll_number: "A123456",
+          policy: policy,
+        )
+      end
+
       CurrentClaim.new(claims:)
     end
 
@@ -32,13 +40,27 @@ RSpec.describe BankOrBuildingSocietyForm, type: :model do
 
     describe "#save" do
       context "when submitted with valid params" do
-        let(:claim_params) { {bank_or_building_society: "personal_bank_account"} }
+        let(:claim_params) { {bank_or_building_society: "building_society"} }
 
         it "saves bank_or_building_society" do
           expect(form.save).to be true
 
           current_claim.claims.each do |claim|
-            expect(claim.bank_or_building_society).to eq "personal_bank_account"
+            expect(claim.bank_or_building_society).to eq "building_society"
+          end
+        end
+
+        it "resets dependent answers" do
+          current_claim.claims.first(1).each do |claim|
+            expect { expect(form.save).to be true }.to(
+              change { claim.banking_name }.to(nil).and(
+                change { claim.bank_account_number }.to(nil).and(
+                  change { claim.bank_sort_code }.to(nil).and(
+                    change { claim.building_society_roll_number }.to(nil)
+                  )
+                )
+              )
+            )
           end
         end
       end
