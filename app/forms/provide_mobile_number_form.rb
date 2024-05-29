@@ -1,18 +1,31 @@
 class ProvideMobileNumberForm < Form
   attribute :provide_mobile_number, :boolean
 
+  # FIXME RL consider moving this to a subclass rather than querying the session
   validates :provide_mobile_number,
     inclusion: {
       in: [true, false],
       message: "Select yes if you would like to provide your mobile number"
     },
-    if: -> { claim.has_ecp_or_lupp_policy? }
+    if: -> { answers.class.module_parent == Journeys::AdditionalPaymentsForTeaching }
 
   def save
     return false unless valid?
 
-    claim.assign_attributes(provide_mobile_number:)
-    claim.reset_eligibility_dependent_answers(["provide_mobile_number"])
-    claim.save!
+    if provide_mobile_number_changed?
+      journey_session.answers.assign_attributes(mobile_verified: nil)
+    end
+
+    journey_session.answers.assign_attributes(
+      provide_mobile_number: provide_mobile_number
+    )
+
+    journey_session.save!
+  end
+
+  private
+
+  def provide_mobile_number_changed?
+    answers.provide_mobile_number != provide_mobile_number
   end
 end

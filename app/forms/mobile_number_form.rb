@@ -21,11 +21,13 @@ class MobileNumberForm < Form
       Time.now
     end
 
-    update!(
+    journey_session.answers.assign_attributes(
       mobile_number: mobile_number,
       mobile_verified: nil,
       sent_one_time_password_at: sent_one_time_password_at
     )
+
+    journey_session.save!
   end
 
   private
@@ -39,6 +41,6 @@ class MobileNumberForm < Form
   end
 
   def mobile_number_changed?
-    mobile_number != claim.mobile_number
+    mobile_number != answers.mobile_number
   end
 end

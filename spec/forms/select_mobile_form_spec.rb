@@ -2,12 +2,6 @@ require "rails_helper"
 
 RSpec.describe SelectMobileForm do
   shared_examples "select_mobile_form" do |journey|
-    let(:claims) do
-      journey::POLICIES.map { |policy| create(:claim, policy: policy) }
-    end
-
-    let(:current_claim) { CurrentClaim.new(claims: claims) }
-
     let(:journey_session) do
       create(
         :"#{journey::I18N_NAMESPACE}_session",
@@ -29,7 +23,7 @@ RSpec.describe SelectMobileForm do
       described_class.new(
         journey: journey,
         journey_session: journey_session,
-        claim: current_claim,
+        claim: CurrentClaim.new(claims: [build(:claim)]),
         params: params
       )
     end
@@ -72,12 +66,12 @@ RSpec.describe SelectMobileForm do
           let(:mobile_check) { "use" }
 
           it "updates the claims" do
-            claims.each do |claim|
-              expect(claim.mobile_number).to eq("07123456789")
-              expect(claim.provide_mobile_number).to eq(true)
-              expect(claim.mobile_check).to eq("use")
-              expect(claim.mobile_verified).to eq(nil)
-            end
+            answers = journey_session.reload.answers
+
+            expect(answers.mobile_number).to eq("07123456789")
+            expect(answers.provide_mobile_number).to eq(true)
+            expect(answers.mobile_check).to eq("use")
+            expect(answers.mobile_verified).to eq(nil)
           end
         end
 
@@ -85,12 +79,12 @@ RSpec.describe SelectMobileForm do
           let(:mobile_check) { "alternative" }
 
           it "updates the claims" do
-            claims.each do |claim|
-              expect(claim.mobile_number).to eq(nil)
-              expect(claim.provide_mobile_number).to eq(true)
-              expect(claim.mobile_check).to eq("alternative")
-              expect(claim.mobile_verified).to eq(nil)
-            end
+            answers = journey_session.reload.answers
+
+            expect(answers.mobile_number).to eq(nil)
+            expect(answers.provide_mobile_number).to eq(true)
+            expect(answers.mobile_check).to eq("alternative")
+            expect(answers.mobile_verified).to eq(nil)
           end
         end
 
@@ -98,12 +92,12 @@ RSpec.describe SelectMobileForm do
           let(:mobile_check) { "declined" }
 
           it "updates the claimms" do
-            claims.each do |claim|
-              expect(claim.mobile_number).to eq(nil)
-              expect(claim.provide_mobile_number).to eq(false)
-              expect(claim.mobile_check).to eq("declined")
-              expect(claim.mobile_verified).to eq(nil)
-            end
+            answers = journey_session.reload.answers
+
+            expect(answers.mobile_number).to eq(nil)
+            expect(answers.provide_mobile_number).to eq(false)
+            expect(answers.mobile_check).to eq("declined")
+            expect(answers.mobile_verified).to eq(nil)
           end
         end
       end

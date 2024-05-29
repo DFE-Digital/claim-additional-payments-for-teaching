@@ -137,7 +137,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     choose "No"
     click_on "Continue"
 
-    expect(claim.reload.provide_mobile_number).to eql false
+    expect(session.reload.answers.provide_mobile_number).to eql false
 
     # - Mobile number
     expect(page).not_to have_text(I18n.t("questions.mobile_number"))

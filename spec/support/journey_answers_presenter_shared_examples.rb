@@ -23,9 +23,6 @@ RSpec.shared_examples "journey answers presenter" do
         date_of_birth: dob,
         teacher_reference_number: trn,
         national_insurance_number: nino,
-        mobile_check: logged_in_with_tid ? "use" : nil,
-        provide_mobile_number: true,
-        mobile_number: "01234567890",
         payroll_gender: :dont_know,
         logged_in_with_tid:,
         teacher_id_user_info:
@@ -44,7 +41,10 @@ RSpec.shared_examples "journey answers presenter" do
           date_of_birth: dob,
           national_insurance_number: nino,
           email_address: "test@email.com",
-          email_address_check: logged_in_with_tid ? true : false
+          email_address_check: logged_in_with_tid ? true : false,
+          mobile_check: logged_in_with_tid ? "use" : nil,
+          provide_mobile_number: true,
+          mobile_number: "01234567890"
         }
       )
     end
@@ -108,9 +108,9 @@ RSpec.shared_examples "journey answers presenter" do
 
       context "when the user selected the mobile provided by Teacher ID" do
         before do
-          claim.mobile_number = "01234567890"
-          claim.mobile_check = "use"
-          claim.provide_mobile_number = true
+          journey_session.answers.mobile_number = "01234567890"
+          journey_session.answers.mobile_check = "use"
+          journey_session.answers.provide_mobile_number = true
         end
 
         it "includes the selected mobile and the change slug is `select-mobile`" do
@@ -124,9 +124,9 @@ RSpec.shared_examples "journey answers presenter" do
 
       context "when the user selected to provide an alternative mobile" do
         before do
-          claim.mobile_number = "01234567891"
-          claim.mobile_check = "alternative"
-          claim.provide_mobile_number = true
+          journey_session.answers.mobile_number = "01234567891"
+          journey_session.answers.mobile_check = "alternative"
+          journey_session.answers.provide_mobile_number = true
         end
 
         it "includes the user-provided mobile and the change slug is `select-mobile`" do
@@ -140,9 +140,9 @@ RSpec.shared_examples "journey answers presenter" do
 
       context "when the user declined to be contacted by mobile" do
         before do
-          claim.mobile_number = nil
-          claim.mobile_check = "declined"
-          claim.provide_mobile_number = false
+          journey_session.answers.mobile_number = nil
+          journey_session.answers.mobile_check = "declined"
+          journey_session.answers.provide_mobile_number = false
         end
 
         it "includes the answer to decline and the change slug is `select-mobile`" do
@@ -181,8 +181,8 @@ RSpec.shared_examples "journey answers presenter" do
 
       context "when the user declined to be contacted by mobile" do
         before do
-          claim.mobile_number = nil
-          claim.provide_mobile_number = false
+          journey_session.answers.mobile_number = nil
+          journey_session.answers.provide_mobile_number = false
         end
 
         it "excludes the answer to `mobile-number`" do

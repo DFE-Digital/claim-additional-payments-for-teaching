@@ -8,6 +8,9 @@ RSpec.feature "Eligible later Teacher Early-Career Payments" do
     let(:lup_claim) { Claim.by_policy(Policies::LevellingUpPremiumPayments).order(:created_at).last }
     let(:current_school) { create(:school, :early_career_payments_eligible) }
     let(:itt_subject) { "mathematics" }
+    let(:journey_session) do
+      Journeys::AdditionalPaymentsForTeaching::Session.order(:created_at).last
+    end
 
     context "policy year 2022/2023" do
       it_behaves_like "Eligible later", {
