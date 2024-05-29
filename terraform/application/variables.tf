@@ -37,6 +37,9 @@ variable "docker_image" {
 variable "startup_command" {
   type = list(string)
 }
+variable "worker_command" {
+  type = list(string)
+}
 variable "external_url" {
   default     = null
   description = "Healthcheck URL for StatusCake monitoring"
@@ -52,7 +55,6 @@ variable "enable_monitoring" {
 variable "config" {
   type = string
 }
-
 variable "canonical_hostname" {
   type        = string
   description = "External domain name for the app service"

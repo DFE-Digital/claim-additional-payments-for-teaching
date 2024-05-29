@@ -25,6 +25,7 @@ module "application_configuration" {
 module "web_application" {
   source = "./vendor/modules/aks//aks/application"
 
+  name   = "web"
   is_web = true
 
   namespace    = var.namespace
@@ -37,4 +38,22 @@ module "web_application" {
 
   docker_image = var.docker_image
   command      = var.startup_command
+}
+
+module "worker_application" {
+  source = "./vendor/modules/aks//aks/application"
+
+  name   = "worker"
+  is_web = false
+
+  namespace    = var.namespace
+  environment  = var.environment
+  service_name = var.service_name
+
+  cluster_configuration_map  = module.cluster_data.configuration_map
+  kubernetes_config_map_name = module.application_configuration.kubernetes_config_map_name
+  kubernetes_secret_name     = module.application_configuration.kubernetes_secret_name
+
+  docker_image = var.docker_image
+  command      = var.worker_command
 }
