@@ -76,24 +76,4 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationForm, type:
       end
     end
   end
-
-  describe "#backlink_path" do
-    let(:form) do
-      described_class.new(
-        journey: journey,
-        journey_session: journey_session,
-        claim: current_claim,
-        params: ActionController::Parameters.new(
-          {
-            journey: "additional-payments",
-            slug: "qualification"
-          }
-        )
-      )
-    end
-
-    it "returns the previous page in the journey" do
-      expect(form.backlink_path).to eq("/additional-payments/poor-performance")
-    end
-  end
 end

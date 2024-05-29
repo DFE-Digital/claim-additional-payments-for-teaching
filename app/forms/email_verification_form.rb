@@ -2,7 +2,7 @@ class EmailVerificationForm < Form
   attribute :one_time_password
 
   # Required for shared partial in the view
-  delegate :email_address, to: :claim
+  delegate :email_address, to: :answers
 
   validate :sent_one_time_password_must_be_valid
   validate :otp_must_be_valid, if: :sent_one_time_password_at?
@@ -14,13 +14,14 @@ class EmailVerificationForm < Form
   def save
     return false unless valid?
 
-    update!(email_verified: true)
+    journey_session.answers.assign_attributes(email_verified: true)
+    journey_session.save!
   end
 
   private
 
   def sent_one_time_password_at
-    claim.sent_one_time_password_at
+    answers.sent_one_time_password_at
   end
 
   def sent_one_time_password_must_be_valid

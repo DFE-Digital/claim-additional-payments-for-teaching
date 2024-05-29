@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Teacher Identity Sign in" do
+RSpec.feature "Teacher Identity Sign in", js: true do
   include OmniauthMockHelper
 
   # create a school eligible for ECP and LUP so can walk the whole journey
@@ -41,9 +41,9 @@ RSpec.feature "Teacher Identity Sign in" do
     expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
     expect(page).to have_text("Enter the school name or postcode. Use at least three characters.")
 
-    # check the teacher_id_user_info details are saved to the claim
-    claim = Claim.order(:created_at).last
-    expect(claim.teacher_id_user_info).to eq({
+    # check the teacher_id_user_info details are saved to the session
+    journey_session = Journeys::AdditionalPaymentsForTeaching::Session.last
+    expect(journey_session.answers.teacher_id_user_info).to eq({
       "trn" => "1234567",
       "birthdate" => "1981-01-01",
       "email" => "kelsie.oberbrunner@example.com",
@@ -69,18 +69,18 @@ RSpec.feature "Teacher Identity Sign in" do
 
     expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
 
-    # check the teacher_id_user_info details are saved to the claim
-    claim = Claim.order(:created_at).last
-    expect(claim.teacher_id_user_info).to eq({
+    # check the teacher_id_user_info details are saved to the session
+    journey_session = Journeys::AdditionalPaymentsForTeaching::Session.last
+    expect(journey_session.answers.teacher_id_user_info).to eq({
       "trn" => "1234567",
       "birthdate" => "1981-01-01",
+      "email" => "kelsie.oberbrunner@example.com",
+      "email_verified" => "",
+      "phone_number" => "01234567890",
       "given_name" => "Kelsie",
       "family_name" => "Oberbrunner",
       "ni_number" => "AB123123A",
-      "phone_number" => "01234567890",
-      "trn_match_ni_number" => "True",
-      "email" => "kelsie.oberbrunner@example.com",
-      "email_verified" => ""
+      "trn_match_ni_number" => "True"
     })
   end
 

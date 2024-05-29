@@ -32,16 +32,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::InductionCompletedForm d
       end
     end
 
-    describe "#backlink_path" do
-      context "new form" do
-        let(:params) { ActionController::Parameters.new({slug: slug, claim: {}}) }
-
-        it "returns nil" do
-          expect(form.backlink_path).to be_nil
-        end
-      end
-    end
-
     describe "#induction_completed" do
       let(:params) { ActionController::Parameters.new({slug: slug, claim: {}}) }
 

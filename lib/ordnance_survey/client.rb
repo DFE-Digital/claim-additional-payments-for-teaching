@@ -5,7 +5,7 @@ module OrdnanceSurvey
       params: OrdnanceSurvey.configuration.client.params
     )
       self.base_url = base_url
-      self.params = params
+      self.params = params || {}
     end
 
     def api

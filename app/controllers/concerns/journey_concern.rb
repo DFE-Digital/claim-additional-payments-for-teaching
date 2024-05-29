@@ -2,7 +2,7 @@ module JourneyConcern
   extend ActiveSupport::Concern
 
   included do
-    helper_method :current_journey_routing_name, :journey, :journey_configuration, :current_claim
+    helper_method :current_journey_routing_name, :journey, :journey_configuration, :current_claim, :journey_session
   end
 
   def current_journey_routing_name

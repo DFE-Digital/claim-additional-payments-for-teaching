@@ -77,6 +77,8 @@ module Journeys
 
       attr_reader :claim, :journey_session
 
+      delegate :answers, to: :journey_session
+
       # Really this is a combined CurrentClaim
       def initialize(claim, journey_session)
         @claim = claim
@@ -100,20 +102,22 @@ module Journeys
             sequence.delete("select-mobile")
           end
 
-          sequence.delete("reset-claim") if (!claim.logged_in_with_tid? && claim.details_check.nil?) || claim.details_check?
+          sequence.delete("reset-claim") if skipped_dfe_sign_in? || answers.details_check?
 
-          sequence.delete("select-email") if (claim.logged_in_with_tid == false) || claim.teacher_id_user_info["email"].nil?
-          if claim.logged_in_with_tid? && claim.email_address_check
+          sequence.delete("select-email") unless set_by_teacher_id?("email")
+
+          if answers.logged_in_with_tid? && answers.email_address_check
             sequence.delete("email-address")
             sequence.delete("email-verification")
           end
 
-          if (claim.logged_in_with_tid == false) || claim.teacher_id_user_info["phone_number"].blank?
-            sequence.delete("select-mobile")
-          else
+          if set_by_teacher_id?("phone_number")
             sequence.delete("provide-mobile-number")
+          else
+            sequence.delete("select-mobile")
           end
-          if claim.logged_in_with_tid? && (claim.mobile_check == "use" || claim.mobile_check == "declined")
+
+          if answers.logged_in_with_tid? && (claim.mobile_check == "use" || claim.mobile_check == "declined")
             sequence.delete("mobile-number")
             sequence.delete("mobile-verification")
           end
@@ -129,9 +133,9 @@ module Journeys
           sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
           sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
 
-          sequence.delete("teacher-reference-number") if claim.logged_in_with_tid? && claim.teacher_reference_number.present?
+          sequence.delete("teacher-reference-number") if answers.logged_in_with_tid? && answers.teacher_reference_number.present?
 
-          sequence.delete("correct-school") unless claim.logged_in_with_tid_and_has_recent_tps_school?
+          sequence.delete("correct-school") unless journey_session.logged_in_with_tid_and_has_recent_tps_school?
           sequence.delete("current-school") if claim.eligibility.school_somewhere_else == false
 
           if claim.provide_mobile_number == false
@@ -154,15 +158,15 @@ module Journeys
             replace_ecp_only_induction_not_completed_slugs(sequence)
           end
 
-          sequence.delete("personal-details") if claim.logged_in_with_tid? && personal_details_form.valid? && claim.all_personal_details_same_as_tid?
+          sequence.delete("personal-details") if answers.logged_in_with_tid? && personal_details_form.valid? && answers.all_personal_details_same_as_tid?
 
-          if claim.logged_in_with_tid? && claim.details_check?
+          if answers.logged_in_with_tid? && answers.details_check?
             if claim.qualifications_details_check
-              sequence.delete("qualification") if claim.dqt_teacher_record&.route_into_teaching
-              sequence.delete("itt-year") if claim.dqt_teacher_record&.itt_academic_year_for_claim
-              sequence.delete("eligible-itt-subject") if claim.dqt_teacher_record&.eligible_itt_subject_for_claim
-              sequence.delete("eligible-degree-subject") if claim.for_policy(Policies::LevellingUpPremiumPayments)&.dqt_teacher_record&.eligible_degree_code?
-            elsif claim.dqt_teacher_status && (!claim.has_dqt_record? || claim.has_no_dqt_data_for_claim?)
+              sequence.delete("qualification") if answers.early_career_payments_dqt_teacher_record&.route_into_teaching
+              sequence.delete("itt-year") if answers.early_career_payments_dqt_teacher_record&.itt_academic_year_for_claim
+              sequence.delete("eligible-itt-subject") if answers.early_career_payments_dqt_teacher_record&.eligible_itt_subject_for_claim
+              sequence.delete("eligible-degree-subject") if answers.levelling_up_premium_payments_dqt_reacher_record&.eligible_degree_code?
+            elsif signed_in_with_dfe_identity_and_details_match? && answers.has_no_dqt_data_for_claim?
               sequence.delete("qualification-details")
             end
           else
@@ -180,7 +184,7 @@ module Journeys
       def personal_details_form
         PersonalDetailsForm.new(
           claim:,
-          journey_session:,
+          journey_session: journey_session,
           journey: Journeys::AdditionalPaymentsForTeaching,
           params: ActionController::Parameters.new
         )
@@ -217,9 +221,9 @@ module Journeys
         return false unless ecp_school_selected?
 
         # If the claimant is logged in with their Teacher ID, check the DQT record directly.
-        if claim.logged_in_with_tid?
+        if answers.logged_in_with_tid?
           # If the DQT record confirms induction eligibility, the question is not required.
-          return false if claim.for_policy(Policies::EarlyCareerPayments).dqt_teacher_record&.eligible_induction?
+          return false if answers.early_career_payments_dqt_teacher_record&.eligible_induction?
         end
 
         # In all other cases, the induction question is required.
@@ -230,6 +234,28 @@ module Journeys
         return false unless claim.eligibility.current_school
 
         Policies::EarlyCareerPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible?
+      end
+
+      # We only retrieve dqt teacher status when the user is signed in with DfE
+      # Sign-in and chosen that the details match. The previous implementation
+      # relies on the presence of dqt_teacher_status to determine this.
+      # TODO consider switching this to `answers.details_check`
+      def signed_in_with_dfe_identity_and_details_match?
+        !!answers.dqt_teacher_status
+      end
+
+      def skipped_dfe_sign_in?
+        !answers.logged_in_with_tid? && answers.details_check.nil?
+      end
+
+      def skipped_dfe_sign_in_or_details_did_not_match?
+        answers.logged_in_with_tid == false
+      end
+
+      def set_by_teacher_id?(field)
+        return false if skipped_dfe_sign_in_or_details_did_not_match?
+
+        answers.teacher_id_user_info[field].present?
       end
     end
   end

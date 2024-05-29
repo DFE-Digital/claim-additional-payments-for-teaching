@@ -2,6 +2,11 @@ require "rails_helper"
 
 RSpec.describe "Submissions", type: :request do
   let(:in_progress_claim) { Claim.by_policy(Policies::StudentLoans).order(:created_at).last }
+  let(:journey_session) do
+    Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
+  end
+
+  let(:answers) { journey_session.answers }
 
   before { create(:journey_configuration, :student_loans) }
 
@@ -14,11 +19,19 @@ RSpec.describe "Submissions", type: :request do
         in_progress_claim.eligibility = create(:student_loans_eligibility, :eligible)
         in_progress_claim.save!
 
+        journey_session.update!(
+          answers: attributes_for(
+            :student_loans_answers,
+            :with_personal_details,
+            :with_email_details
+          )
+        )
+
         stub_qualified_teaching_statuses_show(
           trn: in_progress_claim.teacher_reference_number,
           params: {
-            birthdate: in_progress_claim.date_of_birth&.to_s,
-            nino: in_progress_claim.national_insurance_number
+            birthdate: answers.date_of_birth&.to_s,
+            nino: answers.national_insurance_number
           }
         )
       end

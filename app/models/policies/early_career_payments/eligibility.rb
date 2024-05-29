@@ -3,21 +3,6 @@ module Policies
     class Eligibility < ApplicationRecord
       include EligibilityCheckable
 
-      EDITABLE_ATTRIBUTES = [
-        :nqt_in_academic_year_after_itt,
-        :current_school_id,
-        :induction_completed,
-        :school_somewhere_else,
-        :employed_as_supply_teacher,
-        :has_entire_term_contract,
-        :employed_directly,
-        :subject_to_formal_performance_action,
-        :subject_to_disciplinary_action,
-        :qualification,
-        :eligible_itt_subject,
-        :teaching_subject_now,
-        :itt_academic_year
-      ].freeze
       AMENDABLE_ATTRIBUTES = [:award_amount].freeze
       ATTRIBUTE_DEPENDENCIES = {
         "employed_as_supply_teacher" => ["has_entire_term_contract", "employed_directly"],
@@ -82,6 +67,8 @@ module Policies
       validates :award_amount, on: :amendment, award_range: {max: max_award_amount_in_pounds}
 
       delegate :name, to: :current_school, prefix: true, allow_nil: true
+
+      delegate :academic_year, to: :claim
 
       def policy
         Policies::EarlyCareerPayments

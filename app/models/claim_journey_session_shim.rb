@@ -23,30 +23,30 @@ class ClaimJourneySessionShim
       address_line_3: address_line_3,
       address_line_4: address_line_4,
       postcode: postcode,
-      date_of_birth: date_of_birth,
+      date_of_birth: journey_session.answers.date_of_birth,
       teacher_reference_number: teacher_reference_number,
-      national_insurance_number: national_insurance_number,
-      email_address: email_address,
+      national_insurance_number: journey_session.answers.national_insurance_number,
+      email_address: journey_session.answers.email_address,
       bank_sort_code: bank_sort_code,
       bank_account_number: bank_account_number,
       details_check: details_check,
       payroll_gender: payroll_gender,
-      first_name: first_name,
-      middle_name: middle_name,
-      surname: surname,
+      first_name: journey_session.answers.first_name,
+      middle_name: journey_session.answers.middle_name,
+      surname: journey_session.answers.surname,
       banking_name: banking_name,
       building_society_roll_number: building_society_roll_number,
       academic_year: academic_year,
       bank_or_building_society: bank_or_building_society,
       provide_mobile_number: provide_mobile_number,
       mobile_number: mobile_number,
-      email_verified: email_verified,
+      email_verified: journey_session.answers.email_verified,
       mobile_verified: mobile_verified,
       hmrc_bank_validation_succeeded: hmrc_bank_validation_succeeded,
       hmrc_bank_validation_responses: hmrc_bank_validation_responses,
       logged_in_with_tid: logged_in_with_tid,
       teacher_id_user_info: teacher_id_user_info,
-      email_address_check: email_address_check,
+      email_address_check: journey_session.answers.email_address_check,
       mobile_check: mobile_check,
       qualifications_details_check: qualifications_details_check
     }
@@ -78,20 +78,8 @@ class ClaimJourneySessionShim
     journey_session.answers.postcode || current_claim.postcode
   end
 
-  def date_of_birth
-    journey_session.answers.date_of_birth || current_claim.date_of_birth
-  end
-
   def teacher_reference_number
-    journey_session.answers.teacher_reference_number || current_claim.teacher_reference_number
-  end
-
-  def national_insurance_number
-    journey_session.answers.national_insurance_number || current_claim.national_insurance_number
-  end
-
-  def email_address
-    journey_session.answers.email_address || current_claim.email_address
+    journey_session.answers.teacher_reference_number.presence || current_claim.teacher_reference_number
   end
 
   def bank_sort_code
@@ -108,18 +96,6 @@ class ClaimJourneySessionShim
 
   def payroll_gender
     journey_session.answers.payroll_gender || current_claim.payroll_gender
-  end
-
-  def first_name
-    journey_session.answers.first_name || current_claim.first_name
-  end
-
-  def middle_name
-    journey_session.answers.middle_name || current_claim.middle_name
-  end
-
-  def surname
-    journey_session.answers.surname || current_claim.surname
   end
 
   def banking_name
@@ -146,10 +122,6 @@ class ClaimJourneySessionShim
     journey_session.answers.mobile_number || current_claim.mobile_number
   end
 
-  def email_verified
-    journey_session.answers.email_verified || current_claim.email_verified
-  end
-
   def mobile_verified
     journey_session.answers.mobile_verified || current_claim.mobile_verified
   end
@@ -168,10 +140,6 @@ class ClaimJourneySessionShim
 
   def teacher_id_user_info
     journey_session.answers.teacher_id_user_info || current_claim.teacher_id_user_info
-  end
-
-  def email_address_check
-    journey_session.answers.email_address_check || current_claim.email_address_check
   end
 
   def mobile_check

@@ -21,7 +21,7 @@ module Journeys
       private
 
       def current_school
-        @current_school ||= claim.recent_tps_school || claim.school
+        @current_school ||= journey_session.recent_tps_school || claim.school
       end
 
       def change_school?

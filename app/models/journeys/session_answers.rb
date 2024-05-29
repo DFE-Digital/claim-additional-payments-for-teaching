@@ -3,6 +3,7 @@ module Journeys
     include ActiveModel::Model
     include ActiveModel::Attributes
     include ActiveModel::Dirty
+    include Sessions::TeacherId
 
     attribute :current_school_id, :string # UUID
     attribute :selected_policy, :string
@@ -33,14 +34,26 @@ module Journeys
     attribute :hmrc_bank_validation_responses # , :json
     attribute :logged_in_with_tid, :boolean
     attribute :details_check, :boolean
-    attribute :teacher_id_user_info # , :json
+    attribute :teacher_id_user_info, default: {}
     attribute :email_address_check, :boolean
     attribute :mobile_check, :string
     attribute :qualifications_details_check, :boolean
+    attribute :dqt_teacher_status, default: {}
+    attribute :has_student_loan, :boolean
+    attribute :student_loan_plan, :string
+    attribute :sent_one_time_password_at, :datetime
     attribute :answered, default: []
 
     def has_attribute?(name)
       attribute_names.include?(name.to_s)
+    end
+
+    def details_check?
+      !!details_check
+    end
+
+    def email_address_check?
+      !!email_address_check
     end
   end
 end

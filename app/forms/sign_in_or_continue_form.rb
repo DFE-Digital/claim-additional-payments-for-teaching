@@ -38,7 +38,9 @@ class SignInOrContinueForm < Form
     }, if: :signed_in_with_dfe_identity?
 
   def teacher_id_user_info_attributes=(attributes)
-    teacher_id_user_info.assign_attributes(attributes || claim.teacher_id_user_info)
+    teacher_id_user_info.assign_attributes(
+      attributes || journey_session.answers.teacher_id_user_info
+    )
   end
 
   def teacher_id_user_info
@@ -72,10 +74,8 @@ class SignInOrContinueForm < Form
 
   def update_from_dfe_identity_sign_in!
     if details_check
-      # FIXME: RL can we inline DfeIdentity::UserInfo's responsibilities into
-      # TeacherIdUserInfoForm?
       if DfeIdentity::UserInfo.validated?(teacher_id_user_info.attributes)
-        claim.update!(
+        journey_session.answers.assign_attributes(
           first_name: teacher_id_user_info.given_name,
           surname: teacher_id_user_info.family_name,
           teacher_reference_number: teacher_id_user_info.trn,
@@ -87,17 +87,25 @@ class SignInOrContinueForm < Form
           teacher_id_user_info: teacher_id_user_info.attributes
         )
 
-        Dqt::RetrieveClaimQualificationsData.call(claim)
+        # FIXME RL: Remove this once we update the teacher reference number
+        # form to write to the journey session
+        update!(teacher_reference_number: teacher_id_user_info.trn)
+
+        journey_session.save!
+
+        Dqt::RetrieveClaimQualificationsData.call(journey_session)
       else
-        claim.update!(
+        journey_session.answers.assign_attributes(
           logged_in_with_tid: true,
           details_check: false,
           dqt_teacher_status: nil,
           teacher_id_user_info: teacher_id_user_info.attributes
         )
+
+        journey_session.save!
       end
     else
-      claim.update!(
+      journey_session.answers.assign_attributes(
         first_name: "",
         surname: "",
         teacher_reference_number: "",
@@ -107,11 +115,13 @@ class SignInOrContinueForm < Form
         details_check: false,
         teacher_id_user_info: teacher_id_user_info.attributes
       )
+
+      journey_session.save!
     end
   end
 
   def update_from_skipped_dfe_identity_sign_in!
-    update!(
+    journey_session.answers.assign_attributes(
       first_name: "",
       surname: "",
       teacher_reference_number: "",
@@ -121,5 +131,7 @@ class SignInOrContinueForm < Form
       details_check: nil,
       teacher_id_user_info: {}
     )
+
+    journey_session.save!
   end
 end

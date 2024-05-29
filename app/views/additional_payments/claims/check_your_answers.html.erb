@@ -17,9 +17,9 @@
       Check your answers before sending your application
     </h1>
 
-    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Identity details", answers: journey.answers_for_claim(@form.claim).identity_answers} %>
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Identity details", answers: journey.answers_for_claim(@form.claim, @form.journey_session).identity_answers} %>
 
-    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Payment details", answers: journey.answers_for_claim(@form.claim).payment_answers} %>
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Payment details", answers: journey.answers_for_claim(@form.claim, @form.journey_session).payment_answers} %>
 
     <%= form_with url: claim_submission_path do |form| %>
       <h2 class="govuk-heading-m"><%= t("additional_payments.check_your_answers.heading_send_application") %></h2>

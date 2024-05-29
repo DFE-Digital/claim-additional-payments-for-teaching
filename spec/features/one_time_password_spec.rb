@@ -19,7 +19,8 @@ RSpec.feature "Given a one time password" do
 
     click_on "Confirm"
     expect(page).to have_text("Enter a valid passcode")
-    expect(Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last.email_verified).to_not equal(true)
+    session = Journeys::AdditionalPaymentsForTeaching::Session.order(:created_at).last
+    expect(session.answers.email_verified).to_not equal(true)
 
     # - that is expired
 
@@ -28,7 +29,7 @@ RSpec.feature "Given a one time password" do
     fill_in "claim_one_time_password", with: get_otp_from_email
     click_on "Confirm"
     expect(page).to have_text("Your passcode has expired, request a new one")
-    expect(Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last.email_verified).to_not equal(true)
+    expect(session.reload.answers.email_verified).to_not equal(true)
 
     # - that is valid
 
@@ -37,6 +38,6 @@ RSpec.feature "Given a one time password" do
     fill_in "claim_one_time_password", with: get_otp_from_email
     click_on "Confirm"
     expect(page).to_not have_css(".govuk-error-summary")
-    expect(Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last.email_verified).to equal(true)
+    expect(session.reload.answers.email_verified).to equal(true)
   end
 end

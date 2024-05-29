@@ -6,34 +6,6 @@ class Claim < ApplicationRecord
   NO_STUDENT_LOAN = "not_applicable"
   STUDENT_LOAN_PLAN_OPTIONS = StudentLoan::PLANS.dup << NO_STUDENT_LOAN
   ADDRESS_ATTRIBUTES = %w[address_line_1 address_line_2 address_line_3 address_line_4 postcode].freeze
-  EDITABLE_ATTRIBUTES = [
-    :first_name,
-    :middle_name,
-    :surname,
-    :address_line_1,
-    :address_line_2,
-    :address_line_3,
-    :address_line_4,
-    :postcode,
-    :date_of_birth,
-    :payroll_gender,
-    :teacher_reference_number,
-    :national_insurance_number,
-    :email_address,
-    :provide_mobile_number,
-    :mobile_number,
-    :bank_or_building_society,
-    :bank_sort_code,
-    :bank_account_number,
-    :banking_name,
-    :building_society_roll_number,
-    :one_time_password,
-    :logged_in_with_tid,
-    :details_check,
-    :email_address_check,
-    :mobile_check,
-    :qualifications_details_check
-  ].freeze
   AMENDABLE_ATTRIBUTES = %i[
     teacher_reference_number
     national_insurance_number
@@ -439,54 +411,12 @@ class Claim < ApplicationRecord
     submitted_using_slc_data == false
   end
 
-  def has_recent_tps_school?
-    TeachersPensionsService.has_recent_tps_school?(self)
-  end
-
-  def recent_tps_school
-    TeachersPensionsService.recent_tps_school(self)
-  end
-
-  def has_tps_school_for_student_loan_in_previous_financial_year?
-    TeachersPensionsService.has_tps_school_for_student_loan_in_previous_financial_year?(self)
-  end
-
-  def tps_school_for_student_loan_in_previous_financial_year
-    TeachersPensionsService.tps_school_for_student_loan_in_previous_financial_year(self)
-  end
-
-  # This is used to ensure we still show the forms if the personal-details are valid
-  # but are valid because they were susequently provided/changed from what was in TID
-  def all_personal_details_same_as_tid?
-    name_same_as_tid? && dob_same_as_tid? && nino_same_as_tid?
-  end
-
-  def name_same_as_tid?
-    teacher_id_user_info["given_name"] == first_name && teacher_id_user_info["family_name"] == surname
-  end
-
-  def dob_same_as_tid?
-    teacher_id_user_info["birthdate"] == date_of_birth.to_s
-  end
-
-  def nino_same_as_tid?
-    teacher_id_user_info["ni_number"] == national_insurance_number
-  end
-
-  def trn_same_as_tid?
-    teacher_id_user_info["trn"] == teacher_reference_number
-  end
-
-  def logged_in_with_tid_and_has_recent_tps_school?
-    logged_in_with_tid? && teacher_reference_number.present? && has_recent_tps_school?
-  end
-
   def has_dqt_record?
     !dqt_teacher_status.blank?
   end
 
   def dqt_teacher_record
-    policy::DqtRecord.new(Dqt::Teacher.new(dqt_teacher_status), self) if has_dqt_record?
+    policy::DqtRecord.new(Dqt::Teacher.new(dqt_teacher_status), eligibility) if has_dqt_record?
   end
 
   private

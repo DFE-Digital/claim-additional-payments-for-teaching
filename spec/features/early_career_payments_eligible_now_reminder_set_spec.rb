@@ -12,6 +12,15 @@ RSpec.feature "Eligible now can set a reminder for next year." do
 
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(eligibility_attributes)
+    session = Journeys::AdditionalPaymentsForTeaching::Session.last
+    session.answers.assign_attributes(
+      attributes_for(
+        :additional_payments_answers,
+        :with_personal_details,
+        :with_email_details
+      )
+    )
+    session.save!
 
     jump_to_claim_journey_page(claim, "check-your-answers")
     expect(page).to have_text(claim.first_name)
@@ -75,6 +84,16 @@ RSpec.feature "Completed Applications - Reminders" do
             itt_academic_year: scenario[:itt_academic_year]
           )
           reminder_year = (academic_year + 1).start_year
+
+          session = Journeys::AdditionalPaymentsForTeaching::Session.last
+          session.answers.assign_attributes(
+            attributes_for(
+              :additional_payments_answers,
+              :with_personal_details,
+              :with_email_details
+            )
+          )
+          session.save!
 
           jump_to_claim_journey_page(claim, "check-your-answers")
           expect(page).to have_text(claim.first_name)

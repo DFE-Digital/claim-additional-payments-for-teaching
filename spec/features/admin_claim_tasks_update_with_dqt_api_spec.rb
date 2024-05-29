@@ -1,12 +1,24 @@
 require "rails_helper"
 
 RSpec.feature "Admin claim tasks update with DQT API" do
-  def claimant_submits_claim(claim_attributes:, post_submission_claim_attributes: {})
+  def claimant_submits_claim(claim_attributes:, answers:, post_submission_claim_attributes: {})
     claim = nil
 
     in_browser(:claimant) do
-      policy_underscored = claim_attributes[:policy].to_s.underscore
+      policy = claim_attributes[:policy]
+      policy_underscored = policy.to_s.underscore
       claim = send(:"start_#{policy_underscored}_claim")
+
+      journey = Journeys.for_policy(policy)
+
+      journey_session = journey::Session.last
+
+      journey_session.update!(
+        answers: attributes_for(
+          :"#{journey::I18N_NAMESPACE}_answers",
+          :with_email_details
+        ).merge(answers)
+      )
 
       claim.update!(
         attributes_for(
@@ -140,15 +152,17 @@ RSpec.feature "Admin claim tasks update with DQT API" do
     context "with submitted claim" do
       let(:claim) do
         claimant_submits_claim(
-          claim_attributes: {
+          answers: {
             academic_year: AcademicYear.new(2022),
             date_of_birth: Date.new(1990, 8, 23),
             first_name: "Fred",
             national_insurance_number: "QQ100000C",
-            policy: policy,
-            reference: "AB123456",
             surname: "ELIGIBLE",
             teacher_reference_number: "1234567"
+          },
+          claim_attributes: {
+            policy: policy,
+            reference: "AB123456"
           }
         )
       end
@@ -509,14 +523,16 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         context "with admin claims tasks identity confirmation passed" do
           let(:claim) do
             claimant_submits_claim(
-              claim_attributes: {
+              answers: {
                 date_of_birth: Date.new(1990, 8, 23),
                 first_name: "Fred",
                 national_insurance_number: "QQ100000C",
-                policy: policy,
-                reference: "AB123456",
                 surname: "ELIGIBLE",
                 teacher_reference_number: "1234567"
+              },
+              claim_attributes: {
+                policy: policy,
+                reference: "AB123456"
               },
               post_submission_claim_attributes: {
                 tasks: [build(:task, name: :identity_confirmation)]
@@ -863,15 +879,17 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         context "with manually confirmed admin claim tasks qualifications passed" do
           let(:claim) do
             claimant_submits_claim(
-              claim_attributes: {
+              answers: {
                 academic_year: AcademicYear.new(2021),
                 date_of_birth: Date.new(1990, 8, 23),
                 first_name: "Fred",
                 national_insurance_number: "QQ100000C",
-                policy: policy,
-                reference: "AB123456",
                 surname: "ELIGIBLE",
                 teacher_reference_number: "1234567"
+              },
+              claim_attributes: {
+                policy: policy,
+                reference: "AB123456"
               },
               post_submission_claim_attributes: {
                 tasks: [build(:task, name: "qualifications")], # manual: true in factory!
@@ -970,14 +988,16 @@ RSpec.feature "Admin claim tasks update with DQT API" do
     context "with submitted claim" do
       let(:claim) do
         claimant_submits_claim(
-          claim_attributes: {
+          answers: {
             date_of_birth: Date.new(1990, 8, 23),
             first_name: "Fred",
             national_insurance_number: "QQ100000C",
-            policy: policy,
-            reference: "AB123456",
             surname: "ELIGIBLE",
             teacher_reference_number: "1234567"
+          },
+          claim_attributes: {
+            policy: policy,
+            reference: "AB123456"
           }
         )
       end
@@ -1342,14 +1362,16 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         context "with admin claims tasks identity confirmation passed" do
           let(:claim) do
             claimant_submits_claim(
-              claim_attributes: {
+              answers: {
                 date_of_birth: Date.new(1990, 8, 23),
                 first_name: "Fred",
                 national_insurance_number: "QQ100000C",
-                policy: policy,
-                reference: "AB123456",
                 surname: "ELIGIBLE",
                 teacher_reference_number: "1234567"
+              },
+              claim_attributes: {
+                policy: policy,
+                reference: "AB123456"
               },
               post_submission_claim_attributes: {
                 tasks: [build(:task, name: :identity_confirmation)]
@@ -1645,14 +1667,16 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         context "with manually confirmed admin claim tasks qualifications passed" do
           let(:claim) do
             claimant_submits_claim(
-              claim_attributes: {
+              answers: {
                 date_of_birth: Date.new(1990, 8, 23),
                 first_name: "Fred",
                 national_insurance_number: "QQ100000C",
-                policy: policy,
-                reference: "AB123456",
                 surname: "ELIGIBLE",
                 teacher_reference_number: "1234567"
+              },
+              claim_attributes: {
+                policy: policy,
+                reference: "AB123456"
               },
               post_submission_claim_attributes: {
                 tasks: [build(:task, name: "qualifications")],

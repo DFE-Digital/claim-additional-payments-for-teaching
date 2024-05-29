@@ -14,6 +14,22 @@ module Journeys
       attribute :had_leadership_position, :boolean
       attribute :mostly_performed_leadership_duties, :boolean
       attribute :claim_school_somewhere_else, :boolean
+
+      def dqt_teacher_record
+        return unless dqt_teacher_status.present?
+
+        @dqt_teacher_record ||= Policies::StudentLoans::DqtRecord.new(
+          Dqt::Teacher.new(dqt_teacher_status)
+        )
+      end
+
+      def has_no_dqt_data_for_claim?
+        dqt_teacher_status.blank? || dqt_teacher_record.has_no_data_for_claim?
+      end
+
+      def policy
+        Policies::StudentLoans
+      end
     end
   end
 end

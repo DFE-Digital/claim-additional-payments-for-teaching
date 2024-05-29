@@ -15,14 +15,6 @@ class SelectHomeAddressForm < Form
     end
   end
 
-  def backlink_path
-    Rails
-      .application
-      .routes
-      .url_helpers
-      .claim_path(params[:journey], "postcode-search")
-  end
-
   def save
     return false unless valid?
 

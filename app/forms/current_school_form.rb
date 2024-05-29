@@ -13,10 +13,6 @@ class CurrentSchoolForm < Form
     self.current_school_id = permitted_params[:current_school_id]
   end
 
-  def backlink_path
-    params[:slug] if params[:school_search]
-  end
-
   def save
     return false unless valid?
 

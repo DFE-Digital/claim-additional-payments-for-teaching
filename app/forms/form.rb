@@ -9,6 +9,8 @@ class Form
   attr_accessor :journey_session
   attr_accessor :params
 
+  delegate :answers, to: :journey_session
+
   def self.model_name
     Claim.model_name
   end
@@ -34,15 +36,6 @@ class Form
 
   def i18n_namespace
     journey::I18N_NAMESPACE
-  end
-
-  def backlink_path
-    return unless page_sequence.previous_slug
-    Rails
-      .application
-      .routes
-      .url_helpers
-      .claim_path(params[:journey], page_sequence.previous_slug)
   end
 
   def i18n_errors_path(msg, args = {})
@@ -73,7 +66,8 @@ class Form
       claim,
       journey.slug_sequence.new(claim, journey_session),
       nil,
-      params[:slug]
+      params[:slug],
+      journey_session
     )
   end
 

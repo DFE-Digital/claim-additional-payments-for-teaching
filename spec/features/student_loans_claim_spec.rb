@@ -25,6 +25,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     choose_qts_year
     claim = Claim.by_policy(Policies::StudentLoans).order(:created_at).last
+    session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
 
     expect(claim.eligibility.reload.qts_award_year).to eql("on_or_after_cut_off_date")
 
@@ -81,14 +82,16 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     fill_in "National Insurance number", with: "PX321499A"
     click_on "Continue"
 
-    expect(claim.reload.first_name).to eql("Russell")
-    expect(claim.reload.surname).to eql("Wong")
-    expect(claim.reload.date_of_birth).to eq(Date.new(1988, 2, 28))
-    expect(claim.reload.national_insurance_number).to eq("PX321499A")
+    session.reload
+    expect(session.answers.first_name).to eql("Russell")
+    expect(session.answers.surname).to eql("Wong")
+    expect(session.answers.date_of_birth).to eq(Date.new(1988, 2, 28))
+    expect(session.answers.national_insurance_number).to eq("PX321499A")
   end
 
   def fill_in_remaining_personal_details_and_submit
     claim = Claim.by_policy(Policies::StudentLoans).order(:created_at).last
+    session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
 
     expect(page).to have_text(I18n.t("questions.address.home.title"))
 
@@ -116,7 +119,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     fill_in I18n.t("questions.email_address"), with: "name@example.tld"
     click_on "Continue"
 
-    expect(claim.reload.email_address).to eq("name@example.tld")
+    expect(session.reload.answers.email_address).to eq("name@example.tld")
 
     # - One time password
     expect(page).to have_text("Enter the 6-digit passcode")
