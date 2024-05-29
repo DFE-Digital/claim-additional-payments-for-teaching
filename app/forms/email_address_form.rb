@@ -20,24 +20,26 @@ class EmailAddressForm < Form
     return false unless valid?
     return true unless email_address_changed?
 
-    update!(
+    journey_session.answers.assign_attributes(
       email_address: email_address,
       email_verified: email_verified,
       sent_one_time_password_at: Time.now
     )
 
-    ClaimMailer.email_verification(claim, otp_code).deliver_now
+    journey_session.save!
+
+    ClaimMailer.email_verification(answers, otp_code).deliver_now
   end
 
   private
 
   def email_address_changed?
-    email_address != claim.email_address
+    email_address != answers.email_address
   end
 
   def email_verified
     return nil if email_address_changed?
-    claim.email_verified
+    answers.email_verified
   end
 
   def otp_code

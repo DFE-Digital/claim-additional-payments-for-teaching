@@ -41,6 +41,7 @@ module Journeys
     attribute :dqt_teacher_status, default: {}
     attribute :has_student_loan, :boolean
     attribute :student_loan_plan, :string
+    attribute :sent_one_time_password_at, :datetime
     attribute :answered, default: []
 
     def has_attribute?(name)
@@ -49,6 +50,10 @@ module Journeys
 
     def details_check?
       !!details_check
+    end
+
+    def email_address_check?
+      !!email_address_check
     end
   end
 end

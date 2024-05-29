@@ -55,6 +55,16 @@ RSpec.describe Journeys::PageSequence do
       let(:claim) { build(:claim, :submittable) }
       let(:current_slug) { "third-slug" }
       let(:completed_slugs) { ["first-slug", "second-slug", "third-slug"] }
+      let(:journey_session) do
+        build(
+          :student_loans_session,
+          answers: attributes_for(
+            :student_loans_answers,
+            :with_personal_details,
+            :with_email_details
+          )
+        )
+      end
 
       it { is_expected.to eq("check-your-answers") }
 

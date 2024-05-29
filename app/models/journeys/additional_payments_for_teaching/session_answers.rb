@@ -49,6 +49,14 @@ module Journeys
           levelling_up_premium_payments_dqt_reacher_record.has_no_data_for_claim? ||
           early_career_payments_dqt_teacher_record.has_no_data_for_claim?
       end
+
+      def policy
+        if selected_policy.present?
+          selected_policy.constantize
+        else
+          Policies::EarlyCareerPayments
+        end
+      end
     end
   end
 end

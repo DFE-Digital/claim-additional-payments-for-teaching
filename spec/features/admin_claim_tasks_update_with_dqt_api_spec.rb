@@ -9,9 +9,16 @@ RSpec.feature "Admin claim tasks update with DQT API" do
       policy_underscored = policy.to_s.underscore
       claim = send(:"start_#{policy_underscored}_claim")
 
-      journey_session = Journeys.for_policy(policy)::Session.last
+      journey = Journeys.for_policy(policy)
 
-      journey_session.update!(answers: answers)
+      journey_session = journey::Session.last
+
+      journey_session.update!(
+        answers: attributes_for(
+          :"#{journey::I18N_NAMESPACE}_answers",
+          :with_email_details
+        ).merge(answers)
+      )
 
       claim.update!(
         attributes_for(

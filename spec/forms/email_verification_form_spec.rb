@@ -3,13 +3,7 @@ require "rails_helper"
 RSpec.describe EmailVerificationForm do
   shared_examples "email_verification" do |journey|
     let(:claims) do
-      journey::POLICIES.map do |policy|
-        create(
-          :claim,
-          policy: policy,
-          sent_one_time_password_at: sent_one_time_password_at
-        )
-      end
+      journey::POLICIES.map { |policy| create(:claim, policy: policy) }
     end
 
     let(:current_claim) { CurrentClaim.new(claims: claims) }
@@ -22,7 +16,14 @@ RSpec.describe EmailVerificationForm do
       )
     end
 
-    let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
+    let(:journey_session) do
+      create(
+        :"#{journey::I18N_NAMESPACE}_session",
+        answers: {
+          sent_one_time_password_at: sent_one_time_password_at
+        }
+      )
+    end
 
     let(:form) do
       described_class.new(
@@ -93,9 +94,7 @@ RSpec.describe EmailVerificationForm do
       before { form.save }
 
       it "sets the email_verified attribute to true" do
-        claims.each do |claim|
-          expect(claim.email_verified).to be true
-        end
+        expect(journey_session.reload.answers.email_verified).to be true
       end
     end
   end

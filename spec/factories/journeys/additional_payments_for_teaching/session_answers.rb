@@ -11,5 +11,10 @@ FactoryBot.define do
       with_personal_details
       teacher_reference_number { generate(:teacher_reference_number) }
     end
+
+    trait :with_email_details do
+      email_address { generate(:email_address) }
+      email_verified { true }
+    end
   end
 end
