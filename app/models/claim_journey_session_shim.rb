@@ -37,7 +37,7 @@ class ClaimJourneySessionShim
       banking_name: banking_name,
       building_society_roll_number: building_society_roll_number,
       academic_year: academic_year,
-      bank_or_building_society: bank_or_building_society,
+      bank_or_building_society: journey_session.answers.bank_or_building_society,
       provide_mobile_number: journey_session.answers.provide_mobile_number,
       mobile_number: journey_session.answers.mobile_number,
       email_verified: journey_session.answers.email_verified,
@@ -108,10 +108,6 @@ class ClaimJourneySessionShim
 
   def academic_year
     journey_session.answers.academic_year || current_claim.academic_year
-  end
-
-  def bank_or_building_society
-    journey_session.answers.bank_or_building_society || current_claim.bank_or_building_society
   end
 
   def hmrc_bank_validation_succeeded

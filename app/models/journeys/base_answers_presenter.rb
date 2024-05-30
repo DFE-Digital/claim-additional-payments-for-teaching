@@ -32,9 +32,9 @@ module Journeys
     end
 
     def payment_answers
-      change_slug = claim.building_society? ? "building-society-account" : "personal-bank-account"
+      change_slug = answers.building_society? ? "building-society-account" : "personal-bank-account"
       [].tap do |a|
-        a << [t("questions.bank_or_building_society"), claim.bank_or_building_society.to_s.humanize, "bank-or-building-society"]
+        a << [t("questions.bank_or_building_society"), answers.bank_or_building_society.to_s.humanize, "bank-or-building-society"]
         a << ["Name on bank account", claim.banking_name, change_slug]
         a << ["Bank sort code", claim.bank_sort_code, change_slug]
         a << ["Bank account number", claim.bank_account_number, change_slug]

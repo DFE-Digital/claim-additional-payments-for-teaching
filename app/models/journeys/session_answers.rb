@@ -59,5 +59,9 @@ module Journeys
     def provide_mobile_number?
       !!provide_mobile_number
     end
+
+    def building_society?
+      bank_or_building_society == "building_society"
+    end
   end
 end

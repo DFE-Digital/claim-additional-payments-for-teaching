@@ -239,6 +239,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
           :with_personal_details,
           :with_email_details,
           :with_mobile_details,
+          :with_bank_details,
           middle_name: "Jay"
         )
       )
@@ -297,10 +298,12 @@ RSpec.feature "Changing the answers on a submittable claim" do
       choose "Building society"
       click_on "Continue"
 
-      expect(page).to have_content(I18n.t("questions.account_details", bank_or_building_society: claim.reload.bank_or_building_society.humanize.downcase))
+      claim.reload
+      journey_session.reload
+      expect(page).to have_content(I18n.t("questions.account_details", bank_or_building_society: journey_session.answers.bank_or_building_society.humanize.downcase))
       expect(page).to have_content("Building society roll number")
 
-      expect(claim.bank_or_building_society).to eq :building_society.to_s
+      expect(journey_session.answers.bank_or_building_society).to eq :building_society.to_s
       expect(claim.banking_name).to be_nil
       expect(claim.bank_sort_code).to be_nil
       expect(claim.bank_account_number).to be_nil

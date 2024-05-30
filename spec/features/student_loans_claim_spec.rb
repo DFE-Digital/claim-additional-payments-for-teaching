@@ -147,9 +147,9 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     choose "Building society"
     click_on "Continue"
 
-    expect(claim.reload.bank_or_building_society).to eq "building_society"
+    expect(session.reload.answers.bank_or_building_society).to eq "building_society"
 
-    expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: claim.bank_or_building_society.humanize.downcase))
+    expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: session.answers.bank_or_building_society.humanize.downcase))
     expect(page).to have_text("Building society roll number")
 
     fill_in "Name on your account", with: "Jo Bloggs"
