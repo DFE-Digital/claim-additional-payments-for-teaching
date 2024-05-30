@@ -108,11 +108,13 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(page).to have_text(I18n.t("forms.address.questions.your_address"))
     fill_in_address
 
-    expect(claim.reload.address_line_1).to eql("123 Main Street")
-    expect(claim.address_line_2).to eql("Downtown")
-    expect(claim.address_line_3).to eql("Twin Peaks")
-    expect(claim.address_line_4).to eql("Washington")
-    expect(claim.postcode).to eql("M1 7HL")
+    session.reload
+    answers = session.answers
+    expect(answers.address_line_1).to eql("123 Main Street")
+    expect(answers.address_line_2).to eql("Downtown")
+    expect(answers.address_line_3).to eql("Twin Peaks")
+    expect(answers.address_line_4).to eql("Washington")
+    expect(answers.postcode).to eql("M1 7HL")
 
     expect(page).to have_text(I18n.t("questions.email_address"))
     expect(page).to have_text(I18n.t("questions.email_address_hint1"))

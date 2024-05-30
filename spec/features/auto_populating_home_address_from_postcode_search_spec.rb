@@ -259,17 +259,32 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
 
   context "with a supplied postcode" do
     let(:claim) do
-      claim = start_early_career_payments_claim
-      claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
-      claim.address_line_1 = nil
-      claim.address_line_2 = nil
-      claim.address_line_3 = nil
-      claim.postcode = nil
-      claim.save
-      claim
+      Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
     end
 
-    before { create(:journey_configuration, :additional_payments) }
+    let(:journey_session) do
+      Journeys::AdditionalPaymentsForTeaching::Session.order(:created_at).last
+    end
+
+    before do
+      create(:journey_configuration, :additional_payments)
+      start_early_career_payments_claim
+
+      claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
+      claim.save!
+
+      journey_session.answers.assign_attributes(
+        attributes_for(
+          :additional_payments_answers,
+          address_line_1: nil,
+          address_line_2: nil,
+          address_line_3: nil,
+          address_line_4: nil,
+          postcode: nil
+        )
+      )
+      journey_session.save!
+    end
 
     scenario "with Ordnance Survey API data" do
       expect(claim.valid?(:submit)).to eq false
@@ -288,10 +303,12 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       choose "flat_11_millbrook_tower_windermere_avenue_southampton_so16_9fx"
       click_on "Continue"
 
-      expect(claim.reload.address_line_1).to eql "Flat 11, Millbrook Tower"
-      expect(claim.address_line_2).to eql "Windermere Avenue"
-      expect(claim.address_line_3).to eql "Southampton"
-      expect(claim.postcode).to eql "SO16 9FX"
+      journey_session.reload
+      answers = journey_session.answers
+      expect(answers.address_line_1).to eql "Flat 11, Millbrook Tower"
+      expect(answers.address_line_2).to eql "Windermere Avenue"
+      expect(answers.address_line_3).to eql "Southampton"
+      expect(answers.postcode).to eql "SO16 9FX"
 
       # - What is your address
       expect(page).not_to have_text(I18n.t("forms.address.questions.your_address"))
@@ -329,11 +346,13 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       fill_in "Postcode", with: "SO16 9FX"
       click_on "Continue"
 
-      expect(claim.reload.address_line_1).to eql("Penthouse Apartment, Millbrook Tower")
-      expect(claim.address_line_2).to eql("Windermere Avenue")
-      expect(claim.address_line_3).to eql("Southampton")
-      expect(claim.address_line_4).to eql("Hampshire")
-      expect(claim.postcode).to eql("SO16 9FX")
+      journey_session.reload
+      answers = journey_session.answers
+      expect(answers.address_line_1).to eql("Penthouse Apartment, Millbrook Tower")
+      expect(answers.address_line_2).to eql("Windermere Avenue")
+      expect(answers.address_line_3).to eql("Southampton")
+      expect(answers.address_line_4).to eql("Hampshire")
+      expect(answers.postcode).to eql("SO16 9FX")
 
       # - Email address
       expect(page).to have_text(I18n.t("questions.email_address"))
@@ -405,10 +424,12 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       choose "5_wearside_road_london_se13_7un"
       click_on "Continue"
 
-      expect(claim.reload.address_line_1).to eql("5")
-      expect(claim.address_line_2).to eql("Wearside Road")
-      expect(claim.address_line_3).to eql("London")
-      expect(claim.postcode).to eql("SE13 7UN")
+      journey_session.reload
+      answers = journey_session.answers
+      expect(answers.address_line_1).to eql("5")
+      expect(answers.address_line_2).to eql("Wearside Road")
+      expect(answers.address_line_3).to eql("London")
+      expect(answers.postcode).to eql("SE13 7UN")
 
       # - What is your address
       expect(page).not_to have_text(I18n.t("forms.address.questions.your_address"))

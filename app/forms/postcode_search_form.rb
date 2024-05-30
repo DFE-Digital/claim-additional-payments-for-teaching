@@ -8,7 +8,9 @@ class PostcodeSearchForm < Form
   def save
     return false if invalid?
 
-    claim.update(postcode:)
+    journey_session.answers.assign_attributes(postcode:)
+
+    journey_session.save!
   end
 
   private

@@ -18,7 +18,7 @@ module Journeys
     def identity_answers
       [].tap do |a|
         a << [t("questions.name"), claim.full_name, "personal-details"] if show_name?
-        a << [t("forms.address.questions.your_address"), claim.address, "address"] unless claim.address_from_govuk_verify?
+        a << [t("forms.address.questions.your_address"), answers.address, "address"] unless claim.address_from_govuk_verify?
         a << [t("questions.date_of_birth"), date_of_birth_string, "personal-details"] if show_dob?
         a << [t("forms.gender.questions.payroll_gender"), t("answers.payroll_gender.#{claim.payroll_gender}"), "gender"] unless claim.payroll_gender_verified?
         a << [t("questions.teacher_reference_number"), claim.teacher_reference_number, "teacher-reference-number"] if show_trn?
