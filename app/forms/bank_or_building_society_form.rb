@@ -17,15 +17,6 @@ class BankOrBuildingSocietyForm < Form
         bank_sort_code: nil,
         building_society_roll_number: nil
       )
-
-      # FIXME RL: remove this once the other forms are migrated to write to the
-      # session
-      claim.update!(
-        banking_name: nil,
-        bank_account_number: nil,
-        bank_sort_code: nil,
-        building_society_roll_number: nil
-      )
     end
 
     journey_session.answers.assign_attributes(bank_or_building_society:)

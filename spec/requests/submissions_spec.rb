@@ -20,12 +20,7 @@ RSpec.describe "Submissions", type: :request do
         in_progress_claim.save!
 
         journey_session.update!(
-          answers: attributes_for(
-            :student_loans_answers,
-            :with_personal_details,
-            :with_email_details,
-            :with_mobile_details
-          )
+          answers: attributes_for(:student_loans_answers, :submittable)
         )
 
         stub_qualified_teaching_statuses_show(

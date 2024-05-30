@@ -15,12 +15,7 @@ RSpec.shared_examples "Eligible later" do |opts|
       )
 
       journey_session.answers.assign_attributes(
-        attributes_for(
-          :additional_payments_answers,
-          :with_personal_details,
-          :with_email_details,
-          :with_mobile_details
-        )
+        attributes_for(:additional_payments_answers, :submittable)
       )
 
       jump_to_claim_journey_page(claim, "check-your-answers-part-one")

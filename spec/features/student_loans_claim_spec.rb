@@ -158,10 +158,12 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     fill_in "Building society roll number", with: "1234/123456789"
     click_on "Continue"
 
-    expect(claim.reload.banking_name).to eq("Jo Bloggs")
-    expect(claim.bank_sort_code).to eq("123456")
-    expect(claim.bank_account_number).to eq("87654321")
-    expect(claim.building_society_roll_number).to eq("1234/123456789")
+    session.reload
+    answers = session.answers
+    expect(answers.banking_name).to eq("Jo Bloggs")
+    expect(answers.bank_sort_code).to eq("123456")
+    expect(answers.bank_account_number).to eq("87654321")
+    expect(answers.building_society_roll_number).to eq("1234/123456789")
 
     expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
     choose "Male"

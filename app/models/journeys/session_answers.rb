@@ -31,7 +31,7 @@ module Journeys
     attribute :email_verified, :boolean
     attribute :mobile_verified, :boolean
     attribute :hmrc_bank_validation_succeeded, :boolean
-    attribute :hmrc_bank_validation_responses # , :json
+    attribute :hmrc_bank_validation_responses, default: []
     attribute :logged_in_with_tid, :boolean
     attribute :details_check, :boolean
     attribute :teacher_id_user_info, default: {}
@@ -62,6 +62,14 @@ module Journeys
 
     def building_society?
       bank_or_building_society == "building_society"
+    end
+
+    def personal_bank_account?
+      bank_or_building_society == "personal_bank_account"
+    end
+
+    def hmrc_bank_validation_succeeded?
+      !!hmrc_bank_validation_succeeded
     end
   end
 end

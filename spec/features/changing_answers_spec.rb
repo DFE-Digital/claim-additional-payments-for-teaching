@@ -18,12 +18,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
     session.answers.assign_attributes(
-      attributes_for(
-        :student_loans_answers,
-        :with_personal_details,
-        :with_email_details,
-        :with_mobile_details
-      )
+      attributes_for(:student_loans_answers, :submittable)
     )
     session.save!
 
@@ -71,12 +66,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
     session.answers.assign_attributes(
-      attributes_for(
-        :student_loans_answers,
-        :with_personal_details,
-        :with_email_details,
-        :with_mobile_details
-      )
+      attributes_for(:student_loans_answers, :submittable)
     )
     session.save!
 
@@ -120,12 +110,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, had_leadership_position: false, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
     session.answers.assign_attributes(
-      attributes_for(
-        :student_loans_answers,
-        :with_personal_details,
-        :with_email_details,
-        :with_mobile_details
-      )
+      attributes_for(:student_loans_answers, :submittable)
     )
     session.save!
 
@@ -155,12 +140,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
     session.answers.assign_attributes(
-      attributes_for(
-        :student_loans_answers,
-        :with_personal_details,
-        :with_email_details,
-        :with_mobile_details
-      )
+      attributes_for(:student_loans_answers, :submittable)
     )
     session.save!
 
@@ -188,12 +168,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     journey_session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
 
     journey_session.update!(
-      answers: attributes_for(
-        :student_loans_answers,
-        :with_personal_details,
-        :with_email_details,
-        :with_mobile_details
-      )
+      answers: attributes_for(:student_loans_answers, :submittable)
     )
 
     answers = journey_session.answers
@@ -236,10 +211,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       journey_session.update!(
         answers: attributes_for(
           :student_loans_answers,
-          :with_personal_details,
-          :with_email_details,
-          :with_mobile_details,
-          :with_bank_details,
+          :submittable,
           middle_name: "Jay"
         )
       )
@@ -298,15 +270,14 @@ RSpec.feature "Changing the answers on a submittable claim" do
       choose "Building society"
       click_on "Continue"
 
-      claim.reload
       journey_session.reload
       expect(page).to have_content(I18n.t("questions.account_details", bank_or_building_society: journey_session.answers.bank_or_building_society.humanize.downcase))
       expect(page).to have_content("Building society roll number")
 
       expect(journey_session.answers.bank_or_building_society).to eq :building_society.to_s
-      expect(claim.banking_name).to be_nil
-      expect(claim.bank_sort_code).to be_nil
-      expect(claim.bank_account_number).to be_nil
+      expect(journey_session.answers.banking_name).to be_nil
+      expect(journey_session.answers.bank_sort_code).to be_nil
+      expect(journey_session.answers.bank_account_number).to be_nil
 
       fill_in "Name on your account", with: "Miss Jasmine Aniski"
       fill_in "Sort code", with: "80-78-01"
@@ -315,10 +286,11 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
       click_on "Continue"
 
-      expect(claim.reload.banking_name).to eq "Miss Jasmine Aniski"
-      expect(claim.bank_sort_code).to eq "807801"
-      expect(claim.bank_account_number).to eq "43290701"
-      expect(claim.building_society_roll_number).to eq "6284/000390713"
+      journey_session.reload
+      expect(journey_session.answers.banking_name).to eq "Miss Jasmine Aniski"
+      expect(journey_session.answers.bank_sort_code).to eq "807801"
+      expect(journey_session.answers.bank_account_number).to eq "43290701"
+      expect(journey_session.answers.building_society_roll_number).to eq "6284/000390713"
     end
   end
 
@@ -337,9 +309,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       session.answers.assign_attributes(
         attributes_for(
           :student_loans_answers,
-          :with_personal_details,
-          :with_email_details,
-          :with_mobile_details
+          :submittable
         ).merge(personal_details_attributes)
       )
       session.save!
