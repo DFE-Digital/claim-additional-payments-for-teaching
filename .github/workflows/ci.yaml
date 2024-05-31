@@ -51,6 +51,25 @@ jobs:
       - name: Linting - DfE::Analytics
         run: bin/rails dfe:analytics:check
 
+  lint-terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.8.4
+      - run: terraform fmt -check -diff
+      - uses: actions/cache@v4
+        name: Cache tflint plugin dir
+        with:
+          path: ~/.tflint.d/plugins
+          key: tflint-${{ hashFiles('.tflint.hcl') }}
+      - uses: terraform-linters/setup-tflint@v4
+        name: Setup TFLint
+      - run: tflint --init
+      - run: tflint -f compact
+
   test:
     runs-on: ubuntu-latest
     strategy:
