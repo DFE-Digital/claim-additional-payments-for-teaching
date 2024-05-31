@@ -23,12 +23,16 @@ module Journeys
     # current claim. Values for answers may be `nil`, so we need to explicitly
     # check that the question was answered.
     # Once all forms has been migrated to use the journey session, this method,
-    # the before_save call back and the SessionAnswer#answered attribute can be
-    # removed.
+    # the before_save and after_initialize call backs and the
+    # SessionAnswer#answered attribute can be removed.
     # This will be removed in
     # https://dfedigital.atlassian.net.mcas.ms/browse/CAPT-1637
     def answered?(attribute_name)
       answers.answered.include?(attribute_name.to_s)
+    end
+
+    after_initialize do
+      answers.clear_changes_information
     end
 
     before_save do
