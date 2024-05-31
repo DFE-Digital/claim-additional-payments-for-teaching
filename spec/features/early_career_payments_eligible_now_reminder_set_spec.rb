@@ -17,7 +17,8 @@ RSpec.feature "Eligible now can set a reminder for next year." do
       attributes_for(
         :additional_payments_answers,
         :with_personal_details,
-        :with_email_details
+        :with_email_details,
+        :with_mobile_details
       )
     )
     session.save!
@@ -90,7 +91,8 @@ RSpec.feature "Completed Applications - Reminders" do
             attributes_for(
               :additional_payments_answers,
               :with_personal_details,
-              :with_email_details
+              :with_email_details,
+              :with_mobile_details
             )
           )
           session.save!

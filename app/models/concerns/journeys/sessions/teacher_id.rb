@@ -35,6 +35,10 @@ module Journeys
       def trn_same_as_tid?(claim)
         teacher_id_user_info["trn"] == claim.teacher_reference_number
       end
+
+      def using_mobile_number_from_tid?
+        logged_in_with_tid? && mobile_check == "use" && provide_mobile_number && mobile_number.present?
+      end
     end
   end
 end

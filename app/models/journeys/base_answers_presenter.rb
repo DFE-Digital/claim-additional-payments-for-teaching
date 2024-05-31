@@ -25,9 +25,9 @@ module Journeys
         a << [t("questions.national_insurance_number"), claim.national_insurance_number, "personal-details"] if show_nino?
         a << [t("questions.email_address"), answers.email_address, "email-address"] unless show_email_select?
         a << [text_for(:select_email), answers.email_address, "select-email"] if show_email_select?
-        a << [t("questions.provide_mobile_number"), claim.provide_mobile_number? ? "Yes" : "No", "provide-mobile-number"] unless show_mobile_select?
-        a << [t("questions.mobile_number"), claim.mobile_number, "mobile-number"] unless show_mobile_select? || !claim.provide_mobile_number?
-        a << [t("additional_payments.forms.select_mobile_form.questions.which_number"), claim.mobile_number? ? claim.mobile_number : t("additional_payments.forms.select_mobile_form.answers.decline"), "select-mobile"] if show_mobile_select?
+        a << [t("questions.provide_mobile_number"), answers.provide_mobile_number? ? "Yes" : "No", "provide-mobile-number"] unless show_mobile_select?
+        a << [t("questions.mobile_number"), answers.mobile_number, "mobile-number"] unless show_mobile_select? || !answers.provide_mobile_number?
+        a << [t("additional_payments.forms.select_mobile_form.questions.which_number"), answers.mobile_number.present? ? answers.mobile_number : t("additional_payments.forms.select_mobile_form.answers.decline"), "select-mobile"] if show_mobile_select?
       end
     end
 
@@ -73,7 +73,7 @@ module Journeys
     end
 
     def show_mobile_select?
-      answers.logged_in_with_tid? && claim.mobile_check.present?
+      answers.logged_in_with_tid? && answers.mobile_check.present?
     end
   end
 end

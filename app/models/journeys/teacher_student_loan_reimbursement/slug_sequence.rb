@@ -85,8 +85,8 @@ module Journeys
           sequence.delete("mostly-performed-leadership-duties") unless claim.eligibility.had_leadership_position?
           sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
           sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
-          sequence.delete("mobile-number") if claim.provide_mobile_number == false
-          sequence.delete("mobile-verification") if claim.provide_mobile_number == false
+          sequence.delete("mobile-number") if answers.provide_mobile_number == false
+          sequence.delete("mobile-verification") if answers.provide_mobile_number == false
           sequence.delete("ineligible") unless claim.eligibility&.ineligible?
           sequence.delete("personal-details") if answers.logged_in_with_tid? && personal_details_form.valid? && answers.all_personal_details_same_as_tid?
           sequence.delete("select-email") unless set_by_teacher_id?("email")
@@ -100,7 +100,7 @@ module Journeys
           else
             sequence.delete("select-mobile")
           end
-          if answers.logged_in_with_tid? && (claim.mobile_check == "use" || claim.mobile_check == "declined")
+          if answers.logged_in_with_tid? && (answers.mobile_check == "use" || answers.mobile_check == "declined")
             sequence.delete("mobile-number")
             sequence.delete("mobile-verification")
           end

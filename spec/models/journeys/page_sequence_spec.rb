@@ -61,7 +61,8 @@ RSpec.describe Journeys::PageSequence do
           answers: attributes_for(
             :student_loans_answers,
             :with_personal_details,
-            :with_email_details
+            :with_email_details,
+            :with_mobile_details
           )
         )
       end

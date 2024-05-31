@@ -55,5 +55,9 @@ module Journeys
     def email_address_check?
       !!email_address_check
     end
+
+    def provide_mobile_number?
+      !!provide_mobile_number
+    end
   end
 end

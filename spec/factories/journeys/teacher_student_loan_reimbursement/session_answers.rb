@@ -16,5 +16,11 @@ FactoryBot.define do
       email_address { generate(:email_address) }
       email_verified { true }
     end
+
+    trait :with_mobile_details do
+      mobile_number { "07474000123" }
+      provide_mobile_number { true }
+      mobile_verified { true }
+    end
   end
 end

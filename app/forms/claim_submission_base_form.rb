@@ -1,7 +1,7 @@
 class ClaimSubmissionBaseForm
   include ActiveModel::Model
 
-  attr_reader :journey_session
+  attr_reader :journey_session, :claim
 
   validate :not_already_submitted
   validate :email_address_is_preesent
@@ -12,22 +12,20 @@ class ClaimSubmissionBaseForm
 
   def initialize(journey_session:)
     @journey_session = journey_session
+    @claim = build_claim
   end
 
   def save
     return false unless valid?
 
     ApplicationRecord.transaction do
+      set_attributes_for_claim_submission
       main_eligibility.save!
       claim.save!
     end
 
     ClaimMailer.submitted(claim).deliver_later
     ClaimVerifierJob.perform_later(claim)
-  end
-
-  def claim
-    @claim ||= build_claim
   end
 
   private
@@ -37,13 +35,6 @@ class ClaimSubmissionBaseForm
   def build_claim
     claim = Claim.new
 
-    # Temp conditional while we're working with the shim
-    claim.journey_session = if journey_session.is_a?(ClaimJourneySessionShim)
-      journey_session.journey_session
-    else
-      journey_session
-    end
-
     claim.eligibility = main_eligibility
 
     answers.attributes.each do |name, value|
@@ -52,9 +43,6 @@ class ClaimSubmissionBaseForm
       end
     end
 
-    claim.policy_options_provided = generate_policy_options_provided
-    claim.reference = generate_reference
-    claim.submitted_at = Time.zone.now
     claim
   end
 
@@ -73,6 +61,18 @@ class ClaimSubmissionBaseForm
         eligibility.public_send(:"#{name}=", value)
       end
     end
+  end
+
+  def set_attributes_for_claim_submission
+    # Temp conditional while we're working with the shim
+    claim.journey_session = if journey_session.is_a?(ClaimJourneySessionShim)
+      journey_session.journey_session
+    else
+      journey_session
+    end
+    claim.policy_options_provided = generate_policy_options_provided
+    claim.reference = generate_reference
+    claim.submitted_at = Time.zone.now
   end
 
   def generate_reference
@@ -111,9 +111,13 @@ class ClaimSubmissionBaseForm
     end
   end
 
-  # TODO RL move the logic out of the claim rather than use send
   def mobile_number_verified?
-    claim.send(:submittable_mobile_details?)
+    return true if answers.using_mobile_number_from_tid?
+    return true if answers.provide_mobile_number && answers.mobile_number.present? && answers.mobile_verified == true
+    return true if answers.provide_mobile_number == false && answers.mobile_number.nil? && answers.mobile_verified == false
+    return true if answers.provide_mobile_number == false && answers.mobile_verified.nil?
+
+    false
   end
 
   def claim_is_eligible

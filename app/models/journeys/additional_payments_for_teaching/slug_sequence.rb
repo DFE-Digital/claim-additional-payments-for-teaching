@@ -117,7 +117,7 @@ module Journeys
             sequence.delete("select-mobile")
           end
 
-          if answers.logged_in_with_tid? && (claim.mobile_check == "use" || claim.mobile_check == "declined")
+          if answers.logged_in_with_tid? && (answers.mobile_check == "use" || answers.mobile_check == "declined")
             sequence.delete("mobile-number")
             sequence.delete("mobile-verification")
           end
@@ -138,7 +138,7 @@ module Journeys
           sequence.delete("correct-school") unless journey_session.logged_in_with_tid_and_has_recent_tps_school?
           sequence.delete("current-school") if claim.eligibility.school_somewhere_else == false
 
-          if claim.provide_mobile_number == false
+          if answers.provide_mobile_number == false
             sequence.delete("mobile-number")
             sequence.delete("mobile-verification")
           end

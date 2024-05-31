@@ -21,7 +21,8 @@ RSpec.feature "Changing the answers on a submittable claim" do
       attributes_for(
         :student_loans_answers,
         :with_personal_details,
-        :with_email_details
+        :with_email_details,
+        :with_mobile_details
       )
     )
     session.save!
@@ -73,7 +74,8 @@ RSpec.feature "Changing the answers on a submittable claim" do
       attributes_for(
         :student_loans_answers,
         :with_personal_details,
-        :with_email_details
+        :with_email_details,
+        :with_mobile_details
       )
     )
     session.save!
@@ -121,7 +123,8 @@ RSpec.feature "Changing the answers on a submittable claim" do
       attributes_for(
         :student_loans_answers,
         :with_personal_details,
-        :with_email_details
+        :with_email_details,
+        :with_mobile_details
       )
     )
     session.save!
@@ -155,7 +158,8 @@ RSpec.feature "Changing the answers on a submittable claim" do
       attributes_for(
         :student_loans_answers,
         :with_personal_details,
-        :with_email_details
+        :with_email_details,
+        :with_mobile_details
       )
     )
     session.save!
@@ -187,7 +191,8 @@ RSpec.feature "Changing the answers on a submittable claim" do
       answers: attributes_for(
         :student_loans_answers,
         :with_personal_details,
-        :with_email_details
+        :with_email_details,
+        :with_mobile_details
       )
     )
 
@@ -233,6 +238,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
           :student_loans_answers,
           :with_personal_details,
           :with_email_details,
+          :with_mobile_details,
           middle_name: "Jay"
         )
       )
@@ -329,8 +335,9 @@ RSpec.feature "Changing the answers on a submittable claim" do
         attributes_for(
           :student_loans_answers,
           :with_personal_details,
-          :with_email_details
-        )
+          :with_email_details,
+          :with_mobile_details
+        ).merge(personal_details_attributes)
       )
       session.save!
 
@@ -395,7 +402,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
           choose "Yes"
           click_on "Continue"
         }.to change {
-          claim.reload.provide_mobile_number
+          session.reload.answers.provide_mobile_number
         }.from(false).to(true)
 
         expect(page).not_to have_content("Check your answers before sending your application")
@@ -404,7 +411,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
         fill_in "claim_mobile_number", with: new_mobile
         click_on "Continue"
 
-        expect(claim.reload.mobile_number).to eql new_mobile
+        expect(session.reload.answers.mobile_number).to eql new_mobile
 
         # - Mobile number one-time password
         expect(page).to have_text("Mobile number verification")
@@ -414,7 +421,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
         click_on "Confirm"
 
         expect(page).not_to have_text("Some places are both a bank and a building society")
-        expect(claim.reload.mobile_verified).to eq true
+        expect(session.reload.answers.mobile_verified).to eq true
         expect(claim.submittable?).to be true
         expect(page).to have_content("Check your answers before sending your application")
       end
@@ -446,14 +453,14 @@ RSpec.feature "Changing the answers on a submittable claim" do
       let(:old_mobile) { "07813090710" }
 
       scenario "is asked to provide the OTP challenge code for validation" do
-        old_mobile = claim.mobile_number
+        old_mobile = session.answers.mobile_number
 
         expect {
           page.first("a[href='#{claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "mobile-number")}']", minimum: 1).click
           fill_in "Mobile number", with: new_mobile
           click_on "Continue"
         }.to change {
-          claim.reload.mobile_number
+          session.reload.answers.mobile_number
         }.from(old_mobile).to(new_mobile)
 
         expect(page).not_to have_content("Check your answers before sending your application")
@@ -466,7 +473,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
         click_on "Confirm"
 
         expect(page).not_to have_text("Some places are both a bank and a building society")
-        expect(claim.reload.mobile_verified).to eq true
+        expect(session.reload.answers.mobile_verified).to eq true
         expect(claim.submittable?).to be true
         expect(page).to have_content("Check your answers before sending your application")
       end

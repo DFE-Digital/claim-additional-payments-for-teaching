@@ -16,7 +16,8 @@ RSpec.feature "Admin claim tasks update with DQT API" do
       journey_session.update!(
         answers: attributes_for(
           :"#{journey::I18N_NAMESPACE}_answers",
-          :with_email_details
+          :with_email_details,
+          :with_mobile_details
         ).merge(answers)
       )
 

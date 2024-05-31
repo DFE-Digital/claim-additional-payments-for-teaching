@@ -2,20 +2,16 @@ require "rails_helper"
 
 RSpec.describe MobileNumberForm do
   shared_examples "mobile_number_form" do |journey|
-    let(:claims) do
-      journey::POLICIES.map do |policy|
-        create(
-          :claim,
+    let(:journey_session) do
+      create(
+        :"#{journey::I18N_NAMESPACE}_session",
+        answers: attributes_for(
+          :"#{journey::I18N_NAMESPACE}_answers",
           :with_details_from_dfe_identity,
-          policy: policy,
           mobile_verified: true
         )
-      end
+      )
     end
-
-    let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
-
-    let(:current_claim) { CurrentClaim.new(claims: claims) }
 
     let(:params) do
       ActionController::Parameters.new(claim: {mobile_number: mobile_number})
@@ -25,7 +21,7 @@ RSpec.describe MobileNumberForm do
       described_class.new(
         journey: journey,
         journey_session: journey_session,
-        claim: current_claim,
+        claim: CurrentClaim.new(claims: [build(:claim)]),
         params: params
       )
     end
@@ -103,15 +99,11 @@ RSpec.describe MobileNumberForm do
         end
 
         it "stores the mobile number" do
-          claims.each do |claim|
-            expect(claim.mobile_number).to eq(mobile_number)
-          end
+          expect(journey_session.reload.answers.mobile_number).to eq(mobile_number)
         end
 
         it "resets dependent attributes" do
-          claims.each do |claim|
-            expect(claim.mobile_verified).to be_nil
-          end
+          expect(journey_session.reload.answers.mobile_verified).to be_nil
         end
 
         it "sends a text message" do
@@ -127,11 +119,9 @@ RSpec.describe MobileNumberForm do
         end
 
         it "sets sent_one_time_password_at to the current time" do
-          claims.each do |claim|
-            expect(claim.sent_one_time_password_at).to(
-              eq(DateTime.new(2024, 1, 1, 12, 0, 0))
-            )
-          end
+          expect(journey_session.reload.answers.sent_one_time_password_at).to(
+            eq(DateTime.new(2024, 1, 1, 12, 0, 0))
+          )
         end
       end
 
@@ -141,15 +131,11 @@ RSpec.describe MobileNumberForm do
         let(:notify_response) { nil }
 
         it "stores the mobile number" do
-          claims.each do |claim|
-            expect(claim.mobile_number).to eq(mobile_number)
-          end
+          expect(journey_session.reload.answers.mobile_number).to eq(mobile_number)
         end
 
         it "resets dependent attributes" do
-          claims.each do |claim|
-            expect(claim.mobile_verified).to be_nil
-          end
+          expect(journey_session.reload.answers.mobile_verified).to be_nil
         end
 
         it "sends a text message" do
@@ -165,9 +151,7 @@ RSpec.describe MobileNumberForm do
         end
 
         it "sets sent_one_time_password_at to nil" do
-          claims.each do |claim|
-            expect(claim.sent_one_time_password_at).to be_nil
-          end
+          expect(journey_session.reload.answers.sent_one_time_password_at).to be_nil
         end
       end
     end
