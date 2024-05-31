@@ -46,9 +46,10 @@ RSpec.describe EmploymentCheckJob do
       let(:academic_year) { create(:journey_configuration, routing_name: Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME).current_academic_year }
       let(:past_date) { Time.zone.local(academic_year.end_year, 3, 31) }
       let(:claim) { create(:claim, :submitted, policy:, submitted_at: past_date) }
-      let!(:failed_check) { create(:task, :failed, :automated, name: "employment", claim:, created_at: past_date, updated_at: past_date) }
+      let!(:failed_check) { create(:task, :failed, :automated, name: "employment", claim:, created_at: past_date) }
 
       before do
+        failed_check.update!(updated_at: past_date)
         travel_to(Time.zone.local(academic_year.end_year, 8, 31)) { job.perform }
       end
 
