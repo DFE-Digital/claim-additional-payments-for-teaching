@@ -117,6 +117,7 @@ group :development do
 end
 
 group :test do
+  gem "rspec-retry"
   gem "selenium-webdriver"
   gem "launchy"
   gem "rack_session_access"
