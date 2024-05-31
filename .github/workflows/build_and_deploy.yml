@@ -53,6 +53,9 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Set kubectl
+        uses: DFE-Digital/github-actions/set-kubectl@master
+
       - name: Seed review app
         shell: bash
         if: github.event.number != ''
