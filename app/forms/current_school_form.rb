@@ -10,7 +10,6 @@ class CurrentSchoolForm < Form
     super
 
     load_schools
-    self.current_school_id = permitted_params[:current_school_id]
   end
 
   def save
