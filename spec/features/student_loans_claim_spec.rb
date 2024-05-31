@@ -90,7 +90,6 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
   end
 
   def fill_in_remaining_personal_details_and_submit
-    claim = Claim.by_policy(Policies::StudentLoans).order(:created_at).last
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
 
     expect(page).to have_text(I18n.t("questions.address.home.title"))
@@ -177,15 +176,15 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     fill_in :claim_teacher_reference_number, with: "1234567"
     click_on "Continue"
 
-    expect(claim.reload.teacher_reference_number).to eql("1234567")
+    expect(session.reload.answers.teacher_reference_number).to eql("1234567")
 
     expect(page).to have_text("Check your answers before sending your application")
 
     stub_qualified_teaching_statuses_show(
-      trn: claim.teacher_reference_number,
+      trn: session.answers.teacher_reference_number,
       params: {
-        birthdate: claim.date_of_birth.to_s,
-        nino: claim.national_insurance_number
+        birthdate: answers.date_of_birth.to_s,
+        nino: answers.national_insurance_number
       }
     )
 

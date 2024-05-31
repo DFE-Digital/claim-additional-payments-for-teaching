@@ -24,7 +24,7 @@ class ClaimJourneySessionShim
       address_line_4: journey_session.answers.address_line_4,
       postcode: journey_session.answers.postcode,
       date_of_birth: journey_session.answers.date_of_birth,
-      teacher_reference_number: teacher_reference_number,
+      teacher_reference_number: journey_session.answers.teacher_reference_number,
       national_insurance_number: journey_session.answers.national_insurance_number,
       email_address: journey_session.answers.email_address,
       bank_sort_code: journey_session.answers.bank_sort_code,
@@ -56,10 +56,6 @@ class ClaimJourneySessionShim
 
   def selected_policy
     journey_session.answers.selected_policy || current_claim.selected_policy
-  end
-
-  def teacher_reference_number
-    journey_session.answers.teacher_reference_number.presence || current_claim.teacher_reference_number
   end
 
   def details_check

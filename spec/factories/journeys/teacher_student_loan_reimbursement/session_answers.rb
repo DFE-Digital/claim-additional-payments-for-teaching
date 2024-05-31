@@ -34,12 +34,17 @@ FactoryBot.define do
       payroll_gender { "female" }
     end
 
+    trait :with_teacher_reference_number do
+      teacher_reference_number { generate(:teacher_reference_number) }
+    end
+
     trait :submittable do
       with_personal_details
       with_email_details
       with_mobile_details
       with_bank_details
       with_payroll_gender
+      with_teacher_reference_number
     end
   end
 end

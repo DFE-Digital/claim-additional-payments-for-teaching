@@ -5,10 +5,6 @@ RSpec.describe TeacherReferenceNumberForm do
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
 
-  let(:claim) { create(:claim, policy: Policies::EarlyCareerPayments) }
-
-  let(:current_claim) { CurrentClaim.new(claims: [claim]) }
-
   let(:journey_session) { build(:additional_payments_session) }
 
   let(:params) do
@@ -23,7 +19,7 @@ RSpec.describe TeacherReferenceNumberForm do
     described_class.new(
       journey: journey,
       journey_session: journey_session,
-      claim: current_claim,
+      claim: CurrentClaim.new(claims: [build(:claim)]),
       params: params
     )
   end
@@ -73,7 +69,9 @@ RSpec.describe TeacherReferenceNumberForm do
       let(:teacher_reference_number) { "1234-567" }
 
       it "updates the teacher_reference_number on the claim" do
-        expect(claim.teacher_reference_number).to eq "1234567"
+        expect(
+          journey_session.reload.answers.teacher_reference_number
+        ).to eq "1234567"
       end
     end
   end
