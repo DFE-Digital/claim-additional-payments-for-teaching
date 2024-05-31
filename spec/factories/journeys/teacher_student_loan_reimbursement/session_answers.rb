@@ -30,11 +30,16 @@ FactoryBot.define do
       bank_account_number { rand(10000000..99999999) }
     end
 
+    trait :with_payroll_gender do
+      payroll_gender { "female" }
+    end
+
     trait :submittable do
       with_personal_details
       with_email_details
       with_mobile_details
       with_bank_details
+      with_payroll_gender
     end
   end
 end

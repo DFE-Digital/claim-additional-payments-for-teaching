@@ -30,7 +30,7 @@ class ClaimJourneySessionShim
       bank_sort_code: journey_session.answers.bank_sort_code,
       bank_account_number: journey_session.answers.bank_account_number,
       details_check: details_check,
-      payroll_gender: payroll_gender,
+      payroll_gender: journey_session.answers.payroll_gender,
       first_name: journey_session.answers.first_name,
       middle_name: journey_session.answers.middle_name,
       surname: journey_session.answers.surname,
@@ -64,10 +64,6 @@ class ClaimJourneySessionShim
 
   def details_check
     journey_session.answers.details_check || current_claim.details_check
-  end
-
-  def payroll_gender
-    journey_session.answers.payroll_gender || current_claim.payroll_gender
   end
 
   def academic_year
