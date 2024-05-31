@@ -15,6 +15,8 @@ class CurrentSchoolForm < Form
   def save
     return false unless valid?
 
+    journey_session.answers.assign_attributes(current_school_id:)
+    journey_session.save
     update!({"eligibility_attributes" => {"current_school_id" => current_school_id}})
   end
 

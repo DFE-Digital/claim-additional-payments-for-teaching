@@ -12,7 +12,7 @@ RSpec.describe CurrentSchoolForm do
       CurrentClaim.new(claims: claims)
     end
 
-    let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
+    let(:journey_session) { create(:"#{journey::I18N_NAMESPACE}_session") }
 
     let(:slug) { "current-school" }
 
@@ -82,8 +82,11 @@ RSpec.describe CurrentSchoolForm do
     describe "#save" do
       context "current_school_id submitted" do
         let(:params) { ActionController::Parameters.new({slug: slug, claim: {current_school_id: school.id}}) }
-
         let(:school) { create(:school, :eligible_for_journey, journey: journey) }
+
+        it 'updates the journey_session' do
+          expect { form.save }.to change { journey_session.reload.answers.current_school_id }.to(school.id)
+        end
 
         context "claim eligibility didn't have current_school" do
           let(:current_claim) do
