@@ -9,7 +9,7 @@ module Journeys
   module TeacherStudentLoanReimbursement
     class ClaimJourneySessionShim < ClaimJourneySessionShim
       def answers
-        SessionAnswers.new(
+        @answers ||= SessionAnswers.new(
           super.merge(
             {
               qts_award_year: qts_award_year,

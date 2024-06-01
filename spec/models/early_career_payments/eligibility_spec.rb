@@ -315,31 +315,31 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
     # By the 2022 policy year it's too late for this to apply to LUP so is ECP-specific now but
     # technically this check is generally needed for all policies
     context "no eligible subjects" do
-      let(:eligibility) { build(:early_career_payments_eligibility, :eligible_now, :no_eligible_subjects) }
+      let(:eligibility) { create(:early_career_payments_eligibility, :eligible_now, :no_eligible_subjects) }
 
       it { is_expected.to eq(:ineligible) }
     end
 
     context "ineligible ITT subject" do
-      let(:eligibility) { build(:early_career_payments_eligibility, :eligible_now, :ineligible_itt_subject) }
+      let(:eligibility) { create(:early_career_payments_eligibility, :eligible_now, :ineligible_itt_subject) }
 
       it { is_expected.to eq(:ineligible) }
     end
 
     context "'None of the above' ITT subject" do
-      let(:eligibility) { build(:early_career_payments_eligibility, :eligible_now, eligible_itt_subject: :none_of_the_above) }
+      let(:eligibility) { create(:early_career_payments_eligibility, :eligible_now, eligible_itt_subject: :none_of_the_above) }
 
       it { is_expected.to eq(:ineligible) }
     end
 
     context "trainee teacher" do
-      let(:eligibility) { build(:early_career_payments_eligibility, :eligible_now, :trainee_teacher) }
+      let(:eligibility) { create(:early_career_payments_eligibility, :eligible_now, :trainee_teacher) }
 
       it { is_expected.to eq(:ineligible) }
     end
 
     context "induction completed" do
-      let(:eligibility) { build(:early_career_payments_eligibility, :eligible_now, :induction_completed) }
+      let(:eligibility) { create(:early_career_payments_eligibility, :eligible_now, :induction_completed) }
 
       it { is_expected.to eq(:eligible_now) }
     end

@@ -211,8 +211,8 @@ RSpec.describe CurrentClaim, type: :model do
 
     let!(:journey_configuration_ecp_lupp) { create(:journey_configuration, :additional_payments) }
 
-    let(:ecp_claim) { build(:claim, academic_year: "2022/2023", policy: ecp_policy, eligibility: ecp_eligibility) }
-    let(:lup_claim) { build(:claim, academic_year: "2022/2023", policy: lup_policy, eligibility: lup_eligibility) }
+    let(:ecp_claim) { create(:claim, academic_year: "2022/2023", policy: ecp_policy, eligibility: ecp_eligibility) }
+    let(:lup_claim) { create(:claim, academic_year: "2022/2023", policy: lup_policy, eligibility: lup_eligibility) }
 
     let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible) }
     let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
@@ -249,8 +249,8 @@ RSpec.describe CurrentClaim, type: :model do
     let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible) }
     let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
 
-    let(:ecp_claim) { build(:claim, policy: Policies::EarlyCareerPayments, eligibility: ecp_eligibility) }
-    let(:lup_claim) { build(:claim, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility) }
+    let(:ecp_claim) { create(:claim, policy: Policies::EarlyCareerPayments, eligibility: ecp_eligibility) }
+    let(:lup_claim) { create(:claim, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility) }
 
     context "when both claims are eligible" do
       it { is_expected.to be true }
