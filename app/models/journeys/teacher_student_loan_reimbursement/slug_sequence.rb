@@ -83,8 +83,8 @@ module Journeys
           sequence.delete("reset-claim") if skipped_dfe_sign_in? || answers.details_check?
           sequence.delete("current-school") if claim.eligibility.employed_at_claim_school? || claim.eligibility.employed_at_recent_tps_school?
           sequence.delete("mostly-performed-leadership-duties") unless claim.eligibility.had_leadership_position?
-          sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
-          sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
+          sequence.delete("personal-bank-account") if answers.building_society?
+          sequence.delete("building-society-account") if answers.personal_bank_account?
           sequence.delete("mobile-number") if answers.provide_mobile_number == false
           sequence.delete("mobile-verification") if answers.provide_mobile_number == false
           sequence.delete("ineligible") unless claim.eligibility&.ineligible?

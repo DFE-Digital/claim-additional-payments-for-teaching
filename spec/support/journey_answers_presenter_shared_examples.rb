@@ -198,9 +198,20 @@ RSpec.shared_examples "journey answers presenter" do
   end
 
   describe "#payment_answers" do
-    let(:claim) { create(:claim, bank_or_building_society: :personal_bank_account, bank_sort_code: "12 34 56", bank_account_number: "12 34 56 78", banking_name: "Jo Bloggs") }
+    let(:claim) { create(:claim) }
+    let(:journey_session) do
+      create(
+        :additional_payments_session,
+        answers: {
+          bank_or_building_society: "personal_bank_account",
+          bank_sort_code: "123456",
+          bank_account_number: "12345678",
+          banking_name: "Jo Bloggs"
+        }
+      )
+    end
 
-    subject(:answers) { described_class.new(current_claim, nil).payment_answers }
+    subject(:answers) { described_class.new(current_claim, journey_session).payment_answers }
 
     context "when a personal bank account is selected" do
       it "returns an array of questions and answers for displaying to the user for review" do
@@ -216,7 +227,19 @@ RSpec.shared_examples "journey answers presenter" do
     end
 
     context "when a building society is selected" do
-      let(:claim) { create(:claim, bank_or_building_society: :building_society, bank_sort_code: "65 90 07", bank_account_number: "90 77 02 24", banking_name: "David Badger-Hillary", building_society_roll_number: "5890/87654321") }
+      let(:claim) { create(:claim) }
+      let(:journey_session) do
+        create(
+          :additional_payments_session,
+          answers: {
+            bank_or_building_society: "building_society",
+            bank_sort_code: "659007",
+            bank_account_number: "90770224",
+            banking_name: "David Badger-Hillary",
+            building_society_roll_number: "5890/87654321"
+          }
+        )
+      end
 
       it "returns an array of questions and answers for displaying to the user for review" do
         expected_answers = [

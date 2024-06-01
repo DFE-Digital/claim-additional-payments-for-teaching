@@ -14,12 +14,7 @@ RSpec.feature "Eligible now can set a reminder for next year." do
     claim.eligibility.update!(eligibility_attributes)
     session = Journeys::AdditionalPaymentsForTeaching::Session.last
     session.answers.assign_attributes(
-      attributes_for(
-        :additional_payments_answers,
-        :with_personal_details,
-        :with_email_details,
-        :with_mobile_details
-      )
+      attributes_for(:additional_payments_answers, :submittable)
     )
     session.save!
 
@@ -88,12 +83,7 @@ RSpec.feature "Completed Applications - Reminders" do
 
           session = Journeys::AdditionalPaymentsForTeaching::Session.last
           session.answers.assign_attributes(
-            attributes_for(
-              :additional_payments_answers,
-              :with_personal_details,
-              :with_email_details,
-              :with_mobile_details
-            )
+            attributes_for(:additional_payments_answers, :submittable)
           )
           session.save!
 

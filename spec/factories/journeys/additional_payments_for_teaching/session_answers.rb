@@ -22,5 +22,19 @@ FactoryBot.define do
       provide_mobile_number { true }
       mobile_verified { true }
     end
+
+    trait :with_bank_details do
+      bank_or_building_society { :personal_bank_account }
+      banking_name { "Jo Bloggs" }
+      bank_sort_code { rand(100000..999999) }
+      bank_account_number { rand(10000000..99999999) }
+    end
+
+    trait :submittable do
+      with_personal_details
+      with_email_details
+      with_mobile_details
+      with_bank_details
+    end
   end
 end

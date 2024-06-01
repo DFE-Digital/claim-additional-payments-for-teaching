@@ -1,4 +1,4 @@
-<% bank_or_building_society = current_claim.bank_or_building_society.humanize.downcase %>
+<% bank_or_building_society = @form.answers.bank_or_building_society.humanize.downcase %>
 <% content_for(:page_title, page_title(t("questions.account_details", bank_or_building_society: bank_or_building_society), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
 <div class="govuk-grid-row">

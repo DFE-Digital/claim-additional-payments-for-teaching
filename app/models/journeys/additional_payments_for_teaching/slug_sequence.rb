@@ -130,8 +130,8 @@ module Journeys
           sequence.delete("eligibility-confirmed") unless overall_eligibility_status == :eligible_now
           sequence.delete("eligible-later") unless overall_eligibility_status == :eligible_later
 
-          sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
-          sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
+          sequence.delete("personal-bank-account") if answers.building_society?
+          sequence.delete("building-society-account") if answers.personal_bank_account?
 
           sequence.delete("teacher-reference-number") if answers.logged_in_with_tid? && answers.teacher_reference_number.present?
 
