@@ -24,7 +24,7 @@ govuk-frontend@^5.3.1:
   resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-5.3.1.tgz#d63e2078b0d94a119bfe322431218f04024668a2"
   integrity sha512-EzegdVdmZVwXUGTQTsBgK4TkMpMyPdOIa2g1kvwX7EeyP9Kah+amXSo97gbiI8N49L6E0J6/2H6qLW4QN3KhMQ==
 
-prettier@^3.2.5:
-  version "3.2.5"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.2.5.tgz#e52bc3090586e824964a8813b09aba6233b28368"
-  integrity sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A==
+prettier@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.3.0.tgz#d173ea0524a691d4c0b1181752f2b46724328cdf"
+  integrity sha512-J9odKxERhCQ10OC2yb93583f6UnYutOeiV5i0zEDS7UGTdUt0u+y8erxl3lBKvwo/JHyyoEdXjwp4dke9oyZ/g==
