@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ClaimSchoolForm do
+RSpec.describe Journeys::TeacherStudentLoanReimbursement::ClaimSchoolForm do
   let(:journey) { Journeys::TeacherStudentLoanReimbursement }
 
   before { create(:journey_configuration, :student_loans) }

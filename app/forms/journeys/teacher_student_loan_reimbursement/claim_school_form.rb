@@ -1,4 +1,4 @@
-class ClaimSchoolForm < Form
+class Journeys::TeacherStudentLoanReimbursement::ClaimSchoolForm < Form
   attribute :claim_school_id
 
   attr_reader :schools
