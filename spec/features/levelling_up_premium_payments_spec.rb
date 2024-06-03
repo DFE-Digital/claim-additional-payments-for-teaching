@@ -198,7 +198,7 @@ RSpec.feature "Levelling up premium payments claims" do
     click_on "Continue"
 
     # - Enter bank account details
-    expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: claim.bank_or_building_society.humanize.downcase))
+    expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: journey_session.reload.answers.bank_or_building_society.humanize.downcase))
     expect(page).not_to have_text("Building society roll number")
 
     fill_in "Name on your account", with: "Jo Bloggs"

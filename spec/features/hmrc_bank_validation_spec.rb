@@ -1,8 +1,9 @@
 require "rails_helper"
 
 RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_validation_enabled do
-  let(:claim) { Claim.by_policy(Policies::LevellingUpPremiumPayments).order(:created_at).last }
-  let(:eligibility) { claim.eligibility }
+  let(:journey_session) do
+    Journeys::AdditionalPaymentsForTeaching::Session.order(:created_at).last
+  end
   let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
   let(:bank_name) { "Jo Bloggs" }
@@ -128,8 +129,10 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
 
         expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
 
-        expect(claim.reload).to be_hmrc_bank_validation_succeeded
-        expect(claim.hmrc_bank_validation_responses).not_to be_empty
+        journey_session.reload
+        answers = journey_session.answers
+        expect(answers.hmrc_bank_validation_succeeded?).to eq true
+        expect(answers.hmrc_bank_validation_responses).not_to be_empty
 
         # - HMRC API fails bank details match"
         click_on "Back"
@@ -157,8 +160,10 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
         # Third attempt succeeds.
         expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
 
-        expect(claim.reload).not_to be_hmrc_bank_validation_succeeded
-        expect(claim.hmrc_bank_validation_responses).not_to be_empty
+        journey_session.reload
+        answers = journey_session.answers
+        expect(answers.hmrc_bank_validation_succeeded?).not_to be true
+        expect(answers.hmrc_bank_validation_responses).not_to be_empty
       end
     end
   end
@@ -176,7 +181,9 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
 
       expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
 
-      expect(claim.reload).not_to be_hmrc_bank_validation_succeeded
+      journey_session.reload
+      answers = journey_session.answers
+      expect(answers.hmrc_bank_validation_succeeded?).not_to be true
     end
   end
 end

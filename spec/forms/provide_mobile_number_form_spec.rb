@@ -7,18 +7,23 @@ RSpec.describe ProvideMobileNumberForm, type: :model do
       create(:journey_configuration, :additional_payments)
     }
 
-    let(:current_claim) do
-      claims = journey::POLICIES.map { |policy| create(:claim, policy: policy) }
-      CurrentClaim.new(claims: claims)
-    end
-
     let(:slug) { "provide-mobile-number" }
+
     let(:params) { ActionController::Parameters.new }
-    let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
+
+    let(:journey_session) do
+      create(
+        :"#{journey::I18N_NAMESPACE}_session",
+        answers: {
+          provide_mobile_number: provide_mobile_number,
+          mobile_verified: true
+        }
+      )
+    end
 
     subject(:form) do
       described_class.new(
-        claim: current_claim,
+        claim: CurrentClaim.new(claims: [build(:claim)]),
         journey_session: journey_session,
         journey: journey,
         params: params
@@ -26,6 +31,8 @@ RSpec.describe ProvideMobileNumberForm, type: :model do
     end
 
     context "unpermitted claim param" do
+      let(:provide_mobile_number) { nil }
+
       let(:params) { ActionController::Parameters.new({slug: slug, claim: {nonsense_id: 1}}) }
 
       it "raises an error" do
@@ -34,6 +41,8 @@ RSpec.describe ProvideMobileNumberForm, type: :model do
     end
 
     describe "validations" do
+      let(:provide_mobile_number) { nil }
+
       it { should allow_value(%w[true false]).for(:provide_mobile_number).with_message("Select yes if you would like to provide your mobile number") }
     end
 
@@ -42,32 +51,63 @@ RSpec.describe ProvideMobileNumberForm, type: :model do
         let(:params) { ActionController::Parameters.new({slug: slug, claim: {provide_mobile_number: "Yes"}}) }
 
         context "when claim is missing provide_mobile_number" do
-          let(:current_claim) do
-            claims = journey::POLICIES.map { |policy| create(:claim, policy: policy) }
-            CurrentClaim.new(claims: claims)
-          end
+          let(:provide_mobile_number) { nil }
 
           it "saves provide_mobile_number" do
             expect(form.save).to be true
 
-            current_claim.claims.each do |claim|
-              expect(claim.provide_mobile_number).to be_truthy
-            end
+            expect(
+              journey_session.reload.answers.provide_mobile_number
+            ).to eq true
           end
         end
 
         context "claim already has provide_mobile_number" do
-          let(:current_claim) do
-            claims = journey::POLICIES.map { |policy| create(:claim, policy: policy, provide_mobile_number: false) }
-            CurrentClaim.new(claims: claims)
-          end
+          let(:provide_mobile_number) { false }
 
           it "updates provide_mobile_number on claim" do
             expect(form.save).to be true
 
-            current_claim.claims.each do |claim|
-              expect(claim.provide_mobile_number).to be_truthy
-            end
+            expect(
+              journey_session.reload.answers.provide_mobile_number
+            ).to eq true
+          end
+        end
+
+        context "when provide_mobile_number has not changed" do
+          let(:provide_mobile_number) { true }
+
+          let(:params) do
+            ActionController::Parameters.new(
+              claim: {
+                provide_mobile_number: "Yes"
+              }
+            )
+          end
+
+          it "doesn't reset dependent answers" do
+            form.save
+
+            expect(journey_session.reload.answers.mobile_verified).to eq true
+          end
+        end
+
+        context "when provide_mobile_number has changed" do
+          let(:provide_mobile_number) { false }
+
+          let(:params) do
+            ActionController::Parameters.new(
+              claim: {
+                provide_mobile_number: "Yes"
+              }
+            )
+          end
+
+          it "resets dependent answers" do
+            expect { form.save }.to(
+              change { journey_session.reload.answers.mobile_verified }
+              .from(true).to(nil)
+            )
           end
         end
       end

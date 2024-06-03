@@ -2,7 +2,7 @@ class MobileVerificationForm < Form
   attribute :one_time_password
 
   # Required for shared partial in the view
-  delegate :mobile_number, to: :claim
+  delegate :mobile_number, to: :answers
 
   validate :otp_validate
 
@@ -13,7 +13,9 @@ class MobileVerificationForm < Form
   def save
     return false unless valid?
 
-    update!(mobile_verified: true)
+    journey_session.answers.assign_attributes(mobile_verified: true)
+
+    journey_session.save!
   end
 
   private
@@ -21,7 +23,7 @@ class MobileVerificationForm < Form
   def otp_validate
     otp = OneTimePassword::Validator.new(
       one_time_password,
-      claim.sent_one_time_password_at
+      answers.sent_one_time_password_at
     )
 
     errors.add(:one_time_password, otp.warning) unless otp.valid?

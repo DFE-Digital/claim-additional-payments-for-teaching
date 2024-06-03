@@ -8,11 +8,7 @@ RSpec.feature "Claim journey does not get cached" do
     claim.update!(attributes_for(:claim, :submittable))
     journey_session = Journeys::TeacherStudentLoanReimbursement::Session.last
     journey_session.update!(
-      answers: attributes_for(
-        :student_loans_answers,
-        :with_details_from_dfe_identity,
-        :with_email_details
-      )
+      answers: attributes_for(:student_loans_answers, :submittable)
     )
     claim.eligibility = create(:student_loans_eligibility, :eligible)
     claim.save!

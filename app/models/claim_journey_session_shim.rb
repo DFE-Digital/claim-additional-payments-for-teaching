@@ -27,27 +27,27 @@ class ClaimJourneySessionShim
       teacher_reference_number: teacher_reference_number,
       national_insurance_number: journey_session.answers.national_insurance_number,
       email_address: journey_session.answers.email_address,
-      bank_sort_code: bank_sort_code,
-      bank_account_number: bank_account_number,
+      bank_sort_code: journey_session.answers.bank_sort_code,
+      bank_account_number: journey_session.answers.bank_account_number,
       details_check: details_check,
       payroll_gender: payroll_gender,
       first_name: journey_session.answers.first_name,
       middle_name: journey_session.answers.middle_name,
       surname: journey_session.answers.surname,
-      banking_name: banking_name,
-      building_society_roll_number: building_society_roll_number,
+      banking_name: journey_session.answers.banking_name,
+      building_society_roll_number: journey_session.answers.building_society_roll_number,
       academic_year: academic_year,
-      bank_or_building_society: bank_or_building_society,
-      provide_mobile_number: provide_mobile_number,
-      mobile_number: mobile_number,
+      bank_or_building_society: journey_session.answers.bank_or_building_society,
+      provide_mobile_number: journey_session.answers.provide_mobile_number,
+      mobile_number: journey_session.answers.mobile_number,
       email_verified: journey_session.answers.email_verified,
-      mobile_verified: mobile_verified,
-      hmrc_bank_validation_succeeded: hmrc_bank_validation_succeeded,
-      hmrc_bank_validation_responses: hmrc_bank_validation_responses,
+      mobile_verified: journey_session.answers.mobile_verified,
+      hmrc_bank_validation_succeeded: journey_session.answers.hmrc_bank_validation_succeeded,
+      hmrc_bank_validation_responses: journey_session.answers.hmrc_bank_validation_responses,
       logged_in_with_tid: logged_in_with_tid,
       teacher_id_user_info: teacher_id_user_info,
       email_address_check: journey_session.answers.email_address_check,
-      mobile_check: mobile_check,
+      mobile_check: journey_session.answers.mobile_check,
       qualifications_details_check: qualifications_details_check
     }
   end
@@ -82,14 +82,6 @@ class ClaimJourneySessionShim
     journey_session.answers.teacher_reference_number.presence || current_claim.teacher_reference_number
   end
 
-  def bank_sort_code
-    journey_session.answers.bank_sort_code || current_claim.bank_sort_code
-  end
-
-  def bank_account_number
-    journey_session.answers.bank_account_number || current_claim.bank_account_number
-  end
-
   def details_check
     journey_session.answers.details_check || current_claim.details_check
   end
@@ -98,40 +90,8 @@ class ClaimJourneySessionShim
     journey_session.answers.payroll_gender || current_claim.payroll_gender
   end
 
-  def banking_name
-    journey_session.answers.banking_name || current_claim.banking_name
-  end
-
-  def building_society_roll_number
-    journey_session.answers.building_society_roll_number || current_claim.building_society_roll_number
-  end
-
   def academic_year
     journey_session.answers.academic_year || current_claim.academic_year
-  end
-
-  def bank_or_building_society
-    journey_session.answers.bank_or_building_society || current_claim.bank_or_building_society
-  end
-
-  def provide_mobile_number
-    journey_session.answers.provide_mobile_number || current_claim.provide_mobile_number
-  end
-
-  def mobile_number
-    journey_session.answers.mobile_number || current_claim.mobile_number
-  end
-
-  def mobile_verified
-    journey_session.answers.mobile_verified || current_claim.mobile_verified
-  end
-
-  def hmrc_bank_validation_succeeded
-    journey_session.answers.hmrc_bank_validation_succeeded || current_claim.hmrc_bank_validation_succeeded
-  end
-
-  def hmrc_bank_validation_responses
-    journey_session.answers.hmrc_bank_validation_responses || current_claim.hmrc_bank_validation_responses
   end
 
   def logged_in_with_tid
@@ -140,10 +100,6 @@ class ClaimJourneySessionShim
 
   def teacher_id_user_info
     journey_session.answers.teacher_id_user_info || current_claim.teacher_id_user_info
-  end
-
-  def mobile_check
-    journey_session.answers.mobile_check || current_claim.mobile_check
   end
 
   def qualifications_details_check

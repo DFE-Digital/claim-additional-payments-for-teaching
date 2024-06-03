@@ -7,21 +7,29 @@ RSpec.describe BankDetailsForm do
       create(:journey_configuration, :additional_payments)
     }
 
-    let(:current_claim) do
-      claims = journey::POLICIES.map { |policy| create(:claim, :with_bank_details, policy:) }
-      CurrentClaim.new(claims: claims)
+    let(:journey_session) do
+      create(
+        :"#{journey::I18N_NAMESPACE}_session",
+        answers: attributes_for(
+          :"#{journey::I18N_NAMESPACE}_answers"
+        )
+      )
     end
-
-    let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
 
     let(:slug) { "personal-bank-account" }
     let(:params) do
-      {banking_name:, bank_sort_code:, bank_account_number:, building_society_roll_number:, hmrc_validation_attempt_count:}
+      {
+        banking_name:,
+        bank_sort_code:,
+        bank_account_number:,
+        building_society_roll_number:,
+        hmrc_validation_attempt_count:
+      }
     end
 
     subject(:form) do
       described_class.new(
-        claim: current_claim,
+        claim: CurrentClaim.new(claims: [build(:claim)]),
         journey_session: journey_session,
         journey: journey,
         params: ActionController::Parameters.new(slug:, claim: params)
@@ -67,9 +75,14 @@ RSpec.describe BankDetailsForm do
         end
 
         context "when building society" do
-          let(:current_claim) do
-            claims = journey::POLICIES.map { |policy| create(:claim, :with_bank_details, bank_or_building_society: :building_society, policy:) }
-            CurrentClaim.new(claims: claims)
+          let(:journey_session) do
+            create(
+              :"#{journey::I18N_NAMESPACE}_session",
+              answers: attributes_for(
+                :"#{journey::I18N_NAMESPACE}_answers",
+                bank_or_building_society: "building_society"
+              )
+            )
           end
 
           context "with valid building society roll number" do
@@ -100,9 +113,10 @@ RSpec.describe BankDetailsForm do
           end
 
           it "adds the response to the claim" do
-            expect { form.valid? }.to change { current_claim.reload.hmrc_bank_validation_responses }.from([]).to [
-              {"body" => "Test response", "code" => 200}
-            ]
+            expect { form.valid? }.to(
+              change { journey_session.reload.answers.hmrc_bank_validation_responses }
+              .from([]).to([{"body" => "Test response", "code" => 200}])
+            )
           end
 
           context "when the sort code doesn't pass basic validation" do
@@ -196,9 +210,10 @@ RSpec.describe BankDetailsForm do
             end
 
             it "adds the response to the claim" do
-              expect { form.valid? }.to change { current_claim.reload.hmrc_bank_validation_responses }.from([]).to [
-                {"body" => "Test response", "code" => 200}
-              ]
+              expect { form.valid? }.to(
+                change { journey_session.reload.answers.hmrc_bank_validation_responses }
+                .from([]).to([{"body" => "Test response", "code" => 200}])
+              )
             end
           end
         end
@@ -246,9 +261,10 @@ RSpec.describe BankDetailsForm do
         end
 
         it "adds the response to the claim" do
-          expect { form.valid? }.to change { current_claim.reload.hmrc_bank_validation_responses }.from([]).to [
-            {"body" => "Test failure", "code" => 429}
-          ]
+          expect { form.valid? }.to(
+            change { journey_session.reload.answers.hmrc_bank_validation_responses }
+            .from([]).to([{"body" => "Test failure", "code" => 429}])
+          )
         end
       end
     end

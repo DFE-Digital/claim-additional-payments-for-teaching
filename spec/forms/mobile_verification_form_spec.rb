@@ -2,19 +2,14 @@ require "rails_helper"
 
 RSpec.describe MobileVerificationForm do
   shared_examples "mobile_verification" do |journey|
-    let(:claims) do
-      journey::POLICIES.map do |policy|
-        create(
-          :claim,
-          policy: policy,
+    let(:journey_session) do
+      create(
+        :"#{journey::I18N_NAMESPACE}_session",
+        answers: {
           sent_one_time_password_at: sent_one_time_password_at
-        )
-      end
+        }
+      )
     end
-
-    let(:current_claim) { CurrentClaim.new(claims: claims) }
-
-    let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
 
     let(:params) do
       ActionController::Parameters.new(
@@ -28,7 +23,7 @@ RSpec.describe MobileVerificationForm do
       described_class.new(
         journey: journey,
         journey_session: journey_session,
-        claim: current_claim,
+        claim: CurrentClaim.new(claims: [build(:claim)]),
         params: params
       )
     end
@@ -87,9 +82,7 @@ RSpec.describe MobileVerificationForm do
       before { form.save }
 
       it "sets the mobile_verified attribute to true" do
-        claims.each do |claim|
-          expect(claim.mobile_verified).to be true
-        end
+        expect(journey_session.reload.answers.mobile_verified).to be true
       end
     end
   end

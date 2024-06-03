@@ -332,7 +332,7 @@ RSpec.describe "Claims", type: :request do
           expect(response).to be_successful
           expect(response.body).to include("There is a problem")
           expect(response.body).to include("Select a school from the list")
-          expect(response.body).to include(school.name)
+          expect(response.body).to include(CGI.escapeHTML(school.name)) # eg. apostrophe characters become HTML entities
         end
       end
 

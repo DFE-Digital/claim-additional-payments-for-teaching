@@ -117,7 +117,7 @@ module Journeys
             sequence.delete("select-mobile")
           end
 
-          if answers.logged_in_with_tid? && (claim.mobile_check == "use" || claim.mobile_check == "declined")
+          if answers.logged_in_with_tid? && (answers.mobile_check == "use" || answers.mobile_check == "declined")
             sequence.delete("mobile-number")
             sequence.delete("mobile-verification")
           end
@@ -130,15 +130,15 @@ module Journeys
           sequence.delete("eligibility-confirmed") unless overall_eligibility_status == :eligible_now
           sequence.delete("eligible-later") unless overall_eligibility_status == :eligible_later
 
-          sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
-          sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
+          sequence.delete("personal-bank-account") if answers.building_society?
+          sequence.delete("building-society-account") if answers.personal_bank_account?
 
           sequence.delete("teacher-reference-number") if answers.logged_in_with_tid? && answers.teacher_reference_number.present?
 
           sequence.delete("correct-school") unless journey_session.logged_in_with_tid_and_has_recent_tps_school?
           sequence.delete("current-school") if claim.eligibility.school_somewhere_else == false
 
-          if claim.provide_mobile_number == false
+          if answers.provide_mobile_number == false
             sequence.delete("mobile-number")
             sequence.delete("mobile-verification")
           end

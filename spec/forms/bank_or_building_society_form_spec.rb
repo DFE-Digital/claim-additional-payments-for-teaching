@@ -7,19 +7,23 @@ RSpec.describe BankOrBuildingSocietyForm, type: :model do
       create(:journey_configuration, :additional_payments)
     }
 
-    let(:current_claim) do
-      claims = journey::POLICIES.map { |policy| create(:claim, policy: policy) }
-      CurrentClaim.new(claims:)
+    let(:journey_session) do
+      create(
+        :"#{journey::I18N_NAMESPACE}_session",
+        answers: attributes_for(
+          :"#{journey::I18N_NAMESPACE}_answers",
+          :with_bank_details,
+          building_society_roll_number: "A123456"
+        )
+      )
     end
-
-    let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
 
     let(:slug) { "bank-or-building-society-form" }
     let(:claim_params) { {} }
 
     subject(:form) do
       described_class.new(
-        claim: current_claim,
+        claim: CurrentClaim.new(claims: [build(:claim)]),
         journey_session: journey_session,
         journey: journey,
         params: ActionController::Parameters.new({slug:, claim: claim_params})
@@ -37,9 +41,41 @@ RSpec.describe BankOrBuildingSocietyForm, type: :model do
         it "saves bank_or_building_society" do
           expect(form.save).to be true
 
-          current_claim.claims.each do |claim|
-            expect(claim.bank_or_building_society).to eq "personal_bank_account"
-          end
+          expect(
+            journey_session.reload.answers.bank_or_building_society
+          ).to eq "personal_bank_account"
+        end
+      end
+
+      context "when bank_or_building_society has not changed" do
+        let(:claim_params) { {bank_or_building_society: "personal_bank_account"} }
+
+        it "doesn't reset dependent answers" do
+          expect { expect(form.save).to be true }.to(
+            not_change { journey_session.reload.answers.banking_name }.and(
+              not_change { journey_session.reload.answers.bank_account_number }
+            ).and(
+              not_change { journey_session.reload.answers.bank_sort_code }
+            ).and(
+              not_change { journey_session.reload.answers.building_society_roll_number }
+            )
+          )
+        end
+      end
+
+      context "when bank_or_building_society has changed" do
+        let(:claim_params) { {bank_or_building_society: "building_society"} }
+
+        it "resets dependent answers" do
+          expect { expect(form.save).to be true }.to(
+            change { journey_session.reload.answers.banking_name }.to(nil).and(
+              change { journey_session.reload.answers.bank_account_number }.to(nil)
+            ).and(
+              change { journey_session.reload.answers.bank_sort_code }.to(nil)
+            ).and(
+              change { journey_session.reload.answers.building_society_roll_number }.to(nil)
+            )
+          )
         end
       end
     end

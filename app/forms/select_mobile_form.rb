@@ -16,21 +16,21 @@ class SelectMobileForm < Form
 
     case mobile_check
     when "use"
-      claim.update(
+      journey_session.answers.assign_attributes(
         mobile_number: phone_number,
         provide_mobile_number: true,
         mobile_check: mobile_check,
         mobile_verified: nil
       )
     when "alternative"
-      claim.update(
+      journey_session.answers.assign_attributes(
         mobile_number: nil,
         provide_mobile_number: true,
         mobile_check: mobile_check,
         mobile_verified: nil
       )
     when "declined"
-      claim.update(
+      journey_session.answers.assign_attributes(
         mobile_number: nil,
         provide_mobile_number: false,
         mobile_check: mobile_check,
@@ -40,6 +40,6 @@ class SelectMobileForm < Form
       fail "Invalid mobile_check: #{mobile_check}"
     end
 
-    true
+    journey_session.save!
   end
 end

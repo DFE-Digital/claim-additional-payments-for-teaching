@@ -13,7 +13,7 @@ class BankDetailsForm < Form
   validates :banking_name, presence: {message: i18n_error_message(:enter_banking_name)}
   validates :bank_sort_code, presence: {message: i18n_error_message(:enter_sort_code)}
   validates :bank_account_number, presence: {message: i18n_error_message(:enter_account_number)}
-  validates :building_society_roll_number, presence: {message: i18n_error_message(:enter_roll_number)}, if: -> { claim.building_society? }
+  validates :building_society_roll_number, presence: {message: i18n_error_message(:enter_roll_number)}, if: -> { answers.building_society? }
 
   validate :bank_account_number_must_be_eight_digits
   validate :bank_sort_code_must_be_six_digits
@@ -26,13 +26,15 @@ class BankDetailsForm < Form
   def save
     return false unless valid?
 
-    update!(
-      banking_name:,
-      bank_sort_code:,
-      bank_account_number:,
-      building_society_roll_number:,
-      hmrc_bank_validation_succeeded:
+    journey_session.answers.assign_attributes(
+      banking_name: banking_name,
+      bank_sort_code: normalised_bank_detail(bank_sort_code),
+      bank_account_number: normalised_bank_detail(bank_account_number),
+      building_society_roll_number: building_society_roll_number,
+      hmrc_bank_validation_succeeded: hmrc_bank_validation_succeeded
     )
+
+    journey_session.save!
   end
 
   def hmrc_bank_validation_succeeded
@@ -50,7 +52,7 @@ class BankDetailsForm < Form
   private
 
   def normalised_bank_detail(bank_detail)
-    bank_detail.gsub(/\s|-/, "")
+    bank_detail&.gsub(/\s|-/, "")
   end
 
   def bank_account_number_must_be_eight_digits
@@ -93,8 +95,11 @@ class BankDetailsForm < Form
       response = e.response
       @hmrc_api_response_error = true
     ensure
-      new_hmrc_bank_validation_responses_value = claim.hmrc_bank_validation_responses.dup << {code: response.code, body: response.body}
-      claim.update_attribute :hmrc_bank_validation_responses, new_hmrc_bank_validation_responses_value
+      new_hmrc_bank_validation_responses_value = journey_session.answers.hmrc_bank_validation_responses.dup << {code: response.code, body: response.body}
+      journey_session.answers.assign_attributes(
+        hmrc_bank_validation_responses: new_hmrc_bank_validation_responses_value
+      )
+      journey_session.save!
     end
   end
 

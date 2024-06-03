@@ -56,14 +56,18 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
           claim.eligibility = Policies::EarlyCareerPayments::Eligibility.new
           claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
           claim.update!(early_career_payments_personal_details_attributes)
+          session = Journeys::AdditionalPaymentsForTeaching::Session.last
         elsif scenario[:policy] == Policies::StudentLoans
           claim.eligibility = Policies::StudentLoans::Eligibility.new
           claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible))
           claim.update!(student_loans_personal_details_attributes)
+          session = Journeys::TeacherStudentLoanReimbursement::Session.last
         end
 
+        session.update!(answers: {provide_mobile_number: true})
+
         jump_to_claim_journey_page(claim, "mobile-number")
-        expect(claim.reload.provide_mobile_number).to eql true
+        expect(session.reload.answers.provide_mobile_number).to eql true
 
         # - Mobile number
         expect(page).to have_text(I18n.t("questions.mobile_number"))
@@ -71,7 +75,7 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
         fill_in "claim_mobile_number", with: scenario[:mobile_number]
         click_on "Continue"
 
-        expect(claim.reload.mobile_number).to eql(scenario[:mobile_number])
+        expect(session.reload.answers.mobile_number).to eql(scenario[:mobile_number])
 
         # # - Mobile number one-time password
         expect(page).to have_text("Mobile number verification")

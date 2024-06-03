@@ -137,7 +137,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     choose "No"
     click_on "Continue"
 
-    expect(claim.reload.provide_mobile_number).to eql false
+    expect(session.reload.answers.provide_mobile_number).to eql false
 
     # - Mobile number
     expect(page).not_to have_text(I18n.t("questions.mobile_number"))
@@ -147,9 +147,9 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     choose "Building society"
     click_on "Continue"
 
-    expect(claim.reload.bank_or_building_society).to eq "building_society"
+    expect(session.reload.answers.bank_or_building_society).to eq "building_society"
 
-    expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: claim.bank_or_building_society.humanize.downcase))
+    expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: session.answers.bank_or_building_society.humanize.downcase))
     expect(page).to have_text("Building society roll number")
 
     fill_in "Name on your account", with: "Jo Bloggs"
@@ -158,10 +158,12 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     fill_in "Building society roll number", with: "1234/123456789"
     click_on "Continue"
 
-    expect(claim.reload.banking_name).to eq("Jo Bloggs")
-    expect(claim.bank_sort_code).to eq("123456")
-    expect(claim.bank_account_number).to eq("87654321")
-    expect(claim.building_society_roll_number).to eq("1234/123456789")
+    session.reload
+    answers = session.answers
+    expect(answers.banking_name).to eq("Jo Bloggs")
+    expect(answers.bank_sort_code).to eq("123456")
+    expect(answers.bank_account_number).to eq("87654321")
+    expect(answers.building_society_roll_number).to eq("1234/123456789")
 
     expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
     choose "Male"

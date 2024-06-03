@@ -2,6 +2,9 @@ require "rails_helper"
 
 RSpec.feature "Levelling up premium payments and early-career payments combined claim journey", :with_stubbed_hmrc_client, :with_hmrc_bank_validation_enabled do
   let(:claim) { Claim.by_policy(Policies::LevellingUpPremiumPayments).order(:created_at).last }
+  let(:journey_session) do
+    Journeys::AdditionalPaymentsForTeaching::Session.order(:created_at).last
+  end
   let(:eligibility) { claim.eligibility }
 
   before { create(:journey_configuration, :additional_payments) }
@@ -191,7 +194,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     click_on "Continue"
 
     # - Enter bank account details
-    expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: claim.reload.bank_or_building_society.humanize.downcase))
+    expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: journey_session.reload.answers.bank_or_building_society.humanize.downcase))
     expect(page).not_to have_text("Building society roll number")
 
     fill_in "Name on your account", with: "Jo Bloggs"
