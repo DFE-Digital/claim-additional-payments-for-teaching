@@ -182,4 +182,71 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::ClaimSchoolForm do
       end
     end
   end
+
+  describe "#save" do
+    context "when the school has changed" do
+      let(:school) do
+        create(:school, :student_loans_eligible)
+      end
+
+      let(:new_school) do
+        create(:school, :student_loans_eligible)
+      end
+
+      let(:eligibility) do
+        create(
+          :student_loans_eligibility,
+          taught_eligible_subjects: true,
+          biology_taught: true,
+          physics_taught: true,
+          chemistry_taught: true,
+          computing_taught: true,
+          languages_taught: true,
+          employment_status: :claim_school,
+          current_school_id: school.id,
+          claim_school_id: school.id
+        )
+      end
+
+      let(:claim) do
+        create(:claim, eligibility: eligibility)
+      end
+
+      let(:current_claim) do
+        CurrentClaim.new(claims: [claim])
+      end
+
+      let(:params) do
+        ActionController::Parameters.new(
+          {
+            claim: {
+              claim_school_id: new_school.id
+            }
+          }
+        )
+      end
+
+      it "resets the dependent answers" do
+        expect { expect(form.save).to eq true }.to(
+          change { eligibility.reload.claim_school_id }.from(school.id).to(new_school.id).and(
+            change { eligibility.reload.taught_eligible_subjects }.from(true).to(nil)
+          ).and(
+            change { eligibility.reload.biology_taught }.from(true).to(nil)
+          ).and(
+            change { eligibility.reload.physics_taught }.from(true).to(nil)
+          ).and(
+            change { eligibility.reload.chemistry_taught }.from(true).to(nil)
+          ).and(
+            change { eligibility.reload.computing_taught }.from(true).to(nil)
+          ).and(
+            change { eligibility.reload.languages_taught }.from(true).to(nil)
+          ).and(
+            change { eligibility.reload.employment_status }.from("claim_school").to(nil)
+          ).and(
+            change { eligibility.reload.current_school_id }.from(school.id).to(nil)
+          )
+        )
+      end
+    end
+  end
 end
