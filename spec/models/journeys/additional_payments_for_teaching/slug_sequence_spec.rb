@@ -367,14 +367,24 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
   end
 
   describe "eligibility affect on slugs" do
-    let(:ecp_claim) { build(:claim, policy: Policies::EarlyCareerPayments, eligibility_trait: ecp_eligibility) }
-    let(:lup_claim) { build(:claim, policy: Policies::LevellingUpPremiumPayments, eligibility_trait: lup_eligibility) }
+    before do
+      create(:journey_configuration, :additional_payments)
+    end
+
+    let(:current_school) { create(:school, :combined_journey_eligibile_for_all) }
+    let(:ecp_claim) { create(:claim, policy: Policies::EarlyCareerPayments, eligibility_trait: ecp_eligibility) }
+    let(:lup_claim) { create(:claim, policy: Policies::LevellingUpPremiumPayments, eligibility_trait: lup_eligibility) }
     let(:current_claim) { CurrentClaim.new(claims: [ecp_claim, lup_claim]) }
     let(:journey_session) { build(:additional_payments_session) }
 
     subject { described_class.new(current_claim, journey_session).slugs }
 
     context "current claim is :eligible_now" do
+      let(:current_school) { create(:school, :combined_journey_eligibile_for_all) }
+
+      let(:ecp_claim) { create(:claim, policy: Policies::EarlyCareerPayments, eligibility_trait: ecp_eligibility, eligibility_attributes: {current_school: current_school}) }
+      let(:lup_claim) { create(:claim, policy: Policies::LevellingUpPremiumPayments, eligibility_trait: lup_eligibility, eligibility_attributes: {current_school: current_school}) }
+
       let(:ecp_eligibility) { :eligible_later }
       let(:lup_eligibility) { :eligible_now }
 
@@ -383,8 +393,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
     end
 
     context "current claim is :eligible_later" do
-      let(:ecp_eligibility) { :ineligible }
-      let(:lup_eligibility) { :eligible_later }
+      let(:ecp_eligibility) { :eligible_later }
+      let(:lup_eligibility) { :ineligible }
 
       it { is_expected.to include("eligible-later") }
       it { is_expected.not_to include("eligibility-confirmed") }

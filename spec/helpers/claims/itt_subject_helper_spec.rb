@@ -4,8 +4,8 @@ RSpec.describe Claims::IttSubjectHelper do
   let(:ecp_trainee_teacher_eligibility) { build(:early_career_payments_eligibility, :trainee_teacher) }
   let(:lup_trainee_teacher_eligibility) { build(:levelling_up_premium_payments_eligibility, :trainee_teacher) }
 
-  let(:ecp_trainee_teacher_claim) { build(:claim, :first_lup_claim_year, policy: Policies::EarlyCareerPayments, eligibility: ecp_trainee_teacher_eligibility) }
-  let(:lup_trainee_teacher_claim) { build(:claim, :first_lup_claim_year, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_trainee_teacher_eligibility) }
+  let(:ecp_trainee_teacher_claim) { create(:claim, :first_lup_claim_year, policy: Policies::EarlyCareerPayments, eligibility: ecp_trainee_teacher_eligibility) }
+  let(:lup_trainee_teacher_claim) { create(:claim, :first_lup_claim_year, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_trainee_teacher_eligibility) }
 
   describe "#subject_symbols" do
     context "trainee teacher" do
@@ -21,8 +21,8 @@ RSpec.describe Claims::IttSubjectHelper do
       let(:eligible_ecp_eligibility) { build(:early_career_payments_eligibility, :eligible, itt_academic_year: itt_year) }
       let(:eligible_lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, itt_academic_year: itt_year) }
 
-      let(:eligible_ecp_claim) { build(:claim, :first_lup_claim_year, policy: Policies::EarlyCareerPayments, eligibility: eligible_ecp_eligibility) }
-      let(:eligible_lup_claim) { build(:claim, :first_lup_claim_year, policy: Policies::LevellingUpPremiumPayments, eligibility: eligible_lup_eligibility) }
+      let(:eligible_ecp_claim) { create(:claim, :first_lup_claim_year, policy: Policies::EarlyCareerPayments, eligibility: eligible_ecp_eligibility) }
+      let(:eligible_lup_claim) { create(:claim, :first_lup_claim_year, policy: Policies::LevellingUpPremiumPayments, eligibility: eligible_lup_eligibility) }
 
       subject { helper.subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, eligible_lup_claim])) }
 
@@ -31,8 +31,8 @@ RSpec.describe Claims::IttSubjectHelper do
   end
 
   describe "#subjects_to_sentence_for_hint_text" do
-    let(:ecp_claim) { build(:claim, :first_lup_claim_year, policy: Policies::EarlyCareerPayments, eligibility: ecp_eligibility) }
-    let(:lup_claim) { build(:claim, :first_lup_claim_year, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility) }
+    let(:ecp_claim) { create(:claim, :first_lup_claim_year, policy: Policies::EarlyCareerPayments, eligibility: ecp_eligibility) }
+    let(:lup_claim) { create(:claim, :first_lup_claim_year, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility) }
 
     subject { helper.subjects_to_sentence_for_hint_text(CurrentClaim.new(claims: [ecp_claim, lup_claim])) }
 

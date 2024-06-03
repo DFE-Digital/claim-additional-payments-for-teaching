@@ -9,7 +9,7 @@ module Journeys
   module AdditionalPaymentsForTeaching
     class ClaimJourneySessionShim < ClaimJourneySessionShim
       def answers
-        SessionAnswers.new(
+        @answers ||= SessionAnswers.new(
           super.merge(
             {
               nqt_in_academic_year_after_itt: nqt_in_academic_year_after_itt,
