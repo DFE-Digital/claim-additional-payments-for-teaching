@@ -78,55 +78,6 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
     end
   end
 
-  describe "#eligible_later_year" do
-    let!(:claim) { build_stubbed(:claim, academic_year: claim_academic_year, eligibility: eligibility) }
-    let(:claim_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2021)) }
-    let(:eligibility) do
-      build(
-        :early_career_payments_eligibility,
-        eligible_itt_subject: itt_subject,
-        itt_academic_year: itt_academic_year
-      )
-    end
-
-    context "when academic year is 2022/23" do
-      before { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
-
-      context "when claim is eligible later" do
-        [
-          {itt_subject: "mathematics", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019)), claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2024))},
-          {itt_subject: "mathematics", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020)), claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2023))},
-          {itt_subject: "physics", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020)), claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2023))},
-          {itt_subject: "chemistry", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020)), claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2023))},
-          {itt_subject: "foreign_languages", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020)), claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2023))}
-        ].each do |context|
-          context "with ITT subject #{context[:itt_subject].to_s.humanize}" do
-            let(:itt_subject) { context[:itt_subject] }
-
-            context "with ITT academic year #{context[:itt_academic_year]}" do
-              let(:itt_academic_year) { context[:itt_academic_year] }
-
-              it "returns the next eligible claim academic year" do
-                expect(eligibility.eligible_later_year).to be_an_instance_of(AcademicYear)
-                expect(eligibility.eligible_later_year).to eql AcademicYear.new(context[:claim_academic_year])
-              end
-            end
-          end
-        end
-      end
-
-      context "when claim is not eligible later" do
-        let(:itt_subject) { "chemistry" }
-        let(:itt_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2018)) }
-
-        it "does not return the next eligbilbe claim academic year " do
-          expect(eligibility.eligible_later_year).to be_an_instance_of(NilClass)
-          expect(eligibility.eligible_later_year).to be_nil
-        end
-      end
-    end
-  end
-
   describe "#award_amount" do
     context "amendment" do
       it { should_not allow_values(0, nil).for(:award_amount).on(:amendment) }

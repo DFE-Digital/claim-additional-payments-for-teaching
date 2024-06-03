@@ -5,16 +5,6 @@ module Policies
         Policies::EarlyCareerPayments
       end
 
-      def eligible_later_year
-        # This covers the case for *the other policy* (LUP) which has *no* ITT academic year set for a trainee teacher
-        # but this method will still be called and needs to run without error
-        if itt_academic_year.blank?
-          nil
-        else
-          JourneySubjectEligibilityChecker.new(claim_year: claim_year, itt_year: itt_academic_year).next_eligible_claim_year_after_current_claim_year(CurrentClaim.new(claims: [claim]))
-        end
-      end
-
       def award_amount
         super || BigDecimal(calculate_award_amount || 0)
       end
