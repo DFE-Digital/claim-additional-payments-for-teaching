@@ -3,10 +3,21 @@ require "rails_helper"
 RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityConfirmedForm, type: :model do
   subject(:form) { described_class.new(claim:, journey:, journey_session:, params:) }
 
+  before do
+    create(:journey_configuration, :additional_payments)
+  end
+
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
   let(:journey_session) { build(:additional_payments_session) }
-  let(:ecp_claim) { create(:claim, :eligible, policy: Policies::EarlyCareerPayments) }
-  let(:lupp_claim) { create(:claim, :eligible, policy: Policies::LevellingUpPremiumPayments) }
+
+  let(:current_school) { create(:school, :combined_journey_eligibile_for_all) }
+
+  let(:ecp_claim) { create(:claim, policy: Policies::EarlyCareerPayments, eligibility_trait: ecp_eligibility, eligibility_attributes: {current_school: current_school}) }
+  let(:lupp_claim) { create(:claim, policy: Policies::LevellingUpPremiumPayments, eligibility_trait: lupp_eligibility, eligibility_attributes: {current_school: current_school}) }
+
+  let(:ecp_eligibility) { :eligible_now }
+  let(:lupp_eligibility) { :eligible_now }
+
   let(:claim) { CurrentClaim.new(claims: [ecp_claim, lupp_claim], selected_policy:) }
   let(:slug) { "eligibility-confirmed" }
   let(:params) { ActionController::Parameters.new({slug:, claim: claim_params}) }
@@ -14,8 +25,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityConfirmedForm
   let(:selected_policy) { Policies::EarlyCareerPayments }
 
   it { is_expected.to be_a(Form) }
-  it { is_expected.to delegate_method(:eligible_now).to(:claim).with_prefix(:claims) }
-  it { is_expected.to delegate_method(:eligible_now_and_sorted).to(:claim).with_prefix(:claims) }
 
   describe "validations" do
     it do
@@ -46,16 +55,13 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityConfirmedForm
 
   describe "#single_choice_only?" do
     context "when eligible for one policy only" do
-      let(:ecp_claim) { create(:claim, :ineligible, policy: Policies::EarlyCareerPayments) }
-      let(:lupp_claim) { create(:claim, :eligible, policy: Policies::LevellingUpPremiumPayments) }
+      let(:ecp_eligibility) { :ineligible }
+      let(:lupp_eligibility) { :eligible_now }
 
       it { expect(form.single_choice_only?).to eq(true) }
     end
 
     context "when eligible for more than one policy" do
-      let(:ecp_claim) { create(:claim, :eligible, policy: Policies::EarlyCareerPayments) }
-      let(:lupp_claim) { create(:claim, :eligible, policy: Policies::LevellingUpPremiumPayments) }
-
       it { expect(form.single_choice_only?).to eq(false) }
     end
   end
@@ -82,17 +88,17 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityConfirmedForm
     subject { form.first_eligible_compact_policy_name }
 
     before do
-      allow(form).to receive(:claims_eligible_now_and_sorted).and_return(sorted_claims)
+      allow(form).to receive(:policies_eligible_now_and_sorted).and_return(sorted_policies)
     end
 
     context "when the first eligible policy is EarlyCareerPayments" do
-      let(:sorted_claims) { [ecp_claim, lupp_claim] }
+      let(:sorted_policies) { [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments] }
 
       it { is_expected.to eq("earlycareerpayments") }
     end
 
     context "when the first eligible policy is LevellingUpPremiumPayments" do
-      let(:sorted_claims) { [lupp_claim, ecp_claim] }
+      let(:sorted_policies) { [Policies::LevellingUpPremiumPayments, Policies::EarlyCareerPayments] }
 
       it { is_expected.to eq("levellinguppremiumpayments") }
     end

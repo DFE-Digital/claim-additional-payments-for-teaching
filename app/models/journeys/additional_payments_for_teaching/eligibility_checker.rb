@@ -23,6 +23,20 @@ module Journeys
         policies.all? { |policy| policy::PolicyEligibilityChecker.new(journey_session: @journey_session).ineligible? }
       end
 
+      def single_choice_only?
+        policies_eligible_now.one?
+      end
+
+      def policies_eligible_now
+        policies.select { |policy| policy::PolicyEligibilityChecker.new(journey_session: @journey_session).status == :eligible_now }
+      end
+
+      def policies_eligible_now_and_sorted
+        policies_eligible_now.sort_by { |policy|
+          [-policy::PolicyEligibilityChecker.new(journey_session: journey_session).calculate_award_amount, policy.short_name]
+        }
+      end
+
       private
 
       def policies

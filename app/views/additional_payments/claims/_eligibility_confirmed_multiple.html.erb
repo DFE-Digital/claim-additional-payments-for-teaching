@@ -18,12 +18,12 @@
       <%= errors_tag f.object, :selected_claim_policy %>
 
       <div class="govuk-radios" id="claim_base" data-module="govuk-radios">
-        <% claims.each do |claim| %>
+        <% policies.each do |policy| %>
           <div class="govuk-radios__item">
-            <%= f.radio_button(:selected_claim_policy, claim.policy, class: "govuk-radios__input", checked: @form.selected_policy?(claim.policy)) %>
-            <%= f.label "selected_claim_policy_#{claim.policy.to_s.downcase}", "#{award_amount(claim)} #{policy_name(claim)}", class: "govuk-label govuk-radios__label" %>
+            <%= f.radio_button(:selected_claim_policy, policy, class: "govuk-radios__input", checked: @form.selected_policy?(policy)) %>
+            <%= f.label "selected_claim_policy_#{policy.to_s.downcase}", "#{award_amount(@form.award_amount(policy))} #{policy_name(policy)}", class: "govuk-label govuk-radios__label" %>
             <div class="govuk-hint govuk-radios__hint">
-              <%= t("#{claim.policy.locale_key}.purpose") %>
+              <%= t("#{policy.locale_key}.purpose") %>
             </div>
           </div>
         <% end %>

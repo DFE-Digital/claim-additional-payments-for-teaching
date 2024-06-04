@@ -12,12 +12,12 @@ module Claims
       (journey == Journeys::AdditionalPaymentsForTeaching) ? "govuk-label--l" : "govuk-label--xl"
     end
 
-    def policy_name(claim)
-      claim.policy.short_name.downcase.singularize
+    def policy_name(policy)
+      policy.short_name.downcase.singularize
     end
 
-    def award_amount(claim)
-      number_to_currency(claim.award_amount, precision: 0)
+    def award_amount(amount)
+      number_to_currency(amount, precision: 0)
     end
   end
 end
