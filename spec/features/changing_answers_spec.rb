@@ -92,8 +92,9 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     click_on "Continue"
 
-    expect(claim.eligibility.reload.biology_taught).to eq(true)
-    expect(claim.eligibility.chemistry_taught).to eq(true)
+    session.reload
+    expect(session.answers.biology_taught).to eq(true)
+    expect(session.answers.chemistry_taught).to eq(true)
 
     expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "still-teaching"))
 

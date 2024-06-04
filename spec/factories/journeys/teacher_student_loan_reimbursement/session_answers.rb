@@ -42,6 +42,11 @@ FactoryBot.define do
       claim_school_id { create(:school, :student_loans_eligible).id }
     end
 
+    trait :with_subjects_taught do
+      physics_taught { true }
+      taught_eligible_subjects { true }
+    end
+
     trait :submittable do
       with_personal_details
       with_email_details
@@ -50,6 +55,7 @@ FactoryBot.define do
       with_payroll_gender
       with_teacher_reference_number
       with_claim_school
+      with_subjects_taught
     end
   end
 end
