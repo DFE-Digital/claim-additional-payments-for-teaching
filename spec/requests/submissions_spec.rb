@@ -24,7 +24,7 @@ RSpec.describe "Submissions", type: :request do
         )
 
         stub_qualified_teaching_statuses_show(
-          trn: in_progress_claim.teacher_reference_number,
+          trn: answers.teacher_reference_number,
           params: {
             birthdate: answers.date_of_birth&.to_s,
             nino: answers.national_insurance_number
