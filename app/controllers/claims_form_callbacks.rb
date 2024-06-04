@@ -92,7 +92,7 @@ module ClaimsFormCallbacks
   end
 
   def no_postcode?
-    !current_claim.postcode
+    !journey_session.answers.postcode
   end
 
   def update_session_with_selected_policy

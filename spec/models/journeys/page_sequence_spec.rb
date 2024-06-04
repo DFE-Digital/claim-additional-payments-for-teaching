@@ -80,7 +80,16 @@ RSpec.describe Journeys::PageSequence do
         {policy: Policies::StudentLoans, next_slug: "date-of-birth", slug_sequence: OpenStruct.new(slugs: ["postcode-search", "select-home-address", "address", "date-of-birth"])}
       ].each do |scenario|
         context "#{scenario[:policy]} claim" do
-          let(:claim) { build(:claim, policy: scenario[:policy], postcode: "AB12 3CD") }
+          let(:claim) { build(:claim, policy: scenario[:policy]) }
+          let(:journey) { Journeys.for_policy(scenario[:policy]) }
+          let(:journey_session) do
+            build(
+              :"#{journey::I18N_NAMESPACE}_session",
+              answers: {
+                postcode: "AB12 3CD"
+              }
+            )
+          end
           let(:slug_sequence) { scenario[:slug_sequence] }
           let(:current_slug) { "select-home-address" }
           let(:completed_slugs) { ["postcode-search", "select-home-address"] }
@@ -173,7 +182,14 @@ RSpec.describe Journeys::PageSequence do
       let(:completed_slugs) { ["first-slug"] }
 
       context "when claim has a postcode (selected from postcode search)" do
-        let(:claim) { build(:claim, postcode: "AB12 3CD") }
+        let(:journey_session) do
+          build(
+            :student_loans_session,
+            answers: {
+              postcode: "AB12 3CD"
+            }
+          )
+        end
         it { is_expected.to eq(true) }
       end
 

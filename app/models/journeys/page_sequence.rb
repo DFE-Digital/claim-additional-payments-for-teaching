@@ -48,7 +48,7 @@ module Journeys
 
     def has_completed_journey_until?(slug)
       return true if DEAD_END_SLUGS.include?(slug)
-      return true if (slug == "address" || claim.postcode.present?) && incomplete_slugs == ["address"]
+      return true if (slug == "address" || answers.postcode.present?) && incomplete_slugs == ["address"]
       incomplete_slugs.empty?
     end
 
@@ -57,6 +57,8 @@ module Journeys
     end
 
     private
+
+    delegate :answers, to: :@journey_session
 
     def updating_personal_details?
       current_slug == "personal-details"
@@ -69,7 +71,7 @@ module Journeys
     def can_skip_next_slug?
       # This allows 'address' page to be skipped when the postcode is present
       # Occurs when populated from 'postcode-search' and the subsequent 'select-home-address' screens
-      true if current_slug == "select-home-address" && claim.postcode.present?
+      true if current_slug == "select-home-address" && answers.postcode.present?
     end
 
     def lup_policy_and_trainee_teacher_at_lup_school?
