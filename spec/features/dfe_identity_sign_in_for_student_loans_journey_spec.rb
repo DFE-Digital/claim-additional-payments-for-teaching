@@ -94,7 +94,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     expect(answers.claim_school).to eql school
     expect(claim.eligibility.employment_status).to eql("claim_school")
     expect(claim.eligibility.current_school).to eql(school)
-    expect(claim.eligibility.subjects_taught).to eq([:physics_taught])
+    expect(answers.subjects_taught).to eq([:physics_taught])
     expect(claim.eligibility.had_leadership_position?).to eq(true)
     expect(claim.eligibility.mostly_performed_leadership_duties?).to eq(false)
   end
@@ -241,7 +241,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     expect(answers.claim_school).to eql school
     expect(claim.eligibility.employment_status).to eql("claim_school")
     expect(claim.eligibility.current_school).to eql(school)
-    expect(claim.eligibility.subjects_taught).to eq([:physics_taught])
+    expect(answers.subjects_taught).to eq([:physics_taught])
     expect(claim.eligibility.had_leadership_position?).to eq(true)
     expect(claim.eligibility.mostly_performed_leadership_duties?).to eq(false)
   end

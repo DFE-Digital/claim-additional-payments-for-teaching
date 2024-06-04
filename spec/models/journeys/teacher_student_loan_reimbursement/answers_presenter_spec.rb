@@ -18,7 +18,10 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::AnswersPresenter, type
     let(:journey_session) do
       create(
         :student_loans_session,
-        answers: attributes_for(:student_loans_answers, :with_claim_school)
+        answers: attributes_for(
+          :student_loans_answers,
+          :with_claim_school
+        ).merge(subject_attributes)
       )
     end
 

@@ -54,7 +54,7 @@ module Journeys
       def subjects_taught
         [
           subjects_taught_question(school_name: answers.claim_school_name),
-          subject_list(eligibility.subjects_taught),
+          subject_list(answers.subjects_taught),
           "subjects-taught"
         ]
       end
