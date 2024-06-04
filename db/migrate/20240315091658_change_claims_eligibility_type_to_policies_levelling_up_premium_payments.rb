@@ -10,6 +10,7 @@ class ChangeClaimsEligibilityTypeToPoliciesLevellingUpPremiumPayments < ActiveRe
       end
     end
 
-    DfE::Analytics::LoadEntities.new(entity_name: "claims").run
+    entity_tag = Time.now.strftime('%Y%m%d%H%M%S')
+    DfE::Analytics::LoadEntities.new(entity_name: "claims").run(entity_tag:)
   end
 end
