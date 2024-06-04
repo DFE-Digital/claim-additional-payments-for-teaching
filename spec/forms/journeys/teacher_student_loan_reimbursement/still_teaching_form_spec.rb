@@ -3,13 +3,20 @@ require "rails_helper"
 RSpec.describe Journeys::TeacherStudentLoanReimbursement::StillTeachingForm, type: :model do
   before { create(:journey_configuration, :student_loans) }
 
-  let(:claim_school) { build(:school, :student_loans_eligible) }
+  let(:claim_school) { create(:school, :student_loans_eligible) }
   let(:eligibility) { create(:student_loans_eligibility, claim_school:, employment_status: nil) }
   let(:claim) { create(:claim, policy: Policies::StudentLoans, eligibility:) }
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
   let(:claim_params) { {} }
   let(:journey) { Journeys::TeacherStudentLoanReimbursement }
-  let(:journey_session) { build(:student_loans_session) }
+  let(:journey_session) do
+    create(
+      :student_loans_session,
+      answers: {
+        claim_school_id: claim_school.id
+      }
+    )
+  end
 
   subject(:form) do
     described_class.new(
@@ -30,7 +37,9 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::StillTeachingForm, typ
 
   describe "#error_message" do
     context "when the school is closed" do
-      let(:claim_school) { build(:school, :student_loans_eligible, close_date: Date.yesterday) }
+      let(:claim_school) do
+        create(:school, :student_loans_eligible, close_date: Date.yesterday)
+      end
 
       it "does not contain the school name" do
         expect(form.error_message).to eq("Select yes if you are still employed to teach at a school in England")

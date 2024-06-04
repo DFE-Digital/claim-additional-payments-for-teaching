@@ -39,9 +39,9 @@ RSpec.feature "TSLR journey with Teacher ID school playback" do
 
     expect(current_path).to eq("/student-loans/subjects-taught")
 
-    claim = Claim.order(created_at: :desc).limit(1).first
-    expect(claim.eligibility.claim_school.id).to eq(eligible_school.id)
-    expect(claim.eligibility.claim_school_somewhere_else).to eq(false)
+    session = Journeys::TeacherStudentLoanReimbursement::Session.last
+    expect(session.answers.claim_school.id).to eq(eligible_school.id)
+    expect(session.answers.claim_school_somewhere_else).to eq(false)
 
     click_on "Back"
     expect(current_path).to eq("/student-loans/select-claim-school")
@@ -58,9 +58,9 @@ RSpec.feature "TSLR journey with Teacher ID school playback" do
 
     expect(current_path).to eq("/student-loans/ineligible")
 
-    claim = Claim.order(created_at: :desc).limit(1).first
-    expect(claim.eligibility.claim_school.id).to eq(ineligible_school.id)
-    expect(claim.eligibility.claim_school_somewhere_else).to eq(false)
+    session = Journeys::TeacherStudentLoanReimbursement::Session.last
+    expect(session.answers.claim_school.id).to eq(ineligible_school.id)
+    expect(session.answers.claim_school_somewhere_else).to eq(false)
 
     # - Tried all schools button
     click_on("I've tried all of my schools")

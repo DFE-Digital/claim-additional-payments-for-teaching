@@ -32,7 +32,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(page).to have_text(claim_school_question)
 
     choose_school school
-    expect(claim.eligibility.reload.claim_school).to eql school
+    expect(session.reload.answers.claim_school).to eql school
     expect(page).to have_text(subjects_taught_question(school_name: school.name))
 
     check "Physics"
@@ -269,13 +269,14 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
         choose_qts_year
         claim = Claim.by_policy(Policies::StudentLoans).order(:created_at).last
+        session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
 
         expect(claim.eligibility.reload.qts_award_year).to eql("on_or_after_cut_off_date")
 
         expect(page).to have_text(claim_school_question)
 
         choose_school school
-        expect(claim.eligibility.reload.claim_school).to eql school
+        expect(session.reload.answers.claim_school).to eql school
         expect(page).to have_text(subjects_taught_question(school_name: school.name))
 
         check "Physics"

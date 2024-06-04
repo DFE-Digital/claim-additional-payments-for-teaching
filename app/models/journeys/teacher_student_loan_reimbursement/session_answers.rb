@@ -30,6 +30,18 @@ module Journeys
       def policy
         Policies::StudentLoans
       end
+
+      def claim_school
+        @claim_school ||= School.find_by(id: claim_school_id)
+      end
+
+      def claim_school_name
+        claim_school&.name
+      end
+
+      def claim_school_somewhere_else?
+        !!claim_school_somewhere_else
+      end
     end
   end
 end

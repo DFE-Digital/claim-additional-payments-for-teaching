@@ -49,7 +49,8 @@ RSpec.feature "TSLR journey with Teacher ID still teaching school playback" do
     expect(current_path).to eq("/student-loans/leadership-position")
 
     eligibility = Claim.order(created_at: :desc).limit(1).first.eligibility
-    expect(eligibility.claim_school_id).to eq eligible_claim_school.id
+    session = Journeys::TeacherStudentLoanReimbursement::Session.last
+    expect(session.answers.claim_school_id).to eq eligible_claim_school.id
     expect(eligibility.current_school_id).to eq eligible_school.id
     expect(eligibility.employment_status).to eq "recent_tps_school"
 
@@ -62,7 +63,8 @@ RSpec.feature "TSLR journey with Teacher ID still teaching school playback" do
     expect(current_path).to eq("/student-loans/current-school")
 
     eligibility = Claim.order(created_at: :desc).limit(1).first.eligibility
-    expect(eligibility.claim_school_id).to eq eligible_claim_school.id
+    session = Journeys::TeacherStudentLoanReimbursement::Session.last
+    expect(session.answers.claim_school_id).to eq eligible_claim_school.id
     expect(eligibility.current_school_id).to be_nil
     expect(eligibility.employment_status).to eq "different_school"
 
@@ -75,7 +77,8 @@ RSpec.feature "TSLR journey with Teacher ID still teaching school playback" do
     expect(current_path).to eq("/student-loans/ineligible")
 
     eligibility = Claim.order(created_at: :desc).limit(1).first.eligibility
-    expect(eligibility.claim_school_id).to eq eligible_claim_school.id
+    session = Journeys::TeacherStudentLoanReimbursement::Session.last
+    expect(session.answers.claim_school_id).to eq eligible_claim_school.id
     expect(eligibility.current_school_id).to be_nil
     expect(eligibility.employment_status).to eq "no_school"
   end

@@ -14,7 +14,9 @@ module ClaimSessionTimeout
     session.delete(:tps_school_id)
     session.delete(:tps_school_name)
     session.delete(:tps_school_address)
+    session.delete(journey_session_key)
     @current_claim = nil
+    @journey_session = nil
   end
 
   def claim_session_timed_out?

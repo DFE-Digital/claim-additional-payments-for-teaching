@@ -49,6 +49,8 @@ module Policies
       delegate :name, to: :current_school, prefix: true, allow_nil: true
       delegate :academic_year, to: :claim, prefix: true
 
+      delegate :has_student_loan, to: :claim
+
       def policy
         Policies::StudentLoans
       end
@@ -58,25 +60,11 @@ module Policies
       end
 
       def ineligible?
-        ineligible_qts_award_year? ||
-          ineligible_claim_school? ||
-          employed_at_no_school? ||
-          ineligible_current_school? ||
-          not_taught_eligible_subjects? ||
-          not_taught_enough? ||
-          made_zero_repayments?
+        eligibility_checker.ineligible?
       end
 
       def ineligibility_reason
-        [
-          :ineligible_qts_award_year,
-          :ineligible_claim_school,
-          :employed_at_no_school,
-          :ineligible_current_school,
-          :not_taught_eligible_subjects,
-          :not_taught_enough,
-          :made_zero_repayments
-        ].find { |eligibility_check| send(:"#{eligibility_check}?") }
+        eligibility_checker.ineligibility_reason
       end
 
       def award_amount
@@ -100,7 +88,7 @@ module Policies
       end
 
       def ineligible_qts_award_year?
-        awarded_qualified_status_before_cut_off_date?
+        eligibility_checker.awarded_qualified_status_before_cut_off_date?
       end
 
       def select_claim_school_presence_error_message
@@ -109,24 +97,8 @@ module Policies
 
       private
 
-      def ineligible_claim_school?
-        claim_school.present? && !claim_school.eligible_for_student_loans_as_claim_school?
-      end
-
-      def not_taught_eligible_subjects?
-        taught_eligible_subjects == false
-      end
-
-      def not_taught_enough?
-        mostly_performed_leadership_duties == true
-      end
-
-      def made_zero_repayments?
-        claim.present? && claim.has_student_loan == true && student_loan_repayment_amount == 0
-      end
-
-      def ineligible_current_school?
-        current_school.present? && !current_school.eligible_for_student_loans_as_current_school?
+      def eligibility_checker
+        @eligibility_checker ||= EligibilityChecker.new(self)
       end
     end
   end

@@ -5,18 +5,30 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::ClaimSchoolForm do
 
   before { create(:journey_configuration, :student_loans) }
 
-  let(:current_claim) do
-    claims = journey::POLICIES.map { |policy| create(:claim, policy: policy) }
-    CurrentClaim.new(claims: claims)
+  let(:journey_session) do
+    create(
+      :"#{journey::I18N_NAMESPACE}_session",
+      answers: {
+        taught_eligible_subjects: true,
+        biology_taught: true,
+        physics_taught: true,
+        chemistry_taught: true,
+        computing_taught: true,
+        languages_taught: true,
+        employment_status: :claim_school,
+        current_school_id: existing_claim_school_id,
+        claim_school_id: existing_claim_school_id
+      }
+    )
   end
 
-  let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
+  let(:existing_claim_school_id) { nil }
 
   let(:slug) { "claim-school" }
 
   subject(:form) do
     described_class.new(
-      claim: current_claim,
+      claim: CurrentClaim.new(claims: [build(:claim)]),
       journey_session: journey_session,
       journey: journey,
       params: params
@@ -55,19 +67,16 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::ClaimSchoolForm do
   describe "#claim_school_name" do
     let(:params) { ActionController::Parameters.new({slug: slug, claim: {}}) }
 
-    context "claim eligibility DOES NOT have a claim school" do
+    context "when answers DOES NOT have a claim school" do
       it "returns nil" do
         expect(form.claim_school_name).to be_nil
       end
     end
 
-    context "claim eligibility DOES have a claim school" do
+    context "when answers DOES have a claim school" do
       let(:school) { create(:school, :eligible_for_journey, journey: journey) }
 
-      let(:current_claim) do
-        claims = journey::POLICIES.map { |policy| create(:claim, policy: policy, eligibility_attributes: {claim_school: school}) }
-        CurrentClaim.new(claims: claims)
-      end
+      let(:existing_claim_school_id) { school.id }
 
       it "returns school name" do
         expect(form.claim_school_name).to eq school.name
@@ -82,38 +91,22 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::ClaimSchoolForm do
       let(:school) { create(:school, :eligible_for_journey, journey: journey) }
 
       context "claim eligibility didn't have claim_school" do
-        let(:current_claim) do
-          claims = journey::POLICIES.map { |policy| create(:claim, policy: policy) }
-          CurrentClaim.new(claims: claims)
-        end
-
         it "updates the claim_school on claim eligibility" do
           expect(form.save).to be true
 
-          current_claim.claims.each do |claim|
-            eligibility = claim.eligibility.reload
-
-            expect(eligibility.claim_school_id).to eq school.id
-          end
+          expect(journey_session.reload.answers.claim_school_id).to eq school.id
         end
       end
 
       context "claim eligibility already had a claim_school" do
         let(:previous_school) { create(:school, :eligible_for_journey, journey: journey) }
 
-        let(:current_claim) do
-          claims = journey::POLICIES.map { |policy| create(:claim, policy: policy, eligibility_attributes: {claim_school_id: previous_school.id}) }
-          CurrentClaim.new(claims: claims)
-        end
+        let(:existing_claim_school_id) { previous_school.id }
 
         it "updates the claim_school on claim eligibility" do
           expect(form.save).to be true
 
-          current_claim.claims.each do |claim|
-            eligibility = claim.eligibility.reload
-
-            expect(eligibility.claim_school_id).to eq school.id
-          end
+          expect(journey_session.reload.answers.claim_school_id).to eq school.id
         end
       end
 
@@ -125,14 +118,6 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::ClaimSchoolForm do
           expect(form.errors[:claim_school_id]).to eq ["School not found"]
         end
       end
-
-      context "claim model fails validation unexpectedly" do
-        it "raises an error" do
-          allow(current_claim).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
-
-          expect { form.save }.to raise_error(ActiveRecord::RecordInvalid)
-        end
-      end
     end
 
     context "claim_school_id missing" do
@@ -141,6 +126,95 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::ClaimSchoolForm do
       it "does not save and adds error to form" do
         expect(form.save).to be false
         expect(form.errors[:claim_school_id]).to eq ["Select a school from the list or search again for a different school"]
+      end
+    end
+
+    context "when the school has changed" do
+      let(:school) { create(:school, :student_loans_eligible) }
+
+      let(:existing_claim_school_id) { school.id }
+
+      let(:new_school) { create(:school, :student_loans_eligible) }
+
+      let(:params) do
+        ActionController::Parameters.new(
+          {
+            claim: {
+              claim_school_id: new_school.id
+            }
+          }
+        )
+      end
+
+      it "resets the dependent answers" do
+        expect { expect(form.save).to eq true }.to(
+          change { journey_session.reload.answers.claim_school_id }
+          .from(school.id).to(new_school.id)
+          .and(
+            change { journey_session.reload.answers.taught_eligible_subjects }
+            .from(true).to(nil)
+          ).and(
+            change { journey_session.reload.answers.biology_taught }
+            .from(true).to(nil)
+          ).and(
+            change { journey_session.reload.answers.physics_taught }
+            .from(true).to(nil)
+          ).and(
+            change { journey_session.reload.answers.chemistry_taught }
+            .from(true).to(nil)
+          ).and(
+            change { journey_session.reload.answers.computing_taught }
+            .from(true).to(nil)
+          ).and(
+            change { journey_session.reload.answers.languages_taught }
+            .from(true).to(nil)
+          ).and(
+            change { journey_session.reload.answers.employment_status }
+            .from("claim_school").to(nil)
+          ).and(
+            change { journey_session.reload.answers.current_school_id }
+            .from(school.id).to(nil)
+          )
+        )
+      end
+    end
+
+    context "when the claim school has not changed" do
+      let(:school) { create(:school, :student_loans_eligible) }
+
+      let(:existing_claim_school_id) { school.id }
+
+      let(:params) do
+        ActionController::Parameters.new(
+          {
+            claim: {
+              claim_school_id: existing_claim_school_id
+            }
+          }
+        )
+      end
+
+      it "doesn't reset the dependent answers" do
+        expect { expect(form.save).to eq true }.to(
+          not_change { journey_session.reload.answers.claim_school_id }
+          .and(
+            not_change { journey_session.reload.answers.taught_eligible_subjects }
+          ).and(
+            not_change { journey_session.reload.answers.biology_taught }
+          ).and(
+            not_change { journey_session.reload.answers.physics_taught }
+          ).and(
+            not_change { journey_session.reload.answers.chemistry_taught }
+          ).and(
+            not_change { journey_session.reload.answers.computing_taught }
+          ).and(
+            not_change { journey_session.reload.answers.languages_taught }
+          ).and(
+            not_change { journey_session.reload.answers.employment_status }
+          ).and(
+            not_change { journey_session.reload.answers.current_school_id }
+          )
+        )
       end
     end
   end
@@ -179,73 +253,6 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::ClaimSchoolForm do
 
       it "returns true" do
         expect(form.show_multiple_schools_content?).to be true
-      end
-    end
-  end
-
-  describe "#save" do
-    context "when the school has changed" do
-      let(:school) do
-        create(:school, :student_loans_eligible)
-      end
-
-      let(:new_school) do
-        create(:school, :student_loans_eligible)
-      end
-
-      let(:eligibility) do
-        create(
-          :student_loans_eligibility,
-          taught_eligible_subjects: true,
-          biology_taught: true,
-          physics_taught: true,
-          chemistry_taught: true,
-          computing_taught: true,
-          languages_taught: true,
-          employment_status: :claim_school,
-          current_school_id: school.id,
-          claim_school_id: school.id
-        )
-      end
-
-      let(:claim) do
-        create(:claim, eligibility: eligibility)
-      end
-
-      let(:current_claim) do
-        CurrentClaim.new(claims: [claim])
-      end
-
-      let(:params) do
-        ActionController::Parameters.new(
-          {
-            claim: {
-              claim_school_id: new_school.id
-            }
-          }
-        )
-      end
-
-      it "resets the dependent answers" do
-        expect { expect(form.save).to eq true }.to(
-          change { eligibility.reload.claim_school_id }.from(school.id).to(new_school.id).and(
-            change { eligibility.reload.taught_eligible_subjects }.from(true).to(nil)
-          ).and(
-            change { eligibility.reload.biology_taught }.from(true).to(nil)
-          ).and(
-            change { eligibility.reload.physics_taught }.from(true).to(nil)
-          ).and(
-            change { eligibility.reload.chemistry_taught }.from(true).to(nil)
-          ).and(
-            change { eligibility.reload.computing_taught }.from(true).to(nil)
-          ).and(
-            change { eligibility.reload.languages_taught }.from(true).to(nil)
-          ).and(
-            change { eligibility.reload.employment_status }.from("claim_school").to(nil)
-          ).and(
-            change { eligibility.reload.current_school_id }.from(school.id).to(nil)
-          )
-        )
       end
     end
   end

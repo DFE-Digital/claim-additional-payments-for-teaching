@@ -91,7 +91,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     expect(answers.logged_in_with_tid?).to eq(true)
     expect(answers.details_check).to eq(true)
     expect(claim.eligibility.qts_award_year).to eql("on_or_after_cut_off_date")
-    expect(claim.eligibility.claim_school).to eql school
+    expect(answers.claim_school).to eql school
     expect(claim.eligibility.employment_status).to eql("claim_school")
     expect(claim.eligibility.current_school).to eql(school)
     expect(claim.eligibility.subjects_taught).to eq([:physics_taught])
@@ -238,7 +238,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     expect(answers.logged_in_with_tid?).to eq(true)
     expect(answers.details_check).to eq(true)
     expect(claim.eligibility.qts_award_year).to eql("on_or_after_cut_off_date")
-    expect(claim.eligibility.claim_school).to eql school
+    expect(answers.claim_school).to eql school
     expect(claim.eligibility.employment_status).to eql("claim_school")
     expect(claim.eligibility.current_school).to eql(school)
     expect(claim.eligibility.subjects_taught).to eq([:physics_taught])

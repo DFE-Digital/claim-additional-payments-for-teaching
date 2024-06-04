@@ -62,7 +62,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
   scenario "Teacher changes an answer which is a dependency of some of the subsequent answers they've given, remaining eligible" do
     claim = start_student_loans_claim
     claim.update!(attributes_for(:claim, :submittable))
-    claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
+    claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id))
 
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
     session.answers.assign_attributes(
@@ -78,11 +78,12 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     choose_school new_claim_school
 
-    expect(claim.eligibility.reload.claim_school).to eql new_claim_school
-    expect(claim.eligibility.physics_taught).to be_nil
-    expect(claim.eligibility.biology_taught).to be_nil
-    expect(claim.eligibility.employment_status).to be_nil
-    expect(claim.eligibility.current_school).to be_nil
+    session.reload
+    expect(session.answers.claim_school).to eql new_claim_school
+    expect(session.answers.physics_taught).to be_nil
+    expect(session.answers.biology_taught).to be_nil
+    expect(session.answers.employment_status).to be_nil
+    expect(session.answers.current_school).to be_nil
 
     expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "subjects-taught"))
 
@@ -308,7 +309,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
       session.answers.assign_attributes(
         attributes_for(
-          :student_loans_answers,
+          :additional_payments_answers,
           :submittable
         ).merge(personal_details_attributes)
       )
