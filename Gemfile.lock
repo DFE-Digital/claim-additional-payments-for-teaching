@@ -413,6 +413,8 @@ GEM
       rspec-expectations (~> 3.13)
       rspec-mocks (~> 3.13)
       rspec-support (~> 3.13)
+    rspec-retry (0.6.2)
+      rspec-core (> 3.3)
     rspec-support (3.13.1)
     rubocop (1.62.1)
       json (~> 2.3)
@@ -579,6 +581,7 @@ DEPENDENCIES
   rollbar
   rotp
   rspec-rails
+  rspec-retry
   rubyzip
   sass-rails (~> 6.0)
   selenium-webdriver
