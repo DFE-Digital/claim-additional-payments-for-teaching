@@ -44,7 +44,8 @@ RSpec.shared_examples "journey answers presenter" do
           address_line_1: "Flat 1",
           address_line_2: "1 Test Road",
           address_line_3: "Test Town",
-          postcode: "AB1 2CD"
+          postcode: "AB1 2CD",
+          payroll_gender: :dont_know
         }
       )
     end
