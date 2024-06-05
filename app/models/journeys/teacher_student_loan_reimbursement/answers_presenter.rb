@@ -16,7 +16,7 @@ module Journeys
       # [2]: slug for changing the answer.
       def eligibility_answers
         [].tap do |a|
-          a << qts_award_year unless eligibility.claim.qualifications_details_check
+          a << qts_award_year unless answers.qualifications_details_check
           a << claim_school
           a << current_school
           a << subjects_taught

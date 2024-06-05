@@ -6,7 +6,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
 
   let(:journey_session) do
-    build(
+    create(
       :additional_payments_session,
       answers: {
         dqt_teacher_status: dqt_teacher_status
@@ -252,16 +252,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
         it "sets the qualifications_details_check to `false`" do
           expect { form.save }.to(
             change do
-              early_career_payments_claim
-                .reload
-                .qualifications_details_check
-            end.from(nil).to(false).and(
-              change do
-                levelling_up_premium_payments_claim
-                  .reload
-                  .qualifications_details_check
-              end.from(nil).to(false)
-            )
+              journey_session.reload.answers.qualifications_details_check
+            end.from(nil).to(false)
           )
         end
 
@@ -376,16 +368,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
           it "sets the qualifications_details_check to `true`" do
             expect { form.save }.to(
               change do
-                early_career_payments_claim
-                  .reload
-                  .qualifications_details_check
-              end.from(nil).to(true).and(
-                change do
-                  levelling_up_premium_payments_claim
-                    .reload
-                    .qualifications_details_check
-                end.from(nil).to(true)
-              )
+                journey_session.reload.answers.qualifications_details_check
+              end.from(nil).to(true)
             )
           end
 
@@ -454,16 +438,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
           it "sets the qualifications_details_check to `true`" do
             expect { form.save }.to(
               change do
-                early_career_payments_claim
-                  .reload
-                  .qualifications_details_check
-              end.from(nil).to(true).and(
-                change do
-                  levelling_up_premium_payments_claim
-                    .reload
-                    .qualifications_details_check
-                end.from(nil).to(true)
-              )
+                journey_session.reload.answers.qualifications_details_check
+              end.from(nil).to(true)
             )
           end
 

@@ -27,6 +27,13 @@ module Journeys
       def save
         return false unless valid?
 
+        journey_session.answers.assign_attributes(
+          qualifications_details_check: qualifications_details_check
+        )
+
+        # FIXME RL: Remove this once the qualification, eligible_itt_subject,
+        # and itt_academic_year forms are writing to the session and no longer
+        # trigger resetting dependent answers
         claim.assign_attributes(
           qualifications_details_check: qualifications_details_check
         )
@@ -41,7 +48,10 @@ module Journeys
           claim.claims.each { |c| set_nil_qualifications(c.eligibility) }
         end
 
-        claim.save!
+        ApplicationRecord.transaction do
+          journey_session.save!
+          claim.save!
+        end
       end
 
       def dqt_route_into_teaching

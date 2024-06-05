@@ -16,9 +16,8 @@ module Journeys
       def save
         return false unless valid?
 
-        update!(qualifications_details_check: qualifications_details_check)
-
         journey_session.answers.assign_attributes(
+          qualifications_details_check: qualifications_details_check,
           qts_award_year: qts_award_year
         )
 
