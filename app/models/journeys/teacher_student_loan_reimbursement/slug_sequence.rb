@@ -111,7 +111,7 @@ module Journeys
           sequence.delete("teacher-reference-number") if answers.logged_in_with_tid? && answers.teacher_reference_number.present?
 
           if answers.logged_in_with_tid? && answers.details_check?
-            if claim.qualifications_details_check
+            if answers.qualifications_details_check
               sequence.delete("qts-year") if answers.dqt_teacher_record&.qts_award_date
             elsif signed_in_with_dfe_identity_and_details_match? && answers.has_no_dqt_data_for_claim?
               sequence.delete("qualification-details")

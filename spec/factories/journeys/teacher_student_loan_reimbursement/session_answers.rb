@@ -60,6 +60,10 @@ FactoryBot.define do
       qts_award_year { "on_or_after_cut_off_date" }
     end
 
+    trait :with_qualification_details_check do
+      qualifications_details_check { true }
+    end
+
     trait :submittable do
       with_personal_details
       with_email_details
@@ -72,6 +76,7 @@ FactoryBot.define do
       with_employment_status
       with_leadership_position
       with_qts_award_year
+      with_qualification_details_check
     end
   end
 end
