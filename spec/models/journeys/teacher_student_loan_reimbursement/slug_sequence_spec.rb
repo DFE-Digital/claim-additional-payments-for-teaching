@@ -34,7 +34,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
     end
 
     it "excludes “current-school” if the claimant still works at the school they are claiming against" do
-      claim.eligibility.employment_status = :claim_school
+      journey_session.answers.employment_status = :claim_school
 
       expect(slug_sequence.slugs).not_to include("current-school")
     end

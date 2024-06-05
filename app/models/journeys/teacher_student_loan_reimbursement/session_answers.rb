@@ -52,6 +52,22 @@ module Journeys
           :languages_taught
         ].select { |subject| public_send(subject) }
       end
+
+      def employed_at_no_school?
+        employment_status.to_s == "no_school"
+      end
+
+      def employed_at_different_school?
+        employment_status.to_s == "different_school"
+      end
+
+      def employed_at_claim_school?
+        employment_status.to_s == "claim_school"
+      end
+
+      def employed_at_recent_tps_school?
+        employment_status.to_s == "recent_tps_school"
+      end
     end
   end
 end

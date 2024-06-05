@@ -47,6 +47,10 @@ FactoryBot.define do
       taught_eligible_subjects { true }
     end
 
+    trait :with_employment_status do
+      employment_status { :claim_school }
+    end
+
     trait :submittable do
       with_personal_details
       with_email_details
@@ -56,6 +60,7 @@ FactoryBot.define do
       with_teacher_reference_number
       with_claim_school
       with_subjects_taught
+      with_employment_status
     end
   end
 end

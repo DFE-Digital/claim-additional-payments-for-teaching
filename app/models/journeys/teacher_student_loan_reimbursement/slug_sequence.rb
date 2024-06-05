@@ -81,7 +81,7 @@ module Journeys
           end
 
           sequence.delete("reset-claim") if skipped_dfe_sign_in? || answers.details_check?
-          sequence.delete("current-school") if claim.eligibility.employed_at_claim_school? || claim.eligibility.employed_at_recent_tps_school?
+          sequence.delete("current-school") if answers.employed_at_claim_school? || answers.employed_at_recent_tps_school?
           sequence.delete("mostly-performed-leadership-duties") unless claim.eligibility.had_leadership_position?
           sequence.delete("personal-bank-account") if answers.building_society?
           sequence.delete("building-society-account") if answers.personal_bank_account?

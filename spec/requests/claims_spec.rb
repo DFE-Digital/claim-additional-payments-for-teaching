@@ -144,7 +144,9 @@ RSpec.describe "Claims", type: :request do
       before { start_student_loans_claim }
 
       it "renders a static ineligibility page" do
-        Claim.by_policy(Policies::StudentLoans).order(:created_at).last.eligibility.update(employment_status: "no_school")
+        journey_session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
+        journey_session.answers.assign_attributes(employment_status: "no_school")
+        journey_session.save!
 
         get claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "ineligible")
 
