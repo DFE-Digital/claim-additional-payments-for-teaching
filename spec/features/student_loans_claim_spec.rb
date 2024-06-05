@@ -40,8 +40,8 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(page).to have_text(I18n.t("student_loans.forms.still_teaching.questions.claim_school"))
 
     choose_still_teaching("Yes, at #{school.name}")
-    expect(claim.eligibility.reload.employment_status).to eql("claim_school")
-    expect(claim.eligibility.current_school).to eql(school)
+    expect(session.reload.answers.employment_status).to eql("claim_school")
+    expect(session.answers.current_school).to eql(school)
 
     expect(session.reload.answers.subjects_taught).to eq([:physics_taught])
 
@@ -284,8 +284,8 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
         expect(page).to have_text(I18n.t("student_loans.forms.still_teaching.questions.claim_school"))
 
         choose_still_teaching("Yes, at #{school.name}")
-        expect(claim.eligibility.reload.employment_status).to eql("claim_school")
-        expect(claim.eligibility.current_school).to eql(school)
+        expect(session.reload.answers.employment_status).to eql("claim_school")
+        expect(session.answers.current_school).to eql(school)
 
         expect(session.reload.answers.subjects_taught).to eq([:physics_taught])
 
@@ -308,13 +308,14 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
   scenario "currently works at a different school to the claim school" do
     different_school = create(:school, :student_loans_eligible)
     claim = start_student_loans_claim
+    session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
 
     choose_school school
     choose_subjects_taught
 
     choose_still_teaching("Yes, at another school")
 
-    expect(claim.eligibility.reload.employment_status).to eql("different_school")
+    expect(session.reload.answers.employment_status).to eql("different_school")
 
     fill_in :school_search, with: different_school.name
     click_on "Continue"

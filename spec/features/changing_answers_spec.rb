@@ -100,8 +100,8 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     choose_still_teaching "Yes, at Claim School"
 
-    expect(claim.eligibility.reload.employment_status).to eql("claim_school")
-    expect(claim.eligibility.current_school).to eql new_claim_school
+    expect(session.reload.answers.employment_status).to eql("claim_school")
+    expect(session.answers.current_school).to eql new_claim_school
 
     expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "check-your-answers"))
   end

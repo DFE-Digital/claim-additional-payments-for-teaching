@@ -72,13 +72,14 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   end
 
   scenario "no longer teaching" do
-    claim = start_student_loans_claim
+    start_student_loans_claim
+    session = Journeys::TeacherStudentLoanReimbursement::Session.last
     choose_school school
     choose_subjects_taught
 
     choose_still_teaching "No"
 
-    expect(claim.eligibility.reload.employment_status).to eq("no_school")
+    expect(session.reload.answers.employment_status).to eq("no_school")
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text("You can only get this payment if you’re still employed to teach at a state-funded secondary school.")
   end
