@@ -28,8 +28,12 @@ module Journeys
         end
       end
 
+      def eligibility_checker
+        main_policy::EligibilityChecker.new(answers)
+      end
+
       def calculate_award_amount(eligibility)
-        eligibility.award_amount = eligibility.calculate_award_amount
+        eligibility.award_amount = eligibility_checker.calculate_award_amount
       end
 
       def generate_policy_options_provided
@@ -46,7 +50,11 @@ module Journeys
       end
 
       def eligible_now
-        eligibilities.select { |e| e.status == :eligible_now }
+        eligibility_checkers { |e| e.status == :eligible_now }
+      end
+
+      def eligibility_checkers
+        @eligibility_checkers ||= AdditionalPaymentsForTeaching.eligibility_checkers(answers)
       end
     end
   end

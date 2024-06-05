@@ -1,8 +1,8 @@
 module Policies
   module LevellingUpPremiumPayments
     class Eligibility < ApplicationRecord
-      include Eligible
-      include EligibilityCheckable
+      #include Eligible
+      #include EligibilityCheckable
       include ActiveSupport::NumberHelper
 
       self.table_name = "levelling_up_premium_payments_eligibilities"
@@ -59,6 +59,10 @@ module Policies
         none_of_the_above: 4,
         computing: 5
       }, _prefix: :itt_subject
+
+      def policy
+        Policies::LevellingUpPremiumPayments
+      end
 
       def reset_dependent_answers(reset_attrs = [])
         attrs = ineligible? ? changed.concat(reset_attrs) : changed

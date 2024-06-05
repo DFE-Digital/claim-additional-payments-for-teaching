@@ -83,12 +83,6 @@ module Journeys
       def initialize(claim, journey_session)
         @claim = claim
         @journey_session = journey_session
-
-        shim = Journeys.for_routing_name(journey_session.journey)::ClaimJourneySessionShim.new(
-          current_claim: claim,
-          journey_session: journey_session
-        )
-        @overall_eligibility_status = EligibilityChecker.new(journey_session: shim).status
       end
 
       # Even though we are inside the ECP namespace, this method can modify the
@@ -261,6 +255,32 @@ module Journeys
         return false if skipped_dfe_sign_in_or_details_did_not_match?
 
         answers.teacher_id_user_info[field].present?
+      end
+
+      # NOTE RL FOR COMMIT MESSAGE - moved this as we only use it here
+      def overall_eligibility_status
+        return @overall_eligibility_status if defined?(@overall_eligibility_status)
+
+        if eligibility_checkers.any?(&:status) == :eligible_now
+          @overall_eligibility_status = :eligible_now
+        elsif eligibility_checkers.any?(&:status) == :eligible_later
+          @overall_eligibility_status = :eligible_later
+        elsif eligibility_checkers.all?(&:status) == :ineligible
+          @overall_eligibility_status = :ineligible
+        else
+          @overall_eligibility_status = :undetermined
+        end
+      end
+
+      def eligibility_checkers
+        @eligibility_checkers ||= AdditionalPaymentsForTeaching.eligibility_checkers
+      end
+
+      def shim
+        @shim = AdditionalPaymentsForTeaching::ClaimJourneySessionShim.new(
+          current_claim: claim,
+          journey_session: journey_session
+        )
       end
     end
   end

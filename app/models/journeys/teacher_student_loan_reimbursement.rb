@@ -25,5 +25,9 @@ module Journeys
         "select-home-address" => SelectHomeAddressForm
       }
     }.freeze
+
+    def self.eligibility_checkers(answers)
+      POLICIES.map { |policy| policy::EligibilityChecker.new(shim.answers) }
+    end
   end
 end

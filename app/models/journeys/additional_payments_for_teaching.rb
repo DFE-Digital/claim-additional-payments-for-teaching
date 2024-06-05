@@ -34,5 +34,9 @@ module Journeys
         "email-verification" => Reminders::EmailVerificationForm
       }
     }.freeze
+
+    def self.eligibility_checkers(answers)
+      POLICIES.map { |policy| policy::EligibilityChecker.new(answers) }
+    end
   end
 end

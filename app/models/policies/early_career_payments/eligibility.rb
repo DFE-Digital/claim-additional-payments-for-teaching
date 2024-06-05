@@ -1,8 +1,8 @@
 module Policies
   module EarlyCareerPayments
     class Eligibility < ApplicationRecord
-      include Eligible
-      include EligibilityCheckable
+      #include Eligible
+      #include EligibilityCheckable
 
       AMENDABLE_ATTRIBUTES = [:award_amount].freeze
       ATTRIBUTE_DEPENDENCIES = {
@@ -70,6 +70,10 @@ module Policies
       delegate :name, to: :current_school, prefix: true, allow_nil: true
 
       delegate :academic_year, to: :claim
+
+      def policy
+        Policies::EarlyCareerPayments
+      end
 
       # Rescues from errors for assignments coming from LUP-only fields
       # eg. `claim.eligibility.eligible_degree_subject = true` will get ignored

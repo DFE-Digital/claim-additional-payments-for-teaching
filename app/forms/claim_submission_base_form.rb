@@ -121,7 +121,7 @@ class ClaimSubmissionBaseForm
   end
 
   def claim_is_eligible
-    if main_eligibility.ineligible?
+    if eligibility_checker.ineligible?
       errors.add(:base, i18n_error_message(:ineligible))
     end
   end
