@@ -16,19 +16,21 @@ class CurrentSchoolForm < Form
     return false unless valid?
 
     journey_session.answers.assign_attributes(current_school_id:)
-    journey_session.save
-    update!({"eligibility_attributes" => {"current_school_id" => current_school_id}})
+    journey_session.save!
+    update!("eligibility_attributes" => {"current_school_id" => current_school_id})
   end
 
-  def current_school_name
-    claim.eligibility.current_school_name
-  end
+  delegate :name, to: :current_school, prefix: true, allow_nil: true
 
   def no_search_results?
     params[:school_search].present? && errors.empty?
   end
 
   private
+
+  def current_school
+    @current_school ||= School.find_by(id: current_school_id)
+  end
 
   def load_schools
     return unless params[:school_search]
@@ -41,8 +43,8 @@ class CurrentSchoolForm < Form
   end
 
   def current_school_must_be_open
-    if (school = School.find_by(id: current_school_id))
-      errors.add(:current_school_id, i18n_errors_path("the_selected_school_is_closed")) unless school.open?
+    if current_school
+      errors.add(:current_school_id, i18n_errors_path("the_selected_school_is_closed")) unless current_school.open?
     else
       errors.add(:current_school_id, i18n_errors_path("school_not_found"))
     end

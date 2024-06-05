@@ -236,9 +236,10 @@ module Journeys
       end
 
       def ecp_school_selected?
-        return false unless claim.eligibility.current_school
+        school = answers&.current_school || claim.eligibility.current_school
+        return false unless school
 
-        Policies::EarlyCareerPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible?
+        Policies::EarlyCareerPayments::SchoolEligibility.new(school).eligible?
       end
 
       # We only retrieve dqt teacher status when the user is signed in with DfE

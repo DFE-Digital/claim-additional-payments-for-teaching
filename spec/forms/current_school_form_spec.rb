@@ -84,7 +84,7 @@ RSpec.describe CurrentSchoolForm do
         let(:params) { ActionController::Parameters.new({slug: slug, claim: {current_school_id: school.id}}) }
         let(:school) { create(:school, :eligible_for_journey, journey: journey) }
 
-        it 'updates the journey_session' do
+        it "updates the journey_session" do
           expect { form.save }.to change { journey_session.reload.answers.current_school_id }.to(school.id)
         end
 
