@@ -18,10 +18,6 @@ variable "common_tags" {
   type        = map(string)
   description = "Map of the mandatory standard DfE tags"
 }
-variable "app_name" {
-  type        = string
-  description = "Identifier for review apps"
-}
 variable "db_host" {
   type        = string
   description = "FQDN of the postgres app database server"
@@ -53,11 +49,6 @@ variable "bypass_dfe_sign_in" {
   description = "Bypass DFE Sign-In authentication and use a default role"
 }
 
-variable "pr_number" {
-  type        = string
-  description = "Pull Request Number for Review App"
-}
-
 variable "suppress_dfe_analytics_init" {
   type        = string
   description = "Stop DfE-analytics from booting"
@@ -78,7 +69,7 @@ variable keyvault_cert_name {
 locals {
   stash_port         = var.rg_prefix == "s118p01" ? "23888" : "17000"
 
-  app_service_name = var.app_name == null ? format("%s-%s", var.app_rg_name, "as") : format("%s-%s-%s", var.app_rg_name, var.app_name, "as")
+  app_service_name = format("%s-%s", var.app_rg_name, "as")
   canonical_hostname = var.canonical_hostname != null ? var.canonical_hostname : "${local.app_service_name}.azurewebsites.net"
 
   docker_registry = "index.docker.io"
@@ -129,7 +120,6 @@ locals {
     "WORKER_COUNT"                                   = "4"
     "DOCKER_REGISTRY_SERVER_URL"                     = "https://${local.docker_registry}"
     "BYPASS_DFE_SIGN_IN"                             = var.bypass_dfe_sign_in
-    "PR_NUMBER"                                      = var.pr_number
     "TID_SIGN_IN_ISSUER"                             = data.azurerm_key_vault_secret.TidSignInIssuer.value
     "TID_SIGN_IN_API_ENDPOINT"                       = data.azurerm_key_vault_secret.TidSignInApiEndpoint.value
     "TID_BASE_URL"                                   = data.azurerm_key_vault_secret.TidBaseUrl.value

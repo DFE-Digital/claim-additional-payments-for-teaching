@@ -43,12 +43,6 @@ variable "bypass_dfe_sign_in" {
   default     = false
 }
 
-variable "pr_number" {
-  type        = string
-  description = "Pull Request Number for Review App"
-  default     = null
-}
-
 variable "suppress_dfe_analytics_init" {
   type        = string
   description = "Stop DfE-analytics from booting"
@@ -74,8 +68,7 @@ variable statuscake_alerts {
 }
 
 locals {
-  app_name = var.pr_number == null ? null : "pr-${var.pr_number}"
-  db_name         = local.app_name == null ? var.environment : "${var.environment}-${local.app_name}"
+  db_name         = var.environment
   create_db_list  = var.create_database ? [local.db_name] : []
   app_rg_name = format("%s-%s", var.rg_prefix, "app")
   tags = {
