@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_05_124110) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_05_141826) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -97,6 +97,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_05_124110) do
     t.boolean "submitted_using_slc_data", default: false
     t.datetime "sent_one_time_password_at"
     t.uuid "journeys_session_id"
+    t.text "test_column", default: "test"
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"

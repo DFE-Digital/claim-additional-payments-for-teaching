@@ -101,6 +101,7 @@ shared:
     - dqt_teacher_status
     - submitted_using_slc_data
     - journeys_session_id
+    - test_column
   :decisions:
     - id
     - result
