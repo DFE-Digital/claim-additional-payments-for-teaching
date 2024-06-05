@@ -3,25 +3,14 @@ require "rails_helper"
 RSpec.describe Journeys::TeacherStudentLoanReimbursement::MostlyPerformedLeadershipDutiesForm do
   let(:journey) { Journeys::TeacherStudentLoanReimbursement }
 
-  let(:eligibility) do
+  let(:journey_session) do
     create(
-      :student_loans_eligibility,
-      mostly_performed_leadership_duties: true,
-      had_leadership_position: true
+      :student_loans_session,
+      answers: {
+        had_leadership_position: true
+      }
     )
   end
-
-  let(:claim) do
-    create(
-      :claim,
-      policy: Policies::StudentLoans,
-      eligibility: eligibility
-    )
-  end
-
-  let(:journey_session) { build(:student_loans_session) }
-
-  let(:current_claim) { CurrentClaim.new(claims: [claim]) }
 
   let(:params) do
     ActionController::Parameters.new(
@@ -35,7 +24,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::MostlyPerformedLeaders
     described_class.new(
       journey: journey,
       journey_session: journey_session,
-      claim: current_claim,
+      claim: CurrentClaim.new(claims: [build(:claim)]),
       params: params
     )
   end
@@ -70,9 +59,9 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::MostlyPerformedLeaders
     let(:mostly_performed_leadership_duties) { true }
 
     it "updates the eligibility with the mostly_performed_leadership_duties" do
-      expect(eligibility.mostly_performed_leadership_duties).to(
-        eq(true)
-      )
+      expect(
+        journey_session.answers.mostly_performed_leadership_duties
+      ).to(eq(true))
     end
   end
 end

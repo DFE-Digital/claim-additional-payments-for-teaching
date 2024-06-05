@@ -10,7 +10,11 @@ RSpec.feature "Claims with different eligibilities content change logic" do
   end
 
   it "shows the correct subjects for LUP-only and ECP claims" do
-    jump_to_claim_journey_page(claim, "itt-year")
+    jump_to_claim_journey_page(
+      claim: claim,
+      slug: "itt-year",
+      journey_session: Journeys::AdditionalPaymentsForTeaching::Session.last
+    )
     choose "2017 to 2018"
     click_on "Continue"
     expected_subjects = ["Chemistry", "Computing", "Mathematics", "Physics", "None of the above"]

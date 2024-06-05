@@ -66,7 +66,11 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
 
         session.update!(answers: {provide_mobile_number: true})
 
-        jump_to_claim_journey_page(claim, "mobile-number")
+        jump_to_claim_journey_page(
+          claim: claim,
+          slug: "mobile-number",
+          journey_session: session
+        )
         expect(session.reload.answers.provide_mobile_number).to eql true
 
         # - Mobile number

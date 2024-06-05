@@ -97,7 +97,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   end
 
   scenario "was in a leadership position and performed leadership duties for more than half of their time" do
-    claim = start_student_loans_claim
+    start_student_loans_claim
     choose_school school
     check "Biology"
     click_on "Continue"
@@ -110,7 +110,8 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     choose "Yes"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.mostly_performed_leadership_duties?).to eq(true)
+    session = Journeys::TeacherStudentLoanReimbursement::Session.last
+    expect(session.answers.mostly_performed_leadership_duties?).to eq(true)
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text("You can only get this payment if you spent less than half your working hours performing leadership duties between #{Policies::StudentLoans.current_financial_year}.")
   end

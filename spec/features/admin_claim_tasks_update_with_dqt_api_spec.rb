@@ -31,7 +31,11 @@ RSpec.feature "Admin claim tasks update with DQT API" do
       claim.eligibility = create("#{policy_underscored}_eligibility", :eligible)
       claim.save!
 
-      jump_to_claim_journey_page(claim, "check-your-answers")
+      jump_to_claim_journey_page(
+        claim: claim,
+        slug: "check-your-answers",
+        journey_session: journey_session
+      )
 
       (claim_attributes[:policy] == Policies::EarlyCareerPayments) ? click_on("Accept and send") : click_on("Confirm and send")
     end

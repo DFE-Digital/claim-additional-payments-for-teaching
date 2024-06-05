@@ -49,13 +49,13 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     choose "Yes"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.had_leadership_position?).to eq(true)
+    expect(session.reload.answers.had_leadership_position?).to eq(true)
 
     expect(page).to have_text(mostly_performed_leadership_duties_question)
     choose "No"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.mostly_performed_leadership_duties?).to eq(false)
+    expect(session.reload.answers.mostly_performed_leadership_duties?).to eq(false)
 
     expect(page).to have_text("you can claim back the student loan repayments you made between #{Policies::StudentLoans.current_financial_year}.")
     click_on "Continue"
@@ -293,13 +293,13 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
         choose "Yes"
         click_on "Continue"
 
-        expect(claim.eligibility.reload.had_leadership_position?).to eq(true)
+        expect(session.reload.answers.had_leadership_position?).to eq(true)
 
         expect(page).to have_text(mostly_performed_leadership_duties_question)
         choose "No"
         click_on "Continue"
 
-        expect(claim.eligibility.reload.mostly_performed_leadership_duties?).to eq(false)
+        expect(session.reload.answers.mostly_performed_leadership_duties?).to eq(false)
         expect(page).to have_text("you can claim back the student loan repayments you made between #{Policies::StudentLoans.current_financial_year}.")
       end
     end

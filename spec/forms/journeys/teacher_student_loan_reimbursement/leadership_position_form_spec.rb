@@ -3,25 +3,17 @@ require "rails_helper"
 RSpec.describe Journeys::TeacherStudentLoanReimbursement::LeadershipPositionForm do
   let(:journey) { Journeys::TeacherStudentLoanReimbursement }
 
-  let(:eligibility) do
-    create(
-      :student_loans_eligibility,
-      mostly_performed_leadership_duties: true,
-      had_leadership_position: true
-    )
-  end
-
-  let(:claim) do
-    create(
-      :claim,
-      policy: Policies::StudentLoans,
-      eligibility: eligibility
-    )
-  end
-
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
 
-  let(:journey_session) { build(:student_loans_session) }
+  let(:journey_session) do
+    create(
+      :student_loans_session,
+      answers: {
+        had_leadership_position: true,
+        mostly_performed_leadership_duties: true
+      }
+    )
+  end
 
   let(:params) do
     ActionController::Parameters.new(
@@ -33,7 +25,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::LeadershipPositionForm
     described_class.new(
       journey: journey,
       journey_session: journey_session,
-      claim: current_claim,
+      claim: CurrentClaim.new(claims: [build(:claim)]),
       params: params
     )
   end
@@ -71,11 +63,15 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::LeadershipPositionForm
       let(:had_leadership_position) { true }
 
       it "doesn't update the eligibility had_leadership_position attribute" do
-        expect(eligibility.reload.had_leadership_position).to eq(true)
+        expect(
+          journey_session.reload.answers.had_leadership_position
+        ).to eq(true)
       end
 
       it "doesn't reset the mostly_performed_leadership_duties attribute" do
-        expect(eligibility.reload.mostly_performed_leadership_duties).to eq(true)
+        expect(
+          journey_session.reload.answers.mostly_performed_leadership_duties
+        ).to eq(true)
       end
     end
 
@@ -83,11 +79,15 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::LeadershipPositionForm
       let(:had_leadership_position) { false }
 
       it "updates the eligibility had_leadership_position attribute" do
-        expect(eligibility.reload.had_leadership_position).to eq(false)
+        expect(
+          journey_session.reload.answers.had_leadership_position
+        ).to eq(false)
       end
 
       it "resets the mostly_performed_leadership_duties attribute" do
-        expect(eligibility.reload.mostly_performed_leadership_duties).to eq(nil)
+        expect(
+          journey_session.reload.answers.mostly_performed_leadership_duties
+        ).to eq(nil)
       end
     end
   end

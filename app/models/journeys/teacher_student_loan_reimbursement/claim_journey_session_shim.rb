@@ -23,8 +23,8 @@ module Journeys
               physics_taught: journey_session.answers.physics_taught,
               taught_eligible_subjects: journey_session.answers.taught_eligible_subjects,
               student_loan_repayment_amount: student_loan_repayment_amount,
-              had_leadership_position: had_leadership_position,
-              mostly_performed_leadership_duties: mostly_performed_leadership_duties,
+              had_leadership_position: journey_session.answers.had_leadership_position,
+              mostly_performed_leadership_duties: journey_session.answers.mostly_performed_leadership_duties,
               claim_school_somewhere_else: journey_session.answers.claim_school_somewhere_else
             }
           )
@@ -43,14 +43,6 @@ module Journeys
 
       def student_loan_repayment_amount
         journey_session.answers.student_loan_repayment_amount || try_eligibility(:student_loan_repayment_amount)
-      end
-
-      def had_leadership_position
-        journey_session.answers.had_leadership_position || try_eligibility(:had_leadership_position)
-      end
-
-      def mostly_performed_leadership_duties
-        journey_session.answers.mostly_performed_leadership_duties || try_eligibility(:mostly_performed_leadership_duties)
       end
     end
   end

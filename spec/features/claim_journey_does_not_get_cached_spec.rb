@@ -13,7 +13,11 @@ RSpec.feature "Claim journey does not get cached" do
     claim.eligibility = create(:student_loans_eligibility, :eligible)
     claim.save!
 
-    jump_to_claim_journey_page(claim, "check-your-answers")
+    jump_to_claim_journey_page(
+      claim: claim,
+      slug: "check-your-answers",
+      journey_session: journey_session
+    )
 
     expect(page).to have_text(claim.first_name)
 
@@ -21,7 +25,11 @@ RSpec.feature "Claim journey does not get cached" do
 
     expect(current_path).to eq(claim_confirmation_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME))
 
-    jump_to_claim_journey_page(claim, "check-your-answers")
+    jump_to_claim_journey_page(
+      claim: claim,
+      slug: "check-your-answers",
+      journey_session: journey_session
+    )
 
     expect(page).to_not have_text(claim.first_name)
     expect(page).to have_text("Use DfE Identity to sign in")
