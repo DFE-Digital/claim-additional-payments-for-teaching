@@ -32,9 +32,9 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     visit new_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
     skip_tid
     choose_qts_year(:before_cut_off_date)
-    claim = Claim.by_policy(Policies::StudentLoans).order(:created_at).last
+    session = Journeys::TeacherStudentLoanReimbursement::Session.last
 
-    expect(claim.eligibility.reload.qts_award_year).to eql("before_cut_off_date")
+    expect(session.answers.qts_award_year).to eql("before_cut_off_date")
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text("You can only get this payment if you completed your initial teacher training between the start of the 2014 to 2015 academic year and the end of the 2020 to 2021 academic year.")
 

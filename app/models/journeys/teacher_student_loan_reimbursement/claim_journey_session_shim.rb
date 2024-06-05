@@ -12,7 +12,7 @@ module Journeys
         @answers ||= SessionAnswers.new(
           super.merge(
             {
-              qts_award_year: qts_award_year,
+              qts_award_year: journey_session.answers.qts_award_year,
               claim_school_id: journey_session.answers.claim_school_id,
               current_school_id: current_school_id,
               employment_status: journey_session.answers.employment_status,
@@ -32,10 +32,6 @@ module Journeys
       end
 
       private
-
-      def qts_award_year
-        journey_session.answers.qts_award_year || try_eligibility(:qts_award_year)
-      end
 
       def current_school_id
         journey_session.answers.current_school_id || try_eligibility(:current_school_id)

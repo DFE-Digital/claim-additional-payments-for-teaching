@@ -56,6 +56,10 @@ FactoryBot.define do
       mostly_performed_leadership_duties { false }
     end
 
+    trait :with_qts_award_year do
+      qts_award_year { "on_or_after_cut_off_date" }
+    end
+
     trait :submittable do
       with_personal_details
       with_email_details
@@ -67,6 +71,7 @@ FactoryBot.define do
       with_subjects_taught
       with_employment_status
       with_leadership_position
+      with_qts_award_year
     end
   end
 end
