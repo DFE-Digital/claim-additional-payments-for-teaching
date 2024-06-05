@@ -191,7 +191,7 @@ RSpec.describe "Claims", type: :request do
         put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "qts-year"), params: {claim: {qts_award_year: "on_or_after_cut_off_date"}}
 
         expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"))
-        expect(in_progress_claim.reload.eligibility.qts_award_year).to eq "on_or_after_cut_off_date"
+        expect(journey_session.reload.answers.qts_award_year).to eq "on_or_after_cut_off_date"
       end
 
       it "makes sure validations appropriate to the context are run" do
