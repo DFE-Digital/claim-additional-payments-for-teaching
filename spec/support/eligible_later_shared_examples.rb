@@ -15,10 +15,21 @@ RSpec.shared_examples "Eligible later" do |opts|
       )
 
       journey_session.answers.assign_attributes(
-        attributes_for(:additional_payments_answers, :submittable)
+        attributes_for(
+          :additional_payments_answers,
+          :submittable,
+          itt_academic_year: itt_academic_year,
+          eligible_itt_subject: itt_subject,
+          qualification: qualification,
+          current_school_id: current_school.id
+        )
       )
 
-      jump_to_claim_journey_page(claim, "check-your-answers-part-one")
+      jump_to_claim_journey_page(
+        claim: claim,
+        slug: "check-your-answers-part-one",
+        journey_session: journey_session
+      )
 
       expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
       expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.secondary_heading"))

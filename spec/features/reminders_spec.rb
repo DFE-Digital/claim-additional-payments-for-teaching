@@ -26,7 +26,11 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           expect(claim.policy).to eq Policies::EarlyCareerPayments
           expect(claim.eligibility.reload.eligible_itt_subject).to eq args[:subject]
 
-          jump_to_claim_journey_page(claim, "itt-year")
+          jump_to_claim_journey_page(
+            claim:,
+            slug: "itt-year",
+            journey_session: build(:additional_payments_session)
+          )
 
           choose args[:cohort]
           click_on "Continue"
@@ -98,7 +102,11 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           expect(claim.policy).to eq Policies::EarlyCareerPayments
           expect(claim.eligibility.reload.eligible_itt_subject).to eq args[:subject]
 
-          jump_to_claim_journey_page(claim, "itt-year")
+          jump_to_claim_journey_page(
+            claim:,
+            slug: "itt-year",
+            journey_session: build(:additional_payments_session)
+          )
 
           choose args[:cohort]
           click_on "Continue"

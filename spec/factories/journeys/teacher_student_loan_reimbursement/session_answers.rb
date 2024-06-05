@@ -51,6 +51,11 @@ FactoryBot.define do
       employment_status { :claim_school }
     end
 
+    trait :with_leadership_position do
+      had_leadership_position { true }
+      mostly_performed_leadership_duties { false }
+    end
+
     trait :submittable do
       with_personal_details
       with_email_details
@@ -61,6 +66,7 @@ FactoryBot.define do
       with_claim_school
       with_subjects_taught
       with_employment_status
+      with_leadership_position
     end
   end
 end
