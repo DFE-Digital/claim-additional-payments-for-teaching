@@ -13,7 +13,7 @@ module Journeys
           super.merge(
             {
               qts_award_year: qts_award_year,
-              claim_school_id: claim_school_id,
+              claim_school_id: journey_session.answers.claim_school_id,
               current_school_id: current_school_id,
               employment_status: employment_status,
               biology_taught: biology_taught,
@@ -25,7 +25,7 @@ module Journeys
               student_loan_repayment_amount: student_loan_repayment_amount,
               had_leadership_position: had_leadership_position,
               mostly_performed_leadership_duties: mostly_performed_leadership_duties,
-              claim_school_somewhere_else: claim_school_somewhere_else
+              claim_school_somewhere_else: journey_session.answers.claim_school_somewhere_else
             }
           )
         )
@@ -35,10 +35,6 @@ module Journeys
 
       def qts_award_year
         journey_session.answers.qts_award_year || try_eligibility(:qts_award_year)
-      end
-
-      def claim_school_id
-        journey_session.answers.claim_school_id || try_eligibility(:claim_school_id)
       end
 
       def current_school_id
@@ -83,10 +79,6 @@ module Journeys
 
       def mostly_performed_leadership_duties
         journey_session.answers.mostly_performed_leadership_duties || try_eligibility(:mostly_performed_leadership_duties)
-      end
-
-      def claim_school_somewhere_else
-        journey_session.answers.claim_school_somewhere_else || try_eligibility(:claim_school_somewhere_else)
       end
     end
   end

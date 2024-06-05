@@ -48,10 +48,11 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   end
 
   scenario "chooses an ineligible claim school" do
-    claim = start_student_loans_claim
+    start_student_loans_claim
+    session = Journeys::TeacherStudentLoanReimbursement::Session.last
     choose_school ineligible_school
 
-    expect(claim.eligibility.reload.claim_school).to eq ineligible_school
+    expect(session.reload.answers.claim_school).to eq ineligible_school
     expect(page).to have_text("This school is not eligible")
     expect(page).to have_text("#{ineligible_school.name} is not an eligible school.")
   end

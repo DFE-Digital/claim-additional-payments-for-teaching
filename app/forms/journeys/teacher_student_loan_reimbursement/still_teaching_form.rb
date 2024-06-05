@@ -21,7 +21,7 @@ module Journeys
         if journey_session.logged_in_with_tid_and_has_recent_tps_school?
           journey_session.recent_tps_school
         else
-          claim.eligibility.claim_school
+          answers.claim_school
         end
       end
 

@@ -25,9 +25,11 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
     it "excludes the “ineligible” slug if the claim is not actually ineligible" do
       expect(claim.eligibility).not_to be_ineligible
       expect(slug_sequence.slugs).not_to include("ineligible")
+    end
 
-      claim.eligibility.qts_award_year = "before_cut_off_date"
-      expect(claim.eligibility).to be_ineligible
+    it "includes the “ineligible” slug if the claim is actually ineligible" do
+      claim.eligibility.update! qts_award_year: "before_cut_off_date"
+      expect(claim.eligibility.reload).to be_ineligible
       expect(slug_sequence.slugs).to include("ineligible")
     end
 

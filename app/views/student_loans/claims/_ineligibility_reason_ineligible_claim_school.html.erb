@@ -6,7 +6,7 @@
   </h1>
 
   <p class="govuk-body">
-    <%= current_claim.eligibility.claim_school_name %> is not an eligible
+    <%= claim_school_name %> is not an eligible
     school. You can only get this payment if you were employed to teach at an
     eligible school between <%= Policies::StudentLoans.current_financial_year %>
   </p>
@@ -18,7 +18,7 @@
   </p>
 
   <div class="govuk-button-group">
-    <% if current_claim.eligibility.claim_school_somewhere_else == false %>
+    <% if journey_session.answers.claim_school_somewhere_else == false %>
       <%= button_to "Enter another school", claim_path(current_journey_routing_name, "select-claim-school", claim: { change_school: true }), method: :patch, class: "govuk-button", role: :button, data: { module: "govuk-button" } %>
     <% else %>
       <div><%= link_to "Enter another school", claim_path(current_journey_routing_name, "claim-school", additional_school: true), class: "govuk-button", role: "button", data: {module: "govuk-button"} %></div>

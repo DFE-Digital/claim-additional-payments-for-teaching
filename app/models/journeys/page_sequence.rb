@@ -25,7 +25,7 @@ module Journeys
         return handle_trainee_teacher
       end
 
-      return "ineligible" if claim.ineligible?
+      return "ineligible" if eligibility_checkers.all?(&:ineligible?)
 
       if claim_submittable?
         return "student-loan-amount" if updating_personal_details? && in_sequence?("student-loan-amount")
@@ -116,12 +116,26 @@ module Journeys
     end
 
     def claim_submittable?
-      journey::ClaimSubmissionForm.new(
-        journey_session: journey::ClaimJourneySessionShim.new(
-          current_claim: @claim,
-          journey_session: @journey_session
-        )
-      ).valid?
+      journey::ClaimSubmissionForm.new(journey_session: shim).valid?
+    end
+
+    def student_loans_eligibility_checker
+      @eligibility_checker ||= Policies::StudentLoans::EligibilityChecker.new(shim.answers)
+    end
+
+    def shim
+      @shim ||= journey::ClaimJourneySessionShim.new(
+        current_claim: @claim,
+        journey_session: @journey_session
+      )
+    end
+
+    def eligibility_checkers
+      if journey == Journeys::TeacherStudentLoanReimbursement
+        [student_loans_eligibility_checker]
+      else
+        [claim]
+      end
     end
   end
 end

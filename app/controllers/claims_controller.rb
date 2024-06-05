@@ -43,6 +43,11 @@ class ClaimsController < BasePublicController
 
   def redirect_to_existing_claim_journey
     new_journey = Journeys.for_policy(current_claim.policy)
+
+    # Set the params[:journey] to the new journey routing name so things like
+    # journey_session that rely on the journey param find the correct journey.
+    params[:journey] = new_journey::ROUTING_NAME
+
     new_page_sequence = new_journey.page_sequence_for_claim(
       current_claim,
       journey_session,
@@ -87,7 +92,23 @@ class ClaimsController < BasePublicController
   end
 
   def claim_in_progress?
-    session[:claim_id].present? && !current_claim.ineligible?
+    session[:claim_id].present? && !claim_ineligible?
+  end
+
+  def claim_ineligible?
+    # FIXME RL: Once current claim is removed we'll be able to check the
+    # elgibility directly on the answers rather than requiring the shim so
+    # we can do `journey_session.answers.ineligible?` in the mean time we
+    # require this
+    if journey == Journeys::TeacherStudentLoanReimbursement
+      shim = Journeys::TeacherStudentLoanReimbursement::ClaimJourneySessionShim.new(
+        current_claim: current_claim,
+        journey_session: journey_session
+      )
+      Policies::StudentLoans::EligibilityChecker.new(shim.answers).ineligible?
+    else
+      current_claim.ineligible?
+    end
   end
 
   def page_sequence

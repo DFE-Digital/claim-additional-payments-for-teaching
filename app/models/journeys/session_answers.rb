@@ -48,6 +48,10 @@ module Journeys
       attribute_names.include?(name.to_s)
     end
 
+    def current_school
+      @current_school ||= School.find_by(id: current_school_id)
+    end
+
     def details_check?
       !!details_check
     end

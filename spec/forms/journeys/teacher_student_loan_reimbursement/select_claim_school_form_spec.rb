@@ -12,11 +12,32 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SelectClaimSchoolForm,
   describe "#save" do
     subject(:save) { form.save }
 
-    let(:claim) { CurrentClaim.new(claims: [create(:claim, policy: Policies::StudentLoans)]) }
     let(:journey) { Journeys::TeacherStudentLoanReimbursement }
-    let(:journey_session) { build(:student_loans_session) }
+    let(:journey_session) do
+      create(
+        :student_loans_session,
+        answers: {
+          taught_eligible_subjects: true,
+          biology_taught: true,
+          physics_taught: true,
+          chemistry_taught: true,
+          computing_taught: true,
+          languages_taught: true,
+          employment_status: :claim_school,
+          current_school_id: school.id,
+          claim_school_id: school.id
+        }
+      )
+    end
     let(:params) { ActionController::Parameters.new }
-    let(:form) { described_class.new(claim:, journey:, journey_session:, params:) }
+    let(:form) do
+      described_class.new(
+        claim: CurrentClaim.new(claims: [build(:claim)]),
+        journey:,
+        journey_session:,
+        params:
+      )
+    end
     let!(:school) { create(:school, :eligible_for_journey, journey:) }
 
     context "when choosing a school" do
@@ -29,11 +50,36 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SelectClaimSchoolForm,
       end
 
       it "updates the claim with the correct school attributes" do
-        expect { save }.to change { claim.reload.eligibility.claim_school_id }.to(school.id)
+        save
+
+        expect(journey_session.reload.answers.claim_school_id).to eq(school.id)
       end
 
       it "resets the somewhere_else attribute" do
-        expect { save }.to change { claim.reload.eligibility.claim_school_somewhere_else }.to eq(false)
+        expect { save }.to(
+          change { journey_session.reload.answers.claim_school_somewhere_else }.to(false)
+        )
+      end
+
+      it "doesnt reset depenent answers" do
+        expect { save }.to(
+          not_change { journey_session.reload.answers.taught_eligible_subjects }
+          .and(
+            not_change { journey_session.reload.answers.biology_taught }
+          ).and(
+            not_change { journey_session.reload.answers.physics_taught }
+          ).and(
+            not_change { journey_session.reload.answers.chemistry_taught }
+          ).and(
+            not_change { journey_session.reload.answers.computing_taught }
+          ).and(
+            not_change { journey_session.reload.answers.languages_taught }
+          ).and(
+            not_change { journey_session.reload.answers.employment_status }
+          ).and(
+            not_change { journey_session.reload.answers.current_school_id }
+          )
+        )
       end
     end
 
@@ -46,16 +92,43 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SelectClaimSchoolForm,
         })
       end
 
-      before do
-        claim.eligibility.update!(claim_school_id: school.id, claim_school_somewhere_else: false)
-      end
-
       it "resets the school association" do
-        expect { save }.to change { claim.reload.eligibility.claim_school_id }.to(nil)
+        expect { save }.to change { journey_session.reload.answers.claim_school_id }.to(nil)
       end
 
       it "resets the somewhere_else attribute" do
-        expect { save }.to change { claim.reload.eligibility.claim_school_somewhere_else }.to eq(true)
+        expect { save }.to(
+          change { journey_session.reload.answers.claim_school_somewhere_else }.to(true)
+        )
+      end
+
+      it "resets the dependent answers" do
+        expect { form.save }.to(
+          change { journey_session.reload.answers.taught_eligible_subjects }
+          .from(true).to(nil)
+          .and(
+            change { journey_session.reload.answers.biology_taught }
+            .from(true).to(nil)
+          ).and(
+            change { journey_session.reload.answers.physics_taught }
+            .from(true).to(nil)
+          ).and(
+            change { journey_session.reload.answers.chemistry_taught }
+            .from(true).to(nil)
+          ).and(
+            change { journey_session.reload.answers.computing_taught }
+            .from(true).to(nil)
+          ).and(
+            change { journey_session.reload.answers.languages_taught }
+            .from(true).to(nil)
+          ).and(
+            change { journey_session.reload.answers.employment_status }
+            .from("claim_school").to(nil)
+          ).and(
+            change { journey_session.reload.answers.current_school_id }
+            .from(school.id).to(nil)
+          )
+        )
       end
     end
   end

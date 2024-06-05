@@ -87,7 +87,7 @@ module Journeys
           sequence.delete("building-society-account") if answers.personal_bank_account?
           sequence.delete("mobile-number") if answers.provide_mobile_number == false
           sequence.delete("mobile-verification") if answers.provide_mobile_number == false
-          sequence.delete("ineligible") unless claim.eligibility&.ineligible?
+          sequence.delete("ineligible") unless ineligible?
           sequence.delete("personal-details") if answers.logged_in_with_tid? && personal_details_form.valid? && answers.all_personal_details_same_as_tid?
           sequence.delete("select-email") unless set_by_teacher_id?("email")
           if answers.logged_in_with_tid? && answers.email_address_check?
@@ -107,7 +107,7 @@ module Journeys
           unless answers.trn_from_tid? && journey_session.has_tps_school_for_student_loan_in_previous_financial_year?
             sequence.delete("select-claim-school")
           end
-          sequence.delete("claim-school") if claim.eligibility.claim_school_somewhere_else == false
+          sequence.delete("claim-school") if answers.claim_school_somewhere_else == false
           sequence.delete("teacher-reference-number") if answers.logged_in_with_tid? && answers.teacher_reference_number.present?
 
           if answers.logged_in_with_tid? && answers.details_check?
@@ -138,6 +138,21 @@ module Journeys
           journey_session: journey_session,
           journey: Journeys::TeacherStudentLoanReimbursement,
           params: ActionController::Parameters.new
+        )
+      end
+
+      def ineligible?
+        eligibility_checker.ineligible?
+      end
+
+      def eligibility_checker
+        @eligibility_checker ||= Policies::StudentLoans::EligibilityChecker.new(shim.answers)
+      end
+
+      def shim
+        @shim ||= ClaimJourneySessionShim.new(
+          current_claim: claim,
+          journey_session: journey_session
         )
       end
 

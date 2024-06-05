@@ -38,7 +38,7 @@ module Journeys
       def claim_school
         [
           claim_school_question,
-          eligibility.claim_school_name,
+          answers.claim_school_name,
           (eligibility.claim_school_somewhere_else == false) ? "select-claim-school" : "claim-school"
         ]
       end
@@ -53,7 +53,7 @@ module Journeys
 
       def subjects_taught
         [
-          subjects_taught_question(school_name: eligibility.claim_school_name),
+          subjects_taught_question(school_name: answers.claim_school_name),
           subject_list(eligibility.subjects_taught),
           "subjects-taught"
         ]

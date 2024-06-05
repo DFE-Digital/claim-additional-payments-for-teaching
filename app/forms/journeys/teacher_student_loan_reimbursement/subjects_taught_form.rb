@@ -21,7 +21,7 @@ module Journeys
       end
 
       def claim_school_name
-        @claim_school_name ||= claim.eligibility.claim_school_name
+        @claim_school_name ||= answers.claim_school_name
       end
 
       def subject_attributes

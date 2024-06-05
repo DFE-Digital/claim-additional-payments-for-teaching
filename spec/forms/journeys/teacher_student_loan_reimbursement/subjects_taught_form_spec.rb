@@ -5,8 +5,17 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SubjectsTaughtForm, ty
     described_class.new(claim:, journey_session:, journey:, params:)
   end
 
+  let(:claim_school) { create(:school, name: "test school") }
+
   let(:journey) { Journeys::TeacherStudentLoanReimbursement }
-  let(:journey_session) { build(:student_loans_session) }
+  let(:journey_session) do
+    create(
+      :student_loans_session,
+      answers: {
+        claim_school_id: claim_school.id
+      }
+    )
+  end
   let(:claim) { CurrentClaim.new(claims: [build(:claim, policy: Policies::StudentLoans)]) }
   let(:slug) { "subjects-taught" }
   let(:params) { ActionController::Parameters.new({slug:, claim: claim_params}) }
@@ -91,11 +100,9 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SubjectsTaughtForm, ty
   end
 
   describe "#claim_school_name" do
-    before do
-      allow(claim).to receive(:eligibility).and_return(double(claim_school_name: "test school"))
-    end
+    subject { form.claim_school_name }
 
-    it { expect(form.claim_school_name).to eq("test school") }
+    it { is_expected.to eq("test school") }
   end
 
   describe "#subject_attributes" do
