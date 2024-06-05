@@ -17,7 +17,7 @@ module Journeys
       end
 
       def qualification
-        @claim.eligibility.qualification
+        answers.qualification
       end
 
       def qualification_is?(*symbols)

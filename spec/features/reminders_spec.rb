@@ -14,6 +14,8 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
       scenario "Claimant enters personal details and OTP for #{args[:subject]} for #{args[:cohort]}" do
         travel_to args[:frozen_year] do
           claim = start_early_career_payments_claim
+          journey_session = Journeys::AdditionalPaymentsForTeaching::Session.last
+
           claim.eligibility.update!(
             attributes_for(
               :early_career_payments_eligibility,
@@ -23,13 +25,22 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
             )
           )
 
+          journey_session.answers.assign_attributes(
+            attributes_for(
+              :additional_payments_answers,
+              qualification: "postgraduate_itt"
+            )
+          )
+
+          journey_session.save!
+
           expect(claim.policy).to eq Policies::EarlyCareerPayments
           expect(claim.eligibility.reload.eligible_itt_subject).to eq args[:subject]
 
           jump_to_claim_journey_page(
             claim:,
             slug: "itt-year",
-            journey_session: build(:additional_payments_session)
+            journey_session: journey_session
           )
 
           choose args[:cohort]
@@ -90,6 +101,8 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
       scenario "to request a reminder for #{args[:subject]} for #{args[:cohort]}" do
         travel_to args[:frozen_year] do
           claim = start_early_career_payments_claim
+          journey_session = Journeys::AdditionalPaymentsForTeaching::Session.last
+
           claim.eligibility.update!(
             attributes_for(
               :early_career_payments_eligibility,
@@ -99,13 +112,22 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
             )
           )
 
+          journey_session.answers.assign_attributes(
+            attributes_for(
+              :additional_payments_answers,
+              qualification: "postgraduate_itt"
+            )
+          )
+
+          journey_session.save!
+
           expect(claim.policy).to eq Policies::EarlyCareerPayments
           expect(claim.eligibility.reload.eligible_itt_subject).to eq args[:subject]
 
           jump_to_claim_journey_page(
             claim:,
             slug: "itt-year",
-            journey_session: build(:additional_payments_session)
+            journey_session: journey_session
           )
 
           choose args[:cohort]

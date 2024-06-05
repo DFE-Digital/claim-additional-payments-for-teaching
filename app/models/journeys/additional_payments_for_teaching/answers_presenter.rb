@@ -105,7 +105,7 @@ module Journeys
 
         [
           t("additional_payments.forms.qualification.questions.which_route"),
-          t("early_career_payments.forms.qualification.answers.#{eligibility.qualification}"),
+          t("early_career_payments.forms.qualification.answers.#{answers.qualification}"),
           "qualification"
         ]
       end
@@ -114,7 +114,7 @@ module Journeys
         return if answers.qualifications_details_check && answers.early_career_payments_dqt_teacher_record&.eligible_itt_subject_for_claim
 
         [
-          eligible_itt_subject_translation(CurrentClaim.new(claims: [eligibility.claim])),
+          eligible_itt_subject_translation(CurrentClaim.new(claims: [eligibility.claim]), answers),
           text_for_subject_answer,
           "eligible-itt-subject"
         ]
@@ -142,7 +142,7 @@ module Journeys
         return if answers.qualifications_details_check && answers.early_career_payments_dqt_teacher_record&.itt_academic_year_for_claim
 
         [
-          I18n.t("additional_payments.questions.itt_academic_year.qualification.#{eligibility.qualification}"),
+          I18n.t("additional_payments.questions.itt_academic_year.qualification.#{answers.qualification}"),
           eligibility.itt_academic_year.to_s.gsub("/", " - "),
           "itt-year"
         ]

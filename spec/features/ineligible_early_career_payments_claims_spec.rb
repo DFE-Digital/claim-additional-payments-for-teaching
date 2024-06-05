@@ -228,6 +228,8 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
     start_early_career_payments_claim
     claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
 
+    session = Journeys::AdditionalPaymentsForTeaching::Session.last
+
     skip_tid
 
     # - Which school do you teach at
@@ -268,10 +270,10 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
 
     click_on "Continue"
 
-    expect(claim.eligibility.reload.qualification).to eq "undergraduate_itt"
+    expect(session.reload.answers.qualification).to eq "undergraduate_itt"
 
     # - In which academic year did you complete your undergraduate ITT?
-    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{session.answers.qualification}"))
 
     choose "2018 to 2019"
     click_on "Continue"
@@ -290,6 +292,8 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
   scenario "when no longer teaching an eligible ITT subject" do
     start_early_career_payments_claim
     claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
+
+    session = Journeys::AdditionalPaymentsForTeaching::Session.last
 
     skip_tid
 
@@ -331,10 +335,10 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
     choose "Undergraduate initial teacher training (ITT)"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.qualification).to eq "undergraduate_itt"
+    expect(session.reload.answers.qualification).to eq "undergraduate_itt"
 
     # - In which academic year did you start your undergraduate ITT
-    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{session.answers.qualification}"))
 
     choose "2020 to 2021"
     click_on "Continue"
@@ -362,6 +366,8 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
   scenario "when academic year completed undergraduate ITT or started postgraduate ITT is 'none of the above'" do
     start_early_career_payments_claim
     claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
+
+    session = Journeys::AdditionalPaymentsForTeaching::Session.last
 
     skip_tid
 
@@ -402,10 +408,10 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
     choose "Undergraduate initial teacher training (ITT)"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.qualification).to eq "undergraduate_itt"
+    expect(session.reload.answers.qualification).to eq "undergraduate_itt"
 
     # - In which academic year did you start your undergraduate ITT
-    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{session.answers.qualification}"))
 
     choose "None of the above"
     click_on "Continue"

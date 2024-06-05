@@ -339,10 +339,11 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     end
 
     scenario "when Assessment only" do
+      session = Journeys::AdditionalPaymentsForTeaching::Session.last
       jump_to_claim_journey_page(
         claim: claim,
         slug: "qualification",
-        journey_session: Journeys::AdditionalPaymentsForTeaching::Session.last
+        journey_session: session
       )
 
       # - What route into teaching did you take?
@@ -351,10 +352,10 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       choose "Assessment only"
       click_on "Continue"
 
-      expect(claim.eligibility.reload.qualification).to eq "assessment_only"
+      expect(session.reload.answers.qualification).to eq "assessment_only"
 
       # - In which academic year did you earn your qualified teacher status (QTS)
-      expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+      expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{session.answers.qualification}"))
       expect(page).to have_text("2017 to 2018")
       expect(page).to have_text("2018 to 2019")
       expect(page).to have_text("2019 to 2020")
@@ -385,10 +386,11 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     end
 
     scenario "when Overseas recognition" do
+      session = Journeys::AdditionalPaymentsForTeaching::Session.last
       jump_to_claim_journey_page(
         claim: claim,
         slug: "qualification",
-        journey_session: Journeys::AdditionalPaymentsForTeaching::Session.last
+        journey_session: session
       )
 
       # - What route into teaching did you take?
@@ -397,10 +399,10 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       choose "Overseas recognition"
       click_on "Continue"
 
-      expect(claim.eligibility.reload.qualification).to eq "overseas_recognition"
+      expect(session.reload.answers.qualification).to eq "overseas_recognition"
 
       # - In which academic year did you you earn your qualified teacher status (QTS)?
-      expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+      expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{session.answers.qualification}"))
       expect(page).to have_text("2017 to 2018")
       expect(page).to have_text("2018 to 2019")
       expect(page).to have_text("2019 to 2020")
@@ -815,12 +817,21 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       lup_claim
     end
 
+    let!(:session) do
+      session = Journeys::AdditionalPaymentsForTeaching::Session.last
+      session.answers.assign_attributes(
+        qualification: "postgraduate_itt"
+      )
+      session.save!
+      session
+    end
+
     scenario "with Ordnance Survey data" do
       expect(claim.valid?(:submit)).to eq false
       jump_to_claim_journey_page(
         claim: claim,
         slug: "check-your-answers-part-one",
-        journey_session: Journeys::AdditionalPaymentsForTeaching::Session.last
+        journey_session: session
       )
 
       # - Check your answers for eligibility

@@ -28,15 +28,26 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims by cohort" do
     }
   ].each do |policy|
     context "when accepting claims for AcademicYear #{policy[:policy_year]}" do
-      before { create(:journey_configuration, :additional_payments, current_academic_year: policy[:policy_year]) }
+      before do
+        create(:journey_configuration, :additional_payments, current_academic_year: policy[:policy_year])
 
-      let(:claim) do
-        claim = start_early_career_payments_claim
+        start_early_career_payments_claim
 
         eligibility_attrs = attributes_for(:early_career_payments_eligibility, :ineligible_feature)
         claim.eligibility.update!(eligibility_attrs)
 
-        claim
+        journey_session.answers.assign_attributes(
+          qualification: "postgraduate_itt"
+        )
+        journey_session.save!
+      end
+
+      let(:claim) do
+        Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
+      end
+
+      let(:journey_session) do
+        Journeys::AdditionalPaymentsForTeaching::Session.last
       end
 
       policy[:ineligible_cohorts].each do |scenario|
@@ -44,11 +55,11 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims by cohort" do
           jump_to_claim_journey_page(
             claim: claim,
             slug: "itt-year",
-            journey_session: Journeys::AdditionalPaymentsForTeaching::Session.last
+            journey_session: journey_session
           )
 
           # - In which academic year did you start your undergraduate ITT
-          expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+          expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{journey_session.answers.qualification}"))
           choose scenario[:itt_academic_year].to_s(:long)
           click_on "Continue"
 

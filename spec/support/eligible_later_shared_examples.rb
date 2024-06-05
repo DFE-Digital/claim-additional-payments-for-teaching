@@ -4,7 +4,7 @@ RSpec.shared_examples "Eligible later" do |opts|
     let(:next_eligible_year) { opts[:next_eligible_year] }
     let(:policy_year) { opts[:policy_year] }
     let(:qualification) { opts[:qualification] }
-    let(:eligibility_attrs) { attributes_for(:early_career_payments_eligibility, :eligible, qualification: qualification).merge(current_school:) }
+    let(:eligibility_attrs) { attributes_for(:early_career_payments_eligibility, :eligible).merge(current_school:) }
     let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: policy_year) }
 
     scenario "with ITT subject mathematics in ITT academic year #{opts[:itt_academic_year]} with a #{opts[:qualification]} qualification" do
@@ -24,6 +24,8 @@ RSpec.shared_examples "Eligible later" do |opts|
           current_school_id: current_school.id
         )
       )
+
+      journey_session.save!
 
       jump_to_claim_journey_page(
         claim: claim,
