@@ -15,7 +15,7 @@ module Journeys
               qts_award_year: qts_award_year,
               claim_school_id: journey_session.answers.claim_school_id,
               current_school_id: current_school_id,
-              employment_status: employment_status,
+              employment_status: journey_session.answers.employment_status,
               biology_taught: journey_session.answers.biology_taught,
               chemistry_taught: journey_session.answers.chemistry_taught,
               computing_taught: journey_session.answers.computing_taught,
@@ -39,10 +39,6 @@ module Journeys
 
       def current_school_id
         journey_session.answers.current_school_id || try_eligibility(:current_school_id)
-      end
-
-      def employment_status
-        journey_session.answers.employment_status || try_eligibility(:employment_status)
       end
 
       def student_loan_repayment_amount
