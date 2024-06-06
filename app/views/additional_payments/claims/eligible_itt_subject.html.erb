@@ -1,7 +1,7 @@
 <% content_for(
   :page_title,
   page_title(
-    eligible_itt_subject_translation(current_claim),
+    eligible_itt_subject_translation(current_claim, @form.answers),
     journey: current_journey_routing_name,
     show_error: @form.errors.any?
   )
@@ -29,7 +29,7 @@
 
           <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(f.object.journey) %>">
             <h1 class="govuk-fieldset__heading">
-              <%= eligible_itt_subject_translation(f.object.claim) %>
+              <%= eligible_itt_subject_translation(f.object.claim, f.object.answers) %>
             </h1>
           </legend>
 

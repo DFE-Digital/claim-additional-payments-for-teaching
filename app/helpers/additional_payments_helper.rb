@@ -5,12 +5,12 @@ module AdditionalPaymentsHelper
     pluralize(OneTimePassword::Base::DRIFT / 60, "minute")
   end
 
-  def eligible_itt_subject_translation(claim)
+  def eligible_itt_subject_translation(claim, answers)
     if claim.eligibility.trainee_teacher?
       return I18n.t("additional_payments.forms.eligible_itt_subject.questions.which_subject_trainee_teacher")
     end
 
-    qualification_symbol = claim.eligibility.qualification.to_sym
+    qualification_symbol = answers.qualification.to_sym
     subjects = subject_symbols(claim)
 
     if subjects.many?

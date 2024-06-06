@@ -20,8 +20,14 @@ describe AdditionalPaymentsHelper do
   describe "#eligible_itt_subject_translation" do
     let(:ecp_claim) { create(:claim, :first_lup_claim_year, policy: Policies::EarlyCareerPayments, eligibility: ecp_eligibility) }
     let(:lup_claim) { create(:claim, :first_lup_claim_year, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility) }
+    let(:qualification) { nil }
 
-    subject { helper.eligible_itt_subject_translation(CurrentClaim.new(claims: [ecp_claim, lup_claim])) }
+    subject do
+      helper.eligible_itt_subject_translation(
+        CurrentClaim.new(claims: [ecp_claim, lup_claim]),
+        build(:additional_payments_answers, qualification: qualification)
+      )
+    end
 
     context "trainee teacher" do
       let(:ecp_eligibility) { build(:early_career_payments_eligibility, :trainee_teacher) }
@@ -31,8 +37,8 @@ describe AdditionalPaymentsHelper do
     end
 
     context "qualified teacher" do
-      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible, itt_academic_year: itt_year, qualification: qualification) }
-      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible, itt_academic_year: itt_year, qualification: qualification) }
+      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible, itt_academic_year: itt_year) }
+      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible, itt_academic_year: itt_year) }
 
       context "one option" do
         let(:itt_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2019)) }

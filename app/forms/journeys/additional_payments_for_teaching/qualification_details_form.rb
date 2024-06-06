@@ -20,7 +20,6 @@ module Journeys
         # here.
         journey_session.answers.itt_academic_year = claim.eligibility.itt_academic_year
         journey_session.answers.eligible_itt_subject = claim.eligibility.eligible_itt_subject
-        journey_session.answers.qualification = claim.eligibility.qualification
         journey_session.answers.eligible_degree_subject = claim.for_policy(Policies::LevellingUpPremiumPayments).eligibility.eligible_degree_subject
       end
 
@@ -41,10 +40,15 @@ module Journeys
         if qualifications_details_check
           # Teacher has confirmed the details in the dqt record are correct, update
           # the eligibility with these details
+          journey_session.answers.assign_attributes(
+            qualification: answers.early_career_payments_dqt_teacher_record&.route_into_teaching || answers.qualification
+          )
           claim.claims.each { |c| set_qualifications_from_dqt_record(c.eligibility) }
         else
           # Teacher has said the details don't match what they expected so
           # nullify them
+          journey_session.answers.assign_attributes(qualification: nil)
+
           claim.claims.each { |c| set_nil_qualifications(c.eligibility) }
         end
 
@@ -101,14 +105,12 @@ module Journeys
         when Policies::EarlyCareerPayments::Eligibility
           eligibility.assign_attributes(
             itt_academic_year: itt_academic_year(answers.early_career_payments_dqt_teacher_record, eligibility),
-            eligible_itt_subject: eligible_itt_subject(answers.early_career_payments_dqt_teacher_record, eligibility),
-            qualification: qualification(answers.early_career_payments_dqt_teacher_record, eligibility)
+            eligible_itt_subject: eligible_itt_subject(answers.early_career_payments_dqt_teacher_record, eligibility)
           )
         when Policies::LevellingUpPremiumPayments::Eligibility
           eligibility.assign_attributes(
             itt_academic_year: itt_academic_year(answers.levelling_up_premium_payments_dqt_reacher_record, eligibility),
             eligible_itt_subject: eligible_itt_subject(answers.levelling_up_premium_payments_dqt_reacher_record, eligibility),
-            qualification: qualification(answers.levelling_up_premium_payments_dqt_reacher_record, eligibility),
             eligible_degree_subject: eligible_degree_subject(answers.levelling_up_premium_payments_dqt_reacher_record, eligibility)
           )
         else
@@ -121,14 +123,12 @@ module Journeys
         when Policies::EarlyCareerPayments::Eligibility
           eligibility.assign_attributes(
             itt_academic_year: nil,
-            eligible_itt_subject: nil,
-            qualification: nil
+            eligible_itt_subject: nil
           )
         when Policies::LevellingUpPremiumPayments::Eligibility
           eligibility.assign_attributes(
             itt_academic_year: nil,
             eligible_itt_subject: nil,
-            qualification: nil,
             eligible_degree_subject: nil
           )
         else
@@ -142,10 +142,6 @@ module Journeys
 
       def eligible_itt_subject(dqt_teacher_record, eligibility)
         dqt_teacher_record&.eligible_itt_subject_for_claim || eligibility.eligible_itt_subject
-      end
-
-      def qualification(dqt_teacher_record, eligibility)
-        dqt_teacher_record&.route_into_teaching || eligibility.qualification
       end
 
       def eligible_degree_subject(dqt_teacher_record, eligibility)

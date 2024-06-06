@@ -11,12 +11,14 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
     let(:claim) { build(:claim, policy:, academic_year: policy_year, eligibility: eligibility) }
     let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: policy_year) }
     let(:qualifications_details_check) { false }
+    let(:qualification) { "postgraduate_itt" }
 
     let(:journey_session) do
       build(
         :additional_payments_session,
         answers: {
-          qualifications_details_check: qualifications_details_check
+          qualifications_details_check: qualifications_details_check,
+          qualification: qualification
         }
       )
     end

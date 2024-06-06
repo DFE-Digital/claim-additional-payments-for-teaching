@@ -9,7 +9,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
     create(
       :additional_payments_session,
       answers: {
-        dqt_teacher_status: dqt_teacher_status
+        dqt_teacher_status: dqt_teacher_status,
+        qualification: "postgraduate_itt"
       }
     )
   end
@@ -18,8 +19,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
     create(
       :early_career_payments_eligibility,
       itt_academic_year: AcademicYear.new(2023),
-      eligible_itt_subject: :physics,
-      qualification: :postgraduate_itt
+      eligible_itt_subject: :physics
     )
   end
 
@@ -28,7 +28,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
       :levelling_up_premium_payments_eligibility,
       itt_academic_year: AcademicYear.new(2023),
       eligible_itt_subject: :physics,
-      qualification: :postgraduate_itt,
       eligible_degree_subject: false
     )
   end
@@ -289,15 +288,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
 
         it "sets the qualification as nil" do
           expect { form.save }.to(
-            change do
-              early_career_payments_eligibility.reload.qualification
-            end.from("postgraduate_itt").to(nil).and(
-              change do
-                levelling_up_premium_payments_eligibility
-                  .reload
-                  .qualification
-              end.from("postgraduate_itt").to(nil)
-            )
+            change { journey_session.reload.answers.qualification }
+            .from("postgraduate_itt").to(nil)
           )
         end
 
@@ -408,16 +400,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
           it "sets the qualification to the dqt_teacher_record" do
             expect { form.save }.to(
               change do
-                early_career_payments_eligibility
-                  .reload
-                  .qualification
-              end.from("postgraduate_itt").to("undergraduate_itt").and(
-                change do
-                  levelling_up_premium_payments_eligibility
-                    .reload
-                    .qualification
-                end.from("postgraduate_itt").to("undergraduate_itt")
-              )
+                journey_session.reload.answers.qualification
+              end.from("postgraduate_itt").to("undergraduate_itt")
             )
           end
 
@@ -481,19 +465,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
 
           it "doesn't change the qualification" do
             expect { form.save }.not_to(
-              change do
-                early_career_payments_eligibility
-                  .reload
-                  .qualification
-              end
-            )
-
-            expect { form.save }.not_to(
-              change do
-                levelling_up_premium_payments_eligibility
-                  .reload
-                  .qualification
-              end
+              change { journey_session.reload.answers.qualification }
             )
           end
 

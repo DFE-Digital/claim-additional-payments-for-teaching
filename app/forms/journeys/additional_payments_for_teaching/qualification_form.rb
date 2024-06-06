@@ -12,26 +12,42 @@ module Journeys
 
       validates :qualification, inclusion: {in: QUALIFICATION_OPTIONS, message: i18n_error_message(:inclusion)}
 
-      # FIXME RL: Once this method writes to the journey session answers we
-      # update the initializer in
-      # AdditionalPaymentsForTeaching::QualificationDetailsForm
       def save
         return false unless valid?
+        return true unless qualification_changed?
 
-        # We set the attribute like this, rather than using `update!` from the
-        # superclass, as we need "qualification" to be in the `Eligibility#changed`
-        # list of attributes for the `reset_dependent_answers` method to work
-        claim.assign_attributes(
-          eligibility_attributes: {qualification: qualification}
-        )
-        claim.reset_eligibility_dependent_answers(["qualification"])
-        claim.save!
+        journey_session.answers.assign_attributes(qualification: qualification)
+
+        # If some data was derived from DQT we do not want to reset these.
+        unless answers.qualifications_details_check
+          # Once the teaching_subject_now and eligible_itt_subject forms are
+          # writing to the answers we can remove this claim update
+          claim.update!(
+            eligibility_attributes: {
+              teaching_subject_now: nil,
+              eligible_itt_subject: nil
+            }
+          )
+
+          journey_session.answers.assign_attributes(
+            eligible_itt_subject: nil,
+            teaching_subject_now: nil
+          )
+        end
+
+        journey_session.save!
 
         true
       end
 
       def save!
         raise ActiveRecord::RecordInvalid.new unless save
+      end
+
+      private
+
+      def qualification_changed?
+        answers.qualification != qualification
       end
     end
   end

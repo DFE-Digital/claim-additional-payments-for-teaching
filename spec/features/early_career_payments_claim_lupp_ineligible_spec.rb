@@ -32,8 +32,6 @@ RSpec.feature "Early-Career Payments claims with school ineligible for Levelling
     choose "Yes"
     click_on "Continue"
 
-    claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
-
     # - Have you completed your induction as an early-career teacher?
     expect(page).to have_text(I18n.t("additional_payments.questions.induction_completed.heading"))
 
@@ -68,8 +66,9 @@ RSpec.feature "Early-Career Payments claims with school ineligible for Levelling
     choose "Undergraduate initial teacher training (ITT)"
     click_on "Continue"
 
+    session = Journeys::AdditionalPaymentsForTeaching::Session.last
     # - In which academic year did you start your undergraduate ITT
-    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{session.answers.qualification}"))
 
     choose "#{itt_year.start_year} to #{itt_year.end_year}"
     click_on "Continue"

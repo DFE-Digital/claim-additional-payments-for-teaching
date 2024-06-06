@@ -42,6 +42,10 @@ FactoryBot.define do
       qualifications_details_check { true }
     end
 
+    trait :with_qualification do
+      qualification { "postgraduate_itt" }
+    end
+
     trait :submittable do
       with_personal_details
       with_email_details
@@ -50,6 +54,7 @@ FactoryBot.define do
       with_payroll_gender
       with_teacher_reference_number
       with_qualification_details_check
+      with_qualification
     end
   end
 end
