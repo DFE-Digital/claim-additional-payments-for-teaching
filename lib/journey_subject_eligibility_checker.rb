@@ -91,7 +91,9 @@ class JourneySubjectEligibilityChecker
   private
 
   def potentially_still_eligible_policies(current_claim)
-    potentially_still_eligible_claims = current_claim.claims.select { |claim| claim.eligibility.status != :ineligible }
+    potentially_still_eligible_claims = current_claim.claims.select do |claim|
+      claim.policy::EligibilityChecker.new(claim.eligibility).status != :ineligible
+    end
     potentially_still_eligible_claims.collect { |claim| claim.policy }
   end
 

@@ -65,7 +65,7 @@ module Policies
       end
 
       def reset_dependent_answers(reset_attrs = [])
-        attrs = ineligible? ? changed.concat(reset_attrs) : changed
+        attrs = eligibility_checker.ineligible? ? changed.concat(reset_attrs) : changed
 
         dependencies = ATTRIBUTE_DEPENDENCIES.dup
 
@@ -81,6 +81,12 @@ module Policies
             write_attribute(dependent_attribute_name, nil) if attrs.include?(attribute_name)
           end
         end
+      end
+
+      private
+
+      def eligibility_checker
+        @eligibility_checker ||= EligibilityChecker.new(self)
       end
     end
   end

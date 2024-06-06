@@ -23,8 +23,11 @@ module Claims
       hint_subject_symbols = Set[]
 
       if current_claim.eligibility.nqt_in_academic_year_after_itt
-        ecp_eligibility_status = current_claim.for_policy(Policies::EarlyCareerPayments).eligibility.status
-        lup_eligibility_status = current_claim.for_policy(Policies::LevellingUpPremiumPayments).eligibility.status
+        ecp_eligibility = current_claim.for_policy(Policies::EarlyCareerPayments).eligibility
+        lup_eligibility = current_claim.for_policy(Policies::LevellingUpPremiumPayments).eligibility
+
+        ecp_eligibility_status = Policies::EarlyCareerPayments::EligibilityChecker.new(ecp_eligibility).status
+        lup_eligibility_status = Policies::LevellingUpPremiumPayments::EligibilityChecker.new(lup_eligibility).status
 
         potentially_eligible_for_lup = lup_eligibility_status != :ineligible
         potentially_eligible_for_ecp = ecp_eligibility_status != :ineligible

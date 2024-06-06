@@ -128,7 +128,8 @@ class IneligibilityReasonChecker
     # check it and put it back
     eligibility.transaction do
       eligibility.update(teaching_subject_now: true)
-      eligible_with_sufficient_teaching = eligibility.status.in?([:eligible_now, :eligible_later])
+      eligibility_checker = policy::EligibilityChecker.new(eligibility)
+      eligible_with_sufficient_teaching = eligibility_checker.status.in?([:eligible_now, :eligible_later])
       eligibility.update(teaching_subject_now: teaching_before)
     end
 

@@ -15,10 +15,16 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
-    expect(eligibility.ineligible?).to be false
+    eligibility_checker = Policies::LevellingUpPremiumPayments::EligibilityChecker.new(
+      eligibility.reload
+    )
+    expect(eligibility_checker.ineligible?).to be false
     choose_school school
     click_on "Continue"
-    expect(eligibility.reload.ineligible?).to be true
+    eligibility_checker = Policies::LevellingUpPremiumPayments::EligibilityChecker.new(
+      eligibility.reload
+    )
+    expect(eligibility_checker.ineligible?).to be true
 
     expect(page).not_to have_text("The school you have selected is not eligible")
   end
@@ -33,10 +39,16 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
-    expect(eligibility.ineligible?).to be false
+    eligibility_checker = Policies::LevellingUpPremiumPayments::EligibilityChecker.new(
+      eligibility.reload
+    )
+    expect(eligibility_checker.ineligible?).to be false
     choose_school school
     click_on "Continue"
-    expect(eligibility.reload.ineligible?).to be true
+    eligibility_checker = Policies::LevellingUpPremiumPayments::EligibilityChecker.new(
+      eligibility.reload
+    )
+    expect(eligibility_checker.ineligible?).to be true
 
     expect(page).to have_text("The school you have selected is not eligible")
   end
@@ -99,9 +111,15 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
 
     choose "No"
 
-    expect(eligibility.ineligible?).to be false
+    eligibility_checker = Policies::LevellingUpPremiumPayments::EligibilityChecker.new(
+      eligibility.reload
+    )
+    expect(eligibility_checker.ineligible?).to be false
     click_on "Continue"
-    expect(eligibility.reload.ineligible?).to be true
+    eligibility_checker = Policies::LevellingUpPremiumPayments::EligibilityChecker.new(
+      eligibility.reload
+    )
+    expect(eligibility_checker.ineligible?).to be true
 
     expect(page).to have_text(I18n.t("additional_payments.ineligible.heading"))
     expect(page).to have_css("div#lack_both_valid_itt_subject_and_degree")
@@ -113,7 +131,10 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
     choose "Yes"
     click_on "Continue"
 
-    expect(eligibility.reload).not_to be_ineligible
+    eligibility_checker = Policies::LevellingUpPremiumPayments::EligibilityChecker.new(
+      eligibility.reload
+    )
+    expect(eligibility_checker).not_to be_ineligible
 
     expect(page).to have_current_path("/#{Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME}/teaching-subject-now")
   end

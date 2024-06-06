@@ -126,8 +126,8 @@ module Journeys
             sequence.delete("employed-directly")
           end
 
-          sequence.delete("eligibility-confirmed") unless @overall_eligibility_status == :eligible_now
-          sequence.delete("eligible-later") unless @overall_eligibility_status == :eligible_later
+          sequence.delete("eligibility-confirmed") unless overall_eligibility_status == :eligible_now
+          sequence.delete("eligible-later") unless overall_eligibility_status == :eligible_later
 
           sequence.delete("personal-bank-account") if answers.building_society?
           sequence.delete("building-society-account") if answers.personal_bank_account?
@@ -146,14 +146,14 @@ module Journeys
             trainee_teacher_slugs(sequence)
             sequence.delete("eligible-degree-subject") unless lup_claim&.eligibility&.indicated_ineligible_itt_subject?
           else
-            sequence.delete("ineligible") unless [:ineligible, :eligible_later].include?(@overall_eligibility_status)
+            sequence.delete("ineligible") unless [:ineligible, :eligible_later].include?(overall_eligibility_status)
             sequence.delete("future-eligibility")
-            sequence.delete("eligible-degree-subject") unless ecp_claim&.eligibility&.status == :ineligible && lup_claim&.eligibility&.indicated_ineligible_itt_subject?
+            sequence.delete("eligible-degree-subject") unless ecp_eligibility_checker.status == :ineligible && lup_eligibility_checker.indicated_ineligible_itt_subject?
           end
 
           sequence.delete("induction-completed") unless induction_question_required?
 
-          if ecp_claim.eligibility.induction_not_completed? && ecp_claim.eligibility.ecp_only_school?
+          if ecp_eligibility_checker.induction_not_completed? && ecp_claim.eligibility.ecp_only_school?
             replace_ecp_only_induction_not_completed_slugs(sequence)
           end
 
@@ -261,19 +261,15 @@ module Journeys
       def overall_eligibility_status
         return @overall_eligibility_status if defined?(@overall_eligibility_status)
 
-        if eligibility_checkers.any?(&:status) == :eligible_now
+        if eligibility_checkers.any? { |c| c.status == :eligible_now }
           @overall_eligibility_status = :eligible_now
-        elsif eligibility_checkers.any?(&:status) == :eligible_later
+        elsif eligibility_checkers.any? { |c| c.status == :eligible_later }
           @overall_eligibility_status = :eligible_later
-        elsif eligibility_checkers.all?(&:status) == :ineligible
+        elsif eligibility_checkers.all? { |c| c.status == :ineligible }
           @overall_eligibility_status = :ineligible
         else
           @overall_eligibility_status = :undetermined
         end
-      end
-
-      def eligibility_checkers
-        @eligibility_checkers ||= AdditionalPaymentsForTeaching.eligibility_checkers
       end
 
       def shim
@@ -281,6 +277,18 @@ module Journeys
           current_claim: claim,
           journey_session: journey_session
         )
+      end
+
+      def ecp_eligibility_checker
+        @ecp_eligibility_checker ||= Policies::EarlyCareerPayments::EligibilityChecker.new(shim.answers)
+      end
+
+      def lup_eligibility_checker
+        @lup_eligibility_checker ||= Policies::LevellingUpPremiumPayments::EligibilityChecker.new(shim.answers)
+      end
+
+      def eligibility_checkers
+        [ecp_eligibility_checker, lup_eligibility_checker]
       end
     end
   end

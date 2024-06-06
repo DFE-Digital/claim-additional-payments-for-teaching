@@ -16,6 +16,10 @@ module Journeys
       def generate_policy_options_provided
         []
       end
+
+      def eligibility_checker
+        TeacherStudentLoanReimbursement.eligibility_checkers(answers).first
+      end
     end
   end
 end

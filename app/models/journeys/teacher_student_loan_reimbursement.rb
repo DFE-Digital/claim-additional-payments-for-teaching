@@ -27,7 +27,7 @@ module Journeys
     }.freeze
 
     def self.eligibility_checkers(answers)
-      POLICIES.map { |policy| policy::EligibilityChecker.new(shim.answers) }
+      POLICIES.map { |policy| policy::EligibilityChecker.new(answers) }
     end
   end
 end

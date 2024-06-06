@@ -6,20 +6,28 @@ module Policies
       attr_reader :answers
 
       delegate \
+        :employed_as_supply_teacher,
         :employed_as_supply_teacher?,
         :qualification,
+        :has_entire_term_contract,
         :has_entire_term_contract?,
+        :employed_directly,
         :employed_directly?,
+        :subject_to_disciplinary_action,
         :subject_to_disciplinary_action?,
+        :subject_to_formal_performance_action,
         :subject_to_formal_performance_action?,
         :eligible_itt_subject,
         :teaching_subject_now,
+        :teaching_subject_now?,
         :itt_academic_year,
         :itt_subject_none_of_the_above?,
         :induction_completed,
         :induction_completed?,
+        :induction_not_completed?,
         :school_somewhere_else?,
         :nqt_in_academic_year_after_itt,
+        :nqt_in_academic_year_after_itt?,
         :eligible_degree_subject?,
         :current_school,
         to: :answers
