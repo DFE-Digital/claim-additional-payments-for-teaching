@@ -19,7 +19,6 @@ module Journeys
         # session ansswers, so we need to set these values from the elgiibility
         # here.
         journey_session.answers.itt_academic_year = claim.eligibility.itt_academic_year
-        journey_session.answers.eligible_itt_subject = claim.eligibility.eligible_itt_subject
         journey_session.answers.qualification = claim.eligibility.qualification
         journey_session.answers.eligible_degree_subject = claim.for_policy(Policies::LevellingUpPremiumPayments).eligibility.eligible_degree_subject
       end

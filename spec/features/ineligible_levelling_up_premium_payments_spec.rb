@@ -41,7 +41,7 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
     expect(page).to have_text("The school you have selected is not eligible")
   end
 
-  scenario "When subject 'none of the above' and user does not have an eligible degree" do
+  fscenario "When subject 'none of the above' and user does not have an eligible degree" do
     school = create(:school, :levelling_up_premium_payments_eligible)
 
     start_levelling_up_premium_payments_claim

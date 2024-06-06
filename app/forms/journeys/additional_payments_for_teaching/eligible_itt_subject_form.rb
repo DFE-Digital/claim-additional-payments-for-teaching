@@ -28,16 +28,11 @@ module Journeys
       def save
         return false unless valid?
 
-        # FIXME RL: Once this method writes to the journey session answers we
-        # update the initializer in
-        # AdditionalPaymentsForTeaching::QualificationDetailsForm
-        claim.assign_attributes(
-          eligibility_attributes: {eligible_itt_subject: eligible_itt_subject}
+        journey_session.answers.assign_attributes(
+          eligible_itt_subject:,
         )
-        claim.reset_eligibility_dependent_answers(["eligible_itt_subject"])
-        claim.save!
 
-        true
+        journey_session.save!
       end
     end
   end

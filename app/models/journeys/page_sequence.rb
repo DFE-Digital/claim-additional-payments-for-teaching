@@ -131,8 +131,11 @@ module Journeys
     end
 
     def eligibility_checkers
-      if journey == Journeys::TeacherStudentLoanReimbursement
+      @eligibility_checkers ||= case journey
+      when Journeys::TeacherStudentLoanReimbursement
         [student_loans_eligibility_checker]
+      when Journeys::AdditionalPaymentsForTeaching
+        [Journeys::AdditionalPaymentsForTeaching::EligibilityChecker.new(journey_session: shim)]
       else
         [claim]
       end

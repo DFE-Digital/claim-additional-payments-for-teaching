@@ -83,12 +83,14 @@ module Journeys
       def initialize(claim, journey_session)
         @claim = claim
         @journey_session = journey_session
+        @overall_eligibility_status = EligibilityChecker.new(journey_session: journey_session_shim).status
+      end
 
-        shim = Journeys.for_routing_name(journey_session.journey)::ClaimJourneySessionShim.new(
+      def journey_session_shim
+        @journey_session_shim ||= Journeys.for_routing_name(journey_session.journey)::ClaimJourneySessionShim.new(
           current_claim: claim,
           journey_session: journey_session
         )
-        @overall_eligibility_status = EligibilityChecker.new(journey_session: shim).status
       end
 
       # Even though we are inside the ECP namespace, this method can modify the
@@ -154,7 +156,16 @@ module Journeys
           else
             sequence.delete("ineligible") unless [:ineligible, :eligible_later].include?(@overall_eligibility_status)
             sequence.delete("future-eligibility")
-            sequence.delete("eligible-degree-subject") unless ecp_claim&.eligibility&.status == :ineligible && lup_claim&.eligibility&.indicated_ineligible_itt_subject?
+
+            ecp_eligibility_checker = Policies::EarlyCareerPayments::PolicyEligibilityChecker.new(journey_session: journey_session_shim)
+            lup_eligibility_checker = Policies::EarlyCareerPayments::PolicyEligibilityChecker.new(journey_session: journey_session_shim)
+
+            binding.pry
+
+            # sequence.delete("eligible-degree-subject") unless ecp_claim&.eligibility&.status == :ineligible && lup_claim&.eligibility&.indicated_ineligible_itt_subject?
+            unless ecp_eligibility_checker.status == :ineligible && lup_eligibility_checker.indicated_ineligible_itt_subject?
+              sequence.delete("eligible-degree-subject")
+            end
           end
 
           sequence.delete("induction-completed") unless induction_question_required?

@@ -45,7 +45,7 @@ RSpec.feature "ITT subject selection", slow: true do
       context "ITT year 2019" do
         let(:itt_year) { AcademicYear.new(2019) }
 
-        scenario "subject options" do
+        fscenario "subject options" do
           expect_displayed_subjects(["Chemistry", "Computing", "Mathematics", "Physics"])
           # choose subject eligible for LUP only
           select_subject("Chemistry")
@@ -57,6 +57,7 @@ RSpec.feature "ITT subject selection", slow: true do
           click_link "Back"
           # choose ineligible subject for both ECP and LUP
           select_subject("None of the above")
+          # teaching-subject-now
           expect(page).to have_text(I18n.t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"))
         end
       end

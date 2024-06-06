@@ -1,5 +1,9 @@
 <% require "./lib/ineligibility_reason_checker.rb" %>
-<% reason = IneligibilityReasonChecker.new(current_claim).reason %>
+<% shim = Journeys::AdditionalPaymentsForTeaching::ClaimJourneySessionShim.new(
+  current_claim: current_claim,
+  journey_session: journey_session,
+) %>
+<% reason = IneligibilityReasonChecker.new(current_claim, shim).reason %>
 <% title_and_h1_content = reason == :current_school ? I18n.t("additional_payments.ineligible.school_heading") : I18n.t("additional_payments.ineligible.heading") %>
 <% content_for(:page_title, page_title(title_and_h1_content, journey: current_journey_routing_name)) %>
 

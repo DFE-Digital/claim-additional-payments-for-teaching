@@ -6,7 +6,7 @@ module Journeys
       validates :teaching_subject_now, inclusion: {in: [true, false], message: i18n_error_message(:inclusion)}
 
       def eligible_itt_subject
-        @eligible_itt_subject ||= claim.eligibility.eligible_itt_subject
+        @eligible_itt_subject ||= journey_session.answers.eligible_itt_subject
       end
 
       def teaching_physics_or_chemistry?

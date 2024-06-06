@@ -19,6 +19,10 @@ module Journeys
         end
       end
 
+      def ineligible?
+        everything_ineligible?
+      end
+
       private
 
       def policies
@@ -34,6 +38,10 @@ module Journeys
       end
 
       def everything_ineligible?
+        policies.all? { |policy| policy::PolicyEligibilityChecker.new(journey_session: @journey_session).status == :ineligible }
+      end
+
+      def anything_ineligible?
         policies.any? { |policy| policy::PolicyEligibilityChecker.new(journey_session: @journey_session).status == :ineligible }
       end
     end

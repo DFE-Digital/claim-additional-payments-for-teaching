@@ -1,6 +1,9 @@
 class IneligibilityReasonChecker
-  def initialize(current_claim)
+  attr_reader :journey_session
+
+  def initialize(current_claim, journey_session)
     @current_claim = current_claim
+    @journey_session = journey_session
   end
 
   def reason
@@ -121,18 +124,9 @@ class IneligibilityReasonChecker
   end
 
   def eligible_with_sufficient_teaching?(policy)
-    eligibility = @current_claim.for_policy(policy).eligibility
-    teaching_before = eligibility.teaching_subject_now
-    eligible_with_sufficient_teaching = nil
-
-    # check it and put it back
-    eligibility.transaction do
-      eligibility.update(teaching_subject_now: true)
-      eligible_with_sufficient_teaching = eligibility.status.in?([:eligible_now, :eligible_later])
-      eligibility.update(teaching_subject_now: teaching_before)
-    end
-
-    eligible_with_sufficient_teaching
+    checker = policy::PolicyEligibilityChecker.new(journey_session: journey_session.dup)
+    checker.journey_session.answers.teaching_subject_now = true
+    checker.status.in?([:eligible_now, :eligible_later])
   end
 
   def would_be_eligible_for_ecp_only_except_for_insufficient_teaching?
@@ -147,7 +141,7 @@ class IneligibilityReasonChecker
   end
 
   def subject_invalid_for_ecp?
-    !@current_claim.eligibility.eligible_itt_subject&.to_sym&.in?(ecp_subject_options)
+    !journey_session.answers.eligible_itt_subject&.to_sym&.in?(ecp_subject_options)
   end
 
   def ecp_subject_options

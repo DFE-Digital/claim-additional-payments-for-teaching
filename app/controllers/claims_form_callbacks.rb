@@ -84,7 +84,7 @@ module ClaimsFormCallbacks
   end
 
   def no_eligible_itt_subject?
-    !current_claim.eligible_itt_subject
+    !journey_session.answers.eligible_itt_subject
   end
 
   def no_dqt_data?

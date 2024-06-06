@@ -28,6 +28,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         )
       )
 
+      claim.journeys_session_id = journey_session.id
       claim.eligibility = create("#{policy_underscored}_eligibility", :eligible)
       claim.save!
 
@@ -42,6 +43,9 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
     submitted_claim
   end
+
+  let(:journey) { Journeys.for_policy(policy) }
+  let(:journey_session) { journey::Session.last }
 
   def in_browser(name)
     current_session = Capybara.session_name
@@ -158,7 +162,8 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             first_name: "Fred",
             national_insurance_number: "QQ100000C",
             surname: "ELIGIBLE",
-            teacher_reference_number: "1234567"
+            teacher_reference_number: "1234567",
+            eligible_itt_subject: "none_of_the_above",
           },
           claim_attributes: {
             policy: policy,
@@ -528,7 +533,8 @@ RSpec.feature "Admin claim tasks update with DQT API" do
                 first_name: "Fred",
                 national_insurance_number: "QQ100000C",
                 surname: "ELIGIBLE",
-                teacher_reference_number: "1234567"
+                teacher_reference_number: "1234567",
+                eligible_itt_subject: "mathematics",
               },
               claim_attributes: {
                 policy: policy,

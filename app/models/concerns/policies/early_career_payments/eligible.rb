@@ -9,8 +9,27 @@ module Policies
         super || BigDecimal(calculate_award_amount || 0)
       end
 
+      def journey
+        @journey ||= Journeys.for_policy(policy)
+      end
+
+      def journey_session
+        @journey_session ||= journey::Session.find(claim.journeys_session_id)
+      end
+
+      def journey_session_shim
+        @journey_session_shim ||= journey::ClaimJourneySessionShim.new(
+          current_claim: claim,
+          journey_session: journey_session
+        )
+      end
+
+      def eligible_itt_subject_shim
+        journey_session.answers.eligible_itt_subject
+      end
+
       def first_eligible_itt_academic_year
-        JourneySubjectEligibilityChecker.first_eligible_itt_year_for_subject(policy: policy, claim_year: claim_year, subject_symbol: eligible_itt_subject.to_sym)
+        JourneySubjectEligibilityChecker.first_eligible_itt_year_for_subject(policy: policy, claim_year: claim_year, subject_symbol: eligible_itt_subject_shim.to_sym)
       end
 
       def induction_not_completed?

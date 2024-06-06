@@ -62,7 +62,7 @@ module Journeys
       end
 
       def eligible_itt_subject
-        journey_session.answers.eligible_itt_subject || try_eligibility(:eligible_itt_subject)
+        journey_session.answers.eligible_itt_subject
       end
 
       def eligible_degree_subject

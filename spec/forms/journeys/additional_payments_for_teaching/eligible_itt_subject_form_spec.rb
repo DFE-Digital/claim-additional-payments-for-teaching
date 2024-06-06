@@ -245,19 +245,17 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
         )
       end
 
-      it "returns true and updates the claim's eligibility" do
-        expect { expect(form.save).to be true }.to(
-          change { claim.eligibility.eligible_itt_subject }
-          .from("mathematics")
-          .to("chemistry")
-        )
+      it "does not update the claim eligibility" do
+        expect do
+          form.save
+        end.not_to(change { claim.eligibility })
       end
 
-      it "resets dependent attributes" do
+      it "updates answers" do
         expect { form.save }.to(
-          change { claim.eligibility.teaching_subject_now }
-          .from(true)
-          .to(nil)
+          change { journey_session.answers.eligible_itt_subject }
+          .from(nil)
+          .to("chemistry")
         )
       end
     end
