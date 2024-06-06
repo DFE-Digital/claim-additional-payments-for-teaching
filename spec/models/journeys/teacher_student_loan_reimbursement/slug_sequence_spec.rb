@@ -28,8 +28,9 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
     end
 
     it "includes the “ineligible” slug if the claim is actually ineligible" do
-      claim.eligibility.update! qts_award_year: "before_cut_off_date"
-      expect(claim.eligibility.reload).to be_ineligible
+      journey_session.answers.assign_attributes(
+        qts_award_year: "before_cut_off_date"
+      )
       expect(slug_sequence.slugs).to include("ineligible")
     end
 

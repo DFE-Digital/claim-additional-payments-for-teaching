@@ -24,10 +24,9 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(page).to have_link(href: "mailto:#{I18n.t("student_loans.feedback_email")}")
 
     choose_qts_year
-    claim = Claim.by_policy(Policies::StudentLoans).order(:created_at).last
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
 
-    expect(claim.eligibility.reload.qts_award_year).to eql("on_or_after_cut_off_date")
+    expect(session.reload.answers.qts_award_year).to eql("on_or_after_cut_off_date")
 
     expect(page).to have_text(claim_school_question)
 
@@ -268,10 +267,9 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
         expect(page).to have_link(href: "mailto:#{I18n.t("student_loans.feedback_email")}")
 
         choose_qts_year
-        claim = Claim.by_policy(Policies::StudentLoans).order(:created_at).last
         session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
 
-        expect(claim.eligibility.reload.qts_award_year).to eql("on_or_after_cut_off_date")
+        expect(session.reload.answers.qts_award_year).to eql("on_or_after_cut_off_date")
 
         expect(page).to have_text(claim_school_question)
 

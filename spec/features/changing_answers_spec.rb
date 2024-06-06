@@ -46,12 +46,13 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
   scenario "Teacher changes an answer which is not a dependency of any of the other answers they've given, becoming ineligible" do
     claim = start_student_loans_claim
+    session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
     jump_to_claim_journey_page(
       claim:,
       slug: "check-your-answers",
-      journey_session: Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
+      journey_session: session
     )
 
     find("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "qts-year")}']").click
@@ -61,7 +62,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     choose_qts_year :before_cut_off_date
     click_on "Continue"
 
-    expect(claim.eligibility.reload.qts_award_year).to eq("before_cut_off_date")
+    expect(session.reload.answers.qts_award_year).to eq("before_cut_off_date")
 
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text("You can only get this payment if you completed your initial teacher training between the start of the #{Policies::StudentLoans.first_eligible_qts_award_year.to_s(:long)} academic year and the end of the 2020 to 2021 academic year.")
