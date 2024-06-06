@@ -42,6 +42,16 @@ module Journeys
       def claim_school_somewhere_else?
         !!claim_school_somewhere_else
       end
+
+      def subjects_taught
+        [
+          :biology_taught,
+          :chemistry_taught,
+          :physics_taught,
+          :computing_taught,
+          :languages_taught
+        ].select { |subject| public_send(subject) }
+      end
     end
   end
 end
