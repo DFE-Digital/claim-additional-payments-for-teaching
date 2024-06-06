@@ -16,7 +16,7 @@ module Journeys
       end
 
       def show_hint_text?
-        claim.eligibility.nqt_in_academic_year_after_itt &&
+        answers.nqt_in_academic_year_after_itt &&
           available_subjects.many?
       end
 

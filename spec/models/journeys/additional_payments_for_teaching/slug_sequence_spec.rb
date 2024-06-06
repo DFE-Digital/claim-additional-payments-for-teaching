@@ -318,6 +318,11 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
       end
 
       it "includes the 'eligibility_confirmed' slug" do
+        journey_session.answers.assign_attributes(
+          nqt_in_academic_year_after_itt: true,
+          induction_completed: true
+        )
+
         expect(slug_sequence.slugs).to include("eligibility-confirmed")
       end
     end

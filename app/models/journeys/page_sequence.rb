@@ -79,13 +79,13 @@ module Journeys
     end
 
     def lup_teacher_at_lup_school
-      claim.eligibility.nqt_in_academic_year_after_itt == false && Policies::LevellingUpPremiumPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible?
+      answers.nqt_in_academic_year_after_itt == false && Policies::LevellingUpPremiumPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible?
     end
 
     def handle_trainee_teacher
       case current_slug
       when "nqt-in-academic-year-after-itt"
-        if claim.eligibility.nqt_in_academic_year_after_itt?
+        if answers.nqt_in_academic_year_after_itt?
           "supply-teacher"
         else
           @journey_session.answers.policy_year.in?(EligibilityCheckable::COMBINED_ECP_AND_LUP_POLICY_YEARS_BEFORE_FINAL_YEAR) ? "eligible-itt-subject" : "ineligible"

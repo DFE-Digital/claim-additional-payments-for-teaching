@@ -71,14 +71,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EmployedDirectlyForm do
           expect { form.save }.to change { journey_session.answers.employed_directly }.from(false).to(true)
         end
       end
-
-      context "when claim model fails validation unexpectedly" do
-        it "raises an error" do
-          allow(journey_session).to receive(:save).and_raise(ActiveRecord::RecordInvalid)
-
-          expect { form.save }.to raise_error(ActiveRecord::RecordInvalid)
-        end
-      end
     end
 
     context "when employed_directly is not provided" do

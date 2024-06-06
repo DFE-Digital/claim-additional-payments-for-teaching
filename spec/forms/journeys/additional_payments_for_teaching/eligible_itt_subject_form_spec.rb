@@ -94,6 +94,12 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
     context "when qualified teacher" do
       let(:claim) { ecp_qualified_teacher_claim }
 
+      before do
+        journey_session.answers.assign_attributes(
+          nqt_in_academic_year_after_itt: true
+        )
+      end
+
       it do
         is_expected.to contain_exactly(
           "chemistry",
@@ -129,11 +135,19 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
     context "when the claim is for a trainee teacher" do
       let(:claim) { ecp_trainee_teacher_claim }
 
+      before do
+        journey_session.answers.nqt_in_academic_year_after_itt = false
+      end
+
       it { is_expected.to be false }
     end
 
     context "when the claim is for a qualified teacher" do
       let(:claim) { ecp_qualified_teacher_claim }
+
+      before do
+        journey_session.answers.nqt_in_academic_year_after_itt = false
+      end
 
       context "when there is a single avaialble subject" do
         let(:itt_academic_year) { AcademicYear.new(2018) }
@@ -148,6 +162,10 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
       end
 
       context "when there are multiple available subjects" do
+        before do
+          journey_session.answers.nqt_in_academic_year_after_itt = true
+        end
+
         it { is_expected.to be true }
       end
     end

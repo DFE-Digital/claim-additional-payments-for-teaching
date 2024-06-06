@@ -22,6 +22,7 @@ describe AdditionalPaymentsHelper do
     let(:ecp_claim) { create(:claim, :first_lup_claim_year, policy: Policies::EarlyCareerPayments, eligibility: ecp_eligibility) }
     let(:lup_claim) { create(:claim, :first_lup_claim_year, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility) }
     let(:qualification) { nil }
+    let(:answers) { build(:additional_payments_answers, qualification: qualification) }
 
     let(:shim) do
       Journeys::AdditionalPaymentsForTeaching::ClaimJourneySessionShim.new(
@@ -75,6 +76,8 @@ describe AdditionalPaymentsHelper do
 
       context "one option" do
         let(:itt_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2019)) }
+
+        before { answers.nqt_in_academic_year_after_itt = true }
 
         context "undergraduate" do
           let(:qualification) { :undergraduate_itt }

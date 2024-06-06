@@ -14,18 +14,10 @@ module Journeys
           set_qualification! if trainee_teacher?
 
           journey_session.answers.assign_attributes(
-            induction_completed: determine_induction_answer_from_dqt_record
+            induction_completed: determine_induction_answer_from_dqt_record,
+            nqt_in_academic_year_after_itt:
           )
-
-          journey_session.save!
-
-          update!(
-            {
-              eligibility_attributes: {
-                nqt_in_academic_year_after_itt: nqt_in_academic_year_after_itt
-              }
-            }
-          )
+          journey_session.save
         end
       end
 

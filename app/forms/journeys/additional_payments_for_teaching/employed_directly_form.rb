@@ -9,7 +9,7 @@ module Journeys
         return false unless valid?
 
         journey_session.answers.assign_attributes(attributes)
-        journey_session.save
+        journey_session.save!
       end
     end
   end

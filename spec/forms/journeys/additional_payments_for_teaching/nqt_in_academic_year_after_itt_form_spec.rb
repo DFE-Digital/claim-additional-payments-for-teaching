@@ -80,7 +80,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
 
       it "returns false" do
         expect { expect(form.save).to be false }.not_to(
-          change { claim.eligibility.reload.nqt_in_academic_year_after_itt }
+          change { journey_session.answers.nqt_in_academic_year_after_itt }
         )
       end
     end
@@ -97,8 +97,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
       describe "nqt_in_academic_year_after_itt" do
         let(:answers) { {} }
 
-        it "sets the value on the claim's eligibility" do
-          expect(claim.eligibility.nqt_in_academic_year_after_itt).to be true
+        it "sets the value on the journey session" do
+          expect(journey_session.answers.nqt_in_academic_year_after_itt).to be true
         end
       end
 
