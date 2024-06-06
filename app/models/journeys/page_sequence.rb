@@ -25,7 +25,7 @@ module Journeys
         return handle_trainee_teacher
       end
 
-      return "ineligible" if eligibility_checkers.all?(&:ineligible?)
+      return "ineligible" if journey_ineligible?
 
       if claim_submittable?
         return "student-loan-amount" if updating_personal_details? && in_sequence?("student-loan-amount")
@@ -130,11 +130,16 @@ module Journeys
       )
     end
 
-    def eligibility_checkers
+    def journey_ineligible?
+      # TODO KL: avoid treading on other PRs handle TSLR EligiblityChecker separately
       if journey == Journeys::TeacherStudentLoanReimbursement
-        [student_loans_eligibility_checker]
+        student_loans_eligibility_checker.ineligible?
       else
-        [claim]
+        shim = journey::ClaimJourneySessionShim.new(
+          current_claim: claim,
+          journey_session: @journey_session
+        )
+        journey::EligibilityChecker.new(journey_session: shim).ineligible?
       end
     end
   end
