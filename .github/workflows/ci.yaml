@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:11-alpine
+        image: postgres:16-alpine
         ports:
           - '5432:5432'
         env:
@@ -79,7 +79,7 @@ jobs:
         ci_node_index: [0, 1, 2, 3, 4, 5, 6, 7]
     services:
       postgres:
-        image: postgres:11-alpine
+        image: postgres:16-alpine
         ports:
           - '5432:5432'
         env:
