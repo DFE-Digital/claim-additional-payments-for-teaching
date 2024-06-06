@@ -48,7 +48,7 @@ class ClaimJourneySessionShim
       teacher_id_user_info: teacher_id_user_info,
       email_address_check: journey_session.answers.email_address_check,
       mobile_check: journey_session.answers.mobile_check,
-      qualifications_details_check: qualifications_details_check,
+      qualifications_details_check: journey_session.answers.qualifications_details_check,
       has_student_loan: has_student_loan,
       student_loan_plan: student_loan_plan
     }
@@ -74,10 +74,6 @@ class ClaimJourneySessionShim
 
   def teacher_id_user_info
     journey_session.answers.teacher_id_user_info || current_claim.teacher_id_user_info
-  end
-
-  def qualifications_details_check
-    journey_session.answers.qualifications_details_check || current_claim.qualifications_details_check
   end
 
   def has_student_loan

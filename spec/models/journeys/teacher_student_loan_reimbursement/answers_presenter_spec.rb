@@ -12,7 +12,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::AnswersPresenter, type
   describe "#eligibility_answers" do
     let(:subject_attributes) { {chemistry_taught: true, physics_taught: true} }
     let(:eligibility) { claim.eligibility }
-    let(:claim) { build(:claim, policy:, eligibility: build(:student_loans_eligibility, :eligible, subject_attributes), qualifications_details_check:) }
+    let(:claim) { build(:claim, policy:, eligibility: build(:student_loans_eligibility, :eligible, subject_attributes)) }
     let(:qualifications_details_check) { false }
 
     let(:journey_session) do
@@ -21,7 +21,8 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::AnswersPresenter, type
         answers: attributes_for(
           :student_loans_answers,
           :with_claim_school,
-          :with_leadership_position
+          :with_leadership_position,
+          qualifications_details_check: qualifications_details_check
         ).merge(subject_attributes)
       )
     end

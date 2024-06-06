@@ -12,8 +12,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
       :skipped_tid,
       policy: Policies::EarlyCareerPayments,
       academic_year: AcademicYear.new(2021),
-      eligibility: eligibility,
-      qualifications_details_check:
+      eligibility: eligibility
     )
   end
   let(:lup_claim) { create(:claim, :skipped_tid, policy: Policies::LevellingUpPremiumPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility_lup) }
@@ -24,7 +23,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
       answers: {
         logged_in_with_tid: logged_in_with_tid,
         details_check: details_check,
-        dqt_teacher_status: dqt_teacher_status
+        dqt_teacher_status: dqt_teacher_status,
+        qualifications_details_check: qualifications_details_check
       }
     )
   end

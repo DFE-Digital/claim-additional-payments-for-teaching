@@ -4,7 +4,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
   subject(:slug_sequence) { described_class.new(current_claim, journey_session) }
 
   let(:eligibility) { create(:student_loans_eligibility, :eligible) }
-  let(:claim) { build(:claim, eligibility:, qualifications_details_check:) }
+  let(:claim) { build(:claim, eligibility:) }
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
   let(:journey_session) do
     build(
@@ -12,7 +12,8 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
       answers: {
         logged_in_with_tid: logged_in_with_tid,
         details_check: details_check,
-        dqt_teacher_status: dqt_teacher_status
+        dqt_teacher_status: dqt_teacher_status,
+        qualifications_details_check: qualifications_details_check
       }
     )
   end
