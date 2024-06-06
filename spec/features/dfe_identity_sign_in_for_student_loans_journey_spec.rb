@@ -95,8 +95,8 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     expect(answers.employment_status).to eql("claim_school")
     expect(answers.current_school).to eql(school)
     expect(answers.subjects_taught).to eq([:physics_taught])
-    expect(claim.eligibility.had_leadership_position?).to eq(true)
-    expect(claim.eligibility.mostly_performed_leadership_duties?).to eq(false)
+    expect(answers.had_leadership_position?).to eq(true)
+    expect(answers.mostly_performed_leadership_duties?).to eq(false)
   end
 
   scenario "Teacher makes claim for 'Student Loans' by logging in with teacher_id and selects no to details confirm" do
@@ -242,7 +242,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     expect(answers.employment_status).to eql("claim_school")
     expect(answers.current_school).to eql(school)
     expect(answers.subjects_taught).to eq([:physics_taught])
-    expect(claim.eligibility.had_leadership_position?).to eq(true)
-    expect(claim.eligibility.mostly_performed_leadership_duties?).to eq(false)
+    expect(answers.had_leadership_position?).to eq(true)
+    expect(answers.mostly_performed_leadership_duties?).to eq(false)
   end
 end

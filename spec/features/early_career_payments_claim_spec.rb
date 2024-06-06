@@ -339,7 +339,11 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     end
 
     scenario "when Assessment only" do
-      jump_to_claim_journey_page(claim, "qualification")
+      jump_to_claim_journey_page(
+        claim: claim,
+        slug: "qualification",
+        journey_session: Journeys::AdditionalPaymentsForTeaching::Session.last
+      )
 
       # - What route into teaching did you take?
       expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
@@ -381,7 +385,11 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     end
 
     scenario "when Overseas recognition" do
-      jump_to_claim_journey_page(claim, "qualification")
+      jump_to_claim_journey_page(
+        claim: claim,
+        slug: "qualification",
+        journey_session: Journeys::AdditionalPaymentsForTeaching::Session.last
+      )
 
       # - What route into teaching did you take?
       expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
@@ -809,7 +817,11 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
     scenario "with Ordnance Survey data" do
       expect(claim.valid?(:submit)).to eq false
-      jump_to_claim_journey_page(claim, "check-your-answers-part-one")
+      jump_to_claim_journey_page(
+        claim: claim,
+        slug: "check-your-answers-part-one",
+        journey_session: Journeys::AdditionalPaymentsForTeaching::Session.last
+      )
 
       # - Check your answers for eligibility
       expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))

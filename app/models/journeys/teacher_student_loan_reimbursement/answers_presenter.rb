@@ -21,7 +21,7 @@ module Journeys
           a << current_school
           a << subjects_taught
           a << leadership_position
-          a << mostly_performed_leadership_duties if eligibility.had_leadership_position?
+          a << mostly_performed_leadership_duties if answers.had_leadership_position?
         end
       end
 
@@ -62,7 +62,7 @@ module Journeys
       def leadership_position
         [
           leadership_position_question,
-          (eligibility.had_leadership_position? ? "Yes" : "No"),
+          (answers.had_leadership_position? ? "Yes" : "No"),
           "leadership-position"
         ]
       end
@@ -70,7 +70,7 @@ module Journeys
       def mostly_performed_leadership_duties
         [
           mostly_performed_leadership_duties_question,
-          (eligibility.mostly_performed_leadership_duties? ? "Yes" : "No"),
+          (answers.mostly_performed_leadership_duties? ? "Yes" : "No"),
           "mostly-performed-leadership-duties"
         ]
       end

@@ -288,7 +288,11 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
 
     scenario "with Ordnance Survey API data" do
       expect(claim.valid?(:submit)).to eq false
-      jump_to_claim_journey_page(claim, "postcode-search")
+      jump_to_claim_journey_page(
+        claim: claim,
+        slug: "postcode-search",
+        journey_session: journey_session
+      )
 
       # - What is your home address
       expect(page).to have_text(I18n.t("questions.address.home.title"))
@@ -319,7 +323,11 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
 
     scenario "Claimant cannot find the correct address so chooses to manually enter address" do
       expect(claim.valid?(:submit)).to eq false
-      jump_to_claim_journey_page(claim, "postcode-search")
+      jump_to_claim_journey_page(
+        claim: claim,
+        slug: "postcode-search",
+        journey_session: journey_session
+      )
 
       # - What is your home address
       expect(page).to have_text(I18n.t("questions.address.home.title"))
@@ -361,7 +369,11 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
     # Bugfix - did cause an exception after pressing back
     scenario "Claimant cannot find the correct address so chooses to manually enter address, presses back before filling anything to go to the postcode search again" do
       expect(claim.valid?(:submit)).to eq false
-      jump_to_claim_journey_page(claim, "postcode-search")
+      jump_to_claim_journey_page(
+        claim: claim,
+        slug: "postcode-search",
+        journey_session: journey_session
+      )
 
       # - What is your home address
       expect(page).to have_text(I18n.t("questions.address.home.title"))
@@ -385,7 +397,11 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
 
     scenario "Claimant decides they want to change the POSTCODE from the 'select-home-address' screen" do
       expect(claim.valid?(:submit)).to eq false
-      jump_to_claim_journey_page(claim, "postcode-search")
+      jump_to_claim_journey_page(
+        claim: claim,
+        slug: "postcode-search",
+        journey_session: journey_session
+      )
 
       # - What is your home address (1st time before making the request to change)
       expect(page).to have_text(I18n.t("questions.address.home.title"))
@@ -453,7 +469,11 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
 
     scenario "Ordanance Survery Client raise a ResponseError" do
       expect(claim.valid?(:submit)).to eq false
-      jump_to_claim_journey_page(claim, "postcode-search")
+      jump_to_claim_journey_page(
+        claim: claim,
+        slug: "postcode-search",
+        journey_session: journey_session
+      )
 
       # - What is your home address
       expect(page).to have_text(I18n.t("questions.address.home.title"))

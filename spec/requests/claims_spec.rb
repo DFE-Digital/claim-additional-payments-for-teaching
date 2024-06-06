@@ -315,12 +315,18 @@ RSpec.describe "Claims", type: :request do
       end
 
       it "resets depenent eligibility attributes when appropriate" do
-        in_progress_claim.update!(eligibility_attributes: {had_leadership_position: true, mostly_performed_leadership_duties: false})
+        journey_session.answers.assign_attributes(
+          had_leadership_position: true,
+          mostly_performed_leadership_duties: false
+        )
+        journey_session.save!
         set_slug_sequence_in_session(in_progress_claim, "leadership-position")
         put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "leadership-position"), params: {claim: {had_leadership_position: false}}
 
         expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "eligibility-confirmed"))
-        expect(in_progress_claim.eligibility.reload.mostly_performed_leadership_duties).to be_nil
+        expect(
+          journey_session.reload.answers.mostly_performed_leadership_duties
+        ).to be_nil
       end
 
       context "having searched for a school but not selected a school from the results on the claim-school page" do

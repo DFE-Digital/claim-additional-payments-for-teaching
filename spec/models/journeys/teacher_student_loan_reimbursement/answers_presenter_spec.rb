@@ -20,7 +20,8 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::AnswersPresenter, type
         :student_loans_session,
         answers: attributes_for(
           :student_loans_answers,
-          :with_claim_school
+          :with_claim_school,
+          :with_leadership_position
         ).merge(subject_attributes)
       )
     end
@@ -59,7 +60,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::AnswersPresenter, type
     end
 
     it "excludes questions skipped from the flow" do
-      eligibility.had_leadership_position = false
+      journey_session.answers.assign_attributes(had_leadership_position: false)
       expect(answers).to_not include([mostly_performed_leadership_duties_question, "Yes", "mostly-performed-leadership-duties"])
       expect(answers).to_not include([mostly_performed_leadership_duties_question, "No", "mostly-performed-leadership-duties"])
     end
