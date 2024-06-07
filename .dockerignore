@@ -16,3 +16,7 @@ localhost.key
 
 **/.terraform
 .vscode
+
+.github
+azure
+terraform

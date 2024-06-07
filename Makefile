@@ -9,17 +9,6 @@ DOCKER_REPOSITORY=ghcr.io/dfe-digital/claim-additional-payments-for-teaching
 help:
 	@grep -E '^[a-zA-Z\._\-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-review:
-	$(if ${PR_NUMBER}, , $(error Missing environment variable "PR_NUMBER", Please specify the pull request id))
-	$(eval APP_NAME=pr-${PR_NUMBER})
-	$(eval AZ_SUBSCRIPTION=s118-teacherpaymentsservice-development)
-	$(eval RESOURCE_GROUP_NAME=s118d02-review-tfbackend)
-	$(eval STORAGE_ACCOUNT_NAME=s118d02reviewtfbackendsa)
-	$(eval CONTAINER_NAME=s118d02conttfstate)
-	$(eval DEPLOY_ENV=review)
-	$(eval BACKEND_KEY=-backend-config=key=${APP_NAME}.tfstate)
-	$(eval export TF_VAR_pr_number=${PR_NUMBER})
-
 test:
 	$(eval AZ_SUBSCRIPTION=s118-teacherpaymentsservice-test)
 	$(eval RESOURCE_GROUP_NAME=s118t01-tfbackend)
@@ -34,12 +23,13 @@ production:
 	$(eval CONTAINER_NAME=s118p01conttfstate)
 	$(eval DEPLOY_ENV=production)
 
-.PHONY: review_aks
-review_aks: test-cluster
+.PHONY: review-aks
+review-aks: test-cluster
 	$(if ${PR_NUMBER},,$(error Missing PR_NUMBER))
 	$(eval ENVIRONMENT=review-${PR_NUMBER})
 	$(eval export TF_VAR_environment=${ENVIRONMENT})
 	$(eval include global_config/review.sh)
+	echo https://claim-additional-payments-for-teaching-review-$(PR_NUMBER).test.teacherservices.cloud will be created in aks
 
 set-azure-account:
 	az account set -s ${AZ_SUBSCRIPTION}
@@ -55,26 +45,62 @@ terraform-init: set-azure-account
 		-backend-config=container_name=${CONTAINER_NAME} \
 		${BACKEND_KEY}
 
+terraform-init-aks: composed-variables bin/terrafile set-azure-account-aks
+	$(if ${DOCKER_IMAGE_TAG}, , $(eval DOCKER_IMAGE_TAG=master))
+
+	./bin/terrafile -p terraform/application/vendor/modules -f terraform/application/config/$(CONFIG)_Terrafile
+	terraform -chdir=terraform/application init -upgrade -reconfigure \
+		-backend-config=resource_group_name=${RESOURCE_GROUP_NAME} \
+		-backend-config=storage_account_name=${STORAGE_ACCOUNT_NAME} \
+		-backend-config=key=${ENVIRONMENT}_kubernetes.tfstate
+
+	$(eval export TF_VAR_azure_resource_prefix=${AZURE_RESOURCE_PREFIX})
+	$(eval export TF_VAR_config_short=${CONFIG_SHORT})
+	$(eval export TF_VAR_service_name=${SERVICE_NAME})
+	$(eval export TF_VAR_service_short=${SERVICE_SHORT})
+	$(eval export TF_VAR_docker_image=${DOCKER_REPOSITORY}:${DOCKER_IMAGE_TAG})
+
 terraform-plan: terraform-init
 	terraform -chdir=azure/terraform plan \
 		-var="input_container_version=${IMAGE_TAG}" \
 		-var-file workspace_variables/${DEPLOY_ENV}.tfvars.json
+
+terraform-plan-aks: terraform-init-aks
+	terraform -chdir=terraform/application plan -var-file "config/${CONFIG}.tfvars.json"
 
 terraform-apply: terraform-init
 	terraform -chdir=azure/terraform apply \
 		-var="input_container_version=${IMAGE_TAG}" \
 		-var-file workspace_variables/${DEPLOY_ENV}.tfvars.json
 
+terraform-apply-aks: terraform-init-aks
+	terraform -chdir=terraform/application apply -var-file "config/${CONFIG}.tfvars.json" ${AUTO_APPROVE}
+
 terraform-destroy: terraform-init
 	terraform -chdir=azure/terraform destroy \
 		-var="input_container_version=${IMAGE_TAG}" \
 		-var-file workspace_variables/${DEPLOY_ENV}.tfvars.json
+
+terraform-destroy-aks: terraform-init-aks
+	terraform -chdir=terraform/application destroy -var-file "config/${CONFIG}.tfvars.json" ${AUTO_APPROVE}
+
+domains:
+	$(eval include global_config/domains.sh)
 
 composed-variables:
 	$(eval RESOURCE_GROUP_NAME=${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-rg)
 	$(eval KEYVAULT_NAMES='("${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-app-kv", "${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-inf-kv")')
 	$(eval STORAGE_ACCOUNT_NAME=${AZURE_RESOURCE_PREFIX}${SERVICE_SHORT}${CONFIG_SHORT}tfsa)
 	$(eval LOG_ANALYTICS_WORKSPACE_NAME=${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-log)
+
+ci:
+	$(eval AUTO_APPROVE=-auto-approve)
+	$(eval SKIP_AZURE_LOGIN=true)
+	$(eval SKIP_CONFIRM=true)
+
+bin/terrafile: ## Install terrafile to manage terraform modules
+	curl -sL https://github.com/coretech/terrafile/releases/download/v${TERRAFILE_VERSION}/terrafile_${TERRAFILE_VERSION}_$$(uname)_x86_64.tar.gz \
+		| tar xz -C ./bin terrafile
 
 set-what-if:
 	$(eval WHAT_IF=--what-if)
@@ -99,3 +125,15 @@ validate-arm-resources: set-what-if arm-deployment ## Validate ARM resource depl
 test-cluster:
 	$(eval CLUSTER_RESOURCE_GROUP_NAME=s189t01-tsc-ts-rg)
 	$(eval CLUSTER_NAME=s189t01-tsc-test-aks)
+
+production-cluster:
+	$(eval CLUSTER_RESOURCE_GROUP_NAME=s189p01-tsc-pd-rg)
+	$(eval CLUSTER_NAME=s189p01-tsc-production-aks)
+
+get-cluster-credentials: set-azure-account-aks
+	az aks get-credentials --overwrite-existing -g ${CLUSTER_RESOURCE_GROUP_NAME} -n ${CLUSTER_NAME}
+	kubelogin convert-kubeconfig -l $(if ${GITHUB_ACTIONS},spn,azurecli)
+
+bin/konduit.sh:
+	curl -s https://raw.githubusercontent.com/DFE-Digital/teacher-services-cloud/main/scripts/konduit.sh -o bin/konduit.sh \
+		&& chmod +x bin/konduit.sh

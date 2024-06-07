@@ -1,0 +1,80 @@
+name: Build and deploy to AKS cluster
+
+on:
+  pull_request:
+    types: [labeled, opened, reopened, synchronize]
+
+concurrency: deploy-${{ github.ref }}
+
+permissions:
+  packages: write
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
+    outputs:
+      docker-image-tag: ${{ steps.build-image.outputs.tag }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build and push docker image
+        id: build-image
+        uses: DFE-Digital/github-actions/build-docker-image@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          target: web
+          context: .
+
+  deploy_review:
+    name: Deploy to review environment
+    concurrency: deploy_review_${{ github.event.pull_request.number }}
+    runs-on: ubuntu-latest
+    needs: [build]
+    environment:
+      name: review-aks
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/deploy-environment
+        id: deploy
+        with:
+          environment: review-aks
+          docker-image: ${{ needs.build.outputs.docker-image-tag }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          pull-request-number: ${{ github.event.pull_request.number }}
+
+      - uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set kubectl
+        uses: DFE-Digital/github-actions/set-kubectl@master
+
+      - name: Seed review app
+        shell: bash
+        if: github.event.number != ''
+        run: |
+          make ci review-aks get-cluster-credentials
+          kubectl exec -n srtl-development deployment/claim-additional-payments-for-teaching-review-${{ github.event.pull_request.number }}-worker -- sh -c "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/prepare-database"
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+
+      - name: Post comment to Pull Request ${{ github.event.number }}
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: aks
+          message: |
+            ### Deployments
+
+            | Journey             | URL                                  |
+            | ------------------- | ------------------------------------ |
+            | Additional Payments | <${{ env.APP_URL }}/additional-payments/claim> |
+            | Student Loans       | <${{ env.APP_URL }}/student-loans/claim>       |
+            | Admin               | <${{ env.APP_URL }}/admin>                     |

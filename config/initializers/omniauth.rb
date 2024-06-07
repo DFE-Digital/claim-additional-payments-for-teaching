@@ -21,14 +21,14 @@ if ENV["TID_BASE_URL"].present?
   tid_sign_in_redirect_uri = URI.parse(ENV["TID_BASE_URL"])
   tid_sign_in_redirect_uri.path = "/claim/auth/tid/callback"
 
-  if ENV["ENVIRONMENT_NAME"] == "review"
+  if ENV["ENVIRONMENT_NAME"].start_with?("review")
     tid_sign_in_redirect_uri.host = ENV["CANONICAL_HOSTNAME"]
   end
 end
 
 module ::DfESignIn
   def self.bypass?
-    (Rails.env.development? || ENV["ENVIRONMENT_NAME"] == "review") && ENV["BYPASS_DFE_SIGN_IN"] == "true"
+    (Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")) && ENV["BYPASS_DFE_SIGN_IN"] == "true"
   end
 end
 

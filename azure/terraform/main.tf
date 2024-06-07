@@ -10,7 +10,6 @@ module "container" {
   rg_prefix             = var.rg_prefix
   rg_location           = local.input_region
   common_tags           = local.tags
-  app_name              = local.app_name
   db_host                 = data.azurerm_postgresql_server.app.fqdn
   db_admin_username       = data.azurerm_postgresql_server.app.administrator_login
   db_name                 = local.db_name
@@ -32,7 +31,6 @@ module "app_service" {
   rg_prefix               = var.rg_prefix
   rg_location             = local.input_region
   common_tags             = local.tags
-  app_name                = local.app_name
   db_host                 = data.azurerm_postgresql_server.app.fqdn
   db_admin_username       = data.azurerm_postgresql_server.app.administrator_login
   db_name                 = local.db_name
@@ -40,7 +38,6 @@ module "app_service" {
   canonical_hostname      = var.canonical_hostname
   ssl_hostnames           = var.ssl_hostnames
   bypass_dfe_sign_in      = var.bypass_dfe_sign_in
-  pr_number               = var.pr_number
   suppress_dfe_analytics_init = var.suppress_dfe_analytics_init
   enable_basic_auth       = var.enable_basic_auth
   keyvault_cert_name      = var.keyvault_cert_name
