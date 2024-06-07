@@ -27,6 +27,8 @@ module FeatureHelpers
   end
 
   def choose_school(school)
+    expect(page).to have_text(/Which (additional )?school/) # there can be variations of the full text depending on which journey/page
+
     fill_in :school_search, with: school.name.sub("The ", "").split(" ").first
 
     click_button "Continue"
