@@ -88,12 +88,3 @@ steps:
         web-$(COMMIT_ID)
     env:
       DOCKER_BUILDKIT: 1
-
-  - task: Docker@2
-    displayName: Push test image
-    inputs:
-      command: push
-      repository: docker.io/dfedigital/teacher-payments-service
-      tags: test-$(BRANCH)
-    env:
-      DOCKER_BUILDKIT: 1
