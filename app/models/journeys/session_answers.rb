@@ -44,6 +44,18 @@ module Journeys
     attribute :sent_one_time_password_at, :datetime
     attribute :answered, default: []
 
+    attribute :employed_as_supply_teacher, :boolean
+    attribute :has_entire_term_contract, :boolean
+    attribute :employed_directly, :boolean
+    attribute :subject_to_formal_performance_action, :boolean
+    attribute :subject_to_disciplinary_action, :boolean
+    attribute :itt_academic_year
+    attribute :teaching_subject_now, :boolean
+    attribute :eligible_itt_subject, :string
+    attribute :eligible_degree_subject, :boolean
+    attribute :nqt_in_academic_year_after_itt, :boolean
+    attribute :induction_completed, :boolean
+
     def has_attribute?(name)
       attribute_names.include?(name.to_s)
     end
