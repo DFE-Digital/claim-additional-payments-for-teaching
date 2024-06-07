@@ -31,6 +31,10 @@ review-aks: test-cluster
 	$(eval include global_config/review.sh)
 	echo https://claim-additional-payments-for-teaching-review-$(PR_NUMBER).test.teacherservices.cloud will be created in aks
 
+.PHONY: test-aks
+test-aks: test-cluster
+	$(eval include global_config/test.sh)
+
 set-azure-account:
 	az account set -s ${AZ_SUBSCRIPTION}
 
