@@ -1,15 +1,5 @@
 {
   "environments": {
-    "review": {
-      "addons": ["heroku-postgresql:in-dyno"],
-      "buildpacks": [{ "url": "heroku/nodejs" }, { "url": "heroku/ruby" }],
-      "scripts": {
-        "postdeploy": "bundle exec rake db:schema:load db:seed"
-      },
-      "env": {
-        "ENVIRONMENT_NAME": "review"
-      }
-    },
     "test": {
       "addons": ["heroku-postgresql:in-dyno"],
       "buildpacks": [

@@ -280,12 +280,12 @@ https://test.additional-teaching-payment.education.gov.uk.
 The release process for Production is documented in
 [`docs/release-process.md`](docs/release-process.md)
 
-### Azure review apps
+### Review apps
 
-Adding the 'deploy' label to pull requests builds a review app in Azure using
-the same technologies as the production environment. Each one can be accessed
-via this URL:
-`https://claim-additional-payments-for-teaching-review-<PR_NUMBER>.test.teacherservices.cloud`
+Adding the 'deploy' label to pull requests deploys a review app via Azure
+Kubernetes Service (AKS) with the URL:
+
+`https://claim-additional-payments-for-teaching-review-<PR NUMBER>-web.test.teacherservices.cloud`
 
 The review app is then destroyed when the PR is closed or merged.
 
