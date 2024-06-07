@@ -78,7 +78,7 @@ gem "uk_postcode"
 gem "faraday_middleware"
 
 # required for prod due to Azure DEV/TEST all running as 'production'
-gem "faker", "~> 3.3", require: false
+gem "faker", "~> 3.4", require: false
 # speed up bulk imports
 gem "activerecord-copy", require: false
 
