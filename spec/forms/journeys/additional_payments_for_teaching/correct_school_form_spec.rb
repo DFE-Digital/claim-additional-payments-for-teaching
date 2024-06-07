@@ -35,6 +35,10 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::CorrectSchoolForm, type:
       it "resets the somewhere_else attribute" do
         expect { save }.to change { claim.reload.eligibility.school_somewhere_else }.to eq(false)
       end
+
+      it "writes to the journey session" do
+        expect { save }.to change { journey_session.answers.current_school_id }.to(school.id)
+      end
     end
 
     context "with an existing school association and wants to change school" do

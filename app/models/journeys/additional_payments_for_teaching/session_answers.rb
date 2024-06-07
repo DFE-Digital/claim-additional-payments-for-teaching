@@ -84,6 +84,22 @@ module Journeys
 
         @current_school ||= School.find_by(id: current_school_id)
       end
+
+      def postgraduate_itt?
+        qualification == "postgraduate_itt"
+      end
+
+      def undergraduate_itt?
+        qualification == "undergraduate_itt"
+      end
+
+      def assessment_only?
+        qualification == "assessment_only"
+      end
+
+      def overseas_recognition?
+        qualification == "overseas_recognition"
+      end
     end
   end
 end

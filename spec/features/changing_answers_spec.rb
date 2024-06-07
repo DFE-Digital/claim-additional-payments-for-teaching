@@ -22,7 +22,11 @@ RSpec.feature "Changing the answers on a submittable claim" do
     )
     session.save!
 
-    jump_to_claim_journey_page(claim, "check-your-answers")
+    jump_to_claim_journey_page(
+      claim:,
+      journey_session: session,
+      slug: "check-your-answers"
+    )
 
     find("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "subjects-taught")}']").click
 
@@ -42,9 +46,14 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
   scenario "Teacher changes an answer which is not a dependency of any of the other answers they've given, becoming ineligible" do
     claim = start_student_loans_claim
+    session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
-    jump_to_claim_journey_page(claim, "check-your-answers")
+    jump_to_claim_journey_page(
+      claim:,
+      slug: "check-your-answers",
+      journey_session: session
+    )
 
     find("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "qts-year")}']").click
 
@@ -53,7 +62,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     choose_qts_year :before_cut_off_date
     click_on "Continue"
 
-    expect(claim.eligibility.reload.qts_award_year).to eq("before_cut_off_date")
+    expect(session.reload.answers.qts_award_year).to eq("before_cut_off_date")
 
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text("You can only get this payment if you completed your initial teacher training between the start of the #{Policies::StudentLoans.first_eligible_qts_award_year.to_s(:long)} academic year and the end of the 2020 to 2021 academic year.")
@@ -70,7 +79,11 @@ RSpec.feature "Changing the answers on a submittable claim" do
     )
     session.save!
 
-    jump_to_claim_journey_page(claim, "check-your-answers")
+    jump_to_claim_journey_page(
+      claim:,
+      slug: "check-your-answers",
+      journey_session: session
+    )
 
     new_claim_school = create(:school, :student_loans_eligible, name: "Claim School")
 
@@ -92,15 +105,16 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     click_on "Continue"
 
-    expect(claim.eligibility.reload.biology_taught).to eq(true)
-    expect(claim.eligibility.chemistry_taught).to eq(true)
+    session.reload
+    expect(session.answers.biology_taught).to eq(true)
+    expect(session.answers.chemistry_taught).to eq(true)
 
     expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "still-teaching"))
 
     choose_still_teaching "Yes, at Claim School"
 
-    expect(claim.eligibility.reload.employment_status).to eql("claim_school")
-    expect(claim.eligibility.current_school).to eql new_claim_school
+    expect(session.reload.answers.employment_status).to eql("claim_school")
+    expect(session.answers.current_school).to eql new_claim_school
 
     expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "check-your-answers"))
   end
@@ -108,27 +122,35 @@ RSpec.feature "Changing the answers on a submittable claim" do
   scenario "Teacher changes an answer which is a dependency of some of the subsequent answers they've given, making them ineligible" do
     claim = start_student_loans_claim
     claim.update!(attributes_for(:claim, :submittable))
-    claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, had_leadership_position: false, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
+    claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
     session.answers.assign_attributes(
-      attributes_for(:student_loans_answers, :submittable)
+      attributes_for(
+        :student_loans_answers,
+        :submittable,
+        had_leadership_position: false
+      )
     )
     session.save!
 
-    jump_to_claim_journey_page(claim, "check-your-answers")
+    jump_to_claim_journey_page(
+      claim: claim,
+      slug: "check-your-answers",
+      journey_session: session
+    )
 
     find("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "leadership-position")}']").click
 
     choose "Yes"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.had_leadership_position).to eq(true)
-    expect(claim.eligibility.mostly_performed_leadership_duties).to be_nil
+    expect(session.reload.answers.had_leadership_position).to eq(true)
+    expect(session.answers.mostly_performed_leadership_duties).to be_nil
 
     choose "Yes"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.mostly_performed_leadership_duties).to eq(true)
+    expect(session.reload.answers.mostly_performed_leadership_duties).to eq(true)
 
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text("You can only get this payment if you spent less than half your working hours performing leadership duties between #{Policies::StudentLoans.current_financial_year}.")
@@ -145,7 +167,11 @@ RSpec.feature "Changing the answers on a submittable claim" do
     )
     session.save!
 
-    jump_to_claim_journey_page(claim, "check-your-answers")
+    jump_to_claim_journey_page(
+      claim: claim,
+      slug: "check-your-answers",
+      journey_session: session
+    )
 
     find("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "subjects-taught")}']").click
 
@@ -176,7 +202,11 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     claim.update!(attributes_for(:claim, :submittable))
     eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id, student_loan_repayment_amount: 100))
-    jump_to_claim_journey_page(claim, "check-your-answers")
+    jump_to_claim_journey_page(
+      claim: claim,
+      slug: "check-your-answers",
+      journey_session: journey_session
+    )
 
     # Add student loans data for the applicant's NINO and DoB
     create(
@@ -216,7 +246,11 @@ RSpec.feature "Changing the answers on a submittable claim" do
           middle_name: "Jay"
         )
       )
-      jump_to_claim_journey_page(claim, "check-your-answers")
+      jump_to_claim_journey_page(
+        claim: claim,
+        slug: "check-your-answers",
+        journey_session: journey_session
+      )
     end
 
     scenario "Teacher can change a field that isn't related to eligibility" do
@@ -239,7 +273,11 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     scenario "user can change the answer to identity details" do
       claim.update!(govuk_verify_fields: [])
-      jump_to_claim_journey_page(claim, "check-your-answers")
+      jump_to_claim_journey_page(
+        claim: claim,
+        slug: "check-your-answers",
+        journey_session: journey_session
+      )
 
       expect(page).to have_content(I18n.t("questions.name"))
       expect(page).to have_content(I18n.t("forms.address.questions.your_address"))
@@ -261,7 +299,11 @@ RSpec.feature "Changing the answers on a submittable claim" do
     end
 
     scenario "user can change the answer to payment details" do
-      jump_to_claim_journey_page(claim, "check-your-answers")
+      jump_to_claim_journey_page(
+        claim: claim,
+        slug: "check-your-answers",
+        journey_session: journey_session
+      )
 
       expect(page).to have_content(I18n.t("questions.bank_or_building_society"))
       expect(page).to have_content("Personal bank account")
@@ -315,7 +357,11 @@ RSpec.feature "Changing the answers on a submittable claim" do
       )
       session.save!
 
-      jump_to_claim_journey_page(claim, "check-your-answers")
+      jump_to_claim_journey_page(
+        claim: claim,
+        slug: "check-your-answers",
+        journey_session: session
+      )
     end
 
     context "when email address" do

@@ -26,7 +26,11 @@ RSpec.feature "Confirming Claimant Contact details" do
       eq("david.tau1988@hotmail.co.uk")
     )
 
-    jump_to_claim_journey_page(claim, "email-verification")
+    jump_to_claim_journey_page(
+      claim: claim,
+      slug: "email-verification",
+      journey_session: journey_session
+    )
 
     expect(page).to have_text("Enter the 6-digit passcode")
     expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "email-address"))

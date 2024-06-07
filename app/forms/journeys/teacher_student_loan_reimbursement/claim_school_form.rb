@@ -34,20 +34,9 @@ module Journeys
 
         journey_session.save!
 
-        # FIXME RL: Remove this once the subjects taught and still teaching
-        # forms write their answers to the session
-        claim.eligibility.assign_attributes(
-          claim_school_somewhere_else: true,
-          taught_eligible_subjects: nil,
-          biology_taught: nil,
-          physics_taught: nil,
-          chemistry_taught: nil,
-          computing_taught: nil,
-          languages_taught: nil,
-          employment_status: nil,
-          current_school_id: nil
-        )
-
+        # FIXME RL: Remove this once the current_school forms write their
+        # answers to the session
+        claim.eligibility.assign_attributes(current_school_id: nil)
         claim.eligibility.save!
 
         true

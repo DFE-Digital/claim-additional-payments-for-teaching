@@ -1,0 +1,44 @@
+name: Deploy environment
+description: Deploys an application environment
+
+inputs:
+  environment:
+    description: The name of the environment
+    required: true
+  docker-image:
+    description: The Docker image to deploy
+    required: true
+  azure-credentials:
+    description: JSON object containing a service principal that can read from Azure Key Vault
+    required: true
+  pull-request-number:
+    description: The pull request number which triggered this deploy.
+    required: false
+
+runs:
+  using: composite
+
+  steps:
+    - uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.8.4
+        terraform_wrapper: false
+
+    - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
+      with:
+        azure-credentials: ${{ inputs.azure-credentials }}
+
+    - name: Terraform Apply
+      shell: bash
+      run: |
+        make ci ${{ inputs.environment }} terraform-apply-aks
+      env:
+        DOCKER_IMAGE_TAG: ${{ inputs.docker-image }}
+        PR_NUMBER: ${{ inputs.pull-request-number }}
+
+    - name: Extract Terraform outputs
+      shell: bash
+      id: set_outputs
+      run: |
+        output=$(terraform -chdir=terraform/application output -raw url)
+        echo "APP_URL=$output" >> $GITHUB_ENV

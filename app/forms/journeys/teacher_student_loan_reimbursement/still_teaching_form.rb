@@ -9,12 +9,12 @@ module Journeys
       def save
         return false unless valid?
 
-        update!(
-          eligibility_attributes: {
-            employment_status:,
-            current_school_id: currently_at_school? ? current_school_id : nil
-          }
+        journey_session.answers.assign_attributes(
+          employment_status:,
+          current_school_id: currently_at_school? ? current_school_id : nil
         )
+
+        journey_session.save!
       end
 
       def school

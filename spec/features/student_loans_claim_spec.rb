@@ -24,10 +24,9 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(page).to have_link(href: "mailto:#{I18n.t("student_loans.feedback_email")}")
 
     choose_qts_year
-    claim = Claim.by_policy(Policies::StudentLoans).order(:created_at).last
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
 
-    expect(claim.eligibility.reload.qts_award_year).to eql("on_or_after_cut_off_date")
+    expect(session.reload.answers.qts_award_year).to eql("on_or_after_cut_off_date")
 
     expect(page).to have_text(claim_school_question)
 
@@ -40,22 +39,22 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(page).to have_text(I18n.t("student_loans.forms.still_teaching.questions.claim_school"))
 
     choose_still_teaching("Yes, at #{school.name}")
-    expect(claim.eligibility.reload.employment_status).to eql("claim_school")
-    expect(claim.eligibility.current_school).to eql(school)
+    expect(session.reload.answers.employment_status).to eql("claim_school")
+    expect(session.answers.current_school).to eql(school)
 
-    expect(claim.eligibility.reload.subjects_taught).to eq([:physics_taught])
+    expect(session.reload.answers.subjects_taught).to eq([:physics_taught])
 
     expect(page).to have_text(leadership_position_question)
     choose "Yes"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.had_leadership_position?).to eq(true)
+    expect(session.reload.answers.had_leadership_position?).to eq(true)
 
     expect(page).to have_text(mostly_performed_leadership_duties_question)
     choose "No"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.mostly_performed_leadership_duties?).to eq(false)
+    expect(session.reload.answers.mostly_performed_leadership_duties?).to eq(false)
 
     expect(page).to have_text("you can claim back the student loan repayments you made between #{Policies::StudentLoans.current_financial_year}.")
     click_on "Continue"
@@ -268,10 +267,9 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
         expect(page).to have_link(href: "mailto:#{I18n.t("student_loans.feedback_email")}")
 
         choose_qts_year
-        claim = Claim.by_policy(Policies::StudentLoans).order(:created_at).last
         session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
 
-        expect(claim.eligibility.reload.qts_award_year).to eql("on_or_after_cut_off_date")
+        expect(session.reload.answers.qts_award_year).to eql("on_or_after_cut_off_date")
 
         expect(page).to have_text(claim_school_question)
 
@@ -284,22 +282,22 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
         expect(page).to have_text(I18n.t("student_loans.forms.still_teaching.questions.claim_school"))
 
         choose_still_teaching("Yes, at #{school.name}")
-        expect(claim.eligibility.reload.employment_status).to eql("claim_school")
-        expect(claim.eligibility.current_school).to eql(school)
+        expect(session.reload.answers.employment_status).to eql("claim_school")
+        expect(session.answers.current_school).to eql(school)
 
-        expect(claim.eligibility.reload.subjects_taught).to eq([:physics_taught])
+        expect(session.reload.answers.subjects_taught).to eq([:physics_taught])
 
         expect(page).to have_text(leadership_position_question)
         choose "Yes"
         click_on "Continue"
 
-        expect(claim.eligibility.reload.had_leadership_position?).to eq(true)
+        expect(session.reload.answers.had_leadership_position?).to eq(true)
 
         expect(page).to have_text(mostly_performed_leadership_duties_question)
         choose "No"
         click_on "Continue"
 
-        expect(claim.eligibility.reload.mostly_performed_leadership_duties?).to eq(false)
+        expect(session.reload.answers.mostly_performed_leadership_duties?).to eq(false)
         expect(page).to have_text("you can claim back the student loan repayments you made between #{Policies::StudentLoans.current_financial_year}.")
       end
     end
@@ -308,13 +306,14 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
   scenario "currently works at a different school to the claim school" do
     different_school = create(:school, :student_loans_eligible)
     claim = start_student_loans_claim
+    session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
 
     choose_school school
     choose_subjects_taught
 
     choose_still_teaching("Yes, at another school")
 
-    expect(claim.eligibility.reload.employment_status).to eql("different_school")
+    expect(session.reload.answers.employment_status).to eql("different_school")
 
     fill_in :school_search, with: different_school.name
     click_on "Continue"

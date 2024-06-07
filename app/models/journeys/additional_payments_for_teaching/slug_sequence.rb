@@ -141,7 +141,7 @@ module Journeys
           sequence.delete("teacher-reference-number") if answers.logged_in_with_tid? && answers.teacher_reference_number.present?
 
           sequence.delete("correct-school") unless journey_session.logged_in_with_tid_and_has_recent_tps_school?
-          sequence.delete("current-school") if claim.eligibility.school_somewhere_else == false
+          sequence.delete("current-school") if journey_session.answers.school_somewhere_else == false
 
           if answers.provide_mobile_number == false
             sequence.delete("mobile-number")
@@ -166,7 +166,7 @@ module Journeys
           sequence.delete("personal-details") if answers.logged_in_with_tid? && personal_details_form.valid? && answers.all_personal_details_same_as_tid?
 
           if answers.logged_in_with_tid? && answers.details_check?
-            if claim.qualifications_details_check
+            if answers.qualifications_details_check
               sequence.delete("qualification") if answers.early_career_payments_dqt_teacher_record&.route_into_teaching
               sequence.delete("itt-year") if answers.early_career_payments_dqt_teacher_record&.itt_academic_year_for_claim
               sequence.delete("eligible-itt-subject") if answers.early_career_payments_dqt_teacher_record&.eligible_itt_subject_for_claim

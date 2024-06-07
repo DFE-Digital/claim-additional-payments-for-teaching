@@ -101,27 +101,27 @@ module Journeys
       end
 
       def qualification
-        return if eligibility.claim.qualifications_details_check && answers.early_career_payments_dqt_teacher_record&.route_into_teaching
+        return if answers.qualifications_details_check && answers.early_career_payments_dqt_teacher_record&.route_into_teaching
 
         [
           t("additional_payments.forms.qualification.questions.which_route"),
-          t("early_career_payments.forms.qualification.answers.#{eligibility.qualification}"),
+          t("early_career_payments.forms.qualification.answers.#{answers.qualification}"),
           "qualification"
         ]
       end
 
       def eligible_itt_subject
-        return if eligibility.claim.qualifications_details_check && answers.early_career_payments_dqt_teacher_record&.eligible_itt_subject_for_claim
+        return if answers.qualifications_details_check && answers.early_career_payments_dqt_teacher_record&.eligible_itt_subject_for_claim
 
         [
-          eligible_itt_subject_translation(CurrentClaim.new(claims: [eligibility.claim])),
+          eligible_itt_subject_translation(CurrentClaim.new(claims: [eligibility.claim]), answers),
           text_for_subject_answer,
           "eligible-itt-subject"
         ]
       end
 
       def eligible_degree_subject
-        return if !eligibility.respond_to?(:eligible_degree_subject) || !eligibility.eligible_degree_subject? || (eligibility.claim.qualifications_details_check && answers.levelling_up_premium_payments_dqt_reacher_record&.eligible_degree_code?)
+        return if !eligibility.respond_to?(:eligible_degree_subject) || !eligibility.eligible_degree_subject? || (answers.qualifications_details_check && answers.levelling_up_premium_payments_dqt_reacher_record&.eligible_degree_code?)
 
         [
           t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"),
@@ -139,10 +139,10 @@ module Journeys
       end
 
       def itt_academic_year
-        return if eligibility.claim.qualifications_details_check && answers.early_career_payments_dqt_teacher_record&.itt_academic_year_for_claim
+        return if answers.qualifications_details_check && answers.early_career_payments_dqt_teacher_record&.itt_academic_year_for_claim
 
         [
-          I18n.t("additional_payments.questions.itt_academic_year.qualification.#{eligibility.qualification}"),
+          I18n.t("additional_payments.questions.itt_academic_year.qualification.#{answers.qualification}"),
           eligibility.itt_academic_year.to_s.gsub("/", " - "),
           "itt-year"
         ]

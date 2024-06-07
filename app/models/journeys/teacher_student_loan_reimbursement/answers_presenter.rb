@@ -16,12 +16,12 @@ module Journeys
       # [2]: slug for changing the answer.
       def eligibility_answers
         [].tap do |a|
-          a << qts_award_year unless eligibility.claim.qualifications_details_check
+          a << qts_award_year unless answers.qualifications_details_check
           a << claim_school
           a << current_school
           a << subjects_taught
           a << leadership_position
-          a << mostly_performed_leadership_duties if eligibility.had_leadership_position?
+          a << mostly_performed_leadership_duties if answers.had_leadership_position?
         end
       end
 
@@ -54,7 +54,7 @@ module Journeys
       def subjects_taught
         [
           subjects_taught_question(school_name: answers.claim_school_name),
-          subject_list(eligibility.subjects_taught),
+          subject_list(answers.subjects_taught),
           "subjects-taught"
         ]
       end
@@ -62,7 +62,7 @@ module Journeys
       def leadership_position
         [
           leadership_position_question,
-          (eligibility.had_leadership_position? ? "Yes" : "No"),
+          (answers.had_leadership_position? ? "Yes" : "No"),
           "leadership-position"
         ]
       end
@@ -70,7 +70,7 @@ module Journeys
       def mostly_performed_leadership_duties
         [
           mostly_performed_leadership_duties_question,
-          (eligibility.mostly_performed_leadership_duties? ? "Yes" : "No"),
+          (answers.mostly_performed_leadership_duties? ? "Yes" : "No"),
           "mostly-performed-leadership-duties"
         ]
       end

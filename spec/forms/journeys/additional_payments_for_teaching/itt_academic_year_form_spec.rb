@@ -7,11 +7,18 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::IttAcademicYearForm do
     }
 
     let(:current_claim) do
-      claims = journey::POLICIES.map { |policy| create(:claim, policy: policy, eligibility_attributes: {qualification: "postgraduate_itt"}) }
+      claims = journey::POLICIES.map { |policy| create(:claim, policy: policy) }
       CurrentClaim.new(claims: claims)
     end
 
-    let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
+    let(:journey_session) do
+      create(
+        :additional_payments_session,
+        answers: {
+          qualification: "postgraduate_itt"
+        }
+      )
+    end
 
     let(:slug) { "itt_year" }
 

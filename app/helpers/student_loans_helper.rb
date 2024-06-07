@@ -32,6 +32,6 @@ module StudentLoansHelper
   # Returns the question for the mostly-performed-leadership-duties question in
   # the Student  Loans journey.
   def mostly_performed_leadership_duties_question
-    translate("student_loans.forms.mostly_performed_leadership_duties..questions.mostly_performed_leadership_duties", financial_year: Policies::StudentLoans.current_financial_year)
+    translate("student_loans.forms.mostly_performed_leadership_duties.questions.mostly_performed_leadership_duties", financial_year: Policies::StudentLoans.current_financial_year)
   end
 end

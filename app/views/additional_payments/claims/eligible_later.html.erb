@@ -13,7 +13,7 @@
         because you have not completed your induction.
       </p>
     <% else %>
-      <% if current_claim.eligibility.undergraduate_itt? %>
+      <% if journey_session.answers.undergraduate_itt? %>
         <p class="govuk-body">
           You are not eligible for the
           <%= link_to "early-career payment (opens in new tab)", "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>
@@ -21,7 +21,7 @@
         </p>
       <% end %>
 
-      <% if current_claim.eligibility.postgraduate_itt? %>
+      <% if journey_session.answers.postgraduate_itt? %>
         <p class="govuk-body">
           You are not eligible for the
           <%= link_to "early-career payment (opens in new tab)", "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>
@@ -29,7 +29,7 @@
         </p>
       <% end %>
 
-      <% if current_claim.eligibility.assessment_only? || current_claim.eligibility.overseas_recognition? %>
+      <% if journey_session.answers.assessment_only? || journey_session.answers.overseas_recognition? %>
         <p class="govuk-body">
           You are not eligible for the
           <%= link_to "early-career payment (opens in new tab)", "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>

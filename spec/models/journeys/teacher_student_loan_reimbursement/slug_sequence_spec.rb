@@ -4,7 +4,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
   subject(:slug_sequence) { described_class.new(current_claim, journey_session) }
 
   let(:eligibility) { create(:student_loans_eligibility, :eligible) }
-  let(:claim) { build(:claim, eligibility:, qualifications_details_check:) }
+  let(:claim) { build(:claim, eligibility:) }
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
   let(:journey_session) do
     build(
@@ -12,7 +12,8 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
       answers: {
         logged_in_with_tid: logged_in_with_tid,
         details_check: details_check,
-        dqt_teacher_status: dqt_teacher_status
+        dqt_teacher_status: dqt_teacher_status,
+        qualifications_details_check: qualifications_details_check
       }
     )
   end
@@ -28,13 +29,14 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
     end
 
     it "includes the “ineligible” slug if the claim is actually ineligible" do
-      claim.eligibility.update! qts_award_year: "before_cut_off_date"
-      expect(claim.eligibility.reload).to be_ineligible
+      journey_session.answers.assign_attributes(
+        qts_award_year: "before_cut_off_date"
+      )
       expect(slug_sequence.slugs).to include("ineligible")
     end
 
     it "excludes “current-school” if the claimant still works at the school they are claiming against" do
-      claim.eligibility.employment_status = :claim_school
+      journey_session.answers.employment_status = :claim_school
 
       expect(slug_sequence.slugs).not_to include("current-school")
     end

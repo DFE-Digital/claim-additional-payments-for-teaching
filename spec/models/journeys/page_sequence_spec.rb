@@ -7,7 +7,7 @@ RSpec.describe Journeys::PageSequence do
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
   let(:slug_sequence) { OpenStruct.new(slugs: ["first-slug", "second-slug", "third-slug"]) }
   let(:completed_slugs) { [] }
-  let(:journey_session) { build(:student_loans_session) }
+  let(:journey_session) { create(:student_loans_session) }
 
   subject(:page_sequence) do
     described_class.new(
@@ -44,7 +44,14 @@ RSpec.describe Journeys::PageSequence do
     end
 
     context "with an ineligible claim" do
-      let(:claim) { build(:claim, eligibility: build(:student_loans_eligibility, employment_status: :no_school)) }
+      let(:journey_session) do
+        create(
+          :student_loans_session,
+          answers: {
+            employment_status: "no_school"
+          }
+        )
+      end
       let(:current_slug) { "second-slug" }
       let(:completed_slugs) { ["first-slug", "second-slug"] }
 

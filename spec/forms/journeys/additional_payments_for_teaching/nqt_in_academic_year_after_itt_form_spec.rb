@@ -173,7 +173,9 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
           end
 
           it "sets the qualification and resets dependent answers" do
-            expect(claim.eligibility.qualification).to eq "postgraduate_itt"
+            expect(
+              journey_session.answers.qualification
+            ).to eq "postgraduate_itt"
           end
         end
       end

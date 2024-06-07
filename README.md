@@ -282,9 +282,8 @@ The release process for Production is documented in
 
 ### Review apps
 
-Adding the 'deploy' label to pull requests in the
-[GitHub Repository](https://github.com/DFE-Digital/dfe-teachers-payment-service)
-will deploy a review app via Azure Kubernetes Service (AKS) with the URL:
+Adding the 'deploy' label to pull requests deploys a review app via Azure
+Kubernetes Service (AKS) with the URL:
 
 `https://claim-additional-payments-for-teaching-review-<PR NUMBER>-web.test.teacherservices.cloud`
 
