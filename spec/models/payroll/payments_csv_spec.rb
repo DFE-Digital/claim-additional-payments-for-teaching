@@ -16,7 +16,7 @@ RSpec.describe Payroll::PaymentsCsv do
       Payroll::PaymentCsvRow.new(payment).to_s.chomp
     end
 
-    [csv_header_row, csv_payment_rows].join("\n") + "\n"
+    [csv_header_row, csv_payment_rows].join("\r\n") + "\r\n"
   end
 
   def load_zip(buffer)

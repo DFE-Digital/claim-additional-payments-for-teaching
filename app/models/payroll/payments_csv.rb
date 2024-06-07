@@ -83,7 +83,7 @@ module Payroll
     end
 
     def header_row
-      CSV.generate_line(csv_headers)
+      CSV.generate_line(csv_headers, row_sep: PaymentCsvRow::ROW_SEPARATOR)
     end
 
     def csv_headers
