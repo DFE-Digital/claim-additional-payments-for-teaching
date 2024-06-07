@@ -2,7 +2,7 @@ DfE::Analytics.configure do |config|
   # Whether to log events instead of sending them to BigQuery.
   #
   # config.log_only = true
-  config.log_only = (%w[development test].include?(ENV["RAILS_ENV"]) || ENV["ENVIRONMENT_NAME"] == "review")
+  config.log_only = (%w[development test].include?(ENV["RAILS_ENV"]) || ENV["ENVIRONMENT_NAME"].start_with?("review"))
 
   # Whether to use ActiveJob or dispatch events immediately.
   #
