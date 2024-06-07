@@ -6,6 +6,7 @@ require "excel_utils"
 
 module Payroll
   class PaymentCsvRow < SimpleDelegator
+    ROW_SEPARATOR = "\r\n"
     DATE_FORMAT = "%d/%m/%Y"
     UNITED_KINGDOM = "United Kingdom"
     BASIC_RATE_TAX_CODE = "BR"
@@ -19,7 +20,7 @@ module Payroll
     TITLE = "Prof."
 
     def to_s
-      CSV.generate_line(data)
+      CSV.generate_line(data, row_sep: ROW_SEPARATOR)
     end
 
     private

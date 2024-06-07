@@ -292,5 +292,9 @@ RSpec.describe Payroll::PaymentCsvRow do
 
       expect(row[Payroll::PaymentsCsv::FIELDS_WITH_HEADERS.find_index { |k, _| k == :address_line_2 }]).to eq("\\#{claims.first.address_line_2}")
     end
+
+    it "outputs a CRLF line feed" do
+      expect(subject.to_s).to end_with("\r\n")
+    end
   end
 end
