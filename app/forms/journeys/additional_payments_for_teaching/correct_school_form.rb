@@ -10,6 +10,8 @@ module Journeys
 
       def save
         claim.update(eligibility_attributes:)
+        journey_session.answers.assign_attributes(eligibility_attributes)
+        journey_session.save
         claim.reset_eligibility_dependent_answers(["current_school_id"])
         true
       end

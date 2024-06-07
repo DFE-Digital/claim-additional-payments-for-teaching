@@ -25,7 +25,7 @@ module Journeys
         return handle_trainee_teacher
       end
 
-      return "ineligible" if claim.ineligible?
+      return "ineligible" if eligibility_checkers.all?(&:ineligible?)
 
       if claim_submittable?
         return "student-loan-amount" if updating_personal_details? && in_sequence?("student-loan-amount")
@@ -48,7 +48,7 @@ module Journeys
 
     def has_completed_journey_until?(slug)
       return true if DEAD_END_SLUGS.include?(slug)
-      return true if (slug == "address" || claim.postcode.present?) && incomplete_slugs == ["address"]
+      return true if (slug == "address" || answers.postcode.present?) && incomplete_slugs == ["address"]
       incomplete_slugs.empty?
     end
 
@@ -57,6 +57,8 @@ module Journeys
     end
 
     private
+
+    delegate :answers, to: :@journey_session
 
     def updating_personal_details?
       current_slug == "personal-details"
@@ -69,7 +71,7 @@ module Journeys
     def can_skip_next_slug?
       # This allows 'address' page to be skipped when the postcode is present
       # Occurs when populated from 'postcode-search' and the subsequent 'select-home-address' screens
-      true if current_slug == "select-home-address" && claim.postcode.present?
+      true if current_slug == "select-home-address" && answers.postcode.present?
     end
 
     def lup_policy_and_trainee_teacher_at_lup_school?
@@ -114,12 +116,26 @@ module Journeys
     end
 
     def claim_submittable?
-      journey::ClaimSubmissionForm.new(
-        journey_session: journey::ClaimJourneySessionShim.new(
-          current_claim: @claim,
-          journey_session: @journey_session
-        )
-      ).valid?
+      journey::ClaimSubmissionForm.new(journey_session: shim).valid?
+    end
+
+    def student_loans_eligibility_checker
+      @eligibility_checker ||= Policies::StudentLoans::EligibilityChecker.new(shim.answers)
+    end
+
+    def shim
+      @shim ||= journey::ClaimJourneySessionShim.new(
+        current_claim: @claim,
+        journey_session: @journey_session
+      )
+    end
+
+    def eligibility_checkers
+      if journey == Journeys::TeacherStudentLoanReimbursement
+        [student_loans_eligibility_checker]
+      else
+        [claim]
+      end
     end
   end
 end

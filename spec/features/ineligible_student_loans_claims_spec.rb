@@ -32,9 +32,9 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     visit new_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
     skip_tid
     choose_qts_year(:before_cut_off_date)
-    claim = Claim.by_policy(Policies::StudentLoans).order(:created_at).last
+    session = Journeys::TeacherStudentLoanReimbursement::Session.last
 
-    expect(claim.eligibility.reload.qts_award_year).to eql("before_cut_off_date")
+    expect(session.answers.qts_award_year).to eql("before_cut_off_date")
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text("You can only get this payment if you completed your initial teacher training between the start of the 2014 to 2015 academic year and the end of the 2020 to 2021 academic year.")
 
@@ -48,10 +48,11 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   end
 
   scenario "chooses an ineligible claim school" do
-    claim = start_student_loans_claim
+    start_student_loans_claim
+    session = Journeys::TeacherStudentLoanReimbursement::Session.last
     choose_school ineligible_school
 
-    expect(claim.eligibility.reload.claim_school).to eq ineligible_school
+    expect(session.reload.answers.claim_school).to eq ineligible_school
     expect(page).to have_text("This school is not eligible")
     expect(page).to have_text("#{ineligible_school.name} is not an eligible school.")
   end
@@ -71,13 +72,14 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   end
 
   scenario "no longer teaching" do
-    claim = start_student_loans_claim
+    start_student_loans_claim
+    session = Journeys::TeacherStudentLoanReimbursement::Session.last
     choose_school school
     choose_subjects_taught
 
     choose_still_teaching "No"
 
-    expect(claim.eligibility.reload.employment_status).to eq("no_school")
+    expect(session.reload.answers.employment_status).to eq("no_school")
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text("You can only get this payment if you’re still employed to teach at a state-funded secondary school.")
   end
@@ -95,7 +97,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   end
 
   scenario "was in a leadership position and performed leadership duties for more than half of their time" do
-    claim = start_student_loans_claim
+    start_student_loans_claim
     choose_school school
     check "Biology"
     click_on "Continue"
@@ -108,7 +110,8 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     choose "Yes"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.mostly_performed_leadership_duties?).to eq(true)
+    session = Journeys::TeacherStudentLoanReimbursement::Session.last
+    expect(session.answers.mostly_performed_leadership_duties?).to eq(true)
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text("You can only get this payment if you spent less than half your working hours performing leadership duties between #{Policies::StudentLoans.current_financial_year}.")
   end

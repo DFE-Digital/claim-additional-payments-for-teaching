@@ -6,7 +6,7 @@ RSpec.feature "Current school with closed claim school" do
   before { create(:journey_configuration, :student_loans) }
 
   scenario "Still teaching only has two options" do
-    claim = start_student_loans_claim
+    start_student_loans_claim
     choose_school claim_school
     check "Physics"
     click_on "Continue"
@@ -19,7 +19,8 @@ RSpec.feature "Current school with closed claim school" do
     # - Choosing yes to still teaching prompts to search for a school
     choose_still_teaching "Yes"
 
-    expect(claim.eligibility.employment_status).to eq("different_school")
+    session = Journeys::TeacherStudentLoanReimbursement::Session.last
+    expect(session.answers.employment_status).to eq("different_school")
     expect(page).to have_text(I18n.t("student_loans.forms.current_school.questions.current_school_search"))
     expect(page).to have_button("Continue")
   end

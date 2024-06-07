@@ -16,10 +16,6 @@ RSpec.shared_examples "journey answers presenter" do
         policy:,
         first_name:,
         surname:,
-        address_line_1: "Flat 1",
-        address_line_2: "1 Test Road",
-        address_line_3: "Test Town",
-        postcode: "AB1 2CD",
         date_of_birth: dob,
         teacher_reference_number: trn,
         national_insurance_number: nino,
@@ -44,7 +40,12 @@ RSpec.shared_examples "journey answers presenter" do
           email_address_check: logged_in_with_tid ? true : false,
           mobile_check: logged_in_with_tid ? "use" : nil,
           provide_mobile_number: true,
-          mobile_number: "01234567890"
+          mobile_number: "01234567890",
+          address_line_1: "Flat 1",
+          address_line_2: "1 Test Road",
+          address_line_3: "Test Town",
+          postcode: "AB1 2CD",
+          payroll_gender: :dont_know
         }
       )
     end

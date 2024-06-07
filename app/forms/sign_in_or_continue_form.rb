@@ -87,10 +87,6 @@ class SignInOrContinueForm < Form
           teacher_id_user_info: teacher_id_user_info.attributes
         )
 
-        # FIXME RL: Remove this once we update the teacher reference number
-        # form to write to the journey session
-        update!(teacher_reference_number: teacher_id_user_info.trn)
-
         journey_session.save!
 
         Dqt::RetrieveClaimQualificationsData.call(journey_session)

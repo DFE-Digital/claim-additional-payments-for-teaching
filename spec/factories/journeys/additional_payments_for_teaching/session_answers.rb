@@ -30,11 +30,31 @@ FactoryBot.define do
       bank_account_number { rand(10000000..99999999) }
     end
 
+    trait :with_payroll_gender do
+      payroll_gender { "female" }
+    end
+
+    trait :with_teacher_reference_number do
+      teacher_reference_number { generate(:teacher_reference_number) }
+    end
+
+    trait :with_qualification_details_check do
+      qualifications_details_check { true }
+    end
+
+    trait :with_qualification do
+      qualification { "postgraduate_itt" }
+    end
+
     trait :submittable do
       with_personal_details
       with_email_details
       with_mobile_details
       with_bank_details
+      with_payroll_gender
+      with_teacher_reference_number
+      with_qualification_details_check
+      with_qualification
     end
   end
 end

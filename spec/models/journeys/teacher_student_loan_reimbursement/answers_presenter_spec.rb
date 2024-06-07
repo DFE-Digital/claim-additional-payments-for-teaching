@@ -12,13 +12,18 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::AnswersPresenter, type
   describe "#eligibility_answers" do
     let(:subject_attributes) { {chemistry_taught: true, physics_taught: true} }
     let(:eligibility) { claim.eligibility }
-    let(:claim) { build(:claim, policy:, eligibility: build(:student_loans_eligibility, :eligible, subject_attributes), qualifications_details_check:) }
+    let(:claim) { build(:claim, policy:, eligibility: build(:student_loans_eligibility, :eligible, subject_attributes)) }
     let(:qualifications_details_check) { false }
 
     let(:journey_session) do
-      build(
+      create(
         :student_loans_session,
-        answers: {}
+        answers: attributes_for(
+          :student_loans_answers,
+          :with_claim_school,
+          :with_leadership_position,
+          qualifications_details_check: qualifications_details_check
+        ).merge(subject_attributes)
       )
     end
 
@@ -29,9 +34,9 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::AnswersPresenter, type
     it "returns an array of questions, answers, and slugs for displaying to the user for review" do
       expected_answers = [
         [I18n.t("student_loans.forms.qts_year.questions.qts_award_year"), "Between the start of the 2013 to 2014 academic year and the end of the 2020 to 2021 academic year", "qts-year"],
-        [claim_school_question, eligibility.claim_school.name, "claim-school"],
+        [claim_school_question, journey_session.answers.claim_school.name, "claim-school"],
         [I18n.t("student_loans.forms.current_school.questions.current_school_search"), eligibility.current_school.name, "still-teaching"],
-        [subjects_taught_question(school_name: eligibility.current_school.name), "Chemistry and Physics", "subjects-taught"],
+        [subjects_taught_question(school_name: journey_session.answers.claim_school.name), "Chemistry and Physics", "subjects-taught"],
         [leadership_position_question, "Yes", "leadership-position"],
         [mostly_performed_leadership_duties_question, "No", "mostly-performed-leadership-duties"]
       ]
@@ -56,7 +61,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::AnswersPresenter, type
     end
 
     it "excludes questions skipped from the flow" do
-      eligibility.had_leadership_position = false
+      journey_session.answers.assign_attributes(had_leadership_position: false)
       expect(answers).to_not include([mostly_performed_leadership_duties_question, "Yes", "mostly-performed-leadership-duties"])
       expect(answers).to_not include([mostly_performed_leadership_duties_question, "No", "mostly-performed-leadership-duties"])
     end

@@ -18,19 +18,19 @@ class ClaimJourneySessionShim
   def answers
     {
       selected_policy: selected_policy,
-      address_line_1: address_line_1,
-      address_line_2: address_line_2,
-      address_line_3: address_line_3,
-      address_line_4: address_line_4,
-      postcode: postcode,
+      address_line_1: journey_session.answers.address_line_1,
+      address_line_2: journey_session.answers.address_line_2,
+      address_line_3: journey_session.answers.address_line_3,
+      address_line_4: journey_session.answers.address_line_4,
+      postcode: journey_session.answers.postcode,
       date_of_birth: journey_session.answers.date_of_birth,
-      teacher_reference_number: teacher_reference_number,
+      teacher_reference_number: journey_session.answers.teacher_reference_number,
       national_insurance_number: journey_session.answers.national_insurance_number,
       email_address: journey_session.answers.email_address,
       bank_sort_code: journey_session.answers.bank_sort_code,
       bank_account_number: journey_session.answers.bank_account_number,
       details_check: details_check,
-      payroll_gender: payroll_gender,
+      payroll_gender: journey_session.answers.payroll_gender,
       first_name: journey_session.answers.first_name,
       middle_name: journey_session.answers.middle_name,
       surname: journey_session.answers.surname,
@@ -48,7 +48,9 @@ class ClaimJourneySessionShim
       teacher_id_user_info: teacher_id_user_info,
       email_address_check: journey_session.answers.email_address_check,
       mobile_check: journey_session.answers.mobile_check,
-      qualifications_details_check: qualifications_details_check
+      qualifications_details_check: journey_session.answers.qualifications_details_check,
+      has_student_loan: has_student_loan,
+      student_loan_plan: student_loan_plan
     }
   end
 
@@ -58,36 +60,8 @@ class ClaimJourneySessionShim
     journey_session.answers.selected_policy || current_claim.selected_policy
   end
 
-  def address_line_1
-    journey_session.answers.address_line_1 || current_claim.address_line_1
-  end
-
-  def address_line_2
-    journey_session.answers.address_line_2 || current_claim.address_line_2
-  end
-
-  def address_line_3
-    journey_session.answers.address_line_3 || current_claim.address_line_3
-  end
-
-  def address_line_4
-    journey_session.answers.address_line_4 || current_claim.address_line_4
-  end
-
-  def postcode
-    journey_session.answers.postcode || current_claim.postcode
-  end
-
-  def teacher_reference_number
-    journey_session.answers.teacher_reference_number.presence || current_claim.teacher_reference_number
-  end
-
   def details_check
     journey_session.answers.details_check || current_claim.details_check
-  end
-
-  def payroll_gender
-    journey_session.answers.payroll_gender || current_claim.payroll_gender
   end
 
   def academic_year
@@ -102,8 +76,12 @@ class ClaimJourneySessionShim
     journey_session.answers.teacher_id_user_info || current_claim.teacher_id_user_info
   end
 
-  def qualifications_details_check
-    journey_session.answers.qualifications_details_check || current_claim.qualifications_details_check
+  def has_student_loan
+    journey_session.answers.has_student_loan || current_claim.has_student_loan
+  end
+
+  def student_loan_plan
+    journey_session.answers.student_loan_plan || current_claim.student_loan_plan
   end
 
   def eligibilities

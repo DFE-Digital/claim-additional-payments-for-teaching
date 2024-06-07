@@ -144,7 +144,9 @@ RSpec.describe "Claims", type: :request do
       before { start_student_loans_claim }
 
       it "renders a static ineligibility page" do
-        Claim.by_policy(Policies::StudentLoans).order(:created_at).last.eligibility.update(employment_status: "no_school")
+        journey_session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
+        journey_session.answers.assign_attributes(employment_status: "no_school")
+        journey_session.save!
 
         get claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "ineligible")
 
@@ -189,7 +191,7 @@ RSpec.describe "Claims", type: :request do
         put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "qts-year"), params: {claim: {qts_award_year: "on_or_after_cut_off_date"}}
 
         expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"))
-        expect(in_progress_claim.reload.eligibility.qts_award_year).to eq "on_or_after_cut_off_date"
+        expect(journey_session.reload.answers.qts_award_year).to eq "on_or_after_cut_off_date"
       end
 
       it "makes sure validations appropriate to the context are run" do
@@ -313,12 +315,18 @@ RSpec.describe "Claims", type: :request do
       end
 
       it "resets depenent eligibility attributes when appropriate" do
-        in_progress_claim.update!(eligibility_attributes: {had_leadership_position: true, mostly_performed_leadership_duties: false})
+        journey_session.answers.assign_attributes(
+          had_leadership_position: true,
+          mostly_performed_leadership_duties: false
+        )
+        journey_session.save!
         set_slug_sequence_in_session(in_progress_claim, "leadership-position")
         put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "leadership-position"), params: {claim: {had_leadership_position: false}}
 
         expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "eligibility-confirmed"))
-        expect(in_progress_claim.eligibility.reload.mostly_performed_leadership_duties).to be_nil
+        expect(
+          journey_session.reload.answers.mostly_performed_leadership_duties
+        ).to be_nil
       end
 
       context "having searched for a school but not selected a school from the results on the claim-school page" do

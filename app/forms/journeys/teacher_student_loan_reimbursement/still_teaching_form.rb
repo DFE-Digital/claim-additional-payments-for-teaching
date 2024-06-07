@@ -9,19 +9,19 @@ module Journeys
       def save
         return false unless valid?
 
-        update!(
-          eligibility_attributes: {
-            employment_status:,
-            current_school_id: currently_at_school? ? current_school_id : nil
-          }
+        journey_session.answers.assign_attributes(
+          employment_status:,
+          current_school_id: currently_at_school? ? current_school_id : nil
         )
+
+        journey_session.save!
       end
 
       def school
         if journey_session.logged_in_with_tid_and_has_recent_tps_school?
           journey_session.recent_tps_school
         else
-          claim.eligibility.claim_school
+          answers.claim_school
         end
       end
 

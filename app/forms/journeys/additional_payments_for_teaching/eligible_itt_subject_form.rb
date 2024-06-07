@@ -31,6 +31,10 @@ module Journeys
         # FIXME RL: Once this method writes to the journey session answers we
         # update the initializer in
         # AdditionalPaymentsForTeaching::QualificationDetailsForm
+        # and update
+        # QualificationForm#save to not reset eligible_itt_subject subject on
+        # the claim, as it's no longer needed (still keep resetting it on the
+        # answers) (and remove this comment!)
         claim.assign_attributes(
           eligibility_attributes: {eligible_itt_subject: eligible_itt_subject}
         )

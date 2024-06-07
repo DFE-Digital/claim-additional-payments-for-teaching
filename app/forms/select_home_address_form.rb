@@ -19,11 +19,14 @@ class SelectHomeAddressForm < Form
     return false unless valid?
 
     address_parts = address.split(":")
-    update!({
+
+    journey_session.answers.assign_attributes({
       address_line_1: address_parts[1].titleize,
       address_line_2: address_parts[2].titleize,
       address_line_3: address_parts[3].titleize,
       postcode: address_parts[4]
     })
+
+    journey_session.save!
   end
 end

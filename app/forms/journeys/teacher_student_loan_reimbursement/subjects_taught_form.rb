@@ -17,11 +17,20 @@ module Journeys
       def save
         return false unless valid?
 
-        update!(eligibility_attributes: attributes)
+        journey_session.answers.assign_attributes(
+          taught_eligible_subjects: taught_eligible_subjects,
+          biology_taught: biology_taught,
+          chemistry_taught: chemistry_taught,
+          physics_taught: physics_taught,
+          computing_taught: computing_taught,
+          languages_taught: languages_taught
+        )
+
+        journey_session.save!
       end
 
       def claim_school_name
-        @claim_school_name ||= claim.eligibility.claim_school_name
+        @claim_school_name ||= answers.claim_school_name
       end
 
       def subject_attributes

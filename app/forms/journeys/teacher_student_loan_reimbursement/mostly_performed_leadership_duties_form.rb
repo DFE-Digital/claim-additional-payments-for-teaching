@@ -11,11 +11,11 @@ module Journeys
 
       def save
         return false unless valid?
-        claim.update!(
-          eligibility_attributes: {
-            mostly_performed_leadership_duties: mostly_performed_leadership_duties
-          }
+        journey_session.answers.assign_attributes(
+          mostly_performed_leadership_duties: mostly_performed_leadership_duties
         )
+
+        journey_session.save!
       end
     end
   end

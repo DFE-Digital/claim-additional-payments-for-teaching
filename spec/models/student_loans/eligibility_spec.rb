@@ -86,16 +86,29 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
 
   describe "#ineligible?" do
     it "returns false when the eligibility cannot be determined" do
-      expect(described_class.new.ineligible?).to eql false
+      expect(described_class.new(claim: Claim.new).ineligible?).to eql false
     end
 
     it "returns true when the qts_award_year is before the qualifying cut-off" do
-      expect(described_class.new(qts_award_year: "before_cut_off_date").ineligible?).to eql true
-      expect(described_class.new(qts_award_year: "on_or_after_cut_off_date").ineligible?).to eql false
+      expect(
+        described_class.new(
+          qts_award_year: "before_cut_off_date",
+          claim: Claim.new
+        ).ineligible?
+      ).to eql true
+
+      expect(
+        described_class.new(
+          qts_award_year: "on_or_after_cut_off_date",
+          claim: Claim.new
+        ).ineligible?
+      ).to eql false
     end
 
     describe "claim_school eligibility" do
-      subject(:eligibility) { described_class.new(claim_school: school) }
+      subject(:eligibility) do
+        described_class.new(claim_school: school, claim: Claim.new)
+      end
 
       context "when the claim_school is not eligible" do
         let(:school) { ineligible_school }
@@ -111,7 +124,9 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
     end
 
     describe "current_school eligibility" do
-      subject(:eligibility) { described_class.new(current_school: school) }
+      subject(:eligibility) do
+        described_class.new(current_school: school, claim: Claim.new)
+      end
 
       context "when the current_school is not eligible" do
         let(:school) { ineligible_school }
@@ -127,18 +142,51 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
     end
 
     it "returns true when no longer teaching" do
-      expect(described_class.new(employment_status: :no_school).ineligible?).to eql true
-      expect(described_class.new(employment_status: :claim_school).ineligible?).to eql false
+      expect(
+        described_class.new(
+          employment_status: :no_school,
+          claim: Claim.new
+        ).ineligible?
+      ).to eql true
+
+      expect(
+        described_class.new(
+          employment_status: :claim_school,
+          claim: Claim.new
+        ).ineligible?
+      ).to eql false
     end
 
     it "returns true when not teaching an eligible subject" do
-      expect(described_class.new(taught_eligible_subjects: false).ineligible?).to eql true
-      expect(described_class.new(biology_taught: true).ineligible?).to eql false
+      expect(
+        described_class.new(
+          taught_eligible_subjects: false,
+          claim: Claim.new
+        ).ineligible?
+      ).to eql true
+
+      expect(
+        described_class.new(
+          biology_taught: true,
+          claim: Claim.new
+        ).ineligible?
+      ).to eql false
     end
 
     it "returns true when more than half time is spent performing leadership duties" do
-      expect(described_class.new(mostly_performed_leadership_duties: true).ineligible?).to eql true
-      expect(described_class.new(mostly_performed_leadership_duties: false).ineligible?).to eql false
+      expect(
+        described_class.new(
+          mostly_performed_leadership_duties: true,
+          claim: Claim.new
+        ).ineligible?
+      ).to eql true
+
+      expect(
+        described_class.new(
+          mostly_performed_leadership_duties: false,
+          claim: Claim.new
+        ).ineligible?
+      ).to eql false
     end
 
     context "student_loan_repayment_amount eligibility" do
@@ -166,17 +214,60 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
 
   describe "#ineligibility_reason" do
     it "returns nil when the reason for ineligibility cannot be determined" do
-      expect(described_class.new.ineligibility_reason).to be_nil
+      expect(
+        described_class.new(claim: Claim.new).ineligibility_reason
+      ).to be_nil
     end
 
     it "returns a symbol indicating the reason for ineligibility" do
-      expect(described_class.new(qts_award_year: "before_cut_off_date").ineligibility_reason).to eq :ineligible_qts_award_year
-      expect(described_class.new(claim_school: ineligible_school).ineligibility_reason).to eq :ineligible_claim_school
-      expect(described_class.new(employment_status: :no_school).ineligibility_reason).to eq :employed_at_no_school
-      expect(described_class.new(current_school: ineligible_school).ineligibility_reason).to eq :ineligible_current_school
-      expect(described_class.new(taught_eligible_subjects: false).ineligibility_reason).to eq :not_taught_eligible_subjects
-      expect(described_class.new(mostly_performed_leadership_duties: true).ineligibility_reason).to eq :not_taught_enough
-      expect(described_class.new(student_loan_repayment_amount: 0, claim: Claim.new(has_student_loan: true)).ineligibility_reason).to eq :made_zero_repayments
+      expect(
+        described_class.new(
+          qts_award_year: "before_cut_off_date",
+          claim: Claim.new
+        ).ineligibility_reason
+      ).to eq :ineligible_qts_award_year
+
+      expect(
+        described_class.new(
+          claim_school: ineligible_school,
+          claim: Claim.new
+        ).ineligibility_reason
+      ).to eq :ineligible_claim_school
+
+      expect(
+        described_class.new(
+          employment_status: :no_school,
+          claim: Claim.new
+        ).ineligibility_reason
+      ).to eq :employed_at_no_school
+
+      expect(
+        described_class.new(
+          current_school: ineligible_school,
+          claim: Claim.new
+        ).ineligibility_reason
+      ).to eq :ineligible_current_school
+
+      expect(
+        described_class.new(
+          taught_eligible_subjects: false,
+          claim: Claim.new
+        ).ineligibility_reason
+      ).to eq :not_taught_eligible_subjects
+
+      expect(
+        described_class.new(
+          mostly_performed_leadership_duties: true,
+          claim: Claim.new
+        ).ineligibility_reason
+      ).to eq :not_taught_enough
+
+      expect(
+        described_class.new(
+          student_loan_repayment_amount: 0,
+          claim: Claim.new(has_student_loan: true)
+        ).ineligibility_reason
+      ).to eq :made_zero_repayments
     end
   end
 
@@ -200,7 +291,8 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
         computing_taught: true,
         languages_taught: true,
         employment_status: :different_school,
-        had_leadership_position: true
+        had_leadership_position: true,
+        claim: build(:claim)
       )
     end
 

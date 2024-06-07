@@ -2,12 +2,25 @@ require "rails_helper"
 
 RSpec.describe Journeys::TeacherStudentLoanReimbursement::SubjectsTaughtForm, type: :model do
   subject(:form) do
-    described_class.new(claim:, journey_session:, journey:, params:)
+    described_class.new(
+      claim: CurrentClaim.new(claims: [build(:claim)]),
+      journey_session:,
+      journey:,
+      params:
+    )
   end
 
+  let(:claim_school) { create(:school, name: "test school") }
+
   let(:journey) { Journeys::TeacherStudentLoanReimbursement }
-  let(:journey_session) { build(:student_loans_session) }
-  let(:claim) { CurrentClaim.new(claims: [build(:claim, policy: Policies::StudentLoans)]) }
+  let(:journey_session) do
+    create(
+      :student_loans_session,
+      answers: {
+        claim_school_id: claim_school.id
+      }
+    )
+  end
   let(:slug) { "subjects-taught" }
   let(:params) { ActionController::Parameters.new({slug:, claim: claim_params}) }
   let(:claim_params) { {"subjects_taught" => ["biology_taught"]} }
@@ -40,62 +53,59 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SubjectsTaughtForm, ty
   end
 
   describe "#save" do
-    before do
-      allow(form).to receive(:update!)
-      form.save
-    end
+    before { form.save }
 
     context "valid params" do
       context "when multiple subject are selected" do
         let(:claim_params) { {"subjects_taught" => ["biology_taught", "chemistry_taught"]} }
-        let(:expected_saved_attributes) do
-          {
-            eligibility_attributes: {
-              "biology_taught" => true,
-              "chemistry_taught" => true,
-              "physics_taught" => false,
-              "computing_taught" => false,
-              "languages_taught" => false,
-              "taught_eligible_subjects" => true
-            }
-          }
-        end
 
-        it { is_expected.to have_received(:update!).with(expected_saved_attributes) }
+        it "updates the answers" do
+          journey_session.reload
+
+          answers = journey_session.answers
+
+          expect(answers.biology_taught).to eq(true)
+          expect(answers.chemistry_taught).to eq(true)
+          expect(answers.physics_taught).to eq(false)
+          expect(answers.computing_taught).to eq(false)
+          expect(answers.languages_taught).to eq(false)
+          expect(answers.taught_eligible_subjects).to eq(true)
+        end
       end
 
       context "when no subjects are selected" do
         let(:claim_params) { {"subjects_taught" => ["none_taught"]} }
-        let(:expected_saved_attributes) do
-          {
-            eligibility_attributes: {
-              "biology_taught" => false,
-              "chemistry_taught" => false,
-              "physics_taught" => false,
-              "computing_taught" => false,
-              "languages_taught" => false,
-              "taught_eligible_subjects" => false
-            }
-          }
-        end
 
-        it { is_expected.to have_received(:update!).with(expected_saved_attributes) }
+        it "updates the answers" do
+          journey_session.reload
+
+          answers = journey_session.answers
+
+          expect(answers.biology_taught).to eq(false)
+          expect(answers.chemistry_taught).to eq(false)
+          expect(answers.physics_taught).to eq(false)
+          expect(answers.computing_taught).to eq(false)
+          expect(answers.languages_taught).to eq(false)
+          expect(answers.taught_eligible_subjects).to eq(false)
+        end
       end
     end
 
     context "invalid params" do
       let(:claim_params) { {"subjects_taught" => []} }
 
-      it { expect(form).not_to have_received(:update!) }
+      it "doesn't update the answers" do
+        expect { form.save }.to(
+          not_change { journey_session.reload.answers.attributes }
+        )
+      end
     end
   end
 
   describe "#claim_school_name" do
-    before do
-      allow(claim).to receive(:eligibility).and_return(double(claim_school_name: "test school"))
-    end
+    subject { form.claim_school_name }
 
-    it { expect(form.claim_school_name).to eq("test school") }
+    it { is_expected.to eq("test school") }
   end
 
   describe "#subject_attributes" do
@@ -109,7 +119,8 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SubjectsTaughtForm, ty
 
     context "when the subject is taught" do
       before do
-        claim.eligibility.biology_taught = true
+        journey_session.answers.biology_taught = true
+        journey_session.answers.answered = ["biology_taught"]
       end
 
       it { expect(form.subject_taught_selected?(:biology_taught)).to eq(true) }
@@ -117,7 +128,8 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SubjectsTaughtForm, ty
 
     context "when the subject is not taught" do
       before do
-        claim.eligibility.biology_taught = false
+        journey_session.answers.biology_taught = false
+        journey_session.answers.answered = ["biology_taught"]
       end
 
       it { expect(form.subject_taught_selected?(:biology_taught)).to eq(false) }

@@ -1,11 +1,17 @@
 require "rails_helper"
 
 RSpec.describe AddressForm, type: :model do
-  subject(:form) { described_class.new(claim:, journey:, params:, journey_session:) }
+  subject(:form) do
+    described_class.new(
+      claim: CurrentClaim.new(claims: [build(:claim)]),
+      journey: journey,
+      params: params,
+      journey_session: journey_session
+    )
+  end
 
   let(:journey) { Journeys::TeacherStudentLoanReimbursement }
   let(:journey_session) { build(:student_loans_session) }
-  let(:claim) { CurrentClaim.new(claims: [build(:claim, policy: Policies::StudentLoans)]) }
   let(:slug) { "address" }
   let(:params) { ActionController::Parameters.new({slug:, claim: claim_params}) }
   let(:claim_params) do
@@ -102,19 +108,16 @@ RSpec.describe AddressForm, type: :model do
 
     context "valid params" do
       context "all required address lines provided" do
-        let(:expected_saved_attributes) do
-          {
-            "address_line_1" => "123",
-            "address_line_2" => "Main Street",
-            "address_line_3" => "Some City",
-            "address_line_4" => "",
-            "postcode" => "PE11 3EW"
-          }
-        end
-
         before { form.save }
 
-        it { is_expected.to have_received(:update!).with(expected_saved_attributes) }
+        it "updates the session" do
+          answers = journey_session.answers
+          expect(answers.address_line_1).to eq "123"
+          expect(answers.address_line_2).to eq "Main Street"
+          expect(answers.address_line_3).to eq "Some City"
+          expect(answers.address_line_4).to eq ""
+          expect(answers.postcode).to eq "PE11 3EW"
+        end
       end
 
       context "all address lines provided" do
@@ -127,19 +130,17 @@ RSpec.describe AddressForm, type: :model do
             postcode: "PE11 3EW"
           }
         end
-        let(:expected_saved_attributes) do
-          {
-            "address_line_1" => "123",
-            "address_line_2" => "Main Street",
-            "address_line_3" => "Some City",
-            "address_line_4" => "Some County",
-            "postcode" => "PE11 3EW"
-          }
-        end
 
         before { form.save }
 
-        it { is_expected.to have_received(:update!).with(expected_saved_attributes) }
+        it "udpates the session" do
+          answers = journey_session.answers
+          expect(answers.address_line_1).to eq "123"
+          expect(answers.address_line_2).to eq "Main Street"
+          expect(answers.address_line_3).to eq "Some City"
+          expect(answers.address_line_4).to eq "Some County"
+          expect(answers.postcode).to eq "PE11 3EW"
+        end
       end
     end
 
@@ -156,7 +157,14 @@ RSpec.describe AddressForm, type: :model do
 
       before { form.save }
 
-      it { expect(form).not_to have_received(:update!) }
+      it "does not update the session" do
+        answers = journey_session.answers
+        expect(answers.address_line_1).to be_nil
+        expect(answers.address_line_2).to be_nil
+        expect(answers.address_line_3).to be_nil
+        expect(answers.address_line_4).to be_nil
+        expect(answers.postcode).to be_nil
+      end
     end
   end
 end

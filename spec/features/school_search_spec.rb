@@ -12,7 +12,8 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     let!(:school) { create(:school, :student_loans_eligible) }
 
     scenario "doesn't select a school from the search results the first time around" do
-      claim = start_student_loans_claim
+      start_student_loans_claim
+      session = Journeys::TeacherStudentLoanReimbursement::Session.last
 
       # Creates a duplicate school to test whether the school search shows closed schools
       duplicate_school = create(:school, :student_loans_eligible, :closed, name: "#{school.name} Duplicate")
@@ -30,7 +31,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
       choose duplicate_school.name
       click_on "Continue"
 
-      expect(claim.eligibility.reload.claim_school).to eql duplicate_school
+      expect(session.reload.answers.claim_school).to eql duplicate_school
       expect(page).to have_text(subjects_taught_question(school_name: duplicate_school.name))
     end
 

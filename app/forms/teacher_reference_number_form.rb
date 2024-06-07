@@ -19,6 +19,10 @@ class TeacherReferenceNumberForm < Form
   def save
     return false unless valid?
 
-    update!(teacher_reference_number: teacher_reference_number)
+    journey_session.answers.assign_attributes(
+      teacher_reference_number: teacher_reference_number
+    )
+
+    journey_session.save!
   end
 end

@@ -2,22 +2,24 @@ require "rails_helper"
 
 RSpec.describe GenderForm do
   shared_examples "gender_form" do |journey|
-    before {
-      create(:journey_configuration, :additional_payments)
-    }
+    before { create(:journey_configuration, :additional_payments) }
 
-    let(:current_claim) do
-      claims = journey::POLICIES.map { |policy| create(:claim, policy: policy) }
-      CurrentClaim.new(claims: claims)
+    let(:journey_session) do
+      create(
+        :"#{journey::I18N_NAMESPACE}_session",
+        answers: {
+          payroll_gender: gender
+        }
+      )
     end
 
-    let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
+    let(:gender) { nil }
 
     let(:slug) { "gender" }
 
     subject(:form) do
       described_class.new(
-        claim: current_claim,
+        claim: CurrentClaim.new(claims: [build(:claim)]),
         journey_session: journey_session,
         journey: journey,
         params: params
@@ -42,10 +44,7 @@ RSpec.describe GenderForm do
       end
 
       context "claim payroll_gender DOES have a current value" do
-        let(:current_claim) do
-          claims = journey::POLICIES.map { |policy| create(:claim, policy: policy, payroll_gender: Claim.payroll_genders[:male]) }
-          CurrentClaim.new(claims: claims)
-        end
+        let(:gender) { "male" }
 
         it "returns the current value" do
           expect(form.payroll_gender).to eq "male"
@@ -58,40 +57,20 @@ RSpec.describe GenderForm do
         let(:params) { ActionController::Parameters.new({slug: slug, claim: {payroll_gender: "female"}}) }
 
         context "claim didn't have payroll_gender" do
-          let(:current_claim) do
-            claims = journey::POLICIES.map { |policy| create(:claim, policy: policy) }
-            CurrentClaim.new(claims: claims)
-          end
-
           it "updates the payroll_gender on claim" do
             expect(form.save).to be true
 
-            current_claim.claims.each do |claim|
-              expect(claim.reload.payroll_gender).to eq "female"
-            end
+            expect(journey_session.reload.answers.payroll_gender).to eq "female"
           end
         end
 
         context "claim already had a payroll_gender" do
-          let(:current_claim) do
-            claims = journey::POLICIES.map { |policy| create(:claim, policy: policy, payroll_gender: Claim.payroll_genders[:dont_know]) }
-            CurrentClaim.new(claims: claims)
-          end
+          let(:gender) { "dont_know" }
 
           it "updates the payroll_gender on claim" do
             expect(form.save).to be true
 
-            current_claim.claims.each do |claim|
-              expect(claim.reload.payroll_gender).to eq "female"
-            end
-          end
-        end
-
-        context "claim model fails validation unexpectedly" do
-          it "raises an error" do
-            allow(current_claim).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
-
-            expect { form.save }.to raise_error(ActiveRecord::RecordInvalid)
+            expect(journey_session.reload.answers.payroll_gender).to eq "female"
           end
         end
       end

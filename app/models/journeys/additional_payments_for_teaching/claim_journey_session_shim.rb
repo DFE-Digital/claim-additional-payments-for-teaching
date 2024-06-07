@@ -9,12 +9,12 @@ module Journeys
   module AdditionalPaymentsForTeaching
     class ClaimJourneySessionShim < ClaimJourneySessionShim
       def answers
-        SessionAnswers.new(
+        @answers ||= SessionAnswers.new(
           super.merge(
             {
               nqt_in_academic_year_after_itt: nqt_in_academic_year_after_itt,
               employed_as_supply_teacher: employed_as_supply_teacher,
-              qualification: qualification,
+              qualification: journey_session.answers.qualification,
               has_entire_term_contract: has_entire_term_contract,
               employed_directly: employed_directly,
               subject_to_disciplinary_action: subject_to_disciplinary_action,
@@ -25,7 +25,7 @@ module Journeys
               itt_academic_year: itt_academic_year,
               current_school_id: current_school_id,
               induction_completed: induction_completed,
-              school_somewhere_else: school_somewhere_else
+              school_somewhere_else: journey_session.answers.school_somewhere_else
             }
           )
         )
@@ -39,10 +39,6 @@ module Journeys
 
       def employed_as_supply_teacher
         journey_session.answers.employed_as_supply_teacher || try_eligibility(:employed_as_supply_teacher)
-      end
-
-      def qualification
-        journey_session.answers.qualification || try_eligibility(:qualification)
       end
 
       def has_entire_term_contract
@@ -83,10 +79,6 @@ module Journeys
 
       def induction_completed
         journey_session.answers.induction_completed || try_eligibility(:induction_completed)
-      end
-
-      def school_somewhere_else
-        journey_session.answers.school_somewhere_else || try_eligibility(:school_somewhere_else)
       end
     end
   end

@@ -46,6 +46,60 @@ module Journeys
           Policies::EarlyCareerPayments
         end
       end
+
+      def nqt_in_academic_year_after_itt?
+        !!nqt_in_academic_year_after_itt
+      end
+
+      def teaching_subject_now?
+        !!teaching_subject_now
+      end
+
+      def induction_completed?
+        !!induction_completed
+      end
+
+      def itt_subject_none_of_the_above?
+        eligible_itt_subject == "none_of_the_above"
+      end
+
+      def employed_as_supply_teacher?
+        !!employed_as_supply_teacher
+      end
+
+      def subject_to_formal_performance_action?
+        !!subject_to_formal_performance_action
+      end
+
+      def subject_to_disciplinary_action?
+        !!subject_to_disciplinary_action
+      end
+
+      def eligible_degree_subject?
+        !!eligible_degree_subject
+      end
+
+      def current_school
+        return nil if current_school_id.nil?
+
+        @current_school ||= School.find_by(id: current_school_id)
+      end
+
+      def postgraduate_itt?
+        qualification == "postgraduate_itt"
+      end
+
+      def undergraduate_itt?
+        qualification == "undergraduate_itt"
+      end
+
+      def assessment_only?
+        qualification == "assessment_only"
+      end
+
+      def overseas_recognition?
+        qualification == "overseas_recognition"
+      end
     end
   end
 end

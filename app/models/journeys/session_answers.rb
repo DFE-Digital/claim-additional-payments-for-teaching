@@ -48,6 +48,10 @@ module Journeys
       attribute_names.include?(name.to_s)
     end
 
+    def current_school
+      @current_school ||= School.find_by(id: current_school_id)
+    end
+
     def details_check?
       !!details_check
     end
@@ -70,6 +74,16 @@ module Journeys
 
     def hmrc_bank_validation_succeeded?
       !!hmrc_bank_validation_succeeded
+    end
+
+    def address(separator = ", ")
+      [
+        address_line_1,
+        address_line_2,
+        address_line_3,
+        address_line_4,
+        postcode
+      ].reject(&:blank?).join(separator)
     end
   end
 end

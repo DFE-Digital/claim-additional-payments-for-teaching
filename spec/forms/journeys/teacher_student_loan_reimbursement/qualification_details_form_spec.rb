@@ -3,23 +3,6 @@ require "rails_helper"
 RSpec.describe Journeys::TeacherStudentLoanReimbursement::QualificationDetailsForm do
   before { create(:journey_configuration, :student_loans) }
 
-  let(:student_loans_eligibility) do
-    create(:student_loans_eligibility)
-  end
-
-  let(:student_loans_claim) do
-    create(
-      :claim,
-      policy: Policies::StudentLoans,
-      eligibility: student_loans_eligibility,
-      dqt_teacher_status: dqt_teacher_status
-    )
-  end
-
-  let(:current_claim) do
-    CurrentClaim.new(claims: [student_loans_claim])
-  end
-
   let(:journey) { Journeys::TeacherStudentLoanReimbursement }
 
   let(:journey_session) do
@@ -35,7 +18,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::QualificationDetailsFo
     described_class.new(
       journey: journey,
       journey_session: journey_session,
-      claim: current_claim,
+      claim: CurrentClaim.new(claims: [build(:claim)]),
       params: params
     )
   end
@@ -115,9 +98,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::QualificationDetailsFo
         it "sets the qualifications_details_check to `false`" do
           expect { form.save }.to(
             change do
-              student_loans_claim
-                .reload
-                .qualifications_details_check
+              journey_session.reload.answers.qualifications_details_check
             end.from(nil).to(false)
           )
         end
@@ -125,7 +106,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::QualificationDetailsFo
         it "sets qts_award_year as nil" do
           form.save
 
-          expect(student_loans_eligibility.reload.qts_award_year).to eq nil
+          expect(journey_session.reload.answers.qts_award_year).to eq nil
         end
       end
 
@@ -195,7 +176,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::QualificationDetailsFo
               it "sets the qts_award_year to :on_or_after_cut_off_date" do
                 expect { form.save }.to(
                   change do
-                    student_loans_eligibility.reload.qts_award_year
+                    journey_session.reload.answers.qts_award_year
                   end.from(nil).to("on_or_after_cut_off_date")
                 )
               end
@@ -203,7 +184,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::QualificationDetailsFo
               it "sets the qualifications_details_check to `true`" do
                 expect { form.save }.to(
                   change do
-                    student_loans_claim.reload.qualifications_details_check
+                    journey_session.reload.answers.qualifications_details_check
                   end.from(nil).to(true)
                 )
               end
@@ -221,8 +202,9 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::QualificationDetailsFo
               it "sets the qts_award_year to :before_cut_off_date" do
                 expect { form.save }.to(
                   change do
-                    student_loans_eligibility
+                    journey_session
                       .reload
+                      .answers
                       .qts_award_year
                   end.from(nil).to("before_cut_off_date")
                 )
@@ -231,7 +213,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::QualificationDetailsFo
               it "sets the qualifications_details_check to `true`" do
                 expect { form.save }.to(
                   change do
-                    student_loans_claim.reload.qualifications_details_check
+                    journey_session.reload.answers.qualifications_details_check
                   end.from(nil).to(true)
                 )
               end
@@ -244,15 +226,13 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::QualificationDetailsFo
             it "sets qts_award_year as nil" do
               form.save
 
-              expect(
-                student_loans_eligibility.reload.qts_award_year
-              ).to eq nil
+              expect(journey_session.reload.answers.qts_award_year).to eq nil
             end
 
             it "sets the qualifications_details_check to `true`" do
               expect { form.save }.to(
                 change do
-                  student_loans_claim.reload.qualifications_details_check
+                  journey_session.reload.answers.qualifications_details_check
                 end.from(nil).to(true)
               )
             end
@@ -265,15 +245,13 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::QualificationDetailsFo
           it "sets qts_award_year as nil" do
             form.save
 
-            expect(
-              student_loans_eligibility.reload.qts_award_year
-            ).to eq nil
+            expect(journey_session.reload.answers.qts_award_year).to eq nil
           end
 
           it "sets the qualifications_details_check to `true`" do
             expect { form.save }.to(
               change do
-                student_loans_claim.reload.qualifications_details_check
+                journey_session.reload.answers.qualifications_details_check
               end.from(nil).to(true)
             )
           end

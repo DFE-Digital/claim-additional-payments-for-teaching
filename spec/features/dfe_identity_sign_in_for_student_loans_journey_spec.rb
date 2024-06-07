@@ -67,7 +67,6 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     expect(page).not_to have_text(I18n.t("questions.personal_details"))
 
     # check the teacher_id_user_info details are saved to the session
-    claim = Claim.order(:created_at).last
     journey_session = Journeys::TeacherStudentLoanReimbursement::Session.last
     answers = journey_session.answers
     expect(answers.teacher_id_user_info).to eq({
@@ -90,13 +89,13 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     expect(answers.teacher_reference_number).to eq("1234567")
     expect(answers.logged_in_with_tid?).to eq(true)
     expect(answers.details_check).to eq(true)
-    expect(claim.eligibility.qts_award_year).to eql("on_or_after_cut_off_date")
-    expect(claim.eligibility.claim_school).to eql school
-    expect(claim.eligibility.employment_status).to eql("claim_school")
-    expect(claim.eligibility.current_school).to eql(school)
-    expect(claim.eligibility.subjects_taught).to eq([:physics_taught])
-    expect(claim.eligibility.had_leadership_position?).to eq(true)
-    expect(claim.eligibility.mostly_performed_leadership_duties?).to eq(false)
+    expect(answers.qts_award_year).to eql("on_or_after_cut_off_date")
+    expect(answers.claim_school).to eql school
+    expect(answers.employment_status).to eql("claim_school")
+    expect(answers.current_school).to eql(school)
+    expect(answers.subjects_taught).to eq([:physics_taught])
+    expect(answers.had_leadership_position?).to eq(true)
+    expect(answers.mostly_performed_leadership_duties?).to eq(false)
   end
 
   scenario "Teacher makes claim for 'Student Loans' by logging in with teacher_id and selects no to details confirm" do
@@ -214,7 +213,6 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     click_on "Continue"
 
     # check the teacher_id_user_info details are saved to the session
-    claim = Claim.order(:created_at).last
     session = Journeys::TeacherStudentLoanReimbursement::Session.last
     answers = session.answers
     expect(answers.teacher_id_user_info).to eq({
@@ -237,12 +235,12 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     expect(answers.teacher_reference_number).to eq("1234567")
     expect(answers.logged_in_with_tid?).to eq(true)
     expect(answers.details_check).to eq(true)
-    expect(claim.eligibility.qts_award_year).to eql("on_or_after_cut_off_date")
-    expect(claim.eligibility.claim_school).to eql school
-    expect(claim.eligibility.employment_status).to eql("claim_school")
-    expect(claim.eligibility.current_school).to eql(school)
-    expect(claim.eligibility.subjects_taught).to eq([:physics_taught])
-    expect(claim.eligibility.had_leadership_position?).to eq(true)
-    expect(claim.eligibility.mostly_performed_leadership_duties?).to eq(false)
+    expect(answers.qts_award_year).to eql("on_or_after_cut_off_date")
+    expect(answers.claim_school).to eql school
+    expect(answers.employment_status).to eql("claim_school")
+    expect(answers.current_school).to eql(school)
+    expect(answers.subjects_taught).to eq([:physics_taught])
+    expect(answers.had_leadership_position?).to eq(true)
+    expect(answers.mostly_performed_leadership_duties?).to eq(false)
   end
 end

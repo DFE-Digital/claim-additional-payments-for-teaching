@@ -83,12 +83,17 @@ module Journeys
       def initialize(claim, journey_session)
         @claim = claim
         @journey_session = journey_session
+
+        shim = Journeys.for_routing_name(journey_session.journey)::ClaimJourneySessionShim.new(
+          current_claim: claim,
+          journey_session: journey_session
+        )
+        @overall_eligibility_status = EligibilityChecker.new(journey_session: shim).status
       end
 
       # Even though we are inside the ECP namespace, this method can modify the
       # slug sequence of both LUP and ECP claims
       def slugs
-        overall_eligibility_status = claim.eligibility_status
         lup_claim = claim.for_policy(Policies::LevellingUpPremiumPayments)
         ecp_claim = claim.for_policy(Policies::EarlyCareerPayments)
 
@@ -127,8 +132,8 @@ module Journeys
             sequence.delete("employed-directly")
           end
 
-          sequence.delete("eligibility-confirmed") unless overall_eligibility_status == :eligible_now
-          sequence.delete("eligible-later") unless overall_eligibility_status == :eligible_later
+          sequence.delete("eligibility-confirmed") unless @overall_eligibility_status == :eligible_now
+          sequence.delete("eligible-later") unless @overall_eligibility_status == :eligible_later
 
           sequence.delete("personal-bank-account") if answers.building_society?
           sequence.delete("building-society-account") if answers.personal_bank_account?
@@ -136,7 +141,7 @@ module Journeys
           sequence.delete("teacher-reference-number") if answers.logged_in_with_tid? && answers.teacher_reference_number.present?
 
           sequence.delete("correct-school") unless journey_session.logged_in_with_tid_and_has_recent_tps_school?
-          sequence.delete("current-school") if claim.eligibility.school_somewhere_else == false
+          sequence.delete("current-school") if journey_session.answers.school_somewhere_else == false
 
           if answers.provide_mobile_number == false
             sequence.delete("mobile-number")
@@ -147,7 +152,7 @@ module Journeys
             trainee_teacher_slugs(sequence)
             sequence.delete("eligible-degree-subject") unless lup_claim&.eligibility&.indicated_ineligible_itt_subject?
           else
-            sequence.delete("ineligible") unless [:ineligible, :eligible_later].include?(overall_eligibility_status)
+            sequence.delete("ineligible") unless [:ineligible, :eligible_later].include?(@overall_eligibility_status)
             sequence.delete("future-eligibility")
             sequence.delete("eligible-degree-subject") unless ecp_claim&.eligibility&.status == :ineligible && lup_claim&.eligibility&.indicated_ineligible_itt_subject?
           end
@@ -161,7 +166,7 @@ module Journeys
           sequence.delete("personal-details") if answers.logged_in_with_tid? && personal_details_form.valid? && answers.all_personal_details_same_as_tid?
 
           if answers.logged_in_with_tid? && answers.details_check?
-            if claim.qualifications_details_check
+            if answers.qualifications_details_check
               sequence.delete("qualification") if answers.early_career_payments_dqt_teacher_record&.route_into_teaching
               sequence.delete("itt-year") if answers.early_career_payments_dqt_teacher_record&.itt_academic_year_for_claim
               sequence.delete("eligible-itt-subject") if answers.early_career_payments_dqt_teacher_record&.eligible_itt_subject_for_claim

@@ -37,8 +37,8 @@ RSpec.feature "TSLR journey with Teacher ID" do
     click_on "Continue"
 
     # Claim eligibility answers are pre-filled from DQT record
-    claim = Claim.all.order(created_at: :desc).limit(1).first
-    expect(claim.eligibility.qts_award_year).to eq("on_or_after_cut_off_date")
+    session = Journeys::TeacherStudentLoanReimbursement::Session.last
+    expect(session.answers.qts_award_year).to eq("on_or_after_cut_off_date")
 
     # Qualification pages are skipped
 
@@ -51,8 +51,8 @@ RSpec.feature "TSLR journey with Teacher ID" do
     click_on "Continue"
 
     # Claim eligibility qualification answers are wiped
-    claim.eligibility.reload
-    expect(claim.eligibility.qts_award_year).to be nil
+    session.reload
+    expect(session.answers.qts_award_year).to be nil
 
     # Qualification pages are no longer skipped
 
