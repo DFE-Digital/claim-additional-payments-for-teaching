@@ -43,7 +43,7 @@ class Payment < ApplicationRecord
   delegate(*(PERSONAL_DETAILS_ATTRIBUTES_PERMITTING_DISCREPANCIES + PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES), to: :claim_for_personal_details)
 
   def policies_in_payment
-    claims.map { |claim| claim.policy.to_s }.uniq.sort.join(" ")
+    claims.map { |claim| claim.policy.payroll_file_name }.uniq.sort.join(" ")
   end
 
   def confirmed?

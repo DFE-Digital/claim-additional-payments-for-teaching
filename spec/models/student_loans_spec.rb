@@ -56,4 +56,9 @@ RSpec.describe Policies::StudentLoans, type: :model do
       expect(described_class.current_financial_year).to eq "6 April 2019 and 5 April 2020"
     end
   end
+
+  describe ".payroll_file_name" do
+    subject(:payroll_file_name) { described_class.payroll_file_name }
+    it { is_expected.to eq("TSLR") }
+  end
 end

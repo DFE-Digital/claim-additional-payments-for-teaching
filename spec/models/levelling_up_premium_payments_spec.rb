@@ -23,4 +23,9 @@ RSpec.describe Policies::LevellingUpPremiumPayments, type: :model do
       payment_and_deductions_info_url: "https://www.gov.uk/guidance/levelling-up-premium-payments-for-teachers#payments-and-deductions"
     )
   }
+
+  describe ".payroll_file_name" do
+    subject(:payroll_file_name) { described_class.payroll_file_name }
+    it { is_expected.to eq("SchoolsLUP") }
+  end
 end

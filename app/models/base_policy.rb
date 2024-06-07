@@ -20,4 +20,8 @@ module BasePolicy
   def locale_key
     to_s.underscore
   end
+
+  def payroll_file_name
+    to_s
+  end
 end
