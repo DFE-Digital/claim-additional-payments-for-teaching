@@ -5,7 +5,15 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationForm, type:
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
 
-  let(:journey_session) { build(:additional_payments_session) }
+  let(:journey_session) do
+    create(
+      :additional_payments_session,
+      answers: {
+        eligible_itt_subject: "mathematics",
+        teaching_subject_now: true
+      }
+    )
+  end
 
   let(:claim) { create(:claim, policy: Policies::EarlyCareerPayments) }
 
@@ -47,7 +55,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationForm, type:
 
       it "returns false" do
         expect { expect(form.save).to be false }.not_to(
-          change { claim.eligibility.reload.qualification }
+          change { journey_session.reload.answers.qualification }
         )
       end
     end
@@ -59,19 +67,66 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationForm, type:
         )
       end
 
-      it "updates the claim's eligibility" do
+      it "updates the answers" do
         expect { expect(form.save).to be true }.to(
-          change { claim.eligibility.reload.qualification }
+          change { journey_session.reload.answers.qualification }
           .from(nil).to("postgraduate_itt")
         )
       end
 
-      it "resets dependent answers" do
-        claim.eligibility.update!(eligible_itt_subject: "mathematics")
+      it "resets dependent answers if the details didn't come from dqt" do
+        claim.eligibility.update!(
+          eligible_itt_subject: "mathematics",
+          teaching_subject_now: true
+        )
 
         expect { expect(form.save).to be true }.to(
           change { claim.eligibility.reload.eligible_itt_subject }
           .from("mathematics").to(nil)
+          .and(
+            change { claim.eligibility.reload.teaching_subject_now }
+            .from(true).to(nil)
+          ).and(
+            change { journey_session.reload.answers.eligible_itt_subject }
+            .from("mathematics").to(nil)
+          ).and(
+            change { journey_session.reload.answers.teaching_subject_now }
+            .from(true).to(nil)
+          )
+        )
+      end
+
+      it "doesn't reset dependent answers if the details came from dqt" do
+        claim.eligibility.update!(
+          eligible_itt_subject: "mathematics",
+          teaching_subject_now: true
+        )
+
+        journey_session.answers.assign_attributes(
+          qualifications_details_check: true
+        )
+        journey_session.save!
+
+        expect { expect(form.save).to be true }.to(
+          not_change { claim.eligibility.reload.eligible_itt_subject }
+          .and(
+            not_change { claim.eligibility.reload.teaching_subject_now }
+          ).and(
+            not_change { journey_session.reload.answers.eligible_itt_subject }
+          ).and(
+            not_change { journey_session.reload.answers.teaching_subject_now }
+          )
+        )
+      end
+
+      it "doesn't reset the answers if the qualification hasn't changed" do
+        journey_session.answers.assign_attributes(
+          qualification: "postgraduate_itt"
+        )
+        journey_session.save!
+
+        expect { expect(form.save).to be true }.not_to(
+          change { journey_session.reload.answers.eligible_itt_subject }
         )
       end
     end

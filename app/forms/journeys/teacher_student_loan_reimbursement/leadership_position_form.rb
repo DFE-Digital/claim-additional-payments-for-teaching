@@ -13,18 +13,18 @@ module Journeys
         return false unless valid?
         return true unless had_leadership_position_changed?
 
-        update!(
-          eligibility_attributes: {
-            had_leadership_position: had_leadership_position,
-            mostly_performed_leadership_duties: nil
-          }
+        journey_session.answers.assign_attributes(
+          had_leadership_position: had_leadership_position,
+          mostly_performed_leadership_duties: nil
         )
+
+        journey_session.save!
       end
 
       private
 
       def had_leadership_position_changed?
-        claim.eligibility.had_leadership_position != had_leadership_position
+        answers.had_leadership_position != had_leadership_position
       end
     end
   end

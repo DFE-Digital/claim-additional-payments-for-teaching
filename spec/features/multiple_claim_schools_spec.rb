@@ -63,9 +63,10 @@ RSpec.feature "Applicant worked at multiple schools" do
     check I18n.t("student_loans.forms.subjects_taught.answers.physics_taught")
     click_on "Continue"
 
-    expect(claim.eligibility.reload.taught_eligible_subjects).to eq(true)
-    expect(claim.eligibility.biology_taught).to eq(true)
-    expect(claim.eligibility.physics_taught).to eq(true)
+    session.reload
+    expect(session.answers.taught_eligible_subjects).to eq(true)
+    expect(session.answers.biology_taught).to eq(true)
+    expect(session.answers.physics_taught).to eq(true)
   end
 
   scenario "didn't teach eligible subjects and did not teach eligible subjects at a different eligible school" do

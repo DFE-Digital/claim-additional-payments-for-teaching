@@ -42,6 +42,40 @@ module Journeys
       def claim_school_somewhere_else?
         !!claim_school_somewhere_else
       end
+
+      def subjects_taught
+        [
+          :biology_taught,
+          :chemistry_taught,
+          :physics_taught,
+          :computing_taught,
+          :languages_taught
+        ].select { |subject| public_send(subject) }
+      end
+
+      def employed_at_no_school?
+        employment_status.to_s == "no_school"
+      end
+
+      def employed_at_different_school?
+        employment_status.to_s == "different_school"
+      end
+
+      def employed_at_claim_school?
+        employment_status.to_s == "claim_school"
+      end
+
+      def employed_at_recent_tps_school?
+        employment_status.to_s == "recent_tps_school"
+      end
+
+      def had_leadership_position?
+        !!had_leadership_position
+      end
+
+      def mostly_performed_leadership_duties?
+        !!mostly_performed_leadership_duties
+      end
     end
   end
 end

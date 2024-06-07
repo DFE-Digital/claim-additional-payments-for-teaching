@@ -2,12 +2,16 @@ require "rails_helper"
 
 RSpec.describe Journeys::TeacherStudentLoanReimbursement::QtsYearForm, type: :model do
   subject(:form) do
-    described_class.new(claim:, journey_session:, journey:, params:)
+    described_class.new(
+      claim: CurrentClaim.new(claims: [build(:claim)]),
+      journey_session:,
+      journey:,
+      params:
+    )
   end
 
   let(:journey) { Journeys::TeacherStudentLoanReimbursement }
-  let(:journey_session) { build(:student_loans_session) }
-  let(:claim) { CurrentClaim.new(claims: [build(:claim, policy: Policies::StudentLoans)]) }
+  let(:journey_session) { create(:student_loans_session) }
   let(:slug) { "qts-year" }
   let(:params) { ActionController::Parameters.new({slug:, claim: claim_params}) }
   let(:claim_params) { {"qts_award_year" => "before_cut_off_date"} }
@@ -35,15 +39,22 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::QtsYearForm, type: :mo
 
     context "valid params" do
       let(:claim_params) { {"qts_award_year" => "before_cut_off_date"} }
-      let(:expected_saved_attributes) { {eligibility_attributes: claim_params} }
 
-      it { is_expected.to have_received(:update!).with(expected_saved_attributes) }
+      it "updates the answers" do
+        expect(
+          journey_session.reload.answers.qts_award_year
+        ).to eq("before_cut_off_date")
+      end
     end
 
     context "invalid params" do
       let(:claim_params) { {"qts_award_year" => "invalid_option"} }
 
-      it { expect(form).not_to have_received(:update!) }
+      it "doesn't update the answers" do
+        expect(
+          journey_session.reload.answers.qts_award_year
+        ).to be_nil
+      end
     end
   end
 

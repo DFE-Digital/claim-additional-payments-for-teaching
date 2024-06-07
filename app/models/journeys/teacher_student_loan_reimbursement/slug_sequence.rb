@@ -81,8 +81,8 @@ module Journeys
           end
 
           sequence.delete("reset-claim") if skipped_dfe_sign_in? || answers.details_check?
-          sequence.delete("current-school") if claim.eligibility.employed_at_claim_school? || claim.eligibility.employed_at_recent_tps_school?
-          sequence.delete("mostly-performed-leadership-duties") unless claim.eligibility.had_leadership_position?
+          sequence.delete("current-school") if answers.employed_at_claim_school? || answers.employed_at_recent_tps_school?
+          sequence.delete("mostly-performed-leadership-duties") unless answers.had_leadership_position?
           sequence.delete("personal-bank-account") if answers.building_society?
           sequence.delete("building-society-account") if answers.personal_bank_account?
           sequence.delete("mobile-number") if answers.provide_mobile_number == false
@@ -111,7 +111,7 @@ module Journeys
           sequence.delete("teacher-reference-number") if answers.logged_in_with_tid? && answers.teacher_reference_number.present?
 
           if answers.logged_in_with_tid? && answers.details_check?
-            if claim.qualifications_details_check
+            if answers.qualifications_details_check
               sequence.delete("qts-year") if answers.dqt_teacher_record&.qts_award_date
             elsif signed_in_with_dfe_identity_and_details_match? && answers.has_no_dqt_data_for_claim?
               sequence.delete("qualification-details")

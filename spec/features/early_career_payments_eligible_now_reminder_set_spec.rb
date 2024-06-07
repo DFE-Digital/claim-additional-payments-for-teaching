@@ -18,7 +18,11 @@ RSpec.feature "Eligible now can set a reminder for next year." do
     )
     session.save!
 
-    jump_to_claim_journey_page(claim, "check-your-answers")
+    jump_to_claim_journey_page(
+      claim: claim,
+      slug: "check-your-answers",
+      journey_session: session
+    )
     expect(page).to have_text(claim.first_name)
     click_on "Accept and send"
     expect(page).to have_text("Set a reminder to apply next year")
@@ -87,7 +91,11 @@ RSpec.feature "Completed Applications - Reminders" do
           )
           session.save!
 
-          jump_to_claim_journey_page(claim, "check-your-answers")
+          jump_to_claim_journey_page(
+            claim: claim,
+            slug: "check-your-answers",
+            journey_session: session
+          )
           expect(page).to have_text(claim.first_name)
 
           click_on "Accept and send"
