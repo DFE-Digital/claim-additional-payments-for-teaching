@@ -47,6 +47,13 @@ module Journeys
         end
       end
 
+      def policy_year
+        raise "nil academic year" if current_academic_year.nil?
+        raise "none academic year" if current_academic_year == AcademicYear.new
+
+        current_academic_year
+      end
+
       def nqt_in_academic_year_after_itt?
         !!nqt_in_academic_year_after_itt
       end
@@ -85,6 +92,10 @@ module Journeys
         @current_school ||= School.find_by(id: current_school_id)
       end
 
+      def current_school_name
+        current_school&.name
+      end
+
       def postgraduate_itt?
         qualification == "postgraduate_itt"
       end
@@ -99,6 +110,17 @@ module Journeys
 
       def overseas_recognition?
         qualification == "overseas_recognition"
+      end
+
+      def trainee_teacher?
+        nqt_in_academic_year_after_itt == false
+      end
+
+      private
+
+      def current_academic_year
+        @current_academic_year ||=
+          Journeys::AdditionalPaymentsForTeaching.configuration.current_academic_year
       end
     end
   end

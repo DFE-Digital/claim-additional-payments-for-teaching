@@ -1,8 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Claims::ShowHelper do
-  let(:claim) { build(:claim, policy: policy) }
-
   describe "#fieldset_legend_css_class_for_journey" do
     subject(:css_class) { helper.fieldset_legend_css_class_for_journey(journey) }
 
@@ -36,7 +34,7 @@ RSpec.describe Claims::ShowHelper do
   end
 
   describe "#policy_name" do
-    subject(:name) { helper.policy_name(claim.policy) }
+    subject(:name) { helper.policy_name(policy) }
 
     context "with a StudentLoans policy" do
       let(:policy) { Policies::StudentLoans }

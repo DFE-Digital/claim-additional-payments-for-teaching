@@ -22,7 +22,7 @@ module Journeys
               eligible_itt_subject: eligible_itt_subject,
               eligible_degree_subject: eligible_degree_subject,
               teaching_subject_now: teaching_subject_now,
-              itt_academic_year: itt_academic_year,
+              itt_academic_year: journey_session.answers.itt_academic_year,
               current_school_id: current_school_id,
               induction_completed: induction_completed,
               school_somewhere_else: journey_session.answers.school_somewhere_else
@@ -57,8 +57,41 @@ module Journeys
         journey_session.answers.subject_to_formal_performance_action || try_eligibility(:subject_to_formal_performance_action)
       end
 
+      # FIXME RL: This will be removed once we have migrated the
+      # eligible_itt_subject form. This is required as
+      # `EarlyCareerPayments::DqtRecord` and
+      # `LevellingUpPremiumPayments::DqtRecord` can return different values for
+      # eligible_itt_subject, however the `answers` only store one
+      # `eligible_itt_subject`. The slug sequence specificly checks if the
+      # claim is lup ineligible, which if the answers eligible_itt_subject is
+      # set to the value from the ecp dqt record can return false (ie
+      # ecp_dqt_record returns 'none_of_the_above' and lup_dqt_record returns
+      # 'mathematics'). However the `eligible_itt_subject` form writes the
+      # answer selected by the teacher to both claims, implying that the
+      # eligible_itt_subject should be the same for both policies, so either
+      # there is an issue with how the dqt_record differ in calculating the
+      # eligible_itt_subject or the `eligible_itt_subject` form is wrong in
+      # writing the same eligible_itt_subject to both claims.
+      # If the former, wen we update the `eligible_itt_subject` form, we'll
+      # also want to update the qualification details from to have logic
+      # similar to the below. If the later, then we'll need to change answers
+      # to have an `ecp_eligible_itt_subject` and `lup_eligible_itt_subject`,
+      # and update the `eligible_itt_subject` form to write the same answer to
+      # both.
       def eligible_itt_subject
-        journey_session.answers.eligible_itt_subject || try_eligibility(:eligible_itt_subject)
+        answer_from_session = journey_session.answers.eligible_itt_subject
+        return answer_from_session if answer_from_session.present?
+        subjects_from_claim = current_claim.claims.map(&:eligibility).map(&:eligible_itt_subject).compact.map(&:to_sym)
+
+        return nil if subjects_from_claim.empty?
+
+        not_none_of_the_above = subjects_from_claim.reject { |subject| subject == :none_of_the_above }
+
+        if not_none_of_the_above.any?
+          not_none_of_the_above.first
+        else
+          :none_of_the_above
+        end
       end
 
       def eligible_degree_subject
@@ -67,10 +100,6 @@ module Journeys
 
       def teaching_subject_now
         journey_session.answers.teaching_subject_now || try_eligibility(:teaching_subject_now)
-      end
-
-      def itt_academic_year
-        journey_session.answers.itt_academic_year || try_eligibility(:itt_academic_year)
       end
 
       def current_school_id

@@ -18,7 +18,6 @@ module Journeys
         # migrated the forms that set these attributes to write to the journey
         # session ansswers, so we need to set these values from the elgiibility
         # here.
-        journey_session.answers.itt_academic_year = claim.eligibility.itt_academic_year
         journey_session.answers.eligible_itt_subject = claim.eligibility.eligible_itt_subject
         journey_session.answers.eligible_degree_subject = claim.for_policy(Policies::LevellingUpPremiumPayments).eligibility.eligible_degree_subject
       end
@@ -30,8 +29,8 @@ module Journeys
           qualifications_details_check: qualifications_details_check
         )
 
-        # FIXME RL: Remove this once the qualification, eligible_itt_subject,
-        # and itt_academic_year forms are writing to the session and no longer
+        # FIXME RL: Remove this once the qualification and
+        # eligible_itt_subject, forms are writing to the session and no longer
         # trigger resetting dependent answers
         claim.assign_attributes(
           qualifications_details_check: qualifications_details_check
@@ -41,13 +40,17 @@ module Journeys
           # Teacher has confirmed the details in the dqt record are correct, update
           # the eligibility with these details
           journey_session.answers.assign_attributes(
-            qualification: answers.early_career_payments_dqt_teacher_record&.route_into_teaching || answers.qualification
+            qualification: answers.early_career_payments_dqt_teacher_record&.route_into_teaching || answers.qualification,
+            itt_academic_year: answers.early_career_payments_dqt_teacher_record&.itt_academic_year_for_claim || answers.itt_academic_year
           )
           claim.claims.each { |c| set_qualifications_from_dqt_record(c.eligibility) }
         else
           # Teacher has said the details don't match what they expected so
           # nullify them
-          journey_session.answers.assign_attributes(qualification: nil)
+          journey_session.answers.assign_attributes(
+            qualification: nil,
+            itt_academic_year: nil
+          )
 
           claim.claims.each { |c| set_nil_qualifications(c.eligibility) }
         end
@@ -104,12 +107,10 @@ module Journeys
         case eligibility
         when Policies::EarlyCareerPayments::Eligibility
           eligibility.assign_attributes(
-            itt_academic_year: itt_academic_year(answers.early_career_payments_dqt_teacher_record, eligibility),
             eligible_itt_subject: eligible_itt_subject(answers.early_career_payments_dqt_teacher_record, eligibility)
           )
         when Policies::LevellingUpPremiumPayments::Eligibility
           eligibility.assign_attributes(
-            itt_academic_year: itt_academic_year(answers.levelling_up_premium_payments_dqt_reacher_record, eligibility),
             eligible_itt_subject: eligible_itt_subject(answers.levelling_up_premium_payments_dqt_reacher_record, eligibility),
             eligible_degree_subject: eligible_degree_subject(answers.levelling_up_premium_payments_dqt_reacher_record, eligibility)
           )
@@ -122,22 +123,16 @@ module Journeys
         case eligibility
         when Policies::EarlyCareerPayments::Eligibility
           eligibility.assign_attributes(
-            itt_academic_year: nil,
             eligible_itt_subject: nil
           )
         when Policies::LevellingUpPremiumPayments::Eligibility
           eligibility.assign_attributes(
-            itt_academic_year: nil,
             eligible_itt_subject: nil,
             eligible_degree_subject: nil
           )
         else
           fail "Unknown eligibility type #{eligibility.class}"
         end
-      end
-
-      def itt_academic_year(dqt_teacher_record, eligibility)
-        dqt_teacher_record&.itt_academic_year_for_claim || eligibility.itt_academic_year
       end
 
       def eligible_itt_subject(dqt_teacher_record, eligibility)

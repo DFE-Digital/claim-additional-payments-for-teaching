@@ -365,7 +365,6 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
 
   scenario "when academic year completed undergraduate ITT or started postgraduate ITT is 'none of the above'" do
     start_early_career_payments_claim
-    claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
 
     session = Journeys::AdditionalPaymentsForTeaching::Session.last
 
@@ -416,7 +415,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
     choose "None of the above"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.itt_academic_year).to eql AcademicYear.new
+    expect(session.reload.answers.itt_academic_year).to eql AcademicYear.new
 
     expect(page).to have_text(I18n.t("additional_payments.ineligible.heading"))
     expect(page).to have_css("div#ecp_only_teacher_with_ineligible_itt_year")

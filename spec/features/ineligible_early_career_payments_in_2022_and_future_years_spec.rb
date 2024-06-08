@@ -63,7 +63,9 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims by cohort" do
           choose scenario[:itt_academic_year].to_s(:long)
           click_on "Continue"
 
-          expect(claim.eligibility.reload.itt_academic_year).to eql scenario[:itt_academic_year]
+          expect(journey_session.reload.answers.itt_academic_year).to(
+            eq(scenario[:itt_academic_year])
+          )
 
           # - Which subject did you do your undergraduate ITT in
           expect(page).to have_text("Which subject")

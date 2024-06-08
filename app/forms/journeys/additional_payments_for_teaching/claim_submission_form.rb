@@ -1,6 +1,20 @@
 module Journeys
   module AdditionalPaymentsForTeaching
     class ClaimSubmissionForm < ::ClaimSubmissionBaseForm
+      def eligible_now_and_sorted
+        eligible_now.sort_by { |e| [-e.award_amount.to_i, e.policy.short_name] }
+      end
+
+      def eligible_now
+        eligibilities.select { |e| e.status == :eligible_now }
+      end
+
+      def eligible_now_or_later
+        eligibilities.select do |e|
+          e.status == :eligible_now || e.status == :eligible_later
+        end
+      end
+
       private
 
       def selected_claim_policy
@@ -39,14 +53,6 @@ module Journeys
             "award_amount" => BigDecimal(e.award_amount)
           }
         end
-      end
-
-      def eligible_now_and_sorted
-        eligible_now.sort_by { |e| [-e.award_amount.to_i, e.policy.short_name] }
-      end
-
-      def eligible_now
-        eligibilities.select { |e| e.status == :eligible_now }
       end
     end
   end

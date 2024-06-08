@@ -5,12 +5,15 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
 
+  let(:itt_academic_year) { AcademicYear.new(2023) }
+
   let(:journey_session) do
     create(
       :additional_payments_session,
       answers: {
         dqt_teacher_status: dqt_teacher_status,
-        qualification: "postgraduate_itt"
+        qualification: "postgraduate_itt",
+        itt_academic_year: itt_academic_year
       }
     )
   end
@@ -18,7 +21,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
   let(:early_career_payments_eligibility) do
     create(
       :early_career_payments_eligibility,
-      itt_academic_year: AcademicYear.new(2023),
       eligible_itt_subject: :physics
     )
   end
@@ -26,7 +28,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
   let(:levelling_up_premium_payments_eligibility) do
     create(
       :levelling_up_premium_payments_eligibility,
-      itt_academic_year: AcademicYear.new(2023),
       eligible_itt_subject: :physics,
       eligible_degree_subject: false
     )
@@ -151,11 +152,10 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
 
     context "when none of the claims have `none_of_the_above` as eligible_itt_subject" do
       let(:early_career_payments_eligibility) do
-        create(
-          :early_career_payments_eligibility,
-          itt_academic_year: AcademicYear.new(2020)
-        )
+        create(:early_career_payments_eligibility)
       end
+
+      let(:itt_academic_year) { AcademicYear.new(2020) }
 
       let(:dqt_teacher_status) do
         {
@@ -175,10 +175,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
 
     context "when one of the claims has `none_of_the_above` as eligible_itt_subject" do
       let(:early_career_payments_eligibility) do
-        create(
-          :early_career_payments_eligibility,
-          itt_academic_year: AcademicYear.new(2023)
-        )
+        create(:early_career_payments_eligibility)
       end
 
       context "when there is no degree names" do
@@ -259,14 +256,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
         it "sets itt_academic_year as nil" do
           expect { form.save }.to(
             change do
-              early_career_payments_eligibility.reload.itt_academic_year
-            end.from(AcademicYear.new(2023)).to(nil).and(
-              change do
-                levelling_up_premium_payments_eligibility
-                  .reload
-                  .itt_academic_year
-              end.from(AcademicYear.new(2023)).to(nil)
-            )
+              journey_session.reload.answers.itt_academic_year
+            end.from(AcademicYear.new(2023)).to(nil)
           )
         end
 
@@ -368,16 +359,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
           it "sets the itt_academic_year to the dqt_teacher_record" do
             expect { form.save }.to(
               change do
-                early_career_payments_eligibility
-                  .reload
-                  .itt_academic_year
-              end.from(AcademicYear.new(2023)).to(AcademicYear.new(2018)).and(
-                change do
-                  levelling_up_premium_payments_eligibility
-                    .reload
-                    .itt_academic_year
-                end.from(AcademicYear.new(2023)).to(AcademicYear.new(2018))
-              )
+                journey_session.reload.answers.itt_academic_year
+              end.from(AcademicYear.new(2023)).to(AcademicYear.new(2018))
             )
           end
 
@@ -430,17 +413,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
           it "doesn't change the itt_academic_year" do
             expect { form.save }.not_to(
               change do
-                early_career_payments_eligibility
-                  .reload
-                  .itt_academic_year
-              end
-            )
-
-            expect { form.save }.not_to(
-              change do
-                levelling_up_premium_payments_eligibility
-                  .reload
-                  .itt_academic_year
+                journey_session.reload.answers.itt_academic_year
               end
             )
           end
