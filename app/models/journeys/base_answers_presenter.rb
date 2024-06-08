@@ -1,18 +1,12 @@
 module Journeys
   class BaseAnswersPresenter
-    attr_reader :claim, :eligibility, :journey_session
+    attr_reader :claim, :journey_session
 
     delegate :answers, to: :journey_session
 
     def initialize(claim, journey_session)
       @claim = claim
       @journey_session = journey_session
-
-      @eligibility = if @claim.is_a?(CurrentClaim)
-        claim.eligible_eligibility
-      else
-        claim.eligibility
-      end
     end
 
     def identity_answers

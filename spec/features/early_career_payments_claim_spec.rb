@@ -820,7 +820,10 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     let!(:session) do
       session = Journeys::AdditionalPaymentsForTeaching::Session.last
       session.answers.assign_attributes(
-        qualification: "postgraduate_itt"
+        attributes_for(
+          :additional_payments_answers,
+          :ecp_and_lup_eligible
+        )
       )
       session.save!
       session

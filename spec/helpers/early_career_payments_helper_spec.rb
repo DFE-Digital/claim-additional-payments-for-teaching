@@ -18,14 +18,30 @@ describe AdditionalPaymentsHelper do
   end
 
   describe "#eligible_itt_subject_translation" do
+    before { create(:journey_configuration, :additional_payments) }
     let(:ecp_claim) { create(:claim, :first_lup_claim_year, policy: Policies::EarlyCareerPayments, eligibility: ecp_eligibility) }
     let(:lup_claim) { create(:claim, :first_lup_claim_year, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility) }
     let(:qualification) { nil }
 
+    let(:shim) do
+      Journeys::AdditionalPaymentsForTeaching::ClaimJourneySessionShim.new(
+        journey_session: journey_session,
+        current_claim: current_claim
+      )
+    end
+
+    let(:journey_session) do
+      create(:additional_payments_session, answers: answers)
+    end
+
+    let(:current_claim) do
+      CurrentClaim.new(claims: [ecp_claim, lup_claim])
+    end
+
     subject do
       helper.eligible_itt_subject_translation(
-        CurrentClaim.new(claims: [ecp_claim, lup_claim]),
-        build(:additional_payments_answers, qualification: qualification)
+        shim.answers,
+        JourneySubjectEligibilityChecker.selectable_subject_symbols(shim.answers)
       )
     end
 
@@ -33,12 +49,29 @@ describe AdditionalPaymentsHelper do
       let(:ecp_eligibility) { build(:early_career_payments_eligibility, :trainee_teacher) }
       let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :trainee_teacher) }
 
+      let(:answers) do
+        build(
+          :additional_payments_answers,
+          :ecp_and_lup_eligible,
+          :trainee_teacher
+        )
+      end
+
       it { is_expected.to eq("Which subject are you currently doing your initial teacher training (ITT) in?") }
     end
 
     context "qualified teacher" do
-      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible, itt_academic_year: itt_year) }
-      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible, itt_academic_year: itt_year) }
+      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible) }
+      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
+
+      let(:answers) do
+        build(
+          :additional_payments_answers,
+          :ecp_eligible,
+          itt_academic_year: itt_year,
+          qualification: qualification
+        )
+      end
 
       context "one option" do
         let(:itt_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2019)) }

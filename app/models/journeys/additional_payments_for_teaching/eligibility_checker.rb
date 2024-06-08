@@ -19,8 +19,24 @@ module Journeys
         end
       end
 
+      def ineligibility_reason
+        polcies.map do |policy|
+          policy::PolicyEligibilityChecker.new(
+            answers: @journey_session.answers
+          ).ineligibility_reason
+        end.compact.first
+      end
+
       def ineligible?
-        policies.all? { |policy| policy::PolicyEligibilityChecker.new(journey_session: @journey_session).ineligible? }
+        policies.all? { |policy| policy::PolicyEligibilityChecker.new(answers: @journey_session.answers).ineligible? }
+      end
+
+      def eligible_now
+        policies.select { |policy| policy::PolicyEligibilityChecker.new(answers: @journey_session.answers).status == :eligible_now }
+      end
+
+      def eligible_later
+        policies.select { |policy| policy::PolicyEligibilityChecker.new(answers: @journey_session.answers).status == :eligible_later }
       end
 
       def single_choice_only?
@@ -44,17 +60,17 @@ module Journeys
       end
 
       def anything_eligible_now?
-        policies.any? { |policy| policy::PolicyEligibilityChecker.new(journey_session: @journey_session).status == :eligible_now }
+        eligible_now.any?
       end
 
       def anything_eligible_later?
-        policies.any? { |policy| policy::PolicyEligibilityChecker.new(journey_session: @journey_session).status == :eligible_later }
+        eligible_later.any?
       end
 
       # NOTE: not to be confused with `ineligible?`
       # e.g. having `eligible_later` is considered ineligible but not an overall status of :ineligible
       def everything_ineligible?
-        policies.all? { |policy| policy::PolicyEligibilityChecker.new(journey_session: @journey_session).status == :ineligible }
+        policies.all? { |policy| policy::PolicyEligibilityChecker.new(answers: @journey_session.answers).status == :ineligible }
       end
     end
   end

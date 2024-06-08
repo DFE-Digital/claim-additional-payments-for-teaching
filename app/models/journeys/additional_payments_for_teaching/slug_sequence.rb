@@ -83,18 +83,11 @@ module Journeys
       def initialize(claim, journey_session)
         @claim = claim
         @journey_session = journey_session
-
-        shim = Journeys.for_routing_name(journey_session.journey)::ClaimJourneySessionShim.new(
-          current_claim: claim,
-          journey_session: journey_session
-        )
-        @overall_eligibility_status = EligibilityChecker.new(journey_session: shim).status
       end
 
       # Even though we are inside the ECP namespace, this method can modify the
       # slug sequence of both LUP and ECP claims
       def slugs
-        lup_claim = claim.for_policy(Policies::LevellingUpPremiumPayments)
         ecp_claim = claim.for_policy(Policies::EarlyCareerPayments)
 
         SLUGS.dup.tap do |sequence|
@@ -132,8 +125,8 @@ module Journeys
             sequence.delete("employed-directly")
           end
 
-          sequence.delete("eligibility-confirmed") unless @overall_eligibility_status == :eligible_now
-          sequence.delete("eligible-later") unless @overall_eligibility_status == :eligible_later
+          sequence.delete("eligibility-confirmed") unless overall_eligibility_status == :eligible_now
+          sequence.delete("eligible-later") unless overall_eligibility_status == :eligible_later
 
           sequence.delete("personal-bank-account") if answers.building_society?
           sequence.delete("building-society-account") if answers.personal_bank_account?
@@ -150,11 +143,11 @@ module Journeys
 
           if claim.eligibility.trainee_teacher?
             trainee_teacher_slugs(sequence)
-            sequence.delete("eligible-degree-subject") unless lup_claim&.eligibility&.indicated_ineligible_itt_subject?
+            sequence.delete("eligible-degree-subject") unless lup_eligibility_checker.indicated_ineligible_itt_subject?
           else
-            sequence.delete("ineligible") unless [:ineligible, :eligible_later].include?(@overall_eligibility_status)
+            sequence.delete("ineligible") unless [:ineligible, :eligible_later].include?(overall_eligibility_status)
             sequence.delete("future-eligibility")
-            sequence.delete("eligible-degree-subject") unless ecp_claim&.eligibility&.status == :ineligible && lup_claim&.eligibility&.indicated_ineligible_itt_subject?
+            sequence.delete("eligible-degree-subject") unless ecp_eligibility_checker.status == :ineligible && lup_eligibility_checker.indicated_ineligible_itt_subject?
           end
 
           sequence.delete("induction-completed") unless induction_question_required?
@@ -262,6 +255,25 @@ module Journeys
         return false if skipped_dfe_sign_in_or_details_did_not_match?
 
         answers.teacher_id_user_info[field].present?
+      end
+
+      def shim
+        @shim ||= Journeys::AdditionalPaymentsForTeaching::ClaimJourneySessionShim.new(
+          current_claim: claim,
+          journey_session: journey_session
+        )
+      end
+
+      def overall_eligibility_status
+        @overall_eligibility_status ||= EligibilityChecker.new(journey_session: shim).status
+      end
+
+      def ecp_eligibility_checker
+        @ecp_eligibility_checker ||= Policies::EarlyCareerPayments::PolicyEligibilityChecker.new(answers: shim.answers)
+      end
+
+      def lup_eligibility_checker
+        @lup_eligibility_checker ||= Policies::LevellingUpPremiumPayments::PolicyEligibilityChecker.new(answers: shim.answers)
       end
     end
   end

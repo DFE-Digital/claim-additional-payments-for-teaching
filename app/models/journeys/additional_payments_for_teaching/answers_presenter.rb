@@ -5,6 +5,10 @@ module Journeys
       include AdditionalPaymentsHelper
       include Claims::IttSubjectHelper
 
+      def eligibility
+        @eligibility ||= claim_submission_form.eligible_now_or_later.first
+      end
+
       # Formats the eligibility as a list of questions and answers, each
       # accompanied by a slug for changing the answer. Suitable for playback to
       # the claimant for them to review on the check-your-answers page.
@@ -114,7 +118,10 @@ module Journeys
         return if answers.qualifications_details_check && answers.early_career_payments_dqt_teacher_record&.eligible_itt_subject_for_claim
 
         [
-          eligible_itt_subject_translation(CurrentClaim.new(claims: [eligibility.claim]), answers),
+          eligible_itt_subject_translation(
+            shim.answers,
+            subject_symbols
+          ),
           text_for_subject_answer,
           "eligible-itt-subject"
         ]
@@ -159,6 +166,33 @@ module Journeys
           subject_symbol = subjects.first
           (subject_symbol == eligibility.eligible_itt_subject.to_sym) ? "Yes" : "No"
         end
+      end
+
+      private
+
+      def subject_symbols
+        return [] if answers.itt_academic_year.blank?
+
+        if shim.answers.nqt_in_academic_year_after_itt
+          JourneySubjectEligibilityChecker.new(claim_year: answers.policy_year, itt_year: answers.itt_academic_year).current_and_future_subject_symbols(eligibility.policy)
+        elsif answers.policy_year.in?(EligibilityCheckable::COMBINED_ECP_AND_LUP_POLICY_YEARS_BEFORE_FINAL_YEAR)
+          # they get the standard, unchanging LUP subject set because they won't have qualified in time for ECP by 2022/2023
+          # and they won't have given an ITT year
+          JourneySubjectEligibilityChecker.fixed_lup_subject_symbols
+        else
+          []
+        end.sort
+      end
+
+      def claim_submission_form
+        @claim_submission_form ||= ClaimSubmissionForm.new(journey_session: shim)
+      end
+
+      def shim
+        @shim ||= ClaimJourneySessionShim.new(
+          journey_session: journey_session,
+          current_claim: claim
+        )
       end
     end
   end

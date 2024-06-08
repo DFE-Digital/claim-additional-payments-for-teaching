@@ -20,12 +20,14 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
   let(:journey_session) do
     create(
       :additional_payments_session,
-      answers: {
+      answers: attributes_for(
+        :additional_payments_answers,
+        :submittable,
         logged_in_with_tid: logged_in_with_tid,
         details_check: details_check,
         dqt_teacher_status: dqt_teacher_status,
         qualifications_details_check: qualifications_details_check
-      }
+      )
     )
   end
   let(:teacher_id_enabled) { true }
@@ -374,8 +376,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
     let(:current_school) { create(:school, :combined_journey_eligibile_for_all) }
     let(:ecp_claim) { create(:claim, policy: Policies::EarlyCareerPayments, eligibility_trait: ecp_eligibility) }
     let(:lup_claim) { create(:claim, policy: Policies::LevellingUpPremiumPayments, eligibility_trait: lup_eligibility) }
+
     let(:current_claim) { CurrentClaim.new(claims: [ecp_claim, lup_claim]) }
-    let(:journey_session) { build(:additional_payments_session) }
 
     subject { described_class.new(current_claim, journey_session).slugs }
 
@@ -384,6 +386,16 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
 
       let(:ecp_claim) { create(:claim, policy: Policies::EarlyCareerPayments, eligibility_trait: ecp_eligibility, eligibility_attributes: {current_school: current_school}) }
       let(:lup_claim) { create(:claim, policy: Policies::LevellingUpPremiumPayments, eligibility_trait: lup_eligibility, eligibility_attributes: {current_school: current_school}) }
+
+      let(:journey_session) do
+        build(
+          :additional_payments_session,
+          answers: attributes_for(
+            :additional_payments_answers,
+            :ecp_eligible
+          )
+        )
+      end
 
       let(:ecp_eligibility) { :eligible_later }
       let(:lup_eligibility) { :eligible_now }
@@ -396,6 +408,16 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
       let(:ecp_eligibility) { :eligible_later }
       let(:lup_eligibility) { :ineligible }
 
+      let(:journey_session) do
+        build(
+          :additional_payments_session,
+          answers: attributes_for(
+            :additional_payments_answers,
+            :ecp_eligible_later
+          )
+        )
+      end
+
       it { is_expected.to include("eligible-later") }
       it { is_expected.not_to include("eligibility-confirmed") }
     end
@@ -403,6 +425,16 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
     context "current claim is :ineligible" do
       let(:ecp_eligibility) { :ineligible }
       let(:lup_eligibility) { :ineligible }
+
+      let(:journey_session) do
+        build(
+          :additional_payments_session,
+          answers: attributes_for(
+            :additional_payments_answers,
+            :ecp_ineligible
+          )
+        )
+      end
 
       it { is_expected.to include("ineligible") }
       it { is_expected.not_to include("eligibility-confirmed", "eligible-later") }

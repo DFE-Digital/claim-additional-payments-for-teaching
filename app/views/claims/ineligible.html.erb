@@ -2,19 +2,14 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% # FIXME RL: Once current claim is removed we'll be able to pull the
-      # reason directly off the answers rather than requiring the shim so we
-      # can do `journey_session.answers.ineligibility_reason` in the mean time
-      # we require this
-    if current_journey_routing_name == "student-loans"
-      shim = Journeys::TeacherStudentLoanReimbursement::ClaimJourneySessionShim.new(
+    <%
+      shim = journey::ClaimJourneySessionShim.new(
         current_claim: current_claim,
         journey_session: journey_session
       )
-      ineligibility_reason = Policies::StudentLoans::EligibilityChecker.new(shim.answers).ineligibility_reason
-    else
-      ineligibility_reason = current_claim.eligibility.ineligibility_reason
-    end %>
+      ineligibility_reason = journey::EligibilityChecker.new(journey_session: shim).ineligibility_reason
+    %>
+
     <%= render(
       partial: "ineligibility_reason_#{ineligibility_reason}",
       locals: {

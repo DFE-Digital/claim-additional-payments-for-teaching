@@ -85,5 +85,9 @@ module Journeys
         postcode
       ].reject(&:blank?).join(separator)
     end
+
+    def qualifications_details_check?
+      !!qualifications_details_check
+    end
   end
 end

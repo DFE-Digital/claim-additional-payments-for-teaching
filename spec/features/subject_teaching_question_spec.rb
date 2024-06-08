@@ -9,7 +9,14 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
   before do
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible, :eligible_school_ecp_and_lup))
-    journey_session.answers.assign_attributes(qualification: "postgraduate_itt")
+    journey_session.answers.assign_attributes(
+      attributes_for(
+        :additional_payments_answers,
+        :ecp_eligible,
+        :eligible_school_ecp_and_lup,
+        teaching_subject_now: nil # temp until the form that resets this is migrated to reset answers
+      )
+    )
     journey_session.save!
   end
 
@@ -89,6 +96,14 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
   context "when eligible only for LUP" do
     before do
       claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :ineligible))
+      journey_session.answers.assign_attributes(
+        attributes_for(
+          :additional_payments_answers,
+          :ecp_ineligible,
+          :lup_eligible
+        )
+      )
+      journey_session.save!
     end
 
     it "has the correct subjects" do
