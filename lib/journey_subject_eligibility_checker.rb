@@ -86,27 +86,6 @@ class JourneySubjectEligibilityChecker
     end.flatten.uniq
   end
 
-  # TODO RL - this method isn't used anywhere, DELETE IT
-  # TODO: call this when work on CAPT-357 where Mathematics is not eligible now but is in the future
-  # this could be further ahead than just the subsequent year
-  # this *does not* check whether the current claim year is eligible
-  def next_eligible_claim_year_after_current_claim_year(current_claim)
-    itt_subject = itt_subject_symbol(current_claim)
-    itt_year = itt_year(current_claim)
-
-    return nil if itt_year.blank?
-
-    potentially_eligible_future_years = potentially_still_eligible_policies(current_claim).collect do |policy|
-      future_claim_years.select do |future_claim_year|
-        itt_subject.in?(subject_symbols(policy: policy, claim_year: future_claim_year, itt_year: itt_year))
-      end
-    end.flatten.uniq
-
-    if potentially_eligible_future_years.any?
-      potentially_eligible_future_years.first
-    end
-  end
-
   private
 
   def potentially_still_eligible_policies(answers)
