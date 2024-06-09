@@ -98,7 +98,7 @@ module Policies
       private
 
       def eligibility_checker
-        @eligibility_checker ||= EligibilityChecker.new(self)
+        @eligibility_checker ||= PolicyEligibilityChecker.new(answers: self)
       end
     end
   end

@@ -119,10 +119,6 @@ module Journeys
       journey::ClaimSubmissionForm.new(journey_session: shim).valid?
     end
 
-    def student_loans_eligibility_checker
-      @eligibility_checker ||= Policies::StudentLoans::EligibilityChecker.new(shim.answers)
-    end
-
     def shim
       @shim ||= journey::ClaimJourneySessionShim.new(
         current_claim: @claim,
@@ -131,16 +127,7 @@ module Journeys
     end
 
     def journey_ineligible?
-      # TODO KL: avoid treading on other PRs handle TSLR EligiblityChecker separately
-      if journey == Journeys::TeacherStudentLoanReimbursement
-        student_loans_eligibility_checker.ineligible?
-      else
-        shim = journey::ClaimJourneySessionShim.new(
-          current_claim: claim,
-          journey_session: @journey_session
-        )
-        journey::EligibilityChecker.new(journey_session: shim).ineligible?
-      end
+      @journey_ineligible ||= journey::EligibilityChecker.new(journey_session: shim).ineligible?
     end
   end
 end

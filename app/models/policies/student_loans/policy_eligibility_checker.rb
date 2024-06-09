@@ -1,9 +1,9 @@
 module Policies
   module StudentLoans
-    class EligibilityChecker
+    class PolicyEligibilityChecker
       attr_reader :answers
 
-      def initialize(answers)
+      def initialize(answers:)
         @answers = answers
       end
 
