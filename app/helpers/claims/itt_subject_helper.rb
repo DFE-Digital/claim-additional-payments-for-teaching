@@ -2,24 +2,6 @@ require "journey_subject_eligibility_checker"
 
 module Claims
   module IttSubjectHelper
-    # FIXME RL: delete this method
-    def subject_symbols(answers)
-      subjects = if answers.nqt_in_academic_year_after_itt
-        JourneySubjectEligibilityChecker.new(
-          claim_year: answers.policy_year,
-          itt_year: answers.itt_academic_year
-        ).selectable_subject_symbols(answers)
-      elsif answers.policy_year.in?(EligibilityCheckable::COMBINED_ECP_AND_LUP_POLICY_YEARS_BEFORE_FINAL_YEAR)
-        # they get the standard, unchanging LUP subject set because they won't have qualified in time for ECP by 2022/2023
-        # and they won't have given an ITT year
-        JourneySubjectEligibilityChecker.fixed_lup_subject_symbols
-      else
-        []
-      end
-
-      subjects.sort
-    end
-
     def subjects_to_sentence_for_hint_text(answers)
       all_ecp_subjects = [:chemistry, :foreign_languages, :mathematics, :physics]
       all_lup_subjects = JourneySubjectEligibilityChecker.fixed_lup_subject_symbols

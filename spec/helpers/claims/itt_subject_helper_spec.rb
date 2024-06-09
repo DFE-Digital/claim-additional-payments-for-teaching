@@ -9,51 +9,6 @@ RSpec.describe Claims::IttSubjectHelper do
   let(:ecp_trainee_teacher_claim) { create(:claim, :first_lup_claim_year, policy: Policies::EarlyCareerPayments, eligibility: ecp_trainee_teacher_eligibility) }
   let(:lup_trainee_teacher_claim) { create(:claim, :first_lup_claim_year, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_trainee_teacher_eligibility) }
 
-  # FIXME RL remove this
-  xdescribe "#subject_symbols" do
-    let(:shim) do
-      Journeys::AdditionalPaymentsForTeaching::ClaimJourneySessionShim.new(
-        current_claim: CurrentClaim.new(claims: [build(:claim)]),
-        journey_session: journey_session
-      )
-    end
-
-    subject { helper.subject_symbols(shim.answers) }
-
-    context "trainee teacher" do
-      let(:journey_session) do
-        create(
-          :additional_payments_session,
-          answers: attributes_for(
-            :additional_payments_answers,
-            :ecp_and_lup_eligible,
-            :trainee_teacher
-          )
-        )
-      end
-
-      it { is_expected.to contain_exactly(:chemistry, :computing, :mathematics, :physics) }
-    end
-
-    # this delegates to another class which checks more combinations
-    context "non-trainee example" do
-      let(:itt_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2020)) }
-
-      let(:journey_session) do
-        create(
-          :additional_payments_session,
-          answers: attributes_for(
-            :additional_payments_answers,
-            :ecp_and_lup_eligible,
-            itt_academic_year: itt_year
-          )
-        )
-      end
-
-      it { is_expected.to contain_exactly(:chemistry, :computing, :foreign_languages, :mathematics, :physics) }
-    end
-  end
-
   describe "#subjects_to_sentence_for_hint_text" do
     let(:ecp_claim) { create(:claim, :first_lup_claim_year, policy: Policies::EarlyCareerPayments, eligibility: ecp_eligibility) }
     let(:lup_claim) { create(:claim, :first_lup_claim_year, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility) }
