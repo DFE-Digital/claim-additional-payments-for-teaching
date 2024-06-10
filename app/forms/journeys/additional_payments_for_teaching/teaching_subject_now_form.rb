@@ -20,7 +20,11 @@ module Journeys
       def save
         return false unless valid?
 
-        update!(eligibility_attributes: attributes)
+        journey_session.answers.assign_attributes(
+          teaching_subject_now: teaching_subject_now
+        )
+
+        journey_session.save!
       end
     end
   end

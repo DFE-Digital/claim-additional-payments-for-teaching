@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Journeys::AdditionalPaymentsForTeaching::TeachingSubjectNowForm do
   before { create(:journey_configuration, :additional_payments) }
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
-  let(:journey_session) { build(:additional_payments_session) }
+  let(:journey_session) { create(:additional_payments_session) }
   let(:eligibility) { create(:early_career_payments_eligibility) }
   let(:claim) do
     create(
@@ -70,7 +70,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::TeachingSubjectNowForm d
 
       it "returns true and updates the claim's eligibility" do
         expect { expect(form.save).to be true }.to(
-          change { claim.reload.eligibility.teaching_subject_now }
+          change { journey_session.reload.answers.teaching_subject_now }
             .from(nil).to(true)
         )
       end
