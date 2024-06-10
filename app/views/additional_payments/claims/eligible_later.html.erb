@@ -6,7 +6,7 @@
 
     <h2 class="govuk-heading-m">You are not eligible this year</h2>
 
-    <% if current_claim.for_policy(Policies::EarlyCareerPayments)&.eligibility&.induction_not_completed? %>
+    <% if journey_session.answers.induction_not_completed? %>
       <p class="govuk-body">
         You are not eligible for the
         <%= link_to "early-career payment (opens in new tab)", "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>
@@ -47,7 +47,7 @@
     <h2 class="govuk-heading-m">You may be eligible next year</h2>
 
     <p class="govuk-body">
-      <% if current_claim.for_policy(Policies::EarlyCareerPayments)&.eligibility&.induction_not_completed? %>
+      <% if journey_session.answers.induction_not_completed? %>
         If you have completed your induction,
       <% else %>
         So long as your circumstances stay the same,

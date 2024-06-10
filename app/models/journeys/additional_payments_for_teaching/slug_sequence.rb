@@ -152,7 +152,7 @@ module Journeys
 
           sequence.delete("induction-completed") unless induction_question_required?
 
-          if ecp_claim.eligibility.induction_not_completed? && ecp_claim.eligibility.ecp_only_school?
+          if answers.induction_not_completed? && ecp_claim.eligibility.ecp_only_school?
             replace_ecp_only_induction_not_completed_slugs(sequence)
           end
 

@@ -24,7 +24,7 @@ module Journeys
               teaching_subject_now: journey_session.answers.teaching_subject_now,
               itt_academic_year: journey_session.answers.itt_academic_year,
               current_school_id: current_school_id,
-              induction_completed: induction_completed,
+              induction_completed: journey_session.answers.induction_completed,
               school_somewhere_else: journey_session.answers.school_somewhere_else
             }
           )
@@ -96,10 +96,6 @@ module Journeys
 
       def current_school_id
         journey_session.answers.current_school_id || try_eligibility(:current_school_id)
-      end
-
-      def induction_completed
-        journey_session.answers.induction_completed || try_eligibility(:induction_completed)
       end
     end
   end

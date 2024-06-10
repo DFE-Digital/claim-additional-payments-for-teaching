@@ -66,6 +66,10 @@ module Journeys
         !!induction_completed
       end
 
+      def induction_not_completed?
+        !induction_completed.nil? && !induction_completed?
+      end
+
       def itt_subject_none_of_the_above?
         eligible_itt_subject == "none_of_the_above"
       end

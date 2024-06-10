@@ -112,7 +112,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
           end
 
           it "does not set the induction as complete" do
-            expect(claim.eligibility.induction_completed).to be nil
+            expect(journey_session.reload.answers.induction_completed).to be nil
           end
         end
 
@@ -127,7 +127,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
             end
 
             it "does not set the induction as complete" do
-              expect(claim.eligibility.induction_completed).to be nil
+              expect(journey_session.reload.answers.induction_completed).to be nil
             end
           end
 
@@ -140,7 +140,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
             end
 
             it "sets the induction as complete" do
-              expect(claim.eligibility.induction_completed).to be true
+              expect(journey_session.reload.answers.induction_completed).to be true
             end
           end
         end
