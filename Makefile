@@ -29,7 +29,6 @@ review-aks: test-cluster
 	$(eval ENVIRONMENT=review-${PR_NUMBER})
 	$(eval export TF_VAR_environment=${ENVIRONMENT})
 	$(eval include global_config/review.sh)
-	echo https://claim-additional-payments-for-teaching-review-$(PR_NUMBER).test.teacherservices.cloud will be created in aks
 
 .PHONY: test-aks
 test-aks: test-cluster
