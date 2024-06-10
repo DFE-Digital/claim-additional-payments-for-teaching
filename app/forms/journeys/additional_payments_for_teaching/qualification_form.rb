@@ -22,12 +22,7 @@ module Journeys
         unless answers.qualifications_details_check
           # Once the teaching_subject_now and eligible_itt_subject forms are
           # writing to the answers we can remove this claim update
-          claim.update!(
-            eligibility_attributes: {
-              teaching_subject_now: nil,
-              eligible_itt_subject: nil
-            }
-          )
+          claim.update!(eligibility_attributes: {eligible_itt_subject: nil})
 
           journey_session.answers.assign_attributes(
             eligible_itt_subject: nil,

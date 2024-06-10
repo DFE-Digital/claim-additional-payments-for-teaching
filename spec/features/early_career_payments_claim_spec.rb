@@ -378,7 +378,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       choose "Yes"
       click_on "Continue"
 
-      expect(claim.eligibility.reload.teaching_subject_now).to eql true
+      expect(session.reload.answers.teaching_subject_now).to eql true
 
       click_on "Continue"
 
@@ -425,7 +425,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       choose "Yes"
       click_on "Continue"
 
-      expect(claim.eligibility.reload.teaching_subject_now).to eql true
+      expect(session.reload.answers.teaching_subject_now).to eql true
 
       expect(claim.eligibility.reload.itt_academic_year).to eql itt_year
     end

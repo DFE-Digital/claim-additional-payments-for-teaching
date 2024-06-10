@@ -21,7 +21,7 @@ module Journeys
               subject_to_formal_performance_action: subject_to_formal_performance_action,
               eligible_itt_subject: eligible_itt_subject,
               eligible_degree_subject: journey_session.answers.eligible_degree_subject,
-              teaching_subject_now: teaching_subject_now,
+              teaching_subject_now: journey_session.answers.teaching_subject_now,
               itt_academic_year: journey_session.answers.itt_academic_year,
               current_school_id: current_school_id,
               induction_completed: induction_completed,
@@ -92,10 +92,6 @@ module Journeys
         else
           :none_of_the_above
         end
-      end
-
-      def teaching_subject_now
-        journey_session.answers.teaching_subject_now || try_eligibility(:teaching_subject_now)
       end
 
       def current_school_id
