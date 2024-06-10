@@ -1,6 +1,8 @@
 name: Build and deploy to AKS cluster
 
 on:
+  push:
+    branches: [main]
   pull_request:
     types: [labeled, opened, reopened, synchronize]
 
@@ -13,7 +15,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
     outputs:
       docker-image-tag: ${{ steps.build-image.outputs.tag }}
 
@@ -33,6 +34,7 @@ jobs:
     name: Deploy to review environment
     concurrency: deploy_review_${{ github.event.pull_request.number }}
     runs-on: ubuntu-latest
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
     needs: [build]
     environment:
       name: review-aks
@@ -78,3 +80,30 @@ jobs:
             | Additional Payments | <${{ env.APP_URL }}/additional-payments/claim> |
             | Student Loans       | <${{ env.APP_URL }}/student-loans/claim>       |
             | Admin               | <${{ env.APP_URL }}/admin>                     |
+
+  deploy_test:
+    name: Deploy to test environment
+    concurrency: deploy_test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    needs: [build]
+    environment:
+      name: test-aks
+      url: ${{ steps.deploy.outputs.environment_url }}
+    outputs:
+      environment_url: ${{ steps.deploy.outputs.environment_url }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: ./.github/actions/deploy-environment
+        id: deploy
+        with:
+          environment: test-aks
+          docker-image: ${{ needs.build.outputs.docker-image-tag }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
