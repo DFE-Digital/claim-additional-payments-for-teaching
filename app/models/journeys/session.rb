@@ -65,11 +65,5 @@ module Journeys
           teacher_reference_number: answers.teacher_id_user_info["trn"]
         )
     end
-
-    def load_answers(other_answers)
-      other_answers.attributes.each do |field, value|
-        answers.public_send(:"#{field}=", value)
-      end
-    end
   end
 end

@@ -24,12 +24,9 @@ RSpec.describe IneligibilityReasonChecker do
 
   let(:current_claim) { CurrentClaim.new(claims: [ecp_claim, lup_claim]) }
 
-  let(:journey) { "additional-payments" }
-  let(:answers) { Journeys::SessionAnswers.new }
+  let(:answers) { create(:additional_payments_answers) }
   let(:journey_session) do
-    object = Journeys::AdditionalPaymentsForTeaching::Session.new(journey:)
-    object.load_answers(answers)
-    object
+    create(:additional_payments_session)
   end
 
   describe "#reason without using answers" do
@@ -207,143 +204,181 @@ RSpec.describe IneligibilityReasonChecker do
     let(:lup_eligibility) { nil }
 
     context "school ineligible for both ECP and LUP" do
-      let(:answers) do
-        Journeys::SessionAnswers.new(
-          current_school_id: school_ineligible_for_both_ecp_and_lup.id
+      before do
+        journey_session.answers.assign_attributes(
+          attributes_for(
+            :additional_payments_answers,
+            current_school_id: school_ineligible_for_both_ecp_and_lup.id
+          )
         )
+        journey_session.save!
       end
 
       it { expect(subject.reason).to eq(:current_school) }
     end
 
     context "short-term supply teacher" do
-      let(:answers) do
-        Journeys::SessionAnswers.new(
-          current_school_id: school_eligible_for_ecp_and_lup.id,
-          employed_as_supply_teacher: true,
-          has_entire_term_contract: false
+      before do
+        journey_session.answers.assign_attributes(
+          attributes_for(
+            :additional_payments_answers,
+            current_school_id: school_eligible_for_ecp_and_lup.id,
+            employed_as_supply_teacher: true,
+            has_entire_term_contract: false
+          )
         )
+        journey_session.save!
       end
 
       it { expect(subject.reason).to eq(:generic) }
     end
 
     context "agency supply teacher" do
-      let(:answers) do
-        Journeys::SessionAnswers.new(
-          current_school_id: school_eligible_for_ecp_and_lup.id,
-          employed_as_supply_teacher: true,
-          employed_directly: false
+      before do
+        journey_session.answers.assign_attributes(
+          attributes_for(
+            :additional_payments_answers,
+            current_school_id: school_eligible_for_ecp_and_lup.id,
+            employed_as_supply_teacher: true,
+            employed_directly: false
+          )
         )
+        journey_session.save!
       end
 
       it { expect(subject.reason).to eq(:generic) }
     end
 
     context "short-term agency supply teacher" do
-      let(:answers) do
-        Journeys::SessionAnswers.new(
-          current_school_id: school_eligible_for_ecp_and_lup.id,
-          employed_as_supply_teacher: true,
-          has_entire_term_contract: false,
-          employed_directly: false
+      before do
+        journey_session.answers.assign_attributes(
+          attributes_for(
+            :additional_payments_answers,
+            current_school_id: school_eligible_for_ecp_and_lup.id,
+            employed_as_supply_teacher: true,
+            has_entire_term_contract: false,
+            employed_directly: false
+          )
         )
+        journey_session.save!
       end
 
       it { expect(subject.reason).to eq(:generic) }
     end
 
     context "formal action" do
-      let(:answers) do
-        Journeys::SessionAnswers.new(
-          current_school_id: school_eligible_for_ecp_and_lup.id,
-          employed_as_supply_teacher: false,
-          has_entire_term_contract: true,
-          employed_directly: true,
-          subject_to_formal_performance_action: true
+      before do
+        journey_session.answers.assign_attributes(
+          attributes_for(
+            :additional_payments_answers,
+            current_school_id: school_eligible_for_ecp_and_lup.id,
+            employed_as_supply_teacher: false,
+            has_entire_term_contract: true,
+            employed_directly: true,
+            subject_to_formal_performance_action: true
+          )
         )
+        journey_session.save!
       end
 
       it { expect(subject.reason).to eq(:generic) }
     end
 
     context "disciplinary action" do
-      let(:answers) do
-        Journeys::SessionAnswers.new(
-          current_school_id: school_eligible_for_ecp_and_lup.id,
-          employed_as_supply_teacher: false,
-          has_entire_term_contract: true,
-          employed_directly: true,
-          subject_to_disciplinary_action: true
+      before do
+        journey_session.answers.assign_attributes(
+          attributes_for(
+            :additional_payments_answers,
+            current_school_id: school_eligible_for_ecp_and_lup.id,
+            employed_as_supply_teacher: false,
+            has_entire_term_contract: true,
+            employed_directly: true,
+            subject_to_disciplinary_action: true
+          )
         )
+        journey_session.save!
       end
 
       it { expect(subject.reason).to eq(:generic) }
     end
 
     context "formal and disciplinary action" do
-      let(:answers) do
-        Journeys::SessionAnswers.new(
-          current_school_id: school_eligible_for_ecp_and_lup.id,
-          employed_as_supply_teacher: false,
-          has_entire_term_contract: true,
-          employed_directly: true,
-          subject_to_formal_performance_action: true,
-          subject_to_disciplinary_action: true
+      before do
+        journey_session.answers.assign_attributes(
+          attributes_for(
+            :additional_payments_answers,
+            current_school_id: school_eligible_for_ecp_and_lup.id,
+            employed_as_supply_teacher: false,
+            has_entire_term_contract: true,
+            employed_directly: true,
+            subject_to_formal_performance_action: true,
+            subject_to_disciplinary_action: true
+          )
         )
+        journey_session.save!
       end
 
       it { expect(subject.reason).to eq(:generic) }
     end
 
     context "eligible for both ECP and LUP but 'None of the above' ITT year" do
-      let(:answers) do
-        Journeys::SessionAnswers.new(
-          current_school_id: school_eligible_for_ecp_and_lup.id,
-          employed_as_supply_teacher: false,
-          has_entire_term_contract: true,
-          employed_directly: true,
-          subject_to_formal_performance_action: false,
-          subject_to_disciplinary_action: false,
-          itt_academic_year: none_of_the_above_academic_year
+      before do
+        journey_session.answers.assign_attributes(
+          attributes_for(
+            :additional_payments_answers,
+            current_school_id: school_eligible_for_ecp_and_lup.id,
+            employed_as_supply_teacher: false,
+            has_entire_term_contract: true,
+            employed_directly: true,
+            subject_to_formal_performance_action: false,
+            subject_to_disciplinary_action: false,
+            itt_academic_year: none_of_the_above_academic_year
+          )
         )
+        journey_session.save!
       end
 
       it { expect(subject.reason).to eq(:teacher_with_ineligible_itt_year) }
     end
 
     context "eligible for ECP only but 'None of the above' ITT year" do
-      let(:answers) do
-        Journeys::SessionAnswers.new(
-          current_school_id: school_eligible_for_ecp_but_not_lup.id,
-          employed_as_supply_teacher: false,
-          has_entire_term_contract: true,
-          employed_directly: true,
-          subject_to_formal_performance_action: false,
-          subject_to_disciplinary_action: false,
-          itt_academic_year: none_of_the_above_academic_year
+      before do
+        journey_session.answers.assign_attributes(
+          attributes_for(
+            :additional_payments_answers,
+            current_school_id: school_eligible_for_ecp_but_not_lup.id,
+            employed_as_supply_teacher: false,
+            has_entire_term_contract: true,
+            employed_directly: true,
+            subject_to_formal_performance_action: false,
+            subject_to_disciplinary_action: false,
+            itt_academic_year: none_of_the_above_academic_year
+          )
         )
+        journey_session.save!
       end
 
       it { expect(subject.reason).to eq(:ecp_only_teacher_with_ineligible_itt_year) }
     end
 
     context "eligible for LUP only but insufficient teaching" do
-      let(:answers) do
-        Journeys::SessionAnswers.new(
-          current_school_id: school_eligible_for_lup.id,
-          employed_as_supply_teacher: false,
-          has_entire_term_contract: true,
-          employed_directly: true,
-          subject_to_formal_performance_action: false,
-          subject_to_disciplinary_action: false,
-          teaching_subject_now: false,
-          nqt_in_academic_year_after_itt: false,
-          eligible_degree_subject: true
-        )
-      end
-
       before do
+        journey_session.answers.assign_attributes(
+          attributes_for(
+            :additional_payments_answers,
+            current_school_id: school_eligible_for_lup.id,
+            employed_as_supply_teacher: false,
+            has_entire_term_contract: true,
+            employed_directly: true,
+            subject_to_formal_performance_action: false,
+            subject_to_disciplinary_action: false,
+            teaching_subject_now: false,
+            nqt_in_academic_year_after_itt: false,
+            eligible_degree_subject: true
+          )
+        )
+        journey_session.save!
+
         subject.use_answers!
       end
 
@@ -351,16 +386,18 @@ RSpec.describe IneligibilityReasonChecker do
     end
 
     context "eligible for ECP only but insufficient teaching" do
-      let(:answers) do
-        Journeys::SessionAnswers.new(
-          current_school_id: school_eligible_for_ecp_but_not_lup.id,
-          teaching_subject_now: false,
-          nqt_in_academic_year_after_itt: true,
-          induction_completed: false
-        )
-      end
-
       before do
+        journey_session.answers.assign_attributes(
+          attributes_for(
+            :additional_payments_answers,
+            current_school_id: school_eligible_for_ecp_but_not_lup.id,
+            teaching_subject_now: false,
+            nqt_in_academic_year_after_itt: true,
+            induction_completed: false
+          )
+        )
+        journey_session.save!
+
         subject.use_answers!
       end
 
@@ -370,21 +407,23 @@ RSpec.describe IneligibilityReasonChecker do
     context "eligible for both ECP and LUP except for insufficient teaching" do
       let(:itt_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2018)) }
 
-      let(:answers) do
-        Journeys::SessionAnswers.new(
-          current_school_id: school_eligible_for_ecp_and_lup.id,
-          teaching_subject_now: false,
-          nqt_in_academic_year_after_itt: true,
-          induction_completed: true,
-          employed_as_supply_teacher: false,
-          subject_to_formal_performance_action: false,
-          subject_to_disciplinary_action: false,
-          itt_academic_year:,
-          eligible_itt_subject: :mathematics
-        )
-      end
-
       before do
+        journey_session.answers.assign_attributes(
+          attributes_for(
+            :additional_payments_answers,
+            current_school_id: school_eligible_for_ecp_and_lup.id,
+            teaching_subject_now: false,
+            nqt_in_academic_year_after_itt: true,
+            induction_completed: true,
+            employed_as_supply_teacher: false,
+            subject_to_formal_performance_action: false,
+            subject_to_disciplinary_action: false,
+            itt_academic_year:,
+            eligible_itt_subject: :mathematics
+          )
+        )
+        journey_session.save!
+
         subject.use_answers!
       end
 
@@ -392,17 +431,21 @@ RSpec.describe IneligibilityReasonChecker do
     end
 
     context "bad ITT subject and no degree" do
-      let(:answers) do
-        Journeys::SessionAnswers.new(
-          current_school_id: school_eligible_for_ecp_but_not_lup.id,
-          employed_as_supply_teacher: false,
-          has_entire_term_contract: true,
-          employed_directly: true,
-          subject_to_formal_performance_action: false,
-          subject_to_disciplinary_action: false,
-          eligible_itt_subject: :none_of_the_above,
-          eligible_degree_subject: false
+      before do
+        journey_session.answers.assign_attributes(
+          attributes_for(
+            :additional_payments_answers,
+            current_school_id: school_eligible_for_ecp_but_not_lup.id,
+            employed_as_supply_teacher: false,
+            has_entire_term_contract: true,
+            employed_directly: true,
+            subject_to_formal_performance_action: false,
+            subject_to_disciplinary_action: false,
+            eligible_itt_subject: :none_of_the_above,
+            eligible_degree_subject: false
+          )
         )
+        journey_session.save!
       end
 
       it { expect(subject.reason).to eq(:lack_both_valid_itt_subject_and_degree) }
@@ -411,17 +454,21 @@ RSpec.describe IneligibilityReasonChecker do
     context "non-LUP school, only given one ITT subject option but does not take the ECP subject option for 2018" do
       let(:itt_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2018)) }
 
-      let(:answers) do
-        Journeys::SessionAnswers.new(
-          current_school_id: school_eligible_for_ecp_but_not_lup.id,
-          employed_as_supply_teacher: false,
-          has_entire_term_contract: true,
-          employed_directly: true,
-          subject_to_formal_performance_action: false,
-          subject_to_disciplinary_action: false,
-          eligible_itt_subject: :none_of_the_above,
-          itt_academic_year:
+      before do
+        journey_session.answers.assign_attributes(
+          attributes_for(
+            :additional_payments_answers,
+            current_school_id: school_eligible_for_ecp_but_not_lup.id,
+            employed_as_supply_teacher: false,
+            has_entire_term_contract: true,
+            employed_directly: true,
+            subject_to_formal_performance_action: false,
+            subject_to_disciplinary_action: false,
+            eligible_itt_subject: :none_of_the_above,
+            itt_academic_year:
+          )
         )
+        journey_session.save!
       end
 
       it { expect(subject.reason).to eq(:bad_itt_year_for_ecp) }
@@ -430,17 +477,21 @@ RSpec.describe IneligibilityReasonChecker do
     context "non-LUP school, only given one ITT subject option but does not take the ECP subject option for 2019" do
       let(:itt_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2019)) }
 
-      let(:answers) do
-        Journeys::SessionAnswers.new(
-          current_school_id: school_eligible_for_ecp_but_not_lup.id,
-          employed_as_supply_teacher: false,
-          has_entire_term_contract: true,
-          employed_directly: true,
-          subject_to_formal_performance_action: false,
-          subject_to_disciplinary_action: false,
-          eligible_itt_subject: :none_of_the_above,
-          itt_academic_year:
+      before do
+        journey_session.answers.assign_attributes(
+          attributes_for(
+            :additional_payments_answers,
+            current_school_id: school_eligible_for_ecp_but_not_lup.id,
+            employed_as_supply_teacher: false,
+            has_entire_term_contract: true,
+            employed_directly: true,
+            subject_to_formal_performance_action: false,
+            subject_to_disciplinary_action: false,
+            eligible_itt_subject: :none_of_the_above,
+            itt_academic_year:
+          )
         )
+        journey_session.save!
       end
 
       it { expect(subject.reason).to eq(:bad_itt_year_for_ecp) }
@@ -449,53 +500,65 @@ RSpec.describe IneligibilityReasonChecker do
     context "non-LUP school, given multiple ITT subject options but chose 'none of the above'" do
       let(:itt_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2020)) }
 
-      let(:answers) do
-        Journeys::SessionAnswers.new(
-          current_school_id: school_eligible_for_ecp_but_not_lup.id,
-          employed_as_supply_teacher: false,
-          has_entire_term_contract: true,
-          employed_directly: true,
-          subject_to_formal_performance_action: false,
-          subject_to_disciplinary_action: false,
-          eligible_itt_subject: :none_of_the_above,
-          itt_academic_year:
+      before do
+        journey_session.answers.assign_attributes(
+          attributes_for(
+            :additional_payments_answers,
+            current_school_id: school_eligible_for_ecp_but_not_lup.id,
+            employed_as_supply_teacher: false,
+            has_entire_term_contract: true,
+            employed_directly: true,
+            subject_to_formal_performance_action: false,
+            subject_to_disciplinary_action: false,
+            eligible_itt_subject: :none_of_the_above,
+            itt_academic_year:
+          )
         )
+        journey_session.save!
       end
 
       it { expect(subject.reason).to eq(:bad_itt_subject_for_ecp) }
     end
 
     context "trainee teacher at an ECP-only school" do
-      let(:answers) do
-        Journeys::SessionAnswers.new(
-          current_school_id: school_eligible_for_ecp_but_not_lup.id,
-          employed_as_supply_teacher: false,
-          has_entire_term_contract: true,
-          employed_directly: true,
-          nqt_in_academic_year_after_itt: false,
-          subject_to_formal_performance_action: false,
-          subject_to_disciplinary_action: false,
-          eligible_itt_subject: :none_of_the_above,
-          eligible_degree_subject: false
+      before do
+        journey_session.answers.assign_attributes(
+          attributes_for(
+            :additional_payments_answers,
+            current_school_id: school_eligible_for_ecp_but_not_lup.id,
+            employed_as_supply_teacher: false,
+            has_entire_term_contract: true,
+            employed_directly: true,
+            nqt_in_academic_year_after_itt: false,
+            subject_to_formal_performance_action: false,
+            subject_to_disciplinary_action: false,
+            eligible_itt_subject: :none_of_the_above,
+            eligible_degree_subject: false
+          )
         )
+        journey_session.save!
       end
 
       it { expect(subject.reason).to eq(:ecp_only_trainee_teacher) }
     end
 
     context "trainee teacher in an LUP school who isn't training to teach an eligible subject nor has a relevant degree" do
-      let(:answers) do
-        Journeys::SessionAnswers.new(
-          current_school_id: school_eligible_for_lup.id,
-          employed_as_supply_teacher: false,
-          has_entire_term_contract: true,
-          employed_directly: true,
-          nqt_in_academic_year_after_itt: false,
-          subject_to_formal_performance_action: false,
-          subject_to_disciplinary_action: false,
-          eligible_itt_subject: :foreign_languages,
-          eligible_degree_subject: false
+      before do
+        journey_session.answers.assign_attributes(
+          attributes_for(
+            :additional_payments_answers,
+            current_school_id: school_eligible_for_lup.id,
+            employed_as_supply_teacher: false,
+            has_entire_term_contract: true,
+            employed_directly: true,
+            nqt_in_academic_year_after_itt: false,
+            subject_to_formal_performance_action: false,
+            subject_to_disciplinary_action: false,
+            eligible_itt_subject: :foreign_languages,
+            eligible_degree_subject: false
+          )
         )
+        journey_session.save!
       end
 
       it { expect(subject.reason).to eq(:trainee_teaching_lacking_both_valid_itt_subject_and_degree) }
@@ -504,51 +567,63 @@ RSpec.describe IneligibilityReasonChecker do
     context "non-LUP school and no ECP subjects for ITT year" do
       let(:itt_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2021)) }
 
-      let(:answers) do
-        Journeys::SessionAnswers.new(
-          current_school_id: school_eligible_for_ecp_but_not_lup.id,
-          employed_as_supply_teacher: false,
-          has_entire_term_contract: true,
-          employed_directly: true,
-          subject_to_formal_performance_action: false,
-          subject_to_disciplinary_action: false,
-          eligible_itt_subject: :mathematics,
-          eligible_degree_subject: true,
-          itt_academic_year:
+      before do
+        journey_session.answers.assign_attributes(
+          attributes_for(
+            :additional_payments_answers,
+            current_school_id: school_eligible_for_ecp_but_not_lup.id,
+            employed_as_supply_teacher: false,
+            has_entire_term_contract: true,
+            employed_directly: true,
+            subject_to_formal_performance_action: false,
+            subject_to_disciplinary_action: false,
+            eligible_itt_subject: :mathematics,
+            eligible_degree_subject: true,
+            itt_academic_year:
+          )
         )
+        journey_session.save!
       end
 
       it { expect(subject.reason).to eq(:no_ecp_subjects_that_itt_year) }
     end
 
     context "trainee teacher in last policy year" do
-      let(:answers) do
-        Journeys::SessionAnswers.new(
-          current_school_id: school_eligible_for_ecp_and_lup.id,
-          nqt_in_academic_year_after_itt: false,
-          employed_as_supply_teacher: false,
-          has_entire_term_contract: true,
-          employed_directly: true,
-          subject_to_formal_performance_action: false,
-          subject_to_disciplinary_action: false,
-          eligible_itt_subject: :none_of_the_above,
-          eligible_degree_subject: false,
-          academic_year: "2024/2025"
+      before do
+        journey_session.answers.assign_attributes(
+          attributes_for(
+            :additional_payments_answers,
+            current_school_id: school_eligible_for_ecp_and_lup.id,
+            nqt_in_academic_year_after_itt: false,
+            employed_as_supply_teacher: false,
+            has_entire_term_contract: true,
+            employed_directly: true,
+            subject_to_formal_performance_action: false,
+            subject_to_disciplinary_action: false,
+            eligible_itt_subject: :none_of_the_above,
+            eligible_degree_subject: false,
+            academic_year: "2024/2025"
+          )
         )
+        journey_session.save!
       end
 
       it { expect(subject.reason).to eq(:trainee_in_last_policy_year) }
     end
 
     context "when DQT-derived qualifications data indicates the user is ineligible" do
-      let(:answers) do
-        Journeys::SessionAnswers.new(
-          current_school_id: school_eligible_for_ecp_and_lup.id,
-          eligible_degree_subject: false,
-          qualifications_details_check: true,
-          logged_in_with_tid: true,
-          eligible_itt_subject: :none_of_the_above
+      before do
+        journey_session.answers.assign_attributes(
+          attributes_for(
+            :additional_payments_answers,
+            current_school_id: school_eligible_for_ecp_and_lup.id,
+            eligible_degree_subject: false,
+            qualifications_details_check: true,
+            logged_in_with_tid: true,
+            eligible_itt_subject: :none_of_the_above
+          )
         )
+        journey_session.save!
       end
 
       it { expect(subject.reason).to eq(:dqt_data_ineligible) }
