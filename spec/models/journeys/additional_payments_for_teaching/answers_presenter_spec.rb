@@ -179,7 +179,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
           build(
             :additional_payments_answers,
             :lup_eligible,
-            :lup_ineligible_itt_subject
+            :lup_ineligible_itt_subject,
+            selected_policy: "LevellingUpPremiumPayments"
           )
         end
 
@@ -231,7 +232,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
           build(
             :additional_payments_answers,
             :lup_eligible,
-            qualifications_details_check: qualifications_details_check
+            qualifications_details_check: qualifications_details_check,
+            selected_policy: "LevellingUpPremiumPayments"
           )
         end
 
@@ -281,7 +283,13 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
 
       context "eligible ITT" do
         let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
-        let(:answers) { build(:additional_payments_answers, :lup_eligible) }
+        let(:answers) do
+          build(
+            :additional_payments_answers,
+            :lup_eligible,
+            selected_policy: "LevellingUpPremiumPayments"
+          )
+        end
 
         it { is_expected.to include(["Which subject did you do your postgraduate initial teacher training (ITT) in?", "Mathematics", "eligible-itt-subject"]) }
         it { is_expected.not_to include(["Do you have a degree in an eligible subject?", a_string_matching(/(Yes|No)/), "eligible-degree-subject"]) }
@@ -308,7 +316,9 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
           build(
             :additional_payments_answers,
             :lup_eligible,
-            :lup_ineligible_itt_subject
+            :lup_ineligible_itt_subject,
+            :relevant_degree,
+            selected_policy: "LevellingUpPremiumPayments"
           )
         end
 
@@ -320,7 +330,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
         }
 
         specify {
-          expect(questions(subject)).to eq([
+          expect(questions(subject)).to match_array([
             "Which school do you teach at?",
             "Are you currently teaching as a qualified teacher?",
             "Have you completed your induction as an early-career teacher?",

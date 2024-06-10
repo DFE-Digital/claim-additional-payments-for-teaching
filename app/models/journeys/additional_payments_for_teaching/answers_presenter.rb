@@ -171,17 +171,7 @@ module Journeys
       private
 
       def subject_symbols
-        return [] if answers.itt_academic_year.blank?
-
-        if shim.answers.nqt_in_academic_year_after_itt
-          JourneySubjectEligibilityChecker.new(claim_year: answers.policy_year, itt_year: answers.itt_academic_year).current_and_future_subject_symbols(eligibility.policy)
-        elsif answers.policy_year.in?(EligibilityCheckable::COMBINED_ECP_AND_LUP_POLICY_YEARS_BEFORE_FINAL_YEAR)
-          # they get the standard, unchanging LUP subject set because they won't have qualified in time for ECP by 2022/2023
-          # and they won't have given an ITT year
-          JourneySubjectEligibilityChecker.fixed_lup_subject_symbols
-        else
-          []
-        end.sort
+        @subject_symbols ||= JourneySubjectEligibilityChecker.current_and_future_subject_symbols(shim.answers)
       end
 
       def claim_submission_form
