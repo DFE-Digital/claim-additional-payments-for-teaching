@@ -166,16 +166,4 @@ class JourneySubjectEligibilityChecker
       end
     end
   end
-
-  def itt_year(current_claim)
-    current_claim.itt_academic_year
-  end
-
-  def itt_subject_symbol(current_claim)
-    itt_subject(current_claim).to_sym
-  end
-
-  def itt_subject(current_claim)
-    current_claim.eligible_itt_subject
-  end
 end
