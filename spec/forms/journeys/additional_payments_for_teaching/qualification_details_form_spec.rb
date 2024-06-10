@@ -13,7 +13,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
       answers: {
         dqt_teacher_status: dqt_teacher_status,
         qualification: "postgraduate_itt",
-        itt_academic_year: itt_academic_year
+        itt_academic_year: itt_academic_year,
+        eligible_degree_subject: false
       }
     )
   end
@@ -28,8 +29,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
   let(:levelling_up_premium_payments_eligibility) do
     create(
       :levelling_up_premium_payments_eligibility,
-      eligible_itt_subject: :physics,
-      eligible_degree_subject: false
+      eligible_itt_subject: :physics
     )
   end
 
@@ -287,9 +287,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
         it "sets the eligible_degree_subject as nil" do
           expect { form.save }.to(
             change do
-              levelling_up_premium_payments_eligibility
-                .reload
-                .eligible_degree_subject
+              journey_session.reload.answers.eligible_degree_subject
             end.from(false).to(nil)
           )
         end
@@ -391,9 +389,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
           it "sets the eligible_degree_subject to the dqt_teacher_record" do
             expect { form.save }.to(
               change do
-                levelling_up_premium_payments_eligibility
-                  .reload
-                  .eligible_degree_subject
+                journey_session.reload.answers.eligible_degree_subject
               end.from(false).to(true)
             )
           end
@@ -444,11 +440,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
 
           it "doesn't change the eligible_degree_subject" do
             expect { form.save }.not_to(
-              change do
-                levelling_up_premium_payments_eligibility
-                  .reload
-                  .eligible_degree_subject
-              end
+              change { journey_session.reload.answers.eligible_degree_subject }
             )
           end
         end

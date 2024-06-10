@@ -19,7 +19,6 @@ module Journeys
         # session ansswers, so we need to set these values from the elgiibility
         # here.
         journey_session.answers.eligible_itt_subject = claim.eligibility.eligible_itt_subject
-        journey_session.answers.eligible_degree_subject = claim.for_policy(Policies::LevellingUpPremiumPayments).eligibility.eligible_degree_subject
       end
 
       def save
@@ -41,7 +40,8 @@ module Journeys
           # the eligibility with these details
           journey_session.answers.assign_attributes(
             qualification: answers.early_career_payments_dqt_teacher_record&.route_into_teaching || answers.qualification,
-            itt_academic_year: answers.early_career_payments_dqt_teacher_record&.itt_academic_year_for_claim || answers.itt_academic_year
+            itt_academic_year: answers.early_career_payments_dqt_teacher_record&.itt_academic_year_for_claim || answers.itt_academic_year,
+            eligible_degree_subject: answers.levelling_up_premium_payments_dqt_reacher_record&.eligible_degree_code? || answers.eligible_degree_subject
           )
           claim.claims.each { |c| set_qualifications_from_dqt_record(c.eligibility) }
         else
@@ -49,7 +49,8 @@ module Journeys
           # nullify them
           journey_session.answers.assign_attributes(
             qualification: nil,
-            itt_academic_year: nil
+            itt_academic_year: nil,
+            eligible_degree_subject: nil
           )
 
           claim.claims.each { |c| set_nil_qualifications(c.eligibility) }
@@ -111,8 +112,7 @@ module Journeys
           )
         when Policies::LevellingUpPremiumPayments::Eligibility
           eligibility.assign_attributes(
-            eligible_itt_subject: eligible_itt_subject(answers.levelling_up_premium_payments_dqt_reacher_record, eligibility),
-            eligible_degree_subject: eligible_degree_subject(answers.levelling_up_premium_payments_dqt_reacher_record, eligibility)
+            eligible_itt_subject: eligible_itt_subject(answers.levelling_up_premium_payments_dqt_reacher_record, eligibility)
           )
         else
           fail "Unknown eligibility type #{eligibility.class}"
@@ -127,8 +127,7 @@ module Journeys
           )
         when Policies::LevellingUpPremiumPayments::Eligibility
           eligibility.assign_attributes(
-            eligible_itt_subject: nil,
-            eligible_degree_subject: nil
+            eligible_itt_subject: nil
           )
         else
           fail "Unknown eligibility type #{eligibility.class}"
@@ -137,10 +136,6 @@ module Journeys
 
       def eligible_itt_subject(dqt_teacher_record, eligibility)
         dqt_teacher_record&.eligible_itt_subject_for_claim || eligibility.eligible_itt_subject
-      end
-
-      def eligible_degree_subject(dqt_teacher_record, eligibility)
-        dqt_teacher_record&.eligible_degree_code? || eligibility.eligible_degree_subject
       end
     end
   end

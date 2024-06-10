@@ -97,9 +97,7 @@ module Journeys
           "eligible-degree-subject"
         end
       when "eligible-degree-subject"
-        lup_claim = claim.for_policy(Policies::LevellingUpPremiumPayments)
-
-        if lup_claim.eligibility.eligible_degree_subject?
+        if @journey_session.answers.eligible_degree_subject?
           "future-eligibility"
         else
           "ineligible"

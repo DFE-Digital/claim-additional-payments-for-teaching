@@ -173,13 +173,14 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
       let(:policy) { Policies::LevellingUpPremiumPayments }
 
       context "entire output" do
-        let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :long_term_directly_employed_supply_teacher, :ineligible_itt_subject, :relevant_degree) }
+        let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :long_term_directly_employed_supply_teacher, :ineligible_itt_subject) }
         let(:expected_itt_year) { AcademicYear.new(eligibility.itt_academic_year) }
         let(:answers) do
           build(
             :additional_payments_answers,
             :lup_eligible,
             :lup_ineligible_itt_subject,
+            :relevant_degree,
             selected_policy: "LevellingUpPremiumPayments"
           )
         end
@@ -207,7 +208,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
 
       context "qualifications retrieved from DQT" do
         let(:qualifications_details_check) { true }
-        let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :relevant_degree) }
+        let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
         let(:early_career_payments_dqt_teacher_record) do
           double(
             itt_academic_year_for_claim:,
@@ -232,6 +233,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
           build(
             :additional_payments_answers,
             :lup_eligible,
+            :relevant_degree,
             qualifications_details_check: qualifications_details_check,
             selected_policy: "LevellingUpPremiumPayments"
           )
@@ -311,7 +313,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
       end
 
       context "ineligible ITT" do
-        let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :ineligible_itt_subject, :relevant_degree) }
+        let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :ineligible_itt_subject) }
         let(:answers) do
           build(
             :additional_payments_answers,
