@@ -41,7 +41,7 @@ module Journeys
 
       def policy
         if selected_policy.present?
-          selected_policy.constantize
+          "Policies::#{selected_policy}".constantize
         else
           Policies::EarlyCareerPayments
         end

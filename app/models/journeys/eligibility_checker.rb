@@ -43,7 +43,7 @@ module Journeys
     end
 
     def policies_eligible_now
-      policies.select { |policy| policy::PolicyEligibilityChecker.new(journey_session: @journey_session.answers).status == :eligible_now }
+      policies.select { |policy| policy::PolicyEligibilityChecker.new(answers: @journey_session.answers).status == :eligible_now }
     end
 
     def policies_eligible_now_and_sorted

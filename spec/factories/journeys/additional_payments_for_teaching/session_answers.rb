@@ -159,6 +159,10 @@ FactoryBot.define do
       teaching_subject_now { false }
     end
 
+    trait :relevant_degree do
+      eligible_degree_subject { true }
+    end
+
     trait :no_relevant_degree do
       eligible_degree_subject { false }
     end
