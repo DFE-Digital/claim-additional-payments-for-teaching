@@ -36,7 +36,7 @@ RSpec.describe Claims::ShowHelper do
   end
 
   describe "#policy_name" do
-    subject(:name) { helper.policy_name(claim) }
+    subject(:name) { helper.policy_name(claim.policy) }
 
     context "with a StudentLoans policy" do
       let(:policy) { Policies::StudentLoans }
@@ -58,14 +58,12 @@ RSpec.describe Claims::ShowHelper do
   end
 
   describe "#award_amount" do
-    let(:claim) { build(:claim, policy: Policies::LevellingUpPremiumPayments, eligibility: eligibility) }
-    let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, award_amount: award_amount) }
     let(:award_amount) { 2000.0 }
 
     before { create(:journey_configuration, :additional_payments) }
 
     it "returns a string currency representation" do
-      expect(helper.award_amount(claim)).to eq("£2,000")
+      expect(helper.award_amount(award_amount)).to eq("£2,000")
     end
   end
 end

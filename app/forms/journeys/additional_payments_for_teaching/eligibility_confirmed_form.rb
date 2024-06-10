@@ -9,7 +9,6 @@ module Journeys
         in: ->(object) { object.allowed_policy_names }
       }, if: -> { selected_claim_policy.present? }
 
-      delegate :eligible_now, :eligible_now_and_sorted, to: :claim, prefix: :claims
       delegate :selected_policy, to: :claim, prefix: :current
 
       def save
@@ -21,19 +20,41 @@ module Journeys
       end
 
       def single_choice_only?
-        claims_eligible_now.one?
+        eligibility_checker.single_choice_only?
       end
 
+      def policies_eligible_now
+        eligibility_checker.policies_eligible_now
+      end
+
+      def policies_eligible_now_and_sorted
+        eligibility_checker.policies_eligible_now_and_sorted
+      end
+
+      def award_amount(policy)
+        policy::PolicyEligibilityChecker.new(journey_session: shim).calculate_award_amount
+      end
+
+      # TODO KL: This is still using the CurrentClaim for the selected policy
       def selected_policy?(policy)
         policy == current_selected_policy
       end
 
       def first_eligible_compact_policy_name
-        claims_eligible_now_and_sorted.first.policy.to_s.downcase
+        policies_eligible_now_and_sorted.first.to_s.downcase
       end
 
       def allowed_policy_names
-        claims_eligible_now_and_sorted.map(&:policy).map(&:to_s)
+        policies_eligible_now_and_sorted.map(&:to_s)
+      end
+
+      def eligibility_checker
+        @eligibility_checker ||= EligibilityChecker.new(journey_session: shim)
+      end
+
+      # TODO KL: To remove when the shim goes
+      def shim
+        @shim ||= ClaimJourneySessionShim.new(current_claim: claim, journey_session:)
       end
     end
   end

@@ -7,9 +7,9 @@
     </div>
 
     <% if @form.single_choice_only? %>
-      <%= render partial: "eligibility_confirmed_single", locals: { claim: @form.claims_eligible_now.first } %>
+      <%= render partial: "eligibility_confirmed_single", locals: { policy: @form.policies_eligible_now.first } %>
     <% else %>
-      <%= render partial: "eligibility_confirmed_multiple", locals: { claims: @form.claims_eligible_now_and_sorted } %>
+      <%= render partial: "eligibility_confirmed_multiple", locals: { policies: @form.policies_eligible_now_and_sorted } %>
     <% end %>
   </div>
 </div>

@@ -71,6 +71,10 @@ module Policies
 
       delegate :academic_year, to: :claim
 
+      def award_amount
+        super || BigDecimal(calculate_award_amount || 0)
+      end
+
       # Rescues from errors for assignments coming from LUP-only fields
       # eg. `claim.eligibility.eligible_degree_subject = true` will get ignored
       def assign_attributes(*args, **kwargs)

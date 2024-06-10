@@ -5,10 +5,6 @@ module Policies
         Policies::EarlyCareerPayments
       end
 
-      def award_amount
-        super || BigDecimal(calculate_award_amount || 0)
-      end
-
       def first_eligible_itt_academic_year
         JourneySubjectEligibilityChecker.first_eligible_itt_year_for_subject(policy: policy, claim_year: claim_year, subject_symbol: eligible_itt_subject.to_sym)
       end

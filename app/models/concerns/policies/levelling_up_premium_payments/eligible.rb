@@ -5,10 +5,6 @@ module Policies
         Policies::LevellingUpPremiumPayments
       end
 
-      def award_amount
-        super || BigDecimal(calculate_award_amount || 0)
-      end
-
       def indicated_ineligible_itt_subject?
         return false if eligible_itt_subject.blank?
 
