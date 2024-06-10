@@ -19,6 +19,10 @@ module Journeys
         end
       end
 
+      def ineligible?
+        policies.all? { |policy| policy::PolicyEligibilityChecker.new(journey_session: @journey_session).ineligible? }
+      end
+
       private
 
       def policies
@@ -33,8 +37,10 @@ module Journeys
         policies.any? { |policy| policy::PolicyEligibilityChecker.new(journey_session: @journey_session).status == :eligible_later }
       end
 
+      # NOTE: not to be confused with `ineligible?`
+      # e.g. having `eligible_later` is considered ineligible but not an overall status of :ineligible
       def everything_ineligible?
-        policies.any? { |policy| policy::PolicyEligibilityChecker.new(journey_session: @journey_session).status == :ineligible }
+        policies.all? { |policy| policy::PolicyEligibilityChecker.new(journey_session: @journey_session).status == :ineligible }
       end
     end
   end

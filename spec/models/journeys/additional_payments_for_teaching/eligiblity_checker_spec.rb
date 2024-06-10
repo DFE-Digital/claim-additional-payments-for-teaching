@@ -47,6 +47,13 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityChecker, type
       it { is_expected.to eq(:ineligible) }
     end
 
+    context "one ineligible and one undetermined" do
+      let(:ecp_status) { :ineligible }
+      let(:lupp_status) { :undetermined }
+
+      it { is_expected.to eq(:undetermined) }
+    end
+
     context "all are :undetermined" do
       let(:ecp_status) { :undetermined }
       let(:lupp_status) { :undetermined }
