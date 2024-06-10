@@ -288,6 +288,9 @@ Kubernetes Service (AKS) with the URL:
 
 The review app is then destroyed when the PR is closed or merged.
 
+Documentation on accessing review apps can be found in
+[Connecting to Azure](docs/privileged-identity-management-requests.md).
+
 ## Accessing production data with a live Rails console
 
 **Accessing a live console is very risky and should only be done as a last
