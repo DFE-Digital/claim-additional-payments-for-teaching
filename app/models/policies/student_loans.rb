@@ -84,5 +84,10 @@ module Policies
         "6 April #{start_year} and 5 April #{end_year}"
       end
     end
+
+    # Agreed shorthand name to accommodate 30 character limit in payroll system (CAPT-1709)
+    def payroll_file_name
+      "TSLR"
+    end
   end
 end

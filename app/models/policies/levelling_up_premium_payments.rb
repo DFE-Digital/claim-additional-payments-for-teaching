@@ -27,5 +27,10 @@ module Policies
     def payment_and_deductions_info_url
       eligibility_page_url + "#payments-and-deductions"
     end
+
+    # Agreed shorthand name to accommodate 30 character limit in payroll system (CAPT-1709)
+    def payroll_file_name
+      "SchoolsLUP"
+    end
   end
 end

@@ -31,4 +31,9 @@ RSpec.describe Policies::EarlyCareerPayments, type: :model do
       expect(described_class.first_eligible_qts_award_year(AcademicYear.new(2024))).to eq AcademicYear.new(2021)
     end
   end
+
+  describe ".payroll_file_name" do
+    subject(:payroll_file_name) { described_class.payroll_file_name }
+    it { is_expected.to eq("EarlyCareerPayments") }
+  end
 end
