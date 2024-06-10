@@ -212,12 +212,13 @@ RSpec.describe IneligibilityReasonChecker do
     end
 
     context "bad ITT subject and no degree" do
-      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible, eligible_itt_subject: :none_of_the_above) }
-      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :no_relevant_degree, eligible_itt_subject: :none_of_the_above) }
+      let(:ecp_eligibility) { build(:early_career_payments_eligibility) }
+      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility) }
       let(:answers) do
         build(
           :additional_payments_answers,
           :ecp_and_lup_eligible,
+          :no_relevant_degree,
           eligible_itt_subject: :none_of_the_above
         )
       end
@@ -302,14 +303,15 @@ RSpec.describe IneligibilityReasonChecker do
 
     context "trainee teacher in an LUP school who isn't training to teach an eligible subject nor has a relevant degree" do
       let(:school) { build(:school, :levelling_up_premium_payments_eligible) }
-      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible, :trainee_teacher, eligible_itt_subject: :foreign_languages, current_school: school) }
-      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :trainee_teacher, :no_relevant_degree, eligible_itt_subject: :foreign_languages, current_school: school) }
+      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible, :trainee_teacher, current_school: school) }
+      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :trainee_teacher, :no_relevant_degree, current_school: school) }
 
       let(:answers) do
         build(
           :additional_payments_answers,
           :ecp_and_lup_eligible,
           :trainee_teacher,
+          :no_relevant_degree,
           eligible_itt_subject: :foreign_languages,
           current_school_id: school.id
         )
