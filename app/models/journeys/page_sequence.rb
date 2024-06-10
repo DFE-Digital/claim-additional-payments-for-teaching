@@ -91,7 +91,7 @@ module Journeys
           @journey_session.answers.policy_year.in?(EligibilityCheckable::COMBINED_ECP_AND_LUP_POLICY_YEARS_BEFORE_FINAL_YEAR) ? "eligible-itt-subject" : "ineligible"
         end
       when "eligible-itt-subject"
-        if claim.eligibility.eligible_itt_subject.to_sym.in? JourneySubjectEligibilityChecker.fixed_lup_subject_symbols
+        if answers.eligible_itt_subject.to_sym.in? JourneySubjectEligibilityChecker.fixed_lup_subject_symbols
           "future-eligibility"
         else
           "eligible-degree-subject"

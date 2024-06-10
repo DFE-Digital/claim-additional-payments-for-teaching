@@ -24,8 +24,8 @@ module Journeys
           a << nqt_in_academic_year_after_itt
           a << induction_completed
           a << employed_as_supply_teacher
-          a << has_entire_term_contract if eligibility.employed_as_supply_teacher?
-          a << employed_directly if eligibility.employed_as_supply_teacher?
+          a << has_entire_term_contract if journey_session.answers.employed_as_supply_teacher?
+          a << employed_directly if journey_session.answers.employed_as_supply_teacher?
           a << subject_to_formal_performance_action
           a << subject_to_disciplinary_action
 
@@ -52,14 +52,14 @@ module Journeys
         [
           t("additional_payments.forms.current_school.questions.current_school_search"),
           eligibility.current_school_name,
-          (eligibility.school_somewhere_else == false) ? "correct-school" : "current-school"
+          (journey_session.answers.school_somewhere_else == false) ? "correct-school" : "current-school"
         ]
       end
 
       def nqt_in_academic_year_after_itt
         [
           t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"),
-          (eligibility.nqt_in_academic_year_after_itt? ? "Yes" : "No"),
+          (journey_session.answers.nqt_in_academic_year_after_itt? ? "Yes" : "No"),
           "nqt-in-academic-year-after-itt"
         ]
       end
@@ -67,7 +67,7 @@ module Journeys
       def induction_completed
         [
           t("additional_payments.questions.induction_completed.heading"),
-          (eligibility.induction_completed? ? "Yes" : "No"),
+          (journey_session.answers.induction_completed? ? "Yes" : "No"),
           "induction-completed"
         ]
       end
@@ -75,7 +75,7 @@ module Journeys
       def employed_as_supply_teacher
         [
           t("additional_payments.forms.supply_teacher.questions.employed_as_supply_teacher"),
-          (eligibility.employed_as_supply_teacher? ? "Yes" : "No"),
+          (journey_session.answers.employed_as_supply_teacher? ? "Yes" : "No"),
           "supply-teacher"
         ]
       end
@@ -91,7 +91,7 @@ module Journeys
       def subject_to_formal_performance_action
         [
           t("additional_payments.forms.poor_performance.questions.formal_performance_action"),
-          (eligibility.subject_to_formal_performance_action? ? "Yes" : "No"),
+          (journey_session.answers.subject_to_formal_performance_action? ? "Yes" : "No"),
           "poor-performance"
         ]
       end
@@ -99,7 +99,7 @@ module Journeys
       def subject_to_disciplinary_action
         [
           t("additional_payments.forms.poor_performance.questions.disciplinary_action"),
-          (eligibility.subject_to_disciplinary_action? ? "Yes" : "No"),
+          (journey_session.answers.subject_to_disciplinary_action? ? "Yes" : "No"),
           "poor-performance"
         ]
       end
@@ -139,8 +139,8 @@ module Journeys
 
       def teaching_subject_now
         [
-          t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now", eligible_itt_subject: eligibility.eligible_itt_subject),
-          (eligibility.teaching_subject_now? ? "Yes" : "No"),
+          t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now", eligible_itt_subject: journey_session.answers.eligible_itt_subject),
+          (journey_session.answers.teaching_subject_now? ? "Yes" : "No"),
           "teaching-subject-now"
         ]
       end
@@ -150,7 +150,7 @@ module Journeys
 
         [
           I18n.t("additional_payments.questions.itt_academic_year.qualification.#{answers.qualification}"),
-          eligibility.itt_academic_year.to_s.gsub("/", " - "),
+          journey_session.answers.itt_academic_year.to_s.gsub("/", " - "),
           "itt-year"
         ]
       end
@@ -158,7 +158,7 @@ module Journeys
       def text_for_subject_answer
         policy = eligibility.policy
         subjects = JourneySubjectEligibilityChecker.new(claim_year: Journeys.for_policy(policy).configuration.current_academic_year,
-          itt_year: eligibility.itt_academic_year).current_and_future_subject_symbols(policy)
+          itt_year: journey_session.answers.itt_academic_year).current_and_future_subject_symbols(policy)
 
         if subjects.many?
           t("additional_payments.forms.eligible_itt_subject.answers.#{eligibility.eligible_itt_subject}")

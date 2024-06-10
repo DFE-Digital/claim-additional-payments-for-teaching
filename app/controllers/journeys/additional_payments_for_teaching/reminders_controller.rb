@@ -67,7 +67,7 @@ module Journeys
           full_name: current_claim.full_name,
           email_address: current_claim.email_address,
           itt_academic_year: next_academic_year,
-          itt_subject: current_claim.eligibility.eligible_itt_subject,
+          itt_subject: journey_session.answers.eligible_itt_subject,
           email_verified: current_claim.email_verified? # allows the OTP to be skipped if already verified
         )
       end

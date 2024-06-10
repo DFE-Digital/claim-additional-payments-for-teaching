@@ -116,7 +116,8 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           journey_session.answers.assign_attributes(
             attributes_for(
               :additional_payments_answers,
-              qualification: "postgraduate_itt"
+              qualification: "postgraduate_itt",
+              current_school_id: school.id
             )
           )
 

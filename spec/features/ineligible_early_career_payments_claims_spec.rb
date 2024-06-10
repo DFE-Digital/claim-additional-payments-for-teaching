@@ -226,7 +226,6 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
 
   scenario "when subject for undergraduate ITT or postgraduate ITT is 'none of the above'" do
     start_early_career_payments_claim
-    claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
 
     session = Journeys::AdditionalPaymentsForTeaching::Session.last
 
@@ -283,7 +282,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
     choose "No"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.eligible_itt_subject).to eql "none_of_the_above"
+    expect(session.reload.answers.eligible_itt_subject).to eql "none_of_the_above"
 
     expect(page).to have_text(I18n.t("additional_payments.ineligible.heading"))
     expect(page).to have_css("div#bad_itt_year_for_ecp")
@@ -291,7 +290,6 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
 
   scenario "when no longer teaching an eligible ITT subject" do
     start_early_career_payments_claim
-    claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
 
     session = Journeys::AdditionalPaymentsForTeaching::Session.last
 
@@ -349,7 +347,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
     choose "Mathematics"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
+    expect(session.reload.answers.eligible_itt_subject).to eql "mathematics"
 
     # - Do you teach the eligible ITT subject now
     expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))

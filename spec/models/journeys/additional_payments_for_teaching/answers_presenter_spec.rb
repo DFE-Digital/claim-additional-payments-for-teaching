@@ -27,7 +27,10 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
         let(:answers) do
           build(
             :additional_payments_answers,
-            :ecp_eligible
+            :ecp_eligible,
+            employed_as_supply_teacher: true,
+            has_entire_term_contract: true,
+            employed_directly: true
           )
         end
 
@@ -181,7 +184,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
             :lup_eligible,
             :lup_ineligible_itt_subject,
             :relevant_degree,
-            selected_policy: "LevellingUpPremiumPayments"
+            selected_policy: "LevellingUpPremiumPayments",
+            employed_as_supply_teacher: true
           )
         end
 

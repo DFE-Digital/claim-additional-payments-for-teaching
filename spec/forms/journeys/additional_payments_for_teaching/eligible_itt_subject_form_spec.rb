@@ -218,20 +218,90 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
         )
       end
 
-      it "returns true and updates the claim's eligibility" do
-        expect { expect(form.save).to be true }.to(
-          change { claim.eligibility.eligible_itt_subject }
-          .from("mathematics")
-          .to("chemistry")
+      let(:answers) do
+        build(
+          :additional_payments_answers,
+          attributes_for(
+            :additional_payments_answers,
+            trainee_teacher,
+            itt_academic_year: itt_academic_year,
+            teaching_subject_now: true,
+            eligible_degree_subject: true
+          )
         )
       end
 
+      it "does not update the claim's eligibility" do
+        expect { form.save }.not_to change { claim.eligibility.eligible_itt_subject }
+      end
+
+      it "updates the answers" do
+        expect { form.save }.to change { journey_session.reload.answers.eligible_itt_subject }.from(nil).to("chemistry")
+      end
+
       it "resets dependent attributes" do
-        expect { form.save }.to(
-          change { claim.eligibility.teaching_subject_now }
-          .from(true)
-          .to(nil)
+        expect {
+          form.save
+        }.to change { journey_session.reload.answers.teaching_subject_now }.from(true).to(nil)
+          .and change { journey_session.reload.answers.eligible_degree_subject }.from(true).to(nil)
+      end
+    end
+
+    context "when no change" do
+      let(:params) do
+        ActionController::Parameters.new(
+          claim: {
+            eligible_itt_subject: "chemistry"
+          }
         )
+      end
+
+      let(:answers) do
+        build(
+          :additional_payments_answers,
+          attributes_for(
+            :additional_payments_answers,
+            trainee_teacher,
+            itt_academic_year: itt_academic_year,
+            teaching_subject_now: true,
+            eligible_itt_subject: params[:claim][:eligible_itt_subject]
+          )
+        )
+      end
+
+      it "does not reset dependent attributes" do
+        expect {
+          form.save
+        }.to not_change { journey_session.reload.answers.teaching_subject_now }
+          .and not_change { journey_session.reload.answers.eligible_degree_subject }
+      end
+    end
+
+    context "when a change and teaching_subject_now from DQT" do
+      let(:params) do
+        ActionController::Parameters.new(
+          claim: {
+            eligible_itt_subject: "chemistry"
+          }
+        )
+      end
+
+      let(:answers) do
+        build(
+          :additional_payments_answers,
+          attributes_for(
+            :additional_payments_answers,
+            trainee_teacher,
+            itt_academic_year: itt_academic_year,
+            teaching_subject_now: true,
+            qualifications_details_check: true
+          )
+        )
+      end
+
+      it "does not reset dependent attributes" do
+        expect { form.save }.to not_change { journey_session.reload.answers.teaching_subject_now }
+          .and not_change { journey_session.reload.answers.eligible_degree_subject }
       end
     end
   end

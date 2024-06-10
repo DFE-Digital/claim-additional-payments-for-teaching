@@ -23,7 +23,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
       claim.update!(
         attributes_for(
           :claim,
-          :submittable,
+          :submitted,
           **claim_attributes
         )
       )
