@@ -1,6 +1,6 @@
 class IneligibilityReasonChecker
-  def initialize(current_claim)
-    @current_claim = current_claim
+  def initialize(answers)
+    @answers = answers
   end
 
   def reason
@@ -40,7 +40,7 @@ class IneligibilityReasonChecker
   private
 
   def current_school?
-    school = @current_claim.eligibility.current_school
+    school = @answers.current_school
 
     [
       school.present?,
@@ -50,8 +50,8 @@ class IneligibilityReasonChecker
   end
 
   def dqt_data_ineligible?
-    @current_claim.logged_in_with_tid? && @current_claim.qualifications_details_check && [
-      @current_claim.eligibility.itt_academic_year == AcademicYear.new,
+    @answers.logged_in_with_tid? && @answers.qualifications_details_check && [
+      @answers.itt_academic_year == AcademicYear.new,
       bad_itt_year_for_ecp?,
       bad_itt_subject_for_ecp?,
       no_ecp_subjects_that_itt_year?,
@@ -62,48 +62,46 @@ class IneligibilityReasonChecker
 
   def ecp_only_teacher_with_ineligible_itt_year?
     [
-      @current_claim.eligibility.itt_academic_year == AcademicYear.new,
-      school_eligible_for_ecp_but_not_lup?(@current_claim.eligibility.current_school)
+      @answers.itt_academic_year == AcademicYear.new,
+      school_eligible_for_ecp_but_not_lup?(@answers.current_school)
     ].all?
   end
 
   def teacher_with_ineligible_itt_year?
     [
-      @current_claim.eligibility.itt_academic_year == AcademicYear.new,
-      Policies::LevellingUpPremiumPayments::SchoolEligibility.new(@current_claim.eligibility.current_school).eligible?
+      @answers.itt_academic_year == AcademicYear.new,
+      Policies::LevellingUpPremiumPayments::SchoolEligibility.new(@answers.current_school).eligible?
     ].all?
   end
 
   def generic?
     [
-      @current_claim.eligibility.has_entire_term_contract == false,
-      @current_claim.eligibility.employed_directly == false,
-      @current_claim.eligibility.subject_to_formal_performance_action?,
-      @current_claim.eligibility.subject_to_disciplinary_action?
+      @answers.has_entire_term_contract == false,
+      @answers.employed_directly == false,
+      @answers.subject_to_formal_performance_action?,
+      @answers.subject_to_disciplinary_action?
     ].any?
   end
 
   def ecp_only_trainee_teacher?
     [
-      !Policies::LevellingUpPremiumPayments::SchoolEligibility.new(@current_claim.eligibility.current_school).eligible?,
-      @current_claim.eligibility.nqt_in_academic_year_after_itt == false
+      !Policies::LevellingUpPremiumPayments::SchoolEligibility.new(@answers.current_school).eligible?,
+      @answers.nqt_in_academic_year_after_itt == false
     ].all?
   end
 
   def trainee_teaching_lacking_both_valid_itt_subject_and_degree?
     [
-      Policies::LevellingUpPremiumPayments::SchoolEligibility.new(@current_claim.eligibility.current_school).eligible?,
-      @current_claim.eligibility.nqt_in_academic_year_after_itt == false,
+      Policies::LevellingUpPremiumPayments::SchoolEligibility.new(@answers.current_school).eligible?,
+      @answers.nqt_in_academic_year_after_itt == false,
       lack_both_valid_itt_subject_and_degree?
     ].all?
   end
 
   def lack_both_valid_itt_subject_and_degree?
-    lup_claim = @current_claim.for_policy(Policies::LevellingUpPremiumPayments)
-
     [
       subject_invalid_for_ecp?,
-      lup_claim.eligibility.eligible_degree_subject == false
+      @answers.eligible_degree_subject == false
     ].all?
   end
 
@@ -121,16 +119,12 @@ class IneligibilityReasonChecker
   end
 
   def eligible_with_sufficient_teaching?(policy)
-    eligibility = @current_claim.for_policy(policy).eligibility
-    teaching_before = eligibility.teaching_subject_now
-    eligible_with_sufficient_teaching = nil
+    teaching_before = @answers.teaching_subject_now
 
     # check it and put it back
-    eligibility.transaction do
-      eligibility.update(teaching_subject_now: true)
-      eligible_with_sufficient_teaching = eligibility.status.in?([:eligible_now, :eligible_later])
-      eligibility.update(teaching_subject_now: teaching_before)
-    end
+    @answers.teaching_subject_now = true
+    eligible_with_sufficient_teaching = policy::PolicyEligibilityChecker.new(answers: @answers).status.in?([:eligible_now, :eligible_later])
+    @answers.teaching_subject_now = teaching_before
 
     eligible_with_sufficient_teaching
   end
@@ -147,18 +141,21 @@ class IneligibilityReasonChecker
   end
 
   def subject_invalid_for_ecp?
-    !@current_claim.eligibility.eligible_itt_subject&.to_sym&.in?(ecp_subject_options)
+    !@answers.eligible_itt_subject&.to_sym&.in?(ecp_subject_options)
   end
 
   def ecp_subject_options
-    JourneySubjectEligibilityChecker.new(claim_year: @current_claim.policy_year, itt_year: @current_claim.eligibility.itt_academic_year).current_and_future_subject_symbols(Policies::EarlyCareerPayments)
+    JourneySubjectEligibilityChecker.new(
+      claim_year: @answers.policy_year,
+      itt_year: @answers.itt_academic_year
+    ).current_and_future_subject_symbols(Policies::EarlyCareerPayments)
   end
 
   def bad_itt_year_for_ecp?
     [
       ecp_subject_options.one?,
       subject_invalid_for_ecp?,
-      school_eligible_for_ecp_but_not_lup?(@current_claim.eligibility.current_school)
+      school_eligible_for_ecp_but_not_lup?(@answers.current_school)
     ].all?
   end
 
@@ -170,22 +167,22 @@ class IneligibilityReasonChecker
     [
       ecp_subject_options.many?,
       subject_invalid_for_ecp?,
-      school_eligible_for_ecp_but_not_lup?(@current_claim.eligibility.current_school)
+      school_eligible_for_ecp_but_not_lup?(@answers.current_school)
     ].all?
   end
 
   def no_ecp_subjects_that_itt_year?
     [
       ecp_subject_options.none?,
-      school_eligible_for_ecp_but_not_lup?(@current_claim.eligibility.current_school)
+      school_eligible_for_ecp_but_not_lup?(@answers.current_school)
     ].all?
   end
 
   def trainee_teacher_last_policy_year?
     [
-      @current_claim.eligibility.nqt_in_academic_year_after_itt == false,
-      @current_claim.academic_year >= AcademicYear.new(Policies::LevellingUpPremiumPayments::Eligibility::LAST_POLICY_YEAR),
-      @current_claim.academic_year >= AcademicYear.new(Policies::EarlyCareerPayments::Eligibility::LAST_POLICY_YEAR)
+      @answers.nqt_in_academic_year_after_itt == false,
+      @answers.academic_year >= AcademicYear.new(Policies::LevellingUpPremiumPayments::Eligibility::LAST_POLICY_YEAR),
+      @answers.academic_year >= AcademicYear.new(Policies::EarlyCareerPayments::Eligibility::LAST_POLICY_YEAR)
     ].all?
   end
 end

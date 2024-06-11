@@ -105,7 +105,7 @@ class ClaimsController < BasePublicController
         current_claim: current_claim,
         journey_session: journey_session
       )
-      Policies::StudentLoans::EligibilityChecker.new(shim.answers).ineligible?
+      Policies::StudentLoans::PolicyEligibilityChecker.new(answers: shim.answers).ineligible?
     else
       current_claim.ineligible?
     end

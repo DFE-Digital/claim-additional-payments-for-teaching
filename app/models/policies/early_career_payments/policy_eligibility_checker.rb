@@ -4,13 +4,12 @@ module Policies
       include Eligible
       include EligibilityCheckable
 
-      attr_reader :journey_session
+      attr_reader :answers
 
-      delegate :answers, to: :journey_session
       delegate_missing_to :answers
 
-      def initialize(journey_session:)
-        @journey_session = journey_session
+      def initialize(answers:)
+        @answers = answers
       end
     end
   end

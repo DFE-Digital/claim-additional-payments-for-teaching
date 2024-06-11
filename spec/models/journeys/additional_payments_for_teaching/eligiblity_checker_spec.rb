@@ -14,12 +14,12 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityChecker, type
     before do
       allow(Policies::EarlyCareerPayments::PolicyEligibilityChecker)
         .to receive(:new)
-        .with(journey_session:)
+        .with(answers: journey_session.answers)
         .and_return(ecp_policy_eligibility_checker)
 
       allow(Policies::LevellingUpPremiumPayments::PolicyEligibilityChecker)
         .to receive(:new)
-        .with(journey_session:)
+        .with(answers: journey_session.answers)
         .and_return(lupp_policy_eligibility_checker)
 
       allow(ecp_policy_eligibility_checker).to receive(:status).and_return(ecp_status)

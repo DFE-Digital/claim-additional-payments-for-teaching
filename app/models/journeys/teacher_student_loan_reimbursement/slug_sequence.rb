@@ -146,7 +146,7 @@ module Journeys
       end
 
       def eligibility_checker
-        @eligibility_checker ||= Policies::StudentLoans::EligibilityChecker.new(shim.answers)
+        @eligibility_checker ||= Policies::StudentLoans::PolicyEligibilityChecker.new(answers: shim.answers)
       end
 
       def shim

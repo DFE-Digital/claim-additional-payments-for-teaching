@@ -1,5 +1,5 @@
 module Journeys
-  module AdditionalPaymentsForTeaching
+  module TeacherStudentLoanReimbursement
     class EligibilityChecker < Journeys::EligibilityChecker
     end
   end

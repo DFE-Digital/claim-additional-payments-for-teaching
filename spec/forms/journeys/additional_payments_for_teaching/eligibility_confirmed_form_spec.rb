@@ -3,30 +3,20 @@ require "rails_helper"
 RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityConfirmedForm, type: :model do
   subject(:form) { described_class.new(claim:, journey:, journey_session:, params:) }
 
-  before do
-    create(:journey_configuration, :additional_payments)
-  end
-
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
-  let(:journey_session) { build(:additional_payments_session) }
-
-  let(:current_school) { create(:school, :combined_journey_eligibile_for_all) }
-
-  let(:ecp_claim) { create(:claim, policy: Policies::EarlyCareerPayments, eligibility_trait: ecp_eligibility, eligibility_attributes: {current_school: current_school}) }
-  let(:lupp_claim) { create(:claim, policy: Policies::LevellingUpPremiumPayments, eligibility_trait: lupp_eligibility, eligibility_attributes: {current_school: current_school}) }
-
-  let(:ecp_eligibility) { :eligible_now }
-  let(:lupp_eligibility) { :eligible_now }
-
+  let(:journey_session) { build(:additional_payments_session, answers: answers) }
+  let(:ecp_claim) { create(:claim, :eligible, policy: Policies::EarlyCareerPayments) }
+  let(:lupp_claim) { create(:claim, :eligible, policy: Policies::LevellingUpPremiumPayments) }
   let(:claim) { CurrentClaim.new(claims: [ecp_claim, lupp_claim], selected_policy:) }
   let(:slug) { "eligibility-confirmed" }
   let(:params) { ActionController::Parameters.new({slug:, claim: claim_params}) }
   let(:claim_params) { {selected_claim_policy: "EarlyCareerPayments"} }
   let(:selected_policy) { Policies::EarlyCareerPayments }
-
-  it { is_expected.to be_a(Form) }
+  let(:answers) { {} }
 
   describe "validations" do
+    let(:answers) { build(:additional_payments_answers, :ecp_and_lup_eligible) }
+
     it do
       is_expected.to validate_presence_of(:selected_claim_policy)
         .with_message("Select an additional payment")
@@ -42,12 +32,14 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityConfirmedForm
   describe "#save" do
     context "valid params" do
       let(:claim_params) { {selected_claim_policy: "LevellingUpPremiumPayments"} }
+      let(:answers) { build(:additional_payments_answers, :lup_eligible) }
 
       it { expect(form.save).to eq(true) }
     end
 
     context "invalid params" do
       let(:claim_params) { {selected_claim_policy: "InvalidPolicy"} }
+      let(:answers) { build(:additional_payments_answers, :lup_eligible) }
 
       it { expect(form.save).to eq(false) }
     end
@@ -55,13 +47,26 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityConfirmedForm
 
   describe "#single_choice_only?" do
     context "when eligible for one policy only" do
-      let(:ecp_eligibility) { :ineligible }
-      let(:lupp_eligibility) { :eligible_now }
+      let(:ecp_claim) { create(:claim, :ineligible, policy: Policies::EarlyCareerPayments) }
+      let(:lupp_claim) { create(:claim, :eligible, policy: Policies::LevellingUpPremiumPayments) }
+      let(:answers) do
+        build(
+          :additional_payments_answers,
+          :ecp_ineligible,
+          :lup_eligible
+        )
+      end
 
       it { expect(form.single_choice_only?).to eq(true) }
     end
 
     context "when eligible for more than one policy" do
+      let(:ecp_claim) { create(:claim, :eligible, policy: Policies::EarlyCareerPayments) }
+      let(:lupp_claim) { create(:claim, :eligible, policy: Policies::LevellingUpPremiumPayments) }
+      let(:answers) do
+        build(:additional_payments_answers, :ecp_and_lup_eligible)
+      end
+
       it { expect(form.single_choice_only?).to eq(false) }
     end
   end
@@ -106,6 +111,10 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityConfirmedForm
 
   describe "#allowed_policy_names" do
     subject { form.allowed_policy_names }
+
+    let(:answers) do
+      build(:additional_payments_answers, :ecp_and_lup_eligible)
+    end
 
     it { is_expected.to eq(["EarlyCareerPayments", "LevellingUpPremiumPayments"]) }
   end

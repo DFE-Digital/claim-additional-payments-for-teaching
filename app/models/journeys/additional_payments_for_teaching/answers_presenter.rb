@@ -5,6 +5,10 @@ module Journeys
       include AdditionalPaymentsHelper
       include Claims::IttSubjectHelper
 
+      def eligibility
+        @eligibility ||= claim_submission_form.eligible_now_or_later.first
+      end
+
       # Formats the eligibility as a list of questions and answers, each
       # accompanied by a slug for changing the answer. Suitable for playback to
       # the claimant for them to review on the check-your-answers page.
@@ -114,7 +118,10 @@ module Journeys
         return if answers.qualifications_details_check && answers.early_career_payments_dqt_teacher_record&.eligible_itt_subject_for_claim
 
         [
-          eligible_itt_subject_translation(CurrentClaim.new(claims: [eligibility.claim]), answers),
+          eligible_itt_subject_translation(
+            shim.answers,
+            subject_symbols
+          ),
           text_for_subject_answer,
           "eligible-itt-subject"
         ]
@@ -159,6 +166,23 @@ module Journeys
           subject_symbol = subjects.first
           (subject_symbol == eligibility.eligible_itt_subject.to_sym) ? "Yes" : "No"
         end
+      end
+
+      private
+
+      def subject_symbols
+        @subject_symbols ||= JourneySubjectEligibilityChecker.current_and_future_subject_symbols(shim.answers)
+      end
+
+      def claim_submission_form
+        @claim_submission_form ||= ClaimSubmissionForm.new(journey_session: shim)
+      end
+
+      def shim
+        @shim ||= ClaimJourneySessionShim.new(
+          journey_session: journey_session,
+          current_claim: claim
+        )
       end
     end
   end

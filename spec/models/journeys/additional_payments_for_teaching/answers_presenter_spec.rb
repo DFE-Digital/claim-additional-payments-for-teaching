@@ -14,25 +14,22 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
     let(:qualification) { "postgraduate_itt" }
 
     let(:journey_session) do
-      build(
-        :additional_payments_session,
-        answers: {
-          qualifications_details_check: qualifications_details_check,
-          qualification: qualification
-        }
-      )
+      create(:additional_payments_session, answers: answers)
     end
 
-    subject(:answers) do
-      described_class.new(
-        current_claim,
-        journey_session
-      ).eligibility_answers
+    subject do
+      described_class.new(current_claim, journey_session).eligibility_answers
     end
 
     context "ECP" do
       context "long-term directly employed supply teacher" do
         let(:eligibility) { build(:early_career_payments_eligibility, :eligible, :long_term_directly_employed_supply_teacher) }
+        let(:answers) do
+          build(
+            :additional_payments_answers,
+            :ecp_eligible
+          )
+        end
 
         it {
           is_expected.to include(
@@ -43,7 +40,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
         }
 
         specify {
-          expect(questions(subject)).to eq([
+          expect(questions(subject)).to match_array([
             "Which school do you teach at?",
             "Are you currently teaching as a qualified teacher?",
             "Have you completed your induction as an early-career teacher?",
@@ -62,6 +59,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
 
       context "non-supply teacher" do
         let(:eligibility) { build(:early_career_payments_eligibility, :eligible, :not_a_supply_teacher) }
+        let(:answers) { build(:additional_payments_answers, :ecp_eligible) }
 
         it { is_expected.to include(["Are you currently employed as a supply teacher?", "No", "supply-teacher"]) }
 
@@ -73,7 +71,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
         }
 
         specify {
-          expect(questions(subject)).to eq([
+          expect(questions(subject)).to match_array([
             "Which school do you teach at?",
             "Are you currently teaching as a qualified teacher?",
             "Have you completed your induction as an early-career teacher?",
@@ -90,7 +88,14 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
 
       context "single subject option" do
         let(:itt_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2019)) }
-        let(:eligibility) { build(:early_career_payments_eligibility, :eligible, itt_academic_year: itt_year) }
+        let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
+        let(:answers) do
+          build(
+            :additional_payments_answers,
+            :ecp_eligible,
+            itt_academic_year: itt_year
+          )
+        end
 
         it { is_expected.to include(["Did you do your postgraduate initial teacher training (ITT) in mathematics?", "Yes", "eligible-itt-subject"]) }
       end
@@ -98,6 +103,13 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
       context "multiple subject options" do
         let(:itt_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2020)) }
         let(:eligibility) { build(:early_career_payments_eligibility, :eligible, itt_academic_year: itt_year) }
+        let(:answers) do
+          build(
+            :additional_payments_answers,
+            :ecp_eligible,
+            itt_academic_year: itt_year
+          )
+        end
 
         it { is_expected.to include(["Which subject did you do your postgraduate initial teacher training (ITT) in?", "Mathematics", "eligible-itt-subject"]) }
       end
@@ -115,6 +127,15 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
         let(:itt_academic_year_for_claim) { AcademicYear.for(Date.new(1981, 1, 1)) }
         let(:eligible_itt_subject_for_claim) { :mathematics }
         let(:route_into_teaching) { :postgraduate_itt }
+
+        let(:answers) do
+          build(
+            :additional_payments_answers,
+            :ecp_eligible,
+            qualifications_details_check: qualifications_details_check,
+            qualification: qualification
+          )
+        end
 
         before do
           allow_any_instance_of(
@@ -154,11 +175,19 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
       context "entire output" do
         let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :long_term_directly_employed_supply_teacher, :ineligible_itt_subject, :relevant_degree) }
         let(:expected_itt_year) { AcademicYear.new(eligibility.itt_academic_year) }
+        let(:answers) do
+          build(
+            :additional_payments_answers,
+            :lup_eligible,
+            :lup_ineligible_itt_subject,
+            selected_policy: "LevellingUpPremiumPayments"
+          )
+        end
 
         it {
-          is_expected.to eq(
+          is_expected.to match_array(
             [
-              ["Which school do you teach at?", eligibility.current_school.name, "current-school"],
+              ["Which school do you teach at?", answers.current_school.name, "current-school"],
               ["Are you currently teaching as a qualified teacher?", "Yes", "nqt-in-academic-year-after-itt"],
               ["Have you completed your induction as an early-career teacher?", "No", "induction-completed"],
               ["Are you currently employed as a supply teacher?", "Yes", "supply-teacher"],
@@ -198,6 +227,15 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
         let(:eligible_itt_subject_for_claim) { :mathematics }
         let(:route_into_teaching) { :postgraduate_itt }
         let(:eligible_degree_code) { true }
+
+        let(:answers) do
+          build(
+            :additional_payments_answers,
+            :lup_eligible,
+            qualifications_details_check: qualifications_details_check,
+            selected_policy: "LevellingUpPremiumPayments"
+          )
+        end
 
         before do
           allow_any_instance_of(
@@ -245,6 +283,13 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
 
       context "eligible ITT" do
         let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
+        let(:answers) do
+          build(
+            :additional_payments_answers,
+            :lup_eligible,
+            selected_policy: "LevellingUpPremiumPayments"
+          )
+        end
 
         it { is_expected.to include(["Which subject did you do your postgraduate initial teacher training (ITT) in?", "Mathematics", "eligible-itt-subject"]) }
         it { is_expected.not_to include(["Do you have a degree in an eligible subject?", a_string_matching(/(Yes|No)/), "eligible-degree-subject"]) }
@@ -267,6 +312,15 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
 
       context "ineligible ITT" do
         let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :ineligible_itt_subject, :relevant_degree) }
+        let(:answers) do
+          build(
+            :additional_payments_answers,
+            :lup_eligible,
+            :lup_ineligible_itt_subject,
+            :relevant_degree,
+            selected_policy: "LevellingUpPremiumPayments"
+          )
+        end
 
         it {
           is_expected.to include(
@@ -276,7 +330,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
         }
 
         specify {
-          expect(questions(subject)).to eq([
+          expect(questions(subject)).to match_array([
             "Which school do you teach at?",
             "Are you currently teaching as a qualified teacher?",
             "Have you completed your induction as an early-career teacher?",

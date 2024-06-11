@@ -5,6 +5,14 @@ module Journeys
       include Policies::StudentLoans::PresenterMethods
       include ActiveSupport::NumberHelper
 
+      def eligibility
+        @eligibility = if @claim.is_a?(CurrentClaim)
+          claim.eligible_eligibility
+        else
+          claim.eligibility
+        end
+      end
+
       # Formats the eligibility as a list of questions and answers, each
       # accompanied by a slug for changing the answer. Suitable for playback to
       # the claimant for them to review on the check-your-answers page.

@@ -2,29 +2,15 @@ require "journey_subject_eligibility_checker"
 
 module Claims
   module IttSubjectHelper
-    def subject_symbols(current_claim)
-      subjects = if current_claim.eligibility.nqt_in_academic_year_after_itt
-        JourneySubjectEligibilityChecker.new(claim_year: current_claim.policy_year, itt_year: current_claim.eligibility.itt_academic_year).selectable_subject_symbols(current_claim)
-      elsif current_claim.policy_year.in?(EligibilityCheckable::COMBINED_ECP_AND_LUP_POLICY_YEARS_BEFORE_FINAL_YEAR)
-        # they get the standard, unchanging LUP subject set because they won't have qualified in time for ECP by 2022/2023
-        # and they won't have given an ITT year
-        JourneySubjectEligibilityChecker.fixed_lup_subject_symbols
-      else
-        []
-      end
-
-      subjects.sort
-    end
-
-    def subjects_to_sentence_for_hint_text(current_claim)
+    def subjects_to_sentence_for_hint_text(answers)
       all_ecp_subjects = [:chemistry, :foreign_languages, :mathematics, :physics]
       all_lup_subjects = JourneySubjectEligibilityChecker.fixed_lup_subject_symbols
 
       hint_subject_symbols = Set[]
 
-      if current_claim.eligibility.nqt_in_academic_year_after_itt
-        ecp_eligibility_status = current_claim.for_policy(Policies::EarlyCareerPayments).eligibility.status
-        lup_eligibility_status = current_claim.for_policy(Policies::LevellingUpPremiumPayments).eligibility.status
+      if answers.nqt_in_academic_year_after_itt
+        ecp_eligibility_status = Policies::EarlyCareerPayments::PolicyEligibilityChecker.new(answers: answers).status
+        lup_eligibility_status = Policies::LevellingUpPremiumPayments::PolicyEligibilityChecker.new(answers: answers).status
 
         potentially_eligible_for_lup = lup_eligibility_status != :ineligible
         potentially_eligible_for_ecp = ecp_eligibility_status != :ineligible

@@ -20,7 +20,6 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
             attributes_for(
               :early_career_payments_eligibility,
               :eligible,
-              eligible_itt_subject: args[:subject],
               current_school_id: school.id
             )
           )
@@ -28,7 +27,9 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           journey_session.answers.assign_attributes(
             attributes_for(
               :additional_payments_answers,
-              qualification: "postgraduate_itt"
+              :ecp_eligible,
+              eligible_itt_subject: args[:subject],
+              current_school_id: school.id
             )
           )
 
@@ -47,21 +48,21 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           click_on "Continue"
 
           # - Which subject did you do your postgraduate initial teacher training (ITT) in?
-          choose I18n.t("additional_payments.forms.eligible_itt_subject.answers.#{args[:subject]}")
+          choose "Yes"
           click_on "Continue"
 
           # - Do you teach subject now?
           choose "Yes"
           click_on "Continue"
 
-          expect(claim.eligibility.reload.itt_academic_year).to eql args[:academic_year]
+          expect(journey_session.reload.answers.itt_academic_year).to eql args[:academic_year]
 
           # - Check your answers for eligibility
           expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
           expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.secondary_heading"))
           expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
 
-          expect(claim.eligibility.itt_academic_year).to eq args[:academic_year]
+          expect(journey_session.reload.answers.itt_academic_year).to eq args[:academic_year]
           expect(claim.errors.messages).to be_empty
 
           click_on "Continue"
@@ -133,9 +134,9 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           choose args[:cohort]
           click_on "Continue"
 
-          expect(claim.eligibility.reload.itt_academic_year).to eql args[:academic_year]
+          expect(journey_session.reload.answers.itt_academic_year).to eql args[:academic_year]
 
-          choose I18n.t("additional_payments.forms.eligible_itt_subject.answers.#{args[:subject]}")
+          choose "Yes"
           click_on "Continue"
 
           # - Do you teach subject now?
@@ -147,7 +148,7 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.secondary_heading"))
           expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
 
-          expect(claim.eligibility.itt_academic_year).to eq args[:academic_year]
+          expect(journey_session.reload.answers.itt_academic_year).to eq args[:academic_year]
           expect(claim.errors.messages).to be_empty
 
           click_on "Continue"

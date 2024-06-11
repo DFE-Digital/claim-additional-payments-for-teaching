@@ -80,14 +80,17 @@ RSpec.feature "Completed Applications - Reminders" do
         reminder_status = (scenario[:invited_to_set_reminder] == true) ? "CAN" : "CANNOT"
         scenario "with cohort ITT subject #{scenario[:itt_subject]} in ITT academic year #{scenario[:itt_academic_year]} - a reminder #{reminder_status} be set" do
           claim.eligibility.update(
-            eligible_itt_subject: scenario[:itt_subject],
-            itt_academic_year: scenario[:itt_academic_year]
+            eligible_itt_subject: scenario[:itt_subject]
           )
           reminder_year = (academic_year + 1).start_year
 
           session = Journeys::AdditionalPaymentsForTeaching::Session.last
           session.answers.assign_attributes(
-            attributes_for(:additional_payments_answers, :submittable)
+            attributes_for(
+              :additional_payments_answers,
+              :submittable,
+              itt_academic_year: scenario[:itt_academic_year]
+            )
           )
           session.save!
 

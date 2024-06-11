@@ -32,7 +32,7 @@ module Journeys
       end
 
       def award_amount(policy)
-        policy::PolicyEligibilityChecker.new(journey_session: shim).calculate_award_amount
+        policy::PolicyEligibilityChecker.new(answers: shim.answers).calculate_award_amount
       end
 
       # TODO KL: This is still using the CurrentClaim for the selected policy
@@ -50,11 +50,6 @@ module Journeys
 
       def eligibility_checker
         @eligibility_checker ||= EligibilityChecker.new(journey_session: shim)
-      end
-
-      # TODO KL: To remove when the shim goes
-      def shim
-        @shim ||= ClaimJourneySessionShim.new(current_claim: claim, journey_session:)
       end
     end
   end

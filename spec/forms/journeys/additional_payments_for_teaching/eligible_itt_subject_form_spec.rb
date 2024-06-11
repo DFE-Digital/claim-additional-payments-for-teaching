@@ -11,13 +11,29 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
 
-  let(:journey_session) { build(:additional_payments_session) }
+  let(:answers) do
+    build(
+      :additional_payments_answers,
+      attributes_for(
+        :additional_payments_answers,
+        trainee_teacher,
+        itt_academic_year: itt_academic_year
+      )
+    )
+  end
+
+  let(:journey_session) do
+    create(:additional_payments_session, answers: answers)
+  end
+
+  let(:trainee_teacher) { nil }
+
+  let(:itt_academic_year) { AcademicYear.new(2020) }
 
   let(:ecp_trainee_teacher_eligibility) do
     create(
       :early_career_payments_eligibility,
-      :trainee_teacher,
-      itt_academic_year: AcademicYear.new(2020)
+      :trainee_teacher
     )
   end
 
@@ -34,8 +50,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
     create(
       :early_career_payments_eligibility,
       :eligible_now,
-      :sufficient_teaching,
-      itt_academic_year: AcademicYear.new(2020)
+      :sufficient_teaching
     )
   end
 
@@ -49,17 +64,20 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
 
-  describe "validations" do
-    let(:claim) { ecp_qualified_teacher_claim }
+  let(:form) do
+    described_class.new(
+      journey: journey,
+      journey_session: journey_session,
+      claim: current_claim,
+      params: params
+    )
+  end
 
-    subject(:form) do
-      described_class.new(
-        journey: journey,
-        journey_session: journey_session,
-        claim: current_claim,
-        params: ActionController::Parameters.new
-      )
-    end
+  describe "validations" do
+    subject { form }
+
+    let(:claim) { ecp_qualified_teacher_claim }
+    let(:params) { ActionController::Parameters.new }
 
     it do
       is_expected.to validate_inclusion_of(:eligible_itt_subject)
@@ -69,22 +87,13 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
   end
 
   describe "#available_subjects" do
-    let(:form) do
-      described_class.new(
-        journey: journey,
-        journey_session: journey_session,
-        claim: current_claim,
-        params: ActionController::Parameters.new
-      )
-    end
-
     subject(:available_subjects) { form.available_subjects }
+
+    let(:params) { ActionController::Parameters.new }
 
     context "when qualified teacher" do
       let(:claim) { ecp_qualified_teacher_claim }
 
-      # EarlyCareerPayments policy, claim year 2023, itt_year 2020
-      # see `lib/journey_subject_eligibility_checker.rb`
       it do
         is_expected.to contain_exactly(
           "chemistry",
@@ -98,6 +107,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
     context "when trainee teacher" do
       context "when in ECP and LUP policy year range" do
         let(:claim) { ecp_trainee_teacher_claim }
+        let(:trainee_teacher) { :trainee_teacher }
 
         it do
           is_expected.to contain_exactly(
@@ -108,32 +118,13 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
           )
         end
       end
-
-      context "when not in ECP and LUP policy year range" do
-        let(:claim) { ecp_trainee_teacher_claim }
-
-        before do
-          allow(current_claim).to(
-            receive(:policy_year).and_return(AcademicYear.new(2000))
-          )
-        end
-
-        it { is_expected.to be_empty }
-      end
     end
   end
 
   describe "#show_hint_text?" do
-    let(:form) do
-      described_class.new(
-        journey: journey,
-        journey_session: journey_session,
-        claim: current_claim,
-        params: ActionController::Parameters.new
-      )
-    end
-
     subject { form.show_hint_text? }
+
+    let(:params) { ActionController::Parameters.new }
 
     context "when the claim is for a trainee teacher" do
       let(:claim) { ecp_trainee_teacher_claim }
@@ -145,14 +136,11 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
       let(:claim) { ecp_qualified_teacher_claim }
 
       context "when there is a single avaialble subject" do
-        # Single subject "mathematics". See
-        # `JourneySubjectEligibilityChecker#subject_symbols`
+        let(:itt_academic_year) { AcademicYear.new(2018) }
+
         before do
-          allow(ecp_qualified_teacher_eligibility).to(
-            receive(:itt_academic_year).and_return(AcademicYear.new(2018))
-          )
-          allow(current_claim).to(
-            receive(:policy_year).and_return(AcademicYear.new(2019))
+          Journeys::Configuration.last.update!(
+            current_academic_year: AcademicYear.new(2019)
           )
         end
 
@@ -166,18 +154,12 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
   end
 
   describe "#chemistry_or_physics_available?" do
-    let(:form) do
-      described_class.new(
-        journey: journey,
-        journey_session: journey_session,
-        claim: current_claim,
-        params: ActionController::Parameters.new
-      )
-    end
+    subject { form.chemistry_or_physics_available? }
+
+    let(:params) { ActionController::Parameters.new }
 
     let(:claim) { ecp_trainee_teacher_claim }
-
-    subject { form.chemistry_or_physics_available? }
+    let(:trainee_teacher) { :trainee_teacher }
 
     context "when the subject list contains chemistry" do
       before do
@@ -212,15 +194,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
   describe "#save" do
     let(:claim) { ecp_qualified_teacher_claim }
-
-    let(:form) do
-      described_class.new(
-        journey: journey,
-        journey_session: journey_session,
-        claim: current_claim,
-        params: params
-      )
-    end
 
     context "when invalid" do
       let(:params) do

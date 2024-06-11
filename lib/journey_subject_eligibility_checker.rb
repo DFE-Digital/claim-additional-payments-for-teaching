@@ -22,8 +22,37 @@ class JourneySubjectEligibilityChecker
     JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(@claim_year)
   end
 
+  def self.selectable_subject_symbols(answers)
+    if answers.nqt_in_academic_year_after_itt
+      new(
+        claim_year: answers.policy_year,
+        itt_year: answers.itt_academic_year
+      ).selectable_subject_symbols(answers)
+    elsif answers.policy_year.in?(EligibilityCheckable::COMBINED_ECP_AND_LUP_POLICY_YEARS_BEFORE_FINAL_YEAR)
+      # they get the standard, unchanging LUP subject set because they won't have qualified in time for ECP by 2022/2023
+      # and they won't have given an ITT year
+      fixed_lup_subject_symbols
+    else
+      []
+    end.sort
+  end
+
   def self.selectable_itt_years_for_claim_year(claim_year)
     (AcademicYear.new(claim_year - 5)...AcademicYear.new(claim_year)).to_a
+  end
+
+  def self.current_and_future_subject_symbols(answers)
+    return [] if answers.itt_academic_year.blank?
+
+    if answers.nqt_in_academic_year_after_itt
+      JourneySubjectEligibilityChecker.new(claim_year: answers.policy_year, itt_year: answers.itt_academic_year).current_and_future_subject_symbols(answers.policy)
+    elsif answers.policy_year.in?(EligibilityCheckable::COMBINED_ECP_AND_LUP_POLICY_YEARS_BEFORE_FINAL_YEAR)
+      # they get the standard, unchanging LUP subject set because they won't have qualified in time for ECP by 2022/2023
+      # and they won't have given an ITT year
+      JourneySubjectEligibilityChecker.fixed_lup_subject_symbols
+    else
+      []
+    end.sort
   end
 
   # Ideally we wouldn't have this method at all. Unfortunately it was hardcoded like
@@ -63,36 +92,20 @@ class JourneySubjectEligibilityChecker
     end
   end
 
-  def selectable_subject_symbols(current_claim)
-    return [] if itt_year(current_claim).blank?
-    potentially_still_eligible_policies(current_claim).collect { |policy| current_and_future_subject_symbols(policy) }.flatten.uniq
-  end
+  def selectable_subject_symbols(answers)
+    return [] if answers.itt_academic_year.blank?
 
-  # TODO: call this when work on CAPT-357 where Mathematics is not eligible now but is in the future
-  # this could be further ahead than just the subsequent year
-  # this *does not* check whether the current claim year is eligible
-  def next_eligible_claim_year_after_current_claim_year(current_claim)
-    itt_subject = itt_subject_symbol(current_claim)
-    itt_year = itt_year(current_claim)
-
-    return nil if itt_year.blank?
-
-    potentially_eligible_future_years = potentially_still_eligible_policies(current_claim).collect do |policy|
-      future_claim_years.select do |future_claim_year|
-        itt_subject.in?(subject_symbols(policy: policy, claim_year: future_claim_year, itt_year: itt_year))
-      end
+    potentially_still_eligible_policies(answers).map do |policy|
+      current_and_future_subject_symbols(policy)
     end.flatten.uniq
-
-    if potentially_eligible_future_years.any?
-      potentially_eligible_future_years.first
-    end
   end
 
   private
 
-  def potentially_still_eligible_policies(current_claim)
-    potentially_still_eligible_claims = current_claim.claims.select { |claim| claim.eligibility.status != :ineligible }
-    potentially_still_eligible_claims.collect { |claim| claim.policy }
+  def potentially_still_eligible_policies(answers)
+    Journeys::AdditionalPaymentsForTeaching::POLICIES.select do |policy|
+      policy::PolicyEligibilityChecker.new(answers: answers).status != :ineligible
+    end
   end
 
   def validate_itt_year(itt_year)
@@ -114,7 +127,8 @@ class JourneySubjectEligibilityChecker
 
     case policy
     when Policies::EarlyCareerPayments
-      case claim_year
+      year = claim_year.is_a?(AcademicYear) ? claim_year : AcademicYear.new(claim_year)
+      case year
       when AcademicYear.new(2022), AcademicYear.new(2024)
         case itt_year
         when AcademicYear.new(2019)
@@ -151,29 +165,5 @@ class JourneySubjectEligibilityChecker
         []
       end
     end
-  end
-
-  def itt_year(current_claim)
-    get_agreeing_current_claim_eligibility_attribute(current_claim, :itt_academic_year)
-  end
-
-  def get_agreeing_current_claim_eligibility_attribute(current_claim, attribute_symbol)
-    current_claim_non_nil_values_for_attribute = current_claim.claims.collect { |claim| claim.eligibility.send(attribute_symbol) }.compact.uniq
-
-    if current_claim_non_nil_values_for_attribute.one?
-      current_claim_non_nil_values_for_attribute.first
-    elsif current_claim_non_nil_values_for_attribute.many?
-      raise "Claims eligibilities should have consistent #{attribute_symbol} but had multiple: #{current_claim_non_nil_values_for_attribute}"
-    else
-      raise "Claims eligibilities didn't have any #{attribute_symbol} set"
-    end
-  end
-
-  def itt_subject_symbol(current_claim)
-    itt_subject(current_claim).to_sym
-  end
-
-  def itt_subject(current_claim)
-    get_agreeing_current_claim_eligibility_attribute(current_claim, :eligible_itt_subject)
   end
 end

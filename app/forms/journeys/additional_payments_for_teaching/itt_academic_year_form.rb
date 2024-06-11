@@ -8,12 +8,18 @@ module Journeys
       def save
         return false unless valid?
 
-        # FIXME RL: Once this method writes to the journey session answers we
-        # update the initializer in
-        # AdditionalPaymentsForTeaching::QualificationDetailsForm
-        claim.assign_attributes(eligibility_attributes: {itt_academic_year:})
-        claim.reset_eligibility_dependent_answers(["itt_academic_year"])
-        claim.save!
+        if reset_dependent_answers?
+          journey_session.answers.assign_attributes(eligible_itt_subject: nil)
+          claim.update!(
+            eligibility_attributes: {eligible_itt_subject: nil}
+          )
+        end
+
+        journey_session.answers.assign_attributes(
+          itt_academic_year: itt_academic_year
+        )
+
+        journey_session.save!
       end
 
       def qualification
@@ -25,7 +31,17 @@ module Journeys
       end
 
       def selectable_itt_years_for_claim_year
-        JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year journey.configuration.current_academic_year
+        JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(
+          journey.configuration.current_academic_year
+        )
+      end
+
+      def itt_academic_year_changed?
+        answers.itt_academic_year != itt_academic_year
+      end
+
+      def reset_dependent_answers?
+        itt_academic_year_changed? && !answers.qualifications_details_check?
       end
     end
   end

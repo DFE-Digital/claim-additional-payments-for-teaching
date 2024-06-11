@@ -8,7 +8,7 @@ module Journeys
       validates :eligible_itt_subject, inclusion: {in: :available_options, message: i18n_error_message(:inclusion)}
 
       def available_subjects
-        @available_subjects ||= subject_symbols(claim).map(&:to_s)
+        @available_subjects ||= subject_symbols.map(&:to_s)
       end
 
       def available_options
@@ -25,6 +25,11 @@ module Journeys
           available_subjects.include?("physics")
       end
 
+      def subject_symbols
+        @subject_symbols ||=
+          JourneySubjectEligibilityChecker.selectable_subject_symbols(shim.answers)
+      end
+
       def save
         return false unless valid?
 
@@ -35,6 +40,9 @@ module Journeys
         # QualificationForm#save to not reset eligible_itt_subject subject on
         # the claim, as it's no longer needed (still keep resetting it on the
         # answers) (and remove this comment!)
+        # Also upudate the IttAcademicYearForm to no longer reset the
+        # eligible_itt_subject on the claim as it's not needed once this form
+        # writes to the answers
         claim.assign_attributes(
           eligibility_attributes: {eligible_itt_subject: eligible_itt_subject}
         )

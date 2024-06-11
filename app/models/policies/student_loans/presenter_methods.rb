@@ -5,7 +5,7 @@ module Policies
         if eligibility.ineligible_qts_award_year?
           I18n.t("student_loans.answers.qts_award_years.before_cut_off_date")
         else
-          first_eligible_year = StudentLoans.first_eligible_qts_award_year(eligibility.claim.academic_year).to_s(:long)
+          first_eligible_year = Policies::StudentLoans.first_eligible_qts_award_year(eligibility.claim.academic_year).to_s(:long)
           I18n.t("student_loans.answers.qts_award_years.on_or_after_cut_off_date", year: first_eligible_year)
         end
       end
