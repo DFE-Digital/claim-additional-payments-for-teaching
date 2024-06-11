@@ -16,7 +16,7 @@ module Journeys
               employed_as_supply_teacher: employed_as_supply_teacher,
               qualification: journey_session.answers.qualification,
               has_entire_term_contract: has_entire_term_contract,
-              employed_directly: employed_directly,
+              employed_directly: journey_session.answers.employed_directly,
               subject_to_disciplinary_action: subject_to_disciplinary_action,
               subject_to_formal_performance_action: subject_to_formal_performance_action,
               eligible_itt_subject: eligible_itt_subject,
@@ -43,10 +43,6 @@ module Journeys
 
       def has_entire_term_contract
         journey_session.answers.has_entire_term_contract || try_eligibility(:has_entire_term_contract)
-      end
-
-      def employed_directly
-        journey_session.answers.employed_directly || try_eligibility(:employed_directly)
       end
 
       def subject_to_disciplinary_action

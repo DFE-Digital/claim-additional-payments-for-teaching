@@ -5,7 +5,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EmployedDirectlyForm do
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
 
-  let(:journey_session) { build(:additional_payments_session) }
+  let(:journey_session) { create(:additional_payments_session) }
 
   let(:current_claim) do
     claims = journey::POLICIES.map { |policy| create(:claim, policy:) }
@@ -34,18 +34,16 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EmployedDirectlyForm do
   describe "#employed_directly" do
     let(:params) { ActionController::Parameters.new({slug:, claim: {}}) }
 
-    context "when claim eligibility is missing employed_directly" do
+    context "when the journey session is missing employed_directly" do
       it "returns nil" do
         expect(form.employed_directly).to be_nil
       end
     end
 
-    context "when claim eligibility has employed_directly" do
-      let(:current_claim) do
-        claims = journey::POLICIES.map do |policy|
-          create(:claim, policy:, eligibility_attributes: {employed_directly: true})
-        end
-        CurrentClaim.new(claims:)
+    context "when journey session has employed_directly" do
+      before do
+        journey_session.answers.assign_attributes(employed_directly: true)
+        journey_session.save
       end
 
       it "returns existing value for employed_directly" do
@@ -59,44 +57,24 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EmployedDirectlyForm do
       let(:params) { ActionController::Parameters.new({slug:, claim: {employed_directly: "Yes"}}) }
 
       context "when claim eligibility is missing employed_directly" do
-        let(:current_claim) do
-          claims = journey::POLICIES.map { |policy| create(:claim, policy:) }
-          CurrentClaim.new(claims:)
-        end
-
-        it "saves employed_directly on claim eligibility" do
-          expect(form.save).to be true
-
-          current_claim.claims.each do |claim|
-            eligibility = claim.eligibility.reload
-
-            expect(eligibility.employed_directly).to be_truthy
-          end
+        it "saves employed_directly on the journey session" do
+          expect { form.save }.to change { journey_session.reload.answers.employed_directly }.from(nil).to(true)
         end
       end
 
       context "when claim eligibility has employed_directly" do
-        let(:current_claim) do
-          claims = journey::POLICIES.map do |policy|
-            create(:claim, policy:, eligibility_attributes: {employed_directly: false})
-          end
-          CurrentClaim.new(claims:)
+        before do
+          journey_session.answers.assign_attributes(employed_directly: false)
         end
 
         it "updates employed_directly on claim eligibility" do
-          expect(form.save).to be true
-
-          current_claim.claims.each do |claim|
-            eligibility = claim.eligibility.reload
-
-            expect(eligibility.employed_directly).to be_truthy
-          end
+          expect { form.save }.to change { journey_session.answers.employed_directly }.from(false).to(true)
         end
       end
 
       context "when claim model fails validation unexpectedly" do
         it "raises an error" do
-          allow(current_claim).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
+          allow(journey_session).to receive(:save).and_raise(ActiveRecord::RecordInvalid)
 
           expect { form.save }.to raise_error(ActiveRecord::RecordInvalid)
         end

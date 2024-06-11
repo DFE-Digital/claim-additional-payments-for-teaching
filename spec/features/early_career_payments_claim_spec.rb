@@ -6,6 +6,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
   # create a school eligible for ECP and LUP so can walk the whole journey
   let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
+  let(:journey_session) { Journeys::AdditionalPaymentsForTeaching::Session.last }
   let(:current_academic_year) { journey_configuration.current_academic_year }
 
   let(:itt_year) { current_academic_year - 3 }
@@ -317,7 +318,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     choose "Yes, I'm employed by my school"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.employed_directly).to eql true
+    expect(journey_session.answers.employed_directly).to eql true
 
     # - Are you currently subject to action for poor performance
     expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.formal_performance_action"))
