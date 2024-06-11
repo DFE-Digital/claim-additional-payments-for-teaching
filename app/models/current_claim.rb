@@ -73,55 +73,9 @@ class CurrentClaim
     main_claim.respond_to?(method_name, *, **)
   end
 
-  # Always give precedence to returning `:eligible_now` over `:eligible_later`
-  # because we only want to use `:eligible_later` if there's nothing eligible
-  # now.
-  def eligibility_status
-    if anything_eligible_now?
-      :eligible_now
-    elsif anything_eligible_later?
-      :eligible_later
-    elsif everything_ineligible?
-      :ineligible
-    else
-      :undetermined
-    end
-  end
-
   # Persistence should to be checked for all claims in non-combined journeys.
   def persisted?
     claims.all? { |c| c.persisted? }
-  end
-
-  def has_no_dqt_data_for_claim?
-    claims.all? { |c| !c.has_dqt_record? || c.dqt_teacher_record&.has_no_data_for_claim? }
-  end
-
-  # Non-combined journey code like Student Loans should really
-  # be using `eligibility_status` instead of this.
-  def ineligible?
-    claims.all? { |c| c.eligibility.ineligible? }
-  end
-
-  # Non-combined journey code like Student Loans should really
-  # be using `eligibility_status` instead of this.
-  def eligible_now?
-    claims.any? { |c| c.eligibility.eligible_now? }
-  end
-
-  # Non-combined journey code like Student Loans should really
-  # be using `eligibility_status` instead of this.
-  def eligible_later?
-    claims.any? { |c| c.eligibility.eligible_later? }
-  end
-
-  def eligible_now
-    claims.select { |c| c.eligibility.status == :eligible_now }
-  end
-
-  # award_amount highest first, policy name alphabetically if the amount is the same
-  def eligible_now_and_sorted
-    eligible_now.sort_by { |c| [-c.award_amount.to_i, c.policy.short_name] }
   end
 
   def set_a_reminder?
@@ -175,17 +129,5 @@ class CurrentClaim
     return Policies::EarlyCareerPayments if ecp_or_lupp_claims?
 
     raise UnselectablePolicyError
-  end
-
-  def anything_eligible_now?
-    claims.any? { |claim| claim.eligibility.status == :eligible_now }
-  end
-
-  def anything_eligible_later?
-    claims.any? { |claim| claim.eligibility.status == :eligible_later }
-  end
-
-  def everything_ineligible?
-    claims.all? { |claim| claim.eligibility.status == :ineligible }
   end
 end
