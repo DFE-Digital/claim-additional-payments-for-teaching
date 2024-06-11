@@ -2,7 +2,7 @@ name: Build and deploy to AKS cluster
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
     types: [labeled, opened, reopened, synchronize]
 
