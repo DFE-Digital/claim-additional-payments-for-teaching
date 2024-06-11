@@ -78,14 +78,6 @@ class CurrentClaim
     claims.all? { |c| c.persisted? }
   end
 
-  def eligible_eligibility
-    claims.sort_by(&:eligibility_type).each do |claim|
-      return claim.eligibility unless claim.eligibility.ineligible?
-    end
-
-    main_claim.eligibility
-  end
-
   private
 
   def single_claim?
