@@ -191,17 +191,20 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
   scenario "Teacher edits personal details, triggering the update of student loan details" do
     claim = start_student_loans_claim
-    eligibility = claim.eligibility
     journey_session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
 
     journey_session.update!(
-      answers: attributes_for(:student_loans_answers, :submittable)
+      answers: attributes_for(
+        :student_loans_answers,
+        :submittable,
+        current_school_id: student_loans_school.id,
+        claim_school_id: student_loans_school.id,
+        student_loan_repayment_amount: 100
+      )
     )
 
     answers = journey_session.answers
 
-    claim.update!(attributes_for(:claim, :submittable))
-    eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id, student_loan_repayment_amount: 100))
     jump_to_claim_journey_page(
       claim: claim,
       slug: "check-your-answers",

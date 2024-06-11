@@ -216,18 +216,16 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
       answer_eligibility_questions_and_fill_in_personal_details
 
-      claim = Claim.by_policy(Policies::StudentLoans).order(:created_at).last
-
       # - Student loan amount details
       expect(page).to have_title(I18n.t("student_loans.questions.student_loan_amount"))
       click_on "Continue"
 
-      expect(claim.reload).to have_student_loan
-      expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(1_100)
-      expect(claim.student_loan_plan).to eq(StudentLoan::PLAN_1)
+      journey_session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
+      answers = journey_session.answers
 
-      expect(claim.has_masters_doctoral_loan).to be_nil
-      expect(claim.postgraduate_masters_loan).to be_nil
+      expect(answers).to have_student_loan
+      expect(answers.student_loan_repayment_amount).to eql(1_100)
+      expect(answers.student_loan_plan).to eq(StudentLoan::PLAN_1)
 
       fill_in_remaining_personal_details_and_submit
 
@@ -238,18 +236,16 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     scenario "Teacher claims back student loan repayments with javascript #{js_status} (no SLC data present)", js: javascript_enabled do
       answer_eligibility_questions_and_fill_in_personal_details
 
-      claim = Claim.by_policy(Policies::StudentLoans).order(:created_at).last
-
       # - Student loan amount details
       expect(page).to have_title(I18n.t("student_loans.questions.student_loan_amount"))
       click_on "Continue"
 
-      expect(claim.reload).not_to have_student_loan
-      expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(0)
-      expect(claim.student_loan_plan).to eql(Claim::NO_STUDENT_LOAN)
+      journey_session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
+      answers = journey_session.answers
 
-      expect(claim.has_masters_doctoral_loan).to be_nil
-      expect(claim.postgraduate_masters_loan).to be_nil
+      expect(answers).not_to have_student_loan
+      expect(answers.student_loan_repayment_amount).to eql(0)
+      expect(answers.student_loan_plan).to eql(Claim::NO_STUDENT_LOAN)
 
       fill_in_remaining_personal_details_and_submit
     end

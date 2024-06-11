@@ -11,11 +11,6 @@ class ClaimStudentLoanDetailsUpdater
     claim.transaction do
       eligibility.update!(eligibility_student_loan_attributes) if claim.has_tslr_policy?
 
-      # When the claim hasn't been submitted yet, we need a way of knowing if the student loan
-      # details on the claim were found using the SLC data we held before submission;
-      # after submission, the `submitted_using_slc_data` value must not change
-      claim.assign_attributes(submitted_using_slc_data: student_loans_data.found_data?) unless claim.submitted?
-
       claim.assign_attributes(claim_student_loan_attributes)
       claim.save!(context: :"student-loan")
     end

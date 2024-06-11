@@ -72,10 +72,6 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
             .and change { claim.student_loan_plan }.to(StudentLoan::PLAN_1_AND_2)
             .and change { claim.eligibility.student_loan_repayment_amount }.to(110)
         end
-
-        it "sets the `submitted_using_slc_data` flag to `true`" do
-          expect { call }.to change { claim.reload.submitted_using_slc_data }.to(true)
-        end
       end
 
       [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments].each do |policy|
@@ -85,10 +81,6 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
           it "updates the claim with the student plan only" do
             expect { call }.to change { claim.reload.has_student_loan }.to(true)
               .and change { claim.student_loan_plan }.to(StudentLoan::PLAN_1_AND_2)
-          end
-
-          it "sets the `submitted_using_slc_data` flag to `true`" do
-            expect { call }.to change { claim.reload.submitted_using_slc_data }.to(true)
           end
         end
       end

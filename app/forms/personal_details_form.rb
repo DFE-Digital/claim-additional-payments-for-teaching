@@ -65,10 +65,7 @@ class PersonalDetailsForm < Form
 
     reset_depenent_answers_attributes
 
-    ApplicationRecord.transaction do
-      journey_session.save!
-      claim.save!
-    end
+    journey_session.save!
   end
 
   def show_name_section?
@@ -142,22 +139,16 @@ class PersonalDetailsForm < Form
     errors.exclude?(:national_insurance_number)
   end
 
-  # FIXME RL: Remove reseting claim attributes once we've migrated student loan
-  # data to the answers model
   def reset_depenent_answers_attributes
     journey_session.answers.assign_attributes(
       has_student_loan: nil,
       student_loan_plan: nil
     )
 
-    claim.assign_attributes(has_student_loan: nil, student_loan_plan: nil)
-
     if journey == Journeys::TeacherStudentLoanReimbursement
       journey_session.answers.assign_attributes(
         student_loan_repayment_amount: nil
       )
-
-      claim.eligibility.assign_attributes(student_loan_repayment_amount: nil)
     end
   end
 end

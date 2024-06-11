@@ -90,5 +90,9 @@ module Journeys
     def qualifications_details_check?
       !!qualifications_details_check
     end
+
+    def has_student_loan?
+      !!has_student_loan
+    end
   end
 end
