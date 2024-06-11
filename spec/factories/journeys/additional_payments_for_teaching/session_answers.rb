@@ -83,6 +83,7 @@ FactoryBot.define do
       qualification { :postgraduate_itt }
       teaching_subject_now { true }
       eligible_itt_subject { :mathematics }
+      employed_directly { true }
     end
 
     trait :ecp_eligible do
@@ -97,6 +98,7 @@ FactoryBot.define do
       teaching_subject_now { true }
       itt_academic_year { Journeys.for_policy(Policies::EarlyCareerPayments).configuration.current_academic_year - 3 }
       eligible_itt_subject { :mathematics }
+      employed_directly { true }
     end
 
     trait :ecp_and_lup_eligible do
