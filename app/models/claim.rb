@@ -419,6 +419,13 @@ class Claim < ApplicationRecord
     policy::DqtRecord.new(Dqt::Teacher.new(dqt_teacher_status), eligibility) if has_dqt_record?
   end
 
+  def set_a_reminder?
+    Reminder.set_a_reminder?(
+      policy_year: Journeys.for_policy(policy).configuration.current_academic_year,
+      itt_academic_year: eligibility.itt_academic_year
+    )
+  end
+
   private
 
   def normalise_trn

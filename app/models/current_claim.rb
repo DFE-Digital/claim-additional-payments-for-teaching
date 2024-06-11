@@ -78,12 +78,6 @@ class CurrentClaim
     claims.all? { |c| c.persisted? }
   end
 
-  def set_a_reminder?
-    return false unless main_claim
-
-    Reminder.set_a_reminder?(policy_year: policy_year, itt_academic_year: main_claim.eligibility.itt_academic_year)
-  end
-
   # No specific spec for this, but if this is wrong the other specs will show it up
   def policy_year
     raise "nil academic year" if policies.any? { |policy| Journeys.for_policy(policy).configuration.current_academic_year.nil? }
