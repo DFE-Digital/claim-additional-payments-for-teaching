@@ -183,8 +183,11 @@ module Journeys
         )
       end
 
-      def replace_ecp_only_induction_not_completed_slugs(sequence, ecp_claim)
-        dead_end_slug = (ecp_claim.eligibility.status == :eligible_later) ? "eligible-later" : "ineligible"
+      def replace_ecp_only_induction_not_completed_slugs(sequence)
+        # TODO: Remove this workaround to the shim class not reloading the answers after they're updated
+        eligibility = Policies::EarlyCareerPayments::PolicyEligibilityChecker.new(answers:)
+
+        dead_end_slug = (eligibility.status == :eligible_later) ? "eligible-later" : "ineligible"
 
         slugs = %w[
           current-school

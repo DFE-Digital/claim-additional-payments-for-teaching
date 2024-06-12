@@ -87,8 +87,8 @@ class IneligibilityReasonChecker
 
   def ecp_only_induction_not_completed?
     [
-      school_eligible_for_ecp_but_not_lup?(@current_claim.eligibility.current_school),
-      @current_claim.for_policy(Policies::EarlyCareerPayments).eligibility.induction_not_completed?
+      school_eligible_for_ecp_but_not_lup?(@answers.current_school),
+      @answers.induction_not_completed?
     ].all?
   end
 
