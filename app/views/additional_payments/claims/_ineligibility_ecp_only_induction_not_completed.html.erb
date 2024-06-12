@@ -8,3 +8,10 @@
   <%= link_to("levelling up premium payment (opens in new tab)", Policies::LevellingUpPremiumPayments.eligibility_criteria_url, class: "govuk-link", target: "_blank") %>
   because the school you teach in is not eligible. Levelling up premium payments are offered in schools identified as having a higher need for teachers.
 </p>
+
+<p class="govuk-body">
+  For more information, check the eligibility criteria for
+  <%= link_to("early-career payments", Policies::EarlyCareerPayments.eligibility_criteria_url, class: "govuk-link") %>
+  and
+  <%= link_to("levelling up premium payments", Policies::LevellingUpPremiumPayments.eligibility_criteria_url, class: "govuk-link") %>.
+</p>
