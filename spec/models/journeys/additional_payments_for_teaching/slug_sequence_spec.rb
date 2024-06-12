@@ -18,16 +18,16 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
   let(:lup_claim) { create(:claim, :skipped_tid, policy: Policies::LevellingUpPremiumPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility_lup) }
   let(:current_claim) { CurrentClaim.new(claims: [claim, lup_claim]) }
   let(:journey_session) do
-    create(
-      :additional_payments_session,
-      answers: attributes_for(
-        :additional_payments_answers,
-        :submittable,
-        logged_in_with_tid: logged_in_with_tid,
-        details_check: details_check,
-        dqt_teacher_status: dqt_teacher_status,
-        qualifications_details_check: qualifications_details_check
-      )
+    create(:additional_payments_session, answers: answers)
+  end
+  let(:answers) do
+    build(
+      :additional_payments_answers,
+      :submittable,
+      logged_in_with_tid: logged_in_with_tid,
+      details_check: details_check,
+      dqt_teacher_status: dqt_teacher_status,
+      qualifications_details_check: qualifications_details_check
     )
   end
   let(:teacher_id_enabled) { true }
@@ -308,6 +308,12 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
 
     context "when claim is eligible" do
       let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
+      let(:answers) do
+        build(
+          :additional_payments_answers,
+          :ecp_eligible
+        )
+      end
 
       it "includes the 'eligibility_confirmed' slug" do
         expect(slug_sequence.slugs).to include("eligibility-confirmed")
