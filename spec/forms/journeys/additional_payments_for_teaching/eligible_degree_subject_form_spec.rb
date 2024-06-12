@@ -2,19 +2,19 @@ require "rails_helper"
 
 RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleDegreeSubjectForm do
   subject(:form) do
-    described_class.new(claim:, journey_session:, journey:, params:)
+    described_class.new(
+      claim: CurrentClaim.new(claims: [build(:claim)]),
+      journey_session:,
+      journey:,
+      params:
+    )
   end
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
-  let(:journey_session) { build(:additional_payments_session) }
-  let(:ecp_claim) { build(:claim, policy: Policies::EarlyCareerPayments) }
-  let(:lupp_claim) { build(:claim, policy: Policies::LevellingUpPremiumPayments) }
-  let(:claim) { CurrentClaim.new(claims: [ecp_claim, lupp_claim]) }
+  let(:journey_session) { create(:additional_payments_session) }
   let(:slug) { "eligible-degree-subject" }
   let(:params) { ActionController::Parameters.new({slug:, claim: claim_params}) }
   let(:claim_params) { {eligible_degree_subject: "true"} }
-
-  it { is_expected.to be_a(Form) }
 
   describe "validations" do
     context "eligible_degree_subject" do
@@ -39,8 +39,10 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleDegreeSubjectFor
     context "valid params" do
       let(:claim_params) { {eligible_degree_subject: "true"} }
 
-      it "updates the attributes on the claim (LUPP)" do
-        expect { form.save }.to change { lupp_claim.eligibility.eligible_degree_subject }.to(true)
+      it "updates the attributes on the answers" do
+        expect { form.save }.to(
+          change { journey_session.answers.eligible_degree_subject }.to(true)
+        )
       end
     end
 
@@ -48,7 +50,9 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleDegreeSubjectFor
       let(:claim_params) { {eligible_degree_subject: ""} }
 
       it "does not update the attributes on the claim (LUPP)" do
-        expect { form.save }.to not_change { lupp_claim.eligibility.eligible_degree_subject }
+        expect { form.save }.to(
+          not_change { journey_session.answers.eligible_degree_subject }
+        )
       end
     end
   end
