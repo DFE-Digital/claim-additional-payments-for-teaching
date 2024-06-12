@@ -14,7 +14,7 @@ RSpec.describe ImportCensusJob do
 
         # success email
         expect(ActionMailer::Base.deliveries.count).to eq(1)
-        expect(mail[:template_id].decoded).to eq "81862fc7-f842-4f85-a6e7-63dffb931999"
+        expect(mail.template_id).to eq "81862fc7-f842-4f85-a6e7-63dffb931999"
 
         # deletes the file upload
         expect(FileUpload.find_by_id(file_upload.id)).to be_nil
@@ -38,7 +38,7 @@ RSpec.describe ImportCensusJob do
 
         # error email
         expect(ActionMailer::Base.deliveries.count).to eq(1)
-        expect(mail[:template_id].decoded).to eq "873170c9-4535-441f-b929-4670f022ecc9"
+        expect(mail.template_id).to eq "873170c9-4535-441f-b929-4670f022ecc9"
 
         # Rollbar error report
         expect(Rollbar).to have_received(:error)
