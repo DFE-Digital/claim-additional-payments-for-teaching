@@ -21,7 +21,9 @@ RSpec.shared_examples "Eligible later" do |opts|
           itt_academic_year: itt_academic_year,
           eligible_itt_subject: itt_subject,
           qualification: qualification,
-          current_school_id: current_school.id
+          current_school_id: current_school.id,
+          nqt_in_academic_year_after_itt: true,
+          induction_completed: true
         )
       )
 

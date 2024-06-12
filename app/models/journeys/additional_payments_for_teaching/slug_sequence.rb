@@ -141,7 +141,7 @@ module Journeys
             sequence.delete("mobile-verification")
           end
 
-          if claim.eligibility.trainee_teacher?
+          if answers.trainee_teacher?
             trainee_teacher_slugs(sequence)
             sequence.delete("eligible-degree-subject") unless lup_eligibility_checker.indicated_ineligible_itt_subject?
           else

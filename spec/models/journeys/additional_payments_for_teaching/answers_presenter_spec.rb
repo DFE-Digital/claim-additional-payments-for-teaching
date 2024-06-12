@@ -22,6 +22,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
     end
 
     context "ECP" do
+      before { journey_session.answers.nqt_in_academic_year_after_itt = true }
+
       context "long-term directly employed supply teacher" do
         let(:eligibility) { build(:early_career_payments_eligibility, :eligible, :long_term_directly_employed_supply_teacher) }
         let(:answers) do
@@ -187,6 +189,10 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
             selected_policy: "LevellingUpPremiumPayments",
             employed_as_supply_teacher: true
           )
+        end
+
+        before do
+          journey_session.answers.assign_attributes(nqt_in_academic_year_after_itt: true)
         end
 
         it {

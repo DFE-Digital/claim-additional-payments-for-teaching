@@ -12,7 +12,7 @@ module Journeys
         @answers ||= SessionAnswers.new(
           super.merge(
             {
-              nqt_in_academic_year_after_itt: nqt_in_academic_year_after_itt,
+              nqt_in_academic_year_after_itt: journey_session.answers.nqt_in_academic_year_after_itt,
               employed_as_supply_teacher: employed_as_supply_teacher,
               qualification: journey_session.answers.qualification,
               has_entire_term_contract: has_entire_term_contract,
@@ -32,10 +32,6 @@ module Journeys
       end
 
       private
-
-      def nqt_in_academic_year_after_itt
-        journey_session.answers.nqt_in_academic_year_after_itt || try_eligibility(:nqt_in_academic_year_after_itt)
-      end
 
       def employed_as_supply_teacher
         journey_session.answers.employed_as_supply_teacher || try_eligibility(:employed_as_supply_teacher)

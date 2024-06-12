@@ -332,7 +332,8 @@ RSpec.describe IneligibilityReasonChecker do
           :ecp_and_lup_eligible,
           :trainee_teacher,
           itt_academic_year: itt_year,
-          current_school_id: school_eligible_for_ecp_but_not_lup.id
+          current_school_id: school_eligible_for_ecp_but_not_lup.id,
+          nqt_in_academic_year_after_itt: true
         )
       end
 

@@ -286,9 +286,8 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     click_on "Continue"
 
     claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
-    eligibility = claim.eligibility
 
-    expect(eligibility.nqt_in_academic_year_after_itt).to eql true
+    expect(journey_session.answers.nqt_in_academic_year_after_itt).to eql true
 
     # - Have you completed your induction as an early-career teacher?
     expect(page).to have_text(I18n.t("additional_payments.questions.induction_completed.heading"))
@@ -318,7 +317,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     choose "Yes, I'm employed by my school"
     click_on "Continue"
 
-    expect(journey_session.answers.employed_directly).to eql true
+    expect(journey_session.reload.answers.employed_directly).to eql true
 
     # - Are you currently subject to action for poor performance
     expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.formal_performance_action"))
@@ -339,15 +338,24 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       lup_claim
     end
 
-    scenario "when Assessment only" do
+    let!(:journey_session) do
       session = Journeys::AdditionalPaymentsForTeaching::Session.last
-      session.answers.assign_attributes(current_school_id: school.id)
+      session.answers.assign_attributes(
+        attributes_for(
+          :additional_payments_answers,
+          :lup_eligible,
+          current_school_id: school.id
+        )
+      )
       session.save!
+      session
+    end
 
+    scenario "when Assessment only" do
       jump_to_claim_journey_page(
         claim: claim,
         slug: "qualification",
-        journey_session: session
+        journey_session:
       )
 
       # - What route into teaching did you take?
@@ -356,10 +364,10 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       choose "Assessment only"
       click_on "Continue"
 
-      expect(session.reload.answers.qualification).to eq "assessment_only"
+      expect(journey_session.reload.answers.qualification).to eq "assessment_only"
 
       # - In which academic year did you earn your qualified teacher status (QTS)
-      expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{session.answers.qualification}"))
+      expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{journey_session.answers.qualification}"))
       expect(page).to have_text("2017 to 2018")
       expect(page).to have_text("2018 to 2019")
       expect(page).to have_text("2019 to 2020")
@@ -382,7 +390,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       choose "Yes"
       click_on "Continue"
 
-      expect(session.reload.answers.teaching_subject_now).to eql true
+      expect(journey_session.reload.answers.teaching_subject_now).to eql true
 
       click_on "Continue"
 
@@ -390,14 +398,13 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     end
 
     scenario "when Overseas recognition" do
-      session = Journeys::AdditionalPaymentsForTeaching::Session.last
-      session.answers.assign_attributes(current_school_id: school.id)
-      session.save!
+      journey_session.answers.assign_attributes(current_school_id: school.id)
+      journey_session.save!
 
       jump_to_claim_journey_page(
         claim: claim,
         slug: "qualification",
-        journey_session: session
+        journey_session:
       )
 
       # - What route into teaching did you take?
@@ -406,10 +413,10 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       choose "Overseas recognition"
       click_on "Continue"
 
-      expect(session.reload.answers.qualification).to eq "overseas_recognition"
+      expect(journey_session.reload.answers.qualification).to eq "overseas_recognition"
 
       # - In which academic year did you you earn your qualified teacher status (QTS)?
-      expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{session.answers.qualification}"))
+      expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{journey_session.answers.qualification}"))
       expect(page).to have_text("2017 to 2018")
       expect(page).to have_text("2018 to 2019")
       expect(page).to have_text("2019 to 2020")
@@ -432,7 +439,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       choose "Yes"
       click_on "Continue"
 
-      expect(session.reload.answers.teaching_subject_now).to eql true
+      expect(journey_session.reload.answers.teaching_subject_now).to eql true
 
       expect(claim.eligibility.reload.itt_academic_year).to eql itt_year
     end
@@ -824,7 +831,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       lup_claim
     end
 
-    let!(:session) do
+    let!(:journey_session) do
       session = Journeys::AdditionalPaymentsForTeaching::Session.last
       session.answers.assign_attributes(
         attributes_for(
@@ -841,7 +848,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       jump_to_claim_journey_page(
         claim: claim,
         slug: "check-your-answers-part-one",
-        journey_session: session
+        journey_session:
       )
 
       # - Check your answers for eligibility
