@@ -7,7 +7,7 @@ module Journeys
 
       def eligibility
         @eligibility = if @claim.is_a?(CurrentClaim)
-          claim.eligible_eligibility
+          @claim.claims.first.eligibility
         else
           claim.eligibility
         end

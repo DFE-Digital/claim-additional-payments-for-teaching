@@ -96,19 +96,14 @@ class ClaimsController < BasePublicController
   end
 
   def claim_ineligible?
-    # FIXME RL: Once current claim is removed we'll be able to check the
-    # elgibility directly on the answers rather than requiring the shim so
-    # we can do `journey_session.answers.ineligible?` in the mean time we
-    # require this
-    if journey == Journeys::TeacherStudentLoanReimbursement
-      shim = Journeys::TeacherStudentLoanReimbursement::ClaimJourneySessionShim.new(
-        current_claim: current_claim,
-        journey_session: journey_session
-      )
-      Policies::StudentLoans::PolicyEligibilityChecker.new(answers: shim.answers).ineligible?
-    else
-      current_claim.ineligible?
-    end
+    journey::EligibilityChecker.new(journey_session: shim).ineligible?
+  end
+
+  def shim
+    @shim ||= journey::ClaimJourneySessionShim.new(
+      current_claim: current_claim,
+      journey_session: journey_session
+    )
   end
 
   def page_sequence
