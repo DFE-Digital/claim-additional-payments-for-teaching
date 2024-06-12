@@ -52,8 +52,11 @@ but you may need to re-authenticate every once in a while.
 4. Then run:
 
    ```shell
-   make review-aks get-cluster-credentials
+   make review-aks get-cluster-credentials PR_NUMBER=1
    ```
+
+   > You can pass in anything as the PR_NUMBER argument for this command; it
+   > doesn't even need to match a current PR.
 
 5. Assuming everything worked correctly, you should now be able to access the
    Kubernetes cluster using the `kubectl` command.
