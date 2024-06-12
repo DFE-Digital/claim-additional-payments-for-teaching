@@ -66,8 +66,8 @@ RSpec.describe Payroll::PaymentCsvRow do
               claim.national_insurance_number,
               "F",
               "Other",
-              "09/09/2019",
-              "15/09/2019",
+              "01/09/2019",
+              "30/09/2019",
               claim.date_of_birth.strftime("%d/%m/%Y"),
               claim.email_address,
               claim.address_line_1,
@@ -142,8 +142,8 @@ RSpec.describe Payroll::PaymentCsvRow do
               claim.national_insurance_number,
               "M",
               "Other",
-              "09/09/2019",
-              "15/09/2019",
+              "01/09/2019",
+              "30/09/2019",
               claim.date_of_birth.strftime("%d/%m/%Y"),
               claim.email_address,
               claim.address_line_1,
@@ -215,8 +215,8 @@ RSpec.describe Payroll::PaymentCsvRow do
               claim.national_insurance_number,
               "F",
               "Other",
-              "09/09/2019",
-              "15/09/2019",
+              "01/09/2019",
+              "30/09/2019",
               claim.date_of_birth.strftime("%d/%m/%Y"),
               claim.email_address,
               nil,
@@ -248,33 +248,11 @@ RSpec.describe Payroll::PaymentCsvRow do
     end
 
     describe "start and end dates" do
-      context "when the first of the month is a Friday" do
-        it "returns the date of the second Monday and Sunday" do
-          travel_to Date.parse "20 February 2019" do
-            row = CSV.parse(subject.to_s).first
-            expect(row[7]).to eq "11/02/2019"
-            expect(row[8]).to eq "17/02/2019"
-          end
-        end
-      end
-
-      context "when the first of the month is a Sunday" do
-        it "returns the date of the second Monday and Sunday" do
-          travel_to Date.parse "9 July 2040" do
-            row = CSV.parse(subject.to_s).first
-            expect(row[7]).to eq "09/07/2040"
-            expect(row[8]).to eq "15/07/2040"
-          end
-        end
-      end
-
-      context "when the first of the month is a Monday" do
-        it "returns the date of the second Monday and Sunday" do
-          travel_to Date.parse "1 June 2020" do
-            row = CSV.parse(subject.to_s).first
-            expect(row[7]).to eq "08/06/2020"
-            expect(row[8]).to eq "14/06/2020"
-          end
+      it "returns the first and last dates of the month" do
+        travel_to Date.parse "20 February 2019" do
+          row = CSV.parse(subject.to_s).first
+          expect(row[7]).to eq "01/02/2019"
+          expect(row[8]).to eq "28/02/2019"
         end
       end
     end
