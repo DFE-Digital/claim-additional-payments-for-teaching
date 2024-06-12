@@ -3,11 +3,11 @@
   <tbody class="govuk-table__body">
     <tr class="govuk-table__row">
       <th scope="row" class="govuk-table__header">Name</th>
-      <td class="govuk-table__cell"><%= current_claim.school.name %></th>
+      <td class="govuk-table__cell"><%= answers.current_school.name %></th>
     </tr>
     <tr class="govuk-table__row">
       <th scope="row" class="govuk-table__header">Address</th>
-      <td class="govuk-table__cell"><%= current_claim.school.address %></th>
+      <td class="govuk-table__cell"><%= answers.current_school.address %></th>
     </tr>
   </tbody>
 </table>
@@ -37,7 +37,7 @@
 </ul>
 
 <div class="govuk-!-padding-bottom-6">
-  <% if current_claim.eligibility.school_somewhere_else == false %>
+  <% if answers.school_somewhere_else == false %>
     <%= button_to "Change school", claim_path(current_journey_routing_name, "correct-school", claim: { change_school: true }), method: :patch, class: "govuk-button", role: :button, data: { module: "govuk-button" } %>
   <% else %>
     <%= link_to "Change school", claim_path(current_journey_routing_name, "current-school"), class: "govuk-button", role: "button", draggable: false, data: {module: "govuk-button"} %>

@@ -88,8 +88,6 @@ module Journeys
       # Even though we are inside the ECP namespace, this method can modify the
       # slug sequence of both LUP and ECP claims
       def slugs
-        ecp_claim = claim.for_policy(Policies::EarlyCareerPayments)
-
         SLUGS.dup.tap do |sequence|
           if !Journeys::AdditionalPaymentsForTeaching.configuration.teacher_id_enabled?
             sequence.delete("sign-in-or-continue")
@@ -152,7 +150,7 @@ module Journeys
 
           sequence.delete("induction-completed") unless induction_question_required?
 
-          if answers.induction_not_completed? && ecp_claim.eligibility.ecp_only_school?
+          if answers.induction_not_completed? && ecp_eligibility_checker.ecp_only_school?
             replace_ecp_only_induction_not_completed_slugs(sequence)
           end
 
@@ -229,7 +227,7 @@ module Journeys
       end
 
       def ecp_school_selected?
-        school = answers&.current_school || claim.eligibility.current_school
+        school = answers.current_school
         return false unless school
 
         Policies::EarlyCareerPayments::SchoolEligibility.new(school).eligible?

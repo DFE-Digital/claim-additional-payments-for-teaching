@@ -34,11 +34,6 @@ module Journeys
 
         journey_session.save!
 
-        # FIXME RL: Remove this once the current_school forms write their
-        # answers to the session
-        claim.eligibility.assign_attributes(current_school_id: nil)
-        claim.eligibility.save!
-
         true
       end
 

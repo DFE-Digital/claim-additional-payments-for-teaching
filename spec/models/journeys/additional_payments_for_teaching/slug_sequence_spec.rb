@@ -24,6 +24,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
     build(
       :additional_payments_answers,
       :submittable,
+      :ecp_eligible,
       logged_in_with_tid: logged_in_with_tid,
       details_check: details_check,
       dqt_teacher_status: dqt_teacher_status,
@@ -328,13 +329,17 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
     end
 
     context "when claim is ineligible" do
-      let(:journey_session) do
+      let(:eligibility) { build(:early_career_payments_eligibility, :ineligible) }
+      let(:eligibility_lup) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
+      let(:answers) do
         build(
-          :additional_payments_session,
-          answers: attributes_for(
-            :additional_payments_answers,
-            :ecp_ineligible
-          )
+          :additional_payments_answers,
+          :submittable,
+          :ecp_ineligible,
+          logged_in_with_tid: logged_in_with_tid,
+          details_check: details_check,
+          dqt_teacher_status: dqt_teacher_status,
+          qualifications_details_check: qualifications_details_check
         )
       end
 

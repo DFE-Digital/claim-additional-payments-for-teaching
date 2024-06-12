@@ -79,7 +79,7 @@ module Journeys
     end
 
     def lup_teacher_at_lup_school
-      answers.nqt_in_academic_year_after_itt == false && Policies::LevellingUpPremiumPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible?
+      answers.nqt_in_academic_year_after_itt == false && Policies::LevellingUpPremiumPayments::SchoolEligibility.new(answers.current_school).eligible?
     end
 
     def handle_trainee_teacher
