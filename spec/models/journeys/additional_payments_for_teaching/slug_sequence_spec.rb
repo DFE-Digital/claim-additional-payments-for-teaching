@@ -307,11 +307,13 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
     end
 
     context "when claim is eligible" do
-      let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
-      let(:answers) do
-        build(
-          :additional_payments_answers,
-          :ecp_eligible
+      let(:journey_session) do
+        create(
+          :additional_payments_session,
+          answers: attributes_for(
+            :additional_payments_answers,
+            :ecp_and_lup_eligible
+          )
         )
       end
 
@@ -321,8 +323,15 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
     end
 
     context "when claim is ineligible" do
-      let(:eligibility) { build(:early_career_payments_eligibility, :ineligible) }
-      let(:eligibility_lup) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
+      let(:journey_session) do
+        build(
+          :additional_payments_session,
+          answers: attributes_for(
+            :additional_payments_answers,
+            :ecp_ineligible
+          )
+        )
+      end
 
       it "includes the 'ineligible' slug" do
         expect(slug_sequence.slugs).to include("ineligible")

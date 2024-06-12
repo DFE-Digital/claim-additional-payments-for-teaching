@@ -93,10 +93,15 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::TeachingSubjectNowForm d
     end
 
     context "when teaching physics" do
-      let(:eligibility) do
-        create(
-          :early_career_payments_eligibility,
-          eligible_itt_subject: "physics"
+      let(:journey_session) { build(:additional_payments_session, answers:) }
+
+      let(:answers) do
+        build(
+          :additional_payments_answers,
+          attributes_for(
+            :additional_payments_answers,
+            eligible_itt_subject: "physics"
+          )
         )
       end
 
@@ -104,10 +109,15 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::TeachingSubjectNowForm d
     end
 
     context "when teaching chemistry" do
-      let(:eligibility) do
-        create(
-          :early_career_payments_eligibility,
-          eligible_itt_subject: "chemistry"
+      let(:journey_session) { build(:additional_payments_session, answers:) }
+
+      let(:answers) do
+        build(
+          :additional_payments_answers,
+          attributes_for(
+            :additional_payments_answers,
+            eligible_itt_subject: "chemistry"
+          )
         )
       end
 
@@ -115,10 +125,15 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::TeachingSubjectNowForm d
     end
 
     context "when teaching neither physics nor chemistry" do
-      let(:eligibility) do
-        create(
-          :early_career_payments_eligibility,
-          eligible_itt_subject: "mathematics"
+      let(:journey_session) { build(:additional_payments_session, answers:) }
+
+      let(:answers) do
+        build(
+          :additional_payments_answers,
+          attributes_for(
+            :additional_payments_answers,
+            eligible_itt_subject: "mathematics"
+          )
         )
       end
 

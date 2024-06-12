@@ -74,7 +74,7 @@ class ClaimsController < BasePublicController
       return redirect_to new_claim_path
     end
 
-    raise ActionController::RoutingError.new("Not Found") unless page_sequence.in_sequence?(params[:slug])
+    raise ActionController::RoutingError.new("Not Found for #{params[:slug]}") unless page_sequence.in_sequence?(params[:slug])
 
     redirect_to claim_path(current_journey_routing_name, next_required_slug) unless page_sequence.has_completed_journey_until?(params[:slug])
   end

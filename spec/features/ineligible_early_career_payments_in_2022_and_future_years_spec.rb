@@ -76,8 +76,11 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims by cohort" do
             choose subject_name
             click_on "Continue"
 
-            expect(claim.eligibility.reload.eligible_itt_subject).to eq scenario[:itt_subject]
-            expect(claim.eligibility).to be_ineligible
+            expect(journey_session.reload.answers.eligible_itt_subject).to eq scenario[:itt_subject]
+
+            policy_checker = Policies::EarlyCareerPayments::PolicyEligibilityChecker.new(answers: journey_session.reload.answers)
+
+            expect(policy_checker).to be_ineligible
           end
         end
       end

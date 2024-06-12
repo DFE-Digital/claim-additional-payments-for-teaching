@@ -56,6 +56,10 @@ FactoryBot.define do
       teaching_subject_now { true }
     end
 
+    trait :with_eligible_itt_subject do
+      eligible_itt_subject { "mathematics" }
+    end
+
     trait :submittable do
       with_personal_details
       with_email_details
@@ -67,6 +71,7 @@ FactoryBot.define do
       with_qualification
       with_itt_academic_year
       with_teaching_subject_now
+      with_eligible_itt_subject
     end
 
     trait :first_lup_claim_year do

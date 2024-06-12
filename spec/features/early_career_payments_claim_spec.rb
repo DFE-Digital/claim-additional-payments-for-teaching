@@ -341,6 +341,9 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
     scenario "when Assessment only" do
       session = Journeys::AdditionalPaymentsForTeaching::Session.last
+      session.answers.assign_attributes(current_school_id: school.id)
+      session.save!
+
       jump_to_claim_journey_page(
         claim: claim,
         slug: "qualification",
@@ -388,6 +391,9 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
     scenario "when Overseas recognition" do
       session = Journeys::AdditionalPaymentsForTeaching::Session.last
+      session.answers.assign_attributes(current_school_id: school.id)
+      session.save!
+
       jump_to_claim_journey_page(
         claim: claim,
         slug: "qualification",

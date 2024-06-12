@@ -10,9 +10,6 @@ module Journeys
 
         if reset_dependent_answers?
           journey_session.answers.assign_attributes(eligible_itt_subject: nil)
-          claim.update!(
-            eligibility_attributes: {eligible_itt_subject: nil}
-          )
         end
 
         journey_session.answers.assign_attributes(

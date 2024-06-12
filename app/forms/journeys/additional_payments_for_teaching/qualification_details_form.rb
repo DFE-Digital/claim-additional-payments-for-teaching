@@ -18,7 +18,7 @@ module Journeys
         # migrated the forms that set these attributes to write to the journey
         # session ansswers, so we need to set these values from the elgiibility
         # here.
-        journey_session.answers.eligible_itt_subject = claim.eligibility.eligible_itt_subject
+        journey_session.answers.eligible_degree_subject = claim.for_policy(Policies::LevellingUpPremiumPayments).eligibility.eligible_degree_subject
       end
 
       def save
@@ -41,7 +41,8 @@ module Journeys
           journey_session.answers.assign_attributes(
             qualification: answers.early_career_payments_dqt_teacher_record&.route_into_teaching || answers.qualification,
             itt_academic_year: answers.early_career_payments_dqt_teacher_record&.itt_academic_year_for_claim || answers.itt_academic_year,
-            eligible_degree_subject: answers.levelling_up_premium_payments_dqt_reacher_record&.eligible_degree_code? || answers.eligible_degree_subject
+            eligible_degree_subject: answers.levelling_up_premium_payments_dqt_reacher_record&.eligible_degree_code? || answers.eligible_degree_subject,
+            eligible_itt_subject: eligible_itt_subject_from_dqt || answers.eligible_itt_subject
           )
           claim.claims.each { |c| set_qualifications_from_dqt_record(c.eligibility) }
         else
@@ -50,7 +51,8 @@ module Journeys
           journey_session.answers.assign_attributes(
             qualification: nil,
             itt_academic_year: nil,
-            eligible_degree_subject: nil
+            eligible_degree_subject: nil,
+            eligible_itt_subject: nil
           )
 
           claim.claims.each { |c| set_nil_qualifications(c.eligibility) }
@@ -92,6 +94,23 @@ module Journeys
       end
 
       private
+
+      def eligible_itt_subject_from_dqt
+        dqt_subjects = [
+          answers.early_career_payments_dqt_teacher_record&.eligible_itt_subject_for_claim,
+          answers.levelling_up_premium_payments_dqt_reacher_record&.eligible_itt_subject_for_claim
+        ].compact
+
+        return nil if dqt_subjects.empty?
+
+        not_none_of_the_above = dqt_subjects.reject { |subject| subject == :none_of_the_above }
+
+        if not_none_of_the_above.any?
+          not_none_of_the_above.first
+        else
+          :none_of_the_above
+        end
+      end
 
       # Current claim delegates missing methods to ecp eligibility by default
       # so we'll assume that's the "main" dqt record

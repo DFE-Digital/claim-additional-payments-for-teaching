@@ -13,8 +13,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
       answers: {
         dqt_teacher_status: dqt_teacher_status,
         qualification: "postgraduate_itt",
-        itt_academic_year: itt_academic_year,
-        eligible_degree_subject: false
+        itt_academic_year: itt_academic_year
       }
     )
   end
@@ -245,6 +244,18 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
 
         let(:dqt_teacher_status) { {} }
 
+        let(:journey_session) do
+          create(
+            :additional_payments_session,
+            answers: {
+              dqt_teacher_status: dqt_teacher_status,
+              qualification: "postgraduate_itt",
+              itt_academic_year: itt_academic_year,
+              eligible_degree_subject: false
+            }
+          )
+        end
+
         it "sets the qualifications_details_check to `false`" do
           expect { form.save }.to(
             change do
@@ -346,6 +357,18 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
             }
           end
 
+          let(:journey_session) do
+            create(
+              :additional_payments_session,
+              answers: {
+                dqt_teacher_status: dqt_teacher_status,
+                qualification: "postgraduate_itt",
+                itt_academic_year: itt_academic_year,
+                eligible_degree_subject: false
+              }
+            )
+          end
+
           it "sets the qualifications_details_check to `true`" do
             expect { form.save }.to(
               change do
@@ -443,6 +466,85 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
               change { journey_session.reload.answers.eligible_degree_subject }
             )
           end
+        end
+      end
+
+      context "when itt_subject from DQT is outside permitted list" do
+        let(:params) do
+          ActionController::Parameters.new(
+            claim: {qualifications_details_check: true}
+          )
+        end
+
+        let(:dqt_teacher_status) do
+          {
+            trn: 123456,
+            ni_number: "AB123123A",
+            name: "Rick Sanchez",
+            dob: "66-06-06T00:00:00",
+            active_alert: false,
+            state: 0,
+            state_name: "Active",
+            qualified_teacher_status: {
+              name: "Qualified teacher (trained)",
+              qts_date: "2018-12-01",
+              state: 0,
+              state_name: "Active"
+            },
+            induction: {
+              start_date: "2021-07-01T00:00:00Z",
+              completion_date: "2021-07-05T00:00:00Z",
+              status: "Pass",
+              state: 0,
+              state_name: "Active"
+            },
+            initial_teacher_training: {
+              programme_start_date: "666-06-06T00:00:00",
+              programme_end_date: "2021-07-04T00:00:00Z",
+              programme_type: "Overseas Trained Teacher Programme",
+              result: "Pass",
+              subject1: "geography",
+              subject1_code: "ABC",
+              subject2: nil,
+              subject2_code: nil,
+              subject3: nil,
+              subject3_code: nil,
+              qualification: "BA (Hons)",
+              state: 0,
+              state_name: "Active"
+            },
+            qualifications: [
+              {
+                he_subject1_code: "ABC"
+              }
+            ]
+          }
+        end
+
+        it "sets eligible_itt_subject to none_of_the_above" do
+          expect { form.save }.to(
+            change do
+              journey_session.reload.answers.eligible_itt_subject
+            end.from(nil).to("none_of_the_above")
+          )
+        end
+      end
+
+      context "when no itt_subject from DQT" do
+        let(:params) do
+          ActionController::Parameters.new(
+            claim: {qualifications_details_check: true}
+          )
+        end
+
+        let(:dqt_teacher_status) { {} }
+
+        it "makes eligible_itt_subject remain as nil" do
+          expect { form.save }.not_to(
+            change do
+              journey_session.reload.answers.eligible_itt_subject
+            end.from(nil)
+          )
         end
       end
     end

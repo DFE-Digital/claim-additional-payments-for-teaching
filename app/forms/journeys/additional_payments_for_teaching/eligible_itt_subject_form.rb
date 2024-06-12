@@ -33,23 +33,24 @@ module Journeys
       def save
         return false unless valid?
 
-        # FIXME RL: Once this method writes to the journey session answers we
-        # update the initializer in
-        # AdditionalPaymentsForTeaching::QualificationDetailsForm
-        # and update
-        # QualificationForm#save to not reset eligible_itt_subject subject on
-        # the claim, as it's no longer needed (still keep resetting it on the
-        # answers) (and remove this comment!)
-        # Also upudate the IttAcademicYearForm to no longer reset the
-        # eligible_itt_subject on the claim as it's not needed once this form
-        # writes to the answers
-        claim.assign_attributes(
-          eligibility_attributes: {eligible_itt_subject: eligible_itt_subject}
-        )
-        claim.reset_eligibility_dependent_answers(["eligible_itt_subject"])
-        claim.save!
+        if eligible_itt_subject_changed? && !journey_session.answers.qualifications_details_check
+          journey_session.answers.assign_attributes(
+            teaching_subject_now: nil,
+            eligible_degree_subject: nil
+          )
+        end
 
-        true
+        journey_session.answers.assign_attributes(
+          eligible_itt_subject:
+        )
+
+        journey_session.save!
+      end
+
+      private
+
+      def eligible_itt_subject_changed?
+        journey_session.answers.eligible_itt_subject != eligible_itt_subject
       end
     end
   end

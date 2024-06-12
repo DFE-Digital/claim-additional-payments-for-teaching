@@ -78,7 +78,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationForm, type:
         claim.eligibility.update!(eligible_itt_subject: "mathematics")
 
         expect { expect(form.save).to be true }.to(
-          change { claim.eligibility.reload.eligible_itt_subject }
+          change { journey_session.reload.answers.eligible_itt_subject }
           .from("mathematics").to(nil)
           .and(
             change { journey_session.reload.answers.eligible_itt_subject }
@@ -99,7 +99,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationForm, type:
         journey_session.save!
 
         expect { expect(form.save).to be true }.to(
-          not_change { claim.eligibility.reload.eligible_itt_subject }
+          not_change { journey_session.reload.answers.eligible_itt_subject }
           .and(
             not_change { journey_session.reload.answers.eligible_itt_subject }
           ).and(
