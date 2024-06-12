@@ -52,7 +52,7 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     expect(page).to have_text("We have set your reminder")
 
     mail = ReminderMailer.reminder_set(Reminder.order(:created_at).last)
-    expect(mail[:template_id].decoded).to eq "0dc80ba9-adae-43cd-98bf-58882ee401c3"
+    expect(mail.template_id).to eq "0dc80ba9-adae-43cd-98bf-58882ee401c3"
   end
 
   scenario "LUP school with non-LUP ITT subject but eligible degree" do
@@ -87,7 +87,7 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     expect(page).to have_text("We have set your reminder")
 
     mail = ReminderMailer.reminder_set(Reminder.order(:created_at).last)
-    expect(mail[:template_id].decoded).to eq "0dc80ba9-adae-43cd-98bf-58882ee401c3"
+    expect(mail.template_id).to eq "0dc80ba9-adae-43cd-98bf-58882ee401c3"
   end
 
   scenario "LUP school with non-LUP ITT subject and no eligible degree" do

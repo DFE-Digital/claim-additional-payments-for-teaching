@@ -47,7 +47,7 @@ RSpec.describe ClaimMailer, type: :mailer do
 
     it "includes a personalisation key for 'first_name'" do
       expect(mail[:personalisation].decoded).to include("{:first_name=>\"Jo\"")
-      expect(mail.body.encoded).to be_empty
+      expect(mail.body).to be_empty
     end
 
     it "includes a personalisation key for 'support_email_address'" do
@@ -69,19 +69,19 @@ RSpec.describe ClaimMailer, type: :mailer do
 
         context "when EarlyCareerPayments", if: policy == Policies::EarlyCareerPayments do
           it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq "cb319af7-a769-42e4-8f01-5cbb9fc24846"
+            expect(mail.template_id).to eq "cb319af7-a769-42e4-8f01-5cbb9fc24846"
           end
         end
 
         context "when LevellingUpPremiumPayments", if: policy == Policies::LevellingUpPremiumPayments do
           it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq "0158e1c4-ffa2-4b5e-86f9-0dead4e68587"
+            expect(mail.template_id).to eq "0158e1c4-ffa2-4b5e-86f9-0dead4e68587"
           end
         end
 
         context "when StudentLoans", if: policy == Policies::StudentLoans do
           it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq "f9e39fcd-301a-4427-9159-6831fd484e39"
+            expect(mail.template_id).to eq "f9e39fcd-301a-4427-9159-6831fd484e39"
           end
         end
       end
@@ -94,19 +94,19 @@ RSpec.describe ClaimMailer, type: :mailer do
 
         context "when EarlyCareerPayments", if: policy == Policies::EarlyCareerPayments do
           it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq "3974db1c-c7dd-44cf-97b9-bb96d211a996"
+            expect(mail.template_id).to eq "3974db1c-c7dd-44cf-97b9-bb96d211a996"
           end
         end
 
         context "when LevellingUpPremiumPayments", if: policy == Policies::LevellingUpPremiumPayments do
           it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq "78e4bf4a-5d4b-4328-9384-116c08183a77"
+            expect(mail.template_id).to eq "78e4bf4a-5d4b-4328-9384-116c08183a77"
           end
         end
 
         context "when StudentLoans", if: policy == Policies::StudentLoans do
           it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq "2032be01-6aee-4a1a-81ce-cf91e09de8d7"
+            expect(mail.template_id).to eq "2032be01-6aee-4a1a-81ce-cf91e09de8d7"
           end
         end
       end
@@ -142,7 +142,7 @@ RSpec.describe ClaimMailer, type: :mailer do
           let(:all_expected_keys) { expected_common_keys.merge(expected_rejected_reasons_keys) }
 
           it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq(expected_template_id)
+            expect(mail.template_id).to eq(expected_template_id)
           end
 
           it "passes common fields as personalisation keys" do
@@ -185,19 +185,19 @@ RSpec.describe ClaimMailer, type: :mailer do
 
         context "when EarlyCareerPayments", if: policy == Policies::EarlyCareerPayments do
           it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq "0ef1e702-ea64-43a5-a084-330f2f51836e"
+            expect(mail.template_id).to eq "0ef1e702-ea64-43a5-a084-330f2f51836e"
           end
         end
 
         context "when LevellingUpPremiumPayments", if: policy == Policies::LevellingUpPremiumPayments do
           it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq "a10322ed-7829-44b2-95c6-d5cc686d2c04"
+            expect(mail.template_id).to eq "a10322ed-7829-44b2-95c6-d5cc686d2c04"
           end
         end
 
         context "when StudentLoans", if: policy == Policies::StudentLoans do
           it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq "c43bac94-67ff-4440-8f26-506eb4c232e8"
+            expect(mail.template_id).to eq "c43bac94-67ff-4440-8f26-506eb4c232e8"
           end
         end
       end
@@ -255,7 +255,7 @@ RSpec.describe ClaimMailer, type: :mailer do
   describe "#email_verification" do
     let(:mail) { ClaimMailer.email_verification(claim, one_time_password) }
     let(:one_time_password) { 123124 }
-    let(:claim) { build(:claim, policy: policy, first_name: "Ellie") }
+    let(:claim) { build(:claim, policy: policy, first_name: "Ellie", email_address: "test@test.com") }
 
     before { create(:journey_configuration, policy.to_s.underscore) }
 
@@ -264,7 +264,7 @@ RSpec.describe ClaimMailer, type: :mailer do
 
       it "has personalisation keys for: one time password, validity_duration,first_name and support_email_address" do
         expect(mail[:personalisation].decoded).to eq("{:email_subject=>\"Early-career payment email verification\", :first_name=>\"Ellie\", :one_time_password=>123124, :support_email_address=>\"earlycareerteacherpayments@digital.education.gov.uk\", :validity_duration=>\"15 minutes\"}")
-        expect(mail.body.encoded).to be_empty
+        expect(mail.body).to be_empty
       end
     end
 
@@ -273,7 +273,7 @@ RSpec.describe ClaimMailer, type: :mailer do
 
       it "has personalisation keys for: one time password, validity_duration,first_name and support_email_address" do
         expect(mail[:personalisation].decoded).to eq("{:email_subject=>\"Levelling up premium payment email verification\", :first_name=>\"Ellie\", :one_time_password=>123124, :support_email_address=>\"levellinguppremiumpayments@digital.education.gov.uk\", :validity_duration=>\"15 minutes\"}")
-        expect(mail.body.encoded).to be_empty
+        expect(mail.body).to be_empty
       end
     end
   end
