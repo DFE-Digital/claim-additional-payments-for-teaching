@@ -14,12 +14,12 @@ module Journeys
             {
               selected_policy: journey_session.answers.selected_policy,
               nqt_in_academic_year_after_itt: journey_session.answers.nqt_in_academic_year_after_itt,
-              employed_as_supply_teacher: employed_as_supply_teacher,
+              employed_as_supply_teacher: journey_session.answers.employed_as_supply_teacher,
               qualification: journey_session.answers.qualification,
               has_entire_term_contract: journey_session.answers.has_entire_term_contract,
               employed_directly: journey_session.answers.employed_directly,
-              subject_to_disciplinary_action: subject_to_disciplinary_action,
-              subject_to_formal_performance_action: subject_to_formal_performance_action,
+              subject_to_disciplinary_action: journey_session.answers.subject_to_disciplinary_action,
+              subject_to_formal_performance_action: journey_session.answers.subject_to_formal_performance_action,
               eligible_itt_subject: journey_session.answers.eligible_itt_subject,
               eligible_degree_subject: journey_session.answers.eligible_degree_subject,
               teaching_subject_now: journey_session.answers.teaching_subject_now,
@@ -30,20 +30,6 @@ module Journeys
             }
           )
         )
-      end
-
-      private
-
-      def employed_as_supply_teacher
-        journey_session.answers.employed_as_supply_teacher
-      end
-
-      def subject_to_disciplinary_action
-        journey_session.answers.subject_to_disciplinary_action || try_eligibility(:subject_to_disciplinary_action)
-      end
-
-      def subject_to_formal_performance_action
-        journey_session.answers.subject_to_formal_performance_action || try_eligibility(:subject_to_formal_performance_action)
       end
     end
   end
