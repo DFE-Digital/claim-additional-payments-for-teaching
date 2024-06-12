@@ -41,17 +41,11 @@ module Payroll
     end
 
     def start_date
-      second_monday_of_month.strftime(DATE_FORMAT)
+      Date.today.at_beginning_of_month.strftime(DATE_FORMAT)
     end
 
     def end_date
-      second_monday_of_month.end_of_week.strftime(DATE_FORMAT)
-    end
-
-    def second_monday_of_month
-      day = Date.today.at_beginning_of_month
-      day += 1.days until day.monday?
-      day.next_week
+      Date.today.at_end_of_month.strftime(DATE_FORMAT)
     end
 
     def date_of_birth
