@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Ineligible Levelling up premium payments claims" do
   let(:eligibility) { Policies::LevellingUpPremiumPayments::Eligibility.order(:created_at).last }
+  let(:journey_session) { Journeys::AdditionalPaymentsForTeaching::Session.last }
 
   before { create(:journey_configuration, :additional_payments) }
 
@@ -15,10 +16,15 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
-    expect(eligibility.ineligible?).to be false
+    expect(
+      eligibility_checker(journey_session, eligibility).ineligible?
+    ).to be false
+
     choose_school school
     click_on "Continue"
-    expect(eligibility.reload.ineligible?).to be true
+    expect(
+      eligibility_checker(journey_session, eligibility).ineligible?
+    ).to be true
 
     expect(page).not_to have_text("The school you have selected is not eligible")
   end
@@ -33,10 +39,14 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
-    expect(eligibility.ineligible?).to be false
+    expect(
+      eligibility_checker(journey_session, eligibility).ineligible?
+    ).to be false
     choose_school school
     click_on "Continue"
-    expect(eligibility.reload.ineligible?).to be true
+    expect(
+      eligibility_checker(journey_session, eligibility).ineligible?
+    ).to be true
 
     expect(page).to have_text("The school you have selected is not eligible")
   end
@@ -99,31 +109,14 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
 
     choose "No"
 
-    # Not sure if we really need to check the contents of the db here, surely
-    # the page content is enough? Doing so anyway for compatibility with the
-    # tests on master
-    journey_session = Journeys::AdditionalPaymentsForTeaching::Session.last
-
-    shim = Journeys::AdditionalPaymentsForTeaching::ClaimJourneySessionShim.new(
-      journey_session: journey_session,
-      current_claim: CurrentClaim.new(claims: [eligibility.reload.claim])
-    )
-
-    checker = Policies::LevellingUpPremiumPayments::PolicyEligibilityChecker.new(
-      answers: shim.answers
-    )
-    expect(checker.ineligible?).to be false
+    expect(
+      eligibility_checker(journey_session, eligibility).ineligible?
+    ).to be false
     click_on "Continue"
 
-    shim = Journeys::AdditionalPaymentsForTeaching::ClaimJourneySessionShim.new(
-      journey_session: journey_session.reload,
-      current_claim: CurrentClaim.new(claims: [eligibility.reload.claim])
-    )
-
-    checker = Policies::LevellingUpPremiumPayments::PolicyEligibilityChecker.new(
-      answers: shim.answers
-    )
-    expect(checker.ineligible?).to be true
+    expect(
+      eligibility_checker(journey_session, eligibility).ineligible?
+    ).to be true
 
     expect(page).to have_text(I18n.t("additional_payments.ineligible.heading"))
     expect(page).to have_css("div#lack_both_valid_itt_subject_and_degree")
@@ -135,16 +128,21 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
     choose "Yes"
     click_on "Continue"
 
+    expect(
+      eligibility_checker(journey_session, eligibility)
+    ).not_to be_ineligible
+
+    expect(page).to have_current_path("/#{Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME}/teaching-subject-now")
+  end
+
+  def eligibility_checker(journey_session, eligibility)
     shim = Journeys::AdditionalPaymentsForTeaching::ClaimJourneySessionShim.new(
       journey_session: journey_session.reload,
       current_claim: CurrentClaim.new(claims: [eligibility.reload.claim])
     )
 
-    checker = Policies::LevellingUpPremiumPayments::PolicyEligibilityChecker.new(
+    Policies::LevellingUpPremiumPayments::PolicyEligibilityChecker.new(
       answers: shim.answers
     )
-    expect(checker).not_to be_ineligible
-
-    expect(page).to have_current_path("/#{Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME}/teaching-subject-now")
   end
 end

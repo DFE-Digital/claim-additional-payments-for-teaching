@@ -304,7 +304,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
   scenario "currently works at a different school to the claim school" do
     different_school = create(:school, :student_loans_eligible)
-    claim = start_student_loans_claim
+    start_student_loans_claim
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
 
     choose_school school
@@ -320,7 +320,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     choose different_school.name
     click_on "Continue"
 
-    expect(claim.eligibility.reload.current_school).to eql different_school
+    expect(session.reload.answers.current_school).to eql different_school
 
     expect(page).to have_text(leadership_position_question)
   end

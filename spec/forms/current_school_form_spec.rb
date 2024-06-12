@@ -18,7 +18,7 @@ RSpec.describe CurrentSchoolForm do
 
     subject(:form) do
       described_class.new(
-        claim: current_claim,
+        claim: CurrentClaim.new(claims: [build(:claim)]),
         journey_session: journey_session,
         journey: journey,
         params: params
@@ -65,12 +65,14 @@ RSpec.describe CurrentSchoolForm do
         end
       end
 
-      context "claim eligibility DOES have a current school" do
+      context "answers DOES have a current school" do
         let(:school) { create(:school, :eligible_for_journey, journey: journey) }
 
-        let(:current_claim) do
-          claims = journey::POLICIES.map { |policy| create(:claim, policy: policy, eligibility_attributes: {current_school: school}) }
-          CurrentClaim.new(claims: claims)
+        let(:journey_session) do
+          create(
+            :"#{journey::I18N_NAMESPACE}_session",
+            answers: {current_school_id: school.id}
+          )
         end
 
         it "returns school name" do
@@ -88,42 +90,6 @@ RSpec.describe CurrentSchoolForm do
           expect { form.save }.to change { journey_session.reload.answers.current_school_id }.to(school.id)
         end
 
-        context "claim eligibility didn't have current_school" do
-          let(:current_claim) do
-            claims = journey::POLICIES.map { |policy| create(:claim, policy: policy) }
-            CurrentClaim.new(claims: claims)
-          end
-
-          it "updates the current_school on claim eligibility" do
-            expect(form.save).to be true
-
-            current_claim.claims.each do |claim|
-              eligibility = claim.eligibility.reload
-
-              expect(eligibility.current_school_id).to eq school.id
-            end
-          end
-        end
-
-        context "claim eligibility already had a current_school" do
-          let(:previous_school) { create(:school, :eligible_for_journey, journey: journey) }
-
-          let(:current_claim) do
-            claims = journey::POLICIES.map { |policy| create(:claim, policy: policy, eligibility_attributes: {current_school_id: previous_school.id}) }
-            CurrentClaim.new(claims: claims)
-          end
-
-          it "updates the current_school on claim eligibility" do
-            expect(form.save).to be true
-
-            current_claim.claims.each do |claim|
-              eligibility = claim.eligibility.reload
-
-              expect(eligibility.current_school_id).to eq school.id
-            end
-          end
-        end
-
         context "submitted current_school_id is closed - super edge case school closed after loading form" do
           let(:school) { create(:school, :eligible_for_journey, :closed, journey: journey) }
 
@@ -139,14 +105,6 @@ RSpec.describe CurrentSchoolForm do
           it "does not save and adds error to form" do
             expect(form.save).to be false
             expect(form.errors[:current_school_id]).to eq ["School not found"]
-          end
-        end
-
-        context "claim model fails validation unexpectedly" do
-          it "raises an error" do
-            allow(current_claim).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
-
-            expect { form.save }.to raise_error(ActiveRecord::RecordInvalid)
           end
         end
       end

@@ -167,6 +167,10 @@ FactoryBot.define do
       employed_directly { false }
     end
 
+    trait :sufficient_teaching do
+      teaching_subject_now { true }
+    end
+
     trait :insufficient_teaching do
       teaching_subject_now { false }
     end

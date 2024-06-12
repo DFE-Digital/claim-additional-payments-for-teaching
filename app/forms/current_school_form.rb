@@ -17,7 +17,6 @@ class CurrentSchoolForm < Form
 
     journey_session.answers.assign_attributes(current_school_id:)
     journey_session.save!
-    update!("eligibility_attributes" => {"current_school_id" => current_school_id})
   end
 
   delegate :name, to: :current_school, prefix: true, allow_nil: true

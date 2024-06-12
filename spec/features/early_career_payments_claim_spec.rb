@@ -327,35 +327,34 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     let!(:claim) do
       claim = start_early_career_payments_claim
       claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
-      claim.eligibility.update!(current_school: school)
       claim
     end
 
     let!(:lup_claim) do
       lup_claim = Claim.by_policy(Policies::LevellingUpPremiumPayments).order(:created_at).last
       lup_claim.eligibility.update!(attributes_for(:levelling_up_premium_payments_eligibility, :eligible))
-      lup_claim.eligibility.update!(current_school: school)
       lup_claim
     end
 
     let!(:journey_session) do
-      session = Journeys::AdditionalPaymentsForTeaching::Session.last
-      session.answers.assign_attributes(
+      journey_session = Journeys::AdditionalPaymentsForTeaching::Session.last
+      journey_session.answers.assign_attributes(
         attributes_for(
           :additional_payments_answers,
           :lup_eligible,
+          :ecp_and_lup_eligible,
           current_school_id: school.id
         )
       )
-      session.save!
-      session
+      journey_session.save!
+      journey_session
     end
 
     scenario "when Assessment only" do
       jump_to_claim_journey_page(
         claim: claim,
         slug: "qualification",
-        journey_session:
+        journey_session: journey_session
       )
 
       # - What route into teaching did you take?

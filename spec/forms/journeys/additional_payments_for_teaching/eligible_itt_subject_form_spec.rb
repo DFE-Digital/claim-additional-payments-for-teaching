@@ -17,7 +17,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
       attributes_for(
         :additional_payments_answers,
         trainee_teacher,
-        itt_academic_year: itt_academic_year
+        itt_academic_year: itt_academic_year,
+        current_school_id: create(:school, :early_career_payments_eligible).id
       )
     )
   end

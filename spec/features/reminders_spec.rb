@@ -19,8 +19,7 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           claim.eligibility.update!(
             attributes_for(
               :early_career_payments_eligibility,
-              :eligible,
-              current_school_id: school.id
+              :eligible
             )
           )
 
@@ -108,8 +107,7 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
             attributes_for(
               :early_career_payments_eligibility,
               :eligible,
-              eligible_itt_subject: args[:subject],
-              current_school_id: school.id
+              eligible_itt_subject: args[:subject]
             )
           )
 
