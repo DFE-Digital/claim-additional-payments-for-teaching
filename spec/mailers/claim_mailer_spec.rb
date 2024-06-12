@@ -47,7 +47,7 @@ RSpec.describe ClaimMailer, type: :mailer do
 
     it "includes a personalisation key for 'first_name'" do
       expect(mail[:personalisation].decoded).to include("{:first_name=>\"Jo\"")
-      expect(mail.body.encoded).to be_empty
+      expect(mail.body).to be_empty
     end
 
     it "includes a personalisation key for 'support_email_address'" do
@@ -255,7 +255,7 @@ RSpec.describe ClaimMailer, type: :mailer do
   describe "#email_verification" do
     let(:mail) { ClaimMailer.email_verification(claim, one_time_password) }
     let(:one_time_password) { 123124 }
-    let(:claim) { build(:claim, policy: policy, first_name: "Ellie") }
+    let(:claim) { build(:claim, policy: policy, first_name: "Ellie", email_address: "test@test.com") }
 
     before { create(:journey_configuration, policy.to_s.underscore) }
 
@@ -264,7 +264,7 @@ RSpec.describe ClaimMailer, type: :mailer do
 
       it "has personalisation keys for: one time password, validity_duration,first_name and support_email_address" do
         expect(mail[:personalisation].decoded).to eq("{:email_subject=>\"Early-career payment email verification\", :first_name=>\"Ellie\", :one_time_password=>123124, :support_email_address=>\"earlycareerteacherpayments@digital.education.gov.uk\", :validity_duration=>\"15 minutes\"}")
-        expect(mail.body.encoded).to be_empty
+        expect(mail.body).to be_empty
       end
     end
 
@@ -273,7 +273,7 @@ RSpec.describe ClaimMailer, type: :mailer do
 
       it "has personalisation keys for: one time password, validity_duration,first_name and support_email_address" do
         expect(mail[:personalisation].decoded).to eq("{:email_subject=>\"Levelling up premium payment email verification\", :first_name=>\"Ellie\", :one_time_password=>123124, :support_email_address=>\"levellinguppremiumpayments@digital.education.gov.uk\", :validity_duration=>\"15 minutes\"}")
-        expect(mail.body.encoded).to be_empty
+        expect(mail.body).to be_empty
       end
     end
   end
