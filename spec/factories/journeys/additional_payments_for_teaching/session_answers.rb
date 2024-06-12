@@ -52,6 +52,10 @@ FactoryBot.define do
       end
     end
 
+    trait :with_teaching_subject_now do
+      teaching_subject_now { true }
+    end
+
     trait :submittable do
       with_personal_details
       with_email_details
@@ -62,6 +66,7 @@ FactoryBot.define do
       with_qualification_details_check
       with_qualification
       with_itt_academic_year
+      with_teaching_subject_now
     end
 
     trait :first_lup_claim_year do

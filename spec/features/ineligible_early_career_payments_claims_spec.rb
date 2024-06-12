@@ -357,7 +357,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
     choose "No"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.teaching_subject_now).to eql false
+    expect(session.reload.answers.teaching_subject_now).to eql false
 
     expect(page).to have_text(I18n.t("additional_payments.ineligible.heading"))
     expect(page).to have_css("div#would_be_eligible_for_ecp_only_except_for_insufficient_teaching")
