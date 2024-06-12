@@ -15,7 +15,7 @@
   <% pagy.series.each do |item| %>
     <% if item.is_a?(Integer) %>
       <li class="govuk-pagination__item">
-        <%== link.call(item, item, "class=\"govuk-link govuk-pagination__link\" aria-label=\"Page #{item}\"") %>
+        <%== link.call(item, item, classes: "govuk-link govuk-pagination__link", aria_label: "Page #{item}") %>
       </li>
     <% elsif item.is_a?(String) %>
         <li class="govuk-pagination__item govuk-pagination__item--current">
