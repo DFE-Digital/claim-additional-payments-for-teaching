@@ -50,7 +50,8 @@ class ClaimJourneySessionShim
       mobile_check: journey_session.answers.mobile_check,
       qualifications_details_check: journey_session.answers.qualifications_details_check,
       has_student_loan: has_student_loan,
-      student_loan_plan: student_loan_plan
+      student_loan_plan: student_loan_plan,
+      submitted_using_slc_data: current_claim.submitted_using_slc_data
     }
   end
 

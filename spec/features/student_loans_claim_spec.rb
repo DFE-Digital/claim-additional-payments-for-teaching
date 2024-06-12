@@ -230,6 +230,9 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(claim.postgraduate_masters_loan).to be_nil
 
       fill_in_remaining_personal_details_and_submit
+
+      claim = Claim.submitted.order(:created_at).last
+      expect(claim.submitted_using_slc_data).to eql(true)
     end
 
     scenario "Teacher claims back student loan repayments with javascript #{js_status} (no SLC data present)", js: javascript_enabled do
