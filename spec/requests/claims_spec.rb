@@ -217,8 +217,8 @@ RSpec.describe "Claims", type: :request do
         end
 
         it "updates the student loan details" do
-          expect { request }.to change { in_progress_claim.reload.has_student_loan }
-            .and change { in_progress_claim.student_loan_plan }
+          expect { request }.to change { journey_session.reload.answers.has_student_loan }
+            .and change { journey_session.reload.answers.student_loan_plan }
         end
       end
 
@@ -264,8 +264,11 @@ RSpec.describe "Claims", type: :request do
             end
 
             it "updates the student loan details" do
-              expect { request }.to change { in_progress_claim.reload.has_student_loan }
-                .and change { in_progress_claim.student_loan_plan }
+              expect { request }.to(
+                change { journey_session.reload.answers.has_student_loan }.and(
+                  change { journey_session.reload.answers.student_loan_plan }
+                )
+              )
             end
           end
 
@@ -288,8 +291,11 @@ RSpec.describe "Claims", type: :request do
             end
 
             it "does not update the student loan details" do
-              expect { request }.to not_change { in_progress_claim.reload.has_student_loan }
-                .and not_change { in_progress_claim.student_loan_plan }
+              expect { request }.to(
+                not_change { journey_session.reload.answers.has_student_loan }.and(
+                  not_change { journey_session.reload.answers.student_loan_plan }
+                )
+              )
             end
           end
         end

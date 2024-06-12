@@ -102,15 +102,7 @@ module ClaimsFormCallbacks
   end
 
   def retrieve_student_loan_details
-    # FIXME RL: The ClaimStudentLoanDetailsUpdater is called from a
-    # background job that runs against submitted claims making it tricky to
-    # pass in the journey_session.answers, so we set the attributes on the
-    # current_claim from the session answers here.
-    # To be addressed in
-    # https://dfedigital.atlassian.net.mcas.ms/browse/CAPT-1697
-    current_claim.national_insurance_number = journey_session.answers.national_insurance_number
-    current_claim.date_of_birth = journey_session.answers.date_of_birth
-    ClaimStudentLoanDetailsUpdater.call(current_claim)
+    journey::AnswersStudentLoansDetailsUpdater.call(journey_session)
   end
 
   def hmrc_api_validation_attempted?

@@ -7,11 +7,6 @@ RSpec.describe PersonalDetailsForm, type: :model do
       create(:journey_configuration, :additional_payments)
     }
 
-    let(:current_claim) do
-      claims = journey::POLICIES.map { |policy| create(:claim, policy: policy) }
-      CurrentClaim.new(claims: claims)
-    end
-
     let(:journey_session) do
       build(
         :"#{journey::I18N_NAMESPACE}_session",
@@ -29,7 +24,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
     subject(:form) do
       described_class.new(
-        claim: current_claim,
+        claim: CurrentClaim.new(claims: [build(:claim)]),
         journey_session: journey_session,
         journey: journey,
         params: ActionController::Parameters.new(slug:, claim: params)
@@ -383,11 +378,6 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
           expect(answers.has_student_loan).to be nil
           expect(answers.student_loan_plan).to be nil
-
-          current_claim.claims.each do |claim|
-            expect(claim.has_student_loan).to be nil
-            expect(claim.student_loan_plan).to be nil
-          end
         end
       end
     end
@@ -413,10 +403,6 @@ RSpec.describe PersonalDetailsForm, type: :model do
       end
 
       before do
-        current_claim.claims.each do |claim|
-          claim.eligibility.update!(student_loan_repayment_amount: 2000)
-        end
-
         journey_session.answers.assign_attributes(
           student_loan_repayment_amount: 2000
         )
@@ -430,10 +416,6 @@ RSpec.describe PersonalDetailsForm, type: :model do
         answers = journey_session.answers
 
         expect(answers.student_loan_repayment_amount).to be nil
-
-        current_claim.claims.each do |claim|
-          expect(claim.eligibility.student_loan_repayment_amount).to be nil
-        end
       end
     end
   end

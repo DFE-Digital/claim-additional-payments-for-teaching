@@ -41,6 +41,7 @@ module Journeys
     attribute :dqt_teacher_status, default: {}
     attribute :has_student_loan, :boolean
     attribute :student_loan_plan, :string
+    attribute :submitted_using_slc_data, :boolean
     attribute :sent_one_time_password_at, :datetime
     attribute :answered, default: []
 
@@ -88,6 +89,10 @@ module Journeys
 
     def qualifications_details_check?
       !!qualifications_details_check
+    end
+
+    def has_student_loan?
+      !!has_student_loan
     end
   end
 end
