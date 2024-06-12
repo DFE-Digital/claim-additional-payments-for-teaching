@@ -69,19 +69,19 @@ RSpec.describe ClaimMailer, type: :mailer do
 
         context "when EarlyCareerPayments", if: policy == Policies::EarlyCareerPayments do
           it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq "cb319af7-a769-42e4-8f01-5cbb9fc24846"
+            expect(mail.template_id).to eq "cb319af7-a769-42e4-8f01-5cbb9fc24846"
           end
         end
 
         context "when LevellingUpPremiumPayments", if: policy == Policies::LevellingUpPremiumPayments do
           it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq "0158e1c4-ffa2-4b5e-86f9-0dead4e68587"
+            expect(mail.template_id).to eq "0158e1c4-ffa2-4b5e-86f9-0dead4e68587"
           end
         end
 
         context "when StudentLoans", if: policy == Policies::StudentLoans do
           it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq "f9e39fcd-301a-4427-9159-6831fd484e39"
+            expect(mail.template_id).to eq "f9e39fcd-301a-4427-9159-6831fd484e39"
           end
         end
       end
@@ -94,19 +94,19 @@ RSpec.describe ClaimMailer, type: :mailer do
 
         context "when EarlyCareerPayments", if: policy == Policies::EarlyCareerPayments do
           it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq "3974db1c-c7dd-44cf-97b9-bb96d211a996"
+            expect(mail.template_id).to eq "3974db1c-c7dd-44cf-97b9-bb96d211a996"
           end
         end
 
         context "when LevellingUpPremiumPayments", if: policy == Policies::LevellingUpPremiumPayments do
           it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq "78e4bf4a-5d4b-4328-9384-116c08183a77"
+            expect(mail.template_id).to eq "78e4bf4a-5d4b-4328-9384-116c08183a77"
           end
         end
 
         context "when StudentLoans", if: policy == Policies::StudentLoans do
           it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq "2032be01-6aee-4a1a-81ce-cf91e09de8d7"
+            expect(mail.template_id).to eq "2032be01-6aee-4a1a-81ce-cf91e09de8d7"
           end
         end
       end
@@ -142,7 +142,7 @@ RSpec.describe ClaimMailer, type: :mailer do
           let(:all_expected_keys) { expected_common_keys.merge(expected_rejected_reasons_keys) }
 
           it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq(expected_template_id)
+            expect(mail.template_id).to eq(expected_template_id)
           end
 
           it "passes common fields as personalisation keys" do
@@ -185,19 +185,19 @@ RSpec.describe ClaimMailer, type: :mailer do
 
         context "when EarlyCareerPayments", if: policy == Policies::EarlyCareerPayments do
           it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq "0ef1e702-ea64-43a5-a084-330f2f51836e"
+            expect(mail.template_id).to eq "0ef1e702-ea64-43a5-a084-330f2f51836e"
           end
         end
 
         context "when LevellingUpPremiumPayments", if: policy == Policies::LevellingUpPremiumPayments do
           it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq "a10322ed-7829-44b2-95c6-d5cc686d2c04"
+            expect(mail.template_id).to eq "a10322ed-7829-44b2-95c6-d5cc686d2c04"
           end
         end
 
         context "when StudentLoans", if: policy == Policies::StudentLoans do
           it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq "c43bac94-67ff-4440-8f26-506eb4c232e8"
+            expect(mail.template_id).to eq "c43bac94-67ff-4440-8f26-506eb4c232e8"
           end
         end
       end

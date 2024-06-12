@@ -27,7 +27,7 @@ RSpec.describe SendReminderEmailsJob do
       }.to change { ActionMailer::Base.deliveries.count }.by(count)
 
       # check template id is correct
-      expect(mail[:template_id].decoded).to eq "a8a36571-f93b-4474-93e2-35775fa753a0"
+      expect(mail.template_id).to eq "a8a36571-f93b-4474-93e2-35775fa753a0"
 
       # reminder emails once sent have sent_at's
       reminders.each do |reminder|
