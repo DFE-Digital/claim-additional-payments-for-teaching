@@ -5,7 +5,7 @@ RSpec::Matchers.define :have_received_email do |template_id, expected_personalis
     end
 
     matching_templates = emails.select do |email|
-      email["template-id"]&.unparsed_value == template_id
+      email.template_id == template_id
     end.compact
 
     personalisation_fields = matching_templates.map do |email|
