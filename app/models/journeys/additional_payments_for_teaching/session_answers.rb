@@ -120,6 +120,10 @@ module Journeys
         nqt_in_academic_year_after_itt == false
       end
 
+      def school_somewhere_else?
+        !!school_somewhere_else
+      end
+
       private
 
       def current_academic_year

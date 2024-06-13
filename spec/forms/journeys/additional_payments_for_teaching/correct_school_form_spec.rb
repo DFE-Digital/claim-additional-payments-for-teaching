@@ -29,11 +29,11 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::CorrectSchoolForm, type:
       end
 
       it "updates the claim with the correct school attributes" do
-        expect { save }.to change { claim.reload.eligibility.current_school_id }.to(school.id)
+        expect { save }.to change { journey_session.reload.answers.current_school_id }.to(school.id)
       end
 
       it "resets the somewhere_else attribute" do
-        expect { save }.to change { claim.reload.eligibility.school_somewhere_else }.to eq(false)
+        expect { save }.to change { journey_session.reload.answers.school_somewhere_else }.to eq(false)
       end
 
       it "writes to the journey session" do
@@ -51,15 +51,19 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::CorrectSchoolForm, type:
       end
 
       before do
-        claim.eligibility.update!(current_school_id: school.id, school_somewhere_else: false)
+        journey_session.answers.assign_attributes(
+          current_school_id: school.id,
+          school_somewhere_else: false
+        )
+        journey_session.save!
       end
 
       it "resets the school association" do
-        expect { save }.to change { claim.reload.eligibility.current_school_id }.to(nil)
+        expect { save }.to change { journey_session.reload.answers.current_school_id }.to(nil)
       end
 
       it "resets the somewhere_else attribute" do
-        expect { save }.to change { claim.reload.eligibility.school_somewhere_else }.to eq(true)
+        expect { save }.to change { journey_session.reload.answers.school_somewhere_else }.to eq(true)
       end
     end
   end

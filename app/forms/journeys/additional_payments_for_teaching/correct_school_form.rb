@@ -5,15 +5,11 @@ module Journeys
       attribute :current_school_id, :string
 
       delegate :address, :name, to: :current_school, prefix: true, allow_nil: true
-      delegate :eligibility, to: :claim
-      delegate :school_somewhere_else?, to: :eligibility
+      delegate :school_somewhere_else?, to: :answers
 
       def save
-        claim.update(eligibility_attributes:)
         journey_session.answers.assign_attributes(eligibility_attributes)
-        journey_session.save
-        claim.reset_eligibility_dependent_answers(["current_school_id"])
-        true
+        journey_session.save!
       end
 
       def current_school_id

@@ -19,7 +19,7 @@ module Journeys
               employed_directly: journey_session.answers.employed_directly,
               subject_to_disciplinary_action: subject_to_disciplinary_action,
               subject_to_formal_performance_action: subject_to_formal_performance_action,
-              eligible_itt_subject: eligible_itt_subject,
+              eligible_itt_subject: journey_session.answers.eligible_itt_subject,
               eligible_degree_subject: journey_session.answers.eligible_degree_subject,
               teaching_subject_now: journey_session.answers.teaching_subject_now,
               itt_academic_year: journey_session.answers.itt_academic_year,
@@ -47,10 +47,6 @@ module Journeys
 
       def subject_to_formal_performance_action
         journey_session.answers.subject_to_formal_performance_action || try_eligibility(:subject_to_formal_performance_action)
-      end
-
-      def eligible_itt_subject
-        journey_session.answers.eligible_itt_subject
       end
     end
   end

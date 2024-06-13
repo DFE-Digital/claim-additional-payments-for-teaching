@@ -35,10 +35,9 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
 
     expect(page).to have_text(I18n.t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"))
 
-    Claim.order(created_at: :desc).limit(2).each do |c|
-      expect(c.school.id).to eq(eligible_school.id)
-      expect(c.eligibility.school_somewhere_else).to eq(false)
-    end
+    session = Journeys::AdditionalPaymentsForTeaching::Session.last
+    expect(session.answers.current_school_id).to eq(eligible_school.id)
+    expect(session.answers.school_somewhere_else).to eq(false)
 
     click_on "Back"
 
@@ -53,10 +52,9 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
     expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
     expect(page).not_to have_text(eligible_school.name)
 
-    Claim.order(created_at: :desc).limit(2).each do |c|
-      expect(c.school).to be_nil
-      expect(c.eligibility.school_somewhere_else).to eq(true)
-    end
+    session = Journeys::AdditionalPaymentsForTeaching::Session.last
+    expect(session.answers.current_school).to be_nil
+    expect(session.answers.school_somewhere_else).to eq(true)
   end
 
   scenario "Most recent TPS is outside window - skips directly to current-school" do
@@ -86,10 +84,9 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
     expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
     expect(page).to have_text("Enter the school name or postcode. Use at least three characters.")
 
-    Claim.order(created_at: :desc).limit(2).each do |c|
-      expect(c.school).to be_nil
-      expect(c.eligibility.school_somewhere_else).to eq(true)
-    end
+    session = Journeys::AdditionalPaymentsForTeaching::Session.last
+    expect(session.answers.current_school).to be_nil
+    expect(session.answers.school_somewhere_else).to eq(true)
   end
 
   def navigate_to_correct_school_page(tps:, school:)
