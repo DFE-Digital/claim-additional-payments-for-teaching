@@ -42,7 +42,6 @@ module Journeys
     attribute :student_loan_plan, :string
     attribute :submitted_using_slc_data, :boolean
     attribute :sent_one_time_password_at, :datetime
-    attribute :answered, default: []
 
     def has_attribute?(name)
       attribute_names.include?(name.to_s)
@@ -96,6 +95,10 @@ module Journeys
 
     def has_student_loan?
       !!has_student_loan
+    end
+
+    def email_verified?
+      !!email_verified
     end
   end
 end

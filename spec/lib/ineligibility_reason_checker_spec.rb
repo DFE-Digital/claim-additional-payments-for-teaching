@@ -183,6 +183,7 @@ RSpec.describe IneligibilityReasonChecker do
         build(
           :additional_payments_answers,
           :ecp_eligible,
+          :first_lup_claim_year,
           :insufficient_teaching
         )
       end

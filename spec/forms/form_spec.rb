@@ -75,8 +75,7 @@ RSpec.describe Form, type: :model do
             :student_loans_session,
             answers: {
               first_name: "existing-name",
-              student_loan_repayment_amount: 2000,
-              answered: %w[first_name student_loan_repayment_amount]
+              student_loan_repayment_amount: 2000
             }
           )
         end
@@ -108,8 +107,7 @@ RSpec.describe Form, type: :model do
             :student_loans_session,
             answers: {
               first_name: "existing-name",
-              student_loan_repayment_amount: nil,
-              answered: %w[first_name student_loan_repayment_amount]
+              student_loan_repayment_amount: nil
             }
           )
         end
@@ -122,15 +120,7 @@ RSpec.describe Form, type: :model do
         end
       end
 
-      context "when an existing value can be found on the claim or eligibility record" do
-        let(:claims) { [build(:claim, first_name: "existing-name", eligibility_attributes: {student_loan_repayment_amount: 100}, policy: Policies::StudentLoans)] }
-
-        it "initialises the attributes with values from the claim" do
-          expect(form).to have_attributes(first_name: "existing-name", student_loan_repayment_amount: 100)
-        end
-      end
-
-      context "when an existing value cannot be found on the claim nor eligibility nor journey session" do
+      context "when an existing value cannot be found on journey session" do
         let(:claims) { [build(:claim, first_name: nil, policy: Policies::StudentLoans)] }
 
         it "initialises the attributes with nil" do
