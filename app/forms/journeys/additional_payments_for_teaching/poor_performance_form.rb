@@ -14,7 +14,6 @@ module Journeys
           subject_to_formal_performance_action:,
           subject_to_disciplinary_action:
         )
-
         journey_session.save
       end
     end

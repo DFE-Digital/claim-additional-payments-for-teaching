@@ -4,7 +4,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::PoorPerformanceForm do
   subject(:form) { described_class.new(claim:, journey_session:, journey:, params:) }
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
-  let(:journey_session) { build(:additional_payments_session) }
+  let(:journey_session) { create(:additional_payments_session) }
   let(:ecp_claim) { build(:claim, policy: Policies::EarlyCareerPayments) }
   let(:lupp_claim) { build(:claim, policy: Policies::LevellingUpPremiumPayments) }
   let(:claim) { CurrentClaim.new(claims: [ecp_claim, lupp_claim]) }
@@ -76,8 +76,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::PoorPerformanceForm do
       let(:claim_params) { {subject_to_formal_performance_action: "", subject_to_disciplinary_action: "false"} }
 
       it "does not update the attributes on the claim" do
-        expect { form.save }.to not_change { claim.eligibility.subject_to_formal_performance_action }
-          .and not_change { claim.eligibility.subject_to_disciplinary_action }
+        expect { form.save }.to not_change { journey_session.reload.answers.subject_to_formal_performance_action }
+          .and not_change { journey_session.reload.answers.subject_to_disciplinary_action }
       end
     end
   end
