@@ -65,8 +65,10 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::PoorPerformanceForm do
       let(:claim_params) { {subject_to_formal_performance_action: "true", subject_to_disciplinary_action: "false"} }
 
       it "updates the attributes on the claim" do
-        expect { form.save }.to change { claim.eligibility.subject_to_formal_performance_action }.to(true)
-          .and change { claim.eligibility.subject_to_disciplinary_action }.to(false)
+        expect {
+          form.save
+        }.to change { journey_session.answers.subject_to_formal_performance_action }.to(true)
+          .and change { journey_session.answers.subject_to_disciplinary_action }.to(false)
       end
     end
 

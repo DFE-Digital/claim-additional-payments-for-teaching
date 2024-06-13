@@ -51,7 +51,7 @@ module Journeys
       def current_school
         [
           t("additional_payments.forms.current_school.questions.current_school_search"),
-          eligibility.current_school_name,
+          journey_session.answers.current_school.name,
           (journey_session.answers.school_somewhere_else == false) ? "correct-school" : "current-school"
         ]
       end
@@ -157,11 +157,13 @@ module Journeys
 
       def text_for_subject_answer
         policy = eligibility.policy
-        subjects = JourneySubjectEligibilityChecker.new(claim_year: Journeys.for_policy(policy).configuration.current_academic_year,
-          itt_year: journey_session.answers.itt_academic_year).current_and_future_subject_symbols(policy)
+        subjects = JourneySubjectEligibilityChecker.new(
+          claim_year: Journeys.for_policy(policy).configuration.current_academic_year,
+          itt_year: journey_session.answers.itt_academic_year
+        ).current_and_future_subject_symbols(policy)
 
         if subjects.many?
-          t("additional_payments.forms.eligible_itt_subject.answers.#{eligibility.eligible_itt_subject}")
+          t("additional_payments.forms.eligible_itt_subject.answers.#{journey_session.answers.eligible_itt_subject}")
         else
           subject_symbol = subjects.first
           (subject_symbol == eligibility.eligible_itt_subject.to_sym) ? "Yes" : "No"

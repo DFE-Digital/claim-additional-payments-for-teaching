@@ -10,8 +10,11 @@ module Journeys
       def save
         return false unless valid?
 
-        update!(eligibility_attributes: attributes.except("journey_session_id"))
-        journey_session.answers.assign_attributes(attributes.except("journey_session_id"))
+        journey_session.answers.assign_attributes(
+          subject_to_formal_performance_action:,
+          subject_to_disciplinary_action:
+        )
+
         journey_session.save
       end
     end
