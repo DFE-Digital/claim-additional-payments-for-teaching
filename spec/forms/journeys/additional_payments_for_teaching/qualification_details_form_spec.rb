@@ -13,49 +13,9 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
       answers: {
         dqt_teacher_status: dqt_teacher_status,
         qualification: "postgraduate_itt",
-        itt_academic_year: itt_academic_year
+        itt_academic_year: itt_academic_year,
+        eligible_itt_subject: existing_eligible_itt_subject
       }
-    )
-  end
-
-  let(:early_career_payments_eligibility) do
-    create(
-      :early_career_payments_eligibility,
-      eligible_itt_subject: :physics
-    )
-  end
-
-  let(:levelling_up_premium_payments_eligibility) do
-    create(
-      :levelling_up_premium_payments_eligibility,
-      eligible_itt_subject: :physics
-    )
-  end
-
-  let(:early_career_payments_claim) do
-    create(
-      :claim,
-      policy: Policies::EarlyCareerPayments,
-      eligibility: early_career_payments_eligibility,
-      dqt_teacher_status: dqt_teacher_status
-    )
-  end
-
-  let(:levelling_up_premium_payments_claim) do
-    create(
-      :claim,
-      policy: Policies::LevellingUpPremiumPayments,
-      eligibility: levelling_up_premium_payments_eligibility,
-      dqt_teacher_status: dqt_teacher_status
-    )
-  end
-
-  let(:current_claim) do
-    CurrentClaim.new(
-      claims: [
-        early_career_payments_claim,
-        levelling_up_premium_payments_claim
-      ]
     )
   end
 
@@ -63,7 +23,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
     described_class.new(
       journey: Journeys::AdditionalPaymentsForTeaching,
       journey_session: journey_session,
-      claim: current_claim,
+      claim: CurrentClaim.new(claims: [build(:claim)]),
       params: params
     )
   end
@@ -74,6 +34,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
     subject { form }
 
     describe "qualifications_details_check" do
+      let(:existing_eligible_itt_subject) { nil }
+
       context "when `true`" do
         let(:params) do
           ActionController::Parameters.new(
@@ -104,6 +66,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
 
   describe "#dqt_academic_date" do
     let(:params) { ActionController::Parameters.new(claim: {}) }
+    let(:existing_eligible_itt_subject) { nil }
 
     subject { form.dqt_academic_date }
 
@@ -128,6 +91,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
 
   describe "#dqt_itt_subjects" do
     let(:params) { ActionController::Parameters.new(claim: {}) }
+    let(:existing_eligible_itt_subject) { nil }
 
     let(:dqt_teacher_status) do
       {
@@ -150,9 +114,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
     subject { form.show_degree_subjects? }
 
     context "when none of the claims have `none_of_the_above` as eligible_itt_subject" do
-      let(:early_career_payments_eligibility) do
-        create(:early_career_payments_eligibility)
-      end
+      let(:existing_eligible_itt_subject) { "none_of_the_above" }
 
       let(:itt_academic_year) { AcademicYear.new(2020) }
 
@@ -173,9 +135,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
     end
 
     context "when one of the claims has `none_of_the_above` as eligible_itt_subject" do
-      let(:early_career_payments_eligibility) do
-        create(:early_career_payments_eligibility)
-      end
+      let(:existing_eligible_itt_subject) { "none_of_the_above" }
 
       context "when there is no degree names" do
         let(:dqt_teacher_status) do
@@ -205,6 +165,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
 
   describe "#dqt_degree_subjects" do
     let(:params) { ActionController::Parameters.new(claim: {}) }
+    let(:existing_eligible_itt_subject) { :physics }
 
     let(:dqt_teacher_status) do
       {
@@ -226,6 +187,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
   describe "#save" do
     context "when invalid" do
       let(:dqt_teacher_status) { {} }
+      let(:existing_eligible_itt_subject) { "physics" }
 
       let(:params) { ActionController::Parameters.new(claim: {}) }
 
@@ -251,7 +213,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
               dqt_teacher_status: dqt_teacher_status,
               qualification: "postgraduate_itt",
               itt_academic_year: itt_academic_year,
-              eligible_degree_subject: false
+              eligible_degree_subject: false,
+              eligible_itt_subject: "physics"
             }
           )
         end
@@ -275,16 +238,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
         it "sets eligible_itt_subject as nil" do
           expect { form.save }.to(
             change do
-              early_career_payments_eligibility
-                .reload
-                .eligible_itt_subject
-            end.from("physics").to(nil).and(
-              change do
-                levelling_up_premium_payments_eligibility
-                  .reload
-                  .eligible_itt_subject
-              end.from("physics").to(nil)
-            )
+              journey_session.reload.answers.eligible_itt_subject
+            end.from("physics").to(nil)
           )
         end
 
@@ -310,6 +265,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
             claim: {qualifications_details_check: true}
           )
         end
+        let(:existing_eligible_itt_subject) { "physics" }
 
         context "when there is a dqt_teacher_record" do
           let(:dqt_teacher_status) do
@@ -364,7 +320,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
                 dqt_teacher_status: dqt_teacher_status,
                 qualification: "postgraduate_itt",
                 itt_academic_year: itt_academic_year,
-                eligible_degree_subject: false
+                eligible_degree_subject: false,
+                eligible_itt_subject: "physics"
               }
             )
           end
@@ -388,16 +345,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
           it "sets the eligible_itt_subject to the dqt_teacher_record" do
             expect { form.save }.to(
               change do
-                early_career_payments_eligibility
-                  .reload
-                  .eligible_itt_subject
-              end.from("physics").to("mathematics").and(
-                change do
-                  levelling_up_premium_payments_eligibility
-                    .reload
-                    .eligible_itt_subject
-                end.from("physics").to("mathematics")
-              )
+                journey_session.reload.answers.eligible_itt_subject
+              end.from("physics").to("mathematics")
             )
           end
 
@@ -439,19 +388,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
 
           it "doesn't change the eligible_itt_subject" do
             expect { form.save }.not_to(
-              change do
-                early_career_payments_eligibility
-                  .reload
-                  .eligible_itt_subject
-              end
-            )
-
-            expect { form.save }.not_to(
-              change do
-                levelling_up_premium_payments_eligibility
-                  .reload
-                  .eligible_itt_subject
-              end
+              change { journey_session.reload.answers.eligible_itt_subject }
             )
           end
 
@@ -475,6 +412,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
             claim: {qualifications_details_check: true}
           )
         end
+
+        let(:existing_eligible_itt_subject) { nil }
 
         let(:dqt_teacher_status) do
           {
@@ -536,6 +475,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
             claim: {qualifications_details_check: true}
           )
         end
+
+        let(:existing_eligible_itt_subject) { nil }
 
         let(:dqt_teacher_status) { {} }
 

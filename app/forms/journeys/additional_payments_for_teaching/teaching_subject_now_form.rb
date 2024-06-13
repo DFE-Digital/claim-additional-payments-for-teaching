@@ -13,10 +13,6 @@ module Journeys
         eligible_itt_subject == "physics" || eligible_itt_subject == "chemistry"
       end
 
-      # FIXME RL: Once this method writes to the journey session answers update
-      # QualificationForm#save to not reset teaching subject on the claim, as
-      # it's no longer needed (still keep resetting it on the answers)
-      # (and remove this comment!)
       def save
         return false unless valid?
 
