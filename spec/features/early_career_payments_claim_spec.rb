@@ -285,8 +285,6 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     choose "Yes"
     click_on "Continue"
 
-    claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
-
     expect(journey_session.answers.nqt_in_academic_year_after_itt).to eql true
 
     # - Have you completed your induction as an early-career teacher?
@@ -301,7 +299,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     choose "Yes"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.employed_as_supply_teacher).to eql true
+    expect(journey_session.reload.answers.employed_as_supply_teacher).to eql true
 
     # - Do you have a contract to teach at the same school for an entire term or longer
     expect(page).to have_text(I18n.t("additional_payments.forms.entire_term_contract.questions.has_entire_term_contract"))

@@ -45,13 +45,13 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
     end
 
     it "excludes supply teacher detail slugs if they aren't a supply teacher" do
-      claim.eligibility.employed_as_supply_teacher = false
+      answers.employed_as_supply_teacher = false
 
       expect(slug_sequence.slugs).not_to include("entire-term-contract", "employed-directly")
     end
 
     it "includes supply teacher detail slugs if they are a supply teacher" do
-      claim.eligibility.employed_as_supply_teacher = true
+      answers.employed_as_supply_teacher = true
 
       expect(slug_sequence.slugs).to include("entire-term-contract", "employed-directly")
     end

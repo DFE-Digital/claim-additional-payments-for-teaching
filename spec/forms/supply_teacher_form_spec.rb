@@ -34,18 +34,16 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SupplyTeacherForm do
   describe "#employed_as_supply_teacher" do
     let(:params) { ActionController::Parameters.new({slug:, claim: {}}) }
 
-    context "when claim eligibility is missing employed_as_supply_teacher" do
+    context "when answers is missing employed_as_supply_teacher" do
       it "returns nil" do
         expect(form.employed_as_supply_teacher).to be_nil
       end
     end
 
-    context "when claim eligibility has employed_as_supply_teacher" do
-      let(:current_claim) do
-        claims = journey::POLICIES.map do |policy|
-          create(:claim, policy:, eligibility_attributes: {employed_as_supply_teacher: true})
-        end
-        CurrentClaim.new(claims:)
+    context "when answers has employed_as_supply_teacher" do
+      before do
+        journey_session.answers.assign_attributes(employed_as_supply_teacher: true)
+        journey_session.save!
       end
 
       it "returns existing value for employed_as_supply_teacher" do
@@ -58,48 +56,25 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SupplyTeacherForm do
     context "when a valid employed_as_supply_teacher is submitted" do
       let(:params) { ActionController::Parameters.new({slug:, claim: {employed_as_supply_teacher: "Yes"}}) }
 
-      context "when claim eligibility is missing employed_as_supply_teacher" do
-        let(:current_claim) do
-          claims = journey::POLICIES.map { |policy| create(:claim, policy:) }
-          CurrentClaim.new(claims:)
-        end
-
-        it "saves employed_as_supply_teacher on claim eligibility" do
-          expect(form.save).to be true
-
-          current_claim.claims.each do |claim|
-            eligibility = claim.eligibility.reload
-
-            expect(eligibility.employed_as_supply_teacher).to be_truthy
-          end
-        end
+      before do
+        journey_session.answers.assign_attributes(
+          has_entire_term_contract: true,
+          employed_directly: true
+        )
+        journey_session.save!
       end
 
-      context "when claim eligibility has employed_as_supply_teacher" do
-        let(:current_claim) do
-          claims = journey::POLICIES.map do |policy|
-            create(:claim, policy:, eligibility_attributes: {employed_as_supply_teacher: false})
-          end
-          CurrentClaim.new(claims:)
-        end
-
-        it "updates employed_as_supply_teacher on claim eligibility" do
-          expect(form.save).to be true
-
-          current_claim.claims.each do |claim|
-            eligibility = claim.eligibility.reload
-
-            expect(eligibility.employed_as_supply_teacher).to be_truthy
-          end
-        end
+      it "saves employed_as_supply_teacher on answers" do
+        expect {
+          form.save
+        }.to change { journey_session.answers.employed_as_supply_teacher }.from(nil).to(true)
       end
 
-      context "when claim model fails validation unexpectedly" do
-        it "raises an error" do
-          allow(current_claim).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
-
-          expect { form.save }.to raise_error(ActiveRecord::RecordInvalid)
-        end
+      it "resets dependent attributes" do
+        expect {
+          form.save
+        }.to change { journey_session.answers.has_entire_term_contract }.from(true).to(nil)
+          .and change { journey_session.answers.employed_directly }.from(true).to(nil)
       end
     end
 
