@@ -36,7 +36,7 @@
 
           <div class="govuk-hint" id="teaching_subject_now-hint">
            At least 50% of your contracted hours allocated to teaching must be spent
-           teaching <%= subjects_to_sentence_for_hint_text(f.object.shim.answers) %>.
+           teaching <%= subjects_to_sentence_for_hint_text(f.object.answers) %>.
           </div>
 
           <%= errors_tag f.object, :teaching_subject_now %>

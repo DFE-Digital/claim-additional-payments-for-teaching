@@ -56,7 +56,12 @@ module JourneyConcern
   end
 
   def create_journey_session!
-    journey::Session.create!(journey: params[:journey])
+    journey::Session.create!(
+      journey: params[:journey],
+      answers: {
+        academic_year: journey_configuration.current_academic_year
+      }
+    )
   end
 
   def journey_session_key

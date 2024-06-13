@@ -51,16 +51,6 @@ class Form
     true
   end
 
-  # NOTE RL: temporary method while migrating away from current claim for when
-  # we need to check against either answers or the claim for some information
-  # Will be removed once the migration is complete and we delete the shim
-  def shim
-    @shim ||= Journeys::AdditionalPaymentsForTeaching::ClaimJourneySessionShim.new(
-      current_claim: claim,
-      journey_session: journey_session
-    )
-  end
-
   private
 
   def permitted_attributes
@@ -91,22 +81,6 @@ class Form
   end
 
   def load_current_value(attribute)
-    if journey_session.answered?(attribute)
-      return journey_session.answers.public_send(attribute)
-    end
-
-    # TODO: re-implement when the underlying claim and eligibility data sources
-    # are moved to an alternative place e.g. a session hash
-
-    # Some, but not all attributes are present directly on the claim record.
-    return claim.public_send(attribute) if claim.has_attribute?(attribute)
-
-    # At the moment, some attributes are unique to a policy eligibility record,
-    # so we need to loop through all the claims in the wrapper and check each
-    # eligibility individually; if the search fails, it should return `nil`.
-    claim.claims.each do |c|
-      return c.eligibility.public_send(attribute) if c.eligibility.has_attribute?(attribute)
-    end
-    nil
+    journey_session.answers.public_send(attribute) if journey_session.answers.has_attribute?(attribute)
   end
 end

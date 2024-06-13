@@ -27,7 +27,7 @@ module Journeys
 
       def subject_symbols
         @subject_symbols ||=
-          JourneySubjectEligibilityChecker.selectable_subject_symbols(shim.answers)
+          JourneySubjectEligibilityChecker.selectable_subject_symbols(answers)
       end
 
       def save

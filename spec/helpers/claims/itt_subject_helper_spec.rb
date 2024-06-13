@@ -16,14 +16,7 @@ RSpec.describe Claims::IttSubjectHelper do
       create(:additional_payments_session, answers: answers)
     end
 
-    let(:shimmed_answers) do
-      Journeys::AdditionalPaymentsForTeaching::ClaimJourneySessionShim.new(
-        current_claim: CurrentClaim.new(claims: [ecp_claim, lup_claim]),
-        journey_session: journey_session
-      ).answers
-    end
-
-    subject { helper.subjects_to_sentence_for_hint_text(shimmed_answers) }
+    subject { helper.subjects_to_sentence_for_hint_text(journey_session.answers) }
 
     context "trainee teacher" do
       let(:ecp_eligibility) { build(:early_career_payments_eligibility, :trainee_teacher) }

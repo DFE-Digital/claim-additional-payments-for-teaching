@@ -15,32 +15,6 @@ module Journeys
       claim.present?
     end
 
-    # This method and the associated `before_save` callback are temporary
-    # methods while we're working with both a current claim and journey
-    # session.
-    # When setting default values in a form object we need to know if the
-    # answer was stored on the journey session or whether we should check the
-    # current claim. Values for answers may be `nil`, so we need to explicitly
-    # check that the question was answered.
-    # Once all forms has been migrated to use the journey session, this method,
-    # the before_save and after_initialize call backs and the
-    # SessionAnswer#answered attribute can be removed.
-    # This will be removed in
-    # https://dfedigital.atlassian.net.mcas.ms/browse/CAPT-1637
-    def answered?(attribute_name)
-      answers.answered.include?(attribute_name.to_s)
-    end
-
-    after_initialize do
-      answers.clear_changes_information
-    end
-
-    before_save do
-      unless answers.answered_changed? # Allow overwriting answered attributes
-        answers.answered += answers.changes.keys.map(&:to_s)
-      end
-    end
-
     def logged_in_with_tid_and_has_recent_tps_school?
       answers.trn_from_tid? && recent_tps_school.present?
     end

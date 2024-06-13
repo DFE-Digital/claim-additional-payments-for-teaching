@@ -120,7 +120,6 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SubjectsTaughtForm, ty
     context "when the subject is taught" do
       before do
         journey_session.answers.biology_taught = true
-        journey_session.answers.answered = ["biology_taught"]
       end
 
       it { expect(form.subject_taught_selected?(:biology_taught)).to eq(true) }
@@ -129,7 +128,6 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SubjectsTaughtForm, ty
     context "when the subject is not taught" do
       before do
         journey_session.answers.biology_taught = false
-        journey_session.answers.answered = ["biology_taught"]
       end
 
       it { expect(form.subject_taught_selected?(:biology_taught)).to eq(false) }

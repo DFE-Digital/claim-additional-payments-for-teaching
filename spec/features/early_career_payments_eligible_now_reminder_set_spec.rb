@@ -10,11 +10,14 @@ RSpec.feature "Eligible now can set a reminder for next year." do
     claim = start_early_career_payments_claim
     reminder_year = (academic_year + 1).start_year
 
-    claim.update!(attributes_for(:claim, :submittable))
-    claim.eligibility.update!(eligibility_attributes)
     session = Journeys::AdditionalPaymentsForTeaching::Session.last
     session.answers.assign_attributes(
-      attributes_for(:additional_payments_answers, :submittable)
+      attributes_for(
+        :additional_payments_answers,
+        :ecp_and_lup_eligible,
+        :submittable,
+        current_school_id: school.id
+      )
     )
     session.save!
 
@@ -69,19 +72,10 @@ RSpec.feature "Completed Applications - Reminders" do
       let(:academic_year) { journey_configuration.current_academic_year }
       let(:school) { create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_eligible) }
 
-      let(:claim) do
-        claim = start_early_career_payments_claim
-        claim.update!(attributes_for(:claim, :submittable))
-        claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible, current_school_id: school.id))
-        claim
-      end
-
       policy[:eligible_now].each do |scenario|
         reminder_status = (scenario[:invited_to_set_reminder] == true) ? "CAN" : "CANNOT"
         scenario "with cohort ITT subject #{scenario[:itt_subject]} in ITT academic year #{scenario[:itt_academic_year]} - a reminder #{reminder_status} be set" do
-          claim.eligibility.update(
-            eligible_itt_subject: scenario[:itt_subject]
-          )
+          claim = start_early_career_payments_claim
           reminder_year = (academic_year + 1).start_year
 
           session = Journeys::AdditionalPaymentsForTeaching::Session.last
@@ -89,7 +83,10 @@ RSpec.feature "Completed Applications - Reminders" do
             attributes_for(
               :additional_payments_answers,
               :submittable,
-              itt_academic_year: scenario[:itt_academic_year]
+              :ecp_and_lup_eligible,
+              itt_academic_year: scenario[:itt_academic_year],
+              eligible_itt_subject: scenario[:itt_subject],
+              current_school_id: school.id
             )
           )
           session.save!
@@ -99,7 +96,7 @@ RSpec.feature "Completed Applications - Reminders" do
             slug: "check-your-answers",
             journey_session: session
           )
-          expect(page).to have_text(claim.first_name)
+          expect(page).to have_text(session.answers.first_name)
 
           click_on "Accept and send"
 

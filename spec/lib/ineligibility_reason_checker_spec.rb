@@ -28,14 +28,7 @@ RSpec.describe IneligibilityReasonChecker do
     create(:additional_payments_session, answers: answers)
   end
 
-  let(:shim) do
-    Journeys::AdditionalPaymentsForTeaching::ClaimJourneySessionShim.new(
-      current_claim: current_claim,
-      journey_session: journey_session
-    )
-  end
-
-  let(:checker) { described_class.new(shim.answers) }
+  let(:checker) { described_class.new(journey_session.answers) }
 
   describe "#reason" do
     subject { checker.reason }
@@ -190,6 +183,7 @@ RSpec.describe IneligibilityReasonChecker do
         build(
           :additional_payments_answers,
           :ecp_eligible,
+          :first_lup_claim_year,
           :insufficient_teaching
         )
       end

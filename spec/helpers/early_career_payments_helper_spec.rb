@@ -24,13 +24,6 @@ describe AdditionalPaymentsHelper do
     let(:qualification) { nil }
     let(:answers) { build(:additional_payments_answers, qualification: qualification) }
 
-    let(:shim) do
-      Journeys::AdditionalPaymentsForTeaching::ClaimJourneySessionShim.new(
-        journey_session: journey_session,
-        current_claim: current_claim
-      )
-    end
-
     let(:journey_session) do
       create(:additional_payments_session, answers: answers)
     end
@@ -41,8 +34,8 @@ describe AdditionalPaymentsHelper do
 
     subject do
       helper.eligible_itt_subject_translation(
-        shim.answers,
-        JourneySubjectEligibilityChecker.selectable_subject_symbols(shim.answers)
+        journey_session.answers,
+        JourneySubjectEligibilityChecker.selectable_subject_symbols(journey_session.answers)
       )
     end
 

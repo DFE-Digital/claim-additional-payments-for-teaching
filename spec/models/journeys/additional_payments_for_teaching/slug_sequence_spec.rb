@@ -192,13 +192,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
         journey_session.answers.date_of_birth = dob
         journey_session.answers.national_insurance_number = "JH001234D"
 
-        journey_session.answers.answered = %w[
-          first_name
-          surname
-          date_of_birth
-          national_insurance_number
-        ]
-
         expect(slug_sequence.slugs).not_to include("personal-details")
       end
 
@@ -207,13 +200,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
         journey_session.answers.surname = "Doe"
         journey_session.answers.date_of_birth = 30.years.ago.to_date
         journey_session.answers.national_insurance_number = nil
-
-        journey_session.answers.answered = %w[
-          first_name
-          surname
-          date_of_birth
-          national_insurance_number
-        ]
 
         expect(slug_sequence.slugs).to include("personal-details")
       end
@@ -224,13 +210,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
         journey_session.answers.date_of_birth = 30.years.ago.to_date
         journey_session.answers.national_insurance_number = "JH001234D"
 
-        journey_session.answers.answered = %w[
-          first_name
-          surname
-          date_of_birth
-          national_insurance_number
-        ]
-
         expect(slug_sequence.slugs).to include("personal-details")
       end
 
@@ -239,13 +218,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
         journey_session.answers.surname = "Doe"
         journey_session.answers.date_of_birth = nil
         journey_session.answers.national_insurance_number = "JH001234D"
-
-        journey_session.answers.answered = %w[
-          first_name
-          surname
-          date_of_birth
-          national_insurance_number
-        ]
 
         expect(slug_sequence.slugs).to include("personal-details")
       end
