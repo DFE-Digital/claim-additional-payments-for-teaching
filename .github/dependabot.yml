@@ -25,3 +25,13 @@ updates:
     - 6.0.1
     - 6.1.0
     - 6.1.1
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 3
+- package-ecosystem: docker
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 3
