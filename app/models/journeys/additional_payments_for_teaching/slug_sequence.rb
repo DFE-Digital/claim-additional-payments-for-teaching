@@ -118,7 +118,7 @@ module Journeys
             sequence.delete("mobile-verification")
           end
 
-          unless claim.eligibility.employed_as_supply_teacher?
+          unless answers.employed_as_supply_teacher?
             sequence.delete("entire-term-contract")
             sequence.delete("employed-directly")
           end

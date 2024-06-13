@@ -34,7 +34,7 @@ module Journeys
       private
 
       def employed_as_supply_teacher
-        journey_session.answers.employed_as_supply_teacher || try_eligibility(:employed_as_supply_teacher)
+        journey_session.answers.employed_as_supply_teacher
       end
 
       def subject_to_disciplinary_action
