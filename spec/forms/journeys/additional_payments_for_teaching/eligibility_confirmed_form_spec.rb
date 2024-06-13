@@ -1,17 +1,18 @@
 require "rails_helper"
 
 RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityConfirmedForm, type: :model do
+  before { create(:journey_configuration, :additional_payments) }
+
   subject(:form) { described_class.new(claim:, journey:, journey_session:, params:) }
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
-  let(:journey_session) { build(:additional_payments_session, answers: answers) }
+  let(:journey_session) { create(:additional_payments_session, answers: answers) }
   let(:ecp_claim) { create(:claim, :eligible, policy: Policies::EarlyCareerPayments) }
   let(:lupp_claim) { create(:claim, :eligible, policy: Policies::LevellingUpPremiumPayments) }
-  let(:claim) { CurrentClaim.new(claims: [ecp_claim, lupp_claim], selected_policy:) }
+  let(:claim) { CurrentClaim.new(claims: [ecp_claim, lupp_claim]) }
   let(:slug) { "eligibility-confirmed" }
   let(:params) { ActionController::Parameters.new({slug:, claim: claim_params}) }
   let(:claim_params) { {selected_claim_policy: "EarlyCareerPayments"} }
-  let(:selected_policy) { Policies::EarlyCareerPayments }
   let(:answers) { {} }
 
   describe "validations" do
@@ -30,11 +31,26 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityConfirmedForm
   end
 
   describe "#save" do
-    context "valid params" do
+    context "valid params - LUPP" do
+      let(:claim_params) { {selected_claim_policy: "EarlyCareerPayments"} }
+      let(:answers) { build(:additional_payments_answers, :ecp_eligible) }
+
+      it { expect(form.save).to eq(true) }
+
+      it do
+        expect { form.save }.to change { journey_session.reload.answers.selected_policy }.to("EarlyCareerPayments")
+      end
+    end
+
+    context "valid params - ECP" do
       let(:claim_params) { {selected_claim_policy: "LevellingUpPremiumPayments"} }
       let(:answers) { build(:additional_payments_answers, :lup_eligible) }
 
       it { expect(form.save).to eq(true) }
+
+      it do
+        expect { form.save }.to change { journey_session.reload.answers.selected_policy }.to("LevellingUpPremiumPayments")
+      end
     end
 
     context "invalid params" do
@@ -74,18 +90,38 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityConfirmedForm
   describe "#selected_policy?" do
     subject { form.selected_policy?(policy_in_the_argument) }
 
-    let(:selected_policy) { Policies::EarlyCareerPayments }
+    let(:answers) { build(:additional_payments_answers, :ecp_and_lup_eligible, with_selected_policy) }
 
-    context "when the policy in the argument is the currently selected claim policy" do
+    context "when the policy in the argument is ECP" do
       let(:policy_in_the_argument) { Policies::EarlyCareerPayments }
 
-      it { is_expected.to eq(true) }
+      context "selected policy is ECP" do
+        let(:with_selected_policy) { :with_selected_policy_ecp }
+
+        it { is_expected.to eq(true) }
+      end
+
+      context "selected policy is LUPP" do
+        let(:with_selected_policy) { :with_selected_policy_lupp }
+
+        it { is_expected.to eq(false) }
+      end
     end
 
-    context "when the policy in the argument is not the currently selected claim policy" do
+    context "when the policy in the argument is LUPP" do
       let(:policy_in_the_argument) { Policies::LevellingUpPremiumPayments }
 
-      it { is_expected.to eq(false) }
+      context "selected policy is ECP" do
+        let(:with_selected_policy) { :with_selected_policy_ecp }
+
+        it { is_expected.to eq(false) }
+      end
+
+      context "selected policy is LUPP" do
+        let(:with_selected_policy) { :with_selected_policy_lupp }
+
+        it { is_expected.to eq(true) }
+      end
     end
   end
 

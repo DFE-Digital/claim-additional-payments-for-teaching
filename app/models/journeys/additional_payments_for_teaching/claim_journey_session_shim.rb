@@ -12,6 +12,7 @@ module Journeys
         @answers ||= SessionAnswers.new(
           super.merge(
             {
+              selected_policy: journey_session.answers.selected_policy,
               nqt_in_academic_year_after_itt: journey_session.answers.nqt_in_academic_year_after_itt,
               employed_as_supply_teacher: employed_as_supply_teacher,
               qualification: journey_session.answers.qualification,

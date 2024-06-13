@@ -9,26 +9,13 @@ module Journeys
 
       private
 
-      def selected_claim_policy
-        case answers.selected_policy
-        when "EarlyCareerPayments"
-          Policies::EarlyCareerPayments
-        when "LevellingUpPremiumPayments"
-          Policies::LevellingUpPremiumPayments
-        when nil
-          nil
-        else
-          fail "Invalid policy selected: #{answers.selected_policy}"
-        end
-      end
-
       def main_eligibility
         @main_eligibility ||= eligibilities.detect { |e| e.policy == main_policy }
       end
 
       def main_policy
-        if selected_claim_policy.present?
-          selected_claim_policy
+        if answers.selected_claim_policy.present?
+          answers.selected_claim_policy
         else
           Policies::EarlyCareerPayments
         end

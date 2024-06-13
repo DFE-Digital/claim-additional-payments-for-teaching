@@ -44,18 +44,6 @@ describe ApplicationHelper do
     end
   end
 
-  describe "#support_email_address_for_selected_claim_policy" do
-    it "returns a ECP specific email if the session contains selected ECP claim" do
-      session[:selected_claim_policy] = "EarlyCareerPayments"
-      expect(support_email_address_for_selected_claim_policy).to eq t("early_career_payments.support_email_address")
-    end
-
-    it "returns a LUP specific email if the session contains selected LUP claim" do
-      session[:selected_claim_policy] = "LevellingUpPremiumPayments"
-      expect(support_email_address_for_selected_claim_policy).to eq t("levelling_up_premium_payments.support_email_address")
-    end
-  end
-
   describe "#journey_service_name" do
     it "defaults to the generic service name" do
       expect(journey_service_name).to eq t("service_name")
@@ -81,25 +69,22 @@ describe ApplicationHelper do
   end
 
   describe "#information_provided_further_details_with_link" do
-    subject { information_provided_further_details_with_link }
+    subject { information_provided_further_details_with_link(policy:) }
 
-    context "policy is nil and falls back to the current claim policy" do
-      let(:current_claim) { double(selected_policy: nil, policy: policy) }
+    context "policy is a Teacher Student Loan Reimbursement" do
       let(:policy) { Policies::StudentLoans }
 
       it { is_expected.to eq('For more details, you can read about payments and deductions when <a class="govuk-link govuk-link--no-visited-state" target="_blank" href="https://www.gov.uk/guidance/teachers-claim-back-your-student-loan-repayments#payment">claiming back your student loan repayments (opens in new tab)</a>') }
     end
 
-    context "policy is LevellingUpPremiumPayments" do
+    context "policy is a LevellingUpPremiumPayments" do
       let(:policy) { Policies::LevellingUpPremiumPayments }
-      let(:current_claim) { double(selected_policy: policy) }
 
       it { is_expected.to eq('For more details, you can read about payments and deductions for the <a class="govuk-link govuk-link--no-visited-state" target="_blank" href="https://www.gov.uk/guidance/levelling-up-premium-payments-for-teachers#payments-and-deductions">levelling up premium payment (opens in new tab)</a>') }
     end
 
-    context "policy is EarlyCareerPayments" do
+    context "policy is a EarlyCareerPayments" do
       let(:policy) { Policies::EarlyCareerPayments }
-      let(:current_claim) { double(selected_policy: policy) }
 
       it { is_expected.to eq('For more details, you can read about payments and deductions for the <a class="govuk-link govuk-link--no-visited-state" target="_blank" href="https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools#paying-income-tax-and-national-insurance">early-career payment (opens in new tab)</a>') }
     end

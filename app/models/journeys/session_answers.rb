@@ -6,7 +6,6 @@ module Journeys
     include Sessions::TeacherId
 
     attribute :current_school_id, :string # UUID
-    attribute :selected_policy, :string
     attribute :address_line_1, :string
     attribute :address_line_2, :string
     attribute :address_line_3, :string

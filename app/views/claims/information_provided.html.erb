@@ -76,7 +76,7 @@
     </p>
 
     <p class="govuk-body">
-      <%= information_provided_further_details_with_link %>
+      <%= information_provided_further_details_with_link(policy: journey_session.answers.selected_claim_policy) %>
     </p>
 
     <%= button_to "Continue", claim_path(current_journey_routing_name), method: :patch, class: "govuk-button", role: :button, data: { module: "govuk-button" } %>

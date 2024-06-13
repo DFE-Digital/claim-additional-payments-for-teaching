@@ -44,11 +44,6 @@ module ClaimsFormCallbacks
     redirect_to_next_slug
   end
 
-  def eligibility_confirmed_after_form_save_success
-    update_session_with_selected_policy if additional_payments_journey?
-    redirect_to_next_slug
-  end
-
   def personal_bank_account_after_form_save_failure
     increment_hmrc_validation_attempt_count if hmrc_api_validation_attempted?
     render_template_for_current_slug
@@ -93,12 +88,6 @@ module ClaimsFormCallbacks
 
   def no_postcode?
     !journey_session.answers.postcode
-  end
-
-  def update_session_with_selected_policy
-    # TODO: revisit this once the claimant's answers are all moved to the session, as at
-    # that point we can probably encapsulate this behaviour somewhere else
-    session[:selected_claim_policy] = @form.selected_claim_policy
   end
 
   def retrieve_student_loan_details

@@ -3,7 +3,6 @@ module ClaimSessionTimeout
 
   def clear_claim_session
     session.delete(:claim_id)
-    session.delete(:selected_claim_policy)
     session.delete(:claim_postcode)
     session.delete(:claim_address_line_1)
     session.delete(:no_address_selected)
