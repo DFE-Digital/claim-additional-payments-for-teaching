@@ -15,7 +15,7 @@ module Journeys
               nqt_in_academic_year_after_itt: journey_session.answers.nqt_in_academic_year_after_itt,
               employed_as_supply_teacher: employed_as_supply_teacher,
               qualification: journey_session.answers.qualification,
-              has_entire_term_contract: has_entire_term_contract,
+              has_entire_term_contract: journey_session.answers.has_entire_term_contract,
               employed_directly: journey_session.answers.employed_directly,
               subject_to_disciplinary_action: subject_to_disciplinary_action,
               subject_to_formal_performance_action: subject_to_formal_performance_action,
@@ -35,10 +35,6 @@ module Journeys
 
       def employed_as_supply_teacher
         journey_session.answers.employed_as_supply_teacher || try_eligibility(:employed_as_supply_teacher)
-      end
-
-      def has_entire_term_contract
-        journey_session.answers.has_entire_term_contract || try_eligibility(:has_entire_term_contract)
       end
 
       def subject_to_disciplinary_action

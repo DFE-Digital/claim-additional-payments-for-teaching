@@ -162,6 +162,12 @@ FactoryBot.define do
       has_entire_term_contract { false }
     end
 
+    trait :long_term_directly_employed_supply_teacher do
+      employed_as_supply_teacher { true }
+      has_entire_term_contract { true }
+      employed_directly { true }
+    end
+
     trait :agency_supply_teacher do
       employed_as_supply_teacher { true }
       employed_directly { false }

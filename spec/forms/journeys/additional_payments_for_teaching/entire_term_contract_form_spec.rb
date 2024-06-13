@@ -7,16 +7,11 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EntireTermContractForm d
 
   let(:journey_session) { build(:additional_payments_session) }
 
-  let(:current_claim) do
-    claims = journey::POLICIES.map { |policy| create(:claim, policy:) }
-    CurrentClaim.new(claims:)
-  end
-
   let(:slug) { "entire-term-contract" }
 
   subject(:form) do
     described_class.new(
-      claim: current_claim,
+      claim: CurrentClaim.new(claims: [build(:claim)]),
       journey:,
       journey_session:,
       params:
@@ -41,11 +36,11 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EntireTermContractForm d
     end
 
     context "when claim eligibility has has_entire_term_contract" do
-      let(:current_claim) do
-        claims = journey::POLICIES.map do |policy|
-          create(:claim, policy:, eligibility_attributes: {has_entire_term_contract: true})
-        end
-        CurrentClaim.new(claims:)
+      before do
+        journey_session.answers.assign_attributes(
+          has_entire_term_contract: true
+        )
+        journey_session.save!
       end
 
       it "returns existing value for has_entire_term_contract" do
@@ -59,46 +54,26 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EntireTermContractForm d
       let(:params) { ActionController::Parameters.new({slug:, claim: {has_entire_term_contract: "Yes"}}) }
 
       context "when claim eligibility is missing has_entire_term_contract" do
-        let(:current_claim) do
-          claims = journey::POLICIES.map { |policy| create(:claim, policy:) }
-          CurrentClaim.new(claims:)
-        end
-
         it "saves has_entire_term_contract on claim eligibility" do
           expect(form.save).to be true
 
-          current_claim.claims.each do |claim|
-            eligibility = claim.eligibility.reload
-
-            expect(eligibility.has_entire_term_contract).to be_truthy
-          end
+          expect(journey_session.answers.has_entire_term_contract).to eq true
         end
       end
 
       context "when claim eligibility has has_entire_term_contract" do
-        let(:current_claim) do
-          claims = journey::POLICIES.map do |policy|
-            create(:claim, policy:, eligibility_attributes: {has_entire_term_contract: false})
-          end
-          CurrentClaim.new(claims:)
+        before do
+          journey_session.answers.assign_attributes(
+            has_entire_term_contract: false
+          )
+
+          journey_session.save!
         end
 
         it "updates has_entire_term_contract on claim eligibility" do
           expect(form.save).to be true
 
-          current_claim.claims.each do |claim|
-            eligibility = claim.eligibility.reload
-
-            expect(eligibility.has_entire_term_contract).to be_truthy
-          end
-        end
-      end
-
-      context "when claim model fails validation unexpectedly" do
-        it "raises an error" do
-          allow(current_claim).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
-
-          expect { form.save }.to raise_error(ActiveRecord::RecordInvalid)
+          expect(journey_session.answers.has_entire_term_contract).to eq true
         end
       end
     end

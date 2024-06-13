@@ -25,14 +25,12 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
       before { journey_session.answers.nqt_in_academic_year_after_itt = true }
 
       context "long-term directly employed supply teacher" do
-        let(:eligibility) { build(:early_career_payments_eligibility, :eligible, :long_term_directly_employed_supply_teacher) }
+        let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
         let(:answers) do
           build(
             :additional_payments_answers,
             :ecp_eligible,
-            employed_as_supply_teacher: true,
-            has_entire_term_contract: true,
-            employed_directly: true
+            :long_term_directly_employed_supply_teacher
           )
         end
 
@@ -178,7 +176,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
       let(:policy) { Policies::LevellingUpPremiumPayments }
 
       context "entire output" do
-        let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :long_term_directly_employed_supply_teacher, :ineligible_itt_subject) }
+        let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :ineligible_itt_subject) }
         let(:expected_itt_year) { AcademicYear.new(eligibility.itt_academic_year) }
         let(:answers) do
           build(
@@ -186,8 +184,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
             :lup_eligible,
             :lup_ineligible_itt_subject,
             :relevant_degree,
-            selected_policy: "LevellingUpPremiumPayments",
-            employed_as_supply_teacher: true
+            :long_term_directly_employed_supply_teacher,
+            selected_policy: "LevellingUpPremiumPayments"
           )
         end
 
