@@ -63,7 +63,7 @@ RSpec.describe Journeys::PageSequence do
       let(:current_slug) { "third-slug" }
       let(:completed_slugs) { ["first-slug", "second-slug", "third-slug"] }
       let(:journey_session) do
-        build(
+        create(
           :student_loans_session,
           answers: attributes_for(:student_loans_answers, :submittable)
         )

@@ -30,6 +30,15 @@ FactoryBot.define do
       bank_account_number { rand(10000000..99999999) }
     end
 
+    trait :with_bank_details_validated do
+      hmrc_bank_validation_succeeded { true }
+      hmrc_bank_validation_responses do
+        [
+          {code: 200, body: "Test response"}
+        ]
+      end
+    end
+
     trait :with_payroll_gender do
       payroll_gender { "female" }
     end
@@ -68,11 +77,25 @@ FactoryBot.define do
       qualifications_details_check { true }
     end
 
+    trait :with_acadmic_year do
+      academic_year { AcademicYear.new(2019) }
+    end
+
+    trait :with_student_loan do
+      has_student_loan { true }
+      student_loan_plan { StudentLoan::PLAN_1 }
+    end
+
+    trait :with_student_loan_repayment_amount do
+      student_loan_repayment_amount { 1000 }
+    end
+
     trait :submittable do
       with_personal_details
       with_email_details
       with_mobile_details
       with_bank_details
+      with_bank_details_validated
       with_payroll_gender
       with_teacher_reference_number
       with_claim_school
@@ -82,6 +105,9 @@ FactoryBot.define do
       with_leadership_position
       with_qts_award_year
       with_qualification_details_check
+      with_acadmic_year
+      with_student_loan
+      with_student_loan_repayment_amount
     end
   end
 end

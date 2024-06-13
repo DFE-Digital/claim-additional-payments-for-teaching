@@ -146,14 +146,7 @@ module Journeys
       end
 
       def eligibility_checker
-        @eligibility_checker ||= Policies::StudentLoans::PolicyEligibilityChecker.new(answers: shim.answers)
-      end
-
-      def shim
-        @shim ||= ClaimJourneySessionShim.new(
-          current_claim: claim,
-          journey_session: journey_session
-        )
+        @eligibility_checker ||= Policies::StudentLoans::PolicyEligibilityChecker.new(answers: answers)
       end
 
       def signed_in_with_dfe_identity_and_details_match?

@@ -96,14 +96,7 @@ class ClaimsController < BasePublicController
   end
 
   def claim_ineligible?
-    journey::EligibilityChecker.new(journey_session: shim).ineligible?
-  end
-
-  def shim
-    @shim ||= journey::ClaimJourneySessionShim.new(
-      current_claim: current_claim,
-      journey_session: journey_session
-    )
+    journey::EligibilityChecker.new(journey_session: journey_session).ineligible?
   end
 
   def page_sequence

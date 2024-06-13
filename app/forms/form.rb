@@ -51,16 +51,6 @@ class Form
     true
   end
 
-  # NOTE RL: temporary method while migrating away from current claim for when
-  # we need to check against either answers or the claim for some information
-  # Will be removed once the migration is complete and we delete the shim
-  def shim
-    @shim ||= Journeys::AdditionalPaymentsForTeaching::ClaimJourneySessionShim.new(
-      current_claim: claim,
-      journey_session: journey_session
-    )
-  end
-
   private
 
   def permitted_attributes

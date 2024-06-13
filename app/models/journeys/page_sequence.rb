@@ -114,18 +114,11 @@ module Journeys
     end
 
     def claim_submittable?
-      journey::ClaimSubmissionForm.new(journey_session: shim).valid?
-    end
-
-    def shim
-      @shim ||= journey::ClaimJourneySessionShim.new(
-        current_claim: @claim,
-        journey_session: @journey_session
-      )
+      journey::ClaimSubmissionForm.new(journey_session: @journey_session).valid?
     end
 
     def journey_ineligible?
-      @journey_ineligible ||= journey::EligibilityChecker.new(journey_session: shim).ineligible?
+      @journey_ineligible ||= journey::EligibilityChecker.new(journey_session: @journey_session).ineligible?
     end
   end
 end

@@ -255,23 +255,16 @@ module Journeys
         answers.teacher_id_user_info[field].present?
       end
 
-      def shim
-        @shim ||= Journeys::AdditionalPaymentsForTeaching::ClaimJourneySessionShim.new(
-          current_claim: claim,
-          journey_session: journey_session
-        )
-      end
-
       def overall_eligibility_status
-        @overall_eligibility_status ||= EligibilityChecker.new(journey_session: shim).status
+        @overall_eligibility_status ||= EligibilityChecker.new(journey_session: journey_session).status
       end
 
       def ecp_eligibility_checker
-        @ecp_eligibility_checker ||= Policies::EarlyCareerPayments::PolicyEligibilityChecker.new(answers: shim.answers)
+        @ecp_eligibility_checker ||= Policies::EarlyCareerPayments::PolicyEligibilityChecker.new(answers: answers)
       end
 
       def lup_eligibility_checker
-        @lup_eligibility_checker ||= Policies::LevellingUpPremiumPayments::PolicyEligibilityChecker.new(answers: shim.answers)
+        @lup_eligibility_checker ||= Policies::LevellingUpPremiumPayments::PolicyEligibilityChecker.new(answers: answers)
       end
     end
   end

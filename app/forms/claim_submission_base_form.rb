@@ -64,12 +64,7 @@ class ClaimSubmissionBaseForm
   end
 
   def set_attributes_for_claim_submission
-    # Temp conditional while we're working with the shim
-    claim.journey_session = if journey_session.is_a?(ClaimJourneySessionShim)
-      journey_session.journey_session
-    else
-      journey_session
-    end
+    claim.journey_session = journey_session
     claim.policy_options_provided = generate_policy_options_provided
     claim.reference = generate_reference
     claim.submitted_at = Time.zone.now

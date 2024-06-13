@@ -797,17 +797,10 @@ RSpec.describe JourneySubjectEligibilityChecker do
     let(:ineligible_ecp_claim) { create(:claim, :first_lup_claim_year, policy: Policies::EarlyCareerPayments, eligibility: ineligible_ecp_eligibility) }
     let(:ineligible_lup_claim) { create(:claim, :first_lup_claim_year, policy: Policies::LevellingUpPremiumPayments, eligibility: ineligible_lup_eligibility) }
 
-    let(:shim) do
-      Journeys::AdditionalPaymentsForTeaching::ClaimJourneySessionShim.new(
-        current_claim: current_claim,
-        journey_session: journey_session
-      )
-    end
-
     subject do
       described_class.new(
         claim_year: claim_year, itt_year: itt_year
-      ).selectable_subject_symbols(shim.answers)
+      ).selectable_subject_symbols(journey_session.answers)
     end
 
     context "when academic year is 2022" do

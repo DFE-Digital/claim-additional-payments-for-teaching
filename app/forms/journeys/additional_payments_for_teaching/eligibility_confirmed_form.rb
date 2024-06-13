@@ -31,7 +31,7 @@ module Journeys
       end
 
       def award_amount(policy)
-        policy::PolicyEligibilityChecker.new(answers: shim.answers).calculate_award_amount
+        policy::PolicyEligibilityChecker.new(answers: answers).calculate_award_amount
       end
 
       def selected_policy?(policy)
@@ -47,7 +47,7 @@ module Journeys
       end
 
       def eligibility_checker
-        @eligibility_checker ||= EligibilityChecker.new(journey_session: shim)
+        @eligibility_checker ||= EligibilityChecker.new(journey_session: journey_session)
       end
     end
   end
