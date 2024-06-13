@@ -138,6 +138,14 @@ module Journeys
         !!school_somewhere_else
       end
 
+      def has_entire_term_contract?
+        !!has_entire_term_contract
+      end
+
+      def employed_directly?
+        !!employed_directly
+      end
+
       private
 
       def current_academic_year

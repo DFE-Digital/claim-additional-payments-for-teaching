@@ -47,8 +47,16 @@ RSpec.feature "Changing the answers on a submittable claim" do
   scenario "Teacher changes an answer which is not a dependency of any of the other answers they've given, becoming ineligible" do
     claim = start_student_loans_claim
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
-    claim.update!(attributes_for(:claim, :submittable))
-    claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
+    session.answers.assign_attributes(
+      attributes_for(
+        :student_loans_answers,
+        :submittable,
+        current_school_id: student_loans_school.id,
+        claim_school_id: student_loans_school.id,
+        qualifications_details_check: false
+      )
+    )
+    session.save!
     jump_to_claim_journey_page(
       claim:,
       slug: "check-your-answers",

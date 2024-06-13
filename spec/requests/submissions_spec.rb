@@ -71,7 +71,11 @@ RSpec.describe "Submissions", type: :request do
       before :each do
         start_student_loans_claim
         # Make the claim _almost_ submittable
-        in_progress_claim.update!(attributes_for(:claim, :submittable, email_address: nil))
+        journey_session.answers.assign_attributes(
+          attributes_for(:student_loans_answers, :submittable, email_address: nil)
+        )
+
+        journey_session.save!
 
         perform_enqueued_jobs { post claim_submission_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME) }
       end

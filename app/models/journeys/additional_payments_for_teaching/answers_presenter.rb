@@ -43,7 +43,7 @@ module Journeys
       def has_entire_term_contract
         [
           t("additional_payments.forms.entire_term_contract.questions.has_entire_term_contract"),
-          (eligibility.has_entire_term_contract? ? "Yes" : "No"),
+          (answers.has_entire_term_contract? ? "Yes" : "No"),
           "entire-term-contract"
         ]
       end
@@ -83,7 +83,7 @@ module Journeys
       def employed_directly
         [
           t("additional_payments.forms.employed_directly.questions.employed_directly"),
-          (eligibility.employed_directly? ? "Yes" : "No"),
+          (answers.employed_directly? ? "Yes" : "No"),
           "employed-directly"
         ]
       end
@@ -119,7 +119,7 @@ module Journeys
 
         [
           eligible_itt_subject_translation(
-            shim.answers,
+            answers,
             subject_symbols
           ),
           text_for_subject_answer,
@@ -173,18 +173,11 @@ module Journeys
       private
 
       def subject_symbols
-        @subject_symbols ||= JourneySubjectEligibilityChecker.current_and_future_subject_symbols(shim.answers)
+        @subject_symbols ||= JourneySubjectEligibilityChecker.current_and_future_subject_symbols(answers)
       end
 
       def claim_submission_form
-        @claim_submission_form ||= ClaimSubmissionForm.new(journey_session: shim)
-      end
-
-      def shim
-        @shim ||= ClaimJourneySessionShim.new(
-          journey_session: journey_session,
-          current_claim: claim
-        )
+        @claim_submission_form ||= ClaimSubmissionForm.new(journey_session: journey_session)
       end
     end
   end

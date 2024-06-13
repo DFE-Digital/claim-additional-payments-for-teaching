@@ -1,29 +1,12 @@
 require "rails_helper"
 
 RSpec.shared_examples "journey answers presenter" do
-  let(:current_claim) { CurrentClaim.new(claims: [claim]) }
-
   describe "#identity_answers" do
     let(:first_name) { "Jo" }
     let(:surname) { "Bloggs" }
     let(:trn) { "1234567" }
     let(:nino) { "QQ123456C" }
     let(:dob) { Date.new(1980, 1, 10) }
-
-    let(:claim) do
-      build(
-        :claim,
-        policy:,
-        first_name:,
-        surname:,
-        date_of_birth: dob,
-        teacher_reference_number: trn,
-        national_insurance_number: nino,
-        payroll_gender: :dont_know,
-        logged_in_with_tid:,
-        teacher_id_user_info:
-      )
-    end
 
     let(:journey_session) do
       build(
@@ -51,7 +34,7 @@ RSpec.shared_examples "journey answers presenter" do
     end
 
     subject(:answers) do
-      described_class.new(current_claim, journey_session).identity_answers
+      described_class.new(journey_session).identity_answers
     end
 
     context "logged in with Teacher ID" do
@@ -192,14 +175,13 @@ RSpec.shared_examples "journey answers presenter" do
       end
 
       it "copes with a blank date of birth" do
-        claim.date_of_birth = nil
+        journey_session.answers.date_of_birth = nil
         expect(answers).to include([I18n.t("questions.date_of_birth"), nil, "personal-details"])
       end
     end
   end
 
   describe "#payment_answers" do
-    let(:claim) { create(:claim) }
     let(:journey_session) do
       create(
         :additional_payments_session,
@@ -212,7 +194,7 @@ RSpec.shared_examples "journey answers presenter" do
       )
     end
 
-    subject(:answers) { described_class.new(current_claim, journey_session).payment_answers }
+    subject(:answers) { described_class.new(journey_session).payment_answers }
 
     context "when a personal bank account is selected" do
       it "returns an array of questions and answers for displaying to the user for review" do
@@ -228,7 +210,6 @@ RSpec.shared_examples "journey answers presenter" do
     end
 
     context "when a building society is selected" do
-      let(:claim) { create(:claim) }
       let(:journey_session) do
         create(
           :additional_payments_session,

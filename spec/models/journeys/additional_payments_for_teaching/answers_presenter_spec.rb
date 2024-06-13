@@ -2,13 +2,10 @@ require "rails_helper"
 
 RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
   let(:policy) { Policies::EarlyCareerPayments }
-  let(:current_claim) { CurrentClaim.new(claims: [claim]) }
-
   it_behaves_like "journey answers presenter"
 
   describe "#eligibility_answers" do
     let(:policy_year) { AcademicYear.new(2022) }
-    let(:claim) { build(:claim, policy:, academic_year: policy_year, eligibility: eligibility) }
     let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: policy_year) }
     let(:qualifications_details_check) { false }
     let(:qualification) { "postgraduate_itt" }
@@ -17,15 +14,12 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
       create(:additional_payments_session, answers: answers)
     end
 
-    subject do
-      described_class.new(current_claim, journey_session).eligibility_answers
-    end
+    subject { described_class.new(journey_session).eligibility_answers }
 
     context "ECP" do
       before { journey_session.answers.nqt_in_academic_year_after_itt = true }
 
       context "long-term directly employed supply teacher" do
-        let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
         let(:answers) do
           build(
             :additional_payments_answers,
@@ -61,7 +55,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
       end
 
       context "non-supply teacher" do
-        let(:eligibility) { build(:early_career_payments_eligibility, :eligible, :not_a_supply_teacher) }
         let(:answers) { build(:additional_payments_answers, :ecp_eligible) }
 
         it { is_expected.to include(["Are you currently employed as a supply teacher?", "No", "supply-teacher"]) }
@@ -91,7 +84,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
 
       context "single subject option" do
         let(:itt_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2019)) }
-        let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
         let(:answers) do
           build(
             :additional_payments_answers,
@@ -105,7 +97,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
 
       context "multiple subject options" do
         let(:itt_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2020)) }
-        let(:eligibility) { build(:early_career_payments_eligibility, :eligible, itt_academic_year: itt_year) }
         let(:answers) do
           build(
             :additional_payments_answers,
@@ -119,7 +110,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
 
       context "qualifications retrieved from DQT" do
         let(:qualifications_details_check) { true }
-        let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
         let(:early_career_payments_dqt_teacher_record) do
           double(
             itt_academic_year_for_claim:,
@@ -176,8 +166,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
       let(:policy) { Policies::LevellingUpPremiumPayments }
 
       context "entire output" do
-        let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :ineligible_itt_subject) }
-        let(:expected_itt_year) { AcademicYear.new(eligibility.itt_academic_year) }
+        let(:expected_itt_year) { AcademicYear.new(answers.itt_academic_year) }
         let(:answers) do
           build(
             :additional_payments_answers,
@@ -216,7 +205,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
 
       context "qualifications retrieved from DQT" do
         let(:qualifications_details_check) { true }
-        let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
         let(:early_career_payments_dqt_teacher_record) do
           double(
             itt_academic_year_for_claim:,
@@ -292,7 +280,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
       end
 
       context "eligible ITT" do
-        let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
         let(:answers) do
           build(
             :additional_payments_answers,
@@ -321,7 +308,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
       end
 
       context "ineligible ITT" do
-        let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :ineligible_itt_subject) }
         let(:answers) do
           build(
             :additional_payments_answers,

@@ -34,7 +34,7 @@ module Policies
       def qts_award_year
         [
           translate("admin.qts_award_year"),
-          qts_award_year_answer(eligibility)
+          qts_award_year_answer(eligibility.ineligible_qts_award_year?, eligibility.claim.academic_year)
         ]
       end
 
