@@ -17,7 +17,6 @@ class ClaimJourneySessionShim
 
   def answers
     {
-      selected_policy: selected_policy,
       address_line_1: journey_session.answers.address_line_1,
       address_line_2: journey_session.answers.address_line_2,
       address_line_3: journey_session.answers.address_line_3,
@@ -56,10 +55,6 @@ class ClaimJourneySessionShim
   end
 
   private
-
-  def selected_policy
-    journey_session.answers.selected_policy || current_claim.selected_policy
-  end
 
   def details_check
     journey_session.answers.details_check || current_claim.details_check

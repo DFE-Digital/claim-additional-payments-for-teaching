@@ -1,6 +1,7 @@
 module Journeys
   module AdditionalPaymentsForTeaching
     class SessionAnswers < Journeys::SessionAnswers
+      attribute :selected_policy, :string
       attribute :employed_as_supply_teacher, :boolean
       attribute :qualification, :string
       attribute :has_entire_term_contract, :boolean
@@ -37,6 +38,19 @@ module Journeys
         dqt_teacher_status.blank? ||
           levelling_up_premium_payments_dqt_reacher_record.has_no_data_for_claim? ||
           early_career_payments_dqt_teacher_record.has_no_data_for_claim?
+      end
+
+      def selected_claim_policy
+        case selected_policy
+        when "EarlyCareerPayments"
+          Policies::EarlyCareerPayments
+        when "LevellingUpPremiumPayments"
+          Policies::LevellingUpPremiumPayments
+        when nil
+          nil
+        else
+          fail "Invalid policy selected: #{answers.selected_policy}"
+        end
       end
 
       def policy

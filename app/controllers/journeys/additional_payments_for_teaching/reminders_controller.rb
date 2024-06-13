@@ -19,12 +19,8 @@ module Journeys
       def claim_from_session
         return unless session.key?(:claim_id) || session.key?(:submitted_claim_id)
 
-        selected_policy = if session[:selected_claim_policy].present?
-          Policies.constantize(session[:selected_claim_policy])
-        end
-
         claims = Claim.includes(:eligibility).where(id: session[:claim_id] || session[:submitted_claim_id])
-        claims.present? ? CurrentClaim.new(claims: claims, selected_policy: selected_policy) : nil
+        claims.present? ? CurrentClaim.new(claims: claims) : nil
       end
 
       def slugs

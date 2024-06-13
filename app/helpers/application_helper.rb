@@ -25,13 +25,6 @@ module ApplicationHelper
     t("#{namespace}.support_email_address")
   end
 
-  def support_email_address_for_selected_claim_policy
-    return t("early_career_payments.support_email_address") if session[:selected_claim_policy] == "EarlyCareerPayments"
-    return t("levelling_up_premium_payments.support_email_address") if session[:selected_claim_policy] == "LevellingUpPremiumPayments"
-
-    t("support_email_address")
-  end
-
   def journey_service_name(routing_name = nil)
     return t("service_name") unless routing_name
 
@@ -65,9 +58,7 @@ module ApplicationHelper
     "https://www.gov.uk/done/claim-additional-teaching-payment"
   end
 
-  def information_provided_further_details_with_link
-    policy = current_claim.selected_policy || current_claim.policy
-
+  def information_provided_further_details_with_link(policy:)
     text = I18n.t("#{policy.locale_key}.information_provided_further_details_link_text")
     link = link_to(text, policy.payment_and_deductions_info_url, class: "govuk-link govuk-link--no-visited-state", target: "_blank")
 

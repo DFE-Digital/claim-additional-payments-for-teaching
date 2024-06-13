@@ -60,6 +60,14 @@ FactoryBot.define do
       eligible_itt_subject { "mathematics" }
     end
 
+    trait :with_selected_policy_ecp do
+      selected_policy { "EarlyCareerPayments" }
+    end
+
+    trait :with_selected_policy_lupp do
+      selected_policy { "LevellingUpPremiumPayments" }
+    end
+
     trait :submittable do
       with_personal_details
       with_email_details

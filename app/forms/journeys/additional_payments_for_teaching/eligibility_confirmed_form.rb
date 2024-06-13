@@ -12,11 +12,10 @@ module Journeys
       delegate :selected_policy, to: :claim, prefix: :current
 
       def save
-        # This form doesn't directly persist anything; the controller currently calls `save`
-        # on every form object, while for this form all we need is to call `valid?` instead.
-        # TODO: If we change the data persistence layer for all forms, then this should be
-        # revisited as well.
-        valid?
+        return false unless valid?
+
+        journey_session.answers.assign_attributes(selected_policy: selected_claim_policy)
+        journey_session.save!
       end
 
       def single_choice_only?
@@ -35,9 +34,8 @@ module Journeys
         policy::PolicyEligibilityChecker.new(answers: shim.answers).calculate_award_amount
       end
 
-      # TODO KL: This is still using the CurrentClaim for the selected policy
       def selected_policy?(policy)
-        policy == current_selected_policy
+        policy.to_s == journey_session.answers.selected_policy
       end
 
       def first_eligible_compact_policy_name
