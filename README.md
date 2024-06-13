@@ -34,8 +34,7 @@ Architecture decision records can be found in the
 
 ## Prerequisites
 
-- Java 11 or 8 (LTS) - we recommend [OpenJDK](https://adoptopenjdk.net/)
-- Ruby 2.6.2
+- Ruby 3.2.4
 - PostgreSQL
 - [ShellCheck](https://www.shellcheck.net/)
 - [Yarn](https://yarnpkg.com/en/docs/install)
