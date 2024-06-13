@@ -8,7 +8,11 @@ module Journeys
       def save
         return false unless valid?
 
-        update!(eligibility_attributes: attributes)
+        journey_session.answers.assign_attributes(
+          has_entire_term_contract: has_entire_term_contract
+        )
+
+        journey_session.save!
       end
     end
   end

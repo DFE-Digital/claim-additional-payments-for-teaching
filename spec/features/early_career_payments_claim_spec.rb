@@ -309,7 +309,9 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     choose "Yes"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.has_entire_term_contract).to eql true
+    journey_session = Journeys::AdditionalPaymentsForTeaching::Session.last
+
+    expect(journey_session.answers.has_entire_term_contract).to eq true
 
     # - Are you employed directly by your school
     expect(page).to have_text(I18n.t("additional_payments.forms.employed_directly.questions.employed_directly"))
