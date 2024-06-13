@@ -17,11 +17,11 @@
       Check your answers before sending your application
     </h1>
 
-    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Eligibility details", answers: journey.answers_for_claim(@form.claim, @form.journey_session).eligibility_answers} %>
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Eligibility details", answers: journey.answers_for_claim(@form.journey_session).eligibility_answers} %>
 
-    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Identity details", answers: journey.answers_for_claim(@form.claim, @form.journey_session).identity_answers} %>
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Identity details", answers: journey.answers_for_claim(@form.journey_session).identity_answers} %>
 
-    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Payment details", answers: journey.answers_for_claim(@form.claim, @form.journey_session).payment_answers} %>
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Payment details", answers: journey.answers_for_claim(@form.journey_session).payment_answers} %>
 
     <%= form_with url: claim_submission_path do |form| %>
       <h2 class="govuk-heading-m"><%= t("check_your_answers.heading_send_application") %></h2>

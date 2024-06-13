@@ -15,7 +15,7 @@ module Policies
 
       def qualifications
         [
-          ["Award year", qts_award_year_answer(eligibility)]
+          ["Award year", qts_award_year_answer(eligibility.ineligible_qts_award_year?, claim.academic_year)]
         ]
       end
 

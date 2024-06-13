@@ -32,8 +32,8 @@ module Journeys
         teacher_id_user_info["ni_number"] == national_insurance_number
       end
 
-      def trn_same_as_tid?(claim)
-        teacher_id_user_info["trn"] == claim.teacher_reference_number
+      def trn_same_as_tid?
+        teacher_id_user_info["trn"] == teacher_reference_number
       end
 
       def using_mobile_number_from_tid?

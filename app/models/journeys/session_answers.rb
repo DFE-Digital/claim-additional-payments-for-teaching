@@ -76,6 +76,10 @@ module Journeys
       !!hmrc_bank_validation_succeeded
     end
 
+    def full_name
+      [first_name, middle_name, surname].reject(&:blank?).join(" ")
+    end
+
     def address(separator = ", ")
       [
         address_line_1,

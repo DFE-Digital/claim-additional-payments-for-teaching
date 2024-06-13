@@ -5,12 +5,8 @@ module Journeys
       include Policies::StudentLoans::PresenterMethods
       include ActiveSupport::NumberHelper
 
-      def eligibility
-        @eligibility = if @claim.is_a?(CurrentClaim)
-          @claim.claims.first.eligibility
-        else
-          claim.eligibility
-        end
+      def eligibility_checker
+        Policies::StudentLoans::PolicyEligibilityChecker.new(answers: answers)
       end
 
       # Formats the eligibility as a list of questions and answers, each
@@ -38,7 +34,7 @@ module Journeys
       def qts_award_year
         [
           t("student_loans.forms.qts_year.questions.qts_award_year"),
-          qts_award_year_answer(eligibility),
+          qts_award_year_answer(eligibility_checker.ineligible_qts_award_year?, answers.academic_year),
           "qts-year"
         ]
       end
@@ -47,14 +43,14 @@ module Journeys
         [
           claim_school_question,
           answers.claim_school_name,
-          (eligibility.claim_school_somewhere_else == false) ? "select-claim-school" : "claim-school"
+          (answers.claim_school_somewhere_else == false) ? "select-claim-school" : "claim-school"
         ]
       end
 
       def current_school
         [
           t("student_loans.forms.still_teaching.questions.tps_school"),
-          eligibility.current_school_name,
+          answers.current_school.name,
           "still-teaching"
         ]
       end

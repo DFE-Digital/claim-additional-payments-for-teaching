@@ -24,10 +24,20 @@ RSpec.describe Policies::StudentLoans::PresenterMethods, type: :helper do
         eligibility = build(:student_loans_eligibility, claim: claim)
 
         eligibility.qts_award_year = :before_cut_off_date
-        expect(helper.qts_award_year_answer(eligibility)).to eq args[:qts_award_year_answer_ineligible]
+        expect(
+          helper.qts_award_year_answer(
+            eligibility.ineligible_qts_award_year?,
+            eligibility.claim.academic_year
+          )
+        ).to eq args[:qts_award_year_answer_ineligible]
 
         eligibility.qts_award_year = :on_or_after_cut_off_date
-        expect(helper.qts_award_year_answer(eligibility)).to eq args[:qts_award_year_answer_eligible]
+        expect(
+          helper.qts_award_year_answer(
+            eligibility.ineligible_qts_award_year?,
+            eligibility.claim.academic_year
+          )
+        ).to eq args[:qts_award_year_answer_eligible]
       end
     end
   end
