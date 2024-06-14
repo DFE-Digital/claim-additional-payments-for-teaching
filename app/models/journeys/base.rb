@@ -47,7 +47,6 @@ module Journeys
 
     def page_sequence_for_claim(claim, journey_session, completed_slugs, current_slug)
       PageSequence.new(
-        claim,
         slug_sequence.new(claim, journey_session),
         completed_slugs,
         current_slug,

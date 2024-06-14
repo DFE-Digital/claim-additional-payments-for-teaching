@@ -51,7 +51,6 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement do
     it { is_expected.to be_a(Journeys::PageSequence) }
 
     it "populates the page sequence attributes" do
-      expect(page_sequence.claim).to eq(claim)
       expect(page_sequence.current_slug).to eq(current_slug)
       expect(page_sequence.completed_slugs).to eq(completed_slugs)
     end
