@@ -78,10 +78,11 @@
 
         <ul class='govuk-list govuk-list--bullet'>
           <li>
-            <a href="<%= Policies::EarlyCareerPayments.eligibility_page_url %>" class="govuk-link govuk-link--no-visited-state" target="_blank">Early-career payment (opens in new tab)</a> - payment of up to £7,500 for eligible teachers including language teachers.
+            <%= govuk_link_to "Early-career payment (opens in new tab)", Policies::EarlyCareerPayments.eligibility_page_url, no_visited_state: true, target: "_blank" %> - payment of up to £7,500 for eligible teachers including language teachers.
           </li>
+
           <li>
-            <a href="<%= Policies::LevellingUpPremiumPayments.eligibility_page_url %>" class="govuk-link govuk-link--no-visited-state" target="_blank">Levelling up premium payment (opens in new tab)</a> - payment of up to £3,000 for eligible teachers in certain schools, including computing teachers.
+            <%= govuk_link_to "Levelling up premium payment (opens in new tab)", Policies::LevellingUpPremiumPayments.eligibility_page_url, no_visited_state: true, target: "_blank" %> - payment of up to £3,000 for eligible teachers in certain schools, including computing teachers.
           </li>
         </ul>
 
