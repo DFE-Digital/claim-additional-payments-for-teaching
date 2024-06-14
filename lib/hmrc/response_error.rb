@@ -4,7 +4,7 @@ module Hmrc
 
     def initialize(response = nil)
       @response = response
-      super(response)
+      super
     end
   end
 end
