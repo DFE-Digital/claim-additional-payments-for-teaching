@@ -61,16 +61,6 @@ class Form
     self.class.name.demodulize.gsub("Form", "").underscore
   end
 
-  def page_sequence
-    @page_sequence ||= Journeys::PageSequence.new(
-      claim,
-      journey.slug_sequence.new(claim, journey_session),
-      nil,
-      params[:slug],
-      journey_session
-    )
-  end
-
   def attributes_with_current_value
     attributes.each_with_object({}) do |(attribute, _), attributes|
       attributes[attribute] = permitted_params[attribute]
