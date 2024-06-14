@@ -66,6 +66,8 @@ gem "daemons"
 # Gov form builder to structure claims
 gem "govuk_design_system_formbuilder", "~> 5.3.2"
 
+gem "govuk-components"
+
 # See https://github.com/typhoeus/ethon/issues/185
 gem "ethon", "~> 0.16.0"
 gem "typhoeus", "~> 1.4.1"
