@@ -1,11 +1,10 @@
 require "rails_helper"
 
 RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
-  subject(:slug_sequence) { described_class.new(current_claim, journey_session) }
+  before { create(:journey_configuration, :student_loans) }
 
-  let(:eligibility) { create(:student_loans_eligibility, :eligible) }
-  let(:claim) { build(:claim, eligibility:) }
-  let(:current_claim) { CurrentClaim.new(claims: [claim]) }
+  subject(:slug_sequence) { described_class.new(journey_session) }
+
   let(:journey_session) do
     build(
       :student_loans_session,
@@ -24,7 +23,11 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
 
   describe "The sequence as defined by #slugs" do
     it "excludes the “ineligible” slug if the claim is not actually ineligible" do
-      expect(claim.eligibility).not_to be_ineligible
+      expect(
+        Journeys::TeacherStudentLoanReimbursement::EligibilityChecker.new(
+          journey_session: journey_session
+        )
+      ).not_to be_ineligible
       expect(slug_sequence.slugs).not_to include("ineligible")
     end
 
@@ -86,7 +89,11 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
     end
 
     context "when Teacher ID is disabled on the policy configuration" do
-      before { create(:journey_configuration, :student_loans, teacher_id_enabled: false) }
+      before do
+        Journeys::TeacherStudentLoanReimbursement.configuration.update!(
+          teacher_id_enabled: false
+        )
+      end
 
       it "removes the Teacher ID-dependant slugs" do
         slugs = %w[sign-in-or-continue reset-claim qualification-details select-email select-mobile]

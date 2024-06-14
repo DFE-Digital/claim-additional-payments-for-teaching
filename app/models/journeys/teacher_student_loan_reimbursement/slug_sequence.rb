@@ -61,18 +61,17 @@ module Journeys
         RESULTS_SLUGS
       ).freeze
 
-      attr_reader :claim, :journey_session
+      attr_reader :journey_session
 
       delegate :answers, to: :journey_session
 
-      def initialize(claim, journey_session)
-        @claim = claim
+      def initialize(journey_session)
         @journey_session = journey_session
       end
 
       def slugs
         SLUGS.dup.tap do |sequence|
-          if !Journeys.for_policy(claim.policy).configuration.teacher_id_enabled?
+          if !Journeys::TeacherStudentLoanReimbursement.configuration.teacher_id_enabled?
             sequence.delete("sign-in-or-continue")
             sequence.delete("reset-claim")
             sequence.delete("qualification-details")
@@ -134,7 +133,7 @@ module Journeys
 
       def personal_details_form
         PersonalDetailsForm.new(
-          claim:,
+          claim: nil,
           journey_session: journey_session,
           journey: Journeys::TeacherStudentLoanReimbursement,
           params: ActionController::Parameters.new

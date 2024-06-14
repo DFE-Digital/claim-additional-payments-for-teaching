@@ -37,11 +37,9 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement do
     let(:completed_slugs) { [:test] }
     let(:current_slug) { [:test2] }
     let(:journey_session) { build(:student_loans_session) }
-    let(:claim) { double }
 
     subject(:page_sequence) do
       described_class.page_sequence_for_claim(
-        claim,
         journey_session,
         completed_slugs,
         current_slug
@@ -57,7 +55,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement do
 
     it "creates a slug sequence" do
       expect(Journeys::TeacherStudentLoanReimbursement::SlugSequence).to(
-        receive(:new).with(claim, journey_session)
+        receive(:new).with(journey_session)
       )
 
       page_sequence

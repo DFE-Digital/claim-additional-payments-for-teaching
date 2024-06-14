@@ -1,22 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
-  subject(:slug_sequence) { described_class.new(current_claim, journey_session) }
-
-  let(:eligibility) { create(:early_career_payments_eligibility, :eligible) }
-  let(:eligibility_lup) { create(:levelling_up_premium_payments_eligibility, :eligible) }
-
-  let(:claim) do
-    create(
-      :claim,
-      :skipped_tid,
-      policy: Policies::EarlyCareerPayments,
-      academic_year: AcademicYear.new(2021),
-      eligibility: eligibility
-    )
-  end
-  let(:lup_claim) { create(:claim, :skipped_tid, policy: Policies::LevellingUpPremiumPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility_lup) }
-  let(:current_claim) { CurrentClaim.new(claims: [claim, lup_claim]) }
+  subject(:slug_sequence) { described_class.new(journey_session) }
   let(:journey_session) do
     create(:additional_payments_session, answers: answers)
   end
@@ -231,13 +216,13 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
       end
 
       it "includes teacher reference number slug if teacher reference number is nil" do
-        claim.teacher_reference_number = nil
+        journey_session.answers.teacher_reference_number = nil
 
         expect(slug_sequence.slugs).to include("teacher-reference-number")
       end
 
       it "includes teacher reference number slug if teacher reference number is not nil" do
-        claim.teacher_reference_number = "1234567"
+        journey_session.answers.teacher_reference_number = "1234567"
 
         expect(slug_sequence.slugs).to include("teacher-reference-number")
       end
@@ -370,20 +355,9 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
       create(:journey_configuration, :additional_payments)
     end
 
-    let(:current_school) { create(:school, :combined_journey_eligibile_for_all) }
-    let(:ecp_claim) { create(:claim, policy: Policies::EarlyCareerPayments, eligibility_trait: ecp_eligibility) }
-    let(:lup_claim) { create(:claim, policy: Policies::LevellingUpPremiumPayments, eligibility_trait: lup_eligibility) }
-
-    let(:current_claim) { CurrentClaim.new(claims: [ecp_claim, lup_claim]) }
-
-    subject { described_class.new(current_claim, journey_session).slugs }
+    subject { described_class.new(journey_session).slugs }
 
     context "current claim is :eligible_now" do
-      let(:current_school) { create(:school, :combined_journey_eligibile_for_all) }
-
-      let(:ecp_claim) { create(:claim, policy: Policies::EarlyCareerPayments, eligibility_trait: ecp_eligibility, eligibility_attributes: {current_school: current_school}) }
-      let(:lup_claim) { create(:claim, policy: Policies::LevellingUpPremiumPayments, eligibility_trait: lup_eligibility, eligibility_attributes: {current_school: current_school}) }
-
       let(:journey_session) do
         build(
           :additional_payments_session,
@@ -394,17 +368,11 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
         )
       end
 
-      let(:ecp_eligibility) { :eligible_later }
-      let(:lup_eligibility) { :eligible_now }
-
       it { is_expected.to include("eligibility-confirmed") }
       it { is_expected.not_to include("eligible-later", "ineligible") }
     end
 
     context "current claim is :eligible_later" do
-      let(:ecp_eligibility) { :eligible_later }
-      let(:lup_eligibility) { :ineligible }
-
       let(:journey_session) do
         build(
           :additional_payments_session,
@@ -420,9 +388,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
     end
 
     context "current claim is :ineligible" do
-      let(:ecp_eligibility) { :ineligible }
-      let(:lup_eligibility) { :ineligible }
-
       let(:journey_session) do
         build(
           :additional_payments_session,

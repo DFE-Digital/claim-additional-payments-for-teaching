@@ -36,15 +36,10 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching do
   describe ".page_sequence_for_claim" do
     let(:completed_slugs) { [:test] }
     let(:current_slug) { [:test2] }
-    let(:current_claim) do
-      claims = Journeys::AdditionalPaymentsForTeaching::POLICIES.map { |policy| create(:claim, policy: policy) }
-      CurrentClaim.new(claims: claims)
-    end
     let(:journey_session) { build(:additional_payments_session) }
 
     subject(:page_sequence) do
       described_class.page_sequence_for_claim(
-        current_claim,
         journey_session,
         completed_slugs,
         current_slug
@@ -60,7 +55,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching do
 
     it "creates a slug sequence" do
       expect(Journeys::AdditionalPaymentsForTeaching::SlugSequence).to(
-        receive(:new).with(current_claim, journey_session)
+        receive(:new).with(journey_session)
       )
       page_sequence
     end

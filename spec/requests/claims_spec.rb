@@ -75,7 +75,7 @@ RSpec.describe "Claims", type: :request do
     before { create(:journey_configuration, :student_loans) }
 
     context "when a claim is already in progress" do
-      let(:in_progress_claim) { Claim.by_policy(Policies::StudentLoans).order(:created_at).last }
+      let(:journey_session) { Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last }
 
       before { start_student_loans_claim }
 
@@ -91,7 +91,7 @@ RSpec.describe "Claims", type: :request do
       end
 
       context "when the user has completed the journey in the correct slug sequence" do
-        before { set_slug_sequence_in_session(in_progress_claim, "claim-school") }
+        before { set_slug_sequence_in_session(journey_session, "claim-school") }
 
         it "renders the requested page in the sequence" do
           get claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school")
@@ -176,15 +176,13 @@ RSpec.describe "Claims", type: :request do
     before { create(:journey_configuration, :student_loans) }
 
     context "when a claim is already in progress" do
-      let(:in_progress_claim) { Claim.by_policy(Policies::StudentLoans).order(:created_at).last }
-
       let(:journey_session) do
         Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
       end
 
       before {
         start_student_loans_claim
-        set_slug_sequence_in_session(in_progress_claim, "qts-year")
+        set_slug_sequence_in_session(journey_session, "qts-year")
       }
 
       it "updates the claim with the submitted form data" do
@@ -213,7 +211,7 @@ RSpec.describe "Claims", type: :request do
         let(:request) { put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "personal-details"), params: }
 
         before do
-          set_slug_sequence_in_session(in_progress_claim, "personal-details")
+          set_slug_sequence_in_session(journey_session, "personal-details")
         end
 
         it "updates the student loan details" do
@@ -230,15 +228,15 @@ RSpec.describe "Claims", type: :request do
             journey_session.answers.assign_attributes(logged_in_with_tid: true)
             journey_session.save!
           end
-          set_slug_sequence_in_session(in_progress_claim, "information-provided")
+          set_slug_sequence_in_session(journey_session, "information-provided")
         end
 
         context "within the non-TID journey" do
           let(:tid_journey?) { false }
 
           it "does not update the student loan details" do
-            expect { request }.to not_change { in_progress_claim.reload.has_student_loan }
-              .and not_change { in_progress_claim.student_loan_plan }
+            expect { request }.to not_change { journey_session.reload.answers.has_student_loan }
+              .and not_change { journey_session.reload.answers.student_loan_plan }
           end
         end
 
@@ -309,14 +307,15 @@ RSpec.describe "Claims", type: :request do
       end
 
       context "when the user has completed the journey in the correct slug sequence" do
-        before { set_slug_sequence_in_session(in_progress_claim, "provide-mobile-number") }
+        before { set_slug_sequence_in_session(journey_session, "provide-mobile-number") }
 
         it "resets dependent claim attributes when appropriate" do
-          in_progress_claim.update!(provide_mobile_number: false, mobile_number: nil)
+          journey_session.answers.assign_attributes(provide_mobile_number: false, mobile_number: nil)
+          journey_session.save!
           put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "provide-mobile-number"), params: {claim: {provide_mobile_number: true}}
 
           expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "mobile-number"))
-          expect(in_progress_claim.reload.student_loan_plan).to be_nil
+          expect(journey_session.reload.answers.student_loan_plan).to be_nil
         end
       end
 
@@ -326,7 +325,7 @@ RSpec.describe "Claims", type: :request do
           mostly_performed_leadership_duties: false
         )
         journey_session.save!
-        set_slug_sequence_in_session(in_progress_claim, "leadership-position")
+        set_slug_sequence_in_session(journey_session, "leadership-position")
         put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "leadership-position"), params: {claim: {had_leadership_position: false}}
 
         expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "eligibility-confirmed"))
@@ -338,7 +337,7 @@ RSpec.describe "Claims", type: :request do
       context "having searched for a school but not selected a school from the results on the claim-school page" do
         let!(:school) { create(:school) }
 
-        before { set_slug_sequence_in_session(in_progress_claim, "claim-school") }
+        before { set_slug_sequence_in_session(journey_session, "claim-school") }
 
         it "re-renders the school search results with an error message" do
           put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"), params: {school_search: school.name, claim: {claim_school_id: ""}}
@@ -354,7 +353,7 @@ RSpec.describe "Claims", type: :request do
         let(:ineligible_school) { create(:school, :student_loans_ineligible) }
 
         it "redirects to the “ineligible” page" do
-          set_slug_sequence_in_session(in_progress_claim, "claim-school")
+          set_slug_sequence_in_session(journey_session, "claim-school")
           put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"), params: {claim: {claim_school_id: ineligible_school.to_param}}
 
           expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "ineligible"))

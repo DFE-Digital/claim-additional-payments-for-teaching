@@ -49,7 +49,6 @@ class ClaimsController < BasePublicController
     params[:journey] = new_journey::ROUTING_NAME
 
     new_page_sequence = new_journey.page_sequence_for_claim(
-      current_claim,
       journey_session,
       session[:slugs],
       params[:slug]
@@ -101,7 +100,6 @@ class ClaimsController < BasePublicController
 
   def page_sequence
     @page_sequence ||= journey.page_sequence_for_claim(
-      current_claim,
       journey_session,
       session[:slugs],
       params[:slug]

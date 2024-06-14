@@ -14,7 +14,7 @@ module Journeys
     I18N_NAMESPACE = "test_i18n_ns"
 
     class SlugSequence
-      def initialize(claim, journey_session)
+      def initialize(journey_session)
         # NOOP
       end
     end

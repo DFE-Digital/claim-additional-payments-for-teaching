@@ -258,10 +258,6 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
   end
 
   context "with a supplied postcode" do
-    let(:claim) do
-      Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
-    end
-
     let(:journey_session) do
       Journeys::AdditionalPaymentsForTeaching::Session.order(:created_at).last
     end
@@ -269,9 +265,6 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
     before do
       create(:journey_configuration, :additional_payments)
       start_early_career_payments_claim
-
-      claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
-      claim.save!
 
       journey_session.answers.assign_attributes(
         attributes_for(
@@ -287,9 +280,13 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
     end
 
     scenario "with Ordnance Survey API data" do
-      expect(claim.valid?(:submit)).to eq false
+      expect(
+        Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm.new(
+          journey_session: journey_session
+        ).valid?
+      ).to eq false
+
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "postcode-search",
         journey_session: journey_session
       )
@@ -322,9 +319,12 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
     end
 
     scenario "Claimant cannot find the correct address so chooses to manually enter address" do
-      expect(claim.valid?(:submit)).to eq false
+      expect(
+        Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm.new(
+          journey_session: journey_session
+        ).valid?
+      ).to eq false
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "postcode-search",
         journey_session: journey_session
       )
@@ -368,9 +368,13 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
 
     # Bugfix - did cause an exception after pressing back
     scenario "Claimant cannot find the correct address so chooses to manually enter address, presses back before filling anything to go to the postcode search again" do
-      expect(claim.valid?(:submit)).to eq false
+      expect(
+        Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm.new(
+          journey_session: journey_session
+        ).valid?
+      ).to eq false
+
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "postcode-search",
         journey_session: journey_session
       )
@@ -396,9 +400,13 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
     end
 
     scenario "Claimant decides they want to change the POSTCODE from the 'select-home-address' screen" do
-      expect(claim.valid?(:submit)).to eq false
+      expect(
+        Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm.new(
+          journey_session: journey_session
+        ).valid?
+      ).to eq false
+
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "postcode-search",
         journey_session: journey_session
       )
@@ -468,9 +476,13 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
     end
 
     scenario "Ordanance Survery Client raise a ResponseError" do
-      expect(claim.valid?(:submit)).to eq false
+      expect(
+        Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm.new(
+          journey_session: journey_session
+        ).valid?
+      ).to eq false
+
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "postcode-search",
         journey_session: journey_session
       )
