@@ -3,7 +3,6 @@ require "rails_helper"
 RSpec.describe PostcodeSearchForm, type: :model do
   subject do
     described_class.new(
-      claim: CurrentClaim.new(claims: [build(:claim)]),
       journey: journey,
       params: params,
       journey_session: journey_session

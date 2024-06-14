@@ -4,7 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: @form, errored_field_id_overrides: { payroll_gender: "claim_payroll_gender_female" }) if @form.errors.any? %>
     <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
-      <%= form_group_tag @form.claim do %>
+      <%= form_group_tag @form do %>
         <fieldset class="govuk-fieldset" aria-describedby="payroll_gender-hint" role="group">
 
           <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">

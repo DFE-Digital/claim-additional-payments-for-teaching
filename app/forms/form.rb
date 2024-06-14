@@ -4,7 +4,6 @@ class Form
   include ActiveModel::Serialization
   include ActiveModel::Validations::Callbacks
 
-  attr_accessor :claim
   attr_accessor :journey
   attr_accessor :journey_session
   attr_accessor :params
@@ -20,14 +19,10 @@ class Form
   end
 
   # TODO RL: remove journey param and pull it from the journey_session
-  def initialize(claim:, journey_session:, journey:, params:)
+  def initialize(journey_session:, journey:, params:)
     super
 
     assign_attributes(attributes_with_current_value)
-  end
-
-  def update!(attrs)
-    claim.update!(attrs)
   end
 
   def view_path

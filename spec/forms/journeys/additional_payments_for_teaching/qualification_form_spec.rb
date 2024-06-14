@@ -15,19 +15,18 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationForm, type:
     )
   end
 
-  let(:claim) { create(:claim, policy: Policies::EarlyCareerPayments) }
-
-  let(:current_claim) { CurrentClaim.new(claims: [claim]) }
+  let(:form) do
+    described_class.new(
+      journey: journey,
+      journey_session: journey_session,
+      params: params
+    )
+  end
 
   describe "validations" do
-    subject(:form) do
-      described_class.new(
-        journey: journey,
-        journey_session: journey_session,
-        claim: current_claim,
-        params: ActionController::Parameters.new
-      )
-    end
+    subject { form }
+
+    let(:params) { ActionController::Parameters.new }
 
     it do
       is_expected.to(
@@ -39,15 +38,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationForm, type:
   end
 
   describe "#save" do
-    let(:form) do
-      described_class.new(
-        journey: journey,
-        journey_session: journey_session,
-        claim: current_claim,
-        params: params
-      )
-    end
-
     context "when invalid" do
       let(:params) do
         ActionController::Parameters.new(claim: {qualification: "invalid"})
@@ -75,8 +65,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationForm, type:
       end
 
       it "resets dependent answers if the details didn't come from dqt" do
-        claim.eligibility.update!(eligible_itt_subject: "mathematics")
-
         expect { expect(form.save).to be true }.to(
           change { journey_session.reload.answers.eligible_itt_subject }
           .from("mathematics").to(nil)
@@ -91,8 +79,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationForm, type:
       end
 
       it "doesn't reset dependent answers if the details came from dqt" do
-        claim.eligibility.update!(eligible_itt_subject: "mathematics")
-
         journey_session.answers.assign_attributes(
           qualifications_details_check: true
         )

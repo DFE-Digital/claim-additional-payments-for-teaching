@@ -7,16 +7,10 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EmployedDirectlyForm do
 
   let(:journey_session) { create(:additional_payments_session) }
 
-  let(:current_claim) do
-    claims = journey::POLICIES.map { |policy| create(:claim, policy:) }
-    CurrentClaim.new(claims:)
-  end
-
   let(:slug) { "employed-directly" }
 
   subject(:form) do
     described_class.new(
-      claim: current_claim,
       journey_session:,
       journey:,
       params:

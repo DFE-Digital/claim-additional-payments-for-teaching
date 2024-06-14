@@ -2,14 +2,6 @@ require "rails_helper"
 
 RSpec.describe SignInOrContinueForm do
   shared_examples "sign_in_or_continue_form" do |journey|
-    let(:current_claim) do
-      claims = journey::POLICIES.map do |policy|
-        create(:claim, policy: policy)
-      end
-
-      CurrentClaim.new(claims: claims)
-    end
-
     let(:journey_session) do
       build(
         :"#{journey::I18N_NAMESPACE}_session",
@@ -24,7 +16,6 @@ RSpec.describe SignInOrContinueForm do
       described_class.new(
         journey: journey,
         journey_session: journey_session,
-        claim: current_claim,
         params: params
       )
     end

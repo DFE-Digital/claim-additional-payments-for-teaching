@@ -8,7 +8,7 @@ module Journeys
       validates :claim_school_id, presence: {message: i18n_error_message(:select_a_school)}
       validate :claim_school_must_exist, if: -> { claim_school_id.present? }
 
-      def initialize(claim:, journey_session:, journey:, params:)
+      def initialize(journey_session:, journey:, params:)
         super
 
         load_schools

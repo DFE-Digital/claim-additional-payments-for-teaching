@@ -19,6 +19,22 @@ module Journeys
           self.one_time_password = one_time_password.gsub(/\D/, "")
         end
 
+        # TODO RL: remove this and the initializer once reminders are writing
+        # to the session
+        attr_reader :claim
+
+        def initialize(claim:, journey_session:, journey:, params:)
+          @claim = claim
+          super(journey_session:, journey:, params:)
+
+          assign_attributes(attributes_with_current_value)
+        end
+
+        # TODO RL: remove this once reminders are writing to the session
+        def update!(attrs)
+          claim.update!(attrs)
+        end
+
         def save
           return false unless valid?
 

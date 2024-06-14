@@ -25,7 +25,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::IttAcademicYearForm do
 
   subject(:form) do
     described_class.new(
-      claim: CurrentClaim.new(claims: [build(:claim, policy: Policies::EarlyCareerPayments)]),
       journey_session: journey_session,
       journey: Journeys::AdditionalPaymentsForTeaching,
       params: params

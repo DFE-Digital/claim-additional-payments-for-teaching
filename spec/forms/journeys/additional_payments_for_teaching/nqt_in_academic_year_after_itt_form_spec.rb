@@ -9,15 +9,10 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
     create(:additional_payments_session, answers: answers)
   end
 
-  let(:claim) { create(:claim, policy: Policies::EarlyCareerPayments) }
-
-  let(:current_claim) { CurrentClaim.new(claims: [claim]) }
-
   subject(:form) do
     described_class.new(
       journey: journey,
       journey_session: journey_session,
-      claim: current_claim,
       params: params
     )
   end
@@ -159,7 +154,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
           end
 
           it "does not set the qualification" do
-            expect(claim.eligibility.qualification).to be nil
+            expect(journey_session.reload.answers.qualification).to be nil
           end
         end
 

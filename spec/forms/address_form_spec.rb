@@ -3,7 +3,6 @@ require "rails_helper"
 RSpec.describe AddressForm, type: :model do
   subject(:form) do
     described_class.new(
-      claim: CurrentClaim.new(claims: [build(:claim)]),
       journey: journey,
       params: params,
       journey_session: journey_session
@@ -102,10 +101,6 @@ RSpec.describe AddressForm, type: :model do
   end
 
   describe "#save" do
-    before do
-      allow(form).to receive(:update!)
-    end
-
     context "valid params" do
       context "all required address lines provided" do
         before { form.save }

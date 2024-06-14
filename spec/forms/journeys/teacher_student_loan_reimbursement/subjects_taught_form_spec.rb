@@ -3,7 +3,6 @@ require "rails_helper"
 RSpec.describe Journeys::TeacherStudentLoanReimbursement::SubjectsTaughtForm, type: :model do
   subject(:form) do
     described_class.new(
-      claim: CurrentClaim.new(claims: [build(:claim)]),
       journey_session:,
       journey:,
       params:

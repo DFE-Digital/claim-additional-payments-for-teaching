@@ -12,11 +12,10 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::CorrectSchoolForm, type:
   describe "#save" do
     subject(:save) { form.save }
 
-    let(:claim) { CurrentClaim.new(claims: [create(:claim, policy: Policies::LevellingUpPremiumPayments)]) }
     let(:journey) { Journeys::AdditionalPaymentsForTeaching }
     let(:journey_session) { create(:additional_payments_session) }
     let(:params) { ActionController::Parameters.new }
-    let(:form) { described_class.new(claim:, journey:, journey_session:, params:) }
+    let(:form) { described_class.new(journey:, journey_session:, params:) }
     let!(:school) { create(:school, :eligible_for_journey, journey:) }
 
     context "when choosing a school" do

@@ -46,12 +46,6 @@ module FormSubmittable
     before_action :load_form_if_exists, only: [:show, :update, :create]
     around_action :handle_form_submission, only: [:update, :create]
 
-    def current_data_object
-      # This is the instance of the main resource handled by the form object,
-      # and should always be defined in the controller.
-      nil
-    end
-
     def new
       redirect_to_first_slug
     end
@@ -171,7 +165,7 @@ module FormSubmittable
     end
 
     def load_form_if_exists
-      @form ||= journey.form(claim: current_data_object, journey_session:, params:)
+      @form ||= journey.form(journey_session:, params:)
     end
   end
 end

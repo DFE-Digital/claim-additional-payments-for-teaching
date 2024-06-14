@@ -24,7 +24,6 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::MostlyPerformedLeaders
     described_class.new(
       journey: journey,
       journey_session: journey_session,
-      claim: CurrentClaim.new(claims: [build(:claim)]),
       params: params
     )
   end

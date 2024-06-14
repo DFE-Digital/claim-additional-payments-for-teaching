@@ -23,7 +23,6 @@ RSpec.describe ProvideMobileNumberForm, type: :model do
 
     subject(:form) do
       described_class.new(
-        claim: CurrentClaim.new(claims: [build(:claim)]),
         journey_session: journey_session,
         journey: journey,
         params: params

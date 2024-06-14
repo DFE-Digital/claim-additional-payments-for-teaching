@@ -16,7 +16,7 @@
           <div class="govuk-radios">
             <%= form.hidden_field :employment_status %>
 
-            <%= render partial: "still_teaching_with_#{@form.tps_or_claim_school}", locals: { current_claim: @form.claim, form: form, school: @form.school }  %>
+            <%= render partial: "still_teaching_with_#{@form.tps_or_claim_school}", locals: { form: form, school: @form.school }  %>
           </div>
         </fieldset>
       <% end %>

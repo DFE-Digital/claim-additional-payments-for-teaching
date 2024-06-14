@@ -3,7 +3,6 @@ require "rails_helper"
 RSpec.describe Journeys::TeacherStudentLoanReimbursement::QtsYearForm, type: :model do
   subject(:form) do
     described_class.new(
-      claim: CurrentClaim.new(claims: [build(:claim)]),
       journey_session:,
       journey:,
       params:
@@ -33,7 +32,6 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::QtsYearForm, type: :mo
 
   describe "#save" do
     before do
-      allow(form).to receive(:update!)
       form.save
     end
 

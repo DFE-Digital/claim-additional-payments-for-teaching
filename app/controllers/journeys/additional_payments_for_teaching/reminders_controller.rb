@@ -11,9 +11,11 @@ module Journeys
 
       private
 
-      # Wrapping `current_reminder` with an abstract method that is fed to the form object.
-      def current_data_object
-        current_reminder
+      # FIXME RL: Remove this once reminders are writing to the session
+      def load_form_if_exists
+        @form ||= AdditionalPaymentsForTeaching::FORMS.dig(
+          "reminders", params[:slug]
+        )&.new(claim: current_reminder, journey: Journeys::AdditionalPaymentsForTeaching, journey_session:, params:)
       end
 
       def claim_from_session

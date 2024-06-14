@@ -2,10 +2,6 @@ require "rails_helper"
 
 RSpec.describe EmailAddressForm do
   shared_examples "email_address_form" do |journey|
-    let(:claims) do
-      journey::POLICIES.map { |policy| create(:claim, policy: policy) }
-    end
-
     let(:journey_session) do
       create(
         :"#{journey::I18N_NAMESPACE}_session",
@@ -28,7 +24,6 @@ RSpec.describe EmailAddressForm do
       described_class.new(
         journey: journey,
         journey_session: journey_session,
-        claim: current_claim,
         params: params
       )
     end

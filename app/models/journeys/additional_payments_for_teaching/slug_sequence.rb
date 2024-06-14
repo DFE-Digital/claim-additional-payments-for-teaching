@@ -176,11 +176,7 @@ module Journeys
       private
 
       def personal_details_form
-        # FIXME RL: forms expect a claim argument even thought they don't use it
-        # this will be removed as part of no longer creating a claim at the
-        # start of the journey work
         PersonalDetailsForm.new(
-          claim: nil,
           journey_session: journey_session,
           journey: Journeys::AdditionalPaymentsForTeaching,
           params: ActionController::Parameters.new

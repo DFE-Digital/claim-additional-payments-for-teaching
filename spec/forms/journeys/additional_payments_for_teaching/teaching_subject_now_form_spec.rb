@@ -4,20 +4,10 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::TeachingSubjectNowForm d
   before { create(:journey_configuration, :additional_payments) }
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
   let(:journey_session) { create(:additional_payments_session) }
-  let(:eligibility) { create(:early_career_payments_eligibility) }
-  let(:claim) do
-    create(
-      :claim,
-      policy: Policies::EarlyCareerPayments,
-      eligibility: eligibility
-    )
-  end
-  let(:current_claim) { CurrentClaim.new(claims: [claim]) }
   let(:form) do
     described_class.new(
       journey: journey,
       journey_session: journey_session,
-      claim: current_claim,
       params: params
     )
   end
@@ -82,7 +72,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::TeachingSubjectNowForm d
 
     subject(:eligible_itt_subject) { form.eligible_itt_subject }
 
-    it { is_expected.to eq claim.eligibility.eligible_itt_subject }
+    it { is_expected.to eq journey_session.answers.eligible_itt_subject }
   end
 
   describe "#teaching_physics_or_chemistry?" do

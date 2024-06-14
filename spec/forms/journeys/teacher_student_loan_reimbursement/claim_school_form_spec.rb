@@ -7,7 +7,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::ClaimSchoolForm do
 
   let(:journey_session) do
     create(
-      :"#{journey::I18N_NAMESPACE}_session",
+      :student_loans_session,
       answers: {
         taught_eligible_subjects: true,
         biology_taught: true,
@@ -28,7 +28,6 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::ClaimSchoolForm do
 
   subject(:form) do
     described_class.new(
-      claim: CurrentClaim.new(claims: [build(:claim)]),
       journey_session: journey_session,
       journey: journey,
       params: params

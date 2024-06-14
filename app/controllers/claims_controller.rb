@@ -14,10 +14,6 @@ class ClaimsController < BasePublicController
   include FormSubmittable
   include ClaimsFormCallbacks
 
-  def current_data_object
-    current_claim
-  end
-
   def timeout
   end
 

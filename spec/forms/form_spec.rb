@@ -40,10 +40,8 @@ RSpec.describe Form, type: :model do
     end
   end
 
-  subject(:form) { TestSlugForm.new(claim:, journey:, journey_session:, params:) }
+  subject(:form) { TestSlugForm.new(journey:, journey_session:, params:) }
 
-  let(:claim) { CurrentClaim.new(claims:) }
-  let(:claims) { [build(:claim, policy: Policies::StudentLoans)] }
   let(:journey) { Journeys::TestJourney }
   let(:journey_session) { build(:student_loans_session) }
   let(:params) { ActionController::Parameters.new({journey: "test-journey", slug: "test_slug", claim: claim_params}) }
@@ -132,25 +130,6 @@ RSpec.describe Form, type: :model do
 
   describe "#persisted?" do
     it { expect(form.persisted?).to eq(true) }
-  end
-
-  describe "#update!" do
-    context "when successful" do
-      it "updates the claim" do
-        expect { form.update!(first_name: "test-name") }
-          .to change { claim.first_name }.to("test-name")
-      end
-    end
-
-    context "when an error occurrs" do
-      before do
-        allow(claim).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
-      end
-
-      it "does not update the claim" do
-        expect { form.update!(first_name: "test-name") }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
   end
 
   describe "#view_path" do
