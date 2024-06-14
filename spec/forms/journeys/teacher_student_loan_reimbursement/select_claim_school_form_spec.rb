@@ -32,7 +32,6 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SelectClaimSchoolForm,
     let(:params) { ActionController::Parameters.new }
     let(:form) do
       described_class.new(
-        claim: CurrentClaim.new(claims: [build(:claim)]),
         journey:,
         journey_session:,
         params:

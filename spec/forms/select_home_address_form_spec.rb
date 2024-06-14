@@ -7,7 +7,6 @@ RSpec.describe SelectHomeAddressForm, type: :model do
     let(:address) { "The full address:123:Main Street:Springfield:12345" }
     let(:form) do
       described_class.new(
-        claim: CurrentClaim.new(claims: [build(:claim)]),
         journey: journey,
         journey_session: journey_session,
         params: params

@@ -21,7 +21,7 @@
     <% end %>
 
     <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
-      <%= form_group_tag f.object.claim do %>
+      <%= form_group_tag f.object do %>
 
         <%= f.hidden_field :eligible_itt_subject %>
 

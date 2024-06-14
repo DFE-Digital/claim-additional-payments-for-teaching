@@ -44,7 +44,6 @@ module Journeys
         QualificationForm.new(
           journey: journey,
           journey_session: journey_session,
-          claim: claim,
           params: ActionController::Parameters.new(
             claim: {
               qualification: :postgraduate_itt

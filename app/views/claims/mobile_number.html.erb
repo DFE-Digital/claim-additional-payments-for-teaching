@@ -13,7 +13,7 @@
 
     <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
       <span class="govuk-caption-xl"><%= t("questions.personal_details") %></span>
-      <%= form_group_tag f.object.claim do %>
+      <%= form_group_tag f.object do %>
         <h1 class="govuk-label-wrapper">
           <%= f.label(
             :mobile_number,
@@ -31,7 +31,7 @@
         <%= f.text_field(
           :mobile_number,
           spellcheck: "false",
-          class: css_classes_for_input(f.object.claim, :mobile_number),
+          class: css_classes_for_input(f.object, :mobile_number),
           "aria-describedby" => "mobile-number-hint"
         ) %>
 

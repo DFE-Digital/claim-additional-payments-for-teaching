@@ -7,18 +7,12 @@ RSpec.describe CurrentSchoolForm do
       create(:journey_configuration, :additional_payments)
     }
 
-    let(:current_claim) do
-      claims = journey::POLICIES.map { |policy| create(:claim, policy: policy) }
-      CurrentClaim.new(claims: claims)
-    end
-
     let(:journey_session) { create(:"#{journey::I18N_NAMESPACE}_session") }
 
     let(:slug) { "current-school" }
 
     subject(:form) do
       described_class.new(
-        claim: CurrentClaim.new(claims: [build(:claim)]),
         journey_session: journey_session,
         journey: journey,
         params: params

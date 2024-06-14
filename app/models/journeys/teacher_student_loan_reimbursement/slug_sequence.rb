@@ -133,7 +133,6 @@ module Journeys
 
       def personal_details_form
         PersonalDetailsForm.new(
-          claim: nil,
           journey_session: journey_session,
           journey: Journeys::TeacherStudentLoanReimbursement,
           params: ActionController::Parameters.new

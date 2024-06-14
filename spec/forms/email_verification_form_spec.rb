@@ -2,12 +2,6 @@ require "rails_helper"
 
 RSpec.describe EmailVerificationForm do
   shared_examples "email_verification" do |journey|
-    let(:claims) do
-      journey::POLICIES.map { |policy| create(:claim, policy: policy) }
-    end
-
-    let(:current_claim) { CurrentClaim.new(claims: claims) }
-
     let(:params) do
       ActionController::Parameters.new(
         claim: {
@@ -29,7 +23,6 @@ RSpec.describe EmailVerificationForm do
       described_class.new(
         journey: journey,
         journey_session: journey_session,
-        claim: current_claim,
         params: params
       )
     end

@@ -23,7 +23,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::QualificationDetailsForm
     described_class.new(
       journey: Journeys::AdditionalPaymentsForTeaching,
       journey_session: journey_session,
-      claim: CurrentClaim.new(claims: [build(:claim)]),
       params: params
     )
   end

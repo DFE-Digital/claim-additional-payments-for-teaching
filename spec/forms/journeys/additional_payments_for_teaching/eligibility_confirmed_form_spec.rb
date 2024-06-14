@@ -3,13 +3,10 @@ require "rails_helper"
 RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityConfirmedForm, type: :model do
   before { create(:journey_configuration, :additional_payments) }
 
-  subject(:form) { described_class.new(claim:, journey:, journey_session:, params:) }
+  subject(:form) { described_class.new(journey:, journey_session:, params:) }
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
   let(:journey_session) { create(:additional_payments_session, answers: answers) }
-  let(:ecp_claim) { create(:claim, :eligible, policy: Policies::EarlyCareerPayments) }
-  let(:lupp_claim) { create(:claim, :eligible, policy: Policies::LevellingUpPremiumPayments) }
-  let(:claim) { CurrentClaim.new(claims: [ecp_claim, lupp_claim]) }
   let(:slug) { "eligibility-confirmed" }
   let(:params) { ActionController::Parameters.new({slug:, claim: claim_params}) }
   let(:claim_params) { {selected_claim_policy: "EarlyCareerPayments"} }
@@ -63,8 +60,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityConfirmedForm
 
   describe "#single_choice_only?" do
     context "when eligible for one policy only" do
-      let(:ecp_claim) { create(:claim, :ineligible, policy: Policies::EarlyCareerPayments) }
-      let(:lupp_claim) { create(:claim, :eligible, policy: Policies::LevellingUpPremiumPayments) }
       let(:answers) do
         build(
           :additional_payments_answers,
@@ -77,8 +72,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityConfirmedForm
     end
 
     context "when eligible for more than one policy" do
-      let(:ecp_claim) { create(:claim, :eligible, policy: Policies::EarlyCareerPayments) }
-      let(:lupp_claim) { create(:claim, :eligible, policy: Policies::LevellingUpPremiumPayments) }
       let(:answers) do
         build(:additional_payments_answers, :ecp_and_lup_eligible)
       end

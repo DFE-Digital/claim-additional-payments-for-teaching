@@ -7,16 +7,10 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SupplyTeacherForm do
 
   let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
 
-  let(:current_claim) do
-    claims = journey::POLICIES.map { |policy| create(:claim, policy:) }
-    CurrentClaim.new(claims:)
-  end
-
   let(:slug) { "supply-teacher" }
 
   subject(:form) do
     described_class.new(
-      claim: current_claim,
       journey_session:,
       journey:,
       params:

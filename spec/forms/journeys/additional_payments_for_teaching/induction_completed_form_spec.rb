@@ -5,15 +5,12 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::InductionCompletedForm d
     create(:journey_configuration, :additional_payments)
   }
 
-  let(:current_claim) { CurrentClaim.new(claims: [build(:claim)]) }
-
   let(:slug) { "induction_completed" }
 
   let(:journey_session) { create(:additional_payments_session) }
 
   subject(:form) do
     described_class.new(
-      claim: current_claim,
       journey_session: journey_session,
       journey: Journeys::AdditionalPaymentsForTeaching,
       params: params

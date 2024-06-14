@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe SelectEmailForm, type: :model do
-  subject(:form) { described_class.new(claim:, journey_session:, journey:, params:) }
+  subject(:form) { described_class.new(journey_session:, journey:, params:) }
 
   let(:journey) { Journeys::TeacherStudentLoanReimbursement }
   let(:journey_session) do
@@ -14,7 +14,6 @@ RSpec.describe SelectEmailForm, type: :model do
       }
     )
   end
-  let(:claim) { CurrentClaim.new(claims: [build(:claim, policy: Policies::StudentLoans)]) }
   let(:slug) { "select-email" }
   let(:params) { ActionController::Parameters.new({slug:, claim: claim_params}) }
   let(:claim_params) { {email_address_check: "false"} }
@@ -75,10 +74,6 @@ RSpec.describe SelectEmailForm, type: :model do
   end
 
   describe "#save" do
-    before do
-      allow(form).to receive(:update!)
-    end
-
     context "valid params" do
       context "when the user selected to use the email address from Teacher ID" do
         let(:claim_params) { {email_address_check: "true"} }
@@ -107,14 +102,6 @@ RSpec.describe SelectEmailForm, type: :model do
           expect(journey_session.reload.answers.email_address_check).to eq(false)
         end
       end
-    end
-
-    context "invalid params" do
-      let(:claim_params) { {email_address_check: nil} }
-
-      before { form.save }
-
-      it { expect(form).not_to have_received(:update!) }
     end
   end
 end

@@ -40,7 +40,7 @@ class PersonalDetailsForm < Form
   validates :national_insurance_number, presence: {message: "Enter a National Insurance number in the correct format"}
   validate :ni_number_is_correct_format
 
-  def initialize(claim:, journey_session:, journey:, params:)
+  def initialize(journey_session:, journey:, params:)
     super
     assign_date_attributes
   end

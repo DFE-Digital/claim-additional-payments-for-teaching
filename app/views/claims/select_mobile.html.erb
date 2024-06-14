@@ -20,7 +20,7 @@
     <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
 
       <span class="govuk-caption-xl"><%= t("questions.personal_details") %></span>
-      <%= form_group_tag f.object.claim do %>
+      <%= form_group_tag f.object do %>
 
         <fieldset class="govuk-fieldset" aria-describedby="phone-number-hint">
 

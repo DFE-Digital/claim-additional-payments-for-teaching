@@ -34,7 +34,7 @@
 
   <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
     <%= f.hidden_field :qualifications_details_check %>
-    <%= form_group_tag f.object.claim do %>
+    <%= form_group_tag f.object do %>
 
     <div class="govuk-radios">
       <fieldset class="govuk-fieldset">

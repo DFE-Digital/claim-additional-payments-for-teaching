@@ -3,8 +3,6 @@ require "rails_helper"
 RSpec.describe Journeys::TeacherStudentLoanReimbursement::LeadershipPositionForm do
   let(:journey) { Journeys::TeacherStudentLoanReimbursement }
 
-  let(:current_claim) { CurrentClaim.new(claims: [claim]) }
-
   let(:journey_session) do
     create(
       :student_loans_session,
@@ -25,7 +23,6 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::LeadershipPositionForm
     described_class.new(
       journey: journey,
       journey_session: journey_session,
-      claim: CurrentClaim.new(claims: [build(:claim)]),
       params: params
     )
   end

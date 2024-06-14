@@ -31,45 +31,10 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
   let(:itt_academic_year) { AcademicYear.new(2020) }
 
-  let(:ecp_trainee_teacher_eligibility) do
-    create(
-      :early_career_payments_eligibility,
-      :trainee_teacher
-    )
-  end
-
-  let(:ecp_trainee_teacher_claim) do
-    create(
-      :claim,
-      :first_lup_claim_year,
-      policy: Policies::EarlyCareerPayments,
-      eligibility: ecp_trainee_teacher_eligibility
-    )
-  end
-
-  let(:ecp_qualified_teacher_eligibility) do
-    create(
-      :early_career_payments_eligibility,
-      :eligible_now,
-      :sufficient_teaching
-    )
-  end
-
-  let(:ecp_qualified_teacher_claim) do
-    create(
-      :claim,
-      policy: Policies::EarlyCareerPayments,
-      eligibility: ecp_qualified_teacher_eligibility
-    )
-  end
-
-  let(:current_claim) { CurrentClaim.new(claims: [claim]) }
-
   let(:form) do
     described_class.new(
       journey: journey,
       journey_session: journey_session,
-      claim: current_claim,
       params: params
     )
   end
@@ -77,7 +42,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
   describe "validations" do
     subject { form }
 
-    let(:claim) { ecp_qualified_teacher_claim }
     let(:params) { ActionController::Parameters.new }
 
     it do
@@ -93,8 +57,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
     let(:params) { ActionController::Parameters.new }
 
     context "when qualified teacher" do
-      let(:claim) { ecp_qualified_teacher_claim }
-
       before do
         journey_session.answers.assign_attributes(
           nqt_in_academic_year_after_itt: true
@@ -113,7 +75,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
     context "when trainee teacher" do
       context "when in ECP and LUP policy year range" do
-        let(:claim) { ecp_trainee_teacher_claim }
         let(:trainee_teacher) { :trainee_teacher }
 
         it do
@@ -134,8 +95,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
     let(:params) { ActionController::Parameters.new }
 
     context "when the claim is for a trainee teacher" do
-      let(:claim) { ecp_trainee_teacher_claim }
-
       before do
         journey_session.answers.nqt_in_academic_year_after_itt = false
       end
@@ -144,8 +103,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
     end
 
     context "when the claim is for a qualified teacher" do
-      let(:claim) { ecp_qualified_teacher_claim }
-
       before do
         journey_session.answers.nqt_in_academic_year_after_itt = false
       end
@@ -177,7 +134,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
     let(:params) { ActionController::Parameters.new }
 
-    let(:claim) { ecp_trainee_teacher_claim }
     let(:trainee_teacher) { :trainee_teacher }
 
     context "when the subject list contains chemistry" do
@@ -212,8 +168,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
   end
 
   describe "#save" do
-    let(:claim) { ecp_qualified_teacher_claim }
-
     context "when invalid" do
       let(:params) do
         ActionController::Parameters.new(
@@ -248,10 +202,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
             eligible_degree_subject: true
           )
         )
-      end
-
-      it "does not update the claim's eligibility" do
-        expect { form.save }.not_to change { claim.eligibility.eligible_itt_subject }
       end
 
       it "updates the answers" do
