@@ -4,9 +4,7 @@ RSpec.feature "Confirming Claimant Contact details" do
   before { create(:journey_configuration, :additional_payments) }
 
   it "redirects to 'email-address' if 'Change email address' is clicked on the One Time Password page" do
-    claim = start_early_career_payments_claim
-    claim.update!(attributes_for(:claim, :submittable))
-    claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
+    start_early_career_payments_claim
 
     journey_session = Journeys::AdditionalPaymentsForTeaching::Session.last
     journey_session.answers.assign_attributes(
@@ -27,7 +25,6 @@ RSpec.feature "Confirming Claimant Contact details" do
     )
 
     jump_to_claim_journey_page(
-      claim: claim,
       slug: "email-verification",
       journey_session: journey_session
     )

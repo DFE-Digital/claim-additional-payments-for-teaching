@@ -1,14 +1,12 @@
 require "rails_helper"
 
 RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
-  let(:claim) { start_early_career_payments_claim }
   let(:journey_session) { Journeys::AdditionalPaymentsForTeaching::Session.last }
 
   before { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
 
   before do
-    claim.update!(attributes_for(:claim, :submittable))
-    claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible, :eligible_school_ecp_and_lup))
+    start_early_career_payments_claim
     journey_session.answers.assign_attributes(
       attributes_for(
         :additional_payments_answers,
@@ -23,7 +21,6 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
   context "when ECP and LUP eligible" do
     it "has the correct subjects" do
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "nqt-in-academic-year-after-itt",
         journey_session: journey_session
       )
@@ -31,7 +28,6 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
       click_on "Continue"
 
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "itt-year",
         journey_session: journey_session
       )
@@ -39,7 +35,6 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
       click_on "Continue"
 
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "eligible-itt-subject",
         journey_session: journey_session
       )
@@ -47,7 +42,6 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
       click_on "Continue"
 
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "teaching-subject-now",
         journey_session: journey_session
       )
@@ -61,7 +55,6 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
   context "when eligible only for ECP" do
     it "has the correct subjects" do
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "nqt-in-academic-year-after-itt",
         journey_session: journey_session
       )
@@ -69,7 +62,6 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
       click_on "Continue"
 
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "itt-year",
         journey_session: journey_session
       )
@@ -77,7 +69,6 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
       click_on "Continue"
 
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "eligible-itt-subject",
         journey_session: journey_session
       )
@@ -85,7 +76,6 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
       click_on "Continue"
 
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "teaching-subject-now",
         journey_session: journey_session
       )
@@ -95,7 +85,6 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
 
   context "when eligible only for LUP" do
     before do
-      claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :ineligible))
       journey_session.answers.assign_attributes(
         attributes_for(
           :additional_payments_answers,
@@ -108,7 +97,6 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
 
     it "has the correct subjects" do
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "teaching-subject-now",
         journey_session: journey_session
       )

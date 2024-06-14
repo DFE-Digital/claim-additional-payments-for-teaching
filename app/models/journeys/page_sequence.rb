@@ -3,13 +3,12 @@
 # Used to model the sequence of pages that make up the claim process.
 module Journeys
   class PageSequence
-    attr_reader :claim, :current_slug, :completed_slugs
+    attr_reader :current_slug, :completed_slugs
 
     DEAD_END_SLUGS = %w[complete existing-session eligible-later future-eligibility ineligible]
     OPTIONAL_SLUGS = %w[postcode-search select-home-address reset-claim]
 
-    def initialize(claim, slug_sequence, completed_slugs, current_slug, journey_session)
-      @claim = claim
+    def initialize(slug_sequence, completed_slugs, current_slug, journey_session)
       @current_slug = current_slug
       @slug_sequence = slug_sequence
       @completed_slugs = completed_slugs
@@ -75,7 +74,7 @@ module Journeys
     end
 
     def lup_policy_and_trainee_teacher_at_lup_school?
-      Policies::LevellingUpPremiumPayments.in?(claim.policies) && lup_teacher_at_lup_school
+      journey == Journeys::AdditionalPaymentsForTeaching && lup_teacher_at_lup_school
     end
 
     def lup_teacher_at_lup_school

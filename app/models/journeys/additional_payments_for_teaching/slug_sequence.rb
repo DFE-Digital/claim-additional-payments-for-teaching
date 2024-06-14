@@ -75,13 +75,11 @@ module Journeys
         RESULTS_SLUGS
       ).freeze
 
-      attr_reader :claim, :journey_session
+      attr_reader :journey_session
 
       delegate :answers, to: :journey_session
 
-      # Really this is a combined CurrentClaim
-      def initialize(claim, journey_session)
-        @claim = claim
+      def initialize(journey_session)
         @journey_session = journey_session
       end
 
@@ -178,8 +176,11 @@ module Journeys
       private
 
       def personal_details_form
+        # FIXME RL: forms expect a claim argument even thought they don't use it
+        # this will be removed as part of no longer creating a claim at the
+        # start of the journey work
         PersonalDetailsForm.new(
-          claim:,
+          claim: nil,
           journey_session: journey_session,
           journey: Journeys::AdditionalPaymentsForTeaching,
           params: ActionController::Parameters.new

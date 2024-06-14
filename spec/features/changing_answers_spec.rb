@@ -12,9 +12,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
   let(:ecp_school) { create(:school, :early_career_payments_eligible) }
 
   scenario "Teacher changes an answer which is not a dependency of any of the other answers they've given, remaining eligible" do
-    claim = start_student_loans_claim
-    claim.update!(attributes_for(:claim, :submittable))
-    claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
+    start_student_loans_claim
 
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
     session.answers.assign_attributes(
@@ -23,7 +21,6 @@ RSpec.feature "Changing the answers on a submittable claim" do
     session.save!
 
     jump_to_claim_journey_page(
-      claim:,
       journey_session: session,
       slug: "check-your-answers"
     )
@@ -45,7 +42,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
   end
 
   scenario "Teacher changes an answer which is not a dependency of any of the other answers they've given, becoming ineligible" do
-    claim = start_student_loans_claim
+    start_student_loans_claim
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
     session.answers.assign_attributes(
       attributes_for(
@@ -58,7 +55,6 @@ RSpec.feature "Changing the answers on a submittable claim" do
     )
     session.save!
     jump_to_claim_journey_page(
-      claim:,
       slug: "check-your-answers",
       journey_session: session
     )
@@ -77,9 +73,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
   end
 
   scenario "Teacher changes an answer which is a dependency of some of the subsequent answers they've given, remaining eligible" do
-    claim = start_student_loans_claim
-    claim.update!(attributes_for(:claim, :submittable))
-    claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id))
+    start_student_loans_claim
 
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
     session.answers.assign_attributes(
@@ -88,7 +82,6 @@ RSpec.feature "Changing the answers on a submittable claim" do
     session.save!
 
     jump_to_claim_journey_page(
-      claim:,
       slug: "check-your-answers",
       journey_session: session
     )
@@ -128,9 +121,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
   end
 
   scenario "Teacher changes an answer which is a dependency of some of the subsequent answers they've given, making them ineligible" do
-    claim = start_student_loans_claim
-    claim.update!(attributes_for(:claim, :submittable))
-    claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
+    start_student_loans_claim
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
     session.answers.assign_attributes(
       attributes_for(
@@ -142,7 +133,6 @@ RSpec.feature "Changing the answers on a submittable claim" do
     session.save!
 
     jump_to_claim_journey_page(
-      claim: claim,
       slug: "check-your-answers",
       journey_session: session
     )
@@ -165,9 +155,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
   end
 
   scenario "Teacher edits but does not change an answer which is a dependency of some of the subsequent answers they've given" do
-    claim = start_student_loans_claim
-    claim.update!(attributes_for(:claim, :submittable))
-    claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
+    start_student_loans_claim
 
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
     session.answers.assign_attributes(
@@ -176,7 +164,6 @@ RSpec.feature "Changing the answers on a submittable claim" do
     session.save!
 
     jump_to_claim_journey_page(
-      claim: claim,
       slug: "check-your-answers",
       journey_session: session
     )
@@ -198,7 +185,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
   end
 
   scenario "Teacher edits personal details, triggering the update of student loan details" do
-    claim = start_student_loans_claim
+    start_student_loans_claim
     journey_session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
 
     journey_session.update!(
@@ -214,7 +201,6 @@ RSpec.feature "Changing the answers on a submittable claim" do
     answers = journey_session.answers
 
     jump_to_claim_journey_page(
-      claim: claim,
       slug: "check-your-answers",
       journey_session: journey_session
     )
@@ -240,16 +226,13 @@ RSpec.feature "Changing the answers on a submittable claim" do
   end
 
   context "User changes fields that aren't related to eligibility" do
-    let!(:claim) { start_student_loans_claim }
-    let(:eligibility) { claim.eligibility }
     let(:journey_session) do
       Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
     end
     let(:answers) { journey_session.answers }
 
     before do
-      claim.update!(attributes_for(:claim, :submittable))
-      eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
+      start_student_loans_claim
       journey_session.update!(
         answers: attributes_for(
           :student_loans_answers,
@@ -258,7 +241,6 @@ RSpec.feature "Changing the answers on a submittable claim" do
         )
       )
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "check-your-answers",
         journey_session: journey_session
       )
@@ -283,9 +265,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     end
 
     scenario "user can change the answer to identity details" do
-      claim.update!(govuk_verify_fields: [])
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "check-your-answers",
         journey_session: journey_session
       )
@@ -311,7 +291,6 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     scenario "user can change the answer to payment details" do
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "check-your-answers",
         journey_session: journey_session
       )
@@ -349,16 +328,12 @@ RSpec.feature "Changing the answers on a submittable claim" do
   end
 
   describe "Teacher changes a field that requires OTP validation" do
-    let!(:claim) { start_early_career_payments_claim }
-    let(:eligibility) { claim.eligibility }
     let(:session) do
       Journeys::AdditionalPaymentsForTeaching::Session.order(:created_at).last
     end
 
     before do
-      claim.update!(attributes_for(:claim, :submittable))
-      eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible, current_school_id: ecp_school.id))
-      claim.update!(personal_details_attributes)
+      start_early_career_payments_claim
 
       session.answers.assign_attributes(
         attributes_for(
@@ -369,7 +344,6 @@ RSpec.feature "Changing the answers on a submittable claim" do
       session.save!
 
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "check-your-answers",
         journey_session: session
       )
@@ -399,8 +373,12 @@ RSpec.feature "Changing the answers on a submittable claim" do
         fill_in "claim_one_time_password", with: otp_in_mail_sent
         click_on "Confirm"
 
-        expect(claim.reload.email_verified).to eq true
-        expect(claim.submittable?).to be true
+        expect(session.reload.answers.email_verified).to eq true
+        expect(
+          Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm.new(
+            journey_session: session
+          )
+        ).to be_valid
         expect(page).to have_content("Check your answers before sending your application")
       end
     end
@@ -453,7 +431,11 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
         expect(page).not_to have_text("Some places are both a bank and a building society")
         expect(session.reload.answers.mobile_verified).to eq true
-        expect(claim.submittable?).to be true
+        expect(
+          Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm.new(
+            journey_session: session
+          )
+        ).to be_valid
         expect(page).to have_content("Check your answers before sending your application")
       end
     end
@@ -505,7 +487,11 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
         expect(page).not_to have_text("Some places are both a bank and a building society")
         expect(session.reload.answers.mobile_verified).to eq true
-        expect(claim.submittable?).to be true
+        expect(
+          Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm.new(
+            journey_session: session
+          )
+        ).to be_valid
         expect(page).to have_content("Check your answers before sending your application")
       end
     end

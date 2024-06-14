@@ -4,14 +4,12 @@ require "rails_helper"
 
 RSpec.describe Journeys::PageSequence do
   let(:claim) { build(:claim) }
-  let(:current_claim) { CurrentClaim.new(claims: [claim]) }
   let(:slug_sequence) { OpenStruct.new(slugs: ["first-slug", "second-slug", "third-slug"]) }
   let(:completed_slugs) { [] }
   let(:journey_session) { create(:student_loans_session) }
 
   subject(:page_sequence) do
     described_class.new(
-      current_claim,
       slug_sequence,
       completed_slugs,
       current_slug,
@@ -59,7 +57,6 @@ RSpec.describe Journeys::PageSequence do
     end
 
     context "when the claim is in a submittable state (i.e. all questions have been answered)" do
-      let(:claim) { build(:claim, :submittable) }
       let(:current_slug) { "third-slug" }
       let(:completed_slugs) { ["first-slug", "second-slug", "third-slug"] }
       let(:journey_session) do
@@ -72,7 +69,6 @@ RSpec.describe Journeys::PageSequence do
       it { is_expected.to eq("check-your-answers") }
 
       context "when student-loan-amount is in the sequence and the current slug is personal-details" do
-        let(:claim) { build(:claim, :submittable) }
         let(:slug_sequence) { OpenStruct.new(slugs: ["personal-details", "student-loan-amount"]) }
         let(:current_slug) { "personal-details" }
         let(:completed_slugs) { ["personal-details", "student-loan-amount"] }
@@ -87,7 +83,6 @@ RSpec.describe Journeys::PageSequence do
         {policy: Policies::StudentLoans, next_slug: "date-of-birth", slug_sequence: OpenStruct.new(slugs: ["postcode-search", "select-home-address", "address", "date-of-birth"])}
       ].each do |scenario|
         context "#{scenario[:policy]} claim" do
-          let(:claim) { build(:claim, policy: scenario[:policy]) }
           let(:journey) { Journeys.for_policy(scenario[:policy]) }
           let(:journey_session) do
             build(
@@ -100,6 +95,10 @@ RSpec.describe Journeys::PageSequence do
           let(:slug_sequence) { scenario[:slug_sequence] }
           let(:current_slug) { "select-home-address" }
           let(:completed_slugs) { ["postcode-search", "select-home-address"] }
+
+          before do
+            create(:journey_configuration, journey::I18N_NAMESPACE)
+          end
 
           it { is_expected.to eq(scenario[:next_slug]) }
         end

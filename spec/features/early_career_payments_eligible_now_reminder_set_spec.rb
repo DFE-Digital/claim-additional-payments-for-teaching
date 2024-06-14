@@ -7,7 +7,7 @@ RSpec.feature "Eligible now can set a reminder for next year." do
   let(:school) { create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_eligible) }
 
   it "auto-sets a reminders email and name from claim params and displays the correct year" do
-    claim = start_early_career_payments_claim
+    start_early_career_payments_claim
     reminder_year = (academic_year + 1).start_year
 
     session = Journeys::AdditionalPaymentsForTeaching::Session.last
@@ -22,11 +22,10 @@ RSpec.feature "Eligible now can set a reminder for next year." do
     session.save!
 
     jump_to_claim_journey_page(
-      claim: claim,
       slug: "check-your-answers",
       journey_session: session
     )
-    expect(page).to have_text(claim.first_name)
+    expect(page).to have_text(session.answers.first_name)
     click_on "Accept and send"
     expect(page).to have_text("Set a reminder to apply next year")
     click_on "Set reminder"
@@ -75,7 +74,7 @@ RSpec.feature "Completed Applications - Reminders" do
       policy[:eligible_now].each do |scenario|
         reminder_status = (scenario[:invited_to_set_reminder] == true) ? "CAN" : "CANNOT"
         scenario "with cohort ITT subject #{scenario[:itt_subject]} in ITT academic year #{scenario[:itt_academic_year]} - a reminder #{reminder_status} be set" do
-          claim = start_early_career_payments_claim
+          start_early_career_payments_claim
           reminder_year = (academic_year + 1).start_year
 
           session = Journeys::AdditionalPaymentsForTeaching::Session.last
@@ -92,7 +91,6 @@ RSpec.feature "Completed Applications - Reminders" do
           session.save!
 
           jump_to_claim_journey_page(
-            claim: claim,
             slug: "check-your-answers",
             journey_session: session
           )

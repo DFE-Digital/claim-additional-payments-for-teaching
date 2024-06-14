@@ -33,17 +33,10 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims by cohort" do
 
         start_early_career_payments_claim
 
-        eligibility_attrs = attributes_for(:early_career_payments_eligibility, :ineligible_feature)
-        claim.eligibility.update!(eligibility_attrs)
-
         journey_session.answers.assign_attributes(
           qualification: "postgraduate_itt"
         )
         journey_session.save!
-      end
-
-      let(:claim) do
-        Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
       end
 
       let(:journey_session) do
@@ -53,7 +46,6 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims by cohort" do
       policy[:ineligible_cohorts].each do |scenario|
         scenario "with cohort ITT subject #{scenario[:itt_subject]} in ITT academic year #{scenario[:itt_academic_year]}" do
           jump_to_claim_journey_page(
-            claim: claim,
             slug: "itt-year",
             journey_session: journey_session
           )

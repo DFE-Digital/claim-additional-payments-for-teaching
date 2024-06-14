@@ -35,10 +35,9 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           journey_session.save!
 
           expect(claim.policy).to eq Policies::EarlyCareerPayments
-          expect(claim.eligibility.reload.eligible_itt_subject).to eq args[:subject]
+          expect(journey_session.reload.answers.eligible_itt_subject).to eq args[:subject]
 
           jump_to_claim_journey_page(
-            claim:,
             slug: "itt-year",
             journey_session: journey_session
           )
@@ -103,31 +102,23 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           claim = start_early_career_payments_claim
           journey_session = Journeys::AdditionalPaymentsForTeaching::Session.last
 
-          claim.eligibility.update!(
-            attributes_for(
-              :early_career_payments_eligibility,
-              :eligible,
-              eligible_itt_subject: args[:subject]
-            )
-          )
-
           journey_session.answers.assign_attributes(
             attributes_for(
               :additional_payments_answers,
+              :submittable,
               qualification: "postgraduate_itt",
               current_school_id: school.id,
               nqt_in_academic_year_after_itt: true,
-              induction_completed: true
+              induction_completed: true,
+              eligible_itt_subject: args[:subject]
             )
           )
 
           journey_session.save!
 
-          expect(claim.policy).to eq Policies::EarlyCareerPayments
-          expect(claim.eligibility.reload.eligible_itt_subject).to eq args[:subject]
+          expect(journey_session.reload.answers.eligible_itt_subject).to eq args[:subject]
 
           jump_to_claim_journey_page(
-            claim:,
             slug: "itt-year",
             journey_session: journey_session
           )
@@ -150,7 +141,11 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
 
           expect(journey_session.reload.answers.itt_academic_year).to eq args[:academic_year]
-          expect(claim.errors.messages).to be_empty
+          expect(
+            Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm.new(
+              journey_session: journey_session
+            ).tap(&:validate).errors.messages
+          ).to be_empty
 
           click_on "Continue"
 

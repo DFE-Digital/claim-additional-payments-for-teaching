@@ -324,19 +324,8 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
   end
 
   context "Route into teaching" do
-    let!(:claim) do
-      claim = start_early_career_payments_claim
-      claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
-      claim
-    end
-
-    let!(:lup_claim) do
-      lup_claim = Claim.by_policy(Policies::LevellingUpPremiumPayments).order(:created_at).last
-      lup_claim.eligibility.update!(attributes_for(:levelling_up_premium_payments_eligibility, :eligible))
-      lup_claim
-    end
-
     let!(:journey_session) do
+      start_early_career_payments_claim
       journey_session = Journeys::AdditionalPaymentsForTeaching::Session.last
       journey_session.answers.assign_attributes(
         attributes_for(
@@ -351,7 +340,6 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
     scenario "when Assessment only" do
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "qualification",
         journey_session: journey_session
       )
@@ -380,7 +368,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       choose "Mathematics"
       click_on "Continue"
 
-      expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
+      expect(journey_session.reload.answers.eligible_itt_subject).to eql "mathematics"
 
       # - Do you teach maths now
       expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
@@ -392,7 +380,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
       click_on "Continue"
 
-      expect(claim.eligibility.reload.itt_academic_year).to eql itt_year
+      expect(journey_session.reload.answers.itt_academic_year).to eql itt_year
     end
 
     scenario "when Overseas recognition" do
@@ -400,7 +388,6 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       journey_session.save!
 
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "qualification",
         journey_session:
       )
@@ -429,7 +416,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       choose "Mathematics"
       click_on "Continue"
 
-      expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
+      expect(journey_session.reload.answers.eligible_itt_subject).to eql "mathematics"
 
       # - Do you teach maths now
       expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
@@ -439,7 +426,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
       expect(journey_session.reload.answers.teaching_subject_now).to eql true
 
-      expect(claim.eligibility.reload.itt_academic_year).to eql itt_year
+      expect(journey_session.reload.answers.itt_academic_year).to eql itt_year
     end
   end
 
@@ -815,19 +802,8 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
         ).to_return(status: 200, body: body, headers: {})
     end
 
-    let!(:claim) do
-      claim = start_early_career_payments_claim
-      claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
-      claim
-    end
-
-    let!(:lup_claim) do
-      lup_claim = Claim.by_policy(Policies::LevellingUpPremiumPayments).order(:created_at).last
-      lup_claim.eligibility.update!(attributes_for(:levelling_up_premium_payments_eligibility, :eligible))
-      lup_claim
-    end
-
     let!(:journey_session) do
+      start_early_career_payments_claim
       session = Journeys::AdditionalPaymentsForTeaching::Session.last
       session.answers.assign_attributes(
         attributes_for(
@@ -840,9 +816,13 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     end
 
     scenario "with Ordnance Survey data" do
-      expect(claim.valid?(:submit)).to eq false
+      expect(
+        Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm.new(
+          journey_session: journey_session
+        ).valid?
+      ).to eq false
+
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "check-your-answers-part-one",
         journey_session:
       )

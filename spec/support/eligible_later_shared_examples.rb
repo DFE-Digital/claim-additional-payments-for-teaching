@@ -30,7 +30,6 @@ RSpec.shared_examples "Eligible later" do |opts|
       journey_session.save!
 
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "check-your-answers-part-one",
         journey_session: journey_session
       )

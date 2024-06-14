@@ -32,7 +32,6 @@ RSpec.feature "Admin claim tasks update with DQT API" do
       claim.save!
 
       jump_to_claim_journey_page(
-        claim: claim,
         slug: "check-your-answers",
         journey_session: journey_session
       )
