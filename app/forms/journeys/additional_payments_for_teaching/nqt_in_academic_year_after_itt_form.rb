@@ -21,16 +21,6 @@ module Journeys
         end
       end
 
-      def backlink_path
-        return unless page_sequence.in_sequence?("correct-school")
-
-        Rails
-          .application
-          .routes
-          .url_helpers
-          .claim_path(params[:journey], "correct-school")
-      end
-
       private
 
       def determine_induction_answer_from_dqt_record
