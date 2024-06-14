@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Journeys::AdditionalPaymentsForTeaching::Reminders::EmailVerificationForm do
   subject(:form) do
-    described_class.new(claim: reminder, journey:, journey_session:, params:)
+    described_class.new(reminder: reminder, journey:, journey_session:, params:)
   end
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }

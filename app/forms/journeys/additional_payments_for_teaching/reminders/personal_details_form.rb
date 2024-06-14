@@ -16,26 +16,19 @@ module Journeys
           ActiveModel::Name.new(Form)
         end
 
-        # TODO RL: remove this and the initializer once reminders are writing
-        # to the session
-        attr_reader :claim
+        attr_reader :reminder
 
-        def initialize(claim:, journey_session:, journey:, params:)
-          @claim = claim
+        def initialize(reminder:, journey_session:, journey:, params:)
+          @reminder = reminder
           super(journey_session:, journey:, params:)
 
           assign_attributes(attributes_with_current_value)
         end
 
-        # TODO RL: remove this once reminders are writing to the session
-        def update!(attrs)
-          claim.update!(attrs)
-        end
-
         def save
           return false unless valid?
 
-          update!(attributes)
+          reminder.update!(attributes)
         end
 
         private
@@ -45,19 +38,7 @@ module Journeys
         end
 
         def load_current_value(attribute)
-          # TODO: re-implement when the underlying claim and eligibility data sources
-          # are moved to an alternative place e.g. a session hash
-
-          # Some, but not all attributes are present directly on the claim record.
-          return claim.public_send(attribute) if claim.has_attribute?(attribute)
-
-          # At the moment, some attributes are unique to a policy eligibility record,
-          # so we need to loop through all the claims in the wrapper and check each
-          # eligibility individually; if the search fails, it should return `nil`.
-          claim.claims.each do |c|
-            return c.eligibility.public_send(attribute) if c.eligibility.has_attribute?(attribute)
-          end
-          nil
+          reminder.public_send(attribute) if reminder.has_attribute?(attribute)
         end
       end
     end

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Journeys::AdditionalPaymentsForTeaching::Reminders::PersonalDetailsForm, type: :model do
-  subject(:form) { described_class.new(claim: form_data_object, journey:, journey_session:, params:) }
+  subject(:form) { described_class.new(reminder: form_data_object, journey:, journey_session:, params:) }
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
   let(:journey_session) { build(:additional_payments_session) }
@@ -30,16 +30,13 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::Reminders::PersonalDetai
   describe "#save" do
     subject(:save) { form.save }
 
-    before do
-      allow(form).to receive(:update!).and_return(true)
-    end
-
     context "valid params" do
       let(:form_params) { {"full_name" => "John Doe", "email_address" => "john.doe@email.com"} }
 
       it "saves the attributes" do
         expect(save).to eq(true)
-        expect(form).to have_received(:update!).with(form_params)
+        expect(form_data_object.full_name).to eq("John Doe")
+        expect(form_data_object.email_address).to eq("john.doe@email.com")
       end
     end
 
@@ -48,7 +45,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::Reminders::PersonalDetai
 
       it "does not save the attributes" do
         expect(save).to eq(false)
-        expect(form).not_to have_received(:update!)
+        expect(form_data_object.full_name).to be_nil
+        expect(form_data_object.email_address).to be_nil
       end
     end
   end

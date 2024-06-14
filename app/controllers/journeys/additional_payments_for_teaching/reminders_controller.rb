@@ -11,11 +11,10 @@ module Journeys
 
       private
 
-      # FIXME RL: Remove this once reminders are writing to the session
       def load_form_if_exists
         @form ||= AdditionalPaymentsForTeaching::FORMS.dig(
           "reminders", params[:slug]
-        )&.new(claim: current_reminder, journey: Journeys::AdditionalPaymentsForTeaching, journey_session:, params:)
+        )&.new(reminder: current_reminder, journey: Journeys::AdditionalPaymentsForTeaching, journey_session:, params:)
       end
 
       def claim_from_session
