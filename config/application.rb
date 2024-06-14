@@ -24,6 +24,8 @@ require_relative "../lib/one_time_password"
 require_relative "../lib/dqt"
 require_relative "../lib/notify_sms_message"
 
+require "govuk/components"
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
