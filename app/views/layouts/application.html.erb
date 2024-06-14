@@ -90,13 +90,14 @@
         </p>
       </div>
 
+      <%= render 'shared/backlink'%>
+
       <main class="govuk-main-wrapper app-main-class" id="main-content">
         <% flash.each do |name, msg| %>
           <div class="govuk-body-l govuk-flash__<%= name %>">
             <%= msg %>
           </div>
         <% end %>
-        <%= render 'shared/backlink'%>
         <%= yield %>
       </main>
     </div>
