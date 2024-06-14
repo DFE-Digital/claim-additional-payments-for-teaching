@@ -12,13 +12,19 @@
     <%= render("shared/error_summary", instance: @form) if @form.errors.any? %>
 
     <%= form_for @form, url: claim_path(current_journey_routing_name), html: { novalidate: false } do |f| %>
-      <%= personal_details_caption(f.object.claim) %>
+      <span class="govuk-caption-xl">
+        <%= I18n.t("questions.personal_details") %>
+      </span>
+
       <%= form_group_tag f.object do %>
         <h1 class="govuk-label-wrapper">
           <%= f.label :email_address, t("questions.email_address"), class: "govuk-label #{label_css_class_for_journey(f.object.journey)}" %>
         </h1>
 
-        <%= email_govuk_hint(f.object.claim) %>
+        <div id="email-address-hint" class="govuk-hint">
+          <p><%= I18n.t("questions.email_address_hint1") %></p>
+          <p><%= I18n.t("questions.email_address_hint2") %></p>
+        </div>
 
         <%= errors_tag f.object, :email_address %>
 
