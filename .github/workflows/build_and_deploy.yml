@@ -107,3 +107,9 @@ jobs:
           environment: test-aks
           docker-image: ${{ needs.build.outputs.docker-image-tag }}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Run migrations
+        shell: bash
+        run: |
+          make ci test-aks get-cluster-credentials
+          kubectl exec -n srtl-test deployment/claim-additional-payments-for-teaching-test-worker -- sh -c "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/prepare-database"
