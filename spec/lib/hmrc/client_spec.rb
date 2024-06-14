@@ -10,7 +10,7 @@ RSpec.describe Hmrc::Client do
   let(:token_expiry) { 99999 }
 
   before do
-    http_client.stub(:post).with("#{base_url}/oauth/token", headers: nil, body: {
+    allow(http_client).to receive(:post).with("#{base_url}/oauth/token", headers: nil, body: {
       grant_type: "client_credentials",
       client_id: client_id,
       client_secret: client_secret
@@ -87,7 +87,7 @@ RSpec.describe Hmrc::Client do
     end
 
     before do
-      http_client.stub(:post).with("#{base_url}/misc/bank-account/verify/personal", headers: expected_headers, body: expected_payload) do
+      allow(http_client).to receive(:post).with("#{base_url}/misc/bank-account/verify/personal", headers: expected_headers, body: expected_payload) do
         double(body: response_to_return, success?: response_success, code: response_code)
       end
     end
