@@ -3,6 +3,7 @@ module JourneyConcern
 
   included do
     helper_method :current_journey_routing_name, :journey, :journey_configuration, :current_claim, :journey_session, :answers
+    helper_method :claim_in_progress?
   end
 
   def current_journey_routing_name
@@ -27,6 +28,10 @@ module JourneyConcern
 
   def answers
     journey_session.answers
+  end
+
+  def claim_in_progress?
+    session[:claim_id].present?
   end
 
   private

@@ -8,10 +8,6 @@ module ApplicationHelper
     end.join(" — ")
   end
 
-  def claim_in_progress?
-    session.key?(:claim_id)
-  end
-
   def currency_value_for_number_field(value)
     return if value.nil?
 
