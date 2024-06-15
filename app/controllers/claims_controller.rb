@@ -83,11 +83,11 @@ class ClaimsController < BasePublicController
   end
 
   def check_claim_not_in_progress
-    redirect_to(existing_session_path(journey: current_journey_routing_name)) if claim_in_progress?
+    redirect_to(existing_session_path(journey: current_journey_routing_name)) if eligible_claim_in_progress?
   end
 
-  def claim_in_progress?
-    session[:claim_id].present? && !claim_ineligible?
+  def eligible_claim_in_progress?
+    claim_in_progress? && !claim_ineligible?
   end
 
   def claim_ineligible?
