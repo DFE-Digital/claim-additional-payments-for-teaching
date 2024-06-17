@@ -14,8 +14,6 @@ RSpec.describe EmailAddressForm do
       )
     end
 
-    let(:current_claim) { CurrentClaim.new(claims: claims) }
-
     let(:params) do
       ActionController::Parameters.new(claim: {email_address: email_address})
     end

@@ -1,13 +1,12 @@
 require "rails_helper"
 
 RSpec.describe "Claims" do
-  before { create(:journey_configuration, :additional_payments) }
+  before do
+    create(:journey_configuration, :additional_payments)
+    start_claim("additional-payments")
+  end
 
   describe "#create" do
-    before do
-      allow_any_instance_of(BasePublicController).to receive(:current_claim).and_return(current_claim)
-    end
-    let(:current_claim) { create(:claim, policy: Policies::LevellingUpPremiumPayments) }
     let(:submit_form) { post reminders_path("additional-payments", params: form_params) }
 
     context "with full name and valid email address" do

@@ -43,7 +43,6 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
       eligibility_checker(journey_session).ineligible?
     ).to be false
     choose_school school
-    click_on "Continue"
     expect(
       eligibility_checker(journey_session).ineligible?
     ).to be true

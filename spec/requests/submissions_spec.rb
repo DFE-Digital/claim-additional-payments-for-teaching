@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "Submissions", type: :request do
-  let(:in_progress_claim) { Claim.by_policy(Policies::StudentLoans).order(:created_at).last }
   let(:journey_session) do
     Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
   end
@@ -15,10 +14,6 @@ RSpec.describe "Submissions", type: :request do
       before do
         start_student_loans_claim
         # Make the claim submittable
-        in_progress_claim.update!(attributes_for(:claim, :submittable))
-        in_progress_claim.eligibility = create(:student_loans_eligibility, :eligible)
-        in_progress_claim.save!
-
         journey_session.update!(
           answers: attributes_for(:student_loans_answers, :submittable)
         )
@@ -81,7 +76,7 @@ RSpec.describe "Submissions", type: :request do
       end
 
       it "doesn't submit the claim and renders the check-your-answers page with the reasons why" do
-        expect(in_progress_claim.reload.submitted_at).to be_nil
+        expect(journey_session.submitted?).to eq false
         expect(ActionMailer::Base.deliveries).to be_empty
         expect(response.body).to include("Check your answers before sending your application")
         expect(response.body).to include("Enter an email address")
@@ -97,15 +92,14 @@ RSpec.describe "Submissions", type: :request do
   describe "#show" do
     before do
       start_student_loans_claim
-      in_progress_claim.update!(attributes_for(:claim, :submittable))
     end
 
     context "when the user has followed the slug sequence" do
-      before { set_session_data(submitted_claim_id: in_progress_claim.id) }
+      before do
+        set_session_data(submitted_claim_id: create(:claim, :submittable).id)
+      end
 
       it "renders the claim confirmation screen, including identity checking content" do
-        in_progress_claim.update!(govuk_verify_fields: [])
-
         get claim_confirmation_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
 
         expect(response.body).to include("Claim submitted")

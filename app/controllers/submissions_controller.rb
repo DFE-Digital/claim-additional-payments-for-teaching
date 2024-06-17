@@ -7,8 +7,6 @@ class SubmissionsController < BasePublicController
     @form = journey::ClaimSubmissionForm.new(journey_session: journey_session)
 
     if @form.save
-      current_claim.claims.each(&:destroy!)
-
       session[:submitted_claim_id] = @form.claim.id
       clear_claim_session
       redirect_to claim_confirmation_path

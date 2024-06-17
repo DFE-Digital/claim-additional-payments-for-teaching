@@ -26,12 +26,13 @@ module PartOfClaimJourney
   end
 
   def send_to_start?
-    !skip_landing_page? && !current_claim.persisted?
+    !skip_landing_page? && journey_session.nil?
   end
 
   def submitted_claim
     return unless session[:submitted_claim_id]
-    CurrentClaim.new(claims: Claim.where(id: session[:submitted_claim_id]))
+
+    Claim.find(session[:submitted_claim_id])
   end
 
   def set_cache_headers

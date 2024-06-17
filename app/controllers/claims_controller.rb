@@ -38,7 +38,7 @@ class ClaimsController < BasePublicController
   delegate :slugs, :current_slug, :previous_slug, :next_slug, :next_required_slug, to: :page_sequence
 
   def redirect_to_existing_claim_journey
-    new_journey = Journeys.for_policy(current_claim.policy)
+    new_journey = Journeys.for_routing_name(journey_session.journey)
 
     # Set the params[:journey] to the new journey routing name so things like
     # journey_session that rely on the journey param find the correct journey.
@@ -58,8 +58,21 @@ class ClaimsController < BasePublicController
   end
 
   def persist_claim
-    current_claim.save!
-    session[:claim_id] = current_claim.claim_ids
+    # Setting the journey name in the session is required for omniauth
+    # callbacks congtroller, as we're redirected to a generic url so we can't
+    # infer the journey from the params, and for refreshing the session as that
+    # hits a non namespaced url. See
+    # JourneyConcern#current_journey_routing_name and
+    # OmniauthCallbacksController#current_journey_routing_name for where we use
+    # this session value.
+    session[:current_journey_routing_name] = current_journey_routing_name
+
+    journey_session = journey::Session.create!(
+      journey: current_journey_routing_name,
+      answers: {
+        academic_year: journey_configuration.current_academic_year
+      }
+    )
     session[journey_session_key] = journey_session.id
   end
 
@@ -106,11 +119,9 @@ class ClaimsController < BasePublicController
     prepend_view_path("app/views/#{current_journey_routing_name.underscore}")
   end
 
+  # Not sure if this is still needed as the journey sessions are scoped to a
+  # journey by the session key
   def correct_journey_for_claim_in_progress?
-    journey::POLICIES.include?(current_claim.policy)
-  end
-
-  def failed_details_check_with_teacher_id?
-    !current_claim.details_check? && current_claim.logged_in_with_tid?
+    journey == Journeys.for_routing_name(journey_session.journey)
   end
 end

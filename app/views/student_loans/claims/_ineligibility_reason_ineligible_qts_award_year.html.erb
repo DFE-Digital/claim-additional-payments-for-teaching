@@ -9,6 +9,6 @@
 
 <p class="govuk-body">
   For more information, including eligibility criteria for this payment, visit the
-  <%= link_to "‘#{journey_service_name(current_journey_routing_name)}’", "#{eligibility_page_url}#eligible-teachers", class: "govuk-link" %>
+  <%= link_to "‘#{journey_service_name(current_journey_routing_name)}’", "#{Policies::StudentLoans.eligibility_page_url}#eligible-teachers", class: "govuk-link" %>
   guidance.
 </p>

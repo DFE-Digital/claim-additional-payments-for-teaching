@@ -2,34 +2,23 @@ require "rails_helper"
 
 RSpec.feature "Admin claim tasks update with DQT API" do
   def claimant_submits_claim(claim_attributes:, answers:, post_submission_claim_attributes: {})
-    claim = nil
-
     in_browser(:claimant) do
       policy = claim_attributes[:policy]
       policy_underscored = policy.to_s.underscore
-      claim = send(:"start_#{policy_underscored}_claim")
+      send(:"start_#{policy_underscored}_claim")
 
       journey = Journeys.for_policy(policy)
 
       journey_session = journey::Session.last
 
-      journey_session.update!(
-        answers: attributes_for(
+      journey_session.answers.assign_attributes(
+        attributes_for(
           :"#{journey::I18N_NAMESPACE}_answers",
           :submittable
         ).merge(answers)
       )
 
-      claim.update!(
-        attributes_for(
-          :claim,
-          :submitted,
-          **claim_attributes
-        )
-      )
-
-      claim.eligibility = create("#{policy_underscored}_eligibility", :eligible)
-      claim.save!
+      journey_session.save!
 
       jump_to_claim_journey_page(
         slug: "check-your-answers",
