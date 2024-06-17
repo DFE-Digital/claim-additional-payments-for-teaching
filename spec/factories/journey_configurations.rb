@@ -10,6 +10,10 @@ FactoryBot.define do
       routing_name { Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME }
     end
 
+    trait :get_a_teacher_relocation_payment do
+      routing_name { Journeys::GetATeacherRelocationPayment::ROUTING_NAME }
+    end
+
     trait :early_career_payments do
       additional_payments
     end
