@@ -114,7 +114,16 @@ jobs:
           make ci test-aks get-cluster-credentials
           kubectl exec -n srtl-test deployment/claim-additional-payments-for-teaching-test-worker -- sh -c "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/prepare-database"
 
-      - name: Slack notification
+      - name: Run smoke tests
+        shell: bash
+        run: bin/smoke
+        env:
+          RAILS_ENV: test
+          SMOKE_TEST_APP_HOST: ${{ env.APP_URL }}
+          BASIC_AUTH_USERNAME: ${{ secrets.BASIC_AUTH_USERNAME }}
+          BASIC_AUTH_PASSWORD: ${{ secrets.BASIC_AUTH_PASSWORD }}
+
+      - name: Notify on failure
         if: failure()
         uses: rtCamp/action-slack-notify@master
         env:
