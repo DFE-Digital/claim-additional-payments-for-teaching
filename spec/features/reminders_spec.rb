@@ -13,15 +13,8 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
 
       scenario "Claimant enters personal details and OTP for #{args[:subject]} for #{args[:cohort]}" do
         travel_to args[:frozen_year] do
-          claim = start_early_career_payments_claim
+          start_early_career_payments_claim
           journey_session = Journeys::AdditionalPaymentsForTeaching::Session.last
-
-          claim.eligibility.update!(
-            attributes_for(
-              :early_career_payments_eligibility,
-              :eligible
-            )
-          )
 
           journey_session.answers.assign_attributes(
             attributes_for(
@@ -34,7 +27,6 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
 
           journey_session.save!
 
-          expect(claim.policy).to eq Policies::EarlyCareerPayments
           expect(journey_session.reload.answers.eligible_itt_subject).to eq args[:subject]
 
           jump_to_claim_journey_page(
@@ -61,7 +53,6 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
 
           expect(journey_session.reload.answers.itt_academic_year).to eq args[:academic_year]
-          expect(claim.errors.messages).to be_empty
 
           click_on "Continue"
 
@@ -99,13 +90,13 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
     ].each do |args|
       scenario "to request a reminder for #{args[:subject]} for #{args[:cohort]}" do
         travel_to args[:frozen_year] do
-          claim = start_early_career_payments_claim
+          start_early_career_payments_claim
           journey_session = Journeys::AdditionalPaymentsForTeaching::Session.last
 
           journey_session.answers.assign_attributes(
             attributes_for(
               :additional_payments_answers,
-              :submittable,
+              :ecp_eligible,
               qualification: "postgraduate_itt",
               current_school_id: school.id,
               nqt_in_academic_year_after_itt: true,
@@ -141,11 +132,6 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
 
           expect(journey_session.reload.answers.itt_academic_year).to eq args[:academic_year]
-          expect(
-            Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm.new(
-              journey_session: journey_session
-            ).tap(&:validate).errors.messages
-          ).to be_empty
 
           click_on "Continue"
 
@@ -161,7 +147,7 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
           click_on "Continue"
 
-          expect(page).to have_link("Resend passcode (you will be sent back to the email address page)", href: new_reminder_path(journey: Journeys.for_policy(claim.policy)::ROUTING_NAME))
+          expect(page).to have_link("Resend passcode (you will be sent back to the email address page)", href: new_reminder_path(journey: Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME))
 
           click_link "Resend passcode"
           expect(page).to have_text("Personal details")

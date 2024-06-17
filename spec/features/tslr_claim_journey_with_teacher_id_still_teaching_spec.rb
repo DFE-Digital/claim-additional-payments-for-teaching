@@ -48,7 +48,6 @@ RSpec.feature "TSLR journey with Teacher ID still teaching school playback" do
 
     expect(current_path).to eq("/student-loans/leadership-position")
 
-    Claim.order(created_at: :desc).limit(1).first.eligibility
     session = Journeys::TeacherStudentLoanReimbursement::Session.last
     expect(session.answers.claim_school_id).to eq eligible_claim_school.id
     expect(session.answers.current_school_id).to eq eligible_school.id
@@ -62,7 +61,6 @@ RSpec.feature "TSLR journey with Teacher ID still teaching school playback" do
 
     expect(current_path).to eq("/student-loans/current-school")
 
-    Claim.order(created_at: :desc).limit(1).first.eligibility
     session = Journeys::TeacherStudentLoanReimbursement::Session.last
     expect(session.answers.claim_school_id).to eq eligible_claim_school.id
     expect(session.answers.current_school_id).to be_nil
@@ -76,7 +74,6 @@ RSpec.feature "TSLR journey with Teacher ID still teaching school playback" do
 
     expect(current_path).to eq("/student-loans/ineligible")
 
-    Claim.order(created_at: :desc).limit(1).first.eligibility
     session = Journeys::TeacherStudentLoanReimbursement::Session.last
     expect(session.answers.claim_school_id).to eq eligible_claim_school.id
     expect(session.answers.current_school_id).to be_nil

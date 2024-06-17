@@ -1,4 +1,4 @@
-<% content_for(:page_title, page_title("You are eligible to claim back student loan repayments", journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title("You are eligible to claim back student loan repayments", journey: current_journey_routing_name, show_error: journey_session.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">

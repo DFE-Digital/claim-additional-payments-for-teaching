@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.feature "Levelling up premium payments and early-career payments combined claim journey", :with_stubbed_hmrc_client, :with_hmrc_bank_validation_enabled do
-  let(:claim) { Claim.by_policy(Policies::LevellingUpPremiumPayments).order(:created_at).last }
   let(:journey_session) do
     Journeys::AdditionalPaymentsForTeaching::Session.order(:created_at).last
   end
@@ -35,7 +34,8 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     expect(page).to have_current_path("/#{Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME}/current-school")
 
     # - Which school do you teach at
-    claim.update(details_check: true)
+    journey_session.answers.assign_attributes(details_check: true)
+    journey_session.save!
     expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
     choose_school school
     click_on "Continue"

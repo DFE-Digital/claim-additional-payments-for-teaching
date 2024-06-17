@@ -42,10 +42,6 @@ module ApplicationHelper
     Journeys.for_routing_name(routing_name).start_page_url
   end
 
-  def eligibility_page_url
-    current_claim.policy.eligibility_page_url
-  end
-
   def claim_decision_deadline_in_weeks
     "#{Claim::DECISION_DEADLINE.to_i / ActiveSupport::Duration::SECONDS_PER_WEEK} weeks"
   end

@@ -85,13 +85,14 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   end
 
   scenario "did not teach an eligible subject" do
-    claim = start_student_loans_claim
+    start_student_loans_claim
     choose_school school
 
     check I18n.t("student_loans.forms.subjects_taught.answers.none_taught")
     click_on "Continue"
 
-    expect(claim.eligibility.reload.taught_eligible_subjects?).to eq(false)
+    session = Journeys::TeacherStudentLoanReimbursement::Session.last
+    expect(session.answers.taught_eligible_subjects).to eq(false)
     expect(page).to have_text("You did not select an eligible subject")
     expect(page).to have_text("You can only get this payment if you taught one or more of the following subjects between #{Policies::StudentLoans.current_financial_year}:")
   end

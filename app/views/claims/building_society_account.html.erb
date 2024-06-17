@@ -6,7 +6,7 @@
 
     <%= render("shared/error_summary", instance: @form ) if @form.errors.any? %>
 
-    <%= render partial: "account_details", locals: { current_claim: current_claim, bank_or_building_society: bank_or_building_society, current_journey_routing_name: current_journey_routing_name} %>
+    <%= render partial: "account_details", locals: { bank_or_building_society: bank_or_building_society, current_journey_routing_name: current_journey_routing_name} %>
 
   </div>
 </div>

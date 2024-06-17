@@ -97,12 +97,10 @@ module FeatureHelpers
   # Early-Career Payment Policy specific helpers
   def start_early_career_payments_claim
     visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
-    Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
   end
 
   def start_levelling_up_premium_payments_claim
     visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
-    Claim.by_policy(Policies::LevellingUpPremiumPayments).order(:created_at).last
   end
 
   def get_otp_from_email
