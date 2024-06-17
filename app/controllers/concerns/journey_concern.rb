@@ -29,6 +29,12 @@ module JourneyConcern
     session[journey_session_key].present?
   end
 
+  def clear_journey_sessions!
+    journey_session_keys.each { |key| session.delete(key) }
+    @journey_session = nil
+    @journey_sessions = []
+  end
+
   private
 
   def find_journey_session
