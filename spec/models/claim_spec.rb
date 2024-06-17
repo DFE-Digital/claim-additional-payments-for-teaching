@@ -82,10 +82,14 @@ RSpec.describe Claim, type: :model do
   context "with early-career payments policy eligibility" do
     let(:claim) { build(:claim, policy: Policies::EarlyCareerPayments) }
 
-    # Tests a single attribute, possibly should test multiple attributes
     it "validates eligibility" do
       expect(claim).not_to be_valid(:amendment)
-      expect(claim.errors.first.message).to eq("Enter a positive amount up to £7,500.00 (inclusive)")
+      expect(claim.errors.map(&:message)).to contain_exactly(
+        "Enter your teacher reference number",
+        "Enter a valid student loan plan",
+        "Enter a sort code",
+        "Enter an account number"
+      )
     end
   end
 

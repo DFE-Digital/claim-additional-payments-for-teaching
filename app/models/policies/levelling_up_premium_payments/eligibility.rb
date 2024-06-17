@@ -60,10 +60,6 @@ module Policies
         computing: 5
       }, _prefix: :itt_subject
 
-      def award_amount
-        super || BigDecimal(calculate_award_amount || 0)
-      end
-
       def reset_dependent_answers(reset_attrs = [])
         attrs = ineligible? ? changed.concat(reset_attrs) : changed
 

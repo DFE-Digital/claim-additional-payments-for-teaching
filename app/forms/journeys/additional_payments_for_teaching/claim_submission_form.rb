@@ -22,7 +22,9 @@ module Journeys
       end
 
       def calculate_award_amount(eligibility)
-        eligibility.award_amount = eligibility.calculate_award_amount
+        eligibility.award_amount = eligibility.policy::PolicyEligibilityChecker
+          .new(answers: journey_session.answers)
+          .calculate_award_amount
       end
 
       def generate_policy_options_provided
