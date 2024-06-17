@@ -66,13 +66,7 @@ class ClaimsController < BasePublicController
     # this session value.
     session[:current_journey_routing_name] = current_journey_routing_name
 
-    journey_session = journey::Session.create!(
-      journey: current_journey_routing_name,
-      answers: {
-        academic_year: journey_configuration.current_academic_year
-      }
-    )
-    session[journey_session_key] = journey_session.id
+    create_journey_session!
   end
 
   def check_page_is_in_sequence
@@ -96,15 +90,6 @@ class ClaimsController < BasePublicController
 
   def check_claim_not_in_progress
     redirect_to(existing_session_path(journey: current_journey_routing_name)) if eligible_claim_in_progress?
-  end
-
-  def eligible_claim_in_progress?
-    journey_sessions.any? && journey_sessions.none? { |js| claim_ineligible?(js) }
-  end
-
-  def claim_ineligible?(journey_session)
-    journey = Journeys.for_routing_name(journey_session.journey)
-    journey::EligibilityChecker.new(journey_session: journey_session).ineligible?
   end
 
   def page_sequence

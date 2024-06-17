@@ -29,10 +29,32 @@ module JourneyConcern
     session[journey_session_key].present?
   end
 
+  def eligible_claim_in_progress?
+    journey_sessions.any? && journey_sessions.none? { |js| claim_ineligible?(js) }
+  end
+
+  def claim_ineligible?(journey_session)
+    journey = Journeys.for_routing_name(journey_session.journey)
+    journey::EligibilityChecker.new(journey_session: journey_session).ineligible?
+  end
+
   def clear_journey_sessions!
     journey_session_keys.each { |key| session.delete(key) }
     @journey_session = nil
     @journey_sessions = []
+  end
+
+  def create_journey_session!
+    journey_session = journey::Session.create!(
+      journey: current_journey_routing_name,
+      answers: {
+        academic_year: journey_configuration.current_academic_year
+      }
+    )
+
+    session[journey_session_key] = journey_session.id
+
+    journey_session
   end
 
   private
