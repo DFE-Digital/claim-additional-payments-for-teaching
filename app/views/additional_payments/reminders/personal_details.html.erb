@@ -2,43 +2,44 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: @form) if @form.errors.any? %>
+    <%= form_for @form, url: reminder_path(current_journey_routing_name), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
 
-    <%= form_for @form, url: reminder_path(current_journey_routing_name) do |f| %>
       <h1 class="govuk-heading-xl">
         <%= t("questions.personal_details") %>
       </h1>
 
-      <%= form_group_tag @form, :full_name do %>
-        <h1 class="govuk-label-wrapper">
-          <%= f.label :full_name, t("additional_payments.reminders.full_name"), {class: "govuk-label govuk-label--l"}  %>
-        </h1>
-        <%= errors_tag @form, :full_name %>
-        <%= f.text_field :full_name, class: css_classes_for_input(@form, :full_name), type: "text", spellcheck: "false", autocomplete: "name" %>
-      <% end %>
+      <%= f.govuk_text_field :full_name,
+        label: {
+          text: t("additional_payments.reminders.full_name"),
+          size: "l"
+        },
+        spellcheck: "false", autocomplete: "name" %>
 
-      <%= form_group_tag @form, :email_address do %>
-        <h1 class="govuk-label-wrapper">
-          <%= f.label :email_address, t("questions.email_address"), {class: "govuk-label govuk-label--l"}  %>
-        </h1>
-        <div class="govuk-hint" id="email_address-hint">
+      <%= f.govuk_text_field :email_address,
+        label: {
+          text: t("questions.email_address"),
+          size: "l"
+        },
+        spellcheck: "false",
+        autocomplete: "email",
+        hint: -> do %>
           <p>
             Tell us the email you want us to send reminders to.
             We recommend you use a non-work email address in case your circumstances change.
           </p>
+
           <p>
             To verify your email address we will send you an email with a 6-digit passcode.
             You can enter the passcode on the next screen.
           </p>
-        </div>
-        <%= errors_tag @form, :email_address %>
-         <%= f.text_field :email_address, class: css_classes_for_input(@form, :email_address), type: "text", spellcheck: "false", autocomplete: "email" %>
       <% end %>
 
       <details class="govuk-details" data-module="govuk-details">
         <summary class="govuk-details__summary">
           <span class="govuk-details__summary-text">Get help with access codes</span>
         </summary>
+
         <div class="govuk-details__text">
           <p class="govuk-body">
             If you have any issues with the passcode, email us at:
@@ -47,7 +48,7 @@
         </div>
       </details>
 
-      <%= f.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
+      <%= f.govuk_submit "Continue" %>
     <% end %>
   </div>
 </div>
