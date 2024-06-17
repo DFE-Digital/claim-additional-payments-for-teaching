@@ -35,6 +35,11 @@ review-aks: test-cluster
 test-aks: test-cluster
 	$(eval include global_config/test.sh)
 
+.PHONY: production-aks
+production-aks: production-cluster
+	$(if $(or ${SKIP_CONFIRM}, ${CONFIRM_PRODUCTION}), , $(error Missing CONFIRM_PRODUCTION=yes))
+	$(eval include global_config/production.sh)
+
 set-azure-account:
 	az account set -s ${AZ_SUBSCRIPTION}
 
