@@ -1,68 +1,42 @@
 <% account_hint = bank_or_building_society == "personal bank account" ? "bank" : bank_or_building_society %>
 <% account_card = account_hint == "bank" ? account_hint : "" %>
 
-<%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
-  <fieldset class="govuk-fieldset" aria-describedby="bank_details-hint" role="group">
-    <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">
-      <h1 class="govuk-fieldset__heading">
-        <%= t("questions.account_details", bank_or_building_society: bank_or_building_society) %>
-      </h1>
-    </legend>
+<%= form_for @form, url: claim_path(current_journey_routing_name), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+  <%= f.govuk_error_summary %>
 
-    <%= form_group_tag @form, :banking_name do %>
-      <%= f.label :banking_name, "Name on your account", class: "govuk-label" %>
-      <div class="govuk-hint" id="name-on-the-account-hint">
-        <%= t("questions.account_hint", bank_or_building_society: account_hint, card: account_card) %>
-      </div>
-      <%= errors_tag @form, :banking_name %>
-      <%= f.text_field :banking_name,
-        class: css_classes_for_input(@form, :banking_name),
-        spellcheck: "false",
-        "aria-describedby" => "name-on-the-account-hint" %>
-    <% end %>
+  <%= f.govuk_fieldset legend: {
+    text: t("questions.account_details", bank_or_building_society: bank_or_building_society),
+    tag: "h1",
+    size: "l"
+  } do %>
+    <%= f.govuk_text_field :banking_name,
+      spellcheck: "false",
+      label: { text: "Name on your account" },
+      hint: { text: t("questions.account_hint", bank_or_building_society: account_hint, card: account_card) } %>
 
-    <%= form_group_tag @form, :bank_sort_code do %>
-      <%= f.label :bank_sort_code, "Sort code", class: "govuk-label" %>
-      <div id="sort-code-hint" class="govuk-hint">For example: 309430</div>
-      <%= errors_tag @form, :bank_sort_code %>
-      <%= f.text_field :bank_sort_code,
-        class: css_classes_for_input(@form, :bank_sort_code, "govuk-!-width-one-quarter"),
-        autocomplete: "off",
-        "aria-describedby" => "sort-code-hint" %>
-    <% end %>
+    <%= f.govuk_text_field :bank_sort_code,
+      width: "one-quarter",
+      autocomplete: "off",
+      label: { text: "Sort code" },
+      hint: { text: "For example: 309430" } %>
 
-    <%= form_group_tag @form, :bank_account_number do %>
-      <%= f.label :bank_account_number, "Account number", class: "govuk-label" %>
-      <div id="account-number-hint" class="govuk-hint">For example: 00733445</div>
-      <%= errors_tag @form, :bank_account_number %>
-      <%= f.text_field :bank_account_number,
-        class: css_classes_for_input(@form, :bank_account_number, "govuk-input--width-20"),
-        autocomplete: "off",
-        "aria-describedby" => "account-number-hint" %>
-    <% end %>
+    <%= f.govuk_text_field :bank_account_number,
+      width: 20,
+      autocomplete: "off",
+      label: { text: "Account number" },
+      hint: { text: "For example: 00733445" } %>
 
     <% if bank_or_building_society == "building society" %>
-      <%= form_group_tag @form, :building_society_roll_number do %>
-        <%= f.label :building_society_roll_number, "Building society roll number", class: "govuk-label" %>
-        <div id="roll-number-hint" class="govuk-hint">You can find it on your card, statement or passbook</div>
-        <%= errors_tag @form, :building_society_roll_number %>
-        <%= f.text_field :building_society_roll_number,
-          class: css_classes_for_input(@form, :building_society_roll_number, "govuk-input--width-20"),
-          autocomplete: "off",
-          spellcheck: "false",
-          "aria-describedby" => "roll-number-hint" %>
-      <% end %>
+      <%= f.govuk_text_field :building_society_roll_number,
+        width: 20,
+        autocomplete: "off",
+        spellcheck: "false",
+        label: { text: "Building society roll number" },
+        hint: { text: "You can find it on your card, statement or passbook" } %>
     <% end %>
+  <% end %>
 
-  </fieldset>
+  <%= govuk_warning_text(text: t("questions.check_your_account_details")) %>
 
-  <div class="govuk-warning-text">
-    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-    <strong class="govuk-warning-text__text">
-      <span class="govuk-visually-hidden">Warning</span>
-      <%= t("questions.check_your_account_details") %>
-    </strong>
-  </div>
-
-  <%= f.submit "Continue", class: "govuk-button", data: { "prevent-double-click" => "true" } %>
+  <%= f.govuk_submit "Continue" %>
 <% end %>
