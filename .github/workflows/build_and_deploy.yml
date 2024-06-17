@@ -113,3 +113,11 @@ jobs:
         run: |
           make ci test-aks get-cluster-credentials
           kubectl exec -n srtl-test deployment/claim-additional-payments-for-teaching-test-worker -- sh -c "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/prepare-database"
+
+      - name: Slack notification
+        if: failure()
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_TITLE: Failure deploying release to test
+          SLACK_MESSAGE: Failure deploying release to test - Docker tag ${{ needs.build.outputs.docker-image-tag }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
