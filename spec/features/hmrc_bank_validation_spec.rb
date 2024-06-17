@@ -64,8 +64,8 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
     click_on "Continue"
 
     # - Personal details
-    fill_in "claim_first_name", with: "Russell"
-    fill_in "claim_surname", with: "Wong"
+    fill_in "First name", with: "Russell"
+    fill_in "Last name", with: "Wong"
     fill_in "Day", with: "28"
     fill_in "Month", with: "2"
     fill_in "Year", with: "1988"
