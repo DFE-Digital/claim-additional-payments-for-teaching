@@ -5,7 +5,7 @@ class ClaimsController < BasePublicController
   before_action :initialize_session_slug_history
   before_action :check_page_is_in_sequence, only: [:show, :update]
   before_action :update_session_with_current_slug, only: [:update]
-  before_action :set_backlink_path, only: [:show]
+  before_action :set_backlink_path, only: [:show, :update]
   before_action :check_claim_not_in_progress, only: [:new]
   before_action :clear_claim_session, only: [:new]
   before_action :prepend_view_path_for_journey
@@ -53,7 +53,6 @@ class ClaimsController < BasePublicController
   end
 
   def set_backlink_path
-    previous_slug = previous_slug()
     @backlink_path = claim_path(current_journey_routing_name, previous_slug) if previous_slug.present?
   end
 
