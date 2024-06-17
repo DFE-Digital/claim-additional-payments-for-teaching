@@ -12,13 +12,11 @@ module ClaimSessionTimeout
     session.delete(:tps_school_id)
     session.delete(:tps_school_name)
     session.delete(:tps_school_address)
-    journey_session_keys.each { |key| session.delete(key) }
-    @journey_session = nil
-    @journey_sessions = []
+    clear_journey_sessions!
   end
 
   def claim_session_timed_out?
-    session.key?(journey_session_key) && session[:last_seen_at] < claim_timeout_in_minutes.minutes.ago
+    claim_in_progress? && session[:last_seen_at] < claim_timeout_in_minutes.minutes.ago
   end
 
   def claim_timeout_in_minutes
