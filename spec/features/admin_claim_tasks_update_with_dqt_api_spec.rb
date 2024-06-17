@@ -138,6 +138,14 @@ RSpec.feature "Admin claim tasks update with DQT API" do
     HTML
   end
 
+  let(:first_eligible_itt_academic_year) {
+    JourneySubjectEligibilityChecker.first_eligible_itt_year_for_subject(
+      policy: claim.eligibility.policy,
+      claim_year: Journeys.for_policy(claim.eligibility.policy).configuration.current_academic_year,
+      subject_symbol: claim.eligibility.eligible_itt_subject.to_sym
+    )
+  }
+
   context "with EarlyCareerPayments policy" do
     let(:policy) { Policies::EarlyCareerPayments }
 
@@ -711,8 +719,8 @@ RSpec.feature "Admin claim tasks update with DQT API" do
       context "with eligible qualifications" do
         let(:data) do
           {
-            itt_start_date: Date.new(claim.eligibility.first_eligible_itt_academic_year.start_year, 9, 1),
-            qts_award_date: Date.new(claim.eligibility.first_eligible_itt_academic_year.start_year, 9, 2),
+            itt_start_date: Date.new(first_eligible_itt_academic_year.start_year, 9, 1),
+            qts_award_date: Date.new(first_eligible_itt_academic_year.start_year, 9, 2),
             itt_subjects: ["mathematics"],
             itt_subject_codes: [Policies::EarlyCareerPayments::DqtRecord::ELIGIBLE_HECOS_CODES[:mathematics].first]
           }
@@ -766,7 +774,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           let(:data) do
             {
               qts_award_date: Date.new(
-                claim.eligibility.first_eligible_itt_academic_year.start_year - 1,
+                first_eligible_itt_academic_year.start_year - 1,
                 9,
                 1
               ),
@@ -820,7 +828,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           let(:data) do
             {
               qts_award_date: Date.new( # 1st September is start of academic year
-                claim.eligibility.first_eligible_itt_academic_year.start_year,
+                first_eligible_itt_academic_year.start_year,
                 9,
                 1
               ),
@@ -924,7 +932,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         let(:data) do
           {
             qts_award_date: Date.new(
-              claim.eligibility.first_eligible_itt_academic_year.start_year - 1,
+              first_eligible_itt_academic_year.start_year - 1,
               9,
               1
             ),
