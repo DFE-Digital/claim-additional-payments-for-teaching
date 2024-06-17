@@ -1,0 +1,68 @@
+<% content_for(
+  :page_title,
+  page_title(
+      t(
+        "get_a_teacher_relocation_payment.forms.application_route.questions.which_route"
+      ),
+      journey: current_journey_routing_name,
+      show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: @form) if @form.errors.any? %>
+
+    <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
+      <%= form_group_tag f.object do %>
+
+        <%= f.hidden_field :application_route %>
+
+        <fieldset class="govuk-fieldset" role="group">
+
+          <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">
+            <h1 class="govuk-fieldset__heading">
+              <%= t(
+                "get_a_teacher_relocation_payment.forms.application_route.questions.which_route"
+              ) %>
+            </h1>
+          </legend>
+
+          <%= errors_tag f.object, :application_route %>
+
+          <div class="govuk-radios">
+            <% f.object.application_routes.each do |route| %>
+              <div class="govuk-radios__item">
+                <%= f.radio_button(
+                  :application_route,
+                  route,
+                  class: "govuk-radios__input"
+                ) %>
+
+                <%= f.label(
+                  "application_route_#{route}",
+                  t("get_a_teacher_relocation_payment.forms.application_route.answers.#{route}"),
+                  class: "govuk-label govuk-radios__label"
+                ) %>
+
+                <% if I18n.exists?("get_a_teacher_relocation_payment.forms.application_route.hints.#{route}") %>
+                  <div id="<%= "application_route_#{route}_hint" %>" class="govuk-hint govuk-radios__hint">
+                    <%= t("get_a_teacher_relocation_payment.forms.application_route.hints.#{route}") %>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+
+        </fieldset>
+      <% end %>
+
+      <%= f.submit(
+        "Continue",
+        class: "govuk-button",
+        data: {module: "govuk-button"}
+      ) %>
+    <% end %>
+  </div>
+</div>
+
