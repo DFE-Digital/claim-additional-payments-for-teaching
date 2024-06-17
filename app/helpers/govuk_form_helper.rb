@@ -83,24 +83,6 @@ module GovukFormHelper
     content_tag(:span, messages.join("<br>").html_safe, {class: "govuk-error-message", id: error_id(object.model_name.singular, attribute)})
   end
 
-  # Returns a string of the GOVUK css classes for the +<select>+ html element along with any
-  # existing css classes provided.
-  #
-  # When _object_ contains errors for _attribute_ the 'govuk-input--error' css class is added.
-  #
-  # === Example
-  #
-  # css_classes_for_select(object, :attribute, "another-css-class")
-  #
-  #   "govuk-select another-css-class"
-  #
-  def css_classes_for_select(object, attribute, css_classes = "")
-    css_classes = css_classes.split
-    css_classes << "govuk-select"
-    css_classes << "govuk-select--error" if object.errors.key?(attribute)
-    css_classes.join(" ")
-  end
-
   # Returns a string of the GOVUK css classes for the +<input>+ html element along with any
   # existing css classes provided.
   #
