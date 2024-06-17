@@ -38,7 +38,7 @@ class ClaimsController < BasePublicController
   delegate :slugs, :current_slug, :previous_slug, :next_slug, :next_required_slug, to: :page_sequence
 
   def redirect_to_existing_claim_journey
-    new_journey = Journeys.for_routing_name(journey_session.journey)
+    new_journey = Journeys.for_routing_name(other_journey_sessions.first.journey)
 
     # Set the params[:journey] to the new journey routing name so things like
     # journey_session that rely on the journey param find the correct journey.
@@ -99,10 +99,11 @@ class ClaimsController < BasePublicController
   end
 
   def eligible_claim_in_progress?
-    claim_in_progress? && !claim_ineligible?
+    journey_sessions.any? && journey_sessions.none? { |js| claim_ineligible?(js) }
   end
 
-  def claim_ineligible?
+  def claim_ineligible?(journey_session)
+    journey = Journeys.for_routing_name(journey_session.journey)
     journey::EligibilityChecker.new(journey_session: journey_session).ineligible?
   end
 
@@ -118,8 +119,6 @@ class ClaimsController < BasePublicController
     prepend_view_path("app/views/#{current_journey_routing_name.underscore}")
   end
 
-  # Not sure if this is still needed as the journey sessions are scoped to a
-  # journey by the session key
   def correct_journey_for_claim_in_progress?
     journey == Journeys.for_routing_name(journey_session.journey)
   end

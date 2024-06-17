@@ -26,7 +26,7 @@ module PartOfClaimJourney
   end
 
   def send_to_start?
-    !skip_landing_page? && journey_session.nil?
+    !skip_landing_page? && journey_sessions.none?
   end
 
   def submitted_claim
