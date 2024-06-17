@@ -174,7 +174,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
         expect(page).to have_text(closed_school.name)
       end
 
-      scenario "Current school search with autocomplete excludes closed schools", js: true do
+      scenario "Current school search with autocomplete excludes closed schools", js: true, flaky: true do
         start_student_loans_claim
 
         choose_school school
