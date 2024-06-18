@@ -8,50 +8,29 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% if @form.errors.any? %>
-      <%= render("shared/error_summary", instance: @form) %>
-    <% end %>
+    <%= form_for @form, url: claim_path(current_journey_routing_name), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
 
-    <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
-      <%= form_group_tag f.object do %>
-        <h1 class="govuk-label-wrapper">
-          <%= f.label(
-            :teacher_reference_number,
-            t("additional_payments.forms.teacher_reference_number.questions.teacher_reference_number"),
-            class: "govuk-label #{label_css_class_for_journey(f.object.journey)}"
-          ) %>
-        </h1>
+      <%= f.govuk_text_field :teacher_reference_number,
+        width: 10,
+        spellcheck: "false",
+        autocomplete: "off",
+        label: {
+          text: t("additional_payments.forms.teacher_reference_number.questions.teacher_reference_number"),
+          tag: "h1",
+          size: "l"
+        },
+        hint: { text: "You can get this from your payslip, teacher pension statement or teacher training records." } %>
 
-        <div class="govuk-hint" id="teacher_reference_number-hint">
-          You can get this from your payslip, teacher pension statement or teacher training records.
-        </div>
-
-        <div class="govuk-form-group">
-          <%= errors_tag f.object, :teacher_reference_number %>
-          <%= f.text_field(
-            :teacher_reference_number,
-            spellcheck: "false",
-            autocomplete: "off",
-            class: css_classes_for_input(f.object, :teacher_reference_number, 'govuk-input--width-10'),
-            "aria-describedby" => "teacher_reference_number-hint"
-          ) %>
-        </div>
+      <%= govuk_details(summary_text: "Help to find a lost TRN") do %>
+        <p>
+          Use the online service to
+          <%= govuk_link_to "find a lost TRN (opens in new tab)", "https://find-a-lost-trn.education.gov.uk/start", target: "_blank" %>
+          if you are unable to find it on your payslip, teacher pension statement or teacher training records.
+        </p>
       <% end %>
-      <details class="govuk-details" data-module="govuk-details">
-        <summary class="govuk-details__summary">
-              <span class="govuk-details__summary-text">
-                Help to find a lost TRN
-              </span>
-        </summary>
-        <div class="govuk-details__text">
-          <p class="govuk-body">
-            Use the online service to
-            <%= link_to "find a lost TRN (opens in new tab)", "https://find-a-lost-trn.education.gov.uk/start", class: "govuk-link", target: "_blank" %>
-            if you are unable to find it on your payslip, teacher pension statement or teacher training records.
-          </p>
-        </div>
-      </details>
-      <%= f.submit "Continue", class: "govuk-button" %>
+
+      <%= f.govuk_submit "Continue" %>
     <% end %>
   </div>
 </div>

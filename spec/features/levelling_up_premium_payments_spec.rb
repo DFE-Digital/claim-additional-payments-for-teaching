@@ -215,7 +215,7 @@ RSpec.feature "Levelling up premium payments claims" do
     # - What is your teacher reference number
     expect(page).to have_text(I18n.t("questions.teacher_reference_number"))
 
-    fill_in :claim_teacher_reference_number, with: "1234567"
+    fill_in "claim-teacher-reference-number-field", with: "1234567"
     click_on "Continue"
 
     # - Check your answers before sending your application
