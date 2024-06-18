@@ -50,7 +50,7 @@ Rails.application.configure do
   # https://technical-guidance.education.gov.uk/infrastructure/monitoring/logit/#ruby-on-rails
   config.log_format = :json                               # For parsing in Logit
   config.rails_semantic_logger.add_file_appender = false  # Don't log to file
-  config.active_record.logger = nil                       # Don't log SQL 
+  config.active_record.logger = nil                       # Don't log SQL
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
