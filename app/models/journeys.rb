@@ -7,7 +7,8 @@ module Journeys
 
   JOURNEYS = [
     AdditionalPaymentsForTeaching,
-    TeacherStudentLoanReimbursement
+    TeacherStudentLoanReimbursement,
+    GetATeacherRelocationPayment
   ].freeze
 
   def all
