@@ -38,7 +38,7 @@ class ClaimsController < BasePublicController
   delegate :slugs, :current_slug, :previous_slug, :next_slug, :next_required_slug, to: :page_sequence
 
   def redirect_to_existing_claim_journey
-    new_journey = Journeys.for_policy(current_claim.policy)
+    new_journey = Journeys.for_routing_name(other_journey_sessions.first.journey)
 
     # Set the params[:journey] to the new journey routing name so things like
     # journey_session that rely on the journey param find the correct journey.
@@ -57,9 +57,16 @@ class ClaimsController < BasePublicController
   end
 
   def persist_claim
-    current_claim.save!
-    session[:claim_id] = current_claim.claim_ids
-    session[journey_session_key] = journey_session.id
+    # Setting the journey name in the session is required for omniauth
+    # callbacks congtroller, as we're redirected to a generic url so we can't
+    # infer the journey from the params, and for refreshing the session as that
+    # hits a non namespaced url. See
+    # JourneyConcern#current_journey_routing_name and
+    # OmniauthCallbacksController#current_journey_routing_name for where we use
+    # this session value.
+    session[:current_journey_routing_name] = current_journey_routing_name
+
+    create_journey_session!
   end
 
   def check_page_is_in_sequence
@@ -82,15 +89,7 @@ class ClaimsController < BasePublicController
   end
 
   def check_claim_not_in_progress
-    redirect_to(existing_session_path(journey: current_journey_routing_name)) if claim_in_progress?
-  end
-
-  def claim_in_progress?
-    session[:claim_id].present? && !claim_ineligible?
-  end
-
-  def claim_ineligible?
-    journey::EligibilityChecker.new(journey_session: journey_session).ineligible?
+    redirect_to(existing_session_path(journey: current_journey_routing_name)) if eligible_claim_in_progress?
   end
 
   def page_sequence
@@ -106,10 +105,6 @@ class ClaimsController < BasePublicController
   end
 
   def correct_journey_for_claim_in_progress?
-    journey::POLICIES.include?(current_claim.policy)
-  end
-
-  def failed_details_check_with_teacher_id?
-    !current_claim.details_check? && current_claim.logged_in_with_tid?
+    journey == Journeys.for_routing_name(journey_session.journey)
   end
 end

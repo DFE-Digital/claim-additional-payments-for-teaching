@@ -1,10 +1,10 @@
-<% content_for(:page_title, page_title(t("questions.address.home.no_address_found"), journey: current_journey_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(t("questions.address.home.no_address_found"), journey: current_journey_routing_name, show_error: journey_session.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
+    <%= render("shared/error_summary", instance: journey_session) if journey_session.errors.any? %>
 
-    <%= form_for current_claim, url: claim_path(current_journey_routing_name), method: :get do |form| %>
+    <%= form_for journey_session, url: claim_path(current_journey_routing_name), method: :get do |form| %>
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
           <h1 class="govuk-heading-l"><%= t("questions.address.home.no_address_found") %></h1>

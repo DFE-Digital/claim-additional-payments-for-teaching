@@ -64,8 +64,8 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
     click_on "Continue"
 
     # - Personal details
-    fill_in "claim_first_name", with: "Russell"
-    fill_in "claim_surname", with: "Wong"
+    fill_in "First name", with: "Russell"
+    fill_in "Last name", with: "Wong"
     fill_in "Day", with: "28"
     fill_in "Month", with: "2"
     fill_in "Year", with: "1988"
@@ -76,8 +76,8 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
     click_link(I18n.t("questions.address.home.link_to_manual_address"))
 
     # - What is your address
-    fill_in :claim_address_line_1, with: "57"
-    fill_in :claim_address_line_2, with: "Walthamstow Drive"
+    fill_in "House number or name", with: "57"
+    fill_in "Building and street", with: "Walthamstow Drive"
     fill_in "Town or city", with: "Derby"
     fill_in "County", with: "City of Derby"
     fill_in "Postcode", with: "DE22 4BS"

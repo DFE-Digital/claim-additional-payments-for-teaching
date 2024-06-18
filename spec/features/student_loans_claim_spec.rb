@@ -67,8 +67,8 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(page).to have_text(I18n.t("questions.personal_details"))
     expect(page).to have_text(I18n.t("questions.name"))
 
-    fill_in "claim_first_name", with: "Russell"
-    fill_in "claim_surname", with: "Wong"
+    fill_in "First name", with: "Russell"
+    fill_in "Last name", with: "Wong"
 
     expect(page).to have_text(I18n.t("questions.date_of_birth"))
 

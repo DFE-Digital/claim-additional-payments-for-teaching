@@ -66,8 +66,8 @@ module FeatureHelpers
   end
 
   def fill_in_address
-    fill_in :claim_address_line_1, with: "123 Main Street"
-    fill_in :claim_address_line_2, with: "Downtown"
+    fill_in "House number or name", with: "123 Main Street"
+    fill_in "Building and street", with: "Downtown"
     fill_in "Town or city", with: "Twin Peaks"
     fill_in "County", with: "Washington"
     fill_in "Postcode", with: "M1 7HL"
@@ -97,12 +97,10 @@ module FeatureHelpers
   # Early-Career Payment Policy specific helpers
   def start_early_career_payments_claim
     visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
-    Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
   end
 
   def start_levelling_up_premium_payments_claim
     visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
-    Claim.by_policy(Policies::LevellingUpPremiumPayments).order(:created_at).last
   end
 
   def get_otp_from_email

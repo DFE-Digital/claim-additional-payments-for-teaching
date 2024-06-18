@@ -33,17 +33,13 @@ RSpec.describe "Claims", type: :request do
 
   describe "claims#create request" do
     def check_claims_created
-      expect { start_claim(@journey_configuration.journey::ROUTING_NAME) }.to change { Claim.count }.by(@journey_configuration.journey::POLICIES.count)
+      expect { start_claim(@journey_configuration.journey::ROUTING_NAME) }.to change { @journey_configuration.journey::Session.count }.by(1)
     end
 
     def check_claims_eligibility_created
-      claims = @journey_configuration.journey::POLICIES.map { |p| Claim.by_policy(p).order(:created_at).last }
-      current_claim = CurrentClaim.new(claims: claims)
+      journey_session = @journey_configuration.journey::Session.last
 
-      current_claim.claims.each_with_index do |claim, i|
-        expect(claim.eligibility).to be_kind_of(@journey_configuration.journey::POLICIES[i]::Eligibility)
-        expect(claim.academic_year).to eq(@journey_configuration.current_academic_year)
-      end
+      expect(journey_session.answers.academic_year).to eq(@journey_configuration.current_academic_year)
     end
 
     def check_slug_redirection

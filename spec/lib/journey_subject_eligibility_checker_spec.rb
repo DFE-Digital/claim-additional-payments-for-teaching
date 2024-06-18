@@ -785,18 +785,6 @@ RSpec.describe JourneySubjectEligibilityChecker do
   end
 
   describe "#selectable_subject_symbols" do
-    let(:eligible_ecp_eligibility) { build(:early_career_payments_eligibility, :eligible) }
-    let(:eligible_lup_eligibility) { build(:levelling_up_premium_payments_eligibility) }
-
-    let(:ineligible_ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible) }
-    let(:ineligible_lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
-
-    let(:eligible_ecp_claim) { create(:claim, :first_lup_claim_year, policy: Policies::EarlyCareerPayments, eligibility: eligible_ecp_eligibility) }
-    let(:eligible_lup_claim) { create(:claim, :first_lup_claim_year, policy: Policies::LevellingUpPremiumPayments, eligibility: eligible_lup_eligibility) }
-
-    let(:ineligible_ecp_claim) { create(:claim, :first_lup_claim_year, policy: Policies::EarlyCareerPayments, eligibility: ineligible_ecp_eligibility) }
-    let(:ineligible_lup_claim) { create(:claim, :first_lup_claim_year, policy: Policies::LevellingUpPremiumPayments, eligibility: ineligible_lup_eligibility) }
-
     subject do
       described_class.new(
         claim_year: claim_year, itt_year: itt_year
@@ -812,10 +800,6 @@ RSpec.describe JourneySubjectEligibilityChecker do
         context "None of the above ITT year" do
           let(:itt_year) { AcademicYear.new }
 
-          let(:current_claim) do
-            CurrentClaim.new(claims: [eligible_ecp_claim, eligible_lup_claim])
-          end
-
           let(:journey_session) do
             create(:additional_payments_session)
           end
@@ -827,10 +811,6 @@ RSpec.describe JourneySubjectEligibilityChecker do
           let(:itt_year) { AcademicYear.new(2017) }
 
           context "ineligible LUP" do
-            let(:current_claim) do
-              CurrentClaim.new(claims: [eligible_ecp_claim, ineligible_lup_claim])
-            end
-
             let(:journey_session) do
               create(
                 :additional_payments_session,
@@ -846,10 +826,6 @@ RSpec.describe JourneySubjectEligibilityChecker do
           end
 
           context "eligible LUP" do
-            let(:current_claim) do
-              CurrentClaim.new(claims: [eligible_ecp_claim, eligible_lup_claim])
-            end
-
             let(:journey_session) do
               create(
                 :additional_payments_session,
@@ -869,10 +845,6 @@ RSpec.describe JourneySubjectEligibilityChecker do
           let(:itt_year) { AcademicYear.new(2018) }
 
           context "ineligible LUP" do
-            let(:current_claim) do
-              CurrentClaim.new(claims: [eligible_ecp_claim, ineligible_lup_claim])
-            end
-
             let(:journey_session) do
               create(
                 :additional_payments_session,
@@ -888,10 +860,6 @@ RSpec.describe JourneySubjectEligibilityChecker do
           end
 
           context "eligible LUP" do
-            let(:current_claim) do
-              CurrentClaim.new(claims: [eligible_ecp_claim, eligible_lup_claim])
-            end
-
             let(:journey_session) do
               create(
                 :additional_payments_session,
@@ -911,10 +879,6 @@ RSpec.describe JourneySubjectEligibilityChecker do
           let(:itt_year) { AcademicYear.new(2019) }
 
           context "ineligible LUP" do
-            let(:current_claim) do
-              CurrentClaim.new(claims: [eligible_ecp_claim, ineligible_lup_claim])
-            end
-
             let(:journey_session) do
               create(
                 :additional_payments_session,
@@ -930,10 +894,6 @@ RSpec.describe JourneySubjectEligibilityChecker do
           end
 
           context "eligible LUP" do
-            let(:current_claim) do
-              CurrentClaim.new(claims: [eligible_ecp_claim, eligible_lup_claim])
-            end
-
             let(:journey_session) do
               create(
                 :additional_payments_session,
@@ -953,10 +913,6 @@ RSpec.describe JourneySubjectEligibilityChecker do
           let(:itt_year) { AcademicYear.new(2020) }
 
           context "ineligible LUP" do
-            let(:current_claim) do
-              CurrentClaim.new(claims: [eligible_ecp_claim, ineligible_lup_claim])
-            end
-
             let(:journey_session) do
               create(
                 :additional_payments_session,
@@ -972,10 +928,6 @@ RSpec.describe JourneySubjectEligibilityChecker do
           end
 
           context "eligible LUP" do
-            let(:current_claim) do
-              CurrentClaim.new(claims: [eligible_ecp_claim, eligible_lup_claim])
-            end
-
             let(:journey_session) do
               create(
                 :additional_payments_session,
@@ -995,10 +947,6 @@ RSpec.describe JourneySubjectEligibilityChecker do
           let(:itt_year) { AcademicYear.new(2021) }
 
           context "ineligible LUP" do
-            let(:current_claim) do
-              CurrentClaim.new(claims: [eligible_ecp_claim, ineligible_lup_claim])
-            end
-
             let(:journey_session) do
               create(
                 :additional_payments_session,
@@ -1014,10 +962,6 @@ RSpec.describe JourneySubjectEligibilityChecker do
           end
 
           context "eligible LUP" do
-            let(:current_claim) do
-              CurrentClaim.new(claims: [eligible_ecp_claim, eligible_lup_claim])
-            end
-
             let(:journey_session) do
               create(
                 :additional_payments_session,

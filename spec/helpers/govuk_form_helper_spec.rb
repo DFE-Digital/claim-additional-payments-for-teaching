@@ -66,16 +66,4 @@ describe GovukFormHelper do
       expect(helper.css_classes_for_input(claim, :attribute, "class-one class-two") {}).to eq("class-one class-two govuk-input")
     end
   end
-
-  describe "#css_classes_for_select" do
-    it "adds the correct css class" do
-      expect(helper.css_classes_for_select(claim, :attribute) {}).to eq("govuk-select")
-    end
-
-    it "adds the error class when there are errors" do
-      claim.errors.add(:attribute, "Test error")
-
-      expect(helper.css_classes_for_select(claim, :attribute) {}).to eq("govuk-select govuk-select--error")
-    end
-  end
 end

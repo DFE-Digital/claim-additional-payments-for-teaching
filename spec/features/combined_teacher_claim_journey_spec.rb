@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.feature "Levelling up premium payments and early-career payments combined claim journey", :with_stubbed_hmrc_client, :with_hmrc_bank_validation_enabled do
-  let(:claim) { Claim.by_policy(Policies::LevellingUpPremiumPayments).order(:created_at).last }
   let(:journey_session) do
     Journeys::AdditionalPaymentsForTeaching::Session.order(:created_at).last
   end
@@ -35,7 +34,8 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     expect(page).to have_current_path("/#{Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME}/current-school")
 
     # - Which school do you teach at
-    claim.update(details_check: true)
+    journey_session.answers.assign_attributes(details_check: true)
+    journey_session.save!
     expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
     choose_school school
     click_on "Continue"
@@ -117,8 +117,8 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     expect(page).to have_text(I18n.t("questions.personal_details"))
     expect(page).to have_text(I18n.t("questions.name"))
 
-    fill_in "claim_first_name", with: "Russell"
-    fill_in "claim_surname", with: "Wong"
+    fill_in "First name", with: "Russell"
+    fill_in "Last name", with: "Wong"
 
     expect(page).to have_text(I18n.t("questions.date_of_birth"))
 
@@ -146,8 +146,8 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     # - What is your address
     expect(page).to have_text(I18n.t("forms.address.questions.your_address"))
 
-    fill_in :claim_address_line_1, with: "57"
-    fill_in :claim_address_line_2, with: "Walthamstow Drive"
+    fill_in "House number or name", with: "57"
+    fill_in "Building and street", with: "Walthamstow Drive"
     fill_in "Town or city", with: "Derby"
     fill_in "County", with: "City of Derby"
     fill_in "Postcode", with: "DE22 4BS"

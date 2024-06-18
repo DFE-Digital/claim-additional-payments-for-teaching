@@ -117,8 +117,8 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(page).to have_text(I18n.t("questions.personal_details"))
     expect(page).to have_text(I18n.t("questions.name"))
 
-    fill_in "claim_first_name", with: "Russell"
-    fill_in "claim_surname", with: "Wong"
+    fill_in "First name", with: "Russell"
+    fill_in "Last name", with: "Wong"
 
     expect(page).to have_text(I18n.t("questions.date_of_birth"))
 
@@ -140,8 +140,8 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     # - What is your address
     expect(page).to have_text(I18n.t("forms.address.questions.your_address"))
 
-    fill_in :claim_address_line_1, with: "57"
-    fill_in :claim_address_line_2, with: "Walthamstow Drive"
+    fill_in "House number or name", with: "57"
+    fill_in "Building and street", with: "Walthamstow Drive"
     fill_in "Town or city", with: "Derby"
     fill_in "County", with: "City of Derby"
     fill_in "Postcode", with: "DE22 4BS"
@@ -532,8 +532,8 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(page).to have_text(I18n.t("questions.personal_details"))
     expect(page).to have_text(I18n.t("questions.name"))
 
-    fill_in "claim_first_name", with: "Russell"
-    fill_in "claim_surname", with: "Wong"
+    fill_in "First name", with: "Russell"
+    fill_in "Last name", with: "Wong"
 
     expect(page).to have_text(I18n.t("questions.date_of_birth"))
 
@@ -555,8 +555,8 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     # - What is your address
     expect(page).to have_text(I18n.t("forms.address.questions.your_address"))
 
-    fill_in :claim_address_line_1, with: "88"
-    fill_in :claim_address_line_2, with: "Deanborough Street"
+    fill_in "House number or name", with: "88"
+    fill_in "Building and street", with: "Deanborough Street"
     fill_in "Town or city", with: "Nottingham"
     fill_in "County", with: "Nottinghamshire"
     fill_in "Postcode", with: "M1 7HL"
@@ -853,8 +853,8 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       expect(page).to have_text(I18n.t("questions.personal_details"))
       expect(page).to have_text(I18n.t("questions.name"))
 
-      fill_in "claim_first_name", with: "Russell"
-      fill_in "claim_surname", with: "Wong"
+      fill_in "First name", with: "Russell"
+      fill_in "Last name", with: "Wong"
 
       expect(page).to have_text(I18n.t("questions.date_of_birth"))
 

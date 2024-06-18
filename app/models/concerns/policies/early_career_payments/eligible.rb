@@ -5,10 +5,6 @@ module Policies
         Policies::EarlyCareerPayments
       end
 
-      def first_eligible_itt_academic_year
-        JourneySubjectEligibilityChecker.first_eligible_itt_year_for_subject(policy: policy, claim_year: claim_year, subject_symbol: eligible_itt_subject.to_sym)
-      end
-
       def induction_not_completed?
         !induction_completed.nil? && !induction_completed?
       end

@@ -8,10 +8,6 @@ module ApplicationHelper
     end.join(" — ")
   end
 
-  def claim_in_progress?
-    session.key?(:claim_id)
-  end
-
   def currency_value_for_number_field(value)
     return if value.nil?
 
@@ -44,10 +40,6 @@ module ApplicationHelper
 
   def start_page_url(routing_name)
     Journeys.for_routing_name(routing_name).start_page_url
-  end
-
-  def eligibility_page_url
-    current_claim.policy.eligibility_page_url
   end
 
   def claim_decision_deadline_in_weeks

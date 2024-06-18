@@ -1,7 +1,7 @@
-<%= render("shared/error_summary", instance: current_claim.eligibility) if current_claim.eligibility.errors.any? %>
+<%= render("shared/error_summary", instance: @form) if @form.errors.any? %>
 
 <%= form_for @form, url: claim_path(current_journey_routing_name) do |form| %>
-  <%= form_group_tag current_claim do %>
+  <%= form_group_tag form.object do %>
     <fieldset class="govuk-fieldset" aria-describedby="school-search-result-hint">
       <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">
         <h1 class="govuk-fieldset__heading">

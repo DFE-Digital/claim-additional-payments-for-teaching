@@ -2,47 +2,50 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: @form) if @form.errors.any? %>
+    <%= form_for @form, url: claim_path(current_journey_routing_name), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
 
-    <%= form_for @form, url: claim_path(current_journey_routing_name) do |form| %>
       <% if @form.errors.any? %>
-        <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-            <h1 class="govuk-heading-l"><%= I18n.t("questions.address.home.no_address_found") %></h1>
-          </legend>
-
+        <%= f.govuk_fieldset legend: {
+          text: I18n.t("questions.address.home.no_address_found"),
+          tag: "h1",
+          size: "l"
+        } do %>
           <p class="govuk-body">
             We have not been able to find your address. Check the details you have
             provided, or enter your address manually.
           </p>
 
           <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Postcode</h2>
+
           <p class="govuk-body">
-            <%= @form.postcode %>
-            <%= link_to "Change", claim_path(current_journey_routing_name, "postcode-search"), class: "govuk-link govuk-!-margin-left-3", "aria-label": "Change" %>
+            <% if @form.postcode.present? %>
+              <span class="govuk-!-margin-right-3"><%= @form.postcode %></span>
+            <% end %>
+            <%= govuk_link_to "Change", claim_path(current_journey_routing_name, "postcode-search"), "aria-label": "Change" %>
           </p>
 
-          <%= link_to I18n.t("questions.address.home.link_to_manual_address"), claim_path(current_journey_routing_name, "address"), class: "govuk-button", "aria-label": I18n.t("questions.address.home.link_to_manual_address"), role: "button", data: {module: "govuk-button"} %>
-        </fieldset>
+          <%= govuk_button_link_to I18n.t("questions.address.home.link_to_manual_address"), claim_path(current_journey_routing_name, "address"), "aria-label": I18n.t("questions.address.home.link_to_manual_address") %>
+        <% end %>
       <% else %>
-        <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-            <h1 class="govuk-heading-l"><%= I18n.t("questions.address.home.title") %></h1>
-          </legend>
-          <%= form_group_tag @form do %>
-            <%= form.label :postcode, class: "govuk-label govuk-label--m" %>
-            <%= errors_tag @form, :postcode %>
-            <%= form.text_field :postcode,
-              class: css_classes_for_input(current_claim, :postcode, "govuk-input--width-10"),
-              required: true,
-              "aria-describedby" => "postcode-hint"
-            %>
-          <% end %>
+        <%= f.govuk_fieldset legend: {
+          text: I18n.t("questions.address.home.title"),
+          tag: "h1",
+          size: "l"
+        } do %>
+        <%= f.govuk_text_field :postcode,
+          width: 10,
+          required: true,
+          label: {
+            text: "Postcode",
+            size: "m"
+          } %>
 
-          <%= link_to I18n.t("questions.address.home.link_to_manual_address"), claim_path(current_journey_routing_name, "address"), class: "govuk-link", "aria-label": I18n.t("questions.address.home.link_to_manual_address") %>
-        </fieldset>
+          <%= govuk_link_to I18n.t("questions.address.home.link_to_manual_address"), claim_path(current_journey_routing_name, "address"), "aria-label": I18n.t("questions.address.home.link_to_manual_address") %>
+        <% end %>
+
         <p class="govuk-!-padding-top-6">
-          <%= form.submit "Search", class: "govuk-button" %>
+          <%= f.govuk_submit "Search" %>
         </p>
       <% end %>
     <% end %>
