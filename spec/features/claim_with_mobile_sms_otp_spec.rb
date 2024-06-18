@@ -42,7 +42,7 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
         # - Mobile number
         expect(page).to have_text(I18n.t("questions.mobile_number"))
 
-        fill_in "claim_mobile_number", with: scenario[:mobile_number]
+        fill_in "Mobile number", with: scenario[:mobile_number]
         click_on "Continue"
 
         expect(session.reload.answers.mobile_number).to eql(scenario[:mobile_number])

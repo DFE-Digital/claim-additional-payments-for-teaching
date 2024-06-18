@@ -9,35 +9,25 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: @form) if @form.errors.any? %>
+    <%= form_for @form, url: claim_path(current_journey_routing_name), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
 
-    <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
-      <span class="govuk-caption-xl"><%= t("questions.personal_details") %></span>
-      <%= form_group_tag f.object do %>
-        <h1 class="govuk-label-wrapper">
-          <%= f.label(
-            :mobile_number,
-            t("questions.mobile_number"),
-            class: "govuk-label #{label_css_class_for_journey(f.object.journey)}"
-          ) %>
-        </h1>
+      <%= f.govuk_phone_field :mobile_number,
+        spellcheck: "false",
+        caption: {
+          text: t("questions.personal_details"),
+          size: "xl"
+        },
+        label: {
+          text: t("questions.mobile_number"),
+          tag: "h1",
+          size: "xl",
+        },
+        hint: { text: "To verify your mobile number we will send you a text message with a 6-digit passcode. You can enter the passcode on the next screen." } %>
 
-        <div id="mobile-number-hint" class="govuk-hint">
-          To verify your mobile number we will send you a text message with a 6-digit passcode. You can enter the passcode on the next screen.
-        </div>
-
-        <%= errors_tag f.object, :mobile_number %>
-
-        <%= f.text_field(
-          :mobile_number,
-          spellcheck: "false",
-          class: css_classes_for_input(f.object, :mobile_number),
-          "aria-describedby" => "mobile-number-hint"
-        ) %>
-
-      <% end %>
       <%= render "help_with_access_codes", communication_type: "Mobile" %>
-      <%= f.submit "Continue", class: "govuk-button" %>
+
+      <%= f.govuk_submit "Continue" %>
     <% end %>
   </div>
 </div>

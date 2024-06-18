@@ -417,7 +417,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
         expect(page).not_to have_content("Check your answers before sending your application")
         expect(page).to have_text(I18n.t("questions.mobile_number"))
 
-        fill_in "claim_mobile_number", with: new_mobile
+        fill_in "Mobile number", with: new_mobile
         click_on "Continue"
 
         expect(session.reload.answers.mobile_number).to eql new_mobile
