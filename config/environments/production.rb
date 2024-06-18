@@ -47,10 +47,8 @@ Rails.application.configure do
   # information to avoid inadvertent exposure of personally identifiable information (PII).
   config.log_level = :info
 
-  # https://technical-guidance.education.gov.uk/infrastructure/monitoring/logit/#ruby-on-rails
-  config.log_format = :json                               # For parsing in Logit
-  config.rails_semantic_logger.add_file_appender = false  # Don't log to file
-  config.active_record.logger = nil                       # Don't log SQL 
+  # Prepend all log lines with the following tags.
+  config.log_tags = [:request_id]
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
@@ -90,6 +88,16 @@ Rails.application.configure do
   # Use a different logger for distributed setups.
   # require "syslog/logger"
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new "app-name")
+
+  if ENV["RAILS_LOG_TO_STDOUT"].present?
+    logger = ActiveSupport::Logger.new($stdout)
+    logger.formatter = config.log_formatter
+    config.logger = ActiveSupport::TaggedLogging.new(logger)
+
+    $stdout.sync = true
+    config.rails_semantic_logger.add_file_appender = false
+    config.semantic_logger.add_appender(io: $stdout, formatter: config.rails_semantic_logger.format)
+  end
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
