@@ -80,14 +80,6 @@ class Claim < ApplicationRecord
   }.freeze
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
-  ATTRIBUTE_DEPENDENCIES = {
-    "national_insurance_number" => ["has_student_loan", "student_loan_plan", "eligibility.student_loan_repayment_amount"],
-    "date_of_birth" => ["has_student_loan", "student_loan_plan", "eligibility.student_loan_repayment_amount"],
-    "bank_or_building_society" => ["banking_name", "bank_account_number", "bank_sort_code", "building_society_roll_number"],
-    "provide_mobile_number" => ["mobile_number", "mobile_verified"],
-    "mobile_number" => ["mobile_verified"],
-    "email_address" => ["email_verified"]
-  }.freeze
 
   # Use AcademicYear as custom ActiveRecord attribute type
   attribute :academic_year, AcademicYear::Type.new
@@ -346,21 +338,6 @@ class Claim < ApplicationRecord
 
   def self.filtered_params
     FILTER_PARAMS.select { |_, v| v }.keys
-  end
-
-  def reset_dependent_answers
-    ATTRIBUTE_DEPENDENCIES.each do |attribute_name, dependent_attribute_names|
-      dependent_attribute_names.each do |dependent_attribute_name|
-        next unless changed.include?(attribute_name)
-
-        target_model, dependent_attribute_name = dependent_attribute_name.split(".") if dependent_attribute_name.include?(".")
-        target_model ||= "itself"
-
-        next unless send(target_model).has_attribute?(dependent_attribute_name)
-
-        send(target_model).write_attribute(dependent_attribute_name, nil)
-      end
-    end
   end
 
   def policy

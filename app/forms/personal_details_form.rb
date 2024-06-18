@@ -63,7 +63,7 @@ class PersonalDetailsForm < Form
       national_insurance_number:
     )
 
-    reset_depenent_answers_attributes
+    reset_dependent_answers_attributes
 
     journey_session.save!
   end
@@ -139,7 +139,7 @@ class PersonalDetailsForm < Form
     errors.exclude?(:national_insurance_number)
   end
 
-  def reset_depenent_answers_attributes
+  def reset_dependent_answers_attributes
     journey_session.answers.assign_attributes(
       has_student_loan: nil,
       student_loan_plan: nil
