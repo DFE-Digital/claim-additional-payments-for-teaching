@@ -118,6 +118,7 @@ jobs:
         if: failure()
         uses: rtCamp/action-slack-notify@master
         env:
+          SLACK_COLOR: failure
           SLACK_TITLE: Failure deploying release to test
           SLACK_MESSAGE: Failure deploying release to test - Docker tag ${{ needs.build.outputs.docker-image-tag }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
