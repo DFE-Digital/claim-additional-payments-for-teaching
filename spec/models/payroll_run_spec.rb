@@ -105,7 +105,7 @@ RSpec.describe PayrollRun, type: :model do
       payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2, payment_3, payment_4, payment_5])
 
       expect(payroll_run.total_claim_amount_for_policy(Policies::StudentLoans)).to eq(3500)
-      expect(payroll_run.total_claim_amount_for_policy(Policies::EarlyCareerPayments)).to eq(4000)
+      expect(payroll_run.total_claim_amount_for_policy(Policies::EarlyCareerPayments)).to eq(10_000)
       expect(payroll_run.total_claim_amount_for_policy(Policies::LevellingUpPremiumPayments)).to eq(2000)
     end
   end

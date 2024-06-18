@@ -139,7 +139,7 @@ RSpec.describe PaymentMailer, type: :mailer do
       end
 
       it "includes the amount claimed for each claim" do
-        expect(mail.body).to include("Additional payment for teaching: £2,000.00")
+        expect(mail.body).to include("Additional payment for teaching: £5,000.00")
         expect(mail.body).to include("Student loan repayments you’ve claimed back: £500.00")
       end
 

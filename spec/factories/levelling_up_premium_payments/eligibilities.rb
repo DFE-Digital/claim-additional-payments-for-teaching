@@ -1,5 +1,7 @@
 FactoryBot.define do
   factory :levelling_up_premium_payments_eligibility, class: "Policies::LevellingUpPremiumPayments::Eligibility" do
+    award_amount { 2000.0 }
+
     trait :eligible do # TODO rename
       eligible_now
     end
