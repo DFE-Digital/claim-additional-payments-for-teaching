@@ -100,10 +100,6 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
     end
   end
 
-  describe "#first_eligible_itt_academic_year" do
-    it { should respond_to(:first_eligible_itt_academic_year) }
-  end
-
   describe "#reset_dependent_answers" do
     let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
     let!(:claim) { build_stubbed(:claim, :with_student_loan, eligibility: eligibility) }

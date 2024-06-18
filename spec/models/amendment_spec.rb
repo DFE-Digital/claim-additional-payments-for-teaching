@@ -29,7 +29,17 @@ RSpec.describe Amendment, type: :model do
   end
 
   describe ".amend_claim" do
-    let(:claim) { create(:claim, :submitted, teacher_reference_number: "1234567", bank_sort_code: "111213", bank_account_number: "12345678", building_society_roll_number: nil, policy: Policies::EarlyCareerPayments) }
+    # Needs to reload as .amend_claim looks at the ActiveModel #previous_changes and the factory setup confuses it
+    let(:claim) {
+      create(:claim,
+        :submitted,
+        teacher_reference_number: "1234567",
+        bank_sort_code: "111213",
+        bank_account_number: "12345678",
+        building_society_roll_number: nil,
+        policy: Policies::EarlyCareerPayments).reload
+    }
+
     let(:dfe_signin_user) { create(:dfe_signin_user) }
 
     context "given valid claim attributes and valid amendment attributes" do

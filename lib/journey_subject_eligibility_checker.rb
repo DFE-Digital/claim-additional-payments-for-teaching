@@ -62,6 +62,7 @@ class JourneySubjectEligibilityChecker
     [:chemistry, :computing, :mathematics, :physics]
   end
 
+  # NOTE: ONLY used by specs
   def self.first_eligible_itt_year_for_subject(policy:, claim_year:, subject_symbol:)
     raise "[#{subject_symbol}] is not a symbol" unless subject_symbol.is_a?(Symbol)
     itt_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(claim_year)
