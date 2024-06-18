@@ -139,8 +139,8 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     click_on "Continue"
 
     # - Personal details
-    fill_in "claim_first_name", with: "Russell"
-    fill_in "claim_surname", with: "Wong"
+    fill_in "First name", with: "Russell"
+    fill_in "Last name", with: "Wong"
 
     fill_in "Day", with: Date.parse(date_of_birth).day
     fill_in "Month", with: Date.parse(date_of_birth).month
