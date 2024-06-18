@@ -2,11 +2,11 @@ module JourneyConcern
   extend ActiveSupport::Concern
 
   included do
-    helper_method :current_journey_routing_name, :journey, :journey_configuration, :current_claim, :journey_session, :answers
+    helper_method :current_journey_routing_name, :journey, :journey_configuration, :journey_session, :answers, :claim_in_progress?
   end
 
   def current_journey_routing_name
-    params[:journey] || Journeys.for_policy(claim_from_session.policy)::ROUTING_NAME
+    params[:journey] || session[:current_journey_routing_name]
   end
 
   def journey
@@ -17,54 +17,67 @@ module JourneyConcern
     journey.configuration
   end
 
-  def current_claim
-    @current_claim ||= claim_from_session || build_new_claim
-  end
-
   def journey_session
-    @journey_session ||= find_journey_session || create_journey_session!
+    @journey_session ||= find_journey_session
   end
 
   def answers
     journey_session.answers
   end
 
-  private
-
-  def claim_from_session
-    return unless session.key?(:claim_id)
-
-    claims = Claim.includes(:eligibility).where(id: session[:claim_id])
-    claims.present? ? CurrentClaim.new(claims: claims) : nil
+  def claim_in_progress?
+    session[journey_session_key].present?
   end
 
-  def build_new_claim
-    CurrentClaim.new(claims: build_new_claims)
+  def eligible_claim_in_progress?
+    journey_sessions.any? && journey_sessions.none? { |js| claim_ineligible?(js) }
   end
 
-  def build_new_claims
-    journey::POLICIES.map do |policy|
-      Claim.new(
-        eligibility: policy::Eligibility.new,
+  def claim_ineligible?(journey_session)
+    journey = Journeys.for_routing_name(journey_session.journey)
+    journey::EligibilityChecker.new(journey_session: journey_session).ineligible?
+  end
+
+  def clear_journey_sessions!
+    journey_session_keys.each { |key| session.delete(key) }
+    @journey_session = nil
+    @journey_sessions = []
+  end
+
+  def create_journey_session!
+    journey_session = journey::Session.create!(
+      journey: current_journey_routing_name,
+      answers: {
         academic_year: journey_configuration.current_academic_year
-      )
-    end
+      }
+    )
+
+    session[journey_session_key] = journey_session.id
+
+    journey_session
   end
+
+  private
 
   def find_journey_session
     journey::Session.find_by(id: session[journey_session_key])
   end
 
-  def create_journey_session!
-    journey::Session.create!(
-      journey: params[:journey],
-      answers: {
-        academic_year: journey_configuration.current_academic_year
-      }
-    )
+  def journey_session_key
+    :"#{current_journey_routing_name}_journeys_session_id"
   end
 
-  def journey_session_key
-    :"#{params[:journey]}_journeys_session_id"
+  def journey_sessions
+    @journey_sessions ||= Journeys::JOURNEYS.map do |journey|
+      journey::Session.find_by(id: session[:"#{journey::ROUTING_NAME}_journeys_session_id"])
+    end.compact
+  end
+
+  def other_journey_sessions
+    journey_sessions.reject { |js| js.journey == current_journey_routing_name }
+  end
+
+  def journey_session_keys
+    Journeys::JOURNEYS.map { |journey| :"#{journey::ROUTING_NAME}_journeys_session_id" }
   end
 end

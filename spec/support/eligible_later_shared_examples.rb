@@ -8,11 +8,7 @@ RSpec.shared_examples "Eligible later" do |opts|
     let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: policy_year) }
 
     scenario "with ITT subject mathematics in ITT academic year #{opts[:itt_academic_year]} with a #{opts[:qualification]} qualification" do
-      claim.eligibility.update!(
-        **eligibility_attrs,
-        eligible_itt_subject: itt_subject,
-        itt_academic_year: itt_academic_year
-      )
+      start_early_career_payments_claim
 
       journey_session.answers.assign_attributes(
         attributes_for(

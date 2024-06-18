@@ -17,13 +17,6 @@ module Journeys
         )&.new(reminder: current_reminder, journey: Journeys::AdditionalPaymentsForTeaching, journey_session:, params:)
       end
 
-      def claim_from_session
-        return unless session.key?(:claim_id) || session.key?(:submitted_claim_id)
-
-        claims = Claim.includes(:eligibility).where(id: session[:claim_id] || session[:submitted_claim_id])
-        claims.present? ? CurrentClaim.new(claims: claims) : nil
-      end
-
       def slugs
         journey.slug_sequence::REMINDER_SLUGS
       end
@@ -57,16 +50,31 @@ module Journeys
         Reminder.find(session[:reminder_id])
       end
 
+      def submitted_claim
+        @submitted_claim ||= Claim.includes(:eligibility).find_by(id: session[:submitted_claim_id])
+      end
+
       def build_reminder_from_claim
-        return unless current_claim
+        return unless model_for_reminder_attributes
 
         Reminder.new(
-          full_name: current_claim.full_name,
-          email_address: current_claim.email_address,
+          full_name: model_for_reminder_attributes.full_name,
+          email_address: model_for_reminder_attributes.email_address,
           itt_academic_year: next_academic_year,
-          itt_subject: journey_session.answers.eligible_itt_subject,
-          email_verified: current_claim.email_verified? # allows the OTP to be skipped if already verified
+          itt_subject: model_for_reminder_attributes.eligible_itt_subject,
+          email_verified: model_for_reminder_attributes.email_verified? # allows the OTP to be skipped if already verified
         )
+      end
+
+      # Remidners can be set for inprogress and submitted claims
+      # We can tell if we're setting a reminder for a submitted claim as the
+      # journey session will be nil given that we clear it on claim submission.
+      def model_for_reminder_attributes
+        @model_for_reminder_attributes ||= journey_session&.answers || submitted_claim
+      end
+
+      def send_to_start?
+        model_for_reminder_attributes.nil?
       end
 
       # Fallback reminder will set reminder date to the next academic year
@@ -81,7 +89,7 @@ module Journeys
       def clear_sessions
         return unless current_slug == "set"
 
-        session.delete(:claim_id)
+        session.delete(journey_session_key)
         session.delete(:reminder_id)
       end
     end

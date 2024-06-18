@@ -19,17 +19,11 @@ describe AdditionalPaymentsHelper do
 
   describe "#eligible_itt_subject_translation" do
     before { create(:journey_configuration, :additional_payments) }
-    let(:ecp_claim) { create(:claim, :first_lup_claim_year, policy: Policies::EarlyCareerPayments, eligibility: ecp_eligibility) }
-    let(:lup_claim) { create(:claim, :first_lup_claim_year, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility) }
     let(:qualification) { nil }
     let(:answers) { build(:additional_payments_answers, qualification: qualification) }
 
     let(:journey_session) do
       create(:additional_payments_session, answers: answers)
-    end
-
-    let(:current_claim) do
-      CurrentClaim.new(claims: [ecp_claim, lup_claim])
     end
 
     subject do
@@ -40,9 +34,6 @@ describe AdditionalPaymentsHelper do
     end
 
     context "trainee teacher" do
-      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :trainee_teacher) }
-      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :trainee_teacher) }
-
       let(:answers) do
         build(
           :additional_payments_answers,
@@ -55,9 +46,6 @@ describe AdditionalPaymentsHelper do
     end
 
     context "qualified teacher" do
-      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible) }
-      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
-
       let(:answers) do
         build(
           :additional_payments_answers,

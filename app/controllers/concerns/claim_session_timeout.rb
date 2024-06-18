@@ -2,7 +2,6 @@ module ClaimSessionTimeout
   CLAIM_TIMEOUT_LENGTH_IN_MINUTES = 30
 
   def clear_claim_session
-    session.delete(:claim_id)
     session.delete(:claim_postcode)
     session.delete(:claim_address_line_1)
     session.delete(:no_address_selected)
@@ -13,13 +12,11 @@ module ClaimSessionTimeout
     session.delete(:tps_school_id)
     session.delete(:tps_school_name)
     session.delete(:tps_school_address)
-    session.delete(journey_session_key)
-    @current_claim = nil
-    @journey_session = nil
+    clear_journey_sessions!
   end
 
   def claim_session_timed_out?
-    session.key?(:claim_id) && session[:last_seen_at] < claim_timeout_in_minutes.minutes.ago
+    claim_in_progress? && session[:last_seen_at] < claim_timeout_in_minutes.minutes.ago
   end
 
   def claim_timeout_in_minutes

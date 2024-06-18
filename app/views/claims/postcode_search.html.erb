@@ -33,7 +33,7 @@
             <%= form.label :postcode, class: "govuk-label govuk-label--m" %>
             <%= errors_tag @form, :postcode %>
             <%= form.text_field :postcode,
-              class: css_classes_for_input(current_claim, :postcode, "govuk-input--width-10"),
+              class: css_classes_for_input(form.object, :postcode, "govuk-input--width-10"),
               required: true,
               "aria-describedby" => "postcode-hint"
             %>

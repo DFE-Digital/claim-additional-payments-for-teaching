@@ -24,7 +24,7 @@
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key"><%= t("questions.teacher_route") %></dt>
               <dd class="govuk-summary-list__value">
-                <%= t("#{current_claim.policy.locale_key}.forms.qualification.answers.#{@form.dqt_route_into_teaching}") %>
+                <%= t("#{Journeys.for_routing_name(@form.journey_session.journey)::I18N_NAMESPACE}.forms.qualification.answers.#{@form.dqt_route_into_teaching}") %>
               </dd>
             </div>
           <% end %>
