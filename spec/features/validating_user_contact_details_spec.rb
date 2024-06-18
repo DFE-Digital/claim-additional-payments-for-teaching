@@ -37,7 +37,7 @@ RSpec.feature "Confirming Claimant Contact details" do
     expect(page).to have_text("Personal details")
     expect(page).to have_text("Email address")
 
-    fill_in "claim_email_address", with: "david.tau1988@hotmail.co.uk"
+    fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
 
     click_on "Continue"
 
