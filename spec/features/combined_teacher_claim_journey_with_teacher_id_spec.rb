@@ -134,8 +134,8 @@ RSpec.feature "Combined journey with Teacher ID" do
     # - What is your address
     expect(page).to have_text(I18n.t("forms.address.questions.your_address"))
 
-    fill_in :claim_address_line_1, with: "57"
-    fill_in :claim_address_line_2, with: "Walthamstow Drive"
+    fill_in "House number or name", with: "57"
+    fill_in "Building and street", with: "Walthamstow Drive"
     fill_in "Town or city", with: "Derby"
     fill_in "County", with: "City of Derby"
     fill_in "Postcode", with: "DE22 4BS"

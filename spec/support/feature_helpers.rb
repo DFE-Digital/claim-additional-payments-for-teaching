@@ -66,8 +66,8 @@ module FeatureHelpers
   end
 
   def fill_in_address
-    fill_in :claim_address_line_1, with: "123 Main Street"
-    fill_in :claim_address_line_2, with: "Downtown"
+    fill_in "House number or name", with: "123 Main Street"
+    fill_in "Building and street", with: "Downtown"
     fill_in "Town or city", with: "Twin Peaks"
     fill_in "County", with: "Washington"
     fill_in "Postcode", with: "M1 7HL"

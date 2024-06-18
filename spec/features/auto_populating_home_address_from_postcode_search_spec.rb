@@ -347,8 +347,8 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       # - What is your address
       expect(page).to have_text(I18n.t("forms.address.questions.your_address"))
 
-      fill_in :claim_address_line_1, with: "Penthouse Apartment, Millbrook Tower"
-      fill_in :claim_address_line_2, with: "Windermere Avenue"
+      fill_in "House number or name", with: "Penthouse Apartment, Millbrook Tower"
+      fill_in "Building and street", with: "Windermere Avenue"
       fill_in "Town or city", with: "Southampton"
       fill_in "County", with: "Hampshire"
       fill_in "Postcode", with: "SO16 9FX"
