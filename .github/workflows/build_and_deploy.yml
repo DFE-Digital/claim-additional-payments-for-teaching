@@ -2,7 +2,7 @@ name: Build and deploy to AKS cluster
 
 on:
   push:
-    branches: [master]
+    branches: [CAPT-1702-smoke-test]
   pull_request:
     types: [labeled, opened, reopened, synchronize]
 
@@ -85,7 +85,7 @@ jobs:
     name: Deploy to test environment
     concurrency: deploy_test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/CAPT-1702-smoke-test' && github.event_name == 'push'
     needs: [build]
     environment:
       name: test-aks
