@@ -18,6 +18,7 @@ class ClaimsController < BasePublicController
   end
 
   def existing_session
+    @existing_session = journey_sessions.first
   end
 
   def start_new
