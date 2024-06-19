@@ -7,10 +7,6 @@ module ClaimsFormCallbacks
     set_backlink_override_to_current_slug if on_school_search_results?
   end
 
-  def teaching_subject_now_before_show
-    redirect_to_slug("eligible-itt-subject") if no_eligible_itt_subject?
-  end
-
   def qualification_details_before_show
     redirect_to_next_slug if no_dqt_data?
   end

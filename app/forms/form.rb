@@ -46,7 +46,22 @@ class Form
     true
   end
 
+  def redirect?
+    @redirect
+  end
+
+  attr_reader :redirect_slug
+
   private
+
+  def redirect_to_slug(slug)
+    redirect!
+    @redirect_slug = slug
+  end
+
+  def redirect!
+    @redirect = true
+  end
 
   def permitted_attributes
     attribute_names

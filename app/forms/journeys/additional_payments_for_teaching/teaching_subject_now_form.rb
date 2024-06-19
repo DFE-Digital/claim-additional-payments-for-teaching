@@ -5,6 +5,12 @@ module Journeys
 
       validates :teaching_subject_now, inclusion: {in: [true, false], message: i18n_error_message(:inclusion)}
 
+      def before_show
+        if no_eligible_itt_subject?
+          redirect_to_slug "eligible-itt-subject"
+        end
+      end
+
       def eligible_itt_subject
         @eligible_itt_subject ||= journey_session.answers.eligible_itt_subject
       end
@@ -21,6 +27,12 @@ module Journeys
         )
 
         journey_session.save!
+      end
+
+      private
+
+      def no_eligible_itt_subject?
+        !journey_session.answers.eligible_itt_subject
       end
     end
   end

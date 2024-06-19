@@ -40,10 +40,12 @@ module FormSubmittable
   # See the implementation of `_set_slug_specific_callbacks` below for more details.
 
   included do
+    before_action :load_form_if_exists, only: [:show, :update, :create]
     before_action :_set_slug_specific_callbacks, only: [:show, :update, :create]
     before_action :before_show, only: :show
+    before_action :handle_form_before_show, only: :show
+    before_action :handle_callback_redirects, only: :show
     before_action :before_update, only: [:update, :create]
-    before_action :load_form_if_exists, only: [:show, :update, :create]
     around_action :handle_form_submission, only: [:update, :create]
 
     def new
@@ -63,6 +65,20 @@ module FormSubmittable
     end
 
     private
+
+    def handle_form_before_show
+      return unless @form
+
+      @form.before_show if @form.respond_to?(:before_show)
+    end
+
+    def handle_callback_redirects
+      return unless @form
+
+      if @form.redirect?
+        redirect_to_slug(@form.redirect_slug)
+      end
+    end
 
     #
     # Slug-specific callbacks are generated and executed around `show`, `update`, `create` actions,
