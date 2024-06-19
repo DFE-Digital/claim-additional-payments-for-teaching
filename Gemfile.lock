@@ -239,7 +239,7 @@ GEM
       aes_key_wrap
       bindata
       httpclient
-    jwt (2.8.1)
+    jwt (2.8.2)
       base64
     language_server-protocol (3.17.0.3)
     launchy (3.0.1)
