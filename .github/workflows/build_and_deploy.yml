@@ -116,7 +116,7 @@ jobs:
 
       - name: Run smoke tests
         shell: bash
-        run: bin/smoke
+        run: bin/bundle exec rspec spec/smoke -t smoke:true -b
         env:
           RAILS_ENV: test
           SMOKE_TEST_APP_HOST: ${{ env.APP_URL }}
