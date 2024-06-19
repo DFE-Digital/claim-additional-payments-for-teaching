@@ -1,8 +1,9 @@
 module Policies
   module EarlyCareerPayments
     class Eligibility < ApplicationRecord
-      include Eligible
-      include EligibilityCheckable
+      def policy
+        Policies::EarlyCareerPayments
+      end
 
       AMENDABLE_ATTRIBUTES = [:award_amount].freeze
 
