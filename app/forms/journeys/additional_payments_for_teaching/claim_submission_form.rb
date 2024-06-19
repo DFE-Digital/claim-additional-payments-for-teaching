@@ -3,11 +3,15 @@ module Journeys
     class ClaimSubmissionForm < ::ClaimSubmissionBaseForm
       def eligible_now_or_later
         eligibilities.select do |e|
-          e.status == :eligible_now || e.status == :eligible_later
+          eligibility_checker.eligible_now_or_later.include?(e.policy)
         end
       end
 
       private
+
+      def eligibility_checker
+        @eligibility_checker ||= Journeys::EligibilityChecker.new(journey_session: journey_session)
+      end
 
       def main_eligibility
         @main_eligibility ||= eligibilities.detect { |e| e.policy == main_policy }
@@ -28,20 +32,12 @@ module Journeys
       end
 
       def generate_policy_options_provided
-        eligible_now_and_sorted.map do |e|
+        eligibility_checker.policies_eligible_now_with_award_amount_and_sorted.map do |policy_with_award_amount|
           {
-            "policy" => e.policy.to_s,
-            "award_amount" => BigDecimal(e.award_amount)
+            "policy" => policy_with_award_amount.policy.to_s,
+            "award_amount" => BigDecimal(policy_with_award_amount.award_amount)
           }
         end
-      end
-
-      def eligible_now_and_sorted
-        eligible_now.sort_by { |e| [-e.award_amount.to_i, e.policy.short_name] }
-      end
-
-      def eligible_now
-        eligibilities.select { |e| e.status == :eligible_now }
       end
     end
   end
