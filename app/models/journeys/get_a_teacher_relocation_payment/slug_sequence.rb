@@ -7,7 +7,8 @@ module Journeys
       ]
 
       RESULTS_SLUGS = [
-        "check-your-answers"
+        "check-your-answers",
+        "ineligible"
       ].freeze
 
       SLUGS = ELIGIBILITY_SLUGS + RESULTS_SLUGS

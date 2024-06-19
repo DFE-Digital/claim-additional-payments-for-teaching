@@ -10,11 +10,24 @@ module Policies
       end
 
       def status
+        return :ineligible if ineligible?
+
         :eligible_now
       end
 
       def ineligible?
-        false
+        ineligible_reason.present?
+      end
+
+      private
+
+      def ineligible_reason
+        case answers.attributes.symbolize_keys
+        in application_route: "other"
+          "application route other not accecpted"
+        else
+          nil
+        end
       end
     end
   end
