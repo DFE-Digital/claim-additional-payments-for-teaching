@@ -11,10 +11,6 @@ module Policies
         :languages_taught
       ].freeze
       AMENDABLE_ATTRIBUTES = %i[student_loan_repayment_amount].freeze
-      ATTRIBUTE_DEPENDENCIES = {
-        "claim_school_id" => ["taught_eligible_subjects", *SUBJECT_ATTRIBUTES, "employment_status", "current_school_id"],
-        "had_leadership_position" => ["mostly_performed_leadership_duties"]
-      }.freeze
 
       self.table_name = "student_loans_eligibilities"
 
@@ -72,16 +68,6 @@ module Policies
       end
 
       def eligible_itt_subject
-      end
-
-      def reset_dependent_answers(reset_attrs = [])
-        attrs = ineligible? ? changed.concat(reset_attrs) : changed
-
-        ATTRIBUTE_DEPENDENCIES.each do |attribute_name, dependent_attribute_names|
-          dependent_attribute_names.each do |dependent_attribute_name|
-            write_attribute(dependent_attribute_name, nil) if attrs.include?(attribute_name)
-          end
-        end
       end
 
       def submit!
