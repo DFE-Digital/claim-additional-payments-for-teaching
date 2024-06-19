@@ -1,15 +1,16 @@
 module Journeys
   module GetATeacherRelocationPayment
     class SlugSequence
-      # FIXME RL due to how the page sequence works we need a minimum of 2
-      # slugs otherwise there's no next slug to go to. Once we have added
-      # another page remove the duplicate "check-your-answers" slug.
+      ELIGIBILITY_SLUGS = [
+        "application-route",
+        "check-your-answers-part-one"
+      ]
+
       RESULTS_SLUGS = [
-        "check-your-answers",
         "check-your-answers"
       ].freeze
 
-      SLUGS = RESULTS_SLUGS
+      SLUGS = ELIGIBILITY_SLUGS + RESULTS_SLUGS
 
       def self.start_page_url
         if Rails.env.production?

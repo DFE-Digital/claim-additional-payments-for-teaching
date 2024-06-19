@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "teacher route: completing the form" do
+describe "trainee route: completing the form" do
   include GetATeacherRelocationPayment::StepHelpers
 
   before do
@@ -11,7 +11,7 @@ describe "teacher route: completing the form" do
     it "submits an application" do
       when_i_start_the_form
       and_i_complete_application_route_question_with(
-        option: "I am employed as a teacher in a school in England"
+        option: "I am enrolled on a salaried teacher training course in England"
       )
       then_the_check_your_answers_part_one_page_shows_my_answers
       and_i_dont_change_my_answers
@@ -25,7 +25,7 @@ describe "teacher route: completing the form" do
     assert_on_check_your_answers_part_one_page!
 
     expect(page).to have_text(
-      "What is your employment status? I am employed as a teacher in a school in England"
+      "What is your employment status? I am enrolled on a salaried teacher training course in England"
     )
   end
 end
