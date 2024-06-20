@@ -59,11 +59,8 @@ RSpec.feature "Switching policies" do
 
       click_on "Submit"
 
-      # FIXME RL as of writing this test, the journey only has one page "check
-      # your answers", once the real first page of the journey is added this
-      # test will need to be updated to test for the content of that page
       expect(page.title).to include(
-        "Check your answers before sending your application — Get a teacher relocation payment"
+        "What is your employment status? — Get a teacher relocation payment"
       )
     end
 

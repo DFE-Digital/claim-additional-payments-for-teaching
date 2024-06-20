@@ -683,6 +683,26 @@ en:
     journey_name: "Get a teacher relocation payment"
     feedback_email: "teach.inengland@education.gov.uk"
     claim_description: "for a get a teacher relocation payment"
+    forms:
+      application_route:
+        question: "What is your employment status?"
+        hint: "Select one of the following options"
+        answers:
+          teacher:
+            answer: "I am employed as a teacher in a school in England"
+          salaried_trainee:
+            answer: "I am enrolled on a salaried teacher training course in England"
+            hint: "‘Salaried’ means a course where you are paid a wage to work while you train."
+          other:
+            answer: "Other"
+        errors:
+          inclusion: "Select the option that applies to you"
+    check_your_answers:
+      part_one:
+        primary_heading: "Check your answers"
+        eligibility_details: "Eligibility details"
+        confirmation_notice:
+          "By selecting continue you are confirming that, to the best of your knowledge, the details you are providing are correct."
 
   activerecord:
     errors:

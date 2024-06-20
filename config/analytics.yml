@@ -219,6 +219,7 @@ shared:
     - id
     - created_at
     - updated_at
+    - application_route
   :schools:
     - id
     - urn

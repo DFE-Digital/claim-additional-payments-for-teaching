@@ -8,7 +8,9 @@ module Journeys
     I18N_NAMESPACE = "get_a_teacher_relocation_payment"
     POLICIES = [Policies::InternationalRelocationPayments]
     FORMS = {
-      "claims" => {}
+      "claims" => {
+        "application-route" => ApplicationRouteForm
+      }
     }
   end
 end

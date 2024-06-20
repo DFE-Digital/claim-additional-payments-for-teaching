@@ -7,6 +7,10 @@ FactoryBot.define do
       national_insurance_number { generate(:national_insurance_number) }
     end
 
+    trait :with_application_route do
+      application_route { "teacher" }
+    end
+
     trait :with_email_details do
       email_address { generate(:email_address) }
       email_verified { true }
