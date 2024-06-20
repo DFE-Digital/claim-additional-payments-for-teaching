@@ -215,6 +215,10 @@ shared:
     - eligible_degree_subject
     - induction_completed
     - school_somewhere_else
+  :international_relocation_payments_eligibilities:
+    - id
+    - created_at
+    - updated_at
   :schools:
     - id
     - urn
