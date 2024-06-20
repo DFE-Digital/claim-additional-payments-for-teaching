@@ -61,6 +61,18 @@ variable "canonical_hostname" {
   default     = null
 }
 
+variable "web_replicas" {
+  type        = integer
+  description = "Number of instances of the web container to run"
+  default     = 1
+}
+
+variable "worker_replicas" {
+  type        = integer
+  description = "Number of instances of the worker container to run"
+  default     = 1
+}
+
 locals {
   postgres_ssl_mode = var.enable_postgres_ssl ? "require" : "disable"
   canonical_hostname = var.canonical_hostname != null ? var.canonical_hostname : "${var.service_name}-${var.environment}-web.test.teacherservices.cloud"

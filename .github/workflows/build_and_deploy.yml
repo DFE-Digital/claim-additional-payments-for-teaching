@@ -1,6 +1,8 @@
 name: Build and deploy to AKS cluster
 
 on:
+  push:
+    branches: [master]
   pull_request:
     types: [labeled, opened, reopened, synchronize]
 
@@ -13,7 +15,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
     outputs:
       docker-image-tag: ${{ steps.build-image.outputs.tag }}
 
@@ -33,6 +34,7 @@ jobs:
     name: Deploy to review environment
     concurrency: deploy_review_${{ github.event.pull_request.number }}
     runs-on: ubuntu-latest
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
     needs: [build]
     environment:
       name: review-aks
@@ -78,3 +80,45 @@ jobs:
             | Additional Payments | <${{ env.APP_URL }}/additional-payments/claim> |
             | Student Loans       | <${{ env.APP_URL }}/student-loans/claim>       |
             | Admin               | <${{ env.APP_URL }}/admin>                     |
+
+  deploy_production:
+    name: Deploy to production environment
+    concurrency: deploy_production
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    needs: [build]
+    environment:
+      name: production-aks
+      url: ${{ steps.deploy.outputs.environment_url }}
+    outputs:
+      environment_url: ${{ steps.deploy.outputs.environment_url }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: ./.github/actions/deploy-environment
+        id: deploy
+        with:
+          environment: production-aks
+          docker-image: ${{ needs.build.outputs.docker-image-tag }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Run migrations
+        shell: bash
+        run: |
+          make ci production-aks get-cluster-credentials
+          kubectl exec -n srtl-test deployment/claim-additional-payments-for-teaching-production-worker -- sh -c "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/prepare-database"
+
+      - name: Slack notification
+        if: failure()
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_COLOR: failure
+          SLACK_TITLE: Failure deploying release to production
+          SLACK_MESSAGE: Failure deploying release to production - Docker tag ${{ needs.build.outputs.docker-image-tag }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
