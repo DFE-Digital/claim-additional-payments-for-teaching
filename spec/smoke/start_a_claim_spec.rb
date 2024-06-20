@@ -13,7 +13,9 @@ RSpec.describe "Start a claim", :smoke, type: :feature do
   end
 
   def url_with_basic_auth
-    uri = URI.parse(new_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME))
+    host = ENV.fetch("SMOKE_TEST_APP_HOST")
+    path = new_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
+    uri = URI.join(host, path)
 
     uri.user = ENV.fetch("BASIC_AUTH_USERNAME", nil)
     uri.password = ENV.fetch("BASIC_AUTH_PASSWORD", nil)

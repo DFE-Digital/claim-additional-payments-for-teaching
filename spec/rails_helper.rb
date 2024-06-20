@@ -86,12 +86,6 @@ RSpec.configure do |config|
     OmniAuth.config.mock_auth[:default] = nil
   end
 
-  config.around(:each, :smoke) do |example|
-    Capybara.app_host = ENV.fetch("SMOKE_TEST_APP_HOST")
-    example.run
-    Capybara.app_host = nil
-  end
-
   config.filter_run_excluding :smoke
   config.filter_run_excluding flaky: true unless ENV["RUN_FLAKY_SPECS"] == "true"
   config.filter_run_excluding js: true unless ENV["RUN_JS_SPECS"] == "true"
