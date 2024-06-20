@@ -310,3 +310,7 @@ shared:
     - journey
     - created_at
     - updated_at
+  :further_education_payments_eligibilities:
+    - id
+    - created_at
+    - updated_at
