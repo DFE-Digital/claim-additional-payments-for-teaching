@@ -27,3 +27,13 @@ Capybara.configure do |config|
 end
 
 Capybara.automatic_label_click = true
+
+RSpec.configure do |config|
+  config.around(:each, :smoke) do |example|
+    Capybara.current_driver = Capybara.javascript_driver
+    Capybara.run_server = false
+    example.run
+    Capybara.run_server = true
+    Capybara.current_driver = Capybara.default_driver
+  end
+end

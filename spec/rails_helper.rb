@@ -22,13 +22,17 @@ require "rspec/rails"
 #
 Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each { |f| require f }
 
-# Checks for pending migrations and applies them before tests are run.
-# If you are not using ActiveRecord, you can remove these lines.
-begin
-  ActiveRecord::Migration.maintain_test_schema!
-rescue ActiveRecord::PendingMigrationError => e
-  puts e.to_s.strip
-  exit 1
+if ENV["SMOKE_TEST_APP_HOST"].present?
+  ActiveRecord::Base.establish_connection adapter: :nulldb
+else
+  # Checks for pending migrations and applies them before tests are run.
+  # If you are not using ActiveRecord, you can remove these lines.
+  begin
+    ActiveRecord::Migration.maintain_test_schema!
+  rescue ActiveRecord::PendingMigrationError => e
+    puts e.to_s.strip
+    exit 1
+  end
 end
 
 RSpec.configure do |config|
@@ -82,6 +86,7 @@ RSpec.configure do |config|
     OmniAuth.config.mock_auth[:default] = nil
   end
 
+  config.filter_run_excluding :smoke
   config.filter_run_excluding flaky: true unless ENV["RUN_FLAKY_SPECS"] == "true"
   config.filter_run_excluding js: true unless ENV["RUN_JS_SPECS"] == "true"
   config.filter_run_excluding slow: true unless ENV["RUN_SLOW_SPECS"] == "true"
