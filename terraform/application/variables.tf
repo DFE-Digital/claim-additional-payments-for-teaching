@@ -60,7 +60,7 @@ variable "canonical_hostname" {
   description = "External domain name for the app service"
   default     = null
 }
-variable "app_replicas" {
+variable "web_replicas" {
   description = "Number of replicas of the web app"
   default = 1
 }
