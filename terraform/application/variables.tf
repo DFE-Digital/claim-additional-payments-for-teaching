@@ -62,13 +62,13 @@ variable "canonical_hostname" {
 }
 
 variable "web_replicas" {
-  type        = integer
+  type        = number
   description = "Number of instances of the web container to run"
   default     = 1
 }
 
 variable "worker_replicas" {
-  type        = integer
+  type        = number
   description = "Number of instances of the worker container to run"
   default     = 1
 }
