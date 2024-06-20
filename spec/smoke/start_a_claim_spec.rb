@@ -7,10 +7,6 @@ RSpec.describe "Start a claim", :smoke, type: :feature do
   # BASIC_AUTH_USERNAME
   # BASIC_AUTH_PASSWORD
 
-  before do
-    create(:journey_configuration, :student_loans)
-  end
-
   scenario "User starts a claim" do
     visit url_with_basic_auth
     expect(page).to have_text("Teachers: claim back your student loan repayments")
