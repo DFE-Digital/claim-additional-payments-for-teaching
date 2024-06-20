@@ -37,5 +37,37 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::ApplicationRouteForm, typ
         change { journey_session.reload.answers.application_route }.to("teacher")
       )
     end
+
+    describe "reseting dependent answers" do
+      before do
+        journey_session.answers.assign_attributes(
+          application_route: existing_option,
+          state_funded_secondary_school: true
+        )
+        journey_session.save!
+      end
+
+      context "when the value has changed" do
+        let(:existing_option) { "salaried_trainee" }
+
+        it "resets dependent answers" do
+          expect { expect(form.save).to be(true) }.to(
+            change { journey_session.reload.answers.state_funded_secondary_school }
+            .from(true)
+            .to(nil)
+          )
+        end
+      end
+
+      context "when the value hasn't changed" do
+        let(:existing_option) { option }
+
+        it "doesn't reset dependent answers if the value hasn't changed" do
+          expect { expect(form.save).to be(true) }.not_to(
+            change { journey_session.reload.answers.state_funded_secondary_school }
+          )
+        end
+      end
+    end
   end
 end

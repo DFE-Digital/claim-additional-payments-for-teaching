@@ -13,7 +13,9 @@ describe "trainee route: completing the form" do
       and_i_complete_application_route_question_with(
         option: "I am enrolled on a salaried teacher training course in England"
       )
+      and_i_complete_the_trainee_details_step_with(option: "Yes")
       then_the_check_your_answers_part_one_page_shows_my_answers
+
       and_i_dont_change_my_answers
       and_the_personal_details_section_has_been_temporarily_stubbed
       and_i_submit_the_application
@@ -26,6 +28,10 @@ describe "trainee route: completing the form" do
 
     expect(page).to have_text(
       "What is your employment status? I am enrolled on a salaried teacher training course in England"
+    )
+
+    expect(page).to have_text(
+      "Are you on a teacher training course in England which meets the following conditions? Yes"
     )
   end
 end

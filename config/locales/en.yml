@@ -697,6 +697,34 @@ en:
             answer: "Other"
         errors:
           inclusion: "Select the option that applies to you"
+      state_funded_secondary_school:
+        question: "Are you employed by an English state secondary school?"
+        hint: "State schools receive funding from the UK government. Secondary schools teach children aged 11 to 16, or 11 to 18."
+        answers:
+          true:
+            answer: "Yes"
+          false:
+            answer: "No"
+        errors:
+          inclusion: "Select the option that applies to you"
+      trainee_details:
+        question: "Are you on a teacher training course in England which meets the following conditions?"
+        hint_html: >
+          The course must:
+          <ul>
+            <li>pay a salary</li>
+            <li>lead to qualified teacher status (QTS)</li>
+            <li>be accredited by the UK government</li>
+          </ul>
+          Check with your training provider if you're not sure.
+        answers:
+          true:
+            answer: "Yes"
+          false:
+            answer: "No"
+        errors:
+          inclusion: "Select the option that applies to you"
+
     check_your_answers:
       part_one:
         primary_heading: "Check your answers"

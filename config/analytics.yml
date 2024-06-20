@@ -220,6 +220,7 @@ shared:
     - created_at
     - updated_at
     - application_route
+    - state_funded_secondary_school
   :schools:
     - id
     - urn

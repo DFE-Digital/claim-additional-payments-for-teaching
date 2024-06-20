@@ -25,6 +25,8 @@ module Policies
         case answers.attributes.symbolize_keys
         in application_route: "other"
           "application route other not accecpted"
+        in state_funded_secondary_school: false
+          "school not state funded"
         else
           nil
         end
