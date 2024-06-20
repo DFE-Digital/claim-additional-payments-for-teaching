@@ -11,7 +11,8 @@ module Journeys
       "claims" => {
         "application-route" => ApplicationRouteForm,
         "state-funded-secondary-school" => StateFundedSecondarySchoolForm,
-        "trainee-details" => TraineeDetailsForm
+        "trainee-details" => TraineeDetailsForm,
+        "contract-details" => ContractDetailsForm
       }
     }
   end

@@ -37,6 +37,18 @@ describe "ineligible route: completing the form" do
         then_i_see_the_ineligible_page
       end
     end
+
+    context "ineligible - contract details" do
+      it "shows the ineligible page" do
+        when_i_start_the_form
+        and_i_complete_application_route_question_with(
+          option: "I am employed as a teacher in a school in England"
+        )
+        and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
+        and_i_complete_the_contract_details_step_with(option: "No")
+        then_i_see_the_ineligible_page
+      end
+    end
   end
 
   def then_i_see_the_ineligible_page

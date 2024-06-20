@@ -221,6 +221,7 @@ shared:
     - updated_at
     - application_route
     - state_funded_secondary_school
+    - one_year
   :schools:
     - id
     - urn

@@ -57,6 +57,14 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
+    def and_i_complete_the_contract_details_step_with(option:)
+      assert_on_contract_details_page!
+
+      choose(option)
+
+      click_button("Continue")
+    end
+
     def and_i_dont_change_my_answers
       click_button("Continue")
     end
@@ -83,6 +91,10 @@ module GetATeacherRelocationPayment
 
     def assert_on_check_your_answers_page!
       expect(page).to have_text("Check your answers before sending your application")
+    end
+
+    def assert_on_contract_details_page!
+      expect(page).to have_text("Are you employed on a contract lasting at least one year?")
     end
 
     def assert_application_is_submitted!

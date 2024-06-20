@@ -5,6 +5,7 @@ module Journeys
         "application-route",
         "state-funded-secondary-school",
         "trainee-details",
+        "contract-details",
         "check-your-answers-part-one"
       ]
 
@@ -35,6 +36,7 @@ module Journeys
         SLUGS.dup.tap do |sequence|
           if answers.trainee?
             sequence.delete("state-funded-secondary-school")
+            sequence.delete("contract-details")
           else
             sequence.delete("trainee-details")
           end
