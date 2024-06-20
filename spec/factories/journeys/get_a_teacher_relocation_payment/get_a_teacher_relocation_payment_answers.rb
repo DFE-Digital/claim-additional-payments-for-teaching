@@ -11,6 +11,10 @@ FactoryBot.define do
       application_route { "teacher" }
     end
 
+    trait :with_state_funded_secondary_school do
+      state_funded_secondary_school { true }
+    end
+
     trait :with_email_details do
       email_address { generate(:email_address) }
       email_verified { true }
@@ -29,7 +33,13 @@ FactoryBot.define do
       bank_account_number { rand(10000000..99999999) }
     end
 
+    trait :eligible_teacher do
+      with_application_route
+      with_state_funded_secondary_school
+    end
+
     trait :submitable do
+      eligible_teacher
       with_personal_details
       with_email_details
       with_mobile_details

@@ -32,7 +32,15 @@ module GetATeacherRelocationPayment
       journey_session.save!
     end
 
-    def and_i_complete_application_route_question_with(option: "teacher")
+    def and_i_complete_application_route_question_with(option:)
+      choose(option)
+
+      click_button("Continue")
+    end
+
+    def and_i_complete_the_state_funded_secondary_school_step_with(option:)
+      assert_on_state_funded_secondary_school_page!
+
       choose(option)
 
       click_button("Continue")
@@ -44,6 +52,12 @@ module GetATeacherRelocationPayment
 
     def then_the_application_is_submitted_successfully
       assert_application_is_submitted!
+    end
+
+    def assert_on_state_funded_secondary_school_page!
+      expect(page).to have_text(
+        "Are you employed by an English state secondary school?"
+      )
     end
 
     def assert_on_check_your_answers_part_one_page!

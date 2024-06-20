@@ -3,6 +3,7 @@ module Journeys
     class SlugSequence
       ELIGIBILITY_SLUGS = [
         "application-route",
+        "state-funded-secondary-school",
         "check-your-answers-part-one"
       ]
 

@@ -8,10 +8,21 @@ describe "ineligible route: completing the form" do
   end
 
   describe "navigating forward" do
-    context "ineligible application route" do
+    context "ineligible - application route" do
       it "shows the ineligible page" do
         when_i_start_the_form
         and_i_complete_application_route_question_with(option: "Other")
+        then_i_see_the_ineligible_page
+      end
+    end
+
+    context "ineligible - non state funded school" do
+      it "shows the ineligible page" do
+        when_i_start_the_form
+        and_i_complete_application_route_question_with(
+          option: "I am employed as a teacher in a school in England"
+        )
+        and_i_complete_the_state_funded_secondary_school_step_with(option: "No")
         then_i_see_the_ineligible_page
       end
     end

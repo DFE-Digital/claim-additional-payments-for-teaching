@@ -13,7 +13,8 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
     let(:answers) do
       build(
         :get_a_teacher_relocation_payment_answers,
-        :with_application_route
+        :with_application_route,
+        :with_state_funded_secondary_school
       )
     end
 
@@ -23,6 +24,11 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
           "What is your employment status?",
           "I am employed as a teacher in a school in England",
           "application-route"
+        ],
+        [
+          "Are you employed by an English state secondary school?",
+          "Yes",
+          "state-funded-secondary-school"
         ]
       )
     end
