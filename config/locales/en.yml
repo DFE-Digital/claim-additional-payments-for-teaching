@@ -724,6 +724,16 @@ en:
             answer: "No"
         errors:
           inclusion: "Select the option that applies to you"
+      contract_details:
+        question: "Are you employed on a contract lasting at least one year?"
+        hint: "Your contract can also be ongoing or permanent."
+        answers:
+          true:
+            answer: "Yes"
+          false:
+            answer: "No"
+        errors:
+          inclusion: "Select the option that applies to you"
 
     check_your_answers:
       part_one:

@@ -19,6 +19,10 @@ FactoryBot.define do
       state_funded_secondary_school { true }
     end
 
+    trait :with_one_year_contract do
+      one_year { true }
+    end
+
     trait :with_email_details do
       email_address { generate(:email_address) }
       email_verified { true }
@@ -40,6 +44,7 @@ FactoryBot.define do
     trait :eligible_teacher do
       with_teacher_application_route
       with_state_funded_secondary_school
+      with_one_year_contract
     end
   end
 end

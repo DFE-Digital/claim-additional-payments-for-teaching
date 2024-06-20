@@ -42,7 +42,8 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::ApplicationRouteForm, typ
       before do
         journey_session.answers.assign_attributes(
           application_route: existing_option,
-          state_funded_secondary_school: true
+          state_funded_secondary_school: true,
+          one_year: true
         )
         journey_session.save!
       end
@@ -55,6 +56,11 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::ApplicationRouteForm, typ
             change { journey_session.reload.answers.state_funded_secondary_school }
             .from(true)
             .to(nil)
+            .and(
+              change { journey_session.reload.answers.one_year }
+              .from(true)
+              .to(nil)
+            )
           )
         end
       end
@@ -63,8 +69,9 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::ApplicationRouteForm, typ
         let(:existing_option) { option }
 
         it "doesn't reset dependent answers if the value hasn't changed" do
-          expect { expect(form.save).to be(true) }.not_to(
-            change { journey_session.reload.answers.state_funded_secondary_school }
+          expect { expect(form.save).to be(true) }.to(
+            not_change { journey_session.reload.answers.state_funded_secondary_school }
+            .and(not_change { journey_session.reload.answers.one_year })
           )
         end
       end

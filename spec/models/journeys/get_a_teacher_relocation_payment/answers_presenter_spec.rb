@@ -15,7 +15,8 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
         build(
           :get_a_teacher_relocation_payment_answers,
           :with_teacher_application_route,
-          :with_state_funded_secondary_school
+          :with_state_funded_secondary_school,
+          :with_one_year_contract
         )
       end
 
@@ -30,6 +31,11 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
             "Are you employed by an English state secondary school?",
             "Yes",
             "state-funded-secondary-school"
+          ],
+          [
+            "Are you employed on a contract lasting at least one year?",
+            "Yes",
+            "contract-details"
           ]
         )
       end

@@ -14,6 +14,7 @@ describe "teacher route: completing the form" do
         option: "I am employed as a teacher in a school in England"
       )
       and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
+      and_i_complete_the_contract_details_step_with(option: "Yes")
       then_the_check_your_answers_part_one_page_shows_my_answers
       and_i_dont_change_my_answers
       and_the_personal_details_section_has_been_temporarily_stubbed
@@ -30,6 +31,9 @@ describe "teacher route: completing the form" do
     )
     expect(page).to have_text(
       "Are you employed by an English state secondary school? Yes"
+    )
+    expect(page).to have_text(
+      "Are you employed on a contract lasting at least one year? Yes"
     )
   end
 end
