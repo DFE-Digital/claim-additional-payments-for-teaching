@@ -9,7 +9,7 @@ RSpec.feature "Admin checking a claim with matching details" do
 
   scenario "service operator can check a claim with matching details" do
     claim = create(:claim, :submitted, policy: Policies::StudentLoans)
-    claim_with_matching_details = create(:claim, :submitted, teacher_reference_number: claim.teacher_reference_number)
+    claim_with_matching_details = create(:claim, :submitted, eligibility_attributes: {teacher_reference_number: claim.eligibility.teacher_reference_number})
 
     click_on "View claims"
     find("a[href='#{admin_claim_tasks_path(claim)}']").click

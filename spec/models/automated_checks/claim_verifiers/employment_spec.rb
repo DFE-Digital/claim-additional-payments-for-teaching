@@ -24,7 +24,6 @@ module AutomatedChecks
           national_insurance_number: "RT901113D",
           reference: "QKCVAQ3K",
           surname: "Bonnet-Fontaine",
-          teacher_reference_number: teacher_reference_number,
           policy: policy,
           submitted_at: DateTime.new(2022, 1, 12, 13, 0, 0)
         )
@@ -33,7 +32,8 @@ module AutomatedChecks
           attributes_for(
             :"#{policy_underscored}_eligibility",
             :eligible,
-            current_school_id: school.id
+            current_school_id: school.id,
+            teacher_reference_number: teacher_reference_number
           )
         )
 

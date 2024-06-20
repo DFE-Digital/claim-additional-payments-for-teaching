@@ -26,7 +26,7 @@ module Journeys
 
       return "ineligible" if journey_ineligible?
 
-      if claim_submittable?
+      if completed?
         return "student-loan-amount" if updating_personal_details? && in_sequence?("student-loan-amount")
         return "check-your-answers"
       end
@@ -118,6 +118,14 @@ module Journeys
 
     def journey_ineligible?
       @journey_ineligible ||= journey::EligibilityChecker.new(journey_session: @journey_session).ineligible?
+    end
+
+    def completed?
+      if journey == Journeys::AdditionalPaymentsForTeaching
+        claim_submittable? && answers.teacher_reference_number.present?
+      else
+        claim_submittable?
+      end
     end
   end
 end

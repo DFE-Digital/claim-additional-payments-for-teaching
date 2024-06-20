@@ -8,10 +8,10 @@ RSpec.describe Claim::ClaimsPreventingPaymentFinder do
   describe "#claims_preventing_payment" do
     let(:personal_details) do
       {
-        teacher_reference_number: generate(:teacher_reference_number),
         bank_account_number: "32828838",
         bank_sort_code: "183828",
-        first_name: "Boris"
+        first_name: "Boris",
+        eligibility_attributes: {teacher_reference_number: generate(:teacher_reference_number)}
       }
     end
     let(:claim) { create(:claim, :submitted, personal_details) }
@@ -42,7 +42,9 @@ RSpec.describe Claim::ClaimsPreventingPaymentFinder do
       end
 
       it "includes the other claim where a topup is payrollable" do
-        lup_eligibility = create(:levelling_up_premium_payments_eligibility, :eligible, award_amount: 1500.0)
+        eligibility_attributes = inconsistent_personal_details.delete(:eligibility_attributes)
+
+        lup_eligibility = create(:levelling_up_premium_payments_eligibility, :eligible, award_amount: 1500.0, **eligibility_attributes)
         other_claim = create(:claim, :approved, inconsistent_personal_details.merge(policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility))
         create(:payment, claims: [other_claim])
         other_claim.topups.create(award_amount: "500.00", created_by: user)

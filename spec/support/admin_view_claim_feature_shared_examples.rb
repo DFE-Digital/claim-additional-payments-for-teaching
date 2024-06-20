@@ -34,13 +34,12 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
   }
 
   let!(:similar_claim) {
-    eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible)
+    eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible, teacher_reference_number: multiple_claim.eligibility.teacher_reference_number)
     create(
       :claim,
       :submitted,
       policy: policy,
-      eligibility: eligibility,
-      teacher_reference_number: multiple_claim.teacher_reference_number
+      eligibility: eligibility
     )
   }
 

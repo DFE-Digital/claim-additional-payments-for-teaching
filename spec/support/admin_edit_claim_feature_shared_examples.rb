@@ -30,7 +30,7 @@ RSpec.shared_examples "Admin Edit Claim Feature" do |policy|
   end
 
   context "non-claim attribute" do
-    let(:old_value) { claim.teacher_reference_number }
+    let(:old_value) { claim.eligibility.teacher_reference_number }
     let(:new_value) { old_value.next }
     let(:reason) { "Fix typo" }
 

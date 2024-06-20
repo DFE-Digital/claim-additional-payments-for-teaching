@@ -16,7 +16,7 @@ class Payment < ApplicationRecord
   validates :scheduled_payment_date, presence: true, on: :upload
   validate :personal_details_must_be_consistent
 
-  PERSONAL_DETAILS_ATTRIBUTES_PERMITTING_DISCREPANCIES = %i[
+  PERSONAL_CLAIM_DETAILS_ATTRIBUTES_PERMITTING_DISCREPANCIES = %i[
     first_name
     middle_name
     surname
@@ -31,8 +31,7 @@ class Payment < ApplicationRecord
     banking_name
     national_insurance_number
   ]
-  PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES = %i[
-    teacher_reference_number
+  PERSONAL_CLAIM_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES = %i[
     date_of_birth
     student_loan_plan
     bank_sort_code
@@ -40,7 +39,11 @@ class Payment < ApplicationRecord
     building_society_roll_number
   ]
 
-  delegate(*(PERSONAL_DETAILS_ATTRIBUTES_PERMITTING_DISCREPANCIES + PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES), to: :claim_for_personal_details)
+  PERSONAL_ELIGIBILITY_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES = %i[
+    teacher_reference_number
+  ]
+
+  delegate(*(PERSONAL_CLAIM_DETAILS_ATTRIBUTES_PERMITTING_DISCREPANCIES + PERSONAL_CLAIM_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES), to: :claim_for_personal_details)
 
   def policies_in_payment
     claims.map { |claim| claim.policy.payroll_file_name }.uniq.sort.join(" ")
@@ -53,14 +56,22 @@ class Payment < ApplicationRecord
   private
 
   def personal_details_must_be_consistent
-    mismatching_attributes = PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES.select { |attribute|
+    mismatching_attributes = PERSONAL_CLAIM_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES.select { |attribute|
       attribute_values = claims.map(&attribute)
       attribute_values.uniq.count > 1 && !attribute_values.all?(&:blank?)
     }
 
-    if mismatching_attributes.any?
+    mismatching_eligibility_attributes = PERSONAL_ELIGIBILITY_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES.select { |attribute|
+      attribute_values = claims.map(&:eligibility).map(&attribute)
+      attribute_values.uniq.count > 1 && !attribute_values.all?(&:blank?)
+    }
+
+    if mismatching_attributes.any? || mismatching_eligibility_attributes.any?
       claims_sentence = claims.map(&:reference).to_sentence
-      attributes_sentence = mismatching_attributes.map { |attribute| Claim.human_attribute_name(attribute).downcase }.to_sentence
+      attributes_list = mismatching_attributes.map { |attribute| Claim.human_attribute_name(attribute).downcase }
+      attributes_list += mismatching_eligibility_attributes.map { |attribute| claims.first.eligibility.class.human_attribute_name(attribute).downcase }
+      attributes_sentence = attributes_list.to_sentence
+
       errors.add(:claims, "#{claims_sentence} have different values for #{attributes_sentence}")
     end
   end

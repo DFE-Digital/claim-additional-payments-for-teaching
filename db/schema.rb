@@ -49,7 +49,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_24_105924) do
     t.string "address_line_4", limit: 100
     t.string "postcode", limit: 11
     t.date "date_of_birth"
-    t.string "teacher_reference_number", limit: 11
+    t.string "column_to_remove_teacher_reference_number", limit: 11
     t.string "national_insurance_number", limit: 9
     t.string "email_address", limit: 256
     t.string "bank_sort_code", limit: 6
@@ -170,7 +170,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_24_105924) do
     t.decimal "award_amount", precision: 7, scale: 2
     t.boolean "induction_completed"
     t.boolean "school_somewhere_else"
+    t.string "teacher_reference_number", limit: 11
     t.index ["current_school_id"], name: "index_early_career_payments_eligibilities_on_current_school_id"
+    t.index ["teacher_reference_number"], name: "index_ecp_eligibility_trn"
   end
 
   create_table "file_uploads", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -246,7 +248,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_24_105924) do
     t.boolean "eligible_degree_subject"
     t.boolean "induction_completed"
     t.boolean "school_somewhere_else"
+    t.string "teacher_reference_number", limit: 11
     t.index ["current_school_id"], name: "index_lup_payments_eligibilities_on_current_school_id"
+    t.index ["teacher_reference_number"], name: "index_lupp_eligibility_trn"
   end
 
   create_table "local_authorities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -406,9 +410,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_24_105924) do
     t.boolean "had_leadership_position"
     t.boolean "mostly_performed_leadership_duties"
     t.boolean "claim_school_somewhere_else"
+    t.string "teacher_reference_number", limit: 11
     t.index ["claim_school_id"], name: "index_student_loans_eligibilities_on_claim_school_id"
     t.index ["created_at"], name: "index_student_loans_eligibilities_on_created_at"
     t.index ["current_school_id"], name: "index_student_loans_eligibilities_on_current_school_id"
+    t.index ["teacher_reference_number"], name: "index_sl_eligibility_trn"
   end
 
   create_table "support_tickets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

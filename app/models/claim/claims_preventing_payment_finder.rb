@@ -22,14 +22,20 @@ class Claim
     private
 
     def find_claims_preventing_payment
-      payrollable_claims_from_same_claimant = Claim.payrollable.where(teacher_reference_number: claim.teacher_reference_number)
+      eligibility_ids = [
+        Policies::StudentLoans::Eligibility.where(teacher_reference_number: claim.eligibility.teacher_reference_number),
+        Policies::EarlyCareerPayments::Eligibility.where(teacher_reference_number: claim.eligibility.teacher_reference_number),
+        Policies::LevellingUpPremiumPayments::Eligibility.where(teacher_reference_number: claim.eligibility.teacher_reference_number)
+      ].flatten.map(&:id)
+
+      payrollable_claims_from_same_claimant = Claim.payrollable.where(eligibility_id: eligibility_ids)
 
       payrollable_topup_claims_from_same_claimant = Topup.includes(:claim).payrollable
-        .select { |t| t.claim.teacher_reference_number == claim.teacher_reference_number }
+        .select { |t| t.claim.eligibility.teacher_reference_number == claim.eligibility.teacher_reference_number }
         .map(&:claim)
 
       [payrollable_claims_from_same_claimant, payrollable_topup_claims_from_same_claimant].reduce([], :concat).select do |other_claim|
-        Payment::PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES.any? do |attribute|
+        Payment::PERSONAL_CLAIM_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES.any? do |attribute|
           attribute_does_not_match?(other_claim, attribute)
         end
       end

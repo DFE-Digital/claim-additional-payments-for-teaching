@@ -43,9 +43,9 @@ RSpec.describe Claim, type: :model do
 
   context "that has a teacher_reference_number" do
     it "validates the length of the teacher reference number" do
-      expect(build(:claim, teacher_reference_number: "1/2/3/4/5/6/7")).to be_valid
-      expect(build(:claim, teacher_reference_number: "1/2/3/4/5")).not_to be_valid
-      expect(build(:claim, teacher_reference_number: "12/345678")).not_to be_valid
+      expect(build(:claim, eligibility_attributes: {teacher_reference_number: "1/2/3/4/5/6/7"}).eligibility).to be_valid
+      expect(build(:claim, eligibility_attributes: {teacher_reference_number: "1/2/3/4/5"}).eligibility).not_to be_valid
+      expect(build(:claim, eligibility_attributes: {teacher_reference_number: "12/345678"}).eligibility).not_to be_valid
     end
   end
 
@@ -109,20 +109,20 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#teacher_reference_number" do
-    let(:claim) { build(:claim, teacher_reference_number: teacher_reference_number) }
+    let(:claim) { build(:claim, eligibility_attributes: {teacher_reference_number: teacher_reference_number}) }
 
     context "when the teacher reference number is stored and contains non digits" do
       let(:teacher_reference_number) { "12\\23 /232 " }
       it "strips out the non digits" do
         claim.save!
-        expect(claim.teacher_reference_number).to eql("1223232")
+        expect(claim.eligibility.teacher_reference_number).to eql("1223232")
       end
     end
 
     context "before the teacher reference number is stored" do
       let(:teacher_reference_number) { "12/34567" }
       it "is not modified" do
-        expect(claim.teacher_reference_number).to eql("12/34567")
+        expect(claim.eligibility.teacher_reference_number).to eql("12/34567")
       end
     end
   end
@@ -328,9 +328,9 @@ RSpec.describe Claim, type: :model do
 
     it "returns false when there exists another payrollable claim with the same teacher reference number but with inconsistent attributes that would prevent us from running payroll" do
       teacher_reference_number = generate(:teacher_reference_number)
-      create(:claim, :approved, teacher_reference_number: teacher_reference_number, date_of_birth: 20.years.ago)
+      create(:claim, :approved, eligibility_attributes: {teacher_reference_number: teacher_reference_number}, date_of_birth: 20.years.ago)
 
-      expect(create(:claim, :submitted, teacher_reference_number: teacher_reference_number, date_of_birth: 30.years.ago).approvable?).to eq false
+      expect(create(:claim, :submitted, eligibility_attributes: {teacher_reference_number: teacher_reference_number}, date_of_birth: 30.years.ago).approvable?).to eq false
     end
 
     context "when the claim is held" do
@@ -572,7 +572,6 @@ RSpec.describe Claim, type: :model do
         :address_line_4,
         :postcode,
         :payroll_gender,
-        :teacher_reference_number,
         :national_insurance_number,
         :email_address,
         :mobile_number,
@@ -592,7 +591,8 @@ RSpec.describe Claim, type: :model do
         :details_check,
         :email_address_check,
         :mobile_check,
-        :qualifications_details_check
+        :qualifications_details_check,
+        :column_to_remove_teacher_reference_number
       ])
     end
   end

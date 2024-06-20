@@ -246,7 +246,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       expect(claim.bank_sort_code).to eq("123456")
       expect(claim.bank_account_number).to eq("87654321")
       expect(claim.payroll_gender).to eq("female")
-      expect(claim.teacher_reference_number).to eq("1234567")
+      expect(claim.eligibility.teacher_reference_number).to eq("1234567")
       expect(claim.reload.submitted_at).to eq(Time.zone.now)
       policy_options_provided = [
         {"policy" => "EarlyCareerPayments", "award_amount" => "5000.0"},
@@ -655,7 +655,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       expect(claim.bank_sort_code).to eq("123456")
       expect(claim.bank_account_number).to eq("87654321")
       expect(claim.payroll_gender).to eq("female")
-      expect(claim.teacher_reference_number).to eql("1234567")
+      expect(claim.eligibility.teacher_reference_number).to eql("1234567")
       expect(claim.submitted_at).to eq(Time.zone.now)
       policy_options_provided = [
         {"policy" => "EarlyCareerPayments", "award_amount" => "5000.0"},
@@ -965,7 +965,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
         expect(submitted_claim.bank_sort_code).to eq("123456")
         expect(submitted_claim.bank_account_number).to eq("87654321")
         expect(submitted_claim.payroll_gender).to eq("female")
-        expect(submitted_claim.teacher_reference_number).to eql("1234567")
+        expect(submitted_claim.eligibility.teacher_reference_number).to eql("1234567")
         expect(submitted_claim.submitted_at).to eq(Time.zone.now)
 
         policy_options_provided = [

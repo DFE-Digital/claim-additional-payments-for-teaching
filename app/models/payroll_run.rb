@@ -48,7 +48,7 @@ class PayrollRun < ApplicationRecord
   def self.create_with_claims!(claims, topups, attrs = {})
     ActiveRecord::Base.transaction do
       PayrollRun.create!(attrs).tap do |payroll_run|
-        [claims, topups].reduce([], :concat).group_by(&:teacher_reference_number).each_value do |grouped_items|
+        [claims, topups].reduce([], :concat).group_by { |obj| group_by_field(obj) }.each_value do |grouped_items|
           # associates the claim to the payment, for Topup that's its associated claim
           grouped_claims = grouped_items.map { |i| i.is_a?(Topup) ? i.claim : i }
 
@@ -60,6 +60,10 @@ class PayrollRun < ApplicationRecord
         end
       end
     end
+  end
+
+  def self.group_by_field(obj)
+    obj.is_a?(Claim) ? obj.eligibility.teacher_reference_number : obj.teacher_reference_number
   end
 
   def download_triggered?

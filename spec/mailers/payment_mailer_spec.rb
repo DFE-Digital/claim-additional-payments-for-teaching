@@ -96,18 +96,17 @@ RSpec.describe PaymentMailer, type: :mailer do
   context "with a payment with multiple claims" do
     describe "#confirmation" do
       let(:payment) { create(:payment, :confirmed, :with_figures, net_pay: 2500.00, student_loan_repayment: 60, claims: claims, scheduled_payment_date: Date.parse("2019-01-01")) }
-      let(:student_loans_eligibility) { build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 500) }
+      let(:teacher_reference_number) { "1234567" }
       let(:claims) do
         personal_details = {
           national_insurance_number: "JM603818B",
-          teacher_reference_number: "1234567",
           bank_sort_code: "112233",
           bank_account_number: "95928482",
           building_society_roll_number: nil
         }
         [
-          build(:claim, :approved, personal_details.merge(eligibility: student_loans_eligibility)),
-          build(:claim, :approved, personal_details.merge(policy: Policies::EarlyCareerPayments))
+          build(:claim, :approved, personal_details.merge(eligibility_attributes: {student_loan_repayment_amount: 500, teacher_reference_number: teacher_reference_number})),
+          build(:claim, :approved, personal_details.merge(policy: Policies::EarlyCareerPayments, eligibility_attributes: {teacher_reference_number: teacher_reference_number}))
         ]
       end
       let(:mail) { PaymentMailer.confirmation(payment) }

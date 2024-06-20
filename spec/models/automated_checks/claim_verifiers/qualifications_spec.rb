@@ -17,7 +17,7 @@ module AutomatedChecks
         end
 
         stub_qualified_teaching_statuses_show(
-          trn: claim_arg.teacher_reference_number,
+          trn: claim_arg.eligibility.teacher_reference_number,
           params: {
             birthdate: claim_arg.date_of_birth&.to_s,
             nino: claim_arg.national_insurance_number
@@ -38,7 +38,6 @@ module AutomatedChecks
           national_insurance_number: "QQ100000C",
           reference: "AB123456",
           surname: "ELIGIBLE",
-          teacher_reference_number: "1234567",
           policy: Policies::EarlyCareerPayments
         )
 
@@ -46,7 +45,8 @@ module AutomatedChecks
           attributes_for(
             :early_career_payments_eligibility,
             :eligible,
-            qualification: :undergraduate_itt
+            qualification: :undergraduate_itt,
+            teacher_reference_number: "1234567"
           )
         )
 
@@ -57,7 +57,7 @@ module AutomatedChecks
         {
           claim: claim_arg,
           dqt_teacher_status: Dqt::Client.new.teacher.find(
-            claim_arg.teacher_reference_number,
+            claim_arg.eligibility.teacher_reference_number,
             birthdate: claim_arg.date_of_birth,
             nino: claim_arg.national_insurance_number
           )
@@ -331,7 +331,7 @@ module AutomatedChecks
                 reference: "AB123456",
                 surname: "ELIGIBLE",
                 tasks: [build(:task, name: :qualifications)],
-                teacher_reference_number: "1234567"
+                eligibility_attributes: {teacher_reference_number: "1234567"}
               )
             end
 

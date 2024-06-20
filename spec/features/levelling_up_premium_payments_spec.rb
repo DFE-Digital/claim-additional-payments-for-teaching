@@ -251,7 +251,7 @@ RSpec.feature "Levelling up premium payments claims" do
       expect(submitted_claim.bank_sort_code).to eq("123456")
       expect(submitted_claim.bank_account_number).to eq("87654321")
       expect(submitted_claim.payroll_gender).to eq("female")
-      expect(submitted_claim.teacher_reference_number).to eql("1234567")
+      expect(submitted_claim.eligibility.teacher_reference_number).to eql("1234567")
 
       # - Application complete (make sure its Word for Word and styling matches)
       expect(page).to have_text("You applied for a levelling up premium payment")

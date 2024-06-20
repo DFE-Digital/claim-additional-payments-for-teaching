@@ -147,7 +147,7 @@ module AutomatedChecks
         unless trn_matched?
           notes << create_field_note(
             name: "Teacher reference number",
-            claimant: claim.teacher_reference_number,
+            claimant: claim.eligibility.teacher_reference_number,
             dqt: dqt_teacher_status.teacher_reference_number
           )
         end
@@ -162,7 +162,7 @@ module AutomatedChecks
       end
 
       def trn_matched?
-        claim.teacher_reference_number == dqt_teacher_status.teacher_reference_number
+        claim.eligibility.teacher_reference_number == dqt_teacher_status.teacher_reference_number
       end
     end
   end

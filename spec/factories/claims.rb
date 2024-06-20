@@ -39,7 +39,6 @@ FactoryBot.define do
     trait :with_details_from_dfe_identity do
       first_name { "Jo" }
       surname { "Bloggs" }
-      teacher_reference_number { generate(:teacher_reference_number) }
       date_of_birth { 20.years.ago.to_date }
       national_insurance_number { generate(:national_insurance_number) }
     end
