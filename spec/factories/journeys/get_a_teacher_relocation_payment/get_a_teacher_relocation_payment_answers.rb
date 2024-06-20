@@ -7,8 +7,12 @@ FactoryBot.define do
       national_insurance_number { generate(:national_insurance_number) }
     end
 
-    trait :with_application_route do
+    trait :with_teacher_application_route do
       application_route { "teacher" }
+    end
+
+    trait :with_trainee_application_route do
+      application_route { "salaried_trainee" }
     end
 
     trait :with_state_funded_secondary_school do
@@ -34,16 +38,8 @@ FactoryBot.define do
     end
 
     trait :eligible_teacher do
-      with_application_route
+      with_teacher_application_route
       with_state_funded_secondary_school
-    end
-
-    trait :submitable do
-      eligible_teacher
-      with_personal_details
-      with_email_details
-      with_mobile_details
-      with_bank_details
     end
   end
 end

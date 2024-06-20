@@ -4,6 +4,7 @@ module Journeys
       ELIGIBILITY_SLUGS = [
         "application-route",
         "state-funded-secondary-school",
+        "trainee-details",
         "check-your-answers-part-one"
       ]
 
@@ -31,7 +32,13 @@ module Journeys
       end
 
       def slugs
-        SLUGS
+        SLUGS.dup.tap do |sequence|
+          if answers.trainee?
+            sequence.delete("state-funded-secondary-school")
+          else
+            sequence.delete("trainee-details")
+          end
+        end
       end
     end
   end

@@ -10,7 +10,8 @@ module Journeys
     FORMS = {
       "claims" => {
         "application-route" => ApplicationRouteForm,
-        "state-funded-secondary-school" => StateFundedSecondarySchoolForm
+        "state-funded-secondary-school" => StateFundedSecondarySchoolForm,
+        "trainee-details" => TraineeDetailsForm
       }
     }
   end

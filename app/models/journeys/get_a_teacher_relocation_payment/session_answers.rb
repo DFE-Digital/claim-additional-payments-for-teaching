@@ -3,6 +3,10 @@ module Journeys
     class SessionAnswers < Journeys::SessionAnswers
       attribute :application_route, :string
       attribute :state_funded_secondary_school, :boolean
+
+      def trainee?
+        application_route == "salaried_trainee"
+      end
     end
   end
 end

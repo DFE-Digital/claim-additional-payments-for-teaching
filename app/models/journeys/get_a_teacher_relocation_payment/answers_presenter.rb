@@ -6,7 +6,11 @@ module Journeys
       def eligibility_answers
         [].tap do |a|
           a << application_route
-          a << state_funded_secondary_school
+          a << if answers.trainee?
+            trainee_details
+          else
+            state_funded_secondary_school
+          end
         end.compact
       end
 
@@ -25,6 +29,14 @@ module Journeys
           t("get_a_teacher_relocation_payment.forms.state_funded_secondary_school.question"),
           t("get_a_teacher_relocation_payment.forms.state_funded_secondary_school.answers.#{answers.state_funded_secondary_school}.answer"),
           "state-funded-secondary-school"
+        ]
+      end
+
+      def trainee_details
+        [
+          t("get_a_teacher_relocation_payment.forms.trainee_details.question"),
+          t("get_a_teacher_relocation_payment.forms.trainee_details.answers.#{answers.state_funded_secondary_school}.answer"),
+          "trainee-details"
         ]
       end
     end

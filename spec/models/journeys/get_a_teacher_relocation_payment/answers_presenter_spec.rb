@@ -10,27 +10,54 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
   describe "#eligibility_answers" do
     subject { presenter.eligibility_answers }
 
-    let(:answers) do
-      build(
-        :get_a_teacher_relocation_payment_answers,
-        :with_application_route,
-        :with_state_funded_secondary_school
-      )
+    context "when a teacher application" do
+      let(:answers) do
+        build(
+          :get_a_teacher_relocation_payment_answers,
+          :with_teacher_application_route,
+          :with_state_funded_secondary_school
+        )
+      end
+
+      it do
+        is_expected.to include(
+          [
+            "What is your employment status?",
+            "I am employed as a teacher in a school in England",
+            "application-route"
+          ],
+          [
+            "Are you employed by an English state secondary school?",
+            "Yes",
+            "state-funded-secondary-school"
+          ]
+        )
+      end
     end
 
-    it do
-      is_expected.to include(
-        [
-          "What is your employment status?",
-          "I am employed as a teacher in a school in England",
-          "application-route"
-        ],
-        [
-          "Are you employed by an English state secondary school?",
-          "Yes",
-          "state-funded-secondary-school"
-        ]
-      )
+    context "when a trainee application" do
+      let(:answers) do
+        build(
+          :get_a_teacher_relocation_payment_answers,
+          :with_trainee_application_route,
+          :with_state_funded_secondary_school
+        )
+      end
+
+      it do
+        is_expected.to include(
+          [
+            "What is your employment status?",
+            "I am enrolled on a salaried teacher training course in England",
+            "application-route"
+          ],
+          [
+            "Are you on a teacher training course in England which meets the following conditions?",
+            "Yes",
+            "trainee-details"
+          ]
+        )
+      end
     end
   end
 end

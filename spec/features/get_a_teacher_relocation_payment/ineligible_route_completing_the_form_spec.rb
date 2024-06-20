@@ -26,6 +26,17 @@ describe "ineligible route: completing the form" do
         then_i_see_the_ineligible_page
       end
     end
+
+    context "ineligible - trainee details" do
+      it "shows the ineligible page" do
+        when_i_start_the_form
+        and_i_complete_application_route_question_with(
+          option: "I am enrolled on a salaried teacher training course in England"
+        )
+        and_i_complete_the_trainee_details_step_with(option: "No")
+        then_i_see_the_ineligible_page
+      end
+    end
   end
 
   def then_i_see_the_ineligible_page

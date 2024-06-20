@@ -23,7 +23,10 @@ module GetATeacherRelocationPayment
       journey_session.answers.assign_attributes(
         attributes_for(
           :get_a_teacher_relocation_payment_answers,
-          :submitable,
+          :with_personal_details,
+          :with_email_details,
+          :with_mobile_details,
+          :with_bank_details,
           email_address: "test-irp-claim@example.com",
           teacher_reference_number: "1234567",
           payroll_gender: "male"
@@ -46,6 +49,14 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
+    def and_i_complete_the_trainee_details_step_with(option:)
+      assert_on_trainee_details_page!
+
+      choose(option)
+
+      click_button("Continue")
+    end
+
     def and_i_dont_change_my_answers
       click_button("Continue")
     end
@@ -57,6 +68,12 @@ module GetATeacherRelocationPayment
     def assert_on_state_funded_secondary_school_page!
       expect(page).to have_text(
         "Are you employed by an English state secondary school?"
+      )
+    end
+
+    def assert_on_trainee_details_page!
+      expect(page).to have_text(
+        "Are you on a teacher training course in England which meets the following conditions?"
       )
     end
 

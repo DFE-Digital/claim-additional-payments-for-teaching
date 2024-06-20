@@ -707,6 +707,24 @@ en:
             answer: "No"
         errors:
           inclusion: "Select the option that applies to you"
+      trainee_details:
+        question: "Are you on a teacher training course in England which meets the following conditions?"
+        hint_html: >
+          The course must:
+          <ul>
+            <li>pay a salary</li>
+            <li>lead to qualified teacher status (QTS)</li>
+            <li>be accredited by the UK government</li>
+          </ul>
+          Check with your training provider if you're not sure.
+        answers:
+          true:
+            answer: "Yes"
+          false:
+            answer: "No"
+        errors:
+          inclusion: "Select the option that applies to you"
+
     check_your_answers:
       part_one:
         primary_heading: "Check your answers"
