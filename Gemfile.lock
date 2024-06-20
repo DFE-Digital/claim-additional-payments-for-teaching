@@ -239,7 +239,7 @@ GEM
       aes_key_wrap
       bindata
       httpclient
-    jwt (2.8.1)
+    jwt (2.8.2)
       base64
     language_server-protocol (3.17.0.3)
     launchy (3.0.1)
@@ -316,7 +316,7 @@ GEM
       validate_url
       webfinger (~> 1.2)
     os (1.1.4)
-    pagy (8.4.4)
+    pagy (8.4.5)
     parallel (1.25.1)
     parallel_tests (4.7.1)
       parallel
