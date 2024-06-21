@@ -14,7 +14,8 @@ module Journeys
         "trainee-details" => TraineeDetailsForm,
         "contract-details" => ContractDetailsForm,
         "start-date" => StartDateForm,
-        "subject" => SubjectForm
+        "subject" => SubjectForm,
+        "visa" => VisaForm
       }
     }
   end

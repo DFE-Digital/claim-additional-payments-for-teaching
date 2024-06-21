@@ -127,6 +127,25 @@ describe "ineligible route: completing the form" do
         end
       end
     end
+
+    context "ineligible - visa" do
+      context "as a teacher" do
+        it "shows the ineligible page" do
+          when_i_start_the_form
+          and_i_complete_application_route_question_with(
+            option: "I am employed as a teacher in a school in England"
+          )
+          and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
+          and_i_complete_the_contract_details_step_with(option: "Yes")
+          and_i_complete_the_contract_start_date_step_with(
+            date: contract_start_date
+          )
+          and_i_complete_the_subject_step_with(option: "Physics")
+          and_i_complete_the_visa_screen_with(option: "Other")
+          then_i_see_the_ineligible_page
+        end
+      end
+    end
   end
 
   def then_i_see_the_ineligible_page

@@ -31,6 +31,8 @@ module Policies
           "teacher contract duration of less than one year not accepted"
         in subject: "other"
           "taught subject not accepted"
+        in visa_type: "Other"
+          "visa not accepted"
         else
           nil
         end

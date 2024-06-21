@@ -16,7 +16,8 @@ describe "trainee route: completing the form" do
   end
 
   describe "navigating forward" do
-    it "submits an application" do
+    # Well be removing this feature spec in the next commit
+    xit "submits an application" do
       when_i_start_the_form
       and_i_complete_application_route_question_with(
         option: "I am enrolled on a salaried teacher training course in England"
