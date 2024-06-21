@@ -65,6 +65,16 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
+    def and_i_complete_the_contract_start_date_step_with(date:)
+      assert_on_contract_start_date_page!
+
+      fill_in("Day", with: date.day)
+      fill_in("Month", with: date.month)
+      fill_in("Year", with: date.year)
+
+      click_button("Continue")
+    end
+
     def and_i_dont_change_my_answers
       click_button("Continue")
     end
@@ -95,6 +105,10 @@ module GetATeacherRelocationPayment
 
     def assert_on_contract_details_page!
       expect(page).to have_text("Are you employed on a contract lasting at least one year?")
+    end
+
+    def assert_on_contract_start_date_page!
+      expect(page).to have_text("Enter the start date of your contract")
     end
 
     def assert_application_is_submitted!

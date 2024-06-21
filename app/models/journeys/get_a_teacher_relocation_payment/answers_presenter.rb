@@ -12,6 +12,7 @@ module Journeys
             a << state_funded_secondary_school
             a << contract_details
           end
+          a << start_date_details
         end.compact
       end
 
@@ -46,6 +47,14 @@ module Journeys
           t("get_a_teacher_relocation_payment.forms.contract_details.question"),
           t("get_a_teacher_relocation_payment.forms.contract_details.answers.#{answers.one_year}.answer"),
           "contract-details"
+        ]
+      end
+
+      def start_date_details
+        [
+          t("get_a_teacher_relocation_payment.forms.start_date.question"),
+          answers.start_date.strftime("%d-%m-%Y"),
+          "start-date"
         ]
       end
     end

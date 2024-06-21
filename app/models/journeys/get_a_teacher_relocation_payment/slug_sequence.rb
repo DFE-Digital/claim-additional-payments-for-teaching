@@ -6,6 +6,7 @@ module Journeys
         "state-funded-secondary-school",
         "trainee-details",
         "contract-details",
+        "start-date",
         "check-your-answers-part-one"
       ]
 
