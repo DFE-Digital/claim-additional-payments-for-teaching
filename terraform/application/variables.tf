@@ -60,6 +60,10 @@ variable "canonical_hostname" {
   description = "External domain name for the app service"
   default     = null
 }
+variable "web_replicas" {
+  description = "Number of replicas of the web app"
+  default = 1
+}
 
 locals {
   postgres_ssl_mode = var.enable_postgres_ssl ? "require" : "disable"

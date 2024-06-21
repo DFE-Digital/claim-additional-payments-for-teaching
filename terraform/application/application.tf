@@ -38,6 +38,8 @@ module "web_application" {
 
   docker_image = var.docker_image
   command      = var.startup_command
+
+  replicas     = var.web_replicas
 }
 
 module "worker_application" {
