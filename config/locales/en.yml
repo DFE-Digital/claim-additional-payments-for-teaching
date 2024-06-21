@@ -735,6 +735,12 @@ en:
         question: "Select the visa you used to move to England"
         errors:
           inclusion: "Choose your visa type"
+      entry_date:
+        question: "Enter the date you moved to England to start your teaching job"
+        errors:
+          presence: "Enter your entry date"
+          date_not_in_future: "Date of entry cannot be in the future"
+
 
     check_your_answers:
       part_one:

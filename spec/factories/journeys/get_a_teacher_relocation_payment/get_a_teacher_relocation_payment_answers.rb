@@ -35,6 +35,11 @@ FactoryBot.define do
       visa_type { "British National (Overseas) visa" }
     end
 
+    trait :with_entry_date do
+      with_start_date
+      date_of_entry { start_date - 1.week }
+    end
+
     trait :with_email_details do
       email_address { generate(:email_address) }
       email_verified { true }
@@ -59,6 +64,7 @@ FactoryBot.define do
       with_one_year_contract
       with_start_date
       with_visa
+      with_entry_date
     end
   end
 end

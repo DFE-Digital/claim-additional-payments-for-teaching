@@ -7,6 +7,7 @@ module Journeys
       attribute :start_date, :date
       attribute :subject, :string
       attribute :visa_type, :string
+      attribute :date_of_entry, :date
     end
   end
 end

@@ -18,7 +18,8 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
         :with_one_year_contract,
         :with_start_date,
         :with_subject,
-        :with_visa
+        :with_visa,
+        :with_entry_date
       )
     end
 
@@ -53,6 +54,11 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
           "Select the visa you used to move to England",
           "British National (Overseas) visa",
           "visa"
+        ],
+        [
+          "Enter the date you moved to England to start your teaching job",
+          answers.date_of_entry.strftime("%d-%m-%Y"),
+          "entry-date"
         ]
       )
     end
