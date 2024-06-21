@@ -3,7 +3,7 @@
 # Used to model the sequence of pages that make up the claim process.
 module Journeys
   class PageSequence
-    attr_reader :current_slug, :completed_slugs
+    attr_reader :current_slug
 
     DEAD_END_SLUGS = %w[complete existing-session eligible-later future-eligibility ineligible]
     OPTIONAL_SLUGS = %w[postcode-search select-home-address reset-claim]
@@ -26,7 +26,7 @@ module Journeys
 
       return "ineligible" if journey_ineligible?
 
-      if completed?
+      if claim_submittable?
         return "student-loan-amount" if updating_personal_details? && in_sequence?("student-loan-amount")
         return "check-your-answers"
       end
@@ -47,8 +47,14 @@ module Journeys
 
     def has_completed_journey_until?(slug)
       return true if DEAD_END_SLUGS.include?(slug)
-      return true if (slug == "address" || answers.postcode.present?) && incomplete_slugs == ["address"]
       incomplete_slugs.empty?
+    end
+
+    def completed_slugs
+      # /address is considered completed if provided via /postcode-search and /select-home-address
+      return @completed_slugs + ["address"] if answers.postcode.present?
+
+      @completed_slugs
     end
 
     def next_required_slug
@@ -118,14 +124,6 @@ module Journeys
 
     def journey_ineligible?
       @journey_ineligible ||= journey::EligibilityChecker.new(journey_session: @journey_session).ineligible?
-    end
-
-    def completed?
-      if journey == Journeys::AdditionalPaymentsForTeaching
-        claim_submittable? && answers.teacher_reference_number.present?
-      else
-        claim_submittable?
-      end
     end
   end
 end
