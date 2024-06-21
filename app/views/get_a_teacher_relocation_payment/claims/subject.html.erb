@@ -1,7 +1,7 @@
 <% content_for(
   :page_title,
   page_title(
-        t("get_a_teacher_relocation_payment.forms.subject.question.#{@form.answers.application_route}"),
+        t("get_a_teacher_relocation_payment.forms.subject.question"),
     journey: current_journey_routing_name,
     show_error: @form.errors.any?
   )
@@ -22,8 +22,8 @@
         f.object.available_options,
         -> (option) { option },
         -> (option) { t("get_a_teacher_relocation_payment.forms.subject.answers.#{option}") },
-        legend: { text: t("get_a_teacher_relocation_payment.forms.subject.question.#{f.object.answers.application_route}") },
-        hint: { text: t("get_a_teacher_relocation_payment.forms.subject.hint.#{f.object.answers.application_route}") }
+        legend: { text: t("get_a_teacher_relocation_payment.forms.subject.question") },
+        hint: { text: t("get_a_teacher_relocation_payment.forms.subject.hint") }
       ) %>
 
       <%= f.govuk_submit %>

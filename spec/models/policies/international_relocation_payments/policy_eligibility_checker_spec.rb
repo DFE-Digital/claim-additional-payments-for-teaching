@@ -28,7 +28,7 @@ describe Policies::InternationalRelocationPayments::PolicyEligibilityChecker do
     context "when the application route is 'salaried_trainee'" do
       let(:application_route) { "salaried_trainee" }
 
-      it { is_expected.to eq(:eligible_now) }
+      it { is_expected.to eq(:ineligible) }
     end
   end
 
@@ -50,7 +50,7 @@ describe Policies::InternationalRelocationPayments::PolicyEligibilityChecker do
     context "when the application route is 'salaried_trainee'" do
       let(:application_route) { "salaried_trainee" }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to eq(true) }
     end
   end
 end

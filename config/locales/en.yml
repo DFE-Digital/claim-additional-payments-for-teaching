@@ -707,23 +707,6 @@ en:
             answer: "No"
         errors:
           inclusion: "Select the option that applies to you"
-      trainee_details:
-        question: "Are you on a teacher training course in England which meets the following conditions?"
-        hint_html: >
-          The course must:
-          <ul>
-            <li>pay a salary</li>
-            <li>lead to qualified teacher status (QTS)</li>
-            <li>be accredited by the UK government</li>
-          </ul>
-          Check with your training provider if you're not sure.
-        answers:
-          true:
-            answer: "Yes"
-          false:
-            answer: "No"
-        errors:
-          inclusion: "Select the option that applies to you"
       contract_details:
         question: "Are you employed on a contract lasting at least one year?"
         hint: "Your contract can also be ongoing or permanent."
@@ -739,12 +722,8 @@ en:
         errors:
           presence: "Enter your contract start date"
       subject:
-        question:
-          teacher: "What subject are you employed to teach at your school?"
-          salaried_trainee: "What subject are you training to teach?"
-        hint:
-          teacher: "Physics, general or combined science including physics, and languages can be combined with other subjects but must make up at least 50% of your time in the classroom."
-          salaried_trainee: "Physics or languages can be combined with other subjects but must make up at least 50% of your course content."
+        question: "What subject are you employed to teach at your school?"
+        hint: "Physics, general or combined science including physics, and languages can be combined with other subjects but must make up at least 50% of your time in the classroom."
         answers:
           physics: "Physics"
           combined_with_physics: "General or combined science, including physics"

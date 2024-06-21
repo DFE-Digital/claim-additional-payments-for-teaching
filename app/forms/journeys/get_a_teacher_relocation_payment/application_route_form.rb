@@ -15,16 +15,6 @@ module Journeys
       def save
         return false unless valid?
 
-        if application_route_changed?
-          journey_session.answers.assign_attributes(
-            state_funded_secondary_school: nil,
-            one_year: nil,
-            start_date: nil,
-            subject: nil,
-            visa_type: nil
-          )
-        end
-
         journey_session.answers.assign_attributes(
           application_route: application_route
         )
