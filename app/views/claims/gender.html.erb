@@ -2,47 +2,26 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: @form, errored_field_id_overrides: { payroll_gender: "claim_payroll_gender_female" }) if @form.errors.any? %>
-    <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
-      <%= form_group_tag @form do %>
-        <fieldset class="govuk-fieldset" aria-describedby="payroll_gender-hint" role="group">
+    <%= form_with model: @form, url: claim_path(current_journey_routing_name), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
 
-          <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">
-            <h1 class="govuk-fieldset__heading">
-              <%= t("forms.gender.questions.payroll_gender") %>
-            </h1>
-          </legend>
-
-          <div class="govuk-hint" id="payroll_gender-hint">
-            This is not us asking how you identify. HMRC only records male or female and
-            we need to match their records to make tax contributions on your behalf. If
-            you don't know what gender is held on record we will contact HMRC or the
-            Teachers Pension Scheme.
-          </div>
-
-          <%= errors_tag @form, :payroll_gender %>
-
-          <div class="govuk-radios">
-            <div class="govuk-radios__item">
-              <%= f.radio_button(:payroll_gender, :female, class: "govuk-radios__input") %>
-              <%= f.label :payroll_gender_female, "Female", class: "govuk-label govuk-radios__label" %>
-            </div>
-            <div class="govuk-radios__item">
-              <%= f.radio_button(:payroll_gender, :male, class: "govuk-radios__input") %>
-              <%= f.label :payroll_gender_male, "Male", class: "govuk-label govuk-radios__label" %>
-            </div>
-            <div class="govuk-radios__divider">or</div>
-            <div class="govuk-radios__item">
-              <%= f.radio_button(:payroll_gender, :dont_know, class: "govuk-radios__input") %>
-              <%= f.label :payroll_gender_dont_know, "I don't know", class: "govuk-label govuk-radios__label" %>
-            </div>
-          </div>
-
-        </fieldset>
+      <%= f.govuk_radio_buttons_fieldset(
+        :payroll_gender,
+        legend: {
+          text: t("forms.gender.questions.payroll_gender"),
+          tag: "h1",
+          size: "l"
+        },
+        hint: {
+          text: "This is not us asking how you identify. HMRC only records male or female and we need to match their records to make tax contributions on your behalf. If you don’t know what gender is held on record we will contact HMRC or the Teachers Pension Scheme."
+        }) do %>
+        <%= f.govuk_radio_button :payroll_gender, :female, label: { text: "Female" }, link_errors: true %>
+        <%= f.govuk_radio_button :payroll_gender, :male, label: { text: "Male" } %>
+        <%= f.govuk_radio_divider %>
+        <%= f.govuk_radio_button :payroll_gender, :dont_know, label: { text: "I don’t know" } %>
       <% end %>
 
-      <%= f.submit "Continue", class: "govuk-button" %>
-
+      <%= f.govuk_submit "Continue" %>
     <% end %>
   </div>
 </div>
