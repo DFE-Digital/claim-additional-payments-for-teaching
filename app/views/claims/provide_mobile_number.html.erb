@@ -2,43 +2,24 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: @form, errored_field_id_overrides: { provide_mobile_number: "claim_provide_mobile_number_true" }) if @form.errors.any? %>
+    <%= form_with model: @form, url: claim_path(current_journey_routing_name), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
 
-    <%= form_for @form, url: claim_path(current_journey_routing_name) do |form| %>
-      <span class="govuk-caption-xl"><%= t("questions.personal_details") %></span>
+      <%= f.govuk_collection_radio_buttons :provide_mobile_number, @form.radio_options, :id, :name,
+        caption: {
+          text: t("questions.personal_details"),
+          size: "xl"
+        },
+        legend: {
+          text: t("questions.provide_mobile_number"),
+          tag: "h1",
+          size: "l"
+        },
+        hint: {
+          text: "We will only use this number if we are unable to contact you via email. It may slow down your application if we are unable to reach you."
+        } %>
 
-      <%= form_group_tag @form do %>
-        <%= form.hidden_field :provide_mobile_number %>
-
-        <fieldset class="govuk-fieldset" aria-describedby="provide-mobile-number-hint">
-          <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">
-            <h1 class="govuk-fieldset__heading">
-              <%= t("questions.provide_mobile_number") %>
-            </h1>
-          </legend>
-
-          <div class="govuk-hint" id="provide-mobile-number-hint">
-              We will only use this number if we are unable to contact you via email. It may slow
-              down your application if we are unable to reach you.
-          </div>
-
-          <%= errors_tag @form, :provide_mobile_number %>
-
-          <div class="govuk-radios">
-            <div class="govuk-radios__item">
-              <%= form.radio_button(:provide_mobile_number, true, class: "govuk-radios__input") %>
-              <%= form.label :provide_mobile_number_true, "Yes", class: "govuk-label govuk-radios__label" %>
-            </div>
-
-            <div class="govuk-radios__item">
-              <%= form.radio_button(:provide_mobile_number, false, class: "govuk-radios__input") %>
-              <%= form.label :provide_mobile_number_false, "No", class: "govuk-label govuk-radios__label" %>
-            </div>
-          </div>
-        </fieldset>
-      <% end %>
-
-      <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
+      <%= f.govuk_submit "Continue" %>
     <% end %>
   </div>
 </div>
