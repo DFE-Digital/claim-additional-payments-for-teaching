@@ -114,11 +114,10 @@ jobs:
           make ci test-aks get-cluster-credentials
           kubectl exec -n srtl-test deployment/claim-additional-payments-for-teaching-test-worker -- sh -c "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/prepare-database"
 
-      - name: Install Ruby 3.2.4
+      - name: Install Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          ruby-version: 3.2.4
 
       - name: Run smoke tests
         shell: bash
