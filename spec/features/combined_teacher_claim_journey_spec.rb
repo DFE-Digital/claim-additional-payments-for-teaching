@@ -167,12 +167,12 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     otp_in_mail_sent = mail[:personalisation].decoded.scan(/\b[0-9]{6}\b/).first
 
     # - One time password wrong
-    fill_in "claim_one_time_password", with: "000000"
+    fill_in "claim-one-time-password-field", with: "000000"
     click_on "Confirm"
     expect(page).to have_text("Enter a valid passcode")
 
     # - clear and enter correct OTP
-    fill_in "claim_one_time_password", with: otp_in_mail_sent
+    fill_in "claim-one-time-password-field-error", with: otp_in_mail_sent
     click_on "Confirm"
 
     # - Provide mobile number
