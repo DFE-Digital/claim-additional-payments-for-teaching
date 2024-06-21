@@ -4,13 +4,6 @@ The audience for this document is a developer working on first-line support, who
 may not have worked on this service before. It explains how to perform some
 tasks that you might get asked to do.
 
-## Non-standard things about this project
-
-- We usually use the word “development” to refer to the `development`
-  environment in Azure — this is what other projects might call “staging”. To
-  refer to the application running on a developer’s machine, we usually include
-  the word “local”, for example “local development”.
-
 ## Support tasks
 
 If you want to do one of these tasks and you don’t have what you need, see the

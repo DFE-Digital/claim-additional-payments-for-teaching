@@ -1,47 +1,53 @@
 # Deployment process
 
-All of our infrastructure is hosted on DfE's Cloud Infrastructure Platform in
-[Microsoft Azure][azure].
+This Rails app runs on the
+[Teacher Services Cloud](https://github.com/DFE-Digital/teacher-services-cloud)
+Kubernetes infrastructure in Azure.
+
+All of our infrastructure is run on
+[Teacher Services Cloud](https://github.com/DFE-Digital/teacher-services-cloud)
+Kubernetes infrastructure in Azure.
 
 The setup is specified as [Infrastructure as Code][iac] using Terraform, stored
-in the `azure` folder in the root of the project.
+in the `terraform` folder in the root of the project.
 
 ## Automated deployment
 
-[Azure DevOps](https://dev.azure.com/dfe-ssp/S118-Teacher-Payments-Service) is
-responsible for automated infrastructure deployments, this is separate from the
-deployment of a version of the application.
+We use GitHub Actions to automate our deployments to both the test and
+production environments. You can find the workflow
+[here](../.github/workflows/build_and_deploy.yml).
 
 ## Manual deployment
 
 Automated deployment should always be the first option but it may be required to
 deploy manually for troubleshooting.
 
-### Requesting permissions to acess the infrastructure in higer environments
+### Requesting permissions to access the infrastructure in production environments
 
 - In the [Azure Portal][azure_portal], navigate to Azure AD Privileged Identity
   Management.
-- Click 'My Roles', then 'Azure Resource Roles'.
-- Then click 'Eligible Roles' in the table, choose the role you want access to
-  and click 'Activate'.
+- Click 'My Roles', then 'Groups'.
+- In the 'Eligible assignments' table, click 'Activate' on the
+  `s189 SRTL production PIM` group.
 - You can then choose how long you want permissions for, enter the reason you
-  need access and click the button marked 'Activate'.
-- Everyone in the Managers group will then get an email saying you have
-  requested permissions and will be able to grant your permissions.
+  need access and click the button marked 'Activate'
 
 You will need to carry out a Privileged Identity Management request to deploy to
-the test or production environments. See
+the production environment. See
 [Privileged Identity Management requests](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1192624202/Privileged+Identity+Management+requests)
 for more.
 
 ### Deploying to an environment
 
 The docker image must be already built. It may be required to create a pull
-request to let the build process run. All the available image tags are listed on
-DockerHub: https://hub.docker.com/r/dfedigital/teacher-payments-service/tags
+request to let the build process run. All the available image tags are listed in
+the GitHub repository packages:
+https://github.com/orgs/DFE-Digital/packages?repo_name=claim-additional-payments-for-teaching
 
-- Verify changes: `make <environment> terraform-plan IMAGE_TAG=xyz`
-- Apply changes: `make <environment> terraform-apply IMAGE_TAG=xyz`
+- Verify changes:
+  `make [production-aks|test-aks] terraform-plan-aks IMAGE_TAG=xyz`
+- Apply changes:
+  `make [production-aks|test-aks] terraform-apply-aks IMAGE_TAG=xyz`
 
 [azure]: https://azure.microsoft.com/en-gb/
 [iac]: https://en.wikipedia.org/wiki/Infrastructure_as_code
