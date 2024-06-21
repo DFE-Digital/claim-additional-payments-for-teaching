@@ -223,6 +223,7 @@ shared:
     - state_funded_secondary_school
     - one_year
     - start_date
+    - subject
   :schools:
     - id
     - urn

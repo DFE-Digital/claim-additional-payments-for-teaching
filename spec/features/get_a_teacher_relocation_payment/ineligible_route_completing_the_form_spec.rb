@@ -65,7 +65,7 @@ describe "ineligible route: completing the form" do
     # FIXME RL waiting on feedback from policy team to determine what the cut
     # off date is for contracts
     xcontext "ineligible - contract start date" do
-      context "teacher" do
+      context "as a teacher" do
         it "shows the ineligible page" do
           when_i_start_the_form
           and_i_complete_application_route_question_with(
@@ -80,7 +80,7 @@ describe "ineligible route: completing the form" do
         end
       end
 
-      context "trainee" do
+      context "as a trainee" do
         it "shows the ineligible page" do
           when_i_start_the_form
           and_i_complete_application_route_question_with(
@@ -90,6 +90,39 @@ describe "ineligible route: completing the form" do
           and_i_complete_the_contract_start_date_step_with(
             date: Polices::InternationalRelocationPayments.earliest_eligible_contract_start_date - 1.day
           )
+          then_i_see_the_ineligible_page
+        end
+      end
+    end
+
+    context "ineligible - subject" do
+      context "as a teacher" do
+        it "shows the ineligible page" do
+          when_i_start_the_form
+          and_i_complete_application_route_question_with(
+            option: "I am employed as a teacher in a school in England"
+          )
+          and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
+          and_i_complete_the_contract_details_step_with(option: "Yes")
+          and_i_complete_the_contract_start_date_step_with(
+            date: contract_start_date
+          )
+          and_i_complete_the_subject_step_with(option: "Other")
+          then_i_see_the_ineligible_page
+        end
+      end
+
+      context "as a trainee" do
+        it "shows the ineligible page" do
+          when_i_start_the_form
+          and_i_complete_application_route_question_with(
+            option: "I am enrolled on a salaried teacher training course in England"
+          )
+          and_i_complete_the_trainee_details_step_with(option: "Yes")
+          and_i_complete_the_contract_start_date_step_with(
+            date: contract_start_date
+          )
+          and_i_complete_the_subject_step_with(option: "Other", trainee: true)
           then_i_see_the_ineligible_page
         end
       end
