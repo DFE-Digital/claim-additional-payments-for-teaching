@@ -1,6 +1,8 @@
 module Journeys
   module AdditionalPaymentsForTeaching
     class EligibilityConfirmedForm < Form
+      include ActionView::Helpers::NumberHelper
+
       attribute :selected_claim_policy, :string
 
       validates :selected_claim_policy, presence: {message: ->(object, _) { object.i18n_errors_path(:blank) }}
@@ -18,6 +20,16 @@ module Journeys
         journey_session.save!
       end
 
+      def radio_options
+        policies_eligible_now_and_sorted.map do |policy|
+          OpenStruct.new(
+            id: policy.to_s,
+            name: "#{award_amount_with_currency(policy)} #{policy.short_name.downcase.singularize}",
+            description: I18n.t("#{policy.locale_key}.purpose")
+          )
+        end
+      end
+
       def single_choice_only?
         eligibility_checker.single_choice_only?
       end
@@ -32,6 +44,10 @@ module Journeys
 
       def award_amount(policy)
         policy::PolicyEligibilityChecker.new(answers: answers).calculate_award_amount
+      end
+
+      def award_amount_with_currency(policy)
+        number_to_currency(award_amount(policy), precision: 0)
       end
 
       def selected_policy?(policy)

@@ -51,7 +51,7 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
         expect(page).to have_text("Mobile number verification")
         expect(page).to have_text("Enter the 6-digit passcode")
 
-        fill_in "claim_one_time_password", with: scenario[:otp_code]
+        fill_in "claim-one-time-password-field", with: scenario[:otp_code]
         click_on "Confirm"
 
         expect(page).to have_text(I18n.t("questions.bank_or_building_society"))

@@ -81,6 +81,62 @@ jobs:
             | Student Loans       | <${{ env.APP_URL }}/student-loans/claim>       |
             | Admin               | <${{ env.APP_URL }}/admin>                     |
 
+  deploy_test:
+    name: Deploy to test environment
+    concurrency: deploy_test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    needs: [build]
+    environment:
+      name: test-aks
+      url: ${{ steps.deploy.outputs.environment_url }}
+    outputs:
+      environment_url: ${{ steps.deploy.outputs.environment_url }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: ./.github/actions/deploy-environment
+        id: deploy
+        with:
+          environment: test-aks
+          docker-image: ${{ needs.build.outputs.docker-image-tag }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Run migrations
+        shell: bash
+        run: |
+          make ci test-aks get-cluster-credentials
+          kubectl exec -n srtl-test deployment/claim-additional-payments-for-teaching-test-worker -- sh -c "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/prepare-database"
+
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Run smoke tests
+        shell: bash
+        run: bundle exec rspec spec/smoke -t smoke:true -b
+        env:
+          RAILS_ENV: test
+          SMOKE_TEST_APP_HOST: ${{ env.APP_URL }}
+          BASIC_AUTH_USERNAME: ${{ secrets.BASIC_AUTH_USERNAME }}
+          BASIC_AUTH_PASSWORD: ${{ secrets.BASIC_AUTH_PASSWORD }}
+
+      - name: Notify on failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_COLOR: failure
+          SLACK_TITLE: Failure deploying release to test
+          SLACK_MESSAGE: Failure deploying release to test - Docker tag ${{ needs.build.outputs.docker-image-tag }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+
   deploy_production:
     name: Deploy to production environment
     concurrency: deploy_production
@@ -112,9 +168,23 @@ jobs:
         shell: bash
         run: |
           make ci production-aks get-cluster-credentials
-          kubectl exec -n srtl-test deployment/claim-additional-payments-for-teaching-production-worker -- sh -c "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/prepare-database"
+          kubectl exec -n srtl-production deployment/claim-additional-payments-for-teaching-production-worker -- sh -c "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/prepare-database"
 
-      - name: Slack notification
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Run smoke tests
+        shell: bash
+        run: bundle exec rspec spec/smoke -t smoke:true -b
+        env:
+          RAILS_ENV: test
+          SMOKE_TEST_APP_HOST: ${{ env.APP_URL }}
+          BASIC_AUTH_USERNAME: ${{ secrets.BASIC_AUTH_USERNAME }}
+          BASIC_AUTH_PASSWORD: ${{ secrets.BASIC_AUTH_PASSWORD }}
+
+      - name: Notify on failure
         if: failure()
         uses: rtCamp/action-slack-notify@master
         env:

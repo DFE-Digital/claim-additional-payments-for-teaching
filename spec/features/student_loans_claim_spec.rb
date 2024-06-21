@@ -127,7 +127,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     mail = ActionMailer::Base.deliveries.last
     otp_in_mail_sent = mail[:personalisation].decoded.scan(/\b[0-9]{6}\b/).first
 
-    fill_in "claim_one_time_password", with: otp_in_mail_sent
+    fill_in "claim-one-time-password-field", with: otp_in_mail_sent
 
     click_on "Confirm"
 

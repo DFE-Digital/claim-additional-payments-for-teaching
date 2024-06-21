@@ -60,16 +60,13 @@ variable "canonical_hostname" {
   description = "External domain name for the app service"
   default     = null
 }
-
 variable "web_replicas" {
-  type        = number
-  description = "Number of instances of the web container to run"
-  default     = 1
+  description = "Number of replicas of the web app"
+  default = 1
 }
 
 variable "worker_replicas" {
-  type        = number
-  description = "Number of instances of the worker container to run"
+  description = "Number of replicas of the worker"
   default     = 1
 }
 

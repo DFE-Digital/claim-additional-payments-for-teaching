@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_10_144004) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_20_124504) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -178,6 +178,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_10_144004) do
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "international_relocation_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "application_route"
+    t.boolean "state_funded_secondary_school"
+    t.boolean "one_year"
   end
 
   create_table "journey_configurations", primary_key: "routing_name", id: :string, force: :cascade do |t|
