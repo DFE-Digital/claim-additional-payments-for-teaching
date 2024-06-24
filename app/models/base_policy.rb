@@ -24,4 +24,14 @@ module BasePolicy
   def payroll_file_name
     to_s
   end
+
+  def policies_claimable
+    return [] unless self.const_defined?(:OTHER_CLAIMABLE_POLICIES)
+
+    [self] + self::OTHER_CLAIMABLE_POLICIES
+  end
+
+  def policy_eligibilities_claimable
+    policies_claimable.map { |p| p::Eligibility }
+  end
 end

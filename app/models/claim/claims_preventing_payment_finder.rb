@@ -15,6 +15,9 @@ class Claim
     # The returned claims have different payment or tax details to those
     # provided by `claim`, and hence `claim` cannot be paid in the same payment
     # as the returned claims.
+    #
+    # NOTE: This only works for ECP/LUPP and TSLR cross policy as this requires a TRN
+    # Driven by: Policies.policies_claimable(policy) using OTHER_CLAIMABLE_POLICIES config otherwise this just returns []
     def claims_preventing_payment
       @claims_preventing_payment ||= find_claims_preventing_payment
     end
@@ -22,16 +25,17 @@ class Claim
     private
 
     def find_claims_preventing_payment
-      eligibility_ids = [
-        Policies::StudentLoans::Eligibility.where(teacher_reference_number: claim.eligibility.teacher_reference_number),
-        Policies::EarlyCareerPayments::Eligibility.where(teacher_reference_number: claim.eligibility.teacher_reference_number),
-        Policies::LevellingUpPremiumPayments::Eligibility.where(teacher_reference_number: claim.eligibility.teacher_reference_number)
-      ].flatten.map(&:id)
+      eligibility_ids = claim.policy.policies_claimable.map { |policy|
+        policy::Eligibility.where(teacher_reference_number: claim.eligibility.teacher_reference_number)
+      }.flatten.map(&:id)
 
       payrollable_claims_from_same_claimant = Claim.payrollable.where(eligibility_id: eligibility_ids)
 
       payrollable_topup_claims_from_same_claimant = Topup.includes(:claim).payrollable
-        .select { |t| t.claim.eligibility.teacher_reference_number == claim.eligibility.teacher_reference_number }
+        .select { |t|
+        claim.policy.policy_eligibilities_claimable.map(&:to_s).include?(t.claim.eligibility_type) &&
+          t.claim.eligibility.teacher_reference_number == claim.eligibility.teacher_reference_number
+      }
         .map(&:claim)
 
       [payrollable_claims_from_same_claimant, payrollable_topup_claims_from_same_claimant].reduce([], :concat).select do |other_claim|

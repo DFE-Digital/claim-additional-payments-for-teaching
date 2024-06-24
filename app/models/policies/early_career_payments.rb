@@ -24,6 +24,13 @@ module Policies
 
     POLICY_START_YEAR = AcademicYear.new(2021).freeze
 
+    # Used in
+    #  - checking payments with multiple policies: ClaimsPreventingPaymentFinder
+    OTHER_CLAIMABLE_POLICIES = [
+      LevellingUpPremiumPayments,
+      StudentLoans
+    ].freeze
+
     def eligibility_page_url
       "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools"
     end

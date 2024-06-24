@@ -12,6 +12,13 @@ module Policies
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan
     ].freeze
 
+    # Used in
+    #  - checking payments with multiple policies: ClaimsPreventingPaymentFinder
+    OTHER_CLAIMABLE_POLICIES = [
+      EarlyCareerPayments,
+      StudentLoans
+    ].freeze
+
     def notify_reply_to_id
       "03ece7eb-2a5b-461b-9c91-6630d0051aa6"
     end

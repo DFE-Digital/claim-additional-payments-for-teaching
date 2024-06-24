@@ -25,6 +25,13 @@ module Policies
     POLICY_END_YEAR = AcademicYear.new(2020).freeze
     ACADEMIC_YEARS_QUALIFIED_TEACHERS_CAN_CLAIM_FOR = 11
 
+    # Used in
+    #  - checking payments with multiple policies: ClaimsPreventingPaymentFinder
+    OTHER_CLAIMABLE_POLICIES = [
+      EarlyCareerPayments,
+      LevellingUpPremiumPayments
+    ]
+
     def eligibility_page_url
       "https://www.gov.uk/guidance/teachers-claim-back-your-student-loan-repayments"
     end
