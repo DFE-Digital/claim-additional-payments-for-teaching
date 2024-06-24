@@ -21,14 +21,28 @@ RSpec.describe Journeys::FurtherEducationPayments::FurtherEducationProvisionSear
   end
 
   describe "validations" do
-    let(:provision_search) { "" }
+    context "when search query is blank" do
+      let(:provision_search) { "" }
 
-    it do
-      is_expected.not_to(
-        allow_value("")
-        .for(:provision_search)
-        .with_message("Enter a college name or postcode")
-      )
+      it do
+        is_expected.not_to(
+          allow_value(provision_search)
+          .for(:provision_search)
+          .with_message("Enter a college name or postcode")
+        )
+      end
+    end
+
+    context "when search query is under 3 characters long" do
+      let(:provision_search) { "ab" }
+
+      it do
+        is_expected.not_to(
+          allow_value(provision_search)
+          .for(:provision_search)
+          .with_message("Enter a college name or postcode that is at least 3 characters long")
+        )
+      end
     end
   end
 

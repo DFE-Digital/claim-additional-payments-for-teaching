@@ -775,6 +775,7 @@ en:
       further_education_provision_search:
         errors:
           blank: Enter a college name or postcode
+          min_length: Enter a college name or postcode that is at least 3 characters long
       select_provision:
         errors:
           blank: Select the college you teach at
