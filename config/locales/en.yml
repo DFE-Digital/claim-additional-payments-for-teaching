@@ -764,6 +764,10 @@ en:
     journey_name: Claim further education payments
     feedback_email: "fe-levellingup.premiumpayments@education.gov.uk"
     support_email_address: "fe-levellingup.premiumpayments@education.gov.uk"
+    forms:
+      teaching_responsibilities:
+        errors:
+          inclusion: Select yes if you are a member of staff with teaching responsibilities
   activerecord:
     errors:
       models:
