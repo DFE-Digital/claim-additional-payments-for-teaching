@@ -1,0 +1,9 @@
+<% @backlink_path = landing_page_path %>
+
+<p class="govuk-body">
+  FE teaching responsibilities goes here
+</p>
+
+<%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+  <%= f.govuk_submit %>
+<% end %>

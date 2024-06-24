@@ -3,8 +3,16 @@ require "rails_helper"
 describe "trainee route: completing the form" do
   include GetATeacherRelocationPayment::StepHelpers
 
-  before do
+  let(:journey_configuration) do
     create(:journey_configuration, :get_a_teacher_relocation_payment)
+  end
+
+  let(:contract_start_date) do
+    Date.tomorrow
+  end
+
+  before do
+    journey_configuration
   end
 
   describe "navigating forward" do
@@ -14,6 +22,9 @@ describe "trainee route: completing the form" do
         option: "I am enrolled on a salaried teacher training course in England"
       )
       and_i_complete_the_trainee_details_step_with(option: "Yes")
+      and_i_complete_the_contract_start_date_step_with(
+        date: contract_start_date
+      )
       then_the_check_your_answers_part_one_page_shows_my_answers
 
       and_i_dont_change_my_answers
@@ -32,6 +43,10 @@ describe "trainee route: completing the form" do
 
     expect(page).to have_text(
       "Are you on a teacher training course in England which meets the following conditions? Yes"
+    )
+
+    expect(page).to have_text(
+      "Enter the start date of your contract #{contract_start_date.strftime("%d-%m-%Y")}"
     )
   end
 end

@@ -3,8 +3,16 @@ require "rails_helper"
 describe "teacher route: completing the form" do
   include GetATeacherRelocationPayment::StepHelpers
 
-  before do
+  let(:journey_configuration) do
     create(:journey_configuration, :get_a_teacher_relocation_payment)
+  end
+
+  let(:contract_start_date) do
+    Date.tomorrow
+  end
+
+  before do
+    journey_configuration
   end
 
   describe "navigating forward" do
@@ -15,6 +23,9 @@ describe "teacher route: completing the form" do
       )
       and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
       and_i_complete_the_contract_details_step_with(option: "Yes")
+      and_i_complete_the_contract_start_date_step_with(
+        date: contract_start_date
+      )
       then_the_check_your_answers_part_one_page_shows_my_answers
       and_i_dont_change_my_answers
       and_the_personal_details_section_has_been_temporarily_stubbed
@@ -29,11 +40,17 @@ describe "teacher route: completing the form" do
     expect(page).to have_text(
       "What is your employment status? I am employed as a teacher in a school in England"
     )
+
     expect(page).to have_text(
       "Are you employed by an English state secondary school? Yes"
     )
+
     expect(page).to have_text(
       "Are you employed on a contract lasting at least one year? Yes"
+    )
+
+    expect(page).to have_text(
+      "Enter the start date of your contract #{contract_start_date.strftime("%d-%m-%Y")}"
     )
   end
 end

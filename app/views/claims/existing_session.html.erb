@@ -1,38 +1,30 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <div class="govuk-panel govuk-panel--interruption">
-      <%= form_with url: start_new_path(journey: current_journey_routing_name), method: :post do |form| %>
-        <fieldset class="govuk-fieldset" aria-describedby="start_new_claim">
+      <%= form_with url: start_new_path(journey: current_journey_routing_name), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+        <% radio_options = [
+              OpenStruct.new(id: true, name: "Yes, start claim #{journey_description(current_journey_routing_name)} and lose my progress on my first claim"),
+              OpenStruct.new(id: false, name: "No, finish the claim I have in progress"),
+            ] %>
 
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-              <h1 class="govuk-heading-xl" id="start_new_claim">
-                Are you sure you want to start a claim <%= journey_description(current_journey_routing_name) %>?
-              </h1>
-            </legend>
+          <%= f.govuk_collection_radio_buttons :start_new_claim, radio_options, :id, :name,
+            class: "govuk-!-margin-bottom-6",
+            legend: {
+              text: "Are you sure you want to start a claim #{journey_description(current_journey_routing_name)}?",
+              tag: "h1",
+              size: "xl",
+              class: "govuk-!-margin-bottom-9"
+            } do %>
+            <h2 class="govuk-heading-m">
+              You have a claim in progress <%= journey_description(@existing_session.journey) %>.
+            </h2>
 
-          <h2 class="govuk-heading-m">
-            You have a claim in progress <%= journey_description(@existing_session.journey) %>.
-          </h2>
+            <h2 class="govuk-heading-m">
+              You will lose your progress on this claim if you start a different claim before you send it.
+            </h2>
+          <% end %>
 
-          <h2 class="govuk-heading-m">
-            You will lose your progress on this claim if you start a different claim before you send it.
-          </h2>
-
-          <div class="govuk-radios govuk-!-margin-bottom-9">
-            <div class="govuk-radios__item">
-              <%= form.radio_button(:start_new_claim, true, class: "govuk-radios__input") %>
-              <%= form.label :start_new_claim_true, "Yes, start claim #{journey_description(current_journey_routing_name)} and lose my progress on my first claim", class: "govuk-label govuk-radios__label" %>
-            </div>
-            <div class="govuk-radios__item">
-              <%= form.radio_button(:start_new_claim, false, class: "govuk-radios__input") %>
-              <%= form.label :start_new_claim_false, "No, finish the claim I have in progress", class: "govuk-label govuk-radios__label" %>
-            </div>
-          </div>
-
-        </fieldset>
-
-        <%= form.submit "Submit", class: "govuk-button govuk-button--secondary" %>
-
+        <%= f.govuk_submit "Submit", secondary: true %>
       <% end %>
     </div>
   </div>

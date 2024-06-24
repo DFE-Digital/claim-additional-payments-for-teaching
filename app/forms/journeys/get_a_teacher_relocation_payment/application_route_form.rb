@@ -18,7 +18,8 @@ module Journeys
         if application_route_changed?
           journey_session.answers.assign_attributes(
             state_funded_secondary_school: nil,
-            one_year: nil
+            one_year: nil,
+            start_date: nil
           )
         end
 
