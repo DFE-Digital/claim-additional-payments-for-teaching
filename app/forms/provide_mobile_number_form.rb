@@ -23,6 +23,13 @@ class ProvideMobileNumberForm < Form
     journey_session.save!
   end
 
+  def radio_options
+    [
+      OpenStruct.new(id: true, name: "Yes"),
+      OpenStruct.new(id: false, name: "No")
+    ]
+  end
+
   private
 
   def provide_mobile_number_changed?
