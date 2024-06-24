@@ -15,7 +15,8 @@ module Journeys
         "start-date" => StartDateForm,
         "subject" => SubjectForm,
         "visa" => VisaForm,
-        "entry-date" => EntryDateForm
+        "entry-date" => EntryDateForm,
+        "nationality" => NationalityForm
       }
     }
   end

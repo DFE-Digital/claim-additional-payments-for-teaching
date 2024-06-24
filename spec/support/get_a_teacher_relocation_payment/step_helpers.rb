@@ -97,6 +97,14 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
+    def and_i_complete_the_nationality_step_with(option:)
+      assert_on_nationality_page!
+
+      select(option)
+
+      click_button("Continue")
+    end
+
     def then_the_application_is_submitted_successfully
       assert_application_is_submitted!
     end
@@ -137,6 +145,10 @@ module GetATeacherRelocationPayment
       expect(page).to have_text(
         "Enter the date you moved to England to start your teaching job"
       )
+    end
+
+    def assert_on_nationality_page!
+      expect(page).to have_text("Select your nationality")
     end
 
     def assert_application_is_submitted!

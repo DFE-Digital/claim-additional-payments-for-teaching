@@ -15,6 +15,12 @@ module Journeys
         end.compact
       end
 
+      def identity_answers
+        super.tap do |a|
+          a << nationality
+        end
+      end
+
       private
 
       def application_route
@@ -70,6 +76,14 @@ module Journeys
           t("get_a_teacher_relocation_payment.forms.entry_date.question"),
           answers.date_of_entry.strftime("%d-%m-%Y"),
           "entry-date"
+        ]
+      end
+
+      def nationality
+        [
+          t("get_a_teacher_relocation_payment.forms.nationality.question"),
+          answers.nationality,
+          "nationality"
         ]
       end
     end

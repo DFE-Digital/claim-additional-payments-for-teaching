@@ -35,7 +35,9 @@ describe "teacher route: completing the form" do
       and_i_complete_the_entry_date_page_with(date: entry_date)
       then_the_check_your_answers_part_one_page_shows_my_answers
       and_i_dont_change_my_answers
+      and_i_complete_the_nationality_step_with(option: "Australian")
       and_the_personal_details_section_has_been_temporarily_stubbed
+      then_the_check_your_answers_part_page_shows_my_answers
       and_i_submit_the_application
       then_the_application_is_submitted_successfully
     end
@@ -71,5 +73,9 @@ describe "teacher route: completing the form" do
     expect(page).to have_text(
       "Enter the date you moved to England to start your teaching job #{entry_date.strftime("%d-%m-%Y")}"
     )
+  end
+
+  def then_the_check_your_answers_part_page_shows_my_answers
+    expect(page).to have_text("Select your nationality Australian")
   end
 end

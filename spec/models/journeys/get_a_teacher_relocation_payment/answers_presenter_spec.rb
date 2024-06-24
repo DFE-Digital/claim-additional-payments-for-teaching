@@ -19,7 +19,8 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
         :with_start_date,
         :with_subject,
         :with_visa,
-        :with_entry_date
+        :with_entry_date,
+        :with_nationality
       )
     end
 
@@ -59,6 +60,27 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
           "Enter the date you moved to England to start your teaching job",
           answers.date_of_entry.strftime("%d-%m-%Y"),
           "entry-date"
+        ]
+      )
+    end
+  end
+
+  describe "#identity_answers" do
+    subject { presenter.identity_answers }
+
+    let(:answers) do
+      build(
+        :get_a_teacher_relocation_payment_answers,
+        :with_nationality
+      )
+    end
+
+    it do
+      is_expected.to include(
+        [
+          "Select your nationality",
+          "Australian",
+          "nationality"
         ]
       )
     end

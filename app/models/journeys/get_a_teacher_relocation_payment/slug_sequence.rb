@@ -12,12 +12,16 @@ module Journeys
         "check-your-answers-part-one"
       ]
 
+      PERSONAL_DETAILS_SLUGS = [
+        "nationality",
+      ]
+
       RESULTS_SLUGS = [
         "check-your-answers",
         "ineligible"
       ].freeze
 
-      SLUGS = ELIGIBILITY_SLUGS + RESULTS_SLUGS
+      SLUGS = ELIGIBILITY_SLUGS + PERSONAL_DETAILS_SLUGS + RESULTS_SLUGS
 
       def self.start_page_url
         if Rails.env.production?

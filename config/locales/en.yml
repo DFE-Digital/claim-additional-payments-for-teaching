@@ -740,6 +740,10 @@ en:
         errors:
           presence: "Enter your entry date"
           date_not_in_future: "Date of entry cannot be in the future"
+      nationality:
+        question: "Select your nationality"
+        errors:
+          inclusion: "Choose your nationality"
 
 
     check_your_answers:
