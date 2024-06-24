@@ -9,13 +9,6 @@ DOCKER_REPOSITORY=ghcr.io/dfe-digital/claim-additional-payments-for-teaching
 help:
 	@grep -E '^[a-zA-Z\._\-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-test:
-	$(eval AZ_SUBSCRIPTION=s118-teacherpaymentsservice-test)
-	$(eval RESOURCE_GROUP_NAME=s118t01-tfbackend)
-	$(eval STORAGE_ACCOUNT_NAME=s118t01tfbackendsa)
-	$(eval CONTAINER_NAME=s118t01conttfstate)
-	$(eval DEPLOY_ENV=test)
-
 production:
 	$(eval AZ_SUBSCRIPTION=s118-teacherpaymentsservice-production)
 	$(eval RESOURCE_GROUP_NAME=s118p01-tfbackend)
