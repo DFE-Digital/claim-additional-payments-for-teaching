@@ -1,31 +1,11 @@
 class Claim
   class MatchingAttributeFinder
-    STUDENT_LOANS_AND_ADDITIONAL_PAYMENTS_GROUP = [
-      Policies::StudentLoans,
-      Policies::EarlyCareerPayments,
-      Policies::LevellingUpPremiumPayments
-    ]
-
-    # From the source_claim use this determine which group to use for comparison
-    CROSS_POLICY_MATCH_GROUPS = {
-      Policies::StudentLoans => STUDENT_LOANS_AND_ADDITIONAL_PAYMENTS_GROUP,
-      Policies::EarlyCareerPayments => STUDENT_LOANS_AND_ADDITIONAL_PAYMENTS_GROUP,
-      Policies::LevellingUpPremiumPayments => STUDENT_LOANS_AND_ADDITIONAL_PAYMENTS_GROUP
-    }
-
     # Fields on the claim model to consider a match
     CLAIM_ATTRIBUTE_GROUPS_TO_MATCH = [
       ["email_address"],
       ["national_insurance_number"],
       ["bank_account_number", "bank_sort_code", "building_society_roll_number"]
     ].freeze
-
-    # Fields on the eligibility that are considered a match
-    ELIGIBILITY_ATTRIBUTE_GROUPS_TO_MATCH = {
-      Policies::StudentLoans => [["teacher_reference_number"]],
-      Policies::EarlyCareerPayments => [["teacher_reference_number"]],
-      Policies::LevellingUpPremiumPayments => [["teacher_reference_number"]]
-    }
 
     def initialize(source_claim)
       @source_claim = source_claim
@@ -75,11 +55,11 @@ class Claim
     private
 
     def policies_to_find_matches
-      CROSS_POLICY_MATCH_GROUPS[@source_claim.policy]
+      @source_claim.policy.policies_claimable
     end
 
     def eligibility_attributes_groups_to_match
-      ELIGIBILITY_ATTRIBUTE_GROUPS_TO_MATCH[@source_claim.policy]
+      @source_claim.policy.eligibility_matching_attributes
     end
 
     def policies_to_find_matches_eligibility_types

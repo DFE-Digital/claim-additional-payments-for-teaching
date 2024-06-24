@@ -26,12 +26,18 @@ module BasePolicy
   end
 
   def policies_claimable
-    return [] unless self.const_defined?(:OTHER_CLAIMABLE_POLICIES)
+    return [] unless const_defined?(:OTHER_CLAIMABLE_POLICIES)
 
     [self] + self::OTHER_CLAIMABLE_POLICIES
   end
 
   def policy_eligibilities_claimable
     policies_claimable.map { |p| p::Eligibility }
+  end
+
+  def eligibility_matching_attributes
+    return [] unless const_defined?(:ELIGIBILITY_MATCHING_ATTRIBUTES)
+
+    self::ELIGIBILITY_MATCHING_ATTRIBUTES
   end
 end
