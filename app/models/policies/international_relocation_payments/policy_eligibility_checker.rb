@@ -29,6 +29,8 @@ module Policies
           "school not state funded"
         in application_route: "teacher", one_year: false
           "teacher contract duration of less than one year not accepted"
+        in subject: "other"
+          "taught subject not accepted"
         else
           nil
         end

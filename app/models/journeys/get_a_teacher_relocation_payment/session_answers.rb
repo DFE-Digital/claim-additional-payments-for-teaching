@@ -5,6 +5,7 @@ module Journeys
       attribute :state_funded_secondary_school, :boolean
       attribute :one_year, :boolean
       attribute :start_date, :date
+      attribute :subject, :string
 
       def trainee?
         application_route == "salaried_trainee"

@@ -13,7 +13,8 @@ module Journeys
         "state-funded-secondary-school" => StateFundedSecondarySchoolForm,
         "trainee-details" => TraineeDetailsForm,
         "contract-details" => ContractDetailsForm,
-        "start-date" => StartDateForm
+        "start-date" => StartDateForm,
+        "subject" => SubjectForm
       }
     }
   end

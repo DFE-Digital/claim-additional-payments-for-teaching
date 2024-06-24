@@ -27,6 +27,10 @@ FactoryBot.define do
       start_date { Date.tomorrow }
     end
 
+    trait :with_subject do
+      subject { "physics" }
+    end
+
     trait :with_email_details do
       email_address { generate(:email_address) }
       email_verified { true }

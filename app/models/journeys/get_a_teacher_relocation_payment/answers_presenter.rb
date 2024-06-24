@@ -13,6 +13,7 @@ module Journeys
             a << contract_details
           end
           a << start_date_details
+          a << subject_details
         end.compact
       end
 
@@ -55,6 +56,14 @@ module Journeys
           t("get_a_teacher_relocation_payment.forms.start_date.question"),
           answers.start_date.strftime("%d-%m-%Y"),
           "start-date"
+        ]
+      end
+
+      def subject_details
+        [
+          t("get_a_teacher_relocation_payment.forms.subject.question.#{answers.application_route}"),
+          t("get_a_teacher_relocation_payment.forms.subject.answers.#{answers.subject}"),
+          "subject"
         ]
       end
     end

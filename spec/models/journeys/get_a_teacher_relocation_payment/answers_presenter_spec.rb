@@ -17,7 +17,8 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
           :with_teacher_application_route,
           :with_state_funded_secondary_school,
           :with_one_year_contract,
-          :with_start_date
+          :with_start_date,
+          :with_subject
         )
       end
 
@@ -42,6 +43,11 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
             "Enter the start date of your contract",
             answers.start_date.strftime("%d-%m-%Y"),
             "start-date"
+          ],
+          [
+            "What subject are you employed to teach at your school?",
+            "Physics",
+            "subject"
           ]
         )
       end
@@ -53,7 +59,8 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
           :get_a_teacher_relocation_payment_answers,
           :with_trainee_application_route,
           :with_state_funded_secondary_school,
-          :with_start_date
+          :with_start_date,
+          :with_subject
         )
       end
 
@@ -73,6 +80,11 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
             "Enter the start date of your contract",
             answers.start_date.strftime("%d-%m-%Y"),
             "start-date"
+          ],
+          [
+            "What subject are you training to teach?",
+            "Physics",
+            "subject"
           ]
         )
       end

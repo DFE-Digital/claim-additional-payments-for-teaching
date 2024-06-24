@@ -738,6 +738,20 @@ en:
         question: "Enter the start date of your contract"
         errors:
           presence: "Enter your contract start date"
+      subject:
+        question:
+          teacher: "What subject are you employed to teach at your school?"
+          salaried_trainee: "What subject are you training to teach?"
+        hint:
+          teacher: "Physics, general or combined science including physics, and languages can be combined with other subjects but must make up at least 50% of your time in the classroom."
+          salaried_trainee: "Physics or languages can be combined with other subjects but must make up at least 50% of your course content."
+        answers:
+          physics: "Physics"
+          combined_with_physics: "General or combined science, including physics"
+          languages: "Languages"
+          other: "Other"
+        errors:
+          inclusion: "Choose a subject"
 
     check_your_answers:
       part_one:
