@@ -36,6 +36,7 @@ describe "teacher route: completing the form" do
       then_the_check_your_answers_part_one_page_shows_my_answers
       and_i_dont_change_my_answers
       and_i_complete_the_nationality_step_with(option: "Australian")
+      and_i_complete_the_passport_number_step_with(options: "123456789")
       and_the_personal_details_section_has_been_temporarily_stubbed
       then_the_check_your_answers_part_page_shows_my_answers
       and_i_submit_the_application
@@ -77,5 +78,9 @@ describe "teacher route: completing the form" do
 
   def then_the_check_your_answers_part_page_shows_my_answers
     expect(page).to have_text("Select your nationality Australian")
+
+    expect(page).to have_text(
+      "Enter your passport number, as it appears on your passport 123456789"
+    )
   end
 end

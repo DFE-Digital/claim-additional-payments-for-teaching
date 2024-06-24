@@ -71,7 +71,8 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
     let(:answers) do
       build(
         :get_a_teacher_relocation_payment_answers,
-        :with_nationality
+        :with_nationality,
+        :with_passport_number
       )
     end
 
@@ -81,6 +82,11 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
           "Select your nationality",
           "Australian",
           "nationality"
+        ],
+        [
+          "Enter your passport number, as it appears on your passport",
+          "1234567890123456789A",
+          "passport-number"
         ]
       )
     end

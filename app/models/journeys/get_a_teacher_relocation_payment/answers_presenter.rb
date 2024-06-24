@@ -18,6 +18,7 @@ module Journeys
       def identity_answers
         super.tap do |a|
           a << nationality
+          a << passport_number
         end
       end
 
@@ -84,6 +85,14 @@ module Journeys
           t("get_a_teacher_relocation_payment.forms.nationality.question"),
           answers.nationality,
           "nationality"
+        ]
+      end
+
+      def passport_number
+        [
+          t("get_a_teacher_relocation_payment.forms.passport_number.question"),
+          answers.passport_number,
+          "passport-number"
         ]
       end
     end

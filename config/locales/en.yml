@@ -744,6 +744,11 @@ en:
         question: "Select your nationality"
         errors:
           inclusion: "Choose your nationality"
+      passport_number:
+        question: "Enter your passport number, as it appears on your passport"
+        errors:
+          presence: "Enter your passport number"
+          invalid: "Invalid passport number"
 
 
     check_your_answers:
