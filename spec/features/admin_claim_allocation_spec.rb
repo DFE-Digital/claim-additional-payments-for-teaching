@@ -4,6 +4,7 @@ RSpec.feature "Claims awaiting a decision" do
   before do
     create(:journey_configuration, :student_loans)
     create(:journey_configuration, :additional_payments)
+    create(:journey_configuration, :get_a_teacher_relocation_payment)
 
     submitted_claims = []
     @signed_in_user = sign_in_as_service_operator
@@ -28,6 +29,9 @@ RSpec.feature "Claims awaiting a decision" do
 
     # index: 35-38
     submitted_claims << create_list(:claim, 4, :submitted, policy: Policies::LevellingUpPremiumPayments)
+
+    # index: 39
+    submitted_claims << create_list(:claim, 1, :submitted, policy: Policies::InternationalRelocationPayments)
 
     @submitted_claims = submitted_claims.flatten
   end
@@ -60,6 +64,7 @@ RSpec.feature "Claims awaiting a decision" do
   let(:twenty_sixth_claim) { @submitted_claims[25] }
   let(:thirtieth_claim) { @submitted_claims[29] }
   let(:thirty_fifth_claim) { @submitted_claims[34] }
+  let(:thirty_ninth_claim) { @submitted_claims[38] }
 
   let(:student_loan_claims) do
     [
@@ -83,6 +88,8 @@ RSpec.feature "Claims awaiting a decision" do
     ].flatten
   end
 
+  let(:international_relocation_payment_claims) { [thirty_ninth_claim] }
+
   let(:levelling_up_premium_payments) { @submitted_claims.slice(36...35) }
 
   let!(:sarah) { create(:dfe_signin_user, given_name: "Sarah", family_name: "Strawbridge", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
@@ -97,11 +104,11 @@ RSpec.feature "Claims awaiting a decision" do
 
       within("#allocations") do
         expect(page).to have_select("allocate_to_team_member", options: ["Aaron Admin", "Sarah Strawbridge", "Frank Yee", "Abdul Rafiq"])
-        expect(page).to have_select("allocate_to_policy", options: ["All", "Student Loans", "Early-Career Payments", "Levelling Up Premium Payments"])
+        expect(page).to have_select("allocate_to_policy", options: ["All", "Student Loans", "Early-Career Payments", "Levelling Up Premium Payments", "International Relocation Payments"])
         expect(page).to have_button("Allocate claims", disabled: false)
         expect(page).to have_button("Unallocate claims")
       end
-      expect(@submitted_claims.size).to eq 39
+      expect(@submitted_claims.size).to eq 40
 
       @submitted_claims.each do |claim|
         expect(claim.assigned_to).to be_nil
@@ -152,7 +159,7 @@ RSpec.feature "Claims awaiting a decision" do
       within(".govuk-flash__notice") do
         expect(page).to have_text I18n.t(
           "admin.allocations.bulk_allocate.success",
-          quantity: 14,
+          quantity: 15,
           pluralized_or_singular_claim: "claims",
           allocate_to_policy: "",
           dfe_user: frank.full_name.titleize
@@ -171,11 +178,11 @@ RSpec.feature "Claims awaiting a decision" do
     scenario "Student Loans" do
       click_on "View claims"
 
-      expect(@submitted_claims.size).to eq 39
+      expect(@submitted_claims.size).to eq 40
 
       within("#allocations") do
         expect(page).to have_select("allocate_to_team_member", options: ["Aaron Admin", "Sarah Strawbridge", "Frank Yee", "Abdul Rafiq"])
-        expect(page).to have_select("allocate_to_policy", options: ["All", "Student Loans", "Early-Career Payments", "Levelling Up Premium Payments"])
+        expect(page).to have_select("allocate_to_policy", options: ["All", "Student Loans", "Early-Career Payments", "Levelling Up Premium Payments", "International Relocation Payments"])
         expect(page).to have_button("Allocate claims", disabled: false)
         expect(page).to have_button("Unallocate claims")
       end
@@ -205,6 +212,19 @@ RSpec.feature "Claims awaiting a decision" do
       [twenty_sixth_claim, thirtieth_claim, thirty_fifth_claim].each do |claim|
         expect(claim.reload.assigned_to).to be_nil
       end
+    end
+
+    scenario "International Relocation Payments" do
+      click_on "View claims"
+
+      within("#allocations") do
+        expect(page).to have_select("allocate_to_team_member", options: ["Aaron Admin", "Sarah Strawbridge", "Frank Yee", "Abdul Rafiq"])
+        expect(page).to have_select("allocate_to_policy", options: ["All", "Student Loans", "Early-Career Payments", "Levelling Up Premium Payments", "International Relocation Payments"])
+        expect(page).to have_button("Allocate claims", disabled: false)
+        expect(page).to have_button("Unallocate claims")
+      end
+
+      expect(thirty_ninth_claim.assigned_to).to be_nil
     end
 
     scenario "when no claims for specified policy awaiting assignment" do
