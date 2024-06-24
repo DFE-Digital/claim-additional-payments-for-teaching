@@ -21,20 +21,33 @@
         If you are unsure if your FE provider is eligible, you can refer to the full list of eligible FE providers for more information.
       </p>
 
-      <%= f.govuk_text_field :provision_search,
-        label: {
-          text: "Which FE provider are you employed by?",
-          size: "m"
-        },
-        hint: -> do %>
-          <p>
-            Enter the name of your employer. If you work for a college or sixth-form group, you must enter the group’s name.
-          </p>
+      <% if @form.no_results? %>
+        <%= f.govuk_text_field :provision_search,
+          label: {
+            text: "Which FE provider are you employed by?",
+            size: "m"
+          },
+          hint: -> do %>
+            <p class="govuk-body">
+              <strong>No results match that search term. Try again.</strong>
+            </p>
+          <% end %>
+      <% else %>
+        <%= f.govuk_text_field :provision_search,
+          label: {
+            text: "Which FE provider are you employed by?",
+            size: "m"
+          },
+          hint: -> do %>
+            <p>
+              Enter the name of your employer. If you work for a college or sixth-form group, you must enter the group’s name.
+            </p>
 
-          <p>
-            Use at least three characters.
-          </p>
-        <% end %>
+            <p>
+              Use at least three characters.
+            </p>
+          <% end %>
+      <% end %>
 
       <%= f.govuk_submit %>
     <% end %>

@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe Journeys::FurtherEducationPayments::FurtherEducationProvisionSearchForm, type: :model do
   let(:journey) { Journeys::FurtherEducationPayments }
   let(:journey_session) { create(:further_education_payments_session) }
+  let(:college) { create(:school) }
 
   let(:params) do
     ActionController::Parameters.new(
@@ -47,7 +48,7 @@ RSpec.describe Journeys::FurtherEducationPayments::FurtherEducationProvisionSear
   end
 
   describe "#save" do
-    let(:provision_search) { "city college plymouth" }
+    let(:provision_search) { college.name }
 
     it "updates the journey session" do
       expect { expect(subject.save).to be(true) }.to(
