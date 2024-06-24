@@ -37,6 +37,7 @@ describe "teacher route: completing the form" do
       and_i_dont_change_my_answers
       and_i_complete_the_nationality_step_with(option: "Australian")
       and_i_complete_the_passport_number_step_with(options: "123456789")
+      and_i_complete_the_personal_details_step
       and_the_personal_details_section_has_been_temporarily_stubbed
       then_the_check_your_answers_part_page_shows_my_answers
       and_i_submit_the_application
@@ -77,6 +78,18 @@ describe "teacher route: completing the form" do
   end
 
   def then_the_check_your_answers_part_page_shows_my_answers
+    expect(page).to have_text(
+      "What is your full name? Walter Seymour Skinner"
+    )
+
+    expect(page).to have_text(
+      "What is your date of birth? 12 July 1945"
+    )
+
+    expect(page).to have_text(
+      "What is your National Insurance number? QQ123456C"
+    )
+
     expect(page).to have_text("Select your nationality Australian")
 
     expect(page).to have_text(

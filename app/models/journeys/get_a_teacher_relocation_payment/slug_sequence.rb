@@ -14,7 +14,8 @@ module Journeys
 
       PERSONAL_DETAILS_SLUGS = [
         "nationality",
-        "passport-number"
+        "passport-number",
+        "personal-details"
       ]
 
       RESULTS_SLUGS = [

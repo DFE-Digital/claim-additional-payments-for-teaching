@@ -23,7 +23,6 @@ module GetATeacherRelocationPayment
       journey_session.answers.assign_attributes(
         attributes_for(
           :get_a_teacher_relocation_payment_answers,
-          :with_personal_details,
           :with_email_details,
           :with_mobile_details,
           :with_bank_details,
@@ -116,6 +115,20 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
+    def and_i_complete_the_personal_details_step
+      assert_on_personal_details_page!
+
+      fill_in("First name", with: "Walter")
+      fill_in("Middle names", with: "Seymour")
+      fill_in("Last name", with: "Skinner")
+      fill_in("Day", with: "12")
+      fill_in("Month", with: "7")
+      fill_in("Year", with: "1945")
+      fill_in("What is your National Insurance number", with: "QQ123456C")
+
+      click_button("Continue")
+    end
+
     def then_the_application_is_submitted_successfully
       assert_application_is_submitted!
     end
@@ -166,6 +179,10 @@ module GetATeacherRelocationPayment
       expect(page).to have_text(
         "Enter your passport number, as it appears on your passport"
       )
+    end
+
+    def assert_on_personal_details_page!
+      expect(page).to have_text("What is your full name?")
     end
 
     def assert_application_is_submitted!
