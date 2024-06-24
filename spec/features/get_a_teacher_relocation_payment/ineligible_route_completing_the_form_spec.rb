@@ -3,8 +3,20 @@ require "rails_helper"
 describe "ineligible route: completing the form" do
   include GetATeacherRelocationPayment::StepHelpers
 
-  before do
+  let(:journey_configuration) do
     create(:journey_configuration, :get_a_teacher_relocation_payment)
+  end
+
+  let(:contract_start_date) do
+    Date.new(
+      journey_configuration.current_academic_year.start_year,
+      1,
+      1
+    )
+  end
+
+  before do
+    journey_configuration
   end
 
   describe "navigating forward" do
@@ -47,6 +59,39 @@ describe "ineligible route: completing the form" do
         and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
         and_i_complete_the_contract_details_step_with(option: "No")
         then_i_see_the_ineligible_page
+      end
+    end
+
+    # FIXME RL waiting on feedback from policy team to determine what the cut
+    # off date is for contracts
+    xcontext "ineligible - contract start date" do
+      context "teacher" do
+        it "shows the ineligible page" do
+          when_i_start_the_form
+          and_i_complete_application_route_question_with(
+            option: "I am employed as a teacher in a school in England"
+          )
+          and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
+          and_i_complete_the_contract_details_step_with(option: "Yes")
+          and_i_complete_the_contract_start_date_step_with(
+            date: Polices::InternationalRelocationPayments.earliest_eligible_contract_start_date - 1.day
+          )
+          then_i_see_the_ineligible_page
+        end
+      end
+
+      context "trainee" do
+        it "shows the ineligible page" do
+          when_i_start_the_form
+          and_i_complete_application_route_question_with(
+            option: "I am enrolled on a salaried teacher training course in England"
+          )
+          and_i_complete_the_trainee_details_step_with(option: "Yes")
+          and_i_complete_the_contract_start_date_step_with(
+            date: Polices::InternationalRelocationPayments.earliest_eligible_contract_start_date - 1.day
+          )
+          then_i_see_the_ineligible_page
+        end
       end
     end
   end

@@ -16,7 +16,8 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
           :get_a_teacher_relocation_payment_answers,
           :with_teacher_application_route,
           :with_state_funded_secondary_school,
-          :with_one_year_contract
+          :with_one_year_contract,
+          :with_start_date
         )
       end
 
@@ -36,6 +37,11 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
             "Are you employed on a contract lasting at least one year?",
             "Yes",
             "contract-details"
+          ],
+          [
+            "Enter the start date of your contract",
+            answers.start_date.strftime("%d-%m-%Y"),
+            "start-date"
           ]
         )
       end
@@ -46,7 +52,8 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
         build(
           :get_a_teacher_relocation_payment_answers,
           :with_trainee_application_route,
-          :with_state_funded_secondary_school
+          :with_state_funded_secondary_school,
+          :with_start_date
         )
       end
 
@@ -61,6 +68,11 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
             "Are you on a teacher training course in England which meets the following conditions?",
             "Yes",
             "trainee-details"
+          ],
+          [
+            "Enter the start date of your contract",
+            answers.start_date.strftime("%d-%m-%Y"),
+            "start-date"
           ]
         )
       end

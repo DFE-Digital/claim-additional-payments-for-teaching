@@ -734,6 +734,10 @@ en:
             answer: "No"
         errors:
           inclusion: "Select the option that applies to you"
+      start_date:
+        question: "Enter the start date of your contract"
+        errors:
+          presence: "Enter your contract start date"
 
     check_your_answers:
       part_one:
@@ -741,7 +745,11 @@ en:
         eligibility_details: "Eligibility details"
         confirmation_notice:
           "By selecting continue you are confirming that, to the best of your knowledge, the details you are providing are correct."
-
+  further_education_payments:
+    claim_description: for further education payments
+    journey_name: Claim further education payments
+    feedback_email: "fe-levellingup.premiumpayments@education.gov.uk"
+    support_email_address: "fe-levellingup.premiumpayments@education.gov.uk"
   activerecord:
     errors:
       models:
