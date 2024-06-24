@@ -734,6 +734,10 @@ en:
             answer: "No"
         errors:
           inclusion: "Select the option that applies to you"
+      start_date:
+        question: "Enter the start date of your contract"
+        errors:
+          presence: "Enter your contract start date"
 
     check_your_answers:
       part_one:

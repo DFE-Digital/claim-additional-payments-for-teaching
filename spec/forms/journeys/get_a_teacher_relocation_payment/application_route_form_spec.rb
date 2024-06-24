@@ -43,7 +43,8 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::ApplicationRouteForm, typ
         journey_session.answers.assign_attributes(
           application_route: existing_option,
           state_funded_secondary_school: true,
-          one_year: true
+          one_year: true,
+          start_date: Date.new(2024, 1, 1)
         )
         journey_session.save!
       end
@@ -61,6 +62,11 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::ApplicationRouteForm, typ
               .from(true)
               .to(nil)
             )
+            .and(
+              change { journey_session.reload.answers.start_date }
+              .from(Date.new(2024, 1, 1))
+              .to(nil)
+            )
           )
         end
       end
@@ -72,6 +78,7 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::ApplicationRouteForm, typ
           expect { expect(form.save).to be(true) }.to(
             not_change { journey_session.reload.answers.state_funded_secondary_school }
             .and(not_change { journey_session.reload.answers.one_year })
+            .and(not_change { journey_session.reload.answers.start_date })
           )
         end
       end
