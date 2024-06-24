@@ -18,7 +18,9 @@ module Journeys
         "personal-details",
         "postcode-search",
         "select-home-address",
-        "address"
+        "address",
+        "email-address",
+        "email-verification"
       ]
 
       RESULTS_SLUGS = [

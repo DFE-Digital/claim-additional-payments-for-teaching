@@ -40,6 +40,7 @@ describe "teacher route: completing the form" do
         and_i_complete_the_passport_number_step_with(options: "123456789")
         and_i_complete_the_personal_details_step
         and_i_complete_the_postcode_step
+        and_i_complete_the_email_address_step
         and_the_personal_details_section_has_been_temporarily_stubbed
         then_the_check_your_answers_part_page_shows_my_answers
         and_i_submit_the_application
@@ -67,6 +68,7 @@ describe "teacher route: completing the form" do
         and_i_complete_the_passport_number_step_with(options: "123456789")
         and_i_complete_the_personal_details_step
         and_i_complete_the_manual_address_step
+        and_i_complete_the_email_address_step
         and_the_personal_details_section_has_been_temporarily_stubbed
         then_the_check_your_answers_part_page_shows_my_answers
         and_i_submit_the_application
@@ -122,6 +124,10 @@ describe "teacher route: completing the form" do
 
     expect(page).to have_text(
       "What is your address? Flat 1, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX"
+    )
+
+    expect(page).to have_text(
+      "Email address seymour.skinner@springfieldelementary.edu"
     )
 
     expect(page).to have_text("Select your nationality Australian")

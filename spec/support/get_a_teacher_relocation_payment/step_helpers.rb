@@ -23,7 +23,6 @@ module GetATeacherRelocationPayment
       journey_session.answers.assign_attributes(
         attributes_for(
           :get_a_teacher_relocation_payment_answers,
-          :with_email_details,
           :with_mobile_details,
           :with_bank_details,
           email_address: "test-irp-claim@example.com",
@@ -172,6 +171,18 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
+    def and_i_complete_the_email_address_step
+      assert_on_email_address_page!
+
+      fill_in "Email address", with: "seymour.skinner@springfieldelementary.edu"
+
+      click_on "Continue"
+
+      fill_in "Enter the 6-digit passcode", with: get_otp_from_email
+
+      click_on "Confirm"
+    end
+
     def then_the_application_is_submitted_successfully
       assert_application_is_submitted!
     end
@@ -230,6 +241,10 @@ module GetATeacherRelocationPayment
 
     def assert_on_postcode_page!
       expect(page).to have_text("What is your home address?")
+    end
+
+    def assert_on_email_address_page!
+      expect(page).to have_text("Email address")
     end
 
     def assert_application_is_submitted!
