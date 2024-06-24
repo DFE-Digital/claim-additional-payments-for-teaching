@@ -772,6 +772,12 @@ en:
       teaching_responsibilities:
         errors:
           inclusion: Select yes if you are a member of staff with teaching responsibilities
+      further_education_provision_search:
+        errors:
+          blank: Enter a college name or postcode
+      select_provision:
+        errors:
+          blank: Select the college you teach at
   activerecord:
     errors:
       models:

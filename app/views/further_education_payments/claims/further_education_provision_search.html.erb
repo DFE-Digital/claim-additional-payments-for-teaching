@@ -1,7 +1,42 @@
-<p class="govuk-body">
-  FE provision search goes here
-</p>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
 
-<%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
-  <%= f.govuk_submit %>
-<% end %>
+      <h1 class="govuk-heading-l">
+        An eligible further education (FE) provider in England must employ you as a teacher
+      </h1>
+
+      <p class="govuk-body">
+        Eligible FE providers include:
+      </p>
+
+      <%= govuk_list [
+        "statutory FE providers, such as FE colleges, sixth-form colleges or designated institutions",
+        "16 to 19 only academies and free schools",
+        "college or sixth-form groups"],
+        type: :bullet %>
+
+      <p class="govuk-body">
+        If you are unsure if your FE provider is eligible, you can refer to the full list of eligible FE providers for more information.
+      </p>
+
+      <%= f.govuk_text_field :provision_search,
+        label: {
+          text: "Which FE provider are you employed by?",
+          size: "m"
+        },
+        hint: -> do %>
+          <p>
+            Enter the name of your employer. If you work for a college or sixth-form group, you must enter the group’s name.
+          </p>
+
+          <p>
+            Use at least three characters.
+          </p>
+        <% end %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>
