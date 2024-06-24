@@ -15,7 +15,10 @@ module Journeys
       PERSONAL_DETAILS_SLUGS = [
         "nationality",
         "passport-number",
-        "personal-details"
+        "personal-details",
+        "postcode-search",
+        "select-home-address",
+        "address"
       ]
 
       RESULTS_SLUGS = [

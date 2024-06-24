@@ -129,6 +129,49 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
+    def and_i_complete_the_postcode_step
+      assert_on_postcode_page!
+
+      allow_any_instance_of(OrdnanceSurvey::Client)
+        .to receive_message_chain(:api, :search_places, :index)
+        .and_return(
+          [
+            {
+              address: "Flat 1, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX",
+              address_line_1: "FLAT 1, MILLBROOK TOWER",
+              address_line_2: "WINDERMERE AVENUE",
+              address_line_3: "SOUTHAMPTON",
+              postcode: "SO16 9FX"
+            }
+          ]
+        )
+
+      fill_in("Postcode", with: "SO16 9FX")
+
+      click_on "Search"
+
+      expect(page).to have_text("Select an address")
+      choose "flat_1_millbrook_tower_windermere_avenue_southampton_so16_9fx"
+
+      click_on "Continue"
+    end
+
+    def and_i_complete_the_manual_address_step
+      assert_on_postcode_page!
+
+      click_link("Enter your address manually")
+
+      fill_in("House number or name", with: "Flat 1, Millbrook Tower")
+
+      fill_in("Building and street", with: "Windermere Avenue")
+
+      fill_in("Town or city", with: "Southampton")
+
+      fill_in("Postcode", with: "SO16 9FX")
+
+      click_button("Continue")
+    end
+
     def then_the_application_is_submitted_successfully
       assert_application_is_submitted!
     end
@@ -183,6 +226,10 @@ module GetATeacherRelocationPayment
 
     def assert_on_personal_details_page!
       expect(page).to have_text("What is your full name?")
+    end
+
+    def assert_on_postcode_page!
+      expect(page).to have_text("What is your home address?")
     end
 
     def assert_application_is_submitted!
