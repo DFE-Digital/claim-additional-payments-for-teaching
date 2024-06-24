@@ -770,6 +770,8 @@ en:
           "By selecting continue you are confirming that, to the best of your knowledge, the details you are providing are correct."
   international_relocation_payments:
     <<: *get_a_teacher_relocation_payment
+    policy_short_name: "International Relocation Payments"
+    policy_acronym: "IRP"
 
   further_education_payments:
     landing_page: Find out if you are eligible for any incentive payments for further education teachers

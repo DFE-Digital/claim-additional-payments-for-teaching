@@ -9,7 +9,11 @@ class ClaimCheckingTasks
     @claim = claim
   end
 
+  delegate :policy, to: :claim
+
   def applicable_task_names
+    return [] if policy.international_relocation_payments?
+
     @applicable_task_names ||= Task::NAMES.dup.tap do |task_names|
       task_names.delete("induction_confirmation") unless claim.policy == Policies::EarlyCareerPayments
       task_names.delete("student_loan_amount") unless claim.policy == Policies::StudentLoans
