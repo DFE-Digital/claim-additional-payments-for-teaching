@@ -73,7 +73,7 @@ jobs:
     name: Deploy to test environment
     concurrency: deploy_test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     needs: [build]
     environment:
       name: test-aks
@@ -125,7 +125,7 @@ jobs:
     name: Deploy to production environment
     concurrency: deploy_production
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     needs: [deploy_test]
     environment:
       name: production-aks
