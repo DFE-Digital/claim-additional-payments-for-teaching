@@ -11,7 +11,8 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("FE teaching responsibilities goes here")
+    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    choose "Yes"
     click_button "Continue"
 
     expect(page).to have_content("Which FE provider are you employed by?")
