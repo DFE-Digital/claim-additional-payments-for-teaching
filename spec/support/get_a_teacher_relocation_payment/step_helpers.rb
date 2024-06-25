@@ -23,7 +23,6 @@ module GetATeacherRelocationPayment
       journey_session.answers.assign_attributes(
         attributes_for(
           :get_a_teacher_relocation_payment_answers,
-          email_address: "test-irp-claim@example.com", # REMOVE THIS
           teacher_reference_number: "1234567",
           payroll_gender: "male"
         )
@@ -333,7 +332,7 @@ module GetATeacherRelocationPayment
     def assert_application_is_submitted!
       expect(page).to have_content("Claim submitted")
       expect(page).to have_content(
-        "We have sent you a confirmation email to test-irp-claim@example.com"
+        "We have sent you a confirmation email to seymour.skinner@springfieldelementary.edu"
       )
     end
   end
