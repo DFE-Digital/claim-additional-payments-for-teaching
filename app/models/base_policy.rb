@@ -40,4 +40,10 @@ module BasePolicy
 
     self::ELIGIBILITY_MATCHING_ATTRIBUTES
   end
+
+  def searchable_eligibility_attributes
+    return [] unless const_defined?(:SEARCHABLE_ELIGIBILITY_ATTRIBUTES)
+
+    self::SEARCHABLE_ELIGIBILITY_ATTRIBUTES
+  end
 end

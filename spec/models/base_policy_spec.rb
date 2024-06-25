@@ -31,6 +31,8 @@ module Policies
 
     ELIGIBILITY_MATCHING_ATTRIBUTES = [["some_reference"]].freeze
 
+    SEARCHABLE_ELIGIBILITY_ATTRIBUTES = %w[some_searchable_reference].freeze
+
     class Eligibility
     end
   end
@@ -98,6 +100,16 @@ RSpec.describe BasePolicy, type: :model do
 
     it do
       expect(Policies::TestPolicyA.eligibility_matching_attributes).to be_empty
+    end
+  end
+
+  describe "::searchable_eligibility_attributes" do
+    it do
+      expect(Policies::TestPolicy.searchable_eligibility_attributes).to contain_exactly("some_searchable_reference")
+    end
+
+    it do
+      expect(Policies::TestPolicyA.searchable_eligibility_attributes).to be_empty
     end
   end
 end

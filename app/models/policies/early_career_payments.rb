@@ -34,6 +34,8 @@ module Policies
 
     ELIGIBILITY_MATCHING_ATTRIBUTES = [["teacher_reference_number"]].freeze
 
+    SEARCHABLE_ELIGIBILITY_ATTRIBUTES = %w[teacher_reference_number].freeze
+
     def eligibility_page_url
       "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools"
     end

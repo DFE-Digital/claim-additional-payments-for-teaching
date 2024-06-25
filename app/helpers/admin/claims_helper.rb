@@ -243,7 +243,7 @@ module Admin
 
     def matching_attributes_for_eligibility(eligibility)
       eligibility.attributes
-        .slice(*Claim::MatchingAttributeFinder::ELIGIBILITY_ATTRIBUTE_GROUPS_TO_MATCH[eligibility.policy].flatten)
+        .slice(*eligibility.policy.eligibility_matching_attributes.flatten)
         .reject { |_, v| v.blank? }
         .to_a
     end
