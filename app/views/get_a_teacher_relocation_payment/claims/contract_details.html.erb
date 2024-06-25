@@ -13,9 +13,7 @@
       url: claim_path(current_journey_routing_name),
       builder: GOVUKDesignSystemFormBuilder::FormBuilder
     ) do |f| %>
-      <% if f.object.errors.any? %>
-        <%= render("shared/error_summary", instance: f.object) %>
-      <% end %>
+      <%= f.govuk_error_summary %>
 
       <%= f.govuk_collection_radio_buttons(
         :one_year,
