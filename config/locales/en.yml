@@ -765,7 +765,7 @@ en:
           "By selecting continue you are confirming that, to the best of your knowledge, the details you are providing are correct."
   further_education_payments:
     claim_description: for further education payments
-    journey_name: Claim further education payments
+    journey_name: Claim incentive payments for further education teachers
     feedback_email: "fe-levellingup.premiumpayments@education.gov.uk"
     support_email_address: "fe-levellingup.premiumpayments@education.gov.uk"
     forms:
