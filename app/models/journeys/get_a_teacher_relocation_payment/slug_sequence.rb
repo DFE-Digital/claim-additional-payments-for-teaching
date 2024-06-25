@@ -20,7 +20,8 @@ module Journeys
         "select-home-address",
         "address",
         "email-address",
-        "email-verification"
+        "email-verification",
+        "provide-mobile-number"
       ]
 
       RESULTS_SLUGS = [

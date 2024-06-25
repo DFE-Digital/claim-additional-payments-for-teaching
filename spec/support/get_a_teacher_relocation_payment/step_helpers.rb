@@ -23,7 +23,6 @@ module GetATeacherRelocationPayment
       journey_session.answers.assign_attributes(
         attributes_for(
           :get_a_teacher_relocation_payment_answers,
-          :with_mobile_details,
           :with_bank_details,
           email_address: "test-irp-claim@example.com",
           teacher_reference_number: "1234567",
@@ -183,6 +182,14 @@ module GetATeacherRelocationPayment
       click_on "Confirm"
     end
 
+    def and_i_dont_provide_my_mobile_number
+      assert_on_provider_mobile_number_page!
+
+      choose "No"
+
+      click_button("Continue")
+    end
+
     def then_the_application_is_submitted_successfully
       assert_application_is_submitted!
     end
@@ -245,6 +252,10 @@ module GetATeacherRelocationPayment
 
     def assert_on_email_address_page!
       expect(page).to have_text("Email address")
+    end
+
+    def assert_on_provider_mobile_number_page!
+      expect(page).to have_text("Would you like to provide your mobile number?")
     end
 
     def assert_application_is_submitted!
