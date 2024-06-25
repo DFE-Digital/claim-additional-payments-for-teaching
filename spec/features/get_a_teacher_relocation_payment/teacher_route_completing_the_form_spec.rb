@@ -45,6 +45,7 @@ describe "teacher route: completing the form" do
         and_i_complete_the_postcode_step
         and_i_complete_the_email_address_step
         and_i_dont_provide_my_mobile_number
+        and_i_provide_my_personal_bank_details
         and_the_personal_details_section_has_been_temporarily_stubbed
         then_the_check_your_answers_part_page_shows_my_answers
         and_i_submit_the_application
@@ -60,6 +61,7 @@ describe "teacher route: completing the form" do
         and_i_complete_the_manual_address_step
         and_i_complete_the_email_address_step
         and_i_dont_provide_my_mobile_number
+        and_i_provide_my_personal_bank_details
         and_the_personal_details_section_has_been_temporarily_stubbed
         then_the_check_your_answers_part_page_shows_my_answers
         and_i_submit_the_application
@@ -75,8 +77,28 @@ describe "teacher route: completing the form" do
         and_i_complete_the_manual_address_step
         and_i_complete_the_email_address_step
         and_i_provide_my_mobile_number
+        and_i_provide_my_personal_bank_details
         and_the_personal_details_section_has_been_temporarily_stubbed
         then_the_check_your_answers_part_page_shows_my_answers(mobile_number: true)
+        and_i_submit_the_application
+        then_the_application_is_submitted_successfully
+      end
+    end
+
+    context "with a building society account" do
+      it "submits an application" do
+        and_i_complete_the_nationality_step_with(option: "Australian")
+        and_i_complete_the_passport_number_step_with(options: "123456789")
+        and_i_complete_the_personal_details_step
+        and_i_complete_the_manual_address_step
+        and_i_complete_the_email_address_step
+        and_i_provide_my_mobile_number
+        and_i_provide_my_building_society_details
+        and_the_personal_details_section_has_been_temporarily_stubbed
+        then_the_check_your_answers_part_page_shows_my_answers(
+          mobile_number: true,
+          building_society: true
+        )
         and_i_submit_the_application
         then_the_application_is_submitted_successfully
       end
@@ -115,7 +137,7 @@ describe "teacher route: completing the form" do
     )
   end
 
-  def then_the_check_your_answers_part_page_shows_my_answers(mobile_number: false)
+  def then_the_check_your_answers_part_page_shows_my_answers(mobile_number: false, building_society: false)
     expect(page).to have_text(
       "What is your full name? Walter Seymour Skinner"
     )
@@ -147,6 +169,23 @@ describe "teacher route: completing the form" do
     else
       expect(page).to have_text(
         "Would you like to provide your mobile number? No"
+      )
+    end
+
+    expect(page).to have_text("Name on bank account Walter Skinner")
+
+    expect(page).to have_text("Bank sort code 123456")
+
+    expect(page).to have_text("Bank account number 12345678")
+
+    if building_society
+      expect(page).to have_text(
+        "What account do you want the money paid into? Building society"
+      )
+      expect(page).to have_text("Building society roll number 12345678")
+    else
+      expect(page).to have_text(
+        "What account do you want the money paid into? Personal bank account"
       )
     end
   end
