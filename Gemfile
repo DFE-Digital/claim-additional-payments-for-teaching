@@ -112,8 +112,6 @@ group :development do
   gem "spring-watcher-listen", "~> 2.1.0"
 
   gem "foreman"
-
-  gem "lefthook"
   # Provides a detailed speed badge for every HTML page to aid performance optimisation.
   gem "rack-mini-profiler"
 end
