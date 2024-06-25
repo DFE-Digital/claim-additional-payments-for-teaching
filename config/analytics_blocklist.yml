@@ -98,6 +98,12 @@
   - gender_digit
   :international_relocation_payments_eligibilities:
   - passport_number
+  - school_headteacher_name
+  - school_name
+  - school_address_line_1
+  - school_address_line_2
+  - school_city
+  - school_postcode
   :levelling_up_premium_payments_eligibilities:
   - teacher_reference_number
   :early_career_payments_eligibilities:
