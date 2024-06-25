@@ -3,7 +3,7 @@ module Journeys
     class SelectProvisionForm < Form
       attribute :school_id, :string # school GUID
 
-      validates :school_id, presence: { message: i18n_error_message(:blank) }
+      validates :school_id, presence: {message: i18n_error_message(:blank)}
 
       def radio_options
         results.map do |school|

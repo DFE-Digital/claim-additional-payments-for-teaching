@@ -7,12 +7,12 @@ module Journeys
       attribute :school_id, :string
 
       validates :provision_search,
-        presence: { message: i18n_error_message(:blank) },
-        length: { minimum: MIN_LENGTH, message: i18n_error_message(:min_length) },
-        unless: Proc.new { |object| object.school_id.present? }
+        presence: {message: i18n_error_message(:blank)},
+        length: {minimum: MIN_LENGTH, message: i18n_error_message(:min_length)},
+        unless: proc { |object| object.school_id.present? }
 
       def no_results?
-        provision_search.present? && provision_search.size >=MIN_LENGTH && !has_results
+        provision_search.present? && provision_search.size >= MIN_LENGTH && !has_results
       end
 
       def save
