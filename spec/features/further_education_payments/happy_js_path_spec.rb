@@ -33,7 +33,8 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     expect(page).to have_content("FE teaching hours per week goes here")
     click_button "Continue"
 
-    expect(page).to have_content("FE academic year in further education goes here")
+    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
+    choose("September 2023 to August 2024")
     click_button "Continue"
 
     expect(page).to have_content("Which subject areas do you teach?")

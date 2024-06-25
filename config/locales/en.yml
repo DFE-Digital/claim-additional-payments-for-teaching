@@ -800,6 +800,9 @@ en:
         question: What type of contract do you have with %{school_name}?
         errors:
           inclusion: Select the contract type you have
+      further_education_teaching_start_year:
+        errors:
+          blank: Select which academic year you started teaching in further education in England
       subjects_taught:
         question: Which subject areas do you teach?
         hint: Select all that apply
