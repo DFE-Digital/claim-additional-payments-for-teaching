@@ -23,8 +23,7 @@ module GetATeacherRelocationPayment
       journey_session.answers.assign_attributes(
         attributes_for(
           :get_a_teacher_relocation_payment_answers,
-          teacher_reference_number: "1234567",
-          payroll_gender: "male"
+          teacher_reference_number: "1234567"
         )
       )
       journey_session.save!
@@ -249,6 +248,14 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
+    def and_i_complete_the_payroll_gender_step
+      assert_on_payroll_gender_step!
+
+      choose "Male"
+
+      click_button("Continue")
+    end
+
     def then_the_application_is_submitted_successfully
       assert_application_is_submitted!
     end
@@ -327,6 +334,12 @@ module GetATeacherRelocationPayment
 
     def assert_on_building_society_account_page!
       expect(page).to have_text("Enter your building society details")
+    end
+
+    def assert_on_payroll_gender_step!
+      expect(page).to have_text(
+        "How is your gender recorded on your school’s payroll system?"
+      )
     end
 
     def assert_application_is_submitted!

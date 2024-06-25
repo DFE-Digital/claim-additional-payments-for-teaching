@@ -29,7 +29,8 @@ module Journeys
       PAYMENT_DETAILS_SLUGS = [
         "bank-or-building-society",
         "personal-bank-account",
-        "building-society-account"
+        "building-society-account",
+        "gender"
       ].freeze
 
       RESULTS_SLUGS = [
