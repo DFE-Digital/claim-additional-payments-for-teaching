@@ -62,3 +62,5 @@ runs:
       run: |
         make ci ${{ inputs.environment }} get-cluster-credentials
         kubectl exec -n ${{ inputs.aks-namespace }} deployment/${{ inputs.aks-deployment }}-worker -- sh -c "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/prepare-database"
+      env:
+        PR_NUMBER: ${{ inputs.pull-request-number }}
