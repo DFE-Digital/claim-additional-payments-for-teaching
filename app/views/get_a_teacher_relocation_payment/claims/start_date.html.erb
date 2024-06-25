@@ -17,7 +17,11 @@
 
       <%= f.govuk_date_field(
         :start_date,
-        legend: { text: t("get_a_teacher_relocation_payment.forms.start_date.question") },
+        legend: {
+          text: t("get_a_teacher_relocation_payment.forms.start_date.question"),
+          size: "l",
+          tag: "h1"
+        },
       ) %>
 
       <%= f.govuk_submit %>

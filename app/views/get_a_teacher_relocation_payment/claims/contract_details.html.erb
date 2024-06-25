@@ -20,7 +20,11 @@
         f.object.available_options,
         -> (option) { option },
         -> (option) { t("get_a_teacher_relocation_payment.forms.contract_details.answers.#{option}.answer") },
-        legend: { text: t("get_a_teacher_relocation_payment.forms.contract_details.question") },
+        legend: {
+          text: t("get_a_teacher_relocation_payment.forms.contract_details.question"),
+          size: "l",
+          tag: "h1"
+        },
         hint: { text: t("get_a_teacher_relocation_payment.forms.contract_details.hint") }
       ) %>
 
