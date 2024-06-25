@@ -12,23 +12,6 @@ module GetATeacherRelocationPayment
       click_button("Confirm and send")
     end
 
-    # FIXME RL make sure to remove this step it's just a temporary hack until
-    # we've added the personal details pages. Really don't want to modify the db
-    # in a feature spec!
-    # Also we're only temporarily adding the teacher reference number, and
-    # payroll gender to get the test to pass as we're not asking for it on the
-    # IRP journey.
-    def and_the_personal_details_section_has_been_temporarily_stubbed
-      journey_session = Journeys::GetATeacherRelocationPayment::Session.last
-      journey_session.answers.assign_attributes(
-        attributes_for(
-          :get_a_teacher_relocation_payment_answers,
-          teacher_reference_number: "1234567"
-        )
-      )
-      journey_session.save!
-    end
-
     def and_i_complete_application_route_question_with(option:)
       choose(option)
 
@@ -252,6 +235,14 @@ module GetATeacherRelocationPayment
       assert_on_payroll_gender_step!
 
       choose "Male"
+
+      click_button("Continue")
+    end
+
+    # FIXME RL: Once https://dfedigital.atlassian.net.mcas.ms/browse/CAPT-1625
+    # remove this step. We don't want to capture a TRN on the IRP journey.
+    def and_i_complete_the_trn_step
+      fill_in("What is your teacher reference number (TRN)?", with: "1234567")
 
       click_button("Continue")
     end
