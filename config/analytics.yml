@@ -224,6 +224,7 @@ shared:
     - one_year
     - start_date
     - subject
+    - visa_type
   :schools:
     - id
     - urn

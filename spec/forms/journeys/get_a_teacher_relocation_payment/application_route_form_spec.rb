@@ -45,7 +45,8 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::ApplicationRouteForm, typ
           state_funded_secondary_school: true,
           one_year: true,
           start_date: Date.new(2024, 1, 1),
-          subject: "physics"
+          subject: "physics",
+          visa_type: "British National (Overseas) visa_type"
         )
         journey_session.save!
       end
@@ -73,6 +74,11 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::ApplicationRouteForm, typ
               .from("physics")
               .to(nil)
             )
+            .and(
+              change { journey_session.reload.answers.visa_type }
+              .from("British National (Overseas) visa_type")
+              .to(nil)
+            )
           )
         end
       end
@@ -86,6 +92,7 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::ApplicationRouteForm, typ
             .and(not_change { journey_session.reload.answers.one_year })
             .and(not_change { journey_session.reload.answers.start_date })
             .and(not_change { journey_session.reload.answers.subject })
+            .and(not_change { journey_session.reload.answers.visa_type })
           )
         end
       end

@@ -18,7 +18,8 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
           :with_state_funded_secondary_school,
           :with_one_year_contract,
           :with_start_date,
-          :with_subject
+          :with_subject,
+          :with_visa
         )
       end
 
@@ -48,6 +49,11 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
             "What subject are you employed to teach at your school?",
             "Physics",
             "subject"
+          ],
+          [
+            "Select the visa you used to move to England",
+            "British National (Overseas) visa",
+            "visa"
           ]
         )
       end

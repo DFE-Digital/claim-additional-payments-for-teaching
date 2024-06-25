@@ -27,6 +27,7 @@ describe "teacher route: completing the form" do
         date: contract_start_date
       )
       and_i_complete_the_subject_step_with(option: "Physics")
+      and_i_complete_the_visa_screen_with(option: "British National (Overseas) visa")
       then_the_check_your_answers_part_one_page_shows_my_answers
       and_i_dont_change_my_answers
       and_the_personal_details_section_has_been_temporarily_stubbed
@@ -56,6 +57,10 @@ describe "teacher route: completing the form" do
 
     expect(page).to have_text(
       "What subject are you employed to teach at your school? Physics"
+    )
+
+    expect(page).to have_text(
+      "Select the visa you used to move to England British National (Overseas) visa"
     )
   end
 end

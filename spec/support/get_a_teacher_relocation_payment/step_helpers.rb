@@ -83,6 +83,14 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
+    def and_i_complete_the_visa_screen_with(option:)
+      assert_on_visa_page!
+
+      select(option)
+
+      click_button("Continue")
+    end
+
     def and_i_dont_change_my_answers
       click_button("Continue")
     end
@@ -127,6 +135,10 @@ module GetATeacherRelocationPayment
           "What subject are you employed to teach at your school?"
         )
       end
+    end
+
+    def assert_on_visa_page!
+      expect(page).to have_text("Select the visa you used to move to England")
     end
 
     def assert_application_is_submitted!

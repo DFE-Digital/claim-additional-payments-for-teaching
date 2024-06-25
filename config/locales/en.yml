@@ -752,6 +752,10 @@ en:
           other: "Other"
         errors:
           inclusion: "Choose a subject"
+      visa:
+        question: "Select the visa you used to move to England"
+        errors:
+          inclusion: "Choose your visa type"
 
     check_your_answers:
       part_one:
