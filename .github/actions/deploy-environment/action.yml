@@ -53,6 +53,10 @@ runs:
         output=$(terraform -chdir=terraform/application output -raw url)
         echo "APP_URL=$output" >> $GITHUB_ENV
 
+    - uses: azure/login@v2
+      with:
+        creds: ${{ inputs.azure-credentials }}
+
     - name: Set kubectl
       uses: DFE-Digital/github-actions/set-kubectl@master
 
