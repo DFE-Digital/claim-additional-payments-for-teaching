@@ -1,0 +1,73 @@
+<% content_for(
+  :page_title,
+  page_title(
+    t("get_a_teacher_relocation_payment.forms.employment_details.title"),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <%= t("get_a_teacher_relocation_payment.forms.employment_details.title") %>
+    </h1>
+
+    <%= form_for(
+      @form,
+      url: claim_path(current_journey_routing_name),
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_text_field(
+        :school_headteacher_name,
+        label: {
+          text: t("get_a_teacher_relocation_payment.forms.employment_details.questions.school_headteacher_name"),
+        },
+      ) %>
+
+      <%= f.govuk_text_field(
+        :school_name,
+        label: {
+          text: t("get_a_teacher_relocation_payment.forms.employment_details.questions.school_name"),
+        },
+      ) %>
+
+      <%= f.govuk_fieldset(
+        legend: {
+          text: t("get_a_teacher_relocation_payment.forms.employment_details.school_address_legend"),
+        },
+      ) do %>
+        <%= f.govuk_text_field(
+          :school_address_line_1,
+          label: {
+            text: t("get_a_teacher_relocation_payment.forms.employment_details.questions.school_address_line_1"),
+          },
+        ) %>
+
+        <%= f.govuk_text_field(
+          :school_address_line_2,
+          label: {
+            text: t("get_a_teacher_relocation_payment.forms.employment_details.questions.school_address_line_2"),
+          },
+        ) %>
+
+        <%= f.govuk_text_field(
+          :school_city,
+          label: {
+            text: t("get_a_teacher_relocation_payment.forms.employment_details.questions.school_city"),
+          },
+        ) %>
+
+        <%= f.govuk_text_field(
+          :school_postcode,
+          label: {
+            text: t("get_a_teacher_relocation_payment.forms.employment_details.questions.school_postcode"),
+          },
+        ) %>
+      <% end %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>
