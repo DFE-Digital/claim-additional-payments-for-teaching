@@ -190,6 +190,29 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
+    def and_i_provide_my_mobile_number
+      assert_on_provider_mobile_number_page!
+
+      choose "Yes"
+
+      click_button("Continue")
+
+      otp_code = nil
+
+      allow(NotifySmsMessage).to(
+        receive(:new) { |args| otp_code = args.fetch(:personalisation).fetch(:otp) }
+        .and_return(double(NotifySmsMessage, deliver!: true))
+      )
+
+      fill_in("Mobile number", with: "01234567890")
+
+      click_button("Continue")
+
+      fill_in("Enter the 6-digit passcode", with: otp_code)
+
+      click_button "Confirm"
+    end
+
     def then_the_application_is_submitted_successfully
       assert_application_is_submitted!
     end

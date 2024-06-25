@@ -77,6 +77,35 @@ describe "teacher route: completing the form" do
         then_the_application_is_submitted_successfully
       end
     end
+
+    context "with mobile verification" do
+      it "submits an application" do
+        when_i_start_the_form
+        and_i_complete_application_route_question_with(
+          option: "I am employed as a teacher in a school in England"
+        )
+        and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
+        and_i_complete_the_contract_details_step_with(option: "Yes")
+        and_i_complete_the_contract_start_date_step_with(
+          date: contract_start_date
+        )
+        and_i_complete_the_subject_step_with(option: "Physics")
+        and_i_complete_the_visa_screen_with(option: "British National (Overseas) visa")
+        and_i_complete_the_entry_date_page_with(date: entry_date)
+        then_the_check_your_answers_part_one_page_shows_my_answers
+        and_i_dont_change_my_answers
+        and_i_complete_the_nationality_step_with(option: "Australian")
+        and_i_complete_the_passport_number_step_with(options: "123456789")
+        and_i_complete_the_personal_details_step
+        and_i_complete_the_manual_address_step
+        and_i_complete_the_email_address_step
+        and_i_provide_my_mobile_number
+        and_the_personal_details_section_has_been_temporarily_stubbed
+        then_the_check_your_answers_part_page_shows_my_answers(mobile_number: true)
+        and_i_submit_the_application
+        then_the_application_is_submitted_successfully
+      end
+    end
   end
 
   def then_the_check_your_answers_part_one_page_shows_my_answers
@@ -111,7 +140,7 @@ describe "teacher route: completing the form" do
     )
   end
 
-  def then_the_check_your_answers_part_page_shows_my_answers
+  def then_the_check_your_answers_part_page_shows_my_answers(mobile_number: false)
     expect(page).to have_text(
       "What is your full name? Walter Seymour Skinner"
     )
@@ -138,8 +167,12 @@ describe "teacher route: completing the form" do
       "Enter your passport number, as it appears on your passport 123456789"
     )
 
-    expect(page).to have_text(
-      "Would you like to provide your mobile number? No"
-    )
+    if mobile_number
+      expect(page).to have_text("Mobile number 01234567890")
+    else
+      expect(page).to have_text(
+        "Would you like to provide your mobile number? No"
+      )
+    end
   end
 end

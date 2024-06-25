@@ -21,7 +21,9 @@ module Journeys
         "address",
         "email-address",
         "email-verification",
-        "provide-mobile-number"
+        "provide-mobile-number",
+        "mobile-number",
+        "mobile-verification"
       ]
 
       RESULTS_SLUGS = [
@@ -48,7 +50,12 @@ module Journeys
       end
 
       def slugs
-        SLUGS.dup
+        SLUGS.dup.tap do |sequence|
+          if answers.provide_mobile_number == false
+            sequence.delete("mobile-number")
+            sequence.delete("mobile-verification")
+          end
+        end
       end
     end
   end
