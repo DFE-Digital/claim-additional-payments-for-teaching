@@ -5,10 +5,14 @@ RSpec.describe Journeys::FurtherEducationPayments::FurtherEducationProvisionSear
   let(:journey_session) { create(:further_education_payments_session) }
   let(:college) { create(:school) }
 
+  let(:provision_search) { nil }
+  let(:school_id) { nil }
+
   let(:params) do
     ActionController::Parameters.new(
       claim: {
-        provision_search:
+        provision_search:,
+        school_id:
       }
     )
   end
@@ -48,12 +52,24 @@ RSpec.describe Journeys::FurtherEducationPayments::FurtherEducationProvisionSear
   end
 
   describe "#save" do
-    let(:provision_search) { college.name }
+    context "when provision_search supplied" do
+      let(:provision_search) { college.name }
 
-    it "updates the journey session" do
-      expect { expect(subject.save).to be(true) }.to(
-        change { journey_session.reload.answers.provision_search }.to(provision_search)
-      )
+      it "updates the journey session with provision search" do
+        expect { expect(subject.save).to be(true) }.to(
+          change { journey_session.reload.answers.provision_search }.to(provision_search)
+        )
+      end
+    end
+
+    context "when school_id supplied" do
+      let(:school_id) { college.id }
+
+      it "updates the journey session with school_id" do
+        expect { expect(subject.save).to be(true) }.to(
+          change { journey_session.reload.answers.school_id }.to(school_id)
+        )
+      end
     end
   end
 end
