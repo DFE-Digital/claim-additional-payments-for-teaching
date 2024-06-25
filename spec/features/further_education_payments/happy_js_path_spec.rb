@@ -26,7 +26,8 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     expect(page).to have_selector "input[type=radio][checked=checked][value='#{college.id}']", visible: false
     click_button "Continue"
 
-    expect(page).to have_content("FE contract type goes here")
+    expect(page).to have_content("What type of contract do you have with #{college.name}?")
+    choose("Permanent contract")
     click_button "Continue"
 
     expect(page).to have_content("FE teaching hours per week goes here")

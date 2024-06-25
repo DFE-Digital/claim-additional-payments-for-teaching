@@ -12,6 +12,7 @@ module Journeys
         "teaching-responsibilities" => TeachingResponsibilitiesForm,
         "further-education-provision-search" => FurtherEducationProvisionSearchForm,
         "select-provision" => SelectProvisionForm,
+        "contract-type" => ContractTypeForm,
         "subjects-taught" => SubjectsTaughtForm
       }
     }

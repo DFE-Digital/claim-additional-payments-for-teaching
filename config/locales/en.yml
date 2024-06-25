@@ -788,6 +788,10 @@ en:
       select_provision:
         errors:
           blank: Select the college you teach at
+      contract_type:
+        question: What type of contract do you have with %{school_name}?
+        errors:
+          inclusion: Select the contract type you have
       subjects_taught:
         question: Which subject areas do you teach?
         hint: Select all that apply
