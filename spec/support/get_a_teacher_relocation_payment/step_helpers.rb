@@ -93,6 +93,30 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
+    def and_i_complete_the_employment_details_step
+      assert_on_employment_details_page!
+
+      fill_in(
+        "Enter the name of the headteacher of the school where you are employed as a teacher",
+        with: "Seymour Skinner"
+      )
+
+      fill_in(
+        "Enter the name of the school",
+        with: "Springfield Elementary School"
+      )
+
+      fill_in("Address line 1", with: "Springfield Elementary School")
+
+      fill_in("Address line 2", with: "Plympton Street")
+
+      fill_in("Town or city", with: "Springfield")
+
+      fill_in("Postcode", with: "TE57 1NG")
+
+      click_button("Continue")
+    end
+
     def and_i_complete_the_personal_details_step
       assert_on_personal_details_page!
 
@@ -297,6 +321,10 @@ module GetATeacherRelocationPayment
       expect(page).to have_text(
         "Enter your passport number, as it appears on your passport"
       )
+    end
+
+    def assert_on_employment_details_page!
+      expect(page).to have_text("Employment information")
     end
 
     def assert_on_personal_details_page!

@@ -66,6 +66,15 @@ FactoryBot.define do
       bank_account_number { rand(10000000..99999999) }
     end
 
+    trait :with_employment_details do
+      school_headteacher_name { "Seymour Skinner" }
+      school_name { "Springfield Elementary School" }
+      school_address_line_1 { "Springfield Elementary School" }
+      school_address_line_2 { "Plympton Street" }
+      school_city { "Springfield" }
+      school_postcode { "TE57 1NG" }
+    end
+
     trait :eligible_teacher do
       with_teacher_application_route
       with_state_funded_secondary_school

@@ -91,4 +91,50 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
       )
     end
   end
+
+  describe "#employment_answers" do
+    subject { presenter.employment_answers }
+
+    let(:answers) do
+      build(
+        :get_a_teacher_relocation_payment_answers,
+        :with_employment_details
+      )
+    end
+
+    it do
+      is_expected.to include(
+        [
+          "Enter the name of the headteacher of the school where you are employed as a teacher",
+          "Seymour Skinner",
+          "employment-details"
+        ],
+        [
+          "Enter the name of the school",
+          "Springfield Elementary School",
+          "employment-details"
+        ],
+        [
+          "Address line 1",
+          "Springfield Elementary School",
+          "employment-details"
+        ],
+        [
+          "Address line 2",
+          "Plympton Street",
+          "employment-details"
+        ],
+        [
+          "Town or city",
+          "Springfield",
+          "employment-details"
+        ],
+        [
+          "Postcode",
+          "TE57 1NG",
+          "employment-details"
+        ]
+      )
+    end
+  end
 end
