@@ -48,7 +48,6 @@ describe "teacher route: completing the form" do
         and_i_dont_provide_my_mobile_number
         and_i_provide_my_personal_bank_details
         and_i_complete_the_payroll_gender_step
-        and_i_complete_the_trn_step
         then_the_check_your_answers_part_page_shows_my_answers
         and_i_submit_the_application
         then_the_application_is_submitted_successfully
@@ -66,7 +65,6 @@ describe "teacher route: completing the form" do
         and_i_dont_provide_my_mobile_number
         and_i_provide_my_personal_bank_details
         and_i_complete_the_payroll_gender_step
-        and_i_complete_the_trn_step
         then_the_check_your_answers_part_page_shows_my_answers
         and_i_submit_the_application
         then_the_application_is_submitted_successfully
@@ -84,7 +82,6 @@ describe "teacher route: completing the form" do
         and_i_provide_my_mobile_number
         and_i_provide_my_personal_bank_details
         and_i_complete_the_payroll_gender_step
-        and_i_complete_the_trn_step
         then_the_check_your_answers_part_page_shows_my_answers(mobile_number: true)
         and_i_submit_the_application
         then_the_application_is_submitted_successfully
@@ -102,7 +99,6 @@ describe "teacher route: completing the form" do
         and_i_provide_my_mobile_number
         and_i_provide_my_building_society_details
         and_i_complete_the_payroll_gender_step
-        and_i_complete_the_trn_step
         then_the_check_your_answers_part_page_shows_my_answers(
           mobile_number: true,
           building_society: true
