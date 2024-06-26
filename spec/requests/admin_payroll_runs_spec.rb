@@ -17,9 +17,9 @@ RSpec.describe "Admin payroll runs" do
       it "limits the number of claims entering payroll when exceeding the maximum allowed" do
         stubbed_max_payments = stub_const("PayrollRun::MAX_MONTHLY_PAYMENTS", 2)
 
-        create(:claim, :approved, eligibility: create(:student_loans_eligibility, student_loan_repayment_amount: 100), submitted_at: 3.days.ago)
-        create(:claim, :approved, eligibility: create(:student_loans_eligibility, student_loan_repayment_amount: 50), submitted_at: 1.days.ago)
-        create(:claim, :approved, eligibility: create(:student_loans_eligibility, student_loan_repayment_amount: 10), submitted_at: 2.days.ago)
+        create(:claim, :approved, eligibility_attributes: {student_loan_repayment_amount: 100}, submitted_at: 3.days.ago)
+        create(:claim, :approved, eligibility_attributes: {student_loan_repayment_amount: 50}, submitted_at: 1.days.ago)
+        create(:claim, :approved, eligibility_attributes: {student_loan_repayment_amount: 10}, submitted_at: 2.days.ago)
 
         get new_admin_payroll_run_path
 

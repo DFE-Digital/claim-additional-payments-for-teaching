@@ -18,7 +18,7 @@ RSpec.feature "Admin search" do
     expect(page).to have_content(claim1.reference)
     expect(page).to have_no_content(claim2.reference)
 
-    expect(page).to have_content(claim1.teacher_reference_number)
+    expect(page).to have_content(claim1.eligibility.teacher_reference_number)
     expect(page).to have_content(claim1.policy.short_name)
   end
 
@@ -35,7 +35,7 @@ RSpec.feature "Admin search" do
 
     expect(page).to have_content(claim1.reference)
     expect(page).to have_no_content(claim2.reference)
-    expect(page).to have_content(claim1.teacher_reference_number)
+    expect(page).to have_content(claim1.eligibility.teacher_reference_number)
     expect(page).to have_content(claim1.policy.short_name)
   end
 

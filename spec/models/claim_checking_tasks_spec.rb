@@ -29,7 +29,7 @@ RSpec.describe ClaimCheckingTasks do
 
     shared_examples :matching_details_task do
       it "includes a task for matching details when there are claims with matching details" do
-        create(:claim, :submitted, policy:, teacher_reference_number: claim.teacher_reference_number)
+        create(:claim, :submitted, policy:, eligibility_attributes: {teacher_reference_number: claim.eligibility.teacher_reference_number})
 
         expect(checking_tasks.applicable_task_names).to match_array(applicable_tasks + %w[matching_details])
       end
@@ -135,7 +135,7 @@ RSpec.describe ClaimCheckingTasks do
         end
       end
 
-      let!(:previous_claim) { create(:claim, :submitted, policy:, teacher_reference_number: claim.teacher_reference_number) }
+      let!(:previous_claim) { create(:claim, :submitted, policy:, eligibility_attributes: {teacher_reference_number: claim.eligibility.teacher_reference_number}) }
 
       it { is_expected.to eq(false) }
     end

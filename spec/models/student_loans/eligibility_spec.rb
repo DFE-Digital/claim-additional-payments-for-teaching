@@ -50,8 +50,8 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
     end
 
     it "validates that the loan repayment less than £5000 when amending a claim" do
-      expect(described_class.new(student_loan_repayment_amount: "5001")).not_to be_valid(:amendment)
-      expect(described_class.new(student_loan_repayment_amount: "1200")).to be_valid(:amendment)
+      expect(described_class.new(teacher_reference_number: "1234567", student_loan_repayment_amount: "5001")).not_to be_valid(:amendment)
+      expect(described_class.new(teacher_reference_number: "1234567", student_loan_repayment_amount: "1200")).to be_valid(:amendment)
     end
   end
 

@@ -54,8 +54,8 @@ RSpec.describe PayrollRun, type: :model do
 
   describe "#total_award_amount" do
     it "returns the sum of the award amounts of its claims" do
-      payment_1 = build(:payment, claims: [build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1500))])
-      payment_2 = build(:payment, claims: [build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 2000))])
+      payment_1 = build(:payment, claims: [build(:claim, :approved, eligibility_attributes: {student_loan_repayment_amount: 1500})])
+      payment_2 = build(:payment, claims: [build(:claim, :approved, eligibility_attributes: {student_loan_repayment_amount: 2000})])
 
       payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2])
 
@@ -66,13 +66,13 @@ RSpec.describe PayrollRun, type: :model do
   describe "#number_of_claims_for_policy" do
     it "returns the correct number of claims under each policy" do
       payment_1 = build(:payment, claims: [
-        build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1500))
+        build(:claim, :approved, eligibility_attributes: {student_loan_repayment_amount: 1500})
       ])
       payment_2 = build(:payment, claims: [
-        build(:claim, :approved, policy: Policies::EarlyCareerPayments, eligibility: build(:early_career_payments_eligibility, :eligible))
+        build(:claim, :approved, policy: Policies::EarlyCareerPayments)
       ])
       payment_3 = build(:payment, claims: [
-        build(:claim, :approved, policy: Policies::LevellingUpPremiumPayments, eligibility: build(:levelling_up_premium_payments_eligibility, :eligible))
+        build(:claim, :approved, policy: Policies::LevellingUpPremiumPayments)
       ])
 
       payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2, payment_3])
@@ -86,20 +86,20 @@ RSpec.describe PayrollRun, type: :model do
   describe "#total_claim_amount_for_policy" do
     it "returns the correct total amount claimed under each policy" do
       payment_1 = build(:payment, claims: [
-        build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1500))
+        build(:claim, :approved, policy: Policies::StudentLoans, eligibility_attributes: {student_loan_repayment_amount: 1500})
       ])
       payment_2 = build(:payment, claims: [
-        build(:claim, :approved, policy: Policies::EarlyCareerPayments, eligibility: build(:early_career_payments_eligibility, :eligible))
+        build(:claim, :approved, policy: Policies::EarlyCareerPayments)
       ])
       payment_3 = build(:payment, claims: [
-        build(:claim, :approved, policy: Policies::EarlyCareerPayments, eligibility: build(:early_career_payments_eligibility, :eligible))
+        build(:claim, :approved, policy: Policies::EarlyCareerPayments)
       ])
       payment_4 = build(:payment, claims: [
-        build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1000))
+        build(:claim, :approved, eligibility_attributes: {student_loan_repayment_amount: 1000})
       ])
       payment_5 = build(:payment, claims: [
-        build(:claim, :approved, policy: Policies::LevellingUpPremiumPayments, teacher_reference_number: "1234567", bank_sort_code: "123456", bank_account_number: "12345678", eligibility: build(:levelling_up_premium_payments_eligibility, :eligible)),
-        build(:claim, :approved, teacher_reference_number: "1234567", bank_sort_code: "123456", bank_account_number: "12345678", eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1000))
+        build(:claim, :approved, policy: Policies::LevellingUpPremiumPayments, bank_sort_code: "123456", bank_account_number: "12345678", eligibility_attributes: {teacher_reference_number: "1234567"}),
+        build(:claim, :approved, bank_sort_code: "123456", bank_account_number: "12345678", eligibility_attributes: {student_loan_repayment_amount: 1000, teacher_reference_number: "1234567"})
       ])
 
       payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2, payment_3, payment_4, payment_5])
@@ -126,7 +126,7 @@ RSpec.describe PayrollRun, type: :model do
       let(:personal_details) do
         {
           national_insurance_number: generate(:national_insurance_number),
-          teacher_reference_number: generate(:teacher_reference_number),
+          eligibility_attributes: {teacher_reference_number: generate(:teacher_reference_number)},
           email_address: generate(:email_address),
           bank_sort_code: "112233",
           bank_account_number: "95928482",

@@ -8,7 +8,7 @@ require "rails_helper"
 RSpec.feature "Admin amends a claim" do
   let(:claim) do
     create(:claim, :submitted,
-      teacher_reference_number: "1234567",
+      eligibility_attributes: {teacher_reference_number: "1234567"},
       payroll_gender: :dont_know,
       date_of_birth: date_of_birth,
       student_loan_plan: :plan_1,
@@ -57,7 +57,7 @@ RSpec.feature "Admin amends a claim" do
     expect(amendment.notes).to eq("This claimant got some of their details wrong and then contacted us")
     expect(amendment.created_by).to eq(@signed_in_user)
 
-    expect(claim.reload.teacher_reference_number).to eq("7654321")
+    expect(claim.eligibility.reload.teacher_reference_number).to eq("7654321")
     expect(claim.date_of_birth).to eq(new_date_of_birth)
     expect(claim.student_loan_plan).to eq("plan_2")
     expect(claim.bank_sort_code).to eq("111213")
@@ -88,7 +88,7 @@ RSpec.feature "Admin amends a claim" do
 
     fill_in "Teacher reference number", with: "7654321"
 
-    expect { click_on "Cancel" }.not_to change { [claim.reload.amendments.size, claim.teacher_reference_number] }
+    expect { click_on "Cancel" }.not_to change { [claim.reload.amendments.size, claim.eligibility.teacher_reference_number] }
 
     expect(current_url).to eq(admin_claim_tasks_url(claim))
   end

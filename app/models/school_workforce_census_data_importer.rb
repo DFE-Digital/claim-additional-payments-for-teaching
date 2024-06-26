@@ -1,5 +1,5 @@
 class SchoolWorkforceCensusDataImporter < CsvImporter::Base
-  include ::TrnValidation
+  include ::TeacherReferenceNumberValidation
 
   import_options(
     target_data_model: SchoolWorkforceCensus,
@@ -11,12 +11,12 @@ class SchoolWorkforceCensusDataImporter < CsvImporter::Base
   private
 
   def skip_row_conditions?(row)
-    row[0].blank? || row[4] == "NULL" || row[0] == "NULL" || !valid_trn?(row[0])
+    row[0].blank? || row[4] == "NULL" || row[0] == "NULL" || !valid_teacher_reference_number?(row[0])
   end
 
-  def valid_trn?(trn)
-    normalize_teacher_reference_number(trn)
-    valid_trn_length?(trn)
+  def valid_teacher_reference_number?(trn)
+    normalised_teacher_reference_number(trn)
+    valid_teacher_reference_number_length_for_school_workforce_census?(trn)
   end
 
   def row_to_hash(row)

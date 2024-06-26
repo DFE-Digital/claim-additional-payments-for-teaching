@@ -24,6 +24,18 @@ module Policies
 
     POLICY_START_YEAR = AcademicYear.new(2021).freeze
 
+    # Used in
+    #  - checking payments with multiple policies: ClaimsPreventingPaymentFinder
+    #  - matching claims with multiple policies: MatchingAttributeFinder
+    OTHER_CLAIMABLE_POLICIES = [
+      LevellingUpPremiumPayments,
+      StudentLoans
+    ].freeze
+
+    ELIGIBILITY_MATCHING_ATTRIBUTES = [["teacher_reference_number"]].freeze
+
+    SEARCHABLE_ELIGIBILITY_ATTRIBUTES = %w[teacher_reference_number].freeze
+
     def eligibility_page_url
       "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools"
     end

@@ -94,7 +94,7 @@ RSpec.describe Claim::Search do
   end
 
   context "search by teacher reference number" do
-    let(:claim) { create(:claim, :submitted, teacher_reference_number: teacher_reference_number) }
+    let!(:claim) { create(:claim, :submitted, eligibility_attributes: {teacher_reference_number: teacher_reference_number}) }
 
     context "matches" do
       let(:query) { teacher_reference_number }
@@ -109,7 +109,7 @@ RSpec.describe Claim::Search do
     end
 
     context "multiple matches" do
-      let(:historical_matching_claim) { create(:claim, :submitted, teacher_reference_number: teacher_reference_number) }
+      let!(:historical_matching_claim) { create(:claim, :submitted, eligibility_attributes: {teacher_reference_number: teacher_reference_number}) }
       let(:query) { teacher_reference_number }
 
       specify { expect(search.claims).to contain_exactly(claim, historical_matching_claim) }

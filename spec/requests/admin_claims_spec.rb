@@ -110,7 +110,7 @@ RSpec.describe "Admin claims", type: :request do
         end
 
         context "when another claim has matching attributes" do
-          let!(:claim_with_matching_attributes) { create(:claim, :submitted, teacher_reference_number: claim.teacher_reference_number, policy: policy) }
+          let!(:claim_with_matching_attributes) { create(:claim, :submitted, eligibility_attributes: {teacher_reference_number: claim.eligibility.teacher_reference_number}, policy: policy) }
 
           it "returns the claim and the duplicate" do
             get admin_claim_path(claim)
