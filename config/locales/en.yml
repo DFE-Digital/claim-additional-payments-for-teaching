@@ -764,6 +764,7 @@ en:
         confirmation_notice:
           "By selecting continue you are confirming that, to the best of your knowledge, the details you are providing are correct."
   further_education_payments:
+    landing_page: Find out if you are eligible for any incentive payments for further education teachers
     claim_description: for further education payments
     journey_name: Claim incentive payments for further education teachers
     feedback_email: "fe-levellingup.premiumpayments@education.gov.uk"
