@@ -121,10 +121,18 @@ module EligibilityCheckable
   end
 
   def common_eligible_later_attributes?
-    any_future_policy_years? && indicated_eligible_school?
+    any_future_combined_policy_years? && indicated_eligible_school?
+  end
+
+  def policy_end_year
+    policy::POLICY_END_YEAR
   end
 
   def any_future_policy_years?
+    claim_year < policy_end_year
+  end
+
+  def any_future_combined_policy_years?
     claim_year < FINAL_COMBINED_ECP_AND_LUP_POLICY_YEAR
   end
 end

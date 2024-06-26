@@ -179,6 +179,12 @@ FactoryBot.define do
       end
     end
 
+    trait :eligible_school_ecp_only do
+      current_school_id do
+        create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible).id
+      end
+    end
+
     trait :short_term_supply_teacher do
       employed_as_supply_teacher { true }
       has_entire_term_contract { false }

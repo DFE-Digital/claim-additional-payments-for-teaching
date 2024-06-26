@@ -16,7 +16,6 @@ module Policies
       self.table_name = "early_career_payments_eligibilities"
 
       FIRST_ITT_AY = "2016/2017"
-      LAST_POLICY_YEAR = "2024/2025"
 
       # Generates an object similar to
       # {
@@ -31,7 +30,7 @@ module Policies
       # and the enums would be stale until after a server restart.
       # Make all valid ITT values based on the last known policy year.
       ITT_ACADEMIC_YEARS =
-        (AcademicYear.new(FIRST_ITT_AY)...AcademicYear.new(LAST_POLICY_YEAR)).each_with_object({}) do |year, hsh|
+        (AcademicYear.new(FIRST_ITT_AY)...POLICY_END_YEAR).each_with_object({}) do |year, hsh|
           hsh[year] = AcademicYear::Type.new.serialize(year)
         end.merge({AcademicYear.new => AcademicYear::Type.new.serialize(AcademicYear.new)})
 
