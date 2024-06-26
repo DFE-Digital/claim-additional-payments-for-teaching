@@ -263,14 +263,6 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
-    # FIXME RL: Once https://dfedigital.atlassian.net.mcas.ms/browse/CAPT-1625
-    # remove this step. We don't want to capture a TRN on the IRP journey.
-    def and_i_complete_the_trn_step
-      fill_in("What is your teacher reference number (TRN)?", with: "1234567")
-
-      click_button("Continue")
-    end
-
     def then_the_application_is_submitted_successfully
       assert_application_is_submitted!
     end
