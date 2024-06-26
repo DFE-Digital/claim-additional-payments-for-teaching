@@ -23,6 +23,8 @@ module Policies
 
       def ineligible_reason
         case answers.attributes.symbolize_keys
+        in application_route: "salaried_trainee"
+          "application route salaried trainee not accecpted"
         in application_route: "other"
           "application route other not accecpted"
         in state_funded_secondary_school: false
