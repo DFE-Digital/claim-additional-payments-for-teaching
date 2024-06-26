@@ -11,6 +11,7 @@ module Journeys
           a << start_date_details
           a << subject_details
           a << visa_details
+          a << entry_date
         end.compact
       end
 
@@ -61,6 +62,14 @@ module Journeys
           t("get_a_teacher_relocation_payment.forms.visa.question"),
           answers.visa_type,
           "visa"
+        ]
+      end
+
+      def entry_date
+        [
+          t("get_a_teacher_relocation_payment.forms.entry_date.question"),
+          answers.date_of_entry.strftime("%d-%m-%Y"),
+          "entry-date"
         ]
       end
     end

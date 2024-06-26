@@ -1,14 +1,19 @@
 module Journeys
   module GetATeacherRelocationPayment
-    class StartDateForm < Form
+    class EntryDateForm < Form
       include ActiveRecord::AttributeAssignment
 
-      validates :start_date,
-        presence: {
-          message: i18n_error_message(:presence)
-        }
+      attribute :date_of_entry, :date
 
-      attribute :start_date, :date
+      validates :date_of_entry, presence: {
+        message: i18n_error_message(:presence)
+      }
+
+      validates :date_of_entry,
+        comparison: {
+          less_than: ->(_) { Date.tomorrow },
+          message: i18n_error_message(:date_not_in_future)
+        }, if: :date_of_entry
 
       def initialize(journey_session:, journey:, params:)
         super
@@ -18,25 +23,15 @@ module Journeys
         _assign_attributes(permitted_params)
       rescue ActiveRecord::MultiparameterAssignmentErrors
         # Invalid date was entered
-        self.start_date = nil
+        self.date_of_entry = nil
       end
 
       def save
         return false unless valid?
 
-        if start_date_changed?
-          journey_session.answers.assign_attributes(date_of_entry: nil)
-        end
-
-        journey_session.answers.assign_attributes(start_date: start_date)
+        journey_session.answers.assign_attributes(date_of_entry: date_of_entry)
 
         journey_session.save!
-      end
-
-      private
-
-      def start_date_changed?
-        journey_session.answers.start_date != start_date
       end
     end
   end

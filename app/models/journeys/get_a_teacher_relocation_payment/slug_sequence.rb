@@ -8,6 +8,7 @@ module Journeys
         "start-date",
         "subject",
         "visa",
+        "entry-date",
         "check-your-answers-part-one"
       ]
 

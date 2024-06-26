@@ -83,6 +83,16 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
+    def and_i_complete_the_entry_date_page_with(date:)
+      assert_on_entry_date_page!
+
+      fill_in("Day", with: date.day)
+      fill_in("Month", with: date.month)
+      fill_in("Year", with: date.year)
+
+      click_button("Continue")
+    end
+
     def and_i_dont_change_my_answers
       click_button("Continue")
     end
@@ -121,6 +131,12 @@ module GetATeacherRelocationPayment
 
     def assert_on_visa_page!
       expect(page).to have_text("Select the visa you used to move to England")
+    end
+
+    def assert_on_entry_date_page!
+      expect(page).to have_text(
+        "Enter the date you moved to England to start your teaching job"
+      )
     end
 
     def assert_application_is_submitted!
