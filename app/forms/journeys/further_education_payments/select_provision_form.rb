@@ -6,13 +6,7 @@ module Journeys
       validates :school_id, presence: {message: i18n_error_message(:blank)}
 
       def radio_options
-        results.map do |school|
-          OpenStruct.new(
-            id: school.id,
-            name: school.name,
-            address: school.address
-          )
-        end
+        results
       end
 
       def save
