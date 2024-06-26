@@ -97,6 +97,25 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
+    def and_i_complete_the_nationality_step_with(option:)
+      assert_on_nationality_page!
+
+      select(option)
+
+      click_button("Continue")
+    end
+
+    def and_i_complete_the_passport_number_step_with(options:)
+      assert_on_passport_number_page!
+
+      fill_in(
+        "Enter your passport number, as it appears on your passport",
+        with: options
+      )
+
+      click_button("Continue")
+    end
+
     def then_the_application_is_submitted_successfully
       assert_application_is_submitted!
     end
@@ -136,6 +155,16 @@ module GetATeacherRelocationPayment
     def assert_on_entry_date_page!
       expect(page).to have_text(
         "Enter the date you moved to England to start your teaching job"
+      )
+    end
+
+    def assert_on_nationality_page!
+      expect(page).to have_text("Select your nationality")
+    end
+
+    def assert_on_passport_number_page!
+      expect(page).to have_text(
+        "Enter your passport number, as it appears on your passport"
       )
     end
 

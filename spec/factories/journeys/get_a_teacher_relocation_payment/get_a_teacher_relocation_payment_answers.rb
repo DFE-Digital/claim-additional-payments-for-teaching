@@ -40,6 +40,14 @@ FactoryBot.define do
       date_of_entry { start_date - 1.week }
     end
 
+    trait :with_nationality do
+      nationality { "Australian" }
+    end
+
+    trait :with_passport_number do
+      passport_number { "1234567890123456789A" }
+    end
+
     trait :with_email_details do
       email_address { generate(:email_address) }
       email_verified { true }

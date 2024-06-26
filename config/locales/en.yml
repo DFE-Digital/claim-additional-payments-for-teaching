@@ -740,6 +740,15 @@ en:
         errors:
           presence: "Enter your entry date"
           date_not_in_future: "Date of entry cannot be in the future"
+      nationality:
+        question: "Select your nationality"
+        errors:
+          inclusion: "Choose your nationality"
+      passport_number:
+        question: "Enter your passport number, as it appears on your passport"
+        errors:
+          presence: "Enter your passport number"
+          invalid: "Invalid passport number"
 
 
     check_your_answers:

@@ -96,4 +96,6 @@
   - created_at
   - updated_at
   - gender_digit
+  :international_relocation_payments_eligibilities:
+  - passport_number
 
