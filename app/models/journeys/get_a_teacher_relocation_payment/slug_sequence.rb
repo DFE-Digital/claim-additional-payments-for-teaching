@@ -14,15 +14,37 @@ module Journeys
 
       PERSONAL_DETAILS_SLUGS = [
         "nationality",
-        "passport-number"
+        "passport-number",
+        "personal-details",
+        "postcode-search",
+        "select-home-address",
+        "address",
+        "email-address",
+        "email-verification",
+        "provide-mobile-number",
+        "mobile-number",
+        "mobile-verification"
       ]
+
+      PAYMENT_DETAILS_SLUGS = [
+        "bank-or-building-society",
+        "personal-bank-account",
+        "building-society-account",
+        "gender",
+        "teacher-reference-number"
+      ].freeze
 
       RESULTS_SLUGS = [
         "check-your-answers",
         "ineligible"
       ].freeze
 
-      SLUGS = ELIGIBILITY_SLUGS + PERSONAL_DETAILS_SLUGS + RESULTS_SLUGS
+      SLUGS = (
+        ELIGIBILITY_SLUGS +
+        PERSONAL_DETAILS_SLUGS +
+        PAYMENT_DETAILS_SLUGS +
+        RESULTS_SLUGS
+      ).freeze
 
       def self.start_page_url
         if Rails.env.production?
@@ -41,7 +63,15 @@ module Journeys
       end
 
       def slugs
-        SLUGS.dup
+        SLUGS.dup.tap do |sequence|
+          if answers.provide_mobile_number == false
+            sequence.delete("mobile-number")
+            sequence.delete("mobile-verification")
+          end
+
+          sequence.delete("personal-bank-account") if answers.building_society?
+          sequence.delete("building-society-account") if answers.personal_bank_account?
+        end
       end
     end
   end

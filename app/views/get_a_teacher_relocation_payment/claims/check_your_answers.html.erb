@@ -23,6 +23,14 @@
         }
       ) %>
 
+      <%= render(
+        partial: "claims/check_your_answers_section",
+        locals: {
+          heading: "Payment details",
+          answers: journey.answers_for_claim(@form.journey_session).payment_answers
+        }
+      ) %>
+
       <h2 class="govuk-heading-m"><%= t("check_your_answers.heading_send_application") %></h2>
 
       <p class="govuk-body"><%= t("check_your_answers.statement") %></p>

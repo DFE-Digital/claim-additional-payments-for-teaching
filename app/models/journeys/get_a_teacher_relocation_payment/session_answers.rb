@@ -10,6 +10,10 @@ module Journeys
       attribute :date_of_entry, :date
       attribute :nationality, :string
       attribute :passport_number, :string
+
+      def policy
+        Policies::InternationalRelocationPayments
+      end
     end
   end
 end
