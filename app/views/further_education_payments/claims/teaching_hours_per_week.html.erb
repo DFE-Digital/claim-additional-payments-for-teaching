@@ -1,7 +1,17 @@
-<p class="govuk-body">
-  FE teaching hours per week goes here
-</p>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
 
-<%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
-  <%= f.govuk_submit %>
-<% end %>
+      <%= f.govuk_collection_radio_buttons :teaching_hours_per_week, @form.radio_options, :id, :name,
+        legend: {
+          text: @form.t(:question, school_name: journey_session.answers.school.name),
+          tag: "h1",
+          size: "l"
+        },
+        hint: { text: @form.t(:hint) } %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

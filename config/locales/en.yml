@@ -800,6 +800,11 @@ en:
         question: What type of contract do you have with %{school_name}?
         errors:
           inclusion: Select the contract type you have
+      teaching_hours_per_week:
+        question: On average, how many hours per week are you timetabled to teach at %{school_name} during the current term?
+        hint: ‘Teaching’ refers to the direct contact time you spend in lessons with students of all ages.
+        errors:
+          inclusion: Select how many hours per week you are timetabled to teach during the current term
       further_education_teaching_start_year:
         errors:
           blank: Select which academic year you started teaching in further education in England
