@@ -8,7 +8,11 @@ module Journeys
     I18N_NAMESPACE = "further_education_payments"
     POLICIES = []
     FORMS = {
-      "claims" => {}
+      "claims" => {
+        "teaching-responsibilities" => TeachingResponsibilitiesForm,
+        "further-education-provision-search" => FurtherEducationProvisionSearchForm,
+        "select-provision" => SelectProvisionForm
+      }
     }
   end
 end

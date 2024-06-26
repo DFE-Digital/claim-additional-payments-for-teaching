@@ -7,6 +7,8 @@ module Journeys
         "trainee-details",
         "contract-details",
         "start-date",
+        "subject",
+        "visa",
         "check-your-answers-part-one"
       ]
 

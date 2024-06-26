@@ -24,6 +24,13 @@ class BankOrBuildingSocietyForm < Form
     journey_session.save!
   end
 
+  def radio_options
+    [
+      OpenStruct.new(id: :personal_bank_account, name: "Personal bank account"),
+      OpenStruct.new(id: :building_society, name: "Building society")
+    ]
+  end
+
   private
 
   def bank_or_building_society_changed?

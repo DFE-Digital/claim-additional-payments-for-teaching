@@ -1,5 +1,35 @@
 ---
 :shared:
+  :claims:
+  - first_name
+  - middle_name
+  - surname
+  - date_of_birth
+  - date_of_birth_day
+  - date_of_birth_month
+  - date_of_birth_year
+  - address_line_1
+  - address_line_2
+  - address_line_3
+  - address_line_4
+  - postcode
+  - national_insurance_number
+  - bank_sort_code
+  - bank_account_number
+  - building_society_roll_number
+  - banking_name
+  - mobile_number
+  - teacher_reference_number
+  - email_address
+  - payroll_gender
+  - one_time_password
+  - hmrc_bank_validation_responses
+  - dqt_teacher_status
+  - teacher_id_user_info
+  :claim_decisions:
+  - trn
+  - claimant_age
+  - claimant_gender
   :delayed_jobs:
   - id
   - priority
@@ -15,6 +45,9 @@
   - updated_at
   - cron
   :dfe_sign_in_users:
+  - given_name
+  - family_name
+  - email
   - session_token
   :schools:
   - postcode_sanitised
@@ -24,6 +57,10 @@
   - body
   - created_at
   - updated_at
+  :reminders:
+  - full_name
+  - email_address
+  - one_time_password
   :student_loans_data:
   - id
   - claim_reference
@@ -39,3 +76,24 @@
   :school_workforce_censuses:
   - id
   - teacher_reference_number
+  - school_urn
+  - totfte
+  - contract_agreement_type
+  - subject_description_sfr
+  - general_subject_code
+  - hours_taught
+  - created_at
+  - updated_at
+  :teachers_pensions_service:
+  - id
+  - teacher_reference_number
+  - start_date
+  - end_date
+  - la_urn
+  - school_urn
+  - employer_id
+  - nino
+  - created_at
+  - updated_at
+  - gender_digit
+

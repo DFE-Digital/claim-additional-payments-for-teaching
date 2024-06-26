@@ -75,6 +75,22 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
+    def and_i_complete_the_subject_step_with(option:, trainee: false)
+      assert_on_subject_page!(trainee)
+
+      choose(option)
+
+      click_button("Continue")
+    end
+
+    def and_i_complete_the_visa_screen_with(option:)
+      assert_on_visa_page!
+
+      select(option)
+
+      click_button("Continue")
+    end
+
     def and_i_dont_change_my_answers
       click_button("Continue")
     end
@@ -109,6 +125,20 @@ module GetATeacherRelocationPayment
 
     def assert_on_contract_start_date_page!
       expect(page).to have_text("Enter the start date of your contract")
+    end
+
+    def assert_on_subject_page!(trainee)
+      if trainee
+        expect(page).to have_text("What subject are you training to teach?")
+      else
+        expect(page).to have_text(
+          "What subject are you employed to teach at your school?"
+        )
+      end
+    end
+
+    def assert_on_visa_page!
+      expect(page).to have_text("Select the visa you used to move to England")
     end
 
     def assert_application_is_submitted!

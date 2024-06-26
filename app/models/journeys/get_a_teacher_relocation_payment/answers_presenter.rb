@@ -13,6 +13,11 @@ module Journeys
             a << contract_details
           end
           a << start_date_details
+          a << subject_details
+          # FIXME RL we'll soon be removing trainee screens from the journey
+          # so we're just adding this for the time being to save having to
+          # write a test we'll be deleting in the next commit
+          a << visa_details unless answers.trainee?
         end.compact
       end
 
@@ -55,6 +60,22 @@ module Journeys
           t("get_a_teacher_relocation_payment.forms.start_date.question"),
           answers.start_date.strftime("%d-%m-%Y"),
           "start-date"
+        ]
+      end
+
+      def subject_details
+        [
+          t("get_a_teacher_relocation_payment.forms.subject.question.#{answers.application_route}"),
+          t("get_a_teacher_relocation_payment.forms.subject.answers.#{answers.subject}"),
+          "subject"
+        ]
+      end
+
+      def visa_details
+        [
+          t("get_a_teacher_relocation_payment.forms.visa.question"),
+          answers.visa_type,
+          "visa"
         ]
       end
     end

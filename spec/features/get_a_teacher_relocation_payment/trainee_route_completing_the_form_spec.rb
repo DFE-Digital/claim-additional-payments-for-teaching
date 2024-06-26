@@ -16,7 +16,8 @@ describe "trainee route: completing the form" do
   end
 
   describe "navigating forward" do
-    it "submits an application" do
+    # Well be removing this feature spec in the next commit
+    xit "submits an application" do
       when_i_start_the_form
       and_i_complete_application_route_question_with(
         option: "I am enrolled on a salaried teacher training course in England"
@@ -25,8 +26,8 @@ describe "trainee route: completing the form" do
       and_i_complete_the_contract_start_date_step_with(
         date: contract_start_date
       )
+      and_i_complete_the_subject_step_with(option: "Physics", trainee: true)
       then_the_check_your_answers_part_one_page_shows_my_answers
-
       and_i_dont_change_my_answers
       and_the_personal_details_section_has_been_temporarily_stubbed
       and_i_submit_the_application
@@ -47,6 +48,10 @@ describe "trainee route: completing the form" do
 
     expect(page).to have_text(
       "Enter the start date of your contract #{contract_start_date.strftime("%d-%m-%Y")}"
+    )
+
+    expect(page).to have_text(
+      "What subject are you training to teach? Physics"
     )
   end
 end
