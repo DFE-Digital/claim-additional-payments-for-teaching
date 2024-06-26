@@ -1,15 +1,17 @@
 require "rails_helper"
 
-RSpec.describe Journeys::GetATeacherRelocationPayment::TraineeDetailsForm, type: :model do
+RSpec.describe Journeys::GetATeacherRelocationPayment::NationalityForm, type: :model do
   let(:journey_session) { create(:get_a_teacher_relocation_payment_session) }
 
   let(:params) do
     ActionController::Parameters.new(
       claim: {
-        state_funded_secondary_school: option
+        nationality: option
       }
     )
   end
+
+  let(:option) { nil }
 
   let(:form) do
     described_class.new(
@@ -22,24 +24,22 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::TraineeDetailsForm, type:
   describe "validations" do
     subject { form }
 
-    let(:option) { nil }
-
     it do
-      is_expected.not_to(
-        allow_value(nil)
-        .for(:state_funded_secondary_school)
-        .with_message("Select the option that applies to you")
+      is_expected.to(
+        validate_inclusion_of(:nationality)
+        .in_array(NATIONALITIES)
+        .with_message("Choose your nationality")
       )
     end
   end
 
   describe "#save" do
-    let(:option) { true }
+    let(:option) { "Australian" }
 
     it "updates the journey session" do
       expect { expect(form.save).to be(true) }.to(
-        change { journey_session.reload.answers.state_funded_secondary_school }
-        .to(true)
+        change { journey_session.reload.answers.nationality }
+        .to("Australian")
       )
     end
   end

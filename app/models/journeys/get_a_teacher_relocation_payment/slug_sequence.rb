@@ -4,20 +4,47 @@ module Journeys
       ELIGIBILITY_SLUGS = [
         "application-route",
         "state-funded-secondary-school",
-        "trainee-details",
         "contract-details",
         "start-date",
         "subject",
         "visa",
+        "entry-date",
         "check-your-answers-part-one"
       ]
+
+      PERSONAL_DETAILS_SLUGS = [
+        "nationality",
+        "passport-number",
+        "personal-details",
+        "postcode-search",
+        "select-home-address",
+        "address",
+        "email-address",
+        "email-verification",
+        "provide-mobile-number",
+        "mobile-number",
+        "mobile-verification"
+      ]
+
+      PAYMENT_DETAILS_SLUGS = [
+        "bank-or-building-society",
+        "personal-bank-account",
+        "building-society-account",
+        "gender",
+        "teacher-reference-number"
+      ].freeze
 
       RESULTS_SLUGS = [
         "check-your-answers",
         "ineligible"
       ].freeze
 
-      SLUGS = ELIGIBILITY_SLUGS + RESULTS_SLUGS
+      SLUGS = (
+        ELIGIBILITY_SLUGS +
+        PERSONAL_DETAILS_SLUGS +
+        PAYMENT_DETAILS_SLUGS +
+        RESULTS_SLUGS
+      ).freeze
 
       def self.start_page_url
         if Rails.env.production?
@@ -37,12 +64,13 @@ module Journeys
 
       def slugs
         SLUGS.dup.tap do |sequence|
-          if answers.trainee?
-            sequence.delete("state-funded-secondary-school")
-            sequence.delete("contract-details")
-          else
-            sequence.delete("trainee-details")
+          if answers.provide_mobile_number == false
+            sequence.delete("mobile-number")
+            sequence.delete("mobile-verification")
           end
+
+          sequence.delete("personal-bank-account") if answers.building_society?
+          sequence.delete("building-society-account") if answers.personal_bank_account?
         end
       end
     end

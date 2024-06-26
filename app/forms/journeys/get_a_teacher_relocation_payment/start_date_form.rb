@@ -24,9 +24,19 @@ module Journeys
       def save
         return false unless valid?
 
+        if start_date_changed?
+          journey_session.answers.assign_attributes(date_of_entry: nil)
+        end
+
         journey_session.answers.assign_attributes(start_date: start_date)
 
         journey_session.save!
+      end
+
+      private
+
+      def start_date_changed?
+        journey_session.answers.start_date != start_date
       end
     end
   end

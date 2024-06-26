@@ -32,7 +32,7 @@ RSpec.feature "Data report request" do
     csv.each_with_index do |row, i|
       claim = claims.detect { |c| c.reference == row["Claim reference"] }
       expect(claim).not_to be_nil
-      expect(row["Teacher reference number"]).to eq(claim.teacher_reference_number)
+      expect(row["Teacher reference number"]).to eq(claim.eligibility.teacher_reference_number)
       expect(row["NINO"]).to eq(claim.national_insurance_number)
       expect(row["Full name"]).to eq(claim.full_name)
       expect(row["Email"]).to eq(claim.email_address)

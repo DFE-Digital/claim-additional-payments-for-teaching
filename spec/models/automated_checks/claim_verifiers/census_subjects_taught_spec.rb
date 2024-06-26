@@ -14,7 +14,6 @@ module AutomatedChecks
           national_insurance_number: "RT901113D",
           reference: "QKCVAQ3K",
           surname: "Bonnet-Fontaine",
-          teacher_reference_number: teacher_reference_number,
           policy: policy
         )
 
@@ -23,7 +22,8 @@ module AutomatedChecks
             attributes_for(
               :"#{policy_underscored}_eligibility",
               :eligible,
-              eligible_itt_subject: :mathematics
+              eligible_itt_subject: :mathematics,
+              teacher_reference_number: teacher_reference_number
             )
           )
         elsif policy == Policies::LevellingUpPremiumPayments
@@ -31,7 +31,8 @@ module AutomatedChecks
             attributes_for(
               :"#{policy_underscored}_eligibility",
               :eligible,
-              eligible_itt_subject: :computing
+              eligible_itt_subject: :computing,
+              teacher_reference_number: teacher_reference_number
             )
           )
         elsif policy == Policies::StudentLoans
@@ -41,7 +42,8 @@ module AutomatedChecks
               :eligible,
               biology_taught: true,
               computing_taught: true,
-              physics_taught: false
+              physics_taught: false,
+              teacher_reference_number: teacher_reference_number
             )
           )
         end
@@ -89,7 +91,6 @@ module AutomatedChecks
                   national_insurance_number: "RT901113D",
                   reference: "QKCVAQ3K",
                   surname: "Bonnet-Fontaine",
-                  teacher_reference_number: teacher_reference_number,
                   policy: policy
                 )
 
@@ -98,7 +99,8 @@ module AutomatedChecks
                     attributes_for(
                       :"#{policy_underscored}_eligibility",
                       :eligible,
-                      eligible_itt_subject: :none_of_the_above
+                      eligible_itt_subject: :none_of_the_above,
+                      teacher_reference_number: teacher_reference_number
                     )
                   )
                 elsif policy == Policies::LevellingUpPremiumPayments
@@ -106,7 +108,8 @@ module AutomatedChecks
                     attributes_for(
                       :"#{policy_underscored}_eligibility",
                       :eligible,
-                      eligible_itt_subject: :none_of_the_above
+                      eligible_itt_subject: :none_of_the_above,
+                      teacher_reference_number: teacher_reference_number
                     )
                   )
                 elsif policy == Policies::StudentLoans
@@ -116,7 +119,8 @@ module AutomatedChecks
                       :eligible,
                       biology_taught: false,
                       computing_taught: false,
-                      physics_taught: false
+                      physics_taught: false,
+                      teacher_reference_number: teacher_reference_number
                     )
                   )
                 end
@@ -344,9 +348,9 @@ module AutomatedChecks
                   national_insurance_number: "RT901113D",
                   reference: "QKCVAQ3K",
                   surname: "Bonnet-Fontaine",
-                  teacher_reference_number: teacher_reference_number,
                   policy: policy,
-                  tasks: [build(:task, name: :census_subjects_taught)]
+                  tasks: [build(:task, name: :census_subjects_taught)],
+                  eligibility_attributes: {teacher_reference_number: teacher_reference_number}
                 )
               end
 
@@ -405,7 +409,6 @@ module AutomatedChecks
               national_insurance_number: "RT901113D",
               reference: "QKCVAQ3K",
               surname: "Bonnet-Fontaine",
-              teacher_reference_number: teacher_reference_number,
               policy: Policies::StudentLoans
             )
 
@@ -416,7 +419,8 @@ module AutomatedChecks
                 biology_taught: false,
                 computing_taught: false,
                 physics_taught: false,
-                languages_taught: true
+                languages_taught: true,
+                teacher_reference_number: teacher_reference_number
               )
             )
 

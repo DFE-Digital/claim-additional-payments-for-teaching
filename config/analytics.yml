@@ -198,6 +198,8 @@ shared:
     - start_date
     - subject
     - visa_type
+    - date_of_entry
+    - nationality
   :schools:
     - id
     - urn

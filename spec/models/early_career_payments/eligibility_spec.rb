@@ -117,9 +117,9 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
       end
 
       it "validates that the award_amount is less than £7,500 when amending a claim" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new(award_amount: 7_501)).not_to be_valid(:amendment)
-        expect(Policies::EarlyCareerPayments::Eligibility.new(award_amount: 7_500)).to be_valid(:amendment)
-        expect(Policies::EarlyCareerPayments::Eligibility.new(award_amount: 7_499)).to be_valid(:amendment)
+        expect(Policies::EarlyCareerPayments::Eligibility.new(teacher_reference_number: "1234567", award_amount: 7_501)).not_to be_valid(:amendment)
+        expect(Policies::EarlyCareerPayments::Eligibility.new(teacher_reference_number: "1234567", award_amount: 7_500)).to be_valid(:amendment)
+        expect(Policies::EarlyCareerPayments::Eligibility.new(teacher_reference_number: "1234567", award_amount: 7_499)).to be_valid(:amendment)
       end
     end
   end

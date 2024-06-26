@@ -1,7 +1,7 @@
 <% content_for(
   :page_title,
   page_title(
-    t("get_a_teacher_relocation_payment.forms.trainee_details.question"),
+    t("get_a_teacher_relocation_payment.forms.entry_date.question"),
     journey: current_journey_routing_name,
     show_error: @form.errors.any?
   )
@@ -17,18 +17,14 @@
         <%= render("shared/error_summary", instance: f.object) %>
       <% end %>
 
-      <%= f.govuk_collection_radio_buttons(
-        :state_funded_secondary_school,
-        f.object.available_options,
-        -> (option) { option },
-        -> (option) { t("get_a_teacher_relocation_payment.forms.trainee_details.answers.#{option}.answer") },
-        legend: { text: t("get_a_teacher_relocation_payment.forms.trainee_details.question") },
-        hint: { text: t("get_a_teacher_relocation_payment.forms.trainee_details.hint_html") }
+      <%= f.govuk_date_field(
+        :date_of_entry,
+        legend: {
+          text: t("get_a_teacher_relocation_payment.forms.entry_date.question")
+        },
       ) %>
 
       <%= f.govuk_submit %>
     <% end %>
   </div>
 </div>
-
-

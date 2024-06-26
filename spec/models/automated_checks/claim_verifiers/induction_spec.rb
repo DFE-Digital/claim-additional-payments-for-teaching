@@ -9,7 +9,7 @@ module AutomatedChecks
         {
           claim: claim_arg,
           dqt_teacher_status: Dqt::Client.new.teacher.find(
-            claim_arg.teacher_reference_number,
+            claim_arg.eligibility.teacher_reference_number,
             birthdate: claim_arg.date_of_birth,
             nino: claim_arg.national_insurance_number
           )
@@ -30,7 +30,7 @@ module AutomatedChecks
         end
 
         stub_qualified_teaching_statuses_show(
-          trn: claim_arg.teacher_reference_number,
+          trn: claim_arg.eligibility.teacher_reference_number,
           params: {
             birthdate: claim_arg.date_of_birth&.to_s,
             nino: claim_arg.national_insurance_number

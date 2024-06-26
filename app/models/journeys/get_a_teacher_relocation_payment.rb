@@ -11,11 +11,13 @@ module Journeys
       "claims" => {
         "application-route" => ApplicationRouteForm,
         "state-funded-secondary-school" => StateFundedSecondarySchoolForm,
-        "trainee-details" => TraineeDetailsForm,
         "contract-details" => ContractDetailsForm,
         "start-date" => StartDateForm,
         "subject" => SubjectForm,
-        "visa" => VisaForm
+        "visa" => VisaForm,
+        "entry-date" => EntryDateForm,
+        "nationality" => NationalityForm,
+        "passport-number" => PassportNumberForm
       }
     }
   end

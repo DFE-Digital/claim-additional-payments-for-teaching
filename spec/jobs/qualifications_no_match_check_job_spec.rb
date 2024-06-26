@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe QualificationsNoMatchCheckJob do
   before do
     stub_qualified_teaching_statuses_show(
-      trn: claim.teacher_reference_number,
+      trn: claim.eligibility.teacher_reference_number,
       params: {
         birthdate: claim.date_of_birth&.to_s,
         nino: claim.national_insurance_number

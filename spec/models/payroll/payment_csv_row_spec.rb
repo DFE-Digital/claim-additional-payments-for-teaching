@@ -16,7 +16,7 @@ RSpec.describe Payroll::PaymentCsvRow do
     let(:personal_details_for_student_loans_and_early_career_payments_claim) do
       {
         national_insurance_number: generate(:national_insurance_number),
-        teacher_reference_number: generate(:teacher_reference_number),
+        eligibility_attributes: {teacher_reference_number: generate(:teacher_reference_number)},
         payroll_gender: :female,
         date_of_birth: Date.new(1980, 12, 1),
         student_loan_plan: StudentLoan::PLAN_2,
@@ -105,7 +105,7 @@ RSpec.describe Payroll::PaymentCsvRow do
         let(:personal_details_for_ecp_claim_1) do
           {
             national_insurance_number: generate(:national_insurance_number),
-            teacher_reference_number: generate(:teacher_reference_number),
+            eligibility_attributes: {teacher_reference_number: generate(:teacher_reference_number)},
             payroll_gender: :male,
             date_of_birth: Date.new(1988, 3, 21),
             student_loan_plan: StudentLoan::PLAN_1_AND_3,
@@ -177,7 +177,7 @@ RSpec.describe Payroll::PaymentCsvRow do
         let(:personal_details_for_ecp_claim_2) do
           {
             national_insurance_number: generate(:national_insurance_number),
-            teacher_reference_number: generate(:teacher_reference_number),
+            eligibility_attributes: {teacher_reference_number: generate(:teacher_reference_number)},
             payroll_gender: :female,
             date_of_birth: Date.new(1994, 6, 30),
             student_loan_plan: StudentLoan::PLAN_1,

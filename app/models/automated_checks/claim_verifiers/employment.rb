@@ -7,7 +7,7 @@ module AutomatedChecks
       def initialize(claim:, admin_user: nil)
         self.admin_user = admin_user
         self.claim = claim
-        self.teachers_pensions_service = TeachersPensionsService.by_teacher_reference_number(claim.teacher_reference_number)
+        self.teachers_pensions_service = TeachersPensionsService.by_teacher_reference_number(claim.eligibility.teacher_reference_number)
       end
 
       def perform

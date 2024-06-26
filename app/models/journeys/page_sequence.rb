@@ -3,7 +3,7 @@
 # Used to model the sequence of pages that make up the claim process.
 module Journeys
   class PageSequence
-    attr_reader :current_slug, :completed_slugs
+    attr_reader :current_slug
 
     DEAD_END_SLUGS = %w[complete existing-session eligible-later future-eligibility ineligible]
     OPTIONAL_SLUGS = %w[postcode-search select-home-address reset-claim]
@@ -47,8 +47,14 @@ module Journeys
 
     def has_completed_journey_until?(slug)
       return true if DEAD_END_SLUGS.include?(slug)
-      return true if (slug == "address" || answers.postcode.present?) && incomplete_slugs == ["address"]
       incomplete_slugs.empty?
+    end
+
+    def completed_slugs
+      # /address is considered completed if provided via /postcode-search and /select-home-address
+      return @completed_slugs + ["address"] if answers.postcode.present?
+
+      @completed_slugs
     end
 
     def next_required_slug

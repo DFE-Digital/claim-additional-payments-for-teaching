@@ -181,7 +181,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
     travel_to last_academic_year - 1.week do
       claim = create(:claim, :submitted)
       amendment = create(:amendment, claim: claim, claim_changes: {
-        "teacher_reference_number" => [generate(:teacher_reference_number).to_s, claim.teacher_reference_number],
+        "teacher_reference_number" => [generate(:teacher_reference_number).to_s, claim.eligibility.teacher_reference_number],
         "payroll_gender" => ["male", claim.payroll_gender],
         "date_of_birth" => [25.years.ago.to_date, claim.date_of_birth],
         "student_loan_plan" => ["plan_1", claim.student_loan_plan],
