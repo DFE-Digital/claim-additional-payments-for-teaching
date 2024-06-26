@@ -8,7 +8,7 @@ describe "teacher route: completing the form" do
   end
 
   let(:contract_start_date) do
-    Date.tomorrow
+    Date.yesterday
   end
 
   let(:entry_date) do

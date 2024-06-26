@@ -723,6 +723,7 @@ en:
         question: "Enter the start date of your contract"
         errors:
           presence: "Enter your contract start date"
+          date_not_in_future: "Start date cannot be in the future"
       subject:
         question: "What subject are you employed to teach at your school?"
         hint: "Physics, general or combined science including physics, and languages can be combined with other subjects but must make up at least 50% of your time in the classroom."
