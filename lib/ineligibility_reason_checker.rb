@@ -16,6 +16,8 @@ class IneligibilityReasonChecker
       :generic
     elsif trainee_teacher_last_policy_year?
       :trainee_in_last_policy_year
+    elsif ecp_only_induction_not_completed?
+      :ecp_only_induction_not_completed
     elsif ecp_only_trainee_teacher?
       :ecp_only_trainee_teacher
     elsif trainee_teaching_lacking_both_valid_itt_subject_and_degree?
@@ -81,6 +83,13 @@ class IneligibilityReasonChecker
       @answers.subject_to_formal_performance_action?,
       @answers.subject_to_disciplinary_action?
     ].any?
+  end
+
+  def ecp_only_induction_not_completed?
+    [
+      school_eligible_for_ecp_but_not_lup?(@answers.current_school),
+      @answers.induction_not_completed?
+    ].all?
   end
 
   def ecp_only_trainee_teacher?
@@ -181,8 +190,8 @@ class IneligibilityReasonChecker
   def trainee_teacher_last_policy_year?
     [
       @answers.nqt_in_academic_year_after_itt == false,
-      @answers.academic_year >= AcademicYear.new(Policies::LevellingUpPremiumPayments::Eligibility::LAST_POLICY_YEAR),
-      @answers.academic_year >= AcademicYear.new(Policies::EarlyCareerPayments::Eligibility::LAST_POLICY_YEAR)
+      @answers.academic_year >= AcademicYear.new(Policies::LevellingUpPremiumPayments::POLICY_END_YEAR),
+      @answers.academic_year >= AcademicYear.new(Policies::EarlyCareerPayments::POLICY_END_YEAR)
     ].all?
   end
 end
