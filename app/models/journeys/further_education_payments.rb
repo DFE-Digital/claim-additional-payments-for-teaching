@@ -9,7 +9,9 @@ module Journeys
     POLICIES = []
     FORMS = {
       "claims" => {
-        "teaching-responsibilities" => TeachingResponsibilitiesForm
+        "teaching-responsibilities" => TeachingResponsibilitiesForm,
+        "further-education-provision-search" => FurtherEducationProvisionSearchForm,
+        "select-provision" => SelectProvisionForm
       }
     }
   end

@@ -4,6 +4,7 @@ module Journeys
       ELIGIBILITY_SLUGS = %w[
         teaching-responsibilities
         further-education-provision-search
+        select-provision
         contract-type
         teaching-hours-per-week
         academic-year-in-further-education
