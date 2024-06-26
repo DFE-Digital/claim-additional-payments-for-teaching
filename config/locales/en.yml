@@ -734,6 +734,28 @@ en:
             answer: "No"
         errors:
           inclusion: "Select the option that applies to you"
+      start_date:
+        question: "Enter the start date of your contract"
+        errors:
+          presence: "Enter your contract start date"
+      subject:
+        question:
+          teacher: "What subject are you employed to teach at your school?"
+          salaried_trainee: "What subject are you training to teach?"
+        hint:
+          teacher: "Physics, general or combined science including physics, and languages can be combined with other subjects but must make up at least 50% of your time in the classroom."
+          salaried_trainee: "Physics or languages can be combined with other subjects but must make up at least 50% of your course content."
+        answers:
+          physics: "Physics"
+          combined_with_physics: "General or combined science, including physics"
+          languages: "Languages"
+          other: "Other"
+        errors:
+          inclusion: "Choose a subject"
+      visa:
+        question: "Select the visa you used to move to England"
+        errors:
+          inclusion: "Choose your visa type"
 
     check_your_answers:
       part_one:
@@ -741,7 +763,23 @@ en:
         eligibility_details: "Eligibility details"
         confirmation_notice:
           "By selecting continue you are confirming that, to the best of your knowledge, the details you are providing are correct."
-
+  further_education_payments:
+    landing_page: Find out if you are eligible for any incentive payments for further education teachers
+    claim_description: for further education payments
+    journey_name: Claim incentive payments for further education teachers
+    feedback_email: "fe-levellingup.premiumpayments@education.gov.uk"
+    support_email_address: "fe-levellingup.premiumpayments@education.gov.uk"
+    forms:
+      teaching_responsibilities:
+        errors:
+          inclusion: Select yes if you are a member of staff with teaching responsibilities
+      further_education_provision_search:
+        errors:
+          blank: Enter a college name or postcode
+          min_length: Enter a college name or postcode that is at least 3 characters long
+      select_provision:
+        errors:
+          blank: Select the college you teach at
   activerecord:
     errors:
       models:

@@ -1,5 +1,4 @@
 /.apt/
-/.heroku/
 /bin/vsp/
 /public/assets/
 /public/**/*.min.*

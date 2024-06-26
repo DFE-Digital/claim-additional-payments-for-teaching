@@ -1,0 +1,7 @@
+<p class="govuk-body">
+  FE poor performance goes here
+</p>
+
+<%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+  <%= f.govuk_submit %>
+<% end %>

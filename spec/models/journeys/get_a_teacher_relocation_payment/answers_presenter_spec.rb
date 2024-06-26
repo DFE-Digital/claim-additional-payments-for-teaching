@@ -16,7 +16,10 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
           :get_a_teacher_relocation_payment_answers,
           :with_teacher_application_route,
           :with_state_funded_secondary_school,
-          :with_one_year_contract
+          :with_one_year_contract,
+          :with_start_date,
+          :with_subject,
+          :with_visa
         )
       end
 
@@ -36,6 +39,21 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
             "Are you employed on a contract lasting at least one year?",
             "Yes",
             "contract-details"
+          ],
+          [
+            "Enter the start date of your contract",
+            answers.start_date.strftime("%d-%m-%Y"),
+            "start-date"
+          ],
+          [
+            "What subject are you employed to teach at your school?",
+            "Physics",
+            "subject"
+          ],
+          [
+            "Select the visa you used to move to England",
+            "British National (Overseas) visa",
+            "visa"
           ]
         )
       end
@@ -46,7 +64,9 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
         build(
           :get_a_teacher_relocation_payment_answers,
           :with_trainee_application_route,
-          :with_state_funded_secondary_school
+          :with_state_funded_secondary_school,
+          :with_start_date,
+          :with_subject
         )
       end
 
@@ -61,6 +81,16 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
             "Are you on a teacher training course in England which meets the following conditions?",
             "Yes",
             "trainee-details"
+          ],
+          [
+            "Enter the start date of your contract",
+            answers.start_date.strftime("%d-%m-%Y"),
+            "start-date"
+          ],
+          [
+            "What subject are you training to teach?",
+            "Physics",
+            "subject"
           ]
         )
       end

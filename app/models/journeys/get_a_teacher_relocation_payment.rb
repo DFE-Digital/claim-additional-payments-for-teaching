@@ -12,7 +12,10 @@ module Journeys
         "application-route" => ApplicationRouteForm,
         "state-funded-secondary-school" => StateFundedSecondarySchoolForm,
         "trainee-details" => TraineeDetailsForm,
-        "contract-details" => ContractDetailsForm
+        "contract-details" => ContractDetailsForm,
+        "start-date" => StartDateForm,
+        "subject" => SubjectForm,
+        "visa" => VisaForm
       }
     }
   end

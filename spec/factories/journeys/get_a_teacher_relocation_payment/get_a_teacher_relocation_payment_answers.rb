@@ -23,6 +23,18 @@ FactoryBot.define do
       one_year { true }
     end
 
+    trait :with_start_date do
+      start_date { Date.tomorrow }
+    end
+
+    trait :with_subject do
+      subject { "physics" }
+    end
+
+    trait :with_visa do
+      visa_type { "British National (Overseas) visa" }
+    end
+
     trait :with_email_details do
       email_address { generate(:email_address) }
       email_verified { true }
@@ -45,6 +57,8 @@ FactoryBot.define do
       with_teacher_application_route
       with_state_funded_secondary_school
       with_one_year_contract
+      with_start_date
+      with_visa
     end
   end
 end
