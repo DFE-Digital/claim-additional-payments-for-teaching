@@ -9,9 +9,9 @@ module Journeys
 
       validates :subjects_taught,
         presence: {message: i18n_error_message(:inclusion)},
-        inclusion: {in: ->(form) { form.radio_options.map(&:id) }, message: i18n_error_message(:inclusion)}
+        inclusion: {in: ->(form) { form.checkbox_options.map(&:id) }, message: i18n_error_message(:inclusion)}
 
-      def radio_options
+      def checkbox_options
         [
           OpenStruct.new(id: "building-and-construction", name: "Building and construction"),
           OpenStruct.new(id: "chemistry", name: "Chemistry"),

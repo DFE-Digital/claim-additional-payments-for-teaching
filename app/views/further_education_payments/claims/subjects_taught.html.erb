@@ -12,13 +12,13 @@
         hint: {
           text: @form.t(:hint)
         } do %>
-        <% @form.radio_options[0..-2].each do |option| %>
-          <%= f.govuk_check_box :subjects_taught, option.id, label: { text: option.name }, link_errors: @form.radio_options.first == option %>
+        <% @form.checkbox_options[0..-2].each do |option| %>
+          <%= f.govuk_check_box :subjects_taught, option.id, label: { text: option.name }, link_errors: @form.checkbox_options.first == option %>
         <% end %>
 
         <%= f.govuk_check_box_divider %>
 
-        <% option = @form.radio_options.last %>
+        <% option = @form.checkbox_options.last %>
         <%= f.govuk_check_box :subjects_taught, option.id, label: { text: option.name }, exclusive: true %>
       <% end %>
 
