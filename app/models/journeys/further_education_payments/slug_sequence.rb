@@ -12,7 +12,7 @@ module Journeys
         building-and-construction-courses
         teaching-courses
         half-teaching-hours
-        qualification
+        teaching-qualification
         poor-performance
       ]
 

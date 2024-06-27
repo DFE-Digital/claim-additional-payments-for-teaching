@@ -8,6 +8,7 @@ module Journeys
       attribute :teaching_hours_per_week, :string
       attribute :further_education_teaching_start_year, :string
       attribute :subjects_taught, default: []
+      attribute :teaching_qualification, :string
 
       def school
         @school ||= School.find(school_id)

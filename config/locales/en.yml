@@ -813,6 +813,11 @@ en:
         hint: Select all that apply
         errors:
           inclusion: Select the subject areas you teach in or select you do not teach any of the listed subject areas
+      teaching_qualification:
+        question: Do you have a teaching qualification?
+        hint: Your response will be noted for future claims. If you don’t have a teaching qualification yet, make sure that you enrol on one or complete one in the next 12 months.
+        errors:
+          inclusion: Select whether you have, are currently enrolled or plan to enrol on a teaching qualification
   activerecord:
     errors:
       models:
