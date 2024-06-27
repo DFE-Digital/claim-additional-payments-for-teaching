@@ -5,6 +5,7 @@ module Journeys
       attribute :provision_search, :string
       attribute :school_id, :string # GUID
       attribute :subjects_taught, default: []
+      attribute :half_teaching_hours, :boolean
     end
   end
 end

@@ -12,7 +12,8 @@ module Journeys
         "teaching-responsibilities" => TeachingResponsibilitiesForm,
         "further-education-provision-search" => FurtherEducationProvisionSearchForm,
         "select-provision" => SelectProvisionForm,
-        "subjects-taught" => SubjectsTaughtForm
+        "subjects-taught" => SubjectsTaughtForm,
+        "half-teaching-hours" => HalfTeachingHoursForm
       }
     }
   end
