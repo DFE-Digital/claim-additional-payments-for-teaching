@@ -16,7 +16,8 @@ module Journeys
         "teaching-hours-per-week" => TeachingHoursPerWeekForm,
         "further-education-teaching-start-year" => FurtherEducationTeachingStartYearForm,
         "subjects-taught" => SubjectsTaughtForm,
-        "teaching-qualification" => TeachingQualificationForm
+        "teaching-qualification" => TeachingQualificationForm,
+        "poor-performance" => PoorPerformanceForm
       }
     }
   end

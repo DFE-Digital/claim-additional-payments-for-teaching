@@ -818,6 +818,20 @@ en:
         hint: Your response will be noted for future claims. If you don’t have a teaching qualification yet, make sure that you enrol on one or complete one in the next 12 months.
         errors:
           inclusion: Select whether you have, are currently enrolled or plan to enrol on a teaching qualification
+      poor_performance:
+        heading: Tell us if you are currently under any performance measures or disciplinary action
+        questions:
+          performance:
+            question: Have any performance measures been started against you?
+            hint: This will be as a result of your underperformance as a teacher over a period of time. It could put your employment at the further education (FE) provider at risk and is something we may check with them as it will affect your eligibility.
+          disciplinary:
+            question: Are you currently subject to disciplinary action?
+            hint: This is more serious than performance measures and could be because of misconduct. It is something we may check with your FE provider as it will affect your eligibility.
+        errors:
+          performance:
+            inclusion: Select yes if you are subject to formal action for poor performance at work
+          disciplinary:
+            inclusion: Select yes if you are subject to disciplinary action
   activerecord:
     errors:
       models:
