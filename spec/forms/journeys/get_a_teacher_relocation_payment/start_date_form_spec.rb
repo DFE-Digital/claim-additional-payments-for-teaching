@@ -9,6 +9,8 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::StartDateForm, type: :mod
     )
   end
 
+  let(:option) { nil }
+
   def multi_part_date_parms(date)
     return {} unless date.present?
 
@@ -31,27 +33,25 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::StartDateForm, type: :mod
     subject { form }
 
     context "with an invalid date" do
-      let(:option) { nil }
-
       it { is_expected.not_to be_valid }
     end
 
     context "with a date in the future" do
-      let(:option) { Date.tomorrow }
-
-      it { is_expected.to be_valid }
+      it do
+        is_expected.not_to(
+          allow_value(Date.tomorrow)
+          .for(:start_date)
+          .with_message("Start date cannot be in the future")
+        )
+      end
     end
 
     context "with a date in the present" do
-      let(:option) { Date.today }
-
-      it { is_expected.to be_valid }
+      it { is_expected.to allow_value(Date.today).for(:start_date) }
     end
 
     context "with a date in the past" do
-      let(:option) { Date.yesterday }
-
-      it { is_expected.to be_valid }
+      it { is_expected.to allow_value(Date.yesterday).for(:start_date) }
     end
   end
 
@@ -90,7 +90,7 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::StartDateForm, type: :mod
   end
 
   describe "#save" do
-    let(:option) { Date.tomorrow }
+    let(:option) { Date.yesterday }
 
     it "updates the journey session" do
       expect { expect(form.save).to be(true) }.to(
