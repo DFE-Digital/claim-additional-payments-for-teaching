@@ -679,10 +679,12 @@ en:
     claim_amount_description: "Additional payment for teaching"
     support_email_address: "levellinguppremiumpayments@digital.education.gov.uk"
     information_provided_further_details_link_text: levelling up premium payment (opens in new tab)
-  get_a_teacher_relocation_payment:
+  get_a_teacher_relocation_payment: &get_a_teacher_relocation_payment
     journey_name: "Get a teacher relocation payment"
     feedback_email: "teach.inengland@education.gov.uk"
     claim_description: "for a get a teacher relocation payment"
+    claim_subject: "International relocation payment"
+    support_email_address: "teach.inengland@education.gov.uk"
     forms:
       application_route:
         question: "What is your employment status?"
@@ -707,23 +709,6 @@ en:
             answer: "No"
         errors:
           inclusion: "Select the option that applies to you"
-      trainee_details:
-        question: "Are you on a teacher training course in England which meets the following conditions?"
-        hint_html: >
-          The course must:
-          <ul>
-            <li>pay a salary</li>
-            <li>lead to qualified teacher status (QTS)</li>
-            <li>be accredited by the UK government</li>
-          </ul>
-          Check with your training provider if you're not sure.
-        answers:
-          true:
-            answer: "Yes"
-          false:
-            answer: "No"
-        errors:
-          inclusion: "Select the option that applies to you"
       contract_details:
         question: "Are you employed on a contract lasting at least one year?"
         hint: "Your contract can also be ongoing or permanent."
@@ -739,12 +724,8 @@ en:
         errors:
           presence: "Enter your contract start date"
       subject:
-        question:
-          teacher: "What subject are you employed to teach at your school?"
-          salaried_trainee: "What subject are you training to teach?"
-        hint:
-          teacher: "Physics, general or combined science including physics, and languages can be combined with other subjects but must make up at least 50% of your time in the classroom."
-          salaried_trainee: "Physics or languages can be combined with other subjects but must make up at least 50% of your course content."
+        question: "What subject are you employed to teach at your school?"
+        hint: "Physics, general or combined science including physics, and languages can be combined with other subjects but must make up at least 50% of your time in the classroom."
         answers:
           physics: "Physics"
           combined_with_physics: "General or combined science, including physics"
@@ -756,13 +737,29 @@ en:
         question: "Select the visa you used to move to England"
         errors:
           inclusion: "Choose your visa type"
-
+      entry_date:
+        question: "Enter the date you moved to England to start your teaching job"
+        errors:
+          presence: "Enter your entry date"
+          date_not_in_future: "Date of entry cannot be in the future"
+      nationality:
+        question: "Select your nationality"
+        errors:
+          inclusion: "Choose your nationality"
+      passport_number:
+        question: "Enter your passport number, as it appears on your passport"
+        errors:
+          presence: "Enter your passport number"
+          invalid: "Invalid passport number"
     check_your_answers:
       part_one:
         primary_heading: "Check your answers"
         eligibility_details: "Eligibility details"
         confirmation_notice:
           "By selecting continue you are confirming that, to the best of your knowledge, the details you are providing are correct."
+  international_relocation_payments:
+    <<: *get_a_teacher_relocation_payment
+
   further_education_payments:
     landing_page: Find out if you are eligible for any incentive payments for further education teachers
     claim_description: for further education payments
@@ -780,6 +777,11 @@ en:
       select_provision:
         errors:
           blank: Select the college you teach at
+      subjects_taught:
+        question: Which subject areas do you teach?
+        hint: Select all that apply
+        errors:
+          inclusion: Select the subject areas you teach in or select you do not teach any of the listed subject areas
   activerecord:
     errors:
       models:

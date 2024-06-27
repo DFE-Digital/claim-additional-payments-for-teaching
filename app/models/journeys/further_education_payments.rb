@@ -11,7 +11,8 @@ module Journeys
       "claims" => {
         "teaching-responsibilities" => TeachingResponsibilitiesForm,
         "further-education-provision-search" => FurtherEducationProvisionSearchForm,
-        "select-provision" => SelectProvisionForm
+        "select-provision" => SelectProvisionForm,
+        "subjects-taught" => SubjectsTaughtForm
       }
     }
   end

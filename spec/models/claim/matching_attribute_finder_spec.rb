@@ -4,40 +4,40 @@ RSpec.describe Claim::MatchingAttributeFinder do
   describe "#matching_claims for ECP/LUP claims" do
     let!(:source_claim) {
       create(:claim,
-        teacher_reference_number: "0902344",
         national_insurance_number: "QQ891011C",
         email_address: "genghis.khan@mongol-empire.com",
         bank_account_number: "34682151",
         bank_sort_code: "972654",
         academic_year: AcademicYear.new("2019"),
         building_society_roll_number: "123456789/ABCD",
-        policy: Policies::EarlyCareerPayments)
+        policy: Policies::EarlyCareerPayments,
+        eligibility_attributes: {teacher_reference_number: "0902344"})
     }
 
     let!(:student_loans_claim) {
       create(:claim,
         :submitted,
-        teacher_reference_number: "0902344",
         national_insurance_number: "QQ891011C",
         email_address: "genghis.khan@mongol-empire.com",
         bank_account_number: "34682151",
         bank_sort_code: "972654",
         academic_year: AcademicYear.new("2019"),
         building_society_roll_number: "123456789/ABCD",
-        policy: Policies::StudentLoans)
+        policy: Policies::StudentLoans,
+        eligibility_attributes: {teacher_reference_number: "0902344"})
     }
 
     let!(:lup_claim) {
       create(:claim,
         :submitted,
-        teacher_reference_number: "0902344",
         national_insurance_number: "QQ891011C",
         email_address: "genghis.khan@mongol-empire.com",
         bank_account_number: "34682151",
         bank_sort_code: "972654",
         academic_year: AcademicYear.new("2019"),
         building_society_roll_number: "123456789/ABCD",
-        policy: Policies::LevellingUpPremiumPayments)
+        policy: Policies::LevellingUpPremiumPayments,
+        eligibility_attributes: {teacher_reference_number: "0902344"})
     }
 
     subject(:matching_claims) { Claim::MatchingAttributeFinder.new(source_claim).matching_claims }
@@ -50,14 +50,14 @@ RSpec.describe Claim::MatchingAttributeFinder do
   describe "#matching_claims" do
     let(:source_claim) {
       create(:claim,
-        teacher_reference_number: "0902344",
         national_insurance_number: "QQ891011C",
         email_address: "genghis.khan@mongol-empire.com",
         bank_account_number: "34682151",
         bank_sort_code: "972654",
         academic_year: AcademicYear.new("2019"),
         building_society_roll_number: "123456789/ABCD",
-        policy: Policies::StudentLoans)
+        policy: Policies::StudentLoans,
+        eligibility_attributes: {teacher_reference_number: "0902344"})
     }
 
     subject(:matching_claims) { Claim::MatchingAttributeFinder.new(source_claim).matching_claims }
@@ -73,20 +73,20 @@ RSpec.describe Claim::MatchingAttributeFinder do
     end
 
     it "does not include unsubmitted claims with matching attributes" do
-      create(:claim, :submittable, teacher_reference_number: source_claim.teacher_reference_number)
+      create(:claim, :submittable, eligibility_attributes: {teacher_reference_number: source_claim.eligibility.teacher_reference_number})
 
       expect(matching_claims).to be_empty
     end
 
     it "does not include claims that match, but have a different policy" do
-      student_loans_claim = create(:claim, :submitted, teacher_reference_number: source_claim.teacher_reference_number, policy: Policies::StudentLoans)
+      student_loans_claim = create(:claim, :submitted, eligibility_attributes: {teacher_reference_number: source_claim.eligibility.teacher_reference_number}, policy: Policies::StudentLoans)
 
       expect(matching_claims).to contain_exactly(student_loans_claim)
     end
 
     it "does not include claims that match, but have a different academic year" do
       create(:claim, :submitted,
-        teacher_reference_number: source_claim.teacher_reference_number,
+        eligibility_attributes: {teacher_reference_number: source_claim.eligibility.teacher_reference_number},
         academic_year: AcademicYear.new("2020"),
         policy: source_claim.policy)
 
@@ -94,7 +94,7 @@ RSpec.describe Claim::MatchingAttributeFinder do
     end
 
     it "includes a claim with a matching teacher reference number" do
-      claim_with_matching_attribute = create(:claim, :submitted, teacher_reference_number: source_claim.teacher_reference_number)
+      claim_with_matching_attribute = create(:claim, :submitted, eligibility_attributes: {teacher_reference_number: source_claim.eligibility.teacher_reference_number})
 
       expect(matching_claims).to eq([claim_with_matching_attribute])
     end

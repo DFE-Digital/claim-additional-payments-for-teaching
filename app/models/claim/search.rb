@@ -1,15 +1,14 @@
 class Claim
   # Accepts a search term and returns all Claims that match against any of the
-  # attributes defined in the `SEARCHABLE_ATTRIBUTES` constant. Both subject
+  # attributes defined in the `SEARCHABLE_ATTRIBUTES` or `policy::SEARCHABLE_ELIGIBILITY_ATTRIBUTES` constant. Both subject
   # and attribute are downcased, so the search is case-insensitive.
   class Search
     attr_accessor :search_term
 
-    SEARCHABLE_ATTRIBUTES = %w[
+    SEARCHABLE_CLAIM_ATTRIBUTES = %w[
       reference
       email_address
       surname
-      teacher_reference_number
     ]
 
     def initialize(search_term)
@@ -17,9 +16,17 @@ class Claim
     end
 
     def claims
-      SEARCHABLE_ATTRIBUTES.inject(Claim.none) do |relation, attribute|
+      claim_match_query = SEARCHABLE_CLAIM_ATTRIBUTES.inject(Claim.none) { |relation, attribute|
         relation.or(search_by(attribute))
-      end
+      }
+
+      eligibility_ids = Policies::POLICIES.map { |policy|
+        policy.searchable_eligibility_attributes.map { |attribute|
+          policy::Eligibility.where("LOWER(#{attribute}) = LOWER(?)", search_term)
+        }
+      }.flatten.map(&:id)
+
+      claim_match_query.or(Claim.where(eligibility_id: eligibility_ids))
     end
 
     private

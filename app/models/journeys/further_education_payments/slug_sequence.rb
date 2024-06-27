@@ -8,7 +8,7 @@ module Journeys
         contract-type
         teaching-hours-per-week
         academic-year-in-further-education
-        subject-areas
+        subjects-taught
         building-and-construction-courses
         teaching-courses
         half-teaching-hours

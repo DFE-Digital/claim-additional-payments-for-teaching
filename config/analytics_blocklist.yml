@@ -19,7 +19,7 @@
   - building_society_roll_number
   - banking_name
   - mobile_number
-  - teacher_reference_number
+  - column_to_remove_teacher_reference_number
   - email_address
   - payroll_gender
   - one_time_password
@@ -96,4 +96,11 @@
   - created_at
   - updated_at
   - gender_digit
-
+  :international_relocation_payments_eligibilities:
+  - passport_number
+  :levelling_up_premium_payments_eligibilities:
+  - teacher_reference_number
+  :early_career_payments_eligibilities:
+  - teacher_reference_number
+  :student_loans_eligibilities:
+  - teacher_reference_number

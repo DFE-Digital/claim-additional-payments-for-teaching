@@ -1,11 +1,13 @@
 module Policies
   module EarlyCareerPayments
     class Eligibility < ApplicationRecord
+      include TeacherReferenceNumberValidation
+
       def policy
         Policies::EarlyCareerPayments
       end
 
-      AMENDABLE_ATTRIBUTES = [:award_amount].freeze
+      AMENDABLE_ATTRIBUTES = [:teacher_reference_number, :award_amount].freeze
 
       IGNORED_ATTRIBUTES = [
         "eligible_degree_subject"
@@ -14,7 +16,6 @@ module Policies
       self.table_name = "early_career_payments_eligibilities"
 
       FIRST_ITT_AY = "2016/2017"
-      LAST_POLICY_YEAR = "2024/2025"
 
       # Generates an object similar to
       # {
@@ -29,7 +30,7 @@ module Policies
       # and the enums would be stale until after a server restart.
       # Make all valid ITT values based on the last known policy year.
       ITT_ACADEMIC_YEARS =
-        (AcademicYear.new(FIRST_ITT_AY)...AcademicYear.new(LAST_POLICY_YEAR)).each_with_object({}) do |year, hsh|
+        (AcademicYear.new(FIRST_ITT_AY)...POLICY_END_YEAR).each_with_object({}) do |year, hsh|
           hsh[year] = AcademicYear::Type.new.serialize(year)
         end.merge({AcademicYear.new => AcademicYear::Type.new.serialize(AcademicYear.new)})
 
@@ -58,9 +59,14 @@ module Policies
       has_one :claim, as: :eligibility, inverse_of: :eligibility
       belongs_to :current_school, optional: true, class_name: "School"
 
+      before_validation :normalise_teacher_reference_number, if: :teacher_reference_number_changed?
+
       validates :current_school, on: [:"correct-school"], presence: {message: "Select the school you teach at or choose somewhere else"}, unless: :school_somewhere_else?
       validates_numericality_of :award_amount, message: "Enter a valid monetary amount", allow_nil: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 7500
       validates :award_amount, on: :amendment, award_range: {max: max_award_amount_in_pounds}
+
+      validates :teacher_reference_number, on: :amendment, presence: {message: "Enter your teacher reference number"}
+      validate :validate_teacher_reference_number_length
 
       delegate :name, to: :current_school, prefix: true, allow_nil: true
 

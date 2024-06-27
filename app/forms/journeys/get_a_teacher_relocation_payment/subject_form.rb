@@ -9,11 +9,7 @@ module Journeys
       }
 
       def available_options
-        if answers.trainee?
-          %w[physics languages other]
-        else
-          %w[physics combined_with_physics languages other]
-        end
+        %w[physics combined_with_physics languages other]
       end
 
       def save

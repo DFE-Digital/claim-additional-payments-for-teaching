@@ -110,7 +110,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
       status = 200
     end
 
-    stub_request(:get, "#{ENV["DQT_API_URL"]}teachers/#{claim.teacher_reference_number}")
+    stub_request(:get, "#{ENV["DQT_API_URL"]}teachers/#{claim.eligibility.teacher_reference_number}")
       .with(query: WebMock::API.hash_including({
         birthdate: claim.date_of_birth.to_s,
         nino: claim.national_insurance_number
@@ -173,7 +173,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             date_of_birth: claim.date_of_birth,
             name: "#{claim.first_name} #{claim.surname}",
             national_insurance_number: claim.national_insurance_number,
-            teacher_reference_number: claim.teacher_reference_number
+            teacher_reference_number: claim.eligibility.teacher_reference_number
           }
         end
 
@@ -211,7 +211,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               date_of_birth: claim.date_of_birth,
               name: "#{claim.first_name} #{claim.surname}",
               national_insurance_number: "QQ100000B",
-              teacher_reference_number: claim.teacher_reference_number
+              teacher_reference_number: claim.eligibility.teacher_reference_number
             }
           end
 
@@ -290,7 +290,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows the notes added as part of automated identity checking" do
               expect(notes).to include(
                 have_text("Teacher reference number not matched").and(
-                  have_text("Claimant: \"#{claim.teacher_reference_number}\"").and(
+                  have_text("Claimant: \"#{claim.eligibility.teacher_reference_number}\"").and(
                     have_text("DQT: \"7654321\"").and(
                       have_text("by an automated check")
                     )
@@ -319,7 +319,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               date_of_birth: claim.date_of_birth,
               name: "Except #{claim.surname}",
               national_insurance_number: claim.national_insurance_number,
-              teacher_reference_number: claim.teacher_reference_number
+              teacher_reference_number: claim.eligibility.teacher_reference_number
             }
           end
 
@@ -375,7 +375,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               date_of_birth: claim.date_of_birth,
               name: "#{claim.first_name} Except",
               national_insurance_number: claim.national_insurance_number,
-              teacher_reference_number: claim.teacher_reference_number
+              teacher_reference_number: claim.eligibility.teacher_reference_number
             }
           end
 
@@ -431,7 +431,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               date_of_birth: claim.date_of_birth,
               name: "#{claim.first_name} Middle Names #{claim.surname}",
               national_insurance_number: claim.national_insurance_number,
-              teacher_reference_number: claim.teacher_reference_number
+              teacher_reference_number: claim.eligibility.teacher_reference_number
             }
           end
 
@@ -470,7 +470,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               date_of_birth: claim.date_of_birth + 1.day,
               name: "#{claim.first_name} #{claim.surname}",
               national_insurance_number: claim.national_insurance_number,
-              teacher_reference_number: claim.teacher_reference_number
+              teacher_reference_number: claim.eligibility.teacher_reference_number
             }
           end
 
@@ -568,7 +568,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               date_of_birth: claim.date_of_birth,
               name: "#{claim.first_name} #{claim.surname}",
               national_insurance_number: claim.national_insurance_number,
-              teacher_reference_number: claim.teacher_reference_number
+              teacher_reference_number: claim.eligibility.teacher_reference_number
             }
           end
 
@@ -626,7 +626,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               date_of_birth: claim.date_of_birth + 1.day,
               name: "Except #{claim.surname}",
               national_insurance_number: claim.national_insurance_number,
-              teacher_reference_number: claim.teacher_reference_number
+              teacher_reference_number: claim.eligibility.teacher_reference_number
             }
           end
 
@@ -1008,7 +1008,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             date_of_birth: claim.date_of_birth,
             name: "#{claim.first_name} #{claim.surname}",
             national_insurance_number: claim.national_insurance_number,
-            teacher_reference_number: claim.teacher_reference_number
+            teacher_reference_number: claim.eligibility.teacher_reference_number
           }
         end
 
@@ -1046,7 +1046,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               date_of_birth: claim.date_of_birth,
               name: "#{claim.first_name} #{claim.surname}",
               national_insurance_number: "QQ100000B",
-              teacher_reference_number: claim.teacher_reference_number
+              teacher_reference_number: claim.eligibility.teacher_reference_number
             }
           end
 
@@ -1125,7 +1125,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows the notes added as part of automated identity checking" do
               expect(notes).to include(
                 have_text("Teacher reference number not matched").and(
-                  have_text("Claimant: \"#{claim.teacher_reference_number}\"").and(
+                  have_text("Claimant: \"#{claim.eligibility.teacher_reference_number}\"").and(
                     have_text("DQT: \"7654321\"").and(
                       have_text("by an automated check")
                     )
@@ -1154,7 +1154,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               date_of_birth: claim.date_of_birth,
               name: "Except #{claim.surname}",
               national_insurance_number: claim.national_insurance_number,
-              teacher_reference_number: claim.teacher_reference_number
+              teacher_reference_number: claim.eligibility.teacher_reference_number
             }
           end
 
@@ -1210,7 +1210,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               date_of_birth: claim.date_of_birth,
               name: "#{claim.first_name} Except",
               national_insurance_number: claim.national_insurance_number,
-              teacher_reference_number: claim.teacher_reference_number
+              teacher_reference_number: claim.eligibility.teacher_reference_number
             }
           end
 
@@ -1270,7 +1270,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               date_of_birth: claim.date_of_birth,
               name: "#{claim.first_name} Middle Names #{claim.surname}",
               national_insurance_number: claim.national_insurance_number,
-              teacher_reference_number: claim.teacher_reference_number
+              teacher_reference_number: claim.eligibility.teacher_reference_number
             }
           end
 
@@ -1309,7 +1309,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               date_of_birth: claim.date_of_birth + 1.day,
               name: "#{claim.first_name} #{claim.surname}",
               national_insurance_number: claim.national_insurance_number,
-              teacher_reference_number: claim.teacher_reference_number
+              teacher_reference_number: claim.eligibility.teacher_reference_number
             }
           end
 
@@ -1407,7 +1407,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               date_of_birth: claim.date_of_birth,
               name: "#{claim.first_name} #{claim.surname}",
               national_insurance_number: claim.national_insurance_number,
-              teacher_reference_number: claim.teacher_reference_number
+              teacher_reference_number: claim.eligibility.teacher_reference_number
             }
           end
 
@@ -1461,7 +1461,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               date_of_birth: claim.date_of_birth + 1.day,
               name: "Except #{claim.surname}",
               national_insurance_number: claim.national_insurance_number,
-              teacher_reference_number: claim.teacher_reference_number
+              teacher_reference_number: claim.eligibility.teacher_reference_number
             }
           end
 

@@ -8,7 +8,7 @@ RSpec.describe TeachersPensionsService do
   let(:school) { create(:school, local_authority:, establishment_number:) }
   let(:la_urn) { local_authority.code }
   let(:school_urn) { school.establishment_number }
-  let(:teacher_reference_number) { claim.teacher_reference_number }
+  let(:teacher_reference_number) { claim.eligibility.teacher_reference_number }
   let(:start_date) { end_date - 1.week }
 
   describe ".recent_tps_school" do
@@ -63,7 +63,7 @@ RSpec.describe TeachersPensionsService do
     let!(:ineligible_school) { create(:school, :student_loans_ineligible) }
     let!(:ineligible_school2) { create(:school, :student_loans_ineligible) }
     let(:trn) { "1234567" }
-    let(:claim) { create(:claim, teacher_reference_number: trn) }
+    let(:claim) { create(:claim, eligibility_attributes: {teacher_reference_number: trn}) }
 
     context "previous financial year has eligible school and ineligible school" do
       it "returns most recent eligible school" do

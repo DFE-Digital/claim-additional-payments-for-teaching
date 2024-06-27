@@ -23,6 +23,19 @@ module Policies
     ].freeze
 
     POLICY_START_YEAR = AcademicYear.new(2021).freeze
+    POLICY_END_YEAR = AcademicYear.new(2024).freeze
+
+    # Used in
+    #  - checking payments with multiple policies: ClaimsPreventingPaymentFinder
+    #  - matching claims with multiple policies: MatchingAttributeFinder
+    OTHER_CLAIMABLE_POLICIES = [
+      LevellingUpPremiumPayments,
+      StudentLoans
+    ].freeze
+
+    ELIGIBILITY_MATCHING_ATTRIBUTES = [["teacher_reference_number"]].freeze
+
+    SEARCHABLE_ELIGIBILITY_ATTRIBUTES = %w[teacher_reference_number].freeze
 
     def eligibility_page_url
       "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools"
@@ -34,14 +47,6 @@ module Policies
 
     def notify_reply_to_id
       "3f85a1f7-9400-4b48-9a31-eaa643d6b977"
-    end
-
-    def first_eligible_qts_award_year(claim_year = nil)
-      POLICY_START_YEAR
-    end
-
-    def last_ineligible_qts_award_year
-      first_eligible_qts_award_year - 1
     end
 
     def student_loan_balance_url

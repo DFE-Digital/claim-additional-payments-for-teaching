@@ -20,6 +20,27 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
     expect(page).to have_text("The school you have selected is not eligible")
   end
 
+  scenario "induction not completed and it's the last policy year" do
+    Journeys.for_policy(Policies::EarlyCareerPayments).configuration.update!(current_academic_year: Policies::EarlyCareerPayments::POLICY_END_YEAR)
+
+    start_early_career_payments_claim
+
+    skip_tid
+
+    choose_school eligible_school
+
+    # - Are you currently teaching as a qualified teacher?
+    choose "Yes"
+    click_on "Continue"
+
+    # - Have you completed your induction as an early-career teacher?
+    choose "No"
+    click_on "Continue"
+
+    expect(page).to have_text(I18n.t("additional_payments.ineligible.heading"))
+    expect(page).to have_css("div#ecp_only_induction_not_completed")
+  end
+
   scenario "when poor performance - subject to formal performance action" do
     start_early_career_payments_claim
 

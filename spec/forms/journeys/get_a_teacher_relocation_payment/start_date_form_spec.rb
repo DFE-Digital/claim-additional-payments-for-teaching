@@ -98,5 +98,34 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::StartDateForm, type: :mod
         .to(option)
       )
     end
+
+    describe "resetting depenent answers" do
+      before do
+        journey_session.answers.assign_attributes(date_of_entry: 1.year.ago)
+        journey_session.save!
+      end
+
+      context "when the start date is changed" do
+        it "resets the dependent answers" do
+          expect { form.save }.to(
+            change { journey_session.reload.answers.date_of_entry }
+            .to(nil)
+          )
+        end
+      end
+
+      context "when the start date is not changed" do
+        before do
+          journey_session.answers.assign_attributes(start_date: option)
+          journey_session.save!
+        end
+
+        it "does not reset the dependent answers" do
+          expect { form.save }.to(
+            not_change { journey_session.reload.answers.date_of_entry }
+          )
+        end
+      end
+    end
   end
 end

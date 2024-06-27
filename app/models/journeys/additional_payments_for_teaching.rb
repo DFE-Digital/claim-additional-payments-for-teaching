@@ -26,7 +26,6 @@ module Journeys
         "eligibility-confirmed" => EligibilityConfirmedForm,
         "correct-school" => CorrectSchoolForm,
         "reset-claim" => ResetClaimForm,
-        "postcode-search" => PostcodeSearchForm,
         "select-home-address" => SelectHomeAddressForm
       },
       "reminders" => {

@@ -35,7 +35,8 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     expect(page).to have_content("FE academic year in further education goes here")
     click_button "Continue"
 
-    expect(page).to have_content("FE subject areas goes here")
+    expect(page).to have_content("Which subject areas do you teach?")
+    check("Building and construction")
     click_button "Continue"
 
     expect(page).to have_content("FE building and construction courses goes here")
