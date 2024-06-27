@@ -126,7 +126,7 @@ jobs:
     concurrency: deploy_production
     runs-on: ubuntu-latest
     # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-    needs: [deploy_test]
+    needs: [build, deploy_test]
     environment:
       name: production-aks
       url: ${{ steps.deploy.outputs.environment_url }}
