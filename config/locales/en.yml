@@ -777,6 +777,11 @@ en:
       select_provision:
         errors:
           blank: Select the college you teach at
+      subjects_taught:
+        question: Which subject areas do you teach?
+        hint: Select all that apply
+        errors:
+          inclusion: Select the subject areas you teach in or select you do not teach any of the listed subject areas
   activerecord:
     errors:
       models:

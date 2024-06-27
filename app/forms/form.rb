@@ -38,6 +38,10 @@ class Form
     I18n.t("#{i18n_namespace}.#{base_key}", default: base_key, **args)
   end
 
+  def t(key, args = {})
+    I18n.t(key, scope: "#{i18n_namespace}.forms.#{i18n_form_namespace}", **args)
+  end
+
   def permitted_params
     @permitted_params ||= params.fetch(model_name.param_key, {}).permit(*permitted_attributes)
   end
@@ -49,7 +53,16 @@ class Form
   private
 
   def permitted_attributes
-    attribute_names
+    attributes.keys.map do |key|
+      field = @attributes[key]
+
+      case field.value_before_type_cast
+      when []
+        {key => []}
+      else
+        key
+      end
+    end
   end
 
   def i18n_form_namespace
@@ -57,11 +70,11 @@ class Form
   end
 
   def attributes_with_current_value
-    attributes.each_with_object({}) do |(attribute, _), attributes|
-      attributes[attribute] = permitted_params[attribute]
-      next unless attributes[attribute].nil?
+    attributes.each_with_object({}) do |(attribute, _), hash|
+      hash[attribute] = permitted_params[attribute]
+      next unless hash[attribute].nil?
 
-      attributes[attribute] = load_current_value(attribute)
+      hash[attribute] = load_current_value(attribute)
     end
   end
 
