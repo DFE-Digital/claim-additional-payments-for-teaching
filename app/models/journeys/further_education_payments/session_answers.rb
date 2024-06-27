@@ -4,6 +4,7 @@ module Journeys
       attribute :teaching_responsibilities, :boolean
       attribute :provision_search, :string
       attribute :school_id, :string # GUID
+      attribute :subjects_taught, default: []
     end
   end
 end
