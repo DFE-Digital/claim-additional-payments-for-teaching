@@ -15,6 +15,10 @@ describe "teacher route: completing the form" do
     contract_start_date - 1.week
   end
 
+  let(:school) do
+    create(:school)
+  end
+
   before do
     journey_configuration
   end
@@ -41,31 +45,33 @@ describe "teacher route: completing the form" do
       it "submits an application" do
         and_i_complete_the_nationality_step_with(option: "Australian")
         and_i_complete_the_passport_number_step_with(options: "123456789")
-        and_i_complete_the_employment_details_step
+        and_i_complete_the_current_school_step(school)
+        and_i_complete_the_headteacher_step
         and_i_complete_the_personal_details_step
         and_i_complete_the_postcode_step
         and_i_complete_the_email_address_step
         and_i_dont_provide_my_mobile_number
         and_i_provide_my_personal_bank_details
         and_i_complete_the_payroll_gender_step
-        then_the_check_your_answers_part_page_shows_my_answers
+        then_the_check_your_answers_part_page_shows_my_answers(school)
         and_i_submit_the_application
         then_the_application_is_submitted_successfully
       end
     end
 
     context "without postcode search" do
-      it "submits an application" do
+      it "submits an application", js: true do
         and_i_complete_the_nationality_step_with(option: "Australian")
         and_i_complete_the_passport_number_step_with(options: "123456789")
-        and_i_complete_the_employment_details_step
+        and_i_complete_the_current_school_step(school)
+        and_i_complete_the_headteacher_step
         and_i_complete_the_personal_details_step
         and_i_complete_the_manual_address_step
         and_i_complete_the_email_address_step
         and_i_dont_provide_my_mobile_number
         and_i_provide_my_personal_bank_details
         and_i_complete_the_payroll_gender_step
-        then_the_check_your_answers_part_page_shows_my_answers
+        then_the_check_your_answers_part_page_shows_my_answers(school)
         and_i_submit_the_application
         then_the_application_is_submitted_successfully
       end
@@ -75,14 +81,15 @@ describe "teacher route: completing the form" do
       it "submits an application" do
         and_i_complete_the_nationality_step_with(option: "Australian")
         and_i_complete_the_passport_number_step_with(options: "123456789")
-        and_i_complete_the_employment_details_step
+        and_i_complete_the_current_school_step(school)
+        and_i_complete_the_headteacher_step
         and_i_complete_the_personal_details_step
         and_i_complete_the_manual_address_step
         and_i_complete_the_email_address_step
         and_i_provide_my_mobile_number
         and_i_provide_my_personal_bank_details
         and_i_complete_the_payroll_gender_step
-        then_the_check_your_answers_part_page_shows_my_answers(mobile_number: true)
+        then_the_check_your_answers_part_page_shows_my_answers(school, mobile_number: true)
         and_i_submit_the_application
         then_the_application_is_submitted_successfully
       end
@@ -92,7 +99,8 @@ describe "teacher route: completing the form" do
       it "submits an application" do
         and_i_complete_the_nationality_step_with(option: "Australian")
         and_i_complete_the_passport_number_step_with(options: "123456789")
-        and_i_complete_the_employment_details_step
+        and_i_complete_the_current_school_step(school)
+        and_i_complete_the_headteacher_step
         and_i_complete_the_personal_details_step
         and_i_complete_the_manual_address_step
         and_i_complete_the_email_address_step
@@ -100,6 +108,7 @@ describe "teacher route: completing the form" do
         and_i_provide_my_building_society_details
         and_i_complete_the_payroll_gender_step
         then_the_check_your_answers_part_page_shows_my_answers(
+          school,
           mobile_number: true,
           building_society: true
         )
@@ -141,7 +150,7 @@ describe "teacher route: completing the form" do
     )
   end
 
-  def then_the_check_your_answers_part_page_shows_my_answers(mobile_number: false, building_society: false)
+  def then_the_check_your_answers_part_page_shows_my_answers(school, mobile_number: false, building_society: false)
     expect(page).to have_text(
       "What is your full name? Walter Seymour Skinner"
     )
@@ -173,16 +182,8 @@ describe "teacher route: completing the form" do
     )
 
     expect(page).to have_text(
-      "Enter the name of the school Springfield Elementary School"
+      "Which school are you currently employed to teach at? #{school.name}"
     )
-
-    expect(page).to have_text("Address line 1 Springfield Elementary School")
-
-    expect(page).to have_text("Address line 2 Plympton Street")
-
-    expect(page).to have_text("Town or city Springfield")
-
-    expect(page).to have_text("Postcode TE57 1NG")
 
     if mobile_number
       expect(page).to have_text("Mobile number 01234567890")

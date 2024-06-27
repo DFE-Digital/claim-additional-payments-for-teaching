@@ -49,11 +49,7 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::ClaimSubmissionForm do
       nationality: "Australian",
       passport_number: "1234567890123456789A",
       school_headteacher_name: "Seymour Skinner",
-      school_name: "Springfield Elementary School",
-      school_address_line_1: "Springfield Elementary School",
-      school_address_line_2: "Plympton Street",
-      school_city: "Springfield",
-      school_postcode: "TE57 1NG"
+      current_school_id: create(:school).id
     }
   end
 

@@ -752,22 +752,15 @@ en:
         errors:
           presence: "Enter your passport number"
           invalid: "Invalid passport number"
-      employment_details:
-        title: "Employment information"
-        school_address_legend: "Enter the school address"
+      current_school:
+        questions:
+          current_school_search: "Which school are you currently employed to teach at?"
+          current_school_results: "Which school are you currently employed to teach at?"
+      headteacher_details:
         questions:
           school_headteacher_name: "Enter the name of the headteacher of the school where you are employed as a teacher"
-          school_name: "Enter the name of the school"
-          school_address_line_1: "Address line 1"
-          school_address_line_2: "Address line 2"
-          school_city: "Town or city"
-          school_postcode: "Postcode"
         errors:
           school_headteacher_name: "Enter the headteacher's name"
-          school_name: "Enter the school name"
-          school_address_line_1: "Enter your school's address"
-          school_city: "Enter your school's city"
-          school_postcode: "Enter a valid postcode (for example, BN1 1AA)"
 
     check_your_answers:
       part_one:
