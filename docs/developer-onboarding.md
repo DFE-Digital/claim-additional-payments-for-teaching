@@ -27,7 +27,7 @@ Then, follow these steps to complete your onboarding:
 3. Follow the link in the Azure invitation email and create an account. Your
    password should be no longer than 16 characters.
 4. Click on
-   [this link](https://portal.azure.com/?Microsoft_Azure_PIMCommon=true#blade/Microsoft_AAD_IAM/GroupDetailsMenuBlade/Owners/groupId/6642920a-1aab-49bb-9a20-365131195349)
+   [this link](https://portal.azure.com/#view/Microsoft_AAD_IAM/GroupDetailsMenuBlade/~/Overview/groupId/f50f3249-db5d-4d96-a123-cd1ef84536c3)
    – we’ll use this to confirm you’re using the correct directory in Azure.
 5. If you see an error about “the group could not be found”, then click on your
    email address in the top right, choose “Switch directory”, and switch to “DfE
@@ -35,9 +35,8 @@ Then, follow these steps to complete your onboarding:
 6. If Azure asks you to set up two-factor authentication, see
    [this advice](#how-to-set-up-azure-two-factor-auth-without-giving-a-phone-number-or-downloading-a-special-app).
 7. Ask one of the
-   [owners](https://portal.azure.com/?Microsoft_Azure_PIMCommon=true#blade/Microsoft_AAD_IAM/GroupDetailsMenuBlade/Owners/groupId/6642920a-1aab-49bb-9a20-365131195349)
-   of the “s118-teacherpaymentservice-Delivery Team USR” Active Directory group
-   to follow
+   [owners](https://portal.azure.com/#view/Microsoft_AAD_IAM/GroupOwnersV3Blade/groupId/f50f3249-db5d-4d96-a123-cd1ef84536c3)
+   of the “s189 SRTL delivery team” to follow
    [these instructions](#how-to-add-a-member-to-the-delivery-team-group-in-azure)
    to add you as a member.
 8. Sign up for
@@ -113,5 +112,5 @@ proceed. Two-factor auth is now set up.
    https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/Overview.
 2. Confirm that it says “DfE Platform Identity” – if not, use the “switch
    directory” button.
-3. In Groups, search for “s118-teacherpaymentservice-Delivery Team USR”.
+3. In Groups, search for “s189 SRTL delivery team”.
 4. Add the new person.
