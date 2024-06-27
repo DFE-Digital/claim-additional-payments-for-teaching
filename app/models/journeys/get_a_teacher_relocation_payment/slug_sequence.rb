@@ -31,8 +31,7 @@ module Journeys
         "bank-or-building-society",
         "personal-bank-account",
         "building-society-account",
-        "gender",
-        "teacher-reference-number"
+        "gender"
       ].freeze
 
       RESULTS_SLUGS = [

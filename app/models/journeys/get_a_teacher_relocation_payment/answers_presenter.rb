@@ -35,6 +35,10 @@ module Journeys
 
       private
 
+      def show_trn?
+        false
+      end
+
       def application_route
         [
           t("get_a_teacher_relocation_payment.forms.application_route.question"),
