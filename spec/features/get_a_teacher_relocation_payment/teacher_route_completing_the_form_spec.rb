@@ -41,6 +41,7 @@ describe "teacher route: completing the form" do
       it "submits an application" do
         and_i_complete_the_nationality_step_with(option: "Australian")
         and_i_complete_the_passport_number_step_with(options: "123456789")
+        and_i_complete_the_employment_details_step
         and_i_complete_the_personal_details_step
         and_i_complete_the_postcode_step
         and_i_complete_the_email_address_step
@@ -58,6 +59,7 @@ describe "teacher route: completing the form" do
       it "submits an application" do
         and_i_complete_the_nationality_step_with(option: "Australian")
         and_i_complete_the_passport_number_step_with(options: "123456789")
+        and_i_complete_the_employment_details_step
         and_i_complete_the_personal_details_step
         and_i_complete_the_manual_address_step
         and_i_complete_the_email_address_step
@@ -75,6 +77,7 @@ describe "teacher route: completing the form" do
       it "submits an application" do
         and_i_complete_the_nationality_step_with(option: "Australian")
         and_i_complete_the_passport_number_step_with(options: "123456789")
+        and_i_complete_the_employment_details_step
         and_i_complete_the_personal_details_step
         and_i_complete_the_manual_address_step
         and_i_complete_the_email_address_step
@@ -92,6 +95,7 @@ describe "teacher route: completing the form" do
       it "submits an application" do
         and_i_complete_the_nationality_step_with(option: "Australian")
         and_i_complete_the_passport_number_step_with(options: "123456789")
+        and_i_complete_the_employment_details_step
         and_i_complete_the_personal_details_step
         and_i_complete_the_manual_address_step
         and_i_complete_the_email_address_step
@@ -167,6 +171,22 @@ describe "teacher route: completing the form" do
     expect(page).to have_text(
       "Enter your passport number, as it appears on your passport 123456789"
     )
+
+    expect(page).to have_text(
+      "Enter the name of the headteacher of the school where you are employed as a teacher Seymour Skinner"
+    )
+
+    expect(page).to have_text(
+      "Enter the name of the school Springfield Elementary School"
+    )
+
+    expect(page).to have_text("Address line 1 Springfield Elementary School")
+
+    expect(page).to have_text("Address line 2 Plympton Street")
+
+    expect(page).to have_text("Town or city Springfield")
+
+    expect(page).to have_text("Postcode TE57 1NG")
 
     if mobile_number
       expect(page).to have_text("Mobile number 01234567890")

@@ -17,7 +17,8 @@ module Journeys
         "visa" => VisaForm,
         "entry-date" => EntryDateForm,
         "nationality" => NationalityForm,
-        "passport-number" => PassportNumberForm
+        "passport-number" => PassportNumberForm,
+        "employment-details" => EmploymentDetailsForm
       }
     }
   end
