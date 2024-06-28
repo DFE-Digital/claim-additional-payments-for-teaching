@@ -15,10 +15,11 @@ class SchoolSearchController < ApplicationController
       return
     end
 
+    fe_only = ActiveModel::Type::Boolean.new.cast(params[:fe_only])
     schools = ActiveModel::Type::Boolean.new.cast(params[:exclude_closed]) ? School.open : School
 
     begin
-      @schools = schools.search(params[:query])
+      @schools = schools.search(params[:query], fe_only:)
     rescue ArgumentError => e
       raise unless e.message == School::SEARCH_NOT_ENOUGH_CHARACTERS_ERROR
 
