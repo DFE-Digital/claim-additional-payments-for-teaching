@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Claim < ApplicationRecord
-  MIN_QA_THRESHOLD = 10
   NO_STUDENT_LOAN = "not_applicable"
   STUDENT_LOAN_PLAN_OPTIONS = StudentLoan::PLANS.dup << NO_STUDENT_LOAN
   ADDRESS_ATTRIBUTES = %w[address_line_1 address_line_2 address_line_3 address_line_4 postcode].freeze
@@ -240,12 +239,12 @@ class Claim < ApplicationRecord
   # Newly approved claims should not be flagged for QA for as long as the method
   # returns `false`; they should be flagged for QA otherwise.
   def below_min_qa_threshold?
-    return false if MIN_QA_THRESHOLD.zero?
+    return false if policy::MIN_QA_THRESHOLD.zero?
 
-    claims_approved_so_far = Claim.current_academic_year.approved.count
+    claims_approved_so_far = Claim.by_policy(policy).current_academic_year.approved.count
     return true if claims_approved_so_far.zero?
 
-    (Claim.current_academic_year.approved.qa_required.count.to_f / claims_approved_so_far) * 100 <= MIN_QA_THRESHOLD
+    (Claim.by_policy(policy).current_academic_year.approved.qa_required.count.to_f / claims_approved_so_far) * 100 <= policy::MIN_QA_THRESHOLD
   end
 
   def qa_completed?

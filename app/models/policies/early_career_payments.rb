@@ -37,6 +37,9 @@ module Policies
 
     SEARCHABLE_ELIGIBILITY_ATTRIBUTES = %w[teacher_reference_number].freeze
 
+    # Percentage of claims to QA
+    MIN_QA_THRESHOLD = 10
+
     def eligibility_page_url
       "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools"
     end

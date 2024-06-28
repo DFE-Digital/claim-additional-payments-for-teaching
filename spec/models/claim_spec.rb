@@ -371,7 +371,7 @@ RSpec.describe Claim, type: :model do
 
       context "when above the min QA threshold" do
         before do
-          stub_const("Claim::MIN_QA_THRESHOLD", 0)
+          stub_const("Policies::#{claim.policy}::MIN_QA_THRESHOLD", 0)
         end
 
         it { is_expected.to eq(false) }
@@ -379,7 +379,7 @@ RSpec.describe Claim, type: :model do
 
       context "when below the min QA threshold" do
         before do
-          stub_const("Claim::MIN_QA_THRESHOLD", 100)
+          stub_const("Policies::#{claim.policy}::MIN_QA_THRESHOLD", 100)
         end
 
         it { is_expected.to eq(true) }
@@ -598,11 +598,14 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#below_min_qa_threshold?" do
-    subject { described_class.new.below_min_qa_threshold? }
+    let(:policy) { Policies::EarlyCareerPayments }
+    let(:other_policy) { Policies::POLICIES.detect { |p| p != policy } }
+
+    subject { build(:claim, policy: policy).below_min_qa_threshold? }
 
     context "when the MIN_QA_THRESHOLD is set to zero" do
       before do
-        stub_const("Claim::MIN_QA_THRESHOLD", 0)
+        stub_const("Policies::#{policy}::MIN_QA_THRESHOLD", 0)
       end
 
       it { is_expected.to eq(false) }
@@ -610,50 +613,193 @@ RSpec.describe Claim, type: :model do
 
     context "when the MIN_QA_THRESHOLD is set to 10" do
       before do
-        stub_const("Claim::MIN_QA_THRESHOLD", 10) unless described_class::MIN_QA_THRESHOLD == 10
+        stub_const("Policies::#{policy}::MIN_QA_THRESHOLD", 10)
       end
 
       context "with no previously approved claims" do
+        let!(:claims_for_other_policy) do
+          create_list(
+            :claim,
+            1,
+            :approved,
+            :flagged_for_qa,
+            policy: other_policy,
+            academic_year: AcademicYear.current
+          )
+        end
         it { is_expected.to eq(true) }
       end
 
       context "with 1 previously approved claim (1 flagged for QA)" do
-        let!(:claims_flagged_for_qa) { create_list(:claim, 1, :approved, :flagged_for_qa, academic_year: AcademicYear.current) }
+        let!(:claims_flagged_for_qa) do
+          create_list(
+            :claim,
+            1,
+            :approved,
+            :flagged_for_qa,
+            policy: policy,
+            academic_year: AcademicYear.current
+          )
+        end
 
         it { is_expected.to eq(false) }
       end
 
       context "with 2 previously approved claims (1 flagged for QA)" do
-        let!(:claims_flagged_for_qa) { create_list(:claim, 1, :approved, :flagged_for_qa, academic_year: AcademicYear.current) }
-        let!(:claims_not_flagged_for_qa) { create_list(:claim, 1, :approved, academic_year: AcademicYear.current) }
+        let!(:claims_flagged_for_qa) do
+          create_list(
+            :claim,
+            1,
+            :approved,
+            :flagged_for_qa,
+            policy: policy,
+            academic_year: AcademicYear.current
+          )
+        end
+        let!(:claims_not_flagged_for_qa) do
+          create_list(
+            :claim,
+            1,
+            :approved,
+            policy: policy,
+            academic_year: AcademicYear.current
+          )
+        end
 
         it { is_expected.to eq(false) }
       end
 
       context "with 9 previously approved claims (1 flagged for QA)" do
-        let!(:claims_flagged_for_qa) { create_list(:claim, 1, :approved, :flagged_for_qa, academic_year: AcademicYear.current) }
-        let!(:claims_not_flagged_for_qa) { create_list(:claim, 8, :approved, academic_year: AcademicYear.current) }
+        let!(:claims_flagged_for_qa) do
+          create_list(
+            :claim,
+            1,
+            :approved,
+            :flagged_for_qa,
+            policy: policy,
+            academic_year: AcademicYear.current
+          )
+        end
+
+        let!(:claims_not_flagged_for_qa) do
+          create_list(
+            :claim,
+            8,
+            :approved,
+            policy: policy,
+            academic_year: AcademicYear.current
+          )
+        end
+        let!(:claims_for_other_policy) do
+          create_list(
+            :claim,
+            1,
+            :approved,
+            :flagged_for_qa,
+            policy: other_policy,
+            academic_year: AcademicYear.current
+          )
+        end
 
         it { is_expected.to eq(false) }
       end
 
       context "with 10 previously approved claims (1 flagged for QA)" do
-        let!(:claims_flagged_for_qa) { create_list(:claim, 1, :approved, :flagged_for_qa, academic_year: AcademicYear.current) }
-        let!(:claims_not_flagged_for_qa) { create_list(:claim, 9, :approved, academic_year: AcademicYear.current) }
+        let!(:claims_flagged_for_qa) do
+          create_list(
+            :claim,
+            1,
+            :approved,
+            :flagged_for_qa,
+            policy: policy,
+            academic_year: AcademicYear.current
+          )
+        end
+        let!(:claims_not_flagged_for_qa) do
+          create_list(
+            :claim,
+            9,
+            :approved,
+            policy: policy,
+            academic_year: AcademicYear.current
+          )
+        end
+        let!(:claims_for_other_policy) do
+          create_list(
+            :claim,
+            1,
+            :approved,
+            :flagged_for_qa,
+            policy: other_policy,
+            academic_year: AcademicYear.current
+          )
+        end
 
         it { is_expected.to eq(true) }
       end
 
       context "with 11 previously approved claims (2 flagged for QA)" do
-        let!(:claims_flagged_for_qa) { create_list(:claim, 2, :approved, :flagged_for_qa, academic_year: AcademicYear.current) }
-        let!(:claims_not_flagged_for_qa) { create_list(:claim, 10, :approved, academic_year: AcademicYear.current) }
+        let!(:claims_flagged_for_qa) do
+          create_list(
+            :claim,
+            2,
+            :approved,
+            :flagged_for_qa,
+            policy: policy,
+            academic_year: AcademicYear.current
+          )
+        end
+        let!(:claims_not_flagged_for_qa) do
+          create_list(
+            :claim,
+            10,
+            :approved,
+            policy: policy,
+            academic_year: AcademicYear.current
+          )
+        end
+        let!(:claims_for_other_policy) do
+          create_list(
+            :claim,
+            2,
+            :approved,
+            policy: other_policy,
+            academic_year: AcademicYear.current
+          )
+        end
 
         it { is_expected.to eq(false) }
       end
 
       context "with 21 previously approved claims (2 flagged for QA)" do
-        let!(:claims_flagged_for_qa) { create_list(:claim, 2, :approved, :flagged_for_qa, academic_year: AcademicYear.current) }
-        let!(:claims_not_flagged_for_qa) { create_list(:claim, 19, :approved, academic_year: AcademicYear.current) }
+        let!(:claims_flagged_for_qa) do
+          create_list(
+            :claim,
+            2,
+            :approved,
+            :flagged_for_qa,
+            policy: policy,
+            academic_year: AcademicYear.current
+          )
+        end
+        let!(:claims_not_flagged_for_qa) do
+          create_list(
+            :claim,
+            19,
+            :approved,
+            policy: policy,
+            academic_year: AcademicYear.current
+          )
+        end
+        let!(:claims_for_other_policy) do
+          create_list(
+            :claim,
+            19,
+            :approved,
+            policy: other_policy,
+            academic_year: AcademicYear.current
+          )
+        end
 
         it { is_expected.to eq(true) }
       end

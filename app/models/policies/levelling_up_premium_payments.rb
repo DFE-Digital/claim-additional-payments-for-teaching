@@ -27,6 +27,9 @@ module Policies
     POLICY_START_YEAR = AcademicYear.new(2022).freeze
     POLICY_END_YEAR = AcademicYear.new(2024).freeze
 
+    # Percentage of claims to QA
+    MIN_QA_THRESHOLD = 10
+
     def notify_reply_to_id
       "03ece7eb-2a5b-461b-9c91-6630d0051aa6"
     end
