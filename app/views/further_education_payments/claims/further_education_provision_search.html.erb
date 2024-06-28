@@ -5,6 +5,7 @@
       method: :patch,
       builder: GOVUKDesignSystemFormBuilder::FormBuilder,
       id: "further-education-provision-search-form",
+      data: { "fe-only" => true },
       html: { novalidate: false } do |f| %>
       <%= f.govuk_error_summary %>
 
