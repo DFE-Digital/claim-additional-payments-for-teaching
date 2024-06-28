@@ -10,11 +10,19 @@ module Policies
       end
 
       def status
+        return :ineligible if ineligible?
+
         :eligible_now
       end
 
       def ineligible?
-        false
+        ineligibility_reason.present?
+      end
+
+      def ineligibility_reason
+        if answers.teaching_responsibilities == false
+          :lack_teaching_responsibilities
+        end
       end
     end
   end
