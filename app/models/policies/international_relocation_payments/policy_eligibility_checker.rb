@@ -35,11 +35,23 @@ module Policies
           "taught subject not accepted"
         in visa_type: "Other"
           "visa not accepted"
+        in start_date: Date unless contract_start_date_eligible?
+          "contract start date must be after #{earliest_eligible_contract_start_date}"
         in date_of_entry: Date, start_date: Date unless date_of_entry_eligible?
           "cannot enter the UK more than 3 months before your contract start date"
         else
           nil
         end
+      end
+
+      def contract_start_date_eligible?
+        return false unless answers.start_date
+
+        answers.start_date >= earliest_eligible_contract_start_date
+      end
+
+      def earliest_eligible_contract_start_date
+        Eligibility.earliest_eligible_contract_start_date
       end
 
       def date_of_entry_eligible?

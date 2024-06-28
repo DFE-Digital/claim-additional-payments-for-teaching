@@ -8,11 +8,8 @@ describe "ineligible route: completing the form" do
   end
 
   let(:contract_start_date) do
-    Date.new(
-      journey_configuration.current_academic_year.start_year,
-      1,
-      1
-    )
+    Policies::InternationalRelocationPayments::Eligibility
+      .earliest_eligible_contract_start_date
   end
 
   before do
@@ -63,9 +60,7 @@ describe "ineligible route: completing the form" do
       end
     end
 
-    # FIXME RL waiting on feedback from policy team to determine what the cut
-    # off date is for contracts
-    xcontext "ineligible - contract start date" do
+    context "ineligible - contract start date" do
       it "shows the ineligible page" do
         when_i_start_the_form
         and_i_complete_application_route_question_with(
@@ -74,7 +69,8 @@ describe "ineligible route: completing the form" do
         and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
         and_i_complete_the_contract_details_step_with(option: "Yes")
         and_i_complete_the_contract_start_date_step_with(
-          date: Polices::InternationalRelocationPayments.earliest_eligible_contract_start_date - 1.day
+          date: Policies::InternationalRelocationPayments::Eligibility
+          .earliest_eligible_contract_start_date - 1.day
         )
         then_i_see_the_ineligible_page
       end
