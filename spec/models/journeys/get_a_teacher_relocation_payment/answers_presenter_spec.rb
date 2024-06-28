@@ -105,34 +105,14 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
     it do
       is_expected.to include(
         [
+          "Which school are you currently employed to teach at?",
+          answers.current_school.name,
+          "current-school"
+        ],
+        [
           "Enter the name of the headteacher of the school where you are employed as a teacher",
           "Seymour Skinner",
-          "employment-details"
-        ],
-        [
-          "Enter the name of the school",
-          "Springfield Elementary School",
-          "employment-details"
-        ],
-        [
-          "Address line 1",
-          "Springfield Elementary School",
-          "employment-details"
-        ],
-        [
-          "Address line 2",
-          "Plympton Street",
-          "employment-details"
-        ],
-        [
-          "Town or city",
-          "Springfield",
-          "employment-details"
-        ],
-        [
-          "Postcode",
-          "TE57 1NG",
-          "employment-details"
+          "headteacher-details"
         ]
       )
     end

@@ -200,6 +200,7 @@ shared:
     - visa_type
     - date_of_entry
     - nationality
+    - current_school_id
   :schools:
     - id
     - urn

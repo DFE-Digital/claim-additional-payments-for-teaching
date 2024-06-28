@@ -18,7 +18,7 @@ module Journeys
         "entry-date" => EntryDateForm,
         "nationality" => NationalityForm,
         "passport-number" => PassportNumberForm,
-        "employment-details" => EmploymentDetailsForm
+        "headteacher-details" => HeadteacherDetailsForm
       }
     }
   end

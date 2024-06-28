@@ -24,12 +24,8 @@ module Journeys
 
       def employment_answers
         [].tap do |a|
+          a << current_school
           a << school_headteacher_name
-          a << school_name
-          a << school_address_line_1
-          a << school_address_line_2 if answers.school_address_line_2.present?
-          a << school_city
-          a << school_postcode
         end
       end
 
@@ -111,51 +107,19 @@ module Journeys
         ]
       end
 
+      def current_school
+        [
+          t("get_a_teacher_relocation_payment.forms.current_school.questions.current_school_search"),
+          answers.current_school.name,
+          "current-school"
+        ]
+      end
+
       def school_headteacher_name
         [
-          t("get_a_teacher_relocation_payment.forms.employment_details.questions.school_headteacher_name"),
+          t("get_a_teacher_relocation_payment.forms.headteacher_details.questions.school_headteacher_name"),
           answers.school_headteacher_name,
-          "employment-details"
-        ]
-      end
-
-      def school_name
-        [
-          t("get_a_teacher_relocation_payment.forms.employment_details.questions.school_name"),
-          answers.school_name,
-          "employment-details"
-        ]
-      end
-
-      def school_address_line_1
-        [
-          t("get_a_teacher_relocation_payment.forms.employment_details.questions.school_address_line_1"),
-          answers.school_address_line_1,
-          "employment-details"
-        ]
-      end
-
-      def school_address_line_2
-        [
-          t("get_a_teacher_relocation_payment.forms.employment_details.questions.school_address_line_2"),
-          answers.school_address_line_2,
-          "employment-details"
-        ]
-      end
-
-      def school_city
-        [
-          t("get_a_teacher_relocation_payment.forms.employment_details.questions.school_city"),
-          answers.school_city,
-          "employment-details"
-        ]
-      end
-
-      def school_postcode
-        [
-          t("get_a_teacher_relocation_payment.forms.employment_details.questions.school_postcode"),
-          answers.school_postcode,
-          "employment-details"
+          "headteacher-details"
         ]
       end
     end

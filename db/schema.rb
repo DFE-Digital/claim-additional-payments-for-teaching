@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_27_114644) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_27_145713) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -200,11 +200,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_27_114644) do
     t.string "nationality"
     t.string "passport_number"
     t.string "school_headteacher_name"
-    t.string "school_name"
-    t.string "school_address_line_1"
-    t.string "school_address_line_2"
-    t.string "school_city"
-    t.string "school_postcode"
+    t.uuid "current_school_id"
+    t.index ["current_school_id"], name: "index_irb_eligibilities_on_current_school_id"
   end
 
   create_table "journey_configurations", primary_key: "routing_name", id: :string, force: :cascade do |t|
@@ -488,6 +485,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_27_114644) do
   add_foreign_key "claims", "journeys_sessions"
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "early_career_payments_eligibilities", "schools", column: "current_school_id"
+  add_foreign_key "international_relocation_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "levelling_up_premium_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "notes", "claims"
   add_foreign_key "notes", "dfe_sign_in_users", column: "created_by_id"
