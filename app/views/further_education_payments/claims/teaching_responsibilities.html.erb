@@ -23,8 +23,8 @@
         "tutor"
       ], type: :bullet %>
 
-    <%= f.govuk_collection_radio_buttons :teaching_responsibilities, @form.radio_options, :id, :name,
-      legend: { text: "Are you a member of staff with teaching responsibilities?" } %>
+      <%= f.govuk_collection_radio_buttons :teaching_responsibilities, @form.radio_options, :id, :name,
+        legend: { text: "Are you a member of staff with teaching responsibilities?" } %>
 
       <%= f.govuk_submit %>
     <% end %>

@@ -793,6 +793,9 @@ en:
         hint: Select all that apply
         errors:
           inclusion: Select the subject areas you teach in or select you do not teach any of the listed subject areas
+      half_teaching_hours:
+        errors:
+          inclusion: Select yes if at least half your timetabled teaching hours are spent teaching 16-19-year-olds, including those up to 25 with an Education, Health and Care Plan
   activerecord:
     errors:
       models:
