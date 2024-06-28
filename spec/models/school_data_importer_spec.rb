@@ -44,6 +44,7 @@ RSpec.describe SchoolDataImporter do
         expect(imported_school.statutory_high_age).to eq(18)
         expect(imported_school.phone_number).to eq("01226762114")
         expect(imported_school.open_date).to be_nil
+        expect(imported_school.ukprn).to eql("10005034")
       end
 
       it "imports a closed school with the date it closed" do

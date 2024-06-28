@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_25_135618) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_27_114644) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -374,6 +374,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_25_135618) do
     t.string "phone_number", limit: 20
     t.date "open_date"
     t.string "postcode_sanitised"
+    t.text "ukprn"
     t.index ["close_date"], name: "index_schools_on_close_date"
     t.index ["created_at"], name: "index_schools_on_created_at"
     t.index ["local_authority_district_id"], name: "index_schools_on_local_authority_district_id"
@@ -381,6 +382,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_25_135618) do
     t.index ["name"], name: "index_schools_on_name", opclass: :gin_trgm_ops, using: :gin
     t.index ["open_date"], name: "index_schools_on_open_date"
     t.index ["postcode_sanitised"], name: "index_schools_on_postcode_sanitised", opclass: :gin_trgm_ops, using: :gin
+    t.index ["ukprn"], name: "index_schools_on_ukprn"
     t.index ["urn"], name: "index_schools_on_urn", unique: true
   end
 
