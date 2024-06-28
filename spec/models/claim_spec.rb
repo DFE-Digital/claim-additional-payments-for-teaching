@@ -371,7 +371,7 @@ RSpec.describe Claim, type: :model do
 
       context "when above the min QA threshold" do
         before do
-          allow(Claim).to receive(:below_min_qa_threshold?).and_return(false)
+          stub_const("Claim::MIN_QA_THRESHOLD", 0)
         end
 
         it { is_expected.to eq(false) }
@@ -379,7 +379,7 @@ RSpec.describe Claim, type: :model do
 
       context "when below the min QA threshold" do
         before do
-          allow(Claim).to receive(:below_min_qa_threshold?).and_return(true)
+          stub_const("Claim::MIN_QA_THRESHOLD", 100)
         end
 
         it { is_expected.to eq(true) }
@@ -597,8 +597,8 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe ".below_min_qa_threshold?" do
-    subject { described_class.below_min_qa_threshold? }
+  describe "#below_min_qa_threshold?" do
+    subject { described_class.new.below_min_qa_threshold? }
 
     context "when the MIN_QA_THRESHOLD is set to zero" do
       before do
