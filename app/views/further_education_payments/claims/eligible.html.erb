@@ -1,0 +1,26 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= govuk_panel(
+        title_text: "You’re eligible for a financial incentive payment",
+        html_attributes: {
+          class: "govuk-panel--informational"
+        }
+      ) %>
+
+      <div class="govuk-heading-m">
+        Based on what you’ve told us, you can apply for an early career further education financial incentive payment of:
+      </div>
+
+      <div class="govuk-heading-l">
+        £???
+      </div>
+
+      <div class="govuk-body">
+        For more information about why you are eligible, read about the <%= govuk_link_to "levelling up premium payments for early career further education teachers", "https://www.gov.uk/guidance/levelling-up-premium-payments-for-fe-teachers", new_tab: true %>.
+      </div>
+
+      <%= f.govuk_submit "Apply now" %>
+    <% end %>
+  </div>
+</div>

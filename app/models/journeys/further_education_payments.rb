@@ -18,6 +18,7 @@ module Journeys
         "subjects-taught" => SubjectsTaughtForm,
         "teaching-qualification" => TeachingQualificationForm,
         "poor-performance" => PoorPerformanceForm,
+        "check-your-answers" => CheckYourAnswersForm,
         "ineligible" => IneligibleForm
       }
     }
