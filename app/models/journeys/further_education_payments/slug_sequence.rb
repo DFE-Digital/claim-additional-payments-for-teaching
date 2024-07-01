@@ -6,6 +6,7 @@ module Journeys
         further-education-provision-search
         select-provision
         contract-type
+        fixed-term-contract
         teaching-hours-per-week
         further-education-teaching-start-year
         subjects-taught
@@ -42,7 +43,11 @@ module Journeys
       end
 
       def slugs
-        SLUGS
+        SLUGS.dup.tap do |sequence|
+          if answers.contract_type == "permanent"
+            sequence.delete("fixed-term-contract")
+          end
+        end
       end
     end
   end

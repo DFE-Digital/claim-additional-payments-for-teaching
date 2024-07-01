@@ -24,7 +24,11 @@ RSpec.feature "Further education payments" do
     click_button "Continue"
 
     expect(page).to have_content("What type of contract do you have with #{college.name}?")
-    choose("Permanent contract")
+    choose("Fixed-term contract")
+    click_button "Continue"
+
+    expect(page).to have_content("Does your fixed-term contract cover the full #{AcademicYear.current.to_s(:long)} academic year?")
+    choose("Yes")
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")

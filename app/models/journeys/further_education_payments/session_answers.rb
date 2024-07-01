@@ -5,6 +5,7 @@ module Journeys
       attribute :provision_search, :string
       attribute :school_id, :string # GUID
       attribute :contract_type, :string
+      attribute :fixed_term_full_year, :boolean
       attribute :teaching_hours_per_week, :string
       attribute :further_education_teaching_start_year, :string
       attribute :subjects_taught, default: []
