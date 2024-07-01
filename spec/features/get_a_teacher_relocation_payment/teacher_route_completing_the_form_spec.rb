@@ -8,7 +8,8 @@ describe "teacher route: completing the form" do
   end
 
   let(:contract_start_date) do
-    Date.yesterday
+    Policies::InternationalRelocationPayments::PolicyEligibilityChecker
+      .earliest_eligible_contract_start_date
   end
 
   let(:entry_date) do

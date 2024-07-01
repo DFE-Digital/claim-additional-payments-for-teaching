@@ -186,4 +186,10 @@ RSpec.describe AcademicYear do
       expect(AcademicYear.new(2014).hash).not_to eql 2014.hash
     end
   end
+
+  describe "#start_of_autumn_term" do
+    it "returns September 1st of the start year" do
+      expect(AcademicYear.new(2014).start_of_autumn_term).to eq Date.new(2014, 9, 1)
+    end
+  end
 end

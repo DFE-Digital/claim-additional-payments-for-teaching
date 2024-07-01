@@ -12,11 +12,6 @@ module Policies
       def policy
         Policies::InternationalRelocationPayments
       end
-
-      def self.earliest_eligible_contract_start_date
-        # FIXME RL - waiting on policy to get back to us for what this should
-        # be
-      end
     end
   end
 end

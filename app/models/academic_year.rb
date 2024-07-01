@@ -15,6 +15,9 @@ class AcademicYear
 
   ACADEMIC_YEAR_REGEXP = /\A20\d{2}\/20\d{2}\z/
 
+  AUTUMN_TERM_START_MONTH = 9
+  AUTUMN_TERM_START_DAY = 1
+
   attr_reader :start_year, :end_year
 
   # Defines a custom ActiveRecord::Type for AcademicYear that means we can
@@ -52,7 +55,12 @@ class AcademicYear
     def for(date)
       return if date.nil?
 
-      start_of_autumn_term = Date.new(date.year, 9, 1)
+      start_of_autumn_term = Date.new(
+        date.year,
+        AUTUMN_TERM_START_MONTH,
+        AUTUMN_TERM_START_DAY
+      )
+
       if date < start_of_autumn_term
         new(date.year - 1)
       else
@@ -131,5 +139,9 @@ class AcademicYear
 
   def +(other)
     AcademicYear.new(start_year + other)
+  end
+
+  def start_of_autumn_term
+    Date.new(start_year, AUTUMN_TERM_START_MONTH, AUTUMN_TERM_START_DAY)
   end
 end
