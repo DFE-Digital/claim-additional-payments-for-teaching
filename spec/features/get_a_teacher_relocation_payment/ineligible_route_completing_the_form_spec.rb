@@ -8,7 +8,7 @@ describe "ineligible route: completing the form" do
   end
 
   let(:contract_start_date) do
-    Policies::InternationalRelocationPayments::Eligibility
+    Policies::InternationalRelocationPayments::PolicyEligibilityChecker
       .earliest_eligible_contract_start_date
   end
 
@@ -69,7 +69,7 @@ describe "ineligible route: completing the form" do
         and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
         and_i_complete_the_contract_details_step_with(option: "Yes")
         and_i_complete_the_contract_start_date_step_with(
-          date: Policies::InternationalRelocationPayments::Eligibility
+          date: Policies::InternationalRelocationPayments::PolicyEligibilityChecker
           .earliest_eligible_contract_start_date - 1.day
         )
         then_i_see_the_ineligible_page

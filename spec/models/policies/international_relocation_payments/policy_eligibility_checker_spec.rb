@@ -139,7 +139,7 @@ describe Policies::InternationalRelocationPayments::PolicyEligibilityChecker do
           one_year: true,
           subject: "physics",
           visa_type: "British National (Overseas) visa",
-          start_date: Policies::InternationalRelocationPayments::Eligibility.earliest_eligible_contract_start_date - 1.day
+          start_date: Policies::InternationalRelocationPayments::PolicyEligibilityChecker.earliest_eligible_contract_start_date - 1.day
         }
       end
 
@@ -154,8 +154,8 @@ describe Policies::InternationalRelocationPayments::PolicyEligibilityChecker do
           one_year: true,
           subject: "physics",
           visa_type: "British National (Overseas) visa",
-          start_date: Policies::InternationalRelocationPayments::Eligibility.earliest_eligible_contract_start_date,
-          date_of_entry: Policies::InternationalRelocationPayments::Eligibility.earliest_eligible_contract_start_date - 4.months
+          start_date: Policies::InternationalRelocationPayments::PolicyEligibilityChecker.earliest_eligible_contract_start_date,
+          date_of_entry: Policies::InternationalRelocationPayments::PolicyEligibilityChecker.earliest_eligible_contract_start_date - 4.months
         }
       end
 
@@ -170,8 +170,8 @@ describe Policies::InternationalRelocationPayments::PolicyEligibilityChecker do
           one_year: true,
           subject: "physics",
           visa_type: "British National (Overseas) visa",
-          start_date: Policies::InternationalRelocationPayments::Eligibility.earliest_eligible_contract_start_date,
-          date_of_entry: Policies::InternationalRelocationPayments::Eligibility.earliest_eligible_contract_start_date - 1.week
+          start_date: Policies::InternationalRelocationPayments::PolicyEligibilityChecker.earliest_eligible_contract_start_date,
+          date_of_entry: Policies::InternationalRelocationPayments::PolicyEligibilityChecker.earliest_eligible_contract_start_date - 1.week
         }
       end
 
