@@ -119,6 +119,8 @@ en:
     claim_route: "Claim route"
     claim_route_not_tid: "Not signed in with DfE Identity"
     claim_route_with_tid: "Signed in with DfE Identity"
+    passport_number: "Passport number"
+    nationality: "Nationality"
     decision:
       created_at: "Created at"
       result: "Result"
@@ -772,6 +774,10 @@ en:
     <<: *get_a_teacher_relocation_payment
     policy_short_name: "International Relocation Payments"
     policy_acronym: "IRP"
+    admin:
+      task_questions:
+        identity_confirmation:
+          title: "Did %{claim_full_name} submit the claim?"
 
   further_education_payments:
     landing_page: Find out if you are eligible for any incentive payments for further education teachers
