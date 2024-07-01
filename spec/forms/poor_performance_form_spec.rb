@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Journeys::AdditionalPaymentsForTeaching::PoorPerformanceForm do
+RSpec.describe PoorPerformanceForm do
   subject(:form) { described_class.new(journey_session:, journey:, params:) }
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
@@ -26,7 +26,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::PoorPerformanceForm do
 
         expect(form).to be_invalid
         expect(form.errors[:subject_to_formal_performance_action])
-          .to eq([form.i18n_errors_path("subject_to_formal_performance_action.inclusion")])
+          .to eq([form.i18n_errors_path("performance.inclusion")])
       end
 
       it "can be true or false" do
@@ -44,7 +44,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::PoorPerformanceForm do
 
         expect(form).to be_invalid
         expect(form.errors[:subject_to_disciplinary_action])
-          .to eq([form.i18n_errors_path("subject_to_disciplinary_action.inclusion")])
+          .to eq([form.i18n_errors_path("disciplinary.inclusion")])
       end
 
       it "can be true or false" do

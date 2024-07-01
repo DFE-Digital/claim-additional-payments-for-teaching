@@ -46,18 +46,20 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     click_on "Continue"
 
     # - Performance Issues
-    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.poor_performance"))
-    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.formal_performance_action"))
-    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.formal_performance_action_hint"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.performance.question"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.performance.hint"))
 
-    # No
-    choose "claim_subject_to_formal_performance_action_false"
+    within all(".govuk-fieldset")[0] do
+      choose("No")
+    end
 
-    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.disciplinary_action"))
-    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.disciplinary_action_hint"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.disciplinary.question"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.disciplinary.hint"))
 
-    # "No"
-    choose "claim_subject_to_disciplinary_action_false"
+    within all(".govuk-fieldset")[1] do
+      choose("No")
+    end
 
     click_on "Continue"
 
@@ -320,7 +322,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(journey_session.reload.answers.employed_directly).to eql true
 
     # - Are you currently subject to action for poor performance
-    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.formal_performance_action"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.performance.question"))
   end
 
   context "Route into teaching" do
@@ -464,18 +466,20 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     click_on "Continue"
 
     # - Performance Issues
-    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.poor_performance"))
-    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.formal_performance_action"))
-    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.formal_performance_action_hint"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.performance.question"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.performance.hint"))
 
-    # No
-    choose "claim_subject_to_formal_performance_action_false"
+    within all(".govuk-fieldset")[0] do
+      choose("No")
+    end
 
-    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.disciplinary_action"))
-    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.disciplinary_action_hint"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.disciplinary.question"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.disciplinary.hint"))
 
-    # "No"
-    choose "claim_subject_to_disciplinary_action_false"
+    within all(".govuk-fieldset")[1] do
+      choose("No")
+    end
     click_on "Continue"
 
     # - What route into teaching did you take?
@@ -1008,10 +1012,12 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       click_on "Continue"
 
       # - Performance Issues
-      # No
-      choose "claim_subject_to_formal_performance_action_false"
-      # "No"
-      choose "claim_subject_to_disciplinary_action_false"
+      within all(".govuk-fieldset")[0] do
+        choose("No")
+      end
+      within all(".govuk-fieldset")[1] do
+        choose("No")
+      end
       click_on "Continue"
 
       # - What route into teaching did you take?

@@ -486,21 +486,23 @@ en:
         errors:
           blank: "Select yes if you have completed your induction"
       poor_performance:
+        heading: Tell us if you are currently under any performance measures or disciplinary action
         questions:
-          poor_performance: Tell us if you are currently under any performance measures or disciplinary action
-          disciplinary_action: "Are you currently subject to disciplinary action?"
-          disciplinary_action_hint:
-            "This is more serious than performance measures and could be because of misconduct. It is something we may
-            check with your school as it will affect your eligibility."
-          formal_performance_action: "Have any performance measures been started against you?"
-          formal_performance_action_hint:
-            "This will be as a result of your underperformance as a teacher over a period of time. It could put your
-            employment at the school at risk and is something we may check with your school as it will affect your
-            eligibility."
+          performance:
+            question: "Have any performance measures been started against you?"
+            hint:
+              "This will be as a result of your underperformance as a teacher over a period of time. It could put your
+              employment at the school at risk and is something we may check with your school as it will affect your
+              eligibility."
+          disciplinary:
+            question: "Are you currently subject to disciplinary action?"
+            hint:
+              "This is more serious than performance measures and could be because of misconduct. It is something we may
+              check with your school as it will affect your eligibility."
         errors:
-          subject_to_formal_performance_action:
+          performance:
             inclusion: Select yes if you are subject to formal action for poor performance at work
-          subject_to_disciplinary_action:
+          disciplinary:
             inclusion: Select yes if you are subject to disciplinary action
       qualification:
         questions:
