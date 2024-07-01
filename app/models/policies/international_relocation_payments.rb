@@ -7,7 +7,7 @@ module Policies
     OTHER_CLAIMABLE_POLICIES = []
 
     # Percentage of claims to QA
-    MIN_QA_THRESHOLD = 10
+    MIN_QA_THRESHOLD = 100
 
     # NOTE RL: currently IRP only has a single reply to address, so notify
     # doesn't show the address id
