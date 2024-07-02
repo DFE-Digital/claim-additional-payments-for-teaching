@@ -66,6 +66,10 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     click_button "Continue"
 
     expect(page).to have_content("FE check your answers goes here")
+    click_button "Continue"
+
+    expect(page).to have_content("You’re eligible for a financial incentive payment")
+    expect(page).to have_content("Apply now")
   end
 
   def when_further_education_payments_journey_configuration_exists
