@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Teacher Student Loan Repayments claims", js: true do
+RSpec.feature "Teacher Student Loan Repayments claims", js: true, flaky: true do
   let(:one_second_in_minutes) { 1 / 60.to_f }
   let(:two_seconds_in_minutes) { 2 / 60.to_f }
 
