@@ -34,7 +34,12 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
   }
 
   let!(:similar_claim) {
-    eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible, teacher_reference_number: multiple_claim.eligibility.teacher_reference_number)
+    duplicate_attribute = if policy == Policies::InternationalRelocationPayments
+      {passport_number: multiple_claim.eligibility.passport_number}
+    else
+      {teacher_reference_number: multiple_claim.eligibility.teacher_reference_number}
+    end
+    eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible, duplicate_attribute)
     create(
       :claim,
       :submitted,
@@ -173,6 +178,8 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
       ["Identity confirmation", "Qualifications", "Census subjects taught", "Employment", "Student loan plan", "Decision"]
     when Policies::EarlyCareerPayments
       ["Identity confirmation", "Qualifications", "Induction confirmation", "Census subjects taught", "Employment", "Student loan plan", "Decision"]
+    when Policies::InternationalRelocationPayments
+      ["Decision"]
     else
       raise "Unimplemented policy: #{policy}"
     end

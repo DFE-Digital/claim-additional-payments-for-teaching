@@ -16,7 +16,7 @@ RSpec.describe PaymentMailer, type: :mailer do
         end
 
         it "sets the GOV.UK Notify reply_to_id according to the policy" do
-          expect(mail["reply_to_id"].first.value).to eql(policy.notify_reply_to_id)
+          expect(mail["reply_to_id"]&.first&.value).to eql(policy.notify_reply_to_id)
         end
 
         it "mentions the type of claim in the subject" do

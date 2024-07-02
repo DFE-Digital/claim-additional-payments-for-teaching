@@ -46,4 +46,8 @@ module BasePolicy
 
     self::SEARCHABLE_ELIGIBILITY_ATTRIBUTES
   end
+
+  def international_relocation_payments?
+    to_s == "InternationalRelocationPayments"
+  end
 end

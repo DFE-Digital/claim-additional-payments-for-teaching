@@ -2,7 +2,8 @@ module Policies
   POLICIES = [
     StudentLoans,
     EarlyCareerPayments,
-    LevellingUpPremiumPayments
+    LevellingUpPremiumPayments,
+    InternationalRelocationPayments
   ].freeze
 
   AMENDABLE_ELIGIBILITY_ATTRIBUTES = POLICIES.map do |policy|

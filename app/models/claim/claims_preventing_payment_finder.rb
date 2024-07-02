@@ -25,6 +25,8 @@ class Claim
     private
 
     def find_claims_preventing_payment
+      return [] if claim.policy == Policies::InternationalRelocationPayments
+
       eligibility_ids = claim.policy.policies_claimable.map { |policy|
         policy::Eligibility.where(teacher_reference_number: claim.eligibility.teacher_reference_number)
       }.flatten.map(&:id)
