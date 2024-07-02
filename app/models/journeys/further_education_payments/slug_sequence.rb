@@ -7,7 +7,7 @@ module Journeys
         select-provision
         contract-type
         teaching-hours-per-week
-        academic-year-in-further-education
+        further-education-teaching-start-year
         subjects-taught
         building-and-construction-courses
         teaching-courses
