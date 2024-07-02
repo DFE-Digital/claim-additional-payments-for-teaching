@@ -9,6 +9,8 @@ module Journeys
       attribute :further_education_teaching_start_year, :string
       attribute :subjects_taught, default: []
       attribute :teaching_qualification, :string
+      attribute :subject_to_formal_performance_action, :boolean
+      attribute :subject_to_disciplinary_action, :boolean
 
       def school
         @school ||= School.find(school_id)
