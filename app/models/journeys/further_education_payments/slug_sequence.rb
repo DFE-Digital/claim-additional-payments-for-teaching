@@ -7,6 +7,7 @@ module Journeys
         select-provision
         contract-type
         fixed-term-contract
+        taught-at-least-one-term
         teaching-hours-per-week
         further-education-teaching-start-year
         subjects-taught
@@ -46,6 +47,10 @@ module Journeys
         SLUGS.dup.tap do |sequence|
           if answers.contract_type == "permanent"
             sequence.delete("fixed-term-contract")
+          end
+
+          if answers.fixed_term_full_year == true
+            sequence.delete("taught-at-least-one-term")
           end
         end
       end

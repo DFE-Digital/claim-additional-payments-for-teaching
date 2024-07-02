@@ -14,6 +14,7 @@ module Journeys
         "select-provision" => SelectProvisionForm,
         "contract-type" => ContractTypeForm,
         "fixed-term-contract" => FixedTermContractForm,
+        "taught-at-least-one-term" => TaughtAtLeastOneTermForm,
         "teaching-hours-per-week" => TeachingHoursPerWeekForm,
         "further-education-teaching-start-year" => FurtherEducationTeachingStartYearForm,
         "subjects-taught" => SubjectsTaughtForm,
