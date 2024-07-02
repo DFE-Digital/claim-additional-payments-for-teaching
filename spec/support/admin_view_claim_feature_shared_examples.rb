@@ -179,7 +179,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     when Policies::EarlyCareerPayments
       ["Identity confirmation", "Qualifications", "Induction confirmation", "Census subjects taught", "Employment", "Student loan plan", "Decision"]
     when Policies::InternationalRelocationPayments
-      ["Decision"]
+      ["Identity confirmation", "Decision"]
     else
       raise "Unimplemented policy: #{policy}"
     end
