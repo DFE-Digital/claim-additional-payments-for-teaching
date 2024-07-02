@@ -13,6 +13,7 @@ module Journeys
         "further-education-provision-search" => FurtherEducationProvisionSearchForm,
         "select-provision" => SelectProvisionForm,
         "contract-type" => ContractTypeForm,
+        "teaching-hours-per-week" => TeachingHoursPerWeekForm,
         "further-education-teaching-start-year" => FurtherEducationTeachingStartYearForm,
         "subjects-taught" => SubjectsTaughtForm
       }
