@@ -47,6 +47,11 @@ module Journeys
         SLUGS.dup.tap do |sequence|
           if answers.contract_type == "permanent"
             sequence.delete("fixed-term-contract")
+            sequence.delete("taught-at-least-one-term")
+          end
+
+          if answers.contract_type == "variable-hours"
+            sequence.delete("fixed-term-contract")
           end
 
           if answers.fixed_term_full_year == true
