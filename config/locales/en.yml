@@ -153,6 +153,7 @@ en:
       student_loan_plan: "Check student loan plan"
       payroll_details: "Check bank/building society account details"
       census_subjects_taught: "Check eligible subjects are taught"
+      visa: "Check visa"
     undo_decision:
       approved: "Undo approval"
       rejected: "Undo rejection"
@@ -780,6 +781,8 @@ en:
       task_questions:
         identity_confirmation:
           title: "Did %{claim_full_name} submit the claim?"
+        visa:
+          title: "Is the claimant’s visa type eligible for a claim?"
 
   further_education_payments:
     landing_page: Find out if you are eligible for any incentive payments for further education teachers

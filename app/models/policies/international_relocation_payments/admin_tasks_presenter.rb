@@ -16,6 +16,12 @@ module Policies
         ]
       end
 
+      def visa
+        [
+          ["Visa type", eligibility.visa_type]
+        ]
+      end
+
       private
 
       delegate :eligibility, to: :claim
