@@ -3,6 +3,9 @@
 # was scheduled to be paid more than two months ago.
 #
 # Attributes are set to nil, and personal_data_removed_at is set to the current timestamp.
+#
+# Inherit policy specifc data scrubbers from this class
+# `app/models/policy/{some_policy}/claim_personal_data_scrubber.rb`
 
 class Claim
   class PersonalDataScrubber
@@ -29,13 +32,21 @@ class Claim
     ]
 
     def scrub_completed_claims
-      Claim.transaction do
+      ApplicationRecord.transaction do
         scrub_claims(old_rejected_claims)
         scrub_claims(old_paid_claims)
       end
     end
 
     private
+
+    def policy
+      self.class.module_parent
+    end
+
+    def claim_scope
+      Claim.by_policy(policy)
+    end
 
     def scrub_claims(claims)
       claims.includes(:amendments).each do |claim|
@@ -46,13 +57,13 @@ class Claim
     end
 
     def attribute_values_to_set
-      PERSONAL_DATA_ATTRIBUTES_TO_DELETE.map { |attr| [attr, nil] }.to_h.merge(
+      self.class::PERSONAL_DATA_ATTRIBUTES_TO_DELETE.map { |attr| [attr, nil] }.to_h.merge(
         personal_data_removed_at: Time.zone.now
       )
     end
 
     def old_rejected_claims
-      Claim.joins(:decisions)
+      claim_scope.joins(:decisions)
         .where(personal_data_removed_at: nil)
         .where(
           "(decisions.undone = false AND decisions.result = :rejected AND decisions.created_at < :minimum_time)",
@@ -65,7 +76,7 @@ class Claim
       claim_ids_with_payrollable_topups = Topup.payrollable.pluck(:claim_id)
       claim_ids_with_payrolled_topups_without_payment_confirmation = Topup.joins(payment: [:payroll_run]).where(payments: {scheduled_payment_date: nil}).pluck(:claim_id)
 
-      Claim.approved.joins(payments: [:payroll_run])
+      claim_scope.approved.joins(payments: [:payroll_run])
         .where(personal_data_removed_at: nil)
         .where.not(id: claim_ids_with_payrollable_topups + claim_ids_with_payrolled_topups_without_payment_confirmation)
         .where("payments.scheduled_payment_date < :minimum_time", minimum_time: minimum_time)
@@ -86,7 +97,7 @@ class Claim
     end
 
     def scrub_amendment_personal_data(amendment)
-      attributes_to_scrub = PERSONAL_DATA_ATTRIBUTES_TO_DELETE.map(&:to_s) & amendment.claim_changes.keys
+      attributes_to_scrub = self.class::PERSONAL_DATA_ATTRIBUTES_TO_DELETE.map(&:to_s) & amendment.claim_changes.keys
       personal_data_mask = attributes_to_scrub.to_h { |attribute| [attribute, nil] }
       amendment.claim_changes.merge!(personal_data_mask)
 

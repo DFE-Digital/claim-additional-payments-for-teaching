@@ -75,45 +75,37 @@ RSpec.shared_examples "a claim personal data scrubber" do |policy|
     expect { personal_data_scrubber }.not_to change { claim.reload.attributes }
   end
 
-  it "does not delete details from a claim that has a payment, but has a payrollable topup" do
-    eligibility = create(eligibility_factory, :eligible, award_amount: 1500.0)
-
-    claim = create(:claim, :approved, policy: policy, eligibility: eligibility)
-
-    create(:payment, :confirmed, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
-    create(:topup, payment: nil, claim: claim, award_amount: 500, created_by: user)
-
-    expect { personal_data_scrubber }.not_to change { claim.reload.attributes }
-  end
-
-  it "does not delete details from a claim that has a payment, but has a payrolled topup without payment confirmation" do
-    claim = nil
-
-    travel_to 2.months.ago do
-      eligibility = create(eligibility_factory, :eligible, award_amount: 1500.0)
-      claim = create(:claim, :approved, policy: policy, eligibility: eligibility)
-      create(:payment, :confirmed, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
-    end
-
-    payment2 = create(:payment, :with_figures, claims: [claim], scheduled_payment_date: nil)
-    create(:topup, payment: payment2, claim: claim, award_amount: 500, created_by: user)
-
-    expect { personal_data_scrubber }.not_to change { claim.reload.attributes }
-  end
-
   it "deletes expected details from a claim with multiple payments all of which have been confirmed" do
     claim = nil
 
     travel_to 2.months.ago do
-      eligibility = create(eligibility_factory, :eligible, award_amount: 1500.0)
+      eligibility = build(eligibility_factory, :eligible)
+      # Student loans don't have a settable award amount
+      if eligibility.has_attribute?(:award_amount)
+        eligibility.award_amount = 1500.0
+      end
+      eligibility.save!
       claim = create(:claim, :approved, policy: policy, eligibility: eligibility)
       create(:payment, :confirmed, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
     end
 
     payment2 = create(:payment, :confirmed, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
-    create(:topup, payment: payment2, claim: claim, award_amount: 500, created_by: user)
+
+    if claim.topupable?
+      create(:topup, payment: payment2, claim: claim, award_amount: 500, created_by: user)
+    end
 
     expect { personal_data_scrubber }.to change { claim.reload.attributes }
+  end
+
+  it "does not delete expected details from a claim for a different policy" do
+    other_policy = Policies::POLICIES.detect { |p| p != policy }
+
+    claim = create(:claim, :submitted, policy: other_policy)
+    create(:decision, :rejected, claim: claim, created_at: last_academic_year)
+    claim.update_attribute :hmrc_bank_validation_responses, ["test"]
+
+    expect { personal_data_scrubber }.not_to change { claim.reload.attributes }
   end
 
   it "deletes expected details from an old rejected claim, setting a personal_data_removed_at timestamp" do
@@ -182,13 +174,13 @@ RSpec.shared_examples "a claim personal data scrubber" do |policy|
 
   it "only scrubs claims from the previous academic year" do
     # Initialise the scrubber, and create a claim
-    scrubber = Claim::PersonalDataScrubber.new
+    scrubber = described_class.new
 
     claim = create(:claim, :submitted, policy: policy)
     create(:decision, :rejected, claim: claim)
 
     travel_to(last_academic_year) do
-      claim = create(:claim, :submitted)
+      claim = create(:claim, :submitted, policy: policy)
       create(:decision, :rejected, claim: claim)
     end
 
@@ -204,15 +196,20 @@ RSpec.shared_examples "a claim personal data scrubber" do |policy|
     claim, amendment = nil
     travel_to last_academic_year - 1.week do
       claim = create(:claim, :submitted, policy: policy)
-      amendment = create(:amendment, claim: claim, claim_changes: {
-        "teacher_reference_number" => [generate(:teacher_reference_number).to_s, claim.eligibility.teacher_reference_number],
+      claim_changes = {
         "payroll_gender" => ["male", claim.payroll_gender],
         "date_of_birth" => [25.years.ago.to_date, claim.date_of_birth],
         "student_loan_plan" => ["plan_1", claim.student_loan_plan],
         "bank_sort_code" => ["457288", claim.bank_sort_code],
         "bank_account_number" => ["84818482", claim.bank_account_number],
         "building_society_roll_number" => ["123456789/ABCD", claim.building_society_roll_number]
-      })
+      }
+
+      if claim.eligibility.has_attribute?(:teacher_reference_number)
+        claim_changes["teacher_reference_number"] = [generate(:teacher_reference_number).to_s, claim.eligibility.teacher_reference_number]
+      end
+
+      amendment = create(:amendment, claim: claim, claim_changes: claim_changes)
       create(:decision, :approved, claim: claim, created_at: last_academic_year)
       create(:payment, :confirmed, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
     end

@@ -201,6 +201,7 @@ shared:
     - date_of_entry
     - nationality
     - current_school_id
+    - award_amount
   :schools:
     - id
     - urn
@@ -270,3 +271,4 @@ shared:
     - id
     - created_at
     - updated_at
+    - award_amount
