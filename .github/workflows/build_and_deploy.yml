@@ -2,7 +2,7 @@ name: Build and deploy to AKS cluster
 
 on:
   push:
-    branches: [master]
+    branches: [CAPT-1703-prod-aks-migration]
   pull_request:
     types: [labeled, opened, reopened, synchronize]
 
@@ -50,22 +50,9 @@ jobs:
           docker-image: ${{ needs.build.outputs.docker-image-tag }}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
           pull-request-number: ${{ github.event.pull_request.number }}
-
-      - uses: azure/login@v2
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Set kubectl
-        uses: DFE-Digital/github-actions/set-kubectl@master
-
-      - name: Seed review app
-        shell: bash
-        if: github.event.number != ''
-        run: |
-          make ci review-aks get-cluster-credentials
-          kubectl exec -n srtl-development deployment/claim-additional-payments-for-teaching-review-${{ github.event.pull_request.number }}-worker -- sh -c "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/prepare-database"
-        env:
-          PR_NUMBER: ${{ github.event.pull_request.number }}
+          aks-namespace: srtl-development
+          aks-deployment: claim-additional-payments-for-teaching-review-${{ github.event.pull_request.number }}
+          prepare-database: ${{ github.event.pull_request.number != '' }}
 
       - name: Post comment to Pull Request ${{ github.event.number }}
         if: ${{ github.event_name == 'pull_request' }}
@@ -86,7 +73,7 @@ jobs:
     name: Deploy to test environment
     concurrency: deploy_test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     needs: [build]
     environment:
       name: test-aks
@@ -108,12 +95,8 @@ jobs:
           environment: test-aks
           docker-image: ${{ needs.build.outputs.docker-image-tag }}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Run migrations
-        shell: bash
-        run: |
-          make ci test-aks get-cluster-credentials
-          kubectl exec -n srtl-test deployment/claim-additional-payments-for-teaching-test-worker -- sh -c "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/prepare-database"
+          aks-namespace: srtl-test
+          aks-deployment: claim-additional-payments-for-teaching-test
 
       - name: Install Ruby
         uses: ruby/setup-ruby@v1
@@ -136,4 +119,56 @@ jobs:
           SLACK_COLOR: failure
           SLACK_TITLE: Failure deploying release to test
           SLACK_MESSAGE: Failure deploying release to test - Docker tag ${{ needs.build.outputs.docker-image-tag }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  deploy_production:
+    name: Deploy to production environment
+    concurrency: deploy_production
+    runs-on: ubuntu-latest
+    # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    needs: [build, deploy_test]
+    environment:
+      name: production-aks
+      url: ${{ steps.deploy.outputs.environment_url }}
+    outputs:
+      environment_url: ${{ steps.deploy.outputs.environment_url }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: ./.github/actions/deploy-environment
+        id: deploy
+        with:
+          environment: production-aks
+          docker-image: ${{ needs.build.outputs.docker-image-tag }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          aks-namespace: srtl-production
+          aks-deployment: claim-additional-payments-for-teaching-production
+
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Run smoke tests
+        shell: bash
+        run: bundle exec rspec spec/smoke -t smoke:true -b
+        env:
+          RAILS_ENV: test
+          SMOKE_TEST_APP_HOST: ${{ env.APP_URL }}
+          BASIC_AUTH_USERNAME: ${{ secrets.BASIC_AUTH_USERNAME }}
+          BASIC_AUTH_PASSWORD: ${{ secrets.BASIC_AUTH_PASSWORD }}
+
+      - name: Notify on failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_COLOR: failure
+          SLACK_TITLE: Failure deploying release to production
+          SLACK_MESSAGE: Failure deploying release to production - Docker tag ${{ needs.build.outputs.docker-image-tag }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}

@@ -13,10 +13,10 @@ module "application_configuration" {
   config_variables = merge(
     local.app_env_values,
     {
-      ENVIRONMENT_NAME = var.environment
-      PGSSLMODE        = local.postgres_ssl_mode
+      ENVIRONMENT_NAME   = var.environment
+      PGSSLMODE          = local.postgres_ssl_mode
       CANONICAL_HOSTNAME = local.canonical_hostname
-    })
+  })
   secret_variables = {
     DATABASE_URL = module.postgres.url
   }
@@ -39,7 +39,7 @@ module "web_application" {
   docker_image = var.docker_image
   command      = var.startup_command
 
-  replicas     = var.web_replicas
+  replicas = var.web_replicas
 }
 
 module "worker_application" {
@@ -58,4 +58,6 @@ module "worker_application" {
 
   docker_image = var.docker_image
   command      = var.worker_command
+
+  replicas = var.worker_replicas
 }
