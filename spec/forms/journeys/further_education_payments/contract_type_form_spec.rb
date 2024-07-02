@@ -36,7 +36,7 @@ RSpec.describe Journeys::FurtherEducationPayments::ContractTypeForm, type: :mode
   end
 
   describe "#save" do
-    let(:contract_type) { %w[permanent fixed-term variable-hours].sample }
+    let(:contract_type) { %w[permanent fixed_term variable_hours].sample }
 
     it "updates the journey session" do
       expect { expect(subject.save).to be(true) }.to(

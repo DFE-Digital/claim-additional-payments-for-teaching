@@ -39,7 +39,7 @@ RSpec.describe Journeys::FurtherEducationPayments::TeachingHoursPerWeekForm, typ
   end
 
   describe "#save" do
-    let(:teaching_hours_per_week) { "more-than-12" }
+    let(:teaching_hours_per_week) { "more_than_12" }
 
     it "updates the journey session" do
       expect { expect(subject.save).to be(true) }.to(

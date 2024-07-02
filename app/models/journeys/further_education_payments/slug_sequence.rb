@@ -14,6 +14,7 @@ module Journeys
         half-teaching-hours
         teaching-qualification
         poor-performance
+        check-your-answers-part-one
       ]
 
       RESULTS_SLUGS = %w[

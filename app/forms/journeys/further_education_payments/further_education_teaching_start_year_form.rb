@@ -13,14 +13,14 @@ module Journeys
           academic_year = AcademicYear.current + delta
           OpenStruct.new(
             id: academic_year.start_year.to_s,
-            name: "September #{academic_year.start_year} to August #{academic_year.end_year}"
+            name: t("options.between_dates", start_year: academic_year.start_year, end_year: academic_year.end_year)
           )
         end
 
         academic_year = AcademicYear.current + years_before
         array << OpenStruct.new(
           id: "pre-#{academic_year.start_year}",
-          name: "I started before September #{academic_year.start_year}"
+          name: t("options.before_date", year: academic_year.start_year)
         )
 
         array
