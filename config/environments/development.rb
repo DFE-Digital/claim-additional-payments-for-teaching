@@ -87,4 +87,9 @@ Rails.application.configure do
   # Add '127.0.0.1 ecp.test' to your /etc/hosts to use this over localhost.
   # This allows you to use https://ecp.test:3000/ in your browser.
   config.hosts << "ecp.test"
+
+  # https://technical-guidance.education.gov.uk/infrastructure/monitoring/logit/#ruby-on-rails
+  config.log_level = :debug                       # Or :info
+  config.log_format = :color                      # Console colorised non-json output
+  config.semantic_logger.backtrace_level = :debug # Show file and line number (expensive: not for production)
 end
