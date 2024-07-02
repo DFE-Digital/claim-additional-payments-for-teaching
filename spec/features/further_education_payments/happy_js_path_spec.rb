@@ -51,7 +51,8 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     expect(page).to have_content("FE half teaching hours goes here")
     click_button "Continue"
 
-    expect(page).to have_content("FE qualification goes here")
+    expect(page).to have_content("Do you have a teaching qualification?")
+    choose("Yes")
     click_button "Continue"
 
     expect(page).to have_content("FE poor performance goes here")

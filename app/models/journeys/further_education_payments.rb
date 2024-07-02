@@ -15,7 +15,8 @@ module Journeys
         "contract-type" => ContractTypeForm,
         "teaching-hours-per-week" => TeachingHoursPerWeekForm,
         "further-education-teaching-start-year" => FurtherEducationTeachingStartYearForm,
-        "subjects-taught" => SubjectsTaughtForm
+        "subjects-taught" => SubjectsTaughtForm,
+        "teaching-qualification" => TeachingQualificationForm
       }
     }
   end
