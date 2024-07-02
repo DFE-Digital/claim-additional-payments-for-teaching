@@ -6,7 +6,7 @@ module Journeys
     ROUTING_NAME = "further-education-payments"
     VIEW_PATH = "further_education_payments"
     I18N_NAMESPACE = "further_education_payments"
-    POLICIES = []
+    POLICIES = [Policies::FurtherEducationPayments]
     FORMS = {
       "claims" => {
         "teaching-responsibilities" => TeachingResponsibilitiesForm,
@@ -17,7 +17,8 @@ module Journeys
         "further-education-teaching-start-year" => FurtherEducationTeachingStartYearForm,
         "subjects-taught" => SubjectsTaughtForm,
         "teaching-qualification" => TeachingQualificationForm,
-        "poor-performance" => PoorPerformanceForm
+        "poor-performance" => PoorPerformanceForm,
+        "ineligible" => IneligibleForm
       }
     }
   end
