@@ -2,6 +2,8 @@ module Journeys
   class Session < ApplicationRecord
     self.abstract_class = true
 
+    self.table_name = "journeys_sessions"
+
     has_one :claim,
       dependent: :nullify,
       inverse_of: :journey_session,
@@ -10,6 +12,12 @@ module Journeys
     validates :journey,
       presence: true,
       inclusion: {in: Journeys.all_routing_names}
+
+    scope :unsubmitted, -> { where.missing(:claim) }
+
+    scope :purgeable, -> do
+      unsubmitted.where(journeys_sessions: {updated_at: ..24.hours.ago})
+    end
 
     def submitted?
       claim.present?
