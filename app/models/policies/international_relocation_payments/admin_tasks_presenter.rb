@@ -9,6 +9,12 @@ module Policies
         @claim = claim
       end
 
+      def arrival_date
+        [
+          ["Arrival date", eligibility.date_of_entry.to_fs(:govuk_date)]
+        ]
+      end
+
       def identity_confirmation
         [
           ["Nationality", eligibility.nationality],
