@@ -121,6 +121,7 @@ en:
     claim_route_with_tid: "Signed in with DfE Identity"
     passport_number: "Passport number"
     nationality: "Nationality"
+    arrival_date: "Date of entry"
     decision:
       created_at: "Created at"
       result: "Result"
@@ -154,6 +155,7 @@ en:
       payroll_details: "Check bank/building society account details"
       census_subjects_taught: "Check eligible subjects are taught"
       visa: "Check visa"
+      arrival_date: "Check arrival date"
     undo_decision:
       approved: "Undo approval"
       rejected: "Undo rejection"
@@ -783,6 +785,8 @@ en:
           title: "Did %{claim_full_name} submit the claim?"
         visa:
           title: "Is the claimant’s visa type eligible for a claim?"
+        arrival_date:
+          title: "Does the claimant’s arrival date match the above information from their claim?"
 
   further_education_payments:
     landing_page: Find out if you are eligible for any incentive payments for further education teachers
