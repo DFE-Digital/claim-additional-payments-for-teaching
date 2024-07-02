@@ -5,6 +5,8 @@ class DeletePersonalDataFromOldClaimsJob < CronJob
 
   def perform
     Rails.logger.info "Deleting personal data from old claims which have been rejected or paid"
-    Claim::PersonalDataScrubber.new.scrub_completed_claims
+    Policies::POLICIES.each do |policy|
+      policy::ClaimPersonalDataScrubber.new.scrub_completed_claims
+    end
   end
 end
