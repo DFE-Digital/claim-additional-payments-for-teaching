@@ -1,6 +1,8 @@
 module StubbingHelpers
   def disable_claim_qa_flagging
-    stub_const("Claim::MIN_QA_THRESHOLD", 0)
+    Policies::POLICIES.each do |policy|
+      stub_const("Policies::#{policy}::MIN_QA_THRESHOLD", 0)
+    end
   end
 
   def stub_otp_verification(otp_code: "123456", valid: true)
