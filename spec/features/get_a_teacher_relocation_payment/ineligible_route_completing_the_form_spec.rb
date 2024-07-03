@@ -126,6 +126,28 @@ describe "ineligible route: completing the form" do
         then_i_see_the_ineligible_page
       end
     end
+
+    context "ineligible - school-choice" do
+      it "shows the ineligible page" do
+        when_i_start_the_form
+        and_i_complete_application_route_question_with(
+          option: "I am employed as a teacher in a school in England"
+        )
+        and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
+        and_i_complete_the_contract_details_step_with(option: "Yes")
+        and_i_complete_the_contract_start_date_step_with(
+          date: contract_start_date
+        )
+        and_i_complete_the_subject_step_with(option: "Physics")
+        and_i_complete_the_visa_screen_with(option: "British National (Overseas) visa")
+        and_i_complete_the_entry_date_page_with(date: contract_start_date)
+        and_i_dont_change_my_answers
+        and_i_complete_the_nationality_step_with(option: "Australian")
+        and_i_complete_the_passport_number_step_with(options: "123456789")
+        and_i_complete_the_current_school_step(create(:school, phase: :primary))
+        then_i_see_the_ineligible_page
+      end
+    end
   end
 
   def then_i_see_the_ineligible_page

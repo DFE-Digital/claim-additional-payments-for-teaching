@@ -50,6 +50,8 @@ module Policies
           "contract start date must be after #{earliest_eligible_contract_start_date}"
         in date_of_entry: Date, start_date: Date unless date_of_entry_eligible?
           "cannot enter the UK more than 3 months before your contract start date"
+        in current_school_id: String unless current_school_eligible?
+          "school not eligible"
         else
           nil
         end
@@ -65,6 +67,12 @@ module Policies
         return false unless answers.date_of_entry && answers.start_date
 
         answers.date_of_entry >= answers.start_date - 3.months
+      end
+
+      def current_school_eligible?
+        return false unless answers.current_school
+
+        answers.current_school.secondary_or_equivalent? && answers.current_school.state_funded?
       end
     end
   end
