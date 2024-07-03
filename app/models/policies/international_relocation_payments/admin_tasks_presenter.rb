@@ -15,6 +15,12 @@ module Policies
         ]
       end
 
+      def employment
+        [
+          [translate("admin.current_school"), display_school(eligibility.current_school)]
+        ]
+      end
+
       def identity_confirmation
         [
           ["Nationality", eligibility.nationality],
