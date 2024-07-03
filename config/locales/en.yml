@@ -787,6 +787,8 @@ en:
           title: "Is the claimant’s visa type eligible for a claim?"
         arrival_date:
           title: "Does the claimant’s arrival date match the above information from their claim?"
+        employment:
+          title: "Does the claimant’s current school match the above information from their claim?"
 
   further_education_payments:
     landing_page: Find out if you are eligible for any incentive payments for further education teachers
