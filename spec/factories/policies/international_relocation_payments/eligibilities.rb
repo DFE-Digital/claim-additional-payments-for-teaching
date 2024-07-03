@@ -23,5 +23,9 @@ FactoryBot.define do
     trait :eligible_contract do
       one_year { true }
     end
+
+    trait :eligible_start_date do
+      start_date { 1.month.ago }
+    end
   end
 end

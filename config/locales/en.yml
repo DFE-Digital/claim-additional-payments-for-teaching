@@ -157,6 +157,7 @@ en:
       visa: "Check visa"
       arrival_date: "Check arrival date"
       employment_contract: "Check employment contract"
+      employment_start: "Check employment start date"
     undo_decision:
       approved: "Undo approval"
       rejected: "Undo rejection"
@@ -792,6 +793,8 @@ en:
           title: "Does the claimant’s current school match the above information from their claim?"
         employment_contract:
           title: "Does the claimant’s employment contract match the above information from their claim?"
+        employment_start:
+          title: "Does the claimant’s employment start date match the above information from their claim?"
 
   further_education_payments:
     landing_page: Find out if you are eligible for any incentive payments for further education teachers
