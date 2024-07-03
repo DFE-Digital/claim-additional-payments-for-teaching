@@ -28,8 +28,35 @@ module Journeys
       def save
         return if invalid?
 
+        reset_dependent_answers
+
         journey_session.answers.assign_attributes(contract_type:)
         journey_session.save!
+      end
+
+      private
+
+      def reset_dependent_answers
+        if changing_answer? && old_answer == "fixed-term"
+          journey_session.answers.assign_attributes(
+            fixed_term_full_year: nil,
+            taught_at_least_one_term: nil
+          )
+        end
+
+        if changing_answer? && old_answer == "variable-hours"
+          journey_session.answers.assign_attributes(
+            taught_at_least_one_term: nil
+          )
+        end
+      end
+
+      def changing_answer?
+        journey_session.answers.contract_type.present? && (contract_type != journey_session.answers.contract_type)
+      end
+
+      def old_answer
+        journey_session.answers.contract_type
       end
     end
   end
