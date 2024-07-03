@@ -770,6 +770,10 @@ en:
           school_headteacher_name: "Enter the name of the headteacher of the school where you are employed as a teacher"
         errors:
           school_headteacher_name: "Enter the headteacher's name"
+      personal_details:
+        errors:
+          over_max_age: Age must be below 80
+          below_min_age: Age must be above 21
 
     check_your_answers:
       part_one:
