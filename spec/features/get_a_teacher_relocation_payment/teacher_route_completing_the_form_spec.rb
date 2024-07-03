@@ -31,6 +31,7 @@ describe "teacher route: completing the form" do
         option: "I am employed as a teacher in a school in England"
       )
       and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
+      and_i_complete_the_current_school_step(school)
       and_i_complete_the_contract_details_step_with(option: "Yes")
       and_i_complete_the_contract_start_date_step_with(
         date: contract_start_date
@@ -46,7 +47,6 @@ describe "teacher route: completing the form" do
       it "submits an application" do
         and_i_complete_the_nationality_step_with(option: "Australian")
         and_i_complete_the_passport_number_step_with(options: "123456789")
-        and_i_complete_the_current_school_step(school)
         and_i_complete_the_headteacher_step
         and_i_complete_the_personal_details_step
         and_i_complete_the_postcode_step
@@ -64,7 +64,6 @@ describe "teacher route: completing the form" do
       it "submits an application", js: true do
         and_i_complete_the_nationality_step_with(option: "Australian")
         and_i_complete_the_passport_number_step_with(options: "123456789")
-        and_i_complete_the_current_school_step(school)
         and_i_complete_the_headteacher_step
         and_i_complete_the_personal_details_step
         and_i_complete_the_manual_address_step
@@ -82,7 +81,6 @@ describe "teacher route: completing the form" do
       it "submits an application" do
         and_i_complete_the_nationality_step_with(option: "Australian")
         and_i_complete_the_passport_number_step_with(options: "123456789")
-        and_i_complete_the_current_school_step(school)
         and_i_complete_the_headteacher_step
         and_i_complete_the_personal_details_step
         and_i_complete_the_manual_address_step
@@ -100,7 +98,6 @@ describe "teacher route: completing the form" do
       it "submits an application" do
         and_i_complete_the_nationality_step_with(option: "Australian")
         and_i_complete_the_passport_number_step_with(options: "123456789")
-        and_i_complete_the_current_school_step(school)
         and_i_complete_the_headteacher_step
         and_i_complete_the_personal_details_step
         and_i_complete_the_manual_address_step
@@ -128,6 +125,10 @@ describe "teacher route: completing the form" do
 
     expect(page).to have_text(
       "Are you employed by an English state secondary school? Yes"
+    )
+
+    expect(page).to have_text(
+      "Which school are you currently employed to teach at? #{school.name}"
     )
 
     expect(page).to have_text(
@@ -180,10 +181,6 @@ describe "teacher route: completing the form" do
 
     expect(page).to have_text(
       "Enter the name of the headteacher of the school where you are employed as a teacher Seymour Skinner"
-    )
-
-    expect(page).to have_text(
-      "Which school are you currently employed to teach at? #{school.name}"
     )
 
     if mobile_number
