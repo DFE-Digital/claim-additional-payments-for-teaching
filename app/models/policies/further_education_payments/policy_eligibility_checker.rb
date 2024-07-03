@@ -36,6 +36,8 @@ module Policies
           :lacks_teacher_qualification_or_enrolment
         elsif answers.less_than_half_hours_teaching_fe?
           :must_at_least_half_hours_teaching_fe
+        elsif answers.subjects_taught.include? "none"
+          :subject
         end
       end
     end
