@@ -19,7 +19,8 @@ module Journeys
         "teaching-qualification" => TeachingQualificationForm,
         "poor-performance" => PoorPerformanceForm,
         "check-your-answers" => CheckYourAnswersForm,
-        "ineligible" => IneligibleForm
+        "ineligible" => IneligibleForm,
+        "half-teaching-hours" => HalfTeachingHoursForm
       }
     }
   end

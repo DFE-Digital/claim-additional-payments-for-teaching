@@ -11,6 +11,7 @@ module Journeys
       attribute :teaching_qualification, :string
       attribute :subject_to_formal_performance_action, :boolean
       attribute :subject_to_disciplinary_action, :boolean
+      attribute :half_teaching_hours, :boolean
 
       def school
         @school ||= School.find(school_id)
