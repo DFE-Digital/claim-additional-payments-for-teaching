@@ -1,6 +1,6 @@
 module Policies
   module FurtherEducationPayments
-    class ClaimPersonalDataScrubber < Claim::PersonalDataScrubber
+    class ClaimPersonalDataScrubber < Policies::ClaimPersonalDataScrubber
     end
   end
 end

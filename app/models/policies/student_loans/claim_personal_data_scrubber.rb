@@ -1,6 +1,6 @@
 module Policies
   module StudentLoans
-    class ClaimPersonalDataScrubber < Claim::PersonalDataScrubber
+    class ClaimPersonalDataScrubber < Policies::ClaimPersonalDataScrubber
     end
   end
 end

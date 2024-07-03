@@ -1,6 +1,6 @@
 module Policies
   module EarlyCareerPayments
-    class ClaimPersonalDataScrubber < Claim::PersonalDataScrubber
+    class ClaimPersonalDataScrubber < Policies::ClaimPersonalDataScrubber
     end
   end
 end

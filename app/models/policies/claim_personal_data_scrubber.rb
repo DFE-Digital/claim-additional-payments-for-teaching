@@ -7,8 +7,8 @@
 # Inherit policy specifc data scrubbers from this class
 # `app/models/policy/{some_policy}/claim_personal_data_scrubber.rb`
 
-class Claim
-  class PersonalDataScrubber
+module Policies
+  class ClaimPersonalDataScrubber
     PERSONAL_DATA_ATTRIBUTES_TO_DELETE = [
       :first_name,
       :middle_name,
