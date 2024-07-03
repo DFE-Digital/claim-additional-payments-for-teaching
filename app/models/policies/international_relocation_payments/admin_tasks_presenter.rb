@@ -40,6 +40,12 @@ module Policies
         ]
       end
 
+      def subject
+        [
+          ["Subject employed to teach", eligibility.subject.humanize]
+        ]
+      end
+
       def visa
         [
           ["Visa type", eligibility.visa_type]
