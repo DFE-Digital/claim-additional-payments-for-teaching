@@ -27,6 +27,12 @@ module Policies
         ]
       end
 
+      def employment_start
+        [
+          ["Employment start date", eligibility.start_date&.to_fs(:govuk_date)]
+        ]
+      end
+
       def identity_confirmation
         [
           ["Nationality", eligibility.nationality],
