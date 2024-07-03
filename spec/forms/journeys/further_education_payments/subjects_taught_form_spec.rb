@@ -48,11 +48,11 @@ RSpec.describe Journeys::FurtherEducationPayments::SubjectsTaughtForm, type: :mo
   end
 
   describe "#save" do
-    let(:subjects_taught) { ["chemistry", "mathematics"] }
+    let(:subjects_taught) { ["chemistry", "maths"] }
 
     it "updates the journey session" do
       expect { expect(subject.save).to be(true) }.to(
-        change { journey_session.reload.answers.subjects_taught }.to(["chemistry", "mathematics"])
+        change { journey_session.reload.answers.subjects_taught }.to(["chemistry", "maths"])
       )
     end
   end
