@@ -21,6 +21,12 @@ module Policies
         ]
       end
 
+      def employment_contract
+        [
+          ["Employment contract at least one year", eligibility.one_year?]
+        ]
+      end
+
       def identity_confirmation
         [
           ["Nationality", eligibility.nationality],

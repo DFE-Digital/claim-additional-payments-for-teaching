@@ -19,6 +19,7 @@ class Task < ApplicationRecord
     matching_details
     payroll_gender
     arrival_date
+    employment_contract
     visa
   ].freeze
 
