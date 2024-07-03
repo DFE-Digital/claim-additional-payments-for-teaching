@@ -6,7 +6,7 @@ module Journeys
       validates :taught_at_least_one_term,
         inclusion: {
           in: [true, false],
-          message: -> (object, data) { i18n_error_message(:inclusion, school_name: object.school.name).call(object, data) }
+          message: ->(object, data) { i18n_error_message(:inclusion, school_name: object.school.name).call(object, data) }
         }
 
       def radio_options
