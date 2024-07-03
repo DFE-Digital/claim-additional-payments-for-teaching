@@ -6,6 +6,7 @@ FactoryBot.define do
     end
 
     trait :eligible do
+      eligible_contract
       eligible_date_of_entry
       eligible_home_office
       eligible_school
@@ -17,6 +18,10 @@ FactoryBot.define do
 
     trait :eligible_date_of_entry do
       date_of_entry { 1.year.ago }
+    end
+
+    trait :eligible_contract do
+      one_year { true }
     end
   end
 end
