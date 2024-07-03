@@ -843,6 +843,9 @@ en:
             inclusion: Select yes if you are subject to formal action for poor performance at work
           disciplinary:
             inclusion: Select yes if you are subject to disciplinary action
+      half_teaching_hours:
+        errors:
+          inclusion: Select yes if at least half your timetabled teaching hours are spent teaching 16-19-year-olds, including those up to 25 with an Education, Health and Care Plan
   activerecord:
     errors:
       models:

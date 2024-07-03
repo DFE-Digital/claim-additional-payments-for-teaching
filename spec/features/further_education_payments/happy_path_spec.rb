@@ -45,7 +45,8 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("FE teaching courses goes here")
     click_button "Continue"
 
-    expect(page).to have_content("FE half teaching hours goes here")
+    expect(page).to have_content("Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?")
+    choose "Yes"
     click_button "Continue"
 
     expect(page).to have_content("Do you have a teaching qualification?")
