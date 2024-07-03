@@ -5,6 +5,7 @@
       method: :patch,
       builder: GOVUKDesignSystemFormBuilder::FormBuilder,
       id: "further-education-provision-search-form",
+      data: { "fe-only" => true },
       html: { novalidate: false } do |f| %>
       <%= f.govuk_error_summary %>
 
@@ -25,7 +26,7 @@
         type: :bullet %>
 
       <p class="govuk-body">
-        If you are unsure if your FE provider is eligible, you can refer to the full list of eligible FE providers for more information.
+        If you are unsure if your FE provider is eligible, you can refer to the <%= govuk_link_to "full list of eligible FE providers", "https://assets.publishing.service.gov.uk/media/667300fe64e554df3bd0db92/List_of_eligible_FE_providers_and_payment_value_for_levelling_up_premium.xlsx" %> for more information.
       </p>
 
       <div id="autocomplete-container" class="govuk-!-margin-bottom-9">

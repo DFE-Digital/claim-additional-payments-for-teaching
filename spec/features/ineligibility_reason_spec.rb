@@ -39,24 +39,36 @@ RSpec.feature "Ineligibility reason", slow: true do
     end
 
     scenario "formal performance action" do
-      choose "claim_subject_to_formal_performance_action_true"
-      choose "claim_subject_to_disciplinary_action_false"
+      within all(".govuk-fieldset")[0] do
+        choose("Yes")
+      end
+      within all(".govuk-fieldset")[1] do
+        choose("No")
+      end
       click_on "Continue"
 
       expect(page).to have_css("div#generic")
     end
 
     scenario "disciplinary action" do
-      choose "claim_subject_to_formal_performance_action_false"
-      choose "claim_subject_to_disciplinary_action_true"
+      within all(".govuk-fieldset")[0] do
+        choose("No")
+      end
+      within all(".govuk-fieldset")[1] do
+        choose("Yes")
+      end
       click_on "Continue"
 
       expect(page).to have_css("div#generic")
     end
 
     scenario "formal performance and disciplinary action" do
-      choose "claim_subject_to_formal_performance_action_true"
-      choose "claim_subject_to_disciplinary_action_true"
+      within all(".govuk-fieldset")[0] do
+        choose("Yes")
+      end
+      within all(".govuk-fieldset")[1] do
+        choose("Yes")
+      end
       click_on "Continue"
 
       expect(page).to have_css("div#generic")
@@ -305,8 +317,12 @@ RSpec.feature "Ineligibility reason", slow: true do
     click_on "Continue"
 
     # - Poor performance
-    choose "claim_subject_to_formal_performance_action_false"
-    choose "claim_subject_to_disciplinary_action_false"
+    within all(".govuk-fieldset")[0] do
+      choose("No")
+    end
+    within all(".govuk-fieldset")[1] do
+      choose("No")
+    end
     click_on "Continue"
 
     # - What route into teaching did you take?

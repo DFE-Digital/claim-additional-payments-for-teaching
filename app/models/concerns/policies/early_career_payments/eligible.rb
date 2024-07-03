@@ -42,7 +42,7 @@ module Policies
       end
 
       def specific_ineligible_attributes?
-        trainee_teacher? || (induction_not_completed? && !ecp_only_school?) || itt_subject_ineligible_now_and_in_the_future?
+        trainee_teacher? || (induction_not_completed? && !any_future_policy_years?) || itt_subject_ineligible_now_and_in_the_future?
       end
 
       def itt_subject_ineligible_now_and_in_the_future?
@@ -55,7 +55,7 @@ module Policies
       end
 
       def specific_eligible_later_attributes?
-        newly_qualified_teacher? && ((induction_not_completed? && ecp_only_school?) || (!itt_subject_eligible_now? && itt_subject_eligible_later?))
+        newly_qualified_teacher? && ((induction_not_completed? && any_future_policy_years?) || (!itt_subject_eligible_now? && itt_subject_eligible_later?))
       end
 
       def itt_subject_eligible_later?

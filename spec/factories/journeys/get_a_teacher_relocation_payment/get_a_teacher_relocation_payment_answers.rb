@@ -35,6 +35,19 @@ FactoryBot.define do
       visa_type { "British National (Overseas) visa" }
     end
 
+    trait :with_entry_date do
+      with_start_date
+      date_of_entry { start_date - 1.week }
+    end
+
+    trait :with_nationality do
+      nationality { "Australian" }
+    end
+
+    trait :with_passport_number do
+      passport_number { "1234567890123456789A" }
+    end
+
     trait :with_email_details do
       email_address { generate(:email_address) }
       email_verified { true }
@@ -53,12 +66,18 @@ FactoryBot.define do
       bank_account_number { rand(10000000..99999999) }
     end
 
+    trait :with_employment_details do
+      current_school_id { create(:school).id }
+      school_headteacher_name { "Seymour Skinner" }
+    end
+
     trait :eligible_teacher do
       with_teacher_application_route
       with_state_funded_secondary_school
       with_one_year_contract
       with_start_date
       with_visa
+      with_entry_date
     end
   end
 end

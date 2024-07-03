@@ -13,13 +13,15 @@
       url: claim_path(current_journey_routing_name),
       builder: GOVUKDesignSystemFormBuilder::FormBuilder
     ) do |f| %>
-      <% if f.object.errors.any? %>
-        <%= render("shared/error_summary", instance: f.object) %>
-      <% end %>
+      <%= f.govuk_error_summary %>
 
       <%= f.govuk_date_field(
         :start_date,
-        legend: { text: t("get_a_teacher_relocation_payment.forms.start_date.question") },
+        legend: {
+          text: t("get_a_teacher_relocation_payment.forms.start_date.question"),
+          size: "l",
+          tag: "h1"
+        },
       ) %>
 
       <%= f.govuk_submit %>

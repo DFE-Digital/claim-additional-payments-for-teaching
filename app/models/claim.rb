@@ -1,13 +1,10 @@
 # frozen_string_literal: true
 
 class Claim < ApplicationRecord
-  MIN_QA_THRESHOLD = 10
-  TRN_LENGTH = 7
   NO_STUDENT_LOAN = "not_applicable"
   STUDENT_LOAN_PLAN_OPTIONS = StudentLoan::PLANS.dup << NO_STUDENT_LOAN
   ADDRESS_ATTRIBUTES = %w[address_line_1 address_line_2 address_line_3 address_line_4 postcode].freeze
   AMENDABLE_ATTRIBUTES = %i[
-    teacher_reference_number
     national_insurance_number
     date_of_birth
     student_loan_plan
@@ -22,7 +19,6 @@ class Claim < ApplicationRecord
     address_line_4: true,
     postcode: true,
     payroll_gender: true,
-    teacher_reference_number: true,
     national_insurance_number: true,
     has_student_loan: false,
     student_loan_country: false,
@@ -76,7 +72,8 @@ class Claim < ApplicationRecord
     qualifications_details_check: true,
     dqt_teacher_status: false,
     submitted_using_slc_data: false,
-    journeys_session_id: false
+    journeys_session_id: false,
+    column_to_remove_teacher_reference_number: true
   }.freeze
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
@@ -126,9 +123,6 @@ class Claim < ApplicationRecord
 
   validates :academic_year_before_type_cast, format: {with: AcademicYear::ACADEMIC_YEAR_REGEXP}
 
-  validates :teacher_reference_number, on: [:submit, :amendment], presence: {message: "Enter your teacher reference number"}
-  validate :trn_must_be_seven_digits
-
   validates :has_student_loan, on: [:"student-loan"], inclusion: {in: [true, false]}
   validates :student_loan_plan, inclusion: {in: STUDENT_LOAN_PLAN_OPTIONS}, allow_nil: true
   validates :student_loan_plan, on: [:"student-loan", :amendment], presence: {message: "Enter a valid student loan plan"}
@@ -147,7 +141,6 @@ class Claim < ApplicationRecord
   validate :building_society_roll_number_must_be_between_one_and_eighteen_digits
   validate :building_society_roll_number_must_be_in_a_valid_format
 
-  before_save :normalise_trn, if: :teacher_reference_number_changed?
   before_save :normalise_ni_number, if: :national_insurance_number_changed?
   before_save :normalise_bank_account_number, if: :bank_account_number_changed?
   before_save :normalise_bank_sort_code, if: :bank_sort_code_changed?
@@ -186,31 +179,6 @@ class Claim < ApplicationRecord
   scope :not_awaiting_qa, -> { approved.where("qa_required = false OR (qa_required = true AND qa_completed_at IS NOT NULL)") }
   scope :awaiting_qa, -> { approved.qa_required.where(qa_completed_at: nil) }
   scope :qa_required, -> { where(qa_required: true) }
-
-  # This method's intention is to help make a decision on whether a claim should
-  # be flagged for QA or not. These criteria need to be met for each academic year:
-  #
-  # 1. the first claim to be approved should always be flagged for QA
-  # 2. subsequently approved claims should be flagged for QA, 1 in 100/MIN_QA_THRESHOLD.
-  #
-  # This method should be used every time a new approval decision is being made;
-  # when used retrospectively, i.e. when several claims have been approved,
-  # the method returns:
-  #
-  # 1. `true` if none of then claims have been flagged for QA
-  # 2. `true` if some claims have been flagged for QA using a lower MIN_QA_THRESHOLD
-  # 3. `false` if some claims have been flagged for QA using a higher MIN_QA_THRESHOLD
-  #
-  # Newly approved claims should not be flagged for QA for as long as the method
-  # returns `false`; they should be flagged for QA otherwise.
-  def self.below_min_qa_threshold?
-    return false if MIN_QA_THRESHOLD.zero?
-
-    claims_approved_so_far = current_academic_year.approved.count
-    return true if claims_approved_so_far.zero?
-
-    (current_academic_year.approved.qa_required.count.to_f / claims_approved_so_far) * 100 <= MIN_QA_THRESHOLD
-  end
 
   def hold!(reason:, user:)
     if holdable? && !held?
@@ -251,7 +219,32 @@ class Claim < ApplicationRecord
   end
 
   def flaggable_for_qa?
-    decision_made? && latest_decision.approved? && Claim.below_min_qa_threshold? && !awaiting_qa? && !qa_completed?
+    decision_made? && latest_decision.approved? && below_min_qa_threshold? && !awaiting_qa? && !qa_completed?
+  end
+
+  # This method's intention is to help make a decision on whether a claim should
+  # be flagged for QA or not. These criteria need to be met for each academic year:
+  #
+  # 1. the first claim to be approved should always be flagged for QA
+  # 2. subsequently approved claims should be flagged for QA, 1 in 100/MIN_QA_THRESHOLD.
+  #
+  # This method should be used every time a new approval decision is being made;
+  # when used retrospectively, i.e. when several claims have been approved,
+  # the method returns:
+  #
+  # 1. `true` if none of then claims have been flagged for QA
+  # 2. `true` if some claims have been flagged for QA using a lower MIN_QA_THRESHOLD
+  # 3. `false` if some claims have been flagged for QA using a higher MIN_QA_THRESHOLD
+  #
+  # Newly approved claims should not be flagged for QA for as long as the method
+  # returns `false`; they should be flagged for QA otherwise.
+  def below_min_qa_threshold?
+    return false if policy::MIN_QA_THRESHOLD.zero?
+
+    claims_approved_so_far = Claim.by_policy(policy).current_academic_year.approved.count
+    return true if claims_approved_so_far.zero?
+
+    (Claim.by_policy(policy).current_academic_year.approved.qa_required.count.to_f / claims_approved_so_far) * 100 <= policy::MIN_QA_THRESHOLD
   end
 
   def qa_completed?
@@ -404,18 +397,6 @@ class Claim < ApplicationRecord
   end
 
   private
-
-  def normalise_trn
-    self.teacher_reference_number = normalised_trn
-  end
-
-  def normalised_trn
-    teacher_reference_number.gsub(/\D/, "")
-  end
-
-  def trn_must_be_seven_digits
-    errors.add(:teacher_reference_number, "Teacher reference number must be 7 digits") if teacher_reference_number.present? && normalised_trn.length != TRN_LENGTH
-  end
 
   def normalise_ni_number
     self.national_insurance_number = normalised_ni_number

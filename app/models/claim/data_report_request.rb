@@ -28,7 +28,7 @@ class Claim
         @claims.each do |claim|
           csv << [
             ExcelUtils.escape_formulas(claim.reference),
-            ExcelUtils.escape_formulas(claim.teacher_reference_number),
+            ExcelUtils.escape_formulas(claim.eligibility.teacher_reference_number),
             ExcelUtils.escape_formulas(claim.national_insurance_number),
             ExcelUtils.escape_formulas(claim.full_name),
             ExcelUtils.escape_formulas(claim.email_address),

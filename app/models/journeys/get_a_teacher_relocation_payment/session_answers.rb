@@ -7,9 +7,13 @@ module Journeys
       attribute :start_date, :date
       attribute :subject, :string
       attribute :visa_type, :string
+      attribute :date_of_entry, :date
+      attribute :nationality, :string
+      attribute :passport_number, :string
+      attribute :school_headteacher_name, :string
 
-      def trainee?
-        application_route == "salaried_trainee"
+      def policy
+        Policies::InternationalRelocationPayments
       end
     end
   end

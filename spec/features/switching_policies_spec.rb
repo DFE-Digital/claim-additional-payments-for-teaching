@@ -95,6 +95,36 @@ RSpec.feature "Switching policies" do
     end
   end
 
+  context "Switching to the same journey" do
+    scenario "a user can switch to the same journey after starting a claim on that journey" do
+      school = create(:school, :combined_journey_eligibile_for_all)
+
+      visit new_claim_path("additional-payments")
+
+      skip_tid
+
+      choose_school school
+
+      expect(page).to have_text(
+        "Are you currently teaching as a qualified teacher?"
+      )
+
+      visit new_claim_path("additional-payments")
+
+      expect(page).to(have_text(
+        "You have a claim in progress for an additional payment for teaching."
+      ))
+
+      choose "No, finish the claim I have in progress"
+
+      click_on "Submit"
+
+      expect(page).to have_text(
+        "Are you currently teaching as a qualified teacher?"
+      )
+    end
+  end
+
   scenario "a user does not select an option" do
     start_student_loans_claim
     visit new_claim_path("additional-payments")

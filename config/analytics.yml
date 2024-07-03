@@ -198,6 +198,9 @@ shared:
     - start_date
     - subject
     - visa_type
+    - date_of_entry
+    - nationality
+    - current_school_id
   :schools:
     - id
     - urn
@@ -219,6 +222,7 @@ shared:
     - statutory_high_age
     - phone_number
     - open_date
+    - ukprn
   :support_tickets:
     - id
     - url

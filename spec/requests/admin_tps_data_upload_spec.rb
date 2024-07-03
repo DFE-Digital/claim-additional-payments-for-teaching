@@ -76,10 +76,10 @@ RSpec.describe "TPS data upload" do
             :claim,
             :submitted,
             policy: Policies::EarlyCareerPayments,
-            teacher_reference_number: 1000106,
             submitted_at: Date.new(2022, 7, 15),
             academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
             eligibility_attributes: {
+              teacher_reference_number: 1000106,
               current_school: current_school
             }
           )
@@ -90,9 +90,9 @@ RSpec.describe "TPS data upload" do
             :claim,
             :submitted,
             policy: Policies::EarlyCareerPayments,
-            teacher_reference_number: 1000107,
             submitted_at: Date.new(2022, 7, 15),
-            academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021))
+            academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
+            eligibility_attributes: {teacher_reference_number: 1000107}
           )
         end
 
@@ -101,9 +101,9 @@ RSpec.describe "TPS data upload" do
             :claim,
             :submitted,
             policy: Policies::EarlyCareerPayments,
-            teacher_reference_number: 1000108,
             submitted_at: Date.new(2022, 7, 15),
-            academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021))
+            academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
+            eligibility_attributes: {teacher_reference_number: 1000108}
           )
         end
 
@@ -143,7 +143,7 @@ RSpec.describe "TPS data upload" do
           it "runs the employment task again for NO MATCH claims" do
             csv = <<~CSV
               Teacher reference number,NINO,Start Date,End Date,LA URN,School URN,Employer ID
-              #{claim_no_data.teacher_reference_number},ZX043155C,01/07/2022,30/09/2022,#{claim_no_data.school.local_authority.code},#{claim_no_data.school.establishment_number},1122
+              #{claim_no_data.eligibility.teacher_reference_number},ZX043155C,01/07/2022,30/09/2022,#{claim_no_data.school.local_authority.code},#{claim_no_data.school.establishment_number},1122
             CSV
 
             file = Rack::Test::UploadedFile.new(StringIO.new(csv), "text/csv", original_filename: "tps_data.csv")
@@ -184,10 +184,10 @@ RSpec.describe "TPS data upload" do
             :claim,
             :submitted,
             policy: Policies::StudentLoans,
-            teacher_reference_number: 1000106,
             submitted_at: Date.new(2022, 7, 15),
             academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
             eligibility_attributes: {
+              teacher_reference_number: 1000106,
               current_school: current_school,
               claim_school: claim_school
             }
@@ -199,9 +199,9 @@ RSpec.describe "TPS data upload" do
             :claim,
             :submitted,
             policy: Policies::StudentLoans,
-            teacher_reference_number: 1000107,
             submitted_at: Date.new(2022, 7, 15),
-            academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021))
+            academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
+            eligibility_attributes: {teacher_reference_number: 1000107}
           )
         end
 

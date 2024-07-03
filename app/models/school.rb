@@ -15,6 +15,8 @@ class School < ApplicationRecord
   validates :school_type_group, presence: true
   validates :school_type, presence: true
 
+  scope :fe_only, -> { where(phase: 6) } # PhaseOfEducation == 16 plus
+
   PHASES = {
     not_applicable: 0,
     nursery: 1,
@@ -119,7 +121,7 @@ class School < ApplicationRecord
 
   before_save :sanitise_postcode_search_index
 
-  def self.search(search_term)
+  def self.search(search_term, fe_only: false)
     raise ArgumentError, SEARCH_NOT_ENOUGH_CHARACTERS_ERROR if search_term.length < SEARCH_MINIMUM_LENGTH
 
     search_field = :name
@@ -131,10 +133,14 @@ class School < ApplicationRecord
       search_field, search_term = [:postcode_sanitised, sanitised_search_term]
     end
 
-    where("#{search_field} ILIKE ?", "%#{sanitize_sql_like(search_term)}%")
+    sql = where("#{search_field} ILIKE ?", "%#{sanitize_sql_like(search_term)}%")
       .order(sanitize_sql_for_order([Arel.sql("similarity(#{search_field}, ?) DESC"), search_term]))
       .order(:name, close_date: :desc)
       .limit(SEARCH_RESULTS_LIMIT)
+
+    sql = sql.fe_only if fe_only
+
+    sql
   end
 
   def address

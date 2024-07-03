@@ -10,14 +10,14 @@ describe Admin::ClaimsHelper do
         :claim,
         first_name: "Bruce",
         surname: "Wayne",
-        teacher_reference_number: "1234567",
         national_insurance_number: "QQ123456C",
         email_address: "test@email.com",
         address_line_1: "Flat 1",
         address_line_2: "1 Test Road",
         address_line_3: "Test Town",
         postcode: "AB1 2CD",
-        date_of_birth: Date.new(1901, 1, 1)
+        date_of_birth: Date.new(1901, 1, 1),
+        eligibility_attributes: {teacher_reference_number: "1234567"}
       )
     end
 
@@ -35,7 +35,7 @@ describe Admin::ClaimsHelper do
     end
 
     context "when a claim has had personal data deleted" do
-      let(:claim) { build(:claim, :rejected, :personal_data_removed, teacher_reference_number: "1234567", email_address: "test@email.com") }
+      let(:claim) { build(:claim, :rejected, :personal_data_removed, eligibility_attributes: {teacher_reference_number: "1234567"}, email_address: "test@email.com") }
 
       it "returns the expected strings" do
         expected_answers = [
@@ -176,23 +176,23 @@ describe Admin::ClaimsHelper do
     let(:first_claim) {
       build(
         :claim,
-        teacher_reference_number: "0902344",
         national_insurance_number: "QQ891011C",
         email_address: "genghis.khan@mongol-empire.com",
         bank_account_number: "34682151",
         bank_sort_code: "972654",
-        building_society_roll_number: "123456789/ABCD"
+        building_society_roll_number: "123456789/ABCD",
+        eligibility_attributes: {teacher_reference_number: "0902344"}
       )
     }
     let(:second_claim) {
       build(
         :claim,
         :submitted,
-        teacher_reference_number: first_claim.teacher_reference_number,
         national_insurance_number: first_claim.national_insurance_number,
         bank_account_number: first_claim.bank_account_number,
         bank_sort_code: first_claim.bank_sort_code,
-        building_society_roll_number: first_claim.building_society_roll_number
+        building_society_roll_number: first_claim.building_society_roll_number,
+        eligibility_attributes: {teacher_reference_number: first_claim.eligibility.teacher_reference_number}
       )
     }
     subject { helper.matching_attributes(first_claim, second_claim) }

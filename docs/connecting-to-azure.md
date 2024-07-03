@@ -52,11 +52,8 @@ but you may need to re-authenticate every once in a while.
 4. Then run:
 
    ```shell
-   make review-aks get-cluster-credentials PR_NUMBER=1
+   make test-aks get-cluster-credentials
    ```
-
-   > You can pass in anything as the PR_NUMBER argument for this command; it
-   > doesn't even need to match a current PR.
 
 5. Assuming everything worked correctly, you should now be able to access the
    Kubernetes cluster using the `kubectl` command.
@@ -72,9 +69,15 @@ but you may need to re-authenticate every once in a while.
 ## 2. Get the Kubernetes Deployment name
 
 Multiple instances of the app run on the `test` cluster, one for each Pull
-Request that has a `deploy` label. Each one is a Kubernetes
+Request that has a `deploy` label, plus our `test` app itself. Each one is a
+Kubernetes
 [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
 resource.
+
+### Review apps
+
+Our review apps are under the `srtl-development` namespace within the `test`
+cluster.
 
 To connect to a **review app**, the deployment is named after the PR number
 followed by either web, postgres or worker:
@@ -88,15 +91,26 @@ claim-additional-payments-for-teaching-review-[PR_NUMBER]-worker
 For example, the worker for PR 123 would be
 `claim-additional-payments-for-teaching-review-123-worker`.
 
-> [!TIP] For a list of all active deployments, run:
->
-> ```shell
-> kubectl -n srtl-development get deployments
-> ```
+For a list of all active review deployments, run:
+
+```shell
+kubectl -n srtl-development get deployments
+```
+
+### Test app
+
+Our test app is under the `srtl-test` namespace within the `test` cluster.
+
+For a list of all test deployments, run:
+
+```shell
+kubectl -n srtl-test get deployments
+```
 
 ## 3. Connect to a running container
 
-These commands will connect to a review app.
+The following commands will connect to a review app. To connect to the test app,
+replace `srtl-development` with `srtl-test` then target the test deployment.
 
 ### Open a Rails console
 

@@ -105,6 +105,18 @@ RSpec.describe "Admin tasks", type: :request do
         end
       end
     end
+
+    context "with an International Relocation Payments claim" do
+      let(:claim) { create(:claim, :submitted, policy: Policies::InternationalRelocationPayments) }
+
+      describe "tasks#show" do
+        it "renders the requested page" do
+          get admin_claim_task_path(claim, "identity_confirmation")
+          expect(response.body).to include(I18n.t("admin.nationality"))
+          expect(response.body).to include(I18n.t("admin.passport_number"))
+        end
+      end
+    end
   end
 
   context "when signed in as a payroll operator or a support agent" do

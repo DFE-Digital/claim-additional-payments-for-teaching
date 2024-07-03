@@ -6,17 +6,37 @@ RSpec.describe PurgeUnsubmittedClaimsJob do
     let(:four_hours_ago) { 4.hours.ago }
 
     it "destroys any unsubmitted claims that have not been updated in the last 24 hours" do
-      expired_unsubmitted_claim = create(:claim, updated_at: over_24_hours_ago)
-      active_unsubmitted_claim = create(:claim, updated_at: four_hours_ago)
+      submitted_journeys = []
+      unsubmitted_fresh_journeys = []
+      unsubmitted_expired_journeys = []
 
-      old_submitted_claim = create(:claim, :submitted, updated_at: over_24_hours_ago)
+      Journeys::JOURNEYS.each do |journey|
+        submitted_journeys << journey::Session.create!(
+          journey: journey::ROUTING_NAME,
+          claim: create(:claim),
+          updated_at: over_24_hours_ago
+        )
+
+        unsubmitted_fresh_journeys << journey::Session.create!(
+          journey: journey::ROUTING_NAME,
+          updated_at: four_hours_ago
+        )
+
+        unsubmitted_expired_journeys << journey::Session.create!(
+          journey: journey::ROUTING_NAME,
+          updated_at: over_24_hours_ago
+        )
+      end
 
       PurgeUnsubmittedClaimsJob.new.perform
 
-      expect(Claim.exists?(expired_unsubmitted_claim.id)).to eq false
+      expect(submitted_journeys.each(&:reload)).to all be_persisted
 
-      expect(Claim.exists?(old_submitted_claim.id)).to eq true
-      expect(Claim.exists?(active_unsubmitted_claim.id)).to eq true
+      expect(unsubmitted_fresh_journeys.each(&:reload)).to all be_persisted
+
+      expect(
+        Journeys::Session.where(id: unsubmitted_expired_journeys.map(&:id))
+      ).to be_empty
     end
   end
 end

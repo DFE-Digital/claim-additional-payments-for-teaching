@@ -38,7 +38,7 @@ module ClaimsFormCallbacks
   end
 
   def personal_details_after_form_save_success
-    return unless journey_requires_student_loan_details?
+    return redirect_to_next_slug unless journey_requires_student_loan_details?
 
     retrieve_student_loan_details
     redirect_to_next_slug
@@ -115,7 +115,7 @@ module ClaimsFormCallbacks
   end
 
   def journey_requires_student_loan_details?
-    student_loans_journey? || additional_payments_journey?
+    student_loans_journey? || additional_payments_journey? || get_a_teacher_relocation_payment_journey?
   end
 
   def student_loans_journey?
@@ -124,5 +124,9 @@ module ClaimsFormCallbacks
 
   def additional_payments_journey?
     current_journey_routing_name == "additional-payments"
+  end
+
+  def get_a_teacher_relocation_payment_journey?
+    current_journey_routing_name == "get-a-teacher-relocation-payment"
   end
 end

@@ -1,0 +1,28 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_radio_buttons_fieldset :further_education_teaching_start_year,
+        legend: {
+          text: "Which academic year did you start teaching in further education (FE) in England?",
+          tag: "h1",
+          size: "l"
+        } do %>
+        <% @form.radio_options[0..-2].each do |option| %>
+          <%= f.govuk_radio_button :further_education_teaching_start_year, option.id,
+            label: { text: option.name },
+            link_errors: @form.radio_options.first == option %>
+        <% end %>
+
+        <%= f.govuk_radio_divider %>
+
+        <% option = @form.radio_options.last %>
+        <%= f.govuk_radio_button :further_education_teaching_start_year, option.id,
+          label: { text: option.name } %>
+      <% end %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

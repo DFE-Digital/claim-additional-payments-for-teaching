@@ -8,11 +8,8 @@ describe "ineligible route: completing the form" do
   end
 
   let(:contract_start_date) do
-    Date.new(
-      journey_configuration.current_academic_year.start_year,
-      1,
-      1
-    )
+    Policies::InternationalRelocationPayments::PolicyEligibilityChecker
+      .earliest_eligible_contract_start_date
   end
 
   before do
@@ -21,10 +18,22 @@ describe "ineligible route: completing the form" do
 
   describe "navigating forward" do
     context "ineligible - application route" do
-      it "shows the ineligible page" do
-        when_i_start_the_form
-        and_i_complete_application_route_question_with(option: "Other")
-        then_i_see_the_ineligible_page
+      context "when choosing other" do
+        it "shows the ineligible page" do
+          when_i_start_the_form
+          and_i_complete_application_route_question_with(option: "Other")
+          then_i_see_the_ineligible_page
+        end
+      end
+
+      context "when choosing trainee" do
+        it "shows the ineligible page" do
+          when_i_start_the_form
+          and_i_complete_application_route_question_with(
+            option: "I am enrolled on a salaried teacher training course in England"
+          )
+          then_i_see_the_ineligible_page
+        end
       end
     end
 
@@ -35,17 +44,6 @@ describe "ineligible route: completing the form" do
           option: "I am employed as a teacher in a school in England"
         )
         and_i_complete_the_state_funded_secondary_school_step_with(option: "No")
-        then_i_see_the_ineligible_page
-      end
-    end
-
-    context "ineligible - trainee details" do
-      it "shows the ineligible page" do
-        when_i_start_the_form
-        and_i_complete_application_route_question_with(
-          option: "I am enrolled on a salaried teacher training course in England"
-        )
-        and_i_complete_the_trainee_details_step_with(option: "No")
         then_i_see_the_ineligible_page
       end
     end
@@ -62,88 +60,70 @@ describe "ineligible route: completing the form" do
       end
     end
 
-    # FIXME RL waiting on feedback from policy team to determine what the cut
-    # off date is for contracts
-    xcontext "ineligible - contract start date" do
-      context "as a teacher" do
-        it "shows the ineligible page" do
-          when_i_start_the_form
-          and_i_complete_application_route_question_with(
-            option: "I am employed as a teacher in a school in England"
-          )
-          and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
-          and_i_complete_the_contract_details_step_with(option: "Yes")
-          and_i_complete_the_contract_start_date_step_with(
-            date: Polices::InternationalRelocationPayments.earliest_eligible_contract_start_date - 1.day
-          )
-          then_i_see_the_ineligible_page
-        end
-      end
-
-      context "as a trainee" do
-        it "shows the ineligible page" do
-          when_i_start_the_form
-          and_i_complete_application_route_question_with(
-            option: "I am enrolled on a salaried teacher training course in England"
-          )
-          and_i_complete_the_trainee_details_step_with(option: "Yes")
-          and_i_complete_the_contract_start_date_step_with(
-            date: Polices::InternationalRelocationPayments.earliest_eligible_contract_start_date - 1.day
-          )
-          then_i_see_the_ineligible_page
-        end
+    context "ineligible - contract start date" do
+      it "shows the ineligible page" do
+        when_i_start_the_form
+        and_i_complete_application_route_question_with(
+          option: "I am employed as a teacher in a school in England"
+        )
+        and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
+        and_i_complete_the_contract_details_step_with(option: "Yes")
+        and_i_complete_the_contract_start_date_step_with(
+          date: Policies::InternationalRelocationPayments::PolicyEligibilityChecker
+          .earliest_eligible_contract_start_date - 1.day
+        )
+        then_i_see_the_ineligible_page
       end
     end
 
     context "ineligible - subject" do
-      context "as a teacher" do
-        it "shows the ineligible page" do
-          when_i_start_the_form
-          and_i_complete_application_route_question_with(
-            option: "I am employed as a teacher in a school in England"
-          )
-          and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
-          and_i_complete_the_contract_details_step_with(option: "Yes")
-          and_i_complete_the_contract_start_date_step_with(
-            date: contract_start_date
-          )
-          and_i_complete_the_subject_step_with(option: "Other")
-          then_i_see_the_ineligible_page
-        end
-      end
-
-      context "as a trainee" do
-        it "shows the ineligible page" do
-          when_i_start_the_form
-          and_i_complete_application_route_question_with(
-            option: "I am enrolled on a salaried teacher training course in England"
-          )
-          and_i_complete_the_trainee_details_step_with(option: "Yes")
-          and_i_complete_the_contract_start_date_step_with(
-            date: contract_start_date
-          )
-          and_i_complete_the_subject_step_with(option: "Other", trainee: true)
-          then_i_see_the_ineligible_page
-        end
+      it "shows the ineligible page" do
+        when_i_start_the_form
+        and_i_complete_application_route_question_with(
+          option: "I am employed as a teacher in a school in England"
+        )
+        and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
+        and_i_complete_the_contract_details_step_with(option: "Yes")
+        and_i_complete_the_contract_start_date_step_with(
+          date: contract_start_date
+        )
+        and_i_complete_the_subject_step_with(option: "Other")
+        then_i_see_the_ineligible_page
       end
     end
 
     context "ineligible - visa" do
-      context "as a teacher" do
-        it "shows the ineligible page" do
-          when_i_start_the_form
-          and_i_complete_application_route_question_with(
-            option: "I am employed as a teacher in a school in England"
-          )
-          and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
-          and_i_complete_the_contract_details_step_with(option: "Yes")
-          and_i_complete_the_contract_start_date_step_with(
-            date: contract_start_date
-          )
-          and_i_complete_the_subject_step_with(option: "Physics")
-          and_i_complete_the_visa_screen_with(option: "Other")
-          then_i_see_the_ineligible_page
-        end
+      it "shows the ineligible page" do
+        when_i_start_the_form
+        and_i_complete_application_route_question_with(
+          option: "I am employed as a teacher in a school in England"
+        )
+        and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
+        and_i_complete_the_contract_details_step_with(option: "Yes")
+        and_i_complete_the_contract_start_date_step_with(
+          date: contract_start_date
+        )
+        and_i_complete_the_subject_step_with(option: "Physics")
+        and_i_complete_the_visa_screen_with(option: "Other")
+        then_i_see_the_ineligible_page
+      end
+    end
+
+    context "ineligible - entry date" do
+      it "shows the ineligible page" do
+        when_i_start_the_form
+        and_i_complete_application_route_question_with(
+          option: "I am employed as a teacher in a school in England"
+        )
+        and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
+        and_i_complete_the_contract_details_step_with(option: "Yes")
+        and_i_complete_the_contract_start_date_step_with(
+          date: contract_start_date
+        )
+        and_i_complete_the_subject_step_with(option: "Physics")
+        and_i_complete_the_visa_screen_with(option: "British National (Overseas) visa")
+        and_i_complete_the_entry_date_page_with(date: contract_start_date - 4.months)
+        then_i_see_the_ineligible_page
       end
     end
   end

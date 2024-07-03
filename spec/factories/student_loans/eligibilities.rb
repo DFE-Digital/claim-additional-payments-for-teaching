@@ -11,6 +11,7 @@ FactoryBot.define do
       had_leadership_position { true }
       mostly_performed_leadership_duties { false }
       student_loan_repayment_amount { 1000 }
+      teacher_reference_number { generate(:teacher_reference_number) }
     end
 
     trait :ineligible do

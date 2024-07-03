@@ -18,6 +18,7 @@ module Journeys
         "building-society-account" => BankDetailsForm,
         "teacher-reference-number" => TeacherReferenceNumberForm,
         "address" => AddressForm,
+        "postcode-search" => PostcodeSearchForm,
         "select-home-address" => SelectHomeAddressForm,
         "check-your-answers" => CheckYourAnswersForm
       }

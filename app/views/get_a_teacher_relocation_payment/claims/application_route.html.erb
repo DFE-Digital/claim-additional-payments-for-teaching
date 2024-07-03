@@ -13,9 +13,7 @@
       url: claim_path(current_journey_routing_name),
       builder: GOVUKDesignSystemFormBuilder::FormBuilder
     ) do |f| %>
-      <% if f.object.errors.any? %>
-        <%= render("shared/error_summary", instance: f.object) %>
-      <% end %>
+      <%= f.govuk_error_summary %>
 
       <%= f.govuk_collection_radio_buttons(
         :application_route,
@@ -27,7 +25,11 @@
             t("get_a_teacher_relocation_payment.forms.application_route.answers.#{option}.hint")
           end
         end,
-        legend: { text: t("get_a_teacher_relocation_payment.forms.application_route.question") },
+        legend: {
+          text: t("get_a_teacher_relocation_payment.forms.application_route.question"),
+          size: "l",
+          tag: "h1"
+        },
         hint: { text: t("get_a_teacher_relocation_payment.forms.application_route.hint") }
       ) %>
 

@@ -9,6 +9,8 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::StartDateForm, type: :mod
     )
   end
 
+  let(:option) { nil }
+
   def multi_part_date_parms(date)
     return {} unless date.present?
 
@@ -31,27 +33,25 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::StartDateForm, type: :mod
     subject { form }
 
     context "with an invalid date" do
-      let(:option) { nil }
-
       it { is_expected.not_to be_valid }
     end
 
     context "with a date in the future" do
-      let(:option) { Date.tomorrow }
-
-      it { is_expected.to be_valid }
+      it do
+        is_expected.not_to(
+          allow_value(Date.tomorrow)
+          .for(:start_date)
+          .with_message("Start date cannot be in the future")
+        )
+      end
     end
 
     context "with a date in the present" do
-      let(:option) { Date.today }
-
-      it { is_expected.to be_valid }
+      it { is_expected.to allow_value(Date.today).for(:start_date) }
     end
 
     context "with a date in the past" do
-      let(:option) { Date.yesterday }
-
-      it { is_expected.to be_valid }
+      it { is_expected.to allow_value(Date.yesterday).for(:start_date) }
     end
   end
 
@@ -90,13 +90,42 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::StartDateForm, type: :mod
   end
 
   describe "#save" do
-    let(:option) { Date.tomorrow }
+    let(:option) { Date.yesterday }
 
     it "updates the journey session" do
       expect { expect(form.save).to be(true) }.to(
         change { journey_session.reload.answers.start_date }
         .to(option)
       )
+    end
+
+    describe "resetting depenent answers" do
+      before do
+        journey_session.answers.assign_attributes(date_of_entry: 1.year.ago)
+        journey_session.save!
+      end
+
+      context "when the start date is changed" do
+        it "resets the dependent answers" do
+          expect { form.save }.to(
+            change { journey_session.reload.answers.date_of_entry }
+            .to(nil)
+          )
+        end
+      end
+
+      context "when the start date is not changed" do
+        before do
+          journey_session.answers.assign_attributes(start_date: option)
+          journey_session.save!
+        end
+
+        it "does not reset the dependent answers" do
+          expect { form.save }.to(
+            not_change { journey_session.reload.answers.date_of_entry }
+          )
+        end
+      end
     end
   end
 end

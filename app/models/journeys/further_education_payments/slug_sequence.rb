@@ -7,17 +7,18 @@ module Journeys
         select-provision
         contract-type
         teaching-hours-per-week
-        academic-year-in-further-education
-        subject-areas
+        further-education-teaching-start-year
+        subjects-taught
         building-and-construction-courses
         teaching-courses
         half-teaching-hours
-        qualification
+        teaching-qualification
         poor-performance
       ]
 
       RESULTS_SLUGS = %w[
         check-your-answers
+        eligible
         ineligible
       ].freeze
 

@@ -25,7 +25,7 @@ stages:
 
   - stage: ProductionRelease
     lockBehavior: sequential
-    condition: and(succeeded('TestRelease'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
     jobs:
       - deployment: ProductionRelease
         displayName: Deploy to production environment

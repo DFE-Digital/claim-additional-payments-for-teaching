@@ -75,5 +75,21 @@ RSpec.describe "School search", type: :request do
         expect(response.body).to include(other_school_similar_name.name)
       end
     end
+
+    context "when searching for FE only" do
+      let!(:school_3) { create(:school, :further_education, name: "some college") }
+
+      before do
+        school_1.update(name: "some school")
+        school_2.update(name: "some school")
+      end
+
+      it "only returns FE bodies" do
+        post school_search_index_path, params: {query: "some", fe_only: true}
+
+        expect(JSON.parse(response.body)["data"].size).to eql(1)
+        expect(response.body).to include("some college")
+      end
+    end
   end
 end

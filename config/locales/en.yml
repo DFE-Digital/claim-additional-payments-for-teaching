@@ -119,6 +119,9 @@ en:
     claim_route: "Claim route"
     claim_route_not_tid: "Not signed in with DfE Identity"
     claim_route_with_tid: "Signed in with DfE Identity"
+    passport_number: "Passport number"
+    nationality: "Nationality"
+    arrival_date: "Date of entry"
     decision:
       created_at: "Created at"
       result: "Result"
@@ -151,6 +154,9 @@ en:
       student_loan_plan: "Check student loan plan"
       payroll_details: "Check bank/building society account details"
       census_subjects_taught: "Check eligible subjects are taught"
+      visa: "Check visa"
+      arrival_date: "Check arrival date"
+      employment_contract: "Check employment contract"
     undo_decision:
       approved: "Undo approval"
       rejected: "Undo rejection"
@@ -484,21 +490,23 @@ en:
         errors:
           blank: "Select yes if you have completed your induction"
       poor_performance:
+        heading: Tell us if you are currently under any performance measures or disciplinary action
         questions:
-          poor_performance: Tell us if you are currently under any performance measures or disciplinary action
-          disciplinary_action: "Are you currently subject to disciplinary action?"
-          disciplinary_action_hint:
-            "This is more serious than performance measures and could be because of misconduct. It is something we may
-            check with your school as it will affect your eligibility."
-          formal_performance_action: "Have any performance measures been started against you?"
-          formal_performance_action_hint:
-            "This will be as a result of your underperformance as a teacher over a period of time. It could put your
-            employment at the school at risk and is something we may check with your school as it will affect your
-            eligibility."
+          performance:
+            question: "Have any performance measures been started against you?"
+            hint:
+              "This will be as a result of your underperformance as a teacher over a period of time. It could put your
+              employment at the school at risk and is something we may check with your school as it will affect your
+              eligibility."
+          disciplinary:
+            question: "Are you currently subject to disciplinary action?"
+            hint:
+              "This is more serious than performance measures and could be because of misconduct. It is something we may
+              check with your school as it will affect your eligibility."
         errors:
-          subject_to_formal_performance_action:
+          performance:
             inclusion: Select yes if you are subject to formal action for poor performance at work
-          subject_to_disciplinary_action:
+          disciplinary:
             inclusion: Select yes if you are subject to disciplinary action
       qualification:
         questions:
@@ -679,10 +687,12 @@ en:
     claim_amount_description: "Additional payment for teaching"
     support_email_address: "levellinguppremiumpayments@digital.education.gov.uk"
     information_provided_further_details_link_text: levelling up premium payment (opens in new tab)
-  get_a_teacher_relocation_payment:
+  get_a_teacher_relocation_payment: &get_a_teacher_relocation_payment
     journey_name: "Get a teacher relocation payment"
     feedback_email: "teach.inengland@education.gov.uk"
     claim_description: "for a get a teacher relocation payment"
+    claim_subject: "International relocation payment"
+    support_email_address: "teach.inengland@education.gov.uk"
     forms:
       application_route:
         question: "What is your employment status?"
@@ -707,23 +717,6 @@ en:
             answer: "No"
         errors:
           inclusion: "Select the option that applies to you"
-      trainee_details:
-        question: "Are you on a teacher training course in England which meets the following conditions?"
-        hint_html: >
-          The course must:
-          <ul>
-            <li>pay a salary</li>
-            <li>lead to qualified teacher status (QTS)</li>
-            <li>be accredited by the UK government</li>
-          </ul>
-          Check with your training provider if you're not sure.
-        answers:
-          true:
-            answer: "Yes"
-          false:
-            answer: "No"
-        errors:
-          inclusion: "Select the option that applies to you"
       contract_details:
         question: "Are you employed on a contract lasting at least one year?"
         hint: "Your contract can also be ongoing or permanent."
@@ -738,13 +731,10 @@ en:
         question: "Enter the start date of your contract"
         errors:
           presence: "Enter your contract start date"
+          date_not_in_future: "Start date cannot be in the future"
       subject:
-        question:
-          teacher: "What subject are you employed to teach at your school?"
-          salaried_trainee: "What subject are you training to teach?"
-        hint:
-          teacher: "Physics, general or combined science including physics, and languages can be combined with other subjects but must make up at least 50% of your time in the classroom."
-          salaried_trainee: "Physics or languages can be combined with other subjects but must make up at least 50% of your course content."
+        question: "What subject are you employed to teach at your school?"
+        hint: "Physics, general or combined science including physics, and languages can be combined with other subjects but must make up at least 50% of your time in the classroom."
         answers:
           physics: "Physics"
           combined_with_physics: "General or combined science, including physics"
@@ -756,6 +746,29 @@ en:
         question: "Select the visa you used to move to England"
         errors:
           inclusion: "Choose your visa type"
+      entry_date:
+        question: "Enter the date you moved to England to start your teaching job"
+        errors:
+          presence: "Enter your entry date"
+          date_not_in_future: "Date of entry cannot be in the future"
+      nationality:
+        question: "Select your nationality"
+        errors:
+          inclusion: "Choose your nationality"
+      passport_number:
+        question: "Enter your passport number, as it appears on your passport"
+        errors:
+          presence: "Enter your passport number"
+          invalid: "Invalid passport number"
+      current_school:
+        questions:
+          current_school_search: "Which school are you currently employed to teach at?"
+          current_school_results: "Which school are you currently employed to teach at?"
+      headteacher_details:
+        questions:
+          school_headteacher_name: "Enter the name of the headteacher of the school where you are employed as a teacher"
+        errors:
+          school_headteacher_name: "Enter the headteacher's name"
 
     check_your_answers:
       part_one:
@@ -763,7 +776,25 @@ en:
         eligibility_details: "Eligibility details"
         confirmation_notice:
           "By selecting continue you are confirming that, to the best of your knowledge, the details you are providing are correct."
+  international_relocation_payments:
+    <<: *get_a_teacher_relocation_payment
+    policy_short_name: "International Relocation Payments"
+    policy_acronym: "IRP"
+    admin:
+      task_questions:
+        identity_confirmation:
+          title: "Did %{claim_full_name} submit the claim?"
+        visa:
+          title: "Is the claimant’s visa type eligible for a claim?"
+        arrival_date:
+          title: "Does the claimant’s arrival date match the above information from their claim?"
+        employment:
+          title: "Does the claimant’s current school match the above information from their claim?"
+        employment_contract:
+          title: "Does the claimant’s employment contract match the above information from their claim?"
+
   further_education_payments:
+    landing_page: Find out if you are eligible for any incentive payments for further education teachers
     claim_description: for further education payments
     journey_name: Claim incentive payments for further education teachers
     feedback_email: "fe-levellingup.premiumpayments@education.gov.uk"
@@ -779,6 +810,45 @@ en:
       select_provision:
         errors:
           blank: Select the college you teach at
+      contract_type:
+        question: What type of contract do you have with %{school_name}?
+        errors:
+          inclusion: Select the contract type you have
+      teaching_hours_per_week:
+        question: On average, how many hours per week are you timetabled to teach at %{school_name} during the current term?
+        hint: ‘Teaching’ refers to the direct contact time you spend in lessons with students of all ages.
+        errors:
+          inclusion: Select how many hours per week you are timetabled to teach during the current term
+      further_education_teaching_start_year:
+        errors:
+          blank: Select which academic year you started teaching in further education in England
+      subjects_taught:
+        question: Which subject areas do you teach?
+        hint: Select all that apply
+        errors:
+          inclusion: Select the subject areas you teach in or select you do not teach any of the listed subject areas
+      teaching_qualification:
+        question: Do you have a teaching qualification?
+        hint: Your response will be noted for future claims. If you don’t have a teaching qualification yet, make sure that you enrol on one or complete one in the next 12 months.
+        errors:
+          inclusion: Select whether you have, are currently enrolled or plan to enrol on a teaching qualification
+      poor_performance:
+        heading: Tell us if you are currently under any performance measures or disciplinary action
+        questions:
+          performance:
+            question: Have any performance measures been started against you?
+            hint: This will be as a result of your underperformance as a teacher over a period of time. It could put your employment at the further education (FE) provider at risk and is something we may check with them as it will affect your eligibility.
+          disciplinary:
+            question: Are you currently subject to disciplinary action?
+            hint: This is more serious than performance measures and could be because of misconduct. It is something we may check with your FE provider as it will affect your eligibility.
+        errors:
+          performance:
+            inclusion: Select yes if you are subject to formal action for poor performance at work
+          disciplinary:
+            inclusion: Select yes if you are subject to disciplinary action
+      half_teaching_hours:
+        errors:
+          inclusion: Select yes if at least half your timetabled teaching hours are spent teaching 16-19-year-olds, including those up to 25 with an Education, Health and Care Plan
   activerecord:
     errors:
       models:

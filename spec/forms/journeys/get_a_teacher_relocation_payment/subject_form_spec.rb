@@ -36,20 +36,10 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::SubjectForm, type: :model
   describe "#available_options" do
     subject { form.available_options }
 
-    context "when a teacher" do
-      before { journey_session.answers.application_route = "teacher" }
-
-      it do
-        is_expected.to(
-          match_array(%w[physics combined_with_physics languages other])
-        )
-      end
-    end
-
-    context "when a trainee" do
-      before { journey_session.answers.application_route = "salaried_trainee" }
-
-      it { is_expected.to(match_array(%w[physics languages other])) }
+    it do
+      is_expected.to(
+        match_array(%w[physics combined_with_physics languages other])
+      )
     end
   end
 
