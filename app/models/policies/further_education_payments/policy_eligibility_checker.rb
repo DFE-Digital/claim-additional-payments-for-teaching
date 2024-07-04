@@ -46,12 +46,12 @@ module Policies
       private
 
       def all_selected_courses_ineligible?
-        groups = answers.subjects_taught.reject{|e| e == "none"}
+        groups = answers.subjects_taught.reject { |e| e == "none" }
 
         return if groups.empty?
 
         groups.all? do |subject|
-          answers.public_send("#{subject}_courses").include?("none")
+          answers.public_send(:"#{subject}_courses").include?("none")
         end
       end
     end

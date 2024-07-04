@@ -53,7 +53,7 @@ module Journeys
           OpenStruct.new(
             id: "none",
             name: "I do not teach any of these courses"
-          ),
+          )
         ]
       end
 
