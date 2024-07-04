@@ -57,6 +57,10 @@ RSpec.feature "Further education payments" do
     check "T Level in digital support services"
     click_button "Continue"
 
+    expect(page).to have_content("Which early years courses do you teach?")
+    check "T Level in education and early years (early years educator)"
+    click_button "Continue"
+
     expect(page).to have_content("FE teaching courses goes here")
     click_button "Continue"
 

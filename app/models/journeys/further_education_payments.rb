@@ -22,6 +22,7 @@ module Journeys
         "building-and-construction-courses" => BuildingConstructionCoursesForm,
         "chemistry-courses" => ChemistryCoursesForm,
         "computing-courses" => ComputingCoursesForm,
+        "early-years-courses" => EarlyYearsCoursesForm,
         "teaching-qualification" => TeachingQualificationForm,
         "poor-performance" => PoorPerformanceForm,
         "check-your-answers" => CheckYourAnswersForm,

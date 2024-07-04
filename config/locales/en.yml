@@ -905,6 +905,9 @@ en:
       computing_courses:
         <<: *courses
         question: Which computing courses do you teach?
+      early_years_courses:
+        <<: *courses
+        question: Which early years courses do you teach?
       teaching_qualification:
         question: Do you have a teaching qualification?
         hint: Your response will be noted for future claims. If you don’t have a teaching qualification yet, make sure that you enrol on one or complete one in the next 12 months.

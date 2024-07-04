@@ -15,6 +15,7 @@ module Journeys
         building-and-construction-courses
         chemistry-courses
         computing-courses
+        early-years-courses
         teaching-courses
         half-teaching-hours
         teaching-qualification
@@ -72,6 +73,10 @@ module Journeys
 
           if answers.subjects_taught.exclude?("computing")
             sequence.delete("computing-courses")
+          end
+
+          if answers.subjects_taught.exclude?("early_years")
+            sequence.delete("early-years-courses")
           end
         end
       end
