@@ -890,6 +890,13 @@ en:
           none: I do not teach any of these subjects
         errors:
           inclusion: Select the subject areas you teach in or select you do not teach any of the listed subject areas
+      building_construction_courses:
+        question: Which building and construction courses do you teach?
+        hint: |
+          <p>If you are unsure what course(s) you teach, email: %{email}</p>
+          <p>Select all that apply</p>
+        errors:
+          inclusion: Select all the courses you teach otherwise select you do not teach any of these courses
       teaching_qualification:
         question: Do you have a teaching qualification?
         hint: Your response will be noted for future claims. If you don’t have a teaching qualification yet, make sure that you enrol on one or complete one in the next 12 months.

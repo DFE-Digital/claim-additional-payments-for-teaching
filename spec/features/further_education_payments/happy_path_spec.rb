@@ -37,9 +37,16 @@ RSpec.feature "Further education payments" do
 
     expect(page).to have_content("Which subject areas do you teach?")
     check("Building and construction")
+    check("Chemistry")
+    check("Computing, including digital and ICT")
+    check("Early years")
+    check("Engineering and manufacturing, including transport engineering and electronics")
+    check("Maths")
+    check("Physics")
     click_button "Continue"
 
-    expect(page).to have_content("FE building and construction courses goes here")
+    expect(page).to have_content("Which building and construction courses do you teach?")
+    check "T Level in building services engineering for construction"
     click_button "Continue"
 
     expect(page).to have_content("FE teaching courses goes here")

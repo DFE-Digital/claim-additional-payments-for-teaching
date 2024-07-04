@@ -19,6 +19,7 @@ module Journeys
         "teaching-hours-per-week-next-term" => TeachingHoursPerWeekNextTermForm,
         "further-education-teaching-start-year" => FurtherEducationTeachingStartYearForm,
         "subjects-taught" => SubjectsTaughtForm,
+        "building-and-construction-courses" => BuildingConstructionCoursesForm,
         "teaching-qualification" => TeachingQualificationForm,
         "poor-performance" => PoorPerformanceForm,
         "check-your-answers" => CheckYourAnswersForm,
