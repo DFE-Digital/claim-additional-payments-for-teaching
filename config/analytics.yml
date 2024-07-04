@@ -262,7 +262,6 @@ shared:
     - updated_at
   :journeys_sessions:
     - id
-    - answers
     - journey
     - created_at
     - updated_at
