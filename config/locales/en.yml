@@ -815,8 +815,8 @@ en:
     landing_page: Find out if you are eligible for any incentive payments for further education teachers
     claim_description: for further education payments
     journey_name: Claim incentive payments for further education teachers
-    feedback_email: "fe-levellingup.premiumpayments@education.gov.uk"
-    support_email_address: "fe-levellingup.premiumpayments@education.gov.uk"
+    feedback_email: "FE-Levellingup.PremiumPayments@education.gov.uk"
+    support_email_address: "FE-Levellingup.PremiumPayments@education.gov.uk"
     forms:
       teaching_responsibilities:
         question: Are you a member of staff with teaching responsibilities?
