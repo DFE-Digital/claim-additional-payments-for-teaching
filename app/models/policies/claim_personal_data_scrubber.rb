@@ -63,23 +63,43 @@ module Policies
     end
 
     def old_rejected_claims
+      claims_rejected_before(minimum_time)
+    end
+
+    def claims_rejected_before(date)
+      rejected_claims.where(
+        "decisions.created_at < :minimum_time",
+        minimum_time: date
+      )
+    end
+
+    def rejected_claims
       claim_scope.joins(:decisions)
         .where(personal_data_removed_at: nil)
         .where(
-          "(decisions.undone = false AND decisions.result = :rejected AND decisions.created_at < :minimum_time)",
-          minimum_time: minimum_time,
+          "(decisions.undone = false AND decisions.result = :rejected)",
           rejected: Decision.results.fetch(:rejected)
         )
     end
 
     def old_paid_claims
+      claims_paid_before(minimum_time)
+    end
+
+    def claims_paid_before(date)
+      paid_claims.where(
+        "payments.scheduled_payment_date < :minimum_time",
+        minimum_time: date
+      )
+    end
+
+    def paid_claims
       claim_ids_with_payrollable_topups = Topup.payrollable.pluck(:claim_id)
       claim_ids_with_payrolled_topups_without_payment_confirmation = Topup.joins(payment: [:payroll_run]).where(payments: {scheduled_payment_date: nil}).pluck(:claim_id)
 
       claim_scope.approved.joins(payments: [:payroll_run])
         .where(personal_data_removed_at: nil)
         .where.not(id: claim_ids_with_payrollable_topups + claim_ids_with_payrolled_topups_without_payment_confirmation)
-        .where("payments.scheduled_payment_date < :minimum_time", minimum_time: minimum_time)
     end
 
     def minimum_time
