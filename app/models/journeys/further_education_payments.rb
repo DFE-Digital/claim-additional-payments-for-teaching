@@ -25,6 +25,7 @@ module Journeys
         "early-years-courses" => EarlyYearsCoursesForm,
         "engineering-manufacturing-courses" => EngineeringManufacturingCoursesForm,
         "maths-courses" => MathsCoursesForm,
+        "physics-courses" => PhysicsCoursesForm,
         "teaching-qualification" => TeachingQualificationForm,
         "poor-performance" => PoorPerformanceForm,
         "check-your-answers" => CheckYourAnswersForm,

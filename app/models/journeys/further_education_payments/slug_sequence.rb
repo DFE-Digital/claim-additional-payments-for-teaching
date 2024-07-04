@@ -18,6 +18,7 @@ module Journeys
         early-years-courses
         engineering-manufacturing-courses
         maths-courses
+        physics-courses
         teaching-courses
         half-teaching-hours
         teaching-qualification
@@ -87,6 +88,10 @@ module Journeys
 
           if answers.subjects_taught.exclude?("maths")
             sequence.delete("maths-courses")
+          end
+
+          if answers.subjects_taught.exclude?("physics")
+            sequence.delete("physics-courses")
           end
         end
       end

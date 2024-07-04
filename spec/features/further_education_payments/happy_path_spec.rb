@@ -69,6 +69,10 @@ RSpec.feature "Further education payments" do
     find("label", text: "ESFA-funded qualifications at level 3 and below in the mathematics and statistics sector subject area").click
     click_button "Continue"
 
+    expect(page).to have_content("Which physics courses do you teach?")
+    check "A or AS level physics"
+    click_button "Continue"
+
     expect(page).to have_content("FE teaching courses goes here")
     click_button "Continue"
 
