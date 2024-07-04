@@ -1,0 +1,19 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      You are not eligible
+    </h1>
+
+    <p class="govuk-body">
+      In order to claim a levelling up premium payment, you must teach an <%= govuk_link_to "eligible FE course", "https://www.gov.uk/guidance/levelling-up-premium-payments-for-fe-teachers#eligible-fe-courses", new_tab: true %>.
+    </p>
+
+    <p class="govuk-body">
+      For more information, check the eligibility criteria for <%= govuk_link_to "levelling up premium payments for early career further education teachers", "https://www.gov.uk/guidance/levelling-up-premium-payments-for-fe-teachers", new_tab: true %>.
+    </p>
+
+    <p class="govuk-body">
+      The information entered is not stored. If you are unsure your information is correct, <%= govuk_link_to "start again", claim_path(current_journey_routing_name, "claim") %>.
+    </p>
+  </div>
+</div>

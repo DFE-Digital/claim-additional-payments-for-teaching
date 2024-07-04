@@ -43,5 +43,21 @@ describe Policies::FurtherEducationPayments::PolicyEligibilityChecker do
         expect(subject.ineligibility_reason).to eql(:subject)
       end
     end
+
+    context "when all courses are ineligible" do
+      let(:answers) do
+        build(
+          :further_education_payments_answers,
+          subjects_taught: ["building_construction"],
+          building_construction_courses: ["none"]
+        )
+      end
+
+      it "is ineligble as :lack_teaching_responsibilities" do
+        expect(subject).to be_ineligible
+        expect(subject.status).to eql(:ineligible)
+        expect(subject.ineligibility_reason).to eql(:courses)
+      end
+    end
   end
 end
