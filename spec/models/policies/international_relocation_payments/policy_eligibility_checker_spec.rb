@@ -162,6 +162,40 @@ describe Policies::InternationalRelocationPayments::PolicyEligibilityChecker do
       it { is_expected.to eq(true) }
     end
 
+    context "with a non secondary school" do
+      let(:attributes) do
+        {
+          application_route: "teacher",
+          state_funded_secondary_school: true,
+          one_year: true,
+          subject: "physics",
+          visa_type: "British National (Overseas) visa",
+          start_date: Policies::InternationalRelocationPayments::PolicyEligibilityChecker.earliest_eligible_contract_start_date,
+          date_of_entry: Policies::InternationalRelocationPayments::PolicyEligibilityChecker.earliest_eligible_contract_start_date - 1.week,
+          current_school_id: create(:school, school_type_group: "la_maintained", phase: :primary).id
+        }
+      end
+
+      it { is_expected.to eq(true) }
+    end
+
+    context "with a non state funded secondary school" do
+      let(:attributes) do
+        {
+          application_route: "teacher",
+          state_funded_secondary_school: true,
+          one_year: true,
+          subject: "physics",
+          visa_type: "British National (Overseas) visa",
+          start_date: Policies::InternationalRelocationPayments::PolicyEligibilityChecker.earliest_eligible_contract_start_date,
+          date_of_entry: Policies::InternationalRelocationPayments::PolicyEligibilityChecker.earliest_eligible_contract_start_date - 1.week,
+          current_school_id: create(:school, school_type_group: "independent_schools", phase: :secondary).id
+        }
+      end
+
+      it { is_expected.to eq(true) }
+    end
+
     context "with an eligible application" do
       let(:attributes) do
         {
@@ -171,7 +205,8 @@ describe Policies::InternationalRelocationPayments::PolicyEligibilityChecker do
           subject: "physics",
           visa_type: "British National (Overseas) visa",
           start_date: Policies::InternationalRelocationPayments::PolicyEligibilityChecker.earliest_eligible_contract_start_date,
-          date_of_entry: Policies::InternationalRelocationPayments::PolicyEligibilityChecker.earliest_eligible_contract_start_date - 1.week
+          date_of_entry: Policies::InternationalRelocationPayments::PolicyEligibilityChecker.earliest_eligible_contract_start_date - 1.week,
+          current_school_id: create(:school, school_type_group: "la_maintained", phase: :secondary).id
         }
       end
 

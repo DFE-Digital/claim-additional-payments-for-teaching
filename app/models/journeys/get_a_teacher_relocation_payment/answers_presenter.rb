@@ -7,6 +7,7 @@ module Journeys
         [].tap do |a|
           a << application_route
           a << state_funded_secondary_school
+          a << current_school
           a << contract_details
           a << start_date_details
           a << subject_details
@@ -24,7 +25,6 @@ module Journeys
 
       def employment_answers
         [].tap do |a|
-          a << current_school
           a << school_headteacher_name
         end
       end

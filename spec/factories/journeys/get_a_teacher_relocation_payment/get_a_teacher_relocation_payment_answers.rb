@@ -19,6 +19,10 @@ FactoryBot.define do
       state_funded_secondary_school { true }
     end
 
+    trait :with_current_school do
+      current_school_id { create(:school).id }
+    end
+
     trait :with_one_year_contract do
       one_year { true }
     end
@@ -67,13 +71,13 @@ FactoryBot.define do
     end
 
     trait :with_employment_details do
-      current_school_id { create(:school).id }
       school_headteacher_name { "Seymour Skinner" }
     end
 
     trait :eligible_teacher do
       with_teacher_application_route
       with_state_funded_secondary_school
+      with_current_school
       with_one_year_contract
       with_start_date
       with_visa
