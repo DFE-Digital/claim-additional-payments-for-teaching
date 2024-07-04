@@ -15,6 +15,7 @@ module Journeys
       attribute :chemistry_courses, default: []
       attribute :computing_courses, default: []
       attribute :early_years_courses, default: []
+      attribute :engineering_manufacturing_courses, default: []
       attribute :teaching_qualification, :string
       attribute :subject_to_formal_performance_action, :boolean
       attribute :subject_to_disciplinary_action, :boolean

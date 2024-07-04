@@ -18,6 +18,7 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     expect(page).to have_content("Which FE provider are you employed by?")
     fill_in "Which FE provider are you employed by?", with: college.name
     within("#claim-provision-search-field__listbox") do
+      sleep(1) # seems to aid in success, as if click happens before event is bound
       find("li", text: college.name).click
     end
     click_button "Continue"

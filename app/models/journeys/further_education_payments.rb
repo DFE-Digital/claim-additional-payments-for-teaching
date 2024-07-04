@@ -23,6 +23,7 @@ module Journeys
         "chemistry-courses" => ChemistryCoursesForm,
         "computing-courses" => ComputingCoursesForm,
         "early-years-courses" => EarlyYearsCoursesForm,
+        "engineering-manufacturing-courses" => EngineeringManufacturingCoursesForm,
         "teaching-qualification" => TeachingQualificationForm,
         "poor-performance" => PoorPerformanceForm,
         "check-your-answers" => CheckYourAnswersForm,
