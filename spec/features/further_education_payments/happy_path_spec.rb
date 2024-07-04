@@ -65,6 +65,10 @@ RSpec.feature "Further education payments" do
     check "T Level in design and development for engineering and manufacturing"
     click_button "Continue"
 
+    expect(page).to have_content("Which maths courses do you teach?")
+    find("label", text: "ESFA-funded qualifications at level 3 and below in the mathematics and statistics sector subject area").click
+    click_button "Continue"
+
     expect(page).to have_content("FE teaching courses goes here")
     click_button "Continue"
 

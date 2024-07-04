@@ -17,6 +17,7 @@ module Journeys
         computing-courses
         early-years-courses
         engineering-manufacturing-courses
+        maths-courses
         teaching-courses
         half-teaching-hours
         teaching-qualification
@@ -82,6 +83,10 @@ module Journeys
 
           if answers.subjects_taught.exclude?("engineering_manufacturing")
             sequence.delete("engineering-manufacturing-courses")
+          end
+
+          if answers.subjects_taught.exclude?("maths")
+            sequence.delete("maths-courses")
           end
         end
       end
