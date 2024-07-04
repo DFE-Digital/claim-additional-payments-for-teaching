@@ -14,6 +14,7 @@ module Journeys
         subjects-taught
         building-and-construction-courses
         chemistry-courses
+        computing-courses
         teaching-courses
         half-teaching-hours
         teaching-qualification
@@ -67,6 +68,10 @@ module Journeys
 
           if answers.subjects_taught.exclude?("chemistry")
             sequence.delete("chemistry-courses")
+          end
+
+          if answers.subjects_taught.exclude?("computing")
+            sequence.delete("computing-courses")
           end
         end
       end

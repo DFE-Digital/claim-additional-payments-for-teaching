@@ -21,6 +21,7 @@ module Journeys
         "subjects-taught" => SubjectsTaughtForm,
         "building-and-construction-courses" => BuildingConstructionCoursesForm,
         "chemistry-courses" => ChemistryCoursesForm,
+        "computing-courses" => ComputingCoursesForm,
         "teaching-qualification" => TeachingQualificationForm,
         "poor-performance" => PoorPerformanceForm,
         "check-your-answers" => CheckYourAnswersForm,

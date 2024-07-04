@@ -53,6 +53,10 @@ RSpec.feature "Further education payments" do
     check "GCSE chemistry"
     click_button "Continue"
 
+    expect(page).to have_content("Which computing courses do you teach?")
+    check "T Level in digital support services"
+    click_button "Continue"
+
     expect(page).to have_content("FE teaching courses goes here")
     click_button "Continue"
 

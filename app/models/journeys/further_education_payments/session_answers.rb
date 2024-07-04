@@ -13,6 +13,7 @@ module Journeys
       attribute :subjects_taught, default: []
       attribute :building_construction_courses, default: []
       attribute :chemistry_courses, default: []
+      attribute :computing_courses, default: []
       attribute :teaching_qualification, :string
       attribute :subject_to_formal_performance_action, :boolean
       attribute :subject_to_disciplinary_action, :boolean
