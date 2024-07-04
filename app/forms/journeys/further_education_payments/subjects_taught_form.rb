@@ -13,12 +13,12 @@ module Journeys
 
       def checkbox_options
         [
-          OpenStruct.new(id: "building_and_construction", name: t("options.building_and_construction")),
+          OpenStruct.new(id: "building_construction", name: t("options.building_and_construction")),
           OpenStruct.new(id: "chemistry", name: t("options.chemistry")),
           OpenStruct.new(id: "computing", name: t("options.computing")),
           OpenStruct.new(id: "early_years", name: t("options.early_years")),
-          OpenStruct.new(id: "engineering_and_manufacturing", name: t("options.engineering_and_manufacturing")),
-          OpenStruct.new(id: "mathematics", name: t("options.mathematics")),
+          OpenStruct.new(id: "engineering_manufacturing", name: t("options.engineering_and_manufacturing")),
+          OpenStruct.new(id: "maths", name: t("options.maths")),
           OpenStruct.new(id: "physics", name: t("options.physics")),
           OpenStruct.new(id: "none", name: t("options.none"))
         ]
