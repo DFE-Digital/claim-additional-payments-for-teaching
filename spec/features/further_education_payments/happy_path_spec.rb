@@ -49,6 +49,10 @@ RSpec.feature "Further education payments" do
     check "T Level in building services engineering for construction"
     click_button "Continue"
 
+    expect(page).to have_content("Which chemistry courses do you teach?")
+    check "GCSE chemistry"
+    click_button "Continue"
+
     expect(page).to have_content("FE teaching courses goes here")
     click_button "Continue"
 

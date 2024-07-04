@@ -15,6 +15,10 @@ module Journeys
         presence: {message: i18n_error_message(:inclusion)},
         inclusion: {in: ->(form) { form.checkbox_options.map(&:id) }, message: i18n_error_message(:inclusion)}
 
+      def course_field
+        :building_construction_courses
+      end
+
       def checkbox_options
         [
           OpenStruct.new(

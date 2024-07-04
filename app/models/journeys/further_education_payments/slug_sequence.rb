@@ -13,6 +13,7 @@ module Journeys
         further-education-teaching-start-year
         subjects-taught
         building-and-construction-courses
+        chemistry-courses
         teaching-courses
         half-teaching-hours
         teaching-qualification
@@ -58,6 +59,14 @@ module Journeys
 
           if answers.fixed_term_full_year == true
             sequence.delete("taught-at-least-one-term")
+          end
+
+          if answers.subjects_taught.exclude?("building_construction")
+            sequence.delete("building-and-construction-courses")
+          end
+
+          if answers.subjects_taught.exclude?("chemistry")
+            sequence.delete("chemistry-courses")
           end
         end
       end
