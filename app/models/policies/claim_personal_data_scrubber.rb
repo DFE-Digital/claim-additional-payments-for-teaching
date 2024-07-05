@@ -34,13 +34,13 @@ module Policies
     def scrub_completed_claims
       old_rejected_claims
         .where(personal_data_removed_at: nil)
-        .includes(:amendments).each do |claim|
+        .includes(:amendments, :journey_session).each do |claim|
         Claim::Scrubber.scrub!(claim, self.class::PERSONAL_DATA_ATTRIBUTES_TO_DELETE)
       end
 
       old_paid_claims
         .where(personal_data_removed_at: nil)
-        .includes(:amendments).each do |claim|
+        .includes(:amendments, :journey_session).each do |claim|
         Claim::Scrubber.scrub!(claim, self.class::PERSONAL_DATA_ATTRIBUTES_TO_DELETE)
       end
     end

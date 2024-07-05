@@ -80,9 +80,21 @@ FactoryBot.define do
       with_current_school
       with_headteacher_details
       with_one_year_contract
+      with_subject
       with_start_date
       with_visa
       with_entry_date
+    end
+
+    trait :submittable do
+      eligible_teacher
+      with_personal_details
+      with_nationality
+      with_passport_number
+      with_email_details
+      with_mobile_details
+      with_bank_details
+      with_employment_details
     end
   end
 end

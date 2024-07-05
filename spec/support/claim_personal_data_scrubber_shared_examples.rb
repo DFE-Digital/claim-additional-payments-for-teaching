@@ -217,4 +217,73 @@ RSpec.shared_examples "a claim personal data scrubber" do |policy|
       expect(cleaned_amendment.personal_data_removed_at).to eq(Time.zone.now)
     end
   end
+
+  it "removes personal details from the journey session too" do
+    journey = Journeys.for_policy(policy)
+    session_name = journey::I18N_NAMESPACE
+
+    session_for_approved_claim = create(
+      "#{session_name}_session",
+      answers: build(
+        "#{session_name}_answers",
+        :submittable
+      )
+    )
+
+    session_for_rejected_claim = create(
+      "#{session_name}_session",
+      answers: build(
+        "#{session_name}_answers",
+        :submittable
+      )
+    )
+
+    approved_claim = create(
+      :claim,
+      :submitted,
+      policy: policy,
+      journey_session: session_for_approved_claim
+    )
+
+    create(
+      :decision,
+      :approved,
+      claim: approved_claim,
+      created_at: last_academic_year
+    )
+
+    create(
+      :payment,
+      :confirmed,
+      :with_figures,
+      claims: [approved_claim],
+      scheduled_payment_date: last_academic_year
+    )
+
+    rejected_claim = create(
+      :claim,
+      :submitted,
+      policy: policy,
+      journey_session: session_for_rejected_claim
+    )
+
+    create(
+      :decision,
+      :rejected,
+      claim: rejected_claim,
+      created_at: last_academic_year
+    )
+
+    personal_data_scrubber
+
+    described_class::PERSONAL_DATA_ATTRIBUTES_TO_DELETE.each do |attribute|
+      expect(
+        session_for_approved_claim.reload.answers.public_send(attribute)
+      ).to be_blank
+
+      expect(
+        session_for_rejected_claim.reload.answers.public_send(attribute)
+      ).to be_blank
+    end
+  end
 end

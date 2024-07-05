@@ -16,6 +16,7 @@ class Claim
       ApplicationRecord.transaction do
         claim.amendments.each { |amendment| scrub_amendment!(amendment) }
         scrub_claim!
+        scrub_session!
       end
     end
 
@@ -35,6 +36,12 @@ class Claim
         personal_data_removed_at: Time.zone.now
       )
       claim.update_columns(attributes_to_set)
+    end
+
+    def scrub_session!
+      return unless claim.journey_session
+
+      claim.journey_session.update!(answers: {})
     end
   end
 end
