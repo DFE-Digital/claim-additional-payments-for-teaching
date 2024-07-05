@@ -82,6 +82,9 @@ class Claim < ApplicationRecord
   }.freeze
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
+  CLAIMANT_MATCHING_ATTRIBUTES = %i[
+    national_insurance_number
+  ]
 
   # Use AcademicYear as custom ActiveRecord attribute type
   attribute :academic_year, AcademicYear::Type.new
@@ -177,6 +180,12 @@ class Claim < ApplicationRecord
   scope :unassigned, -> { where(assigned_to_id: nil) }
   scope :current_academic_year, -> { by_academic_year(AcademicYear.current) }
   scope :failed_bank_validation, -> { where(hmrc_bank_validation_succeeded: false) }
+
+  scope :with_same_claimant, ->(claim) do
+    CLAIMANT_MATCHING_ATTRIBUTES.reduce(where.not(id: claim.id)) do |scope, attr|
+      scope.where(attr => claim.public_send(attr))
+    end
+  end
 
   delegate :award_amount, to: :eligibility
 
@@ -399,6 +408,12 @@ class Claim < ApplicationRecord
       policy_year: Journeys.for_policy(policy).configuration.current_academic_year,
       itt_academic_year: eligibility.itt_academic_year
     )
+  end
+
+  def same_claimant?(other_claim)
+    CLAIMANT_MATCHING_ATTRIBUTES.all? do |attr|
+      public_send(attr) == other_claim.public_send(attr)
+    end
   end
 
   private

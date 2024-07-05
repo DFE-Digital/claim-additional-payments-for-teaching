@@ -15,9 +15,6 @@ class Claim
     # The returned claims have different payment or tax details to those
     # provided by `claim`, and hence `claim` cannot be paid in the same payment
     # as the returned claims.
-    #
-    # NOTE: This only works for ECP/LUPP and TSLR cross policy as this requires a TRN
-    # Driven by: Policies.policies_claimable(policy) using OTHER_CLAIMABLE_POLICIES config otherwise this just returns []
     def claims_preventing_payment
       @claims_preventing_payment ||= find_claims_preventing_payment
     end
@@ -25,20 +22,12 @@ class Claim
     private
 
     def find_claims_preventing_payment
-      return [] if claim.policy == Policies::InternationalRelocationPayments
+      return [] if claim.personal_data_removed?
 
-      eligibility_ids = claim.policy.policies_claimable.map { |policy|
-        policy::Eligibility.where(teacher_reference_number: claim.eligibility.teacher_reference_number)
-      }.flatten.map(&:id)
-
-      payrollable_claims_from_same_claimant = Claim.payrollable.where(eligibility_id: eligibility_ids)
+      payrollable_claims_from_same_claimant = Claim.payrollable.with_same_claimant(claim)
 
       payrollable_topup_claims_from_same_claimant = Topup.includes(:claim).payrollable
-        .select { |t|
-        claim.policy.policy_eligibilities_claimable.map(&:to_s).include?(t.claim.eligibility_type) &&
-          t.claim.eligibility.teacher_reference_number == claim.eligibility.teacher_reference_number
-      }
-        .map(&:claim)
+        .select { |t| claim.same_claimant?(t.claim) }.map(&:claim)
 
       [payrollable_claims_from_same_claimant, payrollable_topup_claims_from_same_claimant].reduce([], :concat).select do |other_claim|
         Payment::PERSONAL_CLAIM_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES.any? do |attribute|

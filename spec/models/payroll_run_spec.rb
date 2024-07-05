@@ -98,8 +98,8 @@ RSpec.describe PayrollRun, type: :model do
         build(:claim, :approved, eligibility_attributes: {student_loan_repayment_amount: 1000})
       ])
       payment_5 = build(:payment, claims: [
-        build(:claim, :approved, policy: Policies::LevellingUpPremiumPayments, bank_sort_code: "123456", bank_account_number: "12345678", eligibility_attributes: {teacher_reference_number: "1234567"}),
-        build(:claim, :approved, bank_sort_code: "123456", bank_account_number: "12345678", eligibility_attributes: {student_loan_repayment_amount: 1000, teacher_reference_number: "1234567"})
+        build(:claim, :approved, policy: Policies::LevellingUpPremiumPayments, bank_sort_code: "123456", bank_account_number: "12345678", national_insurance_number: "1234567"),
+        build(:claim, :approved, bank_sort_code: "123456", bank_account_number: "12345678", national_insurance_number: "1234567", eligibility_attributes: {student_loan_repayment_amount: 1000})
       ])
 
       payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2, payment_3, payment_4, payment_5])
