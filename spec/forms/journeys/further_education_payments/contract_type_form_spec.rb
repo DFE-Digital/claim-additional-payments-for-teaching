@@ -50,7 +50,7 @@ RSpec.describe Journeys::FurtherEducationPayments::ContractTypeForm, type: :mode
         build(
           :further_education_payments_answers,
           school_id: college.id,
-          contract_type: "fixed-term",
+          contract_type: "fixed_term",
           fixed_term_full_year: false,
           taught_at_least_one_term: true
         )
@@ -72,7 +72,7 @@ RSpec.describe Journeys::FurtherEducationPayments::ContractTypeForm, type: :mode
         build(
           :further_education_payments_answers,
           school_id: college.id,
-          contract_type: "variable-hours",
+          contract_type: "variable_hours",
           taught_at_least_one_term: true
         )
       end

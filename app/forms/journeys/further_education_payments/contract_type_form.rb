@@ -37,14 +37,14 @@ module Journeys
       private
 
       def reset_dependent_answers
-        if changing_answer? && old_answer == "fixed-term"
+        if changing_answer? && old_answer == "fixed_term"
           journey_session.answers.assign_attributes(
             fixed_term_full_year: nil,
             taught_at_least_one_term: nil
           )
         end
 
-        if changing_answer? && old_answer == "variable-hours"
+        if changing_answer? && old_answer == "variable_hours"
           journey_session.answers.assign_attributes(
             taught_at_least_one_term: nil
           )

@@ -50,7 +50,7 @@ module Journeys
             sequence.delete("taught-at-least-one-term")
           end
 
-          if answers.contract_type == "variable-hours"
+          if answers.contract_type == "variable_hours"
             sequence.delete("fixed-term-contract")
           end
 
