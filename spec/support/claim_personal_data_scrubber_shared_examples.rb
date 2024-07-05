@@ -117,25 +117,10 @@ RSpec.shared_examples "a claim personal data scrubber" do |policy|
       personal_data_scrubber
       cleaned_claim = Claim.find(claim.id)
 
-      expect(cleaned_claim.first_name).to be_nil
-      expect(cleaned_claim.middle_name).to be_nil
-      expect(cleaned_claim.surname).to be_nil
-      expect(cleaned_claim.date_of_birth).to be_nil
-      expect(cleaned_claim.address_line_1).to be_nil
-      expect(cleaned_claim.address_line_2).to be_nil
-      expect(cleaned_claim.address_line_3).to be_nil
-      expect(cleaned_claim.address_line_4).to be_nil
-      expect(cleaned_claim.postcode).to be_nil
-      expect(cleaned_claim.payroll_gender).to be_nil
-      expect(cleaned_claim.national_insurance_number).to be_nil
-      expect(cleaned_claim.bank_sort_code).to be_nil
-      expect(cleaned_claim.bank_account_number).to be_nil
-      expect(cleaned_claim.building_society_roll_number).to be_nil
-      expect(cleaned_claim.banking_name).to be_nil
-      expect(cleaned_claim.hmrc_bank_validation_responses).to be_nil
-      expect(cleaned_claim.mobile_number).to be_nil
-      expect(cleaned_claim.teacher_id_user_info).to be_nil
-      expect(cleaned_claim.dqt_teacher_status).to be_nil
+      described_class::PERSONAL_DATA_ATTRIBUTES_TO_DELETE.each do |attribute|
+        expect(cleaned_claim.public_send(attribute)).to be_nil
+      end
+
       expect(cleaned_claim.personal_data_removed_at).to eq(Time.zone.now)
     end
   end
@@ -149,25 +134,9 @@ RSpec.shared_examples "a claim personal data scrubber" do |policy|
       personal_data_scrubber
       cleaned_claim = Claim.find(claim.id)
 
-      expect(cleaned_claim.first_name).to be_nil
-      expect(cleaned_claim.middle_name).to be_nil
-      expect(cleaned_claim.surname).to be_nil
-      expect(cleaned_claim.date_of_birth).to be_nil
-      expect(cleaned_claim.address_line_1).to be_nil
-      expect(cleaned_claim.address_line_2).to be_nil
-      expect(cleaned_claim.address_line_3).to be_nil
-      expect(cleaned_claim.address_line_4).to be_nil
-      expect(cleaned_claim.postcode).to be_nil
-      expect(cleaned_claim.payroll_gender).to be_nil
-      expect(cleaned_claim.national_insurance_number).to be_nil
-      expect(cleaned_claim.bank_sort_code).to be_nil
-      expect(cleaned_claim.bank_account_number).to be_nil
-      expect(cleaned_claim.building_society_roll_number).to be_nil
-      expect(cleaned_claim.banking_name).to be_nil
-      expect(cleaned_claim.hmrc_bank_validation_responses).to be_nil
-      expect(cleaned_claim.mobile_number).to be_nil
-      expect(cleaned_claim.teacher_id_user_info).to be_nil
-      expect(cleaned_claim.dqt_teacher_status).to be_nil
+      described_class::PERSONAL_DATA_ATTRIBUTES_TO_DELETE.each do |attribute|
+        expect(cleaned_claim.public_send(attribute)).to be_nil
+      end
       expect(cleaned_claim.personal_data_removed_at).to eq(Time.zone.now)
     end
   end
@@ -221,9 +190,24 @@ RSpec.shared_examples "a claim personal data scrubber" do |policy|
 
       cleaned_amendment = Amendment.find(amendment.id)
 
-      expect(cleaned_amendment.claim_changes.keys).to match_array(%w[teacher_reference_number payroll_gender date_of_birth student_loan_plan bank_sort_code bank_account_number building_society_roll_number])
+      expected_claim_changed_attributes = %w[
+        payroll_gender
+        date_of_birth
+        student_loan_plan
+        bank_sort_code
+        bank_account_number
+        building_society_roll_number
+      ]
+
+      if claim.eligibility.has_attribute?(:teacher_reference_number)
+        expected_claim_changed_attributes << "teacher_reference_number"
+      end
+
+      expect(cleaned_amendment.claim_changes.keys).to match_array(expected_claim_changed_attributes)
       expect(cleaned_amendment.notes).not_to be_nil
-      expect(cleaned_amendment.claim_changes["teacher_reference_number"]).to eq(original_trn_change)
+      if claim.eligibility.has_attribute?(:teacher_reference_number)
+        expect(cleaned_amendment.claim_changes["teacher_reference_number"]).to eq(original_trn_change)
+      end
       expect(cleaned_amendment.claim_changes["date_of_birth"]).to eq(nil)
       expect(cleaned_amendment.claim_changes["payroll_gender"]).to eq(nil)
       expect(cleaned_amendment.claim_changes["bank_sort_code"]).to eq(nil)
