@@ -23,19 +23,19 @@ module Journeys
         [
           OpenStruct.new(
             id: "alevel_chemistry",
-            name: "A or AS level chemistry"
+            name: t("options.alevel_chemistry")
           ),
           OpenStruct.new(
             id: "gcse_chemistry",
-            name: "GCSE chemistry"
+            name: t("options.gcse_chemistry")
           ),
           OpenStruct.new(
             id: "ib_certificate_chemistry",
-            name: "International baccalaureate middle years programme or certificate in chemistry"
+            name: t("options.ib_certificate_chemistry")
           ),
           OpenStruct.new(
             id: "none",
-            name: "I do not teach any of these courses"
+            name: t("options.none")
           )
         ]
       end

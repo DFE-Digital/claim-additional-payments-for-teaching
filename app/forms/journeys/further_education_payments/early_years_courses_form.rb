@@ -23,23 +23,26 @@ module Journeys
         [
           OpenStruct.new(
             id: "eylevel2",
-            name: "Early years practitioner (level 2) apprenticeship"
+            name: t("options.eylevel2")
           ),
           OpenStruct.new(
             id: "eylevel3",
-            name: "Early years educator (level 3) apprenticeship"
+            name: t("options.eylevel3")
           ),
           OpenStruct.new(
             id: "eytlevel",
-            name: "T Level in education and early years (early years educator)"
+            name: t("options.eytlevel")
           ),
           OpenStruct.new(
             id: "coursetoeyq",
-            name: "A course that leads to an #{govuk_link_to "early years qualification", "https://www.gov.uk/government/publications/early-years-qualifications-achieved-in-england"} which enables providers to count the recipient in staff:child ratios"
+            name: t(
+              "options.coursetoeyq",
+              link: govuk_link_to("early years qualification", "https://www.gov.uk/government/publications/early-years-qualifications-achieved-in-england")
+            )
           ),
           OpenStruct.new(
             id: "none",
-            name: "I do not teach any of these courses"
+            name: t("options.none")
           )
         ]
       end

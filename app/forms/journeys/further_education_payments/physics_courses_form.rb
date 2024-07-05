@@ -23,19 +23,19 @@ module Journeys
         [
           OpenStruct.new(
             id: "alevel_physics",
-            name: "A or AS level physics"
+            name: t("options.alevel_physics")
           ),
           OpenStruct.new(
             id: "gcse_physics",
-            name: "GCSE physics"
+            name: t("options.gcse_physics")
           ),
           OpenStruct.new(
             id: "ib_certificate_physics",
-            name: "International baccalaureate middle years programme or certificate in physics"
+            name: t("options.ib_certificate_physics")
           ),
           OpenStruct.new(
             id: "none",
-            name: "I do not teach any of these courses"
+            name: t("options.none")
           )
         ]
       end

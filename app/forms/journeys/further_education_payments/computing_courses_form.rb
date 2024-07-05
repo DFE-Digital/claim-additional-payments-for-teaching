@@ -23,39 +23,48 @@ module Journeys
         [
           OpenStruct.new(
             id: "esfa_digitalpractitioners",
-            name: "ESFA-funded qualifications at level 3 and below in the #{govuk_link_to "digital technology for practitioners", "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=23&PageSize=10&Sort=Status"} sector subject area"
+            name: t(
+              "options.esfa_digitalpractitioners",
+              link: govuk_link_to("digital technology for practitioners", "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=23&PageSize=10&Sort=Status")
+            )
           ),
           OpenStruct.new(
             id: "esfa_digitalusers",
-            name: "ESFA-funded qualifications at level 3 and below in the #{govuk_link_to "digital technology for users", "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=22&PageSize=10&Sort=Status"} sector subject area"
+            name: t(
+              "options.esfa_digitalusers",
+              link: govuk_link_to("digital technology for users", "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=22&PageSize=10&Sort=Status")
+            )
           ),
           OpenStruct.new(
             id: "digitalskills_quals",
-            name: "Digital functional skills qualifications and essential digital skills qualifications"
+            name: t("options.digitalskills_quals")
           ),
           OpenStruct.new(
             id: "tlevel_digitalsupport",
-            name: "T Level in digital support services"
+            name: t("options.tlevel_digitalsupport")
           ),
           OpenStruct.new(
             id: "tlevel_digitalbusiness",
-            name: "T Level in digital business services"
+            name: t("options.tlevel_digitalbusiness")
           ),
           OpenStruct.new(
             id: "tlevel_digitalproduction",
-            name: "T Level in digital production, design and development"
+            name: t("options.tlevel_digitalproduction")
           ),
           OpenStruct.new(
             id: "ib_certificate_compsci",
-            name: "International baccalaureate certificate in computer science"
+            name: t("options.ib_certificate_compsci")
           ),
           OpenStruct.new(
             id: "level2_3_apprenticeship",
-            name: "Level 2 or level 3 apprenticeships in the #{govuk_link_to "digital occupational route", "https://occupational-maps.instituteforapprenticeships.org/maps/route/digital"}"
+            name: t(
+              "options.level2_3_apprenticeship",
+              link: govuk_link_to("digital occupational route", "https://occupational-maps.instituteforapprenticeships.org/maps/route/digital")
+            )
           ),
           OpenStruct.new(
             id: "none",
-            name: "I do not teach any of these courses"
+            name: t("options.none")
           )
         ]
       end

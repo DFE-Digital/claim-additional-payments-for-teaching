@@ -23,27 +23,33 @@ module Journeys
         [
           OpenStruct.new(
             id: "esfa_buildingconstruction",
-            name: "ESFA-funded qualifications at level 3 and below in the #{govuk_link_to "building and construction", "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=7"} sector subject area"
+            name: t(
+              "options.esfa_buildingconstruction",
+              link: govuk_link_to("building and construction", "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=7")
+            )
           ),
           OpenStruct.new(
             id: "tlevel_building",
-            name: "T Level in building services engineering for construction"
+            name: t("options.tlevel_building")
           ),
           OpenStruct.new(
             id: "tlevel_onsiteconstruction",
-            name: "T Level in onsite construction"
+            name: t("options.tlevel_onsiteconstruction")
           ),
           OpenStruct.new(
             id: "tlevel_design_surveying",
-            name: "T Level in design, surveying and planning for construction"
+            name: t("options.tlevel_design_surveying")
           ),
           OpenStruct.new(
             id: "level2_3_apprenticeship",
-            name: "Level 2 or level 3 apprenticeships in the #{govuk_link_to "construction and the built environment occupational route", "https://occupational-maps.instituteforapprenticeships.org/maps/route/construction"}"
+            name: t(
+              "options.level2_3_apprenticeship",
+              link: govuk_link_to("construction and the built environment occupational route", "https://occupational-maps.instituteforapprenticeships.org/maps/route/construction")
+            )
           ),
           OpenStruct.new(
             id: "none",
-            name: "I do not teach any of these courses"
+            name: t("options.none")
           )
         ]
       end
