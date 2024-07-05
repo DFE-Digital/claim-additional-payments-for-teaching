@@ -828,6 +828,20 @@ en:
           variable_hours: Variable hours contract
         errors:
           inclusion: Select the contract type you have
+      fixed_term_contract:
+        question: Does your fixed-term contract cover the full %{academic_year} academic year?
+        options:
+          true: Yes, it covers the full %{current_academic_year} academic year
+          false: No, it does not cover the full %{current_academic_year} academic year
+        errors:
+          inclusion: Select yes if your fixed-term contract covers the full academic year
+      taught_at_least_one_term:
+        question: Have you taught at %{school_name} for at least one academic term?
+        options:
+          true: Yes, I have taught at %{school_name} for at least one academic term
+          false: No, I have not taught at %{school_name} for at least one academic term
+        errors:
+          inclusion: Select yes if you have taught at %{school_name} for at least one academic term
       teaching_hours_per_week:
         question: On average, how many hours per week are you timetabled to teach at %{school_name} during the current term?
         hint: ‘Teaching’ refers to the direct contact time you spend in lessons with students of all ages.
