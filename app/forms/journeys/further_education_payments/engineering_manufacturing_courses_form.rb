@@ -25,21 +25,21 @@ module Journeys
             id: "esfa_engineering",
             name: t(
               "options.esfa_engineering",
-              link: govuk_link_to("engineering", "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=13&PageSize=10&Sort=Status")
+              link: govuk_link_to("engineering", "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=13&PageSize=10&Sort=Status", new_tab: true)
             )
           ),
           OpenStruct.new(
             id: "esfa_manufacturing",
             name: t(
               "options.esfa_manufacturing",
-              link: govuk_link_to("manufacturing technologies", "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=26&PageSize=10&Sort=Status")
+              link: govuk_link_to("manufacturing technologies", "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=26&PageSize=10&Sort=Status", new_tab: true)
             )
           ),
           OpenStruct.new(
             id: "esfa_transportation",
             name: t(
               "options.esfa_transportation",
-              link: govuk_link_to("transportation operations and maintenance", "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=47&PageSize=10&Sort=Status")
+              link: govuk_link_to("transportation operations and maintenance", "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=47&PageSize=10&Sort=Status", new_tab: true)
             )
           ),
           OpenStruct.new(
@@ -58,7 +58,7 @@ module Journeys
             id: "level2_3_apprenticeship",
             name: t(
               "options.level2_3_apprenticeship",
-              link: govuk_link_to("engineering and manufacturing occupational route", "https://occupational-maps.instituteforapprenticeships.org/maps/route/engineering-manufacturing")
+              link: govuk_link_to("engineering and manufacturing occupational route", "https://occupational-maps.instituteforapprenticeships.org/maps/route/engineering-manufacturing", new_tab: true)
             )
           ),
           OpenStruct.new(

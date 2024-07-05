@@ -25,14 +25,14 @@ module Journeys
             id: "esfa_digitalpractitioners",
             name: t(
               "options.esfa_digitalpractitioners",
-              link: govuk_link_to("digital technology for practitioners", "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=23&PageSize=10&Sort=Status")
+              link: govuk_link_to("digital technology for practitioners", "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=23&PageSize=10&Sort=Status", new_tab: true)
             )
           ),
           OpenStruct.new(
             id: "esfa_digitalusers",
             name: t(
               "options.esfa_digitalusers",
-              link: govuk_link_to("digital technology for users", "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=22&PageSize=10&Sort=Status")
+              link: govuk_link_to("digital technology for users", "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=22&PageSize=10&Sort=Status", new_tab: true)
             )
           ),
           OpenStruct.new(
@@ -59,7 +59,7 @@ module Journeys
             id: "level2_3_apprenticeship",
             name: t(
               "options.level2_3_apprenticeship",
-              link: govuk_link_to("digital occupational route", "https://occupational-maps.instituteforapprenticeships.org/maps/route/digital")
+              link: govuk_link_to("digital occupational route", "https://occupational-maps.instituteforapprenticeships.org/maps/route/digital", new_tab: true)
             )
           ),
           OpenStruct.new(

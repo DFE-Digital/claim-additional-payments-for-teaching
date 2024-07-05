@@ -37,7 +37,7 @@ module Journeys
             id: "coursetoeyq",
             name: t(
               "options.coursetoeyq",
-              link: govuk_link_to("early years qualification", "https://www.gov.uk/government/publications/early-years-qualifications-achieved-in-england")
+              link: govuk_link_to("early years qualification", "https://www.gov.uk/government/publications/early-years-qualifications-achieved-in-england", new_tab: true)
             )
           ),
           OpenStruct.new(

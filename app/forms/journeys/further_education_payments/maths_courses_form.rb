@@ -25,14 +25,14 @@ module Journeys
             id: "esfa",
             name: t(
               "options.esfa",
-              link: govuk_link_to("mathematics and statistics", "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=28&PageSize=10&Sort=Status")
+              link: govuk_link_to("mathematics and statistics", "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=28&PageSize=10&Sort=Status", new_tab: true)
             )
           ),
           OpenStruct.new(
             id: "gcse_maths",
             name: t(
               "options.gcse_maths",
-              link: govuk_link_to("other maths qualifications", "https://submit-learner-data.service.gov.uk/find-a-learning-aim/LearningAimSearchResult?TeachingYear=2324&HasFilters=False&EFAFundingConditions=EFACONFUNDMATHS")
+              link: govuk_link_to("other maths qualifications", "https://submit-learner-data.service.gov.uk/find-a-learning-aim/LearningAimSearchResult?TeachingYear=2324&HasFilters=False&EFAFundingConditions=EFACONFUNDMATHS", new_tab: true)
             )
           ),
           OpenStruct.new(
