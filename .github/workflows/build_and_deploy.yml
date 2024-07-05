@@ -69,17 +69,21 @@ jobs:
             | Further Education   | <${{ env.APP_URL }}/further-education-payments/landing-page> |
             | Admin               | <${{ env.APP_URL }}/admin>                                   |
 
-  deploy_test:
-    name: Deploy to test environment
-    concurrency: deploy_test
+  deploy:
+    name: Deploy to ${{ matrix.environment }}
     runs-on: ubuntu-latest
+    concurrency: deploy_${{ matrix.environment }}
     # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     needs: [build]
     environment:
-      name: test-aks
+      name: ${{ matrix.environment }}-aks
       url: ${{ steps.deploy.outputs.environment_url }}
     outputs:
       environment_url: ${{ steps.deploy.outputs.environment_url }}
+    strategy:
+      max-parallel: 1
+      matrix:
+        environment: [test, production]
 
     steps:
       - name: Checkout code
@@ -92,11 +96,11 @@ jobs:
       - uses: ./.github/actions/deploy-environment
         id: deploy
         with:
-          environment: test-aks
+          environment: ${{ matrix.environment }}-aks
           docker-image: ${{ needs.build.outputs.docker-image-tag }}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
-          aks-namespace: srtl-test
-          aks-deployment: claim-additional-payments-for-teaching-test
+          aks-namespace: srtl-${{ matrix.environment }}
+          aks-deployment: claim-additional-payments-for-teaching-${{ matrix.environment }}
 
       - name: Install Ruby
         uses: ruby/setup-ruby@v1
@@ -117,58 +121,6 @@ jobs:
         uses: rtCamp/action-slack-notify@master
         env:
           SLACK_COLOR: failure
-          SLACK_TITLE: Failure deploying release to test
-          SLACK_MESSAGE: Failure deploying release to test - Docker tag ${{ needs.build.outputs.docker-image-tag }}
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-
-  deploy_production:
-    name: Deploy to production environment
-    concurrency: deploy_production
-    runs-on: ubuntu-latest
-    # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-    needs: [build, deploy_test]
-    environment:
-      name: production-aks
-      url: ${{ steps.deploy.outputs.environment_url }}
-    outputs:
-      environment_url: ${{ steps.deploy.outputs.environment_url }}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - uses: azure/login@v2
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - uses: ./.github/actions/deploy-environment
-        id: deploy
-        with:
-          environment: production-aks
-          docker-image: ${{ needs.build.outputs.docker-image-tag }}
-          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
-          aks-namespace: srtl-production
-          aks-deployment: claim-additional-payments-for-teaching-production
-
-      - name: Install Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-
-      - name: Run smoke tests
-        shell: bash
-        run: bundle exec rspec spec/smoke -t smoke:true -b
-        env:
-          RAILS_ENV: test
-          SMOKE_TEST_APP_HOST: ${{ env.APP_URL }}
-          BASIC_AUTH_USERNAME: ${{ secrets.BASIC_AUTH_USERNAME }}
-          BASIC_AUTH_PASSWORD: ${{ secrets.BASIC_AUTH_PASSWORD }}
-
-      - name: Notify on failure
-        if: failure()
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_COLOR: failure
-          SLACK_TITLE: Failure deploying release to production
-          SLACK_MESSAGE: Failure deploying release to production - Docker tag ${{ needs.build.outputs.docker-image-tag }}
+          SLACK_TITLE: Failure deploying release to ${{ matrix.environment }}
+          SLACK_MESSAGE: Failure deploying release to ${{ matrix.environment }} - Docker tag ${{ needs.build.outputs.docker-image-tag }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
