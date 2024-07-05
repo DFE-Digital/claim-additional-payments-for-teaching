@@ -32,11 +32,15 @@ module Policies
     ]
 
     def scrub_completed_claims
-      old_rejected_claims.includes(:amendments).each do |claim|
+      old_rejected_claims
+        .where(personal_data_removed_at: nil)
+        .includes(:amendments).each do |claim|
         Claim::Scrubber.scrub!(claim, self.class::PERSONAL_DATA_ATTRIBUTES_TO_DELETE)
       end
 
-      old_paid_claims.includes(:amendments).each do |claim|
+      old_paid_claims
+        .where(personal_data_removed_at: nil)
+        .includes(:amendments).each do |claim|
         Claim::Scrubber.scrub!(claim, self.class::PERSONAL_DATA_ATTRIBUTES_TO_DELETE)
       end
     end
@@ -64,7 +68,6 @@ module Policies
 
     def rejected_claims
       claim_scope.joins(:decisions)
-        .where(personal_data_removed_at: nil)
         .where(
           "(decisions.undone = false AND decisions.result = :rejected)",
           rejected: Decision.results.fetch(:rejected)
@@ -87,7 +90,6 @@ module Policies
       claim_ids_with_payrolled_topups_without_payment_confirmation = Topup.joins(payment: [:payroll_run]).where(payments: {scheduled_payment_date: nil}).pluck(:claim_id)
 
       claim_scope.approved.joins(payments: [:payroll_run])
-        .where(personal_data_removed_at: nil)
         .where.not(id: claim_ids_with_payrollable_topups + claim_ids_with_payrolled_topups_without_payment_confirmation)
     end
 
