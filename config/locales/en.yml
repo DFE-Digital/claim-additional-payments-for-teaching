@@ -880,11 +880,11 @@ en:
         question: Which subject areas do you teach?
         hint: Select all that apply
         options:
-          building_and_construction: Building and construction
+          building_construction: Building and construction
           chemistry: Chemistry
           computing: Computing, including digital and ICT
           early_years: Early years
-          engineering_and_manufacturing: Engineering and manufacturing, including transport engineering and electronics
+          engineering_manufacturing: Engineering and manufacturing, including transport engineering and electronics
           maths: Maths
           physics: Physics
           none: I do not teach any of these subjects
