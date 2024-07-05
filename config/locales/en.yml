@@ -892,7 +892,7 @@ en:
           inclusion: Select the subject areas you teach in or select you do not teach any of the listed subject areas
       courses: &courses
         hint: |
-          <p>If you are unsure what course(s) you teach, email: %{email}</p>
+          <p>If you are unsure what course(s) you teach, email: <br/>%{email}</p>
           <p>Select all that apply</p>
         errors:
           inclusion: Select all the courses you teach otherwise select you do not teach any of these courses
