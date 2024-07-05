@@ -44,7 +44,7 @@ RSpec.describe Journeys::FurtherEducationPayments::ChemistryCoursesForm, type: :
   end
 
   describe "#save" do
-    let(:chemistry_courses) { ["a_as_level_chemistry", "gcse_chemistry"] }
+    let(:chemistry_courses) { ["alevel_chemistry", "gcse_chemistry"] }
 
     it "updates the journey session" do
       expect { expect(subject.save).to be(true) }.to(

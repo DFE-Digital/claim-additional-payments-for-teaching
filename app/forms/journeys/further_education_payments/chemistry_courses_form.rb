@@ -22,7 +22,7 @@ module Journeys
       def checkbox_options
         [
           OpenStruct.new(
-            id: "a_as_level_chemistry",
+            id: "alevel_chemistry",
             name: "A or AS level chemistry"
           ),
           OpenStruct.new(
@@ -30,7 +30,7 @@ module Journeys
             name: "GCSE chemistry"
           ),
           OpenStruct.new(
-            id: "international_baccalaureate_middle_years_programme_certificate_chemistry",
+            id: "ib_certificate_chemistry",
             name: "International baccalaureate middle years programme or certificate in chemistry"
           ),
           OpenStruct.new(

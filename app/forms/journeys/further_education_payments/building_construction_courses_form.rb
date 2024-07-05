@@ -22,23 +22,23 @@ module Journeys
       def checkbox_options
         [
           OpenStruct.new(
-            id: "esfa_funded_level_3_and_lower_building_construction",
+            id: "esfa_buildingconstruction",
             name: "ESFA-funded qualifications at level 3 and below in the #{govuk_link_to "building and construction", "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=7"} sector subject area"
           ),
           OpenStruct.new(
-            id: "t_level_building_services_engineering_construction",
+            id: "tlevel_building",
             name: "T Level in building services engineering for construction"
           ),
           OpenStruct.new(
-            id: "t_level_onsite_construction",
+            id: "tlevel_onsiteconstruction",
             name: "T Level in onsite construction"
           ),
           OpenStruct.new(
-            id: "t_level_design_surveying_planning_construction",
+            id: "tlevel_design_surveying",
             name: "T Level in design, surveying and planning for construction"
           ),
           OpenStruct.new(
-            id: "level_2_level_3_apprenticeships_construction_built_environment_occupational_route",
+            id: "level2_3_apprenticeship",
             name: "Level 2 or level 3 apprenticeships in the #{govuk_link_to "construction and the built environment occupational route", "https://occupational-maps.instituteforapprenticeships.org/maps/route/construction"}"
           ),
           OpenStruct.new(
