@@ -49,7 +49,7 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Have you taught at #{college.name} for at least one academic term?")
-    choose("No, I have not worked at #{college.name} for at least one academic term")
+    choose("No, I have not taught at #{college.name} for at least one academic term")
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible for a financial incentive payment yet")
@@ -79,7 +79,7 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Have you taught at #{college.name} for at least one academic term?")
-    choose("No, I have not worked at #{college.name} for at least one academic term")
+    choose("No, I have not taught at #{college.name} for at least one academic term")
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible for a financial incentive payment yet")

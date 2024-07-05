@@ -13,11 +13,11 @@ module Journeys
         [
           OpenStruct.new(
             id: true,
-            name: "Yes, I have worked at #{school.name} for at least one academic term"
+            name: "Yes, I have taught at #{school.name} for at least one academic term"
           ),
           OpenStruct.new(
             id: false,
-            name: "No, I have not worked at #{school.name} for at least one academic term"
+            name: "No, I have not taught at #{school.name} for at least one academic term"
           )
         ]
       end

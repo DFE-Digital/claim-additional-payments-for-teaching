@@ -32,7 +32,7 @@ RSpec.feature "Further education payments" do
     click_button "Continue"
 
     expect(page).to have_content("Have you taught at #{college.name} for at least one academic term?")
-    choose("Yes, I have worked at #{college.name} for at least one academic term")
+    choose("Yes, I have taught at #{college.name} for at least one academic term")
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
