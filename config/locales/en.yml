@@ -775,7 +775,6 @@ en:
         errors:
           over_max_age: Age must be below 80
           below_min_age: Age must be above 21
-
     check_your_answers:
       part_one:
         primary_heading: "Check your answers"
@@ -802,7 +801,6 @@ en:
           title: "Does the claimant’s employment start date match the above information from their claim?"
         subject:
           title: "Does the claimant’s subject match the above information from their claim?"
-
   further_education_payments:
     landing_page: Find out if you are eligible for any incentive payments for further education teachers
     claim_description: for further education payments
@@ -811,9 +809,11 @@ en:
     support_email_address: "fe-levellingup.premiumpayments@education.gov.uk"
     forms:
       teaching_responsibilities:
+        question: Are you a member of staff with teaching responsibilities?
         errors:
           inclusion: Select yes if you are a member of staff with teaching responsibilities
       further_education_provision_search:
+        question: Which FE provider are you employed by?
         errors:
           blank: Enter a college name or postcode
           min_length: Enter a college name or postcode that is at least 3 characters long
@@ -822,24 +822,50 @@ en:
           blank: Select the college you teach at
       contract_type:
         question: What type of contract do you have with %{school_name}?
+        options:
+          permanent: Permanent contract
+          fixed_term: Fixed-term contract
+          variable_hours: Variable hours contract
         errors:
           inclusion: Select the contract type you have
       teaching_hours_per_week:
         question: On average, how many hours per week are you timetabled to teach at %{school_name} during the current term?
         hint: ‘Teaching’ refers to the direct contact time you spend in lessons with students of all ages.
+        options:
+          more_than_12: More than 12 hours per week
+          between_2_5_and_12: Between 2.5 and 12 hours per week
+          less_than_2_5: Less than 2.5 hours per week
         errors:
           inclusion: Select how many hours per week you are timetabled to teach during the current term
       further_education_teaching_start_year:
+        question: Which academic year did you start teaching in further education (FE) in England?
+        options:
+          between_dates: September %{start_year} to August %{end_year}
+          before_date: I started before September %{year}
         errors:
           blank: Select which academic year you started teaching in further education in England
       subjects_taught:
         question: Which subject areas do you teach?
         hint: Select all that apply
+        options:
+          building_and_construction: Building and construction
+          chemistry: Chemistry
+          computing: Computing, including digital and ICT
+          early_years: Early years
+          engineering_and_manufacturing: Engineering and manufacturing, including transport engineering and electronics
+          mathematics: Mathematics
+          physics: Physics
+          none: I do not teach any of these subjects
         errors:
           inclusion: Select the subject areas you teach in or select you do not teach any of the listed subject areas
       teaching_qualification:
         question: Do you have a teaching qualification?
         hint: Your response will be noted for future claims. If you don’t have a teaching qualification yet, make sure that you enrol on one or complete one in the next 12 months.
+        options:
+          "yes": "Yes"
+          not_yet: Not yet, I am currently enrolled on one and working towards completing it
+          no_but_planned: No, but I plan to enrol on one in the next 12 months
+          no_not_planned: No, and I do not plan to enrol on one in the next 12 months
         errors:
           inclusion: Select whether you have, are currently enrolled or plan to enrol on a teaching qualification
       poor_performance:
@@ -857,8 +883,13 @@ en:
           disciplinary:
             inclusion: Select yes if you are subject to disciplinary action
       half_teaching_hours:
+        question: Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?
         errors:
           inclusion: Select yes if at least half your timetabled teaching hours are spent teaching 16-19-year-olds, including those up to 25 with an Education, Health and Care Plan
+    check_your_answers:
+      part_one:
+        primary_heading: Check your answers
+        confirmation_notice: By selecting continue you are confirming that, to the best of your knowledge, the details you are providing are correct.
   activerecord:
     errors:
       models:

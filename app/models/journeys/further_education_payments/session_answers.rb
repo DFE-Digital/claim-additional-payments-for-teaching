@@ -16,6 +16,22 @@ module Journeys
       def school
         @school ||= School.find(school_id)
       end
+
+      def teaching_responsibilities?
+        !!teaching_responsibilities
+      end
+
+      def half_teaching_hours?
+        !!half_teaching_hours
+      end
+
+      def subject_to_formal_performance_action?
+        !!subject_to_formal_performance_action
+      end
+
+      def subject_to_disciplinary_action?
+        !!subject_to_disciplinary_action
+      end
     end
   end
 end
