@@ -10,16 +10,16 @@ module Journeys
         [
           OpenStruct.new(
             id: "permanent",
-            name: "Permanent contract",
+            name: t("options.permanent"),
             hint: "This includes full-time and part-time contracts"
           ),
           OpenStruct.new(
-            id: "fixed-term",
-            name: "Fixed-term contract"
+            id: "fixed_term",
+            name: t("options.fixed_term")
           ),
           OpenStruct.new(
-            id: "variable-hours",
-            name: "Variable hours contract",
+            id: "variable_hours",
+            name: t("options.variable_hours"),
             hint: "This includes zero hours contract and hourly paid"
           )
         ]

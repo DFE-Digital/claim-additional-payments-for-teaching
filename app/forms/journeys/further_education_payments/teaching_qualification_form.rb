@@ -11,19 +11,19 @@ module Journeys
         [
           OpenStruct.new(
             id: "yes",
-            name: "Yes"
+            name: t("options.yes")
           ),
           OpenStruct.new(
-            id: "not-yet",
-            name: "Not yet, I am currently enrolled on one and working towards completing it"
+            id: "not_yet",
+            name: t("options.not_yet")
           ),
           OpenStruct.new(
-            id: "no-but-planned",
-            name: "No, but I plan to enrol on one in the next 12 months"
+            id: "no_but_planned",
+            name: t("options.no_but_planned")
           ),
           OpenStruct.new(
-            id: "no-not-planned",
-            name: "No, and I do not plan to enrol on one in the next 12 months "
+            id: "no_not_planned",
+            name: t("options.no_not_planned")
           )
         ]
       end

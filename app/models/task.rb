@@ -9,18 +9,20 @@
 class Task < ApplicationRecord
   NAMES = %w[
     identity_confirmation
+    visa
+    arrival_date
     qualifications
     induction_confirmation
     census_subjects_taught
     employment
+    employment_contract
+    employment_start
+    subject
     student_loan_amount
     student_loan_plan
     payroll_details
     matching_details
     payroll_gender
-    arrival_date
-    employment_contract
-    visa
   ].freeze
 
   belongs_to :claim

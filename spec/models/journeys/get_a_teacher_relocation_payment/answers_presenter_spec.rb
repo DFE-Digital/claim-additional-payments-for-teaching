@@ -15,6 +15,7 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
         :get_a_teacher_relocation_payment_answers,
         :with_teacher_application_route,
         :with_state_funded_secondary_school,
+        :with_current_school,
         :with_one_year_contract,
         :with_start_date,
         :with_subject,
@@ -30,6 +31,11 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
           "What is your employment status?",
           "I am employed as a teacher in a school in England",
           "application-route"
+        ],
+        [
+          "Which school are you currently employed to teach at?",
+          answers.current_school.name,
+          "current-school"
         ],
         [
           "Are you employed by an English state secondary school?",
@@ -104,11 +110,6 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
 
     it do
       is_expected.to include(
-        [
-          "Which school are you currently employed to teach at?",
-          answers.current_school.name,
-          "current-school"
-        ],
         [
           "Enter the name of the headteacher of the school where you are employed as a teacher",
           "Seymour Skinner",

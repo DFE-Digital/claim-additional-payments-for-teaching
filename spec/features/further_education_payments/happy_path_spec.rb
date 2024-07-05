@@ -63,6 +63,9 @@ RSpec.feature "Further education payments" do
     end
     click_button "Continue"
 
+    expect(page).to have_content("Check your answers")
+    click_button "Continue"
+
     expect(page).to have_content("FE check your answers goes here")
     click_button "Continue"
 
