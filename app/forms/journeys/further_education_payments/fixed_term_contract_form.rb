@@ -10,11 +10,11 @@ module Journeys
         [
           OpenStruct.new(
             id: true,
-            name: "Yes, it covers the full #{current_academic_year.to_s(:long)} academic year"
+            name: t("options.true", current_academic_year: current_academic_year.to_s(:long))
           ),
           OpenStruct.new(
             id: false,
-            name: "No, it does not cover the full #{current_academic_year.to_s(:long)} academic year"
+            name: t("options.false", current_academic_year: current_academic_year.to_s(:long))
           )
         ]
       end
