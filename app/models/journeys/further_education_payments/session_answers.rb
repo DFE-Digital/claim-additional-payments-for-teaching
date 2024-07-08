@@ -34,6 +34,10 @@ module Journeys
       def subject_to_disciplinary_action?
         !!subject_to_disciplinary_action
       end
+
+      def recent_further_education_teacher?
+        !further_education_teaching_start_year&.start_with?("pre-")
+      end
     end
   end
 end
