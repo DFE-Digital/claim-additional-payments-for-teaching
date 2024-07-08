@@ -11,6 +11,7 @@ FactoryBot.define do
       eligible_home_office
       eligible_school
       eligible_subject
+      eligible_start_date
     end
 
     trait :eligible_school do
