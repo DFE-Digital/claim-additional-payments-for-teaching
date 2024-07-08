@@ -30,6 +30,8 @@ module Policies
           :teaching_less_than_2_5
         elsif answers.teaching_less_than_2_5_hours_per_week_next_term?
           :teaching_less_than_2_5_next_term
+        elsif answers.subject_to_problematic_actions?
+          :subject_to_problematic_actions
         end
       end
     end
