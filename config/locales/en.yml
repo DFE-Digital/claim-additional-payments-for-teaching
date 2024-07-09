@@ -795,6 +795,8 @@ en:
         visa_type: "Visa type"
         date_of_entry: "Date of entry"
       task_questions:
+        matching_details:
+          title: "Is this claim still valid despite having matching details with other claims?"
         identity_confirmation:
           title: "Did %{claim_full_name} submit the claim?"
         visa:
