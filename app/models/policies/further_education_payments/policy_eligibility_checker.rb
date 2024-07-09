@@ -34,6 +34,8 @@ module Policies
           :subject_to_problematic_actions
         elsif answers.lacks_teacher_qualification_or_enrolment?
           :lacks_teacher_qualification_or_enrolment
+        elsif answers.less_than_half_hours_teaching_fe?
+          :must_at_least_half_hours_teaching_fe
         end
       end
     end
