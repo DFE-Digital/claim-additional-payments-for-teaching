@@ -8,6 +8,7 @@ module Journeys
           a << application_route
           a << state_funded_secondary_school
           a << current_school
+          a << school_headteacher_name
           a << contract_details
           a << start_date_details
           a << subject_details
@@ -20,12 +21,6 @@ module Journeys
         super.tap do |a|
           a << nationality
           a << passport_number
-        end
-      end
-
-      def employment_answers
-        [].tap do |a|
-          a << school_headteacher_name
         end
       end
 
