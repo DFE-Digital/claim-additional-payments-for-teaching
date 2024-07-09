@@ -227,7 +227,6 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_content("What type of contract do you have with #{college.name}?")
     choose "Permanent contract"
     click_button "Continue"
-
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
     choose "More than 12 hours per week"
     click_button "Continue"
@@ -244,7 +243,8 @@ RSpec.feature "Further education payments ineligible paths" do
     check "T Level in onsite construction"
     click_button "Continue"
 
-    expect(page).to have_content("FE teaching courses goes here")
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching these eligible courses?")
+    choose "Yes"
     click_button "Continue"
 
     expect(page).to have_content("Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?")
@@ -308,7 +308,8 @@ RSpec.feature "Further education payments ineligible paths" do
     check "T Level in onsite construction"
     click_button "Continue"
 
-    expect(page).to have_content("FE teaching courses goes here")
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching these eligible courses?")
+    choose "Yes"
     click_button "Continue"
 
     expect(page).to have_content("Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?")
@@ -372,7 +373,8 @@ RSpec.feature "Further education payments ineligible paths" do
     check "T Level in onsite construction"
     click_button "Continue"
 
-    expect(page).to have_content("FE teaching courses goes here")
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching these eligible courses?")
+    choose "Yes"
     click_button "Continue"
 
     expect(page).to have_content("Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?")
@@ -535,7 +537,8 @@ RSpec.feature "Further education payments ineligible paths" do
     check "T Level in onsite construction"
     click_button "Continue"
 
-    expect(page).to have_content("FE teaching courses goes here")
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching these eligible courses?")
+    choose "Yes"
     click_button "Continue"
 
     expect(page).to have_content("Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?")

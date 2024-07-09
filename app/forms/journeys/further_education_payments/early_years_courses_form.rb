@@ -1,10 +1,7 @@
 module Journeys
   module FurtherEducationPayments
     class EarlyYearsCoursesForm < Form
-      include ActionView::Helpers::UrlHelper
-      include ActionView::Helpers::OutputSafetyHelper
-      include GovukVisuallyHiddenHelper
-      include GovukLinkHelper
+      include CoursesHelper
 
       attribute :early_years_courses, default: []
 
@@ -22,26 +19,23 @@ module Journeys
         [
           OpenStruct.new(
             id: "eylevel2",
-            name: t("options.eylevel2")
+            name: course_option_description("eylevel2")
           ),
           OpenStruct.new(
             id: "eylevel3",
-            name: t("options.eylevel3")
+            name: course_option_description("eylevel3")
           ),
           OpenStruct.new(
             id: "eytlevel",
-            name: t("options.eytlevel")
+            name: course_option_description("eytlevel")
           ),
           OpenStruct.new(
             id: "coursetoeyq",
-            name: t(
-              "options.coursetoeyq",
-              link: govuk_link_to("early years qualification", "https://www.gov.uk/government/publications/early-years-qualifications-achieved-in-england", new_tab: true)
-            )
+            name: course_option_description("coursetoeyq")
           ),
           OpenStruct.new(
             id: "none",
-            name: t("options.none")
+            name: course_option_description("none")
           )
         ]
       end

@@ -1,10 +1,7 @@
 module Journeys
   module FurtherEducationPayments
     class MathsCoursesForm < Form
-      include ActionView::Helpers::UrlHelper
-      include ActionView::Helpers::OutputSafetyHelper
-      include GovukVisuallyHiddenHelper
-      include GovukLinkHelper
+      include CoursesHelper
 
       attribute :maths_courses, default: []
 
@@ -22,21 +19,15 @@ module Journeys
         [
           OpenStruct.new(
             id: "esfa",
-            name: t(
-              "options.esfa",
-              link: govuk_link_to("mathematics and statistics", "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=28&PageSize=10&Sort=Status", new_tab: true)
-            )
+            name: course_option_description("esfa")
           ),
           OpenStruct.new(
             id: "gcse_maths",
-            name: t(
-              "options.gcse_maths",
-              link: govuk_link_to("other maths qualifications", "https://submit-learner-data.service.gov.uk/find-a-learning-aim/LearningAimSearchResult?TeachingYear=2324&HasFilters=False&EFAFundingConditions=EFACONFUNDMATHS", new_tab: true)
-            )
+            name: course_option_description("gcse_maths")
           ),
           OpenStruct.new(
             id: "none",
-            name: t("options.none")
+            name: course_option_description("none")
           )
         ]
       end

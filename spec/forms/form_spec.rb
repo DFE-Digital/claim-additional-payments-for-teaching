@@ -164,6 +164,31 @@ RSpec.describe Form, type: :model do
   end
 
   describe "#t" do
+    let(:form) { TestSlugForm.new(journey:, journey_session:, params:) }
+    let(:args) { {} }
+    let(:key) { "some_key" }
+
+    before do
+      allow(I18n).to receive(:t)
+      form.t(key, args)
+    end
+
+    context "no args" do
+      it do
+        expect(I18n).to have_received(:t).with("test_i18n_ns.forms.test_slug.some_key", {default: :"forms.test_slug.some_key"})
+      end
+    end
+
+    context "override i18n_form_namespace" do
+      let(:args) { {i18n_form_namespace: "overriden_ns"} }
+
+      it do
+        expect(I18n).to have_received(:t).with("test_i18n_ns.forms.overriden_ns.some_key", {default: :"forms.overriden_ns.some_key"})
+      end
+    end
+  end
+
+  describe "#t - actually use something from en.yml" do
     let(:params) { ActionController::Parameters.new({}) }
 
     subject(:form) { GenderForm.new(journey:, journey_session:, params:) }

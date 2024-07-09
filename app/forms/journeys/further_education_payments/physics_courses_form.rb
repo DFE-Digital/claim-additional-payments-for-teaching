@@ -1,10 +1,7 @@
 module Journeys
   module FurtherEducationPayments
     class PhysicsCoursesForm < Form
-      include ActionView::Helpers::UrlHelper
-      include ActionView::Helpers::OutputSafetyHelper
-      include GovukVisuallyHiddenHelper
-      include GovukLinkHelper
+      include CoursesHelper
 
       attribute :physics_courses, default: []
 
@@ -22,19 +19,19 @@ module Journeys
         [
           OpenStruct.new(
             id: "alevel_physics",
-            name: t("options.alevel_physics")
+            name: course_option_description("alevel_physics")
           ),
           OpenStruct.new(
             id: "gcse_physics",
-            name: t("options.gcse_physics")
+            name: course_option_description("gcse_physics")
           ),
           OpenStruct.new(
             id: "ib_certificate_physics",
-            name: t("options.ib_certificate_physics")
+            name: course_option_description("ib_certificate_physics")
           ),
           OpenStruct.new(
             id: "none",
-            name: t("options.none")
+            name: course_option_description("none")
           )
         ]
       end

@@ -19,7 +19,7 @@ module Journeys
         engineering-manufacturing-courses
         maths-courses
         physics-courses
-        teaching-courses
+        hours-teaching-eligible-subjects
         half-teaching-hours
         teaching-qualification
         poor-performance

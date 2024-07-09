@@ -2,6 +2,7 @@ module Journeys
   module FurtherEducationPayments
     class SubjectsTaughtForm < Form
       include ActiveModel::Validations::Callbacks
+      include CoursesHelper
 
       attribute :subjects_taught, default: []
 
@@ -12,16 +13,7 @@ module Journeys
         inclusion: {in: ->(form) { form.checkbox_options.map(&:id) }, message: i18n_error_message(:inclusion)}
 
       def checkbox_options
-        [
-          OpenStruct.new(id: "building_construction", name: t("options.building_construction")),
-          OpenStruct.new(id: "chemistry", name: t("options.chemistry")),
-          OpenStruct.new(id: "computing", name: t("options.computing")),
-          OpenStruct.new(id: "early_years", name: t("options.early_years")),
-          OpenStruct.new(id: "engineering_manufacturing", name: t("options.engineering_manufacturing")),
-          OpenStruct.new(id: "maths", name: t("options.maths")),
-          OpenStruct.new(id: "physics", name: t("options.physics")),
-          OpenStruct.new(id: "none", name: t("options.none"))
-        ]
+        (ALL_SUBJECTS + ["none"]).map { |subject| OpenStruct.new(id: subject, name: t("options.#{subject}")) }
       end
 
       def save
