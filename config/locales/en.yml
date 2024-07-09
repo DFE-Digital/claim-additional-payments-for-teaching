@@ -786,7 +786,17 @@ en:
     policy_short_name: "International Relocation Payments"
     policy_acronym: "IRP"
     admin:
+      eligibility_answers:
+        nationality: "Nationality"
+        passport_number: "Passport number"
+        subject: "Subject"
+        school_headteacher_name: "School headteacher name"
+        start_date: "Contract start date"
+        visa_type: "Visa type"
+        date_of_entry: "Date of entry"
       task_questions:
+        matching_details:
+          title: "Is this claim still valid despite having matching details with other claims?"
         identity_confirmation:
           title: "Did %{claim_full_name} submit the claim?"
         visa:
