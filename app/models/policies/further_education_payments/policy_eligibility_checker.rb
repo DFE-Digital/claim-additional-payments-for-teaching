@@ -24,6 +24,8 @@ module Policies
           :lack_teaching_responsibilities
         elsif answers.taught_at_least_one_term == false
           :must_teach_at_least_one_term
+        elsif !answers.recent_further_education_teacher?
+          :must_be_recent_further_education_teacher
         end
       end
     end
