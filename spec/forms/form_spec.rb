@@ -33,7 +33,7 @@ RSpec.describe Form, type: :model do
       path = :test_error_path
       error_message_lambda = described_class.i18n_error_message(path)
 
-      allow(form_double).to receive(:i18n_errors_path).with(path).and_return("Test error message")
+      allow(form_double).to receive(:i18n_errors_path).with(path, {}).and_return("Test error message")
 
       result = error_message_lambda.call(form_double, nil)
       expect(result).to eq("Test error message")

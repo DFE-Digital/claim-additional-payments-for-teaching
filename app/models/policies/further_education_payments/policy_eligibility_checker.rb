@@ -22,6 +22,8 @@ module Policies
       def ineligibility_reason
         if answers.teaching_responsibilities == false
           :lack_teaching_responsibilities
+        elsif answers.taught_at_least_one_term == false
+          :must_teach_at_least_one_term
         end
       end
     end

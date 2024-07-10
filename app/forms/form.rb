@@ -14,8 +14,8 @@ class Form
     Claim.model_name
   end
 
-  def self.i18n_error_message(path)
-    ->(object, _) { object.i18n_errors_path(path) }
+  def self.i18n_error_message(path, args = {})
+    ->(object, _) { object.i18n_errors_path(path, args) }
   end
 
   # TODO RL: remove journey param and pull it from the journey_session
