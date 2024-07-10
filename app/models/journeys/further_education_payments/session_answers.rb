@@ -8,6 +8,7 @@ module Journeys
       attribute :fixed_term_full_year, :boolean
       attribute :taught_at_least_one_term, :boolean
       attribute :teaching_hours_per_week, :string
+      attribute :teaching_hours_per_week_next_term, :string
       attribute :further_education_teaching_start_year, :string
       attribute :subjects_taught, default: []
       attribute :teaching_qualification, :string
@@ -33,6 +34,22 @@ module Journeys
 
       def subject_to_disciplinary_action?
         !!subject_to_disciplinary_action
+      end
+
+      def recent_further_education_teacher?
+        !further_education_teaching_start_year&.start_with?("pre-")
+      end
+
+      def teaching_less_than_2_5_hours_per_week?
+        teaching_hours_per_week == "less_than_2_5"
+      end
+
+      def teaching_less_than_2_5_hours_per_week_next_term?
+        teaching_hours_per_week_next_term == "less_than_2_5"
+      end
+
+      def subject_to_problematic_actions?
+        subject_to_formal_performance_action || subject_to_disciplinary_action
       end
     end
   end

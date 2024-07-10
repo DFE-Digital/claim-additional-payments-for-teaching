@@ -24,6 +24,14 @@ module Policies
           :lack_teaching_responsibilities
         elsif answers.taught_at_least_one_term == false
           :must_teach_at_least_one_term
+        elsif !answers.recent_further_education_teacher?
+          :must_be_recent_further_education_teacher
+        elsif answers.teaching_less_than_2_5_hours_per_week?
+          :teaching_less_than_2_5
+        elsif answers.teaching_less_than_2_5_hours_per_week_next_term?
+          :teaching_less_than_2_5_next_term
+        elsif answers.subject_to_problematic_actions?
+          :subject_to_problematic_actions
         end
       end
     end

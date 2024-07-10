@@ -9,6 +9,7 @@ module Journeys
         fixed-term-contract
         taught-at-least-one-term
         teaching-hours-per-week
+        teaching-hours-per-week-next-term
         further-education-teaching-start-year
         subjects-taught
         building-and-construction-courses
@@ -48,6 +49,7 @@ module Journeys
           if answers.contract_type == "permanent"
             sequence.delete("fixed-term-contract")
             sequence.delete("taught-at-least-one-term")
+            sequence.delete("teaching-hours-per-week-next-term")
           end
 
           if answers.contract_type == "variable_hours"

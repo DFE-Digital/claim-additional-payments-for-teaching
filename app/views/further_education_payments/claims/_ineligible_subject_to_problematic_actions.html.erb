@@ -5,8 +5,14 @@
     </h1>
 
     <p class="govuk-body">
-      In order to claim a levelling up premium payment, you must be employed as a member of staff with teaching responsibilities.
+      In order to claim an incentive payment, you must not currently be subject to any:
     </p>
+
+    <%= govuk_list [
+      "formal performance measures as a result of continuous poor teaching standards",
+      "disciplinary action"
+    ],
+    type: :bullet %>
 
     <p class="govuk-body">
       For more information, check the eligibility criteria for <%= govuk_link_to "levelling up premium payments for early career further education teachers", "https://www.gov.uk/guidance/levelling-up-premium-payments-for-fe-teachers", new_tab: true %>.
