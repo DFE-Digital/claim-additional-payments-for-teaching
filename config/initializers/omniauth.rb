@@ -26,6 +26,11 @@ if ENV["TID_BASE_URL"].present?
   end
 end
 
+onelogin_sign_in_issuer_uri = ENV["ONELOGIN_SIGN_IN_ISSUER"].present? ? URI(ENV["ONELOGIN_SIGN_IN_ISSUER"]) : nil
+if ENV["ONELOGIN_REDIRECT_BASE_URL"].present?
+  onelogin_sign_in_redirect_uri = URI.join(ENV["ONELOGIN_REDIRECT_BASE_URL"], "/auth/onelogin")
+end
+
 module ::DfESignIn
   def self.bypass?
     (Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")) && ENV["BYPASS_DFE_SIGN_IN"] == "true"
@@ -72,5 +77,23 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     pkce: true,
     scope: ["email", "openid", "profile", "dqt:read"],
     send_scope_to_token_endpoint: false
+  }
+
+  provider :openid_connect, {
+    name: :onelogin,
+    callback_path: "/claim/auth/onelogin/callback",
+    client_options: {
+      host: onelogin_sign_in_issuer_uri&.host,
+      identifier: ENV["ONELOGIN_SIGN_IN_CLIENT_ID"],
+      port: onelogin_sign_in_issuer_uri&.port,
+      redirect_uri: onelogin_sign_in_redirect_uri&.to_s,
+      scheme: onelogin_sign_in_issuer_uri&.scheme
+    },
+    discovery: true,
+    extra_authorize_params: {vtr: '["Cl.Cm"]'},
+    issuer: ENV["ONELOGIN_SIGN_IN_ISSUER"],
+    jwt_secret_base64: ENV["ONELOGIN_SIGN_IN_SECRET_BASE64"],
+    pkce: true,
+    scope: %i[openid email]
   }
 end
