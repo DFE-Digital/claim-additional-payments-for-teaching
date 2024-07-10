@@ -50,22 +50,9 @@ jobs:
           docker-image: ${{ needs.build.outputs.docker-image-tag }}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
           pull-request-number: ${{ github.event.pull_request.number }}
-
-      - uses: azure/login@v2
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Set kubectl
-        uses: DFE-Digital/github-actions/set-kubectl@master
-
-      - name: Seed review app
-        shell: bash
-        if: github.event.number != ''
-        run: |
-          make ci review-aks get-cluster-credentials
-          kubectl exec -n srtl-development deployment/claim-additional-payments-for-teaching-review-${{ github.event.pull_request.number }}-worker -- sh -c "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/prepare-database"
-        env:
-          PR_NUMBER: ${{ github.event.pull_request.number }}
+          aks-namespace: srtl-development
+          aks-deployment: claim-additional-payments-for-teaching-review-${{ github.event.pull_request.number }}
+          prepare-database: ${{ github.event.pull_request.number != '' }}
 
       - name: Post comment to Pull Request ${{ github.event.number }}
         if: ${{ github.event_name == 'pull_request' }}
@@ -83,17 +70,21 @@ jobs:
             | Relocation Payments | <${{ env.APP_URL }}/get-a-teacher-relocation-payment/landing-page> |
             | Admin               | <${{ env.APP_URL }}/admin>                                         |
 
-  deploy_test:
-    name: Deploy to test environment
-    concurrency: deploy_test
+  deploy:
+    name: Deploy to ${{ matrix.environment }}
     runs-on: ubuntu-latest
+    concurrency: deploy_${{ matrix.environment }}
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     needs: [build]
     environment:
-      name: test-aks
+      name: ${{ matrix.environment }}-aks
       url: ${{ steps.deploy.outputs.environment_url }}
     outputs:
       environment_url: ${{ steps.deploy.outputs.environment_url }}
+    strategy:
+      max-parallel: 1
+      matrix:
+        environment: [test, production]
 
     steps:
       - name: Checkout code
@@ -106,15 +97,11 @@ jobs:
       - uses: ./.github/actions/deploy-environment
         id: deploy
         with:
-          environment: test-aks
+          environment: ${{ matrix.environment }}-aks
           docker-image: ${{ needs.build.outputs.docker-image-tag }}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Run migrations
-        shell: bash
-        run: |
-          make ci test-aks get-cluster-credentials
-          kubectl exec -n srtl-test deployment/claim-additional-payments-for-teaching-test-worker -- sh -c "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/prepare-database"
+          aks-namespace: srtl-${{ matrix.environment }}
+          aks-deployment: claim-additional-payments-for-teaching-${{ matrix.environment }}
 
       - name: Install Ruby
         uses: ruby/setup-ruby@v1
@@ -135,6 +122,6 @@ jobs:
         uses: rtCamp/action-slack-notify@master
         env:
           SLACK_COLOR: failure
-          SLACK_TITLE: Failure deploying release to test
-          SLACK_MESSAGE: Failure deploying release to test - Docker tag ${{ needs.build.outputs.docker-image-tag }}
+          SLACK_TITLE: Failure deploying release to ${{ matrix.environment }}
+          SLACK_MESSAGE: Failure deploying release to ${{ matrix.environment }} - Docker tag ${{ needs.build.outputs.docker-image-tag }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}

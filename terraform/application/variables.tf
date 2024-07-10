@@ -64,6 +64,19 @@ variable "web_replicas" {
   description = "Number of replicas of the web app"
   default     = 1
 }
+variable "worker_replicas" {
+  description = "Number of replicas of the worker"
+  default     = 1
+}
+variable "azure_maintenance_window" {
+  default = null
+}
+variable "postgres_flexible_server_sku" {
+  default = "B_Standard_B1ms"
+}
+variable "postgres_enable_high_availability" {
+  default = false
+}
 
 locals {
   postgres_ssl_mode       = var.enable_postgres_ssl ? "require" : "disable"
