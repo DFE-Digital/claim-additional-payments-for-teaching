@@ -16,6 +16,7 @@ module Journeys
         "fixed-term-contract" => FixedTermContractForm,
         "taught-at-least-one-term" => TaughtAtLeastOneTermForm,
         "teaching-hours-per-week" => TeachingHoursPerWeekForm,
+        "teaching-hours-per-week-next-term" => TeachingHoursPerWeekNextTermForm,
         "further-education-teaching-start-year" => FurtherEducationTeachingStartYearForm,
         "subjects-taught" => SubjectsTaughtForm,
         "teaching-qualification" => TeachingQualificationForm,
