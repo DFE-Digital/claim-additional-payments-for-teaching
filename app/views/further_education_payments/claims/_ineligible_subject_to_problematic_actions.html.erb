@@ -1,0 +1,25 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      You are not eligible
+    </h1>
+
+    <p class="govuk-body">
+      In order to claim an incentive payment, you must not currently be subject to any:
+    </p>
+
+    <%= govuk_list [
+      "formal performance measures as a result of continuous poor teaching standards",
+      "disciplinary action"
+    ],
+    type: :bullet %>
+
+    <p class="govuk-body">
+      For more information, check the eligibility criteria for <%= govuk_link_to "levelling up premium payments for early career further education teachers", "https://www.gov.uk/guidance/levelling-up-premium-payments-for-fe-teachers", new_tab: true %>.
+    </p>
+
+    <p class="govuk-body">
+      The information entered is not stored. If you are unsure your information is correct, <%= govuk_link_to "start again", claim_path(current_journey_routing_name, "landing-page") %>.
+    </p>
+  </div>
+</div>

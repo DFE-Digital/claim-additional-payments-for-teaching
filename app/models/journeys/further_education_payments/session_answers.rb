@@ -47,6 +47,10 @@ module Journeys
       def teaching_less_than_2_5_hours_per_week_next_term?
         teaching_hours_per_week_next_term == "less_than_2_5"
       end
+
+      def subject_to_problematic_actions?
+        subject_to_formal_performance_action || subject_to_disciplinary_action
+      end
     end
   end
 end
