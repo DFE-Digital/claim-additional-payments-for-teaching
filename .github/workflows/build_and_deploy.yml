@@ -2,7 +2,7 @@ name: Build and deploy to AKS cluster
 
 on:
   push:
-    branches: [CAPT-1703-prod-aks-migration]
+    branches: [master]
   pull_request:
     types: [labeled, opened, reopened, synchronize]
 
@@ -74,7 +74,7 @@ jobs:
     name: Deploy to ${{ matrix.environment }}
     runs-on: ubuntu-latest
     concurrency: deploy_${{ matrix.environment }}
-    # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     needs: [build]
     environment:
       name: ${{ matrix.environment }}-aks
