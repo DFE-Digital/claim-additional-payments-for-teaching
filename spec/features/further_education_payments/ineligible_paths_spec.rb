@@ -546,10 +546,6 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_content("half of your timetabled teaching hours must include")
   end
 
-  def when_further_education_payments_journey_configuration_exists
-    create(:journey_configuration, :further_education_payments)
-  end
-
   def and_college_exists
     college
   end

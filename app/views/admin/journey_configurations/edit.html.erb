@@ -7,6 +7,10 @@
       <%= journey_service_name(journey_configuration.journey::ROUTING_NAME) %>
     </h1>
 
+    <p class="govuk-body">
+      <%= govuk_link_to "View and upload eligible further education providers", new_admin_eligible_fe_providers_path %>
+    </p>
+
     <div class="govuk-panel govuk-panel--informational govuk-panel--small">
       <% if journey_configuration.open_for_submissions? %>
         <h2 class="govuk-panel__title">Service open</h2>

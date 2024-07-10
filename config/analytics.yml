@@ -269,3 +269,11 @@ shared:
     - id
     - created_at
     - updated_at
+  :eligible_fe_providers:
+    - id
+    - ukprn
+    - academic_year
+    - max_award_amount
+    - lower_award_amount
+    - created_at
+    - updated_at

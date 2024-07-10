@@ -1,0 +1,42 @@
+<% content_for :back_link do %>
+  <%= govuk_back_link href: edit_admin_journey_configuration_path(Journeys::FurtherEducationPayments::ROUTING_NAME) %>
+<% end %>
+
+<h1 class="govuk-heading-l">
+  Eligible further education (FE) providers
+</h1>
+
+<%= govuk_tabs do |tabs| %>
+  <% tabs.with_tab(label: "Upload eligible FE providers") do %>
+    <h2 class="govuk-heading-m">
+      Upload eligible FE providers
+    </h2>
+
+    <%= form_with model: @upload_form, scope: :eligible_fe_providers, url: admin_eligible_fe_providers_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_collection_select :academic_year, f.object.select_options, :id, :name,
+        label: { text: "Academic year" } %>
+
+      <%= f.govuk_file_field :file,
+        label: { text: "Eligible FE providers" },
+        hint: { text: "This file should be a CSV" } %>
+
+      <%= f.govuk_submit "Upload CSV" %>
+    <% end %>
+  <% end %>
+  <% tabs.with_tab(label: "Download eligible FE providers") do %>
+    <h2 class="govuk-heading-m">
+      Download eligible FE providers
+    </h2>
+
+    <%= form_with model: @download_form, scope: :eligible_fe_providers, url: admin_eligible_fe_providers_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :get do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_collection_select :academic_year, f.object.select_options, :id, :name,
+        label: { text: "Academic year" } %>
+
+      <%= f.govuk_submit "Download CSV" %>
+    <% end %>
+  <% end %>
+<% end %>

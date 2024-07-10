@@ -139,10 +139,6 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     expect(page).to have_content("You applied for a further education financial incentive payment")
   end
 
-  def when_further_education_payments_journey_configuration_exists
-    create(:journey_configuration, :further_education_payments)
-  end
-
   def and_college_exists
     college
   end
