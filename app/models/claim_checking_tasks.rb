@@ -12,8 +12,6 @@ class ClaimCheckingTasks
   delegate :policy, to: :claim
 
   def applicable_task_names
-    return %w[identity_confirmation visa arrival_date employment employment_contract] if policy.international_relocation_payments?
-
     @applicable_task_names ||= Task::NAMES.dup.tap do |task_names|
       task_names.delete("induction_confirmation") unless claim.policy == Policies::EarlyCareerPayments
       task_names.delete("student_loan_amount") unless claim.policy == Policies::StudentLoans
@@ -21,9 +19,17 @@ class ClaimCheckingTasks
       task_names.delete("payroll_details") unless claim.must_manually_validate_bank_details?
       task_names.delete("matching_details") unless matching_claims.exists?
       task_names.delete("payroll_gender") unless claim.payroll_gender_missing? || task_names_for_claim.include?("payroll_gender")
-      task_names.delete("visa") unless claim.policy.international_relocation_payments?
-      task_names.delete("arrival_date") unless claim.policy.international_relocation_payments?
-      task_names.delete("employment_contract") unless claim.policy.international_relocation_payments?
+      if claim.policy.international_relocation_payments?
+        task_names.delete("qualifications")
+        task_names.delete("census_subjects_taught")
+      end
+      unless claim.policy.international_relocation_payments?
+        task_names.delete("visa")
+        task_names.delete("arrival_date")
+        task_names.delete("employment_contract")
+        task_names.delete("employment_start")
+        task_names.delete("subject")
+      end
     end
   end
 

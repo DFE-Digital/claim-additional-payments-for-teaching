@@ -4,6 +4,7 @@ module Journeys
       ELIGIBILITY_SLUGS = [
         "application-route",
         "state-funded-secondary-school",
+        "current-school",
         "contract-details",
         "start-date",
         "subject",
@@ -15,7 +16,6 @@ module Journeys
       PERSONAL_DETAILS_SLUGS = [
         "nationality",
         "passport-number",
-        "current-school",
         "headteacher-details",
         "personal-details",
         "postcode-search",

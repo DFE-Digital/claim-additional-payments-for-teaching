@@ -105,3 +105,5 @@
   - teacher_reference_number
   :student_loans_eligibilities:
   - teacher_reference_number
+  :journeys_sessions:
+  - answers

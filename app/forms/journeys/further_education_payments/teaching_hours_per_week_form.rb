@@ -9,16 +9,16 @@ module Journeys
       def radio_options
         @radio_options ||= [
           OpenStruct.new(
-            id: "more-than-12",
-            name: "More than 12 hours per week"
+            id: "more_than_12",
+            name: t("options.more_than_12")
           ),
           OpenStruct.new(
-            id: "between-2.5-and-12",
-            name: "Between 2.5 and 12 hours per week"
+            id: "between_2_5_and_12",
+            name: t("options.between_2_5_and_12")
           ),
           OpenStruct.new(
-            id: "less-than-2.5",
-            name: "Less than 2.5 hours per week"
+            id: "less_than_2_5",
+            name: t("options.less_than_2_5")
           )
         ]
       end
