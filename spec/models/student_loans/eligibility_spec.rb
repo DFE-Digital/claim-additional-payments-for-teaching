@@ -50,8 +50,8 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
     end
 
     it "validates that the loan repayment less than £5000 when amending a claim" do
-      expect(described_class.new(student_loan_repayment_amount: "5001")).not_to be_valid(:amendment)
-      expect(described_class.new(student_loan_repayment_amount: "1200")).to be_valid(:amendment)
+      expect(described_class.new(teacher_reference_number: "1234567", student_loan_repayment_amount: "5001")).not_to be_valid(:amendment)
+      expect(described_class.new(teacher_reference_number: "1234567", student_loan_repayment_amount: "1200")).to be_valid(:amendment)
     end
   end
 
@@ -275,66 +275,6 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
     it "returns the student loan repayment amount" do
       eligibility = described_class.new(student_loan_repayment_amount: 1000)
       expect(eligibility.award_amount).to eq(1000)
-    end
-  end
-
-  describe "#reset_dependent_answers" do
-    let(:eligibility) do
-      create(
-        :student_loans_eligibility,
-        :eligible,
-        claim_school: build(:school, :student_loans_eligible),
-        current_school: build(:school, :student_loans_eligible),
-        taught_eligible_subjects: true,
-        chemistry_taught: true,
-        physics_taught: true,
-        computing_taught: true,
-        languages_taught: true,
-        employment_status: :different_school,
-        had_leadership_position: true,
-        claim: build(:claim)
-      )
-    end
-
-    it "resets employment_status when the value of claim_school changes" do
-      eligibility.claim_school = eligibility.claim_school # standard:disable Lint/SelfAssignment
-      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
-
-      eligibility.claim_school = eligibility.current_school
-      expect { eligibility.reset_dependent_answers }
-        .to change { eligibility.employment_status }
-        .from("different_school").to(nil)
-    end
-
-    it "resets the current_school_id to nil when the value of claim_school changes" do
-      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
-
-      eligibility.claim_school = eligibility.current_school
-      expect { eligibility.reset_dependent_answers }
-        .to change { eligibility.current_school_id }
-        .from(eligibility.current_school.id).to(nil)
-    end
-
-    it "resets the subject fields when the value of the claim_school changes" do
-      eligibility.claim_school = eligibility.current_school
-      eligibility.reset_dependent_answers
-
-      expect(eligibility.taught_eligible_subjects).to eq(nil)
-      expect(eligibility.physics_taught).to eq(nil)
-      expect(eligibility.chemistry_taught).to eq(nil)
-      expect(eligibility.physics_taught).to eq(nil)
-      expect(eligibility.computing_taught).to eq(nil)
-      expect(eligibility.languages_taught).to eq(nil)
-    end
-
-    it "resets mostly_performed_leadership_duties when the value of had_leadership_position changes" do
-      eligibility.had_leadership_position = true
-      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
-
-      eligibility.had_leadership_position = false
-      expect { eligibility.reset_dependent_answers }
-        .to change { eligibility.mostly_performed_leadership_duties }
-        .from(false).to(nil)
     end
   end
 

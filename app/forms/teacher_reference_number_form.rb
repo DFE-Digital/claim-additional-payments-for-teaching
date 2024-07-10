@@ -1,9 +1,9 @@
 class TeacherReferenceNumberForm < Form
+  include TeacherReferenceNumberValidation
+
   attribute :teacher_reference_number
 
-  before_validation do
-    self.teacher_reference_number = teacher_reference_number&.gsub(/\D/, "")
-  end
+  before_validation :normalise_teacher_reference_number
 
   validates :teacher_reference_number,
     presence: {
@@ -12,7 +12,7 @@ class TeacherReferenceNumberForm < Form
 
   validates :teacher_reference_number,
     length: {
-      is: 7,
+      is: TRN_LENGTH,
       message: ->(form, _) { form.i18n_errors_path("length") }
     }, if: -> { teacher_reference_number.present? }
 

@@ -23,37 +23,9 @@ stages:
         steps:
           - template: templates/build.yml
 
-  - stage: TestRelease
-    lockBehavior: sequential
-    condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-    jobs:
-      - deployment: TestRelease
-        displayName: Deploy to test environment
-        pool:
-          vmImage: ubuntu-latest
-        environment: s118-teacherpaymentsservice-test
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - checkout: self
-                - template: templates/release.yml
-                  parameters:
-                    backendAzureRmContainerName: s118t01conttfstate
-                    backendAzureRmKey: terraform.tfstate
-                    backendAzureRmResourceGroupName: s118t01-tfbackend
-                    backendAzureRmStorageAccountName: s118t01tfbackendsa
-                    env: test
-                    KeyVaultId: /subscriptions/e9299169-9666-4f15-9da9-5332680145af/resourceGroups/s118t01-secrets/providers/Microsoft.KeyVault/vaults/s118t01-secrets-kv
-                    ResourceGroupName: s118t01-app
-                    SourceSlot: staging
-                    WebAppName: s118t01-app-as
-                    ExtraTerraformVariables:
-                    ServiceConnection: azdo.pipelines.cip.S118T.arm03ce3ff5-9a61-4525-a063-6ecde34874cf
-
   - stage: ProductionRelease
     lockBehavior: sequential
-    condition: and(succeeded('TestRelease'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
     jobs:
       - deployment: ProductionRelease
         displayName: Deploy to production environment

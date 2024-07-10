@@ -3,6 +3,8 @@
 module Policies
   module StudentLoans
     class Eligibility < ApplicationRecord
+      include TeacherReferenceNumberValidation
+
       SUBJECT_ATTRIBUTES = [
         :biology_taught,
         :chemistry_taught,
@@ -10,11 +12,7 @@ module Policies
         :computing_taught,
         :languages_taught
       ].freeze
-      AMENDABLE_ATTRIBUTES = %i[student_loan_repayment_amount].freeze
-      ATTRIBUTE_DEPENDENCIES = {
-        "claim_school_id" => ["taught_eligible_subjects", *SUBJECT_ATTRIBUTES, "employment_status", "current_school_id"],
-        "had_leadership_position" => ["mostly_performed_leadership_duties"]
-      }.freeze
+      AMENDABLE_ATTRIBUTES = %i[teacher_reference_number student_loan_repayment_amount].freeze
 
       self.table_name = "student_loans_eligibilities"
 
@@ -38,12 +36,16 @@ module Policies
       belongs_to :claim_school, optional: true, class_name: "School"
       belongs_to :current_school, optional: true, class_name: "School"
 
+      before_validation :normalise_teacher_reference_number, if: :teacher_reference_number_changed?
+
       validates :claim_school, on: [:"select-claim-school"], presence: {message: ->(object, _data) { object.select_claim_school_presence_error_message }}, unless: :claim_school_somewhere_else?
       validates :employment_status, on: [:submit], presence: {message: ->(object, _data) { "Select if you still work at #{object.claim_school_name}, another school or no longer teach in England" }}
       validates :had_leadership_position, on: [:submit], inclusion: {in: [true, false], message: "Select yes if you were employed in a leadership position"}
       validates :mostly_performed_leadership_duties, on: [:submit], inclusion: {in: [true, false], message: "Select yes if you spent more than half your working hours on leadership duties"}, if: :had_leadership_position?
       validates_numericality_of :student_loan_repayment_amount, message: "Enter a valid monetary amount", allow_nil: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 99999
       validates :student_loan_repayment_amount, on: :amendment, award_range: {max: 5_000}
+      validates :teacher_reference_number, on: :amendment, presence: {message: "Enter your teacher reference number"}
+      validate :validate_teacher_reference_number_length
 
       delegate :name, to: :claim_school, prefix: true, allow_nil: true
       delegate :name, to: :current_school, prefix: true, allow_nil: true
@@ -72,16 +74,6 @@ module Policies
       end
 
       def eligible_itt_subject
-      end
-
-      def reset_dependent_answers(reset_attrs = [])
-        attrs = ineligible? ? changed.concat(reset_attrs) : changed
-
-        ATTRIBUTE_DEPENDENCIES.each do |attribute_name, dependent_attribute_names|
-          dependent_attribute_names.each do |dependent_attribute_name|
-            write_attribute(dependent_attribute_name, nil) if attrs.include?(attribute_name)
-          end
-        end
       end
 
       def submit!

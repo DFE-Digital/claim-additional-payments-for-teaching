@@ -100,130 +100,6 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
     end
   end
 
-  describe "#reset_dependent_answers" do
-    let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
-    let!(:claim) { build_stubbed(:claim, :with_student_loan, eligibility: eligibility) }
-
-    let(:eligibility) do
-      build_stubbed(
-        :early_career_payments_eligibility,
-        :eligible,
-        employed_as_supply_teacher: true,
-        has_entire_term_contract: false,
-        employed_directly: false,
-        qualification: :undergraduate_itt,
-        eligible_itt_subject: :none_of_the_above,
-        teaching_subject_now: false
-      )
-    end
-
-    it "resets 'eligible_itt_subject' when value of 'qualification' changes" do
-      eligibility.qualification = :undergraduate_itt
-      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
-
-      eligibility.qualification = :postgraduate_itt
-      expect { eligibility.reset_dependent_answers }
-        .to change { eligibility.eligible_itt_subject }
-        .from("none_of_the_above").to(nil)
-    end
-
-    it "resets 'teaching_subject_now' when value of 'qualification' changes" do
-      eligibility.qualification = :undergraduate_itt
-      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
-
-      eligibility.qualification = :postgraduate_itt
-      expect { eligibility.reset_dependent_answers }
-        .to change { eligibility.teaching_subject_now }
-        .from(false).to(nil)
-    end
-
-    it "resets 'teaching_subject_now' when value of 'eligible_itt_subject' changes" do
-      eligibility.eligible_itt_subject = :none_of_the_above
-      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
-
-      eligibility.eligible_itt_subject = :foreign_languages
-      expect { eligibility.reset_dependent_answers }
-        .to change { eligibility.teaching_subject_now }
-        .from(false).to(nil)
-    end
-
-    it "resets 'has_entire_term_contract' when the value of 'employed_as_supply_teacher' changes" do
-      eligibility.employed_as_supply_teacher = true
-      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
-
-      eligibility.employed_as_supply_teacher = false
-      expect { eligibility.reset_dependent_answers }
-        .to change { eligibility.has_entire_term_contract }
-        .from(false).to(nil)
-    end
-
-    it "resets 'employed_directly' when the value of 'employed_as_supply_teacher' changes" do
-      eligibility.employed_as_supply_teacher = true
-      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
-
-      eligibility.employed_as_supply_teacher = false
-      expect { eligibility.reset_dependent_answers }
-        .to change { eligibility.employed_directly }
-        .from(false).to(nil)
-    end
-  end
-
-  describe "#trainee_teacher?" do
-    let(:eligibility) { build_stubbed(:early_career_payments_eligibility, nqt_in_academic_year_after_itt: false) }
-
-    before { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
-
-    it "returns true" do
-      expect(eligibility).to be_a_trainee_teacher
-    end
-
-    it "returns false" do
-      eligibility.nqt_in_academic_year_after_itt = true
-      expect(eligibility).to_not be_a_trainee_teacher
-    end
-  end
-
-  describe "#induction_not_completed?" do
-    subject { eligibility.induction_not_completed? }
-    let(:eligibility) { build_stubbed(:early_career_payments_eligibility, induction_completed:) }
-
-    context "when the induction_completed attribute is nil" do
-      let(:induction_completed) { nil }
-
-      it { is_expected.to eq(false) }
-    end
-
-    context "when the induction_completed attribute is false" do
-      let(:induction_completed) { false }
-
-      it { is_expected.to eq(true) }
-    end
-
-    context "when the induction_completed attribute is true" do
-      let(:induction_completed) { true }
-
-      it { is_expected.to eq(false) }
-    end
-  end
-
-  describe "#ecp_only_school?" do
-    subject { eligibility.ecp_only_school? }
-    let!(:policy_config) { create(:journey_configuration, :additional_payments) }
-    let!(:claim) { build_stubbed(:claim, eligibility: eligibility) }
-
-    context "when the current school is eligible for ECP and LUP" do
-      let(:eligibility) { create(:early_career_payments_eligibility, :eligible_school_ecp_and_lup) }
-
-      it { is_expected.to eq(false) }
-    end
-
-    context "when the current school is eligible for ECP only" do
-      let(:eligibility) { create(:early_career_payments_eligibility, :eligible_school_ecp_only) }
-
-      it { is_expected.to eq(true) }
-    end
-  end
-
   describe "validation contexts" do
     context "award_amount attribute" do
       it "validates the award_amount is numerical" do
@@ -241,70 +117,14 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
       end
 
       it "validates that the award_amount is less than £7,500 when amending a claim" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new(award_amount: 7_501)).not_to be_valid(:amendment)
-        expect(Policies::EarlyCareerPayments::Eligibility.new(award_amount: 7_500)).to be_valid(:amendment)
-        expect(Policies::EarlyCareerPayments::Eligibility.new(award_amount: 7_499)).to be_valid(:amendment)
+        expect(Policies::EarlyCareerPayments::Eligibility.new(teacher_reference_number: "1234567", award_amount: 7_501)).not_to be_valid(:amendment)
+        expect(Policies::EarlyCareerPayments::Eligibility.new(teacher_reference_number: "1234567", award_amount: 7_500)).to be_valid(:amendment)
+        expect(Policies::EarlyCareerPayments::Eligibility.new(teacher_reference_number: "1234567", award_amount: 7_499)).to be_valid(:amendment)
       end
     end
   end
 
   describe ".max_award_amount_in_pounds" do
     specify { expect(described_class.max_award_amount_in_pounds).to eq(7_500) }
-  end
-
-  it_behaves_like "Eligibility status", :early_career_payments
-
-  context "ECP-specific eligibility" do
-    subject { eligibility.status }
-
-    before { create(:journey_configuration, :additional_payments) }
-
-    # By the 2022 policy year it's too late for this to apply to LUP so is ECP-specific now but
-    # technically this check is generally needed for all policies
-    context "no eligible subjects" do
-      let(:eligibility) { create(:early_career_payments_eligibility, :eligible_now, :no_eligible_subjects) }
-
-      it { is_expected.to eq(:ineligible) }
-    end
-
-    context "ineligible ITT subject" do
-      let(:eligibility) { create(:early_career_payments_eligibility, :eligible_now, :ineligible_itt_subject) }
-
-      it { is_expected.to eq(:ineligible) }
-    end
-
-    context "'None of the above' ITT subject" do
-      let(:eligibility) { create(:early_career_payments_eligibility, :eligible_now, eligible_itt_subject: :none_of_the_above) }
-
-      it { is_expected.to eq(:ineligible) }
-    end
-
-    context "trainee teacher" do
-      let(:eligibility) { create(:early_career_payments_eligibility, :eligible_now, :trainee_teacher) }
-
-      it { is_expected.to eq(:ineligible) }
-    end
-
-    context "induction completed" do
-      let(:eligibility) { create(:early_career_payments_eligibility, :eligible_now, :induction_completed) }
-
-      it { is_expected.to eq(:eligible_now) }
-    end
-
-    context "induction not completed" do
-      let!(:claim) { build_stubbed(:claim, eligibility: eligibility) }
-
-      context "with an ECP-only eligible school" do
-        let(:eligibility) { create(:early_career_payments_eligibility, :eligible_now, :induction_not_completed, :eligible_school_ecp_only) }
-
-        it { is_expected.to eq(:eligible_later) }
-      end
-
-      context "with an ECP and LUP eligible school" do
-        let(:eligibility) { create(:early_career_payments_eligibility, :eligible_now, :induction_not_completed, :eligible_school_ecp_and_lup) }
-
-        it { is_expected.to eq(:ineligible) }
-      end
-    end
   end
 end

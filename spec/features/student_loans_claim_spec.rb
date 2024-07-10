@@ -127,7 +127,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     mail = ActionMailer::Base.deliveries.last
     otp_in_mail_sent = mail[:personalisation].decoded.scan(/\b[0-9]{6}\b/).first
 
-    fill_in "claim_one_time_password", with: otp_in_mail_sent
+    fill_in "claim-one-time-password-field", with: otp_in_mail_sent
 
     click_on "Confirm"
 
@@ -172,7 +172,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(session.reload.answers.payroll_gender).to eq("male")
 
     expect(page).to have_text(I18n.t("questions.teacher_reference_number"))
-    fill_in :claim_teacher_reference_number, with: "1234567"
+    fill_in "claim-teacher-reference-number-field", with: "1234567"
     click_on "Continue"
 
     expect(session.reload.answers.teacher_reference_number).to eql("1234567")

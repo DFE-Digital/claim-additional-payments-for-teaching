@@ -3,6 +3,7 @@ FactoryBot.define do
     award_amount { 5000.0 }
 
     trait :eligible do
+      teacher_reference_number { generate(:teacher_reference_number) }
       eligible_now
     end
 

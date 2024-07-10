@@ -17,7 +17,7 @@ module AutomatedChecks
         end
 
         stub_qualified_teaching_statuses_show(
-          trn: claim_arg.teacher_reference_number,
+          trn: claim_arg.eligibility.teacher_reference_number,
           params: {
             birthdate: claim_arg.date_of_birth&.to_s,
             nino: claim_arg.national_insurance_number
@@ -36,7 +36,6 @@ module AutomatedChecks
           national_insurance_number: "QQ100000C",
           reference: "AB123456",
           surname: "ELIGIBLE",
-          teacher_reference_number: "1234567",
           policy: policy
         )
 
@@ -45,7 +44,8 @@ module AutomatedChecks
         claim.eligibility.update!(
           attributes_for(
             :"#{policy_underscored}_eligibility",
-            :eligible
+            :eligible,
+            teacher_reference_number: "1234567"
           )
         )
 
@@ -56,7 +56,7 @@ module AutomatedChecks
         {
           claim: claim_arg,
           dqt_teacher_status: Dqt::Client.new.teacher.find(
-            claim_arg.teacher_reference_number,
+            claim_arg.eligibility.teacher_reference_number,
             birthdate: claim_arg.date_of_birth,
             nino: claim_arg.national_insurance_number
           )
@@ -79,7 +79,7 @@ module AutomatedChecks
                   dob: claim_arg.date_of_birth,
                   name: claim_arg.full_name,
                   nino: claim_arg.national_insurance_number,
-                  trn: claim_arg.teacher_reference_number
+                  trn: claim_arg.eligibility.teacher_reference_number
                 }
               end
 
@@ -554,7 +554,7 @@ module AutomatedChecks
                     reference: "AB123456",
                     surname: "ELIGIBLE",
                     tasks: [build(:task, name: :identity_confirmation)],
-                    teacher_reference_number: "1234567"
+                    eligibility_attributes: {teacher_reference_number: "1234567"}
                   )
                 end
 
@@ -675,7 +675,6 @@ module AutomatedChecks
                     national_insurance_number: " QQ100000C ",
                     reference: "AB123456",
                     surname: "ELIGIBLE ",
-                    teacher_reference_number: " 1234567   ",
                     policy: policy
                   )
 
@@ -684,7 +683,8 @@ module AutomatedChecks
                   claim.eligibility.update!(
                     attributes_for(
                       :"#{policy_underscored}_eligibility",
-                      :eligible
+                      :eligible,
+                      teacher_reference_number: " 1234567   "
                     )
                   )
 

@@ -1,16 +1,13 @@
 module Policies
   module EarlyCareerPayments
     class Eligibility < ApplicationRecord
-      include Eligible
-      include EligibilityCheckable
+      include TeacherReferenceNumberValidation
 
-      AMENDABLE_ATTRIBUTES = [:award_amount].freeze
-      ATTRIBUTE_DEPENDENCIES = {
-        "employed_as_supply_teacher" => ["has_entire_term_contract", "employed_directly"],
-        "qualification" => ["eligible_itt_subject", "teaching_subject_now"],
-        "eligible_itt_subject" => ["teaching_subject_now"],
-        "itt_academic_year" => ["eligible_itt_subject"]
-      }.freeze
+      def policy
+        Policies::EarlyCareerPayments
+      end
+
+      AMENDABLE_ATTRIBUTES = [:teacher_reference_number, :award_amount].freeze
 
       IGNORED_ATTRIBUTES = [
         "eligible_degree_subject"
@@ -19,7 +16,6 @@ module Policies
       self.table_name = "early_career_payments_eligibilities"
 
       FIRST_ITT_AY = "2016/2017"
-      LAST_POLICY_YEAR = "2024/2025"
 
       # Generates an object similar to
       # {
@@ -34,7 +30,7 @@ module Policies
       # and the enums would be stale until after a server restart.
       # Make all valid ITT values based on the last known policy year.
       ITT_ACADEMIC_YEARS =
-        (AcademicYear.new(FIRST_ITT_AY)...AcademicYear.new(LAST_POLICY_YEAR)).each_with_object({}) do |year, hsh|
+        (AcademicYear.new(FIRST_ITT_AY)...POLICY_END_YEAR).each_with_object({}) do |year, hsh|
           hsh[year] = AcademicYear::Type.new.serialize(year)
         end.merge({AcademicYear.new => AcademicYear::Type.new.serialize(AcademicYear.new)})
 
@@ -63,9 +59,14 @@ module Policies
       has_one :claim, as: :eligibility, inverse_of: :eligibility
       belongs_to :current_school, optional: true, class_name: "School"
 
+      before_validation :normalise_teacher_reference_number, if: :teacher_reference_number_changed?
+
       validates :current_school, on: [:"correct-school"], presence: {message: "Select the school you teach at or choose somewhere else"}, unless: :school_somewhere_else?
       validates_numericality_of :award_amount, message: "Enter a valid monetary amount", allow_nil: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 7500
       validates :award_amount, on: :amendment, award_range: {max: max_award_amount_in_pounds}
+
+      validates :teacher_reference_number, on: :amendment, presence: {message: "Enter your teacher reference number"}
+      validate :validate_teacher_reference_number_length
 
       delegate :name, to: :current_school, prefix: true, allow_nil: true
 
@@ -78,25 +79,6 @@ module Policies
       rescue ActiveRecord::UnknownAttributeError
         all_attributes_ignored = (args.first.keys - IGNORED_ATTRIBUTES).empty?
         raise unless all_attributes_ignored
-      end
-
-      def reset_dependent_answers(reset_attrs = [])
-        attrs = ineligible? ? changed.concat(reset_attrs) : changed
-
-        dependencies = ATTRIBUTE_DEPENDENCIES.dup
-
-        # If some data was derived from DQT we do not want to reset these.
-        if claim.qualifications_details_check
-          dependencies.delete("qualification")
-          dependencies.delete("eligible_itt_subject")
-          dependencies.delete("itt_academic_year")
-        end
-
-        dependencies.each do |attribute_name, dependent_attribute_names|
-          dependent_attribute_names.each do |dependent_attribute_name|
-            write_attribute(dependent_attribute_name, nil) if attrs.include?(attribute_name)
-          end
-        end
       end
     end
   end

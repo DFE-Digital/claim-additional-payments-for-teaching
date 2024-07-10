@@ -132,8 +132,12 @@ RSpec.feature "Combined journey with Teacher ID mobile check" do
     click_on "Continue"
 
     # - Performance Issues
-    choose "claim_subject_to_formal_performance_action_false"
-    choose "claim_subject_to_disciplinary_action_false"
+    within all(".govuk-fieldset")[0] do
+      choose("No")
+    end
+    within all(".govuk-fieldset")[1] do
+      choose("No")
+    end
     click_on "Continue"
 
     # - Check and confirm qualifications
@@ -208,10 +212,10 @@ RSpec.feature "Combined journey with Teacher ID mobile check" do
     find("#claim_mobile_check_alternative").click
     click_on "Continue"
 
-    fill_in "claim_mobile_number", with: alt_phone_number
+    fill_in "Mobile number", with: alt_phone_number
     click_on "Continue"
 
-    fill_in "claim_one_time_password", with: otp_code
+    fill_in "claim-one-time-password-field", with: otp_code
     click_on "Confirm"
   end
 

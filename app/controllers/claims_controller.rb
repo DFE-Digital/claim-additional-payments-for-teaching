@@ -18,6 +18,7 @@ class ClaimsController < BasePublicController
   end
 
   def existing_session
+    @existing_session = journey_sessions.first
   end
 
   def start_new
@@ -38,7 +39,11 @@ class ClaimsController < BasePublicController
   delegate :slugs, :current_slug, :previous_slug, :next_slug, :next_required_slug, to: :page_sequence
 
   def redirect_to_existing_claim_journey
-    new_journey = Journeys.for_routing_name(other_journey_sessions.first.journey)
+    # If other journey sessions is empty, then the claimant has hit the landing
+    # page for the journey they're already on, so we need to look at the
+    # existing session.
+    other_journey_session = other_journey_sessions.first || journey_session
+    new_journey = Journeys.for_routing_name(other_journey_session.journey)
 
     # Set the params[:journey] to the new journey routing name so things like
     # journey_session that rely on the journey param find the correct journey.

@@ -29,7 +29,7 @@ RSpec.describe ClaimAutoApproval do
 
     context "when the claim is a duplicate" do
       let(:claim) { create(:claim, :submitted) }
-      let!(:duplicate) { create(:claim, :submitted, teacher_reference_number: claim.teacher_reference_number, policy: claim.policy) }
+      let!(:duplicate) { create(:claim, :submitted, eligibility_attributes: {teacher_reference_number: claim.eligibility.teacher_reference_number}, policy: claim.policy) }
 
       it { is_expected.to eq(false) }
     end

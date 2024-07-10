@@ -1,0 +1,110 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl"><%= t("further_education_payments.landing_page") %></h1>
+
+    <p class="govuk-body">
+      Use this service to check your eligibility for an incentive payment before you apply.
+    </p>
+
+    <p class="govuk-body">
+      Before starting your application, it may be useful to have the following information to hand:
+    </p>
+
+    <%= govuk_list [
+      "your contract or written statement of employment",
+      "your teaching timetable",
+      "the name of your college or sixth-form group, if your further education (FE) provider is part of one"
+    ], type: :bullet %>
+
+    <p class="govuk-body">
+      Answering questions about eligibility takes [TBC] minutes and applying for the payment takes another [TBC] minutes.
+    </p>
+
+    <%= govuk_inset_text do %>
+      <p>
+        You’ll need a GOV.UK One Login account to apply for a further education financial incentive payment. If you don’t have an account yet, we’ll help you create one.
+      </p>
+
+      <p>To create a GOV.UK One Login, you’ll need:</p>
+
+      <%= govuk_list [
+        "an email address",
+        "a way to get security codes - this can be a mobile phone number or an authenticator app"
+      ], type: :bullet %>
+    <% end %>
+
+    <%# TODO: There isn't any journey closed content, for now hide the button %>
+    <% if @journey_open %>
+      <%= govuk_start_button(text: "Start now", href: claim_path(current_journey_routing_name, "claim")) %>
+    <% end %>
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-6">Continue an existing application</h2>
+
+    <p class="govuk-body">
+      If you have already started an application, you can <%= govuk_link_to "continue it [TBC]" %>. You will be asked to sign in to GOV.UK One Login if you are not signed in already.
+    </p>
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-6">Eligibility criteria</h2>
+
+    <p class="govuk-body">
+      Eligible early career FE teachers can claim an annual incentive payment to encourage them to continue teaching.
+    </p>
+
+    <p class="govuk-body">
+      Claimants should be in the first 5 years of their teaching career in England and teach specific courses in the following subject areas:
+    </p>
+
+    <%= govuk_list [
+      "building and construction",
+      "chemistry",
+      "computing, including digital and ICT",
+      "early years",
+      "engineering and manufacturing, including transport engineering and electronics",
+      "maths",
+      "physics"
+    ], type: :bullet %>
+
+    <p class="govuk-body">
+      Further information about the eligibility criteria can be found in the <%= govuk_link_to "levelling up premium payments for FE teachers guidance", "https://www.gov.uk/guidance/levelling-up-premium-payments-for-fe-teachers", target: "_blank" %>.
+    </p>
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-6">Payments and deductions</h2>
+
+    <p class="govuk-body">
+      If you meet the eligibility criteria, you could be eligible for between £2,000 and £6,000. The amount you are eligible for depends on:
+    </p>
+
+    <%= govuk_list [
+      govuk_link_to("the FE provider you teach in", "https://assets.publishing.service.gov.uk/media/667300fe64e554df3bd0db92/List_of_eligible_FE_providers_and_payment_value_for_levelling_up_premium.xlsx"),
+      "the number of hours you teach"
+    ], type: :bullet %>
+
+    <p class="govuk-body">
+      The incentive payment is taxable income, so the amount you receive may be lower following tax deductions. If you are currently paying off a student loan, a deduction from your payment will also go towards repaying it.
+    </p>
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-6">Further information</h2>
+
+    <p class="govuk-body">
+      You must apply between [MONTH TBC] <%= @academic_year.start_year.to_s %> and March <%= @academic_year.end_year.to_s %>.
+    </p>
+
+    <p class="govuk-body">
+      If you are eligible for an incentive payment, we will collect personal information to verify your claim and process your payment.
+    </p>
+
+    <p class="govuk-body">
+      Payments are given up to [TBC] weeks from applying. You will receive an approval email with further information on your application.
+    </p>
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-6">Contact</h2>
+
+    <p class="govuk-body">
+      For further support, email
+      <br />
+      <%= govuk_link_to "FE-Levellingup.PremiumPayments@education.gov.uk", "mailto:FE-Levellingup.PremiumPayments@education.gov.uk", no_visited_state: true %>.
+    </p>
+
+    <p class="govuk-body">You should receive a reply within [TBC] working days.</p>
+  </div>
+</div>

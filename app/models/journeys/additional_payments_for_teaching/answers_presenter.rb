@@ -90,7 +90,7 @@ module Journeys
 
       def subject_to_formal_performance_action
         [
-          t("additional_payments.forms.poor_performance.questions.formal_performance_action"),
+          t("additional_payments.forms.poor_performance.questions.performance.question"),
           (journey_session.answers.subject_to_formal_performance_action? ? "Yes" : "No"),
           "poor-performance"
         ]
@@ -98,7 +98,7 @@ module Journeys
 
       def subject_to_disciplinary_action
         [
-          t("additional_payments.forms.poor_performance.questions.disciplinary_action"),
+          t("additional_payments.forms.poor_performance.questions.disciplinary.question"),
           (journey_session.answers.subject_to_disciplinary_action? ? "Yes" : "No"),
           "poor-performance"
         ]

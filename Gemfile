@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.2.4"
+ruby "3.3.3"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "~> 7.0.8"
@@ -64,7 +64,7 @@ gem "httpclient"
 gem "daemons"
 
 # Gov form builder to structure claims
-gem "govuk_design_system_formbuilder", "~> 5.3.2"
+gem "govuk_design_system_formbuilder", "~> 5.4.0"
 
 gem "govuk-components"
 
@@ -112,8 +112,6 @@ group :development do
   gem "spring-watcher-listen", "~> 2.1.0"
 
   gem "foreman"
-
-  gem "lefthook"
   # Provides a detailed speed badge for every HTML page to aid performance optimisation.
   gem "rack-mini-profiler"
 end
@@ -124,6 +122,8 @@ group :test do
   gem "launchy"
   gem "rack_session_access"
   gem "simplecov", require: false
+  # Return null object for active record connection rather than raising error
+  gem "activerecord-nulldb-adapter"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -10,7 +10,7 @@ module AutomatedChecks
       )
         self.admin_user = admin_user
         self.claim = claim
-        self.school_workforce_census = SchoolWorkforceCensus.where(teacher_reference_number: claim.teacher_reference_number)
+        self.school_workforce_census = SchoolWorkforceCensus.where(teacher_reference_number: claim.eligibility.teacher_reference_number)
         self.school_workforce_census_subjects = school_workforce_census
       end
 

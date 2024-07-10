@@ -1,0 +1,37 @@
+<% content_for(
+  :page_title,
+  page_title(
+    t("get_a_teacher_relocation_payment.forms.visa.question"),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for(
+      @form,
+      url: claim_path(current_journey_routing_name),
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_collection_select(
+        :visa_type,
+        f.object.available_options,
+        :to_s,
+        :to_s,
+        label: {
+          text: t("get_a_teacher_relocation_payment.forms.visa.question"),
+          size: "l",
+          tag: "h1"
+        },
+        options: {
+          include_blank: true
+        }
+      ) %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>
+

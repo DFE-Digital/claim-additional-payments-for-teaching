@@ -34,7 +34,7 @@ Architecture decision records can be found in the
 
 ## Prerequisites
 
-- Ruby 3.2.4
+- Ruby 3.3.3
 - PostgreSQL
 - [ShellCheck](https://www.shellcheck.net/)
 - [Yarn](https://yarnpkg.com/en/docs/install)
@@ -199,11 +199,6 @@ Code linting is performed using:
 - [Standard](https://github.com/testdouble/standard) for Ruby
 - [ShellCheck](https://www.shellcheck.net/) for shell scripts
 - [Prettier](https://prettier.io/) for everything else
-
-**Optionally, enable automatic linting checks on pre-commit with
-[lefthook](https://github.com/evilmartians/lefthook)**
-
-> `lefthook install`
 
 ### N+1 query detection
 

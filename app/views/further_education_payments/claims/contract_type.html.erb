@@ -1,0 +1,12 @@
+<%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+  <%= f.govuk_error_summary %>
+
+  <%= f.govuk_collection_radio_buttons :contract_type, @form.radio_options, :id, :name, :hint,
+    legend: {
+      text: @form.t(:question, school_name: journey_session.answers.school.name),
+      tag: "h1",
+      size: "l"
+    } %>
+
+  <%= f.govuk_submit %>
+<% end %>

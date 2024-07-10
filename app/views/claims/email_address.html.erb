@@ -9,35 +9,29 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: @form) if @form.errors.any? %>
+    <%= form_for @form, url: claim_path(current_journey_routing_name), builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
 
-    <%= form_for @form, url: claim_path(current_journey_routing_name), html: { novalidate: false } do |f| %>
-      <span class="govuk-caption-xl">
-        <%= I18n.t("questions.personal_details") %>
-      </span>
-
-      <%= form_group_tag f.object do %>
-        <h1 class="govuk-label-wrapper">
-          <%= f.label :email_address, t("questions.email_address"), class: "govuk-label #{label_css_class_for_journey(f.object.journey)}" %>
-        </h1>
-
-        <div id="email-address-hint" class="govuk-hint">
+      <%= f.govuk_text_field :email_address,
+        autocomplete: "email",
+        spellcheck: "false",
+        caption: {
+          text: t("questions.personal_details"),
+          size: "xl"
+        },
+        label: {
+          text: t("questions.email_address"),
+          tag: "h1",
+          size: "xl"
+        },
+        hint: -> do %>
           <p><%= I18n.t("questions.email_address_hint1") %></p>
           <p><%= I18n.t("questions.email_address_hint2") %></p>
-        </div>
+        <% end %>
 
-        <%= errors_tag f.object, :email_address %>
-
-        <%= f.text_field(
-          :email_address,
-          autocomplete: "email",
-          spellcheck: "false",
-          class: css_classes_for_input(f.object, :email_address),
-          "aria-describedby" => "email-address-hint"
-        ) %>
-      <% end %>
       <%= render "help_with_access_codes", communication_type: "Email" %>
-      <%= f.submit "Continue", class: "govuk-button" %>
+
+      <%= f.govuk_submit "Continue" %>
     <% end %>
   </div>
 </div>

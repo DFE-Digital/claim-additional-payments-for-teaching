@@ -16,7 +16,7 @@ RSpec.feature "Given a one time password" do
 
   scenario "verifies the password" do
     # - that is wrong
-    fill_in "claim_one_time_password", with: "000000"
+    fill_in "claim-one-time-password-field", with: "000000"
 
     click_on "Confirm"
     expect(page).to have_text("Enter a valid passcode")
@@ -27,7 +27,7 @@ RSpec.feature "Given a one time password" do
 
     stub_const("OneTimePassword::Base::DRIFT", -100)
 
-    fill_in "claim_one_time_password", with: get_otp_from_email
+    fill_in "claim-one-time-password-field-error", with: get_otp_from_email
     click_on "Confirm"
     expect(page).to have_text("Your passcode has expired, request a new one")
     expect(session.reload.answers.email_verified).to_not equal(true)
@@ -36,7 +36,7 @@ RSpec.feature "Given a one time password" do
 
     stub_const("OneTimePassword::Base::DRIFT", drift)
 
-    fill_in "claim_one_time_password", with: get_otp_from_email
+    fill_in "claim-one-time-password-field-error", with: get_otp_from_email
     click_on "Confirm"
     expect(page).to_not have_css(".govuk-error-summary")
     expect(session.reload.answers.email_verified).to equal(true)

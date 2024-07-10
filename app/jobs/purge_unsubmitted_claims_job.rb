@@ -5,13 +5,13 @@ class PurgeUnsubmittedClaimsJob < CronJob
   self.cron_expression = "0 0 * * *"
 
   def perform
-    Rails.logger.info "Purging #{old_unsubmitted_claims.count} old and unsubmitted claims from the database"
-    old_unsubmitted_claims.destroy_all
+    Rails.logger.info "Purging #{old_unsubmitted_journeys.count} old and unsubmitted journeys from the database"
+    old_unsubmitted_journeys.destroy_all
   end
 
   private
 
-  def old_unsubmitted_claims
-    Claim.unsubmitted.where("updated_at < ?", 24.hours.ago)
+  def old_unsubmitted_journeys
+    Journeys::Session.purgeable
   end
 end

@@ -59,11 +59,15 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     click_on "Continue"
 
     # - Poor performance
-    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.formal_performance_action"))
-    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.disciplinary_action"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.performance.question"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.disciplinary.question"))
 
-    choose "claim_subject_to_formal_performance_action_false"
-    choose "claim_subject_to_disciplinary_action_false"
+    within all(".govuk-fieldset")[0] do
+      choose("No")
+    end
+    within all(".govuk-fieldset")[1] do
+      choose("No")
+    end
     click_on "Continue"
 
     # - What route into teaching did you take?
@@ -167,12 +171,12 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     otp_in_mail_sent = mail[:personalisation].decoded.scan(/\b[0-9]{6}\b/).first
 
     # - One time password wrong
-    fill_in "claim_one_time_password", with: "000000"
+    fill_in "claim-one-time-password-field", with: "000000"
     click_on "Confirm"
     expect(page).to have_text("Enter a valid passcode")
 
     # - clear and enter correct OTP
-    fill_in "claim_one_time_password", with: otp_in_mail_sent
+    fill_in "claim-one-time-password-field-error", with: otp_in_mail_sent
     click_on "Confirm"
 
     # - Provide mobile number
@@ -212,7 +216,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     # - What is your teacher reference number
     expect(page).to have_text(I18n.t("questions.teacher_reference_number"))
 
-    fill_in :claim_teacher_reference_number, with: "1234567"
+    fill_in "claim-teacher-reference-number-field", with: "1234567"
     click_on "Continue"
 
     # - Check your answers before sending your application
@@ -278,11 +282,15 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     click_on "Continue"
 
     # - Poor performance
-    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.formal_performance_action"))
-    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.disciplinary_action"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.performance.question"))
+    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.disciplinary.question"))
 
-    choose "claim_subject_to_formal_performance_action_false"
-    choose "claim_subject_to_disciplinary_action_false"
+    within all(".govuk-fieldset")[0] do
+      choose("No")
+    end
+    within all(".govuk-fieldset")[1] do
+      choose("No")
+    end
     click_on "Continue"
 
     # - What route into teaching did you take?

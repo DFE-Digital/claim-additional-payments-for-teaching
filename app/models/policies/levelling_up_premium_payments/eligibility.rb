@@ -1,29 +1,29 @@
 module Policies
   module LevellingUpPremiumPayments
     class Eligibility < ApplicationRecord
-      include Eligible
-      include EligibilityCheckable
+      include TeacherReferenceNumberValidation
+
+      def policy
+        Policies::LevellingUpPremiumPayments
+      end
+
       include ActiveSupport::NumberHelper
 
       self.table_name = "levelling_up_premium_payments_eligibilities"
       has_one :claim, as: :eligibility, inverse_of: :eligibility
       belongs_to :current_school, optional: true, class_name: "School"
 
+      before_validation :normalise_teacher_reference_number, if: :teacher_reference_number_changed?
+
       validate :award_amount_must_be_in_range, on: :amendment
+      validates :teacher_reference_number, on: :amendment, presence: {message: "Enter your teacher reference number"}
+      validate :validate_teacher_reference_number_length
 
       delegate :name, to: :current_school, prefix: true, allow_nil: true
 
-      AMENDABLE_ATTRIBUTES = [:award_amount].freeze
-
-      ATTRIBUTE_DEPENDENCIES = {
-        "employed_as_supply_teacher" => ["has_entire_term_contract", "employed_directly"],
-        "qualification" => ["eligible_itt_subject", "teaching_subject_now"],
-        "eligible_itt_subject" => ["teaching_subject_now", "eligible_degree_subject"],
-        "itt_academic_year" => ["eligible_itt_subject"]
-      }.freeze
+      AMENDABLE_ATTRIBUTES = [:teacher_reference_number, :award_amount].freeze
 
       FIRST_ITT_AY = "2017/2018"
-      LAST_POLICY_YEAR = "2024/2025"
 
       # Generates an object similar to
       # {
@@ -38,7 +38,7 @@ module Policies
       # and the enums would be stale until after a server restart.
       # Make all valid ITT values based on the last known policy year.
       ITT_ACADEMIC_YEARS =
-        (AcademicYear.new(FIRST_ITT_AY)...AcademicYear.new(LAST_POLICY_YEAR)).each_with_object({}) do |year, hsh|
+        (AcademicYear.new(FIRST_ITT_AY)...POLICY_END_YEAR).each_with_object({}) do |year, hsh|
           hsh[year] = AcademicYear::Type.new.serialize(year)
         end.merge({AcademicYear.new => AcademicYear::Type.new.serialize(AcademicYear.new)})
 
@@ -60,22 +60,14 @@ module Policies
         computing: 5
       }, _prefix: :itt_subject
 
-      def reset_dependent_answers(reset_attrs = [])
-        attrs = ineligible? ? changed.concat(reset_attrs) : changed
+      private
 
-        dependencies = ATTRIBUTE_DEPENDENCIES.dup
+      def award_amount_must_be_in_range
+        claim_year = Journeys.for_policy(policy).configuration.current_academic_year
+        max = LevellingUpPremiumPayments::Award.where(academic_year: claim_year.to_s).maximum(:award_amount)
 
-        # If some data was derived from DQT we do not want to reset these.
-        if claim.qualifications_details_check
-          dependencies.delete("qualification")
-          dependencies.delete("eligible_itt_subject")
-          dependencies.delete("itt_academic_year")
-        end
-
-        dependencies.each do |attribute_name, dependent_attribute_names|
-          dependent_attribute_names.each do |dependent_attribute_name|
-            write_attribute(dependent_attribute_name, nil) if attrs.include?(attribute_name)
-          end
+        unless award_amount&.between?(1, max)
+          errors.add(:award_amount, "Enter a positive amount up to #{number_to_currency(max)} (inclusive)")
         end
       end
     end

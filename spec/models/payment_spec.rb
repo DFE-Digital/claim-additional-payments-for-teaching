@@ -71,7 +71,7 @@ RSpec.describe Payment do
     let(:claims) do
       build_list(:claim, 2, :approved,
         national_insurance_number: "JM603818B",
-        teacher_reference_number: "1234567",
+        eligibility_attributes: {teacher_reference_number: "1234567"},
         email_address: "email@example.com",
         bank_sort_code: "112233",
         bank_account_number: "95928482",
@@ -97,7 +97,7 @@ RSpec.describe Payment do
     end
 
     it "is invalid when claims' teacher reference numbers do not match" do
-      claims[0].teacher_reference_number = "9988776"
+      claims[0].eligibility.teacher_reference_number = "9988776"
 
       expect(subject).not_to be_valid
       expect(subject.errors[:claims]).to eq(["#{claims[0].reference} and #{claims[1].reference} have different values for teacher reference number"])
@@ -179,7 +179,7 @@ RSpec.describe Payment do
     let(:claims) do
       personal_details = {
         national_insurance_number: "JM603818B",
-        teacher_reference_number: "1234567",
+        eligibility_attributes: {teacher_reference_number: "1234567"},
         bank_sort_code: "112233",
         bank_account_number: "95928482",
         building_society_roll_number: nil
@@ -201,7 +201,7 @@ RSpec.describe Payment do
     let(:personal_details) do
       {
         national_insurance_number: generate(:national_insurance_number),
-        teacher_reference_number: generate(:teacher_reference_number),
+        eligibility_attributes: {teacher_reference_number: generate(:teacher_reference_number)},
         email_address: generate(:email_address),
         bank_sort_code: "112233",
         bank_account_number: "95928482",
@@ -262,11 +262,11 @@ RSpec.describe Payment do
   end
 
   describe "method delegations" do
-    described_class::PERSONAL_DETAILS_ATTRIBUTES_PERMITTING_DISCREPANCIES.each do |method|
+    described_class::PERSONAL_CLAIM_DETAILS_ATTRIBUTES_PERMITTING_DISCREPANCIES.each do |method|
       it { is_expected.to delegate_method(method).to(:claim_for_personal_details) }
     end
 
-    described_class::PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES.each do |method|
+    described_class::PERSONAL_CLAIM_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES.each do |method|
       it { is_expected.to delegate_method(method).to(:claim_for_personal_details) }
     end
   end

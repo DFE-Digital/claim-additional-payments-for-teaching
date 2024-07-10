@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_10_144004) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_27_145713) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -49,7 +49,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_10_144004) do
     t.string "address_line_4", limit: 100
     t.string "postcode", limit: 11
     t.date "date_of_birth"
-    t.string "teacher_reference_number", limit: 11
+    t.string "column_to_remove_teacher_reference_number", limit: 11
     t.string "national_insurance_number", limit: 9
     t.string "email_address", limit: 256
     t.string "bank_sort_code", limit: 6
@@ -170,7 +170,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_10_144004) do
     t.decimal "award_amount", precision: 7, scale: 2
     t.boolean "induction_completed"
     t.boolean "school_somewhere_else"
+    t.string "teacher_reference_number", limit: 11
     t.index ["current_school_id"], name: "index_early_career_payments_eligibilities_on_current_school_id"
+    t.index ["teacher_reference_number"], name: "index_ecp_eligibility_trn"
   end
 
   create_table "file_uploads", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -178,6 +180,28 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_10_144004) do
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "further_education_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "international_relocation_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "application_route"
+    t.boolean "state_funded_secondary_school"
+    t.boolean "one_year"
+    t.date "start_date"
+    t.string "subject"
+    t.string "visa_type"
+    t.date "date_of_entry"
+    t.string "nationality"
+    t.string "passport_number"
+    t.string "school_headteacher_name"
+    t.uuid "current_school_id"
+    t.index ["current_school_id"], name: "index_irb_eligibilities_on_current_school_id"
   end
 
   create_table "journey_configurations", primary_key: "routing_name", id: :string, force: :cascade do |t|
@@ -227,7 +251,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_10_144004) do
     t.boolean "eligible_degree_subject"
     t.boolean "induction_completed"
     t.boolean "school_somewhere_else"
+    t.string "teacher_reference_number", limit: 11
     t.index ["current_school_id"], name: "index_lup_payments_eligibilities_on_current_school_id"
+    t.index ["teacher_reference_number"], name: "index_lupp_eligibility_trn"
   end
 
   create_table "local_authorities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -345,6 +371,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_10_144004) do
     t.string "phone_number", limit: 20
     t.date "open_date"
     t.string "postcode_sanitised"
+    t.text "ukprn"
     t.index ["close_date"], name: "index_schools_on_close_date"
     t.index ["created_at"], name: "index_schools_on_created_at"
     t.index ["local_authority_district_id"], name: "index_schools_on_local_authority_district_id"
@@ -352,6 +379,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_10_144004) do
     t.index ["name"], name: "index_schools_on_name", opclass: :gin_trgm_ops, using: :gin
     t.index ["open_date"], name: "index_schools_on_open_date"
     t.index ["postcode_sanitised"], name: "index_schools_on_postcode_sanitised", opclass: :gin_trgm_ops, using: :gin
+    t.index ["ukprn"], name: "index_schools_on_ukprn"
     t.index ["urn"], name: "index_schools_on_urn", unique: true
   end
 
@@ -387,9 +415,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_10_144004) do
     t.boolean "had_leadership_position"
     t.boolean "mostly_performed_leadership_duties"
     t.boolean "claim_school_somewhere_else"
+    t.string "teacher_reference_number", limit: 11
     t.index ["claim_school_id"], name: "index_student_loans_eligibilities_on_claim_school_id"
     t.index ["created_at"], name: "index_student_loans_eligibilities_on_created_at"
     t.index ["current_school_id"], name: "index_student_loans_eligibilities_on_current_school_id"
+    t.index ["teacher_reference_number"], name: "index_sl_eligibility_trn"
   end
 
   create_table "support_tickets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -455,6 +485,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_10_144004) do
   add_foreign_key "claims", "journeys_sessions"
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "early_career_payments_eligibilities", "schools", column: "current_school_id"
+  add_foreign_key "international_relocation_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "levelling_up_premium_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "notes", "claims"
   add_foreign_key "notes", "dfe_sign_in_users", column: "created_by_id"

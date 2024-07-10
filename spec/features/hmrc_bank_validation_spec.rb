@@ -34,8 +34,12 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
     click_on "Continue"
 
     # - Poor performance
-    choose "claim_subject_to_formal_performance_action_false"
-    choose "claim_subject_to_disciplinary_action_false"
+    within all(".govuk-fieldset")[0] do
+      choose("No")
+    end
+    within all(".govuk-fieldset")[1] do
+      choose("No")
+    end
     click_on "Continue"
 
     # - What route into teaching did you take?
@@ -92,7 +96,7 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
     otp_in_mail_sent = mail[:personalisation].decoded.scan(/\b[0-9]{6}\b/).first
 
     # - clear and enter correct OTP
-    fill_in "claim_one_time_password", with: otp_in_mail_sent
+    fill_in "claim-one-time-password-field", with: otp_in_mail_sent
     click_on "Confirm"
 
     # - Provide mobile number

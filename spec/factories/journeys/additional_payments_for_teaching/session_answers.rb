@@ -52,6 +52,10 @@ FactoryBot.define do
       end
     end
 
+    trait :with_no_eligible_subjects do
+      itt_academic_year { Journeys.for_policy(Policies::EarlyCareerPayments).configuration.current_academic_year - 1 }
+    end
+
     trait :with_teaching_subject_now do
       teaching_subject_now { true }
     end
@@ -160,8 +164,24 @@ FactoryBot.define do
 
     trait :lup_ineligible do
       lup_eligible
+      lup_ineligible_school
+    end
+
+    trait :lup_ineligible_school do
       current_school_id do
         create(:school, :levelling_up_premium_payments_ineligible).id
+      end
+    end
+
+    trait :ecp_ineligible_school do
+      current_school_id do
+        create(:school, :early_career_payments_ineligible).id
+      end
+    end
+
+    trait :eligible_school_ecp_only do
+      current_school_id do
+        create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible).id
       end
     end
 
@@ -178,6 +198,12 @@ FactoryBot.define do
 
     trait :agency_supply_teacher do
       employed_as_supply_teacher { true }
+      employed_directly { false }
+    end
+
+    trait :short_term_agency_supply_teacher do
+      employed_as_supply_teacher { true }
+      has_entire_term_contract { false }
       employed_directly { false }
     end
 
@@ -216,6 +242,15 @@ FactoryBot.define do
     trait :ecp_and_lup_undetermined do
       ecp_and_lup_eligible
       teaching_subject_now { nil }
+    end
+
+    trait :lup_eligible_later do
+      lup_eligible
+      trainee_teacher
+    end
+
+    trait :not_a_supply_teacher do
+      employed_as_supply_teacher { false }
     end
   end
 end

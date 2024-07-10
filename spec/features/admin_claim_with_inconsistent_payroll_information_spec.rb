@@ -4,7 +4,7 @@ RSpec.feature "Admin checking a claim with inconsistent payroll information" do
   let(:personal_details) do
     {
       national_insurance_number: generate(:national_insurance_number),
-      teacher_reference_number: generate(:teacher_reference_number),
+      eligibility_attributes: {teacher_reference_number: generate(:teacher_reference_number)},
       date_of_birth: 30.years.ago.to_date,
       student_loan_plan: StudentLoan::PLAN_1,
       email_address: "email@example.com",

@@ -1,0 +1,24 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <%= @form.t(:question) %>
+      </h1>
+
+      <p class="govuk-body">
+        To apply, at least 50% of your timetabled teaching hours must include either:
+      </p>
+
+      <%= govuk_list [
+        "a student aged 16 to 19",
+        "a person up to age 25 with an #{govuk_link_to("Education, Health and Care Plan (EHCP)", "https://www.gov.uk/children-with-special-educational-needs/extra-SEN-help", target: "_blank")}".html_safe
+      ], type: :bullet %>
+
+      <%= f.govuk_collection_radio_buttons :half_teaching_hours, @form.radio_options, :id, :name, legend: { hidden: true } %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+<% content_for(
+  :page_title,
+  page_title(
+    t("get_a_teacher_relocation_payment.forms.entry_date.question"),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for(
+      @form,
+      url: claim_path(current_journey_routing_name),
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_date_field(
+        :date_of_entry,
+        legend: {
+          text: t("get_a_teacher_relocation_payment.forms.entry_date.question"),
+          size: "l",
+          tag: "h1"
+        },
+      ) %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

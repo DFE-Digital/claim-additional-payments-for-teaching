@@ -6,15 +6,16 @@ RSpec.describe Policies, type: :model do
       expect(described_class::POLICIES).to eq([
         Policies::StudentLoans,
         Policies::EarlyCareerPayments,
-        Policies::LevellingUpPremiumPayments
+        Policies::LevellingUpPremiumPayments,
+        Policies::InternationalRelocationPayments
       ])
     end
   end
 
   describe "::AMENDABLE_ELIGIBILITY_ATTRIBUTES" do
     it do
-      expect(described_class::AMENDABLE_ELIGIBILITY_ATTRIBUTES).to eq([
-        :student_loan_repayment_amount, :award_amount, :award_amount
+      expect(described_class::AMENDABLE_ELIGIBILITY_ATTRIBUTES.sort).to eq([
+        :award_amount, :student_loan_repayment_amount, :teacher_reference_number
       ])
     end
   end
@@ -30,7 +31,8 @@ RSpec.describe Policies, type: :model do
       expect(described_class.options_for_select).to eq([
         ["Student Loans", "student-loans"],
         ["Early-Career Payments", "early-career-payments"],
-        ["Levelling Up Premium Payments", "levelling-up-premium-payments"]
+        ["Levelling Up Premium Payments", "levelling-up-premium-payments"],
+        ["International Relocation Payments", "international-relocation-payments"]
       ])
     end
   end

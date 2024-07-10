@@ -9,13 +9,6 @@ DOCKER_REPOSITORY=ghcr.io/dfe-digital/claim-additional-payments-for-teaching
 help:
 	@grep -E '^[a-zA-Z\._\-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-test:
-	$(eval AZ_SUBSCRIPTION=s118-teacherpaymentsservice-test)
-	$(eval RESOURCE_GROUP_NAME=s118t01-tfbackend)
-	$(eval STORAGE_ACCOUNT_NAME=s118t01tfbackendsa)
-	$(eval CONTAINER_NAME=s118t01conttfstate)
-	$(eval DEPLOY_ENV=test)
-
 production:
 	$(eval AZ_SUBSCRIPTION=s118-teacherpaymentsservice-production)
 	$(eval RESOURCE_GROUP_NAME=s118p01-tfbackend)
@@ -29,7 +22,6 @@ review-aks: test-cluster
 	$(eval ENVIRONMENT=review-${PR_NUMBER})
 	$(eval export TF_VAR_environment=${ENVIRONMENT})
 	$(eval include global_config/review.sh)
-	echo https://claim-additional-payments-for-teaching-review-$(PR_NUMBER).test.teacherservices.cloud will be created in aks
 
 .PHONY: test-aks
 test-aks: test-cluster
@@ -146,3 +138,31 @@ get-cluster-credentials: set-azure-account-aks
 bin/konduit.sh:
 	curl -s https://raw.githubusercontent.com/DFE-Digital/teacher-services-cloud/main/scripts/konduit.sh -o bin/konduit.sh \
 		&& chmod +x bin/konduit.sh
+
+domains-infra-init: bin/terrafile domains composed-variables set-azure-account-aks
+	./bin/terrafile -p terraform/domains/infrastructure/vendor/modules -f terraform/domains/infrastructure/config/zones_Terrafile
+
+	terraform -chdir=terraform/domains/infrastructure init -reconfigure -upgrade \
+		-backend-config=resource_group_name=${RESOURCE_GROUP_NAME} \
+		-backend-config=storage_account_name=${STORAGE_ACCOUNT_NAME} \
+		-backend-config=key=domains_infrastructure.tfstate
+
+domains-infra-plan: domains domains-infra-init  ## Terraform plan for DNS infrastructure (DNS zone and front door). Usage: make domains-infra-plan
+	terraform -chdir=terraform/domains/infrastructure plan -var-file config/zones.tfvars.json
+
+domains-infra-apply: domains domains-infra-init  ## Terraform apply for DNS infrastructure (DNS zone and front door). Usage: make domains-infra-apply
+	terraform -chdir=terraform/domains/infrastructure apply -var-file config/zones.tfvars.json ${AUTO_APPROVE}
+
+domains-init: bin/terrafile domains composed-variables set-azure-account-aks
+	./bin/terrafile -p terraform/domains/environment_domains/vendor/modules -f terraform/domains/environment_domains/config/${CONFIG}_Terrafile
+
+	terraform -chdir=terraform/domains/environment_domains init -upgrade -reconfigure \
+		-backend-config=resource_group_name=${RESOURCE_GROUP_NAME} \
+		-backend-config=storage_account_name=${STORAGE_ACCOUNT_NAME} \
+		-backend-config=key=${ENVIRONMENT}.tfstate
+
+domains-plan: domains-init  ## Terraform plan for DNS environment domains. Usage: make development domains-plan
+	terraform -chdir=terraform/domains/environment_domains plan -var-file config/${CONFIG}.tfvars.json
+
+domains-apply: domains-init ## Terraform apply for DNS environment domains. Usage: make development domains-apply
+	terraform -chdir=terraform/domains/environment_domains apply -var-file config/${CONFIG}.tfvars.json ${AUTO_APPROVE}

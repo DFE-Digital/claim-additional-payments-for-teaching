@@ -82,14 +82,6 @@ module Policies
       def lacks_eligible_degree?
         eligible_degree_subject == false
       end
-
-      def award_amount_must_be_in_range
-        max = LevellingUpPremiumPayments::Award.where(academic_year: claim_year.to_s).maximum(:award_amount)
-
-        unless award_amount&.between?(1, max)
-          errors.add(:award_amount, "Enter a positive amount up to #{number_to_currency(max)} (inclusive)")
-        end
-      end
     end
   end
 end

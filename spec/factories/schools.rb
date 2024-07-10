@@ -133,5 +133,9 @@ FactoryBot.define do
       open_date { 10.days.ago }
       close_date { nil }
     end
+
+    trait :further_education do
+      phase { 6 }
+    end
   end
 end

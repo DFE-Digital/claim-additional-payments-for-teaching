@@ -6,29 +6,129 @@ RSpec.feature "Switching policies" do
   before do
     create(:journey_configuration, :student_loans)
     create(:journey_configuration, :early_career_payments)
-
-    start_student_loans_claim
-    visit new_claim_path("additional-payments")
+    create(:journey_configuration, :get_a_teacher_relocation_payment)
   end
 
-  scenario "a user can switch to a different policy after starting a claim on another" do
-    expect(page.title).to have_text(I18n.t("additional_payments.journey_name"))
-    expect(page.find("header")).to have_text(I18n.t("additional_payments.journey_name"))
+  context "swtiching from student loans to additional payments" do
+    before do
+      start_student_loans_claim
+      visit new_claim_path("additional-payments")
+    end
 
-    choose "Yes, start claim for an additional payment for teaching and lose my progress on my first claim"
-    click_on "Submit"
+    scenario "a user can switch to a different policy after starting a claim on another" do
+      expect(page.title).to have_text(I18n.t("additional_payments.journey_name"))
+      expect(page.find("header")).to have_text(I18n.t("additional_payments.journey_name"))
 
-    expect(page).to have_text("You can sign in or set up a DfE Identity account to make it easier to claim additional payments.")
+      choose "Yes, start claim for an additional payment for teaching and lose my progress on my first claim"
+      click_on "Submit"
+
+      expect(page).to have_text("You can sign in or set up a DfE Identity account to make it easier to claim additional payments.")
+    end
+
+    scenario "a user can choose to continue their claim" do
+      choose "No, finish the claim I have in progress"
+      click_on "Submit"
+
+      expect(page).to have_text(claim_school_question)
+    end
   end
 
-  scenario "a user can choose to continue their claim" do
-    choose "No, finish the claim I have in progress"
-    click_on "Submit"
+  context "switching from additional payments to get a teacher relocation payment" do
+    before do
+      school = create(:school, :combined_journey_eligibile_for_all)
 
-    expect(page).to have_text(claim_school_question)
+      visit new_claim_path("additional-payments")
+
+      skip_tid
+
+      choose_school school
+
+      visit new_claim_path("get-a-teacher-relocation-payment")
+    end
+
+    scenario "a user can switch to a different policy after starting a claim on another" do
+      expect(page.title).to have_text(
+        I18n.t("get_a_teacher_relocation_payment.journey_name")
+      )
+
+      expect(page.find("header")).to(
+        have_text(I18n.t("get_a_teacher_relocation_payment.journey_name"))
+      )
+
+      choose "Yes, start claim for a get a teacher relocation payment and lose my progress on my first claim"
+
+      click_on "Submit"
+
+      expect(page.title).to include(
+        "What is your employment status? — Get a teacher relocation payment"
+      )
+    end
+
+    scenario "a user can choose to continue their claim" do
+      choose "No, finish the claim I have in progress"
+      click_on "Submit"
+
+      expect(page.title).to include("Claim additional payments for teaching")
+    end
+  end
+
+  context "Switching from teacher relocation to additional payments" do
+    before do
+      visit new_claim_path("get-a-teacher-relocation-payment")
+
+      # FIXME RL as of writing this test, the journey only has one page "check
+      # your answers", once the real first page of the journey is added this
+      # test will need to be updated to select an option on that page
+      click_on "Continue"
+
+      visit new_claim_path("additional-payments")
+    end
+
+    scenario "a user can switch to a different policy after starting a claim on another" do
+      expect(page).to have_content "Are you sure you want to start a claim for an additional payment for teaching?"
+
+      expect(page).to have_content "You have a claim in progress for a get a teacher relocation payment"
+
+      choose "Yes, start claim for an additional payment for teaching and lose my progress on my first claim"
+
+      click_on "Submit"
+    end
+  end
+
+  context "Switching to the same journey" do
+    scenario "a user can switch to the same journey after starting a claim on that journey" do
+      school = create(:school, :combined_journey_eligibile_for_all)
+
+      visit new_claim_path("additional-payments")
+
+      skip_tid
+
+      choose_school school
+
+      expect(page).to have_text(
+        "Are you currently teaching as a qualified teacher?"
+      )
+
+      visit new_claim_path("additional-payments")
+
+      expect(page).to(have_text(
+        "You have a claim in progress for an additional payment for teaching."
+      ))
+
+      choose "No, finish the claim I have in progress"
+
+      click_on "Submit"
+
+      expect(page).to have_text(
+        "Are you currently teaching as a qualified teacher?"
+      )
+    end
   end
 
   scenario "a user does not select an option" do
+    start_student_loans_claim
+    visit new_claim_path("additional-payments")
+
     click_on "Submit"
 
     expect(page).to have_text("Select yes if you want to start a claim for an additional payment for teaching")

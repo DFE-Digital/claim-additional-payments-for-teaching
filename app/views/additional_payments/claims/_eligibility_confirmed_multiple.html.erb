@@ -1,53 +1,26 @@
-<%= render("shared/error_summary", instance: @form, errored_field_id_overrides: {
-  "selected_claim_policy": "claim_selected_claim_policy_#{@form.first_eligible_compact_policy_name}"
-}) if @form.errors.any? %>
+<%= form_with model: @form, url: claim_path(current_journey_routing_name), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+  <%= f.govuk_error_summary %>
 
-<%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
-  <%= form_group_tag @form do %>
-    <fieldset class="govuk-fieldset">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-        <h1 class="govuk-fieldset__heading govuk-!-padding-top-2">
-          Which additional payment do you want to choose?
-        </h1>
-      </legend>
+  <%= f.govuk_collection_radio_buttons :selected_claim_policy, @form.radio_options, :id, :name, :description,
+    legend: {
+      text: "Which additional payment do you want to choose?",
+      tag: "h1",
+      size: "l"
+    },
+    hint: {
+      text: "You can only make one claim per academic year. Your choice does not impact your ability to apply in future years."
+    } %>
 
-      <div id="payments-hint" class="govuk-hint govuk-!-padding-bottom-2">
-        You can only make one claim per academic year. Your choice does not impact your ability to apply in future years.
-      </div>
-
-      <%= errors_tag f.object, :selected_claim_policy %>
-
-      <div class="govuk-radios" id="claim_base" data-module="govuk-radios">
-        <% policies.each do |policy| %>
-          <div class="govuk-radios__item">
-            <%= f.radio_button(:selected_claim_policy, policy, class: "govuk-radios__input", checked: @form.selected_policy?(policy)) %>
-            <%= f.label "selected_claim_policy_#{policy.to_s.downcase}", "#{award_amount(@form.award_amount(policy))} #{policy_name(policy)}", class: "govuk-label govuk-radios__label" %>
-            <div class="govuk-hint govuk-radios__hint">
-              <%= t("#{policy.locale_key}.purpose") %>
-            </div>
-          </div>
-        <% end %>
-      </div>
-    </fieldset>
+  <%= govuk_details(summary_text: "Help with choosing an additional payment") do %>
+    For the majority of teachers, the larger payment is the most beneficial option. In rare cases, some may prefer to choose the smaller option, such as if you are close to the threshold for the higher rate of tax.
   <% end %>
 
-  <details class="govuk-details" data-module="govuk-details">
-    <summary class="govuk-details__summary">
-      <span class="govuk-details__summary-text">
-        Help with choosing an additional payment
-      </span>
-    </summary>
-    <div class="govuk-details__text">
-      For the majority of teachers, the larger payment is the most beneficial option. In rare cases, some may prefer to choose the smaller option, such as if you are close to the threshold for the higher rate of tax.
-    </div>
-  </details>
-
-  <%= f.submit "Apply now", class: "govuk-button", data: { module: "govuk-button" } %>
+  <%= f.govuk_submit "Apply now" %>
 <% end %>
 
 <p class="govuk-body">
   For more information about why you are eligible for different additional payments, read about the
-  <%= link_to "early-career payments (opens in new tab)", Policies::EarlyCareerPayments.eligibility_page_url, class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>
+  <%= govuk_link_to "early-career payments", Policies::EarlyCareerPayments.eligibility_page_url, no_visited_state: true, new_tab: true %>
   and
-  <%= link_to "levelling up premium payments (opens in new tab)", Policies::LevellingUpPremiumPayments.eligibility_page_url, class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>.
+  <%= govuk_link_to "levelling up premium payments", Policies::LevellingUpPremiumPayments.eligibility_page_url, no_visited_state: true, new_tab: true %>.
 </p>

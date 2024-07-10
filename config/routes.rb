@@ -64,7 +64,7 @@ Rails.application.routes.draw do
       resources :reminders, only: [:show, :update], param: :slug, constraints: {slug: %r{#{Journeys::AdditionalPaymentsForTeaching::SlugSequence::REMINDER_SLUGS.join("|")}}}, controller: "journeys/additional_payments_for_teaching/reminders"
     end
 
-    scope path: "/", constraints: {journey: /student-loans|additional-payments/} do
+    scope path: "/", constraints: {journey: Regexp.new(Journeys.all_routing_names.join("|"))} do
       get "landing-page", to: "static_pages#landing_page", as: :landing_page
     end
   end

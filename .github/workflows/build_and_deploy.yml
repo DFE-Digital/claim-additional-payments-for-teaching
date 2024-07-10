@@ -1,6 +1,8 @@
 name: Build and deploy to AKS cluster
 
 on:
+  push:
+    branches: [master]
   pull_request:
     types: [labeled, opened, reopened, synchronize]
 
@@ -13,7 +15,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
     outputs:
       docker-image-tag: ${{ steps.build-image.outputs.tag }}
 
@@ -33,6 +34,7 @@ jobs:
     name: Deploy to review environment
     concurrency: deploy_review_${{ github.event.pull_request.number }}
     runs-on: ubuntu-latest
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
     needs: [build]
     environment:
       name: review-aks
@@ -48,22 +50,9 @@ jobs:
           docker-image: ${{ needs.build.outputs.docker-image-tag }}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
           pull-request-number: ${{ github.event.pull_request.number }}
-
-      - uses: azure/login@v2
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Set kubectl
-        uses: DFE-Digital/github-actions/set-kubectl@master
-
-      - name: Seed review app
-        shell: bash
-        if: github.event.number != ''
-        run: |
-          make ci review-aks get-cluster-credentials
-          kubectl exec -n srtl-development deployment/claim-additional-payments-for-teaching-review-${{ github.event.pull_request.number }}-worker -- sh -c "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/prepare-database"
-        env:
-          PR_NUMBER: ${{ github.event.pull_request.number }}
+          aks-namespace: srtl-development
+          aks-deployment: claim-additional-payments-for-teaching-review-${{ github.event.pull_request.number }}
+          prepare-database: ${{ github.event.pull_request.number != '' }}
 
       - name: Post comment to Pull Request ${{ github.event.number }}
         if: ${{ github.event_name == 'pull_request' }}
@@ -73,8 +62,66 @@ jobs:
           message: |
             ### Deployments
 
-            | Journey             | URL                                  |
-            | ------------------- | ------------------------------------ |
-            | Additional Payments | <${{ env.APP_URL }}/additional-payments/claim> |
-            | Student Loans       | <${{ env.APP_URL }}/student-loans/claim>       |
-            | Admin               | <${{ env.APP_URL }}/admin>                     |
+            | Journey             | URL                                                                |
+            | ------------------- | -------------------------------------------------------------------|
+            | Additional Payments | <${{ env.APP_URL }}/additional-payments/claim>                     |
+            | Student Loans       | <${{ env.APP_URL }}/student-loans/claim>                           |
+            | Further Education   | <${{ env.APP_URL }}/further-education-payments/landing-page>       |
+            | Relocation Payments | <${{ env.APP_URL }}/get-a-teacher-relocation-payment/landing-page> |
+            | Admin               | <${{ env.APP_URL }}/admin>                                         |
+
+  deploy:
+    name: Deploy to ${{ matrix.environment }}
+    runs-on: ubuntu-latest
+    concurrency: deploy_${{ matrix.environment }}
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    needs: [build]
+    environment:
+      name: ${{ matrix.environment }}-aks
+      url: ${{ steps.deploy.outputs.environment_url }}
+    outputs:
+      environment_url: ${{ steps.deploy.outputs.environment_url }}
+    strategy:
+      max-parallel: 1
+      matrix:
+        environment: [test, production]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: ./.github/actions/deploy-environment
+        id: deploy
+        with:
+          environment: ${{ matrix.environment }}-aks
+          docker-image: ${{ needs.build.outputs.docker-image-tag }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          aks-namespace: srtl-${{ matrix.environment }}
+          aks-deployment: claim-additional-payments-for-teaching-${{ matrix.environment }}
+
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Run smoke tests
+        shell: bash
+        run: bundle exec rspec spec/smoke -t smoke:true -b
+        env:
+          RAILS_ENV: test
+          SMOKE_TEST_APP_HOST: ${{ env.APP_URL }}
+          BASIC_AUTH_USERNAME: ${{ secrets.BASIC_AUTH_USERNAME }}
+          BASIC_AUTH_PASSWORD: ${{ secrets.BASIC_AUTH_PASSWORD }}
+
+      - name: Notify on failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_COLOR: failure
+          SLACK_TITLE: Failure deploying release to ${{ matrix.environment }}
+          SLACK_MESSAGE: Failure deploying release to ${{ matrix.environment }} - Docker tag ${{ needs.build.outputs.docker-image-tag }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}

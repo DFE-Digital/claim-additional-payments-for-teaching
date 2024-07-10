@@ -36,7 +36,7 @@ module Admin
 
     def admin_personal_details(claim)
       [
-        [translate("admin.teacher_reference_number"), claim.teacher_reference_number],
+        [translate("admin.teacher_reference_number"), claim.eligibility.teacher_reference_number],
         [translate("govuk_verify_fields.full_name").capitalize, claim.personal_data_removed? ? personal_data_removed_text : claim.full_name],
         [translate("govuk_verify_fields.date_of_birth").capitalize, claim.personal_data_removed? ? personal_data_removed_text : l(claim.date_of_birth, format: :day_month_year)],
         [translate("admin.national_insurance_number"), claim.personal_data_removed? ? personal_data_removed_text : claim.national_insurance_number],
@@ -98,11 +98,19 @@ module Admin
     end
 
     def matching_attributes(first_claim, second_claim)
-      first_attributes = matching_attributes_for(first_claim)
-      second_attributes = matching_attributes_for(second_claim)
+      first_attributes = matching_attributes_for_claim(first_claim)
+      second_attributes = matching_attributes_for_claim(second_claim)
+
+      first_eligibility_attributes = matching_attributes_for_eligibility(first_claim.eligibility)
+      second_eligibility_attributes = matching_attributes_for_eligibility(second_claim.eligibility)
 
       matching_attributes = first_attributes & second_attributes
-      matching_attributes.to_h.compact.keys.map(&:humanize).sort
+      claim_matches = matching_attributes.to_h.compact.keys.map(&:humanize).sort
+
+      matching_eligibility_attributes = first_eligibility_attributes & second_eligibility_attributes
+      eligibility_matches = matching_eligibility_attributes.to_h.compact.keys.map(&:humanize).sort
+
+      claim_matches + eligibility_matches
     end
 
     def identity_confirmation_task_claim_verifier_match_status_tag(claim)
@@ -226,9 +234,16 @@ module Admin
 
     private
 
-    def matching_attributes_for(claim)
+    def matching_attributes_for_claim(claim)
       claim.attributes
-        .slice(*Claim::MatchingAttributeFinder::ATTRIBUTE_GROUPS_TO_MATCH.flatten)
+        .slice(*Claim::MatchingAttributeFinder::CLAIM_ATTRIBUTE_GROUPS_TO_MATCH.flatten)
+        .reject { |_, v| v.blank? }
+        .to_a
+    end
+
+    def matching_attributes_for_eligibility(eligibility)
+      eligibility.attributes
+        .slice(*eligibility.policy.eligibility_matching_attributes.flatten)
         .reject { |_, v| v.blank? }
         .to_a
     end

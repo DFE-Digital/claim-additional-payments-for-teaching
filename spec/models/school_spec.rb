@@ -12,7 +12,7 @@ RSpec.describe School, type: :model do
   describe ".search" do
     let!(:first_school) { create(:school, name: "Community School London", postcode: "SW1P 3BT") }
     let!(:second_school) { create(:school, name: "Unity School London", postcode: "SW1P 3BT") }
-    let!(:third_school) { create(:school, name: "The Unity College Manchester", postcode: "M1 2WD") }
+    let!(:third_school) { create(:school, :further_education, name: "The Unity College Manchester", postcode: "M1 2WD") }
 
     it "returns schools with a name matching the search term" do
       expect(School.search("School")).to match_array([first_school, second_school])
@@ -37,6 +37,12 @@ RSpec.describe School, type: :model do
 
     it "orders the results by similarity" do
       expect(School.search("Unity School")).to eq([second_school, first_school])
+    end
+
+    context "when searching for FE only" do
+      it "only returns FE bodies" do
+        expect(School.search("Unity", fe_only: true)).to eq([third_school])
+      end
     end
   end
 
