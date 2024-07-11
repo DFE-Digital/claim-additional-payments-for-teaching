@@ -1,0 +1,2 @@
+class SignInForm < Form
+end

@@ -82,6 +82,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   provider :openid_connect, {
     name: :onelogin,
     callback_path: "/claim/auth/onelogin/callback",
+    client_auth_method: "jwks",
     client_options: {
       host: onelogin_sign_in_issuer_uri&.host,
       identifier: ENV["ONELOGIN_SIGN_IN_CLIENT_ID"],
@@ -90,10 +91,29 @@ Rails.application.config.middleware.use OmniAuth::Builder do
       scheme: onelogin_sign_in_issuer_uri&.scheme
     },
     discovery: true,
-    extra_authorize_params: {vtr: '["Cl.Cm"]'},
+    # extra_authorize_params: {vtr: '["Cl.Cm"]'}, # default anyway
     issuer: ENV["ONELOGIN_SIGN_IN_ISSUER"],
-    jwt_secret_base64: ENV["ONELOGIN_SIGN_IN_SECRET_BASE64"],
-    pkce: true,
+    # jwt_secret_base64: ENV["ONELOGIN_SIGN_IN_SECRET_BASE64"], # not needed here
+    # pkce: true, # is this needed?
+    response_type: :code,
+    scope: %i[openid email]
+  }
+
+  provider :openid_connect, {
+    name: :onelogin_identity,
+    callback_path: "/claim/auth/onelogin/callback",
+    client_options: {
+      host: onelogin_sign_in_issuer_uri&.host,
+      identifier: ENV["ONELOGIN_SIGN_IN_CLIENT_ID"],
+      port: onelogin_sign_in_issuer_uri&.port,
+      redirect_uri: onelogin_sign_in_redirect_uri&.to_s,
+      scheme: onelogin_sign_in_issuer_uri&.scheme
+    },
+    discovery: true,
+    extra_authorize_params: {vtr: '["Cl.Cm.P2"]'},
+    issuer: ENV["ONELOGIN_SIGN_IN_ISSUER"],
+    # jwt_secret_base64: ENV["ONELOGIN_SIGN_IN_SECRET_BASE64"], # not needed here
+    # pkce: true, # is this needed?
     scope: %i[openid email]
   }
 end
