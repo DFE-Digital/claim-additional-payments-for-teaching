@@ -1,7 +1,9 @@
 module Journeys
   module FurtherEducationPayments
     class SlugSequence
+      # TODO move sign-in to after the eligibility checks
       ELIGIBILITY_SLUGS = %w[
+        sign-in
         teaching-responsibilities
         further-education-provision-search
         select-provision
