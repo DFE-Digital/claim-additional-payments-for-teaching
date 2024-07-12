@@ -11,6 +11,7 @@ jobs:
   backup:
     name: Backup AKS Database (production)
     runs-on: ubuntu-latest
+    environment: production-aks
 
     steps:
       - name: Backup postgres
