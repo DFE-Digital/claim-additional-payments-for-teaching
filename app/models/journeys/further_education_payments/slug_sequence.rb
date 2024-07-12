@@ -24,15 +24,44 @@ module Journeys
         teaching-qualification
         poor-performance
         check-your-answers-part-one
+        eligible
       ]
 
-      RESULTS_SLUGS = %w[
-        check-your-answers
-        eligible
-        ineligible
+      PERSONAL_DETAILS_SLUGS = [
+        "one-login-placeholder",
+        "information-provided"
+        #   "personal-details",
+        #   "postcode-search",
+        #   "select-home-address",
+        #   "address",
+        #   "select-email",
+        #   "email-address",
+        #   "email-verification",
+        #   "select-mobile",
+        #   "provide-mobile-number",
+        #   "mobile-number",
+        #   "mobile-verification"
       ].freeze
 
-      SLUGS = ELIGIBILITY_SLUGS + RESULTS_SLUGS
+      PAYMENT_DETAILS_SLUGS = [
+        # "bank-or-building-society",
+        # "personal-bank-account",
+        # "building-society-account",
+        # "gender",
+        # "teacher-reference-number"
+      ].freeze
+
+      RESULTS_SLUGS = [
+        "check-your-answers",
+        "ineligible"
+      ].freeze
+
+      SLUGS = (
+        ELIGIBILITY_SLUGS +
+        PERSONAL_DETAILS_SLUGS +
+        PAYMENT_DETAILS_SLUGS +
+        RESULTS_SLUGS
+      ).freeze
 
       def self.start_page_url
         if Rails.env.production?

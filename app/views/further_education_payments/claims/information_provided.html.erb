@@ -1,0 +1,76 @@
+<% content_for(:page_title, page_title("How we will use the information you provide", journey: current_journey_routing_name)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">How we will use the information you provide in your application</h1>
+
+    <h2 class="govuk-heading-m">To process your application</h2>
+
+    <p class="govuk-body">
+      We will check the information you have provided with the further education provider where you currently teach.
+    </p>
+
+    <p class="govuk-body">
+      We may also check this information with:
+    </p>
+
+    <%= govuk_list [
+      "the Department for Education’s (DfE) database of qualified teachers",
+      "the Teacher Pension Scheme"
+    ], type: :bullet %>
+
+    <h2 class="govuk-heading-m">To pay you</h2>
+
+    <p class="govuk-body">
+      DfE will make the payment directly to you.
+    </p>
+
+    <p class="govuk-body">
+      To complete the rest of your application, you will need your:
+    </p>
+
+    <%= govuk_list [
+      "National Insurance number",
+      "bank account details",
+      "anything else needed"
+    ], type: :bullet %>
+
+    <p class="govuk-body">
+      You will also be asked to provide your teacher reference number (TRN) if you have one, although this is optional.
+    </p>
+
+    <%= govuk_details(summary_text: "Where can I find my TRN?") do %>
+      <p class="govuk-body">
+        Your TRN may be shown on a:
+      </p>
+
+      <%= govuk_list [
+        "payslip",
+        "teacher pension statement",
+        "teacher training records"
+      ], type: :bullet %>
+
+      <p class="govuk-body">
+        Get help to <%= govuk_link_to "find your TRN", "https://find-a-lost-trn.education.gov.uk/start", new_tab: true %> if you do not know it or have forgotten it.
+      </p>
+    <% end %>
+
+    <h2 class="govuk-heading-m">Student loan deductions</h2>
+
+    <p class="govuk-body">
+      If you are currently paying off a student loan, a deduction from your payment will go towards repaying it.
+    </p>
+
+    <h2 class="govuk-heading-m">Income Tax</h2>
+
+    <p class="govuk-body">
+      Your financial incentive payment is taxable income, but DfE will pay Income Tax and National Insurance contributions due to HMRC for you.
+      This means the payment amount you receive may be lower following tax deductions.
+    </p>
+
+    <p class="govuk-body">
+      For more details, you can read about payments and deductions for the
+      <%= govuk_link_to "levelling up premium payment", "https://www.gov.uk/guidance/levelling-up-premium-payments-for-fe-teachers", new_tab: true %>.
+    </p>
+  </div>
+</div>
