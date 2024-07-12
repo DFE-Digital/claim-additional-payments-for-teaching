@@ -362,7 +362,7 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Are you timetabled to teach at least 2.5 hours per week at #{college.name} next term?")
-    choose("No, I’m not timetabled to teach at least 2.5 hours at #{college.name} next term")
+    choose("No, I’m not timetabled to teach at least 2.5 hours per week at #{college.name} next term")
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible")
@@ -401,7 +401,7 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Are you timetabled to teach at least 2.5 hours per week at #{college.name} next term?")
-    choose("No, I’m not timetabled to teach at least 2.5 hours at #{college.name} next term")
+    choose("No, I’m not timetabled to teach at least 2.5 hours per week at #{college.name} next term")
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible")
