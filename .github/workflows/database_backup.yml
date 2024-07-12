@@ -10,7 +10,6 @@ on:
 jobs:
   backup:
     name: Backup AKS Database (production)
-    if: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -22,7 +21,7 @@ jobs:
         with:
           storage-account: s189p01captdbbkppdsa
           resource-group: s189p01-capt-pd-rg
-          app-name: claim-additional-payments-for-teaching-production
+          app-name: claim-additional-payments-for-teaching-production-web
           cluster: production
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
           backup-file: capt_prod_$(date +"%F").sql
