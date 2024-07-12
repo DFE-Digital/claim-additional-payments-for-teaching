@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Backup postgres
-        uses: DFE-Digital/github-actions/backup-postgres@master
+        uses: DFE-Digital/github-actions/backup-postgres@1914-claims-db-backup
         with:
           storage-account: s189p01captdbbkppdsa
           resource-group: s189p01-capt-pd-rg
