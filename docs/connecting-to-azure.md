@@ -7,12 +7,6 @@ Kubernetes infrastructure in Azure.
 Follow these instructions to [run a Rake task](#run-a-rake-task) or
 [open a Rails console](#open-a-rails-console).
 
-> [!NOTE] These instructions are for connecting to the `test` Kubernetes cluster
-> which powers our **Test and PR review environments**.
->
-> We don't have a production environment yet – but when we do, we will update
-> these instructions accordingly.
-
 ## 1. Authenticate to the Kubernetes cluster
 
 You'll need to configure your command line console so it can connect to the
@@ -49,19 +43,21 @@ but you may need to re-authenticate every once in a while.
    brew install Azure/kubelogin/kubelogin
    ```
 
-4. Then run:
+4. Then run one of these commands:
 
    ```shell
-   make test-aks get-cluster-credentials
+   make test-aks get-cluster-credentials # for test and review apps
+   make production-aks get-cluster-credentials CONFIRM_PRODUCTION=yes # for production
    ```
 
 5. Assuming everything worked correctly, you should now be able to access the
    Kubernetes cluster using the `kubectl` command.
 
-   > You can test you have access by running this command:
+   > You can test you have access by running one of these commands:
    >
    > ```shell
-   > kubectl -n srtl-development get deployments
+   > kubectl -n srtl-test get deployments # for test and review apps
+   > kubectl -n srtl-production get deployments # for production
    > ```
    >
    > You should see a list of Kubernetes deployments.
@@ -107,25 +103,55 @@ For a list of all test deployments, run:
 kubectl -n srtl-test get deployments
 ```
 
+### Production app
+
+Our production app is under the `srtl-production` namespace within the
+`production` cluster.
+
+For a list of all test deployments, run:
+
+```shell
+kubectl -n srtl-production get deployments
+```
+
+> Accessing production deployments requires a
+> [PIM (Privileged Identity Management) request](docs/privileged-identity-management-requests.md).
+
 ## 3. Connect to a running container
 
-The following commands will connect to a review app. To connect to the test app,
-replace `srtl-development` with `srtl-test` then target the test deployment.
+To run the following commands, replace `NAMESPACE` with one of:
+
+```shell
+srtl-production # for production
+srtl-test # for test
+srtl-development # for review apps
+```
+
+Replace `DEPLOYMENT_NAME` with the deployment you want to target e.g.
+`claim-additional-payments-for-teaching-test-worker`.
 
 ### Open a Rails console
 
 Open an interactive Rails console using this command:
 
 ```shell
-kubectl -n srtl-development exec -it deployment/claim-additional-payments-for-teaching-review-123-worker -- rails console
+kubectl -n ${NAMESPACE} exec -it deployment/${DEPLOYMENT_NAME} -- rails console
 ```
+
+Alternatively, you can run the following script:
+
+```shell
+bin/azure-console ${ENVIRONMENT}
+```
+
+Where environment is one of `production`, `test` or `review-PR_NUMBER`.
 
 ### Open a shell console
 
 Open an interactive Linux shell using this command:
 
 ```shell
-kubectl -n srtl-development exec -it deployment/claim-additional-payments-for-teaching-review-123-worker -- sh
+kubectl -n ${NAMESPACE} exec -it deployment/${DEPLOYMENT_NAME} -- sh
 ```
 
 ### Run a Rake task
@@ -133,13 +159,13 @@ kubectl -n srtl-development exec -it deployment/claim-additional-payments-for-te
 Run Rake tasks using this command:
 
 ```shell
-kubectl -n srtl-development exec -it deployment/claim-additional-payments-for-teaching-review-123-worker -- rake [TASK_TO_RUN]
+kubectl -n ${NAMESPACE} exec -it deployment/${DEPLOYMENT_NAME} -- rake ${TASK_TO_RUN}
 ```
 
 Or list all available Rake tasks with:
 
 ```shell
-kubectl -n srtl-development exec -it deployment/claim-additional-payments-for-teaching-review-123-worker -- rake -T
+kubectl -n ${NAMESPACE} exec -it deployment/${DEPLOYMENT_NAME} -- rake -T
 ```
 
 ## Useful links
