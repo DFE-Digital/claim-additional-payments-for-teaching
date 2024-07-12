@@ -27,35 +27,23 @@ class OmniauthCallbacksController < ApplicationController
 
   def onelogin
     # could be success or failure?
-    assertion = {
-      aud: "https://oidc.integration.account.gov.uk/token", # TODO: use value from discovery
-      iss: ENV["ONELOGIN_SIGN_IN_CLIENT_ID"],
-      sub: ENV["ONELOGIN_SIGN_IN_CLIENT_ID"],
-      exp: 5.minutes.from_now.to_i,
-      jti: SecureRandom.uuid, # unique ID
-      iat: Time.now.to_i
-    }
-    private_key = OpenSSL::PKey::RSA.new(Base64.decode64(ENV["ONELOGIN_SIGN_IN_SECRET_BASE64"])) # too clunky? better to read from a file?
-    signed_jwt = JWT.encode(assertion, private_key, "RS256")
-    # signed_jwt = JSON::JWT.new(assertion).sign(private_key, :RS256) # same as JWT.encode, but has "typ"=>"JWT" in the JWT
-    token_request_params = {
-      grant_type: "authorization_code",
-      code: params["code"],
-      redirect_uri: "http://localhost:3000/auth/onelogin", # TODO: get this in the same way config/initializers/omniauth.rb does
-      client_assertion_type: "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
-      client_assertion: signed_jwt.to_s
-    }
-    token_response = OpenIDConnect.http_client.post("https://oidc.integration.account.gov.uk/token", token_request_params)
-    # results in: {"error_description":"Invalid signature in private_key_jwt","error":"invalid_client"}
-    #
-    # decode signed JWT using: JWT.decode signed_jwt, private_key.public_key, true, { algorithm: 'RS256' }
+    # TODO: check for error callbacks here
 
-    if token_response.code == HTTP::Status::OK
-      render plain: "OK"
-    else
-      # TODO: render :failure, layout: false # check for token_response.code and token_response.error_description\
-      render plain: token_response.body
-    end
+    private_key = OpenSSL::PKey::RSA.new(Base64.decode64(ENV["ONELOGIN_SIGN_IN_SECRET_BASE64"] + "\n")) # too clunky? better to read from a file?
+
+    discover = OpenIDConnect::Discovery::Provider::Config.discover! ENV["ONELOGIN_SIGN_IN_ISSUER"]
+    client = OpenIDConnect::Client.new(
+      identifier: ENV["ONELOGIN_SIGN_IN_CLIENT_ID"],
+      private_key: private_key,
+      redirect_uri: "#{ENV["ONELOGIN_REDIRECT_BASE_URL"]}/auth/onelogin",
+      authorization_endpoint: discover.authorization_endpoint,
+      token_endpoint: discover.token_endpoint,
+      userinfo_endpoint: discover.userinfo_endpoint
+    )
+    client.authorization_code = params["code"]
+    access_token = client.access_token!(client_auth_method: :jwt_bearer, grant_type: "authorization_code")
+
+    render plain: "access_token: #{access_token}"
   end
 
   private
