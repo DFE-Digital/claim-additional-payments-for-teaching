@@ -32,6 +32,8 @@ module Policies
           :teaching_less_than_2_5_next_term
         elsif answers.subject_to_problematic_actions?
           :subject_to_problematic_actions
+        elsif answers.lacks_teacher_qualification_or_enrolment?
+          :lacks_teacher_qualification_or_enrolment
         end
       end
     end
