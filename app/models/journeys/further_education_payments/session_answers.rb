@@ -55,6 +55,10 @@ module Journeys
       def lacks_teacher_qualification_or_enrolment?
         teaching_qualification == "no_not_planned"
       end
+
+      def less_than_half_hours_teaching_fe?
+        half_teaching_hours == false
+      end
     end
   end
 end
