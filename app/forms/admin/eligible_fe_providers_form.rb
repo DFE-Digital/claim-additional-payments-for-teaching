@@ -8,7 +8,7 @@ class Admin::EligibleFeProvidersForm
   validates :file,
     presence: {message: "Choose a CSV file of eligible FE providers to upload"}
 
-  validate :valid_importer_errors
+  validate :validate_importer_errors
 
   def select_options
     (0..2).map do |relative_year|
@@ -27,7 +27,7 @@ class Admin::EligibleFeProvidersForm
   private
 
   # importer is not activemodel::errors compliant
-  def valid_importer_errors
+  def validate_importer_errors
     importer.errors.each do |error|
       errors.add(:file, error)
     end
