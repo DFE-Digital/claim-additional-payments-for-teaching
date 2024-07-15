@@ -5,8 +5,16 @@ ENVIRONMENT_NAME=$1
 
 case $ENVIRONMENT_NAME in
   "production")
-    SUBSCRIPTION_ID="88bd392f-df19-458b-a100-22b4429060ed"
-    RESOURCE_GROUP_PREFIX="s118p01"
+    SUBSCRIPTION="s189-teacher-services-cloud-production"
+    NAMESPACE="srtl-production"
+    ;;
+  "test")
+    SUBSCRIPTION="s189-teacher-services-cloud-test"
+    NAMESPACE="srtl-test"
+    ;;
+  review-*)
+    SUBSCRIPTION="s189-teacher-services-cloud-test"
+    NAMESPACE="srtl-development"
     ;;
   *)
     echo "Could not find a known environment with the name: $ENVIRONMENT_NAME"
@@ -34,10 +42,12 @@ if ! az account show > /dev/null; then
   az login > /dev/null
 fi
 
-echo "**********************************************************************************************************************"
-echo "IMPORTANT: Accessing the $ENVIRONMENT_NAME console in this way is VERY risky and should only be done as a last resort"
-echo "This should only be done in pairs, and mutating any live data is STRONGLY discouraged."
-echo "**********************************************************************************************************************"
+if [[ $ENVIRONMENT_NAME == "production" ]]; then
+  echo "**********************************************************************************************************************"
+  echo "IMPORTANT: Accessing the $ENVIRONMENT_NAME console in this way is VERY risky and should only be done as a last resort"
+  echo "This should only be done in pairs, and mutating any live data is STRONGLY discouraged."
+  echo "**********************************************************************************************************************"
+fi
 
 echo
 
@@ -45,13 +55,9 @@ read -p "Are you sure you want to continue? (y/n)" -n 1 -r
 echo
 
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-  az account set --subscription "$SUBSCRIPTION_ID"
+  az account set --subscription "$SUBSCRIPTION"
 
-  az container exec \
-    --name=$RESOURCE_GROUP_PREFIX-app-worker-aci \
-    --resource-group=$RESOURCE_GROUP_PREFIX-app \
-    --exec-command="/bin/bash"
-
+  kubectl -n $NAMESPACE exec -it deployment/claim-additional-payments-for-teaching-"$ENVIRONMENT_NAME"-worker -- rails console --sandbox
   exit 0
 else
   echo "Quitting"
