@@ -77,6 +77,12 @@ variable "postgres_flexible_server_sku" {
 variable "postgres_enable_high_availability" {
   default = false
 }
+variable "enable_logit" {
+  type        = bool
+  default     = false
+  description = "A boolean to indicate whether to enable sending container logs to logit.io"
+  nullable    = false
+}
 
 locals {
   postgres_ssl_mode       = var.enable_postgres_ssl ? "require" : "disable"
