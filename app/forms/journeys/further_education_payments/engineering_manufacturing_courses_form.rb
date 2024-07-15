@@ -1,7 +1,6 @@
 module Journeys
   module FurtherEducationPayments
     class EngineeringManufacturingCoursesForm < Form
-      include ActiveModel::Validations::Callbacks
       include ActionView::Helpers::UrlHelper
       include ActionView::Helpers::OutputSafetyHelper
       include GovukVisuallyHiddenHelper
