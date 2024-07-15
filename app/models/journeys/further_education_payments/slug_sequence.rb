@@ -27,33 +27,31 @@ module Journeys
         eligible
       ]
 
-      PERSONAL_DETAILS_SLUGS = [
-        "one-login-placeholder",
-        "information-provided"
-        #   "personal-details",
-        #   "postcode-search",
-        #   "select-home-address",
-        #   "address",
-        #   "select-email",
-        #   "email-address",
-        #   "email-verification",
-        #   "select-mobile",
-        #   "provide-mobile-number",
-        #   "mobile-number",
-        #   "mobile-verification"
+      PERSONAL_DETAILS_SLUGS = %w[
+        one-login-placeholder
+        information-provided
+        personal-details
+        postcode-search
+        select-home-address
+        address
+        email-address
+        email-verification
+        provide-mobile-number
+        mobile-number
+        mobile-verification
       ].freeze
 
-      PAYMENT_DETAILS_SLUGS = [
-        # "bank-or-building-society",
-        # "personal-bank-account",
-        # "building-society-account",
-        # "gender",
-        # "teacher-reference-number"
+      PAYMENT_DETAILS_SLUGS = %w[
+        bank-or-building-society
+        personal-bank-account
+        building-society-account
+        gender
+        teacher-reference-number
       ].freeze
 
-      RESULTS_SLUGS = [
-        "check-your-answers",
-        "ineligible"
+      RESULTS_SLUGS = %w[
+        check-your-answers
+        ineligible
       ].freeze
 
       SLUGS = (
@@ -122,6 +120,14 @@ module Journeys
           if answers.subjects_taught.exclude?("physics")
             sequence.delete("physics-courses")
           end
+
+          if answers.provide_mobile_number == false
+            sequence.delete("mobile-number")
+            sequence.delete("mobile-verification")
+          end
+
+          sequence.delete("personal-bank-account") if answers.building_society?
+          sequence.delete("building-society-account") if answers.personal_bank_account?
         end
       end
     end

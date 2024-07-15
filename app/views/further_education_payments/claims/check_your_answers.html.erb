@@ -1,7 +1,34 @@
-<p class="govuk-body">
-  FE check your answers goes here
-</p>
+<% content_for(
+  :page_title,
+  page_title(
+    "Check your answers before sending your application",
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
 
-<%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
-  <%= f.govuk_submit %>
-<% end %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <% if @form.errors.any? %>
+      <%= render("shared/error_summary", instance: @form) %>
+    <% end %>
+
+    <h1 class="govuk-heading-xl">
+      Check your answers before sending your application
+    </h1>
+
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Identity details", answers: journey.answers_for_claim(@form.journey_session).identity_answers} %>
+
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Payment details", answers: journey.answers_for_claim(@form.journey_session).payment_answers} %>
+
+    <%= form_with url: claim_submission_path do |form| %>
+      <h2 class="govuk-heading-m"><%= t("further_education_payments.check_your_answers.heading_send_application") %></h2>
+
+      <p class="govuk-body"><%= t("further_education_payments.check_your_answers.statement") %></p>
+
+      <div class="govuk-form-group">
+        <%= form.submit t("further_education_payments.check_your_answers.btn_text"), class: "govuk-button" %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -23,6 +23,10 @@ module Journeys
       attribute :subject_to_disciplinary_action, :boolean
       attribute :half_teaching_hours, :boolean
 
+      def policy
+        Policies::FurtherEducationPayments
+      end
+
       def school
         @school ||= School.find(school_id)
       end

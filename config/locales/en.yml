@@ -201,6 +201,12 @@ en:
     address: "address"
     full_name: "Full name"
   forms:
+    teacher_reference_number: &teacher_reference_number
+      questions:
+        teacher_reference_number: "What is your teacher reference number (TRN)?"
+      errors:
+        blank: "Enter your teacher reference number"
+        length: "Teacher reference number must be 7 digits long"
     gender:
       questions:
         payroll_gender: "How is your gender recorded on your school’s payroll system?"
@@ -347,11 +353,7 @@ en:
             Select if you still work at %{school_name}, another school or no longer teach in England
           select_are_you_still_employed: Select yes if you are still employed to teach at a school in England
       teacher_reference_number:
-        questions:
-          teacher_reference_number: "What is your teacher reference number (TRN)?"
-        errors:
-          blank: "Enter your teacher reference number"
-          length: "Teacher reference number must be 7 digits long"
+        <<: *teacher_reference_number
       qualification_details:
         errors:
           qualifications_details_check: "Select yes if your qualification details are correct"
@@ -549,11 +551,7 @@ en:
         errors:
           inclusion: Select yes if you are a supply teacher
       teacher_reference_number:
-        questions:
-          teacher_reference_number: "What is your teacher reference number (TRN)?"
-        errors:
-          blank: "Enter your teacher reference number"
-          length: "Teacher reference number must be 7 digits long"
+        <<: *teacher_reference_number
       teaching_subject_now:
         questions:
           teaching_subject_now: "Do you spend at least half of your contracted hours teaching eligible subjects?"
@@ -817,6 +815,7 @@ en:
     journey_name: Claim incentive payments for further education teachers
     feedback_email: "FE-Levellingup.PremiumPayments@education.gov.uk"
     support_email_address: "FE-Levellingup.PremiumPayments@education.gov.uk"
+    claim_subject: "Further education payment"
     forms:
       ineligible:
         courses:
@@ -1017,6 +1016,11 @@ en:
       part_one:
         primary_heading: Check your answers
         confirmation_notice: By selecting continue you are confirming that, to the best of your knowledge, the details you are providing are correct.
+      heading_send_application: Now send your application
+      statement:
+        By submitting this you are confirming that, to the best of your knowledge, the details you are providing are
+        correct.
+      btn_text: Accept and send
   activerecord:
     errors:
       models:
