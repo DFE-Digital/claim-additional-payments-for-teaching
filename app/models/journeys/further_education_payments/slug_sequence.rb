@@ -12,7 +12,7 @@ module Journeys
         teaching-hours-per-week-next-term
         further-education-teaching-start-year
         subjects-taught
-        building-and-construction-courses
+        building-construction-courses
         chemistry-courses
         computing-courses
         early-years-courses
