@@ -9,12 +9,13 @@ module CsvImporter
     def initialize(file)
       @errors = []
       @rows = parse_csv_file(file)
+      @deleted_row_count = 0
 
       check_headers if rows && with_headers?
     end
 
     def run
-      target_data_model.delete_all unless append_only
+      @deleted_row_count = delete_all_scope.delete_all unless append_only
 
       rows.each_slice(batch_size).with_index(1) do |batch_rows, i|
         Rails.logger.info "Processing #{target_data_model.to_s.titleize} batch #{i}"
@@ -30,6 +31,10 @@ module CsvImporter
     end
 
     private
+
+    def delete_all_scope
+      target_data_model
+    end
 
     def with_headers?
       parse_headers && mandatory_headers&.is_a?(Array) && mandatory_headers&.any?

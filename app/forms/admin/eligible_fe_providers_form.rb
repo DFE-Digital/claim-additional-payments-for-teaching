@@ -8,10 +8,28 @@ class Admin::EligibleFeProvidersForm
   validates :file,
     presence: {message: "Choose a CSV file of eligible FE providers to upload"}
 
+  validate :valid_importer_errors
+
   def select_options
     (0..2).map do |relative_year|
       academic_year = AcademicYear.current + relative_year
       OpenStruct.new(id: academic_year.start_year, name: academic_year)
+    end
+  end
+
+  def importer
+    @importer ||= EligibleFeProvidersImporter.new(
+      file,
+      academic_year
+    )
+  end
+
+  private
+
+  # importer is not activemodel::errors compliant
+  def valid_importer_errors
+    importer.errors.each do |error|
+      errors.add(:file, error)
     end
   end
 end

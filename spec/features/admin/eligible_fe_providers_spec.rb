@@ -25,7 +25,7 @@ RSpec.feature "Admin of eligible FE providers" do
     return @eligible_fe_providers_csv_file if @eligible_fe_providers_csv_file
 
     @eligible_fe_providers_csv_file = Tempfile.new
-    @eligible_fe_providers_csv_file.write Importers::EligibleFeProviders.headers.join(",") + "\n"
+    @eligible_fe_providers_csv_file.write EligibleFeProvidersImporter.mandatory_headers.join(",") + "\n"
 
     3.times do
       hash = attributes_for(:eligible_fe_provider)

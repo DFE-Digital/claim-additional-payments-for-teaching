@@ -1,11 +1,11 @@
 require "rails_helper"
 
-RSpec.describe Importers::EligibleFeProviders do
-  subject { described_class.new(file:, academic_year:) }
+RSpec.describe EligibleFeProvidersImporter do
+  subject { described_class.new(file, academic_year) }
 
   let(:academic_year) { AcademicYear.current }
   let(:file) { Tempfile.new }
-  let(:correct_headers) { described_class.headers.join(",") + "\n" }
+  let(:correct_headers) { described_class.mandatory_headers.join(",") + "\n" }
 
   def to_row(hash)
     [
@@ -15,7 +15,7 @@ RSpec.describe Importers::EligibleFeProviders do
     ].join(",") + "\n"
   end
 
-  describe "#call" do
+  describe "#run" do
     context "when incorrect headers" do
       before do
         file.write "incorrect,headers,here,here"
@@ -23,10 +23,10 @@ RSpec.describe Importers::EligibleFeProviders do
       end
 
       it "has errors" do
-        subject.call
+        subject.run
 
         expect(subject.errors).to be_present
-        expect(subject.errors[:file]).to include("Incorrect headers")
+        expect(subject.errors).to include("The selected file is missing some expected columns: ukprn, max_award_amount, lower_award_amount")
       end
     end
 
@@ -37,13 +37,13 @@ RSpec.describe Importers::EligibleFeProviders do
       end
 
       it "has no errors" do
-        subject.call
+        subject.run
 
         expect(subject.errors).to be_empty
       end
 
       it "does not add any any records" do
-        expect { subject.call }.not_to change { EligibleFeProvider.count }
+        expect { subject.run }.not_to change { EligibleFeProvider.count }
       end
 
       context "when there are existing records" do
@@ -53,7 +53,7 @@ RSpec.describe Importers::EligibleFeProviders do
         end
 
         it "deletes existing records for academic year" do
-          expect { subject.call }.to change { EligibleFeProvider.count }.to(1)
+          expect { subject.run }.to change { EligibleFeProvider.count }.to(1)
         end
       end
     end
@@ -70,7 +70,7 @@ RSpec.describe Importers::EligibleFeProviders do
       end
 
       it "imports new records" do
-        expect { subject.call }.to change { EligibleFeProvider.count }.by(3)
+        expect { subject.run }.to change { EligibleFeProvider.count }.by(3)
       end
 
       context "when there are existing records" do
@@ -80,7 +80,7 @@ RSpec.describe Importers::EligibleFeProviders do
         end
 
         it "deletes them with new records" do
-          expect { subject.call }.to change { EligibleFeProvider.count }.by(2)
+          expect { subject.run }.to change { EligibleFeProvider.count }.by(2)
         end
       end
     end
