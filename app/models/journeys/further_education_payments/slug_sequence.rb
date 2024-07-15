@@ -12,7 +12,13 @@ module Journeys
         teaching-hours-per-week-next-term
         further-education-teaching-start-year
         subjects-taught
-        building-and-construction-courses
+        building-construction-courses
+        chemistry-courses
+        computing-courses
+        early-years-courses
+        engineering-manufacturing-courses
+        maths-courses
+        physics-courses
         teaching-courses
         half-teaching-hours
         teaching-qualification
@@ -58,6 +64,34 @@ module Journeys
 
           if answers.fixed_term_full_year == true
             sequence.delete("taught-at-least-one-term")
+          end
+
+          if answers.subjects_taught.exclude?("building_construction")
+            sequence.delete("building-and-construction-courses")
+          end
+
+          if answers.subjects_taught.exclude?("chemistry")
+            sequence.delete("chemistry-courses")
+          end
+
+          if answers.subjects_taught.exclude?("computing")
+            sequence.delete("computing-courses")
+          end
+
+          if answers.subjects_taught.exclude?("early_years")
+            sequence.delete("early-years-courses")
+          end
+
+          if answers.subjects_taught.exclude?("engineering_manufacturing")
+            sequence.delete("engineering-manufacturing-courses")
+          end
+
+          if answers.subjects_taught.exclude?("maths")
+            sequence.delete("maths-courses")
+          end
+
+          if answers.subjects_taught.exclude?("physics")
+            sequence.delete("physics-courses")
           end
         end
       end

@@ -55,8 +55,49 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_content("You are not eligible for a financial incentive payment yet")
   end
 
+  scenario "when lacking subjects" do
+    when_further_education_payments_journey_configuration_exists
+    and_college_exists
+
+    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    expect(page).to have_link("Start now")
+    click_link "Start now"
+
+    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_content("Which FE provider are you employed by?")
+    fill_in "Which FE provider are you employed by?", with: college.name
+    click_button "Continue"
+
+    expect(page).to have_content("Select the college you teach at")
+    choose college.name
+    click_button "Continue"
+
+    expect(page).to have_content("What type of contract do you have with #{college.name}?")
+    choose "Permanent contract"
+    click_button "Continue"
+
+    expect(page).to have_content("On average, how many hours per week")
+    choose "More than 12 hours per week"
+    click_button "Continue"
+
+    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
+    choose "September 2023 to August 2024"
+    click_button "Continue"
+
+    expect(page).to have_content("Which subject areas do you teach?")
+    check "I do not teach any of these subjects"
+    click_button "Continue"
+
+    expect(page).to have_content("You are not eligible")
+    expect(page).to have_content("you must teach an eligible FE subject")
+  end
+
   scenario "when variable contract and just one academic term taught" do
     when_further_education_payments_journey_configuration_exists
+    and_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
@@ -83,6 +124,50 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible for a financial incentive payment yet")
+  end
+
+  scenario "when teaches non eligible course in applicable subject area" do
+    when_further_education_payments_journey_configuration_exists
+    and_college_exists
+
+    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    expect(page).to have_link("Start now")
+    click_link "Start now"
+
+    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_content("Which FE provider are you employed by?")
+    fill_in "Which FE provider are you employed by?", with: college.name
+    click_button "Continue"
+
+    expect(page).to have_content("Select the college you teach at")
+    choose college.name
+    click_button "Continue"
+
+    expect(page).to have_content("What type of contract do you have with #{college.name}?")
+    choose "Permanent contract"
+    click_button "Continue"
+
+    expect(page).to have_content("On average, how many hours per week")
+    choose "More than 12 hours per week"
+    click_button "Continue"
+
+    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
+    choose "September 2023 to August 2024"
+    click_button "Continue"
+
+    expect(page).to have_content("Which subject areas do you teach?")
+    check "Building and construction"
+    click_button "Continue"
+
+    expect(page).to have_content("Which building and construction courses do you teach?")
+    check "I do not teach any of these courses"
+    click_button "Continue"
+
+    expect(page).to have_content("You are not eligible")
+    expect(page).to have_content("you must teach an eligible FE course")
   end
 
   scenario "when not a recent FE teacher" do
@@ -140,22 +225,23 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("What type of contract do you have with #{college.name}?")
-    choose("Permanent contract")
+    choose "Permanent contract"
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
-    choose("More than 12 hours per week")
+    choose "More than 12 hours per week"
     click_button "Continue"
 
     expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
-    choose("September 2023 to August 2024")
+    choose "September 2023 to August 2024"
     click_button "Continue"
 
     expect(page).to have_content("Which subject areas do you teach?")
-    check("Building and construction")
+    check "Building and construction"
     click_button "Continue"
 
-    expect(page).to have_content("FE building and construction courses goes here")
+    expect(page).to have_content("Which building and construction courses do you teach?")
+    check "T Level in onsite construction"
     click_button "Continue"
 
     expect(page).to have_content("FE teaching courses goes here")
@@ -203,22 +289,23 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("What type of contract do you have with #{college.name}?")
-    choose("Permanent contract")
+    choose "Permanent contract"
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
-    choose("More than 12 hours per week")
+    choose "More than 12 hours per week"
     click_button "Continue"
 
     expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
-    choose("September 2023 to August 2024")
+    choose "September 2023 to August 2024"
     click_button "Continue"
 
     expect(page).to have_content("Which subject areas do you teach?")
-    check("Building and construction")
+    check "Building and construction"
     click_button "Continue"
 
-    expect(page).to have_content("FE building and construction courses goes here")
+    expect(page).to have_content("Which building and construction courses do you teach?")
+    check "T Level in onsite construction"
     click_button "Continue"
 
     expect(page).to have_content("FE teaching courses goes here")
@@ -266,22 +353,23 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("What type of contract do you have with #{college.name}?")
-    choose("Permanent contract")
+    choose "Permanent contract"
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
-    choose("More than 12 hours per week")
+    choose "More than 12 hours per week"
     click_button "Continue"
 
     expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
-    choose("September 2023 to August 2024")
+    choose "September 2023 to August 2024"
     click_button "Continue"
 
     expect(page).to have_content("Which subject areas do you teach?")
-    check("Building and construction")
+    check "Building and construction"
     click_button "Continue"
 
-    expect(page).to have_content("FE building and construction courses goes here")
+    expect(page).to have_content("Which building and construction courses do you teach?")
+    check "T Level in onsite construction"
     click_button "Continue"
 
     expect(page).to have_content("FE teaching courses goes here")
@@ -319,7 +407,7 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("What type of contract do you have with #{college.name}?")
-    choose("Permanent contract")
+    choose "Permanent contract"
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
@@ -350,15 +438,15 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("What type of contract do you have with #{college.name}?")
-    choose("Fixed-term contract")
+    choose "Fixed-term contract"
     click_button "Continue"
 
     expect(page).to have_content("Does your fixed-term contract cover the full #{current_academic_year.to_s(:long)} academic year?")
-    choose("Yes, it covers the full #{current_academic_year.to_s(:long)} academic year")
+    choose "Yes, it covers the full #{current_academic_year.to_s(:long)} academic year"
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
-    choose("More than 12 hours per week")
+    choose "More than 12 hours per week"
     click_button "Continue"
 
     expect(page).to have_content("Are you timetabled to teach at least 2.5 hours per week at #{college.name} next term?")
@@ -440,10 +528,11 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Which subject areas do you teach?")
-    check("Building and construction")
+    check "Building and construction"
     click_button "Continue"
 
-    expect(page).to have_content("FE building and construction courses goes here")
+    expect(page).to have_content("Which building and construction courses do you teach?")
+    check "T Level in onsite construction"
     click_button "Continue"
 
     expect(page).to have_content("FE teaching courses goes here")
