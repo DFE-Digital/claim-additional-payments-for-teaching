@@ -1,0 +1,31 @@
+name: Restore Database from Azure Storage
+concurrency: build_and_deploy_main
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: Set to true to restore nightly backup to production
+        required: true
+        default: 'false'
+        type: choice
+        options:
+        - 'false'
+        - 'true'
+
+jobs:
+  restore:
+    name: Restore AKS Database (production)
+    runs-on: ubuntu-latest
+    environment: production-aks
+
+    steps:
+      - name: Restore postgres
+        uses: DFE-Digital/github-actions/restore-postgres-backup@master
+        with:
+          storage-account: s189p01captdbbkppdsa
+          resource-group: s189p01-capt-pd-rg
+          app-name: claim-additional-payments-for-teaching-production-web
+          cluster: production
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          backup-file: capt_prod_$(date +"%F").sql.gz
