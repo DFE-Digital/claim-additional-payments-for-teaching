@@ -15,6 +15,8 @@ if Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")
   ENV["FIXTURES_PATH"] = "spec/fixtures"
   ENV["FIXTURES"] = "local_authorities,local_authority_districts,schools"
   Rake::Task["db:fixtures:load"].invoke
+
+  SchoolDataImporterJob.perform_later if School.count < 100
 end
 
 if Rails.env.development?
