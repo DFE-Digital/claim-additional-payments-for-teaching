@@ -30,7 +30,8 @@ module Journeys
         "poor-performance" => PoorPerformanceForm,
         "check-your-answers" => CheckYourAnswersForm,
         "ineligible" => IneligibleForm,
-        "half-teaching-hours" => HalfTeachingHoursForm
+        "half-teaching-hours" => HalfTeachingHoursForm,
+        "eligible" => EligibleForm
       }
     }
   end

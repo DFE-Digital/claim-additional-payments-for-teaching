@@ -818,6 +818,25 @@ en:
     feedback_email: "FE-Levellingup.PremiumPayments@education.gov.uk"
     support_email_address: "FE-Levellingup.PremiumPayments@education.gov.uk"
     forms:
+      ineligible:
+        courses:
+          heading: You are not eligible
+        lack_teaching_responsibilities:
+          heading: You are not eligible
+        lacks_teacher_qualification_or_enrolment:
+          heading: You are not eligible
+        must_at_least_half_hours_teaching_fe:
+          heading: You are not eligible
+        must_be_recent_further_education_teacher:
+          heading: You are not eligible
+        must_teach_at_least_one_term:
+          heading: You are not eligible for a financial incentive payment yet
+        subject_to_problematic_actions:
+          heading: You are not eligible
+        ineligible_teaching_less_than_2_5:
+          heading: You are not eligible
+        teaching_less_than_2_5_next_term:
+          heading: You are not eligible
       teaching_responsibilities:
         question: Are you a member of staff with teaching responsibilities?
         errors:
@@ -828,6 +847,7 @@ en:
           blank: Enter a college name or postcode
           min_length: Enter a college name or postcode that is at least 3 characters long
       select_provision:
+        heading: Select the college you teach at
         errors:
           blank: Select the college you teach at
       contract_type:
@@ -991,6 +1011,8 @@ en:
         question: Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?
         errors:
           inclusion: Select yes if at least half your timetabled teaching hours are spent teaching 16-19-year-olds, including those up to 25 with an Education, Health and Care Plan
+      eligible:
+        heading: You’re eligible for a financial incentive payment
     check_your_answers:
       part_one:
         primary_heading: Check your answers
