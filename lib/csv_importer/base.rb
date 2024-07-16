@@ -4,7 +4,7 @@ module CsvImporter
   class Base
     include CsvImporter::Config
 
-    attr_reader :errors, :rows
+    attr_reader :errors, :rows, :deleted_row_count
 
     def initialize(file)
       @errors = []

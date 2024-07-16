@@ -7,13 +7,10 @@ RSpec.feature "Admin of eligible FE providers" do
 
     click_link "Manage services"
     click_link "Change Claim incentive payments for further education teachers"
-    click_link "View and upload eligible further education providers"
-    click_link "Upload eligible FE providers"
 
     attach_file "eligible-fe-providers-file-field", eligible_fe_providers_csv_file.path
     click_button "Upload CSV"
 
-    click_link "Download eligible FE providers"
     click_button "Download CSV"
 
     downloaded_csv = page.body

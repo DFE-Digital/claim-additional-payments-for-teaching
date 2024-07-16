@@ -10,6 +10,9 @@ module Admin
 
     def edit
       @csv_upload = Policies::LevellingUpPremiumPayments::AwardCsvImporter.new if journey_configuration.additional_payments?
+
+      @upload_form = EligibleFeProvidersForm.new
+      @download_form = EligibleFeProvidersForm.new
     end
 
     def update
