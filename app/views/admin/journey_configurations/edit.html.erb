@@ -1,5 +1,9 @@
 <% content_for(:page_title) { page_title("Manage #{journey_service_name(journey_configuration.journey::ROUTING_NAME)}") } %>
 
+<% content_for :back_link do %>
+  <%= govuk_back_link href: admin_journey_configurations_path %>
+<% end %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">
