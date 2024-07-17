@@ -28,22 +28,10 @@ class OmniauthCallbacksController < ApplicationController
   def onelogin
     # could be success or failure?
     # TODO: check for error callbacks here
-
-    private_key = OpenSSL::PKey::RSA.new(Base64.decode64(ENV["ONELOGIN_SIGN_IN_SECRET_BASE64"] + "\n")) # too clunky? better to read from a file?
-
-    discover = OpenIDConnect::Discovery::Provider::Config.discover! ENV["ONELOGIN_SIGN_IN_ISSUER"]
-    client = OpenIDConnect::Client.new(
-      identifier: ENV["ONELOGIN_SIGN_IN_CLIENT_ID"],
-      private_key: private_key,
-      redirect_uri: "#{ENV["ONELOGIN_REDIRECT_BASE_URL"]}/auth/onelogin",
-      authorization_endpoint: discover.authorization_endpoint,
-      token_endpoint: discover.token_endpoint,
-      userinfo_endpoint: discover.userinfo_endpoint
-    )
-    client.authorization_code = params["code"]
-    access_token = client.access_token!(client_auth_method: :jwt_bearer, grant_type: "authorization_code")
-
-    render plain: "access_token: #{access_token}"
+    auth = request.env["omniauth.auth"]
+    render plain: "Logged in as #{auth.info.email}"
+  rescue Rack::OAuth2::Client::Error => e
+    render plain: e.message
   end
 
   private
