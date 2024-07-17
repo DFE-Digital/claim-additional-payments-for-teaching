@@ -1,0 +1,36 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_check_boxes_fieldset @form.course_field,
+        legend: {
+          text: @form.t(:question),
+          tag: "h1",
+          size: "l"
+        },
+        hint: {
+          text: @form.t(:hint, email: govuk_link_to(t("support_email_address", scope: @form.i18n_namespace))).html_safe
+        } do %>
+        <% @form.checkbox_options[0..-2].each do |option| %>
+          <%= f.govuk_check_box @form.course_field, option.id,
+            link_errors: @form.checkbox_options.first == option,
+            label: {
+              text: option.name.html_safe
+          } %>
+        <% end %>
+
+        <%= f.govuk_check_box_divider %>
+
+        <% option = @form.checkbox_options.last %>
+        <%= f.govuk_check_box @form.course_field, option.id,
+          exclusive: true,
+          label: {
+            text: option.name.html_safe
+        } %>
+      <% end %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>
