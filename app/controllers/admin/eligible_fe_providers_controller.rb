@@ -14,7 +14,7 @@ module Admin
         @upload_form.importer.run
         flash[:notice] = @upload_form.importer.results_message
 
-        redirect_to edit_admin_journey_configuration_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+        redirect_to edit_admin_journey_configuration_path(Journeys::FurtherEducationPayments::ROUTING_NAME, eligible_fe_providers_upload: {academic_year: @upload_form.academic_year})
       end
     end
 
@@ -35,11 +35,11 @@ module Admin
     end
 
     def upload_params
-      params.require(:eligible_fe_providers).permit(:academic_year, :file)
+      params.require(:eligible_fe_providers_upload).permit(:academic_year, :file)
     end
 
     def download_params
-      params.require(:eligible_fe_providers).permit(:academic_year)
+      params.require(:eligible_fe_providers_download).permit(:academic_year)
     end
   end
 end

@@ -13,7 +13,7 @@ class Admin::EligibleFeProvidersForm
   def select_options
     (0..2).map do |relative_year|
       academic_year = AcademicYear.current + relative_year
-      OpenStruct.new(id: academic_year.start_year, name: academic_year)
+      OpenStruct.new(id: academic_year.to_s, name: academic_year)
     end
   end
 

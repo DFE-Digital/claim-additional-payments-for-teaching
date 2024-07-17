@@ -4,7 +4,7 @@
   Download eligible FE providers
 </h2>
 
-<%= form_with model: @download_form, scope: :eligible_fe_providers, url: admin_eligible_fe_providers_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :get do |f| %>
+<%= form_with model: @download_form, scope: :eligible_fe_providers_download, url: admin_eligible_fe_providers_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :get do |f| %>
   <%= f.govuk_error_summary %>
 
   <%= f.govuk_collection_select :academic_year, f.object.select_options, :id, :name,
@@ -19,7 +19,7 @@
   Upload eligible FE providers
 </h2>
 
-<%= form_with model: @upload_form, scope: :eligible_fe_providers, url: admin_eligible_fe_providers_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+<%= form_with model: @upload_form, scope: :eligible_fe_providers_upload, url: admin_eligible_fe_providers_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
   <%= f.govuk_error_summary %>
 
   <%= f.govuk_collection_select :academic_year, f.object.select_options, :id, :name,

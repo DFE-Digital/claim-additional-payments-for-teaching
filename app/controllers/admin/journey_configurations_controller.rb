@@ -11,7 +11,7 @@ module Admin
     def edit
       @csv_upload = Policies::LevellingUpPremiumPayments::AwardCsvImporter.new if journey_configuration.additional_payments?
 
-      @upload_form = EligibleFeProvidersForm.new
+      @upload_form = EligibleFeProvidersForm.new(upload_params)
       @download_form = EligibleFeProvidersForm.new
     end
 
@@ -21,6 +21,10 @@ module Admin
     end
 
     private
+
+    def upload_params
+      params.fetch(:eligible_fe_providers_upload, {}).permit(:academic_year)
+    end
 
     def journey_configuration
       return unless params[:id].present?
