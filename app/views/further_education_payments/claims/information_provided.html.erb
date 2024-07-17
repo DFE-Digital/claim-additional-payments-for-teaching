@@ -73,6 +73,6 @@
       <%= govuk_link_to "levelling up premium payment", "https://www.gov.uk/guidance/levelling-up-premium-payments-for-fe-teachers", new_tab: true %>.
     </p>
 
-    <%= button_to "Continue", claim_path(current_journey_routing_name), method: :patch, class: "govuk-button", role: :button, data: { module: "govuk-button" } %>
+    <%= govuk_button_to "Continue", claim_path(current_journey_routing_name), method: :patch %>
   </div>
 </div>

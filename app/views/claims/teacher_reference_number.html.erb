@@ -1,7 +1,7 @@
 <% content_for(
   :page_title,
   page_title(
-    t("additional_payments.forms.teacher_reference_number.questions.teacher_reference_number"),
+    t("questions.teacher_reference_number"),
     journey: current_journey_routing_name,
     show_error: @form.errors.any?)
 ) %>
@@ -16,7 +16,7 @@
         spellcheck: "false",
         autocomplete: "off",
         label: {
-          text: t("additional_payments.forms.teacher_reference_number.questions.teacher_reference_number"),
+          text: t("questions.teacher_reference_number"),
           tag: "h1",
           size: "l"
         },

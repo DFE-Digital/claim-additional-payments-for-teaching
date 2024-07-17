@@ -33,6 +33,11 @@ class MobileNumberForm < Form
   private
 
   def send_sms_message
+    if Rails.env.development?
+      Rails.logger.info("SMS CODE: #{OneTimePassword::Generator.new.code}")
+      return true
+    end
+
     NotifySmsMessage.new(
       phone_number: mobile_number,
       template_id: NotifySmsMessage::OTP_PROMPT_TEMPLATE_ID,

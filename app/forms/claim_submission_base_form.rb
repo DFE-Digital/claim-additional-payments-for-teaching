@@ -4,7 +4,7 @@ class ClaimSubmissionBaseForm
   attr_reader :journey_session, :claim
 
   validate :not_already_submitted
-  validate :email_address_is_preesent
+  validate :email_address_is_present
   validate :email_address_verified
   validate :mobile_number_verified
   validate :claim_is_eligible
@@ -83,7 +83,7 @@ class ClaimSubmissionBaseForm
     end
   end
 
-  def email_address_is_preesent
+  def email_address_is_present
     if answers.email_address.blank?
       errors.add(:email_address, i18n_error_message(:email_address))
     end
