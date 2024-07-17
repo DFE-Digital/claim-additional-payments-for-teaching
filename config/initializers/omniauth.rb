@@ -81,22 +81,22 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 
   provider :openid_connect, {
     name: :onelogin,
-    callback_path: "/claim/auth/onelogin/callback",
-    client_auth_method: "jwks",
+    callback_path: "/auth/onelogin",
+    client_auth_method: "jwt_bearer",
     client_options: {
       host: onelogin_sign_in_issuer_uri&.host,
       identifier: ENV["ONELOGIN_SIGN_IN_CLIENT_ID"],
       port: onelogin_sign_in_issuer_uri&.port,
       redirect_uri: onelogin_sign_in_redirect_uri&.to_s,
-      scheme: onelogin_sign_in_issuer_uri&.scheme
+      scheme: onelogin_sign_in_issuer_uri&.scheme,
+      secret: OpenSSL::PKey::RSA.new(Base64.decode64(ENV["ONELOGIN_SIGN_IN_SECRET_BASE64"] + "\n")) # TODO: too clunky? read from file instead?
     },
     discovery: true,
-    # extra_authorize_params: {vtr: '["Cl.Cm"]'}, # default anyway
     issuer: ENV["ONELOGIN_SIGN_IN_ISSUER"],
     # jwt_secret_base64: ENV["ONELOGIN_SIGN_IN_SECRET_BASE64"], # not needed here
-    # pkce: true, # is this needed?
     response_type: :code,
-    scope: %i[openid email]
+    scope: %i[openid email],
+    send_scope_to_token_endpoint: false
   }
 
   provider :openid_connect, {
