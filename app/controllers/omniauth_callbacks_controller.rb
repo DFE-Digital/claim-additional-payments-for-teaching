@@ -26,10 +26,21 @@ class OmniauthCallbacksController < ApplicationController
   end
 
   def onelogin
-    # could be success or failure?
-    # TODO: check for error callbacks here
     auth = request.env["omniauth.auth"]
-    render plain: "Logged in as #{auth.info.email}"
+    # TODO need public key to decode and verify jwt
+    # jwt = auth.extra.raw_info["https://vocab.account.gov.uk/v1/coreIdentityJWT"]
+    # JSON::JWT.decode(jwt, public_key)
+    # contains: GivenName, FamilyName
+    redirect_to(
+      claim_path(
+        journey: current_journey_routing_name,
+        slug: "sign-in",
+        claim: {
+          logged_in_with_onelogin: true,
+          email_address: auth.info.email
+        }
+      )
+    )
   rescue Rack::OAuth2::Client::Error => e
     render plain: e.message
   end

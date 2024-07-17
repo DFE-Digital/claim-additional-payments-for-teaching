@@ -93,15 +93,14 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     },
     discovery: true,
     issuer: ENV["ONELOGIN_SIGN_IN_ISSUER"],
-    # jwt_secret_base64: ENV["ONELOGIN_SIGN_IN_SECRET_BASE64"], # not needed here
     response_type: :code,
-    scope: %i[openid email],
+    scope: %i[openid email phone],
     send_scope_to_token_endpoint: false
   }
 
   provider :openid_connect, {
     name: :onelogin_identity,
-    callback_path: "/claim/auth/onelogin/callback",
+    callback_path: "/auth/onelogin_identity",
     client_options: {
       host: onelogin_sign_in_issuer_uri&.host,
       identifier: ENV["ONELOGIN_SIGN_IN_CLIENT_ID"],
@@ -110,10 +109,13 @@ Rails.application.config.middleware.use OmniAuth::Builder do
       scheme: onelogin_sign_in_issuer_uri&.scheme
     },
     discovery: true,
-    extra_authorize_params: {vtr: '["Cl.Cm.P2"]'},
+    extra_authorize_params: {
+      vtr: '["Cl.Cm.P2"]',
+      claims: {userinfo: {"https://vocab.account.gov.uk/v1/coreIdentityJWT": nil}}.to_json
+    },
     issuer: ENV["ONELOGIN_SIGN_IN_ISSUER"],
-    # jwt_secret_base64: ENV["ONELOGIN_SIGN_IN_SECRET_BASE64"], # not needed here
-    # pkce: true, # is this needed?
-    scope: %i[openid email]
+    response_type: :code,
+    scope: %i[openid email phone],
+    send_scope_to_token_endpoint: false
   }
 end
