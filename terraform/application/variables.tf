@@ -62,12 +62,25 @@ variable "canonical_hostname" {
 }
 variable "web_replicas" {
   description = "Number of replicas of the web app"
-  default = 1
+  default     = 1
+}
+variable "worker_replicas" {
+  description = "Number of replicas of the worker"
+  default     = 1
+}
+variable "azure_maintenance_window" {
+  default = null
+}
+variable "postgres_flexible_server_sku" {
+  default = "B_Standard_B1ms"
+}
+variable "postgres_enable_high_availability" {
+  default = false
 }
 
 locals {
-  postgres_ssl_mode = var.enable_postgres_ssl ? "require" : "disable"
-  canonical_hostname = var.canonical_hostname != null ? var.canonical_hostname : "${var.service_name}-${var.environment}-web.test.teacherservices.cloud"
+  postgres_ssl_mode       = var.enable_postgres_ssl ? "require" : "disable"
+  canonical_hostname      = var.canonical_hostname != null ? var.canonical_hostname : "${var.service_name}-${var.environment}-web.test.teacherservices.cloud"
   app_env_values_from_yml = yamldecode(file("${path.module}/config/${var.config}_app_env.yml"))
-  app_env_values = merge(local.app_env_values_from_yml)
+  app_env_values          = merge(local.app_env_values_from_yml)
 }

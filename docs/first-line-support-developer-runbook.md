@@ -20,13 +20,13 @@ If you want to do one of these tasks and you don’t have what you need, see the
 
   1. Log in to https://portal.azure.com with your `@digital.education.gov.uk`
      email address.
-  2. Search for `s118-teacherpaymentsservice-production`.
+  2. Search for `s189-teacher-services-cloud-production`.
   3. Click “My permissions”.
   4. If you see something like
 
-     > You are a member of the group 's118-teacherpaymentservice-Delivery Team
-     > USR (null)' which has been assigned the role 'Reader' (type BuiltInRole)
-     > and has access to subscription s118-teacherpaymentsservice-production
+     > You are a member of the group 's189 SRTL delivery team ()' which has been
+     > assigned the role 'Reader' (type BuiltInRole) and has access to
+     > s189-teacher-services-cloud-production
 
      then you have what you need.
 
@@ -45,11 +45,10 @@ If you want to do one of these tasks and you don’t have what you need, see the
 
 2. Fix the bug.
 3. Describe the fix in [`CHANGELOG.md`](../CHANGELOG.md).
-4. Open a pull request into `master`, and get it reviewed.
-5. Merge the pull request.
-6. If possible, verify that the fix works on the
-   [development environment](../README.md#development).
-7. Do a release. See [`release-process.md`](release-process.md).
+4. Open a pull request into `master`.
+5. Deploy a review app by adding the 'Deploy' tag to your PR and get it
+   reviewed.
+6. Merge the pull request.
 
 ### I want to pull some data from the production database
 
@@ -97,13 +96,13 @@ there is a claim window open, which is around September – March.
 
   1. Log in to https://portal.azure.com with your `@digital.education.gov.uk`
      email address.
-  2. Search for `s118-teacherpaymentsservice-production`.
+  2. Search for `s189-teacher-services-cloud-production`.
   3. Click “My permissions”.
   4. If you see something like
 
-     > You are a member of the group 's118-teacherpaymentservice-Delivery Team
-     > USR (null)' which has been assigned the role 'Reader' (type BuiltInRole)
-     > and has access to subscription s118-teacherpaymentsservice-production`
+     > You are a member of the group 's189 SRTL delivery team ()' which has been
+     > assigned the role 'Reader' (type BuiltInRole) and has access to
+     > s189-teacher-services-cloud-production
 
      then you have what you need.
 
@@ -130,6 +129,7 @@ who raised the support ticket.
 4. Identify the latest `PayrollRun` object (double check that the dates are as
    expected), set `downloaded_at` and `downloaded_by_id` to `nil` and save the
    object:
+
    ```ruby
    payroll = PayrollRun.last
    payroll.downloaded_at = nil
@@ -149,8 +149,17 @@ who raised the support ticket.
    permissions required to access production resources. See
    [`privileged-identity-management-requests.md`](privileged-identity-management-requests.md).
 2. Ask another developer to approve the PIM request.
-3. Search for `s118p01-app-worker-aci` within the Azure portal.
-4. Click "Restart"
 
-Alternatively, instead of doing it via the web interface, you can run
-`az container restart --name s118p01-app-worker-aci --resource-group s118p01-app`.
+Then run:
+
+```bash
+kubectl -n srtl-production rollout restart deployment claim-additional-payments-for-teaching-production-worker
+```
+
+If you need more detailed information about the rollout status, you can describe
+the deployment:
+
+```bash
+kubectl -n srtl-test describe deployment
+claim-additional-payments-for-teaching-production-worker
+```

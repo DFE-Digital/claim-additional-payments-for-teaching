@@ -1,4 +1,3 @@
----
 DFE_SIGN_IN_API_CLIENT_ID: teacherpayments
 DFE_SIGN_IN_API_ENDPOINT: https://api.signin.education.gov.uk
 DFE_SIGN_IN_IDENTIFIER: teacherpayments

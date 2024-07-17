@@ -295,17 +295,6 @@ STRONGLY discouraged.**
 The console will be ran inside a container instance and won't be on one of the
 web servers, however it will have access to the database.
 
-### Through the Azure UI
-
-- Navigate to the
-  [container instance](https://portal.azure.com/#blade/HubsExtension/BrowseResourceBlade/resourceType/Microsoft.ContainerInstance%2FcontainerGroups)
-  resource (eg. `s118d01-app-worker-aci`)
-- Then go to 'Containers' under 'Settings'
-- With the container selected go to the 'Connect' tab
-- Choose the start up command (`/bin/bash` is recommended) and connect
-- From there, you can run a Rails console with `bin/rails console`. Pass the
-  `--sandbox` flag if you don’t need to modify data.
-
 ### Through the Azure CLI
 
 We have a helpful script you can run that will connect you to the right resource

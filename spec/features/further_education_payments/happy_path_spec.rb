@@ -37,9 +37,40 @@ RSpec.feature "Further education payments" do
 
     expect(page).to have_content("Which subject areas do you teach?")
     check("Building and construction")
+    check("Chemistry")
+    check("Computing, including digital and ICT")
+    check("Early years")
+    check("Engineering and manufacturing, including transport engineering and electronics")
+    check("Maths")
+    check("Physics")
     click_button "Continue"
 
-    expect(page).to have_content("FE building and construction courses goes here")
+    expect(page).to have_content("Which building and construction courses do you teach?")
+    check "T Level in building services engineering for construction"
+    click_button "Continue"
+
+    expect(page).to have_content("Which chemistry courses do you teach?")
+    check "GCSE chemistry"
+    click_button "Continue"
+
+    expect(page).to have_content("Which computing courses do you teach?")
+    check "T Level in digital support services"
+    click_button "Continue"
+
+    expect(page).to have_content("Which early years courses do you teach?")
+    check "T Level in education and early years (early years educator)"
+    click_button "Continue"
+
+    expect(page).to have_content("Which engineering and manufacturing courses do you teach?")
+    check "T Level in design and development for engineering and manufacturing"
+    click_button "Continue"
+
+    expect(page).to have_content("Which maths courses do you teach?")
+    check("claim-maths-courses-esfa-field")
+    click_button "Continue"
+
+    expect(page).to have_content("Which physics courses do you teach?")
+    check "A or AS level physics"
     click_button "Continue"
 
     expect(page).to have_content("FE teaching courses goes here")
@@ -61,6 +92,9 @@ RSpec.feature "Further education payments" do
     within all(".govuk-fieldset")[1] do
       choose("No")
     end
+    click_button "Continue"
+
+    expect(page).to have_content("Check your answers")
     click_button "Continue"
 
     expect(page).to have_content("FE check your answers goes here")

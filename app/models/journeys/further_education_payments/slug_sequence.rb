@@ -6,14 +6,24 @@ module Journeys
         further-education-provision-search
         select-provision
         contract-type
+        fixed-term-contract
+        taught-at-least-one-term
         teaching-hours-per-week
+        teaching-hours-per-week-next-term
         further-education-teaching-start-year
         subjects-taught
-        building-and-construction-courses
+        building-construction-courses
+        chemistry-courses
+        computing-courses
+        early-years-courses
+        engineering-manufacturing-courses
+        maths-courses
+        physics-courses
         teaching-courses
         half-teaching-hours
         teaching-qualification
         poor-performance
+        check-your-answers-part-one
       ]
 
       RESULTS_SLUGS = %w[
@@ -41,7 +51,49 @@ module Journeys
       end
 
       def slugs
-        SLUGS
+        SLUGS.dup.tap do |sequence|
+          if answers.contract_type == "permanent"
+            sequence.delete("fixed-term-contract")
+            sequence.delete("taught-at-least-one-term")
+            sequence.delete("teaching-hours-per-week-next-term")
+          end
+
+          if answers.contract_type == "variable_hours"
+            sequence.delete("fixed-term-contract")
+          end
+
+          if answers.fixed_term_full_year == true
+            sequence.delete("taught-at-least-one-term")
+          end
+
+          if answers.subjects_taught.exclude?("building_construction")
+            sequence.delete("building-and-construction-courses")
+          end
+
+          if answers.subjects_taught.exclude?("chemistry")
+            sequence.delete("chemistry-courses")
+          end
+
+          if answers.subjects_taught.exclude?("computing")
+            sequence.delete("computing-courses")
+          end
+
+          if answers.subjects_taught.exclude?("early_years")
+            sequence.delete("early-years-courses")
+          end
+
+          if answers.subjects_taught.exclude?("engineering_manufacturing")
+            sequence.delete("engineering-manufacturing-courses")
+          end
+
+          if answers.subjects_taught.exclude?("maths")
+            sequence.delete("maths-courses")
+          end
+
+          if answers.subjects_taught.exclude?("physics")
+            sequence.delete("physics-courses")
+          end
+        end
       end
     end
   end

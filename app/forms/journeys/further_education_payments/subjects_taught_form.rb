@@ -13,19 +13,21 @@ module Journeys
 
       def checkbox_options
         [
-          OpenStruct.new(id: "building-and-construction", name: "Building and construction"),
-          OpenStruct.new(id: "chemistry", name: "Chemistry"),
-          OpenStruct.new(id: "computing", name: "Computing, including digital and ICT"),
-          OpenStruct.new(id: "early-years", name: "Early years"),
-          OpenStruct.new(id: "engineering-and-manufacturing", name: "Engineering and manufacturing, including transport engineering and electronics"),
-          OpenStruct.new(id: "mathematics", name: "Mathematics"),
-          OpenStruct.new(id: "physics", name: "Physics"),
-          OpenStruct.new(id: "none", name: "I do not teach any of these subjects")
+          OpenStruct.new(id: "building_construction", name: t("options.building_construction")),
+          OpenStruct.new(id: "chemistry", name: t("options.chemistry")),
+          OpenStruct.new(id: "computing", name: t("options.computing")),
+          OpenStruct.new(id: "early_years", name: t("options.early_years")),
+          OpenStruct.new(id: "engineering_manufacturing", name: t("options.engineering_manufacturing")),
+          OpenStruct.new(id: "maths", name: t("options.maths")),
+          OpenStruct.new(id: "physics", name: t("options.physics")),
+          OpenStruct.new(id: "none", name: t("options.none"))
         ]
       end
 
       def save
-        return false unless valid?
+        return false if invalid?
+
+        reset_dependent_answers
 
         journey_session.answers.assign_attributes(subjects_taught:)
         journey_session.save!
@@ -35,6 +37,16 @@ module Journeys
 
       def clean_subjects_taught
         subjects_taught.reject!(&:blank?)
+      end
+
+      def reset_dependent_answers
+        unchecked_subjects.each do |subject|
+          journey_session.answers.assign_attributes("#{subject}_courses" => [])
+        end
+      end
+
+      def unchecked_subjects
+        journey_session.answers.subjects_taught - subjects_taught - ["none"]
       end
     end
   end
