@@ -10,7 +10,6 @@
 
 <div class="govuk-button-group">
   <%= button_to "Continue with DfE Identity", "/auth/tid", class: "govuk-button", method: :post %>
-  <%= button_to "Continue with One Login", "/auth/onelogin", class: "govuk-button", method: :post %>
   <%= button_to(
     "Continue without signing in",
     claim_path(current_journey_routing_name, "sign-in-or-continue"),
