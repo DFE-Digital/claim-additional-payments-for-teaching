@@ -16,6 +16,10 @@ kubectl -n srtl-test logs claim-additional-payments-for-teaching-test-web-123456
 
 You will need PIM elevated privileges to view logs for production.
 
+# Logit.io
+
+Logs are shipped to [Logit.io](https://logit.io/) automatically by AKS. You will need an account to access this service.
+
 ## App Service
 
 The App Service handles HTTP traffic.
