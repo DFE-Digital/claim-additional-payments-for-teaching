@@ -1,10 +1,23 @@
 <h1 class="govuk-heading-l">
-  Use One Login to sign in
+<% if @form.logged_in_with_onelogin %>
+  You've successfully signed in to GOV.UK One Login
+<% elsif @form.identity_confirmed_with_onelogin %>
+  You've successfully proved your identity with GOV.UK One Login
+<% else %>
+  Sign in with GOV.UK One Login
+<% end %>
 </h1>
 
 <% if @form.logged_in_with_onelogin %>
   <p>
     You are signed in with One Login as <%= @form.email_address %>
+  </p>
+<% elsif @form.identity_confirmed_with_onelogin %>
+  <p>
+  <%= @form.first_name %> <%= @form.surname %> - you have proved your identity
+  </p>
+  <p>
+    You can now continue your application
   </p>
 <% else %>
   <p>
@@ -15,6 +28,8 @@
 <div class="govuk-button-group">
   <% if @form.logged_in_with_onelogin %>
     <%= button_to "Prove your identity with One Login", "/auth/onelogin_identity", class: "govuk-button", method: :post %>
+  <% elsif @form.identity_confirmed_with_onelogin %>
+    <%= button_to "Continue", "", class: "govuk-button", method: :post %>
   <% else %>
     <%= button_to "Continue with One Login", "/auth/onelogin", class: "govuk-button", method: :post %>
   <% end %>
