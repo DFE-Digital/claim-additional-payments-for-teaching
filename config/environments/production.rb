@@ -51,6 +51,7 @@ Rails.application.configure do
   config.log_format = :json                               # For parsing in Logit
   config.rails_semantic_logger.add_file_appender = false  # Don't log to file
   config.active_record.logger = nil                       # Don't log SQL
+  config.rails_semantic_logger.filter = proc { |log| log.name != "DfE::Analytics::SendEvents" }
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
