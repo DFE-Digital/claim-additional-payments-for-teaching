@@ -40,6 +40,8 @@ module "web_application" {
   command      = var.startup_command
 
   replicas = var.web_replicas
+
+  enable_logit = var.enable_logit
 }
 
 module "worker_application" {
@@ -60,4 +62,6 @@ module "worker_application" {
   command      = var.worker_command
 
   replicas = var.worker_replicas
+
+  enable_logit = var.enable_logit
 }
