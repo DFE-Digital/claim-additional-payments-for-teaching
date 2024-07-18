@@ -65,6 +65,7 @@ class Claim < ApplicationRecord
     logged_in_with_tid: false,
     logged_in_with_onelogin: false,
     teacher_id_user_info: false,
+    onelogin_user_info: false,
     details_check: true,
     email_address_check: true,
     mobile_check: true,
