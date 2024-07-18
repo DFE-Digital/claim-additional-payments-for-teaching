@@ -10,11 +10,11 @@
 
 <% if @form.logged_in_with_onelogin %>
   <p>
-    You are signed in with One Login as <%= @form.email_address %>
+    You are signed in with One Login as <strong><%= @form.onelogin_user_info.email %></strong>
   </p>
 <% elsif @form.identity_confirmed_with_onelogin %>
   <p>
-  <%= @form.first_name %> <%= @form.surname %> - you have proved your identity
+    <strong><%= @form.first_name %> <%= @form.surname %></strong> - you have proved your identity
   </p>
   <p>
     You can now continue your application
@@ -29,7 +29,7 @@
   <% if @form.logged_in_with_onelogin %>
     <%= button_to "Prove your identity with One Login", "/auth/onelogin_identity", class: "govuk-button", method: :post %>
   <% elsif @form.identity_confirmed_with_onelogin %>
-    <%= button_to "Continue", "", class: "govuk-button", method: :post %>
+    <%= button_to "Continue", "", class: "govuk-button", method: :get %>
   <% else %>
     <%= button_to "Continue with One Login", "/auth/onelogin", class: "govuk-button", method: :post %>
   <% end %>
