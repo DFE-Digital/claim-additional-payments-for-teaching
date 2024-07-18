@@ -1,24 +1,25 @@
 require "rails_helper"
 
-RSpec.describe "Start a claim", :smoke, type: :feature do
+RSpec.describe "Visit admin", :smoke, type: :feature do
   # To test this locally you will need to add to your .env file:
   #
   # SMOKE_TEST_APP_HOST
   # BASIC_AUTH_USERNAME
   # BASIC_AUTH_PASSWORD
 
-  scenario "User starts a claim" do
+  scenario "User visits admin" do
     visit url_with_basic_auth
-    expect(page).to have_text("Teachers: claim back your student loan repayments")
+    expect(page).to have_text(I18n.t("service_name"))
   end
 
   def url_with_basic_auth
     host = ENV.fetch("SMOKE_TEST_APP_HOST")
-    path = new_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
+    path = admin_root_path
     uri = URI.join(host, path)
 
     uri.user = ENV.fetch("BASIC_AUTH_USERNAME", nil)
     uri.password = ENV.fetch("BASIC_AUTH_PASSWORD", nil)
+
     uri.to_s
   end
 end
