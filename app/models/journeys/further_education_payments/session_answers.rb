@@ -99,6 +99,12 @@ module Journeys
 
         !eligible_fe_provider?
       end
+
+      def fe_provider_closed?
+        return unless school
+
+        school.closed?
+      end
     end
   end
 end

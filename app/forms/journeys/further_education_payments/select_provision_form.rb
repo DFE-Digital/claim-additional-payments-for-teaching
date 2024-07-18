@@ -22,9 +22,9 @@ module Journeys
 
       def results
         @results ||= if journey_session.answers.possible_school_id.present?
-          School.open.fe_only.where(id: possible_school_id)
+          School.fe_only.where(id: possible_school_id)
         else
-          School.open.fe_only.search(provision_search)
+          School.fe_only.search(provision_search)
         end
       end
 

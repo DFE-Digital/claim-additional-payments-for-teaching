@@ -38,7 +38,7 @@ module Journeys
       private
 
       def has_results
-        School.open.search(provision_search).count > 0
+        School.search(provision_search).count > 0
       end
 
       def changed_answer?

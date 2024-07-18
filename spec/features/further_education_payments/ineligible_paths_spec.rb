@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.feature "Further education payments ineligible paths" do
   let(:ineligible_college) { create(:school, :further_education) }
   let(:eligible_college) { create(:school, :further_education, :fe_eligible) }
+  let(:closed_eligible_college) { create(:school, :further_education, :fe_eligible, :closed) }
   let(:current_academic_year) { AcademicYear.current }
 
   scenario "when no teaching responsibilities" do
@@ -89,6 +90,40 @@ RSpec.feature "Further education payments ineligible paths" do
       sleep(1) # seems to aid in success, as if click happens before event is bound
       find("li", text: eligible_college.name).click
     end
+    click_button "Continue"
+
+    expect(page).to have_content("Select the college you teach at")
+    choose eligible_college.name
+    click_button "Continue"
+
+    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
+  end
+
+  scenario "when closed FE provider selected" do
+    when_further_education_payments_journey_configuration_exists
+    and_closed_eligible_college_exists
+
+    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    expect(page).to have_link("Start now")
+    click_link "Start now"
+
+    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_content("Which FE provider are you employed by?")
+    fill_in "Which FE provider are you employed by?", with: closed_eligible_college.name
+    click_button "Continue"
+
+    expect(page).to have_content("Select the college you teach at")
+    choose closed_eligible_college.name
+    click_button "Continue"
+
+    expect(page).to have_content("The further education (FE) provider you have entered is not eligible")
+    click_link "Change FE provider"
+
+    expect(page).to have_content("Which FE provider are you employed by?")
+    fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select the college you teach at")
@@ -642,5 +677,9 @@ RSpec.feature "Further education payments ineligible paths" do
 
   def and_eligible_college_exists
     eligible_college
+  end
+
+  def and_closed_eligible_college_exists
+    closed_eligible_college
   end
 end
