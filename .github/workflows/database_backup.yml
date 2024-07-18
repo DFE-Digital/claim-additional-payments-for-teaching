@@ -3,9 +3,8 @@ concurrency: build_and_deploy_main
 
 on:
   workflow_dispatch:
-  # TODO: Uncomment after migration
-  # schedule: # 03:00 UTC
-  #   - cron: "0 3 * * *"
+  schedule: # 03:00 UTC
+    - cron: "0 3 * * *"
 
 jobs:
   backup:
