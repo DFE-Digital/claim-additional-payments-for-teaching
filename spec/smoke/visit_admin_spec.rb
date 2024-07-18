@@ -20,7 +20,7 @@ RSpec.describe "Visit admin", :smoke, type: :feature do
     username = ENV.fetch("BASIC_AUTH_USERNAME", nil)
     password = ENV.fetch("BASIC_AUTH_PASSWORD", nil)
 
-    if username && password
+    if username.present? && password.present?
       uri.user = username
       uri.password = password
     end
