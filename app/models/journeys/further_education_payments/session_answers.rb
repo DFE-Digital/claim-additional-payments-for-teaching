@@ -11,6 +11,13 @@ module Journeys
       attribute :teaching_hours_per_week_next_term, :string
       attribute :further_education_teaching_start_year, :string
       attribute :subjects_taught, default: []
+      attribute :building_construction_courses, default: []
+      attribute :chemistry_courses, default: []
+      attribute :computing_courses, default: []
+      attribute :early_years_courses, default: []
+      attribute :engineering_manufacturing_courses, default: []
+      attribute :maths_courses, default: []
+      attribute :physics_courses, default: []
       attribute :teaching_qualification, :string
       attribute :subject_to_formal_performance_action, :boolean
       attribute :subject_to_disciplinary_action, :boolean
