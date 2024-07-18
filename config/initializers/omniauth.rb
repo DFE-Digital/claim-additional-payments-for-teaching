@@ -37,6 +37,12 @@ module ::DfESignIn
   end
 end
 
+module ::OneLoginSignIn
+  def self.bypass?
+    Rails.env.test? || ENV["ENVIRONMENT_NAME"].start_with?("review")
+  end
+end
+
 Rails.application.config.middleware.use OmniAuth::Builder do
   if DfESignIn.bypass?
     provider :developer
@@ -79,42 +85,44 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     send_scope_to_token_endpoint: false
   }
 
-  provider :openid_connect, {
-    name: :onelogin,
-    callback_path: "/auth/onelogin",
-    client_auth_method: "jwt_bearer",
-    client_options: {
-      host: onelogin_sign_in_issuer_uri&.host,
-      identifier: ENV["ONELOGIN_SIGN_IN_CLIENT_ID"],
-      port: onelogin_sign_in_issuer_uri&.port,
-      redirect_uri: onelogin_sign_in_redirect_uri&.to_s,
-      scheme: onelogin_sign_in_issuer_uri&.scheme,
-      secret: OpenSSL::PKey::RSA.new(Base64.decode64(ENV["ONELOGIN_SIGN_IN_SECRET_BASE64"] + "\n")) # TODO: too clunky? read from file instead?
-    },
-    discovery: true,
-    issuer: ENV["ONELOGIN_SIGN_IN_ISSUER"],
-    response_type: :code,
-    scope: %i[openid email phone],
-    send_scope_to_token_endpoint: false
-  }
+  unless OneLoginSignIn.bypass?
+    provider :openid_connect, {
+      name: :onelogin,
+      callback_path: "/auth/onelogin",
+      client_auth_method: "jwt_bearer",
+      client_options: {
+        host: onelogin_sign_in_issuer_uri&.host,
+        identifier: ENV["ONELOGIN_SIGN_IN_CLIENT_ID"],
+        port: onelogin_sign_in_issuer_uri&.port,
+        redirect_uri: onelogin_sign_in_redirect_uri&.to_s,
+        scheme: onelogin_sign_in_issuer_uri&.scheme,
+        secret: OpenSSL::PKey::RSA.new(Base64.decode64(ENV["ONELOGIN_SIGN_IN_SECRET_BASE64"] + "\n")) # TODO: too clunky? read from file instead?
+      },
+      discovery: true,
+      issuer: ENV["ONELOGIN_SIGN_IN_ISSUER"],
+      response_type: :code,
+      scope: %i[openid email phone],
+      send_scope_to_token_endpoint: false
+    }
 
-  provider :openid_connect, {
-    name: :onelogin_identity,
-    callback_path: "/auth/onelogin_identity",
-    client_options: {
-      host: onelogin_sign_in_issuer_uri&.host,
-      identifier: ENV["ONELOGIN_SIGN_IN_CLIENT_ID"],
-      port: onelogin_sign_in_issuer_uri&.port,
-      redirect_uri: onelogin_sign_in_redirect_uri&.to_s,
-      scheme: onelogin_sign_in_issuer_uri&.scheme
-    },
-    discovery: true,
-    extra_authorize_params: {
-      vtr: '["Cl.Cm.P2"]',
-      claims: {userinfo: {"https://vocab.account.gov.uk/v1/coreIdentityJWT": nil}}.to_json
-    },
-    issuer: ENV["ONELOGIN_SIGN_IN_ISSUER"],
-    response_type: :code,
-    send_scope_to_token_endpoint: false
-  }
+    provider :openid_connect, {
+      name: :onelogin_identity,
+      callback_path: "/auth/onelogin_identity",
+      client_options: {
+        host: onelogin_sign_in_issuer_uri&.host,
+        identifier: ENV["ONELOGIN_SIGN_IN_CLIENT_ID"],
+        port: onelogin_sign_in_issuer_uri&.port,
+        redirect_uri: onelogin_sign_in_redirect_uri&.to_s,
+        scheme: onelogin_sign_in_issuer_uri&.scheme
+      },
+      discovery: true,
+      extra_authorize_params: {
+        vtr: '["Cl.Cm.P2"]',
+        claims: {userinfo: {"https://vocab.account.gov.uk/v1/coreIdentityJWT": nil}}.to_json
+      },
+      issuer: ENV["ONELOGIN_SIGN_IN_ISSUER"],
+      response_type: :code,
+      send_scope_to_token_endpoint: false
+    }
+  end
 end
