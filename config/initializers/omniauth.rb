@@ -115,7 +115,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     },
     issuer: ENV["ONELOGIN_SIGN_IN_ISSUER"],
     response_type: :code,
-    scope: %i[openid email phone],
     send_scope_to_token_endpoint: false
   }
 end
