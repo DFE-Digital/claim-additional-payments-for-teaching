@@ -268,7 +268,7 @@ en:
     mobile_number:
       errors:
         invalid: "Enter a mobile number, like 07700 900 982 or +44 7700 900 982"
-    claim_submission_form: &claim_submission_form
+    claim_submission:
       errors:
         email_verified: "You must verify your email address before you can submit your claim"
         email_address: "Enter an email address"
@@ -355,8 +355,6 @@ en:
       qualification_details:
         errors:
           qualifications_details_check: "Select yes if your qualification details are correct"
-      claim_submission_form:
-        <<: *claim_submission_form
     journey_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"
     policy_acronym: "TSLR"
@@ -544,8 +542,6 @@ en:
         errors:
           blank: Select an additional payment
           inclusion: Select a valid additional payment
-      claim_submission_form:
-        <<: *claim_submission_form
       reminders:
         personal_details:
           errors:
@@ -1002,8 +998,6 @@ en:
           payroll_gender: "How is your gender recorded on your employer’s payroll system?"
         errors:
           select_gender: "Select the gender recorded on your employer’s payroll system or select whether you do not know"
-      claim_submission_form:
-        <<: *claim_submission_form
     check_your_answers:
       part_one:
         primary_heading: Check your answers

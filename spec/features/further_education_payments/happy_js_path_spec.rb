@@ -125,7 +125,7 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     fill_in "Account number", with: "87654321"
     click_on "Continue"
 
-    expect(page).to have_content("How is your gender recorded on your school’s payroll system?")
+    expect(page).to have_content("How is your gender recorded on your employer’s payroll system?")
     choose "Female"
     click_on "Continue"
 

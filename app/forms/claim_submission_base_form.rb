@@ -1,5 +1,6 @@
 class ClaimSubmissionBaseForm
   include ActiveModel::Model
+  include FormHelpers
 
   attr_reader :journey_session, :claim
 
@@ -79,13 +80,13 @@ class ClaimSubmissionBaseForm
 
   def not_already_submitted
     if journey_session.submitted?
-      errors.add(:base, i18n_error_message(:already_submitted))
+      errors.add(:base, i18n_errors_path(:already_submitted))
     end
   end
 
   def email_address_is_present
     if answers.email_address.blank?
-      errors.add(:email_address, i18n_error_message(:email_address))
+      errors.add(:email_address, i18n_errors_path(:email_address))
     end
   end
 
@@ -93,7 +94,7 @@ class ClaimSubmissionBaseForm
     return unless answers.email_address.present?
 
     unless answers.email_verified
-      errors.add(:email_verified, i18n_error_message(:email_verified))
+      errors.add(:email_verified, i18n_errors_path(:email_verified))
     end
   end
 
@@ -101,7 +102,7 @@ class ClaimSubmissionBaseForm
     unless mobile_number_verified?
       errors.add(
         :base,
-        i18n_error_message(:mobile_number_verified)
+        i18n_errors_path(:mobile_number_verified)
       )
     end
   end
@@ -117,17 +118,13 @@ class ClaimSubmissionBaseForm
 
   def claim_is_eligible
     if main_eligibility.policy::PolicyEligibilityChecker.new(answers: answers).ineligible?
-      errors.add(:base, i18n_error_message(:ineligible))
+      errors.add(:base, i18n_errors_path(:ineligible))
     end
   end
 
   def main_claim_is_submittable
     return if claim.valid?(:submit)
     claim.errors.full_messages.each { |message| errors.add(:base, message) }
-  end
-
-  def i18n_error_message(attr)
-    I18n.t("#{journey::I18N_NAMESPACE}.forms.claim_submission_form.errors.#{attr}")
   end
 
   def journey
