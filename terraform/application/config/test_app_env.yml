@@ -3,6 +3,7 @@ DFE_SIGN_IN_API_CLIENT_ID: teacherpayments
 DFE_SIGN_IN_API_ENDPOINT: https://test-api.signin.education.gov.uk/
 DFE_SIGN_IN_IDENTIFIER: teacherpayments
 DFE_SIGN_IN_ISSUER: https://test-oidc.signin.education.gov.uk:443
+DFE_SIGN_IN_REDIRECT_BASE_URL: https://test.claim-additional-teaching-payment.service.gov.uk
 
 DQT_API_URL: https://test.teacher-qualifications-api.education.gov.uk/v1
 DQT_BASE_URL: https://test-api-customerengagement.platform.education.gov.uk/dqt-crm/v1/
@@ -14,6 +15,7 @@ ORDNANCE_SURVEY_API_BASE_URL: https://api.os.uk
 
 SUPPRESS_DFE_ANALYTICS_INIT: true
 
+TID_BASE_URL: https://test.claim-additional-teaching-payment.service.gov.uk/additional-payments/claim
 TID_SIGN_IN_API_ENDPOINT: https://preprod.teaching-identity.education.gov.uk:433
 TID_SIGN_IN_CLIENT_ID: claim
 TID_SIGN_IN_ISSUER: https://preprod.teaching-identity.education.gov.uk/
