@@ -27,10 +27,10 @@ class OmniauthCallbacksController < ApplicationController
 
   def onelogin
     auth = request.env["omniauth.auth"]
-    # TODO need public key to decode and verify jwt
     jwt = auth.extra.raw_info["https://vocab.account.gov.uk/v1/coreIdentityJWT"]
     if jwt
-      decoded_jwt = JSON::JWT.decode(jwt, :skip_verification) # TODO need the public key to veryify this JWT
+      identity_jwt_public_key = OpenSSL::PKey::EC.new(Base64.decode64(ENV["ONELOGIN_IDENTITY_JWT_PUBLIC_KEY_BASE64"]))
+      decoded_jwt = JSON::JWT.decode(jwt, identity_jwt_public_key)
       name_parts = decoded_jwt["vc"]["credentialSubject"]["name"][0]["nameParts"]
       first_name = name_parts.find { |part| part["type"] == "GivenName" }["value"]
       surname = name_parts.find { |part| part["type"] == "FamilyName" }["value"]
@@ -44,7 +44,7 @@ class OmniauthCallbacksController < ApplicationController
             surname: surname
           }
         )
-      )
+      ) # TODO: store name in journey answers # check teacher hash in additional payment journey as an example
     else
       redirect_to(
         claim_path(
