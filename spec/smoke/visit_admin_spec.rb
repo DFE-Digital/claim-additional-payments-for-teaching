@@ -17,8 +17,13 @@ RSpec.describe "Visit admin", :smoke, type: :feature do
     path = admin_root_path
     uri = URI.join(host, path)
 
-    uri.user = ENV.fetch("BASIC_AUTH_USERNAME", nil)
-    uri.password = ENV.fetch("BASIC_AUTH_PASSWORD", nil)
+    username = ENV.fetch("BASIC_AUTH_USERNAME", nil)
+    password = ENV.fetch("BASIC_AUTH_PASSWORD", nil)
+
+    if username && password
+      uri.user = username
+      uri.password = password
+    end
 
     uri.to_s
   end
