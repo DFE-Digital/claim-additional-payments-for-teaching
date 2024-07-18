@@ -5,7 +5,7 @@
     <%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
       <%= f.govuk_error_summary %>
 
-      <%= f.govuk_collection_radio_buttons :school_id, @form.radio_options, :id, :name, :address,
+      <%= f.govuk_collection_radio_buttons :possible_school_id, @form.radio_options, :id, :name, :address,
         legend: {
           text: @form.t("heading"),
           tag: "h1",

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Further education payments", js: true, flaky: true do
-  let(:college) { create(:school, :further_education) }
+  let(:college) { create(:school, :further_education, :fe_eligible) }
 
   scenario "happy js path" do
     when_further_education_payments_journey_configuration_exists
