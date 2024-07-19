@@ -29,11 +29,16 @@ class OmniauthCallbacksController < ApplicationController
     auth = request.env["omniauth.auth"]
     jwt = auth.extra.raw_info["https://vocab.account.gov.uk/v1/coreIdentityJWT"]
     if jwt
-      identity_jwt_public_key = OpenSSL::PKey::EC.new(Base64.decode64(ENV["ONELOGIN_IDENTITY_JWT_PUBLIC_KEY_BASE64"]))
-      decoded_jwt = JSON::JWT.decode(jwt, identity_jwt_public_key)
-      name_parts = decoded_jwt["vc"]["credentialSubject"]["name"][0]["nameParts"]
-      first_name = name_parts.find { |part| part["type"] == "GivenName" }["value"]
-      surname = name_parts.find { |part| part["type"] == "FamilyName" }["value"]
+      if OneLoginSignIn.bypass?
+        first_name = "TEST"
+        surname = "USER"
+      else
+        identity_jwt_public_key = OpenSSL::PKey::EC.new(Base64.decode64(ENV["ONELOGIN_IDENTITY_JWT_PUBLIC_KEY_BASE64"]))
+        decoded_jwt = JSON::JWT.decode(jwt, identity_jwt_public_key)
+        name_parts = decoded_jwt["vc"]["credentialSubject"]["name"][0]["nameParts"]
+        first_name = name_parts.find { |part| part["type"] == "GivenName" }["value"]
+        surname = name_parts.find { |part| part["type"] == "FamilyName" }["value"]
+      end
       redirect_to(
         claim_path(
           journey: current_journey_routing_name,
