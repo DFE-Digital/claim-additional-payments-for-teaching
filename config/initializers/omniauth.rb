@@ -30,6 +30,9 @@ onelogin_sign_in_issuer_uri = ENV["ONELOGIN_SIGN_IN_ISSUER"].present? ? URI(ENV[
 if ENV["ONELOGIN_REDIRECT_BASE_URL"].present?
   onelogin_sign_in_redirect_uri = URI.join(ENV["ONELOGIN_REDIRECT_BASE_URL"], "/auth/onelogin")
 end
+if ENV["ONELOGIN_SIGN_IN_SECRET_BASE64"].present?
+  onelogin_sign_in_secret_key = OpenSSL::PKey::RSA.new(Base64.decode64(ENV["ONELOGIN_SIGN_IN_SECRET_BASE64"] + "\n"))
+end
 
 module ::DfESignIn
   def self.bypass?
@@ -96,7 +99,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
         port: onelogin_sign_in_issuer_uri&.port,
         redirect_uri: onelogin_sign_in_redirect_uri&.to_s,
         scheme: onelogin_sign_in_issuer_uri&.scheme,
-        secret: OpenSSL::PKey::RSA.new(Base64.decode64(ENV["ONELOGIN_SIGN_IN_SECRET_BASE64"] + "\n")) # TODO: too clunky? read from file instead?
+        secret: onelogin_sign_in_secret_key
       },
       discovery: true,
       issuer: ENV["ONELOGIN_SIGN_IN_ISSUER"],
