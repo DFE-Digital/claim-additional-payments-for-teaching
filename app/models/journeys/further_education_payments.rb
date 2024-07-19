@@ -29,10 +29,10 @@ module Journeys
         "teaching-qualification" => TeachingQualificationForm,
         "poor-performance" => PoorPerformanceForm,
         "check-your-answers" => CheckYourAnswersForm,
-        "ineligible" => IneligibleForm,
         "half-teaching-hours" => HalfTeachingHoursForm,
         "hours-teaching-eligible-subjects" => HoursTeachingEligibleSubjectsForm,
         "eligible" => EligibleForm,
+        "ineligible" => IneligibleForm,
         "teacher-reference-number" => TeacherReferenceNumberForm
       }
     }

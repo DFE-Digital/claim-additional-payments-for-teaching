@@ -119,6 +119,17 @@ module Journeys
       def less_than_half_hours_teaching_eligible_courses?
         hours_teaching_eligible_subjects == false
       end
+
+      def award_amount
+        case teaching_hours_per_week
+        when "more_than_12"
+          school.eligible_fe_provider.max_award_amount
+        when "between_2_5_and_12"
+          school.eligible_fe_provider.lower_award_amount
+        else
+          0
+        end
+      end
     end
   end
 end
