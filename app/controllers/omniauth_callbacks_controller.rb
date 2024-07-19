@@ -55,7 +55,7 @@ class OmniauthCallbacksController < ApplicationController
           slug: "sign-in",
           claim: {
             logged_in_with_onelogin: true,
-            onelogin_user_info_attributes: onelogin_user_info_attributes,
+            onelogin_user_info_attributes: onelogin_user_info_attributes
           }
         )
       )
