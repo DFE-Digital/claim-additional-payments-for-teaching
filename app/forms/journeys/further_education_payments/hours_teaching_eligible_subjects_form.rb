@@ -34,7 +34,9 @@ module Journeys
       private
 
       def course_descriptions(course_field)
-        journey_session.answers.public_send(course_field).map { |course|
+        journey_session.answers.public_send(course_field).reject { |course|
+          course == "none"
+        }.map { |course|
           course_option_description(course, i18n_form_namespace: course_field).html_safe
         }
       end
