@@ -1001,7 +1001,7 @@ en:
       hours_teaching_eligible_subjects:
         question: Do you spend at least half of your timetabled teaching hours teaching these eligible courses?
         errors:
-          inclusion: Select yes if spend at least half of your timetabled teaching hours teaching these eligible courses
+          inclusion: Select yes if you spend at least half of your timetabled teaching hours teaching these eligible courses
     check_your_answers:
       part_one:
         primary_heading: Check your answers
