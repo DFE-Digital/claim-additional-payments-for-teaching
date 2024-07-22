@@ -29,7 +29,16 @@
   <% if @form.logged_in_with_onelogin %>
     <%= button_to "Prove your identity with One Login", "/auth/onelogin_identity", class: "govuk-button", method: :post %>
   <% elsif @form.identity_confirmed_with_onelogin %>
-    <%= button_to "Continue", "", class: "govuk-button", method: :get %>
+    <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
+      <%= f.fields_for :onelogin_user_info do |ff| %>
+        <% ff.object.attribute_names.each do |attribute| %>
+          <%= ff.hidden_field attribute %>
+        <% end %>
+      <% end %>
+      <%= f.hidden_field :first_name %>
+      <%= f.hidden_field :surname %>
+      <%= f.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
+    <% end %>
   <% else %>
     <%= button_to "Continue with One Login", "/auth/onelogin", class: "govuk-button", method: :post %>
   <% end %>

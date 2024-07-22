@@ -29,6 +29,15 @@ class SignInForm < Form
     @onelogin_user_info ||= OneloginUserInfoForm.new
   end
 
+  def save
+    journey_session.answers.assign_attributes(
+      onelogin_user_info: onelogin_user_info.attributes,
+      first_name: first_name,
+      surname: surname
+    )
+    journey_session.save!
+  end
+
   private
 
   def permitted_attributes

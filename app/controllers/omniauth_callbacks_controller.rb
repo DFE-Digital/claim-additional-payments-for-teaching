@@ -49,18 +49,21 @@ class OmniauthCallbacksController < ApplicationController
             surname: surname
           }
         )
-      ) # TODO: store name in journey answers # check teacher hash in additional payment journey as an example
+      )
     else
       onelogin_user_info_attributes = auth.info.to_h.slice(
         *SignInForm::OneloginUserInfoForm::ONELOGIN_USER_INFO_ATTRIBUTES.map(&:to_s)
       )
+
+      journey_session.answers.assign_attributes(onelogin_user_info: onelogin_user_info_attributes)
+      journey_session.save!
+
       redirect_to(
         claim_path(
           journey: current_journey_routing_name,
           slug: "sign-in",
           claim: {
-            logged_in_with_onelogin: true,
-            onelogin_user_info_attributes: onelogin_user_info_attributes
+            logged_in_with_onelogin: true
           }
         )
       )

@@ -42,7 +42,7 @@ end
 
 module ::OneLoginSignIn
   def self.bypass?
-    (Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")) && ENV["BYPASS_ONELOGIN_SIGN_IN"] == "true"
+    ENV["BYPASS_ONELOGIN_SIGN_IN"] == "true" # too unsafe? could accidentally enable this on production
   end
 end
 
