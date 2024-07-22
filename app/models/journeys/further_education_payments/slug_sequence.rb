@@ -24,15 +24,42 @@ module Journeys
         teaching-qualification
         poor-performance
         check-your-answers-part-one
+        eligible
       ]
+
+      PERSONAL_DETAILS_SLUGS = %w[
+        one-login-placeholder
+        information-provided
+        personal-details
+        postcode-search
+        select-home-address
+        address
+        email-address
+        email-verification
+        provide-mobile-number
+        mobile-number
+        mobile-verification
+      ].freeze
+
+      PAYMENT_DETAILS_SLUGS = %w[
+        bank-or-building-society
+        personal-bank-account
+        building-society-account
+        gender
+        teacher-reference-number
+      ].freeze
 
       RESULTS_SLUGS = %w[
         check-your-answers
-        eligible
         ineligible
       ].freeze
 
-      SLUGS = ELIGIBILITY_SLUGS + RESULTS_SLUGS
+      SLUGS = (
+        ELIGIBILITY_SLUGS +
+        PERSONAL_DETAILS_SLUGS +
+        PAYMENT_DETAILS_SLUGS +
+        RESULTS_SLUGS
+      ).freeze
 
       def self.start_page_url
         if Rails.env.production?
@@ -93,6 +120,14 @@ module Journeys
           if answers.subjects_taught.exclude?("physics")
             sequence.delete("physics-courses")
           end
+
+          if answers.provide_mobile_number == false
+            sequence.delete("mobile-number")
+            sequence.delete("mobile-verification")
+          end
+
+          sequence.delete("personal-bank-account") if answers.building_society?
+          sequence.delete("building-society-account") if answers.personal_bank_account?
         end
       end
     end

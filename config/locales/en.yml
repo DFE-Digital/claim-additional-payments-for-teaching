@@ -201,6 +201,12 @@ en:
     address: "address"
     full_name: "Full name"
   forms:
+    teacher_reference_number:
+      questions:
+        teacher_reference_number: "What is your teacher reference number (TRN)?"
+      errors:
+        blank: "Enter your teacher reference number"
+        length: "Teacher reference number must be 7 digits long"
     gender:
       questions:
         payroll_gender: "How is your gender recorded on your school’s payroll system?"
@@ -254,6 +260,21 @@ en:
       errors:
         select_email: Select an option to indicate whether the email is correct or not
         invalid_email: Invalid email address. Please select a different email address
+    email_address:
+      errors:
+        presence: "Enter an email address"
+        format: "Enter an email address in the correct format, like name@example.com"
+        length: "Email address must be 256 characters or less"
+    mobile_number:
+      errors:
+        invalid: "Enter a mobile number, like 07700 900 982 or +44 7700 900 982"
+    claim_submission:
+      errors:
+        email_verified: "You must verify your email address before you can submit your claim"
+        email_address: "Enter an email address"
+        ineligible: "You’re not eligible for this payment"
+        mobile_number_verified: "You must verify your mobile number before you can submit your claim"
+        already_submitted: "You have already submitted this claim"
   student_loans:
     forms:
       claim_school:
@@ -264,13 +285,6 @@ en:
           enter_a_school_or_postcode: "Enter a school or postcode"
           select_a_school: "Select a school from the list or search again for a different school"
           school_not_found: "School not found"
-      claim_submission_form:
-        errors:
-          email_verified: "You must verify your email address before you can submit your claim"
-          email_address: "Enter an email address"
-          ineligible: "You’re not eligible for this payment"
-          mobile_number_verified: "You must verify your mobile number before you can submit your claim"
-          already_submitted: "You have already submitted this claim"
       current_school:
         questions:
           current_school_search: "Which school are you currently employed to teach at?"
@@ -280,11 +294,6 @@ en:
           select_the_school_you_teach_at: "Select the school you teach at"
           the_selected_school_is_closed: "The selected school is closed"
           school_not_found: "School not found"
-      email_address:
-        errors:
-          presence: "Enter an email address"
-          format: "Enter an email address in the correct format, like name@example.com"
-          length: "Email address must be 256 characters or less"
       leadership_position:
         questions:
           leadership_position: "Were you employed in a leadership position between %{financial_year}?"
@@ -294,9 +303,6 @@ en:
             leader role."
         errors:
           inclusion: "Select yes if you were employed in a leadership position"
-      mobile_number:
-        errors:
-          invalid: "Enter a mobile number, like 07700 900 982 or +44 7700 900 982"
       mostly_performed_leadership_duties:
         questions:
           mostly_performed_leadership_duties:
@@ -346,12 +352,6 @@ en:
           select_which_school_currently:
             Select if you still work at %{school_name}, another school or no longer teach in England
           select_are_you_still_employed: Select yes if you are still employed to teach at a school in England
-      teacher_reference_number:
-        questions:
-          teacher_reference_number: "What is your teacher reference number (TRN)?"
-        errors:
-          blank: "Enter your teacher reference number"
-          length: "Teacher reference number must be 7 digits long"
       qualification_details:
         errors:
           qualifications_details_check: "Select yes if your qualification details are correct"
@@ -415,13 +415,6 @@ en:
             confirmed their %{bank_or_building_society} details?"
   additional_payments: &additional_payments
     forms:
-      claim_submission_form:
-        errors:
-          email_verified: "You must verify your email address before you can submit your claim"
-          email_address: "Enter an email address"
-          ineligible: "You’re not eligible for this payment"
-          mobile_number_verified: "You must verify your mobile number before you can submit your claim"
-          already_submitted: "You have already submitted this claim"
       correct_school:
         questions:
           which_school: "Which school do you teach at?"
@@ -434,18 +427,10 @@ en:
           select_the_school_you_teach_at: "Select the school you teach at"
           the_selected_school_is_closed: "The selected school is closed"
           school_not_found: "School not found"
-      email_address:
-        errors:
-          presence: "Enter an email address"
-          format: "Enter an email address in the correct format, like name@example.com"
-          length: "Email address must be 256 characters or less"
       email_verification:
         errors:
           one_time_password:
             invalid: An error occured while validating the passcode, please try generating a new one
-      mobile_number:
-        errors:
-          invalid: "Enter a mobile number, like 07700 900 982 or +44 7700 900 982"
       nqt_in_academic_year_after_itt:
         errors:
           inclusion: Select yes if you are currently teaching as a qualified teacher
@@ -548,12 +533,6 @@ en:
           employed_as_supply_teacher: Are you currently employed as a supply teacher?
         errors:
           inclusion: Select yes if you are a supply teacher
-      teacher_reference_number:
-        questions:
-          teacher_reference_number: "What is your teacher reference number (TRN)?"
-        errors:
-          blank: "Enter your teacher reference number"
-          length: "Teacher reference number must be 7 digits long"
       teaching_subject_now:
         questions:
           teaching_subject_now: "Do you spend at least half of your contracted hours teaching eligible subjects?"
@@ -817,6 +796,7 @@ en:
     journey_name: Claim incentive payments for further education teachers
     feedback_email: "FE-Levellingup.PremiumPayments@education.gov.uk"
     support_email_address: "FE-Levellingup.PremiumPayments@education.gov.uk"
+    claim_subject: "Further education payment"
     forms:
       ineligible:
         courses:
@@ -1013,10 +993,20 @@ en:
           inclusion: Select yes if at least half your timetabled teaching hours are spent teaching 16-19-year-olds, including those up to 25 with an Education, Health and Care Plan
       eligible:
         heading: You’re eligible for a financial incentive payment
+      gender:
+        questions:
+          payroll_gender: "How is your gender recorded on your employer’s payroll system?"
+        errors:
+          select_gender: "Select the gender recorded on your employer’s payroll system or select whether you do not know"
     check_your_answers:
       part_one:
         primary_heading: Check your answers
         confirmation_notice: By selecting continue you are confirming that, to the best of your knowledge, the details you are providing are correct.
+      heading_send_application: Now send your application
+      statement:
+        By submitting this you are confirming that, to the best of your knowledge, the details you are providing are
+        correct.
+      btn_text: Accept and send
   activerecord:
     errors:
       models:
