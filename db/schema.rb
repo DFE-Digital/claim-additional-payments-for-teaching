@@ -175,6 +175,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_09_110147) do
     t.index ["teacher_reference_number"], name: "index_ecp_eligibility_trn"
   end
 
+  create_table "eligible_fe_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "ukprn", null: false
+    t.text "academic_year", null: false
+    t.decimal "max_award_amount", precision: 7, scale: 2
+    t.decimal "lower_award_amount", precision: 7, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["academic_year", "ukprn"], name: "index_eligible_fe_providers_on_academic_year_and_ukprn"
+  end
+
   create_table "file_uploads", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "uploaded_by_id"
     t.text "body"
