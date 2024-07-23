@@ -85,6 +85,8 @@
     </header>
 
     <div class="govuk-width-container">
+      <%= content_for(:back_link) %>
+
       <main class="govuk-main-wrapper app-main-class" id="main-content">
         <% flash.each do |name, msg| %>
           <div class="govuk-body-l govuk-flash__<%= name %>">

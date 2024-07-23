@@ -29,6 +29,14 @@ module Journeys
 
       private
 
+      def payroll_gender
+        [
+          t("further_education_payments.forms.gender.questions.payroll_gender"),
+          t("answers.payroll_gender.#{answers.payroll_gender}"),
+          "gender"
+        ]
+      end
+
       def teaching_responsibilities
         [
           t("further_education_payments.forms.teaching_responsibilities.question"),

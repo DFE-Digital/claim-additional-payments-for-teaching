@@ -10,10 +10,6 @@ module Policies
 
       attr_accessor :teacher_reference_number
 
-      def award_amount
-        0
-      end
-
       def ineligible?
         false
       end

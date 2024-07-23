@@ -16,13 +16,23 @@ module Journeys
         "fixed-term-contract" => FixedTermContractForm,
         "taught-at-least-one-term" => TaughtAtLeastOneTermForm,
         "teaching-hours-per-week" => TeachingHoursPerWeekForm,
+        "teaching-hours-per-week-next-term" => TeachingHoursPerWeekNextTermForm,
         "further-education-teaching-start-year" => FurtherEducationTeachingStartYearForm,
         "subjects-taught" => SubjectsTaughtForm,
+        "building-construction-courses" => BuildingConstructionCoursesForm,
+        "chemistry-courses" => ChemistryCoursesForm,
+        "computing-courses" => ComputingCoursesForm,
+        "early-years-courses" => EarlyYearsCoursesForm,
+        "engineering-manufacturing-courses" => EngineeringManufacturingCoursesForm,
+        "maths-courses" => MathsCoursesForm,
+        "physics-courses" => PhysicsCoursesForm,
         "teaching-qualification" => TeachingQualificationForm,
         "poor-performance" => PoorPerformanceForm,
         "check-your-answers" => CheckYourAnswersForm,
         "ineligible" => IneligibleForm,
-        "half-teaching-hours" => HalfTeachingHoursForm
+        "half-teaching-hours" => HalfTeachingHoursForm,
+        "eligible" => EligibleForm,
+        "teacher-reference-number" => TeacherReferenceNumberForm
       }
     }
   end

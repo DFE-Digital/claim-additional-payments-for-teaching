@@ -1,5 +1,7 @@
 FactoryBot.define do
   factory :international_relocation_payments_eligibility, class: "Policies::InternationalRelocationPayments::Eligibility" do
+    award_amount { Policies::InternationalRelocationPayments.award_amount }
+
     trait :eligible_home_office do
       passport_number { Faker::Number.unique.number(digits: 9).to_s }
       nationality { "French" }

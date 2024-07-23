@@ -18,6 +18,7 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     expect(page).to have_content("Which FE provider are you employed by?")
     fill_in "Which FE provider are you employed by?", with: college.name
     within("#claim-provision-search-field__listbox") do
+      sleep(1) # seems to aid in success, as if click happens before event is bound
       find("li", text: college.name).click
     end
     click_button "Continue"
@@ -42,7 +43,8 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     check("Building and construction")
     click_button "Continue"
 
-    expect(page).to have_content("FE building and construction courses goes here")
+    expect(page).to have_content("Which building and construction courses do you teach?")
+    check "T Level in building services engineering for construction"
     click_button "Continue"
 
     expect(page).to have_content("FE teaching courses goes here")
@@ -69,15 +71,72 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     expect(page).to have_content("Check your answers")
     click_button "Continue"
 
-    expect(page).to have_content("FE check your answers goes here")
-    click_button "Continue"
-
     expect(page).to have_content("You’re eligible for a financial incentive payment")
     expect(page).to have_content("Apply now")
-  end
+    click_button "Apply now"
 
-  def when_further_education_payments_journey_configuration_exists
-    create(:journey_configuration, :further_education_payments)
+    expect(page).to have_content("FE ONE LOGIN PLACEHOLDER")
+    click_button "Continue"
+
+    expect(page).to have_content("How we will use the information you provide in your application")
+    click_button "Continue"
+
+    expect(page).to have_content("Personal details")
+    fill_in "First name", with: "John"
+    fill_in "Last name", with: "Doe"
+    fill_in "Day", with: "28"
+    fill_in "Month", with: "2"
+    fill_in "Year", with: "1988"
+    fill_in "National Insurance number", with: "PX321499A"
+    click_on "Continue"
+
+    expect(page).to have_content("What is your home address?")
+    click_link("Enter your address manually")
+
+    expect(page).to have_content("What is your address?")
+    fill_in "House number or name", with: "57"
+    fill_in "Building and street", with: "Walthamstow Drive"
+    fill_in "Town or city", with: "Derby"
+    fill_in "County", with: "City of Derby"
+    fill_in "Postcode", with: "DE22 4BS"
+    click_on "Continue"
+
+    expect(page).to have_content("Email address")
+    fill_in "Email address", with: "johndoe@example.com"
+    click_on "Continue"
+
+    expect(page).to have_content("Enter the 6-digit passcode")
+    mail = ActionMailer::Base.deliveries.last
+    otp_in_mail_sent = mail[:personalisation].decoded.scan(/\b[0-9]{6}\b/).first
+    fill_in "claim-one-time-password-field", with: otp_in_mail_sent
+    click_on "Confirm"
+
+    expect(page).to have_content("Would you like to provide your mobile number?")
+    choose "No"
+    click_on "Continue"
+
+    expect(page).to have_content("What account do you want the money paid into?")
+    choose "Personal bank account"
+    click_on "Continue"
+
+    expect(page).to have_content("Enter your personal bank account details")
+    fill_in "Name on your account", with: "Jo Bloggs"
+    fill_in "Sort code", with: "123456"
+    fill_in "Account number", with: "87654321"
+    click_on "Continue"
+
+    expect(page).to have_content("How is your gender recorded on your employer’s payroll system?")
+    choose "Female"
+    click_on "Continue"
+
+    expect(page).to have_content("What is your teacher reference number (TRN)?")
+    fill_in "claim-teacher-reference-number-field", with: "1234567"
+    click_on "Continue"
+
+    expect(page).to have_content("Check your answers before sending your application")
+    click_on "Accept and send"
+
+    expect(page).to have_content("You applied for a further education financial incentive payment")
   end
 
   def and_college_exists

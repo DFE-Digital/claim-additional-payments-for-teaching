@@ -1,12 +1,18 @@
-<%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
-  <%= f.govuk_error_summary %>
+<% content_for(:page_title, page_title(@form.t(:question, school_name: journey_session.answers.school.name), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
-  <%= f.govuk_collection_radio_buttons :contract_type, @form.radio_options, :id, :name, :hint,
-    legend: {
-      text: @form.t(:question, school_name: journey_session.answers.school.name),
-      tag: "h1",
-      size: "l"
-    } %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
 
-  <%= f.govuk_submit %>
-<% end %>
+      <%= f.govuk_collection_radio_buttons :contract_type, @form.radio_options, :id, :name, :hint,
+        legend: {
+          text: @form.t(:question, school_name: journey_session.answers.school.name),
+          tag: "h1",
+          size: "l"
+        } %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

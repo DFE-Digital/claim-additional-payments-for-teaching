@@ -6,8 +6,7 @@ class ProvideMobileNumberForm < Form
     inclusion: {
       in: [true, false],
       message: "Select yes if you would like to provide your mobile number"
-    },
-    if: -> { answers.class.module_parent == Journeys::AdditionalPaymentsForTeaching }
+    }
 
   def save
     return false unless valid?

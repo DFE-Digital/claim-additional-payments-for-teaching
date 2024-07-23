@@ -3,6 +3,7 @@ class Form
   include ActiveModel::Attributes
   include ActiveModel::Serialization
   include ActiveModel::Validations::Callbacks
+  include FormHelpers
 
   attr_accessor :journey
   attr_accessor :journey_session
@@ -29,19 +30,6 @@ class Form
     journey::VIEW_PATH
   end
 
-  def i18n_namespace
-    journey::I18N_NAMESPACE
-  end
-
-  def i18n_errors_path(msg, args = {})
-    base_key = :"forms.#{i18n_form_namespace}.errors.#{msg}"
-    I18n.t("#{i18n_namespace}.#{base_key}", default: base_key, **args)
-  end
-
-  def t(key, args = {})
-    I18n.t(key, scope: "#{i18n_namespace}.forms.#{i18n_form_namespace}", **args)
-  end
-
   def permitted_params
     @permitted_params ||= params.fetch(model_name.param_key, {}).permit(*permitted_attributes)
   end
@@ -63,10 +51,6 @@ class Form
         key
       end
     end
-  end
-
-  def i18n_form_namespace
-    self.class.name.demodulize.gsub("Form", "").underscore
   end
 
   def attributes_with_current_value

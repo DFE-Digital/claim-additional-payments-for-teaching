@@ -14,5 +14,9 @@ module Policies
     def notify_reply_to_id
       nil
     end
+
+    def award_amount
+      5_000
+    end
   end
 end
