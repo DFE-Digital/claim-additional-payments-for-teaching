@@ -1,13 +1,13 @@
 require "rails_helper"
 
 RSpec.feature "Further education payments ineligible paths" do
-  let(:school) { create(:school, :further_education) }
-  let(:college) { school }
+  let(:ineligible_college) { create(:school, :further_education) }
+  let(:eligible_college) { create(:school, :further_education, :fe_eligible) }
+  let(:closed_eligible_college) { create(:school, :further_education, :fe_eligible, :closed) }
   let(:current_academic_year) { AcademicYear.current }
 
   scenario "when no teaching responsibilities" do
     when_further_education_payments_journey_configuration_exists
-    and_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
@@ -21,8 +21,10 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_content("you must be employed as a member of staff with teaching responsibilities")
   end
 
-  scenario "when fixed term contract and just one academic term taught" do
+  scenario "when ineligible FE provider is selected" do
     when_further_education_payments_journey_configuration_exists
+    and_ineligible_college_exists
+    and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
@@ -33,14 +35,125 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: college.name
+    fill_in "Which FE provider are you employed by?", with: ineligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select the college you teach at")
-    choose college.name
+    choose ineligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{college.name}?")
+    expect(page).to have_content("The further education (FE) provider you have entered is not eligible")
+    click_link "Change FE provider"
+
+    expect(page).to have_content("Which FE provider are you employed by?")
+    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    click_button "Continue"
+
+    expect(page).to have_content("Select the college you teach at")
+    choose eligible_college.name
+    click_button "Continue"
+
+    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
+  end
+
+  scenario "when ineligible FE provider is selected with js", js: true do
+    when_further_education_payments_journey_configuration_exists
+    and_ineligible_college_exists
+    and_eligible_college_exists
+
+    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    expect(page).to have_link("Start now")
+    click_link "Start now"
+
+    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_content("Which FE provider are you employed by?")
+    fill_in "Which FE provider are you employed by?", with: ineligible_college.name
+    within("#claim-provision-search-field__listbox") do
+      sleep(1) # seems to aid in success, as if click happens before event is bound
+      find("li", text: ineligible_college.name).click
+    end
+    click_button "Continue"
+
+    expect(page).to have_content("Select the college you teach at")
+    choose ineligible_college.name
+    click_button "Continue"
+
+    expect(page).to have_content("The further education (FE) provider you have entered is not eligible")
+    click_link "Change FE provider"
+
+    expect(page).to have_content("Which FE provider are you employed by?")
+    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    within("#claim-provision-search-field__listbox") do
+      sleep(1) # seems to aid in success, as if click happens before event is bound
+      find("li", text: eligible_college.name).click
+    end
+    click_button "Continue"
+
+    expect(page).to have_content("Select the college you teach at")
+    choose eligible_college.name
+    click_button "Continue"
+
+    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
+  end
+
+  scenario "when closed FE provider selected" do
+    when_further_education_payments_journey_configuration_exists
+    and_closed_eligible_college_exists
+
+    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    expect(page).to have_link("Start now")
+    click_link "Start now"
+
+    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_content("Which FE provider are you employed by?")
+    fill_in "Which FE provider are you employed by?", with: closed_eligible_college.name
+    click_button "Continue"
+
+    expect(page).to have_content("Select the college you teach at")
+    choose closed_eligible_college.name
+    click_button "Continue"
+
+    expect(page).to have_content("The further education (FE) provider you have entered is not eligible")
+    click_link "Change FE provider"
+
+    expect(page).to have_content("Which FE provider are you employed by?")
+    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    click_button "Continue"
+
+    expect(page).to have_content("Select the college you teach at")
+    choose eligible_college.name
+    click_button "Continue"
+
+    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
+  end
+
+  scenario "when fixed term contract and just one academic term taught" do
+    when_further_education_payments_journey_configuration_exists
+    and_eligible_college_exists
+
+    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    expect(page).to have_link("Start now")
+    click_link "Start now"
+
+    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_content("Which FE provider are you employed by?")
+    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    click_button "Continue"
+
+    expect(page).to have_content("Select the college you teach at")
+    choose eligible_college.name
+    click_button "Continue"
+
+    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
     choose("Fixed-term contract")
     click_button "Continue"
 
@@ -48,8 +161,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("No, it does not cover the full #{current_academic_year.to_s(:long)} academic year")
     click_button "Continue"
 
-    expect(page).to have_content("Have you taught at #{college.name} for at least one academic term?")
-    choose("No, I have not taught at #{college.name} for at least one academic term")
+    expect(page).to have_content("Have you taught at #{eligible_college.name} for at least one academic term?")
+    choose("No, I have not taught at #{eligible_college.name} for at least one academic term")
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible for a financial incentive payment yet")
@@ -57,7 +170,7 @@ RSpec.feature "Further education payments ineligible paths" do
 
   scenario "when lacking subjects" do
     when_further_education_payments_journey_configuration_exists
-    and_college_exists
+    and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
@@ -68,14 +181,14 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: college.name
+    fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select the college you teach at")
-    choose college.name
+    choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{college.name}?")
+    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
     choose "Permanent contract"
     click_button "Continue"
 
@@ -97,7 +210,7 @@ RSpec.feature "Further education payments ineligible paths" do
 
   scenario "when variable contract and just one academic term taught" do
     when_further_education_payments_journey_configuration_exists
-    and_college_exists
+    and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
@@ -108,19 +221,19 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: college.name
+    fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select the college you teach at")
-    choose college.name
+    choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{college.name}?")
+    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
     choose("Variable hours contract")
     click_button "Continue"
 
-    expect(page).to have_content("Have you taught at #{college.name} for at least one academic term?")
-    choose("No, I have not taught at #{college.name} for at least one academic term")
+    expect(page).to have_content("Have you taught at #{eligible_college.name} for at least one academic term?")
+    choose("No, I have not taught at #{eligible_college.name} for at least one academic term")
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible for a financial incentive payment yet")
@@ -128,7 +241,7 @@ RSpec.feature "Further education payments ineligible paths" do
 
   scenario "when teaches non eligible course in applicable subject area" do
     when_further_education_payments_journey_configuration_exists
-    and_college_exists
+    and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
@@ -139,14 +252,14 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: college.name
+    fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select the college you teach at")
-    choose college.name
+    choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{college.name}?")
+    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
     choose "Permanent contract"
     click_button "Continue"
 
@@ -172,6 +285,7 @@ RSpec.feature "Further education payments ineligible paths" do
 
   scenario "when not a recent FE teacher" do
     when_further_education_payments_journey_configuration_exists
+    and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
@@ -182,18 +296,18 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: college.name
+    fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select the college you teach at")
-    choose college.name
+    choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{college.name}?")
+    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
     choose("Permanent contract")
     click_button "Continue"
 
-    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
+    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{eligible_college.name} during the current term?")
     choose("More than 12 hours per week")
     click_button "Continue"
 
@@ -207,6 +321,7 @@ RSpec.feature "Further education payments ineligible paths" do
 
   scenario "when teacher is subject to performance measures" do
     when_further_education_payments_journey_configuration_exists
+    and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
@@ -217,17 +332,18 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: college.name
+    fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select the college you teach at")
-    choose college.name
+    choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{college.name}?")
+    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
     choose "Permanent contract"
     click_button "Continue"
-    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
+
+    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{eligible_college.name} during the current term?")
     choose "More than 12 hours per week"
     click_button "Continue"
 
@@ -271,6 +387,7 @@ RSpec.feature "Further education payments ineligible paths" do
 
   scenario "when teacher is subject to disciplinary action" do
     when_further_education_payments_journey_configuration_exists
+    and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
@@ -281,18 +398,18 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: college.name
+    fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select the college you teach at")
-    choose college.name
+    choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{college.name}?")
+    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
     choose "Permanent contract"
     click_button "Continue"
 
-    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
+    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{eligible_college.name} during the current term?")
     choose "More than 12 hours per week"
     click_button "Continue"
 
@@ -336,6 +453,7 @@ RSpec.feature "Further education payments ineligible paths" do
 
   scenario "when lacks teaching qualification and no enrol plan" do
     when_further_education_payments_journey_configuration_exists
+    and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
@@ -346,18 +464,18 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: college.name
+    fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select the college you teach at")
-    choose college.name
+    choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{college.name}?")
+    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
     choose "Permanent contract"
     click_button "Continue"
 
-    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
+    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{eligible_college.name} during the current term?")
     choose "More than 12 hours per week"
     click_button "Continue"
 
@@ -391,6 +509,7 @@ RSpec.feature "Further education payments ineligible paths" do
 
   scenario "when permanent contract and not enough hours" do
     when_further_education_payments_journey_configuration_exists
+    and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
@@ -401,18 +520,18 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: college.name
+    fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select the college you teach at")
-    choose college.name
+    choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{college.name}?")
+    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
     choose "Permanent contract"
     click_button "Continue"
 
-    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
+    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{eligible_college.name} during the current term?")
     choose("Less than 2.5 hours per week")
     click_button "Continue"
 
@@ -422,6 +541,7 @@ RSpec.feature "Further education payments ineligible paths" do
 
   scenario "when fixed-term contract and not enough hours" do
     when_further_education_payments_journey_configuration_exists
+    and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
@@ -432,14 +552,14 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: college.name
+    fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select the college you teach at")
-    choose college.name
+    choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{college.name}?")
+    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
     choose "Fixed-term contract"
     click_button "Continue"
 
@@ -447,12 +567,12 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "Yes, it covers the full #{current_academic_year.to_s(:long)} academic year"
     click_button "Continue"
 
-    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
+    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{eligible_college.name} during the current term?")
     choose "More than 12 hours per week"
     click_button "Continue"
 
-    expect(page).to have_content("Are you timetabled to teach at least 2.5 hours per week at #{college.name} next term?")
-    choose("No, I’m not timetabled to teach at least 2.5 hours per week at #{college.name} next term")
+    expect(page).to have_content("Are you timetabled to teach at least 2.5 hours per week at #{eligible_college.name} next term?")
+    choose("No, I’m not timetabled to teach at least 2.5 hours per week at #{eligible_college.name} next term")
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible")
@@ -461,6 +581,7 @@ RSpec.feature "Further education payments ineligible paths" do
 
   scenario "when variable contract and not enough hours" do
     when_further_education_payments_journey_configuration_exists
+    and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
@@ -471,27 +592,27 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: college.name
+    fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select the college you teach at")
-    choose college.name
+    choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{college.name}?")
+    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
     choose("Variable hours contract")
     click_button "Continue"
 
-    expect(page).to have_content("Have you taught at #{college.name} for at least one academic term?")
-    choose("Yes, I have taught at #{college.name} for at least one academic term")
+    expect(page).to have_content("Have you taught at #{eligible_college.name} for at least one academic term?")
+    choose("Yes, I have taught at #{eligible_college.name} for at least one academic term")
     click_button "Continue"
 
-    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
+    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{eligible_college.name} during the current term?")
     choose("More than 12 hours per week")
     click_button "Continue"
 
-    expect(page).to have_content("Are you timetabled to teach at least 2.5 hours per week at #{college.name} next term?")
-    choose("No, I’m not timetabled to teach at least 2.5 hours per week at #{college.name} next term")
+    expect(page).to have_content("Are you timetabled to teach at least 2.5 hours per week at #{eligible_college.name} next term?")
+    choose("No, I’m not timetabled to teach at least 2.5 hours per week at #{eligible_college.name} next term")
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible")
@@ -500,6 +621,7 @@ RSpec.feature "Further education payments ineligible paths" do
 
   scenario "when less that 50% teaching hours to FE" do
     when_further_education_payments_journey_configuration_exists
+    and_eligible_college_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
@@ -510,18 +632,18 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: college.name
+    fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select the college you teach at")
-    choose college.name
+    choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{college.name}?")
+    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
     choose("Permanent contract")
     click_button "Continue"
 
-    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
+    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{eligible_college.name} during the current term?")
     choose("More than 12 hours per week")
     click_button "Continue"
 
@@ -549,7 +671,15 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_content("half of your timetabled teaching hours must include")
   end
 
-  def and_college_exists
-    college
+  def and_ineligible_college_exists
+    ineligible_college
+  end
+
+  def and_eligible_college_exists
+    eligible_college
+  end
+
+  def and_closed_eligible_college_exists
+    closed_eligible_college
   end
 end

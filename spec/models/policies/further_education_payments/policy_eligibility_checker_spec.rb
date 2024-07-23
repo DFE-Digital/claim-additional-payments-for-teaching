@@ -2,8 +2,14 @@ require "rails_helper"
 
 describe Policies::FurtherEducationPayments::PolicyEligibilityChecker do
   let(:answers) do
-    build(:further_education_payments_answers)
+    build(
+      :further_education_payments_answers,
+      school_id: eligible_college.id
+    )
   end
+
+  let(:ineligible_college) { create(:school, :further_education) }
+  let(:eligible_college) { create(:school, :further_education, :fe_eligible) }
 
   subject { described_class.new(answers: answers) }
 
@@ -20,9 +26,28 @@ describe Policies::FurtherEducationPayments::PolicyEligibilityChecker do
       end
     end
 
+    context "when ineligible FE provider selected" do
+      let(:answers) do
+        build(
+          :further_education_payments_answers,
+          school_id: ineligible_college.id
+        )
+      end
+
+      it "is ineligble as :lack_teaching_responsibilities" do
+        expect(subject).to be_ineligible
+        expect(subject.status).to eql(:ineligible)
+        expect(subject.ineligibility_reason).to eql(:fe_provider)
+      end
+    end
+
     context "when have not taught for at least one academic term" do
       let(:answers) do
-        build(:further_education_payments_answers, taught_at_least_one_term: false)
+        build(
+          :further_education_payments_answers,
+          school_id: eligible_college.id,
+          taught_at_least_one_term: false
+        )
       end
 
       it "is ineligble as :must_teach_at_least_one_term" do
@@ -34,7 +59,11 @@ describe Policies::FurtherEducationPayments::PolicyEligibilityChecker do
 
     context "when ineligible as lacking subjects taught" do
       let(:answers) do
-        build(:further_education_payments_answers, subjects_taught: ["none"])
+        build(
+          :further_education_payments_answers,
+          school_id: eligible_college.id,
+          subjects_taught: ["none"]
+        )
       end
 
       it "is ineligble as :subject" do
@@ -48,6 +77,7 @@ describe Policies::FurtherEducationPayments::PolicyEligibilityChecker do
       let(:answers) do
         build(
           :further_education_payments_answers,
+          school_id: eligible_college.id,
           subjects_taught: ["building_construction"],
           building_construction_courses: ["none"]
         )

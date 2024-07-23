@@ -62,11 +62,7 @@ module Journeys
       ).freeze
 
       def self.start_page_url
-        if Rails.env.production?
-          "https://www.example.com" # TODO: update to correct guidance
-        else
-          Rails.application.routes.url_helpers.landing_page_path("further-education-payments")
-        end
+        Rails.application.routes.url_helpers.landing_page_path("further-education-payments")
       end
 
       attr_reader :journey_session

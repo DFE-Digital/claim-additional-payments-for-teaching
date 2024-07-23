@@ -6,13 +6,13 @@ RSpec.describe Journeys::FurtherEducationPayments::FurtherEducationProvisionSear
   let(:college) { create(:school) }
 
   let(:provision_search) { nil }
-  let(:school_id) { nil }
+  let(:possible_school_id) { nil }
 
   let(:params) do
     ActionController::Parameters.new(
       claim: {
         provision_search:,
-        school_id:
+        possible_school_id:
       }
     )
   end
@@ -62,12 +62,12 @@ RSpec.describe Journeys::FurtherEducationPayments::FurtherEducationProvisionSear
       end
     end
 
-    context "when school_id supplied" do
-      let(:school_id) { college.id }
+    context "when possible_school_id supplied" do
+      let(:possible_school_id) { college.id }
 
-      it "updates the journey session with school_id" do
+      it "updates the journey session with possible_school_id" do
         expect { expect(subject.save).to be(true) }.to(
-          change { journey_session.reload.answers.school_id }.to(school_id)
+          change { journey_session.reload.answers.possible_school_id }.to(possible_school_id)
         )
       end
     end

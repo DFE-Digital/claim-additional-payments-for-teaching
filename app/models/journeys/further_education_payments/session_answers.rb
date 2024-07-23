@@ -3,6 +3,7 @@ module Journeys
     class SessionAnswers < Journeys::SessionAnswers
       attribute :teaching_responsibilities, :boolean
       attribute :provision_search, :string
+      attribute :possible_school_id, :string # GUID
       attribute :school_id, :string # GUID
       attribute :contract_type, :string
       attribute :fixed_term_full_year, :boolean
@@ -29,7 +30,15 @@ module Journeys
       end
 
       def school
+        return unless school_id
+
         @school ||= School.find(school_id)
+      end
+
+      def possible_school
+        return unless possible_school_id
+
+        @possible_school ||= School.find(possible_school_id)
       end
 
       def teaching_responsibilities?
@@ -74,6 +83,27 @@ module Journeys
 
       def hours_teaching_eligible_subjects?
         !!hours_teaching_eligible_subjects
+      end
+
+      def eligible_fe_provider?
+        return unless school
+
+        EligibleFeProvider
+          .where(academic_year: AcademicYear.current)
+          .where(ukprn: school.ukprn)
+          .exists?
+      end
+
+      def ineligible_fe_provider?
+        return unless school
+
+        !eligible_fe_provider?
+      end
+
+      def fe_provider_closed?
+        return unless school
+
+        school.closed?
       end
     end
   end

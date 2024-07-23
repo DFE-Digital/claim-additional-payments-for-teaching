@@ -1,9 +1,9 @@
 module Journeys
   module FurtherEducationPayments
     class SelectProvisionForm < Form
-      attribute :school_id, :string # school GUID
+      attribute :possible_school_id, :string # school GUID
 
-      validates :school_id, presence: {message: i18n_error_message(:blank)}
+      validates :possible_school_id, presence: {message: i18n_error_message(:blank)}
 
       def radio_options
         results
@@ -12,7 +12,7 @@ module Journeys
       def save
         return unless valid?
 
-        journey_session.answers.assign_attributes(school_id:)
+        journey_session.answers.assign_attributes(school_id: possible_school_id)
         journey_session.save!
 
         true
@@ -21,10 +21,10 @@ module Journeys
       private
 
       def results
-        @results ||= if journey_session.answers.school_id.present?
-          School.open.fe_only.where(id: school_id)
+        @results ||= if journey_session.answers.possible_school_id.present?
+          School.fe_only.where(id: possible_school_id)
         else
-          School.open.fe_only.search(provision_search)
+          School.fe_only.search(provision_search)
         end
       end
 
