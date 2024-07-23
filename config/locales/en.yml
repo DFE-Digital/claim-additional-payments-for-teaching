@@ -201,6 +201,12 @@ en:
     address: "address"
     full_name: "Full name"
   forms:
+    teacher_reference_number:
+      questions:
+        teacher_reference_number: "What is your teacher reference number (TRN)?"
+      errors:
+        blank: "Enter your teacher reference number"
+        length: "Teacher reference number must be 7 digits long"
     gender:
       questions:
         payroll_gender: "How is your gender recorded on your school’s payroll system?"
@@ -254,6 +260,21 @@ en:
       errors:
         select_email: Select an option to indicate whether the email is correct or not
         invalid_email: Invalid email address. Please select a different email address
+    email_address:
+      errors:
+        presence: "Enter an email address"
+        format: "Enter an email address in the correct format, like name@example.com"
+        length: "Email address must be 256 characters or less"
+    mobile_number:
+      errors:
+        invalid: "Enter a mobile number, like 07700 900 982 or +44 7700 900 982"
+    claim_submission:
+      errors:
+        email_verified: "You must verify your email address before you can submit your claim"
+        email_address: "Enter an email address"
+        ineligible: "You’re not eligible for this payment"
+        mobile_number_verified: "You must verify your mobile number before you can submit your claim"
+        already_submitted: "You have already submitted this claim"
   student_loans:
     forms:
       claim_school:
@@ -264,13 +285,6 @@ en:
           enter_a_school_or_postcode: "Enter a school or postcode"
           select_a_school: "Select a school from the list or search again for a different school"
           school_not_found: "School not found"
-      claim_submission_form:
-        errors:
-          email_verified: "You must verify your email address before you can submit your claim"
-          email_address: "Enter an email address"
-          ineligible: "You’re not eligible for this payment"
-          mobile_number_verified: "You must verify your mobile number before you can submit your claim"
-          already_submitted: "You have already submitted this claim"
       current_school:
         questions:
           current_school_search: "Which school are you currently employed to teach at?"
@@ -280,11 +294,6 @@ en:
           select_the_school_you_teach_at: "Select the school you teach at"
           the_selected_school_is_closed: "The selected school is closed"
           school_not_found: "School not found"
-      email_address:
-        errors:
-          presence: "Enter an email address"
-          format: "Enter an email address in the correct format, like name@example.com"
-          length: "Email address must be 256 characters or less"
       leadership_position:
         questions:
           leadership_position: "Were you employed in a leadership position between %{financial_year}?"
@@ -294,9 +303,6 @@ en:
             leader role."
         errors:
           inclusion: "Select yes if you were employed in a leadership position"
-      mobile_number:
-        errors:
-          invalid: "Enter a mobile number, like 07700 900 982 or +44 7700 900 982"
       mostly_performed_leadership_duties:
         questions:
           mostly_performed_leadership_duties:
@@ -346,12 +352,6 @@ en:
           select_which_school_currently:
             Select if you still work at %{school_name}, another school or no longer teach in England
           select_are_you_still_employed: Select yes if you are still employed to teach at a school in England
-      teacher_reference_number:
-        questions:
-          teacher_reference_number: "What is your teacher reference number (TRN)?"
-        errors:
-          blank: "Enter your teacher reference number"
-          length: "Teacher reference number must be 7 digits long"
       qualification_details:
         errors:
           qualifications_details_check: "Select yes if your qualification details are correct"
@@ -415,13 +415,6 @@ en:
             confirmed their %{bank_or_building_society} details?"
   additional_payments: &additional_payments
     forms:
-      claim_submission_form:
-        errors:
-          email_verified: "You must verify your email address before you can submit your claim"
-          email_address: "Enter an email address"
-          ineligible: "You’re not eligible for this payment"
-          mobile_number_verified: "You must verify your mobile number before you can submit your claim"
-          already_submitted: "You have already submitted this claim"
       correct_school:
         questions:
           which_school: "Which school do you teach at?"
@@ -434,18 +427,10 @@ en:
           select_the_school_you_teach_at: "Select the school you teach at"
           the_selected_school_is_closed: "The selected school is closed"
           school_not_found: "School not found"
-      email_address:
-        errors:
-          presence: "Enter an email address"
-          format: "Enter an email address in the correct format, like name@example.com"
-          length: "Email address must be 256 characters or less"
       email_verification:
         errors:
           one_time_password:
             invalid: An error occured while validating the passcode, please try generating a new one
-      mobile_number:
-        errors:
-          invalid: "Enter a mobile number, like 07700 900 982 or +44 7700 900 982"
       nqt_in_academic_year_after_itt:
         errors:
           inclusion: Select yes if you are currently teaching as a qualified teacher
@@ -548,12 +533,6 @@ en:
           employed_as_supply_teacher: Are you currently employed as a supply teacher?
         errors:
           inclusion: Select yes if you are a supply teacher
-      teacher_reference_number:
-        questions:
-          teacher_reference_number: "What is your teacher reference number (TRN)?"
-        errors:
-          blank: "Enter your teacher reference number"
-          length: "Teacher reference number must be 7 digits long"
       teaching_subject_now:
         questions:
           teaching_subject_now: "Do you spend at least half of your contracted hours teaching eligible subjects?"
@@ -795,6 +774,8 @@ en:
         visa_type: "Visa type"
         date_of_entry: "Date of entry"
       task_questions:
+        matching_details:
+          title: "Is this claim still valid despite having matching details with other claims?"
         identity_confirmation:
           title: "Did %{claim_full_name} submit the claim?"
         visa:
@@ -813,9 +794,29 @@ en:
     landing_page: Find out if you are eligible for any incentive payments for further education teachers
     claim_description: for further education payments
     journey_name: Claim incentive payments for further education teachers
-    feedback_email: "fe-levellingup.premiumpayments@education.gov.uk"
-    support_email_address: "fe-levellingup.premiumpayments@education.gov.uk"
+    feedback_email: "FE-Levellingup.PremiumPayments@education.gov.uk"
+    support_email_address: "FE-Levellingup.PremiumPayments@education.gov.uk"
+    claim_subject: "Further education payment"
     forms:
+      ineligible:
+        courses:
+          heading: You are not eligible
+        lack_teaching_responsibilities:
+          heading: You are not eligible
+        lacks_teacher_qualification_or_enrolment:
+          heading: You are not eligible
+        must_at_least_half_hours_teaching_fe:
+          heading: You are not eligible
+        must_be_recent_further_education_teacher:
+          heading: You are not eligible
+        must_teach_at_least_one_term:
+          heading: You are not eligible for a financial incentive payment yet
+        subject_to_problematic_actions:
+          heading: You are not eligible
+        ineligible_teaching_less_than_2_5:
+          heading: You are not eligible
+        teaching_less_than_2_5_next_term:
+          heading: You are not eligible
       teaching_responsibilities:
         question: Are you a member of staff with teaching responsibilities?
         errors:
@@ -826,6 +827,7 @@ en:
           blank: Enter a college name or postcode
           min_length: Enter a college name or postcode that is at least 3 characters long
       select_provision:
+        heading: Select the college you teach at
         errors:
           blank: Select the college you teach at
       contract_type:
@@ -859,6 +861,14 @@ en:
           less_than_2_5: Less than 2.5 hours per week
         errors:
           inclusion: Select how many hours per week you are timetabled to teach during the current term
+      teaching_hours_per_week_next_term:
+        question: Are you timetabled to teach at least 2.5 hours per week at %{school_name} next term?
+        hint: If you are unsure, you should speak to HR or apply when you know your arrangements for next term.
+        options:
+          at_least_2_5: Yes, I am timetabled to teach at least 2.5 hours per week at %{school_name} next term
+          less_than_2_5: No, I’m not timetabled to teach at least 2.5 hours per week at %{school_name} next term
+        errors:
+          inclusion: Select yes if you are timetabled to teach at least 2.5 hours next term otherwise select you are not
       further_education_teaching_start_year:
         question: Which academic year did you start teaching in further education (FE) in England?
         options:
@@ -870,16 +880,89 @@ en:
         question: Which subject areas do you teach?
         hint: Select all that apply
         options:
-          building_and_construction: Building and construction
+          building_construction: Building and construction
           chemistry: Chemistry
           computing: Computing, including digital and ICT
           early_years: Early years
-          engineering_and_manufacturing: Engineering and manufacturing, including transport engineering and electronics
-          mathematics: Mathematics
+          engineering_manufacturing: Engineering and manufacturing, including transport engineering and electronics
+          maths: Maths
           physics: Physics
           none: I do not teach any of these subjects
         errors:
           inclusion: Select the subject areas you teach in or select you do not teach any of the listed subject areas
+      courses: &courses
+        hint: |
+          <p>If you are unsure whether the course(s) you teach is eligible, please email: <br/>%{email}</p>
+          <p>Select all that apply</p>
+        errors:
+          inclusion: Select all the courses you teach otherwise select you do not teach any of these courses
+      building_construction_courses:
+        <<: *courses
+        question: Which building and construction courses do you teach?
+        options:
+          esfa_buildingconstruction: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
+          tlevel_building: T Level in building services engineering for construction
+          tlevel_onsiteconstruction: T Level in onsite construction
+          tlevel_design_surveying: T Level in design, surveying and planning for construction
+          level2_3_apprenticeship: Level 2 or level 3 apprenticeships in the %{link}
+          none: I do not teach any of these courses
+      chemistry_courses:
+        <<: *courses
+        question: Which chemistry courses do you teach?
+        options:
+          alevel_chemistry: A or AS level chemistry
+          gcse_chemistry: GCSE chemistry
+          ib_certificate_chemistry: International baccalaureate middle years programme or certificate in chemistry
+          none: I do not teach any of these courses
+      computing_courses:
+        <<: *courses
+        question: Which computing courses do you teach?
+        options:
+          esfa_digitalpractitioners: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
+          esfa_digitalusers: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
+          digitalskills_quals: Digital functional skills qualifications and essential digital skills qualifications
+          tlevel_digitalsupport: T Level in digital support services
+          tlevel_digitalbusiness: T Level in digital business services
+          tlevel_digitalproduction: T Level in digital production, design and development
+          ib_certificate_compsci: International baccalaureate certificate in computer science
+          level2_3_apprenticeship: Level 2 or level 3 apprenticeships in the %{link}
+          none: I do not teach any of these courses
+      early_years_courses:
+        <<: *courses
+        question: Which early years courses do you teach?
+        options:
+          eylevel2: Early years practitioner (level 2) apprenticeship
+          eylevel3: Early years educator (level 3) apprenticeship
+          eytlevel: T Level in education and early years (early years educator)
+          coursetoeyq: A course that leads to an %{link} which enables providers to count the recipient in staff:child ratios
+          none: I do not teach any of these courses
+      engineering_manufacturing_courses:
+        <<: *courses
+        question: Which engineering and manufacturing courses do you teach?
+        options:
+          esfa_engineering: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
+          esfa_manufacturing: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
+          esfa_transportation: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
+          tlevel_design: T Level in design and development for engineering and manufacturing
+          tlevel_maintenance: T Level in maintenance, installation and repair for engineering and manufacturing
+          tlevel_engineering: T Level in engineering, manufacturing, processing and control
+          level2_3_apprenticeship: Level 2 or level 3 apprenticeships in the %{link}
+          none: I do not teach any of these courses
+      maths_courses:
+        <<: *courses
+        question: Which maths courses do you teach?
+        options:
+          esfa: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
+          gcse_maths: Maths GCSE, functional skills qualifications and %{link} approved for teaching to 16 to 19-year-olds who meet the condition of funding
+          none: I do not teach any of these courses
+      physics_courses:
+        <<: *courses
+        question: Which physics courses do you teach?
+        options:
+          alevel_physics: A or AS level physics
+          gcse_physics: GCSE physics
+          ib_certificate_physics: International baccalaureate middle years programme or certificate in physics
+          none: I do not teach any of these courses
       teaching_qualification:
         question: Do you have a teaching qualification?
         hint: Your response will be noted for future claims. If you don’t have a teaching qualification yet, make sure that you enrol on one or complete one in the next 12 months.
@@ -908,10 +991,22 @@ en:
         question: Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?
         errors:
           inclusion: Select yes if at least half your timetabled teaching hours are spent teaching 16-19-year-olds, including those up to 25 with an Education, Health and Care Plan
+      eligible:
+        heading: You’re eligible for a financial incentive payment
+      gender:
+        questions:
+          payroll_gender: "How is your gender recorded on your employer’s payroll system?"
+        errors:
+          select_gender: "Select the gender recorded on your employer’s payroll system or select whether you do not know"
     check_your_answers:
       part_one:
         primary_heading: Check your answers
         confirmation_notice: By selecting continue you are confirming that, to the best of your knowledge, the details you are providing are correct.
+      heading_send_application: Now send your application
+      statement:
+        By submitting this you are confirming that, to the best of your knowledge, the details you are providing are
+        correct.
+      btn_text: Accept and send
   activerecord:
     errors:
       models:

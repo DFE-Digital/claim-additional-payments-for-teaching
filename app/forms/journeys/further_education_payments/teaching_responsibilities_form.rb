@@ -17,7 +17,7 @@ module Journeys
       end
 
       def save
-        return false unless valid?
+        return false if invalid?
 
         journey_session.answers.assign_attributes(teaching_responsibilities:)
         journey_session.save!

@@ -14,7 +14,7 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
     let(:contract_type) { "permanent" }
     let(:teaching_hours_per_week) { "more_than_12" }
     let(:further_education_teaching_start_year) { 2023 }
-    let(:subjects_taught) { ["chemistry", "mathematics"] }
+    let(:subjects_taught) { ["chemistry", "maths"] }
     let(:half_teaching_hours) { true }
     let(:teaching_qualification) { "yes" }
     let(:subject_to_formal_performance_action) { false }
@@ -44,7 +44,7 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
           ["What type of contract do you have with #{college.name}?", "Permanent contract", "contract-type"],
           ["On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?", "More than 12 hours per week", "teaching-hours-per-week"],
           ["Which academic year did you start teaching in further education (FE) in England?", "September 2023 to August 2024", "further-education-teaching-start-year"],
-          ["Which subject areas do you teach?", "<p class=\"govuk-body\">Chemistry</p><p class=\"govuk-body\">Mathematics</p>", "subjects-taught"],
+          ["Which subject areas do you teach?", "<p class=\"govuk-body\">Chemistry</p><p class=\"govuk-body\">Maths</p>", "subjects-taught"],
           ["Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?", "Yes", "half-teaching-hours"],
           ["Do you have a teaching qualification?", "Yes", "teaching-qualification"],
           ["Have any performance measures been started against you?", "No", "poor-performance"],
@@ -66,7 +66,7 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
     end
 
     context "subjects-taught - just one" do
-      let(:subjects_taught) { %w[building_and_construction] }
+      let(:subjects_taught) { %w[building_construction] }
 
       it {
         is_expected.to include([
@@ -78,12 +78,12 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
     end
 
     context "subjects-taught - all of them" do
-      let(:subjects_taught) { %w[building_and_construction chemistry computing early_years engineering_and_manufacturing mathematics physics] }
+      let(:subjects_taught) { %w[building_construction chemistry computing early_years engineering_manufacturing maths physics] }
 
       it {
         is_expected.to include([
           "Which subject areas do you teach?",
-          "<p class=\"govuk-body\">Building and construction</p><p class=\"govuk-body\">Chemistry</p><p class=\"govuk-body\">Computing, including digital and ICT</p><p class=\"govuk-body\">Early years</p><p class=\"govuk-body\">Engineering and manufacturing, including transport engineering and electronics</p><p class=\"govuk-body\">Mathematics</p><p class=\"govuk-body\">Physics</p>",
+          "<p class=\"govuk-body\">Building and construction</p><p class=\"govuk-body\">Chemistry</p><p class=\"govuk-body\">Computing, including digital and ICT</p><p class=\"govuk-body\">Early years</p><p class=\"govuk-body\">Engineering and manufacturing, including transport engineering and electronics</p><p class=\"govuk-body\">Maths</p><p class=\"govuk-body\">Physics</p>",
           "subjects-taught"
         ])
       }

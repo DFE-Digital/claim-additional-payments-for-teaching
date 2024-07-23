@@ -163,6 +163,28 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "#t" do
+    let(:params) { ActionController::Parameters.new({}) }
+
+    subject(:form) { GenderForm.new(journey:, journey_session:, params:) }
+
+    context "FE journey overrides gender form in en.yml" do
+      let(:journey) { Journeys::FurtherEducationPayments }
+
+      it "calls the i18n namespaced version" do
+        expect(form.t("questions.payroll_gender")).to eq("How is your gender recorded on your employer’s payroll system?")
+      end
+    end
+
+    context "TSLR journey uses the base gender form in en.yml" do
+      let(:journey) { Journeys::TeacherStudentLoanReimbursement }
+
+      it "calls the base version" do
+        expect(form.t("questions.payroll_gender")).to eq("How is your gender recorded on your school’s payroll system?")
+      end
+    end
+  end
+
   describe "#permitted_params" do
     let(:claim_params) { {first_name: "test-value"} }
 

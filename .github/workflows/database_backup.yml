@@ -1,0 +1,24 @@
+name: Backup Database to Azure Storage
+concurrency: build_and_deploy_main
+
+on:
+  workflow_dispatch:
+  schedule: # 03:00 UTC
+    - cron: "0 3 * * *"
+
+jobs:
+  backup:
+    name: Backup AKS Database (production)
+    runs-on: ubuntu-latest
+    environment: production-aks
+
+    steps:
+      - name: Backup postgres
+        uses: DFE-Digital/github-actions/backup-postgres@master
+        with:
+          storage-account: s189p01captdbbkppdsa
+          resource-group: s189p01-capt-pd-rg
+          app-name: claim-additional-payments-for-teaching-production-web
+          cluster: production
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          backup-file: capt_prod_$(date +"%F").sql
