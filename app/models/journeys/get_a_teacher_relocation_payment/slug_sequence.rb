@@ -5,6 +5,7 @@ module Journeys
         "application-route",
         "state-funded-secondary-school",
         "current-school",
+        "headteacher-details",
         "contract-details",
         "start-date",
         "subject",
@@ -16,7 +17,6 @@ module Journeys
       PERSONAL_DETAILS_SLUGS = [
         "nationality",
         "passport-number",
-        "headteacher-details",
         "personal-details",
         "postcode-search",
         "select-home-address",
