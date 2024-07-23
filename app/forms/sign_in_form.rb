@@ -21,7 +21,7 @@ class SignInForm < Form
 
   def onelogin_user_info_attributes=(attributes)
     onelogin_user_info.assign_attributes(
-      attributes || journey_session.answers.onelogin_user_info # TODO: store answers in journey_session
+      journey_session.answers.onelogin_user_info
     )
   end
 
