@@ -19,7 +19,7 @@ module Journeys
         engineering-manufacturing-courses
         maths-courses
         physics-courses
-        teaching-courses
+        hours-teaching-eligible-subjects
         half-teaching-hours
         teaching-qualification
         poor-performance
@@ -94,7 +94,7 @@ module Journeys
           end
 
           if answers.subjects_taught.exclude?("building_construction")
-            sequence.delete("building-and-construction-courses")
+            sequence.delete("building-construction-courses")
           end
 
           if answers.subjects_taught.exclude?("chemistry")

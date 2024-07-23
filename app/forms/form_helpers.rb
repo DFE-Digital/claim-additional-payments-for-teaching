@@ -9,7 +9,9 @@ module FormHelpers
   end
 
   def t(key, args = {})
-    base_key = :"forms.#{i18n_form_namespace}.#{key}"
+    i18n_form_namespace_dup = args.delete(:i18n_form_namespace) || i18n_form_namespace
+
+    base_key = :"forms.#{i18n_form_namespace_dup}.#{key}"
     I18n.t("#{i18n_namespace}.#{base_key}", default: base_key, **args)
   end
 

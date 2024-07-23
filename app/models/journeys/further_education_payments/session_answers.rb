@@ -18,6 +18,7 @@ module Journeys
       attribute :engineering_manufacturing_courses, default: []
       attribute :maths_courses, default: []
       attribute :physics_courses, default: []
+      attribute :hours_teaching_eligible_subjects, :boolean
       attribute :teaching_qualification, :string
       attribute :subject_to_formal_performance_action, :boolean
       attribute :subject_to_disciplinary_action, :boolean
@@ -69,6 +70,10 @@ module Journeys
 
       def less_than_half_hours_teaching_fe?
         half_teaching_hours == false
+      end
+
+      def hours_teaching_eligible_subjects?
+        !!hours_teaching_eligible_subjects
       end
     end
   end

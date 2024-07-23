@@ -1,10 +1,7 @@
 module Journeys
   module FurtherEducationPayments
     class ChemistryCoursesForm < Form
-      include ActionView::Helpers::UrlHelper
-      include ActionView::Helpers::OutputSafetyHelper
-      include GovukVisuallyHiddenHelper
-      include GovukLinkHelper
+      include CoursesHelper
 
       attribute :chemistry_courses, default: []
 
@@ -22,19 +19,19 @@ module Journeys
         [
           OpenStruct.new(
             id: "alevel_chemistry",
-            name: t("options.alevel_chemistry")
+            name: course_option_description("alevel_chemistry")
           ),
           OpenStruct.new(
             id: "gcse_chemistry",
-            name: t("options.gcse_chemistry")
+            name: course_option_description("gcse_chemistry")
           ),
           OpenStruct.new(
             id: "ib_certificate_chemistry",
-            name: t("options.ib_certificate_chemistry")
+            name: course_option_description("ib_certificate_chemistry")
           ),
           OpenStruct.new(
             id: "none",
-            name: t("options.none")
+            name: course_option_description("none")
           )
         ]
       end
