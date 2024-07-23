@@ -211,6 +211,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_10_080536) do
     t.string "passport_number"
     t.string "school_headteacher_name"
     t.uuid "current_school_id"
+    t.decimal "award_amount", precision: 7, scale: 2
     t.index ["current_school_id"], name: "index_irb_eligibilities_on_current_school_id"
   end
 

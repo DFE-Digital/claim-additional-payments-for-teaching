@@ -8,9 +8,7 @@ module Journeys
       end
 
       def calculate_award_amount(eligibility)
-        # NOOP
-        # This is just for compatibility with the AdditionalPaymentsForTeaching
-        # claim submission form.
+        eligibility.award_amount = Policies::InternationalRelocationPayments.award_amount
       end
 
       def generate_policy_options_provided
