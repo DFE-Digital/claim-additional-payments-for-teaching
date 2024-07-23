@@ -17,6 +17,10 @@ if Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")
   Rake::Task["db:fixtures:load"].invoke
 end
 
+if ENV["ENVIRONMENT_NAME"].start_with?("review")
+  SchoolDataImporterJob.perform_later if School.count < 100
+end
+
 if Rails.env.development?
   require "./lib/factory_helpers"
 
