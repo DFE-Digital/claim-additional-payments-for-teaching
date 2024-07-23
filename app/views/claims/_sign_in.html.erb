@@ -10,24 +10,28 @@
 
 <% if @form.logged_in_with_onelogin %>
   <p>
-    You are signed in with One Login as <strong><%= @form.onelogin_user_info.email %></strong>
+    Before you can continue your application, you'll need to prove your identity through GOV.UK One Login.
+  </p>
+  <p>
+    When you've proved your identity through GOV.UK One Login, you'll return to this service to complete your applciation.
   </p>
 <% elsif @form.identity_confirmed_with_onelogin %>
-  <p>
-    <strong><%= @form.first_name %> <%= @form.surname %></strong> - you have proved your identity
-  </p>
   <p>
     You can now continue your application
   </p>
 <% else %>
   <p>
-    You can sign in or set up a One Login account to make it easier to claim additional payments.
+  To continue your application, you'll need to create a GOV.UK One Login or sign in.
+  </p>
+  <p>
+    When you've signed in through GOV.UK One Login, your progress will be saved
+    and you'll be able to return to complete your application.
   </p>
 <% end %>
 
 <div class="govuk-button-group">
   <% if @form.logged_in_with_onelogin %>
-    <%= button_to "Prove your identity with One Login", "/auth/onelogin_identity", class: "govuk-button", method: :post %>
+    <%= button_to "Continue", "/auth/onelogin_identity", class: "govuk-button", method: :post %>
   <% elsif @form.identity_confirmed_with_onelogin %>
     <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
       <%= f.fields_for :onelogin_user_info do |ff| %>
@@ -40,6 +44,6 @@
       <%= f.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
     <% end %>
   <% else %>
-    <%= button_to "Continue with One Login", "/auth/onelogin", class: "govuk-button", method: :post %>
+    <%= button_to "Continue", "/auth/onelogin", class: "govuk-button", method: :post %>
   <% end %>
 </div>

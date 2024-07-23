@@ -136,10 +136,10 @@ module FeatureHelpers
 
   def sign_in_with_one_login
     expect(page).to have_content("Sign in with GOV.UK One Login")
-    click_button "Continue with One Login"
+    click_button "Continue"
 
     expect(page).to have_content("You've successfully signed in to GOV.UK One Login")
-    click_button "Prove your identity with One Login"
+    click_button "Continue"
 
     expect(page).to have_content("You've successfully proved your identity with GOV.UK One Login")
     click_button "Continue"
