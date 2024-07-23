@@ -1,6 +1,8 @@
 class OmniauthCallbacksController < ApplicationController
   include JourneyConcern
 
+  ONELOGIN_JWT_CORE_IDENTITY_HASH_KEY = "https://vocab.account.gov.uk/v1/coreIdentityJWT".freeze
+
   def callback
     auth = request.env["omniauth.auth"]
 
@@ -40,8 +42,6 @@ class OmniauthCallbacksController < ApplicationController
   end
 
   private
-
-  ONELOGIN_JWT_CORE_IDENTITY_HASH_KEY = "https://vocab.account.gov.uk/v1/coreIdentityJWT"
 
   def current_journey_routing_name
     if session[:current_journey_routing_name].present?
