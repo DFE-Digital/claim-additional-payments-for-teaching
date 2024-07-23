@@ -42,11 +42,7 @@ module Journeys
       end
 
       def changed_answer?
-        if possible_school_id.present?
-          possible_school_id != journey_session.answers.school_id
-        else
-          true
-        end
+        possible_school_id != journey_session.answers.school_id
       end
 
       def reset_dependent_answers
