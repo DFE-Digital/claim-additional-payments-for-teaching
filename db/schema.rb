@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_27_145713) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_10_080536) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -173,6 +173,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_27_145713) do
     t.string "teacher_reference_number", limit: 11
     t.index ["current_school_id"], name: "index_early_career_payments_eligibilities_on_current_school_id"
     t.index ["teacher_reference_number"], name: "index_ecp_eligibility_trn"
+  end
+
+  create_table "eligible_fe_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "ukprn", null: false
+    t.text "academic_year", null: false
+    t.decimal "max_award_amount", precision: 7, scale: 2
+    t.decimal "lower_award_amount", precision: 7, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["academic_year", "ukprn"], name: "index_eligible_fe_providers_on_academic_year_and_ukprn"
   end
 
   create_table "file_uploads", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
