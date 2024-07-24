@@ -817,6 +817,8 @@ en:
           heading: You are not eligible
         teaching_less_than_2_5_next_term:
           heading: You are not eligible
+        fe_provider:
+          heading: The further education (FE) provider you have entered is not eligible
       teaching_responsibilities:
         question: Are you a member of staff with teaching responsibilities?
         errors:
@@ -904,7 +906,7 @@ en:
           tlevel_building: T Level in building services engineering for construction
           tlevel_onsiteconstruction: T Level in onsite construction
           tlevel_design_surveying: T Level in design, surveying and planning for construction
-          level2_3_apprenticeship: Level 2 or level 3 apprenticeships in the %{link}
+          level2_3_apprenticeship: Level 2 or level 3 apprenticeships in the %{link}
           none: I do not teach any of these courses
       chemistry_courses:
         <<: *courses
@@ -918,14 +920,14 @@ en:
         <<: *courses
         question: Which computing courses do you teach?
         options:
-          esfa_digitalpractitioners: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
-          esfa_digitalusers: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
+          esfa_digitalpractitioners: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
+          esfa_digitalusers: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
           digitalskills_quals: Digital functional skills qualifications and essential digital skills qualifications
           tlevel_digitalsupport: T Level in digital support services
           tlevel_digitalbusiness: T Level in digital business services
           tlevel_digitalproduction: T Level in digital production, design and development
           ib_certificate_compsci: International baccalaureate certificate in computer science
-          level2_3_apprenticeship: Level 2 or level 3 apprenticeships in the %{link}
+          level2_3_apprenticeship: Level 2 or level 3 apprenticeships in the %{link}
           none: I do not teach any of these courses
       early_years_courses:
         <<: *courses
@@ -934,26 +936,26 @@ en:
           eylevel2: Early years practitioner (level 2) apprenticeship
           eylevel3: Early years educator (level 3) apprenticeship
           eytlevel: T Level in education and early years (early years educator)
-          coursetoeyq: A course that leads to an %{link} which enables providers to count the recipient in staff:child ratios
+          coursetoeyq: A course that leads to an %{link} which enables providers to count the recipient in staff:child ratios
           none: I do not teach any of these courses
       engineering_manufacturing_courses:
         <<: *courses
         question: Which engineering and manufacturing courses do you teach?
         options:
-          esfa_engineering: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
-          esfa_manufacturing: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
-          esfa_transportation: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
+          esfa_engineering: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
+          esfa_manufacturing: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
+          esfa_transportation: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
           tlevel_design: T Level in design and development for engineering and manufacturing
           tlevel_maintenance: T Level in maintenance, installation and repair for engineering and manufacturing
           tlevel_engineering: T Level in engineering, manufacturing, processing and control
-          level2_3_apprenticeship: Level 2 or level 3 apprenticeships in the %{link}
+          level2_3_apprenticeship: Level 2 or level 3 apprenticeships in the %{link}
           none: I do not teach any of these courses
       maths_courses:
         <<: *courses
         question: Which maths courses do you teach?
         options:
-          esfa: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
-          gcse_maths: Maths GCSE, functional skills qualifications and %{link} approved for teaching to 16 to 19-year-olds who meet the condition of funding
+          esfa: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
+          gcse_maths: Maths GCSE, functional skills qualifications and %{link} approved for teaching to 16 to 19-year-olds who meet the condition of funding
           none: I do not teach any of these courses
       physics_courses:
         <<: *courses
@@ -998,6 +1000,10 @@ en:
           payroll_gender: "How is your gender recorded on your employer’s payroll system?"
         errors:
           select_gender: "Select the gender recorded on your employer’s payroll system or select whether you do not know"
+      hours_teaching_eligible_subjects:
+        question: Do you spend at least half of your timetabled teaching hours teaching these eligible courses?
+        errors:
+          inclusion: Select yes if you spend at least half of your timetabled teaching hours teaching these eligible courses
     check_your_answers:
       part_one:
         primary_heading: Check your answers

@@ -68,6 +68,7 @@ describe "ineligible route: completing the form" do
         )
         and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
         and_i_complete_the_current_school_step(create(:school, phase: :secondary))
+        and_i_complete_the_headteacher_step
         and_i_complete_the_contract_details_step_with(option: "No")
         then_i_see_the_ineligible_page
       end
@@ -81,6 +82,7 @@ describe "ineligible route: completing the form" do
         )
         and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
         and_i_complete_the_current_school_step(create(:school, phase: :secondary))
+        and_i_complete_the_headteacher_step
         and_i_complete_the_contract_details_step_with(option: "Yes")
         and_i_complete_the_contract_start_date_step_with(
           date: Policies::InternationalRelocationPayments::PolicyEligibilityChecker
@@ -98,6 +100,7 @@ describe "ineligible route: completing the form" do
         )
         and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
         and_i_complete_the_current_school_step(create(:school, phase: :secondary))
+        and_i_complete_the_headteacher_step
         and_i_complete_the_contract_details_step_with(option: "Yes")
         and_i_complete_the_contract_start_date_step_with(
           date: contract_start_date
@@ -115,6 +118,7 @@ describe "ineligible route: completing the form" do
         )
         and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
         and_i_complete_the_current_school_step(create(:school, phase: :secondary))
+        and_i_complete_the_headteacher_step
         and_i_complete_the_contract_details_step_with(option: "Yes")
         and_i_complete_the_contract_start_date_step_with(
           date: contract_start_date
@@ -133,6 +137,7 @@ describe "ineligible route: completing the form" do
         )
         and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
         and_i_complete_the_current_school_step(create(:school, phase: :secondary))
+        and_i_complete_the_headteacher_step
         and_i_complete_the_contract_details_step_with(option: "Yes")
         and_i_complete_the_contract_start_date_step_with(
           date: contract_start_date

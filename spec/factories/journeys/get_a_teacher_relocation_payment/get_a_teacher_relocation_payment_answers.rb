@@ -70,7 +70,7 @@ FactoryBot.define do
       bank_account_number { rand(10000000..99999999) }
     end
 
-    trait :with_employment_details do
+    trait :with_headteacher_details do
       school_headteacher_name { "Seymour Skinner" }
     end
 
@@ -78,6 +78,7 @@ FactoryBot.define do
       with_teacher_application_route
       with_state_funded_secondary_school
       with_current_school
+      with_headteacher_details
       with_one_year_contract
       with_start_date
       with_visa

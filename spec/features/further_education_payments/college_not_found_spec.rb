@@ -38,8 +38,4 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Which FE provider are you employed by?")
     expect(page).to have_content("No results match that search term. Try again.")
   end
-
-  def when_further_education_payments_journey_configuration_exists
-    create(:journey_configuration, :further_education_payments)
-  end
 end

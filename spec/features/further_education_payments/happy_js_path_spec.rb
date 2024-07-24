@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Further education payments", js: true, flaky: true do
-  let(:college) { create(:school, :further_education) }
+  let(:college) { create(:school, :further_education, :fe_eligible) }
 
   scenario "happy js path" do
     when_further_education_payments_journey_configuration_exists
@@ -47,7 +47,9 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     check "T Level in building services engineering for construction"
     click_button "Continue"
 
-    expect(page).to have_content("FE teaching courses goes here")
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching these eligible courses?")
+    expect(page).to have_content("T Level in building services engineering for construction")
+    choose("Yes")
     click_button "Continue"
 
     expect(page).to have_content("Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?")
@@ -137,10 +139,6 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     click_on "Accept and send"
 
     expect(page).to have_content("You applied for a further education financial incentive payment")
-  end
-
-  def when_further_education_payments_journey_configuration_exists
-    create(:journey_configuration, :further_education_payments)
   end
 
   def and_college_exists

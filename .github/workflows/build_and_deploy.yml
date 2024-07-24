@@ -113,7 +113,7 @@ jobs:
         run: bundle exec rspec spec/smoke -t smoke:true -b
         env:
           RAILS_ENV: test
-          SMOKE_TEST_APP_HOST: ${{ env.APP_URL }}
+          SMOKE_TEST_APP_HOST: ${{ vars.SMOKE_TEST_APP_HOST }}
           BASIC_AUTH_USERNAME: ${{ secrets.BASIC_AUTH_USERNAME }}
           BASIC_AUTH_PASSWORD: ${{ secrets.BASIC_AUTH_PASSWORD }}
 
@@ -123,5 +123,7 @@ jobs:
         env:
           SLACK_COLOR: failure
           SLACK_TITLE: Failure deploying release to ${{ matrix.environment }}
-          SLACK_MESSAGE: Failure deploying release to ${{ matrix.environment }} - Docker tag ${{ needs.build.outputs.docker-image-tag }}
+          SLACK_MESSAGE:
+            Failure deploying release to ${{ matrix.environment }} - Docker tag ${{ needs.build.outputs.docker-image-tag
+            }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}

@@ -1,10 +1,7 @@
 module Journeys
   module FurtherEducationPayments
     class BuildingConstructionCoursesForm < Form
-      include ActionView::Helpers::UrlHelper
-      include ActionView::Helpers::OutputSafetyHelper
-      include GovukVisuallyHiddenHelper
-      include GovukLinkHelper
+      include CoursesHelper
 
       attribute :building_construction_courses, default: []
 
@@ -22,33 +19,27 @@ module Journeys
         [
           OpenStruct.new(
             id: "esfa_buildingconstruction",
-            name: t(
-              "options.esfa_buildingconstruction",
-              link: govuk_link_to("building and construction", "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=7", new_tab: true)
-            )
+            name: course_option_description("esfa_buildingconstruction")
           ),
           OpenStruct.new(
             id: "tlevel_building",
-            name: t("options.tlevel_building")
+            name: course_option_description("tlevel_building")
           ),
           OpenStruct.new(
             id: "tlevel_onsiteconstruction",
-            name: t("options.tlevel_onsiteconstruction")
+            name: course_option_description("tlevel_onsiteconstruction")
           ),
           OpenStruct.new(
             id: "tlevel_design_surveying",
-            name: t("options.tlevel_design_surveying")
+            name: course_option_description("tlevel_design_surveying")
           ),
           OpenStruct.new(
             id: "level2_3_apprenticeship",
-            name: t(
-              "options.level2_3_apprenticeship",
-              link: govuk_link_to("construction and the built environment occupational route", "https://occupational-maps.instituteforapprenticeships.org/maps/route/construction", new_tab: true)
-            )
+            name: course_option_description("level2_3_apprenticeship")
           ),
           OpenStruct.new(
             id: "none",
-            name: t("options.none")
+            name: course_option_description("none")
           )
         ]
       end

@@ -201,6 +201,7 @@ shared:
     - date_of_entry
     - nationality
     - current_school_id
+    - award_amount
   :schools:
     - id
     - urn
@@ -267,5 +268,13 @@ shared:
     - updated_at
   :further_education_payments_eligibilities:
     - id
+    - created_at
+    - updated_at
+  :eligible_fe_providers:
+    - id
+    - ukprn
+    - academic_year
+    - max_award_amount
+    - lower_award_amount
     - created_at
     - updated_at

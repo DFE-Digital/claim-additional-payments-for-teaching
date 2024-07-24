@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Further education payments" do
-  let(:college) { create(:school, :further_education) }
+  let(:college) { create(:school, :further_education, :fe_eligible) }
 
   scenario "happy path claim" do
     when_further_education_payments_journey_configuration_exists
@@ -73,7 +73,15 @@ RSpec.feature "Further education payments" do
     check "A or AS level physics"
     click_button "Continue"
 
-    expect(page).to have_content("FE teaching courses goes here")
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching these eligible courses?")
+    expect(page).to have_content("T Level in building services engineering for construction")
+    expect(page).to have_content("GCSE chemistry")
+    expect(page).to have_content("T Level in digital support services")
+    expect(page).to have_content("T Level in education and early years (early years educator)")
+    expect(page).to have_content("T Level in design and development for engineering and manufacturing")
+    expect(page).to have_content("ESFA-funded qualifications at level 3 and below in the")
+    expect(page).to have_content("A or AS level physics")
+    choose("Yes")
     click_button "Continue"
 
     expect(page).to have_content("Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?")
@@ -163,10 +171,6 @@ RSpec.feature "Further education payments" do
     click_on "Accept and send"
 
     expect(page).to have_content("You applied for a further education financial incentive payment")
-  end
-
-  def when_further_education_payments_journey_configuration_exists
-    create(:journey_configuration, :further_education_payments)
   end
 
   def and_college_exists

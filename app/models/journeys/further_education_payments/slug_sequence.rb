@@ -19,7 +19,7 @@ module Journeys
         engineering-manufacturing-courses
         maths-courses
         physics-courses
-        teaching-courses
+        hours-teaching-eligible-subjects
         half-teaching-hours
         teaching-qualification
         poor-performance
@@ -62,11 +62,7 @@ module Journeys
       ).freeze
 
       def self.start_page_url
-        if Rails.env.production?
-          "https://www.example.com" # TODO: update to correct guidance
-        else
-          Rails.application.routes.url_helpers.landing_page_path("further-education-payments")
-        end
+        Rails.application.routes.url_helpers.landing_page_path("further-education-payments")
       end
 
       attr_reader :journey_session
@@ -94,7 +90,7 @@ module Journeys
           end
 
           if answers.subjects_taught.exclude?("building_construction")
-            sequence.delete("building-and-construction-courses")
+            sequence.delete("building-construction-courses")
           end
 
           if answers.subjects_taught.exclude?("chemistry")
