@@ -105,6 +105,20 @@ module Journeys
 
         school.closed?
       end
+
+      def all_selected_courses_ineligible?
+        groups = subjects_taught.reject { |e| e == "none" }
+
+        return if groups.empty?
+
+        groups.all? do |subject|
+          public_send(:"#{subject}_courses").include?("none")
+        end
+      end
+
+      def less_than_half_hours_teaching_eligible_courses?
+        hours_teaching_eligible_subjects == false
+      end
     end
   end
 end

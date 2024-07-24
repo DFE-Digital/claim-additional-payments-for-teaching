@@ -1,7 +1,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
-      You are not eligible for a financial incentive payment yet
+      <%= @form.t([@form.journey_eligibility_checker.ineligibility_reason, "heading"]) %>
     </h1>
 
     <p class="govuk-body">
