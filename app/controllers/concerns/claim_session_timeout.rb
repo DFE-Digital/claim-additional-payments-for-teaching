@@ -2,16 +2,6 @@ module ClaimSessionTimeout
   CLAIM_TIMEOUT_LENGTH_IN_MINUTES = 30
 
   def clear_claim_session
-    session.delete(:claim_postcode)
-    session.delete(:claim_address_line_1)
-    session.delete(:no_address_selected)
-    session.delete(:reminder_id)
-    session.delete(:slugs)
-    session.delete(:bank_validation_attempt_count)
-    session.delete(:user_info)
-    session.delete(:tps_school_id)
-    session.delete(:tps_school_name)
-    session.delete(:tps_school_address)
     clear_journey_sessions!
   end
 
