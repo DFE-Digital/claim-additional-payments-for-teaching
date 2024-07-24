@@ -1046,7 +1046,7 @@ en:
       btn_text: Accept and send
   early_years_payment:
     journey_name: Claim an early years financial incentive payment
-    feedback_email: "TODO EMAIL GOES HERE"
+    feedback_email: "help@opsteam.education.gov.uk"
   activerecord:
     errors:
       models:
