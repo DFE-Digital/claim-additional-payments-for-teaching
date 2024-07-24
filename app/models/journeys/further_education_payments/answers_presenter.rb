@@ -20,6 +20,7 @@ module Journeys
           a << teaching_hours_per_week
           a << further_education_teaching_start_year
           a << subjects_taught
+          a << hours_teaching_eligible_subjects
           a << half_teaching_hours
           a << teaching_qualification
           a << subject_to_formal_performance_action
@@ -66,6 +67,14 @@ module Journeys
           t("further_education_payments.forms.teaching_hours_per_week.question", school_name: journey_session.answers.school.name),
           t(journey_session.answers.teaching_hours_per_week, scope: "further_education_payments.forms.teaching_hours_per_week.options"),
           "teaching-hours-per-week"
+        ]
+      end
+
+      def hours_teaching_eligible_subjects
+        [
+          t("further_education_payments.forms.hours_teaching_eligible_subjects.question"),
+          (journey_session.answers.hours_teaching_eligible_subjects? ? "Yes" : "No"),
+          "hours-teaching-eligible-subjects"
         ]
       end
 
