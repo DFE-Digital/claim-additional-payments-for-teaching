@@ -35,7 +35,7 @@ class Claim
       attributes_to_set = personal_data_mask.merge(
         personal_data_removed_at: Time.zone.now
       )
-      claim.update_columns(attributes_to_set)
+      claim.update!(attributes_to_set)
     end
 
     def scrub_session!

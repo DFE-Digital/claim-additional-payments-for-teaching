@@ -149,11 +149,11 @@ class Claim < ApplicationRecord
   validate :building_society_roll_number_must_be_between_one_and_eighteen_digits
   validate :building_society_roll_number_must_be_in_a_valid_format
 
-  before_save :normalise_ni_number, if: :national_insurance_number_changed?
-  before_save :normalise_bank_account_number, if: :bank_account_number_changed?
-  before_save :normalise_bank_sort_code, if: :bank_sort_code_changed?
-  before_save :normalise_first_name, if: :first_name_changed?
-  before_save :normalise_surname, if: :surname_changed?
+  before_save :normalise_ni_number, if: %i[national_insurance_number national_insurance_number_changed?]
+  before_save :normalise_bank_account_number, if: %i[bank_account_number bank_account_number_changed?]
+  before_save :normalise_bank_sort_code, if: %i[bank_sort_code bank_sort_code_changed?]
+  before_save :normalise_first_name, if: %i[first_name first_name_changed?]
+  before_save :normalise_surname, if: %i[surname surname_changed?]
 
   scope :unsubmitted, -> { where(submitted_at: nil) }
   scope :submitted, -> { where.not(submitted_at: nil) }
