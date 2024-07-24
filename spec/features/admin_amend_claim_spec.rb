@@ -7,14 +7,22 @@ require "rails_helper"
 # themselves are slightly different from ECP and LUP).
 RSpec.feature "Admin amends a claim" do
   let(:claim) do
-    create(:claim, :submitted,
+    create(
+      :claim,
+      :submitted,
       eligibility_attributes: {teacher_reference_number: "1234567"},
       payroll_gender: :dont_know,
       date_of_birth: date_of_birth,
       student_loan_plan: :plan_1,
       bank_sort_code: "010203",
       bank_account_number: "47274828",
-      building_society_roll_number: "RN 123456")
+      building_society_roll_number: "RN 123456",
+      address_line_1: "Old address line 1",
+      address_line_2: "Old address line 2",
+      address_line_3: "Old address line 3",
+      address_line_4: "Old address line 4",
+      postcode: "AB12 3CD"
+    )
   end
   let(:date_of_birth) { 25.years.ago.to_date }
 
@@ -40,6 +48,12 @@ RSpec.feature "Admin amends a claim" do
     fill_in "Bank account number", with: "18929492"
     fill_in "Building society roll number", with: "JF 838281"
 
+    fill_in "Address line 1", with: "New address line 1"
+    fill_in "Address line 2", with: "New address line 2"
+    fill_in "Address line 3", with: "New address line 3"
+    fill_in "Address line 4", with: "New address line 4"
+    fill_in "Postcode", with: "TE57 1NG"
+
     fill_in "Change notes", with: "This claimant got some of their details wrong and then contacted us"
 
     expect { click_on "Amend claim" }.to change { claim.reload.amendments.size }.by(1)
@@ -52,7 +66,12 @@ RSpec.feature "Admin amends a claim" do
       "student_loan_plan" => ["plan_1", "plan_2"],
       "bank_sort_code" => ["010203", "111213"],
       "bank_account_number" => ["47274828", "18929492"],
-      "building_society_roll_number" => ["RN 123456", "JF 838281"]
+      "building_society_roll_number" => ["RN 123456", "JF 838281"],
+      "address_line_1" => ["Old address line 1", "New address line 1"],
+      "address_line_2" => ["Old address line 2", "New address line 2"],
+      "address_line_3" => ["Old address line 3", "New address line 3"],
+      "address_line_4" => ["Old address line 4", "New address line 4"],
+      "postcode" => ["AB12 3CD", "TE57 1NG"]
     })
     expect(amendment.notes).to eq("This claimant got some of their details wrong and then contacted us")
     expect(amendment.created_by).to eq(@signed_in_user)
@@ -63,6 +82,11 @@ RSpec.feature "Admin amends a claim" do
     expect(claim.bank_sort_code).to eq("111213")
     expect(claim.bank_account_number).to eq("18929492")
     expect(claim.building_society_roll_number).to eq("JF 838281")
+    expect(claim.address_line_1).to eq("New address line 1")
+    expect(claim.address_line_2).to eq("New address line 2")
+    expect(claim.address_line_3).to eq("New address line 3")
+    expect(claim.address_line_4).to eq("New address line 4")
+    expect(claim.postcode).to eq("TE57 1NG")
 
     expect(current_url).to eq(admin_claim_tasks_url(claim))
 
@@ -76,6 +100,12 @@ RSpec.feature "Admin amends a claim" do
     expect(page).to have_content("Bank sort code\nchanged from 010203 to 111213")
     expect(page).to have_content("Bank account number\nchanged from 47274828 to 18929492")
     expect(page).to have_content("Building society roll number\nchanged from RN 123456 to JF 838281")
+
+    expect(page).to have_content("Address line 1\nchanged from Old address line 1 to New address line 1")
+    expect(page).to have_content("Address line 2\nchanged from Old address line 2 to New address line 2")
+    expect(page).to have_content("Address line 3\nchanged from Old address line 3 to New address line 3")
+    expect(page).to have_content("Address line 4\nchanged from Old address line 4 to New address line 4")
+    expect(page).to have_content("Postcode\nchanged from AB12 3CD to TE57 1NG")
 
     expect(page).to have_content("This claimant got some of their details wrong and then contacted us")
     expect(page).to have_content("by #{@signed_in_user.full_name} on #{I18n.l(Time.current)}")
