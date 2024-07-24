@@ -7,20 +7,7 @@
       for an employee.
     </p>
 
-    <h2 class="govuk-heading-s">Contents</h2>
-
-    <%= govuk_list [
-      govuk_link_to("Eligibility", "#eligibility"),
-      govuk_link_to("Other conditions for the payment", "#other-conditions"),
-      govuk_link_to("Information you’ll need to provide", "#information"),
-      govuk_link_to("Documents", "#documents"),
-      govuk_link_to("Cancelling a claim", "#cancelling"),
-      govuk_link_to("Get help with your claim", "#get-help")
-    ], type: :bullet %>
-
-    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-
-    <h2 class="govuk-heading-l" id="eligibility">Eligibility</h2>
+    <h2 class="govuk-heading-l govuk-!-margin-top-7">Eligibility</h2>
 
     <p class="govuk-body">
       To make a claim for an employee, they must:
@@ -29,7 +16,7 @@
     <%= govuk_list [
       "have applied for a job with an incentive attached",
       "have started their job after 15 May 2024",
-      "spend most of the time in their job (70% or more) working directly with the children"
+      "spend most of the time in their job (70% or more) working directly with children - there is no minimum number of hours and applies to all EYFS part and full time roles"
     ], type: :bullet %>
 
     <p class="govuk-body">
@@ -38,13 +25,11 @@
 
     <%= govuk_list [
       "working in the room (for example this can include playrooms, baserooms or classrooms)",
-      "guiding children in their learning",
-      "supporting children with their learning and development",
-      "interacting with children",
-      "giving hands-on care, like with health and hygiene"
+      "guiding, supporting, and interacting with children in their learning and development",
+      "giving hands-on care, including health and hygiene"
     ], type: :bullet %>
 
-    <h3 class="govuk-heading-m" id="other-conditions">Other conditions for the payment</h3>
+    <h3 class="govuk-heading-m">Other conditions for the payment</h3>
 
     <p class="govuk-body">
       The purpose of this incentive scheme is to increase the number of people
@@ -86,17 +71,11 @@
     </p>
 
     <p class="govuk-body">
-      You can also claim if the main focus of their job did not involve working
-      directly with children. For example, they worked as a gardener, chef or
-      administrator.
-    </p>
-
-    <p class="govuk-body">
       More information can be found in the
       <%= govuk_link_to("guidance", "#") %>.
     </p>
 
-    <h2 class="govuk-heading-l" id="information">Information you’ll need to provide</h2>
+    <h2 class="govuk-heading-l">Information you’ll need to provide</h2>
 
     <p class="govuk-body">
       You’ll need to provide some details about your employee to make a claim.
@@ -134,9 +113,9 @@
       We’ll also ask you to confirm that they meet the eligibility criteria.
     </p>
 
-    <h3 class="govuk-heading-m" id="documents">Documents</h3>
+    <h3 class="govuk-heading-m">Documents</h3>
 
-    <h2 class="govuk-heading-l" id="cancelling">Cancelling a claim</h2>
+    <h2 class="govuk-heading-l">Cancel or get help with your claim</h2>
 
     <p class="govuk-body">
       If your employee leaves their job before they’ve been in it for 6 months,
@@ -144,20 +123,13 @@
     </p>
 
     <p class="govuk-body">
-      You can cancel a claim by contacting us at
+      You can cancel a claim or get help on this service by contacting us at
       <%= govuk_link_to t("early_years_payment.feedback_email"), "mailto:#{t("early_years_payment.feedback_email")}", no_visited_state: true %>.
     </p>
-
-    <h2 class="govuk-heading-l" id="get-help">Get help with your claim</h2>
 
     <p class="govuk-body">
       Read more about the
       <%= govuk_link_to("early years financial incentive payment", "#") %>.
-    </p>
-
-    <p class="govuk-body">
-      Contact us for help at
-      <%= govuk_link_to t("early_years_payment.feedback_email"), "mailto:#{t("early_years_payment.feedback_email")}", no_visited_state: true %>.
     </p>
 
     <%= govuk_start_button(text: "Start now", href: "#") %>
