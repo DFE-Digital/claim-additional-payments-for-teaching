@@ -283,6 +283,54 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_content("you must teach an eligible FE course")
   end
 
+  scenario "when teacher spends less than half hours teaching eligible courses" do
+    when_further_education_payments_journey_configuration_exists
+    and_eligible_college_exists
+
+    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    expect(page).to have_link("Start now")
+    click_link "Start now"
+
+    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_content("Which FE provider are you employed by?")
+    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    click_button "Continue"
+
+    expect(page).to have_content("Select the college you teach at")
+    choose eligible_college.name
+    click_button "Continue"
+
+    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
+    choose "Permanent contract"
+    click_button "Continue"
+
+    expect(page).to have_content("On average, how many hours per week")
+    choose "More than 12 hours per week"
+    click_button "Continue"
+
+    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
+    choose "September 2023 to August 2024"
+    click_button "Continue"
+
+    expect(page).to have_content("Which subject areas do you teach?")
+    check "Building and construction"
+    click_button "Continue"
+
+    expect(page).to have_content("Which building and construction courses do you teach?")
+    check "T Level in onsite construction"
+    click_button "Continue"
+
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching these eligible courses?")
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_content("You are not eligible")
+    expect(page).to have_content("In order to claim a financial incentive payment, at least half of your timetabled teaching hours should be spent teaching an")
+  end
+
   scenario "when not a recent FE teacher" do
     when_further_education_payments_journey_configuration_exists
     and_eligible_college_exists

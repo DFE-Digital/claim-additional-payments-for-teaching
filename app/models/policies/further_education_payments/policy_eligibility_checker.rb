@@ -40,20 +40,10 @@ module Policies
           :must_at_least_half_hours_teaching_fe
         elsif answers.subjects_taught.include? "none"
           :subject
-        elsif all_selected_courses_ineligible?
+        elsif answers.all_selected_courses_ineligible?
           :courses
-        end
-      end
-
-      private
-
-      def all_selected_courses_ineligible?
-        groups = answers.subjects_taught.reject { |e| e == "none" }
-
-        return if groups.empty?
-
-        groups.all? do |subject|
-          answers.public_send(:"#{subject}_courses").include?("none")
+        elsif answers.less_than_half_hours_teaching_eligible_courses?
+          :less_than_half_hours_teaching_eligible_courses
         end
       end
     end
