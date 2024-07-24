@@ -94,7 +94,6 @@ FactoryBot.define do
       with_email_details
       with_mobile_details
       with_bank_details
-      with_employment_details
     end
   end
 end
