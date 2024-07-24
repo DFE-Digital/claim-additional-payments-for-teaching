@@ -1,7 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Further education payments" do
+  include ActionView::Helpers::NumberHelper
+
   let(:college) { create(:school, :further_education, :fe_eligible) }
+  let(:expected_award_amount) { college.eligible_fe_provider.max_award_amount }
 
   scenario "happy path claim" do
     when_further_education_payments_journey_configuration_exists
@@ -106,6 +109,7 @@ RSpec.feature "Further education payments" do
     click_button "Continue"
 
     expect(page).to have_content("You’re eligible for a financial incentive payment")
+    expect(page).to have_content(number_to_currency(expected_award_amount, precision: 0))
     expect(page).to have_content("Apply now")
     click_button "Apply now"
 

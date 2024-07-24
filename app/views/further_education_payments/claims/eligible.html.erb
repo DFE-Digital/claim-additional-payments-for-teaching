@@ -15,7 +15,7 @@
       </div>
 
       <div class="govuk-heading-l">
-        £???
+        <%= number_to_currency(@form.award_amount, precision: 0) %>
       </div>
 
       <div class="govuk-body">
