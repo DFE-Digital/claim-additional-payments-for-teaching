@@ -9,7 +9,8 @@ module Journeys
     AdditionalPaymentsForTeaching,
     TeacherStudentLoanReimbursement,
     GetATeacherRelocationPayment,
-    FurtherEducationPayments
+    FurtherEducationPayments,
+    EarlyYearsPayment
   ].freeze
 
   def all
