@@ -180,6 +180,7 @@ class Claim < ApplicationRecord
   scope :unassigned, -> { where(assigned_to_id: nil) }
   scope :current_academic_year, -> { by_academic_year(AcademicYear.current) }
   scope :failed_bank_validation, -> { where(hmrc_bank_validation_succeeded: false) }
+  scope :unscrubbed, -> { where(personal_data_removed_at: nil) }
 
   scope :with_same_claimant, ->(claim) do
     CLAIMANT_MATCHING_ATTRIBUTES.reduce(where.not(id: claim.id)) do |scope, attr|
