@@ -10,7 +10,14 @@ module Policies
     MIN_QA_THRESHOLD = 100
 
     # Options shown to admins when rejecting a claim
-    ADMIN_DECISION_REJECTED_REASONS = []
+    ADMIN_DECISION_REJECTED_REASONS = [
+      :duplicate,
+      :ineligible_school,
+      :invalid_bank_details,
+      :ineligible_visa_or_entry_date,
+      :ineligible_employment_terms,
+      :no_response_from_school
+    ]
 
     # NOTE RL: currently IRP only has a single reply to address, so notify
     # doesn't show the address id

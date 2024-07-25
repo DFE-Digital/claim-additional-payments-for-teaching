@@ -783,6 +783,14 @@ en:
     policy_short_name: "International Relocation Payments"
     policy_acronym: "IRP"
     admin:
+      decision:
+        rejected_reasons:
+          duplicate: Duplicate application
+          ineligible_school: Ineligible school
+          invalid_bank_details: Invalid bank details
+          ineligible_visa_or_entry_date: "Visa/entry date ineligible"
+          ineligible_employment_terms: Ineligible employment terms
+          no_response_from_school: No response from school
       eligibility_answers:
         nationality: "Nationality"
         passport_number: "Passport number"
