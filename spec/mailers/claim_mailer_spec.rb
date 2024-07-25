@@ -126,19 +126,6 @@ RSpec.describe ClaimMailer, type: :mailer do
               current_financial_year: (policy == Policies::StudentLoans) ? Policies::StudentLoans.current_financial_year : ""
             }
           end
-          let(:expected_rejected_reasons_keys) do
-            {
-              reason_ineligible_subject: "yes",
-              reason_ineligible_year: "no",
-              reason_ineligible_school: "no",
-              reason_ineligible_qualification: "no",
-              reason_induction: "no",
-              reason_no_qts_or_qtls: "no",
-              reason_duplicate: "no",
-              reason_no_response: "no",
-              reason_other: "no"
-            }
-          end
           let(:all_expected_keys) { expected_common_keys.merge(expected_rejected_reasons_keys) }
 
           it "uses the correct template" do
@@ -161,17 +148,57 @@ RSpec.describe ClaimMailer, type: :mailer do
         context "when EarlyCareerPayments", if: policy == Policies::EarlyCareerPayments do
           let(:expected_template_id) { "b78ffea4-a3d7-4c4a-b0f7-066744c6e79f" }
 
+          let(:expected_rejected_reasons_keys) do
+            {
+              reason_ineligible_subject: "yes",
+              reason_ineligible_year: "no",
+              reason_ineligible_school: "no",
+              reason_ineligible_qualification: "no",
+              reason_induction: "no",
+              reason_no_qts_or_qtls: "no",
+              reason_duplicate: "no",
+              reason_no_response: "no",
+              reason_other: "no"
+            }
+          end
+
           include_examples "template id and personalisation keys"
         end
 
         context "when LevellingUpPremiumPayments", if: policy == Policies::LevellingUpPremiumPayments do
           let(:expected_template_id) { "c20e8d85-ef71-4395-8f8b-90fcbd824b86" }
 
+          let(:expected_rejected_reasons_keys) do
+            {
+              reason_ineligible_subject: "yes",
+              reason_ineligible_year: "no",
+              reason_ineligible_school: "no",
+              reason_ineligible_qualification: "no",
+              reason_no_qts_or_qtls: "no",
+              reason_duplicate: "no",
+              reason_no_response: "no",
+              reason_other: "no"
+            }
+          end
+
           include_examples "template id and personalisation keys"
         end
 
         context "when StudentLoans", if: policy == Policies::StudentLoans do
           let(:expected_template_id) { "f719237d-6b2a-42d6-98f2-3d5b6585f32b" }
+
+          let(:expected_rejected_reasons_keys) do
+            {
+              reason_ineligible_subject: "yes",
+              reason_ineligible_year: "no",
+              reason_ineligible_school: "no",
+              reason_ineligible_qualification: "no",
+              reason_no_qts_or_qtls: "no",
+              reason_duplicate: "no",
+              reason_no_response: "no",
+              reason_other: "no"
+            }
+          end
 
           include_examples "template id and personalisation keys"
         end

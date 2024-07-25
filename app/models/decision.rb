@@ -2,18 +2,11 @@ class Decision < ApplicationRecord
   belongs_to :claim
   belongs_to :created_by, class_name: "DfeSignIn::User", optional: true
 
-  # NOTE: remember en.yml -> admin.decision.rejected_reasons
-  REJECTED_REASONS = [
-    :ineligible_subject,
-    :ineligible_year,
-    :ineligible_school,
-    :ineligible_qualification,
-    :induction,
-    :no_qts_or_qtls,
-    :duplicate,
-    :no_response,
-    :other
-  ]
+  delegate :policy, to: :claim
+
+  REJECTED_REASONS = Policies.all.flat_map do |policy|
+    policy::ADMIN_DECISION_REJECTED_REASONS
+  end.uniq
 
   store_accessor :rejected_reasons, *REJECTED_REASONS, prefix: true
 
@@ -37,9 +30,7 @@ class Decision < ApplicationRecord
   }
 
   def self.rejected_reasons_for(policy)
-    REJECTED_REASONS.dup.tap do |reasons|
-      reasons.delete(:induction) unless policy == Policies::EarlyCareerPayments
-    end
+    policy::ADMIN_DECISION_REJECTED_REASONS
   end
 
   def readonly?
@@ -48,7 +39,7 @@ class Decision < ApplicationRecord
   end
 
   def rejected_reasons_hash
-    REJECTED_REASONS.reduce({}) do |memo, reason|
+    policy::ADMIN_DECISION_REJECTED_REASONS.reduce({}) do |memo, reason|
       memo.merge("reason_#{reason}": public_send(:"rejected_reasons_#{reason}") || "0")
     end
   end

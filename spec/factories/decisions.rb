@@ -9,7 +9,7 @@ FactoryBot.define do
 
     trait :rejected do
       result { :rejected }
-      rejected_reasons_ineligible_subject { "1" }
+      rejected_reasons { {policy::ADMIN_DECISION_REJECTED_REASONS.first => "1"} }
     end
 
     trait :with_notes do
