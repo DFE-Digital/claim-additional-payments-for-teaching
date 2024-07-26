@@ -32,8 +32,10 @@ module Journeys
     attribute :hmrc_bank_validation_succeeded, :boolean
     attribute :hmrc_bank_validation_responses, default: []
     attribute :logged_in_with_tid, :boolean
+    attribute :logged_in_with_onelogin, :boolean
     attribute :details_check, :boolean
     attribute :teacher_id_user_info, default: {}
+    attribute :onelogin_user_info, default: {}
     attribute :email_address_check, :boolean
     attribute :mobile_check, :string
     attribute :qualifications_details_check, :boolean

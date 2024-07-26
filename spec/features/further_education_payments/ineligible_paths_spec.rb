@@ -13,6 +13,8 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
+    sign_in_with_one_login
+
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "No"
     click_button "Continue"
@@ -141,6 +143,8 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
+    sign_in_with_one_login
+
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"
     click_button "Continue"
@@ -175,6 +179,8 @@ RSpec.feature "Further education payments ineligible paths" do
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
     click_link "Start now"
+
+    sign_in_with_one_login
 
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"
@@ -216,6 +222,8 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
+    sign_in_with_one_login
+
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"
     click_button "Continue"
@@ -246,6 +254,8 @@ RSpec.feature "Further education payments ineligible paths" do
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
     click_link "Start now"
+
+    sign_in_with_one_login
 
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"
@@ -339,6 +349,8 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
+    sign_in_with_one_login
+
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"
     click_button "Continue"
@@ -374,6 +386,8 @@ RSpec.feature "Further education payments ineligible paths" do
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
     click_link "Start now"
+
+    sign_in_with_one_login
 
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"
@@ -441,6 +455,8 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
+    sign_in_with_one_login
+
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"
     click_button "Continue"
@@ -507,6 +523,8 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
+    sign_in_with_one_login
+
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"
     click_button "Continue"
@@ -563,6 +581,8 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
+    sign_in_with_one_login
+
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"
     click_button "Continue"
@@ -594,6 +614,8 @@ RSpec.feature "Further education payments ineligible paths" do
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
     click_link "Start now"
+
+    sign_in_with_one_login
 
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"
@@ -635,6 +657,8 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
+    sign_in_with_one_login
+
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"
     click_button "Continue"
@@ -674,6 +698,8 @@ RSpec.feature "Further education payments ineligible paths" do
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
     click_link "Start now"
+
+    sign_in_with_one_login
 
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"

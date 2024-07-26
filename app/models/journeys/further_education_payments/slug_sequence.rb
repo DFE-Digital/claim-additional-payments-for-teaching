@@ -2,6 +2,7 @@ module Journeys
   module FurtherEducationPayments
     class SlugSequence
       ELIGIBILITY_SLUGS = %w[
+        sign-in
         teaching-responsibilities
         further-education-provision-search
         select-provision
