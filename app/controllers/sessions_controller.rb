@@ -1,5 +1,5 @@
 class SessionsController < BasePublicController
-  def refresh # TODO - is this method or controller needed?
+  def refresh
     head :ok
   end
 end

@@ -16,8 +16,6 @@ Rails.application.routes.draw do
   # setup a simple healthcheck endpoint for monitoring purposes
   get "/healthcheck", to: proc { [200, {}, ["OK"]] }
 
-  get "refresh-session", to: "sessions#refresh", as: :refresh_session
-
   # Used to constrain claim journey routing so only slugs
   # that are part of a journey's slug sequence are routed.
   restrict_to_sequence_slugs = Class.new {
