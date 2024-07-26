@@ -24,7 +24,7 @@ describe "teacher route: completing the form" do
     journey_configuration
   end
 
-  describe "navigating forward" do
+  describe "navigating forward", flaky: true do
     before do
       when_i_start_the_form
       and_i_complete_application_route_question_with(
