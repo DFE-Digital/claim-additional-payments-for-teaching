@@ -1,6 +1,6 @@
 class BasePublicController < ApplicationController
   include DfE::Analytics::Requests
-  include ClaimSessionTimeout
+  include SessionManagement
   include HttpAuthConcern
   include JourneyConcern
 
