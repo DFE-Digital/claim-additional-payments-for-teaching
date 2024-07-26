@@ -45,9 +45,9 @@ module Journeys
       end
 
       def reminder_from_session
-        return unless session.key?(:reminder_id)
+        return unless answers.reminder_id
 
-        Reminder.find(session[:reminder_id])
+        Reminder.find(answers.reminder_id)
       end
 
       def submitted_claim
@@ -90,7 +90,6 @@ module Journeys
         return unless current_slug == "set"
 
         session.delete(journey_session_key)
-        session.delete(:reminder_id)
       end
     end
   end

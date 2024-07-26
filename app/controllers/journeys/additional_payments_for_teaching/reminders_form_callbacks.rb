@@ -13,9 +13,9 @@ module Journeys
         inject_sent_one_time_password_at_into_the_form
       end
 
-      def personal_details_after_form_save_success # called in: spec/features/get_a_teacher_relocation_payment/teacher_route_completing_the_form_spec.rb
-        # TODO store reminder_id somewhere other than the session?
-        session[:reminder_id] = current_reminder.to_param
+      def personal_details_after_form_save_success
+        answers.reminder_id = current_reminder.to_param
+        journey_session.save!
         try_mailer { send_verification_email } || return
         redirect_to_next_slug
       end
@@ -48,9 +48,7 @@ module Journeys
       end
 
       def send_reminder_set_email
-        ReminderMailer.reminder_set(current_reminder).deliver_now.tap do
-          session.delete(:reminder_id) # is this ok? what happens if mailer fails? # TODO: check session cleared in specs
-        end
+        ReminderMailer.reminder_set(current_reminder).deliver_now
       end
 
       def try_mailer(&block)
