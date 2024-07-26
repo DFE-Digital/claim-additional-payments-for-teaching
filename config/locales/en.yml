@@ -1045,6 +1045,7 @@ en:
         correct.
       btn_text: Accept and send
   early_years_payment_provider:
+    claim_description: for an early years financial incentive payment
     journey_name: Claim an early years financial incentive payment - provider
     landing_page:
       title: Claim an early years financial incentive payment
