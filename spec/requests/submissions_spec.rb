@@ -39,7 +39,6 @@ RSpec.describe "Submissions", type: :request do
         expect(email[:personalisation].decoded).to include("ref_number")
         expect(email[:personalisation].decoded).to include(submitted_claim.reference)
 
-        expect(session[:claim_id]).to be_nil # this is never set
         expect(session[:slugs]).to be_nil
         expect(session[:submitted_claim_id]).to eq(submitted_claim.id)
       end
