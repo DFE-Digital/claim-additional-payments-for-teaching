@@ -45,7 +45,7 @@ module Journeys
       end
 
       def reminder_from_session
-        return unless answers.reminder_id
+        return unless answers&.reminder_id
 
         Reminder.find(answers.reminder_id)
       end
@@ -70,7 +70,7 @@ module Journeys
       # We can tell if we're setting a reminder for a submitted claim as the
       # journey session will be nil given that we clear it on claim submission.
       def model_for_reminder_attributes
-        @model_for_reminder_attributes ||= journey_session&.answers || submitted_claim
+        @model_for_reminder_attributes ||= answers || submitted_claim
       end
 
       def send_to_start?
