@@ -103,6 +103,11 @@ module GetATeacherRelocationPayment
 
       click_button "Continue"
 
+      unless page.has_text?("Select your school from the search results")
+        # We've got stuck on the school search page, try again
+        click_button "Continue"
+      end
+
       choose school.name
 
       click_button "Continue"
