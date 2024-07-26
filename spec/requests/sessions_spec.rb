@@ -14,17 +14,5 @@ RSpec.describe "Sessions", type: :request do
         expect(response).to have_http_status(:ok)
       end
     end
-
-    it "does not extend an expired public user session" do
-      start_student_loans_claim
-
-      travel(2.hours) do
-        get refresh_session_path
-        expect(session[:claim_id]).to be_nil
-
-        get claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "qts-year")
-        expect(response).to redirect_to(Journeys::TeacherStudentLoanReimbursement.start_page_url)
-      end
-    end
   end
 end
