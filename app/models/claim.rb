@@ -11,6 +11,11 @@ class Claim < ApplicationRecord
     bank_sort_code
     bank_account_number
     building_society_roll_number
+    address_line_1
+    address_line_2
+    address_line_3
+    address_line_4
+    postcode
   ].freeze
   FILTER_PARAMS = {
     address_line_1: true,

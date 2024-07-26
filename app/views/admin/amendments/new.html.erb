@@ -143,6 +143,76 @@
       </div>
     </div>
 
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-third">
+        <%= form_group_tag(@amendment, :address_line_1) do %>
+          <%= claim_form.label :address_line_1, class: "govuk-label" %>
+          <%= errors_tag @amendment, :address_line_1 %>
+        <% end %>
+      </div>
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-form-group">
+          <%= claim_form.text_field :address_line_1, class: "govuk-input govuk-input--width-10" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-third">
+        <%= form_group_tag(@amendment, :address_line_2) do %>
+          <%= claim_form.label :address_line_2, class: "govuk-label" %>
+          <%= errors_tag @amendment, :address_line_2 %>
+        <% end %>
+      </div>
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-form-group">
+          <%= claim_form.text_field :address_line_2, class: "govuk-input govuk-input--width-10" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-third">
+        <%= form_group_tag(@amendment, :address_line_3) do %>
+          <%= claim_form.label :address_line_3, class: "govuk-label" %>
+          <%= errors_tag @amendment, :address_line_3 %>
+        <% end %>
+      </div>
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-form-group">
+          <%= claim_form.text_field :address_line_3, class: "govuk-input govuk-input--width-10" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-third">
+        <%= form_group_tag(@amendment, :address_line_4) do %>
+          <%= claim_form.label :address_line_4, class: "govuk-label" %>
+          <%= errors_tag @amendment, :address_line_4 %>
+        <% end %>
+      </div>
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-form-group">
+          <%= claim_form.text_field :address_line_4, class: "govuk-input govuk-input--width-10" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-third">
+        <%= form_group_tag(@amendment, :postcode) do %>
+          <%= claim_form.label :postcode, class: "govuk-label" %>
+          <%= errors_tag @amendment, :postcode %>
+        <% end %>
+      </div>
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-form-group">
+          <%= claim_form.text_field :postcode, class: "govuk-input govuk-input--width-10" %>
+        </div>
+      </div>
+    </div>
+
     <% if @amendment.claim.policy == Policies::StudentLoans %>
       <%= claim_form.fields_for :eligibility, @amendment.claim.eligibility, include_id: false do |eligibility_form| %>
         <div class="govuk-grid-row">
