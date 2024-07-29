@@ -49,6 +49,16 @@
   - family_name
   - email
   - session_token
+  :early_years_data:
+  - id
+  - nursery_name
+  - urn
+  - local_authority_id
+  - nursery_address
+  - primary_key_contact_email_address
+  - secondary_contact_email_address
+  - created_at
+  - updated_at
   :schools:
   - postcode_sanitised
   :file_uploads:
