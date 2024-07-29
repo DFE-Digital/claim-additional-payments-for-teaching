@@ -27,8 +27,9 @@ RSpec.describe ImportEarlyYearsDataJob do
       it "associates local authourity correctly" do
         upload
 
-        expect(EarlyYearsData.first.nursery_name).to eq("Test Nursery")
-        expect(EarlyYearsData.first.local_authority).to eq(local_authority)
+        nursery = EarlyYearsData.find_by_urn("1234567")
+        expect(nursery.nursery_name).to eq("Test Nursery")
+        expect(nursery.local_authority).to eq(local_authority)
       end
     end
 
