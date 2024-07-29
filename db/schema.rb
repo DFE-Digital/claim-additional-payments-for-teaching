@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_10_080536) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_29_101656) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -173,6 +173,19 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_10_080536) do
     t.string "teacher_reference_number", limit: 11
     t.index ["current_school_id"], name: "index_early_career_payments_eligibilities_on_current_school_id"
     t.index ["teacher_reference_number"], name: "index_ecp_eligibility_trn"
+  end
+
+  create_table "early_years_data", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "nursery_name"
+    t.string "urn"
+    t.uuid "local_authority_id", null: false
+    t.string "nursery_address"
+    t.string "primary_key_contact_email_address"
+    t.string "secondary_contact_email_address"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["local_authority_id"], name: "index_early_years_data_on_local_authority_id"
+    t.index ["urn"], name: "index_early_years_data_on_urn"
   end
 
   create_table "eligible_fe_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -496,6 +509,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_10_080536) do
   add_foreign_key "claims", "journeys_sessions"
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "early_career_payments_eligibilities", "schools", column: "current_school_id"
+  add_foreign_key "early_years_data", "local_authorities"
   add_foreign_key "international_relocation_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "levelling_up_premium_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "notes", "claims"

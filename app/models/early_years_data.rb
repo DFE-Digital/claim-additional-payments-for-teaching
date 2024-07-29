@@ -1,0 +1,2 @@
+class EarlyYearsData < ApplicationRecord
+end

@@ -96,6 +96,7 @@ Rails.application.routes.draw do
       patch "unhold"
     end
 
+    resources :early_years_data_uploads, only: [:new, :create]
     resources :qualification_report_uploads, only: [:new, :create]
     resources :school_workforce_census_data_uploads, only: [:new, :create]
     resources :student_loans_data_uploads, only: [:new, :create]
