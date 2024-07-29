@@ -115,7 +115,7 @@ RSpec.feature "Further education payments" do
 
     sign_in_with_one_login
 
-    expect(page).to have_content("How we will use the information you provide in your application")
+    expect(page).to have_content("How we will use the information you provide")
     click_button "Continue"
 
     expect(page).to have_content("Personal details")
