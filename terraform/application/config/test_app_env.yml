@@ -5,6 +5,9 @@ DFE_SIGN_IN_IDENTIFIER: teacherpayments
 DFE_SIGN_IN_ISSUER: https://test-oidc.signin.education.gov.uk:443
 DFE_SIGN_IN_REDIRECT_BASE_URL: https://test.claim-additional-teaching-payment.service.gov.uk
 
+ONELOGIN_SIGN_IN_ISSUER: https://oidc.integration.account.gov.uk/
+ONELOGIN_REDIRECT_BASE_URL: https://test.claim-additional-teaching-payment.service.gov.uk
+
 DQT_API_URL: https://test.teacher-qualifications-api.education.gov.uk/v1
 DQT_BASE_URL: https://test-api-customerengagement.platform.education.gov.uk/dqt-crm/v1/
 
