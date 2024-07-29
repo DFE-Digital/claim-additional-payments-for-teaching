@@ -30,7 +30,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/claim/search.rb",
-      "line": 45,
+      "line": 35,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "Claim.submitted.where(\"LOWER(#{attribute}) = LOWER(?)\", search_term)",
       "render_path": null,
@@ -116,13 +116,36 @@
       "note": ""
     },
     {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "c0b6b50e69dad10b4bc4a8f45991cd2b4af57ecb9e740f59d3baa0696d96fa40",
+      "check_name": "FileAccess",
+      "message": "Parameter value used in file name",
+      "file": "app/controllers/admin/early_years_data_uploads_controller.rb",
+      "line": 15,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "File.read(params[:file])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::EarlyYearsDataUploadsController",
+        "method": "create"
+      },
+      "user_input": "params[:file]",
+      "confidence": "High",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "f83635b54e1ce0088178d8082ffe632ab8aa81b10fce1026caf87f286cb4d81a",
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/claim/matching_attribute_finder.rb",
-      "line": 54,
+      "line": 34,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "Claim.where(\"LOWER(#{\"CONCAT(#{attributes.join(\",\")})\"}) = LOWER(?)\", values_for_attributes(source_claim, attributes).join)",
       "render_path": null,
@@ -139,6 +162,6 @@
       "note": ""
     }
   ],
-  "updated": "2024-06-20 16:06:05 +0100",
+  "updated": "2024-07-29 20:52:44 +0100",
   "brakeman_version": "6.1.2"
 }
