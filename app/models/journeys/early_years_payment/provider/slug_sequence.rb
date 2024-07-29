@@ -2,20 +2,7 @@ module Journeys
   module EarlyYearsPayment
     module Provider
       class SlugSequence
-        ELIGIBILITY_SLUGS = %w[].freeze
-
-        PERSONAL_DETAILS_SLUGS = %w[].freeze
-
-        PAYMENT_DETAILS_SLUGS = %w[].freeze
-
-        RESULTS_SLUGS = %w[].freeze
-
-        SLUGS = (
-          ELIGIBILITY_SLUGS +
-          PERSONAL_DETAILS_SLUGS +
-          PAYMENT_DETAILS_SLUGS +
-          RESULTS_SLUGS
-        ).freeze
+        SLUGS = %w[].freeze
 
         def self.start_page_url
           if Rails.env.production?
