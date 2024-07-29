@@ -65,7 +65,7 @@ RSpec.describe "EY (Early Years) data upload " do
             nursery_name: "Test Nursery",
             urn: "1234567",
             local_authority_id: "101",
-            nursery_address: "123 Test Street, Test Town, TE1 5ST",
+            nursery_address: "123 Test Street Test Town TE1 5ST",
             primary_key_contact_email_address: "primary@example.com",
             secondary_contact_email_address: "secondary@example.com"
           },
@@ -73,9 +73,9 @@ RSpec.describe "EY (Early Years) data upload " do
             nursery_name: "Other Nursery",
             urn: "9876543",
             local_authority_id: "101",
-            nursery_address: "321 Test Street, Test Town, TE1 5ST",
+            nursery_address: "321 Test Street Test Town TE1 5ST",
             primary_key_contact_email_address: "primary@example.com",
-            secondary_contact_email_address: ""
+            secondary_contact_email_address: nil
           }
         ]
       end
@@ -83,7 +83,7 @@ RSpec.describe "EY (Early Years) data upload " do
       let(:expected_records) do
         rows.map do |row|
           expected_row = row.dup
-          expected_row[:local_authourity] = local_authourity
+          expected_row[:local_authority] = local_authority
           expected_row.delete :local_authority_id
           expected_row
         end
@@ -96,8 +96,8 @@ RSpec.describe "EY (Early Years) data upload " do
       it "parses the rows and saves them as early years data records" do
         aggregate_failures do
           expect { perform_enqueued_jobs { upload } }.to change(EarlyYearsData, :count).by(2)
-          expect(EarlyYearsData.find(urn: "1234567")).to have_attributes(expected_records[0])
-          expect(EarlyYearsData.find(urn: "9876543")).to have_attributes(expected_records[1])
+          expect(EarlyYearsData.find_by_urn("1234567")).to have_attributes(expected_records[0])
+          expect(EarlyYearsData.find_by_urn("9876543")).to have_attributes(expected_records[1])
         end
       end
 
@@ -114,7 +114,7 @@ RSpec.describe "EY (Early Years) data upload " do
       end
 
       context "with rows with invalid primary email" do
-        let(:rows) { super().map { |row| row.merge(primary_key_contact_email_address: "") } }
+        let(:rows) { super().map { |row| row.merge(primary_key_contact_email_address: nil) } }
 
         include_examples :no_upload
       end
