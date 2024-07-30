@@ -173,7 +173,7 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Check your answers before sending your application")
     click_on "Accept and send"
 
-    expect(page).to have_content("You applied for a further education financial incentive payment")
+    expect(page).to have_content("You applied for a further education retention payment")
   end
 
   def and_college_exists
