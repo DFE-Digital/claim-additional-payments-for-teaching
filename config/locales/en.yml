@@ -1072,6 +1072,14 @@ en:
     landing_page:
       title: Claim an early years financial incentive payment
     feedback_email: "help@opsteam.education.gov.uk"
+    forms:
+      consent:
+        question: Declaration of Employee Consent
+        option:
+          I confirm that I have obtained consent from my employee and have provided them with the relevant privacy
+          notice.
+        errors:
+          presence: You must be able to confirm this information to continue
   activerecord:
     errors:
       models:

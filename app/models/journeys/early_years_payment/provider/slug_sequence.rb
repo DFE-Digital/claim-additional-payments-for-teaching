@@ -2,7 +2,10 @@ module Journeys
   module EarlyYearsPayment
     module Provider
       class SlugSequence
-        SLUGS = %w[].freeze
+        SLUGS = %w[
+          consent
+          current-nursery
+        ].freeze
 
         def self.start_page_url
           Rails.application.routes.url_helpers.landing_page_path("early-years-payment-provider")

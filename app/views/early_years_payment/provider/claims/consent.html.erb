@@ -1,0 +1,52 @@
+<% content_for(:page_title, page_title(@form.t(:question), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+
+      <%= f.govuk_check_boxes_fieldset :consent_given, multiple: false, legend: nil do %>
+        <h1 class="govuk-heading-l">
+          <%= @form.t(:question) %>
+        </h1>
+
+        <p class="govuk-body">
+          You need to confirm that you’ve got consent from your employee before
+          you can continue with a claim.
+        </p>
+
+        <p class="govuk-body">
+          By continuing you’re confirming that you’ve:
+        </p>
+
+        <%= govuk_list [
+          "obtained written consent from your employee to share their personal information (full name, start date, email address)",
+          "provided your employee with a privacy notice that explains what information will be collected, why it is being collected and who it will be shared with"
+        ], type: :bullet %>
+
+        <p class="govuk-body">
+          You do not need to send us the consent forms, but you should keep them
+          for your records.
+        </p>
+
+        <p class="govuk-body">
+          If you have any questions, or need further guidance, contact our support
+          team at
+          <%= govuk_link_to t("early_years_payment_provider.feedback_email"), "mailto:#{t("early_years_payment_provider.feedback_email")}", no_visited_state: true %>.
+        </p>
+
+        <div class="govuk-warning-text">
+          <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+          <strong class="govuk-warning-text__text">
+            <span class="govuk-visually-hidden">Warning</span>
+            By ticking this box, you confirm that you have obtained consent from
+            your employee.
+          </strong>
+        </div>
+
+        <%= f.govuk_check_box :consent_given, 1, 0, multiple: false, link_errors: true, label: { text: @form.t(:option) } %>
+      <% end %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>
