@@ -103,11 +103,12 @@ module ClaimsFormCallbacks
   end
 
   def increment_hmrc_validation_attempt_count
-    session[:hmrc_validation_attempt_count] = current_hmrc_validation_attempt_count + 1
+    journey_session.answers.hmrc_validation_attempt_count = current_hmrc_validation_attempt_count + 1
+    journey_session.save!
   end
 
   def current_hmrc_validation_attempt_count
-    session[:hmrc_validation_attempt_count] || 0
+    journey_session.answers.hmrc_validation_attempt_count || 0
   end
 
   def on_tid_route?

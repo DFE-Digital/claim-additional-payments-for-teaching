@@ -16,8 +16,6 @@ Rails.application.routes.draw do
   # setup a simple healthcheck endpoint for monitoring purposes
   get "/healthcheck", to: proc { [200, {}, ["OK"]] }
 
-  get "refresh-session", to: "sessions#refresh", as: :refresh_session
-
   # Used to constrain claim journey routing so only slugs
   # that are part of a journey's slug sequence are routed.
   restrict_to_sequence_slugs = Class.new {
@@ -47,7 +45,6 @@ Rails.application.routes.draw do
     post "claim", as: :claims, to: "claims#create"
     post "claim/submit", as: :claim_submission, to: "submissions#create"
     get "claims/confirmation", as: :claim_confirmation, to: "submissions#show"
-    get "timeout", to: "claims#timeout", as: :timeout_claim
     get "existing-session", as: :existing_session, to: "claims#existing_session"
     post "start-new", to: "claims#start_new", as: :start_new
 

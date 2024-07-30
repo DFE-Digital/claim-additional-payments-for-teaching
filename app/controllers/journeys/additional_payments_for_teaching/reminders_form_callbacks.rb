@@ -14,7 +14,8 @@ module Journeys
       end
 
       def personal_details_after_form_save_success
-        update_reminder_id
+        answers.reminder_id = current_reminder.to_param
+        journey_session.save!
         try_mailer { send_verification_email } || return
         redirect_to_next_slug
       end
@@ -38,10 +39,6 @@ module Journeys
 
       def inject_sent_one_time_password_at_into_the_form
         params[:form]&.[]=(:sent_one_time_password_at, session[:sent_one_time_password_at])
-      end
-
-      def update_reminder_id
-        session[:reminder_id] = current_reminder.to_param
       end
 
       def send_verification_email

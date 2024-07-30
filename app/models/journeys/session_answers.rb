@@ -44,6 +44,8 @@ module Journeys
     attribute :student_loan_plan, :string
     attribute :submitted_using_slc_data, :boolean
     attribute :sent_one_time_password_at, :datetime
+    attribute :hmrc_validation_attempt_count, :integer
+    attribute :reminder_id, :string
 
     def has_attribute?(name)
       attribute_names.include?(name.to_s)

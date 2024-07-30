@@ -22,7 +22,7 @@ module JourneyConcern
   end
 
   def answers
-    journey_session.answers
+    journey_session&.answers
   end
 
   def claim_in_progress?
