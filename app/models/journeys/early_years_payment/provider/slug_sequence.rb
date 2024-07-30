@@ -5,11 +5,7 @@ module Journeys
         SLUGS = %w[].freeze
 
         def self.start_page_url
-          if Rails.env.production?
-            "https://www.example.com" # TODO: update to correct guidance
-          else
-            Rails.application.routes.url_helpers.landing_page_path("early-years-payment-provider")
-          end
+          Rails.application.routes.url_helpers.landing_page_path("early-years-payment-provider")
         end
 
         attr_reader :journey_session
