@@ -278,3 +278,7 @@ shared:
     - lower_award_amount
     - created_at
     - updated_at
+  :early_years_payment_eligibilities:
+    - id
+    - created_at
+    - updated_at

@@ -343,7 +343,9 @@ en:
           languages_taught: Languages
           none_taught: I did not teach any of these subjects
         errors:
-          select_subject: Select if you taught Biology, Chemistry, Physics, Computing, Languages or you did not teach any of these subjects
+          select_subject:
+            Select if you taught Biology, Chemistry, Physics, Computing, Languages or you did not teach any of these
+            subjects
       still_teaching:
         questions:
           tps_school: Which school are you currently employed to teach at?
@@ -690,7 +692,9 @@ en:
           inclusion: "Select the option that applies to you"
       state_funded_secondary_school:
         question: "Are you employed by an English state secondary school?"
-        hint: "State schools receive funding from the UK government. Secondary schools teach children aged 11 to 16, or 11 to 18."
+        hint:
+          "State schools receive funding from the UK government. Secondary schools teach children aged 11 to 16, or 11
+          to 18."
         answers:
           true:
             answer: "Yes"
@@ -715,7 +719,9 @@ en:
           date_not_in_future: "Start date cannot be in the future"
       subject:
         question: "What subject are you employed to teach at your school?"
-        hint: "Physics, general or combined science including physics, and languages can be combined with other subjects but must make up at least 50% of your time in the classroom."
+        hint:
+          "Physics, general or combined science including physics, and languages can be combined with other subjects but
+          must make up at least 50% of your time in the classroom."
         answers:
           physics: "Physics"
           combined_with_physics: "General or combined science, including physics"
@@ -759,7 +765,8 @@ en:
         primary_heading: "Check your answers"
         eligibility_details: "Eligibility details"
         confirmation_notice:
-          "By selecting continue you are confirming that, to the best of your knowledge, the details you are providing are correct."
+          "By selecting continue you are confirming that, to the best of your knowledge, the details you are providing
+          are correct."
   international_relocation_payments:
     <<: *get_a_teacher_relocation_payment
     policy_short_name: "International Relocation Payments"
@@ -824,7 +831,6 @@ en:
         subject:
           heading: You are not eligible
 
-
       teaching_responsibilities:
         question: Are you a member of staff with teaching responsibilities?
         errors:
@@ -861,7 +867,8 @@ en:
         errors:
           inclusion: Select yes if you have taught at %{school_name} for at least one academic term
       teaching_hours_per_week:
-        question: On average, how many hours per week are you timetabled to teach at %{school_name} during the current term?
+        question:
+          On average, how many hours per week are you timetabled to teach at %{school_name} during the current term?
         hint: ‘Teaching’ refers to the direct contact time you spend in lessons with students of all ages.
         options:
           more_than_12: More than 12 hours per week
@@ -942,7 +949,8 @@ en:
           eylevel2: Early years practitioner (level 2) apprenticeship
           eylevel3: Early years educator (level 3) apprenticeship
           eytlevel: T Level in education and early years (early years educator)
-          coursetoeyq: A course that leads to an %{link} which enables providers to count the recipient in staff:child ratios
+          coursetoeyq:
+            A course that leads to an %{link} which enables providers to count the recipient in staff:child ratios
           none: I do not teach any of these courses
       engineering_manufacturing_courses:
         <<: *courses
@@ -961,7 +969,9 @@ en:
         question: Which maths courses do you teach?
         options:
           esfa: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
-          gcse_maths: Maths GCSE, functional skills qualifications and %{link} approved for teaching to 16 to 19-year-olds who meet the condition of funding
+          gcse_maths:
+            Maths GCSE, functional skills qualifications and %{link} approved for teaching to 16 to 19-year-olds who
+            meet the condition of funding
           none: I do not teach any of these courses
       physics_courses:
         <<: *courses
@@ -973,7 +983,9 @@ en:
           none: I do not teach any of these courses
       teaching_qualification:
         question: Do you have a teaching qualification?
-        hint: Your response will be noted for future claims. If you don’t have a teaching qualification yet, make sure that you enrol on one or complete one in the next 12 months.
+        hint:
+          Your response will be noted for future claims. If you don’t have a teaching qualification yet, make sure that
+          you enrol on one or complete one in the next 12 months.
         options:
           "yes": "Yes"
           not_yet: Not yet, I am currently enrolled on one and working towards completing it
@@ -986,39 +998,58 @@ en:
         questions:
           performance:
             question: Have any performance measures been started against you?
-            hint: This will be as a result of your underperformance as a teacher over a period of time. It could put your employment at the further education (FE) provider at risk and is something we may check with them as it will affect your eligibility.
+            hint:
+              This will be as a result of your underperformance as a teacher over a period of time. It could put your
+              employment at the further education (FE) provider at risk and is something we may check with them as it
+              will affect your eligibility.
           disciplinary:
             question: Are you currently subject to disciplinary action?
-            hint: This is more serious than performance measures and could be because of misconduct. It is something we may check with your FE provider as it will affect your eligibility.
+            hint:
+              This is more serious than performance measures and could be because of misconduct. It is something we may
+              check with your FE provider as it will affect your eligibility.
         errors:
           performance:
             inclusion: Select yes if you are subject to formal action for poor performance at work
           disciplinary:
             inclusion: Select yes if you are subject to disciplinary action
       half_teaching_hours:
-        question: Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?
+        question:
+          Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to
+          age 25 with an Education, Health and Care Plan (EHCP)?
         errors:
-          inclusion: Select yes if at least half your timetabled teaching hours are spent teaching 16-19-year-olds, including those up to 25 with an Education, Health and Care Plan
+          inclusion:
+            Select yes if at least half your timetabled teaching hours are spent teaching 16-19-year-olds, including
+            those up to 25 with an Education, Health and Care Plan
       eligible:
         heading: You’re eligible for a financial incentive payment
       gender:
         questions:
           payroll_gender: "How is your gender recorded on your employer’s payroll system?"
         errors:
-          select_gender: "Select the gender recorded on your employer’s payroll system or select whether you do not know"
+          select_gender:
+            "Select the gender recorded on your employer’s payroll system or select whether you do not know"
       hours_teaching_eligible_subjects:
         question: Do you spend at least half of your timetabled teaching hours teaching these eligible courses?
         errors:
-          inclusion: Select yes if you spend at least half of your timetabled teaching hours teaching these eligible courses
+          inclusion:
+            Select yes if you spend at least half of your timetabled teaching hours teaching these eligible courses
     check_your_answers:
       part_one:
         primary_heading: Check your answers
-        confirmation_notice: By selecting continue you are confirming that, to the best of your knowledge, the details you are providing are correct.
+        confirmation_notice:
+          By selecting continue you are confirming that, to the best of your knowledge, the details you are providing
+          are correct.
       heading_send_application: Now send your application
       statement:
         By submitting this you are confirming that, to the best of your knowledge, the details you are providing are
         correct.
       btn_text: Accept and send
+  early_years_payment_provider:
+    claim_description: for an early years financial incentive payment
+    journey_name: Claim an early years financial incentive payment - provider
+    landing_page:
+      title: Claim an early years financial incentive payment
+    feedback_email: "help@opsteam.education.gov.uk"
   activerecord:
     errors:
       models:
