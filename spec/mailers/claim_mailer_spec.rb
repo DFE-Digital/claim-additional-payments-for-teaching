@@ -225,7 +225,9 @@ RSpec.describe ClaimMailer, type: :mailer do
               reason_invalid_bank_details: "no",
               reason_ineligible_visa_or_entry_date: "no",
               reason_ineligible_employment_terms: "no",
-              reason_no_response_from_school: "no"
+              reason_no_response_from_school: "no",
+              reason_suspected_fraud: "no",
+              reason_information_mismatch_new_details_needed: "no"
             }
           end
 

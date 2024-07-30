@@ -16,7 +16,9 @@ module Policies
       :invalid_bank_details,
       :ineligible_visa_or_entry_date,
       :ineligible_employment_terms,
-      :no_response_from_school
+      :no_response_from_school,
+      :suspected_fraud,
+      :information_mismatch_new_details_needed
     ]
 
     # NOTE RL: currently IRP only has a single reply to address, so notify
