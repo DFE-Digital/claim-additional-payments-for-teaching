@@ -77,8 +77,7 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     expect(page).to have_content("Apply now")
     click_button "Apply now"
 
-    expect(page).to have_content("FE ONE LOGIN PLACEHOLDER")
-    click_button "Continue"
+    sign_in_with_one_login
 
     expect(page).to have_content("How we will use the information you provide in your application")
     click_button "Continue"

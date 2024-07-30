@@ -28,7 +28,7 @@ module Journeys
       ]
 
       PERSONAL_DETAILS_SLUGS = %w[
-        one-login-placeholder
+        sign-in
         information-provided
         personal-details
         postcode-search

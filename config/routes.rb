@@ -4,6 +4,11 @@ Rails.application.routes.draw do
 
   get "/claim/auth/tid/callback", to: "omniauth_callbacks#callback"
   get "/auth/failure", to: "omniauth_callbacks#failure"
+  get "/auth/onelogin", to: "omniauth_callbacks#onelogin"
+  if OneLoginSignIn.bypass?
+    post "/auth/onelogin", to: "omniauth_callbacks#onelogin"
+    post "/auth/onelogin_identity", to: "omniauth_callbacks#onelogin"
+  end
 
   # /early-career-payments is now /additional-payments - redirect old urls to a gov page
   get "early-career-payments(/*anything)", to: redirect("https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details")

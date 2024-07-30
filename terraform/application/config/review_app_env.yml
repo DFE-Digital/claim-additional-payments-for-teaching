@@ -1,5 +1,6 @@
 ---
 BYPASS_DFE_SIGN_IN: true
+BYPASS_ONELOGIN_SIGN_IN: true
 
 DFE_SIGN_IN_API_CLIENT_ID: teacherpayments
 DFE_SIGN_IN_API_ENDPOINT: https://pp-api.signin.education.gov.uk
