@@ -78,14 +78,28 @@ module Journeys
         }
       }.freeze
 
+      # Some radio button options have a link in the description
       def course_option_description(course, opts = {})
         course_field = opts.key?(:i18n_form_namespace) ? opts[:i18n_form_namespace] : i18n_form_namespace
-        args = {i18n_form_namespace: course_field}
+
+        args = {
+          i18n_form_namespace: course_field,
+          link: link_for_course(course_field, course)
+        }
+
+        # NOTE: This is expecting FormHelpers mixin if used for a specific `t()`
+        t("options.#{course}", args)
+      end
+
+      # If there is a link for course - generate one
+      # Pass in {link: false} to return just the text and not a link
+      def link_for_course(course_field, course, opts = {})
+        dont_link = opts[:link] == false
 
         text, url = COURSE_DESCRIPTIONS_WITH_INLINE_LINKS.dig(course_field.to_sym, course.to_sym)
-        args[:link] = govuk_link_to(text, url, new_tab: true) if text.present? && url.present?
-
-        t("options.#{course}", args)
+        if text.present? && url.present?
+          dont_link ? text : govuk_link_to(text, url, new_tab: true)
+        end
       end
     end
   end
