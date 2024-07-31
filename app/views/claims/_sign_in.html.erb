@@ -1,23 +1,23 @@
 <h1 class="govuk-heading-l">
-<% if @form.logged_in_with_onelogin %>
-  You've successfully signed in to GOV.UK One Login
-<% elsif @form.identity_confirmed_with_onelogin %>
+<% if @journey_session.answers.identity_confirmed_with_onelogin? %>
   You've successfully proved your identity with GOV.UK One Login
+<% elsif @journey_session.answers.logged_in_with_onelogin? %>
+  You've successfully signed in to GOV.UK One Login
 <% else %>
   You're now going to GOV.UK One Login
 <% end %>
 </h1>
 
-<% if @form.logged_in_with_onelogin %>
+<% if @journey_session.answers.identity_confirmed_with_onelogin? %>
+  <p>
+    You can now continue your application
+  </p>
+<% elsif @journey_session.answers.logged_in_with_onelogin? %>
   <p>
     Before you can continue your application, you'll need to prove your identity through GOV.UK One Login.
   </p>
   <p>
     When you've proved your identity through GOV.UK One Login, you'll return to this service to complete your applciation.
-  </p>
-<% elsif @form.identity_confirmed_with_onelogin %>
-  <p>
-    You can now continue your application
   </p>
 <% else %>
   <p>
@@ -30,19 +30,12 @@
 <% end %>
 
 <div class="govuk-button-group">
-  <% if @form.logged_in_with_onelogin %>
-    <%= button_to "Continue", "/auth/onelogin_identity", class: "govuk-button", method: :post %>
-  <% elsif @form.identity_confirmed_with_onelogin %>
+  <% if @journey_session.answers.identity_confirmed_with_onelogin? %>
     <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
-      <%= f.fields_for :onelogin_user_info do |ff| %>
-        <% ff.object.attribute_names.each do |attribute| %>
-          <%= ff.hidden_field attribute %>
-        <% end %>
-      <% end %>
-      <%= f.hidden_field :first_name %>
-      <%= f.hidden_field :surname %>
       <%= f.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
     <% end %>
+  <% elsif @journey_session.answers.logged_in_with_onelogin? %>
+    <%= button_to "Continue", "/auth/onelogin_identity", class: "govuk-button", method: :post %>
   <% else %>
     <%= button_to "Continue", "/auth/onelogin", class: "govuk-button", method: :post %>
   <% end %>
