@@ -15,6 +15,7 @@
 //= require accessible-autocomplete/dist/accessible-autocomplete.min.js
 //= require cookie_functions.js
 //= require govuk-frontend/dist/govuk/all.bundle.js
+//= require govuk-one-login-service-header/dist/scripts/service-header-with-init.js
 //= require_tree .
 //= stub js_check.js
 //= stub google_analytics.js
