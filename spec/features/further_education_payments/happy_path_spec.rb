@@ -22,7 +22,7 @@ RSpec.feature "Further education payments" do
     fill_in "Which FE provider are you employed by?", with: college.name
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     choose college.name
     click_button "Continue"
 
