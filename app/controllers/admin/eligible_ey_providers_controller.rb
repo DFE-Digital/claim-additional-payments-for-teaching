@@ -5,7 +5,6 @@ module Admin
     helper_method :journey_configuration
 
     def create
-      @download_form = EligibleEyProvidersForm.new
       @upload_form = EligibleEyProvidersForm.new(upload_params)
 
       if @upload_form.invalid?
@@ -14,16 +13,14 @@ module Admin
         @upload_form.importer.run
         flash[:notice] = @upload_form.importer.results_message
 
-        redirect_to edit_admin_journey_configuration_path(Journeys::EarlyYearsPayment::Provider::ROUTING_NAME, eligible_ey_providers_upload: {academic_year: @upload_form.academic_year})
+        redirect_to edit_admin_journey_configuration_path(Journeys::EarlyYearsPayment::Provider::ROUTING_NAME)
       end
     end
 
     def show
-      @download_form = EligibleEyProvidersForm.new(download_params)
-
-      send_data EligibleEyProvider.csv_for_academic_year(@download_form.academic_year),
+      send_data EligibleEyProvider.csv,
         type: "text/csv",
-        filename: "eligible_early_years_providers_#{@download_form.academic_year}.csv"
+        filename: "eligible_early_years_providers.csv"
     end
 
     private
@@ -35,11 +32,7 @@ module Admin
     end
 
     def upload_params
-      params.require(:eligible_ey_providers_upload).permit(:academic_year, :file)
-    end
-
-    def download_params
-      params.require(:eligible_ey_providers_download).permit(:academic_year)
+      params.require(:eligible_ey_providers_upload).permit(:file)
     end
   end
 end

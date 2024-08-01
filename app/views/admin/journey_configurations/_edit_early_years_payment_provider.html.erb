@@ -4,14 +4,7 @@
   Download eligible EY providers
 </h2>
 
-<%= form_with model: @download_form, scope: :eligible_ey_providers_download, url: admin_eligible_ey_providers_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :get do |f| %>
-  <%= f.govuk_error_summary %>
-
-  <%= f.govuk_collection_select :academic_year, f.object.select_options, :id, :name,
-    label: { text: "Academic year" } %>
-
-  <%= f.govuk_submit "Download CSV" %>
-<% end %>
+<%= link_to "Download CSV", admin_eligible_ey_providers_path, class: "govuk-button" %>
 
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
@@ -21,9 +14,6 @@
 
 <%= form_with model: @upload_form, scope: :eligible_ey_providers_upload, url: admin_eligible_ey_providers_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
   <%= f.govuk_error_summary %>
-
-  <%= f.govuk_collection_select :academic_year, f.object.select_options, :id, :name,
-    label: { text: "Academic year" } %>
 
   <%= f.govuk_file_field :file,
     label: { text: "Eligible EY providers" },

@@ -12,23 +12,11 @@ class EligibleEyProvidersImporter < CsvImporter::Base
     ]
   )
 
-  attr_reader :academic_year
-
-  def initialize(file, academic_year)
-    super(file)
-
-    @academic_year = academic_year
-  end
-
   def results_message
     "Replaced #{deleted_row_count} existing providers with #{rows.count} new providers"
   end
 
   private
-
-  def delete_all_scope
-    target_data_model.where(academic_year:)
-  end
 
   def row_to_hash(row)
     {
@@ -37,8 +25,7 @@ class EligibleEyProvidersImporter < CsvImporter::Base
       local_authority_id: LocalAuthority.find_by(code: row.fetch("LA Code")).try(:id),
       nursery_address: row.fetch("Nursery Address"),
       primary_key_contact_email_address: row.fetch("Primary Key Contact Email Address"),
-      secondary_contact_email_address: row.fetch("Secondary Contact Email Address (Optional)"),
-      academic_year:
+      secondary_contact_email_address: row.fetch("Secondary Contact Email Address (Optional)")
     }
   end
 end

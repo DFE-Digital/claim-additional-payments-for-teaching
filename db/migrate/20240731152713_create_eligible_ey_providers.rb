@@ -7,10 +7,9 @@ class CreateEligibleEyProviders < ActiveRecord::Migration[7.0]
       t.string :nursery_address
       t.string :primary_key_contact_email_address
       t.string :secondary_contact_email_address
-      t.text :academic_year, limit: 9, null: false
 
       t.timestamps
     end
-    add_index :eligible_ey_providers, [:academic_year, :urn]
+    add_index :eligible_ey_providers, :urn
   end
 end

@@ -1,13 +1,11 @@
 class EligibleEyProvider < ApplicationRecord
-  attribute :academic_year, AcademicYear::Type.new
-
   belongs_to :local_authority
 
   def local_authority_code
     local_authority.try :code
   end
 
-  def self.csv_for_academic_year(academic_year)
+  def self.csv
     csv_columns = {
       "Nursery Name" => :nursery_name,
       "EYURN / Ofsted URN" => :urn,
@@ -20,7 +18,7 @@ class EligibleEyProvider < ApplicationRecord
     CSV.generate(headers: true) do |csv|
       csv << csv_columns.keys
 
-      where(academic_year:).each do |row|
+      all.each do |row|
         csv << csv_columns.values.map { |attr| row.send(attr) }
       end
     end

@@ -187,11 +187,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_31_152713) do
     t.string "nursery_address"
     t.string "primary_key_contact_email_address"
     t.string "secondary_contact_email_address"
-    t.text "academic_year", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["academic_year", "urn"], name: "index_eligible_ey_providers_on_academic_year_and_urn"
     t.index ["local_authority_id"], name: "index_eligible_ey_providers_on_local_authority_id"
+    t.index ["urn"], name: "index_eligible_ey_providers_on_urn"
   end
 
   create_table "eligible_fe_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
