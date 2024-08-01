@@ -29,7 +29,6 @@ class Payment < ApplicationRecord
     postcode
     has_student_loan
     banking_name
-    national_insurance_number
   ]
   PERSONAL_CLAIM_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES = %i[
     date_of_birth
@@ -37,10 +36,7 @@ class Payment < ApplicationRecord
     bank_sort_code
     bank_account_number
     building_society_roll_number
-  ]
-
-  PERSONAL_ELIGIBILITY_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES = %i[
-    teacher_reference_number
+    national_insurance_number
   ]
 
   delegate(*(PERSONAL_CLAIM_DETAILS_ATTRIBUTES_PERMITTING_DISCREPANCIES + PERSONAL_CLAIM_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES), to: :claim_for_personal_details)
@@ -61,15 +57,9 @@ class Payment < ApplicationRecord
       attribute_values.uniq.count > 1 && !attribute_values.all?(&:blank?)
     }
 
-    mismatching_eligibility_attributes = PERSONAL_ELIGIBILITY_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES.select { |attribute|
-      attribute_values = claims.map(&:eligibility).map(&attribute)
-      attribute_values.uniq.count > 1 && !attribute_values.all?(&:blank?)
-    }
-
-    if mismatching_attributes.any? || mismatching_eligibility_attributes.any?
+    if mismatching_attributes.any?
       claims_sentence = claims.map(&:reference).to_sentence
       attributes_list = mismatching_attributes.map { |attribute| Claim.human_attribute_name(attribute).downcase }
-      attributes_list += mismatching_eligibility_attributes.map { |attribute| claims.first.eligibility.class.human_attribute_name(attribute).downcase }
       attributes_sentence = attributes_list.to_sentence
 
       errors.add(:claims, "#{claims_sentence} have different values for #{attributes_sentence}")

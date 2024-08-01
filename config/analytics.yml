@@ -270,6 +270,7 @@ shared:
     - id
     - created_at
     - updated_at
+    - award_amount
   :eligible_fe_providers:
     - id
     - ukprn

@@ -63,7 +63,7 @@ class PayrollRun < ApplicationRecord
   end
 
   def self.group_by_field(obj)
-    obj.is_a?(Claim) ? obj.eligibility.teacher_reference_number : obj.teacher_reference_number
+    obj.national_insurance_number
   end
 
   def download_triggered?

@@ -71,7 +71,7 @@ RSpec.describe Decision, type: :model do
 
   it "prevents a claim with matching bank details from being approved" do
     personal_details = {
-      eligibility_attributes: {teacher_reference_number: generate(:teacher_reference_number)},
+      national_insurance_number: "QQ123456C",
       bank_sort_code: "112233"
     }
 

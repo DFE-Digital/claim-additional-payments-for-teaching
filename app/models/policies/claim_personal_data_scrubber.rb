@@ -3,9 +3,12 @@
 # was scheduled to be paid more than two months ago.
 #
 # Attributes are set to nil, and personal_data_removed_at is set to the current timestamp.
+#
+# Inherit policy specifc data scrubbers from this class
+# `app/models/policy/{some_policy}/claim_personal_data_scrubber.rb`
 
-class Claim
-  class PersonalDataScrubber
+module Policies
+  class ClaimPersonalDataScrubber
     PERSONAL_DATA_ATTRIBUTES_TO_DELETE = [
       :first_name,
       :middle_name,
@@ -29,46 +32,65 @@ class Claim
     ]
 
     def scrub_completed_claims
-      Claim.transaction do
-        scrub_claims(old_rejected_claims)
-        scrub_claims(old_paid_claims)
+      old_rejected_claims
+        .unscrubbed
+        .includes(:amendments, :journey_session).each do |claim|
+        Claim::Scrubber.scrub!(claim, self.class::PERSONAL_DATA_ATTRIBUTES_TO_DELETE)
+      end
+
+      old_paid_claims
+        .unscrubbed
+        .includes(:amendments, :journey_session).each do |claim|
+        Claim::Scrubber.scrub!(claim, self.class::PERSONAL_DATA_ATTRIBUTES_TO_DELETE)
       end
     end
 
     private
 
-    def scrub_claims(claims)
-      claims.includes(:amendments).each do |claim|
-        scrub_amendments_personal_data(claim)
-      end
-
-      claims.update_all(attribute_values_to_set)
+    def policy
+      self.class.module_parent
     end
 
-    def attribute_values_to_set
-      PERSONAL_DATA_ATTRIBUTES_TO_DELETE.map { |attr| [attr, nil] }.to_h.merge(
-        personal_data_removed_at: Time.zone.now
-      )
+    def claim_scope
+      Claim.by_policy(policy)
     end
 
     def old_rejected_claims
-      Claim.joins(:decisions)
-        .where(personal_data_removed_at: nil)
+      claims_rejected_before(minimum_time)
+    end
+
+    def claims_rejected_before(date)
+      rejected_claims.where(
+        "decisions.created_at < :minimum_time",
+        minimum_time: date
+      )
+    end
+
+    def rejected_claims
+      claim_scope.joins(:decisions)
         .where(
-          "(decisions.undone = false AND decisions.result = :rejected AND decisions.created_at < :minimum_time)",
-          minimum_time: minimum_time,
+          "(decisions.undone = false AND decisions.result = :rejected)",
           rejected: Decision.results.fetch(:rejected)
         )
     end
 
     def old_paid_claims
+      claims_paid_before(minimum_time)
+    end
+
+    def claims_paid_before(date)
+      paid_claims.where(
+        "payments.scheduled_payment_date < :minimum_time",
+        minimum_time: date
+      )
+    end
+
+    def paid_claims
       claim_ids_with_payrollable_topups = Topup.payrollable.pluck(:claim_id)
       claim_ids_with_payrolled_topups_without_payment_confirmation = Topup.joins(payment: [:payroll_run]).where(payments: {scheduled_payment_date: nil}).pluck(:claim_id)
 
-      Claim.approved.joins(payments: [:payroll_run])
-        .where(personal_data_removed_at: nil)
+      claim_scope.approved.joins(payments: [:payroll_run])
         .where.not(id: claim_ids_with_payrollable_topups + claim_ids_with_payrolled_topups_without_payment_confirmation)
-        .where("payments.scheduled_payment_date < :minimum_time", minimum_time: minimum_time)
     end
 
     def minimum_time
@@ -77,22 +99,6 @@ class Claim
 
     def current_academic_year
       AcademicYear.current
-    end
-
-    def scrub_amendments_personal_data(claim)
-      claim.amendments.each do |amendment|
-        scrub_amendment_personal_data(amendment)
-      end
-    end
-
-    def scrub_amendment_personal_data(amendment)
-      attributes_to_scrub = PERSONAL_DATA_ATTRIBUTES_TO_DELETE.map(&:to_s) & amendment.claim_changes.keys
-      personal_data_mask = attributes_to_scrub.to_h { |attribute| [attribute, nil] }
-      amendment.claim_changes.merge!(personal_data_mask)
-
-      amendment.personal_data_removed_at = Time.zone.now
-
-      amendment.save!
     end
   end
 end
