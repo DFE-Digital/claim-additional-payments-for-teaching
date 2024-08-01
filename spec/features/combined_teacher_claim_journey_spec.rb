@@ -20,8 +20,8 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     click_on "Start now"
     expect(page).to have_current_path("/#{Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME}/existing-session")
 
-    choose "Yes, start claim for an additional payment for teaching and lose my progress on my first claim"
-    click_on "Submit"
+    choose "Start a new eligibility check"
+    click_on "Continue"
 
     skip_tid
 
