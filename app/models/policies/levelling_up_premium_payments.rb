@@ -30,6 +30,18 @@ module Policies
     # Percentage of claims to QA
     MIN_QA_THRESHOLD = 10
 
+    # Options shown to admins when rejecting a claim
+    ADMIN_DECISION_REJECTED_REASONS = [
+      :ineligible_subject,
+      :ineligible_year,
+      :ineligible_school,
+      :ineligible_qualification,
+      :no_qts_or_qtls,
+      :duplicate,
+      :no_response,
+      :other
+    ]
+
     def notify_reply_to_id
       "03ece7eb-2a5b-461b-9c91-6630d0051aa6"
     end

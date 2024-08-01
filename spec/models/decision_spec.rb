@@ -148,29 +148,79 @@ RSpec.describe Decision, type: :model do
   describe "#rejected_reasons_hash" do
     subject { decision.rejected_reasons_hash }
 
-    let(:decision) { create(:decision, :rejected, **rejected_reasons) }
-    let(:rejected_reasons) do
-      {
-        rejected_reasons_ineligible_subject: "1",
-        rejected_reasons_no_qts_or_qtls: "1"
-      }
-    end
-    let(:expected_hash) do
-      {
-        reason_ineligible_subject: "1",
-        reason_ineligible_year: "0",
-        reason_ineligible_school: "0",
-        reason_ineligible_qualification: "0",
-        reason_no_qts_or_qtls: "1",
-        reason_duplicate: "0",
-        reason_induction: "0",
-        reason_no_response: "0",
-        reason_other: "0"
-      }
+    let(:decision) { create(:decision, :rejected, claim: claim, **rejected_reasons) }
+
+    context "with an ECP claim" do
+      let(:claim) { create(:claim, policy: Policies::EarlyCareerPayments) }
+
+      let(:rejected_reasons) do
+        {
+          rejected_reasons_ineligible_subject: "1",
+          rejected_reasons_no_qts_or_qtls: "1"
+        }
+      end
+
+      it do
+        is_expected.to eq(
+          reason_ineligible_subject: "1",
+          reason_ineligible_year: "0",
+          reason_ineligible_school: "0",
+          reason_ineligible_qualification: "0",
+          reason_no_qts_or_qtls: "1",
+          reason_duplicate: "0",
+          reason_induction: "0",
+          reason_no_response: "0",
+          reason_other: "0"
+        )
+      end
     end
 
-    it "returns the complete hash of rejected reasons" do
-      is_expected.to eq(expected_hash)
+    context "with an LUP claim" do
+      let(:claim) { create(:claim, policy: Policies::LevellingUpPremiumPayments) }
+
+      let(:rejected_reasons) do
+        {
+          rejected_reasons_ineligible_subject: "1",
+          rejected_reasons_no_qts_or_qtls: "1"
+        }
+      end
+
+      it do
+        is_expected.to eq(
+          reason_ineligible_subject: "1",
+          reason_ineligible_year: "0",
+          reason_ineligible_school: "0",
+          reason_ineligible_qualification: "0",
+          reason_no_qts_or_qtls: "1",
+          reason_duplicate: "0",
+          reason_no_response: "0",
+          reason_other: "0"
+        )
+      end
+    end
+
+    context "with a TSLR claim" do
+      let(:rejected_reasons) do
+        {
+          rejected_reasons_ineligible_subject: "1",
+          rejected_reasons_no_qts_or_qtls: "1"
+        }
+      end
+
+      let(:claim) { create(:claim, policy: Policies::StudentLoans) }
+
+      it do
+        is_expected.to eq(
+          reason_ineligible_subject: "1",
+          reason_ineligible_year: "0",
+          reason_ineligible_school: "0",
+          reason_ineligible_qualification: "0",
+          reason_no_qts_or_qtls: "1",
+          reason_duplicate: "0",
+          reason_no_response: "0",
+          reason_other: "0"
+        )
+      end
     end
   end
 

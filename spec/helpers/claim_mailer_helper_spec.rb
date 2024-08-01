@@ -3,7 +3,8 @@ require "rails_helper"
 describe ClaimMailerHelper do
   describe ".rejected_reasons_personalisation" do
     subject { rejected_reasons_personalisation(decision.rejected_reasons_hash) }
-    let(:decision) { create(:decision, :rejected, :with_notes, **rejected_reasons) }
+    let(:claim) { create(:claim, policy: Policies::EarlyCareerPayments) }
+    let(:decision) { create(:decision, :rejected, :with_notes, claim: claim, **rejected_reasons) }
 
     context "with rejected reasons that don't include 'other'" do
       let(:rejected_reasons) do
