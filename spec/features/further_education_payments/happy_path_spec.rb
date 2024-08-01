@@ -22,7 +22,7 @@ RSpec.feature "Further education payments" do
     fill_in "Which FE provider are you employed by?", with: college.name
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     choose college.name
     click_button "Continue"
 
@@ -115,7 +115,7 @@ RSpec.feature "Further education payments" do
 
     sign_in_with_one_login
 
-    expect(page).to have_content("How we will use the information you provide in your application")
+    expect(page).to have_content("How we will use the information you provide")
     click_button "Continue"
 
     expect(page).to have_content("Personal details")
@@ -173,7 +173,7 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Check your answers before sending your application")
     click_on "Accept and send"
 
-    expect(page).to have_content("You applied for a further education financial incentive payment")
+    expect(page).to have_content("You applied for a further education retention payment")
   end
 
   def and_college_exists

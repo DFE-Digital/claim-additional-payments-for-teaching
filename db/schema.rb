@@ -213,6 +213,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_31_152713) do
   create_table "further_education_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "award_amount", precision: 7, scale: 2
   end
 
   create_table "international_relocation_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

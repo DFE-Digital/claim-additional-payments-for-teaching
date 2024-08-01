@@ -23,7 +23,7 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     end
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     expect(page).to have_selector "input[type=radio][checked=checked][value='#{college.id}']", visible: false
     click_button "Continue"
 
@@ -79,7 +79,7 @@ RSpec.feature "Further education payments", js: true, flaky: true do
 
     sign_in_with_one_login
 
-    expect(page).to have_content("How we will use the information you provide in your application")
+    expect(page).to have_content("How we will use the information you provide")
     click_button "Continue"
 
     expect(page).to have_content("Personal details")
@@ -137,7 +137,7 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     expect(page).to have_content("Check your answers before sending your application")
     click_on "Accept and send"
 
-    expect(page).to have_content("You applied for a further education financial incentive payment")
+    expect(page).to have_content("You applied for a further education retention payment")
   end
 
   def and_college_exists

@@ -19,6 +19,9 @@ RSpec.feature "Further education payments ineligible paths" do
 
     expect(page).to have_content("You are not eligible")
     expect(page).to have_content("you must be employed as a member of staff with teaching responsibilities")
+    click_link "Back"
+
+    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
   end
 
   scenario "when ineligible FE provider is selected" do
@@ -38,7 +41,7 @@ RSpec.feature "Further education payments ineligible paths" do
     fill_in "Which FE provider are you employed by?", with: ineligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     choose ineligible_college.name
     click_button "Continue"
 
@@ -49,7 +52,7 @@ RSpec.feature "Further education payments ineligible paths" do
     fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     choose eligible_college.name
     click_button "Continue"
 
@@ -77,7 +80,7 @@ RSpec.feature "Further education payments ineligible paths" do
     end
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     choose ineligible_college.name
     click_button "Continue"
 
@@ -92,7 +95,7 @@ RSpec.feature "Further education payments ineligible paths" do
     end
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     choose eligible_college.name
     click_button "Continue"
 
@@ -115,7 +118,7 @@ RSpec.feature "Further education payments ineligible paths" do
     fill_in "Which FE provider are you employed by?", with: closed_eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     choose closed_eligible_college.name
     click_button "Continue"
 
@@ -126,7 +129,7 @@ RSpec.feature "Further education payments ineligible paths" do
     fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     choose eligible_college.name
     click_button "Continue"
 
@@ -149,7 +152,7 @@ RSpec.feature "Further education payments ineligible paths" do
     fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     choose eligible_college.name
     click_button "Continue"
 
@@ -184,7 +187,7 @@ RSpec.feature "Further education payments ineligible paths" do
     fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     choose eligible_college.name
     click_button "Continue"
 
@@ -224,7 +227,7 @@ RSpec.feature "Further education payments ineligible paths" do
     fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     choose eligible_college.name
     click_button "Continue"
 
@@ -255,7 +258,7 @@ RSpec.feature "Further education payments ineligible paths" do
     fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     choose eligible_college.name
     click_button "Continue"
 
@@ -299,7 +302,7 @@ RSpec.feature "Further education payments ineligible paths" do
     fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     choose eligible_college.name
     click_button "Continue"
 
@@ -347,7 +350,7 @@ RSpec.feature "Further education payments ineligible paths" do
     fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     choose eligible_college.name
     click_button "Continue"
 
@@ -383,7 +386,7 @@ RSpec.feature "Further education payments ineligible paths" do
     fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     choose eligible_college.name
     click_button "Continue"
 
@@ -449,7 +452,7 @@ RSpec.feature "Further education payments ineligible paths" do
     fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     choose eligible_college.name
     click_button "Continue"
 
@@ -515,7 +518,7 @@ RSpec.feature "Further education payments ineligible paths" do
     fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     choose eligible_college.name
     click_button "Continue"
 
@@ -571,7 +574,7 @@ RSpec.feature "Further education payments ineligible paths" do
     fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     choose eligible_college.name
     click_button "Continue"
 
@@ -603,7 +606,7 @@ RSpec.feature "Further education payments ineligible paths" do
     fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     choose eligible_college.name
     click_button "Continue"
 
@@ -643,7 +646,7 @@ RSpec.feature "Further education payments ineligible paths" do
     fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     choose eligible_college.name
     click_button "Continue"
 
@@ -683,7 +686,7 @@ RSpec.feature "Further education payments ineligible paths" do
     fill_in "Which FE provider are you employed by?", with: eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("Select the college you teach at")
+    expect(page).to have_content("Select where you are employed")
     choose eligible_college.name
     click_button "Continue"
 

@@ -40,6 +40,19 @@ module Policies
     # Percentage of claims to QA
     MIN_QA_THRESHOLD = 10
 
+    # Options shown to admins when rejecting a claim
+    ADMIN_DECISION_REJECTED_REASONS = [
+      :ineligible_subject,
+      :ineligible_year,
+      :ineligible_school,
+      :ineligible_qualification,
+      :induction,
+      :no_qts_or_qtls,
+      :duplicate,
+      :no_response,
+      :other
+    ]
+
     def eligibility_page_url
       "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools"
     end

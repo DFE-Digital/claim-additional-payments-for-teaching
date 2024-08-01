@@ -10,6 +10,8 @@ class Topup < ApplicationRecord
   validates :award_amount, presence: {message: "Enter top up amount"}
   validate :award_amount_must_be_in_range, on: :create
 
+  delegate :national_insurance_number, to: :claim
+
   def payrolled?
     payment.present?
   end

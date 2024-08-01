@@ -128,16 +128,6 @@ en:
       notes: "Notes"
       created_by: "Created by"
       reasons: Reasons
-      rejected_reasons:
-        ineligible_subject: Ineligible subject
-        ineligible_year: Ineligible year
-        ineligible_school: Ineligible school
-        ineligible_qualification: Ineligible qualification
-        induction: Induction - ECP only
-        no_qts_or_qtls: No QTS or QTLS
-        duplicate: Duplicate
-        no_response: No response
-        other: Other
     duplicate_attributes_message:
       one: Details in this claim match another %{policy} claim
       other: Details in this claim match other %{policy} claims
@@ -389,6 +379,16 @@ en:
     information_provided_further_details_link_text: claiming back your student loan repayments (opens in new tab)
     admin:
       claim_school: "Claim school"
+      decision:
+        rejected_reasons:
+          ineligible_subject: Ineligible subject
+          ineligible_year: Ineligible year
+          ineligible_school: Ineligible school
+          ineligible_qualification: Ineligible qualification
+          no_qts_or_qtls: No QTS or QTLS
+          duplicate: Duplicate
+          no_response: No response
+          other: Other
       subjects_taught: "Subjects taught"
       had_leadership_position: "Had leadership position?"
       mostly_performed_leadership_duties: "Mostly performed leadership duties?"
@@ -624,6 +624,17 @@ en:
       employed_as_supply_teacher: "Employed as a supply teacher?"
       nqt_in_academic_year_after_itt: "Teaching as a qualified teacher?"
       induction_completed: "Has completed induction as an early-career teacher?"
+      decision:
+        rejected_reasons:
+          ineligible_subject: Ineligible subject
+          ineligible_year: Ineligible year
+          ineligible_school: Ineligible school
+          ineligible_qualification: Ineligible qualification
+          induction: Induction - ECP only
+          no_qts_or_qtls: No QTS or QTLS
+          duplicate: Duplicate
+          no_response: No response
+          other: Other
       task_questions:
         employment:
           title: "Does the claimant’s current school match the above information from their claim?"
@@ -772,6 +783,16 @@ en:
     policy_short_name: "International Relocation Payments"
     policy_acronym: "IRP"
     admin:
+      decision:
+        rejected_reasons:
+          duplicate: Duplicate application
+          ineligible_school: Ineligible school
+          invalid_bank_details: Invalid bank details
+          ineligible_visa_or_entry_date: "Visa/entry date ineligible"
+          ineligible_employment_terms: Ineligible employment terms
+          no_response_from_school: No response from school
+          suspected_fraud: Suspected fraud
+          information_mismatch_new_details_needed: "Information mismatch - new details needed"
       eligibility_answers:
         nationality: "Nationality"
         passport_number: "Passport number"
@@ -841,9 +862,10 @@ en:
           blank: Enter a college name or postcode
           min_length: Enter a college name or postcode that is at least 3 characters long
       select_provision:
-        heading: Select the college you teach at
+        heading: Select where you are employed
+        hint: Select the further education provider you are employed by. If you work for a college or sixth-form group, you should select the group name.
         errors:
-          blank: Select the college you teach at
+          blank: Select where you are employed
       contract_type:
         question: What type of contract do you have with %{school_name}?
         options:

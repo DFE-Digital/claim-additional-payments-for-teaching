@@ -74,7 +74,7 @@ module Admin
     def rejected_reasons_list(decision)
       decision.selected_rejected_reasons
         .sort_by { |k| Decision::REJECTED_REASONS.index(k) }
-        .map { |reason| t("admin.decision.rejected_reasons.#{reason}") }
+        .map { |reason| t("#{decision.policy.locale_key}.admin.decision.rejected_reasons.#{reason}") }
         .join(", ")
     end
 

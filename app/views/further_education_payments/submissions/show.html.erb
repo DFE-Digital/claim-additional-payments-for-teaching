@@ -5,7 +5,7 @@
 
     <div class="govuk-panel govuk-panel--confirmation">
       <h1 class="govuk-panel__title" id="submitted-title">
-        You applied for a further education financial incentive payment
+        You applied for a further education retention payment
       </h1>
 
       <div class="govuk-panel__body">
@@ -15,7 +15,42 @@
     </div>
 
     <p class="govuk-body">
-      FE CONFIRMATION PLACEHOLDER
+      We have sent you a confirmation email to <%= submitted_claim.email_address %>.
     </p>
+
+    <h2 class="govuk-heading-m">
+      What happens next
+    </h2>
+
+    <p class="govuk-body">
+      Your application will be reviewed by the Department for Education. If it’s approved, you will receive the payment in one lump sum.
+    </p>
+
+    <p class="govuk-body">
+      Payments are given up to 20 weeks from applying. We will email you updates on the progress of your application.
+    </p>
+
+    <p class="govuk-body">
+      You will also receive emails to confirm:
+    </p>
+
+    <%= govuk_list [
+      "whether your application is accepted or rejected, usually within 14 weeks",
+      "when your payment has been made, with a full breakdown of how much you have received",
+    ], type: :bullet %>
+
+    <h2 class="govuk-heading-m">
+      Apply for a retention payment each academic year
+    </h2>
+
+    <p class="govuk-body">
+      As long as you continue to meet the <%= govuk_link_to "eligibility criteria", "https://www.gov.uk/guidance/levelling-up-premium-payments-for-fe-teachers#eligibility" %>, you could claim a retention payment in future academic years.
+    </p>
+
+    <p class="govuk-body">
+      You can set a reminder so you know when you are able to apply next year. We cannot issue payments unless you apply.
+    </p>
+
+    <%= govuk_button_link_to "Set reminder", "#" %>
   </div>
 </div>

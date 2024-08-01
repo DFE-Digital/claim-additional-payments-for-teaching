@@ -70,7 +70,7 @@
                 <div class="govuk-checkboxes__item">
                   <%= form.hidden_field reason_prefixed, value: false %>
                   <%= form.check_box reason_prefixed, class: "govuk-checkboxes__input subject", id: reason_prefixed %>
-                  <%= form.label reason_prefixed, t("admin.decision.rejected_reasons.#{reason}"), class: "govuk-label govuk-checkboxes__label", for: reason_prefixed %>
+                  <%= form.label reason_prefixed, t("#{claim.policy.locale_key}.admin.decision.rejected_reasons.#{reason}"), class: "govuk-label govuk-checkboxes__label", for: reason_prefixed %>
                 </div>
               <% end %>
             </div>

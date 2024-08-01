@@ -34,6 +34,16 @@ RSpec.describe Claim, type: :model do
         end
       end
     end
+
+    describe "::with_same_claimant" do
+      let(:claim_1) { create(:claim, national_insurance_number: "AB123456A") }
+      let(:claim_2) { create(:claim, national_insurance_number: "AB123456A") }
+      let(:claim_3) { create(:claim, national_insurance_number: "CD123456A") }
+
+      subject { Claim.with_same_claimant(claim_1) }
+
+      it { is_expected.to contain_exactly(claim_2) }
+    end
   end
 
   it "validates academic years are formated like '2020/2021'" do
@@ -326,11 +336,11 @@ RSpec.describe Claim, type: :model do
       expect(claim_with_decision.approvable?).to eq false
     end
 
-    it "returns false when there exists another payrollable claim with the same teacher reference number but with inconsistent attributes that would prevent us from running payroll" do
-      teacher_reference_number = generate(:teacher_reference_number)
-      create(:claim, :approved, eligibility_attributes: {teacher_reference_number: teacher_reference_number}, date_of_birth: 20.years.ago)
+    it "returns false when there exists another payrollable claim with the same national insurance number but with inconsistent attributes that would prevent us from running payroll" do
+      national_insurance_number = generate(:national_insurance_number)
+      create(:claim, :approved, national_insurance_number: national_insurance_number, date_of_birth: 20.years.ago)
 
-      expect(create(:claim, :submitted, eligibility_attributes: {teacher_reference_number: teacher_reference_number}, date_of_birth: 30.years.ago).approvable?).to eq false
+      expect(create(:claim, :submitted, national_insurance_number: national_insurance_number, date_of_birth: 30.years.ago).approvable?).to eq false
     end
 
     context "when the claim is held" do
@@ -1278,6 +1288,24 @@ RSpec.describe Claim, type: :model do
     context "when dqt_teacher_status value is not empty" do
       let(:dqt_teacher_status) { {"test" => "test"} }
       it { is_expected.to be_a(claim.policy::DqtRecord) }
+    end
+  end
+
+  describe "#same_claimant?" do
+    subject { claim.same_claimant?(other_claim) }
+
+    let(:claim) { create(:claim, national_insurance_number: "AA12345A") }
+
+    context "with the same claimant" do
+      let(:other_claim) { create(:claim, national_insurance_number: "AA12345A") }
+
+      it { is_expected.to be true }
+    end
+
+    context "with a different claimant" do
+      let(:other_claim) { create(:claim, national_insurance_number: "BB12345B") }
+
+      it { is_expected.to be false }
     end
   end
 end

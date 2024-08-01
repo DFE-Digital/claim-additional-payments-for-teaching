@@ -2,7 +2,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">How we will use the information you provide in your application</h1>
+    <h1 class="govuk-heading-xl">How we will use the information you provide</h1>
 
     <h2 class="govuk-heading-m">To process your application</h2>
 
@@ -11,12 +11,12 @@
     </p>
 
     <p class="govuk-body">
-      We may also check this information with:
+      We will also check this information with the:
     </p>
 
     <%= govuk_list [
-      "the Department for Education’s (DfE) database of qualified teachers",
-      "the Teacher Pension Scheme"
+      "Department for Education’s (DfE) database of qualified teachers",
+      "Teacher Pension Scheme"
     ], type: :bullet %>
 
     <h2 class="govuk-heading-m">To pay you</h2>
@@ -32,27 +32,25 @@
     <%= govuk_list [
       "National Insurance number",
       "bank account details",
-      "anything else needed"
     ], type: :bullet %>
 
     <p class="govuk-body">
       You will also be asked to provide your teacher reference number (TRN) if you have one, although this is optional.
     </p>
 
-    <%= govuk_details(summary_text: "Where can I find my TRN?") do %>
+    <%= govuk_details(summary_text: "Where to find your TRN") do %>
       <p class="govuk-body">
-        Your TRN may be shown on a:
+        A TRN is a 7-digit number that uniquely identifies you in the education sector in England. Most people eligible for a TRN will be given one automatically.
+      </p>
+
+      <p class="govuk-body">
+        If you are unsure what your TRN is, you can:
       </p>
 
       <%= govuk_list [
-        "payslip",
-        "teacher pension statement",
-        "teacher training records"
-      ], type: :bullet %>
-
-      <p class="govuk-body">
-        Get help to <%= govuk_link_to "find your TRN", "https://find-a-lost-trn.education.gov.uk/start", new_tab: true %> if you do not know it or have forgotten it.
-      </p>
+        "Check your payslip or Teachers’ Pension Scheme Benefit Statement.",
+        "Use #{govuk_link_to "Find a lost TRN", "https://find-a-lost-trn.education.gov.uk/start"} to check if you have a TRN or find your TRN.".html_safe,
+      ], type: :number %>
     <% end %>
 
     <h2 class="govuk-heading-m">Student loan deductions</h2>
@@ -64,8 +62,7 @@
     <h2 class="govuk-heading-m">Income Tax</h2>
 
     <p class="govuk-body">
-      Your financial incentive payment is taxable income, but DfE will pay Income Tax and National Insurance contributions due to HMRC for you.
-      This means the payment amount you receive may be lower following tax deductions.
+      Your financial incentive payment is taxable income. However DfE will pay any Income Tax and National Insurance contributions due to HMRC for you. This means the payment amount you receive may be lower following tax deductions.
     </p>
 
     <p class="govuk-body">

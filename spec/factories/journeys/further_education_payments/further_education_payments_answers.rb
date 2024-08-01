@@ -5,5 +5,9 @@ FactoryBot.define do
       surname { "Bloggs" }
       onelogin_user_info { {email: "jo.bloggs@example.com"} }
     end
+
+    trait :submittable do
+      # FIXME implement this trait with the details required to submit a claim
+    end
   end
 end
