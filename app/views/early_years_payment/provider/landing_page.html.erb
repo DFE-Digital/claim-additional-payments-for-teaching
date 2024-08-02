@@ -133,7 +133,7 @@
     </p>
 
     <% if @journey_open %>
-      <%= govuk_start_button(text: "Start now", href: "#") %>
+      <%= govuk_start_button(text: "Start now", href: claim_path(current_journey_routing_name, "claim")) %>
     <% end %>
   </div>
 </div>
