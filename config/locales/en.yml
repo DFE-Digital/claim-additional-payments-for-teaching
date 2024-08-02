@@ -936,6 +936,7 @@ en:
       building_construction_courses:
         <<: *courses
         question: Which building and construction courses do you teach?
+        question_check_your_answers: Building and construction courses
         options:
           esfa_buildingconstruction: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
           tlevel_building: T Level in building services engineering for construction
@@ -946,6 +947,7 @@ en:
       chemistry_courses:
         <<: *courses
         question: Which chemistry courses do you teach?
+        question_check_your_answers: Chemistry courses
         options:
           alevel_chemistry: A or AS level chemistry
           gcse_chemistry: GCSE chemistry
@@ -954,6 +956,7 @@ en:
       computing_courses:
         <<: *courses
         question: Which computing courses do you teach?
+        question_check_your_answers: Computing courses
         options:
           esfa_digitalpractitioners: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
           esfa_digitalusers: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
@@ -967,6 +970,7 @@ en:
       early_years_courses:
         <<: *courses
         question: Which early years courses do you teach?
+        question_check_your_answers: Early years courses
         options:
           eylevel2: Early years practitioner (level 2) apprenticeship
           eylevel3: Early years educator (level 3) apprenticeship
@@ -977,6 +981,7 @@ en:
       engineering_manufacturing_courses:
         <<: *courses
         question: Which engineering and manufacturing courses do you teach?
+        question_check_your_answers: Engineering and manufacturing courses
         options:
           esfa_engineering: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
           esfa_manufacturing: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
@@ -989,6 +994,7 @@ en:
       maths_courses:
         <<: *courses
         question: Which maths courses do you teach?
+        question_check_your_answers: Maths courses
         options:
           esfa: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
           gcse_maths:
@@ -998,6 +1004,7 @@ en:
       physics_courses:
         <<: *courses
         question: Which physics courses do you teach?
+        question_check_your_answers: Physics courses
         options:
           alevel_physics: A or AS level physics
           gcse_physics: GCSE physics
