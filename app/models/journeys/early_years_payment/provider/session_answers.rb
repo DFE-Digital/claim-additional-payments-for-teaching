@@ -5,7 +5,7 @@ module Journeys
         attribute :consent_given, :boolean
 
         def policy
-          Policies::EarlyYearsPayment
+          Policies::EarlyYearsPayments
         end
       end
     end

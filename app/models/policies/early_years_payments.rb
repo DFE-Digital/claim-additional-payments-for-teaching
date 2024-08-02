@@ -1,5 +1,5 @@
 module Policies
-  module EarlyYearsPayment
+  module EarlyYearsPayments
     include BasePolicy
     extend self
 

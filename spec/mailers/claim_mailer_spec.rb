@@ -308,6 +308,14 @@ RSpec.describe ClaimMailer, type: :mailer do
         }.to raise_error(ArgumentError, "Unknown claim policy: SomePolicy")
       end
     end
+
+    describe "#early_years_payment_provider_email" do
+      it "raises error" do
+        expect {
+          ClaimMailer.early_years_payment_provider_email(claim, nil).deliver!
+        }.to raise_error(ArgumentError, "Unknown claim policy: SomePolicy")
+      end
+    end
   end
 
   describe "#email_verification" do
@@ -333,6 +341,21 @@ RSpec.describe ClaimMailer, type: :mailer do
         expect(mail[:personalisation].decoded).to eq("{:email_subject=>\"Levelling up premium payment email verification\", :first_name=>\"Ellie\", :one_time_password=>123124, :support_email_address=>\"levellinguppremiumpayments@digital.education.gov.uk\", :validity_duration=>\"15 minutes\"}")
         expect(mail.body).to be_empty
       end
+    end
+  end
+
+  describe "#early_years_payment_provider_email" do
+    let(:mail) { ClaimMailer.early_years_payment_provider_email(claim, one_time_password) }
+    let(:one_time_password) { 123124 }
+    let(:claim) { build(:claim, policy: policy, email_address: "test@test.com") }
+    let(:policy) { Policies::EarlyYearsPayments }
+
+    before { create(:journey_configuration, :early_years_payment_provider) }
+
+    it "has personalisation keys for: one time password" do
+      # TODO find correct email subject. Is subject used? or overriden on notify template?
+      expect(mail[:personalisation].decoded).to eq("{:email_subject=>\"Early Years Payment\", :one_time_password=>123124}")
+      expect(mail.body).to be_empty
     end
   end
 end

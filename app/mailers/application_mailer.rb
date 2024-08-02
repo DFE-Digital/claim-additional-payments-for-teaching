@@ -31,4 +31,7 @@ class ApplicationMailer < Mail::Notify::Mailer
     CLAIM_UPDATE_AFTER_THREE_WEEKS_NOTIFY_TEMPLATE_ID: "967cc72f-e2e4-4c42-a07f-dd8b8375716e".freeze,
     CLAIM_REJECTED_NOTIFY_TEMPLATE_ID: "1edc468c-a1bf-4bea-bb79-042740cd8547".freeze
   }
+  EARLY_YEARS_PAYMENTS = {
+    CLAIM_PROVIDER_EMAIL_TEMPLATE_ID: "e0b78a08-601b-40ba-a97f-61fb00a7c951".freeze
+  }
 end

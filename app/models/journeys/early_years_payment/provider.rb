@@ -7,10 +7,11 @@ module Journeys
       ROUTING_NAME = "early-years-payment-provider"
       VIEW_PATH = "early_years_payment/provider"
       I18N_NAMESPACE = "early_years_payment_provider"
-      POLICIES = [Policies::EarlyYearsPayment]
+      POLICIES = [Policies::EarlyYearsPayments]
       FORMS = {
         "claims" => {
-          "consent" => ConsentForm
+          "consent" => ConsentForm,
+          "email-address" => EmailAddressForm
         }
       }
     end

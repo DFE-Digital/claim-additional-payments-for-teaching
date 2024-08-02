@@ -3,6 +3,8 @@ module Journeys
     module Provider
       class SlugSequence
         SLUGS = %w[
+          email-address
+          check-your-email
           consent
           current-nursery
         ].freeze
