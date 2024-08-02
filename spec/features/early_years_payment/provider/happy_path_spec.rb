@@ -2,6 +2,8 @@ require "rails_helper"
 
 RSpec.feature "Early years payment provider" do
   let(:journey_session) { Journeys::EarlyYearsPayment::Provider::Session.last }
+  let(:mail) { ActionMailer::Base.deliveries.last }
+  let(:otp) { mail[:personalisation].unparsed_value[:one_time_password] }
 
   scenario "happy path claim" do
     when_early_years_payment_provider_journey_configuration_exists
@@ -18,8 +20,7 @@ RSpec.feature "Early years payment provider" do
     expect(page).to have_content("Check your email")
     expect(page).to have_content("We have sent an email to johndoe@example.com")
 
-    mail = ActionMailer::Base.deliveries.last
-    otp = mail[:personalisation].unparsed_value[:one_time_password]
+    expect(mail.to).to eq ["johndoe@example.com"]
     expect(otp).to match(/\A\d{6}\Z/)
 
     visit claim_path(Journeys::EarlyYearsPayment::Provider::ROUTING_NAME, :consent, code: otp)
@@ -29,7 +30,21 @@ RSpec.feature "Early years payment provider" do
     click_button "Continue"
   end
 
-  scenario "send another link"
+  scenario "enter another email address" do
+    when_early_years_payment_provider_journey_configuration_exists
 
-  scenario "enter another email address"
+    visit landing_page_path(Journeys::EarlyYearsPayment::Provider::ROUTING_NAME)
+    click_link "Start now"
+
+    fill_in "Email address", with: "johndoe@example.com"
+    click_on "Submit"
+    click_on "enter another email address"
+
+    fill_in "Email address", with: "janedoe@example.com"
+    click_on "Submit"
+
+    expect(page).to have_content("We have sent an email to janedoe@example.com")
+
+    expect(mail.to).to eq ["janedoe@example.com"]
+  end
 end
