@@ -9,7 +9,9 @@ module Journeys
       I18N_NAMESPACE = "early_years_payment_provider"
       POLICIES = [Policies::EarlyYearsPayment]
       FORMS = {
-        "claims" => {}
+        "claims" => {
+          "consent" => ConsentForm
+        }
       }
     end
   end
