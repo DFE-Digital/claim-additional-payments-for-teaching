@@ -107,6 +107,6 @@ class ClaimsController < BasePublicController
   end
 
   def correct_journey_for_claim_in_progress?
-    journey == Journeys.for_routing_name(journey_session.journey)
+    journey == Journeys.for_routing_name(journey_session.journey) if journey_session
   end
 end
