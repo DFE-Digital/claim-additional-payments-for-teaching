@@ -7,6 +7,7 @@ module Journeys
 
     DEAD_END_SLUGS = %w[complete existing-session eligible-later future-eligibility ineligible]
     OPTIONAL_SLUGS = %w[postcode-search select-home-address reset-claim]
+    MAGIC_LINK_SLUGS = %w[consent]
 
     def initialize(slug_sequence, completed_slugs, current_slug, journey_session)
       @current_slug = current_slug
@@ -59,6 +60,10 @@ module Journeys
 
     def next_required_slug
       (slugs - completed_slugs - OPTIONAL_SLUGS).first
+    end
+
+    def magic_link?
+      MAGIC_LINK_SLUGS.include?(current_slug)
     end
 
     private

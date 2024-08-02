@@ -6,7 +6,9 @@ module Journeys
 
         def save
           journey_session.answers.assign_attributes(
-            email_address: email_address
+            email_address: email_address,
+            sent_one_time_password_at: Time.now,
+            email_verified: email_verified
           )
           journey_session.save!
 
@@ -14,6 +16,15 @@ module Journeys
         end
 
         private
+
+        def email_address_changed?
+          email_address != answers.email_address
+        end
+
+        def email_verified
+          return nil if email_address_changed?
+          answers.email_verified
+        end
 
         def otp_code
           @otp_code ||= OneTimePassword::Generator.new.code

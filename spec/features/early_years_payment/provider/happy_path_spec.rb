@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Early years payment provider" do
+  let(:journey_session) { Journeys::EarlyYearsPayment::Provider::Session.last }
+
   scenario "happy path claim" do
     when_early_years_payment_provider_journey_configuration_exists
 
@@ -17,13 +19,14 @@ RSpec.feature "Early years payment provider" do
     expect(page).to have_content("We have sent an email to johndoe@example.com")
 
     mail = ActionMailer::Base.deliveries.last
-    mail_personalisation = mail[:personalisation].unparsed_value
-    expect(mail_personalisation[:one_time_password]).to match(/\A\d{6}\Z/)
+    otp = mail[:personalisation].unparsed_value[:one_time_password]
+    expect(otp).to match(/\A\d{6}\Z/)
 
-    # TODO - uncomment below when magic link functionality in place
-    # expect(page).to have_content("Declaration of Employee Consent")
-    # check "I confirm that I have obtained consent from my employee and have provided them with the relevant privacy notice."
-    # click_button "Continue"
+    visit claim_path(Journeys::EarlyYearsPayment::Provider::ROUTING_NAME, :consent, code: otp)
+    expect(journey_session.reload.answers.email_verified).to be true
+    expect(page).to have_content("Declaration of Employee Consent")
+    check "I confirm that I have obtained consent from my employee and have provided them with the relevant privacy notice."
+    click_button "Continue"
   end
 
   scenario "send another link"

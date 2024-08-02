@@ -79,7 +79,17 @@ class ClaimsController < BasePublicController
 
     raise ActionController::RoutingError.new("Not Found for #{params[:slug]}") unless page_sequence.in_sequence?(params[:slug])
 
+    handle_magic_link if page_sequence.magic_link?
     redirect_to claim_path(current_journey_routing_name, next_required_slug) unless page_sequence.has_completed_journey_until?(params[:slug])
+  end
+
+  def handle_magic_link
+    otp = OneTimePassword::Validator.new(params[:code], answers.sent_one_time_password_at)
+    if otp.valid?
+      journey_session.answers.assign_attributes(email_verified: true)
+      journey_session.save!
+      session[:slugs] << page_sequence.next_required_slug
+    end
   end
 
   def initialize_session_slug_history
