@@ -17,6 +17,9 @@ RSpec.feature "Early years payment provider" do
     click_on "Submit"
 
     expect(page.title).to have_text(I18n.t("early_years_payment_provider.check_your_email_page.title"))
+    within ".govuk-notification-banner--success" do
+      expect(page).to have_content("Email sent to johndoe@example.com")
+    end
     expect(page).to have_content("Check your email")
     expect(page).to have_content("We have sent an email to johndoe@example.com")
 
