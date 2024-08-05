@@ -1,6 +1,7 @@
 class BankDetailsForm < Form
   # Only validate against HMRC API if number of attempts is below threshold
   MAX_HMRC_API_VALIDATION_ATTEMPTS = 3
+  BANKING_NAME_REGEX_FILTER = /\A[0-9A-Za-z .\/&-]*\z/
 
   attribute :hmrc_validation_attempt_count, :integer
   attribute :banking_name, :string
@@ -11,6 +12,7 @@ class BankDetailsForm < Form
   attr_reader :hmrc_api_validation_attempted, :hmrc_api_validation_succeeded, :hmrc_api_response_error
 
   validates :banking_name, presence: {message: i18n_error_message(:enter_banking_name)}
+  validates :banking_name, format: {with: BANKING_NAME_REGEX_FILTER, message: i18n_error_message(:invalid_banking_name)}, if: -> { banking_name.present? }
   validates :bank_sort_code, presence: {message: i18n_error_message(:enter_sort_code)}
   validates :bank_account_number, presence: {message: i18n_error_message(:enter_account_number)}
   validates :building_society_roll_number, presence: {message: i18n_error_message(:enter_roll_number)}, if: -> { answers.building_society? }
