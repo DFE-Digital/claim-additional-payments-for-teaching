@@ -85,7 +85,7 @@ class ClaimsController < BasePublicController
 
   def handle_magic_link
     otp = OneTimePassword::Validator.new(params[:code], answers.sent_one_time_password_at)
-    if otp.valid?
+    if otp.valid? # && EligibleEyProvider.eligible_email?(journey_session.answers.email_address) # TODO eligible check once model merged: https://github.com/DFE-Digital/claim-additional-payments-for-teaching/pull/3050
       journey_session.answers.assign_attributes(email_verified: true)
       journey_session.save!
       session[:slugs] << page_sequence.next_required_slug

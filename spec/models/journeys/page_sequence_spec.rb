@@ -219,20 +219,4 @@ RSpec.describe Journeys::PageSequence do
       expect(page_sequence.next_required_slug).to eq("second-slug")
     end
   end
-
-  describe "#magic_link?" do
-    subject { page_sequence.magic_link? }
-
-    context "when the current slug is not a magic link" do
-      let(:current_slug) { "whatever" }
-
-      it { is_expected.to be false }
-    end
-
-    context "when the current slug is not a magic link" do
-      let(:current_slug) { "consent" }
-
-      it { is_expected.to be true }
-    end
-  end
 end

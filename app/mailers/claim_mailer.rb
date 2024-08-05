@@ -74,11 +74,9 @@ class ClaimMailer < ApplicationMailer
   def early_years_payment_provider_email(claim, one_time_password)
     unknown_policy_check(claim)
     set_common_instance_variables(claim)
-    @subject = @claim_subject
-    @one_time_password = one_time_password
+    @magic_link = early_years_payment_provider_magic_link(one_time_password)
     personalisation = {
-      email_subject: @subject,
-      one_time_password: @one_time_password
+      magic_link: @magic_link
     }
 
     send_mail(template_ids(claim)[:CLAIM_PROVIDER_EMAIL_TEMPLATE_ID], personalisation)
@@ -119,5 +117,10 @@ class ClaimMailer < ApplicationMailer
       Policies::EarlyYearsPayments
     ].include?(claim.policy)
     raise ArgumentError, "Unknown claim policy: #{claim.policy}"
+  end
+
+  def early_years_payment_provider_magic_link(one_time_password)
+    slug = Journeys::PageSequence::EARLY_YEARS_PAYMENT_PROVIDER_EMAIL_SLUG
+    "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Provider::ROUTING_NAME}/#{slug}?code=#{one_time_password}"
   end
 end

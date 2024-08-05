@@ -352,9 +352,8 @@ RSpec.describe ClaimMailer, type: :mailer do
 
     before { create(:journey_configuration, :early_years_payment_provider) }
 
-    it "has personalisation keys for: one time password" do
-      # TODO find correct email subject. Is subject used? or overriden on notify template?
-      expect(mail[:personalisation].decoded).to eq("{:email_subject=>\"Early Years Payment\", :one_time_password=>123124}")
+    it "has personalisation keys for: magic link" do
+      expect(mail[:personalisation].decoded).to eq("{:magic_link=>\"https://#{ENV["CANONICAL_HOSTNAME"]}/early-years-payment-provider/consent?code=123124\"}")
       expect(mail.body).to be_empty
     end
   end

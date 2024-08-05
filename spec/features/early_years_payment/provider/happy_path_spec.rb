@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Early years payment provider" do
   let(:journey_session) { Journeys::EarlyYearsPayment::Provider::Session.last }
   let(:mail) { ActionMailer::Base.deliveries.last }
-  let(:otp) { mail[:personalisation].unparsed_value[:one_time_password] }
+  let(:magic_link) { mail[:personalisation].unparsed_value[:magic_link] }
 
   scenario "happy path claim" do
     when_early_years_payment_provider_journey_configuration_exists
@@ -24,9 +24,9 @@ RSpec.feature "Early years payment provider" do
     expect(page).to have_content("We have sent an email to johndoe@example.com")
 
     expect(mail.to).to eq ["johndoe@example.com"]
-    expect(otp).to match(/\A\d{6}\Z/)
+    expect(magic_link).to match(/\?code=\d{6}\Z/)
 
-    visit claim_path(Journeys::EarlyYearsPayment::Provider::ROUTING_NAME, :consent, code: otp)
+    visit magic_link
     expect(journey_session.reload.answers.email_verified).to be true
     expect(page).to have_content("Declaration of Employee Consent")
     check "I confirm that I have obtained consent from my employee and have provided them with the relevant privacy notice."

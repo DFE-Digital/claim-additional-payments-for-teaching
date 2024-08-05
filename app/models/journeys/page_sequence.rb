@@ -5,9 +5,9 @@ module Journeys
   class PageSequence
     attr_reader :current_slug
 
+    EARLY_YEARS_PAYMENT_PROVIDER_EMAIL_SLUG = "consent"
     DEAD_END_SLUGS = %w[complete existing-session eligible-later future-eligibility ineligible]
     OPTIONAL_SLUGS = %w[postcode-search select-home-address reset-claim]
-    MAGIC_LINK_SLUGS = %w[consent]
 
     def initialize(slug_sequence, completed_slugs, current_slug, journey_session)
       @current_slug = current_slug
@@ -63,7 +63,7 @@ module Journeys
     end
 
     def magic_link?
-      MAGIC_LINK_SLUGS.include?(current_slug)
+      @slug_sequence.respond_to?(:magic_link?) && @slug_sequence.magic_link?(current_slug)
     end
 
     private

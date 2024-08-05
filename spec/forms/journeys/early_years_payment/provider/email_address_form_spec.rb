@@ -31,7 +31,6 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::EmailAddressForm do
 
     let(:policy) { journey_session.answers.policy }
     let(:claim_subject) { I18n.t("#{policy.locale_key}.claim_subject") }
-    let(:email_subject) { claim_subject }
 
     it { should be_truthy }
 
@@ -47,8 +46,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::EmailAddressForm do
 
       expect(email_address).to have_received_email(
         "e0b78a08-601b-40ba-a97f-61fb00a7c951",
-        email_subject: email_subject,
-        one_time_password: "111111"
+        magic_link: "https://www.example.com/early-years-payment-provider/consent?code=111111"
       )
     end
 
