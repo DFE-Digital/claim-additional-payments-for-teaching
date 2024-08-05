@@ -3,6 +3,15 @@ require "rails_helper"
 RSpec.feature "Service configuration" do
   let!(:journey_configuration) { create(:journey_configuration, :student_loans) }
 
+  scenario "when teacher id configurable for service" do
+    sign_in_as_service_operator
+
+    click_on "Manage services"
+    click_on "Change"
+
+    expect(page).to have_content("Sign in with DfE Identity")
+  end
+
   scenario "Service operator closes a service for submissions" do
     sign_in_as_service_operator
 
@@ -112,5 +121,23 @@ RSpec.feature "Service configuration" do
 
       expect(journey_configuration.reload.current_academic_year).to eq AcademicYear.new(2023)
     end
+  end
+end
+
+RSpec.feature "Service configuration" do
+  let(:journey_configuration) { create(:journey_configuration, :further_education_payments) }
+
+  scenario "when teacher id not configurable for service" do
+    given_journey_configuration
+    sign_in_as_service_operator
+
+    click_on "Manage services"
+    click_on "Change Claim incentive payments for further education teachers"
+
+    expect(page).not_to have_content("Sign in with DfE Identity")
+  end
+
+  def given_journey_configuration
+    journey_configuration
   end
 end
