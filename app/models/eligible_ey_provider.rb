@@ -27,6 +27,6 @@ class EligibleEyProvider < ApplicationRecord
   def self.eligible_email?(email_address)
     where(primary_key_contact_email_address: email_address).or(
       where(secondary_contact_email_address: email_address)
-    ).exists?
+    ).exists? if email_address.present?
   end
 end
