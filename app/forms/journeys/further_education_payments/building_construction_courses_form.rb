@@ -18,8 +18,8 @@ module Journeys
       def checkbox_options
         [
           OpenStruct.new(
-            id: "esfa_buildingconstruction",
-            name: course_option_description("esfa_buildingconstruction")
+            id: "level3_buildingconstruction_approved",
+            name: course_option_description("level3_buildingconstruction_approved")
           ),
           OpenStruct.new(
             id: "tlevel_building",

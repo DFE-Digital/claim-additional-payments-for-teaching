@@ -938,7 +938,7 @@ en:
         question: Which building and construction courses do you teach?
         question_check_your_answers: Building and construction courses
         options:
-          esfa_buildingconstruction: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
+          level3_buildingconstruction_approved: Qualifications approved for funding at level 3 and below in the %{link} sector subject area
           tlevel_building: T Level in building services engineering for construction
           tlevel_onsiteconstruction: T Level in onsite construction
           tlevel_design_surveying: T Level in design, surveying and planning for construction
