@@ -5,14 +5,16 @@ module Journeys
         attribute :email_address, :string
 
         def save
-          journey_session.answers.assign_attributes(
-            email_address: email_address,
-            sent_one_time_password_at: Time.now,
-            email_verified: email_verified
-          )
-          journey_session.save!
+          if EligibleEyProvider.eligible_email?(email_address)
+            journey_session.answers.assign_attributes(
+              email_address: email_address,
+              sent_one_time_password_at: Time.now,
+              email_verified: email_verified
+            )
+            journey_session.save!
 
-          ClaimMailer.early_years_payment_provider_email(answers, otp_code).deliver_now
+            ClaimMailer.early_years_payment_provider_email(answers, otp_code).deliver_now
+          end
         end
 
         private

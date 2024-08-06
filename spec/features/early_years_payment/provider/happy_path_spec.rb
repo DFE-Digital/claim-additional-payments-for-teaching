@@ -5,6 +5,10 @@ RSpec.feature "Early years payment provider" do
   let(:mail) { ActionMailer::Base.deliveries.last }
   let(:magic_link) { mail[:personalisation].unparsed_value[:magic_link] }
 
+  before do
+    create(:eligible_ey_provider, primary_key_contact_email_address: "johndoe@example.com", secondary_contact_email_address: "janedoe@example.com")
+  end
+
   scenario "happy path claim" do
     when_early_years_payment_provider_journey_configuration_exists
 
