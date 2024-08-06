@@ -18,7 +18,7 @@ FactoryBot.define do
     end
     association(:payroll_run, factory: :payroll_run)
 
-    award_amount { claims.sum(&:award_amount) }
+    award_amount { claims.map(&:award_amount).compact.sum }
 
     trait :with_figures do
       # This is a rough approximation of the "grossing up" done by DfE Payroll. It
