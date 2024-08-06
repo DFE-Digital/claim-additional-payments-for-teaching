@@ -20,6 +20,7 @@ class Task < ApplicationRecord
     subject
     student_loan_amount
     student_loan_plan
+    teaching_hours
     payroll_details
     matching_details
     payroll_gender

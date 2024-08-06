@@ -29,6 +29,7 @@ class ClaimCheckingTasks
         task_names.delete("employment_contract")
         task_names.delete("employment_start")
         task_names.delete("subject")
+        task_names.delete("teaching_hours")
       end
     end
   end
