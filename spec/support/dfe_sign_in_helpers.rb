@@ -2,18 +2,30 @@ module DfeSignInHelpers
   # Stubs the DfE Sign-in OpenID response and the call to the DfE Sign-in API
   # that we use to determine the roles that the user is authorised with.
   def stub_dfe_sign_in_with_role(role_code, user_id = "123", organisation_id = "1234")
-    mock_dfe_sign_in_auth_session(user_id, organisation_id)
+    mock_dfe_sign_in_auth_session(
+      auth_hash: {
+        uid: user_id,
+        extra: {
+          raw_info: {
+            sub: user_id,
+            organisation: {
+              id: organisation_id
+            }
+          }
+        }
+      }
+    )
     stub_dfe_sign_in_user_info_request(user_id, organisation_id, role_code)
   end
 
-  def mock_dfe_sign_in_auth_session(user_id, organisation_id)
-    OmniAuth.config.mock_auth[:dfe] = OmniAuth::AuthHash.new(dfe_sign_in_auth_hash(user_id, organisation_id))
+  def mock_dfe_sign_in_auth_session(auth_hash: {}, provider: :dfe)
+    OmniAuth.config.mock_auth[provider] = OmniAuth::AuthHash.new(dfe_sign_in_auth_hash(auth_hash))
   end
 
-  def dfe_sign_in_auth_hash(user_id, organisation_id)
+  def dfe_sign_in_auth_hash(attributes)
     {
       "provider" => :dfe,
-      "uid" => user_id,
+      "uid" => "123",
       "info" => {
         "name" => nil,
         "email" => "test-dfe-sign-in@host.tld",
@@ -34,10 +46,10 @@ module DfeSignInHelpers
       },
       "extra" => {
         "raw_info" => {
-          "sub" => user_id,
+          "sub" => "123",
           "email" => "test-dfe-sign-in@host.tld",
           "organisation" => {
-            "id" => organisation_id,
+            "id" => "1234",
             "name" => "Department for Education",
             "category" => {"id" => "002", "name" => "Local Authority"},
             "urn" => nil,
@@ -58,7 +70,7 @@ module DfeSignInHelpers
           }
         }
       }
-    }
+    }.deep_merge(attributes.deep_stringify_keys)
   end
 
   def stub_dfe_sign_in_user_info_request(user_id, organisation_id, role_code)
