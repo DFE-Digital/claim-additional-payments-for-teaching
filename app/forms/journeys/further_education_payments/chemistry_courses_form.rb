@@ -26,8 +26,12 @@ module Journeys
             name: course_option_description("gcse_chemistry")
           ),
           OpenStruct.new(
-            id: "ib_certificate_chemistry",
-            name: course_option_description("ib_certificate_chemistry")
+            id: "ibo_level_3_chemistry",
+            name: course_option_description("ibo_level_3_chemistry")
+          ),
+          OpenStruct.new(
+            id: "ibo_level_1_2_myp_chemistry",
+            name: course_option_description("ibo_level_1_2_myp_chemistry")
           ),
           OpenStruct.new(
             id: "none",
