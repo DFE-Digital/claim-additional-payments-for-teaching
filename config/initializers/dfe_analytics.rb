@@ -51,4 +51,7 @@ DfE::Analytics.configure do |config|
   # to all events we send to BigQuery.
   #
   # config.environment = ENV.fetch('RAILS_ENV', 'development')
+
+  # FIXME: remove this line once the window has passed
+  config.bigquery_maintenance_window = "09-08-2024 10:00..09-08-2024 11:00"
 end
