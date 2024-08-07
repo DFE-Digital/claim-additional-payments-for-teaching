@@ -22,6 +22,13 @@ module Journeys
       journey == Journeys::AdditionalPaymentsForTeaching
     end
 
+    def teacher_id_configurable?
+      [
+        AdditionalPaymentsForTeaching,
+        TeacherStudentLoanReimbursement
+      ].include?(journey)
+    end
+
     def journey
       Journeys.for_routing_name(routing_name)
     end
