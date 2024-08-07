@@ -292,24 +292,12 @@ Documentation on accessing review apps can be found in
 resort. This should only be done in pairs, and mutating any live data is
 STRONGLY discouraged.**
 
-The console will be ran inside a container instance and won't be on one of the
-web servers, however it will have access to the database.
-
-### Through the Azure CLI
-
-We have a helpful script you can run that will connect you to the right resource
-(you will need the [Azure CLI](https://docs.microsoft.com/en-gb/cli) installed
-first):
-
-```bash
-bin/azure-console $ENVIRONMENT # (test/production)
-```
-
-From there, you can run a Rails console with `bin/rails console`. Pass the
-`--sandbox` flag if you don’t need to modify data.
+You can run a Rails console with `bin/rails console`. Pass the `--sandbox`
+flag if you don’t need to modify data.
 
 Accessing a live console on production requires a
-[PIM (Privileged Identity Management) request](docs/privileged-identity-management-requests.md)
+[PIM (Privileged Identity Management) request](docs/privileged-identity-management-requests.md).
+Follow the steps outlined in [Connect to an instance running in Azure](docs/connecting-to-azure.md).
 
 ### Usage
 

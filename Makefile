@@ -9,13 +9,6 @@ DOCKER_REPOSITORY=ghcr.io/dfe-digital/claim-additional-payments-for-teaching
 help:
 	@grep -E '^[a-zA-Z\._\-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-production:
-	$(eval AZ_SUBSCRIPTION=s118-teacherpaymentsservice-production)
-	$(eval RESOURCE_GROUP_NAME=s118p01-tfbackend)
-	$(eval STORAGE_ACCOUNT_NAME=s118p01tfbackendsa)
-	$(eval CONTAINER_NAME=s118p01conttfstate)
-	$(eval DEPLOY_ENV=production)
-
 .PHONY: review-aks
 review-aks: test-cluster
 	$(if ${PR_NUMBER},,$(error Missing PR_NUMBER))
@@ -32,19 +25,8 @@ production-aks: production-cluster
 	$(if $(or ${SKIP_CONFIRM}, ${CONFIRM_PRODUCTION}), , $(error Missing CONFIRM_PRODUCTION=yes))
 	$(eval include global_config/production.sh)
 
-set-azure-account:
-	az account set -s ${AZ_SUBSCRIPTION}
-
 set-azure-account-aks:
 	[ "${SKIP_AZURE_LOGIN}" != "true" ] && az account set -s ${AZURE_SUBSCRIPTION} || true
-
-terraform-init: set-azure-account
-	$(if $(IMAGE_TAG), , $(error Missing environment variable "IMAGE_TAG"))
-	terraform -chdir=azure/terraform init -reconfigure -upgrade \
-		-backend-config=resource_group_name=${RESOURCE_GROUP_NAME} \
-		-backend-config=storage_account_name=${STORAGE_ACCOUNT_NAME} \
-		-backend-config=container_name=${CONTAINER_NAME} \
-		${BACKEND_KEY}
 
 terraform-init-aks: composed-variables bin/terrafile set-azure-account-aks
 	$(if ${DOCKER_IMAGE_TAG}, , $(eval DOCKER_IMAGE_TAG=master))
@@ -61,26 +43,11 @@ terraform-init-aks: composed-variables bin/terrafile set-azure-account-aks
 	$(eval export TF_VAR_service_short=${SERVICE_SHORT})
 	$(eval export TF_VAR_docker_image=${DOCKER_REPOSITORY}:${DOCKER_IMAGE_TAG})
 
-terraform-plan: terraform-init
-	terraform -chdir=azure/terraform plan \
-		-var="input_container_version=${IMAGE_TAG}" \
-		-var-file workspace_variables/${DEPLOY_ENV}.tfvars.json
-
 terraform-plan-aks: terraform-init-aks
 	terraform -chdir=terraform/application plan -var-file "config/${CONFIG}.tfvars.json"
 
-terraform-apply: terraform-init
-	terraform -chdir=azure/terraform apply \
-		-var="input_container_version=${IMAGE_TAG}" \
-		-var-file workspace_variables/${DEPLOY_ENV}.tfvars.json
-
 terraform-apply-aks: terraform-init-aks
 	terraform -chdir=terraform/application apply -var-file "config/${CONFIG}.tfvars.json" ${AUTO_APPROVE}
-
-terraform-destroy: terraform-init
-	terraform -chdir=azure/terraform destroy \
-		-var="input_container_version=${IMAGE_TAG}" \
-		-var-file workspace_variables/${DEPLOY_ENV}.tfvars.json
 
 terraform-destroy-aks: terraform-init-aks
 	terraform -chdir=terraform/application destroy -var-file "config/${CONFIG}.tfvars.json" ${AUTO_APPROVE}
