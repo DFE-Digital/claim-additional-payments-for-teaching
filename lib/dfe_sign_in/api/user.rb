@@ -7,6 +7,7 @@ module DfeSignIn
       attr_accessor :organisation_id,
         :user_id,
         :organisation_name,
+        :organisation_ukprn,
         :given_name,
         :family_name,
         :email
@@ -47,6 +48,7 @@ module DfeSignIn
       def initialize(attrs)
         self.organisation_id = attrs[:organisation_id]
         self.organisation_name = attrs[:organisation_name]
+        self.organisation_ukprn = attrs[:organisation_ukprn]
         self.user_id = attrs[:user_id]
         self.given_name = attrs[:given_name]
         self.family_name = attrs[:family_name]
