@@ -1,19 +1,20 @@
 module OneTimePassword
   class Validator < Base
-    def initialize(code, generated_at = nil)
+    def initialize(code, generated_at = nil, secret: nil)
       @code = code
       @generated_at = generated_at
+      @secret = encode_secret(secret) || SECRET
     end
 
     def valid?
-      code.present? && !wrong_length? && (generated_at && !expired?) && !incorrect?
+      code.present? && !wrong_length? && !expired? && !incorrect?
     end
 
     def warning
       return "Enter a passcode" if code.blank?
       return "Enter a valid passcode containing #{LENGTH} digits" if wrong_length?
-      return "Your passcode has expired, request a new one" if generated_at && expired?
-      return "Your passcode is not valid or has expired" if !generated_at
+      return "Your passcode has expired, request a new one" if expired?
+      return "Your passcode is not valid or has expired" if !generated_at && incorrect?
       "Enter a valid passcode" if incorrect?
     end
 
@@ -30,13 +31,13 @@ module OneTimePassword
     def expired?
       return @expired if defined?(@expired)
 
-      @expired = generated_at < DRIFT.seconds.ago
+      @expired = generated_at < DRIFT.seconds.ago if generated_at
     end
 
     def incorrect?
       return @incorrect if defined? @incorrect
 
-      @incorrect = rotp.new(SECRET, issuer: ISSUER).verify(code, drift_behind: DRIFT).nil?
+      @incorrect = rotp.new(secret, issuer: ISSUER).verify(code, drift_behind: DRIFT).nil?
     end
   end
 end

@@ -87,4 +87,31 @@ RSpec.describe OneTimePassword::Validator do
       end
     end
   end
+
+  context "not specifying generated_at" do
+    subject { described_class.new(one_time_passcode) }
+
+    context "with a valid code" do
+      it { is_expected.to be_valid }
+
+      it "has no warning" do
+        expect(subject.warning).to be_nil
+      end
+    end
+  end
+
+  context "specifying a secret" do
+    let!(:one_time_passcode) { OneTimePassword::Generator.new(secret: secret).code }
+    subject { described_class.new(one_time_passcode, secret: secret) }
+
+    let(:secret) { "somesecretstring" }
+
+    context "with a valid code" do
+      it { is_expected.to be_valid }
+
+      it "has no warning" do
+        expect(subject.warning).to be_nil
+      end
+    end
+  end
 end
