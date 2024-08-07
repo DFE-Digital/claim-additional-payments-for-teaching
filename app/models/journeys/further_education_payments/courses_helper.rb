@@ -29,12 +29,12 @@ module Journeys
           ]
         },
         computing_courses: {
-          esfa_digitalpractitioners: [
-            "digital technology for practitioners",
-            "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=23&PageSize=10&Sort=Status"
+          level3_and_below_ict_for_practitioners: [
+            "ICT for practitioners",
+            "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=22&PageSize=10&Sort=Status"
           ],
-          esfa_digitalusers: [
-            "digital technology for users",
+          level3_and_below_ict_for_users: [
+            "ICT for users",
             "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=22&PageSize=10&Sort=Status"
           ],
           level2_3_apprenticeship: [
