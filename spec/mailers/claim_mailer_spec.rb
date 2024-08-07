@@ -312,7 +312,7 @@ RSpec.describe ClaimMailer, type: :mailer do
     describe "#early_years_payment_provider_email" do
       it "raises error" do
         expect {
-          ClaimMailer.early_years_payment_provider_email(claim, nil).deliver!
+          ClaimMailer.early_years_payment_provider_email(claim, "test@example.com", nil).deliver!
         }.to raise_error(ArgumentError, "Unknown claim policy: SomePolicy")
       end
     end
@@ -345,15 +345,16 @@ RSpec.describe ClaimMailer, type: :mailer do
   end
 
   describe "#early_years_payment_provider_email" do
-    let(:mail) { ClaimMailer.early_years_payment_provider_email(claim, one_time_password) }
+    let(:mail) { ClaimMailer.early_years_payment_provider_email(claim, one_time_password, email) }
+    let(:email) { "test@example.com" }
     let(:one_time_password) { 123124 }
-    let(:claim) { build(:claim, policy: policy, email_address: "test@test.com") }
+    let(:claim) { build(:claim, policy: policy, email_address: email) }
     let(:policy) { Policies::EarlyYearsPayments }
 
     before { create(:journey_configuration, :early_years_payment_provider) }
 
     it "has personalisation keys for: magic link" do
-      expect(mail[:personalisation].decoded).to eq("{:magic_link=>\"https://#{ENV["CANONICAL_HOSTNAME"]}/early-years-payment-provider/consent?code=123124\"}")
+      expect(mail[:personalisation].decoded).to eq("{:magic_link=>\"https://#{ENV["CANONICAL_HOSTNAME"]}/early-years-payment-provider/claim?code=123124&email=#{email}\"}")
       expect(mail.body).to be_empty
     end
   end

@@ -63,5 +63,9 @@ module Journeys
     def answers_for_claim(journey_session)
       answers_presenter.new(journey_session)
     end
+
+    def start_with_magic_link?
+      defined?(self::START_WITH_MAGIC_LINK) && self::START_WITH_MAGIC_LINK
+    end
   end
 end

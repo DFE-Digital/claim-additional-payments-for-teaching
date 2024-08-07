@@ -1,10 +1,10 @@
 require "rails_helper"
 
-RSpec.describe Journeys::EarlyYearsPayment::Provider::EmailAddressForm do
+RSpec.describe Journeys::EarlyYearsPayment::Start::EmailAddressForm do
   subject(:form) { described_class.new(journey:, journey_session:, params:) }
 
-  let(:journey) { Journeys::EarlyYearsPayment::Provider }
-  let(:journey_session) { build(:early_years_payment_provider_session) }
+  let(:journey) { Journeys::EarlyYearsPayment::Start }
+  let(:journey_session) { build(:early_years_payment_start_session) }
 
   let(:params) do
     ActionController::Parameters.new(claim: {email_address: email_address})
@@ -49,14 +49,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::EmailAddressForm do
 
         expect(email_address).to have_received_email(
           "e0b78a08-601b-40ba-a97f-61fb00a7c951",
-          magic_link: "https://www.example.com/early-years-payment-provider/consent?code=111111"
-        )
-      end
-
-      it "updates sent_one_time_password_at" do
-        subject
-        expect(journey_session.answers.sent_one_time_password_at).to(
-          eq(DateTime.new(2024, 1, 1, 12, 0, 0))
+          magic_link: "https://www.example.com/early-years-payment-provider/claim?code=111111&email=test@example.com"
         )
       end
 

@@ -1,13 +1,11 @@
 module Journeys
   module EarlyYearsPayment
-    module Provider
+    module Start
       class SlugSequence
         SLUGS = %w[
-          consent
-          current-nursery
+          email-address
+          check-your-email
         ].freeze
-
-        MAGIC_LINK_SLUG = "consent"
 
         def self.start_page_url
           Rails.application.routes.url_helpers.landing_page_path("early-years-payment-provider")
@@ -23,10 +21,6 @@ module Journeys
 
         def slugs
           SLUGS
-        end
-
-        def magic_link?(slug)
-          slug == MAGIC_LINK_SLUG
         end
       end
     end

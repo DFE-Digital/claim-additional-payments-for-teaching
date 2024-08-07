@@ -10,6 +10,7 @@ RSpec.describe Journeys do
         Journeys::TeacherStudentLoanReimbursement,
         Journeys::GetATeacherRelocationPayment,
         Journeys::FurtherEducationPayments,
+        Journeys::EarlyYearsPayment::Start,
         Journeys::EarlyYearsPayment::Provider
       ])
     end
@@ -22,6 +23,7 @@ RSpec.describe Journeys do
         Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME,
         Journeys::GetATeacherRelocationPayment::ROUTING_NAME,
         Journeys::FurtherEducationPayments::ROUTING_NAME,
+        Journeys::EarlyYearsPayment::Start::ROUTING_NAME,
         Journeys::EarlyYearsPayment::Provider::ROUTING_NAME
       ])
     end

@@ -10,10 +10,10 @@ module Journeys
       POLICIES = [Policies::EarlyYearsPayments]
       FORMS = {
         "claims" => {
-          "consent" => ConsentForm,
-          "email-address" => EmailAddressForm
+          "consent" => ConsentForm
         }
       }
+      START_WITH_MAGIC_LINK = true
     end
   end
 end

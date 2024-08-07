@@ -1,6 +1,6 @@
 module Journeys
   module EarlyYearsPayment
-    module Provider
+    module Start
       class EmailAddressForm < Form
         attribute :email_address, :string
 
@@ -8,12 +8,10 @@ module Journeys
           if EligibleEyProvider.eligible_email?(email_address)
             journey_session.answers.assign_attributes(
               email_address: email_address,
-              sent_one_time_password_at: Time.now,
               email_verified: email_verified
             )
             journey_session.save!
-
-            ClaimMailer.early_years_payment_provider_email(answers, otp_code).deliver_now
+            ClaimMailer.early_years_payment_provider_email(answers, otp_code(email_address), email_address).deliver_now
           end
         end
 
@@ -28,8 +26,8 @@ module Journeys
           answers.email_verified
         end
 
-        def otp_code
-          @otp_code ||= OneTimePassword::Generator.new.code
+        def otp_code(email_address)
+          @otp_code ||= OneTimePassword::Generator.new(secret: ENV["EY_MAGIC_LINK_SECRET"] + email_address).code
         end
       end
     end
