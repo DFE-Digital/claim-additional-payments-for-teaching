@@ -58,16 +58,6 @@ describe ApplicationHelper do
     end
   end
 
-  describe "#journey_description" do
-    it "returns description for student loans" do
-      expect(journey_description("student-loans")).to eq t("student_loans.claim_description")
-    end
-
-    it "returns description for early career payments" do
-      expect(journey_description("additional-payments")).to eq t("additional_payments.claim_description")
-    end
-  end
-
   describe "#information_provided_further_details_with_link" do
     subject { information_provided_further_details_with_link(policy:) }
 

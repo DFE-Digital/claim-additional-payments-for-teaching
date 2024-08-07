@@ -28,11 +28,6 @@ module ApplicationHelper
     t("#{namespace}.journey_name")
   end
 
-  def journey_description(routing_name)
-    namespace = Journeys.for_routing_name(routing_name)::I18N_NAMESPACE
-    t("#{namespace}.claim_description")
-  end
-
   def feedback_email(routing_name)
     namespace = Journeys.for_routing_name(routing_name)::I18N_NAMESPACE
     t("#{namespace}.feedback_email")

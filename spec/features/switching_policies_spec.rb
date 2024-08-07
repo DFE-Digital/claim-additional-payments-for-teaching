@@ -19,15 +19,15 @@ RSpec.feature "Switching policies" do
       expect(page.title).to have_text(I18n.t("additional_payments.journey_name"))
       expect(page.find("header")).to have_text(I18n.t("additional_payments.journey_name"))
 
-      choose "Yes, start claim for an additional payment for teaching and lose my progress on my first claim"
-      click_on "Submit"
+      choose "Start a new eligibility check"
+      click_on "Continue"
 
       expect(page).to have_text("You can sign in or set up a DfE Identity account to make it easier to claim additional payments.")
     end
 
     scenario "a user can choose to continue their claim" do
-      choose "No, finish the claim I have in progress"
-      click_on "Submit"
+      choose "Continue with the eligibility check that you have already started"
+      click_on "Continue"
 
       expect(page).to have_text(claim_school_question)
     end
@@ -55,9 +55,9 @@ RSpec.feature "Switching policies" do
         have_text(I18n.t("get_a_teacher_relocation_payment.journey_name"))
       )
 
-      choose "Yes, start claim for a get a teacher relocation payment and lose my progress on my first claim"
+      choose "Start a new eligibility check"
 
-      click_on "Submit"
+      click_on "Continue"
 
       expect(page.title).to include(
         "What is your employment status? — Get a teacher relocation payment"
@@ -65,8 +65,8 @@ RSpec.feature "Switching policies" do
     end
 
     scenario "a user can choose to continue their claim" do
-      choose "No, finish the claim I have in progress"
-      click_on "Submit"
+      choose "Continue with the eligibility check that you have already started"
+      click_on "Continue"
 
       expect(page.title).to include("Claim additional payments for teaching")
     end
@@ -85,13 +85,13 @@ RSpec.feature "Switching policies" do
     end
 
     scenario "a user can switch to a different policy after starting a claim on another" do
-      expect(page).to have_content "Are you sure you want to start a claim for an additional payment for teaching?"
+      expect(page).to have_content "You have already started an eligibility check"
 
-      expect(page).to have_content "You have a claim in progress for a get a teacher relocation payment"
+      expect(page).to have_content "You can only have one eligibility check in progress at any time."
 
-      choose "Yes, start claim for an additional payment for teaching and lose my progress on my first claim"
+      choose "Start a new eligibility check"
 
-      click_on "Submit"
+      click_on "Continue"
     end
   end
 
@@ -112,12 +112,12 @@ RSpec.feature "Switching policies" do
       visit new_claim_path("additional-payments")
 
       expect(page).to(have_text(
-        "You have a claim in progress for an additional payment for teaching."
+        "You have already started an eligibility check"
       ))
 
-      choose "No, finish the claim I have in progress"
+      choose "Continue with the eligibility check that you have already started"
 
-      click_on "Submit"
+      click_on "Continue"
 
       expect(page).to have_text(
         "Are you currently teaching as a qualified teacher?"
@@ -129,7 +129,7 @@ RSpec.feature "Switching policies" do
     start_student_loans_claim
     visit new_claim_path("additional-payments")
 
-    click_on "Submit"
+    click_on "Continue"
 
     expect(page).to have_text("Select yes if you want to start a claim for an additional payment for teaching")
   end
