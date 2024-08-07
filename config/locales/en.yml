@@ -1073,6 +1073,10 @@ en:
         By submitting this you are confirming that, to the best of your knowledge, the details you are providing are
         correct.
       btn_text: Accept and send
+  further_education_payments_provider:
+    journey_name: Claim incentive payments for further education teachers - provider
+    feedback_email: "FE-Levellingup.PremiumPayments@education.gov.uk"
+    support_email_address: "FE-Levellingup.PremiumPayments@education.gov.uk"
   early_years_payment_provider:
     claim_description: for an early years financial incentive payment
     journey_name: Claim an early years financial incentive payment - provider

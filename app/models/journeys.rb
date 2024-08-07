@@ -10,6 +10,7 @@ module Journeys
     TeacherStudentLoanReimbursement,
     GetATeacherRelocationPayment,
     FurtherEducationPayments,
+    FurtherEducationPayments::Provider,
     EarlyYearsPayment::Provider
   ].freeze
 

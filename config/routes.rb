@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root to: redirect(Rails.application.config.guidance_url)
 
   get "/claim/auth/tid/callback", to: "omniauth_callbacks#callback"
+  get "/further-education-payments-provider/auth/callback", to: "omniauth_callbacks#further_education_payments_provider"
   get "/auth/failure", to: "omniauth_callbacks#failure"
   get "/auth/onelogin", to: "omniauth_callbacks#onelogin"
   if OneLoginSignIn.bypass?

@@ -44,12 +44,12 @@ module JourneyConcern
     @journey_sessions = []
   end
 
-  def create_journey_session!
+  def create_journey_session!(answers: {})
     journey_session = journey::Session.create!(
       journey: current_journey_routing_name,
-      answers: {
+      answers: answers.to_h.reverse_merge(
         academic_year: journey_configuration.current_academic_year
-      }
+      )
     )
 
     session[journey_session_key] = journey_session.id

@@ -23,6 +23,40 @@ class OmniauthCallbacksController < ApplicationController
     )
   end
 
+  # Prob better to update the `callback` method to check the journey rather
+  # than a separate method, maybe a callback form for each journey?
+  def further_education_payments_provider
+    # Not stoked on updating a record in a get request!
+    # Ideally we'd cache these in session then write them to the record after
+    # posting a form
+
+    organisation_id = request.env["omniauth.auth"].extra.raw_info.organisation.id
+    organisation_ukprn = request.env["omniauth.auth"].extra.raw_info.organisation.ukprn
+    uid = request.env["omniauth.auth"].uid
+
+    dfe_sign_in_user = DfeSignIn::Api::User.new(
+      user_id: uid,
+      organisation_id: organisation_id
+    )
+
+    journey_session.answers.assign_attributes(
+      dfe_sign_in_uid: uid,
+      dfe_sign_in_organisation_ukprn: organisation_ukprn,
+      dfe_sign_in_organisation_role_codes: dfe_sign_in_user.role_codes
+    )
+
+    journey_session.save!
+
+    # Yeah this should be a form object
+
+    redirect_to(
+      claim_path(journey: current_journey_routing_name, slug: "verify-claim")
+    )
+
+    # FIXME handle errors, eg "omniauth hash not being present"
+    # Think this should be handled by a form
+  end
+
   def failure
     render layout: false
   end

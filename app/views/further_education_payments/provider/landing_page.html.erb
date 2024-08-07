@@ -1,0 +1,4 @@
+<%= button_to(
+  "Start now",
+  claim_path(current_journey_routing_name, "claim", answers: { claim_id: params[:claim_id] })
+) %>

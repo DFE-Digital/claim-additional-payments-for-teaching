@@ -13,6 +13,8 @@ dfe_sign_in_issuer_uri = ENV["DFE_SIGN_IN_ISSUER"].present? ? URI(ENV["DFE_SIGN_
 
 if ENV["DFE_SIGN_IN_REDIRECT_BASE_URL"].present?
   dfe_sign_in_redirect_uri = URI.join(ENV["DFE_SIGN_IN_REDIRECT_BASE_URL"], "/admin/auth/callback")
+
+  dfe_sign_in_fe_provider_redirect_uri = URI.join(ENV["DFE_SIGN_IN_REDIRECT_BASE_URL"], "/further-education-payments/provider/auth/callback")
 end
 
 tid_sign_in_endpoint_uri = ENV["TID_SIGN_IN_API_ENDPOINT"].present? ? URI(ENV["TID_SIGN_IN_API_ENDPOINT"]) : nil
@@ -47,9 +49,10 @@ module ::OneLoginSignIn
 end
 
 Rails.application.config.middleware.use OmniAuth::Builder do
-  if DfESignIn.bypass?
+  if false && DfESignIn.bypass?
     provider :developer
   else
+    # FIXME RL: Check this doesn't allow FE providers to login
     provider :openid_connect, {
       name: :dfe,
       discovery: true,
@@ -64,6 +67,26 @@ Rails.application.config.middleware.use OmniAuth::Builder do
         identifier: ENV["DFE_SIGN_IN_IDENTIFIER"],
         secret: ENV["DFE_SIGN_IN_SECRET"],
         redirect_uri: dfe_sign_in_redirect_uri&.to_s
+      },
+      issuer:
+        ("#{dfe_sign_in_issuer_uri}:#{dfe_sign_in_issuer_uri.port}" if dfe_sign_in_issuer_uri.present?)
+    }
+
+    # FIXME RL Need to handle sign out depending on the journey the user is on
+    provider :openid_connect, {
+      name: :dfe_fe_provider,
+      discovery: true,
+      response_type: :code,
+      scope: %i[openid email organisation],
+      callback_path: "/further-education-payments-provider/auth/callback",
+      path_prefix: "/further-education-payments-provider/auth",
+      client_options: {
+        port: dfe_sign_in_issuer_uri&.port,
+        scheme: dfe_sign_in_issuer_uri&.scheme,
+        host: dfe_sign_in_issuer_uri&.host,
+        identifier: ENV["DFE_SIGN_IN_IDENTIFIER"],
+        secret: ENV["DFE_SIGN_IN_SECRET"],
+        redirect_uri: dfe_sign_in_fe_provider_redirect_uri&.to_s
       },
       issuer:
         ("#{dfe_sign_in_issuer_uri}:#{dfe_sign_in_issuer_uri.port}" if dfe_sign_in_issuer_uri.present?)

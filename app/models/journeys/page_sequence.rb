@@ -5,6 +5,8 @@ module Journeys
   class PageSequence
     attr_reader :current_slug
 
+    delegate :requires_authorisation?, :authorisation_start, to: :@slug_sequence
+
     DEAD_END_SLUGS = %w[complete existing-session eligible-later future-eligibility ineligible]
     OPTIONAL_SLUGS = %w[postcode-search select-home-address reset-claim]
 

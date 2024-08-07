@@ -13,6 +13,7 @@ class ClaimsController < BasePublicController
 
   include FormSubmittable
   include ClaimsFormCallbacks
+  include AuthorisedSlugs
 
   def existing_session
     @existing_session = journey_sessions.first
@@ -68,7 +69,16 @@ class ClaimsController < BasePublicController
     # this session value.
     session[:current_journey_routing_name] = current_journey_routing_name
 
-    create_journey_session!
+    # Not happy about this!!
+    # The before new/create callback forces us to do this. Ideally the "Start
+    # now" button on each journey would have a corresponding form so we could
+    # set up the new journey with required attributes by `POST`ing to the
+    # `create` action, rather than when `GET`ting the `new` action.
+    # Also we should have some method for scoping the required params per
+    # journey TBBD.
+    create_journey_session!(
+      answers: params.fetch(:answers, {}).permit(:claim_id)
+    )
   end
 
   def check_page_is_in_sequence
