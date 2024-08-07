@@ -19,7 +19,7 @@ module Journeys
 
       COURSE_DESCRIPTIONS_WITH_INLINE_LINKS = {
         building_construction_courses: {
-          esfa_buildingconstruction: [
+          level3_buildingconstruction_approved: [
             "building and construction",
             "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=7"
           ],

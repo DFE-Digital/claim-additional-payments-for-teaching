@@ -44,7 +44,7 @@ RSpec.describe Journeys::FurtherEducationPayments::BuildingConstructionCoursesFo
   end
 
   describe "#save" do
-    let(:building_construction_courses) { ["esfa_buildingconstruction", "tlevel_building"] }
+    let(:building_construction_courses) { ["level3_buildingconstruction_approved", "tlevel_building"] }
 
     it "updates the journey session" do
       expect { expect(subject.save).to be(true) }.to(
