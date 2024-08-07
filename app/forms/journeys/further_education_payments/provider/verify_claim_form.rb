@@ -6,4 +6,3 @@ module Journeys
     end
   end
 end
-

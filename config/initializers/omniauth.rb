@@ -49,7 +49,7 @@ module ::OneLoginSignIn
 end
 
 Rails.application.config.middleware.use OmniAuth::Builder do
-  if false && DfESignIn.bypass?
+  if DfESignIn.bypass?
     provider :developer
   else
     # FIXME RL: Check this doesn't allow FE providers to login

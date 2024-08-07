@@ -26,4 +26,3 @@ module AuthorisedSlugs
     page_sequence.requires_authorisation?(current_slug)
   end
 end
-

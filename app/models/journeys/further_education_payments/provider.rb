@@ -10,13 +10,12 @@ module Journeys
 
       POLICIES = []
 
-      # FIXME RL replace the one of these in the verification class
-      # with this
-      CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE = "fixme_rl"
+      # FIXME RL find out what this role should be
+      CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE = "FIXME_RL"
 
       FORMS = {
         "claims" => {
-          "verify-claim" => VerifyClaimForm,
+          "verify-claim" => VerifyClaimForm
         }
       }
     end

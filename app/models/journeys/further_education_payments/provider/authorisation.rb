@@ -30,15 +30,19 @@ module Journeys
         end
 
         def organisation_matches?
+          # FIXME RL temp returning `true` until we've added school to the FE
+          # eligibility
+          return true
+
           answers.dfe_sign_in_organisation_ukprn == answers.claim.school.ukprn
         end
 
-        # FIXME RL: need to find out what the role codes should be
         def service_access?
-          answers.dfe_sign_in_organisation_role_codes.include?("claim_verifier_access")
+          answers.dfe_sign_in_organisation_role_codes.include?(
+            CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
+          )
         end
       end
     end
   end
 end
-
