@@ -143,6 +143,10 @@ class School < ApplicationRecord
     sql
   end
 
+  def eligible_fe_provider(academic_year: AcademicYear.current)
+    EligibleFeProvider.find_by(ukprn:, academic_year:)
+  end
+
   def address
     [street, locality, town, county, postcode].reject(&:blank?).join(", ")
   end

@@ -42,8 +42,6 @@
       </noscript>
     <% end %>
 
-    <%= render("timeout_dialog", timeout_in_minutes: claim_timeout_in_minutes, path_on_timeout: timeout_claim_path(current_journey_routing_name), refresh_session_path: refresh_session_path) if claim_in_progress? %>
-
     <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
 
     <div id="global-cookie-message" class="govuk-cookie-banner" role="region" aria-label="cookie banner">

@@ -11,10 +11,20 @@ if Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")
   Journeys::Configuration.create!(routing_name: Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, current_academic_year: AcademicYear.current)
   Journeys::Configuration.create!(routing_name: Journeys::GetATeacherRelocationPayment::ROUTING_NAME, current_academic_year: AcademicYear.current)
   Journeys::Configuration.create!(routing_name: Journeys::FurtherEducationPayments::ROUTING_NAME, current_academic_year: AcademicYear.current)
+  Journeys::Configuration.create!(routing_name: Journeys::EarlyYearsPayment::Provider::ROUTING_NAME, current_academic_year: AcademicYear.current)
 
   ENV["FIXTURES_PATH"] = "spec/fixtures"
   ENV["FIXTURES"] = "local_authorities,local_authority_districts,schools"
   Rake::Task["db:fixtures:load"].invoke
+end
+
+if ENV["ENVIRONMENT_NAME"].start_with?("review")
+  EligibleFeProvidersImporter.new(
+    File.new(Rails.root.join("spec/fixtures/files/eligible_fe_providers.csv")),
+    AcademicYear.current
+  ).run
+
+  SchoolDataImporterJob.perform_later if School.count < 100
 end
 
 if Rails.env.development?

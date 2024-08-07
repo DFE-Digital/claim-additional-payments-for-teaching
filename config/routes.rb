@@ -4,22 +4,17 @@ Rails.application.routes.draw do
 
   get "/claim/auth/tid/callback", to: "omniauth_callbacks#callback"
   get "/auth/failure", to: "omniauth_callbacks#failure"
+  get "/auth/onelogin", to: "omniauth_callbacks#onelogin"
+  if OneLoginSignIn.bypass?
+    post "/auth/onelogin", to: "omniauth_callbacks#onelogin"
+    post "/auth/onelogin_identity", to: "omniauth_callbacks#onelogin"
+  end
 
   # /early-career-payments is now /additional-payments - redirect old urls to a gov page
   get "early-career-payments(/*anything)", to: redirect("https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details")
 
   # setup a simple healthcheck endpoint for monitoring purposes
   get "/healthcheck", to: proc { [200, {}, ["OK"]] }
-
-  # If the CANONICAL_HOSTNAME env var is present, and the request doesn't come from that
-  # hostname, redirect us to the canonical hostname with the path and query string present
-  if ENV["CANONICAL_HOSTNAME"].present?
-    constraints(host: Regexp.new("^(?!#{Regexp.escape(ENV["CANONICAL_HOSTNAME"])})")) do
-      match "/(*path)" => redirect(host: ENV["CANONICAL_HOSTNAME"]), :via => [:all]
-    end
-  end
-
-  get "refresh-session", to: "sessions#refresh", as: :refresh_session
 
   # Used to constrain claim journey routing so only slugs
   # that are part of a journey's slug sequence are routed.
@@ -50,7 +45,6 @@ Rails.application.routes.draw do
     post "claim", as: :claims, to: "claims#create"
     post "claim/submit", as: :claim_submission, to: "submissions#create"
     get "claims/confirmation", as: :claim_confirmation, to: "submissions#show"
-    get "timeout", to: "claims#timeout", as: :timeout_claim
     get "existing-session", as: :existing_session, to: "claims#existing_session"
     post "start-new", to: "claims#start_new", as: :start_new
 
@@ -119,6 +113,8 @@ Rails.application.routes.draw do
 
     resources :journey_configurations, only: [:index, :edit, :update]
     resources :levelling_up_premium_payments_awards, only: [:index, :create]
+    resource :eligible_ey_providers, only: [:create, :show], path: "eligible-early-years-providers"
+    resource :eligible_fe_providers, only: [:create, :show], path: "eligible-further-education-providers"
 
     get "refresh-session", to: "sessions#refresh", as: :refresh_session
 

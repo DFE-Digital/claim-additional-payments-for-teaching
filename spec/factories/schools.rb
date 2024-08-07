@@ -135,7 +135,14 @@ FactoryBot.define do
     end
 
     trait :further_education do
+      ukprn { rand(10_000_000..19_000_000) }
       phase { 6 }
+    end
+
+    trait :fe_eligible do
+      after(:create) do |school, evaluator|
+        create(:eligible_fe_provider, ukprn: school.ukprn)
+      end
     end
   end
 end

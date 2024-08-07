@@ -26,14 +26,6 @@
       <%= render(
         partial: "claims/check_your_answers_section",
         locals: {
-          heading: "Employment information",
-          answers: journey.answers_for_claim(@form.journey_session).employment_answers
-        }
-      ) %>
-
-      <%= render(
-        partial: "claims/check_your_answers_section",
-        locals: {
           heading: "Payment details",
           answers: journey.answers_for_claim(@form.journey_session).payment_answers
         }

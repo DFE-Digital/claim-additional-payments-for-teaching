@@ -19,11 +19,21 @@ module Journeys
         "teaching-hours-per-week-next-term" => TeachingHoursPerWeekNextTermForm,
         "further-education-teaching-start-year" => FurtherEducationTeachingStartYearForm,
         "subjects-taught" => SubjectsTaughtForm,
+        "building-construction-courses" => BuildingConstructionCoursesForm,
+        "chemistry-courses" => ChemistryCoursesForm,
+        "computing-courses" => ComputingCoursesForm,
+        "early-years-courses" => EarlyYearsCoursesForm,
+        "engineering-manufacturing-courses" => EngineeringManufacturingCoursesForm,
+        "maths-courses" => MathsCoursesForm,
+        "physics-courses" => PhysicsCoursesForm,
         "teaching-qualification" => TeachingQualificationForm,
         "poor-performance" => PoorPerformanceForm,
         "check-your-answers" => CheckYourAnswersForm,
+        "half-teaching-hours" => HalfTeachingHoursForm,
+        "hours-teaching-eligible-subjects" => HoursTeachingEligibleSubjectsForm,
+        "eligible" => EligibleForm,
         "ineligible" => IneligibleForm,
-        "half-teaching-hours" => HalfTeachingHoursForm
+        "teacher-reference-number" => TeacherReferenceNumberForm
       }
     }
   end

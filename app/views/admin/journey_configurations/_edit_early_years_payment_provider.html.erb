@@ -1,0 +1,23 @@
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+<h2 class="govuk-heading-m">
+  Download eligible EY providers
+</h2>
+
+<%= link_to "Download CSV", admin_eligible_ey_providers_path, class: "govuk-button" %>
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+<h2 class="govuk-heading-m">
+  Upload eligible EY providers
+</h2>
+
+<%= form_with model: @upload_form, scope: :eligible_ey_providers_upload, url: admin_eligible_ey_providers_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+  <%= f.govuk_error_summary %>
+
+  <%= f.govuk_file_field :file,
+    label: { text: "Eligible EY providers" },
+    hint: { text: "This file should be a CSV" } %>
+
+  <%= f.govuk_submit "Upload CSV" %>
+<% end %>

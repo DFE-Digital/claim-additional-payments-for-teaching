@@ -2,6 +2,7 @@ module Journeys
   module FurtherEducationPayments
     class SubjectsTaughtForm < Form
       include ActiveModel::Validations::Callbacks
+      include CoursesHelper
 
       attribute :subjects_taught, default: []
 
@@ -12,20 +13,13 @@ module Journeys
         inclusion: {in: ->(form) { form.checkbox_options.map(&:id) }, message: i18n_error_message(:inclusion)}
 
       def checkbox_options
-        [
-          OpenStruct.new(id: "building_and_construction", name: t("options.building_and_construction")),
-          OpenStruct.new(id: "chemistry", name: t("options.chemistry")),
-          OpenStruct.new(id: "computing", name: t("options.computing")),
-          OpenStruct.new(id: "early_years", name: t("options.early_years")),
-          OpenStruct.new(id: "engineering_and_manufacturing", name: t("options.engineering_and_manufacturing")),
-          OpenStruct.new(id: "mathematics", name: t("options.mathematics")),
-          OpenStruct.new(id: "physics", name: t("options.physics")),
-          OpenStruct.new(id: "none", name: t("options.none"))
-        ]
+        (ALL_SUBJECTS + ["none"]).map { |subject| OpenStruct.new(id: subject, name: t("options.#{subject}")) }
       end
 
       def save
-        return false unless valid?
+        return false if invalid?
+
+        reset_dependent_answers
 
         journey_session.answers.assign_attributes(subjects_taught:)
         journey_session.save!
@@ -35,6 +29,16 @@ module Journeys
 
       def clean_subjects_taught
         subjects_taught.reject!(&:blank?)
+      end
+
+      def reset_dependent_answers
+        unchecked_subjects.each do |subject|
+          journey_session.answers.assign_attributes("#{subject}_courses" => [])
+        end
+      end
+
+      def unchecked_subjects
+        journey_session.answers.subjects_taught - subjects_taught - ["none"]
       end
     end
   end

@@ -1,6 +1,4 @@
 #!/bin/bash
 
 echo "Starting workers..."
-/filebeat/filebeat -c /filebeat/filebeat.yml \
-  & bundle exec bin/delayed_job start -n "$WORKER_COUNT" \
-  & tail -f "log/$RAILS_ENV.log"
+bundle exec bin/delayed_job run -n "$WORKER_COUNT"

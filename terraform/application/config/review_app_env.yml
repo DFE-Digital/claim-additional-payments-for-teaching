@@ -1,5 +1,6 @@
 ---
 BYPASS_DFE_SIGN_IN: true
+BYPASS_ONELOGIN_SIGN_IN: true
 
 DFE_SIGN_IN_API_CLIENT_ID: teacherpayments
 DFE_SIGN_IN_API_ENDPOINT: https://pp-api.signin.education.gov.uk
@@ -19,3 +20,4 @@ SUPPRESS_DFE_ANALYTICS_INIT: true
 TID_SIGN_IN_API_ENDPOINT: https://preprod.teaching-identity.education.gov.uk:433
 TID_SIGN_IN_CLIENT_ID: claim
 TID_SIGN_IN_ISSUER: https://preprod.teaching-identity.education.gov.uk/
+TID_BASE_URL: https://claim-additional-payments-for-teaching-review-*.test.teacherservices.cloud/additional-payments/claim

@@ -1,7 +1,7 @@
 class ClaimsController < BasePublicController
   include PartOfClaimJourney
 
-  skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create, :timeout]
+  skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create]
   before_action :initialize_session_slug_history
   before_action :check_page_is_in_sequence, only: [:show, :update]
   before_action :update_session_with_current_slug, only: [:update]
@@ -13,9 +13,6 @@ class ClaimsController < BasePublicController
 
   include FormSubmittable
   include ClaimsFormCallbacks
-
-  def timeout
-  end
 
   def existing_session
     @existing_session = journey_sessions.first

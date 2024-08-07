@@ -32,8 +32,10 @@ module Journeys
     attribute :hmrc_bank_validation_succeeded, :boolean
     attribute :hmrc_bank_validation_responses, default: []
     attribute :logged_in_with_tid, :boolean
+    attribute :logged_in_with_onelogin, :boolean
     attribute :details_check, :boolean
     attribute :teacher_id_user_info, default: {}
+    attribute :onelogin_user_info, default: {}
     attribute :email_address_check, :boolean
     attribute :mobile_check, :string
     attribute :qualifications_details_check, :boolean
@@ -42,6 +44,8 @@ module Journeys
     attribute :student_loan_plan, :string
     attribute :submitted_using_slc_data, :boolean
     attribute :sent_one_time_password_at, :datetime
+    attribute :hmrc_validation_attempt_count, :integer
+    attribute :reminder_id, :string
 
     def has_attribute?(name)
       attribute_names.include?(name.to_s)

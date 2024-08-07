@@ -12,28 +12,57 @@ module Journeys
         teaching-hours-per-week-next-term
         further-education-teaching-start-year
         subjects-taught
-        building-and-construction-courses
-        teaching-courses
+        building-construction-courses
+        chemistry-courses
+        computing-courses
+        early-years-courses
+        engineering-manufacturing-courses
+        maths-courses
+        physics-courses
+        hours-teaching-eligible-subjects
         half-teaching-hours
         teaching-qualification
         poor-performance
         check-your-answers-part-one
+        eligible
       ]
+
+      PERSONAL_DETAILS_SLUGS = %w[
+        sign-in
+        information-provided
+        personal-details
+        postcode-search
+        select-home-address
+        address
+        email-address
+        email-verification
+        provide-mobile-number
+        mobile-number
+        mobile-verification
+      ].freeze
+
+      PAYMENT_DETAILS_SLUGS = %w[
+        bank-or-building-society
+        personal-bank-account
+        building-society-account
+        gender
+        teacher-reference-number
+      ].freeze
 
       RESULTS_SLUGS = %w[
         check-your-answers
-        eligible
         ineligible
       ].freeze
 
-      SLUGS = ELIGIBILITY_SLUGS + RESULTS_SLUGS
+      SLUGS = (
+        ELIGIBILITY_SLUGS +
+        PERSONAL_DETAILS_SLUGS +
+        PAYMENT_DETAILS_SLUGS +
+        RESULTS_SLUGS
+      ).freeze
 
       def self.start_page_url
-        if Rails.env.production?
-          "https://www.example.com" # TODO: update to correct guidance
-        else
-          Rails.application.routes.url_helpers.landing_page_path("further-education-payments")
-        end
+        Rails.application.routes.url_helpers.landing_page_path("further-education-payments")
       end
 
       attr_reader :journey_session
@@ -59,6 +88,42 @@ module Journeys
           if answers.fixed_term_full_year == true
             sequence.delete("taught-at-least-one-term")
           end
+
+          if answers.subjects_taught.exclude?("building_construction")
+            sequence.delete("building-construction-courses")
+          end
+
+          if answers.subjects_taught.exclude?("chemistry")
+            sequence.delete("chemistry-courses")
+          end
+
+          if answers.subjects_taught.exclude?("computing")
+            sequence.delete("computing-courses")
+          end
+
+          if answers.subjects_taught.exclude?("early_years")
+            sequence.delete("early-years-courses")
+          end
+
+          if answers.subjects_taught.exclude?("engineering_manufacturing")
+            sequence.delete("engineering-manufacturing-courses")
+          end
+
+          if answers.subjects_taught.exclude?("maths")
+            sequence.delete("maths-courses")
+          end
+
+          if answers.subjects_taught.exclude?("physics")
+            sequence.delete("physics-courses")
+          end
+
+          if answers.provide_mobile_number == false
+            sequence.delete("mobile-number")
+            sequence.delete("mobile-verification")
+          end
+
+          sequence.delete("personal-bank-account") if answers.building_society?
+          sequence.delete("building-society-account") if answers.personal_bank_account?
         end
       end
     end

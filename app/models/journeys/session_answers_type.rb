@@ -12,7 +12,10 @@ module Journeys
         rescue
           nil
         end
-        answers_class.new(decoded) unless decoded.nil?
+        unless decoded.nil?
+          decoded_with_allowed_attributes = decoded.slice(*answers_class.attribute_names)
+          answers_class.new(decoded_with_allowed_attributes)
+        end
       when Hash
         answers_class.new(value)
       when answers_class

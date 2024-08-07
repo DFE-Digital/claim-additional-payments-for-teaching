@@ -159,15 +159,6 @@ RSpec.describe "Claims", type: :request do
     end
   end
 
-  describe "claims#timeout" do
-    before { create(:journey_configuration, :student_loans) }
-
-    it "displays session timeout content" do
-      get timeout_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
-      expect(response.body).to include("Your session has ended due to inactivity")
-    end
-  end
-
   describe "claims#update request" do
     before { create(:journey_configuration, :student_loans) }
 

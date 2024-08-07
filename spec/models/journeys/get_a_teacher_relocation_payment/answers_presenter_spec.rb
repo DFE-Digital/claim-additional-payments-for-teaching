@@ -16,6 +16,7 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
         :with_teacher_application_route,
         :with_state_funded_secondary_school,
         :with_current_school,
+        :with_headteacher_details,
         :with_one_year_contract,
         :with_start_date,
         :with_subject,
@@ -33,14 +34,19 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
           "application-route"
         ],
         [
+          "Are you employed by an English state secondary school?",
+          "Yes",
+          "state-funded-secondary-school"
+        ],
+        [
           "Which school are you currently employed to teach at?",
           answers.current_school.name,
           "current-school"
         ],
         [
-          "Are you employed by an English state secondary school?",
-          "Yes",
-          "state-funded-secondary-school"
+          "Enter the name of the headteacher of the school where you are employed as a teacher",
+          "Seymour Skinner",
+          "headteacher-details"
         ],
         [
           "Are you employed on a contract lasting at least one year?",
@@ -93,27 +99,6 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
           "Enter your passport number, as it appears on your passport",
           "1234567890123456789A",
           "passport-number"
-        ]
-      )
-    end
-  end
-
-  describe "#employment_answers" do
-    subject { presenter.employment_answers }
-
-    let(:answers) do
-      build(
-        :get_a_teacher_relocation_payment_answers,
-        :with_employment_details
-      )
-    end
-
-    it do
-      is_expected.to include(
-        [
-          "Enter the name of the headteacher of the school where you are employed as a teacher",
-          "Seymour Skinner",
-          "headteacher-details"
         ]
       )
     end

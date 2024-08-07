@@ -1,0 +1,24 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <%= @form.t([@form.journey_eligibility_checker.ineligibility_reason, "heading"]) %>
+    </h1>
+
+    <p class="govuk-body">
+      In order to claim a financial incentive payment, half of your timetabled teaching hours must include:
+    </p>
+
+    <%= govuk_list [
+      "a student aged 16 to 19",
+      "a person up to age 25 with an Education, Health and Care Plan (EHCP)",
+    ], type: :bullet %>
+
+    <p class="govuk-body">
+      For more information, check the eligibility criteria for <%= govuk_link_to "levelling up premium payments for early career further education teachers", "https://www.gov.uk/guidance/levelling-up-premium-payments-for-fe-teachers", new_tab: true %>.
+    </p>
+
+    <p class="govuk-body">
+      The information entered is not stored. If you are unsure your information is correct, <%= govuk_link_to "start again", claim_path(current_journey_routing_name, "landing-page") %>.
+    </p>
+  </div>
+</div>

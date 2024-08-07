@@ -1,0 +1,59 @@
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+<div class="govuk-grid-row" id="download">
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-m">
+      Download Levelling Up Premium Payments School Awards
+    </h2>
+
+    <% if lupp_awards_academic_years.any? %>
+      <%= form_with model: [:admin, Policies::LevellingUpPremiumPayments::Award], method: :get, url: admin_levelling_up_premium_payments_awards_path do |form| %>
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="download_academic_year">
+          Academic year
+        </label>
+
+        <%= form.select :academic_year, lupp_awards_academic_years, {}, class: "govuk-select", id: "download_academic_year" %>
+
+        <%= form.submit "Download CSV", class: "govuk-button", data: { module: "govuk-button" } %>
+      </div>
+      <% end %>
+    <% else %>
+      <p class="govuk-body">No school award data has been uploaded.</p>
+    <% end %>
+  </div>
+</div>
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+<div class="govuk-grid-row" id="upload">
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-m">
+      Upload Levelling Up Premium Payments School Awards
+    </h2>
+
+    <%= render("shared/error_summary", instance: @csv_upload) if @csv_upload.errors.any? %>
+
+    <%= form_with model: @csv_upload, url: admin_levelling_up_premium_payments_awards_path, multipart: true do |form| %>
+      <%= form_group_tag @csv_upload, :academic_year do %>
+        <label class="govuk-label" for="upload_academic_year">
+          Academic year
+        </label>
+
+        <%= form.select :academic_year, options_for_academic_year, {}, class: "govuk-select", id: "upload_academic_year" %>
+      <% end %>
+
+      <%= form_group_tag @csv_upload, :csv_data do %>
+        <%= errors_tag @csv_upload, :csv_data %>
+
+        <%= form.label :csv_data, "CSV file", class: "govuk-label" %>
+
+        <%= form.file_field :csv_data, class: "govuk-file-upload#{" govuk-file-upload--error" if @csv_upload&.errors[:csv_data]&.any?}" %>
+      <% end %>
+
+      <div class="govuk-button-group">
+        <%= form.submit "Upload CSV", class: "govuk-button", data: { module: "govuk-button" } %>
+      </div>
+    <% end %>
+  </div>
+</div>

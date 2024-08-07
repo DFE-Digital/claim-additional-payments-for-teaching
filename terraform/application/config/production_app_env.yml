@@ -1,1 +1,23 @@
 ---
+DFE_SIGN_IN_API_CLIENT_ID: teacherpayments
+DFE_SIGN_IN_API_ENDPOINT: https://api.signin.education.gov.uk
+DFE_SIGN_IN_IDENTIFIER: teacherpayments
+DFE_SIGN_IN_ISSUER: https://oidc.signin.education.gov.uk:443
+DFE_SIGN_IN_REDIRECT_BASE_URL: https://www.claim-additional-teaching-payment.service.gov.uk
+
+BYPASS_ONELOGIN_SIGN_IN: true
+ONELOGIN_SIGN_IN_ISSUER: https://oidc.integration.account.gov.uk/
+ONELOGIN_REDIRECT_BASE_URL: https://www.claim-additional-teaching-payment.service.gov.uk
+
+DQT_API_URL: https://teacher-qualifications-api.education.gov.uk/v1
+DQT_BASE_URL: https://api-customerengagement.platform.education.gov.uk/dqt-crm/v1/
+
+HMRC_API_BASE_URL: https://api.service.hmrc.gov.uk
+HMRC_API_BANK_VALIDATION_ENABLED: true
+
+ORDNANCE_SURVEY_API_BASE_URL: https://api.os.uk
+
+TID_BASE_URL: https://claim-additional-teaching-payment.service.gov.uk/additional-payments/claim
+TID_SIGN_IN_API_ENDPOINT: https://teaching-identity.education.gov.uk/
+TID_SIGN_IN_CLIENT_ID: claim
+TID_SIGN_IN_ISSUER: https://teaching-identity.education.gov.uk/

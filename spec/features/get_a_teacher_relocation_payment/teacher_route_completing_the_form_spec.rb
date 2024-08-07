@@ -24,7 +24,7 @@ describe "teacher route: completing the form" do
     journey_configuration
   end
 
-  describe "navigating forward" do
+  describe "navigating forward", flaky: true do
     before do
       when_i_start_the_form
       and_i_complete_application_route_question_with(
@@ -32,6 +32,7 @@ describe "teacher route: completing the form" do
       )
       and_i_complete_the_state_funded_secondary_school_step_with(option: "Yes")
       and_i_complete_the_current_school_step(school)
+      and_i_complete_the_headteacher_step
       and_i_complete_the_contract_details_step_with(option: "Yes")
       and_i_complete_the_contract_start_date_step_with(
         date: contract_start_date
@@ -47,7 +48,6 @@ describe "teacher route: completing the form" do
       it "submits an application" do
         and_i_complete_the_nationality_step_with(option: "Australian")
         and_i_complete_the_passport_number_step_with(options: "123456789")
-        and_i_complete_the_headteacher_step
         and_i_complete_the_personal_details_step
         and_i_complete_the_postcode_step
         and_i_complete_the_email_address_step
@@ -64,7 +64,6 @@ describe "teacher route: completing the form" do
       it "submits an application", js: true do
         and_i_complete_the_nationality_step_with(option: "Australian")
         and_i_complete_the_passport_number_step_with(options: "123456789")
-        and_i_complete_the_headteacher_step
         and_i_complete_the_personal_details_step
         and_i_complete_the_manual_address_step
         and_i_complete_the_email_address_step
@@ -81,7 +80,6 @@ describe "teacher route: completing the form" do
       it "submits an application" do
         and_i_complete_the_nationality_step_with(option: "Australian")
         and_i_complete_the_passport_number_step_with(options: "123456789")
-        and_i_complete_the_headteacher_step
         and_i_complete_the_personal_details_step
         and_i_complete_the_manual_address_step
         and_i_complete_the_email_address_step
@@ -98,7 +96,6 @@ describe "teacher route: completing the form" do
       it "submits an application" do
         and_i_complete_the_nationality_step_with(option: "Australian")
         and_i_complete_the_passport_number_step_with(options: "123456789")
-        and_i_complete_the_headteacher_step
         and_i_complete_the_personal_details_step
         and_i_complete_the_manual_address_step
         and_i_complete_the_email_address_step
@@ -129,6 +126,10 @@ describe "teacher route: completing the form" do
 
     expect(page).to have_text(
       "Which school are you currently employed to teach at? #{school.name}"
+    )
+
+    expect(page).to have_text(
+      "Enter the name of the headteacher of the school where you are employed as a teacher Seymour Skinner"
     )
 
     expect(page).to have_text(
@@ -177,10 +178,6 @@ describe "teacher route: completing the form" do
 
     expect(page).to have_text(
       "Enter your passport number, as it appears on your passport 123456789"
-    )
-
-    expect(page).to have_text(
-      "Enter the name of the headteacher of the school where you are employed as a teacher Seymour Skinner"
     )
 
     if mobile_number

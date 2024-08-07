@@ -11,6 +11,11 @@ class Claim < ApplicationRecord
     bank_sort_code
     bank_account_number
     building_society_roll_number
+    address_line_1
+    address_line_2
+    address_line_3
+    address_line_4
+    postcode
   ].freeze
   FILTER_PARAMS = {
     address_line_1: true,
@@ -77,6 +82,9 @@ class Claim < ApplicationRecord
   }.freeze
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
+  CLAIMANT_MATCHING_ATTRIBUTES = %i[
+    national_insurance_number
+  ]
 
   # Use AcademicYear as custom ActiveRecord attribute type
   attribute :academic_year, AcademicYear::Type.new
@@ -141,11 +149,11 @@ class Claim < ApplicationRecord
   validate :building_society_roll_number_must_be_between_one_and_eighteen_digits
   validate :building_society_roll_number_must_be_in_a_valid_format
 
-  before_save :normalise_ni_number, if: :national_insurance_number_changed?
-  before_save :normalise_bank_account_number, if: :bank_account_number_changed?
-  before_save :normalise_bank_sort_code, if: :bank_sort_code_changed?
-  before_save :normalise_first_name, if: :first_name_changed?
-  before_save :normalise_surname, if: :surname_changed?
+  before_save :normalise_ni_number, if: %i[national_insurance_number national_insurance_number_changed?]
+  before_save :normalise_bank_account_number, if: %i[bank_account_number bank_account_number_changed?]
+  before_save :normalise_bank_sort_code, if: %i[bank_sort_code bank_sort_code_changed?]
+  before_save :normalise_first_name, if: %i[first_name first_name_changed?]
+  before_save :normalise_surname, if: %i[surname surname_changed?]
 
   scope :unsubmitted, -> { where(submitted_at: nil) }
   scope :submitted, -> { where.not(submitted_at: nil) }
@@ -172,6 +180,13 @@ class Claim < ApplicationRecord
   scope :unassigned, -> { where(assigned_to_id: nil) }
   scope :current_academic_year, -> { by_academic_year(AcademicYear.current) }
   scope :failed_bank_validation, -> { where(hmrc_bank_validation_succeeded: false) }
+  scope :unscrubbed, -> { where(personal_data_removed_at: nil) }
+
+  scope :with_same_claimant, ->(claim) do
+    CLAIMANT_MATCHING_ATTRIBUTES.reduce(where.not(id: claim.id)) do |scope, attr|
+      scope.where(attr => claim.public_send(attr))
+    end
+  end
 
   delegate :award_amount, to: :eligibility
 
@@ -394,6 +409,12 @@ class Claim < ApplicationRecord
       policy_year: Journeys.for_policy(policy).configuration.current_academic_year,
       itt_academic_year: eligibility.itt_academic_year
     )
+  end
+
+  def same_claimant?(other_claim)
+    CLAIMANT_MATCHING_ATTRIBUTES.all? do |attr|
+      public_send(attr) == other_claim.public_send(attr)
+    end
   end
 
   private

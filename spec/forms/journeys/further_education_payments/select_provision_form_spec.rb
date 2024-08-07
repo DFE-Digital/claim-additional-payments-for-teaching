@@ -8,7 +8,7 @@ RSpec.describe Journeys::FurtherEducationPayments::SelectProvisionForm, type: :m
   let(:params) do
     ActionController::Parameters.new(
       claim: {
-        school_id:
+        possible_school_id:
       }
     )
   end
@@ -22,19 +22,19 @@ RSpec.describe Journeys::FurtherEducationPayments::SelectProvisionForm, type: :m
   end
 
   describe "validations" do
-    let(:school_id) { nil }
+    let(:possible_school_id) { nil }
 
     it do
       is_expected.not_to(
         allow_value("")
-        .for(:school_id)
-        .with_message("Select the college you teach at")
+        .for(:possible_school_id)
+        .with_message("Select where you are employed")
       )
     end
   end
 
   describe "#save" do
-    let(:school_id) { college.id }
+    let(:possible_school_id) { college.id }
 
     it "updates the journey session" do
       expect { expect(subject.save).to be(true) }.to(
