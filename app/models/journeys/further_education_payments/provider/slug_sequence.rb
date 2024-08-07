@@ -5,10 +5,15 @@ module Journeys
         SLUGS = %w[
           sign-in
           verify-claim
+          authorisation-failure
         ]
 
         AUTHORISED_SLUGS = %w[
           verify-claim
+        ]
+
+        DEAD_END_SLUGS = %w[
+          authorisation-failure
         ]
 
         def self.verify_claim_url(claim)
@@ -33,10 +38,15 @@ module Journeys
 
         # May use different auth depending on slug
         def authorisation_start(slug)
+          "sign-in"
         end
 
         def requires_authorisation?(slug)
           AUTHORISED_SLUGS.include?(slug)
+        end
+
+        def dead_end_slugs
+          DEAD_END_SLUGS
         end
       end
     end

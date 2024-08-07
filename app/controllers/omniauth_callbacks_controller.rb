@@ -49,9 +49,27 @@ class OmniauthCallbacksController < ApplicationController
 
     # Yeah this should be a form object
 
-    redirect_to(
-      claim_path(journey: current_journey_routing_name, slug: "verify-claim")
+    authorisation = journey::Authorisation.new(
+      answers: journey_session.answers,
+      slug: "verify-claim"
     )
+
+    session[:slugs] << "sign-in"
+
+    if authorisation.authorised?
+      redirect_to(
+        claim_path(journey: current_journey_routing_name, slug: "verify-claim")
+      )
+    else
+      puts "in auth faliure"
+      redirect_to(
+        claim_path(
+          journey: current_journey_routing_name,
+          slug: "authorisation-failure",
+          reason: authorisation.failure_reason
+        )
+      )
+    end
 
     # FIXME handle errors, eg "omniauth hash not being present"
     # Think this should be handled by a form

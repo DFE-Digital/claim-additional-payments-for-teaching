@@ -16,7 +16,7 @@ module Journeys
 
       FORMS = {
         "claims" => {
-          "verify-claim" => ClaimSubmissionForm,
+          "verify-claim" => VerifyClaimForm,
         }
       }
     end

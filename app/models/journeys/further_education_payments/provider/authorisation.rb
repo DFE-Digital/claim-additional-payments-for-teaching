@@ -2,19 +2,18 @@ module Journeys
   module FurtherEducationPayments
     module Provider
       class Authorisation
-        attr_reader :answers
+        include ActiveModel::Model
 
-        def initialize(answers)
+        def initialize(answers:, slug:)
           @answers = answers
+          @slug = slug
         end
 
-        def authorised?(slug)
-          return false if failure_reason(slug).present?
-
-          true
+        def authorised?
+          failure_reason.nil?
         end
 
-        def failure_reason(slug)
+        def failure_reason
           return :not_signed_in unless signed_in?
           return :no_service_access unless service_access?
           return :organisation_mismatch unless organisation_matches?
@@ -23,6 +22,8 @@ module Journeys
         end
 
         private
+
+        attr_reader :answers, :slug
 
         def signed_in?
           answers.dfe_sign_in_uid.present?

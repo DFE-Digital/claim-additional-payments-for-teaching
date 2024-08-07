@@ -48,7 +48,7 @@ module Journeys
     end
 
     def has_completed_journey_until?(slug)
-      return true if DEAD_END_SLUGS.include?(slug)
+      return true if dead_end_slugs.include?(slug)
       incomplete_slugs.empty?
     end
 
@@ -126,6 +126,10 @@ module Journeys
 
     def journey_ineligible?
       @journey_ineligible ||= journey::EligibilityChecker.new(journey_session: @journey_session).ineligible?
+    end
+
+    def dead_end_slugs
+      DEAD_END_SLUGS + @slug_sequence.dead_end_slugs
     end
   end
 end

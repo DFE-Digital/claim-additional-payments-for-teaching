@@ -12,7 +12,14 @@ module AuthorisedSlugs
   end
 
   def authorised?
-    journey::Authorisation.new(journey_session.answers).authorised?(current_slug)
+    authorisation.authorised?
+  end
+
+  def authorisation
+    journey::Authorisation.new(
+      answers: journey_session.answers,
+      slug: current_slug
+    )
   end
 
   def current_slug_requires_authorisation?

@@ -9,30 +9,6 @@ RSpec.feature "Provider verifying claims" do
 
   xscenario "Problem with the service"
 
-  scenario "Provider skips a head" do
-    claim = create(
-      :claim,
-      first_name: "Edna",
-      surname: "Krabappel",
-      date_of_birth: Date.new(1945, 7, 3),
-      reference: "AB123456",
-      created_at: DateTime.new(2024, 8, 1, 9, 0, 0)
-    )
-
-    claim_link = Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
-
-    visit claim_link
-
-    click_on "Start now"
-
-    expect(page).to have_button("Sign in")
-
-    # Attempt to skip signing in
-    visit claim_path(journey: "further-education-payments-provider", slug: "verify-claim")
-
-    expect(page).to have_button("Sign in")
-  end
-
   scenario "Provider without access visits email link" do
     # Given I have DSI permission to verify claims for "College A"
     fe_provider = create(:school, :further_education, name: "Springfield A&M")
@@ -77,6 +53,11 @@ RSpec.feature "Provider verifying claims" do
     click_on "Sign in"
 
     expect(page).to have_text("You do not have access to verify claims for this organisation")
+
+    # Attempt to skip to authorised page
+    visit claim_path(journey: "further-education-payments-provider", slug: "verify-claim")
+
+    expect(page).to have_button("Sign in")
   end
 
   xscenario "Provider with access to service but for the wrong organisation"

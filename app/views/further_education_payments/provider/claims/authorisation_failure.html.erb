@@ -1,0 +1,6 @@
+<% case params[:reason] %>
+<% when "no_service_access" %>
+  You do not have access to verify claims for this organisation
+<% else %>
+  <% fail "unknown reason" %>
+<% end %>
