@@ -42,6 +42,24 @@ RSpec.describe BankDetailsForm do
     let(:hmrc_validation_attempt_count) { 0 }
 
     describe "#valid?" do
+      context "banking name with invalid characters" do
+        let(:banking_name) { "John=Doe" }
+
+        it { is_expected.not_to be_valid }
+
+        it do
+          form.valid?
+          expect(form.errors[:banking_name]).to contain_exactly("Enter a valid name on the account")
+        end
+      end
+
+      context "banking name with valid characters" do
+        let(:valid_characters) { "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ./&-".chars }
+        let(:banking_name) { Array.new(15) { valid_characters.sample }.join }
+
+        it { is_expected.to be_valid }
+      end
+
       context "with 200 code HMRC API response", :with_stubbed_hmrc_client do
         context "with valid account number" do
           let(:bank_account_number) { "12-34-56-78" }
