@@ -26,8 +26,12 @@ module Journeys
             name: course_option_description("gcse_physics")
           ),
           OpenStruct.new(
-            id: "ib_certificate_physics",
-            name: course_option_description("ib_certificate_physics")
+            id: "ibo_level_1_2_myp_physics",
+            name: course_option_description("ibo_level_1_2_myp_physics")
+          ),
+          OpenStruct.new(
+            id: "ibo_level_3_physics",
+            name: course_option_description("ibo_level_3_physics")
           ),
           OpenStruct.new(
             id: "none",

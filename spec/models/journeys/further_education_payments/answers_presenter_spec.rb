@@ -84,7 +84,8 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
       %w[
         alevel_physics
         gcse_physics
-        ib_certificate_physics
+        ibo_level_1_2_myp_physics
+        ibo_level_3_physics
       ]
     }
 
@@ -127,7 +128,7 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
           ["Early years courses", "<p class=\"govuk-body\">Early years practitioner (level 2) apprenticeship</p><p class=\"govuk-body\">Early years educator (level 3) apprenticeship</p><p class=\"govuk-body\">T Level in education and early years (early years educator)</p><p class=\"govuk-body\">A course that leads to an early years qualification which enables providers to count the recipient in staff:child ratios</p>", "early-years-courses"],
           ["Engineering and manufacturing courses", "<p class=\"govuk-body\">ESFA-funded qualifications at level 3 and below in the engineering sector subject area</p><p class=\"govuk-body\">ESFA-funded qualifications at level 3 and below in the manufacturing technologies sector subject area</p><p class=\"govuk-body\">ESFA-funded qualifications at level 3 and below in the transportation operations and maintenance sector subject area</p><p class=\"govuk-body\">T Level in design and development for engineering and manufacturing</p><p class=\"govuk-body\">T Level in maintenance, installation and repair for engineering and manufacturing</p><p class=\"govuk-body\">T Level in engineering, manufacturing, processing and control</p><p class=\"govuk-body\">Level 2 or level 3 apprenticeships in the engineering and manufacturing occupational route</p>", "engineering-manufacturing-courses"],
           ["Maths courses", "<p class=\"govuk-body\">ESFA-funded qualifications at level 3 and below in the mathematics and statistics sector subject area</p><p class=\"govuk-body\">Maths GCSE, functional skills qualifications and other maths qualifications approved for teaching to 16 to 19-year-olds who meet the condition of funding</p>", "maths-courses"],
-          ["Physics courses", "<p class=\"govuk-body\">A or AS level physics</p><p class=\"govuk-body\">GCSE physics</p><p class=\"govuk-body\">International baccalaureate middle years programme or certificate in physics</p>", "physics-courses"],
+          ["Physics courses", "<p class=\"govuk-body\">A or AS level physics</p><p class=\"govuk-body\">GCSE physics</p><p class=\"govuk-body\">IBO level 1 / level 2 MYP physics</p><p class=\"govuk-body\">IBO level 3 in SL and HL physics, taught as part of a diploma or career related programme or as a standalone certificate</p>", "physics-courses"],
           ["Do you spend at least half of your timetabled teaching hours teaching these eligible courses?", "Yes", "hours-teaching-eligible-subjects"],
           ["Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?", "Yes", "half-teaching-hours"],
           ["Do you have a teaching qualification?", "Yes", "teaching-qualification"],
