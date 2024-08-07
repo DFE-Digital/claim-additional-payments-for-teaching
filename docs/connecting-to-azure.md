@@ -138,14 +138,6 @@ Open an interactive Rails console using this command:
 kubectl -n ${NAMESPACE} exec -it deployment/${DEPLOYMENT_NAME} -- rails console
 ```
 
-Alternatively, you can run the following script:
-
-```shell
-bin/azure-console ${ENVIRONMENT}
-```
-
-Where environment is one of `production`, `test` or `review-PR_NUMBER`.
-
 ### Open a shell console
 
 Open an interactive Linux shell using this command:

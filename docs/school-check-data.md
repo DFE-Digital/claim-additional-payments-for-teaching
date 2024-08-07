@@ -18,11 +18,7 @@ which need this email sending is a developer task, documented below.
    there are no trailing commas
 
 3. Have a second developer join you to observe, and connect to the production
-   console using
-
-   ```shell
-   bin/azure-console production
-   ```
+   console
 
 4. Create a new instance of `Claim::SchoolCheckEmailDataExport` with
 
