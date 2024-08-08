@@ -45,12 +45,7 @@ module JourneyConcern
   end
 
   def create_journey_session!
-    journey_session = journey::Session.create!(
-      journey: current_journey_routing_name,
-      answers: {
-        academic_year: journey_configuration.current_academic_year
-      }
-    )
+    journey_session = journey::SessionForm.create!(params)
 
     session[journey_session_key] = journey_session.id
 
