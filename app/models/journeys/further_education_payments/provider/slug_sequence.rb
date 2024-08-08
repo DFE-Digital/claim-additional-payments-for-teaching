@@ -17,9 +17,11 @@ module Journeys
         ]
 
         def self.verify_claim_url(claim)
-          Rails.application.routes.url_helpers.landing_page_path(
-            journey: module_parent::ROUTING_NAME,
-            claim_id: claim.id
+          Rails.application.routes.url_helpers.new_claim_path(
+            module_parent::ROUTING_NAME,
+            answers: {
+              claim_id: claim.id
+            }
           )
         end
 

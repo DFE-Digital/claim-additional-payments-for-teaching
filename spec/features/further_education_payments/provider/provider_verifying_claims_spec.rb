@@ -44,14 +44,23 @@ RSpec.feature "Provider verifying claims" do
 
     click_on "Start now"
 
-    click_on "Sign in"
-
     expect(page).to have_text("You do not have access to verify claims for this organisation")
 
     # Attempt to skip to authorised page
     visit claim_path(journey: "further-education-payments-provider", slug: "verify-claim")
 
-    expect(page).to have_button("Sign in")
+    expect(page).to have_button("Start now")
+
+    # Sign in with access
+    stub_dfe_sign_in_user_info_request(
+      "11111",
+      "22222",
+      Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
+    )
+
+    click_on "Start now"
+
+    expect(page).to have_text "Verify claim form"
   end
 
   scenario "provider approves the claim" do
@@ -92,8 +101,6 @@ RSpec.feature "Provider verifying claims" do
     visit claim_link
 
     click_on "Start now"
-
-    click_on "Sign in"
 
     expect(page).to have_text "Verify claim form"
   end
