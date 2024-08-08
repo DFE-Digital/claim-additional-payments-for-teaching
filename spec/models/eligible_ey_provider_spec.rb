@@ -12,8 +12,22 @@ describe EligibleEyProvider do
       it { is_expected.to be true }
     end
 
+    context "with a valid primary email address but with different capitalisation" do
+      let!(:eligible_ey_provider) { create(:eligible_ey_provider, primary_key_contact_email_address: "test@example.com") }
+      let(:email) { "TeSt@EXAMPLE.com" }
+
+      it { is_expected.to be true }
+    end
+
     context "with a valid secondary email address" do
       let(:email) { eligible_ey_provider.secondary_contact_email_address }
+
+      it { is_expected.to be true }
+    end
+
+    context "with a valid secondary email address but with different capitalisation" do
+      let!(:eligible_ey_provider) { create(:eligible_ey_provider, secondary_contact_email_address: "secondary@example.com") }
+      let(:email) { "SeCoNdArY@EXAMPLE.com" }
 
       it { is_expected.to be true }
     end
