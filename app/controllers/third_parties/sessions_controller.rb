@@ -1,10 +1,5 @@
 module ThirdParties
-  class SessionsController < ApplicationController
-    include DfE::Analytics::Requests
-    include HttpAuthConcern
-
-    before_action :add_view_paths
-
+  class SessionsController < BaseController
     def new
     end
 
@@ -19,22 +14,6 @@ module ThirdParties
 
       redirect_to session.delete(:after_sign_in_path)
     end
-
-    private
-
-    def journey
-      @journey ||= Journeys.for_routing_name(params[:journey])
-    end
-
-    def add_view_paths
-      prepend_view_path(Rails.root.join("app", "views", journey::VIEW_PATH))
-    end
-
-    def current_journey_routing_name
-      journey::ROUTING_NAME
-    end
-
-    helper_method :current_journey_routing_name
   end
 end
 
