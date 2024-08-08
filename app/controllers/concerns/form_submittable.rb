@@ -47,7 +47,6 @@ module FormSubmittable
     around_action :handle_form_submission, only: [:update, :create]
 
     def new
-      handle_magic_link if journey.start_with_magic_link?
       redirect_to_first_slug
     end
 
@@ -167,17 +166,6 @@ module FormSubmittable
 
     def load_form_if_exists
       @form ||= journey.form(journey_session:, params:)
-    end
-
-    def handle_magic_link
-      return unless params[:code] && params[:email]
-
-      otp = OneTimePassword::Validator.new(params[:code], secret: ENV["EY_MAGIC_LINK_SECRET"] + params[:email])
-      if otp.valid?
-        journey_session.answers.assign_attributes(email_address: params[:email])
-        journey_session.answers.assign_attributes(email_verified: true)
-        journey_session.save!
-      end
     end
   end
 end

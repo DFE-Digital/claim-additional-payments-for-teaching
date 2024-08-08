@@ -7,9 +7,10 @@ class ClaimsController < BasePublicController
   before_action :update_session_with_current_slug, only: [:update]
   before_action :set_backlink_path, only: [:show, :update]
   before_action :check_claim_not_in_progress, only: [:new]
-  before_action :clear_claim_session, only: [:new]
+  before_action :clear_claim_session, only: [:new], unless: -> { journey.start_with_magic_link? }
   before_action :prepend_view_path_for_journey
   before_action :persist_claim, only: [:new, :create]
+  before_action :handle_magic_link, only: [:new], if: -> { journey.start_with_magic_link? }
 
   include FormSubmittable
   include ClaimsFormCallbacks
@@ -108,5 +109,17 @@ class ClaimsController < BasePublicController
 
   def correct_journey_for_claim_in_progress?
     journey == Journeys.for_routing_name(journey_session.journey) if journey_session
+  end
+
+  def handle_magic_link
+    return unless params[:code] && params[:email]
+
+    otp = OneTimePassword::Validator.new(params[:code], secret: ENV["EY_MAGIC_LINK_SECRET"] + params[:email])
+    if otp.valid?
+      journey_session.answers.assign_attributes(email_address: params[:email])
+      journey_session.answers.assign_attributes(email_verified: true)
+      journey_session.save!
+    end
+    redirect_to_next_slug if claim_in_progress?
   end
 end

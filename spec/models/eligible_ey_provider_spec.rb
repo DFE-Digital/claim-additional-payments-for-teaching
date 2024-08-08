@@ -4,7 +4,7 @@ describe EligibleEyProvider do
   describe ".eligible_email?" do
     subject { described_class.eligible_email?(email) }
 
-    let!(:eligible_ey_provider) { create(:eligible_ey_provider) }
+    let!(:eligible_ey_provider) { create(:eligible_ey_provider, :with_secondary_contact_email_address) }
 
     context "with a valid primary email address" do
       let(:email) { eligible_ey_provider.primary_key_contact_email_address }
