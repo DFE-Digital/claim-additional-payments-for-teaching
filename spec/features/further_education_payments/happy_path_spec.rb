@@ -69,7 +69,8 @@ RSpec.feature "Further education payments" do
     click_button "Continue"
 
     expect(page).to have_content("Which maths courses do you teach?")
-    check("claim-maths-courses-esfa-field")
+
+    check("claim-maths-courses-approved-level-321-maths-field")
     click_button "Continue"
 
     expect(page).to have_content("Which physics courses do you teach?")
@@ -82,7 +83,7 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("T Level in digital support services")
     expect(page).to have_content("T Level in education and early years (early years educator)")
     expect(page).to have_content("T Level in design and development for engineering and manufacturing")
-    expect(page).to have_content("ESFA-funded qualifications at level 3 and below in the")
+    expect(page).to have_content("Qualifications approved for funding at level 3 and below in the")
     expect(page).to have_content("A or AS level physics")
     choose("Yes")
     click_button "Continue"

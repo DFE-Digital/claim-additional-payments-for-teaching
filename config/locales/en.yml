@@ -851,7 +851,6 @@ en:
           heading: You are not eligible
         subject:
           heading: You are not eligible
-
       teaching_responsibilities:
         question: Are you a member of staff with teaching responsibilities?
         errors:
@@ -997,10 +996,9 @@ en:
         question: Which maths courses do you teach?
         question_check_your_answers: Maths courses
         options:
-          esfa: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
+          approved_level_321_maths: Qualifications approved for funding at level 3 and below in the %{link} sector subject area
           gcse_maths:
-            Maths GCSE, functional skills qualifications and %{link} approved for teaching to 16 to 19-year-olds who
-            meet the condition of funding
+            GCSE in maths, functional skills qualifications and %{link} approved for teaching to 16 to 19-year-olds who meet the condition of funding
           none: I do not teach any of these courses
       physics_courses:
         <<: *courses
