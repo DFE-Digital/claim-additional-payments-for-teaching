@@ -38,6 +38,10 @@ module ThirdParties
       def claim
         @claim ||= Claim.find(params[:claim_id])
       end
+
+      def record_to_authorise
+        claim
+      end
     end
   end
 end

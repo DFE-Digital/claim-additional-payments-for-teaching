@@ -1,3 +1,20 @@
+# Expects a journey two define two classes
+# `SomeJourney::ThirdPartySession`
+#    This class needs to implement a class method `.from_session`
+#    which will be passed the contents of the controller session,
+#    a `to_h` instance method which returns a hash of what to store in the
+#    session, and a `signed_in?` instance method which returns a boolean.
+#
+# `SomeJourney::ThirdPartyAuthorisation`
+#    This class is passed `SomeJourney::ThirdPartySession` and the current
+#    record to authorised.
+#    It should implement an instance method `authorised?` which returns a
+#    boolean and `failure_reason` which returns the reason for authorisation
+#    failure.
+#
+#    The including controller needs to implement a `record_to_authorise` method
+#    The return value from this method will be passed to the
+#    `ThirdPartyAuthorisation` class
 module ThirdPartyAuthorised
   extend ActiveSupport::Concern
 
@@ -25,7 +42,7 @@ module ThirdPartyAuthorised
     def authorisation
       @authorisation ||= journey::ThirdPartyAuthorisation.new(
         user: third_party_session,
-        record: claim
+        record: record_to_authorise
       )
     end
   end
