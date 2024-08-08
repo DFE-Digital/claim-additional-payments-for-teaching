@@ -86,9 +86,7 @@
             </a>
           </li>
           <li class="one-login-header__nav__list-item">
-            <a class="one-login-header__nav__link" href="https://home.account.gov.uk/sign-out">
-              Sign out
-            </a>
+            <%= button_to "Sign out", deauth_onelogin_path, method: :delete, class: "one-login-header__nav__link button-to-as-link" %>
           </li>
         </ul>
       </nav>

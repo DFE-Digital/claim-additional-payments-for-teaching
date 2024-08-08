@@ -54,7 +54,7 @@
       </div>
     </div>
 
-    <% if @journey_session.answers.logged_in_with_onelogin? %>
+    <% if @journey_session&.answers&.logged_in_with_onelogin? %>
       <%= render "shared/one_login_header" %>
     <% else %>
       <%= render "shared/header" %>

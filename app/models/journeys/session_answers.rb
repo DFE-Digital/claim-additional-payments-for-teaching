@@ -37,6 +37,7 @@ module Journeys
     attribute :details_check, :boolean
     attribute :teacher_id_user_info, default: {}
     attribute :onelogin_user_info, default: {}
+    attribute :onelogin_credentials, default: {}
     attribute :email_address_check, :boolean
     attribute :mobile_check, :string
     attribute :qualifications_details_check, :boolean

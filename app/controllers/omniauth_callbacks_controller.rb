@@ -54,10 +54,12 @@ class OmniauthCallbacksController < ApplicationController
   end
 
   def process_one_login_authentication_callback(auth)
-    onelogin_user_info_attributes = auth.info.to_h.slice("email", "phone")
+    onelogin_user_info = auth.info.to_h.slice("email", "phone")
+    onelogin_credentials = auth.credentials
 
     journey_session.answers.assign_attributes(
-      onelogin_user_info: onelogin_user_info_attributes,
+      onelogin_user_info:,
+      onelogin_credentials:,
       logged_in_with_onelogin: true
     )
     journey_session.save!
