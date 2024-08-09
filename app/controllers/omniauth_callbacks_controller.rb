@@ -6,21 +6,14 @@ class OmniauthCallbacksController < ApplicationController
   def callback
     auth = request.env["omniauth.auth"]
 
-    # Only keep the attributes permitted by the form
-    teacher_id_user_info_attributes = auth.extra.raw_info.to_h.slice(
-      *SignInOrContinueForm::TeacherIdUserInfoForm::DFE_IDENTITY_ATTRIBUTES.map(&:to_s)
-    )
-
-    redirect_to(
-      claim_path(
-        journey: current_journey_routing_name,
-        slug: "sign-in-or-continue",
-        claim: {
-          logged_in_with_tid: true,
-          teacher_id_user_info_attributes: teacher_id_user_info_attributes
-        }
-      )
-    )
+    case params[:journey]
+    when "further-education-payments-provider"
+      further_education_payments_provider_callback(auth)
+    else
+      # The callback route for student loans and additional payments isn't
+      # namespaced under a journey
+      additional_payments_callback(auth)
+    end
   end
 
   def failure
@@ -127,5 +120,34 @@ class OmniauthCallbacksController < ApplicationController
     else
       request.env["omniauth.auth"]
     end
+  end
+
+  def further_education_payments_provider_callback(auth)
+    session[:slugs] << "sign-in"
+
+    redirect_to(
+      claim_path(
+        journey: current_journey_routing_name,
+        slug: "verify-claim"
+      )
+    )
+  end
+
+  def additional_payments_callback(auth)
+    # Only keep the attributes permitted by the form
+    teacher_id_user_info_attributes = auth.extra.raw_info.to_h.slice(
+      *SignInOrContinueForm::TeacherIdUserInfoForm::DFE_IDENTITY_ATTRIBUTES.map(&:to_s)
+    )
+
+    redirect_to(
+      claim_path(
+        journey: current_journey_routing_name,
+        slug: "sign-in-or-continue",
+        claim: {
+          logged_in_with_tid: true,
+          teacher_id_user_info_attributes: teacher_id_user_info_attributes
+        }
+      )
+    )
   end
 end

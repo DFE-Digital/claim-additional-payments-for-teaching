@@ -11,8 +11,11 @@ OmniAuth.config.on_failure = proc { |env|
 
 dfe_sign_in_issuer_uri = ENV["DFE_SIGN_IN_ISSUER"].present? ? URI(ENV["DFE_SIGN_IN_ISSUER"]) : nil
 
+dfe_sign_in_fe_provider_callback_path = "/further-education-payments-provider/auth/callback"
+
 if ENV["DFE_SIGN_IN_REDIRECT_BASE_URL"].present?
   dfe_sign_in_redirect_uri = URI.join(ENV["DFE_SIGN_IN_REDIRECT_BASE_URL"], "/admin/auth/callback")
+  dfe_sign_in_fe_provider_redirect_uri = URI.join(ENV["DFE_SIGN_IN_REDIRECT_BASE_URL"], dfe_sign_in_fe_provider_callback_path)
 end
 
 tid_sign_in_endpoint_uri = ENV["TID_SIGN_IN_API_ENDPOINT"].present? ? URI(ENV["TID_SIGN_IN_API_ENDPOINT"]) : nil
@@ -69,6 +72,25 @@ Rails.application.config.middleware.use OmniAuth::Builder do
         ("#{dfe_sign_in_issuer_uri}:#{dfe_sign_in_issuer_uri.port}" if dfe_sign_in_issuer_uri.present?)
     }
   end
+
+  provider :openid_connect, {
+    name: :dfe_fe_provider,
+    discovery: true,
+    response_type: :code,
+    scope: %i[openid email organisation first_name last_name],
+    callback_path: dfe_sign_in_fe_provider_callback_path,
+    path_prefix: "/further-education-payments-provider/auth",
+    client_options: {
+      port: dfe_sign_in_issuer_uri&.port,
+      scheme: dfe_sign_in_issuer_uri&.scheme,
+      host: dfe_sign_in_issuer_uri&.host,
+      identifier: ENV["DFE_SIGN_IN_IDENTIFIER"],
+      secret: ENV["DFE_SIGN_IN_SECRET"],
+      redirect_uri: dfe_sign_in_fe_provider_redirect_uri&.to_s
+    },
+    issuer:
+       ("#{dfe_sign_in_issuer_uri}:#{dfe_sign_in_issuer_uri.port}" if dfe_sign_in_issuer_uri.present?)
+  }
 
   provider :openid_connect, {
     name: :tid,

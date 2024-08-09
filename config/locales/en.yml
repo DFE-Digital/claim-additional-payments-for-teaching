@@ -1094,6 +1094,20 @@ en:
         By submitting this you are confirming that, to the best of your knowledge, the details you are providing are
         correct.
       btn_text: Accept and send
+  further_education_payments_provider:
+    journey_name: Claim incentive payments for further education teachers - provider
+    feedback_email: "FE-Levellingup.PremiumPayments@education.gov.uk"
+    support_email_address: "FE-Levellingup.PremiumPayments@education.gov.uk"
+    forms:
+      verify_claim:
+        title: "Review a financial incentive payment claim"
+        declaration_title: "Declaration"
+        declaration: "To the best of my knowledge, I confirm that the information provided in this form is correct."
+        claim_reference: "Claim reference"
+        claimant_name: "Claimant name"
+        claimant_date_of_birth: "Claimant date of birth"
+        claimant_trn: "Claimant teacher reference number (TRN)"
+        claim_date: "Claim date"
   early_years_payment:
     claim_description: for an early years financial incentive payment
   early_years_payment_provider_start:
