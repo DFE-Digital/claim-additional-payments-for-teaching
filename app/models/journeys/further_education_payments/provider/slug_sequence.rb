@@ -5,6 +5,12 @@ module Journeys
         SLUGS = [
           "sign-in",
           "verify-claim",
+          "complete",
+          "unauthorised"
+        ]
+
+        RESTRICTED_SLUGS = [
+          "verify-claim",
           "complete"
         ]
 
@@ -29,6 +35,18 @@ module Journeys
 
         def slugs
           SLUGS
+        end
+
+        def requires_authorisation?(slug)
+          RESTRICTED_SLUGS.include?(slug)
+        end
+
+        def unauthorised_path(slug, failure_reason)
+          Rails.application.routes.url_helpers.claim_path(
+            self.class.module_parent::ROUTING_NAME,
+            "unauthorised",
+            failure_reason: failure_reason
+          )
         end
       end
     end
