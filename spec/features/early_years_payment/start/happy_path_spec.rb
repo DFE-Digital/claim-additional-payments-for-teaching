@@ -12,12 +12,12 @@ RSpec.feature "Early years payment provider" do
     visit landing_page_path(Journeys::EarlyYearsPayment::Start::ROUTING_NAME)
     click_link "Start now"
 
-    expect(page.title).to have_text(I18n.t("early_years_payment_start.forms.email_address.question"))
+    expect(page.title).to have_text("Enter your email address")
     expect(page).to have_content("Enter your email address")
     fill_in "Email address", with: "johndoe@example.com"
     click_on "Submit"
 
-    expect(page.title).to have_text(I18n.t("early_years_payment_start.check_your_email_page.title"))
+    expect(page.title).to have_text("Check your email")
     within ".govuk-notification-banner--success" do
       expect(page).to have_content("Email sent to johndoe@example.com")
     end

@@ -1083,6 +1083,9 @@ en:
     feedback_email: "help@opsteam.education.gov.uk"
     check_your_email_page:
       title: Check your email
+    forms:
+      email_address:
+        question: Enter your email address
   early_years_payment_provider: &early_years_payment_provider
     claim_description: for an early years financial incentive payment
     journey_name: Claim an early years financial incentive payment - provider
