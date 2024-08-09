@@ -15,7 +15,7 @@
         You must use the email address previously provided to your local authority to access this service.
       </p>
 
-      <%= f.govuk_text_field :email_address,
+      <%= f.govuk_email_field :email_address,
         autocomplete: "email",
         spellcheck: "false",
         label: { text: t("questions.email_address"), hidden: true } # label still read by screen readers
