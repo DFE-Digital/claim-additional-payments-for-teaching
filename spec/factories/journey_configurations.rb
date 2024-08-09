@@ -30,12 +30,12 @@ FactoryBot.define do
       routing_name { Journeys::FurtherEducationPayments::ROUTING_NAME }
     end
 
-    trait :early_years_payment_start do
-      routing_name { Journeys::EarlyYearsPayment::Start::ROUTING_NAME }
+    trait :early_years_payment_provider_start do
+      routing_name { Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME }
     end
 
-    trait :early_years_payment_provider do
-      routing_name { Journeys::EarlyYearsPayment::Provider::ROUTING_NAME }
+    trait :early_years_payment_provider_authenticated do
+      routing_name { Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME }
     end
 
     trait :closed do

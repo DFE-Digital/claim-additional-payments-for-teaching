@@ -351,7 +351,7 @@ RSpec.describe ClaimMailer, type: :mailer do
     let(:claim) { build(:claim, policy: policy, email_address: email) }
     let(:policy) { Policies::EarlyYearsPayments }
 
-    before { create(:journey_configuration, :early_years_payment_provider) }
+    before { create(:journey_configuration, :early_years_payment_provider_start) }
 
     it "has personalisation keys for: magic link" do
       expect(mail[:personalisation].decoded).to eq("{:magic_link=>\"https://#{ENV["CANONICAL_HOSTNAME"]}/early-years-payment-provider/claim?code=123124&email=#{email}\"}")

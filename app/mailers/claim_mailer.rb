@@ -120,6 +120,6 @@ class ClaimMailer < ApplicationMailer
   end
 
   def early_years_payment_provider_magic_link(one_time_password, email)
-    "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Provider::ROUTING_NAME}/claim?code=#{one_time_password}&email=#{email}"
+    "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME}/claim?code=#{one_time_password}&email=#{email}"
   end
 end
