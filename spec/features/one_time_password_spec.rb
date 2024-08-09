@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.feature "Given a one time password" do
-  let!(:drift) { OneTimePassword::Base::DRIFT }
+RSpec.feature "One time password" do
+  let(:session) { Journeys::AdditionalPaymentsForTeaching::Session.order(:created_at).last }
 
   before do
     create(:journey_configuration, :additional_payments)
@@ -14,29 +14,23 @@ RSpec.feature "Given a one time password" do
     click_on "Continue"
   end
 
-  scenario "verifies the password" do
-    # - that is wrong
+  scenario "that is wrong" do
     fill_in "claim-one-time-password-field", with: "000000"
-
     click_on "Confirm"
     expect(page).to have_text("Enter a valid passcode")
-    session = Journeys::AdditionalPaymentsForTeaching::Session.order(:created_at).last
     expect(session.answers.email_verified).to_not equal(true)
+  end
 
-    # - that is expired
-
-    stub_const("OneTimePassword::Base::DRIFT", -100)
-
-    fill_in "claim-one-time-password-field-error", with: get_otp_from_email
+  scenario "that is expired" do
+    travel 20.minutes
+    fill_in "claim-one-time-password-field", with: get_otp_from_email
     click_on "Confirm"
     expect(page).to have_text("Your passcode has expired, request a new one")
     expect(session.reload.answers.email_verified).to_not equal(true)
+  end
 
-    # - that is valid
-
-    stub_const("OneTimePassword::Base::DRIFT", drift)
-
-    fill_in "claim-one-time-password-field-error", with: get_otp_from_email
+  scenario "that is valid" do
+    fill_in "claim-one-time-password-field", with: get_otp_from_email
     click_on "Confirm"
     expect(page).to_not have_css(".govuk-error-summary")
     expect(session.reload.answers.email_verified).to equal(true)

@@ -12,6 +12,10 @@ module OneTimePassword
 
     private
 
-    attr_reader :issuer
+    attr_reader :issuer, :secret
+
+    def encode_secret(secret)
+      ROTP::Base32.encode(secret) if secret
+    end
   end
 end
