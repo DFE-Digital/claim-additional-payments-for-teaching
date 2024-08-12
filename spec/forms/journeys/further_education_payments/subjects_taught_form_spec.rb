@@ -62,7 +62,7 @@ RSpec.describe Journeys::FurtherEducationPayments::SubjectsTaughtForm, type: :mo
       let(:answers_hash) do
         {
           subjects_taught: %w[maths physics],
-          maths_courses: %w[esfa],
+          maths_courses: %w[approved_level_321_maths],
           physics_courses: %w[alevel_physics]
         }
       end

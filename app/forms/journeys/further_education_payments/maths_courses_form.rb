@@ -18,8 +18,8 @@ module Journeys
       def checkbox_options
         [
           OpenStruct.new(
-            id: "esfa",
-            name: course_option_description("esfa")
+            id: "approved_level_321_maths",
+            name: course_option_description("approved_level_321_maths")
           ),
           OpenStruct.new(
             id: "gcse_maths",

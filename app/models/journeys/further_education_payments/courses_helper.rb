@@ -67,7 +67,7 @@ module Journeys
           ]
         },
         maths_courses: {
-          esfa: [
+          approved_level_321_maths: [
             "mathematics and statistics",
             "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=28&PageSize=10&Sort=Status"
           ],
