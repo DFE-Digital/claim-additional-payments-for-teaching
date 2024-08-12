@@ -71,6 +71,17 @@ class ClaimMailer < ApplicationMailer
     send_mail(OTP_EMAIL_NOTIFY_TEMPLATE_ID, personalisation)
   end
 
+  def early_years_payment_provider_email(claim, one_time_password, email)
+    unknown_policy_check(claim)
+    set_common_instance_variables(claim)
+    @magic_link = early_years_payment_provider_magic_link(one_time_password, email)
+    personalisation = {
+      magic_link: @magic_link
+    }
+
+    send_mail(template_ids(claim)[:CLAIM_PROVIDER_EMAIL_TEMPLATE_ID], personalisation)
+  end
+
   private
 
   def set_common_instance_variables(claim)
@@ -102,8 +113,13 @@ class ClaimMailer < ApplicationMailer
       Policies::EarlyCareerPayments,
       Policies::LevellingUpPremiumPayments,
       Policies::InternationalRelocationPayments,
-      Policies::FurtherEducationPayments
+      Policies::FurtherEducationPayments,
+      Policies::EarlyYearsPayments
     ].include?(claim.policy)
     raise ArgumentError, "Unknown claim policy: #{claim.policy}"
+  end
+
+  def early_years_payment_provider_magic_link(one_time_password, email)
+    "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME}/claim?code=#{one_time_password}&email=#{email}"
   end
 end

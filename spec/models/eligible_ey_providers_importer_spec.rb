@@ -52,7 +52,7 @@ RSpec.describe EligibleEyProvidersImporter do
       context "when there are existing records" do
         before do
           create(:eligible_ey_provider, local_authority:)
-          create(:eligible_ey_provider, local_authority:)
+          create(:eligible_ey_provider, :with_secondary_contact_email_address, local_authority:)
         end
 
         it "deletes existing records" do
@@ -79,7 +79,7 @@ RSpec.describe EligibleEyProvidersImporter do
       context "when there are existing records" do
         before do
           create(:eligible_ey_provider, local_authority:)
-          create(:eligible_ey_provider, local_authority:)
+          create(:eligible_ey_provider, :with_secondary_contact_email_address, local_authority:)
         end
 
         it "deletes them with new records" do

@@ -17,7 +17,7 @@ FactoryBot.define do
       journey = Journeys.for_policy(evaluator.policy)
 
       begin
-        Journeys.for_policy(evaluator.policy)&.configuration.present?
+        raise ActiveRecord::RecordNotFound unless Journeys.for_policy(evaluator.policy)&.configuration.present?
       rescue ActiveRecord::RecordNotFound
         create(:journey_configuration, journey::I18N_NAMESPACE)
       end

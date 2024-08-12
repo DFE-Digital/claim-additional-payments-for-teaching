@@ -7,7 +7,7 @@ module OneTimePassword
     end
 
     def valid?
-      code.present? && !wrong_length? && !expired? && !incorrect?
+      code.present? && !wrong_length? && (generated_at ? !expired? : true) && !incorrect?
     end
 
     def warning

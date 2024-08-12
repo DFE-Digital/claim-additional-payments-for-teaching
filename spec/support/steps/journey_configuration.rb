@@ -2,6 +2,10 @@ def when_further_education_payments_journey_configuration_exists
   create(:journey_configuration, :further_education_payments)
 end
 
-def when_early_years_payment_provider_journey_configuration_exists
-  create(:journey_configuration, :early_years_payment_provider)
+def when_early_years_payment_provider_start_journey_configuration_exists
+  create(:journey_configuration, :early_years_payment_provider_start)
+end
+
+def when_early_years_payment_provider_authenticated_journey_configuration_exists
+  create(:journey_configuration, :early_years_payment_provider_authenticated)
 end

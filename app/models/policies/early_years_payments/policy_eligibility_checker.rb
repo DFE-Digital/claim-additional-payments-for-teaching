@@ -1,5 +1,5 @@
 module Policies
-  module EarlyYearsPayment
+  module EarlyYearsPayments
     class PolicyEligibilityChecker
       attr_reader :answers
 

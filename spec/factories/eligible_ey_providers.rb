@@ -6,6 +6,13 @@ FactoryBot.define do
     urn { rand(10_000_000..99_999_999) }
     nursery_address { Faker::Address.full_address }
     primary_key_contact_email_address { Faker::Internet.email }
-    secondary_contact_email_address { [Faker::Internet.email, nil].sample }
+
+    trait :with_sometimes_nil_secondary_contact_email_address do
+      secondary_contact_email_address { [Faker::Internet.email, nil].sample }
+    end
+
+    trait :with_secondary_contact_email_address do
+      secondary_contact_email_address { Faker::Internet.email }
+    end
   end
 end

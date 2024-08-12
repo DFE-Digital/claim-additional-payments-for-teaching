@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_31_152713) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_08_153424) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "citext"
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -185,11 +186,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_31_152713) do
     t.string "urn"
     t.uuid "local_authority_id", null: false
     t.string "nursery_address"
-    t.string "primary_key_contact_email_address"
-    t.string "secondary_contact_email_address"
+    t.citext "primary_key_contact_email_address"
+    t.citext "secondary_contact_email_address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["local_authority_id"], name: "index_eligible_ey_providers_on_local_authority_id"
+    t.index ["primary_key_contact_email_address"], name: "index_eligible_ey_providers_on_primary_contact_email_address"
+    t.index ["secondary_contact_email_address"], name: "index_eligible_ey_providers_on_secondary_contact_email_address"
     t.index ["urn"], name: "index_eligible_ey_providers_on_urn"
   end
 

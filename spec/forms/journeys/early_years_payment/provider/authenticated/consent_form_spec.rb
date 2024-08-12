@@ -1,8 +1,8 @@
 require "rails_helper"
 
-RSpec.describe Journeys::EarlyYearsPayment::Provider::ConsentForm, type: :model do
-  let(:journey) { Journeys::EarlyYearsPayment::Provider }
-  let(:journey_session) { create(:early_years_payment_provider_session) }
+RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::ConsentForm, type: :model do
+  let(:journey) { Journeys::EarlyYearsPayment::Provider::Authenticated }
+  let(:journey_session) { create(:early_years_payment_provider_authenticated_session) }
   let(:consent_given) { nil }
 
   let(:params) do

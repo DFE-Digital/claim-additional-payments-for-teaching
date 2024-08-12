@@ -1,7 +1,8 @@
 module Journeys
   module EarlyYearsPayment
     module Provider
-      class EligibilityChecker < Journeys::EligibilityChecker
+      module Start
+        class SessionAnswersType < ::Journeys::SessionAnswersType; end
       end
     end
   end

@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Admin of eligible ey providers" do
   scenario "manage eligible ey providers" do
-    when_early_years_payment_provider_journey_configuration_exists
+    when_early_years_payment_provider_authenticated_journey_configuration_exists
     sign_in_as_service_operator
 
     click_link "Manage services"

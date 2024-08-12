@@ -67,7 +67,7 @@ jobs:
             | Additional Payments | <${{ env.APP_URL }}/additional-payments/claim>                     |
             | Student Loans       | <${{ env.APP_URL }}/student-loans/claim>                           |
             | Further Education   | <${{ env.APP_URL }}/further-education-payments/landing-page>       |
-            | Early Years Payment | <${{ env.APP_URL }}/early-years-payment-provider/landing-page>     |
+            | Early Years Payment | <${{ env.APP_URL }}/early-years-payment/landing-page>     |
             | Relocation Payments | <${{ env.APP_URL }}/get-a-teacher-relocation-payment/landing-page> |
             | Admin               | <${{ env.APP_URL }}/admin>                                         |
 

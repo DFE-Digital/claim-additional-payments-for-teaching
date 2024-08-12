@@ -1073,11 +1073,22 @@ en:
         By submitting this you are confirming that, to the best of your knowledge, the details you are providing are
         correct.
       btn_text: Accept and send
-  early_years_payment_provider:
+  early_years_payment:
     claim_description: for an early years financial incentive payment
-    journey_name: Claim an early years financial incentive payment - provider
+  early_years_payment_provider_start:
+    claim_description: for an early years financial incentive payment
+    journey_name: Claim an early years financial incentive payment - start
     landing_page:
       title: Claim an early years financial incentive payment
+    feedback_email: "help@opsteam.education.gov.uk"
+    check_your_email_page:
+      title: Check your email
+    forms:
+      email_address:
+        question: Enter your email address
+  early_years_payment_provider_authenticated: &early_years_payment_provider_authenticated
+    claim_description: for an early years financial incentive payment
+    journey_name: Claim an early years financial incentive payment - provider
     feedback_email: "help@opsteam.education.gov.uk"
     forms:
       consent:
@@ -1087,6 +1098,10 @@ en:
           notice.
         errors:
           presence: You must be able to confirm this information to continue
+  early_years_payments:
+    <<: *early_years_payment_provider_authenticated
+    claim_subject: "Early Years Payment"
+    support_email_address: "help@opsteam.education.gov.uk"
   activerecord:
     errors:
       models:

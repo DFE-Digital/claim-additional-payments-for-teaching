@@ -13,7 +13,7 @@ module Admin
         @upload_form.importer.run
         flash[:notice] = @upload_form.importer.results_message
 
-        redirect_to edit_admin_journey_configuration_path(Journeys::EarlyYearsPayment::Provider::ROUTING_NAME)
+        redirect_to edit_admin_journey_configuration_path(Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME)
       end
     end
 
@@ -27,7 +27,7 @@ module Admin
 
     def journey_configuration
       @journey_configuration ||= Journeys::Configuration.find_by(
-        routing_name: Journeys::EarlyYearsPayment::Provider::ROUTING_NAME
+        routing_name: Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME
       )
     end
 
