@@ -67,7 +67,6 @@ en:
         i_cannot_find: "I can't find my address in the list"
         no_address_found: "No addresses found matching those details"
     date_of_birth: "What is your date of birth?"
-    teacher_reference_number: "What is your teacher reference number (TRN)?"
     email_address: "Email address"
     email_address_hint1:
       "We recommend you use a non-work email address in case your circumstances change while we process your payment."
@@ -1077,6 +1076,9 @@ en:
         errors:
           inclusion:
             Select yes if you spend at least half of your timetabled teaching hours teaching these eligible courses
+      teacher_reference_number:
+        questions:
+          teacher_reference_number: "What is your TRN? (optional)"
     check_your_answers:
       part_one:
         primary_heading: Check your answers

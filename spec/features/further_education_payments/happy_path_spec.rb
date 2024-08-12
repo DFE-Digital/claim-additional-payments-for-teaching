@@ -167,7 +167,7 @@ RSpec.feature "Further education payments" do
     choose "Female"
     click_on "Continue"
 
-    expect(page).to have_content("What is your teacher reference number (TRN)?")
+    expect(page).to have_content("Teacher reference number (TRN)")
     fill_in "claim-teacher-reference-number-field", with: "1234567"
     click_on "Continue"
 

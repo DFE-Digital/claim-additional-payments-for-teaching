@@ -46,6 +46,14 @@ module Journeys
         ]
       end
 
+      def teacher_reference_number
+        [
+          t("further_education_payments.forms.teacher_reference_number.questions.teacher_reference_number"),
+          answers.teacher_reference_number,
+          "teacher-reference-number"
+        ]
+      end
+
       def teaching_responsibilities
         [
           t("further_education_payments.forms.teaching_responsibilities.question"),

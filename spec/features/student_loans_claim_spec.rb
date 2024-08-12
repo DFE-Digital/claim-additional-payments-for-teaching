@@ -171,7 +171,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(session.reload.answers.payroll_gender).to eq("male")
 
-    expect(page).to have_text(I18n.t("questions.teacher_reference_number"))
+    expect(page).to have_text(I18n.t("forms.teacher_reference_number.questions.teacher_reference_number"))
     fill_in "claim-teacher-reference-number-field", with: "1234567"
     click_on "Continue"
 

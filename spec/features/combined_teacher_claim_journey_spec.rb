@@ -214,7 +214,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     click_on "Continue"
 
     # - What is your teacher reference number
-    expect(page).to have_text(I18n.t("questions.teacher_reference_number"))
+    expect(page).to have_text(I18n.t("forms.teacher_reference_number.questions.teacher_reference_number"))
 
     fill_in "claim-teacher-reference-number-field", with: "1234567"
     click_on "Continue"
