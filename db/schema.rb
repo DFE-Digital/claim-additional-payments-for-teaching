@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_08_153424) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_12_123209) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_trgm"
@@ -217,6 +217,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_08_153424) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "award_amount", precision: 7, scale: 2
+    t.text "teacher_reference_number"
   end
 
   create_table "international_relocation_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
