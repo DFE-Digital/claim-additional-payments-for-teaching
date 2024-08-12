@@ -172,7 +172,20 @@ RSpec.feature "Further education payments" do
     click_on "Continue"
 
     expect(page).to have_content("Check your answers before sending your application")
-    click_on "Accept and send"
+
+    expect do
+      click_on "Accept and send"
+    end.to change { Claim.count }.by(1)
+      .and change { Policies::FurtherEducationPayments::Eligibility.count }.by(1)
+
+    claim = Claim.last
+
+    expect(claim.first_name).to eql("John")
+    expect(claim.surname).to eql("Doe")
+
+    eligibility = Policies::FurtherEducationPayments::Eligibility.last
+
+    expect(eligibility.teacher_reference_number).to eql("1234567")
 
     expect(page).to have_content("You applied for a further education retention payment")
   end
