@@ -31,7 +31,7 @@ module Journeys
         computing_courses: {
           level3_and_below_ict_for_practitioners: [
             "ICT for practitioners",
-            "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=22&PageSize=10&Sort=Status"
+            "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=23&PageSize=10&Sort=Status"
           ],
           level3_and_below_ict_for_users: [
             "ICT for users",
