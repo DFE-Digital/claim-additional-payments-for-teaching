@@ -63,7 +63,7 @@ RSpec.describe DfeSignIn::Api::User do
     end
   end
 
-  context "with an invalid response" do
+  context "with a invalid response" do
     before do
       stub_failed_dfe_sign_in_user_info_request(999, 456)
     end
@@ -74,6 +74,46 @@ RSpec.describe DfeSignIn::Api::User do
       }.to raise_error(
         DfeSignIn::ExternalServerError, "500: {\"error\":\"An error occurred\"}"
       )
+    end
+  end
+
+  describe "#service_access?" do
+    subject { user.service_access? }
+
+    context "when the response is successful" do
+      before do
+        stub_dfe_sign_in_user_info_request(999, 456, "my_role")
+      end
+
+      it { is_expected.to be true }
+    end
+
+    context "when the response is not successful" do
+      before do
+        stub_failed_dfe_sign_in_user_info_request(999, 456, status: 404)
+      end
+
+      it { is_expected.to be false }
+    end
+  end
+
+  describe "#service_error?" do
+    subject { user.service_error? }
+
+    context "when the response is not a server error" do
+      before do
+        stub_dfe_sign_in_user_info_request(999, 456, "my_role")
+      end
+
+      it { is_expected.to be false }
+    end
+
+    context "when the response is an error" do
+      before do
+        stub_failed_dfe_sign_in_user_info_request(999, 456, status: 500)
+      end
+
+      it { is_expected.to be true }
     end
   end
 end

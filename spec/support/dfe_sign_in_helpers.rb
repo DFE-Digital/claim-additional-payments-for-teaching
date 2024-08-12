@@ -73,7 +73,7 @@ module DfeSignInHelpers
     }.deep_merge(attributes.deep_stringify_keys)
   end
 
-  def stub_dfe_sign_in_user_info_request(user_id, organisation_id, role_code)
+  def stub_dfe_sign_in_user_info_request(user_id, organisation_id, role_code, service_id: "XXXXXXX")
     url = dfe_sign_in_user_info_url(user_id, organisation_id)
     api_response = {
       "userId" => user_id,
@@ -102,14 +102,14 @@ module DfeSignInHelpers
       .to_return(status: 200, body: api_response)
   end
 
-  def stub_failed_dfe_sign_in_user_info_request(user_id, organisation_id)
+  def stub_failed_dfe_sign_in_user_info_request(user_id, organisation_id, status: 500)
     url = dfe_sign_in_user_info_url(user_id, organisation_id)
     api_response = {
       error: "An error occurred"
     }.to_json
 
     stub_request(:get, url)
-      .to_return(status: 500, body: api_response)
+      .to_return(status: status, body: api_response)
   end
 
   def stub_dfe_sign_in_user_list_request(number_of_pages: 1, page_number: nil)

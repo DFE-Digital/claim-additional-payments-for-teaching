@@ -58,20 +58,32 @@ module DfeSignIn
       end
 
       def role_codes
+        unless service_access?
+          raise ExternalServerError, "#{response.code}: #{response.body}" unless response.code.eql?("200")
+        end
+
         body["roles"].map { |r| r["code"] }
+      end
+
+      def service_access?
+        response.code == "200"
+      end
+
+      def service_error?
+        response.code == "500"
       end
 
       private
 
       def body
-        @body ||= get(uri)
+        @body ||= JSON.parse(response.body)
       end
 
-      def uri
-        @uri ||= begin
+      def response
+        @response ||= begin
           uri = URI(DfeSignIn.configuration.base_url)
           uri.path = "/services/#{DfeSignIn.configuration.client_id}/organisations/#{organisation_id}/users/#{user_id}"
-          uri
+          dfe_sign_in_request(uri)
         end
       end
     end
