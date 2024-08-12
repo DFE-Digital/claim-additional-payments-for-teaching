@@ -951,7 +951,8 @@ en:
         options:
           alevel_chemistry: A or AS level chemistry
           gcse_chemistry: GCSE chemistry
-          ib_certificate_chemistry: International baccalaureate middle years programme or certificate in chemistry
+          ibo_level_3_chemistry: IBO level 3 SL and HL chemistry, taught as part of a diploma or career related programme or as a standalone certificate
+          ibo_level_1_2_myp_chemistry: IBO level 1 / level 2 MYP chemistry
           none: I do not teach any of these courses
       computing_courses:
         <<: *courses
