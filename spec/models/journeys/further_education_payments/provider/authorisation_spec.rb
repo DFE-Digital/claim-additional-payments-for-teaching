@@ -24,11 +24,23 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::Authorisation do
     context "when the ukprns don't match" do
       let(:answers) do
         {
+          dfe_sign_in_service_access: true,
           dfe_sign_in_organisation_ukprn: "mismatch"
         }
       end
 
       it { is_expected.to eq(:organisation_mismatch) }
+    end
+
+    context "when the user does not have access to the service" do
+      let(:answers) do
+        {
+          dfe_sign_in_service_access: false,
+          dfe_sign_in_organisation_ukprn: organisation.ukprn
+        }
+      end
+
+      it { is_expected.to eq(:no_service_access) }
     end
   end
 end

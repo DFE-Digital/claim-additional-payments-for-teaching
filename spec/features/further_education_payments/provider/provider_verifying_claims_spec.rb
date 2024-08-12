@@ -5,6 +5,68 @@ RSpec.feature "Provider verifying claims" do
     create(:journey_configuration, :further_education_payments_provider)
   end
 
+  scenario "provider visits a claim without service access" do
+    fe_provider = create(:school, :further_education, name: "Springfield A&M")
+
+    claim = create(
+      :claim,
+      first_name: "Edna",
+      surname: "Krabappel",
+      date_of_birth: Date.new(1945, 7, 3),
+      reference: "AB123456",
+      created_at: DateTime.new(2024, 8, 1, 9, 0, 0)
+    )
+
+    create(
+      :further_education_payments_eligibility,
+      claim: claim,
+      school: fe_provider
+    )
+
+    mock_dfe_sign_in_auth_session(
+      provider: :dfe_fe_provider,
+      auth_hash: {
+        uid: "11111",
+        extra: {
+          raw_info: {
+            organisation: {
+              id: "22222",
+              ukprn: fe_provider.ukprn
+            }
+          }
+        }
+      }
+    )
+
+    # https://github.com/DFE-Digital/login.dfe.public-api?tab=readme-ov-file#get-user-access-to-service
+    stub_failed_dfe_sign_in_user_info_request(
+      "11111",
+      "22222",
+      status: 404
+    )
+
+    claim_link = Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
+
+    visit claim_link
+
+    click_on "Start now"
+
+    expect(page).to have_text("You do not have access to this service")
+
+    expect(page).to have_text(
+      "You can request access to verify retention payments for further education teachers using DfE Sign-in."
+    )
+
+    # Try to visit the restricted slug directly
+    visit "/further-education-payments-provider/verify-claim"
+
+    expect(page).to have_text("You do not have access to this service")
+
+    expect(page).to have_text(
+      "You can request access to verify retention payments for further education teachers using DfE Sign-in."
+    )
+  end
+
   scenario "provider visits a claim for the wrong organisation" do
     fe_provider = create(:school, :further_education, name: "Springfield A&M")
 
@@ -42,6 +104,12 @@ RSpec.feature "Provider verifying claims" do
           }
         }
       }
+    )
+
+    stub_dfe_sign_in_user_info_request(
+      "11111",
+      "22222",
+      "some-role"
     )
 
     claim_link = Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
@@ -93,6 +161,12 @@ RSpec.feature "Provider verifying claims" do
           }
         }
       }
+    )
+
+    stub_dfe_sign_in_user_info_request(
+      "11111",
+      "22222",
+      Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
     )
 
     claim_link = Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)

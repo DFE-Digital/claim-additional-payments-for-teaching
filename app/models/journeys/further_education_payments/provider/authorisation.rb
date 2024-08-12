@@ -9,6 +9,7 @@ module Journeys
 
         def failure_reason
           return :organisation_mismatch if organisation_mismatch?
+          return :no_service_access unless answers.dfe_sign_in_service_access?
 
           nil
         end

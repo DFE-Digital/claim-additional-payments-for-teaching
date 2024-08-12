@@ -17,6 +17,14 @@ module Journeys
       }
 
       CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE = "teacher_payments_claim_verifier"
+
+      def self.request_service_access_url(session)
+        [
+          "https://services.signin.education.gov.uk",
+          "request-service", DfeSignIn.configuration.client_id,
+          "users", session.answers.dfe_sign_in_uid
+        ].join("/")
+      end
     end
   end
 end
