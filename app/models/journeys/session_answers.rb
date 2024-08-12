@@ -33,9 +33,11 @@ module Journeys
     attribute :hmrc_bank_validation_responses, default: []
     attribute :logged_in_with_tid, :boolean
     attribute :logged_in_with_onelogin, :boolean
+    attribute :identity_confirmed_with_onelogin, :boolean
     attribute :details_check, :boolean
     attribute :teacher_id_user_info, default: {}
     attribute :onelogin_user_info, default: {}
+    attribute :onelogin_credentials, default: {}
     attribute :email_address_check, :boolean
     attribute :mobile_check, :string
     attribute :qualifications_details_check, :boolean
@@ -103,6 +105,14 @@ module Journeys
 
     def email_verified?
       !!email_verified
+    end
+
+    def logged_in_with_onelogin?
+      logged_in_with_onelogin
+    end
+
+    def identity_confirmed_with_onelogin?
+      identity_confirmed_with_onelogin
     end
   end
 end

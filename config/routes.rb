@@ -10,6 +10,9 @@ Rails.application.routes.draw do
     post "/auth/onelogin_identity", to: "omniauth_callbacks#onelogin"
   end
 
+  delete "deauth/onelogin", to: "deauth#onelogin"
+  get "deauth/onelogin/callback", to: "deauth#onelogin_callback"
+
   # /early-career-payments is now /additional-payments - redirect old urls to a gov page
   get "early-career-payments(/*anything)", to: redirect("https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details")
 

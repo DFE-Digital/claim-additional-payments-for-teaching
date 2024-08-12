@@ -54,35 +54,38 @@ class OmniauthCallbacksController < ApplicationController
   end
 
   def process_one_login_authentication_callback(auth)
-    onelogin_user_info_attributes = auth.info.to_h.slice(
-      *SignInForm::OneloginUserInfoForm::ONELOGIN_USER_INFO_ATTRIBUTES.map(&:to_s)
-    )
+    onelogin_user_info = auth.info.to_h.slice("email", "phone")
+    onelogin_credentials = auth.credentials
 
-    journey_session.answers.assign_attributes(onelogin_user_info: onelogin_user_info_attributes)
+    journey_session.answers.assign_attributes(
+      onelogin_user_info:,
+      onelogin_credentials:,
+      logged_in_with_onelogin: true
+    )
     journey_session.save!
 
     redirect_to(
       claim_path(
         journey: current_journey_routing_name,
-        slug: "sign-in",
-        claim: {
-          logged_in_with_onelogin: true
-        }
+        slug: "sign-in"
       )
     )
   end
 
   def process_one_login_identity_verification_callback(core_identity_jwt)
     first_name, surname = extract_name_from_jwt(core_identity_jwt)
+
+    journey_session.answers.assign_attributes(
+      identity_confirmed_with_onelogin: true
+    )
+    journey_session.answers.first_name ||= first_name
+    journey_session.answers.surname ||= surname
+    journey_session.save!
+
     redirect_to(
       claim_path(
         journey: current_journey_routing_name,
-        slug: "sign-in",
-        claim: {
-          identity_confirmed_with_onelogin: true,
-          first_name: first_name,
-          surname: surname
-        }
+        slug: "sign-in"
       )
     )
   end

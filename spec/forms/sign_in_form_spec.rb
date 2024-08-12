@@ -12,11 +12,7 @@ RSpec.describe SignInForm do
     )
   end
 
-  let(:onelogin_user_info) do
-    {email: "jo.bloggs@example.com", phone: nil}
-  end
-
-  let(:form) do
+  subject(:form) do
     described_class.new(
       journey: journey,
       journey_session: journey_session,
@@ -25,28 +21,12 @@ RSpec.describe SignInForm do
   end
 
   let(:params) do
-    ActionController::Parameters.new(
-      claim: {
-        # logged_in_with_tid: true
-      }
-    )
+    ActionController::Parameters.new
   end
 
   describe "#save" do
-    before { form.save }
-
-    it "keeps the details from onelogin_user_info" do
-      expect(
-        journey_session.answers.onelogin_user_info.symbolize_keys
-      ).to(eq(onelogin_user_info))
-    end
-
-    it "keeps the first name" do
-      expect(journey_session.answers.first_name).to eq "Jo"
-    end
-
-    it "keeps the surname" do
-      expect(journey_session.answers.surname).to eq "Bloggs"
+    it "returns true" do
+      expect(subject.save).to be_truthy
     end
   end
 end
