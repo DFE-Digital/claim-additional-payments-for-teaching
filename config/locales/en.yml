@@ -984,9 +984,9 @@ en:
         question: Which engineering and manufacturing courses do you teach?
         question_check_your_answers: Engineering and manufacturing courses
         options:
-          esfa_engineering: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
-          esfa_manufacturing: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
-          esfa_transportation: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
+          approved_level_321_engineering: Qualifications approved for funding at level 3 and below in the %{link} sector subject area
+          approved_level_321_manufacturing: Qualifications approved for funding at level 3 and below in the %{link} sector subject area
+          approved_level_321_transportation: Qualifications approved for funding at level 3 and below in the %{link} sector subject area
           tlevel_design: T Level in design and development for engineering and manufacturing
           tlevel_maintenance: T Level in maintenance, installation and repair for engineering and manufacturing
           tlevel_engineering: T Level in engineering, manufacturing, processing and control

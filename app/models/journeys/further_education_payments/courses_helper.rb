@@ -49,15 +49,15 @@ module Journeys
           ]
         },
         engineering_manufacturing_courses: {
-          esfa_engineering: [
+          approved_level_321_engineering: [
             "engineering",
             "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=13&PageSize=10&Sort=Status"
           ],
-          esfa_manufacturing: [
+          approved_level_321_manufacturing: [
             "manufacturing technologies",
             "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=26&PageSize=10&Sort=Status"
           ],
-          esfa_transportation: [
+          approved_level_321_transportation: [
             "transportation operations and maintenance",
             "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=47&PageSize=10&Sort=Status"
           ],

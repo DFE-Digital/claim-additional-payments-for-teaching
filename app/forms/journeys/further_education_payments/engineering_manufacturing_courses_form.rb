@@ -18,16 +18,16 @@ module Journeys
       def checkbox_options
         [
           OpenStruct.new(
-            id: "esfa_engineering",
-            name: course_option_description("esfa_engineering")
+            id: "approved_level_321_engineering",
+            name: course_option_description("approved_level_321_engineering")
           ),
           OpenStruct.new(
-            id: "esfa_manufacturing",
-            name: course_option_description("esfa_manufacturing")
+            id: "approved_level_321_manufacturing",
+            name: course_option_description("approved_level_321_manufacturing")
           ),
           OpenStruct.new(
-            id: "esfa_transportation",
-            name: course_option_description("esfa_transportation")
+            id: "approved_level_321_transportation",
+            name: course_option_description("approved_level_321_transportation")
           ),
           OpenStruct.new(
             id: "tlevel_design",
