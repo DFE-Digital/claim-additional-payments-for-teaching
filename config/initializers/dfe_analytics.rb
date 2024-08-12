@@ -51,9 +51,4 @@ DfE::Analytics.configure do |config|
   # to all events we send to BigQuery.
   #
   # config.environment = ENV.fetch('RAILS_ENV', 'development')
-
-  if Rails.env.development? && DateTime.now > DateTime.new(2024, 8, 9, 11, 0, 0)
-    fail "FIXME: remove the line below once the window has passed"
-  end
-  config.bigquery_maintenance_window = "09-08-2024 10:00..09-08-2024 11:00"
 end
