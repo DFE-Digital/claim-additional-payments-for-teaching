@@ -11,7 +11,8 @@ module Journeys
         POLICIES = [Policies::EarlyYearsPayments]
         FORMS = {
           "claims" => {
-            "consent" => ConsentForm
+            "consent" => ConsentForm,
+            "current-nursery" => CurrentNurseryForm
           }
         }
         START_WITH_MAGIC_LINK = true

@@ -16,7 +16,15 @@ module Policies
       end
 
       def ineligible?
-        false
+        return false if answers.is_a?(Journeys::EarlyYearsPayment::Provider::Start::SessionAnswers)
+
+        ineligibility_reason.present?
+      end
+
+      def ineligibility_reason
+        if answers.nursery_urn.to_s == "none_of_the_above"
+          :nursery_is_not_listed
+        end
       end
     end
   end

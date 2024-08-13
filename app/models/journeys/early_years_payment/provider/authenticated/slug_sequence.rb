@@ -6,6 +6,8 @@ module Journeys
           SLUGS = %w[
             consent
             current-nursery
+            employee-name
+            ineligible
           ].freeze
 
           MAGIC_LINK_SLUG = "consent"
