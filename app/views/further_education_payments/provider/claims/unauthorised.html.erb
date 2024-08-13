@@ -10,77 +10,11 @@
   <div class="govuk-grid-column-two-thirds">
   <% case params[:failure_reason] %>
   <% when "organisation_mismatch" %>
-    <h1 class="govuk-heading-xl">
-      You cannot verify this claim
-    </h1>
-
-    <p class="govuk-body govuk-!-margin-top-6">
-      The organisation you have used to log in to DfE Sign-in does not match
-      the organisation in the claim.
-    </p>
-
-    <p class="govuk-body govuk-!-margin-top-6">
-      If your DfE Sign-in account is linked to multiple organisations, check
-      that you have logged in using the correct one.
-    </p>
-
-    <p class="govuk-body govuk-!-margin-top-6">
-      Email <%= govuk_mail_to("FE-Levellingup.PremiumPayments@education.gov.uk") %>
-      if you have logged in with the correct organisation and need support.
-    </p>
+    <%= render "unauthorised_organisation_mismatch" %>
   <% when "no_service_access" %>
-    <h1 class="govuk-heading-xl">
-      You do not have access to this service
-    </h1>
-
-    <p class="govuk-body govuk-!-margin-top-6">
-      When a claimant applies for a retention payment, an access link will be
-      sent to your organisation's nominated email address.
-    </p>
-
-    <p class="govuk-body govuk-!-margin-top-6">
-    You can <%= govuk_link_to(
-      "request access",
-      Journeys::FurtherEducationPayments::Provider.request_service_access_url(journey_session)
-    ) %> to verify retention payments for further
-      education teachers using DfE Sign-in.
-    </p>
-
-    <p class="govuk-body govuk-!-margin-top-6">
-      Your request will be sent to all approvers at your organisation. Most
-      requests will be approved or rejected within 5 days of being raised.
-    </p>
-
-    <p class="govuk-body govuk-!-margin-top-6">
-      If you have waited 5 days or longer and you still haven't had a response
-      to your request:
-    </p>
-
-    <%= govuk_list(
-      [
-        "Log in to DfE Sign-in and go to the 'Organisations' tab.",
-        "Find the email address of an approver at your organisation.",
-        "Send a chaser email."
-      ],
-      type: :bullet
-    ) %>
-
+    <%= render "unauthorised_no_service_access" %>
    <% when "incorrect_role" %>
-    <h1 class="govuk-heading-xl">
-      You do not have access to verify claims for this organisation
-    </h1>
-
-    <p class="govuk-body govuk-!-margin-top-6">
-      If you think you should have access, you need to:
-    </p>
-
-    <%= govuk_list(
-      [
-        "check you have logged in to DfE Sign-in using the correct organisation",
-        "contact an approver at your organisation to confirm your access rights"
-      ],
-      type: :bullet
-    ) %>
+    <%= render "unauthorised_incorrect_role" %>
   <% end %>
   </div>
 </div>
