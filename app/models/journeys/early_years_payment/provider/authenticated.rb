@@ -12,7 +12,8 @@ module Journeys
         FORMS = {
           "claims" => {
             "consent" => ConsentForm,
-            "current-nursery" => CurrentNurseryForm
+            "current-nursery" => CurrentNurseryForm,
+            "claimant-name" => ClaimantNameForm
           }
         }
         START_WITH_MAGIC_LINK = true

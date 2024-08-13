@@ -7,6 +7,7 @@ module Journeys
             consent
             current-nursery
             claimant-name
+            start-date
             ineligible
           ].freeze
 
