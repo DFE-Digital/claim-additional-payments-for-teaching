@@ -18,7 +18,11 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::OmniauthCallbackFor
     end
 
     let(:dfe_sign_in_user) do
-      instance_double(DfeSignIn::Api::User, service_access?: service_access)
+      instance_double(
+        DfeSignIn::Api::User,
+        service_access?: service_access,
+        role_codes: ["teacher_payments_claim_verifier"]
+      )
     end
 
     let(:auth) do
@@ -52,6 +56,10 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::OmniauthCallbackFor
             change(journey_session.answers, :dfe_sign_in_service_access?)
               .from(false)
               .to(true)
+          ).and(
+            change(journey_session.answers, :dfe_sign_in_role_codes)
+              .from([])
+              .to(["teacher_payments_claim_verifier"])
           )
         )
       end
@@ -72,6 +80,8 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::OmniauthCallbackFor
               .to("22222")
           ).and(
             not_change(journey_session.answers, :dfe_sign_in_service_access?)
+          ).and(
+            not_change(journey_session.answers, :dfe_sign_in_role_codes)
           )
         )
       end

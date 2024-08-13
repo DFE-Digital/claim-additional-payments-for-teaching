@@ -42,5 +42,17 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::Authorisation do
 
       it { is_expected.to eq(:no_service_access) }
     end
+
+    context "when the user does not have the required role" do
+      let(:answers) do
+        {
+          dfe_sign_in_service_access: true,
+          dfe_sign_in_organisation_ukprn: organisation.ukprn,
+          dfe_sign_in_role_codes: ["incorrect_role"]
+        }
+      end
+
+      it { is_expected.to eq(:incorrect_role) }
+    end
   end
 end

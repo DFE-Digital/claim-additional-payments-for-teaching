@@ -12,7 +12,8 @@ module Journeys
             dfe_sign_in_uid: dfe_sign_in_uid,
             dfe_sign_in_organisation_id: dfe_sign_in_organisation_id,
             dfe_sign_in_organisation_ukprn: dfe_sign_in_organisation_ukprn,
-            dfe_sign_in_service_access: dfe_sign_in_service_access?
+            dfe_sign_in_service_access: dfe_sign_in_service_access?,
+            dfe_sign_in_role_codes: dfe_sign_in_role_codes
           )
 
           journey_session.save!
@@ -43,6 +44,12 @@ module Journeys
             organisation_id: dfe_sign_in_organisation_id,
             user_id: dfe_sign_in_uid
           )
+        end
+
+        def dfe_sign_in_role_codes
+          return [] unless dfe_sign_in_service_access?
+
+          dfe_sign_in_user.role_codes
         end
       end
     end
