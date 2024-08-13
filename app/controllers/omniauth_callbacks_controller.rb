@@ -37,8 +37,6 @@ class OmniauthCallbacksController < ApplicationController
     core_identity_jwt = auth.extra.raw_info[ONELOGIN_JWT_CORE_IDENTITY_HASH_KEY]
     return process_one_login_identity_verification_callback(core_identity_jwt) if core_identity_jwt
     process_one_login_authentication_callback(auth)
-  rescue Rack::OAuth2::Client::Error => e
-    render plain: e.message
   end
 
   private
