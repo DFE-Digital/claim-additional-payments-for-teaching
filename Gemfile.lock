@@ -218,7 +218,7 @@ GEM
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (>= 6, < 9)
       view_component (>= 3.9, < 3.13)
-    govuk_design_system_formbuilder (5.4.0)
+    govuk_design_system_formbuilder (5.4.1)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
@@ -291,14 +291,14 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.0)
-    nokogiri (1.16.6)
+    nokogiri (1.16.7)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    nokogiri (1.16.6-arm64-darwin)
+    nokogiri (1.16.7-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.16.6-x86_64-darwin)
+    nokogiri (1.16.7-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.16.6-x86_64-linux)
+    nokogiri (1.16.7-x86_64-linux)
       racc (~> 1.4)
     notifications-ruby-client (6.1.0)
       jwt (>= 1.5, < 3)
@@ -579,7 +579,7 @@ DEPENDENCIES
   faraday_middleware
   foreman
   govuk-components
-  govuk_design_system_formbuilder (~> 5.4.0)
+  govuk_design_system_formbuilder (~> 5.4.1)
   httpclient
   jbuilder (~> 2.12)
   jwt
