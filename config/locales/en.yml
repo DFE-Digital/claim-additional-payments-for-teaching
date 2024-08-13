@@ -1101,6 +1101,20 @@ en:
           notice.
         errors:
           presence: You must be able to confirm this information to continue
+      claimant_name:
+        question: Who are you making this claim for?
+        hint:
+          Enter the employee’s full legal name as it appears on official identity documents such as passports or driving
+          licenses.
+        errors:
+          first_name:
+            presence: Enter employee’s first name
+            length: Employee’s first name must be less than 100 characters
+            format: Employee’s first name cannot contain special characters
+          last_name:
+            presence: Enter employee’s last name
+            length: Employee’s last name must be less than 100 characters
+            format: Employee’s last name cannot contain special characters
   early_years_payments:
     <<: *early_years_payment_provider_authenticated
     claim_subject: "Early Years Payment"

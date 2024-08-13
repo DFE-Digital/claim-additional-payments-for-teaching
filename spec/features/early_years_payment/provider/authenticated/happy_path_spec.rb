@@ -13,9 +13,18 @@ RSpec.feature "Early years payment provider" do
     expect(journey_session.reload.answers.email_address).to eq "johndoe@example.com"
     expect(journey_session.reload.answers.email_verified).to be true
     expect(page).to have_content("Declaration of Employee Consent")
+
     check "I confirm that I have obtained consent from my employee and have provided them with the relevant privacy notice."
     click_button "Continue"
     expect(page.current_path).to eq "/early-years-payment-provider/current-nursery"
+
+    click_button "Continue"
+    expect(page.current_path).to eq "/early-years-payment-provider/claimant-name"
+
+    fill_in "First name", with: "Bobby"
+    fill_in "Last name", with: "Bobberson"
+    click_button "Continue"
+    expect(page.current_path).to eq "/early-years-payment-provider/start-date"
   end
 
   scenario "using magic link after having completed some of the journey" do
