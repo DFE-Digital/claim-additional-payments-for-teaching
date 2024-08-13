@@ -52,6 +52,14 @@ module Policies
         ]
       end
 
+      # We don't have a specific teaching hours question so we show the subject
+      # to admins
+      def teaching_hours
+        [
+          ["Subject", eligibility.subject.humanize]
+        ]
+      end
+
       private
 
       delegate :eligibility, to: :claim
