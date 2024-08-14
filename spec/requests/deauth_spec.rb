@@ -28,7 +28,7 @@ RSpec.describe "logging out", type: :request do
       get "/further-education-payments/claim"
 
       journey_session = Journeys::FurtherEducationPayments::Session.last
-      journey_session.answers.onelogin_credentials = {id_token: "some_token"}
+      journey_session.answers.onelogin_credentials = {"id_token" => "some_token"}
       journey_session.save!
 
       delete "/deauth/onelogin"

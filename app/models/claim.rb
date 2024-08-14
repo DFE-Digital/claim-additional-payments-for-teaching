@@ -78,7 +78,11 @@ class Claim < ApplicationRecord
     dqt_teacher_status: false,
     submitted_using_slc_data: false,
     journeys_session_id: false,
-    column_to_remove_teacher_reference_number: true
+    column_to_remove_teacher_reference_number: true,
+    identity_confirmed_with_onelogin: false,
+    logged_in_with_onelogin: false,
+    onelogin_credentials: true,
+    onelogin_user_info: true
   }.freeze
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks

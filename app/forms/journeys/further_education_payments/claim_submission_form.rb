@@ -4,9 +4,7 @@ module Journeys
       private
 
       def main_eligibility
-        @main_eligibility ||= Policies::FurtherEducationPayments::Eligibility.new(
-          teacher_reference_number: @journey_session.answers.teacher_reference_number
-        )
+        @main_eligibility ||= eligibilities.first
       end
 
       def calculate_award_amount(eligibility)

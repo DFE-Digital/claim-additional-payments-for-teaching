@@ -13,7 +13,7 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
     let(:school_id) { college.id }
     let(:contract_type) { "permanent" }
     let(:teaching_hours_per_week) { "more_than_12" }
-    let(:further_education_teaching_start_year) { 2023 }
+    let(:further_education_teaching_start_year) { "2023" }
     let(:subjects_taught) { ["chemistry", "maths"] }
     let(:half_teaching_hours) { true }
     let(:teaching_qualification) { "yes" }
