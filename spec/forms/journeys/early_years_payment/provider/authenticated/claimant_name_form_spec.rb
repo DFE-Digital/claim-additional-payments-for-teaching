@@ -37,7 +37,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::ClaimantNam
     let(:first_name) { "Bobby" }
     let(:surname) { "Bobberson" }
 
-    it "updates the journey session" do  
+    it "updates the journey session" do
       expect { subject.save }.to(
         change { journey_session.answers.first_name }.to(first_name).and(
           change { journey_session.answers.surname }.to(surname)
