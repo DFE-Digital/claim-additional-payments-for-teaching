@@ -47,7 +47,7 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
         tlevel_digitalsupport
         tlevel_digitalbusiness
         tlevel_digitalproduction
-        ibo_level3
+        ibo_level3_compsci
         level2_3_apprenticeship
       ]
     }

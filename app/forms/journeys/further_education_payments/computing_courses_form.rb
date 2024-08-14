@@ -42,8 +42,8 @@ module Journeys
             name: course_option_description("tlevel_digitalproduction")
           ),
           OpenStruct.new(
-            id: "ibo_level3",
-            name: course_option_description("ibo_level3")
+            id: "ibo_level3_compsci",
+            name: course_option_description("ibo_level3_compsci")
           ),
           OpenStruct.new(
             id: "level2_3_apprenticeship",
