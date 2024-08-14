@@ -39,4 +39,10 @@ RSpec.describe OneLogin::Did do
       expect(subject.assertion_methods).to be_an(Array)
     end
   end
+
+  describe "#algorithms" do
+    it "returns used algorithms" do
+      expect(subject.algorithms).to eql(["ES256"])
+    end
+  end
 end

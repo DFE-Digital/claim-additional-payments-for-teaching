@@ -6,14 +6,32 @@ class OneLogin::Did
   end
 
   def context
-    document_hash["@context"]
+    @context ||= document_hash["@context"]
   end
 
   def id
-    document_hash["id"]
+    @id ||= document_hash["id"]
   end
 
   def assertion_methods
-    document_hash["assertionMethod"]
+    @assertion_methods ||= document_hash["assertionMethod"]
+  end
+
+  def algorithms
+    @algorithms ||= assertion_methods.map do |assertion|
+      assertion.dig("publicKeyJwk", "alg")
+    end
+  end
+
+  def jwks
+    return @jwks if @jwks
+
+    keys = assertion_methods.map do |assertion|
+      jwk = JWT::JWK.new(assertion["publicKeyJwk"])
+      jwk[:kid] = assertion["id"]
+      jwk
+    end
+
+    @jwks = JWT::JWK::Set.new(keys)
   end
 end
