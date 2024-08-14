@@ -6,7 +6,7 @@ module Journeys
           SLUGS = %w[
             consent
             current-nursery
-            employee-name
+            claimant-name
             ineligible
           ].freeze
 
