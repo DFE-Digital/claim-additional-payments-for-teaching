@@ -1,5 +1,5 @@
 class NameFormatValidator < ActiveModel::EachValidator
-  NAME_REGEX_FILTER = /\A[^"=$%#&*+\/\\()@?!<>0-9]*\z/
+  NAME_REGEX_FILTER = /\A[^\[\]\^"=$%#&*+\/\\()@?!<>_`|{}~0-9]*\z/
 
   def validate_each(record, attribute, value)
     return unless value.present?
