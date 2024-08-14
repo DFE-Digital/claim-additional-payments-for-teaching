@@ -5,20 +5,14 @@ module Journeys
         class ClaimantNameForm < Form
           attribute :first_name
           attribute :surname
-          
-          NAME_REGEX_FILTER = /\A[^"=$%#&*+\/\\()@?!<>0-9]*\z/
 
           validates :first_name, presence: {message: i18n_error_message("first_name.presence")}
-          validates :first_name,
-            length: {maximum: 100, message: i18n_error_message("first_name.length")},
-            format: {with: NAME_REGEX_FILTER, message: i18n_error_message("first_name.format")},
-            if: -> { first_name.present? }
+          validates :first_name, length: {maximum: 100, message: i18n_error_message("first_name.length")}, if: -> { first_name.present? }
+          validates :first_name, name_format: {message: i18n_error_message("first_name.format")}
 
           validates :surname, presence: {message: i18n_error_message("last_name.presence")}
-          validates :surname,
-            length: {maximum: 100, message: i18n_error_message("last_name.length")},
-            format: {with: NAME_REGEX_FILTER, message: i18n_error_message("last_name.format")},
-            if: -> { surname.present? }
+          validates :surname, length: {maximum: 100, message: i18n_error_message("last_name.length")}, if: -> { surname.present? }
+          validates :surname, name_format: {message: i18n_error_message("last_name.format")}
 
           def save
             return false if invalid?
