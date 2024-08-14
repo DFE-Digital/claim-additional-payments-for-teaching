@@ -15,7 +15,8 @@ module Journeys
             "current-nursery" => CurrentNurseryForm,
             "paye-reference" => PayeReferenceForm,
             "claimant-name" => ClaimantNameForm,
-            "start-date" => StartDateForm
+            "start-date" => StartDateForm,
+            "child-facing" => ChildFacingForm
           }
         }
         START_WITH_MAGIC_LINK = true

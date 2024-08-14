@@ -34,12 +34,16 @@ RSpec.feature "Early years payment provider" do
     click_button "Continue"
 
     expect(page.current_path).to eq "/early-years-payment-provider/start-date"
-
     fill_in("Day", with: "1")
     fill_in("Month", with: "12")
     fill_in("Year", with: "2024")
     click_button "Continue"
+
     expect(page.current_path).to eq "/early-years-payment-provider/child-facing"
+    check "I confirm that at least 70% of Bobby’s time in their job is spent working directly with children."
+    click_button "Continue"
+
+    expect(page.current_path).to eq "/early-years-payment-provider/returner"
   end
 
   scenario "using magic link after having completed some of the journey" do
