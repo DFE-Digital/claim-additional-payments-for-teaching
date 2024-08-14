@@ -79,17 +79,17 @@ module DfeSignInHelpers
       "userId" => user_id,
       "serviceId" => "XXXXXXX",
       "organisationId" => organisation_id,
-      "roles" => [
+      "roles" => Array.wrap(role_code).map.each_with_index do |code, i|
         {
           "id" => "YYYYYYY",
           "name" => "Access to Teacher Payments",
-          "code" => role_code,
+          "code" => code,
           "numericId" => "162",
           "status" => {
-            "id" => 1
+            "id" => i + 1
           }
         }
-      ],
+      end,
       "identifiers" => [
         {
           "key" => "groups",

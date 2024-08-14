@@ -191,6 +191,69 @@ RSpec.feature "Provider verifying claims" do
     )
   end
 
+  scenario "admin visits the claim" do
+    fe_provider = create(:school, :further_education, name: "Springfield A&M")
+
+    claim = create(
+      :claim,
+      first_name: "Edna",
+      surname: "Krabappel",
+      date_of_birth: Date.new(1945, 7, 3),
+      reference: "AB123456",
+      created_at: DateTime.new(2024, 8, 1, 9, 0, 0)
+    )
+
+    create(
+      :further_education_payments_eligibility,
+      claim: claim,
+      school: fe_provider
+    )
+
+    mock_dfe_sign_in_auth_session(
+      provider: :dfe_fe_provider,
+      auth_hash: {
+        uid: "11111",
+        extra: {
+          raw_info: {
+            organisation: {
+              id: "22222",
+              ukprn: fe_provider.ukprn
+            }
+          }
+        }
+      }
+    )
+
+    stub_dfe_sign_in_user_info_request(
+      "11111",
+      "22222",
+      [
+        DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE
+      ]
+    )
+
+    claim_link = Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
+
+    visit claim_link
+
+    click_on "Start now"
+
+    expect(page).to have_text(
+      "You do not have access to verify claims for this organisation"
+    )
+
+    expect(page).to have_text(
+      "DfE staff do not have access to verify retention payments for further education teachers."
+    )
+
+    # Try to visit the restricted slug directly
+    visit "/further-education-payments-provider/verify-claim"
+
+    expect(page).to have_text(
+      "You do not have access to verify claims for this organisation"
+    )
+  end
+
   scenario "provider approves the claim" do
     fe_provider = create(:school, :further_education, name: "Springfield A&M")
 

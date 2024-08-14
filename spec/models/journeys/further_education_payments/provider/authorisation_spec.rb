@@ -54,5 +54,20 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::Authorisation do
 
       it { is_expected.to eq(:incorrect_role) }
     end
+
+    context "when the user is a claim admin" do
+      let(:answers) do
+        {
+          dfe_sign_in_service_access: true,
+          dfe_sign_in_organisation_ukprn: organisation.ukprn,
+          dfe_sign_in_role_codes: [
+            DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE,
+            Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
+          ]
+        }
+      end
+
+      it { is_expected.to eq(:claim_admin) }
+    end
   end
 end
