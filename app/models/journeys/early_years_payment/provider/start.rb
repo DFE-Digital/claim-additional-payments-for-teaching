@@ -11,7 +11,8 @@ module Journeys
         POLICIES = [Policies::EarlyYearsPayments]
         FORMS = {
           "claims" => {
-            "email-address" => EmailAddressForm
+            "email-address" => EmailAddressForm,
+            "check-your-email" => EmailAddressForm
           }
         }
       end
