@@ -25,7 +25,7 @@ class EligibleEyProvider < ApplicationRecord
   end
 
   def self.eligible_email?(email_address)
-    email_address.present? && for_email(email_address).exists?
+    for_email(email_address).exists?
   end
 
   def self.for_email(email_address)
