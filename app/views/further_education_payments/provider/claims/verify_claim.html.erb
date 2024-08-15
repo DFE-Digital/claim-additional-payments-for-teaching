@@ -38,18 +38,51 @@
       <% end %>
     <% end %>
 
+    <h2 class="govuk-heading-l">
+      We need you to verify some information
+    </h2>
+
     <%= form_with(
       model: @form,
       url: claim_path(current_journey_routing_name),
       builder: GOVUKDesignSystemFormBuilder::FormBuilder,
       html: { novalidate: false }
     ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.fields_for :assertions do |ff| %>
+        <%= ff.govuk_collection_radio_buttons(
+          :outcome,
+          ff.object.radio_options,
+          :id,
+          :name,
+          nil,
+          legend: {
+            size: "s",
+            text: f.object.t(
+              [:assertions, ff.object.name],
+              claimant: f.object.claimant_name,
+              provider: f.object.claim.school.name,
+            ),
+          },
+          hint: -> do
+            if ff.object.name.to_s == "subjects_taught"
+              govuk_list(
+                f.object.course_descriptions.map(&:html_safe),
+                type: :bullet
+              )
+            end
+          end
+        ) %>
+
+        <%= ff.hidden_field :name %>
+      <% end %>
 
       <%= f.govuk_check_boxes_fieldset(
         :declaration,
         multiple: false,
         legend: {
-          text: @form.t(:declaration_title),
+          text: f.object.t(:declaration_title),
           size: "m"
         }
       ) do %>
@@ -60,7 +93,7 @@
           multiple: false,
           link_errors: true,
           label: {
-            text: @form.t(:declaration)
+            text: f.object.t(:declaration)
           }
         ) %>
       <% end %>

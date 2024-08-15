@@ -254,8 +254,8 @@ RSpec.feature "Provider verifying claims" do
     )
   end
 
-  scenario "provider approves the claim" do
-    fe_provider = create(:school, :further_education, name: "Springfield A&M")
+  scenario "provider approves a fixed contract claim" do
+    fe_provider = create(:school, :further_education, name: "Springfield A and M")
 
     claim = create(
       :claim,
@@ -269,7 +269,13 @@ RSpec.feature "Provider verifying claims" do
     create(
       :further_education_payments_eligibility,
       claim: claim,
-      school: fe_provider
+      school: fe_provider,
+      contract_type: "fixed_term",
+      subjects_taught: ["engineering_manufacturing"],
+      engineering_manufacturing_courses: [
+        "approved_level_321_transportation",
+        "level2_3_apprenticeship"
+      ]
     )
 
     mock_dfe_sign_in_auth_session(
@@ -308,6 +314,59 @@ RSpec.feature "Provider verifying claims" do
     # FIXME RL enable this test once we've added the TRN to the eligibility
     # expect(page).to have_text "Claimant teacher reference number (TRN)1234567"
     expect(page).to have_text "Claim date1 August 2024"
+
+    within_fieldset(
+      "Does Edna Krabappel have a permanent contract of employment at " \
+      "Springfield A and M?"
+    ) do
+      choose "Yes"
+    end
+
+    within_fieldset(
+      "Is Edna Krabappel a member of staff with teaching responsibilities?"
+    ) do
+      choose "Yes"
+    end
+
+    within_fieldset(
+      "Is Edna Krabappel in the first 5 years of their further education " \
+      "teaching career in England?"
+    ) do
+      choose "Yes"
+    end
+
+    within_fieldset(
+      "Is Edna Krabappel timetabled to teach an average of 12 hours per " \
+      "week during the current term?"
+    ) do
+      choose "Yes"
+    end
+
+    within_fieldset(
+      "For at least half of their timetabled teaching hours, does " \
+      "Edna Krabappel teach 16- to 19-year-olds, including those up to " \
+      "age 25 with an Education, Health and Care Plan (EHCP)?"
+    ) do
+      choose "Yes"
+    end
+
+    expect(page).to have_text(
+      "Qualifications approved for funding at level 3 and below in the " \
+      "transportation operations and maintenance (opens in new tab) sector " \
+      "subject area"
+    )
+
+    expect(page).to have_text(
+      "Level 2 or level 3 apprenticeships in the engineering and " \
+      "manufacturing occupational route (opens in new tab)"
+    )
+
+    within_fieldset(
+      "For at least half of their timetabled teaching hours, does " \
+      "Edna Krabappel teach:"
+    ) do
+      choose "Yes"
+    end
 
     check "To the best of my knowledge, I confirm that the information provided in this form is correct."
 

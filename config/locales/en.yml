@@ -1108,6 +1108,14 @@ en:
         claimant_date_of_birth: "Claimant date of birth"
         claimant_trn: "Claimant teacher reference number (TRN)"
         claim_date: "Claim date"
+        assertions:
+          contract_type: "Does %{claimant} have a permanent contract of employment at %{provider}?"
+          teaching_responsibilities: "Is %{claimant} a member of staff with teaching responsibilities?"
+          further_education_teaching_start_year: "Is %{claimant} in the first 5 years of their further education teaching career in England?"
+          teaching_hours_per_week: "Is %{claimant} timetabled to teach an average of 12 hours per week during the current term?"
+          hours_teaching_eligible_subjects: "For at least half of their timetabled teaching hours, does %{claimant} teach 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?"
+          subjects_taught: "For at least half of their timetabled teaching hours, does %{claimant} teach:"
+
   early_years_payment:
     claim_description: for an early years financial incentive payment
   early_years_payment_provider_start:
