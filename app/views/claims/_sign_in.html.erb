@@ -1,42 +1,7 @@
-<h1 class="govuk-heading-l">
 <% if @journey_session.answers.identity_confirmed_with_onelogin? %>
-  You've successfully proved your identity with GOV.UK One Login
+  <%= render "sign_in_3_identified" %>
 <% elsif @journey_session.answers.logged_in_with_onelogin? %>
-  You've successfully signed in to GOV.UK One Login
+  <%= render "sign_in_2_authed" %>
 <% else %>
-  You're now going to GOV.UK One Login
+  <%= render "sign_in_1_start" %>
 <% end %>
-</h1>
-
-<% if @journey_session.answers.identity_confirmed_with_onelogin? %>
-  <p>
-    You can now continue your application
-  </p>
-<% elsif @journey_session.answers.logged_in_with_onelogin? %>
-  <p>
-    Before you can continue your application, you'll need to prove your identity through GOV.UK One Login.
-  </p>
-  <p>
-    When you've proved your identity through GOV.UK One Login, you'll return to this service to complete your applciation.
-  </p>
-<% else %>
-  <p>
-  To continue your application, you'll need to create a GOV.UK One Login or sign in.
-  </p>
-  <p>
-    When you've signed in through GOV.UK One Login, your progress will be saved
-    and you'll be able to return to complete your application.
-  </p>
-<% end %>
-
-<div class="govuk-button-group">
-  <% if @journey_session.answers.identity_confirmed_with_onelogin? %>
-    <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
-      <%= f.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
-    <% end %>
-  <% elsif @journey_session.answers.logged_in_with_onelogin? %>
-    <%= button_to "Continue", "/auth/onelogin_identity", class: "govuk-button", method: :post %>
-  <% else %>
-    <%= button_to "Continue", "/auth/onelogin", class: "govuk-button", method: :post %>
-  <% end %>
-</div>
