@@ -25,10 +25,14 @@ class EligibleEyProvider < ApplicationRecord
   end
 
   def self.eligible_email?(email_address)
-    if email_address.present?
-      where(primary_key_contact_email_address: email_address).or(
-        where(secondary_contact_email_address: email_address)
-      ).exists?
-    end
+    for_email(email_address).exists?
+  end
+
+  def self.for_email(email_address)
+    return none unless email_address.present?
+
+    where(primary_key_contact_email_address: email_address).or(
+      where(secondary_contact_email_address: email_address)
+    )
   end
 end

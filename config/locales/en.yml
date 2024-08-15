@@ -1101,6 +1101,10 @@ en:
           notice.
         errors:
           presence: You must be able to confirm this information to continue
+      current_nursery:
+        question: Confirm that your employee works at the location below
+        errors:
+          presence: Select the nursery where your employee works
   early_years_payments:
     <<: *early_years_payment_provider_authenticated
     claim_subject: "Early Years Payment"
