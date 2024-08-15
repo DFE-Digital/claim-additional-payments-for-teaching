@@ -28,7 +28,7 @@ module Journeys
           def nursery_is_valid_for_user
             return if nursery_urn.blank? || nursery_urn == "none_of_the_above"
 
-            unless EligibleEyProvider.for_email(journey_session.answers.email_address).pluck(:nursery_urn).include?(nursery_urn)
+            unless EligibleEyProvider.for_email(journey_session.answers.email_address).pluck(:urn).include?(nursery_urn)
               errors.add(:nursery_urn, "is not associated with your email address")
             end
           end
