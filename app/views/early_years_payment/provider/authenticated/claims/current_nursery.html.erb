@@ -19,7 +19,7 @@
           <%= f.govuk_radio_button :nursery_urn, nursery.urn, label: { text: nursery.nursery_name }, hint: { text: nursery.nursery_address }, link_errors: @form.selectable_nurseries.first == nursery %>
         <% end %>
         <%= f.govuk_radio_divider %>
-        <%= f.govuk_radio_button :nursery_urn, :none_of_the_above, label: { text: "None of the above" } %>
+        <%= f.govuk_radio_button :nursery_urn, "none_of_the_above", label: { text: "None of the above" } %>
       <% end %>
 
       <%= f.govuk_submit %>

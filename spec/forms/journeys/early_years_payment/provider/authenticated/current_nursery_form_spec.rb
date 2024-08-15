@@ -25,6 +25,14 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::CurrentNurs
         .with_message("Select the nursery where your employee works")
       )
     end
+
+    it do
+      is_expected.not_to(
+        allow_value("other")
+        .for(:nursery_urn)
+        .with_message("is not associated with your email address")
+      )
+    end
   end
 
   describe "#save" do
