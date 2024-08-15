@@ -1138,6 +1138,11 @@ en:
             presence: Enter employee’s last name
             length: Employee’s last name must be less than 100 characters
             format: Employee’s last name cannot contain special characters
+      start_date:
+        question: When did %{first_name} start at %{current_nursery}?
+        hint: For example, 27 3 2024.
+        errors:
+          presence: Provide a date in the format 27 3 2024
   early_years_payments:
     <<: *early_years_payment_provider_authenticated
     claim_subject: "Early Years Payment"

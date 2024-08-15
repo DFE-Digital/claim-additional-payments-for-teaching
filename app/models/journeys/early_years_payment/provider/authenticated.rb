@@ -14,7 +14,8 @@ module Journeys
             "consent" => ConsentForm,
             "current-nursery" => CurrentNurseryForm,
             "paye-reference" => PayeReferenceForm,
-            "claimant-name" => ClaimantNameForm
+            "claimant-name" => ClaimantNameForm,
+            "start-date" => StartDateForm
           }
         }
         START_WITH_MAGIC_LINK = true

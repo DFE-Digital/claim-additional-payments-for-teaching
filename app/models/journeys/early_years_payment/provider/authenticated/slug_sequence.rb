@@ -9,6 +9,7 @@ module Journeys
             paye-reference
             claimant-name
             start-date
+            child-facing
             ineligible
           ].freeze
 
