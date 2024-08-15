@@ -5,7 +5,7 @@ module Journeys
   class PageSequence
     attr_reader :current_slug
 
-    DEAD_END_SLUGS = %w[complete existing-session eligible-later future-eligibility ineligible]
+    DEAD_END_SLUGS = %w[complete existing-session eligible-later future-eligibility ineligible check-your-email]
     OPTIONAL_SLUGS = %w[postcode-search select-home-address reset-claim]
 
     def initialize(slug_sequence, completed_slugs, current_slug, journey_session)

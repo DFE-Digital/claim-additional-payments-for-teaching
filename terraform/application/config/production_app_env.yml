@@ -8,6 +8,7 @@ DFE_SIGN_IN_REDIRECT_BASE_URL: https://www.claim-additional-teaching-payment.ser
 BYPASS_ONELOGIN_SIGN_IN: true
 ONELOGIN_SIGN_IN_ISSUER: https://oidc.integration.account.gov.uk/
 ONELOGIN_REDIRECT_BASE_URL: https://www.claim-additional-teaching-payment.service.gov.uk
+ONELOGIN_DID_URL: https://identity.account.gov.uk/.well-known/did.json
 
 DQT_API_URL: https://teacher-qualifications-api.education.gov.uk/v1
 DQT_BASE_URL: https://api-customerengagement.platform.education.gov.uk/dqt-crm/v1/

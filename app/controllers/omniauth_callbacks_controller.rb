@@ -37,8 +37,6 @@ class OmniauthCallbacksController < ApplicationController
     core_identity_jwt = auth.extra.raw_info[ONELOGIN_JWT_CORE_IDENTITY_HASH_KEY]
     return process_one_login_identity_verification_callback(core_identity_jwt) if core_identity_jwt
     process_one_login_authentication_callback(auth)
-  rescue Rack::OAuth2::Client::Error => e
-    render plain: e.message
   end
 
   private
@@ -95,9 +93,8 @@ class OmniauthCallbacksController < ApplicationController
       first_name = "TEST"
       surname = "USER"
     else
-      identity_jwt_public_key = OpenSSL::PKey::EC.new(Base64.decode64(ENV["ONELOGIN_IDENTITY_JWT_PUBLIC_KEY_BASE64"]))
-      decoded_jwt = JSON::JWT.decode(jwt, identity_jwt_public_key)
-      name_parts = decoded_jwt["vc"]["credentialSubject"]["name"][0]["nameParts"]
+      decoded_jwt = OneLogin::CoreIdentityValidator.new(jwt:).call
+      name_parts = decoded_jwt[0]["vc"]["credentialSubject"]["name"][0]["nameParts"]
       first_name = name_parts.find { |part| part["type"] == "GivenName" }["value"]
       surname = name_parts.find { |part| part["type"] == "FamilyName" }["value"]
     end

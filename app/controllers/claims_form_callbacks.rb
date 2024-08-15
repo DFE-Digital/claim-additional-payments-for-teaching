@@ -64,6 +64,11 @@ module ClaimsFormCallbacks
     end
   end
 
+  def check_your_email_after_form_save_success
+    @email_resent = true
+    render("check_your_email")
+  end
+
   private
 
   def set_backlink_override_to_current_slug
