@@ -1,0 +1,23 @@
+<% content_for(:page_title, page_title(@form.t(:question), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <%= @form.t(:question) %>
+      </h1>
+
+      <div class="govuk-hint">
+        <%= @form.t(:hint) %>
+      </div>
+
+      <%= f.govuk_text_field :first_name, label: { text: "First name" }, spellcheck: "false", autocomplete: "name" %>
+
+      <%= f.govuk_text_field :surname, label: { text: "Last name" }, spellcheck: "false", autocomplete: "name" %>
+
+      <%= f.govuk_submit "Continue" %>
+    <% end %>
+  </div>
+</div>

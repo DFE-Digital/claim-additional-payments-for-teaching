@@ -5,7 +5,6 @@ class PersonalDetailsForm < Form
     end
   end
 
-  NAME_REGEX_FILTER = /\A[^"=$%#&*+\/\\()@?!<>0-9]*\z/
   NINO_REGEX_FILTER = /\A[A-Z]{2}[0-9]{6}[A-D]{1}\Z/
   DOB_PARAM_CONVERSION = {
     "date_of_birth(3i)" => "day",
@@ -23,19 +22,16 @@ class PersonalDetailsForm < Form
   attribute :national_insurance_number
 
   validates :first_name, presence: {message: "Enter your first name"}
-  validates :first_name,
-    length: {maximum: 100, message: "First name must be less than 100 characters"},
-    format: {with: NAME_REGEX_FILTER, message: "First name cannot contain special characters"},
-    if: -> { first_name.present? }
-  validates :middle_name,
-    length: {maximum: 61, message: "Middle names must be less than 61 characters"},
-    format: {with: NAME_REGEX_FILTER, message: "Middle names cannot contain special characters"},
-    if: -> { middle_name.present? }
+  validates :first_name, length: {maximum: 100, message: "First name must be less than 100 characters"}, if: -> { first_name.present? }
+  validates :first_name, name_format: {message: "First name cannot contain special characters"}
+
+  validates :middle_name, length: {maximum: 61, message: "Middle names must be less than 61 characters"}, if: -> { middle_name.present? }
+  validates :middle_name, name_format: {message: "Middle names cannot contain special characters"}
+
   validates :surname, presence: {message: "Enter your last name"}
-  validates :surname,
-    length: {maximum: 100, message: "Last name must be less than 100 characters"},
-    format: {with: NAME_REGEX_FILTER, message: "Last name cannot contain special characters"},
-    if: -> { surname.present? }
+  validates :surname, length: {maximum: 100, message: "Last name must be less than 100 characters"}, if: -> { surname.present? }
+  validates :surname, name_format: {message: "Last name cannot contain special characters"}
+
   validate :date_of_birth_criteria
   validates :national_insurance_number, presence: {message: "Enter a National Insurance number in the correct format"}
   validate :ni_number_is_correct_format

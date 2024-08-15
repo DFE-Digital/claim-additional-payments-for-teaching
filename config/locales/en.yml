@@ -865,7 +865,9 @@ en:
           min_length: Enter a college name or postcode that is at least 3 characters long
       select_provision:
         heading: Select where you are employed
-        hint: Select the further education provider you are employed by. If you work for a college or sixth-form group, you should select the group name.
+        hint:
+          Select the further education provider you are employed by. If you work for a college or sixth-form group, you
+          should select the group name.
         errors:
           blank: Select where you are employed
       contract_type:
@@ -940,7 +942,8 @@ en:
         question: Which building and construction courses do you teach?
         question_check_your_answers: Building and construction courses
         options:
-          level3_buildingconstruction_approved: Qualifications approved for funding at level 3 and below in the %{link} sector subject area
+          level3_buildingconstruction_approved:
+            Qualifications approved for funding at level 3 and below in the %{link} sector subject area
           tlevel_building: T Level in building services engineering for construction
           tlevel_onsiteconstruction: T Level in onsite construction
           tlevel_design_surveying: T Level in design, surveying and planning for construction
@@ -953,7 +956,9 @@ en:
         options:
           alevel_chemistry: A or AS level chemistry
           gcse_chemistry: GCSE chemistry
-          ibo_level_3_chemistry: IBO level 3 SL and HL chemistry, taught as part of a diploma or career related programme or as a standalone certificate
+          ibo_level_3_chemistry:
+            IBO level 3 SL and HL chemistry, taught as part of a diploma or career related programme or as a standalone
+            certificate
           ibo_level_1_2_myp_chemistry: IBO level 1 / level 2 MYP chemistry
           none: I do not teach any of these courses
       computing_courses:
@@ -986,9 +991,12 @@ en:
         question: Which engineering and manufacturing courses do you teach?
         question_check_your_answers: Engineering and manufacturing courses
         options:
-          approved_level_321_engineering: Qualifications approved for funding at level 3 and below in the %{link} sector subject area
-          approved_level_321_manufacturing: Qualifications approved for funding at level 3 and below in the %{link} sector subject area
-          approved_level_321_transportation: Qualifications approved for funding at level 3 and below in the %{link} sector subject area
+          approved_level_321_engineering:
+            Qualifications approved for funding at level 3 and below in the %{link} sector subject area
+          approved_level_321_manufacturing:
+            Qualifications approved for funding at level 3 and below in the %{link} sector subject area
+          approved_level_321_transportation:
+            Qualifications approved for funding at level 3 and below in the %{link} sector subject area
           tlevel_design: T Level in design and development for engineering and manufacturing
           tlevel_maintenance: T Level in maintenance, installation and repair for engineering and manufacturing
           tlevel_engineering: T Level in engineering, manufacturing, processing and control
@@ -999,9 +1007,11 @@ en:
         question: Which maths courses do you teach?
         question_check_your_answers: Maths courses
         options:
-          approved_level_321_maths: Qualifications approved for funding at level 3 and below in the %{link} sector subject area
+          approved_level_321_maths:
+            Qualifications approved for funding at level 3 and below in the %{link} sector subject area
           gcse_maths:
-            GCSE in maths, functional skills qualifications and %{link} approved for teaching to 16 to 19-year-olds who meet the condition of funding
+            GCSE in maths, functional skills qualifications and %{link} approved for teaching to 16 to 19-year-olds who
+            meet the condition of funding
           none: I do not teach any of these courses
       physics_courses:
         <<: *courses
@@ -1011,7 +1021,9 @@ en:
           alevel_physics: A or AS level physics
           gcse_physics: GCSE physics
           ibo_level_1_2_myp_physics: IBO level 1 / level 2 MYP physics
-          ibo_level_3_physics: IBO level 3 in SL and HL physics, taught as part of a diploma or career related programme or as a standalone certificate
+          ibo_level_3_physics:
+            IBO level 3 in SL and HL physics, taught as part of a diploma or career related programme or as a standalone
+            certificate
           none: I do not teach any of these courses
       teaching_qualification:
         question: Do you have a teaching qualification?
@@ -1105,6 +1117,20 @@ en:
         question: Confirm that your employee works at the location below
         errors:
           presence: Select the nursery where your employee works
+      claimant_name:
+        question: Who are you making this claim for?
+        hint:
+          Enter the employee’s full legal name as it appears on official identity documents such as passports or driving
+          licenses.
+        errors:
+          first_name:
+            presence: Enter employee’s first name
+            length: Employee’s first name must be less than 100 characters
+            format: Employee’s first name cannot contain special characters
+          last_name:
+            presence: Enter employee’s last name
+            length: Employee’s last name must be less than 100 characters
+            format: Employee’s last name cannot contain special characters
   early_years_payments:
     <<: *early_years_payment_provider_authenticated
     claim_subject: "Early Years Payment"
