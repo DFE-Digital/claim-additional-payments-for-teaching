@@ -14,7 +14,7 @@ module Journeys
         a << [t("forms.address.questions.your_address"), answers.address, "address"]
         a << [t("questions.date_of_birth"), date_of_birth_string, "personal-details"] if show_dob?
         a << payroll_gender
-        a << [t("questions.teacher_reference_number"), answers.teacher_reference_number, "teacher-reference-number"] if show_trn?
+        a << teacher_reference_number if show_trn?
         a << [t("questions.national_insurance_number"), answers.national_insurance_number, "personal-details"] if show_nino?
         a << [t("questions.email_address"), answers.email_address, "email-address"] unless show_email_select?
         a << [text_for(:select_email), answers.email_address, "select-email"] if show_email_select?
@@ -71,6 +71,10 @@ module Journeys
 
     def payroll_gender
       [t("forms.gender.questions.payroll_gender"), t("answers.payroll_gender.#{answers.payroll_gender}"), "gender"]
+    end
+
+    def teacher_reference_number
+      [text_for(:teacher_reference_number), answers.teacher_reference_number, "teacher-reference-number"]
     end
   end
 end
