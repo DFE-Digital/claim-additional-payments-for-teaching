@@ -24,6 +24,7 @@ module Journeys
       attribute :subject_to_formal_performance_action, :boolean
       attribute :subject_to_disciplinary_action, :boolean
       attribute :half_teaching_hours, :boolean
+      attribute :award_amount, :decimal
 
       def policy
         Policies::FurtherEducationPayments
@@ -120,7 +121,7 @@ module Journeys
         hours_teaching_eligible_subjects == false
       end
 
-      def award_amount
+      def calculate_award_amount
         case teaching_hours_per_week
         when "more_than_12"
           school.eligible_fe_provider.max_award_amount

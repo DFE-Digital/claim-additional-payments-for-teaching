@@ -77,7 +77,7 @@ FactoryBot.define do
       qualifications_details_check { true }
     end
 
-    trait :with_acadmic_year do
+    trait :with_academic_year do
       academic_year { AcademicYear.new(2019) }
     end
 
@@ -105,7 +105,7 @@ FactoryBot.define do
       with_leadership_position
       with_qts_award_year
       with_qualification_details_check
-      with_acadmic_year
+      with_academic_year
       with_student_loan
       with_student_loan_repayment_amount
     end

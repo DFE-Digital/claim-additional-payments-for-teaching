@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_12_123209) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_16_122950) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_trgm"
@@ -98,6 +98,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_12_123209) do
     t.boolean "submitted_using_slc_data", default: false
     t.datetime "sent_one_time_password_at"
     t.uuid "journeys_session_id"
+    t.boolean "identity_confirmed_with_onelogin"
+    t.boolean "logged_in_with_onelogin"
+    t.jsonb "onelogin_credentials", default: {}
+    t.jsonb "onelogin_user_info", default: {}
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
@@ -218,6 +222,31 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_12_123209) do
     t.datetime "updated_at", null: false
     t.decimal "award_amount", precision: 7, scale: 2
     t.text "teacher_reference_number"
+    t.boolean "teaching_responsibilities"
+    t.text "provision_search"
+    t.uuid "possible_school_id"
+    t.uuid "school_id"
+    t.text "contract_type"
+    t.boolean "fixed_term_full_year"
+    t.boolean "taught_at_least_one_term"
+    t.text "teaching_hours_per_week"
+    t.text "teaching_hours_per_week_next_term"
+    t.text "further_education_teaching_start_year"
+    t.jsonb "subjects_taught", default: []
+    t.jsonb "building_construction_courses", default: []
+    t.jsonb "chemistry_courses", default: []
+    t.jsonb "computing_courses", default: []
+    t.jsonb "early_years_courses", default: []
+    t.jsonb "engineering_manufacturing_courses", default: []
+    t.jsonb "maths_courses", default: []
+    t.jsonb "physics_courses", default: []
+    t.boolean "hours_teaching_eligible_subjects"
+    t.text "teaching_qualification"
+    t.boolean "subject_to_formal_performance_action"
+    t.boolean "subject_to_disciplinary_action"
+    t.boolean "half_teaching_hours"
+    t.index ["possible_school_id"], name: "index_fe_payments_eligibilities_on_possible_school_id"
+    t.index ["school_id"], name: "index_fe_payments_eligibilities_on_school_id"
   end
 
   create_table "international_relocation_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -520,6 +549,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_12_123209) do
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "early_career_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "eligible_ey_providers", "local_authorities"
+  add_foreign_key "further_education_payments_eligibilities", "schools"
+  add_foreign_key "further_education_payments_eligibilities", "schools", column: "possible_school_id"
   add_foreign_key "international_relocation_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "levelling_up_premium_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "notes", "claims"

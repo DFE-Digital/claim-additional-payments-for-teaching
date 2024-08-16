@@ -602,7 +602,9 @@ RSpec.describe Claim, type: :model do
         :email_address_check,
         :mobile_check,
         :qualifications_details_check,
-        :column_to_remove_teacher_reference_number
+        :column_to_remove_teacher_reference_number,
+        :onelogin_credentials,
+        :onelogin_user_info
       ])
     end
   end

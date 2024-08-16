@@ -26,6 +26,8 @@
   - hmrc_bank_validation_responses
   - dqt_teacher_status
   - teacher_id_user_info
+  - onelogin_credentials
+  - onelogin_user_info
   :claim_decisions:
   - trn
   - claimant_age

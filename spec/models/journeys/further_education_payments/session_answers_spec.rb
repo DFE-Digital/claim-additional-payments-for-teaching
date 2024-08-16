@@ -5,7 +5,7 @@ RSpec.describe Journeys::FurtherEducationPayments::SessionAnswers do
 
   let(:school) { create(:school, :further_education, :fe_eligible) }
 
-  describe "#award_amount" do
+  describe "#calculate_award_amount" do
     context "when teaching over 12 hours per week" do
       let(:answers) do
         build(
@@ -16,7 +16,7 @@ RSpec.describe Journeys::FurtherEducationPayments::SessionAnswers do
       end
 
       it "returns max award amount" do
-        expect(subject.award_amount).to eql(school.eligible_fe_provider.max_award_amount)
+        expect(subject.calculate_award_amount).to eql(school.eligible_fe_provider.max_award_amount)
       end
     end
 
@@ -30,7 +30,7 @@ RSpec.describe Journeys::FurtherEducationPayments::SessionAnswers do
       end
 
       it "returns lower award amount" do
-        expect(subject.award_amount).to eql(school.eligible_fe_provider.lower_award_amount)
+        expect(subject.calculate_award_amount).to eql(school.eligible_fe_provider.lower_award_amount)
       end
     end
 
@@ -44,7 +44,7 @@ RSpec.describe Journeys::FurtherEducationPayments::SessionAnswers do
       end
 
       it "returns zero" do
-        expect(subject.award_amount).to be_zero
+        expect(subject.calculate_award_amount).to be_zero
       end
     end
   end
