@@ -10,7 +10,8 @@ module Journeys
             claimant-name
             start-date
             child-facing
-            returner
+            returner-1
+            employee-email
             ineligible
           ].freeze
 

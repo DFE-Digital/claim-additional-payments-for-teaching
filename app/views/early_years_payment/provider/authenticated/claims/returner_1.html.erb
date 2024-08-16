@@ -1,0 +1,27 @@
+<% question = "Is this #{'name'}'s first job in an early years setting between #{'6 months before start date'} and #{'start date'}" %>
+<% content_for(:page_title, page_title(question, journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_radio_buttons_fieldset(
+        :first_job_within_6_months,
+        inline: true,
+        legend: {
+          text: question,
+          tag: "h1",
+          size: "l"
+        },
+        hint: {
+          text: "In the 6 months before starting their current job, your employee must not have had a permanent job working directly with children in an early years setting."
+        }) do %>
+        <%= f.govuk_radio_button :first_job_within_6_months, true, label: { text: "Yes" } %>
+        <%= f.govuk_radio_button :first_job_within_6_months, false, label: { text: "No" } %>
+      <% end %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>
