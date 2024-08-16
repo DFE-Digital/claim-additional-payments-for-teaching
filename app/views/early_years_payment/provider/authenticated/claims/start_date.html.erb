@@ -1,4 +1,4 @@
-<% content_for(:page_title, page_title(@form.t(:question, first_name: answers.first_name, current_nursery: "TODO"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+<% content_for(:page_title, page_title(@form.t(:question, first_name: answers.first_name, current_nursery: @form.nursery_name), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -7,7 +7,7 @@
 
       <%= f.govuk_date_field(
         :start_date,
-        legend: { text: @form.t(:question, first_name: answers.first_name, current_nursery: "TODO"), size: "l", tag: "h1" },
+        legend: { text: @form.t(:question, first_name: answers.first_name, current_nursery: @form.nursery_name), size: "l", tag: "h1" },
         hint: { text: @form.t(:hint) }) %>
 
       <%= f.govuk_submit %>

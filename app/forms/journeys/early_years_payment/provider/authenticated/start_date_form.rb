@@ -26,6 +26,10 @@ module Journeys
             journey_session.answers.assign_attributes(start_date:)
             journey_session.save!
           end
+
+          def nursery_name
+            EligibleEyProvider.find_by(urn: answers.nursery_urn)&.nursery_name
+          end
         end
       end
     end
