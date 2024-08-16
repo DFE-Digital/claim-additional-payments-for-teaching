@@ -74,6 +74,8 @@ shared:
     - qualifications_details_check
     - submitted_using_slc_data
     - journeys_session_id
+    - identity_confirmed_with_onelogin
+    - logged_in_with_onelogin
   :decisions:
     - id
     - result
@@ -271,6 +273,29 @@ shared:
     - created_at
     - updated_at
     - award_amount
+    - teaching_responsibilities
+    - provision_search
+    - possible_school_id
+    - school_id
+    - contract_type
+    - fixed_term_full_year
+    - taught_at_least_one_term
+    - teaching_hours_per_week
+    - teaching_hours_per_week_next_term
+    - further_education_teaching_start_year
+    - subjects_taught
+    - building_construction_courses
+    - chemistry_courses
+    - computing_courses
+    - early_years_courses
+    - engineering_manufacturing_courses
+    - maths_courses
+    - physics_courses
+    - hours_teaching_eligible_subjects
+    - teaching_qualification
+    - subject_to_formal_performance_action
+    - subject_to_disciplinary_action
+    - half_teaching_hours
   :eligible_fe_providers:
     - id
     - ukprn
