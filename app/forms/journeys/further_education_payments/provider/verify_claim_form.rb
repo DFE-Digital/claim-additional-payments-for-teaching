@@ -4,14 +4,16 @@ module Journeys
       class VerifyClaimForm < Form
         include CoursesHelper
 
-        ASSERTIONS = %i[
-          contract_type
-          teaching_responsibilities
-          further_education_teaching_start_year
-          teaching_hours_per_week
-          hours_teaching_eligible_subjects
-          subjects_taught
-        ]
+        ASSERTIONS = {
+          fixed_contract: %i[
+            contract_type
+            teaching_responsibilities
+            further_education_teaching_start_year
+            teaching_hours_per_week
+            hours_teaching_eligible_subjects
+            subjects_taught
+          ]
+        }
 
         attribute :assertions_attributes
 
@@ -50,7 +52,7 @@ module Journeys
         end
 
         def assertions
-          @assertions ||= ASSERTIONS.map do |assertion_name|
+          @assertions ||= ASSERTIONS.fetch(contract_type).map do |assertion_name|
             AssertionForm.new(name: assertion_name)
           end
         end
@@ -67,6 +69,14 @@ module Journeys
           return false unless valid?
 
           true
+        end
+
+        def contract_type
+          if claim.eligibility.fixed_contract?
+            :fixed_contract
+          else
+            :variable_contract
+          end
         end
 
         private
