@@ -966,13 +966,13 @@ en:
         question: Which computing courses do you teach?
         question_check_your_answers: Computing courses
         options:
-          esfa_digitalpractitioners: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
-          esfa_digitalusers: ESFA-funded qualifications at level 3 and below in the %{link} sector subject area
+          level3_and_below_ict_for_practitioners: Qualifications approved for funding at level 3 and below in the %{link} sector subject area
+          level3_and_below_ict_for_users: Qualifications approved for funding at level 3 and below in the %{link} sector subject area
           digitalskills_quals: Digital functional skills qualifications and essential digital skills qualifications
           tlevel_digitalsupport: T Level in digital support services
           tlevel_digitalbusiness: T Level in digital business services
           tlevel_digitalproduction: T Level in digital production, design and development
-          ib_certificate_compsci: International baccalaureate certificate in computer science
+          ibo_level3_compsci: IBO level 3 SL and HL computer science, taught as part of a diploma or career related programme or as a standalone certificate
           level2_3_apprenticeship: Level 2 or level 3 apprenticeships in the %{link}
           none: I do not teach any of these courses
       early_years_courses:

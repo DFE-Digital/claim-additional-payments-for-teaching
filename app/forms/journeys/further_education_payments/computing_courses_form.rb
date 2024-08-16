@@ -18,12 +18,12 @@ module Journeys
       def checkbox_options
         [
           OpenStruct.new(
-            id: "esfa_digitalpractitioners",
-            name: course_option_description("esfa_digitalpractitioners")
+            id: "level3_and_below_ict_for_practitioners",
+            name: course_option_description("level3_and_below_ict_for_practitioners")
           ),
           OpenStruct.new(
-            id: "esfa_digitalusers",
-            name: course_option_description("esfa_digitalusers")
+            id: "level3_and_below_ict_for_users",
+            name: course_option_description("level3_and_below_ict_for_users")
           ),
           OpenStruct.new(
             id: "digitalskills_quals",
@@ -42,8 +42,8 @@ module Journeys
             name: course_option_description("tlevel_digitalproduction")
           ),
           OpenStruct.new(
-            id: "ib_certificate_compsci",
-            name: course_option_description("ib_certificate_compsci")
+            id: "ibo_level3_compsci",
+            name: course_option_description("ibo_level3_compsci")
           ),
           OpenStruct.new(
             id: "level2_3_apprenticeship",
