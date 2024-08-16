@@ -6,6 +6,7 @@ module Journeys
           SLUGS = %w[
             consent
             current-nursery
+            paye-reference
             claimant-name
             start-date
             ineligible
