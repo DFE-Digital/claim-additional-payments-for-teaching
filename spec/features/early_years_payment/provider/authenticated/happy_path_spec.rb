@@ -24,7 +24,7 @@ RSpec.feature "Early years payment provider" do
     click_button "Continue"
 
     expect(page.current_path).to eq "/early-years-payment-provider/paye-reference"
-    expect(page).to have_content("What is #{nursery.nursery_name}'s employer PAYE reference?")
+    expect(page).to have_content("What is #{nursery.nursery_name}’s employer PAYE reference?")
     fill_in "claim-paye-reference-field", with: "123/123456SE90"
     click_button "Continue"
 
