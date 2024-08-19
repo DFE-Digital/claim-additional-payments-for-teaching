@@ -10,12 +10,8 @@ module Journeys
           validates :paye_reference, presence: {message: i18n_error_message(:valid)},
             format: {with: PAYE_REFERENCE_REGEX_FILTER, message: i18n_error_message(:valid)}
 
-          attr_reader :nursery_name
-
-          def initialize(journey_session:, journey:, params:)
-            super
-
-            @nursery_name = EligibleEyProvider.find_by(urn: answers.nursery_urn)&.nursery_name
+          def nursery_name
+            @nursery_name ||= EligibleEyProvider.find_by(urn: answers.nursery_urn)&.nursery_name
           end
 
           def save
