@@ -57,7 +57,7 @@
       <nav aria-label="GOV.UK One Login menu" class="one-login-header__nav" data-open-class="one-login-header__nav--open" id="one-login-header__nav">
         <ul class="one-login-header__nav__list">
           <li class="one-login-header__nav__list-item">
-            <a class="one-login-header__nav__link one-login-header__nav__link--one-login" href="https://home.account.gov.uk/">
+            <%= link_to one_login_home_url, class: "one-login-header__nav__link one-login-header__nav__link--one-login" do %>
               <span class="one-login-header__nav__link-content">
                 GOV.UK One Login
               </span>
@@ -83,7 +83,7 @@
       </svg>
     </span>
   <!--<![endif]-->
-            </a>
+            <% end %>
           </li>
           <li class="one-login-header__nav__list-item">
             <%= button_to "Sign out", deauth_onelogin_path, method: :delete, class: "one-login-header__nav__link button-to-as-link" %>
