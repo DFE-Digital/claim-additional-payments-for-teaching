@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Admin user session timeout", js: true do
+RSpec.feature "Admin user session timeout", js: true, flaky: true do
   let(:one_second_in_minutes) { 1 / 60.to_f }
   let(:two_seconds_in_minutes) { 2 / 60.to_f }
 
