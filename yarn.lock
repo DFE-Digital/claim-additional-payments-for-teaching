@@ -7,10 +7,10 @@ a-sync-waterfall@^1.0.0:
   resolved "https://registry.yarnpkg.com/a-sync-waterfall/-/a-sync-waterfall-1.0.1.tgz#75b6b6aa72598b497a125e7a2770f14f4c8a1fa7"
   integrity sha512-RYTOHHdWipFUliRFMCS4X2Yn2X8M87V/OpSqWzKKOGhzqyUxzyVmhHDH9sAvG+ZuQf/TAOFsLCpMw09I1ufUnA==
 
-a11y-dialog@^8.0.4:
-  version "8.0.4"
-  resolved "https://registry.yarnpkg.com/a11y-dialog/-/a11y-dialog-8.0.4.tgz#731a983d38d059665ff7e62daccedf5214131be8"
-  integrity sha512-MQrLxqLPx4E8+ynGwulBs6OjtxQT/XemgnlNPb+cR8K/qdwHBQv1WZQZpBuTVhlWGpAwWmSYffUZ/78anhcD3w==
+a11y-dialog@^8.1.0:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/a11y-dialog/-/a11y-dialog-8.1.0.tgz#0ad9c74fa7035c9809803f23c3dcb7c2291a1b52"
+  integrity sha512-1sAxP3CXOgdfQPG0N33sg1jNYwJ0WS48V1rlqsoyb7Ih9GmMEimlCmU74tVePJv2Oihdpk9NqeB6OAt0IaGyLw==
   dependencies:
     focusable-selectors "^0.8.0"
 
