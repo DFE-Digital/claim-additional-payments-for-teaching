@@ -8,7 +8,9 @@ class OneLogin::FailureHandler
   end
 
   def template
-    if answers.logged_in_with_onelogin
+    if !answers.logged_in_with_onelogin
+      "#{journey::VIEW_PATH}_auth_failure"
+    elsif answers.logged_in_with_onelogin
       "#{journey::VIEW_PATH}_idv_failure"
     end
   end
