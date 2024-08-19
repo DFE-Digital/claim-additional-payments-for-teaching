@@ -121,5 +121,6 @@
   - teacher_reference_number
   :further_education_payments_eligibilities:
   - teacher_reference_number
+  - verification
   :journeys_sessions:
   - answers

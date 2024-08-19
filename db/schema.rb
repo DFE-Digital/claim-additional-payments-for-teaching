@@ -246,6 +246,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_21_121253) do
     t.boolean "subject_to_formal_performance_action"
     t.boolean "subject_to_disciplinary_action"
     t.boolean "half_teaching_hours"
+    t.jsonb "verification", default: {}
     t.index ["possible_school_id"], name: "index_fe_payments_eligibilities_on_possible_school_id"
     t.index ["school_id"], name: "index_fe_payments_eligibilities_on_school_id"
   end

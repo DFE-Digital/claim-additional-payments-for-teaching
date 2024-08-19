@@ -78,6 +78,21 @@ module Journeys
         def save
           return false unless valid?
 
+          claim.eligibility.update!(
+            verification: {
+              assertions: assertions.map(&:attributes),
+              verifier: {
+                dfe_sign_in_uid: answers.dfe_sign_in_uid,
+                first_name: answers.dfe_sign_in_first_name,
+                last_name: answers.dfe_sign_in_last_name,
+                email: answers.dfe_sign_in_email
+              },
+              created_at: DateTime.now
+            }
+          )
+
+          claim.save!
+
           true
         end
 
