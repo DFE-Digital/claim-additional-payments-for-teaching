@@ -79,4 +79,30 @@ describe ApplicationHelper do
       it { is_expected.to eq('For more details, you can read about payments and deductions for the <a class="govuk-link govuk-link--no-visited-state" target="_blank" href="https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools#paying-income-tax-and-national-insurance">early-career payment (opens in new tab)</a>') }
     end
   end
+
+  describe "#one_login_home_url" do
+    context "when ONELOGIN_DID_URL env var not present" do
+      it "defaults to production url" do
+        stub_const("ENV", {})
+
+        expect(helper.one_login_home_url).to eql("https://home.account.gov.uk/")
+      end
+    end
+
+    context "when ONELOGIN_DID_URL set to integration value" do
+      it "returns integration url" do
+        stub_const("ENV", {"ONELOGIN_DID_URL" => "https://identity.integration.account.gov.uk/.well-known/did.json"})
+
+        expect(helper.one_login_home_url).to eql("https://home.integration.account.gov.uk/")
+      end
+    end
+
+    context "when ONELOGIN_DID_URL set to production value" do
+      it "returns production url" do
+        stub_const("ENV", {"ONELOGIN_DID_URL" => "https://identity.account.gov.uk/.well-known/did.json"})
+
+        expect(helper.one_login_home_url).to eql("https://home.account.gov.uk/")
+      end
+    end
+  end
 end

@@ -51,4 +51,8 @@ module ApplicationHelper
 
     I18n.t("#{policy.locale_key}.information_provided_further_details", link: link)&.html_safe
   end
+
+  def one_login_home_url
+    OneLogin::Config.home_url
+  end
 end
