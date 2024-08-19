@@ -13,7 +13,10 @@ module Journeys
             dfe_sign_in_organisation_id: dfe_sign_in_organisation_id,
             dfe_sign_in_organisation_ukprn: dfe_sign_in_organisation_ukprn,
             dfe_sign_in_service_access: dfe_sign_in_service_access?,
-            dfe_sign_in_role_codes: dfe_sign_in_role_codes
+            dfe_sign_in_role_codes: dfe_sign_in_role_codes,
+            dfe_sign_in_first_name: dfe_sign_in_first_name,
+            dfe_sign_in_last_name: dfe_sign_in_last_name,
+            dfe_sign_in_email: dfe_sign_in_email
           )
 
           journey_session.save!
@@ -50,6 +53,18 @@ module Journeys
           return [] unless dfe_sign_in_service_access?
 
           dfe_sign_in_user.role_codes
+        end
+
+        def dfe_sign_in_first_name
+          auth.dig("info", "first_name")
+        end
+
+        def dfe_sign_in_last_name
+          auth.dig("info", "last_name")
+        end
+
+        def dfe_sign_in_email
+          auth.dig("info", "email")
         end
       end
     end

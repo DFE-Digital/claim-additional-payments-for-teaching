@@ -28,6 +28,11 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::OmniauthCallbackFor
     let(:auth) do
       OmniAuth::AuthHash.new(
         "uid" => "11111",
+        "info" => {
+          "email" => "seymore.skinner@springfield-elementary.edu",
+          "first_name" => "Seymoure",
+          "last_name" => "Skinner"
+        },
         "extra" => {
           "raw_info" => {
             "organisation" => {
@@ -60,6 +65,18 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::OmniauthCallbackFor
             change(journey_session.answers, :dfe_sign_in_role_codes)
               .from([])
               .to(["teacher_payments_claim_verifier"])
+          ).and(
+            change(journey_session.answers, :dfe_sign_in_first_name)
+              .from(nil)
+              .to("Seymoure")
+          ).and(
+            change(journey_session.answers, :dfe_sign_in_last_name)
+              .from(nil)
+              .to("Skinner")
+          ).and(
+            change(journey_session.answers, :dfe_sign_in_email)
+              .from(nil)
+            .to("seymore.skinner@springfield-elementary.edu")
           )
         )
       end
@@ -82,6 +99,18 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::OmniauthCallbackFor
             not_change(journey_session.answers, :dfe_sign_in_service_access?)
           ).and(
             not_change(journey_session.answers, :dfe_sign_in_role_codes)
+          ).and(
+            change(journey_session.answers, :dfe_sign_in_first_name)
+              .from(nil)
+              .to("Seymoure")
+          ).and(
+            change(journey_session.answers, :dfe_sign_in_last_name)
+              .from(nil)
+              .to("Skinner")
+          ).and(
+            change(journey_session.answers, :dfe_sign_in_email)
+              .from(nil)
+            .to("seymore.skinner@springfield-elementary.edu")
           )
         )
       end
