@@ -1159,6 +1159,8 @@ en:
         errors:
           presence: You must be able to confirm this information to continue
       returner1:
+        question:
+          Did %{first_name} work in an early years setting between %{6_months_before_start_date} and %{start_date}?
         errors:
           inclusion: You must select an option below to continue
   early_years_payments:
