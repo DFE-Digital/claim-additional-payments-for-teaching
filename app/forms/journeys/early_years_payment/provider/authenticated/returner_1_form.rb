@@ -14,6 +14,14 @@ module Journeys
             journey_session.answers.assign_attributes(first_job_within_6_months:)
             journey_session.save!
           end
+
+          def start_date
+            answers.start_date
+          end
+
+          def six_months_before_start_date
+            start_date - 6.months
+          end
         end
       end
     end
