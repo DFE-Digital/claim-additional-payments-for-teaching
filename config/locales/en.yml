@@ -1119,6 +1119,11 @@ en:
         question: Confirm that your employee works at the location below
         errors:
           presence: Select the nursery where your employee works
+      paye_reference:
+        question: "What is %{nursery_name}’s employer PAYE reference?"
+        hint: This is a series of numbers and letters separated with a slash, like 123/AB456. Your organisation’s payroll or human resources can provide this.
+        errors:
+          valid: Enter a valid PAYE reference
       claimant_name:
         question: Who are you making this claim for?
         hint:

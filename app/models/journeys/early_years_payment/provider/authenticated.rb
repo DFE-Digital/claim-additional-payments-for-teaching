@@ -13,6 +13,7 @@ module Journeys
           "claims" => {
             "consent" => ConsentForm,
             "current-nursery" => CurrentNurseryForm,
+            "paye-reference" => PayeReferenceForm,
             "claimant-name" => ClaimantNameForm
           }
         }
