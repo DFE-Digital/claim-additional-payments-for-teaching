@@ -18,6 +18,8 @@ module Journeys
 
       CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE = "teacher_payments_claim_verifier"
 
+      START_WITH_MAGIC_LINK = true
+
       def self.request_service_access_url(session)
         [
           "https://services.signin.education.gov.uk",

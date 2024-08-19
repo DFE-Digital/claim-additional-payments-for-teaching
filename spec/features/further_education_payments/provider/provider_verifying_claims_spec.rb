@@ -254,6 +254,77 @@ RSpec.feature "Provider verifying claims" do
     )
   end
 
+  scenario "provider visits a claim with an inprogress session" do
+    fe_provider = create(:school, :further_education, name: "Springfield A and M")
+
+    claim_1 = create(
+      :claim,
+      first_name: "Edna",
+      surname: "Krabappel",
+      date_of_birth: Date.new(1945, 7, 3),
+      reference: "CLAIM1",
+      created_at: DateTime.new(2024, 8, 1, 9, 0, 0)
+    )
+
+    create(
+      :further_education_payments_eligibility,
+      claim: claim_1,
+      school: fe_provider
+    )
+
+    claim_2 = create(
+      :claim,
+      first_name: "Edna",
+      surname: "Krabappel",
+      date_of_birth: Date.new(1945, 7, 3),
+      reference: "CLAIM2",
+      created_at: DateTime.new(2024, 8, 1, 9, 0, 0)
+    )
+
+    create(
+      :further_education_payments_eligibility,
+      claim: claim_2,
+      school: fe_provider
+    )
+
+    mock_dfe_sign_in_auth_session(
+      provider: :dfe_fe_provider,
+      auth_hash: {
+        uid: "11111",
+        extra: {
+          raw_info: {
+            organisation: {
+              id: "22222",
+              ukprn: fe_provider.ukprn
+            }
+          }
+        }
+      }
+    )
+
+    stub_dfe_sign_in_user_info_request(
+      "11111",
+      "22222",
+      Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
+    )
+
+    claim_1_link = Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim_1)
+
+    claim_2_link = Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim_2)
+
+    visit claim_1_link
+
+    click_on "Start now"
+
+    visit claim_2_link
+
+    click_on "Start now"
+
+    expect(page).to have_text "Review a financial incentive payment claim"
+
+    expect(page).to have_text "Claim referenceCLAIM2"
+  end
+
   scenario "provider approves a fixed contract claim" do
     fe_provider = create(:school, :further_education, name: "Springfield A and M")
 
