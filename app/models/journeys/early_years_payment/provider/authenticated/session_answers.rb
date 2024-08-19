@@ -6,6 +6,7 @@ module Journeys
           attribute :consent_given, :boolean
           attribute :nursery_urn
           attribute :paye_reference
+          attribute :start_date, :date
 
           def policy
             Policies::EarlyYearsPayments
