@@ -6,7 +6,18 @@ RSpec.describe DfeSignIn::AuthenticatedSession do
   let(:role_codes) { ["role_code"] }
 
   describe "initialising with an auth hash" do
-    let(:auth_hash) { dfe_sign_in_auth_hash(user_id, organisation_id) }
+    let(:auth_hash) do
+      dfe_sign_in_auth_hash(
+        uid: user_id,
+        extra: {
+          raw_info: {
+            organisation: {
+              id: organisation_id
+            }
+          }
+        }
+      )
+    end
 
     subject(:authenticated_session) { DfeSignIn::AuthenticatedSession.from_auth_hash(auth_hash) }
 
