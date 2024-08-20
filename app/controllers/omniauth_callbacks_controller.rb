@@ -24,7 +24,16 @@ class OmniauthCallbacksController < ApplicationController
   end
 
   def failure
-    render layout: false
+    case params[:strategy]
+    when "onelogin"
+      render OneLogin::FailureHandler.new(
+        message: params[:message],
+        origin: params[:origin],
+        answers: journey_session.answers
+      ).template
+    else
+      render layout: false
+    end
   end
 
   def onelogin

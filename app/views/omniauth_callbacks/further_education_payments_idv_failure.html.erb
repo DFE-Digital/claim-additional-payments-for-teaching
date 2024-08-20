@@ -1,0 +1,19 @@
+<% content_for(:page_title, page_title("We cannot progress your application", journey: current_journey_routing_name, show_error: false)) %>
+
+<% @backlink_path = claim_path(journey: current_journey_routing_name, slug: "sign-in") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      We cannot progress your application
+    </h1>
+
+    <p class="govuk-body">
+      You need to be able to prove your identity in GOV.UK One Login to continue your application. You can find more information about <%= govuk_link_to "proving your identity", "https://www.gov.uk/using-your-gov-uk-one-login" %> on GOV.UK.
+    </p>
+
+    <p class="govuk-body">
+      If you have any queries about the application process, contact us at <%= govuk_link_to t("further_education_payments.support_email_address"), "mailto:#{t("further_education_payments.support_email_address")}" %>.
+    </p>
+  </div>
+</div>

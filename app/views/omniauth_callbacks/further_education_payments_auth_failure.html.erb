@@ -1,0 +1,21 @@
+<% content_for(:page_title, page_title("Sorry, there is a problem with the service", journey: current_journey_routing_name, show_error: false)) %>
+
+<% @backlink_path = claim_path(journey: current_journey_routing_name, slug: "sign-in") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Sorry, there is a problem with the service
+    </h1>
+
+    <p class="govuk-body">
+      Try again later.
+    </p>
+
+    <p class="govuk-body">
+      Email <%= govuk_link_to "help@opsteam.education.gov.uk", "mailto:help@opsteam.education.gov.uk" %> if you need help.
+    </p>
+
+    <%= govuk_button_link_to "Try again", claim_path(journey: current_journey_routing_name, slug: "sign-in") %>
+  </div>
+</div>

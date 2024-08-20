@@ -75,4 +75,36 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
       end
     end
   end
+
+  describe "#failure" do
+    context "FE journey" do
+      before do
+        create(:journey_configuration, :further_education_payments)
+      end
+
+      context "when onelogin auth fail" do
+        it "renders problem with service page" do
+          get "/further-education-payments/claim"
+
+          get "/auth/failure?message=access_denied&origin=http%3A%2F%2Flocalhost%3A3000%2Ffurther-education-payments%2Fsign-in&strategy=onelogin"
+
+          expect(response.body).to include("Sorry, there is a problem with the service")
+        end
+      end
+
+      context "when onelogin idv fail" do
+        it "renders cannot progress page" do
+          get "/further-education-payments/claim"
+
+          journey_session = Journeys::FurtherEducationPayments::Session.last
+          journey_session.answers.logged_in_with_onelogin = true
+          journey_session.save!
+
+          get "/auth/failure?message=access_denied&origin=http%3A%2F%2Flocalhost%3A3000%2Ffurther-education-payments%2Fsign-in&strategy=onelogin"
+
+          expect(response.body).to include("We cannot progress your application")
+        end
+      end
+    end
+  end
 end
