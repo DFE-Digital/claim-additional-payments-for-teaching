@@ -81,6 +81,14 @@ class OmniauthCallbacksController < ApplicationController
   end
 
   def process_one_login_identity_verification_callback(core_identity_jwt)
+    if request.env["omniauth.auth"].uid != journey_session.answers.onelogin_uid
+      origin = claim_url(
+        journey: current_journey_routing_name,
+        slug: "sign-in"
+      )
+      return redirect_to "/auth/failure?strategy=onelogin&message=access_denied&origin=#{origin}"
+    end
+
     first_name, surname = extract_name_from_jwt(core_identity_jwt)
 
     journey_session.answers.assign_attributes(
@@ -103,10 +111,10 @@ class OmniauthCallbacksController < ApplicationController
       first_name = "TEST"
       surname = "USER"
     else
-      decoded_jwt = OneLogin::CoreIdentityValidator.new(jwt:).call
-      name_parts = decoded_jwt[0]["vc"]["credentialSubject"]["name"][0]["nameParts"]
-      first_name = name_parts.find { |part| part["type"] == "GivenName" }["value"]
-      surname = name_parts.find { |part| part["type"] == "FamilyName" }["value"]
+      validator = OneLogin::CoreIdentityValidator.new(jwt:)
+      validator.call
+      first_name = validator.first_name
+      surname = validator.surname
     end
     [first_name, surname]
   end
