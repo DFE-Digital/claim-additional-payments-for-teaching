@@ -3,15 +3,15 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "3.104.2"
+      version = "3.116.0"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "2.30.0"
+      version = "2.32.0"
     }
     statuscake = {
       source  = "StatusCakeDev/statuscake"
-      version = "2.2.0"
+      version = "2.2.2"
     }
   }
   backend "azurerm" {
