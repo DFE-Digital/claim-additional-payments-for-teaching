@@ -1143,6 +1143,12 @@ en:
         hint: For example, 27 3 2024.
         errors:
           presence: Provide a date in the format 27 3 2024
+      child_facing:
+        question: Confirm %{first_name} spends most of their time in their job working directly with children
+        hint: "%{first_name}’s job must involve spending most of their contracted hours (approximately 70% or more) working directly with children."
+        option: I confirm that at least 70% of %{first_name}’s time in their job is spent working directly with children.
+        errors:
+          presence: You must be able to confirm this information to continue
   early_years_payments:
     <<: *early_years_payment_provider_authenticated
     claim_subject: "Early Years Payment"

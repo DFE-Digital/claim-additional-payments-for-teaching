@@ -10,6 +10,7 @@ module Journeys
             claimant-name
             start-date
             child-facing
+            returner
             ineligible
           ].freeze
 
