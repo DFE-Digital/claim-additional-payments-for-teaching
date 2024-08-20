@@ -17,7 +17,7 @@ module Journeys
             "claimant-name" => ClaimantNameForm,
             "start-date" => StartDateForm,
             "child-facing" => ChildFacingForm,
-            "returner-1" => Returner1Form
+            "returner" => ReturnerForm
           }
         }
         START_WITH_MAGIC_LINK = true

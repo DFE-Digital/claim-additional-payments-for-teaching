@@ -43,7 +43,7 @@ RSpec.feature "Early years payment provider" do
     check "I confirm that at least 70% of Bobby’s time in their job is spent working directly with children."
     click_button "Continue"
 
-    expect(page.current_path).to eq "/early-years-payment-provider/returner-1"
+    expect(page.current_path).to eq "/early-years-payment-provider/returner"
     choose "No"
     click_button "Continue"
     expect(page.current_path).to eq "/early-years-payment-provider/employee-email"

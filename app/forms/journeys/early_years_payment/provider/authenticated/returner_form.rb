@@ -2,7 +2,7 @@ module Journeys
   module EarlyYearsPayment
     module Provider
       module Authenticated
-        class Returner1Form < Form
+        class ReturnerForm < Form
           attribute :first_job_within_6_months, :boolean
 
           validates :first_job_within_6_months,

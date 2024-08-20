@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::Returner1Form, type: :model do
+RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::ReturnerForm, type: :model do
   let(:journey) { Journeys::EarlyYearsPayment::Provider::Authenticated }
   let(:journey_session) { create(:early_years_payment_provider_authenticated_session) }
   let(:first_job_within_6_months) { nil }
