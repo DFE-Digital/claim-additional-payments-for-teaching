@@ -49,6 +49,10 @@ module Policies
       def fixed_contract?
         contract_type != "variable_hours"
       end
+
+      def verified?
+        verification.present?
+      end
     end
   end
 end

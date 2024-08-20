@@ -44,6 +44,20 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
         expect(assertion.errors[:outcome]).to eq(["Select an option"])
       end
     end
+
+    it "validates the claim hasn't already been verified" do
+      eligibility.update!(
+        verification: {
+          assertions: [
+            {name: "contract_type", outcome: true}
+          ]
+        }
+      )
+
+      form.validate
+
+      expect(form.errors[:base]).to eq(["Claim has already been verified"])
+    end
   end
 
   describe "#assertions" do

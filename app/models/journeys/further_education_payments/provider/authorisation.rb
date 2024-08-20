@@ -12,6 +12,7 @@ module Journeys
           return :no_service_access unless answers.dfe_sign_in_service_access?
           return :claim_admin if claim_admin?
           return :incorrect_role unless role_permits_access?
+          return :already_verified if already_verified? && slug != "complete"
 
           nil
         end
@@ -42,6 +43,10 @@ module Journeys
             DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE,
             DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE
           ]
+        end
+
+        def already_verified?
+          answers.claim.eligibility.verified?
         end
       end
     end

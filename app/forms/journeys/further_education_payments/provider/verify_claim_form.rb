@@ -33,7 +33,7 @@ module Journeys
 
         validate :all_assertions_answered
 
-        # validate claim not already verified
+        validate :claim_not_already_verified
 
         delegate :claim, to: :answers
 
@@ -119,6 +119,12 @@ module Journeys
                 error.full_message
               )
             end
+          end
+        end
+
+        def claim_not_already_verified
+          if claim.eligibility.verified?
+            errors.add(:base, "Claim has already been verified")
           end
         end
 
