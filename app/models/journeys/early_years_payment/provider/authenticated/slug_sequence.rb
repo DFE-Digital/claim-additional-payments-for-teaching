@@ -3,7 +3,7 @@ module Journeys
     module Provider
       module Authenticated
         class SlugSequence
-          ELIGIBILITY_SLUGS = %w[
+          CLAIM_SLUGS = %w[
             consent
             current-nursery
             paye-reference
@@ -19,7 +19,7 @@ module Journeys
             ineligible
           ].freeze
 
-          SLUGS = (ELIGIBILITY_SLUGS + RESULTS_SLUGS).freeze
+          SLUGS = (CLAIM_SLUGS + RESULTS_SLUGS).freeze
 
           MAGIC_LINK_SLUG = "consent"
 
