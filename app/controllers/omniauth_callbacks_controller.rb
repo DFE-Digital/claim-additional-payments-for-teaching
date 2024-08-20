@@ -65,6 +65,7 @@ class OmniauthCallbacksController < ApplicationController
     onelogin_credentials = auth.credentials
 
     journey_session.answers.assign_attributes(
+      onelogin_uid: auth.uid,
       onelogin_user_info:,
       onelogin_credentials:,
       logged_in_with_onelogin: true

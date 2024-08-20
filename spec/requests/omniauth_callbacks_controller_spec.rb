@@ -107,4 +107,34 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
       end
     end
   end
+
+  describe "#onelogin" do
+    def set_mock_auth
+      OmniAuth.config.mock_auth[:onelogin] = OmniAuth::AuthHash.new(
+        "uid" => "12345",
+        "extra" => {
+          "raw_info" => {}
+        }
+      )
+
+      Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:onelogin]
+    end
+
+    before do
+      set_mock_auth
+
+      allow(OneLoginSignIn).to receive(:bypass?).and_return(false)
+
+      create(:journey_configuration, :further_education_payments)
+      get "/further-education-payments/claim"
+    end
+
+    it "sets onelogin_uid from omniauth hash" do
+      journey_session = Journeys::FurtherEducationPayments::Session.last
+
+      expect {
+        get auth_onelogin_path
+      }.to change { journey_session.reload.answers.onelogin_uid }.from(nil).to("12345")
+    end
+  end
 end
