@@ -44,6 +44,9 @@ RSpec.feature "Early years payment provider" do
     click_button "Continue"
 
     expect(page.current_path).to eq "/early-years-payment-provider/returner"
+    choose "No"
+    click_button "Continue"
+    expect(page.current_path).to eq "/early-years-payment-provider/employee-email"
   end
 
   scenario "using magic link after having completed some of the journey" do

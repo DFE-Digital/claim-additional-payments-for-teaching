@@ -8,6 +8,8 @@ module Journeys
           attribute :paye_reference
           attribute :start_date, :date
           attribute :child_facing_confirmation_given, :boolean
+          attribute :first_job_within_6_months, :boolean
+          attribute :start_date, :date
 
           def policy
             Policies::EarlyYearsPayments

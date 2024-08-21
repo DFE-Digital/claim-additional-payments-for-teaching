@@ -11,6 +11,7 @@ module Journeys
             start-date
             child-facing
             returner
+            employee-email
             ineligible
           ].freeze
 

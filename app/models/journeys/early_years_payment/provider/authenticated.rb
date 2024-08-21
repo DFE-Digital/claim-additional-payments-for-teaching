@@ -16,7 +16,8 @@ module Journeys
             "paye-reference" => PayeReferenceForm,
             "claimant-name" => ClaimantNameForm,
             "start-date" => StartDateForm,
-            "child-facing" => ChildFacingForm
+            "child-facing" => ChildFacingForm,
+            "returner" => ReturnerForm
           }
         }
         START_WITH_MAGIC_LINK = true

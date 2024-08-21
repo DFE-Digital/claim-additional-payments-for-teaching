@@ -965,13 +965,17 @@ en:
         question: Which computing courses do you teach?
         question_check_your_answers: Computing courses
         options:
-          level3_and_below_ict_for_practitioners: Qualifications approved for funding at level 3 and below in the %{link} sector subject area
-          level3_and_below_ict_for_users: Qualifications approved for funding at level 3 and below in the %{link} sector subject area
+          level3_and_below_ict_for_practitioners:
+            Qualifications approved for funding at level 3 and below in the %{link} sector subject area
+          level3_and_below_ict_for_users:
+            Qualifications approved for funding at level 3 and below in the %{link} sector subject area
           digitalskills_quals: Digital functional skills qualifications and essential digital skills qualifications
           tlevel_digitalsupport: T Level in digital support services
           tlevel_digitalbusiness: T Level in digital business services
           tlevel_digitalproduction: T Level in digital production, design and development
-          ibo_level3_compsci: IBO level 3 SL and HL computer science, taught as part of a diploma or career related programme or as a standalone certificate
+          ibo_level3_compsci:
+            IBO level 3 SL and HL computer science, taught as part of a diploma or career related programme or as a
+            standalone certificate
           level2_3_apprenticeship: Level 2 or level 3 apprenticeships in the %{link}
           none: I do not teach any of these courses
       early_years_courses:
@@ -1121,7 +1125,9 @@ en:
           presence: Select the nursery where your employee works
       paye_reference:
         question: "What is %{nursery_name}’s employer PAYE reference?"
-        hint: This is a series of numbers and letters separated with a slash, like 123/AB456. Your organisation’s payroll or human resources can provide this.
+        hint:
+          This is a series of numbers and letters separated with a slash, like 123/AB456. Your organisation’s payroll or
+          human resources can provide this.
         errors:
           valid: Enter a valid PAYE reference
       claimant_name:
@@ -1145,10 +1151,18 @@ en:
           presence: Provide a date in the format 27 3 2024
       child_facing:
         question: Confirm %{first_name} spends most of their time in their job working directly with children
-        hint: "%{first_name}’s job must involve spending most of their contracted hours (approximately 70% or more) working directly with children."
-        option: I confirm that at least 70% of %{first_name}’s time in their job is spent working directly with children.
+        hint:
+          "%{first_name}’s job must involve spending most of their contracted hours (approximately 70% or more) working
+          directly with children."
+        option:
+          I confirm that at least 70% of %{first_name}’s time in their job is spent working directly with children.
         errors:
           presence: You must be able to confirm this information to continue
+      returner:
+        question:
+          Did %{first_name} work in an early years setting between %{six_months_before_start_date} and %{start_date}?
+        errors:
+          inclusion: You must select an option below to continue
   early_years_payments:
     <<: *early_years_payment_provider_authenticated
     claim_subject: "Early Years Payment"
