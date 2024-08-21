@@ -61,6 +61,8 @@
   - secondary_contact_email_address
   - created_at
   - updated_at
+  :eligible_fe_providers:
+  - primary_key_contact_email_address
   :schools:
   - postcode_sanitised
   :file_uploads:

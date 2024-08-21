@@ -1,8 +1,13 @@
 class EligibleFeProvider < ApplicationRecord
   attribute :academic_year, AcademicYear::Type.new
 
+  validates :primary_key_contact_email_address,
+    presence: true,
+    format: {with: Rails.application.config.email_regexp},
+    length: {maximum: 256}
+
   def self.csv_for_academic_year(academic_year)
-    attribute_names = [:ukprn, :max_award_amount, :lower_award_amount]
+    attribute_names = [:ukprn, :max_award_amount, :lower_award_amount, :primary_key_contact_email_address]
 
     CSV.generate(headers: true) do |csv|
       csv << attribute_names

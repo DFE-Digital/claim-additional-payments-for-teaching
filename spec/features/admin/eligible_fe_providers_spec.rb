@@ -30,7 +30,7 @@ RSpec.feature "Admin of eligible FE providers" do
 
     3.times do
       hash = attributes_for(:eligible_fe_provider)
-      @eligible_fe_providers_csv_file.write "#{hash[:ukprn]},#{hash[:max_award_amount].to_f},#{hash[:lower_award_amount].to_f}\n"
+      @eligible_fe_providers_csv_file.write "#{hash[:ukprn]},#{hash[:max_award_amount].to_f},#{hash[:lower_award_amount].to_f},#{hash[:primary_key_contact_email_address]}\n"
     end
 
     @eligible_fe_providers_csv_file.rewind

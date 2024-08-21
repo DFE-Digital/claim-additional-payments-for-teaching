@@ -26,7 +26,7 @@ RSpec.describe EligibleFeProvidersImporter do
         subject.run
 
         expect(subject.errors).to be_present
-        expect(subject.errors).to include("The selected file is missing some expected columns: ukprn, max_award_amount, lower_award_amount")
+        expect(subject.errors).to include("The selected file is missing some expected columns: ukprn, max_award_amount, lower_award_amount, primary_key_contact_email_address")
       end
     end
 
