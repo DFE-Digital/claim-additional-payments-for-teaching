@@ -23,6 +23,17 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::StartDateFo
 
   describe "validations" do
     it { should validate_presence_of(:start_date).with_message("Provide a date in the format 27 3 2024") }
+
+    context "when the year doesn't have 4 digits" do
+      let(:day) { 1 }
+      let(:month) { 1 }
+      let(:year) { 24 }
+
+      it "returns an error" do
+        subject.save
+        expect(subject.errors[:start_date]).to include("Year must include 4 numbers")
+      end
+    end
   end
 
   describe "#save" do
