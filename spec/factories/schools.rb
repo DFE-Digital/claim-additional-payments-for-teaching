@@ -144,5 +144,7 @@ FactoryBot.define do
         create(:eligible_fe_provider, ukprn: school.ukprn)
       end
     end
+
+    factory :fe_eligible_school, traits: [:fe_eligible]
   end
 end
