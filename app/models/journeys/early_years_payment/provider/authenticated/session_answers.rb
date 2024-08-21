@@ -11,9 +11,14 @@ module Journeys
           attribute :first_job_within_6_months, :boolean
           attribute :start_date, :date
           attribute :practitioner_email_address
+          attribute :provider_contact_name
 
           def policy
             Policies::EarlyYearsPayments
+          end
+
+          def provide_mobile_number
+            false
           end
         end
       end
