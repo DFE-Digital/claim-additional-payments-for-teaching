@@ -1163,6 +1163,11 @@ en:
           Did %{first_name} work in an early years setting between %{six_months_before_start_date} and %{start_date}?
         errors:
           inclusion: You must select an option below to continue
+      employee_email:
+        question: What is %{first_name}’s email address?
+        hint: We’ll use this to ask your employee to provide their payment details.
+        errors:
+          valid: Enter a valid email address
   early_years_payments:
     <<: *early_years_payment_provider_authenticated
     claim_subject: "Early Years Payment"
