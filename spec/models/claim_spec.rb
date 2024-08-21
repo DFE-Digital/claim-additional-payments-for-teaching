@@ -604,7 +604,10 @@ RSpec.describe Claim, type: :model do
         :qualifications_details_check,
         :column_to_remove_teacher_reference_number,
         :onelogin_credentials,
-        :onelogin_user_info
+        :onelogin_user_info,
+        :paye_reference,
+        :practitioner_email_address,
+        :provider_contact_name
       ])
     end
   end

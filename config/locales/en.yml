@@ -1168,6 +1168,15 @@ en:
         hint: We’ll use this to ask your employee to provide their payment details.
         errors:
           valid: Enter a valid email address
+      check_your_answers:
+        errors:
+          valid: You cannot submit this claim without providing your full name
+    check_your_answers:
+      title: Check your answers before submitting this claim
+      heading_send_application: Before submitting this claim
+      statement:
+        By submitting this claim you’re confirming that, to the best of your knowledge, the details you’re providing are correct.
+      btn_text: Accept and send
   early_years_payments:
     <<: *early_years_payment_provider_authenticated
     claim_subject: "Early Years Payment"

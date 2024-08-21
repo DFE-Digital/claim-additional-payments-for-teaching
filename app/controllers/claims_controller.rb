@@ -14,6 +14,7 @@ class ClaimsController < BasePublicController
 
   include FormSubmittable
   include ClaimsFormCallbacks
+  include ClaimSubmission
 
   def existing_session
     @existing_session = journey_sessions.first

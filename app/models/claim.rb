@@ -82,7 +82,10 @@ class Claim < ApplicationRecord
     identity_confirmed_with_onelogin: false,
     logged_in_with_onelogin: false,
     onelogin_credentials: true,
-    onelogin_user_info: true
+    onelogin_user_info: true,
+    paye_reference: true,
+    practitioner_email_address: true,
+    provider_contact_name: true
   }.freeze
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
@@ -142,11 +145,11 @@ class Claim < ApplicationRecord
   # TODO: remove when a form object is created for email-address
   validates :email_address, on: [:submit], presence: {message: "Enter an email address"}
 
-  validates :bank_sort_code, on: [:submit, :amendment], presence: {message: "Enter a sort code"}
-  validates :bank_account_number, on: [:submit, :amendment], presence: {message: "Enter an account number"}
+  validates :bank_sort_code, on: [:amendment], presence: {message: "Enter a sort code"}
+  validates :bank_account_number, on: [:amendment], presence: {message: "Enter an account number"}
   validates :building_society_roll_number, on: [:submit, :amendment], presence: {message: "Enter a roll number"}, if: -> { building_society? }
 
-  validates :payroll_gender, on: [:"payroll-gender-task", :submit], presence: {message: "You must select a gender that will be passed to HMRC"}
+  validates :payroll_gender, on: [:"payroll-gender-task"], presence: {message: "You must select a gender that will be passed to HMRC"}
 
   validate :bank_account_number_must_be_eight_digits
   validate :bank_sort_code_must_be_six_digits

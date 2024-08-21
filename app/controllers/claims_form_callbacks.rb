@@ -69,6 +69,10 @@ module ClaimsFormCallbacks
     render("check_your_email")
   end
 
+  def check_your_answers_after_form_save_success
+    create_and_save_claim_form
+  end
+
   private
 
   def set_backlink_override_to_current_slug

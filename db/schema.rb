@@ -102,6 +102,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_21_121253) do
     t.boolean "logged_in_with_onelogin"
     t.jsonb "onelogin_credentials", default: {}
     t.jsonb "onelogin_user_info", default: {}
+    t.string "paye_reference"
+    t.string "practitioner_email_address"
+    t.string "provider_contact_name"
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
@@ -183,6 +186,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_21_121253) do
   create_table "early_years_payment_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "nursery_urn"
+    t.date "start_date"
+    t.boolean "child_facing_confirmation_given"
+    t.boolean "first_job_within_6_months"
   end
 
   create_table "eligible_ey_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
