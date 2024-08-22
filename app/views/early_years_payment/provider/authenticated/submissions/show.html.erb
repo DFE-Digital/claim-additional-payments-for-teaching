@@ -1,0 +1,37 @@
+<% content_for(:page_title, page_title("Claim submitted", journey: current_journey_routing_name)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <div class="govuk-panel govuk-panel--confirmation">
+      <h1 class="govuk-panel__title" id="submitted-title">Claim submitted</h1>
+
+      <div class="govuk-panel__body">
+        Your claim reference<br>
+        <strong><%= submitted_claim.reference %></strong>
+      </div>
+    </div>
+
+    <h2 class="govuk-heading-m">
+      You’ve successfully submitted a claim for an early years financial
+      incentive payment on behalf of <%= submitted_claim.first_name %> <%= submitted_claim.surname %>.
+    </h2>
+
+    <p class="govuk-body">
+      We’ve sent a confirmation email to <%= submitted_claim.email_address %>.
+    </p>
+
+    <h2 class="govuk-heading-m">What happens next</h2>
+
+    <p class="govuk-body">
+      We’ll send an email to your employee asking for them to provide some
+      further information. We’ll also ask them to provide their payment details.
+    </p>
+
+    <p class="govuk-body">
+      For more information, read more about the
+      <%= govuk_link_to("early years financial incentive", "#") %>.
+    </p>
+  </div>
+</div>
+
