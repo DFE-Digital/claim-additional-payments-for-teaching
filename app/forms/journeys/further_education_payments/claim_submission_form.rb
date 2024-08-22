@@ -1,6 +1,12 @@
 module Journeys
   module FurtherEducationPayments
     class ClaimSubmissionForm < ::ClaimSubmissionBaseForm
+      def save
+        super
+
+        ClaimMailer.further_education_payment_provider_verification_email(claim).deliver_later
+      end
+
       private
 
       def main_eligibility

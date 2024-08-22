@@ -60,5 +60,25 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
       expect(eligibility.subject_to_disciplinary_action).to eq(answers.subject_to_disciplinary_action)
       expect(eligibility.half_teaching_hours).to eq(answers.half_teaching_hours)
     end
+
+    it "emails the claim provider" do
+      allow(ClaimVerifierJob).to receive(:perform_later)
+
+      perform_enqueued_jobs { subject }
+
+      claim = form.claim
+
+      expect(claim.school.eligible_fe_provider.primary_key_contact_email_address).to(
+        have_received_email(
+          "9a25fe46-2ee4-4a5c-8d47-0f04f058a87d",
+          recipient_name: claim.school.name,
+          claimant_name: [answers.first_name, answers.surname].join(" "),
+          claim_reference: claim.reference,
+          claim_submission_date: claim.submitted_at.to_s(:govuk_date),
+          verification_due_date: claim.eligibility.verification_deadline.to_s(:govuk_date),
+          verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
+        )
+      )
+    end
   end
 end
