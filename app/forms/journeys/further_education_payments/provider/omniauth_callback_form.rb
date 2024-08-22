@@ -43,10 +43,14 @@ module Journeys
         end
 
         def dfe_sign_in_user
-          @dfe_sign_in_user ||= DfeSignIn::Api::User.new(
-            organisation_id: dfe_sign_in_organisation_id,
-            user_id: dfe_sign_in_uid
-          )
+          @dfe_sign_in_user ||= if DfESignIn.bypass?
+            StubApiUser.new(auth)
+          else
+            DfeSignIn::Api::User.new(
+              organisation_id: dfe_sign_in_organisation_id,
+              user_id: dfe_sign_in_uid
+            )
+          end
         end
 
         def dfe_sign_in_role_codes
@@ -65,6 +69,20 @@ module Journeys
 
         def dfe_sign_in_email
           auth.dig("info", "email")
+        end
+
+        class StubApiUser
+          def initialize(params)
+            @params = params
+          end
+
+          def role_codes
+            @params.fetch("roles", {}).values.compact_blank
+          end
+
+          def service_access?
+            @params.fetch("service_access", false)
+          end
         end
       end
     end
