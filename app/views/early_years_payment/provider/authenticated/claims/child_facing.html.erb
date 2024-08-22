@@ -1,16 +1,24 @@
-<% content_for(:page_title, page_title(@form.t(:question, first_name: answers.first_name), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+<% question = @form.t("question", first_name: answers.first_name) %>
+<% content_for(:page_title, page_title(question, journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
       <%= f.govuk_error_summary %>
 
-      <%= f.govuk_check_boxes_fieldset :child_facing_confirmation_given, multiple: false, legend: { text: @form.t(:question, first_name: answers.first_name), tag: "h1", size: "l" }, hint: -> do %>
+      <%= f.govuk_radio_buttons_fieldset :child_facing_confirmation_given,
+        inline: true,
+        legend: {
+          text: question,
+          tag: "h1",
+          size: "l"
+        }, hint: -> do %>
         <div class="govuk-body">
           <%= @form.t(:hint, first_name: answers.first_name) %>
         </div>
       <% end do %>
-        <%= f.govuk_check_box :child_facing_confirmation_given, 1, 0, multiple: false, link_errors: true, label: { text: @form.t(:option, first_name: answers.first_name) } %>
+        <%= f.govuk_radio_button :child_facing_confirmation_given, true, label: { text: "Yes" } %>
+        <%= f.govuk_radio_button :child_facing_confirmation_given, false, label: { text: "No" } %>
       <% end %>
 
       <%= govuk_details(summary_text: "What does working at least 70% of time directly with children mean?") do %>
@@ -22,10 +30,6 @@
           <li>giving hands-on care, including health and hygiene</li>
         </ul>
       <% end %>
-
-      <p class="govuk-body">
-        <%= govuk_link_to "I cannot confirm this information", "" %>
-      </p>
 
       <%= f.govuk_submit "Continue" %>
     <% end %>
