@@ -6,6 +6,7 @@ class EligibleFeProvidersImporter < CsvImporter::Base
       ukprn
       max_award_amount
       lower_award_amount
+      primary_key_contact_email_address
     ]
   )
 
@@ -32,6 +33,7 @@ class EligibleFeProvidersImporter < CsvImporter::Base
       ukprn: row.fetch("ukprn"),
       max_award_amount: row.fetch("max_award_amount"),
       lower_award_amount: row.fetch("lower_award_amount"),
+      primary_key_contact_email_address: row.fetch("primary_key_contact_email_address"),
       academic_year:
     }
   end

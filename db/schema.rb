@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_16_122950) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_21_121253) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_trgm"
@@ -207,6 +207,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_16_122950) do
     t.decimal "lower_award_amount", precision: 7, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "primary_key_contact_email_address"
     t.index ["academic_year", "ukprn"], name: "index_eligible_fe_providers_on_academic_year_and_ukprn"
   end
 
