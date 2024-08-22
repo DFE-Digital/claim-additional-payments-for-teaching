@@ -107,4 +107,67 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
       end
     end
   end
+
+  describe "#onelogin" do
+    let(:omniauth_hash) do
+      OmniAuth::AuthHash.new(
+        "uid" => "12345",
+        "extra" => {
+          "raw_info" => {}
+        }
+      )
+    end
+
+    before do
+      OmniAuth.config.mock_auth[:onelogin] = omniauth_hash
+      Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:onelogin]
+
+      allow(OneLoginSignIn).to receive(:bypass?).and_return(false)
+
+      create(:journey_configuration, :further_education_payments)
+      get "/further-education-payments/claim"
+    end
+
+    context "signing in" do
+      it "sets onelogin_uid from omniauth hash" do
+        journey_session = Journeys::FurtherEducationPayments::Session.last
+
+        expect {
+          get auth_onelogin_path
+        }.to change { journey_session.reload.answers.onelogin_uid }.from(nil).to("12345")
+      end
+    end
+
+    context "idv step" do
+      let(:omniauth_hash) do
+        OmniAuth::AuthHash.new(
+          "uid" => "12345",
+          "extra" => {
+            "raw_info" => {
+              "https://vocab.account.gov.uk/v1/coreIdentityJWT" => ""
+            }
+          }
+        )
+      end
+
+      it "ensure idv matches logged in user" do
+        journey_session = Journeys::FurtherEducationPayments::Session.last
+        journey_session.answers.onelogin_uid = "54321"
+        journey_session.save!
+
+        validator_double = double(
+          OneLogin::CoreIdentityValidator,
+          call: nil,
+          first_name: "John",
+          surname: "Doe"
+        )
+
+        allow(OneLogin::CoreIdentityValidator).to receive(:new).and_return(validator_double)
+
+        get auth_onelogin_path
+
+        expect(response).to redirect_to("http://www.example.com/auth/failure?strategy=onelogin&message=access_denied&origin=http://www.example.com/further-education-payments/sign-in")
+      end
+    end
+  end
 end

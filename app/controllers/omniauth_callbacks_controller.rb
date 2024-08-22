@@ -37,15 +37,9 @@ class OmniauthCallbacksController < ApplicationController
   end
 
   def onelogin
-    auth = if OneLoginSignIn.bypass?
-      test_user_auth_hash
-    else
-      request.env["omniauth.auth"]
-    end
-
-    core_identity_jwt = auth.extra.raw_info[ONELOGIN_JWT_CORE_IDENTITY_HASH_KEY]
+    core_identity_jwt = omniauth_hash.extra.raw_info[ONELOGIN_JWT_CORE_IDENTITY_HASH_KEY]
     return process_one_login_identity_verification_callback(core_identity_jwt) if core_identity_jwt
-    process_one_login_authentication_callback(auth)
+    process_one_login_authentication_callback
   end
 
   private
@@ -60,11 +54,12 @@ class OmniauthCallbacksController < ApplicationController
     end
   end
 
-  def process_one_login_authentication_callback(auth)
-    onelogin_user_info = auth.info.to_h.slice("email", "phone")
-    onelogin_credentials = auth.credentials
+  def process_one_login_authentication_callback
+    onelogin_user_info = omniauth_hash.info.to_h.slice("email", "phone")
+    onelogin_credentials = omniauth_hash.credentials
 
     journey_session.answers.assign_attributes(
+      onelogin_uid: omniauth_hash.uid,
       onelogin_user_info:,
       onelogin_credentials:,
       logged_in_with_onelogin: true
@@ -80,6 +75,14 @@ class OmniauthCallbacksController < ApplicationController
   end
 
   def process_one_login_identity_verification_callback(core_identity_jwt)
+    if omniauth_hash.uid != journey_session.answers.onelogin_uid
+      origin = claim_url(
+        journey: current_journey_routing_name,
+        slug: "sign-in"
+      )
+      return redirect_to "/auth/failure?strategy=onelogin&message=access_denied&origin=#{origin}"
+    end
+
     first_name, surname = extract_name_from_jwt(core_identity_jwt)
 
     journey_session.answers.assign_attributes(
@@ -102,19 +105,27 @@ class OmniauthCallbacksController < ApplicationController
       first_name = "TEST"
       surname = "USER"
     else
-      decoded_jwt = OneLogin::CoreIdentityValidator.new(jwt:).call
-      name_parts = decoded_jwt[0]["vc"]["credentialSubject"]["name"][0]["nameParts"]
-      first_name = name_parts.find { |part| part["type"] == "GivenName" }["value"]
-      surname = name_parts.find { |part| part["type"] == "FamilyName" }["value"]
+      validator = OneLogin::CoreIdentityValidator.new(jwt:)
+      validator.call
+      first_name = validator.first_name
+      surname = validator.surname
     end
     [first_name, surname]
   end
 
   def test_user_auth_hash
     if request.path == "/auth/onelogin"
-      OmniAuth::AuthHash.new(info: {email: "test@example.com"}, extra: {raw_info: {}})
+      OmniAuth::AuthHash.new(uid: "12345", info: {email: "test@example.com"}, extra: {raw_info: {}})
     elsif request.path == "/auth/onelogin_identity"
-      OmniAuth::AuthHash.new(info: {email: ""}, extra: {raw_info: {ONELOGIN_JWT_CORE_IDENTITY_HASH_KEY => "test"}})
+      OmniAuth::AuthHash.new(uid: "12345", info: {email: ""}, extra: {raw_info: {ONELOGIN_JWT_CORE_IDENTITY_HASH_KEY => "test"}})
+    end
+  end
+
+  def omniauth_hash
+    @omniauth_hash ||= if OneLoginSignIn.bypass?
+      test_user_auth_hash
+    else
+      request.env["omniauth.auth"]
     end
   end
 end
