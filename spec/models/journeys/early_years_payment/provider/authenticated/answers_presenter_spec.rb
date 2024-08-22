@@ -25,12 +25,12 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::AnswersPres
           "paye-reference"
         ],
         [
-          "Employee's name",
+          "Employee’s name",
           "John Doe",
           "claimant-name"
         ],
         [
-          "Employee's start date",
+          "Employee’s start date",
           "1 January 2024",
           "start-date"
         ],
@@ -45,7 +45,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::AnswersPres
           "returner"
         ],
         [
-          "Employee's email address",
+          "Employee’s email address",
           "johndoe@example.com",
           "employee-email"
         ]

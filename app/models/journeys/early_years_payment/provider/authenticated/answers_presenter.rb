@@ -37,7 +37,7 @@ module Journeys
 
           def employee_name
             [
-              "Employee's name",
+              "Employee’s name",
               [answers.first_name, answers.surname].join(" "),
               "claimant-name"
             ]
@@ -45,7 +45,7 @@ module Journeys
 
           def start_date
             [
-              "Employee's start date",
+              "Employee’s start date",
               answers.start_date.to_fs(:long_date),
               "start-date"
             ]
@@ -69,7 +69,7 @@ module Journeys
 
           def employee_email_address
             [
-              "Employee's email address",
+              "Employee’s email address",
               answers.practitioner_email_address,
               "employee-email"
             ]
