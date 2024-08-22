@@ -8,7 +8,8 @@ module Journeys
           attribute :start_date, :date
 
           validates :start_date, presence: {message: i18n_error_message(:presence)}
-          validate :start_year_has_four_digits, if: -> { start_date.present? }
+          validates :start_date, comparison: {less_than: ->(_) { Date.tomorrow }, message: i18n_error_message(:date_not_in_future)}, if: :start_date
+          validate :start_year_has_four_digits, if: :start_date
 
           def initialize(journey_session:, journey:, params:)
             super
@@ -34,7 +35,7 @@ module Journeys
 
           def start_year_has_four_digits
             if start_date.year < 1000
-              errors.add(:start_date, "Year must include 4 numbers")
+              errors.add(:start_date, i18n_errors_path(:year_must_have_4_digits))
             end
           end
         end

@@ -24,6 +24,16 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::StartDateFo
   describe "validations" do
     it { should validate_presence_of(:start_date).with_message("Provide a date in the format 27 3 2024") }
 
+    context "with a date in the future" do
+      it do
+        is_expected.not_to(
+          allow_value(Date.tomorrow)
+          .for(:start_date)
+          .with_message("Start date cannot be in the future")
+        )
+      end
+    end
+
     context "when the year doesn't have 4 digits" do
       let(:day) { 1 }
       let(:month) { 1 }
