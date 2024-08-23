@@ -1143,6 +1143,7 @@ en:
     claim_description: for an early years financial incentive payment
     journey_name: Claim an early years financial incentive payment - provider
     feedback_email: "help@opsteam.education.gov.uk"
+    support_email_address: "help@opsteam.education.gov.uk"
     forms:
       consent:
         question: Declaration of Employee Consent
@@ -1212,7 +1213,6 @@ en:
   early_years_payments:
     <<: *early_years_payment_provider_authenticated
     claim_subject: "Early Years Payment"
-    support_email_address: "help@opsteam.education.gov.uk"
   activerecord:
     errors:
       models:
