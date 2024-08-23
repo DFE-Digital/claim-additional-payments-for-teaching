@@ -1149,6 +1149,8 @@ en:
         hint: For example, 27 3 2024.
         errors:
           presence: Provide a date in the format 27 3 2024
+          date_not_in_future: Start date cannot be in the future
+          year_must_have_4_digits: Year must include 4 numbers
       child_facing:
         question: Confirm %{first_name} spends most of their time in their job working directly with children
         hint:

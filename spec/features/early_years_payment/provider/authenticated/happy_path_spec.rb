@@ -34,9 +34,10 @@ RSpec.feature "Early years payment provider" do
     click_button "Continue"
 
     expect(page.current_path).to eq "/early-years-payment-provider/start-date"
-    fill_in("Day", with: "1")
-    fill_in("Month", with: "12")
-    fill_in("Year", with: "2024")
+    date = Date.yesterday
+    fill_in("Day", with: date.day)
+    fill_in("Month", with: date.month)
+    fill_in("Year", with: date.year)
     click_button "Continue"
 
     expect(page.current_path).to eq "/early-years-payment-provider/child-facing"
