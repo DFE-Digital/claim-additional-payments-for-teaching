@@ -29,6 +29,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           target: web
           context: .
+          snyk-token: ${{ secrets.SNYK_TOKEN }}
 
   deploy_review:
     name: Deploy to review environment
