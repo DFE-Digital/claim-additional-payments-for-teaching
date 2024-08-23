@@ -57,7 +57,10 @@ RSpec.feature "Early years payment provider" do
     click_button "Accept and send"
 
     expect(page.current_path).to eq claim_confirmation_path(Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME)
-    expect(Claim.last.provider_contact_name).to eq "John Doe"
+
+    claim = Claim.last
+    expect(claim.provider_contact_name).to eq "John Doe"
+    expect(page).to have_content(claim.reference)
   end
 
   scenario "using magic link after having completed some of the journey" do
