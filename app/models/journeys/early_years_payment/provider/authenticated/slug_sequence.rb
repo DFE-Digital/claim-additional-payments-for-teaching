@@ -38,7 +38,7 @@ module Journeys
 
           def slugs
             SLUGS.dup.tap do |sequence|
-              if answers.first_job_within_6_months == false
+              if answers.returning_within_6_months == false
                 sequence.delete("returner-worked-with-children")
               end
             end
