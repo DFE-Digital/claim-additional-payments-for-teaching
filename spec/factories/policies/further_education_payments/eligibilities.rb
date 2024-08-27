@@ -32,7 +32,7 @@ FactoryBot.define do
               "outcome" => true
             },
             {
-              "name" => "hours_teaching_eligible_subjects",
+              "name" => "half_teaching_hours",
               "outcome" => false
             },
             {

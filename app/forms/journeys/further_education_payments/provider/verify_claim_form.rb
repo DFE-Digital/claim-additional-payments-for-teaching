@@ -10,7 +10,7 @@ module Journeys
             teaching_responsibilities
             further_education_teaching_start_year
             teaching_hours_per_week
-            hours_teaching_eligible_subjects
+            half_teaching_hours
             subjects_taught
           ],
           variable_contract: %i[
@@ -19,7 +19,7 @@ module Journeys
             further_education_teaching_start_year
             taught_at_least_one_term
             teaching_hours_per_week
-            hours_teaching_eligible_subjects
+            half_teaching_hours
             subjects_taught
             teaching_hours_per_week_next_term
           ]

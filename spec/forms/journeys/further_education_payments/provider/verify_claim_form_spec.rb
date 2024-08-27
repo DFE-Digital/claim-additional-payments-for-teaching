@@ -97,7 +97,7 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
             teaching_responsibilities
             further_education_teaching_start_year
             teaching_hours_per_week
-            hours_teaching_eligible_subjects
+            half_teaching_hours
             subjects_taught
           ]
         )
@@ -120,7 +120,7 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
             further_education_teaching_start_year
             taught_at_least_one_term
             teaching_hours_per_week
-            hours_teaching_eligible_subjects
+            half_teaching_hours
             subjects_taught
             teaching_hours_per_week_next_term
           ]
@@ -213,8 +213,8 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
       end
     end
 
-    context "when the assertion is `hours_teaching_eligible_subjects`" do
-      let(:assertion_name) { "hours_teaching_eligible_subjects" }
+    context "when the assertion is `half_teaching_hours`" do
+      let(:assertion_name) { "half_teaching_hours" }
 
       it do
         is_expected.not_to(allow_value(nil).for(:outcome).with_message(
@@ -257,7 +257,7 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
               "1": {name: "teaching_responsibilities", outcome: "1"},
               "2": {name: "further_education_teaching_start_year", outcome: "1"},
               "3": {name: "teaching_hours_per_week", outcome: "1"},
-              "4": {name: "hours_teaching_eligible_subjects", outcome: "0"},
+              "4": {name: "half_teaching_hours", outcome: "0"},
               "5": {name: "subjects_taught", outcome: "0"}
             }
           }
@@ -290,7 +290,7 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
               "outcome" => true
             },
             {
-              "name" => "hours_teaching_eligible_subjects",
+              "name" => "half_teaching_hours",
               "outcome" => false
             },
             {

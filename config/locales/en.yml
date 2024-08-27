@@ -1146,7 +1146,7 @@ en:
               label: "Is %{claimant} timetabled to teach an average of %{hours} during the current term?"
               errors:
                 inclusion: "Select yes if %{claimant} is timetabled to teach an average of %{hours} during the current term"
-            hours_teaching_eligible_subjects:
+            half_teaching_hours:
               label: "For at least half of their timetabled teaching hours, does %{claimant} teach 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?"
               errors:
                 inclusion: "Select yes if %{claimant} teaches 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP), for at least half of their timetabled teaching hours"
@@ -1175,7 +1175,7 @@ en:
               label: "Is %{claimant} timetabled to teach an average of %{hours} during the current term?"
               errors:
                 inclusion: "Select yes if %{claimant} is timetabled to teach an average of %{hours} during the current term"
-            hours_teaching_eligible_subjects:
+            half_teaching_hours:
               label: "For at least half of their timetabled teaching hours, does %{claimant} teach 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?"
               errors:
                 inclusion: "Select yes if %{claimant} teaches 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP), for at least half of their timetabled teaching hours"
