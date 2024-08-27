@@ -821,7 +821,7 @@ en:
         teaching_hours:
           title: "Does the teacher meet the minimum 50% teaching time requirement in their role?"
   further_education_payments:
-    landing_page: Find out if you are eligible for any incentive payments for further education teachers
+    landing_page: Find out if you are eligible for a targeted retention incentive payment for further education teachers
     claim_description: for further education payments
     journey_name: Claim incentive payments for further education teachers
     feedback_email: "FE-Levellingup.PremiumPayments@education.gov.uk"
