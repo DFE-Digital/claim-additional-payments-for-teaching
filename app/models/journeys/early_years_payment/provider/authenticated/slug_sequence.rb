@@ -39,12 +39,12 @@ module Journeys
 
           def slugs
             SLUGS.dup.tap do |sequence|
-              if answers.returning_within_6_months == false
+              if !answers.returning_within_6_months
                 sequence.delete("returner-worked-with-children")
                 sequence.delete("returner-contract-type")
               end
 
-              if answers.returner_worked_with_children == false
+              if !answers.returner_worked_with_children
                 sequence.delete("returner-contract-type")
               end
             end

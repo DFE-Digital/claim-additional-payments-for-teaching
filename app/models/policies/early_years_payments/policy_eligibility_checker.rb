@@ -24,7 +24,15 @@ module Policies
       def ineligibility_reason
         if answers.nursery_urn.to_s == "none_of_the_above"
           :nursery_is_not_listed
+        elsif ineligible_returner?
+          :returner
         end
+      end
+
+      private
+
+      def ineligible_returner?
+        answers.returning_within_6_months && answers.returner_worked_with_children && answers.returner_contract_type == "permanent"
       end
     end
   end
