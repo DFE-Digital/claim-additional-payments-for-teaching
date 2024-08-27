@@ -10,6 +10,7 @@ module Journeys
           attribute :child_facing_confirmation_given, :boolean
           attribute :returning_within_6_months, :boolean
           attribute :returner_worked_with_children, :boolean
+          attribute :returner_contract_type
           attribute :practitioner_email_address
           attribute :provider_contact_name
 

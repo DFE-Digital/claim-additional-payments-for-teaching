@@ -47,6 +47,10 @@ RSpec.feature "Early years payment provider ineligible returner" do
     choose "Yes"
     click_button "Continue"
 
+    expect(page.current_path).to eq "/early-years-payment-provider/returner-contract-type"
+    choose "permanent"
+    click_button "Continue"
+
     # expect(page.current_path).to eq "/early-years-payment-provider/ineligible"
     # expect(page).to have_content("This nursery is not eligible")
   end

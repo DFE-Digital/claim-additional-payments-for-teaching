@@ -47,8 +47,28 @@ RSpec.feature "Early years payment provider" do
     expect(page.current_path).to eq "/early-years-payment-provider/returner"
     choose "No"
     click_button "Continue"
-
     expect(page.current_path).to eq "/early-years-payment-provider/employee-email"
+
+    click_link "Back"
+    expect(page.current_path).to eq "/early-years-payment-provider/returner"
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page.current_path).to eq "/early-years-payment-provider/returner-worked-with-children"
+    choose "No"
+    click_button "Continue"
+    expect(page.current_path).to eq "/early-years-payment-provider/employee-email"
+
+    click_link "Back"
+    expect(page.current_path).to eq "/early-years-payment-provider/returner-worked-with-children"
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page.current_path).to eq "/early-years-payment-provider/returner-contract-type"
+    choose "casual or temporary"
+    click_button "Continue"
+    expect(page.current_path).to eq "/early-years-payment-provider/employee-email"
+
     fill_in "claim-practitioner-email-address-field", with: "practitioner@example.com"
     click_button "Continue"
 

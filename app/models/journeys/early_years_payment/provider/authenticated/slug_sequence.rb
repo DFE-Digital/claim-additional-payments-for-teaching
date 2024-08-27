@@ -12,6 +12,7 @@ module Journeys
             child-facing
             returner
             returner-worked-with-children
+            returner-contract-type
             employee-email
           ].freeze
 
@@ -40,6 +41,11 @@ module Journeys
             SLUGS.dup.tap do |sequence|
               if answers.returning_within_6_months == false
                 sequence.delete("returner-worked-with-children")
+                sequence.delete("returner-contract-type")
+              end
+
+              if answers.returner_worked_with_children == false
+                sequence.delete("returner-contract-type")
               end
             end
           end

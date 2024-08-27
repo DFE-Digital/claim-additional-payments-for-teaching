@@ -19,6 +19,7 @@ module Journeys
             "child-facing" => ChildFacingForm,
             "returner" => ReturnerForm,
             "returner-worked-with-children" => ReturnerWorkedWithChildrenForm,
+            "returner-contract-type" => ReturnerContractTypeForm,
             "employee-email" => EmployeeEmailForm,
             "check-your-answers" => CheckYourAnswersForm
           }
