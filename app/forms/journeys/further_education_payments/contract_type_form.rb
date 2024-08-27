@@ -20,7 +20,7 @@ module Journeys
           OpenStruct.new(
             id: "variable_hours",
             name: t("options.variable_hours"),
-            hint: "This includes zero hours and hourly paid contract types"
+            hint: "This includes zero hours contracts"
           )
         ]
       end
