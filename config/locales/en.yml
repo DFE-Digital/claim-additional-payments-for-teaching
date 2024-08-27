@@ -1197,6 +1197,11 @@ en:
           Did %{first_name} work in an early years setting between %{six_months_before_start_date} and %{start_date}?
         errors:
           inclusion: You must select an option below to continue
+      returner_worked_with_children:
+        question:
+          Did %{first_name}’s previous role in an early years setting involve mostly working directly with children?
+        errors:
+          inclusion: You must select an option below to continue
       employee_email:
         question: What is %{first_name}’s email address?
         hint: We’ll use this to ask your employee to provide their payment details.

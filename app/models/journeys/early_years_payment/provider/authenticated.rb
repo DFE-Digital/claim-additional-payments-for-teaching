@@ -18,6 +18,7 @@ module Journeys
             "start-date" => StartDateForm,
             "child-facing" => ChildFacingForm,
             "returner" => ReturnerForm,
+            "returner-worked-with-children" => ReturnerWorkedWithChildrenForm,
             "employee-email" => EmployeeEmailForm,
             "check-your-answers" => CheckYourAnswersForm
           }

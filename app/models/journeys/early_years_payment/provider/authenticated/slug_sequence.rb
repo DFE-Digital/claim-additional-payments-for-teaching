@@ -11,6 +11,7 @@ module Journeys
             start-date
             child-facing
             returner
+            returner-worked-with-children
             employee-email
           ].freeze
 
@@ -36,7 +37,11 @@ module Journeys
           end
 
           def slugs
-            SLUGS
+            SLUGS.dup.tap do |sequence|
+              if answers.first_job_within_6_months == false
+                sequence.delete("returner-worked-with-children")
+              end
+            end
           end
 
           def magic_link?(slug)
