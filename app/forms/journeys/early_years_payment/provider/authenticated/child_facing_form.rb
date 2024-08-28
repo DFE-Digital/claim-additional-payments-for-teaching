@@ -6,7 +6,7 @@ module Journeys
           attribute :child_facing_confirmation_given, :boolean
 
           validates :child_facing_confirmation_given,
-            presence: {message: i18n_error_message(:presence)}
+            inclusion: {in: [true, false], message: i18n_error_message(:inclusion)}
 
           def save
             return false if invalid?
