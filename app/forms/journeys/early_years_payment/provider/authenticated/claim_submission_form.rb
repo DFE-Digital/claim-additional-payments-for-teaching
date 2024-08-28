@@ -6,7 +6,7 @@ module Journeys
           private
 
           def main_eligibility
-            @main_eligibility ||= Policies::EarlyYearsPayments::Eligibility.new
+            @main_eligibility ||= eligibilities.first
           end
 
           def calculate_award_amount(eligibility)

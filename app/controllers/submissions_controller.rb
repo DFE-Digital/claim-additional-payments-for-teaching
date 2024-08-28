@@ -1,18 +1,11 @@
 class SubmissionsController < BasePublicController
   include PartOfClaimJourney
+  include ClaimSubmission
 
   skip_before_action :send_unstarted_claimants_to_the_start, only: [:show]
 
   def create
-    @form = journey::ClaimSubmissionForm.new(journey_session: journey_session)
-
-    if @form.save
-      session[:submitted_claim_id] = @form.claim.id
-      clear_claim_session
-      redirect_to claim_confirmation_path
-    else
-      render "claims/check_your_answers"
-    end
+    create_and_save_claim_form
   end
 
   def show

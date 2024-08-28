@@ -3,6 +3,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
 
       <%= f.govuk_check_boxes_fieldset :child_facing_confirmation_given, multiple: false, legend: { text: @form.t(:question, first_name: answers.first_name), tag: "h1", size: "l" }, hint: -> do %>
         <div class="govuk-body">

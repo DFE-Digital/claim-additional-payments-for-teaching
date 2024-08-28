@@ -18,7 +18,8 @@ module Journeys
             "start-date" => StartDateForm,
             "child-facing" => ChildFacingForm,
             "returner" => ReturnerForm,
-            "employee-email" => EmployeeEmailForm
+            "employee-email" => EmployeeEmailForm,
+            "check-your-answers" => CheckYourAnswersForm
           }
         }
         START_WITH_MAGIC_LINK = true

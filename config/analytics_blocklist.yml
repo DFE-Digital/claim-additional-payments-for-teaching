@@ -28,6 +28,9 @@
   - teacher_id_user_info
   - onelogin_credentials
   - onelogin_user_info
+  - paye_reference
+  - practitioner_email_address
+  - provider_contact_name
   :claim_decisions:
   - trn
   - claimant_age
