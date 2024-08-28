@@ -7,4 +7,6 @@ module "statuscake" {
   ssl_urls    = compact([var.external_url])
 
   contact_groups = var.statuscake_contact_groups
+
+  heartbeat_names  = [local.heartbeat_check_name]
 }
