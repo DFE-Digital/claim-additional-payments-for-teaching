@@ -36,7 +36,7 @@ RSpec.feature "Early years payment provider ineligible returner" do
     click_button "Continue"
 
     expect(page.current_path).to eq "/early-years-payment-provider/child-facing"
-    check "I confirm that at least 70% of Bobby’s time in their job is spent working directly with children."
+    choose "Yes"
     click_button "Continue"
 
     expect(page.current_path).to eq "/early-years-payment-provider/returner"
