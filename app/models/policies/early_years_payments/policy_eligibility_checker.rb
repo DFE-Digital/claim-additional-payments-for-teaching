@@ -24,6 +24,8 @@ module Policies
       def ineligibility_reason
         if answers.nursery_urn.to_s == "none_of_the_above"
           :nursery_is_not_listed
+        elsif answers.child_facing_confirmation_given == false
+          :not_child_facing_enough
         end
       end
     end

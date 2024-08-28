@@ -19,7 +19,7 @@ def when_early_years_payment_provider_authenticated_journey_ready_to_submit
   fill_in("Year", with: date.year)
   click_button "Continue"
 
-  check "I confirm that at least 70% of Bobby’s time in their job is spent working directly with children."
+  choose "Yes"
   click_button "Continue"
 
   choose "No"

@@ -22,7 +22,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::ChildFacing
       is_expected.not_to(
         allow_value(child_facing_confirmation_given)
         .for(:child_facing_confirmation_given)
-        .with_message("You must be able to confirm this information to continue")
+        .with_message("You must select an option below to continue")
       )
     end
   end

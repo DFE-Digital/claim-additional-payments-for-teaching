@@ -1143,6 +1143,7 @@ en:
     claim_description: for an early years financial incentive payment
     journey_name: Claim an early years financial incentive payment - provider
     feedback_email: "help@opsteam.education.gov.uk"
+    support_email_address: "help@opsteam.education.gov.uk"
     forms:
       consent:
         question: Declaration of Employee Consent
@@ -1184,14 +1185,12 @@ en:
           date_not_in_future: Start date cannot be in the future
           year_must_have_4_digits: Year must include 4 numbers
       child_facing:
-        question: Confirm %{first_name} spends most of their time in their job working directly with children
+        question: Does %{first_name} spend most of their time in their job working directly with children?
         hint:
-          "%{first_name}’s job must involve spending most of their contracted hours (approximately 70% or more) working
-          directly with children."
-        option:
-          I confirm that at least 70% of %{first_name}’s time in their job is spent working directly with children.
+          "%{first_name}’s job must involve spending most of their contracted hours (approximately 70% or more) directly working
+          with children."
         errors:
-          presence: You must be able to confirm this information to continue
+          inclusion: You must select an option below to continue
       returner:
         question:
           Did %{first_name} work in an early years setting between %{six_months_before_start_date} and %{start_date}?
@@ -1214,7 +1213,6 @@ en:
   early_years_payments:
     <<: *early_years_payment_provider_authenticated
     claim_subject: "Early Years Payment"
-    support_email_address: "help@opsteam.education.gov.uk"
   activerecord:
     errors:
       models:
