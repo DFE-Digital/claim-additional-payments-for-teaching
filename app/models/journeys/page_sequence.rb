@@ -5,7 +5,7 @@ module Journeys
   class PageSequence
     attr_reader :current_slug
 
-    DEAD_END_SLUGS = %w[complete existing-session eligible-later future-eligibility ineligible check-your-email]
+    DEAD_END_SLUGS = %w[complete existing-session eligible-later future-eligibility ineligible check-your-email unauthorised]
     OPTIONAL_SLUGS = %w[postcode-search select-home-address reset-claim]
 
     def initialize(slug_sequence, completed_slugs, current_slug, journey_session)
@@ -59,6 +59,14 @@ module Journeys
 
     def next_required_slug
       (slugs - completed_slugs - OPTIONAL_SLUGS).first
+    end
+
+    def requires_authorisation?(slug)
+      @slug_sequence.try(:requires_authorisation?, slug) || false
+    end
+
+    def unauthorised_path(slug, failure_reason)
+      @slug_sequence.unauthorised_path(slug, failure_reason)
     end
 
     private

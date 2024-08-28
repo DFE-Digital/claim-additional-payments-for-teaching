@@ -12,6 +12,7 @@ class ClaimsController < BasePublicController
   before_action :persist_claim, only: [:new, :create]
   before_action :handle_magic_link, only: [:new], if: -> { journey.start_with_magic_link? }
 
+  include AuthorisedSlugs
   include FormSubmittable
   include ClaimsFormCallbacks
 

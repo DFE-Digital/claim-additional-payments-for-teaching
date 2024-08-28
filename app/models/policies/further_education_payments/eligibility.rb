@@ -3,6 +3,21 @@ module Policies
     class Eligibility < ApplicationRecord
       self.table_name = "further_education_payments_eligibilities"
 
+      class Course < Struct.new(:subject, :name, keyword_init: true)
+        include Journeys::FurtherEducationPayments::CoursesHelper
+
+        def taught?
+          name != "none"
+        end
+
+        def description
+          I18n.t(
+            "further_education_payments.forms.#{subject}_courses.options.#{name}",
+            link: link_for_course("#{subject}_courses", name)
+          )
+        end
+      end
+
       has_one :claim, as: :eligibility, inverse_of: :eligibility
 
       belongs_to :possible_school, optional: true, class_name: "School"
@@ -17,6 +32,26 @@ module Policies
 
       def ineligible?
         false
+      end
+
+      def courses_taught
+        courses.select(&:taught?)
+      end
+
+      def courses
+        subjects_taught.map do |subject|
+          public_send(:"#{subject}_courses").map do |course|
+            Course.new(subject: subject, name: course)
+          end
+        end.flatten
+      end
+
+      def fixed_contract?
+        contract_type != "variable_hours"
+      end
+
+      def verified?
+        verification.present?
       end
     end
   end
