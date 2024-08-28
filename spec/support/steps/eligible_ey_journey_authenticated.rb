@@ -13,9 +13,10 @@ def when_early_years_payment_provider_authenticated_journey_ready_to_submit
   fill_in "Last name", with: "Bobberson"
   click_button "Continue"
 
-  fill_in("Day", with: "1")
-  fill_in("Month", with: "12")
-  fill_in("Year", with: "2024")
+  date = Date.yesterday
+  fill_in("Day", with: date.day)
+  fill_in("Month", with: date.month)
+  fill_in("Year", with: date.year)
   click_button "Continue"
 
   check "I confirm that at least 70% of Bobby’s time in their job is spent working directly with children."
