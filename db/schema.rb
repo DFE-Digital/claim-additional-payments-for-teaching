@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_21_121253) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_28_132813) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_trgm"
@@ -189,7 +189,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_21_121253) do
     t.string "nursery_urn"
     t.date "start_date"
     t.boolean "child_facing_confirmation_given"
-    t.boolean "first_job_within_6_months"
+    t.boolean "returning_within_6_months"
   end
 
   create_table "eligible_ey_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -62,7 +62,7 @@ module Journeys
           def returner
             [
               "Confirmation that employee worked in an early years setting 6 months before the start date",
-              (answers.first_job_within_6_months ? "Yes" : "No"),
+              (answers.returning_within_6_months ? "Yes" : "No"),
               "returner"
             ]
           end
