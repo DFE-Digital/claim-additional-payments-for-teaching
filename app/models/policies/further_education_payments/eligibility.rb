@@ -53,6 +53,11 @@ module Policies
       def verified?
         verification.present?
       end
+
+      # FIXME LUPEYALPHA-923
+      def verification_deadline
+        created_at + 1.week
+      end
     end
   end
 end

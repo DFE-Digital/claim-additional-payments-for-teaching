@@ -35,4 +35,10 @@ class ApplicationMailer < Mail::Notify::Mailer
     CLAIM_PROVIDER_EMAIL_TEMPLATE_ID: "e0b78a08-601b-40ba-a97f-61fb00a7c951".freeze,
     CLAIM_RECEIVED_NOTIFY_TEMPLATE_ID: "149c5999-12fb-4b99-aff5-23a7c3302783".freeze
   }
+  FURTHER_EDUCATION_PAYMENTS = {
+    CLAIM_PROVIDER_VERIFICATION_EMAIL_TEMPLATE_ID: "9a25fe46-2ee4-4a5c-8d47-0f04f058a87d".freeze,
+    # FIXME this is just a place holder - it's an empty template
+    # Correct copy will be added as part of LUPEYALPHA-848
+    CLAIM_RECEIVED_NOTIFY_TEMPLATE_ID: NOTIFY_TEMPLATE_ID
+  }
 end
