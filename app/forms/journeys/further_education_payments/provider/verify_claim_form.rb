@@ -29,7 +29,9 @@ module Journeys
 
         attribute :declaration, :boolean
 
-        validates :declaration, acceptance: true
+        validates :declaration, acceptance: {
+          message: i18n_error_message("declaration.acceptance")
+        }
 
         validate :all_assertions_answered
 
@@ -63,7 +65,11 @@ module Journeys
 
         def assertions
           @assertions ||= ASSERTIONS.fetch(contract_type).map do |assertion_name|
-            AssertionForm.new(name: assertion_name)
+            AssertionForm.new(
+              name: assertion_name,
+              claim: claim,
+              type: contract_type
+            )
           end
         end
 
@@ -116,7 +122,7 @@ module Journeys
             assertion.errors.each do |error|
               errors.add(
                 "assertions_attributes[#{i}][#{error.attribute}]",
-                error.full_message
+                error.message
               )
             end
           end
@@ -132,14 +138,38 @@ module Journeys
           include ActiveModel::Model
           include ActiveModel::Attributes
 
+          attr_reader :claim, :type
+
           attribute :name, :string
           attribute :outcome, :boolean
 
           validates :name, presence: true
           validates :outcome, inclusion: {
             in: [true, false],
-            message: "Select an option"
+            message: ->(form, _) do
+              I18n.t(
+                [
+                  "further_education_payments_provider",
+                  "forms",
+                  "verify_claim",
+                  "assertions",
+                  form.type,
+                  form.name,
+                  "errors",
+                  "inclusion"
+                ].join("."),
+                claimant: form.claimant,
+                provider: form.provider
+              )
+            end
           }
+
+          def initialize(name:, claim:, type:)
+            @claim = claim
+            @type = type
+
+            super(name: name)
+          end
 
           def radio_options
             [
@@ -149,6 +179,14 @@ module Journeys
           end
 
           class RadioOption < Struct.new(:id, :name, keyword_init: true); end
+
+          def claimant
+            claim.first_name
+          end
+
+          def provider
+            claim.school.name
+          end
         end
       end
     end
