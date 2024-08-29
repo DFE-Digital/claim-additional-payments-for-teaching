@@ -7,10 +7,16 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
     create(:school, :further_education, name: "Springfield Elementary")
   end
 
+  let(:teaching_hours_per_week) { "more_than_12" }
+
+  let(:contract_type) { "fixed_term" }
+
   let(:eligibility) do
     create(
       :further_education_payments_eligibility,
-      school: school
+      school: school,
+      teaching_hours_per_week: teaching_hours_per_week,
+      contract_type: contract_type
     )
   end
 
@@ -124,13 +130,10 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
   end
 
   describe "AssertionForm" do
-    let(:contract_type) { "fixed_contract" }
-
     subject do
       described_class::AssertionForm.new(
         name: assertion_name,
-        type: contract_type,
-        claim: claim
+        parent_form: form
       )
     end
 
@@ -138,8 +141,6 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
       let(:assertion_name) { "contract_type" }
 
       context "when fixed term" do
-        let(:contract_type) { "fixed_contract" }
-
         it do
           is_expected.not_to(allow_value(nil).for(:outcome).with_message(
             "Select yes if Edna has a fixed term contract of employment at Springfield Elementary"
@@ -148,7 +149,7 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
       end
 
       context "when variable" do
-        let(:contract_type) { "variable_contract" }
+        let(:contract_type) { "variable_hours" }
 
         it do
           is_expected.not_to(allow_value(nil).for(:outcome).with_message(
@@ -181,7 +182,7 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
     context "when the assertion is `taught_at_least_one_term`" do
       let(:assertion_name) { "taught_at_least_one_term" }
 
-      let(:contract_type) { "variable_contract" }
+      let(:contract_type) { "variable_hours" }
 
       it do
         is_expected.not_to(allow_value(nil).for(:outcome).with_message(
@@ -193,10 +194,22 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
     context "when the assertion is `teaching_hours_per_week`" do
       let(:assertion_name) { "teaching_hours_per_week" }
 
-      it do
-        is_expected.not_to(allow_value(nil).for(:outcome).with_message(
-          "Select yes if Edna is timetabled to teach an average of 12 hours per week during the current term"
-        ))
+      context "when more that 12" do
+        it do
+          is_expected.not_to(allow_value(nil).for(:outcome).with_message(
+            "Select yes if Edna is timetabled to teach an average of more than 12 hours per week during the current term"
+          ))
+        end
+      end
+
+      context "when between 2.5 and 12" do
+        let(:teaching_hours_per_week) { "between_2_5_and_12" }
+
+        it do
+          is_expected.not_to(allow_value(nil).for(:outcome).with_message(
+            "Select yes if Edna is timetabled to teach an average of between 2.5 and 12 hours per week during the current term"
+          ))
+        end
       end
     end
 
@@ -223,7 +236,7 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
     context "when the assertion is `teaching_hours_per_week_next_term`" do
       let(:assertion_name) { "teaching_hours_per_week_next_term" }
 
-      let(:contract_type) { "variable_contract" }
+      let(:contract_type) { "variable_hours" }
 
       it do
         is_expected.not_to(allow_value(nil).for(:outcome).with_message(

@@ -63,13 +63,21 @@ module Journeys
           @course_descriptions ||= claim.eligibility.courses_taught.map(&:description)
         end
 
+        def teaching_hours_per_week
+          I18n.t(
+            [
+              "further_education_payments",
+              "forms",
+              "teaching_hours_per_week",
+              "options",
+              claim.eligibility.teaching_hours_per_week
+            ].join(".")
+          ).downcase
+        end
+
         def assertions
           @assertions ||= ASSERTIONS.fetch(contract_type).map do |assertion_name|
-            AssertionForm.new(
-              name: assertion_name,
-              claim: claim,
-              type: contract_type
-            )
+            AssertionForm.new(name: assertion_name, parent_form: self)
           end
         end
 
@@ -138,7 +146,7 @@ module Journeys
           include ActiveModel::Model
           include ActiveModel::Attributes
 
-          attr_reader :claim, :type
+          attr_reader :parent_form
 
           attribute :name, :string
           attribute :outcome, :boolean
@@ -153,20 +161,20 @@ module Journeys
                   "forms",
                   "verify_claim",
                   "assertions",
-                  form.type,
+                  form.contract_type,
                   form.name,
                   "errors",
                   "inclusion"
                 ].join("."),
                 claimant: form.claimant,
-                provider: form.provider
+                provider: form.provider,
+                hours: form.hours
               )
             end
           }
 
-          def initialize(name:, claim:, type:)
-            @claim = claim
-            @type = type
+          def initialize(name:, parent_form:)
+            @parent_form = parent_form
 
             super(name: name)
           end
@@ -181,11 +189,19 @@ module Journeys
           class RadioOption < Struct.new(:id, :name, keyword_init: true); end
 
           def claimant
-            claim.first_name
+            parent_form.claim.first_name
           end
 
           def provider
-            claim.school.name
+            parent_form.claim.school.name
+          end
+
+          def hours
+            parent_form.teaching_hours_per_week
+          end
+
+          def contract_type
+            parent_form.contract_type
           end
         end
       end

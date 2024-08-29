@@ -518,6 +518,7 @@ RSpec.feature "Provider verifying claims" do
       claim: claim,
       school: fe_provider,
       contract_type: "variable_hours",
+      teaching_hours_per_week: "between_2_5_and_12",
       subjects_taught: ["engineering_manufacturing"],
       engineering_manufacturing_courses: [
         "approved_level_321_transportation",
@@ -590,8 +591,8 @@ RSpec.feature "Provider verifying claims" do
     end
 
     within_fieldset(
-      "Is Edna Krabappel timetabled to teach an average of 12 hours per " \
-      "week during the current term?"
+      "Is Edna Krabappel timetabled to teach an average of between 2.5 and " \
+      "12 hours per week during the current term?"
     ) do
       choose "Yes"
     end
