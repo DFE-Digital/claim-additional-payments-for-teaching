@@ -64,7 +64,9 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
     it "emails the claim provider" do
       allow(ClaimVerifierJob).to receive(:perform_later)
 
-      perform_enqueued_jobs { subject }
+      travel_to DateTime.new(2024, 3, 1, 0, 0, 0) do
+        perform_enqueued_jobs { subject }
+      end
 
       claim = form.claim
 
@@ -74,8 +76,8 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
           recipient_name: claim.school.name,
           claimant_name: [answers.first_name, answers.surname].join(" "),
           claim_reference: claim.reference,
-          claim_submission_date: claim.submitted_at.to_s(:govuk_date),
-          verification_due_date: claim.eligibility.verification_deadline.to_s(:govuk_date),
+          claim_submission_date: "1 March 2024",
+          verification_due_date: "15 March 2024",
           verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
         )
       )

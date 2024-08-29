@@ -89,8 +89,8 @@ class ClaimMailer < ApplicationMailer
       recipient_name: claim.school.name,
       claimant_name: claim.full_name,
       claim_reference: claim.reference,
-      claim_submission_date: claim.created_at.to_s(:govuk_date),
-      verification_due_date: claim.eligibility.verification_deadline.to_s(:govuk_date),
+      claim_submission_date: l(claim.created_at.to_date),
+      verification_due_date: l(Policies::FurtherEducationPayments.verification_due_date_for_claim(claim)),
       verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
     }
 
