@@ -13,6 +13,8 @@ module Journeys
               a << start_date
               a << child_facing_confirmation_given
               a << returner
+              a << returner_worked_with_children if journey_session.answers.returning_within_6_months
+              a << returner_contract_type if journey_session.answers.returner_worked_with_children
               a << employee_email_address
             end
           end
@@ -64,6 +66,22 @@ module Journeys
               "Confirmation that employee worked in an early years setting 6 months before the start date",
               (answers.returning_within_6_months ? "Yes" : "No"),
               "returner"
+            ]
+          end
+
+          def returner_worked_with_children
+            [
+              "Employee’s previous role in an early years setting involved working mostly with children",
+              (answers.returner_worked_with_children ? "Yes" : "No"),
+              "returner-worked-with-children"
+            ]
+          end
+
+          def returner_contract_type
+            [
+              "Contact type for previous role in an early years setting",
+              answers.returner_contract_type,
+              "returner-contract-type"
             ]
           end
 
