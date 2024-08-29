@@ -63,6 +63,7 @@
               [:assertions, f.object.contract_type, ff.object.name, :label],
               claimant: f.object.claimant_name,
               provider: f.object.claim.school.name,
+              hours: f.object.teaching_hours_per_week
             ),
           },
           hint: -> do

@@ -1134,9 +1134,9 @@ en:
               errors:
                 inclusion: "Select yes if %{claimant} is in the first 5 years of their further education teaching career in England"
             teaching_hours_per_week:
-              label: "Is %{claimant} timetabled to teach an average of 12 hours per week during the current term?"
+              label: "Is %{claimant} timetabled to teach an average of %{hours} during the current term?"
               errors:
-                inclusion: "Select yes if %{claimant} is timetabled to teach an average of 12 hours per week during the current term"
+                inclusion: "Select yes if %{claimant} is timetabled to teach an average of %{hours} during the current term"
             hours_teaching_eligible_subjects:
               label: "For at least half of their timetabled teaching hours, does %{claimant} teach 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?"
               errors:
@@ -1163,9 +1163,9 @@ en:
               errors:
                 inclusion: "Select yes if %{claimant} has taught at least one academic term at %{provider}"
             teaching_hours_per_week:
-              label: "Is %{claimant} timetabled to teach an average of 12 hours per week during the current term?"
+              label: "Is %{claimant} timetabled to teach an average of %{hours} during the current term?"
               errors:
-                inclusion: "Select yes if %{claimant} is timetabled to teach an average of 12 hours per week during the current term"
+                inclusion: "Select yes if %{claimant} is timetabled to teach an average of %{hours} during the current term"
             hours_teaching_eligible_subjects:
               label: "For at least half of their timetabled teaching hours, does %{claimant} teach 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?"
               errors:
