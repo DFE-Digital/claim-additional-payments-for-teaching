@@ -109,7 +109,7 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Check your answers")
     click_button "Continue"
 
-    expect(page).to have_content("You’re eligible for a financial incentive payment")
+    expect(page).to have_content("You’re eligible for a targeted retention incentive payment")
     expect(page).to have_content(number_to_currency(expected_award_amount, precision: 0))
     expect(page).to have_content("Apply now")
     click_button "Apply now"
@@ -188,7 +188,7 @@ RSpec.feature "Further education payments" do
 
     expect(eligibility.teacher_reference_number).to eql("1234567")
 
-    expect(page).to have_content("You applied for a further education retention payment")
+    expect(page).to have_content("You applied for a targeted retention incentive payment")
     click_link "Set reminder"
 
     expect(page).to have_content("Personal details")

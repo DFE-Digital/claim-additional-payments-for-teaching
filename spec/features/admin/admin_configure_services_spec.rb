@@ -132,7 +132,7 @@ RSpec.feature "Service configuration" do
     sign_in_as_service_operator
 
     click_on "Manage services"
-    click_on "Change Claim incentive payments for further education teachers"
+    click_on "Change Claim a targeted retention incentive payment for further education teachers"
 
     expect(page).not_to have_content("Sign in with DfE Identity")
   end
