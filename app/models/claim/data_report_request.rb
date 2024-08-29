@@ -26,7 +26,23 @@ class Claim
     def to_csv
       CSV.generate(write_headers: true, headers: HEADERS) do |csv|
         @claims.each do |claim|
-          csv << [
+          csv << Serializers.const_get(claim.policy.to_s).new(claim:).to_csv_row
+        end
+      end
+    end
+
+    module Serializers
+      class Base
+        attr_reader :claim
+
+        def initialize(claim:)
+          @claim = claim
+        end
+      end
+
+      class LevellingUpPremiumPayments < Base
+        def to_csv_row
+          [
             ExcelUtils.escape_formulas(claim.reference),
             ExcelUtils.escape_formulas(claim.eligibility.teacher_reference_number),
             ExcelUtils.escape_formulas(claim.national_insurance_number),
@@ -37,6 +53,29 @@ class Claim
             ExcelUtils.escape_formulas(claim.policy),
             ExcelUtils.escape_formulas(claim.eligibility.current_school.name),
             ExcelUtils.escape_formulas(claim.eligibility.current_school.urn)
+          ]
+        end
+      end
+
+      class StudentLoans < LevellingUpPremiumPayments
+      end
+
+      class EarlyCareerPayments < LevellingUpPremiumPayments
+      end
+
+      class FurtherEducationPayments < Base
+        def to_csv_row
+          [
+            ExcelUtils.escape_formulas(claim.reference),
+            ExcelUtils.escape_formulas(claim.eligibility.teacher_reference_number),
+            ExcelUtils.escape_formulas(claim.national_insurance_number),
+            ExcelUtils.escape_formulas(claim.full_name),
+            ExcelUtils.escape_formulas(claim.email_address),
+            ExcelUtils.escape_formulas(claim.date_of_birth),
+            ExcelUtils.escape_formulas(nil),
+            ExcelUtils.escape_formulas(claim.policy),
+            ExcelUtils.escape_formulas(claim.eligibility.school.name),
+            ExcelUtils.escape_formulas(claim.eligibility.school.urn)
           ]
         end
       end
