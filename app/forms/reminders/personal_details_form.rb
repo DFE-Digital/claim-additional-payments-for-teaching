@@ -5,27 +5,27 @@ module Reminders
 
     validates :reminder_full_name,
       presence: {
-        message: i18n_error_message(:"full_name.blank")
+        message: i18n_error_message("full_name.blank")
       },
       length: {
         maximum: 100,
-        message: i18n_error_message(:"full_name.length")
+        message: i18n_error_message("full_name.length")
       }
 
     validates :reminder_email_address,
       presence: {
-        message: i18n_error_message(:"email_address.blank")
+        message: i18n_error_message("email_address.blank")
       }
 
     validates :reminder_email_address,
       if: -> { reminder_email_address.present? },
       format: {
         with: Rails.application.config.email_regexp,
-        message: i18n_error_message(:"email_address.invalid")
+        message: i18n_error_message("email_address.invalid")
       },
       length: {
         maximum: 256,
-        message: i18n_error_message(:"email_address.length")
+        message: i18n_error_message("email_address.length")
       }
 
     def save!

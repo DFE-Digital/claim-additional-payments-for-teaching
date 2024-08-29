@@ -1,4 +1,6 @@
 class RemindersController < BasePublicController
+  before_action :create_journey_session_if_no_session
+
   def show
     @form = form_from_slug
 
@@ -21,6 +23,24 @@ class RemindersController < BasePublicController
   end
 
   private
+
+  def create_journey_session_if_no_session
+    if session[journey_session_key].blank?
+      create_journey_session!
+    end
+  end
+
+  def create_journey_session!
+    journey_session = journey::SessionForm.create!(params)
+
+    session[journey_session_key] = journey_session.id
+
+    journey_session
+  end
+
+  def journey_session_key
+    :"#{journey::ROUTING_NAME}_journeys_session_id"
+  end
 
   def view_file
     params[:slug].underscore

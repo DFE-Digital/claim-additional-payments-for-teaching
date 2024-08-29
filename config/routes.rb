@@ -55,7 +55,7 @@ Rails.application.routes.draw do
       get page_name.dasherize, to: "static_pages##{page_name}", as: page_name
     end
 
-    scope constraints: {journey: "further-education-payments"} do
+    scope constraints: {journey: /further-education-payments/} do
       resources :reminders,
         only: [:show, :update],
         param: :slug,
