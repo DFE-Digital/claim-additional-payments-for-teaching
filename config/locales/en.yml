@@ -894,7 +894,7 @@ en:
       teaching_hours_per_week:
         question:
           On average, how many hours per week are you timetabled to teach at %{school_name} during the current term?
-        hint: ‘Teaching’ refers to the direct contact time you spend in lessons with students of all ages.
+        hint: ‘Timetabled teaching hours’ refers to the time you spend teaching lessons to students of all ages.
         options:
           more_than_12: More than 12 hours per week
           between_2_5_and_12: Between 2.5 and 12 hours per week
