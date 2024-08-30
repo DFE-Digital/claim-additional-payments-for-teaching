@@ -1030,9 +1030,16 @@ en:
           none: I do not teach any of these courses
       teaching_qualification:
         question: Do you have a teaching qualification?
-        hint:
-          Your response will be noted for future claims. If you don’t have a teaching qualification yet, make sure that
-          you enrol on one or complete one in the next 12 months.
+        hint_html: >
+          <p>Your response will be noted for future claims.</p>
+          <p>If you don’t have a teaching qualification yet, to remain eligible for a retention payment next year,
+          make sure you either:</p>
+          <p>
+            <ul>
+              <li>complete a teaching qualification in the next 12 months</li>
+              <li>enrol on a teaching qualification in the next 12 months</li>
+            </ul>
+          </p>
         options:
           "yes": "Yes"
           not_yet: Not yet, I am currently enrolled on one and working towards completing it
