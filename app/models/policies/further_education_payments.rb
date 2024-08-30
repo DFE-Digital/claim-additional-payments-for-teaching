@@ -21,5 +21,9 @@ module Policies
     def notify_reply_to_id
       nil
     end
+
+    def verification_due_date_for_claim(claim)
+      (claim.created_at + 2.weeks).to_date
+    end
   end
 end
