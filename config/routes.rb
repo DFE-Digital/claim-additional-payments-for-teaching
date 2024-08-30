@@ -55,10 +55,33 @@ Rails.application.routes.draw do
       get page_name.dasherize, to: "static_pages##{page_name}", as: page_name
     end
 
+    scope constraints: {journey: /further-education-payments/} do
+      resources :reminders,
+        only: [:show, :update],
+        param: :slug,
+        controller: "reminders",
+        as: :independent_reminders,
+        constraints: {
+          slug: %r{#{Journeys::Reminders::SlugSequence::SLUGS.join("|")}}
+        }
+    end
+
     scope constraints: {journey: "additional-payments"} do
       get "reminder", as: :new_reminder, to: "journeys/additional_payments_for_teaching/reminders#new"
-      post "reminders/:slug", constraints: {slug: %r{#{Journeys::AdditionalPaymentsForTeaching::SlugSequence::REMINDER_SLUGS.join("|")}}}, defaults: {slug: "personal-details"}, as: :reminders, to: "journeys/additional_payments_for_teaching/reminders#create"
-      resources :reminders, only: [:show, :update], param: :slug, constraints: {slug: %r{#{Journeys::AdditionalPaymentsForTeaching::SlugSequence::REMINDER_SLUGS.join("|")}}}, controller: "journeys/additional_payments_for_teaching/reminders"
+
+      post "reminders/:slug",
+        constraints: {slug: %r{#{Journeys::AdditionalPaymentsForTeaching::SlugSequence::REMINDER_SLUGS.join("|")}}},
+        defaults: {slug: "personal-details"},
+        as: :reminders,
+        to: "journeys/additional_payments_for_teaching/reminders#create"
+
+      resources :reminders,
+        only: [:show, :update],
+        param: :slug,
+        controller: "journeys/additional_payments_for_teaching/reminders",
+        constraints: {
+          slug: %r{#{Journeys::AdditionalPaymentsForTeaching::SlugSequence::REMINDER_SLUGS.join("|")}}
+        }
     end
 
     scope constraints: {journey: "further-education-payments-provider"} do

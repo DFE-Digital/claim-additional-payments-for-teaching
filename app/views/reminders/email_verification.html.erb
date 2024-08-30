@@ -1,0 +1,44 @@
+<% content_for(:page_title, page_title(t("one_time_password.title"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<% @backlink_path = independent_reminder_path(current_journey_routing_name, navigator.previous_slug) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form,
+      url: independent_reminder_path(current_journey_routing_name),
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_text_field :one_time_password,
+        autocomplete: "off",
+        width: 5,
+        label: {
+          text: t("one_time_password.title"),
+          size: "l",
+          tag: "h1"
+        },
+        caption: {
+          text: "Email verification",
+          size: "xl"
+        },
+        hint: -> do %>
+          <p>
+            <%= t("one_time_password.hint1_html", email_or_mobile_message: "an email", email_or_mobile_value: journey_session.answers.reminder_email_address) %>
+          </p>
+
+          <p>
+            <%= t("one_time_password.validity_duration", duration_valid: one_time_password_validity_duration) %>
+          </p>
+        <% end %>
+
+      <div class="govuk-body govuk-!-margin-bottom-6">
+        <%= govuk_link_to "Resend passcode (you will be sent back to the email address page)", independent_reminder_path(journey: journey::ROUTING_NAME, slug: "personal-details"), no_visited_state: true %>
+      </div>
+
+      <div class="govuk-button-group">
+        <%= f.govuk_submit "Confirm" %>
+        <%= govuk_button_link_to "Change email address", independent_reminder_path(journey: journey::ROUTING_NAME, slug: "personal-details"), secondary: true %>
+      </div>
+    <% end %>
+  </div>
+</div>

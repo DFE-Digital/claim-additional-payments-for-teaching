@@ -545,7 +545,7 @@ en:
           blank: Select an additional payment
           inclusion: Select a valid additional payment
       reminders:
-        personal_details:
+        personal_details: &reminders_personal_details
           errors:
             full_name:
               blank: Enter full name
@@ -1090,6 +1090,7 @@ en:
       teacher_reference_number:
         questions:
           teacher_reference_number: "What is your TRN? (optional)"
+      personal_details: *reminders_personal_details
     check_your_answers:
       part_one:
         primary_heading: Check your answers
