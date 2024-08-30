@@ -123,6 +123,8 @@ class OmniauthCallbacksController < ApplicationController
   end
 
   def further_education_payments_provider_callback(auth)
+    auth = params if DfESignIn.bypass?
+
     Journeys::FurtherEducationPayments::Provider::OmniauthCallbackForm.new(
       journey_session: journey_session,
       auth: auth
