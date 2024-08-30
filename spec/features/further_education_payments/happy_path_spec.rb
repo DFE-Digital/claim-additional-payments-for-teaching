@@ -177,6 +177,7 @@ RSpec.feature "Further education payments" do
       click_on "Accept and send"
     end.to change { Claim.count }.by(1)
       .and change { Policies::FurtherEducationPayments::Eligibility.count }.by(1)
+      .and have_enqueued_mail(ClaimMailer, :submitted).with(Claim.last)
 
     claim = Claim.last
 
