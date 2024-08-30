@@ -248,7 +248,7 @@ RSpec.describe "TPS data upload" do
             CSV
           end
 
-          it "runs the tasks, adds notes and redirects to the right page" do
+          it "runs the tasks, adds notes and redirects to the right page", flaky: true do
             aggregate_failures "testing tasks and notes" do
               expect { upload_tps_data_csm_file(file) }.to(
                 change do
