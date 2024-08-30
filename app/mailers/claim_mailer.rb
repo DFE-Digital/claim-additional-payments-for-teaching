@@ -83,7 +83,7 @@ class ClaimMailer < ApplicationMailer
   end
 
   def further_education_payment_provider_verification_email(claim)
-    unknown_policy_check(claim)
+    policy_check!(claim, Policies::FurtherEducationPayments)
 
     personalisation = {
       recipient_name: claim.school.name,
@@ -95,6 +95,32 @@ class ClaimMailer < ApplicationMailer
     }
 
     template_id = template_ids(claim)[:CLAIM_PROVIDER_VERIFICATION_EMAIL_TEMPLATE_ID]
+
+    template_mail(
+      template_id,
+      to: claim.school.eligible_fe_provider.primary_key_contact_email_address,
+      personalisation: personalisation
+    )
+  end
+
+  def further_education_payment_provider_confirmation_email(claim)
+    policy_check!(claim, Policies::FurtherEducationPayments)
+
+    verification = claim.eligibility.verification
+
+    verifier = verification.fetch("verifier")
+    verifier_name = "#{verifier.fetch("first_name")} #{verifier.fetch("last_name")}"
+    verification_date = verification.fetch("created_at").to_date
+
+    personalisation = {
+      recipient_name: claim.school.name,
+      claim_reference: claim.reference,
+      claimant_name: claim.full_name,
+      verifier_name: verifier_name,
+      verification_date: l(verification_date)
+    }
+
+    template_id = template_ids(claim)[:CLAIM_PROVIDER_VERIFICATION_CONFIRMATION_EMAIL_TEMPLATE_ID]
 
     template_mail(
       template_id,
@@ -142,5 +168,14 @@ class ClaimMailer < ApplicationMailer
 
   def early_years_payment_provider_magic_link(one_time_password, email)
     "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME}/claim?code=#{one_time_password}&email=#{email}"
+  end
+
+  def policy_check!(claim, policy)
+    return if claim.policy == policy
+
+    raise(
+      ArgumentError,
+      "Claim policy does not match the expected policy `#{policy}`"
+    )
   end
 end
