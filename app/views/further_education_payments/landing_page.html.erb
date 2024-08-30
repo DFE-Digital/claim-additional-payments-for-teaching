@@ -3,34 +3,26 @@
     <h1 class="govuk-heading-xl"><%= t("further_education_payments.landing_page") %></h1>
 
     <p class="govuk-body">
-      Use this service to check your eligibility for an incentive payment before you apply.
+      Use this service to check your eligibility for a targeted retention incentive payment before you apply.
     </p>
 
     <p class="govuk-body">
-      Before starting your application, it may be useful to have the following information to hand:
+      Before starting the eligibility check, it may be useful to have the following information to hand:
     </p>
 
     <%= govuk_list [
       "your contract or written statement of employment",
-      "your teaching timetable",
-      "the name of your college or sixth-form group, if your further education (FE) provider is part of one"
+      "your teaching timetable"
     ], type: :bullet %>
 
     <p class="govuk-body">
-      Answering questions about eligibility takes [TBC] minutes and applying for the payment takes another [TBC] minutes.
+      Answering questions about eligibility takes 10 minutes and applying for the payment takes another 5 minutes.
     </p>
 
     <%= govuk_inset_text do %>
       <p>
-        You’ll need a GOV.UK One Login account to apply for a further education financial incentive payment. If you don’t have an account yet, we’ll help you create one.
+        You will need a GOV.UK One Login account to apply for a targeted retention incentive payment. If you don’t have an account yet, we will help you create one.
       </p>
-
-      <p>To create a GOV.UK One Login, you’ll need:</p>
-
-      <%= govuk_list [
-        "an email address",
-        "a way to get security codes - this can be a mobile phone number or an authenticator app"
-      ], type: :bullet %>
     <% end %>
 
     <%# TODO: There isn't any journey closed content, for now hide the button %>
@@ -38,20 +30,10 @@
       <%= govuk_start_button(text: "Start now", href: claim_path(current_journey_routing_name, "claim")) %>
     <% end %>
 
-    <h2 class="govuk-heading-m govuk-!-margin-top-6">Continue an existing application</h2>
-
-    <p class="govuk-body">
-      If you have already started an application, you can <%= govuk_link_to "continue it [TBC]" %>. You will be asked to sign in to GOV.UK One Login if you are not signed in already.
-    </p>
-
     <h2 class="govuk-heading-m govuk-!-margin-top-6">Eligibility criteria</h2>
 
     <p class="govuk-body">
-      Eligible early career FE teachers can claim an annual incentive payment to encourage them to continue teaching.
-    </p>
-
-    <p class="govuk-body">
-      Claimants should be in the first 5 years of their teaching career in England and teach specific courses in the following subject areas:
+      Claimants should be in the first 5 years of their FE teaching career in England and teach specific FE courses in the following subject areas:
     </p>
 
     <%= govuk_list [
@@ -68,6 +50,42 @@
       Further information about the eligibility criteria can be found in the <%= govuk_link_to "levelling up premium payments for FE teachers guidance", "https://www.gov.uk/guidance/levelling-up-premium-payments-for-fe-teachers", target: "_blank" %>.
     </p>
 
+    <h2 class="govuk-heading-m govuk-!-margin-top-6">Application process</h2>
+
+    <p class="govuk-body">
+      You must apply between October 2024 and March 2025.
+    </p>
+
+    <p class="govuk-body">
+      If you are eligible for a targeted retention incentive payment, we will collect some personal information to:
+    </p>
+
+    <%= govuk_list [
+      "prove your identity - this will be done via GOV.UK One Login",
+      "verify your claim",
+      "process your payment"
+    ], type: :bullet %>
+
+    <p class="govuk-body">
+      If you don’t have a GOV.UK One Login account yet, you will need to create one. To do this, you will need:
+    </p>
+
+    <%= govuk_list [
+      "an email address",
+      "a way to get security codes - this can be a mobile phone number or an authenticator app"
+    ], type: :bullet %>
+
+    <p class="govuk-body">
+      You can <%= govuk_link_to "prove your identity" ,"https://www.gov.uk/using-your-gov-uk-one-login/proving-your-identity", target: "_blank" %> using the GOV.UK One Login application, by answering questions online or by visiting a Post Office.
+    </p>
+
+    <%= govuk_inset_text do %>
+      <p>
+        If you need to visit a Post Office to prove your identity, this process can take up to 10 working days.
+        Your application details will not be saved and you will need to start your application again.
+      </p>
+    <% end %>
+
     <h2 class="govuk-heading-m govuk-!-margin-top-6">Payments and deductions</h2>
 
     <p class="govuk-body">
@@ -80,20 +98,6 @@
     ], type: :bullet %>
 
     <p class="govuk-body">
-      The incentive payment is taxable income, so the amount you receive may be lower following tax deductions. If you are currently paying off a student loan, a deduction from your payment will also go towards repaying it.
-    </p>
-
-    <h2 class="govuk-heading-m govuk-!-margin-top-6">Further information</h2>
-
-    <p class="govuk-body">
-      You must apply between [MONTH TBC] <%= @academic_year.start_year.to_s %> and March <%= @academic_year.end_year.to_s %>.
-    </p>
-
-    <p class="govuk-body">
-      If you are eligible for an incentive payment, we will collect personal information to verify your claim and process your payment.
-    </p>
-
-    <p class="govuk-body">
       Payments are given up to [TBC] weeks from applying. You will receive an approval email with further information on your application.
     </p>
 
@@ -102,9 +106,9 @@
     <p class="govuk-body">
       For further support, email
       <br />
-      <%= govuk_link_to "FE-Levellingup.PremiumPayments@education.gov.uk", "mailto:FE-Levellingup.PremiumPayments@education.gov.uk", no_visited_state: true %>.
+      <%= govuk_mail_to t("further_education_payments.support_email_address"), no_visited_state: true %>.
     </p>
 
-    <p class="govuk-body">You should receive a reply within [TBC] working days.</p>
+    <p class="govuk-body">You should receive a reply within 5 working days.</p>
   </div>
 </div>
