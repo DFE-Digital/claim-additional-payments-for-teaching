@@ -16,12 +16,24 @@ module Policies
       end
 
       def ineligible?
-        return false if answers.is_a?(Journeys::EarlyYearsPayment::Provider::Start::SessionAnswers)
-
         ineligibility_reason.present?
       end
 
       def ineligibility_reason
+        start_ineligibility_reason || authenticated_ineligibility_reason
+      end
+
+      def start_ineligibility_reason
+        return nil unless answers.is_a?(Journeys::EarlyYearsPayment::Provider::Start::SessionAnswers)
+
+        if !EligibleEyProvider.eligible_email?(answers.email_address)
+          :email_not_on_whitelist
+        end
+      end
+
+      def authenticated_ineligibility_reason
+        return nil unless answers.is_a?(Journeys::EarlyYearsPayment::Provider::Authenticated::SessionAnswers)
+
         if answers.nursery_urn.to_s == "none_of_the_above"
           :nursery_is_not_listed
         elsif answers.child_facing_confirmation_given == false
