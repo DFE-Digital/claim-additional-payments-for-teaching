@@ -53,7 +53,9 @@ FactoryBot.define do
             "dfe_sign_in_uid" => "123",
             "first_name" => "Seymoure",
             "last_name" => "Skinner",
-            "email" => "seymore.skinner@springfield-elementary.edu"
+            "email" => "seymore.skinner@springfield-elementary.edu",
+            "dfe_sign_in_organisation_name" => "Springfield Elementary",
+            "dfe_sign_in_role_codes" => ["teacher_payments_claim_verifier"]
           },
           "created_at" => "2024-01-01T12:00:00.000+00:00"
         }
@@ -112,7 +114,9 @@ FactoryBot.define do
             "dfe_sign_in_uid" => "123",
             "first_name" => "Seymoure",
             "last_name" => "Skinner",
-            "email" => "seymore.skinner@springfield-elementary.edu"
+            "email" => "seymore.skinner@springfield-elementary.edu",
+            "dfe_sign_in_organisation_name" => "Springfield Elementary",
+            "dfe_sign_in_role_codes" => ["teacher_payments_claim_verifier"]
           },
           "created_at" => "2024-01-01T12:00:00.000+00:00"
         }
