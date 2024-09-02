@@ -138,6 +138,7 @@ en:
       employment: "Check employment information"
       matching_details: "Review matching details from other claims"
       identity_confirmation: "Confirm the claimant made the claim"
+      provider_verification: "Confirm the provider verification"
       payroll_gender: "Add a payroll gender for HMRC"
       student_loan_amount: "Check student loan amount"
       student_loan_plan: "Check student loan plan"
@@ -149,6 +150,7 @@ en:
       employment_start: "Check employment start date"
       subject: "Check subject"
       teaching_hours: "Check teaching hours"
+
     undo_decision:
       approved: "Undo approval"
       rejected: "Undo rejection"
@@ -836,6 +838,46 @@ en:
       task_questions:
         matching_details:
           title: Is this claim still valid despite having matching details with other claims?
+        provider_verification:
+          title: "Has the provider confirmed the claimant's details?"
+          contract_type:
+            label: "Contract of employment"
+            claimant_answers:
+              permanent: "Permanent"
+              fixed_term: "Fixed term"
+              variable_hours: "Variable hours"
+          teaching_responsibilities:
+            label: "Teaching responsibilities"
+            claimant_answers:
+              true: "Yes"
+              false: "No"
+          further_education_teaching_start_year:
+            label: "First 5 years of teaching"
+          teaching_hours_per_week:
+            label: "Timetabled teaching hours"
+            claimant_answers:
+              more_than_12: "More than 12 hours per week"
+              between_2_5_and_12: "Between 2.5 and 12 hours per week"
+              less_than_2_5: "Less than 2.5 hours per week"
+          half_teaching_hours:
+            label: "Age range taught"
+            claimant_answers:
+              true: "Yes"
+              false: "No"
+          subjects_taught:
+            label: "Subject"
+          courses_taught:
+            label: "Course"
+          teaching_hours_per_week_next_term:
+            label: "Timetabled teaching hours next term"
+            claimant_answers:
+              at_least_2_5: "At least 2.5 hours per week"
+              less_than_2_5: "Less than 2.5 hours per week"
+          taught_at_least_one_term:
+            label: "Taught at least one term"
+            claimant_answers:
+              true: "Yes"
+              false: "No"
     forms:
       ineligible:
         courses:
