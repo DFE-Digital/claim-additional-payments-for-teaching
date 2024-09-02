@@ -3,7 +3,7 @@ require "rails_helper"
 module AutomatedChecks
   module ClaimVerifiers
     describe Qualifications do
-      let(:journey_configuration) { create(:journey_configuration, :additional_payments) }
+      let(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023)) }
 
       before do
         if data
@@ -30,27 +30,29 @@ module AutomatedChecks
       subject(:qualifications) { described_class.new(**qualifications_args) }
 
       let(:claim_arg) do
-        claim = create(
-          :claim,
-          :submitted,
-          date_of_birth: Date.new(1990, 8, 23),
-          first_name: "Fred",
-          national_insurance_number: "QQ100000C",
-          reference: "AB123456",
-          surname: "ELIGIBLE",
-          policy: Policies::EarlyCareerPayments
-        )
-
-        claim.eligibility.update!(
-          attributes_for(
-            :early_career_payments_eligibility,
-            :eligible,
-            qualification: :undergraduate_itt,
-            teacher_reference_number: "1234567"
+        travel_to Date.new(2024, 3, 1) do
+          claim = create(
+            :claim,
+            :submitted,
+            date_of_birth: Date.new(1990, 8, 23),
+            first_name: "Fred",
+            national_insurance_number: "QQ100000C",
+            reference: "AB123456",
+            surname: "ELIGIBLE",
+            policy: Policies::EarlyCareerPayments
           )
-        )
 
-        claim
+          claim.eligibility.update!(
+            attributes_for(
+              :early_career_payments_eligibility,
+              :eligible,
+              qualification: :undergraduate_itt,
+              teacher_reference_number: "1234567"
+            )
+          )
+
+          claim
+        end
       end
 
       let(:qualifications_args) do
@@ -65,7 +67,11 @@ module AutomatedChecks
       end
 
       describe "#perform" do
-        subject(:perform) { qualifications.perform }
+        subject(:perform) do
+          travel_to Date.new(2024, 3, 1) do
+            qualifications.perform
+          end
+        end
 
         context "with eligible qualifications" do
           let(:data) do
