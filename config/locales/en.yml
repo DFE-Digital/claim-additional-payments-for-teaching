@@ -829,13 +829,13 @@ en:
     claim_subject: "Further education payment"
     policy_acronym: FE
     policy_short_name: Targeted Retention Incentive Payment For FE Teachers
+    eligibility_criteria_link:
+      text: targeted retention incentive payments for early career further education teachers
+      url: "https://www.gov.uk/guidance/levelling-up-premium-payments-for-fe-teachers"
     admin:
       task_questions:
         matching_details:
           title: Is this claim still valid despite having matching details with other claims?
-    eligibility_criteria_link:
-      text: targeted retention incentive payments for early career further education teachers
-      url: "https://www.gov.uk/guidance/levelling-up-premium-payments-for-fe-teachers"
     forms:
       ineligible:
         courses:
