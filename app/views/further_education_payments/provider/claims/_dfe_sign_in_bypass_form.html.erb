@@ -30,6 +30,12 @@
     ) %>
 
     <%= f.govuk_text_field(
+      "[extra][raw_info][organisation][name]",
+      label: { text: "Organisation id" },
+      value: "Springfield Elementary School"
+    ) %>
+
+    <%= f.govuk_text_field(
       "uid",
       label: { text: "DfE sign in UID" },
       value: "12345678"
