@@ -83,7 +83,7 @@ RSpec.feature "Backlinking during a claim" do
   end
 
   scenario "ECP/LUP journey" do
-    create(:journey_configuration, :additional_payments)
+    create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023))
     lup_school = create(:school, :levelling_up_premium_payments_eligible)
 
     visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
@@ -108,7 +108,7 @@ RSpec.feature "Backlinking during a claim" do
   end
 
   scenario "ECP/LUP trainee mini journey" do
-    create(:journey_configuration, :additional_payments)
+    create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023))
     lup_school = create(:school, :levelling_up_premium_payments_eligible)
 
     visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)

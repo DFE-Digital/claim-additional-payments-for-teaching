@@ -80,7 +80,13 @@ RSpec.describe Policies::LevellingUpPremiumPayments::PolicyEligibilityChecker, t
   end
 
   describe "#eligible_later?" do
-    before { create(:journey_configuration, :additional_payments) }
+    before do
+      create(
+        :journey_configuration,
+        :additional_payments,
+        current_academic_year: AcademicYear.new(2023)
+      )
+    end
 
     subject { policy_eligibility_checker.eligible_later? }
 
@@ -108,7 +114,13 @@ RSpec.describe Policies::LevellingUpPremiumPayments::PolicyEligibilityChecker, t
   end
 
   describe "#status" do
-    before { create(:journey_configuration, :additional_payments) }
+    before do
+      create(
+        :journey_configuration,
+        :additional_payments,
+        current_academic_year: AcademicYear.new(2023)
+      )
+    end
 
     subject { policy_eligibility_checker.status }
 
