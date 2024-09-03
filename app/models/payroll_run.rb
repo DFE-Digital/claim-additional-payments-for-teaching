@@ -55,7 +55,7 @@ class PayrollRun < ApplicationRecord
           # associates the payment to the Topup, so we know it's payrolled
           group_topups = grouped_items.select { |i| i.is_a?(Topup) }
 
-          award_amount = grouped_items.sum(&:award_amount)
+          award_amount = grouped_items.map(&:award_amount).compact.sum(0)
           Payment.create!(payroll_run: payroll_run, claims: grouped_claims, topups: group_topups, award_amount: award_amount)
         end
       end

@@ -7,7 +7,8 @@ RSpec.describe Policies, type: :model do
         Policies::StudentLoans,
         Policies::EarlyCareerPayments,
         Policies::LevellingUpPremiumPayments,
-        Policies::InternationalRelocationPayments
+        Policies::InternationalRelocationPayments,
+        Policies::FurtherEducationPayments
       ])
     end
   end
@@ -32,7 +33,8 @@ RSpec.describe Policies, type: :model do
         ["Student Loans", "student-loans"],
         ["Early-Career Payments", "early-career-payments"],
         ["Levelling Up Premium Payments", "levelling-up-premium-payments"],
-        ["International Relocation Payments", "international-relocation-payments"]
+        ["International Relocation Payments", "international-relocation-payments"],
+        ["Targeted Retention Incentive Payment For FE Teachers", "further-education-payments"]
       ])
     end
   end

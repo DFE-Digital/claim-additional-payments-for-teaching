@@ -3,6 +3,9 @@ module Policies
     include BasePolicy
     extend self
 
+    OTHER_CLAIMABLE_POLICIES = []
+    ELIGIBILITY_MATCHING_ATTRIBUTES = [["teacher_reference_number"]].freeze
+
     # Percentage of claims to QA
     MIN_QA_THRESHOLD = 10
 

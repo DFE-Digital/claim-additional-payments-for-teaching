@@ -140,6 +140,8 @@ FactoryBot.define do
     end
 
     trait :fe_eligible do
+      further_education
+
       after(:create) do |school, evaluator|
         create(:eligible_fe_provider, ukprn: school.ukprn)
       end
