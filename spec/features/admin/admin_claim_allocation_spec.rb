@@ -1,6 +1,17 @@
 require "rails_helper"
 
 RSpec.feature "Claims awaiting a decision" do
+  let(:expected_policy_select_options) do
+    [
+      "All",
+      "Student Loans",
+      "Early-Career Payments",
+      "Levelling Up Premium Payments",
+      "International Relocation Payments",
+      "Targeted Retention Incentive Payment For FE Teachers"
+    ]
+  end
+
   before do
     create(:journey_configuration, :student_loans)
     create(:journey_configuration, :additional_payments)
@@ -104,7 +115,7 @@ RSpec.feature "Claims awaiting a decision" do
 
       within("#allocations") do
         expect(page).to have_select("allocate_to_team_member", options: ["Aaron Admin", "Sarah Strawbridge", "Frank Yee", "Abdul Rafiq"])
-        expect(page).to have_select("allocate_to_policy", options: ["All", "Student Loans", "Early-Career Payments", "Levelling Up Premium Payments", "International Relocation Payments"])
+        expect(page).to have_select("allocate_to_policy", options: expected_policy_select_options)
         expect(page).to have_button("Allocate claims", disabled: false)
         expect(page).to have_button("Unallocate claims")
       end
@@ -182,7 +193,7 @@ RSpec.feature "Claims awaiting a decision" do
 
       within("#allocations") do
         expect(page).to have_select("allocate_to_team_member", options: ["Aaron Admin", "Sarah Strawbridge", "Frank Yee", "Abdul Rafiq"])
-        expect(page).to have_select("allocate_to_policy", options: ["All", "Student Loans", "Early-Career Payments", "Levelling Up Premium Payments", "International Relocation Payments"])
+        expect(page).to have_select("allocate_to_policy", options: expected_policy_select_options)
         expect(page).to have_button("Allocate claims", disabled: false)
         expect(page).to have_button("Unallocate claims")
       end
@@ -219,7 +230,7 @@ RSpec.feature "Claims awaiting a decision" do
 
       within("#allocations") do
         expect(page).to have_select("allocate_to_team_member", options: ["Aaron Admin", "Sarah Strawbridge", "Frank Yee", "Abdul Rafiq"])
-        expect(page).to have_select("allocate_to_policy", options: ["All", "Student Loans", "Early-Career Payments", "Levelling Up Premium Payments", "International Relocation Payments"])
+        expect(page).to have_select("allocate_to_policy", options: expected_policy_select_options)
         expect(page).to have_button("Allocate claims", disabled: false)
         expect(page).to have_button("Unallocate claims")
       end
