@@ -396,7 +396,7 @@ class Claim < ApplicationRecord
   end
 
   def award_amount_with_topups
-    topups.sum(:award_amount) + award_amount
+    topups.sum(:award_amount) + (award_amount || 0)
   end
 
   def must_manually_validate_bank_details?
