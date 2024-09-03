@@ -1,6 +1,37 @@
 require "rails_helper"
 
 RSpec.describe "OmniauthCallbacksControllers", type: :request do
+  describe "#sign_out" do
+    before do
+      allow_any_instance_of(OmniauthCallbacksController).to receive(:current_journey_routing_name).and_return(journey)
+
+      get auth_sign_out_path(journey: "further-education-payments-provider")
+    end
+
+    context "further education payments provider journey" do
+      let(:journey) { Journeys::FurtherEducationPayments::Provider::ROUTING_NAME }
+
+      it "redirects to the FE sign-in page with a flash message" do
+        expect(response).to redirect_to(
+          claim_path(
+            journey: "further-education-payments-provider",
+            slug: "sign-in"
+          )
+        )
+
+        expect(flash[:notice]).to include("You've been signed out")
+      end
+    end
+
+    context "no journey returns a 404" do
+      let(:journey) { nil }
+
+      it "404 page" do
+        expect(response.body).to include("Page not found")
+      end
+    end
+  end
+
   describe "#callback" do
     def set_mock_auth(trn)
       OmniAuth.config.mock_auth[:default] = OmniAuth::AuthHash.new(

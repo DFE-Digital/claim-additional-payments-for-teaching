@@ -29,6 +29,21 @@ class OmniauthCallbacksController < ApplicationController
     end
   end
 
+  def sign_out
+    case current_journey_routing_name
+    when "further-education-payments-provider"
+      redirect_to(
+        claim_path(
+          journey: current_journey_routing_name,
+          slug: "sign-in"
+        ),
+        notice: "You've been signed out"
+      )
+    else
+      render file: Rails.root.join("public", "404.html"), status: :not_found, layout: false
+    end
+  end
+
   def onelogin
     core_identity_jwt = omniauth_hash.extra.raw_info[ONELOGIN_JWT_CORE_IDENTITY_HASH_KEY]
     return process_one_login_identity_verification_callback(core_identity_jwt) if core_identity_jwt

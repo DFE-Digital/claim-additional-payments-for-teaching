@@ -12,7 +12,9 @@
   that you have logged in using the correct one.
 </p>
 
-<p class="govuk-body govuk-!-margin-top-6">
+<%= govuk_button_link_to "Sign out", Journeys::FurtherEducationPayments::Provider.sign_out_url %>
+
+<p class="govuk-body">
   Email <%= govuk_mail_to t("further_education_payments_provider.support_email_address") %>
   if you have logged in with the correct organisation and need support.
 </p>
