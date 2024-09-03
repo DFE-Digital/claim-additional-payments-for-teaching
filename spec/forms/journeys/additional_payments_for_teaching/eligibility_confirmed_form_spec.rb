@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityConfirmedForm, type: :model do
-  before { create(:journey_configuration, :additional_payments) }
+  before { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023)) }
 
   subject(:form) { described_class.new(journey:, journey_session:, params:) }
 

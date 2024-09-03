@@ -6,7 +6,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
   end
   let(:eligibility) { claim.eligibility }
 
-  before { create(:journey_configuration, :additional_payments) }
+  before { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023)) }
 
   scenario "Eligible for both" do
     school = create(:school, :combined_journey_eligibile_for_all)

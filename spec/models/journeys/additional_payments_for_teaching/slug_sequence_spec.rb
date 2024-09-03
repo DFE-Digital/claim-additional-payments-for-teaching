@@ -23,7 +23,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
   let(:qualifications_details_check) { nil }
 
   describe "The sequence as defined by #slugs" do
-    before { create(:journey_configuration, :additional_payments, teacher_id_enabled:) }
+    before { create(:journey_configuration, :additional_payments, teacher_id_enabled:, current_academic_year: AcademicYear.new(2023)) }
 
     it "excludes the 'ineligible' slug if the claim's eligibility is undetermined" do
       expect(slug_sequence.slugs).not_to include("ineligible")
@@ -352,7 +352,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
 
   describe "eligibility affect on slugs" do
     before do
-      create(:journey_configuration, :additional_payments)
+      create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023))
     end
 
     subject { described_class.new(journey_session).slugs }

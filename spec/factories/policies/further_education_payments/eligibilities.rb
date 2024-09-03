@@ -4,6 +4,11 @@ FactoryBot.define do
     school { create(:school, :further_education) }
 
     trait :eligible do
+      eligible_school
+    end
+
+    trait :eligible_school do
+      association :school, factory: :fe_eligible_school
     end
 
     trait :verified do

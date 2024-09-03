@@ -545,7 +545,7 @@ en:
           blank: Select an additional payment
           inclusion: Select a valid additional payment
       reminders:
-        personal_details:
+        personal_details: &reminders_personal_details
           errors:
             full_name:
               blank: Enter full name
@@ -821,12 +821,18 @@ en:
         teaching_hours:
           title: "Does the teacher meet the minimum 50% teaching time requirement in their role?"
   further_education_payments:
-    landing_page: Find out if you are eligible for any incentive payments for further education teachers
+    landing_page: Find out if you are eligible for a targeted retention incentive payment for further education teachers
     claim_description: for further education payments
     journey_name: Claim incentive payments for further education teachers
     feedback_email: "FE-Levellingup.PremiumPayments@education.gov.uk"
     support_email_address: "FE-Levellingup.PremiumPayments@education.gov.uk"
     claim_subject: "Further education payment"
+    policy_acronym: FE
+    policy_short_name: Targeted Retention Incentive Payment For FE Teachers
+    admin:
+      task_questions:
+        matching_details:
+          title: Is this claim still valid despite having matching details with other claims?
     forms:
       ineligible:
         courses:
@@ -894,7 +900,7 @@ en:
       teaching_hours_per_week:
         question:
           On average, how many hours per week are you timetabled to teach at %{school_name} during the current term?
-        hint: ‘Teaching’ refers to the direct contact time you spend in lessons with students of all ages.
+        hint: ‘Timetabled teaching hours’ refers to the time you spend teaching lessons to students of all ages.
         options:
           more_than_12: More than 12 hours per week
           between_2_5_and_12: Between 2.5 and 12 hours per week
@@ -1030,9 +1036,16 @@ en:
           none: I do not teach any of these courses
       teaching_qualification:
         question: Do you have a teaching qualification?
-        hint:
-          Your response will be noted for future claims. If you don’t have a teaching qualification yet, make sure that
-          you enrol on one or complete one in the next 12 months.
+        hint_html: >
+          <p>Your response will be noted for future claims.</p>
+          <p>If you don’t have a teaching qualification yet, to remain eligible for a retention payment next year,
+          make sure you either:</p>
+          <p>
+            <ul>
+              <li>complete a teaching qualification in the next 12 months</li>
+              <li>enrol on a teaching qualification in the next 12 months</li>
+            </ul>
+          </p>
         options:
           "yes": "Yes"
           not_yet: Not yet, I am currently enrolled on one and working towards completing it
@@ -1083,6 +1096,7 @@ en:
       teacher_reference_number:
         questions:
           teacher_reference_number: "What is your TRN? (optional)"
+      personal_details: *reminders_personal_details
     check_your_answers:
       part_one:
         primary_heading: Check your answers
@@ -1108,23 +1122,68 @@ en:
         claimant_date_of_birth: "Claimant date of birth"
         claimant_trn: "Claimant teacher reference number (TRN)"
         claim_date: "Claim date"
+        errors:
+          declaration:
+            acceptance: "Tick the box to confirm that the information provided in this form is correct to the best of your knowledge"
         assertions:
           fixed_contract:
-            contract_type: "Does %{claimant} have a permanent contract of employment at %{provider}?"
-            teaching_responsibilities: "Is %{claimant} a member of staff with teaching responsibilities?"
-            further_education_teaching_start_year: "Is %{claimant} in the first 5 years of their further education teaching career in England?"
-            teaching_hours_per_week: "Is %{claimant} timetabled to teach an average of 12 hours per week during the current term?"
-            hours_teaching_eligible_subjects: "For at least half of their timetabled teaching hours, does %{claimant} teach 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?"
-            subjects_taught: "For at least half of their timetabled teaching hours, does %{claimant} teach:"
+            contract_type:
+              label: "Does %{claimant} have a permanent contract of employment at %{provider}?"
+              errors:
+                inclusion: "Select yes if %{claimant} has a fixed term contract of employment at %{provider}"
+            teaching_responsibilities:
+              label: "Is %{claimant} a member of staff with teaching responsibilities?"
+              errors:
+                inclusion: "Select yes if %{claimant} is a member of staff with teaching responsibilities"
+            further_education_teaching_start_year:
+              label: "Is %{claimant} in the first 5 years of their further education teaching career in England?"
+              errors:
+                inclusion: "Select yes if %{claimant} is in the first 5 years of their further education teaching career in England"
+            teaching_hours_per_week:
+              label: "Is %{claimant} timetabled to teach an average of %{hours} during the current term?"
+              errors:
+                inclusion: "Select yes if %{claimant} is timetabled to teach an average of %{hours} during the current term"
+            hours_teaching_eligible_subjects:
+              label: "For at least half of their timetabled teaching hours, does %{claimant} teach 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?"
+              errors:
+                inclusion: "Select yes if %{claimant} teaches 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP), for at least half of their timetabled teaching hours"
+            subjects_taught:
+              label: "For at least half of their timetabled teaching hours, does %{claimant} teach:"
+              errors:
+                inclusion: "Select yes if %{claimant} teaches this course for at least half their timetabled teaching hours"
           variable_contract:
-            contract_type: "Does %{claimant} have a variable hour contract of employment at %{provider}?"
-            teaching_responsibilities: "Is %{claimant} a member of staff with teaching responsibilities?"
-            further_education_teaching_start_year: "Is %{claimant} in the first 5 years of their further education teaching career in England?"
-            taught_at_least_one_term: "Has %{claimant} taught for at least one academic term at %{provider}?"
-            teaching_hours_per_week: "Is %{claimant} timetabled to teach an average of 12 hours per week during the current term?"
-            hours_teaching_eligible_subjects: "For at least half of their timetabled teaching hours, does %{claimant} teach 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?"
-            subjects_taught: "For at least half of their timetabled teaching hours, does %{claimant} teach:"
-            teaching_hours_per_week_next_term: "Will %{claimant} be timetabled to teach at least 2.5 hours per week next term?"
+            contract_type:
+              label: "Does %{claimant} have a variable hour contract of employment at %{provider}?"
+              errors:
+                inclusion: "Select yes if %{claimant} has a variable hours contract of employment at %{provider}"
+            teaching_responsibilities:
+              label: "Is %{claimant} a member of staff with teaching responsibilities?"
+              errors:
+                inclusion: "Select yes if %{claimant} is a member of staff with teaching responsibilities"
+            further_education_teaching_start_year:
+              label: "Is %{claimant} in the first 5 years of their further education teaching career in England?"
+              errors:
+                inclusion: "Select yes if %{claimant} is in the first 5 years of their further education teaching career in England"
+            taught_at_least_one_term:
+              label: "Has %{claimant} taught for at least one academic term at %{provider}?"
+              errors:
+                inclusion: "Select yes if %{claimant} has taught at least one academic term at %{provider}"
+            teaching_hours_per_week:
+              label: "Is %{claimant} timetabled to teach an average of %{hours} during the current term?"
+              errors:
+                inclusion: "Select yes if %{claimant} is timetabled to teach an average of %{hours} during the current term"
+            hours_teaching_eligible_subjects:
+              label: "For at least half of their timetabled teaching hours, does %{claimant} teach 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?"
+              errors:
+                inclusion: "Select yes if %{claimant} teaches 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP), for at least half of their timetabled teaching hours"
+            subjects_taught:
+              label: "For at least half of their timetabled teaching hours, does %{claimant} teach:"
+              errors:
+                inclusion: "Select yes if %{claimant} teaches this course for at least half their timetabled teaching hours"
+            teaching_hours_per_week_next_term:
+              label: "Will %{claimant} be timetabled to teach at least 2.5 hours per week next term?"
+              errors:
+                inclusion: "Select yes if %{claimant} will be timetabled to teach at least 2.5 hours per week next term"
 
   early_years_payment:
     claim_description: for an early years financial incentive payment

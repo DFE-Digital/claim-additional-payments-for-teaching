@@ -166,7 +166,11 @@ class Claim < ApplicationRecord
   scope :submitted, -> { where.not(submitted_at: nil) }
   scope :held, -> { where(held: true) }
   scope :not_held, -> { where(held: false) }
-  scope :awaiting_decision, -> { submitted.joins("LEFT OUTER JOIN decisions ON decisions.claim_id = claims.id AND decisions.undone = false").where(decisions: {claim_id: nil}) }
+  scope :awaiting_decision, -> do
+    submitted
+      .joins("LEFT OUTER JOIN decisions ON decisions.claim_id = claims.id AND decisions.undone = false")
+      .where(decisions: {claim_id: nil})
+  end
   scope :awaiting_task, ->(task_name) { awaiting_decision.joins(sanitize_sql(["LEFT OUTER JOIN tasks ON tasks.claim_id = claims.id AND tasks.name = ?", task_name])).where(tasks: {claim_id: nil}) }
   scope :auto_approved, -> { approved.where(decisions: {created_by: nil}) }
   scope :approved, -> { joins(:decisions).merge(Decision.active.approved) }
@@ -392,7 +396,7 @@ class Claim < ApplicationRecord
   end
 
   def award_amount_with_topups
-    topups.sum(:award_amount) + award_amount
+    topups.sum(:award_amount) + (award_amount || 0)
   end
 
   def must_manually_validate_bank_details?

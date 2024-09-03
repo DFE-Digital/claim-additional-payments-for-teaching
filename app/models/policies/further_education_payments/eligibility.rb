@@ -1,6 +1,8 @@
 module Policies
   module FurtherEducationPayments
     class Eligibility < ApplicationRecord
+      AMENDABLE_ATTRIBUTES = [].freeze
+
       self.table_name = "further_education_payments_eligibilities"
 
       class Course < Struct.new(:subject, :name, keyword_init: true)

@@ -2,21 +2,16 @@ class Admin::ClaimsController < Admin::BaseAdminController
   include Pagy::Backend
 
   before_action :ensure_service_operator
-  before_action :filter_claims_by_status, only: :index
 
   def index
-    @claims ||= Claim.includes(:decisions).not_held.awaiting_decision
+    @filter_form = Admin::ClaimsFilterForm.new(
+      team_member: params[:team_member],
+      policy: params[:policy],
+      status: params[:status]
+    )
 
-    @claims = @claims.by_policy(filtered_policy) if filtered_policy
-    @claims = @claims.by_claims_team_member(filtered_team_member, params[:status]) if filtered_team_member
-    @claims = @claims.unassigned if filtered_unassigned
-
-    @claims = @claims.includes(:tasks, eligibility: [:claim_school, :current_school])
-    @claims = @claims.order(:submitted_at)
-
-    all_claims = @claims
-    @total_claim_count = all_claims.count
-    @pagy, @claims = pagy(@claims)
+    @total_claim_count = @filter_form.count
+    @pagy, @claims = pagy(@filter_form.claims)
 
     respond_to do |format|
       format.html {
@@ -79,19 +74,6 @@ class Admin::ClaimsController < Admin::BaseAdminController
 
   private
 
-  def filtered_policy
-    Policies[params[:policy]]
-  end
-
-  def filtered_team_member
-    return if params[:team_member].blank? || filtered_unassigned
-    DfeSignIn::User.not_deleted.find(params[:team_member]).id
-  end
-
-  def filtered_unassigned
-    params[:team_member] == "unassigned"
-  end
-
   # Stores where View Claim originated from, e.g. claims index or search results
   def claims_backlink_path!(source_path)
     session[:claims_backlink_path] = source_path
@@ -99,31 +81,5 @@ class Admin::ClaimsController < Admin::BaseAdminController
 
   def hold_params
     params.require(:hold).permit(:body).merge(claim: @claim)
-  end
-
-  def filter_claims_by_status
-    @claims =
-      case params[:status]
-      when "approved"
-        Claim.current_academic_year.approved
-      when "approved_awaiting_qa"
-        Claim.approved.awaiting_qa
-      when "approved_awaiting_payroll"
-        approved_awaiting_payroll
-      when "automatically_approved_awaiting_payroll"
-        Claim.current_academic_year.payrollable.auto_approved
-      when "rejected"
-        Claim.current_academic_year.rejected
-      when "held"
-        Claim.includes(:decisions).held.awaiting_decision
-      when "failed_bank_validation"
-        Claim.includes(:decisions).failed_bank_validation.awaiting_decision
-      end
-  end
-
-  def approved_awaiting_payroll
-    claim_ids_with_payrollable_topups = Topup.payrollable.pluck(:claim_id)
-
-    Claim.current_academic_year.payrollable.or(Claim.current_academic_year.where(id: claim_ids_with_payrollable_topups))
   end
 end

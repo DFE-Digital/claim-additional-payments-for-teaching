@@ -3,6 +3,9 @@ module Policies
     include BasePolicy
     extend self
 
+    OTHER_CLAIMABLE_POLICIES = []
+    ELIGIBILITY_MATCHING_ATTRIBUTES = [["teacher_reference_number"]].freeze
+
     # Percentage of claims to QA
     MIN_QA_THRESHOLD = 10
 
@@ -20,6 +23,10 @@ module Policies
     # TODO: This is needed once the reply-to email address has been added to Gov Notify
     def notify_reply_to_id
       nil
+    end
+
+    def verification_due_date_for_claim(claim)
+      (claim.created_at + 2.weeks).to_date
     end
   end
 end
