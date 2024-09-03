@@ -52,6 +52,11 @@
       <p class="govuk-body">
         This task has not yet been completed by the provider
       </p>
+
+      <%= govuk_button_to(
+        "Resend provider verification email",
+        admin_claim_further_education_payments_provider_verification_emails_path(@claim)
+      ) %>
     <% end %>
   </div>
 
