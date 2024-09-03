@@ -109,6 +109,8 @@ module Journeys
 
           claim.save!
 
+          ClaimVerifierJob.perform_later(claim)
+
           true
         end
 

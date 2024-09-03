@@ -36,7 +36,7 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
       answers: {
         claim_id: claim.id,
         dfe_sign_in_uid: "123",
-        dfe_sign_in_first_name: "Seymoure",
+        dfe_sign_in_first_name: "Seymour",
         dfe_sign_in_last_name: "Skinner",
         dfe_sign_in_email: "seymour.skinner@springfield-elementary.edu",
         dfe_sign_in_organisation_name: "Springfield Elementary",
@@ -267,11 +267,19 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
       )
     end
 
-    it "verifies the claim" do
-      travel_to DateTime.new(2024, 1, 1, 12, 0, 0) do
-        form.save
-      end
+    before do
+      dqt_teacher_resource = instance_double(Dqt::TeacherResource, find: nil)
+      dqt_client = instance_double(Dqt::Client, teacher: dqt_teacher_resource)
+      allow(Dqt::Client).to receive(:new).and_return(dqt_client)
 
+      travel_to DateTime.new(2024, 1, 1, 12, 0, 0) do
+        perform_enqueued_jobs do
+          form.save
+        end
+      end
+    end
+
+    it "verifies the claim" do
       expect(claim.reload.eligibility.verification).to match(
         {
           "assertions" => [
@@ -302,7 +310,7 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
           ],
           "verifier" => {
             "dfe_sign_in_uid" => "123",
-            "first_name" => "Seymoure",
+            "first_name" => "Seymour",
             "last_name" => "Skinner",
             "email" => "seymour.skinner@springfield-elementary.edu",
             "dfe_sign_in_organisation_name" => "Springfield Elementary",
@@ -310,6 +318,16 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
           },
           "created_at" => "2024-01-01T12:00:00.000+00:00"
         }
+      )
+    end
+
+    it "creates the provider verification task" do
+      task = claim.reload.tasks.last
+
+      expect(task.name).to eq("provider_verification")
+
+      expect(task.created_by.email).to eq(
+        "seymour.skinner@springfield-elementary.edu"
       )
     end
   end
