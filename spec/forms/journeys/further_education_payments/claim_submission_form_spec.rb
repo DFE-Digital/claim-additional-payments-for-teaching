@@ -83,5 +83,20 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
         )
       )
     end
+
+    it "doesn't email the provider if the claim is a duplicate" do
+      allow(ClaimVerifierJob).to receive(:perform_later)
+
+      allow(ClaimMailer).to(
+        receive(:further_education_payment_provider_verification_email)
+      ).and_return(double(deliver_later: nil))
+
+      2.times { described_class.new(journey_session: journey_session).save }
+
+      expect(ClaimMailer).to(
+        have_received(:further_education_payment_provider_verification_email)
+        .exactly(1).times
+      )
+    end
   end
 end
