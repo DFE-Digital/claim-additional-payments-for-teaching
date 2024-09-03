@@ -7,6 +7,8 @@ class Admin::ClaimsFilterForm
   attribute :status, :string
 
   def claims
+    return @claims if @claims
+
     @claims =
       case status
       when "approved"
@@ -23,13 +25,13 @@ class Admin::ClaimsFilterForm
         Claim.includes(:decisions).held.awaiting_decision
       when "failed_bank_validation"
         Claim.includes(:decisions).failed_bank_validation.awaiting_decision
+      else
+        Claim.includes(:decisions).not_held.awaiting_decision
       end
 
-    @claims ||= Claim.includes(:decisions).not_held.awaiting_decision
-
-    @claims = @claims.by_policy(filtered_policy) if filtered_policy
-    @claims = @claims.by_claims_team_member(filtered_team_member, status) if filtered_team_member
-    @claims = @claims.unassigned if filtered_unassigned
+    @claims = @claims.by_policy(selected_policy) if selected_policy
+    @claims = @claims.by_claims_team_member(selected_team_member, status) if selected_team_member
+    @claims = @claims.unassigned if unassigned?
 
     @claims = @claims.includes(:tasks, eligibility: [:claim_school, :current_school])
     @claims = @claims.order(:submitted_at)
@@ -49,16 +51,17 @@ class Admin::ClaimsFilterForm
     Claim.current_academic_year.payrollable.or(Claim.current_academic_year.where(id: claim_ids_with_payrollable_topups))
   end
 
-  def filtered_policy
+  def selected_policy
     Policies[policy]
   end
 
-  def filtered_team_member
-    return if team_member.blank? || filtered_unassigned
-    DfeSignIn::User.not_deleted.find(team_member).id
+  def selected_team_member
+    return if team_member.blank? || unassigned?
+
+    DfeSignIn::User.not_deleted.find(team_member)
   end
 
-  def filtered_unassigned
+  def unassigned?
     team_member == "unassigned"
   end
 end
