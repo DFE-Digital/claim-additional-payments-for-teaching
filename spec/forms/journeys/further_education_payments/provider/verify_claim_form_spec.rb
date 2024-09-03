@@ -3,9 +3,32 @@ require "rails_helper"
 RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, type: :model do
   let(:journey) { Journeys::FurtherEducationPayments::Provider }
 
-  let(:eligibility) { create(:further_education_payments_eligibility) }
+  let(:school) do
+    create(:school, :further_education, name: "Springfield Elementary")
+  end
 
-  let(:claim) { eligibility.claim }
+  let(:teaching_hours_per_week) { "more_than_12" }
+
+  let(:contract_type) { "fixed_term" }
+
+  let(:eligibility) do
+    create(
+      :further_education_payments_eligibility,
+      school: school,
+      teaching_hours_per_week: teaching_hours_per_week,
+      contract_type: contract_type
+    )
+  end
+
+  let(:claim) do
+    create(
+      :claim,
+      eligibility: eligibility,
+      policy: Policies::FurtherEducationPayments,
+      first_name: "Edna",
+      surname: "Krabappel"
+    )
+  end
 
   let(:journey_session) do
     create(
@@ -34,15 +57,11 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
     subject { form }
 
     it do
-      is_expected.to validate_acceptance_of(:declaration)
-    end
-
-    it "validates all assertions are answered" do
-      form.validate
-
-      form.assertions.each do |assertion|
-        expect(assertion.errors[:outcome]).to eq(["Select an option"])
-      end
+      is_expected.to(
+        validate_acceptance_of(:declaration).with_message(
+          "Tick the box to confirm that the information provided in this form is correct to the best of your knowledge"
+        )
+      )
     end
 
     it "validates the claim hasn't already been verified" do
@@ -106,6 +125,123 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
             teaching_hours_per_week_next_term
           ]
         )
+      end
+    end
+  end
+
+  describe "AssertionForm" do
+    subject do
+      described_class::AssertionForm.new(
+        name: assertion_name,
+        parent_form: form
+      )
+    end
+
+    context "when the assertion is `contract_type`" do
+      let(:assertion_name) { "contract_type" }
+
+      context "when fixed term" do
+        it do
+          is_expected.not_to(allow_value(nil).for(:outcome).with_message(
+            "Select yes if Edna has a fixed term contract of employment at Springfield Elementary"
+          ))
+        end
+      end
+
+      context "when variable" do
+        let(:contract_type) { "variable_hours" }
+
+        it do
+          is_expected.not_to(allow_value(nil).for(:outcome).with_message(
+            "Select yes if Edna has a variable hours contract of employment at Springfield Elementary"
+          ))
+        end
+      end
+    end
+
+    context "when the assertion is `teaching_responsibilities`" do
+      let(:assertion_name) { "teaching_responsibilities" }
+
+      it do
+        is_expected.not_to(allow_value(nil).for(:outcome).with_message(
+          "Select yes if Edna is a member of staff with teaching responsibilities"
+        ))
+      end
+    end
+
+    context "when the assertion is `further_education_teaching_start_year`" do
+      let(:assertion_name) { "further_education_teaching_start_year" }
+
+      it do
+        is_expected.not_to(allow_value(nil).for(:outcome).with_message(
+          "Select yes if Edna is in the first 5 years of their further education teaching career in England"
+        ))
+      end
+    end
+
+    context "when the assertion is `taught_at_least_one_term`" do
+      let(:assertion_name) { "taught_at_least_one_term" }
+
+      let(:contract_type) { "variable_hours" }
+
+      it do
+        is_expected.not_to(allow_value(nil).for(:outcome).with_message(
+          "Select yes if Edna has taught at least one academic term at Springfield Elementary"
+        ))
+      end
+    end
+
+    context "when the assertion is `teaching_hours_per_week`" do
+      let(:assertion_name) { "teaching_hours_per_week" }
+
+      context "when more that 12" do
+        it do
+          is_expected.not_to(allow_value(nil).for(:outcome).with_message(
+            "Select yes if Edna is timetabled to teach an average of more than 12 hours per week during the current term"
+          ))
+        end
+      end
+
+      context "when between 2.5 and 12" do
+        let(:teaching_hours_per_week) { "between_2_5_and_12" }
+
+        it do
+          is_expected.not_to(allow_value(nil).for(:outcome).with_message(
+            "Select yes if Edna is timetabled to teach an average of between 2.5 and 12 hours per week during the current term"
+          ))
+        end
+      end
+    end
+
+    context "when the assertion is `hours_teaching_eligible_subjects`" do
+      let(:assertion_name) { "hours_teaching_eligible_subjects" }
+
+      it do
+        is_expected.not_to(allow_value(nil).for(:outcome).with_message(
+          "Select yes if Edna teaches 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP), for at least half of their timetabled teaching hours"
+        ))
+      end
+    end
+
+    context "when the assertion is `subjects_taught`" do
+      let(:assertion_name) { "subjects_taught" }
+
+      it do
+        is_expected.not_to(allow_value(nil).for(:outcome).with_message(
+          "Select yes if Edna teaches this course for at least half their timetabled teaching hours"
+        ))
+      end
+    end
+
+    context "when the assertion is `teaching_hours_per_week_next_term`" do
+      let(:assertion_name) { "teaching_hours_per_week_next_term" }
+
+      let(:contract_type) { "variable_hours" }
+
+      it do
+        is_expected.not_to(allow_value(nil).for(:outcome).with_message(
+          "Select yes if Edna will be timetabled to teach at least 2.5 hours per week next term"
+        ))
       end
     end
   end

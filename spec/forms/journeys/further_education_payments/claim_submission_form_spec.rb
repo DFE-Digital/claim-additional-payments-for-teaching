@@ -2,9 +2,10 @@ require "rails_helper"
 
 RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
   before do
-    create(:journey_configuration, :further_education_payments)
+    create(:journey_configuration, :further_education_payments, current_academic_year:)
   end
 
+  let(:current_academic_year) { AcademicYear.new(2024) }
   let(:journey) { Journeys::FurtherEducationPayments }
   let(:school) { create(:school, :further_education, :fe_eligible) }
 
@@ -64,7 +65,7 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
     it "emails the claim provider" do
       allow(ClaimVerifierJob).to receive(:perform_later)
 
-      travel_to DateTime.new(2024, 3, 1, 0, 0, 0) do
+      travel_to DateTime.new(2024, 10, 1, 0, 0, 0) do
         perform_enqueued_jobs { subject }
       end
 
@@ -76,8 +77,8 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
           recipient_name: claim.school.name,
           claimant_name: [answers.first_name, answers.surname].join(" "),
           claim_reference: claim.reference,
-          claim_submission_date: "1 March 2024",
-          verification_due_date: "15 March 2024",
+          claim_submission_date: "1 October 2024",
+          verification_due_date: "15 October 2024",
           verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
         )
       )

@@ -4,8 +4,8 @@ RSpec.feature "Changing the answers on a submittable claim" do
   include StudentLoansHelper
 
   before do
-    create(:journey_configuration, :student_loans)
-    create(:journey_configuration, :additional_payments)
+    create(:journey_configuration, :student_loans, current_academic_year: AcademicYear.new(2023))
+    create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023))
   end
 
   let(:student_loans_school) { create(:school, :student_loans_eligible) }

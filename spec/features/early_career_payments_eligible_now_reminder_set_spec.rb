@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Eligible now can set a reminder for next year." do
-  let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
+  let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023)) }
   let(:eligibility_attributes) { attributes_for(:early_career_payments_eligibility, :eligible, current_school_id: school.id) }
   let(:academic_year) { journey_configuration.current_academic_year }
   let(:school) { create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_eligible) }

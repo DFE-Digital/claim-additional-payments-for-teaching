@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Claims::IttSubjectHelper do
-  before { create(:journey_configuration, :additional_payments) }
+  before { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023)) }
 
   let(:ecp_trainee_teacher_eligibility) { build(:early_career_payments_eligibility, :trainee_teacher) }
   let(:lup_trainee_teacher_eligibility) { build(:levelling_up_premium_payments_eligibility, :trainee_teacher) }

@@ -29,7 +29,9 @@ module Journeys
 
         attribute :declaration, :boolean
 
-        validates :declaration, acceptance: true
+        validates :declaration, acceptance: {
+          message: i18n_error_message("declaration.acceptance")
+        }
 
         validate :all_assertions_answered
 
@@ -61,9 +63,21 @@ module Journeys
           @course_descriptions ||= claim.eligibility.courses_taught.map(&:description)
         end
 
+        def teaching_hours_per_week
+          I18n.t(
+            [
+              "further_education_payments",
+              "forms",
+              "teaching_hours_per_week",
+              "options",
+              claim.eligibility.teaching_hours_per_week
+            ].join(".")
+          ).downcase
+        end
+
         def assertions
           @assertions ||= ASSERTIONS.fetch(contract_type).map do |assertion_name|
-            AssertionForm.new(name: assertion_name)
+            AssertionForm.new(name: assertion_name, parent_form: self)
           end
         end
 
@@ -116,7 +130,7 @@ module Journeys
             assertion.errors.each do |error|
               errors.add(
                 "assertions_attributes[#{i}][#{error.attribute}]",
-                error.full_message
+                error.message
               )
             end
           end
@@ -132,14 +146,38 @@ module Journeys
           include ActiveModel::Model
           include ActiveModel::Attributes
 
+          attr_reader :parent_form
+
           attribute :name, :string
           attribute :outcome, :boolean
 
           validates :name, presence: true
           validates :outcome, inclusion: {
             in: [true, false],
-            message: "Select an option"
+            message: ->(form, _) do
+              I18n.t(
+                [
+                  "further_education_payments_provider",
+                  "forms",
+                  "verify_claim",
+                  "assertions",
+                  form.contract_type,
+                  form.name,
+                  "errors",
+                  "inclusion"
+                ].join("."),
+                claimant: form.claimant,
+                provider: form.provider,
+                hours: form.hours
+              )
+            end
           }
+
+          def initialize(name:, parent_form:)
+            @parent_form = parent_form
+
+            super(name: name)
+          end
 
           def radio_options
             [
@@ -149,6 +187,22 @@ module Journeys
           end
 
           class RadioOption < Struct.new(:id, :name, keyword_init: true); end
+
+          def claimant
+            parent_form.claim.first_name
+          end
+
+          def provider
+            parent_form.claim.school.name
+          end
+
+          def hours
+            parent_form.teaching_hours_per_week
+          end
+
+          def contract_type
+            parent_form.contract_type
+          end
         end
       end
     end

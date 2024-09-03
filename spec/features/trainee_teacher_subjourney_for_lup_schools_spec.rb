@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Trainee teacher subjourney for LUP schools" do
-  let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
+  let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023)) }
   let(:academic_year) { journey_configuration.current_academic_year }
 
   scenario "non-LUP school" do
