@@ -39,6 +39,11 @@ module Journeys
     attribute :onelogin_user_info, default: {}
     attribute :onelogin_credentials, default: {}
     attribute :onelogin_uid, :string
+
+    attribute :onelogin_idv_first_name, :string
+    attribute :onelogin_idv_last_name, :string
+    attribute :onelogin_idv_date_of_birth, :date
+
     attribute :onelogin_auth_at, :datetime
     attribute :onelogin_idv_at, :datetime
     attribute :email_address_check, :boolean
