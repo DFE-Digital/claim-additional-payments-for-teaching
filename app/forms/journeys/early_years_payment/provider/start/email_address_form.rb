@@ -13,6 +13,9 @@ module Journeys
               )
               journey_session.save!
               ClaimMailer.early_years_payment_provider_email(answers, otp_code(email_address), email_address).deliver_now
+            else
+              journey_session.answers.assign_attributes(email_address: email_address)
+              journey_session.save!
             end
           end
 
