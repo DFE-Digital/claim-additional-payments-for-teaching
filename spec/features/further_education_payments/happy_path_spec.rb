@@ -188,7 +188,7 @@ RSpec.feature "Further education payments" do
 
     expect(eligibility.teacher_reference_number).to eql("1234567")
 
-    expect(page).to have_content("You applied for a targeted retention incentive payment")
+    expect(page).to have_content("You applied for a further education targeted retention incentive payment")
     click_link "Set reminder"
 
     expect(page).to have_content("Personal details")
