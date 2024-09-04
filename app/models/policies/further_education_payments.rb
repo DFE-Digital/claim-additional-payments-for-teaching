@@ -34,18 +34,7 @@ module Policies
     end
 
     def duplicate_claim?(claim)
-      Eligibility
-        .joins(:claim)
-        .where(school_id: claim.eligibility.school_id)
-        .merge(
-          Claim.where(
-            first_name: claim.first_name,
-            surname: claim.surname,
-            email_address: claim.email_address
-          )
-          .where.not(id: claim.id)
-        )
-        .exists?
+      Claim::MatchingAttributeFinder.new(claim).matching_claims.exists?
     end
   end
 end

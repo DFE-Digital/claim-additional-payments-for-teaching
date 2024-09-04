@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_21_121253) do
+ActiveRecord::Schema[7.0].define(version: 2024_09_04_105917) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_trgm"
@@ -254,6 +254,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_21_121253) do
     t.boolean "subject_to_disciplinary_action"
     t.boolean "half_teaching_hours"
     t.jsonb "verification", default: {}
+    t.boolean "flagged_as_duplicate", default: false
     t.index ["possible_school_id"], name: "index_fe_payments_eligibilities_on_possible_school_id"
     t.index ["school_id"], name: "index_fe_payments_eligibilities_on_school_id"
   end
