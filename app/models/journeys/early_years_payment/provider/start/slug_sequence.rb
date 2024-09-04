@@ -6,6 +6,7 @@ module Journeys
           SLUGS = %w[
             email-address
             check-your-email
+            ineligible
           ].freeze
 
           def self.start_page_url
