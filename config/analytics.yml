@@ -76,6 +76,8 @@ shared:
     - journeys_session_id
     - identity_confirmed_with_onelogin
     - logged_in_with_onelogin
+    - onelogin_auth_at
+    - onelogin_idv_at
   :decisions:
     - id
     - result

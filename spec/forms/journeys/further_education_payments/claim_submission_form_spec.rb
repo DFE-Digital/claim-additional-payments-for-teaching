@@ -35,6 +35,13 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
       expect(claim.onelogin_credentials).to eq(answers.onelogin_credentials)
       expect(claim.onelogin_user_info).to eq(answers.onelogin_user_info)
 
+      expect(claim.onelogin_uid).to eql(answers.onelogin_uid)
+      expect(claim.onelogin_auth_at).to eql(answers.onelogin_auth_at)
+      expect(claim.onelogin_idv_at).to eql(answers.onelogin_idv_at)
+      expect(claim.onelogin_idv_first_name).to eql(answers.onelogin_idv_first_name)
+      expect(claim.onelogin_idv_last_name).to eql(answers.onelogin_idv_last_name)
+      expect(claim.onelogin_idv_date_of_birth).to eql(answers.onelogin_idv_date_of_birth)
+
       expect(eligibility.award_amount).to eq(answers.award_amount)
       expect(eligibility.teacher_reference_number).to eq(answers.teacher_reference_number)
       expect(eligibility.teaching_responsibilities).to eq(answers.teaching_responsibilities)
