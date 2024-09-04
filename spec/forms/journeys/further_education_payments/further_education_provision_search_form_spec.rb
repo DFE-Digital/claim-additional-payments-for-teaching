@@ -33,7 +33,7 @@ RSpec.describe Journeys::FurtherEducationPayments::FurtherEducationProvisionSear
         is_expected.not_to(
           allow_value(provision_search)
           .for(:provision_search)
-          .with_message("Enter a college name or postcode")
+          .with_message("Enter the name of the FE provider you are employed by")
         )
       end
     end

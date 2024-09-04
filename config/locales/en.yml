@@ -866,7 +866,7 @@ en:
       further_education_provision_search:
         question: Which FE provider are you employed by?
         errors:
-          blank: Enter a college name or postcode
+          blank: Enter the name of the FE provider you are employed by
           min_length: Enter a college name or postcode that is at least 3 characters long
       select_provision:
         heading: Select where you are employed
@@ -874,7 +874,7 @@ en:
           Select the further education provider you are employed by. If you work for a college or sixth-form group, you
           should select the group name.
         errors:
-          blank: Select where you are employed
+          blank: Select the further education provider you are employed by
       contract_type:
         question: What type of contract do you have with %{school_name}?
         options:
@@ -882,14 +882,14 @@ en:
           fixed_term: Fixed-term contract
           variable_hours: Variable hours contract
         errors:
-          inclusion: Select the contract type you have
+          inclusion: Select the type of contract you have with %{school_name}
       fixed_term_contract:
         question: Does your fixed-term contract cover the full %{academic_year} academic year?
         options:
           true: Yes, it covers the full %{current_academic_year} academic year
           false: No, it does not cover the full %{current_academic_year} academic year
         errors:
-          inclusion: Select yes if your fixed-term contract covers the full academic year
+          inclusion: Select yes if your fixed-term contract covers the full %{current_academic_year} academic year
       taught_at_least_one_term:
         question: Have you taught at %{school_name} for at least one academic term?
         options:
@@ -906,7 +906,7 @@ en:
           between_2_5_and_12: Between 2.5 and 12 hours per week
           less_than_2_5: Less than 2.5 hours per week
         errors:
-          inclusion: Select how many hours per week you are timetabled to teach during the current term
+          inclusion: Select the number of hours you are timetabled to teach per week at %{school_name} during the current term
       teaching_hours_per_week_next_term:
         question: Are you timetabled to teach at least 2.5 hours per week at %{school_name} next term?
         hint: If you are unsure, you should speak to HR or apply when you know your arrangements for next term.
@@ -914,14 +914,14 @@ en:
           at_least_2_5: Yes, I am timetabled to teach at least 2.5 hours per week at %{school_name} next term
           less_than_2_5: No, I’m not timetabled to teach at least 2.5 hours per week at %{school_name} next term
         errors:
-          inclusion: Select yes if you are timetabled to teach at least 2.5 hours next term otherwise select you are not
+          inclusion: Select yes if you are timetabled to teach at least 2.5 hours per week next term at %{school_name}
       further_education_teaching_start_year:
         question: Which academic year did you start teaching in further education (FE) in England?
         options:
           between_dates: September %{start_year} to August %{end_year}
           before_date: I started before September %{year}
         errors:
-          blank: Select which academic year you started teaching in further education in England
+          blank: Select the academic year you started teaching further education in England, or select ‘I started before September %{before_year}’
       subjects_taught:
         question: Which subject areas do you teach?
         hint: Select all that apply
@@ -935,13 +935,13 @@ en:
           physics: Physics
           none: I do not teach any of these subjects
         errors:
-          inclusion: Select the subject areas you teach in or select you do not teach any of the listed subject areas
+          inclusion: Select the subject areas that you teach, or select ‘I do not teach any of these subjects’
       courses: &courses
         hint: |
           <p>If you are unsure whether the course(s) you teach is eligible, please email: <br/>%{email}</p>
           <p>Select all that apply</p>
         errors:
-          inclusion: Select all the courses you teach otherwise select you do not teach any of these courses
+          inclusion: Select the courses that you teach, or select ‘I do not teach any of these courses’
       building_construction_courses:
         <<: *courses
         question: Which building and construction courses do you teach?
@@ -1052,7 +1052,7 @@ en:
           no_but_planned: No, but I plan to enrol on one in the next 12 months
           no_not_planned: No, and I do not plan to enrol on one in the next 12 months
         errors:
-          inclusion: Select whether you have, are currently enrolled or plan to enrol on a teaching qualification
+          inclusion: Select if you have a teaching qualification, or are currently enrolled on one or are planning to enrol on one
       poor_performance:
         heading: Tell us if you are currently under any performance measures or disciplinary action
         questions:
@@ -1069,9 +1069,9 @@ en:
               check with your FE provider as it will affect your eligibility.
         errors:
           performance:
-            inclusion: Select yes if you are subject to formal action for poor performance at work
+            inclusion: Select yes if any performance measures have been started against you
           disciplinary:
-            inclusion: Select yes if you are subject to disciplinary action
+            inclusion: Select yes if you are currently subject to disciplinary action
       half_teaching_hours:
         question:
           Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to

@@ -4,12 +4,14 @@ module Journeys
       attribute :further_education_teaching_start_year, :string
 
       validates :further_education_teaching_start_year,
-        presence: {message: i18n_error_message(:blank)}
+        presence: {
+          message: ->(object, data) { i18n_error_message(:blank, before_year: object.before_year).call(object, data) }
+        }
+
+      YEARS_BEFORE = -4
 
       def radio_options
-        years_before = -4
-
-        array = (years_before..0).map do |delta|
+        array = (YEARS_BEFORE..0).map do |delta|
           academic_year = AcademicYear.current + delta
           OpenStruct.new(
             id: academic_year.start_year.to_s,
@@ -17,10 +19,9 @@ module Journeys
           )
         end
 
-        academic_year = AcademicYear.current + years_before
         array << OpenStruct.new(
-          id: "pre-#{academic_year.start_year}",
-          name: t("options.before_date", year: academic_year.start_year)
+          id: "pre-#{before_year}",
+          name: t("options.before_date", year: before_year)
         )
 
         array
@@ -31,6 +32,11 @@ module Journeys
 
         journey_session.answers.assign_attributes(further_education_teaching_start_year:)
         journey_session.save!
+      end
+
+      def before_year
+        academic_year = AcademicYear.current + YEARS_BEFORE
+        academic_year.start_year
       end
     end
   end

@@ -29,7 +29,7 @@ RSpec.describe Journeys::FurtherEducationPayments::TeachingQualificationForm, ty
         is_expected.not_to(
           allow_value(nil)
           .for(:teaching_qualification)
-          .with_message("Select whether you have, are currently enrolled or plan to enrol on a teaching qualification")
+          .with_message("Select if you have a teaching qualification, or are currently enrolled on one or are planning to enrol on one")
         )
       end
     end
@@ -41,7 +41,7 @@ RSpec.describe Journeys::FurtherEducationPayments::TeachingQualificationForm, ty
         is_expected.not_to(
           allow_value("foo")
           .for(:teaching_qualification)
-          .with_message("Select whether you have, are currently enrolled or plan to enrol on a teaching qualification")
+          .with_message("Select if you have a teaching qualification, or are currently enrolled on one or are planning to enrol on one")
         )
       end
     end

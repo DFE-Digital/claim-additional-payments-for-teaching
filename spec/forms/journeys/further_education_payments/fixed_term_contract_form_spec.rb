@@ -23,11 +23,13 @@ RSpec.describe Journeys::FurtherEducationPayments::FixedTermContractForm, type: 
 
   describe "validations" do
     it do
-      is_expected.not_to(
-        allow_value(fixed_term_full_year)
-        .for(:fixed_term_full_year)
-        .with_message("Select yes if your fixed-term contract covers the full academic year")
-      )
+      travel_to Date.new(2024, 10, 1) do
+        is_expected.not_to(
+          allow_value(fixed_term_full_year)
+          .for(:fixed_term_full_year)
+          .with_message("Select yes if your fixed-term contract covers the full 2024 to 2025 academic year")
+        )
+      end
     end
   end
 

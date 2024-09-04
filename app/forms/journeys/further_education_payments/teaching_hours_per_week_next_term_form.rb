@@ -4,7 +4,10 @@ module Journeys
       attribute :teaching_hours_per_week_next_term, :string
 
       validates :teaching_hours_per_week_next_term,
-        inclusion: {in: ->(form) { form.radio_options.map(&:id) }, message: i18n_error_message(:inclusion)}
+        inclusion: {
+          in: ->(form) { form.radio_options.map(&:id) },
+          message: ->(object, data) { i18n_error_message(:inclusion, school_name: object.school.name).call(object, data) }
+        }
 
       def radio_options
         @radio_options ||= [
@@ -25,8 +28,6 @@ module Journeys
         journey_session.answers.assign_attributes(teaching_hours_per_week_next_term:)
         journey_session.save!
       end
-
-      private
 
       def school
         journey_session.answers.school
