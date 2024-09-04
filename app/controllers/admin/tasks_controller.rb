@@ -5,6 +5,7 @@ class Admin::TasksController < Admin::BaseAdminController
   before_action :load_claim
   before_action :ensure_task_has_not_already_been_completed, only: [:create]
   before_action :load_matching_claims, only: [:show], if: -> { params[:name] == "matching_details" }
+  before_action :set_claim_summary_view
 
   def index
     @claim_checking_tasks = ClaimCheckingTasks.new(@claim)

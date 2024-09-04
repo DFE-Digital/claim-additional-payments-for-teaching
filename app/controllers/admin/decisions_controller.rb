@@ -6,6 +6,7 @@ class Admin::DecisionsController < Admin::BaseAdminController
   before_action :reject_decided_claims, unless: -> { qa_decision_task? }
   before_action :reject_missing_payroll_gender, only: [:create]
   before_action :reject_if_claims_preventing_payment, only: [:create]
+  before_action :set_claim_summary_view
 
   def new
     @decision = Decision.new

@@ -3,6 +3,7 @@ module Admin
     before_action :ensure_service_operator
     before_action :find_payroll_run, except: [:index]
     before_action :find_payment, except: [:index]
+    before_action :set_claim_summary_view, only: [:index]
 
     def index
       @claim = Claim.find(params[:claim_id])
