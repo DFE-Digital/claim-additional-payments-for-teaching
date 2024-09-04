@@ -73,7 +73,7 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     expect(page).to have_content("Check your answers")
     click_button "Continue"
 
-    expect(page).to have_content("You’re eligible for a financial incentive payment")
+    expect(page).to have_content("You’re eligible for a targeted retention incentive payment")
     expect(page).to have_content("Apply now")
     click_button "Apply now"
 
@@ -137,7 +137,7 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     expect(page).to have_content("Check your answers before sending your application")
     click_on "Accept and send"
 
-    expect(page).to have_content("You applied for a further education retention payment")
+    expect(page).to have_content("You applied for a targeted retention incentive payment")
   end
 
   def and_college_exists

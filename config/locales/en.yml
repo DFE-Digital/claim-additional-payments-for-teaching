@@ -823,7 +823,7 @@ en:
   further_education_payments:
     landing_page: Find out if you are eligible for a targeted retention incentive payment for further education teachers
     claim_description: for further education payments
-    journey_name: Claim incentive payments for further education teachers
+    journey_name: Claim a targeted retention incentive payment for further education teachers
     feedback_email: "FE-Levellingup.PremiumPayments@education.gov.uk"
     support_email_address: "FE-Levellingup.PremiumPayments@education.gov.uk"
     claim_subject: "Further education payment"
@@ -833,6 +833,9 @@ en:
       task_questions:
         matching_details:
           title: Is this claim still valid despite having matching details with other claims?
+    eligibility_criteria_link:
+      text: targeted retention incentive payments for early career further education teachers
+      url: "https://www.gov.uk/guidance/levelling-up-premium-payments-for-fe-teachers"
     forms:
       ineligible:
         courses:
@@ -846,7 +849,7 @@ en:
         must_be_recent_further_education_teacher:
           heading: You are not eligible
         must_teach_at_least_one_term:
-          heading: You are not eligible for a financial incentive payment yet
+          heading: You are not eligible for a retention payment yet
         subject_to_problematic_actions:
           heading: You are not eligible
         teaching_less_than_2_5:
@@ -1081,7 +1084,7 @@ en:
             Select yes if at least half your timetabled teaching hours are spent teaching 16-19-year-olds, including
             those up to 25 with an Education, Health and Care Plan
       eligible:
-        heading: You’re eligible for a financial incentive payment
+        heading: You’re eligible for a targeted retention incentive payment
       gender:
         questions:
           payroll_gender: "How is your gender recorded on your employer’s payroll system?"
@@ -1109,12 +1112,12 @@ en:
         correct.
       btn_text: Accept and send
   further_education_payments_provider:
-    journey_name: Claim incentive payments for further education teachers - provider
+    journey_name: Claim a targeted retention incentive payment for further education teachers - provider
     feedback_email: "FE-Levellingup.PremiumPayments@education.gov.uk"
     support_email_address: "FE-Levellingup.PremiumPayments@education.gov.uk"
     forms:
       verify_claim:
-        title: "Review a financial incentive payment claim"
+        title: "Review a targeted retention incentive payment claim"
         declaration_title: "Declaration"
         declaration: "To the best of my knowledge, I confirm that the information provided in this form is correct."
         claim_reference: "Claim reference"
