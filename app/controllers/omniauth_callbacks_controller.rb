@@ -70,6 +70,7 @@ class OmniauthCallbacksController < ApplicationController
       onelogin_uid: omniauth_hash.uid,
       onelogin_user_info:,
       onelogin_credentials:,
+      onelogin_auth_at: Time.now,
       logged_in_with_onelogin: true
     )
     journey_session.save!
@@ -94,7 +95,8 @@ class OmniauthCallbacksController < ApplicationController
     first_name, surname = extract_name_from_jwt(core_identity_jwt)
 
     journey_session.answers.assign_attributes(
-      identity_confirmed_with_onelogin: true
+      identity_confirmed_with_onelogin: true,
+      onelogin_idv_at: Time.now
     )
     journey_session.answers.first_name ||= first_name
     journey_session.answers.surname ||= surname
