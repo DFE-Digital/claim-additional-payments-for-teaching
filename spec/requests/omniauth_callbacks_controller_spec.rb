@@ -2,8 +2,13 @@ require "rails_helper"
 
 RSpec.describe "OmniauthCallbacksControllers", type: :request do
   describe "#sign_out" do
+    let(:claim_id) { "1234-1234-1234-1234" }
+
     before do
+      answers_with_claim = double(claim: double(id: claim_id))
+      journey_session_with_answers_and_claim = double(answers: answers_with_claim)
       allow_any_instance_of(OmniauthCallbacksController).to receive(:current_journey_routing_name).and_return(journey)
+      allow_any_instance_of(OmniauthCallbacksController).to receive(:journey_session).and_return(journey_session_with_answers_and_claim)
 
       get auth_sign_out_path(journey: "further-education-payments-provider")
     end
@@ -12,14 +17,9 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
       let(:journey) { Journeys::FurtherEducationPayments::Provider::ROUTING_NAME }
 
       it "redirects to the FE sign-in page with a flash message" do
-        expect(response).to redirect_to(
-          claim_path(
-            journey: "further-education-payments-provider",
-            slug: "sign-in"
-          )
-        )
+        expect(response).to redirect_to("https://www.example.com/further-education-payments-provider/claim?answers%5Bclaim_id%5D=#{claim_id}")
 
-        expect(flash[:notice]).to include("You've been signed out")
+        expect(flash[:success]).to include("You have signed out of DfE Sign-in")
       end
     end
 
