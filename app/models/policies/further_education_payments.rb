@@ -32,5 +32,9 @@ module Policies
     def verification_due_date_for_claim(claim)
       (claim.created_at + 2.weeks).to_date
     end
+
+    def duplicate_claim?(claim)
+      Claim::MatchingAttributeFinder.new(claim).matching_claims.exists?
+    end
   end
 end

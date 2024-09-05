@@ -296,6 +296,7 @@ shared:
     - subject_to_formal_performance_action
     - subject_to_disciplinary_action
     - half_teaching_hours
+    - flagged_as_duplicate
   :eligible_fe_providers:
     - id
     - ukprn
