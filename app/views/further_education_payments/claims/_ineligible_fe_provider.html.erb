@@ -9,7 +9,7 @@
     </p>
 
     <%= govuk_list [
-      "the FE provider you have selected is not included in the #{govuk_link_to "list of eligible providers", Policies::FurtherEducationPayments::URL_SPREADSHEET_ELIGIBLE_PROVIDERS }".html_safe,
+      "the FE provider you have selected is not included in the #{govuk_link_to "list of eligible providers", t("further_education_payments.fe_provider_list_url") }".html_safe,
       "the spelling of the FE provider does not match our records - check the spelling, including any apostrophes, hyphens or full stops used in the FE provider’s name",
       "the FE provider you listed is closed - this could be the case if it has rebranded"
     ], type: :bullet %>
