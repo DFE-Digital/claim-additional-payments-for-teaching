@@ -168,7 +168,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("No, I have not taught at #{eligible_college.name} for at least one academic term")
     click_button "Continue"
 
-    expect(page).to have_content("You are not eligible for a retention payment yet")
+    expect(page).to have_content("You are not eligible for a targeted retention incentive payment yet")
   end
 
   scenario "when lacking subjects" do
@@ -239,7 +239,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("No, I have not taught at #{eligible_college.name} for at least one academic term")
     click_button "Continue"
 
-    expect(page).to have_content("You are not eligible for a retention payment yet")
+    expect(page).to have_content("You are not eligible for a targeted retention incentive payment yet")
   end
 
   scenario "when teaches non eligible course in applicable subject area" do
