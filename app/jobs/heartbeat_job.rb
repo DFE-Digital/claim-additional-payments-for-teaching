@@ -1,12 +1,18 @@
-# Writes "Heartbeat job performed" to the logs every minute. This message is
-# evidence that the worker is working properly. We can use a log alerting tool
-# to alert us if too much time passes without seeing one of these messages.
+require "net/http"
+
 class HeartbeatJob < CronJob
   self.cron_expression = "* * * * *"
 
   queue_as :heartbeat
 
   def perform
-    logger.info "Heartbeat job performed"
+    if ENV.key?("HEARTBEAT_CHECK_URL") # Not available in dev and review environments
+      uri = URI(ENV["HEARTBEAT_CHECK_URL"])
+      res = Net::HTTP.get_response(uri)
+
+      unless res.is_a?(Net::HTTPSuccess)
+        Rails.logger.error "Error connecting to StatusCake: #{res.code} #{res.msg}"
+      end
+    end
   end
 end

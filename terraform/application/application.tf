@@ -17,9 +17,14 @@ module "application_configuration" {
       PGSSLMODE          = local.postgres_ssl_mode
       CANONICAL_HOSTNAME = local.canonical_hostname
   })
-  secret_variables = {
-    DATABASE_URL = module.postgres.url
-  }
+  secret_variables = merge(
+    {
+      DATABASE_URL        = module.postgres.url
+    },
+    var.enable_monitoring ? {
+      HEARTBEAT_CHECK_URL = module.statuscake[0].heartbeat_check_urls[local.heartbeat_check_name]
+    } : {}
+  )
 }
 
 module "web_application" {
