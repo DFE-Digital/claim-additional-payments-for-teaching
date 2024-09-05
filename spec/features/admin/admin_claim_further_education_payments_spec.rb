@@ -42,11 +42,11 @@ RSpec.feature "Admin claim further education payments" do
           click_on "Confirm the provider verification"
 
           expect(page).to have_content(
-            "This task has not yet been completed by the provider"
+            "This task has not been sent to the provider yet."
           )
 
           perform_enqueued_jobs do
-            click_on "Resend provider verification email"
+            click_on "Send provider verification request"
           end
 
           provider_email_address = claim.school.eligible_fe_provider.primary_key_contact_email_address
