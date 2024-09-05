@@ -3,7 +3,7 @@
 <%= link_to "Back", claims_backlink_path, class: "govuk-back-link" %>
 
 <div class="govuk-grid-row">
-  <%= render "admin/tasks/#{@claim_summary_view}", claim: @claim, heading: @claim.reference %>
+  <%= render "admin/tasks/#{claim_summary_view}", claim: @claim, heading: @claim.reference %>
 </div>
 
 <div class="govuk-grid-row">

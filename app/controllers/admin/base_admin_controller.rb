@@ -58,10 +58,5 @@ module Admin
       session.delete(:role_codes)
       session.delete(:claims_backlink_path)
     end
-
-    def set_claim_summary_view
-      policy_append = @claim.policy.to_s.underscore if @claim.policy.is_a?(Policies::FurtherEducationPayments)
-      @claim_summary_view = ["claim_summary", policy_append].compact.join("_")
-    end
   end
 end

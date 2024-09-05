@@ -2,7 +2,6 @@ class Admin::AmendmentsController < Admin::BaseAdminController
   before_action :load_claim
   before_action :ensure_service_operator
   before_action :ensure_claim_is_amendable
-  before_action :set_claim_summary_view, only: [:index]
 
   def index
   end

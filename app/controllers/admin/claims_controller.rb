@@ -62,7 +62,6 @@ class Admin::ClaimsController < Admin::BaseAdminController
       redirect_to admin_claim_notes_path(@claim)
     else
       @note = Note.new
-      set_claim_summary_view
       render "admin/notes/index"
     end
   end

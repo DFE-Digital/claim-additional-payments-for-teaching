@@ -2,7 +2,6 @@ module Admin
   class SupportTicketsController < BaseAdminController
     before_action :ensure_service_operator
     before_action :load_claim
-    before_action :set_claim_summary_view
 
     def create
       @support_ticket = @claim.build_support_ticket(support_ticket_params)
