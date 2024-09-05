@@ -16,3 +16,5 @@
   Email <%= govuk_mail_to t("further_education_payments_provider.support_email_address") %>
   if you have logged in with the correct organisation and need support.
 </p>
+
+<%= govuk_button_link_to "Sign out", Journeys::FurtherEducationPayments::Provider.sign_out_url %>

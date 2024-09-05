@@ -27,6 +27,21 @@ module Journeys
           "users", session.answers.dfe_sign_in_uid
         ].join("/")
       end
+
+      def self.sign_out_url
+        dfe_sign_out_redirect_uri = URI.join(ENV.fetch("DFE_SIGN_IN_ISSUER"), "/session/end")
+
+        post_logout_redirect_uri = URI.join(ENV.fetch("DFE_SIGN_IN_REDIRECT_BASE_URL"), "/further-education-payments-provider/auth/sign-out")
+        client_id = DfeSignIn.configuration.client_id
+
+        params = {
+          post_logout_redirect_uri:,
+          client_id:
+        }
+
+        dfe_sign_out_redirect_uri.query = URI.encode_www_form(params)
+        dfe_sign_out_redirect_uri.to_s
+      end
     end
   end
 end

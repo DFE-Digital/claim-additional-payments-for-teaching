@@ -86,6 +86,7 @@ Rails.application.routes.draw do
 
     scope constraints: {journey: "further-education-payments-provider"} do
       get "auth/callback", to: "omniauth_callbacks#callback"
+      get "auth/sign-out", to: "omniauth_callbacks#sign_out"
     end
 
     scope path: "/", constraints: {journey: Regexp.new(Journeys.all_routing_names.join("|"))} do

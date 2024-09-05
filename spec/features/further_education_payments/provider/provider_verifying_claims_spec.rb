@@ -128,6 +128,8 @@ RSpec.feature "Provider verifying claims" do
     expect(page).to have_text(
       "The organisation you have used to log in to DfE Sign-in does not match the organisation in the claim."
     )
+
+    expect(page).to have_link("Sign out", href: Journeys::FurtherEducationPayments::Provider.sign_out_url)
   end
 
   scenario "provider visits claim with the wrong role" do
