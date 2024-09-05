@@ -299,6 +299,13 @@ Accessing a live console on production requires a
 [PIM (Privileged Identity Management) request](docs/privileged-identity-management-requests.md).
 Follow the steps outlined in [Connect to an instance running in Azure](docs/connecting-to-azure.md).
 
+### Restarting worker via the command line
+
+1. [Connect to the desired Kubernetes cluster](docs/connecting-to-azure.md#1-authenticate-to-the-kubernetes-cluster)
+1. Identify the worker deployment via kubectl on the command prompt: `kubectl -n <namespace> get deployments`
+1. Restart the deployment: `kubectl -n <namespace> rollout restart deployment <deployment-name>`
+1. Verify successful restart: `kubectl -n <namespace> get pods`. The column "AGE" should be updated.
+
 ### Usage
 
 When accessing the Rails console on a live system, do so in sandbox mode to
