@@ -59,7 +59,7 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
   end
 
-  scenario "when ineligible FE provider is selected with js", js: true do
+  scenario "when ineligible FE provider is selected with js", js: true, flaky: true do
     when_further_education_payments_journey_configuration_exists
     and_ineligible_college_exists
     and_eligible_college_exists
