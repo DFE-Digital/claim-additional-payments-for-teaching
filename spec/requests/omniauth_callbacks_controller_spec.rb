@@ -167,6 +167,14 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
           get auth_onelogin_path
         }.to change { journey_session.reload.answers.onelogin_uid }.from(nil).to("12345")
       end
+
+      it "sets timestamp onelogin_auth_at" do
+        journey_session = Journeys::FurtherEducationPayments::Session.last
+
+        expect {
+          get auth_onelogin_path
+        }.to change { journey_session.reload.answers.onelogin_auth_at }.from(nil).to(be_within(10.seconds).of(Time.now))
+      end
     end
 
     context "idv step" do
@@ -190,7 +198,7 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
           OneLogin::CoreIdentityValidator,
           call: nil,
           first_name: "John",
-          surname: "Doe"
+          last_name: "Doe"
         )
 
         allow(OneLogin::CoreIdentityValidator).to receive(:new).and_return(validator_double)
@@ -198,6 +206,29 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
         get auth_onelogin_path
 
         expect(response).to redirect_to("http://www.example.com/auth/failure?strategy=onelogin&message=access_denied&origin=http://www.example.com/further-education-payments/sign-in")
+      end
+
+      it "sets timestamp onelogin_idv_* variables" do
+        journey_session = Journeys::FurtherEducationPayments::Session.last
+        journey_session.answers.onelogin_uid = "12345"
+        journey_session.save!
+
+        validator_double = double(
+          OneLogin::CoreIdentityValidator,
+          call: nil,
+          first_name: "John",
+          last_name: "Doe",
+          date_of_birth: Date.new(1970, 12, 13)
+        )
+
+        allow(OneLogin::CoreIdentityValidator).to receive(:new).and_return(validator_double)
+
+        expect {
+          get auth_onelogin_path
+        }.to change { journey_session.reload.answers.onelogin_idv_at }.from(nil).to(be_within(10.seconds).of(Time.now))
+          .and change { journey_session.reload.answers.onelogin_idv_first_name }.from(nil).to("John")
+          .and change { journey_session.reload.answers.onelogin_idv_last_name }.from(nil).to("Doe")
+          .and change { journey_session.reload.answers.onelogin_idv_date_of_birth }.from(nil).to(Date.new(1970, 12, 13))
       end
     end
   end

@@ -37,6 +37,48 @@ RSpec.describe OneLogin::CoreIdentityValidator do
     end
   end
 
+  describe "#first_name" do
+    before do
+      stub_normal_did
+
+      travel_to(Time.at(1723548751)) do
+        subject.call
+      end
+    end
+
+    it "returns first name" do
+      expect(subject.first_name).to eql("KENNETH")
+    end
+  end
+
+  describe "#last_name" do
+    before do
+      stub_normal_did
+
+      travel_to(Time.at(1723548751)) do
+        subject.call
+      end
+    end
+
+    it "returns last name" do
+      expect(subject.last_name).to eql("DECERQUEIRA")
+    end
+  end
+
+  describe "#date_of_birth" do
+    before do
+      stub_normal_did
+
+      travel_to(Time.at(1723548751)) do
+        subject.call
+      end
+    end
+
+    it "returns date of birth" do
+      expect(subject.date_of_birth).to eql(Date.new(1965, 7, 8))
+    end
+  end
+
   let(:stub_normal_did) do
     return_headers = {
       "Cache-Control" => "max-age=3600, private"

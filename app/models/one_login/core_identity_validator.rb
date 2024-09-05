@@ -13,8 +13,12 @@ class OneLogin::CoreIdentityValidator
     name_parts.find { |part| part["type"] == "GivenName" }["value"]
   end
 
-  def surname
+  def last_name
     name_parts.find { |part| part["type"] == "FamilyName" }["value"]
+  end
+
+  def date_of_birth
+    Date.parse(decoded_jwt[0]["vc"]["credentialSubject"]["birthDate"][0]["value"])
   end
 
   private

@@ -31,6 +31,10 @@
   - paye_reference
   - practitioner_email_address
   - provider_contact_name
+  - onelogin_uid
+  - onelogin_idv_first_name
+  - onelogin_idv_last_name
+  - onelogin_idv_date_of_birth
   :claim_decisions:
   - trn
   - claimant_age
