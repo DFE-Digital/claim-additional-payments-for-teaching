@@ -50,4 +50,8 @@ module BasePolicy
   def international_relocation_payments?
     to_s == "InternationalRelocationPayments"
   end
+
+  def further_education_payments?
+    to_s == "FurtherEducationPayments"
+  end
 end

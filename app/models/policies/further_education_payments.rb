@@ -11,6 +11,10 @@ module Policies
 
     URL_SPREADSHEET_ELIGIBLE_PROVIDERS = "https://assets.publishing.service.gov.uk/media/667300fe64e554df3bd0db92/List_of_eligible_FE_providers_and_payment_value_for_levelling_up_premium.xlsx".freeze
 
+    VERIFIERS = [
+      AutomatedChecks::ClaimVerifiers::ProviderVerification
+    ]
+
     # Options shown to admins when rejecting a claim
     ADMIN_DECISION_REJECTED_REASONS = [
       # FIXME RL: this `placeholder` is required to make the

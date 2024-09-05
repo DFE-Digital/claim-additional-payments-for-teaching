@@ -37,7 +37,8 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::OmniauthCallbackFor
           "raw_info" => {
             "organisation" => {
               "id" => "22222",
-              "ukprn" => "12345678"
+              "ukprn" => "12345678",
+              "name" => "Springfield Elementary"
             }
           }
         }
@@ -57,6 +58,10 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::OmniauthCallbackFor
             change(journey_session.answers, :dfe_sign_in_organisation_id)
               .from(nil)
               .to("22222")
+          ).and(
+            change(journey_session.answers, :dfe_sign_in_organisation_name)
+              .from(nil)
+              .to("Springfield Elementary")
           ).and(
             change(journey_session.answers, :dfe_sign_in_service_access?)
               .from(false)

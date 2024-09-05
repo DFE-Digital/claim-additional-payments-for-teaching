@@ -9,6 +9,7 @@
 class Task < ApplicationRecord
   NAMES = %w[
     identity_confirmation
+    provider_verification
     visa
     arrival_date
     qualifications

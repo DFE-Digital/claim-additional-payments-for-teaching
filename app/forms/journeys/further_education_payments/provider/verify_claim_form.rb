@@ -10,7 +10,7 @@ module Journeys
             teaching_responsibilities
             further_education_teaching_start_year
             teaching_hours_per_week
-            hours_teaching_eligible_subjects
+            half_teaching_hours
             subjects_taught
           ],
           variable_contract: %i[
@@ -19,7 +19,7 @@ module Journeys
             further_education_teaching_start_year
             taught_at_least_one_term
             teaching_hours_per_week
-            hours_teaching_eligible_subjects
+            half_teaching_hours
             subjects_taught
             teaching_hours_per_week_next_term
           ]
@@ -99,13 +99,17 @@ module Journeys
                 dfe_sign_in_uid: answers.dfe_sign_in_uid,
                 first_name: answers.dfe_sign_in_first_name,
                 last_name: answers.dfe_sign_in_last_name,
-                email: answers.dfe_sign_in_email
+                email: answers.dfe_sign_in_email,
+                dfe_sign_in_organisation_name: answers.dfe_sign_in_organisation_name,
+                dfe_sign_in_role_codes: answers.dfe_sign_in_role_codes
               },
               created_at: DateTime.now
             }
           )
 
           claim.save!
+
+          ClaimVerifierJob.perform_later(claim)
 
           true
         end
