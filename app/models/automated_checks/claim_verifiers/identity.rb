@@ -18,15 +18,17 @@ module AutomatedChecks
         return unless awaiting_task?(TASK_NAME)
 
         # Order of matching matters so that subsequent conditions in methods fall through to execute the right thing
-        no_match ||
-          partial_match ||
-          complete_match
+        auto_pass || no_match || partial_match || complete_match
       end
 
       private
 
       attr_accessor :admin_user, :claim
       attr_reader :dqt_teacher_status
+
+      def auto_pass
+        create_task(match: nil, passed: true) if claim.policy.further_education_payments?
+      end
 
       def dqt_teacher_status=(dqt_teacher_status)
         @dqt_teacher_status = if dqt_teacher_status.instance_of?(Array)

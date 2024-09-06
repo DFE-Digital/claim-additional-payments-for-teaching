@@ -10,6 +10,7 @@ module Policies
     MIN_QA_THRESHOLD = 10
 
     VERIFIERS = [
+      AutomatedChecks::ClaimVerifiers::Identity,
       AutomatedChecks::ClaimVerifiers::ProviderVerification,
       AutomatedChecks::ClaimVerifiers::Employment
     ]

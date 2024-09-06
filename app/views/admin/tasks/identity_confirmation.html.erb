@@ -10,7 +10,7 @@
     <h2 class="govuk-heading-l"><%= @current_task_name.humanize %></h2>
   </div>
 
-  <% unless @claim.identity_verified? %>
+  <% unless @claim.identity_verified? || @tasks_presenter.identity_confirmation.empty? %>
     <div class="govuk-grid-column-two-thirds">
       <%= render "admin/claims/answers", answers: @tasks_presenter.identity_confirmation %>
     </div>

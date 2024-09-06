@@ -332,10 +332,8 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
       )
     end
 
-    it "creates the provider verification task" do
-      task = claim.reload.tasks.last
-
-      expect(task.name).to eq("provider_verification")
+    it "creates a provider verification task" do
+      task = claim.reload.tasks.find_by(name: "provider_verification")
 
       expect(task.created_by.email).to eq(
         "seymour.skinner@springfield-elementary.edu"
