@@ -1210,7 +1210,7 @@ en:
                 inclusion: "Select yes if %{claimant} teaches this course for at least half their timetabled teaching hours"
           variable_contract:
             contract_type:
-              label: "Does %{claimant} have a variable hour contract of employment at %{provider}?"
+              label: "Does %{claimant} have a %{type_of_contract} of employment at %{provider}?"
               errors:
                 inclusion: "Select yes if %{claimant} has a variable hours contract of employment at %{provider}"
             teaching_responsibilities:

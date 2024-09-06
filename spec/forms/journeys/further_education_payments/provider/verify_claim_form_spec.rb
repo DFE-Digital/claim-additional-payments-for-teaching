@@ -21,7 +21,8 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
       :further_education_payments_eligibility,
       school: school,
       teaching_hours_per_week: teaching_hours_per_week,
-      contract_type: contract_type
+      contract_type: contract_type,
+      fixed_term_full_year: true
     )
   end
 
