@@ -10,7 +10,12 @@ RSpec.feature "Admin claim further education payments" do
     describe "provider verification task" do
       context "when the provider is yet to verify the claim" do
         it "shows the task as pending" do
-          fe_provider = create(:school, :further_education, name: "Springfield A and M")
+          fe_provider = create(
+            :school,
+            :further_education,
+            :fe_eligible,
+            name: "Springfield A and M"
+          )
 
           claim = create(
             :claim,
@@ -37,7 +42,25 @@ RSpec.feature "Admin claim further education payments" do
           click_on "Confirm the provider verification"
 
           expect(page).to have_content(
-            "This task has not yet been completed by the provider"
+            "This task has not been sent to the provider yet."
+          )
+
+          perform_enqueued_jobs do
+            click_on "Send provider verification request"
+          end
+
+          provider_email_address = claim.school.eligible_fe_provider.primary_key_contact_email_address
+
+          expect(provider_email_address).to(
+            have_received_email(
+              "9a25fe46-2ee4-4a5c-8d47-0f04f058a87d",
+              recipient_name: "Springfield A and M",
+              claimant_name: "Edna Krabappel",
+              claim_reference: "AB123456",
+              claim_submission_date: "1 August 2024",
+              verification_due_date: "15 August 2024",
+              verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
+            )
           )
         end
       end

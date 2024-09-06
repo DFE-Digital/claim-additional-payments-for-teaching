@@ -127,6 +127,9 @@ Rails.application.routes.draw do
       get "search", on: :collection
       patch "hold"
       patch "unhold"
+      namespace :further_education_payments do
+        resources :provider_verification_emails, only: [:create]
+      end
     end
 
     resources :qualification_report_uploads, only: [:new, :create]
