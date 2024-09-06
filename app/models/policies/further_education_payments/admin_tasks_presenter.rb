@@ -21,8 +21,9 @@ module Policies
         claim.eligibility.verification.present?
       end
 
-      # FIXME RL - temp stub so the provider verification task can be completed
-      def qualifications
+      # FIMXE: Temp stubbed so being redirected to the next task doesn't error
+      # in our tests.
+      def employment
         []
       end
 

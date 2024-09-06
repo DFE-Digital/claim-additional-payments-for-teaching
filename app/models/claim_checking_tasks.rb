@@ -31,7 +31,10 @@ class ClaimCheckingTasks
         task_names.delete("subject")
         task_names.delete("teaching_hours")
       end
-      unless claim.policy.further_education_payments?
+      if claim.policy.further_education_payments?
+        task_names.delete("qualifications")
+        task_names.delete("census_subjects_taught")
+      else
         task_names.delete("provider_verification")
       end
     end
