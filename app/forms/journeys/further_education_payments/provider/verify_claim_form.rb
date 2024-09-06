@@ -77,6 +77,12 @@ module Journeys
           ).downcase
         end
 
+        def claimant_contract_duration
+          if claim.eligibility.fixed_term_full_year
+            "covering the full academic year "
+          end
+        end
+
         def assertions
           @assertions ||= ASSERTIONS.fetch(contract_type).map do |assertion_name|
             AssertionForm.new(name: assertion_name, parent_form: self)

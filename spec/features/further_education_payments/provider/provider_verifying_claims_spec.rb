@@ -449,8 +449,8 @@ RSpec.feature "Provider verifying claims" do
     expect(page).to have_text "Claim date1 August 2024"
 
     within_fieldset(
-      "Does Edna Krabappel have a fixed-term contract of employment at " \
-      "Springfield A and M?"
+      "Does Edna Krabappel have a fixed-term contract of employment covering " \
+      "the full academic year at Springfield A and M?"
     ) do
       choose "Yes"
     end
