@@ -4,7 +4,8 @@ class Claim
     CLAIM_ATTRIBUTE_GROUPS_TO_MATCH = [
       ["email_address"],
       ["national_insurance_number"],
-      ["bank_account_number", "bank_sort_code", "building_society_roll_number"]
+      ["bank_account_number", "bank_sort_code", "building_society_roll_number"],
+      ["first_name", "surname", "date_of_birth"]
     ].freeze
 
     def initialize(source_claim)
