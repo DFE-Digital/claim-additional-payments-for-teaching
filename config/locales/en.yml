@@ -836,6 +836,17 @@ en:
       url: "https://www.gov.uk/guidance/levelling-up-premium-payments-for-fe-teachers"
     fe_provider_list_url: "https://assets.publishing.service.gov.uk/media/66d70f9c701781e1b341dba7/List_of_eligible_FE_providers_and_payment_values_for_targeted_retention_incentives.xlsx"
     admin:
+      decision:
+        rejected_reasons:
+          no_teaching_responsibilities: "No teaching responsibilities"
+          no_eligible_contract_of_employment: "No eligible contract of employment"
+          works_less_than_2_point_5_hours_per_week: "Works less than 2.5 hours per week (either currently or next term)"
+          has_worked_in_further_education_for_more_than_5_years: "Has worked in further education for more than 5 years"
+          ineligible_subject_or_courses: "Ineligible subjects or courses"
+          insufficient_time_spent_teaching_eligibble_students: "Insufficient time spent teaching eligible students"
+          duplicate_claim: "Duplicate claim"
+          no_response: "No response"
+          other: "Other"
       task_questions:
         matching_details:
           title: Is this claim still valid despite having matching details with other claims?

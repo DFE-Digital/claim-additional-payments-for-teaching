@@ -16,11 +16,15 @@ module Policies
 
     # Options shown to admins when rejecting a claim
     ADMIN_DECISION_REJECTED_REASONS = [
-      # FIXME RL: this `placeholder` is required to make the
-      # `spec/models/policies/further_education_payments/claim_personal_data_scrubber_spec.rb`
-      # test pass. Once we add a real rejection reason we can remove this
-      # placeholder. Figured this was better than removing the test!
-      :placeholder
+      :no_teaching_responsibilities,
+      :no_eligible_contract_of_employment,
+      :works_less_than_2_point_5_hours_per_week,
+      :has_worked_in_further_education_for_more_than_5_years,
+      :ineligible_subject_or_courses,
+      :insufficient_time_spent_teaching_eligibble_students,
+      :duplicate_claim,
+      :no_response,
+      :other
     ]
 
     # TODO: This is needed once the reply-to email address has been added to Gov Notify
