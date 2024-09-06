@@ -49,7 +49,14 @@ module Policies
       end
 
       def fixed_contract?
-        contract_type != "variable_hours"
+        case contract_type
+        when "permanent"
+          true
+        when "variable_hours"
+          false
+        when "fixed_term"
+          !!fixed_term_full_year
+        end
       end
 
       def verified?

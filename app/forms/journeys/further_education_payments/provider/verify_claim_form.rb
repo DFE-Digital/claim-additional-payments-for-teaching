@@ -63,16 +63,24 @@ module Journeys
           @course_descriptions ||= claim.eligibility.courses_taught.map(&:description)
         end
 
-        def teaching_hours_per_week
-          I18n.t(
-            [
-              "further_education_payments",
-              "forms",
-              "teaching_hours_per_week",
-              "options",
-              claim.eligibility.teaching_hours_per_week
-            ].join(".")
+        def claimant_contract_of_employment
+          claimant_option_selected(
+            "contract_type",
+            claim.eligibility.contract_type
           ).downcase
+        end
+
+        def teaching_hours_per_week
+          claimant_option_selected(
+            "teaching_hours_per_week",
+            claim.eligibility.teaching_hours_per_week
+          ).downcase
+        end
+
+        def claimant_contract_duration
+          if claim.eligibility.fixed_term_full_year
+            "covering the full academic year "
+          end
         end
 
         def assertions
@@ -130,6 +138,18 @@ module Journeys
 
         def permitted_attributes
           super + [assertions_attributes: AssertionForm.attribute_names]
+        end
+
+        def claimant_option_selected(question, option)
+          I18n.t(
+            [
+              "further_education_payments",
+              "forms",
+              question,
+              "options",
+              option
+            ].join(".")
+          )
         end
 
         # Make sure the errors in the summary link to the correct nested field
