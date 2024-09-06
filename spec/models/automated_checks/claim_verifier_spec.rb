@@ -111,5 +111,42 @@ RSpec.describe AutomatedChecks::ClaimVerifier do
         it { is_expected.to eq(0) }
       end
     end
+
+    context "when verifier is conditional" do
+      subject(:perform) { claim_verifier }
+
+      let(:claim) { create(:claim, policy: Policies::FurtherEducationPayments) }
+
+      let(:claim_verifier_args) do
+        {
+          claim:,
+          dqt_teacher_status: nil
+        }
+      end
+
+      context "and is needed" do
+        before do
+          claim.eligibility.update teacher_reference_number: "1234567"
+        end
+
+        it "creates relevant task" do
+          expect {
+            subject.perform
+          }.to change { Task.where(name: "employment").count }.by(1)
+        end
+      end
+
+      context "and is not needed" do
+        before do
+          claim.eligibility.update teacher_reference_number: nil
+        end
+
+        it "does not create relevant task" do
+          expect {
+            subject.perform
+          }.to change { Task.where(name: "employment").count }.by(0)
+        end
+      end
+    end
   end
 end
