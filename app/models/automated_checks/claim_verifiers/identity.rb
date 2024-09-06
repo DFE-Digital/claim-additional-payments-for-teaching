@@ -27,7 +27,14 @@ module AutomatedChecks
       attr_reader :dqt_teacher_status
 
       def auto_pass
-        create_task(match: nil, passed: true) if claim.policy.further_education_payments?
+        case claim.policy.auto_pass_identity_confirmation_task(claim)
+        when :pass
+          create_task(match: nil, passed: true)
+        when :fail
+          create_task(match: nil, passed: false)
+        when :skip
+          nil
+        end
       end
 
       def dqt_teacher_status=(dqt_teacher_status)

@@ -27,6 +27,8 @@ module AutomatedChecks
         )
       end
 
+      let(:identity_confirmed_with_onelogin) { nil }
+
       let(:claim_arg) do
         claim = create(
           :claim,
@@ -36,7 +38,8 @@ module AutomatedChecks
           national_insurance_number: "QQ100000C",
           reference: "AB123456",
           surname: "ELIGIBLE",
-          policy: policy
+          policy: policy,
+          identity_confirmed_with_onelogin: identity_confirmed_with_onelogin
         )
 
         policy_underscored = policy.to_s.underscore
@@ -77,6 +80,8 @@ module AutomatedChecks
         subject(:perform) { identity.perform }
 
         describe "identity confirmation task" do
+          let(:identity_confirmed_with_onelogin) { true }
+
           subject(:identity_confirmation_task) { claim_arg.tasks.find_by(name: "identity_confirmation") }
 
           before { perform }
@@ -87,10 +92,22 @@ module AutomatedChecks
             it { is_expected.to eq nil }
           end
 
-          describe "#passed" do
-            subject(:passed) { identity_confirmation_task.passed }
+          context "identity_confirmed_with_onelogin true" do
+            describe "#passed" do
+              subject(:passed) { identity_confirmation_task.passed }
 
-            it { is_expected.to eq true }
+              it { is_expected.to eq true }
+            end
+          end
+
+          context "identity_confirmed_with_onelogin false" do
+            let(:identity_confirmed_with_onelogin) { false }
+
+            describe "#passed" do
+              subject(:passed) { identity_confirmation_task.passed }
+
+              it { is_expected.to eq false }
+            end
           end
 
           describe "#created_by" do

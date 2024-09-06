@@ -54,4 +54,8 @@ module BasePolicy
   def further_education_payments?
     to_s == "FurtherEducationPayments"
   end
+
+  def auto_pass_identity_confirmation_task(claim)
+    :skip
+  end
 end
