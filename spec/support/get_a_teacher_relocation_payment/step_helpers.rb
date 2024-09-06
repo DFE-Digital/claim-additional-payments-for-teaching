@@ -160,7 +160,7 @@ module GetATeacherRelocationPayment
       click_on "Search"
 
       expect(page).to have_text("Select an address")
-      choose "flat_1_millbrook_tower_windermere_avenue_southampton_so16_9fx"
+      choose "Flat 1, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX"
 
       click_on "Continue"
     end
