@@ -4,7 +4,12 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
   let(:journey) { Journeys::FurtherEducationPayments::Provider }
 
   let(:school) do
-    create(:school, :further_education, name: "Springfield Elementary")
+    create(
+      :school,
+      :further_education,
+      :fe_eligible,
+      name: "Springfield Elementary"
+    )
   end
 
   let(:teaching_hours_per_week) { "more_than_12" }
@@ -26,7 +31,8 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
       eligibility: eligibility,
       policy: Policies::FurtherEducationPayments,
       first_name: "Edna",
-      surname: "Krabappel"
+      surname: "Krabappel",
+      reference: "ABC123"
     )
   end
 
@@ -267,16 +273,20 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
       )
     end
 
+    around do |example|
+      travel_to DateTime.new(2024, 1, 1, 12, 0, 0) do
+        perform_enqueued_jobs do
+          example.run
+        end
+      end
+    end
+
     before do
       dqt_teacher_resource = instance_double(Dqt::TeacherResource, find: nil)
       dqt_client = instance_double(Dqt::Client, teacher: dqt_teacher_resource)
       allow(Dqt::Client).to receive(:new).and_return(dqt_client)
 
-      travel_to DateTime.new(2024, 1, 1, 12, 0, 0) do
-        perform_enqueued_jobs do
-          form.save
-        end
-      end
+      form.save
     end
 
     it "verifies the claim" do
@@ -328,6 +338,19 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
 
       expect(task.created_by.email).to eq(
         "seymour.skinner@springfield-elementary.edu"
+      )
+    end
+
+    it "sends the provider a confirmation email" do
+      expect(
+        claim.school.eligible_fe_provider.primary_key_contact_email_address
+      ).to have_received_email(
+        "70942fe1-5838-4d37-904c-9d070f2582f0",
+        recipient_name: "Springfield Elementary",
+        claim_reference: "ABC123",
+        claimant_name: "Edna Krabappel",
+        verifier_name: "Seymour Skinner",
+        verification_date: "1 January 2024"
       )
     end
   end

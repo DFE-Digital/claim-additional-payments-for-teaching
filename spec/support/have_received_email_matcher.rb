@@ -23,7 +23,7 @@ RSpec::Matchers.define :have_received_email do |template_id, expected_personalis
     found = ActionMailer::Base.deliveries.map do |mail|
       <<-TEXT.squish
         To: #{mail.to} -
-        template id: #{mail["template_id"]} -
+        template id: #{mail.try(:template_id)} -
         personalisation: #{mail["personalisation"]}"
       TEXT
     end

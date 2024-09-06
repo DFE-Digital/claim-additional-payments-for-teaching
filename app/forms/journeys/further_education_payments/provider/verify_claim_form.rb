@@ -109,6 +109,10 @@ module Journeys
 
           claim.save!
 
+          ClaimMailer
+            .further_education_payment_provider_confirmation_email(claim)
+            .deliver_later
+
           ClaimVerifierJob.perform_later(claim)
 
           true
