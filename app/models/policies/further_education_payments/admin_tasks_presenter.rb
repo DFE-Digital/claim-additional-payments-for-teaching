@@ -26,6 +26,18 @@ module Policies
         []
       end
 
+      def employment
+        []
+      end
+
+      def identity_confirmation
+        []
+      end
+
+      def student_loan_plan
+        []
+      end
+
       private
 
       def verifier
