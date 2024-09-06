@@ -1168,7 +1168,7 @@ en:
   further_education_payments_provider:
     journey_name: Claim a targeted retention incentive payment for further education teachers - provider
     feedback_email: "FE-Levellingup.PremiumPayments@education.gov.uk"
-    support_email_address: "FE-Levellingup.PremiumPayments@education.gov.uk"
+    support_email_address: "FE-targeted.retention-incentive@education.gov.uk"
     forms:
       verify_claim:
         title: "Review a targeted retention incentive payment claim"
