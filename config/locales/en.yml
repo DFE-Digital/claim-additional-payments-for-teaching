@@ -1174,7 +1174,7 @@ en:
         assertions:
           fixed_contract:
             contract_type:
-              label: "Does %{claimant} have a permanent contract of employment at %{provider}?"
+              label: "Does %{claimant} have a %{type_of_contract} of employment at %{provider}?"
               errors:
                 inclusion: "Select yes if %{claimant} has a fixed term contract of employment at %{provider}"
             teaching_responsibilities:

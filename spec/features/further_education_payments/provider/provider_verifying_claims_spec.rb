@@ -272,7 +272,8 @@ RSpec.feature "Provider verifying claims" do
       :further_education_payments_eligibility,
       claim: claim_1,
       school: fe_provider,
-      teaching_hours_per_week: "more_than_12"
+      teaching_hours_per_week: "more_than_12",
+      contract_type: "fixed_term"
     )
 
     claim_2 = create(
@@ -288,7 +289,8 @@ RSpec.feature "Provider verifying claims" do
       :further_education_payments_eligibility,
       claim: claim_2,
       school: fe_provider,
-      teaching_hours_per_week: "more_than_12"
+      teaching_hours_per_week: "more_than_12",
+      contract_type: "fixed_term"
     )
 
     mock_dfe_sign_in_auth_session(
@@ -446,7 +448,7 @@ RSpec.feature "Provider verifying claims" do
     expect(page).to have_text "Claim date1 August 2024"
 
     within_fieldset(
-      "Does Edna Krabappel have a permanent contract of employment at " \
+      "Does Edna Krabappel have a fixed-term contract of employment at " \
       "Springfield A and M?"
     ) do
       choose "Yes"
