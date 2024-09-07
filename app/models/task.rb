@@ -47,4 +47,8 @@ class Task < ApplicationRecord
   def to_param
     name
   end
+
+  def identity_confirmation?
+    name == "identity_confirmation"
+  end
 end
