@@ -33,7 +33,7 @@
           </tr>
         </thead>
         <tbody class="govuk-table__body">
-          <% @tasks_presenter.provider_verification.each do |row| %>
+          <% @tasks_presenter.provider_verification.rows.each do |row| %>
             <tr class="govuk-table__row govuk-!-width-one-quarter">
               <th scope="row" class="govuk-table__header">
                 <%= row.label %>
@@ -54,11 +54,19 @@
       </p>
 
       <div class="govuk-inset-text">
-        <p>
-          You need to check the matching details and confirm if this is a
-          duplicate claim. If it isn't a duplicate claim, send the verification
-          request to the provider.
-        </p>
+        <% if @tasks_presenter.provider_verification.latest_email.present? %>
+          <% verification_email = @tasks_presenter.provider_verification.latest_email %>
+          <p>
+            The verification request was sent to the provider by
+            <%= user_details(verification_email.created_by) %> on <%= l(verification_email.created_at) %>
+          </p>
+        <% else %>
+          <p>
+            You need to check the matching details and confirm if this is a
+            duplicate claim. If it isn't a duplicate claim, send the verification
+            request to the provider.
+          </p>
+        <% end %>
         <%= govuk_button_to(
           "Send provider verification request",
           admin_claim_further_education_payments_provider_verification_emails_path(@claim),

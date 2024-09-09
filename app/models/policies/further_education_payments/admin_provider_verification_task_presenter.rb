@@ -25,6 +25,10 @@ module Policies
         end
       end
 
+      def latest_email
+        claim.notes.by_label("provider_verification").order(created_at: :desc).first
+      end
+
       private
 
       def verification

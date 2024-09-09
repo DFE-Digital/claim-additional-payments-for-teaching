@@ -1,6 +1,12 @@
 require "rails_helper"
 
 RSpec.feature "Admin claim further education payments" do
+  around do |example|
+    travel_to DateTime.new(AcademicYear.current.start_year, 9, 9, 10, 0, 0) do
+      example.run
+    end
+  end
+
   before do
     create(:journey_configuration, :further_education_payments_provider)
     sign_in_as_service_operator
@@ -48,6 +54,11 @@ RSpec.feature "Admin claim further education payments" do
           perform_enqueued_jobs do
             click_on "Send provider verification request"
           end
+
+          expect(page).to have_content(
+            "The verification request was sent to the provider by " \
+            "Aaron Admin on 9 September 2024 11:00am"
+          )
 
           provider_email_address = claim.school.eligible_fe_provider.primary_key_contact_email_address
 

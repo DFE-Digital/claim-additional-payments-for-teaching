@@ -6,6 +6,12 @@ module Admin
       def create
         claim = Claim.find(params[:claim_id])
 
+        claim.notes.create!(
+          created_by: admin_user,
+          label: "provider_verification",
+          body: "Verification email sent to #{claim.school.name}"
+        )
+
         ClaimMailer.further_education_payment_provider_verification_email(claim).deliver_later
 
         flash[:notice] = "Verification email sent to #{claim.school.name}"
