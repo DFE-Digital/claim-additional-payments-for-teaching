@@ -227,7 +227,61 @@ describe Admin::ClaimsHelper do
       end
     end
 
-    context "with task" do
+    context "with task passed nil" do
+      let(:claim_tasks) do
+        [
+          build(
+            :task,
+            claim_verifier_match: task_claim_verifier_match,
+            name: "identity_confirmation",
+            passed: nil
+          )
+        ]
+      end
+
+      context "with task claim verifier match any" do
+        let(:task_claim_verifier_match) { :any }
+
+        it "returns partial match status tag" do
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("Partial match")
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag app-task-list__task-completed")
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag--yellow")
+        end
+      end
+
+      context "with task claim verifier match none" do
+        let(:task_claim_verifier_match) { :none }
+
+        it "returns no match status tag" do
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("No match")
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag app-task-list__task-completed")
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag--red")
+        end
+      end
+    end
+
+    # TODO: Don't think this condition is ever used as identity confirmation task is never failed
+    # However adding this purely for coverage of the condition that is available
+    context "with task passed false" do
+      let(:claim_tasks) do
+        [
+          build(
+            :task,
+            claim_verifier_match: nil,
+            name: "identity_confirmation",
+            passed: false
+          )
+        ]
+      end
+
+      it "returns failed task status tag" do
+        expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("Failed")
+        expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag app-task-list__task-completed")
+        expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag--red")
+      end
+    end
+
+    context "with task passed true" do
       let(:claim_tasks) do
         [
           build(
@@ -243,9 +297,9 @@ describe Admin::ClaimsHelper do
         let(:task_claim_verifier_match) { nil }
 
         it "returns unverified task status tag" do
-          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("Unverified")
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("Passed")
           expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag app-task-list__task-completed")
-          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag--grey")
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag--green")
         end
       end
 
