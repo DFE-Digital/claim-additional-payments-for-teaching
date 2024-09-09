@@ -10,7 +10,7 @@ module AutomatedChecks
       end
 
       def perform
-        return unless claim.has_ecp_or_lupp_policy?
+        return unless claim.has_ecp_or_lupp_or_fe_policy?
         return unless claim.submitted_without_slc_data?
         return unless awaiting_task?
 

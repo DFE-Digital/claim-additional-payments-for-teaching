@@ -1,8 +1,7 @@
 class StudentLoanPlanCheckJob < ApplicationJob
   def perform
     delete_no_data_student_loan_plan_tasks
-    claims = current_year_ecp_lup_claims_awaiting_decision.awaiting_task("student_loan_plan")
-
+    claims = current_year_ecp_lup_fe_claims_awaiting_decision.awaiting_task("student_loan_plan")
     claims.each do |claim|
       ClaimStudentLoanDetailsUpdater.call(claim)
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan.new(claim:).perform
@@ -20,11 +19,11 @@ class StudentLoanPlanCheckJob < ApplicationJob
   end
 
   def current_year_ecp_lup_claims_with_no_data_tasks
-    current_year_ecp_lup_claims_awaiting_decision.joins(:tasks).where(tasks: {name: "student_loan_plan", claim_verifier_match: nil, manual: false})
+    current_year_ecp_lup_fe_claims_awaiting_decision.joins(:tasks).where(tasks: {name: "student_loan_plan", claim_verifier_match: nil, manual: false})
   end
 
-  def current_year_ecp_lup_claims_awaiting_decision
-    Claim.by_academic_year(current_academic_year).by_policies([Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments]).awaiting_decision.where(submitted_using_slc_data: false)
+  def current_year_ecp_lup_fe_claims_awaiting_decision
+    Claim.by_academic_year(current_academic_year).by_policies([Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments, Policies::FurtherEducationPayments]).awaiting_decision.where(submitted_using_slc_data: false)
   end
 
   def current_academic_year

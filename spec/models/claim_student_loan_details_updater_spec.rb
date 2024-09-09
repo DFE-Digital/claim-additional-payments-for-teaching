@@ -38,7 +38,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
         end
       end
 
-      [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments].each do |policy|
+      [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments, Policies::FurtherEducationPayments].each do |policy|
         context "when the policy is #{policy}" do
           let(:policy) { policy }
 
@@ -67,7 +67,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
         end
       end
 
-      [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments].each do |policy|
+      [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments, Policies::FurtherEducationPayments].each do |policy|
         context "when the policy is #{policy}" do
           let(:policy) { policy }
 

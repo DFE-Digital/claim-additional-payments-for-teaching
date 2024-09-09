@@ -4,6 +4,7 @@ RSpec.feature "Upload SLC data" do
   before do
     create(:journey_configuration, :student_loans) # used by StudentLoanAmountCheckJob
     create(:journey_configuration, :early_career_payments)
+    create(:journey_configuration, :further_education_payments)
     sign_in_as_service_operator
   end
 
@@ -37,6 +38,15 @@ RSpec.feature "Upload SLC data" do
     create(:claim, :submitted, policy: Policies::EarlyCareerPayments,
       eligibility: build(:early_career_payments_eligibility, :eligible),
       has_student_loan: false, student_loan_plan: "not_applicable", submitted_using_slc_data: false)
+  }
+  let!(:fe_claim_no_student_loan_plan_no_slc_data) {
+      create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility: build(:further_education_payments_eligibility, :eligible), has_student_loan: nil, student_loan_plan: nil)
+  }
+  let!(:fe_claim_no_student_loan_plan_in_slc_data) {
+      create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility: build(:further_education_payments_eligibility, :eligible), has_student_loan: nil, student_loan_plan: nil)
+  }
+  let!(:fe_claim_not_in_data_file) {
+      create(:claim, :submitted, :with_student_loan, policy: Policies::FurtherEducationPayments, eligibility: build(:further_education_payments_eligibility, :eligible))
   }
 
   scenario "automated task to verify student loan plan" do
@@ -105,6 +115,36 @@ RSpec.feature "Upload SLC data" do
     end
     expect(ecp_claim_no_slc_data.reload.student_loan_plan).to be nil # this was "not_applicable" before LUPEYALPHA-1031
     expect(ecp_claim_no_slc_data.has_student_loan).to be nil # this was false before LUPEYALPHA-1031
+    
+    # FE
+    
+    visit admin_claims_path
+    click_link fe_claim_no_student_loan_plan_no_slc_data.reference
+    within "li.student_loan_plan" do
+        expect(page).to have_content "Failed" # is this right?
+    end
+    expect(fe_claim_no_student_loan_plan_no_slc_data.reload.student_loan_plan).to eq "not_applicable"
+    expect(fe_claim_no_student_loan_plan_no_slc_data.has_student_loan).to eq true # doesn't seem right - legacy attribute
+    expect(fe_claim_no_student_loan_plan_no_slc_data.submitted_using_slc_data).to be false
+    
+    visit admin_claims_path
+    click_link fe_claim_no_student_loan_plan_in_slc_data.reference
+    within "li.student_loan_plan" do
+        expect(page).to have_content "Passed"
+    end
+    expect(fe_claim_no_student_loan_plan_in_slc_data.reload.student_loan_plan).to eq "plan_1"
+    expect(fe_claim_no_student_loan_plan_in_slc_data.has_student_loan).to eq true
+    expect(fe_claim_no_student_loan_plan_in_slc_data.submitted_using_slc_data).to be false
+    
+    visit admin_claims_path
+    click_link fe_claim_not_in_data_file.reference
+    within "li.student_loan_plan" do
+        expect(page).to have_content "No data"
+    end
+    expect(fe_claim_not_in_data_file.reload.student_loan_plan).to eq "not_applicable"
+    expect(fe_claim_not_in_data_file.has_student_loan).to eq false
+    expect(fe_claim_not_in_data_file.submitted_using_slc_data).to be false
+
   end
 
   def slc_data_csv_file

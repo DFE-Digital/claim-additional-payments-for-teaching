@@ -29,6 +29,8 @@ FactoryBot.define do
       claim_academic_year =
         if [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments].include?(evaluator.policy)
           Journeys::AdditionalPaymentsForTeaching.configuration.current_academic_year
+        elsif evaluator.policy == Policies::FurtherEducationPayments
+          Journeys::FurtherEducationPayments.configuration.current_academic_year
         else
           AcademicYear::Type.new.serialize(AcademicYear.new(2019))
         end
