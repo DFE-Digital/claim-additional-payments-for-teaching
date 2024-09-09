@@ -1,6 +1,7 @@
 <% content_for(:page_title) { page_title("Claim #{@claim.reference} payroll gender check for #{@claim.policy.short_name}") } %>
-
-<%= link_to "Back", admin_claim_tasks_path(claim_id: @claim.id), class: "govuk-back-link" %>
+<% content_for :back_link do %>
+  <%= link_to "Back", admin_claim_tasks_path(claim_id: @claim.id), class: "govuk-back-link" %>
+<% end %>
 <%= render "shared/error_summary", instance: @claim, errored_field_id_overrides: { "payroll_gender": "claim_payroll_gender_female" } if @claim.errors.any? %>
 
 <div class="govuk-grid-row">
