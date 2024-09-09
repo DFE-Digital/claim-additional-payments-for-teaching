@@ -5,7 +5,6 @@
 <%= render "shared/error_summary", instance: @claim, errored_field_id_overrides: { "payroll_gender": "claim_payroll_gender_female" } if @claim.errors.any? %>
 
 <div class="govuk-grid-row">
-
   <%= render claim_summary_view, claim: @claim, heading: "Payroll gender" %>
 
   <div class="govuk-grid-column-two-thirds">
@@ -24,7 +23,7 @@
             </legend>
 
             <p class="govuk-body">
-              The claimant answered ‘Don't know’ to the question ‘What gender does your school's payroll system associate with you?’
+              <%= t("#{Journeys.for_policy(@claim.policy)::I18N_NAMESPACE}.admin.tasks.payroll_gender.hint", default: [:"admin.tasks.payroll_gender.hint"]) %>
             </p>
 
             <%= hidden_field_tag "task[passed]", "true" %>
