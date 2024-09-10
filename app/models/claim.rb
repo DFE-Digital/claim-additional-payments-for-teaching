@@ -421,13 +421,6 @@ class Claim < ApplicationRecord
     policy::DqtRecord.new(Dqt::Teacher.new(dqt_teacher_status), eligibility) if has_dqt_record?
   end
 
-  def set_a_reminder?
-    Reminder.set_a_reminder?(
-      policy_year: Journeys.for_policy(policy).configuration.current_academic_year,
-      itt_academic_year: eligibility.itt_academic_year
-    )
-  end
-
   def same_claimant?(other_claim)
     CLAIMANT_MATCHING_ATTRIBUTES.all? do |attr|
       public_send(attr) == other_claim.public_send(attr)
