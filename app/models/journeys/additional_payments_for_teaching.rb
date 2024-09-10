@@ -33,5 +33,13 @@ module Journeys
         "email-verification" => Reminders::EmailVerificationForm
       }
     }.freeze
+
+    def set_a_reminder?(itt_academic_year:, policy_year: configuration.current_academic_year)
+      return false if policy_year >= EligibilityCheckable::FINAL_COMBINED_ECP_AND_LUP_POLICY_YEAR
+
+      next_year = policy_year + 1
+      eligible_itt_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(next_year)
+      eligible_itt_years.include?(itt_academic_year)
+    end
   end
 end
