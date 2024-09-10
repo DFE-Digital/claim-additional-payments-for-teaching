@@ -23,7 +23,7 @@ class ReminderMailer < ApplicationMailer
 
   def reminder_set(reminder)
     @reminder = reminder
-    support_email_address = translate("additional_payments.support_email_address")
+    support_email_address = translate("#{reminder.journey::I18N_NAMESPACE}.support_email_address")
 
     personalisation = {
       first_name: extract_first_name(@reminder.full_name),
