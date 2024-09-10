@@ -88,6 +88,32 @@ RSpec.describe ClaimCheckingTasks do
       include_examples :payroll_details_task
       include_examples :student_loan_plan_task
     end
+
+    context "FurtherEducationPayments claim" do
+      subject { described_class.new(claim) }
+
+      let(:policy) { Policies::FurtherEducationPayments }
+
+      context "when TRN is provided" do
+        before do
+          claim.eligibility.update!(teacher_reference_number: "1234567")
+        end
+
+        it "includes employment task" do
+          expect(subject.applicable_task_names).to include("employment")
+        end
+      end
+
+      context "when TRN is not included" do
+        before do
+          claim.eligibility.update!(teacher_reference_number: nil)
+        end
+
+        it "excludes employment task" do
+          expect(subject.applicable_task_names).not_to include("employment")
+        end
+      end
+    end
   end
 
   describe "#incomplete_task_names" do

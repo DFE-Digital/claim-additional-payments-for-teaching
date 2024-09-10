@@ -46,11 +46,13 @@ RSpec.describe Journeys::FurtherEducationPayments::FurtherEducationTeachingStart
     let(:further_education_teaching_start_year) { nil }
 
     it do
-      is_expected.not_to(
-        allow_value(further_education_teaching_start_year)
-        .for(:further_education_teaching_start_year)
-        .with_message("Select which academic year you started teaching in further education in England")
-      )
+      travel_to Date.new(2024, 12, 1) do
+        is_expected.not_to(
+          allow_value(further_education_teaching_start_year)
+          .for(:further_education_teaching_start_year)
+          .with_message("Select the academic year you started teaching further education in England, or select ‘I started before September 2020’")
+        )
+      end
     end
   end
 

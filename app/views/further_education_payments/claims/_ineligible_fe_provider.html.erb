@@ -9,7 +9,7 @@
     </p>
 
     <%= govuk_list [
-      "the FE provider you have selected is not included in the #{govuk_link_to "list of eligible providers", Policies::FurtherEducationPayments::URL_SPREADSHEET_ELIGIBLE_PROVIDERS }".html_safe,
+      "the FE provider you have selected is not included in the #{govuk_link_to "list of eligible providers", t("further_education_payments.fe_provider_list_url") }".html_safe,
       "the spelling of the FE provider does not match our records - check the spelling, including any apostrophes, hyphens or full stops used in the FE provider’s name",
       "the FE provider you listed is closed - this could be the case if it has rebranded"
     ], type: :bullet %>
@@ -22,13 +22,13 @@
       "FE colleges",
       "sixth-form colleges",
       "designated institutions",
-      "16 to 19 only academies and free schools"
+      "16 to 19 only academies and schools"
     ], type: :bullet %>
 
     <%= govuk_button_link_to "Change FE provider", claim_path(current_journey_routing_name, "further-education-provision-search") %>
 
     <p class="govuk-body">
-      For more information, check the eligibility criteria for <%= govuk_link_to "levelling up premium payments for early career further education teachers", "https://www.gov.uk/guidance/levelling-up-premium-payments-for-fe-teachers", new_tab: true %>.
+      For more information, check the eligibility criteria for <%= govuk_link_to t("further_education_payments.eligibility_criteria_link.text"), t("further_education_payments.eligibility_criteria_link.url"), new_tab: true %>.
     </p>
   </div>
 </div>

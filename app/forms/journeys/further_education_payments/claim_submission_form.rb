@@ -4,7 +4,13 @@ module Journeys
       def save
         super
 
-        ClaimMailer.further_education_payment_provider_verification_email(claim).deliver_later
+        if Policies::FurtherEducationPayments.duplicate_claim?(claim)
+          claim.eligibility.update!(flagged_as_duplicate: true)
+        else
+          ClaimMailer.further_education_payment_provider_verification_email(claim).deliver_later
+        end
+
+        true
       end
 
       private

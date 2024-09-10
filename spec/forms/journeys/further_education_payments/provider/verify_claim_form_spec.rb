@@ -4,7 +4,12 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
   let(:journey) { Journeys::FurtherEducationPayments::Provider }
 
   let(:school) do
-    create(:school, :further_education, name: "Springfield Elementary")
+    create(
+      :school,
+      :further_education,
+      :fe_eligible,
+      name: "Springfield Elementary"
+    )
   end
 
   let(:teaching_hours_per_week) { "more_than_12" }
@@ -16,7 +21,8 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
       :further_education_payments_eligibility,
       school: school,
       teaching_hours_per_week: teaching_hours_per_week,
-      contract_type: contract_type
+      contract_type: contract_type,
+      fixed_term_full_year: true
     )
   end
 
@@ -26,7 +32,8 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
       eligibility: eligibility,
       policy: Policies::FurtherEducationPayments,
       first_name: "Edna",
-      surname: "Krabappel"
+      surname: "Krabappel",
+      reference: "ABC123"
     )
   end
 
@@ -36,9 +43,11 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
       answers: {
         claim_id: claim.id,
         dfe_sign_in_uid: "123",
-        dfe_sign_in_first_name: "Seymoure",
+        dfe_sign_in_first_name: "Seymour",
         dfe_sign_in_last_name: "Skinner",
-        dfe_sign_in_email: "seymore.skinner@springfield-elementary.edu"
+        dfe_sign_in_email: "seymour.skinner@springfield-elementary.edu",
+        dfe_sign_in_organisation_name: "Springfield Elementary",
+        dfe_sign_in_role_codes: ["teacher_payments_claim_verifier"]
       }
     )
   end
@@ -97,7 +106,7 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
             teaching_responsibilities
             further_education_teaching_start_year
             teaching_hours_per_week
-            hours_teaching_eligible_subjects
+            half_teaching_hours
             subjects_taught
           ]
         )
@@ -120,7 +129,7 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
             further_education_teaching_start_year
             taught_at_least_one_term
             teaching_hours_per_week
-            hours_teaching_eligible_subjects
+            half_teaching_hours
             subjects_taught
             teaching_hours_per_week_next_term
           ]
@@ -213,8 +222,8 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
       end
     end
 
-    context "when the assertion is `hours_teaching_eligible_subjects`" do
-      let(:assertion_name) { "hours_teaching_eligible_subjects" }
+    context "when the assertion is `half_teaching_hours`" do
+      let(:assertion_name) { "half_teaching_hours" }
 
       it do
         is_expected.not_to(allow_value(nil).for(:outcome).with_message(
@@ -257,7 +266,7 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
               "1": {name: "teaching_responsibilities", outcome: "1"},
               "2": {name: "further_education_teaching_start_year", outcome: "1"},
               "3": {name: "teaching_hours_per_week", outcome: "1"},
-              "4": {name: "hours_teaching_eligible_subjects", outcome: "0"},
+              "4": {name: "half_teaching_hours", outcome: "0"},
               "5": {name: "subjects_taught", outcome: "0"}
             }
           }
@@ -265,11 +274,23 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
       )
     end
 
-    it "verifies the claim" do
+    around do |example|
       travel_to DateTime.new(2024, 1, 1, 12, 0, 0) do
-        form.save
+        perform_enqueued_jobs do
+          example.run
+        end
       end
+    end
 
+    before do
+      dqt_teacher_resource = instance_double(Dqt::TeacherResource, find: nil)
+      dqt_client = instance_double(Dqt::Client, teacher: dqt_teacher_resource)
+      allow(Dqt::Client).to receive(:new).and_return(dqt_client)
+
+      form.save
+    end
+
+    it "verifies the claim" do
       expect(claim.reload.eligibility.verification).to match(
         {
           "assertions" => [
@@ -290,7 +311,7 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
               "outcome" => true
             },
             {
-              "name" => "hours_teaching_eligible_subjects",
+              "name" => "half_teaching_hours",
               "outcome" => false
             },
             {
@@ -300,12 +321,35 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
           ],
           "verifier" => {
             "dfe_sign_in_uid" => "123",
-            "first_name" => "Seymoure",
+            "first_name" => "Seymour",
             "last_name" => "Skinner",
-            "email" => "seymore.skinner@springfield-elementary.edu"
+            "email" => "seymour.skinner@springfield-elementary.edu",
+            "dfe_sign_in_organisation_name" => "Springfield Elementary",
+            "dfe_sign_in_role_codes" => ["teacher_payments_claim_verifier"]
           },
           "created_at" => "2024-01-01T12:00:00.000+00:00"
         }
+      )
+    end
+
+    it "creates a provider verification task" do
+      task = claim.reload.tasks.find_by(name: "provider_verification")
+
+      expect(task.created_by.email).to eq(
+        "seymour.skinner@springfield-elementary.edu"
+      )
+    end
+
+    it "sends the provider a confirmation email" do
+      expect(
+        claim.school.eligible_fe_provider.primary_key_contact_email_address
+      ).to have_received_email(
+        "70942fe1-5838-4d37-904c-9d070f2582f0",
+        recipient_name: "Springfield Elementary",
+        claim_reference: "ABC123",
+        claimant_name: "Edna Krabappel",
+        verifier_name: "Seymour Skinner",
+        verification_date: "1 January 2024"
       )
     end
   end

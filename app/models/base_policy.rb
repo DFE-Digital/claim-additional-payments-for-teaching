@@ -50,4 +50,12 @@ module BasePolicy
   def international_relocation_payments?
     to_s == "InternationalRelocationPayments"
   end
+
+  def further_education_payments?
+    to_s == "FurtherEducationPayments"
+  end
+
+  def auto_pass_identity_confirmation_task(claim)
+    :skip
+  end
 end

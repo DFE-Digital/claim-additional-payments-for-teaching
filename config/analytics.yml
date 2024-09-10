@@ -76,6 +76,8 @@ shared:
     - journeys_session_id
     - identity_confirmed_with_onelogin
     - logged_in_with_onelogin
+    - onelogin_auth_at
+    - onelogin_idv_at
   :decisions:
     - id
     - result
@@ -296,6 +298,7 @@ shared:
     - subject_to_formal_performance_action
     - subject_to_disciplinary_action
     - half_teaching_hours
+    - flagged_as_duplicate
   :eligible_fe_providers:
     - id
     - ukprn

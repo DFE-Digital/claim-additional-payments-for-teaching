@@ -35,6 +35,13 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
       expect(claim.onelogin_credentials).to eq(answers.onelogin_credentials)
       expect(claim.onelogin_user_info).to eq(answers.onelogin_user_info)
 
+      expect(claim.onelogin_uid).to eql(answers.onelogin_uid)
+      expect(claim.onelogin_auth_at).to eql(answers.onelogin_auth_at)
+      expect(claim.onelogin_idv_at).to eql(answers.onelogin_idv_at)
+      expect(claim.onelogin_idv_first_name).to eql(answers.onelogin_idv_first_name)
+      expect(claim.onelogin_idv_last_name).to eql(answers.onelogin_idv_last_name)
+      expect(claim.onelogin_idv_date_of_birth).to eql(answers.onelogin_idv_date_of_birth)
+
       expect(eligibility.award_amount).to eq(answers.award_amount)
       expect(eligibility.teacher_reference_number).to eq(answers.teacher_reference_number)
       expect(eligibility.teaching_responsibilities).to eq(answers.teaching_responsibilities)
@@ -82,6 +89,31 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
           verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
         )
       )
+    end
+
+    it "doesn't email the provider if the claim is a duplicate" do
+      allow(ClaimVerifierJob).to receive(:perform_later)
+
+      allow(ClaimMailer).to(
+        receive(:further_education_payment_provider_verification_email)
+      ).and_return(double(deliver_later: nil))
+
+      first_claim_form = described_class.new(journey_session: journey_session)
+      second_claim_form = described_class.new(journey_session: journey_session)
+
+      first_claim_form.save
+      second_claim_form.save
+
+      expect(ClaimMailer).to(
+        have_received(:further_education_payment_provider_verification_email)
+        .exactly(1).times
+      )
+
+      original_claim = first_claim_form.claim
+      duplicate_claim = second_claim_form.claim
+
+      expect(original_claim.eligibility.flagged_as_duplicate).to eq(false)
+      expect(duplicate_claim.eligibility.flagged_as_duplicate).to eq(true)
     end
   end
 end

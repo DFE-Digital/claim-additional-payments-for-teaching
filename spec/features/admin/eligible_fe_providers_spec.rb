@@ -6,7 +6,7 @@ RSpec.feature "Admin of eligible FE providers" do
     sign_in_as_service_operator
 
     click_link "Manage services"
-    click_link "Change Claim incentive payments for further education teachers"
+    click_link "Change Claim a targeted retention incentive payment for further education teachers"
 
     select "2024/2025", from: "eligible-fe-providers-upload-academic-year-field"
     attach_file "eligible-fe-providers-upload-file-field", eligible_fe_providers_csv_file.path

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_28_132813) do
+ActiveRecord::Schema[7.0].define(version: 2024_09_04_150711) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_trgm"
@@ -105,6 +105,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_28_132813) do
     t.string "paye_reference"
     t.string "practitioner_email_address"
     t.string "provider_contact_name"
+    t.text "onelogin_uid"
+    t.datetime "onelogin_auth_at"
+    t.datetime "onelogin_idv_at"
+    t.text "onelogin_idv_first_name"
+    t.text "onelogin_idv_last_name"
+    t.date "onelogin_idv_date_of_birth"
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
@@ -254,6 +260,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_28_132813) do
     t.boolean "subject_to_disciplinary_action"
     t.boolean "half_teaching_hours"
     t.jsonb "verification", default: {}
+    t.boolean "flagged_as_duplicate", default: false
     t.index ["possible_school_id"], name: "index_fe_payments_eligibilities_on_possible_school_id"
     t.index ["school_id"], name: "index_fe_payments_eligibilities_on_school_id"
   end

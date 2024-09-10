@@ -83,6 +83,12 @@ class Claim < ApplicationRecord
     logged_in_with_onelogin: false,
     onelogin_credentials: true,
     onelogin_user_info: true,
+    onelogin_uid: true,
+    onelogin_auth_at: false,
+    onelogin_idv_at: false,
+    onelogin_idv_first_name: true,
+    onelogin_idv_last_name: true,
+    onelogin_idv_date_of_birth: true,
     paye_reference: true,
     practitioner_email_address: true,
     provider_contact_name: true

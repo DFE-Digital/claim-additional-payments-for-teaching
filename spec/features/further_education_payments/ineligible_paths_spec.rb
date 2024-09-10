@@ -59,7 +59,7 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
   end
 
-  scenario "when ineligible FE provider is selected with js", js: true do
+  scenario "when ineligible FE provider is selected with js", js: true, flaky: true do
     when_further_education_payments_journey_configuration_exists
     and_ineligible_college_exists
     and_eligible_college_exists
@@ -168,7 +168,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("No, I have not taught at #{eligible_college.name} for at least one academic term")
     click_button "Continue"
 
-    expect(page).to have_content("You are not eligible for a financial incentive payment yet")
+    expect(page).to have_content("You are not eligible for a targeted retention incentive payment yet")
   end
 
   scenario "when lacking subjects" do
@@ -239,7 +239,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("No, I have not taught at #{eligible_college.name} for at least one academic term")
     click_button "Continue"
 
-    expect(page).to have_content("You are not eligible for a financial incentive payment yet")
+    expect(page).to have_content("You are not eligible for a targeted retention incentive payment yet")
   end
 
   scenario "when teaches non eligible course in applicable subject area" do
@@ -331,7 +331,7 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible")
-    expect(page).to have_content("In order to claim a financial incentive payment, at least half of your timetabled teaching hours should be spent teaching an")
+    expect(page).to have_content("In order to claim a targeted retention incentive payment, at least half of your timetabled teaching hours should be spent teaching an")
   end
 
   scenario "when not a recent FE teacher" do

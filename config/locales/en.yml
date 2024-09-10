@@ -138,6 +138,7 @@ en:
       employment: "Check employment information"
       matching_details: "Review matching details from other claims"
       identity_confirmation: "Confirm the claimant made the claim"
+      provider_verification: "Confirm the provider verification"
       payroll_gender: "Add a payroll gender for HMRC"
       student_loan_amount: "Check student loan amount"
       student_loan_plan: "Check student loan plan"
@@ -149,6 +150,7 @@ en:
       employment_start: "Check employment start date"
       subject: "Check subject"
       teaching_hours: "Check teaching hours"
+
     undo_decision:
       approved: "Undo approval"
       rejected: "Undo rejection"
@@ -823,16 +825,71 @@ en:
   further_education_payments:
     landing_page: Find out if you are eligible for a targeted retention incentive payment for further education teachers
     claim_description: for further education payments
-    journey_name: Claim incentive payments for further education teachers
-    feedback_email: "FE-Levellingup.PremiumPayments@education.gov.uk"
-    support_email_address: "FE-Levellingup.PremiumPayments@education.gov.uk"
+    journey_name: Claim a targeted retention incentive payment for further education teachers
+    feedback_email: "FE-targeted.retention-incentive@education.gov.uk"
+    support_email_address: "FE-targeted.retention-incentive@education.gov.uk"
     claim_subject: "Further education payment"
     policy_acronym: FE
     policy_short_name: Targeted Retention Incentive Payment For FE Teachers
+    eligibility_criteria_link:
+      text: targeted retention incentive payments for early career further education teachers
+      url: "https://www.gov.uk/guidance/levelling-up-premium-payments-for-fe-teachers"
+    fe_provider_list_url: "https://assets.publishing.service.gov.uk/media/66d70f9c701781e1b341dba7/List_of_eligible_FE_providers_and_payment_values_for_targeted_retention_incentives.xlsx"
     admin:
+      decision:
+        rejected_reasons:
+          no_teaching_responsibilities: "No teaching responsibilities"
+          no_eligible_contract_of_employment: "No eligible contract of employment"
+          works_less_than_2_point_5_hours_per_week: "Works less than 2.5 hours per week (either currently or next term)"
+          has_worked_in_further_education_for_more_than_5_years: "Has worked in further education for more than 5 years"
+          ineligible_subject_or_courses: "Ineligible subjects or courses"
+          insufficient_time_spent_teaching_eligibble_students: "Insufficient time spent teaching eligible students"
+          duplicate_claim: "Duplicate claim"
+          no_response: "No response"
+          other: "Other"
       task_questions:
         matching_details:
           title: Is this claim still valid despite having matching details with other claims?
+        provider_verification:
+          title: "Has the provider confirmed the claimant's details?"
+          contract_type:
+            label: "Contract of employment"
+            claimant_answers:
+              permanent: "Permanent"
+              fixed_term: "Fixed term"
+              variable_hours: "Variable hours"
+          teaching_responsibilities:
+            label: "Teaching responsibilities"
+            claimant_answers:
+              true: "Yes"
+              false: "No"
+          further_education_teaching_start_year:
+            label: "First 5 years of teaching"
+          teaching_hours_per_week:
+            label: "Timetabled teaching hours"
+            claimant_answers:
+              more_than_12: "More than 12 hours per week"
+              between_2_5_and_12: "Between 2.5 and 12 hours per week"
+              less_than_2_5: "Less than 2.5 hours per week"
+          half_teaching_hours:
+            label: "Age range taught"
+            claimant_answers:
+              true: "Yes"
+              false: "No"
+          subjects_taught:
+            label: "Subject"
+          courses_taught:
+            label: "Course"
+          teaching_hours_per_week_next_term:
+            label: "Timetabled teaching hours next term"
+            claimant_answers:
+              at_least_2_5: "At least 2.5 hours per week"
+              less_than_2_5: "Less than 2.5 hours per week"
+          taught_at_least_one_term:
+            label: "Taught at least one term"
+            claimant_answers:
+              true: "Yes"
+              false: "No"
     forms:
       ineligible:
         courses:
@@ -846,7 +903,7 @@ en:
         must_be_recent_further_education_teacher:
           heading: You are not eligible
         must_teach_at_least_one_term:
-          heading: You are not eligible for a financial incentive payment yet
+          heading: You are not eligible for a targeted retention incentive payment yet
         subject_to_problematic_actions:
           heading: You are not eligible
         teaching_less_than_2_5:
@@ -866,7 +923,7 @@ en:
       further_education_provision_search:
         question: Which FE provider are you employed by?
         errors:
-          blank: Enter a college name or postcode
+          blank: Enter the name of the FE provider you are employed by
           min_length: Enter a college name or postcode that is at least 3 characters long
       select_provision:
         heading: Select where you are employed
@@ -874,7 +931,7 @@ en:
           Select the further education provider you are employed by. If you work for a college or sixth-form group, you
           should select the group name.
         errors:
-          blank: Select where you are employed
+          blank: Select the further education provider you are employed by
       contract_type:
         question: What type of contract do you have with %{school_name}?
         options:
@@ -882,14 +939,14 @@ en:
           fixed_term: Fixed-term contract
           variable_hours: Variable hours contract
         errors:
-          inclusion: Select the contract type you have
+          inclusion: Select the type of contract you have with %{school_name}
       fixed_term_contract:
         question: Does your fixed-term contract cover the full %{academic_year} academic year?
         options:
           true: Yes, it covers the full %{current_academic_year} academic year
           false: No, it does not cover the full %{current_academic_year} academic year
         errors:
-          inclusion: Select yes if your fixed-term contract covers the full academic year
+          inclusion: Select yes if your fixed-term contract covers the full %{current_academic_year} academic year
       taught_at_least_one_term:
         question: Have you taught at %{school_name} for at least one academic term?
         options:
@@ -906,7 +963,7 @@ en:
           between_2_5_and_12: Between 2.5 and 12 hours per week
           less_than_2_5: Less than 2.5 hours per week
         errors:
-          inclusion: Select how many hours per week you are timetabled to teach during the current term
+          inclusion: Select the number of hours you are timetabled to teach per week at %{school_name} during the current term
       teaching_hours_per_week_next_term:
         question: Are you timetabled to teach at least 2.5 hours per week at %{school_name} next term?
         hint: If you are unsure, you should speak to HR or apply when you know your arrangements for next term.
@@ -914,14 +971,14 @@ en:
           at_least_2_5: Yes, I am timetabled to teach at least 2.5 hours per week at %{school_name} next term
           less_than_2_5: No, I’m not timetabled to teach at least 2.5 hours per week at %{school_name} next term
         errors:
-          inclusion: Select yes if you are timetabled to teach at least 2.5 hours next term otherwise select you are not
+          inclusion: Select yes if you are timetabled to teach at least 2.5 hours per week next term at %{school_name}
       further_education_teaching_start_year:
         question: Which academic year did you start teaching in further education (FE) in England?
         options:
           between_dates: September %{start_year} to August %{end_year}
           before_date: I started before September %{year}
         errors:
-          blank: Select which academic year you started teaching in further education in England
+          blank: Select the academic year you started teaching further education in England, or select ‘I started before September %{before_year}’
       subjects_taught:
         question: Which subject areas do you teach?
         hint: Select all that apply
@@ -935,13 +992,13 @@ en:
           physics: Physics
           none: I do not teach any of these subjects
         errors:
-          inclusion: Select the subject areas you teach in or select you do not teach any of the listed subject areas
+          inclusion: Select the subject areas that you teach, or select ‘I do not teach any of these subjects’
       courses: &courses
         hint: |
           <p>If you are unsure whether the course(s) you teach is eligible, please email: <br/>%{email}</p>
           <p>Select all that apply</p>
         errors:
-          inclusion: Select all the courses you teach otherwise select you do not teach any of these courses
+          inclusion: Select the courses that you teach, or select ‘I do not teach any of these courses’
       building_construction_courses:
         <<: *courses
         question: Which building and construction courses do you teach?
@@ -1052,7 +1109,7 @@ en:
           no_but_planned: No, but I plan to enrol on one in the next 12 months
           no_not_planned: No, and I do not plan to enrol on one in the next 12 months
         errors:
-          inclusion: Select whether you have, are currently enrolled or plan to enrol on a teaching qualification
+          inclusion: Select if you have a teaching qualification, or are currently enrolled on one or are planning to enrol on one
       poor_performance:
         heading: Tell us if you are currently under any performance measures or disciplinary action
         questions:
@@ -1069,9 +1126,9 @@ en:
               check with your FE provider as it will affect your eligibility.
         errors:
           performance:
-            inclusion: Select yes if you are subject to formal action for poor performance at work
+            inclusion: Select yes if any performance measures have been started against you
           disciplinary:
-            inclusion: Select yes if you are subject to disciplinary action
+            inclusion: Select yes if you are currently subject to disciplinary action
       half_teaching_hours:
         question:
           Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to
@@ -1081,7 +1138,7 @@ en:
             Select yes if at least half your timetabled teaching hours are spent teaching 16-19-year-olds, including
             those up to 25 with an Education, Health and Care Plan
       eligible:
-        heading: You’re eligible for a financial incentive payment
+        heading: You’re eligible for a targeted retention incentive payment
       gender:
         questions:
           payroll_gender: "How is your gender recorded on your employer’s payroll system?"
@@ -1109,12 +1166,12 @@ en:
         correct.
       btn_text: Accept and send
   further_education_payments_provider:
-    journey_name: Claim incentive payments for further education teachers - provider
+    journey_name: Claim a targeted retention incentive payment for further education teachers - provider
     feedback_email: "FE-Levellingup.PremiumPayments@education.gov.uk"
-    support_email_address: "FE-Levellingup.PremiumPayments@education.gov.uk"
+    support_email_address: "FE-targeted.retention-incentive@education.gov.uk"
     forms:
       verify_claim:
-        title: "Review a financial incentive payment claim"
+        title: "Review a targeted retention incentive payment claim"
         declaration_title: "Declaration"
         declaration: "To the best of my knowledge, I confirm that the information provided in this form is correct."
         claim_reference: "Claim reference"
@@ -1128,7 +1185,7 @@ en:
         assertions:
           fixed_contract:
             contract_type:
-              label: "Does %{claimant} have a permanent contract of employment at %{provider}?"
+              label: "Does %{claimant} have a %{type_of_contract} of employment %{duration}at %{provider}?"
               errors:
                 inclusion: "Select yes if %{claimant} has a fixed term contract of employment at %{provider}"
             teaching_responsibilities:
@@ -1143,7 +1200,7 @@ en:
               label: "Is %{claimant} timetabled to teach an average of %{hours} during the current term?"
               errors:
                 inclusion: "Select yes if %{claimant} is timetabled to teach an average of %{hours} during the current term"
-            hours_teaching_eligible_subjects:
+            half_teaching_hours:
               label: "For at least half of their timetabled teaching hours, does %{claimant} teach 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?"
               errors:
                 inclusion: "Select yes if %{claimant} teaches 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP), for at least half of their timetabled teaching hours"
@@ -1153,7 +1210,7 @@ en:
                 inclusion: "Select yes if %{claimant} teaches this course for at least half their timetabled teaching hours"
           variable_contract:
             contract_type:
-              label: "Does %{claimant} have a variable hour contract of employment at %{provider}?"
+              label: "Does %{claimant} have a %{type_of_contract} of employment at %{provider}?"
               errors:
                 inclusion: "Select yes if %{claimant} has a variable hours contract of employment at %{provider}"
             teaching_responsibilities:
@@ -1172,7 +1229,7 @@ en:
               label: "Is %{claimant} timetabled to teach an average of %{hours} during the current term?"
               errors:
                 inclusion: "Select yes if %{claimant} is timetabled to teach an average of %{hours} during the current term"
-            hours_teaching_eligible_subjects:
+            half_teaching_hours:
               label: "For at least half of their timetabled teaching hours, does %{claimant} teach 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?"
               errors:
                 inclusion: "Select yes if %{claimant} teaches 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP), for at least half of their timetabled teaching hours"

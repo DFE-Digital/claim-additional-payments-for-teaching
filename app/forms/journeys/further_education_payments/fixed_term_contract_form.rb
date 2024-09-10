@@ -4,17 +4,20 @@ module Journeys
       attribute :fixed_term_full_year, :boolean
 
       validates :fixed_term_full_year,
-        inclusion: {in: ->(form) { form.radio_options.map(&:id) }, message: i18n_error_message(:inclusion)}
+        inclusion: {
+          in: ->(form) { form.radio_options.map(&:id) },
+          message: ->(object, data) { i18n_error_message(:inclusion, current_academic_year: object.current_academic_year).call(object, data) }
+        }
 
       def radio_options
         [
           OpenStruct.new(
             id: true,
-            name: t("options.true", current_academic_year: current_academic_year.to_s(:long))
+            name: t("options.true", current_academic_year: current_academic_year)
           ),
           OpenStruct.new(
             id: false,
-            name: t("options.false", current_academic_year: current_academic_year.to_s(:long))
+            name: t("options.false", current_academic_year: current_academic_year)
           )
         ]
       end
@@ -27,7 +30,7 @@ module Journeys
       end
 
       def current_academic_year
-        @current_academic_year ||= AcademicYear.current
+        @current_academic_year ||= AcademicYear.current.to_s(:long)
       end
     end
   end

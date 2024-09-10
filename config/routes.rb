@@ -86,6 +86,7 @@ Rails.application.routes.draw do
 
     scope constraints: {journey: "further-education-payments-provider"} do
       get "auth/callback", to: "omniauth_callbacks#callback"
+      get "auth/sign-out", to: "omniauth_callbacks#sign_out"
     end
 
     scope path: "/", constraints: {journey: Regexp.new(Journeys.all_routing_names.join("|"))} do
@@ -126,6 +127,9 @@ Rails.application.routes.draw do
       get "search", on: :collection
       patch "hold"
       patch "unhold"
+      namespace :further_education_payments do
+        resources :provider_verification_emails, only: [:create]
+      end
     end
 
     resources :qualification_report_uploads, only: [:new, :create]

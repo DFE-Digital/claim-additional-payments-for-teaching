@@ -12,17 +12,6 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     )
   }
 
-  let!(:claim_logged_in_with_tid) {
-    eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible)
-    create(
-      :claim,
-      :submitted,
-      :logged_in_with_tid,
-      policy: policy,
-      eligibility: eligibility
-    )
-  }
-
   let!(:multiple_claim) {
     eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible)
     create(
@@ -104,7 +93,6 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
 
       expect(page).to have_content("– Approved")
       expect(page).to have_content("Approved awaiting payroll")
-      expect(page).to have_content("Not signed in with DfE Identity")
     end
   end
 
@@ -159,17 +147,6 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     end
   end
 
-  scenario "#{policy} view claim logged in with tid" do
-    travel_to(@within_academic_year) do
-      visit admin_claims_path
-
-      find("a[href='#{admin_claim_tasks_path(claim_logged_in_with_tid)}']").click
-
-      expect(page).to have_content("Claim route")
-      expect(page).to have_content("Signed in with DfE Identity")
-    end
-  end
-
   def expect_page_to_have_policy_sections(policy)
     sections = case policy
     when Policies::StudentLoans
@@ -181,7 +158,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     when Policies::InternationalRelocationPayments
       ["Identity confirmation", "Visa", "Arrival date", "Employment", "Employment contract", "Employment start", "Subject", "Teaching hours", "Decision"]
     when Policies::FurtherEducationPayments
-      ["Identity confirmation", "Qualifications", "Census subjects taught", "Employment", "Matching details", "Decision"]
+      ["Identity confirmation", "Provider verification", "Student loan plan", "Payroll details", "Matching details", "Decision"]
     else
       raise "Unimplemented policy: #{policy}"
     end

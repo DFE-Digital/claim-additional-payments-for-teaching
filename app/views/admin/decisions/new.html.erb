@@ -4,7 +4,7 @@
 <div class="govuk-grid-row">
   <%= render("shared/error_summary", instance: @decision, errored_field_id_overrides: { "result": "decision_result_approved" }) if @decision.errors.any? %>
 
-  <%= render "admin/tasks/claim_summary", claim: @claim, heading: "Claim decision" %>
+  <%= render "admin/tasks/#{claim_summary_view}", claim: @claim, heading: "Claim decision" %>
 
   <div class="govuk-grid-column-two-thirds">
     <%= render("incomplete_tasks", claim: @claim, incomplete_task_names: @claim_checking_tasks.incomplete_task_names) if @claim_checking_tasks.incomplete_task_names.any? %>

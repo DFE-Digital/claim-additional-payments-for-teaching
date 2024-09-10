@@ -1,0 +1,14 @@
+<% content_for(:page_title, page_title("You do not have access to this service", journey: current_journey_routing_name)) %>
+<% @backlink_path = claim_path(current_journey_routing_name, "email-address") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">You do not have access to this service</h1>
+    <p class="govuk-body">
+      This email address does not have access to this service. Check the email address you entered and try again.
+    </p>
+    <p class="govuk-body">
+      To request access, contact us at <%= govuk_mail_to t("early_years_payment_provider_start.feedback_email") %>.
+    </p>
+  </div>
+</div>

@@ -27,6 +27,8 @@ module AutomatedChecks
         )
       end
 
+      let(:identity_confirmed_with_onelogin) { nil }
+
       let(:claim_arg) do
         claim = create(
           :claim,
@@ -36,7 +38,8 @@ module AutomatedChecks
           national_insurance_number: "QQ100000C",
           reference: "AB123456",
           surname: "ELIGIBLE",
-          policy: policy
+          policy: policy,
+          identity_confirmed_with_onelogin: identity_confirmed_with_onelogin
         )
 
         policy_underscored = policy.to_s.underscore
@@ -61,6 +64,64 @@ module AutomatedChecks
             nino: claim_arg.national_insurance_number
           )
         }
+      end
+
+      describe "#perform with auto pass for FurtherEducationPayments" do
+        let(:policy) { Policies::FurtherEducationPayments }
+        let(:data) do
+          {
+            dob: claim_arg.date_of_birth,
+            name: claim_arg.full_name,
+            nino: claim_arg.national_insurance_number,
+            trn: claim_arg.eligibility.teacher_reference_number
+          }
+        end
+
+        subject(:perform) { identity.perform }
+
+        describe "identity confirmation task" do
+          let(:identity_confirmed_with_onelogin) { true }
+
+          subject(:identity_confirmation_task) { claim_arg.tasks.find_by(name: "identity_confirmation") }
+
+          before { perform }
+
+          describe "#claim_verifier_match" do
+            subject(:claim_verifier_match) { identity_confirmation_task.claim_verifier_match }
+
+            it { is_expected.to eq nil }
+          end
+
+          context "identity_confirmed_with_onelogin true" do
+            describe "#passed" do
+              subject(:passed) { identity_confirmation_task.passed }
+
+              it { is_expected.to eq true }
+            end
+          end
+
+          context "identity_confirmed_with_onelogin false" do
+            let(:identity_confirmed_with_onelogin) { false }
+
+            describe "#passed" do
+              subject(:passed) { identity_confirmation_task.passed }
+
+              it { is_expected.to eq false }
+            end
+          end
+
+          describe "#created_by" do
+            subject(:created_by) { identity_confirmation_task.created_by }
+
+            it { is_expected.to eq nil }
+          end
+
+          describe "#manual" do
+            subject(:manual) { identity_confirmation_task.manual }
+
+            it { is_expected.to eq false }
+          end
+        end
       end
 
       describe "#perform" do
@@ -553,7 +614,7 @@ module AutomatedChecks
                     national_insurance_number: "QQ100000C",
                     reference: "AB123456",
                     surname: "ELIGIBLE",
-                    tasks: [build(:task, name: :identity_confirmation)],
+                    tasks: [build(:task, name: :identity_confirmation, claim_verifier_match: :all)],
                     eligibility_attributes: {teacher_reference_number: "1234567"}
                   )
                 end
@@ -568,7 +629,7 @@ module AutomatedChecks
                   describe "#claim_verifier_match" do
                     subject(:claim_verifier_match) { identity_confirmation_task.claim_verifier_match }
 
-                    it { is_expected.to eq nil }
+                    it { is_expected.to eq "all" }
                   end
 
                   describe "#created_by" do

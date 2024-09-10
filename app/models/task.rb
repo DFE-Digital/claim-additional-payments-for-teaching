@@ -9,6 +9,7 @@
 class Task < ApplicationRecord
   NAMES = %w[
     identity_confirmation
+    provider_verification
     visa
     arrival_date
     qualifications
@@ -45,5 +46,9 @@ class Task < ApplicationRecord
 
   def to_param
     name
+  end
+
+  def identity_confirmation?
+    name == "identity_confirmation"
   end
 end

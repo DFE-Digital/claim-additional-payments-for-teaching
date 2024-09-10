@@ -1,6 +1,37 @@
 require "rails_helper"
 
 RSpec.describe "OmniauthCallbacksControllers", type: :request do
+  describe "#sign_out" do
+    let(:claim_id) { "1234-1234-1234-1234" }
+
+    before do
+      answers_with_claim = double(claim: double(id: claim_id))
+      journey_session_with_answers_and_claim = double(answers: answers_with_claim)
+      allow_any_instance_of(OmniauthCallbacksController).to receive(:current_journey_routing_name).and_return(journey)
+      allow_any_instance_of(OmniauthCallbacksController).to receive(:journey_session).and_return(journey_session_with_answers_and_claim)
+
+      get auth_sign_out_path(journey: "further-education-payments-provider")
+    end
+
+    context "further education payments provider journey" do
+      let(:journey) { Journeys::FurtherEducationPayments::Provider::ROUTING_NAME }
+
+      it "redirects to the FE sign-in page with a flash message" do
+        expect(response).to redirect_to("https://www.example.com/further-education-payments-provider/claim?answers%5Bclaim_id%5D=#{claim_id}")
+
+        expect(flash[:success]).to include("You have signed out of DfE Sign-in")
+      end
+    end
+
+    context "no journey returns a 404" do
+      let(:journey) { nil }
+
+      it "404 page" do
+        expect(response.body).to include("Page not found")
+      end
+    end
+  end
+
   describe "#callback" do
     def set_mock_auth(trn)
       OmniAuth.config.mock_auth[:default] = OmniAuth::AuthHash.new(
@@ -136,6 +167,14 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
           get auth_onelogin_path
         }.to change { journey_session.reload.answers.onelogin_uid }.from(nil).to("12345")
       end
+
+      it "sets timestamp onelogin_auth_at" do
+        journey_session = Journeys::FurtherEducationPayments::Session.last
+
+        expect {
+          get auth_onelogin_path
+        }.to change { journey_session.reload.answers.onelogin_auth_at }.from(nil).to(be_within(10.seconds).of(Time.now))
+      end
     end
 
     context "idv step" do
@@ -159,7 +198,7 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
           OneLogin::CoreIdentityValidator,
           call: nil,
           first_name: "John",
-          surname: "Doe"
+          last_name: "Doe"
         )
 
         allow(OneLogin::CoreIdentityValidator).to receive(:new).and_return(validator_double)
@@ -167,6 +206,29 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
         get auth_onelogin_path
 
         expect(response).to redirect_to("http://www.example.com/auth/failure?strategy=onelogin&message=access_denied&origin=http://www.example.com/further-education-payments/sign-in")
+      end
+
+      it "sets timestamp onelogin_idv_* variables" do
+        journey_session = Journeys::FurtherEducationPayments::Session.last
+        journey_session.answers.onelogin_uid = "12345"
+        journey_session.save!
+
+        validator_double = double(
+          OneLogin::CoreIdentityValidator,
+          call: nil,
+          first_name: "John",
+          last_name: "Doe",
+          date_of_birth: Date.new(1970, 12, 13)
+        )
+
+        allow(OneLogin::CoreIdentityValidator).to receive(:new).and_return(validator_double)
+
+        expect {
+          get auth_onelogin_path
+        }.to change { journey_session.reload.answers.onelogin_idv_at }.from(nil).to(be_within(10.seconds).of(Time.now))
+          .and change { journey_session.reload.answers.onelogin_idv_first_name }.from(nil).to("John")
+          .and change { journey_session.reload.answers.onelogin_idv_last_name }.from(nil).to("Doe")
+          .and change { journey_session.reload.answers.onelogin_idv_date_of_birth }.from(nil).to(Date.new(1970, 12, 13))
       end
     end
   end

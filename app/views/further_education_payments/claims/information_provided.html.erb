@@ -7,36 +7,13 @@
     <h2 class="govuk-heading-m">To process your application</h2>
 
     <p class="govuk-body">
-      We will check the information you have provided with the further education provider where you currently teach.
-    </p>
-
-    <p class="govuk-body">
-      We will also check this information with the:
+      We will check the information you have provided with the:
     </p>
 
     <%= govuk_list [
-      "Department for Education’s (DfE) database of qualified teachers",
-      "Teacher Pension Scheme"
+      "further education provider where you currently teach",
+      "Teacher’s Pension Scheme, if you have a teacher reference number (TRN) and choose to provide it"
     ], type: :bullet %>
-
-    <h2 class="govuk-heading-m">To pay you</h2>
-
-    <p class="govuk-body">
-      DfE will make the payment directly to you.
-    </p>
-
-    <p class="govuk-body">
-      To complete the rest of your application, you will need your:
-    </p>
-
-    <%= govuk_list [
-      "National Insurance number",
-      "bank account details",
-    ], type: :bullet %>
-
-    <p class="govuk-body">
-      You will also be asked to provide your teacher reference number (TRN) if you have one, although this is optional.
-    </p>
 
     <%= govuk_details(summary_text: "Where to find your TRN") do %>
       <p class="govuk-body">
@@ -53,6 +30,21 @@
       ], type: :number %>
     <% end %>
 
+    <h2 class="govuk-heading-m">To pay you</h2>
+
+    <p class="govuk-body">
+      DfE will make the payment directly to you.
+    </p>
+
+    <p class="govuk-body">
+      To complete the rest of your application, you will need your:
+    </p>
+
+    <%= govuk_list [
+      "National Insurance number",
+      "bank account details",
+    ], type: :bullet %>
+
     <h2 class="govuk-heading-m">Student loan deductions</h2>
 
     <p class="govuk-body">
@@ -62,12 +54,14 @@
     <h2 class="govuk-heading-m">Income Tax</h2>
 
     <p class="govuk-body">
-      Your financial incentive payment is taxable income. However DfE will pay any Income Tax and National Insurance contributions due to HMRC for you. This means the payment amount you receive may be lower following tax deductions.
+      Your targeted retention incentive payment is taxable income.
+      However DfE will pay any Income Tax and National Insurance contributions due to HMRC for you.
+      This means the payment amount you receive may be lower following tax deductions.
     </p>
 
     <p class="govuk-body">
       For more details, you can read about payments and deductions for the
-      <%= govuk_link_to "levelling up premium payment", "https://www.gov.uk/guidance/levelling-up-premium-payments-for-fe-teachers", new_tab: true %>.
+      <%= govuk_link_to "targeted retention incentive payment", t("further_education_payments.eligibility_criteria_link.url"), new_tab: true %>.
     </p>
 
     <%= govuk_button_to "Continue", claim_path(current_journey_routing_name), method: :patch %>

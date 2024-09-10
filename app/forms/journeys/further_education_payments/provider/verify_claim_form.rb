@@ -10,7 +10,7 @@ module Journeys
             teaching_responsibilities
             further_education_teaching_start_year
             teaching_hours_per_week
-            hours_teaching_eligible_subjects
+            half_teaching_hours
             subjects_taught
           ],
           variable_contract: %i[
@@ -19,7 +19,7 @@ module Journeys
             further_education_teaching_start_year
             taught_at_least_one_term
             teaching_hours_per_week
-            hours_teaching_eligible_subjects
+            half_teaching_hours
             subjects_taught
             teaching_hours_per_week_next_term
           ]
@@ -63,16 +63,24 @@ module Journeys
           @course_descriptions ||= claim.eligibility.courses_taught.map(&:description)
         end
 
-        def teaching_hours_per_week
-          I18n.t(
-            [
-              "further_education_payments",
-              "forms",
-              "teaching_hours_per_week",
-              "options",
-              claim.eligibility.teaching_hours_per_week
-            ].join(".")
+        def claimant_contract_of_employment
+          claimant_option_selected(
+            "contract_type",
+            claim.eligibility.contract_type
           ).downcase
+        end
+
+        def teaching_hours_per_week
+          claimant_option_selected(
+            "teaching_hours_per_week",
+            claim.eligibility.teaching_hours_per_week
+          ).downcase
+        end
+
+        def claimant_contract_duration
+          if claim.eligibility.fixed_term_full_year
+            "covering the full academic year "
+          end
         end
 
         def assertions
@@ -99,13 +107,21 @@ module Journeys
                 dfe_sign_in_uid: answers.dfe_sign_in_uid,
                 first_name: answers.dfe_sign_in_first_name,
                 last_name: answers.dfe_sign_in_last_name,
-                email: answers.dfe_sign_in_email
+                email: answers.dfe_sign_in_email,
+                dfe_sign_in_organisation_name: answers.dfe_sign_in_organisation_name,
+                dfe_sign_in_role_codes: answers.dfe_sign_in_role_codes
               },
               created_at: DateTime.now
             }
           )
 
           claim.save!
+
+          ClaimMailer
+            .further_education_payment_provider_confirmation_email(claim)
+            .deliver_later
+
+          ClaimVerifierJob.perform_later(claim)
 
           true
         end
@@ -122,6 +138,18 @@ module Journeys
 
         def permitted_attributes
           super + [assertions_attributes: AssertionForm.attribute_names]
+        end
+
+        def claimant_option_selected(question, option)
+          I18n.t(
+            [
+              "further_education_payments",
+              "forms",
+              question,
+              "options",
+              option
+            ].join(".")
+          )
         end
 
         # Make sure the errors in the summary link to the correct nested field

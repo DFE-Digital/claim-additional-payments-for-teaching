@@ -7,6 +7,7 @@ module Journeys
         attribute :dfe_sign_in_uid, :string
         attribute :dfe_sign_in_organisation_id, :string
         attribute :dfe_sign_in_organisation_ukprn, :string
+        attribute :dfe_sign_in_organisation_name, :string
         attribute :dfe_sign_in_service_access, :boolean, default: false
         attribute :dfe_sign_in_role_codes, default: []
         attribute :dfe_sign_in_first_name, :string
