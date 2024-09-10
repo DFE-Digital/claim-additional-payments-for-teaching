@@ -9,40 +9,53 @@ module Journeys
       validates :provision_search,
         presence: {message: i18n_error_message(:blank)},
         length: {minimum: MIN_LENGTH, message: i18n_error_message(:min_length)},
-        unless: proc { |object| object.possible_school_id.present? }
+        if: proc { |object| object.possible_school_id.blank? || changed_query? }
+
+      validate :validate_no_results
+
+      def save
+        return if invalid? || no_results?
+
+        if possible_school_id.present? && changed_possible_school?
+          journey_session.answers.assign_attributes(
+            possible_school_id:
+          )
+          reset_dependent_answers
+        end
+
+        if changed_query?
+          journey_session.answers.assign_attributes(
+            possible_school_id: nil,
+            provision_search:
+          )
+          reset_dependent_answers
+        end
+
+        journey_session.save!
+      end
+
+      private
+
+      def validate_no_results
+        if possible_school_id.blank? && no_results?
+          errors.add :provision_search, message: "No results match that search term. Try again."
+        end
+      end
 
       def no_results?
         provision_search.present? && provision_search.size >= MIN_LENGTH && !has_results
       end
 
-      def save
-        return if invalid? || no_results?
-
-        reset_dependent_answers if changed_answer?
-
-        if possible_school_id.present?
-          journey_session.answers.assign_attributes(
-            possible_school_id:
-          )
-        else
-          journey_session.answers.assign_attributes(
-            provision_search:
-          )
-        end
-
-        journey_session.save!
-
-        true
-      end
-
-      private
-
       def has_results
         School.search(provision_search).count > 0
       end
 
-      def changed_answer?
+      def changed_possible_school?
         possible_school_id != journey_session.answers.school_id
+      end
+
+      def changed_query?
+        provision_search != journey_session.answers.provision_search
       end
 
       def reset_dependent_answers

@@ -31,35 +31,21 @@
       </p>
 
       <div id="autocomplete-container" class="govuk-!-margin-bottom-9">
-        <% if @form.no_results? %>
-          <%= f.govuk_text_field :provision_search,
-            class: "js-remove",
-            label: {
-              text: @form.t(:question),
-              size: "m"
-            },
-            hint: -> do %>
-              <p class="govuk-body">
-                <strong>No results match that search term. Try again.</strong>
-              </p>
-            <% end %>
-        <% else %>
-          <%= f.govuk_text_field :provision_search,
-            class: "js-remove",
-            label: {
-              text: @form.t(:question),
-              size: "m"
-            },
-            hint: -> do %>
-              <p>
-                Enter the name of your employer. If you work at an FE provider with multiple campuses, enter the name of the FE provider group.
-              </p>
+        <%= f.govuk_text_field :provision_search,
+          class: "js-remove",
+          label: {
+            text: @form.t(:question),
+            size: "m"
+          },
+          hint: -> do %>
+            <p>
+              Enter the name of your employer. If you work at an FE provider with multiple campuses, enter the name of the FE provider group.
+            </p>
 
-              <p>
-                Use at least three characters.
-              </p>
-            <% end %>
-        <% end %>
+            <p>
+              Use at least three characters.
+            </p>
+          <% end %>
       </div>
 
       <%= f.govuk_submit %>
