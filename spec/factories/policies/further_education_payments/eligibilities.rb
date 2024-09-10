@@ -122,5 +122,9 @@ FactoryBot.define do
         }
       end
     end
+
+    trait :with_trn do
+      teacher_reference_number { generate(:teacher_reference_number) }
+    end
   end
 end
