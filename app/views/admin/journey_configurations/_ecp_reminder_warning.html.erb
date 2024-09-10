@@ -1,4 +1,4 @@
-<% if journey_configuration.additional_payments? && Reminder.to_be_sent.any? %>
+<% if Reminder.to_be_sent.by_journey(journey_configuration.journey).any? %>
   <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="reminders-warning-message">
     <div class="govuk-form-group">
         <div class="govuk-warning-text" id="ecp-reminder-count-warning">

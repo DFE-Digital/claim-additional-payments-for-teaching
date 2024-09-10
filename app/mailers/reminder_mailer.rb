@@ -34,6 +34,10 @@ class ReminderMailer < ApplicationMailer
     send_mail(REMINDER_SET_NOTIFY_TEMPLATE_ID, personalisation)
   end
 
+  # TODO: This template only accommodates LUP/ECP claims currently. Needs to
+  # be changed to support other policies otherwise claimants will receive the
+  # wrong information. Also most of the personalisations are not used in the
+  # template.
   def reminder(reminder)
     @reminder = reminder
     support_email_address = translate("additional_payments.support_email_address")

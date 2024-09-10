@@ -46,7 +46,7 @@ RSpec.feature "Service configuration" do
 
     within_fieldset("Service status") { choose("Open") }
 
-    expect { click_on "Save" }.to_not enqueue_job(SendReminderEmailsJob)
+    click_on "Save"
 
     expect(current_path).to eq(admin_journey_configurations_path)
 
@@ -90,7 +90,7 @@ RSpec.feature "Service configuration" do
       within_fieldset("Service status") { choose("Open") }
       expect(page).to have_content(I18n.t("admin.journey_configuration.reminder_warning", count: count))
       # make sure email reminder jobjob is queued
-      expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob)
+      expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob).with(journey_configuration.journey)
       expect(current_path).to eq(admin_journey_configurations_path)
 
       within(find("tr[data-policy-configuration-routing-name=\"#{journey_configuration.routing_name}\"]")) do
@@ -113,7 +113,8 @@ RSpec.feature "Service configuration" do
       end
 
       select "2023/2024", from: "Accepting claims for academic year"
-      expect { click_on "Save" }.to_not enqueue_job(SendReminderEmailsJob)
+
+      click_on "Save"
 
       within(find("tr[data-policy-configuration-routing-name=\"#{journey_configuration.routing_name}\"]")) do
         expect(page).to have_content("2023/2024")

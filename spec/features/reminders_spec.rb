@@ -77,6 +77,7 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           expect(reminder.itt_subject).to eq args[:subject]
           expect(page).to have_text("We have set your reminder")
           expect(mail.template_id).to eq "0dc80ba9-adae-43cd-98bf-58882ee401c3"
+          expect(mail[:personalisation].decoded).to include(":support_email_address=>\"additionalteachingpayment@digital.education.gov.uk\"")
         end
       end
     end

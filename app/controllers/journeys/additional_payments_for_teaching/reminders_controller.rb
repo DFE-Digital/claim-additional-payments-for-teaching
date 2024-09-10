@@ -58,6 +58,7 @@ module Journeys
         return unless model_for_reminder_attributes
 
         Reminder.new(
+          journey:,
           full_name: model_for_reminder_attributes.full_name,
           email_address: model_for_reminder_attributes.email_address,
           itt_academic_year: next_academic_year,
@@ -79,7 +80,7 @@ module Journeys
 
       # Fallback reminder will set reminder date to the next academic year
       def default_reminder
-        Reminder.new(itt_academic_year: next_academic_year)
+        Reminder.new(journey:, itt_academic_year: next_academic_year)
       end
 
       def next_academic_year

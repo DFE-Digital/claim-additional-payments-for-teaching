@@ -46,6 +46,7 @@ module Reminders
 
     def reminder
       @reminder ||= Reminder.new(
+        journey: Journeys.for_routing_name(journey_session.journey).to_s,
         full_name: reminder_full_name,
         email_address: reminder_email_address
       )

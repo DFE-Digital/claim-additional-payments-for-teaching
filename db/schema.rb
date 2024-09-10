@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_09_04_150711) do
+ActiveRecord::Schema[7.0].define(version: 2024_09_10_135453) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_trgm"
@@ -414,6 +414,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_04_150711) do
     t.datetime "email_sent_at", precision: nil
     t.string "itt_academic_year", limit: 9
     t.string "itt_subject"
+    t.string "journey", null: false
+    t.index ["journey"], name: "index_reminders_on_journey"
   end
 
   create_table "school_workforce_censuses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -8,6 +8,7 @@ RSpec.describe SendReminderEmailsJob do
     create(:reminder, email_verified: false)
     create(:reminder, email_verified: true, email_sent_at: Time.now)
     create(:reminder, email_verified: true, itt_academic_year: AcademicYear.next)
+    create(:reminder, journey: Journeys::FurtherEducationPayments, email_verified: true, itt_academic_year: AcademicYear.next)
   end
 
   describe "#perform" do
@@ -22,7 +23,7 @@ RSpec.describe SendReminderEmailsJob do
       # perform job
       expect {
         perform_enqueued_jobs do
-          subject.perform
+          subject.perform(Journeys::AdditionalPaymentsForTeaching)
         end
       }.to change { ActionMailer::Base.deliveries.count }.by(count)
 

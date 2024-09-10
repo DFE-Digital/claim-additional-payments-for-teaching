@@ -11,8 +11,8 @@ module Reminders
         reminder_otp_confirmed: true
       )
       journey_session.save!
-
       reminder = Reminder.find_or_create_by(
+        journey: Journeys.for_routing_name(journey_session.journey).to_s,
         full_name: journey_session.answers.reminder_full_name,
         email_address: journey_session.answers.reminder_email_address,
         email_verified: true,
