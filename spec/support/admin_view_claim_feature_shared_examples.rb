@@ -13,7 +13,11 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
   }
 
   let!(:multiple_claim) {
-    eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible)
+    eligibility = if policy == Policies::FurtherEducationPayments
+      create(:"#{policy.to_s.underscore}_eligibility", :eligible, :with_trn)
+    else
+      create(:"#{policy.to_s.underscore}_eligibility", :eligible)
+    end
     create(
       :claim,
       :submitted,
@@ -158,7 +162,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     when Policies::InternationalRelocationPayments
       ["Identity confirmation", "Visa", "Arrival date", "Employment", "Employment contract", "Employment start", "Subject", "Teaching hours", "Decision"]
     when Policies::FurtherEducationPayments
-      ["Identity confirmation", "Provider verification", "Student loan plan", "Payroll details", "Matching details", "Decision"]
+      ["Identity confirmation", "Provider verification", "Student loan plan", "Payroll details", "Decision"]
     else
       raise "Unimplemented policy: #{policy}"
     end
