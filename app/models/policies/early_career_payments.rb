@@ -103,5 +103,9 @@ module Policies
     def payment_and_deductions_info_url
       eligibility_page_url + "#paying-income-tax-and-national-insurance"
     end
+
+    def auto_check_student_loan_plan_task?
+      true
+    end
   end
 end

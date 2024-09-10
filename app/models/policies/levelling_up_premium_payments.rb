@@ -93,5 +93,9 @@ module Policies
     def payroll_file_name
       "SchoolsLUP"
     end
+
+    def auto_check_student_loan_plan_task?
+      true
+    end
   end
 end

@@ -405,11 +405,6 @@ class Claim < ApplicationRecord
     has_ecp_policy? || has_lupp_policy?
   end
 
-  # TODO this approach has reached its limit - refactor
-  def has_ecp_or_lupp_or_fe_policy?
-    has_ecp_policy? || has_lupp_policy? || has_fe_policy?
-  end
-
   def important_notes
     notes&.where(important: true)
   end
