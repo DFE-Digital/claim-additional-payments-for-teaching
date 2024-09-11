@@ -87,6 +87,8 @@ gem "activerecord-copy", require: false
 gem "pagy"
 gem "rubyzip", require: "zip"
 
+gem "ostruct"
+
 group :development, :test do
   gem "pry"
   gem "rspec-rails"

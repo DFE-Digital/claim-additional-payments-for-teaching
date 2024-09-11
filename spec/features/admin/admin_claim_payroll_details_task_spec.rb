@@ -27,11 +27,11 @@ RSpec.feature "Admin checking a claim's payroll details" do
       find("a[href='#{admin_claim_tasks_path(claim)}']").click
 
       expect(page).to have_content("Payroll details")
-      expect(page).to have_content I18n.t("admin.tasks.payroll_details")
+      expect(page).to have_content I18n.t("admin.tasks.payroll_details.title")
 
       expect(page.find(".app-task-list__item.payroll_details")).to have_text("Incomplete")
 
-      click_on I18n.t("admin.tasks.payroll_details")
+      click_on I18n.t("admin.tasks.payroll_details.title")
 
       expect(page).to have_content I18n.t("student_loans.admin.task_questions.payroll_details.title", bank_or_building_society: I18n.t("admin.#{claim.bank_or_building_society}"))
 

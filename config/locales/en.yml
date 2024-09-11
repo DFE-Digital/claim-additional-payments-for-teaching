@@ -133,24 +133,41 @@ en:
     unknown_payroll_gender_preventing_approval_message:
       This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
     tasks:
-      qualifications: "Check qualification information"
-      induction_confirmation: "Check induction information"
-      employment: "Check employment information"
-      matching_details: "Review matching details from other claims"
-      identity_confirmation: "Confirm the claimant made the claim"
-      provider_verification: "Confirm the provider verification"
-      payroll_gender: "Add a payroll gender for HMRC"
-      student_loan_amount: "Check student loan amount"
-      student_loan_plan: "Check student loan plan"
-      payroll_details: "Check bank/building society account details"
-      census_subjects_taught: "Check eligible subjects are taught"
-      visa: "Check visa"
-      arrival_date: "Check arrival date"
-      employment_contract: "Check employment contract"
-      employment_start: "Check employment start date"
-      subject: "Check subject"
-      teaching_hours: "Check teaching hours"
-
+      qualifications:
+        title: "Check qualification information"
+      induction_confirmation:
+        title: "Check induction information"
+      employment:
+        title: "Check employment information"
+      matching_details:
+        title: "Review matching details from other claims"
+      identity_confirmation:
+        title: "Confirm the claimant made the claim"
+      provider_verification:
+        title: "Confirm the provider verification"
+      payroll_gender:
+        title: "Add a payroll gender for HMRC"
+        hint: "The claimant answered ‘Don't know’ to the question ‘What gender does your school's payroll system associate with you?’"
+      student_loan_amount:
+        title: "Check student loan amount"
+      student_loan_plan:
+        title: "Check student loan plan"
+      payroll_details:
+        title: "Check bank/building society account details"
+      census_subjects_taught:
+        title: "Check eligible subjects are taught"
+      visa:
+        title: "Check visa"
+      arrival_date:
+        title: "Check arrival date"
+      employment_contract:
+        title: "Check employment contract"
+      employment_start:
+        title: "Check employment start date"
+      subject:
+        title: "Check subject"
+      teaching_hours:
+        title: "Check teaching hours"
     undo_decision:
       approved: "Undo approval"
       rejected: "Undo rejection"
@@ -847,6 +864,9 @@ en:
           duplicate_claim: "Duplicate claim"
           no_response: "No response"
           other: "Other"
+      tasks:
+        payroll_gender:
+          hint: "The claimant answered ‘Don't know’ to the question ‘How is your gender recorded on your employer’s payroll system?'"
       task_questions:
         matching_details:
           title: Is this claim still valid despite having matching details with other claims?
@@ -1167,7 +1187,7 @@ en:
       btn_text: Accept and send
   further_education_payments_provider:
     journey_name: Claim a targeted retention incentive payment for further education teachers - provider
-    feedback_email: "FE-Levellingup.PremiumPayments@education.gov.uk"
+    feedback_email: "FE-targeted.retention-incentive@education.gov.uk"
     support_email_address: "FE-targeted.retention-incentive@education.gov.uk"
     forms:
       verify_claim:
