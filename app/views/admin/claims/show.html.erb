@@ -3,7 +3,10 @@
 <%= link_to "Back", admin_claim_tasks_path(@claim), class: "govuk-back-link" %>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+  <div class="<%= class_names(
+    "govuk-grid-column-two-thirds": !@claim.policy.further_education_payments?,
+    "govuk-grid-column-full": @claim.policy.further_education_payments?
+  ) %>">
     <%= render("shared/error_summary", instance: @decision, errored_field_id_overrides: { "result": "decision_result_approved" }) if @decision.errors.any? %>
 
     <% if @claim.personal_data_removed? %>
@@ -14,7 +17,7 @@
 
     <span class="govuk-caption-xl"><%= @claim.policy.short_name %>  (<%= @claim.academic_year %>)</span>
     <h1 class="govuk-heading-xl govuk-heading--navigation">
-      <%= @claim.reference %>
+      <%= claim_summary_heading(@claim) %>
       <span class="govuk-body-m">
         <%= link_to "View tasks", admin_claim_tasks_path(claim_id: @claim.id), class: "govuk-link" %>
         <%= link_to "Amend claim", new_admin_claim_amendment_path(@claim), class: "govuk-link" if @claim.amendable? %>
