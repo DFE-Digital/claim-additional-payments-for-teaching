@@ -6,7 +6,7 @@
       </dt>
 
       <dd class="govuk-summary-list__value">
-        <%= answer %>
+        <%= safe_join(Array.wrap(answer), tag.br + tag.br) %>
       </dd>
     </div>
   <% end %>
