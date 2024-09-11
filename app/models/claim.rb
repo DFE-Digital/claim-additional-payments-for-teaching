@@ -212,6 +212,10 @@ class Claim < ApplicationRecord
   scope :awaiting_qa, -> { approved.qa_required.where(qa_completed_at: nil) }
   scope :qa_required, -> { where(qa_required: true) }
 
+  def onelogin_idv_full_name
+    "#{onelogin_idv_first_name} #{onelogin_idv_last_name}"
+  end
+
   def hold!(reason:, user:)
     if holdable? && !held?
       self.class.transaction do
