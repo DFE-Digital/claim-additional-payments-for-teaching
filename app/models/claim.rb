@@ -144,9 +144,9 @@ class Claim < ApplicationRecord
 
   validates :academic_year_before_type_cast, format: {with: AcademicYear::ACADEMIC_YEAR_REGEXP}
 
-  validates :has_student_loan, on: [:"student-loan"], inclusion: {in: [true, false]}
+  validates :has_student_loan, on: [:"student-loan"], inclusion: {in: [true, false]}, allow_nil: true
   validates :student_loan_plan, inclusion: {in: STUDENT_LOAN_PLAN_OPTIONS}, allow_nil: true
-  validates :student_loan_plan, on: [:"student-loan", :amendment], presence: {message: "Enter a valid student loan plan"}
+  validates :student_loan_plan, on: [:amendment], presence: {message: "Enter a valid student loan plan"}
 
   # TODO: remove when a form object is created for email-address
   validates :email_address, on: [:submit], presence: {message: "Enter an email address"}

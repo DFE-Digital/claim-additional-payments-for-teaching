@@ -201,7 +201,7 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
       context "when the has_student_loan claim flag is false" do
         let(:claim) { build(:claim, has_student_loan: false) }
 
-        it { is_expected.not_to be_ineligible }
+        it { is_expected.not_to be_ineligible } # why are they eligible if they don't have a student loan?
       end
 
       context "when the has_student_loan claim flag is nil" do
