@@ -125,7 +125,7 @@ module ClaimsFormCallbacks
   end
 
   def journey_requires_student_loan_details?
-    student_loans_journey? || additional_payments_journey? || get_a_teacher_relocation_payment_journey?
+    student_loans_journey? || additional_payments_journey? || get_a_teacher_relocation_payment_journey? || further_education_payments_journey?
   end
 
   def student_loans_journey?
@@ -138,5 +138,9 @@ module ClaimsFormCallbacks
 
   def get_a_teacher_relocation_payment_journey?
     current_journey_routing_name == "get-a-teacher-relocation-payment"
+  end
+
+  def further_education_payments_journey?
+    current_journey_routing_name == "further-education-payments"
   end
 end
