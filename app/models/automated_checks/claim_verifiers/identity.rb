@@ -18,7 +18,7 @@ module AutomatedChecks
         return unless awaiting_task?(TASK_NAME)
 
         # Order of matching matters so that subsequent conditions in methods fall through to execute the right thing
-        auto_pass || no_match || partial_match || complete_match
+        one_login || no_match || partial_match || complete_match
       end
 
       private
@@ -26,14 +26,13 @@ module AutomatedChecks
       attr_accessor :admin_user, :claim
       attr_reader :dqt_teacher_status
 
-      def auto_pass
-        case claim.policy.auto_pass_identity_confirmation_task(claim)
-        when :pass
-          create_task(match: nil, passed: true)
-        when :fail
-          create_task(match: nil, passed: false)
-        when :skip
-          nil
+      def one_login
+        if claim.identity_confirmed_with_onelogin?
+          if claim.onelogin_idv_full_name.downcase == claim.full_name.downcase && claim.onelogin_idv_date_of_birth == claim.date_of_birth
+            create_task(match: nil, passed: true)
+          else
+            create_task(match: nil, passed: false)
+          end
         end
       end
 

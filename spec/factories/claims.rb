@@ -37,6 +37,7 @@ FactoryBot.define do
     end
 
     trait :with_onelogin_idv_data do
+      identity_confirmed_with_onelogin { true }
       onelogin_uid { SecureRandom.uuid }
       onelogin_auth_at { rand(14.days.ago..1.day.ago).to_datetime }
       onelogin_idv_at { (onelogin_auth_at + 1.hour) }
