@@ -11,7 +11,7 @@
     </div>
     <div class="govuk-notification-banner__content">
       <p class="govuk-notification-banner__heading">
-        <%= link_to "Multiple claims",  admin_claim_task_path(claim_id: @claim.id, name: "matching_details") %>
+        <%= link_to "Multiple claims", admin_claim_task_path(claim_id: @claim.id, name: "matching_details") %>
         with matching details have been made in this claim window.
       </p>
     </div>
@@ -39,7 +39,7 @@
             <ul class="app-task-list__items">
               <li class="app-task-list__item <%= task_name %>">
                 <span class="app-task-list__task-name">
-                  <%= link_to I18n.t("admin.tasks.#{task_name}"), admin_claim_task_path(claim_id: @claim.id, name: task_name), class: "govuk-link" %>
+                  <%= link_to I18n.t("admin.tasks.#{task_name}.title"), admin_claim_task_path(claim_id: @claim.id, name: task_name), class: "govuk-link" %>
                 </span>
                 <%= task_status_tag(@claim, task_name) %>
               </li>

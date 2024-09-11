@@ -22,7 +22,7 @@ RSpec.feature "Admin checking a claim with matching details" do
     expect(page).to have_content("6. Matching details")
     expect(page).to have_content("7. Decision")
 
-    click_on I18n.t("admin.tasks.matching_details")
+    click_on I18n.t("admin.tasks.matching_details.title")
 
     expect(page).to have_content(I18n.t("student_loans.admin.task_questions.matching_details.title"))
     expect(page).to have_content(claim_with_matching_details.reference)
