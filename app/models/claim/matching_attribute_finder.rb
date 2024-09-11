@@ -27,7 +27,6 @@ class Claim
       # Claim attributes
       CLAIM_ATTRIBUTE_GROUPS_TO_MATCH.each do |attributes|
         vals = values_for_attributes(@source_claim, attributes)
-
         next if vals.blank?
 
         concatenated_columns = "CONCAT(#{attributes.join(",")})"
@@ -38,12 +37,10 @@ class Claim
 
       # Eligibility attributes
       eligibility_ids = eligibility_attributes_groups_to_match.map { |attributes|
-        present_attributes = attributes_for(@source_claim.eligibility, attributes).reject { |_, v| v.blank? }.map(&:first)
-        next if present_attributes.empty?
+        vals = values_for_attributes(@source_claim.eligibility, attributes)
+        next if vals.blank?
 
-        vals = values_for_attributes(@source_claim.eligibility, present_attributes)
-        concatenated_columns = "CONCAT(#{present_attributes.join(",")})"
-
+        concatenated_columns = "CONCAT(#{attributes.join(",")})"
         policies_to_find_matches.map { |policy|
           policy::Eligibility.where("LOWER(#{concatenated_columns}) = LOWER(?)", vals.join)
         }
@@ -80,12 +77,6 @@ class Claim
       attributes.map { |attribute|
         object.read_attribute(attribute)
       }.reject(&:blank?)
-    end
-
-    def attributes_for(object, attributes)
-      attributes.map { |attribute|
-        [attribute, object.read_attribute(attribute)]
-      }
     end
   end
 end

@@ -229,4 +229,36 @@ RSpec.describe Claim::MatchingAttributeFinder do
 
     it { is_expected.to eq [other_claim] }
   end
+
+  describe "matching_claims - blank trn, another field group with same contract type, blank provision_search" do
+    before do
+      stub_const("Policies::FurtherEducationPayments::ELIGIBILITY_MATCHING_ATTRIBUTES", [["teacher_reference_number"], ["provision_search", "contract_type"]])
+    end
+
+    let(:policy) { Policies::FurtherEducationPayments }
+
+    let!(:source_claim) {
+      eligibility = create(:further_education_payments_eligibility, :eligible, contract_type: "permanent", provision_search: nil)
+      create(
+        :claim,
+        :submitted,
+        policy: policy,
+        eligibility: eligibility
+      )
+    }
+
+    let!(:other_claim) {
+      eligibility = create(:further_education_payments_eligibility, :eligible, contract_type: "permanent", provision_search: nil)
+      create(
+        :claim,
+        :submitted,
+        policy: policy,
+        eligibility: eligibility
+      )
+    }
+
+    subject(:matching_claims) { Claim::MatchingAttributeFinder.new(source_claim).matching_claims }
+
+    it { is_expected.to eq [other_claim] }
+  end
 end
