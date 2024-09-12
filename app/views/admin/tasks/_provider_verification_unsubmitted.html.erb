@@ -1,11 +1,12 @@
 <% if @tasks_presenter.provider_verification.verification_email_sent? %>
   <% if @tasks_presenter.provider_verification.verification_email_sent_by_admin_team? %>
-    <% verification_email = @tasks_presenter.provider_verification.latest_admin_sent_email %>
     <div class="govuk-inset-text">
-      <p>
-        The verification request was sent to the provider by
-        <%= user_details(verification_email.created_by) %> on <%= l(verification_email.created_at) %>
-      </p>
+      <% @tasks_presenter.provider_verification.admin_sent_emails.each do |verification_email| %>
+        <p>
+          The verification request was sent to the provider by
+          <%= user_details(verification_email.created_by) %> on <%= l(verification_email.created_at) %>
+        </p>
+      <% end %>
     </div>
   <% end %>
 

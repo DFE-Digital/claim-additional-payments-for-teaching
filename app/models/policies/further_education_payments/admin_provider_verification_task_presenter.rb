@@ -25,8 +25,8 @@ module Policies
         end
       end
 
-      def latest_admin_sent_email
-        claim.notes.by_label("provider_verification").order(created_at: :desc).first
+      def admin_sent_emails
+        @admin_sent_emails ||= claim.notes.by_label("provider_verification").order(created_at: :desc)
       end
 
       def verification_email_sent?
@@ -34,7 +34,7 @@ module Policies
       end
 
       def verification_email_sent_by_admin_team?
-        latest_admin_sent_email.present?
+        admin_sent_emails.any?
       end
 
       private
