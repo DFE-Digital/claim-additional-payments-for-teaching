@@ -15,64 +15,209 @@ RSpec.feature "Admin claim further education payments" do
   describe "Tasks" do
     describe "provider verification task" do
       context "when the provider is yet to verify the claim" do
-        it "shows the task as pending" do
-          fe_provider = create(
-            :school,
-            :further_education,
-            :fe_eligible,
-            name: "Springfield A and M"
-          )
+        context "when a verification email has not been sent" do
+          it "allows the admins to sent the email" do
+            fe_provider = create(
+              :school,
+              :further_education,
+              :fe_eligible,
+              name: "Springfield A and M"
+            )
 
-          claim = create(
-            :claim,
-            first_name: "Edna",
-            surname: "Krabappel",
-            date_of_birth: Date.new(1945, 7, 3),
-            reference: "AB123456",
-            created_at: DateTime.new(2024, 8, 1, 9, 0, 0),
-            submitted_at: DateTime.new(2024, 8, 1, 9, 0, 0)
-          )
+            claim = create(
+              :claim,
+              first_name: "Edna",
+              surname: "Krabappel",
+              date_of_birth: Date.new(1945, 7, 3),
+              reference: "AB123456",
+              created_at: DateTime.new(2024, 8, 1, 9, 0, 0),
+              submitted_at: DateTime.new(2024, 8, 1, 9, 0, 0)
+            )
 
-          create(
-            :further_education_payments_eligibility,
-            contract_type: "fixed_term",
-            claim: claim,
-            school: fe_provider,
-            award_amount: 1500
-          )
+            create(
+              :further_education_payments_eligibility,
+              contract_type: "fixed_term",
+              claim: claim,
+              school: fe_provider,
+              award_amount: 1500,
+              flagged_as_duplicate: true
+            )
 
-          visit admin_claim_path(claim)
+            visit admin_claim_path(claim)
 
-          click_on "View tasks"
+            click_on "View tasks"
 
-          click_on "Confirm the provider verification"
+            click_on "Confirm the provider verification"
 
-          expect(page).to have_content(
-            "This task has not been sent to the provider yet."
-          )
+            expect(page).to have_content(
+              "This task has not been sent to the provider yet."
+            )
 
-          perform_enqueued_jobs do
-            click_on "Resend provider verification’"
+            perform_enqueued_jobs do
+              click_on "Send provider verification request"
+            end
+
+            expect(page).to have_content(
+              "The verification request was sent to the provider by " \
+              "Aaron Admin on 9 September 2024 11:00am"
+            )
+
+            provider_email_address = claim.school.eligible_fe_provider.primary_key_contact_email_address
+
+            expect(provider_email_address).to(
+              have_received_email(
+                "9a25fe46-2ee4-4a5c-8d47-0f04f058a87d",
+                recipient_name: "Springfield A and M",
+                claimant_name: "Edna Krabappel",
+                claim_reference: "AB123456",
+                claim_submission_date: "1 August 2024",
+                verification_due_date: "15 August 2024",
+                verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
+              )
+            )
+          end
+        end
+
+        context "when a verification email has been sent" do
+          context "when the verification email was resent by the admin team" do
+            it "shows who last sent the email" do
+              fe_provider = create(
+                :school,
+                :further_education,
+                :fe_eligible,
+                name: "Springfield A and M"
+              )
+
+              claim = create(
+                :claim,
+                first_name: "Edna",
+                surname: "Krabappel",
+                date_of_birth: Date.new(1945, 7, 3),
+                reference: "AB123456",
+                created_at: DateTime.new(2024, 8, 1, 9, 0, 0),
+                submitted_at: DateTime.new(2024, 8, 1, 9, 0, 0)
+              )
+
+              create(
+                :further_education_payments_eligibility,
+                contract_type: "fixed_term",
+                claim: claim,
+                school: fe_provider,
+                award_amount: 1500
+              )
+
+              create(
+                :note,
+                claim: claim,
+                label: "provider_verification",
+                created_by: create(
+                  :dfe_signin_user,
+                  given_name: "Some",
+                  family_name: "Admin"
+                )
+              )
+
+              visit admin_claim_path(claim)
+
+              click_on "View tasks"
+
+              click_on "Confirm the provider verification"
+
+              expect(page).not_to have_content(
+                "This task has not been sent to the provider yet."
+              )
+
+              expect(page).to have_content(
+                "The verification request was sent to the provider by " \
+                "Some Admin on 9 September 2024 11:00am"
+              )
+
+              perform_enqueued_jobs do
+                click_on "Resend provider verification request"
+              end
+
+              provider_email_address = claim.school.eligible_fe_provider.primary_key_contact_email_address
+
+              expect(provider_email_address).to(
+                have_received_email(
+                  "9a25fe46-2ee4-4a5c-8d47-0f04f058a87d",
+                  recipient_name: "Springfield A and M",
+                  claimant_name: "Edna Krabappel",
+                  claim_reference: "AB123456",
+                  claim_submission_date: "1 August 2024",
+                  verification_due_date: "15 August 2024",
+                  verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
+                )
+              )
+            end
           end
 
-          expect(page).to have_content(
-            "The verification request was sent to the provider by " \
-            "Aaron Admin on 9 September 2024 11:00am"
-          )
+          context "when the verification email was sent when the claim was submitted" do
+            it "allows the admin to resend the email" do
+              fe_provider = create(
+                :school,
+                :further_education,
+                :fe_eligible,
+                name: "Springfield A and M"
+              )
 
-          provider_email_address = claim.school.eligible_fe_provider.primary_key_contact_email_address
+              claim = create(
+                :claim,
+                first_name: "Edna",
+                surname: "Krabappel",
+                date_of_birth: Date.new(1945, 7, 3),
+                reference: "AB123456",
+                created_at: DateTime.new(2024, 8, 1, 9, 0, 0),
+                submitted_at: DateTime.new(2024, 8, 1, 9, 0, 0)
+              )
 
-          expect(provider_email_address).to(
-            have_received_email(
-              "9a25fe46-2ee4-4a5c-8d47-0f04f058a87d",
-              recipient_name: "Springfield A and M",
-              claimant_name: "Edna Krabappel",
-              claim_reference: "AB123456",
-              claim_submission_date: "1 August 2024",
-              verification_due_date: "15 August 2024",
-              verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
-            )
-          )
+              create(
+                :further_education_payments_eligibility,
+                contract_type: "fixed_term",
+                claim: claim,
+                school: fe_provider,
+                award_amount: 1500
+              )
+
+              visit admin_claim_path(claim)
+
+              click_on "View tasks"
+
+              click_on "Confirm the provider verification"
+
+              expect(page).not_to have_content(
+                "This task has not been sent to the provider yet."
+              )
+
+              expect(page).not_to have_content(
+                "The verification request was sent to the provider by "
+              )
+
+              perform_enqueued_jobs do
+                click_on "Resend provider verification request"
+              end
+
+              # This is the user we're logged in as
+              expect(page).to have_content(
+                "The verification request was sent to the provider by " \
+                "Aaron Admin on 9 September 2024 11:00am"
+              )
+
+              provider_email_address = claim.school.eligible_fe_provider.primary_key_contact_email_address
+
+              expect(provider_email_address).to(
+                have_received_email(
+                  "9a25fe46-2ee4-4a5c-8d47-0f04f058a87d",
+                  recipient_name: "Springfield A and M",
+                  claimant_name: "Edna Krabappel",
+                  claim_reference: "AB123456",
+                  claim_submission_date: "1 August 2024",
+                  verification_due_date: "15 August 2024",
+                  verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
+                )
+              )
+            end
+          end
         end
       end
 

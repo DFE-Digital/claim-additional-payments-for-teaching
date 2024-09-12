@@ -25,8 +25,16 @@ module Policies
         end
       end
 
-      def latest_email
+      def latest_admin_sent_email
         claim.notes.by_label("provider_verification").order(created_at: :desc).first
+      end
+
+      def verification_email_sent?
+        !claim.eligibility.flagged_as_duplicate? || verification_email_sent_by_admin_team?
+      end
+
+      def verification_email_sent_by_admin_team?
+        latest_admin_sent_email.present?
       end
 
       private
