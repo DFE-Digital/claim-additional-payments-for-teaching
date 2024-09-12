@@ -865,6 +865,8 @@ en:
         payroll_gender:
           hint: "The claimant answered ‘Don't know’ to the question ‘How is your gender recorded on your employer’s payroll system?'"
       task_questions:
+        identity_confirmation:
+          title: Do the One Login details match the personal details entered by the claimant?
         matching_details:
           title: Is this claim still valid despite having matching details with other claims?
         payroll_details:
