@@ -57,7 +57,7 @@ RSpec.feature "Upload SLC data" do
       expect(page).to have_content "No match"
     end
     expect(sl_claim_with_slc_data_no_student_loan.reload.student_loan_plan).to eq "not_applicable"
-    expect(sl_claim_with_slc_data_no_student_loan.has_student_loan).to be true # is this correct?
+    expect(sl_claim_with_slc_data_no_student_loan.has_student_loan).to be false
     expect(sl_claim_with_slc_data_no_student_loan.eligibility.student_loan_repayment_amount).to eq 0
 
     visit admin_claims_path
@@ -73,8 +73,8 @@ RSpec.feature "Upload SLC data" do
     within "li.student_loan_amount" do
       expect(page).to have_content "No data"
     end
-    expect(sl_claim_no_slc_data.reload.student_loan_plan).to eq "not_applicable"
-    expect(sl_claim_no_slc_data.has_student_loan).to be false
+    expect(sl_claim_no_slc_data.reload.student_loan_plan).to be nil
+    expect(sl_claim_no_slc_data.has_student_loan).to be nil
     expect(sl_claim_no_slc_data.eligibility.student_loan_repayment_amount).to eq 0
 
     # Early Career Payments

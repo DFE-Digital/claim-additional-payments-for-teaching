@@ -29,10 +29,8 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
       context "when the policy is StudentLoans" do
         let(:policy) { Policies::StudentLoans }
 
-        it "updates the claim with no student plan and zero repayment total" do
-          expect { call }.to change { claim.reload.has_student_loan }.to(false)
-            .and change { claim.student_loan_plan }.to(Claim::NO_STUDENT_LOAN)
-            .and change { claim.eligibility.student_loan_repayment_amount }.to(0)
+        it "does not update the claim student plan and zero repayment total" do
+          expect { call }.not_to change { claim.reload.has_student_loan }
         end
 
         it "keeps the `submitted_using_slc_data` flag to `false` (default)" do
@@ -92,7 +90,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
 
       context "when the policy is StudentLoans" do
         it "updates the claim with the student plan and the repayment total" do
-          expect { call }.to change { claim.reload.has_student_loan }.to(true)
+          expect { call }.to change { claim.reload.has_student_loan }.to(false)
             .and change { claim.student_loan_plan }.to(Claim::NO_STUDENT_LOAN)
             .and change { claim.eligibility.student_loan_repayment_amount }.to(0)
         end

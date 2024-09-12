@@ -9,12 +9,9 @@ class ClaimStudentLoanDetailsUpdater
 
   def update_claim_with_latest_data
     claim.transaction do
-      if claim.has_tslr_policy?
-        eligibility.update!(eligibility_student_loan_attributes)
-        claim.assign_attributes(claim_student_loans_policy_student_loan_attributes)
-      else
-        claim.assign_attributes(claim_student_loan_attributes)
-      end
+      eligibility.update!(eligibility_student_loan_attributes) if claim.has_tslr_policy?
+
+      claim.assign_attributes(claim_student_loan_attributes)
 
       claim.save!(context: :"student-loan")
     end
@@ -38,13 +35,6 @@ class ClaimStudentLoanDetailsUpdater
     {
       has_student_loan: student_loans_data.has_student_loan?,
       student_loan_plan: student_loans_data.student_loan_plan
-    }
-  end
-
-  def claim_student_loans_policy_student_loan_attributes
-    {
-      has_student_loan: student_loans_data.has_student_loan_for_student_loan_policy,
-      student_loan_plan: student_loans_data.student_loan_plan_for_student_loan_policy
     }
   end
 

@@ -67,7 +67,10 @@ module Policies
         answers.mostly_performed_leadership_duties == true
       end
 
+      # checks two scenarios: (1) they do not have a student loan, (2) they have a student loan but the repayment amount is zero
       def made_zero_repayments?
+        return true if answers.has_student_loan == false
+
         answers.has_student_loan == true && answers.student_loan_repayment_amount == 0
       end
     end
