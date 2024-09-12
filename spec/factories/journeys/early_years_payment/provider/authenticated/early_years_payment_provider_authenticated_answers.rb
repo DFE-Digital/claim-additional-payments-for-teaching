@@ -11,7 +11,7 @@ FactoryBot.define do
       surname { "Doe" }
       start_date { Date.parse("1/1/2024") }
       child_facing_confirmation_given { true }
-      first_job_within_6_months { true }
+      returning_within_6_months { true }
       practitioner_email_address { "johndoe@example.com" }
       provide_mobile_number { false }
     end

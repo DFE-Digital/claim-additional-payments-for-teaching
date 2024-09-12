@@ -312,6 +312,6 @@ shared:
     - nursery_urn
     - start_date
     - child_facing_confirmation_given
-    - first_job_within_6_months
+    - returning_within_6_months
     - created_at
     - updated_at

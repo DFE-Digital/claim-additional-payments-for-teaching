@@ -195,7 +195,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_04_150711) do
     t.string "nursery_urn"
     t.date "start_date"
     t.boolean "child_facing_confirmation_given"
-    t.boolean "first_job_within_6_months"
+    t.boolean "returning_within_6_months"
   end
 
   create_table "eligible_ey_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

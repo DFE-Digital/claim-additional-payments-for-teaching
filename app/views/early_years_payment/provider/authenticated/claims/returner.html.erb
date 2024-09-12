@@ -7,15 +7,15 @@
       <%= f.govuk_error_summary %>
 
       <%= f.govuk_radio_buttons_fieldset(
-        :first_job_within_6_months,
+        :returning_within_6_months,
         inline: true,
         legend: {
           text: question,
           tag: "h1",
           size: "l"
         }) do %>
-        <%= f.govuk_radio_button :first_job_within_6_months, true, label: { text: "Yes" } %>
-        <%= f.govuk_radio_button :first_job_within_6_months, false, label: { text: "No" } %>
+        <%= f.govuk_radio_button :returning_within_6_months, true, label: { text: "Yes" } %>
+        <%= f.govuk_radio_button :returning_within_6_months, false, label: { text: "No" } %>
       <% end %>
 
       <%= f.govuk_submit %>
