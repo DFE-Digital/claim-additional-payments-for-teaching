@@ -52,7 +52,7 @@ RSpec.feature "Admin claim further education payments" do
           )
 
           perform_enqueued_jobs do
-            click_on "Send provider verification request"
+            click_on "Resend provider verification’"
           end
 
           expect(page).to have_content(
