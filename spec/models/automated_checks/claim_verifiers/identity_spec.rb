@@ -94,10 +94,10 @@ module AutomatedChecks
             )
           end
 
-          it "creates a failed task" do
+          it "does not create a task" do
             expect {
               subject.perform
-            }.to change(Task.automated.where(passed: false), :count).by(1)
+            }.not_to change(Task, :count)
           end
         end
 
@@ -112,10 +112,10 @@ module AutomatedChecks
             )
           end
 
-          it "creates a failed task" do
+          it "does not create a task" do
             expect {
               subject.perform
-            }.to change(Task.automated.where(passed: false), :count).by(1)
+            }.not_to change(Task, :count)
           end
         end
       end

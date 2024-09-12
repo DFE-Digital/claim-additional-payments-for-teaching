@@ -17,8 +17,12 @@ module AutomatedChecks
       def perform
         return unless awaiting_task?(TASK_NAME)
 
-        # Order of matching matters so that subsequent conditions in methods fall through to execute the right thing
-        one_login || no_match || partial_match || complete_match
+        if claim.identity_confirmed_with_onelogin?
+          one_login
+        else
+          # Order of matching matters so that subsequent conditions in methods fall through to execute the right thing
+          no_match || partial_match || complete_match
+        end
       end
 
       private
@@ -27,12 +31,10 @@ module AutomatedChecks
       attr_reader :dqt_teacher_status
 
       def one_login
-        if claim.identity_confirmed_with_onelogin?
-          if claim.onelogin_idv_full_name.downcase == claim.full_name.downcase && claim.onelogin_idv_date_of_birth == claim.date_of_birth
-            create_task(match: nil, passed: true)
-          else
-            create_task(match: nil, passed: false)
-          end
+        if claim.onelogin_idv_full_name.downcase == claim.full_name.downcase && claim.onelogin_idv_date_of_birth == claim.date_of_birth
+          create_task(match: nil, passed: true)
+        else
+          nil # drops to manual
         end
       end
 
