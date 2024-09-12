@@ -58,7 +58,7 @@ module Journeys
         return unless model_for_reminder_attributes
 
         Reminder.new(
-          journey:,
+          journey_class: journey.to_s,
           full_name: model_for_reminder_attributes.full_name,
           email_address: model_for_reminder_attributes.email_address,
           itt_academic_year: next_academic_year,

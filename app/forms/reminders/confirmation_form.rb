@@ -2,7 +2,7 @@ module Reminders
   class ConfirmationForm < Form
     def reminder
       @reminder ||= Reminder.find_by(
-        journey: Journeys.for_routing_name(journey_session.journey).to_s,
+        journey_class: Journeys.for_routing_name(journey_session.journey).to_s,
         full_name: journey_session.answers.reminder_full_name,
         email_address: journey_session.answers.reminder_email_address,
         email_verified: true,
