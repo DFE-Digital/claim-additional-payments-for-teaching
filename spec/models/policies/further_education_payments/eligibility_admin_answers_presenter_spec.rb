@@ -13,16 +13,28 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
   let(:contract_type) { "permanent" }
   let(:fixed_term_full_year) { nil }
   let(:teaching_hours_per_week) { "more_than_12" }
+  let(:teaching_hours_per_week_next_term) { nil }
+  let(:taught_at_least_one_term) { nil }
+
+  let(:claim) do
+    create(
+      :claim,
+      academic_year: AcademicYear.new(2024)
+    )
+  end
 
   let(:eligibility) do
     create(
       :further_education_payments_eligibility,
       :eligible,
+      claim: claim,
       school: school,
       teaching_responsibilities: true,
       contract_type: contract_type,
       fixed_term_full_year: fixed_term_full_year,
       teaching_hours_per_week: teaching_hours_per_week,
+      teaching_hours_per_week_next_term: teaching_hours_per_week_next_term,
+      taught_at_least_one_term: taught_at_least_one_term,
       further_education_teaching_start_year: "2023",
       subjects_taught: ["maths", "engineering_manufacturing"],
       maths_courses: ["approved_level_321_maths", "gcse_maths"],
@@ -58,99 +70,116 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
   describe "#employment_contract" do
     subject { presenter.employment_contract }
 
-    describe "contract_type answer" do
-      context "with a permant contract claim" do
-        let(:contract_type) { "permanent" }
+    context "with a permant contract claim" do
+      let(:contract_type) { "permanent" }
+      let(:teaching_hours_per_week) { "more_than_12" }
 
-        it do
-          is_expected.to include(
+      it do
+        is_expected.to match_array(
+          [
             [
               "What type of contract do you have with Springfield Elementary?",
               "Permanent contract (including full-time and part-time contracts)"
-            ]
-          )
-        end
-      end
-
-      context "with a fixed term contract claim" do
-        let(:contract_type) { "fixed_term" }
-
-        context "with a fixed_term_full_year contract" do
-          let(:fixed_term_full_year) { true }
-
-          it do
-            is_expected.to include(
-              [
-                "What type of contract do you have with Springfield Elementary?",
-                "Permanent contract (including full-time and part-time contracts)"
-              ]
-            )
-          end
-        end
-
-        context "without a fixed_term_full_year contract" do
-          let(:fixed_term_full_year) { false }
-
-          it do
-            is_expected.to include(
-              [
-                "What type of contract do you have with Springfield Elementary?",
-                "Fixed term contract" # TODO RL check this
-              ]
-            )
-          end
-        end
-      end
-
-      context "with a variable_hours contract" do
-        let(:contract_type) { "variable_hours" }
-
-        it do
-          is_expected.to include(
-            [
-              "What type of contract do you have with Springfield Elementary?",
-              "Variable hours contract" # TODO RL check this
-            ]
-          )
-        end
-      end
-    end
-
-    describe "teaching_hours_per_week answer" do
-      context "when more_than_12" do
-        let(:teaching_hours_per_week) { "more_than_12" }
-
-        it do
-          is_expected.to include(
+            ],
             [
               "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the current term?",
               "More than 12 hours per week"
             ]
-          )
-        end
+          ]
+        )
       end
+    end
 
-      context "when between_2_5_and_12" do
-        let(:teaching_hours_per_week) { "between_2_5_and_12" }
+    context "with a variable_hours contract claim" do
+      let(:contract_type) { "variable_hours" }
+      let(:teaching_hours_per_week) { "less_than_2_5" }
+      let(:teaching_hours_per_week_next_term) { "at_least_2_5" }
+      let(:taught_at_least_one_term) { true }
 
-        it do
-          is_expected.to include(
+      it do
+        is_expected.to match_array(
+          [
+            [
+              "What type of contract do you have with Springfield Elementary?",
+              "Variable hours contract (This includes zero hours contracts)"
+            ],
+            [
+              "Have you taught at Springfield Elementary for at least one academic term?",
+              "Yes, I have taught at Springfield Elementary for at least one academic term"
+            ],
             [
               "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the current term?",
-              "Between 2.5 and 12 hours per week"
+              "Less than 2.5 hours per week"
+            ],
+            [
+              "Are you timetabled to teach at least 2.5 hours per week at Springfield Elementary next term?",
+              "Yes, I am timetabled to teach at least 2.5 hours per week at Springfield Elementary next term"
+            ]
+          ]
+        )
+      end
+    end
+
+    context "with a fixed term contract claim" do
+      let(:contract_type) { "fixed_term" }
+      let(:teaching_hours_per_week) { "between_2_5_and_12" }
+      let(:teaching_hours_per_week_next_term) { "at_least_2_5" }
+
+      context "with a full year contract" do
+        let(:fixed_term_full_year) { true }
+
+        it do
+          is_expected.to match_array(
+            [
+              [
+                "What type of contract do you have with Springfield Elementary?",
+                "Fixed term contract"
+              ],
+              [
+                "Does your fixed-term contract cover the full 2024 to 2025 academic year?",
+                "Yes, it covers the full 2024 to 2025 academic year"
+              ],
+              [
+                "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the current term?",
+                "Between 2.5 and 12 hours per week"
+              ],
+              [
+                "Are you timetabled to teach at least 2.5 hours per week at Springfield Elementary next term?",
+                "Yes, I am timetabled to teach at least 2.5 hours per week at Springfield Elementary next term"
+              ]
             ]
           )
         end
       end
 
-      context "when less_than_2_5" do
-        let(:teaching_hours_per_week) { "less_than_2_5" }
+      context "without a full year contract" do
+        let(:fixed_term_full_year) { false }
+        let(:teaching_hours_per_week_next_term) { "less_than_2_5" }
+        let(:taught_at_least_one_term) { false }
 
         it do
-          is_expected.to include(
+          is_expected.to match_array(
             [
-              "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the current term?",
-              "Less than 2.5 hours per week"
+              [
+                "What type of contract do you have with Springfield Elementary?",
+                "Fixed term contract"
+              ],
+              [
+                "Have you taught at Springfield Elementary for at least one academic term?",
+                "No, I have not taught at Springfield Elementary for at least one academic term"
+              ],
+              [
+                "Does your fixed-term contract cover the full 2024 to 2025 academic year?",
+                "No, it does not cover the full 2024 to 2025 academic year"
+              ],
+              [
+                "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the current term?",
+                "Between 2.5 and 12 hours per week"
+              ],
+              [
+                "Are you timetabled to teach at least 2.5 hours per week at Springfield Elementary next term?",
+                "No, I’m not timetabled to teach at least 2.5 hours per week at Springfield Elementary next term"
+              ]
             ]
           )
         end

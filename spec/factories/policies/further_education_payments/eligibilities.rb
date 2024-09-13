@@ -5,6 +5,7 @@ FactoryBot.define do
 
     trait :eligible do
       eligible_school
+      contract_type { "permanent" }
     end
 
     trait :eligible_school do

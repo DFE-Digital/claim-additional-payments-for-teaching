@@ -59,6 +59,10 @@ module Policies
         end
       end
 
+      def permanent_contract?
+        contract_type == "permanent"
+      end
+
       def verified?
         verification.present?
       end

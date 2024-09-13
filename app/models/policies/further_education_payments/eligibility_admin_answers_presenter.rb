@@ -26,8 +26,11 @@ module Policies
       def employment_contract
         [
           contract_type,
-          teaching_hours_per_week
-        ]
+          taught_at_least_one_term,
+          fixed_term_full_year,
+          teaching_hours_per_week,
+          teaching_hours_per_week_next_term
+        ].compact
       end
 
       def academic_year_claimant_started_teaching
@@ -111,10 +114,64 @@ module Policies
         ]
       end
 
+      def taught_at_least_one_term
+        return nil if eligibility.fixed_contract?
+
+        [
+          question(
+            :taught_at_least_one_term,
+            school_name: eligibility.school.name
+          ),
+          selected_option(
+            :taught_at_least_one_term,
+            eligibility.taught_at_least_one_term,
+            school_name: eligibility.school.name
+          )
+        ]
+      end
+
+      def fixed_term_full_year
+        return nil unless eligibility.contract_type == "fixed_term"
+
+        [
+          question(
+            :fixed_term_contract,
+            academic_year: eligibility.claim.academic_year.to_s(:long)
+          ),
+          selected_option(
+            :fixed_term_contract,
+            eligibility.fixed_term_full_year,
+            current_academic_year: eligibility.claim.academic_year.to_s(:long)
+          )
+        ]
+      end
+
       def teaching_hours_per_week
         [
-          question(:teaching_hours_per_week, school_name: eligibility.school.name),
-          selected_option(:teaching_hours_per_week, eligibility.teaching_hours_per_week)
+          question(
+            :teaching_hours_per_week,
+            school_name: eligibility.school.name
+          ),
+          selected_option(
+            :teaching_hours_per_week,
+            eligibility.teaching_hours_per_week
+          )
+        ]
+      end
+
+      def teaching_hours_per_week_next_term
+        return nil if eligibility.permanent_contract?
+
+        [
+          question(
+            :teaching_hours_per_week_next_term,
+            school_name: eligibility.school.name
+          ),
+          selected_option(
+            :teaching_hours_per_week_next_term,
+            eligibility.teaching_hours_per_week_next_term,
+            school_name: eligibility.school.name
+          )
         ]
       end
 
@@ -128,7 +185,14 @@ module Policies
       def courses
         eligibility.subjects_taught.map do |subject|
           [
-            I18n.t("further_education_payments.forms.#{subject}_courses.question_check_your_answers"),
+            I18n.t(
+              [
+                "further_education_payments",
+                "forms",
+                "#{subject}_courses",
+                "question_check_your_answers"
+              ].join(".")
+            ),
             course_descriptions_for_subject(subject)
           ]
         end
@@ -173,17 +237,20 @@ module Policies
         I18n.t("further_education_payments.forms.#{attr}.question", **)
       end
 
-      def selected_option(attr, value)
-        I18n.t("further_education_payments.forms.#{attr}.options.#{value}")
+      def selected_option(attr, value, **)
+        I18n.t("further_education_payments.forms.#{attr}.options.#{value}", **)
       end
 
       def contract_type_answer
-        if eligibility.fixed_contract?
+        case eligibility.contract_type
+        when "permanent"
           "Permanent contract (including full-time and part-time contracts)"
-        elsif eligibility.contract_type == "variable_hours"
-          "Variable hours contract"
-        else
+        when "variable_hours"
+          "Variable hours contract (This includes zero hours contracts)"
+        when "fixed_term"
           "Fixed term contract"
+        else
+          raise "Unknown contract type: #{eligibility.contract_type}"
         end
       end
 
