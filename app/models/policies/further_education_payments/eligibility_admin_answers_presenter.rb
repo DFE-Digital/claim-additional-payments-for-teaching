@@ -115,7 +115,7 @@ module Policies
       end
 
       def taught_at_least_one_term
-        return nil if eligibility.fixed_contract?
+        return nil if eligibility.long_term_employed?
 
         [
           question(
