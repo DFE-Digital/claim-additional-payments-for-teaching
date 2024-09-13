@@ -13,7 +13,6 @@
 //= require rails-ujs
 //= require a11y-dialog
 //= require accessible-autocomplete/dist/accessible-autocomplete.min.js
-//= require cookie_functions.js
 //= require govuk-frontend/dist/govuk/all.bundle.js
 //= require govuk-one-login-service-header/dist/scripts/service-header-with-init.js
 //= require_tree .

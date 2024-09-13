@@ -156,14 +156,6 @@ rake jobs:schedule
 
 Look for jobs that inherit from `CronJob` for a complete list of scheduled jobs.
 
-## Storing non-essential cookies
-
-Non-essential cookies should not be stored without the user's consent. If the
-user has given consent, we record it in a cookie called `accept_cookies`.
-
-In JavaScript before setting a cookie, you can check the user's consent by using
-the function: `TeacherPayments.cookies.checkNonEssentialCookiesAccepted()`
-
 ## Running specs, brakeman, and code linting
 
 ```

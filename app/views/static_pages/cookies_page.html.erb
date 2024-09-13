@@ -1,0 +1,166 @@
+<% content_for(:page_title, page_title("Cookies", journey: current_journey_routing_name)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Cookies on Claim additional payments for teaching
+    </h1>
+
+    <h2 class="govuk-heading-l">
+      How we use cookies
+    </h2>
+
+    <p class="govuk-body">
+      Cookies are small files saved on your phone, tablet or computer when you visit a website.
+    </p>
+
+    <p class="govuk-body">
+      We use cookies to:
+    </p>
+
+    <%= govuk_list [
+      "track your progress and record your answers as you complete a claim",
+      "measure how you use this service so it can be updated and improved based on your needs",
+      "remember your cookie consent so that we don’t ask you again"
+    ], type: :bullet %>
+
+    <div class="govuk-body">
+      Cookies on this service are not used to identify you personally.
+    </div>
+
+    <div class="govuk-body">
+      We collect the IP addresses of people visiting this website. This is for security reasons.
+    </div>
+
+    <h2 class="govuk-heading-l">
+      Essential cookies
+    </h2>
+
+    <div class="govuk-body">
+      A cookie is set to record your session activity. This is essential to the function of the service.
+    </div>
+
+    <div class="govuk-body">
+      We do not need to ask permission to use essential cookies.
+    </div>
+
+    <%= govuk_table do |table| %>
+      <% table.with_head do |head| %>
+        <% head.with_row do |row| %>
+          <% row.with_cell(text: "Name") %>
+          <% row.with_cell(text: "Purpose") %>
+          <% row.with_cell(text: "Expires") %>
+        <% end %>
+      <% end %>
+
+      <% table.with_body do |body| %>
+        <% body.with_row do |row| %>
+          <% row.with_cell(text: "_claim_session") %>
+          <% row.with_cell(text: "Stores session data") %>
+          <% row.with_cell(text: "Does not expire") %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <h2 class="govuk-heading-l">
+      Analytics cookies (optional)
+    </h2>
+
+    <div class="govuk-body">
+      With your permission, we use Google Analytics to collect data about how you use this service. This information helps us to improve our service.
+    </div>
+
+    <div class="govuk-body">
+      Google Analytics stores information about:
+    </div>
+
+    <%= govuk_list [
+      "the pages you visit and how long you spend on each page",
+      "what you click on while you are visiting this service",
+      "how you got to this service"
+    ], type: :bullet %>
+
+    <div class="govuk-body">
+      Google is not allowed to use or share our analytics data with anyone.
+    </div>
+
+    <%= govuk_table do |table| %>
+      <% table.with_head do |head| %>
+        <% head.with_row do |row| %>
+          <% row.with_cell(text: "Name") %>
+          <% row.with_cell(text: "Purpose") %>
+          <% row.with_cell(text: "Expires") %>
+        <% end %>
+      <% end %>
+
+      <% table.with_body do |body| %>
+        <% body.with_row do |row| %>
+          <% row.with_cell(text: "_ga") %>
+          <% row.with_cell(text: "Helps us count how many people visit Claim additional payments for teaching by tracking if you’ve visited before") %>
+          <% row.with_cell(text: "After 2 years") %>
+        <% end %>
+
+        <% body.with_row do |row| %>
+          <% row.with_cell(text: "_gid") %>
+          <% row.with_cell(text: "Helps us count how many people visit Claim additional payments for teaching by tracking if you’ve visited before") %>
+          <% row.with_cell(text: "After 24 hours") %>
+        <% end %>
+
+        <% body.with_row do |row| %>
+          <% row.with_cell(text: "_gat_gtag_") %>
+          <% row.with_cell(text: "Used by Google Analytics to limit the number of requests they receive") %>
+          <% row.with_cell(text: "After 1 minute") %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%= form_with model: CookiesForm.new(accept: cookies_accepted?), scope: "cookies", url: cookies_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder, method: :patch do |f| %>
+      <%= f.govuk_collection_radio_buttons :accept, f.object.radio_options, :id, :name,
+        legend: {
+          text: "Do you want to accept analytics cookies?",
+          tag: "h3",
+          size: "m"
+        } %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+
+    <h2 class="govuk-heading-l">
+      Functional cookies
+    </h2>
+
+    <div class="govuk-body">
+      You will see a pop-up cookie consent message when you visit Claim additional payments for teaching.
+    </div>
+
+    <div class="govuk-body">
+      If you accept, we will save a cookie on your computer so it remembers you have consented to non-essential cookies. We won’t ask for your consent again for 90 days.
+    </div>
+
+    <%= govuk_table do |table| %>
+      <% table.with_head do |head| %>
+        <% head.with_row do |row| %>
+          <% row.with_cell(text: "Name") %>
+          <% row.with_cell(text: "Purpose") %>
+          <% row.with_cell(text: "Expires") %>
+        <% end %>
+      <% end %>
+
+      <% table.with_body do |body| %>
+        <% body.with_row do |row| %>
+          <% row.with_cell(text: "accept_cookies") %>
+          <% row.with_cell(text: "Saves a message to let us know that you have accepted non-essential cookies") %>
+          <% row.with_cell(text: "After 90 days") %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <h2 class="govuk-heading-l">
+      Gathering your feedback
+    </h2>
+
+    <div class="govuk-body">
+      We use Google Forms software to collect information about what you think of the Claim additional payments for teaching service. We do this to make sure the site is meeting the needs of its users and to help us make improvements.
+    </div>
+  </div>
+</div>

@@ -16,12 +16,14 @@
     <%= favicon_link_tag 'govuk-icon-192.png', rel: 'apple-touch-icon', type: 'image/png', sizes: '192x192' %>
     <%= favicon_link_tag 'govuk-icon-512.png', rel: 'apple-touch-icon', type: 'image/png', sizes: '512x512' %>
 
-    <% if ENV["GOOGLE_ANALYTICS_ID"] %>
-      <%= javascript_include_tag "google_analytics/analytics" %>
-      <%= javascript_include_tag "google_analytics", data: { "ga-id" => ENV["GOOGLE_ANALYTICS_ID"] } %>
+    <% if cookies_accepted? %>
+      <% if ENV["GOOGLE_ANALYTICS_ID"] %>
+        <%= javascript_include_tag "google_analytics/analytics" %>
+        <%= javascript_include_tag "google_analytics", data: { "ga-id" => ENV["GOOGLE_ANALYTICS_ID"] } %>
 
-      <% if ENV["GTM_ANALYTICS"] %>
-        <%= javascript_include_tag "google_gtm" %>
+        <% if ENV["GTM_ANALYTICS"] %>
+          <%= javascript_include_tag "google_gtm" %>
+        <% end %>
       <% end %>
     <% end %>
 
@@ -42,17 +44,9 @@
       </noscript>
     <% end %>
 
-    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+    <%= render "shared/cookie_banner" %>
 
-    <div id="global-cookie-message" class="govuk-cookie-banner" role="region" aria-label="cookie banner">
-      <div class="govuk-width-container">
-        <p class="govuk-cookie-banner__message"><%= journey_service_name(current_journey_routing_name) %> uses cookies to make the site simpler.</p>
-        <div class="govuk-cookie-banner__buttons">
-          <button id="accept-cookies" class="govuk-button" type="submit" data-module="govuk-button">Accept cookies</button>
-          <%= link_to('Cookie information', cookies_path(current_journey_routing_name), class: "govuk-cookie-banner__link" ) %>
-        </div>
-      </div>
-    </div>
+    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
 
     <% if @journey_session&.answers&.logged_in_with_onelogin? %>
       <%= render "shared/one_login_header" %>
