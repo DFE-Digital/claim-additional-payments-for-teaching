@@ -33,15 +33,17 @@
   <body class="govuk-template__body">
     <%= javascript_include_tag 'js_check' %>
 
-    <% if ENV["GOOGLE_ANALYTICS_ID"] %>
-      <noscript>
-        <iframe
-          src="https://www.googletagmanager.com/ns.html?<%= ENV["GTM_ANALYTICS"] %>"
-          height="0"
-          width="0"
-          style="display:none;visibility:hidden">
-        </iframe>
-      </noscript>
+    <% if cookies_accepted? %>
+      <% if ENV["GOOGLE_ANALYTICS_ID"] %>
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?<%= ENV["GTM_ANALYTICS"] %>"
+            height="0"
+            width="0"
+            style="display:none;visibility:hidden">
+          </iframe>
+        </noscript>
+      <% end %>
     <% end %>
 
     <%= render "shared/cookie_banner" %>
