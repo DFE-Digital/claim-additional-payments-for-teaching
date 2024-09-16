@@ -47,7 +47,10 @@ RSpec.feature "Admin claim further education payments" do
 
             click_on "View tasks"
 
-            click_on "Confirm the provider verification"
+            click_on(
+              "Confirm the provider has responded and verified the claimant's " \
+              "information"
+            )
 
             expect(page).to have_content(
               "This task has not been sent to the provider yet."
@@ -121,7 +124,10 @@ RSpec.feature "Admin claim further education payments" do
 
               click_on "View tasks"
 
-              click_on "Confirm the provider verification"
+              click_on(
+                "Confirm the provider has responded and verified the claimant's " \
+                "information"
+              )
 
               expect(page).not_to have_content(
                 "This task has not been sent to the provider yet."
@@ -183,7 +189,10 @@ RSpec.feature "Admin claim further education payments" do
 
               click_on "View tasks"
 
-              click_on "Confirm the provider verification"
+              click_on(
+                "Confirm the provider has responded and verified the claimant's " \
+                "information"
+              )
 
               expect(page).not_to have_content(
                 "This task has not been sent to the provider yet."
@@ -249,7 +258,10 @@ RSpec.feature "Admin claim further education payments" do
 
             click_on "View tasks"
 
-            click_on "Confirm the provider verification"
+            click_on(
+              "Confirm the provider has responded and verified the claimant's " \
+              "information"
+            )
 
             expect(page).to have_content(
               "This task was verified by the provider (Seymoure Skinner)"
@@ -337,7 +349,10 @@ RSpec.feature "Admin claim further education payments" do
 
             click_on "View tasks"
 
-            click_on "Confirm the provider verification"
+            click_on(
+              "Confirm the provider has responded and verified the claimant's " \
+              "information"
+            )
 
             expect(page).to have_content(
               "This task was verified by the provider (Seymoure Skinner)"

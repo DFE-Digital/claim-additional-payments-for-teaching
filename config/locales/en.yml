@@ -144,7 +144,7 @@ en:
       identity_confirmation:
         title: "Confirm the claimant made the claim"
       provider_verification:
-        title: "Confirm the provider verification"
+        title: "Confirm the provider has responded and verified the claimant's information"
       payroll_gender:
         title: "Add a payroll gender for HMRC"
         hint: "The claimant answered ‘Don't know’ to the question ‘What gender does your school's payroll system associate with you?’"
