@@ -10,61 +10,9 @@
     <h2 class="govuk-heading-xl"><%= @current_task_name.humanize %></h2>
 
     <% if @tasks_presenter.provider_verification_submitted? %>
-      <p class="govuk-body">
-        This task was verified by the provider
-        (<%= @tasks_presenter.provider_name %>).
-      </p>
-
-      <table class="govuk-table govuk-!-margin-bottom-9">
-        <caption class="govuk-table__caption govuk-visually-hidden">
-          <%= @current_task_name.humanize %>
-        </caption>
-        <thead>
-          <tr class="govuk-table__row">
-            <th scope="col" class="govuk-table__header">
-              Eligibility check
-            </th>
-            <th scope="col" class="govuk-table__header">
-              Claimant submitted
-            </th>
-            <th scope="col" class="govuk-table__header">
-              Provider response
-            </th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          <% @tasks_presenter.provider_verification.each do |row| %>
-            <tr class="govuk-table__row govuk-!-width-one-quarter">
-              <th scope="row" class="govuk-table__header">
-                <%= row.label %>
-              </th>
-              <td class="govuk-table__cell govuk-!-width-one-half">
-                <%= Array.wrap(row.claimant_answer).join("<br><br>").html_safe %>
-              </td>
-              <td class="govuk-table__cell govuk-!-width-one-quarter">
-                <%= row.provider_answer %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+      <%= render "provider_verification_submitted" %>
     <% else %>
-      <p class="govuk-body">
-        This task has not been sent to the provider yet.
-      </p>
-
-      <div class="govuk-inset-text">
-        <p>
-          You need to check the matching details and confirm if this is a
-          duplicate claim. If it isn't a duplicate claim, send the verification
-          request to the provider.
-        </p>
-        <%= govuk_button_to(
-          "Send provider verification request",
-          admin_claim_further_education_payments_provider_verification_emails_path(@claim),
-          class: "govuk-!-margin-bottom-0"
-        ) %>
-      </div>
+      <%= render "provider_verification_unsubmitted" %>
     <% end %>
   </div>
 

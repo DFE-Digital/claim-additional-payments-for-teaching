@@ -1,0 +1,35 @@
+<% if @tasks_presenter.provider_verification.verification_email_sent? %>
+  <% if @tasks_presenter.provider_verification.verification_email_sent_by_admin_team? %>
+    <div class="govuk-inset-text">
+      <% @tasks_presenter.provider_verification.admin_sent_emails.each do |verification_email| %>
+        <p>
+          The verification request was sent to the provider by
+          <%= user_details(verification_email.created_by) %> on <%= l(verification_email.created_at) %>
+        </p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= govuk_button_to(
+    "Resend provider verification request",
+    admin_claim_further_education_payments_provider_verification_emails_path(@claim),
+    class: "govuk-!-margin-bottom-0"
+  ) %>
+<% else %>
+  <p class="govuk-body">
+    This task has not been sent to the provider yet.
+  </p>
+
+  <div class="govuk-inset-text">
+    <p>
+      You need to check the matching details and confirm if this is a
+      duplicate claim. If it isn't a duplicate claim, send the verification
+      request to the provider.
+    </p>
+    <%= govuk_button_to(
+      "Send provider verification request",
+      admin_claim_further_education_payments_provider_verification_emails_path(@claim),
+      class: "govuk-!-margin-bottom-0"
+    ) %>
+  </div>
+<% end %>

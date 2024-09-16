@@ -10,7 +10,7 @@ module Policies
       end
 
       def provider_verification
-        AdminProviderVerificationTaskPresenter.new(claim).rows
+        AdminProviderVerificationTaskPresenter.new(claim)
       end
 
       def provider_name
