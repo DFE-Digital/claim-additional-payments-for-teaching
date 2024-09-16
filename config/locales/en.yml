@@ -912,6 +912,8 @@ en:
             claimant_answers:
               true: "Yes"
               false: "No"
+        student_loan_plan:
+          title: "Does the claimant’s student loan plan match the information we hold about their loan?"
     forms:
       ineligible:
         courses:
