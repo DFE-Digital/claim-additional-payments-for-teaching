@@ -870,6 +870,8 @@ en:
       task_questions:
         matching_details:
           title: Is this claim still valid despite having matching details with other claims?
+        payroll_details:
+          title: "Check bank/building society account details"
         provider_verification:
           title: "Has the provider confirmed the claimant's details?"
           contract_type:

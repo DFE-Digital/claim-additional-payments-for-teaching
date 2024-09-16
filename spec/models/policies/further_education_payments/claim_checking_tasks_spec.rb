@@ -7,6 +7,7 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks do
     let(:payroll_gender) { "male" }
     let(:teacher_reference_number) { "1234567" }
     let(:matching_claims) { Claim.none }
+    let(:hmrc_bank_validation_succeeded) { true }
 
     let(:eligibility) do
       build(
@@ -20,6 +21,7 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks do
         :claim,
         policy: Policies::FurtherEducationPayments,
         payroll_gender: payroll_gender,
+        hmrc_bank_validation_succeeded: hmrc_bank_validation_succeeded,
         eligibility: eligibility
       )
     end
@@ -28,8 +30,7 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks do
       [
         "identity_confirmation",
         "provider_verification",
-        "student_loan_plan",
-        "payroll_details"
+        "student_loan_plan"
       ]
     end
 
@@ -69,6 +70,17 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks do
 
     context "when the payroll_gender is present" do
       it { is_expected.not_to include("payroll_gender") }
+      it { is_expected.to include(*invariant_tasks) }
+    end
+
+    context "when the bank details need validating" do
+      let(:hmrc_bank_validation_succeeded) { false }
+      it { is_expected.to include("payroll_details") }
+      it { is_expected.to include(*invariant_tasks) }
+    end
+
+    context "when the bank details do not need validating" do
+      it { is_expected.not_to include("payroll_details") }
       it { is_expected.to include(*invariant_tasks) }
     end
   end
