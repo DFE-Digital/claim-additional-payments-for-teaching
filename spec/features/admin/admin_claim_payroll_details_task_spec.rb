@@ -33,7 +33,11 @@ RSpec.feature "Admin checking a claim's payroll details" do
 
       click_on I18n.t("admin.tasks.payroll_details.title")
 
-      expect(page).to have_content I18n.t("student_loans.admin.task_questions.payroll_details.title", bank_or_building_society: I18n.t("admin.#{claim.bank_or_building_society}"))
+      expect(page).to have_content I18n.t(
+        "student_loans.admin.task_questions.payroll_details.title",
+        bank_or_building_society: I18n.t("admin.#{claim.bank_or_building_society}"),
+        claimant_name: claim.full_name
+      )
 
       # Can't match entire payload due to whitespace mismatch
       claim.hmrc_bank_validation_responses.each do |response|
