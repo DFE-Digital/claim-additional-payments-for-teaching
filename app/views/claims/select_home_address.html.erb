@@ -4,7 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: @form, errored_field_id_overrides: { "address": "#{@address_data.first[:address].gsub(",", "").gsub(" ", "_").downcase}"}) if @form.errors.any? %>
 
-    <%= form_for @form, url: claim_path(current_journey_routing_name) do |form| %>
+    <%= form_for @form, url: claim_path(current_journey_routing_name), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
       <div class="govuk-!-margin-bottom-5">
         <h1 class="govuk-heading-xl"><%= t("questions.address.home.title") %></h1>
         <h2 class="govuk-heading-l govuk-!-margin-bottom-1">Postcode</h2>
@@ -27,10 +27,12 @@
                 <% address = option[:address].gsub(",", "").gsub(" ", "_").downcase %>
                 <% checked = params.dig(:claim, :address_line_1) == option[:address_line_1] %>
 
-                <div class="govuk-radios__item">
-                  <%= form.radio_button :address, [option[:address], option[:address_line_1], option[:address_line_2], option[:address_line_3], option[:postcode]].join(":"), { checked:, class: "govuk-radios__input", id: address } %>
-                  <%= form.label address, "#{option[:address]}", class: "govuk-label govuk-radios__label", id: address %>
-                </div>
+                <%= form.govuk_radio_button(
+                  :address,
+                  [option[:address], option[:address_line_1], option[:address_line_2], option[:address_line_3], option[:postcode]].join(":"),
+                  label: { text: option[:address] },
+                  checked: checked
+                ) %>
               <% end %>
             </div>
           </fieldset>
