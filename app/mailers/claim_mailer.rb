@@ -111,7 +111,7 @@ class ClaimMailer < ApplicationMailer
       claimant_name: claim.full_name,
       claim_reference: claim.reference,
       claim_submission_date: l(claim.created_at.to_date),
-      verification_due_date: l(Policies::FurtherEducationPayments.verification_due_date_for_claim(claim)),
+      verification_due_date: l(Policies::FurtherEducationPayments.verification_chase_due_date_for_claim(claim)),
       verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
     }
 
