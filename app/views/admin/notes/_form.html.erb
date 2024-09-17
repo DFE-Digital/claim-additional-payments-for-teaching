@@ -3,7 +3,7 @@
     <%= form.label :body, "Add note", class: "govuk-label govuk-label--m" %>
     <%= errors_tag note, :body %>
     <div class="govuk-hint" id="notes-hint">
-      Write a brief update. Do not include any personal data about the claimant.
+      Enter an update note here. Do not include any personal data about the claimant.
     </div>
     <%= form.text_area :body, class: "govuk-textarea", "aria-describedby" => "notes-hint", rows: 5 %>
   <% end %>
