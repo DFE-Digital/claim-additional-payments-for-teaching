@@ -103,6 +103,27 @@ class ClaimMailer < ApplicationMailer
     )
   end
 
+  def further_education_payment_provider_verification_chase_email(claim)
+    policy_check!(claim, Policies::FurtherEducationPayments)
+
+    personalisation = {
+      recipient_name: claim.school.name,
+      claimant_name: claim.full_name,
+      claim_reference: claim.reference,
+      claim_submission_date: l(claim.created_at.to_date),
+      verification_due_date: l(Policies::FurtherEducationPayments.verification_due_date_for_claim(claim)),
+      verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
+    }
+
+    template_id = template_ids(claim)[:CLAIM_PROVIDER_VERIFICATION_CHASE_EMAIL_TEMPLATE_ID]
+
+    template_mail(
+      template_id,
+      to: claim.school.eligible_fe_provider.primary_key_contact_email_address,
+      personalisation: personalisation
+    )
+  end
+
   def further_education_payment_provider_confirmation_email(claim)
     policy_check!(claim, Policies::FurtherEducationPayments)
 

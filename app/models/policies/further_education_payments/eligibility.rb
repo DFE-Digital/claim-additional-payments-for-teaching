@@ -25,6 +25,8 @@ module Policies
       belongs_to :possible_school, optional: true, class_name: "School"
       belongs_to :school, optional: true
 
+      scope :unverified, -> { where(verification: {}) }
+
       # Claim#school expects this
       alias_method :current_school, :school
 
