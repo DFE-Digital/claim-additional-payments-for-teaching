@@ -155,12 +155,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
           it "does not create a new verifier" do
             dfe_sign_in_user = create(
               :dfe_signin_user,
-              dfe_sign_in_id: "123",
-              given_name: "Seymour",
-              family_name: "Skinner",
-              email: "seymore.skinner@springfield-elementary.edu",
-              organisation_name: "Springfield Elementary",
-              role_codes: ["teacher_payments_claim_verifier"]
+              dfe_sign_in_id: "123"
             )
 
             claim = create(
