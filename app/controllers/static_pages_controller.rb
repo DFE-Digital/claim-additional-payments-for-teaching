@@ -5,7 +5,7 @@ class StaticPagesController < BasePublicController
   def contact_us
   end
 
-  def cookies
+  def cookies_page
   end
 
   def terms_conditions

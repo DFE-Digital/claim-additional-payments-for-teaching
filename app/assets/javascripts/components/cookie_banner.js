@@ -1,15 +1,34 @@
 "use strict";
 
 document.addEventListener("DOMContentLoaded", function () {
-  var cookieBanner = document.querySelector("#global-cookie-message");
-  var acceptButton = document.querySelector("#accept-cookies");
+  var formAcceptCookie = document.querySelector("#formAcceptCookie");
+  var formRejectCookie = document.querySelector("#formRejectCookie");
+  var formHideAcceptCookie = document.querySelector("#formHideAcceptCookie");
+  var formHideRejectCookie = document.querySelector("#formHideRejectCookie");
 
-  if (!window.TeacherPayments.cookies.checkNonEssentialCookiesAccepted()) {
-    cookieBanner.classList.add("govuk-cookie-banner--visible");
+  if (formAcceptCookie) {
+    formAcceptCookie.addEventListener("ajax:success", function(e, data, status, xhr) {
+      document.querySelector("#askCookieBanner").hidden = true;
+      document.querySelector("#acceptedCookieBanner").hidden = false;
+    });
   }
 
-  acceptButton.onclick = function () {
-    window.TeacherPayments.cookies.acceptNonEssentialCookies();
-    cookieBanner.classList.remove("govuk-cookie-banner--visible");
-  };
+  if (formRejectCookie) {
+    formRejectCookie.addEventListener("ajax:success", function(e, data, status, xhr) {
+      document.querySelector("#askCookieBanner").hidden = true;
+      document.querySelector("#rejectedCookieBanner").hidden = false;
+    });
+  }
+
+  if (formHideAcceptCookie) {
+    formHideAcceptCookie.addEventListener("ajax:success", function(e, data, status, xhr) {
+      document.querySelector("#acceptedCookieBanner").hidden = true;
+    });
+  }
+
+  if (formHideRejectCookie) {
+    formHideRejectCookie.addEventListener("ajax:success", function(e, data, status, xhr) {
+      document.querySelector("#rejectedCookieBanner").hidden = true;
+    });
+  }
 });

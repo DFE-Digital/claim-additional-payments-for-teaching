@@ -55,4 +55,36 @@ module ApplicationHelper
   def one_login_home_url
     OneLogin::Config.home_url
   end
+
+  def hide_cookie_banner?
+    return unless cookies.encrypted[:accept_cookies].present?
+
+    hash = JSON.parse(cookies.encrypted[:accept_cookies])
+
+    !hash["state"].nil?
+  end
+
+  def hide_accepted_cookie_banner?
+    return true unless cookies.encrypted[:accept_cookies].present?
+
+    hash = JSON.parse(cookies.encrypted[:accept_cookies])
+
+    !(hash["state"] && hash["message"])
+  end
+
+  def hide_rejected_cookie_banner?
+    return true unless cookies.encrypted[:accept_cookies].present?
+
+    hash = JSON.parse(cookies.encrypted[:accept_cookies])
+
+    !(!hash["state"] && hash["message"])
+  end
+
+  def cookies_accepted?
+    return unless cookies.encrypted[:accept_cookies].present?
+
+    hash = JSON.parse(cookies.encrypted[:accept_cookies])
+
+    hash["state"]
+  end
 end
