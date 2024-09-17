@@ -70,7 +70,7 @@ describe ApplicationHelper do
     context "policy is a LevellingUpPremiumPayments" do
       let(:policy) { Policies::LevellingUpPremiumPayments }
 
-      it { is_expected.to eq('For more details, you can read about payments and deductions for the <a class="govuk-link govuk-link--no-visited-state" target="_blank" href="https://www.gov.uk/guidance/levelling-up-premium-payments-for-teachers#payments-and-deductions">levelling up premium payment (opens in new tab)</a>') }
+      it { is_expected.to eq('For more details, you can read about payments and deductions for the <a class="govuk-link govuk-link--no-visited-state" target="_blank" href="https://www.gov.uk/guidance/targeted-retention-incentive-payments-for-school-teachers#payments-and-deductions">school targeted retention incentive (opens in new tab)</a>') }
     end
 
     context "policy is a EarlyCareerPayments" do

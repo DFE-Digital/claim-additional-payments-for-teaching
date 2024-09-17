@@ -32,7 +32,7 @@ RSpec.feature "Admin claim filtering" do
 
     expect(page.find("table")).to have_content("ECP").exactly(10).times
     expect(page.find("table")).to have_content("TSLR").exactly(7).times
-    expect(page.find("table")).to have_content("LUP").exactly(2).times
+    expect(page.find("table")).to have_content("STRI").exactly(2).times
 
     click_on "View claims"
     select "Student Loans", from: "policy"
@@ -99,7 +99,7 @@ RSpec.feature "Admin claim filtering" do
     select "Unassigned", from: "team_member"
     click_on "Apply filters"
 
-    expect(page.find("table")).to have_content("LUP").exactly(2).times
+    expect(page.find("table")).to have_content("STRI").exactly(2).times
 
     lup_claims_unassigned.each do |c|
       expect(page).to have_content(c.reference)

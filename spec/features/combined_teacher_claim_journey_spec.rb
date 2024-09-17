@@ -106,10 +106,10 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
 
     expect(page).to have_text("You’re eligible for an additional payment")
     expect(page).to have_field("£2,000 early-career payment")
-    expect(page).to have_field("£2,000 levelling up premium payment")
+    expect(page).to have_field("£2,000 school targeted retention incentive")
     expect(page).to have_selector('input[type="radio"]', count: 2)
 
-    choose("£2,000 levelling up premium payment")
+    choose("£2,000 school targeted retention incentive")
 
     click_on("Apply now")
 
@@ -230,7 +230,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
 
     submitted_claim = Claim.by_policy(Policies::LevellingUpPremiumPayments).order(:created_at).last
     # - Application complete
-    expect(page).to have_text("You applied for a levelling up premium payment")
+    expect(page).to have_text("You applied for a school targeted retention incentive")
     expect(page).to have_text("What happens next")
     expect(page).to have_text("Set a reminder to apply next year")
     expect(page).to have_text("Apply for additional payment each academic year")

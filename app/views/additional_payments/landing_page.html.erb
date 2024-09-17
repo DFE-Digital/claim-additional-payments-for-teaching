@@ -78,7 +78,12 @@
         </li>
 
         <li>
-          <%= govuk_link_to "#{I18n.t("levelling_up_premium_payments.policy_short_name").capitalize} (opens in new tab)", Policies::LevellingUpPremiumPayments.eligibility_page_url, no_visited_state: true, target: "_blank" %> - payment of up to £3,000 for eligible teachers in certain schools, including computing teachers.
+          <%= govuk_link_to(
+            "#{I18n.t("levelling_up_premium_payments.policy_short_name")} (opens in new tab)",
+            Policies::LevellingUpPremiumPayments.eligibility_page_url,
+            no_visited_state: true,
+            target: "_blank"
+          ) %> - payment of up to £6,000 for eligible teachers in certain schools, including computing teachers.
         </li>
       </ul>
 

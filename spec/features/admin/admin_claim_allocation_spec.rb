@@ -6,7 +6,7 @@ RSpec.feature "Claims awaiting a decision" do
       "All",
       "Student Loans",
       "Early-Career Payments",
-      "Levelling Up Premium Payments",
+      "School Targeted Retention Incentive",
       "International Relocation Payments",
       "Targeted Retention Incentive Payment For FE Teachers"
     ]
