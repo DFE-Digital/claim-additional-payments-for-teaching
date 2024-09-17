@@ -1,0 +1,22 @@
+<% content_for(:page_title, page_title("This link has expired", journey: current_journey_routing_name)) %>
+<% @backlink_path = claim_path(current_journey_routing_name, "email-address") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      This link has expired
+    </h1>
+
+    <p class="govuk-body">
+      Select the link below to send another link to the same email address.
+    </p>
+
+    <p class="govuk-body">
+      The link will expire in 15 minutes and can only be used once.
+    </p>
+
+    <p class="govuk-body">
+      <%= govuk_link_to "Resend email", @backlink_path %>
+    </p>
+  </div>
+</div>
