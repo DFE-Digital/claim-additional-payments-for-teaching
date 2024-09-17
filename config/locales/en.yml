@@ -44,6 +44,8 @@ en:
         unit: "£"
   service_name: "Claim additional payments for teaching"
   support_email_address: "additionalteachingpayment@digital.education.gov.uk"
+  teacher_reference_number: "Teacher Reference Number"
+  national_insurance_number: "National Insurance Number"
   check_your_answers:
     heading_send_application: Confirm and send your application
     statement:

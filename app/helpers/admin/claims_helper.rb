@@ -105,10 +105,10 @@ module Admin
       second_eligibility_attributes = matching_attributes_for_eligibility(second_claim.eligibility)
 
       matching_attributes = first_attributes & second_attributes
-      claim_matches = matching_attributes.to_h.compact.keys.map(&:humanize).sort
+      claim_matches = matching_attributes.to_h.compact.keys.map(&:to_s).sort
 
       matching_eligibility_attributes = first_eligibility_attributes & second_eligibility_attributes
-      eligibility_matches = matching_eligibility_attributes.to_h.compact.keys.map(&:humanize).sort
+      eligibility_matches = matching_eligibility_attributes.to_h.compact.keys.map(&:to_s).sort
 
       claim_matches + eligibility_matches
     end

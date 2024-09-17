@@ -18,7 +18,7 @@
         <td class="govuk-table__cell">
           <ul class="govuk-list">
             <% matching_attributes(claim, matching_claim).each do |attribute| %>
-              <li><%= attribute %></li>
+              <li><%= I18n.t(attribute, default: attribute.to_s.humanize) %></li>
             <% end %>
           </ul>
         </td>

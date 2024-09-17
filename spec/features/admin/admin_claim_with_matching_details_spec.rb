@@ -26,7 +26,7 @@ RSpec.feature "Admin checking a claim with matching details" do
 
     expect(page).to have_content(I18n.t("student_loans.admin.task_questions.matching_details.title"))
     expect(page).to have_content(claim_with_matching_details.reference)
-    expect(page).to have_content("Teacher reference number")
+    expect(page).to have_content("Teacher Reference Number")
 
     choose "Yes"
     click_on "Save and continue"
