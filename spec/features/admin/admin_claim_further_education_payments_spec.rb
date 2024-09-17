@@ -52,6 +52,8 @@ RSpec.feature "Admin claim further education payments" do
               "information"
             )
 
+            expect(claim.eligibility.reload.provider_verification_email_last_sent_at).to be_nil
+
             expect(page).to have_content(
               "This task has not been sent to the provider yet."
             )
@@ -78,6 +80,8 @@ RSpec.feature "Admin claim further education payments" do
                 verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
               )
             )
+
+            expect(claim.eligibility.reload.provider_verification_email_last_sent_at).to eq Time.now
           end
         end
 
@@ -106,7 +110,8 @@ RSpec.feature "Admin claim further education payments" do
                 contract_type: "fixed_term",
                 claim: claim,
                 school: fe_provider,
-                award_amount: 1500
+                award_amount: 1500,
+                provider_verification_email_last_sent_at: DateTime.new(2024, 8, 1, 9, 0, 0)
               )
 
               create(
@@ -155,6 +160,8 @@ RSpec.feature "Admin claim further education payments" do
                   verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
                 )
               )
+
+              expect(claim.eligibility.reload.provider_verification_email_last_sent_at).to eq Time.now
             end
           end
 
@@ -182,7 +189,8 @@ RSpec.feature "Admin claim further education payments" do
                 contract_type: "fixed_term",
                 claim: claim,
                 school: fe_provider,
-                award_amount: 1500
+                award_amount: 1500,
+                provider_verification_email_last_sent_at: DateTime.new(2024, 8, 1, 9, 0, 0)
               )
 
               visit admin_claim_path(claim)
@@ -225,6 +233,8 @@ RSpec.feature "Admin claim further education payments" do
                   verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
                 )
               )
+
+              expect(claim.eligibility.reload.provider_verification_email_last_sent_at).to eq Time.now
             end
           end
         end

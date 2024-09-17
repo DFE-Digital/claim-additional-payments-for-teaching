@@ -10,7 +10,8 @@ module Journeys
           # noop
           # do not send provider verification email
         else
-          ClaimMailer.further_education_payment_provider_verification_email(claim).deliver_later
+          Policies::FurtherEducationPayments::ProviderVerificationEmails.new(claim)
+            .send_further_education_payment_provider_verification_email
         end
 
         true
