@@ -17,6 +17,10 @@ class ClaimCheckingTasks
       Policies::FurtherEducationPayments::ClaimCheckingTasks
         .new(claim)
         .applicable_task_names
+    when Policies::InternationalRelocationPayments
+      Policies::InternationalRelocationPayments::ClaimCheckingTasks
+        .new(claim)
+        .applicable_task_names
     else
       @applicable_task_names ||= Task::NAMES.dup.tap do |task_names|
         task_names.delete("induction_confirmation") unless claim.policy == Policies::EarlyCareerPayments
@@ -25,21 +29,12 @@ class ClaimCheckingTasks
         task_names.delete("payroll_details") unless claim.must_manually_validate_bank_details?
         task_names.delete("matching_details") unless matching_claims.exists?
         task_names.delete("payroll_gender") unless claim.payroll_gender_missing? || task_names_for_claim.include?("payroll_gender")
-
-        if claim.policy.international_relocation_payments?
-          task_names.delete("qualifications")
-          task_names.delete("census_subjects_taught")
-        end
-
-        unless claim.policy.international_relocation_payments?
-          task_names.delete("visa")
-          task_names.delete("arrival_date")
-          task_names.delete("employment_contract")
-          task_names.delete("employment_start")
-          task_names.delete("subject")
-          task_names.delete("teaching_hours")
-        end
-
+        task_names.delete("visa")
+        task_names.delete("arrival_date")
+        task_names.delete("employment_contract")
+        task_names.delete("employment_start")
+        task_names.delete("subject")
+        task_names.delete("teaching_hours")
         task_names.delete("provider_verification")
       end
     end
