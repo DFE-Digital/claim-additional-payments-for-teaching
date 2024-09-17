@@ -9,6 +9,11 @@ module FurtherEducationPayments
       Rails.logger.info "ProviderVerificationChaseEmailJob sending chase emails..."
 
       unverified_claims_with_provider_email_sent_over_3_weeks_ago.each do |claim|
+        claim.notes.create!(
+          label: "provider_verification",
+          body: "Verification chaser email sent to #{claim.school.name}"
+        )
+
         Policies::FurtherEducationPayments::ProviderVerificationEmails.new(claim)
           .send_further_education_payment_provider_verification_chase_email
       end
