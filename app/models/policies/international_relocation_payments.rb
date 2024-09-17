@@ -54,10 +54,8 @@ module Policies
       start_of_academic_year - 2.years
     end
 
-    # NOTE RL: currently IRP only has a single reply to address, so notify
-    # doesn't show the address id
     def notify_reply_to_id
-      nil
+      "b11c0da5-f976-4cc2-8464-23e4dda63fc4"
     end
 
     def award_amount
