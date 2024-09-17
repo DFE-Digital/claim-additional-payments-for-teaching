@@ -168,5 +168,14 @@ Rails.application.routes.draw do
     patch "bulk_deallocate", to: "allocations#bulk_deallocate"
 
     get "accessibility-statement", to: "static_pages#accessibility_statement"
+    get "cookies", to: "static_pages#cookies_page"
+
+    resource :cookies, only: [:update] do
+      collection do
+        post "accept"
+        post "reject"
+        post "hide"
+      end
+    end
   end
 end
