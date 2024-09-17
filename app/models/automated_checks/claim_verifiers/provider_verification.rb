@@ -50,14 +50,13 @@ module AutomatedChecks
       end
 
       def created_by
-        DfeSignIn::User.find_or_create_by!(
-          dfe_sign_in_id: verifier.fetch("dfe_sign_in_uid"),
-          given_name: verifier.fetch("first_name"),
-          family_name: verifier.fetch("last_name"),
-          email: verifier.fetch("email"),
-          organisation_name: verifier.fetch("dfe_sign_in_organisation_name"),
-          role_codes: verifier.fetch("dfe_sign_in_role_codes")
-        )
+        DfeSignIn::User.find_or_create_by!(dfe_sign_in_id: verifier.fetch("dfe_sign_in_uid")) do |user|
+          user.given_name = verifier.fetch("first_name")
+          user.family_name = verifier.fetch("last_name")
+          user.email = verifier.fetch("email")
+          user.organisation_name = verifier.fetch("dfe_sign_in_organisation_name")
+          user.role_codes = verifier.fetch("dfe_sign_in_role_codes")
+        end
       end
     end
   end
