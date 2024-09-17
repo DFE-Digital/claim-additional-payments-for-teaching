@@ -3,7 +3,7 @@
 <div class="govuk-grid-row" id="download">
   <div class="govuk-grid-column-two-thirds">
     <h2 class="govuk-heading-m">
-      Download Levelling Up Premium Payments School Awards
+      Download <%= I18n.t("levelling_up_premium_payments.policy_short_name").pluralize %> School Awards
     </h2>
 
     <% if lupp_awards_academic_years.any? %>
@@ -29,7 +29,7 @@
 <div class="govuk-grid-row" id="upload">
   <div class="govuk-grid-column-two-thirds">
     <h2 class="govuk-heading-m">
-      Upload Levelling Up Premium Payments School Awards
+      Upload <%= I18n.t("levelling_up_premium_payments.policy_short_name").pluralize %> School Awards
     </h2>
 
     <%= render("shared/error_summary", instance: @csv_upload) if @csv_upload.errors.any? %>
