@@ -31,19 +31,11 @@ module AutomatedChecks
       attr_reader :dqt_teacher_status
 
       def one_login
-        if one_login_name_match? && one_login_dob_match?
-          create_task(match: nil, passed: true)
-        else
+        if claim.one_login_idv_mismatch?
           create_task(match: nil, passed: false)
+        else
+          create_task(match: nil, passed: true)
         end
-      end
-
-      def one_login_name_match?
-        claim.onelogin_idv_full_name.downcase == "#{claim.first_name.downcase} #{claim.surname.downcase}"
-      end
-
-      def one_login_dob_match?
-        claim.onelogin_idv_date_of_birth == claim.date_of_birth
       end
 
       def dqt_teacher_status=(dqt_teacher_status)

@@ -431,7 +431,19 @@ class Claim < ApplicationRecord
     end
   end
 
+  def one_login_idv_mismatch?
+    !one_login_idv_name_match? || !one_login_idv_dob_match?
+  end
+
   private
+
+  def one_login_idv_name_match?
+    onelogin_idv_full_name.downcase == "#{first_name.downcase} #{surname.downcase}"
+  end
+
+  def one_login_idv_dob_match?
+    onelogin_idv_date_of_birth == date_of_birth
+  end
 
   def normalise_ni_number
     self.national_insurance_number = normalised_ni_number
