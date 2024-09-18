@@ -154,7 +154,7 @@ en:
         title: "Check student loan plan"
       payroll_details:
         title: "Check bank/building society account details"
-        question: "%{claimant_name}'s %{bank_or_building_society} details have not been automatically validated. Has %{claimant_name} confirmed their %{bank_or_building_society} details?"
+        question: "The claimant’s %{bank_or_building_society} details have not been automatically validated. Has the claimant confirmed their %{bank_or_building_society} details?"
       census_subjects_taught:
         title: "Check eligible subjects are taught"
       visa:
