@@ -59,7 +59,6 @@
             <th scope="col" class="govuk-table__header">Reference</th>
             <th scope="col" class="govuk-table__header">Applicant Name</th>
             <th scope="col" class="govuk-table__header">ID Verification</th>
-            <th scope="col" class="govuk-table__header">Qualification Status</th>
             <th scope="col" class="govuk-table__header">Policy</th>
             <% if claims_with_warning.nonzero? %>
               <th scope="col" class="govuk-table__header">Decision warning</th>
@@ -74,7 +73,6 @@
               <th scope="row" class="govuk-table__header"><%= link_to claim.reference, admin_claim_tasks_path(claim), class: "govuk-link" %></th>
               <td class="govuk-table__cell"><%= claim.full_name %></td>
               <td class="govuk-table__cell"><%= identity_confirmation_task_claim_verifier_match_status_tag(claim) %></td>
-              <td class="govuk-table__cell"><%= task_status_tag(claim, "qualifications") %></td>
               <td class="govuk-table__cell"><%= I18n.t("#{claim.policy.locale_key}.policy_acronym") %></td>
               <% if claims_with_warning.nonzero? %>
                 <td class="govuk-table__cell"><%= decision_deadline_warning(claim) %></td>
