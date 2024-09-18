@@ -34,7 +34,7 @@ RSpec.feature "Admin checking a claim's payroll details" do
       click_on I18n.t("admin.tasks.payroll_details.title")
 
       expect(page).to have_content I18n.t(
-        "student_loans.admin.task_questions.payroll_details.title",
+        "admin.tasks.payroll_details.question",
         bank_or_building_society: I18n.t("admin.#{claim.bank_or_building_society}"),
         claimant_name: claim.full_name
       )
