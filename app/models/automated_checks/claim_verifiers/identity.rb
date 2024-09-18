@@ -34,7 +34,7 @@ module AutomatedChecks
         if claim.onelogin_idv_full_name.downcase == claim.full_name.downcase && claim.onelogin_idv_date_of_birth == claim.date_of_birth
           create_task(match: nil, passed: true)
         else
-          nil # drops to manual
+          create_task(match: nil, passed: false)
         end
       end
 
