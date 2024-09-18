@@ -299,6 +299,7 @@ shared:
     - subject_to_disciplinary_action
     - half_teaching_hours
     - flagged_as_duplicate
+    - provider_verification_email_last_sent_at
   :eligible_fe_providers:
     - id
     - ukprn
