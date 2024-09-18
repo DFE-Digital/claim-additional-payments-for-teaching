@@ -36,7 +36,7 @@ module Admin
 
     def admin_personal_details(claim)
       [
-        [translate("admin.teacher_reference_number"), claim.eligibility.teacher_reference_number],
+        [translate("admin.teacher_reference_number"), claim.eligibility.teacher_reference_number.presence || "Not provided"],
         [translate("govuk_verify_fields.full_name").capitalize, claim.personal_data_removed? ? personal_data_removed_text : claim.full_name],
         [translate("govuk_verify_fields.date_of_birth").capitalize, claim.personal_data_removed? ? personal_data_removed_text : l(claim.date_of_birth, format: :day_month_year)],
         [translate("admin.national_insurance_number"), claim.personal_data_removed? ? personal_data_removed_text : claim.national_insurance_number],
