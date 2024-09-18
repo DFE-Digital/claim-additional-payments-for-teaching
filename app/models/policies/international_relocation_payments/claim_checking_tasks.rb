@@ -14,6 +14,7 @@ module Policies
       def applicable_task_names
         tasks = []
 
+        tasks << "previous_payment"
         tasks << "identity_confirmation"
         tasks << "visa"
         tasks << "arrival_date"

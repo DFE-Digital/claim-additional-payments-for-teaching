@@ -23,6 +23,7 @@ class ClaimCheckingTasks
         .applicable_task_names
     else
       @applicable_task_names ||= Task::NAMES.dup.tap do |task_names|
+        task_names.delete("previous_payment")
         task_names.delete("induction_confirmation") unless claim.policy == Policies::EarlyCareerPayments
         task_names.delete("student_loan_amount") unless claim.policy == Policies::StudentLoans
         task_names.delete("student_loan_plan") unless claim.has_ecp_or_lupp_policy? && claim.submitted_without_slc_data?
