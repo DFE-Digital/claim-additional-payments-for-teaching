@@ -3,7 +3,10 @@
 <%= link_to "Back", admin_claim_tasks_path(@claim), class: "govuk-back-link" %>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+  <div class="<%= class_names(
+    "govuk-grid-column-two-thirds": !@claim.policy.further_education_payments?,
+    "govuk-grid-column-full": @claim.policy.further_education_payments?
+  ) %>">
     <%= render("shared/error_summary", instance: @decision, errored_field_id_overrides: { "result": "decision_result_approved" }) if @decision.errors.any? %>
 
     <% if @claim.personal_data_removed? %>
@@ -14,7 +17,7 @@
 
     <span class="govuk-caption-xl"><%= @claim.policy.short_name %>  (<%= @claim.academic_year %>)</span>
     <h1 class="govuk-heading-xl govuk-heading--navigation">
-      <%= @claim.reference %>
+      <%= claim_summary_heading(@claim) %>
       <span class="govuk-body-m">
         <%= link_to "View tasks", admin_claim_tasks_path(claim_id: @claim.id), class: "govuk-link" %>
         <%= link_to "Amend claim", new_admin_claim_amendment_path(@claim), class: "govuk-link" if @claim.amendable? %>
@@ -26,24 +29,4 @@
   </div>
 </div>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <%= render "admin/claims/answer_section", {heading: "Personal details", answers: admin_personal_details(@claim)} %>
-
-    <%= render "admin/claims/answer_section", {heading: "Eligibility details", answers: admin_eligibility_answers(@claim)} %>
-
-    <% if @claim.has_ecp_or_lupp_policy? && @claim.policy_options_provided.present? %>
-      <%= render "admin/claims/answer_section", {heading: "Policy options provided", answers: admin_policy_options_provided(@claim)} %>
-    <% end %>
-
-    <%= render "admin/claims/answer_section", {heading: "Student loan details", answers: admin_student_loan_details(@claim)} %>
-
-    <%= render "admin/claims/answer_section", {heading: "Submission details", answers: admin_submission_details(@claim)} %>
-
-    <%= render("claims_with_matching_details", {matching_claims: @matching_claims, claim: @claim, show_caption: true}) if @matching_claims.any? %>
-
-    <% if @decision.persisted? %>
-      <%= render "admin/claims/answer_section", {heading: "Claim decision details", answers: admin_decision_details(@decision)} %>
-    <% end %>
-  </div>
-</div>
+<%= render("admin/claims/policies/#{@claim.policy.to_s.underscore}/claim") %>

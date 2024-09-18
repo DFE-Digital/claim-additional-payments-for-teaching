@@ -127,7 +127,7 @@ module Journeys
         end
 
         def contract_type
-          if claim.eligibility.fixed_contract?
+          if claim.eligibility.long_term_employed?
             :fixed_contract
           else
             :variable_contract
