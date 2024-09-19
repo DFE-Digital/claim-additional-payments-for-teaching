@@ -695,10 +695,10 @@ en:
     information_provided_further_details_link_text: levelling up premium payment (opens in new tab)
   get_a_teacher_relocation_payment: &get_a_teacher_relocation_payment
     journey_name: "Get a teacher relocation payment"
-    feedback_email: "teach.inengland@education.gov.uk"
+    feedback_email: "international.RELOCATIONPAYMENT@education.gov.uk"
     claim_description: "for a get a teacher relocation payment"
     claim_subject: "International relocation payment"
-    support_email_address: "teach.inengland@education.gov.uk"
+    support_email_address: "international.RELOCATIONPAYMENT@education.gov.uk"
     forms:
       application_route:
         question: "What is your employment status?"
