@@ -277,37 +277,231 @@ RSpec.describe Claim::MatchingAttributeFinder do
     it { is_expected.to eq [other_claim] }
   end
 
-  describe "matching_claims - blank trn, another field group with same contract type, blank provision_search" do
-    before do
-      stub_const("Policies::FurtherEducationPayments::ELIGIBILITY_MATCHING_ATTRIBUTES", [["teacher_reference_number"], ["provision_search", "contract_type"]])
-    end
-
+  describe "matching_claims - blank trn, matching email addresses" do
     let(:policy) { Policies::FurtherEducationPayments }
 
     let!(:source_claim) {
-      eligibility = create(:further_education_payments_eligibility, :eligible, contract_type: "permanent", provision_search: nil)
-      create(
-        :claim,
-        :submitted,
-        policy: policy,
-        eligibility: eligibility
-      )
-    }
-
-    let!(:other_claim) {
-      eligibility = create(:further_education_payments_eligibility, :eligible, contract_type: "permanent", provision_search: nil)
+      eligibility = create(:further_education_payments_eligibility, :eligible)
       create(
         :claim,
         :submitted,
         policy: policy,
         eligibility: eligibility,
-        surname: Faker::Name.last_name
+        email_address: "match@example.com"
+      )
+    }
+
+    let!(:other_claim) {
+      eligibility = create(:further_education_payments_eligibility, :eligible)
+      create(
+        :claim,
+        :submitted,
+        policy: policy,
+        eligibility: eligibility,
+        surname: Faker::Name.last_name,
+        email_address: "match@example.com"
       )
     }
 
     subject(:matching_claims) { Claim::MatchingAttributeFinder.new(source_claim).matching_claims }
 
     it { is_expected.to eq [other_claim] }
+  end
+
+  describe "matching claims across policies" do
+    subject(:matching_claims) do
+      Claim::MatchingAttributeFinder.new(source_claim).matching_claims
+    end
+
+    let(:source_claim) do
+      create(
+        :claim,
+        :submitted,
+        policy: source_policy,
+        email_address: "match@example.com",
+        academic_year: AcademicYear.current
+      )
+    end
+
+    let!(:target_claim) do
+      create(
+        :claim,
+        :submitted,
+        policy: target_policy,
+        email_address: "match@example.com",
+        academic_year: AcademicYear.current
+      )
+    end
+
+    context "with an ECP claim" do
+      let(:source_policy) { Policies::EarlyCareerPayments }
+
+      context "when compared with ECP" do
+        let(:target_policy) { Policies::EarlyCareerPayments }
+
+        it { is_expected.to include(target_claim) }
+      end
+
+      context "when compared with LUP" do
+        let(:target_policy) { Policies::LevellingUpPremiumPayments }
+
+        it { is_expected.to include(target_claim) }
+      end
+
+      context "when compared with TSLR" do
+        let(:target_policy) { Policies::StudentLoans }
+
+        it { is_expected.to include(target_claim) }
+      end
+
+      context "when compared with FE" do
+        let(:target_policy) { Policies::FurtherEducationPayments }
+
+        it { is_expected.to include(target_claim) }
+      end
+
+      context "when compared with IRP" do
+        let(:target_policy) { Policies::InternationalRelocationPayments }
+
+        it { is_expected.not_to include(target_claim) }
+      end
+    end
+
+    context "with an LUP claim" do
+      let(:source_policy) { Policies::LevellingUpPremiumPayments }
+
+      context "when compared with ECP" do
+        let(:target_policy) { Policies::EarlyCareerPayments }
+
+        it { is_expected.to include(target_claim) }
+      end
+
+      context "when compared with LUP" do
+        let(:target_policy) { Policies::LevellingUpPremiumPayments }
+
+        it { is_expected.to include(target_claim) }
+      end
+
+      context "when compared with TSLR" do
+        let(:target_policy) { Policies::StudentLoans }
+
+        it { is_expected.to include(target_claim) }
+      end
+
+      context "when compared with FE" do
+        let(:target_policy) { Policies::FurtherEducationPayments }
+
+        it { is_expected.to include(target_claim) }
+      end
+
+      context "when compared with IRP" do
+        let(:target_policy) { Policies::InternationalRelocationPayments }
+
+        it { is_expected.not_to include(target_claim) }
+      end
+    end
+
+    context "with a TSLR claim" do
+      let(:source_policy) { Policies::StudentLoans }
+
+      context "when compared with ECP" do
+        let(:target_policy) { Policies::EarlyCareerPayments }
+
+        it { is_expected.to include(target_claim) }
+      end
+
+      context "when compared with LUP" do
+        let(:target_policy) { Policies::LevellingUpPremiumPayments }
+
+        it { is_expected.to include(target_claim) }
+      end
+
+      context "when compared with TSLR" do
+        let(:target_policy) { Policies::StudentLoans }
+
+        it { is_expected.to include(target_claim) }
+      end
+
+      context "when compared with FE" do
+        let(:target_policy) { Policies::FurtherEducationPayments }
+
+        it { is_expected.to include(target_claim) }
+      end
+
+      context "when compared with IRP" do
+        let(:target_policy) { Policies::InternationalRelocationPayments }
+
+        it { is_expected.not_to include(target_claim) }
+      end
+    end
+
+    context "with an FE claim" do
+      let(:source_policy) { Policies::FurtherEducationPayments }
+
+      context "when compared with ECP" do
+        let(:target_policy) { Policies::EarlyCareerPayments }
+
+        it { is_expected.to include(target_claim) }
+      end
+
+      context "when compared with LUP" do
+        let(:target_policy) { Policies::LevellingUpPremiumPayments }
+
+        it { is_expected.to include(target_claim) }
+      end
+
+      context "when compared with TSLR" do
+        let(:target_policy) { Policies::StudentLoans }
+
+        it { is_expected.to include(target_claim) }
+      end
+
+      context "when compared with FE" do
+        let(:target_policy) { Policies::FurtherEducationPayments }
+
+        it { is_expected.to include(target_claim) }
+      end
+
+      context "when compared with IRP" do
+        let(:target_policy) { Policies::InternationalRelocationPayments }
+
+        it { is_expected.not_to include(target_claim) }
+      end
+    end
+
+    context "with an IRP claim" do
+      let(:source_policy) { Policies::InternationalRelocationPayments }
+
+      context "when compared with ECP" do
+        let(:target_policy) { Policies::EarlyCareerPayments }
+
+        it { is_expected.not_to include(target_claim) }
+      end
+
+      context "when compared with LUP" do
+        let(:target_policy) { Policies::LevellingUpPremiumPayments }
+
+        it { is_expected.not_to include(target_claim) }
+      end
+
+      context "when compared with TSLR" do
+        let(:target_policy) { Policies::StudentLoans }
+
+        it { is_expected.not_to include(target_claim) }
+      end
+
+      context "when compared with FE" do
+        let(:target_policy) { Policies::FurtherEducationPayments }
+
+        it { is_expected.not_to include(target_claim) }
+      end
+
+      context "when compared with IRP" do
+        let(:target_policy) { Policies::InternationalRelocationPayments }
+
+        it { is_expected.to include(target_claim) }
+      end
+    end
   end
 
   describe "#matching_attributes" do

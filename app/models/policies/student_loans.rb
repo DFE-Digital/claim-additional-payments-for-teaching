@@ -30,7 +30,8 @@ module Policies
     #  - matching claims with multiple policies: MatchingAttributeFinder
     OTHER_CLAIMABLE_POLICIES = [
       EarlyCareerPayments,
-      LevellingUpPremiumPayments
+      LevellingUpPremiumPayments,
+      FurtherEducationPayments
     ]
 
     ELIGIBILITY_MATCHING_ATTRIBUTES = [["teacher_reference_number"]].freeze
