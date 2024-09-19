@@ -8,7 +8,7 @@ describe Admin::ClaimsHelper do
 
     before { assign(:claim, claim) }
 
-    Policies.all.excluding(Policies::FurtherEducationPayments).each do |policy|
+    Policies.all.excluding(Policies::FurtherEducationPayments, Policies::InternationalRelocationPayments).each do |policy|
       context "for policy #{policy}" do
         let(:policy) { policy }
 
@@ -20,6 +20,12 @@ describe Admin::ClaimsHelper do
       let(:policy) { Policies::FurtherEducationPayments }
 
       it { is_expected.to eq "claim_summary_further_education_payments" }
+    end
+
+    context "for InternationalRelocationPayments" do
+      let(:policy) { Policies::InternationalRelocationPayments }
+
+      it { is_expected.to eql "claim_summary_international_relocation_payments" }
     end
   end
 end
