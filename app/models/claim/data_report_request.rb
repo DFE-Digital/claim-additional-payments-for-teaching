@@ -16,7 +16,10 @@ class Claim
       "ITT subject",
       "Policy name",
       "School name",
-      "School unique reference number"
+      "School unique reference number",
+      "Payroll gender",
+      "Nationality",
+      "Passport number"
     ].freeze
 
     def initialize(claims)
@@ -76,6 +79,26 @@ class Claim
             ExcelUtils.escape_formulas(claim.policy),
             ExcelUtils.escape_formulas(claim.eligibility.school.name),
             ExcelUtils.escape_formulas(claim.eligibility.school.urn)
+          ]
+        end
+      end
+
+      class InternationalRelocationPayments < Base
+        def to_csv_row
+          [
+            ExcelUtils.escape_formulas(claim.reference),
+            ExcelUtils.escape_formulas(claim.eligibility.teacher_reference_number),
+            ExcelUtils.escape_formulas(claim.national_insurance_number),
+            ExcelUtils.escape_formulas(claim.full_name),
+            ExcelUtils.escape_formulas(claim.email_address),
+            ExcelUtils.escape_formulas(claim.date_of_birth),
+            ExcelUtils.escape_formulas(nil),
+            ExcelUtils.escape_formulas(claim.policy),
+            ExcelUtils.escape_formulas(claim.eligibility.school.name),
+            ExcelUtils.escape_formulas(claim.eligibility.school.urn),
+            ExcelUtils.escape_formulas(claim.payroll_gender),
+            ExcelUtils.escape_formulas(claim.eligibility.nationality),
+            ExcelUtils.escape_formulas(claim.eligibility.passport_number)
           ]
         end
       end

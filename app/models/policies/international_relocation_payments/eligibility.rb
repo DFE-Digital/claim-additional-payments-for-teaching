@@ -17,6 +17,10 @@ module Policies
       def policy
         Policies::InternationalRelocationPayments
       end
+
+      def school
+        current_school
+      end
     end
   end
 end
