@@ -6,6 +6,7 @@ module Journeys
           SLUGS = %w[
             email-address
             check-your-email
+            expired-link
             ineligible
           ].freeze
 
