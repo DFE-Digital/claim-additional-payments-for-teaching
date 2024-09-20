@@ -339,7 +339,7 @@ RSpec.feature "Admin claim further education payments" do
             end
 
             within_table_row("Timetabled teaching hours") do |claimant, provider|
-              expect(claimant).to have_text("More than 12 hours per week")
+              expect(claimant).to have_text("12 hours or more per week")
               expect(provider).to have_text("Yes")
             end
 
@@ -435,7 +435,7 @@ RSpec.feature "Admin claim further education payments" do
             end
 
             within_table_row("Timetabled teaching hours") do |claimant, provider|
-              expect(claimant).to have_text("More than 12 hours per week")
+              expect(claimant).to have_text("12 hours or more per week")
               expect(provider).to have_text("Yes")
             end
 
