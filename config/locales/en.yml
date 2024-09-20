@@ -148,8 +148,8 @@ en:
       provider_verification:
         title: "Confirm the provider has responded and verified the claimant's information"
       payroll_gender:
-        title: "How is %{first_name} %{surname}’s gender recorded for payroll purposes?"
-        hint: "%{first_name} %{surname} answered ‘don’t know’ to the question ‘how is your gender recorded on your employer’s payroll system?’"
+        title: "How is the claimant’s gender recorded for payroll purposes?"
+        hint: "The claimant answered ‘don’t know’ to the question ‘how is your gender recorded on your employer’s payroll system?’"
       student_loan_amount:
         title: "Check student loan amount"
       student_loan_plan:

@@ -18,12 +18,12 @@
           <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l ">
               <h3 class="govuk-heading-l">
-                <%= t("admin.tasks.payroll_gender.title", first_name: @claim.first_name, surname: @claim.surname) %>
+                <%= t("admin.tasks.payroll_gender.title") %>
               </h3>
             </legend>
 
             <p class="govuk-body">
-              <%= t("admin.tasks.payroll_gender.hint", first_name: @claim.first_name, surname: @claim.surname) %>
+              <%= t("admin.tasks.payroll_gender.hint") %>
             </p>
 
             <%= hidden_field_tag "task[passed]", "true" %>
