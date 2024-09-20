@@ -39,7 +39,7 @@
             <ul class="app-task-list__items">
               <li class="app-task-list__item <%= task_name %>">
                 <span class="app-task-list__task-name">
-                  <%= link_to I18n.t("admin.tasks.#{task_name}.title"), admin_claim_task_path(claim_id: @claim.id, name: task_name), class: "govuk-link" %>
+                  <%= govuk_link_to I18n.t("#{@claim.policy.locale_key}.admin.tasks.#{task_name}.title", default: :"admin.tasks.#{task_name}.title"), admin_claim_task_path(claim_id: @claim.id, name: task_name) %>
                 </span>
                 <%= task_status_tag(@claim, task_name) %>
               </li>
