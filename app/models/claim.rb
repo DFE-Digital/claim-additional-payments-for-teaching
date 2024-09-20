@@ -212,6 +212,10 @@ class Claim < ApplicationRecord
   scope :awaiting_qa, -> { approved.qa_required.where(qa_completed_at: nil) }
   scope :qa_required, -> { where(qa_required: true) }
 
+  def onelogin_idv_full_name
+    "#{onelogin_idv_first_name} #{onelogin_idv_last_name}"
+  end
+
   def hold!(reason:, user:)
     if holdable? && !held?
       self.class.transaction do
@@ -427,7 +431,19 @@ class Claim < ApplicationRecord
     end
   end
 
+  def one_login_idv_mismatch?
+    !one_login_idv_name_match? || !one_login_idv_dob_match?
+  end
+
   private
+
+  def one_login_idv_name_match?
+    onelogin_idv_full_name.downcase == "#{first_name.downcase} #{surname.downcase}"
+  end
+
+  def one_login_idv_dob_match?
+    onelogin_idv_date_of_birth == date_of_birth
+  end
 
   def normalise_ni_number
     self.national_insurance_number = normalised_ni_number

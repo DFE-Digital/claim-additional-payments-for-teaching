@@ -5,6 +5,8 @@ module AutomatedChecks
     RSpec.describe Identity do
       subject(:identity) { described_class.new(**identity_args) }
 
+      let(:data) { {} }
+
       before do
         if data
           body = data
@@ -66,60 +68,54 @@ module AutomatedChecks
         }
       end
 
-      describe "#perform with auto pass for FurtherEducationPayments" do
-        let(:policy) { Policies::FurtherEducationPayments }
-        let(:data) do
-          {
-            dob: claim_arg.date_of_birth,
-            name: claim_arg.full_name,
-            nino: claim_arg.national_insurance_number,
-            trn: claim_arg.eligibility.teacher_reference_number
-          }
+      describe "#perform" do
+        context "when IDV-ed with one login and data matches" do
+          let(:claim_arg) do
+            create(:claim, :submitted, :with_onelogin_idv_data)
+          end
+
+          it "creates a passed task" do
+            expect {
+              subject.perform
+            }.to change(Task.passed_automatically, :count).by(1)
+          end
         end
 
-        subject(:perform) { identity.perform }
-
-        describe "identity confirmation task" do
-          let(:identity_confirmed_with_onelogin) { true }
-
-          subject(:identity_confirmation_task) { claim_arg.tasks.find_by(name: "identity_confirmation") }
-
-          before { perform }
-
-          describe "#claim_verifier_match" do
-            subject(:claim_verifier_match) { identity_confirmation_task.claim_verifier_match }
-
-            it { is_expected.to eq nil }
+        context "when IDV-ed with one login and name does not match" do
+          let(:claim_arg) do
+            create(
+              :claim,
+              :submitted,
+              :with_onelogin_idv_data,
+              first_name: "John",
+              surname: "Doe",
+              onelogin_idv_first_name: "Tom",
+              onelogin_idv_last_name: "Jones"
+            )
           end
 
-          context "identity_confirmed_with_onelogin true" do
-            describe "#passed" do
-              subject(:passed) { identity_confirmation_task.passed }
+          it "creates a failed task" do
+            expect {
+              subject.perform
+            }.to change(Task.where(passed: false), :count).by(1)
+          end
+        end
 
-              it { is_expected.to eq true }
-            end
+        context "when IDV-ed with one login and date of birth does not match" do
+          let(:claim_arg) do
+            create(
+              :claim,
+              :submitted,
+              :with_onelogin_idv_data,
+              date_of_birth: Date.new(1980, 12, 13),
+              onelogin_idv_date_of_birth: Date.new(1970, 1, 1)
+            )
           end
 
-          context "identity_confirmed_with_onelogin false" do
-            let(:identity_confirmed_with_onelogin) { false }
-
-            describe "#passed" do
-              subject(:passed) { identity_confirmation_task.passed }
-
-              it { is_expected.to eq false }
-            end
-          end
-
-          describe "#created_by" do
-            subject(:created_by) { identity_confirmation_task.created_by }
-
-            it { is_expected.to eq nil }
-          end
-
-          describe "#manual" do
-            subject(:manual) { identity_confirmation_task.manual }
-
-            it { is_expected.to eq false }
+          it "creates a failed task" do
+            expect {
+              subject.perform
+            }.to change(Task.where(passed: false), :count).by(1)
           end
         end
       end

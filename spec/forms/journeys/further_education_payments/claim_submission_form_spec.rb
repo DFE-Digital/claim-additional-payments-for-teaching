@@ -15,7 +15,13 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
       :submittable,
       :with_onelogin_credentials,
       identity_confirmed_with_onelogin: true,
-      logged_in_with_onelogin: true
+      logged_in_with_onelogin: true,
+      onelogin_idv_first_name: "John",
+      onelogin_idv_last_name: "Doe",
+      onelogin_idv_date_of_birth: Date.new(1970, 1, 1),
+      first_name: "John",
+      surname: "Doe",
+      date_of_birth: Date.new(1970, 1, 1)
     )
   }
 
@@ -114,6 +120,34 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
 
       expect(original_claim.eligibility.flagged_as_duplicate).to eq(false)
       expect(duplicate_claim.eligibility.flagged_as_duplicate).to eq(true)
+    end
+
+    context "when one login IDV mismatch" do
+      let(:answers) do
+        build(
+          :further_education_payments_answers,
+          :submittable,
+          :with_onelogin_credentials,
+          identity_confirmed_with_onelogin: true,
+          logged_in_with_onelogin: true,
+          onelogin_idv_first_name: "John",
+          onelogin_idv_last_name: "Doe",
+          onelogin_idv_date_of_birth: Date.new(1970, 1, 1),
+          first_name: "Jack",
+          surname: "Doe",
+          date_of_birth: Date.new(1970, 1, 1)
+        )
+      end
+
+      it "does not email the provider" do
+        allow(ClaimMailer).to(
+          receive(:further_education_payment_provider_verification_email)
+        ).and_return(double(deliver_later: nil))
+
+        subject
+
+        expect(ClaimMailer).not_to have_received(:further_education_payment_provider_verification_email)
+      end
     end
   end
 end

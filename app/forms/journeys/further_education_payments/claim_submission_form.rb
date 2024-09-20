@@ -6,6 +6,9 @@ module Journeys
 
         if Policies::FurtherEducationPayments.duplicate_claim?(claim)
           claim.eligibility.update!(flagged_as_duplicate: true)
+        elsif claim.one_login_idv_mismatch?
+          # noop
+          # do not send provider verification email
         else
           ClaimMailer.further_education_payment_provider_verification_email(claim).deliver_later
         end
