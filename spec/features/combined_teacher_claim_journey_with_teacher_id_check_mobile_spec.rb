@@ -152,7 +152,7 @@ RSpec.feature "Combined journey with Teacher ID mobile check" do
     click_on("Continue")
 
     # - Eligibility confirmed
-    choose "£2,000 levelling up premium payment"
+    choose "£2,000 school targeted retention incentive"
     click_on("Apply now")
 
     # - How we will use the information you provide

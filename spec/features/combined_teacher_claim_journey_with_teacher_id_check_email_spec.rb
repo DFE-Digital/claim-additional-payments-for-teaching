@@ -138,7 +138,7 @@ RSpec.feature "Combined journey with Teacher ID email check" do
     click_on("Continue")
 
     expect(page).to have_text("You’re eligible for an additional payment")
-    choose("£2,000 levelling up premium payment")
+    choose("£2,000 school targeted retention incentive")
     click_on("Apply now")
 
     # - How will we use the information you provide
