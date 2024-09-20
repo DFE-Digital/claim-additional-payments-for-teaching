@@ -1,0 +1,23 @@
+<% content_for(:page_title) { page_title("Claim #{@claim.reference} previous residency check for #{@claim.policy.short_name}") } %>
+
+<% content_for :back_link do %>
+  <%= govuk_back_link href: admin_claim_tasks_path(claim_id: @claim.id) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <%= render claim_summary_view, claim: @claim %>
+
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-l"><%= @current_task_name.humanize %></h2>
+  </div>
+
+  <div class="govuk-grid-column-two-thirds">
+    <% if !@task.passed.nil? %>
+      <%= render "task_outcome", task: @task %>
+    <% else %>
+      <%= render "form", task_name: "previous_residency", claim: @claim %>
+    <% end %>
+
+    <%= render partial: "admin/task_pagination" %>
+  </div>
+</div>

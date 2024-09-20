@@ -18,6 +18,7 @@ module Policies
         tasks << "identity_confirmation"
         tasks << "visa"
         tasks << "arrival_date"
+        tasks << "previous_residency"
         tasks << "employment"
         tasks << "employment_contract"
         tasks << "employment_start"
