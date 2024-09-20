@@ -44,7 +44,11 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
   }
 
   let!(:approved_awaiting_payroll_claim) {
-    eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible)
+    eligibility = if policy == Policies::FurtherEducationPayments
+      create(:"#{policy.to_s.underscore}_eligibility", :verified)
+    else
+      create(:"#{policy.to_s.underscore}_eligibility", :eligible)
+    end
     create(
       :claim,
       :payrollable,

@@ -909,12 +909,21 @@ RSpec.describe Claim, type: :model do
   describe ".awaiting_further_education_provider_verification" do
     subject { described_class.awaiting_further_education_provider_verification }
 
+    let!(:claim_not_verified_without_matching_details_task) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible) }
+    let!(:claim_not_verified_with_matching_details_task_answered_no) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible_duplicate) }
+    let!(:claim_not_verified_with_matching_details_task_answered_yes) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible_duplicate) }
+    let!(:claim_not_verified_with_duplicate_claims) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible_duplicate) }
     let!(:claim_with_fe_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_trait: :verified) }
-    let!(:claim_awaiting_fe_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_trait: :not_verified) }
     let!(:non_fe_claim) { create(:claim, policy: Policies::StudentLoans) }
 
-    it "returns claims that are awaiting FE provider verification" do
-      is_expected.to match_array([claim_awaiting_fe_provider_verification])
+    before do
+      create(:task, claim: claim_not_verified_with_matching_details_task_answered_yes, name: "matching_details", passed: true)
+      create(:task, claim: claim_not_verified_with_matching_details_task_answered_no, name: "matching_details", passed: false)
+      create(:task, claim: claim_not_verified_with_matching_details_task_answered_no, name: "student_loan_plan", passed: true)
+    end
+
+    it "returns claims that have not been verified by the provider, and have no matching_details task or have a passed matching_details task" do
+      is_expected.to match_array([claim_not_verified_without_matching_details_task, claim_not_verified_with_matching_details_task_answered_yes])
     end
   end
 
@@ -1326,6 +1335,50 @@ RSpec.describe Claim, type: :model do
 
     context "with a different claimant" do
       let(:other_claim) { create(:claim, national_insurance_number: "BB12345B") }
+
+      it { is_expected.to be false }
+    end
+  end
+
+  describe "#awaiting_provider_verification?" do
+    subject { claim.awaiting_provider_verification? }
+
+    context "when the eligiblity is not verified" do
+      let(:claim) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible) }
+
+      context "there is not a matching_details task" do
+        context "when there are matching claims" do
+          before { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible, email_address: claim.email_address) }
+
+          it { is_expected.to be false }
+        end
+
+        context "when there are no matching claims" do
+          it { is_expected.to be true }
+        end
+      end
+
+      context "when there is a passed matching_details task" do
+        before { create(:task, claim: claim, name: "matching_details", passed: true) }
+
+        it { is_expected.to be true }
+      end
+
+      context "when there is a failed matching_details task" do
+        before { create(:task, claim: claim, name: "matching_details", passed: false) }
+
+        it { is_expected.to be false }
+      end
+    end
+
+    context "when the eligiblity is verified" do
+      let(:claim) { build(:claim, policy: Policies::FurtherEducationPayments, eligibility_trait: :verified) }
+
+      it { is_expected.to be false }
+    end
+
+    context "when the eligiblity is not further education payments" do
+      let(:claim) { build(:claim, policy: Policies::StudentLoans) }
 
       it { is_expected.to be false }
     end
