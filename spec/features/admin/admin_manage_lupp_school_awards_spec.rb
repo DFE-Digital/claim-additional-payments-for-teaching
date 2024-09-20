@@ -29,7 +29,7 @@ RSpec.feature "Managing Levelling Up Premium Payments school awards" do
       create(:levelling_up_premium_payments_award, academic_year: journey_configuration.current_academic_year - 1)
 
       visit current_path
-      expect(page).to have_text "The Levelling Up Premium Payments school award amounts for academic year #{journey_configuration.current_academic_year} were updated on #{Time.zone.now.strftime("%-d %B %Y")}"
+      expect(page).to have_text "The School Targeted Retention Incentive school award amounts for academic year #{journey_configuration.current_academic_year} were updated on #{Time.zone.now.strftime("%-d %B %Y")}"
 
       within "#download" do
         expect(page).to have_select "Academic year", options: [journey_configuration.current_academic_year, journey_configuration.current_academic_year - 1]
@@ -45,7 +45,7 @@ RSpec.feature "Managing Levelling Up Premium Payments school awards" do
 
   scenario "uploading school awards" do
     # When no awards exist
-    expect(page).to have_text "No Levelling Up Premium Payments school award data has been uploaded for academic year #{journey_configuration.current_academic_year}."
+    expect(page).to have_text "No School Targeted Retention Incentive school award data has been uploaded for academic year #{journey_configuration.current_academic_year}."
 
     # No CSV file
     within "#upload" do

@@ -35,7 +35,7 @@ RSpec.describe Claims::ShowHelper do
     context "with a LevellingUpPremiumPayments policy" do
       let(:policy) { Policies::LevellingUpPremiumPayments }
 
-      it { is_expected.to eq "levelling up premium payment" }
+      it { is_expected.to eq "school targeted retention incentive" }
     end
   end
 

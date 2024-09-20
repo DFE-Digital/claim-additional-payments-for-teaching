@@ -111,10 +111,10 @@ RSpec.feature "Combined journey with Teacher ID" do
 
     # - You are eligible for an early career payment
     expect(page).to have_text("You’re eligible for an additional payment")
-    expect(page).to have_field("£2,000 levelling up premium payment")
+    expect(page).to have_field("£2,000 school targeted retention incentive")
     expect(page).to have_selector('input[type="radio"]', count: 2)
 
-    choose("£2,000 levelling up premium payment")
+    choose("£2,000 school targeted retention incentive")
 
     click_on("Apply now")
 
@@ -231,7 +231,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     click_on "Continue"
     click_on "Continue"
 
-    choose "£2,000 levelling up premium payment"
+    choose "£2,000 school targeted retention incentive"
     click_on "Apply now"
     click_on "Continue"
 

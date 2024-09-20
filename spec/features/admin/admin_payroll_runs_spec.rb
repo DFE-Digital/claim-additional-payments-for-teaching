@@ -45,8 +45,8 @@ RSpec.feature "Payroll" do
 
     expect(page).to have_content("Student Loans 2 £2,000.00")
     expect(page).to have_content("Early-Career Payments 1 £5,000.00")
-    expect(page).to have_content("Levelling Up Premium Payments 1 £2,000.00")
-    expect(page).to have_content("Levelling Up Premium Payments Top Ups 1 £500.00")
+    expect(page).to have_content("School Targeted Retention Incentive 1 £2,000.00")
+    expect(page).to have_content("School Targeted Retention Incentive Top Ups 1 £500.00")
   end
 
   context "when a payroll run already exists for the month" do

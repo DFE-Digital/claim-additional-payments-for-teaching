@@ -61,7 +61,7 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
     # - Check your answers for eligibility
     click_on("Continue")
 
-    choose("£2,000 levelling up premium payment")
+    choose("£2,000 school targeted retention incentive")
     click_on("Apply now")
 
     # - How will we use the information you provide

@@ -78,7 +78,7 @@ module Policies
     end
 
     def eligibility_page_url
-      "https://www.gov.uk/guidance/levelling-up-premium-payments-for-teachers"
+      "https://www.gov.uk/guidance/targeted-retention-incentive-payments-for-school-teachers"
     end
 
     def eligibility_criteria_url

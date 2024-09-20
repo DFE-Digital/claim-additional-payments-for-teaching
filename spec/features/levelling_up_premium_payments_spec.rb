@@ -114,7 +114,7 @@ RSpec.feature "Levelling up premium payments claims" do
     click_on("Continue")
 
     expect(page).to have_text("You’re eligible for an additional payment")
-    expect(page).to have_text("levelling up premium payment of:\n£2,000")
+    expect(page).to have_text("school targeted retention incentive of:\n£2,000")
 
     click_on("Apply now")
   end
@@ -124,7 +124,7 @@ RSpec.feature "Levelling up premium payments claims" do
 
     # - How will we use the information you provide
     expect(page).to have_text("How we will use the information you provide")
-    expect(page).to have_text("For more details, you can read about payments and deductions for the levelling up premium payment")
+    expect(page).to have_text("For more details, you can read about payments and deductions for the school targeted retention incentive")
     click_on "Continue"
 
     # - Personal details
@@ -258,7 +258,7 @@ RSpec.feature "Levelling up premium payments claims" do
       expect(submitted_claim.eligibility.teacher_reference_number).to eql("1234567")
 
       # - Application complete (make sure its Word for Word and styling matches)
-      expect(page).to have_text("You applied for a levelling up premium payment")
+      expect(page).to have_text("You applied for a school targeted retention incentive")
       expect(page).to have_text("What happens next")
       expect(page).to have_text("Set a reminder to apply next year")
       expect(page).to have_text("Apply for additional payment each academic year")
