@@ -211,7 +211,7 @@ class Claim < ApplicationRecord
   scope :not_awaiting_qa, -> { approved.where("qa_required = false OR (qa_required = true AND qa_completed_at IS NOT NULL)") }
   scope :awaiting_qa, -> { approved.qa_required.where(qa_completed_at: nil) }
   scope :qa_required, -> { where(qa_required: true) }
-  scope :awaiting_fe_provider_verification, -> do
+  scope :awaiting_further_education_provider_verification, -> do
     joins("INNER JOIN further_education_payments_eligibilities ON further_education_payments_eligibilities.id = claims.eligibility_id")
       .where("further_education_payments_eligibilities.verification = '{}'")
   end

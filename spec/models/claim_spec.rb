@@ -906,8 +906,8 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe ".awaiting_fe_provider_verification" do
-    subject { described_class.awaiting_fe_provider_verification }
+  describe ".awaiting_further_education_provider_verification" do
+    subject { described_class.awaiting_further_education_provider_verification }
 
     let!(:claim_with_fe_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_trait: :verified) }
     let!(:claim_awaiting_fe_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible) }
