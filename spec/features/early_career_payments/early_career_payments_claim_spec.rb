@@ -881,7 +881,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       # - Select your home address
       expect(page).to have_text(I18n.t("questions.address.home.title"))
 
-      choose "flat_11_millbrook_tower_windermere_avenue_southampton_so16_9fx"
+      choose "Flat 11, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX"
       click_on "Continue"
 
       # - What is your address

@@ -24,7 +24,8 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
-    expect(page).to have_selector "input[type=radio][checked=checked][value='#{college.id}']", visible: false
+    expect(page).to have_selector "input[type=radio][value='#{college.id}']", visible: false
+    choose college.name
     click_button "Continue"
 
     expect(page).to have_content("What type of contract do you have with #{college.name}?")

@@ -35,7 +35,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::ClaimSubmis
       subject
       expect(eligibility.nursery_urn).to eq answers.nursery_urn
       expect(eligibility.child_facing_confirmation_given).to eq answers.child_facing_confirmation_given
-      expect(eligibility.first_job_within_6_months).to eq answers.first_job_within_6_months
+      expect(eligibility.returning_within_6_months).to eq answers.returning_within_6_months
       expect(eligibility.start_date).to eq answers.start_date
     end
   end

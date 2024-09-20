@@ -10,7 +10,7 @@ module Policies
       end
 
       def provider_verification
-        AdminProviderVerificationTaskPresenter.new(claim).rows
+        AdminProviderVerificationTaskPresenter.new(claim)
       end
 
       def provider_name
@@ -35,7 +35,9 @@ module Policies
       end
 
       def student_loan_plan
-        []
+        [
+          ["Student loan plan", claim.student_loan_plan&.humanize]
+        ]
       end
 
       private

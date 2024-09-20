@@ -2,7 +2,6 @@
 <html lang="en" class="govuk-template app-html-class">
   <head>
     <title>
-
       <%= content_for(:page_title) || "#{t("service_name")} – GOV.UK" %>
     </title>
     <%= csrf_meta_tags %>
@@ -17,12 +16,14 @@
     <%= favicon_link_tag 'govuk-icon-192.png', rel: 'apple-touch-icon', type: 'image/png', sizes: '192x192' %>
     <%= favicon_link_tag 'govuk-icon-512.png', rel: 'apple-touch-icon', type: 'image/png', sizes: '512x512' %>
 
-    <% if ENV["GOOGLE_ANALYTICS_ID"] %>
-      <%= javascript_include_tag "google_analytics/analytics" %>
-      <%= javascript_include_tag "google_analytics", data: { "ga-id" => ENV["GOOGLE_ANALYTICS_ID"] } %>
+    <% if cookies_accepted? %>
+      <% if ENV["GOOGLE_ANALYTICS_ID"] %>
+        <%= javascript_include_tag "google_analytics/analytics" %>
+        <%= javascript_include_tag "google_analytics", data: { "ga-id" => ENV["GOOGLE_ANALYTICS_ID"] } %>
 
-      <% if ENV["GTM_ANALYTICS"] %>
-        <%= javascript_include_tag "google_gtm" %>
+        <% if ENV["GTM_ANALYTICS"] %>
+          <%= javascript_include_tag "google_gtm" %>
+        <% end %>
       <% end %>
     <% end %>
 
@@ -32,30 +33,24 @@
   <body class="govuk-template__body">
     <%= javascript_include_tag 'js_check' %>
 
-    <% if ENV["GOOGLE_ANALYTICS_ID"] %>
-      <noscript>
-        <iframe
-          src="https://www.googletagmanager.com/ns.html?<%= ENV["GTM_ANALYTICS"] %>"
-          height="0"
-          width="0"
-          style="display:none;visibility:hidden">
-        </iframe>
-      </noscript>
+    <% if cookies_accepted? %>
+      <% if ENV["GOOGLE_ANALYTICS_ID"] %>
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?<%= ENV["GTM_ANALYTICS"] %>"
+            height="0"
+            width="0"
+            style="display:none;visibility:hidden">
+          </iframe>
+        </noscript>
+      <% end %>
     <% end %>
 
     <%= render("timeout_dialog", timeout_in_minutes: admin_timeout_in_minutes, path_on_timeout: admin_sign_in_path, refresh_session_path: admin_refresh_session_path) if admin_signed_in? %>
 
-    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+    <%= render "admin/cookie_banner" %>
 
-    <div id="global-cookie-message" class="govuk-cookie-banner" role="region" aria-label="cookie banner">
-      <div class="govuk-width-container">
-        <p class="govuk-cookie-banner__message"><%= t("service_name") %> uses cookies to make the site simpler.</p>
-        <div class="govuk-cookie-banner__buttons">
-          <button id="accept-cookies" class="govuk-button" type="submit" data-module="govuk-button">Accept cookies</button>
-          <%= link_to('Cookie information', cookies_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME), class: "govuk-cookie-banner__link" ) %>
-        </div>
-      </div>
-    </div>
+    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
 
     <header class="govuk-header" data-module="govuk-header">
       <div class="govuk-header__container govuk-width-container">
@@ -103,6 +98,9 @@
           <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
             <h2 class="govuk-visually-hidden">Support links</h2>
             <ul class="govuk-footer__inline-list">
+              <li class="govuk-footer__inline-list-item">
+                <%= link_to "Cookies", admin_cookies_path, class: "govuk-footer__link" %>
+              </li>
               <li class="govuk-footer__inline-list-item">
                 <%= link_to "Accessibility statement", admin_accessibility_statement_path, class: "govuk-footer__link" %>
               </li>

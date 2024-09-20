@@ -24,7 +24,7 @@
 
     <%= render partial: "submissions/confirmation" %>
 
-    <% if submitted_claim.set_a_reminder? %>
+    <% if journey.set_a_reminder?(itt_academic_year: submitted_claim.eligibility.itt_academic_year) %>
       <%= render partial: "submissions/reminder" %>
     <% end %>
 

@@ -48,7 +48,7 @@ module Policies
         end.flatten
       end
 
-      def fixed_contract?
+      def long_term_employed?
         case contract_type
         when "permanent"
           true
@@ -57,6 +57,10 @@ module Policies
         when "fixed_term"
           !!fixed_term_full_year
         end
+      end
+
+      def permanent_contract?
+        contract_type == "permanent"
       end
 
       def verified?

@@ -12,10 +12,11 @@ module Journeys
       def save
         return unless valid?
 
-        journey_session.answers.assign_attributes(school_id: possible_school_id)
+        journey_session.answers.assign_attributes(
+          possible_school_id:,
+          school_id: possible_school_id
+        )
         journey_session.save!
-
-        true
       end
 
       private

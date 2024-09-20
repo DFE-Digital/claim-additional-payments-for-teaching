@@ -1,0 +1,24 @@
+<% question = @form.t("question", first_name: answers.first_name) %>
+<% content_for(:page_title, page_title(question, journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_collection_radio_buttons :returner_contract_type, @form.radio_options, :id, :name, legend: { text: question, tag: "h1", size: "l" } %>
+
+      <%= govuk_details(summary_text: "What does casual or temporary work include?") do %>
+        <p class="govuk-body">Casual or temporary work could include:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>zero-hour contracts</li>
+          <li>guaranteed minimum hour contracts</li>
+          <li>self-employed or freelance contracts</li>
+          <li>fixed term contracts (FTCs)</li>
+          <li>agency work and apprenticeship roles</li>
+        </ul>
+      <% end %>
+
+      <%= f.govuk_submit "Continue" %>
+    <% end %>
+  </div>

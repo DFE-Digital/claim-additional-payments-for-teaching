@@ -21,7 +21,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
     visit admin_claims_path
     find("a[href='#{admin_claim_tasks_path(claim)}']").click
 
-    click_on I18n.t("admin.tasks.identity_confirmation")
+    click_on I18n.t("admin.tasks.identity_confirmation.title")
 
     expect(page).to have_content("Did #{claim.full_name} submit the claim?")
     expect(page).to have_link("Next: Qualifications")
@@ -93,7 +93,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
     visit admin_claims_path
     find("a[href='#{admin_claim_tasks_path(claim)}']").click
 
-    click_on I18n.t("admin.tasks.identity_confirmation")
+    click_on I18n.t("admin.tasks.identity_confirmation.title")
 
     expect(page).to have_content("Did #{claim.full_name} submit the claim?")
     expect(page).to have_link("Next: Qualifications")
@@ -176,7 +176,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
     visit admin_claims_path
     find("a[href='#{admin_claim_tasks_path(claim)}']").click
 
-    click_on I18n.t("admin.tasks.identity_confirmation")
+    click_on I18n.t("admin.tasks.identity_confirmation.title")
 
     expect(page).to have_content("Did #{claim.full_name} submit the claim?")
     expect(page).to have_link("Next: Qualifications")

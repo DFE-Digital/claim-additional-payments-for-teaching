@@ -1,5 +1,6 @@
 <% title = "#{answers.first_name} is not eligible for this payment" %>
 <% content_for(:page_title, page_title(title, journey: current_journey_routing_name)) %>
+<% @backlink_path = claim_path(current_journey_routing_name, "child-facing") %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">

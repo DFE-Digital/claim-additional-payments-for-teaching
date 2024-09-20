@@ -121,6 +121,8 @@ class ClaimsController < BasePublicController
       journey_session.answers.assign_attributes(email_address: params[:email])
       journey_session.answers.assign_attributes(email_verified: true)
       journey_session.save!
+    else
+      redirect_to claim_path(Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME, "expired-link") and return
     end
     redirect_to_next_slug if claim_in_progress?
   end

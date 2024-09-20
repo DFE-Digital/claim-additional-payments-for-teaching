@@ -133,24 +133,42 @@ en:
     unknown_payroll_gender_preventing_approval_message:
       This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
     tasks:
-      qualifications: "Check qualification information"
-      induction_confirmation: "Check induction information"
-      employment: "Check employment information"
-      matching_details: "Review matching details from other claims"
-      identity_confirmation: "Confirm the claimant made the claim"
-      provider_verification: "Confirm the provider verification"
-      payroll_gender: "Add a payroll gender for HMRC"
-      student_loan_amount: "Check student loan amount"
-      student_loan_plan: "Check student loan plan"
-      payroll_details: "Check bank/building society account details"
-      census_subjects_taught: "Check eligible subjects are taught"
-      visa: "Check visa"
-      arrival_date: "Check arrival date"
-      employment_contract: "Check employment contract"
-      employment_start: "Check employment start date"
-      subject: "Check subject"
-      teaching_hours: "Check teaching hours"
-
+      qualifications:
+        title: "Check qualification information"
+      induction_confirmation:
+        title: "Check induction information"
+      employment:
+        title: "Check employment information"
+      matching_details:
+        title: "Review matching details from other claims"
+      identity_confirmation:
+        title: "Confirm the claimant made the claim"
+      provider_verification:
+        title: "Confirm the provider has responded and verified the claimant's information"
+      payroll_gender:
+        title: "Add a payroll gender for HMRC"
+        hint: "The claimant answered ‘Don't know’ to the question ‘What gender does your school's payroll system associate with you?’"
+      student_loan_amount:
+        title: "Check student loan amount"
+      student_loan_plan:
+        title: "Check student loan plan"
+      payroll_details:
+        title: "Check bank/building society account details"
+        question: "The claimant’s %{bank_or_building_society} details have not been automatically validated. Has the claimant confirmed their %{bank_or_building_society} details?"
+      census_subjects_taught:
+        title: "Check eligible subjects are taught"
+      visa:
+        title: "Check visa"
+      arrival_date:
+        title: "Check arrival date"
+      employment_contract:
+        title: "Check employment contract"
+      employment_start:
+        title: "Check employment start date"
+      subject:
+        title: "Check subject"
+      teaching_hours:
+        title: "Check teaching hours"
     undo_decision:
       approved: "Undo approval"
       rejected: "Undo rejection"
@@ -413,10 +431,6 @@ en:
           title: "Does the claimant’s student loan amount and plan type match the information we hold about their loan?"
         matching_details:
           title: "Is this claim still valid despite having matching details with other claims?"
-        payroll_details:
-          title:
-            "The claimant’s %{bank_or_building_society} details have not been automatically validated. Has the claimant
-            confirmed their %{bank_or_building_society} details?"
   additional_payments: &additional_payments
     forms:
       correct_school:
@@ -656,10 +670,6 @@ en:
           title: Does the claimant's subject match the schools workforce census subjects
         matching_details:
           title: "Is this claim still valid despite having matching details with other claims?"
-        payroll_details:
-          title:
-            "The claimant’s %{bank_or_building_society} details have not been automatically validated. Has the claimant
-            confirmed their %{bank_or_building_society} details?"
     reminders:
       full_name: Full name
     information_provided_further_details: For more details, you can read about payments and deductions for the %{link}
@@ -685,10 +695,10 @@ en:
     information_provided_further_details_link_text: levelling up premium payment (opens in new tab)
   get_a_teacher_relocation_payment: &get_a_teacher_relocation_payment
     journey_name: "Get a teacher relocation payment"
-    feedback_email: "teach.inengland@education.gov.uk"
+    feedback_email: "international.RELOCATIONPAYMENT@education.gov.uk"
     claim_description: "for a get a teacher relocation payment"
     claim_subject: "International relocation payment"
-    support_email_address: "teach.inengland@education.gov.uk"
+    support_email_address: "international.RELOCATIONPAYMENT@education.gov.uk"
     forms:
       application_route:
         question: "What is your employment status?"
@@ -847,9 +857,14 @@ en:
           duplicate_claim: "Duplicate claim"
           no_response: "No response"
           other: "Other"
+      tasks:
+        payroll_gender:
+          hint: "The claimant answered ‘Don't know’ to the question ‘How is your gender recorded on your employer’s payroll system?'"
       task_questions:
         matching_details:
           title: Is this claim still valid despite having matching details with other claims?
+        payroll_details:
+          title: "Check bank/building society account details"
         provider_verification:
           title: "Has the provider confirmed the claimant's details?"
           contract_type:
@@ -890,6 +905,8 @@ en:
             claimant_answers:
               true: "Yes"
               false: "No"
+        student_loan_plan:
+          title: "Does the claimant’s student loan plan match the information we hold about their loan?"
     forms:
       ineligible:
         courses:
@@ -1167,7 +1184,7 @@ en:
       btn_text: Accept and send
   further_education_payments_provider:
     journey_name: Claim a targeted retention incentive payment for further education teachers - provider
-    feedback_email: "FE-Levellingup.PremiumPayments@education.gov.uk"
+    feedback_email: "FE-targeted.retention-incentive@education.gov.uk"
     support_email_address: "FE-targeted.retention-incentive@education.gov.uk"
     forms:
       verify_claim:
@@ -1310,6 +1327,20 @@ en:
       returner:
         question:
           Did %{first_name} work in an early years setting between %{six_months_before_start_date} and %{start_date}?
+        errors:
+          inclusion: You must select an option below to continue
+      returner_worked_with_children:
+        question:
+          Did %{first_name}’s previous role in an early years setting involve mostly working directly with children?
+        errors:
+          inclusion: You must select an option below to continue
+      returner_contract_type:
+        question: Select the contract type for %{first_name}’s previous role in an early years setting
+        options:
+          permanent: permanent
+          casual_or_temporary: casual or temporary
+          voluntary_or_unpaid: voluntary or unpaid
+          agency_work_and_apprenticeships: agency work and apprenticeship roles
         errors:
           inclusion: You must select an option below to continue
       employee_email:

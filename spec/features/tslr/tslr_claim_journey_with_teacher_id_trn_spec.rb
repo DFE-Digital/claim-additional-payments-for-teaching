@@ -94,7 +94,7 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
     # - Select your home address
     expect(page).to have_text(I18n.t("questions.address.home.title"))
 
-    choose "flat_11_millbrook_tower_windermere_avenue_southampton_so16_9fx"
+    choose "Flat 11, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX"
     click_on "Continue"
 
     # - select-email page

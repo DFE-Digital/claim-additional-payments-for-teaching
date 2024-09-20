@@ -301,7 +301,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       # - Select your home address
       expect(page).to have_text(I18n.t("questions.address.home.title"))
 
-      choose "flat_11_millbrook_tower_windermere_avenue_southampton_so16_9fx"
+      choose "Flat 11, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX"
       click_on "Continue"
 
       journey_session.reload
@@ -445,7 +445,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       expect(page).to have_text("6, Wearside Road, London, SE13 7UN")
       expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
 
-      choose "5_wearside_road_london_se13_7un"
+      choose "5, Wearside Road, London, SE13 7UN"
       click_on "Continue"
 
       journey_session.reload

@@ -324,6 +324,7 @@ GEM
       validate_url
       webfinger (~> 1.2)
     os (1.1.4)
+    ostruct (0.6.0)
     pagy (8.6.3)
     parallel (1.25.1)
     parallel_tests (4.7.1)
@@ -590,6 +591,7 @@ DEPENDENCIES
   omniauth
   omniauth-rails_csrf_protection
   omniauth_openid_connect
+  ostruct
   pagy
   pg (>= 0.18, < 2.0)
   pry

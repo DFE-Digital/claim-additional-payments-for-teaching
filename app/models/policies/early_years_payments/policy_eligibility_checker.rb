@@ -38,7 +38,15 @@ module Policies
           :nursery_is_not_listed
         elsif answers.child_facing_confirmation_given == false
           :not_child_facing_enough
+        elsif ineligible_returner?
+          :returner
         end
+      end
+
+      private
+
+      def ineligible_returner?
+        answers.returning_within_6_months && answers.returner_worked_with_children && answers.returner_contract_type == "permanent"
       end
     end
   end

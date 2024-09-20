@@ -51,8 +51,18 @@ Rails.application.routes.draw do
     get "existing-session", as: :existing_session, to: "claims#existing_session"
     post "start-new", to: "claims#start_new", as: :start_new
 
-    %w[terms_conditions contact_us cookies accessibility_statement].each do |page_name|
+    %w[terms_conditions contact_us accessibility_statement].each do |page_name|
       get page_name.dasherize, to: "static_pages##{page_name}", as: page_name
+    end
+
+    get "cookies", to: "static_pages#cookies_page"
+
+    resource :cookies, only: [:update] do
+      collection do
+        post "accept"
+        post "reject"
+        post "hide"
+      end
     end
 
     scope constraints: {journey: /further-education-payments/} do
@@ -158,5 +168,14 @@ Rails.application.routes.draw do
     patch "bulk_deallocate", to: "allocations#bulk_deallocate"
 
     get "accessibility-statement", to: "static_pages#accessibility_statement"
+    get "cookies", to: "static_pages#cookies_page"
+
+    resource :cookies, only: [:update] do
+      collection do
+        post "accept"
+        post "reject"
+        post "hide"
+      end
+    end
   end
 end
