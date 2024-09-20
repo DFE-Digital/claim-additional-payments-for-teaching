@@ -13,7 +13,6 @@ module Policies
     ].freeze
 
     # Used in
-    #  - checking payments with multiple policies: ClaimsPreventingPaymentFinder
     #  - matching claims with multiple policies: MatchingAttributeFinder
     OTHER_CLAIMABLE_POLICIES = [
       EarlyCareerPayments,
