@@ -10,6 +10,7 @@ FactoryBot.define do
       eligibility_trait { nil }
       eligibility_attributes { nil }
       decision_creator { nil }
+      rejected_reasons { nil }
       using_mobile_number_from_tid { false }
     end
 
@@ -153,9 +154,13 @@ FactoryBot.define do
 
     trait :rejected do
       submitted
-      after(:build) do |claim|
+      after(:build) do |claim, evaluator|
         claim.save
-        create(:decision, :rejected, claim: claim)
+        if evaluator.rejected_reasons
+          create(:decision, :rejected, claim: claim, rejected_reasons: evaluator.rejected_reasons)
+        else
+          create(:decision, :rejected, claim: claim)
+        end
       end
     end
 
