@@ -159,7 +159,7 @@ RSpec.feature "Admin views claim details for FurtherEducationPayments" do
       ).to have_content("No")
 
       expect(
-        summary_row("Targeted Retention Incentive Payment For FE Teachers")
+        summary_row("Further Education Targeted Retention Incentive")
       ).to have_content("£6,000")
 
       expect(summary_row("Started at")).to have_content("1 August 2024 10:00am")
