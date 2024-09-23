@@ -245,7 +245,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
       expect(answers).not_to have_student_loan
       expect(answers.student_loan_repayment_amount).to eql(0)
-      expect(answers.student_loan_plan).to eql(Claim::NO_STUDENT_LOAN)
+      expect(answers.student_loan_plan).to be nil
 
       fill_in_remaining_personal_details_and_submit
     end

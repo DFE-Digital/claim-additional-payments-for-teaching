@@ -104,8 +104,8 @@ RSpec.describe Claim, type: :model do
   end
 
   context "when saving in the “student-loan” validation context" do
-    it "validates the presence of has_student_loan" do
-      expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1, has_student_loan: nil)).not_to be_valid(:"student-loan")
+    it "validates has_student_loan" do
+      expect(build(:claim, student_loan_plan: nil, has_student_loan: nil)).to be_valid(:"student-loan")
       expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1, has_student_loan: true)).to be_valid(:"student-loan")
       expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1, has_student_loan: false)).to be_valid(:"student-loan")
     end

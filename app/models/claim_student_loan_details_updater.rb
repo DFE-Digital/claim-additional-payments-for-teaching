@@ -12,6 +12,7 @@ class ClaimStudentLoanDetailsUpdater
       eligibility.update!(eligibility_student_loan_attributes) if claim.has_tslr_policy?
 
       claim.assign_attributes(claim_student_loan_attributes)
+
       claim.save!(context: :"student-loan")
     end
   rescue => e
@@ -32,7 +33,7 @@ class ClaimStudentLoanDetailsUpdater
 
   def claim_student_loan_attributes
     {
-      has_student_loan: student_loans_data.found_data?,
+      has_student_loan: student_loans_data.has_student_loan?,
       student_loan_plan: student_loans_data.student_loan_plan
     }
   end

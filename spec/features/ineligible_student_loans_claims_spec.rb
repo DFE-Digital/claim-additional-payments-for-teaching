@@ -7,7 +7,8 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   let!(:journey_configuration) { create(:journey_configuration, :student_loans) }
   let!(:school) { create(:school, :student_loans_eligible) }
   let!(:ineligible_school) { create(:school, :student_loans_ineligible) }
-  let(:imported_slc_data) { create(:student_loans_data, nino:, date_of_birth:, plan_type_of_deduction: 1, amount: 0) }
+  let(:import_zero_amount_slc_data) { create(:student_loans_data, nino:, date_of_birth:, plan_type_of_deduction: 1, amount: 0) }
+  let(:import_no_data_slc_data) { create(:student_loans_data, nino:, date_of_birth:, plan_type_of_deduction: nil, amount: 0) }
   let(:eligible_itt_years) { JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(journey_configuration.current_academic_year) }
   let(:academic_date) { Date.new(eligible_itt_years.first.start_year, 12, 1) }
   let(:itt_year) { AcademicYear.for(academic_date) }
@@ -118,7 +119,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   end
 
   scenario "claimant made zero student loan repayments (Non-TID journey)" do
-    imported_slc_data
+    import_zero_amount_slc_data
 
     start_student_loans_claim
     choose_school school
@@ -133,9 +134,41 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     choose "No"
     click_on "Continue"
-
+    click_on "Continue"
     click_on "Continue"
 
+    # - Personal details
+    fill_in "First name", with: "Russell"
+    fill_in "Last name", with: "Wong"
+
+    fill_in "Day", with: Date.parse(date_of_birth).day
+    fill_in "Month", with: Date.parse(date_of_birth).month
+    fill_in "Year", with: Date.parse(date_of_birth).year
+
+    fill_in "National Insurance number", with: nino
+    click_on "Continue"
+
+    expect(page).to have_text("Your student loan repayment amount is £0.00")
+    expect(page).to have_text("you are not eligible to claim back any repayments")
+  end
+
+  scenario "claimant has no student loan (Non-TID journey)" do
+    import_no_data_slc_data
+
+    start_student_loans_claim
+    choose_school school
+
+    check "Physics"
+    click_on "Continue"
+
+    choose_still_teaching("Yes, at #{school.name}")
+
+    choose "Yes"
+    click_on "Continue"
+
+    choose "No"
+    click_on "Continue"
+    click_on "Continue"
     click_on "Continue"
 
     # - Personal details
@@ -157,7 +190,54 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     set_mock_auth(trn, {date_of_birth:, nino:})
     stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:}, body: eligible_dqt_body)
 
-    imported_slc_data
+    import_zero_amount_slc_data
+
+    visit landing_page_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
+
+    # - Landing (start)
+    click_on "Start now"
+    click_on "Continue with DfE Identity"
+
+    # - Teacher details page
+    choose "Yes"
+    click_on "Continue"
+
+    # - Qualification details
+    choose "Yes"
+    click_on "Continue"
+
+    # - Which school do you teach at
+    choose_school school
+    click_on "Continue"
+
+    # - Select subject
+    check "Physics"
+    click_on "Continue"
+    choose_still_teaching("Yes, at #{school.name}")
+
+    #  - Are you still employed to teach at
+    choose "Yes"
+    click_on "Continue"
+
+    #  - leadership-position question
+    choose "No"
+    click_on "Continue"
+
+    #  - Eligibility confirmed
+    click_on "Continue"
+
+    # - information-provided page
+    click_on "Continue"
+
+    expect(page).to have_text("Your student loan repayment amount is £0.00")
+    expect(page).to have_text("you are not eligible to claim back any repayments")
+  end
+
+  scenario "claimant has no student loan (TID journey)" do
+    set_mock_auth(trn, {date_of_birth:, nino:})
+    stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:}, body: eligible_dqt_body)
+
+    import_no_data_slc_data
 
     visit landing_page_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
 
