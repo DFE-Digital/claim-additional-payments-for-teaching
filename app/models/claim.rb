@@ -447,10 +447,7 @@ class Claim < ApplicationRecord
   def awaiting_provider_verification?
     return false unless has_further_education_policy?
 
-    return false if eligibility.verified?
-
-    # TODO - duplication with app/models/policies/further_education_payments/admin_provider_verification_task_presenter.rb
-    !eligibility.flagged_as_duplicate? || notes.where(label: "provider_verification").any?
+    eligibility.awaiting_provider_verification?
   end
 
   private

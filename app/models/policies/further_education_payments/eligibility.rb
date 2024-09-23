@@ -70,6 +70,13 @@ module Policies
       def verified?
         verification.present?
       end
+
+      def awaiting_provider_verification?
+        return false if verified?
+
+        # when a provider verification email is sent by the admin team, a note is created
+        !flagged_as_duplicate? || claim.notes.where(label: "provider_verification").any?
+      end
     end
   end
 end
