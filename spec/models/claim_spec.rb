@@ -906,6 +906,18 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  describe ".awaiting_further_education_provider_verification" do
+    subject { described_class.awaiting_further_education_provider_verification }
+
+    let!(:claim_with_fe_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_trait: :verified) }
+    let!(:claim_awaiting_fe_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible) }
+    let!(:non_fe_claim) { create(:claim, policy: Policies::StudentLoans) }
+
+    it "returns claims that are awaiting FE provider verification" do
+      is_expected.to match_array([claim_awaiting_fe_provider_verification])
+    end
+  end
+
   describe "#amendable?" do
     it "returns false for a claim that hasn’t been submitted" do
       claim = build(:claim, :submittable)

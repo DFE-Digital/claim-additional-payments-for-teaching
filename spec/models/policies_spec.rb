@@ -34,7 +34,7 @@ RSpec.describe Policies, type: :model do
         ["Early-Career Payments", "early-career-payments"],
         ["School Targeted Retention Incentive", "levelling-up-premium-payments"],
         ["International Relocation Payments", "international-relocation-payments"],
-        ["Targeted Retention Incentive Payment For FE Teachers", "further-education-payments"]
+        ["Further Education Targeted Retention Incentive", "further-education-payments"]
       ])
     end
   end

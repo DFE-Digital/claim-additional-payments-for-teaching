@@ -201,6 +201,7 @@ module Admin
     end
 
     STATUS_FILTERS = [
+      ["Awaiting provider verification", "awaiting_provider_verification"],
       ["Awaiting decision - on hold", "held"],
       ["Awaiting decision - failed bank details", "failed_bank_validation"],
       ["Approved awaiting QA", "approved_awaiting_qa"],
