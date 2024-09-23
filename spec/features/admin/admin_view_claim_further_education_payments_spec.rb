@@ -2,15 +2,13 @@ require "rails_helper"
 
 RSpec.feature "Admin view claim for FurtherEducationPayments" do
   let!(:journey_configuration) { create(:journey_configuration, "further_education_payments") }
-  let(:eligibility) { create(:further_education_payments_eligibility, :eligible) }
   let(:eligibility_with_trn) { create(:further_education_payments_eligibility, :eligible, :with_trn) }
-  let(:eligibility_verified) { create(:further_education_payments_eligibility, :verified) }
   let!(:claim) {
     create(
       :claim,
       :submitted,
       policy: Policies::FurtherEducationPayments,
-      eligibility: eligibility
+      eligibility_trait: :eligible
     )
   }
   let!(:claim_with_trn) {
@@ -21,29 +19,20 @@ RSpec.feature "Admin view claim for FurtherEducationPayments" do
       eligibility: eligibility_with_trn
     )
   }
-  let!(:claim_with_no_matching_details_task) {
+  let!(:claim_with_duplicates_no_provider_email_sent) {
     create(
       :claim,
       :submitted,
       policy: Policies::FurtherEducationPayments,
-      eligibility: eligibility,
-      email_address: claim_with_trn.email_address
+      eligibility_trait: :eligible_duplicate
     )
   }
-  let!(:claim_with_matching_details_task_answered_yes) {
+  let!(:claim_with_duplicates_provider_email_sent) {
     create(
       :claim,
       :submitted,
       policy: Policies::FurtherEducationPayments,
-      eligibility: eligibility
-    )
-  }
-  let!(:claim_with_matching_details_task_answered_no) {
-    create(
-      :claim,
-      :submitted,
-      policy: Policies::FurtherEducationPayments,
-      eligibility: eligibility
+      eligibility_trait: :eligible_duplicate
     )
   }
   let!(:verified_claim) {
@@ -51,14 +40,13 @@ RSpec.feature "Admin view claim for FurtherEducationPayments" do
       :claim,
       :submitted,
       policy: Policies::FurtherEducationPayments,
-      eligibility: eligibility_verified
+      eligibility_trait: :verified
     )
   }
 
   before do
     sign_in_as_service_operator
-    create(:task, claim: claim_with_matching_details_task_answered_yes, name: "matching_details", passed: true)
-    create(:task, claim: claim_with_matching_details_task_answered_no, name: "matching_details", passed: false)
+    create(:note, claim: claim_with_duplicates_provider_email_sent, label: "provider_verification")
   end
 
   scenario "view claim summary for claim with no TRN" do
@@ -86,16 +74,12 @@ RSpec.feature "Admin view claim for FurtherEducationPayments" do
     expect(page).to have_content("Awaiting provider verification")
 
     visit admin_claims_path
-    find("a[href='#{admin_claim_tasks_path(claim_with_no_matching_details_task)}']").click
+    find("a[href='#{admin_claim_tasks_path(claim_with_duplicates_no_provider_email_sent)}']").click
     expect(page).to have_content("Awaiting decision - not on hold")
 
     visit admin_claims_path
-    find("a[href='#{admin_claim_tasks_path(claim_with_matching_details_task_answered_yes)}']").click
+    find("a[href='#{admin_claim_tasks_path(claim_with_duplicates_provider_email_sent)}']").click
     expect(page).to have_content("Awaiting provider verification")
-
-    visit admin_claims_path
-    find("a[href='#{admin_claim_tasks_path(claim_with_matching_details_task_answered_no)}']").click
-    expect(page).to have_content("Awaiting decision - not on hold")
 
     visit admin_claims_path
     find("a[href='#{admin_claim_tasks_path(verified_claim)}']").click

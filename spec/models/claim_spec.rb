@@ -909,21 +909,20 @@ RSpec.describe Claim, type: :model do
   describe ".awaiting_further_education_provider_verification" do
     subject { described_class.awaiting_further_education_provider_verification }
 
-    let!(:claim_not_verified_without_matching_details_task) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible) }
-    let!(:claim_not_verified_with_matching_details_task_answered_no) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible_duplicate) }
-    let!(:claim_not_verified_with_matching_details_task_answered_yes) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible_duplicate) }
-    let!(:claim_not_verified_with_duplicate_claims) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible_duplicate) }
+    let!(:claim_not_verified_provider_email_automatically_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible) }
+    let!(:claim_not_verified_provider_email_not_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible_duplicate) }
+    let!(:claim_not_verified_has_duplicates_provider_email_not_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible_duplicate) }
+    let!(:claim_not_verified_has_duplicates_provider_email_manually_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible_duplicate) }
     let!(:claim_with_fe_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_trait: :verified) }
     let!(:non_fe_claim) { create(:claim, policy: Policies::StudentLoans) }
 
     before do
-      create(:task, claim: claim_not_verified_with_matching_details_task_answered_yes, name: "matching_details", passed: true)
-      create(:task, claim: claim_not_verified_with_matching_details_task_answered_no, name: "matching_details", passed: false)
-      create(:task, claim: claim_not_verified_with_matching_details_task_answered_no, name: "student_loan_plan", passed: true)
+      create(:note, claim: claim_not_verified_has_duplicates_provider_email_manually_sent, label: "provider_verification")
+      create(:note, claim: claim_not_verified_provider_email_not_sent, label: "student_loan_plan")
     end
 
     it "returns claims that have not been verified by the provider, and have no matching_details task or have a passed matching_details task" do
-      is_expected.to match_array([claim_not_verified_without_matching_details_task, claim_not_verified_with_matching_details_task_answered_yes])
+      is_expected.to match_array([claim_not_verified_provider_email_automatically_sent, claim_not_verified_has_duplicates_provider_email_manually_sent])
     end
   end
 
@@ -1344,30 +1343,24 @@ RSpec.describe Claim, type: :model do
     subject { claim.awaiting_provider_verification? }
 
     context "when the eligiblity is not verified" do
-      let(:claim) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible) }
-
-      context "there is not a matching_details task" do
-        context "when there are matching claims" do
-          before { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible, email_address: claim.email_address) }
-
-          it { is_expected.to be false }
-        end
-
-        context "when there are no matching claims" do
-          it { is_expected.to be true }
-        end
-      end
-
-      context "when there is a passed matching_details task" do
-        before { create(:task, claim: claim, name: "matching_details", passed: true) }
+      context "when there are no duplicates" do
+        let(:claim) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible) }
 
         it { is_expected.to be true }
       end
 
-      context "when there is a failed matching_details task" do
-        before { create(:task, claim: claim, name: "matching_details", passed: false) }
+      context "when there are duplicates" do
+        let(:claim) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible_duplicate) }
 
-        it { is_expected.to be false }
+        context "the provider email has not been sent" do
+          it { is_expected.to be false }
+        end
+
+        context "when the provider email has been sent" do
+          before { create(:note, claim: claim, label: "provider_verification") }
+
+          it { is_expected.to be true }
+        end
       end
     end
 

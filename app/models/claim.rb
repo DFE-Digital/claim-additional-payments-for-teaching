@@ -210,17 +210,12 @@ class Claim < ApplicationRecord
   scope :awaiting_qa, -> { approved.qa_required.where(qa_completed_at: nil) }
   scope :qa_required, -> { where(qa_required: true) }
   scope :awaiting_further_education_provider_verification, -> do
-    # TODO change this to check provider email has been sent
     joins("INNER JOIN further_education_payments_eligibilities ON further_education_payments_eligibilities.id = claims.eligibility_id")
-    # .left_outer_joins(:notes)
-    #  .where(notes: {label: [nil, "provider_verification"]})
-      .left_outer_joins(:tasks)
+      .left_outer_joins(:notes)
       .where("further_education_payments_eligibilities.verification = '{}'")
-      .where(tasks: {name: [nil, "matching_details"]})
       .and(
         Claim.where("further_education_payments_eligibilities.flagged_as_duplicate = FALSE")
-        .or(Claim.where("further_education_payments_eligibilities.flagged_as_duplicate = TRUE").and(Claim.where(tasks: {name: "matching_details", passed: true})))
-    # .or(Claim.where("further_education_payments_eligibilities.flagged_as_duplicate = TRUE").and(Claim.where(notes: {label: "provider_verification"})))
+        .or(Claim.where("further_education_payments_eligibilities.flagged_as_duplicate = TRUE").and(Claim.where(notes: {label: "provider_verification"})))
       )
   end
 
@@ -454,11 +449,8 @@ class Claim < ApplicationRecord
 
     return false if eligibility.verified?
 
-    if tasks.where(name: "matching_details").any?
-      tasks.where(name: "matching_details", passed: true).any?
-    else
-      Claim::MatchingAttributeFinder.new(self).matching_claims.empty?
-    end
+    # TODO - duplication with app/models/policies/further_education_payments/admin_provider_verification_task_presenter.rb
+    !eligibility.flagged_as_duplicate? || notes.where(label: "provider_verification").any?
   end
 
   private
