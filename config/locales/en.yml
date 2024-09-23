@@ -135,6 +135,8 @@ en:
     tasks:
       previous_payment:
         title: Check for previous payment
+      previous_residency:
+        title: Check previous residency
       qualifications:
         title: "Check qualification information"
       induction_confirmation:
@@ -807,6 +809,7 @@ en:
           no_response_from_school: No response from school
           suspected_fraud: Suspected fraud
           information_mismatch_new_details_needed: "Information mismatch - new details needed"
+          ineligible_previous_residency: Ineligible previous residency
       eligibility_answers:
         nationality: "Nationality"
         passport_number: "Passport number"
@@ -821,6 +824,9 @@ en:
       task_questions:
         previous_payment:
           title: The claimant has not received an IRP payment in AY 2023/24?
+        previous_residency:
+          title: Does the claimant meet previous residency rules?
+          hint: asd
         matching_details:
           title: "Is this claim still valid despite having matching details with other claims?"
         identity_confirmation:

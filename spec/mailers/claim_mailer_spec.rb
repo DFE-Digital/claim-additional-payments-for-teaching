@@ -227,7 +227,8 @@ RSpec.describe ClaimMailer, type: :mailer do
               reason_ineligible_employment_terms: "no",
               reason_no_response_from_school: "no",
               reason_suspected_fraud: "no",
-              reason_information_mismatch_new_details_needed: "no"
+              reason_information_mismatch_new_details_needed: "no",
+              reason_ineligible_previous_residency: "no"
             }
           end
 

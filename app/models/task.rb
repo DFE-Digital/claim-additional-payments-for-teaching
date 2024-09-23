@@ -13,6 +13,7 @@ class Task < ApplicationRecord
     provider_verification
     visa
     arrival_date
+    previous_residency
     qualifications
     induction_confirmation
     census_subjects_taught
