@@ -16,15 +16,14 @@
     <% end %>
   </div>
 
-  <% if @tasks_presenter.provider_verification_submitted? %>
-    <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-two-thirds">
+    <% if @tasks_presenter.provider_verification_submitted? %>
       <% if @task.persisted? %>
         <%= render "task_outcome", task: @task, notes: @notes %>
       <% else %>
         <%= render "form", task_name: "provider_verification", claim: @claim %>
       <% end %>
-
-      <%= render partial: "admin/task_pagination" %>
-    </div>
-  <% end %>
+    <% end %>
+    <%= render partial: "admin/task_pagination" %>
+  </div>
 </div>
