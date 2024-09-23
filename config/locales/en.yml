@@ -148,8 +148,8 @@ en:
       provider_verification:
         title: "Confirm the provider has responded and verified the claimant's information"
       payroll_gender:
-        title: "Add a payroll gender for HMRC"
-        hint: "The claimant answered ‘Don't know’ to the question ‘What gender does your school's payroll system associate with you?’"
+        title: "How is the claimant’s gender recorded for payroll purposes?"
+        hint: "The claimant answered ‘don’t know’ to the question ‘how is your gender recorded on your employer’s payroll system?’"
       student_loan_amount:
         title: "Check student loan amount"
       student_loan_plan:
@@ -864,9 +864,6 @@ en:
           duplicate_claim: "Duplicate claim"
           no_response: "No response"
           other: "Other"
-      tasks:
-        payroll_gender:
-          hint: "The claimant answered ‘Don't know’ to the question ‘How is your gender recorded on your employer’s payroll system?'"
       task_questions:
         identity_confirmation:
           title: Do the One Login details match the personal details entered by the claimant?

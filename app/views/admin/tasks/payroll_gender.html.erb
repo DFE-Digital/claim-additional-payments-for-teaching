@@ -18,12 +18,12 @@
           <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l ">
               <h3 class="govuk-heading-l">
-                What gender should be passed to payroll and HMRC?
+                <%= t("admin.tasks.payroll_gender.title") %>
               </h3>
             </legend>
 
             <p class="govuk-body">
-              <%= t("#{Journeys.for_policy(@claim.policy)::I18N_NAMESPACE}.admin.tasks.payroll_gender.hint", default: [:"admin.tasks.payroll_gender.hint"]) %>
+              <%= t("admin.tasks.payroll_gender.hint") %>
             </p>
 
             <%= hidden_field_tag "task[passed]", "true" %>
