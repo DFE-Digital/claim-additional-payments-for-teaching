@@ -11,7 +11,8 @@ module Policies
 
       def arrival_date
         [
-          ["Arrival date", eligibility.date_of_entry.to_fs(:govuk_date)]
+          ["Arrival date", eligibility.date_of_entry.to_fs(:govuk_date)],
+          ["Employment start date", eligibility.start_date&.to_fs(:govuk_date)]
         ]
       end
 

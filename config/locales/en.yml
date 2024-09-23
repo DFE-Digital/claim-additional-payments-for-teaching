@@ -834,7 +834,7 @@ en:
         visa:
           title: "Is the claimant’s visa type eligible for a claim?"
         arrival_date:
-          title: "Does the claimant’s arrival date match the above information from their claim?"
+          title: Has the claimant arrived in the UK within 3 months of contract start date?
         employment:
           title: "Does the claimant’s current school match the above information from their claim?"
         employment_contract:
