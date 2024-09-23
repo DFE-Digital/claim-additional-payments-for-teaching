@@ -33,7 +33,7 @@
               <%= form_group_tag @hold_note, :body do %>
                 <%= form.label :body, "On hold", class: "govuk-label govuk-label--m" %>
                 <%= errors_tag @hold_note, :body %>
-                <p class="govuk-hint" id="hold-hint">Enter why the claim is being put on hold</p>
+                <p class="govuk-hint" id="hold-hint">Enter a reason for the claim to be put on hold</p>
                 <%= form.text_area :body, class: "govuk-textarea", "aria-describedby" => "hold-hint", rows: 2 %>
               <% end %>
 
