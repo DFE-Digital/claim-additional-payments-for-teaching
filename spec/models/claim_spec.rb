@@ -1265,10 +1265,11 @@ RSpec.describe Claim, type: :model do
       it { is_expected.to be_submitted_without_slc_data }
     end
 
+    # For 2024/2025 academic year onwards, only FE claims prior to the deployment of LUPEYALPHA-1010 have submitted_using_slc_data = nil
     context "when `submitted_using_slc_data` is `nil`" do
       subject(:claim) { build(:claim, submitted_using_slc_data: nil) }
 
-      it { is_expected.not_to be_submitted_without_slc_data }
+      it { is_expected.to be_submitted_without_slc_data }
     end
   end
 

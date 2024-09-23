@@ -4,6 +4,7 @@ RSpec.feature "Upload SLC data" do
   before do
     create(:journey_configuration, :student_loans) # used by StudentLoanAmountCheckJob
     create(:journey_configuration, :early_career_payments)
+    create(:journey_configuration, :further_education_payments)
     sign_in_as_service_operator
   end
 
@@ -39,6 +40,37 @@ RSpec.feature "Upload SLC data" do
       has_student_loan: false, student_loan_plan: "not_applicable", submitted_using_slc_data: false)
   }
 
+  let!(:fe_claim_with_slc_data_no_student_loan_nil_submitted_using_slc_data) {
+    create(:claim, :submitted, policy: Policies::FurtherEducationPayments,
+      eligibility: build(:further_education_payments_eligibility, :eligible),
+      has_student_loan: nil, student_loan_plan: nil, submitted_using_slc_data: nil) # having nil submitted_using_slc_data won't happen after LUPEYALPHA-1010 merged
+  }
+  let!(:fe_claim_with_slc_data_with_student_loan_nil_submitted_using_slc_data) {
+    create(:claim, :submitted, policy: Policies::FurtherEducationPayments,
+      eligibility: build(:further_education_payments_eligibility, :eligible),
+      has_student_loan: nil, student_loan_plan: nil, submitted_using_slc_data: nil) # having nil submitted_using_slc_data won't happen after LUPEYALPHA-1010 merged
+  }
+  let!(:fe_claim_no_slc_data_nil_submitted_using_slc_data) {
+    create(:claim, :submitted, :with_student_loan, policy: Policies::FurtherEducationPayments,
+      eligibility: build(:further_education_payments_eligibility, :eligible),
+      has_student_loan: nil, student_loan_plan: nil, submitted_using_slc_data: nil) # having nil submitted_using_slc_data won't happen after LUPEYALPHA-1010 merged
+  }
+  let!(:fe_claim_with_slc_data_no_student_loan) {
+    create(:claim, :submitted, policy: Policies::FurtherEducationPayments,
+      eligibility: build(:further_education_payments_eligibility, :eligible),
+      has_student_loan: nil, student_loan_plan: nil, submitted_using_slc_data: false)
+  }
+  let!(:fe_claim_with_slc_data_with_student_loan) {
+    create(:claim, :submitted, policy: Policies::FurtherEducationPayments,
+      eligibility: build(:further_education_payments_eligibility, :eligible),
+      has_student_loan: nil, student_loan_plan: nil, submitted_using_slc_data: false)
+  }
+  let!(:fe_claim_no_slc_data) {
+    create(:claim, :submitted, :with_student_loan, policy: Policies::FurtherEducationPayments,
+      eligibility: build(:further_education_payments_eligibility, :eligible),
+      has_student_loan: nil, student_loan_plan: nil, submitted_using_slc_data: false)
+  }
+
   scenario "automated task to verify student loan plan" do
     visit admin_claims_path
     click_link "Upload SLC data"
@@ -47,64 +79,96 @@ RSpec.feature "Upload SLC data" do
       click_button "Upload"
     end
     expect(page).to have_content "SLC file uploaded and queued to be imported"
-    expect(StudentLoansData.count).to eq 4
+    expect(StudentLoansData.count).to eq 8
 
     # Student Loans
 
-    click_link sl_claim_with_slc_data_no_student_loan.reference
-    expect(page).to have_content "Student loan amount"
-    within "li.student_loan_amount" do
-      expect(page).to have_content "No match"
-    end
-    expect(sl_claim_with_slc_data_no_student_loan.reload.student_loan_plan).to eq "not_applicable"
-    expect(sl_claim_with_slc_data_no_student_loan.has_student_loan).to be false
-    expect(sl_claim_with_slc_data_no_student_loan.eligibility.student_loan_repayment_amount).to eq 0
+    claim = sl_claim_with_slc_data_no_student_loan
+    then_the_student_loan_amount_task_should_show_as(state: "No match", for_claim: claim)
+    expect(claim.reload.student_loan_plan).to eq "not_applicable"
+    expect(claim.has_student_loan).to be false
+    expect(claim.eligibility.student_loan_repayment_amount).to eq 0
 
+    claim = sl_claim_with_slc_data_with_student_loan
     visit admin_claims_path
-    click_link ecp_claim_with_slc_data_with_student_loan.reference
-    expect(page).not_to have_content "Student loan amount"
-    expect(sl_claim_with_slc_data_with_student_loan.reload.student_loan_plan).to eq "plan_1"
-    expect(sl_claim_with_slc_data_with_student_loan.has_student_loan).to eq true
-    expect(sl_claim_with_slc_data_with_student_loan.eligibility.student_loan_repayment_amount).to eq 100
+    click_link claim.reference
+    then_the_student_loan_amount_task_should_show_as(state: "Passed", for_claim: claim)
+    expect(claim.reload.student_loan_plan).to eq "plan_1"
+    expect(claim.has_student_loan).to eq true
+    expect(claim.eligibility.student_loan_repayment_amount).to eq 100
 
-    visit admin_claims_path
-    click_link sl_claim_no_slc_data.reference
-    expect(page).to have_content "Student loan amount"
-    within "li.student_loan_amount" do
-      expect(page).to have_content "No data"
-    end
-    expect(sl_claim_no_slc_data.reload.student_loan_plan).to be nil
-    expect(sl_claim_no_slc_data.has_student_loan).to be nil
-    expect(sl_claim_no_slc_data.eligibility.student_loan_repayment_amount).to eq 0
+    claim = sl_claim_no_slc_data
+    then_the_student_loan_amount_task_should_show_as(state: "No data", for_claim: claim)
+    expect(claim.reload.student_loan_plan).to be nil
+    expect(claim.has_student_loan).to be nil
+    expect(claim.eligibility.student_loan_repayment_amount).to eq 0
 
     # Early Career Payments
 
-    visit admin_claims_path
-    click_link ecp_claim_with_slc_data_no_student_loan.reference
-    expect(page).to have_content "Student loan plan"
-    within "li.student_loan_plan" do
-      expect(page).to have_content "Passed"
-    end
-    expect(ecp_claim_with_slc_data_no_student_loan.reload.student_loan_plan).to eq "not_applicable"
-    expect(ecp_claim_with_slc_data_no_student_loan.has_student_loan).to be false
+    claim = ecp_claim_with_slc_data_no_student_loan
+    then_the_student_loan_plan_task_should_show_as(state: "Passed", for_claim: claim)
+    expect(claim.reload.student_loan_plan).to eq "not_applicable"
+    expect(claim.has_student_loan).to be false
 
-    visit admin_claims_path
-    click_link ecp_claim_with_slc_data_with_student_loan.reference
-    expect(page).to have_content "Student loan plan"
-    within "li.student_loan_plan" do
-      expect(page).to have_content "Passed"
-    end
-    expect(ecp_claim_with_slc_data_with_student_loan.reload.student_loan_plan).to eq "plan_1"
-    expect(ecp_claim_with_slc_data_with_student_loan.has_student_loan).to eq true
+    claim = ecp_claim_with_slc_data_with_student_loan
+    then_the_student_loan_plan_task_should_show_as(state: "Passed", for_claim: claim)
+    expect(claim.reload.student_loan_plan).to eq "plan_1"
+    expect(claim.has_student_loan).to eq true
 
+    claim = ecp_claim_no_slc_data
+    then_the_student_loan_plan_task_should_show_as(state: "No data", for_claim: claim)
+    expect(claim.reload.student_loan_plan).to be nil # this was "not_applicable" before LUPEYALPHA-1031
+    expect(claim.has_student_loan).to be nil # this was false before LUPEYALPHA-1031
+
+    # Further Education Payments
+
+    claim = fe_claim_with_slc_data_no_student_loan_nil_submitted_using_slc_data
+    then_the_student_loan_plan_task_should_show_as(state: "Passed", for_claim: claim)
+    expect(claim.reload.student_loan_plan).to eq "not_applicable"
+    expect(claim.has_student_loan).to eq false
+
+    claim = fe_claim_with_slc_data_with_student_loan_nil_submitted_using_slc_data
+    then_the_student_loan_plan_task_should_show_as(state: "Passed", for_claim: claim)
+    expect(claim.reload.student_loan_plan).to eq "plan_1"
+    expect(claim.has_student_loan).to eq true
+
+    claim = fe_claim_no_slc_data_nil_submitted_using_slc_data
+    then_the_student_loan_plan_task_should_show_as(state: "No data", for_claim: claim)
+    expect(claim.reload.student_loan_plan).to be nil
+    expect(claim.has_student_loan).to be nil
+
+    claim = fe_claim_with_slc_data_no_student_loan
+    then_the_student_loan_plan_task_should_show_as(state: "Passed", for_claim: claim)
+    expect(claim.reload.student_loan_plan).to eq "not_applicable"
+    expect(claim.has_student_loan).to eq false
+
+    claim = fe_claim_with_slc_data_with_student_loan
+    then_the_student_loan_plan_task_should_show_as(state: "Passed", for_claim: claim)
+    expect(claim.reload.student_loan_plan).to eq "plan_1"
+    expect(claim.has_student_loan).to eq true
+
+    claim = fe_claim_no_slc_data
+    then_the_student_loan_plan_task_should_show_as(state: "No data", for_claim: claim)
+    expect(claim.reload.student_loan_plan).to be nil
+    expect(claim.has_student_loan).to be nil
+  end
+
+  def then_the_student_loan_amount_task_should_show_as(state:, for_claim:)
     visit admin_claims_path
-    click_link ecp_claim_no_slc_data.reference
+    click_link for_claim.reference
+    expect(page).to have_content "Student loan amount"
+    within "li.student_loan_amount" do
+      expect(page).to have_content state
+    end
+  end
+
+  def then_the_student_loan_plan_task_should_show_as(state:, for_claim:)
+    visit admin_claims_path
+    click_link for_claim.reference
     expect(page).to have_content "Student loan plan"
     within "li.student_loan_plan" do
-      expect(page).to have_content "No data"
+      expect(page).to have_content state
     end
-    expect(ecp_claim_no_slc_data.reload.student_loan_plan).to be nil # this was "not_applicable" before LUPEYALPHA-1031
-    expect(ecp_claim_no_slc_data.has_student_loan).to be nil # this was false before LUPEYALPHA-1031
   end
 
   def slc_data_csv_file
@@ -116,6 +180,10 @@ RSpec.feature "Upload SLC data" do
     @slc_data_csv_file.write csv_row(sl_claim_with_slc_data_with_student_loan, plan_type: "1", amount: "100")
     @slc_data_csv_file.write csv_row(ecp_claim_with_slc_data_no_student_loan, no_data: true)
     @slc_data_csv_file.write csv_row(ecp_claim_with_slc_data_with_student_loan, plan_type: "1", amount: "100")
+    @slc_data_csv_file.write csv_row(fe_claim_with_slc_data_no_student_loan, no_data: true)
+    @slc_data_csv_file.write csv_row(fe_claim_with_slc_data_with_student_loan, plan_type: "1", amount: "100")
+    @slc_data_csv_file.write csv_row(fe_claim_with_slc_data_no_student_loan_nil_submitted_using_slc_data, no_data: true)
+    @slc_data_csv_file.write csv_row(fe_claim_with_slc_data_with_student_loan_nil_submitted_using_slc_data, plan_type: "1", amount: "100")
 
     @slc_data_csv_file.rewind
 

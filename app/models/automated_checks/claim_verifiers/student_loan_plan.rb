@@ -10,7 +10,7 @@ module AutomatedChecks
       end
 
       def perform
-        return unless claim.has_ecp_or_lupp_policy?
+        return unless claim.policy.auto_check_student_loan_plan_task?
         return unless claim.submitted_without_slc_data?
         return unless awaiting_task?
 

@@ -47,7 +47,7 @@ RSpec.describe ClaimCheckingTasks do
       it "does not include a task for student loan plan when the claim was submitted using SLC data" do
         claim.submitted_using_slc_data = true
 
-        expect(checking_tasks.applicable_task_names).to match_array(applicable_tasks - %w[student_loan_plan])
+        expect(checking_tasks.applicable_task_names).not_to include("student_loan_plan")
       end
     end
 
@@ -93,6 +93,8 @@ RSpec.describe ClaimCheckingTasks do
       subject { described_class.new(claim) }
 
       let(:policy) { Policies::FurtherEducationPayments }
+
+      include_examples :student_loan_plan_task
 
       context "when TRN is provided" do
         before do

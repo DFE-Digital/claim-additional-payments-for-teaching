@@ -418,7 +418,8 @@ class Claim < ApplicationRecord
   end
 
   def submitted_without_slc_data?
-    submitted_using_slc_data == false
+    # FE claims prior to the deployment of LUPEYALPHA-1010 have submitted_using_slc_data = nil
+    submitted_using_slc_data != true
   end
 
   def has_dqt_record?

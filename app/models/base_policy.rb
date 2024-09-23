@@ -54,4 +54,8 @@ module BasePolicy
   def further_education_payments?
     to_s == "FurtherEducationPayments"
   end
+
+  def auto_check_student_loan_plan_task?
+    false
+  end
 end

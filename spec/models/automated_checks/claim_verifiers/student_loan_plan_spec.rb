@@ -67,8 +67,8 @@ module AutomatedChecks
           it_behaves_like :execution_without_an_outcome
         end
 
-        context "when the claim policy is ECP/LUP" do
-          [Policies::LevellingUpPremiumPayments, Policies::EarlyCareerPayments].each do |policy|
+        context "when the claim policy is ECP/LUP/FE" do
+          [Policies::LevellingUpPremiumPayments, Policies::EarlyCareerPayments, Policies::FurtherEducationPayments].each do |policy|
             context "when the policy is #{policy}" do
               let(:policy) { policy }
               let(:claim) { create(:claim, :submitted, policy:, national_insurance_number: "QQ123456A", has_student_loan: true, student_loan_plan: claim_student_loan_plan, submitted_using_slc_data:) }
