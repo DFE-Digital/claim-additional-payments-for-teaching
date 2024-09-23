@@ -3,6 +3,14 @@ module Journeys
     module Provider
       module Authenticated
         class ClaimSubmissionForm < ::ClaimSubmissionBaseForm
+          def save
+            super
+
+            ClaimMailer.early_years_payment_practitioner_email(claim).deliver_later
+
+            true
+          end
+
           private
 
           def main_eligibility
