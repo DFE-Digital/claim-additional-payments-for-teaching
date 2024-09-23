@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_09_16_173031) do
+ActiveRecord::Schema[7.0].define(version: 2024_09_23_130010) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_trgm"
@@ -262,6 +262,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_16_173031) do
     t.jsonb "verification", default: {}
     t.boolean "flagged_as_duplicate", default: false
     t.datetime "provider_verification_email_last_sent_at"
+    t.datetime "provider_verification_chase_email_last_sent_at"
     t.index ["possible_school_id"], name: "index_fe_payments_eligibilities_on_possible_school_id"
     t.index ["school_id"], name: "index_fe_payments_eligibilities_on_school_id"
   end

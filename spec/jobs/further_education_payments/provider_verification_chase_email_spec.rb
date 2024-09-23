@@ -14,8 +14,7 @@ RSpec.describe FurtherEducationPayments::ProviderVerificationChaseEmailJob do
         policy: Policies::FurtherEducationPayments,
         eligibility: build(
           :further_education_payments_eligibility,
-          :eligible,
-          provider_verification_email_last_sent_at: nil
+          :eligible
         ))
     }
 
@@ -53,6 +52,42 @@ RSpec.describe FurtherEducationPayments::ProviderVerificationChaseEmailJob do
         ))
     }
 
+    let!(:claim_with_provider_chase_email_already_sent) {
+      create(:claim,
+        :submitted,
+        policy: Policies::FurtherEducationPayments,
+        eligibility: build(
+          :further_education_payments_eligibility,
+          :eligible,
+          :verified,
+          provider_verification_email_last_sent_at: DateTime.new(2024, 9, 1, 8, 0, 0),
+          provider_verification_chase_email_last_sent_at: DateTime.new(2024, 9, 22, 8, 0, 0)
+        ))
+    }
+
+    let!(:claim_rejected_after_provider_verification_was_sent) {
+      create(:claim,
+        :rejected,
+        policy: Policies::FurtherEducationPayments,
+        eligibility: build(
+          :further_education_payments_eligibility,
+          :eligible,
+          provider_verification_email_last_sent_at: DateTime.new(2024, 10, 1, 7, 0, 0)
+        ))
+    }
+
+    let!(:claim_held_after_provider_verification_was_sent) {
+      create(:claim,
+        :submitted,
+        :held,
+        policy: Policies::FurtherEducationPayments,
+        eligibility: build(
+          :further_education_payments_eligibility,
+          :eligible,
+          provider_verification_email_last_sent_at: DateTime.new(2024, 10, 1, 7, 0, 0)
+        ))
+    }
+
     before do
       allow(ClaimMailer).to(
         receive(:further_education_payment_provider_verification_chase_email)
@@ -62,7 +97,7 @@ RSpec.describe FurtherEducationPayments::ProviderVerificationChaseEmailJob do
     end
 
     it "sends an email only to unverified claims with a provider email last sent over 3 weeks ago " do
-      expect(claim_with_provider_email_sent_over_3_weeks_ago.eligibility.reload.provider_verification_email_last_sent_at).to eq Time.now
+      expect(claim_with_provider_email_sent_over_3_weeks_ago.eligibility.reload.provider_verification_chase_email_last_sent_at).to eq Time.now
 
       expect(ClaimMailer).to(
         have_received(:further_education_payment_provider_verification_chase_email)
@@ -88,6 +123,7 @@ RSpec.describe FurtherEducationPayments::ProviderVerificationChaseEmailJob do
 
     it "does not send a chaser if a provider email was not previously sent" do
       expect(claim_with_no_provider_email_sent.eligibility.reload.provider_verification_email_last_sent_at).to be_nil
+      expect(claim_with_no_provider_email_sent.eligibility.reload.provider_verification_chase_email_last_sent_at).to be_nil
 
       expect(ClaimMailer).to(
         have_received(:further_education_payment_provider_verification_chase_email)
@@ -97,7 +133,7 @@ RSpec.describe FurtherEducationPayments::ProviderVerificationChaseEmailJob do
     end
 
     it "does not send a chaser if it has not been 3 weeks since a provider email was sent" do
-      expect(claim_with_provider_email_sent_less_than_3_weeks_ago.eligibility.reload.provider_verification_email_last_sent_at).to eq DateTime.new(2024, 10, 15, 7, 0, 0)
+      expect(claim_with_provider_email_sent_less_than_3_weeks_ago.eligibility.reload.provider_verification_chase_email_last_sent_at).to be_nil
 
       expect(ClaimMailer).to(
         have_received(:further_education_payment_provider_verification_chase_email)
@@ -107,11 +143,41 @@ RSpec.describe FurtherEducationPayments::ProviderVerificationChaseEmailJob do
     end
 
     it "does not sent a chaser for any claims that are verified" do
-      expect(claim_with_provider_email_sent_over_3_weeks_ago_verified.eligibility.reload.provider_verification_email_last_sent_at).to eq DateTime.new(2024, 10, 1, 7, 0, 0)
+      expect(claim_with_provider_email_sent_over_3_weeks_ago_verified.eligibility.reload.provider_verification_chase_email_last_sent_at).to be_nil
 
       expect(ClaimMailer).to(
         have_received(:further_education_payment_provider_verification_chase_email)
           .with(claim_with_provider_email_sent_over_3_weeks_ago_verified)
+          .exactly(0).times
+      )
+    end
+
+    it "does not send a chaser email if one has been sent before" do
+      expect(claim_with_provider_chase_email_already_sent.eligibility.reload.provider_verification_chase_email_last_sent_at).to eq DateTime.new(2024, 9, 22, 8, 0, 0)
+
+      expect(ClaimMailer).to(
+        have_received(:further_education_payment_provider_verification_chase_email)
+          .with(claim_with_provider_chase_email_already_sent)
+          .exactly(0).times
+      )
+    end
+
+    it "does not send a chaser email if the claim has been rejected" do
+      expect(claim_rejected_after_provider_verification_was_sent.eligibility.reload.provider_verification_chase_email_last_sent_at).to be_nil
+
+      expect(ClaimMailer).to(
+        have_received(:further_education_payment_provider_verification_chase_email)
+          .with(claim_rejected_after_provider_verification_was_sent)
+          .exactly(0).times
+      )
+    end
+
+    it "does not send a chaser email if the claimis on hold" do
+      expect(claim_held_after_provider_verification_was_sent.eligibility.reload.provider_verification_chase_email_last_sent_at).to be_nil
+
+      expect(ClaimMailer).to(
+        have_received(:further_education_payment_provider_verification_chase_email)
+          .with(claim_held_after_provider_verification_was_sent)
           .exactly(0).times
       )
     end

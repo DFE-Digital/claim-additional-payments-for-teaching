@@ -25,8 +25,10 @@ module FurtherEducationPayments
       Policies::FurtherEducationPayments::Eligibility
         .includes(:claim)
         .unverified
-        .where("provider_verification_email_last_sent_at < ?", 3.weeks.ago)
+        .provider_verification_email_last_sent_over(3.weeks.ago)
+        .provider_verification_chase_email_not_sent
         .map(&:claim)
+        .reject { |claim| claim.held? || claim.latest_decision&.rejected? }
     end
   end
 end

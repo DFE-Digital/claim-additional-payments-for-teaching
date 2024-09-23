@@ -26,6 +26,8 @@ module Policies
       belongs_to :school, optional: true
 
       scope :unverified, -> { where(verification: {}) }
+      scope :provider_verification_email_last_sent_over, ->(older_than) { where("provider_verification_email_last_sent_at < ?", older_than) }
+      scope :provider_verification_chase_email_not_sent, -> { where(provider_verification_chase_email_last_sent_at: nil) }
 
       # Claim#school expects this
       alias_method :current_school, :school

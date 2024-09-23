@@ -300,6 +300,7 @@ shared:
     - half_teaching_hours
     - flagged_as_duplicate
     - provider_verification_email_last_sent_at
+    - provider_verification_chase_email_last_sent_at
   :eligible_fe_providers:
     - id
     - ukprn
