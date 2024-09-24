@@ -131,7 +131,10 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
               {
                 details_check: true,
                 logged_in_with_tid: true
-              }.merge(attributes_for(:claim, :with_dqt_teacher_status))
+              }.merge(
+                attributes_for(:claim, :with_dqt_teacher_status)
+                .except(:started_at)
+              )
             end
 
             it "sets the induction as complete" do
