@@ -7,7 +7,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::Reminders::EmailVerifica
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
   let(:journey_session) { build(:additional_payments_session) }
-  let(:reminder) { Reminder.create! }
+  let(:reminder) { Reminder.create!(journey:) }
   let(:slug) { "email-verification" }
   let(:params) { ActionController::Parameters.new({slug:, form: form_params}) }
   let(:form_params) { {one_time_password: "123456"} }

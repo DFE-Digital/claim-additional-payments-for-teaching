@@ -28,7 +28,7 @@ module Journeys
         def save
           return false unless valid?
 
-          reminder.update!(attributes)
+          reminder.update!(attributes.merge(journey:))
         end
 
         private

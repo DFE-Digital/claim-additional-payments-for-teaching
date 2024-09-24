@@ -31,7 +31,7 @@ module Journeys
         def save
           return false unless valid?
 
-          reminder.update!(email_verified: true)
+          reminder.update!(email_verified: true, journey:)
         end
 
         private

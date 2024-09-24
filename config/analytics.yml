@@ -17,6 +17,7 @@ shared:
     - itt_academic_year
     - itt_subject
     - sent_one_time_password_at
+    - journey_class
   :tasks:
     - id
     - name
