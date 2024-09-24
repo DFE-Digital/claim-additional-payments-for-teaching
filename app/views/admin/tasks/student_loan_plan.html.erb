@@ -1,6 +1,8 @@
 <% content_for(:page_title) { page_title("Claim #{@claim.reference} student loan amount check for #{@claim.policy.short_name}") } %>
 
-<%= link_to "Back", admin_claim_tasks_path(claim_id: @claim.id), class: "govuk-back-link" %>
+<% content_for :back_link do %>
+  <%= govuk_back_link href: admin_claim_tasks_path(@claim) %>
+<% end %>
 
 <div class="govuk-grid-row">
 

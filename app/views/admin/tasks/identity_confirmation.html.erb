@@ -1,7 +1,9 @@
 <% content_for(:page_title) { page_title("Claim #{@claim.reference} identity confirmation check for #{@claim.policy.short_name}") } %>
+
 <% content_for :back_link do %>
-  <%= link_to "Back", admin_claim_tasks_path(claim_id: @claim.id), class: "govuk-back-link" %>
+  <%= govuk_back_link href: admin_claim_tasks_path(@claim) %>
 <% end %>
+
 <%= render "shared/error_summary", instance: @task, errored_field_id_overrides: { "passed": "task_passed_true" } if @task.errors.any? %>
 
 <div class="govuk-grid-row">
