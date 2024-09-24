@@ -26,7 +26,7 @@ RSpec.feature "Admin views claim details for FurtherEducationPayments" do
         address_line_4: "Oregon",
         postcode: "AB12 3CD",
         email_address: "edna.krabappel@springfield-elementary.edu",
-        created_at: DateTime.new(2024, 8, 1, 9, 0, 0),
+        started_at: DateTime.new(2024, 8, 1, 9, 0, 0),
         submitted_at: DateTime.new(2024, 8, 1, 11, 0, 0),
         academic_year: AcademicYear.new(2024)
       )
