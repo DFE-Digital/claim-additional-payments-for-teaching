@@ -95,6 +95,8 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
           verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
         )
       )
+
+      expect(claim.eligibility.reload.provider_verification_email_last_sent_at).to eq DateTime.new(2024, 10, 1, 0, 0, 0)
     end
 
     it "doesn't email the provider if the claim is a duplicate" do
@@ -119,7 +121,10 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
       duplicate_claim = second_claim_form.claim
 
       expect(original_claim.eligibility.flagged_as_duplicate).to eq(false)
+      expect(original_claim.eligibility.provider_verification_email_last_sent_at).not_to be_nil
+
       expect(duplicate_claim.eligibility.flagged_as_duplicate).to eq(true)
+      expect(duplicate_claim.eligibility.provider_verification_email_last_sent_at).to be_nil
     end
 
     context "when one login IDV mismatch" do

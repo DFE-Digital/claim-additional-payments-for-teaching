@@ -12,7 +12,8 @@ module Admin
           body: "Verification email sent to #{claim.school.name}"
         )
 
-        ClaimMailer.further_education_payment_provider_verification_email(claim).deliver_later
+        Policies::FurtherEducationPayments::ProviderVerificationEmails.new(claim)
+          .send_further_education_payment_provider_verification_email
 
         flash[:notice] = "Verification email sent to #{claim.school.name}"
 
