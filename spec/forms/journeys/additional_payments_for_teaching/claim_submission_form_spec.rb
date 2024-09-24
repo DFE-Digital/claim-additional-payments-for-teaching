@@ -79,7 +79,11 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm do
   end
 
   let(:journey_session) do
-    build(:additional_payments_session, journey: journey::ROUTING_NAME, answers: answers)
+    create(
+      :additional_payments_session,
+      journey: journey::ROUTING_NAME,
+      answers: answers
+    )
   end
 
   let(:form) { described_class.new(journey_session: journey_session) }
@@ -261,6 +265,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm do
         )
 
         expect(journey_session.claim).to eq(claim)
+
+        expect(claim.started_at).to eq(journey_session.created_at)
 
         expect(ClaimMailer).to have_received(:submitted).with(claim)
         expect(ClaimVerifierJob).to have_received(:perform_later).with(claim)
