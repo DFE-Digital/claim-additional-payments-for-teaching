@@ -29,10 +29,8 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
       context "when the policy is StudentLoans" do
         let(:policy) { Policies::StudentLoans }
 
-        it "updates the claim with no student plan and zero repayment total" do
-          expect { call }.to change { claim.reload.has_student_loan }.to(false)
-            .and change { claim.student_loan_plan }.to(Claim::NO_STUDENT_LOAN)
-            .and change { claim.eligibility.student_loan_repayment_amount }.to(0)
+        it "does not update the claim student plan and zero repayment total" do
+          expect { call }.not_to change { claim.reload.has_student_loan }
         end
 
         it "keeps the `submitted_using_slc_data` flag to `false` (default)" do
@@ -40,23 +38,18 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
         end
       end
 
-      [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments].each do |policy|
+      [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments, Policies::FurtherEducationPayments].each do |policy|
         context "when the policy is #{policy}" do
           let(:policy) { policy }
 
-          it "updates the claim with no student plan" do
-            expect { call }.to change { claim.reload.has_student_loan }.to(false)
-              .and change { claim.student_loan_plan }.to(Claim::NO_STUDENT_LOAN)
-          end
-
-          it "keeps the `submitted_using_slc_data` flag to `false` (default)" do
-            expect { call }.not_to change { claim.submitted_using_slc_data }.from(false)
+          it "does not update the claim" do
+            expect { call }.not_to change { claim.reload }
           end
         end
       end
     end
 
-    context "when existing SLC data is found for the claimant" do
+    context "when SLC data is found with student loan information for the claimant" do
       before do
         create(:student_loans_data, nino: claim.national_insurance_number, date_of_birth: claim.date_of_birth, plan_type_of_deduction: 1, amount: 50)
         create(:student_loans_data, nino: claim.national_insurance_number, date_of_birth: claim.date_of_birth, plan_type_of_deduction: 2, amount: 60)
@@ -74,7 +67,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
         end
       end
 
-      [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments].each do |policy|
+      [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments, Policies::FurtherEducationPayments].each do |policy|
         context "when the policy is #{policy}" do
           let(:policy) { policy }
 
@@ -86,11 +79,40 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
       end
     end
 
+    context "when SLC data is found with no student loan information for the claimant" do
+      before do
+        create(:student_loans_data, nino: claim.national_insurance_number, date_of_birth: claim.date_of_birth, plan_type_of_deduction: nil, amount: nil)
+      end
+
+      it "returns true" do
+        expect(call).to eq(true)
+      end
+
+      context "when the policy is StudentLoans" do
+        it "updates the claim with the student plan and the repayment total" do
+          expect { call }.to change { claim.reload.has_student_loan }.to(false)
+            .and change { claim.student_loan_plan }.to(Claim::NO_STUDENT_LOAN)
+            .and change { claim.eligibility.student_loan_repayment_amount }.to(0)
+        end
+      end
+
+      [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments].each do |policy|
+        context "when the policy is #{policy}" do
+          let(:policy) { policy }
+
+          it "updates the claim with the student plan only" do
+            expect { call }.to change { claim.reload.has_student_loan }.to(false)
+              .and change { claim.student_loan_plan }.to(Claim::NO_STUDENT_LOAN)
+          end
+        end
+      end
+    end
+
     context "when an error occurs while updating" do
       let(:exception) { ActiveRecord::RecordInvalid }
 
       before do
-        allow(claim).to receive_message_chain(:assign_attributes, :assign_attributes, :save!) { raise(exception) }
+        allow(claim).to receive(:save!) { raise(exception) }
         allow(Rollbar).to receive(:error)
       end
 

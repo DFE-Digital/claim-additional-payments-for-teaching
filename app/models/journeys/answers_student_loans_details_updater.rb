@@ -14,7 +14,7 @@ module Journeys
       # held before submission; after submission, the
       # `submitted_using_slc_data` value must not change
       journey_session.answers.assign_attributes(
-        has_student_loan: student_loans_data.found_data?,
+        has_student_loan: student_loans_data.has_student_loan?,
         student_loan_plan: student_loans_data.student_loan_plan,
         submitted_using_slc_data: student_loans_data.found_data?
       )

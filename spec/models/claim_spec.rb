@@ -104,8 +104,8 @@ RSpec.describe Claim, type: :model do
   end
 
   context "when saving in the “student-loan” validation context" do
-    it "validates the presence of has_student_loan" do
-      expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1, has_student_loan: nil)).not_to be_valid(:"student-loan")
+    it "validates has_student_loan" do
+      expect(build(:claim, student_loan_plan: nil, has_student_loan: nil)).to be_valid(:"student-loan")
       expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1, has_student_loan: true)).to be_valid(:"student-loan")
       expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1, has_student_loan: false)).to be_valid(:"student-loan")
     end
@@ -906,6 +906,18 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  describe ".awaiting_further_education_provider_verification" do
+    subject { described_class.awaiting_further_education_provider_verification }
+
+    let!(:claim_with_fe_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_trait: :verified) }
+    let!(:claim_awaiting_fe_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible) }
+    let!(:non_fe_claim) { create(:claim, policy: Policies::StudentLoans) }
+
+    it "returns claims that are awaiting FE provider verification" do
+      is_expected.to match_array([claim_awaiting_fe_provider_verification])
+    end
+  end
+
   describe "#amendable?" do
     it "returns false for a claim that hasn’t been submitted" do
       claim = build(:claim, :submittable)
@@ -1253,10 +1265,11 @@ RSpec.describe Claim, type: :model do
       it { is_expected.to be_submitted_without_slc_data }
     end
 
+    # For 2024/2025 academic year onwards, only FE claims prior to the deployment of LUPEYALPHA-1010 have submitted_using_slc_data = nil
     context "when `submitted_using_slc_data` is `nil`" do
       subject(:claim) { build(:claim, submitted_using_slc_data: nil) }
 
-      it { is_expected.not_to be_submitted_without_slc_data }
+      it { is_expected.to be_submitted_without_slc_data }
     end
   end
 

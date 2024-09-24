@@ -12,16 +12,35 @@ RSpec.feature "Admin claim filtering" do
   let!(:deleted_user) { create(:dfe_signin_user, :deleted, given_name: "Deleted", family_name: "User", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
   let!(:raj) { create(:dfe_signin_user, given_name: "raj", family_name: "sathikumar", organisation_name: "DfE Payroll", role_codes: [DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
 
-  let!(:student_loans_claims_for_mette) { create_list(:claim, 4, :submitted, policy: Policies::StudentLoans, assigned_to: mette) }
-  let!(:student_loans_claims_for_valentino) { create_list(:claim, 1, :submitted, policy: Policies::StudentLoans, assigned_to: valentino) }
-  let!(:early_career_payments_claims_for_mary) { create_list(:claim, 2, :submitted, policy: Policies::EarlyCareerPayments, assigned_to: mary) }
-  let!(:early_career_payments_claims_for_mette) { create_list(:claim, 6, :submitted, policy: Policies::EarlyCareerPayments, assigned_to: mette) }
-  let!(:early_career_payments_claims_failed_bank_validation) { create_list(:claim, 2, :submitted, :bank_details_not_validated, policy: Policies::EarlyCareerPayments, assigned_to: mette) }
-  let!(:lup_claims_unassigned) { create_list(:claim, 2, :submitted, policy: Policies::LevellingUpPremiumPayments) }
-  let!(:held_claims) { create_list(:claim, 2, :submitted, :held) }
-  let!(:approved_awaiting_qa_claims) { create_list(:claim, 2, :approved, :flagged_for_qa, policy: Policies::LevellingUpPremiumPayments) }
-  let!(:auto_approved_awaiting_payroll_claims) { create_list(:claim, 2, :auto_approved, policy: Policies::LevellingUpPremiumPayments) }
-  let!(:approved_claim) { create(:claim, :approved, policy: Policies::LevellingUpPremiumPayments, assigned_to: mette, decision_creator: mary) }
+  let(:student_loans_claims_for_mette) { create_list(:claim, 4, :submitted, policy: Policies::StudentLoans, assigned_to: mette) }
+  let(:student_loans_claims_for_valentino) { create_list(:claim, 1, :submitted, policy: Policies::StudentLoans, assigned_to: valentino) }
+  let(:early_career_payments_claims_for_mary) { create_list(:claim, 2, :submitted, policy: Policies::EarlyCareerPayments, assigned_to: mary) }
+  let(:early_career_payments_claims_for_mette) { create_list(:claim, 6, :submitted, policy: Policies::EarlyCareerPayments, assigned_to: mette) }
+  let(:early_career_payments_claims_failed_bank_validation) { create_list(:claim, 2, :submitted, :bank_details_not_validated, policy: Policies::EarlyCareerPayments, assigned_to: mette) }
+  let(:lup_claims_unassigned) { create_list(:claim, 2, :submitted, policy: Policies::LevellingUpPremiumPayments) }
+  let(:held_claims) { create_list(:claim, 2, :submitted, :held) }
+  let(:approved_awaiting_qa_claims) { create_list(:claim, 2, :approved, :flagged_for_qa, policy: Policies::LevellingUpPremiumPayments) }
+  let(:auto_approved_awaiting_payroll_claims) { create_list(:claim, 2, :auto_approved, policy: Policies::LevellingUpPremiumPayments) }
+  let(:approved_claim) { create(:claim, :approved, policy: Policies::LevellingUpPremiumPayments, assigned_to: mette, decision_creator: mary) }
+  let(:further_education_claims_awaiting_provider_verification) { create_list(:claim, 2, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible, assigned_to: valentino) }
+  let(:rejected_claim) { create(:claim, :rejected, policy: Policies::LevellingUpPremiumPayments, assigned_to: valentino) }
+
+  let!(:claims) do
+    [
+      student_loans_claims_for_mette,
+      student_loans_claims_for_valentino,
+      early_career_payments_claims_for_mary,
+      early_career_payments_claims_for_mette,
+      early_career_payments_claims_failed_bank_validation,
+      lup_claims_unassigned,
+      held_claims,
+      approved_awaiting_qa_claims,
+      auto_approved_awaiting_payroll_claims,
+      approved_claim,
+      further_education_claims_awaiting_provider_verification,
+      rejected_claim
+    ]
+  end
 
   scenario "the service operator can filter claims by policy" do
     student_loan_claims = create_list(:claim, 2, :submitted, policy: Policies::StudentLoans) + student_loans_claims_for_mette + student_loans_claims_for_valentino
@@ -33,6 +52,7 @@ RSpec.feature "Admin claim filtering" do
     expect(page.find("table")).to have_content("ECP").exactly(10).times
     expect(page.find("table")).to have_content("TSLR").exactly(7).times
     expect(page.find("table")).to have_content("STRI").exactly(2).times
+    expect(page.find("table")).to have_content("FE").exactly(2).times
 
     click_on "View claims"
     select "Student Loans", from: "policy"
@@ -63,28 +83,18 @@ RSpec.feature "Admin claim filtering" do
     select "Mette Jørgensen", from: "team_member"
     click_on "Apply filters"
 
-    [
+    expect_page_to_show_claims(
       student_loans_claims_for_mette,
       early_career_payments_claims_for_mette,
       early_career_payments_claims_failed_bank_validation
-    ].flatten.each do |c|
-      expect(page).to have_content(c.reference)
-    end
-
-    [
-      student_loans_claims_for_valentino,
-      early_career_payments_claims_for_mary,
-      lup_claims_unassigned
-    ].flatten.each do |c|
-      expect(page).to_not have_content(c.reference)
-    end
+    )
 
     # Assigned to Mette
     select "Mette Jørgensen", from: "team_member"
     select "Approved", from: "Status:"
     click_on "Apply filters"
     expect(page).to have_content("1 claim approved")
-    expect(page).to have_content(approved_claim.reference)
+    expect_page_to_show_claims(approved_claim)
 
     # Approved by Mary
     select "Mary Wasu Wabi", from: "team_member"
@@ -101,103 +111,62 @@ RSpec.feature "Admin claim filtering" do
 
     expect(page.find("table")).to have_content("STRI").exactly(2).times
 
-    lup_claims_unassigned.each do |c|
-      expect(page).to have_content(c.reference)
-    end
-
-    [
-      student_loans_claims_for_mette,
-      student_loans_claims_for_valentino,
-      early_career_payments_claims_for_mary,
-      early_career_payments_claims_for_mette,
-      early_career_payments_claims_failed_bank_validation
-    ].flatten.each do |c|
-      expect(page).to_not have_content(c.reference)
-    end
+    expect_page_to_show_claims(lup_claims_unassigned)
   end
 
   scenario "filter claims by status" do
     click_on "View claims"
 
-    held_claims.each do |c|
-      expect(page).to_not have_content(c.reference)
-    end
-
-    [
+    expect_page_to_show_claims(
       student_loans_claims_for_mette,
       student_loans_claims_for_valentino,
       early_career_payments_claims_for_mary,
       early_career_payments_claims_for_mette,
       early_career_payments_claims_failed_bank_validation,
-      lup_claims_unassigned
-    ].flatten.each do |c|
-      expect(page).to have_content(c.reference)
-    end
+      lup_claims_unassigned,
+      further_education_claims_awaiting_provider_verification
+    )
+
+    select "Awaiting provider verification", from: "Status:"
+    click_button "Apply filters"
+
+    expect_page_to_show_claims(further_education_claims_awaiting_provider_verification)
 
     select "Awaiting decision - on hold", from: "Status:"
     click_button "Apply filters"
 
-    held_claims.each do |c|
-      expect(page).to have_content(c.reference)
-    end
-
-    [
-      student_loans_claims_for_mette,
-      student_loans_claims_for_valentino,
-      early_career_payments_claims_for_mary,
-      early_career_payments_claims_for_mette,
-      early_career_payments_claims_failed_bank_validation,
-      approved_awaiting_qa_claims,
-      auto_approved_awaiting_payroll_claims,
-      lup_claims_unassigned
-    ].flatten.each do |c|
-      expect(page).not_to have_content(c.reference)
-    end
+    expect_page_to_show_claims(held_claims)
 
     select "Awaiting decision - failed bank details", from: "Status:"
     click_button "Apply filters"
 
-    early_career_payments_claims_failed_bank_validation.each do |c|
-      expect(page).to have_content(c.reference)
-    end
+    expect_page_to_show_claims(early_career_payments_claims_failed_bank_validation)
 
     select "Approved awaiting QA", from: "Status:"
     click_button "Apply filters"
 
-    approved_awaiting_qa_claims.each do |c|
-      expect(page).to have_content(c.reference)
-    end
+    expect_page_to_show_claims(approved_awaiting_qa_claims)
 
-    [
-      student_loans_claims_for_mette,
-      student_loans_claims_for_valentino,
-      early_career_payments_claims_for_mary,
-      early_career_payments_claims_for_mette,
-      early_career_payments_claims_failed_bank_validation,
-      auto_approved_awaiting_payroll_claims,
-      held_claims,
-      lup_claims_unassigned
-    ].flatten.each do |c|
-      expect(page).not_to have_content(c.reference)
-    end
+    select "Approved awaiting payroll", from: "Status:"
+    click_button "Apply filters"
+    expect_page_to_show_claims(auto_approved_awaiting_payroll_claims, approved_claim)
 
     select "Automatically approved awaiting payroll", from: "Status:"
     click_button "Apply filters"
 
-    auto_approved_awaiting_payroll_claims.each do |c|
+    expect_page_to_show_claims(auto_approved_awaiting_payroll_claims)
+
+    select "Rejected", from: "Status:"
+    click_button "Apply filters"
+    expect_page_to_show_claims(rejected_claim)
+  end
+
+  def expect_page_to_show_claims(*expected_claims)
+    expected_claims.flatten.each do |c|
       expect(page).to have_content(c.reference)
     end
-
-    [
-      student_loans_claims_for_mette,
-      student_loans_claims_for_valentino,
-      early_career_payments_claims_for_mary,
-      early_career_payments_claims_for_mette,
-      early_career_payments_claims_failed_bank_validation,
-      held_claims,
-      lup_claims_unassigned
-    ].flatten.each do |c|
-      expect(page).not_to have_content(c.reference)
+    (claims - expected_claims).flatten.each do |c|
+      expect(page).to_not have_content(c.reference)
     end
   end
 end

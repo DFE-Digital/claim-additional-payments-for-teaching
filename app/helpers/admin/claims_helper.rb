@@ -54,7 +54,7 @@ module Admin
 
     def admin_submission_details(claim)
       [
-        [translate("admin.started_at"), l(claim.created_at)],
+        [translate("admin.started_at"), l(claim.started_at)],
         [translate("admin.submitted_at"), l(claim.submitted_at)],
         [translate("admin.decision_deadline"), l(claim.decision_deadline_date)],
         [translate("admin.decision_overdue"), decision_deadline_warning(claim)]
@@ -201,6 +201,7 @@ module Admin
     end
 
     STATUS_FILTERS = [
+      ["Awaiting provider verification", "awaiting_provider_verification"],
       ["Awaiting decision - on hold", "held"],
       ["Awaiting decision - failed bank details", "failed_bank_validation"],
       ["Approved awaiting QA", "approved_awaiting_qa"],

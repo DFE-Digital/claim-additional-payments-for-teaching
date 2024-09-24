@@ -7,6 +7,7 @@ RSpec.feature "Further education payments" do
   let(:expected_award_amount) { college.eligible_fe_provider.max_award_amount }
 
   scenario "happy path claim" do
+    when_student_loan_data_exists
     when_further_education_payments_journey_configuration_exists
     and_college_exists
 
@@ -183,6 +184,7 @@ RSpec.feature "Further education payments" do
 
     expect(claim.first_name).to eql("John")
     expect(claim.surname).to eql("Doe")
+    expect(claim.student_loan_plan).to eq "plan_1"
 
     eligibility = Policies::FurtherEducationPayments::Eligibility.last
 

@@ -4,6 +4,8 @@ FactoryBot.define do
   sequence(:national_insurance_number, 100000) { |n| "QQ#{n}C" }
 
   factory :claim do
+    started_at { Time.zone.now }
+
     transient do
       policy { Policies::StudentLoans }
       eligibility_factory { :"#{policy.to_s.underscore}_eligibility" }
@@ -29,6 +31,8 @@ FactoryBot.define do
       claim_academic_year =
         if [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments].include?(evaluator.policy)
           Journeys::AdditionalPaymentsForTeaching.configuration.current_academic_year
+        elsif evaluator.policy == Policies::FurtherEducationPayments
+          Journeys::FurtherEducationPayments.configuration.current_academic_year
         else
           AcademicYear::Type.new.serialize(AcademicYear.new(2019))
         end

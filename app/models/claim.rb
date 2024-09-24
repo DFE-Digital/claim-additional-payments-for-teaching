@@ -91,7 +91,8 @@ class Claim < ApplicationRecord
     onelogin_idv_date_of_birth: true,
     paye_reference: true,
     practitioner_email_address: true,
-    provider_contact_name: true
+    provider_contact_name: true,
+    started_at: false
   }.freeze
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
@@ -144,9 +145,9 @@ class Claim < ApplicationRecord
 
   validates :academic_year_before_type_cast, format: {with: AcademicYear::ACADEMIC_YEAR_REGEXP}
 
-  validates :has_student_loan, on: [:"student-loan"], inclusion: {in: [true, false]}
+  validates :has_student_loan, on: [:"student-loan"], inclusion: {in: [true, false]}, allow_nil: true
   validates :student_loan_plan, inclusion: {in: STUDENT_LOAN_PLAN_OPTIONS}, allow_nil: true
-  validates :student_loan_plan, on: [:"student-loan", :amendment], presence: {message: "Enter a valid student loan plan"}
+  validates :student_loan_plan, on: [:amendment], presence: {message: "Enter a valid student loan plan"}
 
   # TODO: remove when a form object is created for email-address
   validates :email_address, on: [:submit], presence: {message: "Enter an email address"}
@@ -211,6 +212,10 @@ class Claim < ApplicationRecord
   scope :not_awaiting_qa, -> { approved.where("qa_required = false OR (qa_required = true AND qa_completed_at IS NOT NULL)") }
   scope :awaiting_qa, -> { approved.qa_required.where(qa_completed_at: nil) }
   scope :qa_required, -> { where(qa_required: true) }
+  scope :awaiting_further_education_provider_verification, -> do
+    joins("INNER JOIN further_education_payments_eligibilities ON further_education_payments_eligibilities.id = claims.eligibility_id")
+      .where("further_education_payments_eligibilities.verification = '{}'")
+  end
 
   def onelogin_idv_full_name
     "#{onelogin_idv_first_name} #{onelogin_idv_last_name}"
@@ -414,7 +419,8 @@ class Claim < ApplicationRecord
   end
 
   def submitted_without_slc_data?
-    submitted_using_slc_data == false
+    # FE claims prior to the deployment of LUPEYALPHA-1010 have submitted_using_slc_data = nil
+    submitted_using_slc_data != true
   end
 
   def has_dqt_record?

@@ -290,7 +290,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
       is_expected.to eq(
         [
           [
-            "Targeted Retention Incentive Payment For FE Teachers",
+            "Further Education Targeted Retention Incentive",
             "£6,000"
           ]
         ]

@@ -135,6 +135,8 @@ en:
     tasks:
       previous_payment:
         title: Check for previous payment
+      previous_residency:
+        title: Check previous residency
       qualifications:
         title: "Check qualification information"
       induction_confirmation:
@@ -148,8 +150,8 @@ en:
       provider_verification:
         title: "Confirm the provider has responded and verified the claimant's information"
       payroll_gender:
-        title: "Add a payroll gender for HMRC"
-        hint: "The claimant answered ‘Don't know’ to the question ‘What gender does your school's payroll system associate with you?’"
+        title: "How is the claimant’s gender recorded for payroll purposes?"
+        hint: "The claimant answered ‘don’t know’ to the question ‘how is your gender recorded on your employer’s payroll system?’"
       student_loan_amount:
         title: "Check student loan amount"
       student_loan_plan:
@@ -807,6 +809,7 @@ en:
           no_response_from_school: No response from school
           suspected_fraud: Suspected fraud
           information_mismatch_new_details_needed: "Information mismatch - new details needed"
+          ineligible_previous_residency: Ineligible previous residency
       eligibility_answers:
         nationality: "Nationality"
         passport_number: "Passport number"
@@ -821,6 +824,9 @@ en:
       task_questions:
         previous_payment:
           title: The claimant has not received an IRP payment in AY 2023/24?
+        previous_residency:
+          title: Does the claimant meet previous residency rules?
+          hint: asd
         matching_details:
           title: "Is this claim still valid despite having matching details with other claims?"
         identity_confirmation:
@@ -828,7 +834,7 @@ en:
         visa:
           title: "Is the claimant’s visa type eligible for a claim?"
         arrival_date:
-          title: "Does the claimant’s arrival date match the above information from their claim?"
+          title: Has the claimant arrived in the UK within 3 months of contract start date?
         employment:
           title: "Does the claimant’s current school match the above information from their claim?"
         employment_contract:
@@ -847,7 +853,7 @@ en:
     support_email_address: "FE-targeted.retention-incentive@education.gov.uk"
     claim_subject: "Further education payment"
     policy_acronym: FE
-    policy_short_name: Targeted Retention Incentive Payment For FE Teachers
+    policy_short_name: Further Education Targeted Retention Incentive
     eligibility_criteria_link:
       text: targeted retention incentive payments for early career further education teachers
       url: "https://www.gov.uk/guidance/levelling-up-premium-payments-for-fe-teachers"
@@ -864,9 +870,6 @@ en:
           duplicate_claim: "Duplicate claim"
           no_response: "No response"
           other: "Other"
-      tasks:
-        payroll_gender:
-          hint: "The claimant answered ‘Don't know’ to the question ‘How is your gender recorded on your employer’s payroll system?'"
       task_questions:
         identity_confirmation:
           title: Do the One Login details match the personal details entered by the claimant?

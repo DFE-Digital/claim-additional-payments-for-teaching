@@ -71,5 +71,9 @@ module Policies
     def duplicate_claim?(claim)
       Claim::MatchingAttributeFinder.new(claim).matching_claims.exists?
     end
+
+    def auto_check_student_loan_plan_task?
+      true
+    end
   end
 end

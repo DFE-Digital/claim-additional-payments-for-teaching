@@ -1,7 +1,9 @@
 <% content_for(:page_title) { page_title("Claim #{@claim.reference} payroll gender check for #{@claim.policy.short_name}") } %>
+
 <% content_for :back_link do %>
-  <%= link_to "Back", admin_claim_tasks_path(claim_id: @claim.id), class: "govuk-back-link" %>
+  <%= govuk_back_link href: admin_claim_tasks_path(@claim) %>
 <% end %>
+
 <%= render "shared/error_summary", instance: @claim, errored_field_id_overrides: { "payroll_gender": "claim_payroll_gender_female" } if @claim.errors.any? %>
 
 <div class="govuk-grid-row">
@@ -18,12 +20,12 @@
           <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l ">
               <h3 class="govuk-heading-l">
-                What gender should be passed to payroll and HMRC?
+                <%= t("admin.tasks.payroll_gender.title") %>
               </h3>
             </legend>
 
             <p class="govuk-body">
-              <%= t("#{Journeys.for_policy(@claim.policy)::I18N_NAMESPACE}.admin.tasks.payroll_gender.hint", default: [:"admin.tasks.payroll_gender.hint"]) %>
+              <%= t("admin.tasks.payroll_gender.hint") %>
             </p>
 
             <%= hidden_field_tag "task[passed]", "true" %>

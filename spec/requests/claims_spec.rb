@@ -201,9 +201,28 @@ RSpec.describe "Claims", type: :request do
           set_slug_sequence_in_session(journey_session, "personal-details")
         end
 
-        it "updates the student loan details" do
-          expect { request }.to change { journey_session.reload.answers.has_student_loan }
-            .and change { journey_session.reload.answers.student_loan_plan }
+        context "when there is no student loan data for the claimant" do
+          it "does not update the student loan details" do
+            expect { request }.not_to change { journey_session.reload }
+          end
+        end
+
+        context "when there is student loan data showing the claimant has a student loan" do
+          before { create(:student_loans_data, nino: "QQ123456C", date_of_birth: Date.new(1990, 1, 1)) }
+
+          it "updates the student loan details" do
+            expect { request }.to change { journey_session.reload.answers.has_student_loan }.to(true)
+              .and change { journey_session.reload.answers.student_loan_plan }.to("plan_1")
+          end
+        end
+
+        context "when there is student loan data showing the claimant does not have student loan" do
+          before { create(:student_loans_data, :no_student_loan, nino: "QQ123456C", date_of_birth: Date.new(1990, 1, 1)) }
+
+          it "updates the student loan details" do
+            expect { request }.to change { journey_session.reload.answers.has_student_loan }.to(false)
+              .and change { journey_session.reload.answers.student_loan_plan }.to("not_applicable")
+          end
         end
       end
 
@@ -248,12 +267,28 @@ RSpec.describe "Claims", type: :request do
               journey_session.save!
             end
 
-            it "updates the student loan details" do
-              expect { request }.to(
-                change { journey_session.reload.answers.has_student_loan }.and(
-                  change { journey_session.reload.answers.student_loan_plan }
-                )
-              )
+            context "when there is no student loan data for the claimant" do
+              it "does not update the student loan details" do
+                expect { request }.not_to change { journey_session.reload }
+              end
+            end
+
+            context "when there is student loan data showing the claimant has a student loan" do
+              before { create(:student_loans_data, nino: "QQ123456C", date_of_birth: Date.new(1990, 1, 1)) }
+
+              it "updates the student loan details" do
+                expect { request }.to change { journey_session.reload.answers.has_student_loan }.to(true)
+                  .and change { journey_session.reload.answers.student_loan_plan }.to("plan_1")
+              end
+            end
+
+            context "when there is student loan data showing the claimant does not have student loan" do
+              before { create(:student_loans_data, :no_student_loan, nino: "QQ123456C", date_of_birth: Date.new(1990, 1, 1)) }
+
+              it "updates the student loan details" do
+                expect { request }.to change { journey_session.reload.answers.has_student_loan }.to(false)
+                  .and change { journey_session.reload.answers.student_loan_plan }.to("not_applicable")
+              end
             end
           end
 

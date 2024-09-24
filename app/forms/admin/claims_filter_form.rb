@@ -25,6 +25,8 @@ class Admin::ClaimsFilterForm
         Claim.includes(:decisions).held.awaiting_decision
       when "failed_bank_validation"
         Claim.includes(:decisions).failed_bank_validation.awaiting_decision
+      when "awaiting_provider_verification"
+        Claim.by_policy(Policies::FurtherEducationPayments).awaiting_further_education_provider_verification
       else
         Claim.includes(:decisions).not_held.awaiting_decision
       end

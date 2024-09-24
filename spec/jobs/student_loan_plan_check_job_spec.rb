@@ -3,7 +3,11 @@ require "rails_helper"
 RSpec.describe StudentLoanPlanCheckJob do
   subject(:perform_job) { described_class.new.perform }
 
-  let!(:claim) { create(:claim, claim_status, academic_year:, policy: Policies::LevellingUpPremiumPayments) }
+  before do
+    create(:journey_configuration, :further_education_payments)
+  end
+
+  let(:claim) { create(:claim, claim_status, academic_year:, policy: Policies::LevellingUpPremiumPayments) }
   let(:claim_status) { :submitted }
 
   let(:academic_year) { journey_configuration.current_academic_year }
@@ -48,10 +52,39 @@ RSpec.describe StudentLoanPlanCheckJob do
 
     context "when a claim was submitted using the student loan questions" do
       before do
+        claim.update!(submitted_using_slc_data: false)
+      end
+
+      it "updates the student loan details" do
+        expect(ClaimStudentLoanDetailsUpdater).to receive(:call).with(claim)
+        perform_job
+      end
+
+      it "runs the task" do
+        expect { perform_job }
+          .to change { claim.reload.notes.count }
+          .and change { claim.tasks.count }
+      end
+    end
+
+    # this will only happen for FE claims submitted before LUPEYALPHA-1010 was merged
+    context "when a claim was submitted with submitted_using_slc_data: nil" do
+      before do
         claim.update!(submitted_using_slc_data: nil)
       end
 
-      include_examples :skip_check
+      let(:claim) { create(:claim, claim_status, academic_year:, policy: Policies::FurtherEducationPayments) }
+
+      it "updates the student loan details" do
+        expect(ClaimStudentLoanDetailsUpdater).to receive(:call).with(claim)
+        perform_job
+      end
+
+      it "runs the task" do
+        expect { perform_job }
+          .to change { claim.reload.notes.count }
+          .and change { claim.tasks.count }
+      end
     end
 
     context "when the student loan plan check did not run before" do

@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe "SLC (Student Loans Company) data upload " do
   let!(:journey_configuration_tslr) { create(:journey_configuration, :student_loans) }
   let!(:journey_configuration_ecp_lupp) { create(:journey_configuration, :additional_payments) }
+  let!(:journey_configuration_fe) { create(:journey_configuration, :further_education_payments) }
 
   before { @signed_in_user = sign_in_as_service_operator }
 
@@ -52,8 +53,7 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
       let(:csv) do
         <<~CSV
           Claim reference,NINO,Full name,Date of birth,Policy name,No of Plans Currently Repaying,Plan Type of Deduction,Amount
-          #{rows[0].values.join(",")}
-          #{rows[1].values.join(",")}
+          #{rows.map { |row| row.values.join(",") }.join("\n")}
         CSV
       end
 
@@ -78,6 +78,16 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
             no_of_plans_currently_repaying: "1",
             plan_type_of_deduction: "2",
             amount: "50"
+          },
+          {
+            claim_reference: "TESTREF03",
+            nino: "QQ234567B",
+            full_name: "Guybrush Threepwood",
+            date_of_birth: "1/12/1980",
+            policy_name: "EarlyCareerPayments",
+            no_of_plans_currently_repaying: "No data",
+            plan_type_of_deduction: "No data",
+            amount: "No data"
           }
         ]
       end
@@ -101,12 +111,28 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
         expect { upload }.to have_enqueued_job(ImportStudentLoansDataJob)
       end
 
-      it "parses the rows and saves them as student loans data records" do
+      it "parses the rows with data and saves them as student loans data records" do
         aggregate_failures do
-          expect { perform_enqueued_jobs { upload } }.to change(StudentLoansData, :count).by(2)
+          expect { perform_enqueued_jobs { upload } }.to change(StudentLoansData, :count).by(3)
           expect(StudentLoansData.where(nino: "QQ123456A").first).to have_attributes(expected_records[0])
           expect(StudentLoansData.where(nino: "QQ123456B").first).to have_attributes(expected_records[1])
         end
+      end
+
+      it "parses the rows with no data and saves them as student loans data records" do
+        perform_enqueued_jobs { upload }
+        expect(StudentLoansData.where(nino: "QQ234567B").first).to have_attributes(
+          {
+            claim_reference: "TESTREF03",
+            nino: "QQ234567B",
+            full_name: "Guybrush Threepwood",
+            date_of_birth: Date.strptime("1/12/1980", "%d/%m/%Y"),
+            policy_name: "EarlyCareerPayments",
+            no_of_plans_currently_repaying: nil,
+            plan_type_of_deduction: nil,
+            amount: 0
+          }
+        )
       end
 
       shared_examples :no_upload do

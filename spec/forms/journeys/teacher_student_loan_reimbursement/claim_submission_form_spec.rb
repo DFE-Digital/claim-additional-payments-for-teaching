@@ -72,7 +72,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::ClaimSubmissionForm do
     }
   end
 
-  let(:journey_session) { build(:student_loans_session, answers: answers) }
+  let(:journey_session) { create(:student_loans_session, answers: answers) }
 
   let(:form) { described_class.new(journey_session: journey_session) }
 
@@ -198,6 +198,8 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::ClaimSubmissionForm do
       expect(claim.eligibility_type).to(
         eq("Policies::StudentLoans::Eligibility")
       )
+
+      expect(claim.started_at).to eq(journey_session.created_at)
 
       expect(journey_session.claim).to eq(claim)
 
