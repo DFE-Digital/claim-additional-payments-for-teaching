@@ -91,7 +91,8 @@ class Claim < ApplicationRecord
     onelogin_idv_date_of_birth: true,
     paye_reference: true,
     practitioner_email_address: true,
-    provider_contact_name: true
+    provider_contact_name: true,
+    started_at: false
   }.freeze
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
