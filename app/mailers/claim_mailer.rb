@@ -35,6 +35,7 @@ class ClaimMailer < ApplicationMailer
       ref_number: @claim.reference,
       support_email_address: @support_email_address,
       current_financial_year: (claim.policy == Policies::StudentLoans) ? Policies::StudentLoans.current_financial_year : "",
+      last_academic_year: rejected_reason_claimed_last_year? ? (AcademicYear.current - 1).to_s : "",
       **rejected_reasons_personalisation(@claim.latest_decision&.rejected_reasons_hash)
     }
 
@@ -115,6 +116,27 @@ class ClaimMailer < ApplicationMailer
     }
 
     template_id = template_ids(claim)[:CLAIM_PROVIDER_VERIFICATION_EMAIL_TEMPLATE_ID]
+
+    template_mail(
+      template_id,
+      to: claim.school.eligible_fe_provider.primary_key_contact_email_address,
+      personalisation: personalisation
+    )
+  end
+
+  def further_education_payment_provider_verification_chase_email(claim)
+    policy_check!(claim, Policies::FurtherEducationPayments)
+
+    personalisation = {
+      recipient_name: claim.school.name,
+      claimant_name: claim.full_name,
+      claim_reference: claim.reference,
+      claim_submission_date: l(claim.created_at.to_date),
+      verification_due_date: l(Policies::FurtherEducationPayments.verification_chase_due_date_for_claim(claim)),
+      verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
+    }
+
+    template_id = template_ids(claim)[:CLAIM_PROVIDER_VERIFICATION_CHASE_EMAIL_TEMPLATE_ID]
 
     template_mail(
       template_id,

@@ -52,6 +52,8 @@ RSpec.feature "Admin claim further education payments" do
               "information"
             )
 
+            expect(claim.eligibility.reload.provider_verification_email_last_sent_at).to be_nil
+
             expect(page).to have_content(
               "This task has not been sent to the provider yet."
             )
@@ -78,6 +80,8 @@ RSpec.feature "Admin claim further education payments" do
                 verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
               )
             )
+
+            expect(claim.eligibility.reload.provider_verification_email_last_sent_at).to eq Time.now
           end
         end
 
@@ -106,7 +110,8 @@ RSpec.feature "Admin claim further education payments" do
                 contract_type: "fixed_term",
                 claim: claim,
                 school: fe_provider,
-                award_amount: 1500
+                award_amount: 1500,
+                provider_verification_email_last_sent_at: DateTime.new(2024, 8, 1, 9, 0, 0)
               )
 
               create(
@@ -155,6 +160,8 @@ RSpec.feature "Admin claim further education payments" do
                   verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
                 )
               )
+
+              expect(claim.eligibility.reload.provider_verification_email_last_sent_at).to eq Time.now
             end
           end
 
@@ -182,7 +189,8 @@ RSpec.feature "Admin claim further education payments" do
                 contract_type: "fixed_term",
                 claim: claim,
                 school: fe_provider,
-                award_amount: 1500
+                award_amount: 1500,
+                provider_verification_email_last_sent_at: DateTime.new(2024, 8, 1, 9, 0, 0)
               )
 
               visit admin_claim_path(claim)
@@ -224,6 +232,54 @@ RSpec.feature "Admin claim further education payments" do
                   verification_due_date: "15 August 2024",
                   verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
                 )
+              )
+
+              expect(claim.eligibility.reload.provider_verification_email_last_sent_at).to eq Time.now
+            end
+
+            it "shows the chaser verification email was sent if one was sent after 3 weeks" do
+              fe_provider = create(
+                :school,
+                :further_education,
+                :fe_eligible,
+                name: "Springfield A and M"
+              )
+
+              claim = create(
+                :claim,
+                first_name: "Edna",
+                surname: "Krabappel",
+                date_of_birth: Date.new(1945, 7, 3),
+                reference: "AB123456",
+                created_at: DateTime.new(2024, 8, 1, 9, 0, 0),
+                submitted_at: DateTime.new(2024, 8, 1, 9, 0, 0)
+              )
+
+              create(
+                :further_education_payments_eligibility,
+                contract_type: "fixed_term",
+                claim: claim,
+                school: fe_provider,
+                award_amount: 1500,
+                provider_verification_email_last_sent_at: DateTime.new(2024, 8, 1, 9, 0, 0)
+              )
+
+              perform_enqueued_jobs do
+                FurtherEducationPayments::ProviderVerificationChaseEmailJob.perform_now
+              end
+
+              visit admin_claim_path(claim)
+
+              click_on "View tasks"
+
+              click_on(
+                "Confirm the provider has responded and verified the claimant's " \
+                "information"
+              )
+
+              expect(page).to have_content(
+                "The verification request was sent to the provider by " \
+                "an automated process on 9 September 2024 11:00am"
               )
             end
           end
@@ -283,7 +339,7 @@ RSpec.feature "Admin claim further education payments" do
             end
 
             within_table_row("Timetabled teaching hours") do |claimant, provider|
-              expect(claimant).to have_text("More than 12 hours per week")
+              expect(claimant).to have_text("12 hours or more per week")
               expect(provider).to have_text("Yes")
             end
 
@@ -379,7 +435,7 @@ RSpec.feature "Admin claim further education payments" do
             end
 
             within_table_row("Timetabled teaching hours") do |claimant, provider|
-              expect(claimant).to have_text("More than 12 hours per week")
+              expect(claimant).to have_text("12 hours or more per week")
               expect(provider).to have_text("Yes")
             end
 

@@ -33,7 +33,7 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
-    choose("More than 12 hours per week")
+    choose("12 hours or more per week")
     click_button "Continue"
 
     expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
