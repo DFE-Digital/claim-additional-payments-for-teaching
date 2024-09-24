@@ -1,6 +1,8 @@
 <% content_for(:page_title) { page_title("Claim #{@claim.reference} amendments") } %>
 
-<%= link_to "Back", claims_backlink_path, class: "govuk-back-link" %>
+<% content_for :back_link do %>
+  <%= govuk_back_link href: claims_backlink_path %>
+<% end %>
 
 <div class="govuk-grid-row">
   <%= render "admin/tasks/#{claim_summary_view}", claim: @claim, heading: @claim.reference %>

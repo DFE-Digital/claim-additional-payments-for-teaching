@@ -1,6 +1,8 @@
 <% content_for(:page_title) { page_title("Claim #{@claim.reference} checks for #{@claim.policy.short_name}") } %>
 
-<%= link_to "Back", claims_backlink_path, class: "govuk-back-link" %>
+<% content_for :back_link do %>
+  <%= govuk_back_link href: claims_backlink_path %>
+<% end %>
 
 <% if @has_matching_claims %>
   <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
