@@ -119,7 +119,7 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
           ["Are you a member of staff with teaching responsibilities?", "Yes", "teaching-responsibilities"],
           ["Which FE provider are you employed by?", college.name, "further-education-provision-search"],
           ["What type of contract do you have with #{college.name}?", "Permanent contract", "contract-type"],
-          ["On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?", "More than 12 hours per week", "teaching-hours-per-week"],
+          ["On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?", "12 hours or more per week", "teaching-hours-per-week"],
           ["Which academic year did you start teaching in further education (FE) in England?", "September 2023 to August 2024", "further-education-teaching-start-year"],
           ["Which subject areas do you teach?", "<p class=\"govuk-body\">Chemistry</p><p class=\"govuk-body\">Maths</p>", "subjects-taught"],
           ["Building and construction courses", "<p class=\"govuk-body\">Qualifications approved for funding at level 3 and below in the building and construction sector subject area</p><p class=\"govuk-body\">T Level in building services engineering for construction</p><p class=\"govuk-body\">T Level in onsite construction</p><p class=\"govuk-body\">T Level in design, surveying and planning for construction</p><p class=\"govuk-body\">Level 2 or level 3 apprenticeships in the construction and the built environment occupational route</p>", "building-construction-courses"],
