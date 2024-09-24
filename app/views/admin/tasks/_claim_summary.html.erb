@@ -5,6 +5,7 @@
       <%= claim_summary_heading(claim) %>
     </span>
     <span class="govuk-body-m">
+      <%= link_to "View tasks", admin_claim_tasks_path(claim), class: "govuk-link" unless current_page? admin_claim_tasks_path(@claim) %>
       <%= link_to "View full claim", admin_claim_path(claim), class: "govuk-link" %>
       <%= link_to "Amend claim", new_admin_claim_amendment_path(claim), class: "govuk-link" if claim.amendable? %>
       <%= link_to "Top up claim", new_admin_claim_topup_path(@claim), class: "govuk-link" if @claim.topupable? %>
