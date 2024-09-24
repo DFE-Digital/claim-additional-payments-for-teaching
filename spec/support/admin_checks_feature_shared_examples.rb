@@ -15,6 +15,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
 
   before do
     @signed_in_user = sign_in_as_service_operator
+    create(:task, :automated, :passed, name: "student_loan_plan", claim:)
   end
 
   def lup_claim_checking_steps
@@ -66,15 +67,13 @@ RSpec.shared_examples "Admin Checks" do |policy|
 
     expect(claim.tasks.find_by!(name: "employment").passed?).to eq(true)
 
-    expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.student_loan_plan.title"))
     expect(page).to have_content("Student loan plan")
     expect(page).to have_link("Next: Decision")
     expect(page).to have_link("Previous: Employment")
+    expect(page).to have_content("Passed")
+    expect(page).not_to have_button("Save and continue")
 
-    choose "Yes"
-    click_on "Save and continue"
-
-    expect(claim.tasks.find_by!(name: "student_loan_plan").passed?).to eq(true)
+    click_link "Next: Decision"
 
     expect(page).to have_content("Claim decision")
     expect(page).not_to have_link("Next")
@@ -149,15 +148,13 @@ RSpec.shared_examples "Admin Checks" do |policy|
 
     expect(claim.tasks.find_by!(name: "employment").passed?).to eq(true)
 
-    expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.student_loan_plan.title"))
     expect(page).to have_content("Student loan plan")
     expect(page).to have_link("Next: Decision")
     expect(page).to have_link("Previous: Employment")
+    expect(page).to have_content("Passed")
+    expect(page).not_to have_button("Save and continue")
 
-    choose "Yes"
-    click_on "Save and continue"
-
-    expect(claim.tasks.find_by!(name: "student_loan_plan").passed?).to eq(true)
+    click_link "Next: Decision"
 
     expect(page).to have_content("Claim decision")
     expect(page).not_to have_link("Next")
@@ -243,6 +240,51 @@ RSpec.shared_examples "Admin Checks" do |policy|
     expect(claim.latest_decision.created_by).to eq(@signed_in_user)
   end
 
+  def fe_claim_checking_steps
+    visit admin_claims_path
+    find("a[href='#{admin_claim_tasks_path(claim)}']").click
+
+    click_on I18n.t("admin.tasks.identity_confirmation.title")
+
+    expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.identity_confirmation.title"))
+    expect(page).to have_link("Next: Provider verification")
+    expect(page).not_to have_link("Previous")
+
+    choose "Yes"
+    click_on "Save and continue"
+
+    expect(claim.tasks.find_by!(name: "identity_confirmation").passed?).to eq(true)
+
+    expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.provider_verification.title"))
+    expect(page).to have_link("Next: Student loan plan")
+    expect(page).to have_link("Previous: Identity confirmation")
+
+    choose "Yes"
+    click_on "Save and continue"
+
+    expect(claim.tasks.find_by!(name: "provider_verification").passed?).to eq(true)
+
+    expect(page).to have_content("Student loan plan")
+    expect(page).to have_content("Passed")
+    expect(page).not_to have_button("Save and continue")
+    expect(page).to have_link("Next: Decision")
+    expect(page).to have_link("Previous: Provider verification")
+
+    click_link "Next: Decision"
+
+    expect(page).to have_content("Claim decision")
+    expect(page).not_to have_link("Next")
+    expect(page).to have_link("Previous: Student loan plan")
+
+    choose "Approve"
+    fill_in "Decision notes", with: "All checks passed!"
+    click_on "Confirm decision"
+
+    expect(page).to have_content("Claim has been approved successfully")
+    expect(claim.latest_decision).to be_approved
+    expect(claim.latest_decision.created_by).to eq(@signed_in_user)
+  end
+
   def qa_approval_steps
     expect(page).to have_content("This claim has been marked for a quality assurance review")
     expect(page).to have_content("Quality assurance decision")
@@ -269,6 +311,8 @@ RSpec.shared_examples "Admin Checks" do |policy|
       ecp_claim_checking_steps
     elsif policy == Policies::StudentLoans
       tslr_claim_checking_steps
+    elsif policy == Policies::FurtherEducationPayments
+      fe_claim_checking_steps
     else
       raise "Unimplemented policy: #{policy}"
     end
@@ -281,7 +325,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
     claim_checking_steps(policy)
   end
 
-  scenario "service operator QAs a #{policy_name} claim" do
+  scenario "service operator QAs a #{policy_name} claim", if: policy::MIN_QA_THRESHOLD.positive? do
     claim_checking_steps(policy)
     qa_approval_steps
   end

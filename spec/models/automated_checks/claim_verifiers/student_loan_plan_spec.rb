@@ -10,7 +10,7 @@ module AutomatedChecks
       let(:claim_arg) { claim }
       let(:claim) { create(:claim, :submitted, policy:) }
 
-      shared_examples :execution_with_an_outcome do
+      shared_examples :creating_a_task_and_note do
         let(:saved_task) { claim_arg.tasks.find_by(name: "student_loan_plan") }
         let(:saved_note) { claim_arg.notes.last }
 
@@ -49,7 +49,7 @@ module AutomatedChecks
         end
       end
 
-      shared_examples :execution_without_an_outcome do
+      shared_examples :not_creating_a_task_or_note do
         it "does not save anything and returns immediately", :aggregate_failures do
           is_expected.to be_nil
 
@@ -64,7 +64,7 @@ module AutomatedChecks
         context "when the claim policy is TSLR" do
           let(:policy) { Policies::StudentLoans }
 
-          it_behaves_like :execution_without_an_outcome
+          it_behaves_like :not_creating_a_task_or_note
         end
 
         context "when the claim policy is ECP/LUP/FE" do
@@ -79,14 +79,14 @@ module AutomatedChecks
 
                 let(:submitted_using_slc_data) { false }
 
-                it_behaves_like :execution_without_an_outcome
+                it_behaves_like :not_creating_a_task_or_note
               end
 
               context "when the claim was submitted using SLC data" do
                 let(:submitted_using_slc_data) { true }
                 let(:claim_student_loan_plan) { StudentLoan::PLAN_1 }
 
-                it_behaves_like :execution_without_an_outcome
+                it_behaves_like :not_creating_a_task_or_note
               end
 
               context "when the claim was not submitted using SLC data" do
@@ -97,7 +97,7 @@ module AutomatedChecks
                   let(:expected_match_value) { nil }
                   let(:expected_note) { "[SLC Student loan plan] - No data" }
 
-                  it_behaves_like :execution_with_an_outcome
+                  it_behaves_like :creating_a_task_and_note
                 end
 
                 context "when there is student loan data - with a plan" do
@@ -109,7 +109,7 @@ module AutomatedChecks
                   let(:expected_match_value) { "all" }
                   let(:expected_note) { "[SLC Student loan plan] - Matched - has a student loan" }
 
-                  it_behaves_like :execution_with_an_outcome
+                  it_behaves_like :creating_a_task_and_note
                 end
 
                 context "when there is student loan data - without a plan" do
@@ -121,7 +121,7 @@ module AutomatedChecks
                   let(:expected_match_value) { "all" }
                   let(:expected_note) { "[SLC Student loan plan] - Matched - does not have a student loan" }
 
-                  it_behaves_like :execution_with_an_outcome
+                  it_behaves_like :creating_a_task_and_note
                 end
               end
             end
