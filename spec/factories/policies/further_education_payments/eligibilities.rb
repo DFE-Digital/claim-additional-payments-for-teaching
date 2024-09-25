@@ -18,7 +18,7 @@ FactoryBot.define do
       association :school, factory: :fe_eligible_school
     end
 
-    trait :eligible_duplicate do
+    trait :duplicate do
       flagged_as_duplicate { true }
     end
 

@@ -8,7 +8,7 @@ RSpec.feature "Admin view claim for FurtherEducationPayments" do
       :claim,
       :submitted,
       policy: Policies::FurtherEducationPayments,
-      eligibility_trait: :eligible
+      eligibility_trait: :not_verified
     )
   }
   let!(:claim_with_trn) {
@@ -24,7 +24,7 @@ RSpec.feature "Admin view claim for FurtherEducationPayments" do
       :claim,
       :submitted,
       policy: Policies::FurtherEducationPayments,
-      eligibility_trait: :eligible_duplicate
+      eligibility_trait: :duplicate
     )
   }
   let!(:claim_with_duplicates_provider_email_sent) {
@@ -32,7 +32,7 @@ RSpec.feature "Admin view claim for FurtherEducationPayments" do
       :claim,
       :submitted,
       policy: Policies::FurtherEducationPayments,
-      eligibility_trait: :eligible_duplicate
+      eligibility_trait: :duplicate
     )
   }
   let!(:verified_claim) {
