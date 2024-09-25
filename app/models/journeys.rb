@@ -12,7 +12,8 @@ module Journeys
     FurtherEducationPayments,
     FurtherEducationPayments::Provider,
     EarlyYearsPayment::Provider::Start,
-    EarlyYearsPayment::Provider::Authenticated
+    EarlyYearsPayment::Provider::Authenticated,
+    EarlyYearsPayment::Practitioner
   ].freeze
 
   def all
