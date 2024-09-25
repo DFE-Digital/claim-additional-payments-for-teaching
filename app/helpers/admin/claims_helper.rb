@@ -97,22 +97,6 @@ module Admin
       claim.logged_in_with_tid? ? I18n.t("admin.claim_route_with_tid") : I18n.t("admin.claim_route_not_tid")
     end
 
-    def matching_attributes(first_claim, second_claim)
-      first_attributes = matching_attributes_for_claim(first_claim)
-      second_attributes = matching_attributes_for_claim(second_claim)
-
-      first_eligibility_attributes = matching_attributes_for_eligibility(first_claim.eligibility)
-      second_eligibility_attributes = matching_attributes_for_eligibility(second_claim.eligibility)
-
-      matching_attributes = first_attributes & second_attributes
-      claim_matches = matching_attributes.to_h.compact.keys.map(&:humanize).sort
-
-      matching_eligibility_attributes = first_eligibility_attributes & second_eligibility_attributes
-      eligibility_matches = matching_eligibility_attributes.to_h.compact.keys.map(&:humanize).sort
-
-      claim_matches + eligibility_matches
-    end
-
     def identity_confirmation_task_claim_verifier_match_status_tag(claim)
       task = claim.tasks.detect { |t| t.name == "identity_confirmation" }
 
@@ -234,20 +218,6 @@ module Admin
     end
 
     private
-
-    def matching_attributes_for_claim(claim)
-      claim.attributes
-        .slice(*Claim::MatchingAttributeFinder::CLAIM_ATTRIBUTE_GROUPS_TO_MATCH.flatten)
-        .reject { |_, v| v.blank? }
-        .to_a
-    end
-
-    def matching_attributes_for_eligibility(eligibility)
-      eligibility.attributes
-        .slice(*eligibility.policy.eligibility_matching_attributes.flatten)
-        .reject { |_, v| v.blank? }
-        .to_a
-    end
 
     def days_between(first_date, second_date)
       (second_date - first_date).to_i

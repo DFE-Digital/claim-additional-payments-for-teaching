@@ -172,41 +172,6 @@ describe Admin::ClaimsHelper do
     end
   end
 
-  describe "#matching_attributes" do
-    let(:first_claim) {
-      build(
-        :claim,
-        national_insurance_number: "QQ891011C",
-        email_address: "genghis.khan@mongol-empire.com",
-        bank_account_number: "34682151",
-        bank_sort_code: "972654",
-        building_society_roll_number: "123456789/ABCD",
-        eligibility_attributes: {teacher_reference_number: "0902344"}
-      )
-    }
-    let(:second_claim) {
-      build(
-        :claim,
-        :submitted,
-        national_insurance_number: first_claim.national_insurance_number,
-        bank_account_number: first_claim.bank_account_number,
-        bank_sort_code: first_claim.bank_sort_code,
-        building_society_roll_number: first_claim.building_society_roll_number,
-        eligibility_attributes: {teacher_reference_number: first_claim.eligibility.teacher_reference_number}
-      )
-    }
-    subject { helper.matching_attributes(first_claim, second_claim) }
-
-    it "returns the humanised names of the matching attributes" do
-      expect(subject).to eq(["Bank account number", "Bank sort code", "Building society roll number", "National insurance number", "Teacher reference number"])
-    end
-
-    it "does not consider a blank building society roll number to be a match" do
-      [first_claim, second_claim].each { |claim| claim.building_society_roll_number = "" }
-      expect(subject).to eq(["Bank account number", "Bank sort code", "National insurance number", "Teacher reference number"])
-    end
-  end
-
   describe "#identity_confirmation_task_claim_verifier_match_status_tag" do
     subject(:identity_confirmation_task_claim_verifier_match_status_tag) { helper.identity_confirmation_task_claim_verifier_match_status_tag(claim) }
 
