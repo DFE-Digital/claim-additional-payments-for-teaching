@@ -1402,6 +1402,7 @@ en:
   early_years_payment_practitioner:
     journey_name: Claim an early years financial incentive payment - practitioner
     feedback_email: implementme@example.com
+    claim_description: for early years financial incentive payment
   activerecord:
     errors:
       models:

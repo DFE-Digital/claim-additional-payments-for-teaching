@@ -4,6 +4,9 @@ module Journeys
       class SlugSequence
         SLUGS = %w[
           find-reference
+          one-login-sign-in
+          how-we-use-your-information
+          personal-details
         ].freeze
 
         def self.start_page_url
