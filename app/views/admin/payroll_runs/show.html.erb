@@ -157,4 +157,15 @@
 
     <%== render partial: 'pagination', locals: { pagy: @pagy } %>
   </div>
+
+  <% if PayrollRun.allow_destroy? %>
+    <div class="govuk-grid-column-two-thirds">
+      <%= button_to(
+        "Delete payroll run",
+        admin_payroll_run_path(@payroll_run),
+        method: :delete,
+        class: "govuk-button govuk-button--warning",
+      ) %>
+    </div>
+  <% end %>
 </div>

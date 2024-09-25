@@ -49,5 +49,16 @@ module Admin
       @payroll_run = PayrollRun.where(id: params[:id]).includes({claims: [:eligibility]}, {payments: [{claims: [:eligibility]}]}).first
       @pagy, @payments = pagy(@payroll_run.payments.ordered.includes(claims: [:eligibility]).includes(:topups))
     end
+
+    def destroy
+      if PayrollRun.allow_destroy?
+        PayrollRun.find(params[:id]).destroy!
+        redirect_to admin_payroll_runs_path, notice: "Payroll run deleted"
+      else
+        redirect_to(
+          admin_payroll_runs_path, alert: "Payroll run deletion is not allowed"
+        )
+      end
+    end
   end
 end
