@@ -85,6 +85,8 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::ClaimSubmissionForm do
 
       expect(claim.reference).to be_present
 
+      expect(claim.started_at).to eq(journey_session.created_at)
+
       eligibility_answers.each do |attribute, value|
         expect(eligibility.public_send(attribute)).to eq(value)
       end

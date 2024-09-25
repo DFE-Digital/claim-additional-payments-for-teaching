@@ -40,6 +40,7 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
       expect(claim.logged_in_with_onelogin).to eq(answers.logged_in_with_onelogin)
       expect(claim.onelogin_credentials).to eq(answers.onelogin_credentials)
       expect(claim.onelogin_user_info).to eq(answers.onelogin_user_info)
+      expect(claim.started_at).to eql(journey_session.created_at)
 
       expect(claim.onelogin_uid).to eql(answers.onelogin_uid)
       expect(claim.onelogin_auth_at).to eql(answers.onelogin_auth_at)
