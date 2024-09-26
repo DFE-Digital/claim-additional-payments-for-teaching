@@ -1,1 +1,19 @@
-<p class="govuk-body">enter home address page goes here</p>
+<% content_for(:page_title, page_title(t("forms.address.questions.your_address"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for @form, url: claim_path(current_journey_routing_name), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_fieldset legend: {
+        text: t("forms.address.questions.your_address"),
+        tag: "h1",
+        size: "l"
+      } do %>
+        <%= render "address_fields", f: f %>
+      <% end %>
+
+      <%= f.govuk_submit "Continue" %>
+    <% end %>
+  </div>
+</div>

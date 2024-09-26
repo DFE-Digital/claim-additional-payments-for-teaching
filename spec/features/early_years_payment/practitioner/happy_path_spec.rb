@@ -25,5 +25,14 @@ RSpec.feature "Early years payment practitioner" do
     fill_in "Year", with: "1988"
     fill_in "National Insurance number", with: "PX321499A"
     click_on "Continue"
+
+    expect(page.title).to have_text("What is your address?")
+    expect(page).to have_content("What is your address?")
+    fill_in "House number or name", with: "57"
+    fill_in "Building and street", with: "Walthamstow Drive"
+    fill_in "Town or city", with: "Derby"
+    fill_in "County", with: "City of Derby"
+    fill_in "Postcode", with: "DE22 4BS"
+    click_on "Continue"
   end
 end

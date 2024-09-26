@@ -8,6 +8,7 @@ module Journeys
           how-we-use-your-information
           personal-details
           enter-home-address
+          email-address
         ].freeze
 
         def self.start_page_url
