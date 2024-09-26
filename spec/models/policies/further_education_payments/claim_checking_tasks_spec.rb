@@ -8,11 +8,21 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks do
     let(:teacher_reference_number) { "1234567" }
     let(:matching_claims) { Claim.none }
     let(:hmrc_bank_validation_succeeded) { true }
+    let(:claimant_first_name) { "Edna" }
+    let(:claimant_surname) { "Krabappel" }
+    let(:claimant_email_address) { "e.krabappel@springfield-elementary.edu" }
 
     let(:eligibility) do
       build(
         :further_education_payments_eligibility,
-        teacher_reference_number: teacher_reference_number
+        teacher_reference_number: teacher_reference_number,
+        verification: {
+          verifier: {
+            first_name: "Walter",
+            last_name: "Skinner",
+            email: "w.s.skinner@springfield-elementary.edu"
+          }
+        }
       )
     end
 
@@ -22,7 +32,10 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks do
         policy: Policies::FurtherEducationPayments,
         payroll_gender: payroll_gender,
         hmrc_bank_validation_succeeded: hmrc_bank_validation_succeeded,
-        eligibility: eligibility
+        eligibility: eligibility,
+        first_name: claimant_first_name,
+        surname: claimant_surname,
+        email_address: claimant_email_address
       )
     end
 
@@ -81,6 +94,24 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks do
 
     context "when the bank details do not need validating" do
       it { is_expected.not_to include("payroll_details") }
+      it { is_expected.to include(*invariant_tasks) }
+    end
+
+    context "when the claimant and provider names match" do
+      let(:claimant_first_name) { "Walter" }
+      let(:claimant_surname) { "Skinner" }
+      it { is_expected.to include("provider_details") }
+      it { is_expected.to include(*invariant_tasks) }
+    end
+
+    context "when the claimant and provider emails match" do
+      let(:claimant_email_address) { "w.s.skinner@springfield-elementary.edu" }
+      it { is_expected.to include("provider_details") }
+      it { is_expected.to include(*invariant_tasks) }
+    end
+
+    context "when the claim and provider details are different" do
+      it { is_expected.not_to include("provider_details") }
       it { is_expected.to include(*invariant_tasks) }
     end
   end

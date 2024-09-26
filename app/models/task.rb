@@ -11,6 +11,7 @@ class Task < ApplicationRecord
     previous_payment
     identity_confirmation
     provider_verification
+    provider_details
     visa
     arrival_date
     previous_residency
