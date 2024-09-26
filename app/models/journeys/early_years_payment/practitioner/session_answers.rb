@@ -3,7 +3,7 @@ module Journeys
     module Practitioner
       class SessionAnswers < Journeys::SessionAnswers
         def policy
-          nil
+          Policies::EarlyYearsPayments
         end
       end
     end
