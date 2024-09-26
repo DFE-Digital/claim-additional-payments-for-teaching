@@ -18,7 +18,7 @@ RSpec.feature "Early years payment practitioner" do
     fill_in "Claim reference number", with: claim.reference
     click_button "Submit"
 
-    expect(page).to have_content "one login page goes here"
+    expect(page).to have_content "Sign in with GOV.UK One Login"
     click_on "Continue"
 
     expect(page.title).to have_text("How we’ll use the information you provide")
