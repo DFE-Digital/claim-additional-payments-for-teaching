@@ -42,6 +42,15 @@ module Policies
         ]
       end
 
+      def provider_details
+        [
+          ["Provider name", claim.eligibility.provider_full_name],
+          ["Provider email", claim.eligibility.provider_email],
+          ["Claimant name", claim.full_name],
+          ["Claimant email", claim.email_address]
+        ]
+      end
+
       private
 
       def verifier

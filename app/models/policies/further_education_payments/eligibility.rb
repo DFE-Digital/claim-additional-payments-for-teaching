@@ -77,6 +77,41 @@ module Policies
         # when a provider verification email is sent by the admin team, a note is created
         !flagged_as_duplicate? || claim.notes.where(label: "provider_verification").any?
       end
+
+      def provider_and_claimant_details_match?
+        provider_and_claimant_names_match? || provider_and_claimant_emails_match?
+      end
+
+      def provider_full_name
+        "#{provider_first_name} #{provider_last_name}"
+      end
+
+      def provider_email
+        verification.dig("verifier", "email")
+      end
+
+      private
+
+      def provider_and_claimant_names_match?
+        return false unless verified?
+
+        provider_first_name&.downcase == claim.first_name.downcase &&
+          provider_last_name&.downcase == claim.surname.downcase
+      end
+
+      def provider_and_claimant_emails_match?
+        return false unless verified?
+
+        provider_email&.downcase == claim.email_address.downcase
+      end
+
+      def provider_first_name
+        verification.dig("verifier", "first_name")
+      end
+
+      def provider_last_name
+        verification.dig("verifier", "last_name")
+      end
     end
   end
 end

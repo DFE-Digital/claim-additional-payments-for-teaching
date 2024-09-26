@@ -51,6 +51,7 @@ class ClaimCheckingTasks
         task_names.delete("subject")
         task_names.delete("teaching_hours")
         task_names.delete("provider_verification")
+        task_names.delete("provider_details")
       end
     end
   end
