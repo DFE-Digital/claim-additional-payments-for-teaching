@@ -9,3 +9,7 @@ end
 def when_early_years_payment_provider_authenticated_journey_configuration_exists
   create(:journey_configuration, :early_years_payment_provider_authenticated)
 end
+
+def when_early_years_payment_practitioner_journey_configuration_exists
+  create(:journey_configuration, :early_years_payment_practitioner)
+end
