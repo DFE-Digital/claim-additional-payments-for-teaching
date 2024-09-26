@@ -83,6 +83,26 @@ class ClaimMailer < ApplicationMailer
     send_mail(template_ids(claim)[:CLAIM_PROVIDER_EMAIL_TEMPLATE_ID], personalisation)
   end
 
+  def early_years_payment_practitioner_email(claim)
+    policy_check!(claim, Policies::EarlyYearsPayments)
+
+    personalisation = {
+      full_name: claim.full_name,
+      setting_name: claim.eligibility.eligible_ey_provider.nursery_name,
+      ref_number: claim.reference,
+      # TODO: Reference new route for practitioner journey
+      complete_claim_url: "https://gov.uk/claim-an-early-years-financial-incentive-payment?claim=#{claim.reference}&email=#{CGI.escape claim.practitioner_email_address}"
+    }
+
+    template_id = template_ids(claim)[:CLAIM_PRACTITIONER_NOTIFY_TEMPLATE_ID]
+
+    template_mail(
+      template_id,
+      to: claim.practitioner_email_address,
+      personalisation: personalisation
+    )
+  end
+
   def further_education_payment_provider_verification_email(claim)
     policy_check!(claim, Policies::FurtherEducationPayments)
 

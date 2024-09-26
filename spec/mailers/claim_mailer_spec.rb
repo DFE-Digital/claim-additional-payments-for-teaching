@@ -387,4 +387,22 @@ RSpec.describe ClaimMailer, type: :mailer do
       expect(mail.body).to be_empty
     end
   end
+
+  describe "#early_years_payment_practitioner_email" do
+    let(:mail) { ClaimMailer.early_years_payment_practitioner_email(claim) }
+    let(:email_address) { "test@example.com" }
+    let(:practitioner_email_address) { "practitioner@example.com" }
+    let(:claim) { build(:claim, reference: "TEST123", first_name: "Test", surname: "Practitioner", policy:, email_address:, practitioner_email_address:) }
+    let(:policy) { Policies::EarlyYearsPayments }
+    let(:nursery_name) { "Test Nursery" }
+    let(:eligible_ey_provider) { create(:eligible_ey_provider, nursery_name:) }
+
+    before { create(:journey_configuration, :early_years_payment_provider_start) }
+    before { claim.eligibility.update!(nursery_urn: eligible_ey_provider.urn) }
+
+    it "has personalisation keys for: full_name, setting_name, ref_number, complete_claim_url" do
+      expect(mail[:personalisation].decoded).to eq("{:full_name=>\"Test Practitioner\", :setting_name=>\"Test Nursery\", :ref_number=>\"TEST123\", :complete_claim_url=>\"https://gov.uk/claim-an-early-years-financial-incentive-payment?claim=TEST123&email=practitioner%40example.com\"}")
+      expect(mail.body).to be_empty
+    end
+  end
 end

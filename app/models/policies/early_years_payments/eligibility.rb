@@ -12,6 +12,10 @@ module Policies
       def ineligible?
         false
       end
+
+      def eligible_ey_provider
+        EligibleEyProvider.find_by_urn(nursery_urn)
+      end
     end
   end
 end

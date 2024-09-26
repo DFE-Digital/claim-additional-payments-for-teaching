@@ -38,5 +38,21 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::ClaimSubmis
       expect(eligibility.returning_within_6_months).to eq answers.returning_within_6_months
       expect(eligibility.start_date).to eq answers.start_date
     end
+
+    it "sends a notify email to the practitioner" do
+      allow(ClaimVerifierJob).to receive(:perform_later)
+
+      perform_enqueued_jobs { subject }
+
+      expect(claim.practitioner_email_address).to(
+        have_received_email(
+          "ef21f1d7-8a5c-4261-80b9-e1b78f844575",
+          full_name: claim.full_name,
+          setting_name: claim.eligibility.eligible_ey_provider.nursery_name,
+          ref_number: claim.reference,
+          complete_claim_url: "https://gov.uk/claim-an-early-years-financial-incentive-payment?claim=#{claim.reference}&email=#{CGI.escape claim.practitioner_email_address}"
+        )
+      )
+    end
   end
 end
