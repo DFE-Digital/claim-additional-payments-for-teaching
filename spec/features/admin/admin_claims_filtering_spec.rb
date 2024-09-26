@@ -49,10 +49,10 @@ RSpec.feature "Admin claim filtering" do
 
     click_on "View claims"
 
-    expect(page.find("table")).to have_content("ECP").exactly(10).times
-    expect(page.find("table")).to have_content("TSLR").exactly(7).times
-    expect(page.find("table")).to have_content("STRI").exactly(2).times
-    expect(page.find("table")).to have_content("FE").exactly(2).times
+    expect(page).to have_selector("td[text()='ECP']", count: 10)
+    expect(page).to have_selector("td[text()='TSLR']", count: 7)
+    expect(page).to have_selector("td[text()='STRI']", count: 2)
+    expect(page).to have_selector("td[text()='FE']", count: 2)
 
     click_on "View claims"
     select "Student Loans", from: "policy"
