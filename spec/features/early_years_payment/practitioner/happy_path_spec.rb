@@ -5,14 +5,15 @@ RSpec.feature "Early years payment practitioner" do
     create(
       :claim,
       policy: Policies::EarlyYearsPayments,
-      reference: "foo"
-     )
+      reference: "foo",
+      practitioner_email_address: "user@example.com"
+    )
   end
 
   scenario "Happy path" do
     when_early_years_payment_practitioner_journey_configuration_exists
 
-    visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true"
+    visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=user@example.com"
     expect(page).to have_content "Track your application"
     fill_in "Claim reference number", with: claim.reference
     click_button "Submit"

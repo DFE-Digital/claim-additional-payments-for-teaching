@@ -14,7 +14,7 @@ RSpec.describe "Claims" do
 
       it "redirects to /email-verfication slug" do
         submit_form
-        expect(response).to redirect_to("/additional-payments/reminders/email-verification")
+        expect(response).to redirect_to("/additional-payments/reminders/email-verification?form%5Bemail_address%5D=joe.bloggs%40example.com&form%5Bfull_name%5D=Joe+Bloggs")
       end
     end
 

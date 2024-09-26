@@ -6,10 +6,11 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::FindReferenceForm do
   let(:journey) { Journeys::EarlyYearsPayment::Practitioner }
   let(:journey_session) { create(:early_years_payment_practitioner_session) }
 
-  let(:reference_number){ nil }
+  let(:reference_number) { nil }
+  let(:email) { nil }
 
   let(:params) do
-    ActionController::Parameters.new(claim: {reference_number:})
+    ActionController::Parameters.new(claim: {reference_number:, email:})
   end
 
   describe "validations" do
@@ -21,7 +22,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::FindReferenceForm do
     end
 
     context "when random string" do
-      let(:reference_number){ "foo" }
+      let(:reference_number) { "foo" }
 
       it "is not valid" do
         expect(subject).to be_invalid
@@ -30,10 +31,15 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::FindReferenceForm do
     end
 
     context "when non EY claim" do
-      let(:reference_number){ claim.reference }
+      let(:reference_number) { claim.reference }
+      let(:email) { claim.practitioner_email_address }
 
       let(:claim) do
-        create(:claim)
+        create(
+          :claim,
+          reference: "foo",
+          practitioner_email_address: "user@example.com"
+        )
       end
 
       it "is not valid" do
@@ -43,14 +49,16 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::FindReferenceForm do
     end
 
     context "when EY claim" do
-      let(:reference_number){ claim.reference }
+      let(:reference_number) { claim.reference }
+      let(:email) { claim.practitioner_email_address }
 
       let(:claim) do
         create(
           :claim,
           policy: Policies::EarlyYearsPayments,
-          reference: "foo"
-         )
+          reference: "foo",
+          practitioner_email_address: "user@example.com"
+        )
       end
 
       it "is valid" do
@@ -68,7 +76,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::FindReferenceForm do
         :claim,
         policy: Policies::EarlyYearsPayments,
         reference: "foo"
-       )
+      )
     end
 
     it "updates reference number in session" do

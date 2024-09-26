@@ -1,5 +1,6 @@
 class CurrentSchoolForm < Form
   attribute :current_school_id
+  attribute :change_school
 
   attr_reader :schools
 

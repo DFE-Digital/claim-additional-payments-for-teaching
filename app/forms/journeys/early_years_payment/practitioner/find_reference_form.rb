@@ -3,6 +3,7 @@ module Journeys
     module Practitioner
       class FindReferenceForm < Form
         attribute :reference_number, :string
+        attribute :email, :string
 
         validates :reference_number, presence: {message: i18n_error_message(:presence)}
         validate :validate_permissible_reference_number
@@ -20,6 +21,7 @@ module Journeys
           Claim
             .by_policy(Policies::EarlyYearsPayments)
             .where(reference: reference_number)
+            .where(practitioner_email_address: email)
             .exists?
         end
 

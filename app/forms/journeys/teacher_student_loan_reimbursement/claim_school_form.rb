@@ -2,6 +2,7 @@ module Journeys
   module TeacherStudentLoanReimbursement
     class ClaimSchoolForm < Form
       attribute :claim_school_id
+      attribute :change_school
 
       attr_reader :schools
 
