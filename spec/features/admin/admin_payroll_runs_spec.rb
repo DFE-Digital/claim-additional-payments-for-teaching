@@ -252,10 +252,10 @@ RSpec.feature "Payroll" do
   scenario "Payments can be browsed using pagination" do
     payroll_run = create(:payroll_run, claims_counts: {Policies::StudentLoans => 7})
 
-    stub_const("Pagy::DEFAULT", Pagy::DEFAULT.merge(items: 5))
+    stub_const("Pagy::DEFAULT", Pagy::DEFAULT.merge(limit: 5))
 
-    first_page_payments = payroll_run.payments.ordered[0..Pagy::DEFAULT[:items] - 1]
-    second_page_payments = payroll_run.payments.ordered[Pagy::DEFAULT[:items]..]
+    first_page_payments = payroll_run.payments.ordered[0..Pagy::DEFAULT[:limit] - 1]
+    second_page_payments = payroll_run.payments.ordered[Pagy::DEFAULT[:limit]..]
 
     click_on "Payroll"
     click_on "View #{I18n.l(payroll_run.created_at.to_date, format: :month_year)} payroll run"
