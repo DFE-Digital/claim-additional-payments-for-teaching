@@ -14,32 +14,7 @@
         text: t("questions.personal_details"),
         size: "xl"
       } do %>
-        <%= f.govuk_text_field :address_line_1,
-          autocomplete: "address-line1",
-          label: {
-            text: "#{t('forms.address.answers.address_line_1')}<span class=\"govuk-visually-hidden\">#{ t('forms.address.answers.address_line_1_visually_hidden')}</span>".html_safe
-          } %>
-
-        <%= f.govuk_text_field :address_line_2,
-          autocomplete: "address-line2",
-          label: {
-            text: "#{t('forms.address.answers.address_line_2')}<span class=\"govuk-visually-hidden\">#{ t('forms.address.answers.address_line_2_visually_hidden')}</span>".html_safe
-          } %>
-
-        <%= f.govuk_text_field :address_line_3,
-          width: "two-thirds",
-          autocomplete: "address-level2",
-          label: { text: t("forms.address.answers.address_line_3") } %>
-
-        <%= f.govuk_text_field :address_line_4,
-          width: "two-thirds",
-          autocomplete: "off",
-          label: { text: t("forms.address.answers.address_line_4") } %>
-
-        <%= f.govuk_text_field :postcode,
-          width: 10,
-          autocomplete: "postal-code",
-          label: { text: t("forms.address.answers.postcode") } %>
+        <%= render "address_fields", f: f %>
       <% end %>
 
       <%= f.govuk_submit "Continue" %>
