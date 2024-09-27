@@ -1,6 +1,6 @@
 <% first_name = journey_session.answers.first_name %>
 <% content_for(:page_title, page_title("#{first_name} is not eligible for this payment", journey: current_journey_routing_name)) %>
-<% @backlink_path = claim_path("early-years-payment", "returner-contract-type") %>
+<% @backlink_path = claim_path(current_journey_routing_name, "returner-contract-type") %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
