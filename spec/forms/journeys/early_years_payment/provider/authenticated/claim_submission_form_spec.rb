@@ -50,7 +50,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::ClaimSubmis
           full_name: claim.full_name,
           setting_name: claim.eligibility.eligible_ey_provider.nursery_name,
           ref_number: claim.reference,
-          complete_claim_url: "https://gov.uk/claim-an-early-years-financial-incentive-payment?claim=#{claim.reference}&email=#{CGI.escape claim.practitioner_email_address}"
+          complete_claim_url: "https://www.example.com/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=johndoe%40example.com"
         )
       )
     end

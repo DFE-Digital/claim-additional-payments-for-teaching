@@ -401,7 +401,14 @@ RSpec.describe ClaimMailer, type: :mailer do
     before { claim.eligibility.update!(nursery_urn: eligible_ey_provider.urn) }
 
     it "has personalisation keys for: full_name, setting_name, ref_number, complete_claim_url" do
-      expect(mail[:personalisation].decoded).to eq("{:full_name=>\"Test Practitioner\", :setting_name=>\"Test Nursery\", :ref_number=>\"TEST123\", :complete_claim_url=>\"https://gov.uk/claim-an-early-years-financial-incentive-payment?claim=TEST123&email=practitioner%40example.com\"}")
+      expected_personalisation = {
+        full_name: "Test Practitioner",
+        setting_name: "Test Nursery",
+        ref_number: "TEST123",
+        complete_claim_url: "https://www.example.com/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=practitioner%40example.com"
+      }
+
+      expect(mail[:personalisation].unparsed_value).to eql(expected_personalisation)
       expect(mail.body).to be_empty
     end
   end

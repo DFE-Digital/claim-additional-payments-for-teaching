@@ -90,8 +90,7 @@ class ClaimMailer < ApplicationMailer
       full_name: claim.full_name,
       setting_name: claim.eligibility.eligible_ey_provider.nursery_name,
       ref_number: claim.reference,
-      # TODO: Reference new route for practitioner journey
-      complete_claim_url: "https://gov.uk/claim-an-early-years-financial-incentive-payment?claim=#{claim.reference}&email=#{CGI.escape claim.practitioner_email_address}"
+      complete_claim_url: early_years_practitioner_invite_link(claim:)
     }
 
     template_id = template_ids(claim)[:CLAIM_PRACTITIONER_NOTIFY_TEMPLATE_ID]
@@ -210,6 +209,10 @@ class ClaimMailer < ApplicationMailer
 
   def early_years_payment_provider_magic_link(one_time_password, email)
     "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME}/claim?code=#{one_time_password}&email=#{email}"
+  end
+
+  def early_years_practitioner_invite_link(claim:)
+    "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Practitioner::ROUTING_NAME}/find-reference?skip_landing_page=true&email=#{CGI.escape(claim.practitioner_email_address)}"
   end
 
   def policy_check!(claim, policy)
