@@ -8,7 +8,7 @@ RSpec.feature "Admin view claim for FurtherEducationPayments" do
       :claim,
       :submitted,
       policy: Policies::FurtherEducationPayments,
-      eligibility_trait: :not_verified
+      eligibility_trait: :duplicate
     )
   }
   let!(:claim_with_trn) {
@@ -17,6 +17,14 @@ RSpec.feature "Admin view claim for FurtherEducationPayments" do
       :submitted,
       policy: Policies::FurtherEducationPayments,
       eligibility: eligibility_with_trn
+    )
+  }
+  let!(:claim_not_verified) {
+    create(
+      :claim,
+      :submitted,
+      policy: Policies::FurtherEducationPayments,
+      eligibility_trait: :not_verified
     )
   }
   let!(:claim_with_duplicates_no_provider_email_sent) {
@@ -69,15 +77,15 @@ RSpec.feature "Admin view claim for FurtherEducationPayments" do
   end
 
   scenario "Awaiting provider verification claim status" do
-    visit admin_claims_path
-    find("a[href='#{admin_claim_tasks_path(claim)}']").click
+    visit admin_claims_path(status: "awaiting_provider_verification")
+    find("a[href='#{admin_claim_tasks_path(claim_not_verified)}']").click
     expect(page).to have_content("Awaiting provider verification")
 
     visit admin_claims_path
     find("a[href='#{admin_claim_tasks_path(claim_with_duplicates_no_provider_email_sent)}']").click
     expect(page).to have_content("Awaiting decision - not on hold")
 
-    visit admin_claims_path
+    visit admin_claims_path(status: "awaiting_provider_verification")
     find("a[href='#{admin_claim_tasks_path(claim_with_duplicates_provider_email_sent)}']").click
     expect(page).to have_content("Awaiting provider verification")
 

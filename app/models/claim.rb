@@ -218,6 +218,9 @@ class Claim < ApplicationRecord
         .or(Claim.where("further_education_payments_eligibilities.flagged_as_duplicate = TRUE").and(Claim.where(notes: {label: "provider_verification"})))
       )
   end
+  scope :not_awaiting_further_education_provider_verification, -> do
+    where.not(id: Claim.awaiting_further_education_provider_verification)
+  end
 
   def onelogin_idv_full_name
     "#{onelogin_idv_first_name} #{onelogin_idv_last_name}"

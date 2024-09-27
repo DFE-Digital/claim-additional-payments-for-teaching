@@ -906,11 +906,9 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe ".awaiting_further_education_provider_verification" do
-    subject { described_class.awaiting_further_education_provider_verification }
-
+  describe "awaiting further education provider verification scopes" do
     let!(:claim_not_verified_provider_email_automatically_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :not_verified) }
-    let!(:claim_not_verified_provider_email_not_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
+    let!(:claim_not_verified_has_duplicates_provider_email_not_sent_has_other_note) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
     let!(:claim_not_verified_has_duplicates_provider_email_not_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
     let!(:claim_not_verified_has_duplicates_provider_email_manually_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
     let!(:claim_with_fe_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_trait: :verified) }
@@ -918,11 +916,35 @@ RSpec.describe Claim, type: :model do
 
     before do
       create(:note, claim: claim_not_verified_has_duplicates_provider_email_manually_sent, label: "provider_verification")
-      create(:note, claim: claim_not_verified_provider_email_not_sent, label: "student_loan_plan")
+      create(:note, claim: claim_not_verified_has_duplicates_provider_email_not_sent_has_other_note, label: "student_loan_plan")
     end
 
-    it "returns claims that have not been verified by the provider, and have had a provider email sent" do
-      is_expected.to match_array([claim_not_verified_provider_email_automatically_sent, claim_not_verified_has_duplicates_provider_email_manually_sent])
+    describe ".awaiting_further_education_provider_verification" do
+      subject { described_class.awaiting_further_education_provider_verification }
+
+      it "returns claims that have not been verified by the provider, and have had a provider email sent" do
+        is_expected.to match_array(
+          [
+            claim_not_verified_provider_email_automatically_sent,
+            claim_not_verified_has_duplicates_provider_email_manually_sent
+          ]
+        )
+      end
+    end
+
+    describe ".not_awaiting_further_education_provider_verification" do
+      subject { described_class.not_awaiting_further_education_provider_verification }
+
+      it "returns claims that have no FE eligiblity, or FE claims that have been verified by the provider, or non-verified claims where a provider email has not been sent" do
+        is_expected.to match_array(
+          [
+            claim_not_verified_has_duplicates_provider_email_not_sent_has_other_note,
+            claim_not_verified_has_duplicates_provider_email_not_sent,
+            claim_with_fe_provider_verification,
+            non_fe_claim
+          ]
+        )
+      end
     end
   end
 
