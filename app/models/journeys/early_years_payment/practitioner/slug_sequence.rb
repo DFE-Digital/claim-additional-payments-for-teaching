@@ -4,7 +4,7 @@ module Journeys
       class SlugSequence
         SLUGS = %w[
           find-reference
-          one-login-sign-in
+          sign-in
           how-we-use-your-information
           personal-details
           enter-home-address

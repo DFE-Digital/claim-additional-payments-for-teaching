@@ -33,6 +33,6 @@ RSpec.feature "Early years find reference" do
     fill_in "Claim reference number", with: claim.reference
     click_button "Submit"
 
-    expect(page).to have_content "login page goes here"
+    expect(page).to have_content "Sign in with GOV.UK One Login"
   end
 end
