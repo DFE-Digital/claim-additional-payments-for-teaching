@@ -8,7 +8,9 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
       :claim,
       :submitted,
       policy: policy,
-      eligibility: eligibility
+      eligibility: eligibility,
+      first_name: Faker::Name.first_name,
+      surname: Faker::Name.last_name
     )
   }
 

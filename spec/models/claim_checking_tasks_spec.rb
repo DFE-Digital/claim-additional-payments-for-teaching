@@ -21,7 +21,7 @@ RSpec.describe ClaimCheckingTasks do
       end
 
       it "includes a task for payroll gender when a payroll gender task has previously been completed" do
-        claim.tasks << create(:task, name: "payroll_gender")
+        create(:task, name: "payroll_gender", claim: claim)
 
         expect(checking_tasks.applicable_task_names).to match_array(applicable_tasks + %w[payroll_gender])
       end

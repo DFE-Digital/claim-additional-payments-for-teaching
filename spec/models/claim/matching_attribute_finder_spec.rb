@@ -4,6 +4,9 @@ RSpec.describe Claim::MatchingAttributeFinder do
   describe "#matching_claims for ECP/LUP claims" do
     let!(:source_claim) {
       create(:claim,
+        first_name: "Genghis",
+        surname: "Khan",
+        date_of_birth: Date.new(1162, 5, 31),
         national_insurance_number: "QQ891011C",
         email_address: "genghis.khan@mongol-empire.com",
         bank_account_number: "34682151",
@@ -17,6 +20,9 @@ RSpec.describe Claim::MatchingAttributeFinder do
     let!(:student_loans_claim) {
       create(:claim,
         :submitted,
+        first_name: "Genghis",
+        surname: "Khan",
+        date_of_birth: Date.new(1162, 5, 31),
         national_insurance_number: "QQ891011C",
         email_address: "genghis.khan@mongol-empire.com",
         bank_account_number: "34682151",
@@ -30,6 +36,9 @@ RSpec.describe Claim::MatchingAttributeFinder do
     let!(:lup_claim) {
       create(:claim,
         :submitted,
+        first_name: "Genghis",
+        surname: "Khan",
+        date_of_birth: Date.new(1162, 5, 31),
         national_insurance_number: "QQ891011C",
         email_address: "genghis.khan@mongol-empire.com",
         bank_account_number: "34682151",
@@ -50,6 +59,9 @@ RSpec.describe Claim::MatchingAttributeFinder do
   describe "#matching_claims" do
     let(:source_claim) {
       create(:claim,
+        first_name: "Genghis",
+        surname: "Khan",
+        date_of_birth: Date.new(1162, 5, 31),
         national_insurance_number: "QQ891011C",
         email_address: "genghis.khan@mongol-empire.com",
         bank_account_number: "34682151",
@@ -172,6 +184,39 @@ RSpec.describe Claim::MatchingAttributeFinder do
 
       expect(matching_claims).to be_empty
     end
+
+    it "does not include a claim with a matching name" do
+      create(
+        :claim,
+        :submitted,
+        first_name: source_claim.first_name,
+        surname: source_claim.surname
+      )
+
+      expect(matching_claims).to be_empty
+    end
+
+    it "does not include a claim with a matching date of birth" do
+      create(
+        :claim,
+        :submitted,
+        date_of_birth: source_claim.date_of_birth
+      )
+
+      expect(matching_claims).to be_empty
+    end
+
+    it "includes a claim with a matching name and date of birth" do
+      claim_with_matching_attributes = create(
+        :claim,
+        :submitted,
+        first_name: source_claim.first_name,
+        surname: source_claim.surname,
+        date_of_birth: source_claim.date_of_birth
+      )
+
+      expect(matching_claims).to eq([claim_with_matching_attributes])
+    end
   end
 
   describe "matching_claims - blank trn" do
@@ -193,7 +238,8 @@ RSpec.describe Claim::MatchingAttributeFinder do
         :claim,
         :submitted,
         policy: policy,
-        eligibility: eligibility
+        eligibility: eligibility,
+        surname: Faker::Name.last_name
       )
     }
 
@@ -221,7 +267,8 @@ RSpec.describe Claim::MatchingAttributeFinder do
         :claim,
         :submitted,
         policy: policy,
-        eligibility: eligibility
+        eligibility: eligibility,
+        surname: Faker::Name.last_name
       )
     }
 
@@ -253,7 +300,8 @@ RSpec.describe Claim::MatchingAttributeFinder do
         :claim,
         :submitted,
         policy: policy,
-        eligibility: eligibility
+        eligibility: eligibility,
+        surname: Faker::Name.last_name
       )
     }
 
@@ -266,6 +314,8 @@ RSpec.describe Claim::MatchingAttributeFinder do
     it "returns the attributes that match" do
       source_claim = create(
         :claim,
+        first_name: "genghis",
+        surname: "khan",
         email_address: "genghis.khan@example.com",
         national_insurance_number: "QQ891011C",
         bank_account_number: "34682151",
@@ -277,6 +327,8 @@ RSpec.describe Claim::MatchingAttributeFinder do
 
       other_claim = create(
         :claim,
+        first_name: "genghis",
+        surname: "khan2",
         email_address: "genghis.khan@example.com",
         national_insurance_number: "QQ891011C",
         bank_account_number: "11111111",
