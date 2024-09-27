@@ -17,7 +17,7 @@
         <th scope="row" class="govuk-table__header"><%= link_to matching_claim.reference, [:admin, matching_claim], class: "govuk-link" %>
         <td class="govuk-table__cell">
           <ul class="govuk-list">
-            <% matching_attributes(claim, matching_claim).each do |attribute| %>
+            <% Claim::MatchingAttributeFinder.new(claim).matching_attributes(matching_claim).map(&:humanize).sort.each do |attribute| %>
               <li><%= attribute %></li>
             <% end %>
           </ul>

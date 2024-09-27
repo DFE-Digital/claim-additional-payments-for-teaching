@@ -261,4 +261,36 @@ RSpec.describe Claim::MatchingAttributeFinder do
 
     it { is_expected.to eq [other_claim] }
   end
+
+  describe "#matching_attributes" do
+    it "returns the attributes that match" do
+      source_claim = create(
+        :claim,
+        email_address: "genghis.khan@example.com",
+        national_insurance_number: "QQ891011C",
+        bank_account_number: "34682151",
+        bank_sort_code: "972654",
+        eligibility_attributes: {
+          teacher_reference_number: "0902344"
+        }
+      )
+
+      other_claim = create(
+        :claim,
+        email_address: "genghis.khan@example.com",
+        national_insurance_number: "QQ891011C",
+        bank_account_number: "11111111",
+        bank_sort_code: "972654",
+        eligibility_attributes: {
+          teacher_reference_number: "0902344"
+        }
+      )
+
+      expect(
+        described_class.new(source_claim).matching_attributes(other_claim)
+      ).to eq(
+        %w[email_address national_insurance_number teacher_reference_number]
+      )
+    end
+  end
 end

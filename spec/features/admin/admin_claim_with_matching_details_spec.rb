@@ -41,4 +41,34 @@ RSpec.feature "Admin checking a claim with matching details" do
 
     expect(page).to have_content("Claim has been approved successfully")
   end
+
+  scenario "partial matching details" do
+    claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::StudentLoans,
+      bank_sort_code: "123456"
+    )
+
+    # Matching claim
+    create(
+      :claim,
+      :submitted,
+      bank_sort_code: "123456",
+      eligibility_attributes: {
+        teacher_reference_number: claim.eligibility.teacher_reference_number
+      }
+    )
+
+    visit admin_claim_tasks_path(claim)
+
+    click_on "Multiple claims"
+
+    within "#claims-with-matches" do
+      expect(page).to have_content "Teacher reference number"
+      # Bank sort code on it's own isn't enough to trigger a match,
+      # so shouldn't be displayed
+      expect(page).not_to have_content "Bank sort code"
+    end
+  end
 end
