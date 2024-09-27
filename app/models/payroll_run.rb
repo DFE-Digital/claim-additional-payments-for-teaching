@@ -17,6 +17,12 @@ class PayrollRun < ApplicationRecord
 
   scope :this_month, -> { where(created_at: DateTime.now.all_month) }
 
+  def self.allow_destroy?
+    ENV["ENVIRONMENT_NAME"].start_with?("review") ||
+      ENV["ENVIRONMENT_NAME"] == "test" ||
+      Rails.env.development?
+  end
+
   def total_award_amount
     payments.sum(:award_amount)
   end
