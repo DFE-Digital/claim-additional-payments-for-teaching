@@ -69,19 +69,24 @@ class PayrollRun < ApplicationRecord
   def line_items(policy, filter: :all)
     @items = []
 
-    payments.includes(claims: [:eligibility]).includes(:topups).map do |payment|
+    if policy == :all
+      policy_payments = payments
+    else
+      policy_payments = payments.joins(:claims).merge(Claim.by_policy(policy))
+    end
+
+    policy_payments.includes(:claims).includes(:topups).each do |payment|
       payment.claims.each do |claim|
-        if policy == :all || claim.eligibility_type == policy::Eligibility.to_s
-          topup_claim_ids = payment.topups.pluck(:claim_id)
-          line_item = topup_claim_ids.include?(claim.id) ? payment.topups.find { |t| t.claim_id == claim.id } : claim
-          case filter
-          when :all
-            @items << line_item
-          when :claims
-            @items << line_item if line_item.is_a?(Claim)
-          when :topups
-            @items << line_item if line_item.is_a?(Topup)
-          end
+        topup_claim_ids = payment.topups.pluck(:claim_id)
+        line_item = topup_claim_ids.include?(claim.id) ? payment.topups.find { |t| t.claim_id == claim.id } : claim
+
+        case filter
+        when :all
+          @items << line_item
+        when :claims
+          @items << line_item if line_item.is_a?(Claim)
+        when :topups
+          @items << line_item if line_item.is_a?(Topup)
         end
       end
     end
