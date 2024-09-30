@@ -155,8 +155,11 @@ module Admin
         status_colour = "red"
       end
 
-      tag_classes = "govuk-tag app-task-list__task-completed govuk-tag--#{status_colour}"
+      task_status_content_tag(status_colour:, status:)
+    end
 
+    def task_status_content_tag(status_colour:, status:)
+      tag_classes = "govuk-tag app-task-list__task-completed govuk-tag--#{status_colour}"
       content_tag("strong", status, class: tag_classes)
     end
 

@@ -15,10 +15,17 @@
   </div>
 
   <div class="govuk-grid-column-two-thirds">
-    <% if !@task.passed.nil? %>
+    <% if @task.persisted? %>
       <%= render "task_outcome", task: @task %>
     <% else %>
-      <%= render "form", task_name: "student_loan_plan", claim: @claim %>
+      <div class="govuk-inset-text task-outcome">
+        <p class="govuk-body">
+          <%= task_status_content_tag(status_colour: "grey", status: "Incomplete") %>
+        </p>
+        <p class="govuk-body">
+          This task has not been checked against Student Loan Company data yet.
+        </p>
+      </div>
     <% end %>
 
     <%= render partial: "admin/task_pagination" %>

@@ -14,7 +14,7 @@ RSpec.describe FurtherEducationPayments::ProviderVerificationChaseEmailJob do
         policy: Policies::FurtherEducationPayments,
         eligibility: build(
           :further_education_payments_eligibility,
-          :eligible
+          :not_verified
         ))
     }
 
@@ -24,7 +24,7 @@ RSpec.describe FurtherEducationPayments::ProviderVerificationChaseEmailJob do
         policy: Policies::FurtherEducationPayments,
         eligibility: build(
           :further_education_payments_eligibility,
-          :eligible,
+          :not_verified,
           provider_verification_email_last_sent_at: DateTime.new(2024, 10, 1, 7, 0, 0)
         ))
     }
@@ -35,7 +35,7 @@ RSpec.describe FurtherEducationPayments::ProviderVerificationChaseEmailJob do
         policy: Policies::FurtherEducationPayments,
         eligibility: build(
           :further_education_payments_eligibility,
-          :eligible,
+          :not_verified,
           provider_verification_email_last_sent_at: DateTime.new(2024, 10, 15, 7, 0, 0)
         ))
     }

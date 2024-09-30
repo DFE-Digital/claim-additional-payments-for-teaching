@@ -22,7 +22,7 @@ RSpec.feature "Admin claim filtering" do
   let(:approved_awaiting_qa_claims) { create_list(:claim, 2, :approved, :flagged_for_qa, policy: Policies::LevellingUpPremiumPayments) }
   let(:auto_approved_awaiting_payroll_claims) { create_list(:claim, 2, :auto_approved, policy: Policies::LevellingUpPremiumPayments) }
   let(:approved_claim) { create(:claim, :approved, policy: Policies::LevellingUpPremiumPayments, assigned_to: mette, decision_creator: mary) }
-  let(:further_education_claims_awaiting_provider_verification) { create_list(:claim, 2, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible, assigned_to: valentino) }
+  let(:further_education_claims_awaiting_provider_verification) { create_list(:claim, 2, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :not_verified, assigned_to: valentino) }
   let(:rejected_claim) { create(:claim, :rejected, policy: Policies::LevellingUpPremiumPayments, assigned_to: valentino) }
 
   let!(:claims) do
@@ -74,8 +74,8 @@ RSpec.feature "Admin claim filtering" do
   scenario "the service operator can filter by themselves or other team members" do
     click_on "View claims"
 
-    expect(page.find("table")).to have_content("TSLR").exactly(5).times
-    expect(page.find("table")).to have_content("ECP").exactly(10).times
+    expect(page).to have_selector("td[text()='TSLR']", count: 5)
+    expect(page).to have_selector("td[text()='ECP']", count: 10)
 
     # Excludes payroll users and deleted users
     expect(page).to have_select("team_member", options: ["All", "Unassigned", "#{user.given_name} #{user.family_name}", "Mary Wasu Wabi", "Valentino Ricci", "Mette Jørgensen"])
@@ -109,7 +109,7 @@ RSpec.feature "Admin claim filtering" do
     select "Unassigned", from: "team_member"
     click_on "Apply filters"
 
-    expect(page.find("table")).to have_content("STRI").exactly(2).times
+    expect(page).to have_selector("td[text()='STRI']", count: 2)
 
     expect_page_to_show_claims(lup_claims_unassigned)
   end

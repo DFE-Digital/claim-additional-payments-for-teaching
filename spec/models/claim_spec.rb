@@ -910,7 +910,7 @@ RSpec.describe Claim, type: :model do
     subject { described_class.awaiting_further_education_provider_verification }
 
     let!(:claim_with_fe_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_trait: :verified) }
-    let!(:claim_awaiting_fe_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible) }
+    let!(:claim_awaiting_fe_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_trait: :not_verified) }
     let!(:non_fe_claim) { create(:claim, policy: Policies::StudentLoans) }
 
     it "returns claims that are awaiting FE provider verification" do
