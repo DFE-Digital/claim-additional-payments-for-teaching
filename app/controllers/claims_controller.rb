@@ -77,7 +77,7 @@ class ClaimsController < BasePublicController
   def check_page_is_in_sequence
     unless correct_journey_for_claim_in_progress?
       clear_claim_session
-      return redirect_to new_claim_path
+      return redirect_to new_claim_path(request.query_parameters)
     end
 
     raise ActionController::RoutingError.new("Not Found for #{params[:slug]}") unless page_sequence.in_sequence?(params[:slug])

@@ -1,16 +1,24 @@
 require "rails_helper"
 
 RSpec.feature "Early years payment practitioner" do
+  let(:claim) do
+    create(
+      :claim,
+      policy: Policies::EarlyYearsPayments,
+      reference: "foo",
+      practitioner_email_address: "user@example.com"
+    )
+  end
+
   scenario "Happy path" do
     when_early_years_payment_practitioner_journey_configuration_exists
 
-    visit landing_page_path(Journeys::EarlyYearsPayment::Practitioner::ROUTING_NAME)
+    visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=user@example.com"
+    expect(page).to have_content "Track your application"
+    fill_in "Claim reference number", with: claim.reference
+    click_button "Submit"
 
-    # find-reference page stuff
-    visit claim_path(Journeys::EarlyYearsPayment::Practitioner::ROUTING_NAME, :claim) # temporary step until landing page implemented
-    click_on "Continue"
-
-    # one login stuff
+    expect(page).to have_content "one login page goes here"
     click_on "Continue"
 
     expect(page.title).to have_text("How we’ll use the information you provide")

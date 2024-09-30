@@ -1400,8 +1400,14 @@ en:
   early_years_payment_practitioner:
     journey_name: Claim an early years financial incentive payment - practitioner
     feedback_email: implementme@example.com
+    support_email: "help@opsteam.com"
     claim_description: for early years financial incentive payment
     forms:
+      find_reference:
+        question: Track your application
+        errors:
+          presence: Enter your claim reference number
+          impermissible: Enter a valid claim reference number
       email_address:
         label: Your email address
         hint1: We’ll use this to update you with progress on your claim.
