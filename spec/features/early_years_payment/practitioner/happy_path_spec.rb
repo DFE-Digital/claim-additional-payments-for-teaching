@@ -34,5 +34,16 @@ RSpec.feature "Early years payment practitioner" do
     fill_in "County", with: "City of Derby"
     fill_in "Postcode", with: "DE22 4BS"
     click_on "Continue"
+
+    expect(page.title).to have_text("Your email address")
+    expect(page).to have_content("Your email address")
+    fill_in "claim-email-address-field", with: "johndoe@example.com"
+    click_on "Continue"
+
+    expect(page).to have_content("Enter the 6-digit passcode")
+    mail = ActionMailer::Base.deliveries.last
+    otp_in_mail_sent = mail[:personalisation].unparsed_value[:one_time_password]
+    fill_in "claim-one-time-password-field", with: otp_in_mail_sent
+    click_on "Confirm"
   end
 end

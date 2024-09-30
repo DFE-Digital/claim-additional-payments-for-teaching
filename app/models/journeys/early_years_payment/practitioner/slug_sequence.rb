@@ -9,6 +9,8 @@ module Journeys
           personal-details
           enter-home-address
           email-address
+          email-verification
+          provide-mobile-number
         ].freeze
 
         def self.start_page_url

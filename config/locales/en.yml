@@ -1401,6 +1401,11 @@ en:
     journey_name: Claim an early years financial incentive payment - practitioner
     feedback_email: implementme@example.com
     claim_description: for early years financial incentive payment
+    forms:
+      email_address:
+        label: Your email address
+        hint1: We’ll use this to update you with progress on your claim.
+        hint2: We recommend you use a non-work email address in case your circumstances change while we process your claim.
   activerecord:
     errors:
       models:
