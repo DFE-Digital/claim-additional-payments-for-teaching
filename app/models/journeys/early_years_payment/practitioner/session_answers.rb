@@ -3,6 +3,7 @@ module Journeys
     module Practitioner
       class SessionAnswers < Journeys::SessionAnswers
         attribute :reference_number, :string
+        attribute :start_email, :string
 
         def policy
           Policies::EarlyYearsPayments
