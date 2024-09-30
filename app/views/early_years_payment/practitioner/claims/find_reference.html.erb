@@ -35,7 +35,7 @@
         ], type: :bullet %>
 
         <p>
-          Contact us at <%= govuk_link_to "help@opsteam.com", "mailto:help@opsteam.com" %> for assistance.
+          Contact us at <%= govuk_mail_to t("#{journey::I18N_NAMESPACE}.support_email") %> for assistance.
         </p>
       <% end %>
 
