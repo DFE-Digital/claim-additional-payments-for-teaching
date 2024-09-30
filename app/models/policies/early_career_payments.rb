@@ -26,11 +26,11 @@ module Policies
     POLICY_END_YEAR = AcademicYear.new(2024).freeze
 
     # Used in
-    #  - checking payments with multiple policies: ClaimsPreventingPaymentFinder
     #  - matching claims with multiple policies: MatchingAttributeFinder
     OTHER_CLAIMABLE_POLICIES = [
       LevellingUpPremiumPayments,
-      StudentLoans
+      StudentLoans,
+      FurtherEducationPayments
     ].freeze
 
     ELIGIBILITY_MATCHING_ATTRIBUTES = [["teacher_reference_number"]].freeze
