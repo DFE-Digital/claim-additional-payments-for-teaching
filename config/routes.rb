@@ -147,7 +147,7 @@ Rails.application.routes.draw do
     resources :student_loans_data_uploads, only: [:new, :create]
     resources :tps_data_uploads, only: [:new, :create]
 
-    resources :payroll_runs, only: [:index, :new, :create, :show] do
+    resources :payroll_runs, only: [:index, :new, :create, :show, :destroy] do
       resources :payment_confirmation_report_uploads, only: [:new, :create]
       resource :download, only: [:new, :create, :show], controller: "payroll_run_downloads"
       resources :payments, only: [:destroy] do

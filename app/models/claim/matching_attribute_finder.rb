@@ -4,7 +4,8 @@ class Claim
     CLAIM_ATTRIBUTE_GROUPS_TO_MATCH = [
       ["email_address"],
       ["national_insurance_number"],
-      ["bank_account_number", "bank_sort_code", "building_society_roll_number"]
+      ["bank_account_number", "bank_sort_code", "building_society_roll_number"],
+      ["first_name", "surname", "date_of_birth"]
     ].freeze
 
     def initialize(source_claim)
@@ -50,6 +51,18 @@ class Claim
       match_queries = match_queries.or(eligibility_match_query)
 
       claims_to_compare.merge(match_queries)
+    end
+
+    def matching_attributes(other_claim)
+      matching_claim_attributes = CLAIM_ATTRIBUTE_GROUPS_TO_MATCH.select do |attributes|
+        values_for_attributes(@source_claim, attributes) == values_for_attributes(other_claim, attributes)
+      end
+
+      matching_eligibility_attributes = eligibility_attributes_groups_to_match.select do |attributes|
+        values_for_attributes(@source_claim.eligibility, attributes) == values_for_attributes(other_claim.eligibility, attributes)
+      end
+
+      (matching_claim_attributes + matching_eligibility_attributes).flatten
     end
 
     private
