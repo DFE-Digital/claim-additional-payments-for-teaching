@@ -73,49 +73,67 @@ class PayrollRun < ApplicationRecord
   end
 
   def line_items(policy, filter: :all)
+    sql = <<~SQL
+      WITH claims_with_award_amount AS (
+        SELECT
+        claims.*,
+        CASE
+        WHEN early_career_payments_eligibilities.id IS NOT NULL
+          THEN early_career_payments_eligibilities.award_amount
+        WHEN further_education_payments_eligibilities.id IS NOT NULL
+          THEN further_education_payments_eligibilities.award_amount
+        WHEN international_relocation_payments_eligibilities.id IS NOT NULL
+          THEN international_relocation_payments_eligibilities.award_amount
+        WHEN levelling_up_premium_payments_eligibilities.id IS NOT NULL
+          THEN levelling_up_premium_payments_eligibilities.award_amount
+        WHEN student_loans_eligibilities.id IS NOT NULL
+          THEN student_loans_eligibilities.student_loan_repayment_amount
+        END AS award_amount
+
+        FROM claims
+        LEFT JOIN early_career_payments_eligibilities
+          ON claims.eligibility_id = early_career_payments_eligibilities.id
+          AND claims.eligibility_type = 'Policies::EarlyCareerPayments::Eligibility'
+        LEFT JOIN further_education_payments_eligibilities
+          ON claims.eligibility_id = further_education_payments_eligibilities.id
+          AND claims.eligibility_type = 'Policies::FurtherEducationPayments::Eligibility'
+        LEFT JOIN international_relocation_payments_eligibilities
+          ON claims.eligibility_id = international_relocation_payments_eligibilities.id
+          AND claims.eligibility_type = 'Policies::InternationalRelocationPayments::Eligibility'
+        LEFT JOIN levelling_up_premium_payments_eligibilities
+          ON claims.eligibility_id = levelling_up_premium_payments_eligibilities.id
+          AND claims.eligibility_type = 'Policies::LevellingUpPremiumPayments::Eligibility'
+        LEFT JOIN student_loans_eligibilities
+          ON claims.eligibility_id = student_loans_eligibilities.id
+          AND claims.eligibility_type = 'Policies::StudentLoans::Eligibility'
+      )
+
+      SELECT
+        /* A topup is always paid in different payment/payroll_run than the main claim was */
+        COALESCE(topups.award_amount, claims.award_amount) AS award_amount
+      FROM payments
+      JOIN claim_payments ON claim_payments.payment_id = payments.id
+      JOIN claims_with_award_amount AS claims
+        ON claims.id = claim_payments.claim_id
+      LEFT JOIN topups
+        ON topups.claim_id = claims.id
+      WHERE payments.payroll_run_id = '#{id}'
+    SQL
+
+    unless policy == :all
+      sql += "\nAND claims.eligibility_type = 'Policies::#{policy}::Eligibility'"
+    end
+
     case filter
     when :all
-      policy_items(policy)
+      sql
     when :claims
-      policy_items(policy).select { |item| item.is_a?(Claim) }
+      sql += "\nAND topups.id IS NULL"
     when :topups
-      policy_items(policy).select { |item| item.is_a?(Topup) }
-    end
-  end
-
-  def policy_items(policy)
-    policy_items_cache[policy] ||= build_policy_items(policy)
-  end
-
-  def policy_items_cache
-    @policy_items_cache ||= {}
-  end
-
-  def build_policy_items(policy)
-    policy_payments = if policy == :all
-      payments
-    else
-      payments.joins(:claims).merge(Claim.by_policy(policy))
+      sql += "\nAND topups.id IS NOT NULL"
     end
 
-    items = []
-
-    policy_payments.includes(:claims).includes(:topups).each do |payment|
-      payment.claims.each do |claim|
-        # Payments can have multiple claims
-        # if this claim has a topup, pull the values from the topup instead
-        topup_claim_ids = payment.topups.pluck(:claim_id)
-
-        # This is implying a claim can only have one topup
-        items << if topup_claim_ids.include?(claim.id)
-          payment.topups.find { |t| t.claim_id == claim.id }
-        else
-          claim
-        end
-      end
-    end
-
-    items
+    ActiveRecord::Base.connection.execute(sql).map(&OpenStruct.method(:new))
   end
 
   def ensure_no_payroll_run_this_month
