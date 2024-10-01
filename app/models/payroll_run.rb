@@ -67,7 +67,7 @@ class PayrollRun < ApplicationRecord
   private
 
   def line_items(policy, filter: :all)
-    @items = []
+    items = []
 
     policy_payments = if policy == :all
       payments
@@ -82,7 +82,7 @@ class PayrollRun < ApplicationRecord
         topup_claim_ids = payment.topups.pluck(:claim_id)
 
         # This is implying a claim can only have one topup
-        @items << if topup_claim_ids.include?(claim.id)
+        items << if topup_claim_ids.include?(claim.id)
           payment.topups.find { |t| t.claim_id == claim.id }
         else
           claim
@@ -92,11 +92,11 @@ class PayrollRun < ApplicationRecord
 
     case filter
     when :all
-      @items
+      items
     when :claims
-      @items.select { |item| item.is_a?(Claim) }
+      items.select { |item| item.is_a?(Claim) }
     when :topups
-      @items.select { |item| item.is_a?(Topup) }
+      items.select { |item| item.is_a?(Topup) }
     end
   end
 
