@@ -11,7 +11,10 @@ module Journeys
         def save
           return false if invalid?
 
-          journey_session.answers.assign_attributes(reference_number:)
+          journey_session.answers.assign_attributes(
+            reference_number:,
+            start_email: email
+          )
           journey_session.save!
         end
 
