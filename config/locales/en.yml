@@ -1387,7 +1387,8 @@ en:
           valid: Enter a valid email address
       check_your_answers:
         errors:
-          valid: You cannot submit this claim without providing your full name
+          name: You cannot submit this claim without providing your full name
+          email: You cannot submit this claim without providing the employee’s email address
     check_your_answers:
       title: Check your answers before submitting this claim
       heading_send_application: Before submitting this claim
