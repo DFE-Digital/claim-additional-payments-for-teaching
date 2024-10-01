@@ -19,7 +19,8 @@ module Policies
     VERIFIERS = [
       AutomatedChecks::ClaimVerifiers::Identity,
       AutomatedChecks::ClaimVerifiers::ProviderVerification,
-      AutomatedChecks::ClaimVerifiers::Employment
+      AutomatedChecks::ClaimVerifiers::Employment,
+      AutomatedChecks::ClaimVerifiers::StudentLoanPlan
     ]
 
     # Options shown to admins when rejecting a claim

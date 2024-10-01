@@ -38,7 +38,7 @@ module AutomatedChecks
       def no_student_loan_data_entry
         return if student_loans_data.any?
 
-        create_task(match: nil)
+        create_note(match: nil)
       end
 
       def student_loan_data_exists

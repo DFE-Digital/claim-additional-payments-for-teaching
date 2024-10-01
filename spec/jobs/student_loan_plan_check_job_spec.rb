@@ -7,39 +7,32 @@ RSpec.describe StudentLoanPlanCheckJob do
     create(:journey_configuration, :further_education_payments)
   end
 
-  let(:claim) { create(:claim, claim_status, academic_year:, policy: Policies::LevellingUpPremiumPayments) }
+  let!(:claim) { create(:claim, claim_status, academic_year:, policy: Policies::LevellingUpPremiumPayments) }
   let(:claim_status) { :submitted }
 
   let(:academic_year) { journey_configuration.current_academic_year }
   let(:journey_configuration) { create(:journey_configuration, :additional_payments) }
+  let(:student_loan_plan_claim_verifier) { instance_double(AutomatedChecks::ClaimVerifiers::StudentLoanPlan, perform: true) }
 
   describe "#perform" do
-    before do
-      allow(ClaimStudentLoanDetailsUpdater).to receive(:call)
-    end
-
-    shared_examples :skip_check do
-      before do
-        allow(AutomatedChecks::ClaimVerifiers::StudentLoanPlan).to receive(:new)
-      end
-
+    shared_examples :student_loan_plan_claim_verifier_not_called do
       it "excludes the claim from the check", :aggregate_failures do
-        expect(ClaimStudentLoanDetailsUpdater).not_to receive(:call).with(claim)
-        expect(AutomatedChecks::ClaimVerifiers::StudentLoanPlan).not_to receive(:new).with(claim: claim)
+        expect(ClaimStudentLoanDetailsUpdater).not_to receive(:call)
+        expect(AutomatedChecks::ClaimVerifiers::StudentLoanPlan).not_to receive(:new)
         perform_job
       end
     end
 
-    context "when the previous student loan plan check was run manually" do
+    context "when the previous student loan plan check was run manually" do # not sure it's possible to do this any more
       let!(:previous_task) { create(:task, claim: claim, name: "student_loan_plan", claim_verifier_match: nil, manual: true) }
 
-      include_examples :skip_check
+      include_examples :student_loan_plan_claim_verifier_not_called
     end
 
     context "when a claim is not awaiting decision" do
       let(:claim_status) { :approved }
 
-      include_examples :skip_check
+      include_examples :student_loan_plan_claim_verifier_not_called
     end
 
     context "when a claim was submitted using SLC data" do
@@ -47,10 +40,10 @@ RSpec.describe StudentLoanPlanCheckJob do
         claim.update!(submitted_using_slc_data: true)
       end
 
-      include_examples :skip_check
+      include_examples :student_loan_plan_claim_verifier_not_called
     end
 
-    context "when a claim was submitted using the student loan questions" do
+    context "when a claim was submitted with no SLC data available" do
       before do
         claim.update!(submitted_using_slc_data: false)
       end
@@ -60,10 +53,9 @@ RSpec.describe StudentLoanPlanCheckJob do
         perform_job
       end
 
-      it "runs the task" do
-        expect { perform_job }
-          .to change { claim.reload.notes.count }
-          .and change { claim.tasks.count }
+      it "calls the student loan plan claim verifier" do
+        expect(AutomatedChecks::ClaimVerifiers::StudentLoanPlan).to receive(:new).with(claim: claim).and_return(student_loan_plan_claim_verifier)
+        perform_job
       end
     end
 
@@ -80,10 +72,9 @@ RSpec.describe StudentLoanPlanCheckJob do
         perform_job
       end
 
-      it "runs the task" do
-        expect { perform_job }
-          .to change { claim.reload.notes.count }
-          .and change { claim.tasks.count }
+      it "calls the student loan plan claim verifier" do
+        expect(AutomatedChecks::ClaimVerifiers::StudentLoanPlan).to receive(:new).with(claim: claim).and_return(student_loan_plan_claim_verifier)
+        perform_job
       end
     end
 
@@ -93,10 +84,9 @@ RSpec.describe StudentLoanPlanCheckJob do
         perform_job
       end
 
-      it "runs the task" do
-        expect { perform_job }
-          .to change { claim.reload.notes.count }
-          .and change { claim.tasks.count }
+      it "calls the student loan plan claim verifier" do
+        expect(AutomatedChecks::ClaimVerifiers::StudentLoanPlan).to receive(:new).with(claim: claim).and_return(student_loan_plan_claim_verifier)
+        perform_job
       end
     end
 
@@ -108,44 +98,22 @@ RSpec.describe StudentLoanPlanCheckJob do
         perform_job
       end
 
-      it "re-runs the task" do
-        expect { perform_job }
-          .to change { claim.reload.notes.count }
-          .and change { claim.tasks.last.updated_at }
-          .and not_change { claim.reload.tasks.count }
+      it "calls the student loan plan claim verifier" do
+        expect(AutomatedChecks::ClaimVerifiers::StudentLoanPlan).to receive(:new).with(claim: claim).and_return(student_loan_plan_claim_verifier)
+        perform_job
       end
     end
 
     context "when the previous student loan plan check outcome was FAILED" do
       let!(:previous_task) { create(:task, claim: claim, name: "student_loan_plan", claim_verifier_match: :none, passed: false, manual: false) }
 
-      it "does not update the student loan details" do
-        expect(ClaimStudentLoanDetailsUpdater).not_to receive(:call)
-        perform_job
-      end
-
-      it "does not re-run the task" do
-        expect { perform_job }
-          .to not_change { claim.reload.notes.count }
-          .and not_change { claim.tasks.last.updated_at }
-          .and not_change { claim.reload.tasks.count }
-      end
+      include_examples :student_loan_plan_claim_verifier_not_called
     end
 
     context "when the previous student loan plan check outcome was PASSED" do
       let!(:previous_task) { create(:task, claim: claim, name: "student_loan_plan", claim_verifier_match: :all, manual: false) }
 
-      it "does not update the student loan details" do
-        expect(ClaimStudentLoanDetailsUpdater).not_to receive(:call)
-        perform_job
-      end
-
-      it "does not re-run the task" do
-        expect { perform_job }
-          .to not_change { claim.reload.notes.count }
-          .and not_change { claim.tasks.last.updated_at }
-          .and not_change { claim.reload.tasks.count }
-      end
+      include_examples :student_loan_plan_claim_verifier_not_called
     end
   end
 end

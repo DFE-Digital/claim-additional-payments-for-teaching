@@ -49,6 +49,28 @@ module AutomatedChecks
         end
       end
 
+      shared_examples :creating_a_note_but_no_task do
+        let(:saved_note) { claim_arg.notes.last }
+
+        it "does not create a task" do
+          expect { perform }.not_to change(Task, :count)
+        end
+
+        it "saves a note" do
+          expect { perform }.to change(Note, :count).by(1)
+        end
+
+        it "saves the outcome on the note" do
+          perform
+
+          expect(saved_note).to have_attributes(
+            body: expected_note,
+            label: "student_loan_plan",
+            created_by_id: nil
+          )
+        end
+      end
+
       shared_examples :not_creating_a_task_or_note do
         it "does not save anything and returns immediately", :aggregate_failures do
           is_expected.to be_nil
@@ -67,62 +89,93 @@ module AutomatedChecks
           it_behaves_like :not_creating_a_task_or_note
         end
 
-        context "when the claim policy is ECP/LUP/FE" do
-          [Policies::LevellingUpPremiumPayments, Policies::EarlyCareerPayments, Policies::FurtherEducationPayments].each do |policy|
-            context "when the policy is #{policy}" do
-              let(:policy) { policy }
-              let(:claim) { create(:claim, :submitted, policy:, national_insurance_number: "QQ123456A", has_student_loan: true, student_loan_plan: claim_student_loan_plan, submitted_using_slc_data:) }
-              let(:claim_student_loan_plan) { nil }
+        [Policies::LevellingUpPremiumPayments, Policies::EarlyCareerPayments, Policies::FurtherEducationPayments].each do |policy|
+          context "when the policy is #{policy}" do
+            let(:policy) { policy }
+            let(:claim) { create(:claim, :submitted, policy:, national_insurance_number: "QQ123456A", has_student_loan: true, student_loan_plan: claim_student_loan_plan, submitted_using_slc_data:) }
+            let(:claim_student_loan_plan) { nil }
 
-              context "when there is already a student_loan_plan task" do
-                before { create(:task, claim: claim, name: "student_loan_plan") }
+            context "when there is already a student_loan_plan task" do
+              before { create(:task, claim: claim, name: "student_loan_plan") }
 
-                let(:submitted_using_slc_data) { false }
+              let(:submitted_using_slc_data) { false }
 
-                it_behaves_like :not_creating_a_task_or_note
+              it_behaves_like :not_creating_a_task_or_note
+            end
+
+            context "when the claim was submitted using SLC data" do
+              let(:submitted_using_slc_data) { true }
+              let(:claim_student_loan_plan) { StudentLoan::PLAN_1 }
+
+              it_behaves_like :not_creating_a_task_or_note
+            end
+
+            context "when the claim was not submitted using SLC data" do
+              let(:submitted_using_slc_data) { false }
+
+              context "when there is no student loan data for the claim" do
+                let(:expected_note) { "[SLC Student loan plan] - No data" }
+
+                it_behaves_like :creating_a_note_but_no_task
               end
 
-              context "when the claim was submitted using SLC data" do
-                let(:submitted_using_slc_data) { true }
-                let(:claim_student_loan_plan) { StudentLoan::PLAN_1 }
+              context "when there is student loan data - with a plan" do
+                before do
+                  create(:student_loans_data, nino: claim.national_insurance_number, date_of_birth: claim.date_of_birth, plan_type_of_deduction: 1)
+                end
 
-                it_behaves_like :not_creating_a_task_or_note
+                let(:expected_to_pass?) { true }
+                let(:expected_match_value) { "all" }
+                let(:expected_note) { "[SLC Student loan plan] - Matched - has a student loan" }
+
+                it_behaves_like :creating_a_task_and_note
               end
 
-              context "when the claim was not submitted using SLC data" do
-                let(:submitted_using_slc_data) { false }
-
-                context "when there is no student loan data for the claim" do
-                  let(:expected_to_pass?) { nil }
-                  let(:expected_match_value) { nil }
-                  let(:expected_note) { "[SLC Student loan plan] - No data" }
-
-                  it_behaves_like :creating_a_task_and_note
+              context "when there is student loan data - without a plan" do
+                before do
+                  create(:student_loans_data, nino: claim.national_insurance_number, date_of_birth: claim.date_of_birth, plan_type_of_deduction: nil)
                 end
 
-                context "when there is student loan data - with a plan" do
-                  before do
-                    create(:student_loans_data, nino: claim.national_insurance_number, date_of_birth: claim.date_of_birth, plan_type_of_deduction: 1)
-                  end
+                let(:expected_to_pass?) { true }
+                let(:expected_match_value) { "all" }
+                let(:expected_note) { "[SLC Student loan plan] - Matched - does not have a student loan" }
 
-                  let(:expected_to_pass?) { true }
-                  let(:expected_match_value) { "all" }
-                  let(:expected_note) { "[SLC Student loan plan] - Matched - has a student loan" }
+                it_behaves_like :creating_a_task_and_note
+              end
+            end
 
-                  it_behaves_like :creating_a_task_and_note
+            # this will only happen for FE claims submitted before LUPEYALPHA-1010 was merged
+            context "when a claim was submitted with submitted_using_slc_data: nil" do
+              let(:submitted_using_slc_data) { nil }
+
+              context "when there is no student loan data for the claim" do
+                let(:expected_note) { "[SLC Student loan plan] - No data" }
+
+                it_behaves_like :creating_a_note_but_no_task
+              end
+
+              context "when there is student loan data - with a plan" do
+                before do
+                  create(:student_loans_data, nino: claim.national_insurance_number, date_of_birth: claim.date_of_birth, plan_type_of_deduction: 1)
                 end
 
-                context "when there is student loan data - without a plan" do
-                  before do
-                    create(:student_loans_data, nino: claim.national_insurance_number, date_of_birth: claim.date_of_birth, plan_type_of_deduction: nil)
-                  end
+                let(:expected_to_pass?) { true }
+                let(:expected_match_value) { "all" }
+                let(:expected_note) { "[SLC Student loan plan] - Matched - has a student loan" }
 
-                  let(:expected_to_pass?) { true }
-                  let(:expected_match_value) { "all" }
-                  let(:expected_note) { "[SLC Student loan plan] - Matched - does not have a student loan" }
+                it_behaves_like :creating_a_task_and_note
+              end
 
-                  it_behaves_like :creating_a_task_and_note
+              context "when there is student loan data - without a plan" do
+                before do
+                  create(:student_loans_data, nino: claim.national_insurance_number, date_of_birth: claim.date_of_birth, plan_type_of_deduction: nil)
                 end
+
+                let(:expected_to_pass?) { true }
+                let(:expected_match_value) { "all" }
+                let(:expected_note) { "[SLC Student loan plan] - Matched - does not have a student loan" }
+
+                it_behaves_like :creating_a_task_and_note
               end
             end
           end
