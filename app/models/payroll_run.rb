@@ -40,7 +40,7 @@ class PayrollRun < ApplicationRecord
   end
 
   def total_batches
-    (payments.count / MAX_BATCH_SIZE.to_f).ceil
+    (payments_count / MAX_BATCH_SIZE.to_f).ceil
   end
 
   def total_confirmed_payments
@@ -48,7 +48,9 @@ class PayrollRun < ApplicationRecord
   end
 
   def all_payments_confirmed?
-    payment_confirmations.any? && total_confirmed_payments == payments.count
+    return @all_payments_confirmed if defined?(@all_payments_confirmed)
+
+    @all_payments_confirmed = payment_confirmations.any? && total_confirmed_payments == payments_count
   end
 
   def self.create_with_claims!(claims, topups, attrs = {})
@@ -77,6 +79,11 @@ class PayrollRun < ApplicationRecord
   end
 
   private
+
+  def payments_count
+    @payments_count ||= payments.count
+  end
+
 
   def line_items(policy, filter: :all)
     items = []
