@@ -72,15 +72,33 @@ class PayrollRun < ApplicationRecord
     @payments_count ||= payments.count
   end
 
-
   def line_items(policy, filter: :all)
-    items = []
+    case filter
+    when :all
+      policy_items(policy)
+    when :claims
+      policy_items(policy).select { |item| item.is_a?(Claim) }
+    when :topups
+      policy_items(policy).select { |item| item.is_a?(Topup) }
+    end
+  end
 
+  def policy_items(policy)
+    policy_items_cache[policy] ||= build_policy_items(policy)
+  end
+
+  def policy_items_cache
+    @policy_items_cache ||= {}
+  end
+
+  def build_policy_items(policy)
     policy_payments = if policy == :all
       payments
     else
       payments.joins(:claims).merge(Claim.by_policy(policy))
     end
+
+    items = []
 
     policy_payments.includes(:claims).includes(:topups).each do |payment|
       payment.claims.each do |claim|
@@ -97,14 +115,7 @@ class PayrollRun < ApplicationRecord
       end
     end
 
-    case filter
-    when :all
-      items
-    when :claims
-      items.select { |item| item.is_a?(Claim) }
-    when :topups
-      items.select { |item| item.is_a?(Topup) }
-    end
+    items
   end
 
   def ensure_no_payroll_run_this_month
