@@ -54,7 +54,7 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
         fill_in "claim-one-time-password-field", with: scenario[:otp_code]
         click_on "Confirm"
 
-        expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
+        expect(page).to have_text("Enter your personal bank account details")
       end
     end
   end

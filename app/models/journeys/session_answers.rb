@@ -77,14 +77,6 @@ module Journeys
       !!provide_mobile_number
     end
 
-    def building_society?
-      bank_or_building_society == "building_society"
-    end
-
-    def personal_bank_account?
-      bank_or_building_society == "personal_bank_account"
-    end
-
     def hmrc_bank_validation_succeeded?
       !!hmrc_bank_validation_succeeded
     end

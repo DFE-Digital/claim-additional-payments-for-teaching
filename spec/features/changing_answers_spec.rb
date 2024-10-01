@@ -287,43 +287,6 @@ RSpec.feature "Changing the answers on a submittable claim" do
       expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "check-your-answers"))
       expect(journey_session.reload.answers.first_name).to eq("Bobby")
     end
-
-    scenario "user can change the answer to payment details" do
-      jump_to_claim_journey_page(
-        slug: "check-your-answers",
-        journey_session: journey_session
-      )
-
-      expect(page).to have_content(I18n.t("questions.bank_or_building_society"))
-      expect(page).to have_content("Personal bank account")
-
-      find("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "bank-or-building-society")}']").click
-
-      choose "Building society"
-      click_on "Continue"
-
-      journey_session.reload
-      expect(page).to have_content(I18n.t("questions.account_details", bank_or_building_society: journey_session.answers.bank_or_building_society.humanize.downcase))
-      expect(page).to have_content("Building society roll number")
-
-      expect(journey_session.answers.bank_or_building_society).to eq :building_society.to_s
-      expect(journey_session.answers.banking_name).to be_nil
-      expect(journey_session.answers.bank_sort_code).to be_nil
-      expect(journey_session.answers.bank_account_number).to be_nil
-
-      fill_in "Name on your account", with: "Miss Jasmine Aniski"
-      fill_in "Sort code", with: "80-78-01"
-      fill_in "Account number", with: "43290701"
-      fill_in "Building society roll number", with: "6284/000390713"
-
-      click_on "Continue"
-
-      journey_session.reload
-      expect(journey_session.answers.banking_name).to eq "Miss Jasmine Aniski"
-      expect(journey_session.answers.bank_sort_code).to eq "807801"
-      expect(journey_session.answers.bank_account_number).to eq "43290701"
-      expect(journey_session.answers.building_society_roll_number).to eq "6284/000390713"
-    end
   end
 
   describe "Teacher changes a field that requires OTP validation" do

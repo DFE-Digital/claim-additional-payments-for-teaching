@@ -44,22 +44,6 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
       expect(slug_sequence.slugs).not_to include("current-school")
     end
 
-    context "when claim payment details are 'personal bank account'" do
-      it "excludes the 'building-society-account' slug" do
-        journey_session.answers.bank_or_building_society = :personal_bank_account
-
-        expect(slug_sequence.slugs).not_to include("building-society-account")
-      end
-    end
-
-    context "when claim payment details are 'building society'" do
-      it "excludes the 'personal-bank-account' slug" do
-        journey_session.answers.bank_or_building_society = :building_society
-
-        expect(slug_sequence.slugs).not_to include("personal-bank-account")
-      end
-    end
-
     context "when 'provide_mobile_number' is 'No'" do
       it "excludes the 'mobile-number' slug" do
         journey_session.answers.provide_mobile_number = false

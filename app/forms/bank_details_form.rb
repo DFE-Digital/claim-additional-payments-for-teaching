@@ -7,7 +7,6 @@ class BankDetailsForm < Form
   attribute :banking_name, :string
   attribute :bank_sort_code, :string
   attribute :bank_account_number, :string
-  attribute :building_society_roll_number, :string
 
   attr_reader :hmrc_api_validation_attempted, :hmrc_api_validation_succeeded, :hmrc_api_response_error
 
@@ -15,12 +14,9 @@ class BankDetailsForm < Form
   validates :banking_name, format: {with: BANKING_NAME_REGEX_FILTER, message: i18n_error_message(:invalid_banking_name)}, if: -> { banking_name.present? }
   validates :bank_sort_code, presence: {message: i18n_error_message(:enter_sort_code)}
   validates :bank_account_number, presence: {message: i18n_error_message(:enter_account_number)}
-  validates :building_society_roll_number, presence: {message: i18n_error_message(:enter_roll_number)}, if: -> { answers.building_society? }
 
   validate :bank_account_number_must_be_eight_digits
   validate :bank_sort_code_must_be_six_digits
-  validate :building_society_roll_number_must_be_between_one_and_eighteen_digits
-  validate :building_society_roll_number_must_be_in_a_valid_format
 
   # This should be the last validation specified to prevent unnecessary API calls
   validate :bank_account_is_valid
@@ -32,7 +28,6 @@ class BankDetailsForm < Form
       banking_name: banking_name,
       bank_sort_code: normalised_bank_detail(bank_sort_code),
       bank_account_number: normalised_bank_detail(bank_account_number),
-      building_society_roll_number: building_society_roll_number,
       hmrc_bank_validation_succeeded: hmrc_bank_validation_succeeded
     )
 
@@ -63,18 +58,6 @@ class BankDetailsForm < Form
 
   def bank_sort_code_must_be_six_digits
     errors.add(:bank_sort_code, i18n_errors_path(:format_sort_code)) if bank_sort_code.present? && normalised_bank_detail(bank_sort_code) !~ /\A\d{6}\z/
-  end
-
-  def building_society_roll_number_must_be_between_one_and_eighteen_digits
-    return unless building_society_roll_number.present?
-
-    errors.add(:building_society_roll_number, i18n_errors_path(:length_roll_number)) if building_society_roll_number.length > 18
-  end
-
-  def building_society_roll_number_must_be_in_a_valid_format
-    return unless building_society_roll_number.present?
-
-    errors.add(:building_society_roll_number, i18n_errors_path(:format_roll_number)) unless /\A[a-z0-9\-\s.\/]{1,18}\z/i.match?(building_society_roll_number)
   end
 
   def bank_account_is_valid

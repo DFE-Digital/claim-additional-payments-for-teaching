@@ -156,13 +156,9 @@ RSpec.feature "TSLR journey with Teacher ID mobile check" do
     # - student-loan-amount page
     click_on "Continue"
 
-    choose "Building society"
-    click_on "Continue"
-
     fill_in "Name on your account", with: "Jo Bloggs"
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "87654321"
-    fill_in "Building society roll number", with: "1234/123456789"
     click_on "Continue"
 
     # - What gender does your school's payroll system associate with you

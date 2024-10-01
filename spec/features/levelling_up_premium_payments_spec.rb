@@ -195,14 +195,8 @@ RSpec.feature "Levelling up premium payments claims" do
     # - Mobile number one-time password
     expect(page).not_to have_text("Enter the 6-digit passcode")
 
-    # - Payment to Bank or Building Society
-    expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
-
-    choose "Personal bank account"
-    click_on "Continue"
-
     # - Enter bank account details
-    expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: journey_session.reload.answers.bank_or_building_society.humanize.downcase))
+    expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: "personal bank account"))
     expect(page).not_to have_text("Building society roll number")
 
     fill_in "Name on your account", with: "Jo Bloggs"
@@ -250,7 +244,6 @@ RSpec.feature "Levelling up premium payments claims" do
       expect(submitted_claim.postcode).to eql("DE22 4BS")
       expect(submitted_claim.email_address).to eql("david.tau1988@hotmail.co.uk")
       expect(submitted_claim.provide_mobile_number).to eql false
-      expect(submitted_claim.bank_or_building_society).to eq "personal_bank_account"
       expect(submitted_claim.banking_name).to eq("Jo Bloggs")
       expect(submitted_claim.bank_sort_code).to eq("123456")
       expect(submitted_claim.bank_account_number).to eq("87654321")

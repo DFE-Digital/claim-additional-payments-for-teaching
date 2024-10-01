@@ -78,9 +78,8 @@ en:
     personal_details: "Personal details"
     national_insurance_number: "What is your National Insurance number?"
     bank_details: "Enter bank account details"
-    bank_or_building_society: What account do you want the money paid into?
-    account_details: Enter your %{bank_or_building_society} details
-    account_hint: "For example: your name as it appears on your %{bank_or_building_society} statement or %{card} card."
+    account_details: Enter your personal bank account details
+    account_hint: "For example: your name as it appears on your bank statement or bank card."
     check_your_account_details: Incorrect details will cause a delay to your payment.
     check_and_confirm_qualification_details: Check and confirm your qualification details
     qualification_details: Qualification details
@@ -108,7 +107,6 @@ en:
     teacher_reference_number: "Teacher reference number"
     national_insurance_number: "National Insurance number"
     email_address: "Email address"
-    building_society: "building society"
     personal_bank_account: "bank account"
     started_at: "Started at"
     submitted_at: "Submitted at"
@@ -157,8 +155,8 @@ en:
       student_loan_plan:
         title: "Check student loan plan"
       payroll_details:
-        title: "Check bank/building society account details"
-        question: "The claimant’s %{bank_or_building_society} details have not been automatically validated. Has the claimant confirmed their %{bank_or_building_society} details?"
+        title: "Check bank account details"
+        question: "The claimant’s personal bank account details have not been automatically validated. Has the claimant confirmed their personal bank account details?"
       census_subjects_taught:
         title: "Check eligible subjects are taught"
       visa:
@@ -234,17 +232,9 @@ en:
         enter_roll_number: Enter a roll number
         format_account_number: Account number must be 8 digits
         format_sort_code: Sort code must be 6 digits
-        format_roll_number:
-          Building society roll number must only include letters a to z, numbers, hyphens, spaces, forward slashes and
-          full stops
         invalid_sort_code: Enter a valid sort code
         invalid_account_number: Enter the account number associated with the name on the account and/or sort code
         invalid_banking_name: Enter a valid name on the account
-        length_roll_number: Building society roll number must be between 1 and 18 characters
-    bank_or_building_society:
-      errors:
-        select_bank_or_building_society:
-          Select if you want the money paid in to a personal bank account or building society
     address:
       questions:
         your_address: What is your address?
@@ -892,7 +882,7 @@ en:
         matching_details:
           title: Is this claim still valid despite having matching details with other claims?
         payroll_details:
-          title: "Check bank/building society account details"
+          title: "Check bank account details"
         provider_verification:
           title: "Has the provider confirmed the claimant's details?"
           contract_type:
