@@ -1404,7 +1404,7 @@ en:
     claim_description: for early years financial incentive payment
     forms:
       find_reference:
-        question: Track your application
+        question: Enter your claim reference
         errors:
           presence: Enter your claim reference number
           impermissible: Enter a valid claim reference number
