@@ -111,6 +111,8 @@ module Payroll
     end
 
     def student_loan_plan
+      return if model.student_loan_plan.blank?
+
       model.student_loan_plan.gsub("plan", "").humanize
     end
 
