@@ -501,6 +501,20 @@ RSpec.feature "Provider verifying claims" do
       choose "Yes"
     end
 
+    within_fieldset(
+      "Can you confirm that Edna Krabappel is not currently subject to any " \
+      "performance measures?"
+    ) do
+      choose "Yes"
+    end
+
+    within_fieldset(
+      "Can you confirm that Edna Krabappel is not currently subject to " \
+      "disciplinary action?"
+    ) do
+      choose "Yes"
+    end
+
     check "To the best of my knowledge, I confirm that the information provided in this form is correct."
 
     click_on "Submit"
@@ -635,6 +649,20 @@ RSpec.feature "Provider verifying claims" do
     within_fieldset(
       "Will Edna Krabappel be timetabled to teach at least 2.5 hours per " \
       "week next term?"
+    ) do
+      choose "Yes"
+    end
+
+    within_fieldset(
+      "Can you confirm that Edna Krabappel is not currently subject to any " \
+      "performance measures?"
+    ) do
+      choose "Yes"
+    end
+
+    within_fieldset(
+      "Can you confirm that Edna Krabappel is not currently subject to " \
+      "disciplinary action?"
     ) do
       choose "Yes"
     end
@@ -775,6 +803,20 @@ RSpec.feature "Provider verifying claims" do
     within_fieldset(
       "Will Edna Krabappel be timetabled to teach at least 2.5 hours per " \
       "week next term?"
+    ) do
+      choose "Yes"
+    end
+
+    within_fieldset(
+      "Can you confirm that Edna Krabappel is not currently subject to any " \
+      "performance measures?"
+    ) do
+      choose "Yes"
+    end
+
+    within_fieldset(
+      "Can you confirm that Edna Krabappel is not currently subject to " \
+      "disciplinary action?"
     ) do
       choose "Yes"
     end

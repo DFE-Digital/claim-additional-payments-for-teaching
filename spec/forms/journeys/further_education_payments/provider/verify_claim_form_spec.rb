@@ -108,6 +108,8 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
             teaching_hours_per_week
             half_teaching_hours
             subjects_taught
+            subject_to_formal_performance_action
+            subject_to_disciplinary_action
           ]
         )
       end
@@ -132,6 +134,8 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
             half_teaching_hours
             subjects_taught
             teaching_hours_per_week_next_term
+            subject_to_formal_performance_action
+            subject_to_disciplinary_action
           ]
         )
       end
@@ -267,7 +271,9 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
               "2": {name: "further_education_teaching_start_year", outcome: "1"},
               "3": {name: "teaching_hours_per_week", outcome: "1"},
               "4": {name: "half_teaching_hours", outcome: "0"},
-              "5": {name: "subjects_taught", outcome: "0"}
+              "5": {name: "subjects_taught", outcome: "0"},
+              "6": {name: "subject_to_formal_performance_action", outcome: "0"},
+              "7": {name: "subject_to_disciplinary_action", outcome: "0"}
             }
           }
         }
@@ -316,6 +322,14 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
             },
             {
               "name" => "subjects_taught",
+              "outcome" => false
+            },
+            {
+              "name" => "subject_to_formal_performance_action",
+              "outcome" => false
+            },
+            {
+              "name" => "subject_to_disciplinary_action",
               "outcome" => false
             }
           ],

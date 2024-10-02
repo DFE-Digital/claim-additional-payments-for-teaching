@@ -43,8 +43,22 @@ module Policies
         @verification ||= claim.eligibility.verification
       end
 
+      # See the `courses_taught_assertion` method for more information on why
+      # that assertion is different to the others.
+      # We need to make sure that when presenting the list of assertions to the
+      # admin that the courses taught assertion is displayed after the subjects
+      # taught assertion.
       def assertions
-        verification["assertions"] + [courses_taught_assertion]
+        return @assertions if @assertions
+
+        subjects_taught_index = verification["assertions"].find_index do |h|
+          h["name"] == "subjects_taught"
+        end
+
+        @assertions = verification["assertions"].dup.insert(
+          subjects_taught_index + 1,
+          courses_taught_assertion
+        )
       end
 
       # The provider verifies the courses taught question as part of verifying the
