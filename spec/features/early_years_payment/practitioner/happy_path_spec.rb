@@ -59,5 +59,12 @@ RSpec.feature "Early years payment practitioner" do
     otp_in_mail_sent = mail[:personalisation].unparsed_value[:one_time_password]
     fill_in "claim-one-time-password-field", with: otp_in_mail_sent
     click_on "Confirm"
+
+    expect(page).to have_content("Would you like to provide your mobile number?")
+    choose "No"
+    click_on "Continue"
+
+    # Placeholder page as we build the journey
+    expect(page).to have_content("What account do you want the money paid into?")
   end
 end

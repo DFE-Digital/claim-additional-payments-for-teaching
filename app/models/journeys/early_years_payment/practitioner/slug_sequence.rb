@@ -11,6 +11,8 @@ module Journeys
           email-address
           email-verification
           provide-mobile-number
+          bank-or-building-society
+          check-your-answers
         ].freeze
 
         def self.start_page_url
