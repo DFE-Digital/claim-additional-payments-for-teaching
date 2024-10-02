@@ -997,7 +997,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       skip_tid
 
       # - Which school do you teach at
-      choose_school school
+      choose_school_js school
 
       # - NQT in Academic Year after ITT
       choose "Yes"
