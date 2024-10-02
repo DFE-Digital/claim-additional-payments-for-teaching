@@ -126,10 +126,6 @@ module Payroll
       model.award_amount.to_s
     end
 
-    def roll_number
-      model.building_society_roll_number
-    end
-
     def payment_id
       model.id
     end
