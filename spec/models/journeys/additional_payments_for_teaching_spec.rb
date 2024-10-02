@@ -67,112 +67,64 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching do
     it { is_expected.to eq(Journeys::AdditionalPaymentsForTeaching::AnswersPresenter) }
   end
 
+  shared_examples "true for years" do |start_years_range, policy_year|
+    JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(policy_year).each do |itt_academic_year|
+      context "ITT year #{itt_academic_year}" do
+        let(:itt_academic_year) { itt_academic_year }
+
+        if start_years_range.include?(itt_academic_year.start_year)
+          it { is_expected.to be true }
+        else
+          it { is_expected.to be false }
+        end
+      end
+    end
+  end
+
+  shared_examples "false for all years" do |policy_year|
+    JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(policy_year).each do |itt_academic_year|
+      context "ITT year #{itt_academic_year}" do
+        let(:itt_academic_year) { itt_academic_year }
+
+        it { is_expected.to be false }
+      end
+    end
+  end
+
   describe ".set_a_reminder?" do
-    subject { described_class.set_a_reminder?(itt_academic_year: itt_academic_year, policy_year: policy_year) }
-    let(:itt_academic_year) { AcademicYear.new(year) }
+    subject { described_class.set_a_reminder?(itt_academic_year: itt_academic_year, policy: policy) }
+    let(:policy) { Policies::EarlyCareerPayments }
+    let!(:configuration) { create(:journey_configuration, :additional_payments, current_academic_year: policy_year) }
 
     context "Claim year: 22/23" do
       let(:policy_year) { AcademicYear.new(2022) }
 
-      # Eligible now - but falls out of 5 year window next year so don't set a reminder
-      context "ITT year: 17/18" do
-        let(:year) { 2017 }
-
-        specify { expect(subject).to be false }
-      end
-
-      context "ITT year: 18/19" do
-        let(:year) { 2018 }
-
-        specify { expect(subject).to be true }
-      end
-
-      context "ITT year: 19/20" do
-        let(:year) { 2019 }
-
-        specify { expect(subject).to be true }
-      end
-
-      context "ITT year: 20/21" do
-        let(:year) { 2020 }
-
-        specify { expect(subject).to be true }
-      end
-
-      context "ITT year: 21/22" do
-        let(:year) { 2021 }
-
-        specify { expect(subject).to be true }
-      end
+      # 2017 is eligible now - but falls out of the 5 year window next year
+      it_behaves_like "true for years", 2018..2021, AcademicYear.new(2022)
     end
 
     context "Claim year: 23/24" do
       let(:policy_year) { AcademicYear.new(2023) }
 
-      # Eligible now - but falls out of 5 year window next year so don't set a reminder
-      context "ITT year: 18/19" do
-        let(:year) { 2018 }
-
-        specify { expect(subject).to be false }
-      end
-
-      context "ITT year: 19/20" do
-        let(:year) { 2019 }
-
-        specify { expect(subject).to be true }
-      end
-
-      context "ITT year: 20/21" do
-        let(:year) { 2020 }
-
-        specify { expect(subject).to be true }
-      end
-
-      context "ITT year: 21/22" do
-        let(:year) { 2021 }
-
-        specify { expect(subject).to be true }
-      end
-
-      context "ITT year: 22/23" do
-        let(:year) { 2022 }
-
-        specify { expect(subject).to be true }
-      end
+      # 2018 is eligible now - but falls out of the 5 year window next year
+      it_behaves_like "true for years", 2019..2022, AcademicYear.new(2023)
     end
 
-    # Last policy year - no reminders to set
     context "Claim year: 24/25" do
       let(:policy_year) { AcademicYear.new(2024) }
 
-      context "ITT year: 19/20" do
-        let(:year) { 2019 }
+      context "Last year of the policy - ECP policy" do
+        let(:policy) { Policies::EarlyCareerPayments }
 
-        specify { expect(subject).to be false }
+        # ECP will be removed after 2024/2025 academic year
+        it_behaves_like "false for all years", AcademicYear.new(2024)
       end
 
-      context "ITT year: 20/21" do
-        let(:year) { 2020 }
+      context "LUP policy" do
+        let(:policy) { Policies::LevellingUpPremiumPayments }
 
-        specify { expect(subject).to be false }
-      end
-
-      context "ITT year: 21/22" do
-        let(:year) { 2021 }
-
-        specify { expect(subject).to be false }
-      end
-
-      context "ITT year: 22/23" do
-        let(:year) { 2022 }
-
-        specify { expect(subject).to be false }
-      end
-
-      context "ITT year: 23/24" do
-        let(:year) { 2023 }
-
-        specify { expect(subject).to be false }
+        # 2019 is eligible now - but falls out of the 5 year window next year
+        it_behaves_like "true for years", 2020..2023, AcademicYear.new(2024)
       end
     end
   end
