@@ -282,10 +282,11 @@ class Claim < ApplicationRecord
   def below_min_qa_threshold?
     return false if policy::MIN_QA_THRESHOLD.zero?
 
-    claims_approved_so_far = Claim.by_policy(policy).current_academic_year.approved.count
+    approved_claims = Claim.by_policy(policy).by_academic_year(academic_year).approved
+    claims_approved_so_far = approved_claims.count
     return true if claims_approved_so_far.zero?
 
-    (Claim.by_policy(policy).current_academic_year.approved.qa_required.count.to_f / claims_approved_so_far) * 100 <= policy::MIN_QA_THRESHOLD
+    (approved_claims.qa_required.count.to_f / claims_approved_so_far) * 100 <= policy::MIN_QA_THRESHOLD
   end
 
   def qa_completed?

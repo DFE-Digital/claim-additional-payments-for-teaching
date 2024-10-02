@@ -40,6 +40,22 @@ module FeatureHelpers
     click_button "Continue"
   end
 
+  def choose_school_js(school)
+    expect(page).to have_text(/Which (additional )?school/) # there can be variations of the full text depending on which journey/page
+
+    fill_in :school_search, with: school.name.sub("The ", "").split(" ").first
+
+    within("#school_search__listbox") do
+      sleep(1) # seems to aid in success, as if click happens before event is bound
+      find("li", text: school.name).click
+    end
+
+    click_button "Continue"
+
+    choose school.name
+    click_button "Continue"
+  end
+
   def choose_still_teaching(teaching_at = "Yes, at Penistone Grammar School")
     choose teaching_at
     click_on "Continue"
