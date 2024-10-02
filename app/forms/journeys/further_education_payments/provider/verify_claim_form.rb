@@ -4,6 +4,9 @@ module Journeys
       class VerifyClaimForm < Form
         include CoursesHelper
 
+        # When adding new assertions, try to use the same name as the attribute
+        # in the eligibility model. This simplifies displaying the
+        # corresponding claimant answer in the admin ui.
         ASSERTIONS = {
           fixed_contract: %i[
             contract_type
@@ -12,6 +15,8 @@ module Journeys
             teaching_hours_per_week
             half_teaching_hours
             subjects_taught
+            subject_to_formal_performance_action
+            subject_to_disciplinary_action
           ],
           variable_contract: %i[
             contract_type
@@ -22,6 +27,8 @@ module Journeys
             half_teaching_hours
             subjects_taught
             teaching_hours_per_week_next_term
+            subject_to_formal_performance_action
+            subject_to_disciplinary_action
           ]
         }
 

@@ -43,8 +43,22 @@ module Policies
         @verification ||= claim.eligibility.verification
       end
 
+      # See the `courses_taught_assertion` method for more information on why
+      # that assertion is different to the others.
+      # We need to make sure that when presenting the list of assertions to the
+      # admin that the courses taught assertion is displayed after the subjects
+      # taught assertion.
       def assertions
-        verification["assertions"] + [courses_taught_assertion]
+        return @assertions if @assertions
+
+        subjects_taught_index = verification["assertions"].find_index do |h|
+          h["name"] == "subjects_taught"
+        end
+
+        @assertions = verification["assertions"].dup.insert(
+          subjects_taught_index + 1,
+          courses_taught_assertion
+        )
       end
 
       # The provider verifies the courses taught question as part of verifying the
@@ -101,7 +115,14 @@ module Policies
       end
 
       def provider_answer(assertion)
-        assertion["outcome"] ? "Yes" : "No"
+        case assertion["name"]
+        when "subject_to_formal_performance_action", "subject_to_disciplinary_action"
+          # Due to the phrasing of the question to the provider, we need to
+          # negate their answer when displaying it in the admin ui.
+          assertion["outcome"] ? "No" : "Yes"
+        else
+          assertion["outcome"] ? "Yes" : "No"
+        end
       end
 
       def subjects_taught
