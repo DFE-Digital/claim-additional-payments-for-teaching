@@ -136,8 +136,11 @@ module Policies
       end_year = Journeys::TeacherStudentLoanReimbursement.configuration.current_academic_year.start_year
       start_year = end_year - 1
 
-      if format == :short
+      case format
+      when :short
         "#{start_year}/#{end_year}"
+      when :to
+        "6 April #{start_year} to 5 April #{end_year}"
       else
         "6 April #{start_year} and 5 April #{end_year}"
       end
