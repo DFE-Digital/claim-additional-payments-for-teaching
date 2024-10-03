@@ -15,6 +15,14 @@ module Admin
 
       @no_data_census_subjects_taught_count = SchoolWorkforceCensus.no_data_census_subjects_taught_count
       @any_match_count = SchoolWorkforceCensus.any_match_count
+
+      @fe_provider_verfication_tasks_automatically_passed =
+        Task
+          .joins(:claim)
+          .where(claim: {eligibility_type: "Policies::FurtherEducationPayments::Eligibility", academic_year: AcademicYear.current})
+          .passed_automatically
+          .where(name: "provider_verification")
+          .count
     end
   end
 end
