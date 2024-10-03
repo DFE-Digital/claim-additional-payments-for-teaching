@@ -1,9 +1,6 @@
-<% allocate_claim_count = @claims.where(assigned_to: nil).count > 25 ? 25 : @claims.where(assigned_to: nil).size %>
-
 <h2 class="govuk-heading-m">Allocate claims</h2>
 
 <%= form_with url: admin_bulk_allocate_path, method: :patch do |form| %>
-  <%= form.hidden_field :allocate_claim_count, value: allocate_claim_count %>
   <div class="govuk-form-group admin-filter-group" id="allocations">
     <div>
       <label class="govuk-label" for="allocate_to_team_member">
@@ -17,10 +14,15 @@
       </label>
       <%= form.select :allocate_to_policy, options_for_select(Policies.options_for_select, params[:policy]), {include_blank: "All"}, class: "govuk-select" %>
     </div>
+    <div>
+      <label class="govuk-label" for="allocate_claim_count">
+        Number of claims:
+      </label>
+      <%= form.select :allocate_claim_count, options_for_select([5, 10, 25], params[:allocate_claim_count] || 25), {}, class: "govuk-select" %>
+    </div>
 
     <div>
-      <div class="govuk-label">Default: 25</div>
-      <%= form.submit "Allocate claims", class: "govuk-button govuk-button--secondary", id: :allocate, disabled: allocate_claim_count.zero? %>
+      <%= form.submit "Allocate claims", class: "govuk-button govuk-button--secondary admin-filter-group__button", id: :allocate, disabled: @claims.where(assigned_to: nil).count.zero? %>
     </div>
 
     <div>
