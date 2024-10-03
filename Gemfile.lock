@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/DFE-Digital/dfe-analytics.git
-  revision: d92d0b91b68eebdeb5a22815577be55ef617093f
-  tag: v1.14.0
+  revision: 706595e52fed211cee53ad99ceaeaabb47a059cc
+  tag: v1.14.2
   specs:
-    dfe-analytics (1.14.0)
+    dfe-analytics (1.14.2)
       google-cloud-bigquery (~> 1.38)
       httparty (~> 0.21)
       multi_xml (~> 0.6.0)
@@ -151,7 +151,7 @@ GEM
       railties (>= 5.0.0)
     faker (3.4.2)
       i18n (>= 1.8.11, < 2)
-    faraday (1.10.3)
+    faraday (1.10.4)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -183,7 +183,7 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    google-apis-bigquery_v2 (0.74.0)
+    google-apis-bigquery_v2 (0.78.0)
       google-apis-core (>= 0.15.0, < 2.a)
     google-apis-core (0.15.1)
       addressable (~> 2.5, >= 2.5.1)
@@ -201,10 +201,10 @@ GEM
       google-cloud-core (~> 1.6)
       googleauth (~> 1.9)
       mini_mime (~> 1.0)
-    google-cloud-core (1.7.0)
+    google-cloud-core (1.7.1)
       google-cloud-env (>= 1.0, < 3.a)
       google-cloud-errors (~> 1.0)
-    google-cloud-env (2.1.1)
+    google-cloud-env (2.2.0)
       faraday (>= 1.0, < 3.a)
     google-cloud-errors (1.4.0)
     googleauth (1.11.0)
@@ -243,7 +243,7 @@ GEM
       aes_key_wrap
       bindata
       httpclient
-    jwt (2.8.2)
+    jwt (2.9.1)
       base64
     language_server-protocol (3.17.0.3)
     launchy (3.0.1)
@@ -293,8 +293,6 @@ GEM
     nio4r (2.7.3)
     nokogiri (1.16.6)
       mini_portile2 (~> 2.8.2)
-      racc (~> 1.4)
-    nokogiri (1.16.6-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.16.6-x86_64-darwin)
       racc (~> 1.4)
@@ -554,9 +552,9 @@ GEM
     zeitwerk (2.6.16)
 
 PLATFORMS
-  arm64-darwin-23
   ruby
   x86_64-darwin-21
+  x86_64-darwin-23
   x86_64-linux
 
 DEPENDENCIES
