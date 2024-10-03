@@ -234,7 +234,7 @@ GEM
     httpclient (2.8.3)
     i18n (1.14.6)
       concurrent-ruby (~> 1.0)
-    jbuilder (2.12.0)
+    jbuilder (2.13.0)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     json (2.7.2)
@@ -291,12 +291,12 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.3)
-    nokogiri (1.16.6)
+    nokogiri (1.16.7)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    nokogiri (1.16.6-x86_64-darwin)
+    nokogiri (1.16.7-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.16.6-x86_64-linux)
+    nokogiri (1.16.7-x86_64-linux)
       racc (~> 1.4)
     notifications-ruby-client (6.1.0)
       jwt (>= 1.5, < 3)
@@ -578,7 +578,7 @@ DEPENDENCIES
   govuk-components
   govuk_design_system_formbuilder (~> 5.4.0)
   httpclient
-  jbuilder (~> 2.12)
+  jbuilder (~> 2.13)
   jwt
   launchy
   listen (>= 3.0.5, < 3.10)
