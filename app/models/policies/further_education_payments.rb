@@ -30,6 +30,9 @@ module Policies
       :has_worked_in_further_education_for_more_than_5_years,
       :ineligible_subject_or_courses,
       :insufficient_time_spent_teaching_eligibble_students,
+      :subject_to_performance_measures,
+      :subject_to_disciplinary_action,
+      :identity_check_failed,
       :duplicate_claim,
       :no_response,
       :other
