@@ -1,32 +1,27 @@
 <h2 class="govuk-heading-m">Allocate claims</h2>
 
-<%= form_with url: admin_bulk_allocate_path, method: :patch do |form| %>
+<%= form_with url: admin_bulk_allocate_path, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
   <div class="govuk-form-group admin-filter-group" id="allocations">
-    <div>
-      <label class="govuk-label" for="allocate_to_team_member">
-        Team members:
-      </label>
-      <%= form.select :allocate_to_team_member, options_for_select(DfeSignIn::User.options_for_select, params[:allocate_to_team_member]), {}, class: "govuk-select" %>
-    </div>
-    <div>
-      <label class="govuk-label" for="allocate_to_policy">
-        Policy:
-      </label>
-      <%= form.select :allocate_to_policy, options_for_select(Policies.options_for_select, params[:policy]), {include_blank: "All"}, class: "govuk-select" %>
-    </div>
-    <div>
-      <label class="govuk-label" for="allocate_claim_count">
-        Number of claims:
-      </label>
-      <%= form.select :allocate_claim_count, options_for_select([5, 10, 25], params[:allocate_claim_count] || 25), {}, class: "govuk-select" %>
-    </div>
+    <%= form.govuk_select(
+      :allocate_to_team_member,
+      options_for_select(DfeSignIn::User.options_for_select, params[:allocate_to_team_member]),
+      label: { text: "Team members:" }
+    ) %>
 
-    <div>
-      <%= form.submit "Allocate claims", class: "govuk-button govuk-button--secondary admin-filter-group__button", id: :allocate, disabled: @claims.where(assigned_to: nil).count.zero? %>
-    </div>
+    <%= form.govuk_select(
+      :allocate_to_policy,
+      options_for_select(Policies.options_for_select, params[:policy]),
+      options: { include_blank: "All" },
+      label: { text: "Policy:" }
+    ) %>
 
-    <div>
-      <%= form.submit "Unallocate claims", class: "govuk-button govuk-button--secondary admin-filter-group__button", id: :unallocate, formaction: admin_bulk_deallocate_path %>
-    </div>
+    <%= form.govuk_select(
+      :allocate_claim_count,
+      options_for_select([5, 10, 25], params[:allocate_claim_count] || 25),
+      label: { text: "Number of claims:" }
+    ) %>
+
+    <%= form.submit "Allocate claims", class: "govuk-button govuk-button--secondary", id: :allocate, disabled: @claims.where(assigned_to: nil).count.zero? %>
+    <%= form.submit "Unallocate claims", class: "govuk-button govuk-button--secondary", id: :unallocate, formaction: admin_bulk_deallocate_path %>
   </div>
 <% end %>
