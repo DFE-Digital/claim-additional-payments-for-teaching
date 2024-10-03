@@ -2,7 +2,8 @@ class Admin::CookiesController < Admin::BaseAdminController
   def accept
     cookies.encrypted[:accept_cookies] = {
       value: {state: true, message: true}.to_json,
-      expires: 90.days.from_now
+      expires: 90.days.from_now,
+      httponly: true
     }
 
     respond_to do |format|
@@ -14,7 +15,8 @@ class Admin::CookiesController < Admin::BaseAdminController
   def reject
     cookies.encrypted[:accept_cookies] = {
       value: {state: false, message: true}.to_json,
-      expires: 90.days.from_now
+      expires: 90.days.from_now,
+      httponly: true
     }
 
     respond_to do |format|
@@ -28,7 +30,8 @@ class Admin::CookiesController < Admin::BaseAdminController
 
     cookies.encrypted[:accept_cookies] = {
       value: {state:, message: false}.to_json,
-      expires: 90.days.from_now
+      expires: 90.days.from_now,
+      httponly: true
     }
 
     redirect_to request.env["HTTP_REFERER"]
@@ -39,7 +42,8 @@ class Admin::CookiesController < Admin::BaseAdminController
 
     cookies.encrypted[:accept_cookies] = {
       value: {state: form.accept, message: true}.to_json,
-      expires: 90.days.from_now
+      expires: 90.days.from_now,
+      httponly: true
     }
 
     redirect_to admin_cookies_path

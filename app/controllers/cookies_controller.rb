@@ -4,7 +4,8 @@ class CookiesController < BasePublicController
   def accept
     cookies.encrypted[:accept_cookies] = {
       value: {state: true, message: true}.to_json,
-      expires: 90.days.from_now
+      expires: 90.days.from_now,
+      httponly: true
     }
 
     respond_to do |format|
@@ -16,7 +17,8 @@ class CookiesController < BasePublicController
   def reject
     cookies.encrypted[:accept_cookies] = {
       value: {state: false, message: true}.to_json,
-      expires: 90.days.from_now
+      expires: 90.days.from_now,
+      httponly: true
     }
 
     respond_to do |format|
@@ -30,7 +32,8 @@ class CookiesController < BasePublicController
 
     cookies.encrypted[:accept_cookies] = {
       value: {state:, message: false}.to_json,
-      expires: 90.days.from_now
+      expires: 90.days.from_now,
+      httponly: true
     }
 
     redirect_to request.env["HTTP_REFERER"]
@@ -41,7 +44,8 @@ class CookiesController < BasePublicController
 
     cookies.encrypted[:accept_cookies] = {
       value: {state: form.accept, message: true}.to_json,
-      expires: 90.days.from_now
+      expires: 90.days.from_now,
+      httponly: true
     }
 
     redirect_to cookies_path(current_journey_routing_name)
