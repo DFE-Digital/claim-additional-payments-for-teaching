@@ -111,6 +111,8 @@ module Payroll
     end
 
     def student_loan_plan
+      return if model.student_loan_plan.blank?
+
       model.student_loan_plan.gsub("plan", "").humanize
     end
 
@@ -124,10 +126,6 @@ module Payroll
 
     def scheme_amount
       model.award_amount.to_s
-    end
-
-    def roll_number
-      model.building_society_roll_number
     end
 
     def payment_id

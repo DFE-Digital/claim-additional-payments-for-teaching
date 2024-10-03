@@ -110,14 +110,9 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
     find("#claim_mobile_check_use").click
     click_on "Continue"
 
-    # - Choose bank or building society
-    choose "Building society"
-    click_on "Continue"
-
     fill_in "Name on your account", with: "Jo Bloggs"
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "87654321"
-    fill_in "Building society roll number", with: "1234/123456789"
     click_on "Continue"
 
     choose "Male"

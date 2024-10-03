@@ -27,10 +27,6 @@ module ClaimsFormCallbacks
     inject_hmrc_validation_attempt_count_into_the_form
   end
 
-  def building_society_account_before_update
-    inject_hmrc_validation_attempt_count_into_the_form
-  end
-
   def information_provided_before_update
     return unless journey_requires_student_loan_details?
 
@@ -45,11 +41,6 @@ module ClaimsFormCallbacks
   end
 
   def personal_bank_account_after_form_save_failure
-    increment_hmrc_validation_attempt_count if hmrc_api_validation_attempted?
-    render_template_for_current_slug
-  end
-
-  def building_society_account_after_form_save_failure
     increment_hmrc_validation_attempt_count if hmrc_api_validation_attempted?
     render_template_for_current_slug
   end

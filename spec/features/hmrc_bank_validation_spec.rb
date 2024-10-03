@@ -102,10 +102,6 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
     # - Provide mobile number
     choose "No"
     click_on "Continue"
-
-    # Payment to Bank or Building Society
-    choose "Personal bank account"
-    click_on "Continue"
   end
 
   context "HMRC API returns a 200 response", :with_stubbed_hmrc_client do

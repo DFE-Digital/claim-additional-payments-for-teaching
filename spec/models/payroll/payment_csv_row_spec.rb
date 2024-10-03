@@ -87,7 +87,6 @@ RSpec.describe Payroll::PaymentCsvRow do
               claim.banking_name,
               "00-11-22",
               claim.bank_account_number,
-              claim.building_society_roll_number,
               payment_award_amount.to_s,
               payment.id,
               payment.policies_in_payment,
@@ -163,7 +162,6 @@ RSpec.describe Payroll::PaymentCsvRow do
               claim.banking_name,
               "33-09-90",
               claim.bank_account_number,
-              nil,
               payment_award_amount.to_s,
               payment.id,
               payment.policies_in_payment,
@@ -236,7 +234,6 @@ RSpec.describe Payroll::PaymentCsvRow do
               claim.banking_name,
               "21-09-09",
               claim.bank_account_number,
-              nil,
               payment_award_amount.to_s,
               payment.id,
               payment.policies_in_payment,
@@ -259,7 +256,7 @@ RSpec.describe Payroll::PaymentCsvRow do
 
     describe "PAYMENT_ID" do
       it "is 36 characters long, satisfying DfE Payroll’s length validation" do
-        expect(row[30].length).to eq(36)
+        expect(row[29].length).to eq(36)
       end
     end
 

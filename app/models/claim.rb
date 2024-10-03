@@ -154,14 +154,11 @@ class Claim < ApplicationRecord
 
   validates :bank_sort_code, on: [:amendment], presence: {message: "Enter a sort code"}
   validates :bank_account_number, on: [:amendment], presence: {message: "Enter an account number"}
-  validates :building_society_roll_number, on: [:submit, :amendment], presence: {message: "Enter a roll number"}, if: -> { building_society? }
 
   validates :payroll_gender, on: [:"payroll-gender-task"], presence: {message: "You must select a gender that will be passed to HMRC"}
 
   validate :bank_account_number_must_be_eight_digits
   validate :bank_sort_code_must_be_six_digits
-  validate :building_society_roll_number_must_be_between_one_and_eighteen_digits
-  validate :building_society_roll_number_must_be_in_a_valid_format
 
   before_save :normalise_ni_number, if: %i[national_insurance_number national_insurance_number_changed?]
   before_save :normalise_bank_account_number, if: %i[bank_account_number bank_account_number_changed?]
@@ -482,18 +479,6 @@ class Claim < ApplicationRecord
 
   def normalised_bank_detail(bank_detail)
     bank_detail.gsub(/\s|-/, "")
-  end
-
-  def building_society_roll_number_must_be_between_one_and_eighteen_digits
-    return unless building_society_roll_number.present?
-
-    errors.add(:building_society_roll_number, "Building society roll number must be between 1 and 18 characters") if building_society_roll_number.length > 18
-  end
-
-  def building_society_roll_number_must_be_in_a_valid_format
-    return unless building_society_roll_number.present?
-
-    errors.add(:building_society_roll_number, "Building society roll number must only include letters a to z, numbers, hyphens, spaces, forward slashes and full stops") unless /\A[a-z0-9\-\s.\/]{1,18}\z/i.match?(building_society_roll_number)
   end
 
   def bank_account_number_must_be_eight_digits

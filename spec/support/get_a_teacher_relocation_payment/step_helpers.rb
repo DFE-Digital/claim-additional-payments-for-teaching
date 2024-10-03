@@ -225,12 +225,6 @@ module GetATeacherRelocationPayment
     end
 
     def and_i_provide_my_personal_bank_details
-      assert_on_bank_or_building_society_page!
-
-      choose "Personal bank account"
-
-      click_button("Continue")
-
       assert_on_personal_bank_account_page!
 
       fill_in("Name on your account", with: "Walter Skinner")
@@ -238,26 +232,6 @@ module GetATeacherRelocationPayment
       fill_in("Sort code", with: "123456")
 
       fill_in("Account number", with: "12345678")
-
-      click_button("Continue")
-    end
-
-    def and_i_provide_my_building_society_details
-      assert_on_bank_or_building_society_page!
-
-      choose "Building society"
-
-      click_button("Continue")
-
-      assert_on_building_society_account_page!
-
-      fill_in "Name on your account", with: "Walter Skinner"
-
-      fill_in("Sort code", with: "123456")
-
-      fill_in("Account number", with: "12345678")
-
-      fill_in("Building society roll number", with: "12345678")
 
       click_button("Continue")
     end
@@ -350,16 +324,8 @@ module GetATeacherRelocationPayment
       expect(page).to have_text("Would you like to provide your mobile number?")
     end
 
-    def assert_on_bank_or_building_society_page!
-      expect(page).to have_text("What account do you want the money paid into?")
-    end
-
     def assert_on_personal_bank_account_page!
       expect(page).to have_text("Enter your personal bank account details")
-    end
-
-    def assert_on_building_society_account_page!
-      expect(page).to have_text("Enter your building society details")
     end
 
     def assert_on_payroll_gender_step!
