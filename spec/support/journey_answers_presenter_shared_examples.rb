@@ -186,7 +186,6 @@ RSpec.shared_examples "journey answers presenter" do
       create(
         :additional_payments_session,
         answers: {
-          bank_or_building_society: "personal_bank_account",
           bank_sort_code: "123456",
           bank_account_number: "12345678",
           banking_name: "Jo Bloggs"
@@ -199,37 +198,9 @@ RSpec.shared_examples "journey answers presenter" do
     context "when a personal bank account is selected" do
       it "returns an array of questions and answers for displaying to the user for review" do
         expected_answers = [
-          [I18n.t("questions.bank_or_building_society"), "Personal bank account", "bank-or-building-society"],
           ["Name on bank account", "Jo Bloggs", "personal-bank-account"],
           ["Bank sort code", "123456", "personal-bank-account"],
           ["Bank account number", "12345678", "personal-bank-account"]
-        ]
-
-        expect(answers).to eq expected_answers
-      end
-    end
-
-    context "when a building society is selected" do
-      let(:journey_session) do
-        create(
-          :additional_payments_session,
-          answers: {
-            bank_or_building_society: "building_society",
-            bank_sort_code: "659007",
-            bank_account_number: "90770224",
-            banking_name: "David Badger-Hillary",
-            building_society_roll_number: "5890/87654321"
-          }
-        )
-      end
-
-      it "returns an array of questions and answers for displaying to the user for review" do
-        expected_answers = [
-          [I18n.t("questions.bank_or_building_society"), "Building society", "bank-or-building-society"],
-          ["Name on bank account", "David Badger-Hillary", "building-society-account"],
-          ["Bank sort code", "659007", "building-society-account"],
-          ["Bank account number", "90770224", "building-society-account"],
-          ["Building society roll number", "5890/87654321", "building-society-account"]
         ]
 
         expect(answers).to eq expected_answers

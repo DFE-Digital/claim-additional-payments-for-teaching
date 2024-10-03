@@ -154,10 +154,6 @@ RSpec.feature "Further education payments" do
     choose "No"
     click_on "Continue"
 
-    expect(page).to have_content("What account do you want the money paid into?")
-    choose "Personal bank account"
-    click_on "Continue"
-
     expect(page).to have_content("Enter your personal bank account details")
     fill_in "Name on your account", with: "Jo Bloggs"
     fill_in "Sort code", with: "123456"

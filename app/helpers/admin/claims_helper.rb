@@ -227,7 +227,7 @@ module Admin
     end
 
     def code_msg(bank_account_verification_response, claim)
-      "Error #{bank_account_verification_response.code} - HMRC API failure. No checks have been completed on the claimant’s #{t("admin.#{claim.bank_or_building_society}")} details. Select yes to manually approve the claimant’s #{t("admin.#{claim.bank_or_building_society}")} details"
+      "Error #{bank_account_verification_response.code} - HMRC API failure. No checks have been completed on the claimant’s bank account details. Select yes to manually approve the claimant’s bank account details"
     end
 
     def sort_code_msg(bank_account_verification_response)

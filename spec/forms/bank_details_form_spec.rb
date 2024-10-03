@@ -22,7 +22,6 @@ RSpec.describe BankDetailsForm do
         banking_name:,
         bank_sort_code:,
         bank_account_number:,
-        building_society_roll_number:,
         hmrc_validation_attempt_count:
       }
     end
@@ -38,7 +37,6 @@ RSpec.describe BankDetailsForm do
     let(:banking_name) { "Jo Bloggs" }
     let(:bank_sort_code) { rand(100000..999999) }
     let(:bank_account_number) { rand(10000000..99999999) }
-    let(:building_society_roll_number) { nil }
     let(:hmrc_validation_attempt_count) { 0 }
 
     describe "#valid?" do
@@ -89,33 +87,6 @@ RSpec.describe BankDetailsForm do
         context "with blank sort code" do
           let(:bank_sort_code) { "" }
           it { is_expected.not_to be_valid }
-        end
-
-        context "when building society" do
-          let(:journey_session) do
-            create(
-              :"#{journey::I18N_NAMESPACE}_session",
-              answers: attributes_for(
-                :"#{journey::I18N_NAMESPACE}_answers",
-                bank_or_building_society: "building_society"
-              )
-            )
-          end
-
-          context "with valid building society roll number" do
-            let(:building_society_roll_number) { "CXJ-K6 897/98X" }
-            it { is_expected.to be_valid }
-          end
-
-          context "with invalid building society roll number" do
-            let(:building_society_roll_number) { "123456789/ABC.CD-EFGH " }
-            it { is_expected.not_to be_valid }
-          end
-
-          context "with blank building society roll number" do
-            let(:building_society_roll_number) { "" }
-            it { is_expected.not_to be_valid }
-          end
         end
 
         context "when HMRC bank validation is enabled", :with_hmrc_bank_validation_enabled do

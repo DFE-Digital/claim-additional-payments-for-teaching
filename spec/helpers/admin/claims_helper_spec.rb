@@ -657,15 +657,6 @@ describe Admin::ClaimsHelper do
         expect(code_msg(bank_account_verification_response, claim)).to eq "Error 400 - HMRC API failure. No checks have been completed on the claimant’s bank account details. Select yes to manually approve the claimant’s bank account details"
       end
     end
-
-    context "429 error with building society" do
-      let(:claim) { create(:claim, :submitted, bank_or_building_society: :building_society) }
-      let(:bank_account_verification_response) { Hmrc::BankAccountVerificationResponse.new(OpenStruct.new({code: 429, body: {}.to_json})) }
-
-      it "returns message with code and bank account" do
-        expect(code_msg(bank_account_verification_response, claim)).to eq "Error 429 - HMRC API failure. No checks have been completed on the claimant’s building society details. Select yes to manually approve the claimant’s building society details"
-      end
-    end
   end
 
   describe "#sort_code_msg" do

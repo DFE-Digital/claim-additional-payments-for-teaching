@@ -46,7 +46,6 @@ RSpec.feature "Admin amends a claim" do
     select "Plan 2", from: "Student loan repayment plan"
     fill_in "Bank sort code", with: "111213"
     fill_in "Bank account number", with: "18929492"
-    fill_in "Building society roll number", with: "JF 838281"
 
     fill_in "Address line 1", with: "New address line 1"
     fill_in "Address line 2", with: "New address line 2"
@@ -66,7 +65,6 @@ RSpec.feature "Admin amends a claim" do
       "student_loan_plan" => ["plan_1", "plan_2"],
       "bank_sort_code" => ["010203", "111213"],
       "bank_account_number" => ["47274828", "18929492"],
-      "building_society_roll_number" => ["RN 123456", "JF 838281"],
       "address_line_1" => ["Old address line 1", "New address line 1"],
       "address_line_2" => ["Old address line 2", "New address line 2"],
       "address_line_3" => ["Old address line 3", "New address line 3"],
@@ -81,7 +79,6 @@ RSpec.feature "Admin amends a claim" do
     expect(claim.student_loan_plan).to eq("plan_2")
     expect(claim.bank_sort_code).to eq("111213")
     expect(claim.bank_account_number).to eq("18929492")
-    expect(claim.building_society_roll_number).to eq("JF 838281")
     expect(claim.address_line_1).to eq("New address line 1")
     expect(claim.address_line_2).to eq("New address line 2")
     expect(claim.address_line_3).to eq("New address line 3")
@@ -99,7 +96,6 @@ RSpec.feature "Admin amends a claim" do
     expect(page).to have_content("Student loan repayment plan\nchanged from Plan 1 to Plan 2")
     expect(page).to have_content("Bank sort code\nchanged from 010203 to 111213")
     expect(page).to have_content("Bank account number\nchanged from 47274828 to 18929492")
-    expect(page).to have_content("Building society roll number\nchanged from RN 123456 to JF 838281")
 
     expect(page).to have_content("Address line 1\nchanged from Old address line 1 to New address line 1")
     expect(page).to have_content("Address line 2\nchanged from Old address line 2 to New address line 2")

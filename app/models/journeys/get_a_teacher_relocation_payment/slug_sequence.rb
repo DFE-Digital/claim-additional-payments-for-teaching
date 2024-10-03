@@ -29,9 +29,7 @@ module Journeys
       ]
 
       PAYMENT_DETAILS_SLUGS = [
-        "bank-or-building-society",
         "personal-bank-account",
-        "building-society-account",
         "gender"
       ].freeze
 
@@ -69,9 +67,6 @@ module Journeys
             sequence.delete("mobile-number")
             sequence.delete("mobile-verification")
           end
-
-          sequence.delete("personal-bank-account") if answers.building_society?
-          sequence.delete("building-society-account") if answers.personal_bank_account?
         end
       end
     end
