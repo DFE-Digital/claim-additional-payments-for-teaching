@@ -2,9 +2,40 @@ class Admin::ClaimsFilterForm
   include ActiveModel::Model
   include ActiveModel::Attributes
 
-  attribute :team_member, :string
-  attribute :policy, :string
-  attribute :status, :string
+  attribute :filters
+  attribute :session
+
+  def initialize(args)
+    super
+
+    session[:filter] ||= {}
+  end
+
+  def team_member
+    filters[:team_member] || session[:filter][:team_member]
+  end
+
+  def policy
+    return if reset?
+
+    filters[:policy] || session[:filter][:policy]
+  end
+
+  def status
+    return if reset?
+
+    filters[:status] || session[:filter][:status]
+  end
+
+  def filters_applied?
+    return if reset?
+
+    team_member.present? || policy.present? || status.present?
+  end
+
+  def reset?
+    filters[:reset].present?
+  end
 
   def claims
     return @claims if @claims
@@ -76,6 +107,14 @@ class Admin::ClaimsFilterForm
     array.map do |name, id|
       OpenStruct.new(id:, name:)
     end
+  end
+
+  def save_to_session!
+    session[:filter] = {
+      team_member:,
+      policy:,
+      status:
+    }
   end
 
   private

@@ -92,7 +92,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     travel_to(@within_academic_year) do
       visit admin_claims_path
 
-      select "Approved awaiting payroll", from: "Status"
+      select "Approved awaiting payroll", from: "filter-status-field"
       click_on "Apply filters"
 
       find("a[href='#{admin_claim_tasks_path(approved_awaiting_payroll_claim)}']").click
@@ -106,7 +106,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     travel_to(@within_academic_year) do
       visit admin_claims_path
 
-      select "Approved", from: "Status"
+      select "Approved", from: "filter-status-field"
       click_on "Apply filters"
 
       find("a[href='#{admin_claim_tasks_path(approved_paid_claim)}']").click
@@ -119,7 +119,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     travel_to(@within_academic_year) do
       visit admin_claims_path
 
-      select "Rejected", from: "Status"
+      select "Rejected", from: "filter-status-field"
       click_on "Apply filters"
 
       find("a[href='#{admin_claim_tasks_path(rejected_claim)}']").click

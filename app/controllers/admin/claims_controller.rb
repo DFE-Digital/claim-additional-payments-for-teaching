@@ -5,10 +5,10 @@ class Admin::ClaimsController < Admin::BaseAdminController
 
   def index
     @filter_form = Admin::ClaimsFilterForm.new(
-      team_member: filter_params[:team_member],
-      policy: filter_params[:policy],
-      status: filter_params[:status]
+      filters: filter_params,
+      session:,
     )
+    @filter_form.save_to_session!
 
     @pagy, @claims = pagy(@filter_form.claims)
 
@@ -17,8 +17,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
         claims_backlink_path!(admin_claims_path(
           team_member: params[:team_member],
           policy: params[:policy],
-          status: params[:status],
-          commit: params[:commit]
+          status: params[:status]
         ))
       }
       format.csv {
@@ -85,6 +84,6 @@ class Admin::ClaimsController < Admin::BaseAdminController
   def filter_params
     params
       .fetch(:filter, {})
-      .permit(:team_member, :policy, :status)
+      .permit(:team_member, :policy, :status, :reset)
   end
 end

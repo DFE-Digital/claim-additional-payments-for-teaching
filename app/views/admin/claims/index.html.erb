@@ -21,7 +21,7 @@
     <h2 id="filter" class="govuk-heading-m">Filter claims</h2>
 
     <%= form_with model: @filter_form, scope: "filter", url: admin_claims_path(anchor: "filter"), method: :get, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
-      <div class="govuk-form-group admin-filter-group">
+      <div class="admin-filter-group">
         <div>
           <%= f.govuk_collection_select :team_member, @filter_form.team_member_select_options, :id, :name, label: { text: "Team member" } %>
         </div>
@@ -37,8 +37,8 @@
         <div>
           <%= f.govuk_submit "Apply filters", secondary: true, class: "admin-filter-group__button" %>
 
-          <% if params[:commit].present? %>
-            <%= link_to "Clear filters", admin_claims_path, class: "button-link admin-filter-group__button" %>
+          <% if @filter_form.filters_applied? %>
+            <%= govuk_link_to "Clear filters", admin_claims_path(filter: {reset: true}, anchor: "filter"), class: "button-link admin-filter-group__button" %>
           <% else %>
             <%= f.submit "Clear filters", type: "reset", class: "button-link admin-filter-group__button" %>
           <% end %>
