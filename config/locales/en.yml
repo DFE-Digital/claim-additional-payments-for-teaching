@@ -1400,7 +1400,6 @@ en:
         question: Enter your claim reference
         errors:
           presence: Enter your claim reference number
-          impermissible: Enter a valid claim reference number
       email_address:
         label: Your email address
         hint1: We’ll use this to update you with progress on your claim.
