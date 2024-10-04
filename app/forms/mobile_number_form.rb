@@ -28,6 +28,9 @@ class MobileNumberForm < Form
     )
 
     journey_session.save!
+  rescue NotifySmsMessage::NotifySmsError => e
+    handle_notify_error(e)
+    false
   end
 
   private
@@ -47,5 +50,13 @@ class MobileNumberForm < Form
 
   def mobile_number_changed?
     mobile_number != answers.mobile_number
+  end
+
+  def handle_notify_error(error)
+    if error.message.include?("ValidationError: phone_number Number is not valid")
+      errors.add(:mobile_number, i18n_errors_path("invalid"))
+    else
+      raise error
+    end
   end
 end

@@ -68,89 +68,137 @@ RSpec.describe MobileNumberForm do
         end
       end
 
-      before do
-        allow(OneTimePassword::Generator).to receive(:new).and_return(
-          instance_double(OneTimePassword::Generator, code: "111111")
-        )
+      context "when notify response is successful" do
+        before do
+          allow(OneTimePassword::Generator).to receive(:new).and_return(
+            instance_double(OneTimePassword::Generator, code: "111111")
+          )
 
-        allow(NotifySmsMessage).to receive(:new).and_return(notify_double)
+          allow(NotifySmsMessage).to receive(:new).and_return(notify_double)
 
-        form.save
+          form.save
+        end
+
+        let(:notify_double) do
+          instance_double(NotifySmsMessage, deliver!: notify_response)
+        end
+
+        let(:mobile_number) { "07123456789" }
+
+        context "when notify is successful" do
+          let(:notify_response) do
+            Notifications::Client::ResponseNotification.new(
+              {
+                id: "123",
+                reference: "456",
+                content: "content",
+                template: "template",
+                uri: "uri"
+              }
+            )
+          end
+
+          it "stores the mobile number" do
+            expect(journey_session.reload.answers.mobile_number).to eq(mobile_number)
+          end
+
+          it "resets dependent attributes" do
+            expect(journey_session.reload.answers.mobile_verified).to be_nil
+          end
+
+          it "sends a text message" do
+            expect(NotifySmsMessage).to have_received(:new).with(
+              phone_number: mobile_number,
+              template_id: NotifySmsMessage::OTP_PROMPT_TEMPLATE_ID,
+              personalisation: {
+                otp: "111111"
+              }
+            )
+
+            expect(notify_double).to have_received(:deliver!)
+          end
+
+          it "sets sent_one_time_password_at to the current time" do
+            expect(journey_session.reload.answers.sent_one_time_password_at).to(
+              eq(DateTime.new(2024, 1, 1, 12, 0, 0))
+            )
+          end
+        end
+
+        context "when notify is unsuccessful" do
+          # Not sure how this could be nil rather than a bad response but that's
+          # what the existing code checks for
+          let(:notify_response) { nil }
+
+          it "stores the mobile number" do
+            expect(journey_session.reload.answers.mobile_number).to eq(mobile_number)
+          end
+
+          it "resets dependent attributes" do
+            expect(journey_session.reload.answers.mobile_verified).to be_nil
+          end
+
+          it "sends a text message" do
+            expect(NotifySmsMessage).to have_received(:new).with(
+              phone_number: mobile_number,
+              template_id: NotifySmsMessage::OTP_PROMPT_TEMPLATE_ID,
+              personalisation: {
+                otp: "111111"
+              }
+            )
+
+            expect(notify_double).to have_received(:deliver!)
+          end
+
+          it "sets sent_one_time_password_at to nil" do
+            expect(journey_session.reload.answers.sent_one_time_password_at).to be_nil
+          end
+        end
       end
 
-      let(:notify_double) do
-        instance_double(NotifySmsMessage, deliver!: notify_response)
-      end
+      context "when notify response is not successful" do
+        context "when the error is an invalid phone number" do
+          let(:mobile_number) { "07123456789" }
 
-      let(:mobile_number) { "07123456789" }
+          before do
+            notify_double = instance_double(NotifySmsMessage)
 
-      context "when notify is successful" do
-        let(:notify_response) do
-          Notifications::Client::ResponseNotification.new(
-            {
-              id: "123",
-              reference: "456",
-              content: "content",
-              template: "template",
-              uri: "uri"
-            }
-          )
+            allow(notify_double).to receive(:deliver!).and_raise(
+              NotifySmsMessage::NotifySmsError,
+              "ValidationError: phone_number Number is not valid – double check the phone number you entered"
+            )
+
+            allow(NotifySmsMessage).to receive(:new).and_return(notify_double)
+          end
+
+          it "adds a validation error" do
+            expect(form.save).to eq false
+            expect(form.errors[:mobile_number]).to include(
+              "Enter a mobile number, like 07700 900 982 or +44 7700 900 982"
+            )
+            journey_session.reload
+            expect(journey_session.answers.mobile_number).to be_nil
+            expect(journey_session.answers.sent_one_time_password_at).to be_nil
+          end
         end
 
-        it "stores the mobile number" do
-          expect(journey_session.reload.answers.mobile_number).to eq(mobile_number)
-        end
+        context "when some other error" do
+          let(:mobile_number) { "07123456789" }
 
-        it "resets dependent attributes" do
-          expect(journey_session.reload.answers.mobile_verified).to be_nil
-        end
+          before do
+            notify_double = instance_double(NotifySmsMessage)
 
-        it "sends a text message" do
-          expect(NotifySmsMessage).to have_received(:new).with(
-            phone_number: mobile_number,
-            template_id: NotifySmsMessage::OTP_PROMPT_TEMPLATE_ID,
-            personalisation: {
-              otp: "111111"
-            }
-          )
+            allow(notify_double).to receive(:deliver!).and_raise(
+              NotifySmsMessage::NotifySmsError,
+              "Something went wrong with the SMS service. Please try again later."
+            )
 
-          expect(notify_double).to have_received(:deliver!)
-        end
+            allow(NotifySmsMessage).to receive(:new).and_return(notify_double)
+          end
 
-        it "sets sent_one_time_password_at to the current time" do
-          expect(journey_session.reload.answers.sent_one_time_password_at).to(
-            eq(DateTime.new(2024, 1, 1, 12, 0, 0))
-          )
-        end
-      end
-
-      context "when notify is unsuccessful" do
-        # Not sure how this could be nil rather than a bad response but that's
-        # what the existing code checks for
-        let(:notify_response) { nil }
-
-        it "stores the mobile number" do
-          expect(journey_session.reload.answers.mobile_number).to eq(mobile_number)
-        end
-
-        it "resets dependent attributes" do
-          expect(journey_session.reload.answers.mobile_verified).to be_nil
-        end
-
-        it "sends a text message" do
-          expect(NotifySmsMessage).to have_received(:new).with(
-            phone_number: mobile_number,
-            template_id: NotifySmsMessage::OTP_PROMPT_TEMPLATE_ID,
-            personalisation: {
-              otp: "111111"
-            }
-          )
-
-          expect(notify_double).to have_received(:deliver!)
-        end
-
-        it "sets sent_one_time_password_at to nil" do
-          expect(journey_session.reload.answers.sent_one_time_password_at).to be_nil
+          it "raises the error" do
+            expect { form.save }.to raise_error(NotifySmsMessage::NotifySmsError)
+          end
         end
       end
     end
