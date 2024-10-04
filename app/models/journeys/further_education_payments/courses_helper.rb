@@ -21,7 +21,7 @@ module Journeys
         building_construction_courses: {
           level3_buildingconstruction_approved: [
             "building and construction",
-            "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=7"
+            "https://www.qualifications.education.gov.uk/Search?Status=All&Level=0,1,2,3,4&Sub=7"
           ],
           level2_3_apprenticeship: [
             "construction and the built environment occupational route",
@@ -30,12 +30,12 @@ module Journeys
         },
         computing_courses: {
           level3_and_below_ict_for_practitioners: [
-            "ICT for practitioners",
-            "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=23&PageSize=10&Sort=Status"
+            "Digital technology (practitioners)",
+            "https://www.qualifications.education.gov.uk/Search?Status=All&Level=0,1,2,3,4&Sub=11&PageSize=10&Sort=Status"
           ],
           level3_and_below_ict_for_users: [
-            "ICT for users",
-            "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=22&PageSize=10&Sort=Status"
+            "Digital technology for users",
+            "https://www.qualifications.education.gov.uk/Search?Status=All&Level=0,1,2,3,4&Sub=12&PageSize=10&Sort=Status"
           ],
           level2_3_apprenticeship: [
             "digital occupational route",
@@ -44,22 +44,22 @@ module Journeys
         },
         early_years_courses: {
           coursetoeyq: [
-            "early years qualification",
+            "Early years qualification approved for funding at level 3 and below",
             "https://www.gov.uk/government/publications/early-years-qualifications-achieved-in-england"
           ]
         },
         engineering_manufacturing_courses: {
           approved_level_321_engineering: [
             "engineering",
-            "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=13&PageSize=10&Sort=Status"
+            "https://www.qualifications.education.gov.uk/Search?Status=All&Level=0,1,2,3,4&Sub=15&PageSize=10&Sort=Status"
           ],
           approved_level_321_manufacturing: [
             "manufacturing technologies",
-            "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=26&PageSize=10&Sort=Status"
+            "https://www.qualifications.education.gov.uk/Search?Status=All&Level=0,1,2,3,4&Sub=26&PageSize=10&Sort=Status"
           ],
           approved_level_321_transportation: [
             "transportation operations and maintenance",
-            "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=47&PageSize=10&Sort=Status"
+            "https://www.qualifications.education.gov.uk/Search?Status=All&Level=0,1,2,3,4&Sub=47&PageSize=10&Sort=Status"
           ],
           level2_3_apprenticeship: [
             "engineering and manufacturing occupational route",
@@ -69,11 +69,11 @@ module Journeys
         maths_courses: {
           approved_level_321_maths: [
             "mathematics and statistics",
-            "https://www.qualifications.education.gov.uk/Search?Status=Approved&Level=0,1,2,3,4&Sub=28&PageSize=10&Sort=Status"
+            "https://www.qualifications.education.gov.uk/Search?Status=All&Level=0,1,2,3,4&Sub=28&PageSize=10&Sort=Status"
           ],
           gcse_maths: [
             "other maths qualifications",
-            "https://submit-learner-data.service.gov.uk/find-a-learning-aim/LearningAimSearchResult?TeachingYear=2324&HasFilters=False&EFAFundingConditions=EFACONFUNDMATHS"
+            "https://submit-learner-data.service.gov.uk/find-a-learning-aim/LearningAimSearchResult?TeachingYear=2425&HasFilters=False&EFAFundingConditions=EFACONFUNDMATHS"
           ]
         }
       }.freeze
