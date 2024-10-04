@@ -102,7 +102,7 @@ class Admin::ClaimsFilterForm
 
   def team_member_select_options
     array = [["All", nil], ["Unassigned", "unassigned"]]
-    array = array + DfeSignIn::User.options_for_select
+    array += DfeSignIn::User.options_for_select
 
     array.map do |name, id|
       OpenStruct.new(id:, name:)

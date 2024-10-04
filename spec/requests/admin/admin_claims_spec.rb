@@ -75,7 +75,7 @@ RSpec.describe "Admin claims", type: :request do
         c.save
       }
 
-      get admin_claims_path, params: {filter:{team_member: mette.id}}
+      get admin_claims_path, params: {filter: {team_member: mette.id}}
 
       [
         student_loans_claims_for_mette,

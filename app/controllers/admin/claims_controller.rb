@@ -6,7 +6,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
   def index
     @filter_form = Admin::ClaimsFilterForm.new(
       filters: filter_params,
-      session:,
+      session:
     )
     @filter_form.save_to_session!
 
