@@ -12,24 +12,24 @@ class Admin::ClaimsFilterForm
   end
 
   def team_member
-    filters[:team_member] || session[:filter][:team_member]
+    return if reset?
+
+    @team_member ||= filters[:team_member] || session[:filter]["team_member"]
   end
 
   def policy
     return if reset?
 
-    filters[:policy] || session[:filter][:policy]
+    @policy ||= filters[:policy] || session[:filter]["policy"]
   end
 
   def status
     return if reset?
 
-    filters[:status] || session[:filter][:status]
+    @status ||= filters[:status] || session[:filter]["status"]
   end
 
   def filters_applied?
-    return if reset?
-
     team_member.present? || policy.present? || status.present?
   end
 
