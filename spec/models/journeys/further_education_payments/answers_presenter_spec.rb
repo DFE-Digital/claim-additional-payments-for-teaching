@@ -116,24 +116,87 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
     it {
       is_expected.to match_array(
         [
-          ["Are you a member of staff with teaching responsibilities?", "Yes", "teaching-responsibilities"],
-          ["Which FE provider are you employed by?", college.name, "further-education-provision-search"],
-          ["What type of contract do you have with #{college.name}?", "Permanent contract", "contract-type"],
-          ["On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?", "12 hours or more per week", "teaching-hours-per-week"],
-          ["Which academic year did you start teaching in further education (FE) in England?", "September 2023 to August 2024", "further-education-teaching-start-year"],
-          ["Which subject areas do you teach?", "<p class=\"govuk-body\">Chemistry</p><p class=\"govuk-body\">Maths</p>", "subjects-taught"],
-          ["Building and construction courses", "<p class=\"govuk-body\">Qualifications approved for funding at level 3 and below in the building and construction sector subject area</p><p class=\"govuk-body\">T Level in building services engineering for construction</p><p class=\"govuk-body\">T Level in onsite construction</p><p class=\"govuk-body\">T Level in design, surveying and planning for construction</p><p class=\"govuk-body\">Level 2 or level 3 apprenticeships in the construction and the built environment occupational route</p>", "building-construction-courses"],
-          ["Chemistry courses", "<p class=\"govuk-body\">A or AS level chemistry</p><p class=\"govuk-body\">GCSE chemistry</p><p class=\"govuk-body\">IBO level 3 SL and HL chemistry, taught as part of a diploma or career related programme or as a standalone certificate</p><p class=\"govuk-body\">IBO level 1 / level 2 MYP chemistry</p>", "chemistry-courses"],
-          ["Computing courses", "<p class=\"govuk-body\">Qualifications approved for funding at level 3 and below in the ICT for practitioners sector subject area</p><p class=\"govuk-body\">Qualifications approved for funding at level 3 and below in the ICT for users sector subject area</p><p class=\"govuk-body\">Digital functional skills qualifications and essential digital skills qualifications</p><p class=\"govuk-body\">T Level in digital support services</p><p class=\"govuk-body\">T Level in digital business services</p><p class=\"govuk-body\">T Level in digital production, design and development</p><p class=\"govuk-body\">IBO level 3 SL and HL computer science, taught as part of a diploma or career related programme or as a standalone certificate</p><p class=\"govuk-body\">Level 2 or level 3 apprenticeships in the digital occupational route</p>", "computing-courses"],
-          ["Early years courses", "<p class=\"govuk-body\">Early years practitioner (level 2) apprenticeship</p><p class=\"govuk-body\">Early years educator (level 3) apprenticeship</p><p class=\"govuk-body\">T Level in education and early years (early years educator)</p><p class=\"govuk-body\">A course that leads to an early years qualification which enables providers to count the recipient in staff:child ratios</p>", "early-years-courses"],
-          ["Engineering and manufacturing courses", "<p class=\"govuk-body\">Qualifications approved for funding at level 3 and below in the engineering sector subject area</p><p class=\"govuk-body\">Qualifications approved for funding at level 3 and below in the manufacturing technologies sector subject area</p><p class=\"govuk-body\">Qualifications approved for funding at level 3 and below in the transportation operations and maintenance sector subject area</p><p class=\"govuk-body\">T Level in design and development for engineering and manufacturing</p><p class=\"govuk-body\">T Level in maintenance, installation and repair for engineering and manufacturing</p><p class=\"govuk-body\">T Level in engineering, manufacturing, processing and control</p><p class=\"govuk-body\">Level 2 or level 3 apprenticeships in the engineering and manufacturing occupational route</p>", "engineering-manufacturing-courses"],
-          ["Maths courses", "<p class=\"govuk-body\">Qualifications approved for funding at level 3 and below in the mathematics and statistics sector subject area</p><p class=\"govuk-body\">GCSE in maths, functional skills qualifications and other maths qualifications approved for teaching to 16 to 19-year-olds who meet the condition of funding</p>", "maths-courses"],
-          ["Physics courses", "<p class=\"govuk-body\">A or AS level physics</p><p class=\"govuk-body\">GCSE physics</p><p class=\"govuk-body\">IBO level 1 / level 2 MYP physics</p><p class=\"govuk-body\">IBO level 3 in SL and HL physics, taught as part of a diploma or career related programme or as a standalone certificate</p>", "physics-courses"],
-          ["Do you spend at least half of your timetabled teaching hours teaching these eligible courses?", "Yes", "hours-teaching-eligible-subjects"],
-          ["Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?", "Yes", "half-teaching-hours"],
-          ["Do you have a teaching qualification?", "Yes", "teaching-qualification"],
-          ["Have any performance measures been started against you?", "No", "poor-performance"],
-          ["Are you currently subject to disciplinary action?", "No", "poor-performance"]
+          ["Are you a member of staff with teaching responsibilities?",
+            "Yes",
+            "teaching-responsibilities"],
+          ["Which FE provider are you employed by?",
+            college.name,
+            "further-education-provision-search"],
+          ["What type of contract do you have with #{college.name}?",
+            "Permanent contract",
+            "contract-type"],
+          ["On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?",
+            "12 hours or more per week",
+            "teaching-hours-per-week"],
+          ["Which academic year did you start teaching in further education (FE) in England?",
+            "September 2023 to August 2024",
+            "further-education-teaching-start-year"],
+          ["Which subject areas do you teach?",
+            "<p class=\"govuk-body\">Chemistry</p><p class=\"govuk-body\">Maths</p>",
+            "subjects-taught"],
+          ["Building and construction courses",
+            "<p class=\"govuk-body\">Qualifications approved for funding at level 3 and below in the building and construction sector subject area</p>" \
+            "<p class=\"govuk-body\">T Level in building services engineering for construction</p>" \
+            "<p class=\"govuk-body\">T Level in onsite construction</p>" \
+            "<p class=\"govuk-body\">T Level in design, surveying and planning for construction</p>" \
+            "<p class=\"govuk-body\">Level 2 or level 3 apprenticeships in the construction and the built environment occupational route</p>",
+            "building-construction-courses"],
+          ["Chemistry courses",
+            "<p class=\"govuk-body\">A or AS level chemistry</p>" \
+            "<p class=\"govuk-body\">GCSE chemistry</p>" \
+            "<p class=\"govuk-body\">IBO level 3 SL and HL chemistry, taught as part of a diploma or career related programme or as a standalone certificate</p>" \
+            "<p class=\"govuk-body\">IBO level 1 / level 2 MYP chemistry</p>",
+            "chemistry-courses"],
+          ["Computing courses",
+            "<p class=\"govuk-body\">Qualifications approved for funding at level 3 and below in the Digital technology (practitioners) sector subject area</p>" \
+            "<p class=\"govuk-body\">Qualifications approved for funding at level 3 and below in the Digital technology for users sector subject area</p>" \
+            "<p class=\"govuk-body\">Digital functional skills qualifications and essential digital skills qualifications</p>" \
+            "<p class=\"govuk-body\">T Level in digital support services</p>" \
+            "<p class=\"govuk-body\">T Level in digital business services</p>" \
+            "<p class=\"govuk-body\">T Level in digital production, design and development</p>" \
+            "<p class=\"govuk-body\">IBO level 3 SL and HL computer science, taught as part of a diploma or career related programme or as a standalone certificate</p>" \
+            "<p class=\"govuk-body\">Level 2 or level 3 apprenticeships in the digital occupational route</p>",
+            "computing-courses"],
+          ["Early years courses",
+            "<p class=\"govuk-body\">Early years practitioner (level 2) apprenticeship</p>" \
+            "<p class=\"govuk-body\">Early years educator (level 3) apprenticeship</p>" \
+            "<p class=\"govuk-body\">T Level in education and early years (early years educator)</p>" \
+            "<p class=\"govuk-body\">Early years qualification approved for funding at level 3 and below which enables providers to count the recipient in staff:child ratios as listed on 14 October</p>",
+            "early-years-courses"],
+          ["Engineering and manufacturing courses",
+            "<p class=\"govuk-body\">Qualifications approved for funding at level 3 and below in the engineering sector subject area</p>" \
+            "<p class=\"govuk-body\">Qualifications approved for funding at level 3 and below in the manufacturing technologies sector subject area</p>" \
+            "<p class=\"govuk-body\">Qualifications approved for funding at level 3 and below in the transportation operations and maintenance sector subject area</p>" \
+            "<p class=\"govuk-body\">T Level in design and development for engineering and manufacturing</p>" \
+            "<p class=\"govuk-body\">T Level in maintenance, installation and repair for engineering and manufacturing</p>" \
+            "<p class=\"govuk-body\">T Level in engineering, manufacturing, processing and control</p>" \
+            "<p class=\"govuk-body\">Level 2 or level 3 apprenticeships in the engineering and manufacturing occupational route</p>",
+            "engineering-manufacturing-courses"],
+          ["Maths courses",
+            "<p class=\"govuk-body\">Qualifications approved for funding at level 3 and below in the mathematics and statistics sector subject area</p>" \
+            "<p class=\"govuk-body\">GCSE in maths, functional skills qualifications and other maths qualifications approved for teaching to 16 to 19-year-olds who meet the condition of funding</p>",
+            "maths-courses"],
+          ["Physics courses",
+            "<p class=\"govuk-body\">A or AS level physics</p>" \
+            "<p class=\"govuk-body\">GCSE physics</p>" \
+            "<p class=\"govuk-body\">IBO level 1 / level 2 MYP physics</p>" \
+            "<p class=\"govuk-body\">IBO level 3 in SL and HL physics, taught as part of a diploma or career related programme or as a standalone certificate</p>",
+            "physics-courses"],
+          ["Do you spend at least half of your timetabled teaching hours teaching these eligible courses?",
+            "Yes",
+            "hours-teaching-eligible-subjects"],
+          ["Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?",
+            "Yes",
+            "half-teaching-hours"],
+          ["Do you have a teaching qualification?",
+            "Yes",
+            "teaching-qualification"],
+          ["Have any performance measures been started against you?",
+            "No",
+            "poor-performance"],
+          ["Are you currently subject to disciplinary action?",
+            "No",
+            "poor-performance"]
         ]
       )
     }
