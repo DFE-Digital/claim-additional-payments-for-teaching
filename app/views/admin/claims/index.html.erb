@@ -54,7 +54,7 @@
     <% if @claims.any? %>
       <% claims_with_warning = Claim.approaching_decision_deadline.count + Claim.passed_decision_deadline.count %>
 
-      <h2 class="govuk-heading-m"><%= pluralize(@total_claim_count, "claim") %> <%= index_status_filter(params[:status]) %></h2>
+      <h2 class="govuk-heading-m"><%= pluralize(@filter_form.count, "claim") %> <%= index_status_filter(params[:status]) %></h2>
 
       <table class="govuk-table">
         <thead class="govuk-table__head">

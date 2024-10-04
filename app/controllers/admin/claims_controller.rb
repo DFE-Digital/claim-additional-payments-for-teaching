@@ -10,7 +10,6 @@ class Admin::ClaimsController < Admin::BaseAdminController
       status: params[:status]
     )
 
-    @total_claim_count = @filter_form.count
     @pagy, @claims = pagy(@filter_form.claims)
 
     respond_to do |format|
