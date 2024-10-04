@@ -13,13 +13,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
     @pagy, @claims = pagy(@filter_form.claims)
 
     respond_to do |format|
-      format.html {
-        claims_backlink_path!(admin_claims_path(
-          team_member: params[:team_member],
-          policy: params[:policy],
-          status: params[:status]
-        ))
-      }
+      format.html
       format.csv {
         # "Download report request file" button (doesn't use the filters)
         report_request_claims = Claim.includes(:decisions).awaiting_decision
