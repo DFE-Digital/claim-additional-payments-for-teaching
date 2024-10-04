@@ -19,7 +19,16 @@
     </p>
 
     <h2 class="govuk-heading-m">
-      Apply for a retention payment next academic year
+      Give feedback on your experience in further education (FE) teaching
+    </h2>
+
+    <p class="govuk-body">
+      <% survey_link = "https://dferesearch.fra1.qualtrics.com/jfe/form/SV_eEZQbqP0gllqGEK" %>
+      Help us to improve DfE’s support for FE teaching. Share your feedback in a 5-minute survey: <%= govuk_link_to survey_link, survey_link %>.
+    </p>
+
+    <h2 class="govuk-heading-m">
+      Apply for a targeted retention incentive payment next academic year
     </h2>
 
     <p class="govuk-body">
@@ -31,9 +40,5 @@
     </p>
 
     <%= govuk_button_link_to "Set reminder", independent_reminder_path(journey: journey::ROUTING_NAME, slug: "personal-details") %>
-
-    <p class="govuk-body">
-      Help us to improve DfE’s FE teacher recruitment and retention programmes. <%= govuk_link_to "Share your feedback in this 5 minute survey", "https://dferesearch.fra1.qualtrics.com/jfe/form/SV_eEZQbqP0gllqGEK" %>.
-    </p>
   </div>
 </div>
