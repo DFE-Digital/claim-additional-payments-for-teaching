@@ -1392,8 +1392,8 @@ en:
     claim_subject: "Early Years Payment"
   early_years_payment_practitioner:
     journey_name: Claim an early years financial incentive payment - practitioner
-    feedback_email: implementme@example.com
-    support_email: "help@opsteam.com"
+    feedback_email: "help@opsteam.education.gov.uk"
+    support_email: "help@opsteam.education.gov.uk"
     claim_description: for early years financial incentive payment
     forms:
       find_reference:

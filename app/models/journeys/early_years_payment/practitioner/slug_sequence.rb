@@ -2,7 +2,7 @@ module Journeys
   module EarlyYearsPayment
     module Practitioner
       class SlugSequence
-        SLUGS = %w[
+        CLAIM_SLUGS = %w[
           find-reference
           sign-in
           how-we-use-your-information
@@ -13,6 +13,12 @@ module Journeys
           provide-mobile-number
           check-your-answers
         ].freeze
+
+        RESULTS_SLUGS = %w[
+          ineligible
+        ].freeze
+
+        SLUGS = (CLAIM_SLUGS + RESULTS_SLUGS).freeze
 
         def self.start_page_url
           Rails.application.routes.url_helpers.landing_page_path("early-years-payment-practitioner")

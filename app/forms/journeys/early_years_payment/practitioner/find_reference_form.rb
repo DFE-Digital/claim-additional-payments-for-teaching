@@ -6,14 +6,14 @@ module Journeys
         attribute :email, :string
 
         validates :reference_number, presence: {message: i18n_error_message(:presence)}
-        validate :validate_permissible_reference_number
 
         def save
           return false if invalid?
 
           journey_session.answers.assign_attributes(
             reference_number:,
-            start_email: email
+            start_email: email,
+            reference_number_found: claim_exists?
           )
           journey_session.save!
         end
@@ -26,16 +26,6 @@ module Journeys
             .where(reference: reference_number)
             .where(practitioner_email_address: email)
             .exists?
-        end
-
-        def validate_permissible_reference_number
-          unless claim_exists?
-            errors.add(
-              :reference_number,
-              :impermissible,
-              message: self.class.i18n_error_message(:impermissible)
-            )
-          end
         end
       end
     end
