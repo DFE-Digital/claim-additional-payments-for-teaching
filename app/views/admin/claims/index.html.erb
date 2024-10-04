@@ -18,9 +18,9 @@
 
     <%= render "allocations_form" %>
 
-    <h2 class="govuk-heading-m">Filter claims</h2>
+    <h2 id="filter" class="govuk-heading-m">Filter claims</h2>
 
-    <%= form_with model: @filter_form, scope: "filter", url: admin_claims_path, method: :get, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+    <%= form_with model: @filter_form, scope: "filter", url: admin_claims_path(anchor: "filter"), method: :get, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
       <div class="govuk-form-group admin-filter-group">
         <div>
           <%= f.govuk_collection_select :team_member, @filter_form.team_member_select_options, :id, :name, label: { text: "Team member" } %>
