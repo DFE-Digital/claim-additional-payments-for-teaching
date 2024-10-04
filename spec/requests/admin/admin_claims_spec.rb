@@ -27,7 +27,7 @@ RSpec.describe "Admin claims", type: :request do
 
     it "can filter by policy" do
       early_career_payments_claims = create_list(:claim, 3, :submitted, policy: Policies::EarlyCareerPayments)
-      get admin_claims_path, params: {policy: "early-career-payments"}
+      get admin_claims_path, params: {filter: {policy: "early-career-payments"}}
 
       early_career_payments_claims.each do |c|
         expect(response.body).to include(c.reference)
@@ -75,7 +75,7 @@ RSpec.describe "Admin claims", type: :request do
         c.save
       }
 
-      get admin_claims_path, params: {team_member: mette.id}
+      get admin_claims_path, params: {filter:{team_member: mette.id}}
 
       [
         student_loans_claims_for_mette,

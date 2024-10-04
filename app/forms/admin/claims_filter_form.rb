@@ -45,6 +45,39 @@ class Admin::ClaimsFilterForm
     claims.count
   end
 
+  def policy_select_options
+    array = [OpenStruct.new(id: nil, name: "All")]
+
+    array + Policies.all.map do |policy|
+      OpenStruct.new(id: policy.policy_type, name: policy.short_name)
+    end
+  end
+
+  def status_select_options
+    [
+      ["Awaiting decision - not on hold", nil],
+      ["Awaiting provider verification", "awaiting_provider_verification"],
+      ["Awaiting decision - on hold", "held"],
+      ["Awaiting decision - failed bank details", "failed_bank_validation"],
+      ["Approved awaiting QA", "approved_awaiting_qa"],
+      ["Approved awaiting payroll", "approved_awaiting_payroll"],
+      ["Automatically approved awaiting payroll", "automatically_approved_awaiting_payroll"],
+      ["Approved", "approved"],
+      ["Rejected", "rejected"]
+    ].map do |name, id|
+      OpenStruct.new(id:, name:)
+    end
+  end
+
+  def team_member_select_options
+    array = [["All", nil], ["Unassigned", "unassigned"]]
+    array = array + DfeSignIn::User.options_for_select
+
+    array.map do |name, id|
+      OpenStruct.new(id:, name:)
+    end
+  end
+
   private
 
   def approved_awaiting_payroll

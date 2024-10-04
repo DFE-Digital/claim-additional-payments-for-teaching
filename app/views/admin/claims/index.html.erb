@@ -20,32 +20,27 @@
 
     <h2 class="govuk-heading-m">Filter claims</h2>
 
-    <%= form_with url: admin_claims_path, method: :get do |form| %>
+    <%= form_with model: @filter_form, scope: "filter", url: admin_claims_path, method: :get, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
       <div class="govuk-form-group admin-filter-group">
         <div>
-          <label class="govuk-label" for="team_member">
-            Team member:
-          </label>
-          <%= form.select :team_member, options_for_select(DfeSignIn::User.options_for_select.unshift(["Unassigned", "unassigned"]), params[:team_member]), {include_blank: "All"}, class: "govuk-select" %>
+          <%= f.govuk_collection_select :team_member, @filter_form.team_member_select_options, :id, :name, label: { text: "Team member" } %>
         </div>
+
         <div>
-          <label class="govuk-label" for="policy">
-            Policy:
-          </label>
-          <%= form.select :policy, options_for_select(Policies.options_for_select, params[:policy]), {include_blank: "All"}, class: "govuk-select" %>
+          <%= f.govuk_collection_select :policy, @filter_form.policy_select_options, :id, :name %>
         </div>
+
         <div>
-          <label class="govuk-label" for="status">
-            Status:
-          </label>
-          <%= form.select :status, options_for_select(claim_status_filters, params[:status]), {include_blank: "Awaiting decision - not on hold"}, class: "govuk-select" %>
+          <%= f.govuk_collection_select :status, @filter_form.status_select_options, :id, :name %>
         </div>
+
         <div>
-          <%= form.submit "Apply filters", class: "govuk-button govuk-button--secondary admin-filter-group__button" %>
+          <%= f.govuk_submit "Apply filters", secondary: true, class: "admin-filter-group__button" %>
+
           <% if params[:commit].present? %>
             <%= link_to "Clear filters", admin_claims_path, class: "button-link admin-filter-group__button" %>
           <% else %>
-            <%= form.submit "Clear filters", type: "reset", class: "button-link admin-filter-group__button" %>
+            <%= f.submit "Clear filters", type: "reset", class: "button-link admin-filter-group__button" %>
           <% end %>
         </div>
       </div>
@@ -54,7 +49,7 @@
     <% if @claims.any? %>
       <% claims_with_warning = Claim.approaching_decision_deadline.count + Claim.passed_decision_deadline.count %>
 
-      <h2 class="govuk-heading-m"><%= pluralize(@filter_form.count, "claim") %> <%= index_status_filter(params[:status]) %></h2>
+      <h2 class="govuk-heading-m"><%= pluralize(@filter_form.count, "claim") %> <%= index_status_filter(@filter_form.status) %></h2>
 
       <table class="govuk-table">
         <thead class="govuk-table__head">

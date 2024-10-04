@@ -57,7 +57,7 @@ RSpec.feature "Admin claim filtering" do
     expect(page).to have_selector("td[text()='FE']", count: 2)
 
     click_on "View claims"
-    select "Student Loans", from: "policy"
+    select "Student Loans", from: "filter-policy-field"
     click_on "Apply filters"
 
     student_loan_claims.each do |c|
@@ -80,9 +80,9 @@ RSpec.feature "Admin claim filtering" do
     expect(page).to have_selector("td[text()='ECP']", count: 10)
 
     # Excludes payroll users and deleted users
-    expect(page).to have_select("team_member", options: ["All", "Unassigned", "#{user.given_name} #{user.family_name}", "Mary Wasu Wabi", "Valentino Ricci", "Mette Jørgensen"])
+    expect(page).to have_select("filter-team-member-field", options: ["All", "Unassigned", "#{user.given_name} #{user.family_name}", "Mary Wasu Wabi", "Valentino Ricci", "Mette Jørgensen"])
 
-    select "Mette Jørgensen", from: "team_member"
+    select "Mette Jørgensen", from: "filter-team-member-field"
     click_on "Apply filters"
 
     expect_page_to_show_claims(
@@ -92,15 +92,15 @@ RSpec.feature "Admin claim filtering" do
     )
 
     # Assigned to Mette
-    select "Mette Jørgensen", from: "team_member"
-    select "Approved", from: "Status:"
+    select "Mette Jørgensen", from: "filter-team-member-field"
+    select "Approved", from: "filter-status-field"
     click_on "Apply filters"
     expect(page).to have_content("1 claim approved")
     expect_page_to_show_claims(approved_claim)
 
     # Approved by Mary
-    select "Mary Wasu Wabi", from: "team_member"
-    select "Approved", from: "Status:"
+    select "Mary Wasu Wabi", from: "filter-team-member-field"
+    select "Approved", from: "filter-status-field"
     click_on "Apply filters"
     expect(page).to have_content("1 claim approved")
     expect(page).to have_content(approved_claim.reference)
@@ -108,7 +108,7 @@ RSpec.feature "Admin claim filtering" do
 
   scenario "filter unassigned claims" do
     click_on "View claims"
-    select "Unassigned", from: "team_member"
+    select "Unassigned", from: "filter-team-member-field"
     click_on "Apply filters"
 
     expect(page).to have_selector("td[text()='STRI']", count: 2)
@@ -129,36 +129,36 @@ RSpec.feature "Admin claim filtering" do
       further_education_claims_provider_verification_email_not_sent
     )
 
-    select "Awaiting provider verification", from: "Status:"
+    select "Awaiting provider verification", from: "filter-status-field"
     click_button "Apply filters"
 
     expect_page_to_show_claims(further_education_claims_awaiting_provider_verification)
 
-    select "Awaiting decision - on hold", from: "Status:"
+    select "Awaiting decision - on hold", from: "filter-status-field"
     click_button "Apply filters"
 
     expect_page_to_show_claims(held_claims)
 
-    select "Awaiting decision - failed bank details", from: "Status:"
+    select "Awaiting decision - failed bank details", from: "filter-status-field"
     click_button "Apply filters"
 
     expect_page_to_show_claims(early_career_payments_claims_failed_bank_validation)
 
-    select "Approved awaiting QA", from: "Status:"
+    select "Approved awaiting QA", from: "filter-status-field"
     click_button "Apply filters"
 
     expect_page_to_show_claims(approved_awaiting_qa_claims)
 
-    select "Approved awaiting payroll", from: "Status:"
+    select "Approved awaiting payroll", from: "filter-status-field"
     click_button "Apply filters"
     expect_page_to_show_claims(auto_approved_awaiting_payroll_claims, approved_claim)
 
-    select "Automatically approved awaiting payroll", from: "Status:"
+    select "Automatically approved awaiting payroll", from: "filter-status-field"
     click_button "Apply filters"
 
     expect_page_to_show_claims(auto_approved_awaiting_payroll_claims)
 
-    select "Rejected", from: "Status:"
+    select "Rejected", from: "filter-status-field"
     click_button "Apply filters"
     expect_page_to_show_claims(rejected_claim)
   end

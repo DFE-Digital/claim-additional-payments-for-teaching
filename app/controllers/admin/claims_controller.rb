@@ -5,9 +5,9 @@ class Admin::ClaimsController < Admin::BaseAdminController
 
   def index
     @filter_form = Admin::ClaimsFilterForm.new(
-      team_member: params[:team_member],
-      policy: params[:policy],
-      status: params[:status]
+      team_member: filter_params[:team_member],
+      policy: filter_params[:policy],
+      status: filter_params[:status]
     )
 
     @pagy, @claims = pagy(@filter_form.claims)
@@ -80,5 +80,11 @@ class Admin::ClaimsController < Admin::BaseAdminController
 
   def hold_params
     params.require(:hold).permit(:body).merge(claim: @claim)
+  end
+
+  def filter_params
+    params
+      .fetch(:filter, {})
+      .permit(:team_member, :policy, :status)
   end
 end
