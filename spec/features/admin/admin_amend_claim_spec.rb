@@ -186,4 +186,29 @@ RSpec.feature "Admin amends a claim" do
       expect(page).to have_content("Claim has been amended successfully")
     end
   end
+
+  context "when claim is no longer amendable" do
+    let!(:payment) do
+      create(
+        :payment,
+        claims: [claim]
+      )
+    end
+
+    scenario "admin can view amendments" do
+      visit admin_claim_url(claim)
+      click_link "View tasks"
+      click_on "Claim amendments"
+
+      expect(page).to have_content "Claim amendments"
+    end
+
+    scenario "admin cannot make amendments" do
+      visit admin_claim_url(claim)
+      expect(page).not_to have_content "Amend claim"
+
+      visit new_admin_claim_amendment_path(claim)
+      expect(page).to have_content "This claim cannot be amended"
+    end
+  end
 end
