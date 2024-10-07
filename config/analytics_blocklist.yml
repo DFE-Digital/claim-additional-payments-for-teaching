@@ -107,3 +107,10 @@
   - value
   - created_at
   - updated_at
+  :reports:
+  - id
+  - name
+  - csv
+  - created_at
+  - updated_at
+  - number_of_rows
