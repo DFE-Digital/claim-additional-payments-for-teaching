@@ -28,6 +28,6 @@
         <%= render "form", task_name: "provider_verification", claim: @claim %>
       <% end %>
     <% end %>
-    <%= render partial: "admin/task_pagination" %>
+    <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>
   </div>
 </div>

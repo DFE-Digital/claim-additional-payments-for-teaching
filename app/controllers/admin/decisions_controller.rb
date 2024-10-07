@@ -1,6 +1,4 @@
 class Admin::DecisionsController < Admin::BaseAdminController
-  include AdminTaskPagination
-
   before_action :ensure_service_operator
   before_action :load_claim
   before_action :reject_decided_claims, unless: -> { qa_decision_task? }
@@ -10,8 +8,8 @@ class Admin::DecisionsController < Admin::BaseAdminController
   def new
     @decision = Decision.new
     @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
-    set_pagination
     @claims_preventing_payment = claims_preventing_payment_finder.claims_preventing_payment
+    @task_pagination = Admin::TaskPagination.new(claim: @claim, current_task_name:)
   end
 
   def create
@@ -22,7 +20,7 @@ class Admin::DecisionsController < Admin::BaseAdminController
     redirect_after_decision
   rescue ActiveRecord::RecordInvalid
     @claims_preventing_payment = claims_preventing_payment_finder.claims_preventing_payment
-    set_pagination
+    @task_pagination = Admin::TaskPagination.new(claim: @claim, current_task_name:)
     render "new"
   end
 

@@ -77,6 +77,6 @@
       <% end %>
     <% end %>
 
-    <%= render partial: "admin/task_pagination" %>
+    <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>
   </div>
 </div>
