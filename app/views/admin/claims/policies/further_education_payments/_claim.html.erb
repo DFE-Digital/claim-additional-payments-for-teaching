@@ -98,14 +98,9 @@
       }
     ) if @matching_claims.any? %>
 
-    <% if @decision.persisted? %>
-      <%= render(
-        "admin/claims/answer_section",
-        {
-          heading: "Claim decision details",
-          answers: admin_decision_details(@decision)
-        }
-      ) %>
+    <% (decisions = @claim.decisions.order(created_at: :asc)).each do |decision| %>
+      <% heading = (decisions.first == decision ? "Claim decision details" : nil) %>
+      <%= render "admin/claims/answer_section", {heading:, answers: admin_decision_details(decision)} %>
     <% end %>
   </div>
 </div>
