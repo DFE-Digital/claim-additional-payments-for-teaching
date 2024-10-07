@@ -30,7 +30,7 @@ module Policies
       end
 
       def verification_email_sent?
-        !claim.eligibility.flagged_as_duplicate? || verification_email_sent_by_admin_team?
+        claim.eligibility.awaiting_provider_verification?
       end
 
       def verification_email_sent_by_admin_team?

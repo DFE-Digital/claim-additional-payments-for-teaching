@@ -211,7 +211,15 @@ class Claim < ApplicationRecord
   scope :qa_required, -> { where(qa_required: true) }
   scope :awaiting_further_education_provider_verification, -> do
     joins("INNER JOIN further_education_payments_eligibilities ON further_education_payments_eligibilities.id = claims.eligibility_id")
+      .left_outer_joins(:notes)
       .where("further_education_payments_eligibilities.verification = '{}'")
+      .and(
+        Claim.where("further_education_payments_eligibilities.flagged_as_duplicate = FALSE")
+        .or(Claim.where("further_education_payments_eligibilities.flagged_as_duplicate = TRUE").and(Claim.where(notes: {label: "provider_verification"})))
+      )
+  end
+  scope :not_awaiting_further_education_provider_verification, -> do
+    where.not(id: Claim.awaiting_further_education_provider_verification)
   end
 
   def onelogin_idv_full_name
@@ -439,6 +447,12 @@ class Claim < ApplicationRecord
     !one_login_idv_name_match? || !one_login_idv_dob_match?
   end
 
+  def awaiting_provider_verification?
+    return false unless has_further_education_policy?
+
+    eligibility.awaiting_provider_verification?
+  end
+
   private
 
   def one_login_idv_name_match?
@@ -447,6 +461,10 @@ class Claim < ApplicationRecord
 
   def one_login_idv_dob_match?
     onelogin_idv_date_of_birth == date_of_birth
+  end
+
+  def has_further_education_policy?
+    policy == Policies::FurtherEducationPayments
   end
 
   def normalise_ni_number
