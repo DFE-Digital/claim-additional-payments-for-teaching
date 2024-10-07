@@ -23,6 +23,7 @@ RSpec.feature "Admin claim filtering" do
   let(:auto_approved_awaiting_payroll_claims) { create_list(:claim, 2, :auto_approved, policy: Policies::LevellingUpPremiumPayments) }
   let(:approved_claim) { create(:claim, :approved, policy: Policies::LevellingUpPremiumPayments, assigned_to: mette, decision_creator: mary) }
   let(:further_education_claims_awaiting_provider_verification) { create_list(:claim, 2, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :not_verified, assigned_to: valentino) }
+  let(:further_education_claims_provider_verification_email_not_sent) { create_list(:claim, 2, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate, assigned_to: valentino) }
   let(:rejected_claim) { create(:claim, :rejected, policy: Policies::LevellingUpPremiumPayments, assigned_to: valentino) }
 
   let!(:claims) do
@@ -38,6 +39,7 @@ RSpec.feature "Admin claim filtering" do
       auto_approved_awaiting_payroll_claims,
       approved_claim,
       further_education_claims_awaiting_provider_verification,
+      further_education_claims_provider_verification_email_not_sent,
       rejected_claim
     ]
   end
@@ -124,7 +126,7 @@ RSpec.feature "Admin claim filtering" do
       early_career_payments_claims_for_mette,
       early_career_payments_claims_failed_bank_validation,
       lup_claims_unassigned,
-      further_education_claims_awaiting_provider_verification
+      further_education_claims_provider_verification_email_not_sent
     )
 
     select "Awaiting provider verification", from: "Status:"

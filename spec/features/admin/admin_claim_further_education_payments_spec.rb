@@ -16,7 +16,7 @@ RSpec.feature "Admin claim further education payments" do
     describe "provider verification task" do
       context "when the provider is yet to verify the claim" do
         context "when a verification email has not been sent" do
-          it "allows the admins to sent the email" do
+          it "allows the admins to send the email" do
             fe_provider = create(
               :school,
               :further_education,

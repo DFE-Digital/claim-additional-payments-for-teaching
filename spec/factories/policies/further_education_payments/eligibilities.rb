@@ -18,6 +18,10 @@ FactoryBot.define do
       association :school, factory: :fe_eligible_school
     end
 
+    trait :duplicate do
+      flagged_as_duplicate { true }
+    end
+
     trait :verified do
       contract_type { "permanent" }
       teaching_responsibilities { true }
