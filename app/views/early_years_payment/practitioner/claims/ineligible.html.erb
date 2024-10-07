@@ -1,0 +1,2 @@
+<% ineligibility_reason = Journeys::EarlyYearsPayment::Practitioner::EligibilityChecker.new(journey_session:).ineligibility_reason %>
+<%= render "ineligibility_#{ineligibility_reason}" %>

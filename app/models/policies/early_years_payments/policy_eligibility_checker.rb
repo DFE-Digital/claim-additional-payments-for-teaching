@@ -20,7 +20,7 @@ module Policies
       end
 
       def ineligibility_reason
-        start_ineligibility_reason || authenticated_ineligibility_reason
+        start_ineligibility_reason || provider_ineligibility_reason || practitioner_ineligibility_reason
       end
 
       def start_ineligibility_reason
@@ -31,7 +31,7 @@ module Policies
         end
       end
 
-      def authenticated_ineligibility_reason
+      def provider_ineligibility_reason
         return nil unless answers.is_a?(Journeys::EarlyYearsPayment::Provider::Authenticated::SessionAnswers)
 
         if answers.nursery_urn.to_s == "none_of_the_above"
@@ -40,6 +40,14 @@ module Policies
           :not_child_facing_enough
         elsif ineligible_returner?
           :returner
+        end
+      end
+
+      def practitioner_ineligibility_reason
+        return nil unless answers.is_a?(Journeys::EarlyYearsPayment::Practitioner::SessionAnswers)
+
+        if answers.reference_number_found == false
+          :reference_number_not_found
         end
       end
 
