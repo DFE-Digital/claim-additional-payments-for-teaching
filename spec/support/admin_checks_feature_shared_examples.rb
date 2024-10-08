@@ -25,7 +25,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
     click_on I18n.t("admin.tasks.identity_confirmation.title")
 
     expect(page).to have_content("Did #{claim.full_name} submit the claim?")
-    expect(page).to have_link("Next: Qualifications")
+    expect(page).to have_link("Next:Qualifications")
     expect(page).not_to have_link("Previous")
 
     choose "Yes"
@@ -38,8 +38,8 @@ RSpec.shared_examples "Admin Checks" do |policy|
     expect(page).to have_content(claim.eligibility.itt_academic_year.to_s(:long))
     expect(page).to have_content("ITT subject")
     expect(page).to have_content(claim.eligibility.eligible_itt_subject.humanize)
-    expect(page).to have_link("Next: Census subjects taught")
-    expect(page).to have_link("Previous: Identity confirmation")
+    expect(page).to have_link("Next:Census subjects taught")
+    expect(page).to have_link("Previous:Identity confirmation")
 
     choose "Yes"
     click_on "Save and continue"
@@ -48,8 +48,8 @@ RSpec.shared_examples "Admin Checks" do |policy|
 
     expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.census_subjects_taught.title"))
     expect(page).to have_content("Subject Mathematics")
-    expect(page).to have_link("Next: Employment")
-    expect(page).to have_link("Previous: Qualifications")
+    expect(page).to have_link("Next:Employment")
+    expect(page).to have_link("Previous:Qualifications")
 
     choose "Yes"
     click_on "Save and continue"
@@ -59,8 +59,8 @@ RSpec.shared_examples "Admin Checks" do |policy|
     expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.employment.title"))
     expect(page).to have_content("Current school")
     expect(page).to have_link(claim.eligibility.current_school.name)
-    expect(page).to have_link("Next: Student loan plan")
-    expect(page).to have_link("Previous: Census subjects taught")
+    expect(page).to have_link("Next:Student loan plan")
+    expect(page).to have_link("Previous:Census subjects taught")
 
     choose "Yes"
     click_on "Save and continue"
@@ -68,16 +68,16 @@ RSpec.shared_examples "Admin Checks" do |policy|
     expect(claim.tasks.find_by!(name: "employment").passed?).to eq(true)
 
     expect(page).to have_content("Student loan plan")
-    expect(page).to have_link("Next: Decision")
-    expect(page).to have_link("Previous: Employment")
+    expect(page).to have_link("Next:Decision")
+    expect(page).to have_link("Previous:Employment")
     expect(page).to have_content("Passed")
     expect(page).not_to have_button("Save and continue")
 
-    click_link "Next: Decision"
+    click_link "Next:Decision"
 
     expect(page).to have_content("Claim decision")
     expect(page).not_to have_link("Next")
-    expect(page).to have_link("Previous: Student loan plan")
+    expect(page).to have_link("Previous:Student loan plan")
 
     choose "Approve"
     fill_in "Decision notes", with: "All checks passed!"
@@ -95,7 +95,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
     click_on I18n.t("admin.tasks.identity_confirmation.title")
 
     expect(page).to have_content("Did #{claim.full_name} submit the claim?")
-    expect(page).to have_link("Next: Qualifications")
+    expect(page).to have_link("Next:Qualifications")
     expect(page).not_to have_link("Previous")
 
     choose "Yes"
@@ -108,8 +108,8 @@ RSpec.shared_examples "Admin Checks" do |policy|
     expect(page).to have_content(claim.eligibility.itt_academic_year.to_s(:long))
     expect(page).to have_content("ITT subject")
     expect(page).to have_content(claim.eligibility.eligible_itt_subject.humanize)
-    expect(page).to have_link("Next: Induction confirmation")
-    expect(page).to have_link("Previous: Identity confirmation")
+    expect(page).to have_link("Next:Induction confirmation")
+    expect(page).to have_link("Previous:Identity confirmation")
 
     choose "Yes"
     click_on "Save and continue"
@@ -119,8 +119,8 @@ RSpec.shared_examples "Admin Checks" do |policy|
     expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.induction_confirmation.title"))
     expect(page).to have_content("ITT #{claim.eligibility.postgraduate_itt? ? "start" : "end"} year")
     expect(page).to have_content(claim.eligibility.itt_academic_year.to_s(:long))
-    expect(page).to have_link("Next: Census subjects taught")
-    expect(page).to have_link("Previous: Qualifications")
+    expect(page).to have_link("Next:Census subjects taught")
+    expect(page).to have_link("Previous:Qualifications")
 
     choose "Yes"
     click_on "Save and continue"
@@ -129,8 +129,8 @@ RSpec.shared_examples "Admin Checks" do |policy|
 
     expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.census_subjects_taught.title"))
     expect(page).to have_content("Subject Mathematics")
-    expect(page).to have_link("Next: Employment")
-    expect(page).to have_link("Previous: Induction confirmation")
+    expect(page).to have_link("Next:Employment")
+    expect(page).to have_link("Previous:Induction confirmation")
 
     choose "Yes"
     click_on "Save and continue"
@@ -140,8 +140,8 @@ RSpec.shared_examples "Admin Checks" do |policy|
     expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.employment.title"))
     expect(page).to have_content("Current school")
     expect(page).to have_link(claim.eligibility.current_school.name)
-    expect(page).to have_link("Next: Student loan plan")
-    expect(page).to have_link("Previous: Census subjects taught")
+    expect(page).to have_link("Next:Student loan plan")
+    expect(page).to have_link("Previous:Census subjects taught")
 
     choose "Yes"
     click_on "Save and continue"
@@ -149,16 +149,16 @@ RSpec.shared_examples "Admin Checks" do |policy|
     expect(claim.tasks.find_by!(name: "employment").passed?).to eq(true)
 
     expect(page).to have_content("Student loan plan")
-    expect(page).to have_link("Next: Decision")
-    expect(page).to have_link("Previous: Employment")
+    expect(page).to have_link("Next:Decision")
+    expect(page).to have_link("Previous:Employment")
     expect(page).to have_content("Passed")
     expect(page).not_to have_button("Save and continue")
 
-    click_link "Next: Decision"
+    click_link "Next:Decision"
 
     expect(page).to have_content("Claim decision")
     expect(page).not_to have_link("Next")
-    expect(page).to have_link("Previous: Student loan plan")
+    expect(page).to have_link("Previous:Student loan plan")
 
     choose "Approve"
     fill_in "Decision notes", with: "All checks passed!"
@@ -176,7 +176,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
     click_on I18n.t("admin.tasks.identity_confirmation.title")
 
     expect(page).to have_content("Did #{claim.full_name} submit the claim?")
-    expect(page).to have_link("Next: Qualifications")
+    expect(page).to have_link("Next:Qualifications")
     expect(page).not_to have_link("Previous")
 
     choose "Yes"
@@ -187,8 +187,8 @@ RSpec.shared_examples "Admin Checks" do |policy|
     expect(page).to have_content(I18n.t("student_loans.admin.task_questions.qualifications.title"))
     expect(page).to have_content("Award year")
     expect(page).to have_content(I18n.t("student_loans.answers.qts_award_years.#{claim.eligibility.qts_award_year}", year: Policies::StudentLoans.first_eligible_qts_award_year(claim.academic_year).to_s(:long)))
-    expect(page).to have_link("Next: Census subjects taught")
-    expect(page).to have_link("Previous: Identity confirmation")
+    expect(page).to have_link("Next:Census subjects taught")
+    expect(page).to have_link("Previous:Identity confirmation")
 
     choose "Yes"
     click_on "Save and continue"
@@ -197,8 +197,8 @@ RSpec.shared_examples "Admin Checks" do |policy|
 
     expect(page).to have_content(I18n.t("student_loans.admin.task_questions.census_subjects_taught.title"))
     expect(page).to have_content("Subjects taught Physics")
-    expect(page).to have_link("Next: Employment")
-    expect(page).to have_link("Previous: Qualifications")
+    expect(page).to have_link("Next:Employment")
+    expect(page).to have_link("Previous:Qualifications")
 
     choose "Yes"
     click_on "Save and continue"
@@ -208,8 +208,8 @@ RSpec.shared_examples "Admin Checks" do |policy|
     expect(page).to have_content(I18n.t("student_loans.admin.task_questions.employment.title"))
     expect(page).to have_content("Current school")
     expect(page).to have_link(claim.eligibility.current_school.name)
-    expect(page).to have_link("Next: Student loan amount")
-    expect(page).to have_link("Previous: Census subjects taught")
+    expect(page).to have_link("Next:Student loan amount")
+    expect(page).to have_link("Previous:Census subjects taught")
 
     choose "Yes"
     click_on "Save and continue"
@@ -219,8 +219,8 @@ RSpec.shared_examples "Admin Checks" do |policy|
     expect(page).to have_content(I18n.t("student_loans.admin.task_questions.student_loan_amount.title"))
     expect(page).to have_content("£1,000.00")
     expect(page).to have_content("Plan 1")
-    expect(page).to have_link("Next: Decision")
-    expect(page).to have_link("Previous: Employment")
+    expect(page).to have_link("Next:Decision")
+    expect(page).to have_link("Previous:Employment")
 
     choose "Yes"
     click_on "Save and continue"
@@ -229,7 +229,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
 
     expect(page).to have_content("Claim decision")
     expect(page).not_to have_link("Next")
-    expect(page).to have_link("Previous: Student loan amount")
+    expect(page).to have_link("Previous:Student loan amount")
 
     choose "Approve"
     fill_in "Decision notes", with: "All checks passed!"
@@ -247,7 +247,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
     click_on I18n.t("admin.tasks.identity_confirmation.title")
 
     expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.identity_confirmation.title"))
-    expect(page).to have_link("Next: Provider verification")
+    expect(page).to have_link("Next:Provider verification")
     expect(page).not_to have_link("Previous")
 
     choose "Yes"
@@ -256,8 +256,8 @@ RSpec.shared_examples "Admin Checks" do |policy|
     expect(claim.tasks.find_by!(name: "identity_confirmation").passed?).to eq(true)
 
     expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.provider_verification.title"))
-    expect(page).to have_link("Next: Student loan plan")
-    expect(page).to have_link("Previous: Identity confirmation")
+    expect(page).to have_link("Next:Student loan plan")
+    expect(page).to have_link("Previous:Identity confirmation")
 
     choose "Yes"
     click_on "Save and continue"
@@ -267,14 +267,14 @@ RSpec.shared_examples "Admin Checks" do |policy|
     expect(page).to have_content("Student loan plan")
     expect(page).to have_content("Passed")
     expect(page).not_to have_button("Save and continue")
-    expect(page).to have_link("Next: Decision")
-    expect(page).to have_link("Previous: Provider verification")
+    expect(page).to have_link("Next:Decision")
+    expect(page).to have_link("Previous:Provider verification")
 
-    click_link "Next: Decision"
+    click_link "Next:Decision"
 
     expect(page).to have_content("Claim decision")
     expect(page).not_to have_link("Next")
-    expect(page).to have_link("Previous: Student loan plan")
+    expect(page).to have_link("Previous:Student loan plan")
 
     choose "Approve"
     fill_in "Decision notes", with: "All checks passed!"
