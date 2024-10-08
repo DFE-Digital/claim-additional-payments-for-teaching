@@ -5,23 +5,15 @@ class Admin::ClaimsController < Admin::BaseAdminController
 
   def index
     @filter_form = Admin::ClaimsFilterForm.new(
-      team_member: params[:team_member],
-      policy: params[:policy],
-      status: params[:status]
+      filters: filter_params,
+      session:
     )
+    @filter_form.save_to_session!
 
-    @total_claim_count = @filter_form.count
     @pagy, @claims = pagy(@filter_form.claims)
 
     respond_to do |format|
-      format.html {
-        claims_backlink_path!(admin_claims_path(
-          team_member: params[:team_member],
-          policy: params[:policy],
-          status: params[:status],
-          commit: params[:commit]
-        ))
-      }
+      format.html
       format.csv {
         # "Download report request file" button (doesn't use the filters)
         report_request_claims = Claim.includes(:decisions).awaiting_decision
@@ -81,5 +73,11 @@ class Admin::ClaimsController < Admin::BaseAdminController
 
   def hold_params
     params.require(:hold).permit(:body).merge(claim: @claim)
+  end
+
+  def filter_params
+    params
+      .fetch(:filter, {})
+      .permit(:team_member, :policy, :status, :reset)
   end
 end

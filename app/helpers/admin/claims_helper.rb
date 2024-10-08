@@ -189,21 +189,6 @@ module Admin
       end
     end
 
-    STATUS_FILTERS = [
-      ["Awaiting provider verification", "awaiting_provider_verification"],
-      ["Awaiting decision - on hold", "held"],
-      ["Awaiting decision - failed bank details", "failed_bank_validation"],
-      ["Approved awaiting QA", "approved_awaiting_qa"],
-      ["Approved awaiting payroll", "approved_awaiting_payroll"],
-      ["Automatically approved awaiting payroll", "automatically_approved_awaiting_payroll"],
-      ["Approved", "approved"],
-      ["Rejected", "rejected"]
-    ]
-
-    def claim_status_filters
-      STATUS_FILTERS
-    end
-
     def index_status_filter(status)
       return "awaiting a decision" unless status.present?
 

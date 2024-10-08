@@ -542,14 +542,6 @@ describe Admin::ClaimsHelper do
     end
   end
 
-  describe "#claim_status_filters" do
-    subject { helper.claim_status_filters }
-
-    it "returns the list of status filters available" do
-      is_expected.to eq(described_class::STATUS_FILTERS)
-    end
-  end
-
   describe "#index_status_filter" do
     subject { helper.index_status_filter(status) }
 
