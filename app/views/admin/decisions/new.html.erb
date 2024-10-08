@@ -13,6 +13,6 @@
     <%= render("incomplete_tasks", claim: @claim, incomplete_task_names: @claim_checking_tasks.incomplete_task_names) if @claim_checking_tasks.incomplete_task_names.any? %>
     <%= render "decision_form", claim: @claim, decision: @decision, claims_preventing_payment: @claims_preventing_payment %>
 
-    <%= render partial: "admin/task_pagination" %>
+    <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>
   </div>
 </div>
