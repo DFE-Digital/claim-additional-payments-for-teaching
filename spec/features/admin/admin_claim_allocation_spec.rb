@@ -152,6 +152,36 @@ RSpec.feature "Claims awaiting a decision" do
       expect(page).to have_button "Allocate claims", disabled: false
     end
 
+    scenario "assign 5 claims to one Claim's checker" do
+      click_on "View claims"
+
+      expect(@submitted_claims.size).to eq 40
+
+      select "Frank Yee", from: "allocate_to_team_member"
+      select "All", from: "allocate_to_policy"
+      select "10", from: "allocate_claim_count"
+
+      click_on "Allocate claims"
+
+      within(".govuk-flash__notice") do
+        expect(page).to have_text I18n.t(
+          "admin.allocations.bulk_allocate.success",
+          quantity: 10,
+          pluralized_or_singular_claim: "claims",
+          allocate_to_policy: "",
+          dfe_user: frank.full_name.titleize
+        ).squeeze(" ")
+      end
+
+      @submitted_claims[0..9].each do |claim|
+        expect(claim.reload.assigned_to.full_name).to eq "Frank Yee"
+      end
+
+      @submitted_claims[10..].each do |claim|
+        expect(claim.reload.assigned_to).to be_nil
+      end
+    end
+
     scenario "assign outstanding 10 claims when 25 already allocated" do
       @submitted_claims.slice(0..24).each do |claim|
         claim.assigned_to = @signed_in_user
