@@ -114,7 +114,7 @@ module AutomatedChecks
               let(:submitted_using_slc_data) { false }
 
               context "when there is no student loan data for the claim" do
-                let(:expected_note) { "[SLC Student loan plan] - No data" }
+                let(:expected_note) { "[SLC Student loan plan] - SLC data checked, no matching entry found" }
 
                 it_behaves_like :creating_a_note_but_no_task
               end
@@ -149,7 +149,7 @@ module AutomatedChecks
               let(:submitted_using_slc_data) { nil }
 
               context "when there is no student loan data for the claim" do
-                let(:expected_note) { "[SLC Student loan plan] - No data" }
+                let(:expected_note) { "[SLC Student loan plan] - SLC data checked, no matching entry found" }
 
                 it_behaves_like :creating_a_note_but_no_task
               end

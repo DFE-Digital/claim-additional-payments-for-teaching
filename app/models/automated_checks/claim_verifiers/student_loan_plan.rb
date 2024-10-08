@@ -65,7 +65,7 @@ module AutomatedChecks
 
       def note_body(match:)
         prefix = "[SLC Student loan plan]"
-        return "#{prefix} - No data" unless match
+        return "#{prefix} - SLC data checked, no matching entry found" unless match
 
         if slc_repaying_plan_types
           "#{prefix} - Matched - has a student loan"

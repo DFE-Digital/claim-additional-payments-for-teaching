@@ -15,8 +15,7 @@ RSpec.feature "Further education payments" do
 
     sign_in_as_service_operator
 
-    visit admin_claims_path
-    find("a[href='#{admin_claim_tasks_path(claim)}']").click
+    visit admin_claim_tasks_path(claim)
     within "li.student_loan_plan" do
       expect(page).to have_content "Incomplete"
     end
@@ -32,8 +31,7 @@ RSpec.feature "Further education payments" do
 
     sign_in_as_service_operator
 
-    visit admin_claims_path
-    find("a[href='#{admin_claim_tasks_path(claim)}']").click
+    visit admin_claim_tasks_path(claim)
     expect(page).not_to have_content "Student loan plan"
   end
 end
