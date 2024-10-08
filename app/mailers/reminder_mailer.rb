@@ -37,12 +37,9 @@ class ReminderMailer < ApplicationMailer
   def reminder(reminder)
     @reminder = reminder
     support_email_address = translate("additional_payments.support_email_address")
-    service_start_page_url = Journeys::AdditionalPaymentsForTeaching.start_page_url
+
     personalisation = {
-      first_name: extract_first_name(@reminder.full_name),
-      support_email_address: support_email_address,
-      itt_academic_year: @reminder.itt_academic_year,
-      service_start_page_url: service_start_page_url
+      support_email_address: support_email_address
     }
 
     send_mail(REMINDER_APPLICATION_WINDOW_OPEN_NOTIFY_TEMPLATE_ID, personalisation)
@@ -58,7 +55,7 @@ class ReminderMailer < ApplicationMailer
     template_mail(
       template_id,
       to: @reminder.email_address,
-      reply_to_id: Policies::EarlyCareerPayments.notify_reply_to_id,
+      reply_to_id: GENERIC_NOTIFY_REPLY_TO_ID,
       subject: @subject,
       personalisation:
     )
