@@ -926,6 +926,16 @@ en:
             claimant_answers:
               true: "Yes"
               false: "No"
+          subject_to_formal_performance_action:
+            label: "Performance measures"
+            claimant_answers:
+              true: "Yes"
+              false: "No"
+          subject_to_disciplinary_action:
+            label: "Disciplinary action"
+            claimant_answers:
+              true: "Yes"
+              false: "No"
     forms:
       ineligible:
         courses:
@@ -1247,6 +1257,14 @@ en:
               label: "For at least half of their timetabled teaching hours, does %{claimant} teach:"
               errors:
                 inclusion: "Select yes if %{claimant} teaches this course for at least half their timetabled teaching hours"
+            subject_to_formal_performance_action:
+              label: "Can you confirm that %{claimant} is not currently subject to any performance measures?"
+              errors:
+                inclusion: "Select yes if %{claimant} is not currently subject to any performance measures"
+            subject_to_disciplinary_action:
+              label: "Can you confirm that %{claimant} is not currently subject to disciplinary action?"
+              errors:
+                inclusion: "Select yes if %{claimant} is not currently subject to disciplinary action"
           variable_contract:
             contract_type:
               label: "Does %{claimant} have a %{type_of_contract} of employment at %{provider}?"
@@ -1280,6 +1298,14 @@ en:
               label: "Will %{claimant} be timetabled to teach at least 2.5 hours per week next term?"
               errors:
                 inclusion: "Select yes if %{claimant} will be timetabled to teach at least 2.5 hours per week next term"
+            subject_to_formal_performance_action:
+              label: "Can you confirm that %{claimant} is not currently subject to any performance measures?"
+              errors:
+                inclusion: "Select yes if %{claimant} is not currently subject to any performance measures"
+            subject_to_disciplinary_action:
+              label: "Can you confirm that %{claimant} is not currently subject to disciplinary action?"
+              errors:
+                inclusion: "Select yes if %{claimant} is not currently subject to disciplinary action"
 
   early_years_payment:
     claim_description: for an early years financial incentive payment
