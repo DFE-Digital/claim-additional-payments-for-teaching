@@ -1258,7 +1258,7 @@ en:
               errors:
                 inclusion: "Select yes if %{claimant} teaches this course for at least half their timetabled teaching hours"
             subject_to_formal_performance_action:
-              label: "Can you confirm that %{claimant} is not currently subject to any performance measures?"
+              label: "Can you confirm that %{claimant} is not currently subject to any performance measures as a result of continuous poor teaching standards?"
               errors:
                 inclusion: "Select yes if %{claimant} is not currently subject to any performance measures"
             subject_to_disciplinary_action:
@@ -1299,7 +1299,7 @@ en:
               errors:
                 inclusion: "Select yes if %{claimant} will be timetabled to teach at least 2.5 hours per week next term"
             subject_to_formal_performance_action:
-              label: "Can you confirm that %{claimant} is not currently subject to any performance measures?"
+              label: "Can you confirm that %{claimant} is not currently subject to any performance measures as a result of continuous poor teaching standards?"
               errors:
                 inclusion: "Select yes if %{claimant} is not currently subject to any performance measures"
             subject_to_disciplinary_action:
