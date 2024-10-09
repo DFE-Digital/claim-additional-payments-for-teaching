@@ -4,6 +4,8 @@ module Journeys
       class SessionAnswers < Journeys::SessionAnswers
         attribute :reference_number, :string
         attribute :reference_number_found, :boolean, default: nil
+        attribute :claim_already_submitted, :boolean, default: nil
+        attribute :nursery_name
         attribute :start_email, :string
 
         def policy

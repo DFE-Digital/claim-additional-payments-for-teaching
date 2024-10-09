@@ -1,0 +1,28 @@
+<% content_for(:page_title, page_title("You've already submitted your claim", journey: current_journey_routing_name)) %>
+<% @backlink_path = claim_path(current_journey_routing_name, "find-reference", request.query_parameters) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      You've already submitted your claim
+    </h1>
+
+    <p class="govuk-body">
+      We're reviewing your application and we'll let you know by email if it's accepted or rejected.
+    </p>
+
+    <p class="govuk-body">
+      After 6 months in your role, we'll check that you’re still working at <%= answers.nursery_name %>. If you are:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>we’ll pay the full incentive amount into your bank account</li>
+      <li>email you to confirm the payment</li>
+    </ul>
+
+    <p class="govuk-body">
+      If you have questions or need support with this claim, email
+      <%= govuk_link_to t("early_years_payment_practitioner.feedback_email"), "mailto:#{t("early_years_payment_practitioner.feedback_email")}", no_visited_state: true %>
+    </p>
+  </div>
+</div>

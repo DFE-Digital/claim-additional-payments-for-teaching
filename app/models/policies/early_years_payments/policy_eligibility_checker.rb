@@ -48,6 +48,8 @@ module Policies
 
         if answers.reference_number_found == false
           :reference_number_not_found
+        elsif answers.claim_already_submitted == true
+          :claim_already_submitted
         end
       end
 
