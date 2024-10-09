@@ -40,5 +40,7 @@ RSpec.feature "Early years payment practitioner mobile number" do
     click_on "Confirm"
     expect(journey_session.answers.mobile_number).to eq "07700900001"
     expect(journey_session.answers.mobile_verified).to be true
+
+    expect(page).to have_content("Enter your personal bank account details")
   end
 end

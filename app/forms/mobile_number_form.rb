@@ -15,7 +15,6 @@ class MobileNumberForm < Form
 
   def save
     return false unless valid?
-    return true unless mobile_number_changed?
 
     sent_one_time_password_at = if send_sms_message
       Time.now
@@ -34,7 +33,7 @@ class MobileNumberForm < Form
 
   def send_sms_message
     if Rails.env.development?
-      Rails.logger.info("SMS CODE: #{OneTimePassword::Generator.new.code}")
+      Rails.logger.info("\n\nSMS CODE: #{OneTimePassword::Generator.new.code}\n")
       return true
     end
 
@@ -43,9 +42,5 @@ class MobileNumberForm < Form
       template_id: NotifySmsMessage::OTP_PROMPT_TEMPLATE_ID,
       personalisation: {otp: OneTimePassword::Generator.new.code}
     ).deliver!
-  end
-
-  def mobile_number_changed?
-    mobile_number != answers.mobile_number
   end
 end
