@@ -37,7 +37,7 @@ class MobileNumberForm < Form
 
   def send_sms_message
     if Rails.env.development?
-      Rails.logger.info("SMS CODE: #{OneTimePassword::Generator.new.code}")
+      Rails.logger.info("\n\nSMS CODE: #{OneTimePassword::Generator.new.code}\n")
       return true
     end
 
