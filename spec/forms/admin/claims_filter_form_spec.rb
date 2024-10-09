@@ -80,5 +80,21 @@ RSpec.describe Admin::ClaimsFilterForm, type: :model do
         )
       end
     end
+
+    context "filtering for unassigned + auto approved claims" do
+      subject { described_class.new(session:, filters: {team_member:, status:}) }
+
+      let(:team_member) { "unassigned" }
+      let(:status) { "automatically_approved" }
+      let(:session) { {} }
+
+      before do
+        create(:claim, :submitted, :auto_approved, :current_academic_year)
+      end
+
+      it "works" do
+        expect(subject.claims.count).to eql(1)
+      end
+    end
   end
 end

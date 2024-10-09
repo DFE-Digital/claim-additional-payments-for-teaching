@@ -48,6 +48,8 @@ class Admin::ClaimsFilterForm
         Claim.approved.awaiting_qa
       when "approved_awaiting_payroll"
         approved_awaiting_payroll
+      when "automatically_approved"
+        Claim.current_academic_year.auto_approved
       when "automatically_approved_awaiting_payroll"
         Claim.current_academic_year.payrollable.auto_approved
       when "rejected"
@@ -94,6 +96,7 @@ class Admin::ClaimsFilterForm
       ["Awaiting decision - failed bank details", "failed_bank_validation"],
       ["Approved awaiting QA", "approved_awaiting_qa"],
       ["Approved awaiting payroll", "approved_awaiting_payroll"],
+      ["Automatically approved", "automatically_approved"],
       ["Automatically approved awaiting payroll", "automatically_approved_awaiting_payroll"],
       ["Approved", "approved"],
       ["Rejected", "rejected"]

@@ -41,6 +41,10 @@ FactoryBot.define do
       claim.academic_year = claim_academic_year unless claim.academic_year_before_type_cast
     end
 
+    trait :current_academic_year do
+      academic_year { AcademicYear.current }
+    end
+
     trait :with_onelogin_idv_data do
       identity_confirmed_with_onelogin { true }
       onelogin_uid { SecureRandom.uuid }
