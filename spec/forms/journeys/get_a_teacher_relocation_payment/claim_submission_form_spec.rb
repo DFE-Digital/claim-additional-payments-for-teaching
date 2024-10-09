@@ -87,6 +87,10 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::ClaimSubmissionForm do
 
       expect(claim.started_at).to eq(journey_session.created_at)
 
+      expect(claim.award_amount).to eq(
+        Policies::InternationalRelocationPayments.award_amount
+      )
+
       eligibility_answers.each do |attribute, value|
         expect(eligibility.public_send(attribute)).to eq(value)
       end

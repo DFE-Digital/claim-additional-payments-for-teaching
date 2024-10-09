@@ -268,6 +268,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm do
 
         expect(claim.started_at).to eq(journey_session.created_at)
 
+        expect(claim.award_amount).to eq(2000)
+
         expect(ClaimMailer).to have_received(:submitted).with(claim)
         expect(ClaimVerifierJob).to have_received(:perform_later).with(claim)
       end

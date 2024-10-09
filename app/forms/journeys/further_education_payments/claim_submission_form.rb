@@ -24,9 +24,7 @@ module Journeys
       end
 
       def calculate_award_amount(claim)
-        # NOOP
-        # This is just for compatibility with the AdditionalPaymentsForTeaching
-        # claim submission form.
+        claim.award_amount = answers.award_amount
       end
 
       def generate_policy_options_provided

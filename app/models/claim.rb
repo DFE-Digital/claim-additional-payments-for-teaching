@@ -18,6 +18,7 @@ class Claim < ApplicationRecord
     postcode
   ].freeze
   FILTER_PARAMS = {
+    award_amount: false,
     address_line_1: true,
     address_line_2: true,
     address_line_3: true,

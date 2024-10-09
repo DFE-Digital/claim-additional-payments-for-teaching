@@ -7,10 +7,9 @@ module Journeys
         @main_eligibility ||= eligibilities.first
       end
 
+      # Award amount is the student loan repayment amount set by a job
       def calculate_award_amount(claim)
-        # NOOP
-        # This is just for compatibility with the AdditionalPaymentsForTeaching
-        # claim submission form.
+        claim.award_amount = answers.student_loan_repayment_amount
       end
 
       def generate_policy_options_provided

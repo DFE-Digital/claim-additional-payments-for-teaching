@@ -79,6 +79,7 @@ shared:
     - onelogin_auth_at
     - onelogin_idv_at
     - started_at
+    - award_amount
   :decisions:
     - id
     - result

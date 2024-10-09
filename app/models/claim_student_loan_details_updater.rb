@@ -9,7 +9,12 @@ class ClaimStudentLoanDetailsUpdater
 
   def update_claim_with_latest_data
     claim.transaction do
-      eligibility.update!(eligibility_student_loan_attributes) if claim.has_tslr_policy?
+      if claim.has_tslr_policy?
+        eligibility.update!(eligibility_student_loan_attributes)
+        claim.assign_attributes(
+          award_amount: student_loans_data.total_repayment_amount
+        )
+      end
 
       claim.assign_attributes(claim_student_loan_attributes)
 

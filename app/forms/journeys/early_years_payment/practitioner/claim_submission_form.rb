@@ -7,7 +7,7 @@ module Journeys
         end
 
         def calculate_award_amount(claim)
-          0
+          claim.award_amount = 0
         end
 
         def main_policy

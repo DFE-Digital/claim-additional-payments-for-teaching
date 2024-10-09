@@ -201,6 +201,8 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::ClaimSubmissionForm do
 
       expect(claim.started_at).to eq(journey_session.created_at)
 
+      expect(claim.award_amount).to eq(1000)
+
       expect(journey_session.claim).to eq(claim)
 
       expect(ClaimMailer).to have_received(:submitted).with(claim)

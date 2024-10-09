@@ -64,6 +64,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
           expect { call }.to change { claim.reload.has_student_loan }.to(true)
             .and change { claim.student_loan_plan }.to(StudentLoan::PLAN_1_AND_2)
             .and change { claim.eligibility.student_loan_repayment_amount }.to(110)
+            .and change { claim.award_amount }.to(110)
         end
       end
 
@@ -93,6 +94,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
           expect { call }.to change { claim.reload.has_student_loan }.to(false)
             .and change { claim.student_loan_plan }.to(Claim::NO_STUDENT_LOAN)
             .and change { claim.eligibility.student_loan_repayment_amount }.to(0)
+            .and change { claim.award_amount }.to(0)
         end
       end
 
@@ -130,6 +132,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
         expect { call }.to not_change { claim.reload.has_student_loan }
           .and not_change { claim.student_loan_plan }
           .and not_change { claim.eligibility.student_loan_repayment_amount }
+          .and not_change { claim.award_amount }
       end
     end
 
@@ -144,6 +147,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
         expect { call }.to change { claim.reload.has_student_loan }.to(true)
           .and change { claim.student_loan_plan }.to(StudentLoan::PLAN_1)
           .and change { claim.eligibility.student_loan_repayment_amount }.to(50)
+          .and change { claim.award_amount }.to(50)
       end
 
       it "does not change the `submitted_using_slc_data` flag" do

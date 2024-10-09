@@ -8,7 +8,9 @@ module Journeys
       end
 
       def calculate_award_amount(claim)
-        claim.eligibility.award_amount = Policies::InternationalRelocationPayments.award_amount
+        award_amount = Policies::InternationalRelocationPayments.award_amount
+        claim.eligibility.award_amount = award_amount
+        claim.award_amount = award_amount
       end
 
       def generate_policy_options_provided
