@@ -46,7 +46,7 @@ class ClaimSubmissionBaseForm
       end
     end
 
-    calculate_award_amount(claim.eligibility)
+    calculate_award_amount(claim)
 
     claim
   end

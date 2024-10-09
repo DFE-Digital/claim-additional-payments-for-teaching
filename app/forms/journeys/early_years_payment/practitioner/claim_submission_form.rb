@@ -6,7 +6,7 @@ module Journeys
           @main_eligibility ||= eligibilities.detect { |e| e.policy == main_policy }
         end
 
-        def calculate_award_amount(eligibility)
+        def calculate_award_amount(claim)
           0
         end
 

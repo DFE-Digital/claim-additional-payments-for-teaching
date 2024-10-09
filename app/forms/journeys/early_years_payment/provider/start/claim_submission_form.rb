@@ -9,7 +9,7 @@ module Journeys
             @main_eligibility ||= Policies::EarlyYearsPayments::Eligibility.new
           end
 
-          def calculate_award_amount(eligibility)
+          def calculate_award_amount(claim)
             # NOOP
             # This is just for compatibility with the AdditionalPaymentsForTeaching
             # claim submission form.
