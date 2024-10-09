@@ -503,7 +503,7 @@ RSpec.feature "Provider verifying claims" do
 
     within_fieldset(
       "Can you confirm that Edna Krabappel is not currently subject to any " \
-      "performance measures?"
+      "performance measures as a result of continuous poor teaching standards?"
     ) do
       choose "Yes"
     end
@@ -655,7 +655,7 @@ RSpec.feature "Provider verifying claims" do
 
     within_fieldset(
       "Can you confirm that Edna Krabappel is not currently subject to any " \
-      "performance measures?"
+      "performance measures as a result of continuous poor teaching standards?"
     ) do
       choose "Yes"
     end
@@ -809,7 +809,7 @@ RSpec.feature "Provider verifying claims" do
 
     within_fieldset(
       "Can you confirm that Edna Krabappel is not currently subject to any " \
-      "performance measures?"
+      "performance measures as a result of continuous poor teaching standards?"
     ) do
       choose "Yes"
     end
