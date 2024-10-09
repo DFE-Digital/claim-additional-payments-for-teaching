@@ -116,7 +116,7 @@ RSpec.feature "Upload SLC data" do
     expect(claim.has_student_loan).to eq true
 
     claim = ecp_claim_no_slc_data
-    then_the_student_loan_plan_task_should_show_as(state: "No data", for_claim: claim)
+    then_the_student_loan_plan_task_should_show_as(state: "Incomplete", for_claim: claim)
     expect(claim.reload.student_loan_plan).to be nil # this was "not_applicable" before LUPEYALPHA-1031
     expect(claim.has_student_loan).to be nil # this was false before LUPEYALPHA-1031
 
@@ -133,7 +133,7 @@ RSpec.feature "Upload SLC data" do
     expect(claim.has_student_loan).to eq true
 
     claim = fe_claim_no_slc_data_nil_submitted_using_slc_data
-    then_the_student_loan_plan_task_should_show_as(state: "No data", for_claim: claim)
+    then_the_student_loan_plan_task_should_show_as(state: "Incomplete", for_claim: claim)
     expect(claim.reload.student_loan_plan).to be nil
     expect(claim.has_student_loan).to be nil
 
@@ -148,7 +148,7 @@ RSpec.feature "Upload SLC data" do
     expect(claim.has_student_loan).to eq true
 
     claim = fe_claim_no_slc_data
-    then_the_student_loan_plan_task_should_show_as(state: "No data", for_claim: claim)
+    then_the_student_loan_plan_task_should_show_as(state: "Incomplete", for_claim: claim)
     expect(claim.reload.student_loan_plan).to be nil
     expect(claim.has_student_loan).to be nil
   end
