@@ -27,7 +27,9 @@ module Policies
       end
 
       def employment
-        []
+        [
+          ["Current provider", display_school(claim.eligibility.current_school)]
+        ]
       end
 
       def identity_confirmation
