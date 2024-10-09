@@ -976,8 +976,7 @@ en:
       select_provision:
         heading: Select where you are employed
         hint:
-          Select the further education provider you are employed by. If you work for a college or sixth-form group, you
-          should select the group name.
+          Select the further education (FE) provider you are employed by.
         errors:
           blank: Select the further education provider you are employed by
       contract_type:
