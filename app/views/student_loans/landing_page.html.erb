@@ -22,13 +22,15 @@
     </ul>
 
     <p class="govuk-body">
-      It takes around 5 minutes to check if you're eligible and another 5 minutes to apply.
+      It takes around 5 minutes to check if you’re eligible and another 5 minutes to apply.
     </p>
 
     <p class="govuk-body">
       You must apply before 31 March <%= @academic_year.end_year.to_s %>.
     </p>
 
+    <%# TODO: There isn't any journey closed content, for now hide the button %>
+    <% if @journey_open %>
     <p class="govuk-!-margin-top-8">
         <a href="<%= claim_path(current_journey_routing_name, "claim") %>" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
           Start now
@@ -36,12 +38,13 @@
             <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"/>
           </svg>
         </a>
-      </p>
+    </p>
+    <% end %>
 
     <h2 class="govuk-heading-m govuk-!-margin-top-4">Before you start</h2>
 
     <p class="govuk-body">
-      You can use DfE Identity with this service. You'll need to provide your personal details including your National Insurance number and teacher reference number (TRN).
+      You can use DfE Identity with this service. You’ll need to provide your personal details including your National Insurance number and teacher reference number (TRN).
     </p>
   </div>
 </div>
