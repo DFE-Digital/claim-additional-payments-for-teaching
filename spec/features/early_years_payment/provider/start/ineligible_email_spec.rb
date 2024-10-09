@@ -1,8 +1,6 @@
 require "rails_helper"
 
 RSpec.feature "Early years payment provider" do
-  let(:journey_session) { Journeys::EarlyYearsPayment::Provider::Start::Session.last }
-
   scenario "entering an email address which is not on the whitelist" do
     when_early_years_payment_provider_start_journey_configuration_exists
     when_eligible_ey_provider_exists

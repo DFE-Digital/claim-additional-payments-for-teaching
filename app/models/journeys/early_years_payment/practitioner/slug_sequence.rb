@@ -11,6 +11,8 @@ module Journeys
           email-address
           email-verification
           provide-mobile-number
+          mobile-number
+          mobile-verification
           personal-bank-account
           gender
           check-your-answers
