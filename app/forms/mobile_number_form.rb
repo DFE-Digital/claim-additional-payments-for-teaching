@@ -1,5 +1,6 @@
 class MobileNumberForm < Form
   attribute :mobile_number
+  attribute :resend, :boolean
 
   validates :mobile_number,
     presence: {
@@ -15,6 +16,7 @@ class MobileNumberForm < Form
 
   def save
     return false unless valid?
+    return true unless mobile_number_changed? || resend
 
     sent_one_time_password_at = if send_sms_message
       Time.now
@@ -42,5 +44,9 @@ class MobileNumberForm < Form
       template_id: NotifySmsMessage::OTP_PROMPT_TEMPLATE_ID,
       personalisation: {otp: OneTimePassword::Generator.new.code}
     ).deliver!
+  end
+
+  def mobile_number_changed?
+    mobile_number != answers.mobile_number
   end
 end

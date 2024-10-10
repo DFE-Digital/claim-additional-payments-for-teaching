@@ -1,4 +1,4 @@
-def when_personal_details_entered_up_to_email_address
+def when_personal_details_entered_up_to_address
   visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=user@example.com"
   fill_in "Claim reference number", with: claim.reference
   click_button "Submit"
@@ -22,6 +22,10 @@ def when_personal_details_entered_up_to_email_address
   fill_in "County", with: "City of Derby"
   fill_in "Postcode", with: "DE22 4BS"
   click_on "Continue"
+end
+
+def when_personal_details_entered_up_to_email_address
+  when_personal_details_entered_up_to_address
 
   fill_in "claim-email-address-field", with: "johndoe@example.com"
   click_on "Continue"

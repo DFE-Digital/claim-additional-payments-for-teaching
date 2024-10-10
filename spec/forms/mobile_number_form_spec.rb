@@ -62,41 +62,37 @@ RSpec.describe MobileNumberForm do
     end
 
     describe "#save" do
-      around do |example|
-        travel_to DateTime.new(2024, 1, 1, 12, 0, 0) do
-          example.run
-        end
-      end
+      subject { form.save }
 
       before do
+        travel_to DateTime.new(2024, 1, 1, 12, 0, 0)
         allow(OneTimePassword::Generator).to receive(:new).and_return(
           instance_double(OneTimePassword::Generator, code: "111111")
         )
-
         allow(NotifySmsMessage).to receive(:new).and_return(notify_double)
 
-        form.save
+        subject
       end
 
       let(:notify_double) do
         instance_double(NotifySmsMessage, deliver!: notify_response)
       end
 
+      let(:notify_response) do
+        Notifications::Client::ResponseNotification.new(
+          {
+            id: "123",
+            reference: "456",
+            content: "content",
+            template: "template",
+            uri: "uri"
+          }
+        )
+      end
+
       let(:mobile_number) { "07123456789" }
 
       context "when notify is successful" do
-        let(:notify_response) do
-          Notifications::Client::ResponseNotification.new(
-            {
-              id: "123",
-              reference: "456",
-              content: "content",
-              template: "template",
-              uri: "uri"
-            }
-          )
-        end
-
         it "stores the mobile number" do
           expect(journey_session.reload.answers.mobile_number).to eq(mobile_number)
         end
@@ -151,6 +147,50 @@ RSpec.describe MobileNumberForm do
 
         it "sets sent_one_time_password_at to nil" do
           expect(journey_session.reload.answers.sent_one_time_password_at).to be_nil
+        end
+      end
+
+      context "when the phone number is invalid" do
+        let(:mobile_number) { "0" }
+
+        it "returns false" do
+          expect(subject).to be false
+        end
+
+        it "does not send a text message" do
+          expect(NotifySmsMessage).not_to have_received(:new)
+        end
+      end
+
+      context "when the mobile number has not changed" do
+        let(:journey_session) do
+          create(
+            :"#{journey::I18N_NAMESPACE}_session",
+            answers: attributes_for(
+              :"#{journey::I18N_NAMESPACE}_answers",
+              :with_details_from_dfe_identity,
+              mobile_number: mobile_number,
+              mobile_verified: true
+            )
+          )
+        end
+
+        it "returns true" do
+          expect(subject).to be true
+        end
+
+        it "does not send a text message" do
+          expect(NotifySmsMessage).not_to have_received(:new)
+        end
+
+        context "when the resend attribute is true" do
+          let(:params) do
+            ActionController::Parameters.new(claim: {mobile_number: mobile_number, resend: true})
+          end
+
+          it "sends a text message" do
+            expect(NotifySmsMessage).to have_received(:new)
+          end
         end
       end
     end
