@@ -84,5 +84,35 @@ describe Policies::EarlyYearsPayments::PolicyEligibilityChecker do
         expect(subject.ineligibility_reason).to eql(:nursery_is_not_listed)
       end
     end
+
+    context "when ineligible as :reference_number_not_found" do
+      let(:answers) do
+        build(
+          :early_years_practitioner_answers,
+          reference_number_found: false
+        )
+      end
+
+      it "is ineligble as :reference_number_not_found" do
+        expect(subject).to be_ineligible
+        expect(subject.status).to eql(:ineligible)
+        expect(subject.ineligibility_reason).to eql(:reference_number_not_found)
+      end
+    end
+
+    context "when ineligible as :claim_already_submitted" do
+      let(:answers) do
+        build(
+          :early_years_practitioner_answers,
+          claim_already_submitted: true
+        )
+      end
+
+      it "is ineligble as :claim_already_submitted" do
+        expect(subject).to be_ineligible
+        expect(subject.status).to eql(:ineligible)
+        expect(subject.ineligibility_reason).to eql(:claim_already_submitted)
+      end
+    end
   end
 end
