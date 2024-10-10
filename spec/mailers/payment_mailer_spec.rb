@@ -45,7 +45,13 @@ RSpec.describe PaymentMailer, type: :mailer do
           let(:payment) { create(:payment, :confirmed, :with_figures, student_loan_repayment: 0, postgraduate_loan_repayment: 0, claims: [claim]) }
 
           it "does not mention the content relating to student loan deductions" do
-            expect(mail.body).to_not include("subject to a student loan contribution")
+            expect(mail.body).to_not include("Student loan contribution:")
+            expect(mail.body).to_not include("The Student Loans Company has told us that you’re currently repaying a student loan. This amount is deducted from your payment and goes towards repaying your loan.")
+          end
+
+          it "does not mention the content relating to postgraduate loan deductions" do
+            expect(mail.body).to_not include("Postgraduate Master’s or PhD loan contribution:")
+            expect(mail.body).to_not include("The Student Loans Company has told us that you’re currently repaying a Postgraduate Master’s Loan or Postgraduate Doctoral Loan. This amount is deducted from your payment and goes towards repaying your loan.")
           end
         end
 
@@ -55,12 +61,12 @@ RSpec.describe PaymentMailer, type: :mailer do
           it "mentions the student loan deduction content and lists their contribution" do
             expect(mail.body).to include("This payment is treated as pay and is therefore subject to a student loan contribution, if applicable.")
             expect(mail.body).to include("Student loan contribution: £10.00")
-            expect(mail.body).to include("You told us you’re currently repaying a student loan. This amount is deducted from your payment and goes towards repaying your loan.")
+            expect(mail.body).to include("The Student Loans Company has told us that you’re currently repaying a student loan. This amount is deducted from your payment and goes towards repaying your loan.")
           end
           it "mentions the postgraduate loan deduction content and lists their contribution" do
             expect(mail.body).to include("This payment is treated as pay and is therefore subject to a student loan contribution, if applicable.")
             expect(mail.body).to include("Postgraduate Master’s or PhD loan contribution: £8.00")
-            expect(mail.body).to include("You told us you’re currently repaying a Postgraduate Master’s Loan or Postgraduate Doctoral Loan. This amount is deducted from your payment and goes towards repaying your loan.")
+            expect(mail.body).to include("The Student Loans Company has told us that you’re currently repaying a Postgraduate Master’s Loan or Postgraduate Doctoral Loan. This amount is deducted from your payment and goes towards repaying your loan.")
           end
         end
 
@@ -69,11 +75,11 @@ RSpec.describe PaymentMailer, type: :mailer do
 
           it "mentions the student loan deduction content and lists their contribution" do
             expect(mail.body).to include("Student loan contribution: £10.00")
-            expect(mail.body).to include("You told us you’re currently repaying a student loan. This amount is deducted from your payment and goes towards repaying your loan.")
+            expect(mail.body).to include("The Student Loans Company has told us that you’re currently repaying a student loan. This amount is deducted from your payment and goes towards repaying your loan.")
           end
           it "does not include the postgraduate loan deduction content" do
             expect(mail.body).not_to include("Postgraduate Master’s or PhD loan contribution")
-            expect(mail.body).not_to include("You told us you’re currently repaying a Postgraduate Master’s Loan or Postgraduate Doctoral Loan. This amount is deducted from your payment and goes towards repaying your loan.")
+            expect(mail.body).not_to include("The Student Loans Company has told us that you’re currently repaying a Postgraduate Master’s Loan or Postgraduate Doctoral Loan. This amount is deducted from your payment and goes towards repaying your loan.")
           end
         end
 
@@ -82,11 +88,11 @@ RSpec.describe PaymentMailer, type: :mailer do
 
           it "does not include the student loan deduction content" do
             expect(mail.body).not_to include("Student loan contribution")
-            expect(mail.body).not_to include("You told us you’re currently repaying a student loan. This amount is deducted from your payment and goes towards repaying your loan.")
+            expect(mail.body).not_to include("The Student Loans Company has told us that you’re currently repaying a student loan. This amount is deducted from your payment and goes towards repaying your loan.")
           end
           it "includes the postgraduate loan deduction content" do
             expect(mail.body).to include("Postgraduate Master’s or PhD loan contribution: £8.00")
-            expect(mail.body).to include("You told us you’re currently repaying a Postgraduate Master’s Loan or Postgraduate Doctoral Loan. This amount is deducted from your payment and goes towards repaying your loan.")
+            expect(mail.body).to include("The Student Loans Company has told us that you’re currently repaying a Postgraduate Master’s Loan or Postgraduate Doctoral Loan. This amount is deducted from your payment and goes towards repaying your loan.")
           end
         end
       end
@@ -146,7 +152,13 @@ RSpec.describe PaymentMailer, type: :mailer do
         let(:payment) { create(:payment, :confirmed, :with_figures, student_loan_repayment: 0, postgraduate_loan_repayment: 0, claims: claims) }
 
         it "does not mention the content relating to student loan deductions" do
-          expect(mail.body).to_not include("subject to a student loan contribution")
+          expect(mail.body).to_not include("Student loan contribution:")
+          expect(mail.body).to_not include("The Student Loans Company has told us that you’re currently repaying a student loan. This amount is deducted from your payment and goes towards repaying your loan.")
+        end
+
+        it "does not mention the content relating to postgraduate loan deductions" do
+          expect(mail.body).to_not include("Postgraduate Master’s or PhD loan contribution:")
+          expect(mail.body).to_not include("The Student Loans Company has told us that you’re currently repaying a Postgraduate Master’s Loan or Postgraduate Doctoral Loan. This amount is deducted from your payment and goes towards repaying your loan.")
         end
       end
 
@@ -160,7 +172,7 @@ RSpec.describe PaymentMailer, type: :mailer do
 
         it "includes the postgraduate loan deduction content" do
           expect(mail.body).to include("Postgraduate Master’s or PhD loan contribution: £8.00")
-          expect(mail.body).to include("You told us you’re currently repaying a Postgraduate Master’s Loan or Postgraduate Doctoral Loan. This amount is deducted from your payment and goes towards repaying your loan.")
+          expect(mail.body).to include("The Student Loans Company has told us that you’re currently repaying a Postgraduate Master’s Loan or Postgraduate Doctoral Loan. This amount is deducted from your payment and goes towards repaying your loan.")
         end
       end
 
@@ -169,11 +181,11 @@ RSpec.describe PaymentMailer, type: :mailer do
 
         it "mentions the student loan deduction content and lists their contribution" do
           expect(mail.body).to include("Student loan contribution: £10.00")
-          expect(mail.body).to include("You told us you’re currently repaying a student loan. This amount is deducted from your payment and goes towards repaying your loan.")
+          expect(mail.body).to include("The Student Loans Company has told us that you’re currently repaying a student loan. This amount is deducted from your payment and goes towards repaying your loan.")
         end
         it "does not include the postgraduate loan deduction content" do
           expect(mail.body).not_to include("Postgraduate Master’s or PhD loan contribution")
-          expect(mail.body).not_to include("You told us you’re currently repaying a Postgraduate Master’s Loan or Postgraduate Doctoral Loan. This amount is deducted from your payment and goes towards repaying your loan.")
+          expect(mail.body).not_to include("The Student Loans Company has told us that you’re currently repaying a Postgraduate Master’s Loan or Postgraduate Doctoral Loan. This amount is deducted from your payment and goes towards repaying your loan.")
         end
       end
 
@@ -182,11 +194,11 @@ RSpec.describe PaymentMailer, type: :mailer do
 
         it "does not include the student loan deduction content" do
           expect(mail.body).not_to include("Student loan contribution")
-          expect(mail.body).not_to include("You told us you’re currently repaying a student loan. This amount is deducted from your payment and goes towards repaying your loan.")
+          expect(mail.body).not_to include("The Student Loans Company has told us that you’re currently repaying a student loan. This amount is deducted from your payment and goes towards repaying your loan.")
         end
         it "includes the postgraduate loan deduction content" do
           expect(mail.body).to include("Postgraduate Master’s or PhD loan contribution: £8.00")
-          expect(mail.body).to include("You told us you’re currently repaying a Postgraduate Master’s Loan or Postgraduate Doctoral Loan. This amount is deducted from your payment and goes towards repaying your loan.")
+          expect(mail.body).to include("The Student Loans Company has told us that you’re currently repaying a Postgraduate Master’s Loan or Postgraduate Doctoral Loan. This amount is deducted from your payment and goes towards repaying your loan.")
         end
       end
     end
