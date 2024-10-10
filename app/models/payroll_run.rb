@@ -73,50 +73,30 @@ class PayrollRun < ApplicationRecord
   end
 
   def line_items(policy, filter: :all)
-    sql = <<~SQL
-      WITH claims_with_award_amount AS (
+    eligibilities_cte = "WITH eligibilities AS("
+    eligibilities_cte += Policies::POLICIES.map do |policy|
+      <<~SQL
         SELECT
-        claims.*,
-        CASE
-        WHEN early_career_payments_eligibilities.id IS NOT NULL
-          THEN early_career_payments_eligibilities.award_amount
-        WHEN further_education_payments_eligibilities.id IS NOT NULL
-          THEN further_education_payments_eligibilities.award_amount
-        WHEN international_relocation_payments_eligibilities.id IS NOT NULL
-          THEN international_relocation_payments_eligibilities.award_amount
-        WHEN levelling_up_premium_payments_eligibilities.id IS NOT NULL
-          THEN levelling_up_premium_payments_eligibilities.award_amount
-        WHEN student_loans_eligibilities.id IS NOT NULL
-          THEN student_loans_eligibilities.student_loan_repayment_amount
-        END AS award_amount
+        id,
+        #{policy.award_amount_column} AS award_amount,
+        '#{policy::Eligibility}' AS eligibility_type
+        FROM #{policy::Eligibility.table_name}
+      SQL
+    end.join(" UNION ALL ")
+    eligibilities_cte += ")"
 
-        FROM claims
-        LEFT JOIN early_career_payments_eligibilities
-          ON claims.eligibility_id = early_career_payments_eligibilities.id
-          AND claims.eligibility_type = 'Policies::EarlyCareerPayments::Eligibility'
-        LEFT JOIN further_education_payments_eligibilities
-          ON claims.eligibility_id = further_education_payments_eligibilities.id
-          AND claims.eligibility_type = 'Policies::FurtherEducationPayments::Eligibility'
-        LEFT JOIN international_relocation_payments_eligibilities
-          ON claims.eligibility_id = international_relocation_payments_eligibilities.id
-          AND claims.eligibility_type = 'Policies::InternationalRelocationPayments::Eligibility'
-        LEFT JOIN levelling_up_premium_payments_eligibilities
-          ON claims.eligibility_id = levelling_up_premium_payments_eligibilities.id
-          AND claims.eligibility_type = 'Policies::LevellingUpPremiumPayments::Eligibility'
-        LEFT JOIN student_loans_eligibilities
-          ON claims.eligibility_id = student_loans_eligibilities.id
-          AND claims.eligibility_type = 'Policies::StudentLoans::Eligibility'
-      )
-
+    sql = <<~SQL
+      #{eligibilities_cte}
       SELECT
         /* A topup is always paid in different payment/payroll_run than the main claim was */
-        COALESCE(topups.award_amount, claims.award_amount) AS award_amount
+        COALESCE(topups.award_amount, eligibilities.award_amount) AS award_amount
       FROM payments
       JOIN claim_payments ON claim_payments.payment_id = payments.id
-      JOIN claims_with_award_amount AS claims
-        ON claims.id = claim_payments.claim_id
-      LEFT JOIN topups
-        ON topups.claim_id = claims.id
+      JOIN claims ON claims.id = claim_payments.claim_id
+      JOIN eligibilities
+        ON claims.eligibility_id = eligibilities.id
+        AND claims.eligibility_type = eligibilities.eligibility_type
+      LEFT JOIN topups ON topups.claim_id = claims.id
       WHERE payments.payroll_run_id = '#{id}'
     SQL
 
