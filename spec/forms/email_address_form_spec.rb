@@ -53,21 +53,22 @@ RSpec.describe EmailAddressForm do
     end
 
     describe "#save" do
-      around do |example|
-        travel_to DateTime.new(2024, 1, 1, 12, 0, 0) do
-          example.run
-        end
-      end
+      subject { form.save }
 
       before do
+        travel_to DateTime.new(2024, 1, 1, 12, 0, 0)
         allow(OneTimePassword::Generator).to receive(:new).and_return(
           instance_double(OneTimePassword::Generator, code: "111111")
         )
 
-        form.save
+        subject
       end
 
       let(:email_address) { "test@example.com" }
+      let(:policy) { journey_session.answers.policy }
+      let(:support_email_address) { I18n.t("#{policy.locale_key}.support_email_address") }
+      let(:claim_subject) { I18n.t("#{policy.locale_key}.claim_subject") }
+      let(:email_subject) { "#{claim_subject} email verification" }
 
       it "sets the email address" do
         expect(journey_session.reload.answers.email_address).to(
@@ -76,16 +77,6 @@ RSpec.describe EmailAddressForm do
       end
 
       it "sends an email" do
-        policy = journey_session.answers.policy
-
-        support_email_address = I18n.t(
-          "#{policy.locale_key}.support_email_address"
-        )
-
-        claim_subject = I18n.t("#{policy.locale_key}.claim_subject")
-
-        email_subject = "#{claim_subject} email verification"
-
         expect(email_address).to have_received_email(
           "89e8c33a-1863-4fdd-a73c-1ca01efc0c76",
           email_subject: email_subject,
@@ -103,6 +94,57 @@ RSpec.describe EmailAddressForm do
 
       it "resets email_verified" do
         expect(journey_session.answers.email_verified).to be_nil
+      end
+
+      context "when the email address is invalid" do
+        let(:email_address) { "test" }
+
+        it "returns false" do
+          expect(subject).to be false
+        end
+
+        it "does not send an email" do
+          expect(email_address).not_to have_received_email
+        end
+      end
+
+      context "when the email address has not changed" do
+        let(:journey_session) do
+          create(
+            :"#{journey::I18N_NAMESPACE}_session",
+            answers: attributes_for(
+              :"#{journey::I18N_NAMESPACE}_answers",
+              :with_personal_details,
+              email_address: email_address,
+              email_verified: true,
+              first_name: "Jo"
+            )
+          )
+        end
+
+        it "returns true" do
+          expect(subject).to be true
+        end
+
+        it "does not send an email" do
+          expect(email_address).not_to have_received_email
+        end
+
+        context "when the resend attribute is true" do
+          let(:params) do
+            ActionController::Parameters.new(claim: {email_address: email_address, resend: true})
+          end
+
+          it "sends an email" do
+            expect(email_address).to have_received_email(
+              "89e8c33a-1863-4fdd-a73c-1ca01efc0c76",
+              email_subject: email_subject,
+              first_name: "Jo",
+              one_time_password: "111111",
+              support_email_address: support_email_address
+            )
+          end
+        end
       end
     end
   end

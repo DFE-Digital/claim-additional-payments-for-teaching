@@ -1,0 +1,19 @@
+<% content_for(
+  :page_title,
+  page_title(
+    t("one_time_password.title"),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<%= render(
+  partial: "one_time_password",
+  locals: {
+    form: @form,
+    current_journey_routing_name: current_journey_routing_name,
+    email_or_mobile: "mobile",
+    email_or_text_message: "a text message",
+    show_caption: false
+  }
+) %>

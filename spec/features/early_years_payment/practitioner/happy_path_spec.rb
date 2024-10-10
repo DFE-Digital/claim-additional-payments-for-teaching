@@ -62,5 +62,8 @@ RSpec.feature "Early years payment practitioner" do
 
     expect(page).to have_content("Would you like to provide your mobile number?")
     choose "No"
+    click_on "Continue"
+
+    expect(page).to have_content("Enter your personal bank account details")
   end
 end

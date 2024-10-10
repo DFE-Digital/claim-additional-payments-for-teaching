@@ -11,10 +11,13 @@ module Journeys
           email-address
           email-verification
           provide-mobile-number
-          check-your-answers
+          mobile-number
+          mobile-verification
+          personal-bank-account
         ].freeze
 
         RESULTS_SLUGS = %w[
+          check-your-answers
           ineligible
         ].freeze
 
@@ -33,7 +36,12 @@ module Journeys
         end
 
         def slugs
-          SLUGS
+          SLUGS.dup.tap do |sequence|
+            if answers.provide_mobile_number == false
+              sequence.delete("mobile-number")
+              sequence.delete("mobile-verification")
+            end
+          end
         end
       end
     end

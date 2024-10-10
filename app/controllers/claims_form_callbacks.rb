@@ -69,6 +69,14 @@ module ClaimsFormCallbacks
     render_template_for_current_slug
   end
 
+  def email_address_before_show
+    @resend = params[:resend]
+  end
+
+  def mobile_number_before_show
+    @resend = params[:resend]
+  end
+
   private
 
   def set_backlink_override_to_current_slug

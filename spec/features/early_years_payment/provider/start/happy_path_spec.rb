@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.feature "Early years payment provider" do
-  let(:journey_session) { Journeys::EarlyYearsPayment::Provider::Start::Session.last }
   let(:mail) { ActionMailer::Base.deliveries.last }
   let(:magic_link) { mail[:personalisation].unparsed_value[:magic_link] }
 
