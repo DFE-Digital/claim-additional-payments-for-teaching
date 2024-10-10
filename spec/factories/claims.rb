@@ -309,6 +309,14 @@ FactoryBot.define do
       end
     end
 
+    trait :awaiting_provider_verification do
+      eligibility_trait { :not_verified }
+
+      after(:create) do |claim, _|
+        create(:note, claim:, label: "provider_verification")
+      end
+    end
+
     trait :with_dqt_teacher_status do
       dqt_teacher_status do
         {
