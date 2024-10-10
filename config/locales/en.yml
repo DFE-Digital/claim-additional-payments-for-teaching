@@ -1098,7 +1098,7 @@ en:
           eylevel3: Early years educator (level 3) apprenticeship
           eytlevel: T Level in education and early years (early years educator)
           coursetoeyq:
-            "%{link} which enables providers to count the recipient in staff:child ratios as listed on 14 October"
+            "%{link} which enables providers to count the recipient in staff:child ratios as of 14 October 2024"
           none: I do not teach any of these courses
       engineering_manufacturing_courses:
         <<: *courses

@@ -45,7 +45,7 @@ module Journeys
         early_years_courses: {
           coursetoeyq: [
             "Early years qualification approved for funding at level 3 and below",
-            "https://www.gov.uk/guidance/targeted-retention-incentive-payments-for-fe-teachers#eligibility"
+            "https://www.gov.uk/guidance/targeted-retention-incentive-payments-for-fe-teachers#eligible-fe-courses"
           ]
         },
         engineering_manufacturing_courses: {
@@ -73,7 +73,7 @@ module Journeys
           ],
           gcse_maths: [
             "other maths qualifications",
-            "https://submit-learner-data.service.gov.uk/find-a-learning-aim/LearningAimSearchResult?TeachingYear=2425&HasFilters=False&EFAFundingConditions=EFACONFUNDMATHS"
+            "https://submit-learner-data.service.gov.uk/find-a-learning-aim/"
           ]
         }
       }.freeze
