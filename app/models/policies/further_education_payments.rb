@@ -70,9 +70,8 @@ module Policies
     # NOOP as PERSONAL_DATA_ATTRIBUTES_TO_RETAIN_FOR_EXTENDED_PERIOD is empty
     EXTENDED_PERIOD_END_DATE = ->(start_of_academic_year) {}
 
-    # TODO: This is needed once the reply-to email address has been added to Gov Notify
     def notify_reply_to_id
-      nil
+      "89939786-7078-4267-b197-ee505dfad8ae"
     end
 
     def verification_due_date_for_claim(claim)
