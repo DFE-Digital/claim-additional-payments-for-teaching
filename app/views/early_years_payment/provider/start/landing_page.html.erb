@@ -132,6 +132,7 @@
       <%= govuk_link_to("early years financial incentive payment", "#") %>.
     </p>
 
+    <%# TODO: There isn't any journey closed content, for now hide the button %>
     <% if @journey_open %>
       <%= govuk_start_button(text: "Start now", href: claim_path(current_journey_routing_name, "claim")) %>
     <% end %>
