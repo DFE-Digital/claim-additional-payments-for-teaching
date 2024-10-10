@@ -28,6 +28,7 @@
           <p><%= I18n.t("questions.email_address_hint1") %></p>
           <p><%= I18n.t("questions.email_address_hint2") %></p>
         <% end %>
+      <%= f.hidden_field :resend, value: params[:resend] %>
 
       <%= render "help_with_access_codes", communication_type: "Email" %>
 

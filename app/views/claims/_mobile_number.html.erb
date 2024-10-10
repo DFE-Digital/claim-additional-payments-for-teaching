@@ -22,6 +22,7 @@
           size: heading_size,
         },
         hint: { text: "To verify your mobile number we will send you a text message with a 6-digit passcode. You can enter the passcode on the next screen." } %>
+      <%= f.hidden_field :resend, value: params[:resend] %>
 
       <%= render "help_with_access_codes", communication_type: "Mobile" %>
 

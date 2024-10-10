@@ -17,6 +17,7 @@
           <p><%= @form.t("hint1") %></p>
           <p><%= @form.t("hint2") %></p>
         <% end %>
+      <%= f.hidden_field :resend, value: params[:resend] %>
 
       <%= f.govuk_submit %>
     <% end %>

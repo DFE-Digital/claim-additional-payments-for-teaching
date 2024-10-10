@@ -1,5 +1,6 @@
 class EmailAddressForm < Form
   attribute :email_address
+  attribute :resend, :boolean
 
   validates :email_address,
     presence: {
@@ -18,7 +19,7 @@ class EmailAddressForm < Form
 
   def save
     return false unless valid?
-    return true unless email_address_changed?
+    return true unless email_address_changed? || resend
 
     journey_session.answers.assign_attributes(
       email_address: email_address,
