@@ -1077,9 +1077,9 @@ en:
         question_check_your_answers: Computing courses
         options:
           level3_and_below_ict_for_practitioners:
-            Qualifications approved for funding at level 3 and below in the %{link} sector subject area
+            Qualifications approved for funding at level 3 and below in the %{link} sector subject area
           level3_and_below_ict_for_users:
-            Qualifications approved for funding at level 3 and below in the %{link} sector subject area
+            Qualifications approved for funding at level 3 and below in the %{link} sector subject area
           digitalskills_quals: Digital functional skills qualifications and essential digital skills qualifications
           tlevel_digitalsupport: T Level in digital support services
           tlevel_digitalbusiness: T Level in digital business services
@@ -1098,7 +1098,7 @@ en:
           eylevel3: Early years educator (level 3) apprenticeship
           eytlevel: T Level in education and early years (early years educator)
           coursetoeyq:
-            A course that leads to an %{link} which enables providers to count the recipient in staff:child ratios
+            "%{link} which enables providers to count the recipient in staff:child ratios as of 14 October 2024"
           none: I do not teach any of these courses
       engineering_manufacturing_courses:
         <<: *courses
