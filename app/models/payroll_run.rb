@@ -40,7 +40,7 @@ class PayrollRun < ApplicationRecord
   end
 
   def total_batches
-    (payments.count / MAX_BATCH_SIZE.to_f).ceil
+    (payments_count / MAX_BATCH_SIZE.to_f).ceil
   end
 
   def total_confirmed_payments
@@ -48,7 +48,9 @@ class PayrollRun < ApplicationRecord
   end
 
   def all_payments_confirmed?
-    payment_confirmations.any? && total_confirmed_payments == payments.count
+    return @all_payments_confirmed if defined?(@all_payments_confirmed)
+
+    @all_payments_confirmed = payment_confirmations.any? && total_confirmed_payments == payments_count
   end
 
   def self.create_with_claims!(claims, topups, attrs = {})
@@ -78,27 +80,52 @@ class PayrollRun < ApplicationRecord
 
   private
 
-  def line_items(policy, filter: :all)
-    @items = []
+  def payments_count
+    @payments_count ||= payments.count
+  end
 
-    payments.includes(claims: [:eligibility]).includes(:topups).map do |payment|
-      payment.claims.each do |claim|
-        if policy == :all || claim.eligibility_type == policy::Eligibility.to_s
-          topup_claim_ids = payment.topups.pluck(:claim_id)
-          line_item = topup_claim_ids.include?(claim.id) ? payment.topups.find { |t| t.claim_id == claim.id } : claim
-          case filter
-          when :all
-            @items << line_item
-          when :claims
-            @items << line_item if line_item.is_a?(Claim)
-          when :topups
-            @items << line_item if line_item.is_a?(Topup)
-          end
-        end
-      end
+  def line_items(policy, filter: :all)
+    eligibilities_cte = "WITH eligibilities AS("
+    eligibilities_cte += Policies::POLICIES.map do |policy|
+      <<~SQL
+        SELECT
+        id,
+        #{policy.award_amount_column} AS award_amount,
+        '#{policy::Eligibility}' AS eligibility_type
+        FROM #{policy::Eligibility.table_name}
+      SQL
+    end.join(" UNION ALL ")
+    eligibilities_cte += ")"
+
+    sql = <<~SQL
+      #{eligibilities_cte}
+      SELECT
+        /* A topup is always paid in different payment/payroll_run than the main claim was */
+        COALESCE(topups.award_amount, eligibilities.award_amount) AS award_amount
+      FROM payments
+      JOIN claim_payments ON claim_payments.payment_id = payments.id
+      JOIN claims ON claims.id = claim_payments.claim_id
+      JOIN eligibilities
+        ON claims.eligibility_id = eligibilities.id
+        AND claims.eligibility_type = eligibilities.eligibility_type
+      LEFT JOIN topups ON topups.claim_id = claims.id
+      WHERE payments.payroll_run_id = '#{id}'
+    SQL
+
+    unless policy == :all
+      sql += "\nAND claims.eligibility_type = 'Policies::#{policy}::Eligibility'"
     end
 
-    @items
+    case filter
+    when :all
+      sql
+    when :claims
+      sql += "\nAND topups.id IS NULL"
+    when :topups
+      sql += "\nAND topups.id IS NOT NULL"
+    end
+
+    ActiveRecord::Base.connection.execute(sql).map(&OpenStruct.method(:new))
   end
 
   def ensure_no_payroll_run_this_month

@@ -46,7 +46,7 @@ module Admin
 
     # NOTE: Optimisation - preload payments, claims and eligibility
     def show
-      @payroll_run = PayrollRun.where(id: params[:id]).includes({claims: [:eligibility]}, {payments: [{claims: [:eligibility]}]}).first
+      @payroll_run = PayrollRun.find(params[:id])
       @pagy, @payments = pagy(@payroll_run.payments.ordered.includes(claims: [:eligibility]).includes(:topups))
     end
 
