@@ -67,8 +67,12 @@ class Admin::ClaimsFilterForm
     @claims = @claims.unassigned if unassigned?
 
     @claims = @claims.includes(:tasks, eligibility: [:claim_school, :current_school])
-    @claims = @claims.order(:submitted_at)
 
+    @claims = @claims.select("DISTINCT ON (claims.id, claims.submitted_at) claims.id")
+
+    @claims = Claim.where(id: @claims)
+
+    @claims = @claims.order(:submitted_at)
     @claims
   end
 
