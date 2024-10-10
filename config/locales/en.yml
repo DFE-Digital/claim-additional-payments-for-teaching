@@ -975,9 +975,6 @@ en:
           min_length: Enter a college name or postcode that is at least 3 characters long
       select_provision:
         heading: Select where you are employed
-        hint:
-          Select the further education provider you are employed by. If you work for a college or sixth-form group, you
-          should select the group name.
         errors:
           blank: Select the further education provider you are employed by
       contract_type:
