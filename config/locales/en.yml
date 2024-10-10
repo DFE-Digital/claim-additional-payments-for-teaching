@@ -975,8 +975,6 @@ en:
           min_length: Enter a college name or postcode that is at least 3 characters long
       select_provision:
         heading: Select where you are employed
-        hint:
-          Select the further education (FE) provider you are employed by.
         errors:
           blank: Select the further education provider you are employed by
       contract_type:
