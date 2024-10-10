@@ -936,6 +936,8 @@ en:
             claimant_answers:
               true: "Yes"
               false: "No"
+        employment:
+          title: Does the claimant’s place of work match the above information on their claim?
     forms:
       ineligible:
         courses:

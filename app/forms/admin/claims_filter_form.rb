@@ -48,6 +48,8 @@ class Admin::ClaimsFilterForm
         Claim.approved.awaiting_qa
       when "approved_awaiting_payroll"
         approved_awaiting_payroll
+      when "automatically_approved"
+        Claim.current_academic_year.auto_approved
       when "automatically_approved_awaiting_payroll"
         Claim.current_academic_year.payrollable.auto_approved
       when "rejected"
@@ -57,7 +59,7 @@ class Admin::ClaimsFilterForm
       when "failed_bank_validation"
         Claim.includes(:decisions).failed_bank_validation.awaiting_decision
       when "awaiting_provider_verification"
-        Claim.by_policy(Policies::FurtherEducationPayments).awaiting_further_education_provider_verification
+        Claim.by_policy(Policies::FurtherEducationPayments).awaiting_further_education_provider_verification.awaiting_decision
       else
         Claim.includes(:decisions).not_held.awaiting_decision.not_awaiting_further_education_provider_verification
       end
@@ -66,9 +68,11 @@ class Admin::ClaimsFilterForm
     @claims = @claims.by_claims_team_member(selected_team_member, status) if selected_team_member
     @claims = @claims.unassigned if unassigned?
 
-    @claims = @claims.includes(:tasks, eligibility: [:claim_school, :current_school])
-    @claims = @claims.order(:submitted_at)
+    @claims = Claim.where(id: @claims.select("DISTINCT ON (claims.id) claims.id"))
 
+    @claims = @claims.includes(:tasks, eligibility: [:claim_school, :current_school])
+
+    @claims = @claims.order(:submitted_at)
     @claims
   end
 
@@ -92,6 +96,7 @@ class Admin::ClaimsFilterForm
       ["Awaiting decision - failed bank details", "failed_bank_validation"],
       ["Approved awaiting QA", "approved_awaiting_qa"],
       ["Approved awaiting payroll", "approved_awaiting_payroll"],
+      ["Automatically approved", "automatically_approved"],
       ["Automatically approved awaiting payroll", "automatically_approved_awaiting_payroll"],
       ["Approved", "approved"],
       ["Rejected", "rejected"]

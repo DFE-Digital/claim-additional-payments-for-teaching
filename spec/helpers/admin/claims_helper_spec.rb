@@ -540,6 +540,23 @@ describe Admin::ClaimsHelper do
         end
       end
     end
+
+    context "rejected claim whilst awaiting provider verification" do
+      let!(:claim) do
+        create(
+          :claim,
+          :rejected,
+          :awaiting_provider_verification,
+          policy: Policies::FurtherEducationPayments
+        )
+      end
+
+      it "returns rejected" do
+        freeze_time do
+          expect(status(claim)).to eql "Rejected"
+        end
+      end
+    end
   end
 
   describe "#index_status_filter" do

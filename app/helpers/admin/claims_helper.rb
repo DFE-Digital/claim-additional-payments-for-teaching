@@ -172,9 +172,7 @@ module Admin
     end
 
     def status(claim)
-      if claim.awaiting_provider_verification?
-        "Awaiting provider verification"
-      elsif claim.all_payrolled?
+      if claim.all_payrolled?
         "Payrolled"
       elsif claim.latest_decision&.approved? && claim.awaiting_qa? && !claim.held?
         "Approved awaiting QA"
@@ -182,6 +180,8 @@ module Admin
         "Approved awaiting payroll"
       elsif claim.latest_decision&.rejected?
         "Rejected"
+      elsif claim.awaiting_provider_verification?
+        "Awaiting provider verification"
       elsif claim.held?
         "Awaiting decision - on hold"
       else
