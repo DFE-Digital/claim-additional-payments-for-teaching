@@ -547,7 +547,7 @@ describe Admin::ClaimsHelper do
           :claim,
           :rejected,
           :awaiting_provider_verification,
-          policy: Policies::FurtherEducationPayments,
+          policy: Policies::FurtherEducationPayments
         )
       end
 

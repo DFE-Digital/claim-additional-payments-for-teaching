@@ -8,12 +8,12 @@ RSpec.describe Admin::ClaimsFilterForm, type: :model do
           :claim,
           :rejected,
           :awaiting_provider_verification,
-          policy: Policies::FurtherEducationPayments,
+          policy: Policies::FurtherEducationPayments
         )
       end
 
       let(:session) { {} }
-      let(:filters) { { status: "awaiting_provider_verification" } }
+      let(:filters) { {status: "awaiting_provider_verification"} }
 
       subject { described_class.new(filters:, session:) }
 
