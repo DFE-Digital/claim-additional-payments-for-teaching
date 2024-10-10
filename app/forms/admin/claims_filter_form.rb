@@ -68,7 +68,7 @@ class Admin::ClaimsFilterForm
 
     @claims = @claims.includes(:tasks, eligibility: [:claim_school, :current_school])
 
-    @claims = @claims.select("DISTINCT ON (claims.id, claims.submitted_at) claims.id")
+    @claims = @claims.select("DISTINCT ON (claims.id) claims.id")
 
     @claims = Claim.where(id: @claims)
 

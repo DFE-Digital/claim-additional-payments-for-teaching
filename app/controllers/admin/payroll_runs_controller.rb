@@ -9,7 +9,7 @@ module Admin
     end
 
     def new
-      @claims = Claim.payrollable
+      @claims = Claim.payrollable.order(submitted_at: :asc)
 
       # Due to limitations with the current payroll software we need a temporary
       # cap on the number of claims that can enter payroll, especially expecting
