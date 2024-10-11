@@ -45,7 +45,7 @@ module Journeys
         early_years_courses: {
           coursetoeyq: [
             "Early years qualification approved for funding at level 3 and below",
-            "https://www.gov.uk/guidance/targeted-retention-incentive-payments-for-fe-teachers#eligible-fe-courses"
+            "https://www.gov.uk/guidance/targeted-retention-incentive-payments-for-fe-teachers#early-years"
           ]
         },
         engineering_manufacturing_courses: {
