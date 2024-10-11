@@ -102,24 +102,30 @@ class Admin::ClaimsFilterForm
     end
   end
 
-  def status_select_options
-    [
-      ["Awaiting decision - not on hold", nil],
-      ["Awaiting provider verification", "awaiting_provider_verification"],
-      ["Awaiting decision - on hold", "held"],
-      ["Awaiting decision - failed bank details", "failed_bank_validation"],
-      ["Approved awaiting QA", "approved_awaiting_qa"],
-      ["Quality assured", "quality_assured"],
-      ["Quality assured - approved", "quality_assured_approved"],
-      ["Quality assured - rejected", "quality_assured_rejected"],
-      ["Approved awaiting payroll", "approved_awaiting_payroll"],
-      ["Automatically approved", "automatically_approved"],
-      ["Automatically approved awaiting payroll", "automatically_approved_awaiting_payroll"],
-      ["Approved", "approved"],
-      ["Rejected", "rejected"]
-    ].map do |name, id|
-      OpenStruct.new(id:, name:)
-    end
+  def status_grouped_select_options
+    {
+      "Awaiting" => {
+        "Awaiting decision - not on hold" => nil,
+        "Awaiting provider verification" => "awaiting_provider_verification",
+        "Awaiting decision - on hold" => "held",
+        "Awaiting decision - failed bank details" => "failed_bank_validation"
+      },
+      "QA" => {
+        "Approved awaiting QA" => "approved_awaiting_qa",
+        "Automatically approved" => "automatically_approved",
+        "Quality assured" => "quality_assured",
+        "Quality assured - approved" => "quality_assured_approved",
+        "Quality assured - rejected" => "quality_assured_rejected"
+      },
+      "Payroll" => {
+        "Approved awaiting payroll" => "approved_awaiting_payroll",
+        "Automatically approved awaiting payroll" => "automatically_approved_awaiting_payroll"
+      },
+      "Decisioned" => {
+        "Approved" => "approved",
+        "Rejected" => "rejected"
+      }
+    }
   end
 
   def team_member_select_options
