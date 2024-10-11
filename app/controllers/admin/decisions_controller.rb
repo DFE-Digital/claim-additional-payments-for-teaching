@@ -1,9 +1,14 @@
 class Admin::DecisionsController < Admin::BaseAdminController
   before_action :ensure_service_operator
   before_action :load_claim
-  before_action :reject_decided_claims, unless: -> { qa_decision_task? }
+  before_action :reject_decided_claims, only: [:new, :create], unless: -> { qa_decision_task? }
   before_action :reject_missing_payroll_gender, only: [:create]
   before_action :reject_if_claims_preventing_payment, only: [:create]
+
+  def index
+    @decisions = @claim.decisions.order(created_at: :asc)
+    @task_pagination = Admin::TaskPagination.new(claim: @claim, current_task_name:)
+  end
 
   def new
     @decision = Decision.new
@@ -96,6 +101,10 @@ class Admin::DecisionsController < Admin::BaseAdminController
   end
 
   def current_task_name
-    "decision"
+    if params[:qa] == "true"
+      "qa_decision"
+    else
+      "decision"
+    end
   end
 end

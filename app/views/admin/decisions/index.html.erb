@@ -1,0 +1,18 @@
+<% content_for(:page_title) { page_title("Claim #{@claim.reference} decision") } %>
+
+<% content_for :back_link do %>
+  <%= govuk_back_link href: admin_claim_tasks_path(@claim) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <%= render "admin/tasks/#{claim_summary_view}", claim: @claim, heading: "Claim decision" %>
+
+  <div class="govuk-grid-column-two-thirds">
+    <% @decisions.each do |decision| %>
+      <% heading = (@decisions.first == decision ? "Claim decision details" : nil) %>
+      <%= render "admin/claims/answer_section", {heading:, answers: admin_decision_details(decision)} %>
+    <% end %>
+
+    <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>
+  </div>
+</div>

@@ -5,6 +5,15 @@
 class ClaimCheckingTasks
   attr_reader :claim
 
+  def self.formatted_task_name(task_name)
+    case task_name
+    when "qa_decision"
+      "QA decision"
+    else
+      task_name.humanize
+    end
+  end
+
   def initialize(claim)
     @claim = claim
   end
@@ -22,7 +31,7 @@ class ClaimCheckingTasks
         .new(claim)
         .applicable_task_names
     else
-      @applicable_task_names ||= Task::NAMES.dup.tap do |task_names|
+      Task::NAMES.dup.tap do |task_names|
         task_names.delete("previous_payment")
         task_names.delete("previous_residency")
         task_names.delete("induction_confirmation") unless claim.policy == Policies::EarlyCareerPayments
@@ -40,6 +49,14 @@ class ClaimCheckingTasks
         task_names.delete("provider_verification")
       end
     end
+  end
+
+  def pageable_tasks
+    array = applicable_task_names
+    array << "decision"
+    array << "qa_decision" if claim.qa_required?
+
+    array
   end
 
   # Returns an Array of tasks names that have not been completed on the claim.

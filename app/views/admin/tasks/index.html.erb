@@ -56,7 +56,11 @@
           <ul class="app-task-list__items">
             <li class="app-task-list__item">
               <span class="app-task-list__task-name">
-                <%= link_to "Approve or reject this claim", new_admin_claim_decision_path(@claim), class: "govuk-link" %>
+                <% if @claim.decisions.exists? %>
+                  <%= govuk_link_to "Approve or reject this claim", admin_claim_decisions_path(@claim) %>
+                <% else %>
+                  <%= govuk_link_to "Approve or reject this claim", new_admin_claim_decision_path(@claim) %>
+                <% end %>
               </span>
               <% if @claim.held? %>
                 <strong class="govuk-tag app-task-list__task-completed govuk-tag--warning">On Hold</strong>
@@ -77,7 +81,11 @@
             <ul class="app-task-list__items">
               <li class="app-task-list__item">
                 <span class="app-task-list__task-name">
-                  <%= link_to "Approve or reject quality assurance of this claim", new_admin_claim_decision_path(@claim, qa: true), class: "govuk-link" %>
+                  <% if @claim.qa_completed? %>
+                    <%= govuk_link_to "Approve or reject quality assurance of this claim", admin_claim_decisions_path(@claim, qa: true) %>
+                  <% else %>
+                    <%= govuk_link_to "Approve or reject quality assurance of this claim", new_admin_claim_decision_path(@claim, qa: true) %>
+                  <% end %>
                 </span>
                 <% unless @claim.awaiting_qa? %>
                   <% if @claim.latest_decision&.approved? %>
