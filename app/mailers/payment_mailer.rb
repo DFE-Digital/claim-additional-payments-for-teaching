@@ -31,7 +31,7 @@ class PaymentMailer < ApplicationMailer
     )
   end
 
-  # NOTE: only happens for Additional Payments + TSLR
+  # NOTE: only happens for Additional Payments (ECP/LUPP) + TSLR
   def confirmation_for_multiple_claims
     @support_email_address = translate("additional_payments.support_email_address")
 
