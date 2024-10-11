@@ -9,6 +9,8 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::FindReferenceForm do
   let(:reference_number) { nil }
   let(:email) { nil }
 
+  let(:eligible_ey_provider) { create(:eligible_ey_provider) }
+
   let(:params) do
     ActionController::Parameters.new(claim: {reference_number:, email:})
   end
@@ -48,6 +50,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::FindReferenceForm do
       create(
         :claim,
         policy: Policies::EarlyYearsPayments,
+        eligibility: build(:early_years_payments_eligibility, nursery_urn: eligible_ey_provider.urn),
         reference: "foo"
       )
     end
@@ -62,6 +65,30 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::FindReferenceForm do
       expect {
         subject.save
       }.to change { journey_session.reload.answers.reference_number_found }.from(nil).to(true)
+    end
+
+    it "updates nursery_name in session" do
+      expect {
+        subject.save
+      }.to change { journey_session.reload.answers.nursery_name }.from(nil).to(eligible_ey_provider.nursery_name)
+    end
+
+    context "when the claim is already submitted" do
+      let(:claim) do
+        create(
+          :claim,
+          :submitted,
+          policy: Policies::EarlyYearsPayments,
+          eligibility: build(:early_years_payments_eligibility, nursery_urn: eligible_ey_provider.urn),
+          reference: "foo"
+        )
+      end
+
+      it "updates claim_already_submitted in session" do
+        expect {
+          subject.save
+        }.to change { journey_session.reload.answers.claim_already_submitted }.from(nil).to(true)
+      end
     end
 
     context "when reference is a random string" do
