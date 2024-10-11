@@ -13,6 +13,7 @@ class ProvideMobileNumberForm < Form
 
     if provide_mobile_number_changed?
       journey_session.answers.assign_attributes(mobile_verified: nil)
+      journey_session.answers.assign_attributes(mobile_number: nil) unless provide_mobile_number
     end
 
     journey_session.answers.assign_attributes(

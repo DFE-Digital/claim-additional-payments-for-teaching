@@ -47,7 +47,7 @@ RSpec.describe ProvideMobileNumberForm, type: :model do
 
     describe "#save" do
       context "when submitted with valid params" do
-        let(:params) { ActionController::Parameters.new({slug: slug, claim: {provide_mobile_number: "Yes"}}) }
+        let(:params) { ActionController::Parameters.new({slug: slug, claim: {provide_mobile_number: true}}) }
 
         context "when claim is missing provide_mobile_number" do
           let(:provide_mobile_number) { nil }
@@ -79,7 +79,7 @@ RSpec.describe ProvideMobileNumberForm, type: :model do
           let(:params) do
             ActionController::Parameters.new(
               claim: {
-                provide_mobile_number: "Yes"
+                provide_mobile_number: true
               }
             )
           end
@@ -97,7 +97,7 @@ RSpec.describe ProvideMobileNumberForm, type: :model do
           let(:params) do
             ActionController::Parameters.new(
               claim: {
-                provide_mobile_number: "Yes"
+                provide_mobile_number: true
               }
             )
           end
@@ -108,6 +108,25 @@ RSpec.describe ProvideMobileNumberForm, type: :model do
               .from(true).to(nil)
             )
           end
+        end
+      end
+
+      context "answering no after having previously answered yes with a mobile number" do
+        let(:params) { ActionController::Parameters.new({slug: slug, claim: {provide_mobile_number: false}}) }
+        let(:mobile_number) { "07700900001" }
+        let(:journey_session) do
+          create(
+            :"#{journey::I18N_NAMESPACE}_session",
+            answers: {
+              provide_mobile_number: true,
+              mobile_number: mobile_number,
+              mobile_verified: true
+            }
+          )
+        end
+
+        it "resets the previously provided mobile number" do
+          expect { form.save }.to change { journey_session.reload.answers.mobile_number }.from(mobile_number).to(nil)
         end
       end
     end
