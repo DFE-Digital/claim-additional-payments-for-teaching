@@ -114,8 +114,8 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(answers.address_line_4).to eql("Washington")
     expect(answers.postcode).to eql("M1 7HL")
 
-    expect(page).to have_text(I18n.t("questions.email_address"))
-    expect(page).to have_text(I18n.t("questions.email_address_hint1"))
+    expect(page).to have_text(I18n.t("forms.email_address.label"))
+    expect(page).to have_text(I18n.t("forms.email_address.hint1"))
     fill_in I18n.t("questions.email_address"), with: "name@example.tld"
     click_on "Continue"
 
