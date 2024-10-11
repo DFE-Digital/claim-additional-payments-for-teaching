@@ -14,7 +14,7 @@ module Policies
       end
 
       def provider_name
-        [verifier.fetch("first_name"), verifier.fetch("last_name")].join(" ")
+        [verifier.fetch("first_name"), verifier.fetch("last_name")].join(" ").presence || verifier.fetch("email")
       end
 
       def provider_verification_submitted?
