@@ -3,6 +3,14 @@ require "rails_helper"
 RSpec.feature "Provider verifying claims" do
   before do
     create(:journey_configuration, :further_education_payments_provider)
+    # Stub fetching name from DSI, not required for these tests
+    stub_request(
+      :get,
+      %r{https://example.com/organisations/.*}
+    ).to_return(
+      status: 404,
+      body: nil
+    )
   end
 
   scenario "provider visits a claim without service access" do
