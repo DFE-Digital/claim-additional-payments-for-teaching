@@ -30,7 +30,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/claim/search.rb",
-      "line": 45,
+      "line": 35,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "Claim.submitted.where(\"LOWER(#{attribute}) = LOWER(?)\", search_term)",
       "render_path": null,
@@ -118,11 +118,34 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
+      "fingerprint": "cddc34b96e07d19510d574438a1ce61b69d9c1f28c0d4e5eee631d17a9b38ba6",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/claim.rb",
+      "line": 222,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "joins(\"JOIN (\\n  #{Policies::POLICIES.map do\n \"\\n                SELECT\\n                id,\\n                #{policy.award_amount_column} AS award_amount,\\n                '#{policy::Eligibility}' AS eligibility_type\\n                FROM #{policy::Eligibility.table_name}\\n              \"\n end.join(\" UNION ALL \")}\\n) AS eligibilities\\nON claims.eligibility_id = eligibilities.id\\nAND claims.eligibility_type = eligibilities.eligibility_type\\n\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Claim",
+        "method": "with_award_amounts"
+      },
+      "user_input": "Policies::POLICIES.map do\n \"\\n                SELECT\\n                id,\\n                #{policy.award_amount_column} AS award_amount,\\n                '#{policy::Eligibility}' AS eligibility_type\\n                FROM #{policy::Eligibility.table_name}\\n              \"\n end.join(\" UNION ALL \")",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "Non of the columns used in generating the join are user provided"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
       "fingerprint": "f83635b54e1ce0088178d8082ffe632ab8aa81b10fce1026caf87f286cb4d81a",
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/claim/matching_attribute_finder.rb",
-      "line": 54,
+      "line": 34,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "Claim.where(\"LOWER(#{\"CONCAT(#{attributes.join(\",\")})\"}) = LOWER(?)\", values_for_attributes(source_claim, attributes).join)",
       "render_path": null,
@@ -139,6 +162,6 @@
       "note": ""
     }
   ],
-  "updated": "2024-06-20 16:06:05 +0100",
-  "brakeman_version": "6.1.2"
+  "updated": "2024-10-14 12:08:54 +0100",
+  "brakeman_version": "6.2.1"
 }
