@@ -27,6 +27,8 @@ class ClaimSubmissionBaseForm
 
     ClaimMailer.submitted(claim).deliver_later
     ClaimVerifierJob.perform_later(claim)
+
+    true
   end
 
   private

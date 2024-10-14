@@ -2,7 +2,7 @@ module Journeys
   module FurtherEducationPayments
     class ClaimSubmissionForm < ::ClaimSubmissionBaseForm
       def save
-        super
+        return false unless super
 
         if Policies::FurtherEducationPayments.duplicate_claim?(claim)
           claim.eligibility.update!(flagged_as_duplicate: true)
