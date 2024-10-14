@@ -4,7 +4,7 @@ RSpec.describe ImportCensusJob do
   describe "#perform" do
     context "csv data processes successfully" do
       let(:mail) { AdminMailer.census_csv_processing_success(file_upload.uploaded_by.email) }
-      let(:file_upload) { create(:file_upload) }
+      let(:file_upload) { create(:file_upload, :school_workforce_census_upload) }
 
       it "imports census data, sends success email and deletes the file upload" do
         subject.perform(file_upload.id)
@@ -23,7 +23,7 @@ RSpec.describe ImportCensusJob do
 
     context "csv data encounters an error" do
       let(:mail) { AdminMailer.census_csv_processing_error(file_upload.uploaded_by.email) }
-      let(:file_upload) { create(:file_upload) }
+      let(:file_upload) { create(:file_upload, :school_workforce_census_upload) }
 
       before do
         allow(SchoolWorkforceCensus).to receive(:insert_all).and_raise(ActiveRecord::RecordInvalid)

@@ -21,6 +21,7 @@ module CsvImporter
         Rails.logger.info "Processing #{target_data_model.to_s.titleize} batch #{i}"
 
         record_hashes = batch_rows.map do |row|
+          next if empty_row?(row)
           next if valid_skip_row_conditions?(row)
 
           convert_row_to_hash(row)
@@ -31,6 +32,15 @@ module CsvImporter
     end
 
     private
+
+    def empty_row?(row)
+      case row
+      when Array
+        row.all? { |cell| cell.blank? }
+      else
+        row.all? { |_, v| v.blank? }
+      end
+    end
 
     def delete_all_scope
       target_data_model
