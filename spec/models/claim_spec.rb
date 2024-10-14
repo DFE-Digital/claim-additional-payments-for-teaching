@@ -834,7 +834,7 @@ RSpec.describe Claim, type: :model do
   end
 
   describe ".payrollable" do
-    subject { described_class.payrollable }
+    subject { described_class.payrollable.order(:submitted_at) }
 
     let(:payroll_run) { create(:payroll_run, claims_counts: {Policies::StudentLoans => 1}) }
     let!(:submitted_claim) { create(:claim, :submitted) }
