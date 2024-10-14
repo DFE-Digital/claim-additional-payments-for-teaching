@@ -62,5 +62,15 @@ RSpec.feature "Early years payment practitioner" do
 
     expect(page).to have_content("Would you like to provide your mobile number?")
     choose "No"
+    click_on "Continue"
+
+    expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: "personal bank account"))
+
+    fill_in "Name on your account", with: "Jo Bloggs"
+    fill_in "Sort code", with: "123456"
+    fill_in "Account number", with: "87654321"
+
+    # click_on "Continue"
+    # expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
   end
 end

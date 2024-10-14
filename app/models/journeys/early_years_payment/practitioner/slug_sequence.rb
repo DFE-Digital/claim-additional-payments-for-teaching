@@ -11,6 +11,7 @@ module Journeys
           email-address
           email-verification
           provide-mobile-number
+          personal-bank-account
           check-your-answers
         ].freeze
 
