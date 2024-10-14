@@ -72,48 +72,34 @@ class PayrollRun < ApplicationRecord
     @payments_count ||= payments.count
   end
 
+  class LineItem < Struct.new(:id, :award_amount, keyword_init: true); end
+
   def line_items(policy, filter: :all)
-    eligibilities_cte = "WITH eligibilities AS("
-    eligibilities_cte += Policies::POLICIES.map do |policy|
-      <<~SQL
-        SELECT
-        id,
-        #{policy.award_amount_column} AS award_amount,
-        '#{policy::Eligibility}' AS eligibility_type
-        FROM #{policy::Eligibility.table_name}
-      SQL
-    end.join(" UNION ALL ")
-    eligibilities_cte += ")"
-
-    sql = <<~SQL
-      #{eligibilities_cte}
-      SELECT
-        /* A topup is always paid in different payment/payroll_run than the main claim was */
+    scope = Claim
+      .select(
+        "
+        DISTINCT(claims.id),
         COALESCE(topups.award_amount, eligibilities.award_amount) AS award_amount
-      FROM payments
-      JOIN claim_payments ON claim_payments.payment_id = payments.id
-      JOIN claims ON claims.id = claim_payments.claim_id
-      JOIN eligibilities
-        ON claims.eligibility_id = eligibilities.id
-        AND claims.eligibility_type = eligibilities.eligibility_type
-      LEFT JOIN topups ON topups.claim_id = claims.id
-      WHERE payments.payroll_run_id = '#{id}'
-    SQL
+        "
+      )
+      .with_award_amounts
+      .left_joins(payments: :topups)
+      .joins(payments: :payroll_run)
+      .where(payroll_runs: {id: id})
 
-    unless policy == :all
-      sql += "\nAND claims.eligibility_type = 'Policies::#{policy}::Eligibility'"
-    end
+    scope = scope.by_policy(policy) unless policy == :all
 
     case filter
-    when :all
-      sql
     when :claims
-      sql += "\nAND topups.id IS NULL"
+      scope = scope.where(topups: {id: nil})
     when :topups
-      sql += "\nAND topups.id IS NOT NULL"
+      scope = scope.where.not(topups: {id: nil})
     end
 
-    ActiveRecord::Base.connection.execute(sql).map(&OpenStruct.method(:new))
+    # Claim delegates it's award amount to eligibility, so we want to return
+    # a non claim object ensuring the award amount is from the topup if there
+    # is one
+    ActiveRecord::Base.connection.execute(scope.to_sql).map(&LineItem.method(:new))
   end
 
   def ensure_no_payroll_run_this_month

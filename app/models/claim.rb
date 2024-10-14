@@ -221,6 +221,28 @@ class Claim < ApplicationRecord
     where.not(id: Claim.awaiting_further_education_provider_verification)
   end
 
+  scope :with_award_amounts, -> do
+    joins(
+      <<~SQL
+        JOIN (
+          #{
+            Policies::POLICIES.map do |policy|
+              "
+                SELECT
+                id,
+                #{policy.award_amount_column} AS award_amount,
+                '#{policy::Eligibility}' AS eligibility_type
+                FROM #{policy::Eligibility.table_name}
+              "
+            end.join(" UNION ALL ")
+          }
+        ) AS eligibilities
+        ON claims.eligibility_id = eligibilities.id
+        AND claims.eligibility_type = eligibilities.eligibility_type
+      SQL
+    )
+  end
+
   def onelogin_idv_full_name
     "#{onelogin_idv_first_name} #{onelogin_idv_last_name}"
   end
