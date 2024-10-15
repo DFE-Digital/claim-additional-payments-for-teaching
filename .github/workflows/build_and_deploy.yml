@@ -38,7 +38,7 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
     needs: [build]
     environment:
-      name: review-aks
+      name: review
 
     steps:
       - name: Checkout code
@@ -47,7 +47,7 @@ jobs:
       - uses: ./.github/actions/deploy-environment
         id: deploy
         with:
-          environment: review-aks
+          environment: review
           docker-image: ${{ needs.build.outputs.docker-image-tag }}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
           pull-request-number: ${{ github.event.pull_request.number }}
@@ -79,7 +79,7 @@ jobs:
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     needs: [build]
     environment:
-      name: ${{ matrix.environment }}-aks
+      name: ${{ matrix.environment }}
       url: ${{ steps.deploy.outputs.environment_url }}
     outputs:
       environment_url: ${{ steps.deploy.outputs.environment_url }}
@@ -99,7 +99,7 @@ jobs:
       - uses: ./.github/actions/deploy-environment
         id: deploy
         with:
-          environment: ${{ matrix.environment }}-aks
+          environment: ${{ matrix.environment }}
           docker-image: ${{ needs.build.outputs.docker-image-tag }}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
           aks-namespace: srtl-${{ matrix.environment }}
