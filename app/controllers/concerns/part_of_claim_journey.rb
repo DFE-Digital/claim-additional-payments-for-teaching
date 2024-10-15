@@ -32,8 +32,7 @@ module PartOfClaimJourney
   def submitted_claim
     return unless session[:submitted_claim_id]
 
-    claim = Claim.find_by(id: session[:submitted_claim_id])
-    (claim && journey::POLICIES.include?(claim.policy)) ? claim : nil
+    Claim.by_policies_for_journey(journey).find_by(id: session[:submitted_claim_id])
   end
 
   def set_cache_headers
