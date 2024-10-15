@@ -1,1 +1,29 @@
-placeholder
+<% content_for(
+  :page_title,
+  page_title(
+    t("early_years_payment_practitioner.check_your_answers.title"),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%# Errors are from the SubmissionsController %>
+    <% if @form.errors.any? %>
+      <%= render("shared/error_summary", instance: @form) %>
+    <% end %>
+
+    <h1 class="govuk-heading-xl">
+      <%= t("early_years_payment_practitioner.check_your_answers.title") %>
+    </h1>
+
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Personal details", answers: journey.answers_for_claim(@form.journey_session).identity_answers} %>
+
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Bank account information", answers: journey.answers_for_claim(@form.journey_session).payment_answers} %>
+
+    <%= form_with url: claim_submission_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_submit t("early_years_payment_practitioner.check_your_answers.btn_text") %>
+    <% end %>
+  </div>
+</div>

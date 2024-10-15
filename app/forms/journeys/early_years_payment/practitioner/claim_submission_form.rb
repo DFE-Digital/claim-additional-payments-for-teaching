@@ -13,6 +13,12 @@ module Journeys
         def main_policy
           Policies::EarlyYearsPayments
         end
+
+        private
+
+        def generate_policy_options_provided
+          []
+        end
       end
     end
   end
