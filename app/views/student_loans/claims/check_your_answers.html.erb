@@ -24,14 +24,16 @@
 
     <%= render partial: "claims/check_your_answers_section", locals: {heading: "Payment details", answers: journey.answers_for_claim(@form.journey_session).payment_answers} %>
 
-    <%= form_with url: claim_submission_path do |form| %>
-      <h2 class="govuk-heading-m"><%= t("check_your_answers.heading_send_application") %></h2>
+    <%= form_with url: claim_submission_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <h2 class="govuk-heading-m">
+        <%= t("check_your_answers.heading_send_application") %>
+      </h2>
 
-      <p class="govuk-body"><%= t("check_your_answers.statement") %></p>
+      <p class="govuk-body">
+        <%= t("check_your_answers.statement") %>
+      </p>
 
-      <div class="govuk-form-group">
-        <%= form.submit t("check_your_answers.btn_text"), class: "govuk-button" %>
-      </div>
+      <%= f.govuk_submit t("check_your_answers.btn_text") %>
     <% end %>
   </div>
 </div>

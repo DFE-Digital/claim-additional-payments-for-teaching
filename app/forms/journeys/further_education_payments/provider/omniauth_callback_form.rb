@@ -2,6 +2,8 @@ module Journeys
   module FurtherEducationPayments
     module Provider
       class OmniauthCallbackForm
+        include DfeSignIn::Utils
+
         def initialize(journey_session:, auth:)
           @journey_session = journey_session
           @auth = auth
@@ -65,15 +67,44 @@ module Journeys
         end
 
         def dfe_sign_in_first_name
-          auth.dig("info", "first_name")
+          auth.dig("info", "first_name") || dfe_sign_in_api_user&.first_name
         end
 
         def dfe_sign_in_last_name
-          auth.dig("info", "last_name")
+          auth.dig("info", "last_name") || dfe_sign_in_api_user&.last_name
         end
 
         def dfe_sign_in_email
           auth.dig("info", "email")
+        end
+
+        class ApiUser < Struct.new(:first_name, :last_name, keyword_init: true); end
+
+        def dfe_sign_in_api_user
+          return @dfe_sign_in_api_user if @dfe_sign_in_api_user
+
+          ukprn = journey_session.answers.claim.school.ukprn
+
+          uri = URI(DfeSignIn.configuration.base_url)
+          uri.path = "/organisations/#{ukprn}/users"
+          uri.query = {email: dfe_sign_in_email}.to_query
+
+          response = dfe_sign_in_request(uri)
+
+          return unless response.code == "200"
+
+          data = JSON.parse(response.body)
+          users = data.fetch("users")
+          user = users.detect { |user| user["email"] == dfe_sign_in_email }
+
+          return unless user.present?
+
+          @dfe_sign_in_api_user = ApiUser.new(
+            first_name: user.fetch("firstName"),
+            last_name: user.fetch("lastName")
+          )
+        rescue JSON::ParserError, KeyError => e
+          raise e if Rails.env.development?
         end
 
         class StubApiUser

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_09_24_113642) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_15_093740) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_trgm"
@@ -197,6 +197,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_24_113642) do
     t.date "start_date"
     t.boolean "child_facing_confirmation_given"
     t.boolean "returning_within_6_months"
+    t.datetime "practitioner_claim_submitted_at"
   end
 
   create_table "eligible_ey_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -318,3 +318,4 @@ shared:
     - returning_within_6_months
     - created_at
     - updated_at
+    - practitioner_claim_submitted_at

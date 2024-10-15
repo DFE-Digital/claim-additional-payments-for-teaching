@@ -112,5 +112,17 @@ RSpec.describe "Submissions", type: :request do
         expect(response).to redirect_to(Journeys::TeacherStudentLoanReimbursement.start_page_url)
       end
     end
+
+    context "when the claim with submitted_claim_id in the session is a policy that is not for this journey" do
+      before do
+        create(:journey_configuration, :additional_payments)
+        set_session_data(submitted_claim_id: create(:claim, :submitted).id)
+      end
+
+      it "redirects to the start page of the journey in the url path ignoring the submitted_claim_id" do
+        get claim_confirmation_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
+        expect(response).to redirect_to(Journeys::AdditionalPaymentsForTeaching.start_page_url)
+      end
+    end
   end
 end

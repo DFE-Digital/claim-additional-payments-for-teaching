@@ -28,3 +28,12 @@ def when_early_years_payment_provider_authenticated_journey_ready_to_submit
   fill_in "claim-practitioner-email-address-field", with: "practitioner@example.com"
   click_button "Continue"
 end
+
+def when_early_years_payment_provider_authenticated_journey_submitted
+  when_early_years_payment_provider_authenticated_journey_configuration_exists
+  when_early_years_payment_provider_start_journey_completed
+  when_early_years_payment_provider_authenticated_journey_ready_to_submit
+
+  fill_in "claim-provider-contact-name-field", with: "John Doe"
+  click_button "Accept and send"
+end

@@ -108,9 +108,12 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
       ).and_return(double(deliver_later: nil))
 
       first_claim_form = described_class.new(journey_session: journey_session)
-      second_claim_form = described_class.new(journey_session: journey_session)
 
       first_claim_form.save
+
+      journey_session.update! claim: nil
+      second_claim_form = described_class.new(journey_session: journey_session)
+
       second_claim_form.save
 
       expect(ClaimMailer).to(
