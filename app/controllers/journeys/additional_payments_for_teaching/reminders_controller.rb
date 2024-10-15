@@ -66,7 +66,7 @@ module Journeys
         )
       end
 
-      # Remidners can be set for inprogress and submitted claims
+      # Reminders can be set for in progress and submitted claims
       # We can tell if we're setting a reminder for a submitted claim as the
       # journey session will be nil given that we clear it on claim submission.
       def model_for_reminder_attributes
