@@ -61,5 +61,12 @@ RSpec.feature "Early years payment practitioner" do
 
     expect(page).to have_content("Would you like to provide your mobile number?")
     choose "No"
+    click_on "Continue"
+
+    expect(page).to have_content("Check your answers before submitting this claim")
+    expect do
+      click_on "Accept and send"
+    end.to change { Claim.count }.by(1)
+      .and change { Policies::EarlyYearsPayments::Eligibility.count }.by(1)
   end
 end
