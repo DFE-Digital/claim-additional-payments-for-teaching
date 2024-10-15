@@ -73,7 +73,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::FindReferenceForm do
       }.to change { journey_session.reload.answers.nursery_name }.from(nil).to(eligible_ey_provider.nursery_name)
     end
 
-    context "when the claim is already submitted" do
+    context "when the claim has only been submitted by the provider, not the practitioner" do
       let(:claim) do
         create(
           :claim,
@@ -84,7 +84,25 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::FindReferenceForm do
         )
       end
 
-      it "updates claim_already_submitted in session" do
+      it "sets claim_already_submitted to false in session" do
+        expect {
+          subject.save
+        }.to change { journey_session.reload.answers.claim_already_submitted }.from(nil).to(false)
+      end
+    end
+
+    context "when the claim has been submitted by the practitioner already" do
+      let(:claim) do
+        create(
+          :claim,
+          :submitted,
+          policy: Policies::EarlyYearsPayments,
+          eligibility: build(:early_years_payments_eligibility, :practitioner_claim_submitted, nursery_urn: eligible_ey_provider.urn),
+          reference: "foo"
+        )
+      end
+
+      it "sets claim_already_submitted in session" do
         expect {
           subject.save
         }.to change { journey_session.reload.answers.claim_already_submitted }.from(nil).to(true)

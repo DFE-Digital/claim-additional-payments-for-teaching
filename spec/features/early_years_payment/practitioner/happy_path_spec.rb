@@ -1,19 +1,18 @@
 require "rails_helper"
 
 RSpec.feature "Early years payment practitioner" do
-  let(:claim) do
-    create(
-      :claim,
-      policy: Policies::EarlyYearsPayments,
-      reference: "foo",
-      practitioner_email_address: "user@example.com"
-    )
-  end
+  let(:email_address) { "johndoe@example.com" }
+  let(:journey_session) { Journeys::EarlyYearsPayment::Provider::Authenticated::Session.last }
+  let(:mail) { ActionMailer::Base.deliveries.last }
+  let(:magic_link) { mail[:personalisation].unparsed_value[:magic_link] }
+  let!(:nursery) { create(:eligible_ey_provider, primary_key_contact_email_address: email_address) }
+  let(:claim) { Claim.last }
 
   scenario "Happy path" do
+    when_early_years_payment_provider_authenticated_journey_submitted
     when_early_years_payment_practitioner_journey_configuration_exists
 
-    visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=user@example.com"
+    visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=practitioner@example.com"
     expect(page).to have_content "Enter your claim reference"
     fill_in "Claim reference number", with: claim.reference
     click_button "Submit"
