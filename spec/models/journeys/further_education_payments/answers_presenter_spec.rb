@@ -191,7 +191,7 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
           ["Do you have a teaching qualification?",
             "Yes",
             "teaching-qualification"],
-          ["Have any performance measures been started against you?",
+          ["Are you subject to any formal performance measures as a result of continuous poor teaching standards?",
             "No",
             "poor-performance"],
           ["Are you currently subject to disciplinary action?",

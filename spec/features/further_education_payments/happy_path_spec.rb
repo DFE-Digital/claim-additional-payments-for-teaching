@@ -97,7 +97,7 @@ RSpec.feature "Further education payments" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Have any performance measures been started against you?")
+    expect(page).to have_content("Are you subject to any formal performance measures as a result of continuous poor teaching standards")
     within all(".govuk-fieldset")[0] do
       choose("No")
     end

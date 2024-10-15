@@ -500,7 +500,7 @@ en:
         heading: Tell us if you are currently under any performance measures or disciplinary action
         questions:
           performance:
-            question: "Have any performance measures been started against you?"
+            question: "Are you subject to any formal performance measures as a result of continuous poor teaching standards?"
             hint:
               "This will be as a result of your underperformance as a teacher over a period of time. It could put your
               employment at the school at risk and is something we may check with your school as it will affect your
@@ -1159,7 +1159,7 @@ en:
         heading: Tell us if you are currently under any performance measures or disciplinary action
         questions:
           performance:
-            question: Have any performance measures been started against you?
+            question: Are you subject to any formal performance measures as a result of continuous poor teaching standards?
             hint:
               This will be as a result of your underperformance as a teacher over a period of time. It could put your
               employment at the further education (FE) provider at risk and is something we may check with them as it

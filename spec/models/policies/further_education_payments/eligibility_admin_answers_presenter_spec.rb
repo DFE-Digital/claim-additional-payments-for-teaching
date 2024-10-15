@@ -275,7 +275,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
             "No"
           ],
           [
-            "Have any performance measures been started against you?",
+            "Are you subject to any formal performance measures as a result of continuous poor teaching standards?",
             "No"
           ]
         ]
