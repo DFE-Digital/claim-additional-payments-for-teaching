@@ -5,6 +5,7 @@ FactoryBot.define do
 
   factory :claim do
     started_at { Time.zone.now }
+    reference { Reference.new.to_s }
 
     transient do
       policy { Policies::StudentLoans }
