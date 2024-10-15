@@ -264,7 +264,7 @@ RSpec.feature "Provider verifying claims" do
     )
   end
 
-  scenario "provider visits a claim with an inprogress session" do
+  scenario "provider visits a claim with an in progress session" do
     fe_provider = create(:school, :further_education, name: "Springfield A and M")
 
     claim_1 = create(
