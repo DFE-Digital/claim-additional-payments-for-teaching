@@ -4,13 +4,13 @@ class ClaimsController < BasePublicController
   skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create]
   before_action :initialize_session_slug_history
   before_action :check_page_is_in_sequence, only: [:show, :update]
-  before_action :update_session_with_current_slug, only: [:update]
   before_action :set_backlink_path, only: [:show, :update]
   before_action :check_claim_not_in_progress, only: [:new]
   before_action :clear_claim_session, only: [:new], unless: -> { journey.start_with_magic_link? }
   before_action :prepend_view_path_for_journey
   before_action :persist_claim, only: [:new, :create]
   before_action :handle_magic_link, only: [:new], if: -> { journey.start_with_magic_link? }
+  after_action :update_session_with_current_slug, only: [:update]
 
   include AuthorisedSlugs
   include FormSubmittable
@@ -90,7 +90,11 @@ class ClaimsController < BasePublicController
   end
 
   def update_session_with_current_slug
-    session[:slugs] << params[:slug] unless Journeys::PageSequence::DEAD_END_SLUGS.include?(params[:slug])
+    if @form.nil? || @form.valid?
+      session[:slugs] << params[:slug] unless Journeys::PageSequence::DEAD_END_SLUGS.include?(params[:slug])
+    else
+      # Don't count form as visited if it's invalid
+    end
   end
 
   def check_claim_not_in_progress
