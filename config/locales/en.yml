@@ -1431,6 +1431,9 @@ en:
         label: Your email address
         hint1: We’ll use this to update you with progress on your claim.
         hint2: We recommend you use a non-work email address in case your circumstances change while we process your claim.
+    check_your_answers:
+      title: Check your answers before submitting this claim
+      btn_text: Accept and send
   activerecord:
     errors:
       models:
