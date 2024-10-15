@@ -16,6 +16,10 @@ module Policies
       def eligible_ey_provider
         EligibleEyProvider.find_by_urn(nursery_urn)
       end
+
+      def practitioner_claim_submitted?
+        practitioner_claim_submitted_at.present?
+      end
     end
   end
 end
