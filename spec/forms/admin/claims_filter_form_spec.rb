@@ -2,6 +2,11 @@ require "rails_helper"
 
 RSpec.describe Admin::ClaimsFilterForm, type: :model do
   describe "#claims" do
+    let(:session) { {} }
+    let(:filters) { {} }
+
+    subject { described_class.new(filters:, session:) }
+
     context "when rejected whilst awaiting provider verification" do
       let!(:claim) do
         create(
@@ -12,10 +17,7 @@ RSpec.describe Admin::ClaimsFilterForm, type: :model do
         )
       end
 
-      let(:session) { {} }
       let(:filters) { {status: "awaiting_provider_verification"} }
-
-      subject { described_class.new(filters:, session:) }
 
       it "filtering by status awaiting provider verification excludes them" do
         expect(subject.claims).not_to include(claim)
@@ -94,6 +96,39 @@ RSpec.describe Admin::ClaimsFilterForm, type: :model do
 
       it "works" do
         expect(subject.claims.count).to eql(1)
+      end
+    end
+
+    context "filtering for quality_assured" do
+      let!(:qa_approved_claim) { create(:claim, :approved, :qa_completed, :current_academic_year) }
+      let!(:qa_rejected_claim) { create(:claim, :rejected, :qa_completed, :current_academic_year) }
+
+      let(:filters) { {status: "quality_assured"} }
+
+      it "returns all quality assured claims" do
+        expect(subject.claims.size).to eql(2)
+      end
+    end
+
+    context "filtering for quality_assured_approved" do
+      let!(:qa_approved_claim) { create(:claim, :approved, :qa_completed, :current_academic_year) }
+      let!(:qa_rejected_claim) { create(:claim, :rejected, :qa_completed, :current_academic_year) }
+
+      let(:filters) { {status: "quality_assured_approved"} }
+
+      it "returns all approved quality assured claims" do
+        expect(subject.claims).to eq([qa_approved_claim])
+      end
+    end
+
+    context "filtering for quality_assured_rejected" do
+      let!(:qa_approved_claim) { create(:claim, :approved, :qa_completed, :current_academic_year) }
+      let!(:qa_rejected_claim) { create(:claim, :rejected, :qa_completed, :current_academic_year) }
+
+      let(:filters) { {status: "quality_assured_rejected"} }
+
+      it "returns all rejected quality assured claims" do
+        expect(subject.claims).to eq([qa_rejected_claim])
       end
     end
   end
