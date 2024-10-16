@@ -62,23 +62,69 @@ RSpec.describe MobileNumberForm do
     end
 
     describe "#save" do
-      around do |example|
-        travel_to DateTime.new(2024, 1, 1, 12, 0, 0) do
-          example.run
-        end
-      end
+      subject { form.save }
+
+      let(:mobile_number) { "07123456789" }
+      let(:notify_double) { nil }
 
       before do
+        travel_to DateTime.new(2024, 1, 1, 12, 0, 0)
         allow(OneTimePassword::Generator).to receive(:new).and_return(
           instance_double(OneTimePassword::Generator, code: "111111")
         )
+        allow(NotifySmsMessage).to receive(:new) { notify_double }
+      end
 
-        allow(NotifySmsMessage).to receive(:new).and_return(notify_double)
+      context "when basic phone number validation fails" do
+        # this is validation in the form, not an error raised by notify
+        let(:mobile_number) { "0" }
+
+        it "returns false" do
+          expect(subject).to be false
+        end
+
+        it "does not send a text message" do
+          subject
+          expect(NotifySmsMessage).not_to have_received(:new)
+        end
+      end
+
+      context "when the mobile number has not changed" do
+        let(:journey_session) do
+          create(
+            :"#{journey::I18N_NAMESPACE}_session",
+            answers: attributes_for(
+              :"#{journey::I18N_NAMESPACE}_answers",
+              :with_details_from_dfe_identity,
+              mobile_number: mobile_number,
+              mobile_verified: true
+            )
+          )
+        end
+
+        before { subject }
+
+        it "returns true" do
+          expect(subject).to be true
+        end
+
+        it "does not send a text message" do
+          expect(NotifySmsMessage).not_to have_received(:new)
+        end
+
+        context "when the resend attribute is true" do
+          let(:notify_double) { instance_double(NotifySmsMessage, deliver!: true) }
+          let(:params) do
+            ActionController::Parameters.new(claim: {mobile_number: mobile_number, resend: true})
+          end
+
+          it "sends a text message" do
+            expect(notify_double).to have_received(:deliver!)
+          end
+        end
       end
 
       context "when notify response is successful" do
-        let(:mobile_number) { "07123456789" }
-
         let(:notify_double) do
           instance_double(
             NotifySmsMessage,
@@ -94,7 +140,11 @@ RSpec.describe MobileNumberForm do
           )
         end
 
-        before { form.save }
+        before { subject }
+
+        it "returns true" do
+          expect(subject).to be true
+        end
 
         it "stores the mobile number" do
           expect(journey_session.reload.answers.mobile_number).to eq(mobile_number)
@@ -129,11 +179,9 @@ RSpec.describe MobileNumberForm do
 
           # Not sure how this could be nil rather than a bad response but that's
           # what the existing code checks for
-          let(:notify_double) do
-            instance_double(NotifySmsMessage, deliver!: nil)
-          end
+          let(:notify_double) { instance_double(NotifySmsMessage, deliver!: nil) }
 
-          before { form.save }
+          before { subject }
 
           it "stores the mobile number" do
             expect(journey_session.reload.answers.mobile_number).to eq(mobile_number)
@@ -162,7 +210,6 @@ RSpec.describe MobileNumberForm do
 
         context "when the error is an invalid phone number" do
           let(:mobile_number) { "07123456789" }
-
           let(:notify_double) { instance_double(NotifySmsMessage) }
 
           before do
@@ -173,7 +220,7 @@ RSpec.describe MobileNumberForm do
           end
 
           it "adds a validation error" do
-            expect(form.save).to eq false
+            expect(subject).to eq false
             expect(form.errors[:mobile_number]).to include(
               "Enter a mobile number, like 07700 900 982 or +44 7700 900 982"
             )
@@ -185,7 +232,6 @@ RSpec.describe MobileNumberForm do
 
         context "when some other error" do
           let(:mobile_number) { "07123456789" }
-
           let(:notify_double) { instance_double(NotifySmsMessage) }
 
           before do
@@ -196,7 +242,7 @@ RSpec.describe MobileNumberForm do
           end
 
           it "raises the error" do
-            expect { form.save }.to raise_error(NotifySmsMessage::NotifySmsError)
+            expect { subject }.to raise_error(NotifySmsMessage::NotifySmsError)
           end
         end
       end
