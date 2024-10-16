@@ -69,6 +69,8 @@ RSpec.feature "Early years payment practitioner" do
     end.to change { Claim.count }.by(0)
       .and change { Policies::EarlyYearsPayments::Eligibility.count }.by(0)
 
+    expect(claim.eligibility.reload.practitioner_claim_submitted_at).to be_present
+
     # check answers were saved on the claim
     expect(claim.reload.national_insurance_number).to eq "PX321499A"
   end
