@@ -19,7 +19,7 @@ class EligibleFeProvidersImporter < CsvImporter::Base
   end
 
   def results_message
-    "Replaced #{deleted_row_count} existing providers with #{rows.count} new providers"
+    "Replaced #{deleted_row_count} existing providers with #{rows_with_data_count} new providers"
   end
 
   private

@@ -58,6 +58,36 @@ RSpec.describe EligibleFeProvidersImporter do
       end
     end
 
+    context "with extra empty rows" do
+      before do
+        file.write correct_headers
+
+        file.write(described_class.mandatory_headers.map { nil }.join(",") + "\n")
+
+        3.times do
+          file.write to_row(attributes_for(:eligible_fe_provider))
+        end
+
+        file.write(described_class.mandatory_headers.map { nil }.join(",") + "\n")
+
+        file.close
+      end
+
+      it "ignores empty rows" do
+        expect { subject.run }.to change { EligibleFeProvider.count }.by(3)
+      end
+
+      it "does not raise errors" do
+        expect { subject.run }.not_to raise_error
+      end
+
+      it "returns correct rows_with_data_count" do
+        subject.run
+
+        expect(subject.rows_with_data_count).to eql(3)
+      end
+    end
+
     context "with valid data" do
       before do
         file.write correct_headers
