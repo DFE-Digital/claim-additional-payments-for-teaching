@@ -133,7 +133,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::NqtInAcademicYearAfterIt
                 logged_in_with_tid: true
               }.merge(
                 attributes_for(:claim, :with_dqt_teacher_status)
-                .except(:started_at)
+                .except(:started_at, :reference)
               )
             end
 
