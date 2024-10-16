@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_15_093740) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_15_121145) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_trgm"
@@ -56,7 +56,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_15_093740) do
     t.string "bank_sort_code", limit: 6
     t.string "bank_account_number", limit: 8
     t.datetime "submitted_at", precision: nil
-    t.string "reference", limit: 8
+    t.string "reference", limit: 8, null: false
     t.boolean "has_student_loan"
     t.integer "student_loan_country"
     t.integer "student_loan_courses"
