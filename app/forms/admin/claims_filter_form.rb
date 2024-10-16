@@ -112,7 +112,6 @@ class Admin::ClaimsFilterForm
       },
       "QA" => {
         "Approved awaiting QA" => "approved_awaiting_qa",
-        "Automatically approved" => "automatically_approved",
         "Quality assured" => "quality_assured",
         "Quality assured - approved" => "quality_assured_approved",
         "Quality assured - rejected" => "quality_assured_rejected"
@@ -122,6 +121,7 @@ class Admin::ClaimsFilterForm
         "Automatically approved awaiting payroll" => "automatically_approved_awaiting_payroll"
       },
       "Decisioned" => {
+        "Automatically approved" => "automatically_approved",
         "Approved" => "approved",
         "Rejected" => "rejected"
       }
