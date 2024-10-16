@@ -18,9 +18,9 @@ module Journeys
 
         def build_or_find_claim
           claim = Claim.find_by(reference: journey_session.answers.reference_number) || new_claim
-          # TODO - set a new field: eligibility.practitioner_claim_started_at?
           set_claim_attributes_from_answers(claim, answers)
-
+          claim.eligibility.practitioner_claim_submitted_at = Time.zone.now
+          # TODO - do we need to set a new field here?: eligibility.practitioner_claim_started_at
           claim
         end
       end
