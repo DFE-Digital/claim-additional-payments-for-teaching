@@ -4,12 +4,13 @@ module CsvImporter
   class Base
     include CsvImporter::Config
 
-    attr_reader :errors, :rows, :deleted_row_count
+    attr_reader :errors, :rows, :deleted_row_count, :skipped_row_count
 
     def initialize(file)
       @errors = []
       @rows = parse_csv_file(file)
       @deleted_row_count = 0
+      @skipped_row_count = 0
 
       check_headers if rows && with_headers?
     end
@@ -21,14 +22,20 @@ module CsvImporter
         Rails.logger.info "Processing #{target_data_model.to_s.titleize} batch #{i}"
 
         record_hashes = batch_rows.map do |row|
-          next if empty_row?(row)
-          next if valid_skip_row_conditions?(row)
+          if empty_row?(row) || valid_skip_row_conditions?(row)
+            @skipped_row_count += 1
+            next
+          end
 
           convert_row_to_hash(row)
         end.compact
 
         target_data_model.insert_all(record_hashes) unless record_hashes.empty?
       end
+    end
+
+    def rows_with_data_count
+      rows.count - skipped_row_count
     end
 
     private

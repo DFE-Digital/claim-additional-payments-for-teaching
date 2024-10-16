@@ -80,6 +80,12 @@ RSpec.describe EligibleFeProvidersImporter do
       it "does not raise errors" do
         expect { subject.run }.not_to raise_error
       end
+
+      it "returns correct rows_with_data_count" do
+        subject.run
+
+        expect(subject.rows_with_data_count).to eql(3)
+      end
     end
 
     context "with valid data" do
