@@ -46,8 +46,8 @@ but you may need to re-authenticate every once in a while.
 4. Then run one of these commands:
 
    ```shell
-   make test-aks get-cluster-credentials # for test and review apps
-   make production-aks get-cluster-credentials CONFIRM_PRODUCTION=yes # for production
+   make test get-cluster-credentials # for test and review apps
+   make production get-cluster-credentials CONFIRM_PRODUCTION=yes # for production
    ```
 
 5. Assuming everything worked correctly, you should now be able to access the

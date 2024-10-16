@@ -45,9 +45,9 @@ the GitHub repository packages:
 https://github.com/orgs/DFE-Digital/packages?repo_name=claim-additional-payments-for-teaching
 
 - Verify changes:
-  `make [production-aks|test-aks] terraform-plan-aks IMAGE_TAG=xyz`
+  `make [production|test] terraform-plan IMAGE_TAG=xyz`
 - Apply changes:
-  `make [production-aks|test-aks] terraform-apply-aks IMAGE_TAG=xyz`
+  `make [production|test] terraform-apply IMAGE_TAG=xyz`
 
 [azure]: https://azure.microsoft.com/en-gb/
 [iac]: https://en.wikipedia.org/wiki/Infrastructure_as_code

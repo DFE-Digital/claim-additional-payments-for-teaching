@@ -41,7 +41,7 @@ runs:
     - name: Terraform Apply
       shell: bash
       run: |
-        make ci ${{ inputs.environment }} terraform-apply-aks
+        make ci ${{ inputs.environment }} terraform-apply
       env:
         DOCKER_IMAGE_TAG: ${{ inputs.docker-image }}
         PR_NUMBER: ${{ inputs.pull-request-number }}
