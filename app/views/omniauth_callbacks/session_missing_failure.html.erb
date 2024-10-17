@@ -1,0 +1,14 @@
+<% content_for(:page_title, page_title("Sorry, there is a problem with the One Login service", show_error: false)) %>
+<% content_for(:header_link, header_link(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Sorry, there is a problem with the One Login service
+    </h1>
+
+    <p class="govuk-body">
+      We couldn’t find your claim, please
+      <%= govuk_link_to "start a new claim", "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details" %>.
+  </div>
+</div>

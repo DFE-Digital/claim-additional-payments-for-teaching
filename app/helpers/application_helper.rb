@@ -8,6 +8,10 @@ module ApplicationHelper
     end.join(" — ")
   end
 
+  def header_link(current_journey_routing_name)
+    link_to journey_service_name(current_journey_routing_name), start_page_url(current_journey_routing_name), class: "govuk-header__link govuk-header__service-name"
+  end
+
   def currency_value_for_number_field(value)
     return if value.nil?
 
