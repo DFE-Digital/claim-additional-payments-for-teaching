@@ -82,6 +82,8 @@ RSpec.feature "Early years payment provider" do
     claim = Claim.last
     expect(claim.provider_contact_name).to eq "John Doe"
     expect(page).to have_content(claim.reference)
+    expect(claim.submitted_at).to be_nil
+    expect(claim.eligibility.reload.provider_claim_submitted_at).to be_present
   end
 
   scenario "using magic link after having completed some of the journey" do
