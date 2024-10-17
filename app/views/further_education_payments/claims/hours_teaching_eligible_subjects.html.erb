@@ -3,17 +3,22 @@
     <%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l">
-        <%= @form.t(:question) %>
-      </h1>
+      <%= f.govuk_collection_radio_buttons :hours_teaching_eligible_subjects,
+        @form.radio_options,
+        :id,
+        :name,
+        legend: {
+          tag: "h1",
+          size: "l",
+          text: @form.t(:question)
+        },
+        hint: -> { %>
+          <p class="govuk-body">
+            At least 50% of your timetabled teaching hours must be spent teaching students of all ages in the following courses:
+          </p>
 
-      <p class="govuk-body">
-        At least 50% of your timetabled teaching hours must be spent teaching students of all ages in the following courses:
-      </p>
-
-      <%= govuk_list @form.courses, type: :bullet %>
-
-      <%= f.govuk_collection_radio_buttons :hours_teaching_eligible_subjects, @form.radio_options, :id, :name, legend: { hidden: true } %>
+          <%= govuk_list @form.courses, type: :bullet %>
+        <% } %>
 
       <%= f.govuk_submit %>
     <% end %>
