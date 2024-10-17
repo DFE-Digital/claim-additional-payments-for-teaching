@@ -1,4 +1,4 @@
-<% content_for(:page_title, page_title(@form.t(:question), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+<% content_for(:page_title, page_title(@form.t(:heading), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -14,7 +14,7 @@
       <%= f.hidden_field :possible_school_id %>
 
       <h1 class="govuk-heading-l">
-        An eligible further education (FE) provider in England must employ you as a teacher
+        <%= @form.t(:heading) %>
       </h1>
 
       <p class="govuk-body">
