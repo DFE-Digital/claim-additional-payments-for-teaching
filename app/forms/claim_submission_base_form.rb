@@ -13,7 +13,7 @@ class ClaimSubmissionBaseForm
 
   def initialize(journey_session:)
     @journey_session = journey_session
-    @claim = build_or_find_claim
+    @claim = build_claim
   end
 
   def save
@@ -38,26 +38,21 @@ class ClaimSubmissionBaseForm
     @main_eligibility ||= eligibilities.first
   end
 
-  def build_or_find_claim
-    claim = new_claim
-    set_claim_attributes_from_answers(claim, answers)
-
-    claim
-  end
-
-  def new_claim
-    Claim.new.tap do |claim|
-      claim.eligibility = main_eligibility
+  def build_claim
+    new_or_find_claim.tap do |claim|
+      claim.eligibility ||= main_eligibility
       claim.started_at = journey_session.created_at
-    end
-  end
 
-  def set_claim_attributes_from_answers(claim, answers)
-    answers.attributes.each do |name, value|
-      if claim.respond_to?(:"#{name}=")
-        claim.public_send(:"#{name}=", value)
+      answers.attributes.each do |name, value|
+        if claim.respond_to?(:"#{name}=")
+          claim.public_send(:"#{name}=", value)
+        end
       end
     end
+  end
+
+  def new_or_find_claim
+    Claim.new
   end
 
   def eligibilities
@@ -80,7 +75,11 @@ class ClaimSubmissionBaseForm
   def set_attributes_for_claim_submission
     claim.journey_session = journey_session
     claim.policy_options_provided = generate_policy_options_provided
-    claim.reference = generate_reference
+    claim.reference ||= generate_reference
+    set_submitted_at_attributes
+  end
+
+  def set_submitted_at_attributes
     claim.submitted_at = Time.zone.now
   end
 
