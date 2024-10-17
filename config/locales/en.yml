@@ -968,10 +968,12 @@ en:
         subject:
           heading: You are not eligible
       teaching_responsibilities:
+        heading: To apply for a targeted retention incentive payment, you must be employed as a member of staff with teaching responsibilities
         question: Are you a member of staff with teaching responsibilities?
         errors:
           inclusion: Select yes if you are a member of staff with teaching responsibilities
       further_education_provision_search:
+        heading: An eligible further education (FE) provider in England must employ you as a teacher
         question: Which FE provider are you employed by?
         errors:
           blank: Enter the name of the FE provider you are employed by
@@ -1199,6 +1201,7 @@ en:
           inclusion:
             Select yes if you spend at least half of your timetabled teaching hours teaching these eligible courses
       teacher_reference_number:
+        heading: Teacher reference number (TRN)
         questions:
           teacher_reference_number: "What is your TRN? (optional)"
       personal_details: *reminders_personal_details

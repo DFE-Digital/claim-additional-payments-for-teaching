@@ -2,6 +2,35 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render partial: "account_details", locals: { current_journey_routing_name: current_journey_routing_name} %>
+    <%= form_for @form, url: claim_path(current_journey_routing_name), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_fieldset legend: {
+        text: t("questions.account_details"),
+        tag: "h1",
+        size: "l"
+      } do %>
+        <%= f.govuk_text_field :banking_name,
+          spellcheck: "false",
+          label: { text: "Name on your account" },
+          hint: { text: t("questions.account_hint") } %>
+
+        <%= f.govuk_text_field :bank_sort_code,
+          width: "one-quarter",
+          autocomplete: "off",
+          label: { text: "Sort code" },
+          hint: { text: "For example: 309430" } %>
+
+        <%= f.govuk_text_field :bank_account_number,
+          width: 20,
+          autocomplete: "off",
+          label: { text: "Account number" },
+          hint: { text: "For example: 00733445" } %>
+      <% end %>
+
+      <%= govuk_warning_text(text: t("questions.check_your_account_details")) %>
+
+      <%= f.govuk_submit "Continue" %>
+    <% end %>
   </div>
 </div>
