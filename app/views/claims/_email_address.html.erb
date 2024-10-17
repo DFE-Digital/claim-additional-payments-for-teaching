@@ -1,0 +1,38 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t("label"),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for @form, url: claim_path(current_journey_routing_name), builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <% caption_settings = { text: t("questions.personal_details"), size: "xl" } if show_caption %>
+      <%= f.govuk_text_field :email_address,
+        autocomplete: "email",
+        spellcheck: "false",
+        caption: caption_settings,
+        label: {
+          text: @form.t("label"),
+          tag: "h1",
+          size: heading_size
+        },
+        hint: -> do %>
+          <p><%= @form.t("hint1") %></p>
+          <p><%= @form.t("hint2") %></p>
+        <% end %>
+      <%= f.hidden_field :resend, value: params[:resend] %>
+
+      <% if show_help_with_access_codes %>
+        <%= render "help_with_access_codes", communication_type: "Email" %>
+      <% end %>
+
+      <%= f.govuk_submit "Continue" %>
+    <% end %>
+  </div>
+</div>

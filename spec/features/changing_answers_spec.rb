@@ -314,7 +314,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     context "when email address" do
       let(:personal_details_attributes) { {} }
 
-      scenario "is asked to provide the OTP challenge code for validation" do
+      scenario "entering a new email address - is asked to provide the OTP challenge code for validation" do
         old_email = session.answers.email_address
         new_email = "fiona.adouboux@protonmail.com"
 
@@ -342,6 +342,14 @@ RSpec.feature "Changing the answers on a submittable claim" do
           )
         ).to be_valid
         expect(page).to have_content("Check your answers before sending your application")
+      end
+
+      scenario "entering same email address - passcode email is not sent" do
+        page.first("a[href='#{claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "email-address")}']", minimum: 1).click
+        click_on "Continue"
+
+        expect(page).to have_content("Check your answers before sending your application")
+        expect(ActionMailer::Base.deliveries.count).to eq 0
       end
     end
 
@@ -427,7 +435,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       let(:new_mobile) { "07475112801" }
       let(:old_mobile) { "07813090710" }
 
-      scenario "is asked to provide the OTP challenge code for validation" do
+      scenario "entering a new mobile number - is asked to provide the OTP challenge code for validation" do
         old_mobile = session.answers.mobile_number
 
         expect {
@@ -455,6 +463,14 @@ RSpec.feature "Changing the answers on a submittable claim" do
           )
         ).to be_valid
         expect(page).to have_content("Check your answers before sending your application")
+      end
+
+      scenario "entering same mobile number - is not asked to provide the OTP challenge code for validation" do
+        page.first("a[href='#{claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "mobile-number")}']", minimum: 1).click
+        click_on "Continue"
+
+        expect(page).to have_content("Check your answers before sending your application")
+        expect(notify).to_not have_received(:deliver!)
       end
     end
   end

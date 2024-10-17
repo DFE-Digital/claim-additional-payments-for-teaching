@@ -1,5 +1,6 @@
 class MobileNumberForm < Form
   attribute :mobile_number
+  attribute :resend, :boolean
 
   validates :mobile_number,
     presence: {
@@ -15,7 +16,7 @@ class MobileNumberForm < Form
 
   def save
     return false unless valid?
-    return true unless mobile_number_changed?
+    return true unless mobile_number_changed? || resend
 
     sent_one_time_password_at = if send_sms_message
       Time.now
@@ -37,7 +38,7 @@ class MobileNumberForm < Form
 
   def send_sms_message
     if Rails.env.development?
-      Rails.logger.info("SMS CODE: #{OneTimePassword::Generator.new.code}")
+      Rails.logger.info("\n\nSMS CODE: #{OneTimePassword::Generator.new.code}\n")
       return true
     end
 

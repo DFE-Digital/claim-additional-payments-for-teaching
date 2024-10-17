@@ -56,7 +56,7 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
     find("#claim_email_address_check_false").click
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("questions.email_address_hint1"))
+    expect(page).to have_text(I18n.t("forms.email_address.hint1"))
 
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(created_at: :desc).last
     answers = session.answers
