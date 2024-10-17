@@ -18,7 +18,7 @@ module Journeys
             reference_number:,
             start_email: email,
             reference_number_found: existing_claim.present?,
-            claim_already_submitted: existing_claim&.eligibility&.practitioner_claim_submitted?,
+            claim_already_submitted: existing_claim&.submitted?,
             nursery_name: existing_claim&.eligibility&.eligible_ey_provider&.nursery_name
           )
           journey_session.save!

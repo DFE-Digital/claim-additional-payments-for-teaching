@@ -13,10 +13,6 @@ module Journeys
 
           private
 
-          def main_eligibility
-            @main_eligibility ||= eligibilities.first
-          end
-
           def calculate_award_amount(eligibility)
             # NOOP
             # This is just for compatibility with the AdditionalPaymentsForTeaching
@@ -25,6 +21,10 @@ module Journeys
 
           def generate_policy_options_provided
             []
+          end
+
+          def set_submitted_at_attributes
+            claim.eligibility.provider_claim_submitted_at = Time.zone.now
           end
         end
       end
