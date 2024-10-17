@@ -22,10 +22,10 @@ class OmniauthCallbacksController < ApplicationController
       render OneLogin::FailureHandler.new(
         message: params[:message],
         origin: params[:origin],
-        answers: journey_session.answers
+        answers: journey_session&.answers
       ).template
     else
-      render layout: false
+      render :dfe_identity_failure
     end
   end
 
