@@ -22,7 +22,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::ClaimSubmis
     it "saves some answers into the Claim model" do
       subject
       expect(claim.email_address).to eq answers.email_address
-      expect(claim.submitted_at).to be_present
+      expect(claim.submitted_at).to be_nil
       expect(claim.eligibility_type).to eq "Policies::EarlyYearsPayments::Eligibility"
       expect(claim.first_name).to eq answers.first_name
       expect(claim.surname).to eq answers.surname
@@ -37,6 +37,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::ClaimSubmis
       expect(eligibility.child_facing_confirmation_given).to eq answers.child_facing_confirmation_given
       expect(eligibility.returning_within_6_months).to eq answers.returning_within_6_months
       expect(eligibility.start_date).to eq answers.start_date
+      expect(eligibility.provider_claim_submitted_at).to be_present
     end
 
     it "sends a notify email to the practitioner" do
