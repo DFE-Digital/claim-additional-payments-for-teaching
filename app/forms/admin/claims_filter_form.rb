@@ -50,6 +50,20 @@ class Admin::ClaimsFilterForm
         approved_awaiting_payroll
       when "automatically_approved"
         Claim.current_academic_year.auto_approved
+      when "quality_assured"
+        Claim
+          .current_academic_year
+          .where.not(qa_completed_at: nil)
+      when "quality_assured_approved"
+        Claim
+          .current_academic_year
+          .where.not(qa_completed_at: nil)
+          .approved
+      when "quality_assured_rejected"
+        Claim
+          .current_academic_year
+          .where.not(qa_completed_at: nil)
+          .rejected
       when "automatically_approved_awaiting_payroll"
         Claim.current_academic_year.payrollable.auto_approved
       when "rejected"
@@ -88,21 +102,30 @@ class Admin::ClaimsFilterForm
     end
   end
 
-  def status_select_options
-    [
-      ["Awaiting decision - not on hold", nil],
-      ["Awaiting provider verification", "awaiting_provider_verification"],
-      ["Awaiting decision - on hold", "held"],
-      ["Awaiting decision - failed bank details", "failed_bank_validation"],
-      ["Approved awaiting QA", "approved_awaiting_qa"],
-      ["Approved awaiting payroll", "approved_awaiting_payroll"],
-      ["Automatically approved", "automatically_approved"],
-      ["Automatically approved awaiting payroll", "automatically_approved_awaiting_payroll"],
-      ["Approved", "approved"],
-      ["Rejected", "rejected"]
-    ].map do |name, id|
-      OpenStruct.new(id:, name:)
-    end
+  def status_grouped_select_options
+    {
+      "Awaiting" => {
+        "Awaiting decision - not on hold" => nil,
+        "Awaiting provider verification" => "awaiting_provider_verification",
+        "Awaiting decision - on hold" => "held",
+        "Awaiting decision - failed bank details" => "failed_bank_validation"
+      },
+      "QA" => {
+        "Approved awaiting QA" => "approved_awaiting_qa",
+        "Quality assured" => "quality_assured",
+        "Quality assured - approved" => "quality_assured_approved",
+        "Quality assured - rejected" => "quality_assured_rejected"
+      },
+      "Payroll" => {
+        "Approved awaiting payroll" => "approved_awaiting_payroll",
+        "Automatically approved awaiting payroll" => "automatically_approved_awaiting_payroll"
+      },
+      "Decisioned" => {
+        "Automatically approved" => "automatically_approved",
+        "Approved" => "approved",
+        "Rejected" => "rejected"
+      }
+    }
   end
 
   def team_member_select_options

@@ -7,6 +7,10 @@ FactoryBot.define do
     started_at { Time.zone.now }
     reference { Reference.new.to_s }
 
+    trait :current_academic_year do
+      academic_year { AcademicYear.current }
+    end
+
     transient do
       policy { Policies::StudentLoans }
       eligibility_factory { :"#{policy.to_s.underscore}_eligibility" }

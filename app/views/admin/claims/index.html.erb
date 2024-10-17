@@ -31,7 +31,17 @@
         </div>
 
         <div>
-          <%= f.govuk_collection_select :status, @filter_form.status_select_options, :id, :name %>
+          <%= f.govuk_select(:status, label: { text: "Status" }) do %>
+            <% @filter_form.status_grouped_select_options.each do |group_name, menu_items| %>
+              <optgroup label="<%= group_name %>">
+                <% menu_items.each do |name, value| %>
+                  <option value="<%= value %>" <%= "selected" if @filter_form.status == value %>>
+                    <%= name %>
+                  </option>
+                <% end %>
+              </optgroup>
+            <% end %>
+          <% end %>
         </div>
 
         <div>

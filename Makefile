@@ -9,26 +9,26 @@ DOCKER_REPOSITORY=ghcr.io/dfe-digital/claim-additional-payments-for-teaching
 help:
 	@grep -E '^[a-zA-Z\._\-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-.PHONY: review-aks
-review-aks: test-cluster
+.PHONY: review
+review: test-cluster
 	$(if ${PR_NUMBER},,$(error Missing PR_NUMBER))
 	$(eval ENVIRONMENT=review-${PR_NUMBER})
 	$(eval export TF_VAR_environment=${ENVIRONMENT})
 	$(eval include global_config/review.sh)
 
-.PHONY: test-aks
-test-aks: test-cluster
+.PHONY: test
+test: test-cluster
 	$(eval include global_config/test.sh)
 
-.PHONY: production-aks
-production-aks: production-cluster
+.PHONY: production
+production: production-cluster
 	$(if $(or ${SKIP_CONFIRM}, ${CONFIRM_PRODUCTION}), , $(error Missing CONFIRM_PRODUCTION=yes))
 	$(eval include global_config/production.sh)
 
-set-azure-account-aks:
+set-azure-account:
 	[ "${SKIP_AZURE_LOGIN}" != "true" ] && az account set -s ${AZURE_SUBSCRIPTION} || true
 
-terraform-init-aks: composed-variables bin/terrafile set-azure-account-aks
+terraform-init: composed-variables bin/terrafile set-azure-account
 	$(if ${DOCKER_IMAGE_TAG}, , $(eval DOCKER_IMAGE_TAG=master))
 
 	./bin/terrafile -p terraform/application/vendor/modules -f terraform/application/config/$(CONFIG)_Terrafile
@@ -43,13 +43,13 @@ terraform-init-aks: composed-variables bin/terrafile set-azure-account-aks
 	$(eval export TF_VAR_service_short=${SERVICE_SHORT})
 	$(eval export TF_VAR_docker_image=${DOCKER_REPOSITORY}:${DOCKER_IMAGE_TAG})
 
-terraform-plan-aks: terraform-init-aks
+terraform-plan: terraform-init
 	terraform -chdir=terraform/application plan -var-file "config/${CONFIG}.tfvars.json"
 
-terraform-apply-aks: terraform-init-aks
+terraform-apply: terraform-init
 	terraform -chdir=terraform/application apply -var-file "config/${CONFIG}.tfvars.json" ${AUTO_APPROVE}
 
-terraform-destroy-aks: terraform-init-aks
+terraform-destroy: terraform-init
 	terraform -chdir=terraform/application destroy -var-file "config/${CONFIG}.tfvars.json" ${AUTO_APPROVE}
 
 domains:
@@ -73,7 +73,7 @@ bin/terrafile: ## Install terrafile to manage terraform modules
 set-what-if:
 	$(eval WHAT_IF=--what-if)
 
-arm-deployment: composed-variables set-azure-account-aks
+arm-deployment: composed-variables set-azure-account
 	$(if ${DISABLE_KEYVAULTS},, $(eval KV_ARG=keyVaultNames=${KEYVAULT_NAMES}))
 	$(if ${ENABLE_KV_DIAGNOSTICS}, $(eval KV_DIAG_ARG=enableDiagnostics=${ENABLE_KV_DIAGNOSTICS} logAnalyticsWorkspaceName=${LOG_ANALYTICS_WORKSPACE_NAME}),)
 
@@ -98,7 +98,7 @@ production-cluster:
 	$(eval CLUSTER_RESOURCE_GROUP_NAME=s189p01-tsc-pd-rg)
 	$(eval CLUSTER_NAME=s189p01-tsc-production-aks)
 
-get-cluster-credentials: set-azure-account-aks
+get-cluster-credentials: set-azure-account
 	az aks get-credentials --overwrite-existing -g ${CLUSTER_RESOURCE_GROUP_NAME} -n ${CLUSTER_NAME}
 	kubelogin convert-kubeconfig -l $(if ${GITHUB_ACTIONS},spn,azurecli)
 
@@ -106,7 +106,7 @@ bin/konduit.sh:
 	curl -s https://raw.githubusercontent.com/DFE-Digital/teacher-services-cloud/main/scripts/konduit.sh -o bin/konduit.sh \
 		&& chmod +x bin/konduit.sh
 
-domains-infra-init: bin/terrafile domains composed-variables set-azure-account-aks
+domains-infra-init: bin/terrafile domains composed-variables set-azure-account
 	./bin/terrafile -p terraform/domains/infrastructure/vendor/modules -f terraform/domains/infrastructure/config/zones_Terrafile
 
 	terraform -chdir=terraform/domains/infrastructure init -reconfigure -upgrade \
@@ -120,7 +120,7 @@ domains-infra-plan: domains domains-infra-init  ## Terraform plan for DNS infras
 domains-infra-apply: domains domains-infra-init  ## Terraform apply for DNS infrastructure (DNS zone and front door). Usage: make domains-infra-apply
 	terraform -chdir=terraform/domains/infrastructure apply -var-file config/zones.tfvars.json ${AUTO_APPROVE}
 
-domains-init: bin/terrafile domains composed-variables set-azure-account-aks
+domains-init: bin/terrafile domains composed-variables set-azure-account
 	./bin/terrafile -p terraform/domains/environment_domains/vendor/modules -f terraform/domains/environment_domains/config/${CONFIG}_Terrafile
 
 	terraform -chdir=terraform/domains/environment_domains init -upgrade -reconfigure \
