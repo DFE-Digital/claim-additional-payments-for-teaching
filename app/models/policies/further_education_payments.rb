@@ -75,7 +75,7 @@ module Policies
     end
 
     def verification_due_date_for_claim(claim)
-      (claim.created_at + 2.weeks).to_date
+      (claim.created_at + 3.weeks).to_date
     end
 
     def verification_chase_due_date_for_claim(claim)
