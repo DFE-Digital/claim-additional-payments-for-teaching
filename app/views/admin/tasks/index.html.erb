@@ -4,7 +4,7 @@
   <%= govuk_back_link href: claims_backlink_path %>
 <% end %>
 
-<% if @has_matching_claims %>
+<% if @has_matching_claims || @claim.attributes_flagged_by_risk_indicator.any? %>
   <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
     <div class="govuk-notification-banner__header">
       <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
@@ -12,10 +12,25 @@
       </h2>
     </div>
     <div class="govuk-notification-banner__content">
-      <p class="govuk-notification-banner__heading">
-        <%= link_to "Multiple claims", admin_claim_task_path(claim_id: @claim.id, name: "matching_details") %>
-        with matching details have been made in this claim window.
-      </p>
+      <div class="govuk-notification-banner__heading">
+        <% if @has_matching_claims %>
+          <p class="govuk-!-margin-0">
+            <%= link_to(
+              "Multiple claims",
+              admin_claim_task_path(claim_id: @claim.id, name: "matching_details")
+            ) %>
+            with matching details have been made in this claim window.
+          </p>
+        <% end %>
+
+        <% if @claim.attributes_flagged_by_risk_indicator.any? %>
+          <p class="<%= class_names("govuk-!-margin-0", "govuk-!-margin-top-4" => @has_matching_claims.present?) %>">
+            This claim has been flagged for fraud prevention as it has a
+            <%= @claim.attributes_flagged_by_risk_indicator.map(&:humanize).to_sentence.downcase %>
+            that is present in the fraud risk CSV.
+          </p>
+        <% end %>
+      </div>
     </div>
   </div>
 <% end %>

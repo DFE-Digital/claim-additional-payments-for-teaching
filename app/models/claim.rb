@@ -454,6 +454,10 @@ class Claim < ApplicationRecord
     eligibility.awaiting_provider_verification?
   end
 
+  def attributes_flagged_by_risk_indicator
+    @attributes_flagged_by_risk_indicator ||= RiskIndicator.flagged_attributes(self)
+  end
+
   private
 
   def one_login_idv_name_match?
