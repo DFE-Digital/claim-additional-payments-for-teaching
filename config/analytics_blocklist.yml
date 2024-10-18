@@ -131,3 +131,9 @@
   - verification
   :journeys_sessions:
   - answers
+  :risk_indicators:
+  - id
+  - field
+  - value
+  - created_at
+  - updated_at
