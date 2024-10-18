@@ -58,4 +58,12 @@ module BasePolicy
   def auto_check_student_loan_plan_task?
     false
   end
+
+  def award_amount_column
+    if to_s == "StudentLoans"
+      "student_loan_repayment_amount"
+    else
+      "award_amount"
+    end
+  end
 end
