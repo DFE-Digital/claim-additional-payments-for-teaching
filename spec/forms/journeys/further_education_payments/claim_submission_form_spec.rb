@@ -92,7 +92,7 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
           claimant_name: [answers.first_name, answers.surname].join(" "),
           claim_reference: claim.reference,
           claim_submission_date: "1 October 2024",
-          verification_due_date: "15 October 2024",
+          verification_due_date: "22 October 2024",
           verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
         )
       )

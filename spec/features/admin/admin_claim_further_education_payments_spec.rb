@@ -76,7 +76,7 @@ RSpec.feature "Admin claim further education payments" do
                 claimant_name: "Edna Krabappel",
                 claim_reference: "AB123456",
                 claim_submission_date: "1 August 2024",
-                verification_due_date: "15 August 2024",
+                verification_due_date: "22 August 2024",
                 verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
               )
             )
@@ -156,7 +156,7 @@ RSpec.feature "Admin claim further education payments" do
                   claimant_name: "Edna Krabappel",
                   claim_reference: "AB123456",
                   claim_submission_date: "1 August 2024",
-                  verification_due_date: "15 August 2024",
+                  verification_due_date: "22 August 2024",
                   verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
                 )
               )
@@ -229,7 +229,7 @@ RSpec.feature "Admin claim further education payments" do
                   claimant_name: "Edna Krabappel",
                   claim_reference: "AB123456",
                   claim_submission_date: "1 August 2024",
-                  verification_due_date: "15 August 2024",
+                  verification_due_date: "22 August 2024",
                   verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
                 )
               )
