@@ -254,7 +254,7 @@ class Claim < ApplicationRecord
   end
 
   def approvable?
-    submitted? && !held? && !payroll_gender_missing? && (!decision_made? || awaiting_qa?) && !payment_prevented_by_other_claims?
+    submitted? && !held? && !payroll_gender_missing? && (!decision_made? || awaiting_qa?) && !payment_prevented_by_other_claims? && attributes_flagged_by_risk_indicator.none?
   end
 
   def rejectable?
@@ -452,6 +452,10 @@ class Claim < ApplicationRecord
     return false unless has_further_education_policy?
 
     eligibility.awaiting_provider_verification?
+  end
+
+  def attributes_flagged_by_risk_indicator
+    @attributes_flagged_by_risk_indicator ||= RiskIndicator.flagged_attributes(self)
   end
 
   private

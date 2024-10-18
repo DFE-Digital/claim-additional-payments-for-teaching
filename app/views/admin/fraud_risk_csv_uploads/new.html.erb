@@ -1,0 +1,31 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Fraud risk CSV upload
+    </h1>
+
+    <%= form_with(
+      url: admin_fraud_risk_csv_uploads_path,
+      model: @form,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_file_field(
+        :file,
+        label: { text: "Upload fraud risk CSV file" },
+        hint: {
+          text: "Currently supported attributes are #{RiskIndicator::SUPPORTED_FIELDS.join(", ")}."
+        }
+      ) %>
+
+      <%= f.govuk_submit "Upload CSV" %>
+    <% end %>
+
+    <%= govuk_link_to(
+      "Download CSV",
+      admin_fraud_risk_csv_download_path(format: :csv),
+      class: "govuk-button"
+    ) %>
+  </div>
+</div>
