@@ -428,6 +428,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_30_153139) do
     t.string "itt_subject"
   end
 
+  create_table "risk_indicators", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "field", null: false
+    t.string "value", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["field", "value"], name: "index_risk_indicators_on_field_and_value", unique: true
+  end
+
   create_table "school_workforce_censuses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "teacher_reference_number"
     t.datetime "created_at", null: false

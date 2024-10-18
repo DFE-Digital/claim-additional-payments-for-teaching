@@ -6,7 +6,7 @@ class Admin::TasksController < Admin::BaseAdminController
 
   def index
     @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
-    @has_matching_claims = Claim::MatchingAttributeFinder.new(@claim).matching_claims.exists?
+    @banner_messages = set_banner_messages
   end
 
   def show
@@ -77,5 +77,30 @@ class Admin::TasksController < Admin::BaseAdminController
 
   def current_task_name
     @task.name
+  end
+
+  def set_banner_messages
+    messages = []
+
+    if Claim::MatchingAttributeFinder.new(@claim).matching_claims.exists?
+      claims_link = view_context.link_to(
+        "Multiple claims",
+        admin_claim_task_path(claim_id: @claim.id, name: "matching_details"),
+        class: "govuk-notification-banner__link"
+      )
+
+      messages << "#{claims_link} with matching details have been made in this claim window.".html_safe
+    end
+
+    if @claim.attributes_flagged_by_risk_indicator.any?
+      messages << <<~MSG.html_safe
+        This claim has been flagged as the
+        #{@claim.attributes_flagged_by_risk_indicator.map(&:humanize).to_sentence.downcase}
+        #{@claim.attributes_flagged_by_risk_indicator.many? ? "are" : "is"}
+        included on the fraud prevention list. Speak to a manager.
+      MSG
+    end
+
+    messages
   end
 end

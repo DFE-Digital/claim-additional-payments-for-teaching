@@ -4,19 +4,18 @@
   <%= govuk_back_link href: claims_backlink_path %>
 <% end %>
 
-<% if @has_matching_claims %>
-  <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-    <div class="govuk-notification-banner__header">
-      <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-        Important
-      </h2>
-    </div>
-    <div class="govuk-notification-banner__content">
-      <p class="govuk-notification-banner__heading">
-        <%= link_to "Multiple claims", admin_claim_task_path(claim_id: @claim.id, name: "matching_details") %>
-        with matching details have been made in this claim window.
+<% if @banner_messages.any? %>
+  <%= render partial: "banner", locals: { messages: @banner_messages } %>
+<% end %>
+
+<% if false && @claim.attributes_flagged_by_risk_indicator.any? %>
+  <div class="govuk-warning-text">
+    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+    <strong class="govuk-warning-text__text">
+      <span class="govuk-visually-hidden">Warning</span>
+      <p class="govuk-!-margin-top-0">
       </p>
-    </div>
+    </strong>
   </div>
 <% end %>
 

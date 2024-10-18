@@ -146,6 +146,8 @@ Rails.application.routes.draw do
     resources :school_workforce_census_data_uploads, only: [:new, :create]
     resources :student_loans_data_uploads, only: [:new, :create]
     resources :tps_data_uploads, only: [:new, :create]
+    resources :fraud_risk_csv_uploads, only: [:new, :create]
+    resource :fraud_risk_csv_download, only: :show
 
     resources :payroll_runs, only: [:index, :new, :create, :show, :destroy] do
       resources :payment_confirmation_report_uploads, only: [:new, :create]

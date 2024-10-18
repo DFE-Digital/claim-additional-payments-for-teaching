@@ -3,6 +3,10 @@ module Policies
     include BasePolicy
     extend self
 
+    VERIFIERS = [
+      AutomatedChecks::ClaimVerifiers::FraudRisk
+    ].freeze
+
     ELIGIBILITY_MATCHING_ATTRIBUTES = [["passport_number"]].freeze
     OTHER_CLAIMABLE_POLICIES = []
 

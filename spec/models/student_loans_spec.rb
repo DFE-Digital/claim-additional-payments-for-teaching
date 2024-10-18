@@ -11,7 +11,8 @@ RSpec.describe Policies::StudentLoans, type: :model do
       AutomatedChecks::ClaimVerifiers::Qualifications,
       AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
       AutomatedChecks::ClaimVerifiers::Employment,
-      AutomatedChecks::ClaimVerifiers::StudentLoanAmount
+      AutomatedChecks::ClaimVerifiers::StudentLoanAmount,
+      AutomatedChecks::ClaimVerifiers::FraudRisk
     ])
   end
 

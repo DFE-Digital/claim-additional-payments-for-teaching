@@ -18,7 +18,8 @@ module Policies
       AutomatedChecks::ClaimVerifiers::Qualifications,
       AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
       AutomatedChecks::ClaimVerifiers::Employment,
-      AutomatedChecks::ClaimVerifiers::StudentLoanAmount
+      AutomatedChecks::ClaimVerifiers::StudentLoanAmount,
+      AutomatedChecks::ClaimVerifiers::FraudRisk
     ].freeze
 
     POLICY_START_YEAR = AcademicYear.new(2013).freeze

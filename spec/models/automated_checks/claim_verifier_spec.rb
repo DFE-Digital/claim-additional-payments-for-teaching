@@ -53,6 +53,7 @@ RSpec.describe AutomatedChecks::ClaimVerifier do
             double(perform: Task.new),
             double(perform: Task.new),
             double(perform: Object.new),
+            double(perform: nil),
             double(perform: nil)
           ]
         end
