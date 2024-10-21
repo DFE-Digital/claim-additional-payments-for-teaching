@@ -75,7 +75,7 @@ RSpec.feature "Early years payment practitioner" do
 
     expect(page).to have_content("Check your answers before submitting this claim")
     expect do
-      click_on "Accept and send"
+      perform_enqueued_jobs { click_on "Accept and send" }
     end.to not_change { Claim.count }
       .and not_change { Policies::EarlyYearsPayments::Eligibility.count }
       .and not_change { claim.reload.reference }
