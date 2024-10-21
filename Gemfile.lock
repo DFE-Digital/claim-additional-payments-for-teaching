@@ -402,7 +402,7 @@ GEM
       concurrent-ruby (~> 1.0)
     retriable (3.1.2)
     rexml (3.3.8)
-    rollbar (3.5.2)
+    rollbar (3.6.0)
     rotp (6.3.0)
     rspec (3.13.0)
       rspec-core (~> 3.13.0)
