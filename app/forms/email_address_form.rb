@@ -24,6 +24,7 @@ class EmailAddressForm < Form
     journey_session.answers.assign_attributes(
       email_address: email_address,
       email_verified: email_verified,
+      email_verification_secret: otp_secret,
       sent_one_time_password_at: Time.now
     )
 
@@ -43,7 +44,11 @@ class EmailAddressForm < Form
     answers.email_verified
   end
 
+  def otp_secret
+    @otp_secret ||= ROTP::Base32.random
+  end
+
   def otp_code
-    @otp_code ||= OneTimePassword::Generator.new.code
+    @otp_code ||= OneTimePassword::Generator.new(secret: otp_secret).code
   end
 end
