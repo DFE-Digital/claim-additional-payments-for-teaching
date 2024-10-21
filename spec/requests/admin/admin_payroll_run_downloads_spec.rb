@@ -53,16 +53,16 @@ RSpec.describe "Admin payroll run downloads" do
 
         get admin_payroll_run_download_path(payroll_run)
 
-        expect(response.body).to include admin_payroll_run_download_path(payroll_run, format: :zip)
+        expect(response.body).to include admin_payroll_run_download_path(payroll_run, format: :csv)
       end
     end
 
     context "when requesting zip" do
       it "allows the payroll run file to be downloaded" do
         payroll_run = create(:payroll_run, downloaded_at: Time.zone.now, downloaded_by: admin)
-        get admin_payroll_run_download_path(payroll_run, format: :zip)
+        get admin_payroll_run_download_path(payroll_run, format: :csv)
 
-        expect(response.headers["Content-Type"]).to eq("application/zip")
+        expect(response.headers["Content-Type"]).to eq("text/csv")
       end
     end
   end

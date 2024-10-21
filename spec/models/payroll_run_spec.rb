@@ -159,24 +159,6 @@ RSpec.describe PayrollRun, type: :model do
     end
   end
 
-  describe "#payments_in_batches" do
-    subject(:batches) { payroll_run.payments_in_batches }
-
-    let(:payroll_run) { create(:payroll_run, claims_counts: {Policies::StudentLoans => 5}) }
-    let(:batch_size) { 2 }
-    let(:expected_batches) { payroll_run.payments.ordered.each_slice(batch_size).to_a }
-
-    before do
-      stub_const("#{described_class}::MAX_BATCH_SIZE", batch_size)
-    end
-
-    it { is_expected.to be_an(Enumerator) }
-
-    it "returns payments in batches" do
-      expect(batches.to_a).to eq(expected_batches)
-    end
-  end
-
   describe "#total_batches" do
     subject(:total) { payroll_run.total_batches }
 

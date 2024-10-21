@@ -6,7 +6,6 @@ require "excel_utils"
 
 module Payroll
   class PaymentCsvRow < SimpleDelegator
-    ROW_SEPARATOR = "\r\n"
     DATE_FORMAT = "%d/%m/%Y"
     UNITED_KINGDOM = "United Kingdom"
     BASIC_RATE_TAX_CODE = "BR"
@@ -19,18 +18,14 @@ module Payroll
     RIGHT_TO_WORK_CONFIRM_STATUS = "2"
     TITLE = "Prof."
 
-    def to_s
-      CSV.generate_line(data, row_sep: ROW_SEPARATOR)
-    end
-
-    private
-
-    def data
+    def to_a
       Payroll::PaymentsCsv::FIELDS_WITH_HEADERS.keys.map do |f|
         field = send(f)
         ExcelUtils.escape_formulas(field)
       end
     end
+
+    private
 
     def title
       TITLE
