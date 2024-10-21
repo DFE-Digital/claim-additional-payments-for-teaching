@@ -5,8 +5,12 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::Reminders::EmailVerifica
     described_class.new(reminder: reminder, journey:, journey_session:, params:)
   end
 
+  let(:secret) { ROTP::Base32.random }
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
-  let(:journey_session) { build(:additional_payments_session) }
+  let(:answers) do
+    {email_verification_secret: secret}
+  end
+  let(:journey_session) { build(:additional_payments_session, answers:) }
   let(:reminder) { Reminder.create! }
   let(:slug) { "email-verification" }
   let(:params) { ActionController::Parameters.new({slug:, form: form_params}) }
@@ -22,7 +26,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::Reminders::EmailVerifica
     context "valid params" do
       let(:form_params) do
         {
-          "one_time_password" => OneTimePassword::Generator.new.code,
+          "one_time_password" => OneTimePassword::Generator.new(secret:).code,
           "sent_one_time_password_at" => Time.now
         }
       end
@@ -36,7 +40,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::Reminders::EmailVerifica
     context "invalid params" do
       let(:form_params) do
         {
-          "one_time_password" => OneTimePassword::Generator.new.code,
+          "one_time_password" => OneTimePassword::Generator.new(secret:).code,
           "sent_one_time_password_at" => ""
         }
       end

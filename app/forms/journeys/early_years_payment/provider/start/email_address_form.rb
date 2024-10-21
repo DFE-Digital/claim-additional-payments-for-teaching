@@ -31,7 +31,7 @@ module Journeys
           end
 
           def otp_code(email_address)
-            @otp_code ||= OneTimePassword::Generator.new(secret: ENV.fetch("EY_MAGIC_LINK_SECRET") + email_address).code
+            @otp_code ||= OneTimePassword::Generator.new(secret: ROTP::Base32.encode(ENV.fetch("EY_MAGIC_LINK_SECRET") + email_address)).code
           end
         end
       end

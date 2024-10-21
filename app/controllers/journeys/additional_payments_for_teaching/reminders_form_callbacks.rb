@@ -15,6 +15,7 @@ module Journeys
 
       def personal_details_after_form_save_success
         answers.reminder_id = current_reminder.to_param
+        answers.email_verification_secret = ROTP::Base32.random
         journey_session.save!
         try_mailer { send_verification_email } || return
         redirect_to_next_slug
@@ -42,7 +43,7 @@ module Journeys
       end
 
       def send_verification_email
-        otp = OneTimePassword::Generator.new
+        otp = OneTimePassword::Generator.new(secret: answers.email_verification_secret)
         ReminderMailer.email_verification(current_reminder, otp.code).deliver_now
         session[:sent_one_time_password_at] = Time.now
       end
