@@ -1,4 +1,5 @@
 require "rotp"
+
 module OneTimePassword
   class Base
     DRIFT = 900
