@@ -208,6 +208,7 @@ RSpec.describe ClaimMailer, type: :mailer do
               reason_ineligible_school: "no",
               reason_ineligible_qualification: "no",
               reason_no_qts_or_qtls: "no",
+              reason_no_repayments_to_slc: "no",
               reason_duplicate: "no",
               reason_no_response: "no",
               reason_other: "no"

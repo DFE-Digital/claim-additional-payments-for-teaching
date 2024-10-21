@@ -125,6 +125,19 @@ RSpec.describe Decision, type: :model do
         :other
       ]
     end
+    let(:expected_reasons_tslr) do
+      [
+        :ineligible_subject,
+        :ineligible_year,
+        :ineligible_school,
+        :ineligible_qualification,
+        :no_qts_or_qtls,
+        :no_repayments_to_slc,
+        :duplicate,
+        :no_response,
+        :other
+      ]
+    end
 
     context "when the claim policy is ECP" do
       let(:policy) { Policies::EarlyCareerPayments }
@@ -141,7 +154,7 @@ RSpec.describe Decision, type: :model do
     context "when the claim policy is TSLR" do
       let(:policy) { Policies::StudentLoans }
 
-      it { is_expected.to eq(expected_reasons_non_ecp) }
+      it { is_expected.to eq(expected_reasons_tslr) }
     end
   end
 
@@ -216,6 +229,7 @@ RSpec.describe Decision, type: :model do
           reason_ineligible_school: "0",
           reason_ineligible_qualification: "0",
           reason_no_qts_or_qtls: "1",
+          reason_no_repayments_to_slc: "0",
           reason_duplicate: "0",
           reason_no_response: "0",
           reason_other: "0"

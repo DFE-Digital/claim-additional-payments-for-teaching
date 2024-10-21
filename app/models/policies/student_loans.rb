@@ -47,6 +47,7 @@ module Policies
       :ineligible_school,
       :ineligible_qualification,
       :no_qts_or_qtls,
+      :no_repayments_to_slc,
       :duplicate,
       :no_response,
       :other
