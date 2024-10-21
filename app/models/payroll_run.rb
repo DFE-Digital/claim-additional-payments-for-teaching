@@ -35,10 +35,6 @@ class PayrollRun < ApplicationRecord
     line_items(policy, filter: filter).sum(&:award_amount)
   end
 
-  def payments_in_batches
-    payments.includes(:claims).find_in_batches(batch_size: MAX_BATCH_SIZE)
-  end
-
   def total_batches
     (payments.count / MAX_BATCH_SIZE.to_f).ceil
   end
