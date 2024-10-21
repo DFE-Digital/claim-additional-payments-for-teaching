@@ -25,6 +25,7 @@ class MobileNumberForm < Form
     journey_session.answers.assign_attributes(
       mobile_number: mobile_number,
       mobile_verified: nil,
+      mobile_verification_secret: otp_secret,
       sent_one_time_password_at: sent_one_time_password_at
     )
 
@@ -45,8 +46,12 @@ class MobileNumberForm < Form
     NotifySmsMessage.new(
       phone_number: mobile_number,
       template_id: NotifySmsMessage::OTP_PROMPT_TEMPLATE_ID,
-      personalisation: {otp: OneTimePassword::Generator.new.code}
+      personalisation: {otp: OneTimePassword::Generator.new(secret: otp_secret).code}
     ).deliver!
+  end
+
+  def otp_secret
+    @otp_secret ||= ROTP::Base32.random
   end
 
   def mobile_number_changed?

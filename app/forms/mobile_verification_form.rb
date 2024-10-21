@@ -23,7 +23,8 @@ class MobileVerificationForm < Form
   def otp_validate
     otp = OneTimePassword::Validator.new(
       one_time_password,
-      answers.sent_one_time_password_at
+      answers.sent_one_time_password_at,
+      secret: journey_session.answers.mobile_verification_secret
     )
 
     errors.add(:one_time_password, otp.warning) unless otp.valid?
