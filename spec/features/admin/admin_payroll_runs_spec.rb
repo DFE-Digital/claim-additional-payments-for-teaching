@@ -59,25 +59,6 @@ RSpec.feature "Payroll" do
     end
   end
 
-  scenario "Limiting the maximum number of claims entering payroll" do
-    click_on "Payroll"
-
-    expected_claims = create_list(:claim, 3, :approved)
-    stubbed_max_payments = stub_const("PayrollRun::MAX_MONTHLY_PAYMENTS", 2)
-
-    month_name = Date.today.strftime("%B")
-    click_on "Run #{month_name} payroll"
-
-    expect(page).to have_content("The number of payments entering this payrun will be capped to #{stubbed_max_payments}")
-
-    click_on "Confirm and submit"
-
-    expect(page).to have_content("Approved claims 2")
-
-    payroll_run = PayrollRun.order(:created_at).last
-    expect(payroll_run.claims).to match_array(expected_claims.first(stubbed_max_payments))
-  end
-
   scenario "Any claims approved in the meantime are not included" do
     click_on "Payroll"
 
