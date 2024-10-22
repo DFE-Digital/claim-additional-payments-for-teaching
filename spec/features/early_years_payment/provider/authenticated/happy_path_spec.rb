@@ -84,6 +84,8 @@ RSpec.feature "Early years payment provider" do
     expect(page).to have_content(claim.reference)
     expect(claim.submitted_at).to be_nil
     expect(claim.eligibility.reload.provider_claim_submitted_at).to be_present
+    expect(claim.eligibility.provider_email_address).to eq email_address
+    expect(claim.eligibility.award_amount).to eq 1000
   end
 
   scenario "using magic link after having completed some of the journey" do

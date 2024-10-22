@@ -167,7 +167,6 @@ class Claim < ApplicationRecord
   before_save :normalise_first_name, if: %i[first_name first_name_changed?]
   before_save :normalise_surname, if: %i[surname surname_changed?]
 
-  scope :unsubmitted, -> { where(submitted_at: nil) }
   scope :submitted, -> { where.not(submitted_at: nil) }
   scope :held, -> { where(held: true) }
   scope :not_held, -> { where(held: false) }

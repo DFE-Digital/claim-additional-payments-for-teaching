@@ -131,3 +131,5 @@
   - verification
   :journeys_sessions:
   - answers
+  :early_years_payment_eligibilities:
+  - provider_email_address
