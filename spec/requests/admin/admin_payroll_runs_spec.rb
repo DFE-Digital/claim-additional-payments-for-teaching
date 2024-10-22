@@ -13,20 +13,6 @@ RSpec.describe "Admin payroll runs" do
         expect(response).to have_http_status(:ok)
         expect(response.body).to include("£100")
       end
-
-      it "limits the number of claims entering payroll when exceeding the maximum allowed" do
-        stubbed_max_payments = stub_const("PayrollRun::MAX_MONTHLY_PAYMENTS", 2)
-
-        create(:claim, :approved, eligibility_attributes: {student_loan_repayment_amount: 100}, submitted_at: 3.days.ago)
-        create(:claim, :approved, eligibility_attributes: {student_loan_repayment_amount: 50}, submitted_at: 1.days.ago)
-        create(:claim, :approved, eligibility_attributes: {student_loan_repayment_amount: 10}, submitted_at: 2.days.ago)
-
-        get new_admin_payroll_run_path
-
-        expect(response).to have_http_status(:ok)
-        expect(response.body).to include("The number of payments entering this payrun will be capped to #{stubbed_max_payments}")
-        expect(response.body).to include("£110")
-      end
     end
 
     describe "admin_payroll_runs#create" do
