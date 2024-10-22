@@ -106,6 +106,10 @@ FactoryBot.define do
       reference { Reference.new.to_s }
     end
 
+    trait :early_years_provider_submitted do
+      reference { Reference.new.to_s }
+    end
+
     trait :policy_options_provided_with_both do
       policy_options_provided {
         [

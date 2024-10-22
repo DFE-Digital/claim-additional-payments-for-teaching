@@ -77,9 +77,8 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::FindReferenceForm do
       let(:claim) do
         create(
           :claim,
-          :submitted,
           policy: Policies::EarlyYearsPayments,
-          eligibility: build(:early_years_payments_eligibility, nursery_urn: eligible_ey_provider.urn),
+          eligibility: build(:early_years_payments_eligibility, :provider_claim_submitted, nursery_urn: eligible_ey_provider.urn),
           reference: "foo"
         )
       end
@@ -97,7 +96,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::FindReferenceForm do
           :claim,
           :submitted,
           policy: Policies::EarlyYearsPayments,
-          eligibility: build(:early_years_payments_eligibility, :practitioner_claim_submitted, nursery_urn: eligible_ey_provider.urn),
+          eligibility: build(:early_years_payments_eligibility, nursery_urn: eligible_ey_provider.urn),
           reference: "foo"
         )
       end

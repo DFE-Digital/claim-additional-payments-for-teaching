@@ -71,6 +71,19 @@ RSpec.feature "Early years payment practitioner" do
 
     expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
     choose "Female"
-    # click_on "Continue"
+    click_on "Continue"
+
+    expect(page).to have_content("Check your answers before submitting this claim")
+    expect do
+      perform_enqueued_jobs { click_on "Accept and send" }
+    end.to not_change { Claim.count }
+      .and not_change { Policies::EarlyYearsPayments::Eligibility.count }
+      .and not_change { claim.reload.reference }
+
+    expect(claim.eligibility.practitioner_claim_started_at).to be_present
+    expect(claim.reload.submitted_at).to be_present
+
+    # check answers were saved on the claim
+    expect(claim.reload.national_insurance_number).to eq "PX321499A"
   end
 end

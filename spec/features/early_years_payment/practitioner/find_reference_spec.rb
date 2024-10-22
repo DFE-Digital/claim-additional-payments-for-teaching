@@ -6,8 +6,7 @@ RSpec.feature "Early years find reference" do
       :claim,
       policy: Policies::EarlyYearsPayments,
       reference: "foo",
-      practitioner_email_address: "user@example.com",
-      submitted_at: Time.zone.now
+      practitioner_email_address: "user@example.com"
     )
   end
 
@@ -68,7 +67,7 @@ RSpec.feature "Early years find reference" do
         :claim,
         :submitted,
         policy: Policies::EarlyYearsPayments,
-        eligibility: build(:early_years_payments_eligibility, :practitioner_claim_submitted, nursery_urn: eligible_ey_provider.urn),
+        eligibility: build(:early_years_payments_eligibility, nursery_urn: eligible_ey_provider.urn),
         reference: "foo",
         practitioner_email_address: "user@example.com"
       )

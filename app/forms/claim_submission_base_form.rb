@@ -21,7 +21,6 @@ class ClaimSubmissionBaseForm
 
     ApplicationRecord.transaction do
       set_attributes_for_claim_submission
-      main_eligibility.save!
       claim.save!
     end
 
@@ -35,20 +34,25 @@ class ClaimSubmissionBaseForm
 
   delegate :answers, to: :journey_session
 
+  def main_eligibility
+    @main_eligibility ||= eligibilities.first
+  end
+
   def build_claim
-    claim = Claim.new
+    new_or_find_claim.tap do |claim|
+      claim.eligibility ||= main_eligibility
+      claim.started_at = journey_session.created_at
 
-    claim.eligibility = main_eligibility
-
-    claim.started_at = journey_session.created_at
-
-    answers.attributes.each do |name, value|
-      if claim.respond_to?(:"#{name}=")
-        claim.public_send(:"#{name}=", value)
+      answers.attributes.each do |name, value|
+        if claim.respond_to?(:"#{name}=")
+          claim.public_send(:"#{name}=", value)
+        end
       end
     end
+  end
 
-    claim
+  def new_or_find_claim
+    Claim.new
   end
 
   def eligibilities
@@ -71,7 +75,11 @@ class ClaimSubmissionBaseForm
   def set_attributes_for_claim_submission
     claim.journey_session = journey_session
     claim.policy_options_provided = generate_policy_options_provided
-    claim.reference = generate_reference
+    claim.reference ||= generate_reference
+    set_submitted_at_attributes
+  end
+
+  def set_submitted_at_attributes
     claim.submitted_at = Time.zone.now
   end
 
@@ -121,7 +129,7 @@ class ClaimSubmissionBaseForm
   end
 
   def claim_is_eligible
-    if main_eligibility.policy::PolicyEligibilityChecker.new(answers: answers).ineligible?
+    if claim.eligibility.policy::PolicyEligibilityChecker.new(answers: answers).ineligible?
       errors.add(:base, i18n_errors_path(:ineligible))
     end
   end
