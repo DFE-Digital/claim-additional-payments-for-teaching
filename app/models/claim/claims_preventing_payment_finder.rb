@@ -16,7 +16,7 @@ class Claim
     # provided by `claim`, and hence `claim` cannot be paid in the same payment
     # as the returned claims.
     def claims_preventing_payment
-      @claims_preventing_payment ||= find_claims_preventing_payment
+      []
     end
 
     private

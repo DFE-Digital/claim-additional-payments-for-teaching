@@ -4,7 +4,7 @@ FactoryBot.define do
       journey { nil }
     end
 
-    sequence(:urn)
+    sequence(:urn) { |n| School.maximum(:urn).to_i + n }
     name { "#{Faker::Company.unique.name} School" }
     school_type { :community_school }
     school_type_group { :la_maintained }
