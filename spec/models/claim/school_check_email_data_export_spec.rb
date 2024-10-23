@@ -7,7 +7,6 @@ RSpec.describe Claim::SchoolCheckEmailDataExport do
     create(:claim, :submitted, eligibility: eligibility, first_name: "John", middle_name: "Herbert", surname: "Adams")
   end
   let!(:submitted_claims) { [submitted_student_loans_claim] }
-  let!(:submittable_claims) { create_list(:claim, 4, :submittable) }
   let!(:excluded_claims) { create_list(:claim, 3, :submitted) }
   let!(:approved_claims) { create_list(:claim, 2, :approved) }
   let!(:rejected_claims) { create_list(:claim, 2, :rejected) }

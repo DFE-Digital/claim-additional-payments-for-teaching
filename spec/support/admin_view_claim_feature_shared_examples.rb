@@ -3,28 +3,27 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
   let(:academic_year) { journey_configuration.current_academic_year }
 
   let!(:claim) {
-    eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible)
     create(
       :claim,
       :submitted,
       policy: policy,
-      eligibility: eligibility,
       first_name: Faker::Name.first_name,
-      surname: Faker::Name.last_name
+      surname: Faker::Name.last_name,
+      eligibility_trait: :eligible
     )
   }
 
   let!(:multiple_claim) {
-    eligibility = if policy == Policies::FurtherEducationPayments
-      create(:"#{policy.to_s.underscore}_eligibility", :eligible, :with_trn)
+    eligibility_trait = if policy == Policies::FurtherEducationPayments
+      :with_trn
     else
-      create(:"#{policy.to_s.underscore}_eligibility", :eligible)
+      :eligible
     end
     create(
       :claim,
       :submitted,
       policy: policy,
-      eligibility: eligibility
+      eligibility_trait: eligibility_trait
     )
   }
 
@@ -34,42 +33,39 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     else
       {teacher_reference_number: multiple_claim.eligibility.teacher_reference_number}
     end
-    eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible, duplicate_attribute)
     create(
       :claim,
       :submitted,
       policy: policy,
-      eligibility: eligibility
+      eligibility_trait: :eligible,
+      eligibility_attributes: duplicate_attribute
     )
   }
 
   let!(:approved_awaiting_payroll_claim) {
-    eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible)
     create(
       :claim,
       :payrollable,
       policy: policy,
-      eligibility: eligibility
+      eligibility_trait: :eligible
     )
   }
 
   let!(:approved_paid_claim) {
-    eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible)
     create(
       :claim,
       :approved,
       policy: policy,
-      eligibility: eligibility
+      eligibility_trait: :eligible
     )
   }
 
   let!(:rejected_claim) {
-    eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible)
     create(
       :claim,
       :rejected,
       policy: policy,
-      eligibility: eligibility
+      eligibility_trait: :eligible
     )
   }
 

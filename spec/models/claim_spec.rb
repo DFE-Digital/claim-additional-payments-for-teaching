@@ -170,7 +170,6 @@ RSpec.describe Claim, type: :model do
 
   describe "scopes" do
     let!(:submitted_claims) { create_list(:claim, 5, :submitted) }
-    let!(:unsubmitted_claims) { create_list(:claim, 2, :submittable) }
     let!(:approved_claims) { create_list(:claim, 5, :approved) }
     let!(:rejected_claims) { create_list(:claim, 5, :rejected) }
 

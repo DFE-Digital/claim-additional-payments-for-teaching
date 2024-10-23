@@ -7,7 +7,6 @@ RSpec.feature "Admin stats" do
   let!(:school_workforce_census_task_no_data) { create(:task, claim: submitted_claims.third, name: "census_subjects_taught") }
   before do
     @approved_claims = create_list(:claim, 3, :approved, submitted_at: 10.weeks.ago)
-    @unfinished_claims = create_list(:claim, 1, :submittable)
     @rejected_claims = create_list(:claim, 1, :rejected)
     @claims_approaching_deadline = create_list(:claim, 2, :submitted, submitted_at: (Claim::DECISION_DEADLINE - 1.week).ago)
     @claims_passed_deadline = create_list(:claim, 1, :submitted, submitted_at: (Claim::DECISION_DEADLINE + 1.week).ago)

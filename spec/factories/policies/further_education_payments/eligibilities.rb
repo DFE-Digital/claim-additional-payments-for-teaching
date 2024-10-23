@@ -135,6 +135,7 @@ FactoryBot.define do
     end
 
     trait :with_trn do
+      eligible
       teacher_reference_number { generate(:teacher_reference_number) }
     end
   end
