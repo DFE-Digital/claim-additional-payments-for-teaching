@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe StudentLoansData do
-  let!(:applicant_a_slc_record_one) { create(:student_loans_data, nino: "QQ123456A", amount: 100, plan_type_of_deduction: 2) }
-  let!(:applicant_a_slc_record_two) { create(:student_loans_data, nino: "QQ123456A", amount: 50, plan_type_of_deduction: 1) }
-  let!(:applicant_b_slc_record_one) { create(:student_loans_data, nino: "QQ123456B", amount: 60, plan_type_of_deduction: 1) }
+  let!(:applicant_a_slc_record_one) { create(:student_loans_data, nino: "QQ123456A", date_of_birth: Date.new(1980, 1, 1), amount: 100, plan_type_of_deduction: 2) }
+  let!(:applicant_a_slc_record_two) { create(:student_loans_data, nino: "QQ123456A", date_of_birth: Date.new(1980, 1, 1), amount: 50, plan_type_of_deduction: 1) }
+  let!(:applicant_b_slc_record_one) { create(:student_loans_data, nino: "QQ123456B", date_of_birth: Date.new(1990, 1, 1), amount: 60, plan_type_of_deduction: 1) }
+  let!(:applicant_b_duplicate) { create(:student_loans_data, nino: "QQ123456B", date_of_birth: Date.new(1990, 1, 1), amount: 60, plan_type_of_deduction: 1) }
 
   def query_results_by(**)
     described_class.where(**)

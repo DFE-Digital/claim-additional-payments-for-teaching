@@ -4,6 +4,7 @@ class StudentLoansData < ApplicationRecord
   end
 
   def self.total_repayment_amount
-    sum(:amount)
+    distinct_entries = select(:nino, :date_of_birth, :plan_type_of_deduction, :amount).distinct
+    distinct_entries.sum(:amount)
   end
 end
