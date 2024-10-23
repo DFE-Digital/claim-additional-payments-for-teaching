@@ -1,9 +1,9 @@
 module OneTimePassword
   class Validator < Base
-    def initialize(code, generated_at = nil, secret: nil)
+    def initialize(code, generated_at = nil, secret:)
       @code = code
       @generated_at = generated_at
-      @secret = encode_secret(secret) || SECRET
+      @secret = secret
     end
 
     def valid?

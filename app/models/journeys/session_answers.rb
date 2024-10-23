@@ -28,7 +28,9 @@ module Journeys
     attribute :provide_mobile_number, :boolean
     attribute :mobile_number, :string
     attribute :email_verified, :boolean
+    attribute :email_verification_secret, :string
     attribute :mobile_verified, :boolean
+    attribute :mobile_verification_secret, :string
     attribute :hmrc_bank_validation_succeeded, :boolean
     attribute :hmrc_bank_validation_responses, default: []
     attribute :logged_in_with_tid, :boolean

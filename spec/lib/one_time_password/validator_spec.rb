@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe OneTimePassword::Validator do
-  subject { described_class.new(one_time_passcode, generated_at) }
+  subject { described_class.new(one_time_passcode, generated_at, secret:) }
 
-  let!(:one_time_passcode) { OneTimePassword::Generator.new.code }
+  let(:secret) { ROTP::Base32.random }
+  let!(:one_time_passcode) { OneTimePassword::Generator.new(secret:).code }
   let!(:generated_at) { Time.now }
 
   context "with a valid code" do
@@ -78,7 +79,7 @@ RSpec.describe OneTimePassword::Validator do
     end
 
     context "when generated_at is not specified" do
-      subject { described_class.new(one_time_passcode) }
+      subject { described_class.new(one_time_passcode, secret:) }
 
       it { is_expected.to_not be_valid }
 
@@ -89,7 +90,7 @@ RSpec.describe OneTimePassword::Validator do
   end
 
   context "not specifying generated_at" do
-    subject { described_class.new(one_time_passcode) }
+    subject { described_class.new(one_time_passcode, secret:) }
 
     context "with a valid code" do
       it { is_expected.to be_valid }

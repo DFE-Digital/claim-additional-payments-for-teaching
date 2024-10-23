@@ -45,7 +45,8 @@ module Journeys
         def otp_must_be_valid
           otp = OneTimePassword::Validator.new(
             one_time_password,
-            sent_one_time_password_at
+            sent_one_time_password_at,
+            secret: journey_session.answers.email_verification_secret
           )
 
           errors.add(:one_time_password, otp.warning) unless otp.valid?

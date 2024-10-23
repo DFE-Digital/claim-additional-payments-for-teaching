@@ -120,7 +120,7 @@ class ClaimsController < BasePublicController
   def handle_magic_link
     return unless params[:code] && params[:email]
 
-    otp = OneTimePassword::Validator.new(params[:code], secret: ENV.fetch("EY_MAGIC_LINK_SECRET") + params[:email])
+    otp = OneTimePassword::Validator.new(params[:code], secret: ROTP::Base32.encode(ENV.fetch("EY_MAGIC_LINK_SECRET") + params[:email]))
     if otp.valid?
       journey_session.answers.assign_attributes(email_address: params[:email])
       journey_session.answers.assign_attributes(email_verified: true)
