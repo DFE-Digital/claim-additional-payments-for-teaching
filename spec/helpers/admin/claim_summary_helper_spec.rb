@@ -27,5 +27,11 @@ describe Admin::ClaimsHelper do
 
       it { is_expected.to eql "claim_summary_international_relocation_payments" }
     end
+
+    context "for EarlyYearsPayments" do
+      let(:policy) { Policies::EarlyYearsPayments }
+
+      it { is_expected.to eql "claim_summary_early_years_payments" }
+    end
   end
 end
