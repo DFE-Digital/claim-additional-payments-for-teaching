@@ -1419,11 +1419,12 @@ en:
         By submitting this claim you’re confirming that, to the best of your knowledge, the details you’re providing are correct.
       btn_text: Accept and send
   early_years_payments:
-    <<: *early_years_payment_provider_authenticated
     claim_subject: "Early Years Payment"
     policy_acronym: EY
     policy_short_name: Early Years
     policy_full_name: Early years financial incentive payment
+    support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
+    claim_description: for an early years financial incentive payment
     govuk_verify_fields:
       full_name: Applicant name
     admin:
@@ -1443,6 +1444,13 @@ en:
       provider_submitted_at: Provider submitted at
       practitioner_started_at: Claimant started at
       submitted_at: Claimant submitted at
+      decision:
+        rejected_reasons:
+          claim_cancelled_by_employer: Claim cancelled by employer
+          six_month_retention_check_failed: 6 month retention check failed
+          duplicate: Duplicate
+          no_response: No response
+          other: Other
   early_years_payment_practitioner:
     journey_name: Claim an early years financial incentive payment - practitioner
     feedback_email: "help@opsteam.education.gov.uk"
