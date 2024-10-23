@@ -218,7 +218,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
       fill_in_remaining_personal_details_and_submit
 
-      claim = Claim.submitted.order(:created_at).last
+      claim = Claim.order(:created_at).last
       expect(claim.submitted_using_slc_data).to eql(true)
     end
 

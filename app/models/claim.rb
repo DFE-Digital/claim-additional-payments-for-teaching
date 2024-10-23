@@ -167,12 +167,10 @@ class Claim < ApplicationRecord
   before_save :normalise_first_name, if: %i[first_name first_name_changed?]
   before_save :normalise_surname, if: %i[surname surname_changed?]
 
-  scope :submitted, -> { where.not(submitted_at: nil) }
   scope :held, -> { where(held: true) }
   scope :not_held, -> { where(held: false) }
   scope :awaiting_decision, -> do
-    submitted
-      .joins("LEFT OUTER JOIN decisions ON decisions.claim_id = claims.id AND decisions.undone = false")
+    joins("LEFT OUTER JOIN decisions ON decisions.claim_id = claims.id AND decisions.undone = false")
       .where(decisions: {claim_id: nil})
   end
   scope :awaiting_task, ->(task_name) { awaiting_decision.joins(sanitize_sql(["LEFT OUTER JOIN tasks ON tasks.claim_id = claims.id AND tasks.name = ?", task_name])).where(tasks: {claim_id: nil}) }

@@ -84,12 +84,6 @@ RSpec.describe Claim::MatchingAttributeFinder do
       expect(matching_claims).to be_empty
     end
 
-    it "does not include unsubmitted claims with matching attributes" do
-      create(:claim, :submittable, eligibility_attributes: {teacher_reference_number: source_claim.eligibility.teacher_reference_number})
-
-      expect(matching_claims).to be_empty
-    end
-
     it "does not include claims that match, but have a different policy" do
       student_loans_claim = create(:claim, :submitted, eligibility_attributes: {teacher_reference_number: source_claim.eligibility.teacher_reference_number}, policy: Policies::StudentLoans)
 

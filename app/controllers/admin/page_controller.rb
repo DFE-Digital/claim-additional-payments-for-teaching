@@ -5,11 +5,11 @@ module Admin
     def index
       flash[:notice] = "There is currently no School Workforce Census data present" if SchoolWorkforceCensus.all.size.zero?
 
-      @claims_received = Claim.current_academic_year.submitted.count
+      @claims_received = Claim.current_academic_year.count
       @claims_approved = Claim.current_academic_year.approved.count
       @claims_rejected = Claim.current_academic_year.rejected.count
 
-      @total_claims_received = Claim.submitted.count
+      @total_claims_received = Claim.count
       @claims_approaching_deadline = Claim.approaching_decision_deadline.count
       @claims_passed_decision_deadline = Claim.passed_decision_deadline.count
 

@@ -24,36 +24,13 @@
       "note": ""
     },
     {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "0ac253105d2af7d0dd324537b4be4a392ded73c0f3df8ca4d32db09cac7b586d",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/claim/search.rb",
-      "line": 45,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Claim.submitted.where(\"LOWER(#{attribute}) = LOWER(?)\", search_term)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Search",
-        "method": "search_by"
-      },
-      "user_input": "attribute",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": ""
-    },
-    {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
       "fingerprint": "23e1b8f42ab87b9f17f883de7ac8b7b11261ec3dd8f8ad11f06aaae2a3b6fc51",
       "check_name": "Render",
       "message": "Render path contains parameter value",
       "file": "app/controllers/admin/tasks_controller.rb",
-      "line": 49,
+      "line": 47,
       "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
       "code": "render(action => Claim.includes(:tasks).find(params[:claim_id]).tasks.where(:name => params[:name]).first.name, {})",
       "render_path": null,
@@ -76,7 +53,7 @@
       "check_name": "Render",
       "message": "Render path contains parameter value",
       "file": "app/controllers/admin/tasks_controller.rb",
-      "line": 22,
+      "line": 20,
       "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
       "code": "render(action => Claim.includes(:tasks).find(params[:claim_id]).tasks.find_or_initialize_by(:name => params[:name]).name, {})",
       "render_path": null,
@@ -91,6 +68,29 @@
         22
       ],
       "note": "Constrained to valid input by routes"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "46bfd0a9d4a19eb048a883184b501b060aa4d6006accc3c76bbfc00722b44dbf",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/claim/search.rb",
+      "line": 35,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Claim.where(\"LOWER(#{attribute}) = LOWER(?)\", search_term)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Search",
+        "method": "search_by"
+      },
+      "user_input": "attribute",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
     },
     {
       "warning_type": "File Access",
@@ -122,7 +122,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/claim/matching_attribute_finder.rb",
-      "line": 54,
+      "line": 34,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "Claim.where(\"LOWER(#{\"CONCAT(#{attributes.join(\",\")})\"}) = LOWER(?)\", values_for_attributes(source_claim, attributes).join)",
       "render_path": null,
@@ -139,6 +139,6 @@
       "note": ""
     }
   ],
-  "updated": "2024-06-20 16:06:05 +0100",
-  "brakeman_version": "6.1.2"
+  "updated": "2024-10-23 16:53:59 +0100",
+  "brakeman_version": "6.2.1"
 }
