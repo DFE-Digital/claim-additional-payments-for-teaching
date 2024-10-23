@@ -19,10 +19,6 @@ module Journeys
 
       private
 
-      def main_eligibility
-        @main_eligibility ||= eligibilities.first
-      end
-
       def calculate_award_amount(eligibility)
         # NOOP
         # This is just for compatibility with the AdditionalPaymentsForTeaching

@@ -856,6 +856,7 @@ en:
       prepared_date: "24 September 2024"
     landing_page: Find out if you are eligible for a targeted retention incentive payment for further education teachers
     claim_description: for further education payments
+    claim_amount_description: Further education targeted retention incentive payment
     journey_name: Claim a targeted retention incentive payment for further education teachers
     feedback_email: "FE-targeted.retention-incentive@education.gov.uk"
     support_email_address: "FE-targeted.retention-incentive@education.gov.uk"
@@ -1431,6 +1432,9 @@ en:
         label: Your email address
         hint1: We’ll use this to update you with progress on your claim.
         hint2: We recommend you use a non-work email address in case your circumstances change while we process your claim.
+    check_your_answers:
+      title: Check your answers before submitting this claim
+      btn_text: Accept and send
   activerecord:
     errors:
       models:

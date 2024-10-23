@@ -38,6 +38,15 @@ RSpec.describe ClaimVerifierJob do
         expect(AutomatedChecks::ClaimVerifier).to receive(:new).with(claim:, dqt_teacher_status: mock_payload)
         described_class.new.perform(claim)
       end
+
+      context "when the claim does not have a TRN" do
+        let(:claim) { build(:claim, policy: Policies::EarlyYearsPayments) }
+
+        it "does not perform the verifier job" do
+          expect(AutomatedChecks::ClaimVerifier).not_to receive(:new)
+          described_class.new.perform(claim)
+        end
+      end
     end
 
     context "when the claim does not have a DQT record payload" do
