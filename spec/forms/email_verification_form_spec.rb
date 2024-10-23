@@ -2,6 +2,8 @@ require "rails_helper"
 
 RSpec.describe EmailVerificationForm do
   shared_examples "email_verification" do |journey|
+    let(:secret) { ROTP::Base32.random }
+
     let(:params) do
       ActionController::Parameters.new(
         claim: {
@@ -14,6 +16,7 @@ RSpec.describe EmailVerificationForm do
       create(
         :"#{journey::I18N_NAMESPACE}_session",
         answers: {
+          email_verification_secret: secret,
           sent_one_time_password_at: sent_one_time_password_at
         }
       )
@@ -61,19 +64,19 @@ RSpec.describe EmailVerificationForm do
         end
 
         context "when the code has expired" do
-          let(:one_time_password) { OneTimePassword::Generator.new.code }
+          let(:one_time_password) { OneTimePassword::Generator.new(secret:).code }
           let(:sent_one_time_password_at) { 30.minutes.ago }
           it { is_expected.not_to be_valid }
         end
 
         context "when the code generation timestamp is missing" do
-          let(:one_time_password) { OneTimePassword::Generator.new.code }
+          let(:one_time_password) { OneTimePassword::Generator.new(secret:).code }
           let(:sent_one_time_password_at) { nil }
           it { is_expected.not_to be_valid }
         end
 
         context "when correct code" do
-          let(:one_time_password) { OneTimePassword::Generator.new.code }
+          let(:one_time_password) { OneTimePassword::Generator.new(secret:).code }
           let(:sent_one_time_password_at) { Time.now }
           it { is_expected.to be_valid }
         end
@@ -81,7 +84,7 @@ RSpec.describe EmailVerificationForm do
     end
 
     describe "#save" do
-      let(:one_time_password) { OneTimePassword::Generator.new.code }
+      let(:one_time_password) { OneTimePassword::Generator.new(secret:).code }
       let(:sent_one_time_password_at) { Time.now }
 
       before { form.save }
