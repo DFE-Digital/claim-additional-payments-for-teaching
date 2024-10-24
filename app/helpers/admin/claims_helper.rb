@@ -53,6 +53,10 @@ module Admin
       claim.policy::AdminClaimDetailsPresenter.new(claim).provider_details
     end
 
+    def admin_policy_options_provided_for_early_years_payments(claim)
+      claim.policy::AdminClaimDetailsPresenter.new(claim).policy_options_provided
+    end
+
     def admin_student_loan_details(claim)
       [].tap do |a|
         a << [translate("student_loans.admin.student_loan_repayment_amount"), number_to_currency(claim.eligibility.student_loan_repayment_amount)] if claim.eligibility.respond_to?(:student_loan_repayment_amount)

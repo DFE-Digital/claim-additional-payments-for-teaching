@@ -150,9 +150,6 @@ class Claim < ApplicationRecord
   validates :student_loan_plan, inclusion: {in: STUDENT_LOAN_PLAN_OPTIONS}, allow_nil: true
   validates :student_loan_plan, on: [:amendment], presence: {message: "Enter a valid student loan plan"}
 
-  # TODO: remove when a form object is created for email-address
-  validates :email_address, on: [:submit], presence: {message: "Enter an email address"}
-
   validates :bank_sort_code, on: [:amendment], presence: {message: "Enter a sort code"}
   validates :bank_account_number, on: [:amendment], presence: {message: "Enter an account number"}
 

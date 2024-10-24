@@ -23,7 +23,10 @@ module Journeys
 
           def set_submitted_at_attributes
             claim.eligibility.provider_claim_submitted_at = Time.zone.now
-            claim.eligibility.provider_email_address = journey_session.answers.email_address
+          end
+
+          def claim_expected_to_have_email_address
+            false
           end
         end
       end
