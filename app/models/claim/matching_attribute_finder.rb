@@ -80,7 +80,7 @@ class Claim
     end
 
     def claims_to_compare
-      Claim.submitted
+      Claim
         .by_academic_year(@source_claim.academic_year)
         .by_policies(policies_to_find_matches)
         .where.not(id: @source_claim.id)

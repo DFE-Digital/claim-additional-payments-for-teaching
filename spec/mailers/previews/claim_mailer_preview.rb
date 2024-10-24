@@ -31,10 +31,6 @@ class ClaimMailerPreview < ActionMailer::Preview
     ClaimMailer.update_after_three_weeks(claim_for(Claim.approved.by_policy(Policies::LevellingUpPremiumPayments)))
   end
 
-  def email_verification
-    ClaimMailer.email_verification(claim_for(Claim.unsubmitted), OneTimePassword::Generator.new.code)
-  end
-
   private
 
   def claim_for(scope)

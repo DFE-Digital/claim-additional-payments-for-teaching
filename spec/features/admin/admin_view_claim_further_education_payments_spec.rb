@@ -2,7 +2,6 @@ require "rails_helper"
 
 RSpec.feature "Admin view claim for FurtherEducationPayments" do
   let!(:journey_configuration) { create(:journey_configuration, "further_education_payments") }
-  let(:eligibility_with_trn) { create(:further_education_payments_eligibility, :eligible, :with_trn) }
   let!(:claim) {
     create(
       :claim,
@@ -16,7 +15,7 @@ RSpec.feature "Admin view claim for FurtherEducationPayments" do
       :claim,
       :submitted,
       policy: Policies::FurtherEducationPayments,
-      eligibility: eligibility_with_trn
+      eligibility_trait: :with_trn
     )
   }
   let!(:claim_not_verified) {
@@ -58,8 +57,7 @@ RSpec.feature "Admin view claim for FurtherEducationPayments" do
   end
 
   scenario "view claim summary for claim with no TRN" do
-    visit admin_claims_path
-    find("a[href='#{admin_claim_tasks_path(claim)}']").click
+    visit admin_claim_tasks_path(claim)
     expect(page).not_to have_content("Claim route")
     expect(page).not_to have_content("Not signed in with DfE Identity")
     expect(page).to have_content("Not provided")
@@ -68,8 +66,7 @@ RSpec.feature "Admin view claim for FurtherEducationPayments" do
   end
 
   scenario "view claim summary for claim with TRN" do
-    visit admin_claims_path
-    find("a[href='#{admin_claim_tasks_path(claim_with_trn)}']").click
+    visit admin_claim_tasks_path(claim_with_trn)
     expect(page).not_to have_content("Not provided")
     expect(page).to have_content(claim_with_trn.eligibility.teacher_reference_number)
     expect(page).to have_content("UK Provider Reference Number (UKPRN)")

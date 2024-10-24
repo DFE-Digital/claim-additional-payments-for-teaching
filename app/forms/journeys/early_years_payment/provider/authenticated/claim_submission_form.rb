@@ -14,9 +14,7 @@ module Journeys
           private
 
           def calculate_award_amount(eligibility)
-            # NOOP
-            # This is just for compatibility with the AdditionalPaymentsForTeaching
-            # claim submission form.
+            eligibility.award_amount = Policies::EarlyYearsPayments.award_amount
           end
 
           def generate_policy_options_provided
@@ -25,6 +23,10 @@ module Journeys
 
           def set_submitted_at_attributes
             claim.eligibility.provider_claim_submitted_at = Time.zone.now
+          end
+
+          def claim_expected_to_have_email_address
+            false
           end
         end
       end

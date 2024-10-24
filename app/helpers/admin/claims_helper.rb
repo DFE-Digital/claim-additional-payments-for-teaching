@@ -37,12 +37,24 @@ module Admin
     def admin_personal_details(claim)
       [
         [translate("admin.teacher_reference_number"), claim.eligibility.teacher_reference_number.presence || "Not provided"],
-        [translate("govuk_verify_fields.full_name").capitalize, claim.personal_data_removed? ? personal_data_removed_text : claim.full_name],
+        [translate("#{claim.policy.locale_key}.govuk_verify_fields.full_name", default: :"govuk_verify_fields.full_name").capitalize, claim.personal_data_removed? ? personal_data_removed_text : claim.full_name],
         [translate("govuk_verify_fields.date_of_birth").capitalize, claim.personal_data_removed? ? personal_data_removed_text : l(claim.date_of_birth, format: :day_month_year)],
         [translate("admin.national_insurance_number"), claim.personal_data_removed? ? personal_data_removed_text : claim.national_insurance_number],
         [translate("govuk_verify_fields.address").capitalize, claim.personal_data_removed? ? personal_data_removed_text : sanitize(claim.address("<br>").html_safe, tags: %w[br])],
-        [translate("admin.email_address"), claim.email_address]
+        [translate("#{claim.policy.locale_key}.admin.email_address", default: :"admin.email_address"), claim.email_address]
       ]
+    end
+
+    def admin_personal_details_for_early_years_payments(claim)
+      claim.policy::AdminClaimDetailsPresenter.new(claim).personal_details
+    end
+
+    def admin_provider_details_for_early_years_payments(claim)
+      claim.policy::AdminClaimDetailsPresenter.new(claim).provider_details
+    end
+
+    def admin_policy_options_provided_for_early_years_payments(claim)
+      claim.policy::AdminClaimDetailsPresenter.new(claim).policy_options_provided
     end
 
     def admin_student_loan_details(claim)
@@ -59,6 +71,10 @@ module Admin
         [translate("admin.decision_deadline"), l(claim.decision_deadline_date)],
         [translate("admin.decision_overdue"), decision_deadline_warning(claim)]
       ]
+    end
+
+    def admin_submission_details_for_early_years_payments(claim)
+      claim.policy::AdminClaimDetailsPresenter.new(claim).submission_details
     end
 
     def admin_decision_details(decision)

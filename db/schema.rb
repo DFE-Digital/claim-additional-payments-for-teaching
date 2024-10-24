@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_17_113701) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_21_162043) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_trgm"
@@ -199,6 +199,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_17_113701) do
     t.boolean "returning_within_6_months"
     t.datetime "provider_claim_submitted_at"
     t.datetime "practitioner_claim_started_at"
+    t.string "provider_email_address"
+    t.boolean "returner_worked_with_children"
+    t.string "returner_contract_type"
+    t.decimal "award_amount", precision: 7, scale: 2
   end
 
   create_table "eligible_ey_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

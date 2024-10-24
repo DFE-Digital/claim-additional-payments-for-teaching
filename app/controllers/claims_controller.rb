@@ -122,8 +122,7 @@ class ClaimsController < BasePublicController
 
     otp = OneTimePassword::Validator.new(params[:code], secret: ROTP::Base32.encode(ENV.fetch("EY_MAGIC_LINK_SECRET") + params[:email]))
     if otp.valid?
-      journey_session.answers.assign_attributes(email_address: params[:email])
-      journey_session.answers.assign_attributes(email_verified: true)
+      journey_session.answers.assign_attributes(provider_email_address: params[:email])
       journey_session.save!
     else
       redirect_to claim_path(Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME, "expired-link") and return
