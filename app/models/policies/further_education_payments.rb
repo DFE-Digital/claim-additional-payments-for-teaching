@@ -89,5 +89,9 @@ module Policies
     def auto_check_student_loan_plan_task?
       true
     end
+
+    def payroll_file_name
+      "FELUPEXPANSION"
+    end
   end
 end
