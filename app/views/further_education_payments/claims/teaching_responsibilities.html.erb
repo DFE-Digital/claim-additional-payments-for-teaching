@@ -1,4 +1,4 @@
-<% content_for(:page_title, page_title(@form.t(:question), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+<% content_for(:page_title, page_title(@form.t(:heading), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
 <% @backlink_path = landing_page_path %>
 
@@ -8,7 +8,7 @@
       <%= f.govuk_error_summary %>
 
       <h1 class="govuk-heading-l">
-        To apply for a targeted retention incentive payment, you must be employed as a member of staff with teaching responsibilities
+        <%= @form.t(:heading) %>
       </h1>
 
       <p class="govuk-body">

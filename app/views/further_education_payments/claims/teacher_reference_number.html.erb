@@ -1,7 +1,7 @@
 <% content_for(
   :page_title,
   page_title(
-    @form.t("questions.teacher_reference_number"),
+    @form.t("heading"),
     journey: current_journey_routing_name,
     show_error: @form.errors.any?)
 ) %>
@@ -12,7 +12,7 @@
       <%= f.govuk_error_summary %>
 
       <h1 class="govuk-heading-l">
-        Teacher reference number (TRN)
+        <%= @form.t(:heading) %>
       </h1>
 
       <p class="govuk-body">
