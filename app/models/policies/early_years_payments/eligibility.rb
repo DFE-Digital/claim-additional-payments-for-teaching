@@ -20,6 +20,10 @@ module Policies
       def provider_claim_submitted?
         provider_claim_submitted_at.present?
       end
+
+      def award_amount
+        # TODO: NOOP until confirmed.
+      end
     end
   end
 end

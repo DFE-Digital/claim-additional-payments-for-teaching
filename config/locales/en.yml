@@ -1418,6 +1418,8 @@ en:
   early_years_payments:
     <<: *early_years_payment_provider_authenticated
     claim_subject: "Early Years Payment"
+    policy_acronym: EY
+    policy_short_name: Early Years
   early_years_payment_practitioner:
     journey_name: Claim an early years financial incentive payment - practitioner
     feedback_email: "help@opsteam.education.gov.uk"
