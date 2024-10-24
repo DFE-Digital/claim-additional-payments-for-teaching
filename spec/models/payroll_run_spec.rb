@@ -23,35 +23,6 @@ RSpec.describe PayrollRun, type: :model do
     end
   end
 
-  context "validating the number of payments entering payroll" do
-    let(:stubbed_max_payments) { 10 }
-    let(:payroll_run) { build(:payroll_run, :with_payments, count: payments_count) }
-
-    before do
-      stub_const("PayrollRun::MAX_MONTHLY_PAYMENTS", stubbed_max_payments)
-    end
-
-    context "when exceeding the number of maximum allowed payments" do
-      let(:payments_count) { stubbed_max_payments + 1 }
-
-      it "returns a validation error", :aggregate_failures do
-        expect(payroll_run.valid?).to eq(false)
-        expect(payroll_run.errors[:base]).to eq(["This payroll run exceeds #{stubbed_max_payments} payments"])
-        expect { payroll_run.save! }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
-    context "when not exceeding the number of maximum allowed payments" do
-      let(:payments_count) { stubbed_max_payments }
-
-      it "creates the payroll run", :aggregate_failures do
-        expect(payroll_run.valid?).to eq(true)
-        expect(payroll_run.errors[:base]).to be_empty
-        expect { payroll_run.save! }.to change { payroll_run.persisted? }.to(true)
-      end
-    end
-  end
-
   describe "#total_award_amount" do
     it "returns the sum of the award amounts of its claims" do
       payment_1 = build(:payment, claims: [build(:claim, :approved, eligibility_attributes: {student_loan_repayment_amount: 1500})])
@@ -157,37 +128,6 @@ RSpec.describe PayrollRun, type: :model do
 
       expect(PayrollRun.this_month).to eq([created_this_month])
     end
-  end
-
-  describe "#payments_in_batches" do
-    subject(:batches) { payroll_run.payments_in_batches }
-
-    let(:payroll_run) { create(:payroll_run, claims_counts: {Policies::StudentLoans => 5}) }
-    let(:batch_size) { 2 }
-    let(:expected_batches) { payroll_run.payments.ordered.each_slice(batch_size).to_a }
-
-    before do
-      stub_const("#{described_class}::MAX_BATCH_SIZE", batch_size)
-    end
-
-    it { is_expected.to be_an(Enumerator) }
-
-    it "returns payments in batches" do
-      expect(batches.to_a).to eq(expected_batches)
-    end
-  end
-
-  describe "#total_batches" do
-    subject(:total) { payroll_run.total_batches }
-
-    let(:payroll_run) { create(:payroll_run, claims_counts: {Policies::StudentLoans => 5}) }
-    let(:batch_size) { 2 }
-
-    before do
-      stub_const("#{described_class}::MAX_BATCH_SIZE", batch_size)
-    end
-
-    it { is_expected.to eq(3) }
   end
 
   describe "#total_confirmed_payments" do

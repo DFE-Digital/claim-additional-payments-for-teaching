@@ -4,6 +4,8 @@ module Payroll
   class PaymentsCsv
     attr_reader :payroll_run
 
+    ROW_SEPARATOR = "\r\n"
+
     FIELDS_WITH_HEADERS = {
       title: "TITLE",
       first_name: "FORENAME",
@@ -44,49 +46,25 @@ module Payroll
     end
 
     def data
-      buffer = ::StringIO.new
-      Zip::OutputStream.write_buffer(buffer) do |file|
-        payroll_run.payments_in_batches.each.with_index(1) do |batch, index|
-          file = write_csv(file, batch, index)
+      CSV.generate(
+        row_sep: ROW_SEPARATOR,
+        write_headers: true,
+        headers: FIELDS_WITH_HEADERS.values
+      ) do |csv|
+        payroll_run.payments.includes(:claims).find_in_batches(batch_size: 1000) do |batch|
+          batch.each do |payment|
+            csv << PaymentCsvRow.new(payment).to_a
+          end
         end
       end
-      buffer.rewind
-      buffer.read
     end
 
     def content_type
-      "application/zip"
+      "text/csv"
     end
 
     def filename
-      "#{filename_base}.zip"
-    end
-
-    private
-
-    def write_csv(file, batch, index)
-      file.put_next_entry(filename_batch(index))
-      file.write(header_row)
-      batch.each do |payment|
-        file.write(Payroll::PaymentCsvRow.new(payment).to_s)
-      end
-      file
-    end
-
-    def filename_batch(index)
-      "#{filename_base}-batch_#{index}.csv"
-    end
-
-    def filename_base
-      "payroll_data_#{payroll_run.created_at.to_date.iso8601}"
-    end
-
-    def header_row
-      CSV.generate_line(csv_headers, row_sep: PaymentCsvRow::ROW_SEPARATOR)
-    end
-
-    def csv_headers
-      FIELDS_WITH_HEADERS.values
+      "payroll_data_#{payroll_run.created_at.to_date.iso8601}.csv"
     end
   end
 end

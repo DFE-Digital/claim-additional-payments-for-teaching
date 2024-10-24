@@ -8,8 +8,8 @@ RSpec.describe Payroll::PaymentCsvRow do
 
   subject { described_class.new(payment) }
 
-  describe "#to_s" do
-    let(:row) { CSV.parse(subject.to_s).first }
+  describe "#to_a" do
+    let(:row) { subject.to_a }
     let(:payment_award_amount) { BigDecimal("1234.56") }
     let(:payment) { create(:payment, award_amount: payment_award_amount, claims: claims) }
 
@@ -247,7 +247,6 @@ RSpec.describe Payroll::PaymentCsvRow do
     describe "start and end dates" do
       it "returns the first and last dates of the month" do
         travel_to Date.parse "20 February 2019" do
-          row = CSV.parse(subject.to_s).first
           expect(row[7]).to eq "01/02/2019"
           expect(row[8]).to eq "28/02/2019"
         end
@@ -266,10 +265,6 @@ RSpec.describe Payroll::PaymentCsvRow do
       end
 
       expect(row[Payroll::PaymentsCsv::FIELDS_WITH_HEADERS.find_index { |k, _| k == :address_line_2 }]).to eq("\\#{claims.first.address_line_2}")
-    end
-
-    it "outputs a CRLF line feed" do
-      expect(subject.to_s).to end_with("\r\n")
     end
   end
 end

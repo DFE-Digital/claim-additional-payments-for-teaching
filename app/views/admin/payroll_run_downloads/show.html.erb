@@ -8,13 +8,9 @@
       If the download does not start automatically, click on the link below.
     </p>
 
-    <p class="govuk-body govuk-!-font-weight-bold">
-      NOTE: The generated file will include <%= @payroll_run.total_batches %>
-      <%= "batch".pluralize(@payroll_run.total_batches) %>.
-    </p>
-
   </div>
+
   <div class="govuk-grid-column-full">
-    <%= link_to "Download #{@payroll_run.created_at.strftime("%B")} payroll file", admin_payroll_run_download_path(@payroll_run, format: :zip), class: ["govuk-body", "govuk-link"], data: { "auto-follow-link": "true" } if @payroll_run.download_triggered? %>
+    <%= link_to "Download #{@payroll_run.created_at.strftime("%B")} payroll file", admin_payroll_run_download_path(@payroll_run, format: :csv), class: ["govuk-body", "govuk-link"], data: { "auto-follow-link": "true" } if @payroll_run.download_triggered? %>
   </div>
 </div>
