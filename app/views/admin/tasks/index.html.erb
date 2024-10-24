@@ -20,6 +20,21 @@
   </div>
 <% end %>
 
+<% if @claim.attributes_flagged_by_risk_indicator.any? %>
+  <div class="govuk-warning-text">
+    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+    <strong class="govuk-warning-text__text">
+      <span class="govuk-visually-hidden">Warning</span>
+      <p class="govuk-!-margin-top-0">
+        This claim has been flagged as the
+        <%= @claim.attributes_flagged_by_risk_indicator.map(&:humanize).to_sentence.downcase %>
+        <%= @claim.attributes_flagged_by_risk_indicator.many? ? "are" : "is" %>
+        included on the fraud prevention list. Speak to a manager.
+      </p>
+    </strong>
+  </div>
+<% end %>
+
 <div class="govuk-grid-row">
   <%= render claim_summary_view, claim: @claim %>
 </div>
