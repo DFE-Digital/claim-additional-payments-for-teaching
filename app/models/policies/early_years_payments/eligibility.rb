@@ -1,6 +1,8 @@
 module Policies
   module EarlyYearsPayments
     class Eligibility < ApplicationRecord
+      AMENDABLE_ATTRIBUTES = [].freeze
+
       self.table_name = "early_years_payment_eligibilities"
 
       has_one :claim, as: :eligibility, inverse_of: :eligibility

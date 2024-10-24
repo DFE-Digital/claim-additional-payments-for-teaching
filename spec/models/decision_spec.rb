@@ -138,6 +138,15 @@ RSpec.describe Decision, type: :model do
         :other
       ]
     end
+    let(:expected_reasons_ey) do
+      [
+        :claim_cancelled_by_employer,
+        :six_month_retention_check_failed,
+        :duplicate,
+        :no_response,
+        :other
+      ]
+    end
 
     context "when the claim policy is ECP" do
       let(:policy) { Policies::EarlyCareerPayments }
@@ -155,6 +164,12 @@ RSpec.describe Decision, type: :model do
       let(:policy) { Policies::StudentLoans }
 
       it { is_expected.to eq(expected_reasons_tslr) }
+    end
+
+    context "when the claim policy is EY" do
+      let(:policy) { Policies::EarlyYearsPayments }
+
+      it { is_expected.to eq(expected_reasons_ey) }
     end
   end
 
@@ -230,6 +245,27 @@ RSpec.describe Decision, type: :model do
           reason_ineligible_qualification: "0",
           reason_no_qts_or_qtls: "1",
           reason_no_repayments_to_slc: "0",
+          reason_duplicate: "0",
+          reason_no_response: "0",
+          reason_other: "0"
+        )
+      end
+    end
+
+    context "with an EY claim" do
+      let(:rejected_reasons) do
+        {
+          rejected_reasons_claim_cancelled_by_employer: "1",
+          rejected_reasons_six_month_retention_check_failed: "1"
+        }
+      end
+
+      let(:claim) { create(:claim, policy: Policies::EarlyYearsPayments) }
+
+      it do
+        is_expected.to eq(
+          reason_claim_cancelled_by_employer: "1",
+          reason_six_month_retention_check_failed: "1",
           reason_duplicate: "0",
           reason_no_response: "0",
           reason_other: "0"

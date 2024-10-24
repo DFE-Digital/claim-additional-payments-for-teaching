@@ -4,7 +4,8 @@ module Policies
     EarlyCareerPayments,
     LevellingUpPremiumPayments,
     InternationalRelocationPayments,
-    FurtherEducationPayments
+    FurtherEducationPayments,
+    EarlyYearsPayments
   ].freeze
 
   AMENDABLE_ELIGIBILITY_ATTRIBUTES = POLICIES.map do |policy|

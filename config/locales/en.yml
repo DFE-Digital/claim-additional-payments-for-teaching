@@ -1418,6 +1418,14 @@ en:
   early_years_payments:
     <<: *early_years_payment_provider_authenticated
     claim_subject: "Early Years Payment"
+    admin:
+      decision:
+        rejected_reasons:
+          claim_cancelled_by_employer: Claim cancelled by employer
+          six_month_retention_check_failed: 6 month retention check failed
+          duplicate: Duplicate
+          no_response: No response
+          other: Other
   early_years_payment_practitioner:
     journey_name: Claim an early years financial incentive payment - practitioner
     feedback_email: "help@opsteam.education.gov.uk"
