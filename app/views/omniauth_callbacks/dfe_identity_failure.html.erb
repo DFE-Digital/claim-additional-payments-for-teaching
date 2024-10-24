@@ -1,0 +1,17 @@
+<% content_for(:page_title, page_title("Sorry, there is a problem with the DfE Identity service", show_error: false)) %>
+<% content_for(:header_link, header_link(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Sorry, there is a problem with the DfE Identity service
+    </h1>
+
+    <p class="govuk-body">Try again later if you would like to sign in or set up a DfE Identity account.</p>
+
+    <p class="govuk-body">
+      You can still
+      <%= govuk_link_to "check if you’re eligible for any additional payments and apply for them", "https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details" %>.
+    </p>
+  </div>
+</div>

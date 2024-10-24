@@ -17,7 +17,7 @@
       </a>
     </div>
     <div class="govuk-header__content">
-      <%= link_to journey_service_name(current_journey_routing_name), start_page_url(current_journey_routing_name), class: "govuk-header__link govuk-header__service-name" %>
+      <%= content_for(:header_link) || header_link(current_journey_routing_name) %>
     </div>
   </div>
 </header>

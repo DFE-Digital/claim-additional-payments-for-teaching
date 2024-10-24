@@ -136,6 +136,14 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
           expect(response.body).to include("We cannot progress your application")
         end
       end
+
+      context "when the journey session is missing" do
+        it "renders problem with service page" do
+          get "/auth/failure?message=access_denied&origin=http%3A%2F%2Flocalhost%3A3000%2Ffurther-education-payments%2Fsign-in&strategy=onelogin"
+
+          expect(response.body).to include("Sorry, there is a problem with the One Login service")
+        end
+      end
     end
   end
 
