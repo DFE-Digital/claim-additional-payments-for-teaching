@@ -142,6 +142,18 @@ module AutomatedChecks
 
                 it_behaves_like :creating_a_task_and_note
               end
+
+              context "when there is student loan data matching only the NiNo, but not the DOB" do
+                before do
+                  create(:student_loans_data, nino: claim.national_insurance_number, date_of_birth: claim.date_of_birth + 1.year)
+                end
+
+                let(:expected_to_pass?) { nil }
+                let(:expected_match_value) { "none" }
+                let(:expected_note) { "[SLC Student loan plan] - No match - DOB does not match" }
+
+                it_behaves_like :creating_a_task_and_note
+              end
             end
 
             # this will only happen for FE claims submitted before LUPEYALPHA-1010 was merged
