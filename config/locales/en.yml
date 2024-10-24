@@ -418,7 +418,11 @@ en:
       task_questions:
         identity_confirmation:
           title: "Did %{claim_full_name} submit the claim?"
-          body: "The claimant’s identity matches DQT records. See %{link}."
+          body:
+            match:
+              none: "No DQT record found. See %{link}."
+              any: "The claimant’s identity matches DQT records. See %{link}."
+              all: "The claimant’s identity matches DQT records. See %{link}."
           notes: "notes"
         qualifications:
           title:
@@ -661,7 +665,11 @@ en:
           title: "Does the claimant’s current school match the above information from their claim?"
         identity_confirmation:
           title: "Did %{claim_full_name} submit the claim?"
-          body: "The claimant’s identity matches DQT records. See %{link}."
+          body:
+            match:
+              none: "No DQT record found. See %{link}."
+              any: "The claimant’s identity matches DQT records. See %{link}."
+              all: "The claimant’s identity matches DQT records. See %{link}."
           notes: "notes"
         qualifications:
           title:
