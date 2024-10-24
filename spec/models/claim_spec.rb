@@ -1397,4 +1397,21 @@ RSpec.describe Claim, type: :model do
       it { is_expected.to be false }
     end
   end
+
+  describe "#decision_deadline_date" do
+    subject { claim.decision_deadline_date }
+
+    before { travel_to Date.new(2024, 1, 1) }
+
+    context "when submitted_at populated" do
+      let(:claim) { create(:claim, :early_years_provider_submitted, policy: Policies::EarlyYearsPayments) }
+      it { is_expected.to eq nil }
+    end
+
+    context "when submitted_at not populated" do
+      let(:claim) { create(:claim, :submitted, policy: Policies::EarlyYearsPayments) }
+
+      it { is_expected.to eq Date.new(2024, 3, 25) }
+    end
+  end
 end

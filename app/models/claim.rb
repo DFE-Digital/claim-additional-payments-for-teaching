@@ -319,7 +319,7 @@ class Claim < ApplicationRecord
   end
 
   def decision_deadline_date
-    (submitted_at + DECISION_DEADLINE).to_date
+    (submitted_at + DECISION_DEADLINE).to_date if submitted?
   end
 
   def address(separator = ", ")
