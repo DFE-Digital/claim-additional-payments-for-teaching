@@ -17,7 +17,7 @@ RSpec.feature "Admin views claim details for EarlyYearsPayments" do
         reference: "AB123456",
         first_name: "Bruce",
         surname: "Wayne",
-        email_address: "test@example.com",
+        email_address: nil,
         mobile_number: nil,
         practitioner_email_address: "practitioner@example.com",
         paye_reference: "123/A",
@@ -27,6 +27,7 @@ RSpec.feature "Admin views claim details for EarlyYearsPayments" do
         eligibility_attributes: {
           nursery_urn: eligible_ey_provider.urn,
           start_date: Date.new(2018, 1, 1),
+          award_amount: 1000,
           provider_email_address: "provider@example.com",
           child_facing_confirmation_given: true,
           returning_within_6_months: true,
@@ -52,9 +53,8 @@ RSpec.feature "Admin views claim details for EarlyYearsPayments" do
       expect(summary_row("Did the employee work in an early years setting in the previous 6 months?")).to have_content("Yes")
       expect(summary_row("Did the employee’s previous job involve working directly with children?")).to have_content("No")
       expect(summary_row("What was the employee’s previous job contract type?")).to have_content("casual or temporary")
-      # check if the above should really be "Yes"
 
-      # expect(summary_row("Early years financial incentive payment")).to have_content("£1000")
+      expect(summary_row("Early years financial incentive payment")).to have_content("£1,000")
 
       expect(summary_row("Student loan repayment plan")).to have_content("Not applicable")
 
@@ -88,6 +88,7 @@ RSpec.feature "Admin views claim details for EarlyYearsPayments" do
         eligibility_attributes: {
           nursery_urn: eligible_ey_provider.urn,
           start_date: Date.new(2018, 1, 1),
+          award_amount: 1000,
           provider_email_address: "provider@example.com",
           child_facing_confirmation_given: true,
           returning_within_6_months: true,
@@ -121,9 +122,8 @@ RSpec.feature "Admin views claim details for EarlyYearsPayments" do
       expect(summary_row("Did the employee work in an early years setting in the previous 6 months?")).to have_content("Yes")
       expect(summary_row("Did the employee’s previous job involve working directly with children?")).to have_content("No")
       expect(summary_row("What was the employee’s previous job contract type?")).to have_content("casual or temporary")
-      # check if the above should really be "Yes"
 
-      # expect(summary_row("Early years financial incentive payment")).to have_content("£1000")
+      expect(summary_row("Early years financial incentive payment")).to have_content("£1,000")
 
       expect(summary_row("Student loan repayment plan")).to have_content("Not applicable")
 

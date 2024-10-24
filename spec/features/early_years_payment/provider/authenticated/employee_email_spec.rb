@@ -12,8 +12,9 @@ RSpec.feature "Early years payment provider" do
     when_early_years_payment_provider_start_journey_completed
 
     visit magic_link
-    expect(journey_session.reload.answers.email_address).to eq email_address
-    expect(journey_session.reload.answers.email_verified).to be true
+    expect(journey_session.reload.answers.email_address).to be nil
+    expect(journey_session.reload.answers.email_verified).to be nil
+    expect(journey_session.reload.answers.provider_email_address).to eq email_address
     expect(page).to have_content("Declaration of Employee Consent")
     expect(page.current_path).to eq "/early-years-payment-provider/consent"
     check "I confirm that I have obtained consent from my employee and have provided them with the relevant privacy notice."

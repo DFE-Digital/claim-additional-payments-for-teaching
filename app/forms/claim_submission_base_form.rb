@@ -5,7 +5,7 @@ class ClaimSubmissionBaseForm
   attr_reader :journey_session, :claim
 
   validate :not_already_submitted
-  validate :email_address_is_present
+  validate :email_address_is_present, if: :claim_expected_to_have_email_address
   validate :email_address_verified
   validate :mobile_number_verified
   validate :claim_is_eligible
@@ -24,7 +24,7 @@ class ClaimSubmissionBaseForm
       claim.save!
     end
 
-    ClaimMailer.submitted(claim).deliver_later
+    ClaimMailer.submitted(claim).deliver_later if claim.submitted_at
     ClaimVerifierJob.perform_later(claim)
 
     true
@@ -42,7 +42,6 @@ class ClaimSubmissionBaseForm
     new_or_find_claim.tap do |claim|
       claim.eligibility ||= main_eligibility
       claim.started_at = journey_session.created_at
-
       answers.attributes.each do |name, value|
         if claim.respond_to?(:"#{name}=")
           claim.public_send(:"#{name}=", value)
@@ -141,5 +140,9 @@ class ClaimSubmissionBaseForm
 
   def journey
     self.class.module_parent
+  end
+
+  def claim_expected_to_have_email_address
+    true
   end
 end

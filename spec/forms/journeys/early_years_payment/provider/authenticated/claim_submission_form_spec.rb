@@ -21,7 +21,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::ClaimSubmis
 
     it "saves some answers into the Claim model" do
       subject
-      expect(claim.email_address).to eq answers.email_address
+      expect(claim.email_address).to be nil
       expect(claim.submitted_at).to be_nil
       expect(claim.eligibility_type).to eq "Policies::EarlyYearsPayments::Eligibility"
       expect(claim.first_name).to eq answers.first_name
