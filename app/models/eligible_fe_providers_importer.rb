@@ -31,8 +31,8 @@ class EligibleFeProvidersImporter < CsvImporter::Base
   def row_to_hash(row)
     {
       ukprn: row.fetch("ukprn"),
-      max_award_amount: row.fetch("max_award_amount"),
-      lower_award_amount: row.fetch("lower_award_amount"),
+      max_award_amount: row.fetch("max_award_amount").gsub(/£|,/, ""),
+      lower_award_amount: row.fetch("lower_award_amount").gsub(/£|,/, ""),
       primary_key_contact_email_address: row.fetch("primary_key_contact_email_address"),
       academic_year:
     }
