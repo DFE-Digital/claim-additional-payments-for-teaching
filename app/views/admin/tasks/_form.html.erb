@@ -10,7 +10,7 @@
 
       <%
           I18n.t(
-            "#{translation}.body",
+            "#{translation}.body.match.#{f.object.claim_verifier_match.presence || 'nil'}",
             default: nil,
             link: link_to(
               I18n.t("#{translation}.notes"),
