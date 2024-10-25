@@ -126,7 +126,7 @@ RSpec.feature "Further education payments" do
     fill_in "Day", with: "28"
     fill_in "Month", with: "2"
     fill_in "Year", with: "1988"
-    fill_in "National Insurance number", with: "PX321499A"
+    fill_in "National Insurance number", with: "PX321499A " # deliberate trailing space
     click_on "Continue"
 
     expect(page).to have_content("What is your home address?")
