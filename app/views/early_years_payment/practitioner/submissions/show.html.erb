@@ -1,1 +1,41 @@
-placeholder
+<% content_for(:page_title, page_title("Claim submitted", journey: current_journey_routing_name)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <div class="govuk-panel govuk-panel--confirmation">
+      <h1 class="govuk-panel__title" id="submitted-title">
+        Claim submitted
+      </h1>
+
+      <div class="govuk-panel__body">
+        Your claim reference<br>
+        <strong><%= submitted_claim.reference %></strong>
+      </div>
+    </div>
+
+    <h2 class="govuk-heading-m">
+      You’ve completed a claim for an early years incentive payment.
+    </h2>
+
+    <p class="govuk-body">
+      We’ve sent a confirmation email to <%= submitted_claim.email_address %>.
+    </p>
+
+    <h2 class="govuk-heading-m">
+      What happens next
+    </h2>
+
+    <p class="govuk-body">
+      We’ll review your claim and let you know by email if it’s been accepted or rejected.
+    </p>
+
+    <p class="govuk-body">
+      After 6 months, we’ll check with <%= submitted_claim.eligibility.eligible_ey_provider.nursery_name %> that you’re still working for them. If you are:
+    </p>
+    <%= govuk_list [
+      "we’ll pay the full incentive amount into your bank account",
+      "we’ll email you to confirm the payment"
+    ], type: :bullet %>
+  </div>
+</div>

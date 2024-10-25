@@ -5,7 +5,7 @@ RSpec.feature "Early years payment practitioner" do
   let(:journey_session) { Journeys::EarlyYearsPayment::Provider::Authenticated::Session.last }
   let(:mail) { ActionMailer::Base.deliveries.last }
   let(:magic_link) { mail[:personalisation].unparsed_value[:magic_link] }
-  let!(:nursery) { create(:eligible_ey_provider, primary_key_contact_email_address: email_address) }
+  let!(:nursery) { create(:eligible_ey_provider, primary_key_contact_email_address: email_address, nursery_name: "Acme Nursery Ltd") }
   let(:claim) { Claim.last }
 
   scenario "Happy path" do
@@ -79,11 +79,15 @@ RSpec.feature "Early years payment practitioner" do
     end.to not_change { Claim.count }
       .and not_change { Policies::EarlyYearsPayments::Eligibility.count }
       .and not_change { claim.reload.reference }
+      .and change { ActionMailer::Base.deliveries.count }.by(1)
 
     expect(claim.eligibility.practitioner_claim_started_at).to be_present
     expect(claim.reload.submitted_at).to be_present
 
     # check answers were saved on the claim
     expect(claim.reload.national_insurance_number).to eq "PX321499A"
+
+    expect(page).to have_content("Claim submitted")
+    expect(page).to have_content("After 6 months, we’ll check with Acme Nursery Ltd that you’re still working for them")
   end
 end
