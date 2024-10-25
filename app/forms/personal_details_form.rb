@@ -56,7 +56,7 @@ class PersonalDetailsForm < Form
       middle_name:,
       surname:,
       date_of_birth:,
-      national_insurance_number:
+      national_insurance_number: normalised_ni_number
     )
 
     reset_dependent_answers_attributes

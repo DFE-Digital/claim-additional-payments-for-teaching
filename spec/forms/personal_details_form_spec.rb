@@ -342,10 +342,10 @@ RSpec.describe PersonalDetailsForm, type: :model do
     end
 
     describe "#save" do
-      context "with valid params" do
-        let(:logged_in_with_tid) { nil }
-        let(:teacher_id_user_info) { {} }
+      let(:logged_in_with_tid) { nil }
+      let(:teacher_id_user_info) { {} }
 
+      context "with valid params" do
         let(:params) do
           {
             first_name: "Dr",
@@ -377,6 +377,25 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
           expect(answers.has_student_loan).to be nil
           expect(answers.student_loan_plan).to be nil
+        end
+      end
+
+      context "with a national insurance number with spaces" do
+        let(:params) do
+          {
+            first_name: "Dr",
+            middle_name: "Bob",
+            surname: "Loblaw",
+            day: 1,
+            month: 1,
+            year: 1990,
+            national_insurance_number: "QQ 123456 C "
+          }
+        end
+
+        it "strips spaces" do
+          form.save
+          expect(journey_session.answers.national_insurance_number).to eq "QQ123456C"
         end
       end
     end
