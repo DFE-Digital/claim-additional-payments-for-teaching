@@ -15,8 +15,9 @@ RSpec.feature "Admin view claim for EarlyYearsPayments" do
       :claim,
       :submitted,
       policy: Policies::EarlyYearsPayments,
-      eligibility:,
-      paye_reference: "123/ABC"
+      paye_reference: "123/ABC",
+      eligibility_trait: :provider_claim_submitted,
+      eligibility_attributes: {provider_email_address: "provider@examplecom"}
     )
   }
   let(:claim_with_personal_data_removed) { create(:claim, :rejected, :personal_data_removed) }
