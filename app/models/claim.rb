@@ -92,7 +92,8 @@ class Claim < ApplicationRecord
     paye_reference: true,
     practitioner_email_address: true,
     provider_contact_name: true,
-    started_at: false
+    started_at: false,
+    verified_at: false
   }.freeze
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks

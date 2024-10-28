@@ -79,6 +79,7 @@ shared:
     - onelogin_auth_at
     - onelogin_idv_at
     - started_at
+    - verified_at
   :decisions:
     - id
     - result
