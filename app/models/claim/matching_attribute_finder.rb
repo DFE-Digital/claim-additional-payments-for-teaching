@@ -43,9 +43,9 @@ class Claim
 
         concatenated_columns = "CONCAT(#{attributes.join(",")})"
         policies_to_find_matches.map { |policy|
-          policy::Eligibility.where("LOWER(#{concatenated_columns}) = LOWER(?)", vals.join)
+          policy::Eligibility.where("LOWER(#{concatenated_columns}) = LOWER(?)", vals.join) if (attributes - policy::Eligibility.column_names).empty?
         }
-      }.compact.flatten.map(&:id)
+      }.flatten.compact.map(&:id)
 
       eligibility_match_query = Claim.where(eligibility_id: eligibility_ids)
       match_queries = match_queries.or(eligibility_match_query)

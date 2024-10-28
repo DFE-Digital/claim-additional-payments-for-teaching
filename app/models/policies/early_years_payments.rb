@@ -3,6 +3,13 @@ module Policies
     include BasePolicy
     extend self
 
+    OTHER_CLAIMABLE_POLICIES = [
+      EarlyCareerPayments,
+      LevellingUpPremiumPayments,
+      StudentLoans,
+      FurtherEducationPayments
+    ]
+
     # Percentage of claims to QA
     MIN_QA_THRESHOLD = 10
 

@@ -49,10 +49,40 @@ RSpec.describe Claim::MatchingAttributeFinder do
         eligibility_attributes: {teacher_reference_number: "0902344"})
     }
 
+    let!(:fe_claim) {
+      create(:claim,
+        :submitted,
+        first_name: "Genghis",
+        surname: "Khan",
+        date_of_birth: Date.new(1162, 5, 31),
+        national_insurance_number: "QQ891011C",
+        email_address: "genghis.khan@mongol-empire.com",
+        bank_account_number: "34682151",
+        bank_sort_code: "972654",
+        academic_year: AcademicYear.new("2019"),
+        building_society_roll_number: "123456789/ABCD",
+        policy: Policies::FurtherEducationPayments,
+        eligibility_attributes: {teacher_reference_number: "0902344"})
+    }
+
+    let!(:ey_claim) {
+      create(:claim,
+        :submitted,
+        first_name: "Genghis",
+        surname: "Khan",
+        date_of_birth: Date.new(1162, 5, 31),
+        national_insurance_number: "QQ891011C",
+        email_address: "genghis.khan@mongol-empire.com",
+        bank_account_number: "34682151",
+        bank_sort_code: "972654",
+        academic_year: AcademicYear.new("2019"),
+        policy: Policies::EarlyYearsPayments)
+    }
+
     subject(:matching_claims) { Claim::MatchingAttributeFinder.new(source_claim).matching_claims }
 
-    it "includes only claims for ECP or LUP claims" do
-      expect(matching_claims).to contain_exactly(lup_claim, student_loans_claim)
+    it "includes claims for ECP, LUP, FE and EY claims" do
+      expect(matching_claims).to contain_exactly(lup_claim, student_loans_claim, fe_claim, ey_claim)
     end
   end
 

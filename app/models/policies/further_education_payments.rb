@@ -8,7 +8,8 @@ module Policies
     OTHER_CLAIMABLE_POLICIES = [
       EarlyCareerPayments,
       StudentLoans,
-      LevellingUpPremiumPayments
+      LevellingUpPremiumPayments,
+      EarlyYearsPayments
     ]
 
     ELIGIBILITY_MATCHING_ATTRIBUTES = [["teacher_reference_number"]].freeze
