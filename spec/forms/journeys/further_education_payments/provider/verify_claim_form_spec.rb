@@ -344,6 +344,8 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
           "created_at" => "2024-01-01T12:00:00.000+00:00"
         }
       )
+
+      expect(claim.verified_at).to eq(DateTime.new(2024, 1, 1, 12, 0, 0))
     end
 
     it "creates a provider verification task" do
