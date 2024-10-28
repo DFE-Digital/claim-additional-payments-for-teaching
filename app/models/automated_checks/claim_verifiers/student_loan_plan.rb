@@ -14,7 +14,7 @@ module AutomatedChecks
         return unless claim.submitted_without_slc_data?
         return unless awaiting_task?
 
-        no_student_loan_data_entry || student_loan_data_exists
+        student_loan_data_exists || nino_only_match_found || no_student_loan_data_entry
       end
 
       private
@@ -31,18 +31,24 @@ module AutomatedChecks
         @student_loans_data ||= StudentLoansData.where(nino:, date_of_birth:)
       end
 
+      def student_loans_data_nino_only
+        @student_loans_data_nino_only ||= StudentLoansData.where(nino:).where.not(date_of_birth:)
+      end
+
       def awaiting_task?
         claim.tasks.where(name: TASK_NAME).count.zero?
       end
 
-      def no_student_loan_data_entry
-        return if student_loans_data.any?
-
-        create_note(match: nil)
+      def student_loan_data_exists
+        create_task(match: :all, passed: true) if student_loans_data.any?
       end
 
-      def student_loan_data_exists
-        create_task(match: :all, passed: true)
+      def nino_only_match_found
+        create_task(match: :none) if student_loans_data_nino_only.any?
+      end
+
+      def no_student_loan_data_entry
+        create_note(match: nil)
       end
 
       def create_task(match:, passed: nil)
@@ -66,6 +72,7 @@ module AutomatedChecks
       def note_body(match:)
         prefix = "[SLC Student loan plan]"
         return "#{prefix} - SLC data checked, no matching entry found" unless match
+        return "#{prefix} - No match - DOB does not match" if match == :none
 
         if slc_repaying_plan_types
           "#{prefix} - Matched - has a student loan"
