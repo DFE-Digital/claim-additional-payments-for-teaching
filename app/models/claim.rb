@@ -150,9 +150,6 @@ class Claim < ApplicationRecord
   validates :student_loan_plan, inclusion: {in: STUDENT_LOAN_PLAN_OPTIONS}, allow_nil: true
   validates :student_loan_plan, on: [:amendment], presence: {message: "Enter a valid student loan plan"}
 
-  # TODO: remove when a form object is created for email-address
-  validates :email_address, on: [:submit], presence: {message: "Enter an email address"}
-
   validates :bank_sort_code, on: [:amendment], presence: {message: "Enter a sort code"}
   validates :bank_account_number, on: [:amendment], presence: {message: "Enter an account number"}
 
@@ -167,13 +164,10 @@ class Claim < ApplicationRecord
   before_save :normalise_first_name, if: %i[first_name first_name_changed?]
   before_save :normalise_surname, if: %i[surname surname_changed?]
 
-  scope :unsubmitted, -> { where(submitted_at: nil) }
-  scope :submitted, -> { where.not(submitted_at: nil) }
   scope :held, -> { where(held: true) }
   scope :not_held, -> { where(held: false) }
   scope :awaiting_decision, -> do
-    submitted
-      .joins("LEFT OUTER JOIN decisions ON decisions.claim_id = claims.id AND decisions.undone = false")
+    joins("LEFT OUTER JOIN decisions ON decisions.claim_id = claims.id AND decisions.undone = false")
       .where(decisions: {claim_id: nil})
   end
   scope :awaiting_task, ->(task_name) { awaiting_decision.joins(sanitize_sql(["LEFT OUTER JOIN tasks ON tasks.claim_id = claims.id AND tasks.name = ?", task_name])).where(tasks: {claim_id: nil}) }
@@ -325,7 +319,7 @@ class Claim < ApplicationRecord
   end
 
   def decision_deadline_date
-    (submitted_at + DECISION_DEADLINE).to_date
+    (submitted_at + DECISION_DEADLINE).to_date if submitted?
   end
 
   def address(separator = ", ")

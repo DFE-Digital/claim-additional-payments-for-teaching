@@ -6,6 +6,10 @@ module Policies
     # Percentage of claims to QA
     MIN_QA_THRESHOLD = 10
 
+    VERIFIERS = [
+      AutomatedChecks::ClaimVerifiers::StudentLoanPlan # TODO - spec
+    ]
+
     # Attributes to delete from claims submitted before the current academic
     # year
     PERSONAL_DATA_ATTRIBUTES_TO_DELETE = [
@@ -40,6 +44,10 @@ module Policies
     # TODO: This is needed once the reply-to email address has been added to Gov Notify
     def notify_reply_to_id
       nil
+    end
+
+    def award_amount
+      1_000
     end
   end
 end

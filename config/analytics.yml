@@ -317,6 +317,9 @@ shared:
     - start_date
     - child_facing_confirmation_given
     - returning_within_6_months
+    - returner_worked_with_children
+    - returner_contract_type
+    - award_amount
     - created_at
     - updated_at
     - provider_claim_submitted_at

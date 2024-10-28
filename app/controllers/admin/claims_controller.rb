@@ -24,7 +24,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
   end
 
   def show
-    @claim = Claim.submitted.find(params[:id])
+    @claim = Claim.find(params[:id])
     @decision = @claim.latest_decision || Decision.new
     @matching_claims = Claim::MatchingAttributeFinder.new(@claim).matching_claims
     @claims_preventing_payment = Claim::ClaimsPreventingPaymentFinder.new(@claim).claims_preventing_payment

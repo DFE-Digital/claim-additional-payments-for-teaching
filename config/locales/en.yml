@@ -102,6 +102,7 @@ en:
     teacher_reference_number: "Teacher reference number"
     national_insurance_number: "National Insurance number"
     email_address: "Email address"
+    mobile_number: Mobile number
     personal_bank_account: "bank account"
     started_at: "Started at"
     submitted_at: "Submitted at"
@@ -1423,6 +1424,26 @@ en:
     claim_subject: "Early Years Payment"
     policy_acronym: EY
     policy_short_name: Early Years
+    policy_full_name: Early years financial incentive payment
+    govuk_verify_fields:
+      full_name: Applicant name
+    admin:
+      email_address: Contact email
+      practitioner_email_address: Provider-input contact email
+      nursery_name: Nursery name
+      start_date: Start date
+      paye_reference: PAYE reference
+      provider_email_address: Provider email address
+      provider_name: Provider name
+      consent_given: Declaration of collected consent
+      child_facing_confirmation_given: Does the employee spend more than 70% in the job working with children?
+      returning_within_6_months: Did the employee work in an early years setting in the previous 6 months?
+      returner_worked_with_children: Did the employee’s previous job involve working directly with children?
+      returner_contract_type: What was the employee’s previous job contract type?
+      started_at: Provider started at
+      provider_submitted_at: Provider submitted at
+      practitioner_started_at: Claimant started at
+      submitted_at: Claimant submitted at
   early_years_payment_practitioner:
     journey_name: Claim an early years financial incentive payment - practitioner
     feedback_email: "help@opsteam.education.gov.uk"

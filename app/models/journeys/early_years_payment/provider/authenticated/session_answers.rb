@@ -13,6 +13,7 @@ module Journeys
           attribute :returner_contract_type
           attribute :practitioner_email_address
           attribute :provider_contact_name
+          attribute :provider_email_address
 
           def policy
             Policies::EarlyYearsPayments

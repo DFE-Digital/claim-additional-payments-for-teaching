@@ -53,7 +53,7 @@
         Provider email
       </dt>
       <dd class="govuk-summary-list__value">
-        <%= claim.eligibility.eligible_ey_provider.primary_key_contact_email_address %>
+        <%= claim.eligibility.provider_email_address %>
       </dd>
     </div>
 
@@ -104,7 +104,7 @@
         Submitted
       </dt>
       <dd class="govuk-summary-list__value">
-        <%= l(claim.submitted_at) %>
+        <%= l(claim.submitted_at) if claim.submitted_at %>
       </dd>
     </div>
 
@@ -113,8 +113,10 @@
         Decision due
       </dt>
       <dd class="govuk-summary-list__value">
-        <%= l(claim.decision_deadline_date) %>
-        <%= decision_deadline_warning(claim, {na_text: ""}) %>
+        <% if claim.submitted_at %>
+          <%= l(claim.decision_deadline_date) %>
+          <%= decision_deadline_warning(claim, {na_text: ""}) %>
+        <% end %>
       </dd>
     </div>
 

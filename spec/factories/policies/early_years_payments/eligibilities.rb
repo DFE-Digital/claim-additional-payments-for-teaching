@@ -7,6 +7,7 @@ FactoryBot.define do
     end
 
     trait :provider_claim_submitted do
+      eligible
       provider_claim_submitted_at { Time.zone.now }
     end
   end

@@ -200,6 +200,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_28_110426) do
     t.boolean "returning_within_6_months"
     t.datetime "provider_claim_submitted_at"
     t.datetime "practitioner_claim_started_at"
+    t.string "provider_email_address"
+    t.boolean "returner_worked_with_children"
+    t.string "returner_contract_type"
+    t.decimal "award_amount", precision: 7, scale: 2
   end
 
   create_table "eligible_ey_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

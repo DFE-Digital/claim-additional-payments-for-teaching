@@ -1,12 +1,14 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render "admin/claims/answer_section", {heading: "Personal details", answers: admin_personal_details(@claim)} %>
+    <%= render "admin/claims/answer_section", {heading: "Personal details", answers: admin_personal_details_for_early_years_payments(@claim)} %>
 
-    <%= render "admin/claims/answer_section", {heading: "Eligibility details", answers: admin_eligibility_answers(@claim)} %>
+    <%= render "admin/claims/answer_section", {heading: "Provider details", answers: admin_provider_details_for_early_years_payments(@claim)} %>
+
+    <%= render "admin/claims/answer_section", {heading: "Policy options provided", answers: admin_policy_options_provided_for_early_years_payments(@claim)} %>
 
     <%= render "admin/claims/answer_section", {heading: "Student loan details", answers: admin_student_loan_details(@claim)} %>
 
-    <%= render "admin/claims/answer_section", {heading: "Submission details", answers: admin_submission_details(@claim)} %>
+    <%= render "admin/claims/answer_section", {heading: "Submission details", answers: admin_submission_details_for_early_years_payments(@claim)} %>
 
     <%= render("claims_with_matching_details", {matching_claims: @matching_claims, claim: @claim, show_caption: true}) if @matching_claims.any? %>
 
