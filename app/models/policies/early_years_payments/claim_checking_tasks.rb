@@ -17,6 +17,7 @@ module Policies
         tasks << "identity_confirmation"
         tasks << "student_loan_plan" if claim.submitted_without_slc_data?
         tasks << "employment"
+        tasks << "matching_details" if matching_claims.exists?
 
         tasks
       end
