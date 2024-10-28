@@ -31,7 +31,8 @@ module Policies
     OTHER_CLAIMABLE_POLICIES = [
       LevellingUpPremiumPayments,
       StudentLoans,
-      FurtherEducationPayments
+      FurtherEducationPayments,
+      EarlyYearsPayments
     ].freeze
 
     ELIGIBILITY_MATCHING_ATTRIBUTES = [["teacher_reference_number"]].freeze

@@ -5,6 +5,13 @@ module Policies
 
     RETENTION_PERIOD = 6.months
 
+    OTHER_CLAIMABLE_POLICIES = [
+      EarlyCareerPayments,
+      LevellingUpPremiumPayments,
+      StudentLoans,
+      FurtherEducationPayments
+    ]
+
     # Percentage of claims to QA
     MIN_QA_THRESHOLD = 10
 
@@ -51,12 +58,6 @@ module Policies
       :duplicate,
       :no_response,
       :other
-    ]
-
-    OTHER_CLAIMABLE_POLICIES = [
-      EarlyCareerPayments,
-      StudentLoans,
-      LevellingUpPremiumPayments
     ]
 
     # TODO: This is needed once the reply-to email address has been added to Gov Notify
