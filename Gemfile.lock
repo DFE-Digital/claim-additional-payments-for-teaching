@@ -218,7 +218,7 @@ GEM
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (>= 6, < 10)
       view_component (>= 3.9, < 3.15)
-    govuk_design_system_formbuilder (5.4.0)
+    govuk_design_system_formbuilder (5.7.0)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
@@ -254,7 +254,7 @@ GEM
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     logger (1.6.1)
-    loofah (2.22.0)
+    loofah (2.23.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     mail (2.8.1)
@@ -576,7 +576,7 @@ DEPENDENCIES
   faraday_middleware
   foreman
   govuk-components
-  govuk_design_system_formbuilder (~> 5.4.0)
+  govuk_design_system_formbuilder (~> 5.7.0)
   httpclient
   jbuilder (~> 2.13)
   jwt
