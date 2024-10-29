@@ -63,5 +63,9 @@ module Policies
     def award_amount
       5_000
     end
+
+    def payroll_file_name
+      "IRP"
+    end
   end
 end
