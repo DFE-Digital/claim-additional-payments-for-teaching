@@ -46,4 +46,4 @@ jobs:
             exit 1
           fi
 
-          make ci review terraform-destroy
+          make ci review terraform-destroy PR_NUMBER=$PR_NUMBER
