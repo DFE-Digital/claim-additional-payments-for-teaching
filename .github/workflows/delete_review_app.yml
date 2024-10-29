@@ -3,6 +3,12 @@ name: Delete review app on AKS
 on:
   pull_request:
     types: [closed, unlabeled]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: PR number of review app to delete
+        required: true
+        type: string
 
 jobs:
   delete-review-app:
@@ -28,6 +34,15 @@ jobs:
 
       - name: Terraform destroy
         run: |
+          if [ ${{ github.event_name }} == 'workflow_dispatch' ]; then
+            PR_NUMBER=${{ github.event.inputs.pr_number }}
+          else
+            PR_NUMBER=${{ github.event.pull_request.number }}
+          fi
+
+          if [ -z "$PR_NUMBER" ]; then
+            echo "::error ::Failed to extract PR_NUMBER"
+            exit 1
+          fi
+
           make ci review terraform-destroy
-        env:
-          PR_NUMBER: ${{ github.event.pull_request.number }}
