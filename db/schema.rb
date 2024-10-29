@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_28_110426) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_28_161228) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_trgm"
@@ -103,7 +103,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_28_110426) do
     t.jsonb "onelogin_credentials", default: {}
     t.jsonb "onelogin_user_info", default: {}
     t.string "paye_reference"
-    t.string "practitioner_email_address"
+    t.citext "practitioner_email_address"
     t.string "provider_contact_name"
     t.text "onelogin_uid"
     t.datetime "onelogin_auth_at"
