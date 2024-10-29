@@ -17,7 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     if: >
       github.event.action == 'closed' && contains(github.event.pull_request.labels.*.name, 'deploy') ||
-      (github.event.action == 'unlabeled' && github.event.label.name == 'deploy')
+      (github.event.action == 'unlabeled' && github.event.label.name == 'deploy') ||
+      (github.event_name == 'workflow_dispatch')
     environment: review
     steps:
       - name: Checkout
@@ -45,4 +46,4 @@ jobs:
             exit 1
           fi
 
-          make ci review terraform-destroy
+          make ci review terraform-destroy PR_NUMBER=$PR_NUMBER
