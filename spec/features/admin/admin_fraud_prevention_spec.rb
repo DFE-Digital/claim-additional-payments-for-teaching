@@ -93,6 +93,34 @@ RSpec.feature "Admin fraud prevention" do
         "This claim cannot be approved because the national insurance number " \
         "and teacher reference number are included on the fraud prevention list."
       )
+
+      visit admin_claim_notes_path(flagged_claim_trn)
+
+      within(".hmcts-timeline:first-of-type") do
+        expect(page).to have_content(
+          "This claim has been flagged as the " \
+          "teacher reference number is included on the fraud prevention list."
+        )
+      end
+
+      visit admin_claim_notes_path(flagged_claim_nino)
+
+      within(".hmcts-timeline:first-of-type") do
+        expect(page).to have_content(
+          "This claim has been flagged as the " \
+          "national insurance number is included on the fraud prevention list."
+        )
+      end
+
+      visit admin_claim_notes_path(flagged_claim_trn_and_nino)
+
+      within(".hmcts-timeline:first-of-type") do
+        expect(page).to have_content(
+          "This claim has been flagged as the " \
+          "national insurance number and teacher reference number are included " \
+          "on the fraud prevention list."
+        )
+      end
     end
   end
 

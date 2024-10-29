@@ -136,5 +136,47 @@ RSpec.describe Admin::FraudRiskCsvUploadForm, type: :model do
         )
       ).to exist
     end
+
+    it "adds a note to claims that are flagged" do
+      claim_1 = create(:claim, national_insurance_number: "qq123456c")
+
+      claim_2 = create(
+        :claim,
+        eligibility_attributes: {teacher_reference_number: "1234567"}
+      )
+
+      claim_3 = create(
+        :claim,
+        national_insurance_number: "qq123456c",
+        eligibility_attributes: {teacher_reference_number: "1234567"}
+      )
+
+      form.save
+
+      expect(claim_1.notes.by_label("fraud_risk").last.body).to eq(
+        "This claim has been flagged as the national insurance number is " \
+        "included on the fraud prevention list."
+      )
+
+      expect(claim_2.notes.by_label("fraud_risk").last.body).to eq(
+        "This claim has been flagged as the teacher reference number is " \
+        "included on the fraud prevention list."
+      )
+
+      expect(claim_3.notes.by_label("fraud_risk").last.body).to eq(
+        "This claim has been flagged as the national insurance number and " \
+        "teacher reference number are included on the fraud prevention list."
+      )
+    end
+
+    it "doesn't add a note to claims that aren't flagged" do
+      claim = create(
+        :claim,
+        national_insurance_number: "qq123456d",
+        eligibility_attributes: {teacher_reference_number: "1234568"}
+      )
+
+      expect { form.save }.not_to change { claim.notes.count }
+    end
   end
 end
