@@ -47,29 +47,6 @@
       "note": "Create and update should be flagged but change is not different from existing behaviour, raising issue."
     },
     {
-      "warning_type": "Dynamic Render Path",
-      "warning_code": 15,
-      "fingerprint": "2e15a7fa4c8b8254b7724a1c5b8553cf4f7372f62b9401e1f5cbda1abe8c62ef",
-      "check_name": "Render",
-      "message": "Render path contains parameter value",
-      "file": "app/controllers/admin/tasks_controller.rb",
-      "line": 20,
-      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
-      "code": "render(action => Claim.includes(:tasks).find(params[:claim_id]).tasks.find_or_initialize_by(:name => params[:name]).name, {})",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Admin::TasksController",
-        "method": "show"
-      },
-      "user_input": "params[:name]",
-      "confidence": "Weak",
-      "cwe_id": [
-        22
-      ],
-      "note": "Constrained to valid input by routes"
-    },
-    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "46bfd0a9d4a19eb048a883184b501b060aa4d6006accc3c76bbfc00722b44dbf",
@@ -116,6 +93,29 @@
       "note": ""
     },
     {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "9e2cf5f527443878fab8807fc6ca1af5a8f27690f312694489183624ab98d66d",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/controllers/admin/tasks_controller.rb",
+      "line": 20,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => task_view(Claim.includes(:tasks).find(params[:claim_id]).tasks.find_or_initialize_by(:name => params[:name])), {})",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::TasksController",
+        "method": "show"
+      },
+      "user_input": "params[:name]",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "f83635b54e1ce0088178d8082ffe632ab8aa81b10fce1026caf87f286cb4d81a",
@@ -139,6 +139,6 @@
       "note": ""
     }
   ],
-  "updated": "2024-10-23 16:53:59 +0100",
+  "updated": "2024-10-30 16:55:54 +0000",
   "brakeman_version": "6.2.1"
 }
