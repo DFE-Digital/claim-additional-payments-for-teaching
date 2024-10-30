@@ -42,8 +42,9 @@ RSpec.describe ClaimVerifierJob do
       context "when the claim does not have a TRN" do
         let(:claim) { build(:claim, policy: Policies::EarlyYearsPayments) }
 
-        it "does not perform the verifier job" do
-          expect(AutomatedChecks::ClaimVerifier).not_to receive(:new)
+        it "performs the verifier job but doesn't request dqt info" do
+          expect(AutomatedChecks::ClaimVerifier).to receive(:new)
+          expect(dbl).not_to receive(:find)
           described_class.new.perform(claim)
         end
       end
