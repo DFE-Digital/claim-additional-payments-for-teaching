@@ -114,11 +114,17 @@ class OmniauthCallbacksController < ApplicationController
     )
   end
 
+  ONE_LOGIN_TEST_USER = {
+    first_name: "TEST",
+    last_name: "USER",
+    date_of_birth: Date.new(1970, 1, 1)
+  }
+
   def extract_data_from_jwt(jwt)
     if OneLoginSignIn.bypass?
-      first_name = "TEST"
-      last_name = "USER"
-      date_of_birth = Date.new(1970, 1, 1)
+      first_name = ONE_LOGIN_TEST_USER[:first_name]
+      last_name = ONE_LOGIN_TEST_USER[:last_name]
+      date_of_birth = ONE_LOGIN_TEST_USER[:date_of_birth]
     else
       validator = OneLogin::CoreIdentityValidator.new(jwt:)
       validator.call
