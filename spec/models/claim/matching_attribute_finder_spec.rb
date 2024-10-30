@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Claim::MatchingAttributeFinder do
-  describe "#matching_claims for ECP/LUP claims" do
+  describe "#matching_claims" do
     let!(:source_claim) {
       create(:claim,
         first_name: "Genghis",
@@ -241,6 +241,35 @@ RSpec.describe Claim::MatchingAttributeFinder do
 
       expect(matching_claims).to eq([claim_with_matching_attributes])
     end
+
+    context "when the policy has an array of attributes in ELIGIBILITY_MATCHING_ATTRIBUTES" do # current policies don't do this
+      before do
+        allow(Policies::StudentLoans).to receive(:eligibility_matching_attributes) { [["teacher_reference_number", "current_school_id"]] }
+      end
+
+      it "does not include a claim that only partially matches eligibility_matching_attributes" do
+        create(
+          :claim,
+          :submitted,
+          eligibility_attributes: {teacher_reference_number: "0902344"}
+        )
+
+        expect(matching_claims).to be_empty
+      end
+
+      context "when matching with a claim that has one but not all of the eligibility_matching_attributes" do
+        it "does not include" do
+          create(
+            :claim,
+            :submitted,
+            policy: Policies::FurtherEducationPayments,
+            eligibility_attributes: {teacher_reference_number: "0902344"}
+          )
+
+          expect(matching_claims).to be_empty
+        end
+      end
+    end
   end
 
   describe "matching_claims - blank trn" do
@@ -389,6 +418,12 @@ RSpec.describe Claim::MatchingAttributeFinder do
 
         it { is_expected.not_to include(target_claim) }
       end
+
+      context "when compared with EY" do
+        let(:target_policy) { Policies::EarlyYearsPayments }
+
+        it { is_expected.to include(target_claim) }
+      end
     end
 
     context "with an LUP claim" do
@@ -422,6 +457,12 @@ RSpec.describe Claim::MatchingAttributeFinder do
         let(:target_policy) { Policies::InternationalRelocationPayments }
 
         it { is_expected.not_to include(target_claim) }
+      end
+
+      context "when compared with EY" do
+        let(:target_policy) { Policies::EarlyYearsPayments }
+
+        it { is_expected.to include(target_claim) }
       end
     end
 
@@ -457,6 +498,12 @@ RSpec.describe Claim::MatchingAttributeFinder do
 
         it { is_expected.not_to include(target_claim) }
       end
+
+      context "when compared with EY" do
+        let(:target_policy) { Policies::EarlyYearsPayments }
+
+        it { is_expected.to include(target_claim) }
+      end
     end
 
     context "with an FE claim" do
@@ -491,6 +538,12 @@ RSpec.describe Claim::MatchingAttributeFinder do
 
         it { is_expected.not_to include(target_claim) }
       end
+
+      context "when compared with EY" do
+        let(:target_policy) { Policies::EarlyYearsPayments }
+
+        it { is_expected.to include(target_claim) }
+      end
     end
 
     context "with an IRP claim" do
@@ -516,6 +569,12 @@ RSpec.describe Claim::MatchingAttributeFinder do
 
       context "when compared with FE" do
         let(:target_policy) { Policies::FurtherEducationPayments }
+
+        it { is_expected.not_to include(target_claim) }
+      end
+
+      context "when compared with EY" do
+        let(:target_policy) { Policies::EarlyYearsPayments }
 
         it { is_expected.not_to include(target_claim) }
       end
