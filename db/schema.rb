@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_28_161228) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_30_153139) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_trgm"
@@ -204,6 +204,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_28_161228) do
     t.boolean "returner_worked_with_children"
     t.string "returner_contract_type"
     t.decimal "award_amount", precision: 7, scale: 2
+    t.string "practitioner_first_name"
+    t.string "practitioner_surname"
   end
 
   create_table "eligible_ey_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

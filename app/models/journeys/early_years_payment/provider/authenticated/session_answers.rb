@@ -14,6 +14,8 @@ module Journeys
           attribute :practitioner_email_address
           attribute :provider_contact_name
           attribute :provider_email_address
+          attribute :practitioner_first_name
+          attribute :practitioner_surname
 
           def policy
             Policies::EarlyYearsPayments

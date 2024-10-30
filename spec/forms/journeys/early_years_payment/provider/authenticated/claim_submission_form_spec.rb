@@ -39,6 +39,8 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::ClaimSubmis
       expect(eligibility.start_date).to eq answers.start_date
       expect(eligibility.provider_claim_submitted_at).to be_present
       expect(eligibility.provider_email_address).to eq "provider@example.com"
+      expect(eligibility.practitioner_first_name).to eq answers.first_name
+      expect(eligibility.practitioner_surname).to eq answers.surname
     end
 
     it "sends a notify email to the practitioner" do
