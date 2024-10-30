@@ -41,9 +41,9 @@ class Claim
         vals = values_for_attributes(@source_claim.eligibility, attributes)
         next if vals.blank?
 
-        concatenated_columns = "CONCAT(#{attributes.join(",")})"
+        concatenated_columns = "CONCAT(#{attributes.join(",")})" # current policies will only have a single value in attributes
         policies_to_find_matches.map { |policy|
-          policy::Eligibility.where("LOWER(#{concatenated_columns}) = LOWER(?)", vals.join) if (attributes - policy::Eligibility.column_names).empty?
+          policy::Eligibility.where("LOWER(#{concatenated_columns}) = LOWER(?)", vals.join) if all_attributes_exist_on_the_eligibility(attributes, policy::Eligibility)
         }
       }.flatten.compact.map(&:id)
 
@@ -90,6 +90,10 @@ class Claim
       attributes.map { |attribute|
         object.read_attribute(attribute)
       }.reject(&:blank?)
+    end
+
+    def all_attributes_exist_on_the_eligibility(attributes, eligibility)
+      (attributes - eligibility.column_names).empty?
     end
   end
 end
