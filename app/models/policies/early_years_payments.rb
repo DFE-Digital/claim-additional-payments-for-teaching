@@ -7,6 +7,7 @@ module Policies
     MIN_QA_THRESHOLD = 10
 
     VERIFIERS = [
+      AutomatedChecks::ClaimVerifiers::EarlyYearsPayments::Identity,
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan # TODO - spec
     ]
 

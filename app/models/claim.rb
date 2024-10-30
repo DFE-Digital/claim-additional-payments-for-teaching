@@ -443,6 +443,10 @@ class Claim < ApplicationRecord
     !one_login_idv_name_match? || !one_login_idv_dob_match?
   end
 
+  def one_login_idv_match?
+    one_login_idv_name_match? && one_login_idv_dob_match?
+  end
+
   def awaiting_provider_verification?
     return false unless has_further_education_policy?
 

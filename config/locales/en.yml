@@ -1443,6 +1443,9 @@ en:
       provider_submitted_at: Provider submitted at
       practitioner_started_at: Claimant started at
       submitted_at: Claimant submitted at
+      task_questions:
+        identity_confirmation:
+          title: "Do these names match?"
   early_years_payment_practitioner:
     journey_name: Claim an early years financial incentive payment - practitioner
     feedback_email: "help@opsteam.education.gov.uk"

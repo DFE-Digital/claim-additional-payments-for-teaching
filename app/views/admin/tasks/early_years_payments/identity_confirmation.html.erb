@@ -1,0 +1,60 @@
+<% content_for(:page_title) { page_title("Claim #{@claim.reference} identity confirmation check for #{@claim.policy.short_name}") } %>
+
+<% content_for :back_link do %>
+  <%= govuk_back_link href: admin_claim_tasks_path(@claim) %>
+<% end %>
+
+<%= render "shared/error_summary", instance: @task, errored_field_id_overrides: { "passed": "task_passed_true" } if @task.errors.any? %>
+
+<div class="govuk-grid-row">
+  <%= render claim_summary_view, claim: @claim, heading: "Identity confirmation" %>
+
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-l"><%= @current_task_name.humanize %></h2>
+  </div>
+
+  <div class="govuk-grid-column-two-thirds">
+    <h3 class="govuk-heading-m">
+      <%= I18n.t(
+        "admin.tasks.identity_confirmation.title",
+        claim_full_name: @claim.full_name
+      ) %>
+    </h3>
+
+    <table class="govuk-table">
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">
+            Provider entered claimant name
+          </th>
+          <td class="govuk-table__cell">
+            <%= @tasks_presenter.provider_entered_claimant_name %>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">
+            Claimant name from One login
+          </th>
+          <td class="govuk-table__cell">
+            <%= @tasks_presenter.one_login_claimant_name %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <% if @tasks_presenter.practitioner_journey_completed? %>
+      <% if @task.claim_verifier_match_any? && @task.passed.nil? %>
+        <%= render "form", task_name: "identity_confirmation", claim: @claim %>
+      <% else %>
+        <%= render "task_outcome", task: @task %>
+      <% end %>
+    <% else %>
+      <div class="govuk-inset-text">
+        This task is not available until the claimant has submitted their
+        claim.
+      </div>
+    <% end %>
+
+    <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>
+  </div>
+</div>
