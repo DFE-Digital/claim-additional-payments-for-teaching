@@ -14,6 +14,7 @@ module Policies
       def applicable_task_names
         tasks = []
 
+        tasks << "identity_confirmation"
         tasks << "student_loan_plan" if claim.submitted_without_slc_data?
 
         tasks

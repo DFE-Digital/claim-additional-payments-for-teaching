@@ -1462,6 +1462,8 @@ en:
       task_questions:
         employment:
           title: Is the claimant still working at the current nursery above?
+        identity_confirmation:
+          title: "Do these names match?"
   early_years_payment_practitioner:
     journey_name: Claim an early years financial incentive payment - practitioner
     feedback_email: "help@opsteam.education.gov.uk"
