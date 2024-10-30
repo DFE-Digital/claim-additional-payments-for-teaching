@@ -1,8 +1,17 @@
 class ClaimVerifierJob < ApplicationJob
   def perform(claim)
-    dqt_teacher_status = if claim.policy == Policies::EarlyYearsPayments
-      nil
-    elsif claim.has_dqt_record?
+    AutomatedChecks::ClaimVerifier.new(
+      claim: claim,
+      dqt_teacher_status: dqt_teacher_status(claim)
+    ).perform
+  end
+
+  private
+
+  def dqt_teacher_status(claim)
+    return if claim.policy == Policies::EarlyYearsPayments
+
+    if claim.has_dqt_record?
       Dqt::Teacher.new(claim.dqt_teacher_status)
     else
       Dqt::Client.new.teacher.find(
@@ -11,10 +20,5 @@ class ClaimVerifierJob < ApplicationJob
         nino: claim.national_insurance_number
       )
     end
-
-    AutomatedChecks::ClaimVerifier.new(
-      claim:,
-      dqt_teacher_status:
-    ).perform
   end
 end

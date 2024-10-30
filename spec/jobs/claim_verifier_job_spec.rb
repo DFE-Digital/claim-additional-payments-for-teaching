@@ -40,6 +40,16 @@ RSpec.describe ClaimVerifierJob do
       end
     end
 
+    context "when the claim is for EarlyYearsPayments" do
+      let(:claim) { build(:claim, policy: Policies::EarlyYearsPayments) }
+
+      it "performs the verifier job but doesn't request dqt info" do
+        expect(AutomatedChecks::ClaimVerifier).to receive(:new)
+        expect(dbl).not_to receive(:find)
+        described_class.new.perform(claim)
+      end
+    end
+
     context "when the claim does not have a DQT record payload" do
       let(:dqt_teacher_status) { nil }
 
