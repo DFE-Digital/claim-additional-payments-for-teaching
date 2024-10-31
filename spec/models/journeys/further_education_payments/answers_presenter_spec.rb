@@ -161,7 +161,7 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
             "<p class=\"govuk-body\">Early years practitioner (level 2) apprenticeship</p>" \
             "<p class=\"govuk-body\">Early years educator (level 3) apprenticeship</p>" \
             "<p class=\"govuk-body\">T Level in education and early years (early years educator)</p>" \
-            "<p class=\"govuk-body\">Early years qualification approved for funding at level 3 and below which enables providers to count the recipient in staff:child ratios as of 14 October 2024</p>",
+            "<p class=\"govuk-body\">Early years qualification approved for funding at level 3 and below which enables providers to count the recipient in staff:child ratios on 14 October 2024</p>",
             "early-years-courses"],
           ["Engineering and manufacturing courses",
             "<p class=\"govuk-body\">Qualifications approved for funding at level 3 and below in the engineering sector subject area</p>" \
