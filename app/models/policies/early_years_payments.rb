@@ -41,6 +41,23 @@ module Policies
     # NOOP as PERSONAL_DATA_ATTRIBUTES_TO_RETAIN_FOR_EXTENDED_PERIOD is empty
     EXTENDED_PERIOD_END_DATE = ->(start_of_academic_year) {}
 
+    # Options shown to admins when rejecting a claim
+    ADMIN_DECISION_REJECTED_REASONS = [
+      :claim_cancelled_by_employer,
+      :six_month_retention_check_failed,
+      :duplicate,
+      :no_response,
+      :other
+    ]
+
+    OTHER_CLAIMABLE_POLICIES = [
+      EarlyCareerPayments,
+      StudentLoans,
+      LevellingUpPremiumPayments
+    ]
+
+    VERIFIERS = []
+
     # TODO: This is needed once the reply-to email address has been added to Gov Notify
     def notify_reply_to_id
       nil
