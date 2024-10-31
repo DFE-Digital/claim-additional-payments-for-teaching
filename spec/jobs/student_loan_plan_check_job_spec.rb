@@ -5,6 +5,7 @@ RSpec.describe StudentLoanPlanCheckJob do
 
   before do
     create(:journey_configuration, :further_education_payments)
+    create(:journey_configuration, :early_years_payment_provider_start)
   end
 
   let!(:claim) { create(:claim, claim_status, academic_year:, policy: Policies::LevellingUpPremiumPayments) }
@@ -21,6 +22,15 @@ RSpec.describe StudentLoanPlanCheckJob do
         expect(AutomatedChecks::ClaimVerifiers::StudentLoanPlan).not_to receive(:new)
         perform_job
       end
+    end
+
+    it "includes all applicable policies" do
+      expect(StudentLoanPlanCheckJob::APPLICABLE_POLICIES).to eq [
+        Policies::EarlyCareerPayments,
+        Policies::LevellingUpPremiumPayments,
+        Policies::FurtherEducationPayments,
+        Policies::EarlyYearsPayments
+      ]
     end
 
     context "when the previous student loan plan check was run manually" do # not sure it's possible to do this any more

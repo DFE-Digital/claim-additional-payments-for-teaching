@@ -7,7 +7,7 @@ module Policies
     MIN_QA_THRESHOLD = 10
 
     VERIFIERS = [
-      AutomatedChecks::ClaimVerifiers::StudentLoanPlan # TODO - spec
+      AutomatedChecks::ClaimVerifiers::StudentLoanPlan
     ]
 
     # Attributes to delete from claims submitted before the current academic
@@ -63,6 +63,10 @@ module Policies
 
     def award_amount
       1_000
+    end
+
+    def auto_check_student_loan_plan_task?
+      true
     end
   end
 end

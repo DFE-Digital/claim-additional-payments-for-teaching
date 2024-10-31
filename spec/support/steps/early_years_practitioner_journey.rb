@@ -1,5 +1,5 @@
 def when_personal_details_entered_up_to_address
-  visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=user@example.com"
+  visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=practitioner@example.com"
   fill_in "Claim reference number", with: claim.reference
   click_button "Submit"
 
@@ -34,4 +34,23 @@ def when_personal_details_entered_up_to_email_address
   otp_in_mail_sent = mail[:personalisation].unparsed_value[:one_time_password]
   fill_in "claim-one-time-password-field", with: otp_in_mail_sent
   click_on "Confirm"
+end
+
+def when_early_years_practitioner_claim_submitted
+  when_early_years_payment_practitioner_journey_configuration_exists
+  when_early_years_payment_provider_authenticated_journey_submitted
+  when_personal_details_entered_up_to_email_address
+
+  choose "No"
+  click_on "Continue"
+
+  fill_in "Name on your account", with: "Jo Bloggs"
+  fill_in "Sort code", with: "123456"
+  fill_in "Account number", with: "87654321"
+  click_on "Continue"
+
+  choose "Female"
+  click_on "Continue"
+
+  perform_enqueued_jobs { click_on "Accept and send" }
 end

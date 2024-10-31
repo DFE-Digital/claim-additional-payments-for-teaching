@@ -6,7 +6,7 @@ RSpec.feature "Early years payment practitioner email address" do
       :claim,
       policy: Policies::EarlyYearsPayments,
       reference: "foo",
-      practitioner_email_address: "user@example.com"
+      practitioner_email_address: "practitioner@example.com"
     )
   end
   let(:otp_code) { "123456" }

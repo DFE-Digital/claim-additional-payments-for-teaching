@@ -30,6 +30,10 @@ class ClaimCheckingTasks
       Policies::InternationalRelocationPayments::ClaimCheckingTasks
         .new(claim)
         .applicable_task_names
+    when Policies::EarlyYearsPayments
+      Policies::EarlyYearsPayments::ClaimCheckingTasks
+        .new(claim)
+        .applicable_task_names
     else
       Task::NAMES.dup.tap do |task_names|
         task_names.delete("previous_payment")
