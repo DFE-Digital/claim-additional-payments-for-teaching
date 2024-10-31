@@ -9,6 +9,8 @@ FactoryBot.define do
       paye_reference { "123/A" }
       first_name { "John" }
       surname { "Doe" }
+      practitioner_first_name { "John" }
+      practitioner_surname { "Doe" }
       start_date { Date.parse("1/1/2024") }
       child_facing_confirmation_given { true }
       returning_within_6_months { true }

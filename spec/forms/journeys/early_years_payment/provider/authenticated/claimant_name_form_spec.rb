@@ -43,6 +43,10 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::ClaimantNam
       expect { subject.save }.to(
         change { journey_session.answers.first_name }.to(first_name).and(
           change { journey_session.answers.surname }.to(surname)
+        ).and(
+          change { journey_session.answers.practitioner_first_name }.to(first_name)
+        ).and(
+          change { journey_session.answers.practitioner_surname }.to(surname)
         )
       )
     end

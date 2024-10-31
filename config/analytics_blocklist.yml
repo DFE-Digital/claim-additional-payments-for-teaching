@@ -133,3 +133,5 @@
   - answers
   :early_years_payment_eligibilities:
   - provider_email_address
+  - practitioner_first_name
+  - practitioner_surname
