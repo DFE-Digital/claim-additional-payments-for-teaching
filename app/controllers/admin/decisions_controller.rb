@@ -86,6 +86,10 @@ class Admin::DecisionsController < Admin::BaseAdminController
 
     ClaimMailer.approved(@claim).deliver_later if @claim.latest_decision.result == "approved"
     ClaimMailer.rejected(@claim).deliver_later if @claim.latest_decision.result == "rejected"
+
+    if @claim.latest_decision.result == "rejected" && @claim.has_early_years_policy?
+      ClaimMailer.rejected_provider_notification(@claim).deliver_later
+    end
   end
 
   def decision_params

@@ -33,6 +33,10 @@ module Policies
       def employment_task_available?
         Date.today >= employment_task_available_at
       end
+
+      def practitioner_name
+        [practitioner_first_name, practitioner_surname].join(" ")
+      end
     end
   end
 end

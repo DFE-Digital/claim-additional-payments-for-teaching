@@ -56,8 +56,6 @@ module Policies
       LevellingUpPremiumPayments
     ]
 
-    VERIFIERS = []
-
     # TODO: This is needed once the reply-to email address has been added to Gov Notify
     def notify_reply_to_id
       nil
