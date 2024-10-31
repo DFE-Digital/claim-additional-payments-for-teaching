@@ -1149,6 +1149,27 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  describe "#has_early_years_payments_policy?" do
+    subject { claim.has_early_years_payments_policy? }
+    let(:claim) { create(:claim, :submitted, policy:) }
+
+    context "with early years payements policy" do
+      let(:policy) { Policies::EarlyYearsPayments }
+
+      it { is_expected.to be true }
+    end
+
+    context "with other policies:" do
+      (Policies.all - [Policies::EarlyYearsPayments]).each do |policy|
+        context policy do
+          let(:policy) { policy }
+
+          it { is_expected.to be false }
+        end
+      end
+    end
+  end
+
   describe "#important_notes" do
     subject(:important_notes) do
       claim.important_notes

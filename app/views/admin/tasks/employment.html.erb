@@ -20,7 +20,11 @@
     <% if @task.persisted? %>
       <%= render "task_outcome", task: @task, notes: @notes %>
     <% else %>
-      <%= render "form", task_name: "employment", claim: @claim %>
+      <% if @task.employment_task_available? %>
+        <%= render "form", task_name: "employment", claim: @claim %>
+      <% else %>
+        <%= govuk_inset_text(text: "This task will be available from #{l(@claim.eligibility.employment_task_available_at)}") %>
+      <% end %>
     <% end %>
 
     <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>

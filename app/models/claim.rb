@@ -408,6 +408,10 @@ class Claim < ApplicationRecord
     has_ecp_policy? || has_lupp_policy?
   end
 
+  def has_early_years_payments_policy?
+    policy == Policies::EarlyYearsPayments
+  end
+
   def important_notes
     notes&.where(important: true)
   end
