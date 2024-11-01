@@ -15,7 +15,8 @@ class Admin::PayrollRunDownloadsController < Admin::BaseAdminController
   def show
     respond_to do |format|
       format.html
-      format.zip do
+
+      format.csv do
         out = Payroll::PaymentsCsv.new(@payroll_run)
         send_data out.data, type: out.content_type, filename: out.filename
       end
