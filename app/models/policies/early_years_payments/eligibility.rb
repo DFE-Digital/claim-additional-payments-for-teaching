@@ -27,7 +27,7 @@ module Policies
       end
 
       def employment_task_available_at
-        start_date + 6.months
+        start_date + RETENTION_PERIOD
       end
 
       def employment_task_available?

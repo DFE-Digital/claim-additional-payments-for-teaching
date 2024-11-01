@@ -74,6 +74,25 @@ class Admin::ClaimsFilterForm
         Claim.includes(:decisions).failed_bank_validation.awaiting_decision
       when "awaiting_provider_verification"
         Claim.by_policy(Policies::FurtherEducationPayments).awaiting_further_education_provider_verification.awaiting_decision
+      when "awaiting_claimant_data"
+        Claim
+          .by_policy(Policies::EarlyYearsPayments)
+          .where(submitted_at: nil)
+          .awaiting_decision
+      when "awaiting_retention_period_completion"
+        Claim
+          .by_policy(Policies::EarlyYearsPayments)
+          .joins(:early_years_payment_eligibility)
+          .where.not(submitted_at: nil)
+          .awaiting_decision
+          .where("early_years_payment_eligibilities.start_date > ?", Policies::EarlyYearsPayments::RETENTION_PERIOD.ago)
+      when "awaiting_retention_check_data"
+        Claim
+          .by_policy(Policies::EarlyYearsPayments)
+          .joins(:early_years_payment_eligibility)
+          .where.not(submitted_at: nil)
+          .awaiting_decision
+          .where("early_years_payment_eligibilities.start_date < ?", Policies::EarlyYearsPayments::RETENTION_PERIOD.ago)
       else
         Claim.includes(:decisions).not_held.awaiting_decision.not_awaiting_further_education_provider_verification
       end
@@ -107,6 +126,9 @@ class Admin::ClaimsFilterForm
       "Awaiting" => {
         "Awaiting decision - not on hold" => nil,
         "Awaiting provider verification" => "awaiting_provider_verification",
+        "Awaiting claimant data" => "awaiting_claimant_data",
+        "Awaiting retention period completion" => "awaiting_retention_period_completion",
+        "Awaiting retention check data" => "awaiting_retention_check_data",
         "Awaiting decision - on hold" => "held",
         "Awaiting decision - failed bank details" => "failed_bank_validation"
       },
