@@ -17,7 +17,7 @@ class Admin::TasksController < Admin::BaseAdminController
     @notes = @claim.notes.automated.by_label(params[:name])
     @task_pagination = Admin::TaskPagination.new(claim: @claim, current_task_name:)
 
-    render @task.name
+    render task_view(@task)
   end
 
   def create
@@ -102,5 +102,17 @@ class Admin::TasksController < Admin::BaseAdminController
     end
 
     messages
+  end
+
+  def task_view(task)
+    policy = task.claim.policy
+    policy_path = policy.to_s.underscore
+    policy_scoped_task_name = "#{policy_path}/#{task.name}"
+
+    if lookup_context.template_exists?(policy_scoped_task_name, [params[:controller]], false)
+      "admin/tasks/#{policy_scoped_task_name}"
+    else
+      task.name
+    end
   end
 end

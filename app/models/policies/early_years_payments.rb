@@ -7,7 +7,8 @@ module Policies
     MIN_QA_THRESHOLD = 10
 
     VERIFIERS = [
-      AutomatedChecks::ClaimVerifiers::StudentLoanPlan
+      AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
+      AutomatedChecks::ClaimVerifiers::EarlyYearsPayments::Identity
     ]
 
     # Attributes to delete from claims submitted before the current academic
