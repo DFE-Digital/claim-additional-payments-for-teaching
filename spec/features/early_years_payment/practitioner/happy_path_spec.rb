@@ -9,6 +9,7 @@ RSpec.feature "Early years payment practitioner" do
   let(:claim) { Claim.last }
 
   scenario "Happy path" do
+    when_student_loan_data_exists
     when_early_years_payment_provider_authenticated_journey_submitted
     when_early_years_payment_practitioner_journey_configuration_exists
 
@@ -83,6 +84,7 @@ RSpec.feature "Early years payment practitioner" do
 
     expect(claim.eligibility.practitioner_claim_started_at).to be_present
     expect(claim.reload.submitted_at).to be_present
+    expect(claim.student_loan_plan).to eq "plan_1"
 
     # check answers were saved on the claim
     expect(claim.reload.national_insurance_number).to eq "PX321499A"

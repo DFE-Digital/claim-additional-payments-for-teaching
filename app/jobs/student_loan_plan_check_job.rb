@@ -2,7 +2,8 @@ class StudentLoanPlanCheckJob < ApplicationJob
   APPLICABLE_POLICIES = [
     Policies::EarlyCareerPayments,
     Policies::LevellingUpPremiumPayments,
-    Policies::FurtherEducationPayments
+    Policies::FurtherEducationPayments,
+    Policies::EarlyYearsPayments
   ].freeze
 
   def perform

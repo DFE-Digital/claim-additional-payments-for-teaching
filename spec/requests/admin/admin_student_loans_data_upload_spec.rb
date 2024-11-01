@@ -4,6 +4,7 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
   let!(:journey_configuration_tslr) { create(:journey_configuration, :student_loans) }
   let!(:journey_configuration_ecp_lupp) { create(:journey_configuration, :additional_payments) }
   let!(:journey_configuration_fe) { create(:journey_configuration, :further_education_payments) }
+  let!(:journey_configuration_ey) { create(:journey_configuration, :early_years_payment_provider_start) }
 
   before { @signed_in_user = sign_in_as_service_operator }
 

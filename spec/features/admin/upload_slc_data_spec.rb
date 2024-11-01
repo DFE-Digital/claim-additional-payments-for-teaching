@@ -5,6 +5,7 @@ RSpec.feature "Upload SLC data" do
     create(:journey_configuration, :student_loans) # used by StudentLoanAmountCheckJob
     create(:journey_configuration, :early_career_payments)
     create(:journey_configuration, :further_education_payments)
+    create(:journey_configuration, :early_years_payment_provider_start)
     sign_in_as_service_operator
   end
 
