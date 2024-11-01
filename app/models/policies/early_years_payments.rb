@@ -47,6 +47,7 @@ module Policies
     # Options shown to admins when rejecting a claim
     ADMIN_DECISION_REJECTED_REASONS = [
       :claim_cancelled_by_employer,
+      :identity_check_failed,
       :six_month_retention_check_failed,
       :duplicate,
       :no_response,
