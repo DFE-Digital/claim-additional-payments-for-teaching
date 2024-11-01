@@ -9,7 +9,8 @@ module Policies
       AutomatedChecks::ClaimVerifiers::Qualifications,
       AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
       AutomatedChecks::ClaimVerifiers::Employment,
-      AutomatedChecks::ClaimVerifiers::StudentLoanPlan
+      AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
+      AutomatedChecks::ClaimVerifiers::FraudRisk
     ].freeze
 
     # Used in

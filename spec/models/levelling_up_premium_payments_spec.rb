@@ -9,7 +9,8 @@ RSpec.describe Policies::LevellingUpPremiumPayments, type: :model do
       AutomatedChecks::ClaimVerifiers::Qualifications,
       AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
       AutomatedChecks::ClaimVerifiers::Employment,
-      AutomatedChecks::ClaimVerifiers::StudentLoanPlan
+      AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
+      AutomatedChecks::ClaimVerifiers::FraudRisk
     ])
   end
 

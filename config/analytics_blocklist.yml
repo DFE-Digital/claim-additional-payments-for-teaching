@@ -135,3 +135,9 @@
   - provider_email_address
   - practitioner_first_name
   - practitioner_surname
+  :risk_indicators:
+  - id
+  - field
+  - value
+  - created_at
+  - updated_at

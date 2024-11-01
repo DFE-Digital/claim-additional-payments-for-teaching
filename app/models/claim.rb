@@ -249,7 +249,7 @@ class Claim < ApplicationRecord
   end
 
   def approvable?
-    submitted? && !held? && !payroll_gender_missing? && (!decision_made? || awaiting_qa?) && !payment_prevented_by_other_claims?
+    submitted? && !held? && !payroll_gender_missing? && (!decision_made? || awaiting_qa?) && !payment_prevented_by_other_claims? && attributes_flagged_by_risk_indicator.none?
   end
 
   def rejectable?
@@ -455,6 +455,10 @@ class Claim < ApplicationRecord
 
   def has_early_years_policy?
     policy == Policies::EarlyYearsPayments
+  end
+
+  def attributes_flagged_by_risk_indicator
+    @attributes_flagged_by_risk_indicator ||= RiskIndicator.flagged_attributes(self)
   end
 
   private

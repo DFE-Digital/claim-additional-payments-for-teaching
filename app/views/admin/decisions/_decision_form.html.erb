@@ -29,6 +29,21 @@
   </div>
 <% end %>
 
+<% if claim.attributes_flagged_by_risk_indicator.any? %>
+  <div class="govuk-warning-text">
+    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+    <strong class="govuk-warning-text__text">
+      <span class="govuk-visually-hidden">Warning</span>
+      <p class="govuk-!-margin-top-0">
+        This claim cannot be approved because the
+        <%= @claim.attributes_flagged_by_risk_indicator.map(&:humanize).to_sentence.downcase %>
+        <%= @claim.attributes_flagged_by_risk_indicator.many? ? "are" : "is" %>
+        included on the fraud prevention list.
+      </p>
+    </strong>
+  </div>
+<% end %>
+
 <%= form_for decision, url: admin_claim_decisions_path(claim), html: { id: "claim_decision_form" } do |form| %>
   <%= hidden_field_tag :qa, params[:qa] %>
 

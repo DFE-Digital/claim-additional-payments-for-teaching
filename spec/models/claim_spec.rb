@@ -342,6 +342,13 @@ RSpec.describe Claim, type: :model do
       expect(create(:claim, :submitted, national_insurance_number: national_insurance_number, date_of_birth: 30.years.ago).approvable?).to eq false
     end
 
+    it "returns false if the claim is flagged by a fraud check" do
+      claim = create(:claim, :submitted, national_insurance_number: "QQ123456C")
+      create(:risk_indicator, field: "national_insurance_number", value: "QQ123456C")
+
+      expect(claim.approvable?).to eq false
+    end
+
     context "when the claim is held" do
       subject(:claim) { create(:claim, :held) }
       it { is_expected.not_to be_approvable }

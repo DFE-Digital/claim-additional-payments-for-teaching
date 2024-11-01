@@ -37,4 +37,8 @@ module Policies
   def self.constantize(policy)
     "Policies::#{policy}".constantize
   end
+
+  def self.with_attribute(attr)
+    POLICIES.select { |policy| policy::Eligibility.has_attribute?(attr) }
+  end
 end
