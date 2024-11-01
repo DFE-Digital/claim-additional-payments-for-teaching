@@ -53,4 +53,10 @@ class Task < ApplicationRecord
   def identity_confirmation?
     name == "identity_confirmation"
   end
+
+  def employment_task_available?
+    return true unless claim.has_early_years_payments_policy?
+
+    claim.eligibility.employment_task_available?
+  end
 end

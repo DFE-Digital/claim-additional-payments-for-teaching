@@ -25,6 +25,14 @@ module Policies
       def provider_claim_submitted?
         provider_claim_submitted_at.present?
       end
+
+      def employment_task_available_at
+        start_date + 6.months
+      end
+
+      def employment_task_available?
+        Date.today >= employment_task_available_at
+      end
     end
   end
 end
