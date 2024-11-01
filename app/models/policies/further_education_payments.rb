@@ -14,7 +14,7 @@ module Policies
     ELIGIBILITY_MATCHING_ATTRIBUTES = [["teacher_reference_number"]].freeze
 
     # Percentage of claims to QA
-    MIN_QA_THRESHOLD = 0
+    MIN_QA_THRESHOLD = 10
 
     VERIFIERS = [
       AutomatedChecks::ClaimVerifiers::Identity,
