@@ -108,4 +108,53 @@ RSpec.feature "Admin rejects a claim" do
 
     expect(page).not_to have_content("Reasons")
   end
+
+  context "early years claim" do
+    context "claimant has not completed their half" do
+      let!(:claim) do
+        create(
+          :claim,
+          :submitted,
+          policy: Policies::EarlyYearsPayments,
+          email_address: nil
+        )
+      end
+
+      scenario "rejecting sends email to provider only when claimant yet to complete" do
+        visit admin_claim_tasks_path(claim)
+        click_on "Approve or reject this claim"
+        choose "Reject"
+        check "Claim cancelled by employer"
+
+        expect {
+          click_button "Confirm decision"
+        }.to change { enqueued_jobs.count { |job| job[:job] == ActionMailer::MailDeliveryJob } }.by(1)
+
+        expect(page).to have_content("Claim has been rejected successfully")
+      end
+    end
+
+    context "claimant has completed their half" do
+      let!(:claim) do
+        create(
+          :claim,
+          :submitted,
+          policy: Policies::EarlyYearsPayments
+        )
+      end
+
+      scenario "rejecting sends email to claimant + provider" do
+        visit admin_claim_tasks_path(claim)
+        click_on "Approve or reject this claim"
+        choose "Reject"
+        check "Claim cancelled by employer"
+
+        expect {
+          click_button "Confirm decision"
+        }.to change { enqueued_jobs.count { |job| job[:job] == ActionMailer::MailDeliveryJob } }.by(2)
+
+        expect(page).to have_content("Claim has been rejected successfully")
+      end
+    end
+  end
 end

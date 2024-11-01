@@ -413,4 +413,37 @@ RSpec.describe ClaimMailer, type: :mailer do
       expect(mail.body).to be_empty
     end
   end
+
+  describe "#rejected_provider_notification" do
+    let(:claim) do
+      create(
+        :claim,
+        :rejected,
+        policy: Policies::EarlyYearsPayments
+      )
+    end
+
+    before do
+      claim.eligibility.update!(
+        practitioner_first_name: "John",
+        practitioner_surname: "Doe"
+      )
+    end
+
+    it "sends correct email to provider" do
+      mail = described_class.rejected_provider_notification(claim)
+
+      expect(mail.to).to eql([claim.eligibility.eligible_ey_provider.primary_key_contact_email_address])
+      expect(mail.personalisation[:nursery_name]).to eql(claim.eligibility.eligible_ey_provider.nursery_name)
+      expect(mail.personalisation[:ref_number]).to eql(claim.reference)
+      expect(mail.personalisation[:practitioner_name]).to eql("John Doe")
+      expect(mail.personalisation[:support_email_address]).to eql("earlycareerteacherpayments@digital.education.gov.uk")
+
+      expect(mail.personalisation[:reason_claim_cancelled_by_employer]).to eql("yes")
+      expect(mail.personalisation[:reason_six_month_retention_check_failed]).to eql("no")
+      expect(mail.personalisation[:reason_duplicate]).to eql("no")
+      expect(mail.personalisation[:reason_no_response]).to eql("no")
+      expect(mail.personalisation[:reason_other]).to eql("no")
+    end
+  end
 end

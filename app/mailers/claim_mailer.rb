@@ -42,6 +42,26 @@ class ClaimMailer < ApplicationMailer
     send_mail(template_ids(claim)[:CLAIM_REJECTED_NOTIFY_TEMPLATE_ID], personalisation)
   end
 
+  def rejected_provider_notification(claim)
+    unknown_policy_check(claim)
+    set_common_instance_variables(claim)
+
+    personalisation = {
+      nursery_name: claim.eligibility.eligible_ey_provider.nursery_name,
+      ref_number: claim.reference,
+      practitioner_name: claim.eligibility.practitioner_name,
+      support_email_address: @support_email_address,
+      **rejected_reasons_personalisation(@claim.latest_decision&.rejected_reasons_hash)
+    }
+
+    template_mail(
+      "0c345721-c8d6-493a-95b7-006e84ba9c4e",
+      to: @claim.eligibility.eligible_ey_provider.primary_key_contact_email_address,
+      reply_to_id: @policy.notify_reply_to_id,
+      personalisation:
+    )
+  end
+
   def update_after_three_weeks(claim)
     unknown_policy_check(claim)
     set_common_instance_variables(claim)

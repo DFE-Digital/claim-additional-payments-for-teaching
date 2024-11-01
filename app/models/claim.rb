@@ -453,6 +453,10 @@ class Claim < ApplicationRecord
     eligibility.awaiting_provider_verification?
   end
 
+  def has_early_years_policy?
+    policy == Policies::EarlyYearsPayments
+  end
+
   private
 
   def one_login_idv_name_match?
