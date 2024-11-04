@@ -121,6 +121,10 @@ class Claim < ApplicationRecord
   has_one :support_ticket, dependent: :destroy
 
   belongs_to :eligibility, polymorphic: true, inverse_of: :claim, dependent: :destroy
+  belongs_to :early_years_payment_eligibility,
+    class_name: "Policies::EarlyYearsPayments::Eligibility",
+    optional: true,
+    foreign_key: :eligibility_id
 
   belongs_to :journey_session,
     optional: true,

@@ -3,6 +3,8 @@ module Policies
     include BasePolicy
     extend self
 
+    RETENTION_PERIOD = 6.months
+
     # Percentage of claims to QA
     MIN_QA_THRESHOLD = 10
 

@@ -131,5 +131,41 @@ RSpec.describe Admin::ClaimsFilterForm, type: :model do
         expect(subject.claims).to eq([qa_rejected_claim])
       end
     end
+
+    context "filtering with EY awaiting filters" do
+      let!(:claim_awaiting_claimant) { create(:claim, submitted_at: nil, policy: Policies::EarlyYearsPayments) }
+      let!(:claim_within_retention_period) { create(:claim, :submitted, policy: Policies::EarlyYearsPayments) }
+      let!(:claim_after_retention_period) { create(:claim, :submitted, policy: Policies::EarlyYearsPayments) }
+      let!(:claim_rejected) { create(:claim, :rejected, submitted_at: nil, policy: Policies::EarlyYearsPayments) }
+
+      before do
+        claim_within_retention_period.eligibility.update(start_date: (Policies::EarlyYearsPayments::RETENTION_PERIOD - 1.month).ago)
+        claim_after_retention_period.eligibility.update(start_date: (Policies::EarlyYearsPayments::RETENTION_PERIOD + 1.month).ago)
+      end
+
+      context "awaiting_claimant_data filter" do
+        let(:filters) { {status: "awaiting_claimant_data"} }
+
+        it "returns claims awaiting claimant data" do
+          expect(subject.claims).to eq([claim_awaiting_claimant])
+        end
+      end
+
+      context "awaiting_retention_period_completion filter" do
+        let(:filters) { {status: "awaiting_retention_period_completion"} }
+
+        it "returns claims awaiting retention period completion" do
+          expect(subject.claims).to eq([claim_within_retention_period])
+        end
+      end
+
+      context "awaiting_retention_check_data filter" do
+        let(:filters) { {status: "awaiting_retention_check_data"} }
+
+        it "awaiting_retention_check_data filter" do
+          expect(subject.claims).to eq([claim_after_retention_period])
+        end
+      end
+    end
   end
 end
