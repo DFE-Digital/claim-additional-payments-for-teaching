@@ -116,7 +116,10 @@ module Admin
     def identity_confirmation_task_claim_verifier_match_status_tag(claim)
       task = claim.tasks.detect { |t| t.name == "identity_confirmation" }
 
-      if task.nil?
+      if claim.policy == Policies::EarlyYearsPayments && !claim.eligibility.practitioner_journey_completed?
+        status = "Incomplete"
+        status_colour = "grey"
+      elsif task.nil?
         status = "Unverified"
         status_colour = "grey"
       elsif task.passed?

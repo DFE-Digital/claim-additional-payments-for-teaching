@@ -335,6 +335,10 @@ FactoryBot.define do
       end
     end
 
+    trait :awaiting_practitioner do
+      submitted_at { nil }
+    end
+
     trait :with_dqt_teacher_status do
       dqt_teacher_status do
         {
