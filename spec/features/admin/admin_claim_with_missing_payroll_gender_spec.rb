@@ -45,4 +45,40 @@ RSpec.feature "Admin checking a claim missing a payroll gender" do
     expect(claim.latest_decision).to be_approved
     expect(claim.latest_decision.created_by).to eq(@signed_in_user)
   end
+
+  scenario "with a policy where payroll gender is the last task" do
+    irp_claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::InternationalRelocationPayments,
+      payroll_gender: :dont_know
+    )
+
+    fe_claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::FurtherEducationPayments,
+      payroll_gender: :dont_know
+    )
+
+    visit admin_claim_tasks_path(irp_claim)
+
+    click_on "How is the claimant’s gender recorded for payroll purposes?"
+
+    choose "Male"
+
+    click_on "Save and continue"
+
+    expect(page).to have_content("Claim decision")
+
+    visit admin_claim_tasks_path(fe_claim)
+
+    click_on "How is the claimant’s gender recorded for payroll purposes?"
+
+    choose "Male"
+
+    click_on "Save and continue"
+
+    expect(page).to have_content("Claim decision")
+  end
 end
