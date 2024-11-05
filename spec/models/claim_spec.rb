@@ -353,6 +353,36 @@ RSpec.describe Claim, type: :model do
       subject(:claim) { create(:claim, :held) }
       it { is_expected.not_to be_approvable }
     end
+
+    context "when policy specific conditions are met" do
+      subject do
+        create(
+          :claim,
+          :submitted,
+          policy: Policies::EarlyYearsPayments
+        )
+      end
+
+      it "is approvable" do
+        allow(subject.eligibility).to receive(:approvable?).and_return(true)
+        expect(subject).to be_approvable
+      end
+    end
+
+    context "when policy specific conditions are not met" do
+      subject do
+        create(
+          :claim,
+          :submitted,
+          policy: Policies::EarlyYearsPayments
+        )
+      end
+
+      it "is not approvable" do
+        allow(subject.eligibility).to receive(:approvable?).and_return(false)
+        expect(subject).not_to be_approvable
+      end
+    end
   end
 
   describe "#rejectable?" do
@@ -1236,7 +1266,7 @@ RSpec.describe Claim, type: :model do
     end
 
     context "when the claim cannot be held" do
-      subject(:claim) { build(:claim, :approved) }
+      subject(:claim) { create(:claim, :approved) }
 
       it { is_expected.not_to be_held }
     end

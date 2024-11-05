@@ -253,7 +253,13 @@ class Claim < ApplicationRecord
   end
 
   def approvable?
-    submitted? && !held? && !payroll_gender_missing? && (!decision_made? || awaiting_qa?) && !payment_prevented_by_other_claims? && attributes_flagged_by_risk_indicator.none?
+    submitted? &&
+      !held? &&
+      !payroll_gender_missing? &&
+      (!decision_made? || awaiting_qa?) &&
+      !payment_prevented_by_other_claims? &&
+      attributes_flagged_by_risk_indicator.none? &&
+      policy_specific_approvable?
   end
 
   def rejectable?
@@ -470,6 +476,14 @@ class Claim < ApplicationRecord
   end
 
   private
+
+  def policy_specific_approvable?
+    return true if policy.nil?
+    return true if eligibility.nil?
+    return true if !eligibility.respond_to?(:approvable?)
+
+    eligibility.approvable?
+  end
 
   def one_login_idv_name_match?
     onelogin_idv_full_name.downcase == "#{first_name.downcase} #{surname.downcase}"
