@@ -41,6 +41,12 @@ module Policies
           ["Student loan plan", claim.student_loan_plan&.humanize]
         ]
       end
+
+      def student_loan_amount
+        # FIXME RL - just stubbing this until the main work of showing
+        # tasks is done
+        []
+      end
     end
   end
 end

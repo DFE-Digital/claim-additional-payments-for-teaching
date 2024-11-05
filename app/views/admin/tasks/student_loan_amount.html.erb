@@ -17,8 +17,14 @@
   <div class="govuk-grid-column-two-thirds">
     <% if !@task.passed.nil? %>
       <%= render "task_outcome", task: @task %>
-    <% else %>
+    <% elsif @claim.policy.task_available?(@task) %>
       <%= render "form", task_name: "student_loan_amount", claim: @claim %>
+    <% else %>
+      <%= govuk_inset_text(
+        text: I18n.t(
+          "#{@claim.policy.to_s.underscore}.admin.task_questions.#{@task.name}.unavailable",
+        )
+      ) %>
     <% end %>
 
     <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>

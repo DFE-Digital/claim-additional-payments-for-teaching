@@ -58,4 +58,8 @@ module BasePolicy
   def auto_check_student_loan_plan_task?
     false
   end
+
+  def task_available?(task)
+    true
+  end
 end

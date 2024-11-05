@@ -54,6 +54,7 @@ class Task < ApplicationRecord
     name == "identity_confirmation"
   end
 
+  # FIXME RL - can we remove this, seems like it's a policy concern
   def employment_task_available?
     return true unless claim.has_early_years_payments_policy?
 

@@ -46,7 +46,7 @@
     <% if !@task.passed.nil? %>
       <%= render "task_outcome", task: @task, notes: @notes do %>
       <% end %>
-    <% else %>
+    <% elsif @claim.policy.task_available?(@task) %>
       <%= form_with model: [:admin, @claim, @claim.tasks.where(name: "payroll_details").first_or_initialize] do |f| %>
         <div class="govuk-form-group">
           <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
@@ -75,6 +75,12 @@
           <%= f.submit "Save and continue", class: "govuk-button", data: {module: "govuk-button"} %>
         </div>
       <% end %>
+    <% else %>
+      <%= govuk_inset_text(
+        text: I18n.t(
+          "#{@claim.policy.to_s.underscore}.admin.task_questions.#{@task.name}.unavailable",
+        )
+      ) %>
     <% end %>
 
     <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>

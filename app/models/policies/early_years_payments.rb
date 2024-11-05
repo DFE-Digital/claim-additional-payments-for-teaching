@@ -72,5 +72,14 @@ module Policies
     def auto_check_student_loan_plan_task?
       true
     end
+
+    def task_available?(task)
+      case task.name
+      when "employment"
+        task.claim.eligibility.employment_task_available?
+      else
+        task.claim.eligibility.practitioner_journey_completed?
+      end
+    end
   end
 end

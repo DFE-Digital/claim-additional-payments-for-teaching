@@ -1464,8 +1464,18 @@ en:
           title: Is this claim still valid despite having matching details with other claims?
         employment:
           title: Is the claimant still working at the current nursery above?
+          unavailable: This task will be available from %{employment_task_available_at}
         identity_confirmation:
           title: "Do these names match?"
+        student_loan_amount:
+          title: Does the claimant’s student loan amount and plan type match the information we hold about their loan?
+          unavailable: This task is not available until the claimant has submitted their claim
+        payroll_details:
+          title: "Check bank account details"
+          question: "The claimant’s personal bank account details have not been automatically validated. Has the claimant confirmed their personal bank account details?"
+          unavailable: This task is not available until the claimant has submitted their claim
+        payroll_gender:
+          unavailable: This task is not available until the claimant has submitted their claim
   early_years_payment_practitioner:
     journey_name: Claim an early years financial incentive payment - practitioner
     feedback_email: "help@opsteam.education.gov.uk"
