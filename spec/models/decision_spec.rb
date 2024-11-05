@@ -141,6 +141,7 @@ RSpec.describe Decision, type: :model do
     let(:expected_reasons_ey) do
       [
         :claim_cancelled_by_employer,
+        :identity_check_failed,
         :six_month_retention_check_failed,
         :duplicate,
         :no_response,
@@ -169,7 +170,7 @@ RSpec.describe Decision, type: :model do
     context "when the claim policy is EY" do
       let(:policy) { Policies::EarlyYearsPayments }
 
-      it { is_expected.to eq(expected_reasons_ey) }
+      it { is_expected.to eql(expected_reasons_ey) }
     end
   end
 
@@ -265,6 +266,7 @@ RSpec.describe Decision, type: :model do
       it do
         is_expected.to eq(
           reason_claim_cancelled_by_employer: "1",
+          reason_identity_check_failed: "0",
           reason_six_month_retention_check_failed: "1",
           reason_duplicate: "0",
           reason_no_response: "0",

@@ -1455,6 +1455,7 @@ en:
       decision:
         rejected_reasons:
           claim_cancelled_by_employer: Claim cancelled by employer
+          identity_check_failed: Identity check failed
           six_month_retention_check_failed: 6 month retention check failed
           duplicate: Duplicate
           no_response: No response
