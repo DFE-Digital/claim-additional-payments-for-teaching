@@ -20,7 +20,7 @@ module Policies
         tasks << "student_loan_plan" if claim.submitted_without_slc_data?
         tasks << "payroll_details" if claim.must_manually_validate_bank_details?
         tasks << "matching_details" if matching_claims.exists?
-        tasks << "payroll_gender" if claim.payroll_gender_missing?
+        tasks << "payroll_gender" if claim.payroll_gender_missing? || claim.tasks.exists?(name: "payroll_gender")
 
         tasks
       end
