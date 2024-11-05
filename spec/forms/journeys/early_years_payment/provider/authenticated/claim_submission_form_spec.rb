@@ -54,7 +54,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::ClaimSubmis
           full_name: claim.full_name,
           setting_name: claim.eligibility.eligible_ey_provider.nursery_name,
           ref_number: claim.reference,
-          complete_claim_url: "https://www.example.com/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=johndoe%40example.com"
+          complete_claim_url: "https://www.example.com/early-years-payment-practitioner/find-reference?skip_landing_page=true"
         )
       )
     end

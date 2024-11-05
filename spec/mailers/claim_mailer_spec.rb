@@ -406,7 +406,7 @@ RSpec.describe ClaimMailer, type: :mailer do
         full_name: "Test Practitioner",
         setting_name: "Test Nursery",
         ref_number: "TEST123",
-        complete_claim_url: "https://www.example.com/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=practitioner%40example.com"
+        complete_claim_url: "https://www.example.com/early-years-payment-practitioner/find-reference?skip_landing_page=true"
       }
 
       expect(mail[:personalisation].unparsed_value).to eql(expected_personalisation)

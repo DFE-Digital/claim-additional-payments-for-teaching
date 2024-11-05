@@ -240,7 +240,7 @@ class ClaimMailer < ApplicationMailer
   end
 
   def early_years_practitioner_invite_link(claim:)
-    "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Practitioner::ROUTING_NAME}/find-reference?skip_landing_page=true&email=#{CGI.escape(claim.practitioner_email_address)}"
+    "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Practitioner::ROUTING_NAME}/find-reference?skip_landing_page=true"
   end
 
   def policy_check!(claim, policy)

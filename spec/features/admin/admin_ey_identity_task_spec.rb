@@ -318,7 +318,7 @@ RSpec.describe "Admin EY identity task" do
 
     create(:journey_configuration, :early_years_payment_practitioner)
 
-    visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=practitioner@example.com"
+    visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true"
 
     fill_in "Claim reference number", with: claim.reference
 
