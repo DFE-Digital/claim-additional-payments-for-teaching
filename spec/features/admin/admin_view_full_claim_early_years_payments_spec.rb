@@ -131,8 +131,8 @@ RSpec.feature "Admin views claim details for EarlyYearsPayments" do
       expect(summary_row("Provider submitted at")).to have_content("2 January 2020 12:00pm")
       expect(summary_row("Claimant started at")).to have_content("3 January 2020 12:00pm")
       expect(summary_row("Claimant submitted at")).to have_content("4 January 2020 12:00")
-      expect(summary_row("Decision deadline")).to have_content("28 March 2020")
-      expect(summary_row("Overdue")).to have_content("N/A")
+      expect(page).to have_summary_item(key: "Decision deadline", value: "1 July 2018")
+      expect(summary_row("Overdue")).to have_content("-580 days")
     end
   end
 

@@ -112,4 +112,12 @@ RSpec.describe BasePolicy, type: :model do
       expect(Policies::TestPolicyA.searchable_eligibility_attributes).to be_empty
     end
   end
+
+  describe "#decision_deadline_date" do
+    let(:claim) { build(:claim, :submitted) }
+
+    it "is 12 weeks after submitted date" do
+      expect(Policies::TestPolicy.decision_deadline_date(claim)).to eql((claim.submitted_at + 12.weeks).to_date)
+    end
+  end
 end

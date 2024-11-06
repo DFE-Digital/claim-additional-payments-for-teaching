@@ -55,4 +55,12 @@ RSpec.describe Policies::EarlyYearsPayments do
       end
     end
   end
+
+  describe "#decision_deadline_date" do
+    let(:claim) { build(:claim, :eligible, policy: Policies::EarlyYearsPayments) }
+
+    it "is 6 months after start date" do
+      expect(described_class.decision_deadline_date(claim)).to eql((claim.eligibility.start_date + 6.months).to_date)
+    end
+  end
 end

@@ -76,5 +76,9 @@ module Policies
     def approvable?(claim)
       claim.tasks.find_or_initialize_by(name: "employment").passed?
     end
+
+    def decision_deadline_date(claim)
+      claim.eligibility.start_date + RETENTION_PERIOD
+    end
   end
 end
