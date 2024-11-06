@@ -58,4 +58,8 @@ module BasePolicy
   def auto_check_student_loan_plan_task?
     false
   end
+
+  def approvable?(claim)
+    true
+  end
 end

@@ -364,7 +364,7 @@ RSpec.describe Claim, type: :model do
       end
 
       it "is approvable" do
-        allow(subject.eligibility).to receive(:approvable?).and_return(true)
+        allow(subject.policy).to receive(:approvable?).and_return(true)
         expect(subject).to be_approvable
       end
     end
@@ -379,7 +379,7 @@ RSpec.describe Claim, type: :model do
       end
 
       it "is not approvable" do
-        allow(subject.eligibility).to receive(:approvable?).and_return(false)
+        allow(subject.policy).to receive(:approvable?).and_return(false)
         expect(subject).not_to be_approvable
       end
     end

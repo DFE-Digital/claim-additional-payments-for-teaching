@@ -14,11 +14,6 @@ module Policies
         Policies::EarlyYearsPayments
       end
 
-      def approvable?
-        employment_task = claim.tasks.find_or_initialize_by(name: "employment")
-        employment_task.passed?
-      end
-
       def ineligible?
         false
       end
