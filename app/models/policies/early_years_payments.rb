@@ -72,5 +72,9 @@ module Policies
     def auto_check_student_loan_plan_task?
       true
     end
+
+    def approvable?(claim)
+      claim.tasks.find_or_initialize_by(name: "employment").passed?
+    end
   end
 end

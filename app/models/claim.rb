@@ -253,7 +253,13 @@ class Claim < ApplicationRecord
   end
 
   def approvable?
-    submitted? && !held? && !payroll_gender_missing? && (!decision_made? || awaiting_qa?) && !payment_prevented_by_other_claims? && attributes_flagged_by_risk_indicator.none?
+    submitted? &&
+      !held? &&
+      !payroll_gender_missing? &&
+      (!decision_made? || awaiting_qa?) &&
+      !payment_prevented_by_other_claims? &&
+      attributes_flagged_by_risk_indicator.none? &&
+      policy.approvable?(self)
   end
 
   def rejectable?
