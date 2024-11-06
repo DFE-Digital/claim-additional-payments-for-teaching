@@ -70,7 +70,8 @@ module CsvImporter
         errors.append("Select a file")
         nil
       else
-        CSV.read(file.to_io, headers: parse_headers, encoding: "BOM|UTF-8")
+        string = File.open(file.path, "r", encoding: "BOM|UTF-8").read.scrub
+        CSV.parse(string, headers: parse_headers)
       end
     rescue CSV::MalformedCSVError
       errors.append("The selected file must be a CSV")

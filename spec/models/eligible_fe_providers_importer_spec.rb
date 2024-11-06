@@ -143,5 +143,15 @@ RSpec.describe EligibleFeProvidersImporter do
         end
       end
     end
+
+    context "when file has illegal encoding" do
+      let(:file) { File.open(file_fixture("eligible_fe_providers_illegal_encoding.csv")) }
+
+      it "ignores superfluous characters and imports new records" do
+        expect { subject.run }.to change { EligibleFeProvider.count }.by(10)
+        expect(EligibleFeProvider.pluck(:max_award_amount).uniq.sort).to eql([4_000, 5_000, 6_000])
+        expect(EligibleFeProvider.pluck(:lower_award_amount).uniq.sort).to eql([2_000, 2_500, 3_000])
+      end
+    end
   end
 end
