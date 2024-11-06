@@ -1343,7 +1343,7 @@ en:
       prepared_date: "31 July 2019"
       updated_date: "28 July 2022"
     claim_description: for an early years financial incentive payment
-    journey_name: Claim an early years financial incentive payment - provider
+    journey_name: Claim an early years financial incentive payment
     feedback_email: "help@opsteam.education.gov.uk"
     support_email_address: "help@opsteam.education.gov.uk"
     forms:
@@ -1466,7 +1466,7 @@ en:
         identity_confirmation:
           title: "Do these names match?"
   early_years_payment_practitioner:
-    journey_name: Claim an early years financial incentive payment - practitioner
+    journey_name: Claim an early years financial incentive payment
     feedback_email: "help@opsteam.education.gov.uk"
     support_email: "help@opsteam.education.gov.uk"
     claim_description: for early years financial incentive payment

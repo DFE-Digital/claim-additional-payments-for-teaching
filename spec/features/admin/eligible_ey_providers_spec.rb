@@ -6,7 +6,7 @@ RSpec.feature "Admin of eligible ey providers" do
     sign_in_as_service_operator
 
     click_link "Manage services"
-    click_link "Change Claim an early years financial incentive payment - provider"
+    click_link "Change Claim an early years financial incentive payment"
 
     attach_file "eligible-ey-providers-upload-file-field", eligible_ey_providers_csv_file.path
     click_button "Upload CSV"
