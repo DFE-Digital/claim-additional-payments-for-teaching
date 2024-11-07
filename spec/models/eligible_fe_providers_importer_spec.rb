@@ -114,5 +114,44 @@ RSpec.describe EligibleFeProvidersImporter do
         end
       end
     end
+
+    context "when currency values has GBP symbols and thousand separators" do
+      before do
+        file.write correct_headers
+
+        3.times do
+          file.write to_row(attributes_for(:eligible_fe_provider).merge(max_award_amount: '"£6,000"', lower_award_amount: '"£3,000"'))
+        end
+
+        file.close
+      end
+
+      it "ignores superfluous characters and imports new records" do
+        expect { subject.run }.to change { EligibleFeProvider.count }.by(3)
+        expect(EligibleFeProvider.pluck(:max_award_amount).uniq).to eql([6000])
+        expect(EligibleFeProvider.pluck(:lower_award_amount).uniq).to eql([3000])
+      end
+
+      context "when there are existing records" do
+        before do
+          create(:eligible_fe_provider)
+          create(:eligible_fe_provider, academic_year: AcademicYear.next)
+        end
+
+        it "deletes them with new records" do
+          expect { subject.run }.to change { EligibleFeProvider.count }.by(2)
+        end
+      end
+    end
+
+    context "when file has illegal encoding" do
+      let(:file) { File.open(file_fixture("eligible_fe_providers_illegal_encoding.csv")) }
+
+      it "ignores superfluous characters and imports new records" do
+        expect { subject.run }.to change { EligibleFeProvider.count }.by(10)
+        expect(EligibleFeProvider.pluck(:max_award_amount).uniq.sort).to eql([4_000, 5_000, 6_000])
+        expect(EligibleFeProvider.pluck(:lower_award_amount).uniq.sort).to eql([2_000, 2_500, 3_000])
+      end
+    end
   end
 end
