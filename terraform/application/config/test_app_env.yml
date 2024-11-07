@@ -17,7 +17,7 @@ HMRC_API_BANK_VALIDATION_ENABLED: true
 
 ORDNANCE_SURVEY_API_BASE_URL: https://api.os.uk
 
-SUPPRESS_DFE_ANALYTICS_INIT: true
+# SUPPRESS_DFE_ANALYTICS_INIT: true
 
 TID_BASE_URL: https://test.claim-additional-teaching-payment.service.gov.uk/additional-payments/claim
 TID_SIGN_IN_API_ENDPOINT: https://preprod.teaching-identity.education.gov.uk:433
