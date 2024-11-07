@@ -91,3 +91,5 @@ RSpec.configure do |config|
   config.filter_run_excluding js: true unless ENV["RUN_JS_SPECS"] == "true"
   config.filter_run_excluding slow: true unless ENV["RUN_SLOW_SPECS"] == "true"
 end
+
+Rails.application.load_tasks

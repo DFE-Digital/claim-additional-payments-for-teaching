@@ -7,7 +7,6 @@ class ClaimDeallocator
   end
 
   def call
-    Claim.where(id: claim_ids, assigned_to: admin_user_id)
-      .update_all(assigned_to_id: nil)
+    Claim.where(id: claim_ids, assigned_to: admin_user_id).update(assigned_to_id: nil)
   end
 end
