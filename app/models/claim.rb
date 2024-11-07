@@ -329,7 +329,7 @@ class Claim < ApplicationRecord
   end
 
   def decision_deadline_date
-    (submitted_at + DECISION_DEADLINE).to_date if submitted?
+    policy.decision_deadline_date(self)
   end
 
   def address(separator = ", ")

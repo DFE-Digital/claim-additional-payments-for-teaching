@@ -173,13 +173,30 @@ describe Admin::ClaimsHelper do
   end
 
   describe "#identity_confirmation_task_claim_verifier_match_status_tag" do
-    subject(:identity_confirmation_task_claim_verifier_match_status_tag) { helper.identity_confirmation_task_claim_verifier_match_status_tag(claim) }
+    subject(:identity_confirmation_task_claim_verifier_match_status_tag) do
+      helper.identity_confirmation_task_claim_verifier_match_status_tag(claim)
+    end
 
     let(:claim) do
       build(
         :claim,
         tasks: claim_tasks
       )
+    end
+
+    context "EY specific and practitioner yet to complete their half" do
+      let(:claim) do
+        build(
+          :claim,
+          :awaiting_practitioner,
+          policy: Policies::EarlyYearsPayments
+        )
+      end
+
+      it "return incomplete grey tag" do
+        expect(subject).to match("Incomplete")
+        expect(subject).to match("grey")
+      end
     end
 
     context "without task" do

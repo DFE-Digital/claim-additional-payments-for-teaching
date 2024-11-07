@@ -62,4 +62,8 @@ module BasePolicy
   def approvable?(claim)
     true
   end
+
+  def decision_deadline_date(claim)
+    (claim.submitted_at + Claim::DECISION_DEADLINE).to_date
+  end
 end
