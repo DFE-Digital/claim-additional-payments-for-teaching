@@ -8,7 +8,6 @@ class ClaimAllocator
 
   def call
     # Avoid users clashing
-    Claim.where(id: claim_ids, assigned_to: nil)
-      .update_all(assigned_to_id: admin_user_id)
+    Claim.where(id: claim_ids, assigned_to: nil).update(assigned_to_id: admin_user_id)
   end
 end

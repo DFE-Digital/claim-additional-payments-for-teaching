@@ -29,7 +29,7 @@ module Policies
 
       def commit!
         LevellingUpPremiumPayments::Award.transaction do
-          LevellingUpPremiumPayments::Award.where(academic_year: academic_year.to_s).delete_all
+          LevellingUpPremiumPayments::Award.where(academic_year: academic_year.to_s).destroy_all
           @records.each(&:save!)
         end
       end

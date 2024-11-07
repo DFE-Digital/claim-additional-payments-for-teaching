@@ -21,7 +21,7 @@ class StudentLoanPlanCheckJob < ApplicationJob
     claim_ids = current_year_claims_with_no_data_tasks.pluck(:id)
 
     claim_ids.each_slice(500) do |ids|
-      Task.where(claim_id: ids, name: "student_loan_plan", claim_verifier_match: nil, manual: false).delete_all
+      Task.where(claim_id: ids, name: "student_loan_plan", claim_verifier_match: nil, manual: false).destroy_all
     end
   end
 

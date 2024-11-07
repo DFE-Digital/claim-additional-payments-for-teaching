@@ -65,7 +65,7 @@ module DfeSignIn
     private
 
     def unassign_claims
-      assigned_claims.update_all(assigned_to_id: nil)
+      assigned_claims.update(assigned_to_id: nil)
     end
   end
 end
