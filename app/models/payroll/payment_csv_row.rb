@@ -123,6 +123,11 @@ module Payroll
       model.award_amount.to_s
     end
 
+    # NOTE: Payroll people require this on the CSV, but we no longer ask or store it
+    def roll_number
+      nil
+    end
+
     def payment_id
       model.id
     end
