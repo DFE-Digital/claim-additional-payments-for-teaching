@@ -263,7 +263,7 @@ RSpec.describe "Admin EY identity task" do
     fill_in "Last name", with: "Bobberson"
     click_button "Continue"
 
-    date = Date.yesterday
+    date = Policies::EarlyYearsPayments::POLICY_START_DATE + 1.day
     fill_in("Day", with: date.day)
     fill_in("Month", with: date.month)
     fill_in("Year", with: date.year)

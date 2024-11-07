@@ -4,6 +4,21 @@ describe Policies::EarlyYearsPayments::PolicyEligibilityChecker do
   subject { described_class.new(answers: answers) }
 
   describe "#status, #ineligible?, #ineligibility_reason" do
+    context "start date is before POLICY_START_DATE" do
+      let(:answers) do
+        build(
+          :early_years_payment_answers,
+          start_date: Policies::EarlyYearsPayments::POLICY_START_DATE - 1.day
+        )
+      end
+
+      it "is not eligible" do
+        expect(subject).to be_ineligible
+        expect(subject.status).to eql(:ineligible)
+        expect(subject.ineligibility_reason).to eql(:start_date_before_policy_start)
+      end
+    end
+
     context "not a returner" do
       let(:answers) do
         build(

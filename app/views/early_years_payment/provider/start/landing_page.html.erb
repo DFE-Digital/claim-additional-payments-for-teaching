@@ -15,7 +15,7 @@
 
     <%= govuk_list [
       "have applied for a job with an incentive attached",
-      "have started their job after 15 May 2024",
+      "have started their job on or after #{l(Policies::EarlyYearsPayments::POLICY_START_DATE)}",
       "spend most of the time in their job (70% or more) working directly with children - there is no minimum number of hours and applies to all EYFS part and full time roles"
     ], type: :bullet %>
 

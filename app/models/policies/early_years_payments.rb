@@ -3,6 +3,7 @@ module Policies
     include BasePolicy
     extend self
 
+    POLICY_START_DATE = Date.new(2024, 11, 15) - 1.month # TODO: remove -1.month for launch
     RETENTION_PERIOD = 6.months
 
     OTHER_CLAIMABLE_POLICIES = [
