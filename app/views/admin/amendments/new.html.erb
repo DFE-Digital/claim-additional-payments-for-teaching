@@ -95,7 +95,12 @@
         </div>
         <div class="govuk-grid-column-two-thirds">
           <div class="govuk-form-group">
-            <%= claim_form.select :student_loan_plan, Claim::STUDENT_LOAN_PLAN_OPTIONS.map { |option| [option.humanize, option] }, {}, { class: "govuk-select" } %>
+            <%= claim_form.select(
+              :student_loan_plan,
+              Claim::STUDENT_LOAN_PLAN_OPTIONS.map { |option| [option.humanize, option] },
+              { include_blank: true },
+              { class: "govuk-select" }
+            ) %>
           </div>
         </div>
       </div>
