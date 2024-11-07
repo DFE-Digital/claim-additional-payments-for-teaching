@@ -50,6 +50,7 @@ RSpec.describe ImportCensusJob do
       describe "dfe-analytics syncing", with_dfe_analytics_enabled: true do
         let(:dbl) { double(run: true) }
         it "invokes the relevant import entity job" do
+          expect(DfE::Analytics.enabled?).to be true
           expect(DfE::Analytics::LoadEntities).to receive(:new).with(entity_name: SchoolWorkforceCensus.table_name).and_return(dbl)
           expect(dbl).to receive(:run)
           subject.perform(file_upload.id)
