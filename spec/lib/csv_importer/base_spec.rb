@@ -79,7 +79,7 @@ RSpec.describe CsvImporter::Base do
     end
   end
 
-  describe "dfe-analytics syncing", :with_dfe_analytics_enabled do
+  describe "dfe-analytics syncing", with_dfe_analytics_enabled: true do
     let(:dbl) { double(run: true) }
     it "invokes the relevant import entity job" do
       expect(DfE::Analytics::LoadEntities).to receive(:new).with(entity_name: target_data_model.table_name).and_return(dbl)
