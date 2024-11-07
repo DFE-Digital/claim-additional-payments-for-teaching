@@ -104,6 +104,10 @@ class ClaimMailer < ApplicationMailer
       magic_link: @magic_link
     }
 
+    if Rails.env.development?
+      Rails.logger.info("\n\nEmail verification code: #{one_time_password}\n")
+    end
+
     send_mail(template_ids(claim)[:CLAIM_PROVIDER_EMAIL_TEMPLATE_ID], personalisation)
   end
 

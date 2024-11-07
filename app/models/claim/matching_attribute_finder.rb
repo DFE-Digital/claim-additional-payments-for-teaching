@@ -37,15 +37,24 @@ class Claim
       end
 
       # Eligibility attributes
-      eligibility_ids = eligibility_attributes_groups_to_match.map { |attributes|
+      eligibility_ids = eligibility_attributes_groups_to_match.flat_map do |attributes|
         vals = values_for_attributes(@source_claim.eligibility, attributes)
         next if vals.blank?
 
-        concatenated_columns = "CONCAT(#{attributes.join(",")})"
-        policies_to_find_matches.map { |policy|
-          policy::Eligibility.where("LOWER(#{concatenated_columns}) = LOWER(?)", vals.join)
-        }
-      }.compact.flatten.map(&:id)
+        policies_to_find_matches.map do |policy|
+          # Not all eligibility models have the same columns
+          attributes_to_check = attributes & policy::Eligibility.column_names
+
+          if attributes_to_check.any?
+            concatenated_columns = "CONCAT(#{attributes_to_check.join(",")})"
+
+            policy::Eligibility.where(
+              "LOWER(#{concatenated_columns}) = LOWER(?)",
+              vals
+            ).select(:id)
+          end
+        end
+      end.compact_blank
 
       eligibility_match_query = Claim.where(eligibility_id: eligibility_ids)
       match_queries = match_queries.or(eligibility_match_query)
