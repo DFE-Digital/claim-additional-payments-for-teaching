@@ -96,7 +96,6 @@ RSpec.describe Claim, type: :model do
       expect(claim).not_to be_valid(:amendment)
       expect(claim.errors.map(&:message)).to contain_exactly(
         "Enter your teacher reference number",
-        "Enter a valid student loan plan",
         "Enter a sort code",
         "Enter an account number"
       )

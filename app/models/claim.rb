@@ -152,7 +152,6 @@ class Claim < ApplicationRecord
 
   validates :has_student_loan, on: [:"student-loan"], inclusion: {in: [true, false]}, allow_nil: true
   validates :student_loan_plan, inclusion: {in: STUDENT_LOAN_PLAN_OPTIONS}, allow_nil: true
-  validates :student_loan_plan, on: [:amendment], presence: {message: "Enter a valid student loan plan"}
 
   validates :bank_sort_code, on: [:amendment], presence: {message: "Enter a sort code"}
   validates :bank_account_number, on: [:amendment], presence: {message: "Enter an account number"}
