@@ -14,7 +14,7 @@
 
     <% if @task.persisted? %>
       <%= render "task_outcome", task: @task %>
-    <% else %>
+    <% elsif @claim.policy.task_available?(@task) %>
       <div class="govuk-form-group">
         <%= form_with url: admin_claim_payroll_gender_tasks_path(@claim), scope: :claim do |f| %>
           <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
@@ -46,6 +46,12 @@
           <%= f.submit "Save and continue", class: "govuk-button", data: {module: "govuk-button"} %>
         <% end %>
       </div>
+    <% else %>
+      <%= govuk_inset_text(
+        text: I18n.t(
+          "#{@claim.policy.to_s.underscore}.admin.task_questions.#{@task.name}.unavailable",
+        )
+      ) %>
     <% end %>
 
     <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>
