@@ -143,6 +143,8 @@ en:
         title: "Confirm the claimant made the claim"
       provider_verification:
         title: "Confirm the provider has responded and verified the claimant's information"
+      provider_details:
+        title: "Check the provider details"
       payroll_gender:
         title: "How is the claimant’s gender recorded for payroll purposes?"
         hint: "The claimant answered ‘don’t know’ to the question ‘how is your gender recorded on your employer’s payroll system?’"
@@ -950,6 +952,10 @@ en:
               false: "No"
         employment:
           title: Does the claimant’s place of work match the above information on their claim?
+        provider_details:
+          title: "Is the claim still valid even though the claimant and provider have matching details?"
+        student_loan_plan:
+          title: "Does the claimant’s student loan plan match the information we hold about their loan?"
     forms:
       ineligible:
         courses:
