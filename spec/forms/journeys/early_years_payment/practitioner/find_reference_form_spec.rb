@@ -7,12 +7,11 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::FindReferenceForm do
   let(:journey_session) { create(:early_years_payment_practitioner_session) }
 
   let(:reference_number) { nil }
-  let(:email) { nil }
 
   let(:eligible_ey_provider) { create(:eligible_ey_provider) }
 
   let(:params) do
-    ActionController::Parameters.new(claim: {reference_number:, email:})
+    ActionController::Parameters.new(claim: {reference_number:})
   end
 
   describe "validations" do
@@ -25,14 +24,12 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::FindReferenceForm do
 
     context "when EY claim" do
       let(:reference_number) { claim.reference }
-      let(:email) { claim.practitioner_email_address }
 
       let(:claim) do
         create(
           :claim,
           policy: Policies::EarlyYearsPayments,
-          reference: "foo",
-          practitioner_email_address: "user@example.com"
+          reference: "foo"
         )
       end
 
@@ -120,13 +117,11 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::FindReferenceForm do
 
     context "when reference is a non EY claim" do
       let(:reference_number) { claim.reference }
-      let(:email) { claim.practitioner_email_address }
 
       let(:claim) do
         create(
           :claim,
-          reference: "foo",
-          practitioner_email_address: "user@example.com"
+          reference: "foo"
         )
       end
 

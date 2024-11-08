@@ -5,8 +5,6 @@
     <%= form_with model: @form, url: claim_path(current_journey_routing_name, request.query_parameters), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
       <%= f.govuk_error_summary %>
 
-      <%= f.hidden_field :email, value: (params[:email] || journey_session.answers.attributes["start_email"]) %>
-
       <h1 class="govuk-heading-l">
         <%= @form.t(:question) %>
       <h1>
