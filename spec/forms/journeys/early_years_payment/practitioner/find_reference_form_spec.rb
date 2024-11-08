@@ -70,6 +70,12 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::FindReferenceForm do
       }.to change { journey_session.reload.answers.nursery_name }.from(nil).to(eligible_ey_provider.nursery_name)
     end
 
+    it "sets practitioner_claim_started_at" do
+      expect {
+        subject.save
+      }.to change { journey_session.reload.answers.practitioner_claim_started_at }.from(nil)
+    end
+
     context "when the claim has only been submitted by the provider, not the practitioner" do
       let(:claim) do
         create(

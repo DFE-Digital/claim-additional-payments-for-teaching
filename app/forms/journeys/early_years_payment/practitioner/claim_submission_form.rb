@@ -19,11 +19,14 @@ module Journeys
         end
 
         def new_or_find_claim
-          Claim.find_by(reference: journey_session.answers.reference_number) || Claim.new
+          (Claim.find_by(reference: journey_session.answers.reference_number) || Claim.new).tap do |c|
+            if c.eligibility
+              c.eligibility.practitioner_claim_started_at = journey_session.answers.practitioner_claim_started_at
+            end
+          end
         end
 
         def set_submitted_at_attributes
-          claim.eligibility.practitioner_claim_started_at = journey_session.created_at
           claim.submitted_at = Time.zone.now
         end
       end
