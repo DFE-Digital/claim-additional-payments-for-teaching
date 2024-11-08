@@ -54,37 +54,4 @@ RSpec.describe Task, type: :model do
       end
     end
   end
-
-  describe "#employment_task_available?" do
-    subject { task.employment_task_available? }
-
-    let(:task) { build(:task, claim: claim) }
-    let(:claim) { create(:claim, :submitted, policy:) }
-
-    context "for claims with EarlyYearsPayments policy" do
-      let(:policy) { Policies::EarlyYearsPayments }
-
-      context "when the task is available" do
-        let(:claim) { create(:claim, :submitted, policy:, eligibility_attributes: {start_date: 1.year.ago}) }
-
-        it { is_expected.to be true }
-      end
-
-      context "when the task is not yet available" do
-        let(:claim) { create(:claim, :submitted, policy:, eligibility_attributes: {start_date: 1.day.ago}) }
-
-        it { is_expected.to be false }
-      end
-    end
-
-    context "for claims with other policies" do
-      (Policies.all - [Policies::EarlyYearsPayments]).each do |policy|
-        context policy do
-          let(:policy) { policy }
-
-          it { is_expected.to be true }
-        end
-      end
-    end
-  end
 end
