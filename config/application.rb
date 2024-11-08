@@ -16,6 +16,7 @@ require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 
 require_relative "../lib/student_loan"
+require_relative "../lib/analytics_importer"
 require_relative "../lib/csv_importer"
 require_relative "../lib/dfe_sign_in"
 require_relative "../lib/hmrc"

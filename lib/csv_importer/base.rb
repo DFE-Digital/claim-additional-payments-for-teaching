@@ -33,7 +33,7 @@ module CsvImporter
         target_data_model.insert_all(record_hashes) unless record_hashes.empty?
       end
 
-      Rake::Task["dfe:analytics:import_entity"].invoke(target_data_model.table_name) if DfE::Analytics.enabled?
+      AnalyticsImporter.import(target_data_model)
     end
 
     def rows_with_data_count
