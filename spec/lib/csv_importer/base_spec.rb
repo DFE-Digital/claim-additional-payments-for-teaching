@@ -23,7 +23,7 @@ RSpec.describe CsvImporter::Base do
       skip_row_if:
     }
   end
-  let(:target_data_model) { double("TargetDataModel", delete_all: nil, insert_all: nil, is_a?: true) }
+  let(:target_data_model) { double("TargetDataModel", delete_all: nil, insert_all: nil, is_a?: true, table_name: "schools") }
   let(:append_only) { false }
   let(:batch_size) { nil }
   let(:parse_headers) { true }
@@ -76,6 +76,13 @@ RSpec.describe CsvImporter::Base do
           expect(importer.rows.map(&:to_h)).to eq([{"a" => "1", "b" => "2", "c" => "3"}])
         end
       end
+    end
+  end
+
+  describe "dfe-analytics syncing" do
+    it "invokes the relevant import entity job" do
+      expect(AnalyticsImporter).to receive(:import).with(target_data_model)
+      importer.run
     end
   end
 

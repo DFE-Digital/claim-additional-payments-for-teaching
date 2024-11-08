@@ -32,6 +32,8 @@ module CsvImporter
 
         target_data_model.insert_all(record_hashes) unless record_hashes.empty?
       end
+
+      AnalyticsImporter.import(target_data_model)
     end
 
     def rows_with_data_count

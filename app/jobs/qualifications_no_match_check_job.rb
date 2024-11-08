@@ -18,7 +18,7 @@ class QualificationsNoMatchCheckJob < ApplicationJob
     claims.each_slice(250).with_index do |cl, index|
       sleep 60 unless index.zero?
 
-      Task.where(claim_id: cl.pluck(:id), name: "qualifications").delete_all
+      Task.where(claim_id: cl.pluck(:id), name: "qualifications").destroy_all
 
       cl.each do |claim|
         AutomatedChecks::ClaimVerifiers::Qualifications.new(

@@ -46,6 +46,13 @@ RSpec.describe ImportCensusJob do
         # keeps the file upload for debugging
         expect(FileUpload.find_by_id(file_upload.id)).to be_present
       end
+
+      describe "dfe-analytics syncing" do
+        it "invokes the relevant import entity job" do
+          expect(AnalyticsImporter).to receive(:import).with(SchoolWorkforceCensus)
+          subject.perform(file_upload.id)
+        end
+      end
     end
   end
 end

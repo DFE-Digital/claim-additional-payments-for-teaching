@@ -14,7 +14,7 @@ class EmploymentCheckJob < ApplicationJob
     claim_ids = claims_awaiting_decision_without_passed_check.pluck(:id)
 
     claim_ids.each_slice(500) do |ids|
-      Task.where(claim_id: ids, name: "employment").delete_all
+      Task.where(claim_id: ids, name: "employment").destroy_all
     end
   end
 

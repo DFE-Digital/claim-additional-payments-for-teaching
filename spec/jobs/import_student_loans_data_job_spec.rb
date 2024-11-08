@@ -53,6 +53,13 @@ RSpec.describe ImportStudentLoansDataJob do
       it "does not enqueue StudentLoanPlanCheckJob" do
         expect { upload }.not_to have_enqueued_job(StudentLoanPlanCheckJob)
       end
+
+      describe "dfe-analytics syncing" do
+        it "invokes the relevant import entity job" do
+          expect(AnalyticsImporter).to receive(:import).with(StudentLoansData)
+          upload
+        end
+      end
     end
   end
 end

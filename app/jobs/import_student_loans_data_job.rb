@@ -5,5 +5,8 @@ class ImportStudentLoansDataJob < FileImporterJob
     StudentLoanAmountCheckJob.perform_later
     StudentLoanPlanCheckJob.perform_later
   end
-  rescue_with -> { StudentLoansData.delete_all }
+  rescue_with -> do
+    StudentLoansData.delete_all
+    AnalyticsImporter.import(StudentLoansData)
+  end
 end
