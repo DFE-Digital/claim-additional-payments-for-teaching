@@ -12,6 +12,7 @@ FactoryBot.define do
       banking_name { "John Doe" }
       bank_sort_code { rand(100000..999999) }
       bank_account_number { rand(10000000..99999999) }
+      practitioner_claim_started_at { 30.minutes.ago }
     end
 
     trait :submittable do

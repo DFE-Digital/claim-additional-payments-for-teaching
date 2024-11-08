@@ -7,6 +7,7 @@ module Journeys
         attribute :claim_already_submitted, :boolean, default: nil
         attribute :nursery_name
         attribute :start_email, :string
+        attribute :practitioner_claim_started_at, :datetime
 
         def policy
           Policies::EarlyYearsPayments
