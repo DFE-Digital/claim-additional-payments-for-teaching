@@ -14,6 +14,10 @@ module Journeys
           "enter-home-address" => AddressForm
         }
       }
+
+      def requires_student_loan_details?
+        true
+      end
     end
   end
 end

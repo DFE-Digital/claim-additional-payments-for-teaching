@@ -22,5 +22,9 @@ module Journeys
         "personal-details" => PersonalDetailsForm
       }
     }
+
+    def requires_student_loan_details?
+      true
+    end
   end
 end
