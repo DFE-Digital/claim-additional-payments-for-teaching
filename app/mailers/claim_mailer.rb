@@ -126,6 +126,7 @@ class ClaimMailer < ApplicationMailer
     template_mail(
       template_id,
       to: claim.practitioner_email_address,
+      reply_to_id: claim.policy.notify_reply_to_id,
       personalisation: personalisation
     )
   end
