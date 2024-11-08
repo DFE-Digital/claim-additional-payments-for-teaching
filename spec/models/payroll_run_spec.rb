@@ -79,6 +79,124 @@ RSpec.describe PayrollRun, type: :model do
       expect(payroll_run.total_claim_amount_for_policy(Policies::EarlyCareerPayments)).to eq(10_000)
       expect(payroll_run.total_claim_amount_for_policy(Policies::LevellingUpPremiumPayments)).to eq(2000)
     end
+
+    context "with topups" do
+      it "returns the correct total accounting for top ups" do
+        create(:levelling_up_premium_payments_award)
+
+        topped_up_claim_1 = build(
+          :claim,
+          :approved,
+          policy: Policies::LevellingUpPremiumPayments,
+          bank_sort_code: "123456",
+          bank_account_number: "12345678",
+          national_insurance_number: "1234567",
+          eligibility_attributes: {award_amount: 100}
+        )
+
+        topped_up_claim_2 = build(
+          :claim,
+          :approved,
+          policy: Policies::LevellingUpPremiumPayments,
+          bank_sort_code: "123456",
+          bank_account_number: "12345678",
+          national_insurance_number: "1234567",
+          eligibility_attributes: {award_amount: 100}
+        )
+
+        non_topped_up_claim_1 = build(
+          :claim,
+          :approved,
+          bank_sort_code: "123456",
+          bank_account_number: "12345678",
+          national_insurance_number: "1234567",
+          policy: Policies::LevellingUpPremiumPayments,
+          eligibility_attributes: {award_amount: 101}
+        )
+
+        non_topped_up_claim_2 = build(
+          :claim,
+          :approved,
+          bank_sort_code: "123456",
+          bank_account_number: "12345678",
+          national_insurance_number: "1234567",
+          policy: Policies::LevellingUpPremiumPayments,
+          eligibility_attributes: {award_amount: 103}
+        )
+
+        lup_payment_1 = build(
+          :payment,
+          claims: [
+            topped_up_claim_1
+          ]
+        )
+
+        lup_payment_2 = build(
+          :payment,
+          claims: [
+            topped_up_claim_2
+          ]
+        )
+
+        lup_payment_3 = build(
+          :payment,
+          claims: [
+            non_topped_up_claim_1
+          ]
+        )
+
+        lup_payment_4 = build(
+          :payment,
+          claims: [
+            non_topped_up_claim_2
+          ]
+        )
+
+        payroll_run = PayrollRun.create!(
+          created_by: user,
+          payments: [
+            lup_payment_1,
+            lup_payment_2,
+            lup_payment_3,
+            lup_payment_4
+          ]
+        )
+
+        create(
+          :topup,
+          claim: topped_up_claim_1,
+          award_amount: 107,
+          payment: lup_payment_1
+        )
+
+        create(
+          :topup,
+          claim: topped_up_claim_2,
+          award_amount: 109,
+          payment: lup_payment_2
+        )
+
+        expect(
+          payroll_run.total_claim_amount_for_policy(
+            Policies::LevellingUpPremiumPayments
+          ).to_f
+        ).to eq(420) # 101 + 103 + 107 + 109
+
+        expect(
+          payroll_run.total_claim_amount_for_policy(
+            Policies::LevellingUpPremiumPayments,
+            filter: :topups
+          )
+        ).to eq(216) # 107 + 109
+
+        expect(
+          payroll_run.total_claim_amount_for_policy(
+            Policies::LevellingUpPremiumPayments,
+            filter: :claims
+          )
+        ).to eq(204) # 103 + 101
+      end
+    end
   end
 
   describe ".create_with_claims!" do
