@@ -70,4 +70,8 @@ module BasePolicy
   def award_amount_column
     "award_amount"
   end
+
+  def mailer
+    ClaimMailer
+  end
 end

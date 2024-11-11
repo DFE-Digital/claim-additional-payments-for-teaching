@@ -81,5 +81,9 @@ module Policies
     def decision_deadline_date(claim)
       claim.eligibility.start_date + RETENTION_PERIOD
     end
+
+    def mailer
+      EarlyYearsPaymentsMailer
+    end
   end
 end

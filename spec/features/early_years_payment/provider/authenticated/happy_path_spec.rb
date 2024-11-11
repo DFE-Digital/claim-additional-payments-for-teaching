@@ -77,7 +77,12 @@ RSpec.feature "Early years payment provider" do
     expect(page.current_path).to eq "/early-years-payment-provider/check-your-answers"
     expect(page).to have_content("Check your answers before submitting this claim")
     fill_in "claim-provider-contact-name-field", with: "John Doe"
-    click_button "Accept and send"
+
+    expect do
+      perform_enqueued_jobs { click_on "Accept and send" }
+    end.to change { Claim.count }.by(1)
+      .and change { Policies::EarlyYearsPayments::Eligibility.count }.by(1)
+      .and change { ActionMailer::Base.deliveries.count }.by(2)
 
     expect(page.current_path).to eq claim_confirmation_path(Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME)
 
