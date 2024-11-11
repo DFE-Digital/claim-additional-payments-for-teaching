@@ -62,9 +62,8 @@ module Policies
       :other
     ]
 
-    # TODO: This is needed once the reply-to email address has been added to Gov Notify
     def notify_reply_to_id
-      nil
+      "581f1cd6-3351-4fd6-b408-e53ce8d86a28"
     end
 
     def award_amount
@@ -81,6 +80,10 @@ module Policies
 
     def decision_deadline_date(claim)
       claim.eligibility.start_date + RETENTION_PERIOD
+    end
+
+    def mailer
+      EarlyYearsPaymentsMailer
     end
   end
 end

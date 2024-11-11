@@ -24,7 +24,7 @@ class ClaimSubmissionBaseForm
       claim.save!
     end
 
-    ClaimMailer.submitted(claim).deliver_later if claim.submitted_at
+    claim.policy.mailer.submitted(claim).deliver_later
     ClaimVerifierJob.perform_later(claim)
 
     true
