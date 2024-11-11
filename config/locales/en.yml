@@ -1337,7 +1337,7 @@ en:
     journey_name: Claim an early years financial incentive payment
     landing_page:
       title: Claim an early years financial incentive payment
-    feedback_email: "help@opsteam.education.gov.uk"
+    feedback_email: "EY.Financial-Incentives@education.gov.uk"
     check_your_email_page:
       title: Check your email
     forms:
@@ -1350,8 +1350,8 @@ en:
       updated_date: "28 July 2022"
     claim_description: for an early years financial incentive payment
     journey_name: Claim an early years financial incentive payment
-    feedback_email: "help@opsteam.education.gov.uk"
-    support_email_address: "help@opsteam.education.gov.uk"
+    feedback_email: "EY.Financial-Incentives@education.gov.uk"
+    support_email_address: "EY.Financial-Incentives@education.gov.uk"
     forms:
       consent:
         question: Declaration of Employee Consent
@@ -1475,8 +1475,8 @@ en:
           title: "Do these names match?"
   early_years_payment_practitioner:
     journey_name: Claim an early years financial incentive payment
-    feedback_email: "help@opsteam.education.gov.uk"
-    support_email: "help@opsteam.education.gov.uk"
+    feedback_email: "EY.Financial-Incentives@education.gov.uk"
+    support_email: "EY.Financial-Incentives@education.gov.uk"
     claim_description: for early years financial incentive payment
     forms:
       find_reference:
