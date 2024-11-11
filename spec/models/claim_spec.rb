@@ -2,6 +2,16 @@ require "rails_helper"
 
 RSpec.describe Claim, type: :model do
   describe "scopes" do
+    describe "::require_in_progress_update_emails" do
+      let(:claim_1) { create(:claim, policy: Policies::StudentLoans) }
+      let(:claim_2) { create(:claim, policy: Policies::EarlyYearsPayments) }
+
+      it "includes correct claims" do
+        expect(Claim.require_in_progress_update_emails).to include(claim_1)
+        expect(Claim.require_in_progress_update_emails).not_to include(claim_2)
+      end
+    end
+
     describe "::by_policy" do
       context "with Policies::EarlyCareerPayments" do
         let(:claim_1) { create(:claim, policy: Policies::StudentLoans) }

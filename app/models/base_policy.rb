@@ -78,4 +78,8 @@ module BasePolicy
   def task_available?(task)
     true
   end
+
+  def require_in_progress_update_emails?
+    true
+  end
 end

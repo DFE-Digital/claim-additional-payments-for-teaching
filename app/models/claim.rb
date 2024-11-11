@@ -243,6 +243,10 @@ class Claim < ApplicationRecord
     )
   end
 
+  scope :require_in_progress_update_emails, -> {
+    by_policies(Policies.all.select{|p| p.require_in_progress_update_emails? })
+  }
+
   def onelogin_idv_full_name
     "#{onelogin_idv_first_name} #{onelogin_idv_last_name}"
   end
