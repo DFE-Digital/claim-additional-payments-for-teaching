@@ -139,6 +139,7 @@ shared:
     - downloaded_by_id
     - scheduled_payment_date
     - confirmation_report_uploaded_by_id
+    - status
   :student_loans_eligibilities:
     - id
     - created_at

@@ -9,6 +9,8 @@ class PayrollRun < ApplicationRecord
   # backfill existing payroll runs and payments with a payment confirmation
   belongs_to :confirmation_report_uploaded_by, class_name: "DfeSignIn::User", optional: true
 
+  enum :status, %w[pending complete failed].index_with(&:itself)
+
   validate :ensure_no_payroll_run_this_month, on: :create
 
   scope :this_month, -> { where(created_at: DateTime.now.all_month) }
@@ -39,27 +41,6 @@ class PayrollRun < ApplicationRecord
     return @all_payments_confirmed if defined?(@all_payments_confirmed)
 
     @all_payments_confirmed = payment_confirmations.any? && total_confirmed_payments == payments_count
-  end
-
-  def self.create_with_claims!(claims, topups, attrs = {})
-    ActiveRecord::Base.transaction do
-      PayrollRun.create!(attrs).tap do |payroll_run|
-        [claims, topups].reduce([], :concat).group_by { |obj| group_by_field(obj) }.each_value do |grouped_items|
-          # associates the claim to the payment, for Topup that's its associated claim
-          grouped_claims = grouped_items.map { |i| i.is_a?(Topup) ? i.claim : i }
-
-          # associates the payment to the Topup, so we know it's payrolled
-          group_topups = grouped_items.select { |i| i.is_a?(Topup) }
-
-          award_amount = grouped_items.map(&:award_amount).compact.sum(0)
-          Payment.create!(payroll_run: payroll_run, claims: grouped_claims, topups: group_topups, award_amount: award_amount)
-        end
-      end
-    end
-  end
-
-  def self.group_by_field(obj)
-    obj.national_insurance_number
   end
 
   def download_triggered?

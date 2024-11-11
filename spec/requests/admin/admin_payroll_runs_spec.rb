@@ -19,7 +19,9 @@ RSpec.describe "Admin payroll runs" do
       it "creates a payroll run with payments and redirects to it" do
         claims = create_list(:claim, 2, :approved)
 
-        expect { post admin_payroll_runs_path(claim_ids: claims.map(&:id)) }.to change { PayrollRun.count }.by(1)
+        perform_enqueued_jobs do
+          expect { post admin_payroll_runs_path(claim_ids: claims.map(&:id)) }.to change { PayrollRun.count }.by(1)
+        end
 
         payroll_run = PayrollRun.order(:created_at).last
         expect(payroll_run.created_by.id).to eq(@signed_in_user.id)

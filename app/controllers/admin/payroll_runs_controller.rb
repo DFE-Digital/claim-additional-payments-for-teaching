@@ -24,7 +24,9 @@ module Admin
         return
       end
 
-      payroll_run = PayrollRun.create_with_claims!(claims, topups, created_by: admin_user)
+      payroll_run = PayrollRun.create!(created_by: admin_user)
+
+      PayrollRunJob.perform_later(payroll_run, claims.ids, topups.ids)
 
       redirect_to [:admin, payroll_run], notice: "Payroll run created"
     rescue ActiveRecord::RecordInvalid => e

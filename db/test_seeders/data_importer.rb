@@ -104,6 +104,8 @@ class DataImporter < BaseImporter
     payrollable_claims ||= Claim.payrollable
     topups = []
     logger.info "Generating payroll for #{payrollable_claims.size} payments"
-    PayrollRun.create_with_claims!(payrollable_claims, topups, created_by: admin_approver)
+
+    payroll_run = PayrollRun.create!(created_by: @signed_in_user)
+    PayrollRunJob.perform_now(payroll_run, payrollable_claims.ids, topups.map(&:id))
   end
 end

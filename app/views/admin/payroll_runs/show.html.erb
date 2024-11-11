@@ -1,164 +1,18 @@
 <% content_for(:page_title) { page_title("#{@payroll_run.created_at.strftime("%B")} payroll run") } %>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">
-      <%= @payroll_run.created_at.strftime("%B") %> payroll run
-    </h1>
+<% case @payroll_run.status %>
+<% when "pending" %>
+  <%= render "pending" %>
+<% when "complete" %>
+  <%= render "complete" %>
+<% when "failed" %>
+  <%= render "failed" %>
+<% else %>
+  <% fail "Unknown payroll run status #{@payroll_run.status}" %>
+<% end %>
 
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Approved claims
-        </dt>
-
-        <dd class="govuk-summary-list__value">
-          <%= @payroll_run.number_of_claims_for_policy(:all, filter: :claims) %>
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Top ups
-        </dt>
-
-        <dd class="govuk-summary-list__value">
-          <%= @payroll_run.number_of_claims_for_policy(Policies::LevellingUpPremiumPayments, filter: :topups) %>
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Total award amount
-        </dt>
-
-        <dd class="govuk-summary-list__value">
-          <%= number_to_currency(@payroll_run.total_award_amount) %>
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Created by
-        </dt>
-
-        <dd class="govuk-summary-list__value">
-          <%= user_details(@payroll_run.created_by) %>
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Downloaded
-        </dt>
-
-        <dd class="govuk-summary-list__value">
-          <%= @payroll_run.download_triggered? ? l(@payroll_run.downloaded_at) : "No" %>
-        </dd>
-      </div>
-      <% if @payroll_run.download_triggered? %>
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Downloaded by
-          </dt>
-
-          <dd class="govuk-summary-list__value">
-            <%= user_details(@payroll_run.downloaded_by) %>
-          </dd>
-        </div>
-      <% end %>
-    </dl>
-  </div>
-
-  <div class="govuk-grid-column-full">
-    <h2 class="govuk-heading-m">Summary of claim amounts by service</h2>
-
-    <table class="govuk-table">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th scope="col" class="govuk-table__header">Service</th>
-          <th scope="col" class="govuk-table__header">Number of claims</th>
-          <th scope="col" class="govuk-table__header">Total claimed amount</th>
-        </tr>
-        <% Policies.all.each do |policy| %>
-          <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header"><%= policy.short_name %></th>
-            <td class="govuk-table__cell"><%= @payroll_run.number_of_claims_for_policy(policy, filter: :claims) %></td>
-            <td class="govuk-table__cell"><%= number_to_currency(@payroll_run.total_claim_amount_for_policy(policy, filter: :claims)) %></td>
-          </tr>
-        <% end %>
-        <tr class="govuk-table__row">
-          <th scope="row" class="govuk-table__header"><%= I18n.t("levelling_up_premium_payments.policy_short_name") %> Top Ups</th>
-          <td class="govuk-table__cell"><%= @payroll_run.number_of_claims_for_policy(Policies::LevellingUpPremiumPayments, filter: :topups) %></td>
-          <td class="govuk-table__cell"><%= number_to_currency(@payroll_run.total_claim_amount_for_policy(Policies::LevellingUpPremiumPayments, filter: :topups)) %></td>
-          </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-      </tbody>
-    </table>
-  </div>
-
-  <% unless @payroll_run.all_payments_confirmed? %>
-    <div class="govuk-grid-column-full">
-      <div class="govuk-form-group">
-        <label class="govuk-label" for="payroll_run_download_link">
-          You can now send this link to DfE Payroll for processing.
-        </label>
-        <%= text_field_tag "payroll_run_download_link", new_admin_payroll_run_download_url(@payroll_run), data: {"copy-to-clipboard": :true}, readonly: true, class: ["govuk-input"] %>
-      </div>
-    </div>
-  <% end %>
-
-  <div class="govuk-grid-column-full">
-    <h2 class="govuk-heading-l">Payments</h2>
-
-    <table class="govuk-table">
-    <thead class="govuk-table__head">
-      <tr class="govuk-table__row">
-        <th scope="col" class="govuk-table__header">Payment ID</th>
-        <th scope="col" class="govuk-table__header">Payee Name</th>
-        <th scope="col" class="govuk-table__header">Claim Reference</th>
-        <th scope="col" class="govuk-table__header">Service</th>
-        <th scope="col" class="govuk-table__header">Claim Amount</th>
-        <th scope="col" class="govuk-table__header">Payment Amount</th>
-        <% unless @payroll_run.all_payments_confirmed? %>
-          <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Actions</span></th>
-        <% end %>
-      </tr>
-    </thead>
-    <tbody class="govuk-table__body">
-      <% @payments.each do |payment| %>
-        <% payment.claims.each_with_index do |claim, index| %>
-          <% number_of_claims = payment.claims.size %>
-          <% topup_claim_ids = payment.topups.pluck(:claim_id) %>
-          <% line_item = topup_claim_ids.include?(claim.id) ? payment.topups.select { |t| t.claim_id == claim.id }.first : claim %>
-
-          <tr class="govuk-table__row">
-            <% if index == 0 %>
-              <th scope="row" rowspan="<%= number_of_claims %>" class="govuk-table__header"><%= payment.id %></th>
-              <td class="govuk-table__cell" rowspan="<%= number_of_claims %>"><%= payment.banking_name %></td>
-            <% end %>
-            <td class="govuk-table__cell"><%= link_to claim.reference, admin_claim_path(claim), class: "govuk-link" %></td>
-            <td class="govuk-table__cell"><%= line_item.is_a?(Topup) ? "#{I18n.t("levelling_up_premium_payments.policy_short_name")} (top up)" : claim.policy.short_name %></td>
-            <td class="govuk-table__cell"><%= number_to_currency(line_item.award_amount) %></td>
-            <% if index == 0 %>
-              <td class="govuk-table__cell" rowspan="<%= number_of_claims %>"><%= number_to_currency(payment.award_amount) %></td>
-              <% unless @payroll_run.all_payments_confirmed? %>
-                <td class="govuk-table__cell" rowspan="<%= number_of_claims %>">
-                  <% unless payment.confirmation.present? %>
-                    <%= link_to remove_admin_payroll_run_payment_path(id: payment.id, payroll_run_id: payment.payroll_run.id), class: "govuk-link" do %>
-                      Remove <span class="govuk-visually-hidden">payment row</span>
-                    <% end %>
-                  <% end %>
-                </td>
-              <% end %>
-            <% end %>
-          </tr>
-        <% end %>
-      <% end %>
-    </tbody>
-    </table>
-
-    <%== render partial: 'pagination', locals: { pagy: @pagy } %>
-  </div>
-
-  <% if PayrollRun.allow_destroy? %>
+<% if PayrollRun.allow_destroy? %>
+  <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= button_to(
         "Delete payroll run",
@@ -167,5 +21,5 @@
         class: "govuk-button govuk-button--warning",
       ) %>
     </div>
-  <% end %>
-</div>
+  </div>
+<% end %>
