@@ -33,7 +33,7 @@ module CsvImporter
         target_data_model.insert_all(record_hashes) unless record_hashes.empty?
       end
 
-      AnalyticsImporter.import(target_data_model)
+      sync_analytics
     end
 
     def rows_with_data_count
@@ -41,6 +41,10 @@ module CsvImporter
     end
 
     private
+
+    def sync_analytics
+      AnalyticsImporter.import(target_data_model)
+    end
 
     def empty_row?(row)
       case row
