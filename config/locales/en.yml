@@ -1361,7 +1361,7 @@ en:
         errors:
           presence: You must be able to confirm this information to continue
       current_nursery:
-        question: Confirm that your employee works at the location below
+        question: What is the name of the nursery where your employee works?
         errors:
           presence: Select the nursery where your employee works
       paye_reference:
