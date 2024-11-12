@@ -1401,7 +1401,7 @@ en:
           inclusion: You must select an option below to continue
       returner:
         question:
-          Did %{first_name} work in an early years setting between %{six_months_before_start_date} and %{start_date}?
+          Did %{first_name} work in early years between %{six_months_before_start_date} and %{start_date}?
         errors:
           inclusion: You must select an option below to continue
       returner_worked_with_children:
