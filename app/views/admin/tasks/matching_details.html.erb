@@ -13,14 +13,22 @@
   <div class="govuk-grid-column-two-thirds">
     <h2 class="govuk-heading-l"><%= @current_task_name.humanize %></h2>
 
-    <%= render("admin/claims/claims_with_matching_details", {matching_claims: @matching_claims, claim: @claim, show_caption: false}) %>
+    <% if @claim.policy.task_available?(@task) %>
+      <%= render("admin/claims/claims_with_matching_details", {matching_claims: @matching_claims, claim: @claim, show_caption: false}) %>
+    <% end %>
   </div>
 
   <div class="govuk-grid-column-two-thirds">
     <% if @task.persisted? %>
       <%= render "task_outcome", task: @task %>
-    <% else %>
+    <% elsif @claim.policy.task_available?(@task) %>
       <%= render "form", task_name: "matching_details", claim: @claim %>
+    <% else %>
+      <%= govuk_inset_text(
+        text: I18n.t(
+          "#{@claim.policy.to_s.underscore}.admin.task_questions.#{@task.name}.unavailable",
+        )
+      ) %>
     <% end %>
 
     <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>

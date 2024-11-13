@@ -74,4 +74,8 @@ module BasePolicy
   def mailer
     ClaimMailer
   end
+
+  def task_available?(task)
+    true
+  end
 end

@@ -19,12 +19,15 @@
   <div class="govuk-grid-column-two-thirds">
     <% if @task.persisted? %>
       <%= render "task_outcome", task: @task, notes: @notes %>
+    <% elsif @claim.policy.task_available?(@task) %>
+      <%= render "form", task_name: "employment", claim: @claim %>
     <% else %>
-      <% if @task.employment_task_available? %>
-        <%= render "form", task_name: "employment", claim: @claim %>
-      <% else %>
-        <%= govuk_inset_text(text: "This task will be available from #{l(@claim.eligibility.employment_task_available_at)}") %>
-      <% end %>
+      <%= govuk_inset_text(
+        text: I18n.t(
+          "#{@claim.policy.to_s.underscore}.admin.task_questions.#{@task.name}.unavailable",
+          employment_task_available_at: l(@claim.eligibility.employment_task_available_at)
+        )
+      ) %>
     <% end %>
 
     <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>
