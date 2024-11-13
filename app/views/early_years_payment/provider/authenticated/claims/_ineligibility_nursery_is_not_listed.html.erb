@@ -4,9 +4,13 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">This nursery is not eligible</h1>
+
     <p class="govuk-body">
       This nursery is not part of the incentive scheme.
     </p>
-    <%= govuk_button_link_to "Change nursery", claim_path(current_journey_routing_name, "current-nursery") %>
+
+    <p class="govuk-body">
+      For support, contact: <%= govuk_mail_to t("early_years_payment_provider_authenticated.support_email_address"), t("early_years_payment_provider_authenticated.support_email_address") %>.
+    </p>
   </div>
 </div>
