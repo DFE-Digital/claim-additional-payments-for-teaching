@@ -27,8 +27,8 @@ RSpec.feature "Early years payment practitioner" do
     expect(page).to have_content "You have successfully proved your identity with GOV.UK One Login"
     click_on "Continue"
 
-    expect(page.title).to have_text("How we'll process your claim")
-    expect(page).to have_content("How we'll process your claim")
+    expect(page.title).to have_text("How we’ll use the information you provide")
+    expect(page).to have_content("How we’ll use the information you provide")
     click_on "Continue"
 
     expect(page).to have_content("Personal details")
