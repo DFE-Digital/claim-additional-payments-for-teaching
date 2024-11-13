@@ -28,13 +28,13 @@ module ClaimsFormCallbacks
   end
 
   def information_provided_before_update
-    return unless journey_requires_student_loan_details?
+    return unless journey.requires_student_loan_details?
 
     retrieve_student_loan_details if on_tid_route?
   end
 
   def personal_details_after_form_save_success
-    return redirect_to_next_slug unless journey_requires_student_loan_details?
+    return redirect_to_next_slug unless journey.requires_student_loan_details?
 
     retrieve_student_loan_details
     redirect_to_next_slug
@@ -118,29 +118,5 @@ module ClaimsFormCallbacks
 
   def on_tid_route?
     journey_session.answers.logged_in_with_tid? && journey_session.answers.all_personal_details_same_as_tid?
-  end
-
-  def journey_requires_student_loan_details?
-    student_loans_journey? || additional_payments_journey? || get_a_teacher_relocation_payment_journey? || further_education_payments_journey? || early_years_payments_practitioner_journey?
-  end
-
-  def student_loans_journey?
-    current_journey_routing_name == "student-loans"
-  end
-
-  def additional_payments_journey?
-    current_journey_routing_name == "additional-payments"
-  end
-
-  def get_a_teacher_relocation_payment_journey?
-    current_journey_routing_name == "get-a-teacher-relocation-payment"
-  end
-
-  def further_education_payments_journey?
-    current_journey_routing_name == "further-education-payments"
-  end
-
-  def early_years_payments_practitioner_journey?
-    current_journey_routing_name == "early-years-payment-practitioner"
   end
 end

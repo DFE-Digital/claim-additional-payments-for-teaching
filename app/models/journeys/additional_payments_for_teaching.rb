@@ -49,5 +49,9 @@ module Journeys
       eligible_itt_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(next_year)
       eligible_itt_years.include?(itt_academic_year)
     end
+
+    def requires_student_loan_details?
+      true
+    end
   end
 end

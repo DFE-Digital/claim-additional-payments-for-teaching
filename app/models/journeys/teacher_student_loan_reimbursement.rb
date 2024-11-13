@@ -24,5 +24,9 @@ module Journeys
         "select-home-address" => SelectHomeAddressForm
       }
     }.freeze
+
+    def requires_student_loan_details?
+      true
+    end
   end
 end

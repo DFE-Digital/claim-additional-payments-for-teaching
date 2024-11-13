@@ -65,5 +65,9 @@ module Journeys
     def start_with_magic_link?
       defined?(self::START_WITH_MAGIC_LINK) && self::START_WITH_MAGIC_LINK
     end
+
+    def requires_student_loan_details?
+      false
+    end
   end
 end
