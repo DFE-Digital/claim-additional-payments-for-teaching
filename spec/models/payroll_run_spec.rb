@@ -199,46 +199,6 @@ RSpec.describe PayrollRun, type: :model do
     end
   end
 
-  describe ".create_with_claims!" do
-    let(:claims) { Policies.all.map { |policy| create(:claim, :approved, policy: policy) } }
-    let(:topups) { [] }
-    subject!(:payroll_run) { PayrollRun.create_with_claims!(claims, topups, created_by: user) }
-
-    it "creates a payroll run with payments and populates the award_amount" do
-      expect(payroll_run.reload.created_by.id).to eq(user.id)
-      expect(payroll_run.claims).to match_array(claims)
-      expect(claims[0].payments.first.award_amount).to eq(claims[0].award_amount)
-      expect(claims[1].payments.first.award_amount).to eq(claims[1].award_amount)
-    end
-
-    context "with multiple claims from the same teacher reference number" do
-      let(:personal_details) do
-        {
-          national_insurance_number: generate(:national_insurance_number),
-          eligibility_attributes: {teacher_reference_number: generate(:teacher_reference_number)},
-          email_address: generate(:email_address),
-          bank_sort_code: "112233",
-          bank_account_number: "95928482",
-          address_line_1: "64 West Lane",
-          student_loan_plan: StudentLoan::PLAN_1
-        }
-      end
-      let(:matching_claims) do
-        [
-          create(:claim, :approved, personal_details.merge(policy: Policies::StudentLoans)),
-          create(:claim, :approved, personal_details.merge(policy: Policies::EarlyCareerPayments))
-        ]
-      end
-      let(:other_claim) { create(:claim, :approved) }
-      let(:claims) { matching_claims + [other_claim] }
-
-      it "groups them into a single payment and populates the award_amount" do
-        expect(payroll_run.payments.map(&:claims)).to match_array([match_array(matching_claims), [other_claim]])
-        expect(matching_claims[0].reload.payments.first.award_amount).to eq(matching_claims.sum(&:award_amount))
-      end
-    end
-  end
-
   describe ".this_month" do
     it "only includes payroll runs created in this calendar month" do
       create(:payroll_run, created_at: 1.month.ago)

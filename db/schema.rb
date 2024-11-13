@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_07_164046) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_11_114155) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_trgm"
@@ -410,6 +410,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_07_164046) do
     t.uuid "downloaded_by_id"
     t.date "scheduled_payment_date"
     t.uuid "confirmation_report_uploaded_by_id"
+    t.string "status", default: "pending", null: false
     t.index ["confirmation_report_uploaded_by_id"], name: "index_payroll_runs_on_confirmation_report_uploaded_by_id"
     t.index ["created_at"], name: "index_payroll_runs_on_created_at"
     t.index ["created_by_id"], name: "index_payroll_runs_on_created_by_id"

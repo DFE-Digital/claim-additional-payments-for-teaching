@@ -34,13 +34,19 @@ RSpec.feature "Payroll" do
 
     click_on "Confirm and submit"
 
+    expect(page).to have_content("Payroll run created")
+    expect(page).to have_content("This payroll run is in progress")
+
+    perform_enqueued_jobs
+
+    click_on "Refresh"
+
     payroll_run = PayrollRun.order(:created_at).last
 
     expect(page).to have_content("Approved claims 4")
     expect(page).to have_content("Top ups 1")
     expect(page).to have_content("Created by #{@signed_in_user.full_name}")
     expect(page).to have_content("Total award amount £9,500.00")
-    expect(page).to have_content("Payroll run created")
     expect(page).to have_field("payroll_run_download_link", with: new_admin_payroll_run_download_url(payroll_run))
 
     expect(page).to have_content("Student Loans 2 £2,000.00")
@@ -70,6 +76,10 @@ RSpec.feature "Payroll" do
     create_list(:claim, 3, :approved)
 
     click_on "Confirm and submit"
+
+    perform_enqueued_jobs
+
+    click_on "Refresh"
 
     expect(page).to have_content("Approved claims 3")
 
@@ -268,5 +278,25 @@ RSpec.feature "Payroll" do
       expect(page).not_to have_content "Previous"
       expect(page).to have_content "Next"
     end
+  end
+
+  scenario "failed payroll run job show an error message" do
+    create(:claim, :approved, policy: Policies::EarlyCareerPayments)
+
+    click_on "Payroll"
+
+    month_name = Date.today.strftime("%B")
+
+    click_on "Run #{month_name} payroll"
+
+    click_on "Confirm and submit"
+
+    allow(Payment).to receive(:create!).and_raise(StandardError)
+
+    expect { perform_enqueued_jobs }.to raise_error(StandardError)
+
+    click_on "Refresh"
+
+    expect(page).to have_content("This payroll run errored")
   end
 end

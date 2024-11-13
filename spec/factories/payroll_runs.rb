@@ -3,6 +3,8 @@ FactoryBot.define do
     association :created_by, factory: :dfe_signin_user
     association :downloaded_by, factory: :dfe_signin_user
 
+    status { :complete }
+
     transient do
       # The claim_counts attribute provides a convenient way to create a
       # payroll run with associated payment objects and associated claim

@@ -1,0 +1,14 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      <%= @payroll_run.created_at.strftime("%B") %> payroll run
+    </h1>
+
+    <p class="govuk-body">
+      This payroll run is in progress
+    </p>
+
+    <%= govuk_button_link_to "Refresh", admin_payroll_run_path(@payroll_run) %>
+  </div>
+</div>
+
