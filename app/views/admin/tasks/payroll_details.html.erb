@@ -12,6 +12,14 @@
   <div class="govuk-grid-column-two-thirds">
     <h2 class="govuk-heading-l"><%= @current_task_name.humanize %></h2>
 
+    <% if @claim.personal_data_removed_at.present? %>
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          This claim has had it's personal data removed.
+        </strong>
+      </div>
+    <% else %>
     <div class="hmcts-timeline hmrc_responses">
       <% @claim.hmrc_bank_validation_responses.each do |response| %>
       <% bank_account_verification_response = Hmrc::BankAccountVerificationResponse.new(OpenStruct.new({code: response["code"], body: response["body"].to_json})) %>
@@ -42,6 +50,7 @@
         </div>
       <% end %>
     </div>
+    <% end %>
 
     <% if !@task.passed.nil? %>
       <%= render "task_outcome", task: @task, notes: @notes do %>

@@ -62,4 +62,22 @@ RSpec.feature "Admin checking a claim's payroll details" do
       expect(claim.reload.latest_decision.created_by).to eq(@signed_in_user)
     end
   end
+
+  context "when the claim has been scrubbed" do
+    let!(:claim) do
+      create(
+        :claim,
+        :submitted,
+        :personal_data_removed
+      )
+    end
+
+    scenario "does not show the hmrc response" do
+      visit admin_claim_task_path(claim, "payroll_details")
+
+      expect(page).to have_content(
+        "This claim has had it's personal data removed."
+      )
+    end
+  end
 end
