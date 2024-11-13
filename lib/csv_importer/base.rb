@@ -43,7 +43,7 @@ module CsvImporter
     private
 
     def sync_analytics
-      AnalyticsImporter.import(target_data_model)
+      # NOOP
     end
 
     def empty_row?(row)
