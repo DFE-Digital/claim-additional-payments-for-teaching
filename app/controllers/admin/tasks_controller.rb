@@ -2,7 +2,7 @@ class Admin::TasksController < Admin::BaseAdminController
   before_action :ensure_service_operator
   before_action :load_claim
   before_action :ensure_task_has_not_already_been_completed, only: [:create]
-  before_action :load_matching_claims, only: [:show], if: -> { params[:name] == "matching_details" }
+  before_action :load_matching_claims, only: [:show], if: :load_matching_claims?
 
   def index
     @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
@@ -29,6 +29,7 @@ class Admin::TasksController < Admin::BaseAdminController
     if @task.save
       redirect_to @task_pagination.next_task_path
     else
+      load_matching_claims if load_matching_claims?
       @tasks_presenter = @claim.policy::AdminTasksPresenter.new(@claim)
       render @task.name
     end
@@ -73,6 +74,10 @@ class Admin::TasksController < Admin::BaseAdminController
 
   def load_matching_claims
     @matching_claims = Claim::MatchingAttributeFinder.new(@claim).matching_claims
+  end
+
+  def load_matching_claims?
+    params[:name] == "matching_details"
   end
 
   def current_task_name
