@@ -27,15 +27,15 @@
     </h2>
 
     <p class="govuk-body">
-      We’ll review your claim and let you know by email if it’s been accepted or rejected.
+      We’ll review your claim and let you know by email if it’s been accepted.
     </p>
 
     <p class="govuk-body">
-      After 6 months, we’ll check with <%= submitted_claim.eligibility.eligible_ey_provider.nursery_name %> that you’re still working for them. If you are:
+      After 6 months in your role, we’ll check with <%= submitted_claim.eligibility.eligible_ey_provider.nursery_name %> that you’re still working for them. If you are, we’ll:
     </p>
     <%= govuk_list [
-      "we’ll pay the full incentive amount into your bank account",
-      "we’ll email you to confirm the payment"
+      "make the payment into your bank account around 6 weeks later",
+      "email you to confirm the payment"
     ], type: :bullet %>
   </div>
 </div>

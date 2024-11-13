@@ -90,6 +90,6 @@ RSpec.feature "Early years payment practitioner" do
     expect(claim.reload.national_insurance_number).to eq "PX321499A"
 
     expect(page).to have_content("Claim submitted")
-    expect(page).to have_content("After 6 months, we’ll check with Acme Nursery Ltd that you’re still working for them")
+    expect(page).to have_content("we’ll check with Acme Nursery Ltd")
   end
 end
