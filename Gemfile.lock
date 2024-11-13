@@ -218,7 +218,7 @@ GEM
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (>= 6, < 10)
       view_component (>= 3.9, < 3.15)
-    govuk_design_system_formbuilder (5.4.0)
+    govuk_design_system_formbuilder (5.6.0)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
@@ -293,6 +293,8 @@ GEM
     nio4r (2.7.3)
     nokogiri (1.16.7)
       mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
+    nokogiri (1.16.7-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.16.7-x86_64-darwin)
       racc (~> 1.4)
@@ -527,7 +529,7 @@ GEM
     validate_url (1.0.15)
       activemodel (>= 3.0.0)
       public_suffix
-    view_component (3.12.1)
+    view_component (3.14.0)
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
@@ -575,8 +577,8 @@ DEPENDENCIES
   faker (~> 3.4)
   faraday_middleware
   foreman
-  govuk-components
-  govuk_design_system_formbuilder (~> 5.4.0)
+  govuk-components (~> 5.6.1)
+  govuk_design_system_formbuilder (~> 5.6)
   httpclient
   jbuilder (~> 2.13)
   jwt
