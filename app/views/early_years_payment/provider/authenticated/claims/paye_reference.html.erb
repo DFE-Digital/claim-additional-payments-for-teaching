@@ -7,7 +7,15 @@
 
       <%= f.govuk_text_field :paye_reference,
         label: { text: @form.t(:question, nursery_name: @form.nursery_name), tag: "h1", size: "l" },
-        hint: { text: @form.t(:hint) },
+        hint: -> { %>
+          <p>
+            This is a series of numbers and letters separated with a slash, like 123/AB456. Your organisation’s payroll or human resources can provide this.
+          </p>
+
+          <p>
+            We need this to check that the employee is still working at your setting after 6 months.
+          </p>
+        <% },
         width: 10, spellcheck: "false" %>
 
       <%= f.govuk_submit %>
