@@ -24,10 +24,6 @@ class EligibleFeProvidersImporter < CsvImporter::Base
 
   private
 
-  def sync_analytics
-    # NOOP
-  end
-
   def delete_all_scope
     target_data_model.where(academic_year:)
   end

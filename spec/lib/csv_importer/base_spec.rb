@@ -79,6 +79,13 @@ RSpec.describe CsvImporter::Base do
     end
   end
 
+  describe "dfe-analytics syncing" do
+    it "invokes the relevant import entity job" do
+      expect(AnalyticsImporter).to receive(:import).with(target_data_model)
+      importer.run
+    end
+  end
+
   describe "data transformation and importing" do
     before { importer.run }
 
