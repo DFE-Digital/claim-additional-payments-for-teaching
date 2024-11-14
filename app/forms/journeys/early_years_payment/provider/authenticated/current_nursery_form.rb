@@ -12,7 +12,7 @@ module Journeys
 
           attr_reader :selectable_nurseries
 
-          def initialize(journey_session:, journey:, params:)
+          def initialize(journey_session:, journey:, params:, session: {})
             super
 
             @selectable_nurseries = EligibleEyProvider.for_email(journey_session.answers.provider_email_address)

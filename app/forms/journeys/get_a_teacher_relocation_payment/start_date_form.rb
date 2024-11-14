@@ -16,7 +16,7 @@ module Journeys
           message: i18n_error_message(:date_not_in_future)
         }, if: :start_date
 
-      def initialize(journey_session:, journey:, params:)
+      def initialize(journey_session:, journey:, params:, session: {})
         super
 
         # Handle setting date from multi part params see

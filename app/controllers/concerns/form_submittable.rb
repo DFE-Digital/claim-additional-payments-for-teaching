@@ -165,7 +165,7 @@ module FormSubmittable
     end
 
     def load_form_if_exists
-      @form ||= journey.form(journey_session:, params:)
+      @form ||= journey.form(journey_session:, params:, session:)
     end
   end
 end
