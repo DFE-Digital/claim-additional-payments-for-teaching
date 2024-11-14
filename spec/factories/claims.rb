@@ -168,6 +168,16 @@ FactoryBot.define do
       end
     end
 
+    trait :approveable do
+      submitted
+
+      after(:create) do |claim|
+        ClaimCheckingTasks.new(claim).applicable_task_names.each do |task_name|
+          create(:task, :automated, :passed, name: task_name, claim: claim)
+        end
+      end
+    end
+
     trait :payrollable do
       approved
     end
