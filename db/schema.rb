@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_11_114155) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_13_112028) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_trgm"
@@ -220,7 +220,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_11_114155) do
     t.index ["local_authority_id"], name: "index_eligible_ey_providers_on_local_authority_id"
     t.index ["primary_key_contact_email_address"], name: "index_eligible_ey_providers_on_primary_contact_email_address"
     t.index ["secondary_contact_email_address"], name: "index_eligible_ey_providers_on_secondary_contact_email_address"
-    t.index ["urn"], name: "index_eligible_ey_providers_on_urn"
+    t.index ["urn"], name: "index_eligible_ey_providers_on_urn", unique: true
   end
 
   create_table "eligible_fe_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -231,7 +231,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_11_114155) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "primary_key_contact_email_address"
-    t.index ["academic_year", "ukprn"], name: "index_eligible_fe_providers_on_academic_year_and_ukprn"
+    t.index ["academic_year", "ukprn"], name: "index_eligible_fe_providers_on_academic_year_and_ukprn", unique: true
   end
 
   create_table "file_uploads", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
