@@ -25,6 +25,8 @@ module Journeys
               journey_session.answers.assign_attributes(
                 returner_contract_type: nil
               )
+
+              session.fetch(:slugs, {}).delete("returner-contract-type")
             end
           end
         end
