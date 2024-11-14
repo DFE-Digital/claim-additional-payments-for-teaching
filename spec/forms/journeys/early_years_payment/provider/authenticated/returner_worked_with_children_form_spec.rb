@@ -28,12 +28,36 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::ReturnerWor
   end
 
   describe "#save" do
-    let(:returner_worked_with_children) { "true" }
+    context "when returner worked with children" do
+      let(:returner_worked_with_children) { "true" }
 
-    it "updates the journey session" do
-      expect { expect(subject.save).to be(true) }.to(
-        change { journey_session.reload.answers.returner_worked_with_children }.to(true)
-      )
+      it "updates the journey session" do
+        expect { expect(subject.save).to be(true) }.to(
+          change { journey_session.reload.answers.returner_worked_with_children }.to(true)
+        )
+      end
+    end
+
+    context "when returner did work with children" do
+      let(:returner_worked_with_children) { "false" }
+      let(:journey_session) do
+        create(
+          :early_years_payment_provider_authenticated_session,
+          answers:
+        )
+      end
+      let(:answers) do
+        {
+          returner_contract_type: "casual or temporary"
+        }
+      end
+
+      it "updates the journey session and resets dependent answers" do
+        expect { expect(subject.save).to be(true) }.to(
+          change { journey_session.reload.answers.returner_worked_with_children }.to(false)
+          .and(change { journey_session.answers.returner_contract_type }.to(nil))
+        )
+      end
     end
   end
 end
