@@ -15,6 +15,9 @@ class SendEmailsAfterThreeWeeksJob < CronJob
   private
 
   def three_week_old_undecided_claims
-    Claim.awaiting_decision.where(submitted_at: (21.days.ago.beginning_of_day...21.days.ago.end_of_day))
+    Claim
+      .awaiting_decision
+      .where(submitted_at: (21.days.ago.beginning_of_day...21.days.ago.end_of_day))
+      .require_in_progress_update_emails
   end
 end

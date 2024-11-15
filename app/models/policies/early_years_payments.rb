@@ -94,5 +94,9 @@ module Policies
         task.claim.eligibility.practitioner_journey_completed?
       end
     end
+
+    def require_in_progress_update_emails?
+      false
+    end
   end
 end

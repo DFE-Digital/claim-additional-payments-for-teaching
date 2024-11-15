@@ -7,6 +7,24 @@ class EarlyYearsPaymentsMailer < ApplicationMailer
     end
   end
 
+  def progress_update
+    claim = params[:claim]
+
+    personalisation = {
+      first_name: claim.first_name,
+      application_date: claim.submitted_at.to_date.to_fs(:long_date),
+      ref_number: claim.reference
+    }
+
+    template_mail(
+      "1d20d638-61e4-4768-beba-c447cfa8c5a7",
+      to: claim.email_address,
+      subject: nil,
+      reply_to_id: claim.policy.notify_reply_to_id,
+      personalisation:
+    )
+  end
+
   private
 
   def submitted_by_provider_and_send_to_provider(claim)
