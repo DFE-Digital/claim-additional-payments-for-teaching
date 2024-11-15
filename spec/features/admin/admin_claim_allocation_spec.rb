@@ -360,7 +360,7 @@ RSpec.feature "Claims awaiting a decision" do
       click_on "Unassign"
 
       within(".govuk-flash__notice") do
-        expect(page).to have_text I18n.t("admin.allocations.bulk_deallocate.success", allocate_to_policy: "Early Career Payments", dfe_user: frank.full_name)
+        expect(page).to have_text I18n.t("admin.allocations.bulk_deallocate.success", allocate_to_policy: "Early-Career Payments", dfe_user: frank.full_name)
       end
 
       student_loan_claims.each do |claim|
@@ -421,7 +421,7 @@ RSpec.feature "Claims awaiting a decision" do
       click_on "Unassign"
 
       within(".govuk-flash__notice") do
-        expect(page).to have_text I18n.t("admin.allocations.bulk_deallocate.info", allocate_to_policy: "Early Career Payments", dfe_user: abdul.full_name)
+        expect(page).to have_text I18n.t("admin.allocations.bulk_deallocate.info", allocate_to_policy: "Early-Career Payments", dfe_user: abdul.full_name)
       end
 
       student_loan_claims.each do |claim|

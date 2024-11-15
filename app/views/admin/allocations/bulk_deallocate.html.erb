@@ -8,7 +8,7 @@
 
     <%= form_with url: admin_bulk_deallocate_path, method: :patch do |f| %>
       <%= f.hidden_field :allocate_to_team_member, value: team_member_id %>
-      <%= f.hidden_field :allocate_to_policy, value: policy_name %>
+      <%= f.hidden_field :allocate_to_policy, value: filtered_policy&.policy_type %>
       <%= f.hidden_field :user_confirmation, value: 'yes' %>
 
       <%= f.submit "Unassign", class: "govuk-button govuk-button--warning" %>
