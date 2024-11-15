@@ -54,48 +54,26 @@ class Admin::AllocationsController < Admin::BaseAdminController
 
   def bulk_deallocate
     claims = Claim.where(assigned_to_id: @team_member.id)
+    claims = claims.by_policy(filtered_policy) if filtered_policy
 
-    if filtered_policy
-      claims = claims.by_policy(filtered_policy) if filtered_policy
+    redirect_to admin_claims_path,
+      notice: I18n.t(
+        "admin.allocations.bulk_deallocate.info",
+        allocate_to_policy: policy_name,
+        dfe_user: @team_member.full_name.titleize
+      ) and return if claims.size.zero?
 
-      redirect_to admin_claims_path,
-        notice: I18n.t(
-          "admin.allocations.bulk_deallocate.info",
-          allocate_to_policy: policy_name,
-          dfe_user: @team_member.full_name.titleize
-        ) and return if claims.size.zero?
+    ClaimDeallocator.new(
+      claim_ids: claims.ids,
+      admin_user_id: @team_member.id
+    ).call
 
-      ClaimDeallocator.new(
-        claim_ids: claims.ids,
-        admin_user_id: @team_member.id
-      ).call
-
-      redirect_to admin_claims_path,
-        notice: I18n.t(
-          "admin.allocations.bulk_deallocate.success",
-          allocate_to_policy: policy_name,
-          dfe_user: @team_member.full_name.titleize
-        ) and return
-    else
-      redirect_to admin_claims_path,
-        notice: I18n.t(
-          "admin.allocations.bulk_deallocate.info",
-          allocate_to_policy: policy_name,
-          dfe_user: @team_member.full_name.titleize
-        ) and return if claims.size.zero?
-
-      ClaimDeallocator.new(
-        claim_ids: claims.ids,
-        admin_user_id: params[:allocate_to_team_member]
-      ).call
-
-      redirect_to admin_claims_path,
-        notice: I18n.t(
-          "admin.allocations.bulk_deallocate.success",
-          allocate_to_policy: policy_name,
-          dfe_user: @team_member.full_name.titleize
-        ) and return
-    end
+    redirect_to admin_claims_path,
+      notice: I18n.t(
+        "admin.allocations.bulk_deallocate.success",
+        allocate_to_policy: policy_name,
+        dfe_user: @team_member.full_name.titleize
+      ) and return
   end
 
   helper_method :filtered_policy
