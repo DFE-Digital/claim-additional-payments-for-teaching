@@ -89,10 +89,6 @@ class ClaimMailer < ApplicationMailer
       validity_duration: one_time_password_validity_duration
     }
 
-    if Rails.env.development?
-      Rails.logger.info("\n\nEmail verification code: #{@one_time_password}\n")
-    end
-
     send_mail(OTP_EMAIL_NOTIFY_TEMPLATE_ID, personalisation)
   end
 
@@ -215,6 +211,18 @@ class ClaimMailer < ApplicationMailer
   end
 
   def send_mail(template_id, personalisation)
+    if Rails.env.development?
+      Rails.logger.info(
+        [
+          "\n",
+          "Sending email to: #{@claim.email_address}",
+          "Template ID: #{template_id}",
+          "Subject: #{@subject}",
+          "Personalisation: \n#{personalisation.pretty_inspect}"
+        ].join("\n")
+      )
+    end
+
     template_mail(
       template_id,
       to: @claim.email_address,
