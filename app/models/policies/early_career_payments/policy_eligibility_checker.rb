@@ -47,8 +47,10 @@ module Policies
         return false if itt_subject.blank?
         return false if itt_subject_none_of_the_above?
 
-        itt_subject_checker = JourneySubjectEligibilityChecker.new(claim_year: claim_year, itt_year: itt_academic_year)
-        itt_subject.to_sym.in?(itt_subject_checker.current_subject_symbols(policy))
+        EarlyCareerPayments.current_subject_symbols(
+          claim_year: claim_year,
+          itt_year: itt_academic_year
+        ).include?(itt_subject.to_sym)
       end
 
       def specific_ineligible_attributes?
@@ -60,8 +62,10 @@ module Policies
         return false if itt_subject.blank?
         return true if itt_subject_none_of_the_above?
 
-        itt_subject_checker = JourneySubjectEligibilityChecker.new(claim_year: claim_year, itt_year: itt_academic_year)
-        !itt_subject.to_sym.in?(itt_subject_checker.current_and_future_subject_symbols(policy))
+        EarlyCareerPayments.current_and_future_subject_symbols(
+          claim_year: claim_year,
+          itt_year: itt_academic_year
+        ).exclude?(itt_subject.to_sym)
       end
 
       def specific_eligible_later_attributes?
@@ -73,8 +77,10 @@ module Policies
         return false if itt_subject.blank?
         return false if itt_subject_none_of_the_above?
 
-        itt_subject_checker = JourneySubjectEligibilityChecker.new(claim_year: claim_year, itt_year: itt_academic_year)
-        itt_subject.to_sym.in?(itt_subject_checker.future_subject_symbols(policy))
+        EarlyCareerPayments.future_subject_symbols(
+          claim_year: claim_year,
+          itt_year: itt_academic_year
+        ).include?(itt_subject.to_sym)
       end
 
       # TODO: Is this used anywhere?
@@ -94,9 +100,10 @@ module Policies
           # can still rule some out
           itt_subject_none_of_the_above?
         else
-          itt_subject_checker = JourneySubjectEligibilityChecker.new(**args)
-          itt_subject_symbol = itt_subject.to_sym
-          !itt_subject_symbol.in?(itt_subject_checker.current_and_future_subject_symbols(policy))
+          EarlyCareerPayments.current_and_future_subject_symbols(
+            claim_year: claim_year,
+            itt_year: itt_academic_year
+          ).exclude?(itt_subject_symbol)
         end
       end
     end

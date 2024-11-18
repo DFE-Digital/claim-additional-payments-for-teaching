@@ -49,7 +49,15 @@ module EligibilityCheckable
   private
 
   def common_ineligible_attributes?
-    [indicated_ineligible_school?, trainee_teacher?, supply_teacher_lacking_either_long_contract_or_direct_employment?, poor_performance?, no_selectable_subjects?, ineligible_cohort?, insufficient_teaching?].any?
+    [
+      indicated_ineligible_school?,
+      trainee_teacher?,
+      supply_teacher_lacking_either_long_contract_or_direct_employment?,
+      poor_performance?,
+      no_selectable_subjects?,
+      ineligible_cohort?,
+      insufficient_teaching?
+    ].any?
   end
 
   def indicated_ineligible_school?
@@ -65,12 +73,13 @@ module EligibilityCheckable
   end
 
   def no_selectable_subjects?
-    args = {claim_year: claim_year, itt_year: itt_academic_year}
-
-    if args.values.any?(&:blank?)
+    if claim_year.blank? || itt_academic_year.blank?
       false
     else
-      JourneySubjectEligibilityChecker.new(**args).current_and_future_subject_symbols(policy).empty?
+      policy.current_and_future_subject_symbols(
+        claim_year: claim_year,
+        itt_year: itt_academic_year
+      ).empty?
     end
   end
 

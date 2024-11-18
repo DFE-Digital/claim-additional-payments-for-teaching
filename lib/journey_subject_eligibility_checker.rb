@@ -41,20 +41,6 @@ class JourneySubjectEligibilityChecker
     (AcademicYear.new(claim_year - 5)...AcademicYear.new(claim_year)).to_a
   end
 
-  def self.current_and_future_subject_symbols(answers)
-    return [] if answers.itt_academic_year.blank?
-
-    if answers.nqt_in_academic_year_after_itt
-      JourneySubjectEligibilityChecker.new(claim_year: answers.policy_year, itt_year: answers.itt_academic_year).current_and_future_subject_symbols(answers.policy)
-    elsif answers.policy_year.in?(EligibilityCheckable::COMBINED_ECP_AND_LUP_POLICY_YEARS_BEFORE_FINAL_YEAR)
-      # they get the standard, unchanging LUP subject set because they won't have qualified in time for ECP by 2022/2023
-      # and they won't have given an ITT year
-      JourneySubjectEligibilityChecker.fixed_lup_subject_symbols
-    else
-      []
-    end.sort
-  end
-
   # Ideally we wouldn't have this method at all. Unfortunately it was hardcoded like
   # this before we realised trainee teachers weren't as special a case as we
   # thought.
@@ -62,6 +48,7 @@ class JourneySubjectEligibilityChecker
     [:chemistry, :computing, :mathematics, :physics]
   end
 
+  # FIXME RL - should be able to delete all the methods using this
   def current_and_future_subject_symbols(policy)
     (current_subject_symbols(policy) + future_subject_symbols(policy)).uniq
   end
@@ -70,7 +57,11 @@ class JourneySubjectEligibilityChecker
     if none_of_the_above_or_blank?(@itt_year)
       []
     else
-      subject_symbols(policy: policy, claim_year: @claim_year, itt_year: @itt_year)
+      subject_symbols(
+        policy: policy,
+        claim_year: @claim_year,
+        itt_year: @itt_year
+      )
     end
   end
 
@@ -92,6 +83,7 @@ class JourneySubjectEligibilityChecker
 
   private
 
+  # Move this
   def potentially_still_eligible_policies(answers)
     Journeys::AdditionalPaymentsForTeaching::POLICIES.select do |policy|
       policy::PolicyEligibilityChecker.new(answers: answers).status != :ineligible

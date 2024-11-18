@@ -100,16 +100,55 @@ module Policies
       true
     end
 
+    def current_subject_symbols(claim_year:, itt_year:)
+      subject_symbols(claim_year: claim_year, itt_year: itt_year)
+    end
+
+    def future_subject_symbols(claim_year:, itt_year:)
+      future_years(claim_year).flat_map do |year|
+        subject_symbols(claim_year: year, itt_year: itt_year)
+      end
+    end
+
+    def current_and_future_subject_symbols(claim_year:, itt_year:)
+      [
+        *current_subject_symbols(
+          claim_year: claim_year,
+          itt_year: itt_year
+        ),
+        *future_subject_symbols(
+          claim_year: claim_year,
+          itt_year: itt_year
+        )
+      ].uniq
+    end
+
+    def fixed_subject_symbols
+      [:chemistry, :computing, :mathematics, :physics]
+    end
+
     def subject_symbols(claim_year:, itt_year:)
       return [] unless (POLICY_START_YEAR..POLICY_END_YEAR).cover?(claim_year)
 
       previous_five_years = (claim_year - 5)...claim_year
 
       if previous_five_years.cover?(itt_year)
-        [:chemistry, :computing, :mathematics, :physics]
+        fixed_subject_symbols
       else
         []
       end
+    end
+
+    def current_and_future_years(year)
+      fail "year before policy start year" if year < POLICY_START_YEAR
+
+      [year] + future_years(year)
+    end
+
+    def future_years(year)
+      fail "year before policy start year" if year < POLICY_START_YEAR
+
+      year + 1..POLICY_END_YEAR
     end
   end
 end

@@ -107,8 +107,12 @@ class AcademicYear
     to_s == other.to_s
   end
 
+  def none?
+    [start_year, end_year].include? nil
+  end
+
   def to_s(format = :default)
-    return "None" if [start_year, end_year].include? nil
+    return "None" if none?
 
     if format == :long
       "#{start_year} to #{end_year}"

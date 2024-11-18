@@ -50,7 +50,7 @@ module Journeys
 
       def subject_symbols
         @subject_symbols ||=
-          JourneySubjectEligibilityChecker.selectable_subject_symbols(answers)
+          AdditionalPaymentsForTeaching.selectable_subject_symbols(journey_session)
       end
 
       def save
