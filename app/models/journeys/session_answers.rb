@@ -59,6 +59,11 @@ module Journeys
     attribute :hmrc_validation_attempt_count, :integer
     attribute :reminder_id, :string
 
+    attribute :reminder_full_name, :string
+    attribute :reminder_email_address, :string
+    attribute :reminder_otp_secret, :string
+    attribute :reminder_otp_confirmed, :boolean, default: false # whether or not they have confirmed email via otp
+
     def has_attribute?(name)
       attribute_names.include?(name.to_s)
     end

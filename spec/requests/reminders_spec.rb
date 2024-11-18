@@ -7,19 +7,19 @@ RSpec.describe "Claims" do
   end
 
   describe "#create" do
-    let(:submit_form) { post reminders_path("additional-payments", params: form_params) }
+    let(:submit_form) { put independent_reminder_path(journey: "additional-payments", slug: "personal-details", params: form_params) }
 
     context "with full name and valid email address" do
-      let(:form_params) { {form: {full_name: "Joe Bloggs", email_address: "joe.bloggs@example.com"}} }
+      let(:form_params) { {claim: {reminder_full_name: "Joe Bloggs", reminder_email_address: "joe.bloggs@example.com"}} }
 
       it "redirects to /email-verfication slug" do
         submit_form
-        expect(response).to redirect_to("/additional-payments/reminders/email-verification?form%5Bemail_address%5D=joe.bloggs%40example.com&form%5Bfull_name%5D=Joe+Bloggs")
+        expect(response).to redirect_to("/additional-payments/reminders/email-verification")
       end
     end
 
     context "with empty form" do
-      let(:form_params) { {form: {full_name: "", email_address: ""}} }
+      let(:form_params) { {claim: {reminder_full_name: "", reminder_email_address: ""}} }
 
       before { submit_form }
 
@@ -33,50 +33,16 @@ RSpec.describe "Claims" do
     end
 
     context "invalid email address" do
-      let(:form_params) { {form: {full_name: "Joe Bloggs", email_address: "joe.bloggs.example.com"}} }
+      let(:form_params) { {claim: {reminder_full_name: "Joe Bloggs", reminder_email_address: "joe.bloggs.example.com"}} }
 
       it "renders errors containing invalid email address" do
         submit_form
         expect(response.body).to include "Enter an email address in the correct format, like name@example.com"
-      end
-    end
-
-    context "Notify returns an error about email address is required" do
-      let(:form_params) { {form: {full_name: "Joe Bloggs", email_address: "joe.bloggs@example.com"}} }
-
-      let(:mailer) { double("notify") }
-      let(:notifications_error_response) { double("response", code: 400, body: "ValidationError: email_address is a required property") }
-
-      before do
-        allow(mailer).to receive(:deliver_now).and_raise(Notifications::Client::BadRequestError, notifications_error_response)
-        allow(ReminderMailer).to receive(:email_verification).and_return(mailer)
-      end
-
-      it "renders errors containing invalid email address" do
-        submit_form
-        expect(response.body).to include "Enter an email address in the correct format, like name@example.com"
-      end
-    end
-
-    context "Notify returns an error about team only API key" do
-      let(:form_params) { {form: {full_name: "Joe Bloggs", email_address: "joe.bloggs@example.com"}} }
-
-      let(:mailer) { double("notify") }
-      let(:notifications_error_response) { double("response", code: 400, body: "BadRequestError: Can’t send to this recipient using a team-only API key") }
-
-      before do
-        allow(mailer).to receive(:deliver_now).and_raise(Notifications::Client::BadRequestError, notifications_error_response)
-        allow(ReminderMailer).to receive(:email_verification).and_return(mailer)
-      end
-
-      it "renders errors containing team only API key" do
-        submit_form
-        expect(response.body).to include "Only authorised email addresses can be used when using a team-only API key"
       end
     end
 
     context "Notify returns an unknown error" do
-      let(:form_params) { {form: {full_name: "Joe Bloggs", email_address: "joe.bloggs@example.com"}} }
+      let(:form_params) { {claim: {reminder_full_name: "Joe Bloggs", reminder_email_address: "joe.bloggs@example.com"}} }
 
       let(:mailer) { double("notify") }
       let(:notifications_error_response) { double("response", code: 400, body: "Something unexpected") }

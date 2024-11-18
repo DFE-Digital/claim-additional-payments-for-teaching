@@ -41,7 +41,7 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     fill_in "Full name", with: "David Tau"
     fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
     click_on "Continue"
-    fill_in "form-one-time-password-field", with: get_otp_from_email
+    fill_in "claim-one-time-password-field", with: get_otp_from_email
     click_on "Confirm"
     reminder = Reminder.order(:created_at).last
 
@@ -76,7 +76,7 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     fill_in "Full name", with: "David Tau"
     fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
     click_on "Continue"
-    fill_in "form-one-time-password-field", with: get_otp_from_email
+    fill_in "claim-one-time-password-field", with: get_otp_from_email
     click_on "Confirm"
     reminder = Reminder.order(:created_at).last
 

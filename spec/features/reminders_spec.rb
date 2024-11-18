@@ -67,7 +67,7 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           fill_in "Full name", with: "David Tau"
           fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
           click_on "Continue"
-          fill_in "form-one-time-password-field", with: get_otp_from_email
+          fill_in "claim-one-time-password-field", with: get_otp_from_email
           click_on "Confirm"
           reminder = Reminder.order(:created_at).last
 
@@ -147,13 +147,13 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
           click_on "Continue"
 
-          expect(page).to have_link("Resend passcode (you will be sent back to the email address page)", href: new_reminder_path(journey: Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME))
+          expect(page).to have_link("Resend passcode (you will be sent back to the email address page)", href: independent_reminder_path(journey: journey_session.journey, slug: "personal-details"))
 
           click_link "Resend passcode"
           expect(page).to have_text("Personal details")
           click_on "Continue"
 
-          fill_in "form-one-time-password-field", with: get_otp_from_email
+          fill_in "claim-one-time-password-field", with: get_otp_from_email
           click_on "Confirm"
           reminder = Reminder.order(:created_at).last
 
