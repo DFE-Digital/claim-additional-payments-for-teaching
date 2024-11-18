@@ -30,16 +30,9 @@ module Journeys
       }
     }.freeze
 
-    def final_policy_year(policy)
-      {
-        Policies::EarlyCareerPayments => EligibilityCheckable::FINAL_COMBINED_ECP_AND_LUP_POLICY_YEAR,
-        Policies::LevellingUpPremiumPayments => EligibilityCheckable::FINAL_LUP_POLICY_YEAR
-      }[policy]
-    end
-
     def set_a_reminder?(itt_academic_year:, policy:)
       policy_year = configuration.current_academic_year
-      return false if policy_year >= final_policy_year(policy)
+      return false if policy_year >= policy::POLICY_END_YEAR
 
       next_year = policy_year + 1
       eligible_itt_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(next_year)
