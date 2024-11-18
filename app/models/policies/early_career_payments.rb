@@ -110,6 +110,29 @@ module Policies
       true
     end
 
+    def current_subject_symbols(claim_year:, itt_year:)
+      subject_symbols(claim_year: claim_year, itt_year: itt_year)
+    end
+
+    def future_subject_symbols(claim_year:, itt_year:)
+      future_years(claim_year).flat_map do |year|
+        subject_symbols(claim_year: year, itt_year: itt_year)
+      end
+    end
+
+    def current_and_future_subject_symbols(claim_year:, itt_year:)
+      [
+        *current_subject_symbols(
+          claim_year: claim_year,
+          itt_year: itt_year
+        ),
+        *future_subject_symbols(
+          claim_year: claim_year,
+          itt_year: itt_year
+        )
+      ].uniq
+    end
+
     def subject_symbols(claim_year:, itt_year:)
       case AcademicYear.wrap(claim_year)
       when AcademicYear.new(2022), AcademicYear.new(2024)
@@ -133,6 +156,18 @@ module Policies
       else
         []
       end
+    end
+
+    def current_and_future_years(year)
+      fail "year before policy start year" if year < POLICY_START_YEAR
+
+      [year] + future_years(year)
+    end
+
+    def future_years(year)
+      fail "year before policy start year" if year < POLICY_START_YEAR
+
+      year + 1..POLICY_END_YEAR
     end
   end
 end

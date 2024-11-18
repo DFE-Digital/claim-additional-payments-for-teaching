@@ -2176,8 +2176,10 @@ RSpec.describe Policies::EarlyCareerPayments::DqtRecord do
 
     context "with a valid ITT year" do
       before do
-        allow(JourneySubjectEligibilityChecker).to receive(:new)
-          .and_return(double(current_and_future_subject_symbols: eligible_subjects))
+        allow(Policies::EarlyCareerPayments).to(
+          receive(:current_and_future_subject_symbols)
+          .and_return(eligible_subjects)
+        )
       end
 
       let(:claim_academic_year) { AcademicYear.new(2023) }

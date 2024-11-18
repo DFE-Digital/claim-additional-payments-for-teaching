@@ -29,4 +29,113 @@ RSpec.describe Policies::LevellingUpPremiumPayments, type: :model do
     subject(:payroll_file_name) { described_class.payroll_file_name }
     it { is_expected.to eq("SchoolsLUP") }
   end
+
+  describe ".current_and_future_subject_symbols" do
+    subject(:current_and_future_subject_symbols) do
+      described_class.current_and_future_subject_symbols(
+        claim_year: claim_year,
+        itt_year: itt_year
+      )
+    end
+
+    let(:the_constant_lup_subjects) do
+      [:chemistry, :computing, :mathematics, :physics]
+    end
+
+    context "2022 claim year" do
+      let(:claim_year) { AcademicYear.new(2022) }
+
+      context "2017 ITT year" do
+        let(:itt_year) { AcademicYear.new(2017) }
+
+        it { is_expected.to contain_exactly(:chemistry, :computing, :mathematics, :physics) }
+      end
+
+      context "2018 ITT year" do
+        let(:itt_year) { AcademicYear.new(2018) }
+
+        it { is_expected.to contain_exactly(*the_constant_lup_subjects) }
+      end
+
+      context "2019 ITT year" do
+        let(:itt_year) { AcademicYear.new(2019) }
+
+        it { is_expected.to contain_exactly(*the_constant_lup_subjects) }
+      end
+
+      context "2020 ITT year" do
+        let(:itt_year) { AcademicYear.new(2020) }
+
+        it { is_expected.to contain_exactly(*the_constant_lup_subjects) }
+      end
+
+      context "2021 ITT year" do
+        let(:itt_year) { AcademicYear.new(2021) }
+
+        it { is_expected.to contain_exactly(*the_constant_lup_subjects) }
+      end
+    end
+
+    context "2023 claim year" do
+      let(:claim_year) { AcademicYear.new(2023) }
+
+      context "2018 ITT year" do
+        let(:itt_year) { AcademicYear.new(2018) }
+
+        it { is_expected.to contain_exactly(:chemistry, :computing, :mathematics, :physics) }
+      end
+
+      context "2019 ITT year" do
+        let(:itt_year) { AcademicYear.new(2019) }
+
+        it { is_expected.to contain_exactly(*the_constant_lup_subjects) }
+      end
+
+      context "2020 ITT year" do
+        let(:itt_year) { AcademicYear.new(2020) }
+
+        it { is_expected.to contain_exactly(*the_constant_lup_subjects) }
+      end
+
+      context "2021 ITT year" do
+        let(:itt_year) { AcademicYear.new(2021) }
+
+        it { is_expected.to contain_exactly(*the_constant_lup_subjects) }
+      end
+
+      context "2022 ITT year" do
+        let(:itt_year) { AcademicYear.new(2022) }
+
+        it { is_expected.to contain_exactly(*the_constant_lup_subjects) }
+      end
+    end
+
+    context "2024 claim year" do
+      let(:claim_year) { AcademicYear.new(2024) }
+
+      context "2019 ITT year" do
+        let(:itt_year) { AcademicYear.new(2019) }
+
+        it { is_expected.to contain_exactly(:chemistry, :computing, :mathematics, :physics) }
+      end
+
+      context "2020 ITT year" do
+        let(:itt_year) { AcademicYear.new(2020) }
+
+        it { is_expected.to contain_exactly(:chemistry, :computing, :mathematics, :physics) }
+      end
+
+      context "2021 ITT year" do
+        let(:itt_year) { AcademicYear.new(2021) }
+
+        it { is_expected.to contain_exactly(:chemistry, :computing, :mathematics, :physics) }
+      end
+
+      context "2022 ITT year" do
+        let(:itt_year) { AcademicYear.new(2022) }
+
+        it { is_expected.to contain_exactly(:chemistry, :computing, :mathematics, :physics) }
+      end
+    end
+  end
 end
