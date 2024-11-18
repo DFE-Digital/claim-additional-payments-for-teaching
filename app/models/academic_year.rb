@@ -67,6 +67,12 @@ class AcademicYear
         new(date.year)
       end
     end
+
+    def wrap(value)
+      return value if value.is_a? AcademicYear
+
+      new(value)
+    end
   end
 
   def initialize(year_or_academic_year_or_string = nil)

@@ -109,5 +109,30 @@ module Policies
     def auto_check_student_loan_plan_task?
       true
     end
+
+    def subject_symbols(claim_year:, itt_year:)
+      case AcademicYear.wrap(claim_year)
+      when AcademicYear.new(2022), AcademicYear.new(2024)
+        case AcademicYear.wrap(itt_year)
+        when AcademicYear.new(2019)
+          [:mathematics]
+        when AcademicYear.new(2020)
+          [:chemistry, :foreign_languages, :mathematics, :physics]
+        else
+          []
+        end
+      when AcademicYear.new(2023)
+        case AcademicYear.wrap(itt_year)
+        when AcademicYear.new(2018)
+          [:mathematics]
+        when AcademicYear.new(2020)
+          [:chemistry, :foreign_languages, :mathematics, :physics]
+        else
+          []
+        end
+      else
+        []
+      end
+    end
   end
 end

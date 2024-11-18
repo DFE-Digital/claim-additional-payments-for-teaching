@@ -115,45 +115,6 @@ class JourneySubjectEligibilityChecker
   def subject_symbols(policy:, claim_year:, itt_year:)
     raise "Unsupported policy: #{policy}" unless policy.in?(Journeys::AdditionalPaymentsForTeaching::POLICIES)
 
-    case policy
-    when Policies::EarlyCareerPayments
-      year = claim_year.is_a?(AcademicYear) ? claim_year : AcademicYear.new(claim_year)
-      case year
-      when AcademicYear.new(2022), AcademicYear.new(2024)
-        case itt_year
-        when AcademicYear.new(2019)
-          [:mathematics]
-        when AcademicYear.new(2020)
-          [:chemistry, :foreign_languages, :mathematics, :physics]
-        else
-          []
-        end
-      when AcademicYear.new(2023)
-        case itt_year
-        when AcademicYear.new(2018)
-          [:mathematics]
-        when AcademicYear.new(2020)
-          [:chemistry, :foreign_languages, :mathematics, :physics]
-        else
-          []
-        end
-      else
-        []
-      end
-    when Policies::LevellingUpPremiumPayments
-      case claim_year
-      when EligibilityCheckable::COMBINED_ECP_AND_LUP_POLICY_YEARS
-        year = itt_year.is_a?(AcademicYear) ? itt_year : AcademicYear.new(itt_year)
-
-        case year
-        when (claim_year - 5)...claim_year
-          [:chemistry, :computing, :mathematics, :physics]
-        else
-          []
-        end
-      else
-        []
-      end
-    end
+    policy.subject_symbols(claim_year: claim_year, itt_year: itt_year)
   end
 end
