@@ -99,5 +99,17 @@ module Policies
     def auto_check_student_loan_plan_task?
       true
     end
+
+    def subject_symbols(claim_year:, itt_year:)
+      return [] unless (POLICY_START_YEAR..POLICY_END_YEAR).cover?(claim_year)
+
+      previous_five_years = (claim_year - 5)...claim_year
+
+      if previous_five_years.cover?(itt_year)
+        [:chemistry, :computing, :mathematics, :physics]
+      else
+        []
+      end
+    end
   end
 end
