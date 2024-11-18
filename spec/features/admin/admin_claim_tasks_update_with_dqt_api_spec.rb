@@ -139,11 +139,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
   end
 
   let(:first_eligible_itt_academic_year) {
-    JourneySubjectEligibilityChecker.first_eligible_itt_year_for_subject(
-      policy: claim.eligibility.policy,
-      claim_year: Journeys.for_policy(claim.eligibility.policy).configuration.current_academic_year,
-      subject_symbol: claim.eligibility.eligible_itt_subject.to_sym
-    )
+    subject_symbol = claim.eligibility.eligible_itt_subject.to_sym
+
+    policy = claim.eligibility.policy
+
+    claim_year = Journeys.for_policy(policy).configuration.current_academic_year
+
+    itt_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(claim_year)
+
+    itt_years.detect do |itt_year|
+      checker = JourneySubjectEligibilityChecker.new(claim_year: claim_year, itt_year: itt_year)
+      subject_symbol.in?(checker.current_subject_symbols(policy))
+    end
   }
 
   context "with EarlyCareerPayments policy" do
