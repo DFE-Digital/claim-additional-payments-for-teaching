@@ -18,7 +18,7 @@ module Journeys
             if: :start_date
           validate :start_year_has_four_digits, if: :start_date
 
-          def initialize(journey_session:, journey:, params:)
+          def initialize(journey_session:, journey:, params:, session: {})
             super
 
             # Handle setting date from multi part params see

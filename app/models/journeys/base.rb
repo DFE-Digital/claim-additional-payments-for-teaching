@@ -35,10 +35,10 @@ module Journeys
       self::SlugSequence
     end
 
-    def form(journey_session:, params:)
+    def form(journey_session:, params:, session:)
       form = SHARED_FORMS.deep_merge(forms).dig(params[:controller].split("/").last, params[:slug])
 
-      form&.new(journey: self, journey_session:, params:)
+      form&.new(journey: self, journey_session:, params:, session:)
     end
 
     def forms

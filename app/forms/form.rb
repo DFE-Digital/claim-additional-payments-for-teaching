@@ -8,6 +8,7 @@ class Form
   attr_accessor :journey
   attr_accessor :journey_session
   attr_accessor :params
+  attr_accessor :session
 
   delegate :answers, to: :journey_session
 
@@ -20,7 +21,7 @@ class Form
   end
 
   # TODO RL: remove journey param and pull it from the journey_session
-  def initialize(journey_session:, journey:, params:)
+  def initialize(journey_session:, journey:, params:, session: {})
     super
 
     assign_attributes(attributes_with_current_value)

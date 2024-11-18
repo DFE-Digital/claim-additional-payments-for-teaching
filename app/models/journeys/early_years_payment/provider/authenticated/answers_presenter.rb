@@ -79,7 +79,7 @@ module Journeys
 
           def returner_contract_type
             [
-              "Contact type for previous role in an early years setting",
+              "Contract type for previous role in an early years setting",
               answers.returner_contract_type,
               "returner-contract-type"
             ]

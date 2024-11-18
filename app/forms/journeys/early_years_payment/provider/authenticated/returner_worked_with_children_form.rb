@@ -12,7 +12,22 @@ module Journeys
             return false if invalid?
 
             journey_session.answers.assign_attributes(returner_worked_with_children:)
+
+            reset_dependent_answers
+
             journey_session.save!
+          end
+
+          private
+
+          def reset_dependent_answers
+            if !journey_session.answers.returner_worked_with_children
+              journey_session.answers.assign_attributes(
+                returner_contract_type: nil
+              )
+
+              session.fetch(:slugs, {}).delete("returner-contract-type")
+            end
           end
         end
       end

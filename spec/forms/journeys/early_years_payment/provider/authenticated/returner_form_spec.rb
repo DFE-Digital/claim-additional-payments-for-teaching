@@ -28,12 +28,40 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::ReturnerFor
   end
 
   describe "#save" do
-    let(:returning_within_6_months) { "true" }
+    context "when returning within 6 months" do
+      let(:returning_within_6_months) { "true" }
 
-    it "updates the journey session" do
-      expect { expect(subject.save).to be(true) }.to(
-        change { journey_session.reload.answers.returning_within_6_months }.to(true)
-      )
+      it "updates the journey session" do
+        expect { expect(subject.save).to be(true) }.to(
+          change { journey_session.reload.answers.returning_within_6_months }.to(true)
+        )
+      end
+    end
+
+    context "when not returning within 6 months" do
+      let(:returning_within_6_months) { "false" }
+
+      let(:journey_session) do
+        create(
+          :early_years_payment_provider_authenticated_session,
+          answers:
+        )
+      end
+
+      let(:answers) do
+        {
+          returner_worked_with_children: true,
+          returner_contract_type: "casual or temporary"
+        }
+      end
+
+      it "updates the journey session and resets dependent answers" do
+        expect { expect(subject.save).to be(true) }.to(
+          change { journey_session.reload.answers.returning_within_6_months }.to(false)
+          .and(change { journey_session.answers.returner_worked_with_children }.to(nil)
+          .and(change { journey_session.answers.returner_contract_type }.to(nil)))
+        )
+      end
     end
   end
 end
