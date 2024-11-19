@@ -18,10 +18,6 @@ class JourneySubjectEligibilityChecker
     end
   end
 
-  def selectable_itt_years
-    JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(@claim_year)
-  end
-
   def self.selectable_subject_symbols(answers)
     if answers.nqt_in_academic_year_after_itt
       new(
@@ -35,10 +31,6 @@ class JourneySubjectEligibilityChecker
     else
       []
     end.sort
-  end
-
-  def self.selectable_itt_years_for_claim_year(claim_year)
-    (AcademicYear.new(claim_year - 5)...AcademicYear.new(claim_year)).to_a
   end
 
   # Ideally we wouldn't have this method at all. Unfortunately it was hardcoded like
@@ -92,7 +84,7 @@ class JourneySubjectEligibilityChecker
 
   def validate_itt_year(itt_year)
     unless none_of_the_above_or_blank?(itt_year)
-      raise "ITT year #{itt_year} is outside the window for claim year #{@claim_year}" unless itt_year.in?(selectable_itt_years)
+      raise "ITT year #{itt_year} is outside the window for claim year #{@claim_year}" unless itt_year.in?(Journeys::AdditionalPaymentsForTeaching.selectable_itt_years_for_claim_year(@claim_year))
     end
   end
 

@@ -9,7 +9,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   let!(:ineligible_school) { create(:school, :student_loans_ineligible) }
   let(:import_zero_amount_slc_data) { create(:student_loans_data, nino:, date_of_birth:, plan_type_of_deduction: 1, amount: 0) }
   let(:import_no_data_slc_data) { create(:student_loans_data, nino:, date_of_birth:, plan_type_of_deduction: nil, amount: 0) }
-  let(:eligible_itt_years) { JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(journey_configuration.current_academic_year) }
+  let(:eligible_itt_years) { Journeys::AdditionalPaymentsForTeaching.selectable_itt_years_for_claim_year(journey_configuration.current_academic_year) }
   let(:academic_date) { Date.new(eligible_itt_years.first.start_year, 12, 1) }
   let(:itt_year) { AcademicYear.for(academic_date) }
   let(:trn) { 1234567 }

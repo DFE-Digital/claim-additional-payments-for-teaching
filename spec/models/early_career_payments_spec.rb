@@ -142,4 +142,24 @@ RSpec.describe Policies::EarlyCareerPayments, type: :model do
       end
     end
   end
+
+  describe ".selectable_itt_years_for_view" do
+    context "2022/2023 claim year" do
+      subject { described_class.selectable_itt_years_for_claim_year(AcademicYear.new(2022)) }
+
+      it { is_expected.to eq([AcademicYear.new(2017), AcademicYear.new(2018), AcademicYear.new(2019), AcademicYear.new(2020), AcademicYear.new(2021)]) }
+    end
+
+    context "2023/2024 claim year" do
+      subject { described_class.selectable_itt_years_for_claim_year(AcademicYear.new(2023)) }
+
+      it { is_expected.to eq([AcademicYear.new(2018), AcademicYear.new(2019), AcademicYear.new(2020), AcademicYear.new(2021), AcademicYear.new(2022)]) }
+    end
+
+    context "2024/2025 claim year" do
+      subject { described_class.selectable_itt_years_for_claim_year(AcademicYear.new(2024)) }
+
+      it { is_expected.to eq([AcademicYear.new(2019), AcademicYear.new(2020), AcademicYear.new(2021), AcademicYear.new(2022), AcademicYear.new(2023)]) }
+    end
+  end
 end

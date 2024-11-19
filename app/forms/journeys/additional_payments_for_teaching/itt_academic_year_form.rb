@@ -28,7 +28,7 @@ module Journeys
       end
 
       def selectable_itt_years_for_claim_year
-        JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(
+        AdditionalPaymentsForTeaching.selectable_itt_years_for_claim_year(
           journey.configuration.current_academic_year
         )
       end

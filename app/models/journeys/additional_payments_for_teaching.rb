@@ -35,7 +35,7 @@ module Journeys
       return false if policy_year >= policy::POLICY_END_YEAR
 
       next_year = policy_year + 1
-      eligible_itt_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(next_year)
+      eligible_itt_years = selectable_itt_years_for_claim_year(next_year)
       eligible_itt_years.include?(itt_academic_year)
     end
 
@@ -61,6 +61,12 @@ module Journeys
       else
         []
       end
+    end
+
+    def selectable_itt_years_for_claim_year(claim_year)
+      POLICIES.flat_map do |policy|
+        policy.selectable_itt_years_for_claim_year(claim_year)
+      end.uniq
     end
   end
 end
