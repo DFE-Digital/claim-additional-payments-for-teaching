@@ -12,7 +12,7 @@ RSpec.feature "Early years payment provider child facing" do
     when_early_years_payment_provider_start_journey_completed
 
     visit magic_link
-    check "I confirm that I have obtained consent from my employee and have provided them with the relevant privacy notice."
+    check "I confirm that I've obtained consent from my employee and have provided them with the relevant privacy notice."
     click_button "Continue"
 
     choose nursery.nursery_name
