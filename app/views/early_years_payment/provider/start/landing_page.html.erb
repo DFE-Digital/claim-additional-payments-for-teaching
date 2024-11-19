@@ -7,87 +7,29 @@
       for an employee.
     </p>
 
-    <h2 class="govuk-heading-l govuk-!-margin-top-7">Eligibility</h2>
+    <h2 class="govuk-heading-l govuk-!-margin-top-7">Employee eligibility</h2>
 
     <p class="govuk-body">
       To make a claim for an employee, they must:
     </p>
 
     <%= govuk_list [
-      "have applied for a job with an incentive attached",
-      "have started their job on or after #{l(Policies::EarlyYearsPayments::POLICY_START_DATE)}",
-      "spend most of the time in their job (70% or more) working directly with children - there is no minimum number of hours and applies to all EYFS part and full time roles"
+      "have applied for a permanent part or full-time role with an incentive attached",
+      "have started the role on or after #{l(Policies::EarlyYearsPayments::POLICY_START_DATE)}",
+      "not have had a permanent role working directly with children in an early years setting in the 6 months before starting their current role",
+      "spend most of the time in their role (70% or more) working directly with children"
     ], type: :bullet %>
-
-    <p class="govuk-body">
-      Working directly with children can involve any of the following:
-    </p>
-
-    <%= govuk_list [
-      "working in the room (for example this can include playrooms, baserooms or classrooms)",
-      "guiding, supporting, and interacting with children in their learning and development",
-      "giving hands-on care, including health and hygiene"
-    ], type: :bullet %>
-
-    <h3 class="govuk-heading-m">Other conditions for the payment</h3>
-
-    <p class="govuk-body">
-      The purpose of this incentive scheme is to increase the number of people
-      working with children in permanent roles, within the early years sector.
-    </p>
-
-    <p class="govuk-body">
-      In the six months before starting their current job, your employee must
-      not have had a permanent job working directly with children in an early
-      years setting.
-    </p>
-
-    <p class="govuk-body">
-      If they did work in early years in the 6 months before starting their
-      current job, you can claim if this was in the following types of
-      employment:
-    </p>
-
-    <%= govuk_list [
-      "voluntary or unpaid work",
-      "casual and temporary"
-    ], type: :bullet %>
-
-    <p class="govuk-body">
-      Casual or temporary work could include:
-    </p>
-
-    <%= govuk_list [
-      "zero-hour contracts",
-      "guaranteed minimum hour contracts",
-      "self-employed or freelance contracts",
-      "fixed term contracts (FTCs)",
-      "agency work and apprenticeship jobs"
-    ], type: :bullet %>
-
-    <p class="govuk-body">
-      You can find more information about employment contracts on the
-      <%= govuk_link_to("ACAS website", "https://www.acas.org.uk/employment-contracts") %>.
-    </p>
-
-    <p class="govuk-body">
-      More information can be found in the
-      <%= govuk_link_to("guidance", "#") %>.
-    </p>
 
     <h2 class="govuk-heading-l">Information you’ll need to provide</h2>
 
     <p class="govuk-body">
-      You’ll need to provide some details about your employee to make a claim.
-      You’ll be doing this on behalf of the company, or organisation, the
-      employee works for.
+      You’ll need to provide some details about your employee and your nursery.
     </p>
 
+    <h3 class="govuk-heading-m">Information from your employee</h3>
+
     <p class="govuk-body">
-      You should make sure you have collected their written consent to give us
-      this information before you start. You can use our
-      <%= govuk_link_to("consent form", "#") %>
-      to do this.
+      You should make sure you’ve collected written consent from your employee before you give us their information. You can use our <%= govuk_link_to("consent form", "#") %> to do this.
     </p>
 
     <p class="govuk-body">
@@ -96,30 +38,32 @@
 
     <%= govuk_list [
       "full name",
-      "start date",
       "email address",
-      "PAYE reference number"
+      "start date"
     ], type: :bullet %>
 
     <p class="govuk-body">
-      You must also provide your employee with a privacy notice that explains
-      what information will be collected, why it is being collected and who it
-      will be shared with. You can use our
-      <%= govuk_link_to("privacy notice", "#") %>
-      for this.
+      You must also provide your employee with a privacy notice that explains what information will be collected, why it’s being collected and who it will be shared with. You can view our <%= govuk_link_to("privacy notice", "https://www.gov.uk/government/publications/privacy-information-education-providers-workforce-including-teachers/5a254207-a566-44f7-ac77-6ba59fd26e04", new_tab: true) %> here, as an example.
     </p>
 
     <p class="govuk-body">
       We’ll also ask you to confirm that they meet the eligibility criteria.
     </p>
 
-    <h3 class="govuk-heading-m">Documents</h3>
+    <h4 class="govuk-heading-s">Documents</h4>
+
+    <%= render partial: "shared/document", locals: { title_text: "Privacy notice", title_url: "https://www.gov.uk/government/publications/privacy-information-education-providers-workforce-including-teachers/5a254207-a566-44f7-ac77-6ba59fd26e04" } %>
+
+    <h3 class="govuk-heading-m">Information from your organisation</h3>
+
+    <p class="govuk-body">
+      We’ll need your organisation’s PAYE reference number. Your payroll or human resources can normally provide this.
+    </p>
 
     <h2 class="govuk-heading-l">Cancel or get help with your claim</h2>
 
     <p class="govuk-body">
-      If your employee leaves their job before they’ve been in it for 6 months,
-      you should cancel their claim.
+      If your employee leaves their role before they’ve been in it for 6 months, you need to cancel their claim.
     </p>
 
     <p class="govuk-body">
@@ -129,7 +73,7 @@
 
     <p class="govuk-body">
       Read more about the
-      <%= govuk_link_to("early years financial incentive payment", "#") %>.
+      <%= govuk_link_to("early years incentive payment for new and returning practitioners guidance", "#") %>.
     </p>
 
     <%# TODO: There isn't any journey closed content, for now hide the button %>
