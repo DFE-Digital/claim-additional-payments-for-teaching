@@ -62,7 +62,7 @@ module Policies
 
         if args.values.any?(&:blank?)
           # trainee teacher who won't have given their ITT year
-          eligible_itt_subject.present? && eligible_itt_subject.to_sym.in?(JourneySubjectEligibilityChecker.fixed_lup_subject_symbols)
+          eligible_itt_subject.present? && eligible_itt_subject.to_sym.in?(Policies::LevellingUpPremiumPayments.fixed_subject_symbols)
         else
           itt_subject_checker = JourneySubjectEligibilityChecker.new(**args)
           eligible_itt_subject.to_sym.in?(itt_subject_checker.current_subject_symbols(policy))

@@ -289,7 +289,7 @@ RSpec.describe Policies::LevellingUpPremiumPayments::DqtRecord do
     let(:eligible_subjects) { [:computing] }
 
     before do
-      allow(JourneySubjectEligibilityChecker).to receive(:fixed_lup_subject_symbols)
+      allow(Policies::LevellingUpPremiumPayments).to receive(:fixed_subject_symbols)
         .and_return(eligible_subjects)
     end
 
