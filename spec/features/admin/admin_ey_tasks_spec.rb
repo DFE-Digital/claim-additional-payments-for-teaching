@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Admin EY tasks" do
   around do |example|
-    travel_to DateTime.new(2024, 10, 30, 9, 0, 0) do
+    travel_to DateTime.new(2024, 11, 18, 9, 0, 0) do
       example.run
     end
   end
@@ -61,7 +61,7 @@ RSpec.describe "Admin EY tasks" do
 
           expect(page).to have_content(
             "This task was performed by GOV.UK One Login on " \
-            "30 October 2024 9:00am"
+            "18 November 2024 9:00am"
           )
         end
       end
@@ -238,7 +238,7 @@ RSpec.describe "Admin EY tasks" do
         click_on "Check employment information"
 
         expect(page).to have_content(
-          "This task will be available from 29 April 2025"
+          "This task will be available from 17 May 2025"
         )
       end
     end
