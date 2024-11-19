@@ -123,6 +123,9 @@ module Policies
       ].uniq
     end
 
+    # Ideally we wouldn't have this method at all. Unfortunately it was hardcoded like
+    # this before we realised trainee teachers weren't as special a case as we
+    # thought.
     def fixed_subject_symbols
       [:chemistry, :computing, :mathematics, :physics]
     end
