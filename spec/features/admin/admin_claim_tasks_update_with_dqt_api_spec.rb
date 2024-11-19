@@ -148,8 +148,12 @@ RSpec.feature "Admin claim tasks update with DQT API" do
     itt_years = policy.selectable_itt_years_for_claim_year(claim_year)
 
     itt_years.detect do |itt_year|
-      checker = JourneySubjectEligibilityChecker.new(claim_year: claim_year, itt_year: itt_year)
-      subject_symbol.in?(checker.current_subject_symbols(policy))
+      subject_symbol.in?(
+        policy.current_subject_symbols(
+          claim_year: claim_year,
+          itt_year: itt_year
+        )
+      )
     end
   }
 
