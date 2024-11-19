@@ -53,7 +53,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
     context "when single subject available" do
       before do
-        allow(JourneySubjectEligibilityChecker).to receive(:selectable_subject_symbols).and_return([:mathematics])
+        allow(Journeys::AdditionalPaymentsForTeaching).to receive(:selectable_subject_symbols).and_return([:mathematics])
       end
 
       let(:answers) do

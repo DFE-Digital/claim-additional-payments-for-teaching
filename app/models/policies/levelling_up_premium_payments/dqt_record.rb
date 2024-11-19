@@ -1,5 +1,3 @@
-require "journey_subject_eligibility_checker"
-
 module Policies
   module LevellingUpPremiumPayments
     class DqtRecord

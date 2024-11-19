@@ -18,14 +18,14 @@ module Policies
       def indicated_ineligible_itt_subject?
         return false if eligible_itt_subject.blank?
 
-        args = {claim_year: claim_year, itt_year: itt_academic_year}
-
-        if args.values.any?(&:blank?)
+        if claim_year.blank? || itt_academic_year.blank?
           # trainee teacher who won't have given their ITT year
-          eligible_itt_subject.present? && !eligible_itt_subject.to_sym.in?(policy.fixed_subject_symbols)
+          eligible_itt_subject.present? && LevellingUpPremiumPayments.fixed_subject_symbols.exclude?(eligible_itt_subject.to_sym)
         else
-          itt_subject_checker = JourneySubjectEligibilityChecker.new(**args)
-          eligible_itt_subject.present? && !eligible_itt_subject.to_sym.in?(itt_subject_checker.current_subject_symbols(policy))
+          LevellingUpPremiumPayments.subject_symbols(
+            claim_year: claim_year,
+            itt_year: itt_academic_year
+          ).exclude?(eligible_itt_subject.to_sym)
         end
       end
 
@@ -58,14 +58,14 @@ module Policies
       def good_itt_subject?
         return false if eligible_itt_subject.blank?
 
-        args = {claim_year: claim_year, itt_year: itt_academic_year}
-
-        if args.values.any?(&:blank?)
+        if claim_year.blank? || itt_academic_year.blank?
           # trainee teacher who won't have given their ITT year
           eligible_itt_subject.present? && eligible_itt_subject.to_sym.in?(Policies::LevellingUpPremiumPayments.fixed_subject_symbols)
         else
-          itt_subject_checker = JourneySubjectEligibilityChecker.new(**args)
-          eligible_itt_subject.to_sym.in?(itt_subject_checker.current_subject_symbols(policy))
+          LevellingUpPremiumPayments.current_subject_symbols(
+            claim_year: claim_year,
+            itt_year: itt_academic_year
+          ).include?(eligible_itt_subject.to_sym)
         end
       end
 

@@ -2251,7 +2251,7 @@ RSpec.describe Policies::EarlyCareerPayments::DqtRecord do
       let(:itt_subjects) { ["mathematics"] }
 
       before do
-        allow(JourneySubjectEligibilityChecker).to receive(:new)
+        allow(Policies::EarlyCareerPayments).to receive(:current_and_future_subject_symbols)
           .and_raise(StandardError.new("ITT year"))
       end
 

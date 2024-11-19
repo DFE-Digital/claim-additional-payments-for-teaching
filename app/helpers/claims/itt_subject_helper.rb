@@ -1,5 +1,3 @@
-require "journey_subject_eligibility_checker"
-
 module Claims
   module IttSubjectHelper
     def subjects_to_sentence_for_hint_text(answers)
