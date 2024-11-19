@@ -17,7 +17,7 @@ RSpec.feature "Early years payment provider" do
     expect(journey_session.reload.answers.provider_email_address).to eq email_address
     expect(page).to have_content("Before you continue with your claim")
     expect(page.current_path).to eq "/early-years-payment-provider/consent"
-    check "I confirm that I've obtained consent from my employee and have provided them with the relevant privacy notice."
+    check "I confirm that I’ve obtained consent from my employee and have provided them with the relevant privacy notice."
     click_button "Continue"
 
     expect(page.current_path).to eq "/early-years-payment-provider/current-nursery"

@@ -1356,7 +1356,7 @@ en:
       consent:
         question: Before you continue with your claim
         option:
-          I confirm that I've obtained consent from my employee and have provided them with the relevant privacy notice.
+          I confirm that I’ve obtained consent from my employee and have provided them with the relevant privacy notice.
         errors:
           presence: You must be able to confirm this information to continue
       current_nursery:

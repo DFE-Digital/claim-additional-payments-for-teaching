@@ -537,7 +537,7 @@ RSpec.describe "Admin EY tasks" do
     visit magic_link
 
     check(
-      "I confirm that I've obtained consent from my employee and have " \
+      "I confirm that I’ve obtained consent from my employee and have " \
       "provided them with the relevant privacy notice."
     )
     click_button "Continue"
