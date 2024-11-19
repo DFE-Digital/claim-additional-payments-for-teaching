@@ -145,7 +145,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
     claim_year = Journeys.for_policy(policy).configuration.current_academic_year
 
-    itt_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(claim_year)
+    itt_years = policy.selectable_itt_years_for_claim_year(claim_year)
 
     itt_years.detect do |itt_year|
       checker = JourneySubjectEligibilityChecker.new(claim_year: claim_year, itt_year: itt_year)

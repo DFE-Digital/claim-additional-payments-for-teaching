@@ -63,7 +63,7 @@ module Policies
         return nil unless academic_date
 
         year = AcademicYear.for(academic_date)
-        eligible_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(current_academic_year)
+        eligible_years = EarlyCareerPayments.selectable_itt_years_for_claim_year(current_academic_year)
         eligible_years.include?(year) ? year : AcademicYear.new
       end
 

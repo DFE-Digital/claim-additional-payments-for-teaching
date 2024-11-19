@@ -7,7 +7,7 @@ RSpec.feature "Combined journey with Teacher ID" do
 
   let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023)) }
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
-  let(:eligible_itt_years) { JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(journey_configuration.current_academic_year) }
+  let(:eligible_itt_years) { Journeys::AdditionalPaymentsForTeaching.selectable_itt_years_for_claim_year(journey_configuration.current_academic_year) }
   let(:academic_date) { Date.new(eligible_itt_years.first.start_year, 12, 1) }
   let(:itt_year) { AcademicYear.for(academic_date) }
   let(:trn) { 1234567 }

@@ -86,7 +86,7 @@ module EligibilityCheckable
   def ineligible_cohort?
     return false if itt_academic_year.nil?
 
-    eligible_itt_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(claim_year)
+    eligible_itt_years = policy.selectable_itt_years_for_claim_year(claim_year)
     !itt_academic_year.in? eligible_itt_years
   end
 
@@ -121,7 +121,7 @@ module EligibilityCheckable
   def eligible_cohort?
     return false if itt_academic_year.nil?
 
-    eligible_itt_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(claim_year)
+    eligible_itt_years = policy.selectable_itt_years_for_claim_year(claim_year)
     itt_academic_year.in? eligible_itt_years
   end
 

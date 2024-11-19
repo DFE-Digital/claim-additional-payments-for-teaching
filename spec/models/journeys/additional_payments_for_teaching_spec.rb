@@ -68,7 +68,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching do
   end
 
   shared_examples "true for years" do |start_years_range, policy_year|
-    JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(policy_year).each do |itt_academic_year|
+    Journeys::AdditionalPaymentsForTeaching.selectable_itt_years_for_claim_year(policy_year).each do |itt_academic_year|
       context "ITT year #{itt_academic_year}" do
         let(:itt_academic_year) { itt_academic_year }
 
@@ -82,7 +82,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching do
   end
 
   shared_examples "false for all years" do |policy_year|
-    JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(policy_year).each do |itt_academic_year|
+    Journeys::AdditionalPaymentsForTeaching.selectable_itt_years_for_claim_year(policy_year).each do |itt_academic_year|
       context "ITT year #{itt_academic_year}" do
         let(:itt_academic_year) { itt_academic_year }
 

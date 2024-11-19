@@ -50,46 +50,6 @@ RSpec.describe JourneySubjectEligibilityChecker do
     end
   end
 
-  describe "#selectable_itt_years" do
-    context "2022/2023 claim year" do
-      subject { described_class.new(claim_year: AcademicYear.new(2022), itt_year: AcademicYear.new(2021)).selectable_itt_years }
-
-      it { is_expected.to contain_exactly(AcademicYear.new(2017), AcademicYear.new(2018), AcademicYear.new(2019), AcademicYear.new(2020), AcademicYear.new(2021)) }
-    end
-
-    context "2023/2024 claim year" do
-      subject { described_class.new(claim_year: AcademicYear.new(2023), itt_year: AcademicYear.new(2022)).selectable_itt_years }
-
-      it { is_expected.to contain_exactly(AcademicYear.new(2018), AcademicYear.new(2019), AcademicYear.new(2020), AcademicYear.new(2021), AcademicYear.new(2022)) }
-    end
-
-    context "2024/2025 claim year" do
-      subject { described_class.new(claim_year: AcademicYear.new(2024), itt_year: AcademicYear.new(2023)).selectable_itt_years }
-
-      it { is_expected.to contain_exactly(AcademicYear.new(2019), AcademicYear.new(2020), AcademicYear.new(2021), AcademicYear.new(2022), AcademicYear.new(2023)) }
-    end
-  end
-
-  describe ".selectable_itt_years_for_view" do
-    context "2022/2023 claim year" do
-      subject { described_class.selectable_itt_years_for_claim_year(AcademicYear.new(2022)) }
-
-      it { is_expected.to eq([AcademicYear.new(2017), AcademicYear.new(2018), AcademicYear.new(2019), AcademicYear.new(2020), AcademicYear.new(2021)]) }
-    end
-
-    context "2023/2024 claim year" do
-      subject { described_class.selectable_itt_years_for_claim_year(AcademicYear.new(2023)) }
-
-      it { is_expected.to eq([AcademicYear.new(2018), AcademicYear.new(2019), AcademicYear.new(2020), AcademicYear.new(2021), AcademicYear.new(2022)]) }
-    end
-
-    context "2024/2025 claim year" do
-      subject { described_class.selectable_itt_years_for_claim_year(AcademicYear.new(2024)) }
-
-      it { is_expected.to eq([AcademicYear.new(2019), AcademicYear.new(2020), AcademicYear.new(2021), AcademicYear.new(2022), AcademicYear.new(2023)]) }
-    end
-  end
-
   describe "#current_subject_symbols" do
     subject { described_class.new(claim_year: claim_year, itt_year: itt_year).current_subject_symbols(policy) }
 

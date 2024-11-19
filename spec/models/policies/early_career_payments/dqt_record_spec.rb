@@ -2263,8 +2263,9 @@ RSpec.describe Policies::EarlyCareerPayments::DqtRecord do
 
   describe "#itt_academic_year_for_claim" do
     before do
-      allow(JourneySubjectEligibilityChecker).to receive(:new)
-        .and_return(double(selectable_itt_years_for_claim_year: eligible_years))
+      allow(Policies::EarlyCareerPayments).to(
+        receive(:selectable_itt_years_for_claim_year).and_return(eligible_years)
+      )
     end
 
     let(:record) do

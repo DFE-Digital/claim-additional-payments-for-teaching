@@ -150,5 +150,9 @@ module Policies
 
       year + 1..POLICY_END_YEAR
     end
+
+    def selectable_itt_years_for_claim_year(claim_year)
+      (AcademicYear.new(claim_year - 5)...AcademicYear.new(claim_year)).to_a
+    end
   end
 end
