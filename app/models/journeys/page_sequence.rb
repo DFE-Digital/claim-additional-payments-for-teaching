@@ -22,10 +22,6 @@ module Journeys
     def next_slug
       return "ineligible" if journey_ineligible?
 
-      if lup_policy_and_trainee_teacher_at_lup_school?
-        return handle_trainee_teacher
-      end
-
       if claim_submittable?
         return "student-loan-amount" if updating_personal_details? && in_sequence?("student-loan-amount")
         return "check-your-answers"
@@ -85,29 +81,6 @@ module Journeys
       # This allows 'address' page to be skipped when the postcode is present
       # Occurs when populated from 'postcode-search' and the subsequent 'select-home-address' screens
       true if current_slug == "select-home-address" && answers.postcode.present?
-    end
-
-    def lup_policy_and_trainee_teacher_at_lup_school?
-      journey == Journeys::AdditionalPaymentsForTeaching && lup_trainee_at_lup_school
-    end
-
-    def lup_trainee_at_lup_school
-      answers.nqt_in_academic_year_after_itt == false && Policies::LevellingUpPremiumPayments::SchoolEligibility.new(answers.current_school).eligible?
-    end
-
-    def handle_trainee_teacher
-      case current_slug
-      when "nqt-in-academic-year-after-itt"
-        "eligible-itt-subject"
-      when "eligible-itt-subject"
-        if answers.eligible_itt_subject.to_sym.in? Policies::LevellingUpPremiumPayments.fixed_subject_symbols
-          "future-eligibility"
-        else
-          "eligible-degree-subject"
-        end
-      when "eligible-degree-subject"
-        "future-eligibility"
-      end
     end
 
     def current_slug_index
