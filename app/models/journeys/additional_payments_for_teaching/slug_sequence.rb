@@ -133,7 +133,7 @@ module Journeys
           end
 
           if answers.trainee_teacher?
-            trainee_teacher_slugs(sequence)
+            trainee_teacher_slugs!(sequence)
             sequence.delete("eligible-degree-subject") unless lup_eligibility_checker.indicated_ineligible_itt_subject?
           else
             sequence.delete("ineligible") unless [:ineligible, :eligible_later].include?(overall_eligibility_status)
@@ -192,7 +192,7 @@ module Journeys
 
       # This method swaps out the entire slug sequence and replaces it with this tiny
       # journey.
-      def trainee_teacher_slugs(sequence)
+      def trainee_teacher_slugs!(sequence)
         trainee_slugs = %w[
           current-school
           nqt-in-academic-year-after-itt
