@@ -84,7 +84,7 @@ class Admin::DecisionsController < Admin::BaseAdminController
   def send_claim_result_email
     return if @claim.awaiting_qa?
 
-    ClaimMailer.approved(@claim).deliver_later if @claim.latest_decision.result == "approved"
+    @claim.policy.mailer.approved(@claim).deliver_later if @claim.latest_decision.result == "approved"
 
     if @claim.latest_decision.result == "rejected" && @claim.email_address.present?
       ClaimMailer.rejected(@claim).deliver_later

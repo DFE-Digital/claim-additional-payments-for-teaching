@@ -25,7 +25,7 @@ class ClaimAutoApproval
         claim.notes.create!(body: "This claim has been marked for a quality assurance review")
       end
 
-      ClaimMailer.approved(claim).deliver_later unless claim.awaiting_qa?
+      claim.policy.mailer.approved(claim).deliver_later unless claim.awaiting_qa?
     rescue ActiveRecord::RecordInvalid => e
       raise AutoApprovalFailed, e
     end

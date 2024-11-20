@@ -25,6 +25,43 @@ class EarlyYearsPaymentsMailer < ApplicationMailer
     )
   end
 
+  def approved(claim)
+    self.class.practitioner_approved(claim).deliver_later
+    self.class.provider_approved(claim).deliver_later
+  end
+
+  def practitioner_approved(claim)
+    personalisation = {
+      ref_number: claim.reference,
+      first_name: claim.first_name
+    }
+
+    template_mail(
+      "13b60fab-8306-4cb4-84e1-8a0ff905aba6",
+      to: claim.email_address,
+      subject: nil,
+      reply_to_id: claim.policy.notify_reply_to_id,
+      personalisation:
+    )
+  end
+
+  def provider_approved(claim)
+    personalisation = {
+      ref_number: claim.reference,
+      first_name: claim.provider_contact_name,
+      practitioner_first_name: claim.first_name,
+      practitioner_last_name: claim.surname
+    }
+
+    template_mail(
+      "aa714fac-3fd7-4d3c-a510-2445c16be446",
+      to: claim.eligibility.eligible_ey_provider.primary_key_contact_email_address,
+      subject: nil,
+      reply_to_id: claim.policy.notify_reply_to_id,
+      personalisation:
+    )
+  end
+
   private
 
   def submitted_by_provider_and_send_to_provider(claim)
