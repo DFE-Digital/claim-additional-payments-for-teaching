@@ -51,7 +51,6 @@ module EligibilityCheckable
   def common_ineligible_attributes?
     [
       indicated_ineligible_school?,
-      trainee_teacher?,
       supply_teacher_lacking_either_long_contract_or_direct_employment?,
       poor_performance?,
       no_selectable_subjects?,
