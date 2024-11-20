@@ -52,9 +52,29 @@
 
     <h4 class="govuk-heading-s">Documents</h4>
 
-    <%= render partial: "shared/document", locals: { title_text: "Privacy notice", title_url: "https://www.gov.uk/government/publications/privacy-information-education-providers-workforce-including-teachers/5a254207-a566-44f7-ac77-6ba59fd26e04" } %>
+    <%= render partial: "shared/document",
+      locals: {
+        type: :generic,
+        title_text: "Privacy notice",
+        title_url: "https://www.gov.uk/government/publications/privacy-information-education-providers-workforce-including-teachers/5a254207-a566-44f7-ac77-6ba59fd26e04",
+        metadata: nil
+      } %>
 
-    <%= render partial: "shared/document", locals: { title_text: "Consent form", title_url: "/ey-provider-practitioner-consent-form.html" } %>
+    <%= render partial: "shared/document",
+      locals: {
+        type: :pdf,
+        title_text: "Consent form",
+        title_url: asset_path("ey-provider-practitioner-consent-form.pdf"),
+        metadata: "PDF, 63 KB, 1 page"
+      } %>
+
+    <%= render partial: "shared/document",
+      locals: {
+        type: :generic,
+        title_text: "Consent form",
+        title_url: "/ey-provider-practitioner-consent-form.html",
+        metadata: nil
+      } %>
 
     <h3 class="govuk-heading-m">Information from your organisation</h3>
 
