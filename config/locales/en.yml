@@ -369,6 +369,10 @@ en:
       qualification_details:
         errors:
           qualifications_details_check: "Select yes if your qualification details are correct"
+      email_verification:
+        errors:
+          one_time_password:
+            invalid: An error occured while validating the passcode, please try generating a new one
     journey_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"
     policy_acronym: "TSLR"

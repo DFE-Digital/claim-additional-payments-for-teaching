@@ -12,10 +12,7 @@
           I18n.t(
             "#{translation}.body.match.#{f.object.claim_verifier_match.presence || 'nil'}",
             default: nil,
-            link: link_to(
-              I18n.t("#{translation}.notes"),
-              admin_claim_notes_path(@claim)
-            )
+            link: link_to("Notes", admin_claim_notes_path(@claim))
           )&.html_safe.tap do |translation| %>
         <% break unless translation %>
 

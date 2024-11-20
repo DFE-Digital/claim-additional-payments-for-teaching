@@ -164,12 +164,12 @@ RSpec.describe Policies::EarlyYearsPayments::AdminClaimDetailsPresenter do
       end
 
       context "when near the decision deadline" do
-        before { travel_to claim.decision_deadline_date - 1.week }
-
         it "shows the days left until the deadline" do
-          expect(subject).to include(
-            [I18n.t("admin.decision_overdue"), "<strong class=\"govuk-tag tag--information\">7 days</strong>"]
-          )
+          travel_to(claim.decision_deadline_date - 1.week + 2.hours) do
+            expect(subject).to include(
+              [I18n.t("admin.decision_overdue"), "<strong class=\"govuk-tag tag--information\">7 days</strong>"]
+            )
+          end
         end
       end
     end
