@@ -20,11 +20,11 @@ module Journeys
     end
 
     def next_slug
+      return "ineligible" if journey_ineligible?
+
       if lup_policy_and_trainee_teacher_at_lup_school?
         return handle_trainee_teacher
       end
-
-      return "ineligible" if journey_ineligible?
 
       if claim_submittable?
         return "student-loan-amount" if updating_personal_details? && in_sequence?("student-loan-amount")
@@ -98,7 +98,7 @@ module Journeys
     def handle_trainee_teacher
       case current_slug
       when "nqt-in-academic-year-after-itt"
-        @journey_session.answers.policy_year.in?(EligibilityCheckable::COMBINED_ECP_AND_LUP_POLICY_YEARS_BEFORE_FINAL_YEAR) ? "eligible-itt-subject" : "ineligible"
+        "eligible-itt-subject"
       when "eligible-itt-subject"
         if answers.eligible_itt_subject.to_sym.in? Policies::LevellingUpPremiumPayments.fixed_subject_symbols
           "future-eligibility"
@@ -106,11 +106,7 @@ module Journeys
           "eligible-degree-subject"
         end
       when "eligible-degree-subject"
-        if @journey_session.answers.eligible_degree_subject?
-          "future-eligibility"
-        else
-          "ineligible"
-        end
+        "future-eligibility"
       end
     end
 
