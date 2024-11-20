@@ -74,11 +74,7 @@ module Policies
       end
 
       def specific_ineligible_attributes?
-        indicated_ecp_only_itt_subject? || trainee_teacher_with_ineligible_itt_subject? || ineligible_itt_subject_and_no_relevant_degree?
-      end
-
-      def trainee_teacher_with_ineligible_itt_subject?
-        trainee_teacher? && indicated_ineligible_itt_subject?
+        indicated_ecp_only_itt_subject? || ineligible_itt_subject_and_no_relevant_degree?
       end
 
       def ineligible_itt_subject_and_no_relevant_degree?
