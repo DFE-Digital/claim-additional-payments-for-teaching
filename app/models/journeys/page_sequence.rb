@@ -88,10 +88,10 @@ module Journeys
     end
 
     def lup_policy_and_trainee_teacher_at_lup_school?
-      journey == Journeys::AdditionalPaymentsForTeaching && lup_teacher_at_lup_school
+      journey == Journeys::AdditionalPaymentsForTeaching && lup_trainee_at_lup_school
     end
 
-    def lup_teacher_at_lup_school
+    def lup_trainee_at_lup_school
       answers.nqt_in_academic_year_after_itt == false && Policies::LevellingUpPremiumPayments::SchoolEligibility.new(answers.current_school).eligible?
     end
 
