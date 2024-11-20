@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: claim-additional-payments-for-teaching-maintenance
+  labels:
+    app: claim-additional-payments-for-teaching-maintenance
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: claim-additional-payments-for-teaching-maintenance
+  template:
+    metadata:
+      labels:
+        app: claim-additional-payments-for-teaching-maintenance
+    spec:
+      nodeSelector:
+        teacherservices.cloud/node_pool: applications
+        kubernetes.io/os: linux
+      containers:
+      - name: claim-additional-payments-for-teaching-maintenance
+        image: ghcr.io/dfe-digital/claim-additional-payments-for-teaching-maintenance:#MAINTENANCE_IMAGE_TAG#
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: 64M
+            cpu: 0.1
+          limits:
+            memory: 64M
+            cpu: 1
