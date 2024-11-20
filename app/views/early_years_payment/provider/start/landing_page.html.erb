@@ -29,7 +29,7 @@
     <h3 class="govuk-heading-m">Information from your employee</h3>
 
     <p class="govuk-body">
-      You should make sure you’ve collected written consent from your employee before you give us their information. You can use our <%= govuk_link_to("consent form", "#") %> to do this.
+      You should make sure you’ve collected written consent from your employee before you give us their information. You can use our <%= govuk_link_to("consent form", "/ey-provider-practitioner-consent-form.html", new_tab: true) %> to do this.
     </p>
 
     <p class="govuk-body">
@@ -53,6 +53,8 @@
     <h4 class="govuk-heading-s">Documents</h4>
 
     <%= render partial: "shared/document", locals: { title_text: "Privacy notice", title_url: "https://www.gov.uk/government/publications/privacy-information-education-providers-workforce-including-teachers/5a254207-a566-44f7-ac77-6ba59fd26e04" } %>
+
+    <%= render partial: "shared/document", locals: { title_text: "Consent form", title_url: "/ey-provider-practitioner-consent-form.html" } %>
 
     <h3 class="govuk-heading-m">Information from your organisation</h3>
 
