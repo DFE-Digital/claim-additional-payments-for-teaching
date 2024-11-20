@@ -1354,10 +1354,9 @@ en:
     support_email_address: "EY.Financial-Incentives@education.gov.uk"
     forms:
       consent:
-        question: Declaration of Employee Consent
+        question: Before you continue with your claim
         option:
-          I confirm that I have obtained consent from my employee and have provided them with the relevant privacy
-          notice.
+          I confirm that I’ve obtained consent from my employee and have provided them with the relevant privacy notice.
         errors:
           presence: You must be able to confirm this information to continue
       current_nursery:

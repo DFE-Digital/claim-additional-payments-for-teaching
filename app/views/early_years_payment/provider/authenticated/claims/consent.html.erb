@@ -8,7 +8,7 @@
       <%= f.govuk_check_boxes_fieldset :consent_given, multiple: false, legend: { text: @form.t(:question), tag: "h1", size: "l" }, hint: -> do %>
         <p class="govuk-body">
           You need to confirm that you’ve got consent from your employee before
-          you can continue with a claim.
+          you can continue with your claim.
         </p>
 
         <p class="govuk-body">
@@ -26,8 +26,7 @@
         </p>
 
         <p class="govuk-body">
-          If you have any questions, or need further guidance, contact our support
-          team at
+          If you have any questions or need further guidance, contact our support team at
           <%= govuk_link_to t("early_years_payment_provider_authenticated.feedback_email"), "mailto:#{t("early_years_payment_provider_authenticated.feedback_email")}", no_visited_state: true %>.
         </p>
 
