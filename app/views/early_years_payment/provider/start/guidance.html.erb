@@ -1,0 +1,253 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Claim an early years financial incentive payment: Guidance
+    </h1>
+
+    <p class="govuk-body">
+      This scheme enables nurseries in participating local authorities to offer £1000 payments to recruit new practitioners.
+    </p>
+
+    <%= render "govuk_publishing_components/components/contents_list", contents: [
+      {
+        text: "Overview",
+        href: "#overview"
+      },
+      {
+        text: "Local authorities participating in this scheme",
+        href: "#local-authorities-participating-in-this-scheme"
+      },
+      {
+        text: "How it works",
+        href: "#how-it-works"
+      },
+      {
+        text: "How money is allocated",
+        href: "#how-money-is-allocated"
+      },
+      {
+        text: "Nursery eligibility",
+        href: "#nursery-eligibility"
+      },
+      {
+        text: "Practitioner eligibility",
+        href: "#practitioner-eligibility"
+      },
+      {
+        text: "Apprenticeships",
+        href: "#apprenticeships"
+      },
+      {
+        text: "How practitioners are paid",
+        href: "#how-practitioners-are-paid"
+      },
+      {
+        text: "Tax and deductions",
+        href: "#tax-and-deductions"
+      },
+      {
+        text: "If the employee leaves before they’ve been in the role for 6 months",
+        href: "#if-the-employee-leaves-before-theyve-been-in-the-role-for-6-months"
+      }
+    ] %>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= govuk_notification_banner(title_text: "Important") { |nb| nb.with_heading(text: "This service is in live testing and only available to users in our testing group. If you're not part of this group, you won't be able to access this service.") } %>
+
+      <% if @journey_open %>
+        <div class="app-c-box">
+          <h2 class="govuk-heading-m">Make a claim</h2>
+          <p class="govuk-body">
+            You should only do this when you’ve successfully recruited a new practitioner. Claims need to be made by the 31 March 2025.
+          </p>
+
+          <%= govuk_start_button(text: "Start now", href: claim_path(current_journey_routing_name, "landing-page")) %>
+        </div>
+      <% end %>
+
+
+      <h1 class="govuk-heading-l" id="overview">
+        Overview
+      </h1>
+
+      <%= govuk_list [
+        "This scheme enables nurseries in participating local authorities to offer £1000 payments to recruit new practitioners. Payments can be offered in job adverts for permanent part and full-time roles.",
+        "The aim of this scheme is to support nurseries with recruitment and increase the number of permanent practitioners in the early years workforce.",
+        "After a practitioner has accepted the job, the nursery will start a claim for the payment on their behalf.",
+        "After the nursery has started the claim, the practitioner will receive an email inviting them to complete the claim on a digital service. To do this, we’ll help them create a GOV.UK One Login account if they do not already have one. This is so that we can verify their identity.",
+        "When they have verified their identity, we’ll ask for a few details including their bank account details.",
+        "Payments will be made directly to practitioners by the Department for Education after they have been in the role for 6 months."
+      ], type: :bullet %>
+
+
+      <h1 class="govuk-heading-l" id="local-authorities-participating-in-this-scheme">
+        Local authorities participating in this scheme
+      </h1>
+
+      <p class="govuk-body">You can only participate in this scheme if your nursery is in one of these local authorities:</p>
+
+      <%= govuk_list [
+        "Barking and Dagenham",
+        "Coventry",
+        "Gateshead",
+        "Redcar and Cleveland",
+        "Telford and Wrekin",
+        "Thurrock"
+      ], type: :bullet %>
+
+      <p class="govuk-body">These local authorities were chosen because they have:</p>
+
+      <%= govuk_list [
+        "high levels of deprivation",
+        "low numbers of available nursery places compared to the number of children who need a place"
+      ], type: :bullet %>
+
+
+      <h1 class="govuk-heading-l" id="how-it-works">
+        How it works
+      </h1>
+
+      <p class="govuk-body">From 25 November 2024 to 15 March 2025, nurseries in participating local authorities can claim incentives – which are paid directly to eligible new staff.</p>
+
+      <p class="govuk-body">To be eligible for a payment, a practitioner must have started in their new role between 11 November 2024 to 15 March 2025.</p>
+
+      <p class="govuk-body">New staff can either be:</p>
+
+      <%= govuk_list [
+        "new to the sector",
+        "returning after a break of at least 6 months",
+        "moving from a temporary to permanent contract"
+      ], type: :bullet %>
+
+      <p class="govuk-body">After a nursery has recruited an eligible new employee, they need to start a claim on their behalf on a digital service. The money will then be reserved for the employee and they will receive an email inviting them to complete the claim. </p>
+
+      <p class="govuk-body">After 6 months the nursery will be asked to confirm that they are still in their role. If they are, the Department for Education will pay the money directly into the employee’s bank account.</p>
+
+
+      <h1 class="govuk-heading-l" id="how-money-is-allocated">
+        How money is allocated
+      </h1>
+
+      <p class="govuk-body">The Department for Education has allocated funding for nurseries to use to recruit staff.</p>
+      <p class="govuk-body">Payments will be reserved for nurseries in the order they are requested when a new claim is created. We’ll email participating nurseries when the number of available payments are running low.</p>
+
+
+      <h1 class="govuk-heading-l" id="nursery-eligibility">
+        Nursery eligibility
+      </h1>
+
+      <p class="govuk-body">A nursery is eligible if:</p>
+
+      <%= govuk_list [
+        "it's in a participating local authority",
+        "you have been contacted by the Department for Education and told you’re eligible to offer payments"
+      ], type: :bullet %>
+
+
+      <h1 class="govuk-heading-l" id="practitioner-eligibility">
+        Practitioner eligibility
+      </h1>
+
+      <p class="govuk-body">Applicants who are new or returning to early years are eligible if:</p>
+
+      <%= govuk_list [
+        "they have not worked in a permanent role in a nursery in the 6 months before starting their new role, where they spent most of their time (70% or more) working directly with children",
+        "the role they’ve applied for is a permanent contract (this applies to part and full-time roles)",
+        "they’ll spend most of the time (70% or more) in their role working directly with children"
+      ], type: :bullet %>
+
+      <p class="govuk-body">Applicants do not need to have any early years qualifications or have worked in a nursery before.</p>
+
+      <p class="govuk-body">You cannot offer the incentive to anyone who:</p>
+
+      <%= govuk_list [
+        "has worked in a permanent role in a nursery in the last 6 months",
+        "will not be spending most of their time (70% or more) working directly with children in their new role"
+      ], type: :bullet %>
+
+
+      <h2 class="govuk-heading-m">Working directly with children</h2>
+
+      <p class="govuk-body">Working directly with children can involve any of the following:</p>
+
+      <%= govuk_list [
+        "working in the room with children — this can include playrooms, base rooms and classrooms",
+        "guiding, supporting and interacting with children in their learning and development",
+        "giving hands-on care, including health and hygiene"
+      ], type: :bullet %>
+
+      <%= govuk_list [
+        "70% or more time applies to all part and full-time roles. The employee does not need to work a minimum number of contracted hours to be eligible."
+      ], type: :bullet %>
+
+
+      <h1 class="govuk-heading-l" id="apprenticeships">
+        Apprenticeships
+      </h1>
+
+      <%= govuk_list [
+        "Apprentices cannot receive a payment, even if they’re on a permanent contract during their apprenticeship.",
+        "Apprentices can receive a payment when they move from being an apprentice to an employee. To do this, they must have passed their apprenticeship and been taken on in a permanent role."
+      ], type: :bullet %>
+
+      <h1 class="govuk-heading-l" id="how-practitioners-are-paid">
+        How practitioners are paid
+      </h1>
+
+      <%= govuk_list [
+        "The Department for Education will pay the money directly into the employee’s bank account. This will happen after they have been in the role for 6 months."
+      ], type: :bullet %>
+
+
+      <h1 class="govuk-heading-l" id="tax-and-deductions">
+        Tax and deductions
+      </h1>
+
+      <%= govuk_list [
+        "The Department for Education will pay the employee’s Income Tax and National Insurance contributions.",
+        "There may be other deductions based on the employee’s circumstances. For example, if they’re making student loan repayments. This could reduce the final amount of the incentive below £1000."
+      ], type: :bullet %>
+
+      <h2 class="govuk-heading-m">Universal Credit</h2>
+
+      <%= govuk_list [
+        "If the employee claims Universal Credit, the £1000 payment may affect the amount of Universal Credit they receive.",
+        "Read more about #{govuk_link_to("how changes", "https://www.gov.uk/guidance/universal-credit-and-earnings", no_visited_state: true)} to earnings can affect Universal Credit".html_safe
+      ], type: :bullet %>
+
+      <h2 class="govuk-heading-m">Student loan</h2>
+
+      <%= govuk_list [
+        "The £1000 payment will not be affected by any funding they have previously received to study for a college course or apprenticeship.",
+        "If they have previously studied at university and have a student loan, their £1000 payment may affect their repayments."
+      ], type: :bullet %>
+
+      <h2 class="govuk-heading-m">If they’re currently repaying a student loan</h2>
+
+      <%= govuk_list [
+        "If they’re currently repaying a student loan, a deduction towards it may come out of their £1000 payment."
+      ], type: :bullet %>
+
+
+      <h2 class="govuk-heading-m">If they have a student loan but are not currently repaying it</h2>
+
+      <%= govuk_list [
+        "If their payment takes them over the amount they must earn to start paying back a student loan, a deduction may go towards repaying it.",
+        "Read more about #{govuk_link_to "when they would start paying back a student loan", "https://www.gov.uk/repaying-your-student-loan/when-you-start-repaying", no_visited_state: true} and #{govuk_link_to "what they’ll pay", "https://www.gov.uk/repaying-your-student-loan/what-you-pay", no_visited_state: true}.".html_safe,
+        "They may be able to claim any deductions back at the end of the tax year. Read more about how employees can #{govuk_link_to "claim back student loan deductions", "https://www.gov.uk/repaying-your-student-loan/getting-a-refund", no_visited_state: true}.".html_safe
+      ], type: :bullet %>
+
+
+      <h1 class="govuk-heading-l" id="if-the-employee-leaves-before-theyve-been-in-the-role-for-6-months">
+        If the employee leaves before they’ve been in the role for 6 months
+      </h1>
+
+      <%= govuk_list [
+        "You must tell us by email if the employee leaves the nursery before they have completed 6 months. You can do this by contacting us at #{govuk_link_to t("early_years_payment_provider_start.feedback_email"), "mailto:#{t("early_years_payment_provider_start.feedback_email")}", no_visited_state: true}.".html_safe,
+        "The employee must complete 6 months in their role to receive the payment. We'll contact the nursery by email at that point to check the employee is still working in their role."
+      ], type: :bullet %>
+    </div>
+  </div>
+</div>
