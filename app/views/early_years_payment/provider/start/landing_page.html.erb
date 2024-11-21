@@ -29,7 +29,7 @@
     <h3 class="govuk-heading-m">Information from your employee</h3>
 
     <p class="govuk-body">
-      You should make sure you’ve collected written consent from your employee before you give us their information. You can use our <%= govuk_link_to("consent form", "/ey-provider-practitioner-consent-form.html", new_tab: true) %> to do this.
+      You should make sure you’ve collected written consent from your employee before you give us their information. You can use our <%= govuk_link_to("consent form", asset_path("ey-provider-practitioner-consent-form.pdf"), new_tab: true) %> to do this.
     </p>
 
     <p class="govuk-body">
@@ -66,14 +66,6 @@
         title_text: "Consent form",
         title_url: asset_path("ey-provider-practitioner-consent-form.pdf"),
         metadata: "PDF, 63 KB, 1 page"
-      } %>
-
-    <%= render partial: "shared/document",
-      locals: {
-        type: :generic,
-        title_text: "Consent form",
-        title_url: "/ey-provider-practitioner-consent-form.html",
-        metadata: nil
       } %>
 
     <h3 class="govuk-heading-m">Information from your organisation</h3>
