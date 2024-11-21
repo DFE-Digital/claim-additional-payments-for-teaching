@@ -16,7 +16,7 @@ RSpec.feature "Early years payment provider" do
     click_link "Start now"
 
     # landing page
-    expect(page).to have_text("Eligibility")
+    expect(page).to have_text("Employee eligibility")
     click_link "Start now"
 
     expect(page.title).to have_text("Enter your email address")
