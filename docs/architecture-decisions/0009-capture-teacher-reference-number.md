@@ -15,7 +15,7 @@ eligibility criteria.
 ## Decision
 
 To aid DfE in the process of validating a claimant’s qualifications, we will
-collect the claimant’s ‘Teacher Reference Number’ or TRN.
+collect the claimant's 'Teacher Reference Number' or TRN.
 
 With the TRN, DfE can use the Database of Qualified Teachers
 ([DQT](https://teacherservices.education.gov.uk/SelfService/Login)) to validate
