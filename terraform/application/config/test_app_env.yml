@@ -23,3 +23,6 @@ TID_BASE_URL: https://test.claim-additional-teaching-payment.service.gov.uk/addi
 TID_SIGN_IN_API_ENDPOINT: https://preprod.teaching-identity.education.gov.uk:433
 TID_SIGN_IN_CLIENT_ID: claim
 TID_SIGN_IN_ISSUER: https://preprod.teaching-identity.education.gov.uk/
+
+GOVUK_APP_DOMAIN: ""
+GOVUK_WEBSITE_ROOT: ""
