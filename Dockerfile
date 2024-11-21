@@ -80,6 +80,8 @@ RUN DFE_SIGN_IN_API_CLIENT_ID= \
   ADMIN_ALLOWED_IPS= \
   ENVIRONMENT_NAME= \
   SUPPRESS_DFE_ANALYTICS_INIT= \
+  GOVUK_APP_DOMAIN= \
+  GOVUK_WEBSITE_ROOT= \
   bundle exec rake assets:precompile
 
 RUN chown -hR appuser:appgroup ${APP_HOME}
