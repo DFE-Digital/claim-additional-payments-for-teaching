@@ -28,6 +28,7 @@ module Policies
 
     POLICY_START_YEAR = AcademicYear.new(2022).freeze
     POLICY_END_YEAR = AcademicYear.new(2025).freeze
+    POLICY_RANGE = POLICY_START_YEAR..POLICY_END_YEAR
 
     # Percentage of claims to QA
     MIN_QA_THRESHOLD = 10
@@ -131,7 +132,7 @@ module Policies
     end
 
     def subject_symbols(claim_year:, itt_year:)
-      return [] unless (POLICY_START_YEAR..POLICY_END_YEAR).cover?(claim_year)
+      return [] unless POLICY_RANGE.cover?(claim_year)
 
       previous_five_years = (claim_year - 5)...claim_year
 

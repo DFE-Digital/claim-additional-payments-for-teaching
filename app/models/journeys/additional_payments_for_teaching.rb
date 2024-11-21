@@ -54,7 +54,7 @@ module Journeys
               itt_year: journey_session.answers.itt_academic_year
             )
           end.flatten.uniq
-      elsif journey_session.answers.policy_year.in?(EligibilityCheckable::COMBINED_ECP_AND_LUP_POLICY_YEARS_BEFORE_FINAL_YEAR)
+      elsif journey_session.answers.policy_year.in?(Policies::LevellingUpPremiumPayments::POLICY_RANGE)
         # they get the standard, unchanging LUP subject set because they won't have qualified in time for ECP by 2022/2023
         # and they won't have given an ITT year
         Policies::LevellingUpPremiumPayments.fixed_subject_symbols
