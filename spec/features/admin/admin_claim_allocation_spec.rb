@@ -355,12 +355,12 @@ RSpec.feature "Claims awaiting a decision" do
       select "Early-Career Payments", from: "allocate_to_policy"
       click_on "Unallocate"
 
-      expect(page).to have_text "Are you sure you want to unassign Early Career Payments claims from Frank Yee?"
+      expect(page).to have_text "Are you sure you want to unassign Early-Career Payments claims from Frank Yee?"
 
       click_on "Unassign"
 
       within(".govuk-flash__notice") do
-        expect(page).to have_text I18n.t("admin.allocations.bulk_deallocate.success", allocate_to_policy: "Early Career Payments", dfe_user: frank.full_name)
+        expect(page).to have_text I18n.t("admin.allocations.bulk_deallocate.success", allocate_to_policy: "Early-Career Payments", dfe_user: frank.full_name)
       end
 
       student_loan_claims.each do |claim|
@@ -416,12 +416,12 @@ RSpec.feature "Claims awaiting a decision" do
       select "Early-Career Payments", from: "allocate_to_policy"
       click_on "Unallocate"
 
-      expect(page).to have_text "Are you sure you want to unassign Early Career Payments claims from Abdul Rafiq?"
+      expect(page).to have_text "Are you sure you want to unassign Early-Career Payments claims from Abdul Rafiq?"
 
       click_on "Unassign"
 
       within(".govuk-flash__notice") do
-        expect(page).to have_text I18n.t("admin.allocations.bulk_deallocate.info", allocate_to_policy: "Early Career Payments", dfe_user: abdul.full_name)
+        expect(page).to have_text I18n.t("admin.allocations.bulk_deallocate.info", allocate_to_policy: "Early-Career Payments", dfe_user: abdul.full_name)
       end
 
       student_loan_claims.each do |claim|
