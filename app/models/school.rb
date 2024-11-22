@@ -112,9 +112,9 @@ class School < ApplicationRecord
     academy_alternative_provision_sponsor_led
   ].freeze
 
-  enum phase: PHASES
-  enum school_type_group: SCHOOL_TYPE_GROUPS
-  enum school_type: SCHOOL_TYPES
+  enum :phase, PHASES
+  enum :school_type_group, SCHOOL_TYPE_GROUPS
+  enum :school_type, SCHOOL_TYPES
 
   scope :open, -> { where("(open_date IS NULL OR open_date <= ?) AND (close_date IS NULL OR close_date >= ?)", Date.current, Date.current) }
   scope :closed, -> { where.not("(open_date IS NULL OR open_date <= ?) AND (close_date IS NULL OR close_date >= ?)", Date.current, Date.current) }

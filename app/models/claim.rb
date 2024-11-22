@@ -108,10 +108,10 @@ class Claim < ApplicationRecord
   attribute :date_of_birth_month, :integer
   attribute :date_of_birth_year, :integer
 
-  enum student_loan_country: StudentLoan::COUNTRIES
-  enum student_loan_start_date: StudentLoan::COURSE_START_DATES
-  enum student_loan_courses: {one_course: 0, two_or_more_courses: 1}
-  enum bank_or_building_society: {personal_bank_account: 0, building_society: 1}
+  enum :student_loan_country, StudentLoan::COUNTRIES
+  enum :student_loan_start_date, StudentLoan::COURSE_START_DATES
+  enum :student_loan_courses, {one_course: 0, two_or_more_courses: 1}
+  enum :bank_or_building_society, {personal_bank_account: 0, building_society: 1}
 
   has_many :decisions, dependent: :destroy
   has_many :tasks, dependent: :destroy
@@ -142,7 +142,7 @@ class Claim < ApplicationRecord
     inverse_of: :assigned_claims,
     optional: true
 
-  enum payroll_gender: {
+  enum :payroll_gender, {
     dont_know: 0,
     female: 1,
     male: 2
