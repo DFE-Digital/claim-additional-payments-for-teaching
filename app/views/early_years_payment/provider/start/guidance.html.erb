@@ -214,7 +214,7 @@
 
       <%= govuk_list [
         "If the employee claims Universal Credit, the £1000 payment may affect the amount of Universal Credit they receive.",
-        "Read more about #{govuk_link_to("how changes", "https://www.gov.uk/guidance/universal-credit-and-earnings", no_visited_state: true)} to earnings can affect Universal Credit".html_safe
+        "Read more about #{govuk_link_to("how changes", "https://www.gov.uk/guidance/universal-credit-and-earnings", no_visited_state: true, new_tab: true)} to earnings can affect Universal Credit".html_safe
       ], type: :bullet %>
 
       <h2 class="govuk-heading-m">Student loan</h2>
@@ -235,8 +235,8 @@
 
       <%= govuk_list [
         "If their payment takes them over the amount they must earn to start paying back a student loan, a deduction may go towards repaying it.",
-        "Read more about #{govuk_link_to "when they would start paying back a student loan", "https://www.gov.uk/repaying-your-student-loan/when-you-start-repaying", no_visited_state: true} and #{govuk_link_to "what they’ll pay", "https://www.gov.uk/repaying-your-student-loan/what-you-pay", no_visited_state: true}.".html_safe,
-        "They may be able to claim any deductions back at the end of the tax year. Read more about how employees can #{govuk_link_to "claim back student loan deductions", "https://www.gov.uk/repaying-your-student-loan/getting-a-refund", no_visited_state: true}.".html_safe
+        "Read more about #{govuk_link_to "when they would start paying back a student loan", "https://www.gov.uk/repaying-your-student-loan/when-you-start-repaying", no_visited_state: true, new_tab: true} and #{govuk_link_to "what they’ll pay", "https://www.gov.uk/repaying-your-student-loan/what-you-pay", no_visited_state: true, new_tab: true}.".html_safe,
+        "They may be able to claim any deductions back at the end of the tax year. Read more about how employees can #{govuk_link_to "claim back student loan deductions", "https://www.gov.uk/repaying-your-student-loan/getting-a-refund", no_visited_state: true, new_tab: true}.".html_safe
       ], type: :bullet %>
 
 
