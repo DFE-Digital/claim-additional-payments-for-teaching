@@ -15,9 +15,6 @@ class ClaimStudentLoanDetailsUpdater
 
       claim.save!(context: :"student-loan")
     end
-  rescue => e
-    # If something goes wrong, log the error and continue
-    Rollbar.error(e)
   end
 
   private

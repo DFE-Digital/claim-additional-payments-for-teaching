@@ -125,5 +125,36 @@ RSpec.describe StudentLoanPlanCheckJob do
 
       include_examples :student_loan_plan_claim_verifier_not_called
     end
+
+    context "when an error occurs while updating" do
+      let(:exception) { ActiveRecord::RecordInvalid }
+
+      before do
+        create(
+          :student_loans_data,
+          claim_reference: claim.reference,
+          nino: claim.national_insurance_number,
+          date_of_birth: claim.date_of_birth
+        )
+        allow_any_instance_of(Claim).to receive(:save!) { raise(exception) }
+        allow(Rollbar).to receive(:error)
+      end
+
+      it "suppresses the exception" do
+        expect { perform_job }.not_to raise_error
+      end
+
+      it "logs the exception" do
+        perform_job
+
+        expect(Rollbar).to have_received(:error).with(exception)
+      end
+
+      it "does not update the student loan details or create a task or note" do
+        expect { perform_job }.to not_change { claim.student_loan_plan }
+          .and not_change { claim.tasks.count }
+          .and not_change { claim.notes.count }
+      end
+    end
   end
 end

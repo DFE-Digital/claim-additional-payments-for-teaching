@@ -6,6 +6,9 @@ class StudentLoanAmountCheckJob < ApplicationJob
     claims.each do |claim|
       ClaimStudentLoanDetailsUpdater.call(claim)
       AutomatedChecks::ClaimVerifiers::StudentLoanAmount.new(claim:).perform
+    rescue => e
+      # If something goes wrong, log the error and continue
+      Rollbar.error(e)
     end
   end
 
