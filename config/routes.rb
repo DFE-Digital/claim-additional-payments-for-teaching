@@ -76,6 +76,10 @@ Rails.application.routes.draw do
         }
     end
 
+    scope constraints: {journey: /early-years-payment/} do
+      get "guidance", to: "journeys/early_years_payment/provider/start/static_pages#guidance", as: :guidance
+    end
+
     scope constraints: {journey: "additional-payments"} do
       get "reminder", as: :new_reminder, to: "journeys/additional_payments_for_teaching/reminders#new"
 

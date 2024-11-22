@@ -7,4 +7,6 @@ $govuk-image-url-function: "font-url";
 @import "accessible-autocomplete/src/autocomplete";
 @import "govuk-one-login-service-header/dist/styles/service-header-no-imports";
 
+@import "govuk_publishing_components/components/_contents-list";
+
 @import "**/*";
