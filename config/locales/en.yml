@@ -941,12 +941,12 @@ en:
               true: "Yes"
               false: "No"
           subject_to_formal_performance_action:
-            label: "Performance measures"
+            label: "No performance measures"
             claimant_answers:
               true: "Yes"
               false: "No"
           subject_to_disciplinary_action:
-            label: "Disciplinary action"
+            label: "No disciplinary action"
             claimant_answers:
               true: "Yes"
               false: "No"

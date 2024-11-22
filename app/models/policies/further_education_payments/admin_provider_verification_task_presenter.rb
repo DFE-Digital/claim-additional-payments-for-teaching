@@ -115,14 +115,7 @@ module Policies
       end
 
       def provider_answer(assertion)
-        case assertion["name"]
-        when "subject_to_formal_performance_action", "subject_to_disciplinary_action"
-          # Due to the phrasing of the question to the provider, we need to
-          # negate their answer when displaying it in the admin ui.
-          assertion["outcome"] ? "No" : "Yes"
-        else
-          assertion["outcome"] ? "Yes" : "No"
-        end
+        assertion["outcome"] ? "Yes" : "No"
       end
 
       def subjects_taught
