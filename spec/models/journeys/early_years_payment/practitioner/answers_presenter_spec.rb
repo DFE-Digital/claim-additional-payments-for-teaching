@@ -20,7 +20,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::AnswersPresenter do
       banking_name: "Mr John Doe",
       bank_account_number: "12345678",
       bank_sort_code: "123456",
-      payroll_gender: "male"
+      payroll_gender: "dont_know"
     )
   }
 
@@ -69,7 +69,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::AnswersPresenter do
     end
 
     context "Payroll gender" do
-      it { is_expected.to include(["Payroll gender", "male", "gender"]) }
+      it { is_expected.to include(["Payroll gender", "Don’t know", "gender"]) }
     end
   end
 end
