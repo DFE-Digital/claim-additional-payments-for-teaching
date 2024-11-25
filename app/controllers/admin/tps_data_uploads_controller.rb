@@ -6,17 +6,16 @@ module Admin
     end
 
     def create
-      @tps_data_importer = TeachersPensionsServiceImporter.new(params[:file])
+      file = params[:file]
+      @tps_data_importer = TeachersPensionsServiceImporter.new(file)
 
       if @tps_data_importer.errors.any?
         render :new
       else
-        @tps_data_importer.run
-        if @tps_data_importer.errors.any?
-          render :new and return
-        end
-        EmploymentCheckJob.perform_later
-        redirect_to admin_claims_path, notice: "Teachers Pensions Service data uploaded successfully"
+        file_upload = FileUpload.create(uploaded_by: admin_user, body: File.read(file))
+        ImportTeachersPensionServiceDataJob.perform_later(file_upload.id)
+
+        redirect_to admin_claims_path, notice: "Teachers Pensions Service data file uploaded and queued to be imported"
       end
     rescue ActiveRecord::RecordInvalid => e
       Rollbar.error(e)

@@ -24,36 +24,13 @@
       "note": ""
     },
     {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "0ac253105d2af7d0dd324537b4be4a392ded73c0f3df8ca4d32db09cac7b586d",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/claim/search.rb",
-      "line": 35,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Claim.submitted.where(\"LOWER(#{attribute}) = LOWER(?)\", search_term)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Search",
-        "method": "search_by"
-      },
-      "user_input": "attribute",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": ""
-    },
-    {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
       "fingerprint": "23e1b8f42ab87b9f17f883de7ac8b7b11261ec3dd8f8ad11f06aaae2a3b6fc51",
       "check_name": "Render",
       "message": "Render path contains parameter value",
       "file": "app/controllers/admin/tasks_controller.rb",
-      "line": 47,
+      "line": 48,
       "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
       "code": "render(action => Claim.includes(:tasks).find(params[:claim_id]).tasks.where(:name => params[:name]).first.name, {})",
       "render_path": null,
@@ -116,6 +93,29 @@
       "note": ""
     },
     {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "6a4206d355fcfb4a8c32cd37bd3511a5d31136565add04cf060e63a8a7aff810",
+      "check_name": "FileAccess",
+      "message": "Parameter value used in file name",
+      "file": "app/controllers/admin/tps_data_uploads_controller.rb",
+      "line": 15,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "File.read(params[:file])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::TpsDataUploadsController",
+        "method": "create"
+      },
+      "user_input": "params[:file]",
+      "confidence": "High",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
       "fingerprint": "9e2cf5f527443878fab8807fc6ca1af5a8f27690f312694489183624ab98d66d",
@@ -145,7 +145,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/claim.rb",
-      "line": 222,
+      "line": 229,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "joins(\"JOIN (\\n  #{Policies::POLICIES.map do\n \"\\n                SELECT\\n                id,\\n                #{policy.award_amount_column} AS award_amount,\\n                '#{policy::Eligibility}' AS eligibility_type\\n                FROM #{policy::Eligibility.table_name}\\n              \"\n end.join(\" UNION ALL \")}\\n) AS eligibilities\\nON claims.eligibility_id = eligibilities.id\\nAND claims.eligibility_type = eligibilities.eligibility_type\\n\")",
       "render_path": null,
@@ -185,6 +185,6 @@
       "note": ""
     }
   ],
-  "updated": "2024-10-30 16:55:54 +0000",
+  "updated": "2024-11-20 17:38:36 +0000",
   "brakeman_version": "6.2.1"
 }
