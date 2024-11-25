@@ -30,7 +30,10 @@
 
     <p class="govuk-body">
       For more information, read more about the
-      <%= govuk_link_to("early years financial incentive", "#") %>.
+      <%= govuk_link_to(
+        "early years financial incentive",
+        guidance_path(journey: "early-years-payment")
+      ) %>.
     </p>
   </div>
 </div>
