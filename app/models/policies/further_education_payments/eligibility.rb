@@ -90,6 +90,10 @@ module Policies
         verification.dig("verifier", "email")
       end
 
+      def eligible_itt_subject
+        nil
+      end
+
       private
 
       def provider_and_claimant_names_match?
