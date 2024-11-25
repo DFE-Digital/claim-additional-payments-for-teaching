@@ -74,8 +74,6 @@ COPY db ${APP_HOME}/db
 COPY app ${APP_HOME}/app
 COPY spec ${APP_HOME}/spec
 
-# Not actual SECRET_KEY_BASE and is randomly generated just for this task
-
 RUN DFE_SIGN_IN_API_CLIENT_ID= \
   DFE_SIGN_IN_API_SECRET= \
   DFE_SIGN_IN_API_ENDPOINT= \
@@ -84,7 +82,7 @@ RUN DFE_SIGN_IN_API_CLIENT_ID= \
   SUPPRESS_DFE_ANALYTICS_INIT= \
   GOVUK_APP_DOMAIN= \
   GOVUK_WEBSITE_ROOT= \
-  SECRET_KEY_BASE="1d40d61e24db3cd4282716c45890c33b5be4ac99eee12ddfe758a01ad03d3206b5888911211ea9e29eee891c76e7011e8eae9f0c868d500575ea3b18749f31f1" \
+  SECRET_KEY_BASE_DUMMY=1 \
   bundle exec rake assets:precompile
 
 RUN chown -hR appuser:appgroup ${APP_HOME}
