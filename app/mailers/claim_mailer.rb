@@ -76,7 +76,7 @@ class ClaimMailer < ApplicationMailer
     send_mail(template_ids(claim)[:CLAIM_UPDATE_AFTER_THREE_WEEKS_NOTIFY_TEMPLATE_ID], personalisation)
   end
 
-  def email_verification(claim, one_time_password)
+  def email_verification(claim, one_time_password, journey_name)
     unknown_policy_check(claim)
     set_common_instance_variables(claim)
     @subject = "#{@claim_subject} email verification"
@@ -86,7 +86,8 @@ class ClaimMailer < ApplicationMailer
       first_name: @claim.first_name,
       one_time_password: @one_time_password,
       support_email_address: @support_email_address,
-      validity_duration: one_time_password_validity_duration
+      validity_duration: one_time_password_validity_duration,
+      journey_name:
     }
 
     send_mail(OTP_EMAIL_NOTIFY_TEMPLATE_ID, personalisation)

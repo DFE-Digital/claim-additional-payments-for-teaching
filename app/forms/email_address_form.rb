@@ -30,7 +30,7 @@ class EmailAddressForm < Form
 
     journey_session.save!
 
-    ClaimMailer.email_verification(answers, otp_code).deliver_now
+    ClaimMailer.email_verification(answers, otp_code, journey_session.journey_class.name).deliver_now
   end
 
   private

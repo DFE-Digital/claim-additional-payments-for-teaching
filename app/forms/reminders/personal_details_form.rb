@@ -37,7 +37,7 @@ module Reminders
         reminder_otp_secret:
       )
 
-      ReminderMailer.email_verification(reminder, otp_code).deliver_now
+      ReminderMailer.email_verification(reminder, otp_code, journey_session.journey_class.name).deliver_now
 
       journey_session.save!
     end

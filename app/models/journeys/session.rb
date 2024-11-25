@@ -19,6 +19,10 @@ module Journeys
       unsubmitted.where(journeys_sessions: {updated_at: ..24.hours.ago})
     end
 
+    def journey_class
+      Journeys.for_routing_name(journey)
+    end
+
     def submitted?
       claim.present?
     end
