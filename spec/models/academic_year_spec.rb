@@ -3,13 +3,13 @@ require "rails_helper"
 RSpec.describe AcademicYear do
   describe ".current" do
     it "returns the current academic year (based on September 1st being the start of the year)" do
-      travel_to Date.new(2018, 8, 31) do
+      travel_to Time.new(2018, 8, 31, 12) do
         expect(AcademicYear.current).to eq AcademicYear.new(2017)
       end
-      travel_to Date.new(2018, 9, 1) do
+      travel_to Time.new(2018, 9, 1, 12) do
         expect(AcademicYear.current).to eq AcademicYear.new(2018)
       end
-      travel_to Date.new(2020, 9, 1) do
+      travel_to Time.new(2020, 9, 1, 12) do
         expect(AcademicYear.current).to eq AcademicYear.new(2020)
       end
     end

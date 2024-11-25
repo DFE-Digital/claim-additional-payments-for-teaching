@@ -82,6 +82,7 @@ RUN DFE_SIGN_IN_API_CLIENT_ID= \
   SUPPRESS_DFE_ANALYTICS_INIT= \
   GOVUK_APP_DOMAIN= \
   GOVUK_WEBSITE_ROOT= \
+  SECRET_KEY_BASE_DUMMY=1 \
   bundle exec rake assets:precompile
 
 RUN chown -hR appuser:appgroup ${APP_HOME}

@@ -10,7 +10,7 @@
 class Amendment < ApplicationRecord
   belongs_to :claim
   belongs_to :created_by, class_name: "DfeSignIn::User"
-  serialize :claim_changes, Hash
+  serialize :claim_changes, type: Hash
 
   validates :claim_changes, presence: {message: "To amend the claim you must change at least one value"}
   validates :notes, presence: {message: "Enter a message to explain why you are making this amendment"}

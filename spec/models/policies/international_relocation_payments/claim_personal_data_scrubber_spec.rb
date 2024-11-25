@@ -7,7 +7,7 @@ RSpec.describe Policies::InternationalRelocationPayments::ClaimPersonalDataScrub
   )
 
   it "retains name and national insurance number for 2 years" do
-    last_academic_year = Time.zone.local(AcademicYear.current.start_year, 8, 1)
+    last_academic_year = Time.zone.local(AcademicYear.current.start_year, 8, 1, 12)
 
     approved_claim = create(
       :claim,
@@ -85,7 +85,7 @@ RSpec.describe Policies::InternationalRelocationPayments::ClaimPersonalDataScrub
       )
     )
 
-    travel_to(AcademicYear.current.start_of_autumn_term + 2.years) do
+    travel_to(AcademicYear.current.start_of_autumn_term + 2.years + 2.hours) do
       expect { described_class.new.scrub_completed_claims }.to(
         change { approved_claim.reload.first_name }.to(nil)
         .and(

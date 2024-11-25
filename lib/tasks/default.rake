@@ -5,7 +5,11 @@ db_namespace = namespace(:db) {
   task setup_or_migrate: :load_config do
     ActiveRecord::Base.configurations.configs_for(env_name: Rails.env).each do |db_config|
       ActiveRecord::Base.establish_connection(db_config.configuration_hash)
-      if ActiveRecord::SchemaMigration.table_exists?
+
+      connection = ActiveRecord::Base.connection
+      schema_migration = ActiveRecord::SchemaMigration.new(connection)
+
+      if schema_migration.table_exists?
         db_namespace["migrate"].invoke
       else
         db_namespace["setup"].invoke
