@@ -21,7 +21,7 @@ module Journeys
             a << ["Name on the account", answers.banking_name, "personal-bank-account"]
             a << ["Sort code", answers.bank_sort_code, "personal-bank-account"]
             a << ["Account number", answers.bank_account_number, "personal-bank-account"]
-            a << ["Payroll gender", answers.payroll_gender, "gender"]
+            a << ["Payroll gender", t("answers.payroll_gender.#{answers.payroll_gender}"), "gender"]
           end
         end
       end
