@@ -24,7 +24,7 @@ class Decision < ApplicationRecord
 
   scope :active, -> { where(undone: false) }
 
-  enum result: {
+  enum :result, {
     approved: 0,
     rejected: 1
   }

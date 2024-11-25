@@ -7,7 +7,7 @@ db_namespace = namespace(:db) {
       ActiveRecord::Base.establish_connection(db_config.configuration_hash)
 
       connection = ActiveRecord::Base.connection
-      schema_migration = ActiveRecord::SchemaMigration.new(connection)
+      schema_migration = ActiveRecord::SchemaMigration.new(connection.pool)
 
       if schema_migration.table_exists?
         db_namespace["migrate"].invoke
