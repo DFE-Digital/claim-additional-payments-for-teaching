@@ -64,7 +64,7 @@ gem "httpclient"
 gem "daemons"
 
 # Gov form builder to structure claims
-gem "govuk_design_system_formbuilder", "~> 5.6"
+gem "govuk_design_system_formbuilder", "~> 5.7"
 
 gem "govuk_publishing_components"
 
