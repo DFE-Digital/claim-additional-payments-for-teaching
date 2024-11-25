@@ -70,7 +70,6 @@ Rails.application.routes.draw do
         only: [:show, :update],
         param: :slug,
         controller: "reminders",
-        as: :independent_reminders,
         constraints: {
           slug: %r{#{Journeys::Reminders::SlugSequence::SLUGS.join("|")}}
         }

@@ -7,7 +7,7 @@ RSpec.describe "Claims" do
   end
 
   describe "#create" do
-    let(:submit_form) { put independent_reminder_path(journey: "additional-payments", slug: "personal-details", params: form_params) }
+    let(:submit_form) { put reminder_path(journey: "additional-payments", slug: "personal-details", params: form_params) }
 
     context "with full name and valid email address" do
       let(:form_params) { {claim: {reminder_full_name: "Joe Bloggs", reminder_email_address: "joe.bloggs@example.com"}} }
