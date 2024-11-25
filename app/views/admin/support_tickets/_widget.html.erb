@@ -13,9 +13,13 @@
     <%= form_group_tag support_ticket, :url do %>
       <%= errors_tag support_ticket, :url %>
       <%= form.label :url, "Support ticket", class: "govuk-label govuk-label--m" %>
-      <p class="govuk-body-m">
-        <%= link_to "View all suppport tickets in Zendesk", zendesk_email_search_url(@claim.email_address), class: "govuk-link" , target: "_blank" %>
-      </p>
+
+      <%# EY journey without a practitioner will not have an email address yet %>
+      <% if @claim.email_address %>
+        <p class="govuk-body-m">
+          <%= link_to "View all suppport tickets in Zendesk", zendesk_email_search_url(@claim.email_address), class: "govuk-link" , target: "_blank" %>
+        </p>
+      <% end %>
 
       <div class="govuk-hint" id="ticket-hint">
         Create a ticket on Zendesk and enter the URL here.
