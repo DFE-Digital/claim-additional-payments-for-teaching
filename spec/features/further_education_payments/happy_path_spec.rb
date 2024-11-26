@@ -200,6 +200,7 @@ RSpec.feature "Further education payments" do
     expect(reminder.email_verified).to be_truthy
     expect(reminder.itt_academic_year).to eql(AcademicYear.next.to_s)
     expect(reminder.itt_subject).to be_nil
+    expect(reminder.journey_class).to eql("Journeys::FurtherEducationPayments")
 
     expect(page).to have_content("We have set your reminder")
   end
