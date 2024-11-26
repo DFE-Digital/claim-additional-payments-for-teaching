@@ -3,6 +3,19 @@ require "rails_helper"
 Rails.application.load_tasks
 
 describe "fix_tslr_student_loan_amounts" do
+  around do |example|
+    original_stdout = $stdout
+    original_stderr = $stderr
+
+    $stdout = File.open(File::NULL, "w")
+    $stderr = File.open(File::NULL, "w")
+
+    example.run
+
+    $stdout = original_stdout
+    $stderr = original_stderr
+  end
+
   before do
     create(:student_loans_data, nino: "QQ123456A", date_of_birth: Date.new(1980, 1, 1), amount: 100, plan_type_of_deduction: 2)
     create(:student_loans_data, nino: "QQ123456A", date_of_birth: Date.new(1980, 1, 1), amount: 50, plan_type_of_deduction: 1)
