@@ -76,7 +76,8 @@ module Reminders
     def reminder
       @reminder ||= Reminder.new(
         full_name: reminder_full_name,
-        email_address: reminder_email_address
+        email_address: reminder_email_address,
+        journey_class: journey.to_s
       )
     end
 

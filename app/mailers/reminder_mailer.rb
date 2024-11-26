@@ -9,7 +9,7 @@ class ReminderMailer < ApplicationMailer
     @one_time_password = one_time_password
     @display_name = reminder.full_name
     @subject = "Please verify your reminder email"
-    support_email_address = translate("additional_payments.support_email_address")
+    support_email_address = translate(:support_email_address, scope: reminder.journey::I18N_NAMESPACE)
     personalisation = {
       email_subject: @subject,
       first_name: @display_name,
@@ -24,7 +24,7 @@ class ReminderMailer < ApplicationMailer
 
   def reminder_set(reminder)
     @reminder = reminder
-    support_email_address = translate("additional_payments.support_email_address")
+    support_email_address = translate(:support_email_address, scope: reminder.journey::I18N_NAMESPACE)
 
     personalisation = {
       first_name: extract_first_name(@reminder.full_name),
@@ -35,6 +35,10 @@ class ReminderMailer < ApplicationMailer
     send_mail(REMINDER_SET_NOTIFY_TEMPLATE_ID, personalisation)
   end
 
+  # TODO: This template only accommodates LUP/ECP claims currently. Needs to
+  # be changed to support other policies otherwise claimants will receive the
+  # wrong information. Also most of the personalisations are not used in the
+  # template.
   def reminder(reminder)
     @reminder = reminder
     support_email_address = translate("additional_payments.support_email_address")
