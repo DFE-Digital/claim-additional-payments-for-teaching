@@ -18,10 +18,18 @@ module Journeys
           []
         end
 
-        def new_or_find_claim
-          (Claim.find_by(reference: journey_session.answers.reference_number) || Claim.new).tap do |c|
-            if c.eligibility
-              c.eligibility.practitioner_claim_started_at = journey_session.answers.practitioner_claim_started_at
+        def existing_or_new_claim
+          Claim.find_by(reference: journey_session.answers.reference_number) || Claim.new
+        end
+
+        def build_claim
+          existing_or_new_claim.tap do |claim|
+            claim.eligibility ||= main_eligibility
+            claim.eligibility.practitioner_claim_started_at = journey_session.answers.practitioner_claim_started_at
+            answers.attributes.each do |name, value|
+              if claim.respond_to?(:"#{name}=")
+                claim.public_send(:"#{name}=", value)
+              end
             end
           end
         end

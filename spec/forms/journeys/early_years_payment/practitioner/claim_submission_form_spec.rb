@@ -5,23 +5,23 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::ClaimSubmissionForm do
     create(:journey_configuration, :early_years_payment_practitioner)
   end
 
-  let(:journey) { Journeys::EarlyYearsPayment::Practitioner }
+  subject { described_class.new(journey_session: journey_session) }
 
+  let(:journey) { Journeys::EarlyYearsPayment::Practitioner }
   let(:journey_session) { create(:early_years_payment_practitioner_session, answers: answers) }
-  let(:form) { described_class.new(journey_session: journey_session) }
-  let!(:existing_claim) { create(:claim, :early_years_provider_submitted, policy: Policies::EarlyYearsPayments) }
+  let!(:existing_claim) { create(:claim, :early_years_provider_submitted, policy: Policies::EarlyYearsPayments, started_at:) }
+  let(:started_at) { Time.new(2000, 1, 1, 12) }
 
   describe "#save" do
-    subject { form.save }
-
-    let(:claim) { form.claim }
+    let(:claim) { subject.claim }
     let(:eligibility) { claim.eligibility }
     let(:answers) { build(:early_years_payment_practitioner_answers, :submittable, reference_number: existing_claim.reference) }
 
     it { is_expected.to be_truthy }
 
     it "saves some answers into the Claim model" do
-      subject
+      subject.save
+
       expect(claim.submitted_at).to be_present
       expect(claim.eligibility_type).to eq "Policies::EarlyYearsPayments::Eligibility"
       expect(claim.first_name).to eq answers.first_name
@@ -35,8 +35,15 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::ClaimSubmissionForm do
     end
 
     it "saves some answers into the Eligibility model" do
-      subject
+      subject.save
+
       expect(eligibility.practitioner_claim_started_at).to be_present
+    end
+
+    it "does not overwrite claim#started_at" do
+      expect {
+        subject.save
+      }.not_to change { existing_claim.reload.started_at }
     end
   end
 end
