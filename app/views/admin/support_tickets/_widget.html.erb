@@ -3,8 +3,8 @@
   <h2 class="govuk-heading-m">Support ticket</h2>
 
   <ul class="govuk-body">
-    <li><%= link_to "View all suppport tickets in Zendesk", zendesk_email_search_url(@claim.email_address), class: "govuk-link", target: "_blank" %></li>
-    <li><%= link_to claim.support_ticket.url, claim.support_ticket.url, class: "govuk-link", target: "_blank"  %></li>
+    <li><%= govuk_link_to "View all suppport tickets in Zendesk", zendesk_email_search_url(@claim.email_address), new_tab: "" %></li>
+    <li><%= govuk_link_to claim.support_ticket.url, claim.support_ticket.url, new_tab: ""  %></li>
   </ul>
 
 <% else %>
@@ -17,7 +17,7 @@
       <%# EY journey without a practitioner will not have an email address yet %>
       <% if @claim.email_address %>
         <p class="govuk-body-m">
-          <%= link_to "View all suppport tickets in Zendesk", zendesk_email_search_url(@claim.email_address), class: "govuk-link" , target: "_blank" %>
+          <%= govuk_link_to "View all suppport tickets in Zendesk", zendesk_email_search_url(@claim.email_address) , new_tab: "" %>
         </p>
       <% end %>
 
