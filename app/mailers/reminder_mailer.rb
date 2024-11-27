@@ -4,7 +4,7 @@ class ReminderMailer < ApplicationMailer
   helper :application
   helper :additional_payments
 
-  def email_verification(reminder, one_time_password)
+  def email_verification(reminder, one_time_password, journey_name)
     @reminder = reminder
     @one_time_password = one_time_password
     @display_name = reminder.full_name
@@ -15,7 +15,8 @@ class ReminderMailer < ApplicationMailer
       first_name: @display_name,
       one_time_password: @one_time_password,
       support_email_address: support_email_address,
-      validity_duration: one_time_password_validity_duration
+      validity_duration: one_time_password_validity_duration,
+      journey_name:
     }
 
     send_mail(OTP_EMAIL_NOTIFY_TEMPLATE_ID, personalisation)

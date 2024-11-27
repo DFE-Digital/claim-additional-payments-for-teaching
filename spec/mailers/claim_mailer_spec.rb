@@ -334,7 +334,7 @@ RSpec.describe ClaimMailer, type: :mailer do
     describe "#email_verification" do
       it "raises error" do
         expect {
-          ClaimMailer.email_verification(claim, nil).deliver!
+          ClaimMailer.email_verification(claim, nil, "some journey").deliver!
         }.to raise_error(ArgumentError, "Unknown claim policy: SomePolicy")
       end
     end
@@ -349,7 +349,7 @@ RSpec.describe ClaimMailer, type: :mailer do
   end
 
   describe "#email_verification" do
-    let(:mail) { ClaimMailer.email_verification(claim, one_time_password) }
+    let(:mail) { ClaimMailer.email_verification(claim, one_time_password, "some journey") }
     let(:one_time_password) { 123124 }
     let(:claim) { build(:claim, policy: policy, first_name: "Ellie", email_address: "test@test.com") }
 
@@ -359,7 +359,13 @@ RSpec.describe ClaimMailer, type: :mailer do
       let(:policy) { Policies::EarlyCareerPayments }
 
       it "has personalisation keys for: one time password, validity_duration,first_name and support_email_address" do
-        expect(mail[:personalisation].decoded).to eq("{:email_subject=>\"Early-career payment email verification\", :first_name=>\"Ellie\", :one_time_password=>123124, :support_email_address=>\"earlycareerteacherpayments@digital.education.gov.uk\", :validity_duration=>\"15 minutes\"}")
+        expect(mail.personalisation.keys.sort).to eql([:email_subject, :first_name, :journey_name, :one_time_password, :support_email_address, :validity_duration])
+        expect(mail.personalisation[:email_subject]).to eql("Early-career payment email verification")
+        expect(mail.personalisation[:first_name]).to eql("Ellie")
+        expect(mail.personalisation[:journey_name]).to eql("some journey")
+        expect(mail.personalisation[:one_time_password]).to eql(123124)
+        expect(mail.personalisation[:support_email_address]).to eql("earlycareerteacherpayments@digital.education.gov.uk")
+        expect(mail.personalisation[:validity_duration]).to eql("15 minutes")
         expect(mail.body).to be_empty
       end
     end
@@ -368,7 +374,13 @@ RSpec.describe ClaimMailer, type: :mailer do
       let(:policy) { Policies::LevellingUpPremiumPayments }
 
       it "has personalisation keys for: one time password, validity_duration,first_name and support_email_address" do
-        expect(mail[:personalisation].decoded).to eq("{:email_subject=>\"School targeted retention incentive email verification\", :first_name=>\"Ellie\", :one_time_password=>123124, :support_email_address=>\"schools-targeted.retention-incentive@education.gov.uk\", :validity_duration=>\"15 minutes\"}")
+        expect(mail.personalisation.keys.sort).to eql([:email_subject, :first_name, :journey_name, :one_time_password, :support_email_address, :validity_duration])
+        expect(mail.personalisation[:email_subject]).to eql("School targeted retention incentive email verification")
+        expect(mail.personalisation[:first_name]).to eql("Ellie")
+        expect(mail.personalisation[:journey_name]).to eql("some journey")
+        expect(mail.personalisation[:one_time_password]).to eql(123124)
+        expect(mail.personalisation[:support_email_address]).to eql("schools-targeted.retention-incentive@education.gov.uk")
+        expect(mail.personalisation[:validity_duration]).to eql("15 minutes")
         expect(mail.body).to be_empty
       end
     end

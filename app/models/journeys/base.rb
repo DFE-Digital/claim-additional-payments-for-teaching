@@ -69,5 +69,9 @@ module Journeys
     def requires_student_loan_details?
       false
     end
+
+    def name
+      I18n.t(:journey_name, scope: self::I18N_NAMESPACE)
+    end
   end
 end
