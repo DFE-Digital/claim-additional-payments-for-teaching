@@ -5,7 +5,30 @@ module Journeys
 
       attribute :eligible_itt_subject, :string
 
-      validates :eligible_itt_subject, inclusion: {in: :available_options, message: i18n_error_message(:inclusion)}
+      validates :eligible_itt_subject,
+        inclusion: {
+          in: :available_options,
+          message: i18n_error_message(:inclusion)
+        },
+        unless: :boolean_answer?
+
+      validates :eligible_itt_subject,
+        inclusion: {
+          in: :available_options,
+          message: ->(object, _data) {
+            "Select yes if you did your #{qualification_to_substring(object.answers.qualification.to_sym)} in #{object.available_subjects.first}"
+          }
+        },
+        if: :boolean_answer?
+
+      def self.qualification_to_substring(qualification_symbol)
+        {
+          undergraduate_itt: "undergraduate initial teacher training (ITT)",
+          postgraduate_itt: "postgraduate initial teacher training (ITT)",
+          assessment_only: "assessment",
+          overseas_recognition: "teaching qualification"
+        }[qualification_symbol]
+      end
 
       def available_subjects
         @available_subjects ||= subject_symbols.map(&:to_s)
@@ -51,6 +74,10 @@ module Journeys
 
       def eligible_itt_subject_changed?
         journey_session.answers.eligible_itt_subject != eligible_itt_subject
+      end
+
+      def boolean_answer?
+        !available_subjects.many?
       end
     end
   end
