@@ -28,10 +28,26 @@ class StudentLoansDataImporter < CsvImporter::Base
       full_name: row.fetch("Full name"),
       date_of_birth: cast_as_date(row.fetch("Date of birth")),
       policy_name: row.fetch("Policy name"),
-      no_of_plans_currently_repaying: row.fetch("No of Plans Currently Repaying"),
-      plan_type_of_deduction: row.fetch("Plan Type of Deduction"),
+      no_of_plans_currently_repaying: calculate_no_of_plans_currently_repaying(row.fetch("No of Plans Currently Repaying")),
+      plan_type_of_deduction: calculate_plan_type_of_deduction(row.fetch("Plan Type of Deduction")),
       amount: row.fetch("Amount")
     }
+  end
+
+  def calculate_plan_type_of_deduction(value)
+    if value == "No data"
+      nil
+    else
+      value
+    end
+  end
+
+  def calculate_no_of_plans_currently_repaying(value)
+    if value == "No data"
+      nil
+    else
+      value
+    end
   end
 
   def cast_as_date(string)
