@@ -64,11 +64,10 @@ gem "httpclient"
 gem "daemons"
 
 # Gov form builder to structure claims
-gem "govuk_design_system_formbuilder", "~> 5.6"
+gem "govuk_design_system_formbuilder", "~> 5.7.1"
+gem "govuk-components", "~> 5.7.1"
 
 gem "govuk_publishing_components"
-
-gem "govuk-components", "~> 5.6.1"
 
 # See https://github.com/typhoeus/ethon/issues/185
 gem "ethon", "~> 0.16.0"
