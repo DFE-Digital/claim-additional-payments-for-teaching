@@ -9,4 +9,5 @@ class ImportStudentLoansDataJob < FileImporterJob
     StudentLoansData.delete_all
     AnalyticsImporter.import(StudentLoansData)
   end
+  notify_with AdminMailer, success: :slc_csv_processing_success, failure: :slc_csv_processing_error
 end
