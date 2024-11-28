@@ -39,7 +39,7 @@ class ClaimSubmissionBaseForm
   end
 
   def build_claim
-    new_or_find_claim.tap do |claim|
+    Claim.new.tap do |claim|
       claim.eligibility ||= main_eligibility
       claim.started_at = journey_session.created_at
       answers.attributes.each do |name, value|
@@ -48,10 +48,6 @@ class ClaimSubmissionBaseForm
         end
       end
     end
-  end
-
-  def new_or_find_claim
-    Claim.new
   end
 
   def eligibilities
