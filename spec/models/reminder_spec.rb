@@ -13,7 +13,8 @@ RSpec.describe Reminder, type: :model do
         count,
         email_verified: verified,
         email_sent_at: email_sent_at,
-        itt_academic_year: itt_academic_year
+        itt_academic_year: itt_academic_year,
+        journey_class: Journeys.all.sample.to_s
       )
     end
 

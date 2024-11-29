@@ -46,7 +46,7 @@ RSpec.feature "Service configuration" do
 
     within_fieldset("Service status") { choose("Open") }
 
-    expect { click_on "Save" }.to_not enqueue_job(SendReminderEmailsJob)
+    expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob).with { |arg| expect(arg).to eql(Journeys::TeacherStudentLoanReimbursement) }
 
     expect(current_path).to eq(admin_journey_configurations_path)
 
@@ -63,11 +63,11 @@ RSpec.feature "Service configuration" do
     let(:count) { [*1..5].sample }
 
     before do
-      create_list(:reminder, count, email_verified: true, itt_academic_year: AcademicYear.current)
+      create_list(:reminder, count, :with_additonal_payments_reminder, email_verified: true, itt_academic_year: AcademicYear.current)
       # should not be included
-      create(:reminder, email_verified: true, itt_academic_year: AcademicYear.next)
-      create(:reminder, email_verified: true, itt_academic_year: AcademicYear.current, email_sent_at: Date.today)
-      create(:reminder, email_verified: false, itt_academic_year: AcademicYear.current)
+      create(:reminder, :with_fe_reminder, email_verified: true, itt_academic_year: AcademicYear.next)
+      create(:reminder, :with_fe_reminder, email_verified: true, itt_academic_year: AcademicYear.current, email_sent_at: Date.today)
+      create(:reminder, :with_fe_reminder, email_verified: false, itt_academic_year: AcademicYear.current)
     end
 
     scenario "Service operator opens an ECP service for submissions" do
@@ -89,7 +89,7 @@ RSpec.feature "Service configuration" do
 
       within_fieldset("Service status") { choose("Open") }
       expect(page).to have_content(I18n.t("admin.journey_configuration.reminder_warning", count: count))
-      # make sure email reminder jobjob is queued
+      # make sure email reminder job is queued
       expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob)
       expect(current_path).to eq(admin_journey_configurations_path)
 
@@ -113,7 +113,7 @@ RSpec.feature "Service configuration" do
       end
 
       select "2023/2024", from: "Accepting claims for academic year"
-      expect { click_on "Save" }.to_not enqueue_job(SendReminderEmailsJob)
+      expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob).with { |arg| expect(arg).to eql(journey_configuration.journey) }
 
       within(find("tr[data-policy-configuration-routing-name=\"#{journey_configuration.routing_name}\"]")) do
         expect(page).to have_content("2023/2024")

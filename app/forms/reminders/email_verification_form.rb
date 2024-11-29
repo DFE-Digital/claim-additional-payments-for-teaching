@@ -21,7 +21,8 @@ module Reminders
         email_address: journey_session.answers.reminder_email_address,
         email_verified: true,
         itt_academic_year: next_academic_year.to_s,
-        itt_subject:
+        itt_subject:,
+        journey_class: journey.to_s
       )
 
       ReminderMailer.reminder_set(reminder).deliver_now

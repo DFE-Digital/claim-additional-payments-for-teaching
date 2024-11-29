@@ -37,7 +37,7 @@ module Reminders
         reminder_otp_secret:
       )
 
-      ReminderMailer.email_verification(reminder, otp_code, journey_session.journey_class.name).deliver_now
+      ReminderMailer.email_verification(reminder, otp_code, journey_session.journey_class.journey_name).deliver_now
 
       journey_session.save!
     end
@@ -49,7 +49,8 @@ module Reminders
           email_address: submitted_claim.email_address,
           email_verified: true,
           itt_subject: itt_subject_for_submitted_claim,
-          itt_academic_year: next_academic_year.to_s
+          itt_academic_year: next_academic_year.to_s,
+          journey_class: journey.to_s
         )
 
         ReminderMailer.reminder_set(reminder).deliver_now
@@ -75,7 +76,8 @@ module Reminders
     def reminder
       @reminder ||= Reminder.new(
         full_name: reminder_full_name,
-        email_address: reminder_email_address
+        email_address: reminder_email_address,
+        journey_class: journey.to_s
       )
     end
 

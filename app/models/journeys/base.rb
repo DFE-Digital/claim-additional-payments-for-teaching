@@ -70,7 +70,7 @@ module Journeys
       false
     end
 
-    def name
+    def journey_name
       I18n.t(:journey_name, scope: self::I18N_NAMESPACE)
     end
   end

@@ -7,7 +7,8 @@ module Reminders
           email_address: submitted_claim.email_address,
           email_verified: true,
           itt_subject: itt_subject_for_submitted_claim,
-          itt_academic_year: next_academic_year.to_s
+          itt_academic_year: next_academic_year.to_s,
+          journey_class: journey.to_s
         )
       else
         Reminder.find_by(
@@ -15,7 +16,8 @@ module Reminders
           email_address: journey_session.answers.reminder_email_address,
           email_verified: true,
           itt_subject:,
-          itt_academic_year: next_academic_year.to_s
+          itt_academic_year: next_academic_year.to_s,
+          journey_class: journey.to_s
         )
       end
     end
