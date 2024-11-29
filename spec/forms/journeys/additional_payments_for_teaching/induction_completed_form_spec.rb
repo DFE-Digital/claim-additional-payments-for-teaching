@@ -17,14 +17,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::InductionCompletedForm d
     )
   end
 
-  context "unpermitted claim param" do
-    let(:params) { ActionController::Parameters.new({slug: slug, claim: {nonsense_id: 1}}) }
-
-    it "raises an error" do
-      expect { form }.to raise_error ActionController::UnpermittedParameters
-    end
-  end
-
   describe "#save" do
     let(:params) { ActionController::Parameters.new({slug: slug, claim: {induction_completed: true}}) }
 

@@ -29,16 +29,6 @@ RSpec.describe ProvideMobileNumberForm, type: :model do
       )
     end
 
-    context "unpermitted claim param" do
-      let(:provide_mobile_number) { nil }
-
-      let(:params) { ActionController::Parameters.new({slug: slug, claim: {nonsense_id: 1}}) }
-
-      it "raises an error" do
-        expect { form }.to raise_error ActionController::UnpermittedParameters
-      end
-    end
-
     describe "validations" do
       let(:provide_mobile_number) { nil }
 

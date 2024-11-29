@@ -1,0 +1,27 @@
+<%= content_for(:page_title) { "Unsubscribe" } %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form,
+      url: unsubscribe_index_path,
+      scope: "",
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+
+      <%= f.hidden_field :id %>
+
+      <h1 class="govuk-heading-l">
+        Are you sure you wish to unsubscribe from your <%= @form.journey_name %> reminder?
+      </h1>
+
+      <p class="govuk-body">
+        You will no longer receive your reminder to <%= @form.obfuscasted_email %>.
+      <p>
+
+      <p class="govuk-body">
+        However, you will still continue to receive updates about your claim as it progresses.
+      <p>
+
+      <%= f.govuk_submit "Unsubscribe" %>
+    <% end %>
+  </div>
+</div>

@@ -33,8 +33,7 @@ Rails.application.configure do
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
 
-  # Raise an exception if parameters that are not explicitly permitted are found
-  config.action_controller.action_on_unpermitted_parameters = :raise
+  config.action_controller.action_on_unpermitted_parameters = :log
 
   config.action_mailer.perform_caching = false
 

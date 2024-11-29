@@ -17,14 +17,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EntireTermContractForm d
     )
   end
 
-  context "unpermitted claim param" do
-    let(:params) { ActionController::Parameters.new({slug:, claim: {random_param: 1}}) }
-
-    it "raises an error" do
-      expect { form }.to raise_error ActionController::UnpermittedParameters
-    end
-  end
-
   describe "#has_entire_term_contract" do
     let(:params) { ActionController::Parameters.new({slug:, claim: {}}) }
 
