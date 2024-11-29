@@ -1,0 +1,11 @@
+<%= content_for(:page_title) { "Unsubscribe" } %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= govuk_panel(title_text: "Unsubscribe complete") %>
+
+    <p class="govuk-body">
+    You will no longer receive your <%= @form.journey_name %> reminder to <%= @form.obfuscasted_email %>.
+    </p>
+  </div>
+</div>
