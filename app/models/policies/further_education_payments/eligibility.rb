@@ -75,7 +75,7 @@ module Policies
         return false if verified?
 
         # when a provider verification email is sent by the admin team, a note is created
-        !flagged_as_duplicate? || claim.notes.where(label: "provider_verification").any?
+        !flagged_as_duplicate? || provider_verification_notes.any?
       end
 
       def provider_and_claimant_details_match?
@@ -115,6 +115,14 @@ module Policies
 
       def provider_last_name
         verification.dig("verifier", "last_name")
+      end
+
+      def provider_verification_notes
+        if claim.notes.loaded?
+          claim.notes.select { |note| note.label == "provider_verification" }
+        else
+          claim.notes.where(label: "provider_verification")
+        end
       end
     end
   end

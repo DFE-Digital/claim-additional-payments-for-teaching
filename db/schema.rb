@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_13_112028) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_29_103823) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_trgm"
@@ -113,7 +113,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_13_112028) do
     t.date "onelogin_idv_date_of_birth"
     t.datetime "started_at", precision: nil, null: false
     t.datetime "verified_at"
+    t.index "lower((email_address)::text)", name: "index_claims_on_lower_email_address"
+    t.index "lower((first_name)::text), lower((surname)::text), date_of_birth", name: "index_claims_on_personal_details"
+    t.index "lower((national_insurance_number)::text)", name: "index_claims_on_lower_national_insurance_number"
     t.index ["academic_year"], name: "index_claims_on_academic_year"
+    t.index ["bank_account_number", "bank_sort_code"], name: "index_claims_on_bank_details"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
     t.index ["held"], name: "index_claims_on_held"

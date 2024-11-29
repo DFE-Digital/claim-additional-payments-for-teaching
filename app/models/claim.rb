@@ -334,7 +334,11 @@ class Claim < ApplicationRecord
   end
 
   def latest_decision
-    decisions.active.last
+    if decisions.loaded?
+      decisions.reject(&:undone).sort_by(&:created_at).last
+    else
+      decisions.active.last
+    end
   end
 
   def previous_decision
@@ -388,7 +392,7 @@ class Claim < ApplicationRecord
   end
 
   def payrolled?
-    payments.present?
+    payments.any?
   end
 
   def all_payrolled?
