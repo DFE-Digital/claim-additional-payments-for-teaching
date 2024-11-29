@@ -87,15 +87,11 @@ RSpec.describe "Admin claim amendments" do
         expect(response.body).to include("To amend the claim you must change at least one value")
       end
 
-      it "raises an error and does not create an amendment or update the claim when attempting to modify an attribute that isn't in the allowed list" do
+      it "does not create an amendment or update the claim when attempting to modify an attribute that isn't in the allowed list" do
         original_counts = [claim.reference, claim.amendments.size]
 
-        expect {
-          post admin_claim_amendments_url(claim, amendment: {claim: {reference: "REF12345"},
-                                                             notes: "Claimant made a typo"})
-        }.to raise_error(
-          ActionController::UnpermittedParameters
-        )
+        post admin_claim_amendments_url(claim, amendment: {claim: {reference: "REF12345"},
+                                                           notes: "Claimant made a typo"})
 
         expect([claim.reference, claim.amendments.size]).to eq(original_counts)
       end

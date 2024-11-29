@@ -19,7 +19,13 @@ class ReminderMailer < ApplicationMailer
       journey_name:
     }
 
-    send_mail(OTP_EMAIL_NOTIFY_TEMPLATE_ID, personalisation)
+    template_mail(
+      OTP_EMAIL_NOTIFY_TEMPLATE_ID,
+      to: @reminder.email_address,
+      reply_to_id: GENERIC_NOTIFY_REPLY_TO_ID,
+      subject: @subject,
+      personalisation:
+    )
   end
 
   def reminder_set(reminder)
@@ -29,10 +35,17 @@ class ReminderMailer < ApplicationMailer
     personalisation = {
       first_name: extract_first_name(@reminder.full_name),
       support_email_address: support_email_address,
-      next_application_window: @reminder.send_year
+      next_application_window: @reminder.send_year,
+      unsubscribe_url: unsubscribe_url(reminder:)
     }
 
-    send_mail(REMINDER_SET_NOTIFY_TEMPLATE_ID, personalisation)
+    template_mail(
+      REMINDER_SET_NOTIFY_TEMPLATE_ID,
+      to: @reminder.email_address,
+      reply_to_id: GENERIC_NOTIFY_REPLY_TO_ID,
+      subject: @subject,
+      personalisation:
+    )
   end
 
   # TODO: This template only accommodates LUP/ECP claims currently. Needs to
@@ -47,22 +60,22 @@ class ReminderMailer < ApplicationMailer
       support_email_address: support_email_address
     }
 
-    send_mail(REMINDER_APPLICATION_WINDOW_OPEN_NOTIFY_TEMPLATE_ID, personalisation)
-  end
-
-  private
-
-  def extract_first_name(fullname)
-    (fullname || "").split(" ").first
-  end
-
-  def send_mail(template_id, personalisation)
     template_mail(
-      template_id,
+      REMINDER_APPLICATION_WINDOW_OPEN_NOTIFY_TEMPLATE_ID,
       to: @reminder.email_address,
       reply_to_id: GENERIC_NOTIFY_REPLY_TO_ID,
       subject: @subject,
       personalisation:
     )
+  end
+
+  private
+
+  def unsubscribe_url(reminder:)
+    "https://#{ENV["CANONICAL_HOSTNAME"]}/#{reminder.journey::ROUTING_NAME}/unsubscribe/reminders/#{reminder.id}"
+  end
+
+  def extract_first_name(fullname)
+    (fullname || "").split(" ").first
   end
 end

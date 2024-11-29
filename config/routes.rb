@@ -65,6 +65,11 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :unsubscribe,
+      path: "/unsubscribe/:resource_class",
+      constraints: {resource_class: /reminders/},
+      only: [:create, :show]
+
     scope constraints: {journey: /further-education-payments|additional-payments/} do
       resources :reminders,
         only: [:show, :update],
