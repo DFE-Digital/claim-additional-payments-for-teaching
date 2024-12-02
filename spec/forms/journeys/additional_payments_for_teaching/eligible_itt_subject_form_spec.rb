@@ -31,7 +31,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
   let(:itt_academic_year) { AcademicYear.new(2020) }
 
-  let(:form) do
+  subject(:form) do
     described_class.new(
       journey: journey,
       journey_session: journey_session,
@@ -40,14 +40,36 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
   end
 
   describe "validations" do
-    subject { form }
-
     let(:params) { ActionController::Parameters.new }
 
     it do
       is_expected.to validate_inclusion_of(:eligible_itt_subject)
         .in_array(form.available_options)
         .with_message("Select a subject")
+    end
+
+    context "when single subject available" do
+      before do
+        allow(JourneySubjectEligibilityChecker).to receive(:selectable_subject_symbols).and_return([:mathematics])
+      end
+
+      let(:answers) do
+        build(
+          :additional_payments_answers,
+          attributes_for(
+            :additional_payments_answers,
+            :with_qualification,
+            itt_academic_year: itt_academic_year,
+            current_school_id: create(:school, :early_career_payments_eligible).id
+          )
+        )
+      end
+
+      it "returns contextual error message" do
+        expect(subject).to validate_inclusion_of(:eligible_itt_subject)
+          .in_array(["mathematics"])
+          .with_message("Select yes if you did your postgraduate initial teacher training (ITT) in mathematics")
+      end
     end
   end
 
