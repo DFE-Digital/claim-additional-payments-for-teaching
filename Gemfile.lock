@@ -309,7 +309,7 @@ GEM
     listen (3.9.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    logger (1.6.1)
+    logger (1.6.2)
     logstasher (2.1.5)
       activesupport (>= 5.2)
       request_store
@@ -598,7 +598,8 @@ GEM
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
-    psych (5.2.0)
+    psych (5.2.1)
+      date
       stringio
     public_suffix (6.0.1)
     puma (6.4.3)
@@ -650,10 +651,10 @@ GEM
     rails-html-sanitizer (1.6.1)
       loofah (~> 2.21)
       nokogiri (>= 1.15.7, != 1.16.7, != 1.16.6, != 1.16.5, != 1.16.4, != 1.16.3, != 1.16.2, != 1.16.1, != 1.16.0.rc1, != 1.16.0)
-    rails_semantic_logger (4.15.0)
+    rails_semantic_logger (4.17.0)
       rack
       railties (>= 5.1)
-      semantic_logger (~> 4.13)
+      semantic_logger (~> 4.16)
     railties (8.0.0)
       actionpack (= 8.0.0)
       activesupport (= 8.0.0)
@@ -670,7 +671,7 @@ GEM
     rdoc (6.8.1)
       psych (>= 4.0.0)
     regexp_parser (2.9.2)
-    reline (0.5.11)
+    reline (0.5.12)
       io-console (~> 0.5)
     representable (3.2.0)
       declarative (< 0.1.0)
@@ -737,14 +738,14 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    securerandom (0.3.2)
+    securerandom (0.4.0)
     selenium-webdriver (4.25.0)
       base64 (~> 0.2)
       logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    semantic_logger (4.15.0)
+    semantic_logger (4.16.1)
       concurrent-ruby (~> 1.0)
     sentry-rails (5.21.0)
       railties (>= 5.0)
