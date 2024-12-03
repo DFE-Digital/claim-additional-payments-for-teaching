@@ -1,7 +1,10 @@
 module Claims
   module IttSubjectHelper
     def subjects_to_sentence_for_hint_text(answers)
-      all_ecp_subjects = [:chemistry, :foreign_languages, :mathematics, :physics]
+      all_ecp_subjects = Policies::EarlyCareerPayments.subject_symbols(
+        claim_year: answers.policy_year,
+        itt_year: answers.itt_academic_year
+      )
       all_lup_subjects = Policies::LevellingUpPremiumPayments.fixed_subject_symbols
 
       hint_subject_symbols = Set[]
