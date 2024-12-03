@@ -90,10 +90,10 @@ RSpec.describe PaymentConfirmationUpload do
             gross_value: "487.48".to_d,
             national_insurance: "33.9".to_d,
             employers_national_insurance: "38.98".to_d,
-            student_loan_repayment: "0".to_d,
-            postgraduate_loan_repayment: "0".to_d,
+            student_loan_repayment: 0.to_d,
+            postgraduate_loan_repayment: 0.to_d,
             tax: "89.6".to_d,
-            net_pay: "325".to_d,
+            net_pay: 325.to_d,
             gross_pay: "448.5".to_d
           )
 
@@ -102,10 +102,10 @@ RSpec.describe PaymentConfirmationUpload do
             gross_value: "904.15".to_d,
             national_insurance: "77.84".to_d,
             employers_national_insurance: "89.51".to_d,
-            student_loan_repayment: "40".to_d,
-            postgraduate_loan_repayment: "0".to_d,
+            student_loan_repayment: 40.to_d,
+            postgraduate_loan_repayment: 0.to_d,
             tax: "162.8".to_d,
-            net_pay: "534".to_d,
+            net_pay: 534.to_d,
             gross_pay: "814.64".to_d
           )
 
@@ -114,9 +114,9 @@ RSpec.describe PaymentConfirmationUpload do
             gross_value: "11_027.46".to_d,
             national_insurance: "268.84".to_d,
             employers_national_insurance: "1316.63".to_d,
-            student_loan_repayment: "839".to_d,
+            student_loan_repayment: 839.to_d,
             postgraduate_loan_repayment: "9710.83".to_d,
-            tax: "1942".to_d,
+            tax: 1942.to_d,
             net_pay: "6660.99".to_d,
             gross_pay: "9710.83".to_d
           )

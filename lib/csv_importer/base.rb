@@ -60,7 +60,7 @@ module CsvImporter
     end
 
     def with_headers?
-      parse_headers && mandatory_headers&.is_a?(Array) && mandatory_headers&.any?
+      parse_headers && mandatory_headers&.is_a?(Array) && mandatory_headers.any?
     end
 
     def check_headers
