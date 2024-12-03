@@ -94,7 +94,8 @@ RSpec.describe Claims::IttSubjectHelper do
         build(
           :additional_payments_answers,
           :lup_ineligible,
-          :ecp_eligible_later
+          :ecp_eligible_later,
+          itt_academic_year: AcademicYear.new(2020)
         )
       end
 
