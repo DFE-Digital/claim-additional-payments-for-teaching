@@ -44,7 +44,8 @@ class ReminderMailer < ApplicationMailer
       to: @reminder.email_address,
       reply_to_id: GENERIC_NOTIFY_REPLY_TO_ID,
       subject: @subject,
-      personalisation:
+      personalisation:,
+      one_click_unsubscribe_url: one_click_unsubscribe_url(reminder:)
     )
   end
 
@@ -73,6 +74,10 @@ class ReminderMailer < ApplicationMailer
 
   def unsubscribe_url(reminder:)
     "https://#{ENV["CANONICAL_HOSTNAME"]}/#{reminder.journey::ROUTING_NAME}/unsubscribe/reminders/#{reminder.id}"
+  end
+
+  def one_click_unsubscribe_url(reminder:)
+    "https://#{ENV["CANONICAL_HOSTNAME"]}/#{reminder.journey::ROUTING_NAME}/unsubscribe/reminders?id=#{reminder.id}"
   end
 
   def extract_first_name(fullname)
