@@ -10,6 +10,19 @@ GIT
       request_store_rails (~> 2)
 
 GIT
+  remote: https://github.com/asmega/mail-notify.git
+  revision: bc8c25aa43ebc8d664f3c1760bf05ae9bd96796a
+  branch: one-click-unsubscribe
+  specs:
+    mail-notify (2.0.0)
+      actionmailer (>= 5.2.8.1)
+      actionpack (>= 5.2.8.1)
+      actionview (>= 5.2.8.1)
+      activesupport (>= 5.2.8.1)
+      notifications-ruby-client (~> 6.0)
+      rack (>= 2.1.4.1)
+
+GIT
   remote: https://github.com/microsoft/ApplicationInsights-Ruby.git
   revision: 5db6b4ad65262d23f26b678143a4a1fd7939e5c2
   ref: 5db6b4ad65262d23f26b678143a4a1fd7939e5c2
@@ -321,13 +334,6 @@ GEM
       net-imap
       net-pop
       net-smtp
-    mail-notify (2.0.0)
-      actionmailer (>= 5.2.8.1)
-      actionpack (>= 5.2.8.1)
-      actionview (>= 5.2.8.1)
-      activesupport (>= 5.2.8.1)
-      notifications-ruby-client (~> 6.0)
-      rack (>= 2.1.4.1)
     marcel (1.0.4)
     matrix (0.4.2)
     method_source (1.1.0)
@@ -359,7 +365,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.7-x86_64-linux)
       racc (~> 1.4)
-    notifications-ruby-client (6.1.0)
+    notifications-ruby-client (6.2.0)
       jwt (>= 1.5, < 3)
     omniauth (2.1.2)
       hashie (>= 3.4.6)
@@ -875,7 +881,7 @@ DEPENDENCIES
   jwt
   launchy
   listen (>= 3.0.5, < 3.10)
-  mail-notify
+  mail-notify!
   nanoid
   omniauth
   omniauth-rails_csrf_protection

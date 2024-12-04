@@ -33,7 +33,7 @@ gem "omniauth_openid_connect"
 gem "omniauth-rails_csrf_protection"
 
 # ActionMailer support for GOV.UK Notify
-gem "mail-notify"
+gem "mail-notify", github: "asmega/mail-notify", branch: "one-click-unsubscribe"
 
 # Database based asynchronous priority queue system
 gem "delayed_job_active_record"
