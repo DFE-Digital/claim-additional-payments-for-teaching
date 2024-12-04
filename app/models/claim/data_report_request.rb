@@ -83,6 +83,24 @@ class Claim
         end
       end
 
+      class EarlyYearsPayments < Base
+        def to_csv_row
+          [
+            ExcelUtils.escape_formulas(claim.reference),
+            nil,
+            ExcelUtils.escape_formulas(claim.national_insurance_number),
+            ExcelUtils.escape_formulas(claim.full_name),
+            ExcelUtils.escape_formulas(claim.email_address),
+            ExcelUtils.escape_formulas(claim.date_of_birth),
+            nil,
+            ExcelUtils.escape_formulas(claim.policy),
+            ExcelUtils.escape_formulas(claim.eligibility.eligible_ey_provider.nursery_name),
+            ExcelUtils.escape_formulas(claim.eligibility.eligible_ey_provider.urn),
+            ExcelUtils.escape_formulas(claim.payroll_gender)
+          ]
+        end
+      end
+
       class InternationalRelocationPayments < Base
         def to_csv_row
           [
