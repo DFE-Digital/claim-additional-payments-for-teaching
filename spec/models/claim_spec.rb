@@ -1478,4 +1478,51 @@ RSpec.describe Claim, type: :model do
       expect(policy).to have_received(:decision_deadline_date).with(claim)
     end
   end
+
+  describe "#one_login_idv_match?" do
+    context "space in first name" do
+      before do
+        subject.onelogin_idv_full_name = "A B C"
+        subject.first_name = "A B"
+        subject.surname = "C"
+
+        subject.onelogin_idv_date_of_birth = Date.today
+        subject.date_of_birth = Date.today
+      end
+
+      it "matches" do
+        expect(subject).to be_one_login_idv_match
+      end
+    end
+
+    context "close match" do
+      before do
+        subject.onelogin_idv_full_name = "A B C"
+        subject.first_name = "AA B"
+        subject.surname = "C"
+
+        subject.onelogin_idv_date_of_birth = Date.today
+        subject.date_of_birth = Date.today
+      end
+
+      it "does not match" do
+        expect(subject).not_to be_one_login_idv_match
+      end
+    end
+
+    context "not a match" do
+      before do
+        subject.onelogin_idv_full_name = "A B"
+        subject.first_name = "Z"
+        subject.surname = "B"
+
+        subject.onelogin_idv_date_of_birth = Date.today
+        subject.date_of_birth = Date.today
+      end
+
+      it "does not match" do
+        expect(subject).not_to be_one_login_idv_match
+      end
+    end
+  end
 end
