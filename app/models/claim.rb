@@ -93,7 +93,8 @@ class Claim < ApplicationRecord
     practitioner_email_address: true,
     provider_contact_name: true,
     started_at: false,
-    verified_at: false
+    verified_at: false,
+    onelogin_idv_full_name: true
   }.freeze
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
@@ -246,10 +247,6 @@ class Claim < ApplicationRecord
   scope :require_in_progress_update_emails, -> {
     by_policies(Policies.all.select { |p| p.require_in_progress_update_emails? })
   }
-
-  def onelogin_idv_full_name
-    "#{onelogin_idv_first_name} #{onelogin_idv_last_name}"
-  end
 
   def hold!(reason:, user:)
     if holdable? && !held?

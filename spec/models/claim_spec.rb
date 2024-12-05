@@ -653,6 +653,7 @@ RSpec.describe Claim, type: :model do
         :onelogin_uid,
         :onelogin_idv_first_name,
         :onelogin_idv_last_name,
+        :onelogin_idv_full_name,
         :onelogin_idv_date_of_birth,
         :paye_reference,
         :practitioner_email_address,

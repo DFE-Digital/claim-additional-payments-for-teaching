@@ -180,6 +180,7 @@ RSpec.feature "Further education payments" do
 
     expect(claim.first_name).to eql("John")
     expect(claim.surname).to eql("Doe")
+    expect(claim.onelogin_idv_full_name).to eql("TEST USER")
     expect(claim.student_loan_plan).to eq "plan_1"
 
     eligibility = Policies::FurtherEducationPayments::Eligibility.last

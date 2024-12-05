@@ -92,13 +92,14 @@ class OmniauthCallbacksController < ApplicationController
       return redirect_to "/auth/failure?strategy=onelogin&message=access_denied&origin=#{origin}"
     end
 
-    first_name, last_name, date_of_birth = extract_data_from_jwt(core_identity_jwt)
+    first_name, last_name, full_name, date_of_birth = extract_data_from_jwt(core_identity_jwt)
 
     journey_session.answers.assign_attributes(
       identity_confirmed_with_onelogin: true,
       onelogin_idv_at: Time.now,
       onelogin_idv_first_name: first_name,
       onelogin_idv_last_name: last_name,
+      onelogin_idv_full_name: full_name,
       onelogin_idv_date_of_birth: date_of_birth
     )
     journey_session.answers.first_name ||= first_name
@@ -124,16 +125,18 @@ class OmniauthCallbacksController < ApplicationController
     if OneLoginSignIn.bypass?
       first_name = ONE_LOGIN_TEST_USER[:first_name]
       last_name = ONE_LOGIN_TEST_USER[:last_name]
+      full_name = "#{first_name} #{last_name}"
       date_of_birth = ONE_LOGIN_TEST_USER[:date_of_birth]
     else
       validator = OneLogin::CoreIdentityValidator.new(jwt:)
       validator.call
       first_name = validator.first_name
       last_name = validator.last_name
+      full_name = validator.full_name
       date_of_birth = validator.date_of_birth
     end
 
-    [first_name, last_name, date_of_birth]
+    [first_name, last_name, full_name, date_of_birth]
   end
 
   def test_user_auth_hash
