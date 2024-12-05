@@ -21,6 +21,10 @@ class OneLogin::CoreIdentityValidator
     Date.parse(decoded_jwt[0]["vc"]["credentialSubject"]["birthDate"][0]["value"])
   end
 
+  def full_name
+    name_parts.map { |hash| hash["value"] }.join(" ")
+  end
+
   private
 
   def name_parts

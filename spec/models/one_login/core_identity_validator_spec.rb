@@ -79,6 +79,20 @@ RSpec.describe OneLogin::CoreIdentityValidator do
     end
   end
 
+  describe "#full_name" do
+    before do
+      stub_normal_did
+
+      travel_to(Time.at(1723548751)) do
+        subject.call
+      end
+    end
+
+    it "returns whole name" do
+      expect(subject.full_name).to eql("KENNETH DECERQUEIRA")
+    end
+  end
+
   let(:stub_normal_did) do
     return_headers = {
       "Cache-Control" => "max-age=3600, private"
