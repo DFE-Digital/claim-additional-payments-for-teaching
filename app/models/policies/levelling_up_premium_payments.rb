@@ -158,5 +158,9 @@ module Policies
     def selectable_itt_years_for_claim_year(claim_year)
       (AcademicYear.new(claim_year - 5)...AcademicYear.new(claim_year)).to_a
     end
+
+    def closed?(claim_year)
+      claim_year > POLICY_END_YEAR
+    end
   end
 end
