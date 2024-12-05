@@ -50,6 +50,7 @@ module EligibilityCheckable
 
   def common_ineligible_attributes?
     [
+      policy_closed?,
       indicated_ineligible_school?,
       supply_teacher_lacking_either_long_contract_or_direct_employment?,
       poor_performance?,
@@ -57,6 +58,10 @@ module EligibilityCheckable
       ineligible_cohort?,
       insufficient_teaching?
     ].any?
+  end
+
+  def policy_closed?
+    policy.closed?(claim_year)
   end
 
   def indicated_ineligible_school?

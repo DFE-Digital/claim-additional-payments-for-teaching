@@ -4,7 +4,9 @@ class IneligibilityReasonChecker
   end
 
   def reason
-    if current_school?
+    if ecp_only_and_ecp_closed?
+      :ecp_only_ecp_closed
+    elsif current_school?
       :current_school
     elsif dqt_data_ineligible?
       :dqt_data_ineligible
@@ -40,6 +42,15 @@ class IneligibilityReasonChecker
   end
 
   private
+
+  def ecp_only_and_ecp_closed?
+    school = @answers.current_school
+
+    [
+      Policies::EarlyCareerPayments::SchoolEligibility.new(school).eligible?,
+      !Policies::LevellingUpPremiumPayments::SchoolEligibility.new(school).eligible?
+    ].all? && Policies::EarlyCareerPayments.closed?(@answers.policy_year)
+  end
 
   def current_school?
     school = @answers.current_school
