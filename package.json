@@ -8,6 +8,6 @@
     "govuk-one-login-service-header": "https://github.com/govuk-one-login/service-header.git"
   },
   "devDependencies": {
-    "prettier": "^3.4.1"
+    "prettier": "^3.4.2"
   }
 }
