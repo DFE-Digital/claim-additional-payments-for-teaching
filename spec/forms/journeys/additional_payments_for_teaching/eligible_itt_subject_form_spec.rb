@@ -18,7 +18,10 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
         :additional_payments_answers,
         trainee_teacher,
         itt_academic_year: itt_academic_year,
-        current_school_id: create(:school, :early_career_payments_eligible).id
+        current_school_id: create(
+          :school,
+          :early_career_payments_eligible
+        ).id
       )
     )
   end
@@ -50,7 +53,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
     context "when single subject available" do
       before do
-        allow(JourneySubjectEligibilityChecker).to receive(:selectable_subject_symbols).and_return([:mathematics])
+        allow(Journeys::AdditionalPaymentsForTeaching).to receive(:selectable_subject_symbols).and_return([:mathematics])
       end
 
       let(:answers) do
@@ -160,8 +163,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
     context "when the subject list contains chemistry" do
       before do
-        allow(JourneySubjectEligibilityChecker).to(
-          receive(:fixed_lup_subject_symbols).and_return([:chemistry])
+        allow(Policies::LevellingUpPremiumPayments).to(
+          receive(:fixed_subject_symbols).and_return([:chemistry])
         )
       end
 
@@ -170,8 +173,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
     context "when the subject list contains physics" do
       before do
-        allow(JourneySubjectEligibilityChecker).to(
-          receive(:fixed_lup_subject_symbols).and_return([:physics])
+        allow(Policies::LevellingUpPremiumPayments).to(
+          receive(:fixed_subject_symbols).and_return([:physics])
         )
       end
 
@@ -180,8 +183,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
     context "when the subject list does not contain chemistry or physics" do
       before do
-        allow(JourneySubjectEligibilityChecker).to(
-          receive(:fixed_lup_subject_symbols).and_return([:mathematics])
+        allow(Policies::LevellingUpPremiumPayments).to(
+          receive(:fixed_subject_symbols).and_return([:mathematics])
         )
       end
 

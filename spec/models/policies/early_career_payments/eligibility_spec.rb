@@ -3,6 +3,14 @@
 require "rails_helper"
 
 RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
+  let(:academic_year) do
+    Policies::EarlyCareerPayments::Eligibility::ITT_ACADEMIC_YEARS.keys.first
+  end
+
+  before do
+    create(:journey_configuration, :additional_payments)
+  end
+
   describe "#policy" do
     let(:early_career_payments_eligibility) { build(:early_career_payments_eligibility) }
 
@@ -16,7 +24,7 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
 
     context "current_school not set and school_somewhere_else is not set return one is required error" do
       it "returns an error" do
-        eligibility = Policies::EarlyCareerPayments::Eligibility.new(current_school: nil, school_somewhere_else: nil)
+        eligibility = Policies::EarlyCareerPayments::Eligibility.new(current_school: nil, school_somewhere_else: nil, itt_academic_year: academic_year)
 
         expect(eligibility).not_to be_valid(:"correct-school")
         expect(eligibility.errors.messages[:current_school]).to eq(["Select the school you teach at or choose somewhere else"])
@@ -25,7 +33,7 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
 
     context "selects a school suggested from TPS" do
       it "sets current_school and sets school_somewhere_else to false" do
-        eligibility = Policies::EarlyCareerPayments::Eligibility.new(current_school: school, school_somewhere_else: false)
+        eligibility = Policies::EarlyCareerPayments::Eligibility.new(current_school: school, school_somewhere_else: false, itt_academic_year: academic_year)
 
         expect(eligibility).to be_valid(:"correct-school")
       end
@@ -33,14 +41,14 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
 
     context "selects somewhere else and not the suggested school" do
       it "sets school_somewhere_else to true and current_school stays nil" do
-        eligibility = Policies::EarlyCareerPayments::Eligibility.new(current_school: nil, school_somewhere_else: true)
+        eligibility = Policies::EarlyCareerPayments::Eligibility.new(current_school: nil, school_somewhere_else: true, itt_academic_year: academic_year)
 
         expect(eligibility).to be_valid(:"correct-school")
       end
 
       # e.g. the teacher presses the backlink a school is already set
       it "sets school_somewhere_else to true and current_school stays remains if already set" do
-        eligibility = Policies::EarlyCareerPayments::Eligibility.new(current_school: school, school_somewhere_else: true)
+        eligibility = Policies::EarlyCareerPayments::Eligibility.new(current_school: school, school_somewhere_else: true, itt_academic_year: academic_year)
 
         expect(eligibility).to be_valid(:"correct-school")
       end
@@ -108,18 +116,18 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
       end
 
       it "validates that award_amount is a positive number" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new(award_amount: -1_000)).not_to be_valid
-        expect(Policies::EarlyCareerPayments::Eligibility.new(award_amount: 2_500)).to be_valid
+        expect(Policies::EarlyCareerPayments::Eligibility.new(award_amount: -1_000, itt_academic_year: academic_year)).not_to be_valid
+        expect(Policies::EarlyCareerPayments::Eligibility.new(award_amount: 2_500, itt_academic_year: academic_year)).to be_valid
       end
 
       it "validates that award_amount can be zero" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new(award_amount: 0)).to be_valid
+        expect(Policies::EarlyCareerPayments::Eligibility.new(award_amount: 0, itt_academic_year: academic_year)).to be_valid
       end
 
       it "validates that the award_amount is less than £7,500 when amending a claim" do
-        expect(Policies::EarlyCareerPayments::Eligibility.new(teacher_reference_number: "1234567", award_amount: 7_501)).not_to be_valid(:amendment)
-        expect(Policies::EarlyCareerPayments::Eligibility.new(teacher_reference_number: "1234567", award_amount: 7_500)).to be_valid(:amendment)
-        expect(Policies::EarlyCareerPayments::Eligibility.new(teacher_reference_number: "1234567", award_amount: 7_499)).to be_valid(:amendment)
+        expect(Policies::EarlyCareerPayments::Eligibility.new(teacher_reference_number: "1234567", award_amount: 7_501, itt_academic_year: academic_year)).not_to be_valid(:amendment)
+        expect(Policies::EarlyCareerPayments::Eligibility.new(teacher_reference_number: "1234567", award_amount: 7_500, itt_academic_year: academic_year)).to be_valid(:amendment)
+        expect(Policies::EarlyCareerPayments::Eligibility.new(teacher_reference_number: "1234567", award_amount: 7_499, itt_academic_year: academic_year)).to be_valid(:amendment)
       end
     end
   end

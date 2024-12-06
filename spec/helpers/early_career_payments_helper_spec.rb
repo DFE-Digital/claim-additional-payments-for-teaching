@@ -29,7 +29,7 @@ describe AdditionalPaymentsHelper do
     subject do
       helper.eligible_itt_subject_translation(
         journey_session.answers,
-        JourneySubjectEligibilityChecker.selectable_subject_symbols(journey_session.answers)
+        Journeys::AdditionalPaymentsForTeaching.selectable_subject_symbols(journey_session)
       )
     end
 

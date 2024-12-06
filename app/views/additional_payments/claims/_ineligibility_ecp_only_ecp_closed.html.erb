@@ -1,0 +1,17 @@
+<p class="govuk-body">
+  You are not eligible for the
+  <%= link_to("early-career payment (opens in new tab)", Policies::EarlyCareerPayments.eligibility_criteria_url, class: "govuk-link", target: "_blank") %>
+  because the policy has now closed.
+</p>
+<p class="govuk-body">
+  You are not eligible for the
+  <%= link_to("#{I18n.t("levelling_up_premium_payments.policy_short_name").downcase} (opens in new tab)", Policies::LevellingUpPremiumPayments.eligibility_criteria_url, class: "govuk-link", target: "_blank") %>
+  because the school you teach in is not eligible. <%= I18n.t("levelling_up_premium_payments.policy_short_name").capitalize.pluralize %> are offered in schools identified as having a higher need for teachers.
+</p>
+
+<p class="govuk-body">
+  For more information, check the eligibility criteria for
+  <%= link_to("early-career payments", Policies::EarlyCareerPayments.eligibility_criteria_url, class: "govuk-link") %>
+  and
+  <%= link_to(I18n.t("levelling_up_premium_payments.policy_short_name").downcase.pluralize, Policies::LevellingUpPremiumPayments.eligibility_criteria_url, class: "govuk-link") %>.
+</p>

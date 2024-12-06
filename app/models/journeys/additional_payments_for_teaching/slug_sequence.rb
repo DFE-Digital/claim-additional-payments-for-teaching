@@ -73,6 +73,15 @@ module Journeys
         RESULTS_SLUGS
       ).freeze
 
+      TRAINEE_TEACHER_SLUGS = %w[
+        current-school
+        nqt-in-academic-year-after-itt
+        eligible-itt-subject
+        eligible-degree-subject
+        future-eligibility
+        ineligible
+      ]
+
       attr_reader :journey_session
 
       delegate :answers, to: :journey_session
@@ -81,9 +90,15 @@ module Journeys
         @journey_session = journey_session
       end
 
-      # Even though we are inside the ECP namespace, this method can modify the
-      # slug sequence of both LUP and ECP claims
       def slugs
+        if answers.trainee_teacher? && Policies::LevellingUpPremiumPayments::SchoolEligibility.new(answers.current_school).eligible?
+          lup_trainee_journey_slugs
+        else
+          non_trainee_journey_slugs
+        end
+      end
+
+      def non_trainee_journey_slugs
         SLUGS.dup.tap do |sequence|
           if !Journeys::AdditionalPaymentsForTeaching.configuration.teacher_id_enabled?
             sequence.delete("sign-in-or-continue")
@@ -132,14 +147,9 @@ module Journeys
             sequence.delete("mobile-verification")
           end
 
-          if answers.trainee_teacher?
-            trainee_teacher_slugs(sequence)
-            sequence.delete("eligible-degree-subject") unless lup_eligibility_checker.indicated_ineligible_itt_subject?
-          else
-            sequence.delete("ineligible") unless [:ineligible, :eligible_later].include?(overall_eligibility_status)
-            sequence.delete("future-eligibility")
-            sequence.delete("eligible-degree-subject") unless ecp_eligibility_checker.status == :ineligible && lup_eligibility_checker.indicated_ineligible_itt_subject?
-          end
+          sequence.delete("ineligible") unless [:ineligible, :eligible_later].include?(overall_eligibility_status)
+          sequence.delete("future-eligibility")
+          sequence.delete("eligible-degree-subject") unless ecp_eligibility_checker.status == :ineligible && lup_eligibility_checker.indicated_ineligible_itt_subject?
 
           sequence.delete("induction-completed") unless induction_question_required?
 
@@ -160,6 +170,14 @@ module Journeys
             end
           else
             sequence.delete("qualification-details")
+          end
+        end
+      end
+
+      def lup_trainee_journey_slugs
+        TRAINEE_TEACHER_SLUGS.dup.tap do |sequence|
+          if lup_eligibility_checker.status == :eligible_later && answers.eligible_degree_subject.nil?
+            sequence.delete("eligible-degree-subject")
           end
         end
       end
@@ -188,21 +206,6 @@ module Journeys
         ] << dead_end_slug
 
         sequence.replace(slugs)
-      end
-
-      # This method swaps out the entire slug sequence and replaces it with this tiny
-      # journey.
-      def trainee_teacher_slugs(sequence)
-        trainee_slugs = %w[
-          current-school
-          nqt-in-academic-year-after-itt
-          eligible-itt-subject
-          eligible-degree-subject
-          future-eligibility
-          ineligible
-        ]
-
-        [sequence.dup - trainee_slugs].flatten.each { |slug| sequence.delete(slug) }
       end
 
       def induction_question_required?

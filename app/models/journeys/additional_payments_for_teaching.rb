@@ -30,24 +30,43 @@ module Journeys
       }
     }.freeze
 
-    def final_policy_year(policy)
-      {
-        Policies::EarlyCareerPayments => EligibilityCheckable::FINAL_COMBINED_ECP_AND_LUP_POLICY_YEAR,
-        Policies::LevellingUpPremiumPayments => EligibilityCheckable::FINAL_LUP_POLICY_YEAR
-      }[policy]
-    end
-
     def set_a_reminder?(itt_academic_year:, policy:)
       policy_year = configuration.current_academic_year
-      return false if policy_year >= final_policy_year(policy)
+      return false if policy_year >= policy::POLICY_END_YEAR
 
       next_year = policy_year + 1
-      eligible_itt_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(next_year)
+      eligible_itt_years = selectable_itt_years_for_claim_year(next_year)
       eligible_itt_years.include?(itt_academic_year)
     end
 
     def requires_student_loan_details?
       true
+    end
+
+    def selectable_subject_symbols(journey_session)
+      return [] if journey_session.answers.itt_academic_year&.none?
+
+      if journey_session.answers.nqt_in_academic_year_after_itt
+        EligibilityChecker.new(journey_session: journey_session)
+          .potentially_still_eligible.map do |policy|
+            policy.current_and_future_subject_symbols(
+              claim_year: journey_session.answers.policy_year,
+              itt_year: journey_session.answers.itt_academic_year
+            )
+          end.flatten.uniq
+      elsif journey_session.answers.policy_year.in?(Policies::LevellingUpPremiumPayments::POLICY_RANGE)
+        # they get the standard, unchanging LUP subject set because they won't have qualified in time for ECP by 2022/2023
+        # and they won't have given an ITT year
+        Policies::LevellingUpPremiumPayments.fixed_subject_symbols
+      else
+        []
+      end
+    end
+
+    def selectable_itt_years_for_claim_year(claim_year)
+      POLICIES.flat_map do |policy|
+        policy.selectable_itt_years_for_claim_year(claim_year)
+      end.uniq
     end
   end
 end

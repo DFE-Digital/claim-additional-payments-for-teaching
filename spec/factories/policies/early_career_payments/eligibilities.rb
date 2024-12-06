@@ -2,6 +2,10 @@ FactoryBot.define do
   factory :early_career_payments_eligibility, class: "Policies::EarlyCareerPayments::Eligibility" do
     award_amount { 5000.0 }
 
+    itt_academic_year do
+      Journeys.for_policy(Policies::EarlyCareerPayments).configuration.current_academic_year - 3
+    end
+
     trait :eligible do
       teacher_reference_number { generate(:teacher_reference_number) }
       eligible_now

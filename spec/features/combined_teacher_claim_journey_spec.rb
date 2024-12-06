@@ -6,9 +6,9 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
   end
   let(:eligibility) { claim.eligibility }
 
-  before { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023)) }
-
   scenario "Eligible for both" do
+    create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023))
+
     school = create(:school, :combined_journey_eligibile_for_all)
 
     visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
@@ -243,6 +243,8 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
   end
 
   scenario "Eligible for only one" do
+    create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023))
+
     school = create(:school, :early_career_payments_uplifted)
 
     visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
@@ -322,5 +324,85 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     expect(page).to have_text("Based on what you told us, you can apply for an early-career payment of:\n£3,000")
     expect(page).not_to have_selector('input[type="radio"]')
     expect(page).to have_button("Apply now")
+  end
+
+  context "when ECP is closed" do
+    before do
+      create(
+        :journey_configuration,
+        :additional_payments,
+        current_academic_year: AcademicYear.new(2025)
+      )
+    end
+
+    scenario "choosing an ecp only school is ineligible" do
+      school = create(:school, :early_career_payments_eligible)
+
+      visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
+
+      click_on "Continue without signing"
+
+      choose_school school
+
+      expect(page).to have_content "You are not eligible"
+      expect(page).to have_content "the policy has now closed"
+    end
+
+    scenario "choosing a lup eligible school allows completing the journey" do
+      school = create(:school, :combined_journey_eligibile_for_all)
+
+      visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
+
+      click_on "Continue without signing"
+
+      choose_school school
+      click_on "Continue"
+
+      # - Have you started your first year as a newly qualified teacher?
+      choose "Yes"
+      click_on "Continue"
+
+      # - Have you completed your induction as an early-career teacher?
+      choose "Yes"
+      click_on "Continue"
+
+      # - Are you currently employed as a supply teacher
+      choose "No"
+      click_on "Continue"
+
+      # - Poor performance
+      within all(".govuk-fieldset")[0] do
+        choose("No")
+      end
+      within all(".govuk-fieldset")[1] do
+        choose("No")
+      end
+      click_on "Continue"
+
+      # - What route into teaching did you take?
+      choose("Undergraduate initial teacher training (ITT)")
+      click_on "Continue"
+
+      # - In which academic year did you complete your undergraduate ITT?
+      choose("2024 to 2025")
+      click_on "Continue"
+
+      # - Which subject did you do your undergraduate ITT in
+      choose "Mathematics"
+      click_on "Continue"
+
+      # Do you spend at least half of your contracted hours teaching eligible
+      # subjects?
+      choose "Yes"
+      click_on "Continue"
+
+      # Check your answers
+      click_on "Continue"
+
+      expect(page).to have_content("You’re eligible for an additional payment")
+      expect(page).to have_content(
+        "you can apply for a school targeted retention incentive"
+      )
+    end
   end
 end
