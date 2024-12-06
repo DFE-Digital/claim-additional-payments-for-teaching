@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_05_121421) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_06_105631) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -429,6 +429,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_05_121421) do
     t.string "itt_academic_year", limit: 9
     t.string "itt_subject"
     t.text "journey_class", null: false
+    t.datetime "deleted_at"
     t.index ["journey_class"], name: "index_reminders_on_journey_class"
   end
 

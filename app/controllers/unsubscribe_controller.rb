@@ -15,7 +15,7 @@ class UnsubscribeController < ApplicationController
     if @form.reminder.nil?
       head :bad_request
     else
-      @form.reminder.destroy
+      @form.reminder.soft_delete!
     end
   end
 
