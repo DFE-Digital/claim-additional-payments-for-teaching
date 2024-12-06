@@ -894,7 +894,6 @@ DEPENDENCIES
   rotp
   rspec-rails
   rspec-retry
-  rubyzip
   sass-rails (~> 6.0)
   selenium-webdriver
   shoulda-matchers
