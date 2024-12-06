@@ -6,7 +6,7 @@ module Unsubscribe
     attribute :id, :string
 
     def reminder
-      @reminder ||= Reminder.find_by(id:)
+      @reminder ||= Reminder.not_deleted.find_by(id:)
     end
 
     def obfuscasted_email

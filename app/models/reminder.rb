@@ -7,6 +7,7 @@ class Reminder < ApplicationRecord
   scope :by_journey, ->(journey) { where(journey_class: journey.to_s) }
   scope :inside_academic_year, -> { where(itt_academic_year: AcademicYear.current.to_s) }
   scope :to_be_sent, -> { email_verified.not_yet_sent.inside_academic_year }
+  scope :not_deleted, -> { where(deleted_at: nil) }
 
   def journey
     journey_class.constantize
@@ -20,5 +21,9 @@ class Reminder < ApplicationRecord
     AcademicYear.new(
       read_attribute(:itt_academic_year)
     )
+  end
+
+  def soft_delete!
+    update!(deleted_at: Time.now)
   end
 end
