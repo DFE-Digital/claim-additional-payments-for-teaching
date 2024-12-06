@@ -53,6 +53,8 @@ module Reminders
           journey_class: journey.to_s
         )
 
+        reminder.update!(deleted_at: nil)
+
         ReminderMailer.reminder_set(reminder).deliver_now
       else
         false
