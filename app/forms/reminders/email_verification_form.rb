@@ -25,6 +25,8 @@ module Reminders
         journey_class: journey.to_s
       )
 
+      reminder.update!(deleted_at: nil)
+
       ReminderMailer.reminder_set(reminder).deliver_now
     end
 
@@ -34,7 +36,9 @@ module Reminders
     private
 
     def itt_subject
-      journey_session.answers.eligible_itt_subject
+      if journey_session.answers.respond_to?(:eligible_itt_subject)
+        journey_session.answers.eligible_itt_subject
+      end
     end
 
     def next_academic_year
