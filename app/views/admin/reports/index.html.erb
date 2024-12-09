@@ -13,5 +13,11 @@
       admin_report_path("fe-approved-claims-with-failing-provider-verification", format: :csv),
       secondary: true
     ) %>
+
+    <%= govuk_button_link_to(
+      "Approved claims failing qualification task",
+      admin_report_path("approved-claims-failing-qualification-task", format: :csv),
+      secondary: true
+    ) %>
   </div>
 </div>
