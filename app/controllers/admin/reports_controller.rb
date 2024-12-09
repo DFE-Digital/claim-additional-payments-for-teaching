@@ -19,6 +19,8 @@ module Admin
       @report ||= case params[:name]
       when "fe-approved-claims-with-failing-provider-verification"
         Reports::FeApprovedClaimsWithFailingProviderVerification.new
+      when "approved-claims-failing-qualification-task"
+        Reports::ApprovedClaimsFailingQualificationTask.new
       else
         raise ActiveRecord::RecordNotFound
       end
