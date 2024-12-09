@@ -1,0 +1,17 @@
+<% content_for :back_link do %>
+  <%= govuk_back_link href: admin_claims_path %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-xl">
+      Reports
+    </h1>
+
+    <%= govuk_button_link_to(
+      "FE TRI approved claims whereby the provider check status is 'failed'",
+      admin_report_path("fe-approved-claims-with-failing-provider-verification", format: :csv),
+      secondary: true
+    ) %>
+  </div>
+</div>
