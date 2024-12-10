@@ -37,9 +37,9 @@ module Admin
     end
 
     def send_reminders
-      return unless journey_configuration.open_for_submissions && journey_configuration.additional_payments?
+      return unless journey_configuration.open_for_submissions
 
-      SendReminderEmailsJob.perform_later
+      SendReminderEmailsJob.perform_later(journey_configuration.journey)
     end
   end
 end

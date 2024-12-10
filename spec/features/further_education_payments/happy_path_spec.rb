@@ -141,7 +141,7 @@ RSpec.feature "Further education payments" do
     click_on "Continue"
 
     expect(page).to have_content("Email address")
-    fill_in "Email address", with: "johndoe@example.com"
+    fill_in "Email address", with: "john.doe@example.com"
     click_on "Continue"
 
     expect(page).to have_content("Enter the 6-digit passcode")
@@ -187,22 +187,11 @@ RSpec.feature "Further education payments" do
     expect(eligibility.teacher_reference_number).to eql("1234567")
 
     expect(page).to have_content("You applied for a further education targeted retention incentive payment")
-    click_link "Set reminder"
-
-    expect(page).to have_content("Personal details")
-    fill_in "Full name", with: "John Doe"
-    fill_in "Email address", with: "john.doe@example.com"
-    click_button "Continue"
-
-    expect(page).to have_content("Enter the 6-digit passcode")
-    mail = ActionMailer::Base.deliveries.last
-    otp_in_mail_sent = mail[:personalisation].decoded.scan(/\b[0-9]{6}\b/).first
-    fill_in "Enter the 6-digit passcode", with: otp_in_mail_sent
 
     expect do
-      click_on "Confirm"
-    end.to change { ActionMailer::Base.deliveries.count }.by(1)
-      .and change { Reminder.count }.by(1)
+      click_link "Set reminder"
+    end.to change { Reminder.count }.by(1)
+      .and change { ActionMailer::Base.deliveries.count }.by(1)
 
     reminder = Reminder.last
 
@@ -210,6 +199,8 @@ RSpec.feature "Further education payments" do
     expect(reminder.email_address).to eql("john.doe@example.com")
     expect(reminder.email_verified).to be_truthy
     expect(reminder.itt_academic_year).to eql(AcademicYear.next.to_s)
+    expect(reminder.itt_subject).to be_nil
+    expect(reminder.journey_class).to eql("Journeys::FurtherEducationPayments")
 
     expect(page).to have_content("We have set your reminder")
   end

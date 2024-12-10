@@ -369,6 +369,10 @@ en:
       qualification_details:
         errors:
           qualifications_details_check: "Select yes if your qualification details are correct"
+      email_verification:
+        errors:
+          one_time_password:
+            invalid: An error occured while validating the passcode, please try generating a new one
     journey_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"
     policy_acronym: "TSLR"
@@ -571,17 +575,16 @@ en:
         errors:
           blank: Select an additional payment
           inclusion: Select a valid additional payment
-      reminders:
-        personal_details: &reminders_personal_details
-          errors:
-            full_name:
-              blank: Enter full name
-              length: Full name must be 100 characters or less
-            email_address:
-              blank: Enter an email address
-              invalid: Enter an email address in the correct format, like name@example.com
-              length: Email address must be 256 characters or less
-              unauthorised: Only authorised email addresses can be used when using a team-only API key
+      personal_details: &reminders_personal_details
+        errors:
+          full_name:
+            blank: Enter full name
+            length: Full name must be 100 characters or less
+          email_address:
+            blank: Enter an email address
+            invalid: Enter an email address in the correct format, like name@example.com
+            length: Email address must be 256 characters or less
+            unauthorised: Only authorised email addresses can be used when using a team-only API key
     check_your_answers:
       part_one:
         primary_heading: Check your answers
@@ -941,12 +944,12 @@ en:
               true: "Yes"
               false: "No"
           subject_to_formal_performance_action:
-            label: "Performance measures"
+            label: "No performance measures"
             claimant_answers:
               true: "Yes"
               false: "No"
           subject_to_disciplinary_action:
-            label: "Disciplinary action"
+            label: "No disciplinary action"
             claimant_answers:
               true: "Yes"
               false: "No"

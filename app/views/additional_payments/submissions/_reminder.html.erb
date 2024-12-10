@@ -10,4 +10,4 @@
   Receive a reminder email so you know when you can apply next year. We cannot issue payments unless you apply.
 </p>
 
-<%= link_to "Set reminder", new_reminder_path, class: "govuk-button", role: :button, data: { module: "govuk-button" } %>
+<%= govuk_button_link_to "Set reminder", reminder_path(journey: journey::ROUTING_NAME, slug: "personal-details") %>

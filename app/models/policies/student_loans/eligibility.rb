@@ -20,17 +20,17 @@ module Policies
       # in particular the "cut off date" is to be considered dynamic and based on the current financial/claim year.
       # You should simply consider 0 as the ineligible value and 1 as the eligible one.
       # We don't store claims with a `qts_award_year = 0` as the journey would have ended after the first question.
-      enum qts_award_year: {
+      enum :qts_award_year, {
         before_cut_off_date: 0,
         on_or_after_cut_off_date: 1
-      }, _prefix: :awarded_qualified_status
+      }, prefix: :awarded_qualified_status
 
-      enum employment_status: {
+      enum :employment_status, {
         claim_school: 0,
         different_school: 1,
         no_school: 2,
         recent_tps_school: 3
-      }, _prefix: :employed_at
+      }, prefix: :employed_at
 
       has_one :claim, as: :eligibility, inverse_of: :eligibility
       belongs_to :claim_school, optional: true, class_name: "School"

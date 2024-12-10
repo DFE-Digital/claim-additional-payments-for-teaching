@@ -15,21 +15,27 @@ RSpec.describe Policies::EarlyYearsPayments::Eligibility do
     subject { eligibility.employment_task_available? }
 
     context "before 6 months from start date" do
-      before { travel_to eligibility.start_date }
-
-      it { is_expected.to be false }
+      it do
+        travel_to(eligibility.start_date) do
+          is_expected.to be_falsey
+        end
+      end
     end
 
     context "exactly 6 months from start date" do
-      before { travel_to eligibility.start_date + 6.months }
-
-      it { is_expected.to be true }
+      it do
+        travel_to(eligibility.start_date + 6.months - 2.hours) do
+          is_expected.to be_falsey
+        end
+      end
     end
 
     context "after 6 months from start date" do
-      before { travel_to eligibility.start_date + 6.months + 1.day }
-
-      it { is_expected.to be true }
+      it do
+        travel_to(eligibility.start_date + 6.months + 2.hours) do
+          is_expected.to be_truthy
+        end
+      end
     end
   end
 end

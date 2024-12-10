@@ -60,7 +60,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     expect(page).not_to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
     expect(page).not_to have_text(I18n.t("additional_payments.forms.eligible_itt_subject.questions.which_subject", qualification: "undergraduate initial teacher training (ITT)"))
     expect(page).not_to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
-    expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
+    expect(page).not_to have_text(I18n.t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"))
 
     # Go back to the qualification details page
     click_link "Back"
@@ -105,7 +105,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
     expect(page).to have_text(I18n.t("additional_payments.forms.eligible_itt_subject.questions.single_subject", qualification: "undergraduate initial teacher training (ITT)", subject: "mathematics"))
     expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
-    expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
+    expect(page).not_to have_text(I18n.t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"))
 
     click_on("Continue")
 
@@ -180,7 +180,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     navigate_until_performance_related_questions(expect_induction_question: true)
 
     # Qualification pages are not skipped
-    expect(page).not_to have_text(I18n.t("additional_payments.questions.check_and_confirm_qualification_details"))
+    expect(page).not_to have_text(I18n.t("questions.check_and_confirm_qualification_details"))
 
     # - What route into teaching did you take?
     expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
@@ -206,7 +206,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
     expect(page).to have_text(I18n.t("additional_payments.forms.eligible_itt_subject.questions.single_subject", qualification: "undergraduate initial teacher training (ITT)", subject: "mathematics"))
     expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
-    expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
+    expect(page).not_to have_text(I18n.t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"))
   end
 
   scenario "When user is logged in with Teacher ID and NINO is not supplied" do
@@ -286,7 +286,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     expect(page).not_to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
     expect(page).not_to have_text(I18n.t("additional_payments.forms.eligible_itt_subject.questions.which_subject", qualification: "undergraduate initial teacher training (ITT)"))
     expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
-    expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
+    expect(page).not_to have_text(I18n.t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"))
   end
 
   scenario "When user is logged in with Teacher ID and the ITT subject is ineligible" do

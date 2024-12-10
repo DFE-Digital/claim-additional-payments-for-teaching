@@ -10,7 +10,7 @@ ENV DEPS_HOME /deps
 ENV RAILS_ENV production
 
 RUN apk update
-RUN apk add postgresql16=~16.5-r0
+RUN apk add postgresql16=~16.6-r0
 RUN apk add bash postgresql-dev tzdata nodejs curl libc6-compat shared-mime-info
 
 # ------------------------------------------------------------------------------
@@ -80,6 +80,9 @@ RUN DFE_SIGN_IN_API_CLIENT_ID= \
   ADMIN_ALLOWED_IPS= \
   ENVIRONMENT_NAME= \
   SUPPRESS_DFE_ANALYTICS_INIT= \
+  GOVUK_APP_DOMAIN= \
+  GOVUK_WEBSITE_ROOT= \
+  SECRET_KEY_BASE_DUMMY=1 \
   bundle exec rake assets:precompile
 
 RUN chown -hR appuser:appgroup ${APP_HOME}

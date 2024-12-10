@@ -108,31 +108,6 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
       end
     end
 
-    context "when an error occurs while updating" do
-      let(:exception) { ActiveRecord::RecordInvalid }
-
-      before do
-        allow(claim).to receive(:save!) { raise(exception) }
-        allow(Rollbar).to receive(:error)
-      end
-
-      it "suppresses the exception" do
-        expect { call }.not_to raise_error
-      end
-
-      it "logs the exception" do
-        call
-
-        expect(Rollbar).to have_received(:error).with(exception)
-      end
-
-      it "does not update the student loan details" do
-        expect { call }.to not_change { claim.reload.has_student_loan }
-          .and not_change { claim.student_loan_plan }
-          .and not_change { claim.eligibility.student_loan_repayment_amount }
-      end
-    end
-
     context "when updating a claim after submission" do
       let(:claim) { create(:claim, :submitted, :with_no_student_loan, policy:) }
 

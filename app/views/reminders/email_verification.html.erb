@@ -1,11 +1,11 @@
 <% content_for(:page_title, page_title(t("one_time_password.title"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
-<% @backlink_path = independent_reminder_path(current_journey_routing_name, navigator.previous_slug) %>
+<% @backlink_path = reminder_path(current_journey_routing_name, navigator.previous_slug) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: @form,
-      url: independent_reminder_path(current_journey_routing_name),
+      url: reminder_path(current_journey_routing_name),
       builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
       <%= f.govuk_error_summary %>
 
@@ -32,12 +32,12 @@
         <% end %>
 
       <div class="govuk-body govuk-!-margin-bottom-6">
-        <%= govuk_link_to "Resend passcode (you will be sent back to the email address page)", independent_reminder_path(journey: journey::ROUTING_NAME, slug: "personal-details"), no_visited_state: true %>
+        <%= govuk_link_to "Resend passcode (you will be sent back to the email address page)", reminder_path(journey: journey::ROUTING_NAME, slug: "personal-details"), no_visited_state: true %>
       </div>
 
       <div class="govuk-button-group">
         <%= f.govuk_submit "Confirm" %>
-        <%= govuk_button_link_to "Change email address", independent_reminder_path(journey: journey::ROUTING_NAME, slug: "personal-details"), secondary: true %>
+        <%= govuk_button_link_to "Change email address", reminder_path(journey: journey::ROUTING_NAME, slug: "personal-details"), secondary: true %>
       </div>
     <% end %>
   </div>

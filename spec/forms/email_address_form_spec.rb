@@ -82,7 +82,8 @@ RSpec.describe EmailAddressForm do
           email_subject: email_subject,
           first_name: "Jo",
           one_time_password: "111111",
-          support_email_address: support_email_address
+          support_email_address: support_email_address,
+          journey_name: journey_session.journey_class.journey_name
         )
       end
 

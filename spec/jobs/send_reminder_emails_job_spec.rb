@@ -2,12 +2,22 @@ require "rails_helper"
 
 RSpec.describe SendReminderEmailsJob do
   let(:count) { [*1..5].sample }
-  let(:reminders) { create_list(:reminder, count, email_verified: true, itt_academic_year: AcademicYear.current) }
+  let(:reminders) do
+    create_list(
+      :reminder,
+      count,
+      email_verified: true,
+      itt_academic_year: AcademicYear.current,
+      journey_class: Journeys::AdditionalPaymentsForTeaching.to_s
+    )
+  end
+
   before do
     # these should not send
-    create(:reminder, email_verified: false)
-    create(:reminder, email_verified: true, email_sent_at: Time.now)
-    create(:reminder, email_verified: true, itt_academic_year: AcademicYear.next)
+    create(:reminder, email_verified: false, journey_class: Journeys::AdditionalPaymentsForTeaching.to_s)
+    create(:reminder, email_verified: true, email_sent_at: Time.now, journey_class: Journeys::AdditionalPaymentsForTeaching.to_s)
+    create(:reminder, email_verified: true, itt_academic_year: AcademicYear.next, journey_class: Journeys::AdditionalPaymentsForTeaching.to_s)
+    create(:reminder, email_verified: true, itt_academic_year: AcademicYear.current, journey_class: Journeys::FurtherEducationPayments.to_s)
   end
 
   describe "#perform" do
@@ -22,7 +32,7 @@ RSpec.describe SendReminderEmailsJob do
       # perform job
       expect {
         perform_enqueued_jobs do
-          subject.perform
+          subject.perform(Journeys::AdditionalPaymentsForTeaching.to_s)
         end
       }.to change { ActionMailer::Base.deliveries.count }.by(count)
 

@@ -1,0 +1,6 @@
+.app-c-box {
+  background-color: govuk-colour("light-grey");
+  @include govuk-responsive-padding(9);
+  @include govuk-responsive-padding(6, "bottom");
+  @include govuk-responsive-margin(6, "bottom");
+}

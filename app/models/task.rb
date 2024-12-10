@@ -33,7 +33,7 @@ class Task < ApplicationRecord
   belongs_to :claim
   belongs_to :created_by, class_name: "DfeSignIn::User", optional: true
 
-  enum claim_verifier_match: {none: 0, any: 1, all: 2}, _prefix: :claim_verifier_match
+  enum :claim_verifier_match, {none: 0, any: 1, all: 2}, prefix: :claim_verifier_match
 
   validates :name, uniqueness: {scope: :claim_id}, inclusion: {in: NAMES, message: "name not recognised"}
   validates_inclusion_of :passed, in: [true, false], message: "You must select ‘Yes’ or ‘No’", on: :create

@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.3.5"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem "rails", "~> 7.0.8"
+gem "rails", "~> 8.0"
 # Use postgresql as the database for Active Record
 gem "pg", ">= 0.18", "< 2.0"
 # Use Puma as the app server
@@ -64,9 +64,10 @@ gem "httpclient"
 gem "daemons"
 
 # Gov form builder to structure claims
-gem "govuk_design_system_formbuilder", "~> 5.6"
+gem "govuk_design_system_formbuilder", "~> 5.7.1"
+gem "govuk-components", "~> 5.7.1"
 
-gem "govuk-components", "~> 5.6.1"
+gem "govuk_publishing_components"
 
 # See https://github.com/typhoeus/ethon/issues/185
 gem "ethon", "~> 0.16.0"
@@ -80,7 +81,7 @@ gem "uk_postcode"
 gem "faraday_middleware"
 
 # required for prod due to Azure DEV/TEST all running as 'production'
-gem "faker", "~> 3.4", require: false
+gem "faker", "~> 3.5", require: false
 # speed up bulk imports
 gem "activerecord-copy", require: false
 

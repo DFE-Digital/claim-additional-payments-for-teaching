@@ -5,6 +5,25 @@ on:
     branches: [master]
   pull_request:
     types: [labeled, opened, reopened, synchronize]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Deploy environment"
+        required: true
+        type: choice
+        default: review
+        options:
+        - review
+        - test
+        - production
+      docker-image-tag:
+        description: "Docker image tag to deploy (optional)"
+        required: true
+        type: string
+      pull-request-number:
+        description: "Pull request number (required for review environment)"
+        required: false
+        type: string
 
 concurrency: deploy-${{ github.ref }}
 
@@ -14,6 +33,7 @@ permissions:
 
 jobs:
   build:
+    if: ${{ github.event_name != 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     outputs:
       docker-image-tag: ${{ steps.build-image.outputs.tag }}
@@ -35,7 +55,7 @@ jobs:
     name: Deploy to review environment
     concurrency: deploy_review_${{ github.event.pull_request.number }}
     runs-on: ubuntu-latest
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
+    if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
     needs: [build]
     environment:
       name: review
@@ -129,3 +149,61 @@ jobs:
             Failure deploying release to ${{ matrix.environment }} - Docker tag ${{ needs.build.outputs.docker-image-tag
             }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  manual_deploy:
+    name: Deploy to ${{ inputs.environment }}
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    concurrency: deploy_${{ inputs.environment }}
+    environment:
+      name: ${{ inputs.environment }}
+      url: ${{ steps.deploy_manual.outputs.environment_url }}
+    outputs:
+      environment_url: ${{ steps.deploy_manual.outputs.environment_url }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set env vars
+        shell: bash
+        run: |
+          if [ ${{ inputs.environment }} == 'review' ]; then
+            AKS_NAMESPACE=srtl-development
+            AKS_DEPLOYMENT=claim-additional-payments-for-teaching-review-${{ inputs.pull-request-number }}
+          else
+            AKS_NAMESPACE=srtl-${{ inputs.environment }}
+            AKS_DEPLOYMENT=claim-additional-payments-for-teaching-${{ inputs.environment }}
+          fi
+          echo "AKS_NAMESPACE=$AKS_NAMESPACE" >> $GITHUB_ENV
+          echo "AKS_DEPLOYMENT=$AKS_DEPLOYMENT" >> $GITHUB_ENV
+
+      - uses: ./.github/actions/deploy-environment
+        id: deploy_manual
+        with:
+          environment: ${{ inputs.environment }}
+          docker-image: ${{ inputs.docker-image-tag }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          aks-namespace: ${{ env.AKS_NAMESPACE }}
+          aks-deployment: ${{ env.AKS_DEPLOYMENT }}
+          pull-request-number: ${{ inputs.pull-request-number }}
+
+      - name: Install Ruby
+        if: ${{ inputs.environment != 'review' }}
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Run smoke tests
+        if: ${{ inputs.environment != 'review' }}
+        shell: bash
+        run: bundle exec rspec spec/smoke -t smoke:true -b
+        env:
+          RAILS_ENV: test
+          SMOKE_TEST_APP_HOST: ${{ vars.SMOKE_TEST_APP_HOST }}
+          BASIC_AUTH_USERNAME: ${{ secrets.BASIC_AUTH_USERNAME }}
+          BASIC_AUTH_PASSWORD: ${{ secrets.BASIC_AUTH_PASSWORD }}

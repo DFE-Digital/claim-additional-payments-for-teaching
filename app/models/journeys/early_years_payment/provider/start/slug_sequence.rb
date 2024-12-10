@@ -11,7 +11,7 @@ module Journeys
           ].freeze
 
           def self.start_page_url
-            Rails.application.routes.url_helpers.landing_page_path("early-years-payment-provider")
+            Rails.application.routes.url_helpers.landing_page_path("early-years-payment")
           end
 
           attr_reader :journey_session

@@ -4,7 +4,7 @@ class RiskIndicator < ApplicationRecord
     national_insurance_number
   ].freeze
 
-  enum field: SUPPORTED_FIELDS.index_by(&:itself)
+  enum :field, SUPPORTED_FIELDS.index_by(&:itself)
 
   validates :value, presence: {
     message: "'value' can't be blank"

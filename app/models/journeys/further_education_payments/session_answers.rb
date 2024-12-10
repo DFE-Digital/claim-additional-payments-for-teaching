@@ -26,12 +26,6 @@ module Journeys
       attribute :half_teaching_hours, :boolean
       attribute :award_amount, :decimal
 
-      # TODO: extract
-      attribute :reminder_full_name, :string
-      attribute :reminder_email_address, :string
-      attribute :reminder_otp_secret, :string
-      attribute :reminder_otp_confirmed, :boolean, default: false # whether or not they have confirmed email via otp
-
       def policy
         Policies::FurtherEducationPayments
       end

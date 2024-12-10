@@ -7,7 +7,7 @@ RSpec.describe Claim::DataReportRequest do
   let(:csv) { CSV.parse(subject.to_csv, headers: true) }
 
   describe "#to_csv" do
-    context "early policies" do
+    context "original policies" do
       let(:claims) do
         [
           create(:claim, :submitted, policy: Policies::StudentLoans),
@@ -36,7 +36,7 @@ RSpec.describe Claim::DataReportRequest do
       end
     end
 
-    context "FE policy" do
+    context "FE policy claims" do
       let(:claims) do
         [
           create(:claim, :submitted, policy: Policies::FurtherEducationPayments)
@@ -63,7 +63,7 @@ RSpec.describe Claim::DataReportRequest do
       end
     end
 
-    context "IRP claims" do
+    context "IRP policy claims" do
       let(:claims) do
         [
           create(:claim, :submitted, policy: Policies::InternationalRelocationPayments)
@@ -88,6 +88,36 @@ RSpec.describe Claim::DataReportRequest do
           expect(csv[index]["Payroll gender"]).to eql(claim.payroll_gender)
           expect(csv[index]["Nationality"]).to eql(claim.eligibility.nationality)
           expect(csv[index]["Passport number"]).to eql(claim.eligibility.passport_number)
+        end
+      end
+    end
+
+    context "EY policy claims" do
+      let(:claims) do
+        [
+          create(:claim, :submitted, policy: Policies::EarlyYearsPayments)
+        ]
+      end
+
+      it "contains the correct headers" do
+        expect(csv.headers).to eql(Claim::DataReportRequest::HEADERS)
+      end
+
+      it "contains the correct values" do
+        claims.each_with_index do |claim, index|
+          expect(csv[index]["Claim reference"]).to eql(claim.reference)
+          expect(csv[index]["Teacher reference number"]).to be_nil
+          expect(csv[index]["NINO"]).to eql(claim.national_insurance_number)
+          expect(csv[index]["Full name"]).to eql(claim.full_name)
+          expect(csv[index]["Email"]).to eql(claim.email_address)
+          expect(csv[index]["Date of birth"]).to eql(claim.date_of_birth.to_s)
+          expect(csv[index]["ITT subject"]).to be_nil
+          expect(csv[index]["Policy name"]).to eql(claim.policy.to_s)
+          expect(csv[index]["School name"]).to eql(claim.eligibility.eligible_ey_provider.nursery_name)
+          expect(csv[index]["School unique reference number"]).to eql(claim.eligibility.eligible_ey_provider.urn)
+          expect(csv[index]["Payroll gender"]).to eql(claim.payroll_gender)
+          expect(csv[index]["Nationality"]).to be_nil
+          expect(csv[index]["Passport number"]).to be_nil
         end
       end
     end

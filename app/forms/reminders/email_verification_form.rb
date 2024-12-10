@@ -4,6 +4,10 @@ module Reminders
 
     validate :validate_otp_correct
 
+    def reminder_email_address
+      journey_session.answers.reminder_email_address
+    end
+
     def save!
       return false if invalid?
 
@@ -16,16 +20,25 @@ module Reminders
         full_name: journey_session.answers.reminder_full_name,
         email_address: journey_session.answers.reminder_email_address,
         email_verified: true,
-        itt_academic_year: next_academic_year.to_s
+        itt_academic_year: next_academic_year.to_s,
+        itt_subject:,
+        journey_class: journey.to_s
       )
 
       ReminderMailer.reminder_set(reminder).deliver_now
     end
 
+    def set_reminder_from_claim
+    end
+
     private
 
+    def itt_subject
+      journey_session.answers.eligible_itt_subject
+    end
+
     def next_academic_year
-      AcademicYear.next
+      journey.configuration.current_academic_year + 1
     end
 
     def validate_otp_correct

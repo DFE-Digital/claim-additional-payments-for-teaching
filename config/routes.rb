@@ -29,7 +29,7 @@ Rails.application.routes.draw do
     end
 
     def matches?(request)
-      request["journey"] == journey::ROUTING_NAME && journey.slug_sequence::SLUGS.include?(request["slug"])
+      request.path_parameters[:journey] == journey::ROUTING_NAME && journey.slug_sequence::SLUGS.include?(request.path_parameters[:slug])
     end
   }
 
@@ -65,33 +65,18 @@ Rails.application.routes.draw do
       end
     end
 
-    scope constraints: {journey: /further-education-payments/} do
+    scope constraints: {journey: /further-education-payments|additional-payments/} do
       resources :reminders,
         only: [:show, :update],
         param: :slug,
         controller: "reminders",
-        as: :independent_reminders,
         constraints: {
           slug: %r{#{Journeys::Reminders::SlugSequence::SLUGS.join("|")}}
         }
     end
 
-    scope constraints: {journey: "additional-payments"} do
-      get "reminder", as: :new_reminder, to: "journeys/additional_payments_for_teaching/reminders#new"
-
-      post "reminders/:slug",
-        constraints: {slug: %r{#{Journeys::AdditionalPaymentsForTeaching::SlugSequence::REMINDER_SLUGS.join("|")}}},
-        defaults: {slug: "personal-details"},
-        as: :reminders,
-        to: "journeys/additional_payments_for_teaching/reminders#create"
-
-      resources :reminders,
-        only: [:show, :update],
-        param: :slug,
-        controller: "journeys/additional_payments_for_teaching/reminders",
-        constraints: {
-          slug: %r{#{Journeys::AdditionalPaymentsForTeaching::SlugSequence::REMINDER_SLUGS.join("|")}}
-        }
+    scope constraints: {journey: /early-years-payment/} do
+      get "guidance", to: "journeys/early_years_payment/provider/start/static_pages#guidance", as: :guidance
     end
 
     scope constraints: {journey: "further-education-payments-provider"} do

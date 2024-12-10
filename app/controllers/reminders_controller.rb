@@ -4,14 +4,18 @@ class RemindersController < BasePublicController
   def show
     @form = form_from_slug
 
-    render view_file
+    if @form.set_reminder_from_claim
+      redirect_to reminder_path(journey: journey::ROUTING_NAME, slug: "confirmation")
+    else
+      render view_file
+    end
   end
 
   def update
     @form = form_from_slug
 
     if @form.valid?
-      redirect_to independent_reminder_path(
+      redirect_to reminder_path(
         journey: journey::ROUTING_NAME,
         slug: navigator.next_slug
       )
@@ -70,7 +74,8 @@ class RemindersController < BasePublicController
     form_class_from_slug.new(
       journey_session:,
       journey:,
-      params:
+      params:,
+      session:
     )
   end
 end

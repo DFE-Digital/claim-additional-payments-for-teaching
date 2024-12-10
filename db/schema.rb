@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_13_112028) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_26_105650) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
+  enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
-  enable_extension "plpgsql"
 
   create_table "amendments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "claim_id"
@@ -427,6 +427,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_13_112028) do
     t.datetime "email_sent_at", precision: nil
     t.string "itt_academic_year", limit: 9
     t.string "itt_subject"
+    t.text "journey_class", null: false
+    t.index ["journey_class"], name: "index_reminders_on_journey_class"
   end
 
   create_table "risk_indicators", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

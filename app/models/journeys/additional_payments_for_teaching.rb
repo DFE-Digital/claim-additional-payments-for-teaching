@@ -27,10 +27,6 @@ module Journeys
         "correct-school" => CorrectSchoolForm,
         "reset-claim" => ResetClaimForm,
         "select-home-address" => SelectHomeAddressForm
-      },
-      "reminders" => {
-        "personal-details" => Reminders::PersonalDetailsForm,
-        "email-verification" => Reminders::EmailVerificationForm
       }
     }.freeze
 

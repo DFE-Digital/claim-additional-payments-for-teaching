@@ -83,7 +83,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
       else
         AcademicYear.new(2019)
       end
-    @within_academic_year = Time.zone.local(current_academic_year.start_year, 9, 1)
+    @within_academic_year = Time.zone.local(current_academic_year.start_year, 9, 1, 12)
   end
 
   scenario "#{policy} filter approved awaiting payroll claims" do

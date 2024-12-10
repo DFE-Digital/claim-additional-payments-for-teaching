@@ -12,6 +12,8 @@ RSpec.describe ImportStudentLoansDataJob do
     end
 
     context "csv data processes successfully" do
+      let(:mail) { AdminMailer.slc_csv_processing_success(file_upload.uploaded_by.email) }
+
       it "imports student loans data" do
         expect { upload }.to change(StudentLoansData, :count).by(1)
       end
@@ -29,9 +31,18 @@ RSpec.describe ImportStudentLoansDataJob do
       it "enqueues StudentLoanPlanCheckJob" do
         expect { upload }.to have_enqueued_job(StudentLoanPlanCheckJob)
       end
+
+      it "sends a success email" do
+        upload
+
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
+        expect(mail.template_id).to eq "ee4b950a-28bd-417f-a00a-bc592f18f93b"
+      end
     end
 
     context "csv data encounters an error" do
+      let(:mail) { AdminMailer.slc_csv_processing_error(file_upload.uploaded_by.email) }
+
       before do
         allow(StudentLoansData).to receive(:insert_all).and_raise(ActiveRecord::RecordInvalid)
       end
@@ -52,6 +63,13 @@ RSpec.describe ImportStudentLoansDataJob do
 
       it "does not enqueue StudentLoanPlanCheckJob" do
         expect { upload }.not_to have_enqueued_job(StudentLoanPlanCheckJob)
+      end
+
+      it "sends a error email" do
+        upload
+
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
+        expect(mail.template_id).to eq "f40fa946-963b-4ddd-a896-7c1d6bd7da12"
       end
 
       describe "dfe-analytics syncing" do

@@ -215,7 +215,7 @@ RSpec.describe Form, type: :model do
 
     context "with params containing attributes defined on the form" do
       it "permits the attributes in the params" do
-        expect(form.permitted_params).to eq(claim_params.stringify_keys)
+        expect(form.permitted_params).to eql(ActionController::Parameters.new(claim_params.stringify_keys).permit!)
       end
     end
 
