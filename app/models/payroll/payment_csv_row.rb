@@ -27,6 +27,18 @@ module Payroll
 
     private
 
+    def first_name
+      NameNormalizer.normalize(model.first_name)
+    end
+
+    def middle_name
+      NameNormalizer.normalize(model.middle_name)
+    end
+
+    def surname
+      NameNormalizer.normalize(model.surname)
+    end
+
     def title
       TITLE
     end
