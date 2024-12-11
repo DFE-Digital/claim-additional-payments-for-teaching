@@ -29,7 +29,11 @@ describe AdditionalPaymentsHelper do
     subject do
       helper.eligible_itt_subject_translation(
         journey_session.answers,
-        Journeys::AdditionalPaymentsForTeaching.selectable_subject_symbols(journey_session)
+        Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm.new(
+          journey: Journeys::AdditionalPaymentsForTeaching,
+          journey_session: journey_session,
+          params: ActionController::Parameters.new
+        ).subject_symbols
       )
     end
 
