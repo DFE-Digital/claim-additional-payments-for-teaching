@@ -7,6 +7,11 @@
     <h1 class="govuk-heading-xl">
       Reports
     </h1>
+    <%= govuk_button_link_to(
+      "Duplicate claims",
+      admin_report_path("duplicate-claims", format: :csv),
+      secondary: true
+    ) %>
 
     <%= govuk_button_link_to(
       "FE TRI approved claims whereby the provider check status is 'failed'",

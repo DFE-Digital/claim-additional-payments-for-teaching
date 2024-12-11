@@ -21,6 +21,8 @@ module Admin
         Reports::FeApprovedClaimsWithFailingProviderVerification.new
       when "approved-claims-failing-qualification-task"
         Reports::ApprovedClaimsFailingQualificationTask.new
+      when "duplicate-claims"
+        Reports::DuplicateApprovedClaims.new
       else
         raise ActiveRecord::RecordNotFound
       end

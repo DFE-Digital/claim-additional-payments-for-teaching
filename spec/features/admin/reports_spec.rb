@@ -163,4 +163,49 @@ RSpec.describe "Admin reports" do
       expect(row.fetch("Qualification name")).to eq("BA (Hons)")
     end
   end
+
+  describe "Duplicate claims" do
+    it "returns a CSV report" do
+      claim_1 = create(
+        :claim,
+        :current_academic_year,
+        :approved,
+        email_address: "test@example.com",
+        policy: Policies::InternationalRelocationPayments,
+        eligibility_attributes: {
+          award_amount: 2_000
+        }
+      )
+
+      claim_2 = create(
+        :claim,
+        :current_academic_year,
+        :approved,
+        email_address: "test@example.com",
+        policy: Policies::InternationalRelocationPayments,
+        eligibility_attributes: {
+          award_amount: 2_000
+        }
+      )
+
+      sign_in_as_service_operator
+
+      visit admin_claims_path
+
+      click_on "Reports"
+
+      click_on "Duplicate claims"
+
+      csv_data = page.body
+
+      csv = CSV.parse(csv_data, headers: true)
+
+      claim_references = csv.map { |row| row.fetch("Claim reference") }
+
+      expect(claim_references).to match_array([
+        claim_1.reference,
+        claim_2.reference
+      ])
+    end
+  end
 end
