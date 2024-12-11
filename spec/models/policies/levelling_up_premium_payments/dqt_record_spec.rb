@@ -289,7 +289,7 @@ RSpec.describe Policies::LevellingUpPremiumPayments::DqtRecord do
     let(:eligible_subjects) { [:computing] }
 
     before do
-      allow(JourneySubjectEligibilityChecker).to receive(:fixed_lup_subject_symbols)
+      allow(Policies::LevellingUpPremiumPayments).to receive(:fixed_subject_symbols)
         .and_return(eligible_subjects)
     end
 
@@ -340,8 +340,9 @@ RSpec.describe Policies::LevellingUpPremiumPayments::DqtRecord do
 
   describe "#itt_academic_year_for_claim" do
     before do
-      allow(JourneySubjectEligibilityChecker).to receive(:new)
-        .and_return(double(selectable_itt_years_for_claim_year: eligible_years))
+      allow(Policies::LevellingUpPremiumPayments).to(
+        receive(:selectable_itt_years_for_claim_year).and_return(eligible_years)
+      )
     end
 
     let(:record) do

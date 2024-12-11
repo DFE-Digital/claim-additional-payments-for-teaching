@@ -68,7 +68,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching do
   end
 
   shared_examples "true for years" do |start_years_range, policy_year|
-    JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(policy_year).each do |itt_academic_year|
+    Journeys::AdditionalPaymentsForTeaching.selectable_itt_years_for_claim_year(policy_year).each do |itt_academic_year|
       context "ITT year #{itt_academic_year}" do
         let(:itt_academic_year) { itt_academic_year }
 
@@ -82,7 +82,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching do
   end
 
   shared_examples "false for all years" do |policy_year|
-    JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(policy_year).each do |itt_academic_year|
+    Journeys::AdditionalPaymentsForTeaching.selectable_itt_years_for_claim_year(policy_year).each do |itt_academic_year|
       context "ITT year #{itt_academic_year}" do
         let(:itt_academic_year) { itt_academic_year }
 
@@ -125,6 +125,204 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching do
 
         # 2019 is eligible now - but falls out of the 5 year window next year
         it_behaves_like "true for years", 2020..2023, AcademicYear.new(2024)
+      end
+    end
+  end
+
+  describe ".selectable_subject_symbols" do
+    subject { described_class.selectable_subject_symbols(journey_session) }
+
+    context "when academic year is 2022" do
+      before { create(:journey_configuration, :additional_payments, current_academic_year: claim_year) }
+
+      context "2022 claim year" do
+        let(:claim_year) { AcademicYear.new(2022) }
+
+        context "None of the above ITT year" do
+          let(:itt_year) { AcademicYear.new }
+
+          let(:journey_session) do
+            create(
+              :additional_payments_session,
+              answers: attributes_for(
+                :additional_payments_answers,
+                itt_academic_year: itt_year
+              )
+            )
+          end
+
+          it { is_expected.to be_empty }
+        end
+
+        context "2017 ITT year" do
+          let(:itt_year) { AcademicYear.new(2017) }
+
+          context "ineligible LUP" do
+            let(:journey_session) do
+              create(
+                :additional_payments_session,
+                answers: attributes_for(
+                  :additional_payments_answers,
+                  :ecp_eligible,
+                  itt_academic_year: itt_year
+                )
+              )
+            end
+
+            it { is_expected.to be_empty }
+          end
+
+          context "eligible LUP" do
+            let(:journey_session) do
+              create(
+                :additional_payments_session,
+                answers: attributes_for(
+                  :additional_payments_answers,
+                  :ecp_and_lup_eligible,
+                  itt_academic_year: itt_year
+                )
+              )
+            end
+
+            it { is_expected.to contain_exactly(:chemistry, :computing, :mathematics, :physics) }
+          end
+        end
+
+        context "2018 ITT year" do
+          let(:itt_year) { AcademicYear.new(2018) }
+
+          context "ineligible LUP" do
+            let(:journey_session) do
+              create(
+                :additional_payments_session,
+                answers: attributes_for(
+                  :additional_payments_answers,
+                  :ecp_eligible,
+                  itt_academic_year: itt_year
+                )
+              )
+            end
+
+            it { is_expected.to contain_exactly(:mathematics) }
+          end
+
+          context "eligible LUP" do
+            let(:journey_session) do
+              create(
+                :additional_payments_session,
+                answers: attributes_for(
+                  :additional_payments_answers,
+                  :ecp_and_lup_eligible,
+                  itt_academic_year: itt_year
+                )
+              )
+            end
+
+            it { is_expected.to contain_exactly(:chemistry, :computing, :mathematics, :physics) }
+          end
+        end
+
+        context "2019 ITT year" do
+          let(:itt_year) { AcademicYear.new(2019) }
+
+          context "ineligible LUP" do
+            let(:journey_session) do
+              create(
+                :additional_payments_session,
+                answers: attributes_for(
+                  :additional_payments_answers,
+                  :ecp_eligible,
+                  itt_academic_year: itt_year
+                )
+              )
+            end
+
+            it { is_expected.to contain_exactly(:mathematics) }
+          end
+
+          context "eligible LUP" do
+            let(:journey_session) do
+              create(
+                :additional_payments_session,
+                answers: attributes_for(
+                  :additional_payments_answers,
+                  :ecp_and_lup_eligible,
+                  itt_academic_year: itt_year
+                )
+              )
+            end
+
+            it { is_expected.to contain_exactly(:chemistry, :computing, :mathematics, :physics) }
+          end
+        end
+
+        context "2020 ITT year" do
+          let(:itt_year) { AcademicYear.new(2020) }
+
+          context "ineligible LUP" do
+            let(:journey_session) do
+              create(
+                :additional_payments_session,
+                answers: attributes_for(
+                  :additional_payments_answers,
+                  :ecp_eligible,
+                  itt_academic_year: itt_year
+                )
+              )
+            end
+
+            it { is_expected.to contain_exactly(:chemistry, :foreign_languages, :mathematics, :physics) }
+          end
+
+          context "eligible LUP" do
+            let(:journey_session) do
+              create(
+                :additional_payments_session,
+                answers: attributes_for(
+                  :additional_payments_answers,
+                  :ecp_and_lup_eligible,
+                  itt_academic_year: itt_year
+                )
+              )
+            end
+
+            it { is_expected.to contain_exactly(:chemistry, :computing, :foreign_languages, :mathematics, :physics) }
+          end
+        end
+
+        context "2021 ITT year" do
+          let(:itt_year) { AcademicYear.new(2021) }
+
+          context "ineligible LUP" do
+            let(:journey_session) do
+              create(
+                :additional_payments_session,
+                answers: attributes_for(
+                  :additional_payments_answers,
+                  :ecp_eligible,
+                  itt_academic_year: itt_year
+                )
+              )
+            end
+
+            it { is_expected.to be_empty }
+          end
+
+          context "eligible LUP" do
+            let(:journey_session) do
+              create(
+                :additional_payments_session,
+                answers: attributes_for(
+                  :additional_payments_answers,
+                  :ecp_and_lup_eligible,
+                  itt_academic_year: itt_year
+                )
+              )
+            end
+
+            it { is_expected.to contain_exactly(:chemistry, :computing, :mathematics, :physics) }
+          end
+        end
       end
     end
   end

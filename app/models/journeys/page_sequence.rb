@@ -20,10 +20,6 @@ module Journeys
     end
 
     def next_slug
-      if lup_policy_and_trainee_teacher_at_lup_school?
-        return handle_trainee_teacher
-      end
-
       return "ineligible" if journey_ineligible?
 
       if claim_submittable?
@@ -85,37 +81,6 @@ module Journeys
       # This allows 'address' page to be skipped when the postcode is present
       # Occurs when populated from 'postcode-search' and the subsequent 'select-home-address' screens
       true if current_slug == "select-home-address" && answers.postcode.present?
-    end
-
-    def lup_policy_and_trainee_teacher_at_lup_school?
-      journey == Journeys::AdditionalPaymentsForTeaching && lup_teacher_at_lup_school
-    end
-
-    def lup_teacher_at_lup_school
-      answers.nqt_in_academic_year_after_itt == false && Policies::LevellingUpPremiumPayments::SchoolEligibility.new(answers.current_school).eligible?
-    end
-
-    def handle_trainee_teacher
-      case current_slug
-      when "nqt-in-academic-year-after-itt"
-        if answers.nqt_in_academic_year_after_itt?
-          "supply-teacher"
-        else
-          @journey_session.answers.policy_year.in?(EligibilityCheckable::COMBINED_ECP_AND_LUP_POLICY_YEARS_BEFORE_FINAL_YEAR) ? "eligible-itt-subject" : "ineligible"
-        end
-      when "eligible-itt-subject"
-        if answers.eligible_itt_subject.to_sym.in? JourneySubjectEligibilityChecker.fixed_lup_subject_symbols
-          "future-eligibility"
-        else
-          "eligible-degree-subject"
-        end
-      when "eligible-degree-subject"
-        if @journey_session.answers.eligible_degree_subject?
-          "future-eligibility"
-        else
-          "ineligible"
-        end
-      end
     end
 
     def current_slug_index

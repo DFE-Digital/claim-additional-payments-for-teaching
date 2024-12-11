@@ -34,7 +34,7 @@ module Policies
           hsh[year] = AcademicYear::Type.new.serialize(year)
         end.merge({AcademicYear.new => AcademicYear::Type.new.serialize(AcademicYear.new)})
 
-      enum :itt_academic_year, ITT_ACADEMIC_YEARS
+      enum :itt_academic_year, ITT_ACADEMIC_YEARS, validate: true
 
       enum :qualification, {
         postgraduate_itt: 0,

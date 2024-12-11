@@ -27,7 +27,8 @@ module Policies
     SEARCHABLE_ELIGIBILITY_ATTRIBUTES = %w[teacher_reference_number].freeze
 
     POLICY_START_YEAR = AcademicYear.new(2022).freeze
-    POLICY_END_YEAR = AcademicYear.new(2024).freeze
+    POLICY_END_YEAR = AcademicYear.new(2025).freeze
+    POLICY_RANGE = POLICY_START_YEAR..POLICY_END_YEAR
 
     # Percentage of claims to QA
     MIN_QA_THRESHOLD = 10
@@ -98,6 +99,68 @@ module Policies
 
     def auto_check_student_loan_plan_task?
       true
+    end
+
+    def current_subject_symbols(claim_year:, itt_year:)
+      subject_symbols(claim_year: claim_year, itt_year: itt_year)
+    end
+
+    def future_subject_symbols(claim_year:, itt_year:)
+      future_years(claim_year).flat_map do |year|
+        subject_symbols(claim_year: year, itt_year: itt_year)
+      end
+    end
+
+    def current_and_future_subject_symbols(claim_year:, itt_year:)
+      [
+        *current_subject_symbols(
+          claim_year: claim_year,
+          itt_year: itt_year
+        ),
+        *future_subject_symbols(
+          claim_year: claim_year,
+          itt_year: itt_year
+        )
+      ].uniq
+    end
+
+    # Ideally we wouldn't have this method at all. Unfortunately it was hardcoded like
+    # this before we realised trainee teachers weren't as special a case as we
+    # thought.
+    def fixed_subject_symbols
+      [:chemistry, :computing, :mathematics, :physics]
+    end
+
+    def subject_symbols(claim_year:, itt_year:)
+      return [] unless POLICY_RANGE.cover?(claim_year)
+
+      previous_five_years = (claim_year - 5)...claim_year
+
+      if previous_five_years.cover?(itt_year)
+        fixed_subject_symbols
+      else
+        []
+      end
+    end
+
+    def current_and_future_years(year)
+      fail "year before policy start year" if year < POLICY_START_YEAR
+
+      [year] + future_years(year)
+    end
+
+    def future_years(year)
+      fail "year before policy start year" if year < POLICY_START_YEAR
+
+      year + 1..POLICY_END_YEAR
+    end
+
+    def selectable_itt_years_for_claim_year(claim_year)
+      (AcademicYear.new(claim_year - 5)...AcademicYear.new(claim_year)).to_a
+    end
+
+    def closed?(claim_year)
+      claim_year > POLICY_END_YEAR
     end
   end
 end

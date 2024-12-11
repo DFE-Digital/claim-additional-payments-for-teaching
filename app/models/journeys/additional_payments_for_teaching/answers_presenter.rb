@@ -157,10 +157,11 @@ module Journeys
 
       def text_for_subject_answer
         policy = eligibility.policy
-        subjects = JourneySubjectEligibilityChecker.new(
+
+        subjects = policy.current_and_future_subject_symbols(
           claim_year: Journeys.for_policy(policy).configuration.current_academic_year,
           itt_year: journey_session.answers.itt_academic_year
-        ).current_and_future_subject_symbols(policy)
+        )
 
         if subjects.many?
           t("additional_payments.forms.eligible_itt_subject.answers.#{journey_session.answers.eligible_itt_subject}")
@@ -173,7 +174,10 @@ module Journeys
       private
 
       def subject_symbols
-        @subject_symbols ||= JourneySubjectEligibilityChecker.current_and_future_subject_symbols(answers)
+        @subject_symbols ||= answers.policy.subject_symbols(
+          claim_year: answers.policy_year,
+          itt_year: answers.itt_academic_year
+        )
       end
 
       def claim_submission_form
