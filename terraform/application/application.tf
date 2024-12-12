@@ -41,6 +41,8 @@ module "web_application" {
   kubernetes_config_map_name = module.application_configuration.kubernetes_config_map_name
   kubernetes_secret_name     = module.application_configuration.kubernetes_secret_name
 
+	send_traffic_to_maintenance_page = true
+
   docker_image = var.docker_image
   command      = var.startup_command
 
