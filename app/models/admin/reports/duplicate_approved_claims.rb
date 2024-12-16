@@ -32,6 +32,8 @@ module Admin
 
       private
 
+      class DuplicateClaimRow < Struct.new(:id, :other_claim_id, keyword_init: true); end
+
       attr_reader :academic_year
 
       def rows
@@ -39,9 +41,12 @@ module Admin
       end
 
       def scope
-        Claim.where(
-          id: Set.new(duplicates_by_eligibility + duplicates_by_attributes)
-        ).includes(decisions: :created_by)
+        Claim.where(id: Set.new(duplicates.map(&:id)))
+          .includes(decisions: :created_by)
+      end
+
+      def duplicates
+        duplicates_by_eligibility + duplicates_by_attributes
       end
 
       def duplicates_by_eligibility
@@ -49,7 +54,7 @@ module Admin
           Policies::POLICIES.map do |policy|
             policy_with_claimable_policies(policy)
           end.compact.join("\nUNION\n")
-        ).map { |row| row["id"] }
+        ).map(&DuplicateClaimRow.method(:new))
       end
 
       def policy_with_claimable_policies(policy)
@@ -70,7 +75,7 @@ module Admin
           )
 
           <<~SQL
-            SELECT claims.id
+            SELECT claims.id, other_claims.id AS other_claim_id
             FROM #{left_table}
             JOIN #{right_table} #{right_table_alias}
             ON #{left_table}.id != #{right_table_alias}.id
@@ -173,7 +178,7 @@ module Admin
           end.join(" AND ")
 
           <<~SQL
-            SELECT current_claims.id
+            SELECT current_claims.id, other_claims.id AS other_claim_id
             FROM current_claims
             JOIN current_claims other_claims
             ON #{join_condition}
@@ -183,7 +188,7 @@ module Admin
 
         query = current_claims + "\n" + filter
 
-        ActiveRecord::Base.connection.execute(query).map { |row| row["id"] }
+        ActiveRecord::Base.connection.execute(query).map(&DuplicateClaimRow.method(:new))
       end
 
       class ClaimPresenter
