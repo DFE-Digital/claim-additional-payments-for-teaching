@@ -17,7 +17,7 @@ module Admin
       end
 
       def filename
-        "duplicate_approved_claims"
+        "duplicate_approved_claims.csv"
       end
 
       def to_csv
