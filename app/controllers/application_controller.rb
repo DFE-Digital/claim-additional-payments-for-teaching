@@ -3,6 +3,10 @@ class ApplicationController < ActionController::Base
 
   helper_method :timeout_warning_in_minutes
 
+  def handle_unwanted_requests
+    render file: Rails.root.join("public", "404.html"), status: :not_found, layout: false
+  end
+
   private
 
   def timeout_warning_in_minutes

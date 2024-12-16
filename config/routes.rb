@@ -165,4 +165,29 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  # We still want to know about 404s in case of missing a route, but silence a whitelist instead to reduce the noise in Rollbar
+  # This is not exhastive, so add more if there are obvious requests to ignore
+
+  # 404 - extensions we don't expect
+  match "*path", to: "application#handle_unwanted_requests", via: :all, constraints: lambda { |req|
+    req.path =~ %r{\.(axd|asp|aspx|cgi|htm|html|php|php7|pl|txt|xml)$}i
+  }
+
+  # 404 - folders
+  match "*path", to: "application#handle_unwanted_requests", via: :all, constraints: lambda { |req|
+    req.path =~ %r{^/\.git/config$}i ||
+      req.path =~ %r{^/cgi-bin}i ||
+      req.path =~ %r{^/webui}i
+  }
+
+  # 404 - hard-coded apple icons - gov uk seems to 404 these as well
+  match "*path", to: "application#handle_unwanted_requests", via: :all, constraints: lambda { |req|
+    req.path =~ %r{^/apple-touch-icon(-120x120)?(-precomposed)?\.png$}i
+  }
+
+  # 404 - wordpress
+  match "*path", to: "application#handle_unwanted_requests", via: :all, constraints: lambda { |req|
+    req.path =~ %r{^/(wordpress|wp)}i
+  }
 end

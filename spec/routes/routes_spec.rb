@@ -47,4 +47,55 @@ describe "Routes", type: :routing do
       expect(get: "admin/claims/#{claim.id}/tasks/foo").not_to be_routable
     end
   end
+
+  describe "Silence unwanted request from causing a Rollbar error and render a 404" do
+    context "unwanted extensions" do
+      it "returns a 404" do
+        %w[axd asp aspx cgi htm html php php7 pl txt xml].each do |extension|
+          expect(get: "foo.#{extension}").to route_to(controller: "application", action: "handle_unwanted_requests", path: "foo", format: extension)
+        end
+      end
+    end
+
+    context "folders" do
+      it "returns a 404 for .git/config" do
+        expect(get: ".git/config").to route_to(controller: "application", action: "handle_unwanted_requests", path: ".git/config")
+      end
+
+      it "returns a 404 for cgi-bin" do
+        expect(get: "cgi-bin/").to route_to(controller: "application", action: "handle_unwanted_requests", path: "cgi-bin")
+      end
+
+      it "returns a 404 for webui" do
+        expect(get: "webui/").to route_to(controller: "application", action: "handle_unwanted_requests", path: "webui")
+      end
+    end
+
+    context "apple icons" do
+      it "returns a 404" do
+        %w[
+          apple-touch-icon
+          apple-touch-icon-120x120-precomposed
+          apple-touch-icon-120x120
+          apple-touch-icon-precomposed
+        ].each do |path|
+          expect(get: "#{path}.png").to route_to(controller: "application", action: "handle_unwanted_requests", path: path, format: "png")
+        end
+      end
+    end
+
+    context "wordpress" do
+      it "returns a 404" do
+        %w[
+          wordpress
+          wp
+          wp-admin
+          wp-content
+          wp-includes
+        ].each do |path|
+          expect(get: path).to route_to(controller: "application", action: "handle_unwanted_requests", path: path)
+        end
+      end
+    end
+  end
 end
