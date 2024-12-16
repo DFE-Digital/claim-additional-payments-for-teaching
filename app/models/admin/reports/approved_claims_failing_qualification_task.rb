@@ -18,7 +18,7 @@ module Admin
       ]
 
       def filename
-        "approved_claims_failing_qualification_task"
+        "approved_claims_failing_qualification_task.csv"
       end
 
       def to_csv
