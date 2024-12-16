@@ -1,3 +1,5 @@
+# This file is ignored in the brakeman config, be careful not to interpolate
+# any user provided parameters!
 module Admin
   module Reports
     class DuplicateApprovedClaims
