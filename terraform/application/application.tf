@@ -13,9 +13,12 @@ module "application_configuration" {
   config_variables = merge(
     local.app_env_values,
     {
-      ENVIRONMENT_NAME   = var.environment
-      PGSSLMODE          = local.postgres_ssl_mode
-      CANONICAL_HOSTNAME = local.canonical_hostname
+      ENVIRONMENT_NAME    = var.environment
+      PGSSLMODE           = local.postgres_ssl_mode
+      CANONICAL_HOSTNAME  = local.canonical_hostname
+      BIGQUERY_DATASET    = var.dataset_name
+      BIGQUERY_PROJECT_ID = "claim-additional-payments"
+      BIGQUERY_TABLE_NAME = "events"
   })
   secret_variables = merge(
     {
@@ -23,8 +26,8 @@ module "application_configuration" {
     },
     var.enable_monitoring ? {
       HEARTBEAT_CHECK_URL = module.statuscake[0].heartbeat_check_urls[local.heartbeat_check_name]
-    } : {}
-  )
+    } : {},
+    local.federated_auth_secrets)
 }
 
 module "web_application" {
@@ -47,6 +50,7 @@ module "web_application" {
   replicas = var.web_replicas
 
   enable_logit = var.enable_logit
+  enable_gcp_wif = true
 }
 
 module "worker_application" {
