@@ -40,7 +40,7 @@ runs:
 
     - uses: google-github-actions/auth@v2
       with:
-        project_id: teaching-qualifications
+        project_id: claim-additional-payments
         workload_identity_provider: projects/638192024625/locations/global/workloadIdentityPools/claim-additional-payments/providers/claim-additional-payments
 
     - name: Terraform Apply
