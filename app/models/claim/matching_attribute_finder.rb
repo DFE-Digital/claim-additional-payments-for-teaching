@@ -41,7 +41,7 @@ class Claim
         vals = values_for_attributes(@source_claim.eligibility, attributes)
         next if vals.blank?
 
-        policies_to_find_matches.map do |policy|
+        Policies::POLICIES.map do |policy|
           # Not all eligibility models have the same columns
           attributes_to_check = attributes & policy::Eligibility.column_names
 
@@ -76,22 +76,13 @@ class Claim
 
     private
 
-    def policies_to_find_matches
-      @source_claim.policy.policies_claimable
-    end
-
     def eligibility_attributes_groups_to_match
       @source_claim.policy.eligibility_matching_attributes
-    end
-
-    def policies_to_find_matches_eligibility_types
-      policies_to_find_matches.map { |policy| policy::Eligibility.to_s }
     end
 
     def claims_to_compare
       Claim
         .by_academic_year(@source_claim.academic_year)
-        .by_policies(policies_to_find_matches)
         .where.not(id: @source_claim.id)
     end
 
