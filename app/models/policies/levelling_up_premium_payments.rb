@@ -13,15 +13,6 @@ module Policies
       AutomatedChecks::ClaimVerifiers::FraudRisk
     ].freeze
 
-    # Used in
-    #  - matching claims with multiple policies: MatchingAttributeFinder
-    OTHER_CLAIMABLE_POLICIES = [
-      EarlyCareerPayments,
-      StudentLoans,
-      FurtherEducationPayments,
-      EarlyYearsPayments
-    ].freeze
-
     ELIGIBILITY_MATCHING_ATTRIBUTES = [["teacher_reference_number"]].freeze
 
     SEARCHABLE_ELIGIBILITY_ATTRIBUTES = %w[teacher_reference_number].freeze

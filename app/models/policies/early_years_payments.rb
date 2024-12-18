@@ -6,13 +6,6 @@ module Policies
     POLICY_START_DATE = Date.new(2024, 11, 11)
     RETENTION_PERIOD = 6.months
 
-    OTHER_CLAIMABLE_POLICIES = [
-      EarlyCareerPayments,
-      LevellingUpPremiumPayments,
-      StudentLoans,
-      FurtherEducationPayments
-    ]
-
     # Percentage of claims to QA
     MIN_QA_THRESHOLD = 10
 

@@ -8,7 +8,6 @@ module Policies
     ].freeze
 
     ELIGIBILITY_MATCHING_ATTRIBUTES = [["passport_number"]].freeze
-    OTHER_CLAIMABLE_POLICIES = []
 
     # Percentage of claims to QA
     MIN_QA_THRESHOLD = 100
