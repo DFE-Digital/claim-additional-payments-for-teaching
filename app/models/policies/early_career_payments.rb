@@ -20,7 +20,8 @@ module Policies
       AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
       AutomatedChecks::ClaimVerifiers::Employment,
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
-      AutomatedChecks::ClaimVerifiers::FraudRisk
+      AutomatedChecks::ClaimVerifiers::FraudRisk,
+      AutomatedChecks::ClaimVerifiers::DuplicateClaimsCheck
     ].freeze
 
     POLICY_START_YEAR = AcademicYear.new(2021).freeze
