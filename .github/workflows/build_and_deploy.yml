@@ -30,6 +30,7 @@ concurrency: deploy-${{ github.ref }}
 permissions:
   packages: write
   pull-requests: write
+  id-token: write
 
 jobs:
   build:
