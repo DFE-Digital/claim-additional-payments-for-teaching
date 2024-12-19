@@ -142,6 +142,26 @@ class Claim < ApplicationRecord
     inverse_of: :assigned_claims,
     optional: true
 
+  has_many :claim_duplicates_as_original_claim,
+    class_name: "Claims::ClaimDuplicate",
+    foreign_key: :original_claim_id,
+    dependent: :destroy
+
+  has_many :claim_duplicates_as_duplicate_claim,
+    class_name: "Claims::ClaimDuplicate",
+    foreign_key: :duplicate_claim_id,
+    dependent: :destroy
+
+  has_many :duplicates,
+    through: :claim_duplicates_as_original_claim,
+    source: :duplicate_claim,
+    class_name: "Claim"
+
+  has_many :originals,
+    through: :claim_duplicates_as_duplicate_claim,
+    source: :original_claim,
+    class_name: "Claim"
+
   enum :payroll_gender, {
     dont_know: 0,
     female: 1,
