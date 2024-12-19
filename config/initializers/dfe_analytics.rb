@@ -51,4 +51,5 @@ DfE::Analytics.configure do |config|
   # to all events we send to BigQuery.
   #
   # config.environment = ENV.fetch('RAILS_ENV', 'development')
+  config.azure_federated_auth = ENV.include? "GOOGLE_CLOUD_CREDENTIALS"
 end

@@ -84,10 +84,23 @@ variable "enable_logit" {
   nullable    = false
 }
 
+variable "enable_dfe_analytics_federated_auth" {
+  description = "Create the resources in Google cloud for federated authentication and enable in application"
+  default     = false
+}
+
+variable "dataset_name" {
+  description = "dfe analytics dataset name in Google Bigquery"
+  default     = null
+}
+
 locals {
   postgres_ssl_mode       = var.enable_postgres_ssl ? "require" : "disable"
   canonical_hostname      = var.canonical_hostname != null ? var.canonical_hostname : "${var.service_name}-${var.environment}-web.test.teacherservices.cloud"
   app_env_values_from_yml = yamldecode(file("${path.module}/config/${var.config}_app_env.yml"))
   app_env_values          = merge(local.app_env_values_from_yml)
   heartbeat_check_name    = "${var.service_name}-${var.environment}-worker"
+  federated_auth_secrets = var.enable_dfe_analytics_federated_auth ? {
+    GOOGLE_CLOUD_CREDENTIALS = module.dfe_analytics[0].google_cloud_credentials
+  } : {}
 }
