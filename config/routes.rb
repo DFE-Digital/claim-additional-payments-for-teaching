@@ -133,6 +133,7 @@ Rails.application.routes.draw do
     resources :tps_data_uploads, only: [:new, :create]
     resources :fraud_risk_csv_uploads, only: [:new, :create]
     resource :fraud_risk_csv_download, only: :show
+    resources :reports, only: [:index, :show], param: :name
 
     resources :payroll_runs, only: [:index, :new, :create, :show, :destroy] do
       resources :payment_confirmation_report_uploads, only: [:new, :create]
