@@ -271,6 +271,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
       it { should validate_length_of(:first_name).is_at_most(100).with_message("First name must be less than 100 characters") }
       it { should_not allow_value("*").for(:first_name).with_message("First name cannot contain special characters") }
       it { should allow_value("O'Brian").for(:first_name) }
+      it { should_not allow_value(".").for(:first_name) }
 
       it { should validate_length_of(:middle_name).is_at_most(61).with_message("Middle names must be less than 61 characters") }
       it { should_not allow_value("&").for(:middle_name).with_message("Middle names cannot contain special characters") }
@@ -280,6 +281,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
       it { should validate_length_of(:surname).is_at_most(100).with_message("Last name must be less than 100 characters") }
       it { should_not allow_value("$").for(:surname).with_message("Last name cannot contain special characters") }
       it { should allow_value("O'Brian").for(:surname) }
+      it { should_not allow_value(".").for(:surname) }
 
       it { should validate_presence_of(:national_insurance_number).with_message("Enter a National Insurance number in the correct format") }
       it { should allow_value("QQ123456C").for(:national_insurance_number) }
