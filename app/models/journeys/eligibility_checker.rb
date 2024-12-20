@@ -63,6 +63,14 @@ module Journeys
       policies_eligible_now_with_award_amount_and_sorted.map { |policy_with_award_amount| policy_with_award_amount.policy }
     end
 
+    def potentially_still_eligible
+      policies.select do |policy|
+        policy::PolicyEligibilityChecker.new(
+          answers: @journey_session.answers
+        ).status != :ineligible
+      end
+    end
+
     private
 
     def policies_eligible_now_with_award_amount

@@ -1,8 +1,6 @@
 module Journeys
   module AdditionalPaymentsForTeaching
     class NqtInAcademicYearAfterIttForm < Form
-      include EligibilityCheckable
-
       attribute :nqt_in_academic_year_after_itt, :boolean
 
       validates :nqt_in_academic_year_after_itt, inclusion: {in: [true, false], message: i18n_error_message(:inclusion)}
@@ -22,6 +20,10 @@ module Journeys
       end
 
       private
+
+      def trainee_teacher?
+        nqt_in_academic_year_after_itt == false
+      end
 
       def determine_induction_answer_from_dqt_record
         return unless passed_details_check_with_teacher_id?

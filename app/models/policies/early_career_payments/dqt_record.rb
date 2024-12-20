@@ -49,10 +49,11 @@ module Policies
 
         return :none_of_the_above if itt_subject_groups.empty? || !year
 
-        itt_subject_checker = JourneySubjectEligibilityChecker.new(claim_year: current_academic_year, itt_year: year)
-
         itt_subject_groups.delete_if do |itt_subject_group|
-          !itt_subject_group.in?(itt_subject_checker.current_and_future_subject_symbols(EarlyCareerPayments))
+          EarlyCareerPayments.current_and_future_subject_symbols(
+            claim_year: current_academic_year,
+            itt_year: year
+          ).exclude?(itt_subject_group)
         end.first.to_sym
       rescue # JourneySubjectEligibilityChecker can also raise an exception if itt_year is out of eligible range
         :none_of_the_above
@@ -62,7 +63,7 @@ module Policies
         return nil unless academic_date
 
         year = AcademicYear.for(academic_date)
-        eligible_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(current_academic_year)
+        eligible_years = EarlyCareerPayments.selectable_itt_years_for_claim_year(current_academic_year)
         eligible_years.include?(year) ? year : AcademicYear.new
       end
 
