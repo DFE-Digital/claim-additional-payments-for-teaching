@@ -284,7 +284,12 @@ class Claim < ApplicationRecord
       (!decision_made? || awaiting_qa?) &&
       !payment_prevented_by_other_claims? &&
       attributes_flagged_by_risk_indicator.none? &&
-      policy.approvable?(self)
+      policy.approvable?(self) &&
+      !precluded_by_previous_claim?
+  end
+
+  def approved?
+    decision_made? && latest_decision.approved?
   end
 
   def rejectable?
@@ -296,7 +301,7 @@ class Claim < ApplicationRecord
   end
 
   def flaggable_for_qa?
-    decision_made? && latest_decision.approved? && below_min_qa_threshold? && !awaiting_qa? && !qa_completed?
+    approved? && below_min_qa_threshold? && !awaiting_qa? && !qa_completed?
   end
 
   # This method's intention is to help make a decision on whether a claim should
@@ -569,5 +574,19 @@ class Claim < ApplicationRecord
 
   def submittable_email_details?
     email_address.present? && email_verified == true
+  end
+
+  def claims_from_same_claimant
+    @claims_from_same_claimant ||= MatchingAttributeFinder.new(self).matching_claims
+  end
+
+  def precluded_by_previous_claim?
+    approved_claims = claims_from_same_claimant.select(&:approved?)
+
+    other_claimed_policies = approved_claims.map(&:policy)
+
+    policies_claimed = (other_claimed_policies + [policy]).uniq
+
+    Policies.prohibited_policy_combination?(policies_claimed)
   end
 end
