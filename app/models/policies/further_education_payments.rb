@@ -3,15 +3,6 @@ module Policies
     include BasePolicy
     extend self
 
-    # Used in
-    #  - matching claims with multiple policies: MatchingAttributeFinder
-    OTHER_CLAIMABLE_POLICIES = [
-      EarlyCareerPayments,
-      StudentLoans,
-      LevellingUpPremiumPayments,
-      EarlyYearsPayments
-    ]
-
     ELIGIBILITY_MATCHING_ATTRIBUTES = [["teacher_reference_number"]].freeze
 
     # Percentage of claims to QA

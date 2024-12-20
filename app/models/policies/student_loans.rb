@@ -26,15 +26,6 @@ module Policies
     POLICY_END_YEAR = AcademicYear.new(2020).freeze
     ACADEMIC_YEARS_QUALIFIED_TEACHERS_CAN_CLAIM_FOR = 11
 
-    # Used in
-    #  - matching claims with multiple policies: MatchingAttributeFinder
-    OTHER_CLAIMABLE_POLICIES = [
-      EarlyCareerPayments,
-      LevellingUpPremiumPayments,
-      FurtherEducationPayments,
-      EarlyYearsPayments
-    ]
-
     ELIGIBILITY_MATCHING_ATTRIBUTES = [["teacher_reference_number"]].freeze
 
     SEARCHABLE_ELIGIBILITY_ATTRIBUTES = %w[teacher_reference_number].freeze
