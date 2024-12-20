@@ -44,6 +44,7 @@ module Journeys
 
     attribute :onelogin_idv_first_name, :string
     attribute :onelogin_idv_last_name, :string
+    attribute :onelogin_idv_full_name, :string
     attribute :onelogin_idv_date_of_birth, :date
 
     attribute :onelogin_auth_at, :datetime
