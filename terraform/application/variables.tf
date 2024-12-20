@@ -100,7 +100,4 @@ locals {
   app_env_values_from_yml = yamldecode(file("${path.module}/config/${var.config}_app_env.yml"))
   app_env_values          = merge(local.app_env_values_from_yml)
   heartbeat_check_name    = "${var.service_name}-${var.environment}-worker"
-  federated_auth_secrets = var.enable_dfe_analytics_federated_auth ? {
-    GOOGLE_CLOUD_CREDENTIALS = module.dfe_analytics[0].google_cloud_credentials
-  } : {}
 }

@@ -20,14 +20,11 @@ module "application_configuration" {
       BIGQUERY_PROJECT_ID = "claim-additional-payments"
       BIGQUERY_TABLE_NAME = "events"
   })
-  secret_variables = merge(
-    {
-      DATABASE_URL        = module.postgres.url
-    },
-    var.enable_monitoring ? {
-      HEARTBEAT_CHECK_URL = module.statuscake[0].heartbeat_check_urls[local.heartbeat_check_name]
-    } : {},
-    local.federated_auth_secrets)
+  secret_variables = {
+    DATABASE_URL        = module.postgres.url
+    HEARTBEAT_CHECK_URL = var.enable_monitoring ? module.statuscake[0].heartbeat_check_urls[local.heartbeat_check_name] : null
+    GOOGLE_CLOUD_CREDENTIALS = var.enable_dfe_analytics_federated_auth ? module.dfe_analytics[0].google_cloud_credentials : null
+  }
 }
 
 module "web_application" {
