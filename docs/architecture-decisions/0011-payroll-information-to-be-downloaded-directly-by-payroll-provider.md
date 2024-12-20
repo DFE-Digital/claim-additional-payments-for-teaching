@@ -22,7 +22,7 @@ the service’s back-office, which uses DfE's single sign-on service
 
 The payroll provider will be set up with their own organisation in DfE Sign In
 so that they can manage their own user access and be responsible for
-movers/leavers. Their users will only support a specific “Payroll operator”
+movers/leavers. Their users will only support a specific 'Payroll operator'
 role. This role will only allow the downloading of the monthly payroll file and
 nothing else within the back-office.
 

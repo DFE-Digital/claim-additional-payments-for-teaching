@@ -278,7 +278,7 @@ RSpec.describe IneligibilityReasonChecker do
           :additional_payments_answers,
           :ecp_and_lup_eligible,
           :trainee_teacher,
-          academic_year: AcademicYear.new(2024),
+          academic_year: AcademicYear.new(2025),
           current_school_id: school.id
         )
       end

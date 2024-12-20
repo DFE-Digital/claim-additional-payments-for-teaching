@@ -18,19 +18,19 @@
 ) do |f| %>
   <div class="govuk-form-group">
     <%= f.govuk_text_field(
-      "[extra][raw_info][organisation][ukprn]",
+      "extra[raw_info][organisation][ukprn]",
       label: { text: "UKPRN" },
       value: journey_session.answers.claim.school.ukprn
     ) %>
 
     <%= f.govuk_text_field(
-      "[extra][raw_info][organisation][id]",
+      "extra[raw_info][organisation][id]",
       label: { text: "Organisation id" },
       value: "12345678"
     ) %>
 
     <%= f.govuk_text_field(
-      "[extra][raw_info][organisation][name]",
+      "extra[raw_info][organisation][name]",
       label: { text: "Organisation id" },
       value: "Springfield Elementary School"
     ) %>
@@ -42,25 +42,25 @@
     ) %>
 
     <%= f.govuk_text_field(
-      "[info][first_name]",
+      "info[first_name]",
       label: { text: "First name" },
       value: "Seymoure"
     ) %>
 
     <%= f.govuk_text_field(
-      "[info][last_name]",
+      "info[last_name]",
       label: { text: "Last name" },
       value: "Skinner"
     ) %>
 
     <%= f.govuk_text_field(
-      "[info][email]",
+      "info[email]",
       label: { text: "Email" },
       value: "seymoure.skinner@springfield-elementary.edu"
     ) %>
 
     <%= f.govuk_text_field(
-      "[roles][0]",
+      "roles[0]",
       label: { text: "Role 1" },
       value: Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
     ) %>
