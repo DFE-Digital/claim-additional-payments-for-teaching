@@ -6,7 +6,7 @@ RSpec.describe PayrollRunJob, type: :job do
 
   describe "#perform" do
     context "when successful" do
-      let(:claims) { Policies.all.map { |policy| create(:claim, :approved, policy: policy) } }
+      let(:claims) { Policies.all.map { |policy| create(:claim, :approved, :random_personal_details, policy: policy) } }
       let(:topups) { [] }
 
       before do

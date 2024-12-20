@@ -58,4 +58,12 @@ RSpec.describe Policies, type: :model do
       end
     end
   end
+
+  describe "::INVALID_POLICY_COMBINATIONS" do
+    it "contains subarrays that are sorted alphabetically" do
+      Policies::INVALID_POLICY_COMBINATIONS.each do |subarray|
+        expect(subarray).to eq(subarray.sort_by(&:to_s))
+      end
+    end
+  end
 end

@@ -41,4 +41,23 @@ module Policies
   def self.with_attribute(attr)
     POLICIES.select { |policy| policy::Eligibility.has_attribute?(attr) }
   end
+
+  # Claimants can't claim for these policy combinations in the same academic
+  # year
+  INVALID_POLICY_COMBINATIONS = [
+    [EarlyCareerPayments, EarlyYearsPayments],
+    [EarlyCareerPayments, FurtherEducationPayments],
+    [EarlyCareerPayments, LevellingUpPremiumPayments],
+    [EarlyYearsPayments, FurtherEducationPayments],
+    [EarlyYearsPayments, LevellingUpPremiumPayments],
+    [FurtherEducationPayments, LevellingUpPremiumPayments],
+    [FurtherEducationPayments, StudentLoans],
+    [FurtherEducationPayments, InternationalRelocationPayments]
+  ]
+
+  def self.prohibited_policy_combination?(policies)
+    policies.combination(2).any? do |policy1, policy2|
+      INVALID_POLICY_COMBINATIONS.include?([policy1, policy2].sort_by(&:to_s))
+    end
+  end
 end
