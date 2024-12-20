@@ -47,7 +47,6 @@ module "web_application" {
   replicas = var.web_replicas
 
   enable_logit = var.enable_logit
-  enable_gcp_wif = true
 }
 
 module "worker_application" {
@@ -69,5 +68,6 @@ module "worker_application" {
 
   replicas = var.worker_replicas
 
-  enable_logit = var.enable_logit
+  enable_logit = var.enable_log
+  enable_gcp_wif = trueit
 }
