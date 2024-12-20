@@ -1,3 +1,5 @@
+require "hosting_environment"
+
 DfE::Analytics.configure do |config|
   config.queue = :analytics
   config.environment = HostingEnvironment.environment_name
