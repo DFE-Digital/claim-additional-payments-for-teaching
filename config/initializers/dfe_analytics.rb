@@ -29,7 +29,7 @@ DfE::Analytics.configure do |config|
   #
   # We base64 encode the secret otherwise the raw JSON is mangled when it gets
   #  written to/read from the Azure keyvault.
-  config.bigquery_api_json_key = ENV['BIGQUERY_API_JSON_KEY'] ? Base64.decode64(ENV['BIGQUERY_API_JSON_KEY']) : nil
+  config.bigquery_api_json_key = ENV["BIGQUERY_API_JSON_KEY"] ? Base64.decode64(ENV["BIGQUERY_API_JSON_KEY"]) : nil
 
   # Passed directly to the retries: option on the BigQuery client
   #
