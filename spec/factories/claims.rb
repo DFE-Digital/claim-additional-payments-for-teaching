@@ -2,6 +2,7 @@ FactoryBot.define do
   sequence(:email_address) { |n| "person#{n}@example.com" }
   sequence(:teacher_reference_number, 1000000) { |n| n }
   sequence(:national_insurance_number, 100000) { |n| "QQ#{n}C" }
+  sequence(:name) { |n| "Name #{n}" }
 
   factory :claim do
     started_at { Time.zone.now }
@@ -64,6 +65,14 @@ FactoryBot.define do
       first_name { "Jo" }
       surname { "Bloggs" }
       date_of_birth { 20.years.ago.to_date }
+      national_insurance_number { generate(:national_insurance_number) }
+    end
+
+    trait :random_personal_details do
+      email_address { generate(:email_address) }
+      first_name { generate(:name) }
+      surname { generate(:name) }
+      date_of_birth { rand(18..65).years.ago.to_date }
       national_insurance_number { generate(:national_insurance_number) }
     end
 

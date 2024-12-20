@@ -392,6 +392,54 @@ RSpec.describe Claim, type: :model do
         expect(subject).not_to be_approvable
       end
     end
+
+    context "when the claimant has claimed for a policy that precludes them from this policy" do
+      subject do
+        create(
+          :claim,
+          :submitted,
+          :current_academic_year,
+          policy: Policies::FurtherEducationPayments,
+          email_address: "duplicate@example.com"
+        )
+      end
+
+      context "when the other claim has been approved" do
+        it "is not approvable" do
+          create(
+            :claim,
+            :approved,
+            :current_academic_year,
+            policy: Policies::EarlyCareerPayments,
+            email_address: "duplicate@example.com"
+          )
+
+          expect(subject).not_to be_approvable
+        end
+      end
+
+      context "when the other claim has not been approved" do
+        it "is approvable" do
+          create(
+            :claim,
+            :submitted,
+            :current_academic_year,
+            policy: Policies::EarlyCareerPayments,
+            email_address: "duplicate@example.com"
+          )
+
+          create(
+            :claim,
+            :rejected,
+            :current_academic_year,
+            policy: Policies::EarlyCareerPayments,
+            email_address: "duplicate@example.com"
+          )
+
+          expect(subject).to be_approvable
+        end
+      end
+    end
   end
 
   describe "#rejectable?" do
