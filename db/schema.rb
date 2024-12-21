@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_26_105650) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_19_115223) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -121,6 +121,17 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_26_105650) do
     t.index ["qa_required", "qa_completed_at"], name: "index_claims_on_qa_required_and_qa_completed_at", where: "qa_required"
     t.index ["reference"], name: "index_claims_on_reference", unique: true
     t.index ["submitted_at"], name: "index_claims_on_submitted_at"
+  end
+
+  create_table "claims_claim_duplicates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "original_claim_id", null: false
+    t.uuid "duplicate_claim_id", null: false
+    t.jsonb "matching_attributes", default: []
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["duplicate_claim_id"], name: "index_claims_claim_duplicates_on_duplicate_claim_id"
+    t.index ["original_claim_id", "duplicate_claim_id"], name: "idx_on_original_claim_id_duplicate_claim_id_5ce2c01567", unique: true
+    t.index ["original_claim_id"], name: "index_claims_claim_duplicates_on_original_claim_id"
   end
 
   create_table "decisions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -585,6 +596,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_26_105650) do
   add_foreign_key "claim_payments", "claims"
   add_foreign_key "claim_payments", "payments"
   add_foreign_key "claims", "journeys_sessions"
+  add_foreign_key "claims_claim_duplicates", "claims", column: "duplicate_claim_id"
+  add_foreign_key "claims_claim_duplicates", "claims", column: "original_claim_id"
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "early_career_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "eligible_ey_providers", "local_authorities"

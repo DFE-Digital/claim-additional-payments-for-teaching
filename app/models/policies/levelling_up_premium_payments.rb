@@ -10,7 +10,8 @@ module Policies
       AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
       AutomatedChecks::ClaimVerifiers::Employment,
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
-      AutomatedChecks::ClaimVerifiers::FraudRisk
+      AutomatedChecks::ClaimVerifiers::FraudRisk,
+      AutomatedChecks::ClaimVerifiers::DuplicateClaimsCheck
     ].freeze
 
     ELIGIBILITY_MATCHING_ATTRIBUTES = [["teacher_reference_number"]].freeze
