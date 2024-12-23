@@ -71,4 +71,5 @@ Rails.application.configure do
     Bullet.add_safelist type: :unused_eager_loading, class_name: "TslrClaim", association: :current_school
     Bullet.add_safelist type: :n_plus_one_query, class_name: "School", association: :local_authority
   end
+  config.dfe_analytics = true
 end
