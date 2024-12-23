@@ -56,8 +56,8 @@ module Policies
   ]
 
   def self.prohibited_policy_combination?(policies)
-    policies.combination(2).any? do |policy1, policy2|
-      INVALID_POLICY_COMBINATIONS.include?([policy1, policy2].sort_by(&:to_s))
+    policies.permutation(2).any? do |policy1, policy2|
+      INVALID_POLICY_COMBINATIONS.include?([policy1, policy2])
     end
   end
 end
