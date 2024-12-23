@@ -11,6 +11,10 @@ class AddressForm < Form
   ADDRESS_MAX_CHARS = 100
   POSTCODE_MAX_CHARS = 11
 
+  ADDRESS_LINE_1_VALIDATION = /\A(?=.*[a-zA-Z0-9])[\w\s,.'-]+\z/
+  ADDRESS_LINE_2_VALIDATION = /\A(?=.*[a-zA-Z])[\w\s,.'-]+\z/
+  ADDRESS_LINE_3_VALIDATION = /\A[a-zA-Z\s,.'-]+\z/
+
   validates :address_line_1, presence: {message: i18n_error_message(:address_line_1_blank)}
   validates :address_line_2, presence: {message: i18n_error_message(:address_line_2_blank)}
   validates :address_line_3, presence: {message: i18n_error_message(:address_line_3_blank)}
@@ -23,9 +27,9 @@ class AddressForm < Form
   validates :address_line_4, length: {maximum: ADDRESS_MAX_CHARS, message: i18n_error_message(:address_line_max_chars)}
   validates :postcode, length: {maximum: POSTCODE_MAX_CHARS, message: i18n_error_message(:postcode_max_chars)}
 
-  validates :address_line_1, format: {with: ADDRESS_REGEX_FILTER, message: i18n_error_message(:address_format)}
-  validates :address_line_2, format: {with: ADDRESS_REGEX_FILTER, message: i18n_error_message(:address_format)}
-  validates :address_line_3, format: {with: ADDRESS_REGEX_FILTER, message: i18n_error_message(:address_format)}
+  validate :validate_address_line_1, if: -> { address_line_1.present? }
+  validate :validate_address_line_2, if: -> { address_line_2.present? }
+  validate :validate_address_line_3, if: -> { address_line_3.present? }
   validates :address_line_4, format: {with: ADDRESS_REGEX_FILTER, message: i18n_error_message(:address_format)}
 
   validate :postcode_is_valid, if: -> { postcode.present? }
@@ -49,6 +53,24 @@ class AddressForm < Form
   def postcode_is_valid
     unless UKPostcode.parse(postcode).full_valid?
       errors.add(:postcode, i18n_errors_path(:postcode_format))
+    end
+  end
+
+  def validate_address_line_1
+    unless ADDRESS_REGEX_FILTER.match(address_line_1) && ADDRESS_LINE_1_VALIDATION.match(address_line_1)
+      errors.add(:address_line_1, i18n_errors_path(:address_format))
+    end
+  end
+
+  def validate_address_line_2
+    unless ADDRESS_REGEX_FILTER.match(address_line_2) && ADDRESS_LINE_2_VALIDATION.match(address_line_2)
+      errors.add(:address_line_2, i18n_errors_path(:address_format))
+    end
+  end
+
+  def validate_address_line_3
+    unless ADDRESS_REGEX_FILTER.match(address_line_3) && ADDRESS_LINE_3_VALIDATION.match(address_line_3)
+      errors.add(:address_line_3, i18n_errors_path(:address_format))
     end
   end
 end

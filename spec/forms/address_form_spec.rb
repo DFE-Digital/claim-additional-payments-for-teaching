@@ -53,7 +53,7 @@ RSpec.describe AddressForm, type: :model do
     end
 
     context "address lines too long" do
-      let(:over_one_hundred_chars) { Array.new(101) { [("a".."z"), ("A".."Z"), ("0".."9")].map(&:to_a).flatten.sample }.join }
+      let(:over_one_hundred_chars) { Array.new(101) { [("a".."z"), ("A".."Z")].map(&:to_a).flatten.sample }.join }
       let(:claim_params) do
         {
           address_line_1: over_one_hundred_chars,
@@ -77,25 +77,83 @@ RSpec.describe AddressForm, type: :model do
     end
 
     context "address lines with format errors" do
-      let(:claim_params) do
-        {
-          address_line_1: "#123",
-          address_line_2: "Main $treet",
-          address_line_3: "$ome City",
-          address_line_4: "$som County",
-          postcode: "XXX XXXX"
-        }
+      context "with unpermitted characters" do
+        let(:claim_params) do
+          {
+            address_line_1: "#123",
+            address_line_2: "Main $treet",
+            address_line_3: "$ome City",
+            address_line_4: "$som County",
+            postcode: "XXX XXXX"
+          }
+        end
+
+        it "is invalid with format errors" do
+          is_expected.not_to be_valid
+
+          expect(form.errors.size).to eq 5
+          expect(form.errors[:address_line_1]).to eq([form.i18n_errors_path(:address_format)])
+          expect(form.errors[:address_line_2]).to eq([form.i18n_errors_path(:address_format)])
+          expect(form.errors[:address_line_3]).to eq([form.i18n_errors_path(:address_format)])
+          expect(form.errors[:address_line_4]).to eq([form.i18n_errors_path(:address_format)])
+          expect(form.errors[:postcode]).to eq([form.i18n_errors_path(:postcode_format)])
+        end
       end
 
-      it "is invalid with too format errors" do
-        is_expected.not_to be_valid
+      context "with invalid looking address" do
+        context "with an invalid line 1" do
+          let(:claim_params) do
+            {
+              address_line_1: ".",
+              address_line_2: "10 Downing Street",
+              address_line_3: "London",
+              postcode: "SW1A 2AA"
+            }
+          end
 
-        expect(form.errors.size).to eq 5
-        expect(form.errors[:address_line_1]).to eq([form.i18n_errors_path(:address_format)])
-        expect(form.errors[:address_line_2]).to eq([form.i18n_errors_path(:address_format)])
-        expect(form.errors[:address_line_3]).to eq([form.i18n_errors_path(:address_format)])
-        expect(form.errors[:address_line_4]).to eq([form.i18n_errors_path(:address_format)])
-        expect(form.errors[:postcode]).to eq([form.i18n_errors_path(:postcode_format)])
+          it "is invalid with format errors" do
+            is_expected.not_to be_valid
+
+            expect(form.errors.size).to eq 1
+            expect(form.errors[:address_line_1]).to eq([form.i18n_errors_path(:address_format)])
+          end
+        end
+
+        context "with an invalid line 2" do
+          let(:claim_params) do
+            {
+              address_line_1: "Flat 1",
+              address_line_2: ".",
+              address_line_3: "London",
+              postcode: "SW1A 2AA"
+            }
+          end
+
+          it "is invalid with format errors" do
+            is_expected.not_to be_valid
+
+            expect(form.errors.size).to eq 1
+            expect(form.errors[:address_line_2]).to eq([form.i18n_errors_path(:address_format)])
+          end
+        end
+
+        context "with an invalid line 3" do
+          let(:claim_params) do
+            {
+              address_line_1: "Flat 1",
+              address_line_2: "10 Downing Street",
+              address_line_3: "123",
+              postcode: "SW1A 2AA"
+            }
+          end
+
+          it "is invalid with format errors" do
+            is_expected.not_to be_valid
+
+            expect(form.errors.size).to eq 1
+            expect(form.errors[:address_line_3]).to eq([form.i18n_errors_path(:address_format)])
+          end
+        end
       end
     end
   end
