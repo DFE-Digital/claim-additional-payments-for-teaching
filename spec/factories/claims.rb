@@ -395,5 +395,10 @@ FactoryBot.define do
         }
       end
     end
+
+    trait :random_name do
+      first_name { Faker::Name.first_name }
+      surname { Faker::Name.last_name }
+    end
   end
 end
