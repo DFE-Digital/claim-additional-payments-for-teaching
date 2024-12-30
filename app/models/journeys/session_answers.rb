@@ -4,47 +4,48 @@ module Journeys
     include ActiveModel::Attributes
     include ActiveModel::Dirty
     include Sessions::TeacherId
+    include Sessions::PiiAttributes
 
     attribute :current_school_id, :string # UUID
-    attribute :address_line_1, :string
-    attribute :address_line_2, :string
-    attribute :address_line_3, :string
-    attribute :address_line_4, :string
-    attribute :postcode, :string
+    attribute :address_line_1, :string, pii: true
+    attribute :address_line_2, :string, pii: true
+    attribute :address_line_3, :string, pii: true
+    attribute :address_line_4, :string, pii: true
+    attribute :postcode, :string, pii: true
     attribute :date_of_birth, :date
-    attribute :teacher_reference_number, :string
-    attribute :national_insurance_number, :string
-    attribute :email_address, :string
-    attribute :bank_sort_code, :string
-    attribute :bank_account_number, :string
+    attribute :teacher_reference_number, :string, pii: true
+    attribute :national_insurance_number, :string, pii: true
+    attribute :email_address, :string, pii: true
+    attribute :bank_sort_code, :string, pii: true
+    attribute :bank_account_number, :string, pii: true
     attribute :payroll_gender, :string
-    attribute :first_name, :string
-    attribute :middle_name, :string
-    attribute :surname, :string
-    attribute :banking_name, :string
-    attribute :building_society_roll_number, :string
+    attribute :first_name, :string, pii: true
+    attribute :middle_name, :string, pii: true
+    attribute :surname, :string, pii: true
+    attribute :banking_name, :string, pii: true
+    attribute :building_society_roll_number, :string, pii: true
     attribute :academic_year, AcademicYear::Type.new
     attribute :bank_or_building_society, :string
     attribute :provide_mobile_number, :boolean
-    attribute :mobile_number, :string
+    attribute :mobile_number, :string, pii: true
     attribute :email_verified, :boolean
-    attribute :email_verification_secret, :string
+    attribute :email_verification_secret, :string, pii: true
     attribute :mobile_verified, :boolean
-    attribute :mobile_verification_secret, :string
+    attribute :mobile_verification_secret, :string, pii: true
     attribute :hmrc_bank_validation_succeeded, :boolean
     attribute :hmrc_bank_validation_responses, default: []
     attribute :logged_in_with_tid, :boolean
     attribute :logged_in_with_onelogin, :boolean
     attribute :identity_confirmed_with_onelogin, :boolean
     attribute :details_check, :boolean
-    attribute :teacher_id_user_info, default: {}
-    attribute :onelogin_user_info, default: {}
-    attribute :onelogin_credentials, default: {}
+    attribute :teacher_id_user_info, default: {}, pii: true
+    attribute :onelogin_user_info, default: {}, pii: true
+    attribute :onelogin_credentials, default: {}, pii: true
     attribute :onelogin_uid, :string
 
-    attribute :onelogin_idv_first_name, :string
-    attribute :onelogin_idv_last_name, :string
-    attribute :onelogin_idv_full_name, :string
+    attribute :onelogin_idv_first_name, :string, pii: true
+    attribute :onelogin_idv_last_name, :string, pii: true
+    attribute :onelogin_idv_full_name, :string, pii: true
     attribute :onelogin_idv_date_of_birth, :date
 
     attribute :onelogin_auth_at, :datetime
@@ -60,9 +61,9 @@ module Journeys
     attribute :hmrc_validation_attempt_count, :integer
     attribute :reminder_id, :string
 
-    attribute :reminder_full_name, :string
-    attribute :reminder_email_address, :string
-    attribute :reminder_otp_secret, :string
+    attribute :reminder_full_name, :string, pii: true
+    attribute :reminder_email_address, :string, pii: true
+    attribute :reminder_otp_secret, :string, pii: true
     attribute :reminder_otp_confirmed, :boolean, default: false # whether or not they have confirmed email via otp
 
     def has_attribute?(name)

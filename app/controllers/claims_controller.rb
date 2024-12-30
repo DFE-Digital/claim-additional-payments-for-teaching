@@ -10,6 +10,7 @@ class ClaimsController < BasePublicController
   before_action :prepend_view_path_for_journey
   before_action :persist_claim, only: [:new, :create]
   before_action :handle_magic_link, only: [:new], if: -> { journey.start_with_magic_link? }
+  before_action :add_answers_to_rollbar_context, only: [:show, :update]
   after_action :update_session_with_current_slug, only: [:update]
 
   include AuthorisedSlugs
@@ -128,5 +129,11 @@ class ClaimsController < BasePublicController
       redirect_to claim_path(Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME, "expired-link") and return
     end
     redirect_to_next_slug if claim_in_progress?
+  end
+
+  def add_answers_to_rollbar_context
+    return unless journey_session
+
+    Rollbar.scope!(answers: journey_session.answers.attributes_with_pii_redacted)
   end
 end

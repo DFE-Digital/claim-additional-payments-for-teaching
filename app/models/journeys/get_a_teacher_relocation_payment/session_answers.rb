@@ -9,8 +9,8 @@ module Journeys
       attribute :visa_type, :string
       attribute :date_of_entry, :date
       attribute :nationality, :string
-      attribute :passport_number, :string
-      attribute :school_headteacher_name, :string
+      attribute :passport_number, :string, pii: true
+      attribute :school_headteacher_name, :string, pii: true
 
       def policy
         Policies::InternationalRelocationPayments
