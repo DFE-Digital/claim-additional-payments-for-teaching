@@ -16,4 +16,8 @@ module Deletable
 
     update!(deleted_at: Time.zone.now)
   end
+
+  def undelete!
+    update!(deleted_at: nil)
+  end
 end
