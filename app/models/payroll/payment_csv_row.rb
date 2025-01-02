@@ -124,7 +124,7 @@ module Payroll
     end
 
     def banking_name
-      model.banking_name
+      BankingNameNormalizer.normalize(model.banking_name)
     end
 
     def bank_sort_code
