@@ -91,6 +91,19 @@ RSpec.describe OneLogin::CoreIdentityValidator do
     it "returns whole name" do
       expect(subject.full_name).to eql("KENNETH DECERQUEIRA")
     end
+
+    context "if name parts is out of order" do
+      it "ensures family name is used as last name" do
+        out_of_order = [
+          {"value" => "DECERQUEIRA", "type" => "FamilyName"},
+          {"value" => "KENNETH", "type" => "GivenName"}
+        ]
+
+        allow(subject).to receive(:name_parts).and_return(out_of_order)
+
+        expect(subject.full_name).to eql("KENNETH DECERQUEIRA")
+      end
+    end
   end
 
   let(:stub_normal_did) do

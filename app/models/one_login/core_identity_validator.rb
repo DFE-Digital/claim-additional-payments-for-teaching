@@ -22,7 +22,15 @@ class OneLogin::CoreIdentityValidator
   end
 
   def full_name
-    name_parts.map { |hash| hash["value"] }.join(" ")
+    given_names = name_parts
+      .select { |hash| hash["type"] == "GivenName" }
+      .map { |hash| hash["value"] }
+
+    family_names = name_parts
+      .select { |hash| hash["type"] == "FamilyName" }
+      .map { |hash| hash["value"] }
+
+    (given_names + family_names).join(" ")
   end
 
   private
