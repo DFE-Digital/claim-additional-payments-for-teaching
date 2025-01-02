@@ -190,4 +190,12 @@ Rails.application.routes.draw do
   match "*path", to: "application#handle_unwanted_requests", via: :all, constraints: lambda { |req|
     req.path =~ %r{^/(wordpress|wp)}i
   }
+
+  # 404 - misc head requests
+  match "*path", to: "application#handle_unwanted_requests", via: :head, constraints: lambda { |req|
+    req.path =~ %r{^/(backup|bc|bk|home|main|new|old)}i
+  }
+
+  # 404 - root requests
+  options "/", to: "application#handle_unwanted_requests"
 end

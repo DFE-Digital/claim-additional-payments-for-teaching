@@ -97,5 +97,27 @@ describe "Routes", type: :routing do
         end
       end
     end
+
+    context "misc head requests" do
+      it "returns a 404" do
+        %w[
+          backup
+          bc
+          bk
+          home
+          main
+          new
+          old
+        ].each do |path|
+          expect(head: path).to route_to(controller: "application", action: "handle_unwanted_requests", path: path)
+        end
+      end
+    end
+
+    context "root requests" do
+      it "returns a 404" do
+        expect(options: "/").to route_to(controller: "application", action: "handle_unwanted_requests")
+      end
+    end
   end
 end
