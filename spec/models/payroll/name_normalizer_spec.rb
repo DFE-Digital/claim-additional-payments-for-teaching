@@ -49,8 +49,18 @@ RSpec.describe Payroll::NameNormalizer do
       it { is_expected.to eq "Samuel" }
     end
 
+    context "name with hyphen" do
+      let(:name) { "Double-Barrelled" }
+      it { is_expected.to eq "DoubleBarrelled" }
+    end
+
+    context "name with a period" do
+      let(:name) { "John. Smith" }
+      it { is_expected.to eq "JohnSmith" }
+    end
+
     context "name that has it all" do
-      let(:name) { "Jámes', Ryan, O’Hughes 👍" }
+      let(:name) { "Jámes'. Ryan, O’Hughes 👍" }
       it { is_expected.to eq "JamesRyanOHughes" }
     end
   end
