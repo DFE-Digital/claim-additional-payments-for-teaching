@@ -141,6 +141,29 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
+      "fingerprint": "b0269286fd1ea8251ec5b7680edd39187adb72c1ed2c4bc61e6eec7e14ed24f7",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/admin/reports/duplicate_approved_claims.rb",
+      "line": 191,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "ActiveRecord::Base.connection.execute(((\"WITH current_claims AS (\\n  SELECT claims.id, #{claim_matching_attributes.flatten.join(\", \")}\\n  FROM claims\\n  JOIN decisions ON claims.id = decisions.claim_id\\n  WHERE claims.academic_year = '#{academic_year}'\\n  AND decisions.undone = false\\n  AND decisions.result = 0\\n)\\n\" + \"\\n\") + claim_matching_attributes.flat_map do\n join_condition = attribute_group.map do\n if (Claim.column_for_attribute(attr).type == :string) then\n  \"LOWER(current_claims.#{attr}) = LOWER(other_claims.#{attr})\"\nelse\n  \"current_claims.#{attr} = other_claims.#{attr}\"\nend\n end.join(\" AND \")\n\"SELECT current_claims.id, other_claims.id AS other_claim_id\\nFROM current_claims\\nJOIN current_claims other_claims\\nON #{attribute_group.map do\n if (Claim.column_for_attribute(attr).type == :string) then\n  \"LOWER(current_claims.#{attr}) = LOWER(other_claims.#{attr})\"\nelse\n  \"current_claims.#{attr} = other_claims.#{attr}\"\nend\n end.join(\" AND \")}\\nWHERE current_claims.id != other_claims.id\\n\"\n end.join(\"\\nUNION\\n\")))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::Reports::DuplicateApprovedClaims",
+        "method": "duplicates_by_attributes"
+      },
+      "user_input": "claim_matching_attributes.flatten.join(\", \")",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
       "fingerprint": "cddc34b96e07d19510d574438a1ce61b69d9c1f28c0d4e5eee631d17a9b38ba6",
       "check_name": "SQL",
       "message": "Possible SQL injection",
@@ -185,6 +208,6 @@
       "note": ""
     }
   ],
-  "updated": "2024-11-20 17:38:36 +0000",
+  "updated": "2024-12-16 15:02:51 +0000",
   "brakeman_version": "6.2.1"
 }
