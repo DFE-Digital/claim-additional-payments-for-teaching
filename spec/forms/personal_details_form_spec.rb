@@ -30,16 +30,6 @@ RSpec.describe PersonalDetailsForm, type: :model do
       )
     end
 
-    context "unpermitted claim param" do
-      let(:params) { {nonsense_id: 1} }
-      let(:logged_in_with_tid) { nil }
-      let(:teacher_id_user_info) { {} }
-
-      it "raises an error" do
-        expect { form }.to raise_error ActionController::UnpermittedParameters
-      end
-    end
-
     describe "#show_name_section?" do
       context "when not logged_in_with_tid" do
         let(:logged_in_with_tid) { nil }

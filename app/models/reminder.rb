@@ -1,4 +1,6 @@
 class Reminder < ApplicationRecord
+  include Deletable
+
   attribute :sent_one_time_password_at, :datetime
   attribute :one_time_password, :string, limit: 6
 
@@ -20,5 +22,9 @@ class Reminder < ApplicationRecord
     AcademicYear.new(
       read_attribute(:itt_academic_year)
     )
+  end
+
+  def soft_delete!
+    update!(deleted_at: Time.now)
   end
 end
