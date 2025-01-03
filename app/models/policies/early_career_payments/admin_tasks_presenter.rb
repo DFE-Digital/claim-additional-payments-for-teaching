@@ -26,7 +26,7 @@ module Policies
 
       def census_subjects_taught
         [
-          ["Subject", eligibility.eligible_itt_subject.titleize]
+          ["Subject", eligibility.eligible_itt_subject&.titleize]
         ]
       end
 
