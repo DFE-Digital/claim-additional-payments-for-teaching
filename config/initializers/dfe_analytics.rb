@@ -1,8 +1,7 @@
 DfE::Analytics.configure do |config|
   # Whether to log events instead of sending them to BigQuery.
   #
-  # config.log_only = true
-  config.log_only = (%w[development test].include?(ENV["RAILS_ENV"]) || ENV["ENVIRONMENT_NAME"].start_with?("review"))
+  config.log_only = false
 
   # Whether to use ActiveJob or dispatch events immediately.
   #
@@ -51,4 +50,6 @@ DfE::Analytics.configure do |config|
   # to all events we send to BigQuery.
   #
   # config.environment = ENV.fetch('RAILS_ENV', 'development')
+
+  config.azure_federated_auth = ENV.include? "GOOGLE_CLOUD_CREDENTIALS"
 end
