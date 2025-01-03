@@ -3,14 +3,14 @@ module Journeys
     module Provider
       module Authenticated
         class SessionAnswers < Journeys::SessionAnswers
-          attribute :consent_given, :boolean
-          attribute :nursery_urn
+          attribute :consent_given, :boolean, pii: false
+          attribute :nursery_urn, pii: true
           attribute :paye_reference, pii: true
-          attribute :start_date, :date
-          attribute :child_facing_confirmation_given, :boolean
-          attribute :returning_within_6_months, :boolean
-          attribute :returner_worked_with_children, :boolean
-          attribute :returner_contract_type
+          attribute :start_date, :date, pii: false
+          attribute :child_facing_confirmation_given, :boolean, pii: false
+          attribute :returning_within_6_months, :boolean, pii: false
+          attribute :returner_worked_with_children, :boolean, pii: false
+          attribute :returner_contract_type, pii: false
           attribute :practitioner_email_address, pii: true
           attribute :provider_contact_name, pii: true
           attribute :provider_email_address, pii: true

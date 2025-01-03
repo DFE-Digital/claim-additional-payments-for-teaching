@@ -9,7 +9,14 @@ module Journeys
 
       class_methods do
         def attribute(name, type = nil, **options)
-          pii_attributes << name if options.delete(:pii)
+          pii_flag = options.delete(:pii)
+
+          if pii_flag.nil?
+            raise ArgumentError, "pii indicator for #{name} is required"
+          end
+
+          pii_attributes << name if pii_flag
+
           super
         end
       end
