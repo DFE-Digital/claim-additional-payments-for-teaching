@@ -10,7 +10,7 @@
       <%= f.hidden_field :id %>
 
       <h1 class="govuk-heading-l">
-        Are you sure you wish to unsubscribe from your <%= @form.journey_name %> reminder?
+        Are you sure you wish to unsubscribe from your reminder?
       </h1>
 
       <p class="govuk-body">
@@ -19,6 +19,10 @@
 
       <p class="govuk-body">
         However, you will still continue to receive updates about your claim as it progresses.
+      <p>
+
+      <p class="govuk-body">
+        You will also continue to receive communications related to the claim service, please contact <%= govuk_mail_to I18n.t(:support_email_address) %> if you no longer wish these kinds of updates.
       <p>
 
       <%= f.govuk_submit "Unsubscribe" %>
