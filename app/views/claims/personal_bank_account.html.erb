@@ -18,12 +18,14 @@
         <%= f.govuk_text_field :bank_sort_code,
           width: "one-quarter",
           autocomplete: "off",
+          inputmode: "numeric",
           label: { text: "Sort code" },
           hint: { text: "For example: 309430" } %>
 
         <%= f.govuk_text_field :bank_account_number,
           width: 20,
           autocomplete: "off",
+          inputmode: "numeric",
           label: { text: "Account number" },
           hint: { text: "For example: 00733445" } %>
       <% end %>
