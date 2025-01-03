@@ -51,7 +51,9 @@ module Policies
       def nursery_name
         [
           eligible_ey_provider.nursery_name,
-          "(#{eligible_ey_provider.urn})"
+          "(#{eligible_ey_provider.urn})",
+          "-",
+          eligible_ey_provider.local_authority.name
         ].join(" ")
       end
     end
