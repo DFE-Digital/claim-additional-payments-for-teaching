@@ -17,85 +17,6 @@ class Claim < ApplicationRecord
     address_line_4
     postcode
   ].freeze
-  FILTER_PARAMS = {
-    address_line_1: true,
-    address_line_2: true,
-    address_line_3: true,
-    address_line_4: true,
-    postcode: true,
-    payroll_gender: true,
-    national_insurance_number: true,
-    has_student_loan: false,
-    student_loan_country: false,
-    student_loan_courses: false,
-    student_loan_start_date: false,
-    has_masters_doctoral_loan: false,
-    postgraduate_masters_loan: false,
-    postgraduate_doctoral_loan: false,
-    email_address: true,
-    provide_mobile_number: false,
-    mobile_number: true,
-    bank_sort_code: true,
-    bank_account_number: true,
-    created_at: false,
-    date_of_birth: true,
-    date_of_birth_day: true,
-    date_of_birth_month: true,
-    date_of_birth_year: true,
-    eligibility_id: false,
-    eligibility_type: false,
-    first_name: true,
-    middle_name: true,
-    surname: true,
-    id: false,
-    reference: false,
-    student_loan_plan: false,
-    submitted_at: false,
-    updated_at: false,
-    govuk_verify_fields: false,
-    bank_or_building_society: false,
-    banking_name: true,
-    building_society_roll_number: true,
-    academic_year: false,
-    personal_data_removed_at: false,
-    email_verified: false,
-    one_time_password: true,
-    sent_one_time_password_at: false,
-    mobile_verified: false,
-    assigned_to_id: true,
-    policy_options_provided: false,
-    held: false,
-    hmrc_bank_validation_responses: false,
-    hmrc_bank_validation_succeeded: false,
-    logged_in_with_tid: false,
-    teacher_id_user_info: false,
-    details_check: true,
-    email_address_check: true,
-    mobile_check: true,
-    qa_required: false,
-    qa_completed_at: false,
-    qualifications_details_check: true,
-    dqt_teacher_status: false,
-    submitted_using_slc_data: false,
-    journeys_session_id: false,
-    column_to_remove_teacher_reference_number: true,
-    identity_confirmed_with_onelogin: false,
-    logged_in_with_onelogin: false,
-    onelogin_credentials: true,
-    onelogin_user_info: true,
-    onelogin_uid: true,
-    onelogin_auth_at: false,
-    onelogin_idv_at: false,
-    onelogin_idv_first_name: true,
-    onelogin_idv_last_name: true,
-    onelogin_idv_date_of_birth: true,
-    paye_reference: true,
-    practitioner_email_address: true,
-    provider_contact_name: true,
-    started_at: false,
-    verified_at: false,
-    onelogin_idv_full_name: true
-  }.freeze
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
   CLAIMANT_MATCHING_ATTRIBUTES = %i[
@@ -402,10 +323,6 @@ class Claim < ApplicationRecord
 
   def full_name
     [first_name, middle_name, surname].reject(&:blank?).join(" ")
-  end
-
-  def self.filtered_params
-    FILTER_PARAMS.select { |_, v| v }.keys
   end
 
   def policy
