@@ -1,30 +1,30 @@
 module Journeys
   module FurtherEducationPayments
     class SessionAnswers < Journeys::SessionAnswers
-      attribute :teaching_responsibilities, :boolean
-      attribute :provision_search, :string
-      attribute :possible_school_id, :string # GUID
-      attribute :school_id, :string # GUID
-      attribute :contract_type, :string
-      attribute :fixed_term_full_year, :boolean
-      attribute :taught_at_least_one_term, :boolean
-      attribute :teaching_hours_per_week, :string
-      attribute :teaching_hours_per_week_next_term, :string
-      attribute :further_education_teaching_start_year, :string
-      attribute :subjects_taught, default: []
-      attribute :building_construction_courses, default: []
-      attribute :chemistry_courses, default: []
-      attribute :computing_courses, default: []
-      attribute :early_years_courses, default: []
-      attribute :engineering_manufacturing_courses, default: []
-      attribute :maths_courses, default: []
-      attribute :physics_courses, default: []
-      attribute :hours_teaching_eligible_subjects, :boolean
-      attribute :teaching_qualification, :string
-      attribute :subject_to_formal_performance_action, :boolean
-      attribute :subject_to_disciplinary_action, :boolean
-      attribute :half_teaching_hours, :boolean
-      attribute :award_amount, :decimal
+      attribute :teaching_responsibilities, :boolean, pii: false
+      attribute :provision_search, :string, pii: false
+      attribute :possible_school_id, :string, pii: false # GUID
+      attribute :school_id, :string, pii: false # GUID
+      attribute :contract_type, :string, pii: false
+      attribute :fixed_term_full_year, :boolean, pii: false
+      attribute :taught_at_least_one_term, :boolean, pii: false
+      attribute :teaching_hours_per_week, :string, pii: false
+      attribute :teaching_hours_per_week_next_term, :string, pii: false
+      attribute :further_education_teaching_start_year, :string, pii: false
+      attribute :subjects_taught, default: [], pii: false
+      attribute :building_construction_courses, default: [], pii: false
+      attribute :chemistry_courses, default: [], pii: false
+      attribute :computing_courses, default: [], pii: false
+      attribute :early_years_courses, default: [], pii: false
+      attribute :engineering_manufacturing_courses, default: [], pii: false
+      attribute :maths_courses, default: [], pii: false
+      attribute :physics_courses, default: [], pii: false
+      attribute :hours_teaching_eligible_subjects, :boolean, pii: false
+      attribute :teaching_qualification, :string, pii: false
+      attribute :subject_to_formal_performance_action, :boolean, pii: false
+      attribute :subject_to_disciplinary_action, :boolean, pii: false
+      attribute :half_teaching_hours, :boolean, pii: false
+      attribute :award_amount, :decimal, pii: false
 
       def policy
         Policies::FurtherEducationPayments
