@@ -220,15 +220,6 @@ GEM
     google-protobuf (4.29.2)
       bigdecimal
       rake (>= 13)
-    google-protobuf (4.29.2-arm64-darwin)
-      bigdecimal
-      rake (>= 13)
-    google-protobuf (4.29.2-x86_64-darwin)
-      bigdecimal
-      rake (>= 13)
-    google-protobuf (4.29.2-x86_64-linux)
-      bigdecimal
-      rake (>= 13)
     googleapis-common-protos-types (1.16.0)
       google-protobuf (>= 3.18, < 5.a)
     googleauth (1.11.0)
@@ -851,6 +842,7 @@ PLATFORMS
   arm64-darwin-23
   ruby
   x86_64-darwin-21
+  x86_64-darwin-24
   x86_64-linux
 
 DEPENDENCIES
@@ -913,7 +905,7 @@ DEPENDENCIES
   webmock
 
 RUBY VERSION
-   ruby 3.3.5p100
+   ruby 3.4.1p0
 
 BUNDLED WITH
    2.5.13
