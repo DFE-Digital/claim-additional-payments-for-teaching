@@ -11,7 +11,7 @@ module Policies
 
       def employment
         [
-          ["Current employment", claim.eligibility.eligible_ey_provider.nursery_name],
+          ["Current employment", nursery_name],
           ["Start date", l(claim.eligibility.start_date)]
         ]
       end
@@ -40,6 +40,21 @@ module Policies
         [
           ["Student loan plan", claim.student_loan_plan&.humanize]
         ]
+      end
+
+      private
+
+      def eligible_ey_provider
+        claim.eligibility.eligible_ey_provider
+      end
+
+      def nursery_name
+        [
+          eligible_ey_provider.nursery_name,
+          "(#{eligible_ey_provider.urn})",
+          "-",
+          eligible_ey_provider.local_authority.name
+        ].join(" ")
       end
     end
   end

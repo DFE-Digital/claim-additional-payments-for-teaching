@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Policies::EarlyYearsPayments::AdminTasksPresenter do
   describe "#employment" do
-    let(:claim) {
+    let(:claim) do
       create(:claim,
         :submitted,
         policy: Policies::EarlyYearsPayments,
@@ -10,13 +10,25 @@ RSpec.describe Policies::EarlyYearsPayments::AdminTasksPresenter do
           nursery_urn: eligible_ey_provider.urn,
           start_date: Date.new(2018, 1, 1)
         })
-    }
-    let(:eligible_ey_provider) { create(:eligible_ey_provider) }
+    end
+
+    let(:local_authority) { create(:local_authority, name: "Some LA") }
+
+    let(:eligible_ey_provider) do
+      create(
+        :eligible_ey_provider,
+        nursery_name: "Some Nursery",
+        urn: "EY123456",
+        local_authority: local_authority
+      )
+    end
 
     subject { described_class.new(claim).employment }
 
     it "shows current employment" do
-      expect(subject[0][1]).to eq claim.eligibility.eligible_ey_provider.nursery_name
+      expect(subject[0]).to eq(
+        ["Current employment", "Some Nursery (EY123456) - Some LA"]
+      )
     end
 
     it "shows start date" do
