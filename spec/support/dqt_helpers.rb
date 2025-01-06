@@ -5,7 +5,6 @@ module DqtHelpers
     params: {},
     status: 200
   )
-
     params = {
       birthdate: "1966-06-06",
       nino: "AB123123A"
