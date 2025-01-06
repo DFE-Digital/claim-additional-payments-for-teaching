@@ -46,13 +46,13 @@ RSpec.describe ClaimMailer, type: :mailer do
     end
 
     it "includes a personalisation key for 'first_name'" do
-      expect(mail[:personalisation].decoded).to include("{:first_name=>\"Jo\"")
+      expect(mail[:personalisation].decoded).to include("{first_name: \"Jo\"")
       expect(mail.body).to be_empty
     end
 
     it "includes a personalisation key for 'support_email_address'" do
       support_email_address = I18n.t("#{claim.policy.locale_key}.support_email_address")
-      expect(mail[:personalisation].decoded).to include(":support_email_address=>\"#{support_email_address}\"")
+      expect(mail[:personalisation].decoded).to include("support_email_address: \"#{support_email_address}\"")
     end
   end
 
@@ -396,7 +396,7 @@ RSpec.describe ClaimMailer, type: :mailer do
     before { create(:journey_configuration, :early_years_payment_provider_start) }
 
     it "has personalisation keys for: magic link" do
-      expect(mail[:personalisation].decoded).to eq("{:magic_link=>\"https://#{ENV["CANONICAL_HOSTNAME"]}/early-years-payment-provider/claim?code=123124&email=#{email}\"}")
+      expect(mail[:personalisation].decoded).to eq("{magic_link: \"https://#{ENV["CANONICAL_HOSTNAME"]}/early-years-payment-provider/claim?code=123124&email=#{email}\"}")
       expect(mail.body).to be_empty
     end
   end
