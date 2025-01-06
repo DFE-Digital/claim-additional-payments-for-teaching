@@ -22,7 +22,25 @@
     </h3>
 
     <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__cell">Claimant identity check</th>
+          <th class="govuk-table__cell">Full name</th>
+          <th class="govuk-table__cell">Date of birth</th>
+        </tr>
+      </thead>
       <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">
+            One Login identity verification (IDV)
+          </th>
+          <td class="govuk-table__cell">
+            <%= @tasks_presenter.one_login_claimant_name %>
+          </td>
+          <td class="govuk-table__cell">
+            <%= @tasks_presenter.one_login_claimant_dob %>
+          </td>
+        </tr>
         <tr class="govuk-table__row">
           <th scope="row" class="govuk-table__header">
             Provider entered claimant name
@@ -30,13 +48,8 @@
           <td class="govuk-table__cell">
             <%= @tasks_presenter.provider_entered_claimant_name %>
           </td>
-        </tr>
-        <tr class="govuk-table__row">
-          <th scope="row" class="govuk-table__header">
-            Claimant name from One login
-          </th>
           <td class="govuk-table__cell">
-            <%= @tasks_presenter.one_login_claimant_name %>
+            <%= @tasks_presenter.practitioner_entered_dob %>
           </td>
         </tr>
       </tbody>
