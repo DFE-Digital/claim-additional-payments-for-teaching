@@ -217,16 +217,7 @@ GEM
     google-cloud-env (2.2.0)
       faraday (>= 1.0, < 3.a)
     google-cloud-errors (1.4.0)
-    google-protobuf (4.28.3)
-      bigdecimal
-      rake (>= 13)
-    google-protobuf (4.28.3-arm64-darwin)
-      bigdecimal
-      rake (>= 13)
-    google-protobuf (4.28.3-x86_64-darwin)
-      bigdecimal
-      rake (>= 13)
-    google-protobuf (4.28.3-x86_64-linux)
+    google-protobuf (4.29.2)
       bigdecimal
       rake (>= 13)
     googleapis-common-protos-types (1.16.0)
