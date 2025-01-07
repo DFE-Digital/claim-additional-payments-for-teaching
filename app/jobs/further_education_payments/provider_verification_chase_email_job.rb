@@ -1,8 +1,5 @@
 module FurtherEducationPayments
-  class ProviderVerificationChaseEmailJob < CronJob
-    # Daily 8am
-    self.cron_expression = "0 8 * * *"
-
+  class ProviderVerificationChaseEmailJob < ApplicationJob
     queue_as :user_data
 
     def perform

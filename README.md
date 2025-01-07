@@ -146,16 +146,6 @@ To enable Google Tag Manager set the following environment variable:
 GTM_ANALYTICS=<GTM PROPERTY>
 ```
 
-### Running `CronJob`s
-
-To schedule recurring jobs, run the following:
-
-```
-rake jobs:schedule
-```
-
-Look for jobs that inherit from `CronJob` for a complete list of scheduled jobs.
-
 ## Running specs, brakeman, and code linting
 
 ```
