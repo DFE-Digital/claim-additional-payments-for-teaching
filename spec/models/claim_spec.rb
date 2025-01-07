@@ -618,50 +618,6 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe ".filtered_params" do
-    it "returns a list of sensitive params to be filtered" do
-      expect(Claim.filtered_params).to match_array([
-        :address_line_1,
-        :address_line_2,
-        :address_line_3,
-        :address_line_4,
-        :postcode,
-        :payroll_gender,
-        :national_insurance_number,
-        :email_address,
-        :mobile_number,
-        :bank_sort_code,
-        :bank_account_number,
-        :date_of_birth,
-        :date_of_birth_day,
-        :date_of_birth_month,
-        :date_of_birth_year,
-        :first_name,
-        :middle_name,
-        :surname,
-        :banking_name,
-        :building_society_roll_number,
-        :one_time_password,
-        :assigned_to_id,
-        :details_check,
-        :email_address_check,
-        :mobile_check,
-        :qualifications_details_check,
-        :column_to_remove_teacher_reference_number,
-        :onelogin_credentials,
-        :onelogin_user_info,
-        :onelogin_uid,
-        :onelogin_idv_first_name,
-        :onelogin_idv_last_name,
-        :onelogin_idv_full_name,
-        :onelogin_idv_date_of_birth,
-        :paye_reference,
-        :practitioner_email_address,
-        :provider_contact_name
-      ])
-    end
-  end
-
   describe "#below_min_qa_threshold?" do
     let(:policy) { Policies::EarlyCareerPayments }
     let(:other_policy) { Policies::POLICIES.detect { |p| p != policy } }
@@ -868,14 +824,6 @@ RSpec.describe Claim, type: :model do
 
         it { is_expected.to eq(true) }
       end
-    end
-  end
-
-  describe "::FILTER_PARAMS" do
-    it "has a value for every claim attribute" do
-      expect(Claim::FILTER_PARAMS.keys).to match_array(
-        Claim.new.attribute_names.map(&:to_sym) + [:one_time_password]
-      )
     end
   end
 

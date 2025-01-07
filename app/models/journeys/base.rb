@@ -73,5 +73,9 @@ module Journeys
     def journey_name
       I18n.t(:journey_name, scope: self::I18N_NAMESPACE)
     end
+
+    def pii_attributes
+      SessionAnswers.pii_attributes
+    end
   end
 end

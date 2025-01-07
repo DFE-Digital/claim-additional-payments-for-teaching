@@ -1,20 +1,20 @@
 module Journeys
   module AdditionalPaymentsForTeaching
     class SessionAnswers < Journeys::SessionAnswers
-      attribute :selected_policy, :string
-      attribute :employed_as_supply_teacher, :boolean
-      attribute :qualification, :string
-      attribute :has_entire_term_contract, :boolean
-      attribute :employed_directly, :boolean
-      attribute :subject_to_disciplinary_action, :boolean
-      attribute :subject_to_formal_performance_action, :boolean
-      attribute :eligible_itt_subject, :string
-      attribute :teaching_subject_now, :boolean
-      attribute :itt_academic_year, AcademicYear::Type.new
-      attribute :induction_completed, :boolean
-      attribute :school_somewhere_else, :boolean
-      attribute :nqt_in_academic_year_after_itt, :boolean
-      attribute :eligible_degree_subject, :boolean
+      attribute :selected_policy, :string, pii: false
+      attribute :employed_as_supply_teacher, :boolean, pii: false
+      attribute :qualification, :string, pii: false
+      attribute :has_entire_term_contract, :boolean, pii: false
+      attribute :employed_directly, :boolean, pii: false
+      attribute :subject_to_disciplinary_action, :boolean, pii: false
+      attribute :subject_to_formal_performance_action, :boolean, pii: false
+      attribute :eligible_itt_subject, :string, pii: false
+      attribute :teaching_subject_now, :boolean, pii: false
+      attribute :itt_academic_year, AcademicYear::Type.new, pii: false
+      attribute :induction_completed, :boolean, pii: false
+      attribute :school_somewhere_else, :boolean, pii: false
+      attribute :nqt_in_academic_year_after_itt, :boolean, pii: false
+      attribute :eligible_degree_subject, :boolean, pii: false
 
       def early_career_payments_dqt_teacher_record
         return unless dqt_teacher_status.present?
