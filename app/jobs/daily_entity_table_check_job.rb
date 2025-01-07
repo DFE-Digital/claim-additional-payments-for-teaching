@@ -1,6 +1,4 @@
-class DailyEntityTableCheckJob < CronJob
-  self.cron_expression = "30 0 * * *" # Every day at 00:30
-
+class DailyEntityTableCheckJob < ApplicationJob
   def perform
     DfE::Analytics::EntityTableCheckJob.new.perform
   end

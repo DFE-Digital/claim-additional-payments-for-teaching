@@ -1,7 +1,4 @@
-class DeleteFileUploadsAndDownloadsJob < CronJob
-  # At 10:00 PM, on day 31 of the month, only in August
-  self.cron_expression = "0 22 31 8 *"
-
+class DeleteFileUploadsAndDownloadsJob < ApplicationJob
   def perform
     FileUpload.delete_files(
       target_data_model: PaymentConfirmation,
