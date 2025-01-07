@@ -105,6 +105,8 @@ Rails.application.routes.draw do
   namespace :admin do
     get "/", to: "page#index", as: :root
 
+    mount MissionControl::Jobs::Engine, at: "/jobs"
+
     get "/auth/sign-in" => "auth#sign_in", :as => :sign_in
     delete "/auth/sign-out" => "auth#sign_out", :as => :sign_out
 
