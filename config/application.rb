@@ -75,5 +75,8 @@ module DfeTeachersPaymentService
     config.email_max_length = 129
 
     config.active_support.to_time_preserves_timezone = :offset
+
+    config.mission_control.jobs.base_controller_class = "Admin::MissionControlController"
+    config.mission_control.jobs.http_basic_auth_enabled = false
   end
 end
