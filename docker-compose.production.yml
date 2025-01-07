@@ -33,19 +33,17 @@ services:
       - .:/app
       - assets:/app/public/assets
 
-  delayed_job:
+  worker:
     build:
       context: .
       cache_from:
         - local/dfe-teachers-payment-service:web-dependencies
         - dfedigital/teacher-payments-service:web
       target: web
-    command: bin/start-worker
+    command: bin/jobs
     image: local/dfe-teachers-payment-service:web
     depends_on:
       - web
-    environment:
-      WORKER_COUNT: 4
     env_file: *default_env_files
     volumes:
       - .:/app

@@ -1,4 +1,0 @@
-#!/bin/bash
-
-echo "Starting workers..."
-bundle exec bin/delayed_job run -n "$WORKER_COUNT"
