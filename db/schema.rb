@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_26_105650) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_05_121421) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -113,6 +113,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_26_105650) do
     t.date "onelogin_idv_date_of_birth"
     t.datetime "started_at", precision: nil, null: false
     t.datetime "verified_at"
+    t.text "onelogin_idv_full_name"
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"

@@ -226,6 +226,7 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
           call: nil,
           first_name: "John",
           last_name: "Doe",
+          full_name: "John Doe",
           date_of_birth: Date.new(1970, 12, 13)
         )
 

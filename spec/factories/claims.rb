@@ -57,6 +57,7 @@ FactoryBot.define do
       onelogin_idv_at { (onelogin_auth_at + 1.hour) }
       onelogin_idv_first_name { first_name }
       onelogin_idv_last_name { surname }
+      onelogin_idv_full_name { [first_name, surname].join(" ") }
       onelogin_idv_date_of_birth { date_of_birth }
     end
 

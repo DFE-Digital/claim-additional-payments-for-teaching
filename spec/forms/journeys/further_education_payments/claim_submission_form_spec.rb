@@ -18,6 +18,7 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
       logged_in_with_onelogin: true,
       onelogin_idv_first_name: "John",
       onelogin_idv_last_name: "Doe",
+      onelogin_idv_full_name: "John Doe",
       onelogin_idv_date_of_birth: Date.new(1970, 1, 1),
       first_name: "John",
       surname: "Doe",
@@ -47,6 +48,7 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
       expect(claim.onelogin_idv_at).to eql(answers.onelogin_idv_at)
       expect(claim.onelogin_idv_first_name).to eql(answers.onelogin_idv_first_name)
       expect(claim.onelogin_idv_last_name).to eql(answers.onelogin_idv_last_name)
+      expect(claim.onelogin_idv_full_name).to eql(answers.onelogin_idv_full_name)
       expect(claim.onelogin_idv_date_of_birth).to eql(answers.onelogin_idv_date_of_birth)
 
       expect(eligibility.award_amount).to eq(answers.award_amount)
@@ -141,6 +143,7 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
           logged_in_with_onelogin: true,
           onelogin_idv_first_name: "John",
           onelogin_idv_last_name: "Doe",
+          onelogin_idv_full_name: "John Doe",
           onelogin_idv_date_of_birth: Date.new(1970, 1, 1),
           first_name: "Jack",
           surname: "Doe",

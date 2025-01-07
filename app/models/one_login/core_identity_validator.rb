@@ -21,6 +21,18 @@ class OneLogin::CoreIdentityValidator
     Date.parse(decoded_jwt[0]["vc"]["credentialSubject"]["birthDate"][0]["value"])
   end
 
+  def full_name
+    given_names = name_parts
+      .select { |hash| hash["type"] == "GivenName" }
+      .map { |hash| hash["value"] }
+
+    family_names = name_parts
+      .select { |hash| hash["type"] == "FamilyName" }
+      .map { |hash| hash["value"] }
+
+    (given_names + family_names).join(" ")
+  end
+
   private
 
   def name_parts

@@ -90,7 +90,8 @@ module AutomatedChecks
               first_name: "John",
               surname: "Doe",
               onelogin_idv_first_name: "Tom",
-              onelogin_idv_last_name: "Jones"
+              onelogin_idv_last_name: "Jones",
+              onelogin_idv_full_name: "Tom Jones"
             )
           end
 

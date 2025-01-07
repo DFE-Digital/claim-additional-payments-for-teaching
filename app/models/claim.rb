@@ -93,7 +93,8 @@ class Claim < ApplicationRecord
     practitioner_email_address: true,
     provider_contact_name: true,
     started_at: false,
-    verified_at: false
+    verified_at: false,
+    onelogin_idv_full_name: true
   }.freeze
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
@@ -246,10 +247,6 @@ class Claim < ApplicationRecord
   scope :require_in_progress_update_emails, -> {
     by_policies(Policies.all.select { |p| p.require_in_progress_update_emails? })
   }
-
-  def onelogin_idv_full_name
-    "#{onelogin_idv_first_name} #{onelogin_idv_last_name}"
-  end
 
   def hold!(reason:, user:)
     if holdable? && !held?
@@ -478,12 +475,12 @@ class Claim < ApplicationRecord
     end
   end
 
-  def one_login_idv_mismatch?
-    !one_login_idv_name_match? || !one_login_idv_dob_match?
-  end
-
   def one_login_idv_match?
     one_login_idv_name_match? && one_login_idv_dob_match?
+  end
+
+  def one_login_idv_mismatch?
+    !one_login_idv_match?
   end
 
   def awaiting_provider_verification?
@@ -503,7 +500,8 @@ class Claim < ApplicationRecord
   private
 
   def one_login_idv_name_match?
-    onelogin_idv_full_name.downcase == "#{first_name.downcase} #{surname.downcase}"
+    /\A#{first_name.strip.downcase} /.match?(onelogin_idv_full_name.strip.downcase) &&
+      / #{surname.strip.downcase}\z/.match?(onelogin_idv_full_name.strip.downcase)
   end
 
   def one_login_idv_dob_match?
