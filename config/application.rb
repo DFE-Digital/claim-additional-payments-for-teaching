@@ -50,8 +50,6 @@ module DfeTeachersPaymentService
       g.orm :active_record, primary_key_type: :uuid
     end
 
-    config.active_job.queue_adapter = :delayed_job
-
     # Set a css_compressor so sassc-rails does not overwrite the compressor
     config.assets.css_compressor = nil
 
