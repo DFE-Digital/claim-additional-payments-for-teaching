@@ -6,6 +6,8 @@ class RemindersController < BasePublicController
 
     if @form.set_reminder_from_claim
       redirect_to reminder_path(journey: journey::ROUTING_NAME, slug: "confirmation")
+    elsif params[:slug] == "confirmation" && @form.reminder.nil?
+      redirect_to journey_session.journey_class.start_page_url
     else
       render view_file
     end

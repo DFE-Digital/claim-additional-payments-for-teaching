@@ -1,12 +1,12 @@
 require "rails_helper"
 
 RSpec.describe "Claims" do
-  before do
-    create(:journey_configuration, :additional_payments)
-    start_claim("additional-payments")
-  end
-
   describe "#create" do
+    before do
+      create(:journey_configuration, :additional_payments)
+      start_claim("additional-payments")
+    end
+
     let(:submit_form) { put reminder_path(journey: "additional-payments", slug: "personal-details", params: form_params) }
 
     context "with full name and valid email address" do
@@ -55,6 +55,27 @@ RSpec.describe "Claims" do
       it "renders errors containing team only API key" do
         expect { submit_form }.to raise_error(Notifications::Client::BadRequestError, "Something unexpected")
       end
+    end
+  end
+
+  # Rollbar error - confirmation page loaded without reminder that can be loaded from the session information
+  describe "#show" do
+    shared_examples "confirmation_page_no_reminder" do |journey|
+      before do
+        create(:journey_configuration, journey::ROUTING_NAME.underscore.to_sym)
+      end
+
+      subject { get reminder_path(journey: journey::ROUTING_NAME.to_sym, slug: "confirmation") }
+
+      it { is_expected.to redirect_to(journey.start_page_url) }
+    end
+
+    describe "for FurtherEducationPayments journey" do
+      include_examples "confirmation_page_no_reminder", Journeys::FurtherEducationPayments
+    end
+
+    describe "for AdditionalPaymentsForTeaching journey" do
+      include_examples "confirmation_page_no_reminder", Journeys::AdditionalPaymentsForTeaching
     end
   end
 end

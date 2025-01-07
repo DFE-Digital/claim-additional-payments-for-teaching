@@ -28,7 +28,7 @@ module Reminders
     private
 
     def itt_subject
-      journey_session.answers.eligible_itt_subject
+      defined?(journey_session.answers.eligible_itt_subject) ? journey_session.answers.eligible_itt_subject : nil
     end
 
     def itt_subject_for_submitted_claim
