@@ -3,12 +3,6 @@ require "rails_helper"
 RSpec.describe AutoApproveClaimsJob do
   subject(:auto_approve_claims_job) { described_class.new }
 
-  it { is_expected.to be_a(CronJob) }
-
-  describe ".cron_expression" do
-    it { expect(described_class.cron_expression).to eq("0 8 * * 1-5") }
-  end
-
   describe "#perform" do
     subject(:run_job) { auto_approve_claims_job.perform }
 

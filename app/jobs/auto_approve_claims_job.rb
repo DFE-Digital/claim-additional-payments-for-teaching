@@ -1,6 +1,4 @@
-class AutoApproveClaimsJob < CronJob
-  self.cron_expression = "0 8 * * 1-5" # At 08:00 AM, Monday through Friday
-
+class AutoApproveClaimsJob < ApplicationJob
   def perform
     Rails.logger.info "Checking #{claims_awaiting_decision.count} claims for auto-approval"
 
