@@ -26,7 +26,13 @@ class Claim
         }
       }.flatten.map(&:id)
 
-      claim_match_query.or(Claim.where(eligibility_id: eligibility_ids))
+      claims_matched_on_payment_ids = Claim.joins(:payments).merge(
+        Payment.where(id: search_term)
+      )
+
+      claim_match_query
+        .or(Claim.where(eligibility_id: eligibility_ids))
+        .or(Claim.where(id: claims_matched_on_payment_ids))
     end
 
     private
