@@ -91,7 +91,7 @@ RSpec.describe Policies::EarlyYearsPayments::AdminClaimDetailsPresenter do
       it "returns an array of questions and answers" do
         expected_answers = [
           [I18n.t("early_years_payments.govuk_verify_fields.full_name").capitalize, "Bruce Wayne"],
-          [I18n.t("govuk_verify_fields.date_of_birth").capitalize, "01/01/1901"],
+          [I18n.t("govuk_verify_fields.date_of_birth").capitalize, "1 January 1901"],
           [I18n.t("admin.national_insurance_number"), "QQ123456C"],
           [I18n.t("govuk_verify_fields.address").capitalize, "Flat 1<br>1 Test Road<br>Test Town<br>AB1 2CD"],
           [I18n.t("early_years_payments.admin.email_address"), "test@example.com"],

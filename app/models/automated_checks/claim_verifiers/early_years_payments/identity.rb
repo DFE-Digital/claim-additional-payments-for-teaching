@@ -40,8 +40,8 @@ module AutomatedChecks
         def note_body(match)
           provider_entered_name = claim.eligibility.practitioner_name
           govuk_one_login_name = claim.onelogin_idv_full_name
-          claimant_entered_dob = claim.date_of_birth
-          gov_uk_one_login_dob = claim.onelogin_idv_date_of_birth
+          claimant_entered_dob = format_date(claim.date_of_birth)
+          gov_uk_one_login_dob = format_date(claim.onelogin_idv_date_of_birth)
 
           name_colour = if provider_entered_name.downcase == govuk_one_login_name.downcase
             "green"
@@ -64,6 +64,12 @@ module AutomatedChecks
             GOV.UK One Login DOB: <span class="#{dob_colour}">"#{gov_uk_one_login_dob}"</span>
           </pre>
           HTML
+        end
+
+        def format_date(date)
+          return if date.blank?
+
+          I18n.l(date.to_date)
         end
       end
     end

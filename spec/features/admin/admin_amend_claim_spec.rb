@@ -92,7 +92,7 @@ RSpec.feature "Admin amends a claim" do
     click_on "Claim amendments"
 
     expect(page).to have_content("Teacher reference number\nchanged from 1234567 to 7654321")
-    expect(page).to have_content("Date of birth\nchanged from #{I18n.l(date_of_birth, format: :day_month_year)} to #{I18n.l(new_date_of_birth, format: :day_month_year)}")
+    expect(page).to have_content("Date of birth\nchanged from #{I18n.l(date_of_birth)} to #{I18n.l(new_date_of_birth)}")
     expect(page).to have_content("Student loan repayment plan\nchanged from Plan 1 to Plan 2")
     expect(page).to have_content("Bank sort code\nchanged from 010203 to 111213")
     expect(page).to have_content("Bank account number\nchanged from 47274828 to 18929492")
