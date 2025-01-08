@@ -52,11 +52,11 @@ RSpec.describe "Admin EY tasks" do
           click_on "Confirm the claimant made the claim"
 
           expect(page).to have_content(
-            "Provider entered claimant name Bobby Bobberson 1986-01-01"
+            "Provider entered claimant name Bobby Bobberson 1 January 1986"
           )
 
           expect(page).to have_content(
-            "One Login identity verification (IDV) Bobby Bobberson 1986-01-01"
+            "One Login identity verification (IDV) Bobby Bobberson 1 January 1986"
           )
 
           expect(page).to have_content(
@@ -90,11 +90,11 @@ RSpec.describe "Admin EY tasks" do
             click_on "Confirm the claimant made the claim"
 
             expect(page).to have_content(
-              "Provider entered claimant name Bobby Bobberson 1986-01-01"
+              "Provider entered claimant name Bobby Bobberson 1 January 1986"
             )
 
             expect(page).to have_content(
-              "One Login identity verification (IDV) Robby Bobberson 1986-01-01"
+              "One Login identity verification (IDV) Robby Bobberson 1 January 1986"
             )
 
             expect(page).to have_content(
@@ -166,11 +166,11 @@ RSpec.describe "Admin EY tasks" do
             click_on "Confirm the claimant made the claim"
 
             expect(page).to have_content(
-              "Provider entered claimant name Bobby Bobberson 1986-01-01"
+              "Provider entered claimant name Bobby Bobberson 1 January 1986"
             )
 
             expect(page).to have_content(
-              "One Login identity verification (IDV) Robby Robberson 1986-01-01"
+              "One Login identity verification (IDV) Robby Robberson 1 January 1986"
             )
 
             expect(page).to have_content(

@@ -102,7 +102,7 @@ RSpec.feature "Admin views claim details for EarlyYearsPayments" do
 
     it "shows the claim details" do
       expect(summary_row("Applicant name")).to have_content("Bruce Wayne")
-      expect(summary_row("Date of birth")).to have_content("01/01/1901")
+      expect(summary_row("Date of birth")).to have_content("1 January 1901")
       expect(summary_row("National Insurance number")).to have_content("QQ123456C")
       expect(summary_row("Address")).to have_content("Flat 1")
       expect(summary_row("Address")).to have_content("1 Test Road")
