@@ -50,7 +50,7 @@ RSpec.feature "Admin view claim for EarlyYearsPayments" do
     expect(page).to have_summary_item(key: "Contact email", value: practitioner_claim.email_address)
     expect(page).to have_summary_item(key: "Provider email", value: practitioner_claim.eligibility.provider_email_address)
     expect(page).to have_summary_item(key: "Start date", value: practitioner_claim.eligibility.start_date.strftime(I18n.t("date.formats.default")))
-    expect(page).to have_summary_item(key: "Date of birth", value: practitioner_claim.date_of_birth.strftime(I18n.t("date.formats.day_month_year")))
+    expect(page).to have_summary_item(key: "Date of birth", value: practitioner_claim.date_of_birth.strftime(I18n.t("date.formats.default")))
     expect(page).to have_summary_item(key: "Mobile number", value: practitioner_claim.mobile_number)
     expect(page).to have_summary_item(key: "Reference", value: practitioner_claim.reference)
     expect(page).to have_summary_item(key: "Submitted", value: practitioner_claim.submitted_at.strftime(I18n.t("time.formats.default")))

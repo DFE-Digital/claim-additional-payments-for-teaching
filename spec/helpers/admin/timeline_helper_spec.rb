@@ -19,7 +19,7 @@ describe Admin::TimelineHelper do
         expect(helper.admin_amendment_details(amendment)).to eq([
           ["Bank account number", "12345678", "87654321"],
           ["Bank sort code", "123456", "654321"],
-          ["Date of birth", "25/02/1995", "25/02/1990"],
+          ["Date of birth", "25 February 1995", "25 February 1990"],
           ["Payroll gender", "male", "don’t know"],
           ["Student loan repayment amount", "£123.00", "£456.00"],
           ["Student loan repayment plan", "not applicable", "Plan 1"],
