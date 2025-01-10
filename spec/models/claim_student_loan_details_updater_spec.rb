@@ -1,11 +1,11 @@
 require "rails_helper"
 
 RSpec.describe ClaimStudentLoanDetailsUpdater do
-  let(:updater) { described_class.new(claim) }
-  let(:claim) { create(:claim, policy:) }
-  let(:policy) { Policies::StudentLoans }
-
   describe ".call" do
+    let(:updater) { described_class.new(claim) }
+    let(:claim) { create(:claim, policy:) }
+    let(:policy) { Policies::StudentLoans }
+
     let(:updater_mock) { instance_double(described_class) }
 
     before do
@@ -19,110 +19,219 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
   end
 
   describe "#update_claim_with_latest_data" do
-    subject(:call) { updater.update_claim_with_latest_data }
-
-    context "when no existing SLC data is found for the claimant" do
-      it "returns true" do
-        expect(call).to eq(true)
+    context "when the claim has no student loan data" do
+      let(:claim) do
+        create(
+          :claim,
+          :submitted,
+          has_student_loan: nil,
+          student_loan_plan: nil,
+          **policy_attributes
+        )
       end
 
-      context "when the policy is StudentLoans" do
-        let(:policy) { Policies::StudentLoans }
+      context "when no student loan data is found" do
+        context "when the claim is a tslr claim" do
+          let(:policy_attributes) do
+            {
+              policy: Policies::StudentLoans,
+              eligibility_attributes: {student_loan_repayment_amount: 0}
+            }
+          end
 
-        it "does not update the claim student plan and zero repayment total" do
-          expect { call }.not_to change { claim.reload.has_student_loan }
+          it "doesn't change the claim attributes" do
+            expect { described_class.new(claim).update_claim_with_latest_data }
+              .to not_change { claim.reload.has_student_loan }
+              .and not_change { claim.student_loan_plan }
+              .and not_change { claim.eligibility.student_loan_repayment_amount }
+          end
         end
 
-        it "keeps the `submitted_using_slc_data` flag to `false` (default)" do
-          expect { call }.not_to change { claim.submitted_using_slc_data }.from(false)
+        context "when the claim is not a tslr claim" do
+          let(:policy_attributes) do
+            {
+              policy: Policies::FurtherEducationPayments
+            }
+          end
+
+          it "doesn't change the claim attributes" do
+            expect { described_class.new(claim).update_claim_with_latest_data }
+              .to not_change { claim.reload.has_student_loan }
+              .and not_change { claim.student_loan_plan }
+          end
         end
       end
 
-      [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments, Policies::FurtherEducationPayments].each do |policy|
-        context "when the policy is #{policy}" do
-          let(:policy) { policy }
+      context "when student loan data is found" do
+        before do
+          create(
+            :student_loans_data,
+            nino: claim.national_insurance_number,
+            date_of_birth: claim.date_of_birth,
+            plan_type_of_deduction: 1,
+            amount: 50
+          )
+        end
 
-          it "does not update the claim" do
-            expect { call }.not_to change { claim.reload }
+        context "when the claim is a tslr claim" do
+          let(:policy_attributes) do
+            {
+              policy: Policies::StudentLoans,
+              eligibility_attributes: {student_loan_repayment_amount: 0}
+            }
+          end
+
+          it "updates the claim's attributes" do
+            expect { described_class.new(claim).update_claim_with_latest_data }
+              .to change { claim.reload.has_student_loan }.from(nil).to(true)
+              .and change { claim.student_loan_plan }.from(nil).to(StudentLoan::PLAN_1)
+              .and change { claim.eligibility.student_loan_repayment_amount }.from(0).to(50)
+          end
+        end
+
+        context "when the claim is not a tslr claim" do
+          let(:policy_attributes) do
+            {
+              policy: Policies::LevellingUpPremiumPayments
+            }
+          end
+
+          it "updates the claim's attributes" do
+            expect { described_class.new(claim).update_claim_with_latest_data }
+              .to change { claim.reload.has_student_loan }.from(nil).to(true)
+              .and change { claim.student_loan_plan }.from(nil).to(StudentLoan::PLAN_1)
           end
         end
       end
     end
 
-    context "when SLC data is found with student loan information for the claimant" do
-      before do
-        create(:student_loans_data, nino: claim.national_insurance_number, date_of_birth: claim.date_of_birth, plan_type_of_deduction: 1, amount: 50)
-        create(:student_loans_data, nino: claim.national_insurance_number, date_of_birth: claim.date_of_birth, plan_type_of_deduction: 2, amount: 60)
+    context "when the claim has student loan data" do
+      let(:claim) do
+        create(
+          :claim,
+          :submitted,
+          has_student_loan: true,
+          student_loan_plan: StudentLoan::PLAN_1,
+          **policy_attributes
+        )
       end
 
-      it "returns true" do
-        expect(call).to eq(true)
-      end
+      context "when no student loan data is found" do
+        context "when the claim is a tslr claim" do
+          let(:policy_attributes) do
+            {
+              policy: Policies::StudentLoans,
+              eligibility_attributes: {student_loan_repayment_amount: 100}
+            }
+          end
 
-      context "when the policy is StudentLoans" do
-        it "updates the claim with the student plan and the repayment total" do
-          expect { call }.to change { claim.reload.has_student_loan }.to(true)
-            .and change { claim.student_loan_plan }.to(StudentLoan::PLAN_1_AND_2)
-            .and change { claim.eligibility.student_loan_repayment_amount }.to(110)
+          it "resets the student loan attributes" do
+            expect { described_class.new(claim).update_claim_with_latest_data }
+              .to change { claim.reload.has_student_loan }.from(true).to(nil)
+              .and change { claim.student_loan_plan }.from(StudentLoan::PLAN_1).to(nil)
+              .and change { claim.eligibility.student_loan_repayment_amount }.from(100).to(0)
+          end
         end
-      end
 
-      [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments, Policies::FurtherEducationPayments].each do |policy|
-        context "when the policy is #{policy}" do
-          let(:policy) { policy }
+        context "when the claim is not a tslr claim" do
+          let(:policy_attributes) do
+            {
+              policy: Policies::EarlyYearsPayments
+            }
+          end
 
-          it "updates the claim with the student plan only" do
-            expect { call }.to change { claim.reload.has_student_loan }.to(true)
-              .and change { claim.student_loan_plan }.to(StudentLoan::PLAN_1_AND_2)
+          it "resets the student loan attributes" do
+            expect { described_class.new(claim).update_claim_with_latest_data }
+              .to change { claim.reload.has_student_loan }.from(true).to(nil)
+              .and change { claim.student_loan_plan }.from(StudentLoan::PLAN_1).to(nil)
           end
         end
       end
-    end
 
-    context "when SLC data is found with no student loan information for the claimant" do
-      before do
-        create(:student_loans_data, nino: claim.national_insurance_number, date_of_birth: claim.date_of_birth, plan_type_of_deduction: nil, amount: nil)
-      end
-
-      it "returns true" do
-        expect(call).to eq(true)
-      end
-
-      context "when the policy is StudentLoans" do
-        it "updates the claim with the student plan and the repayment total" do
-          expect { call }.to change { claim.reload.has_student_loan }.to(false)
-            .and change { claim.student_loan_plan }.to(Claim::NO_STUDENT_LOAN)
-            .and change { claim.eligibility.student_loan_repayment_amount }.to(0)
+      context "when student loan data is found" do
+        before do
+          create(
+            :student_loans_data,
+            nino: claim.national_insurance_number,
+            date_of_birth: claim.date_of_birth,
+            plan_type_of_deduction: 2,
+            amount: 100
+          )
         end
-      end
 
-      [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments].each do |policy|
-        context "when the policy is #{policy}" do
-          let(:policy) { policy }
+        context "when the claim is a tslr claim" do
+          let(:policy_attributes) do
+            {
+              policy: Policies::StudentLoans,
+              eligibility_attributes: {student_loan_repayment_amount: 50}
+            }
+          end
 
-          it "updates the claim with the student plan only" do
-            expect { call }.to change { claim.reload.has_student_loan }.to(false)
-              .and change { claim.student_loan_plan }.to(Claim::NO_STUDENT_LOAN)
+          it "replaces the student loan attributes with the latest values" do
+            expect { described_class.new(claim).update_claim_with_latest_data }
+              .to not_change { claim.reload.has_student_loan }
+              .and change { claim.student_loan_plan }.from(StudentLoan::PLAN_1).to(StudentLoan::PLAN_2)
+              .and change { claim.eligibility.student_loan_repayment_amount }.from(50).to(300)
+          end
+        end
+
+        context "when the claim is not a tslr claim" do
+          let(:policy_attributes) do
+            {
+              policy: Policies::FurtherEducationPayments
+            }
+          end
+
+          it "replaces the student loan attributes with the latest values" do
+            expect { described_class.new(claim).update_claim_with_latest_data }
+              .to not_change { claim.reload.has_student_loan }
+              .and change { claim.student_loan_plan }.from(StudentLoan::PLAN_1).to(StudentLoan::PLAN_2)
           end
         end
       end
-    end
 
-    context "when updating a claim after submission" do
-      let(:claim) { create(:claim, :submitted, :with_no_student_loan, policy:) }
+      context "when multiple student loan data is found" do
+        before do
+          create(
+            :student_loans_data,
+            nino: claim.national_insurance_number,
+            date_of_birth: claim.date_of_birth,
+            plan_type_of_deduction: 1,
+            amount: 100
+          )
 
-      before do
-        create(:student_loans_data, nino: claim.national_insurance_number, date_of_birth: claim.date_of_birth, plan_type_of_deduction: 1, amount: 50)
-      end
+          create(
+            :student_loans_data,
+            nino: claim.national_insurance_number,
+            date_of_birth: claim.date_of_birth,
+            plan_type_of_deduction: 2,
+            amount: 200
+          )
+        end
 
-      it "updates the claim with the student plan and the repayment total" do
-        expect { call }.to change { claim.reload.has_student_loan }.to(true)
-          .and change { claim.student_loan_plan }.to(StudentLoan::PLAN_1)
-          .and change { claim.eligibility.student_loan_repayment_amount }.to(50)
-      end
+        context "when the claim is a tslr claim" do
+          let(:policy_attributes) do
+            {
+              policy: Policies::StudentLoans,
+              eligibility_attributes: {student_loan_repayment_amount: 50}
+            }
+          end
 
-      it "does not change the `submitted_using_slc_data` flag" do
-        expect { call }.to not_change { claim.submitted_using_slc_data }
+          it "combines the data and replaces the existing claim attributes" do
+            expect { described_class.new(claim).update_claim_with_latest_data }
+              .to not_change { claim.reload.has_student_loan }
+              .and change { claim.student_loan_plan }.from(StudentLoan::PLAN_1).to(StudentLoan::PLAN_1_AND_2)
+              .and change { claim.eligibility.student_loan_repayment_amount }.from(50).to(300)
+          end
+        end
+
+        context "when the claim is not a tslr claim" do
+          it "combines the data and replaces the existing claim attributes" do
+            expect { described_class.new(claim).update_claim_with_latest_data }
+              .to not_change { claim.reload.has_student_loan }
+              .and change { claim.student_loan_plan }.from(StudentLoan::PLAN_1).to(StudentLoan::PLAN_1_AND_2)
+          end
+        end
       end
     end
   end
