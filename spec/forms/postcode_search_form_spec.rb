@@ -70,11 +70,9 @@ RSpec.describe PostcodeSearchForm, type: :model do
         .and_raise(OrdnanceSurvey::Client::ResponseError)
     end
 
-    it { is_expected.to be_invalid }
-
-    it "adds an error to base" do
+    it "stores state to session" do
       subject.validate
-      expect(subject.errors[:base]).to include("Please enter your address manually")
+      expect(journey_session.reload.answers.ordnance_survey_error).to be_truthy
     end
   end
 end

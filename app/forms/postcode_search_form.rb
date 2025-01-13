@@ -9,7 +9,6 @@ class PostcodeSearchForm < Form
     return false if invalid?
 
     journey_session.answers.assign_attributes(postcode:)
-
     journey_session.save!
   end
 
@@ -32,7 +31,9 @@ class PostcodeSearchForm < Form
     errors.add(:postcode, "Address not found")
   rescue OrdnanceSurvey::Client::ResponseError => e
     Rollbar.error(e)
-    errors.add(:base, "Please enter your address manually")
+
+    journey_session.answers.assign_attributes(ordnance_survey_error: true)
+    journey_session.save!
   end
 
   def postcode_is_valid

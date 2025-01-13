@@ -39,6 +39,8 @@ module Journeys
     attribute :identity_confirmed_with_onelogin, :boolean, pii: false
     attribute :details_check, :boolean, pii: false
     attribute :teacher_id_user_info, default: {}, pii: true
+    attribute :ordnance_survey_error, :boolean, pii: false
+
     attribute :onelogin_user_info, default: {}, pii: true
     attribute :onelogin_credentials, default: {}, pii: true
     attribute :onelogin_uid, :string, pii: false
