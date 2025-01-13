@@ -44,6 +44,10 @@ variable "external_url" {
   default     = null
   description = "Healthcheck URL for StatusCake monitoring"
 }
+variable "apex_url" {
+  default     = null
+  description = "Apex URL for StatusCake SSL monitoring"
+}
 variable "statuscake_contact_groups" {
   default     = []
   description = "ID of the contact group in statuscake web UI"

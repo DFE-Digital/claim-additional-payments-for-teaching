@@ -4,7 +4,7 @@ module "statuscake" {
   source = "./vendor/modules/aks//monitoring/statuscake"
 
   uptime_urls = compact([module.web_application.probe_url, var.external_url])
-  ssl_urls    = compact([var.external_url])
+  ssl_urls    = compact([var.apex_url])
 
   contact_groups = var.statuscake_contact_groups
 
