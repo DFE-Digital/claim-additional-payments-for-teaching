@@ -63,4 +63,9 @@ RSpec.describe Policies::EarlyYearsPayments do
       expect(described_class.decision_deadline_date(claim)).to eql((claim.eligibility.start_date + 6.months).to_date)
     end
   end
+
+  describe ".payroll_file_name" do
+    subject(:payroll_file_name) { described_class.payroll_file_name }
+    it { is_expected.to eq("EYFinancialIncentive") }
+  end
 end

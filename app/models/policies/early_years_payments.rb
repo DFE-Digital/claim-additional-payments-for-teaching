@@ -91,5 +91,9 @@ module Policies
     def require_in_progress_update_emails?
       false
     end
+
+    def payroll_file_name
+      "EYFinancialIncentive"
+    end
   end
 end
