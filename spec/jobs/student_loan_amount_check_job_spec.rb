@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe StudentLoanAmountCheckJob do
-  subject(:perform_job) { described_class.new.perform }
+  let(:admin) { create(:dfe_signin_user) }
+  subject(:perform_job) { described_class.new.perform(admin) }
 
   let!(:claim) { create(:claim, claim_status, academic_year:, policy: Policies::StudentLoans) }
   let(:claim_status) { :submitted }
@@ -21,7 +22,7 @@ RSpec.describe StudentLoanAmountCheckJob do
         end
 
         it "excludes the claim from the check", :aggregate_failures do
-          expect(ClaimStudentLoanDetailsUpdater).not_to receive(:call).with(claim)
+          expect(ClaimStudentLoanDetailsUpdater).not_to receive(:call).with(claim, admin)
           expect(AutomatedChecks::ClaimVerifiers::StudentLoanAmount).not_to receive(:new).with(claim: claim)
           perform_job
         end
@@ -49,7 +50,7 @@ RSpec.describe StudentLoanAmountCheckJob do
 
       context "when the student loan amount check did not run before" do
         it "updates the student loan details" do
-          expect(ClaimStudentLoanDetailsUpdater).to receive(:call).with(claim)
+          expect(ClaimStudentLoanDetailsUpdater).to receive(:call).with(claim, admin)
           perform_job
         end
 
@@ -64,7 +65,7 @@ RSpec.describe StudentLoanAmountCheckJob do
         let!(:previous_task) { create(:task, claim: claim, name: "student_loan_amount", claim_verifier_match: nil, manual: false) }
 
         it "updates the student loan details" do
-          expect(ClaimStudentLoanDetailsUpdater).to receive(:call).with(claim)
+          expect(ClaimStudentLoanDetailsUpdater).to receive(:call).with(claim, admin)
           perform_job
         end
 
@@ -119,7 +120,7 @@ RSpec.describe StudentLoanAmountCheckJob do
           nino: claim.national_insurance_number,
           date_of_birth: claim.date_of_birth
         )
-        allow_any_instance_of(Claim).to receive(:save!) { raise(exception) }
+        allow_any_instance_of(Claim).to receive(:save) { raise(exception) }
         allow(Rollbar).to receive(:error)
       end
 

@@ -32,7 +32,7 @@
                   <% admin_amendment_details(amendment).each do |details| %>
                     <h3 class="hmcts-timeline__title"><%= details[0] %></h3>
                     <% if details.count > 1 %>
-                      <p class="hmcts-timeline__by">changed from <%= details[1] %> to <%= details[2] %></p>
+                      <p class="hmcts-timeline__by">changed from <%= details[1].presence || "[no details]" %> to <%= details[2].presence || "[no details]" %></p>
                     <% else %>
                       <p class="hmcts-timeline__by">changed</p>
                     <% end %>

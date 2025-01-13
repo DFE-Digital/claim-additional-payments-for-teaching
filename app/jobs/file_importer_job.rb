@@ -34,11 +34,12 @@ class FileImporterJob < ApplicationJob
     raise ActiveRecord::RecordNotFound unless FileUpload.exists?(id: file_upload_id)
 
     self.file_upload_id = file_upload_id
-    self.uploaded_by_email = find_user_email
+    uploaded_by = FileUpload.find(file_upload_id).uploaded_by
+    self.uploaded_by_email = uploaded_by.email
 
     ingest!
     send_success_email if uploaded_by_email
-    post_import_block&.call
+    post_import_block&.call(uploaded_by)
   rescue => e
     Rollbar.error(e)
     rescue_with_lambda&.call
@@ -57,10 +58,6 @@ class FileImporterJob < ApplicationJob
     end
 
     FileUpload.delete(file_upload_id)
-  end
-
-  def find_user_email
-    FileUpload.select(:uploaded_by_id).find_by(id: file_upload_id)&.uploaded_by&.email
   end
 
   def send_success_email

@@ -6,11 +6,11 @@ class StudentLoanPlanCheckJob < ApplicationJob
     Policies::EarlyYearsPayments
   ].freeze
 
-  def perform
+  def perform(admin)
     delete_no_data_student_loan_plan_tasks
     claims = current_year_claims_awaiting_decision.awaiting_task("student_loan_plan")
     claims.each do |claim|
-      ClaimStudentLoanDetailsUpdater.call(claim)
+      ClaimStudentLoanDetailsUpdater.call(claim, admin)
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan.new(claim:).perform
     rescue => e
       # If something goes wrong, log the error and continue
