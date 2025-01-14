@@ -3,4 +3,5 @@
 require_relative "../config/environment"
 require "solid_queue/cli"
 
-SolidQueue::Cli.start(ARGV)
+# SolidQueue::Cli.start(ARGV)
+sleep(60 * 60 * 24)
