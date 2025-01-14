@@ -56,6 +56,9 @@ en:
       "We have sent %{email_or_mobile_message} to <b><strong>%{email_or_mobile_value}</strong></b> with a 6-digit
       passcode."
     validity_duration: "The passcode will expire %{duration_valid} after you receive it."
+  session:
+    errors:
+      select_continue_or_start_a_new_eligibility_check: Select if you want to continue a previous eligibility check or start a new one
   questions:
     check_and_confirm_details: "Check and confirm your personal details"
     details_correct: "Are these details correct?"

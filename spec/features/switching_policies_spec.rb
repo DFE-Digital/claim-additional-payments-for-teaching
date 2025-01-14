@@ -131,6 +131,6 @@ RSpec.feature "Switching policies" do
 
     click_on "Continue"
 
-    expect(page).to have_text("Select yes if you want to start a claim for an additional payment for teaching")
+    expect(page).to have_text("Select if you want to continue a previous eligibility check or start a new one")
   end
 end
