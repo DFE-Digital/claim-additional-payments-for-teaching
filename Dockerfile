@@ -19,7 +19,7 @@ RUN apk add bash postgresql-dev tzdata nodejs curl libc6-compat shared-mime-info
 FROM base AS dependencies
 
 RUN apk update
-RUN apk add build-base git yarn
+RUN apk add build-base git yarn yaml-dev libffi-dev
 
 # Set up install environment
 RUN mkdir -p ${DEPS_HOME}
