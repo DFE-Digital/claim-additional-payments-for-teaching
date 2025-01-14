@@ -1,7 +1,4 @@
 #!/bin/bash -e
 
 echo "Running migrations..."
-VERBOSE=true bundle exec rails -v db:setup_or_migrate
-
-echo "Scheduling jobs..."
-bundle exec rails jobs:schedule
+bundle exec rails db:setup_or_migrate
