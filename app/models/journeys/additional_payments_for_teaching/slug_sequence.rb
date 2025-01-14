@@ -171,6 +171,10 @@ module Journeys
           else
             sequence.delete("qualification-details")
           end
+
+          if answers.ordnance_survey_error == true
+            sequence.delete("select-home-address")
+          end
         end
       end
 
@@ -178,6 +182,10 @@ module Journeys
         TRAINEE_TEACHER_SLUGS.dup.tap do |sequence|
           if lup_eligibility_checker.status == :eligible_later && answers.eligible_degree_subject.nil?
             sequence.delete("eligible-degree-subject")
+          end
+
+          if answers.ordnance_survey_error == true
+            sequence.delete("select-home-address")
           end
         end
       end

@@ -45,16 +45,6 @@ module ClaimsFormCallbacks
     render_template_for_current_slug
   end
 
-  def postcode_search_after_form_save_failure
-    lookup_failed_error = @form.errors.messages_for(:base).first
-    if lookup_failed_error
-      flash[:notice] = lookup_failed_error
-      redirect_to_slug("address")
-    else
-      render_template_for_current_slug
-    end
-  end
-
   def check_your_email_after_form_save_success
     @email_resent = true
     render("check_your_email")

@@ -475,30 +475,46 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       expect(page).to have_field("Postcode", with: "SO16 9FX")
     end
 
-    scenario "Ordanance Survery Client raise a ResponseError" do
-      expect(
-        Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm.new(
+    context do
+      let(:journey_session) do
+        create(
+          :additional_payments_session,
+          answers:
+        )
+      end
+
+      let(:answers) {
+        build(
+          :additional_payments_answers,
+          :submittable
+        )
+      }
+
+      scenario "Ordanance Survery Client raise a ResponseError" do
+        expect(
+          Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm.new(
+            journey_session: journey_session
+          ).valid?
+        ).to eq false
+
+        jump_to_claim_journey_page(
+          slug: "postcode-search",
           journey_session: journey_session
-        ).valid?
-      ).to eq false
+        )
 
-      jump_to_claim_journey_page(
-        slug: "postcode-search",
-        journey_session: journey_session
-      )
+        # - What is your home address
+        expect(page).to have_text(I18n.t("questions.address.home.title"))
+        expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
 
-      # - What is your home address
-      expect(page).to have_text(I18n.t("questions.address.home.title"))
-      expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
+        fill_in "Postcode", with: "DA1 5FZ"
+        click_on "Search"
 
-      fill_in "Postcode", with: "DA1 5FZ"
-      click_on "Search"
+        # Redirects to manual address page
+        expect(page).to have_text("What is your address?")
 
-      # Redirects to manual address page
-      expect(page).to have_text("What is your address?")
-
-      # Shows a flash message to enter address manually
-      expect(page).to have_text("Please enter your address manually")
+        # Shows a flash message to enter address manually
+        expect(page).to have_text("Please enter your address manually")
+      end
     end
   end
 end

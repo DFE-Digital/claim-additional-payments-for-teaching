@@ -67,6 +67,10 @@ module Journeys
             sequence.delete("mobile-number")
             sequence.delete("mobile-verification")
           end
+
+          if answers.ordnance_survey_error == true
+            sequence.delete("select-home-address")
+          end
         end
       end
     end

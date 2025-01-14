@@ -114,6 +114,10 @@ module Journeys
           else
             sequence.delete("qualification-details")
           end
+
+          if answers.ordnance_survey_error == true
+            sequence.delete("select-home-address")
+          end
         end
       end
 
