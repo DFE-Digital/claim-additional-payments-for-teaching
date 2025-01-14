@@ -7,20 +7,22 @@ FactoryBot.define do
         [
           [
             "Claim reference",
-            "Teacher reference number",
             "Full name",
             "Claim amount",
             "Claim status",
             "Decision date",
             "Decision agent",
-            "Provider response: Contract of employment",
-            "Provider response: Teaching responsibilities",
-            "Provider response: First 5 years of teaching",
-            "Provider response: Timetabled teaching hours",
-            "Provider response: Age range taught",
-            "Provider response: Subject",
-            "Provider response: Taught at least one term",
-            "Provider response: Timetabled teaching hours next term"
+            "Contract of employment",
+            "Teaching responsibilities",
+            "First 5 years of teaching",
+            "One full term",
+            "Timetabled teaching hours",
+            "Age range taught",
+            "Subject",
+            "Course",
+            "2.5 hours weekly teaching",
+            "Performance",
+            "Disciplinary"
           ].join(","),
           [
             "AAAAAAAA",
