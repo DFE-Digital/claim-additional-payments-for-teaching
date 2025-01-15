@@ -65,10 +65,6 @@ module ClaimsFormCallbacks
     !journey_session.answers.eligible_itt_subject
   end
 
-  def no_postcode?
-    !journey_session.answers.postcode
-  end
-
   def retrieve_student_loan_details
     journey::AnswersStudentLoansDetailsUpdater.call(journey_session)
   end
