@@ -29,6 +29,8 @@ RSpec.describe EmailAddressForm do
     describe "validations" do
       subject { form }
 
+      let(:domain) { "@example.com" }
+
       describe "email_address" do
         context "when missing" do
           let(:email_address) { nil }
@@ -36,8 +38,13 @@ RSpec.describe EmailAddressForm do
         end
 
         context "when too long" do
-          let(:email_address) { "a" * 257 }
+          let(:email_address) { "#{"a" * (130 - domain.length)}#{domain}" }
           it { is_expected.not_to be_valid }
+        end
+
+        context "when as long as it can get" do
+          let(:email_address) { "#{"a" * (129 - domain.length)}#{domain}" }
+          it { is_expected.to be_valid }
         end
 
         context "when the wrong format" do

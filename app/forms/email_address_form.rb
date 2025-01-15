@@ -2,6 +2,9 @@ class EmailAddressForm < Form
   attribute :email_address
   attribute :resend, :boolean
 
+  # Max length is based on the lowest requirement on services Claim interacts, in this case Payroll
+  # https://www.gov.uk/government/publications/real-time-information-internet-submissions-2024-to-2025-technical-specifications
+
   validates :email_address,
     presence: {
       message: ->(form, _) { form.i18n_errors_path("presence") }
@@ -12,7 +15,7 @@ class EmailAddressForm < Form
       message: ->(form, _) { form.i18n_errors_path("format") }
     },
     length: {
-      maximum: 256,
+      maximum: 129,
       message: ->(form, _) { form.i18n_errors_path("length") }
     },
     if: -> { email_address.present? }
