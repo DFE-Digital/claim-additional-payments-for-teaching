@@ -24,24 +24,37 @@ module Reports
     def to_csv
       CSV.generate(write_headers: true, headers: HEADERS) do |csv|
         @claims.each do |claim|
-          csv << row(
-            claim.reference,
-            claim.eligibility.try(:teacher_reference_number),
-            claim.full_name,
-            claim.policy,
-            claim.award_amount,
-            status(claim),
-            claim.latest_decision&.created_at,
-            claim.latest_decision&.created_by&.full_name
-          )
+          csv << ClaimPresenter.new(claim).to_a
         end
       end
     end
 
     private
 
-    def row(*entries)
-      entries.map { |entry| ExcelUtils.escape_formulas(entry) }
+    class ClaimPresenter
+      include Admin::ClaimsHelper
+      include ActionView::Helpers::NumberHelper
+
+      def initialize(claim)
+        @claim = claim
+      end
+
+      def to_a
+        [
+          claim.reference,
+          claim.eligibility.try(:teacher_reference_number),
+          claim.full_name,
+          claim.policy,
+          claim.award_amount,
+          status(claim),
+          claim.latest_decision&.created_at,
+          claim.latest_decision&.created_by&.full_name
+        ]
+      end
+
+      private
+
+      attr_reader :claim
     end
   end
 end
