@@ -19,6 +19,7 @@ module Reports
 
     def initialize
       @claims = Claim
+        .includes(:eligibility)
         .approved
         .where(academic_year: AcademicYear.current)
         .select { |claim| Claim::MatchingAttributeFinder.new(claim).matching_claims.any? }
