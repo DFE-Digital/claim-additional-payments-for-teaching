@@ -11,10 +11,6 @@ module ClaimsFormCallbacks
     redirect_to_slug("eligible-itt-subject") if no_eligible_itt_subject?
   end
 
-  def personal_bank_account_before_update
-    inject_hmrc_validation_attempt_count_into_the_form
-  end
-
   def information_provided_before_update
     return unless journey.requires_student_loan_details?
 
@@ -26,11 +22,6 @@ module ClaimsFormCallbacks
 
     retrieve_student_loan_details
     redirect_to_next_slug
-  end
-
-  def personal_bank_account_after_form_save_failure
-    increment_hmrc_validation_attempt_count if hmrc_api_validation_attempted?
-    render_template_for_current_slug
   end
 
   def check_your_email_after_form_save_success
@@ -67,23 +58,6 @@ module ClaimsFormCallbacks
 
   def retrieve_student_loan_details
     journey::AnswersStudentLoansDetailsUpdater.call(journey_session)
-  end
-
-  def hmrc_api_validation_attempted?
-    @form&.hmrc_api_validation_attempted?
-  end
-
-  def inject_hmrc_validation_attempt_count_into_the_form
-    params[:claim][:hmrc_validation_attempt_count] = current_hmrc_validation_attempt_count
-  end
-
-  def increment_hmrc_validation_attempt_count
-    journey_session.answers.hmrc_validation_attempt_count = current_hmrc_validation_attempt_count + 1
-    journey_session.save!
-  end
-
-  def current_hmrc_validation_attempt_count
-    journey_session.answers.hmrc_validation_attempt_count || 0
   end
 
   def on_tid_route?

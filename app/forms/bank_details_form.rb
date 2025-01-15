@@ -3,7 +3,6 @@ class BankDetailsForm < Form
   MAX_HMRC_API_VALIDATION_ATTEMPTS = 3
   BANKING_NAME_REGEX_FILTER = /\A[0-9A-Za-z .\/&-]*\z/
 
-  attribute :hmrc_validation_attempt_count, :integer
   attribute :banking_name, :string
   attribute :bank_sort_code, :string
   attribute :bank_account_number, :string
@@ -48,6 +47,10 @@ class BankDetailsForm < Form
 
   private
 
+  def hmrc_validation_attempt_count
+    journey_session.answers.hmrc_validation_attempt_count
+  end
+
   def normalised_bank_detail(bank_detail)
     bank_detail&.gsub(/\s|-/, "")
   end
@@ -61,6 +64,7 @@ class BankDetailsForm < Form
   end
 
   def bank_account_is_valid
+    return if @bank_account_is_valid_processed
     return unless can_validate_with_hmrc_api?
 
     response = nil
@@ -71,12 +75,17 @@ class BankDetailsForm < Form
       @hmrc_api_validation_attempted = true
       @hmrc_api_validation_succeeded = true if response.success?
 
+      if !response.success?
+        journey_session.answers.increment_hmrc_validation_attempt_count
+      end
+
       unless met_maximum_attempts?
         errors.add(:bank_sort_code, i18n_errors_path(:invalid_sort_code)) unless response.sort_code_correct?
         errors.add(:bank_account_number, i18n_errors_path(:invalid_account_number)) if response.sort_code_correct? && !response.account_exists?
         errors.add(:banking_name, i18n_errors_path(:invalid_banking_name)) if response.sort_code_correct? && response.account_exists? && !response.name_match?
       end
     rescue Hmrc::ResponseError => e
+      journey_session.answers.increment_hmrc_validation_attempt_count
       response = e.response
       @hmrc_api_response_error = true
     ensure
@@ -84,7 +93,10 @@ class BankDetailsForm < Form
       journey_session.answers.assign_attributes(
         hmrc_bank_validation_responses: new_hmrc_bank_validation_responses_value
       )
+
       journey_session.save!
+
+      @bank_account_is_valid_processed = true
     end
   end
 
@@ -93,10 +105,10 @@ class BankDetailsForm < Form
   end
 
   def within_maximum_attempts?
-    hmrc_validation_attempt_count + 1 <= MAX_HMRC_API_VALIDATION_ATTEMPTS
+    hmrc_validation_attempt_count <= MAX_HMRC_API_VALIDATION_ATTEMPTS
   end
 
   def met_maximum_attempts?
-    hmrc_validation_attempt_count + 1 >= MAX_HMRC_API_VALIDATION_ATTEMPTS
+    hmrc_validation_attempt_count >= MAX_HMRC_API_VALIDATION_ATTEMPTS
   end
 end

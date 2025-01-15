@@ -60,13 +60,17 @@ module Journeys
     attribute :student_loan_plan, :string, pii: false
     attribute :submitted_using_slc_data, :boolean, pii: false
     attribute :sent_one_time_password_at, :datetime, pii: false
-    attribute :hmrc_validation_attempt_count, :integer, pii: false
+    attribute :hmrc_validation_attempt_count, :integer, default: 0, pii: false
     attribute :reminder_id, :string, pii: false
 
     attribute :reminder_full_name, :string, pii: true
     attribute :reminder_email_address, :string, pii: true
     attribute :reminder_otp_secret, :string, pii: true
     attribute :reminder_otp_confirmed, :boolean, default: false, pii: false # whether or not they have confirmed email via otp
+
+    def increment_hmrc_validation_attempt_count
+      self.hmrc_validation_attempt_count = attributes["hmrc_validation_attempt_count"] + 1
+    end
 
     def has_attribute?(name)
       attribute_names.include?(name.to_s)

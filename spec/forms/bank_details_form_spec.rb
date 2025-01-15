@@ -7,11 +7,14 @@ RSpec.describe BankDetailsForm do
       create(:journey_configuration, :additional_payments)
     }
 
+    let(:hmrc_validation_attempt_count) { 0 }
+
     let(:journey_session) do
       create(
         :"#{journey::I18N_NAMESPACE}_session",
         answers: attributes_for(
-          :"#{journey::I18N_NAMESPACE}_answers"
+          :"#{journey::I18N_NAMESPACE}_answers",
+          hmrc_validation_attempt_count:
         )
       )
     end
@@ -22,7 +25,6 @@ RSpec.describe BankDetailsForm do
         banking_name:,
         bank_sort_code:,
         bank_account_number:,
-        hmrc_validation_attempt_count:
       }
     end
 
@@ -37,7 +39,6 @@ RSpec.describe BankDetailsForm do
     let(:banking_name) { "Jo Bloggs" }
     let(:bank_sort_code) { rand(100000..999999) }
     let(:bank_account_number) { rand(10000000..99999999) }
-    let(:hmrc_validation_attempt_count) { 0 }
 
     describe "#valid?" do
       context "banking name with invalid characters" do
