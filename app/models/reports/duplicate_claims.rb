@@ -26,13 +26,13 @@ module Reports
         @claims.each do |claim|
           csv << row(
             claim.reference,
-            claim.eligibility.teacher_reference_number,
+            claim.eligibility.try(:teacher_reference_number),
             claim.full_name,
             claim.policy,
             claim.award_amount,
             status(claim),
-            claim.latest_decision.created_at,
-            claim.latest_decision.created_by.full_name
+            claim.latest_decision&.created_at,
+            claim.latest_decision&.created_by&.full_name
           )
         end
       end
