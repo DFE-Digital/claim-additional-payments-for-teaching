@@ -19,19 +19,25 @@ RSpec.describe "Reports" do
 
     sign_in_as_service_operator
 
-    visit "/admin/reports"
+    visit "/admin"
+
+    click_on "Reports"
 
     click_on "Claims with failed provider check"
 
     expect(page.body).to eq claim_with_failed_provider_check_report.csv
 
-    visit "/admin/reports"
+    visit "/admin"
+
+    click_on "Reports"
 
     click_on "Claims with failed qualification status"
 
     expect(page.body).to eq claim_with_failed_qualification_status_report.csv
 
-    visit "/admin/reports"
+    visit "/admin"
+
+    click_on "Reports"
 
     click_on "Duplicate Approved Claims"
 
