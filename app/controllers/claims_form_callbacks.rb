@@ -11,10 +11,6 @@ module ClaimsFormCallbacks
     redirect_to_slug("eligible-itt-subject") if no_eligible_itt_subject?
   end
 
-  def address_before_show
-    set_backlink_override(slug: "postcode-search") if no_postcode?
-  end
-
   def select_home_address_before_show
     set_backlink_override(slug: "postcode-search")
   end
