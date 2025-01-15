@@ -11,12 +11,6 @@ module ClaimsFormCallbacks
     redirect_to_slug("eligible-itt-subject") if no_eligible_itt_subject?
   end
 
-  def information_provided_before_update
-    return unless journey.requires_student_loan_details?
-
-    retrieve_student_loan_details if on_tid_route?
-  end
-
   def check_your_email_after_form_save_success
     @email_resent = true
     render("check_your_email")
@@ -42,13 +36,5 @@ module ClaimsFormCallbacks
 
   def no_eligible_itt_subject?
     !journey_session.answers.eligible_itt_subject
-  end
-
-  def retrieve_student_loan_details
-    journey::AnswersStudentLoansDetailsUpdater.call(journey_session)
-  end
-
-  def on_tid_route?
-    journey_session.answers.logged_in_with_tid? && journey_session.answers.all_personal_details_same_as_tid?
   end
 end
