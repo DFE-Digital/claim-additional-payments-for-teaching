@@ -11,10 +11,6 @@ module ClaimsFormCallbacks
     redirect_to_slug("eligible-itt-subject") if no_eligible_itt_subject?
   end
 
-  def select_home_address_before_show
-    set_backlink_override(slug: "postcode-search")
-  end
-
   def personal_bank_account_before_update
     inject_hmrc_validation_attempt_count_into_the_form
   end
