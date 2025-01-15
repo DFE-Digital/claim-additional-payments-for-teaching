@@ -420,12 +420,10 @@ RSpec.describe PersonalDetailsForm, type: :model do
         journey_session.save!
       end
 
-      it "resets tslr specific depenent answers" do
+      it "resets tslr specific dependent answers" do
         form.save
 
-        answers = journey_session.answers
-
-        expect(answers.student_loan_repayment_amount).to be nil
+        expect(journey_session.reload.answers.student_loan_repayment_amount).to be_zero
       end
     end
   end

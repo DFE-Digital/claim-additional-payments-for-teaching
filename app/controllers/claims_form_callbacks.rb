@@ -17,13 +17,6 @@ module ClaimsFormCallbacks
     retrieve_student_loan_details if on_tid_route?
   end
 
-  def personal_details_after_form_save_success
-    return redirect_to_next_slug unless journey.requires_student_loan_details?
-
-    retrieve_student_loan_details
-    redirect_to_next_slug
-  end
-
   def check_your_email_after_form_save_success
     @email_resent = true
     render("check_your_email")
