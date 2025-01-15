@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Reports::DuplicateClaims do
   it "returns a csv of duplciate claims" do
-    claim_1 = create(:claim, :approved)
+    claim_1 = create(:claim, :approved, academic_year: AcademicYear.current)
     claim_2 = create(:claim)
 
     allow(Claim::MatchingAttributeFinder).to receive(:new).and_return(

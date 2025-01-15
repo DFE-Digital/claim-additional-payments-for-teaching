@@ -18,7 +18,10 @@ module Reports
     ].freeze
 
     def initialize
-      @claims = Claim.approved.select { |claim| Claim::MatchingAttributeFinder.new(claim).matching_claims.any? }
+      @claims = Claim
+        .approved
+        .where(academic_year: AcademicYear.current)
+        .select { |claim| Claim::MatchingAttributeFinder.new(claim).matching_claims.any? }
     end
 
     def to_csv
