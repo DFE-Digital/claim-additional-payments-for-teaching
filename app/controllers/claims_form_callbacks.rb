@@ -33,11 +33,6 @@ module ClaimsFormCallbacks
     create_and_save_claim_form
   end
 
-  def employee_email_after_form_save_failure
-    session[:slugs].delete("employee-email")
-    render_template_for_current_slug
-  end
-
   private
 
   def set_backlink_override_to_current_slug
