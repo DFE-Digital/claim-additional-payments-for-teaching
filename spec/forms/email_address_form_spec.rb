@@ -39,7 +39,13 @@ RSpec.describe EmailAddressForm do
 
         context "when too long" do
           let(:email_address) { "#{"a" * (130 - domain.length)}#{domain}" }
-          it { is_expected.not_to be_valid }
+          it do
+            subject.valid?
+
+            expect(form).not_to be_valid
+            expect(form.errors.added?(:email_address, :too_long, count: 129)).to be true
+            expect(form.errors.messages[:email_address]).to include("Email address must be 129 characters or less")
+          end
         end
 
         context "when as long as it can get" do

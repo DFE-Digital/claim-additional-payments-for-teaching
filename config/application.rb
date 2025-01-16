@@ -73,6 +73,7 @@ module DfeTeachersPaymentService
     config.active_record.yaml_column_permitted_classes = [BigDecimal, Date, Symbol]
 
     config.email_regexp = /\A[a-zA-Z0-9.!\#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+\z/
+    config.email_max_length = 129
 
     config.active_support.to_time_preserves_timezone = :offset
   end

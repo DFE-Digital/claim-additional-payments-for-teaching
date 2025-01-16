@@ -6,7 +6,7 @@ class SelectEmailForm < Form
   validates :email_address_check, inclusion: {in: [true, false], message: i18n_error_message(:select_email)}
   validates :email_address, presence: {message: i18n_error_message(:invalid_email)}, if: -> { email_address_check == true }
   validates :email_address, format: {with: Rails.application.config.email_regexp, message: i18n_error_message(:invalid_email)},
-    length: {maximum: 256, message: i18n_error_message(:invalid_email)}, if: -> { email_address.present? }
+    length: {maximum: Rails.application.config.email_max_length, message: i18n_error_message(:invalid_email)}, if: -> { email_address.present? }
 
   before_validation :determine_dependant_attributes
 

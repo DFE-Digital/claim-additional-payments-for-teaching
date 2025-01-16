@@ -15,8 +15,8 @@ class EmailAddressForm < Form
       message: ->(form, _) { form.i18n_errors_path("format") }
     },
     length: {
-      maximum: 129,
-      message: ->(form, _) { form.i18n_errors_path("length") }
+      maximum: Rails.application.config.email_max_length,
+      message: ->(form, _) { form.i18n_errors_path("length", length: Rails.application.config.email_max_length) }
     },
     if: -> { email_address.present? }
 

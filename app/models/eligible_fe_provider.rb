@@ -4,7 +4,7 @@ class EligibleFeProvider < ApplicationRecord
   validates :primary_key_contact_email_address,
     presence: true,
     format: {with: Rails.application.config.email_regexp},
-    length: {maximum: 256}
+    length: {maximum: Rails.application.config.email_max_length}
 
   def self.csv_for_academic_year(academic_year)
     attribute_names = [:ukprn, :max_award_amount, :lower_award_amount, :primary_key_contact_email_address]
