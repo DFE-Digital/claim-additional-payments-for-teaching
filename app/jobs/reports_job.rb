@@ -1,5 +1,5 @@
 class ReportsJob < CronJob
-  self.cron_expression = "0 6 * * 2#2" # second Tuesday of the month
+  self.cron_expression = "0 6 * * *" # 6AM daily
 
   def perform
     Rails.logger.info "Generating Ops reports"
