@@ -43,7 +43,7 @@ en:
       format:
         unit: "£"
   service_name: "Claim additional payments for teaching"
-  support_email_address: "additionalteachingpayment@digital.education.gov.uk"
+  support_email_address: "additional.teachingpayment@education.gov.uk"
   check_your_answers:
     heading_send_application: Confirm and send your application
     statement:
