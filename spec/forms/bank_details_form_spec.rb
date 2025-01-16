@@ -24,7 +24,7 @@ RSpec.describe BankDetailsForm do
       {
         banking_name:,
         bank_sort_code:,
-        bank_account_number:,
+        bank_account_number:
       }
     end
 
