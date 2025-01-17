@@ -115,4 +115,61 @@ RSpec.describe Claim::Search do
       specify { expect(search.claims).to contain_exactly(claim, historical_matching_claim) }
     end
   end
+
+  context "search by payment id" do
+    let!(:claim_1) do
+      create(
+        :claim,
+        :submitted,
+        bank_account_number: "12345678",
+        bank_sort_code: "123456",
+        national_insurance_number: "QQ123456C"
+      )
+    end
+
+    let!(:claim_2) do
+      create(
+        :claim,
+        :submitted,
+        bank_account_number: "12345678",
+        bank_sort_code: "123456",
+        national_insurance_number: "QQ123456C"
+      )
+    end
+
+    let!(:claim_3) do
+      create(
+        :claim,
+        :submitted,
+        bank_account_number: "12345678",
+        bank_sort_code: "123456",
+        national_insurance_number: "QQ123456C"
+      )
+    end
+
+    let!(:claim_4) do
+      create(
+        :claim,
+        :submitted,
+        bank_account_number: "12345678",
+        bank_sort_code: "123456",
+        national_insurance_number: "QQ123456C"
+      )
+    end
+
+    let!(:payment_1) { create(:payment, claims: [claim_1, claim_2]) }
+
+    let!(:payment_2) do
+      create(:payment, claims: [claim_3], payroll_run: payment_1.payroll_run)
+    end
+
+    let(:query) { payment_1.id }
+
+    subject { search.claims }
+
+    it { is_expected.to include(claim_1) }
+    it { is_expected.to include(claim_2) }
+    it { is_expected.not_to include(claim_3) }
+    it { is_expected.not_to include(claim_4) }
+  end
 end
