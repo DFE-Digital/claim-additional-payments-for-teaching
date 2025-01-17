@@ -7,7 +7,7 @@ class MobileVerificationForm < Form
   validate :otp_validate
 
   before_validation do
-    self.one_time_password = one_time_password.gsub(/\D/, "")
+    self.one_time_password = (one_time_password || "").gsub(/\D/, "")
   end
 
   def save

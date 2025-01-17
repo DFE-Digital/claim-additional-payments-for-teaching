@@ -37,9 +37,17 @@ module Journeys
     end
 
     def form(journey_session:, params:, session:)
-      form = SHARED_FORMS.deep_merge(forms).dig(params[:controller].split("/").last, params[:slug])
+      form = all_forms.dig(params[:controller].split("/").last, params[:slug])
 
       form&.new(journey: self, journey_session:, params:, session:)
+    end
+
+    def form_class_for_slug(slug:)
+      all_forms.dig("claims", slug)
+    end
+
+    def slug_for_form(form:)
+      all_forms["claims"].invert[form.class]
     end
 
     def forms
@@ -77,6 +85,16 @@ module Journeys
 
     def pii_attributes
       SessionAnswers.pii_attributes
+    end
+
+    def use_navigator?
+      false
+    end
+
+    private
+
+    def all_forms
+      SHARED_FORMS.deep_merge(forms)
     end
   end
 end

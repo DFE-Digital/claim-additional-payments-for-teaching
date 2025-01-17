@@ -3,6 +3,8 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_for @form, url: claim_path(current_journey_routing_name), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.hidden_field :skip_postcode_search, value: "false" %>
+
       <%= f.govuk_error_summary %>
 
       <% if @form.errors.any? %>
@@ -44,13 +46,19 @@
         <% end %>
 
         <p class="govuk-body">
-          <%= govuk_link_to I18n.t("questions.address.home.link_to_manual_address"), claim_path(current_journey_routing_name, "address"), "aria-label": I18n.t("questions.address.home.link_to_manual_address") %>
+          <button form="skip-postcode-search" class="govuk-link govuk-link--no-visited-state button-to-as-link">
+            <%= I18n.t("questions.address.home.link_to_manual_address") %>
+          </button>
         </p>
 
         <p class="govuk-!-padding-top-6">
           <%= f.govuk_submit "Search" %>
         </p>
       <% end %>
+    <% end %>
+
+    <%= form_for @form, url: claim_path(current_journey_routing_name), builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { id: "skip-postcode-search" } do |f| %>
+      <%= f.hidden_field :skip_postcode_search, value: true %>
     <% end %>
   </div>
 </div>

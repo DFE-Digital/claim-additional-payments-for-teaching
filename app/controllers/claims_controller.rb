@@ -35,7 +35,41 @@ class ClaimsController < BasePublicController
 
   private
 
-  delegate :slugs, :current_slug, :previous_slug, :next_slug, :next_required_slug, to: :page_sequence
+  delegate :slugs, :next_required_slug, to: :page_sequence
+
+  def navigator
+    @navigator ||= Journeys::Navigator.new(
+      current_slug: params[:slug],
+      slug_sequence: page_sequence.slug_sequence,
+      params:,
+      session:
+    )
+  end
+  helper_method :navigator
+
+  def current_slug
+    if journey.use_navigator?
+      params[:slug]
+    else
+      page_sequence.current_slug
+    end
+  end
+
+  def next_slug
+    if journey.use_navigator?
+      navigator.next_slug
+    else
+      page_sequence.next_slug
+    end
+  end
+
+  def previous_slug
+    if journey.use_navigator?
+      navigator.previous_slug
+    else
+      page_sequence.previous_slug
+    end
+  end
 
   def redirect_to_existing_claim_journey
     # If other journey sessions is empty, then the claimant has hit the landing
@@ -74,6 +108,8 @@ class ClaimsController < BasePublicController
   end
 
   def check_page_is_in_sequence
+    return if journey.use_navigator?
+
     unless correct_journey_for_claim_in_progress?
       clear_claim_session
       return redirect_to new_claim_path(request.query_parameters)
@@ -89,6 +125,8 @@ class ClaimsController < BasePublicController
   end
 
   def update_session_with_current_slug
+    return if journey.use_navigator?
+
     if @form.nil? || @form.valid?
       session[:slugs] << params[:slug] unless Journeys::PageSequence::DEAD_END_SLUGS.include?(params[:slug])
     else

@@ -1161,6 +1161,10 @@ en:
             IBO level 3 in SL and HL physics, taught as part of a diploma or career related programme or as a standalone
             certificate
           none: I do not teach any of these courses
+      email_verification:
+        errors:
+          one_time_password:
+            invalid: An error occured while validating the passcode, please try generating a new one
       teaching_qualification:
         question: Do you have a teaching qualification?
         hint_html: >

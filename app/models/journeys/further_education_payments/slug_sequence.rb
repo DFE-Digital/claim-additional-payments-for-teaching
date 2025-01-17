@@ -115,12 +115,28 @@ module Journeys
             sequence.delete("physics-courses")
           end
 
+          if answers.school_id.present?
+            sequence.delete("select-provision")
+          end
+
+          if answers.email_verified == true
+            sequence.delete("email-verification")
+          end
+
           if answers.provide_mobile_number == false
             sequence.delete("mobile-number")
             sequence.delete("mobile-verification")
           end
 
+          if answers.mobile_verified == true
+            sequence.delete("mobile-verification")
+          end
+
           if answers.ordnance_survey_error == true
+            sequence.delete("select-home-address")
+          end
+
+          if answers.skip_postcode_search == true
             sequence.delete("select-home-address")
           end
         end
