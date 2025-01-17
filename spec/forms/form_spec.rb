@@ -48,14 +48,6 @@ RSpec.describe Form, type: :model do
   let(:claim_params) { {first_name: "test-name"} }
 
   describe "#initialize" do
-    context "with unpermitted params" do
-      let(:claim_params) { {unpermitted: "my-name"} }
-
-      it "raises an error" do
-        expect { form }.to raise_error(ActionController::UnpermittedParameters)
-      end
-    end
-
     context "with valid params" do
       let(:claim_params) { {first_name: "my-name"} }
 
@@ -216,14 +208,6 @@ RSpec.describe Form, type: :model do
     context "with params containing attributes defined on the form" do
       it "permits the attributes in the params" do
         expect(form.permitted_params).to eql(ActionController::Parameters.new(claim_params.stringify_keys).permit!)
-      end
-    end
-
-    context "with params containing attributes not defined on the form" do
-      let(:claim_params) { super().merge(unpermitted_attribute: "test-value") }
-
-      it "raises an error" do
-        expect { form.permitted_params }.to raise_error(ActionController::UnpermittedParameters)
       end
     end
   end

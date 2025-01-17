@@ -11,5 +11,9 @@ FactoryBot.define do
     trait :with_fe_reminder do
       journey_class { Journeys::FurtherEducationPayments.to_s }
     end
+
+    trait :soft_deleted do
+      deleted_at { 1.second.ago }
+    end
   end
 end

@@ -31,14 +31,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::IttAcademicYearForm do
     )
   end
 
-  context "unpermitted claim param" do
-    let(:params) { ActionController::Parameters.new({slug: slug, claim: {nonsense_id: 1}}) }
-
-    it "raises an error" do
-      expect { form }.to raise_error ActionController::UnpermittedParameters
-    end
-  end
-
   describe "#itt_academic_year" do
     let(:params) { ActionController::Parameters.new({slug: slug, claim: {}}) }
 

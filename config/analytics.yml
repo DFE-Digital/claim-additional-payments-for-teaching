@@ -18,6 +18,7 @@ shared:
     - itt_subject
     - sent_one_time_password_at
     - journey_class
+    - deleted_at
   :tasks:
     - id
     - name

@@ -53,6 +53,8 @@ module Reminders
           journey_class: journey.to_s
         )
 
+        reminder.undelete!
+
         ReminderMailer.reminder_set(reminder).deliver_now
       else
         false

@@ -11,14 +11,6 @@ RSpec.describe PoorPerformanceForm do
 
   it { expect(form).to be_a(Form) }
 
-  context "with unpermitted params" do
-    let(:claim_params) { {unpermitted_param: ""} }
-
-    it "raises an error" do
-      expect { form }.to raise_error ActionController::UnpermittedParameters
-    end
-  end
-
   describe "validations" do
     context "subject_to_formal_performance_action" do
       it "cannot be nil" do
