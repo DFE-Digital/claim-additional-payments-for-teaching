@@ -5,7 +5,11 @@ class ApplicationController < ActionController::Base
   protect_from_forgery except: :handle_unwanted_requests
 
   def handle_unwanted_requests
-    render file: Rails.root.join("public", "404.html"), status: :not_found, layout: false
+    if request.head?
+      head :bad_request
+    else
+      render file: Rails.root.join("public", "404.html"), status: :not_found, layout: false
+    end
   end
 
   private

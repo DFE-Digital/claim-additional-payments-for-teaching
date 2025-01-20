@@ -99,17 +99,25 @@ describe "Routes", type: :routing do
     end
 
     context "misc head requests" do
-      it "returns a 404" do
-        %w[
-          backup
-          bc
-          bk
-          home
-          main
-          new
-          old
+      before { create(:journey_configuration, :additional_payments) }
+
+      let(:some_app_url) do
+        Journeys::AdditionalPaymentsForTeaching::SlugSequence.start_page_url
+      end
+
+      it "returns a 400" do
+        [
+          "backup",
+          "bc",
+          "bk",
+          "home",
+          "main",
+          "new",
+          "old",
+          some_app_url
         ].each do |path|
-          expect(head: path).to route_to(controller: "application", action: "handle_unwanted_requests", path: path)
+          expected_path = path.remove(/\A\//)
+          expect(head: path).to route_to(controller: "application", action: "handle_unwanted_requests", path: expected_path)
         end
       end
     end
