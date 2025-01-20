@@ -42,7 +42,8 @@ RSpec.describe AnalyticsImporter do
             "event_type" => "import_entity",
             "entity_table_name" => "claims",
             "event_tags" => ["20240101000000"],
-            "data" => a_hash_including({"key" => "id", "value" => [claim.id]})
+            "data" => a_hash_including({"key" => "id", "value" => [claim.id]}),
+            "hidden_data" => [{"key" => "onelogin_uid", "value" => []}]
           }
         ],
         ignore_unknown: true

@@ -80,6 +80,7 @@ shared:
     - logged_in_with_onelogin
     - onelogin_auth_at
     - onelogin_idv_at
+    - onelogin_uid
     - started_at
     - verified_at
   :decisions:
@@ -160,6 +161,7 @@ shared:
     - had_leadership_position
     - mostly_performed_leadership_duties
     - claim_school_somewhere_else
+    - teacher_reference_number
   :early_career_payments_eligibilities:
     - id
     - nqt_in_academic_year_after_itt
@@ -178,6 +180,7 @@ shared:
     - award_amount
     - induction_completed
     - school_somewhere_else
+    - teacher_reference_number
   :levelling_up_premium_payments_eligibilities:
     - id
     - created_at
@@ -197,6 +200,7 @@ shared:
     - eligible_degree_subject
     - induction_completed
     - school_somewhere_else
+    - teacher_reference_number
   :international_relocation_payments_eligibilities:
     - id
     - created_at
@@ -306,6 +310,7 @@ shared:
     - flagged_as_duplicate
     - provider_verification_email_last_sent_at
     - provider_verification_chase_email_last_sent_at
+    - teacher_reference_number
   :eligible_fe_providers:
     - id
     - ukprn
@@ -327,3 +332,26 @@ shared:
     - updated_at
     - provider_claim_submitted_at
     - practitioner_claim_started_at
+  :school_workforce_censuses:
+    - id
+    - teacher_reference_number
+    - school_urn
+    - totfte
+    - contract_agreement_type
+    - subject_description_sfr
+    - general_subject_code
+    - hours_taught
+    - created_at
+    - updated_at
+  :teachers_pensions_service:
+    - id
+    - teacher_reference_number
+    - start_date
+    - end_date
+    - la_urn
+    - school_urn
+    - employer_id
+    - nino
+    - created_at
+    - updated_at
+    - gender_digit
