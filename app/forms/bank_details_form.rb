@@ -48,7 +48,7 @@ class BankDetailsForm < Form
   private
 
   def hmrc_validation_attempt_count
-    journey_session.answers.hmrc_validation_attempt_count
+    journey_session.answers.hmrc_validation_attempt_count || 0
   end
 
   def normalised_bank_detail(bank_detail)
