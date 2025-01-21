@@ -5,6 +5,7 @@ module Journeys
         "sign-in" => SignInForm,
         "sign-in-or-continue" => SignInOrContinueForm,
         "current-school" => CurrentSchoolForm,
+        "information-provided" => InformationProvidedForm,
         "gender" => GenderForm,
         "personal-details" => PersonalDetailsForm,
         "select-email" => SelectEmailForm,

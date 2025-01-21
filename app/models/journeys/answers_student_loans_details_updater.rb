@@ -1,7 +1,8 @@
 module Journeys
   class AnswersStudentLoansDetailsUpdater
     def self.call(journey_session)
-      new(journey_session).save!
+      instance = new(journey_session)
+      instance.save!
     end
 
     def initialize(journey_session)

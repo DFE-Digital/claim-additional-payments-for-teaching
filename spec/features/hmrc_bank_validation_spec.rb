@@ -118,13 +118,10 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
         fill_in "Name on your account", with: bank_name
         fill_in "Sort code", with: sort_code
         fill_in "Account number", with: "1111111" # Invalid number
-
         click_on "Continue"
 
         expect(page).to have_text "Account number must be 8 digits"
-
         fill_in "Account number", with: account_number
-
         click_on "Continue"
 
         expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
@@ -146,15 +143,12 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
         fill_in "Name on your account", with: bank_name
         fill_in "Sort code", with: sort_code
         fill_in "Account number", with: account_number
-
         click_on "Continue"
 
         expect(page).to have_text "Enter the account number associated with the name on the account and/or sort code"
-
         click_on "Continue"
 
         expect(page).to have_text "Enter the account number associated with the name on the account and/or sort code"
-
         click_on "Continue"
 
         # Third attempt succeeds.

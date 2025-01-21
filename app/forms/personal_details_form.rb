@@ -49,7 +49,7 @@ class PersonalDetailsForm < Form
   end
 
   def save
-    return false unless valid?
+    return false if invalid?
 
     journey_session.answers.assign_attributes(
       first_name:,
@@ -60,8 +60,11 @@ class PersonalDetailsForm < Form
     )
 
     reset_dependent_answers_attributes
-
     journey_session.save!
+
+    if journey.requires_student_loan_details?
+      journey::AnswersStudentLoansDetailsUpdater.call(journey_session)
+    end
   end
 
   def show_name_section?
