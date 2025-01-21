@@ -23,9 +23,7 @@ class ClaimsController < BasePublicController
   end
 
   def start_new
-    new_journey_description = translate("#{current_journey_routing_name.underscore}.claim_description")
-
-    return redirect_to existing_session_path, alert: "Select yes if you want to start a claim #{new_journey_description}" unless params[:start_new_claim].present?
+    return redirect_to existing_session_path, alert: t("session.errors.select_continue_or_start_a_new_eligibility_check") unless params[:start_new_claim].present?
 
     if ActiveModel::Type::Boolean.new.cast(params[:start_new_claim]) == true
       clear_claim_session
