@@ -21,7 +21,6 @@ module Reports
       @claims = Claim
         .includes(:eligibility)
         .approved
-        .where.missing(:payments)
         .where(academic_year: AcademicYear.current)
         .select { |claim| Claim::MatchingAttributeFinder.new(claim).matching_claims.any? }
     end
