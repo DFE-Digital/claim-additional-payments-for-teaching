@@ -172,4 +172,111 @@ RSpec.describe Claim::Search do
     it { is_expected.not_to include(claim_3) }
     it { is_expected.not_to include(claim_4) }
   end
+
+  context "search by EY provider details" do
+    let!(:provider_1) do
+      create(
+        :eligible_ey_provider,
+        primary_key_contact_email_address: "test1-nursery@example.com"
+      )
+    end
+
+    let!(:provider_2) do
+      create(
+        :eligible_ey_provider,
+        secondary_contact_email_address: "test2-nursery@example.com"
+      )
+    end
+
+    let!(:provider_3) do
+      create(
+        :eligible_ey_provider,
+        nursery_name: "Test Nursery"
+      )
+    end
+
+    let!(:claim_1) do
+      create(
+        :claim,
+        policy: Policies::EarlyYearsPayments,
+        eligibility_attributes: {
+          nursery_urn: provider_1.urn
+        }
+      )
+    end
+
+    let!(:claim_2) do
+      create(
+        :claim,
+        policy: Policies::EarlyYearsPayments,
+        eligibility_attributes: {
+          nursery_urn: provider_2.urn
+        }
+      )
+    end
+
+    let!(:claim_3) do
+      create(
+        :claim,
+        policy: Policies::EarlyYearsPayments,
+        eligibility_attributes: {
+          nursery_urn: provider_3.urn
+        }
+      )
+    end
+
+    let!(:claim_4) do
+      create(
+        :claim,
+        policy: Policies::EarlyYearsPayments,
+        eligibility_attributes: {
+          provider_email_address: "provider-email-address@example.com",
+          nursery_urn: create(:eligible_ey_provider).urn
+        }
+      )
+    end
+
+    let!(:claim_5) do
+      create(
+        :claim,
+        policy: Policies::EarlyYearsPayments,
+        practitioner_email_address: "pracitioner@example.com",
+        eligibility_attributes: {
+          nursery_urn: create(:eligible_ey_provider).urn
+        }
+      )
+    end
+
+    subject { search.claims }
+
+    context "when searching for a primary key contact email address" do
+      let(:query) { provider_1.primary_key_contact_email_address }
+
+      it { is_expected.to match_array([claim_1]) }
+    end
+
+    context "when searching for a secondary key contact email address" do
+      let(:query) { provider_2.secondary_contact_email_address }
+
+      it { is_expected.to match_array([claim_2]) }
+    end
+
+    context "when searching for a nursery name" do
+      let(:query) { provider_3.nursery_name }
+
+      it { is_expected.to match_array([claim_3]) }
+    end
+
+    context "when searching for a provider email address" do
+      let(:query) { claim_4.eligibility.provider_email_address }
+
+      it { is_expected.to match_array([claim_4]) }
+    end
+
+    context "when searching for a practitioner email address" do
+      let(:query) { claim_5.practitioner_email_address }
+
+      it { is_expected.to match_array([claim_5]) }
+    end
+  end
 end

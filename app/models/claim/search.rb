@@ -30,9 +30,23 @@ class Claim
         Payment.where(id: search_term)
       )
 
+      claims_matched_on_ey_provider_details = Claim
+        .joins(:early_years_payment_eligibility)
+        .joins("JOIN eligible_ey_providers ON eligible_ey_providers.urn = early_years_payment_eligibilities.nursery_urn")
+        .where(
+          <<~SQL, search_term: search_term
+            LOWER(claims.practitioner_email_address) = LOWER(:search_term)
+            OR LOWER(early_years_payment_eligibilities.provider_email_address) = LOWER(:search_term)
+            OR LOWER(eligible_ey_providers.nursery_name) = LOWER(:search_term)
+            OR LOWER(eligible_ey_providers.primary_key_contact_email_address) = LOWER(:search_term)
+            OR LOWER(eligible_ey_providers.secondary_contact_email_address) = LOWER(:search_term)
+          SQL
+        )
+
       claim_match_query
         .or(Claim.where(eligibility_id: eligibility_ids))
         .or(Claim.where(id: claims_matched_on_payment_ids))
+        .or(Claim.where(id: claims_matched_on_ey_provider_details))
     end
 
     private
