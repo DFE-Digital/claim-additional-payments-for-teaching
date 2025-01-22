@@ -31,15 +31,10 @@
   - paye_reference
   - practitioner_email_address
   - provider_contact_name
-  - onelogin_uid
   - onelogin_idv_first_name
   - onelogin_idv_last_name
   - onelogin_idv_full_name
   - onelogin_idv_date_of_birth
-  :claim_decisions:
-  - trn
-  - claimant_age
-  - claimant_gender
   :delayed_jobs:
   - id
   - priority
@@ -95,40 +90,10 @@
   - amount
   - created_at
   - updated_at
-  :school_workforce_censuses:
-  - id
-  - teacher_reference_number
-  - school_urn
-  - totfte
-  - contract_agreement_type
-  - subject_description_sfr
-  - general_subject_code
-  - hours_taught
-  - created_at
-  - updated_at
-  :teachers_pensions_service:
-  - id
-  - teacher_reference_number
-  - start_date
-  - end_date
-  - la_urn
-  - school_urn
-  - employer_id
-  - nino
-  - created_at
-  - updated_at
-  - gender_digit
   :international_relocation_payments_eligibilities:
   - passport_number
   - school_headteacher_name
-  :levelling_up_premium_payments_eligibilities:
-  - teacher_reference_number
-  :early_career_payments_eligibilities:
-  - teacher_reference_number
-  :student_loans_eligibilities:
-  - teacher_reference_number
   :further_education_payments_eligibilities:
-  - teacher_reference_number
   - verification
   :journeys_sessions:
   - answers
