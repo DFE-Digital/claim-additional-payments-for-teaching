@@ -275,7 +275,7 @@ en:
       errors:
         presence: "Enter an email address"
         format: "Enter an email address in the correct format, like name@example.com"
-        length: "Email address must be 256 characters or less"
+        length: "Email address must be %{length} characters or less"
     mobile_number:
       errors:
         invalid: "Enter a mobile number, like 07700 900 982 or +44 7700 900 982"
@@ -586,7 +586,7 @@ en:
           email_address:
             blank: Enter an email address
             invalid: Enter an email address in the correct format, like name@example.com
-            length: Email address must be 256 characters or less
+            length: Email address must be %{length} characters or less
             unauthorised: Only authorised email addresses can be used when using a team-only API key
     check_your_answers:
       part_one:

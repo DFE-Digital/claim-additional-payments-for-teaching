@@ -74,6 +74,10 @@ module DfeTeachersPaymentService
 
     config.email_regexp = /\A[a-zA-Z0-9.!\#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+\z/
 
+    # Max length is based on the lowest requirement on services Claim interacts, in this case Payroll
+    # https://www.gov.uk/government/publications/real-time-information-internet-submissions-2024-to-2025-technical-specifications
+    config.email_max_length = 129
+
     config.active_support.to_time_preserves_timezone = :offset
   end
 end

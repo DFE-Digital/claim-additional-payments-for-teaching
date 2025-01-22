@@ -66,7 +66,7 @@ RSpec.describe SelectEmailForm, type: :model do
         is_expected.to be_invalid
         expect(form.errors[:email_address]).to eq([form.i18n_errors_path(:invalid_email)])
 
-        stub_email("a" * 245 + "@example.com") # 257 chars
+        stub_email("a" * (130 - 12) + "@example.com")
         is_expected.to be_invalid
         expect(form.errors[:email_address]).to eq([form.i18n_errors_path(:invalid_email)])
       end

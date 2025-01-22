@@ -24,8 +24,8 @@ module Reminders
         message: i18n_error_message("email_address.invalid")
       },
       length: {
-        maximum: 256,
-        message: i18n_error_message("email_address.length")
+        maximum: Rails.application.config.email_max_length,
+        message: i18n_error_message("email_address.length", length: Rails.application.config.email_max_length)
       }
 
     def save!
