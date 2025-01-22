@@ -43,7 +43,7 @@ module Policies
       validates :had_leadership_position, on: [:submit], inclusion: {in: [true, false], message: "Select yes if you were employed in a leadership position"}
       validates :mostly_performed_leadership_duties, on: [:submit], inclusion: {in: [true, false], message: "Select yes if you spent more than half your working hours on leadership duties"}, if: :had_leadership_position?
       validates_numericality_of :student_loan_repayment_amount, message: "Enter a valid monetary amount", allow_nil: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 99999
-      validates :student_loan_repayment_amount, on: :amendment, award_range: {max: 5_000}
+      validates :student_loan_repayment_amount, on: :amendment, award_range: {max: 5_000}, if: :student_loan_repayment_amount_changed?
       validates :teacher_reference_number, on: :amendment, presence: {message: "Enter your teacher reference number"}
       validate :validate_teacher_reference_number_length
 

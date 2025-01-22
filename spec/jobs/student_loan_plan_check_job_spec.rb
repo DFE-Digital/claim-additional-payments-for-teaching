@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe StudentLoanPlanCheckJob do
-  subject(:perform_job) { described_class.new.perform }
+  let(:admin) { create(:dfe_signin_user) }
+  subject(:perform_job) { described_class.new.perform(admin) }
 
   before do
     create(:journey_configuration, :further_education_payments)
@@ -59,7 +60,7 @@ RSpec.describe StudentLoanPlanCheckJob do
       end
 
       it "updates the student loan details" do
-        expect(ClaimStudentLoanDetailsUpdater).to receive(:call).with(claim)
+        expect(ClaimStudentLoanDetailsUpdater).to receive(:call).with(claim, admin)
         perform_job
       end
 
@@ -78,7 +79,7 @@ RSpec.describe StudentLoanPlanCheckJob do
       let(:claim) { create(:claim, claim_status, academic_year:, policy: Policies::FurtherEducationPayments) }
 
       it "updates the student loan details" do
-        expect(ClaimStudentLoanDetailsUpdater).to receive(:call).with(claim)
+        expect(ClaimStudentLoanDetailsUpdater).to receive(:call).with(claim, admin)
         perform_job
       end
 
@@ -90,7 +91,7 @@ RSpec.describe StudentLoanPlanCheckJob do
 
     context "when the student loan plan check did not run before" do
       it "updates the student loan details" do
-        expect(ClaimStudentLoanDetailsUpdater).to receive(:call).with(claim)
+        expect(ClaimStudentLoanDetailsUpdater).to receive(:call).with(claim, admin)
         perform_job
       end
 
@@ -104,7 +105,7 @@ RSpec.describe StudentLoanPlanCheckJob do
       let!(:previous_task) { create(:task, claim: claim, name: "student_loan_plan", claim_verifier_match: nil, manual: false) }
 
       it "updates the student loan details" do
-        expect(ClaimStudentLoanDetailsUpdater).to receive(:call).with(claim)
+        expect(ClaimStudentLoanDetailsUpdater).to receive(:call).with(claim, admin)
         perform_job
       end
 
@@ -134,9 +135,10 @@ RSpec.describe StudentLoanPlanCheckJob do
           :student_loans_data,
           claim_reference: claim.reference,
           nino: claim.national_insurance_number,
-          date_of_birth: claim.date_of_birth
+          date_of_birth: claim.date_of_birth,
+          plan_type_of_deduction: 2
         )
-        allow_any_instance_of(Claim).to receive(:save!) { raise(exception) }
+        allow_any_instance_of(Claim).to receive(:save) { raise(exception) }
         allow(Rollbar).to receive(:error)
       end
 

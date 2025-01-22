@@ -1,10 +1,10 @@
 class StudentLoanAmountCheckJob < ApplicationJob
-  def perform
+  def perform(admin)
     delete_no_data_student_loan_amount_tasks
     claims = current_year_tslr_claims_awaiting_decision.awaiting_task("student_loan_amount")
 
     claims.each do |claim|
-      ClaimStudentLoanDetailsUpdater.call(claim)
+      ClaimStudentLoanDetailsUpdater.call(claim, admin)
       AutomatedChecks::ClaimVerifiers::StudentLoanAmount.new(claim:).perform
     rescue => e
       # If something goes wrong, log the error and continue

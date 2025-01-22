@@ -8,6 +8,7 @@ class Claim < ApplicationRecord
     national_insurance_number
     date_of_birth
     student_loan_plan
+    has_student_loan
     bank_sort_code
     bank_account_number
     building_society_roll_number

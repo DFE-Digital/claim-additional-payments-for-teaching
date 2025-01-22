@@ -1,9 +1,9 @@
 class ImportStudentLoansDataJob < FileImporterJob
-  import_with StudentLoansDataImporter do
+  import_with StudentLoansDataImporter do |uploaded_by|
     Rails.logger.info "SLC data imported; student loan verifiers will re-run where necessary"
 
-    StudentLoanAmountCheckJob.perform_later
-    StudentLoanPlanCheckJob.perform_later
+    StudentLoanAmountCheckJob.perform_later(uploaded_by)
+    StudentLoanPlanCheckJob.perform_later(uploaded_by)
   end
   rescue_with -> do
     StudentLoansData.delete_all
