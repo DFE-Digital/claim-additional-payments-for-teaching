@@ -43,20 +43,6 @@ module Journeys
     def next_slug
       return "ineligible" if eligibility_checker.ineligible?
 
-      forms = slug_sequence.slugs.map do |slug|
-        form_class = journey.form_class_for_slug(slug:)
-
-        raise "Form not found for journey: #{journey} slug: #{slug}" if form_class.nil?
-
-        form = form_class.new(
-          journey:,
-          journey_session:,
-          params:,
-          session:
-        )
-        form
-      end
-
       if current_slug.nil?
         forms.first
       else
