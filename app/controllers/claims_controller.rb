@@ -4,6 +4,7 @@ class ClaimsController < BasePublicController
   skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create]
   before_action :initialize_session_slug_history
   before_action :check_page_is_in_sequence, only: [:show, :update]
+  before_action :check_page_is_permissible, only: [:show]
   before_action :set_backlink_path, only: [:show, :update]
   before_action :check_claim_not_in_progress, only: [:new]
   before_action :clear_claim_session, only: [:new], unless: -> { journey.start_with_magic_link? }
@@ -118,6 +119,14 @@ class ClaimsController < BasePublicController
     raise ActionController::RoutingError.new("Not Found for #{params[:slug]}") unless page_sequence.in_sequence?(params[:slug])
 
     redirect_to claim_path(current_journey_routing_name, next_required_slug) unless page_sequence.has_completed_journey_until?(params[:slug])
+  end
+
+  def check_page_is_permissible
+    return unless journey.use_navigator?
+
+    unless navigator.permissible_slug?
+      redirect_to claim_path(current_journey_routing_name, navigator.furthest_permissible_slug)
+    end
   end
 
   def initialize_session_slug_history

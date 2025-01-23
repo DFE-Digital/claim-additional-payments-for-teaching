@@ -74,4 +74,83 @@ RSpec.describe Journeys::Navigator do
       end
     end
   end
+
+  describe "#permissible_slug?" do
+    context "when permissible" do
+      let(:answers) do
+        build(
+          :further_education_payments_answers
+        )
+      end
+
+      it "returns truthy" do
+        expect(subject.permissible_slug?).to be_truthy
+      end
+    end
+
+    context "when not permissible" do
+      let(:current_slug) { "address" }
+      let(:answers) do
+        build(
+          :further_education_payments_answers
+        )
+      end
+
+      it "returns falsey" do
+        expect(subject.permissible_slug?).to be_falsey
+      end
+    end
+  end
+
+  describe "#furthest_permissible_slug" do
+    context "when new journey" do
+      let(:answers) do
+        build(
+          :further_education_payments_answers
+        )
+      end
+
+      it "returns first slug" do
+        expect(subject.furthest_permissible_slug).to eql("teaching-responsibilities")
+      end
+    end
+
+    context "when mid-journey" do
+      let(:current_slug) { "foo" }
+
+      let(:answers) do
+        build(
+          :further_education_payments_answers,
+          teaching_responsibilities: true,
+          provision_search: "ply"
+        )
+      end
+
+      before do
+        create(:school, name: "Plymouth")
+      end
+
+      it "returns relevant slug" do
+        expect(subject.furthest_permissible_slug).to eql("select-provision")
+      end
+    end
+
+    context "when about to submit" do
+      let(:current_slug) { "foo" }
+      let(:school) { create(:school) }
+
+      let(:answers) do
+        build(
+          :further_education_payments_answers,
+          :submittable,
+          provision_search: school.name,
+          skip_postcode_search: true
+        )
+      end
+
+      it "returns check-answers slug" do
+        expect(subject.furthest_permissible_slug).to eql("check-your-answers")
+      end
+    end
+  end
 end

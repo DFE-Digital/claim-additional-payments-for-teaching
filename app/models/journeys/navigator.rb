@@ -9,6 +9,8 @@ module Journeys
       @session = session
     end
 
+    # when showing a form
+    # work out where the backlink should take the user
     def previous_slug
       last_valid_slug = nil
 
@@ -35,6 +37,9 @@ module Journeys
       end
     end
 
+    # given the current slug
+    # returns the next slug in the sequence
+    # used when a user hits continue on a form
     def next_slug
       return "ineligible" if eligibility_checker.ineligible?
 
@@ -78,7 +83,73 @@ module Journeys
       end
     end
 
+    # is a user allowed to visit the current_slug?
+    # use this to guard against a user jumping ahead in a journey
+    def permissible_slug?
+      if current_slug == "ineligible" && eligibility_checker.ineligible?
+        return true
+      end
+
+      forms.each do |form|
+        slug = journey.slug_for_form(form:)
+
+        if current_slug == slug
+          return true
+        end
+
+        if form.respond_to?(:completed?)
+          if !form.completed?
+            return false
+          end
+        elsif form.invalid?
+          return false
+        end
+      end
+    end
+
+    # ignoring the current_slug
+    # return the last slug the user is allowed to visit
+    # this is the furthest slug available in the journey given their state
+    # use this when user requests a non permissible slug
+    def furthest_permissible_slug
+      last_slug = nil
+
+      forms.each_with_index do |form, index|
+        slug = journey.slug_for_form(form:)
+
+        if form.respond_to?(:completed?)
+          if form.completed?
+            last_slug = slug
+          else
+            return slug
+          end
+        elsif form.valid?
+          last_slug = slug
+        else
+          return slug
+        end
+      end
+
+      last_slug
+    end
+
     private
+
+    def forms
+      @forms ||= slug_sequence.slugs.map do |slug|
+        form_class = journey.form_class_for_slug(slug:)
+
+        raise "Form not found for journey: #{journey} slug: #{slug}" if form_class.nil?
+
+        form = form_class.new(
+          journey:,
+          journey_session:,
+          params:,
+          session:
+        )
+        form
+      end
+    end
 
     def journey
       Journeys.for_routing_name(slug_sequence.journey_session.journey)

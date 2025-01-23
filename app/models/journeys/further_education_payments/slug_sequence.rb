@@ -139,7 +139,21 @@ module Journeys
           if answers.skip_postcode_search == true
             sequence.delete("select-home-address")
           end
+
+          if !eligibility_checker.ineligible?
+            sequence.delete("ineligible")
+          end
         end
+      end
+
+      private
+
+      def eligibility_checker
+        @eligibility_checker ||= journey::EligibilityChecker.new(journey_session:)
+      end
+
+      def journey
+        Journeys.for_routing_name(journey_session.journey)
       end
     end
   end
