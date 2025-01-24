@@ -2,7 +2,9 @@ require "rails_helper"
 
 RSpec.describe Journeys::FurtherEducationPayments::FurtherEducationTeachingStartYearForm, type: :model do
   let(:journey) { Journeys::FurtherEducationPayments }
-  let(:journey_session) { create(:further_education_payments_session) }
+  let(:journey_session) { create(:further_education_payments_session, answers:) }
+  let(:answers) { build(:further_education_payments_answers, answers_hash) }
+  let(:answers_hash) { {} }
   let(:further_education_teaching_start_year) { nil }
 
   let(:params) do
@@ -63,6 +65,20 @@ RSpec.describe Journeys::FurtherEducationPayments::FurtherEducationTeachingStart
       expect { expect(subject.save).to be(true) }.to(
         change { journey_session.reload.answers.further_education_teaching_start_year }.to(further_education_teaching_start_year)
       )
+    end
+  end
+
+  describe "#clear_answers_from_session" do
+    let(:answers_hash) do
+      {
+        further_education_teaching_start_year: "2025"
+      }
+    end
+
+    it "clears relevant answers from session" do
+      expect {
+        subject.clear_answers_from_session
+      }.to change { journey_session.reload.answers.further_education_teaching_start_year }.from("2025").to(nil)
     end
   end
 end

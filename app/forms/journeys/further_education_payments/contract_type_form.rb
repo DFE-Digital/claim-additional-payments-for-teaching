@@ -41,6 +41,11 @@ module Journeys
         journey_session.answers.school
       end
 
+      def clear_answers_from_session
+        journey_session.answers.assign_attributes(contract_type: nil)
+        journey_session.save!
+      end
+
       private
 
       def reset_dependent_answers

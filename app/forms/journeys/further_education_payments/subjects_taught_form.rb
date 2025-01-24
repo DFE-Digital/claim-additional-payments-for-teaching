@@ -25,6 +25,11 @@ module Journeys
         journey_session.save!
       end
 
+      def clear_answers_from_session
+        journey_session.answers.assign_attributes(subjects_taught: [])
+        journey_session.save!
+      end
+
       private
 
       def clean_subjects_taught

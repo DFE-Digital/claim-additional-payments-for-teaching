@@ -2,7 +2,9 @@ require "rails_helper"
 
 RSpec.describe Journeys::FurtherEducationPayments::TeachingQualificationForm, type: :model do
   let(:journey) { Journeys::FurtherEducationPayments }
-  let(:journey_session) { create(:further_education_payments_session) }
+  let(:journey_session) { create(:further_education_payments_session, answers:) }
+  let(:answers) { build(:further_education_payments_answers, answers_hash) }
+  let(:answers_hash) { {} }
   let(:teaching_qualification) { nil }
 
   let(:params) do
@@ -54,6 +56,20 @@ RSpec.describe Journeys::FurtherEducationPayments::TeachingQualificationForm, ty
       expect { expect(subject.save).to be(true) }.to(
         change { journey_session.reload.answers.teaching_qualification }.to("yes")
       )
+    end
+  end
+
+  describe "#clear_answers_from_session" do
+    let(:answers_hash) do
+      {
+        teaching_qualification: "yes"
+      }
+    end
+
+    it "clears relevant answers from session" do
+      expect {
+        subject.clear_answers_from_session
+      }.to change { journey_session.reload.answers.teaching_qualification }.from("yes").to(nil)
     end
   end
 end

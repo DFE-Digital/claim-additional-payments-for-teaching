@@ -30,4 +30,21 @@ RSpec.describe Journeys::FurtherEducationPayments::EligibleForm, type: :model do
       )
     end
   end
+
+  describe "#clear_answers_from_session" do
+    let(:answers) do
+      build(
+        :further_education_payments_answers,
+        teaching_hours_per_week: "more_than_12",
+        school_id: school.id,
+        award_amount: 6_000
+      )
+    end
+
+    it "clears relevant answers from session" do
+      expect {
+        subject.clear_answers_from_session
+      }.to change { journey_session.reload.answers.award_amount }.from(6_000).to(nil)
+    end
+  end
 end

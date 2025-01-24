@@ -87,4 +87,20 @@ RSpec.describe Journeys::FurtherEducationPayments::ContractTypeForm, type: :mode
       end
     end
   end
+
+  describe "#clear_answers_from_session" do
+    let(:answers) do
+      build(
+        :further_education_payments_answers,
+        school_id: college.id,
+        contract_type: "permanent"
+      )
+    end
+
+    it "clears relevant answers from session" do
+      expect {
+        subject.clear_answers_from_session
+      }.to change { journey_session.reload.answers.contract_type }.from("permanent").to(nil)
+    end
+  end
 end

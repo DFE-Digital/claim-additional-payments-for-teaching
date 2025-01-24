@@ -33,6 +33,11 @@ module Journeys
         journey_session.save!
       end
 
+      def clear_answers_from_session
+        journey_session.answers.assign_attributes(teaching_hours_per_week: nil)
+        journey_session.save!
+      end
+
       def school
         journey_session.answers.school
       end

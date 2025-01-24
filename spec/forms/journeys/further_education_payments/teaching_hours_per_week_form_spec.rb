@@ -47,4 +47,18 @@ RSpec.describe Journeys::FurtherEducationPayments::TeachingHoursPerWeekForm, typ
       )
     end
   end
+
+  describe "#clear_answers_from_session" do
+    let(:answers_hash) do
+      {
+        teaching_hours_per_week: "more_than_12"
+      }
+    end
+
+    it "clears relevant answers from session" do
+      expect {
+        subject.clear_answers_from_session
+      }.to change { journey_session.reload.answers.teaching_hours_per_week }.from("more_than_12").to(nil)
+    end
+  end
 end
