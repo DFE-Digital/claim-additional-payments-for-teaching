@@ -39,6 +39,14 @@ class Form
     true
   end
 
+  # for this particular form
+  # clear all associated answers from the session
+  # does nothing by default
+  # and should be implemented on per form basis
+  # if the forms stores data to session
+  def clear_answers_from_session
+  end
+
   private
 
   def permitted_attributes

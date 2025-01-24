@@ -153,4 +153,26 @@ RSpec.describe Journeys::Navigator do
       end
     end
   end
+
+  describe "#clear_impermissible_answers" do
+    let(:current_slug) { "foo" }
+    let(:school) { create(:school) }
+
+    let(:answers) do
+      build(
+        :further_education_payments_answers,
+        teaching_responsibilities: "true",
+        provision_search: school.name,
+        school_id: school.id,
+        contract_type: "permanent",
+        fixed_term_full_year: true
+      )
+    end
+
+    it "clears impermissible answers from session" do
+      expect {
+        subject.clear_impermissible_answers
+      }.to change { journey_session.reload.answers.fixed_term_full_year }.from(true).to(nil)
+    end
+  end
 end

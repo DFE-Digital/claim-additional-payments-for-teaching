@@ -119,7 +119,46 @@ module Journeys
       last_slug
     end
 
+    # when a user changes an answer
+    # an existing answer might no longer be applicable
+    # if so we clear all those inaccessbile answers
+    def clear_impermissible_answers
+      impermissible_forms.each do |form|
+        form.clear_answers_from_session
+      end
+    end
+
     private
+
+    def impermissible_forms
+      @impermissible_forms ||= all_forms - permissible_forms
+    end
+
+    def all_forms
+      @all_forms ||= journey::SlugSequence::SLUGS.map do |slug|
+        form_class = journey.form_class_for_slug(slug:)
+
+        raise "Form not found for journey: #{journey} slug: #{slug}" if form_class.nil?
+
+        form = form_class.new(
+          journey:,
+          journey_session:,
+          params:,
+          session:
+        )
+        form
+      end
+    end
+
+    def permissible_forms
+      index = forms.find_index do |form|
+        slug = journey.slug_for_form(form:)
+
+        slug == furthest_permissible_slug
+      end
+
+      forms.take(index)
+    end
 
     def forms
       @forms ||= slug_sequence.slugs.map do |slug|

@@ -32,6 +32,11 @@ module Journeys
       def current_academic_year
         @current_academic_year ||= AcademicYear.current.to_s(:long)
       end
+
+      def clear_answers_from_session
+        journey_session.answers.assign_attributes(fixed_term_full_year: nil)
+        journey_session.save!
+      end
     end
   end
 end
