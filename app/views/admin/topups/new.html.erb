@@ -6,22 +6,22 @@
     </h1>
 
     <%=
-      if @topup.errors.any?
+      if @form.errors.any?
         render(
           "shared/error_summary",
-          instance: @topup
+          instance: @form
         )
       end
     %>
   </div>
 </div>
 
-<%= form_with model: @topup, url: admin_claim_topups_path(@claim), html: { autocomplete: "off" } do |f| %>
+<%= form_with model: @form, url: admin_claim_topups_path(@claim), html: { autocomplete: "off" } do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third">
-      <%= form_group_tag(@topup, :award_amount) do %>
+      <%= form_group_tag(@form, :award_amount) do %>
         <%= f.label :award_amount, "Top up amount", class: "govuk-label" %>
-        <%= errors_tag @topup, :award_amount %>
+        <%= errors_tag @form, :award_amount %>
       <% end %>
     </div>
     <div class="govuk-grid-column-two-thirds">
