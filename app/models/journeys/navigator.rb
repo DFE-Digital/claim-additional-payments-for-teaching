@@ -123,8 +123,10 @@ module Journeys
     # an existing answer might no longer be applicable
     # if so we clear all those inaccessbile answers
     def clear_impermissible_answers
-      impermissible_forms.each do |form|
-        form.clear_answers_from_session
+      ApplicationRecord.transaction do
+        impermissible_forms.each do |form|
+          form.clear_answers_from_session
+        end
       end
     end
 
