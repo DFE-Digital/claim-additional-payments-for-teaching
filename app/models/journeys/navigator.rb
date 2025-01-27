@@ -128,6 +128,19 @@ module Journeys
       end
     end
 
+    # should we clear the furthest most inelgible answer
+    # we do so if we are changing answer of a previous page
+    def clear_furthest_ineligible_answer
+      return unless eligibility_checker.ineligible?
+
+      furthest_form = permissible_forms.last
+      furthest_slug = journey.slug_for_form(form: furthest_form)
+
+      if current_slug != furthest_slug
+        furthest_form.clear_answers_from_session
+      end
+    end
+
     private
 
     def impermissible_forms

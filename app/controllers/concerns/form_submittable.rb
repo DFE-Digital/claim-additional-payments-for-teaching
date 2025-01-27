@@ -137,6 +137,10 @@ module FormSubmittable
       log_event(__method__)
 
       if @form.present?
+        if journey.use_navigator?
+          navigator.clear_furthest_ineligible_answer
+        end
+
         if @form.save
           return if execute_callback_if_exists(:after_form_save_success)
           redirect_to_next_slug
