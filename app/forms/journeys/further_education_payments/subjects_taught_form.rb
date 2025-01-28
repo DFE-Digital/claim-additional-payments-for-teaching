@@ -19,8 +19,6 @@ module Journeys
       def save
         return false if invalid?
 
-        reset_dependent_answers
-
         journey_session.answers.assign_attributes(subjects_taught:)
         journey_session.save!
       end
@@ -34,16 +32,6 @@ module Journeys
 
       def clean_subjects_taught
         subjects_taught.reject!(&:blank?)
-      end
-
-      def reset_dependent_answers
-        unchecked_subjects.each do |subject|
-          journey_session.answers.assign_attributes("#{subject}_courses" => [])
-        end
-      end
-
-      def unchecked_subjects
-        journey_session.answers.subjects_taught - subjects_taught - ["none"]
       end
     end
   end

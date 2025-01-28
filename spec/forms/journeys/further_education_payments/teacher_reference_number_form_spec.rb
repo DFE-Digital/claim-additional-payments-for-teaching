@@ -7,7 +7,7 @@ RSpec.describe Journeys::FurtherEducationPayments::TeacherReferenceNumberForm, t
   let(:answers_hash) { {} }
 
   let(:params) do
-    ActionController::Parameters.new()
+    ActionController::Parameters.new
   end
 
   subject do

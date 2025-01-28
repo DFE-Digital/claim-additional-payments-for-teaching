@@ -56,7 +56,7 @@ module Journeys
       end
 
       def has_results
-        School.search(provision_search).count > 0
+        @has_results ||= School.search(provision_search).count > 0
       end
 
       def changed_possible_school?

@@ -146,7 +146,9 @@ module Journeys
     private
 
     def impermissible_forms
-      @impermissible_forms ||= all_forms - permissible_forms
+      all_forms.reject do |form|
+        permissible_forms.map { |f| f.class }.include?(form.class)
+      end
     end
 
     def all_forms

@@ -14,7 +14,6 @@ class MobileVerificationForm < Form
     return false unless valid?
 
     journey_session.answers.assign_attributes(mobile_verified: true)
-
     journey_session.save!
   end
 
