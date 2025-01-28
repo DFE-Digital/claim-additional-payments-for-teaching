@@ -192,6 +192,152 @@ RSpec.describe Reports::FailedQualificationClaims do
         claim: tslr_claim_approved_failed_qualification_task
       )
 
+      # included "no match" on the task
+      ecp_claim_approved_no_match_qualification_task = create(
+        :claim,
+        :approved,
+        policy: Policies::EarlyCareerPayments,
+        academic_year: AcademicYear.new(2024),
+        decision_creator: create(
+          :dfe_signin_user,
+          given_name: "Some",
+          family_name: "admin"
+        ),
+        eligibility_attributes: {
+          teacher_reference_number: "4444444",
+          eligible_itt_subject: :mathematics,
+          itt_academic_year: AcademicYear.new(2021),
+          qualification: :postgraduate_itt
+        },
+        dqt_teacher_status: {
+          qualified_teacher_status: {
+            qts_date: "2023-09-01",
+            name: "Qualified teacher (trained)"
+          },
+          initial_teacher_training: {
+            programme_start_date: "2022-08-01",
+            subject1: "mathematics",
+            subject1_code: "100403",
+            subject2: "physics",
+            subject3_code: "F300",
+            qualification: "Graduate Diploma"
+          }
+        }
+      )
+
+      create(
+        :task,
+        :claim_verifier_context,
+        claim_verifier_match: :none,
+        passed: nil,
+        name: "qualifications",
+        claim: ecp_claim_approved_no_match_qualification_task
+      )
+
+      # included "Ineligible" DQT status - task passed
+      ecp_claim_approved_ineligibile_note = create(
+        :claim,
+        :approved,
+        policy: Policies::EarlyCareerPayments,
+        academic_year: AcademicYear.new(2024),
+        decision_creator: create(
+          :dfe_signin_user,
+          given_name: "Some",
+          family_name: "admin"
+        ),
+        eligibility_attributes: {
+          teacher_reference_number: "5555555",
+          eligible_itt_subject: :mathematics,
+          itt_academic_year: AcademicYear.new(2021),
+          qualification: :postgraduate_itt
+        },
+        dqt_teacher_status: {
+          qualified_teacher_status: {
+            qts_date: "2023-09-01",
+            name: "Qualified teacher (trained)"
+          },
+          initial_teacher_training: {
+            programme_start_date: "2022-08-01",
+            subject1: "mathematics",
+            subject1_code: "100403",
+            subject2: "physics",
+            subject3_code: "F300",
+            qualification: "Graduate Diploma"
+          }
+        }
+      )
+
+      create(
+        :task,
+        claim_verifier_match: :none,
+        passed: true,
+        name: "qualifications",
+        claim: ecp_claim_approved_ineligibile_note
+      )
+
+      create(
+        :note,
+        claim: ecp_claim_approved_ineligibile_note,
+        body: <<~HTML
+          [DQT Qualification] - Ineligible:
+          <pre>
+            ITT subjects: mathematics, physics
+            ITT subject codes:  100403, F300
+            Degree codes:       456
+            ITT start date:     2022-08-01
+            QTS award date:     2023-09-01
+            Qualification name: Graduate Diploma
+          </pre>
+        HTML
+      )
+
+      # included "Not eligible" DQT status - task passed
+      ecp_claim_approved_not_eligible_note = create(
+        :claim,
+        :approved,
+        policy: Policies::EarlyCareerPayments,
+        academic_year: AcademicYear.new(2024),
+        decision_creator: create(
+          :dfe_signin_user,
+          given_name: "Some",
+          family_name: "admin"
+        ),
+        eligibility_attributes: {
+          teacher_reference_number: "6666666",
+          eligible_itt_subject: :mathematics,
+          itt_academic_year: AcademicYear.new(2021),
+          qualification: :postgraduate_itt
+        },
+        dqt_teacher_status: {
+          qualified_teacher_status: {
+            qts_date: "2023-09-01",
+            name: "Qualified teacher (trained)"
+          },
+          initial_teacher_training: {
+            programme_start_date: "2022-08-01",
+            subject1: "mathematics",
+            subject1_code: "100403",
+            subject2: "physics",
+            subject3_code: "F300",
+            qualification: "Graduate Diploma"
+          }
+        }
+      )
+
+      create(
+        :task,
+        claim_verifier_match: :none,
+        passed: true,
+        name: "qualifications",
+        claim: ecp_claim_approved_not_eligible_note
+      )
+
+      create(
+        :note,
+        claim: ecp_claim_approved_not_eligible_note,
+        body: "[DQT Qualification] - Not eligible"
+      )
+
       csv = CSV.parse(described_class.new.to_csv, headers: true)
 
       expect(csv.to_a).to match_array([
@@ -253,6 +399,51 @@ RSpec.describe Reports::FailedQualificationClaims do
           "physics",
           "02/08/2022",
           "01/10/2023",
+          "Graduate Diploma"
+        ],
+        [
+          ecp_claim_approved_no_match_qualification_task.reference,
+          "4444444",
+          "ECP",
+          "Approved awaiting payroll",
+          "01/11/2024",
+          "Some admin",
+          "postgraduate_itt",
+          "2021/2022",
+          "mathematics",
+          "mathematics, physics",
+          "01/08/2022",
+          "01/09/2023",
+          "Graduate Diploma"
+        ],
+        [
+          ecp_claim_approved_ineligibile_note.reference,
+          "5555555",
+          "ECP",
+          "Approved awaiting payroll",
+          "01/11/2024",
+          "Some admin",
+          "postgraduate_itt",
+          "2021/2022",
+          "mathematics",
+          "mathematics, physics",
+          "01/08/2022",
+          "01/09/2023",
+          "Graduate Diploma"
+        ],
+        [
+          ecp_claim_approved_not_eligible_note.reference,
+          "6666666",
+          "ECP",
+          "Approved awaiting payroll",
+          "01/11/2024",
+          "Some admin",
+          "postgraduate_itt",
+          "2021/2022",
+          "mathematics",
+          "mathematics, physics",
+          "01/08/2022",
+          "01/09/2023",
           "Graduate Diploma"
         ]
       ])

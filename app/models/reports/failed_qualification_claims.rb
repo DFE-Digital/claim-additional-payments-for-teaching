@@ -24,7 +24,11 @@ module Reports
       @claims = Claim
         .approved
         .where(academic_year: AcademicYear.current)
-        .joins(:tasks).merge(Task.where(name: "qualifications", passed: false))
+        .joins(:tasks).merge(
+          Task.qualifications.where(passed: false).or(
+            Task.qualifications.claim_verifier_match_none
+          )
+        )
         .includes(:eligibility, decisions: :created_by)
     end
 
