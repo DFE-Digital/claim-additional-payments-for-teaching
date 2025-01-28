@@ -29,7 +29,7 @@ module Reports
             Task.qualifications.claim_verifier_match_none
           )
         )
-        .includes(:eligibility, decisions: :created_by)
+        .includes(:eligibility, :notes, decisions: :created_by)
     end
 
     def to_csv
@@ -58,10 +58,10 @@ module Reports
           qualification,
           itt_academic_year,
           eligible_itt_subject,
-          itt_subjects,
-          itt_start_date,
-          qts_award_date,
-          qualification_name
+          parse_note("ITT subjects"),
+          parse_note("ITT start date"),
+          parse_note("QTS award date"),
+          parse_note("Qualification name")
         ]
       end
 
@@ -88,34 +88,18 @@ module Reports
         claim.eligibility.try(:qualification)
       end
 
-      def itt_subjects
-        dqt_teacher_record&.itt_subjects&.join(", ")
+      # dqt information isn't stored on any claims on production.
+      # We don't want to make an API call for each claim in this report, so
+      # instead we parse the note to get the information for the report.
+      def parse_note(label)
+        return unless dqt_note
+
+        match = dqt_note.body.match(/#{label}: (.*)/)
+        match ? match[1].strip : nil
       end
 
-      def itt_start_date
-        date = dqt_teacher_record&.itt_start_date
-
-        return unless date
-
-        I18n.l(date, format: :day_month_year)
-      end
-
-      def qts_award_date
-        date = dqt_teacher_record&.qts_award_date
-
-        return unless date
-
-        I18n.l(date, format: :day_month_year)
-      end
-
-      def qualification_name
-        dqt_teacher_record&.qualification_name
-      end
-
-      def dqt_teacher_record
-        @dqt_teacher_record ||= if claim.has_dqt_record?
-          Dqt::Teacher.new(claim.dqt_teacher_status)
-        end
+      def dqt_note
+        @dqt_note ||= claim.notes.find_by(label: "qualifications")
       end
     end
   end

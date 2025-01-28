@@ -93,20 +93,6 @@ RSpec.describe Reports::FailedQualificationClaims do
           eligible_itt_subject: :mathematics,
           itt_academic_year: AcademicYear.new(2021),
           qualification: :postgraduate_itt
-        },
-        dqt_teacher_status: {
-          qualified_teacher_status: {
-            qts_date: "2023-09-01",
-            name: "Qualified teacher (trained)"
-          },
-          initial_teacher_training: {
-            programme_start_date: "2022-08-01",
-            subject1: "mathematics",
-            subject1_code: "100403",
-            subject2: "physics",
-            subject3_code: "F300",
-            qualification: "Graduate Diploma"
-          }
         }
       )
 
@@ -115,6 +101,23 @@ RSpec.describe Reports::FailedQualificationClaims do
         :failed,
         name: "qualifications",
         claim: ecp_claim_approved_failed_qualification_task
+      )
+
+      create(
+        :note,
+        label: "qualifications",
+        claim: ecp_claim_approved_failed_qualification_task,
+        body: <<~HTML
+          [DQT Qualification] - Ineligible:
+          <pre>
+            ITT subjects: mathematics, physics
+            ITT subject codes:  100403, F300
+            Degree codes:       456
+            ITT start date:     01/08/2022
+            QTS award date:     01/09/2023
+            Qualification name: Graduate Diploma
+          </pre>
+        HTML
       )
 
       # included
@@ -133,18 +136,6 @@ RSpec.describe Reports::FailedQualificationClaims do
           eligible_itt_subject: :physics,
           itt_academic_year: AcademicYear.new(2021),
           qualification: :postgraduate_itt
-        },
-        dqt_teacher_status: {
-          qualified_teacher_status: {
-            qts_date: "2023-10-01",
-            name: "Qualified teacher (trained)"
-          },
-          initial_teacher_training: {
-            programme_start_date: "2022-08-02",
-            subject1: "physics",
-            subject1_code: "F300",
-            qualification: "Graduate Diploma"
-          }
         }
       )
 
@@ -155,6 +146,23 @@ RSpec.describe Reports::FailedQualificationClaims do
         :failed,
         name: "qualifications",
         claim: lup_claim_approved_failed_qualification_task
+      )
+
+      create(
+        :note,
+        label: "qualifications",
+        claim: lup_claim_approved_failed_qualification_task,
+        body: <<~HTML
+          [DQT Qualification] - Ineligible:
+          <pre>
+            ITT subjects: physics
+            ITT subject codes:  F300
+            Degree codes:       456
+            ITT start date:     02/08/2022
+            QTS award date:     01/10/2023
+            Qualification name: Graduate Diploma
+          </pre>
+        HTML
       )
 
       # included
@@ -170,18 +178,6 @@ RSpec.describe Reports::FailedQualificationClaims do
         ),
         eligibility_attributes: {
           teacher_reference_number: "3333333"
-        },
-        dqt_teacher_status: {
-          qualified_teacher_status: {
-            qts_date: "2023-10-01",
-            name: "Qualified teacher (trained)"
-          },
-          initial_teacher_training: {
-            programme_start_date: "2022-08-02",
-            subject1: "physics",
-            subject1_code: "F300",
-            qualification: "Graduate Diploma"
-          }
         }
       )
 
@@ -190,6 +186,23 @@ RSpec.describe Reports::FailedQualificationClaims do
         :failed,
         name: "qualifications",
         claim: tslr_claim_approved_failed_qualification_task
+      )
+
+      create(
+        :note,
+        label: "qualifications",
+        claim: tslr_claim_approved_failed_qualification_task,
+        body: <<~HTML
+          [DQT Qualification] - Ineligible:
+          <pre>
+            ITT subjects: physics
+            ITT subject codes:  F300
+            Degree codes:       456
+            ITT start date:     02/08/2022
+            QTS award date:     01/10/2023
+            Qualification name: Graduate Diploma
+          </pre>
+        HTML
       )
 
       # included "no match" on the task
@@ -208,20 +221,6 @@ RSpec.describe Reports::FailedQualificationClaims do
           eligible_itt_subject: :mathematics,
           itt_academic_year: AcademicYear.new(2021),
           qualification: :postgraduate_itt
-        },
-        dqt_teacher_status: {
-          qualified_teacher_status: {
-            qts_date: "2023-09-01",
-            name: "Qualified teacher (trained)"
-          },
-          initial_teacher_training: {
-            programme_start_date: "2022-08-01",
-            subject1: "mathematics",
-            subject1_code: "100403",
-            subject2: "physics",
-            subject3_code: "F300",
-            qualification: "Graduate Diploma"
-          }
         }
       )
 
@@ -232,6 +231,23 @@ RSpec.describe Reports::FailedQualificationClaims do
         passed: nil,
         name: "qualifications",
         claim: ecp_claim_approved_no_match_qualification_task
+      )
+
+      create(
+        :note,
+        label: "qualifications",
+        claim: ecp_claim_approved_no_match_qualification_task,
+        body: <<~HTML
+          [DQT Qualification] - Ineligible:
+          <pre>
+            ITT subjects: mathematics, physics
+            ITT subject codes:  100403, F300
+            Degree codes:       456
+            ITT start date:     01/08/2022
+            QTS award date:     01/09/2023
+            Qualification name: Graduate Diploma
+          </pre>
+        HTML
       )
 
       # included "Ineligible" DQT status - task passed
@@ -250,20 +266,6 @@ RSpec.describe Reports::FailedQualificationClaims do
           eligible_itt_subject: :mathematics,
           itt_academic_year: AcademicYear.new(2021),
           qualification: :postgraduate_itt
-        },
-        dqt_teacher_status: {
-          qualified_teacher_status: {
-            qts_date: "2023-09-01",
-            name: "Qualified teacher (trained)"
-          },
-          initial_teacher_training: {
-            programme_start_date: "2022-08-01",
-            subject1: "mathematics",
-            subject1_code: "100403",
-            subject2: "physics",
-            subject3_code: "F300",
-            qualification: "Graduate Diploma"
-          }
         }
       )
 
@@ -277,6 +279,7 @@ RSpec.describe Reports::FailedQualificationClaims do
 
       create(
         :note,
+        label: "qualifications",
         claim: ecp_claim_approved_ineligibile_note,
         body: <<~HTML
           [DQT Qualification] - Ineligible:
@@ -284,8 +287,8 @@ RSpec.describe Reports::FailedQualificationClaims do
             ITT subjects: mathematics, physics
             ITT subject codes:  100403, F300
             Degree codes:       456
-            ITT start date:     2022-08-01
-            QTS award date:     2023-09-01
+            ITT start date:     01/08/2022
+            QTS award date:     01/09/2023
             Qualification name: Graduate Diploma
           </pre>
         HTML
@@ -307,20 +310,6 @@ RSpec.describe Reports::FailedQualificationClaims do
           eligible_itt_subject: :mathematics,
           itt_academic_year: AcademicYear.new(2021),
           qualification: :postgraduate_itt
-        },
-        dqt_teacher_status: {
-          qualified_teacher_status: {
-            qts_date: "2023-09-01",
-            name: "Qualified teacher (trained)"
-          },
-          initial_teacher_training: {
-            programme_start_date: "2022-08-01",
-            subject1: "mathematics",
-            subject1_code: "100403",
-            subject2: "physics",
-            subject3_code: "F300",
-            qualification: "Graduate Diploma"
-          }
         }
       )
 
@@ -334,6 +323,7 @@ RSpec.describe Reports::FailedQualificationClaims do
 
       create(
         :note,
+        label: "qualifications",
         claim: ecp_claim_approved_not_eligible_note,
         body: "[DQT Qualification] - Not eligible"
       )
@@ -441,10 +431,10 @@ RSpec.describe Reports::FailedQualificationClaims do
           "postgraduate_itt",
           "2021/2022",
           "mathematics",
-          "mathematics, physics",
-          "01/08/2022",
-          "01/09/2023",
-          "Graduate Diploma"
+          nil,
+          nil,
+          nil,
+          nil
         ]
       ])
     end
