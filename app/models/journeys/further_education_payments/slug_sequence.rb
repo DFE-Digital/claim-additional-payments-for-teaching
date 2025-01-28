@@ -143,6 +143,13 @@ module Journeys
           if !eligibility_checker.ineligible?
             sequence.delete("ineligible")
           end
+
+          if answers.performing_poorly?
+            sequence.delete("check-your-answers-part-one")
+            sequence.delete("eligible")
+            sequence.delete("sign-in")
+            sequence.delete("information-provided")
+          end
         end
       end
 
