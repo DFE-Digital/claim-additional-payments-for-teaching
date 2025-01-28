@@ -168,13 +168,15 @@ module Journeys
     end
 
     def permissible_forms
+      return @permissible_forms if @permissible_forms
+
       index = forms.find_index do |form|
         slug = journey.slug_for_form(form:)
 
         slug == furthest_permissible_slug
       end
 
-      forms.take(index)
+      @permissible_forms ||= forms.take(index)
     end
 
     def forms
