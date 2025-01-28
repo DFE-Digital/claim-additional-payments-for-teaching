@@ -31,6 +31,11 @@ module Journeys
         journey_session.save!
       end
 
+      def clear_answers_from_session
+        journey_session.answers.assign_attributes(hours_teaching_eligible_subjects: nil)
+        journey_session.save!
+      end
+
       private
 
       def course_descriptions(course_field)
