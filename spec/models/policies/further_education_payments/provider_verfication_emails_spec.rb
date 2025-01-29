@@ -26,7 +26,7 @@ describe Policies::FurtherEducationPayments::ProviderVerificationEmails do
     }
 
     it "emails the claim provider" do
-      travel_to DateTime.new(2024, 10, 1, 7, 0, 0) + 3.weeks do
+      travel_to DateTime.new(2024, 10, 1, 7, 0, 0) + 2.weeks do
         perform_enqueued_jobs do
           described_class.new(claim).send_further_education_payment_provider_verification_chase_email
         end
@@ -38,7 +38,7 @@ describe Policies::FurtherEducationPayments::ProviderVerificationEmails do
             claimant_name: claim.full_name,
             claim_reference: claim.reference,
             claim_submission_date: "1 October 2024",
-            verification_due_date: "12 November 2024",
+            verification_due_date: "29 October 2024",
             verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
           )
         )
