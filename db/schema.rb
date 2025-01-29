@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_06_105631) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_29_115013) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -274,6 +274,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_06_105631) do
     t.boolean "flagged_as_duplicate", default: false
     t.datetime "provider_verification_email_last_sent_at"
     t.datetime "provider_verification_chase_email_last_sent_at"
+    t.integer "provider_verification_email_count", default: 0
     t.index ["possible_school_id"], name: "index_fe_payments_eligibilities_on_possible_school_id"
     t.index ["school_id"], name: "index_fe_payments_eligibilities_on_school_id"
   end
