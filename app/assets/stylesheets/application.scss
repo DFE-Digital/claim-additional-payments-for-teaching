@@ -3,7 +3,7 @@ $govuk-font-url-function: "image-url";
 $govuk-image-url-function: "font-url";
 
 @import "components/gds_kit_tweaks";
-@import "govuk-frontend/dist/govuk/all";
+@import "govuk-frontend/dist/govuk/index";
 @import "accessible-autocomplete/src/autocomplete";
 @import "govuk-one-login-service-header/dist/styles/service-header-no-imports";
 
