@@ -10,7 +10,7 @@ module Admin
       respond_to do |format|
         format.csv {
           report = Report.find(params[:id])
-          send_data report.csv, filename: "#{report.name.parameterize(separator: "_")}_#{report.created_at.iso8601}.csv"
+          send_data report.csv, filename: "#{report.name.parameterize(separator: "_")}_#{report.updated_at.iso8601}.csv"
         }
       end
     end

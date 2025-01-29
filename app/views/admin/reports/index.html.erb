@@ -22,7 +22,7 @@
         <% @reports.each do |report| %>
           <tr class="govuk-table__row">
             <td class="govuk-table__cell"><%= govuk_link_to report.name, admin_report_path(report, format: :csv) %></td>
-            <td class="govuk-table__cell"><%= l(report.created_at) %></td>
+            <td class="govuk-table__cell"><%= l(report.updated_at) %></td>
             <td class="govuk-table__cell"><%= report.number_of_rows %></td>
           </tr>
         <% end %>
