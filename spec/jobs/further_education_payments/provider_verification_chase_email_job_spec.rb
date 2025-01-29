@@ -72,7 +72,6 @@ RSpec.describe FurtherEducationPayments::ProviderVerificationChaseEmailJob do
 
       it "does not send a chaser" do
         expect(claim_with_no_provider_email_sent.eligibility.reload.provider_verification_email_last_sent_at).to be_nil
-        expect(claim_with_no_provider_email_sent.eligibility.reload.provider_verification_chase_email_last_sent_at).to be_nil
 
         expect(ClaimMailer).to(
           have_received(:further_education_payment_provider_verification_chase_email)
@@ -104,7 +103,7 @@ RSpec.describe FurtherEducationPayments::ProviderVerificationChaseEmailJob do
       end
 
       it "does not send a chaser" do
-        expect(claim_with_provider_email_sent_less_than_2_weeks_ago.eligibility.reload.provider_verification_chase_email_last_sent_at).to be_nil
+        expect(claim_with_provider_email_sent_less_than_2_weeks_ago.eligibility.reload.provider_verification_email_last_sent_at).to eq(DateTime.new(2024, 10, 15, 7, 0, 0))
 
         expect(ClaimMailer).to(
           have_received(:further_education_payment_provider_verification_chase_email)
@@ -136,7 +135,7 @@ RSpec.describe FurtherEducationPayments::ProviderVerificationChaseEmailJob do
       end
 
       it "does not sent a chaser" do
-        expect(claim_with_provider_email_sent_over_2_weeks_ago_verified.eligibility.reload.provider_verification_chase_email_last_sent_at).to be_nil
+        expect(claim_with_provider_email_sent_over_2_weeks_ago_verified.eligibility.reload.provider_verification_email_last_sent_at).to eq(DateTime.new(2024, 10, 8, 7, 0, 0))
 
         expect(ClaimMailer).to(
           have_received(:further_education_payment_provider_verification_chase_email)
@@ -232,7 +231,7 @@ RSpec.describe FurtherEducationPayments::ProviderVerificationChaseEmailJob do
       end
 
       it "does not send a chaser email" do
-        expect(claim_rejected_after_provider_verification_was_sent.eligibility.reload.provider_verification_chase_email_last_sent_at).to be_nil
+        expect(claim_rejected_after_provider_verification_was_sent.eligibility.reload.provider_verification_email_last_sent_at).to eq(DateTime.new(2024, 10, 8, 7, 0, 0))
 
         expect(ClaimMailer).to(
           have_received(:further_education_payment_provider_verification_chase_email)
@@ -265,7 +264,7 @@ RSpec.describe FurtherEducationPayments::ProviderVerificationChaseEmailJob do
       end
 
       it "does not send a chaser email" do
-        expect(claim_held_after_provider_verification_was_sent.eligibility.reload.provider_verification_chase_email_last_sent_at).to be_nil
+        expect(claim_held_after_provider_verification_was_sent.eligibility.reload.provider_verification_email_last_sent_at).to eq(DateTime.new(2024, 10, 8, 7, 0, 0))
 
         expect(ClaimMailer).to(
           have_received(:further_education_payment_provider_verification_chase_email)
