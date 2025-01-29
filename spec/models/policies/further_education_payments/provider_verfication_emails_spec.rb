@@ -43,7 +43,7 @@ describe Policies::FurtherEducationPayments::ProviderVerificationEmails do
           )
         )
 
-        expect(claim.eligibility.reload.provider_verification_chase_email_last_sent_at).to eq Time.now
+        expect(claim.eligibility.reload.provider_verification_email_last_sent_at).to eq Time.now
       end
     end
   end

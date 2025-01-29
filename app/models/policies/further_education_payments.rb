@@ -72,7 +72,7 @@ module Policies
     end
 
     def verification_chase_due_date_for_claim(claim)
-      (claim.eligibility.provider_verification_chase_email_last_sent_at + 2.weeks).to_date
+      (claim.eligibility.provider_verification_email_last_sent_at + 2.weeks).to_date
     end
 
     def duplicate_claim?(claim)
