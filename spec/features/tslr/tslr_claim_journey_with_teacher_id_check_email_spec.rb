@@ -162,6 +162,7 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
 
     # - How we will use the information you provide
     expect(page).to have_text("How we will use the information you provide")
+    expect(page).to have_text("the Student Loans Company")
     click_on "Continue"
 
     # - Personal details - skipped
