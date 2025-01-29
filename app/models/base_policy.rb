@@ -75,6 +75,6 @@ module BasePolicy
 
   # Overwrite this in the policies if they set a maximum topup amount
   def max_topup_amount(claim)
-    Float::INFINITY
+    10_000.00
   end
 end
