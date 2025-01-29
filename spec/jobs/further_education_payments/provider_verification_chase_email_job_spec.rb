@@ -33,6 +33,7 @@ RSpec.describe FurtherEducationPayments::ProviderVerificationChaseEmailJob do
 
       it "sends an email" do
         expect(claim_with_provider_email_sent_over_2_weeks_ago.eligibility.reload.provider_verification_email_last_sent_at).to eq Time.now
+        expect(claim_with_provider_email_sent_over_2_weeks_ago.eligibility.reload.provider_verification_email_count).to eql(2)
 
         expect(ClaimMailer).to(
           have_received(:further_education_payment_provider_verification_chase_email)
@@ -168,6 +169,7 @@ RSpec.describe FurtherEducationPayments::ProviderVerificationChaseEmailJob do
 
       it "sends chaser email" do
         expect(claim_with_provider_chase_email_already_sent.eligibility.reload.provider_verification_email_last_sent_at).to be_within(10.seconds).of(now)
+        expect(claim_with_provider_chase_email_already_sent.eligibility.reload.provider_verification_email_count).to eql(3)
 
         expect(ClaimMailer).to(
           have_received(:further_education_payment_provider_verification_chase_email)
