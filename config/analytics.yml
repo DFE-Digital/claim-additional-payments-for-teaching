@@ -311,6 +311,7 @@ shared:
     - provider_verification_email_last_sent_at
     - provider_verification_chase_email_last_sent_at
     - teacher_reference_number
+    - provider_verification_email_count
   :eligible_fe_providers:
     - id
     - ukprn

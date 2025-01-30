@@ -77,7 +77,7 @@ RSpec.feature "Admin claim further education payments" do
                 claimant_name: "Edna Krabappel",
                 claim_reference: "AB123456",
                 claim_submission_date: "1 August 2024",
-                verification_due_date: "22 August 2024",
+                verification_due_date: "15 August 2024",
                 verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
               )
             )
@@ -158,7 +158,7 @@ RSpec.feature "Admin claim further education payments" do
                   claimant_name: "Edna Krabappel",
                   claim_reference: "AB123456",
                   claim_submission_date: "1 August 2024",
-                  verification_due_date: "22 August 2024",
+                  verification_due_date: "15 August 2024",
                   verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
                 )
               )
@@ -232,7 +232,7 @@ RSpec.feature "Admin claim further education payments" do
                   claimant_name: "Edna Krabappel",
                   claim_reference: "AB123456",
                   claim_submission_date: "1 August 2024",
-                  verification_due_date: "22 August 2024",
+                  verification_due_date: "15 August 2024",
                   verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
                 )
               )
@@ -240,7 +240,7 @@ RSpec.feature "Admin claim further education payments" do
               expect(claim.eligibility.reload.provider_verification_email_last_sent_at).to eq Time.now
             end
 
-            it "shows the chaser verification email was sent if one was sent after 3 weeks" do
+            it "shows the chaser verification email was sent if one was sent after 2 weeks" do
               fe_provider = create(
                 :school,
                 :further_education,
@@ -265,7 +265,8 @@ RSpec.feature "Admin claim further education payments" do
                 claim: claim,
                 school: fe_provider,
                 award_amount: 1500,
-                provider_verification_email_last_sent_at: DateTime.new(2024, 8, 1, 9, 0, 0)
+                provider_verification_email_last_sent_at: DateTime.new(2024, 8, 1, 9, 0, 0),
+                provider_verification_email_count: 1
               )
 
               perform_enqueued_jobs do
