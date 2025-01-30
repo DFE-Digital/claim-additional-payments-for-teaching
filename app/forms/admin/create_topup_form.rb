@@ -8,12 +8,23 @@ module Admin
       ActiveModel::Name.new(self, nil, "Topup")
     end
 
+    STEPS = %i[award_amount confirmation].freeze
+
+    attribute :step, default: STEPS.first
+
     attr_reader :claim, :created_by
 
     attribute :award_amount, :decimal
+    attribute :confirmation, :boolean, default: false
 
-    validate :topup_is_valid
-    validate :note_is_valid
+    with_options on: :award_amount do
+      validate :topup_is_valid
+      validate :note_is_valid
+    end
+
+    with_options on: :confirmation do
+      validates :confirmation, acceptance: true
+    end
 
     def initialize(claim:, created_by:, params: {})
       @claim = claim
@@ -22,8 +33,20 @@ module Admin
       super(params)
     end
 
-    def save
-      return false unless valid?
+    def step
+      super.to_sym
+    end
+
+    def next_step
+      STEPS[STEPS.index(step) + 1]
+    end
+
+    def complete?
+      STEPS.all? { |step| dup.valid?(step) }
+    end
+
+    def save!
+      raise ActiveRecord::RecordInvalid unless complete?
 
       ApplicationRecord.transaction do
         topup.save!

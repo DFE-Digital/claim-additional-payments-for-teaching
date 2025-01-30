@@ -11,7 +11,9 @@ class Admin::TopupsController < Admin::BaseAdminController
   def create
     @form = Admin::CreateTopupForm.new(claim: @claim, created_by: admin_user, params: topup_params)
 
-    if @form.save
+    @form.step = @form.next_step if @form.valid?(@form.step)
+
+    if @form.complete? && @form.save!
       redirect_to admin_claim_payments_url(@claim), notice: "Claim top up payment created"
     else
       render "new"
@@ -39,7 +41,7 @@ class Admin::TopupsController < Admin::BaseAdminController
   end
 
   def topup_params
-    params.require(:topup).permit(:award_amount)
+    params.require(:topup).permit(:award_amount, :confirmation, :step)
   end
 
   def load_topup
