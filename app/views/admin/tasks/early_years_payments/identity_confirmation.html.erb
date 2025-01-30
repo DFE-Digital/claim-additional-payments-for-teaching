@@ -14,46 +14,59 @@
   </div>
 
   <div class="govuk-grid-column-two-thirds">
-    <h3 class="govuk-heading-m">
-      <%= I18n.t(
-        "admin.tasks.identity_confirmation.title",
-        claim_full_name: @claim.full_name
-      ) %>
-    </h3>
+    <section>
+      <h3 class="govuk-heading-m">
+        Confirm claimant name
+      </h3>
 
-    <table class="govuk-table">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th class="govuk-table__cell">Claimant identity check</th>
-          <th class="govuk-table__cell">Full name</th>
-          <th class="govuk-table__cell">Date of birth</th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-        <tr class="govuk-table__row">
-          <th scope="row" class="govuk-table__header">
-            One Login identity verification (IDV)
-          </th>
-          <td class="govuk-table__cell">
-            <%= @tasks_presenter.one_login_claimant_name %>
-          </td>
-          <td class="govuk-table__cell">
-            <%= @tasks_presenter.one_login_claimant_dob %>
-          </td>
-        </tr>
-        <tr class="govuk-table__row">
-          <th scope="row" class="govuk-table__header">
-            Provider entered claimant name
-          </th>
-          <td class="govuk-table__cell">
-            <%= @tasks_presenter.provider_entered_claimant_name %>
-          </td>
-          <td class="govuk-table__cell">
-            <%= @tasks_presenter.practitioner_entered_dob %>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <table class="govuk-table">
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">
+              Provider entered claimant name
+            </th>
+            <td class="govuk-table__cell">
+              <%= @tasks_presenter.provider_entered_claimant_name %>
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">
+              Claimant name from One Login
+            </th>
+            <td class="govuk-table__cell">
+              <%= @tasks_presenter.one_login_claimant_name.presence || "-" %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h3 class="govuk-heading-m">
+        Confirm claimant date of birth
+      </h3>
+
+      <table class="govuk-table">
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">
+              Claimant entered DOB
+            </th>
+            <td class="govuk-table__cell">
+              <%= @tasks_presenter.practitioner_entered_dob.presence || "-" %>
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">
+              Claimant DOB from One Login
+            </th>
+            <td class="govuk-table__cell">
+              <%= @tasks_presenter.one_login_claimant_dob.presence || "-" %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
 
     <% if @tasks_presenter.practitioner_journey_completed? %>
       <% if @task.claim_verifier_match_any? && @task.passed.nil? %>
