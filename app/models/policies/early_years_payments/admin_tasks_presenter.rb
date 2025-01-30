@@ -25,7 +25,9 @@ module Policies
       end
 
       def practitioner_entered_dob
-        claim.date_of_birth
+        return unless claim.date_of_birth
+
+        I18n.l(claim.date_of_birth)
       end
 
       def one_login_claimant_name
@@ -33,7 +35,9 @@ module Policies
       end
 
       def one_login_claimant_dob
-        claim.onelogin_idv_date_of_birth
+        return unless claim.onelogin_idv_date_of_birth
+
+        I18n.l(claim.onelogin_idv_date_of_birth)
       end
 
       def practitioner_journey_completed?

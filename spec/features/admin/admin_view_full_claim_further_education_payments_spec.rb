@@ -62,7 +62,7 @@ RSpec.feature "Admin views claim details for FurtherEducationPayments" do
 
       expect(summary_row("Full name")).to have_content("Edna Krabappel")
 
-      expect(summary_row("Date of birth")).to have_content("03/07/1945")
+      expect(summary_row("Date of birth")).to have_content("3 July 1945")
 
       expect(summary_row("National Insurance number")).to have_content(
         "QQ123456C"
