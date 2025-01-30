@@ -40,6 +40,12 @@ RSpec.describe "Admin Topup Claim" do
 
       click_on "Top up"
 
+      expect(page).to have_content("Confirm £100.55 is the correct amount")
+
+      click_on "Confirm"
+
+      expect(page).to have_content("Claim top up payment created")
+
       visit admin_claim_notes_path(claim)
 
       expect(page).to have_content("Claim amount £1,100.55")

@@ -9,25 +9,63 @@ RSpec.describe Admin::CreateTopupForm do
     described_class.new(claim: claim, created_by: admin, params: params)
   end
 
-  describe "#save" do
-    context "when invalid" do
+  describe "#complete?" do
+    subject { form.complete? }
+
+    context "when award_amount is missing" do
       let(:params) do
-        {}
+        {
+          award_amount: nil,
+          confirmation: true
+        }
       end
 
-      it "returns false and sets errors" do
-        expect { expect(form.save).to be false }.to(
-          change(Topup, :count).by(0).and(change(Note, :count).by(0))
-        )
-
-        expect(form.errors[:award_amount]).to include("Enter top up amount")
-      end
+      it { is_expected.to be false }
     end
 
-    context "when valid" do
+    context "when not confirmed" do
+      let(:params) do
+        {
+          award_amount: 100,
+          confirmation: false
+        }
+      end
+
+      it { is_expected.to be false }
+    end
+
+    context "when both are present" do
+      let(:params) do
+        {
+          award_amount: 100,
+          confirmation: true
+        }
+      end
+
+      it { is_expected.to be true }
+    end
+  end
+
+  describe "#save!" do
+    context "when not complete" do
       let(:params) do
         {
           award_amount: 100
+        }
+      end
+
+      it "raises" do
+        expect do
+          expect { form.save! }.to raise_error(ActiveRecord::RecordInvalid)
+        end.to(change(Topup, :count).by(0).and(change(Note, :count).by(0)))
+      end
+    end
+
+    context "when complete" do
+      let(:params) do
+        {
+          award_amount: 100,
+          confirmation: true
         }
       end
 
@@ -38,7 +76,7 @@ RSpec.describe Admin::CreateTopupForm do
       end
 
       it "creates a topup and a note" do
-        expect { expect(form.save).to be true }.to(
+        expect { expect(form.save!).to be true }.to(
           change(claim.topups, :count).by(1).and(change(Note, :count).by(1))
         )
 
