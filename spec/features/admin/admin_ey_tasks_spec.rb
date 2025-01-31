@@ -116,12 +116,20 @@ RSpec.describe "Admin EY tasks" do
             )
 
             expect(page).to have_content(
-              "[GOV UK One Login Name] - Names partially match:"
+              "[GOV UK One Login] - Names partially match:"
             )
 
             expect(page).to have_content(
-              'Provider: "Bobby Bobberson" GOV.UK One Login: "Robby Bobberson"'
+              'Provider-entered name: "Bobby Bobberson"'
             )
+
+            expect(page).to have_content(
+              'GOV.UK One Login Name: "Robby Bobberson"'
+            )
+
+            expect(page).to have_content('Claimant-entered DOB: "1986-01-01"')
+
+            expect(page).to have_content('GOV.UK One Login DOB: "1986-01-01"')
           end
 
           it "allows the admin to mark the task as passed" do
@@ -202,12 +210,20 @@ RSpec.describe "Admin EY tasks" do
             )
 
             expect(page).to have_content(
-              "[GOV UK One Login Name] - Names do not match:"
+              "[GOV UK One Login] - Names do not match:"
             )
 
-            expect(page).to have_content('Provider: "Bobby Bobberson"')
+            expect(page).to have_content(
+              'Provider-entered name: "Bobby Bobberson"'
+            )
 
-            expect(page).to have_content('GOV.UK One Login: "Robby Robberson"')
+            expect(page).to have_content(
+              'GOV.UK One Login Name: "Robby Robberson"'
+            )
+
+            expect(page).to have_content('Claimant-entered DOB: "1986-01-01"')
+
+            expect(page).to have_content('GOV.UK One Login DOB: "1986-01-01"')
           end
 
           it "doesn't allow the admin to complete the task" do
@@ -242,7 +258,15 @@ RSpec.describe "Admin EY tasks" do
             "[GOV UK One Login] - IDV mismatch:"
           )
 
-          expect(page).to have_content('GOV.UK One Login Name: "Bobby Bobberson"')
+          expect(page).to have_content(
+            'Provider-entered name: "Bobby Bobberson"'
+          )
+
+          expect(page).to have_content(
+            'GOV.UK One Login Name: "Bobby Bobberson"'
+          )
+
+          expect(page).to have_content('Claimant-entered DOB: "1986-01-11"')
 
           expect(page).to have_content('GOV.UK One Login DOB: "1986-01-01"')
 

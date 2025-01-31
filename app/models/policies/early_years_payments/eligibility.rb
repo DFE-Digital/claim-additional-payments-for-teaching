@@ -34,6 +34,7 @@ module Policies
         Date.today >= employment_task_available_at
       end
 
+      # This is the practioner name that the provider entered
       def practitioner_name
         [practitioner_first_name, practitioner_surname].join(" ")
       end
