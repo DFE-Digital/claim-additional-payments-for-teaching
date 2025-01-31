@@ -30,7 +30,7 @@ module Journeys
         # We can derive the induction_completed value for current_claim using the
         # ECP DQT record Remember: even if it's only relevant to ECP, the induction
         # question is asked at the beginning of the combined journey, and the
-        # applicant may end up applying for ECP or LUPP only at a later stage in
+        # applicant may end up applying for ECP or Targeted Retention Incentive only at a later stage in
         # the journey, hence we need to store the answer on both eligibilities.
         journey_session.answers.early_career_payments_dqt_teacher_record&.eligible_induction?
       end

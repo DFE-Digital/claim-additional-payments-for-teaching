@@ -5,8 +5,8 @@ RSpec.describe Payment do
 
   describe ".non_topup_claims" do
     it "returns claims that are not associated with topups" do
-      create(:journey_configuration, :levelling_up_premium_payments)
-      create(:levelling_up_premium_payments_award, award_amount: 9999)
+      create(:journey_configuration, :targeted_retention_incentive_payments)
+      create(:targeted_retention_incentive_payments_award, award_amount: 9999)
 
       claim = create(:claim, :approved)
 

@@ -346,12 +346,12 @@ class Claim < ApplicationRecord
     policy == Policies::StudentLoans
   end
 
-  def has_lupp_policy?
-    policy == Policies::LevellingUpPremiumPayments
+  def has_targeted_retention_incentive_policy?
+    policy == Policies::TargetedRetentionIncentivePayments
   end
 
-  def has_ecp_or_lupp_policy?
-    has_ecp_policy? || has_lupp_policy?
+  def has_ecp_or_targeted_retention_incentive_policy?
+    has_ecp_policy? || has_targeted_retention_incentive_policy?
   end
 
   def has_early_years_payments_policy?

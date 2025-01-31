@@ -22,7 +22,7 @@ FactoryBot.define do
       additional_payments
     end
 
-    trait :levelling_up_premium_payments do
+    trait :targeted_retention_incentive_payments do
       additional_payments
     end
 

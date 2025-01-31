@@ -7,18 +7,18 @@ RSpec.describe IneligibilityReasonChecker do
   let(:logged_in_with_tid) { nil }
   let(:qualifications_details_check) { nil }
 
-  let(:school_eligible_for_ecp_and_lup) { create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_eligible) }
-  let(:school_eligible_for_ecp_but_not_lup) { create(:school, :early_career_payments_eligible) }
-  let(:school_ineligible_for_both_ecp_and_lup) { create(:school, :early_career_payments_ineligible) }
+  let(:school_eligible_for_ecp_and_targeted_retention_incentive) { create(:school, :early_career_payments_eligible, :targeted_retention_incentive_payments_eligible) }
+  let(:school_eligible_for_ecp_but_not_targeted_retention_incentive) { create(:school, :early_career_payments_eligible) }
+  let(:school_ineligible_for_both_ecp_and_targeted_retention_incentive) { create(:school, :early_career_payments_ineligible) }
 
   before { create(:journey_configuration, :additional_payments, current_academic_year: academic_year) }
 
   # sanity check of factories
-  specify { expect(Policies::EarlyCareerPayments::SchoolEligibility.new(school_eligible_for_ecp_but_not_lup)).to be_eligible }
-  specify { expect(Policies::LevellingUpPremiumPayments::SchoolEligibility.new(school_eligible_for_ecp_but_not_lup)).not_to be_eligible }
+  specify { expect(Policies::EarlyCareerPayments::SchoolEligibility.new(school_eligible_for_ecp_but_not_targeted_retention_incentive)).to be_eligible }
+  specify { expect(Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(school_eligible_for_ecp_but_not_targeted_retention_incentive)).not_to be_eligible }
 
-  specify { expect(Policies::EarlyCareerPayments::SchoolEligibility.new(school_ineligible_for_both_ecp_and_lup)).not_to be_eligible }
-  specify { expect(Policies::LevellingUpPremiumPayments::SchoolEligibility.new(school_ineligible_for_both_ecp_and_lup)).not_to be_eligible }
+  specify { expect(Policies::EarlyCareerPayments::SchoolEligibility.new(school_ineligible_for_both_ecp_and_targeted_retention_incentive)).not_to be_eligible }
+  specify { expect(Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(school_ineligible_for_both_ecp_and_targeted_retention_incentive)).not_to be_eligible }
 
   let(:journey_session) do
     create(:additional_payments_session, answers: answers)
@@ -29,12 +29,12 @@ RSpec.describe IneligibilityReasonChecker do
   describe "#reason" do
     subject { checker.reason }
 
-    context "school ineligible for both ECP and LUP" do
+    context "school ineligible for both ECP and Targeted Retention Incentive" do
       let(:answers) do
         build(
           :additional_payments_answers,
-          :ecp_and_lup_eligible,
-          current_school_id: school_ineligible_for_both_ecp_and_lup.id
+          :ecp_and_targeted_retention_incentive_eligible,
+          current_school_id: school_ineligible_for_both_ecp_and_targeted_retention_incentive.id
         )
       end
 
@@ -45,7 +45,7 @@ RSpec.describe IneligibilityReasonChecker do
       let(:answers) do
         build(
           :additional_payments_answers,
-          :ecp_and_lup_eligible,
+          :ecp_and_targeted_retention_incentive_eligible,
           :short_term_supply_teacher
         )
       end
@@ -57,7 +57,7 @@ RSpec.describe IneligibilityReasonChecker do
       let(:answers) do
         build(
           :additional_payments_answers,
-          :ecp_and_lup_eligible,
+          :ecp_and_targeted_retention_incentive_eligible,
           :agency_supply_teacher
         )
       end
@@ -69,7 +69,7 @@ RSpec.describe IneligibilityReasonChecker do
       let(:answers) do
         build(
           :additional_payments_answers,
-          :ecp_and_lup_eligible,
+          :ecp_and_targeted_retention_incentive_eligible,
           :agency_supply_teacher,
           :short_term_supply_teacher
         )
@@ -82,7 +82,7 @@ RSpec.describe IneligibilityReasonChecker do
       let(:answers) do
         build(
           :additional_payments_answers,
-          :ecp_and_lup_eligible,
+          :ecp_and_targeted_retention_incentive_eligible,
           subject_to_formal_performance_action: true
         )
       end
@@ -94,7 +94,7 @@ RSpec.describe IneligibilityReasonChecker do
       let(:answers) do
         build(
           :additional_payments_answers,
-          :ecp_and_lup_eligible,
+          :ecp_and_targeted_retention_incentive_eligible,
           subject_to_disciplinary_action: true
         )
       end
@@ -106,7 +106,7 @@ RSpec.describe IneligibilityReasonChecker do
       let(:answers) do
         build(
           :additional_payments_answers,
-          :ecp_and_lup_eligible,
+          :ecp_and_targeted_retention_incentive_eligible,
           subject_to_disciplinary_action: true,
           subject_to_formal_performance_action: true
         )
@@ -115,12 +115,12 @@ RSpec.describe IneligibilityReasonChecker do
       it { is_expected.to eq(:generic) }
     end
 
-    context "eligible for both ECP and LUP but 'None of the above' ITT year" do
+    context "eligible for both ECP and Targeted Retention Incentive but 'None of the above' ITT year" do
       let(:answers) do
         build(
           :additional_payments_answers,
-          :ecp_and_lup_eligible,
-          current_school_id: school_eligible_for_ecp_and_lup.id,
+          :ecp_and_targeted_retention_incentive_eligible,
+          current_school_id: school_eligible_for_ecp_and_targeted_retention_incentive.id,
           itt_academic_year: none_of_the_above_academic_year
         )
       end
@@ -140,16 +140,16 @@ RSpec.describe IneligibilityReasonChecker do
       it { is_expected.to eq(:ecp_only_teacher_with_ineligible_itt_year) }
     end
 
-    context "eligible for LUP only but insufficient teaching" do
+    context "eligible for Targeted Retention Incentive only but insufficient teaching" do
       let(:answers) do
         build(
           :additional_payments_answers,
-          :lup_eligible,
+          :targeted_retention_incentive_eligible,
           :insufficient_teaching
         )
       end
 
-      it { is_expected.to eq(:would_be_eligible_for_lup_only_except_for_insufficient_teaching) }
+      it { is_expected.to eq(:would_be_eligible_for_targeted_retention_incentive_only_except_for_insufficient_teaching) }
     end
 
     context "eligible for ECP only but insufficient teaching" do
@@ -157,7 +157,7 @@ RSpec.describe IneligibilityReasonChecker do
         build(
           :additional_payments_answers,
           :ecp_eligible,
-          :first_lup_claim_year,
+          :first_targeted_retention_incentive_claim_year,
           :insufficient_teaching
         )
       end
@@ -165,23 +165,23 @@ RSpec.describe IneligibilityReasonChecker do
       it { is_expected.to eq(:would_be_eligible_for_ecp_only_except_for_insufficient_teaching) }
     end
 
-    context "eligible for both ECP and LUP except for insufficient teaching" do
+    context "eligible for both ECP and Targeted Retention Incentive except for insufficient teaching" do
       let(:answers) do
         build(
           :additional_payments_answers,
-          :ecp_and_lup_eligible,
+          :ecp_and_targeted_retention_incentive_eligible,
           :insufficient_teaching
         )
       end
 
-      it { is_expected.to eq(:would_be_eligible_for_both_ecp_and_lup_except_for_insufficient_teaching) }
+      it { is_expected.to eq(:would_be_eligible_for_both_ecp_and_targeted_retention_incentive_except_for_insufficient_teaching) }
     end
 
     context "bad ITT subject and no degree" do
       let(:answers) do
         build(
           :additional_payments_answers,
-          :ecp_and_lup_eligible,
+          :ecp_and_targeted_retention_incentive_eligible,
           :no_relevant_degree,
           eligible_itt_subject: :none_of_the_above
         )
@@ -190,16 +190,16 @@ RSpec.describe IneligibilityReasonChecker do
       it { is_expected.to eq(:lack_both_valid_itt_subject_and_degree) }
     end
 
-    context "non-LUP school, only given one ITT subject option but does not take the ECP subject option for 2018" do
+    context "non-Targeted Retention Incentive school, only given one ITT subject option but does not take the ECP subject option for 2018" do
       # This spec might need to change for future policy years
       let(:itt_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2018)) }
 
       let(:answers) do
         build(
           :additional_payments_answers,
-          :ecp_and_lup_eligible,
+          :ecp_and_targeted_retention_incentive_eligible,
           itt_academic_year: itt_year,
-          current_school_id: school_eligible_for_ecp_but_not_lup.id,
+          current_school_id: school_eligible_for_ecp_but_not_targeted_retention_incentive.id,
           eligible_itt_subject: :none_of_the_above
         )
       end
@@ -207,15 +207,15 @@ RSpec.describe IneligibilityReasonChecker do
       it { is_expected.to eq(:bad_itt_year_for_ecp) }
     end
 
-    context "non-LUP school, given multiple ITT subject options but chose 'none of the above'" do
+    context "non-Targeted Retention Incentive school, given multiple ITT subject options but chose 'none of the above'" do
       let(:itt_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2020)) }
 
       let(:answers) do
         build(
           :additional_payments_answers,
-          :ecp_and_lup_eligible,
+          :ecp_and_targeted_retention_incentive_eligible,
           itt_academic_year: itt_year,
-          current_school_id: school_eligible_for_ecp_but_not_lup.id,
+          current_school_id: school_eligible_for_ecp_but_not_targeted_retention_incentive.id,
           eligible_itt_subject: :none_of_the_above
         )
       end
@@ -227,22 +227,22 @@ RSpec.describe IneligibilityReasonChecker do
       let(:answers) do
         build(
           :additional_payments_answers,
-          :ecp_and_lup_eligible,
+          :ecp_and_targeted_retention_incentive_eligible,
           :trainee_teacher,
-          current_school_id: school_eligible_for_ecp_but_not_lup.id
+          current_school_id: school_eligible_for_ecp_but_not_targeted_retention_incentive.id
         )
       end
 
       it { is_expected.to eq(:ecp_only_trainee_teacher) }
     end
 
-    context "trainee teacher in an LUP school who isn't training to teach an eligible subject nor has a relevant degree" do
-      let(:school) { build(:school, :levelling_up_premium_payments_eligible) }
+    context "trainee teacher in an Targeted Retention Incentive school who isn't training to teach an eligible subject nor has a relevant degree" do
+      let(:school) { build(:school, :targeted_retention_incentive_payments_eligible) }
 
       let(:answers) do
         build(
           :additional_payments_answers,
-          :ecp_and_lup_eligible,
+          :ecp_and_targeted_retention_incentive_eligible,
           :trainee_teacher,
           :no_relevant_degree,
           eligible_itt_subject: :foreign_languages,
@@ -253,16 +253,16 @@ RSpec.describe IneligibilityReasonChecker do
       it { is_expected.to eq(:trainee_teaching_lacking_both_valid_itt_subject_and_degree) }
     end
 
-    context "non-LUP school and no ECP subjects for ITT year" do
+    context "non-Targeted Retention Incentive school and no ECP subjects for ITT year" do
       let(:itt_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2021)) }
 
       let(:answers) do
         build(
           :additional_payments_answers,
-          :ecp_and_lup_eligible,
+          :ecp_and_targeted_retention_incentive_eligible,
           :trainee_teacher,
           itt_academic_year: itt_year,
-          current_school_id: school_eligible_for_ecp_but_not_lup.id,
+          current_school_id: school_eligible_for_ecp_but_not_targeted_retention_incentive.id,
           nqt_in_academic_year_after_itt: true
         )
       end
@@ -276,7 +276,7 @@ RSpec.describe IneligibilityReasonChecker do
       let(:answers) do
         build(
           :additional_payments_answers,
-          :ecp_and_lup_eligible,
+          :ecp_and_targeted_retention_incentive_eligible,
           :trainee_teacher,
           academic_year: AcademicYear.new(2025),
           current_school_id: school.id
@@ -293,7 +293,7 @@ RSpec.describe IneligibilityReasonChecker do
       let(:answers) do
         build(
           :additional_payments_answers,
-          :ecp_and_lup_eligible,
+          :ecp_and_targeted_retention_incentive_eligible,
           :no_relevant_degree,
           eligible_itt_subject: :none_of_the_above,
           logged_in_with_tid: logged_in_with_tid,
