@@ -57,7 +57,7 @@ module Journeys
       def start_date_details
         [
           t("get_a_teacher_relocation_payment.forms.start_date.question"),
-          answers.start_date.strftime("%d-%m-%Y"),
+          l(answers.start_date),
           "start-date"
         ]
       end
@@ -81,7 +81,7 @@ module Journeys
       def entry_date
         [
           t("get_a_teacher_relocation_payment.forms.entry_date.question"),
-          answers.date_of_entry.strftime("%d-%m-%Y"),
+          l(answers.date_of_entry),
           "entry-date"
         ]
       end
