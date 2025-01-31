@@ -17,14 +17,14 @@ RSpec.feature "Admin claim filtering" do
   let(:early_career_payments_claims_for_mary) { create_list(:claim, 2, :submitted, policy: Policies::EarlyCareerPayments, assigned_to: mary) }
   let(:early_career_payments_claims_for_mette) { create_list(:claim, 6, :submitted, policy: Policies::EarlyCareerPayments, assigned_to: mette) }
   let(:early_career_payments_claims_failed_bank_validation) { create_list(:claim, 2, :submitted, :bank_details_not_validated, policy: Policies::EarlyCareerPayments, assigned_to: mette) }
-  let(:lup_claims_unassigned) { create_list(:claim, 2, :submitted, policy: Policies::LevellingUpPremiumPayments) }
+  let(:lup_claims_unassigned) { create_list(:claim, 2, :submitted, policy: Policies::TargetedRetentionIncentivePayments) }
   let(:held_claims) { create_list(:claim, 2, :submitted, :held) }
-  let(:approved_awaiting_qa_claims) { create_list(:claim, 2, :approved, :flagged_for_qa, policy: Policies::LevellingUpPremiumPayments) }
-  let(:auto_approved_awaiting_payroll_claims) { create_list(:claim, 2, :auto_approved, policy: Policies::LevellingUpPremiumPayments) }
-  let(:approved_claim) { create(:claim, :approved, policy: Policies::LevellingUpPremiumPayments, assigned_to: mette, decision_creator: mary) }
+  let(:approved_awaiting_qa_claims) { create_list(:claim, 2, :approved, :flagged_for_qa, policy: Policies::TargetedRetentionIncentivePayments) }
+  let(:auto_approved_awaiting_payroll_claims) { create_list(:claim, 2, :auto_approved, policy: Policies::TargetedRetentionIncentivePayments) }
+  let(:approved_claim) { create(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments, assigned_to: mette, decision_creator: mary) }
   let(:further_education_claims_awaiting_provider_verification) { create_list(:claim, 2, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :not_verified, assigned_to: valentino) }
   let(:further_education_claims_provider_verification_email_not_sent) { create_list(:claim, 2, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate, assigned_to: valentino) }
-  let(:rejected_claim) { create(:claim, :rejected, policy: Policies::LevellingUpPremiumPayments, assigned_to: valentino) }
+  let(:rejected_claim) { create(:claim, :rejected, policy: Policies::TargetedRetentionIncentivePayments, assigned_to: valentino) }
 
   let!(:claims) do
     [

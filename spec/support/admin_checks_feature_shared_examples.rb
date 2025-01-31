@@ -305,7 +305,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
   end
 
   def claim_checking_steps(policy)
-    if policy == Policies::LevellingUpPremiumPayments
+    if policy == Policies::TargetedRetentionIncentivePayments
       lup_claim_checking_steps
     elsif policy == Policies::EarlyCareerPayments
       ecp_claim_checking_steps

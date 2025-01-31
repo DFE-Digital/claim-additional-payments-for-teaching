@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe ClaimCheckingTasks do
   let(:checking_tasks) { described_class.new(claim) }
   let(:claim) { create(:claim, :submitted, :verified, policy:) }
-  let(:policy) { Policies::LevellingUpPremiumPayments }
+  let(:policy) { Policies::TargetedRetentionIncentivePayments }
   let(:base_tasks) { %w[identity_confirmation qualifications employment census_subjects_taught] }
   let(:ecp_tasks) { base_tasks + %w[induction_confirmation student_loan_plan] }
   let(:lup_tasks) { base_tasks + %w[student_loan_plan] }
@@ -78,8 +78,8 @@ RSpec.describe ClaimCheckingTasks do
       include_examples :student_loan_plan_task
     end
 
-    context "LevellingUpPremiumPayments claim" do
-      let(:policy) { Policies::LevellingUpPremiumPayments }
+    context "TargetedRetentionIncentivePayments claim" do
+      let(:policy) { Policies::TargetedRetentionIncentivePayments }
       let(:applicable_tasks) { lup_tasks }
 
       include_examples :common_tasks

@@ -91,7 +91,7 @@ module Journeys
       end
 
       def slugs
-        if answers.trainee_teacher? && Policies::LevellingUpPremiumPayments::SchoolEligibility.new(answers.current_school).eligible?
+        if answers.trainee_teacher? && Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(answers.current_school).eligible?
           lup_trainee_journey_slugs
         else
           non_trainee_journey_slugs
@@ -164,7 +164,7 @@ module Journeys
               sequence.delete("qualification") if answers.early_career_payments_dqt_teacher_record&.route_into_teaching
               sequence.delete("itt-year") if answers.early_career_payments_dqt_teacher_record&.itt_academic_year_for_claim
               sequence.delete("eligible-itt-subject") if answers.early_career_payments_dqt_teacher_record&.eligible_itt_subject_for_claim
-              sequence.delete("eligible-degree-subject") if answers.levelling_up_premium_payments_dqt_reacher_record&.eligible_degree_code?
+              sequence.delete("eligible-degree-subject") if answers.targeted_retention_incentive_payments_dqt_reacher_record&.eligible_degree_code?
             elsif signed_in_with_dfe_identity_and_details_match? && answers.has_no_dqt_data_for_claim?
               sequence.delete("qualification-details")
             end
@@ -268,7 +268,7 @@ module Journeys
       end
 
       def lup_eligibility_checker
-        @lup_eligibility_checker ||= Policies::LevellingUpPremiumPayments::PolicyEligibilityChecker.new(answers: answers)
+        @lup_eligibility_checker ||= Policies::TargetedRetentionIncentivePayments::PolicyEligibilityChecker.new(answers: answers)
       end
     end
   end

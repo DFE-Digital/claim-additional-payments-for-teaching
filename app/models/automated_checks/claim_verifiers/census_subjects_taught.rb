@@ -59,8 +59,8 @@ module AutomatedChecks
         match_against = case claim.policy
         when Policies::EarlyCareerPayments
           early_career_payments_policy_subjects
-        when Policies::LevellingUpPremiumPayments
-          levelling_up_premium_payments_policy_subjects
+        when Policies::TargetedRetentionIncentivePayments
+          targeted_retention_incentive_payments_policy_subjects
         when Policies::StudentLoans
           student_loans_policy_subjects
         else
@@ -79,7 +79,7 @@ module AutomatedChecks
         ecp_subjects[claim.eligibility.eligible_itt_subject.to_sym]
       end
 
-      def levelling_up_premium_payments_policy_subjects
+      def targeted_retention_incentive_payments_policy_subjects
         lup_subjects = [
           SchoolWorkforceCensus::LUP_ELIGIBLE_SUBJECTS
         ].reduce({}, :update)

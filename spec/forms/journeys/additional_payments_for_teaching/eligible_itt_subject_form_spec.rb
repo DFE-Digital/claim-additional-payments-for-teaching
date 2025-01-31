@@ -55,7 +55,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
     context "when single subject available" do
       before do
-        allow(Policies::LevellingUpPremiumPayments).to receive(:fixed_subject_symbols).and_return([:mathematics])
+        allow(Policies::TargetedRetentionIncentivePayments).to receive(:fixed_subject_symbols).and_return([:mathematics])
       end
 
       let(:answers) do
@@ -363,7 +363,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
     context "when the subject list contains chemistry" do
       before do
-        allow(Policies::LevellingUpPremiumPayments).to(
+        allow(Policies::TargetedRetentionIncentivePayments).to(
           receive(:fixed_subject_symbols).and_return([:chemistry])
         )
       end
@@ -373,7 +373,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
     context "when the subject list contains physics" do
       before do
-        allow(Policies::LevellingUpPremiumPayments).to(
+        allow(Policies::TargetedRetentionIncentivePayments).to(
           receive(:fixed_subject_symbols).and_return([:physics])
         )
       end
@@ -383,7 +383,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
     context "when the subject list does not contain chemistry or physics" do
       before do
-        allow(Policies::LevellingUpPremiumPayments).to(
+        allow(Policies::TargetedRetentionIncentivePayments).to(
           receive(:fixed_subject_symbols).and_return([:mathematics])
         )
       end

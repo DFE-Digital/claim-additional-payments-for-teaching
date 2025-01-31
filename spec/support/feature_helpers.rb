@@ -115,7 +115,7 @@ module FeatureHelpers
     visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
   end
 
-  def start_levelling_up_premium_payments_claim
+  def start_targeted_retention_incentive_payments_claim
     visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
   end
 

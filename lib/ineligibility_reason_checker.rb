@@ -48,7 +48,7 @@ class IneligibilityReasonChecker
 
     [
       Policies::EarlyCareerPayments::SchoolEligibility.new(school).eligible?,
-      !Policies::LevellingUpPremiumPayments::SchoolEligibility.new(school).eligible?
+      !Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(school).eligible?
     ].all? && Policies::EarlyCareerPayments.closed?(@answers.policy_year)
   end
 
@@ -58,7 +58,7 @@ class IneligibilityReasonChecker
     [
       school.present?,
       !Policies::EarlyCareerPayments::SchoolEligibility.new(school).eligible?,
-      !Policies::LevellingUpPremiumPayments::SchoolEligibility.new(school).eligible?
+      !Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(school).eligible?
     ].all?
   end
 
@@ -83,7 +83,7 @@ class IneligibilityReasonChecker
   def teacher_with_ineligible_itt_year?
     [
       @answers.itt_academic_year == AcademicYear.new,
-      Policies::LevellingUpPremiumPayments::SchoolEligibility.new(@answers.current_school).eligible?
+      Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(@answers.current_school).eligible?
     ].all?
   end
 
@@ -105,14 +105,14 @@ class IneligibilityReasonChecker
 
   def ecp_only_trainee_teacher?
     [
-      !Policies::LevellingUpPremiumPayments::SchoolEligibility.new(@answers.current_school).eligible?,
+      !Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(@answers.current_school).eligible?,
       @answers.nqt_in_academic_year_after_itt == false
     ].all?
   end
 
   def trainee_teaching_lacking_both_valid_itt_subject_and_degree?
     [
-      Policies::LevellingUpPremiumPayments::SchoolEligibility.new(@answers.current_school).eligible?,
+      Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(@answers.current_school).eligible?,
       @answers.nqt_in_academic_year_after_itt == false,
       lack_both_valid_itt_subject_and_degree?
     ].all?
@@ -126,11 +126,11 @@ class IneligibilityReasonChecker
   end
 
   def would_be_eligible_for_lup_only_except_for_insufficient_teaching?
-    would_be_eligible_for_one_policy_only_except_for_insufficient_teaching?(Policies::LevellingUpPremiumPayments)
+    would_be_eligible_for_one_policy_only_except_for_insufficient_teaching?(Policies::TargetedRetentionIncentivePayments)
   end
 
   def would_be_eligible_for_one_policy_only_except_for_insufficient_teaching?(policy)
-    other_policy = (policy == Policies::EarlyCareerPayments) ? Policies::LevellingUpPremiumPayments : Policies::EarlyCareerPayments
+    other_policy = (policy == Policies::EarlyCareerPayments) ? Policies::TargetedRetentionIncentivePayments : Policies::EarlyCareerPayments
 
     [
       eligible_with_sufficient_teaching?(policy),
@@ -156,7 +156,7 @@ class IneligibilityReasonChecker
   def would_be_eligible_for_both_ecp_and_lup_except_for_insufficient_teaching?
     [
       eligible_with_sufficient_teaching?(Policies::EarlyCareerPayments),
-      eligible_with_sufficient_teaching?(Policies::LevellingUpPremiumPayments)
+      eligible_with_sufficient_teaching?(Policies::TargetedRetentionIncentivePayments)
     ].all?
   end
 
@@ -180,7 +180,7 @@ class IneligibilityReasonChecker
   end
 
   def school_eligible_for_ecp_but_not_lup?(school)
-    Policies::EarlyCareerPayments::SchoolEligibility.new(school).eligible? && !Policies::LevellingUpPremiumPayments::SchoolEligibility.new(school).eligible?
+    Policies::EarlyCareerPayments::SchoolEligibility.new(school).eligible? && !Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(school).eligible?
   end
 
   def bad_itt_subject_for_ecp?
@@ -201,7 +201,7 @@ class IneligibilityReasonChecker
   def trainee_teacher_last_policy_year?
     [
       @answers.nqt_in_academic_year_after_itt == false,
-      @answers.academic_year >= AcademicYear.new(Policies::LevellingUpPremiumPayments::POLICY_END_YEAR),
+      @answers.academic_year >= AcademicYear.new(Policies::TargetedRetentionIncentivePayments::POLICY_END_YEAR),
       @answers.academic_year >= AcademicYear.new(Policies::EarlyCareerPayments::POLICY_END_YEAR)
     ].all?
   end

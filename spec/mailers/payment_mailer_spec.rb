@@ -212,7 +212,7 @@ RSpec.describe PaymentMailer, type: :mailer do
       end
     end
 
-    [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments].each do |policy|
+    [Policies::EarlyCareerPayments, Policies::TargetedRetentionIncentivePayments].each do |policy|
       describe "for a payment with a TSLR and a #{policy} claim" do
         include_examples :multiple_claims, policy
       end

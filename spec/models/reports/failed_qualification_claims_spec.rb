@@ -27,7 +27,7 @@ RSpec.describe Reports::FailedQualificationClaims do
       lup_claim_approved_passed_qualification_task = create(
         :claim,
         :approved,
-        policy: Policies::LevellingUpPremiumPayments,
+        policy: Policies::TargetedRetentionIncentivePayments,
         academic_year: AcademicYear.new(2024)
       )
 
@@ -124,7 +124,7 @@ RSpec.describe Reports::FailedQualificationClaims do
       lup_claim_approved_failed_qualification_task = create(
         :claim,
         :approved,
-        policy: Policies::LevellingUpPremiumPayments,
+        policy: Policies::TargetedRetentionIncentivePayments,
         academic_year: AcademicYear.new(2024),
         decision_creator: create(
           :dfe_signin_user,

@@ -26,7 +26,7 @@ module AutomatedChecks
               teacher_reference_number: teacher_reference_number
             )
           )
-        elsif policy == Policies::LevellingUpPremiumPayments
+        elsif policy == Policies::TargetedRetentionIncentivePayments
           claim.eligibility.update!(
             attributes_for(
               :"#{policy_underscored}_eligibility",
@@ -63,7 +63,7 @@ module AutomatedChecks
         [
           Policies::EarlyCareerPayments,
           Policies::StudentLoans,
-          Policies::LevellingUpPremiumPayments
+          Policies::TargetedRetentionIncentivePayments
         ].each do |policy|
           context "with policy #{policy}" do
             let(:policy) { policy }
@@ -72,7 +72,7 @@ module AutomatedChecks
               case policy
               when Policies::EarlyCareerPayments
                 9855512
-              when Policies::LevellingUpPremiumPayments
+              when Policies::TargetedRetentionIncentivePayments
                 1560179
               when Policies::StudentLoans
                 2109438
@@ -103,7 +103,7 @@ module AutomatedChecks
                       teacher_reference_number: teacher_reference_number
                     )
                   )
-                elsif policy == Policies::LevellingUpPremiumPayments
+                elsif policy == Policies::TargetedRetentionIncentivePayments
                   claim.eligibility.update!(
                     attributes_for(
                       :"#{policy_underscored}_eligibility",
@@ -187,7 +187,7 @@ module AutomatedChecks
                     expect(subject).to eq("[School Workforce Census] - Eligible:\n<pre>Subject 1: Mathematics\nSubject 2: Mathematics\n</pre>\n")
                   end
 
-                  it "returns 'Eligible' with the school workforce census subjects", if: policy == Policies::LevellingUpPremiumPayments do
+                  it "returns 'Eligible' with the school workforce census subjects", if: policy == Policies::TargetedRetentionIncentivePayments do
                     expect(subject).to eq("[School Workforce Census] - Eligible:\n<pre>Subject 1: ICT\nSubject 2: ICT\n</pre>\n")
                   end
 
@@ -257,7 +257,7 @@ module AutomatedChecks
                     expect(subject).to eq("[School Workforce Census] - Ineligible:\n<pre>Subject 1: Problem Solving, Reasoning and Numeracy\n</pre>\n")
                   end
 
-                  it "returns 'Ineligible' with the school workforce census subjects", if: policy == Policies::LevellingUpPremiumPayments do
+                  it "returns 'Ineligible' with the school workforce census subjects", if: policy == Policies::TargetedRetentionIncentivePayments do
                     expect(subject).to eq("[School Workforce Census] - Ineligible:\n<pre>Subject 1: Problem Solving, Reasoning and Numeracy\n</pre>\n")
                   end
 

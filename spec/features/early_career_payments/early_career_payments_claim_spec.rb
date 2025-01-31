@@ -245,7 +245,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       expect(claim.reload.submitted_at).to eq(Time.zone.now)
       policy_options_provided = [
         {"policy" => "EarlyCareerPayments", "award_amount" => "5000.0"},
-        {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+        {"policy" => "TargetedRetentionIncentivePayments", "award_amount" => "2000.0"}
       ]
       expect(claim.policy_options_provided).to eq policy_options_provided
 
@@ -648,7 +648,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       expect(claim.submitted_at).to eq(Time.zone.now)
       policy_options_provided = [
         {"policy" => "EarlyCareerPayments", "award_amount" => "5000.0"},
-        {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+        {"policy" => "TargetedRetentionIncentivePayments", "award_amount" => "2000.0"}
       ]
       expect(claim.reload.policy_options_provided).to eq policy_options_provided
 
@@ -951,7 +951,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
         policy_options_provided = [
           {"policy" => "EarlyCareerPayments", "award_amount" => "5000.0"},
-          {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+          {"policy" => "TargetedRetentionIncentivePayments", "award_amount" => "2000.0"}
         ]
         expect(submitted_claim.policy_options_provided).to eq policy_options_provided
         # - Application complete (make sure its Word for Word and styling matches)
