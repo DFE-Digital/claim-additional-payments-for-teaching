@@ -3,7 +3,7 @@ require "csv"
 module Policies
   module LevellingUpPremiumPayments
     class Award < ApplicationRecord
-      self.table_name = "levelling_up_premium_payments_awards"
+      self.table_name = "targeted_retention_incentive_payments_awards"
 
       belongs_to :school, foreign_key: :school_urn, primary_key: :urn, inverse_of: :levelling_up_premium_payments_awards, optional: true
 
