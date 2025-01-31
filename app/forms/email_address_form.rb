@@ -7,8 +7,7 @@ class EmailAddressForm < Form
       message: ->(form, _) { form.i18n_errors_path("presence") }
     }
   validates :email_address,
-    format: {
-      with: Rails.application.config.email_regexp,
+    email_address_format: {
       message: ->(form, _) { form.i18n_errors_path("format") }
     },
     length: {
