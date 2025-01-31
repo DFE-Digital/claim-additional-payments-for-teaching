@@ -24,10 +24,10 @@ RSpec.describe Reports::FailedQualificationClaims do
       )
 
       # excluded, task passed
-      lup_claim_approved_passed_qualification_task = create(
+      targeted_retention_incentive_claim_approved_passed_qualification_task = create(
         :claim,
         :approved,
-        policy: Policies::LevellingUpPremiumPayments,
+        policy: Policies::TargetedRetentionIncentivePayments,
         academic_year: AcademicYear.new(2024)
       )
 
@@ -35,7 +35,7 @@ RSpec.describe Reports::FailedQualificationClaims do
         :task,
         :passed,
         name: "qualifications",
-        claim: lup_claim_approved_passed_qualification_task
+        claim: targeted_retention_incentive_claim_approved_passed_qualification_task
       )
 
       # excluded, claim not approved
@@ -121,10 +121,10 @@ RSpec.describe Reports::FailedQualificationClaims do
       )
 
       # included
-      lup_claim_approved_failed_qualification_task = create(
+      targeted_retention_incentive_claim_approved_failed_qualification_task = create(
         :claim,
         :approved,
-        policy: Policies::LevellingUpPremiumPayments,
+        policy: Policies::TargetedRetentionIncentivePayments,
         academic_year: AcademicYear.new(2024),
         decision_creator: create(
           :dfe_signin_user,
@@ -139,19 +139,19 @@ RSpec.describe Reports::FailedQualificationClaims do
         }
       )
 
-      create(:payment, claims: [lup_claim_approved_failed_qualification_task])
+      create(:payment, claims: [targeted_retention_incentive_claim_approved_failed_qualification_task])
 
       create(
         :task,
         :failed,
         name: "qualifications",
-        claim: lup_claim_approved_failed_qualification_task
+        claim: targeted_retention_incentive_claim_approved_failed_qualification_task
       )
 
       create(
         :note,
         label: "qualifications",
-        claim: lup_claim_approved_failed_qualification_task,
+        claim: targeted_retention_incentive_claim_approved_failed_qualification_task,
         body: <<~HTML
           [DQT Qualification] - Ineligible:
           <pre>
@@ -362,7 +362,7 @@ RSpec.describe Reports::FailedQualificationClaims do
           "Graduate Diploma"
         ],
         [
-          lup_claim_approved_failed_qualification_task.reference,
+          targeted_retention_incentive_claim_approved_failed_qualification_task.reference,
           "2222222",
           "STRI",
           "Payrolled",

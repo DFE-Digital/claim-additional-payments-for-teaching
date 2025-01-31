@@ -18,7 +18,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
     create(:task, :automated, :passed, name: "student_loan_plan", claim:)
   end
 
-  def lup_claim_checking_steps
+  def targeted_retention_incentive_claim_checking_steps
     visit admin_claims_path
     find("a[href='#{admin_claim_tasks_path(claim)}']").click
 
@@ -305,8 +305,8 @@ RSpec.shared_examples "Admin Checks" do |policy|
   end
 
   def claim_checking_steps(policy)
-    if policy == Policies::LevellingUpPremiumPayments
-      lup_claim_checking_steps
+    if policy == Policies::TargetedRetentionIncentivePayments
+      targeted_retention_incentive_claim_checking_steps
     elsif policy == Policies::EarlyCareerPayments
       ecp_claim_checking_steps
     elsif policy == Policies::StudentLoans

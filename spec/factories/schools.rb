@@ -67,23 +67,23 @@ FactoryBot.define do
       not_secondary_equivalent
     end
 
-    trait :levelling_up_premium_payments_eligible do
+    trait :targeted_retention_incentive_payments_eligible do
       transient do
-        levelling_up_premium_payments_award_amount { 2_000 }
+        targeted_retention_incentive_payments_award_amount { 2_000 }
       end
 
       after(:build) do |school, evaluator|
-        create(:levelling_up_premium_payments_award, school: school, award_amount: evaluator.levelling_up_premium_payments_award_amount)
+        create(:targeted_retention_incentive_payments_award, school: school, award_amount: evaluator.targeted_retention_incentive_payments_award_amount)
       end
     end
 
-    trait :levelling_up_premium_payments_ineligible do
+    trait :targeted_retention_incentive_payments_ineligible do
       sequence(:urn, 170000)
     end
 
     trait :combined_journey_eligibile_for_all do
       early_career_payments_eligible
-      levelling_up_premium_payments_eligible
+      targeted_retention_incentive_payments_eligible
     end
 
     trait :state_funded do

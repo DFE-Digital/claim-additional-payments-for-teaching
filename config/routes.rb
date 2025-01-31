@@ -148,7 +148,7 @@ Rails.application.routes.draw do
     end
 
     resources :journey_configurations, only: [:index, :edit, :update]
-    resources :levelling_up_premium_payments_awards, only: [:index, :create]
+    resources :targeted_retention_incentive_payments_awards, only: [:index, :create]
     resource :eligible_ey_providers, only: [:create, :show], path: "eligible-early-years-providers"
     resource :eligible_fe_providers, only: [:create, :show], path: "eligible-further-education-providers"
     resources :reports, only: [:index, :show]

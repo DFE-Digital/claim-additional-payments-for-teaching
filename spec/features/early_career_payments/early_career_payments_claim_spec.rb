@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Teacher Early-Career Payments claims", slow: true do
   include AdditionalPaymentsHelper
 
-  # create a school eligible for ECP and LUP so can walk the whole journey
+  # create a school eligible for ECP and Targeted Retention Incentive so can walk the whole journey
   let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
   let(:journey_session) { Journeys::AdditionalPaymentsForTeaching::Session.last }
@@ -245,7 +245,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       expect(claim.reload.submitted_at).to eq(Time.zone.now)
       policy_options_provided = [
         {"policy" => "EarlyCareerPayments", "award_amount" => "5000.0"},
-        {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+        {"policy" => "TargetedRetentionIncentivePayments", "award_amount" => "2000.0"}
       ]
       expect(claim.policy_options_provided).to eq policy_options_provided
 
@@ -325,7 +325,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       journey_session.answers.assign_attributes(
         attributes_for(
           :additional_payments_answers,
-          :lup_eligible,
+          :targeted_retention_incentive_eligible,
           current_school_id: school.id
         )
       )
@@ -648,7 +648,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       expect(claim.submitted_at).to eq(Time.zone.now)
       policy_options_provided = [
         {"policy" => "EarlyCareerPayments", "award_amount" => "5000.0"},
-        {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+        {"policy" => "TargetedRetentionIncentivePayments", "award_amount" => "2000.0"}
       ]
       expect(claim.reload.policy_options_provided).to eq policy_options_provided
 
@@ -797,7 +797,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       session.answers.assign_attributes(
         attributes_for(
           :additional_payments_answers,
-          :ecp_and_lup_eligible
+          :ecp_and_targeted_retention_incentive_eligible
         )
       )
       session.save!
@@ -951,7 +951,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
         policy_options_provided = [
           {"policy" => "EarlyCareerPayments", "award_amount" => "5000.0"},
-          {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+          {"policy" => "TargetedRetentionIncentivePayments", "award_amount" => "2000.0"}
         ]
         expect(submitted_claim.policy_options_provided).to eq policy_options_provided
         # - Application complete (make sure its Word for Word and styling matches)
