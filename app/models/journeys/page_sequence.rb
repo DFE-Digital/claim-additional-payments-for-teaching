@@ -3,7 +3,7 @@
 # Used to model the sequence of pages that make up the claim process.
 module Journeys
   class PageSequence
-    attr_reader :current_slug
+    attr_reader :current_slug, :slug_sequence
 
     DEAD_END_SLUGS = %w[complete existing-session eligible-later future-eligibility ineligible check-your-email expired-link unauthorised]
     OPTIONAL_SLUGS = %w[postcode-search select-home-address reset-claim]

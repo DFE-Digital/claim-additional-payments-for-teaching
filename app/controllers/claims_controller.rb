@@ -4,6 +4,7 @@ class ClaimsController < BasePublicController
   skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create]
   before_action :initialize_session_slug_history
   before_action :check_page_is_in_sequence, only: [:show, :update]
+  before_action :check_page_is_permissible, only: [:show]
   before_action :set_backlink_path, only: [:show, :update]
   before_action :check_claim_not_in_progress, only: [:new]
   before_action :clear_claim_session, only: [:new], unless: -> { journey.start_with_magic_link? }
@@ -35,7 +36,41 @@ class ClaimsController < BasePublicController
 
   private
 
-  delegate :slugs, :current_slug, :previous_slug, :next_slug, :next_required_slug, to: :page_sequence
+  delegate :slugs, :next_required_slug, to: :page_sequence
+
+  def navigator
+    @navigator ||= Journeys::Navigator.new(
+      current_slug: params[:slug],
+      slug_sequence: page_sequence.slug_sequence,
+      params:,
+      session:
+    )
+  end
+  helper_method :navigator
+
+  def current_slug
+    if journey.use_navigator?
+      params[:slug]
+    else
+      page_sequence.current_slug
+    end
+  end
+
+  def next_slug
+    if journey.use_navigator?
+      navigator.next_slug
+    else
+      page_sequence.next_slug
+    end
+  end
+
+  def previous_slug
+    if journey.use_navigator?
+      navigator.previous_slug
+    else
+      page_sequence.previous_slug
+    end
+  end
 
   def redirect_to_existing_claim_journey
     # If other journey sessions is empty, then the claimant has hit the landing
@@ -74,6 +109,8 @@ class ClaimsController < BasePublicController
   end
 
   def check_page_is_in_sequence
+    return if journey.use_navigator?
+
     unless correct_journey_for_claim_in_progress?
       clear_claim_session
       return redirect_to new_claim_path(request.query_parameters)
@@ -84,11 +121,21 @@ class ClaimsController < BasePublicController
     redirect_to claim_path(current_journey_routing_name, next_required_slug) unless page_sequence.has_completed_journey_until?(params[:slug])
   end
 
+  def check_page_is_permissible
+    return unless journey.use_navigator?
+
+    unless navigator.permissible_slug?
+      redirect_to claim_path(current_journey_routing_name, navigator.furthest_permissible_slug)
+    end
+  end
+
   def initialize_session_slug_history
     session[:slugs] ||= []
   end
 
   def update_session_with_current_slug
+    return if journey.use_navigator?
+
     if @form.nil? || @form.valid?
       session[:slugs] << params[:slug] unless Journeys::PageSequence::DEAD_END_SLUGS.include?(params[:slug])
     else

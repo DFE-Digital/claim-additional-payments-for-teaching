@@ -52,4 +52,21 @@ RSpec.describe Journeys::FurtherEducationPayments::PhysicsCoursesForm, type: :mo
       )
     end
   end
+
+  describe "#clear_answers_from_session" do
+    let(:journey_session) { create(:further_education_payments_session, answers:) }
+    let(:answers) { build(:further_education_payments_answers, answers_hash) }
+
+    let(:answers_hash) do
+      {
+        physics_courses: ["none"]
+      }
+    end
+
+    it "clears relevant answers from session" do
+      expect {
+        subject.clear_answers_from_session
+      }.to change { journey_session.reload.answers.physics_courses }.from(%w[none]).to([])
+    end
+  end
 end

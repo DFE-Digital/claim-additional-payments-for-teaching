@@ -34,6 +34,15 @@ module Journeys
         journey_session.save!
       end
 
+      def clear_answers_from_session
+        journey_session.answers.assign_attributes(
+          possible_school_id: nil,
+          provision_search: nil
+        )
+
+        journey_session.save!
+      end
+
       private
 
       def validate_no_results
@@ -47,7 +56,7 @@ module Journeys
       end
 
       def has_results
-        School.search(provision_search).count > 0
+        @has_results ||= School.search(provision_search).count > 0
       end
 
       def changed_possible_school?

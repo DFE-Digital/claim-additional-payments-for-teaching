@@ -18,7 +18,7 @@
     </p>
 
     <p class="govuk-body">
-      If you are unsure your information is correct, you can <%= govuk_link_to "go back", claim_path(current_journey_routing_name, session[:slugs].last) %> and review your answers. You can also <%= govuk_link_to "start the application again", claim_path(current_journey_routing_name, "landing-page") %>.
+      If you are unsure your information is correct, you can <%= govuk_link_to "go back", claim_path(current_journey_routing_name, navigator.previous_slug) %> and review your answers. You can also <%= govuk_link_to "start the application again", claim_path(current_journey_routing_name, "landing-page") %>.
     </p>
   </div>
 </div>

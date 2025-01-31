@@ -22,6 +22,11 @@ module Journeys
         journey_session.answers.assign_attributes(half_teaching_hours:)
         journey_session.save!
       end
+
+      def clear_answers_from_session
+        journey_session.answers.assign_attributes(half_teaching_hours: nil)
+        journey_session.save!
+      end
     end
   end
 end

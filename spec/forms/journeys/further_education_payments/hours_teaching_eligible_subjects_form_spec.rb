@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe Journeys::FurtherEducationPayments::HoursTeachingEligibleSubjectsForm, type: :model do
   let(:journey) { Journeys::FurtherEducationPayments }
   let(:journey_session) { create(:further_education_payments_session) }
+  let(:hours_teaching_eligible_subjects) { nil }
 
   let(:params) do
     ActionController::Parameters.new(
@@ -53,6 +54,23 @@ RSpec.describe Journeys::FurtherEducationPayments::HoursTeachingEligibleSubjects
           .to(false)
         )
       end
+    end
+  end
+
+  describe "#clear_answers_from_session" do
+    let(:journey_session) { create(:further_education_payments_session, answers:) }
+    let(:answers) { build(:further_education_payments_answers, answers_hash) }
+
+    let(:answers_hash) do
+      {
+        hours_teaching_eligible_subjects: true
+      }
+    end
+
+    it "clears relevant answers from session" do
+      expect {
+        subject.clear_answers_from_session
+      }.to change { journey_session.reload.answers.hours_teaching_eligible_subjects }.from(true).to(nil)
     end
   end
 end

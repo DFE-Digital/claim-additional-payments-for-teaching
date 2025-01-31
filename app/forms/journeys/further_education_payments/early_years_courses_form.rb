@@ -47,6 +47,11 @@ module Journeys
         journey_session.save!
       end
 
+      def clear_answers_from_session
+        journey_session.answers.assign_attributes(early_years_courses: [])
+        journey_session.save!
+      end
+
       private
 
       def clean_courses

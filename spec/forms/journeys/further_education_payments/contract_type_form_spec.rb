@@ -44,47 +44,21 @@ RSpec.describe Journeys::FurtherEducationPayments::ContractTypeForm, type: :mode
         .to(contract_type)
       )
     end
+  end
 
-    context "when changing answers from fixed term contract" do
-      let(:answers) do
-        build(
-          :further_education_payments_answers,
-          school_id: college.id,
-          contract_type: "fixed_term",
-          fixed_term_full_year: false,
-          taught_at_least_one_term: true
-        )
-      end
-
-      it "resets fixed_term_full_year + taught_at_least_one_term" do
-        subject.contract_type = "permanent"
-
-        expect { expect(subject.save).to be(true) }.to(
-          change { journey_session.reload.answers.contract_type }.to("permanent")
-          .and(change { journey_session.answers.fixed_term_full_year }.to(nil)
-          .and(change { journey_session.answers.taught_at_least_one_term }.to(nil)))
-        )
-      end
+  describe "#clear_answers_from_session" do
+    let(:answers) do
+      build(
+        :further_education_payments_answers,
+        school_id: college.id,
+        contract_type: "permanent"
+      )
     end
 
-    context "when changing answers from variable contract" do
-      let(:answers) do
-        build(
-          :further_education_payments_answers,
-          school_id: college.id,
-          contract_type: "variable_hours",
-          taught_at_least_one_term: true
-        )
-      end
-
-      it "resets taught_at_least_one_term" do
-        subject.contract_type = "permanent"
-
-        expect { expect(subject.save).to be(true) }.to(
-          change { journey_session.reload.answers.contract_type }.to("permanent")
-          .and(change { journey_session.answers.taught_at_least_one_term }.to(nil))
-        )
-      end
+    it "clears relevant answers from session" do
+      expect {
+        subject.clear_answers_from_session
+      }.to change { journey_session.reload.answers.contract_type }.from("permanent").to(nil)
     end
   end
 end

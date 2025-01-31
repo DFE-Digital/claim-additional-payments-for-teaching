@@ -4,9 +4,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SupplyTeacherForm do
   before { create(:journey_configuration, :additional_payments) }
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
-
   let(:journey_session) { build(:"#{journey::I18N_NAMESPACE}_session") }
-
   let(:slug) { "supply-teacher" }
 
   subject(:form) do

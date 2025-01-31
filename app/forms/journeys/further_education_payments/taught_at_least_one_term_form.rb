@@ -29,6 +29,11 @@ module Journeys
         journey_session.save!
       end
 
+      def clear_answers_from_session
+        journey_session.answers.assign_attributes(taught_at_least_one_term: nil)
+        journey_session.save!
+      end
+
       def school
         journey_session.answers.school
       end

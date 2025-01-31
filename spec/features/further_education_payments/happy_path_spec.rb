@@ -131,7 +131,7 @@ RSpec.feature "Further education payments" do
     click_on "Continue"
 
     expect(page).to have_content("What is your home address?")
-    click_link("Enter your address manually")
+    click_button("Enter your address manually")
 
     expect(page).to have_content("What is your address?")
     fill_in "House number or name", with: "57"

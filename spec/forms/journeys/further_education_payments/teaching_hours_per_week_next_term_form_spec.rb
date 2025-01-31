@@ -45,4 +45,18 @@ RSpec.describe Journeys::FurtherEducationPayments::TeachingHoursPerWeekNextTermF
       )
     end
   end
+
+  describe "#clear_answers_from_session" do
+    let(:answers_hash) do
+      {
+        teaching_hours_per_week_next_term: "at_least_2_5"
+      }
+    end
+
+    it "clears relevant answers from session" do
+      expect {
+        subject.clear_answers_from_session
+      }.to change { journey_session.reload.answers.teaching_hours_per_week_next_term }.from("at_least_2_5").to(nil)
+    end
+  end
 end

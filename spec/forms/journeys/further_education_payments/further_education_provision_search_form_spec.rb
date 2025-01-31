@@ -2,7 +2,9 @@ require "rails_helper"
 
 RSpec.describe Journeys::FurtherEducationPayments::FurtherEducationProvisionSearchForm, type: :model do
   let(:journey) { Journeys::FurtherEducationPayments }
-  let(:journey_session) { create(:further_education_payments_session) }
+  let(:journey_session) { create(:further_education_payments_session, answers:) }
+  let(:answers) { build(:further_education_payments_answers, answers_hash) }
+  let(:answers_hash) { {} }
   let(:college) { create(:school) }
 
   let(:provision_search) { nil }
@@ -65,11 +67,27 @@ RSpec.describe Journeys::FurtherEducationPayments::FurtherEducationProvisionSear
     context "when possible_school_id supplied" do
       let(:possible_school_id) { college.id }
 
-      it "updates the journey session with possible_school_id" do
+      it "updates the journey session with school_id" do
         expect { expect(subject.save).to be(true) }.to(
           change { journey_session.reload.answers.possible_school_id }.to(possible_school_id)
         )
       end
+    end
+  end
+
+  describe "#clear_answers_from_session" do
+    let(:answers_hash) do
+      {
+        possible_school_id: college.id,
+        provision_search: college.name
+      }
+    end
+
+    it "clears relevant answers from session" do
+      expect {
+        subject.clear_answers_from_session
+      }.to change { journey_session.reload.answers.possible_school_id }.from(college.id).to(nil)
+        .and change { journey_session.reload.answers.provision_search }.from(college.name).to(nil)
     end
   end
 end
