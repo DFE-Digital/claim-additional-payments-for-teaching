@@ -153,5 +153,9 @@ module Policies
     def closed?(claim_year)
       claim_year > POLICY_END_YEAR
     end
+
+    def max_topup_amount(claim)
+      Award.where(academic_year: claim.academic_year.to_s).maximum(:award_amount)
+    end
   end
 end

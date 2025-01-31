@@ -311,15 +311,11 @@ class Claim < ApplicationRecord
   end
 
   def all_payrolled?
-    if has_lupp_policy?
-      topups.all? { |t| t.payrolled? } && payrolled?
-    else
-      payrolled?
-    end
+    topups.all? { |t| t.payrolled? } && payrolled?
   end
 
   def topupable?
-    has_lupp_policy? && submitted? && all_payrolled?
+    submitted? && all_payrolled?
   end
 
   def full_name

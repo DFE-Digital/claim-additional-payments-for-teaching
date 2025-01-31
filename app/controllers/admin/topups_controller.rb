@@ -5,13 +5,15 @@ class Admin::TopupsController < Admin::BaseAdminController
   before_action :ensure_claim_is_topupable, only: [:new, :create]
 
   def new
-    @topup = @claim.topups.build
+    @form = Admin::CreateTopupForm.new(claim: @claim, created_by: admin_user)
   end
 
   def create
-    @topup = @claim.topups.build(topup_params.merge(created_by: admin_user))
+    @form = Admin::CreateTopupForm.new(claim: @claim, created_by: admin_user, params: topup_params)
 
-    if @topup.save
+    @form.step = @form.next_step if @form.valid?(@form.step)
+
+    if @form.complete? && @form.save!
       redirect_to admin_claim_payments_url(@claim), notice: "Claim top up payment created"
     else
       render "new"
@@ -19,11 +21,12 @@ class Admin::TopupsController < Admin::BaseAdminController
   end
 
   def destroy
-    if @topup.payrolled?
-      redirect_to admin_claim_payments_url(@claim), notice: "Top up cannot be removed if payrolled"
-    else
-      @topup.destroy
+    form = Admin::DestroyTopupForm.new(topup: @topup, removed_by: admin_user)
+
+    if form.save
       redirect_to admin_claim_payments_url(@claim), notice: "Top up removed"
+    else
+      redirect_to admin_claim_payments_url(@claim), notice: form.errors.full_messages.to_sentence
     end
   end
 
@@ -38,7 +41,7 @@ class Admin::TopupsController < Admin::BaseAdminController
   end
 
   def topup_params
-    params.require(:topup).permit(:award_amount)
+    params.require(:topup).permit(:award_amount, :confirmation, :step)
   end
 
   def load_topup
