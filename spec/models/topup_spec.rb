@@ -3,12 +3,12 @@ require "rails_helper"
 RSpec.describe Topup, type: :model do
   let(:user) { create(:dfe_signin_user) }
   let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
-  let(:lup_claim) { create(:claim, :approved, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility) }
-  let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, award_amount: 2000.0) }
+  let(:lup_claim) { create(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments, eligibility: lup_eligibility) }
+  let(:lup_eligibility) { build(:targeted_retention_incentive_payments_eligibility, :eligible, award_amount: 2000.0) }
   let!(:payment) { create(:payment, claims: [lup_claim]) }
 
   before do
-    award = lup_claim.eligibility.current_school.levelling_up_premium_payments_awards.first
+    award = lup_claim.eligibility.current_school.targeted_retention_incentive_payments_awards.first
     award.update!(award_amount: award.award_amount + BigDecimal("1000.00"))
   end
 

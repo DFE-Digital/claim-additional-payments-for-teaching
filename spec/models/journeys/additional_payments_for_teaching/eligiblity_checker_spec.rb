@@ -17,7 +17,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityChecker, type
         .with(answers: journey_session.answers)
         .and_return(ecp_policy_eligibility_checker)
 
-      allow(Policies::LevellingUpPremiumPayments::PolicyEligibilityChecker)
+      allow(Policies::TargetedRetentionIncentivePayments::PolicyEligibilityChecker)
         .to receive(:new)
         .with(answers: journey_session.answers)
         .and_return(lupp_policy_eligibility_checker)

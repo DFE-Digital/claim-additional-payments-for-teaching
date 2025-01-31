@@ -5,13 +5,13 @@ module Claims
         claim_year: answers.policy_year,
         itt_year: answers.itt_academic_year
       )
-      all_lup_subjects = Policies::LevellingUpPremiumPayments.fixed_subject_symbols
+      all_lup_subjects = Policies::TargetedRetentionIncentivePayments.fixed_subject_symbols
 
       hint_subject_symbols = Set[]
 
       if answers.nqt_in_academic_year_after_itt
         ecp_eligibility_status = Policies::EarlyCareerPayments::PolicyEligibilityChecker.new(answers: answers).status
-        lup_eligibility_status = Policies::LevellingUpPremiumPayments::PolicyEligibilityChecker.new(answers: answers).status
+        lup_eligibility_status = Policies::TargetedRetentionIncentivePayments::PolicyEligibilityChecker.new(answers: answers).status
 
         potentially_eligible_for_lup = lup_eligibility_status != :ineligible
         potentially_eligible_for_ecp = ecp_eligibility_status != :ineligible

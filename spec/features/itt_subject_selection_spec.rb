@@ -14,7 +14,7 @@ RSpec.feature "ITT subject selection", slow: true do
     end
 
     context "LUP school" do
-      let!(:school) { create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_eligible) }
+      let!(:school) { create(:school, :early_career_payments_eligible, :targeted_retention_incentive_payments_eligible) }
 
       context "ITT year 2017" do
         let(:itt_year) { AcademicYear.new(2017) }
@@ -95,7 +95,7 @@ RSpec.feature "ITT subject selection", slow: true do
     end
 
     context "ECP-only school" do
-      let!(:school) { create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible) }
+      let!(:school) { create(:school, :early_career_payments_eligible, :targeted_retention_incentive_payments_ineligible) }
 
       context "ITT year 2017" do
         let(:itt_year) { AcademicYear.new(2017) }
@@ -179,7 +179,7 @@ RSpec.feature "ITT subject selection", slow: true do
   private
 
   def navigate_to_year_selection(school)
-    start_levelling_up_premium_payments_claim
+    start_targeted_retention_incentive_payments_claim
     skip_tid
 
     # - Which school do you teach at

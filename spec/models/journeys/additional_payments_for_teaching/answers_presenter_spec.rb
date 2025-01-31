@@ -163,7 +163,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
     end
 
     context "LUP" do
-      let(:policy) { Policies::LevellingUpPremiumPayments }
+      let(:policy) { Policies::TargetedRetentionIncentivePayments }
 
       context "entire output" do
         let(:expected_itt_year) { AcademicYear.new(answers.itt_academic_year) }
@@ -174,7 +174,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
             :lup_ineligible_itt_subject,
             :relevant_degree,
             :long_term_directly_employed_supply_teacher,
-            selected_policy: "LevellingUpPremiumPayments"
+            selected_policy: "TargetedRetentionIncentivePayments"
           )
         end
 
@@ -212,7 +212,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
             route_into_teaching:
           )
         end
-        let(:levelling_up_premium_payments_dqt_reacher_record) do
+        let(:targeted_retention_incentive_payments_dqt_reacher_record) do
           double(
             itt_academic_year_for_claim:,
             eligible_itt_subject_for_claim:,
@@ -231,7 +231,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
             :lup_eligible,
             :relevant_degree,
             qualifications_details_check: qualifications_details_check,
-            selected_policy: "LevellingUpPremiumPayments"
+            selected_policy: "TargetedRetentionIncentivePayments"
           )
         end
 
@@ -246,8 +246,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
           allow_any_instance_of(
             Journeys::AdditionalPaymentsForTeaching::SessionAnswers
           ).to(
-            receive(:levelling_up_premium_payments_dqt_reacher_record)
-              .and_return(levelling_up_premium_payments_dqt_reacher_record)
+            receive(:targeted_retention_incentive_payments_dqt_reacher_record)
+              .and_return(targeted_retention_incentive_payments_dqt_reacher_record)
           )
         end
 
@@ -284,7 +284,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
           build(
             :additional_payments_answers,
             :lup_eligible,
-            selected_policy: "LevellingUpPremiumPayments"
+            selected_policy: "TargetedRetentionIncentivePayments"
           )
         end
 
@@ -314,7 +314,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::AnswersPresenter do
             :lup_eligible,
             :lup_ineligible_itt_subject,
             :relevant_degree,
-            selected_policy: "LevellingUpPremiumPayments"
+            selected_policy: "TargetedRetentionIncentivePayments"
           )
         end
 

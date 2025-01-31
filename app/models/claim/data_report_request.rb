@@ -43,7 +43,7 @@ class Claim
         end
       end
 
-      class LevellingUpPremiumPayments < Base
+      class TargetedRetentionIncentivePayments < Base
         def to_csv_row
           [
             ExcelUtils.escape_formulas(claim.reference),
@@ -60,10 +60,10 @@ class Claim
         end
       end
 
-      class StudentLoans < LevellingUpPremiumPayments
+      class StudentLoans < TargetedRetentionIncentivePayments
       end
 
-      class EarlyCareerPayments < LevellingUpPremiumPayments
+      class EarlyCareerPayments < TargetedRetentionIncentivePayments
       end
 
       class FurtherEducationPayments < Base

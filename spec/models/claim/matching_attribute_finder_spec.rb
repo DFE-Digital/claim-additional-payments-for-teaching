@@ -45,7 +45,7 @@ RSpec.describe Claim::MatchingAttributeFinder do
         bank_sort_code: "972654",
         academic_year: AcademicYear.new("2019"),
         building_society_roll_number: "123456789/ABCD",
-        policy: Policies::LevellingUpPremiumPayments,
+        policy: Policies::TargetedRetentionIncentivePayments,
         eligibility_attributes: {teacher_reference_number: "0902344"})
     }
 

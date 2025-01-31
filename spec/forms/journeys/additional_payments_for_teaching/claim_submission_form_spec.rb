@@ -11,7 +11,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm do
     create(
       :school,
       :early_career_payments_eligible,
-      :levelling_up_premium_payments_eligible
+      :targeted_retention_incentive_payments_eligible
     )
   end
 
@@ -211,7 +211,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm do
             },
             {
               "award_amount" => "2000.0",
-              "policy" => "LevellingUpPremiumPayments"
+              "policy" => "TargetedRetentionIncentivePayments"
             }
           ]
         )
@@ -234,7 +234,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm do
       let(:answers) do
         claim_answers.merge(
           eligibility_answers.merge(
-            selected_policy: "LevellingUpPremiumPayments"
+            selected_policy: "TargetedRetentionIncentivePayments"
           )
         )
       end
@@ -252,7 +252,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm do
             },
             {
               "award_amount" => "2000.0",
-              "policy" => "LevellingUpPremiumPayments"
+              "policy" => "TargetedRetentionIncentivePayments"
             }
           ]
         )
@@ -261,7 +261,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm do
         expect(claim.submitted_at).to eq DateTime.new(2024, 3, 1, 9, 0, 0)
 
         expect(claim.eligibility_type).to(
-          eq("Policies::LevellingUpPremiumPayments::Eligibility")
+          eq("Policies::TargetedRetentionIncentivePayments::Eligibility")
         )
 
         expect(journey_session.claim).to eq(claim)

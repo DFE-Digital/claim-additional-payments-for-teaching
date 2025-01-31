@@ -22,7 +22,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityConfirmedForm
 
     it do
       is_expected.to validate_inclusion_of(:selected_claim_policy)
-        .in_array(["EarlyCareerPayments", "LevellingUpPremiumPayments"])
+        .in_array(["EarlyCareerPayments", "TargetedRetentionIncentivePayments"])
         .with_message("Select a valid additional payment")
     end
   end
@@ -40,13 +40,13 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityConfirmedForm
     end
 
     context "valid params - ECP" do
-      let(:claim_params) { {selected_claim_policy: "LevellingUpPremiumPayments"} }
+      let(:claim_params) { {selected_claim_policy: "TargetedRetentionIncentivePayments"} }
       let(:answers) { build(:additional_payments_answers, :lup_eligible) }
 
       it { expect(form.save).to eq(true) }
 
       it do
-        expect { form.save }.to change { journey_session.reload.answers.selected_policy }.to("LevellingUpPremiumPayments")
+        expect { form.save }.to change { journey_session.reload.answers.selected_policy }.to("TargetedRetentionIncentivePayments")
       end
     end
 
@@ -102,7 +102,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityConfirmedForm
     end
 
     context "when the policy in the argument is LUPP" do
-      let(:policy_in_the_argument) { Policies::LevellingUpPremiumPayments }
+      let(:policy_in_the_argument) { Policies::TargetedRetentionIncentivePayments }
 
       context "selected policy is ECP" do
         let(:with_selected_policy) { :with_selected_policy_ecp }
@@ -126,15 +126,15 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityConfirmedForm
     end
 
     context "when the first eligible policy is EarlyCareerPayments" do
-      let(:sorted_policies) { [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments] }
+      let(:sorted_policies) { [Policies::EarlyCareerPayments, Policies::TargetedRetentionIncentivePayments] }
 
       it { is_expected.to eq("earlycareerpayments") }
     end
 
-    context "when the first eligible policy is LevellingUpPremiumPayments" do
-      let(:sorted_policies) { [Policies::LevellingUpPremiumPayments, Policies::EarlyCareerPayments] }
+    context "when the first eligible policy is TargetedRetentionIncentivePayments" do
+      let(:sorted_policies) { [Policies::TargetedRetentionIncentivePayments, Policies::EarlyCareerPayments] }
 
-      it { is_expected.to eq("levellinguppremiumpayments") }
+      it { is_expected.to eq("targetedretentionincentivepayments") }
     end
   end
 
@@ -145,6 +145,6 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibilityConfirmedForm
       build(:additional_payments_answers, :ecp_and_lup_eligible)
     end
 
-    it { is_expected.to eq(["EarlyCareerPayments", "LevellingUpPremiumPayments"]) }
+    it { is_expected.to eq(["EarlyCareerPayments", "TargetedRetentionIncentivePayments"]) }
   end
 end

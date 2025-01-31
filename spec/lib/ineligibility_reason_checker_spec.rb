@@ -7,7 +7,7 @@ RSpec.describe IneligibilityReasonChecker do
   let(:logged_in_with_tid) { nil }
   let(:qualifications_details_check) { nil }
 
-  let(:school_eligible_for_ecp_and_lup) { create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_eligible) }
+  let(:school_eligible_for_ecp_and_lup) { create(:school, :early_career_payments_eligible, :targeted_retention_incentive_payments_eligible) }
   let(:school_eligible_for_ecp_but_not_lup) { create(:school, :early_career_payments_eligible) }
   let(:school_ineligible_for_both_ecp_and_lup) { create(:school, :early_career_payments_ineligible) }
 
@@ -15,10 +15,10 @@ RSpec.describe IneligibilityReasonChecker do
 
   # sanity check of factories
   specify { expect(Policies::EarlyCareerPayments::SchoolEligibility.new(school_eligible_for_ecp_but_not_lup)).to be_eligible }
-  specify { expect(Policies::LevellingUpPremiumPayments::SchoolEligibility.new(school_eligible_for_ecp_but_not_lup)).not_to be_eligible }
+  specify { expect(Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(school_eligible_for_ecp_but_not_lup)).not_to be_eligible }
 
   specify { expect(Policies::EarlyCareerPayments::SchoolEligibility.new(school_ineligible_for_both_ecp_and_lup)).not_to be_eligible }
-  specify { expect(Policies::LevellingUpPremiumPayments::SchoolEligibility.new(school_ineligible_for_both_ecp_and_lup)).not_to be_eligible }
+  specify { expect(Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(school_ineligible_for_both_ecp_and_lup)).not_to be_eligible }
 
   let(:journey_session) do
     create(:additional_payments_session, answers: answers)
@@ -237,7 +237,7 @@ RSpec.describe IneligibilityReasonChecker do
     end
 
     context "trainee teacher in an LUP school who isn't training to teach an eligible subject nor has a relevant degree" do
-      let(:school) { build(:school, :levelling_up_premium_payments_eligible) }
+      let(:school) { build(:school, :targeted_retention_incentive_payments_eligible) }
 
       let(:answers) do
         build(

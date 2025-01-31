@@ -35,7 +35,7 @@
           <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header"><%= l(payroll_run.created_at.to_date) %></th>
             <td class="govuk-table__cell"><%= payroll_run.number_of_claims_for_policy(:all, filter: :claims) %></td>
-            <td class="govuk-table__cell"><%= payroll_run.number_of_claims_for_policy(Policies::LevellingUpPremiumPayments, filter: :topups) %></td>
+            <td class="govuk-table__cell"><%= payroll_run.number_of_claims_for_policy(Policies::TargetedRetentionIncentivePayments, filter: :topups) %></td>
             <td class="govuk-table__cell">
               <% if payroll_run.all_payments_confirmed? %>
                 Uploaded

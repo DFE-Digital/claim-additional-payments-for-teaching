@@ -25,7 +25,7 @@ RSpec.shared_examples "Admin Edit Claim Feature" do |policy|
 
   before do
     create(:journey_configuration, policy.locale_key)
-    eligibility.update(eligible_degree_subject: false) if policy == Policies::LevellingUpPremiumPayments
+    eligibility.update(eligible_degree_subject: false) if policy == Policies::TargetedRetentionIncentivePayments
     @signed_in_user = sign_in_as_service_operator
   end
 

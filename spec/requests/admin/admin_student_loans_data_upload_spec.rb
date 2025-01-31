@@ -75,7 +75,7 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
             nino: "QQ123456B",
             full_name: "Agata Christie",
             date_of_birth: "20/03/1977",
-            policy_name: "LevellingUpPremiumPayments",
+            policy_name: "TargetedRetentionIncentivePayments",
             no_of_plans_currently_repaying: "1",
             plan_type_of_deduction: "2",
             amount: "50"

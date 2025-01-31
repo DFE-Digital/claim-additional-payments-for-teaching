@@ -10,12 +10,12 @@ FactoryBot.define do
       subject_description_sfr { "Problem Solving, Reasoning and Numeracy" }
     end
 
-    trait :levelling_up_premium_payments_matched do
+    trait :targeted_retention_incentive_payments_matched do
       teacher_reference_number { 1560179 }
       subject_description_sfr { "ICT" }
     end
 
-    trait :levelling_up_premium_payments_unmatched do
+    trait :targeted_retention_incentive_payments_unmatched do
       teacher_reference_number { 1560179 }
       subject_description_sfr { "Problem Solving, Reasoning and Numeracy" }
     end

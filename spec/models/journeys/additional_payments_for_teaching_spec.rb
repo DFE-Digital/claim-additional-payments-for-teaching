@@ -121,7 +121,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching do
       end
 
       context "LUP policy" do
-        let(:policy) { Policies::LevellingUpPremiumPayments }
+        let(:policy) { Policies::TargetedRetentionIncentivePayments }
 
         # 2019 is eligible now - but falls out of the 5 year window next year
         it_behaves_like "true for years", 2020..2023, AcademicYear.new(2024)

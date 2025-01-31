@@ -2,7 +2,7 @@
 :shared:
   :claims:
     - onelogin_uid
-  :levelling_up_premium_payments_eligibilities:
+  :targeted_retention_incentive_payments_eligibilities:
     - teacher_reference_number
   :early_career_payments_eligibilities:
     - teacher_reference_number

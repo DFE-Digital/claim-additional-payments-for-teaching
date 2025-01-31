@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Managing Levelling Up Premium Payments school awards" do
+RSpec.feature "Managing targeted_retention_incentive Payments school awards" do
   let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
 
   let(:csv_file) { "spec/fixtures/files/lupp_school_awards_good.csv" }
@@ -25,8 +25,8 @@ RSpec.feature "Managing Levelling Up Premium Payments school awards" do
 
     # When awards exist
     freeze_time do
-      award = create(:levelling_up_premium_payments_award, academic_year: journey_configuration.current_academic_year)
-      create(:levelling_up_premium_payments_award, academic_year: journey_configuration.current_academic_year - 1)
+      award = create(:targeted_retention_incentive_payments_award, academic_year: journey_configuration.current_academic_year)
+      create(:targeted_retention_incentive_payments_award, academic_year: journey_configuration.current_academic_year - 1)
 
       visit current_path
       expect(page).to have_text "The School Targeted Retention Incentive school award amounts for academic year #{journey_configuration.current_academic_year} were updated on #{Time.zone.now.strftime("%-d %B %Y")}"

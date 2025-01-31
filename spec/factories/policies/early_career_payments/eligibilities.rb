@@ -34,7 +34,7 @@ FactoryBot.define do
     end
 
     trait :eligible_school_ecp_only do
-      association :current_school, factory: [:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible]
+      association :current_school, factory: [:school, :early_career_payments_eligible, :targeted_retention_incentive_payments_ineligible]
     end
 
     trait :eligible_school_ecp_and_lup do

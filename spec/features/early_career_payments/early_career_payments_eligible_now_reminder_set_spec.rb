@@ -4,7 +4,7 @@ RSpec.feature "Eligible now can set a reminder for next year." do
   let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023)) }
   let(:eligibility_attributes) { attributes_for(:early_career_payments_eligibility, :eligible, current_school_id: school.id) }
   let(:academic_year) { journey_configuration.current_academic_year }
-  let(:school) { create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_eligible) }
+  let(:school) { create(:school, :early_career_payments_eligible, :targeted_retention_incentive_payments_eligible) }
 
   it "auto-sets a reminders email and name from claim params and displays the correct year" do
     start_early_career_payments_claim
@@ -69,7 +69,7 @@ RSpec.feature "Completed Applications - Reminders" do
     context "when accepting claims for AcademicYear #{policy[:policy_year]}" do
       let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: policy[:policy_year]) }
       let(:academic_year) { journey_configuration.current_academic_year }
-      let(:school) { create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_eligible) }
+      let(:school) { create(:school, :early_career_payments_eligible, :targeted_retention_incentive_payments_eligible) }
 
       policy[:eligible_now].each do |scenario|
         reminder_status = (scenario[:invited_to_set_reminder] == true) ? "CAN" : "CANNOT"

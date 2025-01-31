@@ -35,7 +35,7 @@ FactoryBot.define do
       raise "Policy of Claim (#{evaluator.policy}) must match Eligibility class (#{claim.eligibility.policy})" if evaluator.policy != claim.eligibility.policy
 
       claim_academic_year =
-        if [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments].include?(evaluator.policy)
+        if [Policies::EarlyCareerPayments, Policies::TargetedRetentionIncentivePayments].include?(evaluator.policy)
           Journeys::AdditionalPaymentsForTeaching.configuration.current_academic_year
         elsif evaluator.policy == Policies::FurtherEducationPayments
           Journeys::FurtherEducationPayments.configuration.current_academic_year
@@ -115,7 +115,7 @@ FactoryBot.define do
       policy_options_provided {
         [
           {"policy" => "EarlyCareerPayments", "award_amount" => "2000.0"},
-          {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+          {"policy" => "TargetedRetentionIncentivePayments", "award_amount" => "2000.0"}
         ]
       }
     end
@@ -131,7 +131,7 @@ FactoryBot.define do
     trait :policy_options_provided_lup_only do
       policy_options_provided {
         [
-          {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+          {"policy" => "TargetedRetentionIncentivePayments", "award_amount" => "2000.0"}
         ]
       }
     end
