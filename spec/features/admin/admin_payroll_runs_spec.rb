@@ -9,10 +9,10 @@ RSpec.feature "Payroll" do
   scenario "Service operator creates a payroll run" do
     click_on "Payroll"
 
-    create(:claim, :approved, policy: Policies::StudentLoans)
-    create(:claim, :approved, policy: Policies::StudentLoans)
-    create(:claim, :approved, policy: Policies::EarlyCareerPayments)
-    create(:claim, :approved, policy: Policies::LevellingUpPremiumPayments)
+    create(:claim, :approved, :random_personal_details, policy: Policies::StudentLoans)
+    create(:claim, :approved, :random_personal_details, policy: Policies::StudentLoans)
+    create(:claim, :approved, :random_personal_details, policy: Policies::EarlyCareerPayments)
+    create(:claim, :approved, :random_personal_details, policy: Policies::LevellingUpPremiumPayments)
 
     paid_lup_claim = nil
     travel_to 2.months.ago do
