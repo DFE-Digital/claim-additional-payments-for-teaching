@@ -9,7 +9,8 @@ module Policies
 
       include ActiveSupport::NumberHelper
 
-      self.table_name = "levelling_up_premium_payments_eligibilities"
+      self.table_name = "targeted_retention_incentive_payments_eligibilities"
+
       has_one :claim, as: :eligibility, inverse_of: :eligibility
       belongs_to :current_school, optional: true, class_name: "School"
 
