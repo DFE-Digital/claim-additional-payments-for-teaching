@@ -48,7 +48,7 @@ class ReminderMailer < ApplicationMailer
     )
   end
 
-  # TODO: This template only accommodates LUP/ECP claims currently. Needs to
+  # TODO: This template only accommodates Targeted Retention Incentive/ECP claims currently. Needs to
   # be changed to support other policies otherwise claimants will receive the
   # wrong information. Also most of the personalisations are not used in the
   # template.

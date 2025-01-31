@@ -57,7 +57,7 @@ RSpec.describe ClaimMailer, type: :mailer do
   end
 
   # Characteristics common to all policies
-  [Policies::EarlyCareerPayments, Policies::StudentLoans, Policies::LevellingUpPremiumPayments, Policies::InternationalRelocationPayments].each do |policy|
+  [Policies::EarlyCareerPayments, Policies::StudentLoans, Policies::TargetedRetentionIncentivePayments, Policies::InternationalRelocationPayments].each do |policy|
     context "with a #{policy} claim" do
       let!(:journey_configuration) { create(:journey_configuration, policy.to_s.underscore) }
 
@@ -73,7 +73,7 @@ RSpec.describe ClaimMailer, type: :mailer do
           end
         end
 
-        context "when LevellingUpPremiumPayments", if: policy == Policies::LevellingUpPremiumPayments do
+        context "when TargetedRetentionIncentivePayments", if: policy == Policies::TargetedRetentionIncentivePayments do
           it "uses the correct template" do
             expect(mail.template_id).to eq "0158e1c4-ffa2-4b5e-86f9-0dead4e68587"
           end
@@ -104,7 +104,7 @@ RSpec.describe ClaimMailer, type: :mailer do
           end
         end
 
-        context "when LevellingUpPremiumPayments", if: policy == Policies::LevellingUpPremiumPayments do
+        context "when TargetedRetentionIncentivePayments", if: policy == Policies::TargetedRetentionIncentivePayments do
           it "uses the correct template" do
             expect(mail.template_id).to eq "78e4bf4a-5d4b-4328-9384-116c08183a77"
           end
@@ -179,7 +179,7 @@ RSpec.describe ClaimMailer, type: :mailer do
           include_examples "template id and personalisation keys"
         end
 
-        context "when LevellingUpPremiumPayments", if: policy == Policies::LevellingUpPremiumPayments do
+        context "when TargetedRetentionIncentivePayments", if: policy == Policies::TargetedRetentionIncentivePayments do
           let(:expected_template_id) { "c20e8d85-ef71-4395-8f8b-90fcbd824b86" }
 
           let(:expected_rejected_reasons_keys) do
@@ -277,7 +277,7 @@ RSpec.describe ClaimMailer, type: :mailer do
           end
         end
 
-        context "when LevellingUpPremiumPayments", if: policy == Policies::LevellingUpPremiumPayments do
+        context "when TargetedRetentionIncentivePayments", if: policy == Policies::TargetedRetentionIncentivePayments do
           it "uses the correct template" do
             expect(mail.template_id).to eq "a10322ed-7829-44b2-95c6-d5cc686d2c04"
           end
@@ -370,8 +370,8 @@ RSpec.describe ClaimMailer, type: :mailer do
       end
     end
 
-    context "with an LevellingUpPremiumPayments claim" do
-      let(:policy) { Policies::LevellingUpPremiumPayments }
+    context "with an TargetedRetentionIncentivePayments claim" do
+      let(:policy) { Policies::TargetedRetentionIncentivePayments }
 
       it "has personalisation keys for: one time password, validity_duration,first_name and support_email_address" do
         expect(mail.personalisation.keys.sort).to eql([:email_subject, :first_name, :journey_name, :one_time_password, :support_email_address, :validity_duration])

@@ -16,7 +16,7 @@ RSpec.describe Claim, type: :model do
       context "with Policies::EarlyCareerPayments" do
         let(:claim_1) { create(:claim, policy: Policies::StudentLoans) }
         let(:claim_2) { create(:claim, policy: Policies::EarlyCareerPayments) }
-        let(:claim_3) { create(:claim, policy: Policies::LevellingUpPremiumPayments) }
+        let(:claim_3) { create(:claim, policy: Policies::TargetedRetentionIncentivePayments) }
 
         it do
           expect(Claim.by_policy(Policies::EarlyCareerPayments)).to contain_exactly(claim_2)
@@ -27,20 +27,20 @@ RSpec.describe Claim, type: :model do
         let(:claim_1) { create(:claim, policy: Policies::StudentLoans) }
         let(:claim_2) { create(:claim, policy: Policies::StudentLoans) }
         let(:claim_3) { create(:claim, policy: Policies::EarlyCareerPayments) }
-        let(:claim_4) { create(:claim, policy: Policies::LevellingUpPremiumPayments) }
+        let(:claim_4) { create(:claim, policy: Policies::TargetedRetentionIncentivePayments) }
 
         it do
           expect(Claim.by_policy(Policies::StudentLoans)).to contain_exactly(claim_1, claim_2)
         end
       end
 
-      context "with LevellingUpPremiumPayments" do
+      context "with TargetedRetentionIncentivePayments" do
         let(:claim_1) { create(:claim, policy: Policies::StudentLoans) }
         let(:claim_2) { create(:claim, policy: Policies::EarlyCareerPayments) }
-        let(:claim_3) { create(:claim, policy: Policies::LevellingUpPremiumPayments) }
+        let(:claim_3) { create(:claim, policy: Policies::TargetedRetentionIncentivePayments) }
 
         it do
-          expect(Claim.by_policy(Policies::LevellingUpPremiumPayments)).to contain_exactly(claim_3)
+          expect(Claim.by_policy(Policies::TargetedRetentionIncentivePayments)).to contain_exactly(claim_3)
         end
       end
     end
@@ -1098,8 +1098,8 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe "#has_lupp_policy?" do
-    subject(:result) { claim.has_lupp_policy? }
+  describe "#has_targeted_retention_incentive_policy?" do
+    subject(:result) { claim.has_targeted_retention_incentive_policy? }
     let(:claim) { create(:claim, policy:) }
 
     context "with student loans policy" do
@@ -1115,14 +1115,14 @@ RSpec.describe Claim, type: :model do
     end
 
     context "with levelling-up premium payments policy" do
-      let(:policy) { Policies::LevellingUpPremiumPayments }
+      let(:policy) { Policies::TargetedRetentionIncentivePayments }
 
       it { is_expected.to be true }
     end
   end
 
-  describe "#has_ecp_or_lupp_policy?" do
-    subject(:result) { claim.has_ecp_or_lupp_policy? }
+  describe "#has_ecp_or_targeted_retention_incentive_policy?" do
+    subject(:result) { claim.has_ecp_or_targeted_retention_incentive_policy? }
     let(:claim) { create(:claim, policy:) }
 
     context "with student loans policy" do
@@ -1138,7 +1138,7 @@ RSpec.describe Claim, type: :model do
     end
 
     context "with levelling-up premium payments policy" do
-      let(:policy) { Policies::LevellingUpPremiumPayments }
+      let(:policy) { Policies::TargetedRetentionIncentivePayments }
 
       it { is_expected.to be true }
     end

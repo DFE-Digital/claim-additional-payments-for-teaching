@@ -19,7 +19,7 @@ RSpec.describe AutoApproveClaimsJob do
       (
         create_list(:claim, 2, :submitted, academic_year: current_academic_year, policy: Policies::StudentLoans) +
         create_list(:claim, 2, :submitted, academic_year: current_academic_year, policy: Policies::EarlyCareerPayments) +
-        create_list(:claim, 2, :submitted, academic_year: current_academic_year, policy: Policies::LevellingUpPremiumPayments)
+        create_list(:claim, 2, :submitted, academic_year: current_academic_year, policy: Policies::TargetedRetentionIncentivePayments)
       )
     end
     let(:claims_awaiting_decision_previous_ay) { create_list(:claim, 2, :submitted, academic_year: previous_academic_year, policy: Policies::StudentLoans) }

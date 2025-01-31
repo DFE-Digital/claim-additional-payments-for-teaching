@@ -40,7 +40,7 @@ RSpec.feature "Claims awaiting a decision" do
     submitted_claims << create_list(:claim, 12, :submitted, policy: Policies::EarlyCareerPayments)
 
     # index: 35-38
-    submitted_claims << create_list(:claim, 4, :submitted, policy: Policies::LevellingUpPremiumPayments)
+    submitted_claims << create_list(:claim, 4, :submitted, policy: Policies::TargetedRetentionIncentivePayments)
 
     # index: 39
     submitted_claims << create_list(:claim, 1, :submitted, policy: Policies::InternationalRelocationPayments)
@@ -102,7 +102,7 @@ RSpec.feature "Claims awaiting a decision" do
 
   let(:international_relocation_payment_claims) { [thirty_ninth_claim] }
 
-  let(:levelling_up_premium_payments) { @submitted_claims.slice(36...35) }
+  let(:targeted_retention_incentive_payments) { @submitted_claims.slice(36...35) }
 
   let!(:sarah) { create(:dfe_signin_user, given_name: "Sarah", family_name: "Strawbridge", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
   let!(:frank) { create(:dfe_signin_user, given_name: "Frank", family_name: "Yee", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
