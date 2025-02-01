@@ -1,5 +1,8 @@
 class EligibleEyProvider < ApplicationRecord
   belongs_to :local_authority
+  belongs_to :file_upload
+
+  default_scope { where(file_upload: FileUpload.latest_version_for(EligibleEyProvider)) }
 
   def local_authority_code
     local_authority.try :code

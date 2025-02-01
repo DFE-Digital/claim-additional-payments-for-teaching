@@ -5,12 +5,12 @@ module Admin
     helper_method :journey_configuration
 
     def create
-      @upload_form = EligibleEyProvidersForm.new(upload_params)
+      @upload_form = EligibleEyProvidersForm.new(upload_params, admin_user)
 
       if @upload_form.invalid?
         render "admin/journey_configurations/edit"
       else
-        @upload_form.importer.run
+        @upload_form.run_import!
         flash[:notice] = @upload_form.importer.results_message
 
         redirect_to edit_admin_journey_configuration_path(Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME)
