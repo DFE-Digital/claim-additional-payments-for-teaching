@@ -2,6 +2,9 @@ FactoryBot.define do
   factory :file_upload do
     association :uploaded_by, factory: :dfe_signin_user
 
+    target_data_model { EligibleEyProvider }
+    completed_processing_at { Time.zone.now }
+
     transient do
       row_count { 1 }
       row do
@@ -33,6 +36,10 @@ FactoryBot.define do
       end
 
       string
+    end
+
+    trait :not_completed_processing do
+      completed_processing_at { nil }
     end
   end
 end
