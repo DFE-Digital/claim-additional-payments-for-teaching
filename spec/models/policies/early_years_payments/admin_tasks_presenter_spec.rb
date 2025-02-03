@@ -48,7 +48,7 @@ RSpec.describe Policies::EarlyYearsPayments::AdminTasksPresenter do
 
     subject { described_class.new(claim).practitioner_entered_dob }
 
-    it { is_expected.to eq Date.new(1990, 1, 1) }
+    it { is_expected.to eq I18n.l(Date.new(1990, 1, 1)) }
   end
 
   describe "#one_login_claimant_dob" do
@@ -63,6 +63,6 @@ RSpec.describe Policies::EarlyYearsPayments::AdminTasksPresenter do
 
     subject { described_class.new(claim).one_login_claimant_dob }
 
-    it { is_expected.to eq Date.new(1990, 2, 1) }
+    it { is_expected.to eq I18n.l(Date.new(1990, 2, 1)) }
   end
 end
