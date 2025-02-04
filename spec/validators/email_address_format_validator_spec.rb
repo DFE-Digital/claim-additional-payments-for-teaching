@@ -29,7 +29,7 @@ RSpec.describe EmailAddressFormatValidator do
         record = TestRecord.new
         record.email = string
 
-        expect(record.valid?).to be false
+        expect(record).not_to be_valid
 
         expect(record.errors[:email]).to include("no good")
       end
@@ -47,7 +47,7 @@ RSpec.describe EmailAddressFormatValidator do
         record = TestRecord.new
         record.email = string
 
-        expect(record.valid?).to be true
+        expect(record).to be_valid
 
         expect(record.errors[:email]).to be_empty
       end

@@ -10,76 +10,57 @@ class EmailAddressFormatValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     return unless value
 
-    match = EMAIL_REGEX_PATTERN.match(value)
-
-    if match.nil?
-      record.errors.add(
-        attribute,
-        :invalid,
-        message: options.fetch(:message, "is not a valid email address"),
-        value: value
-      )
-
+    unless valid_format?(value)
+      add_error(record, attribute, value)
       return
     end
 
-    if value.length > 320
-      record.errors.add(
-        attribute,
-        :invalid,
-        message: options.fetch(:message, "is not a valid email address"),
-        value: value
-      )
-
+    unless valid_length?(value)
+      add_error(record, attribute, value)
       return
     end
 
     if value.include?("..")
-      record.errors.add(
-        attribute,
-        :invalid,
-        message: options.fetch(:message, "is not a valid email address"),
-        value: value
-      )
-
+      add_error(record, attribute, value)
       return
     end
 
-    hostname = match[1]
-
-    parts = hostname.split(".")
-
-    if hostname.length > 253 || parts.size < 2
-      record.errors.add(
-        attribute,
-        :invalid,
-        message: options.fetch(:message, "is not a valid email address"),
-        value: value
-      )
-
-      return
+    unless valid_email_domain?(value)
+      add_error(record, attribute, value)
     end
+  end
 
-    if parts.any? { |part| part.length > 63 || !HOSTNAME_PART.match?(part) }
-      record.errors.add(
-        attribute,
-        :invalid,
-        message: options.fetch(:message, "is not a valid email address"),
-        value: value
-      )
+  private
 
-      return
-    end
+  def valid_format?(value)
+    EMAIL_REGEX_PATTERN.match?(value)
+  end
 
-    tld = parts.last
+  def valid_length?(value)
+    value.length <= 320
+  end
 
-    if !TLD_PART.match?(tld)
-      record.errors.add(
-        attribute,
-        :invalid,
-        message: options.fetch(:message, "is not a valid email address"),
-        value: value
-      )
-    end
+  def valid_email_domain?(value)
+    match = EMAIL_REGEX_PATTERN.match(value)
+    return false unless match
+
+    domain = match[1]
+    domain_parts = domain.split(".")
+
+    return false if domain.length > 253 || domain_parts.size < 2
+
+    return false if domain_parts.any? { |part| part.length > 63 || !HOSTNAME_PART.match?(part) }
+
+    top_level_domain = domain_parts.last
+    TLD_PART.match?(top_level_domain)
+  end
+
+  def add_error(record, attribute, value)
+    record.errors.add(
+      attribute,
+      :invalid,
+      message: options.fetch(:message, "is not a valid email address"),
+      value: value
+    )
   end
 end
