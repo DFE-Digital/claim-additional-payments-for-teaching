@@ -117,7 +117,7 @@ describe "teacher route: completing the form" do
     )
 
     expect(page).to have_text(
-      "Enter the start date of your contract #{contract_start_date.strftime("%d-%m-%Y")}"
+      "Enter the start date of your contract #{I18n.l(contract_start_date)}"
     )
 
     expect(page).to have_text(
@@ -129,7 +129,7 @@ describe "teacher route: completing the form" do
     )
 
     expect(page).to have_text(
-      "Enter the date you moved to England to start your teaching job #{entry_date.strftime("%d-%m-%Y")}"
+      "Enter the date you moved to England to start your teaching job #{I18n.l(entry_date)}"
     )
   end
 

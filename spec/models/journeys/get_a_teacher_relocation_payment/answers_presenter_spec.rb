@@ -55,7 +55,7 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
         ],
         [
           "Enter the start date of your contract",
-          answers.start_date.strftime("%d-%m-%Y"),
+          I18n.l(answers.start_date),
           "start-date"
         ],
         [
@@ -70,7 +70,7 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
         ],
         [
           "Enter the date you moved to England to start your teaching job",
-          answers.date_of_entry.strftime("%d-%m-%Y"),
+          I18n.l(answers.date_of_entry),
           "entry-date"
         ]
       )
