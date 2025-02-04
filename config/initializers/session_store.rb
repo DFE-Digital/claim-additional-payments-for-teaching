@@ -4,4 +4,10 @@ elsif !ENV["TID_BASE_URL"].nil?
   URI.parse(ENV["TID_BASE_URL"]).host
 end
 
-Rails.application.config.session_store :cookie_store, key: "_claim_session", domain:
+key = if ENV["ENVIRONMENT_NAME"] == "test"
+  "_test_claim_session"
+else
+  "_claim_session"
+end
+
+Rails.application.config.session_store :cookie_store, key:, domain:
