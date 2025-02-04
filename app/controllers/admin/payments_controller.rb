@@ -1,11 +1,18 @@
 module Admin
   class PaymentsController < BaseAdminController
     before_action :ensure_service_operator
-    before_action :find_payroll_run, except: [:index]
-    before_action :find_payment, except: [:index]
+    before_action :find_payroll_run, except: [:index, :show]
+    before_action :find_payment, except: [:index, :show]
 
     def index
       @claim = Claim.find(params[:claim_id])
+    end
+
+    def show
+      @payment = Payment.includes(
+        non_topup_claims: :eligibility,
+        topups: [:created_by, {claim: :eligibility}]
+      ).find(params[:id])
     end
 
     def remove

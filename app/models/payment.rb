@@ -3,6 +3,16 @@ class Payment < ApplicationRecord
   has_many :claims, through: :claim_payments
   has_many :topups, dependent: :nullify
 
+  # When creating a payment for a topup both the topup and the topup's claim
+  # are associated with the payment, so `Payment#claims` includes topup
+  # claims, see PayrollRunJob#perform
+  has_many(
+    :non_topup_claims,
+    ->(payment) { where.not(id: payment.topups.select(:claim_id)) },
+    through: :claim_payments,
+    source: :claim
+  )
+
   belongs_to :payroll_run
   belongs_to :confirmation, class_name: "PaymentConfirmation", optional: true
 
