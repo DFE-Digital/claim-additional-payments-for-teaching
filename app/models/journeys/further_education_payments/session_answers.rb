@@ -90,7 +90,7 @@ module Journeys
         return unless school
 
         @eligible_fe_provider ||= EligibleFeProvider
-          .where(academic_year: AcademicYear.current)
+          .by_academic_year(AcademicYear.current)
           .where(ukprn: school.ukprn)
           .exists?
       end

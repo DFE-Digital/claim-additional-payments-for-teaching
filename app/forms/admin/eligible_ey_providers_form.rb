@@ -9,12 +9,12 @@ class Admin::EligibleEyProvidersForm
 
   validate :validate_importer_errors
 
-  attr_reader :uploaded_by
+  attr_reader :admin_user
 
-  def initialize(params, uploaded_by)
+  def initialize(params, admin_user)
     super(params)
 
-    @uploaded_by = uploaded_by
+    @admin_user = admin_user
   end
 
   def importer
@@ -22,7 +22,11 @@ class Admin::EligibleEyProvidersForm
   end
 
   def file_upload
-    @file_upload ||= FileUpload.new(uploaded_by:, body: File.read(file), target_data_model: EligibleEyProvider.to_s)
+    @file_upload ||= FileUpload.new(
+      uploaded_by: admin_user,
+      body: File.read(file),
+      target_data_model: EligibleEyProvider.to_s
+    )
   end
 
   def run_import!

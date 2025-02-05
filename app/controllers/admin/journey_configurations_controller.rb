@@ -11,8 +11,8 @@ module Admin
     def edit
       @csv_upload = Policies::LevellingUpPremiumPayments::AwardCsvImporter.new if journey_configuration.additional_payments?
 
-      @upload_form = EligibleFeProvidersForm.new(upload_params)
-      @download_form = EligibleFeProvidersForm.new
+      @upload_form = EligibleFeProvidersForm.new(upload_params, admin_user)
+      @download_form = EligibleFeProvidersForm.new({}, admin_user)
     end
 
     def update

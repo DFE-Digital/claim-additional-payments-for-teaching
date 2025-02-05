@@ -2,7 +2,8 @@ FactoryBot.define do
   factory :file_upload do
     association :uploaded_by, factory: :dfe_signin_user
 
-    target_data_model { EligibleEyProvider }
+    target_data_model { nil }
+    academic_year { nil }
     completed_processing_at { Time.zone.now }
 
     transient do
