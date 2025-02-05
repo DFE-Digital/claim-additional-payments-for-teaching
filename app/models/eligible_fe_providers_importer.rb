@@ -1,6 +1,7 @@
 class EligibleFeProvidersImporter < CsvImporter::Base
   import_options(
     target_data_model: EligibleFeProvider,
+    append_only: true, # Note: the table is never purged
     transform_rows_with: :row_to_hash,
     mandatory_headers: %w[
       ukprn
@@ -10,7 +11,7 @@ class EligibleFeProvidersImporter < CsvImporter::Base
     ]
   )
 
-  attr_reader :academic_year
+  attr_reader :academic_year, :file_upload_id
 
   def initialize(file, academic_year)
     super(file)
@@ -18,15 +19,17 @@ class EligibleFeProvidersImporter < CsvImporter::Base
     @academic_year = academic_year
   end
 
+  def run(file_upload_id)
+    @file_upload_id = file_upload_id
+
+    super()
+  end
+
   def results_message
-    "Replaced #{deleted_row_count} existing providers with #{rows_with_data_count} new providers"
+    "#{rows_with_data_count} providers imported for #{academic_year}"
   end
 
   private
-
-  def delete_all_scope
-    target_data_model.where(academic_year:)
-  end
 
   def row_to_hash(row)
     {
@@ -34,7 +37,8 @@ class EligibleFeProvidersImporter < CsvImporter::Base
       max_award_amount: row.fetch("max_award_amount").gsub(/£|,|�/, ""),
       lower_award_amount: row.fetch("lower_award_amount").gsub(/£|,|�/, ""),
       primary_key_contact_email_address: row.fetch("primary_key_contact_email_address"),
-      academic_year:
+      academic_year:,
+      file_upload_id:
     }
   end
 end

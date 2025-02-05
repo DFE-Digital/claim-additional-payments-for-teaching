@@ -1,5 +1,10 @@
 class EligibleFeProvider < ApplicationRecord
   attribute :academic_year, AcademicYear::Type.new
+  belongs_to :file_upload
+
+  scope :by_academic_year, ->(academic_year) {
+    where(file_upload: FileUpload.latest_version_for(EligibleFeProvider, academic_year))
+  }
 
   validates :primary_key_contact_email_address,
     presence: true,
@@ -12,7 +17,7 @@ class EligibleFeProvider < ApplicationRecord
     CSV.generate(headers: true) do |csv|
       csv << attribute_names
 
-      where(academic_year:).each do |row|
+      by_academic_year(academic_year).each do |row|
         csv << attribute_names.map { |attr| row.send(attr) }
       end
     end
