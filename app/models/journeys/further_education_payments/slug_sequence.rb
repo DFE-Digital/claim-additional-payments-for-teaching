@@ -140,6 +140,10 @@ module Journeys
             sequence.delete("select-home-address")
           end
 
+          if answers.address_line_1.present? && answers.postcode.present?
+            sequence.delete("address")
+          end
+
           if !eligibility_checker.ineligible?
             sequence.delete("ineligible")
           end

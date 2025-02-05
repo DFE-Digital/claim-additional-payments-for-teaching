@@ -3,8 +3,8 @@ class SelectHomeAddressForm < Form
   attribute :address_line_1, :string
   attribute :postcode, :string
 
-  validates :address, presence: true, unless: -> { skip_postcode_search? }
-  validate :address_selected, if: -> { skip_postcode_search? }
+  validate :validate_address_selected, unless: -> { skip_postcode_search? }
+  validate :validate_address_entered, if: -> { skip_postcode_search? }
 
   def address_data
     return [] if postcode.blank?
@@ -41,7 +41,21 @@ class SelectHomeAddressForm < Form
     journey_session.answers.skip_postcode_search
   end
 
-  def address_selected
-    errors.add(:address) if journey_session.answers.address_line_1.blank?
+  def validate_address_selected
+    if journey_session.answers.address_line_1.present? && journey_session.answers.postcode.present?
+      return
+    end
+
+    if address.present?
+      return
+    end
+
+    errors.add(:address)
+  end
+
+  def validate_address_entered
+    if journey_session.answers.address_line_1.blank? && journey_session.answers.postcode.blank?
+      errors.add(:address) if journey_session.answers.address_line_1.blank?
+    end
   end
 end
