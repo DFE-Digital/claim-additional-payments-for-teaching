@@ -45,6 +45,10 @@ shared:
     - updated_at
     - submitted_at
     - reference
+    - first_name
+    - middle_name
+    - surname
+    - date_of_birth
     - has_student_loan
     - student_loan_country
     - student_loan_courses
