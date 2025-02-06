@@ -6,6 +6,7 @@ module Admin
     layout "admin"
 
     before_action :end_expired_admin_sessions, :ensure_authenticated_user
+    before_action :set_cache_headers
     after_action :update_last_seen_at
     helper_method :admin_signed_in?, :admin_timeout_in_minutes, :service_operator_signed_in?
 
@@ -57,6 +58,11 @@ module Admin
       session.delete(:organisation_id)
       session.delete(:role_codes)
       session.delete(:claims_backlink_path)
+    end
+
+    def set_cache_headers
+      response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+      response.headers["Pragma"] = "no-cache"
     end
   end
 end
