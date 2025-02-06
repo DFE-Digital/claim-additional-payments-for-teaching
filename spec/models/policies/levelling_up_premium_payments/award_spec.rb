@@ -25,7 +25,7 @@ RSpec.describe Policies::LevellingUpPremiumPayments::Award do
 
     context "when there are records in the specified academic year" do
       let!(:award) { create(:levelling_up_premium_payments_award, academic_year: academic_year) }
-      it { is_expected.to eq(award.updated_at) }
+      it { is_expected.to eq(award.file_upload.completed_processing_at) }
     end
   end
 

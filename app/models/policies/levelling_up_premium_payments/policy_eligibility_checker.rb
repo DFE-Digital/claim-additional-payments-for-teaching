@@ -38,9 +38,9 @@ module Policies
       def premium_payment_award
         return unless current_school.present?
 
-        current_school.levelling_up_premium_payments_awards.find_by(
-          academic_year: claim_year.to_s
-        )
+        current_school.levelling_up_premium_payments_awards
+          .by_academic_year(claim_year)
+          .first
       end
 
       def indicated_ecp_only_itt_subject?

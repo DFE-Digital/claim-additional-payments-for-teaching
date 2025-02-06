@@ -20,8 +20,8 @@ class AddFileUploadIdToEligibleEyProviders < ActiveRecord::Migration[8.0]
 
   def down
     remove_index :eligible_ey_providers, [:urn, :file_upload_id], unique: true
-    remove_reference :eligible_ey_providers, :file_upload
-
     add_index :eligible_ey_providers, :urn
+
+    remove_reference :eligible_ey_providers, :file_upload
   end
 end
