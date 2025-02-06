@@ -1,0 +1,160 @@
+<% content_for(:page_title) do %>
+  <%= "Payment #{@payment.id}" %>
+<% end %>
+
+<% content_for :back_link do %>
+  <%= govuk_back_link href: request.referrer || admin_claim_payments_path(@payment.claims.first) %>
+<% end %>
+
+<article id="<%= dom_id(@payment) %>">
+  <header>
+    <h1 class="govuk-heading-xl govuk-heading--navigation">
+      Payment <%= @payment.id %>
+    </h1>
+  </header>
+
+  <section id="payment-details">
+    <h2 class="govuk-heading-l">Details</h2>
+    <table class="govuk-table">
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">Payroll run</th>
+          <td class="govuk-table__cell">
+            <%= govuk_link_to(
+              l(@payment.payroll_run.created_at.to_date, format: :month_year),
+              admin_payroll_run_path(@payment.payroll_run)
+            )%>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">Payment amount</th>
+          <td class="govuk-table__cell">
+            <%= number_to_currency(@payment.award_amount) %>
+          </td>
+        </tr>
+        <% if @payment.confirmed? %>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">Gross value</th>
+          <td class="govuk-table__cell">
+            <%= number_to_currency(@payment.gross_value).presence || "-" %>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">NI</th>
+          <td class="govuk-table__cell">
+            <%= number_to_currency(@payment.national_insurance).presence || "-" %>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">Employers NI</th>
+          <td class="govuk-table__cell">
+            <%= number_to_currency(@payment.employers_national_insurance).presence || "-" %>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">Student loan repayment</th>
+          <td class="govuk-table__cell">
+            <%= number_to_currency(@payment.student_loan_repayment).presence || "-" %>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">Tax</th>
+          <td class="govuk-table__cell">
+            <%= number_to_currency(@payment.tax).presence || "-" %>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">Net pay</th>
+          <td class="govuk-table__cell">
+            <%= number_to_currency(@payment.net_pay).presence || "-" %>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">Gross pay</th>
+          <td class="govuk-table__cell">
+            <%= number_to_currency(@payment.gross_pay).presence || "-" %>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">Postgraduate loan repayment</th>
+          <td class="govuk-table__cell">
+            <%= number_to_currency(@payment.postgraduate_loan_repayment).presence || "-" %>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">Scheduled payment date</th>
+          <td class="govuk-table__cell">
+            <%= @payment.scheduled_payment_date ? l(@payment.scheduled_payment_date) : "-" %>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">Confirmed by</th>
+          <td class="govuk-table__cell">
+            <%= user_details(@payment.confirmation.created_by) %>
+          </td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </section>
+
+  <% if @payment.non_topup_claims.any? %>
+    <section id="claims">
+      <h2 class="govuk-heading-l">Claims</h2>
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <th scope="col" class="govuk-table__header">Claim Reference</th>
+          <th scope="col" class="govuk-table__header">Service</th>
+          <th scope="col" class="govuk-table__header">Claim Amount</th>
+        </thead>
+        <tbody class="govuk-table__body">
+          <% @payment.non_topup_claims.each do |claim| %>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">
+                <%= govuk_link_to claim.reference, admin_claim_payments_path(claim) %>
+              </td>
+              <td class="govuk-table__cell">
+                <%= claim.policy.short_name %>
+              </td>
+              <td class="govuk-table__cell">
+                <%= number_to_currency(claim.award_amount) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </section>
+  <% end %>
+
+  <% if @payment.topups.any? %>
+    <section id="topups">
+      <h2 class="govuk-heading-l">Topups</h2>
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <th scope="col" class="govuk-table__header">Claim Reference</th>
+          <th scope="col" class="govuk-table__header">Service</th>
+          <th scope="col" class="govuk-table__header">Top Up Amount</th>
+          <th scope="col" class="govuk-table__header">Created by</th>
+        </thead>
+        <tbody class="govuk-table__body">
+          <% @payment.topups.each do |topup| %>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">
+                <%= govuk_link_to topup.claim.reference, admin_claim_payments_path(topup.claim) %>
+              </td>
+              <td class="govuk-table__cell">
+                <%= topup.claim.policy.short_name %>
+              </td>
+              <td class="govuk-table__cell">
+                <%= number_to_currency(topup.award_amount) %>
+              </td>
+              <td class="govuk-table__cell">
+                <%= user_details(topup.created_by) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </section>
+  <% end %>
+</article>

@@ -129,7 +129,7 @@
 
           <tr class="govuk-table__row">
             <% if index == 0 %>
-              <th scope="row" rowspan="<%= number_of_claims %>" class="govuk-table__header"><%= payment.id %></th>
+              <th scope="row" rowspan="<%= number_of_claims %>" class="govuk-table__header"><%= govuk_link_to payment.id, admin_payment_path(payment) %></th>
               <td class="govuk-table__cell" rowspan="<%= number_of_claims %>"><%= payment.banking_name %></td>
             <% end %>
             <td class="govuk-table__cell"><%= link_to claim.reference, admin_claim_path(claim), class: "govuk-link" %></td>
