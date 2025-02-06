@@ -36,7 +36,7 @@ FactoryBot.define do
         string << (row.join(",") + "\n")
       end
 
-      string
+      string.presence
     end
 
     trait :not_completed_processing do

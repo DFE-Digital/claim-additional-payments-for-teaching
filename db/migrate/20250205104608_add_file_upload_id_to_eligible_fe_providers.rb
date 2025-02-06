@@ -30,8 +30,8 @@ class AddFileUploadIdToEligibleFeProviders < ActiveRecord::Migration[8.0]
 
   def down
     remove_index :eligible_fe_providers, [:academic_year, :ukprn, :file_upload_id], unique: true
-    remove_reference :eligible_fe_providers, :file_upload
-
     add_index :eligible_fe_providers, [:academic_year, :ukprn], unique: true
+
+    remove_reference :eligible_fe_providers, :file_upload
   end
 end

@@ -13,7 +13,9 @@ module Policies
       end
 
       def eligible?
-        @school.levelling_up_premium_payments_awards.where(academic_year: current_academic_year.to_s).any?
+        @school.levelling_up_premium_payments_awards
+          .by_academic_year(current_academic_year)
+          .any?
       end
 
       private
