@@ -24,7 +24,7 @@ class PostcodeSearchForm < Form
   end
 
   def completed?
-    journey_session.answers.skip_postcode_search || journey_session.answers.ordnance_survey_error
+    journey_session.answers.skip_postcode_search || journey_session.answers.ordnance_survey_error || valid?
   end
 
   def skip_postcode_search?

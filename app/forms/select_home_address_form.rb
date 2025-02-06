@@ -2,9 +2,10 @@ class SelectHomeAddressForm < Form
   attribute :address, :string
   attribute :address_line_1, :string
   attribute :postcode, :string
+  attribute :skip_postcode_search, :boolean
 
-  validates :address, presence: true, unless: -> { skip_postcode_search? }
-  validate :address_selected, if: -> { skip_postcode_search? }
+  validate :validate_address_selected, unless: -> { skip_postcode_search? }
+  validate :validate_address_entered, if: -> { skip_postcode_search? }
 
   def address_data
     return [] if postcode.blank?
@@ -19,14 +20,20 @@ class SelectHomeAddressForm < Form
   def save
     return false unless valid?
 
-    address_parts = address.split(":")
+    if skip_postcode_search?
+      journey_session.answers.assign_attributes(
+        skip_postcode_search:
+      )
+    else
+      address_parts = address.split(":")
 
-    journey_session.answers.assign_attributes({
-      address_line_1: address_parts[1].titleize,
-      address_line_2: address_parts[2].titleize,
-      address_line_3: address_parts[3].titleize,
-      postcode: address_parts[4]
-    })
+      journey_session.answers.assign_attributes({
+        address_line_1: address_parts[1].titleize,
+        address_line_2: address_parts[2].titleize,
+        address_line_3: address_parts[3].titleize,
+        postcode: address_parts[4]
+      })
+    end
 
     journey_session.save!
   end
@@ -38,10 +45,24 @@ class SelectHomeAddressForm < Form
   private
 
   def skip_postcode_search?
-    journey_session.answers.skip_postcode_search
+    journey_session.answers.skip_postcode_search || skip_postcode_search
   end
 
-  def address_selected
-    errors.add(:address) if journey_session.answers.address_line_1.blank?
+  def validate_address_selected
+    if journey_session.answers.address_line_1.present? && journey_session.answers.postcode.present?
+      return
+    end
+
+    if address.present?
+      return
+    end
+
+    errors.add(:address, "Select an address")
+  end
+
+  def validate_address_entered
+    if journey_session.answers.address_line_1.blank? && journey_session.answers.postcode.blank?
+      errors.add(:address, "Enter an address") if journey_session.answers.address_line_1.blank?
+    end
   end
 end
