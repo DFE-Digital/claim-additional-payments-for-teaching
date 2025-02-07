@@ -4,20 +4,16 @@
   </h2>
 <% end %>
 
-<dl class="govuk-summary-list govuk-!-margin-bottom-9">
-  <%- answers.each do |(label, answer, slug)| %>
-    <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
-        <%= label %>
-      </dt>
-
-      <dd class="govuk-summary-list__value">
-        <%= answer %>
-      </dd>
-
-      <dd class="govuk-summary-list__actions">
-        <%= link_to('Change', claim_path(current_journey_routing_name, slug), class: 'govuk-link', 'aria-label': "Change #{label.downcase}") unless slug.nil? %>
-      </dd>
-    </div>
+<div class="govuk-!-margin-bottom-9">
+  <%= govuk_summary_list do |summary_list| %>
+    <%- answers.each do |(label, answer, slug)| %>
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { label } %>
+        <% row.with_value { answer } %>
+        <% if slug.present? %>
+          <% row.with_action(text: "Change", href: claim_path(current_journey_routing_name, slug), visually_hidden_text: label.downcase) %>
+        <% end %>
+      <% end %>
+    <% end %>
   <% end %>
-</dl>
+</div>
