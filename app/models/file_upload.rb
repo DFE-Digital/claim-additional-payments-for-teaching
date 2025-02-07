@@ -13,6 +13,12 @@ class FileUpload < ApplicationRecord
       .limit(1)
   }
 
+  def self.upload_history(target_data_model)
+    by_target_data_model(target_data_model)
+      .completed_processing
+      .order(completed_processing_at: :desc)
+  end
+
   def completed_processing!
     update!(completed_processing_at: Time.zone.now)
   end

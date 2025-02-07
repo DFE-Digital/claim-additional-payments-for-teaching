@@ -64,8 +64,10 @@
   - secondary_contact_email_address
   - created_at
   - updated_at
+  - file_upload_id
   :eligible_fe_providers:
   - primary_key_contact_email_address
+  - file_upload_id
   :schools:
   - postcode_sanitised
   :file_uploads:
@@ -74,6 +76,9 @@
   - body
   - created_at
   - updated_at
+  - target_data_model
+  - completed_processing_at
+  - academic_year
   :reminders:
   - full_name
   - email_address
@@ -114,3 +119,5 @@
   - created_at
   - updated_at
   - number_of_rows
+  :levelling_up_premium_payments_awards:
+  - file_upload_id

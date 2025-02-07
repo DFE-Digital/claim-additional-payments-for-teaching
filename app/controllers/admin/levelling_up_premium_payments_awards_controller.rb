@@ -7,12 +7,19 @@ module Admin
     end
 
     def create
-      @csv_upload = Policies::LevellingUpPremiumPayments::AwardCsvImporter.new(**upload_params.to_h.symbolize_keys)
+      @csv_upload = Policies::LevellingUpPremiumPayments::AwardCsvImporter.new(
+        **upload_params
+        .to_h
+        .merge(admin_user:)
+        .symbolize_keys
+      )
 
       if @csv_upload.process
         flash[:notice] = "Award amounts for #{@csv_upload.academic_year} successfully updated."
         return redirect_to edit_admin_journey_configuration_path(journey_configuration)
       end
+
+      @file_upload_history = FileUpload.upload_history(Policies::LevellingUpPremiumPayments::Award)
 
       render "admin/journey_configurations/edit"
     end

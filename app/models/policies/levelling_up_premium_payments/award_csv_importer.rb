@@ -7,8 +7,7 @@ module Policies
       include ActiveModel::Attributes
 
       attribute :academic_year, :string
-      attribute :admin_user, DfeSignIn::User
-      attr_accessor :csv_data
+      attr_accessor :csv_data, :admin_user
 
       validates :academic_year, format: {with: AcademicYear::ACADEMIC_YEAR_REGEXP}, presence: true
       validates :csv_data, presence: {message: "Choose a CSV file to upload"}
