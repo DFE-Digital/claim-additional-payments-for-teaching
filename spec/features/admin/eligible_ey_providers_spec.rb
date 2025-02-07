@@ -8,8 +8,13 @@ RSpec.feature "Admin of eligible ey providers" do
     click_link "Manage services"
     click_link "Change Claim an early years financial incentive payment"
 
+    expect(page).to have_content("Upload history for eligible EY providers")
+    expect(page).to have_content("None")
+
     attach_file "eligible-ey-providers-upload-file-field", eligible_ey_providers_csv_file.path
     click_button "Upload CSV"
+
+    expect(page).to have_content("#{last_file_upload_completed_process_at_string}Aaron AdminN/A")
 
     click_link "Download CSV"
 
@@ -66,5 +71,13 @@ RSpec.feature "Admin of eligible ey providers" do
     @eligible_ey_providers_csv_file_v2.rewind
 
     @eligible_ey_providers_csv_file_v2
+  end
+
+  def last_file_upload_completed_process_at_string
+    FileUpload
+      .latest_version_for(EligibleEyProvider)
+      .first
+      .completed_processing_at
+      .strftime("%-d %B %Y %-l:%M%P")
   end
 end

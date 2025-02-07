@@ -8,13 +8,18 @@ RSpec.feature "Admin of eligible FE providers" do
     click_link "Manage services"
     click_link "Change Claim a targeted retention incentive payment for further education teachers"
 
-    select "2024/2025", from: "eligible-fe-providers-upload-academic-year-field"
+    expect(page).to have_content("Upload history for eligible FE providers")
+    expect(page).to have_content("None")
+
+    select AcademicYear.current.to_s, from: "eligible-fe-providers-upload-academic-year-field"
     attach_file "eligible-fe-providers-upload-file-field", eligible_fe_providers_csv_file.path
     click_button "Upload CSV"
 
-    expect(page).to have_select "eligible-fe-providers-upload-academic-year-field", selected: "2024/2025"
+    expect(page).to have_select "eligible-fe-providers-upload-academic-year-field", selected: AcademicYear.current.to_s
 
-    select "2024/2025", from: "eligible-fe-providers-download-academic-year-field"
+    expect(page).to have_content("#{last_file_upload_completed_process_at_string}Aaron Admin#{AcademicYear.current}")
+
+    select AcademicYear.current.to_s, from: "eligible-fe-providers-download-academic-year-field"
     click_button "Download CSV"
 
     downloaded_csv = page.body
@@ -36,5 +41,13 @@ RSpec.feature "Admin of eligible FE providers" do
     @eligible_fe_providers_csv_file.rewind
 
     @eligible_fe_providers_csv_file
+  end
+
+  def last_file_upload_completed_process_at_string
+    FileUpload
+      .latest_version_for(EligibleFeProvider, AcademicYear.current)
+      .first
+      .completed_processing_at
+      .strftime("%-d %B %Y %-l:%M%P")
   end
 end

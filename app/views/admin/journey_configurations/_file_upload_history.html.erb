@@ -1,0 +1,27 @@
+<h2 class="govuk-heading-m">
+  <%= heading %>
+</h2>
+
+<% if @file_upload_history.empty? %>
+  <p class="govuk-body">None</p>
+<% else %>
+  <%= govuk_table do |table| %>
+    <% table.with_head do |head| %>
+      <% head.with_row do |row| %>
+        <% row.with_cell(text: "Uploaded") %>
+        <% row.with_cell(text: "Uploaded by") %>
+        <% row.with_cell(text: "Academic year") %>
+      <% end %>
+    <% end %>
+
+    <% table.with_body do |body| %>
+      <% @file_upload_history.each do |upload| %>
+        <% body.with_row do |row| %>
+          <% row.with_cell(text: l(upload.completed_processing_at)) %>
+          <% row.with_cell(text: upload.uploaded_by&.full_name || "System") %>
+          <% row.with_cell(text: upload.academic_year || "N/A") %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
