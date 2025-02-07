@@ -11,7 +11,7 @@
         <% row.with_key { label } %>
         <% row.with_value { answer } %>
         <% if slug.present? %>
-          <% row.with_action(text: "Change", href: claim_path(current_journey_routing_name, slug), visually_hidden_text: label.downcase) %>
+          <% row.with_action(text: "Change", href: claim_path(current_journey_routing_name, slug, change: true), visually_hidden_text: label.downcase) %>
         <% end %>
       <% end %>
     <% end %>

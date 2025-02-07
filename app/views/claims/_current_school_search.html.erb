@@ -2,7 +2,7 @@
 <%= render("shared/error_summary", instance: @form, errored_field_id_overrides: { school_search: "school_search" }) if @form.errors.any? %>
 
 <%= form_for @form,
-             url: claim_path(current_journey_routing_name),
+             url: @form.url,
              method: :get,
              data: {
                "school-id-param": "claim_current_school_id",

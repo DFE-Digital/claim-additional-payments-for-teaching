@@ -57,6 +57,12 @@ module Journeys
             return slug
           end
 
+          if changing_answer?
+            return slug if form == forms.last
+
+            next
+          end
+
           if current_slug == slug
             current_index = forms.index(form)
             next_index = current_index + 1
@@ -144,6 +150,10 @@ module Journeys
     end
 
     private
+
+    def changing_answer?
+      params[:change] == "true"
+    end
 
     def impermissible_forms
       all_forms.reject do |form|

@@ -309,7 +309,7 @@ RSpec.feature "Levelling up premium payments claims" do
     before do
       claim_up_to_check_your_answers
 
-      first("a[href='#{claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "personal-details")}']", minimum: 1).click
+      click_link "Change what is your full name?"
       fill_in "Last name", with: new_last_name
     end
 

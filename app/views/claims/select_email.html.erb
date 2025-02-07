@@ -3,7 +3,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: @form, errored_field_id_overrides: { email_address_check: "claim_email_address_check_true", email_address: "claim_email_address_check_false" }) if @form.errors.any? %>
-    <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
+    <%= form_for @form, url: @form.url do |f| %>
       <span class="govuk-caption-xl"><%= t("questions.personal_details") %></span>
       <%= form_group_tag @form do %>
 

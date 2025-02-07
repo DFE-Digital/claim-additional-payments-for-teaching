@@ -25,7 +25,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       slug: "check-your-answers"
     )
 
-    find("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "subjects-taught")}']").click
+    click_link "Change which of the following subjects did you teach at #{session.answers.claim_school.name.downcase} between 6 april 2022 and 5 april 2023?"
 
     expect(find("#claim_physics_taught").checked?).to eq(true)
 
@@ -59,7 +59,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       journey_session: session
     )
 
-    find("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "qts-year")}']").click
+    click_link "Change when did you complete your initial teacher training (itt)?"
 
     expect(find("#claim_qts_award_year_on_or_after_cut_off_date").checked?).to eq(true)
 
@@ -87,7 +87,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     new_claim_school = create(:school, :student_loans_eligible, name: "Claim School")
 
-    find("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school")}']").click
+    click_link "Change which school were you employed to teach at between 6 april 2022 and 5 april 2023?"
 
     choose_school new_claim_school
 
@@ -136,7 +136,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       journey_session: session
     )
 
-    find("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "leadership-position")}']").click
+    click_link "Change were you employed in a leadership position between 6 april 2022 and 5 april 2023?"
 
     choose "Yes"
     click_on "Continue"
@@ -167,7 +167,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       journey_session: session
     )
 
-    find("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "subjects-taught")}']").click
+    click_link "Change which of the following subjects did you teach at #{session.answers.claim_school.name.downcase} between 6 april 2022 and 5 april 2023?"
 
     expect(find("#claim_physics_taught").checked?).to eq(true)
 
@@ -213,7 +213,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       amount: 50
     )
 
-    page.first("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "personal-details")}']", minimum: 1).click
+    click_link "Change what is your national insurance number?"
     fill_in "National Insurance number", with: "AB123456C"
     click_on "Continue"
 
@@ -250,7 +250,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       new_middle_name = "Janet #{old_middle_name}"
 
       expect {
-        page.first("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "personal-details")}']", minimum: 1).click
+        click_link "Change what is your full name?"
         fill_in "Middle names", with: new_middle_name
         click_on "Continue"
       }.to change {
@@ -273,11 +273,11 @@ RSpec.feature "Changing the answers on a submittable claim" do
       expect(page).to have_content(I18n.t("forms.address.questions.your_address"))
       expect(page).to have_content(I18n.t("questions.date_of_birth"))
       expect(page).to have_content(I18n.t("forms.gender.questions.payroll_gender"))
-      expect(page).to have_selector(:css, "a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "personal-details")}']")
-      expect(page).to have_selector(:css, "a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "address")}']")
-      expect(page).to have_selector(:css, "a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "gender")}']")
+      expect(page).to have_link("Change what is your full name?")
+      expect(page).to have_link("Change what is your address?")
+      expect(page).to have_link("Change how is your gender recorded on your school’s payroll system?")
 
-      page.first("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "personal-details")}']", minimum: 1).click
+      click_link "Change what is your full name?"
       fill_in "First name", with: "Bobby"
       click_on "Continue"
 
@@ -319,7 +319,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
         new_email = "fiona.adouboux@protonmail.com"
 
         expect {
-          page.first("a[href='#{claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "email-address")}']", minimum: 1).click
+          click_link "Change email address"
           fill_in "Email address", with: new_email
           click_on "Continue"
         }.to change {
@@ -345,7 +345,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       end
 
       scenario "entering same email address - passcode email is not sent" do
-        page.first("a[href='#{claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "email-address")}']", minimum: 1).click
+        click_link "Change email address"
         click_on "Continue"
 
         expect(page).to have_content("Check your answers before sending your application")
@@ -377,7 +377,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
       scenario "is asked to provide the OTP challenge code for validation" do
         expect {
-          page.first("a[href='#{claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "provide-mobile-number")}']", minimum: 1).click
+          click_link "Change would you like to provide your mobile number?"
           choose "Yes"
           click_on "Continue"
         }.to change {
@@ -439,7 +439,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
         old_mobile = session.answers.mobile_number
 
         expect {
-          page.first("a[href='#{claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "mobile-number")}']", minimum: 1).click
+          click_link "Change mobile number"
           fill_in "Mobile number", with: new_mobile
           click_on "Continue"
         }.to change {
@@ -466,7 +466,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       end
 
       scenario "entering same mobile number - is not asked to provide the OTP challenge code for validation" do
-        page.first("a[href='#{claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "mobile-number")}']", minimum: 1).click
+        click_link "Change mobile number"
         click_on "Continue"
 
         expect(page).to have_content("Check your answers before sending your application")
