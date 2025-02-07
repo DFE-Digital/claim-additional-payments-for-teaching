@@ -121,3 +121,9 @@
   - number_of_rows
   :targeted_retention_incentive_payments_awards:
   - file_upload_id
+  :journeys_service_access_codes:
+  - id
+  - code
+  - journey
+  - created_at
+  - updated_at
