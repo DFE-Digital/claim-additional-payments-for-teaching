@@ -190,7 +190,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     end
   end
 
-  context "combined ECP/LUPP journey claim" do
+  context "combined ECP/Targeted Retention Incentive journey claim" do
     before { create(:journey_configuration, :additional_payments) }
     let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
     let!(:closed_school) { create(:school, :combined_journey_eligibile_for_all, :closed) }

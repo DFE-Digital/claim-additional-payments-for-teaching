@@ -2,9 +2,9 @@ require "rails_helper"
 
 # These existing specs are too complicated, so using
 # `spec/features/admin_edit_claim_spec.rb` for ECP
-# and LUP instead. Keeping these here because they
+# and Targeted Retention Incentive instead. Keeping these here because they
 # at least cover TSLR and Maths & Physics (which
-# themselves are slightly different from ECP and LUP).
+# themselves are slightly different from ECP and Targeted Retention Incentive).
 RSpec.feature "Admin amends a claim" do
   let(:claim) do
     create(

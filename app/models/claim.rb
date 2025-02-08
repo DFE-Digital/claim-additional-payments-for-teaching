@@ -311,7 +311,7 @@ class Claim < ApplicationRecord
   end
 
   def all_payrolled?
-    if has_lupp_policy?
+    if has_targeted_retention_incentive_policy?
       topups.all? { |t| t.payrolled? } && payrolled?
     else
       payrolled?
@@ -319,7 +319,7 @@ class Claim < ApplicationRecord
   end
 
   def topupable?
-    has_lupp_policy? && submitted? && all_payrolled?
+    has_targeted_retention_incentive_policy? && submitted? && all_payrolled?
   end
 
   def full_name
@@ -350,12 +350,12 @@ class Claim < ApplicationRecord
     policy == Policies::StudentLoans
   end
 
-  def has_lupp_policy?
-    policy == Policies::LevellingUpPremiumPayments
+  def has_targeted_retention_incentive_policy?
+    policy == Policies::TargetedRetentionIncentivePayments
   end
 
-  def has_ecp_or_lupp_policy?
-    has_ecp_policy? || has_lupp_policy?
+  def has_ecp_or_targeted_retention_incentive_policy?
+    has_ecp_policy? || has_targeted_retention_incentive_policy?
   end
 
   def has_early_years_payments_policy?

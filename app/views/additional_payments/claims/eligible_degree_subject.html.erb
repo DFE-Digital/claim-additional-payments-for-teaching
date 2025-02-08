@@ -18,7 +18,7 @@
 
           <div class="govuk-hint" id="has_uk_maths_or_physics_degree-hint">
             This can be an undergraduate or postgraduate degree in
-            <%= Policies::LevellingUpPremiumPayments.fixed_subject_symbols.to_sentence(last_word_connector: ' or ') %>.
+            <%= Policies::TargetedRetentionIncentivePayments.fixed_subject_symbols.to_sentence(last_word_connector: ' or ') %>.
           </div>
 
           <%= errors_tag f.object, :eligible_degree_subject %>

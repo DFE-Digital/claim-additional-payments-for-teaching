@@ -58,14 +58,14 @@ RSpec.describe Policies::EarlyCareerPayments::PolicyEligibilityChecker, type: :m
       it { is_expected.to eq(true) }
     end
 
-    context "when the current school is eligible for ECP and LUP" do
-      let(:answers) { build(:additional_payments_answers, :eligible_school_ecp_and_lup) }
+    context "when the current school is eligible for ECP and Targeted Retention Incentive" do
+      let(:answers) { build(:additional_payments_answers, :eligible_school_ecp_and_targeted_retention_incentive) }
 
       it { is_expected.to eq(false) }
     end
 
-    context "when the current school is eligible for LUP only" do
-      let(:answers) { build(:additional_payments_answers, :lup_eligible) }
+    context "when the current school is eligible for Targeted Retention Incentive only" do
+      let(:answers) { build(:additional_payments_answers, :targeted_retention_incentive_eligible) }
 
       it { is_expected.to eq(false) }
     end
@@ -86,7 +86,7 @@ RSpec.describe Policies::EarlyCareerPayments::PolicyEligibilityChecker, type: :m
       it { is_expected.to eq(:eligible_now) }
     end
 
-    # By the 2022 policy year it's too late for this to apply to LUP so is ECP-specific now but
+    # By the 2022 policy year it's too late for this to apply to Targeted Retention Incentive so is ECP-specific now but
     # technically this check is generally needed for all policies
     context "no eligible subjects" do
       let(:answers) { build(:additional_payments_answers, :ecp_eligible, :with_no_eligible_subjects) }
