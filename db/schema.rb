@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_06_122648) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_10_115829) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -554,6 +554,43 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_06_122648) do
     t.index ["created_by_id"], name: "index_support_tickets_on_created_by_id"
   end
 
+  create_table "targeted_retention_incentive_payments_awards", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "academic_year", limit: 9, null: false
+    t.integer "school_urn", null: false
+    t.decimal "award_amount", precision: 7, scale: 2
+    t.uuid "file_upload_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["academic_year", "school_urn", "file_upload_id"], name: "idx_on_academic_year_school_urn_file_upload_id_e22f377ca3"
+    t.index ["academic_year"], name: "idx_on_academic_year_d488a0f13b"
+    t.index ["award_amount"], name: "idx_on_award_amount_327151d288"
+    t.index ["file_upload_id"], name: "idx_on_file_upload_id_f03e7df6df"
+    t.index ["school_urn"], name: "idx_on_school_urn_4cd86bf61e"
+  end
+
+  create_table "targeted_retention_incentive_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.boolean "nqt_in_academic_year_after_itt"
+    t.boolean "employed_as_supply_teacher"
+    t.integer "qualification"
+    t.boolean "has_entire_term_contract"
+    t.boolean "employed_directly"
+    t.boolean "subject_to_disciplinary_action"
+    t.boolean "subject_to_formal_performance_action"
+    t.integer "eligible_itt_subject"
+    t.boolean "teaching_subject_now"
+    t.string "itt_academic_year", limit: 9
+    t.uuid "current_school_id"
+    t.decimal "award_amount", precision: 7, scale: 2
+    t.boolean "eligible_degree_subject"
+    t.boolean "induction_completed"
+    t.boolean "school_somewhere_else"
+    t.string "teacher_reference_number", limit: 11
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["current_school_id"], name: "idx_on_current_school_id_a8a77a93bf"
+    t.index ["teacher_reference_number"], name: "idx_on_teacher_reference_number_d349ded5d7"
+  end
+
   create_table "tasks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.uuid "claim_id"
@@ -629,6 +666,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_06_122648) do
   add_foreign_key "student_loans_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "support_tickets", "claims"
   add_foreign_key "support_tickets", "dfe_sign_in_users", column: "created_by_id"
+  add_foreign_key "targeted_retention_incentive_payments_awards", "file_uploads"
   add_foreign_key "tasks", "claims"
   add_foreign_key "tasks", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "topups", "claims"
