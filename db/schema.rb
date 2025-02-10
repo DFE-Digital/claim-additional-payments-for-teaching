@@ -133,7 +133,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_18_150905) do
     t.uuid "created_by_id"
     t.boolean "undone", default: false
     t.jsonb "rejected_reasons", default: {}
-    t.boolean "approved"
+    t.boolean "approved", null: false
     t.index ["claim_id"], name: "index_decisions_on_claim_id"
     t.index ["created_at"], name: "index_decisions_on_created_at"
     t.index ["created_by_id"], name: "index_decisions_on_created_by_id"
