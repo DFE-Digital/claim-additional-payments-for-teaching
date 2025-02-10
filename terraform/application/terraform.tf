@@ -27,19 +27,15 @@ provider "azurerm" {
 
 provider "kubernetes" {
   host                   = module.cluster_data.kubernetes_host
-  client_certificate     = module.cluster_data.kubernetes_client_certificate
-  client_key             = module.cluster_data.kubernetes_client_key
   cluster_ca_certificate = module.cluster_data.kubernetes_cluster_ca_certificate
 
-  dynamic "exec" {
-    for_each = module.cluster_data.azure_RBAC_enabled ? [1] : []
-    content {
-      api_version = "client.authentication.k8s.io/v1beta1"
-      command     = "kubelogin"
-      args        = module.cluster_data.kubelogin_args
-    }
+  exec {
+    api_version = "client.authentication.k8s.io/v1beta1"
+    command     = "kubelogin"
+    args        = ["get-token", "--server-id","6dae42f8-4368-4678-94ff-3960e28e3630"]
   }
 }
+
 
 provider "statuscake" {
   api_token = module.infrastructure_secrets.map.STATUSCAKE-API-TOKEN
