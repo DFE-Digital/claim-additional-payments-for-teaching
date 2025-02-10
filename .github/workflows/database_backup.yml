@@ -34,6 +34,8 @@ jobs:
   backup:
     name: Backup AKS Database
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     environment:
       name: ${{ inputs.environment || 'production' }}
     env:
@@ -44,11 +46,18 @@ jobs:
     - uses: actions/checkout@v4
       name: Checkout
 
+    - uses: azure/login@v2
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
     - name: Set environment variables
       run: |
         source global_config/${{ env.DEPLOY_ENV }}.sh
         tf_vars_file=${{ env.TF_VARS_PATH }}/${{ env.DEPLOY_ENV }}.tfvars.json
         echo "CLUSTER=$(jq -r '.cluster' ${tf_vars_file})" >> $GITHUB_ENV
+        echo "NAMESPACE=$(jq -r '.namespace' ${tf_vars_file})" >> $GITHUB_ENV
         echo "RESOURCE_GROUP_NAME=${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-rg" >> $GITHUB_ENV
         echo "STORAGE_ACCOUNT_NAME=${AZURE_RESOURCE_PREFIX}${SERVICE_SHORT}dbbkp${CONFIG_SHORT}sa" >> $GITHUB_ENV
         TODAY=$(date +"%F")
@@ -70,7 +79,10 @@ jobs:
         resource-group: ${{ env.RESOURCE_GROUP_NAME }}
         app-name: ${{ env.SERVICE_NAME }}-${{ env.DEPLOY_ENV }}-web
         cluster: ${{ env.CLUSTER }}
-        azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+        azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         backup-file: ${{ env.BACKUP_FILE }}.sql
         db-server-name: ${{ inputs.db-server }}
+        namespace: ${{ env.NAMESPACE }}
         slack-webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
