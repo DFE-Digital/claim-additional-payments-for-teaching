@@ -4,7 +4,7 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
   include OmniauthMockHelper
   include StudentLoansHelper
 
-  # create a school eligible for ECP and Targeted Retention Incentive so can walk the whole journey
+  # create a school eligible for ECP and LUP so can walk the whole journey
   let!(:journey_configuration) { create(:journey_configuration, :student_loans) }
   let!(:school) { create(:school, :student_loans_eligible) }
   let(:trn) { 1234567 }

@@ -1,0 +1,9 @@
+<p class="govuk-body">
+  It is for early career teachers who teach certain subjects and work in disadvantaged schools in England. There is a high need for teachers in your area.
+</p>
+
+<%= button_to "Apply now", claim_path(current_journey_routing_name), method: :patch, class: "govuk-button", role: :button, data: { module: "govuk-button"}, params: { claim: { selected_claim_policy: } } %>
+
+<p class="govuk-body">
+  For more information about why you are eligible, read about the <%= link_to "#{I18n.t("levelling_up_premium_payments.policy_short_name").downcase} (opens in new tab)", Policies::LevellingUpPremiumPayments.eligibility_page_url, class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>.
+</p>

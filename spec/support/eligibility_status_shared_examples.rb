@@ -1,6 +1,6 @@
 RSpec.shared_examples "eligibility_status" do |policy|
   describe "#status" do
-    let(:trait_prefix) { {early_career_payments: :ecp, targeted_retention_incentive_payments: :targeted_retention_incentive}[policy] }
+    let(:trait_prefix) { {early_career_payments: :ecp, levelling_up_premium_payments: :lup}[policy] }
 
     let(:undetermined_trait) { :"#{trait_prefix}_undetermined" }
     let(:eligible_trait) { :"#{trait_prefix}_eligible" }

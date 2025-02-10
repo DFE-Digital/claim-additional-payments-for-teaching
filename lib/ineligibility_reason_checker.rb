@@ -26,12 +26,12 @@ class IneligibilityReasonChecker
       :trainee_teaching_lacking_both_valid_itt_subject_and_degree
     elsif lack_both_valid_itt_subject_and_degree?
       :lack_both_valid_itt_subject_and_degree
-    elsif would_be_eligible_for_targeted_retention_incentive_only_except_for_insufficient_teaching?
-      :would_be_eligible_for_targeted_retention_incentive_only_except_for_insufficient_teaching
+    elsif would_be_eligible_for_lup_only_except_for_insufficient_teaching?
+      :would_be_eligible_for_lup_only_except_for_insufficient_teaching
     elsif would_be_eligible_for_ecp_only_except_for_insufficient_teaching?
       :would_be_eligible_for_ecp_only_except_for_insufficient_teaching
-    elsif would_be_eligible_for_both_ecp_and_targeted_retention_incentive_except_for_insufficient_teaching?
-      :would_be_eligible_for_both_ecp_and_targeted_retention_incentive_except_for_insufficient_teaching
+    elsif would_be_eligible_for_both_ecp_and_lup_except_for_insufficient_teaching?
+      :would_be_eligible_for_both_ecp_and_lup_except_for_insufficient_teaching
     elsif bad_itt_year_for_ecp?
       :bad_itt_year_for_ecp
     elsif bad_itt_subject_for_ecp?
@@ -48,7 +48,7 @@ class IneligibilityReasonChecker
 
     [
       Policies::EarlyCareerPayments::SchoolEligibility.new(school).eligible?,
-      !Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(school).eligible?
+      !Policies::LevellingUpPremiumPayments::SchoolEligibility.new(school).eligible?
     ].all? && Policies::EarlyCareerPayments.closed?(@answers.policy_year)
   end
 
@@ -58,7 +58,7 @@ class IneligibilityReasonChecker
     [
       school.present?,
       !Policies::EarlyCareerPayments::SchoolEligibility.new(school).eligible?,
-      !Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(school).eligible?
+      !Policies::LevellingUpPremiumPayments::SchoolEligibility.new(school).eligible?
     ].all?
   end
 
@@ -76,14 +76,14 @@ class IneligibilityReasonChecker
   def ecp_only_teacher_with_ineligible_itt_year?
     [
       @answers.itt_academic_year == AcademicYear.new,
-      school_eligible_for_ecp_but_not_targeted_retention_incentive?(@answers.current_school)
+      school_eligible_for_ecp_but_not_lup?(@answers.current_school)
     ].all?
   end
 
   def teacher_with_ineligible_itt_year?
     [
       @answers.itt_academic_year == AcademicYear.new,
-      Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(@answers.current_school).eligible?
+      Policies::LevellingUpPremiumPayments::SchoolEligibility.new(@answers.current_school).eligible?
     ].all?
   end
 
@@ -98,21 +98,21 @@ class IneligibilityReasonChecker
 
   def ecp_only_induction_not_completed?
     [
-      school_eligible_for_ecp_but_not_targeted_retention_incentive?(@answers.current_school),
+      school_eligible_for_ecp_but_not_lup?(@answers.current_school),
       @answers.induction_not_completed?
     ].all?
   end
 
   def ecp_only_trainee_teacher?
     [
-      !Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(@answers.current_school).eligible?,
+      !Policies::LevellingUpPremiumPayments::SchoolEligibility.new(@answers.current_school).eligible?,
       @answers.nqt_in_academic_year_after_itt == false
     ].all?
   end
 
   def trainee_teaching_lacking_both_valid_itt_subject_and_degree?
     [
-      Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(@answers.current_school).eligible?,
+      Policies::LevellingUpPremiumPayments::SchoolEligibility.new(@answers.current_school).eligible?,
       @answers.nqt_in_academic_year_after_itt == false,
       lack_both_valid_itt_subject_and_degree?
     ].all?
@@ -125,12 +125,12 @@ class IneligibilityReasonChecker
     ].all?
   end
 
-  def would_be_eligible_for_targeted_retention_incentive_only_except_for_insufficient_teaching?
-    would_be_eligible_for_one_policy_only_except_for_insufficient_teaching?(Policies::TargetedRetentionIncentivePayments)
+  def would_be_eligible_for_lup_only_except_for_insufficient_teaching?
+    would_be_eligible_for_one_policy_only_except_for_insufficient_teaching?(Policies::LevellingUpPremiumPayments)
   end
 
   def would_be_eligible_for_one_policy_only_except_for_insufficient_teaching?(policy)
-    other_policy = (policy == Policies::EarlyCareerPayments) ? Policies::TargetedRetentionIncentivePayments : Policies::EarlyCareerPayments
+    other_policy = (policy == Policies::EarlyCareerPayments) ? Policies::LevellingUpPremiumPayments : Policies::EarlyCareerPayments
 
     [
       eligible_with_sufficient_teaching?(policy),
@@ -153,10 +153,10 @@ class IneligibilityReasonChecker
     would_be_eligible_for_one_policy_only_except_for_insufficient_teaching?(Policies::EarlyCareerPayments)
   end
 
-  def would_be_eligible_for_both_ecp_and_targeted_retention_incentive_except_for_insufficient_teaching?
+  def would_be_eligible_for_both_ecp_and_lup_except_for_insufficient_teaching?
     [
       eligible_with_sufficient_teaching?(Policies::EarlyCareerPayments),
-      eligible_with_sufficient_teaching?(Policies::TargetedRetentionIncentivePayments)
+      eligible_with_sufficient_teaching?(Policies::LevellingUpPremiumPayments)
     ].all?
   end
 
@@ -175,33 +175,33 @@ class IneligibilityReasonChecker
     [
       ecp_subject_options.one?,
       subject_invalid_for_ecp?,
-      school_eligible_for_ecp_but_not_targeted_retention_incentive?(@answers.current_school)
+      school_eligible_for_ecp_but_not_lup?(@answers.current_school)
     ].all?
   end
 
-  def school_eligible_for_ecp_but_not_targeted_retention_incentive?(school)
-    Policies::EarlyCareerPayments::SchoolEligibility.new(school).eligible? && !Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(school).eligible?
+  def school_eligible_for_ecp_but_not_lup?(school)
+    Policies::EarlyCareerPayments::SchoolEligibility.new(school).eligible? && !Policies::LevellingUpPremiumPayments::SchoolEligibility.new(school).eligible?
   end
 
   def bad_itt_subject_for_ecp?
     [
       ecp_subject_options.many?,
       subject_invalid_for_ecp?,
-      school_eligible_for_ecp_but_not_targeted_retention_incentive?(@answers.current_school)
+      school_eligible_for_ecp_but_not_lup?(@answers.current_school)
     ].all?
   end
 
   def no_ecp_subjects_that_itt_year?
     [
       ecp_subject_options.none?,
-      school_eligible_for_ecp_but_not_targeted_retention_incentive?(@answers.current_school)
+      school_eligible_for_ecp_but_not_lup?(@answers.current_school)
     ].all?
   end
 
   def trainee_teacher_last_policy_year?
     [
       @answers.nqt_in_academic_year_after_itt == false,
-      @answers.academic_year >= AcademicYear.new(Policies::TargetedRetentionIncentivePayments::POLICY_END_YEAR),
+      @answers.academic_year >= AcademicYear.new(Policies::LevellingUpPremiumPayments::POLICY_END_YEAR),
       @answers.academic_year >= AcademicYear.new(Policies::EarlyCareerPayments::POLICY_END_YEAR)
     ].all?
   end

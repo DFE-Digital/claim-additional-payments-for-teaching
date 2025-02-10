@@ -67,8 +67,8 @@ describe ApplicationHelper do
       it { is_expected.to eq('For more details, you can read about payments and deductions when <a class="govuk-link govuk-link--no-visited-state" target="_blank" href="https://www.gov.uk/guidance/teachers-claim-back-your-student-loan-repayments#payment">claiming back your student loan repayments (opens in new tab)</a>') }
     end
 
-    context "policy is a TargetedRetentionIncentivePayments" do
-      let(:policy) { Policies::TargetedRetentionIncentivePayments }
+    context "policy is a LevellingUpPremiumPayments" do
+      let(:policy) { Policies::LevellingUpPremiumPayments }
 
       it { is_expected.to eq('For more details, you can read about payments and deductions for the <a class="govuk-link govuk-link--no-visited-state" target="_blank" href="https://www.gov.uk/guidance/targeted-retention-incentive-payments-for-school-teachers#payments-and-deductions">school targeted retention incentive (opens in new tab)</a>') }
     end

@@ -10,7 +10,7 @@ RSpec.describe "Admin views payment spec" do
   before do
     create(:journey_configuration, :student_loans)
     create(:journey_configuration, :further_education_payments)
-    create(:journey_configuration, :targeted_retention_incentive_payments)
+    create(:journey_configuration, :levelling_up_premium_payments)
   end
 
   it "shows the payment details" do
@@ -41,7 +41,7 @@ RSpec.describe "Admin views payment spec" do
       }
     )
 
-    create(:targeted_retention_incentive_payments_award, award_amount: 9999)
+    create(:levelling_up_premium_payments_award, award_amount: 9999)
 
     topup_1 = create(
       :topup,
@@ -49,7 +49,7 @@ RSpec.describe "Admin views payment spec" do
       claim: create(
         :claim,
         :current_academic_year,
-        policy: Policies::TargetedRetentionIncentivePayments,
+        policy: Policies::LevellingUpPremiumPayments,
         **personal_details
       )
     )
@@ -60,7 +60,7 @@ RSpec.describe "Admin views payment spec" do
       claim: create(
         :claim,
         :current_academic_year,
-        policy: Policies::TargetedRetentionIncentivePayments,
+        policy: Policies::LevellingUpPremiumPayments,
         **personal_details
       )
     )

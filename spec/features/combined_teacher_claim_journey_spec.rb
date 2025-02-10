@@ -221,7 +221,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
 
     click_on "Accept and send"
 
-    submitted_claim = Claim.by_policy(Policies::TargetedRetentionIncentivePayments).order(:created_at).last
+    submitted_claim = Claim.by_policy(Policies::LevellingUpPremiumPayments).order(:created_at).last
     # - Application complete
     expect(page).to have_text("You applied for a school targeted retention incentive")
     expect(page).to have_text("What happens next")
@@ -232,7 +232,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
 
     policy_options_provided = [
       {"policy" => "EarlyCareerPayments", "award_amount" => "2000.0"},
-      {"policy" => "TargetedRetentionIncentivePayments", "award_amount" => "2000.0"}
+      {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
     ]
 
     expect(submitted_claim.policy_options_provided).to eq policy_options_provided
@@ -348,7 +348,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
       expect(page).to have_content "the policy has now closed"
     end
 
-    scenario "choosing a Targeted Retention Incentive eligible school allows completing the journey" do
+    scenario "choosing a lup eligible school allows completing the journey" do
       school = create(:school, :combined_journey_eligibile_for_all)
 
       visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)

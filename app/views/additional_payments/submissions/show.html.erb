@@ -7,7 +7,7 @@
       <h1 class="govuk-panel__title" id="submitted-title">
         You applied for
         <%= "an early-career payment" if submitted_claim.has_ecp_policy? %>
-        <%= "a #{I18n.t("targeted_retention_incentive_payments.policy_short_name").downcase}" if submitted_claim.has_targeted_retention_incentive_policy? %>
+        <%= "a #{I18n.t("levelling_up_premium_payments.policy_short_name").downcase}" if submitted_claim.has_lupp_policy? %>
       </h1>
 
       <div class="govuk-panel__body">

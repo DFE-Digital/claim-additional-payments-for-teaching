@@ -10,8 +10,8 @@ RSpec.feature "Data report request" do
     claims = [
       create(:claim, :submitted, policy: Policies::StudentLoans),
       create(:claim, :submitted, policy: Policies::EarlyCareerPayments),
-      create(:claim, :submitted, policy: Policies::TargetedRetentionIncentivePayments),
-      create(:claim, :submitted, :held, policy: Policies::TargetedRetentionIncentivePayments) # includes held claims
+      create(:claim, :submitted, policy: Policies::LevellingUpPremiumPayments),
+      create(:claim, :submitted, :held, policy: Policies::LevellingUpPremiumPayments) # includes held claims
     ]
 
     claims.concat create_list(:claim, 100, :submitted) # Making sure CSV is not paginated at 50 claims/page

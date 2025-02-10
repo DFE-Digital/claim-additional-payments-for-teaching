@@ -83,7 +83,7 @@ module AutomatedChecks
         subject(:perform) { induction_task.perform }
 
         context "when the claim policy is not ECP" do
-          [Policies::TargetedRetentionIncentivePayments, Policies::StudentLoans].each do |policy|
+          [Policies::LevellingUpPremiumPayments, Policies::StudentLoans].each do |policy|
             context "when the policy is #{policy}" do
               let(:policy) { policy }
 

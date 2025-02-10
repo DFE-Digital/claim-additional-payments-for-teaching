@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "SLC (Student Loans Company) data upload " do
   let!(:journey_configuration_tslr) { create(:journey_configuration, :student_loans) }
-  let!(:journey_configuration_ecp_targeted_retention_incentive) { create(:journey_configuration, :additional_payments) }
+  let!(:journey_configuration_ecp_lupp) { create(:journey_configuration, :additional_payments) }
   let!(:journey_configuration_fe) { create(:journey_configuration, :further_education_payments) }
   let!(:journey_configuration_ey) { create(:journey_configuration, :early_years_payment_provider_start) }
 
@@ -75,7 +75,7 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
             nino: "QQ123456B",
             full_name: "Agata Christie",
             date_of_birth: "20/03/1977",
-            policy_name: "TargetedRetentionIncentivePayments",
+            policy_name: "LevellingUpPremiumPayments",
             no_of_plans_currently_repaying: "1",
             plan_type_of_deduction: "2",
             amount: "50"

@@ -22,7 +22,7 @@ module Journeys
           journey_session.answers.assign_attributes(
             qualification: answers.early_career_payments_dqt_teacher_record&.route_into_teaching || answers.qualification,
             itt_academic_year: answers.early_career_payments_dqt_teacher_record&.itt_academic_year_for_claim || answers.itt_academic_year,
-            eligible_degree_subject: answers.targeted_retention_incentive_payments_dqt_reacher_record&.eligible_degree_code? || answers.eligible_degree_subject,
+            eligible_degree_subject: answers.levelling_up_premium_payments_dqt_reacher_record&.eligible_degree_code? || answers.eligible_degree_subject,
             eligible_itt_subject: eligible_itt_subject_from_dqt || answers.eligible_itt_subject
           )
         else
@@ -55,7 +55,7 @@ module Journeys
       def show_degree_subjects?
         [
           answers.early_career_payments_dqt_teacher_record,
-          answers.targeted_retention_incentive_payments_dqt_reacher_record
+          answers.levelling_up_premium_payments_dqt_reacher_record
         ].any? do |dqt_teacher_record|
           dqt_teacher_record.eligible_itt_subject_for_claim == :none_of_the_above
         end && dqt_teacher_record.degree_names.any?
@@ -72,7 +72,7 @@ module Journeys
       def eligible_itt_subject_from_dqt
         dqt_subjects = [
           answers.early_career_payments_dqt_teacher_record&.eligible_itt_subject_for_claim,
-          answers.targeted_retention_incentive_payments_dqt_reacher_record&.eligible_itt_subject_for_claim
+          answers.levelling_up_premium_payments_dqt_reacher_record&.eligible_itt_subject_for_claim
         ].compact
 
         return nil if dqt_subjects.empty?

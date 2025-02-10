@@ -25,10 +25,10 @@ module Journeys
         )
       end
 
-      def targeted_retention_incentive_payments_dqt_reacher_record
+      def levelling_up_premium_payments_dqt_reacher_record
         return unless dqt_teacher_status.present?
 
-        @targeted_retention_incentive_payments_dqt_reacher_record ||= Policies::TargetedRetentionIncentivePayments::DqtRecord.new(
+        @levelling_up_premium_payments_dqt_reacher_record ||= Policies::LevellingUpPremiumPayments::DqtRecord.new(
           Dqt::Teacher.new(dqt_teacher_status),
           self
         )
@@ -36,7 +36,7 @@ module Journeys
 
       def has_no_dqt_data_for_claim?
         dqt_teacher_status.blank? ||
-          targeted_retention_incentive_payments_dqt_reacher_record.has_no_data_for_claim? ||
+          levelling_up_premium_payments_dqt_reacher_record.has_no_data_for_claim? ||
           early_career_payments_dqt_teacher_record.has_no_data_for_claim?
       end
 
@@ -44,8 +44,8 @@ module Journeys
         case selected_policy
         when "EarlyCareerPayments"
           Policies::EarlyCareerPayments
-        when "TargetedRetentionIncentivePayments"
-          Policies::TargetedRetentionIncentivePayments
+        when "LevellingUpPremiumPayments"
+          Policies::LevellingUpPremiumPayments
         when nil
           nil
         else

@@ -2,7 +2,7 @@
   You are not eligible for an
   <%= link_to("early-career payment", Policies::EarlyCareerPayments.eligibility_criteria_url, class: "govuk-link") %>
   or a
-  <%= link_to(I18n.t("targeted_retention_incentive_payments.policy_short_name").downcase, Policies::TargetedRetentionIncentivePayments.eligibility_criteria_url, class: "govuk-link") %>
+  <%= link_to(I18n.t("levelling_up_premium_payments.policy_short_name").downcase, Policies::LevellingUpPremiumPayments.eligibility_criteria_url, class: "govuk-link") %>
   because of the year you studied.
 </p>
 
@@ -10,5 +10,5 @@
   For more information, check the eligibility criteria for
   <%= link_to("early-career payments", Policies::EarlyCareerPayments.eligibility_criteria_url, class: "govuk-link") %>
   and
-  <%= link_to(I18n.t("targeted_retention_incentive_payments.policy_short_name").downcase.pluralize, Policies::TargetedRetentionIncentivePayments.eligibility_criteria_url, class: "govuk-link") %>.
+  <%= link_to(I18n.t("levelling_up_premium_payments.policy_short_name").downcase.pluralize, Policies::LevellingUpPremiumPayments.eligibility_criteria_url, class: "govuk-link") %>.
 </p>

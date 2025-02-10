@@ -41,7 +41,7 @@ describe AdditionalPaymentsHelper do
       let(:answers) do
         build(
           :additional_payments_answers,
-          :ecp_and_targeted_retention_incentive_eligible,
+          :ecp_and_lup_eligible,
           :trainee_teacher
         )
       end

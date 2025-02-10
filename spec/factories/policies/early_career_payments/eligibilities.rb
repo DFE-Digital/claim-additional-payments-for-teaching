@@ -34,10 +34,10 @@ FactoryBot.define do
     end
 
     trait :eligible_school_ecp_only do
-      association :current_school, factory: [:school, :early_career_payments_eligible, :targeted_retention_incentive_payments_ineligible]
+      association :current_school, factory: [:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible]
     end
 
-    trait :eligible_school_ecp_and_targeted_retention_incentive do
+    trait :eligible_school_ecp_and_lup do
       association :current_school, factory: [:school, :combined_journey_eligibile_for_all]
     end
 
@@ -88,7 +88,7 @@ FactoryBot.define do
       qualification { :postgraduate_itt }
     end
 
-    # Traits common to both ECP and Targeted Retention Incentive
+    # Traits common to both ECP and LUP
     trait :common_eligible_attributes do
       school_somewhere_else { nil }
       eligible_school

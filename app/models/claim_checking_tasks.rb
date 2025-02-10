@@ -40,7 +40,7 @@ class ClaimCheckingTasks
         task_names.delete("previous_residency")
         task_names.delete("induction_confirmation") unless claim.policy == Policies::EarlyCareerPayments
         task_names.delete("student_loan_amount") unless claim.policy == Policies::StudentLoans
-        task_names.delete("student_loan_plan") unless claim.has_ecp_or_targeted_retention_incentive_policy? && claim.submitted_without_slc_data?
+        task_names.delete("student_loan_plan") unless claim.has_ecp_or_lupp_policy? && claim.submitted_without_slc_data?
         task_names.delete("payroll_details") unless claim.must_manually_validate_bank_details?
         task_names.delete("matching_details") unless matching_claims.exists?
         task_names.delete("payroll_gender") unless claim.payroll_gender_missing? || task_names_for_claim.include?("payroll_gender")

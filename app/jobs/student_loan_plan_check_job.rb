@@ -1,7 +1,7 @@
 class StudentLoanPlanCheckJob < ApplicationJob
   APPLICABLE_POLICIES = [
     Policies::EarlyCareerPayments,
-    Policies::TargetedRetentionIncentivePayments,
+    Policies::LevellingUpPremiumPayments,
     Policies::FurtherEducationPayments,
     Policies::EarlyYearsPayments
   ].freeze

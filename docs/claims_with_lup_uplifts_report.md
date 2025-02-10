@@ -1,6 +1,6 @@
-# Generate a CSV report of claims that are eligible for a Targeted Retention Incentive top up
+# Generate a CSV report of claims that are eligible for a LUP top up
 
-After Targeted Retention Incentive award amounts are uplift we need identify existing claims which are
+After LUP award amounts are uplift we need identify existing claims which are
 affected.
 
 This is a quick way to create a CSV output of all the claims referring to claims

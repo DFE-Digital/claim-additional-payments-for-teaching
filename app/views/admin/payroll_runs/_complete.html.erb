@@ -20,7 +20,7 @@
         </dt>
 
         <dd class="govuk-summary-list__value">
-          <%= @payroll_run.number_of_claims_for_policy(Policies::TargetedRetentionIncentivePayments, filter: :topups) %>
+          <%= @payroll_run.number_of_claims_for_policy(Policies::LevellingUpPremiumPayments, filter: :topups) %>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -82,9 +82,9 @@
           </tr>
         <% end %>
         <tr class="govuk-table__row">
-          <th scope="row" class="govuk-table__header"><%= I18n.t("targeted_retention_incentive_payments.policy_short_name") %> Top Ups</th>
-          <td class="govuk-table__cell"><%= @payroll_run.number_of_claims_for_policy(Policies::TargetedRetentionIncentivePayments, filter: :topups) %></td>
-          <td class="govuk-table__cell"><%= number_to_currency(@payroll_run.total_claim_amount_for_policy(Policies::TargetedRetentionIncentivePayments, filter: :topups)) %></td>
+          <th scope="row" class="govuk-table__header"><%= I18n.t("levelling_up_premium_payments.policy_short_name") %> Top Ups</th>
+          <td class="govuk-table__cell"><%= @payroll_run.number_of_claims_for_policy(Policies::LevellingUpPremiumPayments, filter: :topups) %></td>
+          <td class="govuk-table__cell"><%= number_to_currency(@payroll_run.total_claim_amount_for_policy(Policies::LevellingUpPremiumPayments, filter: :topups)) %></td>
           </tr>
       </thead>
       <tbody class="govuk-table__body">
@@ -133,7 +133,7 @@
               <td class="govuk-table__cell" rowspan="<%= number_of_claims %>"><%= payment.banking_name %></td>
             <% end %>
             <td class="govuk-table__cell"><%= link_to claim.reference, admin_claim_path(claim), class: "govuk-link" %></td>
-            <td class="govuk-table__cell"><%= line_item.is_a?(Topup) ? "#{I18n.t("targeted_retention_incentive_payments.policy_short_name")} (top up)" : claim.policy.short_name %></td>
+            <td class="govuk-table__cell"><%= line_item.is_a?(Topup) ? "#{I18n.t("levelling_up_premium_payments.policy_short_name")} (top up)" : claim.policy.short_name %></td>
             <td class="govuk-table__cell"><%= number_to_currency(line_item.award_amount) %></td>
             <% if index == 0 %>
               <td class="govuk-table__cell" rowspan="<%= number_of_claims %>"><%= number_to_currency(payment.award_amount) %></td>

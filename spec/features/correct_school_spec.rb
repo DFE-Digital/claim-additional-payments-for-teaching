@@ -3,10 +3,10 @@ require "rails_helper"
 RSpec.feature "Logs in with TID, confirms teacher details and displays school from TPS" do
   include OmniauthMockHelper
 
-  # create a school eligible for ECP and Targeted Retention Incentive so can walk the whole journey
+  # create a school eligible for ECP and LUP so can walk the whole journey
   let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
   let!(:eligible_school) { create(:school, :combined_journey_eligibile_for_all) }
-  let!(:ineligible_school) { create(:school, :early_career_payments_ineligible, :targeted_retention_incentive_payments_ineligible) }
+  let!(:ineligible_school) { create(:school, :early_career_payments_ineligible, :levelling_up_premium_payments_ineligible) }
   let(:trn) { 1234567 }
   let(:date_of_birth) { "1981-01-01" }
   let(:nino) { "AB123123A" }

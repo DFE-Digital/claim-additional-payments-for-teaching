@@ -12,7 +12,7 @@ RSpec.describe Claim::DataReportRequest do
         [
           create(:claim, :submitted, policy: Policies::StudentLoans),
           create(:claim, :submitted, policy: Policies::EarlyCareerPayments),
-          create(:claim, :submitted, policy: Policies::TargetedRetentionIncentivePayments)
+          create(:claim, :submitted, policy: Policies::LevellingUpPremiumPayments)
         ]
       end
 

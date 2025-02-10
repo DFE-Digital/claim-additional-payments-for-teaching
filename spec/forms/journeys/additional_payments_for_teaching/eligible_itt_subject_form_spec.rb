@@ -55,7 +55,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
     context "when single subject available" do
       before do
-        allow(Policies::TargetedRetentionIncentivePayments).to receive(:fixed_subject_symbols).and_return([:mathematics])
+        allow(Policies::LevellingUpPremiumPayments).to receive(:fixed_subject_symbols).and_return([:mathematics])
       end
 
       let(:answers) do
@@ -106,7 +106,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
         context "2017 ITT year" do
           let(:itt_year) { AcademicYear.new(2017) }
 
-          context "ineligible Targeted Retention Incentive" do
+          context "ineligible LUP" do
             let(:journey_session) do
               create(
                 :additional_payments_session,
@@ -121,13 +121,13 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
             it { is_expected.to be_empty }
           end
 
-          context "eligible Targeted Retention Incentive" do
+          context "eligible LUP" do
             let(:journey_session) do
               create(
                 :additional_payments_session,
                 answers: attributes_for(
                   :additional_payments_answers,
-                  :ecp_and_targeted_retention_incentive_eligible,
+                  :ecp_and_lup_eligible,
                   itt_academic_year: itt_year
                 )
               )
@@ -140,7 +140,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
         context "2018 ITT year" do
           let(:itt_year) { AcademicYear.new(2018) }
 
-          context "ineligible Targeted Retention Incentive" do
+          context "ineligible LUP" do
             let(:journey_session) do
               create(
                 :additional_payments_session,
@@ -155,13 +155,13 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
             it { is_expected.to contain_exactly(:mathematics) }
           end
 
-          context "eligible Targeted Retention Incentive" do
+          context "eligible LUP" do
             let(:journey_session) do
               create(
                 :additional_payments_session,
                 answers: attributes_for(
                   :additional_payments_answers,
-                  :ecp_and_targeted_retention_incentive_eligible,
+                  :ecp_and_lup_eligible,
                   itt_academic_year: itt_year
                 )
               )
@@ -174,7 +174,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
         context "2019 ITT year" do
           let(:itt_year) { AcademicYear.new(2019) }
 
-          context "ineligible Targeted Retention Incentive" do
+          context "ineligible LUP" do
             let(:journey_session) do
               create(
                 :additional_payments_session,
@@ -189,13 +189,13 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
             it { is_expected.to contain_exactly(:mathematics) }
           end
 
-          context "eligible Targeted Retention Incentive" do
+          context "eligible LUP" do
             let(:journey_session) do
               create(
                 :additional_payments_session,
                 answers: attributes_for(
                   :additional_payments_answers,
-                  :ecp_and_targeted_retention_incentive_eligible,
+                  :ecp_and_lup_eligible,
                   itt_academic_year: itt_year
                 )
               )
@@ -208,7 +208,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
         context "2020 ITT year" do
           let(:itt_year) { AcademicYear.new(2020) }
 
-          context "ineligible Targeted Retention Incentive" do
+          context "ineligible LUP" do
             let(:journey_session) do
               create(
                 :additional_payments_session,
@@ -223,13 +223,13 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
             it { is_expected.to contain_exactly(:chemistry, :foreign_languages, :mathematics, :physics) }
           end
 
-          context "eligible Targeted Retention Incentive" do
+          context "eligible LUP" do
             let(:journey_session) do
               create(
                 :additional_payments_session,
                 answers: attributes_for(
                   :additional_payments_answers,
-                  :ecp_and_targeted_retention_incentive_eligible,
+                  :ecp_and_lup_eligible,
                   itt_academic_year: itt_year
                 )
               )
@@ -242,7 +242,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
         context "2021 ITT year" do
           let(:itt_year) { AcademicYear.new(2021) }
 
-          context "ineligible Targeted Retention Incentive" do
+          context "ineligible LUP" do
             let(:journey_session) do
               create(
                 :additional_payments_session,
@@ -257,13 +257,13 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
             it { is_expected.to be_empty }
           end
 
-          context "eligible Targeted Retention Incentive" do
+          context "eligible LUP" do
             let(:journey_session) do
               create(
                 :additional_payments_session,
                 answers: attributes_for(
                   :additional_payments_answers,
-                  :ecp_and_targeted_retention_incentive_eligible,
+                  :ecp_and_lup_eligible,
                   itt_academic_year: itt_year
                 )
               )
@@ -299,7 +299,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
     end
 
     context "when trainee teacher" do
-      context "when in ECP and Targeted Retention Incentive policy year range" do
+      context "when in ECP and LUP policy year range" do
         let(:trainee_teacher) { :trainee_teacher }
 
         it do
@@ -363,7 +363,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
     context "when the subject list contains chemistry" do
       before do
-        allow(Policies::TargetedRetentionIncentivePayments).to(
+        allow(Policies::LevellingUpPremiumPayments).to(
           receive(:fixed_subject_symbols).and_return([:chemistry])
         )
       end
@@ -373,7 +373,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
     context "when the subject list contains physics" do
       before do
-        allow(Policies::TargetedRetentionIncentivePayments).to(
+        allow(Policies::LevellingUpPremiumPayments).to(
           receive(:fixed_subject_symbols).and_return([:physics])
         )
       end
@@ -383,7 +383,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
     context "when the subject list does not contain chemistry or physics" do
       before do
-        allow(Policies::TargetedRetentionIncentivePayments).to(
+        allow(Policies::LevellingUpPremiumPayments).to(
           receive(:fixed_subject_symbols).and_return([:mathematics])
         )
       end

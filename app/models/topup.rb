@@ -25,7 +25,7 @@ class Topup < ApplicationRecord
   def award_amount_must_be_in_range
     return unless award_amount.present?
 
-    max = Policies::TargetedRetentionIncentivePayments::Award.where(academic_year: claim.academic_year.to_s).maximum(:award_amount)
+    max = Policies::LevellingUpPremiumPayments::Award.where(academic_year: claim.academic_year.to_s).maximum(:award_amount)
     total_amount = claim.award_amount_with_topups + award_amount
 
     unless total_amount.between?(1, max)

@@ -11,14 +11,14 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
       attributes_for(
         :additional_payments_answers,
         :ecp_eligible,
-        :eligible_school_ecp_and_targeted_retention_incentive,
+        :eligible_school_ecp_and_lup,
         teaching_subject_now: nil # temp until the form that resets this is migrated to reset answers
       )
     )
     journey_session.save!
   end
 
-  context "when ECP and Targeted Retention Incentive eligible" do
+  context "when ECP and LUP eligible" do
     it "has the correct subjects" do
       jump_to_claim_journey_page(
         slug: "nqt-in-academic-year-after-itt",
@@ -83,13 +83,13 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
     end
   end
 
-  context "when eligible only for Targeted Retention Incentive" do
+  context "when eligible only for LUP" do
     before do
       journey_session.answers.assign_attributes(
         attributes_for(
           :additional_payments_answers,
           :ecp_ineligible,
-          :targeted_retention_incentive_eligible
+          :lup_eligible
         )
       )
       journey_session.save!

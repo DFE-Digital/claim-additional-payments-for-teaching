@@ -2,7 +2,7 @@ module Policies
   POLICIES = [
     StudentLoans,
     EarlyCareerPayments,
-    TargetedRetentionIncentivePayments,
+    LevellingUpPremiumPayments,
     InternationalRelocationPayments,
     FurtherEducationPayments,
     EarlyYearsPayments

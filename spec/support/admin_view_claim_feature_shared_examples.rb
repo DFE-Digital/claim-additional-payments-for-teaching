@@ -78,7 +78,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
 
     # NOTE: mirror claims factory for academic_year attribute "hardcoding" of 2019
     current_academic_year =
-      if [Policies::EarlyCareerPayments, Policies::TargetedRetentionIncentivePayments, Policies::FurtherEducationPayments].include?(policy)
+      if [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments, Policies::FurtherEducationPayments].include?(policy)
         academic_year
       else
         AcademicYear.new(2019)
@@ -155,7 +155,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     sections = case policy
     when Policies::StudentLoans
       ["Identity confirmation", "Qualifications", "Census subjects taught", "Employment", "Student loan amount", "Decision"]
-    when Policies::TargetedRetentionIncentivePayments
+    when Policies::LevellingUpPremiumPayments
       ["Identity confirmation", "Qualifications", "Census subjects taught", "Employment", "Student loan plan", "Decision"]
     when Policies::EarlyCareerPayments
       ["Identity confirmation", "Qualifications", "Induction confirmation", "Census subjects taught", "Employment", "Student loan plan", "Decision"]

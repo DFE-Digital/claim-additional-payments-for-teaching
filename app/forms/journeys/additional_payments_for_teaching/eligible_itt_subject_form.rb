@@ -59,10 +59,10 @@ module Journeys
                 itt_year: answers.itt_academic_year
               )
             end.flatten.uniq
-        elsif answers.policy_year.in?(Policies::TargetedRetentionIncentivePayments::POLICY_RANGE)
-          # they get the standard, unchanging Targeted Retention Incentive subject set because they won't have qualified in time for ECP by 2022/2023
+        elsif answers.policy_year.in?(Policies::LevellingUpPremiumPayments::POLICY_RANGE)
+          # they get the standard, unchanging LUP subject set because they won't have qualified in time for ECP by 2022/2023
           # and they won't have given an ITT year
-          Policies::TargetedRetentionIncentivePayments.fixed_subject_symbols
+          Policies::LevellingUpPremiumPayments.fixed_subject_symbols
         else
           []
         end

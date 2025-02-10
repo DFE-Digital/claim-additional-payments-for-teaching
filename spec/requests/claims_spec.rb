@@ -56,7 +56,7 @@ RSpec.describe "Claims", type: :request do
       end
     end
 
-    context "ecp and targeted_retention_incentive combined claim" do
+    context "ecp and lup combined claim" do
       it "created for the current academic year and redirects to the next question in the sequence" do
         @journey_configuration = create(:journey_configuration, :additional_payments)
 
@@ -391,7 +391,7 @@ RSpec.describe "Claims", type: :request do
     end
   end
 
-  # 2022/2023 onwards /additional-payments covers ECP and Targeted Retention Incentive claims
+  # 2022/2023 onwards /additional-payments covers ECP and LUP claims
   describe "when navigating to /early-career-payments/* urls " do
     context "base url" do
       it "redirects to the additional-payments gov page" do

@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Backlinking during a claim" do
   scenario "when there is an error" do
     create(:journey_configuration, :additional_payments)
-    targeted_retention_incentive_school = create(:school, :targeted_retention_incentive_payments_eligible)
+    lup_school = create(:school, :levelling_up_premium_payments_eligible)
 
     visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
     # - Sign in or continue page
@@ -13,7 +13,7 @@ RSpec.feature "Backlinking during a claim" do
 
     expect(page).to have_content("Which school do you teach at?")
     expect(page).to have_link("Back")
-    choose_school targeted_retention_incentive_school
+    choose_school lup_school
 
     expect(page).to have_content("Are you currently teaching as a qualified teacher?")
     choose "Yes"
@@ -82,9 +82,9 @@ RSpec.feature "Backlinking during a claim" do
     expect(page).to have_text("Claim back student loan repayments if you’re a teacher")
   end
 
-  scenario "ECP/Targeted Retention Incentive journey" do
+  scenario "ECP/LUP journey" do
     create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023))
-    targeted_retention_incentive_school = create(:school, :targeted_retention_incentive_payments_eligible)
+    lup_school = create(:school, :levelling_up_premium_payments_eligible)
 
     visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
     # - Sign in or continue page
@@ -93,7 +93,7 @@ RSpec.feature "Backlinking during a claim" do
     click_on "Continue without signing in"
 
     expect(page).to have_link("Back")
-    choose_school targeted_retention_incentive_school
+    choose_school lup_school
     expect(page).to have_link("Back")
 
     # go to deadend
@@ -107,9 +107,9 @@ RSpec.feature "Backlinking during a claim" do
     expect(page).to have_no_link("Back")
   end
 
-  scenario "ECP/Targeted Retention Incentive trainee mini journey" do
+  scenario "ECP/LUP trainee mini journey" do
     create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023))
-    targeted_retention_incentive_school = create(:school, :targeted_retention_incentive_payments_eligible)
+    lup_school = create(:school, :levelling_up_premium_payments_eligible)
 
     visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
 
@@ -118,7 +118,7 @@ RSpec.feature "Backlinking during a claim" do
     expect(page).to have_link("Back")
     click_on "Continue without signing in"
 
-    choose_school targeted_retention_incentive_school
+    choose_school lup_school
 
     choose "No, I’m a trainee teacher"
     click_on "Continue"
