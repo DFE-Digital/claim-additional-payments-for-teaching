@@ -29,6 +29,25 @@ class Decision < ApplicationRecord
     rejected: 1
   }
 
+  # FIXME RL: remove this once we've backfilled the existing data
+  def result=(value)
+    normalized_value =
+      if value.is_a?(Symbol) || value.is_a?(String)
+        self.class.results[value.to_s]
+      else
+        value
+      end
+
+    self.approved = (normalized_value == self.class.results[:approved])
+
+    super(normalized_value)
+  end
+
+  # FIXME RL: remove this once we've backfilled the existing data
+  def approved?
+    result == "approved"
+  end
+
   def self.rejected_reasons_for(policy)
     policy::ADMIN_DECISION_REJECTED_REASONS
   end
