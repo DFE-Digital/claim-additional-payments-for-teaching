@@ -34,11 +34,6 @@ module Journeys
         journey_session.answers.assign_attributes(teaching_qualification:)
         journey_session.save!
       end
-
-      def clear_answers_from_session
-        journey_session.answers.assign_attributes(teaching_qualification: nil)
-        journey_session.save!
-      end
     end
   end
 end

@@ -49,8 +49,8 @@ class Form
   end
 
   def url
-    if journey.use_navigator? && params[:change] == "true"
-      claim_path(journey::ROUTING_NAME, params[:slug], change: true)
+    if journey.use_navigator? && params[:change].present?
+      claim_path(journey::ROUTING_NAME, params[:slug], change: params[:change])
     else
       claim_path(journey::ROUTING_NAME, params[:slug])
     end

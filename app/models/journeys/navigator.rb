@@ -59,6 +59,7 @@ module Journeys
 
           if changing_answer?
             return slug if form == forms.last
+            return slug if params[:change] == slug
 
             next
           end
@@ -152,7 +153,7 @@ module Journeys
     private
 
     def changing_answer?
-      params[:change] == "true"
+      params[:change].present?
     end
 
     def impermissible_forms
