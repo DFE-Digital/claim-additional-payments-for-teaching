@@ -3,32 +3,32 @@ class ClaimMailerPreview < ActionMailer::Preview
     ClaimMailer.submitted(claim_for(Claim.submitted.by_policy(Policies::EarlyCareerPayments)))
   end
 
-  def submitted_targeted_retention_incentive
-    ClaimMailer.submitted(claim_for(Claim.submitted.by_policy(Policies::TargetedRetentionIncentivePayments)))
+  def submitted_lup
+    ClaimMailer.submitted(claim_for(Claim.submitted.by_policy(Policies::LevellingUpPremiumPayments)))
   end
 
   def approved_ecp
     ClaimMailer.approved(claim_for(Claim.approved.by_policy(Policies::EarlyCareerPayments)))
   end
 
-  def approved_targeted_retention_incentive
-    ClaimMailer.approved(claim_for(Claim.approved.by_policy(Policies::TargetedRetentionIncentivePayments)))
+  def approved_lup
+    ClaimMailer.approved(claim_for(Claim.approved.by_policy(Policies::LevellingUpPremiumPayments)))
   end
 
   def rejected_ecp
     ClaimMailer.rejected(claim_for(Claim.rejected.by_policy(Policies::EarlyCareerPayments)))
   end
 
-  def rejected_targeted_retention_incentive
-    ClaimMailer.rejected(claim_for(Claim.rejected.by_policy(Policies::TargetedRetentionIncentivePayments)))
+  def rejected_lup
+    ClaimMailer.rejected(claim_for(Claim.rejected.by_policy(Policies::LevellingUpPremiumPayments)))
   end
 
   def update_after_three_weeks_ecp
     ClaimMailer.update_after_three_weeks(claim_for(Claim.approved.by_policy(Policies::EarlyCareerPayments)))
   end
 
-  def update_after_three_weeks_targeted_retention_incentive
-    ClaimMailer.update_after_three_weeks(claim_for(Claim.approved.by_policy(Policies::TargetedRetentionIncentivePayments)))
+  def update_after_three_weeks_lup
+    ClaimMailer.update_after_three_weeks(claim_for(Claim.approved.by_policy(Policies::LevellingUpPremiumPayments)))
   end
 
   private

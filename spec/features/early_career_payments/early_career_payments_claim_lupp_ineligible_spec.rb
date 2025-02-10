@@ -1,10 +1,10 @@
 require "rails_helper"
 
-RSpec.feature "Early-Career Payments claims with school ineligible for targeted_retention_incentive Payment" do
+RSpec.feature "Early-Career Payments claims with school ineligible for Levelling-Up Premium Payment" do
   include AdditionalPaymentsHelper
 
-  # create a school eligible for ECP and ineligible Targeted Retention Incentive
-  let!(:school) { create(:school, :early_career_payments_eligible, :targeted_retention_incentive_payments_ineligible) }
+  # create a school eligible for ECP and ineligible LUPP
+  let!(:school) { create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible) }
   let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
   let(:current_academic_year) { journey_configuration.current_academic_year }
 

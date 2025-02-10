@@ -1,0 +1,17 @@
+<p class="govuk-body">
+  You are not eligible for the
+  <%= link_to("early-career payment", Policies::EarlyCareerPayments.eligibility_criteria_url, class: "govuk-link") %>.
+  This may be because of the subject you teach or the year you studied.
+  To be eligible, your initial teacher training (ITT) course must have started (postgraduate) or finished (undergraduate)
+  in:
+</p>
+<ul class="govuk-list govuk-list--bullet">
+  <li>mathematics in the 2018 to 2019, 2019 to 2020 or 2020 to 2021 academic year</li>
+  <li>chemistry, languages and physics in the 2020 to 2021 academic year</li>
+</ul>
+<p class="govuk-body">
+  You are not eligible for the
+  <%= link_to(I18n.t("levelling_up_premium_payments.policy_short_name").downcase, Policies::LevellingUpPremiumPayments.eligibility_criteria_url, class: "govuk-link") %>
+  because you do not teach chemistry, computing, mathematics or physics
+  for at least half of your contracted hours.
+</p>

@@ -34,7 +34,7 @@ RSpec.describe "Admin tasks", type: :request do
     end
 
     # Compatible with claims from each policy
-    [Policies::StudentLoans, Policies::EarlyCareerPayments, Policies::TargetedRetentionIncentivePayments].each do |policy|
+    [Policies::StudentLoans, Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments].each do |policy|
       context "with a #{policy} claim" do
         let(:claim) { create(:claim, :submitted, policy: policy) }
 

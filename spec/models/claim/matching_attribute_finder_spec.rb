@@ -33,7 +33,7 @@ RSpec.describe Claim::MatchingAttributeFinder do
         eligibility_attributes: {teacher_reference_number: "0902344"})
     }
 
-    let!(:targeted_retention_incentive_claim) {
+    let!(:lup_claim) {
       create(:claim,
         :submitted,
         first_name: "Genghis",
@@ -45,7 +45,7 @@ RSpec.describe Claim::MatchingAttributeFinder do
         bank_sort_code: "972654",
         academic_year: AcademicYear.new("2019"),
         building_society_roll_number: "123456789/ABCD",
-        policy: Policies::TargetedRetentionIncentivePayments,
+        policy: Policies::LevellingUpPremiumPayments,
         eligibility_attributes: {teacher_reference_number: "0902344"})
     }
 
@@ -81,8 +81,8 @@ RSpec.describe Claim::MatchingAttributeFinder do
 
     subject(:matching_claims) { Claim::MatchingAttributeFinder.new(source_claim).matching_claims }
 
-    it "includes claims for ECP, Targeted Retention Incentive, FE and EY claims" do
-      expect(matching_claims).to contain_exactly(targeted_retention_incentive_claim, student_loans_claim, fe_claim, ey_claim)
+    it "includes claims for ECP, LUP, FE and EY claims" do
+      expect(matching_claims).to contain_exactly(lup_claim, student_loans_claim, fe_claim, ey_claim)
     end
   end
 

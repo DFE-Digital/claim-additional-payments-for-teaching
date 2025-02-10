@@ -4,7 +4,7 @@ RSpec.feature "Combined journey with Teacher ID email check" do
   include OmniauthMockHelper
   include ClaimsControllerHelper
 
-  # create a school eligible for ECP and Targeted Retention Incentive so can walk the whole journey
+  # create a school eligible for ECP and LUP so can walk the whole journey
   let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
   let(:trn) { 1234567 }

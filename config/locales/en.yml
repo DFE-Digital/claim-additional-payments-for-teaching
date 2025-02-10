@@ -704,7 +704,7 @@ en:
     claim_amount_description: "Additional payment for teaching"
     support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
     information_provided_further_details_link_text: early-career payment (opens in new tab)
-  targeted_retention_incentive_payments:
+  levelling_up_premium_payments:
     <<: *additional_payments
     purpose: For early career teachers who teach certain subjects and work in disadvantaged schools.
     policy_short_name: "School Targeted Retention Incentive"

@@ -21,7 +21,7 @@ module Policies
 
       def ecp_only_school?
         Policies::EarlyCareerPayments::SchoolEligibility.new(current_school).eligible? &&
-          !Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(current_school).eligible?
+          !Policies::LevellingUpPremiumPayments::SchoolEligibility.new(current_school).eligible?
       end
 
       def calculate_award_amount

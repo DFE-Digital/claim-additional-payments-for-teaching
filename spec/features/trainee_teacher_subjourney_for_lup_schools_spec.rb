@@ -1,12 +1,12 @@
 require "rails_helper"
 
-RSpec.feature "Trainee teacher subjourney for Targeted Retention Incentive schools" do
+RSpec.feature "Trainee teacher subjourney for LUP schools" do
   let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023)) }
   let(:academic_year) { journey_configuration.current_academic_year }
 
-  scenario "non-Targeted Retention Incentive school" do
-    non_targeted_retention_incentive_school = create(:school, :early_career_payments_eligible, :targeted_retention_incentive_payments_ineligible)
-    expect(Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(non_targeted_retention_incentive_school)).not_to be_eligible
+  scenario "non-LUP school" do
+    non_lup_school = create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible)
+    expect(Policies::LevellingUpPremiumPayments::SchoolEligibility.new(non_lup_school)).not_to be_eligible
 
     visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
 
@@ -14,7 +14,7 @@ RSpec.feature "Trainee teacher subjourney for Targeted Retention Incentive schoo
     expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue without signing in"
 
-    choose_school non_targeted_retention_incentive_school
+    choose_school non_lup_school
 
     expect(page).to have_text(I18n.t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"))
 
@@ -25,7 +25,7 @@ RSpec.feature "Trainee teacher subjourney for Targeted Retention Incentive schoo
     expect(page).to have_no_link("Back")
   end
 
-  scenario "Targeted Retention Incentive school with Targeted Retention Incentive ITT subject" do
+  scenario "LUP school with LUP ITT subject" do
     get_to_itt_subject_question
 
     choose "Mathematics"
@@ -55,7 +55,7 @@ RSpec.feature "Trainee teacher subjourney for Targeted Retention Incentive schoo
     expect(mail.template_id).to eq "0dc80ba9-adae-43cd-98bf-58882ee401c3"
   end
 
-  scenario "Targeted Retention Incentive school with non-Targeted Retention Incentive ITT subject but eligible degree" do
+  scenario "LUP school with non-LUP ITT subject but eligible degree" do
     get_to_itt_subject_question
 
     choose "None of the above"
@@ -90,7 +90,7 @@ RSpec.feature "Trainee teacher subjourney for Targeted Retention Incentive schoo
     expect(mail.template_id).to eq "0dc80ba9-adae-43cd-98bf-58882ee401c3"
   end
 
-  scenario "Targeted Retention Incentive school with non-Targeted Retention Incentive ITT subject and no eligible degree" do
+  scenario "LUP school with non-LUP ITT subject and no eligible degree" do
     get_to_itt_subject_question
 
     choose "None of the above"
@@ -108,8 +108,8 @@ RSpec.feature "Trainee teacher subjourney for Targeted Retention Incentive schoo
   private
 
   def get_to_itt_subject_question
-    targeted_retention_incentive_school = create(:school, :combined_journey_eligibile_for_all)
-    expect(Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(targeted_retention_incentive_school)).to be_eligible
+    lup_school = create(:school, :combined_journey_eligibile_for_all)
+    expect(Policies::LevellingUpPremiumPayments::SchoolEligibility.new(lup_school)).to be_eligible
 
     visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
 
@@ -117,7 +117,7 @@ RSpec.feature "Trainee teacher subjourney for Targeted Retention Incentive schoo
     expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue without signing in"
 
-    choose_school targeted_retention_incentive_school
+    choose_school lup_school
 
     expect(page).to have_text(I18n.t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"))
 

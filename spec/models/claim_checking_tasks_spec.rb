@@ -5,10 +5,10 @@ require "rails_helper"
 RSpec.describe ClaimCheckingTasks do
   let(:checking_tasks) { described_class.new(claim) }
   let(:claim) { create(:claim, :submitted, :verified, policy:) }
-  let(:policy) { Policies::TargetedRetentionIncentivePayments }
+  let(:policy) { Policies::LevellingUpPremiumPayments }
   let(:base_tasks) { %w[identity_confirmation qualifications employment census_subjects_taught] }
   let(:ecp_tasks) { base_tasks + %w[induction_confirmation student_loan_plan] }
-  let(:targeted_retention_incentive_tasks) { base_tasks + %w[student_loan_plan] }
+  let(:lup_tasks) { base_tasks + %w[student_loan_plan] }
   let(:tslr_tasks) { base_tasks + %w[student_loan_amount] }
   let(:applicable_tasks) { [] }
 
@@ -78,9 +78,9 @@ RSpec.describe ClaimCheckingTasks do
       include_examples :student_loan_plan_task
     end
 
-    context "TargetedRetentionIncentivePayments claim" do
-      let(:policy) { Policies::TargetedRetentionIncentivePayments }
-      let(:applicable_tasks) { targeted_retention_incentive_tasks }
+    context "LevellingUpPremiumPayments claim" do
+      let(:policy) { Policies::LevellingUpPremiumPayments }
+      let(:applicable_tasks) { lup_tasks }
 
       include_examples :common_tasks
       include_examples :payroll_gender_task
@@ -120,7 +120,7 @@ RSpec.describe ClaimCheckingTasks do
 
   describe "#incomplete_task_names" do
     it "returns an array of the tasks that haven’t been completed on the claim" do
-      expect(checking_tasks.incomplete_task_names).to match_array(targeted_retention_incentive_tasks)
+      expect(checking_tasks.incomplete_task_names).to match_array(lup_tasks)
 
       claim.tasks << create(:task, name: "qualifications")
       expect(checking_tasks.incomplete_task_names).to match_array(%w[identity_confirmation employment census_subjects_taught student_loan_plan])
@@ -148,7 +148,7 @@ RSpec.describe ClaimCheckingTasks do
 
     context "when all tasks passed automatically" do
       before do
-        targeted_retention_incentive_tasks.each do |task|
+        lup_tasks.each do |task|
           claim.tasks << create(:task, :passed, :automated, name: task)
         end
       end
@@ -158,7 +158,7 @@ RSpec.describe ClaimCheckingTasks do
 
     context "when all tasks automatically passed but there is a duplicate claim" do
       before do
-        targeted_retention_incentive_tasks.each do |task|
+        lup_tasks.each do |task|
           claim.tasks << create(:task, :passed, :automated, name: task)
         end
       end

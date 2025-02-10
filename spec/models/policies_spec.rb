@@ -6,7 +6,7 @@ RSpec.describe Policies, type: :model do
       expect(described_class::POLICIES).to eq([
         Policies::StudentLoans,
         Policies::EarlyCareerPayments,
-        Policies::TargetedRetentionIncentivePayments,
+        Policies::LevellingUpPremiumPayments,
         Policies::InternationalRelocationPayments,
         Policies::FurtherEducationPayments,
         Policies::EarlyYearsPayments
@@ -33,7 +33,7 @@ RSpec.describe Policies, type: :model do
       expect(described_class.options_for_select).to eq([
         ["Student Loans", "student-loans"],
         ["Early-Career Payments", "early-career-payments"],
-        ["School Targeted Retention Incentive", "targeted-retention-incentive-payments"],
+        ["School Targeted Retention Incentive", "levelling-up-premium-payments"],
         ["International Relocation Payments", "international-relocation-payments"],
         ["Further Education Targeted Retention Incentive", "further-education-payments"],
         ["Early Years Financial Incentive Payments", "early-years-payments"]
@@ -50,7 +50,7 @@ RSpec.describe Policies, type: :model do
   end
 
   describe "::constantize" do
-    [Policies::StudentLoans, Policies::EarlyCareerPayments, Policies::TargetedRetentionIncentivePayments].each do |policy|
+    [Policies::StudentLoans, Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments].each do |policy|
       context "when #{policy}" do
         it do
           expect(described_class.constantize(policy.to_s)).to eq(policy)

@@ -35,7 +35,7 @@ FactoryBot.define do
       raise "Policy of Claim (#{evaluator.policy}) must match Eligibility class (#{claim.eligibility.policy})" if evaluator.policy != claim.eligibility.policy
 
       claim_academic_year =
-        if [Policies::EarlyCareerPayments, Policies::TargetedRetentionIncentivePayments].include?(evaluator.policy)
+        if [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments].include?(evaluator.policy)
           Journeys::AdditionalPaymentsForTeaching.configuration.current_academic_year
         elsif evaluator.policy == Policies::FurtherEducationPayments
           Journeys::FurtherEducationPayments.configuration.current_academic_year
@@ -88,7 +88,7 @@ FactoryBot.define do
       details_check { true }
 
       after(:build) do |claim, evaluator|
-        if claim.has_ecp_or_targeted_retention_incentive_policy?
+        if claim.has_ecp_or_lupp_policy?
           claim.provide_mobile_number = true
           claim.mobile_number = "07474000123"
           claim.mobile_verified = true
@@ -115,7 +115,7 @@ FactoryBot.define do
       policy_options_provided {
         [
           {"policy" => "EarlyCareerPayments", "award_amount" => "2000.0"},
-          {"policy" => "TargetedRetentionIncentivePayments", "award_amount" => "2000.0"}
+          {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
         ]
       }
     end
@@ -128,10 +128,10 @@ FactoryBot.define do
       }
     end
 
-    trait :policy_options_provided_targeted_retention_incentive_only do
+    trait :policy_options_provided_lup_only do
       policy_options_provided {
         [
-          {"policy" => "TargetedRetentionIncentivePayments", "award_amount" => "2000.0"}
+          {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
         ]
       }
     end
@@ -228,6 +228,10 @@ FactoryBot.define do
     trait :with_no_student_loan do
       has_student_loan { false }
       student_loan_plan { nil }
+    end
+
+    trait :first_lup_claim_year do
+      academic_year { AcademicYear::Type.new.serialize(AcademicYear.new(2022)) }
     end
 
     trait :held do

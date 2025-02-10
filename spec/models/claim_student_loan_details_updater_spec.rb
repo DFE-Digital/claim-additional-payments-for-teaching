@@ -125,7 +125,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
         context "when the claim is not a tslr claim" do
           let(:policy_attributes) do
             {
-              policy: Policies::TargetedRetentionIncentivePayments
+              policy: Policies::LevellingUpPremiumPayments
             }
           end
 
