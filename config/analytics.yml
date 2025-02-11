@@ -162,6 +162,8 @@ shared:
     - mostly_performed_leadership_duties
     - claim_school_somewhere_else
     - teacher_reference_number
+    - qts_award_year_string
+    - employment_status_string
   :early_career_payments_eligibilities:
     - id
     - nqt_in_academic_year_after_itt

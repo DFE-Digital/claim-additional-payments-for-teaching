@@ -32,6 +32,30 @@ module Policies
         recent_tps_school: 3
       }, prefix: :employed_at
 
+      def qts_award_year=(value)
+        normalised_value = if value.is_a?(Integer)
+          self.class.qts_award_years.invert[value].to_s
+        else
+          value.to_s
+        end
+
+        self.qts_award_year_string = normalised_value
+
+        super
+      end
+
+      def employment_status=(value)
+        normalised_value = if value.is_a?(Integer)
+          self.class.employment_statuses.invert[value].to_s
+        else
+          value.to_s
+        end
+
+        self.employment_status_string = normalised_value
+
+        super
+      end
+
       has_one :claim, as: :eligibility, inverse_of: :eligibility
       belongs_to :claim_school, optional: true, class_name: "School"
       belongs_to :current_school, optional: true, class_name: "School"

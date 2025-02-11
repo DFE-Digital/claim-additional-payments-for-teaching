@@ -6,6 +6,71 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
   let(:eligible_school) { build(:school, :student_loans_eligible) }
   let(:ineligible_school) { build(:school, :student_loans_ineligible) }
 
+  # FIXME RL: remove this once we've finished migrating the backing column
+  describe "enum_methods" do
+    context "when set by name" do
+      it "sets the string column" do
+        eligibility = create(
+          :student_loans_eligibility,
+          qts_award_year: :on_or_after_cut_off_date,
+          employment_status: :claim_school
+        )
+
+        expect(eligibility.qts_award_year_string).to eq(
+          "on_or_after_cut_off_date"
+        )
+
+        expect(eligibility.employment_status_string).to eq("claim_school")
+      end
+    end
+
+    context "when set by value" do
+      it "sets the string column" do
+        eligibility = create(
+          :student_loans_eligibility,
+          qts_award_year: 0,
+          employment_status: 1
+        )
+
+        expect(eligibility.qts_award_year_string).to eq(
+          "before_cut_off_date"
+        )
+
+        expect(eligibility.employment_status_string).to eq("different_school")
+      end
+    end
+
+    context "when set by scope" do
+      it "sets the string column" do
+        eligibility = described_class
+          .awarded_qualified_status_before_cut_off_date
+          .employed_at_no_school
+          .create!(
+            attributes_for(:student_loans_eligibility).except(
+              :qts_award_year,
+              :employment_status
+            )
+          )
+
+        expect(eligibility.qts_award_year_string).to eq("before_cut_off_date")
+
+        expect(eligibility.employment_status_string).to eq("no_school")
+      end
+    end
+
+    context "when set by method" do
+      it "sets the string column" do
+        eligibility = create(:student_loans_eligibility)
+        eligibility.awarded_qualified_status_before_cut_off_date!
+        eligibility.employed_at_recent_tps_school!
+
+        expect(eligibility.qts_award_year_string).to eq("before_cut_off_date")
+
+        expect(eligibility.employment_status_string).to eq("recent_tps_school")
+      end
+    end
+  end
+
   describe "qts_award_year attribute" do
     it "rejects invalid values" do
       expect { described_class.new(qts_award_year: "non-existence") }.to raise_error(ArgumentError)
