@@ -62,9 +62,9 @@ RSpec.describe Policies::LevellingUpPremiumPayments::AwardCsvImporter do
       let!(:old_award_same_academic_year) { create(:levelling_up_premium_payments_award, academic_year: academic_year) }
       let!(:old_award_other_academic_year) { create(:levelling_up_premium_payments_award, academic_year: academic_year - 1) }
 
-      it "deletes the old data" do
+      it "retains old data" do
         importer.process
-        expect { old_award_same_academic_year.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { old_award_same_academic_year.reload }.not_to raise_error(ActiveRecord::RecordNotFound)
       end
 
       it "does not delete data from other academic years" do
@@ -73,8 +73,8 @@ RSpec.describe Policies::LevellingUpPremiumPayments::AwardCsvImporter do
       end
 
       it "populates the table with the CSV data" do
-        importer.process
-        expect(Policies::LevellingUpPremiumPayments::Award.where(academic_year: academic_year.to_s).count).to eq 8
+        expect { importer.process }.to change { Policies::LevellingUpPremiumPayments::Award.count }.from(2).to(10)
+        expect(Policies::LevellingUpPremiumPayments::Award.by_academic_year(academic_year).count).to eq 8
       end
 
       it "skips rows where the award amount is zero" do
@@ -96,7 +96,7 @@ RSpec.describe Policies::LevellingUpPremiumPayments::AwardCsvImporter do
 
         it "does not populate the table with the CSV data" do
           importer.process
-          expect(Policies::LevellingUpPremiumPayments::Award.where(academic_year: academic_year.to_s).count).to eq 1
+          expect(Policies::LevellingUpPremiumPayments::Award.by_academic_year(academic_year).count).to eq 1
         end
       end
     end

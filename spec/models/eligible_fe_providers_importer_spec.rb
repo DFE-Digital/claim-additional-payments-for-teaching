@@ -6,6 +6,7 @@ RSpec.describe EligibleFeProvidersImporter do
   let(:academic_year) { AcademicYear.current }
   let(:file) { Tempfile.new }
   let(:correct_headers) { described_class.mandatory_headers.join(",") + "\n" }
+  let(:file_upload) { create(:file_upload, :not_completed_processing, target_data_model: EligibleFeProvider.to_s, academic_year: AcademicYear.current.to_s) }
 
   def to_row(hash)
     [
@@ -23,7 +24,7 @@ RSpec.describe EligibleFeProvidersImporter do
       end
 
       it "has errors" do
-        subject.run
+        subject.run(file_upload.id)
 
         expect(subject.errors).to be_present
         expect(subject.errors).to include("The selected file is missing some expected columns: ukprn, max_award_amount, lower_award_amount, primary_key_contact_email_address")
@@ -37,13 +38,13 @@ RSpec.describe EligibleFeProvidersImporter do
       end
 
       it "has no errors" do
-        subject.run
+        subject.run(file_upload.id)
 
         expect(subject.errors).to be_empty
       end
 
       it "does not add any any records" do
-        expect { subject.run }.not_to change { EligibleFeProvider.count }
+        expect { subject.run(file_upload.id) }.not_to change { EligibleFeProvider.count }
       end
 
       context "when there are existing records" do
@@ -52,8 +53,8 @@ RSpec.describe EligibleFeProvidersImporter do
           create(:eligible_fe_provider, academic_year: AcademicYear.next)
         end
 
-        it "deletes existing records for academic year" do
-          expect { subject.run }.to change { EligibleFeProvider.count }.to(1)
+        it "does not purge any records" do
+          expect { subject.run(file_upload.id) }.not_to change { EligibleFeProvider.count }
         end
       end
     end
@@ -74,15 +75,15 @@ RSpec.describe EligibleFeProvidersImporter do
       end
 
       it "ignores empty rows" do
-        expect { subject.run }.to change { EligibleFeProvider.count }.by(3)
+        expect { subject.run(file_upload.id) }.to change { EligibleFeProvider.count }.by(3)
       end
 
       it "does not raise errors" do
-        expect { subject.run }.not_to raise_error
+        expect { subject.run(file_upload.id) }.not_to raise_error
       end
 
       it "returns correct rows_with_data_count" do
-        subject.run
+        subject.run(file_upload.id)
 
         expect(subject.rows_with_data_count).to eql(3)
       end
@@ -100,7 +101,7 @@ RSpec.describe EligibleFeProvidersImporter do
       end
 
       it "imports new records" do
-        expect { subject.run }.to change { EligibleFeProvider.count }.by(3)
+        expect { subject.run(file_upload.id) }.to change { EligibleFeProvider.count }.by(3)
       end
 
       context "when there are existing records" do
@@ -109,8 +110,12 @@ RSpec.describe EligibleFeProvidersImporter do
           create(:eligible_fe_provider, academic_year: AcademicYear.next)
         end
 
-        it "deletes them with new records" do
-          expect { subject.run }.to change { EligibleFeProvider.count }.by(2)
+        it "imports new records, keeps existing and returns the latest" do
+          expect { subject.run(file_upload.id) }.to change { EligibleFeProvider.count }.from(2).to(5)
+
+          expect(EligibleFeProvider.by_academic_year(academic_year).count).to eq(1)
+          file_upload.completed_processing!
+          expect(EligibleFeProvider.by_academic_year(academic_year).count).to eq(3)
         end
       end
     end
@@ -127,19 +132,28 @@ RSpec.describe EligibleFeProvidersImporter do
       end
 
       it "ignores superfluous characters and imports new records" do
-        expect { subject.run }.to change { EligibleFeProvider.count }.by(3)
-        expect(EligibleFeProvider.pluck(:max_award_amount).uniq).to eql([6000])
-        expect(EligibleFeProvider.pluck(:lower_award_amount).uniq).to eql([3000])
+        expect { subject.run(file_upload.id) }.to change { EligibleFeProvider.count }.by(3)
+        expect(EligibleFeProvider.pluck(:max_award_amount).uniq).to eql([6_000])
+        expect(EligibleFeProvider.pluck(:lower_award_amount).uniq).to eql([3_000])
       end
 
       context "when there are existing records" do
         before do
-          create(:eligible_fe_provider)
+          create(:eligible_fe_provider, max_award_amount: 5_000, lower_award_amount: 2_000)
           create(:eligible_fe_provider, academic_year: AcademicYear.next)
         end
 
-        it "deletes them with new records" do
-          expect { subject.run }.to change { EligibleFeProvider.count }.by(2)
+        it "imports new records, keeps existing and returns the latest" do
+          expect { subject.run(file_upload.id) }.to change { EligibleFeProvider.count }.from(2).to(5)
+
+          expect(EligibleFeProvider.by_academic_year(academic_year).count).to eq(1)
+          expect(EligibleFeProvider.by_academic_year(academic_year).pluck(:max_award_amount).uniq.sort).to eql([5_000])
+          expect(EligibleFeProvider.by_academic_year(academic_year).pluck(:lower_award_amount).uniq.sort).to eql([2_000])
+
+          file_upload.completed_processing!
+          expect(EligibleFeProvider.by_academic_year(academic_year).count).to eq(3)
+          expect(EligibleFeProvider.by_academic_year(academic_year).pluck(:max_award_amount).uniq.sort).to eql([6_000])
+          expect(EligibleFeProvider.by_academic_year(academic_year).pluck(:lower_award_amount).uniq.sort).to eql([3_000])
         end
       end
     end
@@ -148,7 +162,7 @@ RSpec.describe EligibleFeProvidersImporter do
       let(:file) { File.open(file_fixture("eligible_fe_providers_illegal_encoding.csv")) }
 
       it "ignores superfluous characters and imports new records" do
-        expect { subject.run }.to change { EligibleFeProvider.count }.by(10)
+        expect { subject.run(file_upload.id) }.to change { EligibleFeProvider.count }.by(10)
         expect(EligibleFeProvider.pluck(:max_award_amount).uniq.sort).to eql([4_000, 5_000, 6_000])
         expect(EligibleFeProvider.pluck(:lower_award_amount).uniq.sort).to eql([2_000, 2_500, 3_000])
       end

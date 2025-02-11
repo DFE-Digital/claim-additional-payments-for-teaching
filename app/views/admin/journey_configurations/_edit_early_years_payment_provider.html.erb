@@ -21,3 +21,9 @@
 
   <%= f.govuk_submit "Upload CSV" %>
 <% end %>
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+<%= render partial: "file_upload_history", locals: {
+  heading: "Upload history for eligible EY providers"
+} %>

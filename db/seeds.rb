@@ -21,15 +21,6 @@ if Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")
   Rake::Task["db:fixtures:load"].invoke
 end
 
-if ENV["ENVIRONMENT_NAME"].start_with?("review")
-  EligibleFeProvidersImporter.new(
-    File.new(Rails.root.join("spec/fixtures/files/eligible_fe_providers.csv")),
-    AcademicYear.current
-  ).run
-
-  SchoolDataImporterJob.perform_later if School.count < 100
-end
-
 if Rails.env.development?
   require "./lib/factory_helpers"
 
@@ -91,4 +82,20 @@ if Rails.env.development?
       create_list(:claim, 1, :unverified, policy: policy)
     end
   end
+end
+
+if ENV["ENVIRONMENT_NAME"].start_with?("review")
+  file = File.new(Rails.root.join("spec/fixtures/files/eligible_fe_providers.csv"))
+
+  file_upload = FileUpload.create(
+    uploaded_by: DfeSignIn::User.first,
+    body: File.read(file),
+    target_data_model: EligibleFeProvider.to_s,
+    academic_year: AcademicYear.current.to_s
+  )
+
+  EligibleFeProvidersImporter.new(file, AcademicYear.current).run(file_upload.id)
+  file_upload.completed_processing!
+
+  SchoolDataImporterJob.perform_later if School.count < 100
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_29_115013) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_06_122648) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -218,10 +218,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_29_115013) do
     t.citext "secondary_contact_email_address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "file_upload_id"
+    t.index ["file_upload_id"], name: "index_eligible_ey_providers_on_file_upload_id"
     t.index ["local_authority_id"], name: "index_eligible_ey_providers_on_local_authority_id"
     t.index ["primary_key_contact_email_address"], name: "index_eligible_ey_providers_on_primary_contact_email_address"
     t.index ["secondary_contact_email_address"], name: "index_eligible_ey_providers_on_secondary_contact_email_address"
-    t.index ["urn"], name: "index_eligible_ey_providers_on_urn", unique: true
+    t.index ["urn", "file_upload_id"], name: "index_eligible_ey_providers_on_urn_and_file_upload_id", unique: true
   end
 
   create_table "eligible_fe_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -232,7 +234,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_29_115013) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "primary_key_contact_email_address"
-    t.index ["academic_year", "ukprn"], name: "index_eligible_fe_providers_on_academic_year_and_ukprn", unique: true
+    t.uuid "file_upload_id"
+    t.index ["academic_year", "ukprn", "file_upload_id"], name: "idx_on_academic_year_ukprn_file_upload_id_d31aaa765c", unique: true
+    t.index ["file_upload_id"], name: "index_eligible_fe_providers_on_file_upload_id"
   end
 
   create_table "file_uploads", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -240,6 +244,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_29_115013) do
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "target_data_model"
+    t.datetime "completed_processing_at"
+    t.string "academic_year", limit: 9
   end
 
   create_table "further_education_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -320,9 +327,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_29_115013) do
     t.decimal "award_amount", precision: 7, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["academic_year", "school_urn"], name: "lupp_award_by_year_and_urn"
+    t.uuid "file_upload_id"
+    t.index ["academic_year", "school_urn", "file_upload_id"], name: "idx_on_academic_year_school_urn_file_upload_id_da9cfc909e", unique: true
     t.index ["academic_year"], name: "lupp_award_by_year"
     t.index ["award_amount"], name: "lupp_award_by_amount"
+    t.index ["file_upload_id"], name: "index_levelling_up_premium_payments_awards_on_file_upload_id"
     t.index ["school_urn"], name: "lupp_award_by_urn"
   end
 
@@ -434,20 +443,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_29_115013) do
     t.index ["journey_class"], name: "index_reminders_on_journey_class"
   end
 
-  create_table "risk_indicators", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "field", null: false
-    t.string "value", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["field", "value"], name: "index_risk_indicators_on_field_and_value", unique: true
-  end
-
   create_table "reports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.text "csv"
     t.integer "number_of_rows"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "risk_indicators", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "field", null: false
+    t.string "value", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["field", "value"], name: "index_risk_indicators_on_field_and_value", unique: true
   end
 
   create_table "school_workforce_censuses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -598,10 +607,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_29_115013) do
   add_foreign_key "claims", "journeys_sessions"
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "early_career_payments_eligibilities", "schools", column: "current_school_id"
+  add_foreign_key "eligible_ey_providers", "file_uploads"
   add_foreign_key "eligible_ey_providers", "local_authorities"
+  add_foreign_key "eligible_fe_providers", "file_uploads"
   add_foreign_key "further_education_payments_eligibilities", "schools"
   add_foreign_key "further_education_payments_eligibilities", "schools", column: "possible_school_id"
   add_foreign_key "international_relocation_payments_eligibilities", "schools", column: "current_school_id"
+  add_foreign_key "levelling_up_premium_payments_awards", "file_uploads"
   add_foreign_key "levelling_up_premium_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "notes", "claims"
   add_foreign_key "notes", "dfe_sign_in_users", column: "created_by_id"

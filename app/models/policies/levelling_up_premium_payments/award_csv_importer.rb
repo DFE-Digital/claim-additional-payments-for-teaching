@@ -7,7 +7,7 @@ module Policies
       include ActiveModel::Attributes
 
       attribute :academic_year, :string
-      attr_accessor :csv_data
+      attr_accessor :csv_data, :admin_user
 
       validates :academic_year, format: {with: AcademicYear::ACADEMIC_YEAR_REGEXP}, presence: true
       validates :csv_data, presence: {message: "Choose a CSV file to upload"}
@@ -23,13 +23,22 @@ module Policies
       def process
         return false unless valid?
         commit!
+        file_upload.completed_processing!
       end
 
       private
 
+      def file_upload
+        @file_upload ||= FileUpload.new(
+          uploaded_by: admin_user,
+          body: File.read(csv_data),
+          target_data_model: Policies::LevellingUpPremiumPayments::Award.to_s,
+          academic_year: academic_year.to_s
+        )
+      end
+
       def commit!
         LevellingUpPremiumPayments::Award.transaction do
-          LevellingUpPremiumPayments::Award.where(academic_year: academic_year.to_s).destroy_all
           @records.each(&:save!)
         end
       end
@@ -53,10 +62,12 @@ module Policies
       end
 
       def csv_rows_are_valid
+        file_upload.save!
+
         parse_csv.each.with_index(1) do |row, line|
           next if /\A[0.]+\z/.match?(row["award_amount"])
 
-          record = LevellingUpPremiumPayments::Award.new(row.to_h.merge(academic_year: academic_year))
+          record = LevellingUpPremiumPayments::Award.new(row.to_h.merge(academic_year: academic_year, file_upload_id: file_upload.id))
           @records << record
 
           unless record.valid?

@@ -5,13 +5,13 @@ module Admin
     helper_method :journey_configuration
 
     def create
-      @download_form = EligibleFeProvidersForm.new
-      @upload_form = EligibleFeProvidersForm.new(upload_params)
+      @download_form = EligibleFeProvidersForm.new({}, admin_user)
+      @upload_form = EligibleFeProvidersForm.new(upload_params, admin_user)
 
       if @upload_form.invalid?
         render "admin/journey_configurations/edit"
       else
-        @upload_form.importer.run
+        @upload_form.run_import!
         flash[:notice] = @upload_form.importer.results_message
 
         redirect_to edit_admin_journey_configuration_path(Journeys::FurtherEducationPayments::ROUTING_NAME, eligible_fe_providers_upload: {academic_year: @upload_form.academic_year})
@@ -19,7 +19,7 @@ module Admin
     end
 
     def show
-      @download_form = EligibleFeProvidersForm.new(download_params)
+      @download_form = EligibleFeProvidersForm.new(download_params, admin_user)
 
       send_data EligibleFeProvider.csv_for_academic_year(@download_form.academic_year),
         type: "text/csv",

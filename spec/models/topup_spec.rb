@@ -8,7 +8,7 @@ RSpec.describe Topup, type: :model do
   let!(:payment) { create(:payment, claims: [lup_claim]) }
 
   before do
-    award = lup_claim.eligibility.current_school.levelling_up_premium_payments_awards.first
+    award = lup_claim.eligibility.current_school.levelling_up_premium_payments_awards.by_academic_year(lup_claim.academic_year).first
     award.update!(award_amount: award.award_amount + BigDecimal("1000.00"))
   end
 

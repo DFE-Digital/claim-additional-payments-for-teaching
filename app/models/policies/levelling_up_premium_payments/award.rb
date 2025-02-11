@@ -6,6 +6,11 @@ module Policies
       self.table_name = "levelling_up_premium_payments_awards"
 
       belongs_to :school, foreign_key: :school_urn, primary_key: :urn, inverse_of: :levelling_up_premium_payments_awards, optional: true
+      belongs_to :file_upload
+
+      scope :by_academic_year, ->(academic_year) {
+        where(file_upload: FileUpload.latest_version_for(Award, academic_year))
+      }
 
       validates :academic_year, presence: true
       validates :school_urn, presence: true, numericality: true
@@ -18,14 +23,17 @@ module Policies
         CSV.generate(headers: true) do |csv|
           csv << attribute_names
 
-          where(academic_year: academic_year.to_s).each do |row|
+          by_academic_year(academic_year).each do |row|
             csv << attribute_names.map { |attr| row.send(attr) }
           end
         end
       end
 
       def self.last_updated_at(academic_year)
-        where(academic_year: academic_year.to_s).last&.updated_at
+        FileUpload
+          .latest_version_for(Award, academic_year)
+          .first
+          &.completed_processing_at
       end
 
       def self.distinct_academic_years
