@@ -29,9 +29,6 @@ class Decision < ApplicationRecord
   scope :approved, -> { where(approved: true) }
   scope :rejected, -> { where(approved: false) }
 
-  # FIXME RL: Remove this once we've dropped the column
-  self.ignored_columns = %w[result]
-
   def rejected?
     !approved? && !approved.nil?
   end
