@@ -269,10 +269,6 @@ RSpec.feature "Further education change answers" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Are at least half of your timetabled teaching hours spent teaching 16 to")
-    choose "Yes"
-    click_button "Continue"
-
     expect(page).to have_content("Check your answers")
     click_button "Continue"
 
