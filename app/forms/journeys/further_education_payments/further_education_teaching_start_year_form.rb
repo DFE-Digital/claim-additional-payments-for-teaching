@@ -34,11 +34,6 @@ module Journeys
         journey_session.save!
       end
 
-      def clear_answers_from_session
-        journey_session.answers.assign_attributes(further_education_teaching_start_year: nil)
-        journey_session.save!
-      end
-
       def before_year
         academic_year = AcademicYear.current + YEARS_BEFORE
         academic_year.start_year

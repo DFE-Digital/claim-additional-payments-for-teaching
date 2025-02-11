@@ -67,18 +67,4 @@ RSpec.describe Journeys::FurtherEducationPayments::FurtherEducationTeachingStart
       )
     end
   end
-
-  describe "#clear_answers_from_session" do
-    let(:answers_hash) do
-      {
-        further_education_teaching_start_year: "2025"
-      }
-    end
-
-    it "clears relevant answers from session" do
-      expect {
-        subject.clear_answers_from_session
-      }.to change { journey_session.reload.answers.further_education_teaching_start_year }.from("2025").to(nil)
-    end
-  end
 end
