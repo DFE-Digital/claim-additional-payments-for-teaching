@@ -18,7 +18,7 @@ RSpec.describe AutoApproveClaimJob do
 
       it "creates an approval decision" do
         expect { run_job }.to change { claim.reload.latest_decision }.from(nil)
-          .to have_attributes(result: "approved", notes: "Auto-approved")
+          .to have_attributes(approved: true, notes: "Auto-approved")
       end
     end
 

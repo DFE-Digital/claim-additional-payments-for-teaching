@@ -55,18 +55,18 @@
         </h2>
       </legend>
 
-      <%= errors_tag decision, :result %>
+      <%= errors_tag decision, :approved %>
 
       <div class="govuk-radios" data-module="govuk-radios">
-        <%= form.hidden_field :result %>
+        <%= form.hidden_field :approved %>
         <div class="govuk-radios__item">
-          <%= form.radio_button(:result, "approved", class: "govuk-radios__input", disabled: !claim.approvable?) %>
-          <%= form.label "result_approved", "Approve", class: "govuk-label govuk-radios__label" %>
+          <%= form.radio_button(:approved, true, class: "govuk-radios__input", disabled: !claim.approvable?) %>
+          <%= form.label "approved_true", "Approve", class: "govuk-label govuk-radios__label" %>
         </div>
 
         <div class="govuk-radios__item">
-          <%= form.radio_button(:result, "rejected", class: "govuk-radios__input", disabled: !claim.rejectable?, data: { aria_controls: "conditional-rejected-reasons" }) %>
-          <%= form.label "result_rejected", "Reject", class: "govuk-label govuk-radios__label" %>
+          <%= form.radio_button(:approved, false, class: "govuk-radios__input", disabled: !claim.rejectable?, data: { aria_controls: "conditional-rejected-reasons" }) %>
+          <%= form.label "approved_false", "Reject", class: "govuk-label govuk-radios__label" %>
         </div>
 
         <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-rejected-reasons">

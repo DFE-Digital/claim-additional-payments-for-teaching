@@ -97,7 +97,7 @@ describe Admin::ClaimsHelper do
   describe "#admin_decision_details" do
     let(:claim) { create(:claim, :submitted) }
     let(:user) { create(:dfe_signin_user) }
-    let(:decision) { Decision.create!(claim: claim, created_by: user, result: :approved) }
+    let(:decision) { Decision.create!(claim: claim, created_by: user, approved: true) }
 
     it "includes an array of details about the decision" do
       expect(helper.admin_decision_details(decision)).to eq([
@@ -108,7 +108,7 @@ describe Admin::ClaimsHelper do
     end
 
     context "when notes are saved with the decision" do
-      let(:decision) { Decision.create!(claim: claim, created_by: user, result: :approved, notes: "abc\nxyz") }
+      let(:decision) { Decision.create!(claim: claim, created_by: user, approved: true, notes: "abc\nxyz") }
 
       it "includes the notes" do
         expect(helper.admin_decision_details(decision)).to include([I18n.t("admin.decision.notes"), simple_format(decision.notes, class: "govuk-body")])

@@ -96,7 +96,7 @@ RSpec.feature "Admin checks a claim" do
 
     scenario "User can see existing decision details" do
       claim_with_decision = create(:claim, :submitted)
-      create(:decision, claim: claim_with_decision, result: :approved, notes: "Everything matches")
+      create(:decision, claim: claim_with_decision, approved: true, notes: "Everything matches")
 
       visit admin_claim_path(claim_with_decision)
 
