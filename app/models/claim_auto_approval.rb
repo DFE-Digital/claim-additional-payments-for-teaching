@@ -13,7 +13,7 @@ class ClaimAutoApproval
     return unless eligible?
 
     claim.transaction do
-      claim.decisions.create!(result: :approved, notes: "Auto-approved")
+      claim.decisions.create!(approved: true, notes: "Auto-approved")
       claim.notes.create!(
         body: <<~TEXT
           This claim was auto-approved because it passed all automated checks

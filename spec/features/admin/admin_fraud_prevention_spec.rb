@@ -63,7 +63,7 @@ RSpec.feature "Admin fraud prevention" do
 
       visit new_admin_claim_decision_path(flagged_claim_trn)
 
-      approval_option = find("input[type=radio][value=approved]")
+      approval_option = find("#decision_approved_true")
 
       expect(approval_option).to be_disabled
 
@@ -74,7 +74,7 @@ RSpec.feature "Admin fraud prevention" do
 
       visit new_admin_claim_decision_path(flagged_claim_nino)
 
-      approval_option = find("input[type=radio][value=approved]")
+      approval_option = find("#decision_approved_true")
 
       expect(approval_option).to be_disabled
 
@@ -85,7 +85,7 @@ RSpec.feature "Admin fraud prevention" do
 
       visit new_admin_claim_decision_path(flagged_claim_trn_and_nino)
 
-      approval_option = find("input[type=radio][value=approved]")
+      approval_option = find("#decision_approved_true")
 
       expect(approval_option).to be_disabled
 

@@ -47,13 +47,13 @@ class Admin::DecisionsController < Admin::BaseAdminController
   end
 
   def reject_missing_payroll_gender
-    if decision_params[:result] == "approved" && @claim.payroll_gender_missing?
+    if ActiveModel::Type::Boolean.new.cast(decision_params[:approved]) && @claim.payroll_gender_missing?
       redirect_to admin_claim_path(@claim), alert: "Claim cannot be approved"
     end
   end
 
   def reject_if_claims_preventing_payment
-    if decision_params[:result] == "approved" && claims_preventing_payment_finder.claims_preventing_payment.any?
+    if ActiveModel::Type::Boolean.new.cast(decision_params[:approved]) && claims_preventing_payment_finder.claims_preventing_payment.any?
       redirect_to admin_claim_path(@claim), alert: "Claim cannot be approved because there are inconsistent claims"
     end
   end
@@ -84,19 +84,19 @@ class Admin::DecisionsController < Admin::BaseAdminController
   def send_claim_result_email
     return if @claim.awaiting_qa?
 
-    @claim.policy.mailer.approved(@claim).deliver_later if @claim.latest_decision.result == "approved"
+    @claim.policy.mailer.approved(@claim).deliver_later if @claim.latest_decision.approved?
 
-    if @claim.latest_decision.result == "rejected" && @claim.email_address.present?
+    if @claim.latest_decision.rejected? && @claim.email_address.present?
       ClaimMailer.rejected(@claim).deliver_later
     end
 
-    if @claim.latest_decision.result == "rejected" && @claim.has_early_years_policy?
+    if @claim.latest_decision.rejected? && @claim.has_early_years_policy?
       ClaimMailer.rejected_provider_notification(@claim).deliver_later
     end
   end
 
   def decision_params
-    params.require(:decision).permit(:result, :notes, *rejected_reasons_params)
+    params.require(:decision).permit(:approved, :notes, *rejected_reasons_params)
   end
 
   def rejected_reasons_params

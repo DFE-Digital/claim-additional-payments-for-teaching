@@ -5,7 +5,7 @@
 <% end %>
 
 <div class="govuk-grid-row">
-  <%= render("shared/error_summary", instance: @decision, errored_field_id_overrides: { "result": "decision_result_approved" }) if @decision.errors.any? %>
+  <%= render("shared/error_summary", instance: @decision, errored_field_id_overrides: { "approved": "decision_approved_true" }) if @decision.errors.any? %>
 
   <%= render "admin/tasks/#{claim_summary_view}", claim: @claim, heading: "Claim decision" %>
 
