@@ -82,18 +82,10 @@ module Policies
     end
 
     def claims_rejected_before(date)
-      rejected_claims.where(
+      claim_scope.rejected.where(
         "decisions.created_at < :minimum_time",
         minimum_time: date
       )
-    end
-
-    def rejected_claims
-      claim_scope.joins(:decisions)
-        .where(
-          "(decisions.undone = false AND decisions.result = :rejected)",
-          rejected: Decision.results.fetch(:rejected)
-        )
     end
 
     def old_paid_claims

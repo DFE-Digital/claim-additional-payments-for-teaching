@@ -85,7 +85,6 @@ shared:
     - verified_at
   :decisions:
     - id
-    - result
     - claim_id
     - created_at
     - updated_at

@@ -151,7 +151,7 @@ RSpec.describe ClaimAutoApproval do
       let(:eligible?) { true }
       let(:expected_decision_attributes) do
         {
-          result: "approved",
+          approved: true,
           notes: "Auto-approved",
           created_by_id: nil
         }
