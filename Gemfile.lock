@@ -109,7 +109,7 @@ GEM
     brakeman (7.0.0)
       racc
     builder (3.3.0)
-    bullet (8.0.0)
+    bullet (8.0.1)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     capybara (3.40.0)
@@ -125,7 +125,7 @@ GEM
     childprocess (5.1.0)
       logger (~> 1.5)
     coderay (1.1.3)
-    concurrent-ruby (1.3.4)
+    concurrent-ruby (1.3.5)
     connection_pool (2.5.0)
     crack (1.0.0)
       bigdecimal
@@ -274,7 +274,7 @@ GEM
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
     httpclient (2.8.3)
-    i18n (1.14.6)
+    i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     io-console (0.8.0)
     irb (1.14.3)
