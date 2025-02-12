@@ -9,6 +9,13 @@ RSpec.describe Reports::FailedQualificationClaims do
 
   describe "to_csv" do
     it "returns a csv of the claims" do
+      payroll_run_1 = create(
+        :payroll_run,
+        created_at: 1.month.ago.beginning_of_month
+      )
+
+      payroll_run_2 = create(:payroll_run)
+
       # excluded, claim not approved
       ecp_claim_unapporved_failed_qualification_task = create(
         :claim,
@@ -139,7 +146,11 @@ RSpec.describe Reports::FailedQualificationClaims do
         }
       )
 
-      create(:payment, claims: [lup_claim_approved_failed_qualification_task])
+      payment_1 = create(
+        :payment,
+        claims: [lup_claim_approved_failed_qualification_task],
+        payroll_run: payroll_run_1
+      )
 
       create(
         :task,
@@ -294,6 +305,12 @@ RSpec.describe Reports::FailedQualificationClaims do
         HTML
       )
 
+      payment_2 = create(
+        :payment,
+        claims: [ecp_claim_approved_ineligibile_note],
+        payroll_run: payroll_run_1
+      )
+
       # included "Not eligible" DQT status - task passed
       ecp_claim_approved_not_eligible_note = create(
         :claim,
@@ -328,6 +345,18 @@ RSpec.describe Reports::FailedQualificationClaims do
         body: "[DQT Qualification] - Not eligible"
       )
 
+      payment_3 = create(
+        :payment,
+        claims: [ecp_claim_approved_not_eligible_note],
+        payroll_run: payroll_run_1
+      )
+
+      payment_4 = create(
+        :payment,
+        claims: [ecp_claim_approved_not_eligible_note],
+        payroll_run: payroll_run_2
+      )
+
       csv = CSV.parse(described_class.new.to_csv, headers: true)
 
       expect(csv.to_a).to match_array([
@@ -336,6 +365,7 @@ RSpec.describe Reports::FailedQualificationClaims do
           "Teacher reference number",
           "Policy",
           "Status",
+          "payment_id",
           "Decision date",
           "Decision agent",
           "Applicant answers - Qualification",
@@ -351,6 +381,7 @@ RSpec.describe Reports::FailedQualificationClaims do
           "1111111",
           "ECP",
           "Approved awaiting QA",
+          nil,
           "01/11/2024",
           "Some admin",
           "postgraduate_itt",
@@ -366,6 +397,7 @@ RSpec.describe Reports::FailedQualificationClaims do
           "2222222",
           "STRI",
           "Payrolled",
+          payment_1.id,
           "01/11/2024",
           "Some admin",
           "postgraduate_itt",
@@ -381,6 +413,7 @@ RSpec.describe Reports::FailedQualificationClaims do
           "3333333",
           "TSLR",
           "Approved awaiting payroll",
+          nil,
           "01/11/2024",
           "Some admin",
           nil,
@@ -396,6 +429,7 @@ RSpec.describe Reports::FailedQualificationClaims do
           "4444444",
           "ECP",
           "Approved awaiting payroll",
+          nil,
           "01/11/2024",
           "Some admin",
           "postgraduate_itt",
@@ -410,7 +444,8 @@ RSpec.describe Reports::FailedQualificationClaims do
           ecp_claim_approved_ineligibile_note.reference,
           "5555555",
           "ECP",
-          "Approved awaiting payroll",
+          "Payrolled",
+          payment_2.id,
           "01/11/2024",
           "Some admin",
           "postgraduate_itt",
@@ -425,7 +460,8 @@ RSpec.describe Reports::FailedQualificationClaims do
           ecp_claim_approved_not_eligible_note.reference,
           "6666666",
           "ECP",
-          "Approved awaiting payroll",
+          "Payrolled",
+          "#{payment_3.id};#{payment_4.id}",
           "01/11/2024",
           "Some admin",
           "postgraduate_itt",
