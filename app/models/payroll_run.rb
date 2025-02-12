@@ -56,31 +56,42 @@ class PayrollRun < ApplicationRecord
   class LineItem < Struct.new(:id, :award_amount, keyword_init: true); end
 
   def line_items(policy, filter: :all)
-    scope = Claim
-      .select(
-        "
-        DISTINCT(claims.id),
-        COALESCE(topups.award_amount, eligibilities.award_amount) AS award_amount
-        "
-      )
+    policies = if policy == :all
+      Policies::POLICIES
+    else
+      [policy]
+    end
+
+    claims_topped_up_in_payroll_run = Claim
+      .select("claims.id AS id, topups.award_amount AS award_amount")
+      .joins(topups: :payment)
+      .where(payments: {payroll_run_id: id})
+      .by_policies(policies)
+
+    claims_without_topups_in_payroll_run = Claim
+      .select("claims.id AS id, eligibilities.award_amount AS award_amount")
       .with_award_amounts
-      .left_joins(payments: :topups)
-      .joins(payments: :payroll_run)
-      .where(payroll_runs: {id: id})
+      .joins(:payments)
+      .where(payments: {payroll_run_id: id})
+      .where.not(id: claims_topped_up_in_payroll_run.reselect(:id))
+      .by_policies(policies)
 
-    scope = scope.by_policy(policy) unless policy == :all
-
-    case filter
+    sql = case filter
     when :claims
-      scope = scope.where(topups: {id: nil})
+      claims_without_topups_in_payroll_run.to_sql
     when :topups
-      scope = scope.where.not(topups: {id: nil})
+      claims_topped_up_in_payroll_run.to_sql
+    else
+      [
+        claims_without_topups_in_payroll_run.to_sql,
+        claims_topped_up_in_payroll_run.to_sql
+      ].join("\nUNION\n")
     end
 
     # Claim delegates it's award amount to eligibility, so we want to return
     # a non claim object ensuring the award amount is from the topup if there
     # is one
-    ActiveRecord::Base.connection.execute(scope.to_sql).map(&LineItem.method(:new))
+    ActiveRecord::Base.connection.execute(sql).map(&LineItem.method(:new))
   end
 
   def ensure_no_payroll_run_this_month

@@ -72,4 +72,9 @@ module BasePolicy
   def require_in_progress_update_emails?
     true
   end
+
+  # Overwrite this in the policies if they set a maximum topup amount
+  def max_topup_amount(claim)
+    10_000.00
+  end
 end
