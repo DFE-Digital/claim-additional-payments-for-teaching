@@ -221,6 +221,6 @@ RSpec.feature "Combined journey with Teacher ID mobile check" do
   end
 
   def go_back_to_mobile_selection
-    page.first("a[href='#{claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "select-mobile")}']", minimum: 1).click
+    click_link "Change which mobile number should we use to contact you?"
   end
 end

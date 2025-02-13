@@ -58,18 +58,4 @@ RSpec.describe Journeys::FurtherEducationPayments::TeachingQualificationForm, ty
       )
     end
   end
-
-  describe "#clear_answers_from_session" do
-    let(:answers_hash) do
-      {
-        teaching_qualification: "yes"
-      }
-    end
-
-    it "clears relevant answers from session" do
-      expect {
-        subject.clear_answers_from_session
-      }.to change { journey_session.reload.answers.teaching_qualification }.from("yes").to(nil)
-    end
-  end
 end

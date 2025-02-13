@@ -16,7 +16,7 @@
         You can continue to complete an application to check your eligibility and apply for a payment.
       </p>
 
-      <%= form_with model: @form, url: claim_path(current_journey_routing_name) do %>
+      <%= form_with model: @form, url: @form.url do %>
         <div class="govuk-form-group">
           <%= hidden_field_tag :skip_landing_page, 'true' %>
           <%= submit_tag 'Continue', class: 'govuk-button', data: { module: 'govuk-button' }, 'data-disable-with' => 'Continue' %>

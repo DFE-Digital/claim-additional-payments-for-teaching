@@ -1,7 +1,7 @@
 <% content_for(:page_title, page_title(question, journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 <%= render("shared/error_summary", instance: @form, errored_field_id_overrides: { "current_school_id": "claim_current_school_id_#{@form.schools.first.id}" }) if @form.errors.any? %>
 
-<%= form_for @form, url: claim_path(current_journey_routing_name), method: :patch do |form| %>
+<%= form_for @form, url: @form.url, method: :patch do |form| %>
   <%= form_group_tag @form do %>
     <fieldset class="govuk-fieldset" aria-describedby="school-search-result-hint">
       <%= render "#{@form.view_path}/claims/current_school_search_results_question", question: question %>

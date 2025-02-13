@@ -4,6 +4,7 @@ class Form
   include ActiveModel::Serialization
   include ActiveModel::Validations::Callbacks
   include FormHelpers
+  include Rails.application.routes.url_helpers
 
   attr_accessor :journey
   attr_accessor :journey_session
@@ -45,6 +46,14 @@ class Form
   # and should be implemented on per form basis
   # if the forms stores data to session
   def clear_answers_from_session
+  end
+
+  def url
+    if journey.use_navigator? && params[:change].present?
+      claim_path(journey::ROUTING_NAME, params[:slug], change: params[:change])
+    else
+      claim_path(journey::ROUTING_NAME, params[:slug])
+    end
   end
 
   private

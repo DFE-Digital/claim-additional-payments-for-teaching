@@ -48,8 +48,10 @@ module Journeys
       end
 
       def clear_answers_from_session
-        journey_session.answers.assign_attributes(chemistry_courses: [])
-        journey_session.save!
+        if answers.subjects_taught.exclude?("chemistry")
+          journey_session.answers.assign_attributes(chemistry_courses: [])
+          journey_session.save!
+        end
       end
 
       private

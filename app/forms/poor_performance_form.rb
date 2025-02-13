@@ -36,12 +36,4 @@ class PoorPerformanceForm < Form
     )
     journey_session.save
   end
-
-  def clear_answers_from_session
-    journey_session.answers.assign_attributes(
-      subject_to_formal_performance_action: nil,
-      subject_to_disciplinary_action: nil
-    )
-    journey_session.save
-  end
 end

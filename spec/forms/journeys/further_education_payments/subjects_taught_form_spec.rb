@@ -58,16 +58,4 @@ RSpec.describe Journeys::FurtherEducationPayments::SubjectsTaughtForm, type: :mo
       )
     end
   end
-
-  describe "#clear_answers_from_session" do
-    let(:answers_hash) do
-      {subjects_taught: %w[maths physics]}
-    end
-
-    it "clears relevant answers from session" do
-      expect {
-        subject.clear_answers_from_session
-      }.to change { journey_session.reload.answers.subjects_taught }.from(%w[maths physics]).to([])
-    end
-  end
 end

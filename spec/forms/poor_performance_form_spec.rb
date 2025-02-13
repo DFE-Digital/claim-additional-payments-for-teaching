@@ -70,23 +70,4 @@ RSpec.describe PoorPerformanceForm do
       end
     end
   end
-
-  describe "#clear_answers_from_session" do
-    let(:journey_session) { create(:further_education_payments_session, answers:) }
-    let(:answers) { build(:further_education_payments_answers, answers_hash) }
-
-    let(:answers_hash) do
-      {
-        subject_to_formal_performance_action: true,
-        subject_to_disciplinary_action: true
-      }
-    end
-
-    it "clears relevant answers from session" do
-      expect {
-        subject.clear_answers_from_session
-      }.to change { journey_session.reload.answers.subject_to_formal_performance_action }.from(true).to(nil)
-        .and change { journey_session.reload.answers.subject_to_disciplinary_action }.from(true).to(nil)
-    end
-  end
 end
