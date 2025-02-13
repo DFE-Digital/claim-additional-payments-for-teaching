@@ -8,14 +8,8 @@ inputs:
   docker-image:
     description: The Docker image to deploy
     required: true
-  azure-client-id:
-    description: Azure client ID for authentication
-    required: true
-  azure-tenant-id:
-    description: Azure tenant ID for authentication
-    required: true
-  azure-subscription-id:
-    description: Azure subscription ID for authentication
+  azure-credentials:
+    description: JSON object containing a service principal that can read from Azure Key Vault
     required: true
   pull-request-number:
     description: The pull request number which triggered this deploy.
@@ -42,9 +36,7 @@ runs:
 
     - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
       with:
-        azure-client-id: ${{ inputs.azure-client-id }}
-        azure-tenant-id: ${{ inputs.azure-tenant-id }}
-        azure-subscription-id: ${{ inputs.azure-subscription-id }}
+        azure-credentials: ${{ inputs.azure-credentials }}
 
     - uses: google-github-actions/auth@v2
       with:
@@ -68,9 +60,7 @@ runs:
 
     - uses: azure/login@v2
       with:
-        client-id: ${{ inputs.azure-client-id }}
-        tenant-id: ${{ inputs.azure-tenant-id }}
-        subscription-id: ${{ inputs.azure-subscription-id }}
+        creds: ${{ inputs.azure-credentials }}
 
     - name: Set kubectl
       uses: DFE-Digital/github-actions/set-kubectl@master

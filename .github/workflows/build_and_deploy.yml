@@ -72,9 +72,7 @@ jobs:
         with:
           environment: review
           docker-image: ${{ needs.build.outputs.docker-image-tag }}
-          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
           pull-request-number: ${{ github.event.pull_request.number }}
           aks-namespace: srtl-development
           aks-deployment: claim-additional-payments-for-teaching-review-${{ github.event.pull_request.number }}
@@ -121,18 +119,14 @@ jobs:
 
       - uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - uses: ./.github/actions/deploy-environment
         id: deploy
         with:
           environment: ${{ matrix.environment }}
           docker-image: ${{ needs.build.outputs.docker-image-tag }}
-          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
           aks-namespace: srtl-${{ matrix.environment }}
           aks-deployment: claim-additional-payments-for-teaching-${{ matrix.environment }}
 
@@ -180,9 +174,7 @@ jobs:
 
       - uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Set env vars
         shell: bash
@@ -202,9 +194,7 @@ jobs:
         with:
           environment: ${{ inputs.environment }}
           docker-image: ${{ inputs.docker-image-tag }}
-          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
           aks-namespace: ${{ env.AKS_NAMESPACE }}
           aks-deployment: ${{ env.AKS_DEPLOYMENT }}
           pull-request-number: ${{ inputs.pull-request-number }}

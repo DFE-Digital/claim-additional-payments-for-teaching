@@ -40,17 +40,9 @@ jobs:
       DEPLOY_ENV: ${{ inputs.environment || 'production'  }}
       BACKUP_FILE: ${{ inputs.backup-file || 'schedule'  }}
 
-    permissions:
-      id-token: write
     steps:
     - uses: actions/checkout@v4
       name: Checkout
-
-    - uses: azure/login@v2
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
     - name: Set environment variables
       run: |
@@ -87,9 +79,7 @@ jobs:
         resource-group: ${{ env.RESOURCE_GROUP_NAME }}
         app-name: ${{ env.SERVICE_NAME }}-${{ env.DEPLOY_ENV }}-web
         cluster: ${{ env.CLUSTER }}
-        azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
         backup-file: ${{ env.BACKUP_FILE }}.sql
         db-server-name: ${{ inputs.db-server }}
         slack-webhook: ${{ steps.key-vault-secrets.outputs.SLACK_WEBHOOK }}
