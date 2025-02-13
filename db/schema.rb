@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_06_122648) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_13_153245) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -503,6 +503,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_06_122648) do
     t.index ["postcode_sanitised"], name: "index_schools_on_postcode_sanitised", opclass: :gin_trgm_ops, using: :gin
     t.index ["ukprn"], name: "index_schools_on_ukprn"
     t.index ["urn"], name: "index_schools_on_urn", unique: true
+  end
+
+  create_table "stats", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "one_login_return_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "student_loans_data", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

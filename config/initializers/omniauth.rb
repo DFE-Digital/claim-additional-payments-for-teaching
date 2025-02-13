@@ -145,7 +145,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
       discovery: true,
       extra_authorize_params: {
         vtr: '["Cl.Cm.P2"]',
-        claims: {userinfo: {"https://vocab.account.gov.uk/v1/coreIdentityJWT": nil}}.to_json
+        claims: {userinfo: {"https://vocab.account.gov.uk/v1/coreIdentityJWT": nil, "https://vocab.account.gov.uk/v1/returnCode": nil}}.to_json
       },
       issuer: ENV["ONELOGIN_SIGN_IN_ISSUER"],
       response_type: :code,
