@@ -2,6 +2,10 @@
 :shared:
   :claims:
     - onelogin_uid
+    - first_name
+    - middle_name
+    - surname
+    - date_of_birth
   :levelling_up_premium_payments_eligibilities:
     - teacher_reference_number
   :early_career_payments_eligibilities:
