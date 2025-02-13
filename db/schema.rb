@@ -505,6 +505,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_18_150905) do
     t.index ["urn"], name: "index_schools_on_urn", unique: true
   end
 
+  create_table "stats", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "one_login_return_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "student_loans_data", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "claim_reference"
     t.string "nino"
