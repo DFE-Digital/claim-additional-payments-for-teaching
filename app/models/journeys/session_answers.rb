@@ -6,6 +6,8 @@ module Journeys
     include Sessions::TeacherId
     include Sessions::PiiAttributes
 
+    attribute :service_access_code, :string, pii: true
+
     attribute :current_school_id, :string, pii: false # UUID
     attribute :address_line_1, :string, pii: true
     attribute :address_line_2, :string, pii: true
