@@ -54,3 +54,42 @@ DfE::Analytics.configure do |config|
 
   config.azure_federated_auth = ENV.include? "GOOGLE_CLOUD_CREDENTIALS"
 end
+
+# Patch to send name / dob data to DfE analytics only for FE claims
+# The attributes need to be listed in config/analytics.yml for
+# `extract_model_attributes` to permit them, and they need to be attributes
+# on the model for the analytics lint task to pass. As these fields are just
+# an implementation detail specific to this DfE analytics workaround we define
+# them here rather than in claim.rb.
+Rails.application.config.to_prepare do
+  Claim.class_eval do
+    attribute :fe_first_name, :string
+    attribute :fe_middle_name, :string
+    attribute :fe_surname, :string
+    attribute :fe_date_of_birth, :date
+  end
+end
+
+module DfE::Analytics
+  class << self
+    alias_method :original_extract_model_attributes, :extract_model_attributes
+
+    def extract_model_attributes(model, attributes = nil)
+      if model.is_a?(Claim) && model.policy == Policies::FurtherEducationPayments
+        # If attributes is not `nil` the gem's `extract_model_attributes`
+        # method will use that otherwise it pulls the attributes from the
+        # model.
+        attributes ||= model.attributes
+
+        attributes.merge!(
+          "fe_first_name" => model.first_name,
+          "fe_middle_name" => model.middle_name,
+          "fe_surname" => model.surname,
+          "fe_date_of_birth" => model.date_of_birth
+        )
+      end
+
+      original_extract_model_attributes(model, attributes)
+    end
+  end
+end

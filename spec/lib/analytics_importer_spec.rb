@@ -30,7 +30,14 @@ RSpec.describe AnalyticsImporter do
 
   describe ".import" do
     it "sends the entity information to dfe analytics" do
-      claim = create(:claim)
+      claim = create(
+        :claim,
+        first_name: "Homer",
+        middle_name: "J",
+        surname: "Simpson",
+        date_of_birth: Date.new(1956, 5, 12),
+        policy: Policies::FurtherEducationPayments
+      )
 
       AnalyticsImporter.import(Claim)
 
@@ -43,7 +50,28 @@ RSpec.describe AnalyticsImporter do
             "entity_table_name" => "claims",
             "event_tags" => ["20240101000000"],
             "data" => a_hash_including({"key" => "id", "value" => [claim.id]}),
-            "hidden_data" => [{"key" => "onelogin_uid", "value" => []}]
+            "hidden_data" => [
+              {
+                "key" => "onelogin_uid",
+                "value" => []
+              },
+              {
+                "key" => "fe_first_name",
+                "value" => ["Homer"]
+              },
+              {
+                "key" => "fe_middle_name",
+                "value" => ["J"]
+              },
+              {
+                "key" => "fe_surname",
+                "value" => ["Simpson"]
+              },
+              {
+                "key" => "fe_date_of_birth",
+                "value" => ["1956-05-12"]
+              }
+            ]
           }
         ],
         ignore_unknown: true

@@ -83,6 +83,10 @@ shared:
     - onelogin_uid
     - started_at
     - verified_at
+    - fe_first_name
+    - fe_middle_name
+    - fe_surname
+    - fe_date_of_birth
   :decisions:
     - id
     - result
