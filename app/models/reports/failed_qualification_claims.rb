@@ -9,6 +9,7 @@ module Reports
       "Teacher reference number",
       "Policy",
       "Status",
+      "payment_id",
       "Decision date",
       "Decision agent",
       "Applicant answers - Qualification",
@@ -29,7 +30,7 @@ module Reports
             Task.qualifications.claim_verifier_match_none
           )
         )
-        .includes(:eligibility, :notes, decisions: :created_by)
+        .includes(:eligibility, :notes, :payments, decisions: :created_by)
     end
 
     def to_csv
@@ -53,6 +54,7 @@ module Reports
           claim.eligibility.teacher_reference_number,
           I18n.t("#{claim.policy.locale_key}.policy_acronym"),
           status(claim),
+          claim.payments.pluck(:id).join(";").presence,
           I18n.l(approval.created_at.to_date, format: :day_month_year),
           approval.created_by.full_name,
           qualification,
