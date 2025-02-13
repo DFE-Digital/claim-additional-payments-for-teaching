@@ -411,6 +411,24 @@ class Claim < ApplicationRecord
     @attributes_flagged_by_risk_indicator ||= RiskIndicator.flagged_attributes(self)
   end
 
+  # These attributes and the `attributes` method override is to support sending
+  # some data over to DfE Analytics for FE claims only.
+  attribute :fe_first_name
+  attribute :fe_middle_name
+  attribute :fe_surname
+  attribute :fe_date_of_birth
+
+  def attributes
+    super.tap do |h|
+      if policy == Policies::FurtherEducationPayments
+        h["fe_first_name"] = first_name
+        h["fe_middle_name"] = middle_name
+        h["fe_surname"] = surname
+        h["fe_date_of_birth"] = date_of_birth
+      end
+    end
+  end
+
   private
 
   def one_login_idv_name_match?
