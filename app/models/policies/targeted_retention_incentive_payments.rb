@@ -23,6 +23,8 @@ module Policies
 
     # Percentage of approved claims to QA
     APPROVED_MIN_QA_THRESHOLD = 10
+    # Percentage of rejected claims to QA
+    REJECTED_MIN_QA_THRESHOLD = 10
 
     # Options shown to admins when rejecting a claim
     ADMIN_DECISION_REJECTED_REASONS = [

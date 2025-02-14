@@ -215,7 +215,19 @@ class Claim < ApplicationRecord
   end
 
   def flaggable_for_qa?
-    decision_made? && latest_decision.approved? && below_min_qa_threshold? && !awaiting_qa? && !qa_completed?
+    decision_made? && below_min_qa_threshold? && !awaiting_qa? && !qa_completed?
+  end
+
+  def below_min_qa_threshold?
+    if latest_decision.approved?
+      below_min_qa_threshold_for_approval?
+    else
+      below_min_qa_threshold_for_rejection?
+    end
+  end
+
+  def below_min_qa_threshold_for_rejection?
+    Random.new.rand(100) < policy::REJECTED_MIN_QA_THRESHOLD
   end
 
   # This method's intention is to help make a decision on whether a claim should
@@ -234,7 +246,7 @@ class Claim < ApplicationRecord
   #
   # Newly approved claims should not be flagged for QA for as long as the method
   # returns `false`; they should be flagged for QA otherwise.
-  def below_min_qa_threshold?
+  def below_min_qa_threshold_for_approval?
     return false if policy::APPROVED_MIN_QA_THRESHOLD.zero?
 
     approved_claims = Claim.by_policy(policy).by_academic_year(academic_year).approved
