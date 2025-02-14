@@ -509,6 +509,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_18_150905) do
     t.text "one_login_return_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "type"
   end
 
   create_table "student_loans_data", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
