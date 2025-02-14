@@ -2,6 +2,7 @@ module StubbingHelpers
   def disable_claim_qa_flagging
     Policies::POLICIES.each do |policy|
       stub_const("Policies::#{policy}::APPROVED_MIN_QA_THRESHOLD", 0)
+      stub_const("Policies::#{policy}::REJECTED_MIN_QA_THRESHOLD", 0)
     end
   end
 

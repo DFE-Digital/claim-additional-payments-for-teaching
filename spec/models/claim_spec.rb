@@ -418,7 +418,21 @@ RSpec.describe Claim, type: :model do
     context "when the claim has been rejected" do
       let(:claim) { create(:claim, :rejected) }
 
-      it { is_expected.to eq(false) }
+      context "when above the min QA threshold" do
+        before do
+          stub_const("Policies::#{claim.policy}::REJECTED_MIN_QA_THRESHOLD", 0)
+        end
+
+        it { is_expected.to eq(false) }
+      end
+
+      context "when below the min QA threshold" do
+        before do
+          stub_const("Policies::#{claim.policy}::REJECTED_MIN_QA_THRESHOLD", 100)
+        end
+
+        it { is_expected.to eq(true) }
+      end
     end
 
     context "when the claim has been approved" do
@@ -618,11 +632,11 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe "#below_min_qa_threshold?" do
+  describe "#below_min_qa_threshold_for_approval?" do
     let(:policy) { Policies::EarlyCareerPayments }
     let(:other_policy) { Policies::POLICIES.detect { |p| p != policy } }
 
-    subject { build(:claim, policy: policy).below_min_qa_threshold? }
+    subject { build(:claim, policy: policy).below_min_qa_threshold_for_approval? }
 
     context "when the APPROVED_MIN_QA_THRESHOLD is set to zero" do
       before do
@@ -824,6 +838,28 @@ RSpec.describe Claim, type: :model do
 
         it { is_expected.to eq(true) }
       end
+    end
+  end
+
+  describe "#below_min_qa_threshold_for_rejection?" do
+    it "returns true for 1 in 10 claims" do
+      policy = Policies::FurtherEducationPayments
+
+      stub_const("Policies::#{policy}::REJECTED_MIN_QA_THRESHOLD", 10)
+
+      claim = build(:claim, policy: policy)
+
+      random = double(Random)
+
+      allow(Random).to receive(:new).and_return(random)
+
+      allow(random).to receive(:rand).and_return(9)
+
+      expect(claim.below_min_qa_threshold_for_rejection?).to eq(true)
+
+      allow(random).to receive(:rand).and_return(99)
+
+      expect(claim.below_min_qa_threshold_for_rejection?).to eq(false)
     end
   end
 
