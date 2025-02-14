@@ -426,7 +426,7 @@ RSpec.describe Claim, type: :model do
 
       context "when above the min QA threshold" do
         before do
-          stub_const("Policies::#{claim.policy}::MIN_QA_THRESHOLD", 0)
+          stub_const("Policies::#{claim.policy}::APPROVED_MIN_QA_THRESHOLD", 0)
         end
 
         it { is_expected.to eq(false) }
@@ -434,7 +434,7 @@ RSpec.describe Claim, type: :model do
 
       context "when below the min QA threshold" do
         before do
-          stub_const("Policies::#{claim.policy}::MIN_QA_THRESHOLD", 100)
+          stub_const("Policies::#{claim.policy}::APPROVED_MIN_QA_THRESHOLD", 100)
         end
 
         it { is_expected.to eq(true) }
@@ -624,17 +624,17 @@ RSpec.describe Claim, type: :model do
 
     subject { build(:claim, policy: policy).below_min_qa_threshold? }
 
-    context "when the MIN_QA_THRESHOLD is set to zero" do
+    context "when the APPROVED_MIN_QA_THRESHOLD is set to zero" do
       before do
-        stub_const("Policies::#{policy}::MIN_QA_THRESHOLD", 0)
+        stub_const("Policies::#{policy}::APPROVED_MIN_QA_THRESHOLD", 0)
       end
 
       it { is_expected.to eq(false) }
     end
 
-    context "when the MIN_QA_THRESHOLD is set to 10" do
+    context "when the APPROVED_MIN_QA_THRESHOLD is set to 10" do
       before do
-        stub_const("Policies::#{policy}::MIN_QA_THRESHOLD", 10)
+        stub_const("Policies::#{policy}::APPROVED_MIN_QA_THRESHOLD", 10)
       end
 
       context "with no previously approved claims" do

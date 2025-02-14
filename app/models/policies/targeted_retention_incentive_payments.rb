@@ -21,8 +21,8 @@ module Policies
     POLICY_END_YEAR = AcademicYear.new(2025).freeze
     POLICY_RANGE = POLICY_START_YEAR..POLICY_END_YEAR
 
-    # Percentage of claims to QA
-    MIN_QA_THRESHOLD = 10
+    # Percentage of approved claims to QA
+    APPROVED_MIN_QA_THRESHOLD = 10
 
     # Options shown to admins when rejecting a claim
     ADMIN_DECISION_REJECTED_REASONS = [

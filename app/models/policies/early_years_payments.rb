@@ -6,8 +6,8 @@ module Policies
     POLICY_START_DATE = Date.new(2024, 11, 11)
     RETENTION_PERIOD = 6.months
 
-    # Percentage of claims to QA
-    MIN_QA_THRESHOLD = 10
+    # Percentage of approved claims to QA
+    APPROVED_MIN_QA_THRESHOLD = 10
 
     VERIFIERS = [
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
