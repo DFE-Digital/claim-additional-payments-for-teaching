@@ -136,7 +136,7 @@ class OmniauthCallbacksController < ApplicationController
     journey_session.save!
 
     one_login_return_codes.each do |code|
-      Stat.create!(one_login_return_code: code)
+      Stats::OneLogin.create!(one_login_return_code: code)
     end
 
     redirect_to(

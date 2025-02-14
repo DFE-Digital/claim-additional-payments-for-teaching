@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_13_153245) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_14_095211) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -509,6 +509,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_13_153245) do
     t.text "one_login_return_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "type"
   end
 
   create_table "student_loans_data", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

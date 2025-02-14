@@ -274,9 +274,9 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
 
         expect {
           get auth_onelogin_path
-        }.to change { Stat.count }.by(1)
+        }.to change { Stats::OneLogin.count }.by(1)
 
-        expect(Stat.last.one_login_return_code).to eql("ABC")
+        expect(Stats::OneLogin.last.one_login_return_code).to eql("ABC")
       end
     end
   end

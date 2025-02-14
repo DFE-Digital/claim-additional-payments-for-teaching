@@ -361,3 +361,4 @@ shared:
     - one_login_return_code
     - created_at
     - updated_at
+    - type
