@@ -1,4 +1,6 @@
 RSpec::Matchers.define :have_received_email do |template_id, expected_personalisation|
+  expected_personalisation ||= {}
+
   match do |email_address|
     emails = ActionMailer::Base.deliveries.select do |mail|
       mail.to.include? email_address
