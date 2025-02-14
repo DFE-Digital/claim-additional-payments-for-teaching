@@ -9,8 +9,8 @@ module Policies
 
     ELIGIBILITY_MATCHING_ATTRIBUTES = [["passport_number"]].freeze
 
-    # Percentage of claims to QA
-    MIN_QA_THRESHOLD = 100
+    # Percentage of approved claims to QA
+    APPROVED_MIN_QA_THRESHOLD = 100
 
     # Options shown to admins when rejecting a claim
     ADMIN_DECISION_REJECTED_REASONS = [
