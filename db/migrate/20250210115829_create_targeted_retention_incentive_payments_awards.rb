@@ -9,9 +9,9 @@ class CreateTargetedRetentionIncentivePaymentsAwards < ActiveRecord::Migration[8
       t.timestamps
     end
 
-    add_index :targeted_retention_incentive_payments_awards, [:academic_year, :school_urn, :file_upload_id]
-    add_index :targeted_retention_incentive_payments_awards, :academic_year
-    add_index :targeted_retention_incentive_payments_awards, :award_amount
-    add_index :targeted_retention_incentive_payments_awards, :school_urn
+    add_index :targeted_retention_incentive_payments_awards, [:academic_year, :school_urn, :file_upload_id], if_not_exists: true
+    add_index :targeted_retention_incentive_payments_awards, :academic_year, if_not_exists: true
+    add_index :targeted_retention_incentive_payments_awards, :award_amount, if_not_exists: true
+    add_index :targeted_retention_incentive_payments_awards, :school_urn, if_not_exists: true
   end
 end

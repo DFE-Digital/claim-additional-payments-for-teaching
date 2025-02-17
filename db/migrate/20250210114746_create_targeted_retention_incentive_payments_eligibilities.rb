@@ -21,7 +21,7 @@ class CreateTargetedRetentionIncentivePaymentsEligibilities < ActiveRecord::Migr
       t.timestamps
     end
 
-    add_index :targeted_retention_incentive_payments_eligibilities, :current_school_id
-    add_index :targeted_retention_incentive_payments_eligibilities, :teacher_reference_number
+    add_index :targeted_retention_incentive_payments_eligibilities, :current_school_id, if_not_exists: true
+    add_index :targeted_retention_incentive_payments_eligibilities, :teacher_reference_number, if_not_exists: true
   end
 end
