@@ -1,6 +1,6 @@
 class CreateTargetedRetentionIncentivePaymentsEligibilities < ActiveRecord::Migration[8.0]
   def change
-    create_table :targeted_retention_incentive_payments_eligibilities, id: :uuid do |t|
+    create_table :targeted_retention_incentive_payments_eligibilities, id: :uuid, if_not_exists: true do |t|
       t.boolean :nqt_in_academic_year_after_itt
       t.boolean :employed_as_supply_teacher
       t.integer :qualification
