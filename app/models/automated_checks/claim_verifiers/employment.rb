@@ -58,12 +58,12 @@ module AutomatedChecks
       end
 
       def start_of_previous_financial_year
-        previous_academic_year = Journeys.for_policy(Policies::StudentLoans).configuration.current_academic_year - 1
+        previous_academic_year = Policies::StudentLoans.current_academic_year - 1
         Date.new(previous_academic_year.start_year, 4, 6)
       end
 
       def end_of_previous_financial_year
-        Date.new(Journeys.for_policy(Policies::StudentLoans).configuration.current_academic_year.start_year, 4, 5)
+        Date.new(Policies::StudentLoans.current_academic_year.start_year, 4, 5)
       end
 
       def no_data

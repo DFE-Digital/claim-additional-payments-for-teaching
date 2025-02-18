@@ -77,4 +77,8 @@ module BasePolicy
   def max_topup_amount(claim)
     10_000.00
   end
+
+  def current_academic_year
+    Journeys.for_policy(self).configuration.current_academic_year
+  end
 end

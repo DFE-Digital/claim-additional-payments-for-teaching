@@ -23,7 +23,7 @@ FactoryBot.define do
     end
 
     trait :itt_year_good_for_life_of_targeted_retention_incentive_policy do
-      itt_academic_year { Journeys.for_policy(Policies::TargetedRetentionIncentivePayments).configuration.current_academic_year - 1 }
+      itt_academic_year { Policies::TargetedRetentionIncentivePayments.current_academic_year - 1 }
     end
 
     trait :targeted_retention_incentive_itt_subject do

@@ -71,7 +71,7 @@ module Policies
       end
 
       def current_academic_year
-        Journeys.for_policy(TargetedRetentionIncentivePayments).configuration.current_academic_year
+        TargetedRetentionIncentivePayments.current_academic_year
       end
 
       def eligible_code?(codes)

@@ -63,7 +63,7 @@ module Policies
       private
 
       def award_amount_must_be_in_range
-        claim_year = Journeys.for_policy(policy).configuration.current_academic_year
+        claim_year = policy.current_academic_year
         max = TargetedRetentionIncentivePayments::Award.by_academic_year(claim_year).maximum(:award_amount)
 
         unless award_amount&.between?(1, max)

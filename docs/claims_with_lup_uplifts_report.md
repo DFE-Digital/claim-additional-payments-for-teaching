@@ -29,7 +29,7 @@ elig_ids = Policies::LevellingUpPremiumPayments::Eligibility.where(current_schoo
 csv_output = CSV.generate(headers: true) do |csv|
   csv << ["claim_reference", "full_name", "trn", "school_urn", "school_name", "submitted_date", "claim_status", "award_amount", "new_award_amount"]
 
-  current_academic_year = Journeys.for_policy(Policies::LevellingUpPremiumPayments).configuration.current_academic_year
+  current_academic_year = Policies::LevellingUpPremiumPayments.current_academic_year
 
   elig_ids.each do |elig_id|
     elig = Policies::LevellingUpPremiumPayments::Eligibility.find(elig_id)
