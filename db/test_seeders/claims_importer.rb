@@ -46,7 +46,7 @@ module TestSeeders
 
     def insert_claims
       eligibility_type ||= eligibilities.first.class.name
-      claim_academic_year ||= Journeys.for_policy(eligibilities.first.policy).configuration.current_academic_year.to_s
+      claim_academic_year ||= eligibilities.first.policy.current_academic_year.to_s
 
       Claim.copy_from_client CLAIM_COLUMNS do |copy|
         records.each do |data|
