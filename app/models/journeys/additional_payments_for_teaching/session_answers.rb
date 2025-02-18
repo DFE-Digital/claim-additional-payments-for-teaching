@@ -68,40 +68,12 @@ module Journeys
         current_academic_year
       end
 
-      def nqt_in_academic_year_after_itt?
-        !!nqt_in_academic_year_after_itt
-      end
-
-      def teaching_subject_now?
-        !!teaching_subject_now
-      end
-
-      def induction_completed?
-        !!induction_completed
-      end
-
       def induction_not_completed?
         !induction_completed.nil? && !induction_completed?
       end
 
       def itt_subject_none_of_the_above?
         eligible_itt_subject == "none_of_the_above"
-      end
-
-      def employed_as_supply_teacher?
-        !!employed_as_supply_teacher
-      end
-
-      def subject_to_formal_performance_action?
-        !!subject_to_formal_performance_action
-      end
-
-      def subject_to_disciplinary_action?
-        !!subject_to_disciplinary_action
-      end
-
-      def eligible_degree_subject?
-        !!eligible_degree_subject
       end
 
       def current_school
@@ -132,18 +104,6 @@ module Journeys
 
       def trainee_teacher?
         nqt_in_academic_year_after_itt == false
-      end
-
-      def school_somewhere_else?
-        !!school_somewhere_else
-      end
-
-      def has_entire_term_contract?
-        !!has_entire_term_contract
-      end
-
-      def employed_directly?
-        !!employed_directly
       end
 
       private

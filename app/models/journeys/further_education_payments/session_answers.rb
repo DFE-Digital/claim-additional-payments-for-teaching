@@ -42,22 +42,6 @@ module Journeys
         @possible_school ||= School.find(possible_school_id)
       end
 
-      def teaching_responsibilities?
-        !!teaching_responsibilities
-      end
-
-      def half_teaching_hours?
-        !!half_teaching_hours
-      end
-
-      def subject_to_formal_performance_action?
-        !!subject_to_formal_performance_action
-      end
-
-      def subject_to_disciplinary_action?
-        !!subject_to_disciplinary_action
-      end
-
       def recent_further_education_teacher?
         !further_education_teaching_start_year&.start_with?("pre-")
       end
@@ -80,10 +64,6 @@ module Journeys
 
       def less_than_half_hours_teaching_fe?
         half_teaching_hours == false
-      end
-
-      def hours_teaching_eligible_subjects?
-        !!hours_teaching_eligible_subjects
       end
 
       def eligible_fe_provider?
