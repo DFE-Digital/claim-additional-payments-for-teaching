@@ -12,17 +12,17 @@ RSpec.feature "Payroll" do
     create(:claim, :approved, policy: Policies::StudentLoans)
     create(:claim, :approved, policy: Policies::StudentLoans)
     create(:claim, :approved, policy: Policies::EarlyCareerPayments)
-    create(:claim, :approved, policy: Policies::LevellingUpPremiumPayments)
+    create(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments)
 
-    paid_lup_claim = nil
+    paid_targeted_retention_incentive_claim = nil
     travel_to 2.months.ago do
-      lup_eligibility = create(:levelling_up_premium_payments_eligibility, :eligible, award_amount: 1500.0)
-      paid_lup_claim = create(:claim, :approved, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility)
-      create(:payment, :with_figures, claims: [paid_lup_claim])
+      targeted_retention_incentive_eligibility = create(:targeted_retention_incentive_payments_eligibility, :eligible, award_amount: 1500.0)
+      paid_targeted_retention_incentive_claim = create(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments, eligibility: targeted_retention_incentive_eligibility)
+      create(:payment, :with_figures, claims: [paid_targeted_retention_incentive_claim])
     end
 
     user = create(:dfe_signin_user)
-    create(:topup, claim: paid_lup_claim, award_amount: 500, created_by: user)
+    create(:topup, claim: paid_targeted_retention_incentive_claim, award_amount: 500, created_by: user)
 
     month_name = Date.today.strftime("%B")
 

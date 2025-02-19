@@ -1,4 +1,4 @@
-RSpec.shared_examples "ECP and LUP Combined Journey Admin Tasks Presenter" do |policy|
+RSpec.shared_examples "ECP and Targeted Retention Incentive Combined Journey Admin Tasks Presenter" do |policy|
   let(:claim) { create(:claim, :submitted, policy: policy) }
   let(:eligibility) { claim.eligibility }
   let(:school) { eligibility.current_school }

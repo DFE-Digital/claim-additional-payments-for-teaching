@@ -1,12 +1,12 @@
 require "rails_helper"
 
-RSpec.feature "Managing Levelling Up Premium Payments school awards" do
+RSpec.feature "Managing targeted_retention_incentive Payments school awards" do
   let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
 
-  let(:csv_file) { "spec/fixtures/files/lupp_school_awards_good.csv" }
-  let(:csv_file_with_bad_data) { "spec/fixtures/files/lupp_school_awards_bad.csv" }
-  let(:csv_file_with_extra_columns) { "spec/fixtures/files/lupp_school_awards_additional_columns.csv" }
-  let(:csv_file_without_headers) { "spec/fixtures/files/lupp_school_awards_no_headers.csv" }
+  let(:csv_file) { "spec/fixtures/files/targeted_retention_incentive_school_awards_good.csv" }
+  let(:csv_file_with_bad_data) { "spec/fixtures/files/targeted_retention_incentive_school_awards_bad.csv" }
+  let(:csv_file_with_extra_columns) { "spec/fixtures/files/targeted_retention_incentive_school_awards_additional_columns.csv" }
+  let(:csv_file_without_headers) { "spec/fixtures/files/targeted_retention_incentive_school_awards_no_headers.csv" }
 
   before do
     sign_in_as_service_operator
@@ -25,8 +25,8 @@ RSpec.feature "Managing Levelling Up Premium Payments school awards" do
 
     # When awards exist
     freeze_time do
-      award = create(:levelling_up_premium_payments_award, academic_year: journey_configuration.current_academic_year)
-      create(:levelling_up_premium_payments_award, academic_year: journey_configuration.current_academic_year - 1)
+      award = create(:targeted_retention_incentive_payments_award, academic_year: journey_configuration.current_academic_year)
+      create(:targeted_retention_incentive_payments_award, academic_year: journey_configuration.current_academic_year - 1)
 
       visit current_path
       expect(page).to have_text "The School Targeted Retention Incentive school award amounts for academic year #{journey_configuration.current_academic_year} were updated on #{Time.zone.now.strftime("%-d %B %Y")}"
@@ -119,7 +119,7 @@ RSpec.feature "Managing Levelling Up Premium Payments school awards" do
 
   def last_file_upload_completed_process_at_string
     FileUpload
-      .latest_version_for(Policies::LevellingUpPremiumPayments::Award, journey_configuration.current_academic_year)
+      .latest_version_for(Policies::TargetedRetentionIncentivePayments::Award, journey_configuration.current_academic_year)
       .first
       .completed_processing_at
       .strftime("%-d %B %Y %-l:%M%P")

@@ -51,7 +51,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
       let(:eligible_induction?) { true }
 
       let(:early_career_payments_dqt_record_double) { double(itt_academic_year_for_claim:, route_into_teaching:, eligible_itt_subject_for_claim:, has_no_data_for_claim?: has_no_data_for_claim?, eligible_induction?: eligible_induction?) }
-      let(:levelling_up_premium_payments_dqt_record_double) { double(itt_academic_year_for_claim:, route_into_teaching:, eligible_itt_subject_for_claim:, has_no_data_for_claim?: has_no_data_for_claim?, eligible_degree_code?: eligible_degree_code?) }
+      let(:targeted_retention_incentive_payments_dqt_record_double) { double(itt_academic_year_for_claim:, route_into_teaching:, eligible_itt_subject_for_claim:, has_no_data_for_claim?: has_no_data_for_claim?, eligible_degree_code?: eligible_degree_code?) }
 
       before do
         allow_any_instance_of(
@@ -63,8 +63,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
         allow_any_instance_of(
           Journeys::AdditionalPaymentsForTeaching::SessionAnswers
         ).to(
-          receive(:levelling_up_premium_payments_dqt_reacher_record)
-          .and_return(levelling_up_premium_payments_dqt_record_double)
+          receive(:targeted_retention_incentive_payments_dqt_reacher_record)
+          .and_return(targeted_retention_incentive_payments_dqt_record_double)
         )
       end
     end
@@ -270,7 +270,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
           :additional_payments_session,
           answers: attributes_for(
             :additional_payments_answers,
-            :ecp_and_lup_eligible
+            :ecp_and_targeted_retention_incentive_eligible
           )
         )
       end
@@ -287,7 +287,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::SlugSequence do
 
     context "when claim is ineligible" do
       let(:eligibility) { build(:early_career_payments_eligibility, :ineligible) }
-      let(:eligibility_lup) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
+      let(:eligibility_targeted_retention_incentive) { build(:targeted_retention_incentive_payments_eligibility, :ineligible) }
       let(:answers) do
         build(
           :additional_payments_answers,

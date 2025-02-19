@@ -181,7 +181,7 @@ shared:
     - induction_completed
     - school_somewhere_else
     - teacher_reference_number
-  :levelling_up_premium_payments_eligibilities:
+  :targeted_retention_incentive_payments_eligibilities:
     - id
     - created_at
     - updated_at
@@ -252,7 +252,7 @@ shared:
     - updated_at
     - role_codes
     - deleted_at
-  :levelling_up_premium_payments_awards:
+  :targeted_retention_incentive_payments_awards:
     - id
     - academic_year
     - school_urn

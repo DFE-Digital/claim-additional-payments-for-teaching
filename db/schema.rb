@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_10_115829) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_18_150905) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -554,7 +554,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_10_115829) do
     t.index ["created_by_id"], name: "index_support_tickets_on_created_by_id"
   end
 
-  create_table "targeted_retention_incentive_payments_awards", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "targeted_retention_incentive_payments_awards", force: :cascade do |t|
     t.string "academic_year", limit: 9, null: false
     t.integer "school_urn", null: false
     t.decimal "award_amount", precision: 7, scale: 2

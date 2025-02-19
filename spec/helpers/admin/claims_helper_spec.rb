@@ -656,7 +656,7 @@ describe Admin::ClaimsHelper do
     end
 
     context "Eligible for STRI only" do
-      let(:claim) { create(:claim, :submitted, :policy_options_provided_lup_only, policy: Policies::LevellingUpPremiumPayments) }
+      let(:claim) { create(:claim, :submitted, :policy_options_provided_targeted_retention_incentive_only, policy: Policies::TargetedRetentionIncentivePayments) }
 
       it "returns STRI only" do
         answers = [["School targeted retention incentive", "£2,000"]]
