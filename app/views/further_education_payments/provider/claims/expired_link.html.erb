@@ -1,0 +1,26 @@
+<% content_for(
+  :page_title,
+  page_title(
+    "Verify a targeted retention incentive payment for further education teachers",
+    journey: current_journey_routing_name
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Verify a targeted retention incentive payment for further education
+      teachers
+    </h1>
+
+    <p class="govuk-body govuk-!-margin-top-6">
+      This verification request is no longer active.
+    </p>
+
+    <p class="govuk-body">
+      If you have any questions regarding this claim, please email
+      <%= govuk_mail_to "FE-Targeted.Retention-Incentive@education.gov.uk" %>
+      quoting claim reference <%= journey_session.answers.claim.reference %>.
+    </p>
+  </div>
+</div>
