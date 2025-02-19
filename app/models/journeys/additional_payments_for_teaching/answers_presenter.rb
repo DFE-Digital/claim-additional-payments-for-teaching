@@ -159,7 +159,7 @@ module Journeys
         policy = eligibility.policy
 
         subjects = policy.current_and_future_subject_symbols(
-          claim_year: Journeys.for_policy(policy).configuration.current_academic_year,
+          claim_year: policy.current_academic_year,
           itt_year: journey_session.answers.itt_academic_year
         )
 

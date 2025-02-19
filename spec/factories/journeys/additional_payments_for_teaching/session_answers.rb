@@ -53,7 +53,7 @@ FactoryBot.define do
     end
 
     trait :with_no_eligible_subjects do
-      itt_academic_year { Journeys.for_policy(Policies::EarlyCareerPayments).configuration.current_academic_year - 1 }
+      itt_academic_year { Policies::EarlyCareerPayments.current_academic_year - 1 }
     end
 
     trait :with_teaching_subject_now do
@@ -91,7 +91,7 @@ FactoryBot.define do
     end
 
     trait :itt_year_good_for_life_of_targeted_retention_incentive_policy do
-      itt_academic_year { Journeys.for_policy(Policies::TargetedRetentionIncentivePayments).configuration.current_academic_year - 1 }
+      itt_academic_year { Policies::TargetedRetentionIncentivePayments.current_academic_year - 1 }
     end
 
     trait :targeted_retention_incentive_eligible do
@@ -118,7 +118,7 @@ FactoryBot.define do
       qualification { :postgraduate_itt }
       induction_completed { true }
       teaching_subject_now { true }
-      itt_academic_year { Journeys.for_policy(Policies::EarlyCareerPayments).configuration.current_academic_year - 3 }
+      itt_academic_year { Policies::EarlyCareerPayments.current_academic_year - 3 }
       eligible_itt_subject { :mathematics }
       employed_directly { true }
     end
@@ -140,7 +140,7 @@ FactoryBot.define do
     end
 
     trait :ecp_eligible_itt_subject_later do
-      itt_academic_year { Journeys.for_policy(Policies::EarlyCareerPayments).configuration.current_academic_year - 4 }
+      itt_academic_year { Policies::EarlyCareerPayments.current_academic_year - 4 }
       eligible_itt_subject { :mathematics }
     end
 
