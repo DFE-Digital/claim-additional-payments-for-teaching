@@ -22,7 +22,11 @@ module Admin
 
     def admin_policy_options_provided(claim)
       claim.policy_options_provided.map do |option|
-        policy = Policies.constantize(option["policy"])
+        policy = if option["policy"] == "LevellingUpPremiumPayments"
+          Policies::TargetedRetentionIncentivePayments
+        else
+          Policies.constantize(option["policy"])
+        end
         label = t(:payment_name, scope: policy.locale_key)
         answer = number_to_currency(option["award_amount"], precision: 0)
 
