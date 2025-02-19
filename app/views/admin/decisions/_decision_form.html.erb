@@ -61,12 +61,24 @@
         <%= form.hidden_field :result %>
         <div class="govuk-radios__item">
           <%= form.radio_button(:result, "approved", class: "govuk-radios__input", disabled: !claim.approvable?) %>
-          <%= form.label "result_approved", "Approve", class: "govuk-label govuk-radios__label" %>
+          <%= form.label(
+            "result_approved",
+            (
+              @qa_decision_task && claim.rejected? ? "Claim meets eligibility criteria. Approve claim for payment" : "Approve"
+            ),
+            class: "govuk-label govuk-radios__label"
+          ) %>
         </div>
 
         <div class="govuk-radios__item">
           <%= form.radio_button(:result, "rejected", class: "govuk-radios__input", disabled: !claim.rejectable?, data: { aria_controls: "conditional-rejected-reasons" }) %>
-          <%= form.label "result_rejected", "Reject", class: "govuk-label govuk-radios__label" %>
+          <%= form.label(
+            "result_rejected",
+            (
+              @qa_decision_task && claim.rejected? ? "Claim does not meet eligibility criteria. Reject claim" : "Reject"
+            ),
+            class: "govuk-label govuk-radios__label"
+          ) %>
         </div>
 
         <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-rejected-reasons">

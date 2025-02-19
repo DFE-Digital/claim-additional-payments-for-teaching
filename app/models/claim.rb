@@ -218,8 +218,16 @@ class Claim < ApplicationRecord
     decision_made? && below_min_qa_threshold? && !awaiting_qa? && !qa_completed?
   end
 
+  def approved?
+    decision_made? && latest_decision.approved?
+  end
+
+  def rejected?
+    decision_made? && latest_decision.rejected?
+  end
+
   def below_min_qa_threshold?
-    if latest_decision.approved?
+    if approved?
       below_min_qa_threshold_for_approval?
     else
       below_min_qa_threshold_for_rejection?
