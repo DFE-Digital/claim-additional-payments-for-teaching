@@ -6,7 +6,8 @@ module Journeys
           "sign-in",
           "verify-claim",
           "complete",
-          "unauthorised"
+          "unauthorised",
+          "expired-link"
         ]
 
         RESTRICTED_SLUGS = [
@@ -36,6 +37,15 @@ module Journeys
         end
 
         def slugs
+          if @journey_session.answers.claim.rejected?
+            return [
+              "expired-link",
+              # FormSubmittable requires a "next_slug", if the claim is
+              # rejected there isn't a next slug
+              "expired-link"
+            ]
+          end
+
           SLUGS
         end
 
