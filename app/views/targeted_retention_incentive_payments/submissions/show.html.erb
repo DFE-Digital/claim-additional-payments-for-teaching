@@ -1,0 +1,38 @@
+<% content_for(
+  :page_title,
+  page_title("Claim submitted", journey: current_journey_routing_name)
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <div class="govuk-panel govuk-panel--confirmation">
+      <h1 class="govuk-panel__title" id="submitted-title">
+        You applied for a targeted retention incentive payment
+      </h1>
+
+      <div class="govuk-panel__body">
+        Your reference number<br>
+        <strong><%= submitted_claim.reference %></strong>
+      </div>
+    </div>
+
+    <p class="govuk-body">
+      We have sent you a confirmation email to <%= submitted_claim.email_address %>.
+    </p>
+
+    <h2 class="govuk-heading-m">What happens next</h2>
+
+    <%= render partial: "submissions/confirmation" %>
+
+    <% if journey.set_a_reminder?(itt_academic_year: submitted_claim.eligibility.itt_academic_year, policy: submitted_claim.policy) %>
+      <%= render partial: "submissions/reminder" %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= link_to "What do you think of this service?", done_page_url, class: "govuk-link" %>
+      (takes 30 seconds)
+    </p>
+  </div>
+</div>
+
