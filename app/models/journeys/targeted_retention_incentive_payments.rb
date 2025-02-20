@@ -9,7 +9,8 @@ module Journeys
     POLICIES = [Policies::TargetedRetentionIncentivePayments]
     FORMS = {
       "claims" => {
-        "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm
+        "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm,
+        "supply-teacher" => SupplyTeacherForm
       }
     }
 

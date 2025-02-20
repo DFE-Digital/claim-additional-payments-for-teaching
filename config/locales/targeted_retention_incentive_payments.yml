@@ -29,4 +29,11 @@ en:
           false: "No, I’m a trainee teacher"
         errors:
           inclusion: "Select yes if you are currently teaching as a qualified teacher"
+      supply_teacher:
+        question: "Are you currently employed as a supply teacher?"
+        options:
+          true: "Yes"
+          false: "No"
+        errors:
+          inclusion: "Select yes if you are a supply teacher"
 

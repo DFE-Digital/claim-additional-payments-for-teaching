@@ -5,7 +5,8 @@ module Journeys
       SLUGS = [
         "sign-in-or-continue",
         "current-school",
-        "nqt-in-academic-year-after-itt"
+        "nqt-in-academic-year-after-itt",
+        "supply-teacher"
       ]
 
       attr_reader :journey_session

@@ -9,6 +9,8 @@ module Journeys
       attribute :eligible_itt_subject, :string, pii: false
       attribute :induction_completed, :boolean, pii: false
       attribute :nqt_in_academic_year_after_itt, :boolean, pii: false
+      attribute :has_entire_term_contract, :boolean, pii: false
+      attribute :employed_directly, :boolean, pii: false
     end
   end
 end
