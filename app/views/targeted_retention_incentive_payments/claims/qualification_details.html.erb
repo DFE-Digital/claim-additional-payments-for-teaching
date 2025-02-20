@@ -1,0 +1,98 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:question),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= govuk_summary_list(actions: false) do |summary_list| %>
+        <% if @form.answers.dqt_qualification %>
+          <% summary_list.with_row do |row| %>
+            <% row.with_key(text: @form.t([:summary, :key, :teacher_route])) %>
+            <% row.with_value(
+              text: @form.t(
+                [
+                  :summary,
+                  :value,
+                  :teacher_route,
+                  :qualification,
+                  @form.answers.dqt_qualification
+                ]
+              )
+            ) %>
+          <% end %>
+        <% end %>
+
+        <% if @form.answers.dqt_academic_date %>
+          <% summary_list.with_row do |row| %>
+            <% row.with_key(
+              text: @form.t(
+                [
+                  :summary,
+                  :key,
+                  :academic_year,
+                  :qualification,
+                  @form.answers.dqt_qualification
+                ]
+              )
+            ) %>
+            <% row.with_value(text: @form.answers.dqt_academic_date) %>
+          <% end %>
+        <% end %>
+
+        <% if @form.answers.dqt_itt_subjects.present? %>
+          <% summary_list.with_row do |row| %>
+            <% row.with_key(
+              text: @form.t(
+                [
+                  :summary,
+                  :key,
+                  :itt_subject,
+                  :qualification,
+                  @form.answers.dqt_qualification
+                ]
+              )
+            ) %>
+            <% row.with_value(text: @form.answers.dqt_itt_subjects.join(", ")) %>
+          <% end %>
+        <% end %>
+
+        <% if @form.answers.dqt_show_degree_subjects? %>
+          <% summary_list.with_row do |row| %>
+            <% row.with_key(
+              text: @form.t(
+                [
+                  :summary,
+                  :key,
+                  :degree_subject,
+                ]
+              )
+            ) %>
+            <% row.with_value(text: @form.answers.dqt_degree_subjects.join(", ")) %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= f.govuk_collection_radio_buttons(
+        :qualifications_details_check,
+        @form.radio_options,
+        :id,
+        :name,
+        legend: { text: @form.t(:question), tag: "h1", size: "l" },
+      ) %>
+
+      <%= f.govuk_submit  %>
+    <% end %>
+  </div>
+</div>

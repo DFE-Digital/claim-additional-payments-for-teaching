@@ -1,0 +1,16 @@
+<p class="govuk-body">
+  You are not eligible for a
+  <%= I18n.t("targeted_retention_incentive_payments.policy_short_name").downcase %>
+</p>
+
+<p class="govuk-body">
+  To be eligible for
+  <%= I18n.t("targeted_retention_incentive_payments.policy_short_name").downcase.pluralize %>,
+  your ITT course must have started (postgraduate) or finished (undergraduate)
+  between the
+  <%= Policies::TargetedRetentionIncentivePayments::POLICY_START_YEAR.to_s(:long) %>
+  and
+  <%= Policies::TargetedRetentionIncentivePayments::POLICY_END_YEAR.to_s(:long) %>
+  years in
+  <%= Policies::TargetedRetentionIncentivePayments.fixed_subject_symbols.to_sentence(last_word_connector: ", or ") %>.
+</p>
