@@ -1,0 +1,20 @@
+<p class="govuk-body">
+  You are not eligible for a targeted retention incentive payment because you do
+  not spend at least half of your contracted hours teaching eligible subjects.
+</p>
+
+<p class="govuk-body">
+  Eligible subjects for
+  <%= govuk_link_to(
+    I18n.t("targeted_retention_incentive_payments.policy_short_name").downcase.pluralize,
+    Policies::TargetedRetentionIncentivePayments.eligibility_criteria_url
+  ) %>
+  are:
+</p>
+
+<%= govuk_list([
+  "chemistry",
+  "computing",
+  "mathematics",
+  "physics"
+]) %>
