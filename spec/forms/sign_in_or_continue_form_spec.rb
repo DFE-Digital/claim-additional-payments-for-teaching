@@ -206,7 +206,7 @@ RSpec.describe SignInOrContinueForm do
                 family_name: "Skinner",
                 birthdate: "1953-10-30",
                 ni_number: "AB123456C",
-                trn: nil,
+                trn: "1234567",
                 trn_match_ni_number: true,
                 email: "seymour.skinner@springfieldelementry.edu",
                 email_verified: true,

@@ -57,7 +57,7 @@ module EligibilityCheckable
   end
 
   def ineligible_cohort?
-    return false if itt_academic_year.nil?
+    return false if itt_academic_year.nil? || itt_academic_year.none?
 
     eligible_itt_years = policy.selectable_itt_years_for_claim_year(claim_year)
     !itt_academic_year.in? eligible_itt_years

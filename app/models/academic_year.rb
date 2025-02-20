@@ -50,6 +50,10 @@ class AcademicYear
       current + 1
     end
 
+    def none
+      new(nil)
+    end
+
     # Returns the academic year for a given date, based on September 1st being
     # the start of the year.
     def for(date)

@@ -72,6 +72,17 @@ module Policies
         ).include?(itt_subject.to_sym)
       end
 
+      def no_selectable_subjects?
+        if claim_year.blank? || itt_academic_year.blank? || itt_academic_year.none?
+          false
+        else
+          EarlyCareerPayments.current_and_future_subject_symbols(
+            claim_year: claim_year,
+            itt_year: itt_academic_year
+          ).empty?
+        end
+      end
+
       def itt_subject_ineligible_now_and_in_the_future?
         itt_subject = eligible_itt_subject # attribute name implies eligibility which isn't always the case
         return false if itt_subject.blank?

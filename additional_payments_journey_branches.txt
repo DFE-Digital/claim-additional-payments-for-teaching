@@ -1,0 +1,138 @@
+# Branching Paths in the Combined Teacher Claim Journey
+
+## Teacher ID Authentication Branches:
+
+1. **Logged in with Teacher ID and details matched**
+   - `logged_in_with_tid` = true
+   - `details_check` = true
+   - Personal details are pre-populated from Teacher ID
+
+2. **Logged in with Teacher ID but details did not match**
+   - `logged_in_with_tid` = true
+   - `details_check` = false
+   - User enters details manually
+
+3. **Skipped Teacher ID login**
+   - `logged_in_with_tid` = false
+   - `details_check` = nil
+   - User enters details manually
+
+## DQT Qualification Data Branches:
+
+1. **Valid DQT qualification data available**
+   - When `logged_in_with_tid` = true, `details_check` = true, and DQT returns qualification data
+   - Qualification questions are skipped or pre-filled
+   - User can confirm existing data or provide different information
+
+2. **Incomplete DQT qualification data**
+   - When `logged_in_with_tid` = true, `details_check` = true, but DQT data is partial
+   - User is asked only for the missing qualification information
+
+3. **No DQT qualification data**
+   - When DQT returns empty results or user chose not to use Teacher ID data
+   - User must answer all qualification questions manually
+
+## Email Verification Branches:
+
+1. **Use Teacher ID email**
+   - When `logged_in_with_tid` = true and user has email in Teacher ID data
+   - User chooses their Teacher ID email
+   - Email verification is skipped
+   - `email_address_check` = true
+
+2. **Use different email**
+   - User selects "A different email address"
+   - `email_address_check` = false
+   - Must provide new email and verify with OTP
+
+3. **Not logged in with Teacher ID**
+   - User must provide email and verify with OTP
+
+## Mobile Verification Branches:
+
+1. **Use Teacher ID mobile number**
+   - When `logged_in_with_tid` = true and mobile number exists in Teacher ID data
+   - User chooses "Use the mobile number from DfE Identity"
+   - `mobile_check` = "use"
+   - Mobile verification is skipped
+
+2. **Use alternative mobile number**
+   - User chooses "A different mobile number"
+   - `mobile_check` = "alternative"
+   - Needs to provide and verify new mobile number
+
+3. **Decline mobile contact**
+   - User chooses "I do not want to be contacted by mobile"
+   - `mobile_check` = "declined"
+   - Mobile number collection and verification skipped
+
+4. **No mobile preference**
+   - `provide_mobile_number` = false
+   - Mobile number collection and verification skipped
+
+## School Verification Branches:
+
+1. **Teacher ID has recent TPS school match**
+   - When `journey_session.logged_in_with_tid_and_has_recent_tps_school?` is true
+   - User is asked to confirm if they're still at the same school
+   - `correct_school` page is shown
+
+2. **No school match or not logged in with TID**
+   - User must search for and select their school manually
+
+3. **School in different location**
+   - `school_somewhere_else` = true
+   - User selects a different school
+
+## Supply Teacher Branches:
+
+1. **Not a supply teacher**
+   - `employed_as_supply_teacher` = false
+   - Supply teacher specific questions are skipped
+
+2. **Is a supply teacher**
+   - `employed_as_supply_teacher` = true
+   - Additional questions shown:
+     - Do you have a contract for at least one term?
+     - Are you employed directly by the school?
+
+## Trainee Teacher Branch (Targeted Retention Incentive):
+
+1. **Trainee teacher at TRI eligible school**
+   - When `answers.trainee_teacher?` is true and school is eligible for Targeted Retention Incentive
+   - Shortened journey with trainee-specific questions
+
+## Induction Question Branch:
+
+1. **Induction question required**
+   - When an ECP-eligible school is selected
+   - Not already confirmed via DQT
+
+2. **Induction question not required**
+   - When ECP-eligible school is not selected
+   - Or when DQT confirms induction eligibility
+
+## Policy Eligibility Branches:
+
+1. **Eligible for both ECP and Targeted Retention Incentive**
+   - User chooses which payment to apply for
+
+2. **Eligible for ECP only**
+   - Automatically applies for ECP
+
+3. **Eligible for Targeted Retention Incentive only**
+   - Automatically applies for Targeted Retention Incentive
+
+4. **Ineligible or eligible later**
+   - Shown relevant ineligibility or future eligibility message
+
+## Address Search Branches:
+
+1. **Ordnance Survey search works**
+   - User can search for address by postcode
+   - `select-home-address` page shown
+
+2. **Ordnance Survey error**
+   - `ordnance_survey_error` = true
+   - `select-home-address` page skipped
+   - Manual address entry

@@ -36,6 +36,8 @@
   </li>
 </ul>
 
+<%# FIXME RL, when implementing this for LUP only add a new change school form
+  rather than reusing the correct school form %>
 <div class="govuk-!-padding-bottom-6">
   <% if answers.school_somewhere_else == false %>
     <%= button_to "Change school", claim_path(current_journey_routing_name, "correct-school", claim: { change_school: true }), method: :patch, class: "govuk-button", role: :button, data: { module: "govuk-button" } %>
