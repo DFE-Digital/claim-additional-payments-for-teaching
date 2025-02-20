@@ -34,6 +34,7 @@ module Admin
       AcademicYear.new(params.require(:policies_targeted_retention_incentive_payments_award).require(:academic_year))
     end
 
+    # This one will be tricky
     def journey_configuration
       @journey_configuration ||= Journeys.for_policy(Policies::TargetedRetentionIncentivePayments).configuration
     end

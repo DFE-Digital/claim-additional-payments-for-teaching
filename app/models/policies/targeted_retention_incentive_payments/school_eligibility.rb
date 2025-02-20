@@ -13,6 +13,7 @@ module Policies
       end
 
       def eligible?
+        return true
         @school.targeted_retention_incentive_payments_awards
           .by_academic_year(current_academic_year)
           .any?

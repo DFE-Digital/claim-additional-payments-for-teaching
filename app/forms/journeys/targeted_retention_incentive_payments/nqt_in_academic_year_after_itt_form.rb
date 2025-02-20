@@ -1,10 +1,13 @@
 module Journeys
   module TargetedRetentionIncentivePayments
     class NqtInAcademicYearAfterIttForm < Form
+      # FIXME RL - move this into the base class if I use it in another form
+      class RadioOption < Struct.new(:value, :label, keyword_init: true); end
+
       attribute :nqt_in_academic_year_after_itt, :boolean
 
       validates :nqt_in_academic_year_after_itt, inclusion: {
-        in: [true, false],
+        in: ->(form) { form.radio_options.map(&:value) },
         message: i18n_error_message(:inclusion)
       }
 
@@ -20,6 +23,13 @@ module Journeys
           )
           journey_session.save
         end
+      end
+
+      def radio_options
+        [
+          RadioOption.new(value: true, label: t("options.true")),
+          RadioOption.new(value: false, label: t("options.false"))
+        ]
       end
 
       private

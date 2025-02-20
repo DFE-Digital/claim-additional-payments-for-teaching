@@ -158,6 +158,8 @@ module Journeys
       def text_for_subject_answer
         policy = eligibility.policy
 
+        # We know we're on the additional payments journey here so can
+        # referrence that.
         subjects = policy.current_and_future_subject_symbols(
           claim_year: policy.current_academic_year,
           itt_year: journey_session.answers.itt_academic_year

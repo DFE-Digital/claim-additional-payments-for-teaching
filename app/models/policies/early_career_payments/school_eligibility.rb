@@ -364,6 +364,7 @@ module Policies
       end
 
       def eligible?
+        return false
         @school.open? &&
           (eligible_local_authority_district? || considered_as_eligible_local_authority_district?) &&
           (@school.state_funded? || @school.secure_unit?) &&

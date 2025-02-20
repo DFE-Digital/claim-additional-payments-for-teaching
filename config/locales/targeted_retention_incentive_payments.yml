@@ -1,0 +1,32 @@
+en:
+  targeted_retention_incentive_payments:
+    journey_name: "Claim a targeted retention incentive payment"
+    feedback_email: "additionalteachingpayment@digital.education.gov.uk"
+    landing_page: "Find out if you are eligible for a targeted retention incentive payment"
+    purpose: "For early career teachers who teach certain subjects and work in disadvantaged schools."
+    policy_short_name: "School Targeted Retention Incentive"
+    policy_acronym: "STRI"
+    payment_name: "School targeted retention incentive"
+    claim_subject: "School targeted retention incentive"
+    claim_amount_description: "Additional payment for teaching"
+    support_email_address: "schools-targeted.retention-incentive@education.gov.uk"
+    information_provided_further_details_link_text: "school targeted retention incentive (opens in new tab)"
+    forms:
+      current_school:
+        questions:
+          current_school_search: "Which school do you teach at?"
+          current_school_results: "Select the school you teach at"
+        errors:
+          enter_a_school_or_postcode: "Enter a school or postcode"
+          select_the_school_you_teach_at: "Select the school you teach at"
+          the_selected_school_is_closed: "The selected school is closed"
+          school_not_found: "School not found"
+      nqt_in_academic_year_after_itt:
+        question: "Are you currently teaching as a qualified teacher?"
+        hint: "Your induction years count as long as you have your qualified teacher status (QTS)."
+        options:
+          true: "Yes"
+          false: "No, I’m a trainee teacher"
+        errors:
+          inclusion: "Select yes if you are currently teaching as a qualified teacher"
+

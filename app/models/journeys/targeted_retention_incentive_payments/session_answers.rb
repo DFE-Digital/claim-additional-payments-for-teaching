@@ -7,6 +7,8 @@ module Journeys
       attribute :itt_academic_year, AcademicYear::Type.new, pii: false
       attribute :teaching_subject_now, :boolean, pii: false
       attribute :eligible_itt_subject, :string, pii: false
+      attribute :induction_completed, :boolean, pii: false
+      attribute :nqt_in_academic_year_after_itt, :boolean, pii: false
     end
   end
 end
