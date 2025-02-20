@@ -114,10 +114,6 @@ module FormSubmittable
       current_slug.underscore
     end
 
-    def slugs
-      journey.slug_sequence::SLUGS
-    end
-
     def first_slug
       slugs.first.to_sym
     end
