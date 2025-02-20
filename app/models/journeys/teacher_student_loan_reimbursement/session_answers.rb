@@ -43,10 +43,6 @@ module Journeys
         claim_school&.name
       end
 
-      def claim_school_somewhere_else?
-        !!claim_school_somewhere_else
-      end
-
       def subjects_taught
         [
           :biology_taught,
@@ -71,14 +67,6 @@ module Journeys
 
       def employed_at_recent_tps_school?
         employment_status.to_s == "recent_tps_school"
-      end
-
-      def had_leadership_position?
-        !!had_leadership_position
-      end
-
-      def mostly_performed_leadership_duties?
-        !!mostly_performed_leadership_duties
       end
     end
   end

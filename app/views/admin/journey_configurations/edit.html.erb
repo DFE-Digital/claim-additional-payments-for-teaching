@@ -28,13 +28,13 @@
 
     <% if journey_configuration.additional_payments? %>
       <div class="govuk-panel govuk-panel--informational govuk-panel--small">
-        <% if lupp_awards_last_updated_at %>
+        <% if targeted_retention_incentive_awards_last_updated_at %>
           <p class="govuk-panel__body">
-            The <%= I18n.t("levelling_up_premium_payments.policy_short_name") %> school award amounts for academic year <%= journey_configuration.current_academic_year %> were updated on <%= l(lupp_awards_last_updated_at) %>.
+            The <%= I18n.t("targeted_retention_incentive_payments.policy_short_name") %> school award amounts for academic year <%= journey_configuration.current_academic_year %> were updated on <%= l(targeted_retention_incentive_awards_last_updated_at) %>.
           </p>
         <% else %>
           <p class="govuk-panel__body">
-            No <%= I18n.t("levelling_up_premium_payments.policy_short_name") %> school award data has been uploaded for academic year <%= journey_configuration.current_academic_year %>.
+            No <%= I18n.t("targeted_retention_incentive_payments.policy_short_name") %> school award data has been uploaded for academic year <%= journey_configuration.current_academic_year %>.
           </p>
         <% end %>
       </div>

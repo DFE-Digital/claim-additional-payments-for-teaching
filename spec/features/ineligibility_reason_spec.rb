@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Ineligibility reason", slow: true do
   let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
-  let!(:lup_and_ecp_school) { create(:school, :combined_journey_eligibile_for_all) }
+  let!(:targeted_retention_incentive_and_ecp_school) { create(:school, :combined_journey_eligibile_for_all) }
   let!(:ecp_only_school) { create(:school, :early_career_payments_eligible) }
 
   before do
@@ -76,9 +76,9 @@ RSpec.feature "Ineligibility reason", slow: true do
   end
 
   context "ITT year" do
-    context "LUP and ECP school" do
+    context "Targeted Retention Incentive and ECP school" do
       before do
-        navigate_to_year_selection(lup_and_ecp_school)
+        navigate_to_year_selection(targeted_retention_incentive_and_ecp_school)
       end
 
       scenario "None of the above" do
@@ -93,10 +93,10 @@ RSpec.feature "Ineligibility reason", slow: true do
   context "teaching requirement" do
     context "ineligible for ECP" do
       before do
-        navigate_to_year_selection(lup_and_ecp_school)
+        navigate_to_year_selection(targeted_retention_incentive_and_ecp_school)
       end
 
-      scenario "do not teach LUP subjects" do
+      scenario "do not teach Targeted Retention Incentive subjects" do
         select_itt_year(AcademicYear.new(2021))
 
         choose "Mathematics"
@@ -105,11 +105,11 @@ RSpec.feature "Ineligibility reason", slow: true do
         choose "No"
         click_on "Continue"
 
-        expect(page).to have_css("div#would_be_eligible_for_lup_only_except_for_insufficient_teaching")
+        expect(page).to have_css("div#would_be_eligible_for_targeted_retention_incentive_only_except_for_insufficient_teaching")
       end
     end
 
-    context "ineligible for LUP" do
+    context "ineligible for Targeted Retention Incentive" do
       before do
         navigate_to_year_selection(ecp_only_school)
       end
@@ -129,10 +129,10 @@ RSpec.feature "Ineligibility reason", slow: true do
 
     context "eligible for both" do
       before do
-        navigate_to_year_selection(lup_and_ecp_school)
+        navigate_to_year_selection(targeted_retention_incentive_and_ecp_school)
       end
 
-      scenario "do not teach ECP nor LUP subjects" do
+      scenario "do not teach ECP nor Targeted Retention Incentive subjects" do
         select_itt_year(AcademicYear.new(2020))
 
         choose "Mathematics"
@@ -141,14 +141,14 @@ RSpec.feature "Ineligibility reason", slow: true do
         choose "No"
         click_on "Continue"
 
-        expect(page).to have_css("div#would_be_eligible_for_both_ecp_and_lup_except_for_insufficient_teaching")
+        expect(page).to have_css("div#would_be_eligible_for_both_ecp_and_targeted_retention_incentive_except_for_insufficient_teaching")
       end
     end
   end
 
   context "degree" do
     before do
-      navigate_to_year_selection(lup_and_ecp_school)
+      navigate_to_year_selection(targeted_retention_incentive_and_ecp_school)
     end
 
     scenario "lack both ITT subject and degree" do
@@ -206,9 +206,9 @@ RSpec.feature "Ineligibility reason", slow: true do
   end
 
   context "trainee" do
-    context "LUP school" do
-      scenario "no training for LUP ITT nor have degree" do
-        choose_school(lup_and_ecp_school)
+    context "Targeted Retention Incentive school" do
+      scenario "no training for Targeted Retention Incentive ITT nor have degree" do
+        choose_school(targeted_retention_incentive_and_ecp_school)
 
         choose "No"
         click_on "Continue"
@@ -251,7 +251,7 @@ RSpec.feature "Ineligibility reason", slow: true do
     end
   end
 
-  context "school ineligible for both ECP and LUP" do
+  context "school ineligible for both ECP and Targeted Retention Incentive" do
     let!(:primary_school) { create(:school, :early_career_payments_ineligible) }
 
     scenario "primary school" do
@@ -264,7 +264,7 @@ RSpec.feature "Ineligibility reason", slow: true do
   private
 
   def navigate_to_supply_teacher_subquestions
-    choose_school lup_and_ecp_school
+    choose_school targeted_retention_incentive_and_ecp_school
     click_on "Continue"
 
     # - Have you started your first year as a newly qualified teacher?
@@ -281,7 +281,7 @@ RSpec.feature "Ineligibility reason", slow: true do
   end
 
   def navigate_to_performance_questions
-    choose_school lup_and_ecp_school
+    choose_school targeted_retention_incentive_and_ecp_school
     click_on "Continue"
 
     # - Have you started your first year as a newly qualified teacher?

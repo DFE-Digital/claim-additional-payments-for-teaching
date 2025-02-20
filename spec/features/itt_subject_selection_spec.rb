@@ -13,8 +13,8 @@ RSpec.feature "ITT subject selection", slow: true do
       select_itt_year(itt_year)
     end
 
-    context "LUP school" do
-      let!(:school) { create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_eligible) }
+    context "Targeted Retention Incentive school" do
+      let!(:school) { create(:school, :early_career_payments_eligible, :targeted_retention_incentive_payments_eligible) }
 
       context "ITT year 2017" do
         let(:itt_year) { AcademicYear.new(2017) }
@@ -47,15 +47,15 @@ RSpec.feature "ITT subject selection", slow: true do
 
         scenario "subject options" do
           expect_displayed_subjects(["Chemistry", "Computing", "Mathematics", "Physics"])
-          # choose subject eligible for LUP only
+          # choose subject eligible for Targeted Retention Incentive only
           select_subject("Chemistry")
           expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
           click_link "Back"
-          # choose subject eligible for both LUP and ECP
+          # choose subject eligible for both Targeted Retention Incentive and ECP
           select_subject("Mathematics")
           expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
           click_link "Back"
-          # choose ineligible subject for both ECP and LUP
+          # choose ineligible subject for both ECP and Targeted Retention Incentive
           select_subject("None of the above")
           expect(page).to have_text(I18n.t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"))
         end
@@ -66,7 +66,7 @@ RSpec.feature "ITT subject selection", slow: true do
 
         scenario "subject options" do
           expect_displayed_subjects(["Chemistry", "Computing", "Languages", "Mathematics", "Physics"])
-          # choose subject ineligible for LUP
+          # choose subject ineligible for Targeted Retention Incentive
           select_subject("Languages")
           expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
           click_link "Back"
@@ -95,7 +95,7 @@ RSpec.feature "ITT subject selection", slow: true do
     end
 
     context "ECP-only school" do
-      let!(:school) { create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible) }
+      let!(:school) { create(:school, :early_career_payments_eligible, :targeted_retention_incentive_payments_ineligible) }
 
       context "ITT year 2017" do
         let(:itt_year) { AcademicYear.new(2017) }
@@ -179,7 +179,7 @@ RSpec.feature "ITT subject selection", slow: true do
   private
 
   def navigate_to_year_selection(school)
-    start_levelling_up_premium_payments_claim
+    start_targeted_retention_incentive_payments_claim
     skip_tid
 
     # - Which school do you teach at
@@ -245,8 +245,8 @@ RSpec.feature "ITT subject selection", slow: true do
         expect(page).to have_field(subject_display_string)
       end
 
-      entire_set_of_lup_and_ecp_subject_display_strings = ["Chemistry", "Computing", "Languages", "Mathematics", "Physics"]
-      missing_subject_display_strings = entire_set_of_lup_and_ecp_subject_display_strings - displayed_subject_display_strings
+      entire_set_of_targeted_retention_incentive_and_ecp_subject_display_strings = ["Chemistry", "Computing", "Languages", "Mathematics", "Physics"]
+      missing_subject_display_strings = entire_set_of_targeted_retention_incentive_and_ecp_subject_display_strings - displayed_subject_display_strings
 
       missing_subject_display_strings.each do |missing_subject_display_string|
         expect(page).to have_no_field(missing_subject_display_string)

@@ -48,7 +48,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleDegreeSubjectFor
     context "invalid params" do
       let(:claim_params) { {eligible_degree_subject: ""} }
 
-      it "does not update the attributes on the claim (LUPP)" do
+      it "does not update the attributes on the claim (Targeted Retention Incentive)" do
         expect { form.save }.to(
           not_change { journey_session.answers.eligible_degree_subject }
         )

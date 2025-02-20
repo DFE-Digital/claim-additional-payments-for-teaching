@@ -16,7 +16,7 @@ RSpec.describe Claim, type: :model do
       context "with Policies::EarlyCareerPayments" do
         let(:claim_1) { create(:claim, policy: Policies::StudentLoans) }
         let(:claim_2) { create(:claim, policy: Policies::EarlyCareerPayments) }
-        let(:claim_3) { create(:claim, policy: Policies::LevellingUpPremiumPayments) }
+        let(:claim_3) { create(:claim, policy: Policies::TargetedRetentionIncentivePayments) }
 
         it do
           expect(Claim.by_policy(Policies::EarlyCareerPayments)).to contain_exactly(claim_2)
@@ -27,20 +27,20 @@ RSpec.describe Claim, type: :model do
         let(:claim_1) { create(:claim, policy: Policies::StudentLoans) }
         let(:claim_2) { create(:claim, policy: Policies::StudentLoans) }
         let(:claim_3) { create(:claim, policy: Policies::EarlyCareerPayments) }
-        let(:claim_4) { create(:claim, policy: Policies::LevellingUpPremiumPayments) }
+        let(:claim_4) { create(:claim, policy: Policies::TargetedRetentionIncentivePayments) }
 
         it do
           expect(Claim.by_policy(Policies::StudentLoans)).to contain_exactly(claim_1, claim_2)
         end
       end
 
-      context "with LevellingUpPremiumPayments" do
+      context "with TargetedRetentionIncentivePayments" do
         let(:claim_1) { create(:claim, policy: Policies::StudentLoans) }
         let(:claim_2) { create(:claim, policy: Policies::EarlyCareerPayments) }
-        let(:claim_3) { create(:claim, policy: Policies::LevellingUpPremiumPayments) }
+        let(:claim_3) { create(:claim, policy: Policies::TargetedRetentionIncentivePayments) }
 
         it do
-          expect(Claim.by_policy(Policies::LevellingUpPremiumPayments)).to contain_exactly(claim_3)
+          expect(Claim.by_policy(Policies::TargetedRetentionIncentivePayments)).to contain_exactly(claim_3)
         end
       end
     end
@@ -418,15 +418,9 @@ RSpec.describe Claim, type: :model do
     context "when the claim has been rejected" do
       let(:claim) { create(:claim, :rejected) }
 
-      it { is_expected.to eq(false) }
-    end
-
-    context "when the claim has been approved" do
-      let(:claim) { create(:claim, :approved) }
-
       context "when above the min QA threshold" do
         before do
-          stub_const("Policies::#{claim.policy}::MIN_QA_THRESHOLD", 0)
+          stub_const("Policies::#{claim.policy}::REJECTED_MIN_QA_THRESHOLD", 0)
         end
 
         it { is_expected.to eq(false) }
@@ -434,7 +428,27 @@ RSpec.describe Claim, type: :model do
 
       context "when below the min QA threshold" do
         before do
-          stub_const("Policies::#{claim.policy}::MIN_QA_THRESHOLD", 100)
+          stub_const("Policies::#{claim.policy}::REJECTED_MIN_QA_THRESHOLD", 100)
+        end
+
+        it { is_expected.to eq(true) }
+      end
+    end
+
+    context "when the claim has been approved" do
+      let(:claim) { create(:claim, :approved) }
+
+      context "when above the min QA threshold" do
+        before do
+          stub_const("Policies::#{claim.policy}::APPROVED_MIN_QA_THRESHOLD", 0)
+        end
+
+        it { is_expected.to eq(false) }
+      end
+
+      context "when below the min QA threshold" do
+        before do
+          stub_const("Policies::#{claim.policy}::APPROVED_MIN_QA_THRESHOLD", 100)
         end
 
         it { is_expected.to eq(true) }
@@ -618,23 +632,23 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe "#below_min_qa_threshold?" do
+  describe "#below_min_qa_threshold_for_approval?" do
     let(:policy) { Policies::EarlyCareerPayments }
     let(:other_policy) { Policies::POLICIES.detect { |p| p != policy } }
 
-    subject { build(:claim, policy: policy).below_min_qa_threshold? }
+    subject { build(:claim, policy: policy).below_min_qa_threshold_for_approval? }
 
-    context "when the MIN_QA_THRESHOLD is set to zero" do
+    context "when the APPROVED_MIN_QA_THRESHOLD is set to zero" do
       before do
-        stub_const("Policies::#{policy}::MIN_QA_THRESHOLD", 0)
+        stub_const("Policies::#{policy}::APPROVED_MIN_QA_THRESHOLD", 0)
       end
 
       it { is_expected.to eq(false) }
     end
 
-    context "when the MIN_QA_THRESHOLD is set to 10" do
+    context "when the APPROVED_MIN_QA_THRESHOLD is set to 10" do
       before do
-        stub_const("Policies::#{policy}::MIN_QA_THRESHOLD", 10)
+        stub_const("Policies::#{policy}::APPROVED_MIN_QA_THRESHOLD", 10)
       end
 
       context "with no previously approved claims" do
@@ -824,6 +838,28 @@ RSpec.describe Claim, type: :model do
 
         it { is_expected.to eq(true) }
       end
+    end
+  end
+
+  describe "#below_min_qa_threshold_for_rejection?" do
+    it "returns true for 1 in 10 claims" do
+      policy = Policies::FurtherEducationPayments
+
+      stub_const("Policies::#{policy}::REJECTED_MIN_QA_THRESHOLD", 10)
+
+      claim = build(:claim, policy: policy)
+
+      random = double(Random)
+
+      allow(Random).to receive(:new).and_return(random)
+
+      allow(random).to receive(:rand).and_return(9)
+
+      expect(claim.below_min_qa_threshold_for_rejection?).to eq(true)
+
+      allow(random).to receive(:rand).and_return(99)
+
+      expect(claim.below_min_qa_threshold_for_rejection?).to eq(false)
     end
   end
 
@@ -1098,8 +1134,8 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe "#has_lupp_policy?" do
-    subject(:result) { claim.has_lupp_policy? }
+  describe "#has_targeted_retention_incentive_policy?" do
+    subject(:result) { claim.has_targeted_retention_incentive_policy? }
     let(:claim) { create(:claim, policy:) }
 
     context "with student loans policy" do
@@ -1115,14 +1151,14 @@ RSpec.describe Claim, type: :model do
     end
 
     context "with levelling-up premium payments policy" do
-      let(:policy) { Policies::LevellingUpPremiumPayments }
+      let(:policy) { Policies::TargetedRetentionIncentivePayments }
 
       it { is_expected.to be true }
     end
   end
 
-  describe "#has_ecp_or_lupp_policy?" do
-    subject(:result) { claim.has_ecp_or_lupp_policy? }
+  describe "#has_ecp_or_targeted_retention_incentive_policy?" do
+    subject(:result) { claim.has_ecp_or_targeted_retention_incentive_policy? }
     let(:claim) { create(:claim, policy:) }
 
     context "with student loans policy" do
@@ -1138,7 +1174,7 @@ RSpec.describe Claim, type: :model do
     end
 
     context "with levelling-up premium payments policy" do
-      let(:policy) { Policies::LevellingUpPremiumPayments }
+      let(:policy) { Policies::TargetedRetentionIncentivePayments }
 
       it { is_expected.to be true }
     end

@@ -28,7 +28,7 @@ class SchoolWorkforceCensus < ApplicationRecord
     none_of_the_above: []
   }.freeze
 
-  LUP_ELIGIBLE_SUBJECTS = {
+  TARGETED_RETENTION_INCENTIVE_ELIGIBLE_SUBJECTS = {
     chemistry: [
       "Chemistry",
       "Combined/General science",

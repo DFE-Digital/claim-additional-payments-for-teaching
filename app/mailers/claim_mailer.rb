@@ -237,7 +237,7 @@ class ClaimMailer < ApplicationMailer
     return if [
       Policies::StudentLoans,
       Policies::EarlyCareerPayments,
-      Policies::LevellingUpPremiumPayments,
+      Policies::TargetedRetentionIncentivePayments,
       Policies::InternationalRelocationPayments,
       Policies::FurtherEducationPayments,
       Policies::EarlyYearsPayments

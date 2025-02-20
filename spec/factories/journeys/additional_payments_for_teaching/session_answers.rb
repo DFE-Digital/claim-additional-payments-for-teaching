@@ -53,7 +53,7 @@ FactoryBot.define do
     end
 
     trait :with_no_eligible_subjects do
-      itt_academic_year { Journeys.for_policy(Policies::EarlyCareerPayments).configuration.current_academic_year - 1 }
+      itt_academic_year { Policies::EarlyCareerPayments.current_academic_year - 1 }
     end
 
     trait :with_teaching_subject_now do
@@ -68,8 +68,8 @@ FactoryBot.define do
       selected_policy { "EarlyCareerPayments" }
     end
 
-    trait :with_selected_policy_lupp do
-      selected_policy { "LevellingUpPremiumPayments" }
+    trait :with_selected_policy_targeted_retention_incentive do
+      selected_policy { "TargetedRetentionIncentivePayments" }
     end
 
     trait :submittable do
@@ -86,18 +86,18 @@ FactoryBot.define do
       with_eligible_itt_subject
     end
 
-    trait :first_lup_claim_year do
+    trait :first_targeted_retention_incentive_claim_year do
       academic_year { AcademicYear.new(2022) }
     end
 
-    trait :itt_year_good_for_life_of_lup_policy do
-      itt_academic_year { Journeys.for_policy(Policies::LevellingUpPremiumPayments).configuration.current_academic_year - 1 }
+    trait :itt_year_good_for_life_of_targeted_retention_incentive_policy do
+      itt_academic_year { Policies::TargetedRetentionIncentivePayments.current_academic_year - 1 }
     end
 
-    trait :lup_eligible do
-      first_lup_claim_year
-      itt_year_good_for_life_of_lup_policy
-      current_school_id { create(:school, :levelling_up_premium_payments_eligible).id }
+    trait :targeted_retention_incentive_eligible do
+      first_targeted_retention_incentive_claim_year
+      itt_year_good_for_life_of_targeted_retention_incentive_policy
+      current_school_id { create(:school, :targeted_retention_incentive_payments_eligible).id }
       nqt_in_academic_year_after_itt { true }
       employed_as_supply_teacher { false }
       subject_to_formal_performance_action { false }
@@ -118,19 +118,19 @@ FactoryBot.define do
       qualification { :postgraduate_itt }
       induction_completed { true }
       teaching_subject_now { true }
-      itt_academic_year { Journeys.for_policy(Policies::EarlyCareerPayments).configuration.current_academic_year - 3 }
+      itt_academic_year { Policies::EarlyCareerPayments.current_academic_year - 3 }
       eligible_itt_subject { :mathematics }
       employed_directly { true }
     end
 
-    trait :ecp_and_lup_eligible do
-      lup_eligible
+    trait :ecp_and_targeted_retention_incentive_eligible do
+      targeted_retention_incentive_eligible
       ecp_eligible
       current_school_id do
         create(
           :school,
           :early_career_payments_eligible,
-          :levelling_up_premium_payments_eligible
+          :targeted_retention_incentive_payments_eligible
         ).id
       end
     end
@@ -140,7 +140,7 @@ FactoryBot.define do
     end
 
     trait :ecp_eligible_itt_subject_later do
-      itt_academic_year { Journeys.for_policy(Policies::EarlyCareerPayments).configuration.current_academic_year - 4 }
+      itt_academic_year { Policies::EarlyCareerPayments.current_academic_year - 4 }
       eligible_itt_subject { :mathematics }
     end
 
@@ -153,7 +153,7 @@ FactoryBot.define do
       eligible_itt_subject { :computing }
     end
 
-    trait :lup_ineligible_itt_subject do
+    trait :targeted_retention_incentive_ineligible_itt_subject do
       eligible_itt_subject { :foreign_languages }
     end
 
@@ -162,14 +162,14 @@ FactoryBot.define do
       ecp_ineligible_itt_subject
     end
 
-    trait :lup_ineligible do
-      lup_eligible
-      lup_ineligible_school
+    trait :targeted_retention_incentive_ineligible do
+      targeted_retention_incentive_eligible
+      targeted_retention_incentive_ineligible_school
     end
 
-    trait :lup_ineligible_school do
+    trait :targeted_retention_incentive_ineligible_school do
       current_school_id do
-        create(:school, :levelling_up_premium_payments_ineligible).id
+        create(:school, :targeted_retention_incentive_payments_ineligible).id
       end
     end
 
@@ -181,7 +181,7 @@ FactoryBot.define do
 
     trait :eligible_school_ecp_only do
       current_school_id do
-        create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible).id
+        create(:school, :early_career_payments_eligible, :targeted_retention_incentive_payments_ineligible).id
       end
     end
 
@@ -223,7 +223,7 @@ FactoryBot.define do
       eligible_degree_subject { false }
     end
 
-    trait :eligible_school_ecp_and_lup do
+    trait :eligible_school_ecp_and_targeted_retention_incentive do
       current_school_id do
         create(:school, :combined_journey_eligibile_for_all).id
       end
@@ -234,18 +234,18 @@ FactoryBot.define do
       teaching_subject_now { nil }
     end
 
-    trait :lup_undetermined do
-      lup_eligible
+    trait :targeted_retention_incentive_undetermined do
+      targeted_retention_incentive_eligible
       teaching_subject_now { nil }
     end
 
-    trait :ecp_and_lup_undetermined do
-      ecp_and_lup_eligible
+    trait :ecp_and_targeted_retention_incentive_undetermined do
+      ecp_and_targeted_retention_incentive_eligible
       teaching_subject_now { nil }
     end
 
-    trait :lup_eligible_later do
-      lup_eligible
+    trait :targeted_retention_incentive_eligible_later do
+      targeted_retention_incentive_eligible
       trainee_teacher
     end
 

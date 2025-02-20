@@ -5,6 +5,7 @@ module Journeys
     include ActiveModel::Dirty
     include Sessions::TeacherId
     include Sessions::PiiAttributes
+    include BooleanAttributes
 
     attribute :current_school_id, :string, pii: false # UUID
     attribute :address_line_1, :string, pii: true
@@ -83,22 +84,6 @@ module Journeys
       @current_school ||= School.find_by(id: current_school_id)
     end
 
-    def details_check?
-      !!details_check
-    end
-
-    def email_address_check?
-      !!email_address_check
-    end
-
-    def provide_mobile_number?
-      !!provide_mobile_number
-    end
-
-    def hmrc_bank_validation_succeeded?
-      !!hmrc_bank_validation_succeeded
-    end
-
     def full_name
       [first_name, middle_name, surname].reject(&:blank?).join(" ")
     end
@@ -111,26 +96,6 @@ module Journeys
         address_line_4,
         postcode
       ].reject(&:blank?).join(separator)
-    end
-
-    def qualifications_details_check?
-      !!qualifications_details_check
-    end
-
-    def has_student_loan?
-      !!has_student_loan
-    end
-
-    def email_verified?
-      !!email_verified
-    end
-
-    def logged_in_with_onelogin?
-      logged_in_with_onelogin
-    end
-
-    def identity_confirmed_with_onelogin?
-      identity_confirmed_with_onelogin
     end
   end
 end
