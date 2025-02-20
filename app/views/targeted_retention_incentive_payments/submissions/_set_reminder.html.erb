@@ -1,0 +1,21 @@
+<h2 class="govuk-heading-m">
+  Apply for targeted retention incentive payment each academic year
+</h2>
+
+<p class="govuk-body">
+  So long as your circumstances stay the same, you could claim for
+  targeted retention incentive payments in future academic years. This depends
+  on the years you studied or when you began teaching.
+</p>
+
+<h3 class="govuk-heading-s">Set a reminder to apply next year</h3>
+
+<p class="govuk-body">
+  Receive a reminder email so you know when you can apply next year. We
+  cannot issue payments unless you apply.
+</p>
+
+<%= govuk_button_link_to(
+  "Set reminder",
+  reminder_path(journey: journey::ROUTING_NAME, slug: "personal-details")
+) %>
