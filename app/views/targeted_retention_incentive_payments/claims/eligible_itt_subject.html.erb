@@ -1,0 +1,67 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(@form.question_locale_key),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_radio_buttons_fieldset(
+        :eligible_itt_subject,
+        legend: {
+          text: @form.t(@form.question_locale_key),
+          tag: "h1",
+          size: "l"
+        },
+        hint: {
+          text: (@form.t(:hint) if !@form.answers.trainee_teacher?)
+        }
+      ) do %>
+        <% @form.radio_options.reject { it == @form.none_of_the_above }.each do |option| %>
+          <%= f.govuk_radio_button(
+            :eligible_itt_subject,
+            option.id,
+            label: { text: option.name }
+          ) %>
+        <% end %>
+
+        <%= f.govuk_radio_divider %>
+
+        <%= f.govuk_radio_button(
+          :eligible_itt_subject,
+          @form.none_of_the_above.id,
+          label: { text: @form.none_of_the_above.name }
+        ) %>
+      <% end %>
+
+        <%= govuk_details(
+          summary_text: @form.t(
+            [
+              :details,
+              :summary,
+              @form.answers.trainee_teacher? ? :trainee : :qualified
+            ]
+          ),
+          text: @form.t(
+            [
+              :details,
+              :text,
+              @form.answers.trainee_teacher? ? :trainee : :qualified
+            ]
+          )
+        ) %>
+
+      <%= f.govuk_submit  %>
+    <% end %>
+  </div>
+</div>

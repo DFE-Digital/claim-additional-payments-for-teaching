@@ -1,0 +1,37 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:heading),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <%= @form.t(:heading) %>
+    </h1>
+
+    <%= render(
+      partial: "claims/check_your_answers_section",
+      locals: {
+        heading: "Eligibility details",
+        answers: journey.answers_for_claim(journey_session).eligibility_answers
+      }
+    ) %>
+
+    <p class="govuk-body">
+      <%= @form.t(:confirmation_notice) %>
+    </p>
+
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>
+

@@ -733,16 +733,6 @@ en:
     claim_amount_description: "Additional payment for teaching"
     support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
     information_provided_further_details_link_text: early-career payment (opens in new tab)
-  targeted_retention_incentive_payments:
-    <<: *additional_payments
-    purpose: For early career teachers who teach certain subjects and work in disadvantaged schools.
-    policy_short_name: "School Targeted Retention Incentive"
-    policy_acronym: "STRI"
-    payment_name: "School targeted retention incentive"
-    claim_subject: "School targeted retention incentive"
-    claim_amount_description: "Additional payment for teaching"
-    support_email_address: "schools-targeted.retention-incentive@education.gov.uk"
-    information_provided_further_details_link_text: school targeted retention incentive (opens in new tab)
   get_a_teacher_relocation_payment: &get_a_teacher_relocation_payment
     accessibility_statement:
       test_date: "28 July 2022"
