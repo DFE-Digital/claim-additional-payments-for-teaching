@@ -1,0 +1,47 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.heading,
+    journey: current_journey_routing_name
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= content_tag(:h1, @form.heading, class: "govuk-heading-xl") %>
+
+    <% case @form.ineligibility_reason %>
+    <% when :school_ineligible %>
+      <%= render partial: "ineligible_current_school" %>
+    <% when :supply_teacher_contract_ineligible %>
+      <%= render partial: "generic" %>
+    <% when :ineligible_cohort %>
+      <%= render partial: "ineligible_cohort" %>
+    <% when :subject_and_degree_ineligible %>
+      <%= render partial: "subject_and_degree_ineligible" %>
+    <% when :trainee_in_last_policy_year %>
+      <%= render partial: "trainee_in_last_policy_year_ineligible" %>
+    <% when :insufficient_teaching %>
+      <%= render partial: "insufficient_teaching" %>
+    <% when :poor_performance %>
+      <%= render partial: "generic" %>
+    <% else %>
+      <% fail "unknown ineligibility reason #{@form.ineligibility_reason}" %>
+    <% end %>
+
+    <p class="govuk-body">
+      For more information, check the eligibility criteria for
+      <%= govuk_link_to(
+        Policies::TargetedRetentionIncentivePayments.short_name.downcase.pluralize,
+        Policies::TargetedRetentionIncentivePayments.eligibility_criteria_url
+      ) %>.
+    </p>
+
+    <p class="govuk-body">
+      The information you entered is not stored. If you are unsure your
+      information is correct,
+      <%= link_to("start again", landing_page_path, class: "govuk-link") %>.
+    </p>
+  </div>
+</div>
+

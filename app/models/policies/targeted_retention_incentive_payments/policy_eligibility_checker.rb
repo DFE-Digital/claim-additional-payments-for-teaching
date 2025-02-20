@@ -93,6 +93,11 @@ module Policies
         indicated_ineligible_itt_subject? && lacks_eligible_degree?
       end
 
+      # TODO in CAPT-2055 - remove this when we remove the AddtionalPayments
+      # journey. The only eligible later claimants are trainee teachers and we
+      # handle showing them the eligible later page using the trainee teacher
+      # sub journey in the slug sequence. Have left this in place for now as I
+      # don't want to remove any AP tests until we remove that journey.
       def specific_eligible_later_attributes?
         trainee_teacher? && eligible_itt_subject_or_relevant_degree?
       end
