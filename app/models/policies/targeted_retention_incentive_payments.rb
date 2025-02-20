@@ -69,6 +69,20 @@ module Policies
     # NOOP as PERSONAL_DATA_ATTRIBUTES_TO_RETAIN_FOR_EXTENDED_PERIOD is empty
     EXTENDED_PERIOD_END_DATE = ->(start_of_academic_year) {}
 
+    # FIXME RL: Once we've removed the AdditionalPaymentsForTeaching journey
+    # we can delete this method and fall back to the one in BasePolicy
+    def current_academic_year
+      tri_only_journey_config = Journeys::Configuration.find_by(
+        routing_name: Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME
+      )
+
+      if tri_only_journey_config && tri_only_journey_config.open_for_submissions?
+        tri_only_journey_config.current_academic_year
+      else
+        Journeys::AdditionalPaymentsForTeaching.configuration.current_academic_year
+      end
+    end
+
     def notify_reply_to_id
       "03ece7eb-2a5b-461b-9c91-6630d0051aa6"
     end
