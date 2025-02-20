@@ -325,7 +325,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
     claim_checking_steps(policy)
   end
 
-  scenario "service operator QAs a #{policy_name} claim", if: policy::MIN_QA_THRESHOLD.positive? do
+  scenario "service operator QAs a #{policy_name} claim", if: policy::APPROVED_MIN_QA_THRESHOLD.positive? do
     claim_checking_steps(policy)
     qa_approval_steps
   end
