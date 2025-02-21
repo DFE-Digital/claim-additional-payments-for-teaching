@@ -1,0 +1,50 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t([:question, @form.answers.qualification]),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_radio_buttons_fieldset(
+        :itt_academic_year,
+        legend: {
+          text: @form.t([:question, @form.answers.qualification]),
+          tag: "h1",
+          size: "l"
+        },
+        hint: { text: @form.try_t([:hint, @form.answers.qualification]) }
+      ) do %>
+        <% none_of_the_above = @form.radio_options.find { it.id == "itt_academic_year_none" } %>
+
+        <% @form.radio_options.reject { it == none_of_the_above }.each do |option| %>
+          <%= f.govuk_radio_button(
+            :itt_academic_year,
+            option.id,
+            label: { text: option.name }
+          ) %>
+        <% end %>
+
+        <%= f.govuk_radio_divider %>
+
+        <%= f.govuk_radio_button(
+          :itt_academic_year,
+          none_of_the_above.id,
+          label: { text: none_of_the_above.name }
+        ) %>
+      <% end %>
+
+      <%= f.govuk_submit  %>
+    <% end %>
+  </div>
+</div>

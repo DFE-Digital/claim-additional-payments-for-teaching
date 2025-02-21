@@ -8,7 +8,8 @@ module Journeys
         "nqt-in-academic-year-after-itt",
         "supply-teacher",
         "poor-performance",
-        "qualification"
+        "qualification",
+        "itt-year"
       ]
 
       attr_reader :journey_session

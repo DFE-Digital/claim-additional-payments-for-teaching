@@ -12,7 +12,8 @@ module Journeys
         "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm,
         "supply-teacher" => SupplyTeacherForm,
         "poor-performance" => PoorPerformanceForm,
-        "qualification" => QualificationForm
+        "qualification" => QualificationForm,
+        "itt-year" => IttAcademicYearForm,
       }
     }
 

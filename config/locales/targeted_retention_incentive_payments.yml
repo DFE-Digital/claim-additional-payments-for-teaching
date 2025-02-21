@@ -69,4 +69,19 @@ en:
           undergraduate_itt: "Bachelor of Arts (BA) or Bachelor of Science (BSc) degrees."
         errors:
           inclusion: Select the route you took into teaching
+      itt_academic_year:
+        question:
+          undergraduate_itt: In which academic year did you complete your undergraduate initial teacher training (ITT)?
+          postgraduate_itt: In which academic year did you start your postgraduate initial teacher training (ITT)?
+          assessment_only: In which academic year did you earn your qualified teacher status (QTS)?
+          overseas_recognition: In which academic year did you earn your qualified teacher status (QTS)?
+        hint:
+          undergraduate_itt: If you deferred or did a part time undergraduate ITT, select the year you completed.
+          postgraduate_itt: If you deferred or did a part time postgraduate ITT, select the year you started.
+        errors:
+          inclusion:
+            undergraduate_itt: "Select the academic year you completed your undergraduate ITT"
+            postgraduate_itt: "Select the academic year you started your postgraduate ITT"
+            assessment_only: "Select the academic year you earned your QTS"
+            overseas_recognition: "Select the academic year you earned your QTS"
 
