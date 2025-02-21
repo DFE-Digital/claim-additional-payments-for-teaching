@@ -11,6 +11,7 @@ module Journeys
       attribute :nqt_in_academic_year_after_itt, :boolean, pii: false
       attribute :has_entire_term_contract, :boolean, pii: false
       attribute :employed_directly, :boolean, pii: false
+      attribute :qualification, :string, pii: false
     end
   end
 end

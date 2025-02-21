@@ -55,4 +55,18 @@ en:
             inclusion: "Select yes if any performance measures have been started against you"
           disciplinary:
             inclusion: "Select yes if you are currently subject to disciplinary action"
+      qualification:
+        question: "Which route into teaching did you take?"
+        options:
+          postgraduate_itt: "Postgraduate initial teacher training (ITT)"
+          undergraduate_itt: "Undergraduate initial teacher training (ITT)"
+          assessment_only: "Assessment only"
+          overseas_recognition: "Overseas recognition"
+        hints:
+          postgraduate_itt:
+            "Postgraduate Certificate of Education (PGCE), Teach First, School Direct ITT and School Centered ITT
+            (SCITT)."
+          undergraduate_itt: "Bachelor of Arts (BA) or Bachelor of Science (BSc) degrees."
+        errors:
+          inclusion: Select the route you took into teaching
 
