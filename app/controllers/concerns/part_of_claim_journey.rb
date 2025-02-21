@@ -11,9 +11,20 @@ module PartOfClaimJourney
   private
 
   def check_whether_closed_for_submissions
-    unless journey_configuration.open_for_submissions?
+    unless journey.open_for_submissions?(access_code)
       @availability_message = journey_configuration.availability_message
       render "static_pages/closed_for_submissions", status: :service_unavailable
+    end
+  end
+
+  def access_code
+    if journey_session
+      journey_session.answers.service_access_code
+    else
+      # We've been redirected from the landing page and this callback
+      # is running before the new action, so we're yet to create the
+      # journey session.
+      params.fetch(:answers, {})[:service_access_code]
     end
   end
 

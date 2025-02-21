@@ -32,7 +32,7 @@
     <%# TODO: There isn't any journey closed content, for now hide the button %>
     <% if @journey_open %>
     <p class="govuk-!-margin-top-8">
-        <a href="<%= claim_path(current_journey_routing_name, "claim") %>" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
+      <a href="<%= claim_path(current_journey_routing_name, "claim", answers: { service_access_code: params[:service_access_code] }) %>" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
           Start now
           <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
             <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"/>
