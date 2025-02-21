@@ -19,8 +19,8 @@
       <%= f.govuk_collection_radio_buttons(
         :employed_as_supply_teacher,
         @form.radio_options,
-        :value,
-        :label,
+        :id,
+        :name,
         legend: { text: @form.t(:question), tag: "h1", size: "l" },
       ) %>
 

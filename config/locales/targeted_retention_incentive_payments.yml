@@ -36,4 +36,23 @@ en:
           false: "No"
         errors:
           inclusion: "Select yes if you are a supply teacher"
+      poor_performance:
+        heading: "Tell us if you are currently under any performance measures or disciplinary action"
+        questions:
+          performance:
+            question: "Are you subject to any formal performance measures as a result of continuous poor teaching standards?"
+            hint:
+              This will be as a result of your underperformance as a teacher over a period of time. It could put your
+              employment at the further education (FE) provider at risk and is something we may check with them as it
+              will affect your eligibility.
+          disciplinary:
+            question: 'Are you currently subject to disciplinary action?'
+            hint:
+              This is more serious than performance measures and could be because of misconduct. It is something we may
+              check with your FE provider as it will affect your eligibility.
+        errors:
+          performance:
+            inclusion: "Select yes if any performance measures have been started against you"
+          disciplinary:
+            inclusion: "Select yes if you are currently subject to disciplinary action"
 

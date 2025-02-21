@@ -19,8 +19,8 @@
       <%= f.govuk_collection_radio_buttons(
         :nqt_in_academic_year_after_itt,
         @form.radio_options,
-        :value,
-        :label,
+        :id,
+        :name,
         legend: { text: @form.t(:question), tag: "h1", size: "l" },
         hint: { text: @form.t(:hint) }
       ) %>

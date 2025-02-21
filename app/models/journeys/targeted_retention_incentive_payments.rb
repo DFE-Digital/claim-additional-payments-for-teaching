@@ -10,7 +10,8 @@ module Journeys
     FORMS = {
       "claims" => {
         "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm,
-        "supply-teacher" => SupplyTeacherForm
+        "supply-teacher" => SupplyTeacherForm,
+        "poor-performance" => PoorPerformanceForm,
       }
     }
 

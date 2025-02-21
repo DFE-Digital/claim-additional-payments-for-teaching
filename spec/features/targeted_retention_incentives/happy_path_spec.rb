@@ -43,7 +43,7 @@ RSpec.describe "Targeted retention incentives" do
         click_on "Continue"
 
         # poor-performance
-        all("input[type=radio][value='no']").each(&:click)
+        all(".govuk-radios__label").select { it.text == "No" }.each(&:click)
         click_on "Continue"
 
         # qualification

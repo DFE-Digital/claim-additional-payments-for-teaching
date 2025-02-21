@@ -6,7 +6,8 @@ module Journeys
         "sign-in-or-continue",
         "current-school",
         "nqt-in-academic-year-after-itt",
-        "supply-teacher"
+        "supply-teacher",
+        "poor-performance",
       ]
 
       attr_reader :journey_session

@@ -4,7 +4,7 @@ module Journeys
       attribute :employed_as_supply_teacher, :boolean
 
       validates :employed_as_supply_teacher, inclusion: {
-        in: ->(form) { form.radio_options.map(&:value) },
+        in: ->(form) { form.radio_options.map(&:id) },
         message: i18n_error_message(:inclusion)
       }
 
@@ -23,8 +23,8 @@ module Journeys
 
       def radio_options
         [
-          RadioOption.new(value: true, label: t("options.true")),
-          RadioOption.new(value: false, label: t("options.false"))
+          Option.new(id: true, name: t("options.true")),
+          Option.new(id: false, name: t("options.false"))
         ]
       end
 

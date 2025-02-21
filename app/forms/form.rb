@@ -76,8 +76,6 @@ class Form
 
   private
 
-  class RadioOption < Struct.new(:value, :label, keyword_init: true); end
-
   def permitted_attributes
     attributes.keys.map do |key|
       field = @attributes[key]
