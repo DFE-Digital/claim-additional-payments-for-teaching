@@ -11,11 +11,11 @@ module Journeys
 
       def radio_options
         [
-          OpenStruct.new(
+          Option.new(
             id: true,
             name: t("options.true", current_academic_year: current_academic_year)
           ),
-          OpenStruct.new(
+          Option.new(
             id: false,
             name: t("options.false", current_academic_year: current_academic_year)
           )

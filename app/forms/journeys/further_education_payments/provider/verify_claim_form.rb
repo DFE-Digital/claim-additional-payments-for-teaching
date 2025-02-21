@@ -222,12 +222,10 @@ module Journeys
 
           def radio_options
             [
-              RadioOption.new(id: true, name: "Yes"),
-              RadioOption.new(id: false, name: "No")
+              Form::Option.new(id: true, name: "Yes"),
+              Form::Option.new(id: false, name: "No")
             ]
           end
-
-          class RadioOption < Struct.new(:id, :name, keyword_init: true); end
 
           def claimant
             parent_form.claim.first_name

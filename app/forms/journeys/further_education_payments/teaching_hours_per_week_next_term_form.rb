@@ -11,11 +11,11 @@ module Journeys
 
       def radio_options
         @radio_options ||= [
-          OpenStruct.new(
+          Option.new(
             id: "at_least_2_5",
             name: t("options.at_least_2_5", school_name: school.name)
           ),
-          OpenStruct.new(
+          Option.new(
             id: "less_than_2_5",
             name: t("options.less_than_2_5", school_name: school.name)
           )

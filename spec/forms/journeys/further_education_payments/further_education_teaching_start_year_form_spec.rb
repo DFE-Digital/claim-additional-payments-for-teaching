@@ -31,15 +31,15 @@ RSpec.describe Journeys::FurtherEducationPayments::FurtherEducationTeachingStart
     it "returns expected data" do
       travel_to Time.zone.local(2024, 12, 1) do
         expected = [
-          OpenStruct.new(id: "2020", name: "September 2020 to August 2021"),
-          OpenStruct.new(id: "2021", name: "September 2021 to August 2022"),
-          OpenStruct.new(id: "2022", name: "September 2022 to August 2023"),
-          OpenStruct.new(id: "2023", name: "September 2023 to August 2024"),
-          OpenStruct.new(id: "2024", name: "September 2024 to August 2025"),
-          OpenStruct.new(id: "pre-2020", name: "I started before September 2020")
+          Form::Option.new(id: "2020", name: "September 2020 to August 2021"),
+          Form::Option.new(id: "2021", name: "September 2021 to August 2022"),
+          Form::Option.new(id: "2022", name: "September 2022 to August 2023"),
+          Form::Option.new(id: "2023", name: "September 2023 to August 2024"),
+          Form::Option.new(id: "2024", name: "September 2024 to August 2025"),
+          Form::Option.new(id: "pre-2020", name: "I started before September 2020")
         ]
 
-        expect(subject.radio_options).to eql(expected)
+        expect(subject.radio_options).to eq(expected)
       end
     end
   end

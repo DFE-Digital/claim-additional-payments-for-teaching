@@ -1,4 +1,22 @@
 class Form
+  class Option
+    attr_reader :id, :name, :description, :hint
+
+    def initialize(id:, name:, description: nil, hint: nil)
+      @id = id
+      @name = name
+      @description = description
+      @hint = hint
+    end
+
+    def ==(other)
+      id == other.id &&
+        name == other.name &&
+        description == other.description &&
+        hint == other.hint
+    end
+  end
+
   include ActiveModel::Model
   include ActiveModel::Attributes
   include ActiveModel::Serialization

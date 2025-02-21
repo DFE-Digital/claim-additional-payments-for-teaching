@@ -17,27 +17,27 @@ module Journeys
 
       def checkbox_options
         [
-          OpenStruct.new(
+          Option.new(
             id: "level3_buildingconstruction_approved",
             name: course_option_description("level3_buildingconstruction_approved")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "tlevel_building",
             name: course_option_description("tlevel_building")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "tlevel_onsiteconstruction",
             name: course_option_description("tlevel_onsiteconstruction")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "tlevel_design_surveying",
             name: course_option_description("tlevel_design_surveying")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "level2_3_apprenticeship",
             name: course_option_description("level2_3_apprenticeship")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "none",
             name: course_option_description("none")
           )
