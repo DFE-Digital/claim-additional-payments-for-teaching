@@ -13,7 +13,7 @@ module Journeys
         inclusion: {in: ->(form) { form.checkbox_options.map(&:id) }, message: i18n_error_message(:inclusion)}
 
       def checkbox_options
-        (ALL_SUBJECTS + ["none"]).map { |subject| OpenStruct.new(id: subject, name: t("options.#{subject}")) }
+        (ALL_SUBJECTS + ["none"]).map { |subject| Option.new(id: subject, name: t("options.#{subject}")) }
       end
 
       def save

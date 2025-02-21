@@ -16,14 +16,8 @@ class PoorPerformanceForm < Form
 
   def radio_options
     [
-      OpenStruct.new(
-        id: true,
-        name: "Yes"
-      ),
-      OpenStruct.new(
-        id: false,
-        name: "No"
-      )
+      Option.new(id: true, name: "Yes"),
+      Option.new(id: false, name: "No")
     ]
   end
 

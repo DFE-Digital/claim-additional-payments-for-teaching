@@ -9,19 +9,19 @@ module Journeys
 
       def radio_options
         [
-          OpenStruct.new(
+          Option.new(
             id: "yes",
             name: t("options.yes")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "not_yet",
             name: t("options.not_yet")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "no_but_planned",
             name: t("options.no_but_planned")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "no_not_planned",
             name: t("options.no_not_planned")
           )

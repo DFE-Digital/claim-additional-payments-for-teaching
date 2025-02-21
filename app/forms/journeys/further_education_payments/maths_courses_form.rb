@@ -17,15 +17,15 @@ module Journeys
 
       def checkbox_options
         [
-          OpenStruct.new(
+          Option.new(
             id: "approved_level_321_maths",
             name: course_option_description("approved_level_321_maths")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "gcse_maths",
             name: course_option_description("gcse_maths")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "none",
             name: course_option_description("none")
           )

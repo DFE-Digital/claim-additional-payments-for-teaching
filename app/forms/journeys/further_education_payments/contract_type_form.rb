@@ -11,16 +11,16 @@ module Journeys
 
       def radio_options
         [
-          OpenStruct.new(
+          Option.new(
             id: "permanent",
             name: t("options.permanent"),
             hint: "This includes full-time and part-time contracts"
           ),
-          OpenStruct.new(
+          Option.new(
             id: "fixed_term",
             name: t("options.fixed_term")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "variable_hours",
             name: t("options.variable_hours"),
             hint: "This includes zero hours contracts"
