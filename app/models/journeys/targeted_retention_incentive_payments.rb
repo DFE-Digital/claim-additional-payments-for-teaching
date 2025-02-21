@@ -14,6 +14,7 @@ module Journeys
         "poor-performance" => PoorPerformanceForm,
         "qualification" => QualificationForm,
         "itt-year" => IttAcademicYearForm,
+        "eligible-itt-subject" => EligibleIttSubjectForm,
       }
     }
 

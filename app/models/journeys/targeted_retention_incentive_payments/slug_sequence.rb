@@ -9,7 +9,8 @@ module Journeys
         "supply-teacher",
         "poor-performance",
         "qualification",
-        "itt-year"
+        "itt-year",
+        "eligible-itt-subject"
       ]
 
       attr_reader :journey_session

@@ -1,0 +1,85 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(
+      [
+        :question,
+        @form.answers.trainee_teacher? ? :trainee : :qualified,
+        @form.answers.qualification
+      ]
+    ),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_radio_buttons_fieldset(
+        :eligible_itt_subject,
+        legend: {
+          text: @form.t(
+            [
+              :question,
+              @form.answers.trainee_teacher? ? :trainee : :qualified,
+              @form.answers.qualification
+            ]
+          ),
+          tag: "h1",
+          size: "l"
+        },
+        hint: {
+          text: @form.t(:hint) if !@form.answers.trainee_teacher?
+        }
+      ) do %>
+        <% none_of_the_above = @form.radio_options.find { it.id == "none_of_the_above" } %>
+
+        <% @form.radio_options.reject { it == none_of_the_above }.each do |option| %>
+          <%= f.govuk_radio_button(
+            :eligible_itt_subject,
+            option.id,
+            label: { text: option.name }
+          ) %>
+        <% end %>
+
+        <%= f.govuk_radio_divider %>
+
+        <%= f.govuk_radio_button(
+          :eligible_itt_subject,
+          none_of_the_above.id,
+          label: { text: none_of_the_above.name }
+        ) %>
+      <% end %>
+
+      <% if @form.answers.trainee_teacher? %>
+        <%= govuk_details(
+          summary_text: "If you qualify with science",
+          text: <<~TEXT.squish
+          You will need to specialise in either chemistry or physics to be
+          eligible for an additional payment. If you specialise in biology
+          then you will not be eligible.
+          TEXT
+        ) %>
+      <% else %>
+        <%= govuk_details(
+          summary_text: "If you qualified with science",
+          text: <<~TEXT.squish
+          You will need to have specialised in either chemistry or physics to
+          be eligible. If you specialised in biology then you will not be
+          eligible. If you’re unsure, you can get this from the certificate
+          you received when you qualified as a teacher.
+          TEXT
+        ) %>
+      <% end %>
+
+      <%= f.govuk_submit  %>
+    <% end %>
+  </div>
+</div>

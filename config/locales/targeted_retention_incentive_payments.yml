@@ -84,4 +84,12 @@ en:
             postgraduate_itt: "Select the academic year you started your postgraduate ITT"
             assessment_only: "Select the academic year you earned your QTS"
             overseas_recognition: "Select the academic year you earned your QTS"
+      eligible_itt_subject:
+        options:
+          chemistry: "Chemistry"
+          computing: "Computing"
+          mathematics: "Mathematics"
+          foreign_languages: "Languages"
+          physics: "Physics"
+          none_of_the_above: "None of the above"
 
