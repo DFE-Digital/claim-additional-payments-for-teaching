@@ -100,7 +100,40 @@ en:
           foreign_languages: "Languages"
           physics: "Physics"
           none_of_the_above: "None of the above"
+        details:
+          summary:
+            trainee: "If you qualify with science"
+            qualified: "If you qualified with science"
+          text:
+            trainee: |
+              You will need to specialise in either chemistry or physics to be
+              eligible for an additional payment. If you specialise in biology
+              then you will not be eligible.
+            qualified: |
+              You will need to have specialised in either chemistry or physics
+              to be eligible. If you specialised in biology then you will not
+              be eligible. If you’re unsure, you can get this from the
+              certificate you received when you qualified as a teacher.
         errors:
           inclusion: "Select a subject"
+      teaching_subject_now:
+        question: "Do you spend at least half of your contracted hours teaching eligible subjects?"
+        hint: "At least 50% of your contracted hours allocated to teaching must be spent teaching chemistry, languages, mathematics or physics."
+        options:
+          true: "Yes"
+          false: "No"
+        details:
+          summary: "If you teach all sciences"
+          text: |
+            You will need to spend the majority of your time teaching chemistry
+            and or physics to be eligible. If you teach biology most of the time
+            you will not be eligible.
+        errors:
+          inclusion: Select yes if you spend at least half of your contracted hours teaching eligible subjects
+      check_your_answers_part_one:
+        heading: "Check your answers"
+        confirmation_notice: |
+          By selecting continue you are confirming that, to the best of your
+          knowledge, the details you are providing are correct.
 
 

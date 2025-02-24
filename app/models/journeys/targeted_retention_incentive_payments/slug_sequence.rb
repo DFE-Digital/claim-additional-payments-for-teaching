@@ -1,7 +1,7 @@
 module Journeys
   module TargetedRetentionIncentivePayments
     class SlugSequence
-      # FIXME RL handle reset claim slug
+      # FIXME RL handle reset claim slug, handle eligibile later
       SLUGS = [
         "sign-in-or-continue",
         "current-school",
@@ -10,7 +10,9 @@ module Journeys
         "poor-performance",
         "qualification",
         "itt-year",
-        "eligible-itt-subject"
+        "eligible-itt-subject",
+        "teaching-subject-now",
+        "check-your-answers-part-one",
       ]
 
       attr_reader :journey_session

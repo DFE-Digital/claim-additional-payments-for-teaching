@@ -32,6 +32,10 @@ module Journeys
       def trainee_teacher?
         nqt_in_academic_year_after_itt == false
       end
+
+      def teaching_physics_or_chemistry?
+        eligible_itt_subject == "physics" || eligible_itt_subject == "chemistry"
+      end
     end
   end
 end
