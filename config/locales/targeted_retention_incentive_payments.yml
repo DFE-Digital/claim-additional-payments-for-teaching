@@ -85,6 +85,14 @@ en:
             assessment_only: "Select the academic year you earned your QTS"
             overseas_recognition: "Select the academic year you earned your QTS"
       eligible_itt_subject:
+        question:
+          trainee: "Which subject are you currently doing your initial teacher training (ITT) in?"
+          qualified:
+            postgraduate_itt: "Which subject did you do your postgraduate initial teacher training (ITT) in?"
+            undergraduate_itt: "Which subject did you do your undergraduate initial teacher training (ITT) in?"
+            assessment_only: "Which subject did you do your assessment in?"
+            overseas_recognition: "Which subject did you do your teaching qualification in?"
+        hint: "The subjects listed are eligible for targeted retention incentive payment based on the school you teach in and the year you studied."
         options:
           chemistry: "Chemistry"
           computing: "Computing"
@@ -92,4 +100,7 @@ en:
           foreign_languages: "Languages"
           physics: "Physics"
           none_of_the_above: "None of the above"
+        errors:
+          inclusion: "Select a subject"
+
 

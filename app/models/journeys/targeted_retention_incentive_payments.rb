@@ -18,6 +18,8 @@ module Journeys
       }
     }
 
+    NONE_OF_THE_ABOVE_ACADEMIC_YEAR = "itt_academic_year_none"
+
     def self.use_navigator?
       true
     end

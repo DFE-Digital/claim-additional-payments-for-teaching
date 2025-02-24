@@ -1,13 +1,7 @@
 <% content_for(
   :page_title,
   page_title(
-    @form.t(
-      [
-        :question,
-        @form.answers.trainee_teacher? ? :trainee : :qualified,
-        @form.answers.qualification
-      ]
-    ),
+    @form.t(@form.question_locale_key),
     journey: current_journey_routing_name,
     show_error: @form.errors.any?
   )
@@ -25,23 +19,15 @@
       <%= f.govuk_radio_buttons_fieldset(
         :eligible_itt_subject,
         legend: {
-          text: @form.t(
-            [
-              :question,
-              @form.answers.trainee_teacher? ? :trainee : :qualified,
-              @form.answers.qualification
-            ]
-          ),
+          text: @form.t(@form.question_locale_key),
           tag: "h1",
           size: "l"
         },
         hint: {
-          text: @form.t(:hint) if !@form.answers.trainee_teacher?
+          text: (@form.t(:hint) if !@form.answers.trainee_teacher?)
         }
       ) do %>
-        <% none_of_the_above = @form.radio_options.find { it.id == "none_of_the_above" } %>
-
-        <% @form.radio_options.reject { it == none_of_the_above }.each do |option| %>
+        <% @form.radio_options.reject { it == @form.none_of_the_above }.each do |option| %>
           <%= f.govuk_radio_button(
             :eligible_itt_subject,
             option.id,
@@ -53,8 +39,8 @@
 
         <%= f.govuk_radio_button(
           :eligible_itt_subject,
-          none_of_the_above.id,
-          label: { text: none_of_the_above.name }
+          @form.none_of_the_above.id,
+          label: { text: @form.none_of_the_above.name }
         ) %>
       <% end %>
 
