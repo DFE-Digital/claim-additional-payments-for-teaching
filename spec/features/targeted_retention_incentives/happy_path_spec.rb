@@ -124,7 +124,69 @@ RSpec.describe "Targeted retention incentives" do
           "incentive payment of: £2,000"
         )
 
-        # Personal details and claim submission
+        click_on "Apply now"
+
+        # information-provided
+        expect(page).to have_text(
+          "How we will use the information you provide"
+        )
+        click_on "Continue"
+
+        # Personal details
+        fill_in "First name", with: "Seymour"
+        fill_in "Last name", with: "Skinner"
+
+        fill_in "Day", with: "23"
+        fill_in "Month", with: "10"
+        fill_in "Year", with: "1953"
+
+        fill_in "National Insurance number", with: "QQ123456C"
+        click_on "Continue"
+
+        click_on "Enter your address manually"
+
+        fill_in "House number or name", with: "Test house"
+        fill_in "Building and street", with: "Test street"
+        fill_in "Town or city", with: "Test town"
+        fill_in "County", with: "Testshire"
+        fill_in "Postcode", with: "TE57 1NG"
+        click_on "Continue"
+
+        fill_in "Email address", with: "test@example.com"
+        click_on "Continue"
+
+        mail = ActionMailer::Base.deliveries.last
+        otp_in_mail_sent = mail[:personalisation].decoded.scan(/\b[0-9]{6}\b/).first
+
+        fill_in "Enter the 6-digit passcode", with: otp_in_mail_sent
+
+        # provide-mobile-number
+        choose "No"
+        click_on "Continue"
+
+        fill_in "Name on your account", with: "Seymour Skinner"
+        fill_in "Sort code", with: "000000"
+        fill_in "Account number", with: "00000000"
+        click_on "Continue"
+
+        # gender
+        choose "Male"
+        click_on "Continue"
+
+        # trn
+        fill_in "What is your teacher reference number (TRN)?", with: "1234567"
+        click_on "Continue"
+
+        # check-your-answers
+        expect(page).to have_content(
+          "Check your answers before sending your application"
+        )
+
+        click_on "Accept and send"
+
+        expect(page).to have_content(
+          "You applied for a targeted retention incentive payment"
+        )
       end
     end
 

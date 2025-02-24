@@ -39,9 +39,18 @@ module Journeys
 
       def award_amount
         current_school.targeted_retention_incentive_payments_awards
-          .by_academic_year(
-            Policies::TargetedRetentionIncentivePayments.current_academic_year
-          ).first.award_amount
+          .by_academic_year(policy.current_academic_year).first.award_amount
+      end
+
+      # For information_provided.html.erb
+      def selected_claim_policy
+        policy
+      end
+
+      private
+
+      def policy
+        Policies::TargetedRetentionIncentivePayments
       end
     end
   end

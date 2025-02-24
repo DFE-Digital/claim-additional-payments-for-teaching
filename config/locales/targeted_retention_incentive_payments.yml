@@ -10,6 +10,7 @@ en:
     claim_subject: "School targeted retention incentive"
     claim_amount_description: "Additional payment for teaching"
     support_email_address: "schools-targeted.retention-incentive@education.gov.uk"
+    information_provided_further_details: "For more details, you can read about payments and deductions for the %{link}"
     information_provided_further_details_link_text: "school targeted retention incentive (opens in new tab)"
     forms:
       current_school:
