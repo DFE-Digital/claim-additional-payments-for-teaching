@@ -135,5 +135,7 @@ en:
         confirmation_notice: |
           By selecting continue you are confirming that, to the best of your
           knowledge, the details you are providing are correct.
+      eligibility_confirmed:
+        heading: "You’re eligible for a targeted retention incentive payment"
 
 

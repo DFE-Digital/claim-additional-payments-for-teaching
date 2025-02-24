@@ -113,6 +113,17 @@ RSpec.describe "Targeted retention incentives" do
           value: "Yes"
         )
 
+        click_on "Continue"
+
+        expect(page).to have_content(
+          "You’re eligible for a targeted retention incentive payment"
+        )
+
+        expect(page).to have_text(
+          "Based on what you told us, you can apply for a targeted retention " \
+          "incentive payment of: £2,000"
+        )
+
         # Personal details and claim submission
       end
     end

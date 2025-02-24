@@ -36,6 +36,13 @@ module Journeys
       def teaching_physics_or_chemistry?
         eligible_itt_subject == "physics" || eligible_itt_subject == "chemistry"
       end
+
+      def award_amount
+        current_school.targeted_retention_incentive_payments_awards
+          .by_academic_year(
+            Policies::TargetedRetentionIncentivePayments.current_academic_year
+          ).first.award_amount
+      end
     end
   end
 end

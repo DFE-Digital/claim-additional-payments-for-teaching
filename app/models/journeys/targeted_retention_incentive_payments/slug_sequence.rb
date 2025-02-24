@@ -13,6 +13,7 @@ module Journeys
         "eligible-itt-subject",
         "teaching-subject-now",
         "check-your-answers-part-one",
+        "eligibility-confirmed",
       ]
 
       attr_reader :journey_session

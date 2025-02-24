@@ -17,6 +17,7 @@ module Journeys
         "eligible-itt-subject" => EligibleIttSubjectForm,
         "teaching-subject-now" => TeachingSubjectNowForm,
         "check-your-answers-part-one" => CheckYourAnswersPartOneForm,
+        "eligibility-confirmed" => EligibilityConfirmedForm,
       }
     }
 
