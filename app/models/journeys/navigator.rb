@@ -44,7 +44,7 @@ module Journeys
       return "ineligible" if eligibility_checker.ineligible?
 
       if current_slug.nil?
-        forms.first
+        journey.slug_for_form(form: forms.first)
       else
         forms.each_with_index do |form, index|
           slug = journey.slug_for_form(form:)
@@ -76,7 +76,17 @@ module Journeys
       end
     end
 
-    # is a user allowed to visit the current_slug?
+    def requires_authorisation?
+      journey::SlugSequence::RESTRICTED_SLUGS.include?(current_slug)
+    end
+
+    # is the user allowed to vist the current slug?
+    # based on their permissions
+    def authorised_slug?
+      auth_checker.failure_reason.nil?
+    end
+
+    # is the user allowed to visit the current_slug?
     # use this to guard against a user jumping ahead in a journey
     def permissible_slug?
       if current_slug == "ineligible" && eligibility_checker.ineligible?
@@ -221,6 +231,12 @@ module Journeys
     def form_params(form_class)
       params.fetch(form_class.model_name.param_key, {}).slice(
         *form_class.attribute_names.map(&:to_sym)
+      )
+    end
+
+    def auth_checker
+      @auth_checker ||= journey::Authorisation.new(
+        answers: journey_session.answers
       )
     end
   end

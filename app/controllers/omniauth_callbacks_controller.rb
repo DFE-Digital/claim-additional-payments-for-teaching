@@ -163,8 +163,6 @@ class OmniauthCallbacksController < ApplicationController
       auth: auth
     ).save!
 
-    session[:slugs] << "sign-in"
-
     redirect_to(
       claim_path(
         journey: current_journey_routing_name,

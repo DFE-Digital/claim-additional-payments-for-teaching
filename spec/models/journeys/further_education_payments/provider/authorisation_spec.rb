@@ -15,7 +15,7 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::Authorisation do
   end
 
   let(:authorisation) do
-    described_class.new(answers: journey_session.answers, slug: "verify-claim")
+    described_class.new(answers: journey_session.answers)
   end
 
   describe "#failure_reason" do
@@ -68,24 +68,6 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::Authorisation do
       end
 
       it { is_expected.to eq(:claim_admin) }
-    end
-
-    context "when the claim has already been verified" do
-      let(:answers) do
-        {
-          dfe_sign_in_service_access: true,
-          dfe_sign_in_organisation_ukprn: organisation.ukprn,
-          dfe_sign_in_role_codes: [
-            Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
-          ]
-        }
-      end
-
-      let(:eligibility) do
-        create(:further_education_payments_eligibility, :verified)
-      end
-
-      it { is_expected.to eq(:already_verified) }
     end
   end
 end
