@@ -13,7 +13,10 @@ class Decision < ApplicationRecord
   # NOTE: Don't store the rejected_reasons data params from the form when Approve is selected
   before_validation :clear_rejected_reasons, unless: :rejected?
 
-  validates :result, presence: {message: "Make a decision to approve or reject the claim"}
+  validates :approved, inclusion: {
+    in: [true, false],
+    message: "Make a decision to approve or reject the claim"
+  }
   validate :claim_must_be_approvable, if: :approved?, on: :create
   validate :claim_must_be_rejectable, if: :rejected?, on: :create
   validate :claim_must_have_undoable_decision, if: :undone?, on: :update
@@ -23,29 +26,20 @@ class Decision < ApplicationRecord
   validates :notes, if: -> { !created_by_id? }, presence: {message: "You must add a note when the decision is automated"}
 
   scope :active, -> { where(undone: false) }
+  scope :approved, -> { where(approved: true) }
+  scope :rejected, -> { where(approved: false) }
 
-  enum :result, {
-    approved: 0,
-    rejected: 1
-  }
+  # FIXME RL: Remove this once we've dropped the column
+  self.ignored_columns = %w[result]
 
-  # FIXME RL: remove this once we've backfilled the existing data
-  def result=(value)
-    normalized_value =
-      if value.is_a?(Symbol) || value.is_a?(String)
-        self.class.results[value.to_s]
-      else
-        value
-      end
-
-    self.approved = (normalized_value == self.class.results[:approved])
-
-    super(normalized_value)
+  def rejected?
+    !approved? && !approved.nil?
   end
 
-  # FIXME RL: remove this once we've backfilled the existing data
-  def approved?
-    result == "approved"
+  def result
+    return nil if approved.nil?
+
+    approved ? "approved" : "rejected"
   end
 
   def self.rejected_reasons_for(policy)

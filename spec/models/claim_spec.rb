@@ -304,7 +304,7 @@ RSpec.describe Claim, type: :model do
     it "returns false when a claim has already been approved" do
       claim_with_decision = create(:claim, :submitted)
       expect(claim_with_decision.approvable?).to eq true
-      create(:decision, claim: claim_with_decision, result: :approved)
+      create(:decision, claim: claim_with_decision, approved: true)
 
       expect(claim_with_decision.approvable?).to eq false
     end
@@ -511,7 +511,7 @@ RSpec.describe Claim, type: :model do
   describe "#decision" do
     it "returns the latest decision on a claim" do
       claim = create(:claim, :submitted)
-      create(:decision, result: "approved", claim: claim, created_at: 7.days.ago)
+      create(:decision, approved: true, claim: claim, created_at: 7.days.ago)
       create(:decision, :rejected, claim: claim, created_at: DateTime.now)
 
       expect(claim.latest_decision.result).to eq "rejected"
@@ -1036,20 +1036,20 @@ RSpec.describe Claim, type: :model do
     it "returns true for a claim that had a decison made, undone, then been approved" do
       claim = create(:claim, :submitted)
       create(:decision, :undone, :rejected, claim: claim)
-      create(:decision, result: "approved", claim: claim)
+      create(:decision, approved: true, claim: claim)
       expect(claim.decision_made?).to eq(true)
     end
 
     it "returns true for a claim that had a decison made, undone, then been rejected" do
       claim = create(:claim, :submitted)
-      create(:decision, :undone, result: "approved", claim: claim)
+      create(:decision, :undone, approved: true, claim: claim)
       create(:decision, :rejected, claim: claim)
       expect(claim.decision_made?).to eq(true)
     end
 
     it "returns false for a claim that had a decison made, then undone" do
       claim = create(:claim, :submitted)
-      create(:decision, :undone, result: "approved", claim: claim)
+      create(:decision, :undone, approved: true, claim: claim)
       expect(claim.decision_made?).to eq(false)
     end
   end
@@ -1072,7 +1072,7 @@ RSpec.describe Claim, type: :model do
 
     it "returns false for a claim that had a decison made, then undone" do
       claim = create(:claim, :submitted)
-      create(:decision, :undone, result: "approved", claim: claim)
+      create(:decision, :undone, approved: true, claim: claim)
       expect(claim.decision_made?).to eq(false)
     end
 
