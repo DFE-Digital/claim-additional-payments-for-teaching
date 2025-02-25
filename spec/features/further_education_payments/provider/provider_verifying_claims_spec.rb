@@ -847,4 +847,35 @@ RSpec.feature "Provider verifying claims" do
 
     expect(page).to have_text "You cannot access this service from DfE Sign-in"
   end
+
+  scenario "provider attempts to verify a rejected claim" do
+    fe_provider = create(:school, :further_education, name: "Springfield A&M")
+
+    claim = create(
+      :claim,
+      first_name: "Edna",
+      surname: "Krabappel",
+      date_of_birth: Date.new(1945, 7, 3),
+      reference: "AB123456",
+      created_at: DateTime.new(2024, 8, 1, 9, 0, 0)
+    )
+
+    create(
+      :further_education_payments_eligibility,
+      claim: claim,
+      school: fe_provider
+    )
+
+    create(:decision, :rejected, claim: claim)
+
+    claim_link = Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
+
+    visit claim_link
+
+    expect(page).to have_content(
+      "This verification request is no longer active."
+    )
+
+    expect(page).to have_content("claim reference #{claim.reference}")
+  end
 end
