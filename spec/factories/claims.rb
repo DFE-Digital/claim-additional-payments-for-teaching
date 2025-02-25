@@ -157,14 +157,14 @@ FactoryBot.define do
       submitted
       after(:create) do |claim, evaluator|
         if evaluator.decision_creator
-          create(:decision, claim: claim, result: "approved", created_by: evaluator.decision_creator)
+          create(:decision, claim: claim, approved: true, created_by: evaluator.decision_creator)
         elsif claim.policy == Policies::EarlyYearsPayments
           claim.tasks.find_or_create_by(name: "employment") do |c|
             c.passed = true
           end
-          create(:decision, claim: claim, result: "approved")
+          create(:decision, claim: claim, approved: true)
         else
-          create(:decision, claim: claim, result: "approved")
+          create(:decision, claim: claim, approved: true)
         end
       end
     end

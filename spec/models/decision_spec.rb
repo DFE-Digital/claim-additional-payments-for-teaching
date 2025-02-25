@@ -10,7 +10,7 @@ RSpec.describe Decision, type: :model do
 
   it "should not permit changes after creation" do
     claim = create(:claim, :submitted)
-    decision = Decision.create!(claim: claim, created_by: user, result: :approved)
+    decision = Decision.create!(claim: claim, created_by: user, approved: true)
 
     expect { decision.update(created_by: user) }.to raise_error(ActiveRecord::ReadOnlyRecord)
 
@@ -18,13 +18,13 @@ RSpec.describe Decision, type: :model do
   end
 
   it "validates the decision has a result" do
-    expect(build(:decision, result: "approved", created_by: user)).to be_valid
-    expect(build(:decision, result: nil, created_by: user)).not_to be_valid
+    expect(build(:decision, :rejected, created_by: user)).to be_valid
+    expect(build(:decision, :rejected, approved: nil, created_by: user)).not_to be_valid
   end
 
   it "validates the decision has notes when it's automated" do
-    expect(build(:decision, :automated, result: "approved", notes: "Auto-approved")).to be_valid
-    expect(build(:decision, :automated, result: "approved", notes: nil)).not_to be_valid
+    expect(build(:decision, :automated, approved: true, notes: "Auto-approved")).to be_valid
+    expect(build(:decision, :automated, approved: true, notes: nil)).not_to be_valid
   end
 
   it "validates that at least one rejected reason is selected when rejecting a claim" do
@@ -44,7 +44,7 @@ RSpec.describe Decision, type: :model do
 
   it "prevents an unapprovable claim from being approved" do
     claim = create(:claim, :ineligible)
-    decision = build(:decision, claim: claim, result: "approved")
+    decision = build(:decision, claim: claim, approved: true)
 
     expect(decision).not_to be_valid
     expect(decision.errors.messages[:base]).to eq(["This claim cannot be approved"])
@@ -52,7 +52,7 @@ RSpec.describe Decision, type: :model do
 
   it "prevents an unrejectable claim from being rejected" do
     claim = create(:claim, :held)
-    decision = build(:decision, claim: claim, result: "rejected")
+    decision = build(:decision, claim: claim, approved: false)
 
     expect(decision).not_to be_valid
     expect(decision.errors.messages[:base]).to eq(["This claim cannot be rejected"])
@@ -60,7 +60,7 @@ RSpec.describe Decision, type: :model do
 
   it "prevents a decision being marked as undone when a claim cannot have its decision undone" do
     claim = create(:claim, :submitted)
-    decision = create(:decision, claim: claim, result: "approved")
+    decision = create(:decision, claim: claim, approved: true)
     create(:payment, claims: [claim])
     decision.undone = true
     decision.save
@@ -77,7 +77,7 @@ RSpec.describe Decision, type: :model do
 
     create(:claim, :approved, personal_details.merge(bank_account_number: "12345678"))
     claim_to_approve = create(:claim, :submitted, personal_details.merge(bank_account_number: "99999999"))
-    decision = build(:decision, claim: claim_to_approve, result: "approved")
+    decision = build(:decision, claim: claim_to_approve, approved: true)
 
     expect(decision).not_to be_valid
     expect(decision.errors.messages[:base]).to eq(["This claim cannot be approved"])
@@ -289,114 +289,6 @@ RSpec.describe Decision, type: :model do
 
     it "returns the rejected reasons that have been selected" do
       is_expected.to eq([:ineligible_subject, :no_qts_or_qtls])
-    end
-  end
-
-  # FIXME RL: Remove these tests once we've removed the enum
-  describe "#apporved" do
-    subject { decision.read_attribute(:approved) }
-
-    context "when result is approved" do
-      context "when set by a string" do
-        let(:decision) { create(:decision, result: "approved") }
-
-        it { is_expected.to be(true) }
-      end
-
-      context "when set by a symbol" do
-        let(:decision) { create(:decision, result: :approved) }
-
-        it { is_expected.to be(true) }
-      end
-
-      context "when set by a number" do
-        let(:decision) { create(:decision, result: 0) }
-
-        it { is_expected.to be(true) }
-      end
-
-      context "when set by scope" do
-        let(:decision) do
-          Decision.approved.create!(
-            claim: create(:claim, :approveable),
-            notes: "test"
-          )
-        end
-
-        it { is_expected.to be(true) }
-      end
-
-      context "when set by a method" do
-        let(:decision) { build(:decision, :with_notes).tap(&:approved!) }
-
-        it { is_expected.to be(true) }
-      end
-    end
-
-    context "when result is rejected" do
-      subject { decision.read_attribute(:approved) }
-
-      context "when result is approved" do
-        context "when set by a string" do
-          let(:decision) do
-            create(
-              :decision,
-              result: "rejected",
-              rejected_reasons: {"ineligible_subject" => "1"}
-            )
-          end
-
-          it { is_expected.to be(false) }
-        end
-
-        context "when set by a symbol" do
-          let(:decision) do
-            create(
-              :decision,
-              result: :rejected,
-              rejected_reasons: {"ineligible_subject" => "1"}
-            )
-          end
-
-          it { is_expected.to be(false) }
-        end
-
-        context "when set by a number" do
-          let(:decision) do
-            create(
-              :decision,
-              result: 1,
-              rejected_reasons: {"ineligible_subject" => "1"}
-            )
-          end
-
-          it { is_expected.to be(false) }
-        end
-
-        context "when set by scope" do
-          let(:decision) do
-            Decision.rejected.create!(
-              claim: create(:claim),
-              notes: "test",
-              rejected_reasons: {"ineligible_subject" => "1"}
-            )
-          end
-
-          it { is_expected.to be(false) }
-        end
-
-        context "when set by a method" do
-          let(:decision) do
-            build(
-              :decision,
-              :with_notes,
-              rejected_reasons: {"ineligible_subject" => "1"}
-            ).tap(&:rejected!)
-          end
-
-          it { is_expected.to be(false) }
-        end
-      end
     end
   end
 end

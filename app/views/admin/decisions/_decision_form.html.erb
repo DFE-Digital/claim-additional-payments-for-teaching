@@ -55,14 +55,14 @@
         </h2>
       </legend>
 
-      <%= errors_tag decision, :result %>
+      <%= errors_tag decision, :approved %>
 
       <div class="govuk-radios" data-module="govuk-radios">
-        <%= form.hidden_field :result %>
+        <%= form.hidden_field :approved %>
         <div class="govuk-radios__item">
-          <%= form.radio_button(:result, "approved", class: "govuk-radios__input", disabled: !claim.approvable?) %>
+          <%= form.radio_button(:approved, true, class: "govuk-radios__input", disabled: !claim.approvable?) %>
           <%= form.label(
-            "result_approved",
+            "approved_true",
             (
               @qa_decision_task && claim.rejected? ? "Claim meets eligibility criteria. Approve claim for payment" : "Approve"
             ),
@@ -71,9 +71,9 @@
         </div>
 
         <div class="govuk-radios__item">
-          <%= form.radio_button(:result, "rejected", class: "govuk-radios__input", disabled: !claim.rejectable?, data: { aria_controls: "conditional-rejected-reasons" }) %>
+          <%= form.radio_button(:approved, false, class: "govuk-radios__input", disabled: !claim.rejectable?, data: { aria_controls: "conditional-rejected-reasons" }) %>
           <%= form.label(
-            "result_rejected",
+            "approved_false",
             (
               @qa_decision_task && claim.rejected? ? "Claim does not meet eligibility criteria. Reject claim" : "Reject"
             ),
