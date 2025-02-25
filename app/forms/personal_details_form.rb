@@ -65,6 +65,8 @@ class PersonalDetailsForm < Form
     if journey.requires_student_loan_details?
       journey::AnswersStudentLoansDetailsUpdater.call(journey_session)
     end
+
+    true
   end
 
   def show_name_section?
