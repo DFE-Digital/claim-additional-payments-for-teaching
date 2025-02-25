@@ -291,4 +291,112 @@ RSpec.describe Decision, type: :model do
       is_expected.to eq([:ineligible_subject, :no_qts_or_qtls])
     end
   end
+
+  # FIXME RL: Remove these tests once we've removed the enum
+  describe "#apporved" do
+    subject { decision.read_attribute(:approved) }
+
+    context "when result is approved" do
+      context "when set by a string" do
+        let(:decision) { create(:decision, result: "approved") }
+
+        it { is_expected.to be(true) }
+      end
+
+      context "when set by a symbol" do
+        let(:decision) { create(:decision, result: :approved) }
+
+        it { is_expected.to be(true) }
+      end
+
+      context "when set by a number" do
+        let(:decision) { create(:decision, result: 0) }
+
+        it { is_expected.to be(true) }
+      end
+
+      context "when set by scope" do
+        let(:decision) do
+          Decision.approved.create!(
+            claim: create(:claim, :approveable),
+            notes: "test"
+          )
+        end
+
+        it { is_expected.to be(true) }
+      end
+
+      context "when set by a method" do
+        let(:decision) { build(:decision, :with_notes).tap(&:approved!) }
+
+        it { is_expected.to be(true) }
+      end
+    end
+
+    context "when result is rejected" do
+      subject { decision.read_attribute(:approved) }
+
+      context "when result is approved" do
+        context "when set by a string" do
+          let(:decision) do
+            create(
+              :decision,
+              result: "rejected",
+              rejected_reasons: {"ineligible_subject" => "1"}
+            )
+          end
+
+          it { is_expected.to be(false) }
+        end
+
+        context "when set by a symbol" do
+          let(:decision) do
+            create(
+              :decision,
+              result: :rejected,
+              rejected_reasons: {"ineligible_subject" => "1"}
+            )
+          end
+
+          it { is_expected.to be(false) }
+        end
+
+        context "when set by a number" do
+          let(:decision) do
+            create(
+              :decision,
+              result: 1,
+              rejected_reasons: {"ineligible_subject" => "1"}
+            )
+          end
+
+          it { is_expected.to be(false) }
+        end
+
+        context "when set by scope" do
+          let(:decision) do
+            Decision.rejected.create!(
+              claim: create(:claim),
+              notes: "test",
+              rejected_reasons: {"ineligible_subject" => "1"}
+            )
+          end
+
+          it { is_expected.to be(false) }
+        end
+
+        context "when set by a method" do
+          let(:decision) do
+            build(
+              :decision,
+              :with_notes,
+              rejected_reasons: {"ineligible_subject" => "1"}
+            ).tap(&:rejected!)
+          end
+
+          it { is_expected.to be(false) }
+        end
+      end
+    end
+  end
 end

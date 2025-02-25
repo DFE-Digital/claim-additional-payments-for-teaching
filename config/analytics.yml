@@ -93,6 +93,7 @@ shared:
     - created_by_id
     - undone
     - rejected_reasons
+    - approved
   :local_authorities:
     - id
     - code
