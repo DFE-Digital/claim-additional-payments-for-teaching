@@ -8,6 +8,7 @@ en:
     policy_acronym: "STRI"
     payment_name: "School targeted retention incentive"
     claim_subject: "School targeted retention incentive"
+    claim_description: "for a targeted retention incentive payment"
     claim_amount_description: "Additional payment for teaching"
     support_email_address: "schools-targeted.retention-incentive@education.gov.uk"
     information_provided_further_details: "For more details, you can read about payments and deductions for the %{link}"
@@ -138,5 +139,12 @@ en:
           knowledge, the details you are providing are correct.
       eligibility_confirmed:
         heading: "You’re eligible for a targeted retention incentive payment"
+      check_your_answers:
+        heading: Check your answers before sending your application
+        heading_send_application: Now send your application
+        statement: |
+          By submitting this you are confirming that, to the best of your
+          knowledge, the details you are providing are correct.
+        btn_text: Accept and send
 
 

@@ -30,5 +30,10 @@ module Journeys
     def requires_student_loan_details?
       true
     end
+
+    def set_a_reminder?(*args)
+      # FIXME RL - to implement
+      false
+    end
   end
 end

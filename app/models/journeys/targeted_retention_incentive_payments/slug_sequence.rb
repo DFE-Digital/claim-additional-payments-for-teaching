@@ -61,9 +61,17 @@ module Journeys
       end
 
       def slugs
-        SLUGS.dup.tap do |slugs|
-          slugs.delete("select-home-address") if answers.skip_postcode_search?
-          slugs.delete("select-email") unless set_by_teacher_id?("email")
+        SLUGS.dup.tap do |sequence|
+          sequence.delete("select-home-address") if answers.skip_postcode_search?
+          sequence.delete("select-email") unless set_by_teacher_id?("email")
+          sequence.delete("select-mobile") unless set_by_teacher_id?("mobile")
+
+          sequence.delete("email-verification") if answers.email_verified?
+
+          if answers.provide_mobile_number == false
+            sequence.delete("mobile-number")
+            sequence.delete("mobile-verification")
+          end
         end
       end
 

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Targeted retention incentives" do
+RSpec.describe "Targeted retention incentives", js: true do
   before do
     create(
       :journey_configuration,
@@ -121,7 +121,8 @@ RSpec.describe "Targeted retention incentives" do
 
         expect(page).to have_text(
           "Based on what you told us, you can apply for a targeted retention " \
-          "incentive payment of: £2,000"
+          "incentive payment of: £2,000",
+          normalize_ws: true
         )
 
         click_on "Apply now"
@@ -159,6 +160,7 @@ RSpec.describe "Targeted retention incentives" do
         otp_in_mail_sent = mail[:personalisation].decoded.scan(/\b[0-9]{6}\b/).first
 
         fill_in "Enter the 6-digit passcode", with: otp_in_mail_sent
+        click_on "Confirm"
 
         # provide-mobile-number
         choose "No"

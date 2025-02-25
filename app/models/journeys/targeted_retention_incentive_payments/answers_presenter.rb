@@ -111,13 +111,21 @@ module Journeys
       end
 
       def t(key)
-        I18n.t(
-          [
-            "targeted_retention_incentive_payments",
-            "forms",
-            key
-          ].join(".")
-        )
+        tri_key = [
+          "targeted_retention_incentive_payments",
+          "forms",
+          key
+        ].join(".")
+
+        if I18n.exists?(tri_key)
+          I18n.t(tri_key)
+        else
+          I18n.t(key)
+        end
+      end
+
+      def l(date)
+        I18n.l(date)
       end
     end
   end
