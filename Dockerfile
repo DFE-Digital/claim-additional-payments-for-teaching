@@ -10,7 +10,7 @@ ENV DEPS_HOME /deps
 ENV RAILS_ENV production
 
 RUN apk update
-RUN apk add postgresql16=~16.6-r0
+RUN apk add postgresql16=~16.8-r0
 RUN apk add bash postgresql-dev tzdata nodejs curl libc6-compat shared-mime-info
 
 # ------------------------------------------------------------------------------
