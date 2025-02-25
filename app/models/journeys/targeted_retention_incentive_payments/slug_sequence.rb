@@ -50,6 +50,8 @@ module Journeys
 
       attr_reader :journey_session
 
+      delegate :answers, to: :journey_session
+
       def initialize(journey_session)
         @journey_session = journey_session
       end
@@ -59,7 +61,18 @@ module Journeys
       end
 
       def slugs
-        SLUGS
+        SLUGS.dup.tap do |slugs|
+          slugs.delete("select-home-address") if answers.skip_postcode_search?
+          slugs.delete("select-email") unless set_by_teacher_id?("email")
+        end
+      end
+
+      private
+
+      def set_by_teacher_id?(field)
+        #return false if skipped_dfe_sign_in_or_details_did_not_match?
+
+        answers.teacher_id_user_info[field].present?
       end
     end
   end

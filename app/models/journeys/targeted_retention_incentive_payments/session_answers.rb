@@ -47,8 +47,6 @@ module Journeys
         policy
       end
 
-      private
-
       def policy
         Policies::TargetedRetentionIncentivePayments
       end
