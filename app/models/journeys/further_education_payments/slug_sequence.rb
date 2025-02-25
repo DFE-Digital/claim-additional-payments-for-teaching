@@ -52,6 +52,8 @@ module Journeys
         ineligible
       ].freeze
 
+      RESTRICTED_SLUGS = [].freeze
+
       SLUGS = (
         ELIGIBILITY_SLUGS +
         PERSONAL_DETAILS_SLUGS +

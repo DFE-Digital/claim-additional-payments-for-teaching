@@ -4,15 +4,15 @@ module Journeys
       class SlugSequence
         SLUGS = [
           "sign-in",
+          "unauthorised",
           "verify-claim",
           "complete",
-          "unauthorised",
-          "expired-link"
+          "expired-link",
+          "already-verified"
         ]
 
         RESTRICTED_SLUGS = [
-          "verify-claim",
-          "complete"
+          "verify-claim"
         ]
 
         def self.verify_claim_url(claim)
@@ -32,6 +32,8 @@ module Journeys
           )
         end
 
+        attr_reader :journey_session
+
         def initialize(journey_session)
           @journey_session = journey_session
         end
@@ -46,18 +48,39 @@ module Journeys
             ]
           end
 
-          SLUGS
+          array = []
+          array << "sign-in"
+
+          if already_verified?
+            array << "already-verified"
+            return array
+          end
+
+          if unauthorised?
+            array << "unauthorised"
+            return array
+          end
+
+          array << "verify-claim"
+          array << "complete"
+          array
         end
 
-        def requires_authorisation?(slug)
-          RESTRICTED_SLUGS.include?(slug)
+        private
+
+        def already_verified?
+          return true if journey_session.answers.claim_started_verified == true
+
+          false
         end
 
-        def unauthorised_path(slug, failure_reason)
-          Rails.application.routes.url_helpers.claim_path(
-            self.class.module_parent::ROUTING_NAME,
-            "unauthorised",
-            failure_reason: failure_reason
+        def unauthorised?
+          auth.failure_reason.present?
+        end
+
+        def auth
+          Authorisation.new(
+            answers: journey_session.answers
           )
         end
       end
