@@ -19,7 +19,7 @@ module Journeys
         form = form_class.new(
           journey:,
           journey_session:,
-          params:,
+          params: form_params(form_class),
           session:
         )
 
@@ -171,7 +171,7 @@ module Journeys
         form = form_class.new(
           journey:,
           journey_session:,
-          params:,
+          params: form_params(form_class),
           session:
         )
         form
@@ -199,7 +199,7 @@ module Journeys
         form = form_class.new(
           journey:,
           journey_session:,
-          params:,
+          params: form_params(form_class),
           session:
         )
         form
@@ -216,6 +216,12 @@ module Journeys
 
     def eligibility_checker
       @eligibility_checker ||= journey::EligibilityChecker.new(journey_session:)
+    end
+
+    def form_params(form_class)
+      params.fetch(form_class.model_name.param_key, {}).slice(
+        *form_class.attribute_names.map(&:to_sym)
+      )
     end
   end
 end
