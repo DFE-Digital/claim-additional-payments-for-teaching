@@ -139,20 +139,8 @@ class OmniauthCallbacksController < ApplicationController
     [first_name, last_name, full_name, date_of_birth]
   end
 
-  def test_user_auth_hash
-    if request.path == "/auth/onelogin"
-      OmniAuth::AuthHash.new(uid: "12345", info: {email: "test@example.com"}, extra: {raw_info: {}})
-    elsif request.path == "/auth/onelogin_identity"
-      OmniAuth::AuthHash.new(uid: "12345", info: {email: ""}, extra: {raw_info: {ONELOGIN_JWT_CORE_IDENTITY_HASH_KEY => "test"}})
-    end
-  end
-
   def omniauth_hash
-    @omniauth_hash ||= if OneLoginSignIn.bypass?
-      test_user_auth_hash
-    else
-      request.env["omniauth.auth"]
-    end
+    @omniauth_hash ||= request.env["omniauth.auth"]
   end
 
   def further_education_payments_provider_callback(auth)
