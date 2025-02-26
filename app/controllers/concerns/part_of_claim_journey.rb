@@ -11,7 +11,7 @@ module PartOfClaimJourney
   private
 
   def check_whether_closed_for_submissions
-    unless journey.open_for_submissions?(access_code)
+    unless journey.accessible?(access_code)
       @availability_message = journey_configuration.availability_message
       render "static_pages/closed_for_submissions", status: :service_unavailable
     end
