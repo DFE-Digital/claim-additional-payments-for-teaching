@@ -91,7 +91,7 @@ module Journeys
       false
     end
 
-    def open_for_submissions?(code = nil)
+    def accessible?(code = nil)
       configuration.open_for_submissions? ||
         ServiceAccessCode.permits_access?(code: code, journey: self)
     end

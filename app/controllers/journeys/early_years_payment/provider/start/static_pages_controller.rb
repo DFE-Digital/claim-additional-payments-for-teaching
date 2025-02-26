@@ -4,7 +4,7 @@ module Journeys
       module Start
         class StaticPagesController < BasePublicController
           def guidance
-            @journey_open = journey.open_for_submissions?(params[:service_access_code])
+            @journey_open = journey.accessible?(params[:service_access_code])
             render "#{journey::VIEW_PATH}/guidance"
           end
         end

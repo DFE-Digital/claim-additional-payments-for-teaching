@@ -14,7 +14,7 @@ class StaticPagesController < BasePublicController
   def landing_page
     @academic_year = journey.configuration.current_academic_year
 
-    @journey_open = journey.open_for_submissions?(params[:service_access_code])
+    @journey_open = journey.accessible?(params[:service_access_code])
 
     render "#{journey::VIEW_PATH}/landing_page"
   end
