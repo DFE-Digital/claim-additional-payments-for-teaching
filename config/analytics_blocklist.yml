@@ -124,6 +124,7 @@
   :journeys_service_access_codes:
   - id
   - code
+  - used
   - journey
   - created_at
   - updated_at

@@ -2,16 +2,8 @@ module Journeys
   class ServiceAccessCode < ApplicationRecord
     scope :for_journey, ->(journey) { where(journey: journey) }
 
-    scope :used, -> do
-      joins(
-        <<~SQL
-          JOIN journeys_sessions
-          ON journeys_service_access_codes.code = journeys_sessions.answers ->> 'service_access_code'
-        SQL
-      ).merge(Journeys::Session.submitted)
-    end
-
-    scope :unused, -> { where.not(id: used) }
+    scope :used, -> { where(used: true) }
+    scope :unused, -> { where(used: false) }
 
     after_initialize -> { self.code = generate_code if code.blank? }
 
@@ -21,6 +13,10 @@ module Journeys
 
     def self.permits_access?(code:, journey:)
       code.present? && for_journey(journey).unused.exists?(code: code)
+    end
+
+    def mark_as_used!
+      update!(used: true)
     end
 
     private
