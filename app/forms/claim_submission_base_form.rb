@@ -22,6 +22,7 @@ class ClaimSubmissionBaseForm
     ApplicationRecord.transaction do
       set_attributes_for_claim_submission
       claim.save!
+      mark_service_access_code_as_used!
     end
 
     claim.policy.mailer.submitted(claim).deliver_later
@@ -72,6 +73,14 @@ class ClaimSubmissionBaseForm
     claim.policy_options_provided = generate_policy_options_provided
     claim.reference ||= generate_reference
     set_submitted_at_attributes
+  end
+
+  def mark_service_access_code_as_used!
+    access_code = Journeys::ServiceAccessCode.find_by(
+      code: answers.service_access_code,
+      journey: journey_session.journey_class
+    )
+    access_code&.mark_as_used!
   end
 
   def set_submitted_at_attributes
