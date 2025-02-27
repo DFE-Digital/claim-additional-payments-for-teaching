@@ -125,7 +125,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_18_150905) do
   end
 
   create_table "decisions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.integer "result"
     t.uuid "claim_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
