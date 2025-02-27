@@ -1,5 +1,7 @@
 <% if @journey_session.answers.identity_confirmed_with_onelogin? %>
   <%= render "sign_in_3_identified" %>
+<% elsif @journey_session.answers.logged_in_with_onelogin? && @journey_session.answers.onelogin_idv_return_codes.present? %>
+  <%= render "sign_in_3_not_identified" %>
 <% elsif @journey_session.answers.logged_in_with_onelogin? %>
   <%= render "sign_in_2_authed" %>
 <% else %>

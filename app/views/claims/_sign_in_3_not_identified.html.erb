@@ -1,0 +1,11 @@
+<h1 class="govuk-heading-l">
+  You have not proved your identity with GOV.UK One Login
+</h1>
+
+<p class="govuk-body">
+  You can now continue with your application.
+</p>
+
+<%= form_with model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+  <%= f.govuk_submit "Continue" %>
+<% end %>

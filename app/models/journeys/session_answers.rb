@@ -54,6 +54,7 @@ module Journeys
     attribute :onelogin_idv_last_name, :string, pii: true
     attribute :onelogin_idv_full_name, :string, pii: true
     attribute :onelogin_idv_date_of_birth, :date, pii: false
+    attribute :onelogin_idv_return_codes, default: [], pii: true
 
     attribute :onelogin_auth_at, :datetime, pii: false
     attribute :onelogin_idv_at, :datetime, pii: false
