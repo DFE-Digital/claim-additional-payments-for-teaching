@@ -114,6 +114,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_07_152200) do
     t.datetime "started_at", precision: nil, null: false
     t.datetime "verified_at"
     t.text "onelogin_idv_full_name"
+    t.text "onelogin_idv_return_codes", array: true
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"

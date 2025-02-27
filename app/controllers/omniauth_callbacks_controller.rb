@@ -131,7 +131,8 @@ class OmniauthCallbacksController < ApplicationController
   def process_one_login_return_codes_callback
     journey_session.answers.assign_attributes(
       identity_confirmed_with_onelogin: false,
-      onelogin_idv_at: Time.now
+      onelogin_idv_at: Time.now,
+      onelogin_idv_return_codes: one_login_return_codes
     )
     journey_session.save!
 
@@ -181,7 +182,7 @@ class OmniauthCallbacksController < ApplicationController
 
   def omniauth_hash
     @omniauth_hash ||= if OneLoginSignIn.bypass?
-      test_user_auth_hash
+      OmniAuth.config.mock_auth[:onelogin] || test_user_auth_hash
     else
       request.env["omniauth.auth"]
     end

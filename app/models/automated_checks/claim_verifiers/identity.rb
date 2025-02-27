@@ -19,6 +19,9 @@ module AutomatedChecks
 
         if claim.identity_confirmed_with_onelogin?
           one_login
+        elsif claim.onelogin_idv_at.present? && !claim.identity_confirmed_with_onelogin?
+          # noop
+          # TODO: tbd what happens when OL user that fails OL idv comes thru
         else
           # Order of matching matters so that subsequent conditions in methods fall through to execute the right thing
           no_match || partial_match || complete_match

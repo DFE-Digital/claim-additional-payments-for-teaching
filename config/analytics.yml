@@ -83,6 +83,7 @@ shared:
     - onelogin_uid
     - started_at
     - verified_at
+    - onelogin_idv_return_codes
   :decisions:
     - id
     - claim_id
