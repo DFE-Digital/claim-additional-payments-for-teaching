@@ -356,3 +356,9 @@ shared:
     - created_at
     - updated_at
     - gender_digit
+  :stats:
+    - id
+    - one_login_return_code
+    - created_at
+    - updated_at
+    - type

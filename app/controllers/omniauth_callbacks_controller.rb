@@ -2,6 +2,7 @@ class OmniauthCallbacksController < ApplicationController
   include JourneyConcern
 
   ONELOGIN_JWT_CORE_IDENTITY_HASH_KEY = "https://vocab.account.gov.uk/v1/coreIdentityJWT".freeze
+  ONELOGIN_JWT_RETURN_CODE_HASH_KEY = "https://vocab.account.gov.uk/v1/returnCode".freeze
 
   def callback
     auth = request.env["omniauth.auth"]
@@ -44,13 +45,25 @@ class OmniauthCallbacksController < ApplicationController
     end
   end
 
+  # unfortunely this method has dual responsibilites
+  # handles both auth callback + idv callback
+  # logic must be included to handle this shortcoming
   def onelogin
-    core_identity_jwt = omniauth_hash.extra.raw_info[ONELOGIN_JWT_CORE_IDENTITY_HASH_KEY]
     return process_one_login_identity_verification_callback(core_identity_jwt) if core_identity_jwt
+    return process_one_login_return_codes_callback if one_login_return_codes.present?
+
     process_one_login_authentication_callback
   end
 
   private
+
+  def core_identity_jwt
+    omniauth_hash.extra.raw_info[ONELOGIN_JWT_CORE_IDENTITY_HASH_KEY]
+  end
+
+  def one_login_return_codes
+    omniauth_hash.extra.raw_info.fetch(ONELOGIN_JWT_RETURN_CODE_HASH_KEY, []).map { |hash| hash["code"] }
+  end
 
   def current_journey_routing_name
     if session[:current_journey_routing_name].present?
@@ -106,6 +119,25 @@ class OmniauthCallbacksController < ApplicationController
     journey_session.answers.surname ||= last_name
     journey_session.answers.date_of_birth ||= date_of_birth
     journey_session.save!
+
+    redirect_to(
+      claim_path(
+        journey: current_journey_routing_name,
+        slug: "sign-in"
+      )
+    )
+  end
+
+  def process_one_login_return_codes_callback
+    journey_session.answers.assign_attributes(
+      identity_confirmed_with_onelogin: false,
+      onelogin_idv_at: Time.now
+    )
+    journey_session.save!
+
+    one_login_return_codes.each do |code|
+      Stats::OneLogin.create!(one_login_return_code: code)
+    end
 
     redirect_to(
       claim_path(
