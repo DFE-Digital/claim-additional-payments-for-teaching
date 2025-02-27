@@ -13,6 +13,7 @@ module Journeys
         attribute :dfe_sign_in_first_name, :string, pii: true
         attribute :dfe_sign_in_last_name, :string, pii: true
         attribute :dfe_sign_in_email, :string, pii: true
+        attribute :claim_started_verified, :boolean, pii: false
 
         def claim
           @claim ||= Claim.includes(eligibility: :school).find(claim_id)

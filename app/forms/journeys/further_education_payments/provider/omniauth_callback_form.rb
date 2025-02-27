@@ -19,7 +19,8 @@ module Journeys
             dfe_sign_in_role_codes: dfe_sign_in_role_codes,
             dfe_sign_in_first_name: dfe_sign_in_first_name,
             dfe_sign_in_last_name: dfe_sign_in_last_name,
-            dfe_sign_in_email: dfe_sign_in_email
+            dfe_sign_in_email: dfe_sign_in_email,
+            claim_started_verified: journey_session.answers.claim.eligibility.verified?
           )
 
           journey_session.save!

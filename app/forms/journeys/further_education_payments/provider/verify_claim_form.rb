@@ -147,6 +147,10 @@ module Journeys
           end
         end
 
+        def completed?
+          claim.eligibility.verified?
+        end
+
         private
 
         def permitted_attributes

@@ -4,6 +4,7 @@ class ClaimsController < BasePublicController
   skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create]
   before_action :initialize_session_slug_history
   before_action :check_page_is_in_sequence, only: [:show, :update]
+  before_action :check_page_is_authorised, only: [:show]
   before_action :check_page_is_permissible, only: [:show]
   before_action :set_backlink_path, only: [:show, :update]
   before_action :check_claim_not_in_progress, only: [:new]
@@ -14,7 +15,6 @@ class ClaimsController < BasePublicController
   before_action :add_answers_to_rollbar_context, only: [:show, :update]
   after_action :update_session_with_current_slug, only: [:update]
 
-  include AuthorisedSlugs
   include FormSubmittable
   include ClaimsFormCallbacks
   include ClaimSubmission
@@ -119,6 +119,14 @@ class ClaimsController < BasePublicController
     raise ActionController::RoutingError.new("Not Found for #{params[:slug]}") unless page_sequence.in_sequence?(params[:slug])
 
     redirect_to claim_path(current_journey_routing_name, next_required_slug) unless page_sequence.has_completed_journey_until?(params[:slug])
+  end
+
+  def check_page_is_authorised
+    return unless journey.use_navigator?
+
+    if navigator.requires_authorisation? && !navigator.authorised_slug?
+      redirect_to claim_path(current_journey_routing_name, "unauthorised")
+    end
   end
 
   def check_page_is_permissible
