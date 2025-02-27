@@ -31,6 +31,7 @@ module Policies
       :identity_check_failed,
       :duplicate_claim,
       :no_response,
+      :no_response_from_employer,
       :other
     ]
 

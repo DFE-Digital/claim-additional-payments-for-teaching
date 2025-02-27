@@ -898,6 +898,7 @@ en:
           identity_check_failed: "Identity check failed"
           duplicate_claim: "Duplicate claim"
           no_response: "No response"
+          no_response_from_employer: "No response from employer"
           other: "Other"
       task_questions:
         identity_confirmation:
