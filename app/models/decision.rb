@@ -29,6 +29,8 @@ class Decision < ApplicationRecord
   scope :approved, -> { where(approved: true) }
   scope :rejected, -> { where(approved: false) }
 
+  self.ignored_columns = %w[result]
+
   def rejected?
     !approved? && !approved.nil?
   end
