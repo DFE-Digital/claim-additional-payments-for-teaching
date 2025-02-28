@@ -11,6 +11,8 @@ module Journeys
       "claims" => {
         "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm,
         "supply-teacher" => SupplyTeacherForm,
+        "entire-term-contract" => EntireTermContractForm,
+        "employed-directly" => EmployedDirectlyForm,
         "poor-performance" => PoorPerformanceForm,
         "qualification" => QualificationForm,
         "itt-year" => IttAcademicYearForm,

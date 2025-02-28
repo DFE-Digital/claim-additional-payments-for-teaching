@@ -30,6 +30,34 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
           )
         end
       end
+
+      context "when a supply teacher" do
+        before do
+          journey_session.answers.assign_attributes(
+            employed_as_supply_teacher: true
+          )
+
+          journey_session.save!
+        end
+
+        it do
+          is_expected.to match_array %w(
+            sign-in-or-continue
+            current-school
+            nqt-in-academic-year-after-itt
+            supply-teacher
+            entire-term-contract
+            employed-directly
+            poor-performance
+            qualification
+            itt-year
+            eligible-itt-subject
+            teaching-subject-now
+            check-your-answers-part-one
+            eligibility-confirmed
+          )
+        end
+      end
     end
   end
 end

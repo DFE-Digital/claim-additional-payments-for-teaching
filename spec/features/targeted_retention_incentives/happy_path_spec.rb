@@ -241,4 +241,86 @@ RSpec.describe "Targeted retention incentives" do
       "You applied for a targeted retention incentive payment"
     )
   end
+
+  it "allows a supply teacher to submit a claim" do
+    school = create(
+      :school,
+      :targeted_retention_incentive_payments_eligible
+    )
+
+    visit Journeys::TargetedRetentionIncentivePayments.start_page_url
+
+    click_on "Start now"
+
+    # sign-in-or-continue
+    click_on "Continue without signing in"
+
+    # current-school
+    fill_in "Which school do you teach at?", with: school.name
+    click_on "Continue"
+
+    # current-school part 2
+    choose school.name
+    click_on "Continue"
+
+    # nqt-in-academic-year-after-itt
+    choose "Yes"
+    click_on "Continue"
+
+    # supply-teacher
+    choose "Yes"
+    click_on "Continue"
+
+    # entire-term-contract
+    choose "Yes"
+    click_on "Continue"
+
+    # employed-directly
+    choose "Yes"
+    click_on "Continue"
+
+    # poor-performance
+    all(".govuk-radios__label").select { it.text == "No" }.each(&:click)
+    click_on "Continue"
+
+    # qualification
+    choose "Postgraduate initial teacher training (ITT)"
+    click_on "Continue"
+
+    # itt-year
+    choose "2023 to 2024"
+    click_on "Continue"
+
+    # eligible-itt-subject
+    choose "Physics"
+    click_on "Continue"
+
+    # teaching-subject-now
+    choose "Yes"
+    click_on "Continue"
+
+    expect(page).to have_content "Check your answers"
+
+    expect(page).to have_summary_item(
+      key: "Are you currently employed as a supply teacher?",
+      value: "Yes"
+    )
+
+    expect(page).to have_summary_item(
+      key: "Do you have a contract to teach at the same school for an entire " \
+           "term or longer?",
+      value: "Yes"
+    )
+
+    expect(page).to have_summary_item(
+      key: "Are you employed directly by your school?",
+      value: "Yes, I'm employed by my school"
+    )
+
+    click_on "Continue"
+
+    expect(page).to have_content(
+      "You’re eligible for a targeted retention incentive payment"
+    )
+  end
 end

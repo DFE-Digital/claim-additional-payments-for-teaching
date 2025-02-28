@@ -38,6 +38,20 @@ en:
           false: "No"
         errors:
           inclusion: "Select yes if you are a supply teacher"
+      entire_term_contract:
+        question: "Do you have a contract to teach at the same school for an entire term or longer?"
+        options:
+          true: "Yes"
+          false: "No"
+        errors:
+          inclusion: "Select yes if you have a contract to teach at the same school for an entire term or longer"
+      employed_directly:
+        question: "Are you employed directly by your school?"
+        options:
+          true: "Yes, I'm employed by my school"
+          false: "No, I'm employed by a private agency"
+        errors:
+          inclusion: "Select yes if you are directly employed by your school"
       poor_performance:
         heading: "Tell us if you are currently under any performance measures or disciplinary action"
         questions:

@@ -7,6 +7,8 @@ module Journeys
         "current-school",
         "nqt-in-academic-year-after-itt",
         "supply-teacher",
+        "entire-term-contract",
+        "employed-directly",
         "poor-performance",
         "qualification",
         "itt-year",
@@ -79,6 +81,8 @@ module Journeys
           sequence << "current-school"
           sequence << "nqt-in-academic-year-after-itt"
           sequence << "supply-teacher"
+          sequence << "entire-term-contract" if answers.employed_as_supply_teacher?
+          sequence << "employed-directly" if answers.employed_as_supply_teacher?
           sequence << "poor-performance"
           sequence << "qualification"
           sequence << "itt-year"

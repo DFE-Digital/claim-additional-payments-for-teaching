@@ -5,9 +5,10 @@ module Journeys
         [].tap do |a|
           a << current_school
           a << nqt_in_academic_year_after_itt
+          # a << induction_completed
           a << employed_as_supply_teacher
-          # a << has_entire_term_contract if journey_session.answers.employed_as_supply_teacher?
-          # a << employed_directly if journey_session.answers.employed_as_supply_teacher?
+          a << has_entire_term_contract if journey_session.answers.employed_as_supply_teacher?
+          a << employed_directly if journey_session.answers.employed_as_supply_teacher?
           a << subject_to_formal_performance_action
           a << subject_to_disciplinary_action
 
@@ -44,6 +45,22 @@ module Journeys
           t("supply_teacher.question"),
           t("supply_teacher.options.#{answers.employed_as_supply_teacher}"),
           "supply-teacher"
+        ]
+      end
+
+      def has_entire_term_contract
+        [
+          t("entire_term_contract.question"),
+          t("entire_term_contract.options.#{answers.has_entire_term_contract}"),
+          "entire-term-contract"
+        ]
+      end
+
+      def employed_directly
+        [
+          t("employed_directly.question"),
+          t("employed_directly.options.#{answers.employed_directly}"),
+          "employed-directly"
         ]
       end
 
