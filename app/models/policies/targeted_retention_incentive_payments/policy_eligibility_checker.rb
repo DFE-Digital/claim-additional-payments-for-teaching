@@ -17,10 +17,11 @@ module Policies
 
       def indicated_ineligible_itt_subject?
         return false if eligible_itt_subject.blank?
+        return false if itt_academic_year.blank? # We've not answered the ITT year question yet
 
-        if claim_year.blank? || itt_academic_year.blank?
+        if trainee_teacher?
           # trainee teacher who won't have given their ITT year
-          eligible_itt_subject.present? && TargetedRetentionIncentivePayments.fixed_subject_symbols.exclude?(eligible_itt_subject.to_sym)
+          TargetedRetentionIncentivePayments.fixed_subject_symbols.exclude?(eligible_itt_subject.to_sym)
         else
           TargetedRetentionIncentivePayments.subject_symbols(
             claim_year: claim_year,
@@ -39,9 +40,9 @@ module Policies
           indicated_ineligible_school?,
           supply_teacher_lacking_either_long_contract_or_direct_employment?,
           poor_performance?,
-          no_selectable_subjects?,
-          ineligible_cohort?,
-          insufficient_teaching?,
+          no_selectable_subjects? && !trainee_teacher?,
+          ineligible_cohort? && !trainee_teacher?,
+          insufficient_teaching? && !trainee_teacher?,
           indicated_ecp_only_itt_subject?,
           ineligible_itt_subject_and_no_relevant_degree?
         ].any?
