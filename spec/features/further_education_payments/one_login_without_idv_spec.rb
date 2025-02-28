@@ -129,7 +129,7 @@ RSpec.feature "Further education payments" do
       click_button "Continue"
     }.to change { session.reload.answers.onelogin_idv_return_codes }.from([]).to(["ABC"])
 
-    expect(page).to have_content("You have not proved your identity with GOV.UK One Login")
+    expect(page).to have_content("We cannot verify your identity via GOV.UK One Login")
     click_button "Continue"
 
     expect(page).to have_content("How we will use the information you provide")
