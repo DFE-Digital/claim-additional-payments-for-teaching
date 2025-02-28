@@ -21,7 +21,7 @@ module Journeys
   end
 
   def all_routing_names
-    all.map { |journey| journey::ROUTING_NAME }
+    all.map(&:routing_name)
   end
 
   def for_routing_name(routing_name)

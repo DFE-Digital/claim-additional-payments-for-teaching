@@ -96,6 +96,14 @@ module Journeys
         ServiceAccessCode.permits_access?(code: code, journey: self)
     end
 
+    def uses_reminders?
+      false
+    end
+
+    def routing_name
+      self::ROUTING_NAME
+    end
+
     private
 
     def all_forms
