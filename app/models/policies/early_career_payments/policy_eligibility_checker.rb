@@ -57,6 +57,10 @@ module Policies
         induction_completed? && itt_subject_eligible_now?
       end
 
+      def indicated_ineligible_school?
+        current_school.present? && !SchoolEligibility.new(current_school).eligible?
+      end
+
       def itt_subject_eligible_now?
         itt_subject = eligible_itt_subject # attribute name implies eligibility which isn't always the case
         return false if itt_subject.blank?

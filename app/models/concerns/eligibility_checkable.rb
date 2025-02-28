@@ -45,10 +45,6 @@ module EligibilityCheckable
     policy.closed?(claim_year)
   end
 
-  def indicated_ineligible_school?
-    current_school.present? && !policy::SchoolEligibility.new(current_school).eligible?
-  end
-
   def supply_teacher_lacking_either_long_contract_or_direct_employment?
     employed_as_supply_teacher? && (has_entire_term_contract == false || employed_directly == false)
   end

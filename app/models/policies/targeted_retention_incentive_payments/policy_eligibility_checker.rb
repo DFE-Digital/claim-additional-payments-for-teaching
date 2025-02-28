@@ -57,6 +57,10 @@ module Policies
           .first
       end
 
+      def indicated_ineligible_school?
+        current_school.present? && !SchoolEligibility.new(current_school).eligible?
+      end
+
       def indicated_ecp_only_itt_subject?
         eligible_itt_subject.present? && (eligible_itt_subject.to_sym == :foreign_languages)
       end
