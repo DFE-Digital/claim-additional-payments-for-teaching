@@ -91,6 +91,14 @@ module Journeys
       false
     end
 
+    def uses_reminders?
+      false
+    end
+
+    def routing_name
+      self::ROUTING_NAME
+    end
+
     private
 
     def all_forms

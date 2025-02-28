@@ -48,5 +48,9 @@ module Journeys
         policy.selectable_itt_years_for_claim_year(claim_year)
       end.uniq
     end
+
+    def uses_reminders?
+      true
+    end
   end
 end
