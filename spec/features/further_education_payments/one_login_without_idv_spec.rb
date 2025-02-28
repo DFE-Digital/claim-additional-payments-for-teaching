@@ -115,23 +115,12 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Apply now")
     click_button "Apply now"
 
+    mock_one_login_auth
+
     expect(page).to have_content("Sign in with GOV.UK One Login")
     click_button "Continue"
 
-    hash = OmniAuth::AuthHash.new(
-      uid: "12345",
-      info: {
-        email: ""
-      },
-      extra: {
-        raw_info: {
-          OmniauthCallbacksController::ONELOGIN_RETURN_CODE_HASH_KEY => [{"code" => "ABC"}]
-        }
-      }
-    )
-
-    OmniAuth.config.mock_auth[:onelogin] = hash
-    Rails.application.env_config["omniauth.auth"] = hash
+    mock_one_login_idv_with_return_codes
 
     session = Journeys::FurtherEducationPayments::Session.last
 
