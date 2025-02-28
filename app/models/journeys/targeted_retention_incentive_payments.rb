@@ -17,6 +17,7 @@ module Journeys
         "qualification" => QualificationForm,
         "itt-year" => IttAcademicYearForm,
         "eligible-itt-subject" => EligibleIttSubjectForm,
+        "eligible-degree-subject" => EligibleDegreeSubjectForm,
         "teaching-subject-now" => TeachingSubjectNowForm,
         "check-your-answers-part-one" => CheckYourAnswersPartOneForm,
         "eligibility-confirmed" => EligibilityConfirmedForm

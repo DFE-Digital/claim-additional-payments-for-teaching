@@ -15,7 +15,7 @@ module Journeys
           a << qualification
           a << itt_academic_year
           a << eligible_itt_subject
-          # a << eligible_degree_subject
+          a << eligible_degree_subject if journey_session.answers.eligible_itt_subject == "none_of_the_above"
 
           a << teaching_subject_now
         end.compact
@@ -110,13 +110,13 @@ module Journeys
         ]
       end
 
-      # def eligible_degree_subject
-      #  [
-      #    t("eligible_degree_subject.question"),
-      #    answers.eligible_degree_subject ? "Yes" : "No",
-      #    "eligible-degree-subject"
-      #  ]
-      # end
+      def eligible_degree_subject
+        [
+          t("eligible_degree_subject.question"),
+          answers.eligible_degree_subject ? "Yes" : "No",
+          "eligible-degree-subject"
+        ]
+      end
 
       def teaching_subject_now
         [

@@ -13,6 +13,7 @@ module Journeys
         "qualification",
         "itt-year",
         "eligible-itt-subject",
+        "eligible-degree-subject",
         "teaching-subject-now",
         "check-your-answers-part-one",
         "eligibility-confirmed"
@@ -87,6 +88,7 @@ module Journeys
           sequence << "qualification"
           sequence << "itt-year"
           sequence << "eligible-itt-subject"
+          sequence << "eligible-degree-subject" if answers.eligible_itt_subject == "none_of_the_above"
           sequence << "teaching-subject-now"
           sequence << "check-your-answers-part-one"
           sequence << "eligibility-confirmed"

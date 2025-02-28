@@ -323,4 +323,76 @@ RSpec.describe "Targeted retention incentives" do
       "You’re eligible for a targeted retention incentive payment"
     )
   end
+
+  it "asks an additional question when selecting non of the above for itt subject" do
+    school = create(
+      :school,
+      :targeted_retention_incentive_payments_eligible
+    )
+
+    visit Journeys::TargetedRetentionIncentivePayments.start_page_url
+
+    click_on "Start now"
+
+    # sign-in-or-continue
+    click_on "Continue without signing in"
+
+    # current-school
+    fill_in "Which school do you teach at?", with: school.name
+    click_on "Continue"
+
+    # current-school part 2
+    choose school.name
+    click_on "Continue"
+
+    # nqt-in-academic-year-after-itt
+    choose "Yes"
+    click_on "Continue"
+
+    # supply-teacher
+    choose "No"
+    click_on "Continue"
+
+    # poor-performance
+    all(".govuk-radios__label").select { it.text == "No" }.each(&:click)
+    click_on "Continue"
+
+    # qualification
+    choose "Postgraduate initial teacher training (ITT)"
+    click_on "Continue"
+
+    # itt-year
+    choose "2023 to 2024"
+    click_on "Continue"
+
+    # eligible-itt-subject
+    choose "None of the above"
+    click_on "Continue"
+
+    # eligible-degree-subject
+    expect(page).to have_content("Do you have a degree in an eligible subject?")
+    choose "Yes"
+    click_on "Continue"
+
+    # teaching-subject-now
+    choose "Yes"
+    click_on "Continue"
+
+    expect(page).to have_summary_item(
+      key: "Which subject did you do your postgraduate initial teacher " \
+           "training (ITT) in?",
+      value: "None of the above"
+    )
+
+    expect(page).to have_summary_item(
+      key: "Do you have a degree in an eligible subject?",
+      value: "Yes"
+    )
+
+    click_on "Continue"
+
+    expect(page).to have_content(
+      "You’re eligible for a targeted retention incentive payment"
+    )
+  end
 end
