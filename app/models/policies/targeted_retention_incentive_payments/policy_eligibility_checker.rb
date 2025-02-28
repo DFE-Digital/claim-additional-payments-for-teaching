@@ -33,6 +33,20 @@ module Policies
         premium_payment_award&.award_amount
       end
 
+      def ineligible?
+        [
+          policy_closed?,
+          indicated_ineligible_school?,
+          supply_teacher_lacking_either_long_contract_or_direct_employment?,
+          poor_performance?,
+          no_selectable_subjects?,
+          ineligible_cohort?,
+          insufficient_teaching?,
+          indicated_ecp_only_itt_subject?,
+          ineligible_itt_subject_and_no_relevant_degree?
+        ].any?
+      end
+
       private
 
       def premium_payment_award
@@ -71,10 +85,6 @@ module Policies
 
       def eligible_degree?
         eligible_degree_subject?
-      end
-
-      def specific_ineligible_attributes?
-        indicated_ecp_only_itt_subject? || ineligible_itt_subject_and_no_relevant_degree?
       end
 
       def ineligible_itt_subject_and_no_relevant_degree?

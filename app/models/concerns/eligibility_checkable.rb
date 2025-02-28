@@ -15,10 +15,6 @@ module EligibilityCheckable
     end
   end
 
-  def ineligible?
-    common_ineligible_attributes? || specific_ineligible_attributes?
-  end
-
   # It's not good to call either `eligible_now?` or `eligible_later?` directly
   # because of the following business rule which is captured in the `status`
   # method above: if a claim is both eligible now and eligible later, it's
@@ -44,18 +40,6 @@ module EligibilityCheckable
   end
 
   private
-
-  def common_ineligible_attributes?
-    [
-      policy_closed?,
-      indicated_ineligible_school?,
-      supply_teacher_lacking_either_long_contract_or_direct_employment?,
-      poor_performance?,
-      no_selectable_subjects?,
-      ineligible_cohort?,
-      insufficient_teaching?
-    ].any?
-  end
 
   def policy_closed?
     policy.closed?(claim_year)
