@@ -20,6 +20,9 @@ module Journeys
       #
       # FIXME RL: make this more explicit in the eligibility checker
       def itt_academic_year
+        # Trainee teachers haven't completed ITT
+        return AcademicYear.none if trainee_teacher?
+
         return unless itt_academic_year_string.present?
 
         if itt_academic_year_string == NONE_OF_THE_ABOVE_ACADEMIC_YEAR

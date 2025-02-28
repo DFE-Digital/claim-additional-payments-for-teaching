@@ -395,4 +395,90 @@ RSpec.describe "Targeted retention incentives" do
       "You’re eligible for a targeted retention incentive payment"
     )
   end
+
+  it "handles trainee teachers and shows future eligibility information" do
+    school = create(
+      :school,
+      :targeted_retention_incentive_payments_eligible
+    )
+
+    visit Journeys::TargetedRetentionIncentivePayments.start_page_url
+
+    click_on "Start now"
+
+    # sign-in-or-continue
+    click_on "Continue without signing in"
+
+    # current-school
+    fill_in "Which school do you teach at?", with: school.name
+    click_on "Continue"
+
+    # current-school part 2
+    choose school.name
+    click_on "Continue"
+
+    # nqt-in-academic-year-after-itt - select No (trainee teacher)
+    choose "No, I’m a trainee teacher"
+    click_on "Continue"
+
+    # eligible-itt-subject
+    choose "Physics"
+    click_on "Continue"
+
+    # future-eligibility
+    expect(page).to have_content("You are not eligible this year")
+    expect(page).to have_content(
+      "You'll be eligible for a targeted retention incentive payment when " \
+      "you become a qualified teacher"
+    )
+
+    expect(page).to have_link("Set reminder")
+  end
+
+  it "handles trainee teachers with non-eligible ITT subject" do
+    school = create(
+      :school,
+      :targeted_retention_incentive_payments_eligible
+    )
+
+    visit Journeys::TargetedRetentionIncentivePayments.start_page_url
+
+    click_on "Start now"
+
+    # sign-in-or-continue
+    click_on "Continue without signing in"
+
+    # current-school
+    fill_in "Which school do you teach at?", with: school.name
+    click_on "Continue"
+
+    # current-school part 2
+    choose school.name
+    click_on "Continue"
+
+    # nqt-in-academic-year-after-itt - select No (trainee teacher)
+    choose "No, I’m a trainee teacher"
+    click_on "Continue"
+
+    # eligible-itt-subject
+    choose "None of the above"
+    click_on "Continue"
+
+    # eligible-degree-subject
+    expect(page).to have_content("Do you have a degree in an eligible subject?")
+    expect(page).to have_content(
+      "This can be an undergraduate or postgraduate degree in chemistry, " \
+      "languages, mathematics or physics."
+    )
+
+    choose "Yes"
+    click_on "Continue"
+
+    # Expect to see future eligibility page
+    expect(page).to have_content("You are not eligible this year")
+    expect(page).to have_content(
+      "You'll be eligible for a targeted retention incentive payment when " \
+      "you become a qualified teacher"
+    )
+  end
 end

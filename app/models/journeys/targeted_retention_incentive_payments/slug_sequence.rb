@@ -16,7 +16,8 @@ module Journeys
         "eligible-degree-subject",
         "teaching-subject-now",
         "check-your-answers-part-one",
-        "eligibility-confirmed"
+        "eligibility-confirmed",
+        "future-eligibility"
       ]
 
       PERSONAL_DETAILS_SLUGS = [
@@ -68,9 +69,14 @@ module Journeys
       def slugs
         [].tap do |sequence|
           sequence.push(*eligibility_slugs)
-          sequence.push(*personal_details_slugs)
-          sequence.push(*payment_details_slugs)
-          sequence.push(*results_slugs)
+
+          # For trainee teachers, we don't show any further slugs after
+          # future-eligibility
+          unless answers.trainee_teacher?
+            sequence.push(*personal_details_slugs)
+            sequence.push(*payment_details_slugs)
+            sequence.push(*results_slugs)
+          end
         end
       end
 
@@ -81,17 +87,26 @@ module Journeys
           sequence << "sign-in-or-continue"
           sequence << "current-school"
           sequence << "nqt-in-academic-year-after-itt"
-          sequence << "supply-teacher"
-          sequence << "entire-term-contract" if answers.employed_as_supply_teacher?
-          sequence << "employed-directly" if answers.employed_as_supply_teacher?
-          sequence << "poor-performance"
-          sequence << "qualification"
-          sequence << "itt-year"
-          sequence << "eligible-itt-subject"
-          sequence << "eligible-degree-subject" if answers.eligible_itt_subject == "none_of_the_above"
-          sequence << "teaching-subject-now"
-          sequence << "check-your-answers-part-one"
-          sequence << "eligibility-confirmed"
+
+          if answers.trainee_teacher?
+            # Trainee teacher path
+            sequence << "eligible-itt-subject"
+            sequence << "eligible-degree-subject" if answers.eligible_itt_subject == "none_of_the_above"
+            sequence << "future-eligibility"
+          else
+            # Qualified teacher path
+            sequence << "supply-teacher"
+            sequence << "entire-term-contract" if answers.employed_as_supply_teacher?
+            sequence << "employed-directly" if answers.employed_as_supply_teacher?
+            sequence << "poor-performance"
+            sequence << "qualification"
+            sequence << "itt-year"
+            sequence << "eligible-itt-subject"
+            sequence << "eligible-degree-subject" if answers.eligible_itt_subject == "none_of_the_above"
+            sequence << "teaching-subject-now"
+            sequence << "check-your-answers-part-one"
+            sequence << "eligibility-confirmed"
+          end
         end
       end
 

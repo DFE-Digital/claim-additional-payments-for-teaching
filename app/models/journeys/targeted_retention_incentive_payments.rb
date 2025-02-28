@@ -20,7 +20,8 @@ module Journeys
         "eligible-degree-subject" => EligibleDegreeSubjectForm,
         "teaching-subject-now" => TeachingSubjectNowForm,
         "check-your-answers-part-one" => CheckYourAnswersPartOneForm,
-        "eligibility-confirmed" => EligibilityConfirmedForm
+        "eligibility-confirmed" => EligibilityConfirmedForm,
+        "future-eligibility" => FutureEligibilityForm
       }
     }
 
@@ -37,6 +38,10 @@ module Journeys
     def set_a_reminder?(*args)
       # FIXME RL - to implement
       false
+    end
+
+    def uses_reminders?
+      true
     end
   end
 end

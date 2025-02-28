@@ -52,11 +52,16 @@ module Journeys
       private
 
       def subject_symbols
-        Policies::TargetedRetentionIncentivePayments
-          .current_and_future_subject_symbols(
-            itt_year: answers.itt_academic_year,
-            claim_year: journey.configuration.current_academic_year
-          )
+        # FIXME RL Should probably move this branch into the policy class
+        if answers.trainee_teacher?
+          Policies::TargetedRetentionIncentivePayments.fixed_subject_symbols
+        else
+          Policies::TargetedRetentionIncentivePayments
+            .current_and_future_subject_symbols(
+              itt_year: itt_year,
+              claim_year: journey.configuration.current_academic_year
+            )
+        end
       end
 
       def eligible_itt_subject_changed?

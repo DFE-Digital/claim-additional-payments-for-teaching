@@ -15,7 +15,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
 
       context "non tid, non trainee, non supply teacher, eligible degree subject" do
         it do
-          is_expected.to match_array %w(
+          is_expected.to match_array %w[
             sign-in-or-continue
             current-school
             nqt-in-academic-year-after-itt
@@ -27,7 +27,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
             teaching-subject-now
             check-your-answers-part-one
             eligibility-confirmed
-          )
+          ]
         end
       end
 
@@ -41,7 +41,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
         end
 
         it do
-          is_expected.to match_array %w(
+          is_expected.to match_array %w[
             sign-in-or-continue
             current-school
             nqt-in-academic-year-after-itt
@@ -55,7 +55,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
             teaching-subject-now
             check-your-answers-part-one
             eligibility-confirmed
-          )
+          ]
         end
       end
     end
