@@ -2,7 +2,7 @@ class OmniauthCallbacksController < ApplicationController
   include JourneyConcern
 
   ONELOGIN_JWT_CORE_IDENTITY_HASH_KEY = "https://vocab.account.gov.uk/v1/coreIdentityJWT".freeze
-  ONELOGIN_JWT_RETURN_CODE_HASH_KEY = "https://vocab.account.gov.uk/v1/returnCode".freeze
+  ONELOGIN_RETURN_CODE_HASH_KEY = "https://vocab.account.gov.uk/v1/returnCode".freeze
 
   def callback
     auth = request.env["omniauth.auth"]
@@ -62,7 +62,7 @@ class OmniauthCallbacksController < ApplicationController
   end
 
   def one_login_return_codes
-    omniauth_hash.extra.raw_info.fetch(ONELOGIN_JWT_RETURN_CODE_HASH_KEY, []).map { |hash| hash["code"] }
+    omniauth_hash.extra.raw_info.fetch(ONELOGIN_RETURN_CODE_HASH_KEY, []).map { |hash| hash["code"] }
   end
 
   def current_journey_routing_name

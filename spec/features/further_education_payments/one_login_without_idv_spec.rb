@@ -125,7 +125,7 @@ RSpec.feature "Further education payments" do
       },
       extra: {
         raw_info: {
-          OmniauthCallbacksController::ONELOGIN_JWT_RETURN_CODE_HASH_KEY => [{"code" => "ABC"}]
+          OmniauthCallbacksController::ONELOGIN_RETURN_CODE_HASH_KEY => [{"code" => "ABC"}]
         }
       }
     )
