@@ -18,8 +18,8 @@ module Journeys
       end
 
       def school
-        if journey_session.logged_in_with_tid_and_has_recent_tps_school?
-          journey_session.recent_tps_school
+        if answers.logged_in_with_tid_and_has_recent_tps_school?
+          answers.recent_tps_school
         else
           answers.claim_school
         end
@@ -35,7 +35,7 @@ module Journeys
 
       # Helper used in the view to choose partials and locale keys
       def tps_or_claim_school
-        if journey_session.logged_in_with_tid_and_has_recent_tps_school?
+        if answers.logged_in_with_tid_and_has_recent_tps_school?
           "tps_school"
         else
           "claim_school"
