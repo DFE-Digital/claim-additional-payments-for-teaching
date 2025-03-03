@@ -68,6 +68,17 @@ module Journeys
       def employed_at_recent_tps_school?
         employment_status.to_s == "recent_tps_school"
       end
+
+      def has_tps_school_for_student_loan_in_previous_financial_year?
+        tps_school_for_student_loan_in_previous_financial_year.present?
+      end
+
+      def tps_school_for_student_loan_in_previous_financial_year
+        @tps_school_for_student_loan_in_previous_financial_year ||=
+          TeachersPensionsService.tps_school_for_student_loan_in_previous_financial_year(
+            teacher_reference_number: teacher_id_user_info["trn"]
+          )
+      end
     end
   end
 end

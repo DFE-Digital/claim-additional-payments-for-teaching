@@ -19,7 +19,7 @@ module Journeys
       private
 
       def current_school
-        @current_school ||= journey_session.recent_tps_school || answers.current_school
+        @current_school ||= answers.recent_tps_school || answers.current_school
       end
 
       def change_school?
