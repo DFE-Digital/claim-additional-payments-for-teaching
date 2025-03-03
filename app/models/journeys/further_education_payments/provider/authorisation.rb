@@ -2,9 +2,8 @@ module Journeys
   module FurtherEducationPayments
     module Provider
       class Authorisation
-        def initialize(answers:, slug:)
+        def initialize(answers:)
           @answers = answers
-          @slug = slug
         end
 
         def failure_reason
@@ -12,14 +11,13 @@ module Journeys
           return :no_service_access unless answers.dfe_sign_in_service_access?
           return :claim_admin if claim_admin?
           return :incorrect_role unless role_permits_access?
-          return :already_verified if already_verified? && slug != "complete"
 
           nil
         end
 
         private
 
-        attr_reader :answers, :slug
+        attr_reader :answers
 
         def organisation_mismatch?
           answers.claim.school.ukprn != answers.dfe_sign_in_organisation_ukprn
@@ -43,10 +41,6 @@ module Journeys
             DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE,
             DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE
           ]
-        end
-
-        def already_verified?
-          answers.claim.eligibility.verified?
         end
       end
     end

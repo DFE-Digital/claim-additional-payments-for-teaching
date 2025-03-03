@@ -56,11 +56,9 @@ RSpec.feature "Provider verifying claims" do
     claim_link = Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
 
     visit claim_link
-
     click_on "Start now"
 
     expect(page).to have_text("You do not have access to this service")
-
     expect(page).to have_text(
       "You can request access to verify retention payments for further education teachers using DfE Sign-in."
     )
@@ -382,7 +380,6 @@ RSpec.feature "Provider verifying claims" do
     claim_link = Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
 
     visit claim_link
-
     click_on "Start now"
 
     expect(page).to have_text "This claim has already been verified"
@@ -524,7 +521,6 @@ RSpec.feature "Provider verifying claims" do
     end
 
     check "To the best of my knowledge, I confirm that the information provided in this form is correct."
-
     click_on "Submit"
 
     expect(page).to have_content "Verification complete"
