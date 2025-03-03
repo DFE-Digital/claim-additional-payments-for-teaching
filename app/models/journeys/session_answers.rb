@@ -7,6 +7,8 @@ module Journeys
     include Sessions::PiiAttributes
     include BooleanAttributes
 
+    attr_accessor :session
+
     attribute :current_school_id, :string, pii: false # UUID
     attribute :address_line_1, :string, pii: true
     attribute :address_line_2, :string, pii: true
