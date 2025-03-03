@@ -139,7 +139,7 @@ module Journeys
 
           sequence.delete("teacher-reference-number") if answers.logged_in_with_tid? && answers.teacher_reference_number.present?
 
-          sequence.delete("correct-school") unless journey_session.logged_in_with_tid_and_has_recent_tps_school?
+          sequence.delete("correct-school") unless answers.logged_in_with_tid_and_has_recent_tps_school?
           sequence.delete("current-school") if journey_session.answers.school_somewhere_else == false
 
           if answers.provide_mobile_number == false
