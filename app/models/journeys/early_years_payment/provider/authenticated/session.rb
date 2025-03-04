@@ -2,13 +2,7 @@ module Journeys
   module EarlyYearsPayment
     module Provider
       module Authenticated
-        class Session < Journeys::Session
-          attribute :answers, SessionAnswersType.new
-
-          def answers
-            super.tap { it.session = self }
-          end
-        end
+        class Session < Journeys::Session; end
       end
     end
   end
