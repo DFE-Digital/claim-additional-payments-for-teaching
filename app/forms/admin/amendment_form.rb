@@ -34,6 +34,11 @@ class Admin::AmendmentForm
       message: "Teacher reference number must be 7 digits"
     }
 
+  validates :date_of_birth,
+    presence: {
+      message: "Enter a date of birth"
+    }
+
   validates :bank_account_number,
     presence: {
       message: "Enter an account number"
@@ -50,6 +55,12 @@ class Admin::AmendmentForm
     }
 
   validate :validate_changes_present
+
+  def initialize(args)
+    super
+  rescue ActiveRecord::MultiparameterAssignmentErrors
+    self.date_of_birth = nil
+  end
 
   def valid?
     run_callbacks :validation do
