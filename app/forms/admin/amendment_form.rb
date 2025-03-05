@@ -104,7 +104,7 @@ class Admin::AmendmentForm
   end
 
   def show_award_amount?
-    claim.policy.in? [Policies::EarlyCareerPayments, Policies::TargetedRetentionIncentivePayments, Policies::FurtherEducationPayments]
+    claim.policy::Eligibility::AMENDABLE_ATTRIBUTES.include?(:award_amount)
   end
 
   def save
