@@ -6,7 +6,6 @@ class Admin::AmendmentForm
   include ActiveModel::Model
   include ActiveModel::Attributes
   include ActiveRecord::AttributeAssignment
-  include ApplicationHelper
 
   attribute :claim
   attribute :teacher_reference_number, :string
@@ -20,8 +19,8 @@ class Admin::AmendmentForm
   attribute :address_line_3, :string
   attribute :address_line_4, :string
   attribute :postcode, :string
-  attribute :student_loan_repayment_amount, :string
-  attribute :award_amount, :string
+  attribute :student_loan_repayment_amount, :decimal
+  attribute :award_amount, :decimal
   attribute :notes, :string
   attribute :created_by
 
@@ -93,13 +92,8 @@ class Admin::AmendmentForm
     self.address_line_4 = claim.address_line_4
     self.postcode = claim.postcode
 
-    if show_student_loan_repayment_amount?
-      self.student_loan_repayment_amount = currency_value_for_number_field(eligibility.student_loan_repayment_amount)
-    end
-
-    if show_award_amount?
-      self.award_amount = currency_value_for_number_field(eligibility.award_amount)
-    end
+    self.student_loan_repayment_amount = eligibility.student_loan_repayment_amount if show_student_loan_repayment_amount?
+    self.award_amount = eligibility.award_amount if show_award_amount?
   end
 
   def show_student_loan_repayment_amount?
@@ -140,27 +134,11 @@ class Admin::AmendmentForm
 
     claim_attributes.each do |attr, new_value|
       old_value = claim.public_send(attr)
-
-      case old_value
-      when Float, BigDecimal
-        unless new_value.nil?
-          new_value = BigDecimal(new_value)
-        end
-      end
-
       hash[attr] = [old_value, new_value]
     end
 
     eligibility_attributes.each do |attr, new_value|
       old_value = claim.eligibility.public_send(attr)
-
-      case old_value
-      when Float, BigDecimal
-        unless new_value.nil?
-          new_value = BigDecimal(new_value)
-        end
-      end
-
       hash[attr] = [old_value, new_value]
     end
 

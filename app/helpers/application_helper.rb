@@ -1,6 +1,4 @@
 module ApplicationHelper
-  include ActionView::Helpers::NumberHelper
-
   def page_title(title, journey: nil, show_error: false)
     [].tap do |a|
       a << "Error" if show_error

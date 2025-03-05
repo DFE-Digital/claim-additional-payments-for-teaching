@@ -172,7 +172,8 @@
         <%= f.govuk_text_field :student_loan_repayment_amount,
           prefix_text: "£",
           label: nil,
-          width: 5 %>
+          width: 5,
+          value: currency_value_for_number_field(@form.student_loan_repayment_amount) %>
       </div>
     </div>
   <% end %>
@@ -188,7 +189,8 @@
         <%= f.govuk_text_field :award_amount,
           prefix_text: "£",
           label: nil,
-          width: 5 %>
+          width: 5,
+          value: currency_value_for_number_field(@form.award_amount) %>
       </div>
     </div>
   <% end %>
