@@ -164,17 +164,7 @@ class Admin::AmendmentForm
   end
 
   def eligibility_attributes
-    hash = attributes.slice(*Policies::AMENDABLE_ELIGIBILITY_ATTRIBUTES.map(&:to_s))
-
-    if !show_student_loan_repayment_amount?
-      hash.delete("student_loan_repayment_amount")
-    end
-
-    if !show_award_amount?
-      hash.delete("award_amount")
-    end
-
-    hash
+    attributes.slice(*claim.policy::Eligibility::AMENDABLE_ATTRIBUTES.map(&:to_s))
   end
 
   def eligibility
