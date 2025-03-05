@@ -23,5 +23,6 @@ RSpec.describe Admin::AmendmentForm, type: :model do
     subject { described_class.new(claim:) }
 
     it { is_expected.to validate_presence_of(:date_of_birth).with_message("Enter a date of birth") }
+    it { is_expected.to validate_presence_of(:created_by) }
   end
 end

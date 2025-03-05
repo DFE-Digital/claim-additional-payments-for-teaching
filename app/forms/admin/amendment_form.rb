@@ -53,6 +53,9 @@ class Admin::AmendmentForm
       message: "Enter a message to explain why you are making this amendment"
     }
 
+  validates :created_by,
+    presence: true
+
   validate :validate_changes_present
 
   def initialize(args)
