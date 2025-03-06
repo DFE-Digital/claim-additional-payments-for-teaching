@@ -9,7 +9,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::EligibleIttSubjectF
     create(
       :targeted_retention_incentive_payments_session,
       answers: {
-        itt_academic_year_string: AcademicYear.current.to_s, # used to determine eligible subjects
+        itt_academic_year: AcademicYear.current.to_s, # used to determine eligible subjects
         teaching_subject_now: true, # reset if answers changed
         eligible_degree_subject: true # reset if answers changed
       }

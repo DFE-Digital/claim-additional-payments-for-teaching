@@ -1,9 +1,9 @@
 module Journeys
   module TargetedRetentionIncentivePayments
     class IttAcademicYearForm < Form
-      attribute :itt_academic_year_string, :string
+      attribute :itt_academic_year, :string
 
-      validates :itt_academic_year_string, inclusion: {
+      validates :itt_academic_year, inclusion: {
         in: ->(form) { form.radio_options.map(&:id) },
         message: ->(form, _) do
           form.t([:errors, :inclusion, form.answers.qualification])
@@ -18,7 +18,7 @@ module Journeys
         end
 
         journey_session.answers.assign_attributes(
-          itt_academic_year_string: itt_academic_year_string
+          itt_academic_year: itt_academic_year
         )
 
         journey_session.save!
@@ -33,6 +33,9 @@ module Journeys
           .push(none_of_the_above)
       end
 
+      # We implicitly rely on AcademicYear type casting "none_of_the_above"
+      # into a "none" AcademicYear. This is the same behaviour as the in
+      # AdditionalPayments journey.
       def none_of_the_above
         Option.new(
           id: NONE_OF_THE_ABOVE_ACADEMIC_YEAR,
@@ -43,7 +46,7 @@ module Journeys
       private
 
       def itt_academic_year_changed?
-        answers.itt_academic_year_string != itt_academic_year_string
+        answers.itt_academic_year != itt_academic_year
       end
 
       def reset_dependent_answers?

@@ -17,7 +17,7 @@
       <%= f.govuk_error_summary %>
 
       <%= f.govuk_radio_buttons_fieldset(
-        :itt_academic_year_string,
+        :itt_academic_year,
         legend: {
           text: @form.t([:question, @form.answers.qualification]),
           tag: "h1",
@@ -27,7 +27,7 @@
       ) do %>
         <% @form.radio_options.reject { it == @form.none_of_the_above }.each do |option| %>
           <%= f.govuk_radio_button(
-            :itt_academic_year_string,
+            :itt_academic_year,
             option.id,
             label: { text: option.name }
           ) %>
@@ -36,7 +36,7 @@
         <%= f.govuk_radio_divider %>
 
         <%= f.govuk_radio_button(
-          :itt_academic_year_string,
+          :itt_academic_year,
           @form.none_of_the_above.id,
           label: { text: @form.none_of_the_above.name }
         ) %>

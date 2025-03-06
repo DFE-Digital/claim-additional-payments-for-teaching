@@ -44,7 +44,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::IttAcademicYearForm
     end
 
     it do
-      is_expected.to validate_inclusion_of(:itt_academic_year_string).in_array(
+      is_expected.to validate_inclusion_of(:itt_academic_year).in_array(
         [
           "2019/2020",
           "2020/2021",
@@ -70,14 +70,29 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::IttAcademicYearForm
       let(:academic_year) { AcademicYear.new(2022) }
       let(:params) do
         {
-          itt_academic_year_string: academic_year.to_s
+          itt_academic_year: academic_year.to_s
         }
       end
 
-      context "when itt_academic_year_string has changed" do
+      context "when none of the above is selected" do
+        let(:params) do
+          {
+            itt_academic_year: "itt_academic_year_none"
+          }
+        end
+
+        it "saves the year as a none AcademicYear" do
+          expect { expect(form.save).to be(true) }.to(
+            change { journey_session.reload.answers.itt_academic_year }
+            .from(nil).to(AcademicYear.none)
+          )
+        end
+      end
+
+      context "when itt_academic_year has changed" do
         before do
           journey_session.answers.assign_attributes(
-            itt_academic_year_string: AcademicYear.new(2021).to_s
+            itt_academic_year: AcademicYear.new(2021)
           )
 
           journey_session.save!
@@ -86,8 +101,8 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::IttAcademicYearForm
         context "when qualifications_details_check is not true" do
           it "updates the session and resets the dependent answers" do
             expect { expect(form.save).to be(true) }.to(
-              change { journey_session.reload.answers.itt_academic_year_string }
-              .from(AcademicYear.new(2021).to_s).to(academic_year.to_s)
+              change { journey_session.reload.answers.itt_academic_year }
+              .from(AcademicYear.new(2021)).to(academic_year)
               .and(
                 change { journey_session.reload.answers.eligible_itt_subject }
                 .from("mathematics").to(nil)
@@ -107,8 +122,8 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::IttAcademicYearForm
 
           it "updates the session and does not reset the dependent answers" do
             expect { expect(form.save).to be(true) }.to(
-              change { journey_session.reload.answers.itt_academic_year_string }
-              .from(AcademicYear.new(2021).to_s).to(academic_year.to_s)
+              change { journey_session.reload.answers.itt_academic_year }
+              .from(AcademicYear.new(2021)).to(academic_year)
               .and(
                 not_change { journey_session.reload.answers.eligible_itt_subject }
               )
@@ -117,10 +132,10 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::IttAcademicYearForm
         end
       end
 
-      context "when itt_academic_year_string has not changed" do
+      context "when itt_academic_year has not changed" do
         before do
           journey_session.answers.assign_attributes(
-            itt_academic_year_string: academic_year.to_s
+            itt_academic_year: academic_year
           )
 
           journey_session.save!
@@ -128,8 +143,8 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::IttAcademicYearForm
 
         it "updates the session and does not reset the dependent answers" do
           expect { expect(form.save).to be(true) }.to(
-            not_change { journey_session.reload.answers.itt_academic_year_string }
-            .from(academic_year.to_s)
+            not_change { journey_session.reload.answers.itt_academic_year }
+            .from(academic_year)
             .and(
               not_change { journey_session.reload.answers.eligible_itt_subject }
             )
