@@ -1,7 +1,7 @@
 module Policies
   module FurtherEducationPayments
     class Eligibility < ApplicationRecord
-      AMENDABLE_ATTRIBUTES = [].freeze
+      AMENDABLE_ATTRIBUTES = [:award_amount, :teacher_reference_number].freeze
 
       self.table_name = "further_education_payments_eligibilities"
 

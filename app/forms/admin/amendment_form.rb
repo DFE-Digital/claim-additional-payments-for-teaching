@@ -25,6 +25,7 @@ class Admin::AmendmentForm
   attribute :created_by
 
   before_validation :normalise_bank_sort_code
+  before_validation :nilify_student_loan_repayment_plan
 
   validates :teacher_reference_number,
     length: {
@@ -124,6 +125,12 @@ class Admin::AmendmentForm
   end
 
   private
+
+  def nilify_student_loan_repayment_plan
+    if student_loan_plan == ""
+      self.student_loan_plan = nil
+    end
+  end
 
   def normalise_bank_sort_code
     return if bank_sort_code.nil?

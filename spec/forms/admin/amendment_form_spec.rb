@@ -19,10 +19,35 @@ RSpec.describe Admin::AmendmentForm, type: :model do
 
   describe "validations" do
     let(:claim) { build(:claim, :submitted) }
+    let(:current_user) { create(:dfe_signin_user) }
+    let(:notes) { "made some changes" }
 
-    subject { described_class.new(claim:) }
+    subject { described_class.new(claim:, created_by: current_user, notes:) }
 
     it { is_expected.to validate_presence_of(:date_of_birth).with_message("Enter a date of birth") }
     it { is_expected.to validate_presence_of(:created_by) }
+  end
+
+  describe "#save" do
+    let(:claim) { create(:claim, :submitted) }
+    let(:current_user) { create(:dfe_signin_user) }
+    let(:notes) { "made some changes" }
+
+    context "when student_loan_plan is empty string" do
+      subject do
+        described_class.new(
+          claim:,
+          created_by: current_user,
+          notes:,
+          student_loan_plan: ""
+        )
+      end
+
+      it "saves it as nil" do
+        subject.valid?
+        subject.save
+        expect(claim.reload.student_loan_plan).to be_nil
+      end
+    end
   end
 end
