@@ -23,7 +23,8 @@ module Journeys
         "teaching-subject-now" => TeachingSubjectNowForm,
         "check-your-answers-part-one" => CheckYourAnswersPartOneForm,
         "eligibility-confirmed" => EligibilityConfirmedForm,
-        "future-eligibility" => FutureEligibilityForm
+        "future-eligibility" => FutureEligibilityForm,
+        "ineligible" => IneligibleForm,
       }
     }
 

@@ -28,7 +28,7 @@ module Journeys
             qualification: dqt_or_answers(:qualification),
             itt_academic_year: dqt_or_answers(:itt_academic_year),
             eligible_degree_subject: dqt_or_answers(:eligible_degree_subject?),
-            eligible_itt_subject: dqt_or_answers(:eligible_itt_subject)
+            eligible_itt_subject: dqt_or_answers(:eligible_itt_subject),
           )
         else
           journey_session.answers.assign_attributes(

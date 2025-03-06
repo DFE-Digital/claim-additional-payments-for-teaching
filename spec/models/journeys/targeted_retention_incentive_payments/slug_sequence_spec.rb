@@ -651,7 +651,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
             logged_in_with_tid: true,
             details_check: true,
             teacher_id_user_info: {
-              "teacher_reference_number" => "1234567"
+              "trn" => "1234567"
             }
           )
 

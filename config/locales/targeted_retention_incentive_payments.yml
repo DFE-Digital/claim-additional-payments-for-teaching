@@ -203,5 +203,8 @@ en:
           By submitting this you are confirming that, to the best of your
           knowledge, the details you are providing are correct.
         btn_text: Accept and send
-
+      ineligible:
+        heading:
+          current_school: "The school you have selected is not eligible"
+          generic: "You are not eligible"
 

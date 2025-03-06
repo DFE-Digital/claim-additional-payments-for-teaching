@@ -44,7 +44,8 @@ module Journeys
       ]
 
       RESULTS_SLUGS = [
-        "check-your-answers"
+        "check-your-answers",
+        "ineligible"
       ]
 
       RESTRICTED_SLUGS = []
@@ -72,11 +73,17 @@ module Journeys
 
       def slugs
         [].tap do |sequence|
-          sequence.push(*eligibility_slugs)
+          sequence << "sign-in-or-continue"
+          sequence << "correct-school" if answers.logged_in_with_tid_and_has_recent_tps_school?
+          sequence << "current-school" unless answers.chose_recent_tps_school?
+          sequence << "nqt-in-academic-year-after-itt"
 
           # For trainee teachers, we don't show any further slugs after
           # future-eligibility
-          unless answers.trainee_teacher?
+          if answers.trainee_teacher?
+            sequence.push(*trainne_teacher_slugs)
+          else
+            sequence.push(*eligibility_slugs)
             sequence.push(*personal_details_slugs)
             sequence.push(*payment_details_slugs)
             sequence.push(*results_slugs)
@@ -86,33 +93,28 @@ module Journeys
 
       private
 
+      def trainne_teacher_slugs
+        [].tap do |sequence|
+          sequence << "eligible-itt-subject"
+          sequence << "eligible-degree-subject" if answers.eligible_itt_subject == "none_of_the_above"
+          sequence << "future-eligibility"
+        end
+      end
+
       def eligibility_slugs
         [].tap do |sequence|
-          sequence << "sign-in-or-continue"
-          sequence << "correct-school" if answers.logged_in_with_tid_and_has_recent_tps_school?
-          sequence << "current-school" unless answers.chose_recent_tps_school?
-          sequence << "nqt-in-academic-year-after-itt"
-
-          if answers.trainee_teacher?
-            # Trainee teacher path
-            sequence << "eligible-itt-subject"
-            sequence << "eligible-degree-subject" if answers.eligible_itt_subject == "none_of_the_above"
-            sequence << "future-eligibility"
-          else
-            # Qualified teacher path
-            sequence << "supply-teacher"
-            sequence << "entire-term-contract" if answers.employed_as_supply_teacher?
-            sequence << "employed-directly" if answers.employed_as_supply_teacher?
-            sequence << "poor-performance"
-            sequence << "qualification-details" if answers.dqt_record&.has_data_for_claim?
-            sequence << "qualification" unless answers.dqt_qualification.present?
-            sequence << "itt-year" unless answers.dqt_itt_academic_year.present?
-            sequence << "eligible-itt-subject" unless answers.dqt_eligible_itt_subject.present?
-            sequence << "eligible-degree-subject" if answers.eligible_itt_subject == "none_of_the_above"
-            sequence << "teaching-subject-now"
-            sequence << "check-your-answers-part-one"
-            sequence << "eligibility-confirmed"
-          end
+          sequence << "supply-teacher"
+          sequence << "entire-term-contract" if answers.employed_as_supply_teacher?
+          sequence << "employed-directly" if answers.employed_as_supply_teacher?
+          sequence << "poor-performance"
+          sequence << "qualification-details" if answers.dqt_record&.has_data_for_claim?
+          sequence << "qualification" unless answers.dqt_qualification.present?
+          sequence << "itt-year" unless answers.dqt_itt_academic_year.present?
+          sequence << "eligible-itt-subject" unless answers.dqt_eligible_itt_subject.present?
+          sequence << "eligible-degree-subject" if answers.eligible_itt_subject == "none_of_the_above"
+          sequence << "teaching-subject-now"
+          sequence << "check-your-answers-part-one"
+          sequence << "eligibility-confirmed"
         end
       end
 

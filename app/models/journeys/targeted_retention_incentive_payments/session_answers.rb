@@ -86,8 +86,9 @@ module Journeys
 
       def dqt_itt_academic_year
         return nil unless dqt_record && details_check?
+        return nil unless dqt_record.academic_date
 
-        dqt_record.itt_academic_year_for_claim
+        AcademicYear.for(dqt_record.academic_date)
       end
 
       def dqt_eligible_itt_subject

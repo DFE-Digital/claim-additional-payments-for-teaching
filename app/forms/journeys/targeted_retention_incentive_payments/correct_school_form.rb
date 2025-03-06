@@ -1,6 +1,3 @@
-# FIXME RL - write spec for this
-# FIXME RL - implement the change school on the ineligibile page as a separte
-# form
 module Journeys
   module TargetedRetentionIncentivePayments
     class CorrectSchoolForm < Form
@@ -13,7 +10,7 @@ module Journeys
       def initialize(...)
         super
 
-        self.confirm_recent_tps_school = !answers.chose_recent_tps_school?
+        self.confirm_recent_tps_school ||= !answers.chose_recent_tps_school?
       end
 
       def radio_options
