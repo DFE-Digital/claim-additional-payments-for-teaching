@@ -3,6 +3,7 @@ module DfeSignIn
     include Deletable
 
     SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE = "teacher_payments_access"
+    SERVICE_ADMIN_DFE_SIGN_IN_ROLE_CODE = "teacher_payments_admin"
     SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE = "teacher_payments_support"
     PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE = "teacher_payments_payroll"
 
@@ -40,6 +41,10 @@ module DfeSignIn
 
     def is_payroll_operator?
       role_codes.include?(PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+    end
+
+    def is_service_admin?
+      role_codes.include?(SERVICE_ADMIN_DFE_SIGN_IN_ROLE_CODE)
     end
 
     def has_admin_access?

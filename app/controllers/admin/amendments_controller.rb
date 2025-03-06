@@ -8,12 +8,12 @@ class Admin::AmendmentsController < Admin::BaseAdminController
 
   def new
     @amendment = @claim.amendments.build
-    @form = Admin::AmendmentForm.new(claim: @claim)
+    @form = Admin::AmendmentForm.new(claim: @claim, admin_user:)
     @form.load_data_from_claim
   end
 
   def create
-    @form = Admin::AmendmentForm.new(amendment_params.merge(claim: @claim, created_by: admin_user))
+    @form = Admin::AmendmentForm.new(amendment_params.merge(claim: @claim, admin_user:))
 
     if @form.valid? && @form.save
       redirect_to admin_claim_tasks_url(@claim), notice: "Claim has been amended successfully"
@@ -35,6 +35,8 @@ class Admin::AmendmentsController < Admin::BaseAdminController
   end
 
   def amendment_params
-    params.require(:amendment).permit(Claim::AMENDABLE_ATTRIBUTES + Policies::AMENDABLE_ELIGIBILITY_ATTRIBUTES + [:notes])
+    params
+      .require(:amendment)
+      .permit(Admin::AmendmentForm.amendable_attributes(claim: @claim, admin_user:))
   end
 end

@@ -212,3 +212,135 @@ RSpec.feature "Admin amends a claim" do
     end
   end
 end
+
+RSpec.feature "Admin amends a claim" do
+  before do
+    create(:journey_configuration, :student_loans)
+  end
+
+  context "when user has failed hmrc bank validation" do
+    let(:claim) do
+      create(
+        :claim,
+        :submitted,
+        hmrc_bank_validation_succeeded: false
+      )
+    end
+
+    context "when back office user is an admin" do
+      before do
+        sign_in_as_service_admin
+      end
+
+      scenario "admin can view and edit account name" do
+        visit admin_claim_url(claim)
+        click_link "Amend claim"
+
+        new_banking_name = "#{claim.banking_name}A"
+
+        expect(page).to have_field("Banking name", with: claim.banking_name)
+        fill_in "Banking name", with: new_banking_name
+        fill_in "Change notes", with: "update banking name"
+        click_button "Amend claim"
+
+        click_link "Amend claim"
+
+        expect(page).to have_field("Banking name", with: new_banking_name)
+      end
+    end
+
+    context "back office user does does not have admin role" do
+      before do
+        sign_in_as_service_operator
+      end
+
+      scenario "admin can view but not edit account name" do
+        visit admin_claim_url(claim)
+        click_link "Amend claim"
+
+        expect(page).to have_field("Banking name", with: claim.banking_name, disabled: true)
+      end
+    end
+  end
+
+  context "when user has passed hmrc bank validation" do
+    let(:claim) do
+      create(
+        :claim,
+        :submitted,
+        hmrc_bank_validation_succeeded: true
+      )
+    end
+
+    context "when back office user is an admin" do
+      before do
+        sign_in_as_service_admin
+      end
+
+      scenario "admin cannot view or edit account name" do
+        visit admin_claim_url(claim)
+        click_link "Amend claim"
+
+        expect(page).not_to have_field("Banking name", with: claim.banking_name)
+      end
+    end
+
+    context "back office user does does not have admin role" do
+      before do
+        sign_in_as_service_operator
+      end
+
+      scenario "admin can view but not edit account name" do
+        visit admin_claim_url(claim)
+        click_link "Amend claim"
+
+        expect(page).not_to have_field("Banking name", with: claim.banking_name)
+      end
+    end
+  end
+
+  context "when user has failed hmrc bank validation" do
+    let(:claim) do
+      create(
+        :claim,
+        :submitted,
+        hmrc_bank_validation_succeeded: false
+      )
+    end
+
+    context "when back office user is an admin" do
+      before do
+        sign_in_as_service_admin
+      end
+
+      scenario "admin can view and edit account name" do
+        visit admin_claim_url(claim)
+        click_link "Amend claim"
+
+        new_banking_name = "#{claim.banking_name}A"
+
+        expect(page).to have_field("Banking name", with: claim.banking_name)
+        fill_in "Banking name", with: new_banking_name
+        fill_in "Change notes", with: "update banking name"
+        click_button "Amend claim"
+
+        click_link "Amend claim"
+
+        expect(page).to have_field("Banking name", with: new_banking_name)
+      end
+    end
+
+    context "back office user does does not have admin role" do
+      before do
+        sign_in_as_service_operator
+      end
+
+      scenario "admin can view but not edit account name" do
+        visit admin_claim_url(claim)
+        click_link "Amend claim"
+
+        expect(page).to have_field("Banking name", with: claim.banking_name, disabled: true)
+      end
+    end
+  end
+end
