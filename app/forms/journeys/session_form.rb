@@ -3,6 +3,8 @@ module Journeys
     include ActiveModel::Model
     include ActiveModel::Attributes
 
+    attribute :service_access_code, :string
+
     def self.create!(params)
       new(params).tap(&:save!).journey_session
     end
