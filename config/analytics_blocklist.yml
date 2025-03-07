@@ -128,3 +128,9 @@
   - journey
   - created_at
   - updated_at
+  :feature_flags:
+  - id
+  - name
+  - enabled
+  - created_at
+  - updated_at
