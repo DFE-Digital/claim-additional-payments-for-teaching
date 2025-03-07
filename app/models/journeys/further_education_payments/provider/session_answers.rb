@@ -2,6 +2,24 @@ module Journeys
   module FurtherEducationPayments
     module Provider
       class SessionAnswers < Journeys::SessionAnswers
+        class JsonType < ActiveModel::Type::Value
+          def type
+            :jsonb
+          end
+
+          def serialize(value)
+            ActiveSupport::JSON.encode(value)
+          end
+
+          def cast(value)
+            case value
+            when Hash then value
+            when String then ActiveSupport::JSON.decode(value)
+            else fail "Unexpected value: #{value.inspect}"
+            end
+          end
+        end
+
         attribute :claim_id, :string, pii: false
         attribute :declaration, :boolean, pii: false
         attribute :dfe_sign_in_uid, :string, pii: false
@@ -14,6 +32,7 @@ module Journeys
         attribute :dfe_sign_in_last_name, :string, pii: true
         attribute :dfe_sign_in_email, :string, pii: true
         attribute :claim_started_verified, :boolean, pii: false
+        attribute :verification, JsonType.new, default: {}, pii: true
 
         def claim
           @claim ||= Claim.includes(eligibility: :school).find(claim_id)
