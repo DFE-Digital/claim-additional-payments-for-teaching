@@ -41,7 +41,7 @@ module Admin
     end
 
     def developer_session
-      DfeSignIn::AuthenticatedSession.new(nil, nil, ["teacher_payments_access"])
+      DfeSignIn::AuthenticatedSession.new(nil, nil, params[:roles])
     end
   end
 end

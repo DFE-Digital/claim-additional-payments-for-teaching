@@ -5,9 +5,10 @@
     </h1>
 
     <% if DfESignIn.bypass? %>
-      <%= button_to 'Sign in (bypass DfE Sign-in)', admin_dfe_sign_in_bypass_callback_path, class: 'govuk-button' %>
+      <%= govuk_button_to 'Sign in (bypass DfE Sign-in)', admin_dfe_sign_in_bypass_callback_path, params: { roles: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE] } %>
+      <%= govuk_button_to 'Sign in as admin (bypass DfE Sign-in)', admin_dfe_sign_in_bypass_callback_path, params: { roles: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::SERVICE_ADMIN_DFE_SIGN_IN_ROLE_CODE] } %>
     <% else %>
-      <%= button_to "Sign in", "/admin/auth/dfe", class: "govuk-button" %>
+      <%= govuk_button_to "Sign in", "/admin/auth/dfe" %>
     <% end %>
   </div>
 </div>
