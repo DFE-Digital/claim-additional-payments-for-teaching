@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_26_151104) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_07_152200) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -237,6 +237,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_26_151104) do
     t.uuid "file_upload_id"
     t.index ["academic_year", "ukprn", "file_upload_id"], name: "idx_on_academic_year_ukprn_file_upload_id_d31aaa765c", unique: true
     t.index ["file_upload_id"], name: "index_eligible_fe_providers_on_file_upload_id"
+  end
+
+  create_table "feature_flags", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "name", null: false
+    t.boolean "enabled", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_feature_flags_on_name", unique: true
   end
 
   create_table "file_uploads", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
