@@ -8,10 +8,13 @@ class Admin::AmendmentForm
   include ActiveRecord::AttributeAssignment
 
   attribute :claim
+  attribute :admin_user
+
   attribute :teacher_reference_number, :string
   attribute :national_insurance_number, :string
   attribute :date_of_birth, :date
   attribute :student_loan_plan, :string
+  attribute :banking_name, :string
   attribute :bank_sort_code, :string
   attribute :bank_account_number, :string
   attribute :address_line_1, :string
@@ -22,7 +25,6 @@ class Admin::AmendmentForm
   attribute :student_loan_repayment_amount, :decimal
   attribute :award_amount, :decimal
   attribute :notes, :string
-  attribute :created_by
 
   before_validation :normalise_bank_sort_code
   before_validation :nilify_student_loan_repayment_plan
@@ -54,10 +56,20 @@ class Admin::AmendmentForm
       message: "Enter a message to explain why you are making this amendment"
     }
 
-  validates :created_by,
+  validates :admin_user,
     presence: true
 
   validate :validate_changes_present
+
+  def self.amendable_attributes(claim:, admin_user:)
+    array = Claim::AMENDABLE_ATTRIBUTES + claim.policy::Eligibility::AMENDABLE_ATTRIBUTES + [:notes]
+
+    if admin_user.is_service_admin?
+      array << :banking_name
+    end
+
+    array
+  end
 
   def initialize(args)
     super
@@ -87,6 +99,7 @@ class Admin::AmendmentForm
     self.date_of_birth = claim.date_of_birth
     self.student_loan_plan = claim.student_loan_plan
 
+    self.banking_name = claim.banking_name
     self.bank_sort_code = claim.bank_sort_code
     self.bank_account_number = claim.bank_account_number
 
@@ -122,6 +135,14 @@ class Admin::AmendmentForm
 
       amendment.persisted?
     end
+  end
+
+  def banking_name_disabled?
+    !admin_user.is_service_admin?
+  end
+
+  def show_banking_name?
+    !claim.hmrc_bank_validation_succeeded?
   end
 
   private
@@ -166,11 +187,19 @@ class Admin::AmendmentForm
   end
 
   def amendment_attributes
-    attributes.slice("notes", "created_by")
+    hash = attributes.slice("notes")
+    hash["created_by"] = admin_user
+    hash
   end
 
   def claim_attributes
-    attributes.slice(*Claim::AMENDABLE_ATTRIBUTES.map(&:to_s))
+    hash = attributes.slice(*Claim::AMENDABLE_ATTRIBUTES.map(&:to_s))
+
+    if admin_user.is_service_admin?
+      hash[:banking_name] = banking_name
+    end
+
+    hash
   end
 
   def eligibility_attributes

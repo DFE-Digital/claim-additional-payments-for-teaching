@@ -70,6 +70,22 @@
     </div>
   </div>
 
+  <% if @form.show_banking_name? %>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-third">
+        <div class="govuk-body">
+          <%= label_tag "amendment-banking-name-field", "Banking name" %>
+        </div>
+      </div>
+      <div class="govuk-grid-column-two-thirds">
+        <%= f.govuk_text_field :banking_name,
+          label: nil,
+          width: 10,
+          disabled: @form.banking_name_disabled? %>
+      </div>
+    </div>
+  <% end %>
+
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third">
       <div class="govuk-body">
