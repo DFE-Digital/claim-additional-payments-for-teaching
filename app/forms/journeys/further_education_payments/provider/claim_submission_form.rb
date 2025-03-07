@@ -3,14 +3,38 @@ module Journeys
   module FurtherEducationPayments
     module Provider
       class ClaimSubmissionForm
-        def initialize(journey_session)
+        def initialize(journey_session:)
           @journey_session = journey_session
+          @answers = journey_session.answers
         end
 
-        # We don't want page sequence to redirect us
         def valid?
-          false
+          answers.verification.present?
         end
+
+        def save!
+          raise ActiveRecord::RecordInvalid unless valid?
+
+          claim = answers.claim
+
+          ApplicationRecord.transaction do
+            claim.update!(verified_at: DateTime.now)
+
+            claim.eligibility.update!(verification: answers.verification)
+          end
+
+          ClaimMailer
+            .further_education_payment_provider_confirmation_email(claim)
+            .deliver_later
+
+          ClaimVerifierJob.perform_later(claim)
+
+          true
+        end
+
+        private
+
+        attr_reader :answers
       end
     end
   end

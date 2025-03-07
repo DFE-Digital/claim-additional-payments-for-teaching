@@ -107,36 +107,24 @@ module Journeys
         def save
           return false unless valid?
 
-          ApplicationRecord.transaction do
-            verified_at = DateTime.now
+          journey_session.answers.assign_attributes(
+            verification: {
+              assertions: assertions.map(&:attributes),
+              verifier: {
+                dfe_sign_in_uid: answers.dfe_sign_in_uid,
+                first_name: answers.dfe_sign_in_first_name,
+                last_name: answers.dfe_sign_in_last_name,
+                email: answers.dfe_sign_in_email,
+                dfe_sign_in_organisation_name: answers.dfe_sign_in_organisation_name,
+                dfe_sign_in_role_codes: answers.dfe_sign_in_role_codes
+              },
+              created_at: DateTime.now
+            }
+          )
 
-            claim.eligibility.update!(
-              verification: {
-                assertions: assertions.map(&:attributes),
-                verifier: {
-                  dfe_sign_in_uid: answers.dfe_sign_in_uid,
-                  first_name: answers.dfe_sign_in_first_name,
-                  last_name: answers.dfe_sign_in_last_name,
-                  email: answers.dfe_sign_in_email,
-                  dfe_sign_in_organisation_name: answers.dfe_sign_in_organisation_name,
-                  dfe_sign_in_role_codes: answers.dfe_sign_in_role_codes
-                },
-                created_at: verified_at
-              }
-            )
+          journey_session.save!
 
-            claim.verified_at = verified_at
-
-            claim.save!
-          end
-
-          ClaimMailer
-            .further_education_payment_provider_confirmation_email(claim)
-            .deliver_later
-
-          ClaimVerifierJob.perform_later(claim)
-
-          true
+          ClaimSubmissionForm.new(journey_session: journey_session).save!
         end
 
         def contract_type
