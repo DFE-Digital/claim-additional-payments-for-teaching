@@ -41,6 +41,16 @@ module Journeys
         def dfe_sign_in_service_access?
           !!dfe_sign_in_service_access
         end
+
+        # We need to do this to get the base form to set existing verification
+        # attributes from the session on the verification form.
+        attribute :assertions_attributes, pii: false
+        def assertions_attributes
+          verification
+            .fetch("assertions", [])
+            .map(&:with_indifferent_access)
+            .index_by(&:itself)
+        end
       end
     end
   end

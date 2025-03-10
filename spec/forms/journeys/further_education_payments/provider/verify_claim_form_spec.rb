@@ -369,4 +369,103 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
       )
     end
   end
+
+  describe "initialize" do
+    context "with a existing verified session" do
+      before do
+        journey_session.answers.assign_attributes(
+          verification: {
+            "assertions" => [
+              {
+                "name" => "contract_type",
+                "outcome" => true
+              },
+              {
+                "name" => "teaching_responsibilities",
+                "outcome" => true
+              },
+              {
+                "name" => "further_education_teaching_start_year",
+                "outcome" => true
+              },
+              {
+                "name" => "teaching_hours_per_week",
+                "outcome" => true
+              },
+              {
+                "name" => "half_teaching_hours",
+                "outcome" => false
+              },
+              {
+                "name" => "subjects_taught",
+                "outcome" => false
+              },
+              {
+                "name" => "subject_to_formal_performance_action",
+                "outcome" => false
+              },
+              {
+                "name" => "subject_to_disciplinary_action",
+                "outcome" => false
+              }
+            ],
+            "verifier" => {
+              "dfe_sign_in_uid" => "123",
+              "first_name" => "Seymour",
+              "last_name" => "Skinner",
+              "email" => "seymour.skinner@springfield-elementary.edu",
+              "dfe_sign_in_organisation_name" => "Springfield Elementary",
+              "dfe_sign_in_role_codes" => ["teacher_payments_claim_verifier"]
+            },
+            "created_at" => "2024-01-01T12:00:00.000+00:00"
+          }
+        )
+
+        journey_session.save!
+      end
+
+      it "sets the attributes on the form" do
+        expect(form.assertions.map(&:attributes)).to eq(
+          [
+            {
+              "name" => "contract_type",
+              "outcome" => true
+            },
+            {
+              "name" => "teaching_responsibilities",
+              "outcome" => true
+            },
+            {
+              "name" => "further_education_teaching_start_year",
+              "outcome" => true
+            },
+            {
+              "name" => "teaching_hours_per_week",
+              "outcome" => true
+            },
+            {
+              "name" => "half_teaching_hours",
+              "outcome" => false
+            },
+            {
+              "name" => "subjects_taught",
+              "outcome" => false
+            },
+            {
+              "name" => "subject_to_formal_performance_action",
+              "outcome" => false
+            },
+            {
+              "name" => "subject_to_disciplinary_action",
+              "outcome" => false
+            }
+          ],
+        )
+      end
+
+      it "creates a valid form" do
+        expect(form).to be_valid
+      end
+    end
+  end
 end
