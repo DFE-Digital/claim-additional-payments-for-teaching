@@ -297,6 +297,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_10_160859) do
     t.boolean "claimant_valid_passport"
     t.string "claimant_passport_number"
     t.datetime "claimant_identity_verified_at"
+    t.boolean "valid_passport"
+    t.text "passport_number"
     t.index ["possible_school_id"], name: "index_fe_payments_eligibilities_on_possible_school_id"
     t.index ["school_id"], name: "index_fe_payments_eligibilities_on_school_id"
   end
