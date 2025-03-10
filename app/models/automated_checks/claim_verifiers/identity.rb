@@ -19,7 +19,7 @@ module AutomatedChecks
 
         if claim.identity_confirmed_with_onelogin?
           one_login
-        elsif claim.onelogin_idv_at.present? && !claim.identity_confirmed_with_onelogin?
+        elsif FeatureFlag.enabled?(:alternative_idv) && claim.onelogin_idv_at.present? && !claim.identity_confirmed_with_onelogin?
           # noop
           # TODO: tbd what happens when OL user that fails OL idv comes thru
         else
