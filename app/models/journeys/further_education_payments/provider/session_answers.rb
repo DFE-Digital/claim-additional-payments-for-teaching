@@ -33,6 +33,12 @@ module Journeys
         attribute :dfe_sign_in_email, :string, pii: true
         attribute :claim_started_verified, :boolean, pii: false
         attribute :verification, JsonType.new, default: {}, pii: true
+        attribute :claimant_date_of_birth, :date, pii: true
+        attribute :claimant_postcode, :string, pii: true
+        attribute :claimant_national_insurance_number, :string, pii: true
+        attribute :claimant_valid_passport, :boolean, pii: false
+        attribute :claimant_passport_number, :string, pii: true
+        attribute :claimant_identity_verified_at, :datetime, pii: false
 
         def claim
           @claim ||= Claim.includes(eligibility: :school).find(claim_id)
@@ -40,6 +46,10 @@ module Journeys
 
         def dfe_sign_in_service_access?
           !!dfe_sign_in_service_access
+        end
+
+        def claim_verified?
+          verification.present?
         end
 
         # We need to do this to get the base form to set existing verification
@@ -50,6 +60,11 @@ module Journeys
             .fetch("assertions", [])
             .map(&:with_indifferent_access)
             .index_by(&:itself)
+        end
+
+        def identity_verification_required?
+          claim.onelogin_idv_at.present? &&
+            !claim.identity_confirmed_with_onelogin?
         end
       end
     end

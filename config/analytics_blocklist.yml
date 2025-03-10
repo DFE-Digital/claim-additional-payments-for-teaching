@@ -100,6 +100,11 @@
   - school_headteacher_name
   :further_education_payments_eligibilities:
   - verification
+  - claimant_date_of_birth
+  - claimant_postcode
+  - claimant_national_insurance_number
+  - claimant_valid_passport
+  - claimant_passport_number
   :journeys_sessions:
   - answers
   :early_years_payment_eligibilities:

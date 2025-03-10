@@ -6,13 +6,15 @@ module Journeys
           "sign-in",
           "unauthorised",
           "verify-claim",
+          "verify-identity",
           "complete",
           "expired-link",
           "already-verified"
         ]
 
         RESTRICTED_SLUGS = [
-          "verify-claim"
+          "verify-claim",
+          "verify-identity"
         ]
 
         def self.verify_claim_url(claim)
@@ -63,6 +65,7 @@ module Journeys
           end
 
           array << "verify-claim"
+          array << "verify-identity" if answers.identity_verification_required?
           array << "complete"
           array
         end
