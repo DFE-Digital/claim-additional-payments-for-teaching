@@ -314,6 +314,7 @@ shared:
     - teacher_reference_number
     - provider_verification_email_count
     - claimant_identity_verified_at
+    - valid_passport
   :eligible_fe_providers:
     - id
     - ukprn

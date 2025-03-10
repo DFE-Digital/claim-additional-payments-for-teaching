@@ -33,6 +33,7 @@ module Journeys
         "check-your-answers" => CheckYourAnswersForm,
         "half-teaching-hours" => HalfTeachingHoursForm,
         "hours-teaching-eligible-subjects" => HoursTeachingEligibleSubjectsForm,
+        "passport" => PassportForm,
         "eligible" => EligibleForm,
         "ineligible" => IneligibleForm,
         "teacher-reference-number" => TeacherReferenceNumberForm
