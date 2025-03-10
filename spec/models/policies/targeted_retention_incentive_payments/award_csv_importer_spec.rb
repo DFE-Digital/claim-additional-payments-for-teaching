@@ -64,7 +64,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::AwardCsvImporter do
 
       it "retains old data" do
         importer.process
-        expect { old_award_same_academic_year.reload }.not_to raise_error(ActiveRecord::RecordNotFound)
+        expect { old_award_same_academic_year.reload }.not_to raise_error
       end
 
       it "does not delete data from other academic years" do
