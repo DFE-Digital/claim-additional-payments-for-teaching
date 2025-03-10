@@ -928,4 +928,230 @@ RSpec.feature "Provider verifying claims" do
 
     expect(page).to have_content("claim reference #{claim.reference}")
   end
+
+  scenario "provider verifies a claim that requires id verification" do
+    fe_provider = create(:school, :further_education, name: "Springfield A and M")
+
+    create(
+      :eligible_fe_provider,
+      primary_key_contact_email_address: "g.chalmers@springfield-unified-school-district.edu",
+      ukprn: fe_provider.ukprn
+    )
+
+    claim = create(
+      :claim,
+      first_name: "Edna",
+      surname: "Krabappel",
+      date_of_birth: Date.new(1945, 7, 3),
+      reference: "AB123456",
+      created_at: DateTime.new(2024, 8, 1, 9, 0, 0),
+      onelogin_idv_at: DateTime.new(2024, 8, 1, 9, 0, 0),
+      identity_confirmed_with_onelogin: false
+    )
+
+    create(
+      :further_education_payments_eligibility,
+      claim: claim,
+      school: fe_provider,
+      teaching_hours_per_week: "between_2_5_and_12",
+      contract_type: "fixed_term",
+      fixed_term_full_year: false,
+      subjects_taught: ["engineering_manufacturing"],
+      engineering_manufacturing_courses: [
+        "approved_level_321_transportation",
+        "level2_3_apprenticeship"
+      ],
+      teacher_reference_number: "1234567"
+    )
+
+    mock_dfe_sign_in_auth_session(
+      provider: :dfe_fe_provider,
+      auth_hash: {
+        uid: "11111",
+        extra: {
+          raw_info: {
+            organisation: {
+              id: "22222",
+              ukprn: fe_provider.ukprn
+            }
+          }
+        }
+      }
+    )
+
+    stub_dfe_sign_in_user_info_request(
+      "11111",
+      "22222",
+      Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
+    )
+
+    allow(ClaimVerifierJob).to receive(:perform_later)
+
+    claim_link = Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
+
+    visit claim_link
+
+    click_on "Start now"
+
+    expect(page).to have_text "Review a targeted retention incentive payment claim"
+
+    expect(page).to have_summary_item(
+      key: "Claim reference",
+      value: "AB123456"
+    )
+
+    expect(page).to have_summary_item(
+      key: "Claimant name",
+      value: "Edna Krabappel"
+    )
+
+    expect(page).to have_summary_item(
+      key: "Claimant date of birth",
+      value: "3 July 1945"
+    )
+
+    expect(page).to have_summary_item(
+      key: "Claimant teacher reference number (TRN)",
+      value: "1234567"
+    )
+
+    expect(page).to have_summary_item(
+      key: "Claim date",
+      value: "1 August 2024"
+    )
+
+    within_fieldset(
+      "Does Edna Krabappel have a fixed-term contract of employment at " \
+      "Springfield A and M?"
+    ) do
+      choose "Yes"
+    end
+
+    within_fieldset(
+      "Is Edna Krabappel a member of staff with teaching responsibilities?"
+    ) do
+      choose "Yes"
+    end
+
+    within_fieldset(
+      "Is Edna Krabappel in the first 5 years of their further education " \
+      "teaching career in England?"
+    ) do
+      choose "Yes"
+    end
+
+    within_fieldset(
+      "Has Edna Krabappel taught for at least one academic term at " \
+      "Springfield A and M?"
+    ) do
+      choose "Yes"
+    end
+
+    within_fieldset(
+      "Is Edna Krabappel timetabled to teach an average of 2.5 hours or " \
+      "more but less than 12 hours per week"
+    ) do
+      choose "Yes"
+    end
+
+    within_fieldset(
+      "For at least half of their timetabled teaching hours, does " \
+      "Edna Krabappel teach 16- to 19-year-olds, including those up to " \
+      "age 25 with an Education, Health and Care Plan (EHCP)?"
+    ) do
+      choose "Yes"
+    end
+
+    expect(page).to have_text(
+      "Qualifications approved for funding at level 3 and below in the " \
+      "transportation operations and maintenance (opens in new tab) sector " \
+      "subject area"
+    )
+
+    expect(page).to have_text(
+      "Level 2 or level 3 apprenticeships in the engineering and " \
+      "manufacturing occupational route (opens in new tab)"
+    )
+
+    within_fieldset(
+      "For at least half of their timetabled teaching hours, does " \
+      "Edna Krabappel teach:"
+    ) do
+      choose "Yes"
+    end
+
+    within_fieldset(
+      "Will Edna Krabappel be timetabled to teach at least 2.5 hours per " \
+      "week next term?"
+    ) do
+      choose "Yes"
+    end
+
+    within_fieldset(
+      "Can you confirm that Edna Krabappel is not currently subject to any " \
+      "performance measures as a result of continuous poor teaching standards?"
+    ) do
+      choose "Yes"
+    end
+
+    within_fieldset(
+      "Can you confirm that Edna Krabappel is not currently subject to " \
+      "disciplinary action?"
+    ) do
+      choose "Yes"
+    end
+
+    perform_enqueued_jobs do
+      click_on "Continue"
+    end
+
+    expect("g.chalmers@springfield-unified-school-district.edu").not_to(
+      have_received_email(
+        ApplicationMailer::FURTHER_EDUCATION_PAYMENTS[:CLAIM_PROVIDER_VERIFICATION_CONFIRMATION_EMAIL_TEMPLATE_ID]
+      )
+    )
+
+    expect(page.current_path).to end_with "verify-identity"
+
+    expect(page).to have_content(
+      "We need you to verify the claimant’s identity"
+    )
+
+    fill_in "Day", with: "3"
+    fill_in "Month", with: "7"
+    fill_in "Year", with: "1945"
+
+    fill_in(
+      "What is the postcode of Edna Krabappel’s current home address?",
+      with: "TE57 1NG"
+    )
+
+    fill_in(
+      "What is Edna Krabappel’s National Insurance number?",
+      with: "QQ123456C"
+    )
+
+    choose "Yes" # has valid passport
+
+    fill_in("Passport number", with: "123456789")
+
+    check(
+      "To the best of my knowledge, I confirm that I have verified the " \
+      "claimant’s identity and the information provided in this form is " \
+      "correct."
+    )
+
+    perform_enqueued_jobs do
+      click_on "Submit"
+    end
+
+    expect("g.chalmers@springfield-unified-school-district.edu").to(
+      have_received_email(
+        ApplicationMailer::FURTHER_EDUCATION_PAYMENTS[:CLAIM_PROVIDER_VERIFICATION_CONFIRMATION_EMAIL_TEMPLATE_ID]
+      )
+    )
+
+    expect(page).to have_content "Verification complete"
+    expect(page).to have_text "Claim reference number AB123456"
+  end
 end

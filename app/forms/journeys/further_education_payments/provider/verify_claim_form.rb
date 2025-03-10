@@ -36,9 +36,11 @@ module Journeys
 
         attribute :declaration, :boolean
 
+        # If we require identity verification, we show the declaration on the
+        # next page.
         validates :declaration, acceptance: {
           message: i18n_error_message("declaration.acceptance")
-        }
+        }, unless: -> { answers.identity_verification_required? }
 
         validate :all_assertions_answered
 
@@ -124,7 +126,13 @@ module Journeys
 
           journey_session.save!
 
-          ClaimSubmissionForm.new(journey_session: journey_session).save!
+          # If identity verification is required there's a subsequent step
+          # before we can trigger claim submission.
+          unless answers.identity_verification_required?
+            ClaimSubmissionForm.new(journey_session: journey_session).save!
+          end
+
+          true
         end
 
         def contract_type
@@ -136,7 +144,7 @@ module Journeys
         end
 
         def completed?
-          claim.eligibility.verified?
+          answers.claim_verified?
         end
 
         private
