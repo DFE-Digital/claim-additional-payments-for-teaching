@@ -176,7 +176,11 @@ class OmniauthCallbacksController < ApplicationController
     if request.path == "/auth/onelogin"
       OmniAuth::AuthHash.new(uid: "12345", info: {email: "test@example.com"}, extra: {raw_info: {}})
     elsif request.path == "/auth/onelogin_identity"
-      OmniAuth::AuthHash.new(uid: "12345", info: {email: ""}, extra: {raw_info: {ONELOGIN_RETURN_CODE_HASH_KEY => [{"code" => "ABC"}]}})
+      if FeatureFlag.enabled?(:alternative_idv)
+        OmniAuth::AuthHash.new(uid: "12345", info: {email: ""}, extra: {raw_info: {ONELOGIN_RETURN_CODE_HASH_KEY => [{"code" => "ABC"}]}})
+      else
+        OmniAuth::AuthHash.new(uid: "12345", info: {email: ""}, extra: {raw_info: {ONELOGIN_JWT_CORE_IDENTITY_HASH_KEY => "test"}})
+      end
     end
   end
 

@@ -6,7 +6,7 @@ RSpec.feature "Further education payments" do
   let(:college) { create(:school, :further_education, :fe_eligible) }
   let(:expected_award_amount) { college.eligible_fe_provider.max_award_amount }
 
-  scenario "claim with failed OL idv" do
+  scenario "claim with failed OL idv", feature_flag: :alternative_idv do
     when_student_loan_data_exists
     when_further_education_payments_journey_configuration_exists
     and_college_exists
