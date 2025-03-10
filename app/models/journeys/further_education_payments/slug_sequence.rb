@@ -34,6 +34,7 @@ module Journeys
         postcode-search
         select-home-address
         address
+        passport
         email-address
         email-verification
         provide-mobile-number
@@ -144,6 +145,10 @@ module Journeys
 
           if answers.address_line_1.present? && answers.postcode.present?
             sequence.delete("address")
+          end
+
+          if !FeatureFlag.enabled?(:alternative_idv)
+            sequence.delete("passport")
           end
 
           if !eligibility_checker.ineligible?
