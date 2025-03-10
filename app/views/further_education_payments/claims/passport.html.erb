@@ -1,0 +1,18 @@
+<% content_for(:page_title, page_title(@form.t(:question), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_radio_buttons_fieldset(:valid_passport, legend: { tag: "h1", size: "l", text: @form.t(:question) }, hint: { text: "You can check if a passport is valid by looking at the expiration date on the passport photo page" }) do %>
+        <%= f.govuk_radio_button :valid_passport, "true", label: { text: "Yes" }, link_errors: true do %>
+          <%= f.govuk_text_field :passport_number, label: { text: "Passport number", size: "s" }, hint: { text: "This is the 9 digit number in the top right hand corner of the photo page in your passport" } %>
+        <% end %>
+        <%= f.govuk_radio_button :valid_passport, "false", label: { text: "No" } %>
+      <% end %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

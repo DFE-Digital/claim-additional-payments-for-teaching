@@ -25,6 +25,8 @@ module Journeys
       attribute :subject_to_disciplinary_action, :boolean, pii: false
       attribute :half_teaching_hours, :boolean, pii: false
       attribute :award_amount, :decimal, pii: false
+      attribute :valid_passport, :boolean, pii: false
+      attribute :passport_number, :string, pii: true
 
       def policy
         Policies::FurtherEducationPayments
