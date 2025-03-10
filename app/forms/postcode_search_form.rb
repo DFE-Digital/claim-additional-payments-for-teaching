@@ -7,7 +7,14 @@ class PostcodeSearchForm < Form
     length: {maximum: 11, message: "Postcode must be 11 characters or less"},
     if: -> { !skip_postcode_search? }
 
-  validate :postcode_is_valid, if: -> { !skip_postcode_search? && postcode.present? }
+  validates(
+    :postcode,
+    postcode_format: {
+      message: "Enter a postcode in the correct format"
+    },
+    if: -> { !skip_postcode_search? && postcode.present? }
+  )
+
   validate :postcode_has_address, if: -> { !skip_postcode_search && postcode.present? }
 
   def save
@@ -44,7 +51,7 @@ class PostcodeSearchForm < Form
   end
 
   def postcode_has_address
-    return nil unless postcode_is_valid?
+    return nil unless UKPostcode.parse(postcode).full_valid?
     return unless address_data.nil?
 
     errors.add(:postcode, "Address not found")
@@ -53,15 +60,5 @@ class PostcodeSearchForm < Form
 
     journey_session.answers.assign_attributes(ordnance_survey_error: true)
     journey_session.save!
-  end
-
-  def postcode_is_valid
-    return if postcode_is_valid?
-
-    errors.add(:postcode, "Enter a postcode in the correct format")
-  end
-
-  def postcode_is_valid?
-    UKPostcode.parse(postcode).full_valid?
   end
 end
