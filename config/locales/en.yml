@@ -1336,6 +1336,42 @@ en:
               label: "Can you confirm that %{claimant} is not currently subject to disciplinary action?"
               errors:
                 inclusion: "Select yes if %{claimant} is not currently subject to disciplinary action"
+      verify_identity:
+        title: "We need you to verify the claimant’s identity"
+        claimant_date_of_birth:
+          label: "What is %{claimant}’s date of birth?"
+          errors:
+            blank: "Enter %{claimant}’s date of birth"
+        claimant_postcode:
+          label: "What is the postcode of %{claimant}’s current home address?"
+          hint: "For example ’AA1 2BC’"
+          errors:
+            blank: "Enter %{claimant}’s postcode"
+            invalid: "Enter a postcode in the correct format"
+        claimant_national_insurance_number:
+          label: "What is %{claimant}’s National Insurance number?"
+          hint: "For example ’QQ123456C’"
+          errors:
+            blank: "Enter %{claimant}’s National Insurance number"
+            invalid: "Enter a National Insurance number in the correct format"
+        claimant_valid_passport:
+          label: "Does %{claimant} have a valid passport?"
+          hint: "You can check if a passport is valid by looking at the expiration date"
+          options:
+            true: "Yes"
+            false: "No"
+          errors:
+            inclusion: "Select yes if %{claimant} has a valid passport"
+        claimant_passport_number:
+          label: "Passport number"
+          hint: "This is the number in the top right hand corner of the photo page in the passport"
+          errors:
+            blank: "Enter %{claimant}’s passport number"
+        declaration:
+          legend: "Declaration"
+          label: "To the best of my knowledge, I confirm that I have verified the claimant’s identity and the information provided in this form is correct."
+          errors:
+            acceptance: "Tick the box to confirm that you have verified the claimant’s identity and the information provided in this form is correct"
 
   early_years_payment:
     claim_description: for an early years financial incentive payment

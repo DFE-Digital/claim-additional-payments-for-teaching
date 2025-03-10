@@ -9,6 +9,10 @@ module Journeys
         end
 
         def valid?
+          if answers.identity_verification_required?
+            return false unless answers.claimant_identity_verified_at.present?
+          end
+
           answers.verification.present?
         end
 
@@ -20,7 +24,15 @@ module Journeys
           ApplicationRecord.transaction do
             claim.update!(verified_at: DateTime.now)
 
-            claim.eligibility.update!(verification: answers.verification)
+            claim.eligibility.update!(
+              verification: answers.verification,
+              claimant_date_of_birth: answers.claimant_date_of_birth,
+              claimant_postcode: answers.claimant_postcode,
+              claimant_national_insurance_number: answers.claimant_national_insurance_number,
+              claimant_valid_passport: answers.claimant_valid_passport,
+              claimant_passport_number: answers.claimant_passport_number,
+              claimant_identity_verified_at: answers.claimant_identity_verified_at
+            )
           end
 
           ClaimMailer

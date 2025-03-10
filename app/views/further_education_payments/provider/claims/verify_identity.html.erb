@@ -1,0 +1,130 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl"><%= @form.t(:title) %></h1>
+
+    <p class="govuk-body">
+      We were unable to verify the claimant’s identity via GOV.UK One Login.
+    </p>
+
+    <p class="govuk-body govuk-!-margin-bottom-8">
+      We need you to answer some questions about the claimant using the
+      personal information you have on file. You do not need to send any
+      document copies to the Department for Education.
+    </p>
+
+    <%= form_with(
+      model: @form,
+      url: claim_path(current_journey_routing_name),
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+      html: { novalidate: false }
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_date_field(
+        :claimant_date_of_birth,
+        date_of_birth: true,
+        legend: {
+          text: @form.t(
+            %i(claimant_date_of_birth label),
+            claimant: @form.claimant_name
+          ),
+          size: "s"
+        }
+      ) %>
+
+      <%= f.govuk_text_field(
+        :claimant_postcode,
+        label: {
+          text: @form.t(
+            %i(claimant_postcode label),
+            claimant: @form.claimant_name
+          ),
+          size: "s"
+        },
+        hint: { text: @form.t(%i(claimant_postcode hint)) }
+      ) %>
+
+      <%= f.govuk_text_field(
+        :claimant_national_insurance_number,
+        label: {
+          text: @form.t(
+            %i(claimant_national_insurance_number label),
+            claimant: @form.claimant_name
+          ),
+          size: "s"
+        },
+        hint: { text: @form.t(%i(claimant_national_insurance_number hint)) }
+      ) %>
+
+      <%= f.govuk_radio_buttons_fieldset(
+        :claimant_valid_passport,
+        inline: true,
+        legend: {
+          text: @form.t(
+            %i(claimant_valid_passport label),
+            claimant: @form.claimant_name
+          ),
+          size: "s"
+        },
+        hint: { text: @form.t(%i(claimant_valid_passport hint)) }
+      ) do %>
+        <%= f.govuk_radio_button(
+          :claimant_valid_passport,
+          true,
+          label: {
+            text: @form.t(
+              %i(claimant_valid_passport options true),
+              claimant: @form.claimant_name
+            )
+          }
+        ) do %>
+          <%= f.govuk_text_field(
+            :claimant_passport_number,
+            label: {
+              text: @form.t(%i(claimant_passport_number label)),
+              size: "s"
+            },
+            hint: { text: @form.t(%i(claimant_passport_number hint)) }
+          ) %>
+        <% end %>
+
+        <%= f.govuk_radio_button(
+          :claimant_valid_passport,
+          false,
+          label: { text: @form.t(%i(claimant_valid_passport options false)) }
+        ) %>
+      <% end %>
+
+      <%= f.govuk_check_boxes_fieldset(
+        :declaration,
+        multiple: false,
+        legend: {
+          text: @form.t(%i(declaration legend)),
+          size: "m"
+        }
+      ) do %>
+        <%= f.govuk_check_box(
+          :declaration,
+          "1",
+          "0",
+          multiple: false,
+          link_errors: true,
+          label: {
+            text: @form.t(%i(declaration label))
+          }
+        ) %>
+      <% end %>
+
+      <%= f.govuk_submit "Submit" %>
+    <% end %>
+  </div>
+</div>

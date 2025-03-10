@@ -313,6 +313,7 @@ shared:
     - provider_verification_chase_email_last_sent_at
     - teacher_reference_number
     - provider_verification_email_count
+    - claimant_identity_verified_at
   :eligible_fe_providers:
     - id
     - ukprn
