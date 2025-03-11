@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Admin performs identity confirmation task" do
-  let(:claim) { create(:claim, :submitted, :with_onelogin_idv_data) }
+  let(:claim) { create(:claim, :submitted, :with_onelogin_idv_data, policy: Policies::FurtherEducationPayments) }
 
   before do
     disable_claim_qa_flagging

@@ -35,7 +35,7 @@
         <% @claim_checking_tasks.applicable_task_names.each_with_index do |task_name, index| %>
           <li>
             <h2 class="app-task-list__section">
-              <span class="app-task-list__section-number"><%= index + 1 %>. </span> <%= task_name.humanize %>
+              <span class="app-task-list__section-number"><%= index + 1 %>. </span> <%= I18n.t(:name, scope: [:admin, :tasks, task_name]) %>
             </h2>
             <ul class="app-task-list__items">
               <li class="app-task-list__item <%= task_name %>">
