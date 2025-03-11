@@ -2,6 +2,11 @@ require "rails_helper"
 
 RSpec.feature "Provider verifying claims" do
   before do
+    FeatureFlag.create!(
+      name: "fe_provider_identity_verification",
+      enabled: true
+    )
+
     create(:journey_configuration, :further_education_payments_provider)
     # Stub fetching name from DSI, not required for these tests
     stub_request(

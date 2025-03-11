@@ -1,6 +1,13 @@
 require "rails_helper"
 
 RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, type: :model do
+  before do
+    FeatureFlag.create!(
+      name: "fe_provider_identity_verification",
+      enabled: true
+    )
+  end
+
   let(:journey) { Journeys::FurtherEducationPayments::Provider }
 
   let(:school) do
