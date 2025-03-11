@@ -1,28 +1,19 @@
 require "capybara/rspec"
-begin
-  require "webdrivers"
-rescue LoadError
-  nil
-end
+require "capybara/cuprite"
 
-view_mode = (ENV.fetch("VIEW", false) == "true") ? :chrome : :headless_chrome
-args = %w[disable-dev-shm-usage no-sandbox window-size=1280x1280]
-args <<= "headless" unless view_mode == :chrome
-
-Capybara.register_driver view_mode do |app|
-  Capybara::Selenium::Driver.new(
+Capybara.register_driver(:cuprite) do |app|
+  Capybara::Cuprite::Driver.new(
     app,
-    browser: :chrome,
-    options: Selenium::WebDriver::Options.chrome(
-      args: args
-    )
+    window_size: [1200, 800],
+    process_timeout: 20,
+    timeout: 10
   )
 end
 
 Capybara.configure do |config|
   config.default_driver = :rack_test
-  config.javascript_driver = view_mode
-  config.default_max_wait_time = 5
+  config.javascript_driver = :cuprite
+  config.default_max_wait_time = 10
   config.server = :puma, {Silent: true}
 end
 

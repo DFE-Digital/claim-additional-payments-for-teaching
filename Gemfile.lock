@@ -132,6 +132,9 @@ GEM
       rexml
     crass (1.0.6)
     csv (3.3.0)
+    cuprite (0.15.1)
+      capybara (~> 3.0)
+      ferrum (~> 0.15.0)
     daemons (1.4.1)
     date (3.4.1)
     declarative (0.0.20)
@@ -187,6 +190,11 @@ GEM
     faraday-retry (1.0.3)
     faraday_middleware (1.2.1)
       faraday (~> 1.0)
+    ferrum (0.15)
+      addressable (~> 2.5)
+      concurrent-ruby (~> 1.1)
+      webrick (~> 1.7)
+      websocket-driver (~> 0.7)
     ffi (1.16.3)
     foreman (0.88.1)
     fugit (1.11.1)
@@ -726,7 +734,6 @@ GEM
       rubocop-ast (>= 1.31.1, < 2.0)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
-    rubyzip (2.4.1)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.4.0)
@@ -738,12 +745,6 @@ GEM
       sprockets-rails
       tilt
     securerandom (0.4.1)
-    selenium-webdriver (4.29.0)
-      base64 (~> 0.2)
-      logger (~> 1.4)
-      rexml (~> 3.2, >= 3.2.5)
-      rubyzip (>= 1.2.2, < 3.0)
-      websocket (~> 1.0)
     semantic_logger (4.16.1)
       concurrent-ruby (~> 1.0)
     sentry-rails (5.22.1)
@@ -838,7 +839,6 @@ GEM
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
     webrick (1.9.1)
-    websocket (1.2.11)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -861,6 +861,7 @@ DEPENDENCIES
   brakeman
   bullet
   capybara
+  cuprite
   daemons
   delayed_cron_job
   delayed_job_active_record
@@ -898,7 +899,6 @@ DEPENDENCIES
   rspec-rails
   rspec-retry
   sass-rails (~> 6.0)
-  selenium-webdriver
   shoulda-matchers
   simplecov
   spring

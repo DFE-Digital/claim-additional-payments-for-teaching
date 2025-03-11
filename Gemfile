@@ -120,12 +120,12 @@ end
 
 group :test do
   gem "rspec-retry"
-  gem "selenium-webdriver"
   gem "launchy"
   gem "rack_session_access"
   gem "simplecov", require: false
   # Return null object for active record connection rather than raising error
   gem "activerecord-nulldb-adapter"
+  gem "cuprite"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
