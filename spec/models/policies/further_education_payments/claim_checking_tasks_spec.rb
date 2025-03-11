@@ -41,7 +41,7 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks do
 
     let(:invariant_tasks) do
       [
-        "identity_confirmation",
+        "one_login_identity",
         "provider_verification",
         "student_loan_plan"
       ]

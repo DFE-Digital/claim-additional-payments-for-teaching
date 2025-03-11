@@ -10,7 +10,7 @@ class ClaimCheckingTasks
     when "qa_decision"
       "QA decision"
     else
-      task_name.humanize
+      I18n.t(:name, scope: [:admin, :tasks, task_name], default: task_name.humanize)
     end
   end
 
@@ -36,6 +36,7 @@ class ClaimCheckingTasks
         .applicable_task_names
     else
       Task::NAMES.dup.tap do |task_names|
+        task_names.delete("one_login_identity")
         task_names.delete("previous_payment")
         task_names.delete("previous_residency")
         task_names.delete("induction_confirmation") unless claim.policy == Policies::EarlyCareerPayments

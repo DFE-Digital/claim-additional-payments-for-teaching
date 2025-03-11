@@ -14,7 +14,7 @@ module Policies
       def applicable_task_names
         tasks = []
 
-        tasks << "identity_confirmation"
+        tasks << "one_login_identity"
         tasks << "provider_verification"
         tasks << "provider_details" if claim.eligibility.provider_and_claimant_details_match?
         tasks << "employment" if claim.eligibility.teacher_reference_number.present?
