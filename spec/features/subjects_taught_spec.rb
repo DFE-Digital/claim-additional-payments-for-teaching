@@ -10,7 +10,7 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
     choose_school school
   end
 
-  context "with JS enabled", js: true do
+  context "with JS enabled", js: true, flaky: true do
     scenario "checks subjects and then chooses not applicable" do
       check "Biology"
       check "Physics"

@@ -110,7 +110,7 @@ ENV RAILS_ENV test
 ENV NODE_ENV test
 CMD [ "bundle", "exec", "rake" ]
 
-RUN apk add chromium chromium-chromedriver
+RUN apk add chromium
 
 # Install ShellCheck
 COPY --from=shellcheck / /opt/shellcheck/

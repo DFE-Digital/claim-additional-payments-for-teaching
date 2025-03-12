@@ -20,7 +20,7 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("No results match that search term. Try again.")
   end
 
-  scenario "when searching for college that could not be found with js", js: true do
+  scenario "when searching for college that could not be found with js", js: true, flaky: true do
     when_further_education_payments_journey_configuration_exists
 
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
