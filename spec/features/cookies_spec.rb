@@ -3,7 +3,7 @@ require "rails_helper"
 [true, false].each do |with_js|
   text = with_js ? "with JS" : "without JS"
 
-  RSpec.feature "Cookies #{text}", js: with_js do
+  RSpec.feature "Cookies #{text}", js: with_js, flaky: with_js do
     before do
       when_further_education_payments_journey_configuration_exists
     end

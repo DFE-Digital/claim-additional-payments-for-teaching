@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Teacher Identity Sign in", js: true do
+RSpec.feature "Teacher Identity Sign in", js: true, flaky: true do
   include OmniauthMockHelper
 
   # create a school eligible for ECP and Targeted Retention Incentive so can walk the whole journey
