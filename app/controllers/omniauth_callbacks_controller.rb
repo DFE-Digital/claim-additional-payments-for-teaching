@@ -2,7 +2,7 @@ class OmniauthCallbacksController < ApplicationController
   include JourneyConcern
 
   ONELOGIN_JWT_CORE_IDENTITY_HASH_KEY = "https://vocab.account.gov.uk/v1/coreIdentityJWT".freeze
-  ONELOGIN_JWT_RETURN_CODE_HASH_KEY = "https://vocab.account.gov.uk/v1/returnCode".freeze
+  ONELOGIN_RETURN_CODE_HASH_KEY = "https://vocab.account.gov.uk/v1/returnCode".freeze
 
   def callback
     auth = request.env["omniauth.auth"]
@@ -62,7 +62,7 @@ class OmniauthCallbacksController < ApplicationController
   end
 
   def one_login_return_codes
-    omniauth_hash.extra.raw_info.fetch(ONELOGIN_JWT_RETURN_CODE_HASH_KEY, []).map { |hash| hash["code"] }
+    omniauth_hash.extra.raw_info.fetch(ONELOGIN_RETURN_CODE_HASH_KEY, []).map { |hash| hash["code"] }
   end
 
   def current_journey_routing_name
@@ -131,7 +131,8 @@ class OmniauthCallbacksController < ApplicationController
   def process_one_login_return_codes_callback
     journey_session.answers.assign_attributes(
       identity_confirmed_with_onelogin: false,
-      onelogin_idv_at: Time.now
+      onelogin_idv_at: Time.now,
+      onelogin_idv_return_codes: one_login_return_codes
     )
     journey_session.save!
 
@@ -175,13 +176,17 @@ class OmniauthCallbacksController < ApplicationController
     if request.path == "/auth/onelogin"
       OmniAuth::AuthHash.new(uid: "12345", info: {email: "test@example.com"}, extra: {raw_info: {}})
     elsif request.path == "/auth/onelogin_identity"
-      OmniAuth::AuthHash.new(uid: "12345", info: {email: ""}, extra: {raw_info: {ONELOGIN_JWT_CORE_IDENTITY_HASH_KEY => "test"}})
+      if FeatureFlag.enabled?(:alternative_idv)
+        OmniAuth::AuthHash.new(uid: "12345", info: {email: ""}, extra: {raw_info: {ONELOGIN_RETURN_CODE_HASH_KEY => [{"code" => "ABC"}]}})
+      else
+        OmniAuth::AuthHash.new(uid: "12345", info: {email: ""}, extra: {raw_info: {ONELOGIN_JWT_CORE_IDENTITY_HASH_KEY => "test"}})
+      end
     end
   end
 
   def omniauth_hash
     @omniauth_hash ||= if OneLoginSignIn.bypass?
-      test_user_auth_hash
+      OmniAuth.config.mock_auth[:onelogin] || test_user_auth_hash
     else
       request.env["omniauth.auth"]
     end

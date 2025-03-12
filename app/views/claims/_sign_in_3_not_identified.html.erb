@@ -1,0 +1,15 @@
+<h1 class="govuk-heading-l">
+  We cannot verify your identity via GOV.UK One Login
+</h1>
+
+<p class="govuk-body">
+  We will verify your identity using an alternative method. You can continue with your application.
+</p>
+
+<p class="govuk-body">
+  If you have any questions about the application process, email <%= govuk_mail_to I18n.t("further_education_payments.support_email_address") %>.
+</p>
+
+<%= form_with model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+  <%= f.govuk_submit "Continue" %>
+<% end %>

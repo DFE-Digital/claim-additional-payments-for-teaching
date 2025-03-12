@@ -65,6 +65,7 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
+  config.include OneLoginHelper, type: :feature
   config.include FeatureHelpers, type: :feature
   config.include RequestHelpers, type: :request
   config.include ActiveSupport::Testing::TimeHelpers
