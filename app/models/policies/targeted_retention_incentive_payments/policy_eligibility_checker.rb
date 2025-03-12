@@ -33,6 +33,34 @@ module Policies
         premium_payment_award&.award_amount
       end
 
+      def ineligible?
+        ineligibility_reason.present?
+      end
+
+      def ineligibility_reason
+        return :policy_closed if policy_closed?
+
+        return :school_ineligible if indicated_ineligible_school?
+
+        if supply_teacher_lacking_either_long_contract_or_direct_employment?
+          return :supply_teacher_contract_ineligible
+        end
+
+        return :poor_performance if poor_performance?
+
+        return :no_selectable_subjects if no_selectable_subjects?
+
+        return :ineligible_cohort if ineligible_cohort?
+
+        return :insufficient_teaching if insufficient_teaching?
+
+        return :subject_invalid_for_tslr if indicated_ecp_only_itt_subject?
+
+        if ineligible_itt_subject_and_no_relevant_degree?
+          :subject_and_degree_ineligible
+        end
+      end
+
       private
 
       def premium_payment_award
