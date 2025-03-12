@@ -1010,10 +1010,9 @@ RSpec.feature "Provider verifying claims" do
       value: "Edna Krabappel"
     )
 
-    expect(page).to have_summary_item(
-      key: "Claimant date of birth",
-      value: "3 July 1945"
-    )
+    expect(page).not_to have_text("Claimant date of birth")
+
+    expect(page).not_to have_text("3 July 1945")
 
     expect(page).to have_summary_item(
       key: "Claimant teacher reference number (TRN)",
