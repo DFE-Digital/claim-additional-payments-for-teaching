@@ -51,7 +51,8 @@
           size: "s"
         },
         hint: { text: @form.t(%i(claimant_postcode hint)) },
-        maxlength: 8
+        maxlength: 8,
+        width: 10
       ) %>
 
       <%= f.govuk_text_field(
@@ -64,7 +65,8 @@
           size: "s"
         },
         hint: { text: @form.t(%i(claimant_national_insurance_number hint)) },
-        maxlength: 9
+        maxlength: 9,
+        width: 10
       ) %>
 
       <%= f.govuk_radio_buttons_fieldset(
