@@ -590,7 +590,7 @@ GEM
     ostruct (0.6.1)
     pagy (9.3.3)
     parallel (1.26.3)
-    parallel_tests (4.7.1)
+    parallel_tests (4.10.1)
       parallel
     parser (3.3.7.1)
       ast (~> 2.4.1)
@@ -801,7 +801,7 @@ GEM
     tilt (2.0.11)
     timeout (0.4.3)
     trailblazer-option (0.1.2)
-    turbo_tests (2.2.4)
+    turbo_tests (2.2.5)
       parallel_tests (>= 3.3.0, < 5)
       rspec (>= 3.10)
     typhoeus (1.4.1)
