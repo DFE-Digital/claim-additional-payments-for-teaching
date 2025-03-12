@@ -1356,7 +1356,7 @@ en:
             invalid: "Enter a National Insurance number in the correct format"
         claimant_valid_passport:
           label: "Does %{claimant} have a valid passport?"
-          hint: "You can check if a passport is valid by looking at the expiration date"
+          hint: "You can check if a passport is valid by looking at the expiration date on the passport photo page"
           options:
             true: "Yes"
             false: "No"
