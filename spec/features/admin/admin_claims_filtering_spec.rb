@@ -20,6 +20,7 @@ RSpec.feature "Admin claim filtering" do
   let(:targeted_retention_incentive_claims_unassigned) { create_list(:claim, 2, :submitted, policy: Policies::TargetedRetentionIncentivePayments) }
   let(:held_claims) { create_list(:claim, 2, :submitted, :held) }
   let(:approved_awaiting_qa_claims) { create_list(:claim, 2, :approved, :flagged_for_qa, policy: Policies::TargetedRetentionIncentivePayments) }
+  let(:rejected_awaiting_qa_claims) { create_list(:claim, 2, :rejected, :flagged_for_qa, policy: Policies::TargetedRetentionIncentivePayments) }
   let(:auto_approved_awaiting_payroll_claims) { create_list(:claim, 2, :auto_approved, policy: Policies::TargetedRetentionIncentivePayments) }
   let(:approved_claim) { create(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments, assigned_to: mette, decision_creator: mary) }
   let(:further_education_claims_awaiting_provider_verification) { create_list(:claim, 2, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :not_verified, assigned_to: valentino) }
@@ -36,6 +37,7 @@ RSpec.feature "Admin claim filtering" do
       targeted_retention_incentive_claims_unassigned,
       held_claims,
       approved_awaiting_qa_claims,
+      rejected_awaiting_qa_claims,
       auto_approved_awaiting_payroll_claims,
       approved_claim,
       further_education_claims_awaiting_provider_verification,
@@ -149,6 +151,11 @@ RSpec.feature "Admin claim filtering" do
 
     expect_page_to_show_claims(approved_awaiting_qa_claims)
 
+    select "Rejected awaiting QA", from: "filter-status-field"
+    click_button "Apply filters"
+
+    expect_page_to_show_claims(rejected_awaiting_qa_claims)
+
     select "Approved awaiting payroll", from: "filter-status-field"
     click_button "Apply filters"
     expect_page_to_show_claims(auto_approved_awaiting_payroll_claims, approved_claim)
@@ -160,7 +167,7 @@ RSpec.feature "Admin claim filtering" do
 
     select "Rejected", from: "filter-status-field"
     click_button "Apply filters"
-    expect_page_to_show_claims(rejected_claim)
+    expect_page_to_show_claims(rejected_claim, rejected_awaiting_qa_claims)
   end
 
   def expect_page_to_show_claims(*expected_claims)

@@ -195,6 +195,8 @@ module Admin
         "Payrolled"
       elsif claim.latest_decision&.approved? && claim.awaiting_qa? && !claim.held?
         "Approved awaiting QA"
+      elsif claim.latest_decision&.rejected? && claim.awaiting_qa? && !claim.held?
+        "Rejected awaiting QA"
       elsif claim.latest_decision&.approved?
         "Approved awaiting payroll"
       elsif claim.latest_decision&.rejected?
@@ -208,10 +210,15 @@ module Admin
       end
     end
 
+    INDEX_STATUS_FILTER_MESSAGE = {
+      "approved_awaiting_qa" => "approved awaiting QA",
+      "rejected_awaiting_qa" => "rejected awaiting QA"
+    }
+
     def index_status_filter(status)
       return "awaiting a decision" unless status.present?
 
-      status.humanize.downcase
+      INDEX_STATUS_FILTER_MESSAGE[status] || status.humanize.downcase
     end
 
     NO_CLAIMS = {
