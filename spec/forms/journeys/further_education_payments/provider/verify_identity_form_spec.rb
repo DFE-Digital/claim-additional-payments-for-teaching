@@ -106,14 +106,14 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyIdentityForm,
     it do
       is_expected.to(
         validate_presence_of(:claimant_date_of_birth)
-          .with_message("Enter Edna Krabappel’s date of birth")
+          .with_message("Enter Edna’s date of birth")
       )
     end
 
     it do
       is_expected.to(
         validate_presence_of(:claimant_postcode)
-          .with_message("Enter Edna Krabappel’s postcode")
+          .with_message("Enter Edna’s postcode")
       )
     end
 
@@ -127,7 +127,7 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyIdentityForm,
     it do
       is_expected.to(
         validate_presence_of(:claimant_national_insurance_number)
-          .with_message("Enter Edna Krabappel’s National Insurance number")
+          .with_message("Enter Edna’s National Insurance number")
       )
     end
 
@@ -141,7 +141,7 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyIdentityForm,
     it do
       is_expected.not_to(
         allow_value(nil).for(:claimant_valid_passport)
-          .with_message("Select yes if Edna Krabappel has a valid passport")
+          .with_message("Select yes if Edna has a valid passport")
       )
     end
 
@@ -162,7 +162,7 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyIdentityForm,
       it do
         is_expected.to(
           validate_presence_of(:claimant_passport_number)
-            .with_message("Enter Edna Krabappel’s passport number")
+            .with_message("Enter Edna’s passport number")
         )
       end
     end
@@ -176,9 +176,9 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyIdentityForm,
     end
   end
 
-  describe "#claimant_name" do
-    it "returns the claimant's full name" do
-      expect(form.claimant_name).to eq("Edna Krabappel")
+  describe "#claimant_first_name" do
+    it "returns the claimant's first name" do
+      expect(form.claimant_first_name).to eq("Edna")
     end
   end
 

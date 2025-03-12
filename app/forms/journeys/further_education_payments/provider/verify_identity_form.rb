@@ -29,7 +29,7 @@ module Journeys
             message: ->(form, _) do
               form.t(
                 "claimant_date_of_birth.errors.blank",
-                claimant: form.claimant_name
+                claimant: form.claimant_first_name
               )
             end
           }
@@ -41,7 +41,7 @@ module Journeys
             message: ->(form, _) do
               form.t(
                 "claimant_postcode.errors.blank",
-                claimant: form.claimant_name
+                claimant: form.claimant_first_name
               )
             end
           }
@@ -61,7 +61,7 @@ module Journeys
             message: ->(form, _) do
               form.t(
                 "claimant_national_insurance_number.errors.blank",
-                claimant: form.claimant_name
+                claimant: form.claimant_first_name
               )
             end
           }
@@ -84,7 +84,7 @@ module Journeys
             message: ->(form, _) do
               form.t(
                 "claimant_valid_passport.errors.inclusion",
-                claimant: form.claimant_name
+                claimant: form.claimant_first_name
               )
             end
           }
@@ -96,7 +96,7 @@ module Journeys
             message: ->(form, _) do
               form.t(
                 "claimant_passport_number.errors.blank",
-                claimant: form.claimant_name
+                claimant: form.claimant_first_name
               )
             end,
             if: :claimant_valid_passport
@@ -114,8 +114,8 @@ module Journeys
 
         delegate :claim, to: :answers
 
-        def claimant_name
-          claim.full_name
+        def claimant_first_name
+          claim.first_name
         end
 
         def radio_options
