@@ -477,27 +477,27 @@ RSpec.feature "Provider verifying claims" do
     )
 
     within_fieldset(
-      "Does Edna Krabappel have a fixed-term contract of employment covering " \
+      "Does Edna have a fixed-term contract of employment covering " \
       "the full academic year at Springfield A and M?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Is Edna Krabappel a member of staff with teaching responsibilities?"
+      "Is Edna a member of staff with teaching responsibilities?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Is Edna Krabappel in the first 5 years of their further education " \
+      "Is Edna in the first 5 years of their further education " \
       "teaching career in England?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Is Edna Krabappel timetabled to teach an average of 12 hours or more " \
+      "Is Edna timetabled to teach an average of 12 hours or more " \
       "per week during the current term?"
     ) do
       choose "Yes"
@@ -505,7 +505,7 @@ RSpec.feature "Provider verifying claims" do
 
     within_fieldset(
       "For at least half of their timetabled teaching hours, does " \
-      "Edna Krabappel teach 16- to 19-year-olds, including those up to " \
+      "Edna teach 16- to 19-year-olds, including those up to " \
       "age 25 with an Education, Health and Care Plan (EHCP)?"
     ) do
       choose "Yes"
@@ -524,20 +524,20 @@ RSpec.feature "Provider verifying claims" do
 
     within_fieldset(
       "For at least half of their timetabled teaching hours, does " \
-      "Edna Krabappel teach:"
+      "Edna teach:"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Can you confirm that Edna Krabappel is not currently subject to any " \
+      "Can you confirm that Edna is not currently subject to any " \
       "performance measures as a result of continuous poor teaching standards?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Can you confirm that Edna Krabappel is not currently subject to " \
+      "Can you confirm that Edna is not currently subject to " \
       "disciplinary action?"
     ) do
       choose "Yes"
@@ -632,34 +632,34 @@ RSpec.feature "Provider verifying claims" do
     )
 
     within_fieldset(
-      "Does Edna Krabappel have a fixed-term contract of employment at " \
+      "Does Edna have a fixed-term contract of employment at " \
       "Springfield A and M?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Is Edna Krabappel a member of staff with teaching responsibilities?"
+      "Is Edna a member of staff with teaching responsibilities?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Is Edna Krabappel in the first 5 years of their further education " \
+      "Is Edna in the first 5 years of their further education " \
       "teaching career in England?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Has Edna Krabappel taught for at least one academic term at " \
+      "Has Edna taught for at least one academic term at " \
       "Springfield A and M?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Is Edna Krabappel timetabled to teach an average of 2.5 hours or " \
+      "Is Edna timetabled to teach an average of 2.5 hours or " \
       "more but less than 12 hours per week"
     ) do
       choose "Yes"
@@ -667,7 +667,7 @@ RSpec.feature "Provider verifying claims" do
 
     within_fieldset(
       "For at least half of their timetabled teaching hours, does " \
-      "Edna Krabappel teach 16- to 19-year-olds, including those up to " \
+      "Edna teach 16- to 19-year-olds, including those up to " \
       "age 25 with an Education, Health and Care Plan (EHCP)?"
     ) do
       choose "Yes"
@@ -686,27 +686,27 @@ RSpec.feature "Provider verifying claims" do
 
     within_fieldset(
       "For at least half of their timetabled teaching hours, does " \
-      "Edna Krabappel teach:"
+      "Edna teach:"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Will Edna Krabappel be timetabled to teach at least 2.5 hours per " \
+      "Will Edna be timetabled to teach at least 2.5 hours per " \
       "week next term?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Can you confirm that Edna Krabappel is not currently subject to any " \
+      "Can you confirm that Edna is not currently subject to any " \
       "performance measures as a result of continuous poor teaching standards?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Can you confirm that Edna Krabappel is not currently subject to " \
+      "Can you confirm that Edna is not currently subject to " \
       "disciplinary action?"
     ) do
       choose "Yes"
@@ -804,34 +804,34 @@ RSpec.feature "Provider verifying claims" do
     )
 
     within_fieldset(
-      "Does Edna Krabappel have a variable hours contract of employment at " \
+      "Does Edna have a variable hours contract of employment at " \
       "Springfield A and M?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Is Edna Krabappel a member of staff with teaching responsibilities?"
+      "Is Edna a member of staff with teaching responsibilities?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Is Edna Krabappel in the first 5 years of their further education " \
+      "Is Edna in the first 5 years of their further education " \
       "teaching career in England?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Has Edna Krabappel taught for at least one academic term at " \
+      "Has Edna taught for at least one academic term at " \
       "Springfield A and M?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Is Edna Krabappel timetabled to teach an average of 2.5 hours or " \
+      "Is Edna timetabled to teach an average of 2.5 hours or " \
       "more but less than 12 hours per week during the current term?"
     ) do
       choose "Yes"
@@ -839,7 +839,7 @@ RSpec.feature "Provider verifying claims" do
 
     within_fieldset(
       "For at least half of their timetabled teaching hours, does " \
-      "Edna Krabappel teach 16- to 19-year-olds, including those up to " \
+      "Edna teach 16- to 19-year-olds, including those up to " \
       "age 25 with an Education, Health and Care Plan (EHCP)?"
     ) do
       choose "Yes"
@@ -858,27 +858,27 @@ RSpec.feature "Provider verifying claims" do
 
     within_fieldset(
       "For at least half of their timetabled teaching hours, does " \
-      "Edna Krabappel teach:"
+      "Edna teach:"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Will Edna Krabappel be timetabled to teach at least 2.5 hours per " \
+      "Will Edna be timetabled to teach at least 2.5 hours per " \
       "week next term?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Can you confirm that Edna Krabappel is not currently subject to any " \
+      "Can you confirm that Edna is not currently subject to any " \
       "performance measures as a result of continuous poor teaching standards?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Can you confirm that Edna Krabappel is not currently subject to " \
+      "Can you confirm that Edna is not currently subject to " \
       "disciplinary action?"
     ) do
       choose "Yes"
@@ -1025,34 +1025,34 @@ RSpec.feature "Provider verifying claims" do
     )
 
     within_fieldset(
-      "Does Edna Krabappel have a fixed-term contract of employment at " \
+      "Does Edna have a fixed-term contract of employment at " \
       "Springfield A and M?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Is Edna Krabappel a member of staff with teaching responsibilities?"
+      "Is Edna a member of staff with teaching responsibilities?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Is Edna Krabappel in the first 5 years of their further education " \
+      "Is Edna in the first 5 years of their further education " \
       "teaching career in England?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Has Edna Krabappel taught for at least one academic term at " \
+      "Has Edna taught for at least one academic term at " \
       "Springfield A and M?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Is Edna Krabappel timetabled to teach an average of 2.5 hours or " \
+      "Is Edna timetabled to teach an average of 2.5 hours or " \
       "more but less than 12 hours per week"
     ) do
       choose "Yes"
@@ -1060,7 +1060,7 @@ RSpec.feature "Provider verifying claims" do
 
     within_fieldset(
       "For at least half of their timetabled teaching hours, does " \
-      "Edna Krabappel teach 16- to 19-year-olds, including those up to " \
+      "Edna teach 16- to 19-year-olds, including those up to " \
       "age 25 with an Education, Health and Care Plan (EHCP)?"
     ) do
       choose "Yes"
@@ -1079,27 +1079,27 @@ RSpec.feature "Provider verifying claims" do
 
     within_fieldset(
       "For at least half of their timetabled teaching hours, does " \
-      "Edna Krabappel teach:"
+      "Edna teach:"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Will Edna Krabappel be timetabled to teach at least 2.5 hours per " \
+      "Will Edna be timetabled to teach at least 2.5 hours per " \
       "week next term?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Can you confirm that Edna Krabappel is not currently subject to any " \
+      "Can you confirm that Edna is not currently subject to any " \
       "performance measures as a result of continuous poor teaching standards?"
     ) do
       choose "Yes"
     end
 
     within_fieldset(
-      "Can you confirm that Edna Krabappel is not currently subject to " \
+      "Can you confirm that Edna is not currently subject to " \
       "disciplinary action?"
     ) do
       choose "Yes"
@@ -1126,12 +1126,12 @@ RSpec.feature "Provider verifying claims" do
     fill_in "Year", with: "1945"
 
     fill_in(
-      "What is the postcode of Edna Krabappel’s current home address?",
+      "What is the postcode of Edna’s current home address?",
       with: "TE57 1NG"
     )
 
     fill_in(
-      "What is Edna Krabappel’s National Insurance number?",
+      "What is Edna’s National Insurance number?",
       with: "QQ123456C"
     )
 

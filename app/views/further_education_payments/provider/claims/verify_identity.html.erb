@@ -35,7 +35,7 @@
         legend: {
           text: @form.t(
             %i(claimant_date_of_birth label),
-            claimant: @form.claimant_name
+            claimant: @form.claimant_first_name
           ),
           size: "s"
         }
@@ -46,7 +46,7 @@
         label: {
           text: @form.t(
             %i(claimant_postcode label),
-            claimant: @form.claimant_name
+            claimant: @form.claimant_first_name
           ),
           size: "s"
         },
@@ -58,7 +58,7 @@
         label: {
           text: @form.t(
             %i(claimant_national_insurance_number label),
-            claimant: @form.claimant_name
+            claimant: @form.claimant_first_name
           ),
           size: "s"
         },
@@ -70,7 +70,7 @@
         legend: {
           text: @form.t(
             %i(claimant_valid_passport label),
-            claimant: @form.claimant_name
+            claimant: @form.claimant_first_name
           ),
           size: "s"
         },
@@ -82,7 +82,7 @@
           label: {
             text: @form.t(
               %i(claimant_valid_passport options true),
-              claimant: @form.claimant_name
+              claimant: @form.claimant_first_name
             )
           }
         ) do %>

@@ -56,6 +56,10 @@ module Journeys
           claim.full_name
         end
 
+        def claimant_first_name
+          claim.first_name
+        end
+
         def claimant_date_of_birth
           claim.date_of_birth.strftime("%-d %B %Y")
         end
