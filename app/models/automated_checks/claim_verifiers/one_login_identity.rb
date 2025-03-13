@@ -11,9 +11,10 @@ module AutomatedChecks
 
       def perform
         return unless awaiting_task?(TASK_NAME)
-        return unless claim.identity_confirmed_with_onelogin?
 
-        if claim.one_login_idv_mismatch?
+        if !claim.identity_confirmed_with_onelogin?
+          create_task(passed: false)
+        elsif claim.one_login_idv_mismatch?
           create_task(passed: false)
         else
           create_task(passed: true)
