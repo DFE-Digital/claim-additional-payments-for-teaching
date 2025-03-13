@@ -160,6 +160,10 @@ module Journeys
       end
     end
 
+    def clear_change_param!
+      params.delete(:change)
+    end
+
     private
 
     def changing_answer?

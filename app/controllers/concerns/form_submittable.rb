@@ -137,6 +137,10 @@ module FormSubmittable
           return if execute_callback_if_exists(:after_form_save_success)
 
           if journey.use_navigator?
+            navigator.clear_change_param!
+          end
+
+          if journey.use_navigator?
             navigator.clear_impermissible_answers
           end
 
