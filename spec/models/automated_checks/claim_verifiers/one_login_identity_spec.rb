@@ -14,10 +14,10 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::OneLoginIdentity do
         )
       end
 
-      it "does not create a task" do
+      it "creates a failed task" do
         expect {
           subject.perform
-        }.not_to change(Task, :count)
+        }.to change(Task.where(passed: false), :count).by(1)
       end
     end
 
