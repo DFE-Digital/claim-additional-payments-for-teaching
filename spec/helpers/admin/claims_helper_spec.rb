@@ -522,6 +522,14 @@ describe Admin::ClaimsHelper do
       end
     end
 
+    context "claim rejected and flagged for QA" do
+      let(:claim) { create(:claim, :rejected, :flagged_for_qa) }
+
+      it "returns a status of Rejected awaiting QA" do
+        expect(status(claim)).to eq "Rejected awaiting QA"
+      end
+    end
+
     context "claim held" do
       let(:claim) { create(:claim, :submitted, :held) }
 
@@ -591,6 +599,12 @@ describe Admin::ClaimsHelper do
       it "returns a human readable version of the status in lower case" do
         is_expected.to eq("approved awaiting payroll")
       end
+    end
+
+    context "overridden status message" do
+      let(:status) { "rejected_awaiting_qa" }
+
+      it { is_expected.to eq("rejected awaiting QA") }
     end
   end
 
