@@ -89,5 +89,11 @@ module Policies
     def payroll_file_name
       "FELUPEXPANSION"
     end
+
+    def alternative_identity_verification_required?(claim)
+      return false unless FeatureFlag.enabled?(:fe_provider_identity_verification)
+
+      claim.onelogin_idv_at.present? && !claim.identity_confirmed_with_onelogin?
+    end
   end
 end
