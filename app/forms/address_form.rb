@@ -32,7 +32,13 @@ class AddressForm < Form
   validate :validate_address_line_3, if: -> { address_line_3.present? }
   validates :address_line_4, format: {with: ADDRESS_REGEX_FILTER, message: i18n_error_message(:address_format)}
 
-  validate :postcode_is_valid, if: -> { postcode.present? }
+  validates(
+    :postcode,
+    postcode_format: {
+      message: i18n_error_message(:postcode_format)
+    },
+    if: -> { postcode.present? }
+  )
 
   def save
     return false unless valid?
@@ -49,12 +55,6 @@ class AddressForm < Form
   end
 
   private
-
-  def postcode_is_valid
-    unless UKPostcode.parse(postcode).full_valid?
-      errors.add(:postcode, i18n_errors_path(:postcode_format))
-    end
-  end
 
   def validate_address_line_1
     unless ADDRESS_REGEX_FILTER.match(address_line_1) && ADDRESS_LINE_1_VALIDATION.match(address_line_1)

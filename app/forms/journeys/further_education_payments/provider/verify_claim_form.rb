@@ -36,9 +36,11 @@ module Journeys
 
         attribute :declaration, :boolean
 
+        # If we require identity verification, we show the declaration on the
+        # next page.
         validates :declaration, acceptance: {
           message: i18n_error_message("declaration.acceptance")
-        }
+        }, unless: -> { answers.identity_verification_required? }
 
         validate :all_assertions_answered
 
@@ -52,6 +54,10 @@ module Journeys
 
         def claimant_name
           claim.full_name
+        end
+
+        def claimant_first_name
+          claim.first_name
         end
 
         def claimant_date_of_birth
@@ -107,34 +113,28 @@ module Journeys
         def save
           return false unless valid?
 
-          ApplicationRecord.transaction do
-            verified_at = DateTime.now
+          journey_session.answers.assign_attributes(
+            verification: {
+              assertions: assertions.map(&:attributes),
+              verifier: {
+                dfe_sign_in_uid: answers.dfe_sign_in_uid,
+                first_name: answers.dfe_sign_in_first_name,
+                last_name: answers.dfe_sign_in_last_name,
+                email: answers.dfe_sign_in_email,
+                dfe_sign_in_organisation_name: answers.dfe_sign_in_organisation_name,
+                dfe_sign_in_role_codes: answers.dfe_sign_in_role_codes
+              },
+              created_at: DateTime.now
+            }
+          )
 
-            claim.eligibility.update!(
-              verification: {
-                assertions: assertions.map(&:attributes),
-                verifier: {
-                  dfe_sign_in_uid: answers.dfe_sign_in_uid,
-                  first_name: answers.dfe_sign_in_first_name,
-                  last_name: answers.dfe_sign_in_last_name,
-                  email: answers.dfe_sign_in_email,
-                  dfe_sign_in_organisation_name: answers.dfe_sign_in_organisation_name,
-                  dfe_sign_in_role_codes: answers.dfe_sign_in_role_codes
-                },
-                created_at: verified_at
-              }
-            )
+          journey_session.save!
 
-            claim.verified_at = verified_at
-
-            claim.save!
+          # If identity verification is required there's a subsequent step
+          # before we can trigger claim submission.
+          unless answers.identity_verification_required?
+            ClaimSubmissionForm.new(journey_session: journey_session).save!
           end
-
-          ClaimMailer
-            .further_education_payment_provider_confirmation_email(claim)
-            .deliver_later
-
-          ClaimVerifierJob.perform_later(claim)
 
           true
         end
@@ -148,7 +148,7 @@ module Journeys
         end
 
         def completed?
-          claim.eligibility.verified?
+          answers.claim_verified?
         end
 
         private

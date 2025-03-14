@@ -1,6 +1,13 @@
 require "rails_helper"
 
 RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, type: :model do
+  before do
+    FeatureFlag.create!(
+      name: "fe_provider_identity_verification",
+      enabled: true
+    )
+  end
+
   let(:journey) { Journeys::FurtherEducationPayments::Provider }
 
   let(:school) do
@@ -65,12 +72,28 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
   describe "validations" do
     subject { form }
 
-    it do
-      is_expected.to(
-        validate_acceptance_of(:declaration).with_message(
-          "Tick the box to confirm that the information provided in this form is correct to the best of your knowledge"
+    context "when claim identity verification is required" do
+      before do
+        claim.update!(
+          onelogin_idv_at: DateTime.now,
+          identity_confirmed_with_onelogin: false
         )
-      )
+      end
+
+      it do
+        is_expected.not_to(validate_acceptance_of(:declaration))
+      end
+    end
+
+    context "when claim identity verification is not required" do
+      it do
+        is_expected.to(
+          validate_acceptance_of(:declaration).with_message(
+            "Tick the box to confirm that the information provided in this " \
+            "form is correct to the best of your knowledge"
+          )
+        )
+      end
     end
 
     it "validates the claim hasn't already been verified" do
@@ -288,18 +311,176 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
       end
     end
 
-    before do
-      dqt_teacher_resource = instance_double(Dqt::TeacherResource, find: nil)
-      dqt_client = instance_double(Dqt::Client, teacher: dqt_teacher_resource)
-      allow(Dqt::Client).to receive(:new).and_return(dqt_client)
+    context "when identity verification is required" do
+      before do
+        claim.update!(
+          onelogin_idv_at: Time.zone.now,
+          identity_confirmed_with_onelogin: false
+        )
 
-      form.save
+        form.save
+      end
+
+      it "doesn't updated the claim" do
+        expect(claim.reload.eligibility.verification).to be_empty
+      end
+
+      it "doesn't create a provider verification task" do
+        expect(
+          claim.reload.tasks.where(name: "provider_verification")
+        ).not_to be_present
+      end
+
+      it "doesn't send a confirmation email" do
+        expect(
+          claim.school.eligible_fe_provider.primary_key_contact_email_address
+        ).not_to have_received_email(
+          "70942fe1-5838-4d37-904c-9d070f2582f0"
+        )
+      end
     end
 
-    it "verifies the claim" do
-      expect(claim.reload.eligibility.verification).to match(
-        {
-          "assertions" => [
+    context "when identity verification is not required" do
+      before do
+        dqt_teacher_resource = instance_double(Dqt::TeacherResource, find: nil)
+        dqt_client = instance_double(Dqt::Client, teacher: dqt_teacher_resource)
+        allow(Dqt::Client).to receive(:new).and_return(dqt_client)
+
+        form.save
+      end
+
+      it "verifies the claim" do
+        expect(claim.reload.eligibility.verification).to match(
+          {
+            "assertions" => [
+              {
+                "name" => "contract_type",
+                "outcome" => true
+              },
+              {
+                "name" => "teaching_responsibilities",
+                "outcome" => true
+              },
+              {
+                "name" => "further_education_teaching_start_year",
+                "outcome" => true
+              },
+              {
+                "name" => "teaching_hours_per_week",
+                "outcome" => true
+              },
+              {
+                "name" => "half_teaching_hours",
+                "outcome" => false
+              },
+              {
+                "name" => "subjects_taught",
+                "outcome" => false
+              },
+              {
+                "name" => "subject_to_formal_performance_action",
+                "outcome" => false
+              },
+              {
+                "name" => "subject_to_disciplinary_action",
+                "outcome" => false
+              }
+            ],
+            "verifier" => {
+              "dfe_sign_in_uid" => "123",
+              "first_name" => "Seymour",
+              "last_name" => "Skinner",
+              "email" => "seymour.skinner@springfield-elementary.edu",
+              "dfe_sign_in_organisation_name" => "Springfield Elementary",
+              "dfe_sign_in_role_codes" => ["teacher_payments_claim_verifier"]
+            },
+            "created_at" => "2024-01-01T12:00:00.000+00:00"
+          }
+        )
+
+        expect(claim.verified_at).to eq(DateTime.new(2024, 1, 1, 12, 0, 0))
+      end
+
+      it "creates a provider verification task" do
+        task = claim.reload.tasks.find_by(name: "provider_verification")
+
+        expect(task.created_by.email).to eq(
+          "seymour.skinner@springfield-elementary.edu"
+        )
+      end
+
+      it "sends the provider a confirmation email" do
+        expect(
+          claim.school.eligible_fe_provider.primary_key_contact_email_address
+        ).to have_received_email(
+          "70942fe1-5838-4d37-904c-9d070f2582f0",
+          recipient_name: "Springfield Elementary",
+          claim_reference: "ABC123",
+          claimant_name: "Edna Krabappel",
+          verifier_name: "Seymour Skinner",
+          verification_date: "1 January 2024"
+        )
+      end
+    end
+  end
+
+  describe "initialize" do
+    context "with a existing verified session" do
+      before do
+        journey_session.answers.assign_attributes(
+          verification: {
+            "assertions" => [
+              {
+                "name" => "contract_type",
+                "outcome" => true
+              },
+              {
+                "name" => "teaching_responsibilities",
+                "outcome" => true
+              },
+              {
+                "name" => "further_education_teaching_start_year",
+                "outcome" => true
+              },
+              {
+                "name" => "teaching_hours_per_week",
+                "outcome" => true
+              },
+              {
+                "name" => "half_teaching_hours",
+                "outcome" => false
+              },
+              {
+                "name" => "subjects_taught",
+                "outcome" => false
+              },
+              {
+                "name" => "subject_to_formal_performance_action",
+                "outcome" => false
+              },
+              {
+                "name" => "subject_to_disciplinary_action",
+                "outcome" => false
+              }
+            ],
+            "verifier" => {
+              "dfe_sign_in_uid" => "123",
+              "first_name" => "Seymour",
+              "last_name" => "Skinner",
+              "email" => "seymour.skinner@springfield-elementary.edu",
+              "dfe_sign_in_organisation_name" => "Springfield Elementary",
+              "dfe_sign_in_role_codes" => ["teacher_payments_claim_verifier"]
+            },
+            "created_at" => "2024-01-01T12:00:00.000+00:00"
+          }
+        )
+
+        journey_session.save!
+      end
+
+      it "sets the attributes on the form" do
+        expect(form.assertions.map(&:attributes)).to eq(
+          [
             {
               "name" => "contract_type",
               "outcome" => true
@@ -332,41 +513,13 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
               "name" => "subject_to_disciplinary_action",
               "outcome" => false
             }
-          ],
-          "verifier" => {
-            "dfe_sign_in_uid" => "123",
-            "first_name" => "Seymour",
-            "last_name" => "Skinner",
-            "email" => "seymour.skinner@springfield-elementary.edu",
-            "dfe_sign_in_organisation_name" => "Springfield Elementary",
-            "dfe_sign_in_role_codes" => ["teacher_payments_claim_verifier"]
-          },
-          "created_at" => "2024-01-01T12:00:00.000+00:00"
-        }
-      )
+          ]
+        )
+      end
 
-      expect(claim.verified_at).to eq(DateTime.new(2024, 1, 1, 12, 0, 0))
-    end
-
-    it "creates a provider verification task" do
-      task = claim.reload.tasks.find_by(name: "provider_verification")
-
-      expect(task.created_by.email).to eq(
-        "seymour.skinner@springfield-elementary.edu"
-      )
-    end
-
-    it "sends the provider a confirmation email" do
-      expect(
-        claim.school.eligible_fe_provider.primary_key_contact_email_address
-      ).to have_received_email(
-        "70942fe1-5838-4d37-904c-9d070f2582f0",
-        recipient_name: "Springfield Elementary",
-        claim_reference: "ABC123",
-        claimant_name: "Edna Krabappel",
-        verifier_name: "Seymour Skinner",
-        verification_date: "1 January 2024"
-      )
+      it "creates a valid form" do
+        expect(form).to be_valid
+      end
     end
   end
 end
