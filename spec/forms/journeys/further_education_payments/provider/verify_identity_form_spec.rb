@@ -103,11 +103,216 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyIdentityForm,
   describe "validations" do
     subject { form }
 
-    it do
-      is_expected.to(
-        validate_presence_of(:claimant_date_of_birth)
-          .with_message("Enter Edna’s date of birth")
-      )
+    describe "claimant_date_of_birth" do
+      context "when missing" do
+        let(:params) do
+          ActionController::Parameters.new(
+            {
+              claim: {
+                "claimant_date_of_birth(3i)": "",
+                "claimant_date_of_birth(2i)": "",
+                "claimant_date_of_birth(1i)": ""
+              }
+            }
+          )
+        end
+
+        it "is invalid" do
+          expect(form).not_to be_valid
+          expect(form.errors[:claimant_date_of_birth]).to include(
+            "Enter Edna’s date of birth"
+          )
+        end
+      end
+
+      context "when missing day" do
+        let(:params) do
+          ActionController::Parameters.new(
+            {
+              claim: {
+                "claimant_date_of_birth(2i)": "1",
+                "claimant_date_of_birth(1i)": "1949"
+              }
+            }
+          )
+        end
+
+        it "is invalid" do
+          expect(form).not_to be_valid
+          expect(form.errors[:claimant_date_of_birth]).to include(
+            "Date of birth must include a day, month and year in the correct " \
+            "format, for example 01 01 1980"
+          )
+        end
+      end
+
+      context "when invalid day" do
+        let(:params) do
+          ActionController::Parameters.new(
+            {
+              claim: {
+                "claimant_date_of_birth(3i)": "32",
+                "claimant_date_of_birth(2i)": "1",
+                "claimant_date_of_birth(1i)": "1949"
+              }
+            }
+          )
+        end
+
+        it "is invalid" do
+          expect(form).not_to be_valid
+          expect(form.errors[:claimant_date_of_birth]).to include(
+            "Enter a date of birth in the correct format"
+          )
+        end
+      end
+
+      context "when missing month" do
+        let(:params) do
+          ActionController::Parameters.new(
+            {
+              claim: {
+                "claimant_date_of_birth(3i)": "21",
+                "claimant_date_of_birth(1i)": "1949"
+              }
+            }
+          )
+        end
+
+        it "is invalid" do
+          expect(form).not_to be_valid
+          expect(form.errors[:claimant_date_of_birth]).to include(
+            "Date of birth must include a day, month and year in the correct " \
+            "format, for example 01 01 1980"
+          )
+        end
+      end
+
+      context "when invalid month" do
+        let(:params) do
+          ActionController::Parameters.new(
+            {
+              claim: {
+                "claimant_date_of_birth(3i)": "21",
+                "claimant_date_of_birth(2i)": "13",
+                "claimant_date_of_birth(1i)": "1949"
+              }
+            }
+          )
+        end
+
+        it "is invalid" do
+          expect(form).not_to be_valid
+          expect(form.errors[:claimant_date_of_birth]).to include(
+            "Enter a date of birth in the correct format"
+          )
+        end
+      end
+
+      context "when missing year" do
+        let(:params) do
+          ActionController::Parameters.new(
+            {
+              claim: {
+                "claimant_date_of_birth(3i)": "21",
+                "claimant_date_of_birth(2i)": "1"
+              }
+            }
+          )
+        end
+
+        it "is invalid" do
+          expect(form).not_to be_valid
+          expect(form.errors[:claimant_date_of_birth]).to include(
+            "Date of birth must include a day, month and year in the correct " \
+            "format, for example 01 01 1980"
+          )
+        end
+      end
+
+      context "when invalid date" do
+        let(:params) do
+          ActionController::Parameters.new(
+            {
+              claim: {
+                "claimant_date_of_birth(3i)": "30",
+                "claimant_date_of_birth(2i)": "2",
+                "claimant_date_of_birth(1i)": "2021"
+              }
+            }
+          )
+        end
+
+        it "is invalid" do
+          expect(form).not_to be_valid
+          expect(form.errors[:claimant_date_of_birth]).to include(
+            "Enter a date of birth in the correct format"
+          )
+        end
+      end
+
+      context "when future" do
+        let(:params) do
+          ActionController::Parameters.new(
+            {
+              claim: {
+                "claimant_date_of_birth(3i)": "21",
+                "claimant_date_of_birth(2i)": "1",
+                "claimant_date_of_birth(1i)": "2086"
+              }
+            }
+          )
+        end
+
+        it "is invalid" do
+          expect(form).not_to be_valid
+          expect(form.errors[:claimant_date_of_birth]).to include(
+            "Date of birth must be in the past"
+          )
+        end
+      end
+
+      context "when a year with less than 4 digits" do
+        let(:params) do
+          ActionController::Parameters.new(
+            {
+              claim: {
+                "claimant_date_of_birth(3i)": "21",
+                "claimant_date_of_birth(2i)": "1",
+                "claimant_date_of_birth(1i)": "49"
+              }
+            }
+          )
+        end
+
+        it "is invalid" do
+          expect(form).not_to be_valid
+          expect(form.errors[:claimant_date_of_birth]).to include(
+            "Year must include 4 numbers"
+          )
+        end
+      end
+
+      context "when a year before 1900" do
+        let(:params) do
+          ActionController::Parameters.new(
+            {
+              claim: {
+                "claimant_date_of_birth(3i)": "21",
+                "claimant_date_of_birth(2i)": "1",
+                "claimant_date_of_birth(1i)": "1899"
+              }
+            }
+          )
+        end
+
+        it "is invalid" do
+          expect(form).not_to be_valid
+          expect(form.errors[:claimant_date_of_birth]).to include(
+            "Year must be after 1900"
+          )
+        end
+      end
     end
 
     it do
