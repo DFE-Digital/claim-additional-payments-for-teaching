@@ -1,7 +1,7 @@
 require "rails_helper"
-require "file_download"
+require "file_downloader"
 
-RSpec.describe FileDownload do
+RSpec.describe FileDownloader do
   let(:file_url) { "https://somewhere.com/file.csv" }
   let(:example_file) { File.open("spec/fixtures/files/file.csv") }
   let(:example_iso_encoded_file) { File.open("spec/fixtures/files/iso_encoded_file.csv") }
@@ -9,7 +9,7 @@ RSpec.describe FileDownload do
   it "returns a Tempfile for the given URL" do
     request = stub_request(:get, file_url).to_return(body: example_file)
 
-    file = FileDownload.new(file_url).fetch
+    file = FileDownloader.new(file_url).fetch
 
     expect(request).to have_been_requested
 
@@ -20,7 +20,7 @@ RSpec.describe FileDownload do
   it "allows the file encoding to be overridden" do
     request = stub_request(:get, file_url).to_return(body: example_iso_encoded_file)
 
-    file = FileDownload.new(file_url, encoding: "ISO-8859-1").fetch
+    file = FileDownloader.new(file_url, encoding: "ISO-8859-1").fetch
 
     expect(request).to have_been_requested
 
@@ -33,7 +33,7 @@ RSpec.describe FileDownload do
     stub_request(:get, file_url).to_return(status: 302, headers: {"Location" => redirected_url})
     stub_request(:get, redirected_url).to_return(body: example_file)
 
-    file = FileDownload.new(file_url).fetch
+    file = FileDownloader.new(file_url).fetch
 
     expect(FileUtils.identical?(file.path, example_file.path)).to be_truthy
   end
@@ -43,7 +43,7 @@ RSpec.describe FileDownload do
     stub_request(:get, file_url).to_return(status: 301, headers: {"Location" => redirected_url})
     stub_request(:get, redirected_url).to_return(body: example_file)
 
-    file = FileDownload.new(file_url).fetch
+    file = FileDownloader.new(file_url).fetch
 
     expect(FileUtils.identical?(file.path, example_file.path)).to be_truthy
   end
@@ -55,7 +55,7 @@ RSpec.describe FileDownload do
     end
 
     expect {
-      FileDownload.new("http://url.com/file-0.csv").fetch
+      FileDownloader.new("http://url.com/file-0.csv").fetch
     }.to raise_error(HTTPClient::BadResponseError)
   end
 
@@ -63,7 +63,7 @@ RSpec.describe FileDownload do
     stub_request(:get, file_url).to_return(status: [500, "Internal Server Error"])
 
     expect {
-      FileDownload.new(file_url).fetch
-    }.to raise_error(FileDownload::DownloadError, "500 response for #{file_url}")
+      FileDownloader.new(file_url).fetch
+    }.to raise_error(FileDownloader::DownloadError, "500 response for #{file_url}")
   end
 end

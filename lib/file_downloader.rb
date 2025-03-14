@@ -1,6 +1,6 @@
 # Used to download a remote file. Handles redirects up to the given maximum.
 # Returns the file as a `Tempfile`
-class FileDownload
+class FileDownloader
   MAX_REDIRECTS = 5
 
   class DownloadError < StandardError; end
