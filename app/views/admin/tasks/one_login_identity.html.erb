@@ -13,6 +13,8 @@
     <h2 class="govuk-heading-l"><%= @current_task_name.humanize %></h2>
   </div>
 
+  <%= render "one_login_idv" %>
+
   <% unless @claim.identity_verified? || @tasks_presenter.identity_confirmation.empty? %>
     <div class="govuk-grid-column-two-thirds">
       <%= render "admin/claims/answers", answers: @tasks_presenter.identity_confirmation %>
@@ -24,7 +26,7 @@
       <%= render "task_outcome", task: @task do %>
       <% end %>
     <% else %>
-      <%= render "form", task_name: "identity_confirmation", claim: @claim %>
+      <%= render "form", task_name: "one_login_identity", claim: @claim %>
     <% end %>
 
     <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>

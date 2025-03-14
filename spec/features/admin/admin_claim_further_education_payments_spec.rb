@@ -49,7 +49,7 @@ RSpec.feature "Admin claim further education payments" do
             click_on "View tasks"
 
             click_on(
-              "Confirm the provider has responded and verified the claimant's " \
+              "Confirm the provider has responded and verified the claimant’s " \
               "information"
             )
 
@@ -132,7 +132,7 @@ RSpec.feature "Admin claim further education payments" do
               click_on "View tasks"
 
               click_on(
-                "Confirm the provider has responded and verified the claimant's " \
+                "Confirm the provider has responded and verified the claimant’s " \
                 "information"
               )
 
@@ -201,7 +201,7 @@ RSpec.feature "Admin claim further education payments" do
               click_on "View tasks"
 
               click_on(
-                "Confirm the provider has responded and verified the claimant's " \
+                "Confirm the provider has responded and verified the claimant’s " \
                 "information"
               )
 
@@ -278,7 +278,7 @@ RSpec.feature "Admin claim further education payments" do
               click_on "View tasks"
 
               click_on(
-                "Confirm the provider has responded and verified the claimant's " \
+                "Confirm the provider has responded and verified the claimant’s " \
                 "information"
               )
 
@@ -321,7 +321,7 @@ RSpec.feature "Admin claim further education payments" do
             click_on "View tasks"
 
             click_on(
-              "Confirm the provider has responded and verified the claimant's " \
+              "Confirm the provider has responded and verified the claimant’s " \
               "information"
             )
 
@@ -413,7 +413,7 @@ RSpec.feature "Admin claim further education payments" do
             click_on "View tasks"
 
             click_on(
-              "Confirm the provider has responded and verified the claimant's " \
+              "Confirm the provider has responded and verified the claimant’s " \
               "information"
             )
 

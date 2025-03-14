@@ -5,7 +5,7 @@ RSpec.describe Policies::FurtherEducationPayments, type: :model do
 
   it do
     expect(subject::VERIFIERS).to eq([
-      AutomatedChecks::ClaimVerifiers::Identity,
+      AutomatedChecks::ClaimVerifiers::OneLoginIdentity,
       AutomatedChecks::ClaimVerifiers::ProviderVerification,
       AutomatedChecks::ClaimVerifiers::Employment,
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,

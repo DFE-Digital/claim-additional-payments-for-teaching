@@ -14,7 +14,7 @@ module Policies
       def applicable_task_names
         tasks = []
 
-        tasks << "identity_confirmation"
+        tasks << "one_login_identity"
         tasks << "provider_verification"
         tasks << "provider_details" if claim.eligibility.provider_and_claimant_details_match?
         tasks << "employment" if claim.eligibility.teacher_reference_number.present?
@@ -24,6 +24,18 @@ module Policies
         tasks << "payroll_gender" if claim.payroll_gender_missing? || claim.tasks.exists?(name: "payroll_gender")
 
         tasks
+      end
+
+      def applicable_task_objects
+        applicable_task_names.map do |name|
+          if FeatureFlag.disabled?(:alternative_idv) && name == "one_login_identity"
+            OpenStruct.new(name:, locale_key: "identity_confirmation")
+          elsif FeatureFlag.enabled?(:alternative_idv) && name == "provider_verification"
+            OpenStruct.new(name:, locale_key: "eligibility_check")
+          else
+            OpenStruct.new(name:, locale_key: name)
+          end
+        end
       end
 
       private
