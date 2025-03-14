@@ -1,9 +1,11 @@
+<% object = ClaimCheckingTasks.new(@claim)  %>
+
 <%= govuk_pagination(block_mode: true) do |p| %>
   <% if task_pagination.previous_task_name.present? %>
-    <% p.with_previous_page(text: "Previous", label_text: ClaimCheckingTasks.formatted_task_name(task_pagination.previous_task_name), href: task_pagination.previous_task_path) %>
+    <% p.with_previous_page(text: "Previous", label_text: ClaimCheckingTasks.formatted_task_name(object.locale_key_for_task_name(task_pagination.previous_task_name)), href: task_pagination.previous_task_path) %>
   <% end %>
 
   <% if task_pagination.next_task_name.present? %>
-    <% p.with_next_page(text: "Next", label_text: ClaimCheckingTasks.formatted_task_name(task_pagination.next_task_name), href: task_pagination.next_task_path) %>
+    <% p.with_next_page(text: "Next", label_text: ClaimCheckingTasks.formatted_task_name(object.locale_key_for_task_name(task_pagination.next_task_name)), href: task_pagination.next_task_path) %>
   <% end %>
 <% end %>
