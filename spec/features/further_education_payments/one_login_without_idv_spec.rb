@@ -156,6 +156,11 @@ RSpec.feature "Further education payments" do
     fill_in "Postcode", with: "DE22 4BS"
     click_on "Continue"
 
+    expect(page).to have_content("Do you have a valid passport?")
+    choose "Yes"
+    fill_in "Passport number", with: "123456789"
+    click_on "Continue"
+
     expect(page).to have_content("Email address")
     fill_in "Email address", with: "john.doe@example.com"
     click_on "Continue"
@@ -185,6 +190,8 @@ RSpec.feature "Further education payments" do
     click_on "Continue"
 
     expect(page).to have_content("Check your answers before sending your application")
+    expect(page).to have_content("Do you have a valid passport?")
+    expect(page).to have_content("Passport number")
 
     expect do
       click_on "Accept and send"
@@ -206,6 +213,8 @@ RSpec.feature "Further education payments" do
     eligibility = Policies::FurtherEducationPayments::Eligibility.last
 
     expect(eligibility.teacher_reference_number).to eql("1234567")
+    expect(eligibility.valid_passport).to be_truthy
+    expect(eligibility.passport_number).to eql("123456789")
 
     expect(page).to have_content("You applied for a further education targeted retention incentive payment")
 

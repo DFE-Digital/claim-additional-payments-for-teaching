@@ -100,6 +100,7 @@
   - school_headteacher_name
   :further_education_payments_eligibilities:
   - verification
+  - passport_number
   :journeys_sessions:
   - answers
   :early_years_payment_eligibilities:

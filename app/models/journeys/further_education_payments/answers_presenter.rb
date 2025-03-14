@@ -4,6 +4,26 @@ module Journeys
       include ActionView::Helpers::TranslationHelper
       include CoursesHelper
 
+      def identity_answers
+        [].tap do |a|
+          a << [t("questions.name"), answers.full_name, "personal-details"] if show_name?
+          a << [t("forms.address.questions.your_address"), answers.address, "address"]
+
+          a << [t("further_education_payments.forms.passport.question"), (answers.valid_passport ? "Yes" : "No"), "passport"] if !answers.valid_passport.nil?
+          a << [t("further_education_payments.forms.passport.conditional_question"), answers.passport_number, "passport"] if answers.passport_number.present?
+
+          a << [t("questions.date_of_birth"), date_of_birth_string, "personal-details"] if show_dob?
+          a << payroll_gender
+          a << teacher_reference_number if show_trn?
+          a << [t("questions.national_insurance_number"), answers.national_insurance_number, "personal-details"] if show_nino?
+          a << [t("questions.email_address"), answers.email_address, "email-address"] unless show_email_select?
+          a << [text_for(:select_email), answers.email_address, "select-email"] if show_email_select?
+          a << [t("questions.provide_mobile_number"), answers.provide_mobile_number? ? "Yes" : "No", "provide-mobile-number"] unless show_mobile_select?
+          a << [t("questions.mobile_number"), answers.mobile_number, "mobile-number"] unless show_mobile_select? || !answers.provide_mobile_number?
+          a << [t("additional_payments.forms.select_mobile_form.questions.which_number"), answers.mobile_number.present? ? answers.mobile_number : t("additional_payments.forms.select_mobile_form.answers.decline"), "select-mobile"] if show_mobile_select?
+        end
+      end
+
       # Formats the eligibility as a list of questions and answers, each
       # accompanied by a slug for changing the answer. Suitable for playback to
       # the claimant for them to review on the check-your-answers page.

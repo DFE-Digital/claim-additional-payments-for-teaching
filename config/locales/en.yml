@@ -1225,6 +1225,12 @@ en:
         errors:
           inclusion:
             Select yes if you spend at least half of your timetabled teaching hours teaching these eligible courses
+      passport:
+        question: Do you have a valid passport?
+        conditional_question: Passport number
+        errors:
+          inclusion: Select yes if you have a valid passport
+          length: Passport number should be between 8 and 9 characters long
       teacher_reference_number:
         heading: Teacher reference number (TRN)
         questions:
