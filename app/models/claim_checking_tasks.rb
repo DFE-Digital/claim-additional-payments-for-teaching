@@ -26,6 +26,24 @@ class ClaimCheckingTasks
       .applicable_task_names
   end
 
+  def locale_key_for_task_name(name)
+    r = applicable_task_objects.find do |object|
+      object.name == name
+    end
+
+    if r.nil?
+      name
+    else
+      r.locale_key
+    end
+  end
+
+  def applicable_task_objects
+    policy::ClaimCheckingTasks
+      .new(claim)
+      .applicable_task_objects
+  end
+
   def pageable_tasks
     array = applicable_task_names
     array << "decision"

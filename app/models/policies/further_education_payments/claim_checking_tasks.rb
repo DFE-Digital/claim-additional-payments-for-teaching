@@ -26,6 +26,18 @@ module Policies
         tasks
       end
 
+      def applicable_task_objects
+        applicable_task_names.map do |name|
+          if FeatureFlag.disabled?(:alternative_idv) && name == "one_login_identity"
+            OpenStruct.new(name:, locale_key: "identity_confirmation")
+          elsif FeatureFlag.enabled?(:alternative_idv) && name == "provider_verification"
+            OpenStruct.new(name:, locale_key: "eligibility_check")
+          else
+            OpenStruct.new(name:, locale_key: name)
+          end
+        end
+      end
+
       private
 
       def matching_claims

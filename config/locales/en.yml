@@ -131,7 +131,7 @@ en:
       This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
     tasks:
       one_login_identity:
-        name: Identity confirmation
+        name: One Login identity check
         title: Confirm the claimant made the claim
       previous_payment:
         name: Previous payment
@@ -156,7 +156,10 @@ en:
         title: "Confirm the claimant made the claim"
       provider_verification:
         name: Provider verification
-        title: "Confirm the provider has responded and verified the claimant's information"
+        title: "Confirm the provider has responded and verified the claimant’s information"
+      eligibility_check:
+        name: Eligibility check
+        title: "Confirm the provider has responded and verified the claimant’s information"
       provider_details:
         name: Provider details
         title: "Check the provider details"
