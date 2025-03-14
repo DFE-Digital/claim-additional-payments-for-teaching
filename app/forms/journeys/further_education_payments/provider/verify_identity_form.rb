@@ -2,38 +2,21 @@ module Journeys
   module FurtherEducationPayments
     module Provider
       class VerifyIdentityForm < Form
+        class InvalidDate < Struct.new(:day, :month, :year, keyword_init: true); end
+
         attribute :"claimant_date_of_birth(3i)", :integer
         attribute :"claimant_date_of_birth(2i)", :integer
         attribute :"claimant_date_of_birth(1i)", :integer
-        attribute :claimant_date_of_birth, :date
         attribute :claimant_postcode, :string
         attribute :claimant_national_insurance_number, :string
         attribute :claimant_valid_passport, :boolean
         attribute :claimant_passport_number, :string
         attribute :declaration, :boolean
+        attr_reader :day
+        attr_reader :month
+        attr_reader :year
 
-        def initialize(...)
-          super
-
-          # Handle multi-parameter date attributes
-          self.claimant_date_of_birth ||= [
-            send(:"claimant_date_of_birth(1i)"),
-            send(:"claimant_date_of_birth(2i)"),
-            send(:"claimant_date_of_birth(3i)")
-          ].join("-")
-        end
-
-        validates(
-          :claimant_date_of_birth,
-          presence: {
-            message: ->(form, _) do
-              form.t(
-                "claimant_date_of_birth.errors.blank",
-                claimant: form.claimant_first_name
-              )
-            end
-          }
-        )
+        validate :date_of_birth_criteria
 
         validates(
           :claimant_postcode,
@@ -114,6 +97,20 @@ module Journeys
 
         delegate :claim, to: :answers
 
+        def initialize(...)
+          super
+
+          set_date_of_birth_attributes
+        end
+
+        def claimant_date_of_birth
+          if Date.valid_date?(year, month, day)
+            Date.new(year, month, day)
+          else
+            InvalidDate.new(year: year, month: month, day: day)
+          end
+        end
+
         def claimant_first_name
           claim.first_name
         end
@@ -148,6 +145,51 @@ module Journeys
           ClaimSubmissionForm.new(journey_session: journey_session).save!
 
           true
+        end
+
+        private
+
+        def set_date_of_birth_attributes
+          @day = send(:"claimant_date_of_birth(3i)") || answers.claimant_date_of_birth&.day
+          @month = send(:"claimant_date_of_birth(2i)") || answers.claimant_date_of_birth&.month
+          @year = send(:"claimant_date_of_birth(1i)") || answers.claimant_date_of_birth&.year
+        end
+
+        def date_of_birth_criteria
+          if [day, month, year].all?(&:blank?)
+            errors.add(
+              :claimant_date_of_birth,
+              t(
+                "claimant_date_of_birth.errors.blank",
+                claimant: claimant_first_name
+              )
+            )
+          elsif [day, month, year].any?(&:blank?)
+            errors.add(
+              :claimant_date_of_birth,
+              t("claimant_date_of_birth.errors.format")
+            )
+          elsif claimant_date_of_birth.is_a?(InvalidDate)
+            errors.add(
+              :claimant_date_of_birth,
+              t("claimant_date_of_birth.errors.invalid")
+            )
+          elsif claimant_date_of_birth.future?
+            errors.add(
+              :claimant_date_of_birth,
+              t("claimant_date_of_birth.errors.in_future")
+            )
+          elsif claimant_date_of_birth.year < 1000
+            errors.add(
+              :claimant_date_of_birth,
+              t("claimant_date_of_birth.errors.four_digits")
+            )
+          elsif claimant_date_of_birth.year < 1900
+            errors.add(
+              :claimant_date_of_birth,
+              t("claimant_date_of_birth.errors.before_1900")
+            )
+          end
         end
       end
     end

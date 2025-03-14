@@ -1342,6 +1342,11 @@ en:
           label: "What is %{claimant}’s date of birth?"
           errors:
             blank: "Enter %{claimant}’s date of birth"
+            invalid: "Enter a date of birth in the correct format"
+            in_future: "Date of birth must be in the past"
+            format: "Date of birth must include a day, month and year in the correct format, for example 01 01 1980"
+            four_digits: "Year must include 4 numbers"
+            before_1900: "Year must be after 1900"
         claimant_postcode:
           label: "What is the postcode of %{claimant}’s current home address?"
           hint: "For example ’AA1 2BC’"
