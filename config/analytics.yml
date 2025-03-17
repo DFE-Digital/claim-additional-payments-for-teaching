@@ -29,6 +29,7 @@ shared:
     - passed
     - manual
     - claim_verifier_match
+    - reason
   :amendments:
     - id
     - claim_id

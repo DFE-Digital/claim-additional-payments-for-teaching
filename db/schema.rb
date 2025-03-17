@@ -646,6 +646,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_19_180055) do
     t.boolean "passed"
     t.boolean "manual"
     t.integer "claim_verifier_match"
+    t.text "reason"
     t.index ["claim_id"], name: "index_tasks_on_claim_id"
     t.index ["created_by_id"], name: "index_tasks_on_created_by_id"
     t.index ["name", "claim_id"], name: "index_tasks_on_name_and_claim_id", unique: true

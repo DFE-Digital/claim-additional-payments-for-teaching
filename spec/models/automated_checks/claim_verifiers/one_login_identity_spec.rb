@@ -14,10 +14,10 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::OneLoginIdentity do
         )
       end
 
-      it "creates a failed task" do
+      it "creates a failed task with no_data reason" do
         expect {
           subject.perform
-        }.to change(Task.where(passed: false), :count).by(1)
+        }.to change(Task.where(passed: false, reason: "no_data"), :count).by(1)
       end
     end
 

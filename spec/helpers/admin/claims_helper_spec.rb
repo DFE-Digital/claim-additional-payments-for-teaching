@@ -443,6 +443,28 @@ describe Admin::ClaimsHelper do
       end
     end
 
+    context "when task failed with reason" do
+      subject(:task_status_tag) { helper.task_status_tag(claim, "one_login_identity") }
+
+      let(:claim_tasks) do
+        [
+          build(
+            :task,
+            claim_verifier_match: nil,
+            name: "one_login_identity",
+            passed: false,
+            reason: "no_data"
+          )
+        ]
+      end
+
+      it "returns 'No data' in red" do
+        expect(task_status_tag).to match("No data")
+        expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
+        expect(task_status_tag).to match("govuk-tag--red")
+      end
+    end
+
     context "with task passed nil" do
       let(:claim_tasks) do
         [
