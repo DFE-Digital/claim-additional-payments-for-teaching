@@ -54,5 +54,11 @@ FactoryBot.define do
 
       payments { build_list(:payment, count) }
     end
+
+    trait :with_downloads do
+      after(:create) do |payroll_run, evaluator|
+        create(:file_download, source_data_model: payroll_run.class.to_s, source_data_model_id: payroll_run.id)
+      end
+    end
   end
 end
