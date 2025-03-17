@@ -21,8 +21,7 @@
 
   <div class="govuk-grid-column-two-thirds">
     <% if !@task.passed.nil? %>
-      <%= render "task_outcome", task: @task do %>
-      <% end %>
+      <%= render "task_outcome", task: @task %>
     <% else %>
       <%= render "form", task_name: "identity_confirmation", claim: @claim %>
     <% end %>
