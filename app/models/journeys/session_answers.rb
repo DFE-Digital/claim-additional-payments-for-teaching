@@ -17,7 +17,7 @@ module Journeys
     attribute :postcode, :string, pii: true
     attribute :skip_postcode_search, :boolean, pii: false
 
-    attribute :date_of_birth, :date, pii: false
+    attribute :date_of_birth, :date, pii: true
     attribute :teacher_reference_number, :string, pii: true
     attribute :national_insurance_number, :string, pii: true
     attribute :email_address, :string, pii: true
