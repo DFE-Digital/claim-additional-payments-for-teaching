@@ -133,6 +133,9 @@ en:
       one_login_identity:
         name: One Login identity check
         title: Confirm the claimant made the claim
+      alternative_identity_verification:
+        name: "Alternative identity verification"
+        title: "Confirm the provider has verified the claimant's identity"
       previous_payment:
         name: Previous payment
         title: Check for previous payment
@@ -931,6 +934,8 @@ en:
           title: Do the One Login details match the personal details entered by the claimant?
         identity_confirmation:
           title: Do the One Login details match the personal details entered by the claimant?
+        alternative_identity_verification:
+          title: "Do the details entered by the claimant match the personal details entered by the provider?"
         matching_details:
           title: Is this claim still valid despite having matching details with other claims?
         payroll_details:

@@ -13,6 +13,10 @@ module Policies
         AdminProviderVerificationTaskPresenter.new(claim)
       end
 
+      def alternative_identity_verification
+        AdminAlternativeIdentityVerificationTaskPresenter.new(claim)
+      end
+
       def provider_name
         [verifier.fetch("first_name"), verifier.fetch("last_name")].join(" ").presence || verifier.fetch("email")
       end
