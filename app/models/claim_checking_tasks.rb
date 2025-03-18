@@ -38,6 +38,7 @@ class ClaimCheckingTasks
       Task::NAMES.dup.tap do |task_names|
         task_names.delete("previous_payment")
         task_names.delete("previous_residency")
+        task_names.delete("alternative_identity_verification")
         task_names.delete("induction_confirmation") unless claim.policy == Policies::EarlyCareerPayments
         task_names.delete("student_loan_amount") unless claim.policy == Policies::StudentLoans
         task_names.delete("student_loan_plan") unless claim.has_ecp_or_targeted_retention_incentive_policy? && claim.submitted_without_slc_data?

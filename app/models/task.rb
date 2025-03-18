@@ -10,6 +10,7 @@ class Task < ApplicationRecord
   NAMES = %w[
     previous_payment
     identity_confirmation
+    alternative_identity_verification
     provider_verification
     provider_details
     visa

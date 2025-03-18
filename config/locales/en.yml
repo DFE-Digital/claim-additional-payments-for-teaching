@@ -900,9 +900,14 @@ en:
           no_response: "No response"
           no_response_from_employer: "No response from employer"
           other: "Other"
+      tasks:
+        alternative_identity_verification:
+          title: "Confirm the provider has verified the claimant's identity"
       task_questions:
         identity_confirmation:
           title: Do the One Login details match the personal details entered by the claimant?
+        alternative_identity_verification:
+          title: "Do the details entered by the claimant match the personal details entered by the provider?"
         matching_details:
           title: Is this claim still valid despite having matching details with other claims?
         payroll_details:

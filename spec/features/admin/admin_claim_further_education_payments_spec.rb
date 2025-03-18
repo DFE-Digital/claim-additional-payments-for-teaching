@@ -8,6 +8,7 @@ RSpec.feature "Admin claim further education payments" do
   end
 
   before do
+    FeatureFlag.create!(name: :fe_provider_identity_verification, enabled: true)
     create(:journey_configuration, :further_education_payments_provider)
     sign_in_as_service_operator
   end
@@ -484,6 +485,286 @@ RSpec.feature "Admin claim further education payments" do
             visit admin_claim_tasks_path(claim)
 
             expect(task_status("Provider verification")).to eq "Failed"
+          end
+        end
+      end
+    end
+
+    describe "provider identity verification task" do
+      context "when the claimant has failed IDV" do
+        context "when the provider hasn't verified the claim" do
+          it "shows the alternative idv task" do
+            claim = create(
+              :claim,
+              :submitted,
+              policy: Policies::FurtherEducationPayments,
+              onelogin_idv_at: 1.day.ago,
+              identity_confirmed_with_onelogin: false
+            )
+
+            create(
+              :further_education_payments_eligibility,
+              claim: claim,
+              provider_verification_email_last_sent_at: DateTime.new(2025, 3, 1, 9, 0, 0),
+              provider_verification_email_count: 1
+            )
+
+            visit admin_claim_tasks_path(claim)
+
+            expect(page).to have_content("Alternative identity verification")
+
+            click_on "Confirm the provider has verified the claimant's identity"
+
+            expect(page).to have_content(
+              "Resend provider verification request"
+            )
+          end
+
+          it "shows the option to send the verificaiton email for duplicates" do
+            claim = create(
+              :claim,
+              :submitted,
+              policy: Policies::FurtherEducationPayments,
+              onelogin_idv_at: 1.day.ago,
+              identity_confirmed_with_onelogin: false
+            )
+
+            fe_provider = create(
+              :school,
+              :further_education,
+              :fe_eligible,
+              name: "Springfield A and M"
+            )
+
+            create(
+              :further_education_payments_eligibility,
+              claim: claim,
+              school: fe_provider,
+              flagged_as_duplicate: true
+            )
+
+            visit admin_claim_tasks_path(claim)
+
+            expect(page).to have_content("Alternative identity verification")
+
+            click_on "Confirm the provider has verified the claimant's identity"
+
+            expect(page).to have_content(
+              "This task has not been sent to the provider yet."
+            )
+
+            expect(page).not_to have_content(
+              "The verification request was sent to the provider"
+            )
+
+            perform_enqueued_jobs do
+              click_on "Send provider verification request"
+            end
+
+            expect(page).to have_content(
+              "The verification request was sent to the provider by " \
+              "Aaron Admin on 9 September #{AcademicYear.current.start_year} " \
+              "11:00am"
+            )
+
+            provider_email_address = fe_provider.eligible_fe_provider.primary_key_contact_email_address
+
+            expect(provider_email_address).to(
+              have_received_email("9a25fe46-2ee4-4a5c-8d47-0f04f058a87d")
+            )
+          end
+        end
+
+        context "when the provider has verified the claim" do
+          it "shows the provider and claimant entered details" do
+            claim = create(
+              :claim,
+              :submitted,
+              policy: Policies::FurtherEducationPayments,
+              onelogin_idv_at: 1.day.ago,
+              identity_confirmed_with_onelogin: false,
+              national_insurance_number: "QQ123456B",
+              postcode: "TE57 2NG",
+              date_of_birth: Date.new(1990, 2, 1)
+            )
+
+            create(
+              :further_education_payments_eligibility,
+              claim: claim,
+              flagged_as_duplicate: true,
+              claimant_date_of_birth: Date.new(1990, 1, 1),
+              claimant_postcode: "TE57 1NG",
+              claimant_national_insurance_number: "QQ123456C",
+              claimant_valid_passport: true,
+              claimant_passport_number: "123456789",
+              claimant_identity_verified_at: DateTime.now,
+              valid_passport: true,
+              passport_number: "123456780"
+            )
+
+            AutomatedChecks::ClaimVerifiers::AlternativeIdentityVerification
+              .new(claim: claim).perform
+
+            visit admin_claim_tasks_path(claim)
+
+            click_on "Confirm the provider has verified the claimant's identity"
+
+            within_table_row("National Insurance number") do |claimant, provider|
+              expect(claimant).to have_text("QQ123456B")
+              expect(provider).to have_text("QQ123456C")
+            end
+
+            within_table_row("Post code") do |claimant, provider|
+              expect(claimant).to have_text("TE57 2NG")
+              expect(provider).to have_text("TE57 1NG")
+            end
+
+            within_table_row("Date of Birth") do |claimant, provider|
+              expect(claimant).to have_text("1 February 1990")
+              expect(provider).to have_text("1 January 1990")
+            end
+
+            within_table_row("Passport number") do |claimant, provider|
+              expect(claimant).to have_text("123456780")
+              expect(provider).to have_text("123456789")
+            end
+          end
+
+          context "when the provider and claimant details match" do
+            it "shows the task as passed" do
+              claim = create(
+                :claim,
+                :submitted,
+                policy: Policies::FurtherEducationPayments,
+                onelogin_idv_at: 1.day.ago,
+                identity_confirmed_with_onelogin: false,
+                national_insurance_number: "QQ123456C",
+                postcode: "TE57 1NG",
+                date_of_birth: Date.new(1990, 1, 1)
+              )
+
+              create(
+                :further_education_payments_eligibility,
+                claim: claim,
+                flagged_as_duplicate: true,
+                claimant_date_of_birth: Date.new(1990, 1, 1),
+                claimant_postcode: "TE57 1NG",
+                claimant_national_insurance_number: "QQ123456C",
+                claimant_valid_passport: true,
+                claimant_passport_number: "123456789",
+                claimant_identity_verified_at: DateTime.now,
+                valid_passport: true,
+                passport_number: "123456789",
+                verification: {
+                  verifier: {
+                    dfe_sign_in_uid: "123",
+                    first_name: "Seymour",
+                    last_name: "Skinner",
+                    email: "seymore.skinner@springfield-elementary.edu",
+                    dfe_sign_in_organisation_name: "Springfield Elementary",
+                    dfe_sign_in_role_codes: ["teacher_payments_claim_verifier"]
+                  }
+                }
+              )
+
+              AutomatedChecks::ClaimVerifiers::AlternativeIdentityVerification
+                .new(claim: claim).perform
+
+              visit admin_claim_tasks_path(claim)
+
+              expect(
+                task_status("Alternative identity verification")
+              ).to eq("Passed")
+
+              click_on(
+                "Confirm the provider has verified the claimant's identity"
+              )
+
+              expect(page).not_to have_content(
+                "Do the details entered by the claimant match the personal " \
+                "details entered by the provider?"
+              )
+
+              expect(find(".govuk-tag")).to have_text("Passed")
+
+              expect(page).to have_content(
+                "This task was performed by the provider (Seymour Skinner) on " \
+                "9 September #{AcademicYear.current.start_year} 11:00am"
+              )
+            end
+          end
+
+          context "when the provider and claimant details don't match" do
+            it "shows the task as no match and shows the manual approval form" do
+              claim = create(
+                :claim,
+                :submitted,
+                policy: Policies::FurtherEducationPayments,
+                onelogin_idv_at: 1.day.ago,
+                identity_confirmed_with_onelogin: false,
+                national_insurance_number: "QQ123456B",
+                postcode: "TE57 2NG",
+                date_of_birth: Date.new(1990, 2, 1)
+              )
+
+              create(
+                :further_education_payments_eligibility,
+                claim: claim,
+                flagged_as_duplicate: true,
+                claimant_date_of_birth: Date.new(1990, 1, 1),
+                claimant_postcode: "TE57 1NG",
+                claimant_national_insurance_number: "QQ123456C",
+                claimant_valid_passport: true,
+                claimant_passport_number: "123456789",
+                claimant_identity_verified_at: DateTime.now,
+                valid_passport: false,
+                passport_number: nil
+              )
+
+              AutomatedChecks::ClaimVerifiers::AlternativeIdentityVerification
+                .new(claim: claim).perform
+
+              visit admin_claim_tasks_path(claim)
+
+              expect(
+                task_status("Alternative identity verification")
+              ).to eq("No match")
+
+              click_on(
+                "Confirm the provider has verified the claimant's identity"
+              )
+
+              expect(page).to have_content(
+                "Do the details entered by the claimant match the personal " \
+                "details entered by the provider?"
+              )
+
+              choose "No"
+
+              click_on "Save and continue"
+
+              visit admin_claim_tasks_path(claim)
+
+              expect(
+                task_status("Alternative identity verification")
+              ).to eq("Failed")
+
+              click_on(
+                "Confirm the provider has verified the claimant's identity"
+              )
+
+              expect(page).not_to have_content(
+                "Do the details entered by the claimant match the personal " \
+                "details entered by the provider?"
+              )
+
+              expect(find(".govuk-tag")).to have_text("Failed")
+
+              expect(page).to have_content(
+                "This task was performed by Aaron Admin on 9 September " \
+                "#{AcademicYear.current.start_year} 11:00am"
+              )
+            end
           end
         end
       end
