@@ -11,6 +11,7 @@ class Task < ApplicationRecord
     one_login_identity
     previous_payment
     identity_confirmation
+    alternative_identity_verification
     provider_verification
     provider_details
     visa
