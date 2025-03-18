@@ -34,15 +34,10 @@ focusable-selectors@^0.8.0:
   resolved "https://registry.yarnpkg.com/focusable-selectors/-/focusable-selectors-0.8.4.tgz#2ee34129b29371766ce201499e3b88c6f79ea4c1"
   integrity sha512-0XxbkD0KhOnX10qmnfF9U8DkDD8N/e4M77wMYw2Itoi4vdcoRjSkqXLZFIzkrLIOxzmzCGy88fNG1EbeXMD/zw==
 
-govuk-frontend@^5.4.0:
-  version "5.6.0"
-  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-5.6.0.tgz#8c0975f0d825ec7192bcfe64e3e97ef3dfa7dea1"
-  integrity sha512-yNA4bL7i7mNrg36wPNZ3RctHo9mjl82Phs8MWs1lwovxJuQ4ogEo/XWn2uB1HxkXNqgMlW4wnd0iiKgRMfxYfw==
-
-govuk-frontend@^5.8.0:
-  version "5.8.0"
-  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-5.8.0.tgz#da1b03cb4f2ba1f6036be0dac3c5327c3405174c"
-  integrity sha512-6l3f/YhDUCWjpmSW3CL95Hg8B+ZLzTf2WYo25ZtCs2Lb8UIzxxxFI8LxG7Ey/z04UuPhUunqFhTwSkQyJ69XbQ==
+govuk-frontend@^5.4.0, govuk-frontend@^5.9.0:
+  version "5.9.0"
+  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-5.9.0.tgz#4064ac692019e60f030d6311c49330a6454a5689"
+  integrity sha512-8NzmyoDtRFYyHs413DfNPR8Zo6qw6Q02Mruxml/Yfy+EueaOI/JZ4gVM8d0pqzJmTiMcJuHhvxqYEgBRmqeoyA==
 
 "govuk-one-login-service-header@https://github.com/govuk-one-login/service-header.git":
   version "1.1.0"
