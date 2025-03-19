@@ -105,6 +105,7 @@
   - claimant_national_insurance_number
   - claimant_valid_passport
   - claimant_passport_number
+  - passport_number
   :journeys_sessions:
   - answers
   :early_years_payment_eligibilities:

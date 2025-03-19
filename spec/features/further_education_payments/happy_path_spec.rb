@@ -170,6 +170,8 @@ RSpec.feature "Further education payments" do
     click_on "Continue"
 
     expect(page).to have_content("Check your answers before sending your application")
+    expect(page).not_to have_content("Do you have a valid passport?")
+    expect(page).not_to have_content("Passport number")
 
     expect do
       click_on "Accept and send"
