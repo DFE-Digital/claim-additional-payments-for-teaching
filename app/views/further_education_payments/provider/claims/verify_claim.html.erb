@@ -22,9 +22,11 @@
         <%= row.with_value(text: @form.claimant_name) %>
       <% end %>
 
-      <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: @form.t(:claimant_date_of_birth)) %>
-        <%= row.with_value(text: @form.claimant_date_of_birth) %>
+      <% unless @form.answers.identity_verification_required? %>
+        <%= summary_list.with_row do |row| %>
+          <%= row.with_key(text: @form.t(:claimant_date_of_birth)) %>
+          <%= row.with_value(text: @form.claimant_date_of_birth) %>
+        <% end %>
       <% end %>
 
       <%= summary_list.with_row do |row| %>
@@ -61,7 +63,7 @@
             size: "s",
             text: f.object.t(
               [:assertions, f.object.contract_type, ff.object.name, :label],
-              claimant: f.object.claimant_name,
+              claimant: f.object.claimant_first_name,
               provider: f.object.claim.school.name,
               hours: f.object.teaching_hours_per_week,
               type_of_contract: f.object.claimant_contract_of_employment,
@@ -81,27 +83,31 @@
         <%= ff.hidden_field :name %>
       <% end %>
 
-      <%= f.govuk_check_boxes_fieldset(
-        :declaration,
-        multiple: false,
-        legend: {
-          text: f.object.t(:declaration_title),
-          size: "m"
-        }
-      ) do %>
-        <%= f.govuk_check_box(
+      <% if f.object.answers.identity_verification_required? %>
+        <%= f.govuk_submit "Continue" %>
+      <% else %>
+        <%= f.govuk_check_boxes_fieldset(
           :declaration,
-          "1",
-          "0",
           multiple: false,
-          link_errors: true,
-          label: {
-            text: f.object.t(:declaration)
+          legend: {
+            text: f.object.t(:declaration_title),
+            size: "m"
           }
-        ) %>
-      <% end %>
+        ) do %>
+          <%= f.govuk_check_box(
+            :declaration,
+            "1",
+            "0",
+            multiple: false,
+            link_errors: true,
+            label: {
+              text: f.object.t(:declaration)
+            }
+          ) %>
+        <% end %>
 
-      <%= f.govuk_submit "Submit" %>
+        <%= f.govuk_submit "Submit" %>
+      <% end %>
     <% end %>
   </div>
 </div>

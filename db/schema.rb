@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_07_152200) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_10_160859) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -291,6 +291,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_07_152200) do
     t.datetime "provider_verification_email_last_sent_at"
     t.datetime "provider_verification_chase_email_last_sent_at"
     t.integer "provider_verification_email_count", default: 0
+    t.date "claimant_date_of_birth"
+    t.string "claimant_postcode"
+    t.string "claimant_national_insurance_number"
+    t.boolean "claimant_valid_passport"
+    t.string "claimant_passport_number"
+    t.datetime "claimant_identity_verified_at"
     t.index ["possible_school_id"], name: "index_fe_payments_eligibilities_on_possible_school_id"
     t.index ["school_id"], name: "index_fe_payments_eligibilities_on_school_id"
   end

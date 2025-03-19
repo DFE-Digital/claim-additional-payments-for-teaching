@@ -6,13 +6,15 @@ module Journeys
           "sign-in",
           "unauthorised",
           "verify-claim",
+          "verify-identity",
           "complete",
           "expired-link",
           "already-verified"
         ]
 
         RESTRICTED_SLUGS = [
-          "verify-claim"
+          "verify-claim",
+          "verify-identity"
         ]
 
         def self.verify_claim_url(claim)
@@ -32,14 +34,15 @@ module Journeys
           )
         end
 
-        attr_reader :journey_session
+        attr_reader :journey_session, :answers
 
         def initialize(journey_session)
           @journey_session = journey_session
+          @answers = journey_session.answers
         end
 
         def slugs
-          if @journey_session.answers.claim.rejected?
+          if answers.claim.rejected?
             return [
               "expired-link",
               # FormSubmittable requires a "next_slug", if the claim is
@@ -62,6 +65,7 @@ module Journeys
           end
 
           array << "verify-claim"
+          array << "verify-identity" if answers.identity_verification_required?
           array << "complete"
           array
         end
@@ -69,7 +73,7 @@ module Journeys
         private
 
         def already_verified?
-          return true if journey_session.answers.claim_started_verified == true
+          return true if answers.claim_started_verified == true
 
           false
         end
@@ -79,9 +83,7 @@ module Journeys
         end
 
         def auth
-          Authorisation.new(
-            answers: journey_session.answers
-          )
+          Authorisation.new(answers: answers)
         end
       end
     end

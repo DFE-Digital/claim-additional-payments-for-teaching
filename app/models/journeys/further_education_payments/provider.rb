@@ -13,6 +13,7 @@ module Journeys
       FORMS = {
         "claims" => {
           "verify-claim" => VerifyClaimForm,
+          "verify-identity" => VerifyIdentityForm,
           "complete" => CompleteForm,
           "unauthorised" => UnauthorisedForm,
           "expired-link" => ExpiredLinkForm,
