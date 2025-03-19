@@ -18,6 +18,10 @@ RSpec.feature "Early years payment practitioner" do
     fill_in "Claim reference number", with: claim.reference
     click_button "Submit"
 
+    expect(page.title).to have_text("How we’ll process your claim")
+    expect(page).to have_content("How we’ll process your claim")
+    click_on "Continue"
+
     mock_one_login_auth
 
     expect(page).to have_content "Sign in with GOV.UK One Login"
@@ -29,10 +33,6 @@ RSpec.feature "Early years payment practitioner" do
     click_on "Continue"
 
     expect(page).to have_content "You have successfully proved your identity with GOV.UK One Login"
-    click_on "Continue"
-
-    expect(page.title).to have_text("How we’ll process your claim")
-    expect(page).to have_content("How we’ll process your claim")
     click_on "Continue"
 
     expect(page).to have_content("Personal details")

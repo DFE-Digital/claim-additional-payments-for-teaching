@@ -4,8 +4,8 @@ module Journeys
       class SlugSequence
         CLAIM_SLUGS = %w[
           find-reference
-          sign-in
           how-we-use-your-information
+          sign-in
           personal-details
           enter-home-address
           email-address
