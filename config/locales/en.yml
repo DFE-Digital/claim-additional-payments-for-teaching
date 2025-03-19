@@ -130,47 +130,73 @@ en:
     unknown_payroll_gender_preventing_approval_message:
       This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
     tasks:
+      one_login_identity:
+        name: One Login identity check
+        title: Confirm the claimant made the claim
       previous_payment:
+        name: Previous payment
         title: Check for previous payment
       previous_residency:
+        name: Previous residency
         title: Check previous residency
       qualifications:
+        name: Qualifications
         title: "Check qualification information"
       induction_confirmation:
+        name: Induction confirmation
         title: "Check induction information"
       employment:
+        name: Employment
         title: "Check employment information"
       matching_details:
+        name: Matching details
         title: "Review matching details from other claims"
       identity_confirmation:
+        name: Identity confirmation
         title: "Confirm the claimant made the claim"
       provider_verification:
-        title: "Confirm the provider has responded and verified the claimant's information"
+        name: Provider verification
+        title: "Confirm the provider has responded and verified the claimant’s information"
+      eligibility_check:
+        name: Eligibility check
+        title: "Confirm the provider has responded and verified the claimant’s information"
       provider_details:
+        name: Provider details
         title: "Check the provider details"
       payroll_gender:
+        name: Payroll gender
         title: "How is the claimant’s gender recorded for payroll purposes?"
         hint: "The claimant answered ‘don’t know’ to the question ‘how is your gender recorded on your employer’s payroll system?’"
       student_loan_amount:
+        name: Student loan amount
         title: "Check student loan amount"
       student_loan_plan:
+        name: Student loan plan
         title: "Check student loan plan"
       payroll_details:
+        name: Payroll details
         title: "Check bank account details"
         question: "The claimant’s personal bank account details have not been automatically validated. Has the claimant confirmed their personal bank account details?"
       census_subjects_taught:
+        name: Census subjects taught
         title: "Check eligible subjects are taught"
       visa:
+        name: Visa
         title: "Check visa"
       arrival_date:
+        name: Arrival date
         title: "Check arrival date"
       employment_contract:
+        name: Employment contract
         title: "Check employment contract"
       employment_start:
+        name: Employment start
         title: "Check employment start date"
       subject:
+        name: Subject
         title: "Check subject"
       teaching_hours:
+        name: Teaching hours
         title: "Check teaching hours"
     undo_decision:
       approved: "Undo approval"
@@ -901,6 +927,8 @@ en:
           no_response_from_employer: "No response from employer"
           other: "Other"
       task_questions:
+        one_login_identity:
+          title: Do the One Login details match the personal details entered by the claimant?
         identity_confirmation:
           title: Do the One Login details match the personal details entered by the claimant?
         matching_details:

@@ -8,6 +8,7 @@
 # out.
 class Task < ApplicationRecord
   NAMES = %w[
+    one_login_identity
     previous_payment
     identity_confirmation
     provider_verification
