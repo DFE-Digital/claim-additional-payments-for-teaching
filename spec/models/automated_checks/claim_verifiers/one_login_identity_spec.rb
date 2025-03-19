@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe AutomatedChecks::ClaimVerifiers::OneLoginIdentity do
   describe "#perform" do
     subject do
-      described_class.new(claim:, admin_user: nil)
+      described_class.new(claim:)
     end
 
     context "when identity_confirmed_with_onelogin? is false" do

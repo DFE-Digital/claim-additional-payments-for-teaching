@@ -4,8 +4,7 @@ module AutomatedChecks
       TASK_NAME = "one_login_identity".freeze
       private_constant :TASK_NAME
 
-      def initialize(claim:, admin_user: nil)
-        self.admin_user = admin_user
+      def initialize(claim:)
         self.claim = claim
       end
 
@@ -23,7 +22,7 @@ module AutomatedChecks
 
       private
 
-      attr_accessor :admin_user, :claim
+      attr_accessor :claim
 
       def awaiting_task?(task_name)
         claim.tasks.none? { |task| task.name == task_name }
@@ -35,8 +34,7 @@ module AutomatedChecks
             name: TASK_NAME,
             claim_verifier_match: nil,
             passed: passed,
-            manual: false,
-            created_by: admin_user
+            manual: false
           }
         )
 
