@@ -140,3 +140,13 @@
   - enabled
   - created_at
   - updated_at
+  :file_downloads:
+  - id
+  - downloaded_by_id
+  - body
+  - filename
+  - content_type
+  - source_data_model
+  - source_data_model_id
+  - created_at
+  - updated_at

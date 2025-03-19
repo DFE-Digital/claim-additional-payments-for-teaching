@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_13_111812) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_19_155105) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -246,6 +246,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_13_111812) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_feature_flags_on_name", unique: true
+  end
+
+  create_table "file_downloads", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "downloaded_by_id"
+    t.text "body"
+    t.string "filename"
+    t.string "content_type"
+    t.string "source_data_model"
+    t.string "source_data_model_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "file_uploads", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

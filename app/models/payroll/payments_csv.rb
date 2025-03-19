@@ -63,9 +63,5 @@ module Payroll
     def content_type
       "text/csv"
     end
-
-    def filename
-      "payroll_data_#{payroll_run.created_at.to_date.iso8601}.csv"
-    end
   end
 end
