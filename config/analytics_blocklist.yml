@@ -150,3 +150,5 @@
   - source_data_model_id
   - created_at
   - updated_at
+  :payment_confirmations:
+  - file_upload_id

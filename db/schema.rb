@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_19_155105) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_19_180055) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -425,7 +425,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_19_155105) do
     t.uuid "created_by_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "file_upload_id"
     t.index ["created_by_id"], name: "index_payment_confirmations_on_created_by_id"
+    t.index ["file_upload_id"], name: "index_payment_confirmations_on_file_upload_id"
     t.index ["payroll_run_id"], name: "index_payment_confirmations_on_payroll_run_id"
   end
 
@@ -699,6 +701,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_19_155105) do
   add_foreign_key "notes", "claims"
   add_foreign_key "notes", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "payment_confirmations", "dfe_sign_in_users", column: "created_by_id"
+  add_foreign_key "payment_confirmations", "file_uploads"
   add_foreign_key "payment_confirmations", "payroll_runs"
   add_foreign_key "payments", "payment_confirmations", column: "confirmation_id"
   add_foreign_key "payments", "payroll_runs"
