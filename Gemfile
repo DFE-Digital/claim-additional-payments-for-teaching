@@ -65,7 +65,7 @@ gem "daemons"
 
 # Gov form builder to structure claims
 gem "govuk_design_system_formbuilder", "~> 5.9.0"
-gem "govuk-components", "~> 5.8.0"
+gem "govuk-components", "~> 5.9.0"
 
 gem "govuk_publishing_components"
 
