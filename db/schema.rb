@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_19_095448) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_13_111812) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -328,6 +328,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_19_095448) do
     t.datetime "updated_at", precision: nil, null: false
     t.string "current_academic_year", limit: 9
     t.boolean "teacher_id_enabled", default: true
+    t.index ["created_at"], name: "index_journey_configurations_on_created_at"
   end
 
   create_table "journeys_service_access_codes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -355,6 +356,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_19_095448) do
     t.uuid "file_upload_id"
     t.index ["academic_year", "school_urn", "file_upload_id"], name: "idx_on_academic_year_school_urn_file_upload_id_da9cfc909e", unique: true
     t.index ["academic_year"], name: "lupp_award_by_year"
+    t.index ["award_amount"], name: "lupp_award_by_amount"
     t.index ["file_upload_id"], name: "index_levelling_up_premium_payments_awards_on_file_upload_id"
     t.index ["school_urn"], name: "lupp_award_by_urn"
   end

@@ -200,7 +200,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     false
   ].each do |javascript_enabled|
     js_status = javascript_enabled ? "enabled" : "disabled"
-    scenario "Teacher claims back student loan repayments with javascript #{js_status} (SLC data present)", js: javascript_enabled, flaky: javascript_enabled do
+    scenario "Teacher claims back student loan repayments with javascript #{js_status} (SLC data present)", js: javascript_enabled do
       imported_slc_data
 
       answer_eligibility_questions_and_fill_in_personal_details
