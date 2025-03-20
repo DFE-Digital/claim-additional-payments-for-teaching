@@ -12,7 +12,7 @@ module AutomatedChecks
         return unless awaiting_task?(TASK_NAME)
 
         if !claim.identity_confirmed_with_onelogin?
-          create_task(passed: false)
+          create_task(passed: false, reason: "no_data")
         elsif claim.one_login_idv_mismatch?
           create_task(passed: false)
         else
@@ -28,13 +28,14 @@ module AutomatedChecks
         claim.tasks.none? { |task| task.name == task_name }
       end
 
-      def create_task(passed:)
+      def create_task(passed:, reason: nil)
         task = claim.tasks.build(
           {
             name: TASK_NAME,
             claim_verifier_match: nil,
             passed: passed,
-            manual: false
+            manual: false,
+            reason:
           }
         )
 

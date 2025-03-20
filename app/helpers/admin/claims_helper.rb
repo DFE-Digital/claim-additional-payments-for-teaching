@@ -158,7 +158,7 @@ module Admin
         status = "Passed"
         status_colour = "green"
       elsif task.passed == false
-        status = "Failed"
+        status = task.reason&.humanize || "Failed"
         status_colour = "red"
       elsif task.claim_verifier_match_all?
         status = "Full match"
