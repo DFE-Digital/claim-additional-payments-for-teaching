@@ -15,7 +15,7 @@ RSpec.feature "Early years payment practitioner" do
 
     visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=practitioner@example.com"
     expect(page).to have_content "Enter your claim reference"
-    fill_in "Claim reference number", with: claim.reference
+    fill_in "Enter your claim reference", with: claim.reference
     click_button "Submit"
 
     expect(page.title).to have_text("How we’ll process your claim")

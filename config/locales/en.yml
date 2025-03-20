@@ -1576,6 +1576,7 @@ en:
     forms:
       find_reference:
         question: Enter your claim reference
+        hint: Your claim reference is in the claim invite email from your employer. It’s a series of letters and numbers, like ABC1234E.
         errors:
           presence: Enter your claim reference number
       email_address:
