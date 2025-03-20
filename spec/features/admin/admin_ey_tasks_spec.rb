@@ -661,14 +661,12 @@ RSpec.describe "Admin EY tasks" do
     create(:journey_configuration, :early_years_payment_practitioner)
 
     visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=practitioner@example.com"
-
     fill_in "Claim reference number", with: claim.reference
-
     click_button "Submit"
 
-    sign_in_with_one_login
-
     click_on "Continue"
+
+    sign_in_with_one_login
 
     expect(page).to have_content("Personal details")
     fill_in "Day", with: date_of_birth.day

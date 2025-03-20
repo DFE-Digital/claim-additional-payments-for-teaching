@@ -18,13 +18,14 @@ RSpec.feature "Early years find reference" do
     fill_in "Claim reference number", with: claim.reference
     click_button "Submit"
 
-    expect(page).to have_content "Sign in with GOV.UK One Login"
+    expect(page).to have_content "How we’ll process your claim"
     click_link "Back"
 
     expect(page).to have_content "Enter your claim reference"
     fill_in "Claim reference number", with: claim.reference
     click_button "Submit"
-    expect(page).to have_content "Sign in with GOV.UK One Login"
+
+    expect(page).to have_content "How we’ll process your claim"
   end
 
   scenario "should show ineligibility page when an invalid reference is given" do
