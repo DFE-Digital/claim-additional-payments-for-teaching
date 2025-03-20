@@ -1,4 +1,4 @@
-require "file_download"
+require "file_downloader"
 require "csv"
 
 class SchoolDataImporter
@@ -17,7 +17,7 @@ class SchoolDataImporter
   end
 
   def schools_data_file
-    FileDownload.new(gias_schools_csv_url).fetch
+    FileDownloader.new(gias_schools_csv_url).fetch
   end
 
   def row_to_school(row)

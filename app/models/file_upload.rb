@@ -1,6 +1,8 @@
 class FileUpload < ApplicationRecord
   belongs_to :uploaded_by, class_name: "DfeSignIn::User", optional: true
 
+  has_many :payment_confirmations, dependent: :nullify
+
   scope :by_target_data_model, ->(target_data_model) { where(target_data_model: target_data_model.to_s) }
   scope :by_academic_year, ->(academic_year) { where(academic_year: academic_year&.to_s) }
   scope :completed_processing, -> { where.not(completed_processing_at: nil) }
@@ -17,6 +19,12 @@ class FileUpload < ApplicationRecord
     by_target_data_model(target_data_model)
       .completed_processing
       .order(completed_processing_at: :desc)
+  end
+
+  def self.delete_files(target_data_model:, older_than:)
+    by_target_data_model(target_data_model)
+      .where("created_at < ?", older_than)
+      .destroy_all
   end
 
   def completed_processing!

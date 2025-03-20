@@ -174,7 +174,9 @@ RSpec.feature "Payroll" do
 
     expect(page.find("table")).to have_content("(2/3 uploaded)")
 
-    expect(payroll_run.reload.payment_confirmations[0].created_by).to eq(@signed_in_user)
+    expect(payroll_run.reload.payment_confirmations[0].file_upload.body).to eq(csv)
+    expect(payroll_run.reload.payment_confirmations[0].file_upload.completed_processing_at).not_to be_nil
+    expect(payroll_run.payment_confirmations[0].created_by).to eq(@signed_in_user)
     expect(payroll_run.payment_confirmations[0].payments).to eq([first_payment, second_payment])
     expect(first_payment.reload.gross_value).to eq("448.5".to_d + "38.98".to_d)
     expect(first_payment.reload.gross_pay).to eq("448.5".to_d)
@@ -214,7 +216,9 @@ RSpec.feature "Payroll" do
 
     expect(page.find("table")).to have_content("Uploaded")
 
-    expect(payroll_run.reload.payment_confirmations[1].created_by).to eq(@signed_in_user)
+    expect(payroll_run.reload.payment_confirmations[1].file_upload.body).to eq(csv)
+    expect(payroll_run.reload.payment_confirmations[1].file_upload.completed_processing_at).not_to be_nil
+    expect(payroll_run.payment_confirmations[1].created_by).to eq(@signed_in_user)
     expect(payroll_run.payment_confirmations[1].payments).to eq([third_payment])
     expect(third_payment.reload.gross_value).to eq("844.14".to_d + "19.11".to_d)
     expect(third_payment.reload.gross_pay).to eq("844.14".to_d)
