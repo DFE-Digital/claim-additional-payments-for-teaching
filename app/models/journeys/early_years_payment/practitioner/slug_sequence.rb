@@ -25,7 +25,7 @@ module Journeys
         SLUGS = (CLAIM_SLUGS + RESULTS_SLUGS).freeze
 
         def self.start_page_url
-          Rails.application.routes.url_helpers.claim_path("early-years-payment-practitioner", "find-reference")
+          Rails.application.routes.url_helpers.claim_path("early-years-payment-practitioner", "find-reference", skip_landing_page: true)
         end
 
         attr_reader :journey_session
