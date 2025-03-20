@@ -1456,7 +1456,7 @@ en:
       claimant_name:
         question: Who are you making this claim for?
         hint:
-          Enter the employee’s full legal name as it appears on official identity documents such as passports or driving
+          Enter the employee’s full legal name as it appears on official identity documents such as a passport or driving licence
           licenses.
         errors:
           first_name:
