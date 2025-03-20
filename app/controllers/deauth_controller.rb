@@ -2,7 +2,11 @@ class DeauthController < ApplicationController
   include JourneyConcern
 
   def onelogin
-    redirect_to onelogin_redirect_uri, allow_other_host: true
+    if ENV["BYPASS_ONELOGIN_SIGN_IN"] == "true"
+      redirect_to journey_session.journey_class::SlugSequence.start_page_url
+    else
+      redirect_to onelogin_redirect_uri, allow_other_host: true
+    end
 
     session.destroy
   end
