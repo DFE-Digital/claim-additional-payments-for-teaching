@@ -15,14 +15,14 @@ RSpec.feature "Early years find reference" do
 
     visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true"
     expect(page).to have_content "Enter your claim reference"
-    fill_in "Claim reference number", with: claim.reference
+    fill_in "Enter your claim reference", with: claim.reference
     click_button "Submit"
 
     expect(page).to have_content "How we’ll process your claim"
     click_link "Back"
 
     expect(page).to have_content "Enter your claim reference"
-    fill_in "Claim reference number", with: claim.reference
+    fill_in "Enter your claim reference", with: claim.reference
     click_button "Submit"
 
     expect(page).to have_content "How we’ll process your claim"
@@ -33,14 +33,14 @@ RSpec.feature "Early years find reference" do
 
     visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true"
     expect(page).to have_content "Enter your claim reference"
-    fill_in "Claim reference number", with: "invalid"
+    fill_in "Enter your claim reference", with: "invalid"
     click_button "Submit"
 
     expect(page).to have_content "This claim reference isn’t correct."
     click_link "Try again"
 
     expect(page).to have_content "Enter your claim reference"
-    fill_in "Claim reference number", with: "also invalid"
+    fill_in "Enter your claim reference", with: "also invalid"
     click_button "Submit"
 
     expect(page).to have_content "This claim reference isn’t correct."
@@ -68,7 +68,7 @@ RSpec.feature "Early years find reference" do
 
       visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true"
       expect(page).to have_content "Enter your claim reference"
-      fill_in "Claim reference number", with: claim.reference
+      fill_in "Enter your claim reference", with: claim.reference
       click_button "Submit"
 
       expect(page).to have_content "You've already submitted your claim"

@@ -661,7 +661,9 @@ RSpec.describe "Admin EY tasks" do
     create(:journey_configuration, :early_years_payment_practitioner)
 
     visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=practitioner@example.com"
-    fill_in "Claim reference number", with: claim.reference
+
+    fill_in "Enter your claim reference", with: claim.reference
+
     click_button "Submit"
 
     click_on "Continue"
