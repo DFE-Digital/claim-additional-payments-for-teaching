@@ -38,4 +38,11 @@ class EligibleEyProvider < ApplicationRecord
       where(secondary_contact_email_address: email_address)
     )
   end
+
+  def email_addresses
+    [
+      primary_key_contact_email_address,
+      secondary_contact_email_address
+    ].compact_blank
+  end
 end

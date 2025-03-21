@@ -8,6 +8,8 @@ module Journeys
 
             ClaimMailer.early_years_payment_practitioner_email(claim).deliver_later
 
+            send_provider_completed_emails
+
             true
           end
 
@@ -27,6 +29,15 @@ module Journeys
 
           def claim_expected_to_have_email_address
             false
+          end
+
+          def send_provider_completed_emails
+            claim.eligibility.eligible_ey_provider.email_addresses.each do |email_address|
+              EarlyYearsPaymentsMailer.submitted_by_provider_and_send_to_provider(
+                claim: claim,
+                provider_email_address: email_address
+              ).deliver_later
+            end
           end
         end
       end
