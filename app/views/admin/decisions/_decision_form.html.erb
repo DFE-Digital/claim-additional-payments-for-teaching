@@ -55,12 +55,24 @@
         </h2>
       </legend>
 
+      <% if claim.high_risk_ol_idv? %>
+        <% if current_admin.is_service_admin? %>
+          <%= govuk_warning_text(icon_fallback_text: "Danger") do %>
+            This claim cannot be approved or rejected without approval from the Senior Responsible Officer.
+          <% end %>
+        <% else %>
+          <%= govuk_warning_text(icon_fallback_text: "Danger") do %>
+            This claim cannot be approved or rejected without approval from the Senior Responsible Officer. Refer this claim to your line manager and the Claim Product Team.
+          <% end %>
+        <% end %>
+      <% end %>
+
       <%= errors_tag decision, :approved %>
 
       <div class="govuk-radios" data-module="govuk-radios">
         <%= f.hidden_field :approved %>
         <div class="govuk-radios__item">
-          <%= f.radio_button(:approved, true, class: "govuk-radios__input", disabled: !claim.approvable?) %>
+          <%= f.radio_button(:approved, true, class: "govuk-radios__input", disabled: !claim.approvable?(current_admin:)) %>
           <%= f.label(
             "approved_true",
             (
@@ -71,7 +83,7 @@
         </div>
 
         <div class="govuk-radios__item">
-          <%= f.radio_button(:approved, false, class: "govuk-radios__input", disabled: !claim.rejectable?, data: { aria_controls: "conditional-rejected-reasons" }) %>
+          <%= f.radio_button(:approved, false, class: "govuk-radios__input", disabled: !claim.rejectable?(current_admin:), data: { aria_controls: "conditional-rejected-reasons" }) %>
           <%= f.label(
             "approved_false",
             (
@@ -108,6 +120,7 @@
 
     <%= f.govuk_text_area :notes,
       rows: 5,
+      disabled: !claim.approvable?(current_admin:) && !claim.rejectable?(current_admin:),
       label: {
         text: "Decision notes",
         size: "m"
@@ -117,6 +130,6 @@
       }
     %>
 
-    <%= f.govuk_submit "Confirm decision" %>
+    <%= f.govuk_submit "Confirm decision", disabled: !claim.approvable?(current_admin:) && !claim.rejectable?(current_admin:) %>
   <% end %>
 <% end %>
