@@ -184,6 +184,63 @@ describe Admin::ClaimsHelper do
       )
     end
 
+    context "FE claim" do
+      let(:claim) do
+        create(
+          :claim,
+          policy: Policies::FurtherEducationPayments,
+          tasks: claim_tasks
+        )
+      end
+
+      let(:claim_tasks) do
+        []
+      end
+
+      context "when task not found" do
+        it "returns unverified in grey" do
+          expect(subject).to match("Unverified")
+          expect(subject).to match("grey")
+        end
+      end
+
+      context "when task passed" do
+        let(:claim_tasks) do
+          [
+            create(
+              :task,
+              claim_verifier_match: nil,
+              name: "one_login_identity",
+              passed: true
+            )
+          ]
+        end
+
+        it "is passed in green" do
+          expect(subject).to match("Passed")
+          expect(subject).to match("green")
+        end
+      end
+
+      context "when task failed" do
+        let(:claim_tasks) do
+          [
+            create(
+              :task,
+              claim_verifier_match: nil,
+              name: "one_login_identity",
+              passed: false
+            )
+          ]
+        end
+
+        it "is faied in red" do
+          expect(subject).to match("Failed")
+          expect(subject).to match("red")
+        end
+      end
+    end
+
     context "EY specific and practitioner yet to complete their half" do
       let(:claim) do
         build(

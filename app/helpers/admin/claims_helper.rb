@@ -114,7 +114,11 @@ module Admin
     end
 
     def identity_confirmation_task_claim_verifier_match_status_tag(claim)
-      task = claim.tasks.detect { |t| t.name == "identity_confirmation" }
+      task = if claim.policy == Policies::FurtherEducationPayments
+        claim.tasks.detect { |t| t.name == "one_login_identity" }
+      else
+        claim.tasks.detect { |t| t.name == "identity_confirmation" }
+      end
 
       if claim.policy == Policies::EarlyYearsPayments && !claim.eligibility.practitioner_journey_completed?
         status = "Incomplete"
