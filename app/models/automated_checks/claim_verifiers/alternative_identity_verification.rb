@@ -10,6 +10,7 @@ module AutomatedChecks
       def perform
         return unless eligibility.claimant_identity_verified_at?
         return if task_exists?
+        return unless all_details_match?
 
         create_task!
       end
@@ -23,37 +24,15 @@ module AutomatedChecks
       def create_task!
         task = claim.tasks.build(
           name: TASK_NAME,
-          manual: manual,
-          passed: passed,
-          claim_verifier_match: claim_verifier_match,
+          manual: false,
+          passed: true,
+          claim_verifier_match: "all",
           created_by: created_by
         )
 
         task.save!(context: :claim_verifier)
 
         task
-      end
-
-      def passed
-        if all_details_match?
-          true
-        end
-      end
-
-      def manual
-        if all_details_match?
-          false
-        end
-      end
-
-      def claim_verifier_match
-        if all_details_match?
-          "all"
-        else
-          # Some of the answers may match but the designs call for displaying
-          # "no match" unless all details match.
-          "none"
-        end
       end
 
       def task_exists?
@@ -101,8 +80,6 @@ module AutomatedChecks
       end
 
       def created_by
-        return unless all_details_match?
-
         DfeSignIn::User.find_or_create_by!(dfe_sign_in_id: verifier.fetch("dfe_sign_in_uid")) do |user|
           user.given_name = verifier.fetch("first_name")
           user.family_name = verifier.fetch("last_name")
