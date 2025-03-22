@@ -89,7 +89,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::AlternativeIdentityVerification 
         end
 
         context "when the provider and claimant details do not match" do
-          it "sets the task to no match" do
+          it "doesn't create the task" do
             eligibility = create(
               :further_education_payments_eligibility,
               claimant_identity_verified_at: DateTime.now,
@@ -121,20 +121,12 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::AlternativeIdentityVerification 
               date_of_birth: Date.new(1990, 1, 1)
             )
 
-            expect { described_class.new(claim: claim).perform }.to(
+            expect { described_class.new(claim: claim).perform }.not_to(
               change(
                 claim.tasks.where(name: "alternative_identity_verification"),
                 :count
-              ).from(0).to(1)
+              )
             )
-
-            task = claim.tasks.find_by!(
-              name: "alternative_identity_verification"
-            )
-
-            expect(task.passed).to eq(nil)
-            expect(task.manual).to eq(nil)
-            expect(task.created_by).to eq(nil)
           end
         end
       end

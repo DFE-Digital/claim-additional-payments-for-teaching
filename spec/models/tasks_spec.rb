@@ -117,5 +117,47 @@ RSpec.describe Tasks do
         it { is_expected.to eq([nil, nil]) }
       end
     end
+
+    context "with an alternative_identity_verification task" do
+      let(:task_name) { "alternative_identity_verification" }
+
+      let(:claim) do
+        create(:claim, :submitted, policy: Policies::FurtherEducationPayments)
+      end
+
+      context "when the task hasn't been created" do
+        context "when the provider has submitted the verification" do
+          before do
+            create(
+              :further_education_payments_eligibility,
+              :identity_verified_by_provider,
+              claim: claim
+            )
+          end
+
+          it { is_expected.to eq(["No match", "red"]) }
+        end
+
+        context "when the provider has not submitted the verification" do
+          it { is_expected.to eq(["Incomplete", "grey"]) }
+        end
+      end
+
+      context "when the task has passed" do
+        before do
+          create(:task, :passed, claim: claim, name: task_name)
+        end
+
+        it { is_expected.to eq(["Passed", "green"]) }
+      end
+
+      context "when the task has failed" do
+        before do
+          create(:task, :failed, claim: claim, name: task_name)
+        end
+
+        it { is_expected.to eq(["Failed", "red"]) }
+      end
+    end
   end
 end
