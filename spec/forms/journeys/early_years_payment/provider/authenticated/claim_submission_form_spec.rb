@@ -13,9 +13,18 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::ClaimSubmis
   describe "#save" do
     subject { form.save }
 
+    let(:nursery) do
+      create(:eligible_ey_provider, :with_secondary_contact_email_address)
+    end
     let(:claim) { form.claim }
     let(:eligibility) { claim.eligibility }
-    let(:answers) { build(:early_years_payment_provider_authenticated_answers, :submittable) }
+    let(:answers) do
+      build(
+        :early_years_payment_provider_authenticated_answers,
+        :submittable,
+        nursery_urn: nursery.urn
+      )
+    end
 
     it { is_expected.to be_truthy }
 
@@ -55,6 +64,45 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::ClaimSubmis
           setting_name: claim.eligibility.eligible_ey_provider.nursery_name,
           ref_number: claim.reference,
           complete_claim_url: "https://www.example.com/early-years-payment-practitioner/find-reference?skip_landing_page=true"
+        )
+      )
+    end
+
+    it "doesn't send the claim submitted notification email" do
+      allow(ClaimVerifierJob).to receive(:perform_later)
+
+      perform_enqueued_jobs { subject }
+
+      expect(claim.practitioner_email_address).not_to(
+        have_received_email("f97480c8-7869-4af6-b50c-413929b8cc88")
+      )
+    end
+
+    it "sends a notify email to the provider" do
+      primary_contact_email = nursery.primary_key_contact_email_address
+      secondary_contact_email = nursery.secondary_contact_email_address
+
+      allow(ClaimVerifierJob).to receive(:perform_later)
+
+      perform_enqueued_jobs { subject }
+
+      expect(primary_contact_email).to(
+        have_received_email(
+          "149c5999-12fb-4b99-aff5-23a7c3302783",
+          nursery_name: nursery.nursery_name,
+          practitioner_first_name: answers.first_name,
+          practitioner_last_name: answers.surname,
+          ref_number: claim.reference
+        )
+      )
+
+      expect(secondary_contact_email).to(
+        have_received_email(
+          "149c5999-12fb-4b99-aff5-23a7c3302783",
+          nursery_name: nursery.nursery_name,
+          practitioner_first_name: answers.first_name,
+          practitioner_last_name: answers.surname,
+          ref_number: claim.reference
         )
       )
     end

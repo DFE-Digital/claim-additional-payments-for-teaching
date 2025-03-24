@@ -2,8 +2,6 @@ class EarlyYearsPaymentsMailer < ApplicationMailer
   def submitted(claim)
     if claim.submitted_at.present?
       submitted_by_practitioner_and_send_to_practitioner(claim)
-    else
-      submitted_by_provider_and_send_to_provider(claim)
     end
   end
 
@@ -27,7 +25,13 @@ class EarlyYearsPaymentsMailer < ApplicationMailer
 
   def approved(claim)
     self.class.practitioner_approved(claim).deliver_later
-    self.class.provider_approved(claim).deliver_later
+
+    claim.eligibility.eligible_ey_provider.email_addresses.each do |email_address|
+      self.class.provider_approved(
+        claim: claim,
+        provider_email_address: email_address
+      ).deliver_later
+    end
   end
 
   def practitioner_approved(claim)
@@ -45,26 +49,7 @@ class EarlyYearsPaymentsMailer < ApplicationMailer
     )
   end
 
-  def provider_approved(claim)
-    personalisation = {
-      ref_number: claim.reference,
-      first_name: claim.provider_contact_name,
-      practitioner_first_name: claim.first_name,
-      practitioner_last_name: claim.surname
-    }
-
-    template_mail(
-      "aa714fac-3fd7-4d3c-a510-2445c16be446",
-      to: claim.eligibility.eligible_ey_provider.primary_key_contact_email_address,
-      subject: nil,
-      reply_to_id: claim.policy.notify_reply_to_id,
-      personalisation:
-    )
-  end
-
-  private
-
-  def submitted_by_provider_and_send_to_provider(claim)
+  def submitted_by_provider_and_send_to_provider(claim:, provider_email_address:)
     personalisation = {
       nursery_name: claim.eligibility.eligible_ey_provider.nursery_name,
       practitioner_first_name: claim.eligibility.practitioner_first_name,
@@ -74,12 +59,31 @@ class EarlyYearsPaymentsMailer < ApplicationMailer
 
     template_mail(
       "149c5999-12fb-4b99-aff5-23a7c3302783",
-      to: claim.eligibility.eligible_ey_provider.primary_key_contact_email_address,
+      to: provider_email_address,
       subject: nil,
       reply_to_id: claim.policy.notify_reply_to_id,
       personalisation:
     )
   end
+
+  def provider_approved(claim:, provider_email_address:)
+    personalisation = {
+      ref_number: claim.reference,
+      first_name: claim.provider_contact_name,
+      practitioner_first_name: claim.first_name,
+      practitioner_last_name: claim.surname
+    }
+
+    template_mail(
+      "aa714fac-3fd7-4d3c-a510-2445c16be446",
+      to: provider_email_address,
+      subject: nil,
+      reply_to_id: claim.policy.notify_reply_to_id,
+      personalisation:
+    )
+  end
+
+  private
 
   def submitted_by_practitioner_and_send_to_practitioner(claim)
     personalisation = {
