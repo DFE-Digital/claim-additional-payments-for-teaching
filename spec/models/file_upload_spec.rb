@@ -43,7 +43,7 @@ RSpec.describe FileUpload, type: :model do
       expect(payroll_run2.reload.payment_confirmations.map(&:file_upload_id)).to match_array(expected_file_upload_ids)
 
       # check we don't delete other file uploads for a different target_data_model
-      expect { some_unrelated_file_upload.reload }.not_to raise_error(ActiveRecord::RecordNotFound)
+      expect { some_unrelated_file_upload.reload }.not_to raise_error
     end
   end
 end
