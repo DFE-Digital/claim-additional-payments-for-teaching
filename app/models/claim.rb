@@ -445,7 +445,7 @@ class Claim < ApplicationRecord
   end
 
   def high_risk_ol_idv?
-    (onelogin_idv_return_codes & OneLogin::ReturnCode::HIGH_RISK_CODES).size > 0
+    ((onelogin_idv_return_codes || []) & OneLogin::ReturnCode::HIGH_RISK_CODES).size > 0
   end
 
   private
