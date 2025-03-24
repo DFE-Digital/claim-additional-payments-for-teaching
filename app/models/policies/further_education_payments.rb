@@ -96,5 +96,17 @@ module Policies
 
       claim.failed_one_login_idv?
     end
+
+    def approvable?(claim)
+      ClaimCheckingTasks.new(claim).incomplete_task_names.exclude?(
+        "alternative_identity_verification"
+      )
+    end
+
+    def rejectable?(claim)
+      ClaimCheckingTasks.new(claim).incomplete_task_names.exclude?(
+        "alternative_identity_verification"
+      )
+    end
   end
 end
