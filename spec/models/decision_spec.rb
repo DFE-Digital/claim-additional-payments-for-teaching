@@ -98,7 +98,9 @@ RSpec.describe Decision, type: :model do
   end
 
   describe ".rejected_reasons_for" do
-    subject { described_class.rejected_reasons_for(policy) }
+    subject { described_class.rejected_reasons_for(claim) }
+
+    let(:claim) { create(:claim, policy: policy) }
 
     let(:expected_reasons_ecp) do
       [
