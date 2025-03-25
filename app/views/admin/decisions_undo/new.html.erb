@@ -1,3 +1,7 @@
+<% content_for :back_link do %>
+  <%= govuk_back_link href: new_admin_claim_amendment_path(@claim) %>
+<% end %>
+
 <%= form_with url: admin_claim_decision_undos_path(@claim, @decision), scope: :amendment, model: @form, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
