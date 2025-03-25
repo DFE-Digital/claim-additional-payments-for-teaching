@@ -46,7 +46,7 @@ module Admin
 
     def amendment_params
       {
-        notes:,
+        notes:
       }
     end
   end

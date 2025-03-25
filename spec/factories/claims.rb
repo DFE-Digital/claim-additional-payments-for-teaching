@@ -347,7 +347,7 @@ FactoryBot.define do
     end
 
     trait :high_risk do
-      onelogin_idv_return_codes { OneLogin::ReturnCode::HIGH_RISK_CODES.shuffle.first(2) }
+      onelogin_idv_return_codes { OneLogin::ReturnCode::HIGH_RISK_CODES.sample(2) }
     end
 
     trait :with_dqt_teacher_status do

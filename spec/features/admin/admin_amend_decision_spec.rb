@@ -38,7 +38,7 @@ RSpec.feature "Undoing a claim's decision" do
     end
 
     scenario "service operator cannot undo high risk claim decisions" do
-      current_admin = sign_in_as_service_operator
+      sign_in_as_service_operator
 
       visit admin_claim_url(claim)
       click_link "Amend claim"
