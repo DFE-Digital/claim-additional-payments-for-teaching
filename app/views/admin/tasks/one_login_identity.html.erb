@@ -10,7 +10,10 @@
   <%= render claim_summary_view, claim: @claim, heading: "Identity confirmation" %>
 
   <div class="govuk-grid-column-two-thirds">
-    <h2 class="govuk-heading-l"><%= @current_task_name.humanize %></h2>
+    <% locale_key = @claim.policy::ClaimCheckingTasks.new(@claim).applicable_task_objects.find { |os| os.name == "one_login_identity" }.locale_key %>
+    <h2 class="govuk-heading-l">
+      <%= I18n.t(:name, scope: [:admin, :tasks, locale_key]) %>
+    </h2>
 
     <% if @claim.identity_confirmed_with_onelogin? %>
       <p class="govuk-body">
