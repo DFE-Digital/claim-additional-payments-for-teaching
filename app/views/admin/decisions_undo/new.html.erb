@@ -1,4 +1,4 @@
-<%= form_with url: admin_claim_decision_undos_path(@claim, @decision), scope: :amendment, model: @amendment, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+<%= form_with url: admin_claim_decision_undos_path(@claim, @decision), scope: :amendment, model: @form, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>

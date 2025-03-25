@@ -9,8 +9,8 @@ RSpec.feature "Undoing a claim's decision" do
     signed_in_user = sign_in_as_service_operator
 
     visit admin_claim_url(claim)
-
     click_on "Amend claim"
+
     click_on "Undo decision"
 
     fill_in "Change notes", with: "Here are some notes"
