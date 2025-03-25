@@ -13,6 +13,7 @@ module Admin
       }
 
     validate :validate_decision_undoable
+    validate :validate_processable
 
     def initialize(claim:, decision:, current_admin:, params: {})
       @claim = claim
@@ -28,10 +29,16 @@ module Admin
     end
 
     def processable?
-      claim.high_risk_ol_idv? && !current_admin.is_service_admin?
+      return false if claim.high_risk_ol_idv? && !current_admin.is_service_admin?
+
+      true
     end
 
     private
+
+    def validate_processable
+      errors.add(:base, "This claim can only have its decision undone by an SRO") if !processable?
+    end
 
     def validate_decision_undoable
       errors.add(:base, "This claim cannot have its decision undone") unless claim.decision_undoable?

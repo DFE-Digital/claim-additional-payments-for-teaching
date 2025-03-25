@@ -7,6 +7,10 @@
         Undo claim decision for claim <%= @claim.reference %>
       </h1>
 
+      <% if !@form.processable? %>
+        <%= govuk_warning_text(text: "This decision cannot be undone without approval from the Senior Responsible Officer. Refer this claim to your line manager and the Claim Product Team.") %>
+      <% end %>
+
       <p class="govuk-body">
         Claim <%= @claim.reference %> is currently <%= @claim.latest_decision.result %>. If you undo this
         decision, the claim will be marked as undecided. You'll need to approve or reject this claim later.
@@ -15,9 +19,10 @@
       <%= f.govuk_text_area :notes,
         label: { text: "Change notes" },
         hint: { text: "Please write a brief note to explain why you're undoing this decision." },
+        disabled: !@form.processable?,
         rows: 5 %>
 
-      <%= f.govuk_submit t("admin.undo_decision.#{@claim.latest_decision.result}") %>
+      <%= f.govuk_submit t("admin.undo_decision.#{@claim.latest_decision.result}"), disabled: !@form.processable? %>
       <%= govuk_button_link_to "Cancel", admin_claim_url(@claim), secondary: true %>
     </div>
   </div>
