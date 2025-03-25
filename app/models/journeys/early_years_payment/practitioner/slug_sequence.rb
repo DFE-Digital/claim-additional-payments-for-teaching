@@ -7,7 +7,9 @@ module Journeys
           how-we-use-your-information
           sign-in
           personal-details
-          enter-home-address
+          postcode-search
+          select-home-address
+          address
           email-address
           email-verification
           provide-mobile-number

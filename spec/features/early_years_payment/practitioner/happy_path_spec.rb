@@ -44,6 +44,10 @@ RSpec.feature "Early years payment practitioner" do
     fill_in "National Insurance number", with: "PX321499A"
     click_on "Continue"
 
+    expect(page.title).to have_text("What is your home address?")
+    expect(page).to have_content("What is your home address?")
+    click_on("Enter your address manually")
+
     expect(page.title).to have_text("What is your address?")
     expect(page).to have_content("What is your address?")
     fill_in "House number or name", with: "57"
@@ -53,6 +57,66 @@ RSpec.feature "Early years payment practitioner" do
     fill_in "Postcode", with: "DE22 4BS"
     click_on "Continue"
 
+    rest_of_the_journey
+  end
+
+  scenario "Happy path - with postcode lookup" do
+    when_student_loan_data_exists
+    when_early_years_payment_provider_authenticated_journey_submitted
+    when_early_years_payment_practitioner_journey_configuration_exists
+
+    visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=practitioner@example.com"
+    expect(page).to have_content "Enter your claim reference"
+    fill_in "Enter your claim reference", with: claim.reference
+    click_button "Submit"
+
+    expect(page.title).to have_text("How we’ll process your claim")
+    expect(page).to have_content("How we’ll process your claim")
+    click_on "Continue"
+
+    mock_one_login_auth
+
+    expect(page).to have_content "Sign in with GOV.UK One Login"
+    click_on "Continue"
+
+    mock_one_login_idv
+
+    expect(page).to have_content "You have successfully signed in to GOV.UK One Login"
+    click_on "Continue"
+
+    expect(page).to have_content "You have successfully proved your identity with GOV.UK One Login"
+    click_on "Continue"
+
+    expect(page).to have_content("Personal details")
+    fill_in "First name", with: "John"
+    fill_in "Last name", with: "Doe"
+    fill_in "Day", with: "28"
+    fill_in "Month", with: "2"
+    fill_in "Year", with: "1988"
+    fill_in "National Insurance number", with: "PX321499A"
+    click_on "Continue"
+
+    expect(page.title).to have_text("What is your home address?")
+    expect(page).to have_content("What is your home address?")
+
+    stub_search_places_index(claim: OpenStruct.new(postcode: "SO16 9FX"))
+
+    expect(page).to have_content("What is your home address?")
+    fill_in "Postcode", with: "SO16 9FX"
+    click_on "Search"
+
+    expect(page.title).to have_text("What is your home address?")
+    expect(page).to have_content("What is your home address?")
+    expect(page).to have_text "Flat 1, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX"
+    expect(page).to have_text "Flat 10, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX"
+    expect(page).to have_text "Flat 11, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX"
+    choose "Flat 1, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX"
+    click_on "Continue"
+
+    rest_of_the_journey
+  end
+
+  def rest_of_the_journey
     expect(page.title).to have_text("Your email address")
     expect(page).to have_content("Your email address")
     fill_in "claim-email-address-field", with: "johndoe@example.com"

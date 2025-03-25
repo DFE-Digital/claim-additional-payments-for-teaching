@@ -40,7 +40,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::AnswersPresenter do
     end
 
     context "Home address" do
-      it { is_expected.to include(["Home address", "1, Some Street, Some City, AB1 C23", "enter-home-address"]) }
+      it { is_expected.to include(["Home address", "1, Some Street, Some City, AB1 C23", "address"]) }
     end
 
     context "Email address" do
