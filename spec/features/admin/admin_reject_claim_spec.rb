@@ -197,7 +197,7 @@ RSpec.feature "Admin rejects a claim" do
 
         choose "Reject"
 
-        check "Identity check failed"
+        check "GOV One Login identity check failed"
 
         fill_in "Decision notes", with: "QA failed"
 

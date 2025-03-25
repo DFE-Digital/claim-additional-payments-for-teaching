@@ -924,7 +924,7 @@ en:
           insufficient_time_spent_teaching_eligibble_students: "Insufficient time spent teaching eligible students"
           subject_to_performance_measures: "Subject to performance measures"
           subject_to_disciplinary_action: "Subject to disciplinary action"
-          identity_check_failed: "Identity check failed"
+          identity_check_failed: "GOV One Login identity check failed"
           alternative_identity_verification_check_failed: "Provider-led identity check failed"
           duplicate_claim: "Duplicate claim"
           no_response: "No response"
