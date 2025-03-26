@@ -13,6 +13,7 @@ module Policies
     VERIFIERS = [
       AutomatedChecks::ClaimVerifiers::OneLoginIdentity,
       AutomatedChecks::ClaimVerifiers::ProviderVerification,
+      AutomatedChecks::ClaimVerifiers::AlternativeIdentityVerification,
       AutomatedChecks::ClaimVerifiers::Employment,
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
       AutomatedChecks::ClaimVerifiers::FraudRisk
@@ -88,6 +89,12 @@ module Policies
 
     def payroll_file_name
       "FELUPEXPANSION"
+    end
+
+    def alternative_identity_verification_required?(claim)
+      return false unless FeatureFlag.enabled?(:fe_provider_identity_verification)
+
+      claim.failed_one_login_idv?
     end
   end
 end

@@ -432,6 +432,10 @@ class Claim < ApplicationRecord
     @attributes_flagged_by_risk_indicator ||= RiskIndicator.flagged_attributes(self)
   end
 
+  def failed_one_login_idv?
+    onelogin_idv_at.present? && !identity_confirmed_with_onelogin?
+  end
+
   private
 
   def one_login_idv_name_match?

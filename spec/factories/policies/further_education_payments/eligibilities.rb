@@ -138,5 +138,14 @@ FactoryBot.define do
       eligible
       teacher_reference_number { generate(:teacher_reference_number) }
     end
+
+    trait :identity_verified_by_provider do
+      claimant_date_of_birth { Date.new(1990, 1, 1) }
+      claimant_postcode { "SW1A 1AA" }
+      claimant_national_insurance_number { "QQ123456C" }
+      claimant_valid_passport { true }
+      claimant_passport_number { "123456789" }
+      claimant_identity_verified_at { Time.zone.now }
+    end
   end
 end

@@ -153,32 +153,9 @@ module Admin
     end
 
     def task_status_tag(claim, task_name)
-      task = claim.tasks.detect { |t| t.name == task_name }
+      status, colour = Tasks.status(claim: claim, task_name: task_name)
 
-      if task.nil?
-        status = "Incomplete"
-        status_colour = "grey"
-      elsif task.passed?
-        status = "Passed"
-        status_colour = "green"
-      elsif task.passed == false
-        status = task.reason&.humanize || "Failed"
-        status_colour = "red"
-      elsif task.claim_verifier_match_all?
-        status = "Full match"
-        status_colour = "green"
-      elsif task.claim_verifier_match_any?
-        status = "Partial match"
-        status_colour = "yellow"
-      elsif task.claim_verifier_match_none?
-        status = "No match"
-        status_colour = "red"
-      elsif task.claim_verifier_match.nil? && %w[census_subjects_taught employment induction_confirmation student_loan_amount student_loan_plan].include?(task_name)
-        status = "No data"
-        status_colour = "red"
-      end
-
-      task_status_content_tag(status_colour:, status:)
+      task_status_content_tag(status_colour: colour, status: status)
     end
 
     def task_status_content_tag(status_colour:, status:)
