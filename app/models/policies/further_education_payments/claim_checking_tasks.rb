@@ -39,10 +39,18 @@ module Policies
         end
       end
 
+      def incomplete_task_names
+        applicable_task_names - task_names_for_claim
+      end
+
       private
 
       def matching_claims
         @matching_claims ||= Claim::MatchingAttributeFinder.new(claim).matching_claims
+      end
+
+      def task_names_for_claim
+        claim.tasks.pluck(:name)
       end
     end
   end

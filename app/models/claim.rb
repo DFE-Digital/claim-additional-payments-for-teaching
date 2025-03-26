@@ -208,7 +208,7 @@ class Claim < ApplicationRecord
   end
 
   def rejectable?
-    !held?
+    !held? && policy.rejectable?(self)
   end
 
   def holdable?

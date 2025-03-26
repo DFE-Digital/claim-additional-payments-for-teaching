@@ -769,6 +769,124 @@ RSpec.feature "Admin claim further education payments" do
         end
       end
     end
+
+    describe "FE claim decisions" do
+      context "when the claim is flagged for alternative idv" do
+        context "when the alternative idv task has not been completed" do
+          it "shows the admins a warning" do
+            claim = create(
+              :claim,
+              :submitted,
+              policy: Policies::FurtherEducationPayments,
+              onelogin_idv_at: 1.day.ago,
+              identity_confirmed_with_onelogin: false
+            )
+
+            visit new_admin_claim_decision_path(claim)
+
+            task_warning = find(".govuk-error-summary:first-of-type")
+
+            within(task_warning) do
+              expect(page).to have_content(
+                "Some tasks have not yet been completed"
+              )
+
+              expect(page).to have_content(
+                "Confirm the provider has verified the claimant's identity"
+              )
+            end
+
+            approve_button = find("#decision_approved_true")
+
+            expect(approve_button).to be_disabled
+
+            reject_button = find("#decision_approved_false")
+
+            expect(reject_button).to be_disabled
+          end
+        end
+
+        context "when the alternative idv task is a fail" do
+          it "doesn't show a warning" do
+            claim = create(
+              :claim,
+              :submitted,
+              policy: Policies::FurtherEducationPayments,
+              onelogin_idv_at: 1.day.ago,
+              identity_confirmed_with_onelogin: false
+            )
+
+            create(
+              :task,
+              :claim_verifier_context,
+              claim: claim,
+              name: "alternative_identity_verification",
+              manual: true,
+              passed: false,
+              claim_verifier_match: "none"
+            )
+
+            visit new_admin_claim_decision_path(claim)
+
+            task_warning = find(".govuk-error-summary:first-of-type")
+
+            within(task_warning) do
+              expect(page).not_to have_content(
+                "Confirm the provider has verified the claimant's identity"
+              )
+            end
+
+            approve_button = find("#decision_approved_true")
+
+            expect(approve_button).not_to be_disabled
+
+            reject_button = find("#decision_approved_false")
+
+            expect(reject_button).not_to be_disabled
+          end
+        end
+
+        context "when the alternative idv task is a pass" do
+          it "doesn't show a warning" do
+            claim = create(
+              :claim,
+              :submitted,
+              policy: Policies::FurtherEducationPayments,
+              onelogin_idv_at: 1.day.ago,
+              identity_confirmed_with_onelogin: false
+            )
+
+            create(
+              :task,
+              :claim_verifier_context,
+              claim: claim,
+              name: "alternative_identity_verification",
+              manual: true,
+              passed: true,
+              claim_verifier_match: "none"
+            )
+
+            visit new_admin_claim_decision_path(claim)
+
+            task_warning = find(".govuk-error-summary:first-of-type")
+
+            within(task_warning) do
+              expect(page).not_to have_content(
+                "Confirm the provider has verified the claimant's identity"
+              )
+            end
+
+            approve_button = find("#decision_approved_true")
+
+            expect(approve_button).not_to be_disabled
+
+            reject_button = find("#decision_approved_false")
+
+            expect(reject_button).not_to be_disabled
+          end
+        end
+      end
+    end
   end
 
   def within_table_row(label, &block)
