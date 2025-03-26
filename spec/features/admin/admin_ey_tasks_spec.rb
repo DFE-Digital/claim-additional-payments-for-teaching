@@ -649,13 +649,14 @@ RSpec.describe "Admin EY tasks" do
     one_login_date_of_birth:,
     payroll_gender: "Male"
   )
-    stub_const(
-      "OmniauthCallbacksController::ONE_LOGIN_TEST_USER",
-      {
-        first_name: one_login_first_name,
-        last_name: one_login_last_name,
-        date_of_birth: one_login_date_of_birth
-      }
+    allow(OmniauthCallbacksController::OneLoginTestUser).to(
+      receive(:new).and_return(
+        OpenStruct.new(
+          first_name: one_login_first_name,
+          surname: one_login_last_name,
+          date_of_birth: one_login_date_of_birth
+        )
+      )
     )
 
     create(:journey_configuration, :early_years_payment_practitioner)
