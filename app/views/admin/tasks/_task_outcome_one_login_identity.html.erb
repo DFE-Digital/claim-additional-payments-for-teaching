@@ -21,9 +21,11 @@
         <% end %>
       </p>
 
-      <p>
-        You can confirm the provider has responded and verified the claimant’s identity.
-      </p>
+      <% if Policies::FurtherEducationPayments.alternative_identity_verification_required?(@claim) %>
+        <p>
+          <%= govuk_link_to "You can confirm the provider has responded and verified the claimant’s identity.", admin_claim_task_path(claim_id: @claim.id, name: "alternative_identity_verification") %>
+        </p>
+      <% end %>
     <% else  %>
       This task was performed by an automated check on <%= l(task.created_at) %>
     <% end %>
