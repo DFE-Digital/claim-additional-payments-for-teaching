@@ -24,6 +24,8 @@ module Admin
     end
 
     def save
+      return false if invalid?
+
       amendment = Amendment.undo_decision(decision, amendment_params.merge(created_by: current_admin))
       amendment.persisted?
     end

@@ -19,7 +19,7 @@ class Admin::DecisionsUndoController < Admin::BaseAdminController
       params: amendment_params
     )
 
-    if @form.valid? && @form.save
+    if @form.save
       redirect_to admin_claim_tasks_path(@claim)
     else
       render :new
