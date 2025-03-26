@@ -10,4 +10,8 @@
   Once you have proven your identity through GOV.UK One Login, you will return to this service to complete your application.
 </p>
 
-<%= govuk_button_to "Continue", "/auth/onelogin_identity" %>
+<% if OneLoginSignIn.bypass? %>
+  <%= render "sign_in_2_bypass" %>
+<% else %>
+  <%= govuk_button_to "Continue", "/auth/onelogin_identity" %>
+<% end %>
