@@ -26,8 +26,16 @@ RSpec.describe "admin/tasks/one_login_identity.html.erb" do
     ClaimCheckingTasks.new(claim)
   end
 
+  let(:admin) do
+    build(:dfe_signin_user)
+  end
+
   before do
     allow(view).to receive(:current_page?).and_return(true)
+
+    without_partial_double_verification do
+      allow(view).to receive(:current_admin).and_return(admin)
+    end
   end
 
   it "renders correct text" do

@@ -13,7 +13,17 @@
     <% elsif task.identity_confirmation? && task.claim.identity_confirmed_with_onelogin? %>
       This task was performed by GOV.UK One Login on <%= l(task.claim.onelogin_idv_at) %>
     <% elsif task.failed? && task.reason == "no_data" %>
-      This claimant was unable to verify their identity with GOV.UK One Login on <%= l(task.claim.onelogin_idv_at) %>. THIS WILL LINK TO ALTERNATIVE IDV TASK
+      <p>
+        <% if current_admin.is_service_admin? && @claim.onelogin_idv_return_codes.present? %>
+          This claimant was unable to verify their identity with GOV.UK One Login on <%= l(task.claim.onelogin_idv_at) %> with the following return codes: <%= @claim.onelogin_idv_return_codes.map { |code| "<strong>#{code}</strong>" }.join(", ").html_safe %>.
+        <% else %>
+          This claimant was unable to verify their identity with GOV.UK One Login on <%= l(task.claim.onelogin_idv_at) %>.
+        <% end %>
+      </p>
+
+      <p>
+        You can confirm the provider has responded and verified the claimant’s identity.
+      </p>
     <% else  %>
       This task was performed by an automated check on <%= l(task.created_at) %>
     <% end %>

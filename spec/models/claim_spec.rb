@@ -392,6 +392,36 @@ RSpec.describe Claim, type: :model do
         expect(subject).not_to be_approvable
       end
     end
+
+    context "when high risk return code" do
+      subject do
+        create(
+          :claim,
+          :submitted,
+          onelogin_idv_return_codes: ["D"]
+        )
+      end
+
+      context "when support agent" do
+        let(:current_admin) do
+          create(:dfe_signin_user, :service_operator)
+        end
+
+        it "returns false" do
+          expect(subject).not_to be_approvable(current_admin:)
+        end
+      end
+
+      context "when support agent with admin role" do
+        let(:current_admin) do
+          create(:dfe_signin_user, :service_admin)
+        end
+
+        it "returns true" do
+          expect(subject).to be_approvable(current_admin:)
+        end
+      end
+    end
   end
 
   describe "#rejectable?" do
@@ -403,6 +433,36 @@ RSpec.describe Claim, type: :model do
     context "when the claim is not held" do
       subject(:claim) { create(:claim) }
       it { is_expected.to be_rejectable }
+    end
+
+    context "when high risk return code" do
+      subject do
+        create(
+          :claim,
+          :submitted,
+          onelogin_idv_return_codes: ["D"]
+        )
+      end
+
+      context "when support agent" do
+        let(:current_admin) do
+          create(:dfe_signin_user, :service_operator)
+        end
+
+        it "returns false" do
+          expect(subject).not_to be_rejectable(current_admin:)
+        end
+      end
+
+      context "when support agent with admin role" do
+        let(:current_admin) do
+          create(:dfe_signin_user, :service_admin)
+        end
+
+        it "returns true" do
+          expect(subject).to be_rejectable(current_admin:)
+        end
+      end
     end
   end
 

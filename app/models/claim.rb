@@ -197,7 +197,11 @@ class Claim < ApplicationRecord
     valid?(:submit) && !submitted? && submittable_email_details? && submittable_mobile_details?
   end
 
-  def approvable?
+  def approvable?(current_admin: nil)
+    if current_admin && high_risk_ol_idv? && !current_admin.is_service_admin?
+      return false
+    end
+
     submitted? &&
       !held? &&
       !payroll_gender_missing? &&
@@ -207,7 +211,11 @@ class Claim < ApplicationRecord
       policy.approvable?(self)
   end
 
-  def rejectable?
+  def rejectable?(current_admin: nil)
+    if current_admin && high_risk_ol_idv? && !current_admin.is_service_admin?
+      return false
+    end
+
     !held? && policy.rejectable?(self)
   end
 
@@ -434,6 +442,10 @@ class Claim < ApplicationRecord
 
   def failed_one_login_idv?
     onelogin_idv_at.present? && !identity_confirmed_with_onelogin?
+  end
+
+  def high_risk_ol_idv?
+    ((onelogin_idv_return_codes || []) & OneLogin::ReturnCode::HIGH_RISK_CODES).size > 0
   end
 
   private

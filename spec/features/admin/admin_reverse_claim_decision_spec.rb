@@ -8,6 +8,7 @@ RSpec.feature "Admin reverses a claim decision" do
 
     visit admin_claim_tasks_path(claim)
     click_on "Approve or reject this claim"
+
     choose "Reject"
     check "Ineligible subject"
     click_button "Confirm decision"
@@ -19,6 +20,7 @@ RSpec.feature "Admin reverses a claim decision" do
 
     visit admin_claim_tasks_path(claim)
     click_on "Approve or reject this claim"
+
     choose "Approve"
     click_button "Confirm decision"
 

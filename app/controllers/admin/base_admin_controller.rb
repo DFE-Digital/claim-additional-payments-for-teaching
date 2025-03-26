@@ -24,6 +24,11 @@ module Admin
       @admin_user ||= DfeSignIn::User.not_deleted.find_by(id: session[:user_id], session_token: session[:token])
     end
 
+    def current_admin
+      admin_user
+    end
+    helper_method :current_admin
+
     def service_operator_signed_in?
       admin_user.is_service_operator?
     end
