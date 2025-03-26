@@ -45,7 +45,7 @@ RSpec.feature "Undoing a claim's decision" do
 
       click_link "Undo decision"
 
-      expect(page).to have_content "This decision cannot be undone"
+      expect(page).to have_content "This decision cannot be reversed"
       expect(page).to have_field("amendment-notes-field", disabled: true)
     end
 
@@ -57,7 +57,7 @@ RSpec.feature "Undoing a claim's decision" do
 
       click_link "Undo decision"
 
-      expect(page).not_to have_content "This decision cannot be undone"
+      expect(page).not_to have_content "This decision cannot be reversed"
       fill_in "Change notes", with: "Here are some notes"
 
       expect { click_on "Undo rejection" }.to change { claim.reload.amendments.size }.by(1)
