@@ -100,7 +100,7 @@ class Admin::DecisionsController < Admin::BaseAdminController
   end
 
   def rejected_reasons_params
-    Decision.rejected_reasons_for(@claim.policy).map { |r| :"rejected_reasons_#{r}" }
+    Decision.rejected_reasons_for(@claim).map { |r| :"rejected_reasons_#{r}" }
   end
 
   def qa_decision_task?

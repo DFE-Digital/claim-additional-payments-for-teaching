@@ -30,6 +30,7 @@ module Policies
       :subject_to_performance_measures,
       :subject_to_disciplinary_action,
       :identity_check_failed,
+      :alternative_identity_verification_check_failed,
       :duplicate_claim,
       :no_response,
       :no_response_from_employer,
@@ -107,6 +108,17 @@ module Policies
       ClaimCheckingTasks.new(claim).incomplete_task_names.exclude?(
         "alternative_identity_verification"
       )
+    end
+
+    def rejected_reasons(claim)
+      ADMIN_DECISION_REJECTED_REASONS.select do |reason|
+        case reason
+        when :alternative_identity_verification_check_failed
+          alternative_identity_verification_required?(claim)
+        else
+          true
+        end
+      end
     end
   end
 end

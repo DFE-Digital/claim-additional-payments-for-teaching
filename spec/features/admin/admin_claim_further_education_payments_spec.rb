@@ -808,12 +808,18 @@ RSpec.feature "Admin claim further education payments" do
 
         context "when the alternative idv task is a fail" do
           it "doesn't show a warning" do
+            stub_const(
+              "Policies::FurtherEducationPayments::REJECTED_MIN_QA_THRESHOLD",
+              0
+            )
+
             claim = create(
               :claim,
               :submitted,
               policy: Policies::FurtherEducationPayments,
               onelogin_idv_at: 1.day.ago,
-              identity_confirmed_with_onelogin: false
+              identity_confirmed_with_onelogin: false,
+              email_address: "edna-krabappel@springfield-elementary.edu"
             )
 
             create(
@@ -843,6 +849,21 @@ RSpec.feature "Admin claim further education payments" do
             reject_button = find("#decision_approved_false")
 
             expect(reject_button).not_to be_disabled
+
+            choose "Reject"
+
+            check "Provider-led identity check failed"
+
+            perform_enqueued_jobs do
+              click_on "Confirm decision"
+            end
+
+            expect("edna-krabappel@springfield-elementary.edu").to(
+              have_received_email(
+                "a1bb5f64-585f-4b03-b9db-0b20ad801b34",
+                reason_alternative_identity_verification_check_failed: "yes"
+              )
+            )
           end
         end
 

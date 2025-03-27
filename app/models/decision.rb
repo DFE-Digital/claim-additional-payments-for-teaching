@@ -41,8 +41,8 @@ class Decision < ApplicationRecord
     approved ? "approved" : "rejected"
   end
 
-  def self.rejected_reasons_for(policy)
-    policy::ADMIN_DECISION_REJECTED_REASONS
+  def self.rejected_reasons_for(claim)
+    claim.policy.rejected_reasons(claim)
   end
 
   def readonly?
@@ -88,7 +88,7 @@ class Decision < ApplicationRecord
   end
 
   def rejected_reasons_selectable
-    available_rejected_reasons = self.class.rejected_reasons_for(claim.policy)
+    available_rejected_reasons = self.class.rejected_reasons_for(claim)
     return if (selected_rejected_reasons - available_rejected_reasons).empty?
 
     errors.add(:rejected_reasons, "One or more reasons are not selectable for this claim")
