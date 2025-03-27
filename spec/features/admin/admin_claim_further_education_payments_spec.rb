@@ -807,7 +807,7 @@ RSpec.feature "Admin claim further education payments" do
         end
 
         context "when the alternative idv task is a fail" do
-          it "doesn't show a warning" do
+          it "only allows admins to reject the claim" do
             stub_const(
               "Policies::FurtherEducationPayments::REJECTED_MIN_QA_THRESHOLD",
               0
@@ -844,7 +844,7 @@ RSpec.feature "Admin claim further education payments" do
 
             approve_button = find("#decision_approved_true")
 
-            expect(approve_button).not_to be_disabled
+            expect(approve_button).to be_disabled
 
             reject_button = find("#decision_approved_false")
 
@@ -868,7 +868,7 @@ RSpec.feature "Admin claim further education payments" do
         end
 
         context "when the alternative idv task is a pass" do
-          it "doesn't show a warning" do
+          it "allows admins to approve or reject the claim" do
             claim = create(
               :claim,
               :submitted,

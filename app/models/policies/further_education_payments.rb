@@ -101,7 +101,7 @@ module Policies
     def approvable?(claim)
       ClaimCheckingTasks.new(claim).incomplete_task_names.exclude?(
         "alternative_identity_verification"
-      )
+      ) && !claim.tasks.find_by(name: "alternative_identity_verification")&.failed?
     end
 
     def rejectable?(claim)
