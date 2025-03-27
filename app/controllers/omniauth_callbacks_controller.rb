@@ -148,18 +148,20 @@ class OmniauthCallbacksController < ApplicationController
     )
   end
 
-  ONE_LOGIN_TEST_USER = {
-    first_name: "TEST",
-    last_name: "USER",
-    date_of_birth: Date.new(1970, 1, 1)
-  }
+  class OneLoginTestUser < PersonalDetailsForm; end
 
   def extract_data_from_jwt(jwt)
     if OneLoginSignIn.bypass?
-      first_name = ONE_LOGIN_TEST_USER[:first_name]
-      last_name = ONE_LOGIN_TEST_USER[:last_name]
+      form = OneLoginTestUser.new(
+        journey_session: journey_session,
+        journey: nil,
+        params: params
+      )
+
+      first_name = form.first_name
+      last_name = form.surname
       full_name = "#{first_name} #{last_name}"
-      date_of_birth = ONE_LOGIN_TEST_USER[:date_of_birth]
+      date_of_birth = form.date_of_birth
     else
       validator = OneLogin::CoreIdentityValidator.new(jwt:)
       validator.call
@@ -176,8 +178,25 @@ class OmniauthCallbacksController < ApplicationController
     if request.path == "/auth/onelogin"
       OmniAuth::AuthHash.new(uid: "12345", info: {email: "test@example.com"}, extra: {raw_info: {}})
     elsif request.path == "/auth/onelogin_identity"
-      if FeatureFlag.enabled?(:alternative_idv)
-        OmniAuth::AuthHash.new(uid: "12345", info: {email: ""}, extra: {raw_info: {ONELOGIN_RETURN_CODE_HASH_KEY => [{"code" => "ABC"}]}})
+      return_codes_from_params = params
+        .fetch(:claim, {})
+        .fetch(:one_login_return_codes, "")
+        .to_s
+        .split(",")
+        .map(&:strip)
+        .reject(&:blank?)
+        .map { |code| {"code" => code} }
+
+      if return_codes_from_params.present?
+        OmniAuth::AuthHash.new(
+          uid: "12345",
+          info: {email: ""},
+          extra: {
+            raw_info: {
+              ONELOGIN_RETURN_CODE_HASH_KEY => return_codes_from_params
+            }
+          }
+        )
       else
         OmniAuth::AuthHash.new(uid: "12345", info: {email: ""}, extra: {raw_info: {ONELOGIN_JWT_CORE_IDENTITY_HASH_KEY => "test"}})
       end
