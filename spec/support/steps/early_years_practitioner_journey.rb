@@ -27,6 +27,12 @@ def when_personal_details_entered_up_to_address
   fill_in "National Insurance number", with: "PX321499A"
   click_on "Continue"
 
+  expect(page.title).to have_text("What is your home address?")
+  expect(page).to have_content("What is your home address?")
+  click_on("Enter your address manually")
+
+  expect(page.title).to have_text("What is your address?")
+  expect(page).to have_content("What is your address?")
   fill_in "House number or name", with: "57"
   fill_in "Building and street", with: "Walthamstow Drive"
   fill_in "Town or city", with: "Derby"

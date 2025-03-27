@@ -10,8 +10,7 @@ module Journeys
       POLICIES = [Policies::EarlyYearsPayments]
       FORMS = {
         "claims" => {
-          "find-reference" => FindReferenceForm,
-          "enter-home-address" => AddressForm
+          "find-reference" => FindReferenceForm
         }
       }
 

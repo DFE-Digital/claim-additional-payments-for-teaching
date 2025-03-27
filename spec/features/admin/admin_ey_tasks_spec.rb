@@ -677,6 +677,9 @@ RSpec.describe "Admin EY tasks" do
     fill_in "National Insurance number", with: "PX321499A"
     click_on "Continue"
 
+    expect(page).to have_content("What is your home address?")
+    click_on("Enter your address manually")
+
     expect(page).to have_content("What is your address?")
     fill_in "House number or name", with: "57"
     fill_in "Building and street", with: "Walthamstow Drive"

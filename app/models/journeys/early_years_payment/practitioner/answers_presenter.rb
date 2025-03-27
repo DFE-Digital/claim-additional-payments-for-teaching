@@ -9,7 +9,7 @@ module Journeys
             a << ["Full name", answers.full_name, "personal-details"]
             a << ["Date of birth", date_of_birth_string, "personal-details"]
             a << ["National Insurance number", answers.national_insurance_number, "personal-details"]
-            a << ["Home address", answers.address, "enter-home-address"]
+            a << ["Home address", answers.address, "address"]
             a << ["Preferred email address", answers.email_address, "email-address"]
             a << ["Provide mobile number?", answers.provide_mobile_number? ? "Yes" : "No", "provide-mobile-number"]
             a << ["Preferred mobile number", answers.mobile_number, "mobile-number"] if answers.provide_mobile_number?
