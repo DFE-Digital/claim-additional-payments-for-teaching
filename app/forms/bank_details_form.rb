@@ -45,6 +45,10 @@ class BankDetailsForm < Form
     @hmrc_api_validation_succeeded == true && @hmrc_api_response_error != true
   end
 
+  def show_warning?
+    true
+  end
+
   private
 
   def hmrc_validation_attempt_count

@@ -61,7 +61,7 @@ def when_early_years_practitioner_claim_submitted
   choose "No"
   click_on "Continue"
 
-  fill_in "Name on your account", with: "Jo Bloggs"
+  fill_in "Name on the account", with: "Jo Bloggs"
   fill_in "Sort code", with: "123456"
   fill_in "Account number", with: "87654321"
   click_on "Continue"

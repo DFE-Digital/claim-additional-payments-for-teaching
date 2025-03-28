@@ -1,5 +1,5 @@
 <% unless heading.nil? %>
-  <h2 class="govuk-heading-m">
+  <h2 class="<%= local_assigns.fetch(:heading_class, "govuk-heading-m") %>">
     <%= heading %>
   </h2>
 <% end %>

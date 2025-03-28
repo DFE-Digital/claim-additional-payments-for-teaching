@@ -13,18 +13,29 @@
       <%= f.govuk_error_summary %>
 
       <% caption_settings = { text: t("questions.personal_details"), size: "xl" } if show_caption %>
-      <%= f.govuk_phone_field :mobile_number,
+
+      <%= f.govuk_phone_field(
+        :mobile_number,
         spellcheck: "false",
         caption: caption_settings,
         label: {
-          text: t("questions.mobile_number"),
+          text: @form.t("question", default: t("questions.mobile_number")),
           tag: "h1",
           size: heading_size,
         },
-        hint: { text: "To verify your mobile number we will send you a text message with a 6-digit passcode. You can enter the passcode on the next screen." } %>
+        hint: {
+          text: @form.t(
+            "hint_html",
+            default: "To verify your mobile number we will send you a text message with a 6-digit passcode. You can enter the passcode on the next screen."
+          ).html_safe
+        }
+      ) %>
+
       <%= f.hidden_field :resend, value: params[:resend] %>
 
-      <%= render "help_with_access_codes", communication_type: "Mobile" %>
+      <% if show_help %>
+        <%= render "help_with_access_codes", communication_type: "Mobile" %>
+      <% end %>
 
       <%= f.govuk_submit "Continue" %>
     <% end %>

@@ -43,7 +43,12 @@
               tag: "h2",
               size: subheading_size
             },
-            hint: { text: "For example, 31 03 1980. We need this information to verify your identity." } %>
+            hint: {
+              text: @form.t(
+                "date_of_birth.hint",
+                default: "For example, 31 03 1980. We need this information to verify your identity."
+              ),
+            } %>
         </div>
       <% end %>
 
