@@ -1426,7 +1426,7 @@ en:
       prepared_date: "31 July 2019"
       updated_date: "28 July 2022"
     claim_description: for an early years financial incentive payment
-    journey_name: Claim an early years financial incentive payment
+    journey_name: Early years financial incentive payment service
     landing_page:
       title: Claim an early years financial incentive payment
     feedback_email: "EY.Financial-Incentives@education.gov.uk"
@@ -1441,7 +1441,7 @@ en:
       prepared_date: "31 July 2019"
       updated_date: "28 July 2022"
     claim_description: for an early years financial incentive payment
-    journey_name: Claim an early years financial incentive payment
+    journey_name: Early years financial incentive payment service
     feedback_email: "EY.Financial-Incentives@education.gov.uk"
     support_email_address: "EY.Financial-Incentives@education.gov.uk"
     forms:
@@ -1575,7 +1575,7 @@ en:
           title: Is this claim still valid despite having matching details with other claims?
           unavailable: This task is not available until the claimant has submitted their claim
   early_years_payment_practitioner:
-    journey_name: Claim an early years financial incentive payment
+    journey_name: Early years financial incentive payment service
     feedback_email: "EY.Financial-Incentives@education.gov.uk"
     support_email: "EY.Financial-Incentives@education.gov.uk"
     claim_description: for early years financial incentive payment
@@ -1589,6 +1589,41 @@ en:
         label: Your email address
         hint1: We’ll use this to update you with progress on your claim.
         hint2: We recommend you use a non-work email address in case your circumstances change while we process your claim.
+      personal_details:
+        date_of_birth:
+          hint: "For example, 31 03 1990"
+      provide_mobile_number:
+        question: "Can we use your mobile number to contact you?"
+        hint_html: |
+          <p class="govuk-body govuk-!-margin-top-0">
+            We’ll send you a text message if we cannot contact you by email. We will not call you.
+          </p>
+          <p class="govuk-body">
+            It might slow down your claim if we cannot contact you.
+          </p>
+      mobile_number:
+        question: "Your mobile number"
+        hint_html: |
+          <p class="govuk-body govuk-!-margin-top-0">
+            We’ll check the number by sending a text message with a passcode.
+          </p>
+      bank_details:
+        legend: Your personal bank account details
+        banking_name:
+          label: "Name on the account"
+          hint: "The name as it appears on your bank card or bank statements"
+        bank_sort_code:
+          hint: "Must be 6 digits long"
+        bank_account_number:
+          hint: "Must be 8 digits long"
+      gender:
+        questions:
+          payroll_gender: "How is your gender recorded on your employer’s payroll system?"
+        hint_html: |
+          <p class="govuk-body govuk-!-margin-top-0">
+            We’re asking this so that we can match HMRC’s records and pay tax on your payment for you. You should contact your payroll team if you’re not sure how your gender is recorded.
+          </p>
+
     check_your_answers:
       title: Check your answers before submitting this claim
       btn_text: Accept and send

@@ -4,20 +4,22 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
-      There is a problem
+      This claim reference is not correct
     </h1>
+
     <p class="govuk-body">
-      This claim reference isn’t correct. Check your invite email.
+      You can find the correct claim reference in the invitation email you
+      received.
     </p>
 
     <p class="govuk-body">
-      Your employer will also have the claim reference in their claim confirmation email.
+      Your employer will also have received an email with the claim reference.
     </p>
 
     <p class="govuk-body">
       Contact us at
       <%= govuk_link_to t("early_years_payment_practitioner.feedback_email"), "mailto:#{t("early_years_payment_practitioner.feedback_email")}", no_visited_state: true %>.
-      if you need further assistance to sign into the early years financial incentive payments service.
+      if you need any further help signing in to this service.
     </p>
 
     <%= govuk_button_link_to "Try again", claim_path(current_journey_routing_name, "find-reference", request.query_parameters) %>
