@@ -1,0 +1,60 @@
+name: Notify Analytics Config Changes
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'config/analytics_hidden_pii.yml'
+      - 'config/analytics_blocklist.yml'
+      - 'config/analytics.yml'
+      - 'config/analytics_pii.yml'
+  workflow_dispatch:
+
+jobs:
+  notify-slack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch remote master for comparison
+        run: git fetch origin master --depth=2
+
+      - name: Get analytics config changes
+        id: analytics-diff
+        run: |
+          echo "ANALYTICS_DIFF<<EOF" >> $GITHUB_ENV
+          git diff origin/master^..origin/master -- config/analytics_hidden_pii.yml config/analytics_blocklist.yml config/analytics.yml config/analytics_pii.yml >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Get commit details
+        id: commit-info
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          COMMIT_AUTHOR=$(git log -1 --pretty=%an)
+          COMMIT_LINK="https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
+          echo "COMMIT_MSG=$COMMIT_MSG" >> $GITHUB_ENV
+          echo "COMMIT_AUTHOR=$COMMIT_AUTHOR" >> $GITHUB_ENV
+          echo "COMMIT_LINK=$COMMIT_LINK" >> $GITHUB_ENV
+
+      - name: Notify Slack
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_CHANNEL: twd_payments_devs
+          SLACK_COLOR: '#3578e5'
+          SLACK_TITLE: 'Analytics Configuration Change Detected 🔍'
+          SLACK_MESSAGE: |
+            <@U033AJ0A12P>
+
+            *Commit:* <${{ env.COMMIT_LINK }}|${{ env.COMMIT_MSG }}>
+            *Author:* ${{ env.COMMIT_AUTHOR }}
+            *Branch:* ${{ github.ref_name }}
+
+            *Analytics Config Changes:*
+            ```diff
+            ${{ env.ANALYTICS_DIFF }}
+            ```
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
