@@ -17,23 +17,23 @@ module Journeys
 
       def checkbox_options
         [
-          OpenStruct.new(
+          Option.new(
             id: "alevel_physics",
             name: course_option_description("alevel_physics")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "gcse_physics",
             name: course_option_description("gcse_physics")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "ibo_level_1_2_myp_physics",
             name: course_option_description("ibo_level_1_2_myp_physics")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "ibo_level_3_physics",
             name: course_option_description("ibo_level_3_physics")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "none",
             name: course_option_description("none")
           )
@@ -45,6 +45,13 @@ module Journeys
 
         journey_session.answers.assign_attributes(physics_courses:)
         journey_session.save!
+      end
+
+      def clear_answers_from_session
+        if answers.subjects_taught.exclude?("physics")
+          journey_session.answers.assign_attributes(physics_courses: [])
+          journey_session.save!
+        end
       end
 
       private

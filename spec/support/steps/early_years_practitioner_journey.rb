@@ -1,11 +1,22 @@
 def when_personal_details_entered_up_to_address
   visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=practitioner@example.com"
-  fill_in "Claim reference number", with: claim.reference
+  fill_in "Enter your claim reference", with: claim.reference
   click_button "Submit"
 
+  expect(page).to have_content "How we’ll process your claim"
   click_on "Continue"
+
+  mock_one_login_auth
+
+  expect(page).to have_content "Sign in with GOV.UK One Login"
   click_on "Continue"
+
+  mock_one_login_idv
+
+  expect(page).to have_content "You have successfully signed in to GOV.UK One Login"
   click_on "Continue"
+
+  expect(page).to have_content "You have successfully proved your identity with GOV.UK One Login"
   click_on "Continue"
 
   fill_in "First name", with: "John"
@@ -16,6 +27,12 @@ def when_personal_details_entered_up_to_address
   fill_in "National Insurance number", with: "PX321499A"
   click_on "Continue"
 
+  expect(page.title).to have_text("What is your home address?")
+  expect(page).to have_content("What is your home address?")
+  click_on("Enter your address manually")
+
+  expect(page.title).to have_text("What is your address?")
+  expect(page).to have_content("What is your address?")
   fill_in "House number or name", with: "57"
   fill_in "Building and street", with: "Walthamstow Drive"
   fill_in "Town or city", with: "Derby"

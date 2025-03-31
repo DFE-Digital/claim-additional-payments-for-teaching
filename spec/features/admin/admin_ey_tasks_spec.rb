@@ -56,7 +56,15 @@ RSpec.describe "Admin EY tasks" do
           )
 
           expect(page).to have_content(
-            "Claimant name from One login Bobby Bobberson"
+            "Claimant name from One Login Bobby Bobberson"
+          )
+
+          expect(page).to have_content(
+            "Claimant entered DOB 1 January 1986"
+          )
+
+          expect(page).to have_content(
+            "Claimant DOB from One Login 1 January 1986"
           )
 
           expect(page).to have_content(
@@ -89,21 +97,39 @@ RSpec.describe "Admin EY tasks" do
 
             click_on "Confirm the claimant made the claim"
 
+            expect(page).to have_content("Confirm claimant name")
+
             expect(page).to have_content(
               "Provider entered claimant name Bobby Bobberson"
             )
 
             expect(page).to have_content(
-              "Claimant name from One login Robby Bobberson"
+              "Claimant name from One Login Robby Bobberson"
+            )
+
+            expect(page).to have_content("Confirm claimant date of birth")
+
+            expect(page).to have_content("Claimant entered DOB 1 January 1986")
+
+            expect(page).to have_content(
+              "Claimant DOB from One Login 1 January 1986"
             )
 
             expect(page).to have_content(
-              "[GOV UK One Login Name] - Names partially match"
+              "[GOV UK One Login] - Names partially match:"
             )
 
-            expect(page).to have_content('Provider: "Bobby Bobberson"')
+            expect(page).to have_content(
+              'Provider-entered name: "Bobby Bobberson"'
+            )
 
-            expect(page).to have_content('GOV.UK One Login: "Robby Bobberson"')
+            expect(page).to have_content(
+              'GOV.UK One Login Name: "Robby Bobberson"'
+            )
+
+            expect(page).to have_content('Claimant-entered DOB: "1 January 1986"')
+
+            expect(page).to have_content('GOV.UK One Login DOB: "1 January 1986"')
           end
 
           it "allows the admin to mark the task as passed" do
@@ -165,21 +191,39 @@ RSpec.describe "Admin EY tasks" do
 
             click_on "Confirm the claimant made the claim"
 
+            expect(page).to have_content("Confirm claimant name")
+
             expect(page).to have_content(
               "Provider entered claimant name Bobby Bobberson"
             )
 
             expect(page).to have_content(
-              "Claimant name from One login Robby Robberson"
+              "Claimant name from One Login Robby Robberson"
+            )
+
+            expect(page).to have_content("Confirm claimant date of birth")
+
+            expect(page).to have_content("Claimant entered DOB 1 January 1986")
+
+            expect(page).to have_content(
+              "Claimant DOB from One Login 1 January 1986"
             )
 
             expect(page).to have_content(
-              "[GOV UK One Login Name] - Names do not match"
+              "[GOV UK One Login] - Names do not match:"
             )
 
-            expect(page).to have_content('Provider: "Bobby Bobberson"')
+            expect(page).to have_content(
+              'Provider-entered name: "Bobby Bobberson"'
+            )
 
-            expect(page).to have_content('GOV.UK One Login: "Robby Robberson"')
+            expect(page).to have_content(
+              'GOV.UK One Login Name: "Robby Robberson"'
+            )
+
+            expect(page).to have_content('Claimant-entered DOB: "1 January 1986"')
+
+            expect(page).to have_content('GOV.UK One Login DOB: "1 January 1986"')
           end
 
           it "doesn't allow the admin to complete the task" do
@@ -214,9 +258,17 @@ RSpec.describe "Admin EY tasks" do
             "[GOV UK One Login] - IDV mismatch:"
           )
 
-          expect(page).to have_content('GOV.UK One Login Name: "Bobby Bobberson"')
+          expect(page).to have_content(
+            'Provider-entered name: "Bobby Bobberson"'
+          )
 
-          expect(page).to have_content('GOV.UK One Login DOB: "1986-01-01"')
+          expect(page).to have_content(
+            'GOV.UK One Login Name: "Bobby Bobberson"'
+          )
+
+          expect(page).to have_content('Claimant-entered DOB: "11 January 1986"')
+
+          expect(page).to have_content('GOV.UK One Login DOB: "1 January 1986"')
 
           expect(page).not_to have_button("Save and continue")
         end
@@ -610,13 +662,13 @@ RSpec.describe "Admin EY tasks" do
 
     visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=practitioner@example.com"
 
-    fill_in "Claim reference number", with: claim.reference
+    fill_in "Enter your claim reference", with: claim.reference
 
     click_button "Submit"
 
-    sign_in_with_one_login
-
     click_on "Continue"
+
+    sign_in_with_one_login
 
     expect(page).to have_content("Personal details")
     fill_in "Day", with: date_of_birth.day
@@ -624,6 +676,9 @@ RSpec.describe "Admin EY tasks" do
     fill_in "Year", with: date_of_birth.year
     fill_in "National Insurance number", with: "PX321499A"
     click_on "Continue"
+
+    expect(page).to have_content("What is your home address?")
+    click_on("Enter your address manually")
 
     expect(page).to have_content("What is your address?")
     fill_in "House number or name", with: "57"

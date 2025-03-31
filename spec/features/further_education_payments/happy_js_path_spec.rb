@@ -24,7 +24,6 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
-    expect(page).to have_selector "input[type=radio][value='#{college.id}']", visible: false
     choose college.name
     click_button "Continue"
 
@@ -93,7 +92,7 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     click_on "Continue"
 
     expect(page).to have_content("What is your home address?")
-    click_link("Enter your address manually")
+    click_button("Enter your address manually")
 
     expect(page).to have_content("What is your address?")
     fill_in "House number or name", with: "57"

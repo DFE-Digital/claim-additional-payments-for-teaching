@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Policies::EarlyCareerPayments::AdminTasksPresenter do
-  it_behaves_like "ECP and LUP Combined Journey Admin Tasks Presenter", Policies::EarlyCareerPayments
+  it_behaves_like "ECP and Targeted Retention Incentive Combined Journey Admin Tasks Presenter", Policies::EarlyCareerPayments
 
   describe "#census_subjects_taught" do
     let(:claim) { build(:claim) }

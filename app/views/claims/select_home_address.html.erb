@@ -2,9 +2,9 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: @form, errored_field_id_overrides: { "address": "#{@address_data.first[:address].gsub(",", "").gsub(" ", "_").downcase}"}) if @form.errors.any? %>
+    <%= form_for @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+      <%= form.govuk_error_summary %>
 
-    <%= form_for @form, url: claim_path(current_journey_routing_name), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
       <div class="govuk-!-margin-bottom-5">
         <h1 class="govuk-heading-xl"><%= t("questions.address.home.title") %></h1>
         <h2 class="govuk-heading-l govuk-!-margin-bottom-1">Postcode</h2>
@@ -37,7 +37,16 @@
             </div>
           </fieldset>
         <% end %>
-        <%= link_to I18n.t("questions.address.home.i_cannot_find"), claim_path(current_journey_routing_name, "address"), class: "govuk-link", "aria-label": I18n.t("questions.address.home.i_cannot_find") %>
+
+        <p class="govuk-body">
+          <% if journey.use_navigator? %>
+            <button form="skip-postcode-search" class="govuk-link govuk-link--no-visited-state button-to-as-link">
+              <%= I18n.t("questions.address.home.i_cannot_find") %>
+            </button>
+          <% else %>
+            <%= link_to I18n.t("questions.address.home.i_cannot_find"), claim_path(current_journey_routing_name, "address"), class: "govuk-link", "aria-label": I18n.t("questions.address.home.i_cannot_find") %>
+          <% end %>
+        </p>
       </div>
       <p class="govuk-!-padding-top-3">
         <%= form.submit "Continue", class: "govuk-button" %>
@@ -45,3 +54,7 @@
     <% end %>
   </div>
 </div>
+
+<%= form_for @form, url: claim_path(current_journey_routing_name), builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { id: "skip-postcode-search" } do |f| %>
+  <%= f.hidden_field :skip_postcode_search, value: true %>
+<% end %>

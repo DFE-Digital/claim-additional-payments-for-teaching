@@ -1,5 +1,5 @@
 <% content_for(:page_title, page_title(@form.t("#{@form.journey_eligibility_checker.ineligibility_reason}.heading"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
-<% @backlink_path = claim_path(current_journey_routing_name, session[:slugs].last) %>
+<% @backlink_path = claim_path(current_journey_routing_name, navigator.previous_slug) %>
 
 <%= render "ineligible_#{@form.journey_eligibility_checker.ineligibility_reason}" %>

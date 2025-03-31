@@ -97,83 +97,83 @@ describe "teacher route: completing the form" do
     assert_on_check_your_answers_part_one_page!
 
     expect(page).to have_text(
-      "What is your employment status? I am employed as a teacher in a school in England"
+      /What is your employment status\?\s?I am employed as a teacher in a school in England/
     )
 
     expect(page).to have_text(
-      "Are you employed by an English state secondary school? Yes"
+      /Are you employed by an English state secondary school\?\s?Yes/
     )
 
     expect(page).to have_text(
-      "Which school are you currently employed to teach at? #{school.name}"
+      /Which school are you currently employed to teach at\?\s?#{school.name}/
     )
 
     expect(page).to have_text(
-      "Enter the name of the headteacher of the school where you are employed as a teacher Seymour Skinner"
+      /Enter the name of the headteacher of the school where you are employed as a teacher\s?Seymour Skinner/
     )
 
     expect(page).to have_text(
-      "Are you employed on a contract lasting at least one year? Yes"
+      /Are you employed on a contract lasting at least one year\?\s?Yes/
     )
 
     expect(page).to have_text(
-      "Enter the start date of your contract #{contract_start_date.strftime("%d-%m-%Y")}"
+      /Enter the start date of your contract\s?#{I18n.l(contract_start_date)}/
     )
 
     expect(page).to have_text(
-      "What subject are you employed to teach at your school? Physics"
+      /What subject are you employed to teach at your school\?\s?Physics/
     )
 
     expect(page).to have_text(
-      "Select the visa you used to move to England British National (Overseas) visa"
+      /Select the visa you used to move to England\s?British National \(Overseas\) visa/
     )
 
     expect(page).to have_text(
-      "Enter the date you moved to England to start your teaching job #{entry_date.strftime("%d-%m-%Y")}"
+      /Enter the date you moved to England to start your teaching job\s?#{I18n.l(entry_date)}/
     )
   end
 
   def then_the_check_your_answers_part_page_shows_my_answers(school, mobile_number: false, building_society: false)
     expect(page).to have_text(
-      "What is your full name? Walter Seymour Skinner"
+      /What is your full name\?\s?Walter Seymour Skinner/
     )
 
     expect(page).to have_text(
-      "What is your date of birth? 12 July 1945"
+      /What is your date of birth\?\s?12 July 1945/
     )
 
     expect(page).to have_text(
-      "What is your National Insurance number? QQ123456C"
+      /What is your National Insurance number\?\s?QQ123456C/
     )
 
     expect(page).to have_text(
-      "What is your address? Flat 1, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX"
+      /What is your address\?\s?Flat 1, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX/
     )
 
     expect(page).to have_text(
-      "Email address seymour.skinner@springfieldelementary.edu"
+      /Email address\s?seymour.skinner@springfieldelementary.edu/
     )
 
-    expect(page).to have_text("Select your nationality Australian")
+    expect(page).to have_text(/Select your nationality\s?Australian/)
 
     expect(page).to have_text(
-      "Enter your passport number, as it appears on your passport 123456789"
+      /Enter your passport number, as it appears on your passport\s?123456789/
     )
 
     if mobile_number
-      expect(page).to have_text("Mobile number 01234567890")
+      expect(page).to have_text(/Mobile number\s?01234567890/)
     else
       expect(page).to have_text(
-        "Would you like to provide your mobile number? No"
+        /Would you like to provide your mobile number\?\s?No/
       )
     end
 
-    expect(page).to have_text("Name on bank account Walter Skinner")
-    expect(page).to have_text("Bank sort code 123456")
-    expect(page).to have_text("Bank account number 12345678")
+    expect(page).to have_text(/Name on bank account\s?Walter Skinner/)
+    expect(page).to have_text(/Bank sort code\s?123456/)
+    expect(page).to have_text(/Bank account number\s?12345678/)
 
     expect(page).to have_text(
-      "How is your gender recorded on your school’s payroll system? Male"
+      /How is your gender recorded on your school’s payroll system\?\s?Male/
     )
   end
 end

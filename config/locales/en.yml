@@ -67,7 +67,7 @@ en:
       home:
         title: "What is your home address?"
         link_to_manual_address: "Enter your address manually"
-        i_cannot_find: "I can't find my address in the list"
+        i_cannot_find: "I can’t find my address in the list"
         no_address_found: "No addresses found matching those details"
     date_of_birth: "What is your date of birth?"
     email_address: "Email address"
@@ -130,47 +130,76 @@ en:
     unknown_payroll_gender_preventing_approval_message:
       This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
     tasks:
+      one_login_identity:
+        name: One Login identity check
+        title: Confirm the claimant made the claim
+      alternative_identity_verification:
+        name: "Alternative identity verification"
+        title: "Confirm the provider has verified the claimant's identity"
       previous_payment:
+        name: Previous payment
         title: Check for previous payment
       previous_residency:
+        name: Previous residency
         title: Check previous residency
       qualifications:
+        name: Qualifications
         title: "Check qualification information"
       induction_confirmation:
+        name: Induction confirmation
         title: "Check induction information"
       employment:
+        name: Employment
         title: "Check employment information"
       matching_details:
+        name: Matching details
         title: "Review matching details from other claims"
       identity_confirmation:
+        name: Identity confirmation
         title: "Confirm the claimant made the claim"
       provider_verification:
-        title: "Confirm the provider has responded and verified the claimant's information"
+        name: Provider verification
+        title: "Confirm the provider has responded and verified the claimant’s information"
+      eligibility_check:
+        name: Eligibility check
+        title: "Confirm the provider has responded and verified the claimant’s information"
       provider_details:
+        name: Provider details
         title: "Check the provider details"
       payroll_gender:
+        name: Payroll gender
         title: "How is the claimant’s gender recorded for payroll purposes?"
         hint: "The claimant answered ‘don’t know’ to the question ‘how is your gender recorded on your employer’s payroll system?’"
       student_loan_amount:
+        name: Student loan amount
         title: "Check student loan amount"
       student_loan_plan:
+        name: Student loan plan
         title: "Check student loan plan"
       payroll_details:
+        name: Payroll details
         title: "Check bank account details"
         question: "The claimant’s personal bank account details have not been automatically validated. Has the claimant confirmed their personal bank account details?"
       census_subjects_taught:
+        name: Census subjects taught
         title: "Check eligible subjects are taught"
       visa:
+        name: Visa
         title: "Check visa"
       arrival_date:
+        name: Arrival date
         title: "Check arrival date"
       employment_contract:
+        name: Employment contract
         title: "Check employment contract"
       employment_start:
+        name: Employment start
         title: "Check employment start date"
       subject:
+        name: Subject
         title: "Check subject"
       teaching_hours:
+        name: Teaching hours
         title: "Check teaching hours"
     undo_decision:
       approved: "Undo approval"
@@ -275,7 +304,7 @@ en:
       errors:
         presence: "Enter an email address"
         format: "Enter an email address in the correct format, like name@example.com"
-        length: "Email address must be 256 characters or less"
+        length: "Email address must be %{length} characters or less"
     mobile_number:
       errors:
         invalid: "Enter a mobile number, like 07700 900 982 or +44 7700 900 982"
@@ -586,7 +615,7 @@ en:
           email_address:
             blank: Enter an email address
             invalid: Enter an email address in the correct format, like name@example.com
-            length: Email address must be 256 characters or less
+            length: Email address must be %{length} characters or less
             unauthorised: Only authorised email addresses can be used when using a team-only API key
     check_your_answers:
       part_one:
@@ -704,7 +733,7 @@ en:
     claim_amount_description: "Additional payment for teaching"
     support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
     information_provided_further_details_link_text: early-career payment (opens in new tab)
-  levelling_up_premium_payments:
+  targeted_retention_incentive_payments:
     <<: *additional_payments
     purpose: For early career teachers who teach certain subjects and work in disadvantaged schools.
     policy_short_name: "School Targeted Retention Incentive"
@@ -895,13 +924,19 @@ en:
           insufficient_time_spent_teaching_eligibble_students: "Insufficient time spent teaching eligible students"
           subject_to_performance_measures: "Subject to performance measures"
           subject_to_disciplinary_action: "Subject to disciplinary action"
-          identity_check_failed: "Identity check failed"
+          identity_check_failed: "GOV One Login identity check failed"
+          alternative_identity_verification_check_failed: "Provider-led identity check failed"
           duplicate_claim: "Duplicate claim"
           no_response: "No response"
+          no_response_from_employer: "No response from employer"
           other: "Other"
       task_questions:
+        one_login_identity:
+          title: Do the One Login details match the personal details entered by the claimant?
         identity_confirmation:
           title: Do the One Login details match the personal details entered by the claimant?
+        alternative_identity_verification:
+          title: "Do the details entered by the claimant match the personal details entered by the provider?"
         matching_details:
           title: Is this claim still valid despite having matching details with other claims?
         payroll_details:
@@ -1161,6 +1196,10 @@ en:
             IBO level 3 in SL and HL physics, taught as part of a diploma or career related programme or as a standalone
             certificate
           none: I do not teach any of these courses
+      email_verification:
+        errors:
+          one_time_password:
+            invalid: An error occured while validating the passcode, please try generating a new one
       teaching_qualification:
         question: Do you have a teaching qualification?
         hint_html: >
@@ -1220,6 +1259,12 @@ en:
         errors:
           inclusion:
             Select yes if you spend at least half of your timetabled teaching hours teaching these eligible courses
+      passport:
+        question: Do you have a valid passport?
+        conditional_question: Passport number
+        errors:
+          inclusion: Select yes if you have a valid passport
+          length: Passport number should be between 8 and 9 characters long
       teacher_reference_number:
         heading: Teacher reference number (TRN)
         questions:
@@ -1331,6 +1376,47 @@ en:
               label: "Can you confirm that %{claimant} is not currently subject to disciplinary action?"
               errors:
                 inclusion: "Select yes if %{claimant} is not currently subject to disciplinary action"
+      verify_identity:
+        title: "We need you to verify the claimant’s identity"
+        claimant_date_of_birth:
+          label: "What is %{claimant}’s date of birth?"
+          errors:
+            blank: "Enter %{claimant}’s date of birth"
+            invalid: "Enter a date of birth in the correct format"
+            in_future: "Date of birth must be in the past"
+            format: "Date of birth must include a day, month and year in the correct format, for example 01 01 1980"
+            four_digits: "Year must include 4 numbers"
+            before_1900: "Year must be after 1900"
+        claimant_postcode:
+          label: "What is the postcode of %{claimant}’s current home address?"
+          hint: "For example ’AA1 2BC’"
+          errors:
+            blank: "Enter %{claimant}’s postcode"
+            invalid: "Enter a postcode in the correct format"
+        claimant_national_insurance_number:
+          label: "What is %{claimant}’s National Insurance number?"
+          hint: "For example ’QQ123456C’"
+          errors:
+            blank: "Enter %{claimant}’s National Insurance number"
+            invalid: "Enter a National Insurance number in the correct format"
+        claimant_valid_passport:
+          label: "Does %{claimant} have a valid passport?"
+          hint: "You can check if a passport is valid by looking at the expiration date on the passport photo page"
+          options:
+            true: "Yes"
+            false: "No"
+          errors:
+            inclusion: "Select yes if %{claimant} has a valid passport"
+        claimant_passport_number:
+          label: "Passport number"
+          hint: "This is the number in the top right hand corner of the photo page in the passport"
+          errors:
+            blank: "Enter %{claimant}’s passport number"
+        declaration:
+          legend: "Declaration"
+          label: "To the best of my knowledge, I confirm that I have verified the claimant’s identity and the information provided in this form is correct."
+          errors:
+            acceptance: "Tick the box to confirm that you have verified the claimant’s identity and the information provided in this form is correct"
 
   early_years_payment:
     claim_description: for an early years financial incentive payment
@@ -1366,7 +1452,7 @@ en:
         errors:
           presence: You must be able to confirm this information to continue
       current_nursery:
-        question: What is the name of the nursery where your employee works?
+        question: Select the name of the nursery where your employee works
         errors:
           presence: Select the nursery where your employee works
       paye_reference:
@@ -1376,7 +1462,7 @@ en:
       claimant_name:
         question: Who are you making this claim for?
         hint:
-          Enter the employee’s full legal name as it appears on official identity documents such as passports or driving
+          Enter the employee’s full legal name as it appears on official identity documents such as a passport or driving licence
           licenses.
         errors:
           first_name:
@@ -1496,6 +1582,7 @@ en:
     forms:
       find_reference:
         question: Enter your claim reference
+        hint: Your claim reference is in the claim invite email from your employer. It’s a series of letters and numbers, like ABC1234E.
         errors:
           presence: Enter your claim reference number
       email_address:

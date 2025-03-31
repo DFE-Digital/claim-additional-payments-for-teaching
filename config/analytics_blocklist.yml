@@ -64,8 +64,10 @@
   - secondary_contact_email_address
   - created_at
   - updated_at
+  - file_upload_id
   :eligible_fe_providers:
   - primary_key_contact_email_address
+  - file_upload_id
   :schools:
   - postcode_sanitised
   :file_uploads:
@@ -74,6 +76,9 @@
   - body
   - created_at
   - updated_at
+  - target_data_model
+  - completed_processing_at
+  - academic_year
   :reminders:
   - full_name
   - email_address
@@ -95,6 +100,12 @@
   - school_headteacher_name
   :further_education_payments_eligibilities:
   - verification
+  - claimant_date_of_birth
+  - claimant_postcode
+  - claimant_national_insurance_number
+  - claimant_valid_passport
+  - claimant_passport_number
+  - passport_number
   :journeys_sessions:
   - answers
   :early_years_payment_eligibilities:
@@ -107,3 +118,37 @@
   - value
   - created_at
   - updated_at
+  :reports:
+  - id
+  - name
+  - csv
+  - created_at
+  - updated_at
+  - number_of_rows
+  :targeted_retention_incentive_payments_awards:
+  - file_upload_id
+  :journeys_service_access_codes:
+  - id
+  - code
+  - used
+  - journey
+  - created_at
+  - updated_at
+  :feature_flags:
+  - id
+  - name
+  - enabled
+  - created_at
+  - updated_at
+  :file_downloads:
+  - id
+  - downloaded_by_id
+  - body
+  - filename
+  - content_type
+  - source_data_model
+  - source_data_model_id
+  - created_at
+  - updated_at
+  :payment_confirmations:
+  - file_upload_id

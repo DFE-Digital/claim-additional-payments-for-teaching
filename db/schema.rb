@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_06_105631) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_19_180055) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -114,6 +114,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_06_105631) do
     t.datetime "started_at", precision: nil, null: false
     t.datetime "verified_at"
     t.text "onelogin_idv_full_name"
+    t.text "onelogin_idv_return_codes", array: true
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
@@ -125,7 +126,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_06_105631) do
   end
 
   create_table "decisions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.integer "result"
     t.uuid "claim_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
@@ -133,6 +133,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_06_105631) do
     t.uuid "created_by_id"
     t.boolean "undone", default: false
     t.jsonb "rejected_reasons", default: {}
+    t.boolean "approved", null: false
     t.index ["claim_id"], name: "index_decisions_on_claim_id"
     t.index ["created_at"], name: "index_decisions_on_created_at"
     t.index ["created_by_id"], name: "index_decisions_on_created_by_id"
@@ -218,10 +219,12 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_06_105631) do
     t.citext "secondary_contact_email_address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "file_upload_id"
+    t.index ["file_upload_id"], name: "index_eligible_ey_providers_on_file_upload_id"
     t.index ["local_authority_id"], name: "index_eligible_ey_providers_on_local_authority_id"
     t.index ["primary_key_contact_email_address"], name: "index_eligible_ey_providers_on_primary_contact_email_address"
     t.index ["secondary_contact_email_address"], name: "index_eligible_ey_providers_on_secondary_contact_email_address"
-    t.index ["urn"], name: "index_eligible_ey_providers_on_urn", unique: true
+    t.index ["urn", "file_upload_id"], name: "index_eligible_ey_providers_on_urn_and_file_upload_id", unique: true
   end
 
   create_table "eligible_fe_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -232,7 +235,28 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_06_105631) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "primary_key_contact_email_address"
-    t.index ["academic_year", "ukprn"], name: "index_eligible_fe_providers_on_academic_year_and_ukprn", unique: true
+    t.uuid "file_upload_id"
+    t.index ["academic_year", "ukprn", "file_upload_id"], name: "idx_on_academic_year_ukprn_file_upload_id_d31aaa765c", unique: true
+    t.index ["file_upload_id"], name: "index_eligible_fe_providers_on_file_upload_id"
+  end
+
+  create_table "feature_flags", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "name", null: false
+    t.boolean "enabled", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_feature_flags_on_name", unique: true
+  end
+
+  create_table "file_downloads", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "downloaded_by_id"
+    t.text "body"
+    t.string "filename"
+    t.string "content_type"
+    t.string "source_data_model"
+    t.string "source_data_model_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "file_uploads", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -240,6 +264,9 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_06_105631) do
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "target_data_model"
+    t.datetime "completed_processing_at"
+    t.string "academic_year", limit: 9
   end
 
   create_table "further_education_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -274,6 +301,15 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_06_105631) do
     t.boolean "flagged_as_duplicate", default: false
     t.datetime "provider_verification_email_last_sent_at"
     t.datetime "provider_verification_chase_email_last_sent_at"
+    t.integer "provider_verification_email_count", default: 0
+    t.date "claimant_date_of_birth"
+    t.string "claimant_postcode"
+    t.string "claimant_national_insurance_number"
+    t.boolean "claimant_valid_passport"
+    t.string "claimant_passport_number"
+    t.datetime "claimant_identity_verified_at"
+    t.boolean "valid_passport"
+    t.text "passport_number"
     t.index ["possible_school_id"], name: "index_fe_payments_eligibilities_on_possible_school_id"
     t.index ["school_id"], name: "index_fe_payments_eligibilities_on_school_id"
   end
@@ -306,6 +342,15 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_06_105631) do
     t.index ["created_at"], name: "index_journey_configurations_on_created_at"
   end
 
+  create_table "journeys_service_access_codes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "code", null: false
+    t.string "journey", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "used", default: false, null: false
+    t.index ["code"], name: "index_journeys_service_access_codes_on_code", unique: true
+  end
+
   create_table "journeys_sessions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.jsonb "answers", default: {}
     t.string "journey", null: false
@@ -319,9 +364,11 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_06_105631) do
     t.decimal "award_amount", precision: 7, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["academic_year", "school_urn"], name: "lupp_award_by_year_and_urn"
+    t.uuid "file_upload_id"
+    t.index ["academic_year", "school_urn", "file_upload_id"], name: "idx_on_academic_year_school_urn_file_upload_id_da9cfc909e", unique: true
     t.index ["academic_year"], name: "lupp_award_by_year"
     t.index ["award_amount"], name: "lupp_award_by_amount"
+    t.index ["file_upload_id"], name: "index_levelling_up_premium_payments_awards_on_file_upload_id"
     t.index ["school_urn"], name: "lupp_award_by_urn"
   end
 
@@ -378,7 +425,9 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_06_105631) do
     t.uuid "created_by_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "file_upload_id"
     t.index ["created_by_id"], name: "index_payment_confirmations_on_created_by_id"
+    t.index ["file_upload_id"], name: "index_payment_confirmations_on_file_upload_id"
     t.index ["payroll_run_id"], name: "index_payment_confirmations_on_payroll_run_id"
   end
 
@@ -431,6 +480,14 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_06_105631) do
     t.text "journey_class", null: false
     t.datetime "deleted_at"
     t.index ["journey_class"], name: "index_reminders_on_journey_class"
+  end
+
+  create_table "reports", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.text "csv"
+    t.integer "number_of_rows"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "risk_indicators", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -487,6 +544,13 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_06_105631) do
     t.index ["urn"], name: "index_schools_on_urn", unique: true
   end
 
+  create_table "stats", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "one_login_return_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "type"
+  end
+
   create_table "student_loans_data", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "claim_reference"
     t.string "nino"
@@ -536,6 +600,43 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_06_105631) do
     t.index ["created_by_id"], name: "index_support_tickets_on_created_by_id"
   end
 
+  create_table "targeted_retention_incentive_payments_awards", force: :cascade do |t|
+    t.string "academic_year", limit: 9, null: false
+    t.integer "school_urn", null: false
+    t.decimal "award_amount", precision: 7, scale: 2
+    t.uuid "file_upload_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["academic_year", "school_urn", "file_upload_id"], name: "idx_on_academic_year_school_urn_file_upload_id_e22f377ca3"
+    t.index ["academic_year"], name: "idx_on_academic_year_d488a0f13b"
+    t.index ["award_amount"], name: "idx_on_award_amount_327151d288"
+    t.index ["file_upload_id"], name: "idx_on_file_upload_id_f03e7df6df"
+    t.index ["school_urn"], name: "idx_on_school_urn_4cd86bf61e"
+  end
+
+  create_table "targeted_retention_incentive_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.boolean "nqt_in_academic_year_after_itt"
+    t.boolean "employed_as_supply_teacher"
+    t.integer "qualification"
+    t.boolean "has_entire_term_contract"
+    t.boolean "employed_directly"
+    t.boolean "subject_to_disciplinary_action"
+    t.boolean "subject_to_formal_performance_action"
+    t.integer "eligible_itt_subject"
+    t.boolean "teaching_subject_now"
+    t.string "itt_academic_year", limit: 9
+    t.uuid "current_school_id"
+    t.decimal "award_amount", precision: 7, scale: 2
+    t.boolean "eligible_degree_subject"
+    t.boolean "induction_completed"
+    t.boolean "school_somewhere_else"
+    t.string "teacher_reference_number", limit: 11
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["current_school_id"], name: "idx_on_current_school_id_a8a77a93bf"
+    t.index ["teacher_reference_number"], name: "idx_on_teacher_reference_number_d349ded5d7"
+  end
+
   create_table "tasks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.uuid "claim_id"
@@ -545,6 +646,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_06_105631) do
     t.boolean "passed"
     t.boolean "manual"
     t.integer "claim_verifier_match"
+    t.text "reason"
     t.index ["claim_id"], name: "index_tasks_on_claim_id"
     t.index ["created_by_id"], name: "index_tasks_on_created_by_id"
     t.index ["name", "claim_id"], name: "index_tasks_on_name_and_claim_id", unique: true
@@ -589,14 +691,18 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_06_105631) do
   add_foreign_key "claims", "journeys_sessions"
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "early_career_payments_eligibilities", "schools", column: "current_school_id"
+  add_foreign_key "eligible_ey_providers", "file_uploads"
   add_foreign_key "eligible_ey_providers", "local_authorities"
+  add_foreign_key "eligible_fe_providers", "file_uploads"
   add_foreign_key "further_education_payments_eligibilities", "schools"
   add_foreign_key "further_education_payments_eligibilities", "schools", column: "possible_school_id"
   add_foreign_key "international_relocation_payments_eligibilities", "schools", column: "current_school_id"
+  add_foreign_key "levelling_up_premium_payments_awards", "file_uploads"
   add_foreign_key "levelling_up_premium_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "notes", "claims"
   add_foreign_key "notes", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "payment_confirmations", "dfe_sign_in_users", column: "created_by_id"
+  add_foreign_key "payment_confirmations", "file_uploads"
   add_foreign_key "payment_confirmations", "payroll_runs"
   add_foreign_key "payments", "payment_confirmations", column: "confirmation_id"
   add_foreign_key "payments", "payroll_runs"
@@ -608,6 +714,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_06_105631) do
   add_foreign_key "student_loans_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "support_tickets", "claims"
   add_foreign_key "support_tickets", "dfe_sign_in_users", column: "created_by_id"
+  add_foreign_key "targeted_retention_incentive_payments_awards", "file_uploads"
   add_foreign_key "tasks", "claims"
   add_foreign_key "tasks", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "topups", "claims"

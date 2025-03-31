@@ -240,5 +240,44 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
           .and change { journey_session.reload.answers.onelogin_idv_date_of_birth }.from(nil).to(Date.new(1970, 12, 13))
       end
     end
+
+    context "idv step with return code present" do
+      let(:omniauth_hash) do
+        OmniAuth::AuthHash.new(
+          "uid" => "12345",
+          "extra" => {
+            "raw_info" => {
+              "https://vocab.account.gov.uk/v1/returnCode" => [{"code" => "ABC"}]
+            }
+          }
+        )
+      end
+
+      it "updates session vars" do
+        journey_session = Journeys::FurtherEducationPayments::Session.last
+        journey_session.answers.onelogin_uid = "12345"
+        journey_session.save!
+
+        expect {
+          get auth_onelogin_path
+        }.to change { journey_session.reload.answers.onelogin_idv_at }.from(nil).to(be_within(10.seconds).of(Time.now))
+          .and change { journey_session.reload.answers.identity_confirmed_with_onelogin }.from(nil).to(false)
+          .and not_change { journey_session.reload.answers.onelogin_idv_first_name }
+          .and not_change { journey_session.reload.answers.onelogin_idv_last_name }
+          .and not_change { journey_session.reload.answers.onelogin_idv_date_of_birth }
+      end
+
+      it "updates return codes stats" do
+        journey_session = Journeys::FurtherEducationPayments::Session.last
+        journey_session.answers.onelogin_uid = "12345"
+        journey_session.save!
+
+        expect {
+          get auth_onelogin_path
+        }.to change { Stats::OneLogin.count }.by(1)
+
+        expect(Stats::OneLogin.last.one_login_return_code).to eql("ABC")
+      end
+    end
   end
 end

@@ -1,7 +1,7 @@
 module Policies
   module FurtherEducationPayments
     class Eligibility < ApplicationRecord
-      AMENDABLE_ATTRIBUTES = [].freeze
+      AMENDABLE_ATTRIBUTES = [:award_amount, :teacher_reference_number].freeze
 
       self.table_name = "further_education_payments_eligibilities"
 
@@ -94,6 +94,10 @@ module Policies
         nil
       end
 
+      def verification_assertion(name)
+        assertion_hash[name]
+      end
+
       private
 
       def provider_and_claimant_names_match?
@@ -115,6 +119,12 @@ module Policies
 
       def provider_last_name
         verification.dig("verifier", "last_name")
+      end
+
+      def assertion_hash
+        @assertion_hash ||= verification.fetch("assertions").map do |assertion|
+          [assertion["name"], assertion["outcome"]]
+        end.to_h
       end
     end
   end

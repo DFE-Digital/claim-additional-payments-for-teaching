@@ -53,6 +53,10 @@ module BasePolicy
     true
   end
 
+  def rejectable?(claim)
+    true
+  end
+
   def decision_deadline_date(claim)
     (claim.submitted_at + Claim::DECISION_DEADLINE).to_date
   end
@@ -71,5 +75,18 @@ module BasePolicy
 
   def require_in_progress_update_emails?
     true
+  end
+
+  def rejected_reasons(claim)
+    self::ADMIN_DECISION_REJECTED_REASONS
+  end
+
+  # Overwrite this in the policies if they set a maximum topup amount
+  def max_topup_amount(claim)
+    10_000.00
+  end
+
+  def current_academic_year
+    Journeys.for_policy(self).configuration.current_academic_year
   end
 end

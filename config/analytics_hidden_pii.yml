@@ -4,6 +4,8 @@
     - onelogin_uid
   :levelling_up_premium_payments_eligibilities:
     - teacher_reference_number
+  :targeted_retention_incentive_payments_eligibilities:
+    - teacher_reference_number
   :early_career_payments_eligibilities:
     - teacher_reference_number
   :student_loans_eligibilities:
@@ -11,25 +13,8 @@
   :further_education_payments_eligibilities:
     - teacher_reference_number
   :school_workforce_censuses:
-    - id
     - teacher_reference_number
-    - school_urn
-    - totfte
-    - contract_agreement_type
-    - subject_description_sfr
-    - general_subject_code
-    - hours_taught
-    - created_at
-    - updated_at
   :teachers_pensions_service:
-    - id
     - teacher_reference_number
-    - start_date
-    - end_date
-    - la_urn
-    - school_urn
-    - employer_id
     - nino
-    - created_at
-    - updated_at
     - gender_digit

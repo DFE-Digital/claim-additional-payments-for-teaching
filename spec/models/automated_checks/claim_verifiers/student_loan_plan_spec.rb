@@ -80,6 +80,16 @@ module AutomatedChecks
         end
       end
 
+      shared_examples :raising_an_error do
+        it "raises an error" do
+          expect { perform }.to raise_error(
+            described_class::MissingClaimPlanError,
+            "Claim #{claim.reference} has no student loan plan set. " \
+            "but student loan data with matching DOB and NINO was found"
+          )
+        end
+      end
+
       describe "#perform" do
         subject(:perform) { student_loan_plan_task.perform }
 
@@ -89,11 +99,11 @@ module AutomatedChecks
           it_behaves_like :not_creating_a_task_or_note
         end
 
-        [Policies::LevellingUpPremiumPayments, Policies::EarlyCareerPayments, Policies::FurtherEducationPayments].each do |policy|
+        [Policies::TargetedRetentionIncentivePayments, Policies::EarlyCareerPayments, Policies::FurtherEducationPayments].each do |policy|
           context "when the policy is #{policy}" do
             let(:policy) { policy }
             let(:claim) { create(:claim, :submitted, policy:, national_insurance_number: "QQ123456A", has_student_loan: true, student_loan_plan: claim_student_loan_plan, submitted_using_slc_data:) }
-            let(:claim_student_loan_plan) { nil }
+            let(:claim_student_loan_plan) { StudentLoan::PLAN_1 }
 
             context "when there is already a student_loan_plan task" do
               before { create(:task, claim: claim, name: "student_loan_plan") }
@@ -105,7 +115,6 @@ module AutomatedChecks
 
             context "when the claim was submitted using SLC data" do
               let(:submitted_using_slc_data) { true }
-              let(:claim_student_loan_plan) { StudentLoan::PLAN_1 }
 
               it_behaves_like :not_creating_a_task_or_note
             end
@@ -128,7 +137,15 @@ module AutomatedChecks
                 let(:expected_match_value) { "all" }
                 let(:expected_note) { "[SLC Student loan plan] - Matched - has a student loan" }
 
-                it_behaves_like :creating_a_task_and_note
+                context "when the claim has a student_loan_plan" do
+                  let(:claim_student_loan_plan) { StudentLoan::PLAN_1 }
+                  it_behaves_like :creating_a_task_and_note
+                end
+
+                context "when the claim does not have a student_loan_plan" do
+                  let(:claim_student_loan_plan) { nil }
+                  it_behaves_like :raising_an_error
+                end
               end
 
               context "when there is student loan data - without a plan" do

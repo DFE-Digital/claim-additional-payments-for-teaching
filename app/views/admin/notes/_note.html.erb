@@ -1,6 +1,10 @@
 <div class="hmcts-timeline__item">
   <section<%= " class=banner" if note.important %>>
-    <%= simple_format note.body, class: "govuk-body" %>
+    <%= simple_format(
+      note.body,
+      { class: "govuk-body" },
+      { sanitize_options: { attributes: %w[class], tags: %w[span pre] } }
+    ) %>
   </section>
 
   <% if display_description %>

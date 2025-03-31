@@ -34,7 +34,7 @@
         <tbody class="govuk-table__body">
           <% @claim.payments.each do |payment| %>
             <tr class="govuk-table__row">
-              <td class="govuk-table__cell"><%= payment.id %></td>
+              <td class="govuk-table__cell"><%= govuk_link_to payment.id, admin_payment_path(payment) %></td>
               <td class="govuk-table__cell"><%= number_to_currency(payment.award_amount) %></td>
               <td class="govuk-table__cell"><%= payment.claims.size %></td>
               <td class="govuk-table__cell"><%= link_to(payment.payroll_run.created_at.strftime("%B %Y"), admin_payroll_run_path(payment.payroll_run)) %></td>
@@ -69,7 +69,7 @@
             <% @claim.topups.each do |topup| %>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell"><%= number_to_currency(topup.award_amount) %></td>
-                <td class="govuk-table__cell"><%= topup.payment_id? ? topup.payment_id : "Awaiting payroll" %></td>
+                <td class="govuk-table__cell"><%= topup.payment_id? ? govuk_link_to(topup.payment_id, admin_payment_path(topup.payment)) : "Awaiting payroll" %></td>
                 <td class="govuk-table__cell"><%= user_details(topup.created_by) %></td>
                 <td class="govuk-table__cell"><%= l(topup.created_at) %></td>
                 <td class="govuk-table__cell">

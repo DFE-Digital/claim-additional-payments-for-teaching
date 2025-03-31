@@ -45,4 +45,18 @@ RSpec.describe Journeys::FurtherEducationPayments::TaughtAtLeastOneTermForm, typ
       )
     end
   end
+
+  describe "#clear_answers_from_session" do
+    let(:answers_hash) do
+      {
+        taught_at_least_one_term: true
+      }
+    end
+
+    it "clears relevant answers from session" do
+      expect {
+        subject.clear_answers_from_session
+      }.to change { journey_session.reload.answers.taught_at_least_one_term }.from(true).to(nil)
+    end
+  end
 end

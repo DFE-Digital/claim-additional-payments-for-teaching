@@ -3,6 +3,26 @@ require "rails_helper"
 RSpec.describe Payment do
   subject { build(:payment) }
 
+  describe ".non_topup_claims" do
+    it "returns claims that are not associated with topups" do
+      create(:journey_configuration, :targeted_retention_incentive_payments)
+      create(:targeted_retention_incentive_payments_award, award_amount: 9999)
+
+      claim = create(:claim, :approved)
+
+      personal_details = Payment::PERSONAL_CLAIM_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES.map do |attr|
+        [attr, claim.send(attr)]
+      end.to_h
+
+      topup_claim = create(:claim, :current_academic_year, **personal_details)
+      topup = create(:topup, claim: topup_claim)
+
+      payment = create(:payment, claims: [claim, topup_claim], topups: [topup])
+
+      expect(payment.reload.non_topup_claims).to eq([claim])
+    end
+  end
+
   context "when validating in the :upload context" do
     it "is invalid" do
       expect(subject).not_to be_valid(:upload)

@@ -29,6 +29,7 @@ shared:
     - passed
     - manual
     - claim_verifier_match
+    - reason
   :amendments:
     - id
     - claim_id
@@ -83,9 +84,9 @@ shared:
     - onelogin_uid
     - started_at
     - verified_at
+    - onelogin_idv_return_codes
   :decisions:
     - id
-    - result
     - claim_id
     - created_at
     - updated_at
@@ -93,6 +94,7 @@ shared:
     - created_by_id
     - undone
     - rejected_reasons
+    - approved
   :local_authorities:
     - id
     - code
@@ -181,7 +183,7 @@ shared:
     - induction_completed
     - school_somewhere_else
     - teacher_reference_number
-  :levelling_up_premium_payments_eligibilities:
+  :targeted_retention_incentive_payments_eligibilities:
     - id
     - created_at
     - updated_at
@@ -252,7 +254,7 @@ shared:
     - updated_at
     - role_codes
     - deleted_at
-  :levelling_up_premium_payments_awards:
+  :targeted_retention_incentive_payments_awards:
     - id
     - academic_year
     - school_urn
@@ -311,6 +313,9 @@ shared:
     - provider_verification_email_last_sent_at
     - provider_verification_chase_email_last_sent_at
     - teacher_reference_number
+    - provider_verification_email_count
+    - claimant_identity_verified_at
+    - valid_passport
   :eligible_fe_providers:
     - id
     - ukprn
@@ -355,3 +360,9 @@ shared:
     - created_at
     - updated_at
     - gender_digit
+  :stats:
+    - id
+    - one_login_return_code
+    - created_at
+    - updated_at
+    - type

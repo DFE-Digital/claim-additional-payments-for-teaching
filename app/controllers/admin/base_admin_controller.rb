@@ -6,6 +6,7 @@ module Admin
     layout "admin"
 
     before_action :end_expired_admin_sessions, :ensure_authenticated_user
+    before_action :set_cache_headers
     after_action :update_last_seen_at
     helper_method :admin_signed_in?, :admin_timeout_in_minutes, :service_operator_signed_in?
 
@@ -22,6 +23,11 @@ module Admin
     def admin_user
       @admin_user ||= DfeSignIn::User.not_deleted.find_by(id: session[:user_id], session_token: session[:token])
     end
+
+    def current_admin
+      admin_user
+    end
+    helper_method :current_admin
 
     def service_operator_signed_in?
       admin_user.is_service_operator?
@@ -57,6 +63,11 @@ module Admin
       session.delete(:organisation_id)
       session.delete(:role_codes)
       session.delete(:claims_backlink_path)
+    end
+
+    def set_cache_headers
+      response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+      response.headers["Pragma"] = "no-cache"
     end
   end
 end

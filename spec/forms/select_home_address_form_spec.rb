@@ -13,7 +13,13 @@ RSpec.describe SelectHomeAddressForm, type: :model do
       )
     end
     let(:journey) { Journeys::TeacherStudentLoanReimbursement }
-    let(:journey_session) { build(:student_loans_session) }
+    let(:journey_session) { build(:student_loans_session, answers:) }
+    let(:answers) do
+      attributes_for(
+        :"#{journey::I18N_NAMESPACE}_answers",
+        skip_postcode_search: false
+      )
+    end
     let(:params) { ActionController::Parameters.new(claim: {address:}) }
 
     it { is_expected.to be_truthy }

@@ -69,59 +69,6 @@ module AutomatedChecks
       end
 
       describe "#perform" do
-        context "when IDV-ed with one login and data matches" do
-          let(:claim_arg) do
-            create(:claim, :submitted, :with_onelogin_idv_data)
-          end
-
-          it "creates a passed task" do
-            expect {
-              subject.perform
-            }.to change(Task.passed_automatically, :count).by(1)
-          end
-        end
-
-        context "when IDV-ed with one login and name does not match" do
-          let(:claim_arg) do
-            create(
-              :claim,
-              :submitted,
-              :with_onelogin_idv_data,
-              first_name: "John",
-              surname: "Doe",
-              onelogin_idv_first_name: "Tom",
-              onelogin_idv_last_name: "Jones",
-              onelogin_idv_full_name: "Tom Jones"
-            )
-          end
-
-          it "creates a failed task" do
-            expect {
-              subject.perform
-            }.to change(Task.where(passed: false), :count).by(1)
-          end
-        end
-
-        context "when IDV-ed with one login and date of birth does not match" do
-          let(:claim_arg) do
-            create(
-              :claim,
-              :submitted,
-              :with_onelogin_idv_data,
-              date_of_birth: Date.new(1980, 12, 13),
-              onelogin_idv_date_of_birth: Date.new(1970, 1, 1)
-            )
-          end
-
-          it "creates a failed task" do
-            expect {
-              subject.perform
-            }.to change(Task.where(passed: false), :count).by(1)
-          end
-        end
-      end
-
-      describe "#perform" do
         subject(:perform) { identity.perform }
 
         [

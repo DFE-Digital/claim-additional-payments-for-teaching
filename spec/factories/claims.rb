@@ -35,7 +35,7 @@ FactoryBot.define do
       raise "Policy of Claim (#{evaluator.policy}) must match Eligibility class (#{claim.eligibility.policy})" if evaluator.policy != claim.eligibility.policy
 
       claim_academic_year =
-        if [Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments].include?(evaluator.policy)
+        if [Policies::EarlyCareerPayments, Policies::TargetedRetentionIncentivePayments].include?(evaluator.policy)
           Journeys::AdditionalPaymentsForTeaching.configuration.current_academic_year
         elsif evaluator.policy == Policies::FurtherEducationPayments
           Journeys::FurtherEducationPayments.configuration.current_academic_year
@@ -88,7 +88,7 @@ FactoryBot.define do
       details_check { true }
 
       after(:build) do |claim, evaluator|
-        if claim.has_ecp_or_lupp_policy?
+        if claim.has_ecp_or_targeted_retention_incentive_policy?
           claim.provide_mobile_number = true
           claim.mobile_number = "07474000123"
           claim.mobile_verified = true
@@ -115,7 +115,7 @@ FactoryBot.define do
       policy_options_provided {
         [
           {"policy" => "EarlyCareerPayments", "award_amount" => "2000.0"},
-          {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+          {"policy" => "TargetedRetentionIncentivePayments", "award_amount" => "2000.0"}
         ]
       }
     end
@@ -128,10 +128,10 @@ FactoryBot.define do
       }
     end
 
-    trait :policy_options_provided_lup_only do
+    trait :policy_options_provided_targeted_retention_incentive_only do
       policy_options_provided {
         [
-          {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+          {"policy" => "TargetedRetentionIncentivePayments", "award_amount" => "2000.0"}
         ]
       }
     end
@@ -157,14 +157,14 @@ FactoryBot.define do
       submitted
       after(:create) do |claim, evaluator|
         if evaluator.decision_creator
-          create(:decision, claim: claim, result: "approved", created_by: evaluator.decision_creator)
+          create(:decision, claim: claim, approved: true, created_by: evaluator.decision_creator)
         elsif claim.policy == Policies::EarlyYearsPayments
           claim.tasks.find_or_create_by(name: "employment") do |c|
             c.passed = true
           end
-          create(:decision, claim: claim, result: "approved")
+          create(:decision, claim: claim, approved: true)
         else
-          create(:decision, claim: claim, result: "approved")
+          create(:decision, claim: claim, approved: true)
         end
       end
     end
@@ -228,10 +228,6 @@ FactoryBot.define do
     trait :with_no_student_loan do
       has_student_loan { false }
       student_loan_plan { nil }
-    end
-
-    trait :first_lup_claim_year do
-      academic_year { AcademicYear::Type.new.serialize(AcademicYear.new(2022)) }
     end
 
     trait :held do
@@ -348,6 +344,10 @@ FactoryBot.define do
 
     trait :awaiting_practitioner do
       submitted_at { nil }
+    end
+
+    trait :high_risk do
+      onelogin_idv_return_codes { OneLogin::ReturnCode::HIGH_RISK_CODES.sample(2) }
     end
 
     trait :with_dqt_teacher_status do

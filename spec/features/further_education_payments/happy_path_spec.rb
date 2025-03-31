@@ -118,6 +118,7 @@ RSpec.feature "Further education payments" do
     sign_in_with_one_login
 
     expect(page).to have_content("How we will use the information you provide")
+    expect(page).to have_content("the Student Loans Company")
     click_button "Continue"
 
     expect(page).to have_content("Personal details")
@@ -130,7 +131,7 @@ RSpec.feature "Further education payments" do
     click_on "Continue"
 
     expect(page).to have_content("What is your home address?")
-    click_link("Enter your address manually")
+    click_button("Enter your address manually")
 
     expect(page).to have_content("What is your address?")
     fill_in "House number or name", with: "57"
@@ -169,6 +170,8 @@ RSpec.feature "Further education payments" do
     click_on "Continue"
 
     expect(page).to have_content("Check your answers before sending your application")
+    expect(page).not_to have_content("Do you have a valid passport?")
+    expect(page).not_to have_content("Passport number")
 
     expect do
       click_on "Accept and send"

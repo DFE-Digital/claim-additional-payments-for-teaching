@@ -1,17 +1,25 @@
 class Admin::DecisionsUndoController < Admin::BaseAdminController
   before_action :load_claim
   before_action :load_decision
-
   before_action :ensure_service_operator
 
   def new
-    @amendment = Amendment.new
+    @form = Admin::UndoDecisionForm.new(
+      claim: @claim,
+      decision: @decision,
+      current_admin:
+    )
   end
 
   def create
-    @amendment = Amendment.undo_decision(@decision, amendment_params)
+    @form = Admin::UndoDecisionForm.new(
+      claim: @claim,
+      decision: @decision,
+      current_admin:,
+      params: amendment_params
+    )
 
-    if @amendment.persisted?
+    if @form.save
       redirect_to admin_claim_tasks_path(@claim)
     else
       render :new
@@ -29,9 +37,6 @@ class Admin::DecisionsUndoController < Admin::BaseAdminController
   end
 
   def amendment_params
-    {
-      notes: params[:amendment][:notes],
-      created_by: admin_user
-    }
+    params.require(:amendment).permit(:notes)
   end
 end

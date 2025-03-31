@@ -26,11 +26,14 @@ module Journeys
         "engineering-manufacturing-courses" => EngineeringManufacturingCoursesForm,
         "maths-courses" => MathsCoursesForm,
         "physics-courses" => PhysicsCoursesForm,
+        "check-your-answers-part-one" => CheckYourAnswersPartOneForm,
+        "information-provided" => InformationProvidedForm,
         "teaching-qualification" => TeachingQualificationForm,
         "poor-performance" => PoorPerformanceForm,
         "check-your-answers" => CheckYourAnswersForm,
         "half-teaching-hours" => HalfTeachingHoursForm,
         "hours-teaching-eligible-subjects" => HoursTeachingEligibleSubjectsForm,
+        "passport" => PassportForm,
         "eligible" => EligibleForm,
         "ineligible" => IneligibleForm,
         "teacher-reference-number" => TeacherReferenceNumberForm
@@ -38,6 +41,10 @@ module Journeys
     }
 
     def requires_student_loan_details?
+      true
+    end
+
+    def use_navigator?
       true
     end
   end

@@ -13,7 +13,10 @@ class Decision < ApplicationRecord
   # NOTE: Don't store the rejected_reasons data params from the form when Approve is selected
   before_validation :clear_rejected_reasons, unless: :rejected?
 
-  validates :result, presence: {message: "Make a decision to approve or reject the claim"}
+  validates :approved, inclusion: {
+    in: [true, false],
+    message: "Make a decision to approve or reject the claim"
+  }
   validate :claim_must_be_approvable, if: :approved?, on: :create
   validate :claim_must_be_rejectable, if: :rejected?, on: :create
   validate :claim_must_have_undoable_decision, if: :undone?, on: :update
@@ -23,14 +26,23 @@ class Decision < ApplicationRecord
   validates :notes, if: -> { !created_by_id? }, presence: {message: "You must add a note when the decision is automated"}
 
   scope :active, -> { where(undone: false) }
+  scope :approved, -> { where(approved: true) }
+  scope :rejected, -> { where(approved: false) }
 
-  enum :result, {
-    approved: 0,
-    rejected: 1
-  }
+  self.ignored_columns = %w[result]
 
-  def self.rejected_reasons_for(policy)
-    policy::ADMIN_DECISION_REJECTED_REASONS
+  def rejected?
+    !approved? && !approved.nil?
+  end
+
+  def result
+    return nil if approved.nil?
+
+    approved ? "approved" : "rejected"
+  end
+
+  def self.rejected_reasons_for(claim)
+    claim.policy.rejected_reasons(claim)
   end
 
   def readonly?
@@ -76,7 +88,7 @@ class Decision < ApplicationRecord
   end
 
   def rejected_reasons_selectable
-    available_rejected_reasons = self.class.rejected_reasons_for(claim.policy)
+    available_rejected_reasons = self.class.rejected_reasons_for(claim)
     return if (selected_rejected_reasons - available_rejected_reasons).empty?
 
     errors.add(:rejected_reasons, "One or more reasons are not selectable for this claim")

@@ -1,7 +1,17 @@
 require "rails_helper"
 
 RSpec.describe "Admin claim amendments" do
-  let(:claim) { create(:claim, :submitted, eligibility_attributes: {teacher_reference_number: "1234567"}, bank_sort_code: "010203", date_of_birth: 25.years.ago.to_date) }
+  let(:claim) do
+    create(
+      :claim,
+      :submitted,
+      eligibility_attributes: {
+        teacher_reference_number: "1234567"
+      },
+      bank_sort_code: "010203",
+      date_of_birth: 25.years.ago.to_date
+    )
+  end
 
   context "when signed in as a service operator" do
     before { @signed_in_user = sign_in_as_service_operator }
@@ -22,9 +32,29 @@ RSpec.describe "Admin claim amendments" do
       it "creates an amendment and updates the claim" do
         old_date_of_birth = claim.date_of_birth
         new_date_of_birth = 30.years.ago.to_date
+
+        request_params = {
+          amendment: {
+            teacher_reference_number: "7654321",
+            national_insurance_number: claim.national_insurance_number,
+            bank_sort_code: "111213",
+            bank_account_number: claim.bank_account_number,
+            student_loan_plan: claim.student_loan_plan,
+            student_loan_repayment_amount: claim.eligibility.student_loan_repayment_amount,
+            "date_of_birth(3i)": new_date_of_birth.day,
+            "date_of_birth(2i)": new_date_of_birth.month,
+            "date_of_birth(1i)": new_date_of_birth.year,
+            address_line_1: claim.address_line_1,
+            address_line_2: claim.address_line_2,
+            address_line_3: claim.address_line_3,
+            address_line_4: claim.address_line_4,
+            postcode: claim.postcode,
+            notes: "Claimant made a typo"
+          }
+        }
+
         expect {
-          post admin_claim_amendments_url(claim, amendment: {claim: {eligibility_attributes: {teacher_reference_number: "7654321"}, bank_sort_code: "111213", "date_of_birth(3i)": new_date_of_birth.day, "date_of_birth(2i)": new_date_of_birth.month, "date_of_birth(1i)": new_date_of_birth.year},
-                                                             notes: "Claimant made a typo"})
+          post admin_claim_amendments_url(claim, request_params)
         }.to change { claim.reload.amendments.size }.by(1)
 
         expect(response).to redirect_to(admin_claim_tasks_url(claim))
@@ -45,7 +75,27 @@ RSpec.describe "Admin claim amendments" do
       end
 
       it "saves the normalised value in the amendment when updating bank sort code" do
-        post admin_claim_amendments_url(claim, amendment: {claim: {bank_sort_code: "11 12 13"}, notes: "Claimant made a typo"})
+        request_params = {
+          amendment: {
+            teacher_reference_number: claim.eligibility.teacher_reference_number,
+            national_insurance_number: claim.national_insurance_number,
+            bank_sort_code: "11 12 13",
+            bank_account_number: claim.bank_account_number,
+            student_loan_plan: claim.student_loan_plan,
+            student_loan_repayment_amount: claim.eligibility.student_loan_repayment_amount,
+            "date_of_birth(3i)": claim.date_of_birth.day,
+            "date_of_birth(2i)": claim.date_of_birth.month,
+            "date_of_birth(1i)": claim.date_of_birth.year,
+            address_line_1: claim.address_line_1,
+            address_line_2: claim.address_line_2,
+            address_line_3: claim.address_line_3,
+            address_line_4: claim.address_line_4,
+            postcode: claim.postcode,
+            notes: "Claimant made a typo"
+          }
+        }
+
+        post admin_claim_amendments_url(claim, request_params)
 
         expect(response).to redirect_to(admin_claim_tasks_url(claim))
 
@@ -54,20 +104,57 @@ RSpec.describe "Admin claim amendments" do
       end
 
       it "doesn't record a change when changing a value from nil to an empty string" do
-        claim.update!(building_society_roll_number: nil)
+        claim.update!(address_line_4: nil)
 
-        post admin_claim_amendments_url(claim, amendment: {claim: {bank_sort_code: "111213", building_society_roll_number: ""},
-                                                           notes: "Claimant made a typo"})
+        request_params = {
+          amendment: {
+            teacher_reference_number: claim.eligibility.teacher_reference_number,
+            national_insurance_number: claim.national_insurance_number,
+            bank_sort_code: "111213",
+            bank_account_number: claim.bank_account_number,
+            student_loan_plan: claim.student_loan_plan,
+            student_loan_repayment_amount: claim.eligibility.student_loan_repayment_amount,
+            "date_of_birth(3i)": claim.date_of_birth.day,
+            "date_of_birth(2i)": claim.date_of_birth.month,
+            "date_of_birth(1i)": claim.date_of_birth.year,
+            address_line_1: claim.address_line_1,
+            address_line_2: claim.address_line_2,
+            address_line_3: claim.address_line_3,
+            address_line_4: "",
+            postcode: claim.postcode,
+            notes: "Claimant made a typo"
+          }
+        }
+
+        post admin_claim_amendments_url(claim, request_params)
 
         expect(response).to redirect_to(admin_claim_tasks_url(claim))
-
         expect(claim.reload.amendments.last.claim_changes).to eq({"bank_sort_code" => ["010203", "111213"]})
       end
 
       it "displays a validation error and does not update the claim or create an amendment when invalid values are entered" do
+        request_params = {
+          amendment: {
+            teacher_reference_number: "654321",
+            national_insurance_number: claim.national_insurance_number,
+            bank_sort_code: "111213",
+            bank_account_number: "",
+            student_loan_plan: claim.student_loan_plan,
+            student_loan_repayment_amount: claim.eligibility.student_loan_repayment_amount,
+            "date_of_birth(3i)": claim.date_of_birth.day,
+            "date_of_birth(2i)": claim.date_of_birth.month,
+            "date_of_birth(1i)": claim.date_of_birth.year,
+            address_line_1: claim.address_line_1,
+            address_line_2: claim.address_line_2,
+            address_line_3: claim.address_line_3,
+            address_line_4: "",
+            postcode: claim.postcode,
+            notes: "Claimant made a typo"
+          }
+        }
+
         expect {
-          post admin_claim_amendments_url(claim, amendment: {claim: {eligibility_attributes: {teacher_reference_number: "654321"}, bank_account_number: ""},
-                                                             notes: "Claimant made a typo"})
+          post admin_claim_amendments_url(claim, request_params)
         }.not_to change { [claim.eligibility.reload.teacher_reference_number, claim.amendments.size] }
 
         expect(response).to have_http_status(:ok)
@@ -77,13 +164,31 @@ RSpec.describe "Admin claim amendments" do
       end
 
       it "displays an error message and does not create an amendment when none of the claim’s values are changed" do
+        request_params = {
+          amendment: {
+            teacher_reference_number: claim.eligibility.teacher_reference_number,
+            national_insurance_number: claim.national_insurance_number,
+            bank_sort_code: claim.bank_sort_code,
+            bank_account_number: claim.bank_account_number,
+            student_loan_plan: claim.student_loan_plan,
+            student_loan_repayment_amount: claim.eligibility.student_loan_repayment_amount,
+            "date_of_birth(3i)": claim.date_of_birth.day,
+            "date_of_birth(2i)": claim.date_of_birth.month,
+            "date_of_birth(1i)": claim.date_of_birth.year,
+            address_line_1: claim.address_line_1,
+            address_line_2: claim.address_line_2,
+            address_line_3: claim.address_line_3,
+            address_line_4: claim.address_line_4,
+            postcode: claim.postcode,
+            notes: "Claimant made a typo"
+          }
+        }
+
         expect {
-          post admin_claim_amendments_url(claim, amendment: {claim: {eligibility_attributes: {teacher_reference_number: claim.eligibility.teacher_reference_number}},
-                                                             notes: "Claimant made a typo"})
+          post admin_claim_amendments_url(claim, request_params)
         }.not_to change { [claim.eligibility.reload.teacher_reference_number, claim.amendments.size] }
 
         expect(response).to have_http_status(:ok)
-
         expect(response.body).to include("To amend the claim you must change at least one value")
       end
 

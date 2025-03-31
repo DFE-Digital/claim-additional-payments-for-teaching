@@ -4,13 +4,24 @@ require "rails_helper"
 RSpec.shared_examples "Admin Checks" do |policy|
   let!(:journey_configuration) { create(:journey_configuration, policy.to_s.underscore) }
   let!(:claim) {
-    create(
-      :claim,
-      :submitted,
-      :with_student_loan,
-      policy: policy,
-      eligibility: build(:"#{policy.to_s.underscore}_eligibility", :eligible)
-    )
+    if policy == Policies::FurtherEducationPayments
+      create(
+        :claim,
+        :submitted,
+        :with_student_loan,
+        policy: policy,
+        eligibility: build(:"#{policy.to_s.underscore}_eligibility", :eligible),
+        onelogin_idv_at: 10.minutes.ago
+      )
+    else
+      create(
+        :claim,
+        :submitted,
+        :with_student_loan,
+        policy: policy,
+        eligibility: build(:"#{policy.to_s.underscore}_eligibility", :eligible)
+      )
+    end
   }
 
   before do
@@ -18,7 +29,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
     create(:task, :automated, :passed, name: "student_loan_plan", claim:)
   end
 
-  def lup_claim_checking_steps
+  def targeted_retention_incentive_claim_checking_steps
     visit admin_claims_path
     find("a[href='#{admin_claim_tasks_path(claim)}']").click
 
@@ -244,7 +255,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
     visit admin_claims_path
     find("a[href='#{admin_claim_tasks_path(claim)}']").click
 
-    click_on I18n.t("admin.tasks.identity_confirmation.title")
+    click_on I18n.t("admin.tasks.one_login_identity.title")
 
     expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.identity_confirmation.title"))
     expect(page).to have_link("Next:Provider verification")
@@ -253,7 +264,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
     choose "Yes"
     click_on "Save and continue"
 
-    expect(claim.tasks.find_by!(name: "identity_confirmation").passed?).to eq(true)
+    expect(claim.tasks.find_by!(name: "one_login_identity")).to be_passed
 
     expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.provider_verification.title"))
     expect(page).to have_link("Next:Student loan plan")
@@ -305,8 +316,8 @@ RSpec.shared_examples "Admin Checks" do |policy|
   end
 
   def claim_checking_steps(policy)
-    if policy == Policies::LevellingUpPremiumPayments
-      lup_claim_checking_steps
+    if policy == Policies::TargetedRetentionIncentivePayments
+      targeted_retention_incentive_claim_checking_steps
     elsif policy == Policies::EarlyCareerPayments
       ecp_claim_checking_steps
     elsif policy == Policies::StudentLoans
@@ -325,7 +336,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
     claim_checking_steps(policy)
   end
 
-  scenario "service operator QAs a #{policy_name} claim", if: policy::MIN_QA_THRESHOLD.positive? do
+  scenario "service operator QAs a #{policy_name} claim", if: policy::APPROVED_MIN_QA_THRESHOLD.positive? do
     claim_checking_steps(policy)
     qa_approval_steps
   end

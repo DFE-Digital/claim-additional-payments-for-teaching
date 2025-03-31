@@ -11,7 +11,7 @@ RSpec.feature "Early years payment provider" do
     when_early_years_payment_provider_start_journey_completed
     when_early_years_payment_provider_authenticated_journey_ready_to_submit
 
-    find("a[href='#{claim_path(Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME, "paye-reference")}']").click
+    click_link "Change employer’s paye reference number"
     expect(page).to have_content("What is #{nursery.nursery_name}’s employer PAYE reference?")
     fill_in "claim-paye-reference-field", with: "123/A"
     click_button "Continue"
@@ -65,7 +65,7 @@ RSpec.feature "Early years payment provider" do
     click_button "Continue"
 
     expect(page).to have_content "Check your answers before submitting this claim"
-    find("a[href='#{claim_path(Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME, "returner-worked-with-children")}']").click
+    click_link "Change employee’s previous role in an early years setting involved working mostly with children"
 
     expect(page).to have_content("previous role in an early years setting involve mostly working directly with children?")
     choose "No"
@@ -73,7 +73,7 @@ RSpec.feature "Early years payment provider" do
 
     expect(page).to have_content "Check your answers before submitting this claim"
     expect(page).not_to have_content "Contract type"
-    find("a[href='#{claim_path(Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME, "returner-worked-with-children")}']").click
+    click_link "Change employee’s previous role in an early years setting involved working mostly with children"
 
     expect(page).to have_content("previous role in an early years setting involve mostly working directly with children?")
     choose "Yes"

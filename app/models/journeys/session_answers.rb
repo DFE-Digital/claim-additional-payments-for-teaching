@@ -5,6 +5,9 @@ module Journeys
     include ActiveModel::Dirty
     include Sessions::TeacherId
     include Sessions::PiiAttributes
+    include BooleanAttributes
+
+    attribute :service_access_code, :string, pii: false
 
     attribute :current_school_id, :string, pii: false # UUID
     attribute :address_line_1, :string, pii: true
@@ -12,7 +15,9 @@ module Journeys
     attribute :address_line_3, :string, pii: true
     attribute :address_line_4, :string, pii: true
     attribute :postcode, :string, pii: true
-    attribute :date_of_birth, :date, pii: false
+    attribute :skip_postcode_search, :boolean, pii: false
+
+    attribute :date_of_birth, :date, pii: true
     attribute :teacher_reference_number, :string, pii: true
     attribute :national_insurance_number, :string, pii: true
     attribute :email_address, :string, pii: true
@@ -49,9 +54,11 @@ module Journeys
     attribute :onelogin_idv_last_name, :string, pii: true
     attribute :onelogin_idv_full_name, :string, pii: true
     attribute :onelogin_idv_date_of_birth, :date, pii: false
+    attribute :onelogin_idv_return_codes, default: [], pii: true
 
     attribute :onelogin_auth_at, :datetime, pii: false
     attribute :onelogin_idv_at, :datetime, pii: false
+
     attribute :email_address_check, :boolean, pii: false
     attribute :mobile_check, :string, pii: false
     attribute :qualifications_details_check, :boolean, pii: false
@@ -61,8 +68,8 @@ module Journeys
     attribute :submitted_using_slc_data, :boolean, pii: false
     attribute :sent_one_time_password_at, :datetime, pii: false
     attribute :hmrc_validation_attempt_count, :integer, default: 0, pii: false
-    attribute :reminder_id, :string, pii: false
 
+    attribute :reminder_id, :string, pii: false
     attribute :reminder_full_name, :string, pii: true
     attribute :reminder_email_address, :string, pii: true
     attribute :reminder_otp_secret, :string, pii: true
@@ -80,22 +87,6 @@ module Journeys
       @current_school ||= School.find_by(id: current_school_id)
     end
 
-    def details_check?
-      !!details_check
-    end
-
-    def email_address_check?
-      !!email_address_check
-    end
-
-    def provide_mobile_number?
-      !!provide_mobile_number
-    end
-
-    def hmrc_bank_validation_succeeded?
-      !!hmrc_bank_validation_succeeded
-    end
-
     def full_name
       [first_name, middle_name, surname].reject(&:blank?).join(" ")
     end
@@ -108,26 +99,6 @@ module Journeys
         address_line_4,
         postcode
       ].reject(&:blank?).join(separator)
-    end
-
-    def qualifications_details_check?
-      !!qualifications_details_check
-    end
-
-    def has_student_loan?
-      !!has_student_loan
-    end
-
-    def email_verified?
-      !!email_verified
-    end
-
-    def logged_in_with_onelogin?
-      logged_in_with_onelogin
-    end
-
-    def identity_confirmed_with_onelogin?
-      identity_confirmed_with_onelogin
     end
   end
 end

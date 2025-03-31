@@ -44,9 +44,4 @@ RSpec.describe Payroll::PaymentsCsv do
     subject { generator.content_type }
     it { is_expected.to eq("text/csv") }
   end
-
-  describe "#filename" do
-    subject { generator.filename }
-    it { is_expected.to eq("payroll_data_#{creation_date}.csv") }
-  end
 end

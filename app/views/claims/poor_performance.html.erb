@@ -1,0 +1,53 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:heading),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+      html: { novalidate: false }
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <%= @form.t(:heading) %>
+      </h1>
+
+      <%= f.govuk_collection_radio_buttons(
+        :subject_to_formal_performance_action,
+        @form.radio_options,
+        :id,
+        :name,
+        legend: {
+          text: @form.t("questions.performance.question"),
+          tag: "h2",
+          size: "m"
+        },
+        hint: { text: @form.t("questions.performance.hint") }
+      ) %>
+
+    <%= f.govuk_collection_radio_buttons(
+      :subject_to_disciplinary_action,
+      @form.radio_options,
+      :id,
+      :name,
+        legend: {
+          text: @form.t("questions.disciplinary.question"),
+          tag: "h2",
+          size: "m"
+        },
+        hint: { text: @form.t("questions.disciplinary.hint") }
+    ) %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

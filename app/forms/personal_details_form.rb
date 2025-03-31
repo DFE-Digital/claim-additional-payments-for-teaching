@@ -34,7 +34,13 @@ class PersonalDetailsForm < Form
 
   validate :date_of_birth_criteria
   validates :national_insurance_number, presence: {message: "Enter a National Insurance number in the correct format"}
-  validate :ni_number_is_correct_format
+  validates(
+    :national_insurance_number,
+    national_insurance_number_format: {
+      message: "Enter a National Insurance number in the correct format"
+    },
+    if: -> { national_insurance_number.present? }
+  )
 
   def initialize(journey_session:, journey:, params:, session: {})
     super
@@ -65,6 +71,8 @@ class PersonalDetailsForm < Form
     if journey.requires_student_loan_details?
       journey::AnswersStudentLoansDetailsUpdater.call(journey_session)
     end
+
+    true
   end
 
   def show_name_section?
@@ -91,10 +99,6 @@ class PersonalDetailsForm < Form
     self.day = permitted_params.fetch(:day, answers.date_of_birth&.day)
     self.month = permitted_params.fetch(:month, answers.date_of_birth&.month)
     self.year = permitted_params.fetch(:year, answers.date_of_birth&.year)
-  end
-
-  def ni_number_is_correct_format
-    errors.add(:national_insurance_number, "Enter a National Insurance number in the correct format") if national_insurance_number.present? && !normalised_ni_number.match(NINO_REGEX_FILTER)
   end
 
   def normalised_ni_number

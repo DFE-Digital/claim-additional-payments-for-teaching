@@ -1,14 +1,14 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.4.1"
+ruby "3.4.2"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "~> 8.0"
 # Use postgresql as the database for Active Record
 gem "pg", ">= 0.18", "< 2.0"
 # Use Puma as the app server
-gem "puma", "~> 6.5"
+gem "puma", "~> 6.6"
 # Use SCSS for stylesheets
 gem "sass-rails", "~> 6.0"
 # Use Terser as compressor for ES6 JavaScript assets
@@ -64,8 +64,8 @@ gem "httpclient"
 gem "daemons"
 
 # Gov form builder to structure claims
-gem "govuk_design_system_formbuilder", "~> 5.7.1"
-gem "govuk-components", "~> 5.7.1"
+gem "govuk_design_system_formbuilder", "~> 5.9.0"
+gem "govuk-components", "~> 5.8.0"
 
 gem "govuk_publishing_components"
 
@@ -120,12 +120,12 @@ end
 
 group :test do
   gem "rspec-retry"
-  gem "selenium-webdriver"
   gem "launchy"
   gem "rack_session_access"
   gem "simplecov", require: false
   # Return null object for active record connection rather than raising error
   gem "activerecord-nulldb-adapter"
+  gem "cuprite"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

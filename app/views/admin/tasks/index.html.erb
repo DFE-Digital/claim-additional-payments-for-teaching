@@ -8,7 +8,7 @@
   <%= render partial: "banner", locals: { messages: @banner_messages } %>
 <% end %>
 
-<% if false && @claim.attributes_flagged_by_risk_indicator.any? %>
+<% if @claim.attributes_flagged_by_risk_indicator.any? %>
   <div class="govuk-warning-text">
     <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
     <strong class="govuk-warning-text__text">
@@ -31,18 +31,17 @@
 
     <div class="govuk-tabs__panel">
       <ol class="app-task-list">
-
-        <% @claim_checking_tasks.applicable_task_names.each_with_index do |task_name, index| %>
+        <% @claim_checking_tasks.applicable_task_objects.each_with_index do |object, index| %>
           <li>
             <h2 class="app-task-list__section">
-              <span class="app-task-list__section-number"><%= index + 1 %>. </span> <%= task_name.humanize %>
+              <span class="app-task-list__section-number"><%= index + 1 %>. </span> <%= I18n.t(:name, scope: [:admin, :tasks, object.locale_key]) %>
             </h2>
             <ul class="app-task-list__items">
-              <li class="app-task-list__item <%= task_name %>">
+              <li class="app-task-list__item <%= object.name %>">
                 <span class="app-task-list__task-name">
-                  <%= govuk_link_to I18n.t("#{@claim.policy.locale_key}.admin.tasks.#{task_name}.title", default: :"admin.tasks.#{task_name}.title"), admin_claim_task_path(claim_id: @claim.id, name: task_name) %>
+                  <%= govuk_link_to I18n.t("#{@claim.policy.locale_key}.admin.tasks.#{object.locale_key}.title", default: :"admin.tasks.#{object.locale_key}.title"), admin_claim_task_path(claim_id: @claim.id, name: object.name) %>
                 </span>
-                <%= task_status_tag(@claim, task_name) %>
+                <%= task_status_tag(@claim, object.name) %>
               </li>
             </ul>
           </li>

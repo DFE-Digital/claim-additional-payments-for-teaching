@@ -1,5 +1,8 @@
 class EligibleEyProvider < ApplicationRecord
   belongs_to :local_authority
+  belongs_to :file_upload
+
+  default_scope { where(file_upload: FileUpload.latest_version_for(EligibleEyProvider)) }
 
   def local_authority_code
     local_authority.try :code
@@ -34,5 +37,12 @@ class EligibleEyProvider < ApplicationRecord
     where(primary_key_contact_email_address: email_address).or(
       where(secondary_contact_email_address: email_address)
     )
+  end
+
+  def email_addresses
+    [
+      primary_key_contact_email_address,
+      secondary_contact_email_address
+    ].compact_blank
   end
 end

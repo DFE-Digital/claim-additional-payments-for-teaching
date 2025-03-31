@@ -2,7 +2,9 @@ require "rails_helper"
 
 RSpec.describe Journeys::FurtherEducationPayments::TeachingQualificationForm, type: :model do
   let(:journey) { Journeys::FurtherEducationPayments }
-  let(:journey_session) { create(:further_education_payments_session) }
+  let(:journey_session) { create(:further_education_payments_session, answers:) }
+  let(:answers) { build(:further_education_payments_answers, answers_hash) }
+  let(:answers_hash) { {} }
   let(:teaching_qualification) { nil }
 
   let(:params) do

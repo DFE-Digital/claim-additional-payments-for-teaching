@@ -35,4 +35,34 @@ RSpec.describe Policies::EarlyYearsPayments::AdminTasksPresenter do
       expect(subject[1][1]).to eq "1 January 2018"
     end
   end
+
+  describe "#practitioner_entered_dob" do
+    let(:claim) do
+      create(
+        :claim,
+        :submitted,
+        policy: Policies::EarlyYearsPayments,
+        date_of_birth: Date.new(1990, 1, 1)
+      )
+    end
+
+    subject { described_class.new(claim).practitioner_entered_dob }
+
+    it { is_expected.to eq I18n.l(Date.new(1990, 1, 1)) }
+  end
+
+  describe "#one_login_claimant_dob" do
+    let(:claim) do
+      create(
+        :claim,
+        :submitted,
+        policy: Policies::EarlyYearsPayments,
+        onelogin_idv_date_of_birth: Date.new(1990, 2, 1)
+      )
+    end
+
+    subject { described_class.new(claim).one_login_claimant_dob }
+
+    it { is_expected.to eq I18n.l(Date.new(1990, 2, 1)) }
+  end
 end

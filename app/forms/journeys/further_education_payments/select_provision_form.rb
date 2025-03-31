@@ -13,10 +13,13 @@ module Journeys
         return unless valid?
 
         journey_session.answers.assign_attributes(
-          possible_school_id:,
           school_id: possible_school_id
         )
         journey_session.save!
+      end
+
+      def completed?
+        journey_session.answers.school_id.present?
       end
 
       private

@@ -15,6 +15,8 @@ module Journeys
 
     scope :unsubmitted, -> { where.missing(:claim) }
 
+    scope :submitted, -> { joins(:claim) }
+
     scope :purgeable, -> do
       unsubmitted.where(journeys_sessions: {updated_at: ..24.hours.ago})
     end

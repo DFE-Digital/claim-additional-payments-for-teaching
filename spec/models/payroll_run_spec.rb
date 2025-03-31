@@ -43,14 +43,14 @@ RSpec.describe PayrollRun, type: :model do
         build(:claim, :approved, policy: Policies::EarlyCareerPayments)
       ])
       payment_3 = build(:payment, claims: [
-        build(:claim, :approved, policy: Policies::LevellingUpPremiumPayments)
+        build(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments)
       ])
 
       payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2, payment_3])
 
       expect(payroll_run.number_of_claims_for_policy(Policies::StudentLoans)).to eq(1)
       expect(payroll_run.number_of_claims_for_policy(Policies::EarlyCareerPayments)).to eq(1)
-      expect(payroll_run.number_of_claims_for_policy(Policies::LevellingUpPremiumPayments)).to eq(1)
+      expect(payroll_run.number_of_claims_for_policy(Policies::TargetedRetentionIncentivePayments)).to eq(1)
     end
   end
 
@@ -69,7 +69,7 @@ RSpec.describe PayrollRun, type: :model do
         build(:claim, :approved, eligibility_attributes: {student_loan_repayment_amount: 1000})
       ])
       payment_5 = build(:payment, claims: [
-        build(:claim, :approved, policy: Policies::LevellingUpPremiumPayments, bank_sort_code: "123456", bank_account_number: "12345678", national_insurance_number: "1234567"),
+        build(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments, bank_sort_code: "123456", bank_account_number: "12345678", national_insurance_number: "1234567"),
         build(:claim, :approved, bank_sort_code: "123456", bank_account_number: "12345678", national_insurance_number: "1234567", eligibility_attributes: {student_loan_repayment_amount: 1000})
       ])
 
@@ -77,17 +77,17 @@ RSpec.describe PayrollRun, type: :model do
 
       expect(payroll_run.total_claim_amount_for_policy(Policies::StudentLoans)).to eq(3500)
       expect(payroll_run.total_claim_amount_for_policy(Policies::EarlyCareerPayments)).to eq(10_000)
-      expect(payroll_run.total_claim_amount_for_policy(Policies::LevellingUpPremiumPayments)).to eq(2000)
+      expect(payroll_run.total_claim_amount_for_policy(Policies::TargetedRetentionIncentivePayments)).to eq(2000)
     end
 
     context "with topups" do
       it "returns the correct total accounting for top ups" do
-        create(:levelling_up_premium_payments_award)
+        create(:targeted_retention_incentive_payments_award)
 
         topped_up_claim_1 = build(
           :claim,
           :approved,
-          policy: Policies::LevellingUpPremiumPayments,
+          policy: Policies::TargetedRetentionIncentivePayments,
           bank_sort_code: "123456",
           bank_account_number: "12345678",
           national_insurance_number: "1234567",
@@ -97,7 +97,7 @@ RSpec.describe PayrollRun, type: :model do
         topped_up_claim_2 = build(
           :claim,
           :approved,
-          policy: Policies::LevellingUpPremiumPayments,
+          policy: Policies::TargetedRetentionIncentivePayments,
           bank_sort_code: "123456",
           bank_account_number: "12345678",
           national_insurance_number: "1234567",
@@ -110,7 +110,7 @@ RSpec.describe PayrollRun, type: :model do
           bank_sort_code: "123456",
           bank_account_number: "12345678",
           national_insurance_number: "1234567",
-          policy: Policies::LevellingUpPremiumPayments,
+          policy: Policies::TargetedRetentionIncentivePayments,
           eligibility_attributes: {award_amount: 101}
         )
 
@@ -120,32 +120,32 @@ RSpec.describe PayrollRun, type: :model do
           bank_sort_code: "123456",
           bank_account_number: "12345678",
           national_insurance_number: "1234567",
-          policy: Policies::LevellingUpPremiumPayments,
+          policy: Policies::TargetedRetentionIncentivePayments,
           eligibility_attributes: {award_amount: 103}
         )
 
-        lup_payment_1 = build(
+        targeted_retention_incentive_payment_1 = build(
           :payment,
           claims: [
             topped_up_claim_1
           ]
         )
 
-        lup_payment_2 = build(
+        targeted_retention_incentive_payment_2 = build(
           :payment,
           claims: [
             topped_up_claim_2
           ]
         )
 
-        lup_payment_3 = build(
+        targeted_retention_incentive_payment_3 = build(
           :payment,
           claims: [
             non_topped_up_claim_1
           ]
         )
 
-        lup_payment_4 = build(
+        targeted_retention_incentive_payment_4 = build(
           :payment,
           claims: [
             non_topped_up_claim_2
@@ -155,10 +155,10 @@ RSpec.describe PayrollRun, type: :model do
         payroll_run = PayrollRun.create!(
           created_by: user,
           payments: [
-            lup_payment_1,
-            lup_payment_2,
-            lup_payment_3,
-            lup_payment_4
+            targeted_retention_incentive_payment_1,
+            targeted_retention_incentive_payment_2,
+            targeted_retention_incentive_payment_3,
+            targeted_retention_incentive_payment_4
           ]
         )
 
@@ -166,36 +166,168 @@ RSpec.describe PayrollRun, type: :model do
           :topup,
           claim: topped_up_claim_1,
           award_amount: 107,
-          payment: lup_payment_1
+          payment: targeted_retention_incentive_payment_1
         )
 
         create(
           :topup,
           claim: topped_up_claim_2,
           award_amount: 109,
-          payment: lup_payment_2
+          payment: targeted_retention_incentive_payment_2
         )
 
         expect(
           payroll_run.total_claim_amount_for_policy(
-            Policies::LevellingUpPremiumPayments
+            Policies::TargetedRetentionIncentivePayments
           ).to_f
         ).to eq(420) # 101 + 103 + 107 + 109
 
         expect(
           payroll_run.total_claim_amount_for_policy(
-            Policies::LevellingUpPremiumPayments,
+            Policies::TargetedRetentionIncentivePayments,
             filter: :topups
           )
         ).to eq(216) # 107 + 109
 
         expect(
           payroll_run.total_claim_amount_for_policy(
-            Policies::LevellingUpPremiumPayments,
+            Policies::TargetedRetentionIncentivePayments,
             filter: :claims
           )
         ).to eq(204) # 103 + 101
       end
+    end
+
+    it "handles claims that have topups in multiple payroll runs" do
+      claim_1 = create(
+        :claim,
+        :approved,
+        policy: Policies::EarlyCareerPayments,
+        eligibility_attributes: {
+          award_amount: 1
+        }
+      )
+
+      claim_2 = create(
+        :claim,
+        :approved,
+        policy: Policies::EarlyCareerPayments,
+        eligibility_attributes: {
+          award_amount: 7
+        },
+        date_of_birth: claim_1.date_of_birth,
+        student_loan_plan: claim_1.student_loan_plan,
+        bank_sort_code: claim_1.bank_sort_code,
+        bank_account_number: claim_1.bank_account_number,
+        building_society_roll_number: claim_1.building_society_roll_number,
+        national_insurance_number: claim_1.national_insurance_number
+      )
+
+      first_payroll_run = nil
+
+      travel_to 2.month.ago do
+        first_payroll_run = create(:payroll_run)
+
+        create(
+          :payment,
+          claims: [claim_1],
+          payroll_run: first_payroll_run
+        )
+      end
+
+      second_payroll_run = nil
+
+      travel_to 1.month.ago do
+        second_payroll_run = create(:payroll_run)
+
+        create(
+          :payment,
+          claims: [claim_1, claim_2],
+          topups: [create(:topup, claim: claim_1, award_amount: 3)],
+          payroll_run: second_payroll_run
+        )
+      end
+
+      third_payroll_run = create(:payroll_run)
+
+      create(
+        :payment,
+        claims: [claim_1],
+        topups: [create(:topup, claim: claim_1, award_amount: 5)],
+        payroll_run: third_payroll_run
+      )
+
+      expect(
+        first_payroll_run.total_claim_amount_for_policy(Policies::EarlyCareerPayments)
+      ).to eq(1)
+
+      expect(
+        first_payroll_run.total_claim_amount_for_policy(Policies::EarlyCareerPayments, filter: :claims)
+      ).to eq(1)
+
+      expect(
+        first_payroll_run.total_claim_amount_for_policy(Policies::EarlyCareerPayments, filter: :topups)
+      ).to eq(0)
+
+      expect(
+        first_payroll_run.number_of_claims_for_policy(Policies::EarlyCareerPayments)
+      ).to eq(1)
+
+      expect(
+        first_payroll_run.number_of_claims_for_policy(Policies::EarlyCareerPayments, filter: :claims)
+      ).to eq(1)
+
+      expect(
+        first_payroll_run.number_of_claims_for_policy(Policies::EarlyCareerPayments, filter: :topups)
+      ).to eq(0)
+
+      expect(
+        second_payroll_run.total_claim_amount_for_policy(Policies::EarlyCareerPayments)
+      ).to eq(10) # topup 3 + claim 7
+
+      expect(
+        second_payroll_run.total_claim_amount_for_policy(Policies::EarlyCareerPayments, filter: :claims)
+      ).to eq(7)
+
+      expect(
+        second_payroll_run.total_claim_amount_for_policy(Policies::EarlyCareerPayments, filter: :topups)
+      ).to eq(3)
+
+      expect(
+        second_payroll_run.number_of_claims_for_policy(Policies::EarlyCareerPayments)
+      ).to eq(2) # topup for claim 1 + claim 2
+
+      expect(
+        second_payroll_run.number_of_claims_for_policy(Policies::EarlyCareerPayments, filter: :claims)
+      ).to eq(1)
+
+      expect(
+        second_payroll_run.number_of_claims_for_policy(Policies::EarlyCareerPayments, filter: :topups)
+      ).to eq(1)
+
+      expect(
+        third_payroll_run.total_claim_amount_for_policy(Policies::EarlyCareerPayments)
+      ).to eq(5)
+
+      expect(
+        third_payroll_run.total_claim_amount_for_policy(Policies::EarlyCareerPayments, filter: :claims)
+      ).to eq(0)
+
+      expect(
+        third_payroll_run.total_claim_amount_for_policy(Policies::EarlyCareerPayments, filter: :topups)
+      ).to eq(5)
+
+      expect(
+        third_payroll_run.number_of_claims_for_policy(Policies::EarlyCareerPayments)
+      ).to eq(1)
+
+      expect(
+        third_payroll_run.number_of_claims_for_policy(Policies::EarlyCareerPayments, filter: :claims)
+      ).to eq(0)
+
+      expect(
+        third_payroll_run.number_of_claims_for_policy(Policies::EarlyCareerPayments, filter: :topups)
+      ).to eq(1)
     end
   end
 

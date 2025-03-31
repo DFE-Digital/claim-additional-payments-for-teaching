@@ -7,7 +7,7 @@ class School < ApplicationRecord
 
   belongs_to :local_authority
   belongs_to :local_authority_district
-  has_many :levelling_up_premium_payments_awards, primary_key: :urn, foreign_key: :school_urn, dependent: :destroy, inverse_of: :school, class_name: "Policies::LevellingUpPremiumPayments::Award"
+  has_many :targeted_retention_incentive_payments_awards, primary_key: :urn, foreign_key: :school_urn, dependent: :destroy, inverse_of: :school, class_name: "Policies::TargetedRetentionIncentivePayments::Award"
 
   validates :urn, presence: true
   validates :name, presence: true
@@ -144,7 +144,10 @@ class School < ApplicationRecord
   end
 
   def eligible_fe_provider(academic_year: AcademicYear.current)
-    EligibleFeProvider.find_by(ukprn:, academic_year:)
+    EligibleFeProvider
+      .by_academic_year(academic_year)
+      .where(ukprn:)
+      .first
   end
 
   def address

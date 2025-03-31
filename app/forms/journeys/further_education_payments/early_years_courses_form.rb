@@ -17,23 +17,23 @@ module Journeys
 
       def checkbox_options
         [
-          OpenStruct.new(
+          Option.new(
             id: "eylevel2",
             name: course_option_description("eylevel2")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "eylevel3",
             name: course_option_description("eylevel3")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "eytlevel",
             name: course_option_description("eytlevel")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "coursetoeyq",
             name: course_option_description("coursetoeyq")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "none",
             name: course_option_description("none")
           )
@@ -45,6 +45,13 @@ module Journeys
 
         journey_session.answers.assign_attributes(early_years_courses:)
         journey_session.save!
+      end
+
+      def clear_answers_from_session
+        if answers.subjects_taught.exclude?("early_years")
+          journey_session.answers.assign_attributes(early_years_courses: [])
+          journey_session.save!
+        end
       end
 
       private

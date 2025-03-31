@@ -11,11 +11,11 @@ module Journeys
 
       def radio_options
         [
-          OpenStruct.new(
+          Option.new(
             id: true,
             name: t("options.true", school_name: school.name)
           ),
-          OpenStruct.new(
+          Option.new(
             id: false,
             name: t("options.false", school_name: school.name)
           )
@@ -26,6 +26,11 @@ module Journeys
         return false if invalid?
 
         journey_session.answers.assign_attributes(taught_at_least_one_term:)
+        journey_session.save!
+      end
+
+      def clear_answers_from_session
+        journey_session.answers.assign_attributes(taught_at_least_one_term: nil)
         journey_session.save!
       end
 

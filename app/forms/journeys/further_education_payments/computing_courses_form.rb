@@ -17,39 +17,39 @@ module Journeys
 
       def checkbox_options
         [
-          OpenStruct.new(
+          Option.new(
             id: "level3_and_below_ict_for_practitioners",
             name: course_option_description("level3_and_below_ict_for_practitioners")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "level3_and_below_ict_for_users",
             name: course_option_description("level3_and_below_ict_for_users")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "digitalskills_quals",
             name: course_option_description("digitalskills_quals")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "tlevel_digitalsupport",
             name: course_option_description("tlevel_digitalsupport")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "tlevel_digitalbusiness",
             name: course_option_description("tlevel_digitalbusiness")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "tlevel_digitalproduction",
             name: course_option_description("tlevel_digitalproduction")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "ibo_level3_compsci",
             name: course_option_description("ibo_level3_compsci")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "level2_3_apprenticeship",
             name: course_option_description("level2_3_apprenticeship")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "none",
             name: course_option_description("none")
           )
@@ -61,6 +61,13 @@ module Journeys
 
         journey_session.answers.assign_attributes(computing_courses:)
         journey_session.save!
+      end
+
+      def clear_answers_from_session
+        if answers.subjects_taught.exclude?("computing")
+          journey_session.answers.assign_attributes(computing_courses: [])
+          journey_session.save!
+        end
       end
 
       private

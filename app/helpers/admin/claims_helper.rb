@@ -38,7 +38,7 @@ module Admin
       [
         [translate("admin.teacher_reference_number"), claim.eligibility.teacher_reference_number.presence || "Not provided"],
         [translate("#{claim.policy.locale_key}.govuk_verify_fields.full_name", default: :"govuk_verify_fields.full_name").capitalize, claim.personal_data_removed? ? personal_data_removed_text : claim.full_name],
-        [translate("govuk_verify_fields.date_of_birth").capitalize, claim.personal_data_removed? ? personal_data_removed_text : l(claim.date_of_birth, format: :day_month_year)],
+        [translate("govuk_verify_fields.date_of_birth").capitalize, claim.personal_data_removed? ? personal_data_removed_text : l(claim.date_of_birth)],
         [translate("admin.national_insurance_number"), claim.personal_data_removed? ? personal_data_removed_text : claim.national_insurance_number],
         [translate("govuk_verify_fields.address").capitalize, claim.personal_data_removed? ? personal_data_removed_text : sanitize(claim.address("<br>").html_safe, tags: %w[br])],
         [translate("#{claim.policy.locale_key}.admin.email_address", default: :"admin.email_address"), claim.email_address]
@@ -114,7 +114,11 @@ module Admin
     end
 
     def identity_confirmation_task_claim_verifier_match_status_tag(claim)
-      task = claim.tasks.detect { |t| t.name == "identity_confirmation" }
+      task = if claim.policy == Policies::FurtherEducationPayments
+        claim.tasks.detect { |t| t.name == "one_login_identity" }
+      else
+        claim.tasks.detect { |t| t.name == "identity_confirmation" }
+      end
 
       if claim.policy == Policies::EarlyYearsPayments && !claim.eligibility.practitioner_journey_completed?
         status = "Incomplete"
@@ -149,32 +153,9 @@ module Admin
     end
 
     def task_status_tag(claim, task_name)
-      task = claim.tasks.detect { |t| t.name == task_name }
+      status, colour = Tasks.status(claim: claim, task_name: task_name)
 
-      if task.nil?
-        status = "Incomplete"
-        status_colour = "grey"
-      elsif task.passed?
-        status = "Passed"
-        status_colour = "green"
-      elsif task.passed == false
-        status = "Failed"
-        status_colour = "red"
-      elsif task.claim_verifier_match_all?
-        status = "Full match"
-        status_colour = "green"
-      elsif task.claim_verifier_match_any?
-        status = "Partial match"
-        status_colour = "yellow"
-      elsif task.claim_verifier_match_none?
-        status = "No match"
-        status_colour = "red"
-      elsif task.claim_verifier_match.nil? && %w[census_subjects_taught employment induction_confirmation student_loan_amount student_loan_plan].include?(task_name)
-        status = "No data"
-        status_colour = "red"
-      end
-
-      task_status_content_tag(status_colour:, status:)
+      task_status_content_tag(status_colour: colour, status: status)
     end
 
     def task_status_content_tag(status_colour:, status:)
@@ -195,6 +176,8 @@ module Admin
         "Payrolled"
       elsif claim.latest_decision&.approved? && claim.awaiting_qa? && !claim.held?
         "Approved awaiting QA"
+      elsif claim.latest_decision&.rejected? && claim.awaiting_qa? && !claim.held?
+        "Rejected awaiting QA"
       elsif claim.latest_decision&.approved?
         "Approved awaiting payroll"
       elsif claim.latest_decision&.rejected?
@@ -208,10 +191,15 @@ module Admin
       end
     end
 
+    INDEX_STATUS_FILTER_MESSAGE = {
+      "approved_awaiting_qa" => "approved awaiting QA",
+      "rejected_awaiting_qa" => "rejected awaiting QA"
+    }
+
     def index_status_filter(status)
       return "awaiting a decision" unless status.present?
 
-      status.humanize.downcase
+      INDEX_STATUS_FILTER_MESSAGE[status] || status.humanize.downcase
     end
 
     NO_CLAIMS = {

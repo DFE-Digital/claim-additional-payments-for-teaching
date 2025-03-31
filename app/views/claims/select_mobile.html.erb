@@ -17,8 +17,8 @@
         }
       ) %>
     <% end %>
-    <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
 
+    <%= form_for @form, url: @form.url do |f| %>
       <span class="govuk-caption-xl"><%= t("questions.personal_details") %></span>
       <%= form_group_tag f.object do %>
 

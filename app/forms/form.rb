@@ -1,9 +1,28 @@
 class Form
+  class Option
+    attr_reader :id, :name, :description, :hint
+
+    def initialize(id:, name:, description: nil, hint: nil)
+      @id = id
+      @name = name
+      @description = description
+      @hint = hint
+    end
+
+    def ==(other)
+      id == other.id &&
+        name == other.name &&
+        description == other.description &&
+        hint == other.hint
+    end
+  end
+
   include ActiveModel::Model
   include ActiveModel::Attributes
   include ActiveModel::Serialization
   include ActiveModel::Validations::Callbacks
   include FormHelpers
+  include Rails.application.routes.url_helpers
 
   attr_accessor :journey
   attr_accessor :journey_session
@@ -37,6 +56,22 @@ class Form
 
   def persisted?
     true
+  end
+
+  # for this particular form
+  # clear all associated answers from the session
+  # does nothing by default
+  # and should be implemented on per form basis
+  # if the forms stores data to session
+  def clear_answers_from_session
+  end
+
+  def url
+    if journey.use_navigator? && params[:change].present?
+      claim_path(journey::ROUTING_NAME, params[:slug], change: params[:change])
+    else
+      claim_path(journey::ROUTING_NAME, params[:slug])
+    end
   end
 
   private

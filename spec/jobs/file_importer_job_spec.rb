@@ -85,7 +85,7 @@ RSpec.describe FileImporterJob do
     end
 
     context "when a file upload can be imported" do
-      let(:file) { create(:file_upload) }
+      let(:file) { create(:file_upload, body: "stuff") }
       let(:tempfile) do
         Tempfile.new.tap do |f|
           f.write(file.body)

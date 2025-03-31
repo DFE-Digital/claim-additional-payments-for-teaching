@@ -1,9 +1,9 @@
 require "rails_helper"
 
-RSpec.feature "Teacher Identity Sign in", js: true do
+RSpec.feature "Teacher Identity Sign in", js: true, flaky: true do
   include OmniauthMockHelper
 
-  # create a school eligible for ECP and LUP so can walk the whole journey
+  # create a school eligible for ECP and Targeted Retention Incentive so can walk the whole journey
   let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
   let(:current_academic_year) { journey_configuration.current_academic_year }

@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks do
+  before do
+    FeatureFlag.create!(name: :fe_provider_identity_verification, enabled: true)
+  end
+
   describe "#applicable_task_names" do
     subject { described_class.new(claim).applicable_task_names }
 
@@ -11,6 +15,8 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks do
     let(:claimant_first_name) { "Edna" }
     let(:claimant_surname) { "Krabappel" }
     let(:claimant_email_address) { "e.krabappel@springfield-elementary.edu" }
+    let(:onelogin_idv_at) { 1.day.ago }
+    let(:identity_confirmed_with_onelogin) { true }
 
     let(:eligibility) do
       build(
@@ -35,13 +41,15 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks do
         eligibility: eligibility,
         first_name: claimant_first_name,
         surname: claimant_surname,
-        email_address: claimant_email_address
+        email_address: claimant_email_address,
+        onelogin_idv_at: onelogin_idv_at,
+        identity_confirmed_with_onelogin: identity_confirmed_with_onelogin
       )
     end
 
     let(:invariant_tasks) do
       [
-        "identity_confirmation",
+        "one_login_identity",
         "provider_verification",
         "student_loan_plan"
       ]
@@ -113,6 +121,11 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks do
     context "when the claim and provider details are different" do
       it { is_expected.not_to include("provider_details") }
       it { is_expected.to include(*invariant_tasks) }
+    end
+
+    context "when the claimant fails IDV" do
+      let(:identity_confirmed_with_onelogin) { false }
+      it { is_expected.to include("alternative_identity_verification") }
     end
   end
 end

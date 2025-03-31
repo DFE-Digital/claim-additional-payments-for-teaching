@@ -13,8 +13,8 @@ module Journeys
 
       def radio_options
         [
-          OpenStruct.new(id: true, name: "Yes"),
-          OpenStruct.new(id: false, name: "No")
+          Option.new(id: true, name: "Yes"),
+          Option.new(id: false, name: "No")
         ]
       end
 
@@ -28,6 +28,11 @@ module Journeys
         return false unless valid?
 
         journey_session.answers.assign_attributes(hours_teaching_eligible_subjects:)
+        journey_session.save!
+      end
+
+      def clear_answers_from_session
+        journey_session.answers.assign_attributes(hours_teaching_eligible_subjects: nil)
         journey_session.save!
       end
 

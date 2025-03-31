@@ -48,7 +48,7 @@ def when_further_education_journey_ready_to_submit
   fill_in "National Insurance number", with: "PX321499A"
   click_on "Continue"
 
-  click_link("Enter your address manually")
+  click_button("Enter your address manually")
   fill_in "House number or name", with: "57"
   fill_in "Building and street", with: "Walthamstow Drive"
   fill_in "Town or city", with: "Derby"

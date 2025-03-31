@@ -128,7 +128,7 @@ module Journeys
       end
 
       def eligible_degree_subject
-        return if !answers.eligible_degree_subject? || (answers.qualifications_details_check && answers.levelling_up_premium_payments_dqt_reacher_record&.eligible_degree_code?)
+        return if !answers.eligible_degree_subject? || (answers.qualifications_details_check && answers.targeted_retention_incentive_payments_dqt_reacher_record&.eligible_degree_code?)
 
         [
           t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"),
@@ -159,7 +159,7 @@ module Journeys
         policy = eligibility.policy
 
         subjects = policy.current_and_future_subject_symbols(
-          claim_year: Journeys.for_policy(policy).configuration.current_academic_year,
+          claim_year: policy.current_academic_year,
           itt_year: journey_session.answers.itt_academic_year
         )
 

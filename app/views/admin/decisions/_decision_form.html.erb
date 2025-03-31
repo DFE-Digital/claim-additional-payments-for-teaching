@@ -44,7 +44,7 @@
   </div>
 <% end %>
 
-<%= form_for decision, url: admin_claim_decisions_path(claim), html: { id: "claim_decision_form" } do |form| %>
+<%= form_for decision, url: admin_claim_decisions_path(claim), html: { id: "claim_decision_form" }, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
   <%= hidden_field_tag :qa, params[:qa] %>
 
   <%= form_group_tag decision do %>
@@ -55,18 +55,42 @@
         </h2>
       </legend>
 
-      <%= errors_tag decision, :result %>
+      <% if claim.high_risk_ol_idv? %>
+        <% if current_admin.is_service_admin? %>
+          <%= govuk_warning_text(icon_fallback_text: "Danger") do %>
+            This claim cannot be approved or rejected without approval from the Senior Responsible Officer.
+          <% end %>
+        <% else %>
+          <%= govuk_warning_text(icon_fallback_text: "Danger") do %>
+            This claim cannot be approved or rejected without approval from the Senior Responsible Officer. Refer this claim to your line manager and the Claim Product Team.
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= errors_tag decision, :approved %>
 
       <div class="govuk-radios" data-module="govuk-radios">
-        <%= form.hidden_field :result %>
+        <%= f.hidden_field :approved %>
         <div class="govuk-radios__item">
-          <%= form.radio_button(:result, "approved", class: "govuk-radios__input", disabled: !claim.approvable?) %>
-          <%= form.label "result_approved", "Approve", class: "govuk-label govuk-radios__label" %>
+          <%= f.radio_button(:approved, true, class: "govuk-radios__input", disabled: !claim.approvable?(current_admin:)) %>
+          <%= f.label(
+            "approved_true",
+            (
+              @qa_decision_task && claim.rejected? ? "Claim meets eligibility criteria. Approve claim for payment" : "Approve"
+            ),
+            class: "govuk-label govuk-radios__label"
+          ) %>
         </div>
 
         <div class="govuk-radios__item">
-          <%= form.radio_button(:result, "rejected", class: "govuk-radios__input", disabled: !claim.rejectable?, data: { aria_controls: "conditional-rejected-reasons" }) %>
-          <%= form.label "result_rejected", "Reject", class: "govuk-label govuk-radios__label" %>
+          <%= f.radio_button(:approved, false, class: "govuk-radios__input", disabled: !claim.rejectable?(current_admin:), data: { aria_controls: "conditional-rejected-reasons" }) %>
+          <%= f.label(
+            "approved_false",
+            (
+              @qa_decision_task && claim.rejected? ? "Claim does not meet eligibility criteria. Reject claim" : "Reject"
+            ),
+            class: "govuk-label govuk-radios__label"
+          ) %>
         </div>
 
         <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-rejected-reasons">
@@ -80,12 +104,12 @@
             <%= errors_tag decision, :rejected_reasons %>
 
             <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
-              <% Decision.rejected_reasons_for(claim.policy).each do |reason| %>
+              <% Decision.rejected_reasons_for(claim).each do |reason| %>
                 <% reason_prefixed = "rejected_reasons_#{reason}" %>
                 <div class="govuk-checkboxes__item">
-                  <%= form.hidden_field reason_prefixed, value: false %>
-                  <%= form.check_box reason_prefixed, class: "govuk-checkboxes__input subject", id: reason_prefixed %>
-                  <%= form.label reason_prefixed, t("#{claim.policy.locale_key}.admin.decision.rejected_reasons.#{reason}"), class: "govuk-label govuk-checkboxes__label", for: reason_prefixed %>
+                  <%= f.hidden_field reason_prefixed, value: false %>
+                  <%= f.check_box reason_prefixed, class: "govuk-checkboxes__input subject", id: reason_prefixed %>
+                  <%= f.label reason_prefixed, t("#{claim.policy.locale_key}.admin.decision.rejected_reasons.#{reason}"), class: "govuk-label govuk-checkboxes__label", for: reason_prefixed %>
                 </div>
               <% end %>
             </div>
@@ -94,15 +118,18 @@
       </div>
     </fieldset>
 
-    <%= form.label :notes, "Decision notes", class: "govuk-label govuk-label--m" %>
-    <div class="govuk-hint" id="notes-hint">
-      Please write a brief note explaining why this claim has been rejected or approved.
-    </div>
+    <%= f.govuk_text_area :notes,
+      rows: 5,
+      disabled: !claim.approvable?(current_admin:) && !claim.rejectable?(current_admin:),
+      label: {
+        text: "Decision notes",
+        size: "m"
+      },
+      hint: {
+        text: "Please write a brief note explaining why this claim has been rejected or approved."
+      }
+    %>
 
-    <%= errors_tag decision, :notes %>
-
-    <%= form.text_area :notes, class: "govuk-textarea", "aria-describedby" => "notes-hint", rows: 5 %>
-
-    <%= form.submit "Confirm decision", class: "govuk-button" %>
+    <%= f.govuk_submit "Confirm decision", disabled: !claim.approvable?(current_admin:) && !claim.rejectable?(current_admin:) %>
   <% end %>
 <% end %>

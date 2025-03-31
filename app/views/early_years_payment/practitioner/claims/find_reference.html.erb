@@ -5,37 +5,20 @@
     <%= form_with model: @form, url: claim_path(current_journey_routing_name, request.query_parameters), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l">
-        <%= @form.t(:question) %>
-      <h1>
-
-      <%= f.govuk_text_field :reference_number,
+      <%= f.govuk_text_field(
+        :reference_number,
         width: 10,
         label: {
-          text: "Claim reference number",
-          tag: "h2",
-          size: "m"
+          text: @form.t(:question),
+          tag: "h1",
+          size: "l"
         },
-        hint: { text: "For example, ABC1234D" } %>
-
-      <%= govuk_details(summary_text: "Where you can find your claim reference number") do %>
-        <p>
-          Check your confirmation email from the Department for Education for your claim reference number.
-        </p>
-
-        <p>
-          If you can’t find the email:
-        </p>
-
-        <%= govuk_list [
-          "check your spam or junk folder",
-          "ask your employer to confirm they have sent your application. They will have received the reference number in their confirmation email."
-        ], type: :bullet %>
-
-        <p>
-          Contact us at <%= govuk_mail_to t("#{journey::I18N_NAMESPACE}.support_email") %> for assistance.
-        </p>
-      <% end %>
+        hint: -> do
+          content_tag(:p, class: "govuk-body") do
+            @form.t(:hint)
+          end
+        end
+      ) %>
 
       <%= f.govuk_submit "Submit" %>
     <% end %>

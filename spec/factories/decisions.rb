@@ -4,11 +4,11 @@ FactoryBot.define do
     claim { build(:claim, :submitted) }
 
     trait :approved do
-      result { :approved }
+      approved { true }
     end
 
     trait :rejected do
-      result { :rejected }
+      approved { false }
       rejected_reasons { {policy::ADMIN_DECISION_REJECTED_REASONS.first => "1"} }
     end
 
@@ -21,7 +21,7 @@ FactoryBot.define do
     end
 
     trait :auto_approved do
-      approved
+      approved { true }
       created_by_id { nil }
       notes { "Auto-approved" }
     end

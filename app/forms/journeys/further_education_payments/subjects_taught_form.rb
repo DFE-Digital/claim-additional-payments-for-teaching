@@ -13,13 +13,11 @@ module Journeys
         inclusion: {in: ->(form) { form.checkbox_options.map(&:id) }, message: i18n_error_message(:inclusion)}
 
       def checkbox_options
-        (ALL_SUBJECTS + ["none"]).map { |subject| OpenStruct.new(id: subject, name: t("options.#{subject}")) }
+        (ALL_SUBJECTS + ["none"]).map { |subject| Option.new(id: subject, name: t("options.#{subject}")) }
       end
 
       def save
         return false if invalid?
-
-        reset_dependent_answers
 
         journey_session.answers.assign_attributes(subjects_taught:)
         journey_session.save!
@@ -29,16 +27,6 @@ module Journeys
 
       def clean_subjects_taught
         subjects_taught.reject!(&:blank?)
-      end
-
-      def reset_dependent_answers
-        unchecked_subjects.each do |subject|
-          journey_session.answers.assign_attributes("#{subject}_courses" => [])
-        end
-      end
-
-      def unchecked_subjects
-        journey_session.answers.subjects_taught - subjects_taught - ["none"]
       end
     end
   end

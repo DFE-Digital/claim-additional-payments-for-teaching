@@ -22,7 +22,7 @@ module Journeys
 
       def radio_options
         policies_eligible_now_and_sorted.map do |policy|
-          OpenStruct.new(
+          Option.new(
             id: policy.to_s,
             name: "#{award_amount_with_currency(policy)} #{policy.short_name.downcase.singularize}",
             description: I18n.t("#{policy.locale_key}.purpose")

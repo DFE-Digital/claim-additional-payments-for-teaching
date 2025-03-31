@@ -114,10 +114,6 @@ module FormSubmittable
       current_slug.underscore
     end
 
-    def slugs
-      journey.slug_sequence::SLUGS
-    end
-
     def first_slug
       slugs.first.to_sym
     end
@@ -139,6 +135,15 @@ module FormSubmittable
       if @form.present?
         if @form.save
           return if execute_callback_if_exists(:after_form_save_success)
+
+          if journey.use_navigator?
+            navigator.clear_impermissible_answers
+          end
+
+          if journey.use_navigator?
+            navigator.clear_furthest_ineligible_answer
+          end
+
           redirect_to_next_slug
         else
           return if execute_callback_if_exists(:after_form_save_failure)

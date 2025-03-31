@@ -10,19 +10,19 @@ module Journeys
 
           def radio_options
             [
-              OpenStruct.new(
+              Option.new(
                 id: "permanent",
                 name: t("options.permanent")
               ),
-              OpenStruct.new(
+              Option.new(
                 id: "casual or temporary",
                 name: t("options.casual_or_temporary")
               ),
-              OpenStruct.new(
+              Option.new(
                 id: "voluntary or unpaid",
                 name: t("options.voluntary_or_unpaid")
               ),
-              OpenStruct.new(
+              Option.new(
                 id: "agency work and apprenticeship roles",
                 name: t("options.agency_work_and_apprenticeships")
               )

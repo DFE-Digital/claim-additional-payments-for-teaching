@@ -1,0 +1,32 @@
+<% content_for(:page_title) { page_title("Download Reports") } %>
+
+<% content_for :back_link do %>
+  <%= govuk_back_link href: admin_claims_path %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-xl">
+      Reports
+    </h1>
+
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Name</th>
+          <th scope="col" class="govuk-table__header">Created At</th>
+          <th scope="col" class="govuk-table__header">Number of rows</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <% @reports.each do |report| %>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"><%= govuk_link_to report.name, admin_report_path(report, format: :csv) %></td>
+            <td class="govuk-table__cell"><%= l(report.updated_at) %></td>
+            <td class="govuk-table__cell"><%= report.number_of_rows %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

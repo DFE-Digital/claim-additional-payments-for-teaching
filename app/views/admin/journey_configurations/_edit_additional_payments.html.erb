@@ -3,17 +3,17 @@
 <div class="govuk-grid-row" id="download">
   <div class="govuk-grid-column-two-thirds">
     <h2 class="govuk-heading-m">
-      Download <%= I18n.t("levelling_up_premium_payments.policy_short_name").pluralize %> School Awards
+      Download <%= I18n.t("targeted_retention_incentive_payments.policy_short_name").pluralize %> School Awards
     </h2>
 
-    <% if lupp_awards_academic_years.any? %>
-      <%= form_with model: [:admin, Policies::LevellingUpPremiumPayments::Award], method: :get, url: admin_levelling_up_premium_payments_awards_path do |form| %>
+    <% if targeted_retention_incentive_awards_academic_years.any? %>
+      <%= form_with model: [:admin, Policies::TargetedRetentionIncentivePayments::Award], method: :get, url: admin_targeted_retention_incentive_payments_awards_path do |form| %>
       <div class="govuk-form-group">
         <label class="govuk-label" for="download_academic_year">
           Academic year
         </label>
 
-        <%= form.select :academic_year, lupp_awards_academic_years, {}, class: "govuk-select", id: "download_academic_year" %>
+        <%= form.select :academic_year, targeted_retention_incentive_awards_academic_years, {}, class: "govuk-select", id: "download_academic_year" %>
 
         <%= form.submit "Download CSV", class: "govuk-button", data: { module: "govuk-button" } %>
       </div>
@@ -29,12 +29,12 @@
 <div class="govuk-grid-row" id="upload">
   <div class="govuk-grid-column-two-thirds">
     <h2 class="govuk-heading-m">
-      Upload <%= I18n.t("levelling_up_premium_payments.policy_short_name").pluralize %> School Awards
+      Upload <%= I18n.t("targeted_retention_incentive_payments.policy_short_name").pluralize %> School Awards
     </h2>
 
     <%= render("shared/error_summary", instance: @csv_upload) if @csv_upload.errors.any? %>
 
-    <%= form_with model: @csv_upload, url: admin_levelling_up_premium_payments_awards_path, multipart: true do |form| %>
+    <%= form_with model: @csv_upload, url: admin_targeted_retention_incentive_payments_awards_path, multipart: true do |form| %>
       <%= form_group_tag @csv_upload, :academic_year do %>
         <label class="govuk-label" for="upload_academic_year">
           Academic year
@@ -57,3 +57,9 @@
     <% end %>
   </div>
 </div>
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+<%= render partial: "admin/journey_configurations/file_upload_history", locals: {
+  heading: "Upload History For #{I18n.t("targeted_retention_incentive_payments.policy_short_name").pluralize} School Awards"
+} %>

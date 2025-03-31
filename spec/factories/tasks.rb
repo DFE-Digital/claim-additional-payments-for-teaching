@@ -30,5 +30,9 @@ FactoryBot.define do
     trait :automated do
       manual { false }
     end
+
+    trait :claim_verifier_context do
+      to_create { it.save!(context: :claim_verifier) }
+    end
   end
 end

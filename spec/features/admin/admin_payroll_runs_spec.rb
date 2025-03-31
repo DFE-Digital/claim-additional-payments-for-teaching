@@ -12,17 +12,17 @@ RSpec.feature "Payroll" do
     create(:claim, :approved, policy: Policies::StudentLoans)
     create(:claim, :approved, policy: Policies::StudentLoans)
     create(:claim, :approved, policy: Policies::EarlyCareerPayments)
-    create(:claim, :approved, policy: Policies::LevellingUpPremiumPayments)
+    create(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments)
 
-    paid_lup_claim = nil
+    paid_targeted_retention_incentive_claim = nil
     travel_to 2.months.ago do
-      lup_eligibility = create(:levelling_up_premium_payments_eligibility, :eligible, award_amount: 1500.0)
-      paid_lup_claim = create(:claim, :approved, policy: Policies::LevellingUpPremiumPayments, eligibility: lup_eligibility)
-      create(:payment, :with_figures, claims: [paid_lup_claim])
+      targeted_retention_incentive_eligibility = create(:targeted_retention_incentive_payments_eligibility, :eligible, award_amount: 1500.0)
+      paid_targeted_retention_incentive_claim = create(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments, eligibility: targeted_retention_incentive_eligibility)
+      create(:payment, :with_figures, claims: [paid_targeted_retention_incentive_claim])
     end
 
     user = create(:dfe_signin_user)
-    create(:topup, claim: paid_lup_claim, award_amount: 500, created_by: user)
+    create(:topup, claim: paid_targeted_retention_incentive_claim, award_amount: 500, created_by: user)
 
     month_name = Date.today.strftime("%B")
 
@@ -174,7 +174,9 @@ RSpec.feature "Payroll" do
 
     expect(page.find("table")).to have_content("(2/3 uploaded)")
 
-    expect(payroll_run.reload.payment_confirmations[0].created_by).to eq(@signed_in_user)
+    expect(payroll_run.reload.payment_confirmations[0].file_upload.body).to eq(csv)
+    expect(payroll_run.reload.payment_confirmations[0].file_upload.completed_processing_at).not_to be_nil
+    expect(payroll_run.payment_confirmations[0].created_by).to eq(@signed_in_user)
     expect(payroll_run.payment_confirmations[0].payments).to eq([first_payment, second_payment])
     expect(first_payment.reload.gross_value).to eq("448.5".to_d + "38.98".to_d)
     expect(first_payment.reload.gross_pay).to eq("448.5".to_d)
@@ -214,7 +216,9 @@ RSpec.feature "Payroll" do
 
     expect(page.find("table")).to have_content("Uploaded")
 
-    expect(payroll_run.reload.payment_confirmations[1].created_by).to eq(@signed_in_user)
+    expect(payroll_run.reload.payment_confirmations[1].file_upload.body).to eq(csv)
+    expect(payroll_run.reload.payment_confirmations[1].file_upload.completed_processing_at).not_to be_nil
+    expect(payroll_run.payment_confirmations[1].created_by).to eq(@signed_in_user)
     expect(payroll_run.payment_confirmations[1].payments).to eq([third_payment])
     expect(third_payment.reload.gross_value).to eq("844.14".to_d + "19.11".to_d)
     expect(third_payment.reload.gross_pay).to eq("844.14".to_d)

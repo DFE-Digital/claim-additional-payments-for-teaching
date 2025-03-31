@@ -4,14 +4,17 @@ module Journeys
       class SlugSequence
         SLUGS = [
           "sign-in",
+          "unauthorised",
           "verify-claim",
+          "verify-identity",
           "complete",
-          "unauthorised"
+          "expired-link",
+          "already-verified"
         ]
 
         RESTRICTED_SLUGS = [
           "verify-claim",
-          "complete"
+          "verify-identity"
         ]
 
         def self.verify_claim_url(claim)
@@ -31,24 +34,56 @@ module Journeys
           )
         end
 
+        attr_reader :journey_session, :answers
+
         def initialize(journey_session)
           @journey_session = journey_session
+          @answers = journey_session.answers
         end
 
         def slugs
-          SLUGS
+          if answers.claim.rejected?
+            return [
+              "expired-link",
+              # FormSubmittable requires a "next_slug", if the claim is
+              # rejected there isn't a next slug
+              "expired-link"
+            ]
+          end
+
+          array = []
+          array << "sign-in"
+
+          if already_verified?
+            array << "already-verified"
+            return array
+          end
+
+          if unauthorised?
+            array << "unauthorised"
+            return array
+          end
+
+          array << "verify-claim"
+          array << "verify-identity" if answers.identity_verification_required?
+          array << "complete"
+          array
         end
 
-        def requires_authorisation?(slug)
-          RESTRICTED_SLUGS.include?(slug)
+        private
+
+        def already_verified?
+          return true if answers.claim_started_verified == true
+
+          false
         end
 
-        def unauthorised_path(slug, failure_reason)
-          Rails.application.routes.url_helpers.claim_path(
-            self.class.module_parent::ROUTING_NAME,
-            "unauthorised",
-            failure_reason: failure_reason
-          )
+        def unauthorised?
+          auth.failure_reason.present?
+        end
+
+        def auth
+          Authorisation.new(answers: answers)
         end
       end
     end

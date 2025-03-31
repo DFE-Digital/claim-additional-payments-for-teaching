@@ -24,8 +24,20 @@ module Policies
         claim.eligibility.practitioner_name
       end
 
+      def practitioner_entered_dob
+        return unless claim.date_of_birth
+
+        I18n.l(claim.date_of_birth)
+      end
+
       def one_login_claimant_name
         claim.onelogin_idv_full_name
+      end
+
+      def one_login_claimant_dob
+        return unless claim.onelogin_idv_date_of_birth
+
+        I18n.l(claim.onelogin_idv_date_of_birth)
       end
 
       def practitioner_journey_completed?

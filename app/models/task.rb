@@ -8,8 +8,10 @@
 # out.
 class Task < ApplicationRecord
   NAMES = %w[
+    one_login_identity
     previous_payment
     identity_confirmation
+    alternative_identity_verification
     provider_verification
     provider_details
     visa
@@ -30,6 +32,8 @@ class Task < ApplicationRecord
     payroll_gender
   ].freeze
 
+  NAMES.each { |name| scope name.to_sym, -> { where(name: name) } }
+
   belongs_to :claim
   belongs_to :created_by, class_name: "DfeSignIn::User", optional: true
 
@@ -44,11 +48,14 @@ class Task < ApplicationRecord
   scope :automated, -> { where(manual: false) }
   scope :passed_automatically, -> { automated.where(passed: true) }
 
-  scope :census_subjects_taught, -> { where(name: "census_subjects_taught") }
   scope :no_data_census_subjects_taught, -> { census_subjects_taught.where(passed: nil, claim_verifier_match: nil) }
 
   def to_param
     name
+  end
+
+  def failed?
+    passed == false
   end
 
   def identity_confirmation?

@@ -130,6 +130,7 @@ class Claim < ApplicationRecord
   scope :payrollable, -> { approved.not_awaiting_qa.left_joins(:payments).where(payments: nil) }
   scope :not_awaiting_qa, -> { approved.where("qa_required = false OR (qa_required = true AND qa_completed_at IS NOT NULL)") }
   scope :awaiting_qa, -> { approved.qa_required.where(qa_completed_at: nil) }
+  scope :rejected_awaiting_qa, -> { rejected.qa_required.where(qa_completed_at: nil) }
   scope :qa_required, -> { where(qa_required: true) }
   scope :awaiting_further_education_provider_verification, -> do
     joins("INNER JOIN further_education_payments_eligibilities ON further_education_payments_eligibilities.id = claims.eligibility_id")
@@ -196,7 +197,11 @@ class Claim < ApplicationRecord
     valid?(:submit) && !submitted? && submittable_email_details? && submittable_mobile_details?
   end
 
-  def approvable?
+  def approvable?(current_admin: nil)
+    if current_admin && high_risk_ol_idv? && !current_admin.is_service_admin?
+      return false
+    end
+
     submitted? &&
       !held? &&
       !payroll_gender_missing? &&
@@ -206,8 +211,12 @@ class Claim < ApplicationRecord
       policy.approvable?(self)
   end
 
-  def rejectable?
-    !held?
+  def rejectable?(current_admin: nil)
+    if current_admin && high_risk_ol_idv? && !current_admin.is_service_admin?
+      return false
+    end
+
+    !held? && policy.rejectable?(self)
   end
 
   def holdable?
@@ -215,33 +224,53 @@ class Claim < ApplicationRecord
   end
 
   def flaggable_for_qa?
-    decision_made? && latest_decision.approved? && below_min_qa_threshold? && !awaiting_qa? && !qa_completed?
+    decision_made? && below_min_qa_threshold? && !awaiting_qa? && !qa_completed?
+  end
+
+  def approved?
+    decision_made? && latest_decision.approved?
+  end
+
+  def rejected?
+    decision_made? && latest_decision.rejected?
+  end
+
+  def below_min_qa_threshold?
+    if approved?
+      below_min_qa_threshold_for_approval?
+    else
+      below_min_qa_threshold_for_rejection?
+    end
+  end
+
+  def below_min_qa_threshold_for_rejection?
+    Random.new.rand(100) < policy::REJECTED_MIN_QA_THRESHOLD
   end
 
   # This method's intention is to help make a decision on whether a claim should
   # be flagged for QA or not. These criteria need to be met for each academic year:
   #
   # 1. the first claim to be approved should always be flagged for QA
-  # 2. subsequently approved claims should be flagged for QA, 1 in 100/MIN_QA_THRESHOLD.
+  # 2. subsequently approved claims should be flagged for QA, 1 in 100/APPROVED_MIN_QA_THRESHOLD.
   #
   # This method should be used every time a new approval decision is being made;
   # when used retrospectively, i.e. when several claims have been approved,
   # the method returns:
   #
   # 1. `true` if none of then claims have been flagged for QA
-  # 2. `true` if some claims have been flagged for QA using a lower MIN_QA_THRESHOLD
-  # 3. `false` if some claims have been flagged for QA using a higher MIN_QA_THRESHOLD
+  # 2. `true` if some claims have been flagged for QA using a lower APPROVED_MIN_QA_THRESHOLD
+  # 3. `false` if some claims have been flagged for QA using a higher APPROVED_MIN_QA_THRESHOLD
   #
   # Newly approved claims should not be flagged for QA for as long as the method
   # returns `false`; they should be flagged for QA otherwise.
-  def below_min_qa_threshold?
-    return false if policy::MIN_QA_THRESHOLD.zero?
+  def below_min_qa_threshold_for_approval?
+    return false if policy::APPROVED_MIN_QA_THRESHOLD.zero?
 
     approved_claims = Claim.by_policy(policy).by_academic_year(academic_year).approved
     claims_approved_so_far = approved_claims.count
     return true if claims_approved_so_far.zero?
 
-    (approved_claims.qa_required.count.to_f / claims_approved_so_far) * 100 <= policy::MIN_QA_THRESHOLD
+    (approved_claims.qa_required.count.to_f / claims_approved_so_far) * 100 <= policy::APPROVED_MIN_QA_THRESHOLD
   end
 
   def qa_completed?
@@ -311,15 +340,11 @@ class Claim < ApplicationRecord
   end
 
   def all_payrolled?
-    if has_lupp_policy?
-      topups.all? { |t| t.payrolled? } && payrolled?
-    else
-      payrolled?
-    end
+    topups.all? { |t| t.payrolled? } && payrolled?
   end
 
   def topupable?
-    has_lupp_policy? && submitted? && all_payrolled?
+    submitted? && all_payrolled?
   end
 
   def full_name
@@ -350,12 +375,12 @@ class Claim < ApplicationRecord
     policy == Policies::StudentLoans
   end
 
-  def has_lupp_policy?
-    policy == Policies::LevellingUpPremiumPayments
+  def has_targeted_retention_incentive_policy?
+    policy == Policies::TargetedRetentionIncentivePayments
   end
 
-  def has_ecp_or_lupp_policy?
-    has_ecp_policy? || has_lupp_policy?
+  def has_ecp_or_targeted_retention_incentive_policy?
+    has_ecp_policy? || has_targeted_retention_incentive_policy?
   end
 
   def has_early_years_payments_policy?
@@ -413,6 +438,14 @@ class Claim < ApplicationRecord
 
   def attributes_flagged_by_risk_indicator
     @attributes_flagged_by_risk_indicator ||= RiskIndicator.flagged_attributes(self)
+  end
+
+  def failed_one_login_idv?
+    onelogin_idv_at.present? && !identity_confirmed_with_onelogin?
+  end
+
+  def high_risk_ol_idv?
+    ((onelogin_idv_return_codes || []) & OneLogin::ReturnCode::HIGH_RISK_CODES).size > 0
   end
 
   private

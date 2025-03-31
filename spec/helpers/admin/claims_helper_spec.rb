@@ -25,7 +25,7 @@ describe Admin::ClaimsHelper do
       expected_answers = [
         [I18n.t("admin.teacher_reference_number"), "1234567"],
         [I18n.t("govuk_verify_fields.full_name").capitalize, "Bruce Wayne"],
-        [I18n.t("govuk_verify_fields.date_of_birth").capitalize, "01/01/1901"],
+        [I18n.t("govuk_verify_fields.date_of_birth").capitalize, "1 January 1901"],
         [I18n.t("admin.national_insurance_number"), "QQ123456C"],
         [I18n.t("govuk_verify_fields.address").capitalize, "Flat 1<br>1 Test Road<br>Test Town<br>AB1 2CD"],
         [I18n.t("admin.email_address"), "test@email.com"]
@@ -97,7 +97,7 @@ describe Admin::ClaimsHelper do
   describe "#admin_decision_details" do
     let(:claim) { create(:claim, :submitted) }
     let(:user) { create(:dfe_signin_user) }
-    let(:decision) { Decision.create!(claim: claim, created_by: user, result: :approved) }
+    let(:decision) { Decision.create!(claim: claim, created_by: user, approved: true) }
 
     it "includes an array of details about the decision" do
       expect(helper.admin_decision_details(decision)).to eq([
@@ -108,7 +108,7 @@ describe Admin::ClaimsHelper do
     end
 
     context "when notes are saved with the decision" do
-      let(:decision) { Decision.create!(claim: claim, created_by: user, result: :approved, notes: "abc\nxyz") }
+      let(:decision) { Decision.create!(claim: claim, created_by: user, approved: true, notes: "abc\nxyz") }
 
       it "includes the notes" do
         expect(helper.admin_decision_details(decision)).to include([I18n.t("admin.decision.notes"), simple_format(decision.notes, class: "govuk-body")])
@@ -182,6 +182,63 @@ describe Admin::ClaimsHelper do
         :claim,
         tasks: claim_tasks
       )
+    end
+
+    context "FE claim" do
+      let(:claim) do
+        create(
+          :claim,
+          policy: Policies::FurtherEducationPayments,
+          tasks: claim_tasks
+        )
+      end
+
+      let(:claim_tasks) do
+        []
+      end
+
+      context "when task not found" do
+        it "returns unverified in grey" do
+          expect(subject).to match("Unverified")
+          expect(subject).to match("grey")
+        end
+      end
+
+      context "when task passed" do
+        let(:claim_tasks) do
+          [
+            create(
+              :task,
+              claim_verifier_match: nil,
+              name: "one_login_identity",
+              passed: true
+            )
+          ]
+        end
+
+        it "is passed in green" do
+          expect(subject).to match("Passed")
+          expect(subject).to match("green")
+        end
+      end
+
+      context "when task failed" do
+        let(:claim_tasks) do
+          [
+            create(
+              :task,
+              claim_verifier_match: nil,
+              name: "one_login_identity",
+              passed: false
+            )
+          ]
+        end
+
+        it "is faied in red" do
+          expect(subject).to match("Failed")
+          expect(subject).to match("red")
+        end
+      end
     end
 
     context "EY specific and practitioner yet to complete their half" do
@@ -443,6 +500,28 @@ describe Admin::ClaimsHelper do
       end
     end
 
+    context "when task failed with reason" do
+      subject(:task_status_tag) { helper.task_status_tag(claim, "one_login_identity") }
+
+      let(:claim_tasks) do
+        [
+          build(
+            :task,
+            claim_verifier_match: nil,
+            name: "one_login_identity",
+            passed: false,
+            reason: "no_data"
+          )
+        ]
+      end
+
+      it "returns 'No data' in red" do
+        expect(task_status_tag).to match("No data")
+        expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
+        expect(task_status_tag).to match("govuk-tag--red")
+      end
+    end
+
     context "with task passed nil" do
       let(:claim_tasks) do
         [
@@ -522,6 +601,14 @@ describe Admin::ClaimsHelper do
       end
     end
 
+    context "claim rejected and flagged for QA" do
+      let(:claim) { create(:claim, :rejected, :flagged_for_qa) }
+
+      it "returns a status of Rejected awaiting QA" do
+        expect(status(claim)).to eq "Rejected awaiting QA"
+      end
+    end
+
     context "claim held" do
       let(:claim) { create(:claim, :submitted, :held) }
 
@@ -592,6 +679,12 @@ describe Admin::ClaimsHelper do
         is_expected.to eq("approved awaiting payroll")
       end
     end
+
+    context "overridden status message" do
+      let(:status) { "rejected_awaiting_qa" }
+
+      it { is_expected.to eq("rejected awaiting QA") }
+    end
   end
 
   describe "#no_claims" do
@@ -656,7 +749,7 @@ describe Admin::ClaimsHelper do
     end
 
     context "Eligible for STRI only" do
-      let(:claim) { create(:claim, :submitted, :policy_options_provided_lup_only, policy: Policies::LevellingUpPremiumPayments) }
+      let(:claim) { create(:claim, :submitted, :policy_options_provided_targeted_retention_incentive_only, policy: Policies::TargetedRetentionIncentivePayments) }
 
       it "returns STRI only" do
         answers = [["School targeted retention incentive", "£2,000"]]

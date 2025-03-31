@@ -109,7 +109,10 @@ Rails.application.routes.draw do
     # DfE Sign-in OpenID routes
     get "/auth/callback", to: "auth#callback"
     get "/auth/failure", to: "auth#failure"
-    post "/auth/developer/callback", to: "auth#bypass_callback", as: :dfe_sign_in_bypass_callback
+
+    if DfESignIn.bypass?
+      post "/auth/developer/callback", to: "auth#bypass_callback", as: :dfe_sign_in_bypass_callback
+    end
 
     resources :claims, only: [:index, :show] do
       resources :tasks, only: [:index, :show, :create, :update], param: :name, constraints: {name: %r{#{Task::NAMES.join("|")}}}
@@ -147,10 +150,13 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :payments, only: :show
+
     resources :journey_configurations, only: [:index, :edit, :update]
-    resources :levelling_up_premium_payments_awards, only: [:index, :create]
+    resources :targeted_retention_incentive_payments_awards, only: [:index, :create]
     resource :eligible_ey_providers, only: [:create, :show], path: "eligible-early-years-providers"
     resource :eligible_fe_providers, only: [:create, :show], path: "eligible-further-education-providers"
+    resources :reports, only: [:index, :show]
 
     get "refresh-session", to: "sessions#refresh", as: :refresh_session
 

@@ -4,13 +4,27 @@ module Admin
 
     helper_method :journey_configuration
 
+    rate_limit(
+      to: 1,
+      within: 30.seconds,
+      only: :create,
+      with: -> do
+        redirect_to(
+          edit_admin_journey_configuration_path(
+            Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME
+          ),
+          alert: "Too many requests"
+        )
+      end
+    )
+
     def create
-      @upload_form = EligibleEyProvidersForm.new(upload_params)
+      @upload_form = EligibleEyProvidersForm.new(upload_params, admin_user)
 
       if @upload_form.invalid?
         render "admin/journey_configurations/edit"
       else
-        @upload_form.importer.run
+        @upload_form.run_import!
         flash[:notice] = @upload_form.importer.results_message
 
         redirect_to edit_admin_journey_configuration_path(Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME)

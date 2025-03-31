@@ -4,15 +4,25 @@ module Admin
     before_action :ensure_service_operator, :journey_configuration
     after_action :send_reminders, only: [:update]
 
+    FILE_UPLOAD_TARGET_DATA_MODELS = {
+      "additional-payments" => Policies::TargetedRetentionIncentivePayments::Award,
+      "early-years-payment-provider" => EligibleEyProvider,
+      "further-education-payments" => EligibleFeProvider
+    }
+
     def index
       @journey_configurations = Journeys::Configuration.order(created_at: :desc)
     end
 
     def edit
-      @csv_upload = Policies::LevellingUpPremiumPayments::AwardCsvImporter.new if journey_configuration.additional_payments?
+      @csv_upload = Policies::TargetedRetentionIncentivePayments::AwardCsvImporter.new(admin_user:) if journey_configuration.additional_payments?
 
-      @upload_form = EligibleFeProvidersForm.new(upload_params)
-      @download_form = EligibleFeProvidersForm.new
+      @upload_form = EligibleFeProvidersForm.new(upload_params, admin_user)
+      @download_form = EligibleFeProvidersForm.new({}, admin_user)
+
+      @file_upload_history = FileUpload.upload_history(
+        FILE_UPLOAD_TARGET_DATA_MODELS[journey_configuration.routing_name]
+      )
     end
 
     def update

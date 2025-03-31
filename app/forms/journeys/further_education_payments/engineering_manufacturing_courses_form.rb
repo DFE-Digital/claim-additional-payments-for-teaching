@@ -17,35 +17,35 @@ module Journeys
 
       def checkbox_options
         [
-          OpenStruct.new(
+          Option.new(
             id: "approved_level_321_engineering",
             name: course_option_description("approved_level_321_engineering")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "approved_level_321_manufacturing",
             name: course_option_description("approved_level_321_manufacturing")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "approved_level_321_transportation",
             name: course_option_description("approved_level_321_transportation")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "tlevel_design",
             name: course_option_description("tlevel_design")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "tlevel_maintenance",
             name: course_option_description("tlevel_maintenance")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "tlevel_engineering",
             name: course_option_description("tlevel_engineering")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "level2_3_apprenticeship",
             name: course_option_description("level2_3_apprenticeship")
           ),
-          OpenStruct.new(
+          Option.new(
             id: "none",
             name: course_option_description("none")
           )
@@ -57,6 +57,13 @@ module Journeys
 
         journey_session.answers.assign_attributes(engineering_manufacturing_courses:)
         journey_session.save!
+      end
+
+      def clear_answers_from_session
+        if answers.subjects_taught.exclude?("engineering_manufacturing")
+          journey_session.answers.assign_attributes(engineering_manufacturing_courses: [])
+          journey_session.save!
+        end
       end
 
       private

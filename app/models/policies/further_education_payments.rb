@@ -5,12 +5,15 @@ module Policies
 
     ELIGIBILITY_MATCHING_ATTRIBUTES = [["teacher_reference_number"]].freeze
 
-    # Percentage of claims to QA
-    MIN_QA_THRESHOLD = 10
+    # Percentage of approved claims to QA
+    APPROVED_MIN_QA_THRESHOLD = 10
+    # Percentage of rejected claims to QA
+    REJECTED_MIN_QA_THRESHOLD = 10
 
     VERIFIERS = [
-      AutomatedChecks::ClaimVerifiers::Identity,
+      AutomatedChecks::ClaimVerifiers::OneLoginIdentity,
       AutomatedChecks::ClaimVerifiers::ProviderVerification,
+      AutomatedChecks::ClaimVerifiers::AlternativeIdentityVerification,
       AutomatedChecks::ClaimVerifiers::Employment,
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
       AutomatedChecks::ClaimVerifiers::FraudRisk
@@ -27,8 +30,10 @@ module Policies
       :subject_to_performance_measures,
       :subject_to_disciplinary_action,
       :identity_check_failed,
+      :alternative_identity_verification_check_failed,
       :duplicate_claim,
       :no_response,
+      :no_response_from_employer,
       :other
     ]
 
@@ -68,11 +73,11 @@ module Policies
     end
 
     def verification_due_date_for_claim(claim)
-      (claim.created_at + 3.weeks).to_date
+      (claim.created_at + 2.weeks).to_date
     end
 
     def verification_chase_due_date_for_claim(claim)
-      (claim.eligibility.provider_verification_chase_email_last_sent_at + 3.weeks).to_date
+      (claim.eligibility.provider_verification_email_last_sent_at + 2.weeks).to_date
     end
 
     def duplicate_claim?(claim)
@@ -85,6 +90,35 @@ module Policies
 
     def payroll_file_name
       "FELUPEXPANSION"
+    end
+
+    def alternative_identity_verification_required?(claim)
+      return false unless FeatureFlag.enabled?(:fe_provider_identity_verification)
+
+      claim.failed_one_login_idv?
+    end
+
+    def approvable?(claim)
+      ClaimCheckingTasks.new(claim).incomplete_task_names.exclude?(
+        "alternative_identity_verification"
+      ) && !claim.tasks.find_by(name: "alternative_identity_verification")&.failed?
+    end
+
+    def rejectable?(claim)
+      ClaimCheckingTasks.new(claim).incomplete_task_names.exclude?(
+        "alternative_identity_verification"
+      )
+    end
+
+    def rejected_reasons(claim)
+      ADMIN_DECISION_REJECTED_REASONS.select do |reason|
+        case reason
+        when :alternative_identity_verification_check_failed
+          alternative_identity_verification_required?(claim)
+        else
+          true
+        end
+      end
     end
   end
 end

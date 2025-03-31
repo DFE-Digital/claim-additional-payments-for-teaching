@@ -34,6 +34,7 @@ module Journeys
         postcode-search
         select-home-address
         address
+        passport
         email-address
         email-verification
         provide-mobile-number
@@ -51,6 +52,8 @@ module Journeys
         check-your-answers
         ineligible
       ].freeze
+
+      RESTRICTED_SLUGS = [].freeze
 
       SLUGS = (
         ELIGIBILITY_SLUGS +
@@ -115,15 +118,60 @@ module Journeys
             sequence.delete("physics-courses")
           end
 
+          if answers.school_id.present?
+            sequence.delete("select-provision")
+          end
+
+          if answers.email_verified == true
+            sequence.delete("email-verification")
+          end
+
           if answers.provide_mobile_number == false
             sequence.delete("mobile-number")
+            sequence.delete("mobile-verification")
+          end
+
+          if answers.mobile_verified == true
             sequence.delete("mobile-verification")
           end
 
           if answers.ordnance_survey_error == true
             sequence.delete("select-home-address")
           end
+
+          if answers.skip_postcode_search == true
+            sequence.delete("select-home-address")
+          end
+
+          if answers.address_line_1.present? && answers.postcode.present?
+            sequence.delete("address")
+          end
+
+          if !FeatureFlag.enabled?(:alternative_idv)
+            sequence.delete("passport")
+          end
+
+          if !eligibility_checker.ineligible?
+            sequence.delete("ineligible")
+          end
+
+          if answers.performing_poorly?
+            sequence.delete("check-your-answers-part-one")
+            sequence.delete("eligible")
+            sequence.delete("sign-in")
+            sequence.delete("information-provided")
+          end
         end
+      end
+
+      private
+
+      def eligibility_checker
+        @eligibility_checker ||= journey::EligibilityChecker.new(journey_session:)
+      end
+
+      def journey
+        Journeys.for_routing_name(journey_session.journey)
       end
     end
   end

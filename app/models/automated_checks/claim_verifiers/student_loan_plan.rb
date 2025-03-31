@@ -1,6 +1,15 @@
 module AutomatedChecks
   module ClaimVerifiers
     class StudentLoanPlan
+      class MissingClaimPlanError < StandardError
+        def initialize(claim)
+          super(
+            "Claim #{claim.reference} has no student loan plan set. " \
+            "but student loan data with matching DOB and NINO was found"
+          )
+        end
+      end
+
       TASK_NAME = "student_loan_plan".freeze
       private_constant :TASK_NAME
 
@@ -40,7 +49,13 @@ module AutomatedChecks
       end
 
       def student_loan_data_exists
-        create_task(match: :all, passed: true) if student_loans_data.any?
+        if student_loans_data.any?
+          if claim.student_loan_plan.blank?
+            raise MissingClaimPlanError.new(claim)
+          end
+
+          create_task(match: :all, passed: true)
+        end
       end
 
       def nino_only_match_found

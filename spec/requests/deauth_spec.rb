@@ -25,6 +25,8 @@ RSpec.describe "logging out", type: :request do
     end
 
     it "redirects to one login" do
+      stub_const "ENV", ENV.to_h.merge("BYPASS_ONELOGIN_SIGN_IN" => nil)
+
       get "/further-education-payments/claim"
 
       journey_session = Journeys::FurtherEducationPayments::Session.last
@@ -34,6 +36,17 @@ RSpec.describe "logging out", type: :request do
       delete "/deauth/onelogin"
 
       expect(response).to redirect_to("https://oidc.integration.account.gov.uk/logout?id_token_hint=some_token&post_logout_redirect_uri=http://www.example.com/deauth/onelogin/callback&state=further-education-payments")
+    end
+
+    context "when OL bypassed" do
+      it "redirects to journey start page" do
+        stub_const "ENV", ENV.to_h.merge("BYPASS_ONELOGIN_SIGN_IN" => "true")
+
+        get "/further-education-payments/claim"
+        delete "/deauth/onelogin"
+
+        expect(response).to redirect_to("http://www.example.com/further-education-payments/landing-page")
+      end
     end
   end
 

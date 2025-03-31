@@ -1,12 +1,12 @@
 require "rails_helper"
 
-RSpec.feature "Managing Levelling Up Premium Payments school awards" do
+RSpec.feature "Managing targeted_retention_incentive Payments school awards" do
   let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
 
-  let(:csv_file) { "spec/fixtures/files/lupp_school_awards_good.csv" }
-  let(:csv_file_with_bad_data) { "spec/fixtures/files/lupp_school_awards_bad.csv" }
-  let(:csv_file_with_extra_columns) { "spec/fixtures/files/lupp_school_awards_additional_columns.csv" }
-  let(:csv_file_without_headers) { "spec/fixtures/files/lupp_school_awards_no_headers.csv" }
+  let(:csv_file) { "spec/fixtures/files/targeted_retention_incentive_school_awards_good.csv" }
+  let(:csv_file_with_bad_data) { "spec/fixtures/files/targeted_retention_incentive_school_awards_bad.csv" }
+  let(:csv_file_with_extra_columns) { "spec/fixtures/files/targeted_retention_incentive_school_awards_additional_columns.csv" }
+  let(:csv_file_without_headers) { "spec/fixtures/files/targeted_retention_incentive_school_awards_no_headers.csv" }
 
   before do
     sign_in_as_service_operator
@@ -25,8 +25,8 @@ RSpec.feature "Managing Levelling Up Premium Payments school awards" do
 
     # When awards exist
     freeze_time do
-      award = create(:levelling_up_premium_payments_award, academic_year: journey_configuration.current_academic_year)
-      create(:levelling_up_premium_payments_award, academic_year: journey_configuration.current_academic_year - 1)
+      award = create(:targeted_retention_incentive_payments_award, academic_year: journey_configuration.current_academic_year)
+      create(:targeted_retention_incentive_payments_award, academic_year: journey_configuration.current_academic_year - 1)
 
       visit current_path
       expect(page).to have_text "The School Targeted Retention Incentive school award amounts for academic year #{journey_configuration.current_academic_year} were updated on #{Time.zone.now.strftime("%-d %B %Y")}"
@@ -47,6 +47,9 @@ RSpec.feature "Managing Levelling Up Premium Payments school awards" do
     # When no awards exist
     expect(page).to have_text "No School Targeted Retention Incentive school award data has been uploaded for academic year #{journey_configuration.current_academic_year}."
 
+    expect(page).to have_content("Upload History For School Targeted Retention Incentives School Awards")
+    expect(page).to have_content("None")
+
     # No CSV file
     within "#upload" do
       click_button "Upload CSV"
@@ -65,16 +68,20 @@ RSpec.feature "Managing Levelling Up Premium Payments school awards" do
 
     expect(page).to have_text "Award amounts for #{journey_configuration.current_academic_year} successfully updated."
 
+    expect(page).to have_content(
+      "#{last_file_upload_completed_process_at_string}Aaron Admin#{journey_configuration.current_academic_year}"
+    )
+
     # Different academic year
 
     within "#upload" do
-      select "2024/2025", from: "upload_academic_year"
+      select (journey_configuration.current_academic_year + 1).to_s, from: "upload_academic_year"
 
       attach_file("CSV file", csv_file)
       click_button "Upload CSV"
     end
 
-    expect(page).to have_text "Award amounts for 2024/2025 successfully updated."
+    expect(page).to have_text "Award amounts for #{journey_configuration.current_academic_year + 1} successfully updated."
 
     # CSV file with bad data
     within "#upload" do
@@ -108,5 +115,13 @@ RSpec.feature "Managing Levelling Up Premium Payments school awards" do
 
     expect(page).to have_text "There is a problem"
     expect(page).to have_text "Invalid headers in CSV file. Required headers are school_urn and award_amount"
+  end
+
+  def last_file_upload_completed_process_at_string
+    FileUpload
+      .latest_version_for(Policies::TargetedRetentionIncentivePayments::Award, journey_configuration.current_academic_year)
+      .first
+      .completed_processing_at
+      .strftime("%-d %B %Y %-l:%M%P")
   end
 end

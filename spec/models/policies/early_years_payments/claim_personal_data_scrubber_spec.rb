@@ -122,6 +122,7 @@ RSpec.describe Policies::EarlyYearsPayments::ClaimPersonalDataScrubber do
     payment2 = create(:payment, :confirmed, :with_figures, claims: [claim], scheduled_payment_date: over_1_ago)
 
     if claim.topupable?
+      user = create(:dfe_signin_user)
       create(:topup, payment: payment2, claim: claim, award_amount: 500, created_by: user)
     end
 

@@ -1,0 +1,33 @@
+<%= render "admin/tasks/notes", notes: @notes, display_description: false %>
+
+<div class="govuk-inset-text task-outcome">
+  <p class="govuk-body">
+    <%= task_status_tag(task.claim, task.name) %>
+  </p>
+
+  <p class="govuk-body">
+    <% if task.manual %>
+      This task was performed by <%= user_details(task.created_by, include_line_break: false) %> on <%= l(task.updated_at) %>
+    <% elsif task.created_by %>
+      This task was performed by an automated check uploaded by <%= user_details(task.created_by, include_line_break: false) %> on <%= l(task.created_at) %>
+    <% elsif task.identity_confirmation? && task.claim.identity_confirmed_with_onelogin? %>
+      This task was performed by GOV.UK One Login on <%= l(task.claim.onelogin_idv_at) %>
+    <% elsif task.failed? && task.reason == "no_data" %>
+      <p>
+        <% if current_admin.is_service_admin? && @claim.onelogin_idv_return_codes.present? %>
+          This claimant was unable to verify their identity with GOV.UK One Login on <%= l(task.claim.onelogin_idv_at) %> with the following return codes: <%= @claim.onelogin_idv_return_codes.map { |code| "<strong>#{code}</strong>" }.join(", ").html_safe %>.
+        <% else %>
+          This claimant was unable to verify their identity with GOV.UK One Login on <%= l(task.claim.onelogin_idv_at) %>.
+        <% end %>
+      </p>
+
+      <% if Policies::FurtherEducationPayments.alternative_identity_verification_required?(@claim) %>
+        <p>
+          <%= govuk_link_to "You can confirm the provider has responded and verified the claimant’s identity.", admin_claim_task_path(claim_id: @claim.id, name: "alternative_identity_verification") %>
+        </p>
+      <% end %>
+    <% else  %>
+      This task was performed by an automated check on <%= l(task.created_at) %>
+    <% end %>
+  </p>
+</div>

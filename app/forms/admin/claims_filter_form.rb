@@ -68,6 +68,8 @@ class Admin::ClaimsFilterForm
         Claim.current_academic_year.payrollable.auto_approved
       when "rejected"
         Claim.current_academic_year.rejected
+      when "rejected_awaiting_qa"
+        Claim.rejected_awaiting_qa
       when "held"
         Claim.includes(:decisions).held.awaiting_decision
       when "failed_bank_validation"
@@ -134,6 +136,7 @@ class Admin::ClaimsFilterForm
       },
       "QA" => {
         "Approved awaiting QA" => "approved_awaiting_qa",
+        "Rejected awaiting QA" => "rejected_awaiting_qa",
         "Quality assured" => "quality_assured",
         "Quality assured - approved" => "quality_assured_approved",
         "Quality assured - rejected" => "quality_assured_rejected"

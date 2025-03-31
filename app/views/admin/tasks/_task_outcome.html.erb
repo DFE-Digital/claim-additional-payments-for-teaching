@@ -1,19 +1,23 @@
-<%= render "admin/tasks/notes", notes: @notes, display_description: false %>
+<% if lookup_context.find_all("admin/tasks/_task_outcome_#{task.name}").any? %>
+  <%= render "admin/tasks/task_outcome_#{task.name}", task: %>
+<% else %>
+  <%= render "admin/tasks/notes", notes: @notes, display_description: false %>
 
-<div class="govuk-inset-text task-outcome">
-  <p class="govuk-body">
-    <%= task_status_tag(task.claim, task.name) %>
-  </p>
+  <div class="govuk-inset-text task-outcome">
+    <p class="govuk-body">
+      <%= task_status_tag(task.claim, task.name) %>
+    </p>
 
-  <p class="govuk-body">
-    <% if task.manual %>
-      This task was performed by <%= user_details(task.created_by, include_line_break: false) %> on <%= l(task.updated_at) %>
-    <% elsif task.created_by %>
-      This task was performed by an automated check uploaded by <%= user_details(task.created_by, include_line_break: false) %> on <%= l(task.created_at) %>
-    <% elsif task.identity_confirmation? && task.claim.identity_confirmed_with_onelogin? %>
-      This task was performed by GOV.UK One Login on <%= l(task.claim.onelogin_idv_at) %>
-    <% else  %>
-      This task was performed by an automated check on <%= l(task.created_at) %>
-    <% end %>
-  </p>
-</div>
+    <p class="govuk-body">
+      <% if task.manual %>
+        This task was performed by <%= user_details(task.created_by, include_line_break: false) %> on <%= l(task.updated_at) %>
+      <% elsif task.created_by %>
+        This task was performed by an automated check uploaded by <%= user_details(task.created_by, include_line_break: false) %> on <%= l(task.created_at) %>
+      <% elsif task.identity_confirmation? && task.claim.identity_confirmed_with_onelogin? %>
+        This task was performed by GOV.UK One Login on <%= l(task.claim.onelogin_idv_at) %>
+      <% else  %>
+        This task was performed by an automated check on <%= l(task.created_at) %>
+      <% end %>
+    </p>
+  </div>
+<% end %>

@@ -25,6 +25,8 @@ module Journeys
       attribute :subject_to_disciplinary_action, :boolean, pii: false
       attribute :half_teaching_hours, :boolean, pii: false
       attribute :award_amount, :decimal, pii: false
+      attribute :valid_passport, :boolean, pii: false
+      attribute :passport_number, :string, pii: true
 
       def policy
         Policies::FurtherEducationPayments
@@ -40,22 +42,6 @@ module Journeys
         return unless possible_school_id
 
         @possible_school ||= School.find(possible_school_id)
-      end
-
-      def teaching_responsibilities?
-        !!teaching_responsibilities
-      end
-
-      def half_teaching_hours?
-        !!half_teaching_hours
-      end
-
-      def subject_to_formal_performance_action?
-        !!subject_to_formal_performance_action
-      end
-
-      def subject_to_disciplinary_action?
-        !!subject_to_disciplinary_action
       end
 
       def recent_further_education_teacher?
@@ -82,15 +68,11 @@ module Journeys
         half_teaching_hours == false
       end
 
-      def hours_teaching_eligible_subjects?
-        !!hours_teaching_eligible_subjects
-      end
-
       def eligible_fe_provider?
         return unless school
 
-        EligibleFeProvider
-          .where(academic_year: AcademicYear.current)
+        @eligible_fe_provider ||= EligibleFeProvider
+          .by_academic_year(AcademicYear.current)
           .where(ukprn: school.ukprn)
           .exists?
       end
@@ -130,6 +112,10 @@ module Journeys
         else
           0
         end
+      end
+
+      def performing_poorly?
+        subject_to_formal_performance_action || subject_to_disciplinary_action
       end
     end
   end

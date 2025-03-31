@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe Journeys::FurtherEducationPayments::HalfTeachingHoursForm, type: :model do
   let(:journey) { Journeys::FurtherEducationPayments }
   let(:journey_session) { create(:further_education_payments_session) }
+  let(:half_teaching_hours) { nil }
 
   let(:params) do
     ActionController::Parameters.new(

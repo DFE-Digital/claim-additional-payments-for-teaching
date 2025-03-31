@@ -1,9 +1,10 @@
 class PaymentConfirmationUpload
-  attr_reader :payroll_run, :csv, :updated_payment_ids, :errors, :admin_user
+  attr_reader :payroll_run, :csv, :csv_file, :updated_payment_ids, :errors, :admin_user
 
   def initialize(payroll_run, csv_file, admin_user)
     @payroll_run = payroll_run
     @errors = []
+    @csv_file = csv_file
     @csv = PaymentConfirmationCsv.new(csv_file)
     @line_number = 1
     @updated_payment_ids = Set.new
@@ -17,7 +18,13 @@ class PaymentConfirmationUpload
     ActiveRecord::Base.transaction do
       payments = []
 
-      confirmation = payroll_run.payment_confirmations.create!(created_by: admin_user)
+      file_upload = FileUpload.create!(
+        uploaded_by: admin_user,
+        body: File.read(csv_file),
+        target_data_model: PaymentConfirmation.to_s
+      )
+
+      confirmation = payroll_run.payment_confirmations.create!(created_by: admin_user, file_upload:)
 
       csv.rows.each do |row|
         @line_number += 1
@@ -27,6 +34,8 @@ class PaymentConfirmationUpload
           payments << payment
         end
       end
+
+      file_upload.completed_processing!
 
       raise ActiveRecord::Rollback if errors.any?
 
