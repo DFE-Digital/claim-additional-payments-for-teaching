@@ -10,7 +10,7 @@ RSpec.feature "Early years payment provider" do
 
     expect(page.title).to have_text("Enter your email address")
     expect(page).to have_content("Enter your email address")
-    fill_in "Email address", with: "someoneelse@example.com"
+    fill_in "Enter your email address", with: "someoneelse@example.com"
     click_on "Submit"
 
     expect(page.title).to have_text("You do not have access to this service")
@@ -28,7 +28,7 @@ RSpec.feature "Early years payment provider" do
 
     expect(page.title).to have_text("Enter your email address")
     expect(page).to have_content("Enter your email address")
-    fill_in "Email address", with: "invalidemailaddress"
+    fill_in "Enter your email address", with: "invalidemailaddress"
     click_on "Submit"
 
     expect(page.title).to have_text("You do not have access to this service")
