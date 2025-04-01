@@ -21,7 +21,7 @@ RSpec.feature "Early years payment provider" do
 
     expect(page.title).to have_text("Enter your email address")
     expect(page).to have_content("Enter your email address")
-    fill_in "Email address", with: "johndoe@example.com"
+    fill_in "Enter your email address", with: "johndoe@example.com"
     click_on "Submit"
 
     expect(page.title).to have_text("Check your email")
@@ -40,11 +40,11 @@ RSpec.feature "Early years payment provider" do
     visit landing_page_path(Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME)
     click_link "Start now"
 
-    fill_in "Email address", with: "johndoe@example.com"
+    fill_in "Enter your email address", with: "johndoe@example.com"
     click_on "Submit"
     click_on "enter another email address"
 
-    fill_in "Email address", with: "janedoe@example.com"
+    fill_in "Enter your email address", with: "janedoe@example.com"
     click_on "Submit"
 
     expect(page).to have_content("We have sent an email to janedoe@example.com")
@@ -59,7 +59,7 @@ RSpec.feature "Early years payment provider" do
     visit landing_page_path(Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME)
     click_link "Start now"
 
-    fill_in "Email address", with: "johndoe@example.com"
+    fill_in "Enter your email address", with: "johndoe@example.com"
     click_on "Submit"
     click_link "send another link"
 
