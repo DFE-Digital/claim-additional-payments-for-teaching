@@ -1,13 +1,13 @@
 <div class="document">
   <div>
-    <%= govuk_link_to title_url, new_tab: "" do %>
+    <%= govuk_link_to title_url, "aria-hidden": true, tabindex: -1, new_tab: "" do %>
       <%= render partial: "shared/#{type}_document_icon" %>
     <% end %>
   </div>
 
   <div>
     <div class="title">
-      <%= govuk_link_to title_text, title_url, new_tab: "" %>
+      <%= govuk_link_to title_text, title_url, "aria-label": aria_label, new_tab: "" %>
     </div>
 
     <div class="metadata">
