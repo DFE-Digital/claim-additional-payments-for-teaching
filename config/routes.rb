@@ -82,6 +82,7 @@ Rails.application.routes.draw do
 
     scope constraints: {journey: /early-years-payment/} do
       get "guidance", to: "journeys/early_years_payment/provider/start/static_pages#guidance", as: :guidance
+      get "consent-form", to: "journeys/early_years_payment/provider/start/static_pages#consent_form"
     end
 
     scope constraints: {journey: "further-education-payments-provider"} do
