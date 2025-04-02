@@ -15,7 +15,7 @@ module Admin
     def ensure_authenticated_user
       unless admin_signed_in?
         clear_session
-        session[:requested_admin_path] = request.fullpath
+        session[:requested_admin_path] = request.fullpath if store_requested_admin_path?
         redirect_to admin_sign_in_path
       end
     end
@@ -68,6 +68,10 @@ module Admin
     def set_cache_headers
       response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
       response.headers["Pragma"] = "no-cache"
+    end
+
+    def store_requested_admin_path?
+      true
     end
   end
 end

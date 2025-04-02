@@ -1,4 +1,6 @@
 class Admin::CookiesController < Admin::BaseAdminController
+  skip_before_action :ensure_authenticated_user
+
   def accept
     cookies.encrypted[:accept_cookies] = {
       value: {state: true, message: true}.to_json,
@@ -53,5 +55,9 @@ class Admin::CookiesController < Admin::BaseAdminController
 
   def cookies_params
     params.require(:cookies).permit(:accept)
+  end
+
+  def store_requested_admin_path?
+    false
   end
 end

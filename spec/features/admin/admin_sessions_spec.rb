@@ -24,4 +24,14 @@ RSpec.feature "Admin session management" do
 
     expect(current_path).to eql(admin_claims_path)
   end
+
+  scenario "accepting cookies does not affect sign in" do
+    visit admin_sign_in_path
+    click_button "Accept additional cookies"
+    click_button "Hide cookie message"
+
+    sign_in_as_service_operator
+
+    expect(page).to have_content "Claims received"
+  end
 end
