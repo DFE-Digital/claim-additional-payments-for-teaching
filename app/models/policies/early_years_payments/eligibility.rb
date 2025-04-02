@@ -19,7 +19,10 @@ module Policies
       end
 
       def eligible_ey_provider
-        EligibleEyProvider.find_by_urn(nursery_urn)
+        EligibleEyProvider
+          .unscoped
+          .order(created_at: :desc)
+          .find_by(urn: nursery_urn)
       end
 
       def provider_claim_submitted?
