@@ -5,42 +5,53 @@
     <%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
       <%= f.govuk_error_summary %>
 
-      <%= f.govuk_check_boxes_fieldset :consent_given, multiple: false, legend: { text: @form.t(:question), tag: "h1", size: "l" }, hint: -> do %>
-        <p class="govuk-body">
-          You need to confirm that you’ve got consent from your employee before
-          you can continue with your claim.
-        </p>
+      <h1 class="govuk-heading-l">
+        <%= @form.t(:question) %>
+      </h1>
 
-        <p class="govuk-body">
-          By continuing you’re confirming that you’ve:
-        </p>
+      <p class="govuk-body">
+        You need to confirm that you’ve got consent from your employee before
+        you can continue with your claim.
+      </p>
 
-        <%= govuk_list [
-          "obtained written consent from your employee to share their personal information (full name, start date, email address)",
-          "provided your employee with a privacy notice that explains what information will be collected, why it is being collected and who it will be shared with"
-        ], type: :bullet %>
+      <p class="govuk-body">
+        By continuing you’re confirming that you’ve:
+      </p>
 
-        <p class="govuk-body">
-          You do not need to send us the consent forms, but you should keep them
-          for your records.
-        </p>
+      <%= govuk_list [
+        "obtained written consent from your employee to share their personal information (full name, start date, email address)",
+        "provided your employee with a privacy notice that explains what information will be collected, why it is being collected and who it will be shared with"
+      ], type: :bullet %>
 
-        <p class="govuk-body">
-          If you have any questions or need further guidance, contact our support team at
-          <%= govuk_link_to t("early_years_payment_provider_authenticated.feedback_email"), "mailto:#{t("early_years_payment_provider_authenticated.feedback_email")}", no_visited_state: true %>.
-        </p>
+      <p class="govuk-body">
+        You do not need to send us the consent forms, but you should keep them
+        for your records.
+      </p>
 
-        <div class="govuk-warning-text">
-          <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-          <strong class="govuk-warning-text__text">
-            <span class="govuk-visually-hidden">Warning</span>
-            By ticking this box, you confirm that you have obtained consent from
-            your employee.
-          </strong>
+      <p class="govuk-body">
+        If you have any questions or need further guidance, contact our support team at
+        <%= govuk_link_to t("early_years_payment_provider_authenticated.feedback_email"), "mailto:#{t("early_years_payment_provider_authenticated.feedback_email")}", no_visited_state: true %>.
+      </p>
+
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-visually-hidden">Warning</span>
+          By ticking this box, you confirm that you have obtained consent from
+          your employee.
+        </strong>
+      </div>
+
+      <% if @form.errors.where(:consent_given).any? %>
+        <% message = GOVUKDesignSystemFormBuilder::Elements::ErrorMessage.new(f, :consent, :consent_given) %>
+        <div class="govuk-form-group govuk-form-group--error">
+          <%= message.html %>
+          <%= f.govuk_check_box :consent_given, 1, 0, multiple: false, link_errors: true, label: { text: @form.t(:option) } %>
         </div>
-        <% end do %>
-
-        <%= f.govuk_check_box :consent_given, 1, 0, multiple: false, link_errors: true, label: { text: @form.t(:option) } %>
+      <% else %>
+        <div class="govuk-form-group">
+          <%= f.govuk_check_box :consent_given, 1, 0, multiple: false, link_errors: true, label: { text: @form.t(:option) } %>
+        </div>
       <% end %>
 
       <%= f.govuk_submit %>
