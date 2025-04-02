@@ -29,11 +29,11 @@ RSpec.feature "Early years payment practitioner mobile number" do
     when_early_years_payment_practitioner_journey_configuration_exists
     when_personal_details_entered_up_to_email_address
 
-    expect(page).to have_content("Would you like to provide your mobile number?")
+    expect(page).to have_content("Can we use your mobile number to contact you?")
     choose "Yes"
     click_on "Continue"
 
-    fill_in "Mobile number", with: "07700900001"
+    fill_in "Your mobile number", with: "07700900001"
     click_on "Continue"
     expect(notify_sms_message).to have_received(:deliver!).once
 
@@ -42,18 +42,18 @@ RSpec.feature "Early years payment practitioner mobile number" do
     expect(journey_session.answers.mobile_number).to eq "07700900001"
     expect(journey_session.answers.mobile_verified).to be true
 
-    expect(page).to have_content("Enter your personal bank account details")
+    expect(page).to have_content("Your personal bank account details")
   end
 
   scenario "Resend passcode" do
     when_early_years_payment_practitioner_journey_configuration_exists
     when_personal_details_entered_up_to_email_address
 
-    expect(page).to have_content("Would you like to provide your mobile number?")
+    expect(page).to have_content("Can we use your mobile number to contact you?")
     choose "Yes"
     click_on "Continue"
 
-    fill_in "Mobile number", with: "07700900001"
+    fill_in "Your mobile number", with: "07700900001"
     click_on "Continue"
 
     click_link "Resend passcode"
