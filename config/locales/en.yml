@@ -270,9 +270,9 @@ en:
         your_address: What is your address?
       answers:
         address_line_1: House number or name
-        address_line_1_visually_hidden: House number or name line 1 of 2
+        address_line_1_visually_hidden: line 1 of 2
         address_line_2: Building and street
-        address_line_2_visually_hidden: Building and street line 2 of 2
+        address_line_2_visually_hidden: line 2 of 2
         address_line_3: Town or city
         address_line_4: County
         postcode: Postcode
