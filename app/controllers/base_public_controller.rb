@@ -1,6 +1,5 @@
 class BasePublicController < ApplicationController
   include DfE::Analytics::Requests
-  include SessionManagement
   include HttpAuthConcern
   include JourneyConcern
 
@@ -8,6 +7,11 @@ class BasePublicController < ApplicationController
   after_action :update_last_seen_at
 
   private
+
+  def clear_claim_session
+    session.delete(:slugs)
+    clear_journey_sessions!
+  end
 
   def update_last_seen_at
     session[:last_seen_at] = Time.zone.now
