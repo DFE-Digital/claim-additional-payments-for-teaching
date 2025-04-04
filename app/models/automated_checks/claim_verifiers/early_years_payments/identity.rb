@@ -6,9 +6,9 @@ module AutomatedChecks
           return unless claim.eligibility.practitioner_journey_completed?
           return unless awaiting_task?(TASK_NAME)
 
-          if one_login_idv_match?
+          if one_login_idv_match_details_from_provider?
             create_task(match: nil, passed: true)
-          elsif one_login_idv_partial_match?
+          elsif one_login_idv_partially_match_details_from_provider?
             create_task(match: :any, passed: nil)
 
             create_note(body: note_body("Names partially match"))
@@ -25,13 +25,13 @@ module AutomatedChecks
 
         private
 
-        def one_login_idv_match?
+        def one_login_idv_match_details_from_provider?
           return false unless claim.one_login_idv_match?
 
           claim.eligibility.practitioner_and_provider_entered_names_match?
         end
 
-        def one_login_idv_partial_match?
+        def one_login_idv_partially_match_details_from_provider?
           return false unless claim.one_login_idv_match?
 
           claim.eligibility.practitioner_and_provider_entered_names_partial_match?
