@@ -50,6 +50,7 @@ Rails.application.routes.draw do
     get "claims/confirmation", as: :claim_confirmation, to: "submissions#show"
     get "existing-session", as: :existing_session, to: "claims#existing_session"
     post "start-new", to: "claims#start_new", as: :start_new
+    get "signed-out", to: "claims#signed_out"
 
     %w[terms_conditions contact_us accessibility_statement].each do |page_name|
       get page_name.dasherize, to: "static_pages##{page_name}", as: page_name

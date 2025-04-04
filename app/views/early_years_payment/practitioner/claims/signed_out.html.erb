@@ -1,0 +1,15 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      You have signed out of your GOV.UK One Login account
+    </h1>
+
+    <p class="govuk-body">
+      To continue with your claim, <%= govuk_link_to "sign in again", Journeys::EarlyYearsPayment::Practitioner::SlugSequence.start_page_url %>
+    </p>
+
+    <p class="govuk-body">
+      If you have any queries about the service, email <%= govuk_mail_to I18n.t("early_years_payment_practitioner.support_email") %>
+    </p>
+  </div>
+</div>

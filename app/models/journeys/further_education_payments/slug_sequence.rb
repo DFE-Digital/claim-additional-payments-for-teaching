@@ -66,6 +66,10 @@ module Journeys
         Rails.application.routes.url_helpers.landing_page_path("further-education-payments")
       end
 
+      def self.signed_out_path
+        Rails.application.routes.url_helpers.landing_page_path("further-education-payments")
+      end
+
       attr_reader :journey_session
 
       delegate :answers, to: :journey_session
