@@ -43,17 +43,27 @@ module Policies
       end
 
       def practitioner_and_provider_entered_names_match?
-        practitioner_first_name.downcase == claim.onelogin_idv_first_name.downcase &&
-          practitioner_surname.downcase == claim.onelogin_idv_last_name.downcase
+        first_names_match? && surnames_match?
       end
 
       def practitioner_and_provider_entered_names_partial_match?
-        practitioner_first_name.downcase == claim.onelogin_idv_first_name.downcase ||
-          practitioner_surname.downcase == claim.onelogin_idv_last_name.downcase
+        first_names_match? || surnames_match?
       end
 
       def practitioner_journey_completed?
         claim.submitted_at.present?
+      end
+
+      private
+
+      def first_names_match?
+        practitioner_first_name.downcase.strip ==
+          claim.onelogin_idv_first_name.downcase.strip
+      end
+
+      def surnames_match?
+        practitioner_surname.downcase.strip ==
+          claim.onelogin_idv_last_name.downcase.strip
       end
     end
   end
