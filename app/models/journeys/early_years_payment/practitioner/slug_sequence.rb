@@ -30,6 +30,10 @@ module Journeys
           Rails.application.routes.url_helpers.claim_path("early-years-payment-practitioner", "find-reference", skip_landing_page: true)
         end
 
+        def self.signed_out_path
+          Rails.application.routes.url_helpers.claim_path("early-years-payment-practitioner", "signed-out")
+        end
+
         attr_reader :journey_session
 
         delegate :answers, to: :journey_session
