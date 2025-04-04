@@ -1,7 +1,8 @@
 class ClaimsController < BasePublicController
   include PartOfClaimJourney
 
-  skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create]
+  skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create, :signed_out]
+
   before_action :initialize_session_slug_history
   before_action :check_page_is_in_sequence, only: [:show, :update]
   before_action :check_page_is_authorised, only: [:show]
@@ -32,6 +33,9 @@ class ClaimsController < BasePublicController
     else
       redirect_to_existing_claim_journey
     end
+  end
+
+  def signed_out
   end
 
   private

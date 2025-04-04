@@ -3,7 +3,7 @@ class DeauthController < ApplicationController
 
   def onelogin
     if ENV["BYPASS_ONELOGIN_SIGN_IN"] == "true"
-      redirect_to journey_session.journey_class::SlugSequence.start_page_url
+      redirect_to journey_session.journey_class::SlugSequence.signed_out_path
     else
       redirect_to onelogin_redirect_uri, allow_other_host: true
     end
@@ -12,7 +12,7 @@ class DeauthController < ApplicationController
   end
 
   def onelogin_callback
-    redirect_to Journeys.for_routing_name(params[:state])::SlugSequence.start_page_url
+    redirect_to Journeys.for_routing_name(params[:state])::SlugSequence.signed_out_path
   end
 
   private
