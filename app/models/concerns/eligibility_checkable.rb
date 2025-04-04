@@ -80,10 +80,16 @@ module EligibilityCheckable
     if claim_year.blank? || itt_academic_year.blank?
       false
     else
-      policy.current_and_future_subject_symbols(
+      result = policy.current_and_future_subject_symbols(
         claim_year: claim_year,
         itt_year: itt_academic_year
       ).empty?
+
+      if policy == Policies::TargetedRetentionIncentivePayments && result
+        raise "Fail no selectable subjects for LUP"
+      end
+
+      result
     end
   end
 
