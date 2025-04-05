@@ -12,6 +12,7 @@
       } do %>
         <%= f.govuk_text_field :banking_name,
           spellcheck: "false",
+          autocomplete: "name",
           label: { text: "Name on your account" },
           hint: { text: t("questions.account_hint") } %>
 
