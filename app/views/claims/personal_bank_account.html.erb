@@ -13,6 +13,7 @@
         <%= f.govuk_text_field(
           :banking_name,
           spellcheck: "false",
+          autocomplete: "name",
           label: {
             text: @form.t("banking_name.label", default: "Name on your account")
           },
