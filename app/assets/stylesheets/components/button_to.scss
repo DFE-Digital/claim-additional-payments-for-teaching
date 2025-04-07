@@ -13,6 +13,10 @@
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
+
+  &:focus {
+    @include govuk-focused-text;
+  }
 }
 
 .button-to-as-link:hover {
