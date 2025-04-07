@@ -1,0 +1,70 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-l">
+      We need your consent to share your personal details
+    </h1>
+
+    <p class="govuk-body">
+      We are required to get your written consent to share your personal details with the Department for Education (DfE) to:
+    </p>
+
+    <%= govuk_list [
+      "apply for an Early Years Financial Incentive Payment (recruitment bonus) on your behalf",
+      "comply with data protection and confidentiality regulations",
+    ], type: :bullet %>
+
+    <h2 class="govuk-heading-m">
+      How we will use your personal details
+    </h2>
+
+    <p class="govuk-body">
+      Your personal details will be used to submit a claim application for the recruitment bonus. The recruitment bonus is a £1,000 payment which is available to new and returning early years educators.
+    </p>
+
+    <h2 class="govuk-heading-m">
+      What personal details will be shared
+    </h2>
+
+    <p class="govuk-body">
+      We need your consent to provide DfE with the following personal details:
+    </p>
+
+    <%= govuk_list [
+      "your full name",
+      "your email address",
+      "your employment start date",
+    ], type: :bullet %>
+
+    <p class="govuk-body">
+      Tick the box below if you agree to the terms:
+    </p>
+
+    <p class="govuk-body">
+    <input type="checkbox"></input> I give my employer consent to share the personal details listed with DfE, to apply for an Early Years Financial Incentive Payment (recruitment bonus) on my behalf.
+    </p>
+
+    <p class="govuk-body">
+      This form must be signed by the person who will receive the £1,000 recruitment bonus:
+    </p>
+
+    <p class="govuk-body">
+      Signature: <input type="text" size="30"></input>
+    </p>
+
+    <p class="govuk-body">
+      Full name: <input type="text" size="30"></input>
+    </p>
+
+    <p class="govuk-body">
+      Date: <input type="text" size="30"></input>
+    </p>
+
+    <p class="govuk-body">
+      Email address: <input type="text" size="30"></input>
+    </p>
+
+    <p class="govuk-body">
+      <strong>Consent will be valid for one year from the date above.</strong>
+    </p>
+  </div>
+</div>

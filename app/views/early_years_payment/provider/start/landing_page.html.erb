@@ -29,7 +29,7 @@
     <h3 class="govuk-heading-m">Information from your employee</h3>
 
     <p class="govuk-body">
-      You should make sure you’ve collected written consent from your employee before you give us their information. You can use our <%= govuk_link_to("consent form", asset_path("ey-provider-practitioner-consent-form.pdf"), new_tab: true) %> to do this.
+      You should make sure you’ve collected written consent from your employee before you give us their information. You can use our <%= govuk_link_to("consent form", claim_path(current_journey_routing_name, "consent-form"), new_tab: true) %> to do this.
     </p>
 
     <p class="govuk-body">
@@ -52,21 +52,10 @@
 
     <h4 class="govuk-heading-s">Documents</h4>
 
-    <%= render partial: "shared/document",
-      locals: {
-        type: :generic,
-        title_text: "Privacy notice",
-        title_url: "https://www.gov.uk/government/publications/privacy-information-education-providers-workforce-including-teachers/5a254207-a566-44f7-ac77-6ba59fd26e04",
-        metadata: nil
-      } %>
-
-    <%= render partial: "shared/document",
-      locals: {
-        type: :pdf,
-        title_text: "Consent form",
-        title_url: asset_path("ey-provider-practitioner-consent-form.pdf"),
-        metadata: "PDF, 63 KB, 1 page"
-      } %>
+    <%= govuk_list [
+      "#{govuk_link_to("privacy notice", "https://www.gov.uk/government/publications/privacy-information-education-providers-workforce-including-teachers/5a254207-a566-44f7-ac77-6ba59fd26e04", new_tab: true)} that explains what information will be collected, why it’s being collected and who it will be shared with".html_safe,
+      "#{govuk_link_to("consent form", claim_path(current_journey_routing_name, "consent-form"), new_tab: true)} to collect their written consent to share their full name, email address and start date with the Department for Education (DfE)".html_safe,
+    ], type: :bullet %>
 
     <h3 class="govuk-heading-m">Information from your organisation</h3>
 
