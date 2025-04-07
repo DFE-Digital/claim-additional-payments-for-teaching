@@ -7,19 +7,18 @@
     <%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l">
-        Enter your email address
-      </h1>
-
-      <p class="govuk-body">
-        You must use the email address previously provided to your local authority to access this service.
-      </p>
-
       <%= f.govuk_email_field :email_address,
         autocomplete: "email",
-        spellcheck: "false",
-        label: { text: t("questions.email_address"), hidden: true } # label still read by screen readers
-      %>
+        spellcheck: false,
+        label: {
+          text: "Enter your email address",
+          tag: "h1",
+          size: "l"
+        } do %>
+        <p class="govuk-body">
+          You must use the email address previously provided to your local authority to access this service.
+        </p>
+      <% end %>
 
       <%= f.govuk_submit "Submit" %>
     <% end %>

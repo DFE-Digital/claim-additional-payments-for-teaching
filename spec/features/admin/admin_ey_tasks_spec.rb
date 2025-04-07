@@ -580,7 +580,7 @@ RSpec.describe "Admin EY tasks" do
 
     click_link "Start now"
 
-    fill_in "Email address", with: "johndoe@example.com"
+    fill_in "Enter your email address", with: "johndoe@example.com"
     click_on "Submit"
 
     mail = ActionMailer::Base.deliveries.last
