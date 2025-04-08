@@ -156,12 +156,14 @@ module Journeys
       end
 
       def text_for_subject_answer
-        policy = eligibility.policy
-
-        subjects = policy.current_and_future_subject_symbols(
-          claim_year: policy.current_academic_year,
-          itt_year: journey_session.answers.itt_academic_year
-        )
+        subjects = if eligibility.policy == Policies::EarlyCareerPayments
+          Policies::EarlyCareerPayments.current_and_future_subject_symbols(
+            claim_year: answers.policy.current_academic_year,
+            itt_year: journey_session.answers.itt_academic_year
+          )
+        else
+          Policies::TargetedRetentionIncentivePayments.fixed_subject_symbols
+        end
 
         if subjects.many?
           t("additional_payments.forms.eligible_itt_subject.answers.#{journey_session.answers.eligible_itt_subject}")
@@ -174,10 +176,14 @@ module Journeys
       private
 
       def subject_symbols
-        @subject_symbols ||= answers.policy.subject_symbols(
-          claim_year: answers.policy_year,
-          itt_year: answers.itt_academic_year
-        )
+        @subject_symbols ||= if answers.policy == Policies::EarlyCareerPayments
+          Policies::EarlyCareerPayments.current_and_future_subject_symbols(
+            claim_year: answers.policy.current_academic_year,
+            itt_year: answers.itt_academic_year
+          )
+        else
+          Policies::TargetedRetentionIncentivePayments.fixed_subject_symbols
+        end
       end
 
       def claim_submission_form

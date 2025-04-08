@@ -18,15 +18,9 @@ module Policies
       def indicated_ineligible_itt_subject?
         return false if eligible_itt_subject.blank?
 
-        if claim_year.blank? || itt_academic_year.blank?
-          # trainee teacher who won't have given their ITT year
-          eligible_itt_subject.present? && TargetedRetentionIncentivePayments.fixed_subject_symbols.exclude?(eligible_itt_subject.to_sym)
-        else
-          TargetedRetentionIncentivePayments.subject_symbols(
-            claim_year: claim_year,
-            itt_year: itt_academic_year
-          ).exclude?(eligible_itt_subject.to_sym)
-        end
+        TargetedRetentionIncentivePayments.fixed_subject_symbols.exclude?(
+          eligible_itt_subject.to_sym
+        )
       end
 
       def calculate_award_amount
@@ -58,15 +52,9 @@ module Policies
       def good_itt_subject?
         return false if eligible_itt_subject.blank?
 
-        if claim_year.blank? || itt_academic_year.blank?
-          # trainee teacher who won't have given their ITT year
-          eligible_itt_subject.present? && eligible_itt_subject.to_sym.in?(Policies::TargetedRetentionIncentivePayments.fixed_subject_symbols)
-        else
-          TargetedRetentionIncentivePayments.current_subject_symbols(
-            claim_year: claim_year,
-            itt_year: itt_academic_year
-          ).include?(eligible_itt_subject.to_sym)
-        end
+        TargetedRetentionIncentivePayments.fixed_subject_symbols.include?(
+          eligible_itt_subject.to_sym
+        )
       end
 
       def eligible_degree?
