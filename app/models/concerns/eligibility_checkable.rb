@@ -42,10 +42,6 @@ module EligibilityCheckable
     common_eligible_later_attributes? && specific_eligible_later_attributes?
   end
 
-  def trainee_teacher?
-    nqt_in_academic_year_after_itt == false
-  end
-
   private
 
   def common_ineligible_attributes?

@@ -38,6 +38,10 @@ module Policies
 
       private
 
+      def trainee_teacher?
+        nqt_in_academic_year_after_itt == false
+      end
+
       def specific_eligible_now_attributes?
         induction_completed? && itt_subject_eligible_now?
       end
