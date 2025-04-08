@@ -54,7 +54,7 @@ module Policies
       end
 
       def specific_ineligible_attributes?
-        trainee_teacher? || (induction_not_completed? && !any_future_policy_years?) || itt_subject_ineligible_now_and_in_the_future?
+        trainee_teacher? || (induction_not_completed? && !any_future_policy_years?) || itt_subject_ineligible_now_and_in_the_future? || no_selectable_subjects?
       end
 
       def itt_subject_ineligible_now_and_in_the_future?
@@ -104,6 +104,17 @@ module Policies
             claim_year: claim_year,
             itt_year: itt_academic_year
           ).exclude?(itt_subject_symbol)
+        end
+      end
+
+      def no_selectable_subjects?
+        if claim_year.blank? || itt_academic_year.blank?
+          false
+        else
+          EarlyCareerPayments.current_and_future_subject_symbols(
+            claim_year: claim_year,
+            itt_year: itt_academic_year
+          ).empty?
         end
       end
     end

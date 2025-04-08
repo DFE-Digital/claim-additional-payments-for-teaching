@@ -54,7 +54,6 @@ module EligibilityCheckable
       indicated_ineligible_school?,
       supply_teacher_lacking_either_long_contract_or_direct_employment?,
       poor_performance?,
-      no_selectable_subjects?,
       ineligible_cohort?,
       insufficient_teaching?
     ].any?
@@ -74,17 +73,6 @@ module EligibilityCheckable
 
   def poor_performance?
     subject_to_formal_performance_action? || subject_to_disciplinary_action?
-  end
-
-  def no_selectable_subjects?
-    if claim_year.blank? || itt_academic_year.blank?
-      false
-    else
-      policy.current_and_future_subject_symbols(
-        claim_year: claim_year,
-        itt_year: itt_academic_year
-      ).empty?
-    end
   end
 
   def ineligible_cohort?
