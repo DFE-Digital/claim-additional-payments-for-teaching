@@ -22,7 +22,7 @@ module Policies
           [translate("#{claim.policy.locale_key}.admin.email_address"), claim.email_address],
           [translate("#{claim.policy.locale_key}.admin.practitioner_email_address"), claim.practitioner_email_address],
           [translate("admin.mobile_number"), claim.mobile_number],
-          [translate("#{claim.policy.locale_key}.admin.nursery_name"), EligibleEyProvider.find_by(urn: claim.eligibility.nursery_urn).nursery_name],
+          [translate("#{claim.policy.locale_key}.admin.nursery_name"), claim.eligibility.eligible_ey_provider.nursery_name],
           [translate("#{claim.policy.locale_key}.admin.start_date"), formatted_date(claim.eligibility.start_date)],
           [translate("#{claim.policy.locale_key}.admin.paye_reference"), claim.paye_reference]
         ]
