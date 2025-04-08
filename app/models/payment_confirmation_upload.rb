@@ -28,6 +28,9 @@ class PaymentConfirmationUpload
 
       csv.rows.each do |row|
         @line_number += 1
+
+        next if row.fields.all? { |cell| cell.nil? }
+
         payment = fetch_payment_by_id(row["Payment ID"])
         if payment
           update_payment_fields(payment, confirmation, row)
