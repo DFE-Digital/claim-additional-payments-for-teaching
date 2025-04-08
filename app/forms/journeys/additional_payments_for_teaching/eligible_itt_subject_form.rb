@@ -49,23 +49,13 @@ module Journeys
       end
 
       def subject_symbols
-        return [] if answers.itt_academic_year&.none?
-
-        if answers.nqt_in_academic_year_after_itt
-          EligibilityChecker.new(journey_session: journey_session)
-            .potentially_still_eligible.map do |policy|
-              policy.current_and_future_subject_symbols(
-                claim_year: answers.policy_year,
-                itt_year: answers.itt_academic_year
-              )
-            end.flatten.uniq
-        elsif answers.policy_year.in?(Policies::TargetedRetentionIncentivePayments::POLICY_RANGE)
-          # they get the standard, unchanging Targeted Retention Incentive subject set because they won't have qualified in time for ECP by 2022/2023
-          # and they won't have given an ITT year
-          Policies::TargetedRetentionIncentivePayments.fixed_subject_symbols
-        else
-          []
-        end
+        EligibilityChecker.new(journey_session: journey_session)
+          .potentially_still_eligible.map do |policy|
+            policy.current_and_future_subject_symbols(
+              claim_year: answers.policy_year,
+              itt_year: answers.itt_academic_year
+            )
+          end.flatten.uniq.sort
       end
 
       def save
