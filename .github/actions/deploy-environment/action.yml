@@ -51,15 +51,6 @@ runs:
         project_id: claim-additional-payments
         workload_identity_provider: projects/638192024625/locations/global/workloadIdentityPools/claim-additional-payments-for-te/providers/claim-additional-payments-for-te
 
-    - name: Prepare database
-      if: ${{ inputs.prepare-database }}
-      shell: bash
-      run: |
-        make ci ${{ inputs.environment }} get-cluster-credentials
-        kubectl exec -n ${{ inputs.aks-namespace }} deployment/${{ inputs.aks-deployment }}-worker -- sh -c "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/prepare-database"
-      env:
-        PR_NUMBER: ${{ inputs.pull-request-number }}
-
     - name: Terraform Apply
       shell: bash
       run: |
@@ -83,3 +74,12 @@ runs:
 
     - name: Set kubectl
       uses: DFE-Digital/github-actions/set-kubectl@master
+
+    - name: Prepare database
+      if: ${{ inputs.prepare-database }}
+      shell: bash
+      run: |
+        make ci ${{ inputs.environment }} get-cluster-credentials
+        kubectl exec -n ${{ inputs.aks-namespace }} deployment/${{ inputs.aks-deployment }}-worker -- sh -c "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/prepare-database"
+      env:
+        PR_NUMBER: ${{ inputs.pull-request-number }}
