@@ -36,6 +36,21 @@ module Policies
         end
       end
 
+      def ineligible?
+        [
+          policy_closed?,
+          indicated_ineligible_school?,
+          supply_teacher_lacking_either_long_contract_or_direct_employment?,
+          poor_performance?,
+          ineligible_cohort?,
+          insufficient_teaching?,
+          trainee_teacher?,
+          induction_not_completed? && !any_future_policy_years?,
+          itt_subject_ineligible_now_and_in_the_future?,
+          no_selectable_subjects?
+        ].any?
+      end
+
       private
 
       def trainee_teacher?
@@ -55,10 +70,6 @@ module Policies
           claim_year: claim_year,
           itt_year: itt_academic_year
         ).include?(itt_subject.to_sym)
-      end
-
-      def specific_ineligible_attributes?
-        trainee_teacher? || (induction_not_completed? && !any_future_policy_years?) || itt_subject_ineligible_now_and_in_the_future? || no_selectable_subjects?
       end
 
       def itt_subject_ineligible_now_and_in_the_future?
