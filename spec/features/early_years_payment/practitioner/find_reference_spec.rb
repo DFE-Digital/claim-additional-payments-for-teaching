@@ -36,14 +36,14 @@ RSpec.feature "Early years find reference" do
     fill_in "Enter your claim reference", with: "invalid"
     click_button "Submit"
 
-    expect(page).to have_content "This claim reference isn’t correct."
+    expect(page).to have_content "This claim reference is not correct"
     click_link "Try again"
 
     expect(page).to have_content "Enter your claim reference"
     fill_in "Enter your claim reference", with: "also invalid"
     click_button "Submit"
 
-    expect(page).to have_content "This claim reference isn’t correct."
+    expect(page).to have_content "This claim reference is not correct"
     click_link "Back"
 
     expect(page).to have_content "Enter your claim reference"

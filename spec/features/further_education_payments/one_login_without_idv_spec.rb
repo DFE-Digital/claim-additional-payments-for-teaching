@@ -124,7 +124,7 @@ RSpec.feature "Further education payments" do
 
     session = Journeys::FurtherEducationPayments::Session.last
 
-    expect(page).to have_content("You have successfully signed in to GOV.UK One Login")
+    expect(page).to have_content("You’ve successfully signed in to GOV.UK One Login")
     expect {
       click_button "Continue"
     }.to change { session.reload.answers.onelogin_idv_return_codes }.from([]).to(["ABC"])

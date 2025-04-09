@@ -699,16 +699,18 @@ RSpec.describe "Admin EY tasks" do
     fill_in "claim-one-time-password-field", with: otp_in_mail_sent
     click_on "Confirm"
 
-    expect(page).to have_content("Would you like to provide your mobile number?")
+    expect(page).to have_content("Can we use your mobile number to contact you?")
     choose "No"
     click_on "Continue"
 
-    fill_in "Name on your account", with: "#{claim.first_name} #{claim.surname}"
+    fill_in "Name on the account", with: "#{claim.first_name} #{claim.surname}"
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "87654321"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
+    expect(page).to have_text(
+      "How is your gender recorded on your employer’s payroll system?"
+    )
     choose payroll_gender
     click_on "Continue"
 

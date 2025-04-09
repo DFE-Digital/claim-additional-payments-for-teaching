@@ -23,8 +23,12 @@
           size: heading_size
         },
         hint: -> do %>
-          <p><%= @form.t("hint1") %></p>
-          <p><%= @form.t("hint2") %></p>
+          <p class="govuk-body">
+            <%= @form.t("hint1") %>
+          </p>
+          <p class="govuk-body">
+            <%= @form.t("hint2") %>
+          </p>
         <% end %>
       <%= f.hidden_field :resend, value: params[:resend] %>
 

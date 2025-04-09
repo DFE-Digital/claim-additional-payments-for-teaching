@@ -6,16 +6,26 @@
       <%= f.govuk_error_summary %>
 
       <% caption_settings = { text: t("questions.personal_details"), size: "xl" } if show_caption %>
-      <%= f.govuk_collection_radio_buttons :provide_mobile_number, @form.radio_options, :id, :name,
+
+      <%= f.govuk_collection_radio_buttons(
+        :provide_mobile_number,
+        @form.radio_options,
+        :id,
+        :name,
+        inline: true,
         caption: caption_settings,
         legend: {
-          text: t("questions.provide_mobile_number"),
+          text: @form.t("question", default: t("questions.provide_mobile_number")),
           tag: "h1",
           size: "l"
         },
         hint: {
-          text: "We will only use this number if we are unable to contact you via email. It may slow down your application if we are unable to reach you."
-        } %>
+          text: @form.t(
+            "hint_html",
+            default: "We will only use this number if we are unable to contact you via email. It may slow down your application if we are unable to reach you."
+          ).html_safe
+        }
+      ) %>
 
       <%= f.govuk_submit "Continue" %>
     <% end %>

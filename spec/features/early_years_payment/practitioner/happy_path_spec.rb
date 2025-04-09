@@ -29,10 +29,10 @@ RSpec.feature "Early years payment practitioner" do
 
     mock_one_login_idv
 
-    expect(page).to have_content "You have successfully signed in to GOV.UK One Login"
+    expect(page).to have_content "You’ve successfully signed in to GOV.UK One Login"
     click_on "Continue"
 
-    expect(page).to have_content "You have successfully proved your identity with GOV.UK One Login"
+    expect(page).to have_content "You’ve successfully proved your identity with GOV.UK One Login"
     click_on "Continue"
 
     expect(page).to have_content("Personal details")
@@ -81,10 +81,10 @@ RSpec.feature "Early years payment practitioner" do
 
     mock_one_login_idv
 
-    expect(page).to have_content "You have successfully signed in to GOV.UK One Login"
+    expect(page).to have_content "You’ve successfully signed in to GOV.UK One Login"
     click_on "Continue"
 
-    expect(page).to have_content "You have successfully proved your identity with GOV.UK One Login"
+    expect(page).to have_content "You’ve successfully proved your identity with GOV.UK One Login"
     click_on "Continue"
 
     expect(page).to have_content("Personal details")
@@ -128,17 +128,19 @@ RSpec.feature "Early years payment practitioner" do
     fill_in "claim-one-time-password-field", with: otp_in_mail_sent
     click_on "Confirm"
 
-    expect(page).to have_content("Would you like to provide your mobile number?")
+    expect(page).to have_content("Can we use your mobile number to contact you?")
     choose "No"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: "personal bank account"))
-    fill_in "Name on your account", with: "Jo Bloggs"
+    expect(page).to have_text("Your personal bank account details")
+    fill_in "Name on the account", with: "Jo Bloggs"
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "87654321"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
+    expect(page).to have_text(
+      "How is your gender recorded on your employer’s payroll system?"
+    )
     choose "Female"
     click_on "Continue"
 

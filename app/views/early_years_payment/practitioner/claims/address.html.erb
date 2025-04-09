@@ -1,0 +1,28 @@
+<% content_for(:page_title, page_title(t("forms.address.questions.your_address"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<% if journey_session.answers.ordnance_survey_error %>
+  <%= govuk_notification_banner(title_text: "Notice") { |nb| nb.with_heading(text: "Please enter your address manually") } %>
+<% end %>
+
+<% if !journey_session.answers.postcode %>
+  <% @backlink_path = claim_path(current_journey_routing_name, "postcode-search") %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_fieldset legend: {
+        text: t("forms.address.questions.your_address"),
+        tag: "h1",
+        size: "l"
+      } do %>
+        <%= render "address_fields", f: f %>
+      <% end %>
+
+      <%= f.govuk_submit "Continue" %>
+    <% end %>
+  </div>
+</div>
+
