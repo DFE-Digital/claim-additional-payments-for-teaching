@@ -15,7 +15,7 @@ RSpec.describe PaymentMailer, type: :mailer do
         end
 
         it "sets the GOV.UK Notify reply_to_id according to the policy" do
-          expect(mail["reply_to_id"]&.first&.value).to eql(policy.notify_reply_to_id)
+          expect(mail.reply_to_id).to eql(policy.notify_reply_to_id)
         end
 
         it "mentions the type of claim in the subject" do
@@ -130,7 +130,7 @@ RSpec.describe PaymentMailer, type: :mailer do
         end
 
         it "sets the GOV.UK Notify reply_to_id to be the generic service email address" do
-          expect(mail["reply_to_id"].first.value).to eql(ApplicationMailer::GENERIC_NOTIFY_REPLY_TO_ID)
+          expect(mail.reply_to_id).to eql(ApplicationMailer::GENERIC_NOTIFY_REPLY_TO_ID)
         end
 
         it "greets the claimant in the body" do

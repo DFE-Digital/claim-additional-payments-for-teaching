@@ -11,8 +11,8 @@ RSpec::Matchers.define :have_received_email do |template_id, expected_personalis
     end.compact
 
     personalisation_fields = matching_templates.map do |email|
-      email["personalisation"]
-    end.compact.map(&:unparsed_value)
+      email.personalisation
+    end.compact
 
     personalisation_fields.any? do |personalisation|
       expected_personalisation.all? do |key, value|
@@ -26,7 +26,7 @@ RSpec::Matchers.define :have_received_email do |template_id, expected_personalis
       <<-TEXT.squish
         To: #{mail.to} -
         template id: #{mail.try(:template_id)} -
-        personalisation: #{mail["personalisation"]}"
+        personalisation: #{mail.personalisation}"
       TEXT
     end
 

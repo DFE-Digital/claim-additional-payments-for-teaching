@@ -26,8 +26,7 @@ class PaymentMailer < ApplicationMailer
       NOTIFY_TEMPLATE_ID,
       to: @payment.email_address,
       subject: "We’re paying your claim #{claim_description}, reference number: #{claim.reference}",
-      reply_to_id: claim.policy.notify_reply_to_id,
-      template_name: :payment_breakdown_confirmation
+      reply_to_id: claim.policy.notify_reply_to_id
     )
   end
 
@@ -39,8 +38,7 @@ class PaymentMailer < ApplicationMailer
       NOTIFY_TEMPLATE_ID,
       to: @payment.email_address,
       subject: "We’re paying your additional payments for teaching, reference numbers: #{@payment.claims.map(&:reference).join(", ")}",
-      reply_to_id: GENERIC_NOTIFY_REPLY_TO_ID,
-      template_name: :payment_breakdown_confirmation
+      reply_to_id: GENERIC_NOTIFY_REPLY_TO_ID
     )
   end
 end

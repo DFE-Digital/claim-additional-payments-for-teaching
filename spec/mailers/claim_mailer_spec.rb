@@ -37,22 +37,21 @@ RSpec.describe ClaimMailer, type: :mailer do
     end
 
     it "sets the GOV.UK Notify reply_to_id according to the policy" do
-      expect(mail["reply_to_id"]&.value).to eql(policy.notify_reply_to_id)
+      expect(mail.reply_to_id).to eql(policy.notify_reply_to_id)
     end
 
     it "includes a personalisation key for claim reference (ref_number)" do
-      expect(mail[:personalisation].decoded).to include("ref_number")
-      expect(mail[:personalisation].decoded).to include(claim.reference)
+      expect(mail.personalisation[:ref_number]).to eql(claim.reference)
     end
 
     it "includes a personalisation key for 'first_name'" do
-      expect(mail[:personalisation].decoded).to include("{first_name: \"Jo\"")
+      expect(mail.personalisation[:first_name]).to eql("Jo")
       expect(mail.body).to be_empty
     end
 
     it "includes a personalisation key for 'support_email_address'" do
       support_email_address = I18n.t("#{claim.policy.locale_key}.support_email_address")
-      expect(mail[:personalisation].decoded).to include("support_email_address: \"#{support_email_address}\"")
+      expect(mail.personalisation[:support_email_address]).to eql(support_email_address)
     end
   end
 
@@ -147,15 +146,15 @@ RSpec.describe ClaimMailer, type: :mailer do
           end
 
           it "passes common fields as personalisation keys" do
-            expect(mail[:personalisation].unparsed_value).to include(expected_common_keys)
+            expect(mail.personalisation).to include(expected_common_keys)
           end
 
           it "passes rejected reasons as personalisation keys" do
-            expect(mail[:personalisation].unparsed_value).to include(expected_rejected_reasons_keys)
+            expect(mail.personalisation).to include(expected_rejected_reasons_keys)
           end
 
           it "does not pass any other personalisation keys" do
-            expect(mail[:personalisation].unparsed_value).to match(all_expected_keys)
+            expect(mail.personalisation).to eql(all_expected_keys)
           end
         end
 
@@ -396,7 +395,7 @@ RSpec.describe ClaimMailer, type: :mailer do
     before { create(:journey_configuration, :early_years_payment_provider_start) }
 
     it "has personalisation keys for: magic link" do
-      expect(mail[:personalisation].decoded).to eq("{magic_link: \"https://#{ENV["CANONICAL_HOSTNAME"]}/early-years-payment-provider/claim?code=123124&email=#{email}\"}")
+      expect(mail.personalisation[:magic_link]).to eql("https://#{ENV["CANONICAL_HOSTNAME"]}/early-years-payment-provider/claim?code=123124&email=#{email}")
       expect(mail.body).to be_empty
     end
   end
@@ -421,7 +420,7 @@ RSpec.describe ClaimMailer, type: :mailer do
         complete_claim_url: "https://www.example.com/early-years-payment-practitioner/find-reference?skip_landing_page=true"
       }
 
-      expect(mail[:personalisation].unparsed_value).to eql(expected_personalisation)
+      expect(mail.personalisation).to eql(expected_personalisation)
       expect(mail.body).to be_empty
     end
   end

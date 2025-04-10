@@ -172,7 +172,7 @@ RSpec.feature "targeted_retention_incentive payments claims" do
     expect(page).to have_text("Enter the 6-digit passcode")
 
     mail = ActionMailer::Base.deliveries.last
-    otp_in_mail_sent = mail[:personalisation].decoded.scan(/\b[0-9]{6}\b/).first
+    otp_in_mail_sent = mail.personalisation[:one_time_password]
 
     # - One time password wrong
     fill_in "claim-one-time-password-field", with: "000000"

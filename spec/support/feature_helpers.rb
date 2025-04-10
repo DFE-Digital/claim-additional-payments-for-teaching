@@ -126,8 +126,10 @@ module FeatureHelpers
   end
 
   def get_otp_from_email
-    ActionMailer::Base.deliveries
-      .last[:personalisation].decoded.scan(/\b[0-9]{6}\b/).first
+    ActionMailer::Base
+      .deliveries
+      .last
+      .personalisation[:one_time_password]
   end
 
   def skip_tid

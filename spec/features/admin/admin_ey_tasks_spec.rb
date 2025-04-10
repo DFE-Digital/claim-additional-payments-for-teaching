@@ -584,7 +584,7 @@ RSpec.describe "Admin EY tasks" do
     click_on "Submit"
 
     mail = ActionMailer::Base.deliveries.last
-    magic_link = mail[:personalisation].unparsed_value[:magic_link]
+    magic_link = mail.personalisation[:magic_link]
 
     visit magic_link
 
@@ -695,7 +695,7 @@ RSpec.describe "Admin EY tasks" do
 
     expect(page).to have_content("Enter the 6-digit passcode")
     mail = ActionMailer::Base.deliveries.last
-    otp_in_mail_sent = mail[:personalisation].unparsed_value[:one_time_password]
+    otp_in_mail_sent = mail.personalisation[:one_time_password]
     fill_in "claim-one-time-password-field", with: otp_in_mail_sent
     click_on "Confirm"
 

@@ -4,7 +4,7 @@ RSpec.feature "Early Years Payments Student Loan Plan" do
   include ActionView::Helpers::NumberHelper
 
   let(:claim) { Claim.last }
-  let(:magic_link) { mail[:personalisation].unparsed_value[:magic_link] }
+  let(:magic_link) { mail.personalisation[:magic_link] }
   let(:mail) { ActionMailer::Base.deliveries.last }
 
   scenario "student loan data does not exist on submission" do

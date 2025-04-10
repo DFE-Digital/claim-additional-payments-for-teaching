@@ -33,7 +33,7 @@ RSpec.feature "Early years payment practitioner email address" do
     fill_in "claim-email-address-field", with: "johndoe@example.com"
     click_on "Continue"
     mail = ActionMailer::Base.deliveries.last
-    otp_in_mail_sent = mail[:personalisation].unparsed_value[:one_time_password]
+    otp_in_mail_sent = mail.personalisation[:one_time_password]
     fill_in "claim-one-time-password-field", with: otp_in_mail_sent
     click_on "Confirm"
 

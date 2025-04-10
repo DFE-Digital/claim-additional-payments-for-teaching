@@ -93,7 +93,7 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
 
     # - One time password
     mail = ActionMailer::Base.deliveries.last
-    otp_in_mail_sent = mail[:personalisation].decoded.scan(/\b[0-9]{6}\b/).first
+    otp_in_mail_sent = mail.personalisation[:one_time_password]
 
     # - clear and enter correct OTP
     fill_in "claim-one-time-password-field", with: otp_in_mail_sent

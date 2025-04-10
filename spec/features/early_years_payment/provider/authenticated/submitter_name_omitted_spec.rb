@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Early years payment provider" do
   let(:email_address) { "johndoe@example.com" }
   let(:mail) { ActionMailer::Base.deliveries.last }
-  let(:magic_link) { mail[:personalisation].unparsed_value[:magic_link] }
+  let(:magic_link) { mail.personalisation[:magic_link] }
   let!(:nursery) { create(:eligible_ey_provider, primary_key_contact_email_address: email_address) }
 
   scenario "when the submitter name is omitted on the check-your-answers page" do
