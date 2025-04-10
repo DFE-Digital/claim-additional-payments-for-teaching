@@ -29,7 +29,7 @@ RSpec.feature "Early years payment practitioner" do
 
     click_button "Sign out"
 
-    expect(page).to have_content "Enter your claim reference"
+    expect(page).to have_content "You have signed out"
     expect(page).not_to have_button "Sign out"
   end
 end
