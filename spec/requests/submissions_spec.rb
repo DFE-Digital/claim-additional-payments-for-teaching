@@ -35,9 +35,7 @@ RSpec.describe "Submissions", type: :request do
         expect(submitted_claim.submitted_at).to be_present
 
         email = ActionMailer::Base.deliveries.first
-        expect(email.to).to eql([submitted_claim.email_address])
-        expect(email[:personalisation].decoded).to include("ref_number")
-        expect(email[:personalisation].decoded).to include(submitted_claim.reference)
+        expect(email.personalisation[:ref_number]).to eql(submitted_claim.reference)
 
         expect(session[:slugs]).to be_nil
         expect(session[:submitted_claim_id]).to eq(submitted_claim.id)

@@ -4,7 +4,7 @@ RSpec.feature "Early years payment practitioner" do
   let(:email_address) { "johndoe@example.com" }
   let(:journey_session) { Journeys::EarlyYearsPayment::Provider::Authenticated::Session.last }
   let(:mail) { ActionMailer::Base.deliveries.last }
-  let(:magic_link) { mail[:personalisation].unparsed_value[:magic_link] }
+  let(:magic_link) { mail.personalisation[:magic_link] }
   let!(:nursery) { create(:eligible_ey_provider, primary_key_contact_email_address: email_address, nursery_name: "Acme Nursery Ltd") }
   let(:claim) { Claim.last }
 
@@ -124,7 +124,7 @@ RSpec.feature "Early years payment practitioner" do
 
     expect(page).to have_content("Enter the 6-digit passcode")
     mail = ActionMailer::Base.deliveries.last
-    otp_in_mail_sent = mail[:personalisation].unparsed_value[:one_time_password]
+    otp_in_mail_sent = mail.personalisation[:one_time_password]
     fill_in "claim-one-time-password-field", with: otp_in_mail_sent
     click_on "Confirm"
 

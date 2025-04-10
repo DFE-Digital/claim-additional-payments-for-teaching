@@ -4,7 +4,7 @@ RSpec.feature "Early years payment provider ineligible returner" do
   let(:email_address) { "johndoe@example.com" }
   let(:journey_session) { Journeys::EarlyYearsPayment::Provider::Authenticated::Session.last }
   let(:mail) { ActionMailer::Base.deliveries.last }
-  let(:magic_link) { mail[:personalisation].unparsed_value[:magic_link] }
+  let(:magic_link) { mail.personalisation[:magic_link] }
   let!(:nursery) { create(:eligible_ey_provider, primary_key_contact_email_address: email_address) }
 
   scenario "returner worked with children in a permanent position" do

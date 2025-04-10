@@ -48,7 +48,7 @@ def when_personal_details_entered_up_to_email_address
   click_on "Continue"
 
   mail = ActionMailer::Base.deliveries.last
-  otp_in_mail_sent = mail[:personalisation].unparsed_value[:one_time_password]
+  otp_in_mail_sent = mail.personalisation[:one_time_password]
   fill_in "claim-one-time-password-field", with: otp_in_mail_sent
   click_on "Confirm"
 end
