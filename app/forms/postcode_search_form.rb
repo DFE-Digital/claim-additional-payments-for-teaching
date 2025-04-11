@@ -3,7 +3,7 @@ class PostcodeSearchForm < Form
   attribute :skip_postcode_search, :boolean
 
   validates :postcode,
-    presence: {message: "Enter a real postcode"},
+    presence: {message: "Enter a real postcode, for example NE1 6EE"},
     length: {maximum: 11, message: "Postcode must be 11 characters or less"},
     if: -> { !skip_postcode_search? }
 
