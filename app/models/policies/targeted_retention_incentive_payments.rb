@@ -69,10 +69,12 @@ module Policies
     # NOOP as PERSONAL_DATA_ATTRIBUTES_TO_RETAIN_FOR_EXTENDED_PERIOD is empty
     EXTENDED_PERIOD_END_DATE = ->(start_of_academic_year) {}
 
-    def tri_only_journey_enabled?
-      !!Journeys::Configuration.find_by(
-        routing_name: Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME
-      )&.open_for_submissions?
+    def policies
+      if FeatureFlag.enabled?(:tri_only_journey)
+        POLICIES
+      else
+        []
+      end
     end
 
     def notify_reply_to_id

@@ -28,6 +28,10 @@ module Journeys
       Configuration.find(self::ROUTING_NAME)
     end
 
+    def policies
+      self::POLICIES
+    end
+
     def start_page_url
       slug_sequence.start_page_url
     end

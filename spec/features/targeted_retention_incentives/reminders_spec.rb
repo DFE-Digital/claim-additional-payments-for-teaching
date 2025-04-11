@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "Targeted retention incentives reminders" do
+  before { FeatureFlag.enable!(:tri_only_journey) }
+
   context "when a trainee teacher" do
     it "allows the user to set a reminder" do
       policy_end_year = Policies::TargetedRetentionIncentivePayments::POLICY_END_YEAR
@@ -9,7 +11,7 @@ RSpec.describe "Targeted retention incentives reminders" do
 
       create(
         :journey_configuration,
-        :targeted_retention_incentive_payments,
+        :targeted_retention_incentive_payments_only,
         teacher_id_enabled: true,
         current_academic_year: current_academic_year
       )
@@ -56,7 +58,7 @@ RSpec.describe "Targeted retention incentives reminders" do
       end
 
       mail = ActionMailer::Base.deliveries.last
-      otp_in_mail_sent = mail[:personalisation].unparsed_value[:one_time_password]
+      otp_in_mail_sent = mail.personalisation[:one_time_password]
 
       fill_in "Enter the 6-digit passcode", with: otp_in_mail_sent
       click_on "Confirm"

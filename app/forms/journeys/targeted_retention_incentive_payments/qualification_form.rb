@@ -44,7 +44,7 @@ module Journeys
           Option.new(
             id: option,
             name: t("options.#{option}"),
-            hint: try_t("hints.#{option}")
+            hint: t("hints.#{option}", default: nil)
           )
         end
       end

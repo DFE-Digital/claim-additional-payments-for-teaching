@@ -30,6 +30,14 @@ module Journeys
       }
     }.freeze
 
+    def policies
+      if FeatureFlag.enabled?(:tri_only_journey)
+        [Policies::EarlyCareerPayments]
+      else
+        POLICIES
+      end
+    end
+
     def set_a_reminder?(itt_academic_year:, policy:)
       policy_year = configuration.current_academic_year
       return false if policy_year >= policy::POLICY_END_YEAR
