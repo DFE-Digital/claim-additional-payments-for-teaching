@@ -31,7 +31,7 @@ module Journeys
       end
 
       def available_subjects
-        @available_subjects ||= subject_symbols.map(&:to_s)
+        @available_subjects ||= subject_symbols.map(&:to_s).sort
       end
 
       def available_options
@@ -49,13 +49,26 @@ module Journeys
       end
 
       def subject_symbols
-        EligibilityChecker.new(journey_session: journey_session)
-          .potentially_still_eligible.map do |policy|
-            policy.current_and_future_subject_symbols(
-              claim_year: answers.policy_year,
-              itt_year: answers.itt_academic_year
-            )
-          end.flatten.uniq.sort
+        return @subject_symbols if defined?(@subject_symbols)
+
+        policies = EligibilityChecker.new(
+          journey_session: journey_session
+        ).potentially_still_eligible
+
+        @subject_symbols = Set.new
+
+        if policies.include?(Policies::EarlyCareerPayments)
+          @subject_symbols += Policies::EarlyCareerPayments.current_and_future_subject_symbols(
+            claim_year: answers.policy_year,
+            itt_year: answers.itt_academic_year
+          )
+        end
+
+        if policies.include?(Policies::TargetedRetentionIncentivePayments)
+          @subject_symbols += Policies::TargetedRetentionIncentivePayments.fixed_subject_symbols
+        end
+
+        @subject_symbols.sort
       end
 
       def save
