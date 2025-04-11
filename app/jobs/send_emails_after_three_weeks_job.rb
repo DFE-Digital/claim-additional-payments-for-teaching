@@ -2,9 +2,7 @@
 # are three weeks old, and sends an email saying we are still in the process of
 # deciding.
 
-class SendEmailsAfterThreeWeeksJob < CronJob
-  self.cron_expression = "0 8 * * *"
-
+class SendEmailsAfterThreeWeeksJob < ApplicationJob
   def perform
     Rails.logger.info "Sending three-week emails to #{three_week_old_undecided_claims.count} undecided claims from the database"
     three_week_old_undecided_claims.each do |claim|

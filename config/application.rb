@@ -50,8 +50,6 @@ module DfeTeachersPaymentService
       g.orm :active_record, primary_key_type: :uuid
     end
 
-    config.active_job.queue_adapter = :delayed_job
-
     # Set a css_compressor so sassc-rails does not overwrite the compressor
     config.assets.css_compressor = nil
 
@@ -77,5 +75,8 @@ module DfeTeachersPaymentService
     config.email_max_length = 129
 
     config.active_support.to_time_preserves_timezone = :offset
+
+    config.mission_control.jobs.base_controller_class = "Admin::MissionControlController"
+    config.mission_control.jobs.http_basic_auth_enabled = false
   end
 end

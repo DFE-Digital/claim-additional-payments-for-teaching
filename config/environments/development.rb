@@ -91,4 +91,6 @@ Rails.application.configure do
   config.log_level = :debug                       # Or :info
   config.log_format = :color                      # Console colorised non-json output
   config.semantic_logger.backtrace_level = :debug # Show file and line number (expensive: not for production)
+
+  config.active_job.queue_adapter = :async
 end

@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+require_relative "../config/environment"
+require "solid_queue/cli"
+
+continue = false
+
+until continue == true
+  ActiveRecord::Base.configurations.configs_for(env_name: Rails.env).each do |db_config|
+    ActiveRecord::Base.establish_connection(db_config.configuration_hash)
+
+    connection = ActiveRecord::Base.connection
+    schema_migration = ActiveRecord::SchemaMigration.new(connection.pool)
+
+    if schema_migration.table_exists? && ActiveRecord::Base.connection.table_exists?("solid_queue_semaphores")
+      continue = true
+    end
+  rescue ActiveRecord::NoDatabaseError
+    # noop
+  end
+
+  puts "Solid queue wating for database..."
+  sleep(5)
+end
+
+SolidQueue::Cli.start(ARGV)

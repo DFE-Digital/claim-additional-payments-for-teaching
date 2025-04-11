@@ -1,11 +1,9 @@
 module FurtherEducationPayments
-  class ProviderVerificationChaseEmailJob < CronJob
+  class ProviderVerificationChaseEmailJob < ApplicationJob
     CHASE_INTERVALS = {
       1 => 2.weeks,
       2 => 2.weeks
     }.freeze
-
-    self.cron_expression = "0 8 * * *" # Daily 8am
 
     queue_as :user_data
 
