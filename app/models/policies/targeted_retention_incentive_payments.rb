@@ -127,6 +127,9 @@ module Policies
     def subject_symbols(claim_year:, itt_year:)
       return [] unless POLICY_RANGE.cover?(claim_year)
 
+      # If they're a trainee teacher, they won't have an itt_year
+      return fixed_subject_symbols if itt_year.nil?
+
       previous_five_years = (claim_year - 5)...claim_year
 
       if previous_five_years.cover?(itt_year)

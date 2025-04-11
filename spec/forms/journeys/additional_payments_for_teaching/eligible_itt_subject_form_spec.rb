@@ -13,6 +13,14 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
 
   let(:journey) { Journeys::AdditionalPaymentsForTeaching }
 
+  let(:current_school) do
+    create(
+      :school,
+      :early_career_payments_eligible,
+      :targeted_retention_incentive_payments_eligible
+    )
+  end
+
   let(:answers) do
     build(
       :additional_payments_answers,
@@ -20,10 +28,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
         :additional_payments_answers,
         trainee_teacher,
         itt_academic_year: itt_academic_year,
-        current_school_id: create(
-          :school,
-          :early_career_payments_eligible
-        ).id
+        current_school_id: current_school.id
       )
     )
   end
@@ -65,7 +70,7 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
             :additional_payments_answers,
             :with_qualification,
             itt_academic_year: itt_academic_year,
-            current_school_id: create(:school, :early_career_payments_eligible).id
+            current_school_id: create(:school, :targeted_retention_incentive_payments_eligible).id
           )
         )
       end
@@ -284,7 +289,8 @@ RSpec.describe Journeys::AdditionalPaymentsForTeaching::EligibleIttSubjectForm, 
     context "when qualified teacher" do
       before do
         journey_session.answers.assign_attributes(
-          nqt_in_academic_year_after_itt: true
+          nqt_in_academic_year_after_itt: true,
+          current_school_id: create(:school, :early_career_payments_eligible).id
         )
       end
 
