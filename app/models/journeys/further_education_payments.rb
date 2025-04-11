@@ -47,5 +47,9 @@ module Journeys
     def use_navigator?
       true
     end
+
+    def uses_reminders?
+      true
+    end
   end
 end

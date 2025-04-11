@@ -71,7 +71,7 @@ Rails.application.routes.draw do
       constraints: {resource_class: /reminders/},
       only: [:create, :show]
 
-    scope constraints: {journey: /further-education-payments|additional-payments/} do
+    scope constraints: {journey: %r{#{Journeys.all.select(&:uses_reminders?).map(&:routing_name).join("|")}}} do
       resources :reminders,
         only: [:show, :update],
         param: :slug,
