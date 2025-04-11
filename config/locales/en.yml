@@ -274,7 +274,7 @@ en:
         address_line_2: Building and street
         address_line_2_visually_hidden: line 2 of 2
         address_line_3: Town or city
-        address_line_4: County
+        address_line_4: County (optional)
         postcode: Postcode
       errors:
         address_line_1_blank: Enter a house number or name
@@ -282,7 +282,7 @@ en:
         address_line_3_blank: Enter a town or city
         address_line_max_chars: Address lines must be 100 characters or less
         address_format: Address lines cannot contain special characters
-        postcode_blank: Enter a real postcode
+        postcode_blank: Enter a real postcode, for example NE1 6EE
         postcode_max_chars: Postcode must be 11 characters or less
         postcode_format: Enter a postcode in the correct format
     select_email:
