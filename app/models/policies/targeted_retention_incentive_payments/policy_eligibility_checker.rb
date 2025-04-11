@@ -27,6 +27,34 @@ module Policies
         premium_payment_award&.award_amount
       end
 
+      def ineligible?
+        ineligibility_reason.present?
+      end
+
+      def ineligibility_reason
+        return :policy_closed if policy_closed?
+
+        return :school_ineligible if indicated_ineligible_school?
+
+        if supply_teacher_lacking_either_long_contract_or_direct_employment?
+          return :supply_teacher_contract_ineligible
+        end
+
+        return :poor_performance if poor_performance?
+
+        return :ineligible_cohort if ineligible_cohort?
+
+        return :insufficient_teaching if insufficient_teaching?
+
+        return :subject_invalid_for_tslr if indicated_ecp_only_itt_subject?
+
+        if ineligible_itt_subject_and_no_relevant_degree?
+          return :subject_and_degree_ineligible
+        end
+
+        :trainee_in_last_policy_year if trainee_in_last_policy_year?
+      end
+
       private
 
       def premium_payment_award
@@ -61,10 +89,6 @@ module Policies
         eligible_degree_subject?
       end
 
-      def specific_ineligible_attributes?
-        indicated_ecp_only_itt_subject? || ineligible_itt_subject_and_no_relevant_degree?
-      end
-
       def ineligible_itt_subject_and_no_relevant_degree?
         indicated_ineligible_itt_subject? && lacks_eligible_degree?
       end
@@ -75,6 +99,10 @@ module Policies
 
       def lacks_eligible_degree?
         eligible_degree_subject == false
+      end
+
+      def trainee_in_last_policy_year?
+        trainee_teacher? && claim_year == TargetedRetentionIncentivePayments::POLICY_END_YEAR
       end
     end
   end
