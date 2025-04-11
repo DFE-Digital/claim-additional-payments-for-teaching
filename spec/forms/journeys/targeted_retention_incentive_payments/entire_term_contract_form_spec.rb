@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Journeys::TargetedRetentionIncentivePayments::EntireTermContractForm, type: :model do
   before do
-    create(:journey_configuration, :targeted_retention_incentive_payments)
+    create(:journey_configuration, :targeted_retention_incentive_payments_only)
   end
 
   let(:params) do
