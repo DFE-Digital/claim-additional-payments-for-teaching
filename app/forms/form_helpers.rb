@@ -22,12 +22,6 @@ module FormHelpers
     I18n.t("#{i18n_namespace}.#{base_key}", default: base_key, **args)
   end
 
-  def try_t(key, args = {})
-    t(key, args)
-  rescue I18n::MissingTranslationData
-    nil
-  end
-
   private
 
   def i18n_form_namespace

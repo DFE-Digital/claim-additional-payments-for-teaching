@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "Targeted retention incentives ineligible paths" do
   include OmniauthMockHelper
 
-  before do
+  let!(:journey_configuration) do
     create(
       :journey_configuration,
       :targeted_retention_incentive_payments,
@@ -488,6 +488,49 @@ RSpec.describe "Targeted retention incentives ineligible paths" do
           "mathematics, or physics"
         )
       end
+    end
+  end
+
+  context "when a trainee teacher in the last policy year" do
+    it "is ineligible" do
+      # Complete the wizard in the last policy year
+      journey_configuration.update!(
+        current_academic_year: Policies::TargetedRetentionIncentivePayments::POLICY_END_YEAR
+      )
+
+      school = create(
+        :school,
+        :targeted_retention_incentive_payments_eligible
+      )
+
+      visit Journeys::TargetedRetentionIncentivePayments.start_page_url
+
+      click_on "Start now"
+
+      # sign-in-or-continue
+      click_on "Continue without signing in"
+
+      # current-school
+      fill_in "Which school do you teach at?", with: school.name
+      click_on "Continue"
+
+      # current-school part 2
+      choose school.name
+      click_on "Continue"
+
+      # nqt-in-academic-year-after-itt - select No (trainee teacher)
+      choose "No, I’m a trainee teacher"
+      click_on "Continue"
+
+      expect(page).to have_content("You are not eligible")
+
+      # See TargetedRetentionIncentivePayments POLICY_START_YEAR and
+      # POLICY_END_YEAR for where the dates come form.
+      expect(page).to have_content(
+        "your ITT course must have started (postgraduate) or finished " \
+        "(undergraduate) between the 2022 to 2023 and 2025 to 2026 years " \
+        "in chemistry, computing, mathematics, or physics."
+      )
     end
   end
 end

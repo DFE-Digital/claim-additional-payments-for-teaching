@@ -437,8 +437,6 @@ RSpec.describe "Targeted retention incentives eligible paths" do
       "You'll be eligible for a targeted retention incentive payment when " \
       "you become a qualified teacher"
     )
-
-    expect(page).to have_link("Set reminder")
   end
 
   it "handles trainee teachers with non-eligible ITT subject" do

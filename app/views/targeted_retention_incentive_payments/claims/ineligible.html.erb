@@ -19,6 +19,8 @@
       <%= render partial: "ineligible_cohort" %>
     <% when :subject_and_degree_ineligible %>
       <%= render partial: "subject_and_degree_ineligible" %>
+    <% when :trainee_in_last_policy_year %>
+      <%= render partial: "trainee_in_last_policy_year_ineligible" %>
     <% else %>
       <% fail "unknown ineligibility reason #{@form.ineligibility_reason}" %>
     <% end %>

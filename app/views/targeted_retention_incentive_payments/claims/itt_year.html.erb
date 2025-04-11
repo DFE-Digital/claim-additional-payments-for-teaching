@@ -23,7 +23,7 @@
           tag: "h1",
           size: "l"
         },
-        hint: { text: @form.try_t([:hint, @form.answers.qualification]) }
+        hint: { text: @form.t([:hint, @form.answers.qualification], default: nil) }
       ) do %>
         <% @form.radio_options.reject { it == @form.none_of_the_above }.each do |option| %>
           <%= f.govuk_radio_button(
