@@ -273,4 +273,36 @@ RSpec.describe School, type: :model do
       end
     end
   end
+
+  describe "enum_methods" do
+    context "when set by name" do
+      it "sets the string column" do
+        school = create(
+          :school,
+          phase: :secondary,
+          school_type_group: :free_schools,
+          school_type: :free_school
+        )
+
+        expect(school.phase_string).to eq("secondary")
+        expect(school.school_type_group_string).to eq("free_schools")
+        expect(school.school_type_string).to eq("free_school")
+      end
+    end
+
+    context "when set by value" do
+      it "sets the string column" do
+        school = create(
+          :school,
+          phase: 4,
+          school_type_group: 11,
+          school_type: 35
+        )
+
+        expect(school.phase_string).to eq("secondary")
+        expect(school.school_type_group_string).to eq("free_schools")
+        expect(school.school_type_string).to eq("free_school")
+      end
+    end
+  end
 end
