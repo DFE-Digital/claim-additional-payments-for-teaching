@@ -136,7 +136,7 @@ FactoryBot.define do
 
     trait :further_education do
       ukprn { rand(10_000_000..19_000_000) }
-      phase { 6 }
+      phase { :sixteen_plus }
     end
 
     trait :fe_eligible do

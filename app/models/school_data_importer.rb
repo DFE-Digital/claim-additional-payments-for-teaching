@@ -36,9 +36,9 @@ class SchoolDataImporter
     school.town = row.fetch("Town")
     school.county = row.fetch("County (name)")
     school.postcode = row.fetch("Postcode")
-    school.phase = row.fetch("PhaseOfEducation (code)").to_i
-    school.school_type_group = row.fetch("EstablishmentTypeGroup (code)").to_i
-    school.school_type = row.fetch("TypeOfEstablishment (code)").to_i
+    school.phase = School.phase_code_to_enum(row.fetch("PhaseOfEducation (code)").to_i)
+    school.school_type_group = School.school_type_group_code_to_enum(row.fetch("EstablishmentTypeGroup (code)").to_i)
+    school.school_type = School.school_type_code_to_enum(row.fetch("TypeOfEstablishment (code)").to_i)
     school.local_authority = local_authority
     school.local_authority_district = local_authority_district
     school.close_date = row.fetch("CloseDate")

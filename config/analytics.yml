@@ -239,9 +239,6 @@ shared:
     - phone_number
     - open_date
     - ukprn
-    - phase_string
-    - school_type_group_string
-    - school_type_string
   :support_tickets:
     - id
     - url
