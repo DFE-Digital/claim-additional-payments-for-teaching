@@ -15,7 +15,7 @@ class School < ApplicationRecord
   validates :school_type_group, presence: true
   validates :school_type, presence: true
 
-  scope :fe_only, -> { where(phase: 6) } # PhaseOfEducation == 16 plus
+  scope :fe_only, -> { where(phase: "sixteen_plus") }
 
   PHASES = {
     not_applicable: 0,
@@ -118,13 +118,9 @@ class School < ApplicationRecord
     academy_alternative_provision_sponsor_led
   ].freeze
 
-  enum :phase, PHASES
-  enum :school_type_group, SCHOOL_TYPE_GROUPS
-  enum :school_type, SCHOOL_TYPES
-
-  enum :phase_string, PHASE_STRINGS, prefix: true
-  enum :school_type_group_string, SCHOOL_TYPE_GROUP_STRINGS, prefix: true
-  enum :school_type_string, SCHOOL_TYPE_STRINGS, prefix: true
+  enum :phase, PHASE_STRINGS
+  enum :school_type_group, SCHOOL_TYPE_GROUP_STRINGS
+  enum :school_type, SCHOOL_TYPE_STRINGS
 
   scope :open, -> { where("(open_date IS NULL OR open_date <= ?) AND (close_date IS NULL OR close_date >= ?)", Date.current, Date.current) }
   scope :closed, -> { where.not("(open_date IS NULL OR open_date <= ?) AND (close_date IS NULL OR close_date >= ?)", Date.current, Date.current) }
@@ -151,6 +147,18 @@ class School < ApplicationRecord
     sql = sql.fe_only if fe_only
 
     sql
+  end
+
+  def self.phase_code_to_enum(code)
+    PHASES.invert[code]
+  end
+
+  def self.school_type_group_code_to_enum(code)
+    SCHOOL_TYPE_GROUPS.invert[code]
+  end
+
+  def self.school_type_code_to_enum(code)
+    SCHOOL_TYPES.invert[code]
   end
 
   def eligible_fe_provider(academic_year: AcademicYear.current)
@@ -214,45 +222,6 @@ class School < ApplicationRecord
       secondary_equivalent_special? ||
       secondary_equivalent_alternative_provision? ||
       secondary_equivalent_city_technology_college?
-  end
-
-  # NOTE - remove once string column is renamed
-  def phase=(value)
-    normalised_value = if value.is_a?(Integer)
-      self.class.phases.invert[value].to_s
-    else
-      value.to_s
-    end
-
-    self.phase_string = normalised_value
-
-    super
-  end
-
-  # NOTE - remove once string column is renamed
-  def school_type_group=(value)
-    normalised_value = if value.is_a?(Integer)
-      self.class.school_type_groups.invert[value].to_s
-    else
-      value.to_s
-    end
-
-    self.school_type_group_string = normalised_value
-
-    super
-  end
-
-  # NOTE - remove once string column is renamed
-  def school_type=(value)
-    normalised_value = if value.is_a?(Integer)
-      self.class.school_types.invert[value].to_s
-    else
-      value.to_s
-    end
-
-    self.school_type_string = normalised_value
-
-    super
   end
 
   private
