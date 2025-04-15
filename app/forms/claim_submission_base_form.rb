@@ -52,7 +52,7 @@ class ClaimSubmissionBaseForm
   end
 
   def eligibilities
-    @eligibilities ||= journey::POLICIES.map do |policy|
+    @eligibilities ||= journey.policies.map do |policy|
       policy::Eligibility.new.tap do |eligibility|
         set_eligibility_attributes(eligibility)
         calculate_award_amount(eligibility)

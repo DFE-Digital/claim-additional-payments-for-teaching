@@ -44,7 +44,7 @@ module Journeys
     end
 
     def selectable_itt_years_for_claim_year(claim_year)
-      POLICIES.flat_map do |policy|
+      policies.flat_map do |policy|
         policy.selectable_itt_years_for_claim_year(claim_year)
       end.uniq
     end
