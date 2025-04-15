@@ -27,7 +27,7 @@
         <%= t("early_years_payment_provider_authenticated.check_your_answers.statement") %>
       </p>
 
-      <%= f.govuk_text_field :provider_contact_name, label: { text: "Your full name" }, spellcheck: "false" %>
+      <%= f.govuk_text_field :provider_contact_name, label: { text: "Your full name" }, spellcheck: "false", autocomplete: "name" %>
 
       <%= f.govuk_submit t("early_years_payment_provider_authenticated.check_your_answers.btn_text") %>
     <% end %>

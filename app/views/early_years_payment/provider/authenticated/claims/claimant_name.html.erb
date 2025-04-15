@@ -13,9 +13,9 @@
         <%= @form.t(:hint) %>
       </div>
 
-      <%= f.govuk_text_field :first_name, label: { text: "First name" }, spellcheck: "false", autocomplete: "name" %>
+      <%= f.govuk_text_field :first_name, label: { text: "First name" }, spellcheck: "false", autocomplete: "given-name" %>
 
-      <%= f.govuk_text_field :surname, label: { text: "Last name" }, spellcheck: "false", autocomplete: "name" %>
+      <%= f.govuk_text_field :surname, label: { text: "Last name" }, spellcheck: "false", autocomplete: "family-name" %>
 
       <%= f.govuk_submit "Continue" %>
     <% end %>
