@@ -104,6 +104,10 @@ module Journeys
       self::ROUTING_NAME
     end
 
+    def policies
+      self::POLICIES
+    end
+
     private
 
     def all_forms

@@ -29,6 +29,6 @@ module Journeys
   end
 
   def for_policy(policy)
-    all.find { |journey| journey::POLICIES.include?(policy) }
+    all.find { |journey| journey.policies.include?(policy) }
   end
 end

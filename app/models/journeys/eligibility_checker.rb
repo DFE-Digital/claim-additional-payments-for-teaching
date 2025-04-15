@@ -80,7 +80,7 @@ module Journeys
     end
 
     def policies
-      Journeys.for_routing_name(journey_session.journey)::POLICIES
+      Journeys.for_routing_name(journey_session.journey).policies
     end
 
     def anything_eligible_now?
