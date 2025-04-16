@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/DFE-Digital/dfe-analytics.git
-  revision: f7df3171c79f36c5b90da5d63477a56ae3483899
-  tag: v1.15.4
+  revision: 53a373781df8ed73dbc8d42ffe31d40da8e284af
+  tag: v1.15.5
   specs:
-    dfe-analytics (1.15.4)
+    dfe-analytics (1.15.5)
       google-cloud-bigquery (~> 1.38)
       httparty (~> 0.21)
       multi_xml (~> 0.6.0)
@@ -130,7 +130,7 @@ GEM
       bigdecimal
       rexml
     crass (1.0.6)
-    csv (3.3.2)
+    csv (3.3.4)
     cuprite (0.15.1)
       capybara (~> 3.0)
       ferrum (~> 0.15.0)
@@ -201,7 +201,7 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    google-apis-bigquery_v2 (0.83.0)
+    google-apis-bigquery_v2 (0.86.0)
       google-apis-core (>= 0.15.0, < 2.a)
     google-apis-core (0.16.0)
       addressable (~> 2.5, >= 2.5.1)
@@ -211,7 +211,7 @@ GEM
       mutex_m
       representable (~> 3.0)
       retriable (>= 2.0, < 4.a)
-    google-cloud-bigquery (1.51.1)
+    google-cloud-bigquery (1.52.0)
       bigdecimal (~> 3.0)
       concurrent-ruby (~> 1.0)
       google-apis-bigquery_v2 (~> 0.71)
@@ -219,12 +219,13 @@ GEM
       google-cloud-core (~> 1.6)
       googleauth (~> 1.9)
       mini_mime (~> 1.0)
-    google-cloud-core (1.7.1)
+    google-cloud-core (1.8.0)
       google-cloud-env (>= 1.0, < 3.a)
       google-cloud-errors (~> 1.0)
-    google-cloud-env (2.2.1)
+    google-cloud-env (2.2.2)
+      base64 (~> 0.2)
       faraday (>= 1.0, < 3.a)
-    google-cloud-errors (1.4.0)
+    google-cloud-errors (1.5.0)
     google-logging-utils (0.1.0)
     google-protobuf (4.30.2)
       bigdecimal
@@ -240,7 +241,7 @@ GEM
       rake (>= 13)
     googleapis-common-protos-types (1.19.0)
       google-protobuf (>= 3.18, < 5.a)
-    googleauth (1.12.2)
+    googleauth (1.14.0)
       faraday (>= 1.0, < 3.a)
       google-cloud-env (~> 2.2)
       google-logging-utils (~> 0.1)
@@ -286,7 +287,7 @@ GEM
     hashie (5.0.0)
     html-attributes-utils (1.0.2)
       activesupport (>= 6.1.4.4)
-    httparty (0.22.0)
+    httparty (0.23.1)
       csv
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
