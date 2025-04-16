@@ -11,6 +11,12 @@ module Policies
         @answers = answers
       end
 
+      def status
+        result = super
+        raise "eligible_later scenario" if result == :eligible_later
+        result
+      end
+
       def policy
         Policies::TargetedRetentionIncentivePayments
       end
