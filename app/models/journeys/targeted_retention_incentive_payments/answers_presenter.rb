@@ -5,7 +5,6 @@ module Journeys
         [].tap do |a|
           a << current_school
           a << nqt_in_academic_year_after_itt
-          # a << induction_completed
           a << employed_as_supply_teacher
           a << has_entire_term_contract if journey_session.answers.employed_as_supply_teacher?
           a << employed_directly if journey_session.answers.employed_as_supply_teacher?
