@@ -2,6 +2,3 @@
 
 echo "Running migrations..."
 bundle exec rails db:setup_or_migrate
-
-echo "Scheduling jobs..."
-bundle exec rails jobs:schedule

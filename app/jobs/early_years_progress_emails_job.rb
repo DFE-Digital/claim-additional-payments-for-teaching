@@ -1,6 +1,4 @@
-class EarlyYearsProgressEmailsJob < CronJob
-  self.cron_expression = "0 8 * * *" # Every day at 08:00
-
+class EarlyYearsProgressEmailsJob < ApplicationJob
   def perform
     periods_after_submission = [2.months, 5.months]
     today = Date.today

@@ -89,6 +89,9 @@ gem "pagy"
 
 gem "ostruct"
 
+gem "solid_queue", "~> 1.1"
+gem "mission_control-jobs"
+
 group :development, :test do
   gem "pry"
   gem "rspec-rails"

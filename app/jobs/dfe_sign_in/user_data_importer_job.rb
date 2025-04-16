@@ -1,7 +1,5 @@
 module DfeSignIn
-  class UserDataImporterJob < CronJob
-    self.cron_expression = "0 2 * * *"
-
+  class UserDataImporterJob < ApplicationJob
     queue_as :user_data
 
     def perform

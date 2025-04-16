@@ -1,0 +1,39 @@
+production: &production
+  auto_approve_claims:
+    class: AutoApproveClaimsJob
+    schedule: "0 8 * * 1-5" # At 08:00 AM, Monday through Friday
+  daily_entity_table_check:
+    class: DailyEntityTableCheckJob
+    schedule: "30 0 * * *" # Every day at 00:30
+  delete_pii_from_old_claims:
+    class: DeletePersonalDataFromOldClaimsJob
+    schedule: "30 0 * * 0"
+  user_data_importer:
+    class: DfeSignIn::UserDataImporterJob
+    schedule: "0 2 * * *"
+  early_years_progress_emails:
+    class: EarlyYearsProgressEmailsJob
+    schedule: "0 8 * * *" # Every day at 08:00
+  provider_verification_chase_email:
+    class: FurtherEducationPayments::ProviderVerificationChaseEmailJob
+    schedule: "0 8 * * *" # Daily 8am
+  heartbeat:
+    class: HeartbeatJob
+    schedule: "* * * * *"
+  purge_unsubmitted_claims:
+    class: PurgeUnsubmittedClaimsJob
+    schedule: "0 0 * * *"
+  school_data_import:
+    class: SchoolDataImporterJob
+    schedule: "0 12 * * *"
+  send_emails_after_three_weeks:
+    class: SendEmailsAfterThreeWeeksJob
+    schedule: "0 8 * * *"
+  reports:
+    class: ReportsJob
+    schedule: "0 6 * * *" # 6AM daily
+  delete_file_uploads_and_downloads:
+    class: DeletePersonalDataFromOldClaimsJob
+    schedule: "0 22 31 8 *" # At 10:00 PM, 31st of August every year
+development:
+  <<: *production

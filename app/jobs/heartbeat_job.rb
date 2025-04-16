@@ -1,8 +1,6 @@
 require "net/http"
 
-class HeartbeatJob < CronJob
-  self.cron_expression = "* * * * *"
-
+class HeartbeatJob < ApplicationJob
   queue_as :heartbeat
 
   def perform
