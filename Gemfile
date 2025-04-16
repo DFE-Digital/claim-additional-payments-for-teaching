@@ -35,10 +35,6 @@ gem "omniauth-rails_csrf_protection"
 # ActionMailer support for GOV.UK Notify
 gem "mail-notify"
 
-# Database based asynchronous priority queue system
-gem "delayed_job_active_record"
-gem "delayed_cron_job"
-
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
@@ -59,9 +55,6 @@ gem "rails_semantic_logger"
 
 # Improved memory usage in downloading large files vs Net/HTTP
 gem "httpclient"
-
-# Allow delayed_job to spawn multiple processes
-gem "daemons"
 
 # Gov form builder to structure claims
 gem "govuk_design_system_formbuilder", "~> 5.9.0"
