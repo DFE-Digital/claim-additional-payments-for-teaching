@@ -41,20 +41,17 @@ jobs:
           echo "COMMIT_LINK=$COMMIT_LINK" >> $GITHUB_ENV
 
       - name: Notify Slack
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_CHANNEL: twd_payments_devs
-          SLACK_COLOR: '#3578e5'
-          SLACK_TITLE: 'Analytics Configuration Change Detected 🔍'
-          SLACK_MESSAGE: |
-            <@U033AJ0A12P>
-
-            *Commit:* <${{ env.COMMIT_LINK }}|${{ env.COMMIT_MSG }}>
-            *Author:* ${{ env.COMMIT_AUTHOR }}
-            *Branch:* ${{ github.ref_name }}
-
-            *Analytics Config Changes:*
-            ```diff
-            ${{ env.ANALYTICS_DIFF }}
-            ```
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+        uses: slackapi/slack-github-action@v2.0.0
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            text: |
+              <@U033AJ0A12P> Analytics Configuration Change Detected 🔍
+              *Commit:* <${{ env.COMMIT_LINK }}|${{ env.COMMIT_MSG }}>
+              *Author:* ${{ env.COMMIT_AUTHOR }}
+              *Branch:* ${{ github.ref_name }}
+              *Analytics Config Changes:*
+              ```diff
+              ${{ env.ANALYTICS_DIFF }}
+              ```
