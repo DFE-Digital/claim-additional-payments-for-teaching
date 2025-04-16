@@ -46,6 +46,10 @@ module Admin
       render "admin/auth/failure", status: :unauthorized unless service_operator_signed_in?
     end
 
+    def ensure_service_admin
+      render "admin/auth/failure", status: :unauthorized unless current_admin.is_service_admin?
+    end
+
     def update_last_seen_at
       session[:admin_last_seen_at] = Time.zone.now
     end

@@ -20,6 +20,12 @@ module RequestHelpers
     follow_redirect!
   end
 
+  def sign_in_with_admin(admin)
+    stub_dfe_sign_in_with_role(admin.role_codes, admin.dfe_sign_in_id)
+    post "/admin/auth/dfe"
+    follow_redirect!
+  end
+
   def set_slug_sequence_in_session(journey_session, slug)
     journey = Journeys.for_routing_name(journey_session.journey)
     slug_sequence = journey.slug_sequence.new(journey_session).slugs
