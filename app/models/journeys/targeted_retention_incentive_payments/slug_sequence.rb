@@ -1,7 +1,6 @@
 module Journeys
   module TargetedRetentionIncentivePayments
     class SlugSequence
-      # FIXME RL handle eligibile later
       ELIGIBILITY_SLUGS = [
         "sign-in-or-continue",
         "reset-claim",
