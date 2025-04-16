@@ -63,36 +63,34 @@ RSpec.describe "Admin payroll runs" do
     end
   end
 
-  context "when signed in as a payroll operator or a support agent" do
-    [DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
-      before do
-        sign_in_to_admin_with_role(role)
+  context "when signed in as a support agent" do
+    before do
+      sign_in_to_admin_with_role(DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
+    end
+
+    describe "admin_payroll_runs#new" do
+      it "returns a unauthorized response" do
+        get new_admin_payroll_run_path
+
+        expect(response).to have_http_status(:unauthorized)
       end
+    end
 
-      describe "admin_payroll_runs#new" do
-        it "returns a unauthorized response" do
-          get new_admin_payroll_run_path
+    describe "admin_payroll_runs#create" do
+      it "does not create a payroll run and returns a unauthorized response" do
+        expect { post admin_payroll_runs_path }.to_not change { PayrollRun.count }
 
-          expect(response).to have_http_status(:unauthorized)
-        end
+        expect(response).to have_http_status(:unauthorized)
       end
+    end
 
-      describe "admin_payroll_runs#create" do
-        it "does not create a payroll run and returns a unauthorized response" do
-          expect { post admin_payroll_runs_path }.to_not change { PayrollRun.count }
+    describe "admin_payroll_runs#show" do
+      it "does not view a payroll run and returns a unauthorized response" do
+        payroll_run = create(:payroll_run)
 
-          expect(response).to have_http_status(:unauthorized)
-        end
-      end
+        get admin_payroll_run_path(payroll_run)
 
-      describe "admin_payroll_runs#show" do
-        it "does not view a payroll run and returns a unauthorized response" do
-          payroll_run = create(:payroll_run)
-
-          get admin_payroll_run_path(payroll_run)
-
-          expect(response).to have_http_status(:unauthorized)
-        end
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end

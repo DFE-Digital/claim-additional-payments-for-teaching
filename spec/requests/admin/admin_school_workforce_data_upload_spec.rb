@@ -36,14 +36,12 @@ RSpec.describe "School workforce census data upload" do
       end
     end
 
-    [DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
-      it "returns a unauthorized response for #{role} users" do
-        sign_in_to_admin_with_role(role)
+    it "returns a unauthorized response for support agents" do
+      sign_in_to_admin_with_role(DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
 
-        post admin_school_workforce_census_data_uploads_path
+      post admin_school_workforce_census_data_uploads_path
 
-        expect(response).to have_http_status(:unauthorized)
-      end
+      expect(response).to have_http_status(:unauthorized)
     end
   end
 end

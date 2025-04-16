@@ -98,7 +98,6 @@ class BaseImporter
     user = DfeSignIn::User.find { |u| u.role_codes.include?("teacher_payments_access") }
     if user.nil?
       logger.warn "#{WARN} - No Admin User found with 'teacher_payments_access' role"
-      logger.warn "#{WARN} - Please sign-out of Claims Admin DfE Payroll ('teacher_payments_payroll')"
       logger.warn "#{WARN} - Please sign-in as Department for Education Admin user ('teacher_payments_access')"
       exit 100
     end

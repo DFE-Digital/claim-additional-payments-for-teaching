@@ -120,18 +120,16 @@ RSpec.feature "Admin checks a claim" do
     end
   end
 
-  context "User is logged in as a payroll operator or a support user" do
-    [DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
-      scenario "User cannot view claims" do
-        sign_in_to_admin_with_role(role)
+  context "User is logged in as a support user" do
+    scenario "User cannot view claims" do
+      sign_in_to_admin_with_role(DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
 
-        expect(page).to_not have_link(nil, href: admin_claims_path)
+      expect(page).to_not have_link(nil, href: admin_claims_path)
 
-        visit admin_claims_path
+      visit admin_claims_path
 
-        expect(page.status_code).to eq(401)
-        expect(page).to have_content("Not authorised")
-      end
+      expect(page.status_code).to eq(401)
+      expect(page).to have_content("Not authorised")
     end
   end
 end

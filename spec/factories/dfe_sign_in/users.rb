@@ -21,11 +21,6 @@ FactoryBot.define do
       role_codes { [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE] }
     end
 
-    trait :payroll_operator do
-      role_codes { [DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE] }
-      organisation_name { "DfE Payroll" }
-    end
-
     trait :service_admin do
       role_codes do
         [

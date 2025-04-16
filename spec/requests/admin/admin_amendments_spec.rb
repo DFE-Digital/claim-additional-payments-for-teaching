@@ -214,28 +214,26 @@ RSpec.describe "Admin claim amendments" do
     end
   end
 
-  context "when signed in as a payroll operator or a support agent" do
-    [DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
-      before do
-        sign_in_to_admin_with_role(role)
+  context "when signed in as a support agent" do
+    before do
+      sign_in_to_admin_with_role(DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
+    end
+
+    describe "admin_amendments#new" do
+      it "returns a unauthorized response" do
+        get new_admin_claim_amendment_url(claim)
+
+        expect(response).to have_http_status(:unauthorized)
       end
+    end
 
-      describe "admin_amendments#new" do
-        it "returns a unauthorized response" do
-          get new_admin_claim_amendment_url(claim)
+    describe "admin_amendments#create" do
+      it "returns a unauthorized response and does not create an amendment or change the claim" do
+        expect {
+          post admin_claim_amendments_url(claim, amendment: {claim: {eligibility_attributes: {teacher_reference_number: "7654321"}}})
+        }.not_to change { [claim.eligibility.reload.teacher_reference_number, claim.amendments.size] }
 
-          expect(response).to have_http_status(:unauthorized)
-        end
-      end
-
-      describe "admin_amendments#create" do
-        it "returns a unauthorized response and does not create an amendment or change the claim" do
-          expect {
-            post admin_claim_amendments_url(claim, amendment: {claim: {eligibility_attributes: {teacher_reference_number: "7654321"}}})
-          }.not_to change { [claim.eligibility.reload.teacher_reference_number, claim.amendments.size] }
-
-          expect(response).to have_http_status(:unauthorized)
-        end
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end

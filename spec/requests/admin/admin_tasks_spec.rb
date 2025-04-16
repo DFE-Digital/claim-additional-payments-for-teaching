@@ -119,15 +119,13 @@ RSpec.describe "Admin tasks", type: :request do
     end
   end
 
-  context "when signed in as a payroll operator or a support agent" do
+  context "when signed in as a support agent" do
     describe "tasks#index" do
-      [DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
-        it "does not allow the claim tasks to be viewed" do
-          sign_in_to_admin_with_role(role)
-          get admin_claim_tasks_path(claim_id: claim.id)
+      it "does not allow the claim tasks to be viewed" do
+        sign_in_to_admin_with_role(DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
+        get admin_claim_tasks_path(claim_id: claim.id)
 
-          expect(response.code).to eq("401")
-        end
+        expect(response.code).to eq("401")
       end
     end
   end

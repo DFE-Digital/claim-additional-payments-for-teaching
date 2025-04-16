@@ -4,7 +4,7 @@ RSpec.describe "Admin payroll run downloads" do
   let(:admin) { create(:dfe_signin_user) }
 
   before do
-    sign_in_to_admin_with_role(DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE, admin.dfe_sign_in_id)
+    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, admin.dfe_sign_in_id)
   end
 
   describe "downloads#new" do
@@ -109,25 +109,20 @@ RSpec.describe "Admin payroll run downloads" do
   end
 
   describe "access restriction" do
-    context "when signed is as service operator or a payroll operator" do
-      [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
-        it "responds with success", :aggregate_failures do
-          payroll_run = create(:payroll_run)
+    context "when signed is as service operator" do
+      it "responds with success", :aggregate_failures do
+        payroll_run = create(:payroll_run)
 
-          sign_in_to_admin_with_role(role)
+        sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
 
-          get new_admin_payroll_run_download_path(payroll_run)
+        get new_admin_payroll_run_download_path(payroll_run)
+        expect(response.code).to eq("200")
 
-          expect(response.code).to eq("200")
+        get admin_payroll_run_download_path(payroll_run)
+        expect(response).to redirect_to(new_admin_payroll_run_download_path)
 
-          get admin_payroll_run_download_path(payroll_run)
-
-          expect(response).to redirect_to(new_admin_payroll_run_download_path)
-
-          post admin_payroll_run_download_path(payroll_run)
-
-          expect(response).to redirect_to(admin_payroll_run_download_path)
-        end
+        post admin_payroll_run_download_path(payroll_run)
+        expect(response).to redirect_to(admin_payroll_run_download_path)
       end
     end
 

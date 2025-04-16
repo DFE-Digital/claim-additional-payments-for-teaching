@@ -75,16 +75,14 @@ RSpec.describe "Admin Payment Confirmation Report upload" do
     end
   end
 
-  context "when signed in as a payroll operator or a support agent" do
+  context "when signed in as a support agent" do
     describe "payment_confirmation_report_uploads#new" do
-      [DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
-        it "returns an unauthorized response" do
-          sign_in_to_admin_with_role(role)
+      it "returns an unauthorized response" do
+        sign_in_to_admin_with_role(DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
 
-          get new_admin_payroll_run_payment_confirmation_report_upload_path(payroll_run)
+        get new_admin_payroll_run_payment_confirmation_report_upload_path(payroll_run)
 
-          expect(response).to have_http_status(:unauthorized)
-        end
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end

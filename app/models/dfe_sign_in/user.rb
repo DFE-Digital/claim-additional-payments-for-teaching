@@ -5,7 +5,6 @@ module DfeSignIn
     SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE = "teacher_payments_access"
     SERVICE_ADMIN_DFE_SIGN_IN_ROLE_CODE = "teacher_payments_admin"
     SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE = "teacher_payments_support"
-    PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE = "teacher_payments_payroll"
 
     has_secure_token :session_token
 
@@ -39,16 +38,12 @@ module DfeSignIn
       role_codes.include?(SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
     end
 
-    def is_payroll_operator?
-      role_codes.include?(PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
-    end
-
     def is_service_admin?
       role_codes.include?(SERVICE_ADMIN_DFE_SIGN_IN_ROLE_CODE)
     end
 
     def has_admin_access?
-      is_service_operator? || is_support_agent? || is_payroll_operator?
+      is_service_operator? || is_support_agent?
     end
 
     def self.options_for_select

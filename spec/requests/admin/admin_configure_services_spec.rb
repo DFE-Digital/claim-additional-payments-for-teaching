@@ -19,16 +19,14 @@ RSpec.describe "Service configuration" do
     end
   end
 
-  context "when signed in as a payroll operator or a support agent" do
+  context "when signed in as a support agent" do
     describe "admin_journey_configurations#update" do
-      [DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
-        it "returns a unauthorized response" do
-          sign_in_to_admin_with_role(role)
+      it "returns a unauthorized response" do
+        sign_in_to_admin_with_role(DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
 
-          patch admin_journey_configuration_path(journey_configuration, journey_configuration: {open_for_submissions: false, availability_message: "Test message"})
+        patch admin_journey_configuration_path(journey_configuration, journey_configuration: {open_for_submissions: false, availability_message: "Test message"})
 
-          expect(response).to have_http_status(:unauthorized)
-        end
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
