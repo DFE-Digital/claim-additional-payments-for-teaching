@@ -1,19 +1,4 @@
 module FeatureHelpers
-  def choose_teaching_maths_or_physics(response = "Yes")
-    choose response
-    click_on "Continue"
-  end
-
-  def choose_initial_teacher_training_subject(response = "Maths")
-    choose response
-    click_on "Continue"
-  end
-
-  def choose_initial_teacher_training_subject_specialism(response = "Physics")
-    choose response
-    click_on "Continue"
-  end
-
   def start_student_loans_claim
     visit new_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
     skip_tid
@@ -63,21 +48,6 @@ module FeatureHelpers
 
   def choose_subjects_taught
     check "Physics"
-    click_on "Continue"
-  end
-
-  def choose_leadership
-    choose "Yes"
-    click_on "Continue"
-
-    choose "No"
-    click_on "Continue"
-  end
-
-  def fill_in_date_of_birth
-    fill_in "Day", with: "03"
-    fill_in "Month", with: "7"
-    fill_in "Year", with: "1990"
     click_on "Continue"
   end
 
