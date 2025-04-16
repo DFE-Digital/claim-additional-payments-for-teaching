@@ -34,10 +34,6 @@ module Admin
       admin_user.is_service_operator?
     end
 
-    def payroll_operator_signed_in?
-      admin_user.is_payroll_operator?
-    end
-
     def support_agent_signed_in?
       admin_user.is_support_agent?
     end
@@ -48,10 +44,6 @@ module Admin
 
     def ensure_service_operator
       render "admin/auth/failure", status: :unauthorized unless service_operator_signed_in?
-    end
-
-    def ensure_payroll_operator
-      render "admin/auth/failure", status: :unauthorized unless service_operator_signed_in? || payroll_operator_signed_in?
     end
 
     def update_last_seen_at

@@ -254,17 +254,15 @@ RSpec.describe "Admin decisions", type: :request do
     end
   end
 
-  context "when signed in as a payroll operator or a support agent" do
+  context "when signed in as a support agent" do
     describe "decisions#create" do
       let(:claim) { create(:claim, :submitted) }
 
-      [DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
-        it "does not allow a claim to be approved" do
-          sign_in_to_admin_with_role(role)
-          post admin_claim_decisions_path(claim_id: claim.id, approved: true)
+      it "does not allow a claim to be approved" do
+        sign_in_to_admin_with_role(DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
+        post admin_claim_decisions_path(claim_id: claim.id, approved: true)
 
-          expect(response.code).to eq("401")
-        end
+        expect(response.code).to eq("401")
       end
     end
   end

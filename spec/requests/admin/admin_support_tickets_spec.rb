@@ -24,14 +24,12 @@ RSpec.describe "admin/support_tickets controller" do
     end
 
     it "refuses requests from users without the service operator role" do
-      non_service_operator_roles.each do |role|
-        sign_in_to_admin_with_role(role)
+      sign_in_to_admin_with_role(DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
 
-        post admin_claim_support_tickets_path(claim), params: {support_ticket: {url: "https://some/ticket/url"}}
+      post admin_claim_support_tickets_path(claim), params: {support_ticket: {url: "https://some/ticket/url"}}
 
-        expect(response).to have_http_status(:unauthorized)
-        expect(response.body).to include("Not authorised")
-      end
+      expect(response).to have_http_status(:unauthorized)
+      expect(response.body).to include("Not authorised")
     end
   end
 end

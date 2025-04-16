@@ -108,7 +108,6 @@ RSpec.feature "Claims awaiting a decision" do
   let!(:frank) { create(:dfe_signin_user, given_name: "Frank", family_name: "Yee", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
   let!(:abdul) { create(:dfe_signin_user, given_name: "Abdul", family_name: "Rafiq", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
   let!(:deleted_user) { create(:dfe_signin_user, :deleted, given_name: "Deleted", family_name: "User", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
-  let!(:tripti) { create(:dfe_signin_user, given_name: "Tripti", family_name: "Kumar", organisation_name: "DfE Payroll", role_codes: [DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
 
   context "with more than 25 claims" do
     scenario "assign first 25 to one Claim's checker" do
@@ -402,12 +401,12 @@ RSpec.feature "Claims awaiting a decision" do
     end
 
     scenario "when zero claims for policy" do
-      Claim.awaiting_decision.update_all(assigned_to_id: tripti.id)
+      Claim.awaiting_decision.update_all(assigned_to_id: sarah.id)
 
       click_on "View claims"
 
       @submitted_claims.each do |claim|
-        expect(claim.reload.assigned_to.full_name).to eq "Tripti Kumar"
+        expect(claim.reload.assigned_to.full_name).to eq "Sarah Strawbridge"
       end
 
       expect(page).to have_button "Allocate claims", disabled: true
@@ -425,7 +424,7 @@ RSpec.feature "Claims awaiting a decision" do
       end
 
       student_loan_claims.each do |claim|
-        expect(claim.reload.assigned_to.full_name).to eq "Tripti Kumar"
+        expect(claim.reload.assigned_to.full_name).to eq "Sarah Strawbridge"
       end
     end
   end

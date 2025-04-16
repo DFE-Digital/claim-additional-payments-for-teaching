@@ -38,8 +38,7 @@ module Journeys
         def claim_admin_roles
           [
             DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE,
-            DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE,
-            DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE
+            DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE
           ]
         end
       end
