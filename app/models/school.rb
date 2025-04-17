@@ -28,6 +28,8 @@ class School < ApplicationRecord
     all_through: 7
   }.freeze
 
+  PHASE_STRINGS = PHASES.keys.map(&:to_s).index_with(&:itself).freeze
+
   SECONDARY_PHASES = %w[secondary middle_deemed_secondary all_through].freeze
 
   SCHOOL_TYPE_GROUPS = {
@@ -42,6 +44,8 @@ class School < ApplicationRecord
     free_schools: 11,
     online: 13
   }.freeze
+
+  SCHOOL_TYPE_GROUP_STRINGS = SCHOOL_TYPE_GROUPS.keys.map(&:to_s).index_with(&:itself).freeze
 
   STATE_FUNDED_SCHOOL_TYPE_GROUPS = %w[
     colleges
@@ -93,6 +97,8 @@ class School < ApplicationRecord
     academy_secure_16_to_19: 57
   }.freeze
 
+  SCHOOL_TYPE_STRINGS = SCHOOL_TYPES.keys.map(&:to_s).index_with(&:itself).freeze
+
   SPECIAL_SCHOOL_TYPES = %w[
     community_special_school
     non_maintained_special_school
@@ -115,6 +121,10 @@ class School < ApplicationRecord
   enum :phase, PHASES
   enum :school_type_group, SCHOOL_TYPE_GROUPS
   enum :school_type, SCHOOL_TYPES
+
+  enum :phase_string, PHASE_STRINGS, prefix: true
+  enum :school_type_group_string, SCHOOL_TYPE_GROUP_STRINGS, prefix: true
+  enum :school_type_string, SCHOOL_TYPE_STRINGS, prefix: true
 
   scope :open, -> { where("(open_date IS NULL OR open_date <= ?) AND (close_date IS NULL OR close_date >= ?)", Date.current, Date.current) }
   scope :closed, -> { where.not("(open_date IS NULL OR open_date <= ?) AND (close_date IS NULL OR close_date >= ?)", Date.current, Date.current) }
@@ -204,6 +214,45 @@ class School < ApplicationRecord
       secondary_equivalent_special? ||
       secondary_equivalent_alternative_provision? ||
       secondary_equivalent_city_technology_college?
+  end
+
+  # NOTE - remove once string column is renamed
+  def phase=(value)
+    normalised_value = if value.is_a?(Integer)
+      self.class.phases.invert[value].to_s
+    else
+      value.to_s
+    end
+
+    self.phase_string = normalised_value
+
+    super
+  end
+
+  # NOTE - remove once string column is renamed
+  def school_type_group=(value)
+    normalised_value = if value.is_a?(Integer)
+      self.class.school_type_groups.invert[value].to_s
+    else
+      value.to_s
+    end
+
+    self.school_type_group_string = normalised_value
+
+    super
+  end
+
+  # NOTE - remove once string column is renamed
+  def school_type=(value)
+    normalised_value = if value.is_a?(Integer)
+      self.class.school_types.invert[value].to_s
+    else
+      value.to_s
+    end
+
+    self.school_type_string = normalised_value
+
+    super
   end
 
   private
