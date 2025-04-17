@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Policies::FurtherEducationPayments::PolicyEligibilityChecker do
+RSpec.describe Policies::FurtherEducationPayments::PolicyEligibilityChecker do
   let(:answers) do
     build(
       :further_education_payments_answers,

@@ -2,7 +2,7 @@ require "rails_helper"
 
 module AutomatedChecks
   module ClaimVerifiers
-    describe Qualifications do
+    RSpec.describe Qualifications do
       let(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023)) }
 
       before do

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe GovukFormHelper do
+RSpec.describe GovukFormHelper do
   let(:claim) { Claim.new }
 
   describe "#form_group_tag" do

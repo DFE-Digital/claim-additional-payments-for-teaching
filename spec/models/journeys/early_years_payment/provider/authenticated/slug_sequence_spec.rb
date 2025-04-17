@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Journeys::EarlyYearsPayment::Provider::Authenticated::SlugSequence do
+RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::SlugSequence do
   let(:journey_session) { create(:early_years_payment_provider_authenticated_session) }
 
   describe "#magic_link?" do

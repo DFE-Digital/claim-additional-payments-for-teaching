@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Admin::TimelineHelper do
+RSpec.describe Admin::TimelineHelper do
   describe "#admin_amendment_details" do
     context "TSLR claim" do
       let(:amendment) {

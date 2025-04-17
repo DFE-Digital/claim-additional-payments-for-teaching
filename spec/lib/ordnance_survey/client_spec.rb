@@ -1,7 +1,7 @@
 require "rails_helper"
 
 module OrdnanceSurvey
-  describe Client do
+  RSpec.describe Client do
     shared_examples "a request" do |method|
       it "makes a request to a host" do
         stub = stub_request(method, %r{test})
