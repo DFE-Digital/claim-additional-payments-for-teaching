@@ -42,7 +42,7 @@ module Journeys
       private
 
       def claim_school
-        @claim_school ||= journey_session.tps_school_for_student_loan_in_previous_financial_year || answers.claim_school
+        @claim_school ||= answers.tps_school_for_student_loan_in_previous_financial_year || answers.claim_school
       end
 
       def change_school?
