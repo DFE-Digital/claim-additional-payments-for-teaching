@@ -1,6 +1,6 @@
 module Admin
   class PaymentConfirmationReportUploadsController < BaseAdminController
-    before_action :ensure_service_operator
+    before_action :ensure_service_admin
 
     rate_limit(
       to: 1,
