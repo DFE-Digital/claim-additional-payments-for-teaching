@@ -84,7 +84,7 @@ class BaseImporter
     return if test_type == :volume
 
     logger.info BOLD_LINE
-    logger.info "Clearing down Delayed::Jobs (worker)"
+    logger.info "Clearing down background jobs..."
     Rake::Task["jobs:clear"].invoke
     Claim.submitted.each do |claim|
       ClaimVerifierJob.perform_later(claim)
