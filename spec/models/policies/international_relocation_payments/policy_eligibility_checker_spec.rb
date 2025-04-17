@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Policies::InternationalRelocationPayments::PolicyEligibilityChecker do
+RSpec.describe Policies::InternationalRelocationPayments::PolicyEligibilityChecker do
   before do
     create(:journey_configuration, :get_a_teacher_relocation_payment)
   end

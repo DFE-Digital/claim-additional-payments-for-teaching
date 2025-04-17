@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Policies::EarlyYearsPayments::PolicyEligibilityChecker do
+RSpec.describe Policies::EarlyYearsPayments::PolicyEligibilityChecker do
   subject { described_class.new(answers: answers) }
 
   describe "#status, #ineligible?, #ineligibility_reason" do

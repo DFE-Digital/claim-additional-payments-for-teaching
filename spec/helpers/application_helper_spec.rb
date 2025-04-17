@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe ApplicationHelper do
+RSpec.describe ApplicationHelper do
   describe "#currency_value_for_number_field" do
     let(:value) { 1000.1 }
 

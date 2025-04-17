@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Admin::ClaimsHelper do
+RSpec.describe Admin::ClaimsHelper do
   describe "#claim_summary_view" do
     subject { helper.claim_summary_view }
 

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Admin::ClaimsHelper do
+RSpec.describe Admin::ClaimsHelper do
   let(:claim_school) { create(:school) }
   let(:current_school) { create(:school, :student_loans_eligible) }
 
