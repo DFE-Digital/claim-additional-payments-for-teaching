@@ -156,28 +156,22 @@ module GetATeacherRelocationPayment
         )
 
       fill_in("Postcode", with: "SO16 9FX")
-
       click_on "Search"
 
       expect(page).to have_text("Select an address")
       choose "Flat 1, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX"
-
       click_on "Continue"
     end
 
     def and_i_complete_the_manual_address_step
       assert_on_postcode_page!
 
-      click_link("Enter your address manually")
+      click_button("Enter your address manually")
 
       fill_in("House number or name", with: "Flat 1, Millbrook Tower")
-
       fill_in("Building and street", with: "Windermere Avenue")
-
       fill_in("Town or city", with: "Southampton")
-
       fill_in("Postcode", with: "SO16 9FX")
-
       click_button("Continue")
     end
 
@@ -185,11 +179,9 @@ module GetATeacherRelocationPayment
       assert_on_email_address_page!
 
       fill_in "Email address", with: "seymour.skinner@springfieldelementary.edu"
-
       click_on "Continue"
 
       fill_in "Enter the 6-digit passcode", with: get_otp_from_email
-
       click_on "Confirm"
     end
 
@@ -197,7 +189,6 @@ module GetATeacherRelocationPayment
       assert_on_provider_mobile_number_page!
 
       choose "No"
-
       click_button("Continue")
     end
 
@@ -205,7 +196,6 @@ module GetATeacherRelocationPayment
       assert_on_provider_mobile_number_page!
 
       choose "Yes"
-
       click_button("Continue")
 
       otp_code = nil
@@ -216,11 +206,9 @@ module GetATeacherRelocationPayment
       )
 
       fill_in("Mobile number", with: "01234567890")
-
       click_button("Continue")
 
       fill_in("Enter the 6-digit passcode", with: otp_code)
-
       click_button "Confirm"
     end
 
@@ -228,9 +216,7 @@ module GetATeacherRelocationPayment
       assert_on_personal_bank_account_page!
 
       fill_in("Name on your account", with: "Walter Skinner")
-
       fill_in("Sort code", with: "123456")
-
       fill_in("Account number", with: "12345678")
 
       click_button("Continue")
