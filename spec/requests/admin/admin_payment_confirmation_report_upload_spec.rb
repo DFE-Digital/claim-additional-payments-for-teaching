@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe "Admin Payment Confirmation Report upload" do
   let(:payroll_run) { create(:payroll_run) }
 
-  context "when signed in as a service operator" do
-    before { @signed_in_user = sign_in_as_service_operator }
+  context "when signed in as a service admin" do
+    before { @signed_in_user = sign_in_as_service_admin }
 
     describe "payment_confirmation_report_uploads#new" do
       it "returns an OK response" do

@@ -7,10 +7,15 @@ module RequestHelpers
     post claims_path(routing_name)
   end
 
-  # Signs in as a user with the service operator role. Returns the signed-in User record.
   def sign_in_as_service_operator
     user = create(:dfe_signin_user)
     sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
+    user.reload
+  end
+
+  def sign_in_as_service_admin
+    user = create(:dfe_signin_user, :service_admin)
+    sign_in_to_admin_with_role(user.role_codes, user.dfe_sign_in_id)
     user.reload
   end
 
