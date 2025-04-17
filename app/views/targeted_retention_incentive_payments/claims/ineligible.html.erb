@@ -21,6 +21,10 @@
       <%= render partial: "subject_and_degree_ineligible" %>
     <% when :trainee_in_last_policy_year %>
       <%= render partial: "trainee_in_last_policy_year_ineligible" %>
+    <% when :insufficient_teaching %>
+      <%= render partial: "insufficient_teaching" %>
+    <% when :poor_performance %>
+      <%= render partial: "generic" %>
     <% else %>
       <% fail "unknown ineligibility reason #{@form.ineligibility_reason}" %>
     <% end %>
@@ -40,3 +44,4 @@
     </p>
   </div>
 </div>
+

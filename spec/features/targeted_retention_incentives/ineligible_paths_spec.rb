@@ -205,6 +205,87 @@ RSpec.describe "Targeted retention incentives ineligible paths" do
   # TODO discapline, poor performance
   context "when the claimant has poor performance" do
     it "is ineligible" do
+      school = create(
+        :school,
+        :targeted_retention_incentive_payments_eligible
+      )
+
+      visit Journeys::TargetedRetentionIncentivePayments.start_page_url
+
+      click_on "Start now"
+
+      # sign-in-or-continue
+      click_on "Continue without signing in"
+
+      # current-school
+      fill_in "Which school do you teach at?", with: school.name
+      click_on "Continue"
+
+      # current-school part 2
+      choose school.name
+      click_on "Continue"
+
+      # nqt-in-academic-year-after-itt
+      choose "Yes"
+      click_on "Continue"
+
+      # supply-teacher
+      choose "No"
+      click_on "Continue"
+
+      # poor-performance
+      all(".govuk-radios__label").select { it.text == "Yes" }.first.click
+
+      all(".govuk-radios__label").select { it.text == "No" }.last.click
+
+      click_on "Continue"
+
+      expect(page).to have_content(
+        "You are not eligible for a targeted retention incentive payment."
+      )
+    end
+  end
+
+  context "when the claimant has disciplinary measures" do
+    it "is ineligible" do
+      school = create(
+        :school,
+        :targeted_retention_incentive_payments_eligible
+      )
+
+      visit Journeys::TargetedRetentionIncentivePayments.start_page_url
+
+      click_on "Start now"
+
+      # sign-in-or-continue
+      click_on "Continue without signing in"
+
+      # current-school
+      fill_in "Which school do you teach at?", with: school.name
+      click_on "Continue"
+
+      # current-school part 2
+      choose school.name
+      click_on "Continue"
+
+      # nqt-in-academic-year-after-itt
+      choose "Yes"
+      click_on "Continue"
+
+      # supply-teacher
+      choose "No"
+      click_on "Continue"
+
+      # poor-performance
+      all(".govuk-radios__label").select { it.text == "No" }.first.click
+
+      all(".govuk-radios__label").select { it.text == "Yes" }.last.click
+
+      click_on "Continue"
+
+      expect(page).to have_content(
+        "You are not eligible for a targeted retention incentive payment."
+      )
     end
   end
 
@@ -532,6 +613,64 @@ RSpec.describe "Targeted retention incentives ineligible paths" do
         "your ITT course must have started (postgraduate) or finished " \
         "(undergraduate) between the 2022 to 2023 and 2025 to 2026 years " \
         "in chemistry, computing, mathematics, or physics."
+      )
+    end
+  end
+
+  context "when the claimant doesn't teach enough hours" do
+    it "is ineligible" do
+      school = create(
+        :school,
+        :targeted_retention_incentive_payments_eligible
+      )
+
+      visit Journeys::TargetedRetentionIncentivePayments.start_page_url
+
+      click_on "Start now"
+
+      # sign-in-or-continue
+      click_on "Continue without signing in"
+
+      # current-school
+      fill_in "Which school do you teach at?", with: school.name
+      click_on "Continue"
+
+      # current-school part 2
+      choose school.name
+      click_on "Continue"
+
+      # nqt-in-academic-year-after-itt
+      choose "Yes"
+      click_on "Continue"
+
+      # supply-teacher
+      choose "No"
+      click_on "Continue"
+
+      # poor-performance
+      all(".govuk-radios__label").select { it.text == "No" }.each(&:click)
+      click_on "Continue"
+
+      # qualification
+      choose "Postgraduate initial teacher training (ITT)"
+      click_on "Continue"
+
+      # itt-year
+      choose "2023 to 2024"
+      click_on "Continue"
+
+      # eligible-itt-subject
+      choose "Physics"
+      click_on "Continue"
+
+      # teaching-subject-now
+      choose "No"
+      click_on "Continue"
+
+      expect(page).to have_content(
+        "You are not eligible for a targeted retention incentive payment " \
+        "because you do not spend at least half of your contracted hours " \
+        "teaching eligible subjects."
       )
     end
   end
