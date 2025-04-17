@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Policies::FurtherEducationPayments::ProviderVerificationEmails do
+RSpec.describe Policies::FurtherEducationPayments::ProviderVerificationEmails do
   describe "#send_further_education_payment_provider_verification_chase_email" do
     let(:fe_provider) {
       create(

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "teacher route: completing the form" do
+RSpec.describe "teacher route: completing the form" do
   include GetATeacherRelocationPayment::StepHelpers
 
   let(:journey_configuration) do

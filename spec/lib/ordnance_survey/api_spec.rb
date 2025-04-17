@@ -1,7 +1,7 @@
 require "rails_helper"
 
 module OrdnanceSurvey
-  describe Api do
+  RSpec.describe Api do
     subject(:api) { described_class.new(client: double("client")) }
 
     it { should delegate_method(:search_places).to(:v1) }

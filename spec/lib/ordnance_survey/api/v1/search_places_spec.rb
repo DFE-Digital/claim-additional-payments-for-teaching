@@ -3,7 +3,7 @@ require "rails_helper"
 module OrdnanceSurvey
   class Api
     class V1
-      describe SearchPlaces do
+      RSpec.describe SearchPlaces do
         subject(:search_places) { described_class.new(client: Client.new(base_url: "https://api.os.uk")) }
 
         describe "#index" do

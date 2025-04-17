@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe StudentLoansHelper do
+RSpec.describe StudentLoansHelper do
   let!(:journey_configuration) { create(:journey_configuration, :student_loans) }
   let(:current_academic_year) { AcademicYear.current }
 

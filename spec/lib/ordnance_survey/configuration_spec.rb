@@ -1,7 +1,7 @@
 require "rails_helper"
 
 module OrdnanceSurvey
-  describe Configuration do
+  RSpec.describe Configuration do
     subject(:configuration) { described_class.new }
 
     describe "#client" do
