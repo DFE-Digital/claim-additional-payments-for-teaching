@@ -19,11 +19,17 @@ module Journeys
         "nationality" => NationalityForm,
         "passport-number" => PassportNumberForm,
         "headteacher-details" => HeadteacherDetailsForm,
-        "personal-details" => PersonalDetailsForm
+        "personal-details" => PersonalDetailsForm,
+        "check-your-answers-part-one" => CheckYourAnswersPartOneForm,
+        "ineligible" => IneligibleForm
       }
     }
 
     def requires_student_loan_details?
+      true
+    end
+
+    def use_navigator?
       true
     end
   end

@@ -45,6 +45,8 @@ module Journeys
         RESULTS_SLUGS
       ).freeze
 
+      RESTRICTED_SLUGS = [].freeze
+
       def self.start_page_url
         if Rails.env.production?
           "https://www.gov.uk/government/publications/international-relocation-payments/international-relocation-payments"
@@ -63,13 +65,29 @@ module Journeys
 
       def slugs
         SLUGS.dup.tap do |sequence|
+          if answers.skip_postcode_search == true
+            sequence.delete("select-home-address")
+          end
+
+          if answers.ordnance_survey_error == true
+            sequence.delete("select-home-address")
+          end
+
+          if answers.address_line_1.present? && answers.postcode.present?
+            sequence.delete("address")
+          end
+
+          if answers.email_verified == true
+            sequence.delete("email-verification")
+          end
+
           if answers.provide_mobile_number == false
             sequence.delete("mobile-number")
             sequence.delete("mobile-verification")
           end
 
-          if answers.ordnance_survey_error == true
-            sequence.delete("select-home-address")
+          if answers.mobile_verified == true
+            sequence.delete("mobile-verification")
           end
         end
       end
