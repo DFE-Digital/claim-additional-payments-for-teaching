@@ -26,6 +26,14 @@ FactoryBot.define do
       additional_payments
     end
 
+    # FIXME RL - once the additional payments journey is removed, this can be
+    # renamed to targeted_retention_incentive_payments. Currently some specs
+    # use the policy to create the journey configuration, and expect the tri
+    # policy to point to the additional payments journey.
+    trait :targeted_retention_incentive_payments_only do
+      routing_name { Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME }
+    end
+
     trait :further_education_payments do
       routing_name { Journeys::FurtherEducationPayments::ROUTING_NAME }
     end

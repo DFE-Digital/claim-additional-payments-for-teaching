@@ -1,0 +1,35 @@
+<% content_for(
+  :page_title,
+  page_title(
+    "You are not eligible this year",
+    journey: current_journey_routing_name
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">You are not eligible this year</h1>
+
+    <p class="govuk-body">
+      You do not qualify for a targeted retention incentive payment this year
+      because you have not completed your initial teacher training.
+    </p>
+
+    <p class="govuk-body">
+      You'll be eligible for a targeted retention incentive payment when you
+      become a qualified teacher.
+    </p>
+
+    <h2 class="govuk-heading-m">Set a reminder to apply next year</h2>
+
+    <p class="govuk-body">
+      Receive a reminder email so you know when to check your eligibility and
+      apply. We cannot issue payments unless you apply.
+    </p>
+
+    <%= govuk_button_link_to(
+      "Set reminder",
+      reminder_path(journey: journey::ROUTING_NAME, slug: "personal-details")
+    ) %>
+  </div>
+</div>

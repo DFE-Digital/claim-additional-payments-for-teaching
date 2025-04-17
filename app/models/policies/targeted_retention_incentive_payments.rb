@@ -109,5 +109,9 @@ module Policies
     def max_topup_amount(claim)
       Award.by_academic_year(claim.academic_year).maximum(:award_amount)
     end
+
+    def set_a_reminder?(itt_academic_year)
+      selectable_itt_years_for_claim_year(AcademicYear.next).include?(itt_academic_year)
+    end
   end
 end

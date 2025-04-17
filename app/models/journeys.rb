@@ -7,6 +7,7 @@ module Journeys
 
   JOURNEYS = [
     AdditionalPaymentsForTeaching,
+    TargetedRetentionIncentivePayments,
     TeacherStudentLoanReimbursement,
     GetATeacherRelocationPayment,
     FurtherEducationPayments,
