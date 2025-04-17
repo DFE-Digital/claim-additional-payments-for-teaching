@@ -15,7 +15,7 @@ class School < ApplicationRecord
   validates :school_type_group, presence: true
   validates :school_type, presence: true
 
-  scope :fe_only, -> { where(phase: 6) } # PhaseOfEducation == 16 plus
+  scope :fe_only, -> { where(phase: "sixteen_plus") }
 
   PHASES = {
     not_applicable: 0,
@@ -27,6 +27,8 @@ class School < ApplicationRecord
     sixteen_plus: 6,
     all_through: 7
   }.freeze
+
+  PHASE_STRINGS = PHASES.keys.map(&:to_s).index_with(&:itself).freeze
 
   SECONDARY_PHASES = %w[secondary middle_deemed_secondary all_through].freeze
 
@@ -42,6 +44,8 @@ class School < ApplicationRecord
     free_schools: 11,
     online: 13
   }.freeze
+
+  SCHOOL_TYPE_GROUP_STRINGS = SCHOOL_TYPE_GROUPS.keys.map(&:to_s).index_with(&:itself).freeze
 
   STATE_FUNDED_SCHOOL_TYPE_GROUPS = %w[
     colleges
@@ -93,6 +97,8 @@ class School < ApplicationRecord
     academy_secure_16_to_19: 57
   }.freeze
 
+  SCHOOL_TYPE_STRINGS = SCHOOL_TYPES.keys.map(&:to_s).index_with(&:itself).freeze
+
   SPECIAL_SCHOOL_TYPES = %w[
     community_special_school
     non_maintained_special_school
@@ -112,9 +118,9 @@ class School < ApplicationRecord
     academy_alternative_provision_sponsor_led
   ].freeze
 
-  enum :phase, PHASES
-  enum :school_type_group, SCHOOL_TYPE_GROUPS
-  enum :school_type, SCHOOL_TYPES
+  enum :phase, PHASE_STRINGS
+  enum :school_type_group, SCHOOL_TYPE_GROUP_STRINGS
+  enum :school_type, SCHOOL_TYPE_STRINGS
 
   scope :open, -> { where("(open_date IS NULL OR open_date <= ?) AND (close_date IS NULL OR close_date >= ?)", Date.current, Date.current) }
   scope :closed, -> { where.not("(open_date IS NULL OR open_date <= ?) AND (close_date IS NULL OR close_date >= ?)", Date.current, Date.current) }
@@ -141,6 +147,18 @@ class School < ApplicationRecord
     sql = sql.fe_only if fe_only
 
     sql
+  end
+
+  def self.phase_code_to_enum(code)
+    PHASES.invert[code]
+  end
+
+  def self.school_type_group_code_to_enum(code)
+    SCHOOL_TYPE_GROUPS.invert[code]
+  end
+
+  def self.school_type_code_to_enum(code)
+    SCHOOL_TYPES.invert[code]
   end
 
   def eligible_fe_provider(academic_year: AcademicYear.current)
