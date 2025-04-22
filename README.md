@@ -336,3 +336,5 @@ the user IP address as part of the payload data sent to Application Insights in
 [`lib/application_insights`](lib/application_insights). See
 [`config/initializers/application_insights.rb`](config/initializers/application_insights.rb)
 for how to mixin this code to your Rails application.
+
+...
