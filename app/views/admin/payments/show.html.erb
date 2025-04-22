@@ -10,6 +10,13 @@
   <header>
     <h1 class="govuk-heading-xl govuk-heading--navigation">
       Payment <%= @payment.id %>
+      <% unless @payment.confirmation.present? %>
+        <span class="govuk-body-m">
+          <%= govuk_link_to remove_admin_payroll_run_payment_path(id: @payment.id, payroll_run_id: @payment.payroll_run.id) do %>
+            Remove from payroll run
+          <% end %>
+        </span>
+      <% end %>
     </h1>
   </header>
 

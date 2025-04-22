@@ -142,6 +142,42 @@ RSpec.feature "Payroll" do
     expect(page).to have_content(claim_reference)
   end
 
+  scenario "Service admin can view the payment and remove the payment" do
+    payroll_run = create(:payroll_run, claims_counts: {Policies::EarlyCareerPayments => 1, Policies::StudentLoans => 1})
+    payment_to_delete = payroll_run.payments.first
+    claim_reference = payment_to_delete.claims.first.reference
+
+    click_on "Payroll"
+    click_on "View #{I18n.l(payroll_run.created_at.to_date, format: :month_year)} payroll run"
+    click_on payment_to_delete.id
+
+    expect(page).to have_content("Remove from payroll run")
+    click_on "Remove from payroll run"
+
+    expect {
+      click_on "Remove payment"
+    }.to change(payroll_run.reload.payments, :count).by(-1)
+
+    expect(payroll_run.reload.payments).to_not include(payment_to_delete)
+
+    expect(page).to have_content("You have removed a payment from the payroll run")
+    expect(page).to have_content(claim_reference)
+  end
+
+  scenario "Service admin cannot remove a payment when payroll run has been confirmed" do
+    payroll_run = create(:payroll_run, :with_confirmations, claims_counts: {Policies::EarlyCareerPayments => 1, Policies::StudentLoans => 1})
+    payment_to_delete = payroll_run.payments.first
+
+    click_on "Payroll"
+    click_on "View #{I18n.l(payroll_run.created_at.to_date, format: :month_year)} payroll run"
+
+    expect(page).not_to have_content("Remove")
+
+    click_on payment_to_delete.id
+
+    expect(page).not_to have_content("Remove from payroll run")
+  end
+
   scenario "Service admin can upload a Payment Confirmation Report multiple times against a payroll run" do
     payroll_run = create(:payroll_run, claims_counts: {Policies::StudentLoans => 3})
     first_payment = payroll_run.payments.ordered[0]
