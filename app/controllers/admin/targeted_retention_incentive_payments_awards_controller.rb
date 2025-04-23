@@ -7,7 +7,7 @@ module Admin
     end
 
     def create
-      @awards_upload_form = Policies::TargetedRetentionIncentivePayments::AwardCsvImporter.new(awards_upload_params.merge({admin_user:})) if journey_configuration.additional_payments?
+      @awards_upload_form = Policies::TargetedRetentionIncentivePayments::AwardCsvImporter.new(awards_upload_params.merge({admin_user:})) if journey_configuration.targeted_retention_incentive_payments?
 
       if @awards_upload_form.process
         flash[:notice] = "Award amounts for #{@awards_upload_form.academic_year} successfully updated."
