@@ -6,6 +6,9 @@
     show_error: @form.errors.any?
   )
 ) %>
+
+<% @backlink_path = landing_page_path %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_for(
