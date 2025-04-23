@@ -35,5 +35,8 @@ production: &production
   delete_file_uploads_and_downloads:
     class: DeletePersonalDataFromOldClaimsJob
     schedule: "0 22 31 8 *" # At 10:00 PM, 31st of August every year
+  purge_old_jobs:
+    class: PurgeOldJobsJob
+    schedule: "0 4 * * *" # 4AM daily
 development:
   <<: *production

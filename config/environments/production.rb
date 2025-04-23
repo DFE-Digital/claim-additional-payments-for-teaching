@@ -60,6 +60,7 @@ Rails.application.configure do
   config.active_job.queue_adapter = :solid_queue
   # config.solid_queue.connects_to = { database: { writing: :queue } }
   # config.active_job.queue_name_prefix = "dfe_teachers_payment_service_production"
+  config.solid_queue.clear_finished_jobs_after = 5.days
 
   config.action_mailer.perform_caching = false
 
