@@ -1,19 +1,4 @@
 module FeatureHelpers
-  def choose_teaching_maths_or_physics(response = "Yes")
-    choose response
-    click_on "Continue"
-  end
-
-  def choose_initial_teacher_training_subject(response = "Maths")
-    choose response
-    click_on "Continue"
-  end
-
-  def choose_initial_teacher_training_subject_specialism(response = "Physics")
-    choose response
-    click_on "Continue"
-  end
-
   def start_student_loans_claim
     visit new_claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
     skip_tid
@@ -66,21 +51,6 @@ module FeatureHelpers
     click_on "Continue"
   end
 
-  def choose_leadership
-    choose "Yes"
-    click_on "Continue"
-
-    choose "No"
-    click_on "Continue"
-  end
-
-  def fill_in_date_of_birth
-    fill_in "Day", with: "03"
-    fill_in "Month", with: "7"
-    fill_in "Year", with: "1990"
-    click_on "Continue"
-  end
-
   def fill_in_address
     fill_in "House number or name", with: "123 Main Street"
     fill_in "Building and street", with: "Downtown"
@@ -97,14 +67,19 @@ module FeatureHelpers
   end
 
   def sign_in_as_service_admin
-    user = create(:dfe_signin_user)
-    roles = [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::SERVICE_ADMIN_DFE_SIGN_IN_ROLE_CODE]
-    sign_in_to_admin_with_role(roles, user.dfe_sign_in_id)
+    user = create(:dfe_signin_user, :service_admin)
+    sign_in_to_admin_with_role(user.role_codes, user.dfe_sign_in_id)
     user
   end
 
   def sign_in_to_admin_with_role(role_code, user_id = "123")
     stub_dfe_sign_in_with_role(role_code, user_id)
+    visit admin_sign_in_path
+    click_on "Sign in"
+  end
+
+  def sign_in_with_admin(admin)
+    stub_dfe_sign_in_with_role(admin.role_codes, admin.dfe_sign_in_id)
     visit admin_sign_in_path
     click_on "Sign in"
   end

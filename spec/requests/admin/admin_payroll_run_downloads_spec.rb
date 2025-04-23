@@ -1,10 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "Admin payroll run downloads" do
-  let(:admin) { create(:dfe_signin_user) }
+  let(:admin) { create(:dfe_signin_user, :service_admin) }
 
   before do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, admin.dfe_sign_in_id)
+    sign_in_with_admin(admin)
   end
 
   describe "downloads#new" do
@@ -12,7 +12,6 @@ RSpec.describe "Admin payroll run downloads" do
       payroll_run = create(:payroll_run)
 
       get new_admin_payroll_run_download_path(payroll_run)
-
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("#{Date.today.strftime("%B")} payroll file")
     end
@@ -22,7 +21,6 @@ RSpec.describe "Admin payroll run downloads" do
         payroll_run = create(:payroll_run, downloaded_at: 1.minute.ago, downloaded_by: admin)
 
         get new_admin_payroll_run_download_path(payroll_run)
-
         expect(response.body).to include payroll_run.downloaded_by.full_name
         expect(response.body).to include I18n.l(payroll_run.downloaded_at)
       end
@@ -32,7 +30,6 @@ RSpec.describe "Admin payroll run downloads" do
         payroll_run = create(:payroll_run, downloaded_at: 1.minute.ago, downloaded_by: user)
 
         get new_admin_payroll_run_download_path(payroll_run)
-
         expect(response.body).to include payroll_run.downloaded_by.dfe_sign_in_id
       end
     end
@@ -52,7 +49,6 @@ RSpec.describe "Admin payroll run downloads" do
         payroll_run = create(:payroll_run, downloaded_at: Time.zone.now, downloaded_by: admin)
 
         get admin_payroll_run_download_path(payroll_run)
-
         expect(response.body).to include admin_payroll_run_download_path(payroll_run, format: :csv)
       end
     end
@@ -110,42 +106,37 @@ RSpec.describe "Admin payroll run downloads" do
 
   describe "access restriction" do
     context "when signed is as service operator" do
-      it "responds with success", :aggregate_failures do
+      let(:admin) { create(:dfe_signin_user, :service_operator) }
+
+      it "responds with failure", :aggregate_failures do
         payroll_run = create(:payroll_run)
 
-        sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
-
         get new_admin_payroll_run_download_path(payroll_run)
-        expect(response.code).to eq("200")
+        expect(response).to be_unauthorized
 
         get admin_payroll_run_download_path(payroll_run)
-        expect(response).to redirect_to(new_admin_payroll_run_download_path)
+        expect(response).to be_unauthorized
 
         post admin_payroll_run_download_path(payroll_run)
-        expect(response).to redirect_to(admin_payroll_run_download_path)
+        expect(response).to be_unauthorized
       end
     end
 
     context "when signed in as a support agent" do
-      let(:role) { DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE }
+      let(:admin) { create(:dfe_signin_user, :support_agent) }
 
       it "responds with not authorised", :aggregate_failures do
         payroll_run = create(:payroll_run)
 
-        sign_in_to_admin_with_role(role)
-
         get new_admin_payroll_run_download_path(payroll_run)
-
         expect(response.code).to eq("401")
         expect(response.body).to include("Not authorised")
 
         get admin_payroll_run_download_path(payroll_run)
-
         expect(response.code).to eq("401")
         expect(response.body).to include("Not authorised")
 
         post admin_payroll_run_download_path(payroll_run)
-
         expect(response.code).to eq("401")
         expect(response.body).to include("Not authorised")
       end

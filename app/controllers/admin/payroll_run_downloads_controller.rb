@@ -1,6 +1,6 @@
 class Admin::PayrollRunDownloadsController < Admin::BaseAdminController
-  before_action :ensure_service_operator, :find_payroll_run
-
+  before_action :ensure_service_admin
+  before_action :find_payroll_run
   before_action :ensure_download_has_been_triggered, only: :show
 
   def new

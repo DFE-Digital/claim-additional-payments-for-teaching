@@ -3,10 +3,10 @@ require "rails_helper"
 RSpec.feature "Payroll" do
   before do
     create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) # The specs assume eligibility amounts based on claim made in the 2022 academic year
-    @signed_in_user = sign_in_as_service_operator
+    @signed_in_user = sign_in_as_service_admin
   end
 
-  scenario "Service operator creates a payroll run" do
+  scenario "Service admin creates a payroll run" do
     click_on "Payroll"
 
     create(:claim, :approved, policy: Policies::StudentLoans)
@@ -56,7 +56,7 @@ RSpec.feature "Payroll" do
   end
 
   context "when a payroll run already exists for the month" do
-    scenario "Service operator cannot create a new payroll run" do
+    scenario "Service admin cannot create a new payroll run" do
       create(:payroll_run, claims_counts: {Policies::StudentLoans => 2}, created_at: 5.minutes.ago)
 
       visit admin_payroll_runs_path
@@ -87,7 +87,7 @@ RSpec.feature "Payroll" do
     expect(payroll_run.claims).to match_array(expected_claims)
   end
 
-  scenario "Service operator can view a list of previous payroll runs" do
+  scenario "Service admin can view a list of previous payroll runs" do
     first_payroll_run = create(:payroll_run, created_at: Time.zone.now - 1.month)
     last_payroll_run = create(:payroll_run, created_at: Time.zone.now)
 
@@ -102,7 +102,7 @@ RSpec.feature "Payroll" do
     expect(page).to have_link "View", href: admin_payroll_run_path(last_payroll_run)
   end
 
-  scenario "Service operator can view a payroll run" do
+  scenario "Service admin can view a payroll run" do
     payroll_run = create(:payroll_run, claims_counts: {Policies::EarlyCareerPayments => 1, Policies::StudentLoans => 1})
 
     click_on "Payroll"
@@ -120,7 +120,7 @@ RSpec.feature "Payroll" do
     expect(page).to have_link(href: remove_admin_payroll_run_payment_path(id: payroll_run.payments[1].id, payroll_run_id: payroll_run.id))
   end
 
-  scenario "Service operator can remove a payment from a payroll run" do
+  scenario "Service admin can remove a payment from a payroll run" do
     payroll_run = create(:payroll_run, claims_counts: {Policies::EarlyCareerPayments => 1, Policies::StudentLoans => 1})
     payment_to_delete = payroll_run.payments.first
     claim_reference = payment_to_delete.claims.first.reference
@@ -142,7 +142,7 @@ RSpec.feature "Payroll" do
     expect(page).to have_content(claim_reference)
   end
 
-  scenario "Service operator can upload a Payment Confirmation Report multiple times against a payroll run" do
+  scenario "Service admin can upload a Payment Confirmation Report multiple times against a payroll run" do
     payroll_run = create(:payroll_run, claims_counts: {Policies::StudentLoans => 3})
     first_payment = payroll_run.payments.ordered[0]
     second_payment = payroll_run.payments.ordered[1]
