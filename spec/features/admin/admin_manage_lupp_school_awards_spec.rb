@@ -1,7 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Managing targeted_retention_incentive Payments school awards" do
-  let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
+  let!(:journey_configuration) do
+    FeatureFlag.enable!(:tri_only_journey)
+    create(:journey_configuration, :targeted_retention_incentive_payments_only)
+  end
 
   let(:csv_file) { "spec/fixtures/files/targeted_retention_incentive_school_awards_good.csv" }
   let(:csv_file_with_bad_data) { "spec/fixtures/files/targeted_retention_incentive_school_awards_bad.csv" }
@@ -13,7 +16,7 @@ RSpec.feature "Managing targeted_retention_incentive Payments school awards" do
 
     click_on "Manage services"
 
-    expect(page).to have_content("Claim additional payments for teaching")
+    expect(page).to have_content("Claim a targeted retention incentive payment")
     within(find("tr[data-policy-configuration-routing-name=\"#{journey_configuration.routing_name}\"]")) do
       click_on "Change"
     end
