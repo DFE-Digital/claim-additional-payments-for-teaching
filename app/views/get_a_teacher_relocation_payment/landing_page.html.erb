@@ -1,11 +1,11 @@
 <div class="govuk-grid-row">
-   <div class="govuk-grid-column-full">
+   <div class="govuk-grid-column-two-thirds">
      <h1 class="govuk-heading-xl">Apply for the international relocation payment</h1>
    </div>
  </div>
 
  <div class="govuk-grid-row">
-   <div class="govuk-grid-column-full">
+   <div class="govuk-grid-column-two-thirds">
      <p class="govuk-body">
        The international relocation payment (IRP) is a payment of up to
        £10,000, funded by the UK government, which is available to eligible
@@ -76,32 +76,20 @@
        Applications for the international relocation payment (IRP) are open from:
      </p>
 
-     <ul class="govuk-list govuk-list--bullet">
-       <li>30 September 2024 to the end March 2025</li>
-     </ul>
+     <%= govuk_list [
+       "30 September 2024 to 30 June 2025"
+     ], type: :bullet %>
 
      <p class="govuk-body">
-       If you start your teaching job between 1 March 2024 and 28 February 2025
-       you should apply now. If you are eligible, you should receive the money
-       following successful completion of our eligibility checks. You must
-       apply before the end March 2025 to remain eligible.
+       If you start your teaching job between 1 March 2024 and 31 May 2025 you should apply now. If you are eligible, you should receive the money following successful completion of our eligibility checks. You must apply by 30 June 2025 to remain eligible.
      </p>
 
      <p class="govuk-body">
-       If you start your teaching job between the 1 April 2025 and 31 May 2025
-       you can apply when applications re-open in September 2025.
+       If you start your qualifying teaching role between 1 March 2024 and 31 May 2025, you must apply before the window closes on 30 June 2025.
      </p>
 
      <p class="govuk-body">
-       If you start your teaching job in March 2025 you can either apply before
-       applications close at the end of March 2025 or when they open again in
-       September 2025.
-     </p>
-
-     <p class="govuk-body">
-       Late applications for the IRP will not be accepted. If you fail to apply
-       during the correct window, we will be unable to process your
-       application.
+       DfE may not be able to process late applications if you do not apply during the correct application window. If you miss the correct application window, then contact <%= govuk_link_to(t("get_a_teacher_relocation_payment.support_email_address"), "mailto:#{t("get_a_teacher_relocation_payment.support_email_address")}") %> explaining your circumstances and we will review your eligibility.
      </p>
 
      <h2 class="govuk-heading-m">Contact us</h2>
