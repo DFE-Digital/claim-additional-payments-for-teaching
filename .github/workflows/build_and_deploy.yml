@@ -88,14 +88,15 @@ jobs:
           message: |
             ### Deployments
 
-            | Journey             | URL                                                                |
-            | ------------------- | -------------------------------------------------------------------|
-            | Additional Payments | <${{ env.APP_URL }}/additional-payments/claim>                     |
-            | Student Loans       | <${{ env.APP_URL }}/student-loans/claim>                           |
-            | Further Education   | <${{ env.APP_URL }}/further-education-payments/landing-page>       |
-            | Early Years Payment | <${{ env.APP_URL }}/early-years-payment/landing-page>     |
-            | Relocation Payments | <${{ env.APP_URL }}/get-a-teacher-relocation-payment/landing-page> |
-            | Admin               | <${{ env.APP_URL }}/admin>                                         |
+            | Journey                     | URL                                                                |
+            | --------------------------- | -------------------------------------------------------------------|
+            | Additional Payments         | <${{ env.APP_URL }}/additional-payments/claim>                     |
+            | Targeted Retention Payments | <${{ env.APP_URL }}/targeted-retention-incentive-payments/claim>   |
+            | Student Loans               | <${{ env.APP_URL }}/student-loans/claim>                           |
+            | Further Education           | <${{ env.APP_URL }}/further-education-payments/landing-page>       |
+            | Early Years Payment         | <${{ env.APP_URL }}/early-years-payment/landing-page>              |
+            | Relocation Payments         | <${{ env.APP_URL }}/get-a-teacher-relocation-payment/landing-page> |
+            | Admin                       | <${{ env.APP_URL }}/admin>                                         |
 
   deploy:
     name: Deploy to ${{ matrix.environment }}
