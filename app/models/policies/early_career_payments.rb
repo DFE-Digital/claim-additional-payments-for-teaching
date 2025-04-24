@@ -16,7 +16,6 @@ module Policies
     VERIFIERS = [
       AutomatedChecks::ClaimVerifiers::Identity,
       AutomatedChecks::ClaimVerifiers::Qualifications,
-      AutomatedChecks::ClaimVerifiers::Induction,
       AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
       AutomatedChecks::ClaimVerifiers::Employment,
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
