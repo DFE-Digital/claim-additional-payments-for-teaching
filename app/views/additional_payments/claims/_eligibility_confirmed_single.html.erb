@@ -1,5 +1,0 @@
-<h2 class="govuk-heading-m">Based on what you told us, you can apply for <%= policy.is_a?(Policies::EarlyCareerPayments) ? "an" : "a" %> <%= policy_name(policy) %> of:</h2>
-
-<p class="govuk-heading-l"><%= number_to_currency(@form.award_amount(policy), precision: 0) %></p>
-
-<%= render partial: "eligibility_guidance_#{policy.locale_key}", locals: { selected_claim_policy: policy } %>
