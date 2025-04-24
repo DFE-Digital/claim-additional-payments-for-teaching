@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_19_180055) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_24_111947) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -137,22 +137,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_19_180055) do
     t.index ["claim_id"], name: "index_decisions_on_claim_id"
     t.index ["created_at"], name: "index_decisions_on_created_at"
     t.index ["created_by_id"], name: "index_decisions_on_created_by_id"
-  end
-
-  create_table "delayed_jobs", force: :cascade do |t|
-    t.integer "priority", default: 0, null: false
-    t.integer "attempts", default: 0, null: false
-    t.text "handler", null: false
-    t.text "last_error"
-    t.datetime "run_at", precision: nil
-    t.datetime "locked_at", precision: nil
-    t.datetime "failed_at", precision: nil
-    t.string "locked_by"
-    t.string "queue"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-    t.string "cron"
-    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
   create_table "dfe_sign_in_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
