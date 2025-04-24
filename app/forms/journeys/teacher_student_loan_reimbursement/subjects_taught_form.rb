@@ -1,29 +1,28 @@
 module Journeys
   module TeacherStudentLoanReimbursement
     class SubjectsTaughtForm < Form
-      attr_accessor :subjects_taught
+      attribute :subjects_taught, default: []
 
-      attribute :taught_eligible_subjects, :boolean
-      attribute :biology_taught, :boolean
-      attribute :chemistry_taught, :boolean
-      attribute :physics_taught, :boolean
-      attribute :computing_taught, :boolean
-      attribute :languages_taught, :boolean
+      before_validation :clean_subjects_taught
+
+      validates :subjects_taught,
+        inclusion: {
+          in: :possible_subjects,
+          message: ->(form, _) { form.i18n_errors_path(:select_subject) }
+        }
 
       validate :one_subject_must_be_selected
 
-      before_validation :determine_dependant_attributes
-
       def save
-        return false unless valid?
+        return false if invalid?
 
         journey_session.answers.assign_attributes(
           taught_eligible_subjects: taught_eligible_subjects,
-          biology_taught: biology_taught,
-          chemistry_taught: chemistry_taught,
-          physics_taught: physics_taught,
-          computing_taught: computing_taught,
-          languages_taught: languages_taught
+          biology_taught: taught?("biology"),
+          chemistry_taught: taught?("chemistry"),
+          physics_taught: taught?("physics"),
+          computing_taught: taught?("computing"),
+          languages_taught: taught?("languages")
         )
 
         journey_session.save!
@@ -33,49 +32,50 @@ module Journeys
         @claim_school_name ||= answers.claim_school_name
       end
 
-      def subject_attributes
-        Policies::StudentLoans::Eligibility::SUBJECT_ATTRIBUTES
-      end
-
-      def subject_taught_selected?(subject)
-        public_send(subject) == true if respond_to?(subject)
+      def eligible_subjects
+        Policies::StudentLoans::Eligibility::SUBJECT_ATTRIBUTES.map(&:to_s)
       end
 
       private
 
-      def determine_dependant_attributes
-        subject_attributes.each(&method(:update_subject_taught_attribute))
-        assign_attributes(taught_eligible_subjects: selected_subjects.empty? ? nil : !no_subject_taught_selected?)
+      def attributes_with_current_value
+        if (params.dig(:claim, :subjects_taught) || []).include?("")
+          {subjects_taught: params.dig(:claim, :subjects_taught)}
+        else
+          {subjects_taught: subjects_taught_from_session}
+        end
       end
 
-      def update_subject_taught_attribute(subject)
-        assign_attributes(subject => subject.to_s.in?(selected_subjects))
+      def subjects_taught_from_session
+        if journey_session.answers.taught_eligible_subjects == false
+          return ["none_taught"]
+        end
+
+        eligible_subjects.select { |subject| journey_session.answers.public_send(subject) }
       end
 
-      def no_subject_taught_selected?
-        "none_taught".in?(selected_subjects)
-      end
-
-      def selected_subjects
-        permitted_params.fetch(:subjects_taught, [])
-      end
-
-      def permitted_params
-        @permitted_params ||= params.fetch(:claim, {}).permit(subjects_taught: [])
-      end
-
-      def any_subjects_taught_selected?
-        subject_attributes.any?(&method(:subject_taught_selected?))
-      end
-
-      def not_taught_eligible_subjects?
-        taught_eligible_subjects == false
+      def possible_subjects
+        (eligible_subjects + [:none_taught]).map(&:to_s)
       end
 
       def one_subject_must_be_selected
-        return if not_taught_eligible_subjects? || any_subjects_taught_selected?
+        return if (subjects_taught & possible_subjects).size > 0
 
         errors.add(:subjects_taught, i18n_errors_path(:select_subject))
+      end
+
+      def taught_eligible_subjects
+        return false if subjects_taught.include?("none_taught")
+
+        (subjects_taught & eligible_subjects).size > 0
+      end
+
+      def taught?(subject)
+        subjects_taught.include?("#{subject}_taught")
+      end
+
+      def clean_subjects_taught
+        subjects_taught.reject!(&:blank?)
       end
     end
   end

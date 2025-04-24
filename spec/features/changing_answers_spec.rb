@@ -26,9 +26,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     )
 
     click_link "Change which of the following subjects did you teach at #{session.answers.claim_school.name.downcase} between 6 april 2022 and 5 april 2023?"
-
-    expect(find("#claim_physics_taught").checked?).to eq(true)
-
+    expect(page).to have_checked_field("Physics", visible: false)
     check "Biology"
     click_on "Continue"
 
@@ -100,9 +98,8 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "subjects-taught"))
 
-    check I18n.t("student_loans.forms.subjects_taught.answers.biology_taught"), visible: false
-    check I18n.t("student_loans.forms.subjects_taught.answers.chemistry_taught"), visible: false
-
+    check "Biology", visible: false
+    check "Chemistry", visible: false
     click_on "Continue"
 
     session.reload
@@ -169,14 +166,11 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     click_link "Change which of the following subjects did you teach at #{session.answers.claim_school.name.downcase} between 6 april 2022 and 5 april 2023?"
 
-    expect(find("#claim_physics_taught").checked?).to eq(true)
-
+    expect(page).to have_checked_field("Physics", visible: false)
     click_on "Continue"
 
     expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "check-your-answers"))
-
     expect(page).to have_text("Physics")
-
     expect(page).not_to have_text("Biology")
     expect(page).not_to have_text("Chemistry")
     expect(page).not_to have_text("Computing")
