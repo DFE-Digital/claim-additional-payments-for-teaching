@@ -1,7 +1,0 @@
-<% content_for(:page_title, page_title(t("additional_payments.one_time_password"), journey: current_journey_routing_name, show_error: current_reminder.errors.any?)) %>
-
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <%= render("one_time_password", locals: {form: current_reminder, current_journey_routing_name: current_journey_routing_name, show_caption: true}) %>
-  </div>
-</div>
