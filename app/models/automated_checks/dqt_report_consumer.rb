@@ -42,11 +42,6 @@ module AutomatedChecks
                   admin_user: @admin_user,
                   claim:,
                   dqt_teacher_status: [record]
-                ),
-                ClaimVerifiers::Induction.new(
-                  admin_user: @admin_user,
-                  claim: claim,
-                  dqt_teacher_status: [record]
                 )
               ]
             ).perform
