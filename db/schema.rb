@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_12_125328) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_15_153908) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -519,9 +519,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_12_125328) do
     t.string "town"
     t.string "county"
     t.string "postcode"
-    t.integer "phase", null: false
-    t.integer "school_type_group", null: false
-    t.integer "school_type", null: false
     t.uuid "local_authority_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
@@ -533,9 +530,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_12_125328) do
     t.date "open_date"
     t.string "postcode_sanitised"
     t.text "ukprn"
-    t.string "phase_string"
-    t.string "school_type_group_string"
-    t.string "school_type_string"
+    t.string "phase", null: false
+    t.string "school_type_group", null: false
+    t.string "school_type", null: false
     t.index ["close_date"], name: "index_schools_on_close_date"
     t.index ["created_at"], name: "index_schools_on_created_at"
     t.index ["local_authority_district_id"], name: "index_schools_on_local_authority_district_id"

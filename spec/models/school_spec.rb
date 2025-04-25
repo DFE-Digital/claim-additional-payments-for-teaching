@@ -46,6 +46,95 @@ RSpec.describe School, type: :model do
     end
   end
 
+  describe ".phase_code_to_enum" do
+    describe ".phase_code_to_enum" do
+      it "returns the correct symbol for a valid phase code" do
+        expect(School.phase_code_to_enum(0)).to eq(:not_applicable)
+        expect(School.phase_code_to_enum(1)).to eq(:nursery)
+        expect(School.phase_code_to_enum(2)).to eq(:primary)
+        expect(School.phase_code_to_enum(3)).to eq(:middle_deemed_primary)
+        expect(School.phase_code_to_enum(4)).to eq(:secondary)
+        expect(School.phase_code_to_enum(5)).to eq(:middle_deemed_secondary)
+        expect(School.phase_code_to_enum(6)).to eq(:sixteen_plus)
+        expect(School.phase_code_to_enum(7)).to eq(:all_through)
+      end
+
+      it "returns nil for an unknown phase code" do
+        expect(School.phase_code_to_enum(999)).to be_nil
+        expect(School.phase_code_to_enum(nil)).to be_nil
+      end
+    end
+  end
+
+  describe ".school_type_group_code_to_enum" do
+    it "returns the correct symbol for a valid school type group code" do
+      expect(School.school_type_group_code_to_enum(1)).to eq(:colleges)
+      expect(School.school_type_group_code_to_enum(2)).to eq(:universities)
+      expect(School.school_type_group_code_to_enum(3)).to eq(:independent_schools)
+      expect(School.school_type_group_code_to_enum(4)).to eq(:la_maintained)
+      expect(School.school_type_group_code_to_enum(5)).to eq(:special_schools)
+      expect(School.school_type_group_code_to_enum(6)).to eq(:welsh_schools)
+      expect(School.school_type_group_code_to_enum(9)).to eq(:other)
+      expect(School.school_type_group_code_to_enum(10)).to eq(:academies)
+      expect(School.school_type_group_code_to_enum(11)).to eq(:free_schools)
+      expect(School.school_type_group_code_to_enum(13)).to eq(:online)
+    end
+
+    it "returns nil for an unknown school type group code" do
+      expect(School.school_type_group_code_to_enum(999)).to be_nil
+      expect(School.school_type_group_code_to_enum(nil)).to be_nil
+    end
+  end
+
+  describe ".school_type_code_to_enum" do
+    it "returns the correct symbol for a valid school type code" do
+      expect(School.school_type_code_to_enum(1)).to eq(:community_school)
+      expect(School.school_type_code_to_enum(2)).to eq(:voluntary_aided_school)
+      expect(School.school_type_code_to_enum(3)).to eq(:voluntary_controlled_school)
+      expect(School.school_type_code_to_enum(5)).to eq(:foundation_school)
+      expect(School.school_type_code_to_enum(6)).to eq(:city_technology_college)
+      expect(School.school_type_code_to_enum(7)).to eq(:community_special_school)
+      expect(School.school_type_code_to_enum(8)).to eq(:non_maintained_special_school)
+      expect(School.school_type_code_to_enum(10)).to eq(:other_independent_special_school)
+      expect(School.school_type_code_to_enum(11)).to eq(:other_independent_school)
+      expect(School.school_type_code_to_enum(12)).to eq(:foundation_special_school)
+      expect(School.school_type_code_to_enum(14)).to eq(:pupil_referral_unit)
+      expect(School.school_type_code_to_enum(15)).to eq(:local_authority_nursery_school)
+      expect(School.school_type_code_to_enum(18)).to eq(:further_education)
+      expect(School.school_type_code_to_enum(24)).to eq(:secure_unit)
+      expect(School.school_type_code_to_enum(25)).to eq(:offshore_school)
+      expect(School.school_type_code_to_enum(26)).to eq(:service_childrens_education)
+      expect(School.school_type_code_to_enum(27)).to eq(:miscellaneous)
+      expect(School.school_type_code_to_enum(28)).to eq(:academy_sponsor_led)
+      expect(School.school_type_code_to_enum(29)).to eq(:higher_education_institution)
+      expect(School.school_type_code_to_enum(30)).to eq(:welsh_establishment)
+      expect(School.school_type_code_to_enum(31)).to eq(:sixth_form_centre)
+      expect(School.school_type_code_to_enum(32)).to eq(:special_post_16_institutions)
+      expect(School.school_type_code_to_enum(33)).to eq(:academy_special_sponsor_led)
+      expect(School.school_type_code_to_enum(34)).to eq(:academy_converter)
+      expect(School.school_type_code_to_enum(35)).to eq(:free_school)
+      expect(School.school_type_code_to_enum(36)).to eq(:free_school_special)
+      expect(School.school_type_code_to_enum(37)).to eq(:british_school_oversea)
+      expect(School.school_type_code_to_enum(38)).to eq(:free_school_alternative_provider)
+      expect(School.school_type_code_to_enum(39)).to eq(:free_school_16_to_19)
+      expect(School.school_type_code_to_enum(40)).to eq(:university_technical_college)
+      expect(School.school_type_code_to_enum(41)).to eq(:studio_school)
+      expect(School.school_type_code_to_enum(42)).to eq(:academy_alternative_provision_converter)
+      expect(School.school_type_code_to_enum(43)).to eq(:academy_alternative_provision_sponsor_led)
+      expect(School.school_type_code_to_enum(44)).to eq(:academy_special_converter)
+      expect(School.school_type_code_to_enum(45)).to eq(:academy_16_to_19_converter)
+      expect(School.school_type_code_to_enum(46)).to eq(:academy_16_to_19_sponsor_led)
+      expect(School.school_type_code_to_enum(49)).to eq(:online_provider)
+      expect(School.school_type_code_to_enum(56)).to eq(:institution_funded_by_other_government_department)
+      expect(School.school_type_code_to_enum(57)).to eq(:academy_secure_16_to_19)
+    end
+
+    it "returns nil for an unknown school type code" do
+      expect(School.school_type_code_to_enum(999)).to be_nil
+      expect(School.school_type_code_to_enum(nil)).to be_nil
+    end
+  end
+
   describe "#address" do
     it "returns a formatted address string" do
       school = School.new(
@@ -270,38 +359,6 @@ RSpec.describe School, type: :model do
       it "strips space characters and saves it to postcode_sanitised" do
         school.save!
         expect(school.postcode_sanitised).to eq("AB123CD")
-      end
-    end
-  end
-
-  describe "enum_methods" do
-    context "when set by name" do
-      it "sets the string column" do
-        school = create(
-          :school,
-          phase: :secondary,
-          school_type_group: :free_schools,
-          school_type: :free_school
-        )
-
-        expect(school.phase_string).to eq("secondary")
-        expect(school.school_type_group_string).to eq("free_schools")
-        expect(school.school_type_string).to eq("free_school")
-      end
-    end
-
-    context "when set by value" do
-      it "sets the string column" do
-        school = create(
-          :school,
-          phase: 4,
-          school_type_group: 11,
-          school_type: 35
-        )
-
-        expect(school.phase_string).to eq("secondary")
-        expect(school.school_type_group_string).to eq("free_schools")
-        expect(school.school_type_string).to eq("free_school")
       end
     end
   end
