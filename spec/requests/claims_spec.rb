@@ -93,35 +93,6 @@ RSpec.describe "Claims", type: :request do
           get claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school")
           expect(response.body).to include("Which school were you employed to teach at")
         end
-
-        context "when searching for a school on the claim-school page" do
-          let!(:school_1) { create(:school) }
-          let!(:school_2) { create(:school) }
-
-          it "searches for schools using the search term" do
-            get claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"), params: {school_search: school_1.name}
-
-            # Issues with e.g. "O&#39;Kon and Sons School" matching "O'Kon and Sons School", quickfix escape html
-            expect(response.body).to include CGI.escapeHTML(school_1.name)
-            expect(response.body).not_to include CGI.escapeHTML(school_2.name)
-
-            expect(response.body).to include "Continue"
-          end
-
-          it "only returns results if the search term is more than two characters" do
-            get claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"), params: {school_search: "ab"}
-
-            expect(response.body).to include("There is a problem")
-            expect(response.body).to include("Enter a school or postcode")
-            expect(response.body).not_to include(school_1.name)
-          end
-
-          it "shows an appropriate message when there are no search results" do
-            get claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"), params: {school_search: "crocodile"}
-
-            expect(response.body).to include("No results match that search term")
-          end
-        end
       end
     end
 
@@ -354,32 +325,6 @@ RSpec.describe "Claims", type: :request do
         expect(
           journey_session.reload.answers.mostly_performed_leadership_duties
         ).to be_nil
-      end
-
-      context "having searched for a school but not selected a school from the results on the claim-school page" do
-        let!(:school) { create(:school) }
-
-        before { set_slug_sequence_in_session(journey_session, "claim-school") }
-
-        it "re-renders the school search results with an error message" do
-          put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"), params: {school_search: school.name, claim: {claim_school_id: ""}}
-
-          expect(response).to be_successful
-          expect(response.body).to include("There is a problem")
-          expect(response.body).to include("Select a school from the list")
-          expect(response.body).to include(CGI.escapeHTML(school.name)) # eg. apostrophe characters become HTML entities
-        end
-      end
-
-      context "when the update makes the claim ineligible" do
-        let(:ineligible_school) { create(:school, :student_loans_ineligible) }
-
-        it "redirects to the “ineligible” page" do
-          set_slug_sequence_in_session(journey_session, "claim-school")
-          put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school"), params: {claim: {claim_school_id: ineligible_school.to_param}}
-
-          expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "ineligible"))
-        end
       end
     end
 

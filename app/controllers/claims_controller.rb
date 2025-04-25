@@ -64,6 +64,7 @@ class ClaimsController < BasePublicController
     if journey.use_navigator?
       navigator.next_slug
     else
+      Rails.logger.info "old-claims-debug: next slug is #{page_sequence.next_slug}" if Rails.env.development? || Rails.env.test?
       page_sequence.next_slug
     end
   end

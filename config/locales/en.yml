@@ -329,6 +329,11 @@ en:
           enter_a_school_or_postcode: "Enter a school or postcode"
           select_a_school: "Select a school from the list or search again for a different school"
           school_not_found: "School not found"
+          blank: Enter a school or postcode
+          min_length: Enter a school name or postcode that is at least 3 characters long
+      claim_school_results:
+        errors:
+          blank: Select a school from the list or search again for a different school
       current_school:
         questions:
           current_school_search: "Which school are you currently employed to teach at?"

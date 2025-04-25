@@ -2,6 +2,8 @@ module Journeys
   module TeacherStudentLoanReimbursement
     class SessionAnswers < Journeys::SessionAnswers
       attribute :qts_award_year, :string, pii: false
+      attribute :provision_search, :string, pii: false
+      attribute :possible_claim_school_id, :string, pii: false # UUID
       attribute :claim_school_id, :string, pii: false # UUID
       attribute :employment_status, :string, pii: false
       attribute :biology_taught, :boolean, pii: false
