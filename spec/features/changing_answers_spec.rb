@@ -4,12 +4,12 @@ RSpec.feature "Changing the answers on a submittable claim" do
   include StudentLoansHelper
 
   before do
+    FeatureFlag.enable!(:tri_only_journey)
     create(:journey_configuration, :student_loans, current_academic_year: AcademicYear.new(2023))
-    create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023))
+    create(:journey_configuration, :targeted_retention_incentive_payments_only, current_academic_year: AcademicYear.new(2023))
   end
 
   let(:student_loans_school) { create(:school, :student_loans_eligible) }
-  let(:ecp_school) { create(:school, :early_career_payments_eligible) }
 
   scenario "Teacher changes an answer which is not a dependency of any of the other answers they've given, remaining eligible" do
     start_student_loans_claim
@@ -296,15 +296,15 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
   describe "Teacher changes a field that requires OTP validation" do
     let(:session) do
-      Journeys::AdditionalPaymentsForTeaching::Session.order(:created_at).last
+      Journeys::TargetedRetentionIncentivePayments::Session.order(:created_at).last
     end
 
     before do
-      start_early_career_payments_claim
+      start_targeted_retention_incentive_payments_claim
 
       session.answers.assign_attributes(
         attributes_for(
-          :additional_payments_answers,
+          :targeted_retention_incentive_payments_answers,
           :submittable
         ).merge(personal_details_attributes)
       )
@@ -342,7 +342,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
         expect(session.reload.answers.email_verified).to eq true
         expect(
-          Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm.new(
+          Journeys::TargetedRetentionIncentivePayments::ClaimSubmissionForm.new(
             journey_session: session
           )
         ).to be_valid
@@ -360,18 +360,9 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     context "with no mobile number" do
       before do
-        allow(NotifySmsMessage).to receive(:new).with(
-          phone_number: new_mobile,
-          template_id: NotifySmsMessage::OTP_PROMPT_TEMPLATE_ID,
-          personalisation: {
-            otp: otp_code
-          }
-        ).and_return(notify)
-        allow(OneTimePassword::Generator).to receive(:new).and_return(instance_double("OneTimePassword::Generator", code: otp_code))
-        allow(OneTimePassword::Validator).to receive(:new).and_return(instance_double("OneTimePassword::Validator", valid?: true))
+        allow(NotifySmsMessage).to receive(:new).and_return(notify)
       end
 
-      let(:otp_code) { "019121" }
       let(:notify) { instance_double("NotifySmsMessage", deliver!: true) }
       let(:personal_details_attributes) do
         {
@@ -401,13 +392,15 @@ RSpec.feature "Changing the answers on a submittable claim" do
         expect(page).to have_text("Mobile number verification")
         expect(page).to have_text("Enter the 6-digit passcode")
 
+        secret = Journeys::TargetedRetentionIncentivePayments::Session.last.answers.mobile_verification_secret
+        otp_code = OneTimePassword::Generator.new(secret:).code
         fill_in "claim-one-time-password-field", with: otp_code
         click_on "Confirm"
 
         expect(page).not_to have_text("Some places are both a bank and a building society")
         expect(session.reload.answers.mobile_verified).to eq true
         expect(
-          Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm.new(
+          Journeys::TargetedRetentionIncentivePayments::ClaimSubmissionForm.new(
             journey_session: session
           )
         ).to be_valid
@@ -417,15 +410,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     context "with an existing mobile number" do
       before do
-        allow(NotifySmsMessage).to receive(:new).with(
-          phone_number: new_mobile,
-          template_id: NotifySmsMessage::OTP_PROMPT_TEMPLATE_ID,
-          personalisation: {
-            otp: otp_code
-          }
-        ).and_return(notify)
-        allow(OneTimePassword::Generator).to receive(:new).and_return(instance_double("OneTimePassword::Generator", code: otp_code))
-        allow(OneTimePassword::Validator).to receive(:new).and_return(instance_double("OneTimePassword::Validator", valid?: true))
+        allow(NotifySmsMessage).to receive(:new).and_return(notify)
       end
 
       let(:otp_code) { "229213" }
@@ -457,13 +442,15 @@ RSpec.feature "Changing the answers on a submittable claim" do
         expect(page).to have_text("Mobile number verification")
         expect(page).to have_text("Enter the 6-digit passcode")
 
+        secret = Journeys::TargetedRetentionIncentivePayments::Session.last.answers.mobile_verification_secret
+        otp_code = OneTimePassword::Generator.new(secret:).code
         fill_in "claim-one-time-password-field", with: otp_code
         click_on "Confirm"
 
         expect(page).not_to have_text("Some places are both a bank and a building society")
         expect(session.reload.answers.mobile_verified).to eq true
         expect(
-          Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm.new(
+          Journeys::TargetedRetentionIncentivePayments::ClaimSubmissionForm.new(
             journey_session: session
           )
         ).to be_valid
