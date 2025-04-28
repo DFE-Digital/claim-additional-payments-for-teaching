@@ -1,0 +1,34 @@
+<% if @form.tid_bypassable? %>
+  <%= form_with form: @form, scope: :claim, method: :get, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+    <%= f.hidden_field :logged_in_with_tid, value: true %>
+
+    <h2 class="govuk-heading-m">Developer bypass</h2>
+
+    <p class="govuk-body">
+      The below form is a developer bypass to stub the data returned from TID
+    </p>
+
+    <%= f.fields_for :teacher_id_user_info_attributes do |ff| %>
+      <%= ff.govuk_text_field :given_name, label: { text: "First name" } %>
+      <%= ff.govuk_text_field :family_name, label: { text: "Last name" } %>
+
+      <%= ff.govuk_email_field :email, label: { text: "Email" } %>
+
+      <div class="govuk-form-group">
+        <%= ff.govuk_check_box :email_verified, true, false, multiple: false, link_errors: true, label: { text: "Email verified?" } %>
+      </div>
+
+      <%= ff.govuk_email_field :phone_number, label: { text: "Mobile" } %>
+
+      <%= ff.govuk_text_field :trn, label: { text: "TRN" } %>
+      <%= ff.govuk_text_field :birthdate, label: { text: "Date of birth" }, hint: { text: "yyyy-mm-dd" } %>
+      <%= ff.govuk_text_field :ni_number, label: { text: "NI number" } %>
+
+      <div class="govuk-form-group">
+        <%= ff.govuk_check_box :trn_match_ni_number, true, false, multiple: false, link_errors: true, label: { text: "TRN matches NI number?" } %>
+      </div>
+    <% end %>
+
+    <%= f.govuk_submit "Continue with above answers" %>
+  <% end %>
+<% end %>

@@ -1,20 +1,25 @@
 <h1 class="govuk-heading-l">
   Use DfE Identity to sign in
 </h1>
-<p>
+
+<p class="govuk-body">
   You can sign in or set up a DfE Identity account to make it easier to claim additional payments.
 </p>
-<p>
+
+<p class="govuk-body">
   You will need your National Insurance number and teacher reference number (TRN) to create an account.
 </p>
 
 <div class="govuk-button-group">
-  <%= button_to "Continue with DfE Identity", "/auth/tid", class: "govuk-button", method: :post %>
-  <%= button_to(
+  <%= govuk_button_to "Continue with DfE Identity", "/auth/tid" %>
+
+  <%= govuk_button_to(
     "Continue without signing in",
     claim_path(current_journey_routing_name, "sign-in-or-continue"),
     method: :patch,
     params: { claim: { logged_in_with_tid: false, details_check: nil } },
-    class: "govuk-button govuk-button--secondary"
+    secondary: true
   ) %>
 </div>
+
+<%= render "tid_bypass" %>
