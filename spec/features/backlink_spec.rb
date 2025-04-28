@@ -2,10 +2,11 @@ require "rails_helper"
 
 RSpec.feature "Backlinking during a claim" do
   scenario "when there is an error" do
-    create(:journey_configuration, :additional_payments)
+    FeatureFlag.enable!(:tri_only_journey)
+    create(:journey_configuration, :targeted_retention_incentive_payments_only)
     targeted_retention_incentive_school = create(:school, :targeted_retention_incentive_payments_eligible)
 
-    visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
+    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
     # - Sign in or continue page
     expect(page).to have_text("Use DfE Identity to sign in")
     expect(page).to have_link("Back")
@@ -94,11 +95,21 @@ RSpec.feature "Backlinking during a claim" do
     expect(page).to have_text("Claim back student loan repayments if you’re a teacher")
   end
 
-  scenario "ECP/Targeted Retention Incentive journey" do
-    create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023))
-    targeted_retention_incentive_school = create(:school, :targeted_retention_incentive_payments_eligible)
+  scenario "Targeted Retention Incentive journey" do
+    FeatureFlag.enable!(:tri_only_journey)
 
-    visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
+    create(
+      :journey_configuration,
+      :targeted_retention_incentive_payments_only,
+      current_academic_year: AcademicYear.new(2023)
+    )
+
+    targeted_retention_incentive_school = create(
+      :school,
+      :targeted_retention_incentive_payments_eligible
+    )
+
+    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
     # - Sign in or continue page
     expect(page).to have_text("Use DfE Identity to sign in")
     expect(page).to have_link("Back")
@@ -119,11 +130,21 @@ RSpec.feature "Backlinking during a claim" do
     expect(page).to have_no_link("Back")
   end
 
-  scenario "ECP/Targeted Retention Incentive trainee mini journey" do
-    create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023))
-    targeted_retention_incentive_school = create(:school, :targeted_retention_incentive_payments_eligible)
+  scenario "Targeted Retention Incentive trainee mini journey" do
+    FeatureFlag.enable!(:tri_only_journey)
 
-    visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
+    create(
+      :journey_configuration,
+      :targeted_retention_incentive_payments_only,
+      current_academic_year: AcademicYear.new(2023)
+    )
+
+    targeted_retention_incentive_school = create(
+      :school,
+      :targeted_retention_incentive_payments_eligible
+    )
+
+    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
 
     # - Sign in or continue page
     expect(page).to have_text("Use DfE Identity to sign in")
