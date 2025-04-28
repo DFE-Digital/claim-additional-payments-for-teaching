@@ -33,7 +33,7 @@ jobs:
       - name: Get commit details
         id: commit-info
         run: |
-          COMMIT_MSG=$(git log -1 --pretty=%B)
+          COMMIT_MSG=$(git log -1 --pretty=%s)
           COMMIT_AUTHOR=$(git log -1 --pretty=%an)
           COMMIT_LINK="https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
           echo "COMMIT_MSG=$COMMIT_MSG" >> $GITHUB_ENV
