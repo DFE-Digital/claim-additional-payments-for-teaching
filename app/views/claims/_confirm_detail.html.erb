@@ -1,6 +1,7 @@
 <h1 class="govuk-heading-l"><%=t "questions.check_and_confirm_details" %></h1>
-<p>We have used your DfE Identity account to retrieve your personal details.</p>
-<p>You must check that all details are correct and confirm they are correct to continue.</p>
+
+<p class="govuk-body">We have used your DfE Identity account to retrieve your personal details.</p>
+<p class="govuk-body">You must check that all details are correct and confirm they are correct to continue.</p>
 
 <%= render partial: "personal_details", locals: { teacher_id_user_info: form.teacher_id_user_info } %>
 <%= render partial: "confirmation_form", locals: { form: form} %>
