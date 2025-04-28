@@ -64,6 +64,10 @@ class SignInOrContinueForm < Form
     true
   end
 
+  def tid_bypassable?
+    Rails.env.development?
+  end
+
   private
 
   def permitted_attributes
