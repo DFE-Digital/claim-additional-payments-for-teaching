@@ -92,7 +92,7 @@ module Journeys
 
       def initial_slugs
         [].tap do |sequence|
-          sequence << "sign-in-or-continue"
+          sequence << "sign-in-or-continue" if Journeys::TargetedRetentionIncentivePayments.configuration.teacher_id_enabled?
           sequence << "reset-claim" if answers.details_check == false
           sequence << "correct-school" if answers.logged_in_with_tid_and_has_recent_tps_school?
           sequence << "current-school" unless answers.chose_recent_tps_school?
