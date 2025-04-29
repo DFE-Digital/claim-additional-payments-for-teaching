@@ -184,13 +184,14 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     end
   end
 
-  context "combined ECP/Targeted Retention Incentive journey claim" do
-    before { create(:journey_configuration, :additional_payments) }
-    let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
-    let!(:closed_school) { create(:school, :combined_journey_eligibile_for_all, :closed) }
+  context "Targeted Retention Incentive journey claim" do
+    before { FeatureFlag.enable!(:tri_only_journey) }
+    before { create(:journey_configuration, :targeted_retention_incentive_payments_only) }
+    let!(:school) { create(:school, :targeted_retention_incentive_payments_eligible) }
+    let!(:closed_school) { create(:school, :targeted_retention_incentive_payments_eligible, :closed) }
 
     scenario "doesn't select a school from the search results the first time around" do
-      visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
+      visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
 
       # - Sign in or continue page
       expect(page).to have_text("Use DfE Identity to sign in")
@@ -204,7 +205,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
       click_on "Continue"
 
       # Backlink is to the same slug as current (current-school)
-      expect(page).to have_link("Back", href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "current-school"))
+      expect(page).to have_link("Back", href: claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME, "current-school"))
 
       click_on "Continue"
 
