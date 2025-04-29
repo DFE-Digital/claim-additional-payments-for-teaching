@@ -367,7 +367,6 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
             personal-details
             postcode-search
             select-home-address
-            address
             email-address
             email-verification
             provide-mobile-number
