@@ -1,39 +1,35 @@
 require "rails_helper"
 
 RSpec.feature "Combined claim journey dependent answers" do
-  before { create(:journey_configuration, :additional_payments) }
-  let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
+  before { FeatureFlag.enable!(:tri_only_journey) }
+  before { create(:journey_configuration, :targeted_retention_incentive_payments_only) }
+  let!(:school) { create(:school, :targeted_retention_incentive_payments_eligible) }
 
   scenario "Dependent answers reset" do
-    visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
+    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
 
     # - Sign in or continue page
     expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue without signing in"
 
     # - Which school do you teach at
-    expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
+    expect(page).to have_text("Which school do you teach at?")
     choose_school school
     click_on "Continue"
 
     # - Have you started your first year as a newly qualified teacher?
-    expect(page).to have_text(I18n.t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"))
-    choose "Yes"
-    click_on "Continue"
-
-    # - Have you completed your induction as an early-career teacher?
-    expect(page).to have_text(I18n.t("additional_payments.questions.induction_completed.heading"))
+    expect(page).to have_text("Are you currently teaching as a qualified teacher?")
     choose "Yes"
     click_on "Continue"
 
     # - Are you currently employed as a supply teacher
-    expect(page).to have_text(I18n.t("additional_payments.forms.supply_teacher.questions.employed_as_supply_teacher"))
+    expect(page).to have_text("Are you currently employed as a supply teacher?")
     choose "No"
     click_on "Continue"
 
     # - Poor performance
-    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.performance.question"))
-    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.disciplinary.question"))
+    expect(page).to have_text("Are you subject to any formal performance measures as a result of continuous poor teaching standards?")
+    expect(page).to have_text("Are you currently subject to disciplinary action?")
     within all(".govuk-fieldset")[0] do
       choose("No")
     end
@@ -43,12 +39,12 @@ RSpec.feature "Combined claim journey dependent answers" do
     click_on "Continue"
 
     # - What route into teaching did you take?
-    expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
+    expect(page).to have_text("Which route into teaching did you take?")
     choose "Postgraduate initial teacher training (ITT)"
     click_on "Continue"
 
     # - In which academic year did you complete your postgraduate ITT?
-    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.postgraduate_itt"))
+    expect(page).to have_text("In which academic year did you start your postgraduate initial teacher training (ITT)?")
     choose "2020 to 2021"
     click_on "Continue"
 
@@ -58,17 +54,17 @@ RSpec.feature "Combined claim journey dependent answers" do
     click_on "Continue"
 
     # - Do you teach mathematics now?
-    expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
+    expect(page).to have_text("Do you spend at least half of your contracted hours teaching eligible subjects?")
     choose "Yes"
     click_on "Continue"
 
     # User goes back in the journey and changes their answer to a question which resets other dependent answers
-    visit claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "qualification")
-    expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
+    visit claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME, "qualification")
+    expect(page).to have_text("Which route into teaching did you take?")
     choose "Undergraduate initial teacher training (ITT)"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
+    expect(page).to have_text("In which academic year did you complete your undergraduate initial teacher training (ITT)?")
     choose "2020 to 2021"
     click_on "Continue"
 
@@ -76,7 +72,7 @@ RSpec.feature "Combined claim journey dependent answers" do
     expect(page).to have_text("Which subject")
 
     # User tries to skip ahead and not answer the question
-    visit claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "teaching-subject-now")
+    visit claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME, "teaching-subject-now")
 
     # User should be redirected to the dependent question still unanswered
     expect(page).to have_text("Which subject")
