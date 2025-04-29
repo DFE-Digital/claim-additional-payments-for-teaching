@@ -1,17 +1,20 @@
 require "rails_helper"
 
 RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_validation_enabled do
-  let(:journey_session) do
-    Journeys::AdditionalPaymentsForTeaching::Session.order(:created_at).last
+  before do
+    FeatureFlag.enable!(:tri_only_journey)
   end
-  let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
-  let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
+  let(:journey_session) do
+    Journeys::TargetedRetentionIncentivePayments::Session.order(:created_at).last
+  end
+  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments_only) }
+  let!(:school) { create(:school, :targeted_retention_incentive_payments_eligible) }
   let(:bank_name) { "Jo Bloggs" }
   let(:sort_code) { "123456" }
   let(:account_number) { "87654321" }
 
   def get_to_bank_details_page
-    visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
+    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
 
     # - Sign in or continue page
     expect(page).to have_text("Use DfE Identity to sign in")
@@ -22,10 +25,6 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
     click_on "Continue"
 
     # - Have you started your first year as a newly qualified teacher?
-    choose "Yes"
-    click_on "Continue"
-
-    # - Have you completed your induction as an early-career teacher?
     choose "Yes"
     click_on "Continue"
 
@@ -61,7 +60,6 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
     # - Check your answers for eligibility
     click_on("Continue")
 
-    choose("£2,000 school targeted retention incentive")
     click_on("Apply now")
 
     # - How will we use the information you provide
@@ -77,7 +75,7 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
     click_on "Continue"
 
     # - What is your home address
-    click_link(I18n.t("questions.address.home.link_to_manual_address"))
+    click_on(I18n.t("questions.address.home.link_to_manual_address"))
 
     # - What is your address
     fill_in "House number or name", with: "57"
