@@ -1,6 +1,6 @@
 <%= render("shared/error_summary", instance: @form) if @form.errors.any? %>
 
-<%= form_with model: @form, url: claim_path(current_journey_routing_name) do |form| %>
+<%= form_with model: @form, url: @form.url do |form| %>
   <%= form_group_tag @form do %>
     <fieldset class="govuk-fieldset">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">

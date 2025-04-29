@@ -1,4 +1,6 @@
 class PersonalDetailsForm < Form
+  include ActiveModel::Dirty
+
   InvalidDate = Struct.new(:day, :month, :year, keyword_init: true) do
     def future?
       false
@@ -152,6 +154,12 @@ class PersonalDetailsForm < Form
       journey_session.answers.assign_attributes(
         student_loan_repayment_amount: nil
       )
+
+      if national_insurance_number_changed?
+        journey_session.answers.assign_attributes(
+          student_loan_amount_seen: false
+        )
+      end
     end
   end
 end

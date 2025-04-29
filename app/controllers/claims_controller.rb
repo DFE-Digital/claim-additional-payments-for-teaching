@@ -84,6 +84,17 @@ class ClaimsController < BasePublicController
     other_journey_session = other_journey_sessions.first || journey_session
     new_journey = Journeys.for_routing_name(other_journey_session.journey)
 
+    if new_journey.use_navigator?
+      temp_navigator = Journeys::Navigator.new(
+        current_slug: nil,
+        slug_sequence: new_journey::SlugSequence.new(other_journey_session),
+        params:,
+        session:
+      )
+
+      redirect_to(claim_path(new_journey::ROUTING_NAME, slug: temp_navigator.furthest_permissible_slug)) && return
+    end
+
     # Set the params[:journey] to the new journey routing name so things like
     # journey_session that rely on the journey param find the correct journey.
     params[:journey] = new_journey::ROUTING_NAME
@@ -97,7 +108,9 @@ class ClaimsController < BasePublicController
   end
 
   def set_backlink_path
-    @backlink_path = claim_path(current_journey_routing_name, previous_slug) if previous_slug.present?
+    if previous_slug.present? && Journeys::PageSequence::DEAD_END_SLUGS.exclude?(current_slug)
+      @backlink_path = claim_path(current_journey_routing_name, previous_slug)
+    end
   end
 
   def persist_claim
