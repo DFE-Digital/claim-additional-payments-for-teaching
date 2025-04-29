@@ -133,7 +133,7 @@ module Journeys
 
           sequence << "postcode-search"
           sequence << "select-home-address" unless answers.skip_postcode_search? || answers.ordnance_survey_error?
-          sequence << "address"
+          sequence << "address" if answers.skip_postcode_search? || answers.ordnance_survey_error?
 
           sequence << "select-email" if answers.set_by_teacher_id?("email")
           sequence << "email-address" unless answers.email_address_check?
