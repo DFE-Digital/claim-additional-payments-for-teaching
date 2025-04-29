@@ -2,11 +2,17 @@ require "rails_helper"
 
 RSpec.feature "targeted_retention_incentive payments claims" do
   let(:claim) { Claim.by_policy(Policies::TargetedRetentionIncentivePayments).order(:created_at).last }
-  let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
-  let!(:school) { create(:school, :targeted_retention_incentive_payments_eligible) }
+  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments_only, current_academic_year: AcademicYear.new(2022)) }
+  let(:school) { create(:school, :targeted_retention_incentive_payments_eligible) }
   let(:itt_subject) { "Mathematics" }
   let(:journey_session) do
-    Journeys::AdditionalPaymentsForTeaching::Session.order(:created_at).last
+    Journeys::TargetedRetentionIncentivePayments::Session.order(:created_at).last
+  end
+
+  before do
+    FeatureFlag.enable!(:tri_only_journey)
+    allow(AcademicYear).to receive(:next).and_return(journey_configuration.current_academic_year + 1)
+    school
   end
 
   def check_eligibility_up_to_apply(expect_to_fail: false)
@@ -32,7 +38,7 @@ RSpec.feature "targeted_retention_incentive payments claims" do
       raise "`eligible_degree?` must be defined" unless defined?(eligible_degree?)
 
       # - Do you have an undergraduate or postgraduate degree in an eligible subject?
-      expect(page).to have_text(I18n.t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"))
+      expect(page).to have_text("Do you have a degree in an eligible subject?")
       choose eligible_degree?
       click_on "Continue"
     end
@@ -46,25 +52,25 @@ RSpec.feature "targeted_retention_incentive payments claims" do
     skip_tid
 
     # - Which school do you teach at
-    expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
+    expect(page).to have_text("Which school do you teach at?")
     choose_school school
     click_on "Continue"
 
     # - Have you started your first year as a newly qualified teacher?
-    expect(page).to have_text(I18n.t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"))
+    expect(page).to have_text("Are you currently teaching as a qualified teacher?")
 
     choose "Yes"
     click_on "Continue"
 
     # - Are you currently employed as a supply teacher
-    expect(page).to have_text(I18n.t("additional_payments.forms.supply_teacher.questions.employed_as_supply_teacher"))
+    expect(page).to have_text("Are you currently employed as a supply teacher?")
 
     choose "No"
     click_on "Continue"
 
     # - Poor performance
-    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.performance.question"))
-    expect(page).to have_text(I18n.t("additional_payments.forms.poor_performance.questions.disciplinary.question"))
+    expect(page).to have_text("Are you subject to any formal performance measures as a result of continuous poor teaching standards?")
+    expect(page).to have_text("Are you currently subject to disciplinary action?")
 
     within all(".govuk-fieldset")[0] do
       choose("No")
@@ -75,14 +81,14 @@ RSpec.feature "targeted_retention_incentive payments claims" do
     click_on "Continue"
 
     # - What route into teaching did you take?
-    expect(page).to have_text(I18n.t("additional_payments.forms.qualification.questions.which_route"))
+    expect(page).to have_text("Which route into teaching did you take?")
 
     choose "Undergraduate initial teacher training (ITT)"
 
     click_on "Continue"
 
     # - In which academic year did you complete your undergraduate ITT?
-    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
+    expect(page).to have_text("In which academic year did you complete your undergraduate initial teacher training (ITT)?")
 
     choose "2018 to 2019"
     click_on "Continue"
@@ -93,18 +99,18 @@ RSpec.feature "targeted_retention_incentive payments claims" do
 
   def check_eligibility_after_itt_subject
     # - Do you spend at least half of your contracted hours teaching eligible subjects?
-    expect(page).to have_text(I18n.t("additional_payments.forms.teaching_subject_now.questions.teaching_subject_now"))
+    expect(page).to have_text("Do you spend at least half of your contracted hours teaching eligible subjects?")
 
     choose "Yes"
     click_on "Continue"
 
     # - Check your answers for eligibility
-    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
-    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.secondary_heading"))
-    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
+    expect(page).to have_text("Check your answers")
+    expect(page).to have_text("Eligibility details")
+    expect(page).to have_text("By selecting continue you are confirming that, to the best of your knowledge, the details you are providing are correct.")
 
     if itt_subject == "None of the above"
-      expect(page).to have_text(I18n.t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"))
+      expect(page).to have_text("Do you have a degree in an eligible subject?")
     end
 
     ["Identity details", "Payment details"].each do |section_heading|
@@ -113,8 +119,8 @@ RSpec.feature "targeted_retention_incentive payments claims" do
 
     click_on("Continue")
 
-    expect(page).to have_text("You’re eligible for an additional payment")
-    expect(page).to have_text("school targeted retention incentive of:\n£2,000")
+    expect(page).to have_text("You’re eligible for a targeted retention incentive payment")
+    expect(page).to have_text("targeted retention incentive payment of: £2,000")
 
     click_on("Apply now")
   end
@@ -128,31 +134,30 @@ RSpec.feature "targeted_retention_incentive payments claims" do
     click_on "Continue"
 
     # - Personal details
-    expect(page).to have_text(I18n.t("questions.personal_details"))
-    expect(page).to have_text(I18n.t("questions.name"))
+    expect(page).to have_text("Personal details")
+    expect(page).to have_text("What is your full name?")
 
     fill_in "First name", with: "Russell"
     fill_in "Last name", with: "Wong"
 
-    expect(page).to have_text(I18n.t("questions.date_of_birth"))
+    expect(page).to have_text("What is your date of birth?")
 
     fill_in "Day", with: "28"
     fill_in "Month", with: "2"
     fill_in "Year", with: "1988"
 
-    expect(page).to have_text(I18n.t("questions.national_insurance_number"))
+    expect(page).to have_text("What is your National Insurance number?")
 
     fill_in "National Insurance number", with: "PX321499A"
     click_on "Continue"
 
     # - What is your home address
-    expect(page).to have_text(I18n.t("questions.address.home.title"))
-    expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
+    expect(page).to have_text("What is your home address?")
 
-    click_link(I18n.t("questions.address.home.link_to_manual_address"))
+    click_on("Enter your address manually")
 
     # - What is your address
-    expect(page).to have_text(I18n.t("forms.address.questions.your_address"))
+    expect(page).to have_text("What is your address?")
 
     fill_in "House number or name", with: "57"
     fill_in "Building and street", with: "Walthamstow Drive"
@@ -162,7 +167,7 @@ RSpec.feature "targeted_retention_incentive payments claims" do
     click_on "Continue"
 
     # - Email address
-    expect(page).to have_text(I18n.t("questions.email_address"))
+    expect(page).to have_text("Email address")
 
     fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
     click_on "Continue"
@@ -184,19 +189,19 @@ RSpec.feature "targeted_retention_incentive payments claims" do
     click_on "Confirm"
 
     # - Provide mobile number
-    expect(page).to have_text(I18n.t("questions.provide_mobile_number"))
+    expect(page).to have_text("Would you like to provide your mobile number?")
 
     choose "No"
     click_on "Continue"
 
     # - Mobile number
-    expect(page).not_to have_text(I18n.t("questions.mobile_number"))
+    expect(page).not_to have_text("Mobile number")
 
     # - Mobile number one-time password
     expect(page).not_to have_text("Enter the 6-digit passcode")
 
     # - Enter bank account details
-    expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: "personal bank account"))
+    expect(page).to have_text("Enter your personal bank account details")
     expect(page).not_to have_text("Building society roll number")
 
     fill_in "Name on your account", with: "Jo Bloggs"
@@ -205,13 +210,13 @@ RSpec.feature "targeted_retention_incentive payments claims" do
     click_on "Continue"
 
     # - What gender does your school's payroll system associate with you
-    expect(page).to have_text(I18n.t("forms.gender.questions.payroll_gender"))
+    expect(page).to have_text("How is your gender recorded on your school’s payroll system?")
 
     choose "Female"
     click_on "Continue"
 
     # - What is your teacher reference number
-    expect(page).to have_text(I18n.t("forms.teacher_reference_number.questions.teacher_reference_number"))
+    expect(page).to have_text("What is your teacher reference number (TRN)?")
 
     fill_in "claim-teacher-reference-number-field", with: "1234567"
     click_on "Continue"
@@ -251,18 +256,12 @@ RSpec.feature "targeted_retention_incentive payments claims" do
       expect(submitted_claim.eligibility.teacher_reference_number).to eql("1234567")
 
       # - Application complete (make sure its Word for Word and styling matches)
-      expect(page).to have_text("You applied for a school targeted retention incentive")
+      expect(page).to have_text("You applied for a targeted retention incentive payment")
       expect(page).to have_text("What happens next")
       expect(page).to have_text("Set a reminder to apply next year")
-      expect(page).to have_text("Apply for additional payment each academic year")
+      expect(page).to have_text("Apply for targeted retention incentive payment each academic year")
       expect(page).to have_text("What do you think of this service?")
       expect(page).to have_text(submitted_claim.reference)
-
-      policy_options_provided = [
-        {"policy" => "TargetedRetentionIncentivePayments", "award_amount" => "2000.0"}
-      ]
-
-      expect(submitted_claim.policy_options_provided).to eq policy_options_provided
     end
   end
 
