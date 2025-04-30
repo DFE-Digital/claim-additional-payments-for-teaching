@@ -12,23 +12,21 @@ module FeatureHelpers
   end
 
   def choose_school(school)
+    question = page.find("h1").text
+
     expect(page).to have_text(/Which (additional )?school/) # there can be variations of the full text depending on which journey/page
-
-    fill_in :school_search, with: school.name.sub("The ", "").split(" ").first
-
+    fill_in question, with: school.name.sub("The ", "").split(" ").first
     click_button "Continue"
-
-    # flaky test workaround in case the first click on Continue submitted the form
-    click_button "Continue" unless /(claim|current)-school\?_method=patch/.match?(current_url)
 
     choose school.name
     click_button "Continue"
   end
 
   def choose_school_js(school)
-    expect(page).to have_text(/Which (additional )?school/) # there can be variations of the full text depending on which journey/page
+    question = page.find("h1").text
 
-    fill_in :school_search, with: school.name.sub("The ", "").split(" ").first
+    expect(page).to have_text(/Which (additional )?school/) # there can be variations of the full text depending on which journey/page
+    fill_in question, with: school.name.sub("The ", "").split(" ").first
 
     within("#school_search__listbox") do
       sleep(1) # seems to aid in success, as if click happens before event is bound

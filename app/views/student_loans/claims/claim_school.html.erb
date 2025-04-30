@@ -4,16 +4,38 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% if @form.schools.blank? %>
-      <%= render "claim_school_search",
-                 question: claim_school_question(additional_school: params[:additional_school]),
-                 school_search_value: (@form.claim_school_name unless params[:additional_school])
-      %>
+    <%= form_with model: @form,
+      url: claim_path(current_journey_routing_name),
+      method: :patch,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+      id: "further-education-provision-search-form",
+      html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
 
-    <% else %>
-      <%= render "claim_school_search_results",
-                 question: claim_school_question(additional_school: params[:additional_school])
-      %>
+      <%= f.hidden_field :possible_school_id %>
+
+      <div id="autocomplete-container" class="govuk-!-margin-bottom-9">
+        <%= f.govuk_text_field :provision_search,
+          class: "js-remove",
+          label: {
+            text: claim_school_question(additional_school: params[:additional_school]),
+            tag: "h1",
+            size: "xl"
+          },
+          hint: -> do %>
+            <p>
+              Enter the school name or postcode. Use at least three characters.
+            </p>
+
+            <% if @form.show_multiple_schools_content? %>
+              <p>
+                If you taught at multiple schools during this period, enter the first school you think might be eligible.
+              </p>
+            <% end %>
+          <% end %>
+      </div>
+
+      <%= f.govuk_submit %>
     <% end %>
   </div>
 </div>

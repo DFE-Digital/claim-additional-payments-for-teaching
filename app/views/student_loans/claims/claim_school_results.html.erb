@@ -1,0 +1,18 @@
+<% content_for(:page_title, page_title("HEADING GOES HERE", journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_collection_radio_buttons :possible_claim_school_id, @form.radio_options, :id, :name, :address,
+        legend: {
+          text: claim_school_question(additional_school: params[:additional_school]),
+          tag: "h1",
+          size: "l"
+        } %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

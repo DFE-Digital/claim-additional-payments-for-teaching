@@ -1,28 +1,80 @@
 module Journeys
   module TeacherStudentLoanReimbursement
     class ClaimSchoolForm < Form
-      attribute :claim_school_id
-      attribute :change_school
+      MIN_LENGTH = 3
 
-      attr_reader :schools
+      attribute :provision_search, :string
+      attribute :possible_claim_school_id, :string
 
-      validates :claim_school_id, presence: {message: i18n_error_message(:select_a_school)}
-      validate :claim_school_must_exist, if: -> { claim_school_id.present? }
+      validates :provision_search,
+        presence: {message: i18n_error_message(:blank)},
+        length: {minimum: MIN_LENGTH, message: i18n_error_message(:min_length)},
+        if: proc { |object| object.possible_claim_school_id.blank? || changed_query? }
 
-      def initialize(journey_session:, journey:, params:, session: {})
-        super
-
-        load_schools
-        self.claim_school_id = permitted_params[:claim_school_id]
-      end
+      validate :validate_no_results
 
       def save
-        return false unless valid?
+        return if invalid? || no_results?
 
-        return true unless claim_school_changed?
+        if possible_claim_school_id.present? && changed_possible_school?
+          journey_session.answers.assign_attributes(
+            claim_school_id: nil,
+            possible_claim_school_id:
+          )
+          reset_dependent_answers
+        end
 
+        if changed_query?
+          journey_session.answers.assign_attributes(
+            claim_school_id: nil,
+            possible_claim_school_id: nil,
+            provision_search:
+          )
+          reset_dependent_answers
+        end
+
+        journey_session.save!
+      end
+
+      def clear_answers_from_session
         journey_session.answers.assign_attributes(
-          claim_school_id: claim_school_id,
+          possible_claim_school_id: nil,
+          provision_search: nil
+        )
+
+        journey_session.save!
+      end
+
+      def show_multiple_schools_content?
+        !params.has_key?(:additional_school)
+      end
+
+      private
+
+      def validate_no_results
+        if possible_claim_school_id.blank? && no_results?
+          errors.add :provision_search, message: "No results match that search term. Try again."
+        end
+      end
+
+      def no_results?
+        provision_search.present? && provision_search.size >= MIN_LENGTH && !has_results
+      end
+
+      def has_results
+        @has_results ||= School.search(provision_search).count > 0
+      end
+
+      def changed_possible_school?
+        possible_claim_school_id != journey_session.answers.claim_school_id
+      end
+
+      def changed_query?
+        provision_search != journey_session.answers.provision_search
+      end
+
+      def reset_dependent_answers
+        journey_session.answers.assign_attributes(
           taught_eligible_subjects: nil,
           biology_taught: nil,
           physics_taught: nil,
@@ -32,44 +84,6 @@ module Journeys
           employment_status: nil,
           current_school_id: nil
         )
-
-        journey_session.save!
-
-        true
-      end
-
-      def claim_school_name
-        answers.claim_school_name
-      end
-
-      def no_search_results?
-        params[:school_search].present? && errors.empty?
-      end
-
-      def show_multiple_schools_content?
-        !params.has_key?(:additional_school)
-      end
-
-      private
-
-      def load_schools
-        return unless params[:school_search]
-
-        @schools = School.search(params[:school_search])
-      rescue ArgumentError => e
-        raise unless e.message == School::SEARCH_NOT_ENOUGH_CHARACTERS_ERROR
-
-        errors.add(:school_search, i18n_errors_path("enter_a_school_or_postcode"))
-      end
-
-      def claim_school_must_exist
-        unless School.find_by(id: claim_school_id)
-          errors.add(:claim_school_id, i18n_errors_path("school_not_found"))
-        end
-      end
-
-      def claim_school_changed?
-        claim_school_id != journey_session.answers.claim_school_id
       end
     end
   end

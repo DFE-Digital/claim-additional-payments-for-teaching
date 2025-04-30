@@ -17,6 +17,7 @@ module Journeys
         "qts-year",
         "select-claim-school",
         "claim-school",
+        "claim-school-results",
         "subjects-taught",
         "still-teaching",
         "current-school",
@@ -76,6 +77,8 @@ module Journeys
             sequence.delete("select-email")
             sequence.delete("select-mobile")
           end
+
+          sequence.delete("claim-school-results") if answers.claim_school_id.present? && answers.provision_search.blank?
 
           sequence.delete("reset-claim") if skipped_dfe_sign_in? || answers.details_check?
           sequence.delete("current-school") if answers.employed_at_claim_school? || answers.employed_at_recent_tps_school?

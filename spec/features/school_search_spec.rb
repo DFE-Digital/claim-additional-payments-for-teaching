@@ -18,7 +18,8 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
       # Creates a duplicate school to test whether the school search shows closed schools
       duplicate_school = create(:school, :student_loans_eligible, :closed, name: "#{school.name} Duplicate")
 
-      fill_in :school_search, with: school.name
+      question = page.find("h1").text
+      fill_in question, with: school.name
       click_on "Continue"
 
       click_on "Continue"
@@ -41,7 +42,8 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
       expect(page).to have_text(claim_school_question)
       expect(page).to have_button("Continue")
 
-      fill_in :school_search, with: search_keywords(school)
+      question = page.find("h1").text
+      fill_in question, with: search_keywords(school)
       find("li", text: school.name).click
 
       expect(page).to have_button("Continue")
@@ -95,40 +97,30 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
       expect(page).to have_text(claim_school_question)
       expect(page).to have_button("Continue")
 
-      fill_in :school_search, with: search_keywords(school)
-
+      question = page.find("h1").text
+      fill_in question, with: search_keywords(school)
       expect(page).to have_text(school.name)
-      expect(page).to have_button("Continue")
-
-      # First click simply removes focus from the autocomplete when JS is enabled - form is not submitted
       click_button "Continue"
 
+      choose school.name
       click_button "Continue"
-
-      expect(page).to have_text("Select your school from the search results.")
-      expect(page).to have_text(school.name)
     end
 
     scenario "Editing school search after autocompletion clears last selection", js: true, flaky: true do
       another_school = create(:school, :student_loans_eligible)
       start_student_loans_claim
 
+      question = page.find("h1").text
       expect(page).to have_text(claim_school_question)
-      expect(page).to have_button("Continue")
-
-      fill_in :school_search, with: search_keywords(school)
+      fill_in question, with: search_keywords(school)
+      sleep(1) # seems to aid in success, as if click happens before event is bound
       find("li", text: school.name).click
-
-      fill_in :school_search, with: search_keywords(another_school)
+      fill_in question, with: search_keywords(another_school)
+      sleep(1) # seems to aid in success, as if click happens before event is bound
       find("li", text: another_school.name).click
-
       click_button "Continue"
 
-      # flaky test workaround in case the first click on Continue submitted the form
-      click_button "Continue" unless /claim-school\?_method=patch/.match?(current_url)
-
       choose another_school.name
-
       click_button "Continue"
 
       expect(page).to have_text("Which of the following subjects did you teach at #{another_school.name}")
@@ -143,7 +135,8 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
         expect(page).to have_text(claim_school_question)
         expect(page).to have_button("Continue")
 
-        fill_in :school_search, with: search_keywords(closed_school)
+        question = page.find("h1").text
+        fill_in question, with: search_keywords(closed_school)
         click_button "Continue"
 
         expect(page).to have_text(closed_school.name)
@@ -170,7 +163,8 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
         expect(page).to have_text(claim_school_question)
         expect(page).to have_button("Continue")
 
-        fill_in :school_search, with: search_keywords(closed_school)
+        question = page.find("h1").text
+        fill_in question, with: search_keywords(closed_school)
         expect(page).to have_text(closed_school.name)
       end
 
@@ -205,7 +199,8 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
       # Creates a duplicate school to test whether the school search shows closed schools
       duplicate_school = create(:school, :student_loans_eligible, :closed, name: "#{school.name} Duplicate")
 
-      fill_in :school_search, with: search_keywords(school)
+      question = page.find("h1").text
+      fill_in question, with: search_keywords(school)
       click_on "Continue"
 
       # Backlink is to the same slug as current (current-school)
