@@ -80,11 +80,19 @@ module Journeys
         dqt_record.route_into_teaching
       end
 
+      def dqt_qualification_confirmed?
+        dqt_qualification.present? && qualifications_details_check?
+      end
+
       def dqt_itt_academic_year
         return nil unless dqt_record && details_check?
         return nil unless dqt_record.academic_date
 
         AcademicYear.for(dqt_record.academic_date)
+      end
+
+      def dqt_itt_academic_year_confirmed?
+        dqt_itt_academic_year.present? && qualifications_details_check?
       end
 
       def dqt_eligible_itt_subject
@@ -93,10 +101,18 @@ module Journeys
         dqt_record.eligible_itt_subject_for_claim
       end
 
+      def dqt_eligible_itt_subject_confirmed?
+        dqt_eligible_itt_subject.present? && qualifications_details_check?
+      end
+
       def dqt_eligible_degree_subject?
         return false unless dqt_record && details_check?
 
         dqt_record.eligible_degree_code?
+      end
+
+      def dqt_eligible_degree_subject_confirmed?
+        dqt_eligible_degree_subject? && qualifications_details_check?
       end
 
       def dqt_show_degree_subjects?

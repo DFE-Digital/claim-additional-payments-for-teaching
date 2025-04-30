@@ -253,7 +253,8 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
             context "when DQT data is confirmed" do
               before do
                 journey_session.answers.assign_attributes(
-                  details_check: true
+                  details_check: true,
+                  qualifications_details_check: true
                 )
 
                 journey_session.save!
@@ -288,7 +289,8 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
             context "when DQT data is confirmed" do
               before do
                 journey_session.answers.assign_attributes(
-                  details_check: true
+                  details_check: true,
+                  qualifications_details_check: true
                 )
 
                 journey_session.save!
@@ -319,7 +321,8 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
             context "when DQT data is confirmed" do
               before do
                 journey_session.answers.assign_attributes(
-                  details_check: true
+                  details_check: true,
+                  qualifications_details_check: true
                 )
 
                 journey_session.save!
@@ -330,27 +333,6 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
 
             context "when DQT data is not confirmed" do
               it { is_expected.to include("eligible-itt-subject") }
-            end
-          end
-
-          # FIXME RL: determine if we need this given we only show
-          # eligible-degree-subject if the option "none_of_the_above" is
-          # selected
-          xcontext "when eligible degree subject is returned" do
-            context "when DQT data is confirmed" do
-              before do
-                journey_session.answers.assign_attributes(
-                  details_check: true
-                )
-
-                journey_session.save!
-              end
-
-              it { is_expected.not_to include("eligible-degree-subject") }
-            end
-
-            context "when DQT data is not confirmed" do
-              it { is_expected.to include("eligible-degree-subject") }
             end
           end
         end

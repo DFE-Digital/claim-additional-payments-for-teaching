@@ -115,9 +115,9 @@ module Journeys
           sequence << "employed-directly" if answers.employed_as_supply_teacher?
           sequence << "poor-performance"
           sequence << "qualification-details" if answers.dqt_record&.has_data_for_claim?
-          sequence << "qualification" unless answers.dqt_qualification.present?
-          sequence << "itt-year" unless answers.dqt_itt_academic_year.present?
-          sequence << "eligible-itt-subject" unless answers.dqt_eligible_itt_subject.present?
+          sequence << "qualification" unless answers.dqt_qualification_confirmed?
+          sequence << "itt-year" unless answers.dqt_itt_academic_year_confirmed?
+          sequence << "eligible-itt-subject" unless answers.dqt_eligible_itt_subject_confirmed?
           sequence << "eligible-degree-subject" if answers.eligible_itt_subject == "none_of_the_above"
           sequence << "teaching-subject-now"
           sequence << "check-your-answers-part-one"
