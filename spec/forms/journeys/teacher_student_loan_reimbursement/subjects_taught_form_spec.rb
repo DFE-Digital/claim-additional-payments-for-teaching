@@ -28,7 +28,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SubjectsTaughtForm, ty
 
   describe "validations" do
     context "when no options are selected" do
-      let(:claim_params) { {"subjects_taught" => []} }
+      let(:claim_params) { {"subjects_taught" => [""]} }
 
       it do
         aggregate_failures do
@@ -39,13 +39,13 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SubjectsTaughtForm, ty
     end
 
     context "when one or more subjects are selected" do
-      let(:claim_params) { {"subjects_taught" => ["biology_taught", "chemistry_taught"]} }
+      let(:claim_params) { {"subjects_taught" => ["", "biology_taught", "chemistry_taught"]} }
 
       it { is_expected.to be_valid }
     end
 
     context "when 'I did not teach any of these subjects' is selected" do
-      let(:claim_params) { {"subjects_taught" => ["none_taught"]} }
+      let(:claim_params) { {"subjects_taught" => ["", "none_taught"]} }
 
       it { is_expected.to be_valid }
     end
@@ -56,7 +56,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SubjectsTaughtForm, ty
 
     context "valid params" do
       context "when multiple subject are selected" do
-        let(:claim_params) { {"subjects_taught" => ["biology_taught", "chemistry_taught"]} }
+        let(:claim_params) { {"subjects_taught" => ["", "biology_taught", "chemistry_taught"]} }
 
         it "updates the answers" do
           journey_session.reload
@@ -73,7 +73,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SubjectsTaughtForm, ty
       end
 
       context "when no subjects are selected" do
-        let(:claim_params) { {"subjects_taught" => ["none_taught"]} }
+        let(:claim_params) { {"subjects_taught" => ["", "none_taught"]} }
 
         it "updates the answers" do
           journey_session.reload
@@ -105,31 +105,5 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SubjectsTaughtForm, ty
     subject { form.claim_school_name }
 
     it { is_expected.to eq("test school") }
-  end
-
-  describe "#subject_attributes" do
-    it { expect(form.subject_attributes).to eq(Policies::StudentLoans::Eligibility::SUBJECT_ATTRIBUTES) }
-  end
-
-  describe "#subject_taught_selected?" do
-    context "when the subject is invalid" do
-      it { expect(form.subject_taught_selected?(:invalid_subject_taught)).to be_nil }
-    end
-
-    context "when the subject is taught" do
-      before do
-        journey_session.answers.biology_taught = true
-      end
-
-      it { expect(form.subject_taught_selected?(:biology_taught)).to eq(true) }
-    end
-
-    context "when the subject is not taught" do
-      before do
-        journey_session.answers.biology_taught = false
-      end
-
-      it { expect(form.subject_taught_selected?(:biology_taught)).to eq(false) }
-    end
   end
 end
