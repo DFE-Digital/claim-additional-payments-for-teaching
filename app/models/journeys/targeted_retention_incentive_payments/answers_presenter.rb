@@ -11,9 +11,9 @@ module Journeys
           a << subject_to_formal_performance_action
           a << subject_to_disciplinary_action
 
-          a << qualification
-          a << itt_academic_year
-          a << eligible_itt_subject
+          a << qualification unless journey_session.answers.dqt_qualification_confirmed?
+          a << itt_academic_year unless journey_session.answers.dqt_itt_academic_year_confirmed?
+          a << eligible_itt_subject unless journey_session.answers.dqt_eligible_itt_subject_confirmed?
           a << eligible_degree_subject if journey_session.answers.eligible_itt_subject == "none_of_the_above"
 
           a << teaching_subject_now
