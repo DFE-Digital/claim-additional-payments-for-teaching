@@ -316,6 +316,14 @@ shared:
     - provider_verification_email_count
     - claimant_identity_verified_at
     - valid_passport
+  :eligible_ey_providers:
+    - id
+    - nursery_name
+    - urn
+    - local_authority_id
+    - nursery_address
+    - created_at
+    - updated_at
   :eligible_fe_providers:
     - id
     - ukprn

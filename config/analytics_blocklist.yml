@@ -55,15 +55,8 @@
   - email
   - session_token
   :eligible_ey_providers:
-  - id
-  - nursery_name
-  - urn
-  - local_authority_id
-  - nursery_address
   - primary_key_contact_email_address
   - secondary_contact_email_address
-  - created_at
-  - updated_at
   - file_upload_id
   :eligible_fe_providers:
   - primary_key_contact_email_address
