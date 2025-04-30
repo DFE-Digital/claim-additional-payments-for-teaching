@@ -1,4 +1,4 @@
-name: Delete review app on AKS
+name: Delete review app
 
 on:
   pull_request:
@@ -12,49 +12,29 @@ on:
 
 jobs:
   delete-review-app:
-    name: Delete review app ${{ github.event.pull_request.number }}
-    concurrency: deploy_review_${{ github.event.pull_request.number }}
+    name: Delete review app
     runs-on: ubuntu-latest
+    concurrency: delete-review-app-${{ github.event.pull_request.number || github.event.inputs.pr_number }}
     if: >
       github.event.action == 'closed' && contains(github.event.pull_request.labels.*.name, 'deploy') ||
       (github.event.action == 'unlabeled' && github.event.label.name == 'deploy') || (github.event_name ==
       'workflow_dispatch')
+
     environment: review
     permissions:
       pull-requests: write
       id-token: write
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.8.4
-          terraform_wrapper: false
-
-      - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
+      - name: Delete review app
+        uses: DFE-Digital/github-actions/delete-review-app@master
         with:
           azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      - uses: google-github-actions/auth@v2
-        with:
-          project_id: claim-additional-payments
-          workload_identity_provider: projects/638192024625/locations/global/workloadIdentityPools/claim-additional-payments-for-te/providers/claim-additional-payments-for-te
-
-      - name: Terraform destroy
-        run: |
-          if [ ${{ github.event_name }} == 'workflow_dispatch' ]; then
-            PR_NUMBER=${{ github.event.inputs.pr_number }}
-          else
-            PR_NUMBER=${{ github.event.pull_request.number }}
-          fi
-
-          if [ -z "$PR_NUMBER" ]; then
-            echo "::error ::Failed to extract PR_NUMBER"
-            exit 1
-          fi
-
-          make ci review terraform-destroy PR_NUMBER=$PR_NUMBER
+          pr-number: ${{ github.event.pull_request.number || github.event.inputs.pr_number }}
+          resource-group-name: "s189t01-catp-rg"
+          storage-account-name: "s189t01catptfstate"
+          tf-state-file: "pr-${{ github.event.pull_request.number || github.event.inputs.pr_number }}_kubernetes.tfstate"
+          gcp-wip: "projects/638192024625/locations/global/workloadIdentityPools/claim-additional-payments-for-te/providers/claim-additional-payments-for-te"
+          gcp-project-id: "claim-additional-payments"
