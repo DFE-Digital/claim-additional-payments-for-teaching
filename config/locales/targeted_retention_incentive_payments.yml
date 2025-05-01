@@ -145,6 +145,16 @@ en:
         declaration: |
           By selecting yes you are confirming that, to the best of your
           knowledge, the details above are correct.
+      personal_details:
+        errors:
+          full_name:
+            blank: Enter full name
+            length: Full name must be 100 characters or less
+          email_address:
+            blank: Enter an email address
+            invalid: Enter an email address in the correct format, like name@example.com
+            length: Email address must be %{length} characters or less
+            unauthorised: Only authorised email addresses can be used when using a team-only API key
       qualification:
         question: "Which route into teaching did you take?"
         options:
