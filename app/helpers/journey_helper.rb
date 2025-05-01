@@ -1,4 +1,4 @@
-module AdditionalPaymentsHelper
+module JourneyHelper
   include ActionView::Helpers::TextHelper
 
   def one_time_password_validity_duration
