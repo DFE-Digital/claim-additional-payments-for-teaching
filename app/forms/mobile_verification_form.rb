@@ -17,6 +17,10 @@ class MobileVerificationForm < Form
     journey_session.save!
   end
 
+  def completed?
+    journey_session.answers.mobile_verified?
+  end
+
   private
 
   def otp_validate
