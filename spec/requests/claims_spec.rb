@@ -20,13 +20,14 @@ RSpec.describe "Claims", type: :request do
     end
 
     context "switching claim policies" do
-      before { create(:journey_configuration, :additional_payments) }
+      before { FeatureFlag.enable!(:tri_only_journey) }
+      before { create(:journey_configuration, :targeted_retention_incentive_payments_only) }
 
       it "redirects to the existing claim interruption page if a claim for another policy is already in progress" do
         start_student_loans_claim
-        get new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
+        get new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
 
-        expect(response).to redirect_to(existing_session_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME))
+        expect(response).to redirect_to(existing_session_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME))
       end
     end
   end
@@ -56,9 +57,10 @@ RSpec.describe "Claims", type: :request do
       end
     end
 
-    context "ecp and targeted_retention_incentive combined claim" do
+    context "targeted_retention_incentive claim" do
       it "created for the current academic year and redirects to the next question in the sequence" do
-        @journey_configuration = create(:journey_configuration, :additional_payments)
+        FeatureFlag.enable!(:tri_only_journey)
+        @journey_configuration = create(:journey_configuration, :targeted_retention_incentive_payments_only)
 
         check_claims_created
         check_claims_eligibility_created
