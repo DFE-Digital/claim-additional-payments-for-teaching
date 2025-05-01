@@ -32,7 +32,7 @@
   </div>
 </div>
 
-  <%= form_for @form, url: claim_path(current_journey_routing_name) do |f| %>
+  <%= form_for @form, url: @form.url do |f| %>
     <%= f.hidden_field :qualifications_details_check %>
     <%= form_group_tag f.object do %>
 

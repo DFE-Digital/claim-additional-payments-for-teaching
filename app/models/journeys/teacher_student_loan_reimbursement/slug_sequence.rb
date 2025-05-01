@@ -60,6 +60,8 @@ module Journeys
         RESULTS_SLUGS
       ).freeze
 
+      RESTRICTED_SLUGS = [].freeze
+
       attr_reader :journey_session
 
       delegate :answers, to: :journey_session
@@ -70,6 +72,12 @@ module Journeys
 
       def slugs
         SLUGS.dup.tap do |sequence|
+          if ineligible?
+            sequence.delete("eligibility-confirmed")
+            sequence.delete("information-provided")
+            sequence.delete("check-your-answers")
+          end
+
           if !Journeys::TeacherStudentLoanReimbursement.configuration.teacher_id_enabled?
             sequence.delete("sign-in-or-continue")
             sequence.delete("reset-claim")
@@ -90,6 +98,10 @@ module Journeys
           sequence.delete("select-email") unless set_by_teacher_id?("email")
           if answers.logged_in_with_tid? && answers.email_address_check?
             sequence.delete("email-address")
+            sequence.delete("email-verification")
+          end
+
+          if answers.email_verified == true
             sequence.delete("email-verification")
           end
 
@@ -120,6 +132,14 @@ module Journeys
 
           if answers.ordnance_survey_error == true
             sequence.delete("select-home-address")
+          end
+
+          if answers.skip_postcode_search == true
+            sequence.delete("select-home-address")
+          end
+
+          if answers.address_line_1.present? && answers.postcode.present?
+            sequence.delete("address")
           end
         end
       end

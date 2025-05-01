@@ -95,13 +95,9 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     # Check we can't skip to pages if address not entered
     visit claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "email-address")
-    expect(page).to have_current_path("/#{Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME}/address")
+    expect(page).to have_current_path("/#{Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME}/postcode-search")
 
-    click_on "Back"
-
-    expect(page).to have_link(href: claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "address"))
-
-    click_link(I18n.t("questions.address.home.link_to_manual_address"))
+    click_button(I18n.t("questions.address.home.link_to_manual_address"))
 
     expect(page).to have_text(I18n.t("forms.address.questions.your_address"))
     fill_in_address

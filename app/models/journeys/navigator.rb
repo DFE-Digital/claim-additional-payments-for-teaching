@@ -153,6 +153,9 @@ module Journeys
       return unless eligibility_checker.ineligible?
 
       furthest_form = permissible_forms.last
+
+      return if furthest_form.nil?
+
       furthest_slug = journey.slug_for_form(form: furthest_form)
 
       if current_slug != furthest_slug

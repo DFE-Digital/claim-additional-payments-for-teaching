@@ -16,6 +16,6 @@
       <p class="govuk-body">You can still complete the rest of your application.</p>
     <% end %>
 
-    <%= button_to "Continue", claim_path(current_journey_routing_name), method: :patch, class: "govuk-button", role: :button, data: { module: "govuk-button"} %>
+    <%= button_to "Continue", @form.url, method: :patch, class: "govuk-button", role: :button, data: { module: "govuk-button"} %>
   </div>
 </div>
