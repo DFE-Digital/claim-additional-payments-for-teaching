@@ -193,13 +193,21 @@ class ClaimsController < BasePublicController
     return unless params[:code] && params[:email]
 
     otp = OneTimePassword::Validator.new(params[:code], secret: ROTP::Base32.encode(ENV.fetch("EY_MAGIC_LINK_SECRET") + params[:email]))
+
     if otp.valid?
-      journey_session.answers.assign_attributes(provider_email_address: params[:email])
-      journey_session.save!
+      journey_session.answers.assign_attributes(
+        provider_email_address: params[:email],
+        invalid_magic_link: false
+      )
     else
-      redirect_to claim_path(Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME, "expired-link") and return
+      journey_session.answers.assign_attributes(
+        invalid_magic_link: true
+      )
     end
-    redirect_to_next_slug if claim_in_progress?
+
+    journey_session.save!
+
+    redirect_to_next_slug
   end
 
   def add_answers_to_rollbar_context

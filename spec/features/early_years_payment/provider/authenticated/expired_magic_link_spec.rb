@@ -19,6 +19,6 @@ RSpec.feature "Early years payment provider" do
     expect(journey_session.reload.answers.email_verified).to be nil
 
     expect(page).to have_content("This link has expired")
-    expect(page.current_path).to eq "/early-years-payment/expired-link"
+    expect(page.current_path).to eq "/early-years-payment-provider/expired-link"
   end
 end

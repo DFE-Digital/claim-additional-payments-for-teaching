@@ -4,6 +4,7 @@ module Journeys
       module Authenticated
         class SlugSequence
           CLAIM_SLUGS = %w[
+            expired-link
             consent
             current-nursery
             paye-reference
@@ -39,6 +40,10 @@ module Journeys
 
           def slugs
             SLUGS.dup.tap do |sequence|
+              if !answers.invalid_magic_link
+                sequence.delete("expired-link")
+              end
+
               if !answers.returning_within_6_months
                 sequence.delete("returner-worked-with-children")
                 sequence.delete("returner-contract-type")

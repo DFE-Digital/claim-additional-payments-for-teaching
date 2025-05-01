@@ -2,7 +2,7 @@
   color: inherit;
 }
 
-.button-to-as-link {
+.govuk-button.button-to-as-link, .button-to-as-link {
   padding: 0;
   background: none;
   border: none;
@@ -25,4 +25,8 @@
   text-decoration: underline;
   text-decoration-thickness: 3px;
   text-underline-offset: 0.1578em;
+}
+
+.inline {
+  display: inline;
 }
