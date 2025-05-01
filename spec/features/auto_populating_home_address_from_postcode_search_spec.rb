@@ -259,16 +259,18 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
 
   context "with a supplied postcode" do
     let(:journey_session) do
-      Journeys::AdditionalPaymentsForTeaching::Session.order(:created_at).last
+      Journeys::TargetedRetentionIncentivePayments::Session.order(:created_at).last
     end
 
     before do
-      create(:journey_configuration, :additional_payments)
-      start_early_career_payments_claim
+      FeatureFlag.enable! :tri_only_journey
+      create(:journey_configuration, :targeted_retention_incentive_payments_only)
+      start_targeted_retention_incentive_payments_claim
 
       journey_session.answers.assign_attributes(
         attributes_for(
-          :additional_payments_answers,
+          :targeted_retention_incentive_payments_answers,
+          :submittable,
           address_line_1: nil,
           address_line_2: nil,
           address_line_3: nil,
@@ -280,26 +282,19 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
     end
 
     scenario "with Ordnance Survey API data" do
-      expect(
-        Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm.new(
-          journey_session: journey_session
-        ).valid?
-      ).to eq false
-
       jump_to_claim_journey_page(
         slug: "postcode-search",
         journey_session: journey_session
       )
 
       # - What is your home address
-      expect(page).to have_text(I18n.t("questions.address.home.title"))
-      expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
+      expect(page).to have_text("What is your home address?")
 
       fill_in "Postcode", with: "SO16 9FX"
       click_on "Search"
 
       # - Select your home address
-      expect(page).to have_text(I18n.t("questions.address.home.title"))
+      expect(page).to have_text("What is your home address?")
 
       choose "Flat 11, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX"
       click_on "Continue"
@@ -312,40 +307,33 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       expect(answers.postcode).to eql "SO16 9FX"
 
       # - What is your address
-      expect(page).not_to have_text(I18n.t("forms.address.questions.your_address"))
+      expect(page).not_to have_text("What is your address?")
 
       # - Email address
-      expect(page).to have_text(I18n.t("questions.email_address"))
+      expect(page).to have_text("Email address")
     end
 
     scenario "Claimant cannot find the correct address so chooses to manually enter address" do
-      expect(
-        Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm.new(
-          journey_session: journey_session
-        ).valid?
-      ).to eq false
       jump_to_claim_journey_page(
         slug: "postcode-search",
         journey_session: journey_session
       )
 
       # - What is your home address
-      expect(page).to have_text(I18n.t("questions.address.home.title"))
-      expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
+      expect(page).to have_text("What is your home address?")
 
       fill_in "Postcode", with: "SO16 9FX"
       click_on "Search"
 
       # - Select your home address
       expect(page).to have_text("SO16 9FX Change")
-      expect(page).to have_text(I18n.t("questions.address.home.title"))
+      expect(page).to have_text("What is your home address?")
       expect(page).to have_text("Flat 11, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX")
-      expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
 
-      click_link(I18n.t("questions.address.home.i_cannot_find"))
+      click_on("I can’t find my address in the list")
 
       # - What is your address
-      expect(page).to have_text(I18n.t("forms.address.questions.your_address"))
+      expect(page).to have_text("What is your address?")
 
       fill_in "House number or name", with: "Penthouse Apartment, Millbrook Tower"
       fill_in "Building and street", with: "Windermere Avenue"
@@ -363,73 +351,55 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       expect(answers.postcode).to eql("SO16 9FX")
 
       # - Email address
-      expect(page).to have_text(I18n.t("questions.email_address"))
+      expect(page).to have_text("Email address")
     end
 
     # Bugfix - did cause an exception after pressing back
     scenario "Claimant cannot find the correct address so chooses to manually enter address, presses back before filling anything to go to the postcode search again" do
-      expect(
-        Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm.new(
-          journey_session: journey_session
-        ).valid?
-      ).to eq false
-
       jump_to_claim_journey_page(
         slug: "postcode-search",
         journey_session: journey_session
       )
 
       # - What is your home address
-      expect(page).to have_text(I18n.t("questions.address.home.title"))
-      expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
+      expect(page).to have_text("What is your home address?")
 
       fill_in "Postcode", with: "SO16 9FX"
       click_on "Search"
 
       # - Select your home address
       expect(page).to have_text("SO16 9FX Change")
-      expect(page).to have_text(I18n.t("questions.address.home.title"))
+      expect(page).to have_text("What is your home address?")
       expect(page).to have_text("Flat 11, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX")
-      expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
 
-      click_link(I18n.t("questions.address.home.i_cannot_find"))
+      click_on("I can’t find my address in the list")
       click_link("Back")
 
       # - Redirects to a fresh postcode search
-      expect(page).to have_text(I18n.t("questions.address.home.title"))
+      expect(page).to have_text("What is your home address?")
     end
 
     scenario "Claimant decides they want to change the POSTCODE from the 'select-home-address' screen" do
-      expect(
-        Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm.new(
-          journey_session: journey_session
-        ).valid?
-      ).to eq false
-
       jump_to_claim_journey_page(
         slug: "postcode-search",
         journey_session: journey_session
       )
 
       # - What is your home address (1st time before making the request to change)
-      expect(page).to have_text(I18n.t("questions.address.home.title"))
-      expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
+      expect(page).to have_text("What is your home address?")
 
       fill_in "Postcode", with: "SO16 9FX"
       click_on "Search"
 
       # - Select your home address
-      expect(page).to have_text(I18n.t("questions.address.home.title"))
-      expect(page).to have_link("Change", href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "postcode-search"))
+      expect(page).to have_text("What is your home address?")
       expect(page).to have_text("Flat 11, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX")
-      expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
 
-      click_link("Change", href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "postcode-search"))
+      click_on("Change")
 
       # - What is your home address - Back to make the requested change
-      expect(page).not_to have_text(I18n.t("forms.address.questions.your_address"))
-      expect(page).to have_text(I18n.t("questions.address.home.title"))
-      expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
+      expect(page).not_to have_text("What is your address?")
+      expect(page).to have_text("What is your home address?")
 
       expect(page).to have_field("Postcode", with: "SO16 9FX")
 
@@ -437,13 +407,11 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       click_on "Search"
 
       # - Select your home address
-      expect(page).to have_text(I18n.t("questions.address.home.title"))
-      expect(page).to have_link("Back", href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "postcode-search"))
-      expect(page).to have_link("Change", href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "postcode-search"))
+      expect(page).to have_text("What is your home address?")
+      expect(page).to have_link("Back", href: claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME, "postcode-search"))
       expect(page).to have_text("4, Wearside Road, London, SE13 7UN")
       expect(page).to have_text("5, Wearside Road, London, SE13 7UN")
       expect(page).to have_text("6, Wearside Road, London, SE13 7UN")
-      expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
 
       choose "5, Wearside Road, London, SE13 7UN"
       click_on "Continue"
@@ -456,15 +424,14 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       expect(answers.postcode).to eql("SE13 7UN")
 
       # - What is your address
-      expect(page).not_to have_text(I18n.t("forms.address.questions.your_address"))
+      expect(page).not_to have_text("What is your address?")
 
       # - Email address
-      expect(page).to have_text(I18n.t("questions.email_address"))
+      expect(page).to have_text("Email address")
 
       # Check postcode search field retains the user's last input if the address was saved on the claim
-      click_link "Back"
-      click_link "Back"
-      click_link "Back"
+      click_link "Back" # -> select-home-address
+      click_link "Back" # -> postcode-search
 
       expect(page).to have_field("Postcode", with: "SE13 7UN")
       fill_in "Postcode", with: "SO16 9FX"
@@ -476,35 +443,14 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
     end
 
     context do
-      let(:journey_session) do
-        create(
-          :additional_payments_session,
-          answers:
-        )
-      end
-
-      let(:answers) {
-        build(
-          :additional_payments_answers,
-          :submittable
-        )
-      }
-
       scenario "Ordanance Survery Client raise a ResponseError" do
-        expect(
-          Journeys::AdditionalPaymentsForTeaching::ClaimSubmissionForm.new(
-            journey_session: journey_session
-          ).valid?
-        ).to eq false
-
         jump_to_claim_journey_page(
           slug: "postcode-search",
           journey_session: journey_session
         )
 
         # - What is your home address
-        expect(page).to have_text(I18n.t("questions.address.home.title"))
-        expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "address"))
+        expect(page).to have_text("What is your home address?")
 
         fill_in "Postcode", with: "DA1 5FZ"
         click_on "Search"
