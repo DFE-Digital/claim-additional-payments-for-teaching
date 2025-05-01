@@ -78,7 +78,6 @@ jobs:
           azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           aks-namespace: srtl-development
           aks-deployment: claim-additional-payments-for-teaching-review-${{ github.event.pull_request.number }}
-          prepare-database: ${{ github.event.pull_request.number != '' }}
 
       - name: Post comment to Pull Request ${{ github.event.number }}
         if: ${{ github.event_name == 'pull_request' }}

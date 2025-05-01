@@ -54,7 +54,7 @@ WORKDIR ${APP_HOME}
 
 EXPOSE 3000
 
-CMD bundle exec rails server
+CMD bundle exec rails db:migrate:ignore_concurrent_migration_exceptions && bundle exec rails server
 
 # Copy dependencies (relying on dependencies using the same base image as this)
 COPY --from=dependencies ${DEPS_HOME}/Gemfile ${APP_HOME}/Gemfile
