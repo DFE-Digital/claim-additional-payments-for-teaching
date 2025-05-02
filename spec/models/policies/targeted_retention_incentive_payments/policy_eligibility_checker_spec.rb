@@ -9,14 +9,14 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
     let!(:journey_configuration) do
       create(
         :journey_configuration,
-        :additional_payments,
+        :targeted_retention_incentive_payments,
         open_for_submissions: true
       )
     end
 
     context "when the policy is closed" do
       let(:answers) do
-        build(:additional_payments_answers)
+        build(:targeted_retention_incentive_payments_answers)
       end
 
       before do
@@ -31,7 +31,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
     context "when school is tlsr ineligible" do
       let(:answers) do
         build(
-          :additional_payments_answers,
+          :targeted_retention_incentive_payments_answers,
           current_school_id: create(:school).id
         )
       end
@@ -43,7 +43,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
       context "when lacking entire term contract" do
         let(:answers) do
           build(
-            :additional_payments_answers,
+            :targeted_retention_incentive_payments_answers,
             employed_as_supply_teacher: true,
             has_entire_term_contract: false
           )
@@ -55,7 +55,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
       context "when not employed directly" do
         let(:answers) do
           build(
-            :additional_payments_answers,
+            :targeted_retention_incentive_payments_answers,
             employed_as_supply_teacher: true,
             has_entire_term_contract: true,
             employed_directly: false
@@ -69,7 +69,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
     context "when subject to formal performance action" do
       let(:answers) do
         build(
-          :additional_payments_answers,
+          :targeted_retention_incentive_payments_answers,
           subject_to_formal_performance_action: true
         )
       end
@@ -80,7 +80,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
     context "when subject to disciplinary action" do
       let(:answers) do
         build(
-          :additional_payments_answers,
+          :targeted_retention_incentive_payments_answers,
           subject_to_disciplinary_action: true
         )
       end
@@ -97,7 +97,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
     context "when ineligible cohort" do
       let(:answers) do
         build(
-          :additional_payments_answers,
+          :targeted_retention_incentive_payments_answers,
           itt_academic_year: AcademicYear.new(2000)
         )
       end
@@ -114,7 +114,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
     context "when insufficient teaching" do
       let(:answers) do
         build(
-          :additional_payments_answers,
+          :targeted_retention_incentive_payments_answers,
           teaching_subject_now: false
         )
       end
@@ -125,7 +125,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
     context "when not a tslr subject" do
       let(:answers) do
         build(
-          :additional_payments_answers,
+          :targeted_retention_incentive_payments_answers,
           eligible_itt_subject: :foreign_languages
         )
       end
@@ -136,7 +136,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
     context "when ineligible subject and no eligible degree subject" do
       let(:answers) do
         build(
-          :additional_payments_answers,
+          :targeted_retention_incentive_payments_answers,
           eligible_itt_subject: :none_of_the_above,
           eligible_degree_subject: false
         )
@@ -148,7 +148,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
     context "when trainee teacher in the last policy year" do
       let(:answers) do
         build(
-          :additional_payments_answers,
+          :targeted_retention_incentive_payments_answers,
           :trainee_teacher
         )
       end
@@ -169,7 +169,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
       before {
         create(
           :journey_configuration,
-          :additional_payments,
+          :targeted_retention_incentive_payments,
           current_academic_year: AcademicYear.new(2022)
         )
       }
@@ -177,7 +177,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
       context "when ITT year is 2017" do
         let(:answers) {
           build(
-            :additional_payments_answers,
+            :targeted_retention_incentive_payments_answers,
             itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2017))
           )
         }
@@ -188,7 +188,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
       context "without eligible degree" do
         let(:answers) {
           build(
-            :additional_payments_answers,
+            :targeted_retention_incentive_payments_answers,
             :targeted_retention_incentive_eligible,
             eligible_degree_subject: false,
             eligible_itt_subject: itt_subject
@@ -211,14 +211,14 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
   end
 
   describe "#eligible_now?" do
-    before { create(:journey_configuration, :additional_payments) }
+    before { create(:journey_configuration, :targeted_retention_incentive_payments) }
 
     subject { policy_eligibility_checker.eligible_now? }
 
     context "eligible now" do
       let(:answers) {
         build(
-          :additional_payments_answers,
+          :targeted_retention_incentive_payments_answers,
           :targeted_retention_incentive_eligible
         )
       }
@@ -229,7 +229,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
     context "eligible later" do
       let(:answers) {
         build(
-          :additional_payments_answers,
+          :targeted_retention_incentive_payments_answers,
           :targeted_retention_incentive_eligible_later
         )
       }
@@ -242,7 +242,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
     before do
       create(
         :journey_configuration,
-        :additional_payments,
+        :targeted_retention_incentive_payments,
         current_academic_year: AcademicYear.new(2023)
       )
     end
@@ -252,7 +252,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
     context "eligible now" do
       let(:answers) {
         build(
-          :additional_payments_answers,
+          :targeted_retention_incentive_payments_answers,
           :targeted_retention_incentive_eligible
         )
       }
@@ -263,7 +263,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
     context "eligible later" do
       let(:answers) {
         build(
-          :additional_payments_answers,
+          :targeted_retention_incentive_payments_answers,
           :targeted_retention_incentive_eligible_later
         )
       }
@@ -276,7 +276,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
     before do
       create(
         :journey_configuration,
-        :additional_payments,
+        :targeted_retention_incentive_payments,
         current_academic_year: AcademicYear.new(2023)
       )
     end
@@ -286,26 +286,26 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
     it_behaves_like "eligibility_status", :targeted_retention_incentive_payments
 
     context "ECP-only ITT subject" do
-      let(:answers) { build(:additional_payments_answers, :targeted_retention_incentive_eligible, :targeted_retention_incentive_ineligible_itt_subject) }
+      let(:answers) { build(:targeted_retention_incentive_payments_answers, :targeted_retention_incentive_eligible, :targeted_retention_incentive_ineligible_itt_subject) }
 
       it { is_expected.to eq(:ineligible) }
     end
 
     context "ITT subject or degree subject" do
       context "good ITT subject and no degree" do
-        let(:answers) { build(:additional_payments_answers, :targeted_retention_incentive_eligible, :no_relevant_degree) }
+        let(:answers) { build(:targeted_retention_incentive_payments_answers, :targeted_retention_incentive_eligible, :no_relevant_degree) }
 
         it { is_expected.to eq(:eligible_now) }
       end
 
       context "bad ITT subject but have a degree" do
-        let(:answers) { build(:additional_payments_answers, :targeted_retention_incentive_eligible, :targeted_retention_incentive_ineligible_itt_subject, :relevant_degree) }
+        let(:answers) { build(:targeted_retention_incentive_payments_answers, :targeted_retention_incentive_eligible, :targeted_retention_incentive_ineligible_itt_subject, :relevant_degree) }
 
         it { is_expected.to eq(:eligible_now) }
       end
 
       context "bad ITT subject and no degree" do
-        let(:answers) { build(:additional_payments_answers, :targeted_retention_incentive_eligible, :targeted_retention_incentive_ineligible_itt_subject, :no_relevant_degree) }
+        let(:answers) { build(:targeted_retention_incentive_payments_answers, :targeted_retention_incentive_eligible, :targeted_retention_incentive_ineligible_itt_subject, :no_relevant_degree) }
 
         it { is_expected.to eq(:ineligible) }
       end
@@ -313,19 +313,19 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
 
     context "trainee teacher" do
       context "good ITT subject and no degree" do
-        let(:answers) { build(:additional_payments_answers, :targeted_retention_incentive_eligible, :trainee_teacher, :no_relevant_degree) }
+        let(:answers) { build(:targeted_retention_incentive_payments_answers, :targeted_retention_incentive_eligible, :trainee_teacher, :no_relevant_degree) }
 
         it { is_expected.to eq(:eligible_later) }
       end
 
       context "bad ITT subject but have a degree" do
-        let(:answers) { build(:additional_payments_answers, :targeted_retention_incentive_eligible, :trainee_teacher, :targeted_retention_incentive_ineligible_itt_subject, :relevant_degree) }
+        let(:answers) { build(:targeted_retention_incentive_payments_answers, :targeted_retention_incentive_eligible, :trainee_teacher, :targeted_retention_incentive_ineligible_itt_subject, :relevant_degree) }
 
         it { is_expected.to eq(:eligible_later) }
       end
 
       context "bad ITT subject and no degree" do
-        let(:answers) { build(:additional_payments_answers, :targeted_retention_incentive_eligible, :trainee_teacher, :targeted_retention_incentive_ineligible_itt_subject, :no_relevant_degree) }
+        let(:answers) { build(:targeted_retention_incentive_payments_answers, :targeted_retention_incentive_eligible, :trainee_teacher, :targeted_retention_incentive_ineligible_itt_subject, :no_relevant_degree) }
 
         it { is_expected.to eq(:ineligible) }
       end
