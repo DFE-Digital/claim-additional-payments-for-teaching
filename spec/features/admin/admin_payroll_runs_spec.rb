@@ -2,7 +2,6 @@ require "rails_helper"
 
 RSpec.feature "Payroll" do
   before do
-    create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) # The specs assume eligibility amounts based on claim made in the 2022 academic year
     @signed_in_user = sign_in_as_service_admin
   end
 
