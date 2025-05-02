@@ -14,7 +14,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::Eligibility, type: 
 
   describe "#award_amount" do
     before do
-      create(:journey_configuration, :additional_payments)
+      create(:journey_configuration, :targeted_retention_incentive_payments)
       create(:targeted_retention_incentive_payments_award, award_amount: 3_000)
     end
 

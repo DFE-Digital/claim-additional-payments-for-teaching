@@ -5,9 +5,9 @@ RSpec.describe Dqt::RetrieveClaimQualificationsData do
   let(:response) { {"mock" => "mock"} }
   let(:session) do
     build(
-      :additional_payments_session,
+      :targeted_retention_incentive_payments_session,
       answers: attributes_for(
-        :additional_payments_answers,
+        :targeted_retention_incentive_payments_answers,
         :with_details_from_dfe_identity,
         dqt_teacher_status: dqt_teacher_status
       )
