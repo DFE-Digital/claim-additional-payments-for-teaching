@@ -1,6 +1,5 @@
 class StudentLoanPlanCheckJob < ApplicationJob
   APPLICABLE_POLICIES = [
-    Policies::EarlyCareerPayments,
     Policies::TargetedRetentionIncentivePayments,
     Policies::FurtherEducationPayments,
     Policies::EarlyYearsPayments
