@@ -3,7 +3,7 @@
 <%= form_for @form, url: @form.url do |form| %>
   <%= form_group_tag form.object do %>
     <fieldset class="govuk-fieldset" aria-describedby="school-search-result-hint">
-      <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
         <h1 class="govuk-fieldset__heading">
           <%= t("additional_payments.forms.correct_school.questions.which_school") %>
         </h1>
