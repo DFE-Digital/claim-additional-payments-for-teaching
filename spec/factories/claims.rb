@@ -26,10 +26,14 @@ FactoryBot.define do
     end
 
     after(:build) do |claim, evaluator|
-      journey = Journeys.for_policy(evaluator.policy)
+      journey = if evaluator.policy == Policies::EarlyCareerPayments
+        Journeys::TargetedRetentionIncentivePayments
+      else
+        Journeys.for_policy(evaluator.policy)
+      end
 
       begin
-        raise ActiveRecord::RecordNotFound unless Journeys.for_policy(evaluator.policy)&.configuration.present?
+        raise ActiveRecord::RecordNotFound unless journey&.configuration.present?
       rescue ActiveRecord::RecordNotFound
         create(:journey_configuration, journey::I18N_NAMESPACE)
       end
