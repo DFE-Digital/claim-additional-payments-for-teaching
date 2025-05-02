@@ -19,8 +19,8 @@ FactoryBot.define do
     trait :eligible_for_journey do
       after(:build) do |school, evaluator|
         case evaluator.journey
-        when Journeys::AdditionalPaymentsForTeaching
-          build(:school, :combined_journey_eligibile_for_all)
+        when Journeys::TargetedRetentionIncentivePayments
+          build(:school, :targeted_retention_incentive_payments_eligible)
         when Journeys::TeacherStudentLoanReimbursement
           build(:school, :student_loans_eligible)
         else
