@@ -102,10 +102,10 @@ RSpec.describe EmailVerificationForm do
     )
   end
 
-  describe "for AdditionalPaymentsForTeaching journey" do
+  describe "for TargetedRetentionIncentivePayments journey" do
     include_examples(
       "email_verification",
-      Journeys::AdditionalPaymentsForTeaching
+      Journeys::TargetedRetentionIncentivePayments
     )
   end
 end

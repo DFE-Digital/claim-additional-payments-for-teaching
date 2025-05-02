@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe PoorPerformanceForm do
   subject(:form) { described_class.new(journey_session:, journey:, params:) }
 
-  let(:journey) { Journeys::AdditionalPaymentsForTeaching }
-  let(:journey_session) { create(:additional_payments_session) }
+  let(:journey) { Journeys::TargetedRetentionIncentivePayments }
+  let(:journey_session) { create(:targeted_retention_incentive_payments_session) }
   let(:slug) { "poor-performance" }
   let(:params) { ActionController::Parameters.new({slug:, claim: claim_params}) }
   let(:claim_params) { {subject_to_formal_performance_action: "true", subject_to_disciplinary_action: "false"} }

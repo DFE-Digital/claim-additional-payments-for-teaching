@@ -4,7 +4,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
   shared_examples "personal_details_form" do |journey|
     before {
       create(:journey_configuration, :student_loans)
-      create(:journey_configuration, :additional_payments)
+      create(:journey_configuration, :targeted_retention_incentive_payments)
     }
 
     let(:journey_session) do
@@ -428,7 +428,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
     end
   end
 
-  describe "for AdditionalPaymentsForTeaching journey" do
-    include_examples "personal_details_form", Journeys::AdditionalPaymentsForTeaching
+  describe "for TargetedRetentionIncentivePayments journey" do
+    include_examples "personal_details_form", Journeys::TargetedRetentionIncentivePayments
   end
 end
