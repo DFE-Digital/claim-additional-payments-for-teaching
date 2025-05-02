@@ -2,7 +2,7 @@ require "rails_helper"
 
 Rails.application.load_tasks
 
-describe "fix_tslr_student_loan_amounts" do
+RSpec.describe "fix_tslr_student_loan_amounts" do
   around do |example|
     original_stdout = $stdout
     original_stderr = $stderr

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 module OrdnanceSurvey
-  describe Client::Response do
+  RSpec.describe Client::Response do
     subject(:response) { described_class.new(response: response_args) }
 
     let(:body_args) do

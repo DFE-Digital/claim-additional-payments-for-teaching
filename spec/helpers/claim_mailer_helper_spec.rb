@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe ClaimMailerHelper do
+RSpec.describe ClaimMailerHelper do
   describe ".rejected_reasons_personalisation" do
     subject { rejected_reasons_personalisation(decision.rejected_reasons_hash) }
     let(:claim) { create(:claim, policy: Policies::EarlyCareerPayments) }

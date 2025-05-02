@@ -2,7 +2,7 @@ require "rails_helper"
 
 module OrdnanceSurvey
   class Api
-    describe V1 do
+    RSpec.describe V1 do
       subject(:v1) { described_class.new(client: double("client")) }
 
       describe "#search_places" do

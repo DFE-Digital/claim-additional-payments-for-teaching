@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Policies::EarlyCareerPayments::AwardAmountCalculator do
+RSpec.describe Policies::EarlyCareerPayments::AwardAmountCalculator do
   let(:base_school) { instance_double("School", eligible_for_early_career_payments?: true, eligible_for_early_career_payments_as_uplift?: false) }
   let(:uplift_school) { instance_double("School", eligible_for_early_career_payments?: true, eligible_for_early_career_payments_as_uplift?: true) }
   let(:ineligible_school) { instance_double("School", eligible_for_early_career_payments?: false) }
