@@ -7,9 +7,20 @@ FactoryBot.define do
       national_insurance_number { generate(:national_insurance_number) }
     end
 
+    trait :with_address do
+      address_line_1 { "Some building" }
+      address_line_2 { "1 Grey Street" }
+      address_line_3 { "Newcastle" }
+      postcode { "NE1 6EE" }
+    end
+
     trait :with_details_from_dfe_identity do
       with_personal_details
       teacher_reference_number { generate(:teacher_reference_number) }
+    end
+
+    trait :with_student_loan_amount_seen do
+      student_loan_amount_seen { true }
     end
 
     trait :with_email_details do
@@ -49,6 +60,14 @@ FactoryBot.define do
 
     trait :with_claim_school do
       claim_school_id { create(:school, :student_loans_eligible).id }
+    end
+
+    trait :with_claim_school_searched do
+      possible_claim_school_id { create(:school, :student_loans_eligible).id }
+    end
+
+    trait :with_skip_postcode_search do
+      skip_postcode_search { true }
     end
 
     trait :with_current_school do
@@ -92,6 +111,9 @@ FactoryBot.define do
 
     trait :submittable do
       with_personal_details
+      with_student_loan_amount_seen
+      with_skip_postcode_search
+      with_address
       with_email_details
       with_mobile_details
       with_bank_details
@@ -99,6 +121,7 @@ FactoryBot.define do
       with_payroll_gender
       with_teacher_reference_number
       with_claim_school
+      with_claim_school_searched
       with_current_school
       with_subjects_taught
       with_employment_status

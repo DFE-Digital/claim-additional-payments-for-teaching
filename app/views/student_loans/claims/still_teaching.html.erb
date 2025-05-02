@@ -4,7 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: @form, errored_field_id_overrides: { "employment_status": "claim_employment_status_claim_school" }) if @form.errors.any? %>
 
-    <%= form_for @form, url: claim_path(current_journey_routing_name) do |form| %>
+    <%= form_for @form, url: @form.url do |form| %>
       <%= form_group_tag @form do %>
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">

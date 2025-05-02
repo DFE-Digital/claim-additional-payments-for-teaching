@@ -15,9 +15,14 @@ RSpec.feature "Changing the answers on a submittable claim" do
     start_student_loans_claim
 
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
-    session.answers.assign_attributes(
-      attributes_for(:student_loans_answers, :submittable)
-    )
+    session
+      .answers
+      .assign_attributes(
+        attributes_for(
+          :student_loans_answers,
+          :submittable
+        )
+      )
     session.save!
 
     jump_to_claim_journey_page(
@@ -31,9 +36,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     click_on "Continue"
 
     expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "check-your-answers"))
-
     expect(page).to have_text("Biology and Physics")
-
     expect(page).not_to have_text("Chemistry")
     expect(page).not_to have_text("Computing")
     expect(page).not_to have_text("Languages")
@@ -46,8 +49,6 @@ RSpec.feature "Changing the answers on a submittable claim" do
       attributes_for(
         :student_loans_answers,
         :submittable,
-        current_school_id: student_loans_school.id,
-        claim_school_id: student_loans_school.id,
         qualifications_details_check: false
       )
     )
@@ -60,7 +61,6 @@ RSpec.feature "Changing the answers on a submittable claim" do
     click_link "Change when did you complete your initial teacher training (itt)?"
 
     expect(find("#claim_qts_award_year_on_or_after_cut_off_date").checked?).to eq(true)
-
     choose_qts_year :before_cut_off_date
 
     expect(session.reload.answers.qts_award_year).to eq("before_cut_off_date")
@@ -73,9 +73,14 @@ RSpec.feature "Changing the answers on a submittable claim" do
     start_student_loans_claim
 
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
-    session.answers.assign_attributes(
-      attributes_for(:student_loans_answers, :submittable)
-    )
+    session
+      .answers
+      .assign_attributes(
+        attributes_for(
+          :student_loans_answers,
+          :submittable
+        )
+      )
     session.save!
 
     jump_to_claim_journey_page(
@@ -119,13 +124,15 @@ RSpec.feature "Changing the answers on a submittable claim" do
   scenario "Teacher changes an answer which is a dependency of some of the subsequent answers they've given, making them ineligible" do
     start_student_loans_claim
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
-    session.answers.assign_attributes(
-      attributes_for(
-        :student_loans_answers,
-        :submittable,
-        had_leadership_position: false
+    session
+      .answers
+      .assign_attributes(
+        attributes_for(
+          :student_loans_answers,
+          :submittable,
+          had_leadership_position: false
+        )
       )
-    )
     session.save!
 
     jump_to_claim_journey_page(
@@ -154,9 +161,14 @@ RSpec.feature "Changing the answers on a submittable claim" do
     start_student_loans_claim
 
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
-    session.answers.assign_attributes(
-      attributes_for(:student_loans_answers, :submittable)
-    )
+    session
+      .answers
+      .assign_attributes(
+        attributes_for(
+          :student_loans_answers,
+          :submittable
+        )
+      )
     session.save!
 
     jump_to_claim_journey_page(
@@ -180,17 +192,16 @@ RSpec.feature "Changing the answers on a submittable claim" do
   scenario "Teacher edits personal details, triggering the update of student loan details" do
     start_student_loans_claim
     journey_session = Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
-
-    journey_session.update!(
-      answers: attributes_for(
-        :student_loans_answers,
-        :submittable,
-        current_school_id: student_loans_school.id,
-        claim_school_id: student_loans_school.id,
-        student_loan_repayment_amount: 100
+    journey_session
+      .answers
+      .assign_attributes(
+        attributes_for(
+          :student_loans_answers,
+          :submittable,
+          student_loan_repayment_amount: 100
+        )
       )
-    )
-
+    journey_session.save!
     answers = journey_session.answers
 
     jump_to_claim_journey_page(

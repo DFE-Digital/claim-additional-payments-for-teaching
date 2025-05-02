@@ -6,6 +6,6 @@
     <h1 class="govuk-heading-xl">You are eligible to claim back student loan repayments</h1>
     <p class="govuk-body">Based on your answers, you can claim back the student loan repayments you made between <%= Policies::StudentLoans.current_financial_year %>.</p>
 
-    <%= button_to "Continue", claim_path(current_journey_routing_name), method: :patch, class: "govuk-button", role: :button, data: { module: "govuk-button"} %>
+    <%= button_to "Continue", @form.url, method: :patch, class: "govuk-button", role: :button, data: { module: "govuk-button"} %>
   </div>
 </div>

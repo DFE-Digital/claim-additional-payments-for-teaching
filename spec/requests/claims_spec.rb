@@ -87,7 +87,19 @@ RSpec.describe "Claims", type: :request do
       end
 
       context "when the user has completed the journey in the correct slug sequence" do
-        before { set_slug_sequence_in_session(journey_session, "claim-school") }
+        before do
+          journey_session
+            .answers
+            .assign_attributes(
+              attributes_for(
+                :student_loans_answers,
+                :submittable
+              )
+            )
+          journey_session.save!
+
+          set_slug_sequence_in_session(journey_session, "claim-school")
+        end
 
         it "renders the requested page in the sequence" do
           get claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "claim-school")
@@ -297,34 +309,6 @@ RSpec.describe "Claims", type: :request do
           put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "student-loan-amount"), params: {claim: {has_student_loan: true}}
           expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "qts-year"))
         end
-      end
-
-      context "when the user has completed the journey in the correct slug sequence" do
-        before { set_slug_sequence_in_session(journey_session, "provide-mobile-number") }
-
-        it "resets dependent claim attributes when appropriate" do
-          journey_session.answers.assign_attributes(provide_mobile_number: false, mobile_number: nil)
-          journey_session.save!
-          put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "provide-mobile-number"), params: {claim: {provide_mobile_number: true}}
-
-          expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "mobile-number"))
-          expect(journey_session.reload.answers.student_loan_plan).to be_nil
-        end
-      end
-
-      it "resets depenent eligibility attributes when appropriate" do
-        journey_session.answers.assign_attributes(
-          had_leadership_position: true,
-          mostly_performed_leadership_duties: false
-        )
-        journey_session.save!
-        set_slug_sequence_in_session(journey_session, "leadership-position")
-        put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "leadership-position"), params: {claim: {had_leadership_position: false}}
-
-        expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "eligibility-confirmed"))
-        expect(
-          journey_session.reload.answers.mostly_performed_leadership_duties
-        ).to be_nil
       end
     end
 

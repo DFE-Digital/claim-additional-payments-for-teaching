@@ -22,11 +22,18 @@ module Journeys
         "mostly-performed-leadership-duties" => MostlyPerformedLeadershipDutiesForm,
         "reset-claim" => ResetClaimForm,
         "select-claim-school" => SelectClaimSchoolForm,
-        "select-home-address" => SelectHomeAddressForm
+        "select-home-address" => SelectHomeAddressForm,
+        "eligibility-confirmed" => EligibilityConfirmedForm,
+        "student-loan-amount" => StudentLoanAmountForm,
+        "ineligible" => IneligibleForm
       }
     }.freeze
 
     def requires_student_loan_details?
+      true
+    end
+
+    def use_navigator?
       true
     end
   end

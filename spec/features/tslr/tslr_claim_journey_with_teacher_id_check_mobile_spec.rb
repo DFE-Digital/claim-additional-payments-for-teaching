@@ -144,7 +144,7 @@ RSpec.feature "TSLR journey with Teacher ID mobile check" do
     click_on "Continue"
 
     # - What is your home address
-    click_link(I18n.t("questions.address.home.link_to_manual_address"))
+    click_button(I18n.t("questions.address.home.link_to_manual_address"))
     fill_in_address
 
     # - Select the suggested email address
