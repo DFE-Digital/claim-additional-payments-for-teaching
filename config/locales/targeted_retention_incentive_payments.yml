@@ -145,6 +145,10 @@ en:
         declaration: |
           By selecting yes you are confirming that, to the best of your
           knowledge, the details above are correct.
+      email_verification:
+        errors:
+          one_time_password:
+            invalid: An error occured while validating the passcode, please try generating a new one
       personal_details:
         errors:
           full_name:
