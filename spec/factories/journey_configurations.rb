@@ -23,7 +23,7 @@ FactoryBot.define do
     end
 
     trait :targeted_retention_incentive_payments do
-      additional_payments
+      routing_name { Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME }
     end
 
     # FIXME RL - once the additional payments journey is removed, this can be
