@@ -4,7 +4,7 @@
 <%= form_for @form, url: claim_path(current_journey_routing_name), method: :patch do |form| %>
   <%= form_group_tag @form do %>
     <fieldset class="govuk-fieldset" aria-describedby="school-search-result-hint">
-      <legend class="govuk-fieldset__legend <%= fieldset_legend_css_class_for_journey(journey) %>">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
         <h1 class="govuk-fieldset__heading">
           <%= question %>
         </h1>
