@@ -5,21 +5,21 @@ require "rails_helper"
 RSpec.describe Journeys::Configuration do
   context "with journey configuration records" do
     let!(:student_loans) { create(:journey_configuration, :student_loans) }
-    let!(:additional_payments) { create(:journey_configuration, :additional_payments) }
+    let!(:targeted_retention_incentive_payments) { create(:journey_configuration, :targeted_retention_incentive_payments) }
 
-    describe "#additional_payments?" do
+    describe "#targeted_retention_incentive_payments?" do
       it "returns true" do
-        expect(additional_payments.additional_payments?).to be true
+        expect(targeted_retention_incentive_payments.targeted_retention_incentive_payments?).to be true
       end
 
       it "returns false" do
-        expect(student_loans.additional_payments?).to be false
+        expect(student_loans.targeted_retention_incentive_payments?).to be false
       end
     end
 
     describe "#journey" do
       it "returns the corresponding Journey" do
-        expect(additional_payments.journey).to eq(Journeys::AdditionalPaymentsForTeaching)
+        expect(targeted_retention_incentive_payments.journey).to eq(Journeys::TargetedRetentionIncentivePayments)
         expect(student_loans.journey).to eq(Journeys::TeacherStudentLoanReimbursement)
       end
     end
