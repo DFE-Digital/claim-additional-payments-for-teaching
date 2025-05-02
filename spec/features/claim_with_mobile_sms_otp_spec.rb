@@ -45,7 +45,7 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
         elsif scenario[:policy] == Policies::StudentLoans
           session = Journeys::TeacherStudentLoanReimbursement::Session.last
           session.update!(
-            answers: { provide_mobile_number: true }
+            answers: {provide_mobile_number: true}
           )
         end
 
