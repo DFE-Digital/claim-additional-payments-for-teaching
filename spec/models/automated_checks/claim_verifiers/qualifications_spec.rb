@@ -3,7 +3,7 @@ require "rails_helper"
 module AutomatedChecks
   module ClaimVerifiers
     RSpec.describe Qualifications do
-      let(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023)) }
+      let(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments_only, current_academic_year: AcademicYear.new(2023)) }
 
       before do
         if data
@@ -39,15 +39,16 @@ module AutomatedChecks
             national_insurance_number: "QQ100000C",
             reference: "AB123456",
             surname: "ELIGIBLE",
-            policy: Policies::EarlyCareerPayments
+            policy: Policies::TargetedRetentionIncentivePayments
           )
 
           claim.eligibility.update!(
             attributes_for(
-              :early_career_payments_eligibility,
+              :targeted_retention_incentive_payments_eligibility,
               :eligible,
               qualification: :undergraduate_itt,
-              teacher_reference_number: "1234567"
+              teacher_reference_number: "1234567",
+              itt_academic_year: Policies::TargetedRetentionIncentivePayments.current_academic_year - 3
             )
           )
 
@@ -330,7 +331,7 @@ module AutomatedChecks
               create(
                 :claim,
                 :submitted,
-                policy: Policies::EarlyCareerPayments,
+                policy: Policies::TargetedRetentionIncentivePayments,
                 date_of_birth: Date.new(1990, 8, 23),
                 first_name: "Fred",
                 national_insurance_number: "QQ100000C",
