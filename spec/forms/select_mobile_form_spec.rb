@@ -110,10 +110,10 @@ RSpec.describe SelectMobileForm do
     )
   end
 
-  describe "for AdditionalPaymentsForTeaching journey" do
+  describe "for TargetedRetentionIncentivePayments journey" do
     include_examples(
       "select_mobile_form",
-      Journeys::AdditionalPaymentsForTeaching
+      Journeys::TargetedRetentionIncentivePayments
     )
   end
 end
