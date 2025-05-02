@@ -2,10 +2,10 @@ require "rails_helper"
 
 RSpec.describe "Admin decisions", type: :request do
   context "when signed in as a service operator" do
-    let(:claim) { create(:claim, :submitted, policy: Policies::EarlyCareerPayments) }
+    let(:claim) { create(:claim, :submitted, policy: Policies::TargetedRetentionIncentivePayments) }
 
     before do
-      create(:journey_configuration, :early_career_payments)
+      create(:journey_configuration, :targeted_retention_incentive_payments)
       @signed_in_user = sign_in_as_service_operator
     end
 
@@ -37,7 +37,7 @@ RSpec.describe "Admin decisions", type: :request do
 
       context "when some tasks have not been completed" do
         let(:claim) {
-          create(:claim, :submitted, policy: Policies::EarlyCareerPayments, tasks: [
+          create(:claim, :submitted, policy: Policies::TargetedRetentionIncentivePayments, tasks: [
             build(:task, name: "qualifications")
           ])
         }
@@ -53,7 +53,7 @@ RSpec.describe "Admin decisions", type: :request do
       end
 
       context "when a decision has already been made" do
-        let(:claim) { create(:claim, :approved, policy: Policies::EarlyCareerPayments) }
+        let(:claim) { create(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments) }
 
         it "redirects and shows an error" do
           get new_admin_claim_decision_path(claim)
@@ -166,7 +166,7 @@ RSpec.describe "Admin decisions", type: :request do
       end
 
       context "when a decision has already been made" do
-        let(:claim) { create(:claim, :approved, policy: Policies::EarlyCareerPayments) }
+        let(:claim) { create(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments) }
 
         it "shows an error" do
           post admin_claim_decisions_path(claim_id: claim.id, decision: {approved: true})
@@ -178,7 +178,7 @@ RSpec.describe "Admin decisions", type: :request do
       end
 
       context "when a QA decision has already been made" do
-        let(:claim) { create(:claim, :approved, :qa_completed, policy: Policies::EarlyCareerPayments) }
+        let(:claim) { create(:claim, :approved, :qa_completed, policy: Policies::TargetedRetentionIncentivePayments) }
 
         it "shows an error" do
           post admin_claim_decisions_path(qa: true, claim_id: claim.id, decision: {approved: true})
@@ -190,7 +190,7 @@ RSpec.describe "Admin decisions", type: :request do
       end
 
       context "when the claim is missing a payroll gender" do
-        let(:claim) { create(:claim, :submitted, payroll_gender: :dont_know, policy: Policies::EarlyCareerPayments) }
+        let(:claim) { create(:claim, :submitted, payroll_gender: :dont_know, policy: Policies::TargetedRetentionIncentivePayments) }
 
         before do
           post admin_claim_decisions_path(claim_id: claim.id, decision: {approved: approved, rejected_reasons_ineligible_subject: "1"})
@@ -228,8 +228,8 @@ RSpec.describe "Admin decisions", type: :request do
             building_society_roll_number: nil
           }
         end
-        let(:claim) { create(:claim, :submitted, personal_details.merge(bank_sort_code: "582939", bank_account_number: "74727752", policy: Policies::EarlyCareerPayments)) }
-        let!(:approved_claim) { create(:claim, :approved, personal_details.merge(bank_sort_code: "112233", bank_account_number: "29482823", policy: Policies::EarlyCareerPayments)) }
+        let(:claim) { create(:claim, :submitted, personal_details.merge(bank_sort_code: "582939", bank_account_number: "74727752", policy: Policies::TargetedRetentionIncentivePayments)) }
+        let!(:approved_claim) { create(:claim, :approved, personal_details.merge(bank_sort_code: "112233", bank_account_number: "29482823", policy: Policies::TargetedRetentionIncentivePayments)) }
 
         before do
           post admin_claim_decisions_path(claim_id: claim.id, decision: {approved: approved, rejected_reasons_ineligible_subject: "1"})

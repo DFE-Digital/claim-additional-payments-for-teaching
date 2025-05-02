@@ -62,8 +62,8 @@ RSpec.shared_examples_for "a journey session" do |journey|
   end
 end
 
-RSpec.describe Journeys::AdditionalPaymentsForTeaching::Session, type: :model do
-  it_behaves_like "a journey session", Journeys::AdditionalPaymentsForTeaching
+RSpec.describe Journeys::TargetedRetentionIncentivePayments::Session, type: :model do
+  it_behaves_like "a journey session", Journeys::TargetedRetentionIncentivePayments
 end
 
 RSpec.describe Journeys::TeacherStudentLoanReimbursement::Session, type: :model do
