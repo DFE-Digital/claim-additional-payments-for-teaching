@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Policies::TargetedRetentionIncentivePayments::DqtRecord do
-  before { create(:journey_configuration, :additional_payments, current_academic_year: claim_year) }
+  before { create(:journey_configuration, :targeted_retention_incentive_payments, current_academic_year: claim_year) }
 
   subject(:dqt_record) { described_class.new(record, claim) }
 

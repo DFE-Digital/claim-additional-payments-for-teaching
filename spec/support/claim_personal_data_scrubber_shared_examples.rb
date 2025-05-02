@@ -5,7 +5,7 @@ RSpec.shared_examples "a claim personal data scrubber" do |policy|
 
   let(:eligibility_factory) { "#{policy.to_s.underscore}_eligibility" }
   let(:user) { create(:dfe_signin_user) }
-  let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
+  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments) }
   let(:current_academic_year) { AcademicYear.current }
   let(:last_academic_year) { Time.zone.local(current_academic_year.start_year, 8, 1) }
 
