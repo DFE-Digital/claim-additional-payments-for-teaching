@@ -59,18 +59,18 @@ RSpec.feature "Service configuration" do
   end
 
   context "Reminders exist" do
-    let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
+    let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments) }
     let(:count) { [*1..5].sample }
 
     before do
-      create_list(:reminder, count, :with_additonal_payments_reminder, email_verified: true, itt_academic_year: AcademicYear.current)
+      create_list(:reminder, count, :with_targeted_retention_incentive_payments_reminder, email_verified: true, itt_academic_year: AcademicYear.current)
       # should not be included
       create(:reminder, :with_fe_reminder, email_verified: true, itt_academic_year: AcademicYear.next)
       create(:reminder, :with_fe_reminder, email_verified: true, itt_academic_year: AcademicYear.current, email_sent_at: Date.today)
       create(:reminder, :with_fe_reminder, email_verified: false, itt_academic_year: AcademicYear.current)
     end
 
-    scenario "Service operator opens an ECP service for submissions" do
+    scenario "Service operator opens an TRI service for submissions" do
       journey_configuration.update(open_for_submissions: false)
       sign_in_as_service_operator
 
