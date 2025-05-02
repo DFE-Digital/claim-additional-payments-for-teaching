@@ -96,10 +96,10 @@ RSpec.describe MobileVerificationForm do
     )
   end
 
-  describe "for AdditionalPaymentsForTeaching journey" do
+  describe "for TargetedRetentionIncentivePayments journey" do
     include_examples(
       "mobile_verification",
-      Journeys::AdditionalPaymentsForTeaching
+      Journeys::TargetedRetentionIncentivePayments
     )
   end
 end
