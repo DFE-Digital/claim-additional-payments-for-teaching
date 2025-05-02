@@ -26,15 +26,6 @@ class TestDummyController < BasePublicController
   def current_slug_index
     slugs.index(params[:slug]) || 0
   end
-
-  def navigator
-    @navigator ||= Journeys::Navigator.new(
-      current_slug: params[:slug],
-      slug_sequence: [],
-      params:,
-      session:
-    )
-  end
 end
 
 class TestDummyForm < Form
@@ -57,6 +48,10 @@ RSpec.describe FormSubmittable, type: :request do
   after { Rails.application.reload_routes! }
 
   before { create(:journey_configuration, :targeted_retention_incentive_payments) }
+
+  before do
+    allow(Journeys::TargetedRetentionIncentivePayments).to receive(:use_navigator?).and_return(false)
+  end
 
   shared_context :define_filter do |filter_name|
     before { define_filter(filter_name) }
