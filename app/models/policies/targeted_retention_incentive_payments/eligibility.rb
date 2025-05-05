@@ -73,6 +73,19 @@ module Policies
         super
       end
 
+      # NOTE - remove once string column is renamed
+      def eligible_itt_subject=(value)
+        normalised_value = if value.is_a?(Integer)
+          self.class.eligible_itt_subjects.invert[value].to_s
+        else
+          value.to_s
+        end
+
+        self.eligible_itt_subject_string = normalised_value
+
+        super
+      end
+
       private
 
       def award_amount_must_be_in_range
