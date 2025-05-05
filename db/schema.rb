@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_01_172559) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_01_185513) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -755,6 +755,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_01_172559) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "qualification_string"
+    t.string "eligible_itt_subject_string"
     t.index ["current_school_id"], name: "idx_on_current_school_id_a8a77a93bf"
     t.index ["teacher_reference_number"], name: "idx_on_teacher_reference_number_d349ded5d7"
   end
