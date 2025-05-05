@@ -228,3 +228,5 @@
   - concurrency_key
   - expires_at
   - created_at
+  :targeted_retention_incentive_payments_eligibilities:
+  - qualification_string
