@@ -230,3 +230,4 @@
   - created_at
   :targeted_retention_incentive_payments_eligibilities:
   - qualification_string
+  - eligible_itt_subject_string
