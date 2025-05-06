@@ -141,10 +141,12 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
       it "sets the string column" do
         eligibility = create(
           :early_career_payments_eligibility,
-          qualification: "postgraduate_itt"
+          qualification: "postgraduate_itt",
+          eligible_itt_subject: "physics"
         )
 
         expect(eligibility.qualification_string).to eq("postgraduate_itt")
+        expect(eligibility.eligible_itt_subject_string).to eq("physics")
       end
     end
 
@@ -152,10 +154,12 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
       it "sets the string column" do
         eligibility = create(
           :early_career_payments_eligibility,
-          qualification: 0
+          qualification: 0,
+          eligible_itt_subject: 3
         )
 
         expect(eligibility.qualification_string).to eq("postgraduate_itt")
+        expect(eligibility.eligible_itt_subject_string).to eq("physics")
       end
     end
   end
