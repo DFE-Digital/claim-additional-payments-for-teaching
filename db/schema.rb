@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_02_114728) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_02_123059) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -176,12 +176,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_02_114728) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "employed_as_supply_teacher"
-    t.integer "qualification"
     t.boolean "has_entire_term_contract"
     t.boolean "employed_directly"
     t.boolean "subject_to_disciplinary_action"
     t.boolean "subject_to_formal_performance_action"
-    t.integer "eligible_itt_subject"
     t.boolean "teaching_subject_now"
     t.string "itt_academic_year", limit: 9
     t.uuid "current_school_id"
@@ -189,8 +187,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_02_114728) do
     t.boolean "induction_completed"
     t.boolean "school_somewhere_else"
     t.string "teacher_reference_number", limit: 11
-    t.string "qualification_string"
-    t.string "eligible_itt_subject_string"
+    t.string "qualification"
+    t.string "eligible_itt_subject"
     t.index ["current_school_id"], name: "index_early_career_payments_eligibilities_on_current_school_id"
     t.index ["teacher_reference_number"], name: "index_ecp_eligibility_trn"
   end
