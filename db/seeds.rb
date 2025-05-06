@@ -21,16 +21,18 @@ if Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")
   Rake::Task["db:fixtures:load"].invoke
 end
 
-if Rails.env.development?
+if Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")
   require "./lib/factory_helpers"
 
   class Seeds
     extend FactoryBot::Syntax::Methods
 
+    require "faker"
+
     FactoryHelpers.create_factory_registry
     FactoryHelpers.reset_factory_registry
 
-    if ENV["SEED_ACADEMIC_YEAR"].nil?
+    if ENV["SEED_ACADEMIC_YEAR"].nil? || ENV["ENVIRONMENT_NAME"].start_with?("review")
       # use original project defaults
       create(:payroll_run, :confirmation_report_uploaded,
         claims_counts: {Policies::StudentLoans => 2, Policies::EarlyCareerPayments => 2, Policies::TargetedRetentionIncentivePayments => 2, [Policies::StudentLoans, Policies::EarlyCareerPayments] => 2, [Policies::StudentLoans, Policies::TargetedRetentionIncentivePayments] => 2},
