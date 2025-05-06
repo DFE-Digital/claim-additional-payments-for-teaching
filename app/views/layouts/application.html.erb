@@ -58,7 +58,7 @@
     <% end %>
 
     <div class="govuk-width-container">
-      <div class="govuk-phase-banner">
+      <div class="govuk-phase-banner" role="contentinfo" aria-labelledby="phase">
         <p class="govuk-phase-banner__content">
           <strong class="govuk-tag govuk-phase-banner__content__tag">Beta</strong>
           <span class="govuk-phase-banner__text">
@@ -67,7 +67,7 @@
         </p>
       </div>
 
-      <%= render 'shared/backlink'%>
+      <%= render "shared/backlink" %>
 
       <main class="govuk-main-wrapper app-main-class" id="main-content">
         <% flash.each do |name, msg| %>
