@@ -44,47 +44,21 @@ module Policies
 
       enum :itt_academic_year, ITT_ACADEMIC_YEARS
 
-      enum :qualification, {
-        postgraduate_itt: 0,
-        undergraduate_itt: 1,
-        assessment_only: 2,
-        overseas_recognition: 3
-      }
+      enum :qualification, %w[
+        postgraduate_itt
+        undergraduate_itt
+        assessment_only
+        overseas_recognition
+      ].index_with(&:itself)
 
-      enum :eligible_itt_subject, {
-        chemistry: 0,
-        foreign_languages: 1,
-        mathematics: 2,
-        physics: 3,
-        none_of_the_above: 4,
-        computing: 5
-      }, prefix: :itt_subject
-
-      # NOTE - remove once string column is renamed
-      def qualification=(value)
-        normalised_value = if value.is_a?(Integer)
-          self.class.qualifications.invert[value].to_s
-        else
-          value.to_s
-        end
-
-        self.qualification_string = normalised_value
-
-        super
-      end
-
-      # NOTE - remove once string column is renamed
-      def eligible_itt_subject=(value)
-        normalised_value = if value.is_a?(Integer)
-          self.class.eligible_itt_subjects.invert[value].to_s
-        else
-          value.to_s
-        end
-
-        self.eligible_itt_subject_string = normalised_value
-
-        super
-      end
+      enum :eligible_itt_subject, %w[
+        chemistry
+        foreign_languages
+        mathematics
+        physics
+        none_of_the_above
+        computing
+      ].index_with(&:itself), prefix: :itt_subject
 
       private
 

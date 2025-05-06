@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_01_185513) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_02_100643) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -738,12 +738,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_01_185513) do
   create_table "targeted_retention_incentive_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.boolean "nqt_in_academic_year_after_itt"
     t.boolean "employed_as_supply_teacher"
-    t.integer "qualification"
     t.boolean "has_entire_term_contract"
     t.boolean "employed_directly"
     t.boolean "subject_to_disciplinary_action"
     t.boolean "subject_to_formal_performance_action"
-    t.integer "eligible_itt_subject"
     t.boolean "teaching_subject_now"
     t.string "itt_academic_year", limit: 9
     t.uuid "current_school_id"
@@ -754,8 +752,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_01_185513) do
     t.string "teacher_reference_number", limit: 11
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "qualification_string"
-    t.string "eligible_itt_subject_string"
+    t.string "qualification"
+    t.string "eligible_itt_subject"
     t.index ["current_school_id"], name: "idx_on_current_school_id_a8a77a93bf"
     t.index ["teacher_reference_number"], name: "idx_on_teacher_reference_number_d349ded5d7"
   end
