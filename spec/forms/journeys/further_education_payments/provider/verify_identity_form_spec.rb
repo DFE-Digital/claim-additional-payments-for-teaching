@@ -325,7 +325,7 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyIdentityForm,
     it do
       is_expected.not_to(
         allow_value("SW1A").for(:claimant_postcode)
-          .with_message("Enter a postcode in the correct format")
+          .with_message("Enter a postcode in the correct format, for example NE1 6EE")
       )
     end
 

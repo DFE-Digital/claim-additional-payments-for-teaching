@@ -282,9 +282,9 @@ en:
         address_line_3_blank: Enter a town or city
         address_line_max_chars: Address lines must be 100 characters or less
         address_format: Address lines cannot contain special characters
-        postcode_blank: Enter a real postcode, for example NE1 6EE
+        postcode_blank: Enter a real postcode
         postcode_max_chars: Postcode must be 11 characters or less
-        postcode_format: Enter a postcode in the correct format
+        postcode_format: Enter a postcode in the correct format, for example NE1 6EE
     select_email:
       questions:
         select_email: Which email address should we use to contact you?
@@ -1397,7 +1397,7 @@ en:
           hint: "For example ’AA1 2BC’"
           errors:
             blank: "Enter %{claimant}’s postcode"
-            invalid: "Enter a postcode in the correct format"
+            invalid: "Enter a postcode in the correct format, for example NE1 6EE"
         claimant_national_insurance_number:
           label: "What is %{claimant}’s National Insurance number?"
           hint: "For example ’QQ123456C’"
