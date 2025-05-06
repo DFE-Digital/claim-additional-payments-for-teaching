@@ -105,6 +105,7 @@
   - provider_email_address
   - practitioner_first_name
   - practitioner_surname
+  - qualification_string
   :risk_indicators:
   - id
   - field

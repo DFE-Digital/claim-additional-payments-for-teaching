@@ -135,4 +135,28 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
   describe ".max_award_amount_in_pounds" do
     specify { expect(described_class.max_award_amount_in_pounds).to eq(7_500) }
   end
+
+  describe "enum_methods" do
+    context "when set by name" do
+      it "sets the string column" do
+        eligibility = create(
+          :early_career_payments_eligibility,
+          qualification: "postgraduate_itt"
+        )
+
+        expect(eligibility.qualification_string).to eq("postgraduate_itt")
+      end
+    end
+
+    context "when set by value" do
+      it "sets the string column" do
+        eligibility = create(
+          :early_career_payments_eligibility,
+          qualification: 0
+        )
+
+        expect(eligibility.qualification_string).to eq("postgraduate_itt")
+      end
+    end
+  end
 end

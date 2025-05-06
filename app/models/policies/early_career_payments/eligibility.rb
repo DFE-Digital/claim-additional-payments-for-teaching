@@ -80,6 +80,17 @@ module Policies
         all_attributes_ignored = (args.first.keys - IGNORED_ATTRIBUTES).empty?
         raise unless all_attributes_ignored
       end
+
+      # NOTE - remove once string column is renamed
+      def qualification=(value)
+        normalised_value = if value.is_a?(Integer)
+          self.class.qualifications.invert[value].to_s
+        else
+          value.to_s
+        end
+        self.qualification_string = normalised_value
+        super
+      end
     end
   end
 end
