@@ -230,3 +230,4 @@
   - created_at
   :early_career_payments_eligibilities:
   - qualification_string
+  - eligible_itt_subject_string
