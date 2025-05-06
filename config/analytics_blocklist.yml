@@ -228,3 +228,5 @@
   - concurrency_key
   - expires_at
   - created_at
+  :early_career_payments_eligibilities:
+  - qualification_string

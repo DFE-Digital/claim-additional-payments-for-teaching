@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_02_100643) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_02_112643) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -189,6 +189,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_02_100643) do
     t.boolean "induction_completed"
     t.boolean "school_somewhere_else"
     t.string "teacher_reference_number", limit: 11
+    t.string "qualification_string"
     t.index ["current_school_id"], name: "index_early_career_payments_eligibilities_on_current_school_id"
     t.index ["teacher_reference_number"], name: "index_ecp_eligibility_trn"
   end
