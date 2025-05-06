@@ -85,19 +85,19 @@ gem "ostruct"
 gem "solid_queue", "~> 1.1"
 gem "mission_control-jobs"
 
-group :development, :test do
-  gem "pry"
-  gem "rspec-rails"
-  gem "turbo_tests"
-  gem "capybara"
-  gem "brakeman", require: false
-  gem "standard"
-  gem "bullet"
-  gem "webmock"
-  gem "shoulda-matchers"
-  gem "factory_bot_rails"
-  gem "dotenv-rails"
-end
+# group :development, :test do
+gem "pry"
+gem "rspec-rails"
+gem "turbo_tests"
+gem "capybara"
+gem "brakeman", require: false
+gem "standard"
+gem "bullet"
+gem "webmock"
+gem "shoulda-matchers"
+gem "factory_bot_rails"
+gem "dotenv-rails"
+# end
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
