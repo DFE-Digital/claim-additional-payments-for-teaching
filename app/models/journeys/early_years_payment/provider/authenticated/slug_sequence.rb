@@ -24,6 +24,8 @@ module Journeys
 
           SLUGS = (CLAIM_SLUGS + RESULTS_SLUGS).freeze
 
+          RESTRICTED_SLUGS = [].freeze
+
           MAGIC_LINK_SLUG = "consent"
 
           def self.start_page_url
@@ -39,10 +41,12 @@ module Journeys
           end
 
           def slugs
+            if answers.invalid_magic_link
+              return ["expired-link"]
+            end
+
             SLUGS.dup.tap do |sequence|
-              if !answers.invalid_magic_link
-                sequence.delete("expired-link")
-              end
+              sequence.delete("expired-link")
 
               if !answers.returning_within_6_months
                 sequence.delete("returner-worked-with-children")

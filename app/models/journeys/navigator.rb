@@ -107,9 +107,11 @@ module Journeys
 
         if form.respond_to?(:completed?)
           if !form.completed?
+            Rails.logger.info "navigator-debug: permissible_slug? is false for #{slug} as not completed" if Rails.env.development? || Rails.env.test?
             return false
           end
         elsif form.invalid?
+          Rails.logger.info "navigator-debug: permissible_slug? is false for #{slug} as form invalid" if Rails.env.development? || Rails.env.test?
           return false
         end
       end

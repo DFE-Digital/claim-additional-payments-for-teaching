@@ -14,8 +14,11 @@ class ClaimsController < BasePublicController
   before_action :persist_claim, only: [:new, :create]
   before_action :handle_magic_link, only: [:new], if: -> { journey.start_with_magic_link? }
   before_action :add_answers_to_rollbar_context, only: [:show, :update]
+
   after_action :update_session_with_current_slug, only: [:update]
 
+  # ordering of these includes is important
+  # moving them elsewhere will likely cause issues
   include FormSubmittable
   include ClaimsFormCallbacks
   include ClaimSubmission
@@ -207,7 +210,11 @@ class ClaimsController < BasePublicController
 
     journey_session.save!
 
-    redirect_to_next_slug
+    if journey.use_navigator?
+      redirect_to claim_path(current_journey_routing_name, navigator.furthest_permissible_slug)
+    else
+      redirect_to_next_slug
+    end
   end
 
   def add_answers_to_rollbar_context
