@@ -84,6 +84,7 @@ gem "ostruct"
 
 gem "solid_queue", "~> 1.1"
 gem "mission_control-jobs"
+gem "factory_bot_rails"
 
 group :development, :test do
   gem "pry"
@@ -95,7 +96,7 @@ group :development, :test do
   gem "bullet"
   gem "webmock"
   gem "shoulda-matchers"
-  gem "factory_bot_rails"
+  # gem "factory_bot_rails"
   gem "dotenv-rails"
 end
 

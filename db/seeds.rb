@@ -6,7 +6,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-if Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")
+if false && (Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review"))
   Journeys::Configuration.create!(routing_name: Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, current_academic_year: AcademicYear.current)
   Journeys::Configuration.create!(routing_name: Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, current_academic_year: AcademicYear.current)
   Journeys::Configuration.create!(routing_name: Journeys::GetATeacherRelocationPayment::ROUTING_NAME, current_academic_year: AcademicYear.current)
@@ -21,7 +21,7 @@ if Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")
   Rake::Task["db:fixtures:load"].invoke
 end
 
-if Rails.env.development?
+if true || Rails.env.development?
   require "./lib/factory_helpers"
 
   class Seeds
@@ -30,7 +30,7 @@ if Rails.env.development?
     FactoryHelpers.create_factory_registry
     FactoryHelpers.reset_factory_registry
 
-    if ENV["SEED_ACADEMIC_YEAR"].nil?
+    if true || ENV["SEED_ACADEMIC_YEAR"].nil?
       # use original project defaults
       create(:payroll_run, :confirmation_report_uploaded,
         claims_counts: {Policies::StudentLoans => 2, Policies::EarlyCareerPayments => 2, Policies::TargetedRetentionIncentivePayments => 2, [Policies::StudentLoans, Policies::EarlyCareerPayments] => 2, [Policies::StudentLoans, Policies::TargetedRetentionIncentivePayments] => 2},
