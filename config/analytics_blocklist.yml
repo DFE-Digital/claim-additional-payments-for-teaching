@@ -106,6 +106,7 @@
   - practitioner_first_name
   - practitioner_surname
   - qualification_string
+  - eligible_itt_subject_string
   :risk_indicators:
   - id
   - field
