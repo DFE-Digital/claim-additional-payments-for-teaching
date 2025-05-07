@@ -173,18 +173,6 @@ FactoryBot.define do
       end
     end
 
-    trait :ecp_ineligible_school do
-      current_school_id do
-        create(:school, :early_career_payments_ineligible).id
-      end
-    end
-
-    trait :eligible_school_ecp_only do
-      current_school_id do
-        create(:school, :early_career_payments_eligible, :targeted_retention_incentive_payments_ineligible).id
-      end
-    end
-
     trait :short_term_supply_teacher do
       employed_as_supply_teacher { true }
       has_entire_term_contract { false }
@@ -221,17 +209,6 @@ FactoryBot.define do
 
     trait :no_relevant_degree do
       eligible_degree_subject { false }
-    end
-
-    trait :eligible_school_ecp_and_targeted_retention_incentive do
-      current_school_id do
-        create(:school, :combined_journey_eligibile_for_all).id
-      end
-    end
-
-    trait :ecp_undetermined do
-      ecp_eligible
-      teaching_subject_now { nil }
     end
 
     trait :targeted_retention_incentive_undetermined do
