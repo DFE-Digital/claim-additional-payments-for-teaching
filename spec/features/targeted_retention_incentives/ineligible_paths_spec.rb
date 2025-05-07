@@ -155,7 +155,7 @@ RSpec.describe "Targeted retention incentives ineligible paths" do
       click_on "Continue"
 
       expect(page).to have_content(
-        "You are not eligible for a targeted retention incentive payment"
+        "You are not eligible for a school targeted retention incentive payment."
       )
     end
 
@@ -197,7 +197,7 @@ RSpec.describe "Targeted retention incentives ineligible paths" do
       click_on "Continue"
 
       expect(page).to have_content(
-        "You are not eligible for a targeted retention incentive payment"
+        "You are not eligible for a school targeted retention incentive payment"
       )
     end
   end
@@ -380,7 +380,7 @@ RSpec.describe "Targeted retention incentives ineligible paths" do
 
         expect(page).to have_content(
           "You are not eligible for a school targeted retention incentive " \
-          "payment because of the subject you studied or the year you studied."
+          "payment because of the year you studied."
         )
       end
     end
@@ -429,7 +429,7 @@ RSpec.describe "Targeted retention incentives ineligible paths" do
 
         expect(page).to have_content(
           "You are not eligible for a school targeted retention incentive " \
-          "payment because of the subject you studied or the year you studied."
+          "payment because of the year you studied."
         )
       end
     end
