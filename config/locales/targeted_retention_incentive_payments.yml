@@ -224,7 +224,7 @@ en:
           inclusion: "Select a subject"
       eligible_degree_subject:
         question: "Do you have a degree in an eligible subject?"
-        hint: "This can be an undergraduate or postgraduate degree in chemistry, languages, mathematics or physics."
+        hint: "This can be an undergraduate or postgraduate degree in chemistry, computing, mathematics or physics."
         options:
           true: "Yes"
           false: "No"
