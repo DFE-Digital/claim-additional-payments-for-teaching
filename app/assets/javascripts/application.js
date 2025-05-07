@@ -10,7 +10,6 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require rails-ujs
 //= stub a11y-dialog
 //= require accessible-autocomplete/dist/accessible-autocomplete.min.js
 //= require govuk-frontend/dist/govuk/all.bundle.js
