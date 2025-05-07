@@ -17,7 +17,7 @@
     <h2 class="govuk-heading-m govuk-!-margin-top-6">Payment amount</h2>
 
     <p class="govuk-body">
-      Teachers of eligible subjects can receive between £2,000 and £6,000. The
+      Teachers of eligible subjects can receive between £3,000 and £6,000. The
       amount you are eligible for depends on:
     </p>
 
@@ -55,8 +55,8 @@
         <%= @academic_year.start_year.to_s %> to
         <%= @academic_year.end_year.to_s %> academic year.
         You can apply for a targeted retention incentive payment between
-        October <%= (@academic_year + 1).start_year.to_s %>
-        and March <%= (@academic_year + 1).end_year.to_s %>.
+        September <%= (@academic_year + 1).start_year.to_s %>
+        and January <%= (@academic_year + 1).end_year.to_s %>.
       </p>
     <% end %>
 
@@ -65,8 +65,8 @@
     <% if @journey_open %>
       <p class="govuk-body">
         You must apply between
-        October <%= @academic_year.start_year.to_s %>
-        and March <%= @academic_year.end_year.to_s %>.
+        September <%= @academic_year.start_year.to_s %>
+        and January <%= @academic_year.end_year.to_s %>.
       </p>
     <% end %>
 
