@@ -474,7 +474,7 @@ RSpec.describe "Targeted retention incentives eligible paths" do
     expect(page).to have_content("Do you have a degree in an eligible subject?")
     expect(page).to have_content(
       "This can be an undergraduate or postgraduate degree in chemistry, " \
-      "languages, mathematics or physics."
+      "computing, mathematics or physics."
     )
 
     choose "Yes"
