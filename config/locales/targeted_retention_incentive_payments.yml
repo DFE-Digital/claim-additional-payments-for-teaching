@@ -232,7 +232,7 @@ en:
           inclusion: "Select yes if you have a degree in an eligible subject"
       teaching_subject_now:
         question: "Do you spend at least half of your contracted hours teaching eligible subjects?"
-        hint: "At least 50% of your contracted hours allocated to teaching must be spent teaching chemistry, languages, mathematics or physics."
+        hint: "At least 50% of your contracted hours allocated to teaching must be spent teaching chemistry, computing, mathematics or physics."
         options:
           true: "Yes"
           false: "No"
