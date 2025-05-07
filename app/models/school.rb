@@ -180,14 +180,6 @@ class School < ApplicationRecord
     Policies::StudentLoans::SchoolEligibility.new(self).eligible_current_school?
   end
 
-  def eligible_for_early_career_payments?
-    Policies::EarlyCareerPayments::SchoolEligibility.new(self).eligible?
-  end
-
-  def eligible_for_early_career_payments_as_uplift?
-    Policies::EarlyCareerPayments::SchoolEligibility.new(self).eligible_uplift?
-  end
-
   def state_funded?
     (STATE_FUNDED_SCHOOL_TYPE_GROUPS.include?(school_type_group) && school_type != "other_independent_special_school") ||
       secure_unit? ||
