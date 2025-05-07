@@ -6,7 +6,6 @@ RSpec.describe Journeys do
   describe ".all" do
     it "returns all the journeys" do
       expect(described_class.all).to eq([
-        Journeys::AdditionalPaymentsForTeaching,
         Journeys::TargetedRetentionIncentivePayments,
         Journeys::TeacherStudentLoanReimbursement,
         Journeys::GetATeacherRelocationPayment,
@@ -22,7 +21,6 @@ RSpec.describe Journeys do
   describe ".all_routing_names" do
     it "returns all the journeys' routing names" do
       expect(described_class.all_routing_names).to eq([
-        Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME,
         Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME,
         Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME,
         Journeys::GetATeacherRelocationPayment::ROUTING_NAME,
@@ -39,9 +37,9 @@ RSpec.describe Journeys do
     subject { described_class.for_routing_name(routing_name) }
 
     context "with a valid routing name" do
-      let(:routing_name) { Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME }
+      let(:routing_name) { Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME }
 
-      it { is_expected.to eq(Journeys::AdditionalPaymentsForTeaching) }
+      it { is_expected.to eq(Journeys::TargetedRetentionIncentivePayments) }
     end
 
     context "with an invalid routing name" do
@@ -55,9 +53,9 @@ RSpec.describe Journeys do
     subject { described_class.for_policy(policy) }
 
     context "with a valid policy" do
-      let(:policy) { Policies::EarlyCareerPayments }
+      let(:policy) { Policies::TargetedRetentionIncentivePayments }
 
-      it { is_expected.to eq(Journeys::AdditionalPaymentsForTeaching) }
+      it { is_expected.to eq(Journeys::TargetedRetentionIncentivePayments) }
     end
 
     context "with an invalid routing name" do
