@@ -1426,6 +1426,7 @@ en:
   early_years_payment:
     claim_description: for an early years financial incentive payment
   early_years_payment_provider_start:
+    support_email_address: "EY.Financial-Incentives@education.gov.uk"
     accessibility_statement:
       test_date: "28 July 2022"
       prepared_date: "31 July 2019"
