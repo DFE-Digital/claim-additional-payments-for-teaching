@@ -6,7 +6,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::IttAcademicYearForm
   before do
     create(
       :journey_configuration,
-      :targeted_retention_incentive_payments_only,
+      :targeted_retention_incentive_payments,
       current_academic_year: current_academic_year
     )
   end

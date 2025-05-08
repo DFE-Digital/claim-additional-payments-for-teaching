@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Journeys::TargetedRetentionIncentivePayments::EmployedDirectlyForm, type: :model do
   before do
-    create(:journey_configuration, :targeted_retention_incentive_payments_only)
+    create(:journey_configuration, :targeted_retention_incentive_payments)
   end
 
   let(:params) do

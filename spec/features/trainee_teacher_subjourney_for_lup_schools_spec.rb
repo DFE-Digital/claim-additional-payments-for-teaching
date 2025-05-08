@@ -1,11 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Trainee teacher subjourney for Targeted Retention Incentive schools" do
-  before do
-    FeatureFlag.enable!(:tri_only_journey)
-  end
-
-  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments_only, current_academic_year: AcademicYear.new(2023)) }
+  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments, current_academic_year: AcademicYear.new(2023)) }
   let(:academic_year) { journey_configuration.current_academic_year }
 
   scenario "non-Targeted Retention Incentive school" do

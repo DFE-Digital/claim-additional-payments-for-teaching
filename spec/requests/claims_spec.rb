@@ -20,8 +20,7 @@ RSpec.describe "Claims", type: :request do
     end
 
     context "switching claim policies" do
-      before { FeatureFlag.enable!(:tri_only_journey) }
-      before { create(:journey_configuration, :targeted_retention_incentive_payments_only) }
+      before { create(:journey_configuration, :targeted_retention_incentive_payments) }
 
       it "redirects to the existing claim interruption page if a claim for another policy is already in progress" do
         start_student_loans_claim
@@ -59,8 +58,7 @@ RSpec.describe "Claims", type: :request do
 
     context "targeted_retention_incentive claim" do
       it "created for the current academic year and redirects to the next question in the sequence" do
-        FeatureFlag.enable!(:tri_only_journey)
-        @journey_configuration = create(:journey_configuration, :targeted_retention_incentive_payments_only)
+        @journey_configuration = create(:journey_configuration, :targeted_retention_incentive_payments)
 
         check_claims_created
         check_claims_eligibility_created

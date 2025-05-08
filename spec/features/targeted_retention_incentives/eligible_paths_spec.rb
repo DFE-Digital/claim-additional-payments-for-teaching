@@ -3,12 +3,10 @@ require "rails_helper"
 RSpec.describe "Targeted retention incentives eligible paths" do
   include OmniauthMockHelper
 
-  before { FeatureFlag.enable!(:tri_only_journey) }
-
   before do
     create(
       :journey_configuration,
-      :targeted_retention_incentive_payments_only,
+      :targeted_retention_incentive_payments,
       teacher_id_enabled: true
     )
   end
