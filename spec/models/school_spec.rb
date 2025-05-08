@@ -254,19 +254,6 @@ RSpec.describe School, type: :model do
     end
   end
 
-  describe "#eligible_for_early_career_payments_as_uplift?" do
-    it "delegates to SchoolEligibility#eligible_uplift?" do
-      class_double = class_double(Policies::EarlyCareerPayments::SchoolEligibility).as_stubbed_const
-      instance_double = instance_double(Policies::EarlyCareerPayments::SchoolEligibility)
-      allow(class_double).to receive(:new).and_return(instance_double)
-      allow(instance_double).to receive(:eligible_uplift?)
-
-      School.new.eligible_for_early_career_payments_as_uplift?
-
-      expect(instance_double).to have_received(:eligible_uplift?)
-    end
-  end
-
   describe "#open?" do
     subject(:school) { build(:school, open_date: open_date, close_date: close_date) }
 
