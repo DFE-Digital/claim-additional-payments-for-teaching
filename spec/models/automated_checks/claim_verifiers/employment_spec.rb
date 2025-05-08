@@ -49,7 +49,7 @@ module AutomatedChecks
       describe "#perform" do
         subject(:perform) { employment.perform }
 
-        let(:policy) { Policies::EarlyCareerPayments }
+        let(:policy) { Policies::TargetedRetentionIncentivePayments }
 
         let(:policy_underscored) { policy.to_s.underscore }
         let(:teacher_reference_number) { 1334425 }
