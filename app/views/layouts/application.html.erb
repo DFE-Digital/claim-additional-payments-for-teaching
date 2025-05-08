@@ -49,7 +49,7 @@
 
     <%= render "shared/cookie_banner" %>
 
-    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+    <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
 
     <% if @journey_session&.answers&.logged_in_with_onelogin? %>
       <%= render "shared/one_login_header" %>
