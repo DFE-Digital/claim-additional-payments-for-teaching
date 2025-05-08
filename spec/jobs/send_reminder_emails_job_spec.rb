@@ -8,15 +8,15 @@ RSpec.describe SendReminderEmailsJob do
       count,
       email_verified: true,
       itt_academic_year: AcademicYear.current,
-      journey_class: Journeys::AdditionalPaymentsForTeaching.to_s
+      journey_class: Journeys::TargetedRetentionIncentivePayments.to_s
     )
   end
 
   before do
     # these should not send
-    create(:reminder, email_verified: false, journey_class: Journeys::AdditionalPaymentsForTeaching.to_s)
-    create(:reminder, email_verified: true, email_sent_at: Time.now, journey_class: Journeys::AdditionalPaymentsForTeaching.to_s)
-    create(:reminder, email_verified: true, itt_academic_year: AcademicYear.next, journey_class: Journeys::AdditionalPaymentsForTeaching.to_s)
+    create(:reminder, email_verified: false, journey_class: Journeys::TargetedRetentionIncentivePayments.to_s)
+    create(:reminder, email_verified: true, email_sent_at: Time.now, journey_class: Journeys::TargetedRetentionIncentivePayments.to_s)
+    create(:reminder, email_verified: true, itt_academic_year: AcademicYear.next, journey_class: Journeys::TargetedRetentionIncentivePayments.to_s)
     create(:reminder, email_verified: true, itt_academic_year: AcademicYear.current, journey_class: Journeys::FurtherEducationPayments.to_s)
   end
 
@@ -32,7 +32,7 @@ RSpec.describe SendReminderEmailsJob do
       # perform job
       expect {
         perform_enqueued_jobs do
-          subject.perform(Journeys::AdditionalPaymentsForTeaching.to_s)
+          subject.perform(Journeys::TargetedRetentionIncentivePayments.to_s)
         end
       }.to change { ActionMailer::Base.deliveries.count }.by(count)
 

@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Dqt::Matchers::General do
   before do
-    create(:journey_configuration, :additional_payments)
+    create(:journey_configuration, :targeted_retention_incentive_payments)
   end
 
   subject(:described_class) do
@@ -67,7 +67,7 @@ RSpec.describe Dqt::Matchers::General do
   end
 
   let(:claim_academic_year) do
-    Journeys::AdditionalPaymentsForTeaching.configuration.current_academic_year
+    Journeys::TargetedRetentionIncentivePayments.configuration.current_academic_year
   end
 
   let(:itt_academic_year) { claim_academic_year - 1 }

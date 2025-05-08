@@ -7,10 +7,6 @@ RSpec.describe Policies::EarlyCareerPayments::Eligibility, type: :model do
     Policies::EarlyCareerPayments::Eligibility::ITT_ACADEMIC_YEARS.keys.first
   end
 
-  before do
-    create(:journey_configuration, :additional_payments)
-  end
-
   describe "#policy" do
     let(:early_career_payments_eligibility) { build(:early_career_payments_eligibility) }
 

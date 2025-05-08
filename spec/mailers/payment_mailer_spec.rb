@@ -98,7 +98,7 @@ RSpec.describe PaymentMailer, type: :mailer do
     end
 
     # Characteristics common to all policies
-    Policies.all.each do |policy|
+    Policies.all.select(&:active?).each do |policy|
       describe "for a #{policy} payment" do
         include_examples :single_claim, policy
       end

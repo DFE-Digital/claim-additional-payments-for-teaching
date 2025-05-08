@@ -43,7 +43,7 @@ RSpec.describe EmploymentCheckJob do
     end
 
     context "when there is a claim over 3 months old with a failed employment check" do
-      let(:academic_year) { create(:journey_configuration, routing_name: Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME).current_academic_year }
+      let(:academic_year) { AcademicYear.current }
       let(:past_date) { Time.zone.local(academic_year.end_year, 3, 31) }
       let(:claim) { create(:claim, :submitted, policy:, submitted_at: past_date) }
       let!(:failed_check) { create(:task, :failed, :automated, name: "employment", claim:, created_at: past_date) }

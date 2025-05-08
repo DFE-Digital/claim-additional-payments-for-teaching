@@ -9,7 +9,6 @@ RSpec.describe Policies::EarlyCareerPayments::AdminTasksPresenter do
   subject(:presenter) { described_class.new(claim) }
 
   describe "attributes" do
-    let!(:journey_configuration) { create(:journey_configuration, policy.to_s.underscore) }
     let(:expected_itt_year) { eligibility.itt_academic_year }
 
     it {

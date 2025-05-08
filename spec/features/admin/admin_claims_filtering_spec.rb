@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Admin claim filtering" do
   before do
-    create(:journey_configuration, :additional_payments)
+    create(:journey_configuration, :targeted_retention_incentive_payments)
   end
 
   let!(:user) { sign_in_as_service_operator }
