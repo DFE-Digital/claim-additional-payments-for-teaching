@@ -3,8 +3,7 @@ require "rails_helper"
 RSpec.describe "Claims" do
   describe "#create" do
     before do
-      FeatureFlag.enable!(:tri_only_journey)
-      create(:journey_configuration, :targeted_retention_incentive_payments_only)
+      create(:journey_configuration, :targeted_retention_incentive_payments)
       start_claim("targeted-retention-incentive-payments")
     end
 
@@ -75,7 +74,7 @@ RSpec.describe "Claims" do
 
     describe "for TargetedRetentionIncentivePayments journey" do
       before do
-        create(:journey_configuration, :targeted_retention_incentive_payments_only)
+        create(:journey_configuration, :targeted_retention_incentive_payments)
       end
 
       let(:journey) { Journeys::TargetedRetentionIncentivePayments }

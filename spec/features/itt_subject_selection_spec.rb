@@ -1,8 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "ITT subject selection", slow: true do
-  before { FeatureFlag.enable!(:tri_only_journey) }
-  before { create(:journey_configuration, :targeted_retention_incentive_payments_only, current_academic_year: AcademicYear.new(2022)) }
+  before { create(:journey_configuration, :targeted_retention_incentive_payments, current_academic_year: AcademicYear.new(2022)) }
 
   # Note: If we ever change the UI to show all the options in all cases,
   # you *should* choose a subject instead of "None of the above" in the specs below.

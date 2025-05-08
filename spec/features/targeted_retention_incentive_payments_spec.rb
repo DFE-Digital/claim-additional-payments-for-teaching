@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "targeted_retention_incentive payments claims" do
   let(:claim) { Claim.by_policy(Policies::TargetedRetentionIncentivePayments).order(:created_at).last }
-  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments_only, current_academic_year: AcademicYear.new(2022)) }
+  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments, current_academic_year: AcademicYear.new(2022)) }
   let(:school) { create(:school, :targeted_retention_incentive_payments_eligible) }
   let(:itt_subject) { "Mathematics" }
   let(:journey_session) do
@@ -10,7 +10,6 @@ RSpec.feature "targeted_retention_incentive payments claims" do
   end
 
   before do
-    FeatureFlag.enable!(:tri_only_journey)
     allow(AcademicYear).to receive(:next).and_return(journey_configuration.current_academic_year + 1)
     school
   end

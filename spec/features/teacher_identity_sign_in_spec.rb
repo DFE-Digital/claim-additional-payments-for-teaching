@@ -4,7 +4,7 @@ RSpec.feature "Teacher Identity Sign in" do
   include OmniauthMockHelper
 
   # create a school eligible for ECP and Targeted Retention Incentive so can walk the whole journey
-  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments_only) }
+  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments) }
   let(:school) { create(:school, :targeted_retention_incentive_payments_eligible) }
   let(:current_academic_year) { journey_configuration.current_academic_year }
   let(:trn) { 1234567 }
@@ -14,7 +14,6 @@ RSpec.feature "Teacher Identity Sign in" do
   let(:itt_year) { current_academic_year - 3 }
 
   before do
-    FeatureFlag.enable!(:tri_only_journey)
     school
     set_mock_auth(trn, {date_of_birth:, nino:})
     stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
