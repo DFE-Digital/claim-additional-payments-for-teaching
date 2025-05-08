@@ -13,6 +13,10 @@ en:
     support_email_address: "schools-targeted.retention-incentive@education.gov.uk"
     information_provided_further_details: "For more details, you can read about payments and deductions for the %{link}"
     information_provided_further_details_link_text: "school targeted retention incentive (opens in new tab)"
+    accessibility_statement:
+      test_date: "28 July 2022"
+      prepared_date: "31 July 2019"
+      updated_date: "28 July 2022"
     admin:
       degree_in_an_eligible_subject: "Do you have an UG or a PG degree in an eligible subject?"
       employed_as_supply_teacher: "Employed as a supply teacher?"
