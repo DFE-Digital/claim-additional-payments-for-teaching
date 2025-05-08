@@ -85,4 +85,8 @@ module BasePolicy
   def current_academic_year
     Journeys.for_policy(self).configuration.current_academic_year
   end
+
+  def active?
+    true
+  end
 end
