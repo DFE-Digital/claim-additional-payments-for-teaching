@@ -1,11 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "TargetedRetentionIncentivePayments addres", slow: true do
-  before do
-    FeatureFlag.enable!(:tri_only_journey)
-  end
-
-  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments_only, current_academic_year: AcademicYear.new(2022)) }
+  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments, current_academic_year: AcademicYear.new(2022)) }
   let(:current_academic_year) { journey_configuration.current_academic_year }
 
   let(:itt_year) { current_academic_year - 3 }
