@@ -1,6 +1,5 @@
 RSpec.shared_examples "Admin View Claim Feature" do |policy|
-  let!(:journey_configuration) { create(:journey_configuration, policy.to_s.underscore) }
-  let(:academic_year) { journey_configuration.current_academic_year }
+  let(:academic_year) { AcademicYear.current }
 
   let!(:claim) {
     create(
