@@ -14,8 +14,11 @@ class ClaimsController < BasePublicController
   before_action :persist_claim, only: [:new, :create]
   before_action :handle_magic_link, only: [:new], if: -> { journey.start_with_magic_link? }
   before_action :add_answers_to_rollbar_context, only: [:show, :update]
+
   after_action :update_session_with_current_slug, only: [:update]
 
+  # ordering of these includes is important
+  # moving them elsewhere will likely cause issues
   include FormSubmittable
   include ClaimsFormCallbacks
   include ClaimSubmission
@@ -193,13 +196,25 @@ class ClaimsController < BasePublicController
     return unless params[:code] && params[:email]
 
     otp = OneTimePassword::Validator.new(params[:code], secret: ROTP::Base32.encode(ENV.fetch("EY_MAGIC_LINK_SECRET") + params[:email]))
+
     if otp.valid?
-      journey_session.answers.assign_attributes(provider_email_address: params[:email])
-      journey_session.save!
+      journey_session.answers.assign_attributes(
+        provider_email_address: params[:email],
+        invalid_magic_link: false
+      )
     else
-      redirect_to claim_path(Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME, "expired-link") and return
+      journey_session.answers.assign_attributes(
+        invalid_magic_link: true
+      )
     end
-    redirect_to_next_slug if claim_in_progress?
+
+    journey_session.save!
+
+    if journey.use_navigator?
+      redirect_to claim_path(current_journey_routing_name, navigator.furthest_permissible_slug)
+    else
+      redirect_to_next_slug
+    end
   end
 
   def add_answers_to_rollbar_context

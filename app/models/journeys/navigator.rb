@@ -51,9 +51,12 @@ module Journeys
 
           if form.respond_to?(:completed?)
             if !form.completed?
+              Rails.logger.info "navigator-debug: next_slug is #{slug} as not completed" if Rails.env.development?
               return slug
             end
           elsif form.invalid?
+            Rails.logger.info "navigator-debug: next_slug is #{slug} as invalid" if Rails.env.development?
+
             return slug
           end
 
@@ -69,6 +72,8 @@ module Journeys
             next_index = current_index + 1
             next_form = forms[next_index]
             next_slug = journey.slug_for_form(form: next_form)
+
+            Rails.logger.info "navigator-debug: next_slug is #{next_slug}" if Rails.env.development?
 
             return next_slug
           end
@@ -102,9 +107,11 @@ module Journeys
 
         if form.respond_to?(:completed?)
           if !form.completed?
+            Rails.logger.info "navigator-debug: permissible_slug? is false for #{slug} as not completed" if Rails.env.development? || Rails.env.test?
             return false
           end
         elsif form.invalid?
+          Rails.logger.info "navigator-debug: permissible_slug? is false for #{slug} as form invalid" if Rails.env.development? || Rails.env.test?
           return false
         end
       end

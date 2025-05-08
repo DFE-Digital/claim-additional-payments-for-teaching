@@ -104,6 +104,6 @@ RSpec.feature "Early years payment provider" do
     click_button "Continue"
 
     visit magic_link
-    expect(page.current_path).to eq "/early-years-payment-provider/current-nursery"
+    expect(page.current_path).to eq "/early-years-payment-provider/consent"
   end
 end

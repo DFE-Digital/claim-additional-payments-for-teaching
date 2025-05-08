@@ -1,5 +1,4 @@
 <% content_for(:page_title, page_title("This link has expired", journey: current_journey_routing_name)) %>
-<% @backlink_path = claim_path(current_journey_routing_name, "email-address") %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -16,7 +15,7 @@
     </p>
 
     <p class="govuk-body">
-      <%= govuk_link_to "Resend email", @backlink_path %>
+      <%= govuk_link_to "Resend email", claim_path(Journeys::EarlyYearsPayment::Provider::Start.routing_name, "email-address") %>
     </p>
   </div>
 </div>

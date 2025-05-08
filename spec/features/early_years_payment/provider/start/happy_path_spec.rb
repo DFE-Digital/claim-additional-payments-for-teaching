@@ -61,7 +61,7 @@ RSpec.feature "Early years payment provider" do
 
     fill_in "Enter your email address", with: "johndoe@example.com"
     click_on "Submit"
-    click_link "send another link"
+    click_button "send another link"
 
     within ".govuk-notification-banner--success" do
       expect(page).to have_content("Email sent to johndoe@example.com")
@@ -69,7 +69,7 @@ RSpec.feature "Early years payment provider" do
 
     expect(number_of_emails_sent).to eq 2
 
-    click_link "send another link"
+    click_button "send another link"
 
     within ".govuk-notification-banner--success" do
       expect(page).to have_content("Email sent to johndoe@example.com")
@@ -79,6 +79,7 @@ RSpec.feature "Early years payment provider" do
     visit claim_path(Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME, :claim)
     choose "Continue with the eligibility check that you have already started"
     click_on "Continue"
+
     expect(page.title).to have_text("Check your email")
     expect(page).to have_content("Check your email")
   end

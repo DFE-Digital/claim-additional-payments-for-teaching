@@ -16,6 +16,7 @@ module Journeys
           attribute :provider_email_address, pii: true
           attribute :practitioner_first_name, pii: true
           attribute :practitioner_surname, pii: true
+          attribute :invalid_magic_link, :boolean, pii: false
 
           def policy
             Policies::EarlyYearsPayments

@@ -6,9 +6,10 @@ module Journeys
           SLUGS = %w[
             email-address
             check-your-email
-            expired-link
             ineligible
           ].freeze
+
+          RESTRICTED_SLUGS = [].freeze
 
           def self.start_page_url
             Rails.application.routes.url_helpers.landing_page_path("early-years-payment")
