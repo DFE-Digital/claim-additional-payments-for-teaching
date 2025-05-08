@@ -13,6 +13,8 @@ module Journeys
   class Configuration < ApplicationRecord
     self.table_name = "journey_configurations"
 
+    default_scope { where.not(routing_name: "additional-payments") }
+
     # Use AcademicYear as custom ActiveRecord attribute type
     attribute :current_academic_year, AcademicYear::Type.new
 
