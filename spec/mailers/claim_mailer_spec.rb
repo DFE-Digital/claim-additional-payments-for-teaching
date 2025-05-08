@@ -56,7 +56,7 @@ RSpec.describe ClaimMailer, type: :mailer do
   end
 
   # Characteristics common to all policies
-  [Policies::EarlyCareerPayments, Policies::StudentLoans, Policies::TargetedRetentionIncentivePayments, Policies::InternationalRelocationPayments].each do |policy|
+  [Policies::FurtherEducationPayments, Policies::StudentLoans, Policies::TargetedRetentionIncentivePayments, Policies::InternationalRelocationPayments].each do |policy|
     context "with a #{policy} claim" do
       let!(:journey_configuration) { create(:journey_configuration, policy.to_s.underscore) }
 
@@ -66,9 +66,9 @@ RSpec.describe ClaimMailer, type: :mailer do
 
         it_behaves_like "an email related to a claim using GOVUK Notify templates", policy
 
-        context "when EarlyCareerPayments", if: policy == Policies::EarlyCareerPayments do
+        context "when FurtherEducationPayments", if: policy == Policies::FurtherEducationPayments do
           it "uses the correct template" do
-            expect(mail.template_id).to eq "cb319af7-a769-42e4-8f01-5cbb9fc24846"
+            expect(mail.template_id).to eq "bfceb21c-4051-4ab2-91de-850467931d1b"
           end
         end
 
@@ -354,16 +354,16 @@ RSpec.describe ClaimMailer, type: :mailer do
 
     before { create(:journey_configuration, policy.to_s.underscore) }
 
-    context "with an EarlyCareerPayments claim" do
-      let(:policy) { Policies::EarlyCareerPayments }
+    context "with an FurtherEducationPayments claim" do
+      let(:policy) { Policies::FurtherEducationPayments }
 
       it "has personalisation keys for: one time password, validity_duration,first_name and support_email_address" do
         expect(mail.personalisation.keys.sort).to eql([:email_subject, :first_name, :journey_name, :one_time_password, :support_email_address, :validity_duration])
-        expect(mail.personalisation[:email_subject]).to eql("Early-career payment email verification")
+        expect(mail.personalisation[:email_subject]).to eql("Further education payment email verification")
         expect(mail.personalisation[:first_name]).to eql("Ellie")
         expect(mail.personalisation[:journey_name]).to eql("some journey")
         expect(mail.personalisation[:one_time_password]).to eql(123124)
-        expect(mail.personalisation[:support_email_address]).to eql("earlycareerteacherpayments@digital.education.gov.uk")
+        expect(mail.personalisation[:support_email_address]).to eql("FE-targeted.retention-incentive@education.gov.uk")
         expect(mail.personalisation[:validity_duration]).to eql("15 minutes")
         expect(mail.body).to be_empty
       end

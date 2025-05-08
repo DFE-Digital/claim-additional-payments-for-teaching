@@ -24,7 +24,6 @@ module Journeys
 
     def teacher_id_configurable?
       [
-        AdditionalPaymentsForTeaching,
         TeacherStudentLoanReimbursement
       ].include?(journey)
     end
