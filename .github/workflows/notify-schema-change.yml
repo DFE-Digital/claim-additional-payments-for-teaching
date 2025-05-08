@@ -33,8 +33,8 @@ jobs:
       - name: Get commit details
         id: commit-info
         run: |
-          COMMIT_MSG=$(git log -1 --pretty=%s)
-          COMMIT_AUTHOR=$(git log -1 --pretty=%an)
+          COMMIT_MSG=$(git log -1 --pretty=%s | sed 's/"//g')
+          COMMIT_AUTHOR=$(git log -1 --pretty=%an | sed 's/"//g')
           COMMIT_LINK="https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
           echo "COMMIT_MSG=$COMMIT_MSG" >> $GITHUB_ENV
           echo "COMMIT_AUTHOR=$COMMIT_AUTHOR" >> $GITHUB_ENV
@@ -46,12 +46,17 @@ jobs:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: |
+            text: "
               <@U033AJ0A12P> Analytics Configuration Change Detected 🔍
+
               *Commit:* <${{ env.COMMIT_LINK }}|${{ env.COMMIT_MSG }}>
+
               *Author:* ${{ env.COMMIT_AUTHOR }}
+
               *Branch:* ${{ github.ref_name }}
+
               *Analytics Config Changes:*
               ```diff
               ${{ env.ANALYTICS_DIFF }}
               ```
+              "
