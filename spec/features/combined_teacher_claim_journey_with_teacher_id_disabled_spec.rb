@@ -1,11 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Combined journey" do
-  before do
-    FeatureFlag.enable!(:tri_only_journey)
-  end
-
-  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments_only, teacher_id_enabled: false) }
+  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments, teacher_id_enabled: false) }
 
   scenario "Teacher ID is disabled on the policy configuration" do
     visit landing_page_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)

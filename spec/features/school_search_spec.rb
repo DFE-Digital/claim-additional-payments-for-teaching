@@ -185,8 +185,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
   end
 
   context "Targeted Retention Incentive journey claim" do
-    before { FeatureFlag.enable!(:tri_only_journey) }
-    before { create(:journey_configuration, :targeted_retention_incentive_payments_only) }
+    before { create(:journey_configuration, :targeted_retention_incentive_payments) }
     let!(:school) { create(:school, :targeted_retention_incentive_payments_eligible) }
     let!(:closed_school) { create(:school, :targeted_retention_incentive_payments_eligible, :closed) }
 

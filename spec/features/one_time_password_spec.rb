@@ -4,8 +4,7 @@ RSpec.feature "One time password" do
   let(:session) { Journeys::TargetedRetentionIncentivePayments::Session.order(:created_at).last }
 
   before do
-    FeatureFlag.enable!(:tri_only_journey)
-    create(:journey_configuration, :targeted_retention_incentive_payments_only)
+    create(:journey_configuration, :targeted_retention_incentive_payments)
     start_targeted_retention_incentive_payments_claim
     session.update!(
       answers: attributes_for(

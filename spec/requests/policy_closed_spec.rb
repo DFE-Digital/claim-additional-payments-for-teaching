@@ -26,8 +26,7 @@ RSpec.describe "Maintenance Mode", type: :request do
     end
 
     it "still allows access to a different policy" do
-      FeatureFlag.enable!(:tri_only_journey)
-      create(:journey_configuration, :targeted_retention_incentive_payments_only)
+      create(:journey_configuration, :targeted_retention_incentive_payments)
 
       get new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
       follow_redirect!

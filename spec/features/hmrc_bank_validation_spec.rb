@@ -1,13 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_validation_enabled do
-  before do
-    FeatureFlag.enable!(:tri_only_journey)
-  end
   let(:journey_session) do
     Journeys::TargetedRetentionIncentivePayments::Session.order(:created_at).last
   end
-  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments_only) }
+  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments) }
   let!(:school) { create(:school, :targeted_retention_incentive_payments_eligible) }
   let(:bank_name) { "Jo Bloggs" }
   let(:sort_code) { "123456" }
