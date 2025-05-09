@@ -19,7 +19,7 @@
     <%= hidden_field_tag :exclude_closed, false, id: nil %>
 
    <h1 class="govuk-label-wrapper">
-     <%= label_tag :school_search, question, class: "govuk-label #{label_css_class_for_journey(journey)}" %>
+     <%= label_tag :school_search, question, class: "govuk-label govuk-label--xl" %>
    </h1>
 
     <% if @form.no_search_results? %>

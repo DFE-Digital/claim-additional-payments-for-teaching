@@ -3,9 +3,9 @@ require "rails_helper"
 RSpec.describe TeacherReferenceNumberForm do
   before { create(:journey_configuration, :additional_payments) }
 
-  let(:journey) { Journeys::AdditionalPaymentsForTeaching }
+  let(:journey) { Journeys::TargetedRetentionIncentivePayments }
 
-  let(:journey_session) { build(:additional_payments_session) }
+  let(:journey_session) { build(:targeted_retention_incentive_payments_session) }
 
   let(:params) do
     ActionController::Parameters.new(

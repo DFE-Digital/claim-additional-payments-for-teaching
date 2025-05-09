@@ -4,7 +4,7 @@ RSpec.describe CurrentSchoolForm do
   shared_examples "current_school_form" do |journey|
     before {
       create(:journey_configuration, :student_loans)
-      create(:journey_configuration, :additional_payments)
+      create(:journey_configuration, :targeted_retention_incentive_payments)
     }
 
     let(:journey_session) { create(:"#{journey::I18N_NAMESPACE}_session") }
@@ -130,7 +130,7 @@ RSpec.describe CurrentSchoolForm do
     include_examples "current_school_form", Journeys::TeacherStudentLoanReimbursement
   end
 
-  describe "for AdditionalPaymentsForTeaching journey" do
-    include_examples "current_school_form", Journeys::AdditionalPaymentsForTeaching
+  describe "for TargetedRetentionIncentivePayments journey" do
+    include_examples "current_school_form", Journeys::TargetedRetentionIncentivePayments
   end
 end

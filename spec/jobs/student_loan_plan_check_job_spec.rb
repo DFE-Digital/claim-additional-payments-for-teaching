@@ -13,7 +13,7 @@ RSpec.describe StudentLoanPlanCheckJob do
   let(:claim_status) { :submitted }
 
   let(:academic_year) { journey_configuration.current_academic_year }
-  let(:journey_configuration) { create(:journey_configuration, :additional_payments) }
+  let(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments) }
   let(:student_loan_plan_claim_verifier) { instance_double(AutomatedChecks::ClaimVerifiers::StudentLoanPlan, perform: true) }
 
   describe "#perform" do
@@ -27,7 +27,6 @@ RSpec.describe StudentLoanPlanCheckJob do
 
     it "includes all applicable policies" do
       expect(StudentLoanPlanCheckJob::APPLICABLE_POLICIES).to eq [
-        Policies::EarlyCareerPayments,
         Policies::TargetedRetentionIncentivePayments,
         Policies::FurtherEducationPayments,
         Policies::EarlyYearsPayments

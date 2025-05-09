@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Upload SLC data" do
   before do
     create(:journey_configuration, :student_loans) # used by StudentLoanAmountCheckJob
-    create(:journey_configuration, :early_career_payments)
+    create(:journey_configuration, :targeted_retention_incentive_payments)
     create(:journey_configuration, :further_education_payments)
     create(:journey_configuration, :early_years_payment_provider_start)
     sign_in_as_service_operator
@@ -25,19 +25,19 @@ RSpec.feature "Upload SLC data" do
       has_student_loan: false, student_loan_plan: "not_applicable", submitted_using_slc_data: false)
   }
 
-  let!(:ecp_claim_with_slc_data_no_student_loan) {
-    create(:claim, :submitted, policy: Policies::EarlyCareerPayments,
-      eligibility: build(:early_career_payments_eligibility, :eligible),
+  let!(:tri_claim_with_slc_data_no_student_loan) {
+    create(:claim, :submitted, policy: Policies::TargetedRetentionIncentivePayments,
+      eligibility: build(:targeted_retention_incentive_payments_eligibility, :eligible),
       has_student_loan: nil, student_loan_plan: nil, submitted_using_slc_data: false)
   }
-  let!(:ecp_claim_with_slc_data_with_student_loan) {
-    create(:claim, :submitted, policy: Policies::EarlyCareerPayments,
-      eligibility: build(:early_career_payments_eligibility, :eligible),
+  let!(:tri_claim_with_slc_data_with_student_loan) {
+    create(:claim, :submitted, policy: Policies::TargetedRetentionIncentivePayments,
+      eligibility: build(:targeted_retention_incentive_payments_eligibility, :eligible),
       has_student_loan: true, student_loan_plan: "plan_1", submitted_using_slc_data: false)
   }
-  let!(:ecp_claim_no_slc_data) {
-    create(:claim, :submitted, policy: Policies::EarlyCareerPayments,
-      eligibility: build(:early_career_payments_eligibility, :eligible),
+  let!(:tri_claim_no_slc_data) {
+    create(:claim, :submitted, policy: Policies::TargetedRetentionIncentivePayments,
+      eligibility: build(:targeted_retention_incentive_payments_eligibility, :eligible),
       has_student_loan: false, student_loan_plan: "not_applicable", submitted_using_slc_data: false)
   }
 
@@ -106,17 +106,17 @@ RSpec.feature "Upload SLC data" do
 
     # Early Career Payments
 
-    claim = ecp_claim_with_slc_data_no_student_loan
+    claim = tri_claim_with_slc_data_no_student_loan
     then_the_student_loan_plan_task_should_show_as(state: "Passed", for_claim: claim)
     expect(claim.reload.student_loan_plan).to eq "not_applicable"
     expect(claim.has_student_loan).to be false
 
-    claim = ecp_claim_with_slc_data_with_student_loan
+    claim = tri_claim_with_slc_data_with_student_loan
     then_the_student_loan_plan_task_should_show_as(state: "Passed", for_claim: claim)
     expect(claim.reload.student_loan_plan).to eq "plan_1"
     expect(claim.has_student_loan).to eq true
 
-    claim = ecp_claim_no_slc_data
+    claim = tri_claim_no_slc_data
     then_the_student_loan_plan_task_should_show_as(state: "Incomplete", for_claim: claim)
     expect(claim.reload.student_loan_plan).to be nil # this was "not_applicable" before LUPEYALPHA-1031
     expect(claim.has_student_loan).to be nil # this was false before LUPEYALPHA-1031
@@ -179,8 +179,8 @@ RSpec.feature "Upload SLC data" do
     @slc_data_csv_file.write StudentLoansDataImporter.mandatory_headers.join(",") + "\n"
     @slc_data_csv_file.write csv_row(sl_claim_with_slc_data_no_student_loan, no_data: true)
     @slc_data_csv_file.write csv_row(sl_claim_with_slc_data_with_student_loan, plan_type: "1", amount: "100")
-    @slc_data_csv_file.write csv_row(ecp_claim_with_slc_data_no_student_loan, no_data: true)
-    @slc_data_csv_file.write csv_row(ecp_claim_with_slc_data_with_student_loan, plan_type: "1", amount: "100")
+    @slc_data_csv_file.write csv_row(tri_claim_with_slc_data_no_student_loan, no_data: true)
+    @slc_data_csv_file.write csv_row(tri_claim_with_slc_data_with_student_loan, plan_type: "1", amount: "100")
     @slc_data_csv_file.write csv_row(fe_claim_with_slc_data_no_student_loan, no_data: true)
     @slc_data_csv_file.write csv_row(fe_claim_with_slc_data_with_student_loan, plan_type: "1", amount: "100")
     @slc_data_csv_file.write csv_row(fe_claim_with_slc_data_no_student_loan_nil_submitted_using_slc_data, no_data: true)
