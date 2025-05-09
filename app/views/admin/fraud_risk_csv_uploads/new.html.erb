@@ -16,7 +16,8 @@
         label: { text: "Upload fraud risk CSV file" },
         hint: {
           text: "Currently supported attributes are #{RiskIndicator::SUPPORTED_FIELDS.join(", ")}."
-        }
+        },
+        javascript: true
       ) %>
 
       <%= f.govuk_submit "Upload CSV" %>
