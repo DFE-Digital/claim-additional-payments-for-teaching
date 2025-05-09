@@ -25,7 +25,7 @@ RSpec.describe "TPS data upload" do
       let(:csv) { "Malformed CSV File\"," }
 
       it "displays an error" do
-        post admin_tps_data_uploads_path, params: {file: file}
+        post admin_tps_data_uploads_path, params: {tps_data_upload: {file: file}}
 
         expect(response.body).to include("The selected file must be a CSV")
       end
@@ -35,7 +35,7 @@ RSpec.describe "TPS data upload" do
       it "displays an error" do
         post admin_tps_data_uploads_path
 
-        expect(response.body).to include("Select a file")
+        expect(response.body).to include("Choose a CSV file of Teacher Pensions Service data to upload")
       end
     end
 
@@ -50,7 +50,7 @@ RSpec.describe "TPS data upload" do
     context "when a valid CSV is uploaded" do
       def upload_tps_data_csm_file(file)
         perform_enqueued_jobs do
-          post admin_tps_data_uploads_path, params: {file: file}
+          post admin_tps_data_uploads_path, params: {tps_data_upload: {file: file}}
         end
       end
 

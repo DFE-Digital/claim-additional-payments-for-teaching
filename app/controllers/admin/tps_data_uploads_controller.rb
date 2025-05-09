@@ -15,23 +15,26 @@ module Admin
     )
 
     def new
+      @upload_form = TpsDataForm.new(upload_params, admin_user)
     end
 
     def create
-      file = params[:file]
-      @tps_data_importer = TeachersPensionsServiceImporter.new(file)
+      @upload_form = TpsDataForm.new(upload_params, admin_user)
 
-      if @tps_data_importer.errors.any?
+      if @upload_form.invalid?
         render :new
       else
-        file_upload = FileUpload.create(uploaded_by: admin_user, body: File.read(file))
-        ImportTeachersPensionServiceDataJob.perform_later(file_upload.id)
+        @upload_form.run_import!
+        flash[:notice] = "Teachers Pensions Service data file uploaded and queued to be imported"
 
-        redirect_to admin_claims_path, notice: "Teachers Pensions Service data file uploaded and queued to be imported"
+        redirect_to admin_claims_path
       end
-    rescue ActiveRecord::RecordInvalid => e
-      Rollbar.error(e)
-      redirect_to new_admin_tps_data_upload_path, alert: "There was a problem, please try again"
+    end
+
+    private
+
+    def upload_params
+      params.fetch(:tps_data_upload, {}).permit(:file)
     end
   end
 end
