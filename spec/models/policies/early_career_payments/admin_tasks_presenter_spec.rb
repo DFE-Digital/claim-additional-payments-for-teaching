@@ -62,7 +62,7 @@ RSpec.describe Policies::EarlyCareerPayments::AdminTasksPresenter do
 
         it "returns array with subject #{spec[:subject_text]}" do
           expect(presenter.qualifications).to include(
-            ["ITT subject", I18n.t("additional_payments.forms.eligible_itt_subject.answers.#{spec[:subject_text]}")]
+            ["ITT subject", I18n.t("early_career_payments.forms.eligible_itt_subject.answers.#{spec[:subject_text]}")]
           )
         end
       end
