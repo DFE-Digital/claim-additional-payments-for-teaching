@@ -4,14 +4,17 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
   include OmniauthMockHelper
 
   # create a school eligible for ECP and Targeted Retention Incentive so can walk the whole journey
-  let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
-  let!(:eligible_school) { create(:school, :combined_journey_eligibile_for_all) }
-  let!(:ineligible_school) { create(:school, :early_career_payments_ineligible, :targeted_retention_incentive_payments_ineligible) }
+  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments_only) }
+  let(:eligible_school) { create(:school, :targeted_retention_incentive_payments_eligible) }
+  let(:ineligible_school) { create(:school, :targeted_retention_incentive_payments_ineligible) }
   let(:trn) { 1234567 }
   let(:date_of_birth) { "1981-01-01" }
   let(:nino) { "AB123123A" }
 
   before do
+    FeatureFlag.enable!(:tri_only_journey)
+    eligible_school
+    ineligible_school
     freeze_time
     set_mock_auth(trn, {date_of_birth:, nino:})
     stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
@@ -33,9 +36,9 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
     choose(eligible_school.name)
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"))
+    expect(page).to have_text("Are you currently teaching as a qualified teacher?")
 
-    session = Journeys::AdditionalPaymentsForTeaching::Session.last
+    session = Journeys::TargetedRetentionIncentivePayments::Session.last
     expect(session.answers.current_school_id).to eq(eligible_school.id)
     expect(session.answers.school_somewhere_else).to eq(false)
 
@@ -49,10 +52,10 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
     choose("Somewhere else")
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
+    expect(page).to have_text("Which school do you teach at?")
     expect(page).not_to have_text(eligible_school.name)
 
-    session = Journeys::AdditionalPaymentsForTeaching::Session.last
+    session = Journeys::TargetedRetentionIncentivePayments::Session.last
     expect(session.answers.current_school).to be_nil
     expect(session.answers.school_somewhere_else).to eq(true)
   end
@@ -60,7 +63,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
   scenario "Most recent TPS is outside window - skips directly to current-school" do
     navigate_to_correct_school_page(tps: :outside_window, school: eligible_school)
 
-    expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
+    expect(page).to have_text("Which school do you teach at?")
     expect(page).to have_text("Enter the school name or postcode. Use at least three characters.")
   end
 
@@ -81,10 +84,10 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
     click_on "Change school"
 
     # - Goes to current-school
-    expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
+    expect(page).to have_text("Which school do you teach at?")
     expect(page).to have_text("Enter the school name or postcode. Use at least three characters.")
 
-    session = Journeys::AdditionalPaymentsForTeaching::Session.last
+    session = Journeys::TargetedRetentionIncentivePayments::Session.last
     expect(session.answers.current_school).to be_nil
     expect(session.answers.school_somewhere_else).to eq(true)
   end
@@ -99,18 +102,18 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
       create(:teachers_pensions_service, teacher_reference_number: trn, end_date: (recent_tps_full_months + 2.months).ago, school_urn: school.establishment_number, la_urn: school.local_authority.code)
     end
 
-    visit landing_page_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
+    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
 
     # - Landing (start)
-    expect(page).to have_text(I18n.t("additional_payments.landing_page"))
+    expect(page).to have_text("Find out if you are eligible for a targeted retention incentive payment")
     click_on "Start now"
 
     expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue with DfE Identity"
 
     # - Teacher details page
-    expect(page).to have_text(I18n.t("questions.check_and_confirm_details"))
-    expect(page).to have_text(I18n.t("questions.details_correct"))
+    expect(page).to have_text("Check and confirm your personal details")
+    expect(page).to have_text("Are these details correct?")
 
     choose "Yes"
     click_on "Continue"

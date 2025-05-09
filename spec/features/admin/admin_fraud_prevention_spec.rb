@@ -163,44 +163,42 @@ RSpec.feature "Admin fraud prevention" do
   end
 
   def submit_claim(national_insurance_number: "QQ123456C")
-    create(:journey_configuration, :additional_payments)
+    FeatureFlag.enable!(:tri_only_journey)
+    create(:journey_configuration, :targeted_retention_incentive_payments_only)
 
-    school = create(:school, :early_career_payments_eligible)
+    school = create(:school, :targeted_retention_incentive_payments_eligible)
 
-    visit landing_page_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
+    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
     # - Landing (start)
     click_on "Start now"
 
     click_on "Continue without signing in"
 
-    # /additional-payments/current-school
+    # /targeted-retention-incentive-payments/current-school
     fill_in :school_search, with: school.name
     click_on "Continue"
-    # /additional-payments/current-school
+
+    # /targeted-retention-incentive-payments/current-school
     choose school.name
     click_on "Continue"
 
-    # /additional-payments/nqt-in-academic-year-after-itt
+    # /targeted-retention-incentive-payments/nqt-in-academic-year-after-itt
     choose "Yes"
     click_on "Continue"
 
-    # /additional-payments/induction-completed
+    # /targeted-retention-incentive-payments/supply-teacher
     choose "Yes"
     click_on "Continue"
 
-    # /additional-payments/supply-teacher
+    # /targeted-retention-incentive-payments/entire-term-contract
     choose "Yes"
     click_on "Continue"
 
-    # /additional-payments/entire-term-contract
-    choose "Yes"
-    click_on "Continue"
-
-    # /additional-payments/employed-directly
+    # /targeted-retention-incentive-payments/employed-directly
     choose "Yes, I'm employed by my school"
     click_on "Continue"
 
-    # /additional-payments/poor-performance
+    # /targeted-retention-incentive-payments/poor-performance
     within all(".govuk-fieldset")[0] do
       choose("No")
     end
@@ -209,32 +207,32 @@ RSpec.feature "Admin fraud prevention" do
     end
     click_on "Continue"
 
-    # /additional-payments/qualification
+    # /targeted-retention-incentive-payments/qualification
     choose "Postgraduate initial teacher training (ITT)"
     click_on "Continue"
 
-    # /additional-payments/itt-year
+    # /targeted-retention-incentive-payments/itt-year
     choose "2020 to 2021"
     click_on "Continue"
 
-    # /additional-payments/eligible-itt-subject
+    # /targeted-retention-incentive-payments/eligible-itt-subject
     choose "Chemistry"
     click_on "Continue"
 
-    # /additional-payments/teaching-subject-now
+    # /targeted-retention-incentive-payments/teaching-subject-now
     choose "Yes"
     click_on "Continue"
 
-    # /additional-payments/check-your-answers-part-one
+    # /targeted-retention-incentive-payments/check-your-answers-part-one
     click_on "Continue"
 
-    # /additional-payments/eligibility-confirmed
+    # /targeted-retention-incentive-payments/eligibility-confirmed
     click_on "Apply now"
 
-    # /additional-payments/information-provided
+    # /targeted-retention-incentive-payments/information-provided
     click_on "Continue"
 
-    # /additional-payments/personal-details
+    # /targeted-retention-incentive-payments/personal-details
     fill_in "First name", with: "Seymour"
     fill_in "Last name", with: "Skinner"
 
@@ -246,10 +244,10 @@ RSpec.feature "Admin fraud prevention" do
 
     click_on "Continue"
 
-    # /additional-payments/postcode-search
+    # /targeted-retention-incentive-payments/postcode-search
     click_on "Enter your address manually"
 
-    # /additional-payments/address
+    # /targeted-retention-incentive-payments/address
     fill_in "House number or name", with: "123 Main Street"
     fill_in "Building and street", with: "Downtown"
     fill_in "Town or city", with: "Twin Peaks"
@@ -258,35 +256,35 @@ RSpec.feature "Admin fraud prevention" do
 
     click_on "Continue"
 
-    # /additional-payments/email-address
+    # /targeted-retention-incentive-payments/email-address
     fill_in "Email address", with: "test@example.com"
     click_on "Continue"
 
-    # /additional-payments/email-verification
+    # /targeted-retention-incentive-payments/email-verification
     mail = ActionMailer::Base.deliveries.last
     otp_in_mail_sent = mail.personalisation[:one_time_password]
     fill_in "Enter the 6-digit passcode", with: otp_in_mail_sent
     click_on "Confirm"
 
-    # /additional-payments/provide-mobile-number
+    # /targeted-retention-incentive-payments/provide-mobile-number
     choose "No"
     click_on "Continue"
 
-    # /additional-payments/personal-bank-account
+    # /targeted-retention-incentive-payments/personal-bank-account
     fill_in "Name on your account", with: "Seymour Skinner"
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "87654321"
     click_on "Continue"
 
-    # /additional-payments/gender
+    # /targeted-retention-incentive-payments/gender
     choose "Male"
     click_on "Continue"
 
-    # /additional-payments/teacher-reference-number
+    # /targeted-retention-incentive-payments/teacher-reference-number
     fill_in "What is your teacher reference number (TRN)?", with: "1234567"
     click_on "Continue"
 
-    # /additional-payments/check-your-answers
+    # /targeted-retention-incentive-payments/check-your-answers
     click_on "Accept and send"
 
     Claim.order(:created_at).last

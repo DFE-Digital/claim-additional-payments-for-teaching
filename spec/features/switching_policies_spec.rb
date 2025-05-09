@@ -4,20 +4,21 @@ RSpec.feature "Switching policies" do
   include StudentLoansHelper
 
   before do
+    FeatureFlag.enable!(:tri_only_journey)
     create(:journey_configuration, :student_loans)
-    create(:journey_configuration, :early_career_payments)
+    create(:journey_configuration, :targeted_retention_incentive_payments_only)
     create(:journey_configuration, :get_a_teacher_relocation_payment)
   end
 
-  context "swtiching from student loans to additional payments" do
+  context "swtiching from student loans to targeted retention incentive payments" do
     before do
       start_student_loans_claim
-      visit new_claim_path("additional-payments")
+      visit new_claim_path("targeted-retention-incentive-payments")
     end
 
     scenario "a user can switch to a different policy after starting a claim on another" do
-      expect(page.title).to have_text(I18n.t("additional_payments.journey_name"))
-      expect(page.find("header")).to have_text(I18n.t("additional_payments.journey_name"))
+      expect(page.title).to have_text(I18n.t("targeted_retention_incentive_payments.journey_name"))
+      expect(page.find("header")).to have_text(I18n.t("targeted_retention_incentive_payments.journey_name"))
 
       choose "Start a new eligibility check"
       click_on "Continue"
@@ -33,11 +34,11 @@ RSpec.feature "Switching policies" do
     end
   end
 
-  context "switching from additional payments to get a teacher relocation payment" do
+  context "switching from targeted retention incentive payments to get a teacher relocation payment" do
     before do
-      school = create(:school, :combined_journey_eligibile_for_all)
+      school = create(:school, :targeted_retention_incentive_payments_eligible)
 
-      visit new_claim_path("additional-payments")
+      visit new_claim_path("targeted-retention-incentive-payments")
 
       skip_tid
 
@@ -68,7 +69,7 @@ RSpec.feature "Switching policies" do
       choose "Continue with the eligibility check that you have already started"
       click_on "Continue"
 
-      expect(page.title).to include("Claim additional payments for teaching")
+      expect(page.title).to include("Claim a targeted retention incentive payment")
     end
   end
 
@@ -81,7 +82,7 @@ RSpec.feature "Switching policies" do
       # test will need to be updated to select an option on that page
       click_on "Continue"
 
-      visit new_claim_path("additional-payments")
+      visit new_claim_path("targeted-retention-incentive-payments")
     end
 
     scenario "a user can switch to a different policy after starting a claim on another" do
@@ -97,9 +98,9 @@ RSpec.feature "Switching policies" do
 
   context "Switching to the same journey" do
     scenario "a user can switch to the same journey after starting a claim on that journey" do
-      school = create(:school, :combined_journey_eligibile_for_all)
+      school = create(:school, :targeted_retention_incentive_payments_eligible)
 
-      visit new_claim_path("additional-payments")
+      visit new_claim_path("targeted-retention-incentive-payments")
 
       skip_tid
 
@@ -109,7 +110,7 @@ RSpec.feature "Switching policies" do
         "Are you currently teaching as a qualified teacher?"
       )
 
-      visit new_claim_path("additional-payments")
+      visit new_claim_path("targeted-retention-incentive-payments")
 
       expect(page).to(have_text(
         "You have already started an eligibility check"
@@ -127,7 +128,7 @@ RSpec.feature "Switching policies" do
 
   scenario "a user does not select an option" do
     start_student_loans_claim
-    visit new_claim_path("additional-payments")
+    visit new_claim_path("targeted-retention-incentive-payments")
 
     click_on "Continue"
 
