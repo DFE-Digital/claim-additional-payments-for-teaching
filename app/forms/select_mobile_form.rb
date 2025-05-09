@@ -4,7 +4,7 @@ class SelectMobileForm < Form
   validates :mobile_check,
     inclusion: {
       in: %w[use alternative declined],
-      message: ->(form, _) { form.i18n_errors_path(:mobile_check) }
+      message: ->(form, _) { form.t("select_mobile_form.errors.mobile_check") }
     }
 
   def phone_number

@@ -294,6 +294,18 @@ en:
       errors:
         select_email: Select an option to indicate whether the email is correct or not
         invalid_email: Invalid email address. Please select a different email address
+    select_mobile_form:
+      questions:
+        which_number: "Which mobile number should we use to contact you?"
+      answers:
+        alternative: "A different mobile number"
+        decline: "I do not want to be contacted by mobile"
+      hints:
+        usage:
+          "We will only use this number if we are unable to contact you via email. It may slow down your application
+          if we are unable to reach you."
+      errors:
+        mobile_check: "Select an option to indicate whether the mobile number is correct or not"
     email_address:
       label: "Email address"
       hint1:
@@ -579,18 +591,6 @@ en:
       qualification_details:
         errors:
           qualifications_details_check: "Select yes if your qualification details are correct"
-      select_mobile_form:
-        questions:
-          which_number: "Which mobile number should we use to contact you?"
-        answers:
-          alternative: "A different mobile number"
-          decline: "I do not want to be contacted by mobile"
-        hints:
-          usage:
-            "We will only use this number if we are unable to contact you via email. It may slow down your application
-            if we are unable to reach you."
-        errors:
-          mobile_check: "Select an option to indicate whether the mobile number is correct or not"
       sign_in_or_continue:
         errors:
           details_check: "Select an option to whether the details are correct or not"

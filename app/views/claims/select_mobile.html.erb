@@ -1,7 +1,7 @@
 <% content_for(
   :page_title,
   page_title(
-    t("additional_payments.forms.select_mobile_form.questions.which_number"),
+    t("forms.select_mobile_form.questions.which_number"),
     journey: current_journey_routing_name,
     show_error: @form.errors.any?)
 ) %>
@@ -26,12 +26,12 @@
 
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
             <h1 class="govuk-fieldset__heading">
-              <%= t("additional_payments.forms.select_mobile_form.questions.which_number") %>
+              <%= t("forms.select_mobile_form.questions.which_number") %>
             </h1>
           </legend>
 
           <div class="govuk-hint" id="phone-number-hint">
-              <%= t("additional_payments.forms.select_mobile_form.hints.usage") %>
+              <%= t("forms.select_mobile_form.hints.usage") %>
           </div>
 
           <%= errors_tag f.object, :phone_number %>
@@ -44,12 +44,12 @@
             </div>
             <div class="govuk-radios__item">
               <%= f.radio_button(:mobile_check, :alternative, class: "govuk-radios__input", required: true) %>
-              <%= f.label :mobile_check_alternative, t("additional_payments.forms.select_mobile_form.answers.alternative"), class: "govuk-label govuk-radios__label" %>
+              <%= f.label :mobile_check_alternative, t("forms.select_mobile_form.answers.alternative"), class: "govuk-label govuk-radios__label" %>
             </div>
             <div class="govuk-radios__divider">or</div>
             <div class="govuk-radios__item">
               <%= f.radio_button(:mobile_check, :declined, class: "govuk-radios__input", required: true) %>
-              <%= f.label :mobile_check_declined, t("additional_payments.forms.select_mobile_form.answers.decline"), class: "govuk-label govuk-radios__label" %>
+              <%= f.label :mobile_check_declined, t("forms.select_mobile_form.answers.decline"), class: "govuk-label govuk-radios__label" %>
             </div>
 
           </div>
