@@ -15,7 +15,7 @@ module Admin
     end
 
     def edit
-      @csv_upload = Policies::TargetedRetentionIncentivePayments::AwardCsvImporter.new(admin_user:) if journey_configuration.additional_payments?
+      @awards_upload_form = Policies::TargetedRetentionIncentivePayments::AwardCsvImporter.new(awards_upload_params.merge({admin_user:})) if journey_configuration.additional_payments?
 
       @upload_form = EligibleFeProvidersForm.new(upload_params, admin_user)
       @download_form = EligibleFeProvidersForm.new({}, admin_user)
@@ -31,6 +31,10 @@ module Admin
     end
 
     private
+
+    def awards_upload_params
+      params.fetch(:targeted_retention_incentive_payments_awards_upload, {}).permit(:academic_year, :csv_data)
+    end
 
     def upload_params
       params.fetch(:eligible_fe_providers_upload, {}).permit(:academic_year)
