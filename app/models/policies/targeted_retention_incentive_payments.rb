@@ -109,5 +109,19 @@ module Policies
     def max_topup_amount(claim)
       Award.by_academic_year(claim.academic_year).maximum(:award_amount)
     end
+
+    def set_a_reminder?(itt_academic_year)
+      selectable_itt_years_for_claim_year(AcademicYear.next).include?(itt_academic_year)
+    end
+
+    def award_amount(school)
+      return nil unless school
+
+      school
+        .targeted_retention_incentive_payments_awards
+        .by_academic_year(current_academic_year)
+        .first
+        &.award_amount
+    end
   end
 end
