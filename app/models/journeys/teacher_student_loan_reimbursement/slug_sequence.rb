@@ -114,7 +114,7 @@ module Journeys
             sequence.delete("mobile-number")
             sequence.delete("mobile-verification")
           end
-          unless answers.trn_from_tid? && journey_session.has_tps_school_for_student_loan_in_previous_financial_year?
+          unless answers.trn_from_tid? && answers.has_tps_school_for_student_loan_in_previous_financial_year?
             sequence.delete("select-claim-school")
           end
           sequence.delete("claim-school") if answers.claim_school_somewhere_else == false
