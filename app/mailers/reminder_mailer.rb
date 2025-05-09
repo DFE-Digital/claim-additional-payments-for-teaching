@@ -1,8 +1,7 @@
 class ReminderMailer < ApplicationMailer
-  include AdditionalPaymentsHelper
+  include JourneyHelper
 
   helper :application
-  helper :additional_payments
 
   def email_verification(reminder, one_time_password, journey_name)
     @reminder = reminder

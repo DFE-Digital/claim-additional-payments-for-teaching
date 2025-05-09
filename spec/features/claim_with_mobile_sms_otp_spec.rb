@@ -4,12 +4,19 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
   let(:notify) { instance_double("NotifySmsMessage", deliver!: true) }
 
   [
-    {policy: Policies::EarlyCareerPayments, mobile_number: "07123456789", otp_code: "097543"},
+    {policy: Policies::TargetedRetentionIncentivePayments, mobile_number: "07121212121", otp_code: "097543"},
     {policy: Policies::StudentLoans, mobile_number: "07723190022", otp_code: "123347"}
   ].each do |scenario|
     context "when claimant opts to provide a mobile number" do
       before do
-        create(:journey_configuration, scenario[:policy].to_s.underscore)
+        if scenario[:policy] == Policies::TargetedRetentionIncentivePayments
+          FeatureFlag.enable!(:tri_only_journey)
+          # FIXME RL remove this branch once we've fully removed ECP and can use
+          # the targeted_retention_incentive journey config factory
+          create(:journey_configuration, :targeted_retention_incentive_payments_only)
+        else
+          create(:journey_configuration, scenario[:policy].to_s.underscore)
+        end
 
         allow(NotifySmsMessage).to receive(:new).with(
           phone_number: mobile_number,
@@ -25,13 +32,22 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
 
       scenario "when making a #{scenario[:policy]} claim" do
         send(:"start_#{scenario[:policy].to_s.underscore}_claim")
-        if scenario[:policy] == Policies::EarlyCareerPayments
-          session = Journeys::AdditionalPaymentsForTeaching::Session.last
+        if scenario[:policy] == Policies::TargetedRetentionIncentivePayments
+          session = Journeys::TargetedRetentionIncentivePayments::Session.last
+
+          session.update!(
+            answers: attributes_for(
+              :targeted_retention_incentive_payments_answers,
+              :submittable,
+              provide_mobile_number: true
+            )
+          )
         elsif scenario[:policy] == Policies::StudentLoans
           session = Journeys::TeacherStudentLoanReimbursement::Session.last
+          session.update!(
+            answers: {provide_mobile_number: true}
+          )
         end
-
-        session.update!(answers: {provide_mobile_number: true})
 
         jump_to_claim_journey_page(
           slug: "mobile-number",
