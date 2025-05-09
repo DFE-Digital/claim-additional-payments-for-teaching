@@ -11,19 +11,14 @@
       <%= @payroll_run.total_confirmed_payments %> out of <%= @payroll_run.payments.count %> payments.
     </p>
 
-    <%= form_with url: admin_payroll_run_payment_confirmation_report_uploads_path(@payroll_run), multipart: true do |f| %>
-      <div class="govuk-form-group<%= " govuk-form-group--error" if @payment_confirmation&.errors&.any? %>">
-        <%= f.label 'file', "Upload a Payment Confirmation Report CSV file", class: "govuk-label" %>
+    <%= form_with model: @upload_form, scope: :payment_confirmation_report_upload, url: admin_payroll_run_payment_confirmation_report_uploads_path(@payroll_run), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
 
-        <% @payment_confirmation&.errors&.each do |error| %>
-          <span class="govuk-error-message">
-            <span class="govuk-visually-hidden">Error:</span> <%= error %>
-          </span>
-        <% end %>
+      <%= f.govuk_file_field :file,
+        label: { text: "Upload a Payment Confirmation Report CSV file" },
+        javascript: true %>
 
-        <%= f.file_field 'file', class: "govuk-file-upload#{" govuk-file-upload--error" if @payment_confirmation&.errors&.any?}" %>
-      </div>
-      <%= f.submit "Upload file", class: "govuk-button", data: {module: "govuk-button"} %>
+      <%= f.govuk_submit "Upload file" %>
     <% end %>
   </div>
 </div>

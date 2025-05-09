@@ -16,16 +16,26 @@ module Admin
 
     def new
       @payroll_run = PayrollRun.find(params[:payroll_run_id])
+      @upload_form = PaymentConfirmationReportUploadForm.new(upload_params, @payroll_run, admin_user)
     end
 
     def create
       @payroll_run = PayrollRun.find(params[:payroll_run_id])
-      @payment_confirmation = PaymentConfirmationUpload.new(@payroll_run, params[:file], admin_user)
-      if @payment_confirmation.ingest
-        redirect_to admin_payroll_runs_path, notice: t(".success", counter: "#{@payment_confirmation.updated_payment_ids.count} #{"payment".pluralize(@payment_confirmation.updated_payment_ids.count)}")
-      else
+      @upload_form = PaymentConfirmationReportUploadForm.new(upload_params, @payroll_run, admin_user)
+
+      @upload_form.run_import!
+
+      if @upload_form.invalid?
         render :new
+      else
+        redirect_to admin_payroll_runs_path, notice: t(".success", counter: "#{@upload_form.importer.updated_payment_ids.count} #{"payment".pluralize(@upload_form.importer.updated_payment_ids.count)}")
       end
+    end
+
+    private
+
+    def upload_params
+      params.fetch(:payment_confirmation_report_upload, {}).permit(:file)
     end
   end
 end
