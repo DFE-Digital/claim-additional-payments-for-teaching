@@ -17,19 +17,26 @@ module Admin
     )
 
     def new
+      @upload_form = QualificationReportForm.new(upload_params, admin_user)
     end
 
     def create
-      @dqt_report_consumer = AutomatedChecks::DqtReportConsumer.new(params[:file], admin_user)
+      @upload_form = QualificationReportForm.new(upload_params, admin_user)
 
-      if @dqt_report_consumer.errors.any?
+      if @upload_form.invalid?
         render :new
       else
-        @dqt_report_consumer.ingest
-        redirect_to admin_claims_path, notice: "DQT report uploaded successfully. Automatically completed #{pluralize(@dqt_report_consumer.completed_tasks, "task")} for #{pluralize(@dqt_report_consumer.total_claims_checked, "checked claim")}."
+        @upload_form.run_import!
+        flash[:notice] = "DQT report uploaded successfully. Automatically completed #{pluralize(@upload_form.importer.completed_tasks, "task")} for #{pluralize(@upload_form.importer.total_claims_checked, "checked claim")}."
+
+        redirect_to admin_claims_path
       end
-    rescue ActiveRecord::RecordInvalid
-      redirect_to new_admin_qualification_report_upload_path, alert: "There was a problem, please try again"
+    end
+
+    private
+
+    def upload_params
+      params.fetch(:qualification_report_upload, {}).permit(:file)
     end
   end
 end

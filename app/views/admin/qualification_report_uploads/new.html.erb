@@ -3,20 +3,17 @@
     <h1 class="govuk-heading-xl">
       Choose and upload DQT report
     </h1>
-    <%= form_with url: admin_qualification_report_uploads_path, multipart: true do |f| %>
-      <div class="govuk-form-group">
-        <%= f.label "file", "Upload a CSV file", class: "govuk-label" %>
 
-        <% @dqt_report_consumer && @dqt_report_consumer.errors.each do |error| %>
-          <span class="govuk-error-message">
-            <span class="govuk-visually-hidden">Error:</span> <%= error %>
-          </span>
-        <% end %>
+    <%= form_with model: @upload_form, scope: :qualification_report_upload, url: admin_qualification_report_uploads_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
 
-        <%= f.file_field "file", class: "govuk-file-upload" %>
-      </div>
-      <%= f.submit "Upload", class: "govuk-button", data: {module: "govuk-button"} %>
+      <%= f.govuk_file_field :file,
+        label: { text: "Upload a CSV file" },
+        javascript: true %>
+
+      <%= f.govuk_submit "Upload" %>
     <% end %>
+
     <details class="govuk-details" data-module="govuk-details">
       <summary class="govuk-details__summary">
         <span class="govuk-details__summary-text">
