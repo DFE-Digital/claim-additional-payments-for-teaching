@@ -9,14 +9,7 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
   ].each do |scenario|
     context "when claimant opts to provide a mobile number" do
       before do
-        if scenario[:policy] == Policies::TargetedRetentionIncentivePayments
-          FeatureFlag.enable!(:tri_only_journey)
-          # FIXME RL remove this branch once we've fully removed ECP and can use
-          # the targeted_retention_incentive journey config factory
-          create(:journey_configuration, :targeted_retention_incentive_payments_only)
-        else
-          create(:journey_configuration, scenario[:policy].to_s.underscore)
-        end
+        create(:journey_configuration, scenario[:policy].to_s.underscore)
 
         allow(NotifySmsMessage).to receive(:new).with(
           phone_number: mobile_number,

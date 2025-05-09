@@ -2,7 +2,6 @@ class SendReminderEmailJob < ApplicationJob
   def perform(reminder)
     # TODO: Remove when the template is updated to support other journeys
     return unless [
-      Journeys::AdditionalPaymentsForTeaching,
       Journeys::TargetedRetentionIncentivePayments
     ].include?(reminder.journey)
 
