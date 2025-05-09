@@ -48,6 +48,7 @@ module JourneyConcern
     journey_session = journey::SessionForm.create!(params)
 
     session[journey_session_key] = journey_session.id
+    session[:current_journey_routing_name] = journey.routing_name
 
     journey_session
   end

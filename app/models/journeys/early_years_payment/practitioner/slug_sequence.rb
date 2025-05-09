@@ -26,6 +26,8 @@ module Journeys
 
         SLUGS = (CLAIM_SLUGS + RESULTS_SLUGS).freeze
 
+        RESTRICTED_SLUGS = [].freeze
+
         def self.start_page_url
           Rails.application.routes.url_helpers.claim_path("early-years-payment-practitioner", "find-reference", skip_landing_page: true)
         end
@@ -44,6 +46,18 @@ module Journeys
 
         def slugs
           SLUGS.dup.tap do |sequence|
+            if answers.skip_postcode_search == true
+              sequence.delete("select-home-address")
+            end
+
+            if answers.address_line_1.present? && answers.postcode.present?
+              sequence.delete("address")
+            end
+
+            if answers.email_verified == true
+              sequence.delete("email-verification")
+            end
+
             if answers.provide_mobile_number == false
               sequence.delete("mobile-number")
               sequence.delete("mobile-verification")

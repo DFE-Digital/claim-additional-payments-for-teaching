@@ -11,11 +11,17 @@ module Journeys
       FORMS = {
         "claims" => {
           "find-reference" => FindReferenceForm,
-          "personal-bank-account" => BankDetailsForm
+          "personal-bank-account" => BankDetailsForm,
+          "how-we-use-your-information" => HowWeUseYourInformationForm,
+          "ineligible" => IneligibleForm
         }
       }
 
       def requires_student_loan_details?
+        true
+      end
+
+      def use_navigator?
         true
       end
     end
