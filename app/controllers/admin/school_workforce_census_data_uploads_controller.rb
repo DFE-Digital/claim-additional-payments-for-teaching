@@ -15,23 +15,26 @@ module Admin
     )
 
     def new
+      @upload_form = SchoolWorkforceCensusForm.new(upload_params, admin_user)
     end
 
     def create
-      file = params[:file]
-      @school_workforce_census_data_importer = SchoolWorkforceCensusDataImporter.new(file)
+      @upload_form = SchoolWorkforceCensusForm.new(upload_params, admin_user)
 
-      if @school_workforce_census_data_importer.errors.any?
+      if @upload_form.invalid?
         render :new
       else
-        file_upload = FileUpload.create(uploaded_by: admin_user, body: File.read(file))
-        ImportCensusJob.perform_later(file_upload.id)
+        @upload_form.run_import!
+        flash[:notice] = "School workforce census file uploaded and queued to be imported"
 
-        redirect_to admin_claims_path, notice: "School workforce census file uploaded and queued to be imported"
+        redirect_to admin_claims_path
       end
-    rescue => e
-      Rollbar.error(e)
-      redirect_to new_admin_school_workforce_census_data_upload_path, alert: "There was a problem, please try again"
+    end
+
+    private
+
+    def upload_params
+      params.fetch(:school_workforce_census_upload, {}).permit(:file)
     end
   end
 end

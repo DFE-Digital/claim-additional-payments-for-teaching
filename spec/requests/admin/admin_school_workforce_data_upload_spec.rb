@@ -22,7 +22,7 @@ RSpec.describe "School workforce census data upload" do
     context "when an invalid CSV is uploaded" do
       let(:csv) { "Malformed CSV File\"," }
       it "displays an error" do
-        post admin_school_workforce_census_data_uploads_path, params: {file: file}
+        post admin_school_workforce_census_data_uploads_path, params: {school_workforce_census_upload: {file: file}}
 
         expect(response.body).to include("The selected file must be a CSV")
       end
@@ -32,7 +32,7 @@ RSpec.describe "School workforce census data upload" do
       it "displays an error" do
         post admin_school_workforce_census_data_uploads_path
 
-        expect(response.body).to include("Select a file")
+        expect(response.body).to include("Choose a CSV file of School Workforce Census data to upload")
       end
     end
 
