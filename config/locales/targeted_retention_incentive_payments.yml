@@ -56,6 +56,8 @@ en:
           title: Does the claimant's subject match the schools workforce census subjects
         matching_details:
           title: "Is this claim still valid despite having matching details with other claims?"
+    reminders:
+      full_name: Full name
     forms:
       correct_school:
         question: "Which school do you teach at"
