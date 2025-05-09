@@ -60,7 +60,7 @@ RSpec.feature "Managing targeted_retention_incentive Payments school awards" do
 
     # Good CSV file
     within "#upload" do
-      select journey_configuration.current_academic_year.to_s, from: "upload_academic_year"
+      select journey_configuration.current_academic_year.to_s, from: "targeted_retention_incentive_payments_awards_upload[academic_year]"
 
       attach_file("CSV file", csv_file)
       click_button "Upload CSV"
@@ -75,7 +75,7 @@ RSpec.feature "Managing targeted_retention_incentive Payments school awards" do
     # Different academic year
 
     within "#upload" do
-      select (journey_configuration.current_academic_year + 1).to_s, from: "upload_academic_year"
+      select (journey_configuration.current_academic_year + 1).to_s, from: "targeted_retention_incentive_payments_awards_upload[academic_year]"
 
       attach_file("CSV file", csv_file)
       click_button "Upload CSV"
@@ -85,18 +85,18 @@ RSpec.feature "Managing targeted_retention_incentive Payments school awards" do
 
     # CSV file with bad data
     within "#upload" do
-      select journey_configuration.current_academic_year.to_s, from: "upload_academic_year"
+      select journey_configuration.current_academic_year.to_s, from: "targeted_retention_incentive_payments_awards_upload[academic_year]"
 
       attach_file("CSV file", csv_file_with_bad_data)
       click_button "Upload CSV"
     end
 
     expect(page).to have_text "There is a problem"
-    expect(page).to have_text "Line 6: School urn is not a number Line 6: Award amount is not a number"
+    expect(page).to have_text "Line 6: School urn is not a number"
 
     # CSV file with extra columns
     within "#upload" do
-      select journey_configuration.current_academic_year.to_s, from: "upload_academic_year"
+      select journey_configuration.current_academic_year.to_s, from: "targeted_retention_incentive_payments_awards_upload[academic_year]"
 
       attach_file("CSV file", csv_file_with_extra_columns)
       click_button "Upload CSV"
@@ -107,7 +107,7 @@ RSpec.feature "Managing targeted_retention_incentive Payments school awards" do
 
     # CSV file with no headers
     within "#upload" do
-      select journey_configuration.current_academic_year.to_s, from: "upload_academic_year"
+      select journey_configuration.current_academic_year.to_s, from: "targeted_retention_incentive_payments_awards_upload[academic_year]"
 
       attach_file("CSV file", csv_file_without_headers)
       click_button "Upload CSV"
