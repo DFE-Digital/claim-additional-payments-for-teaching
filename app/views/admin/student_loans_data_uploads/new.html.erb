@@ -35,19 +35,14 @@
       <li>You can wipe all data by uploading a CSV file with just the header row and no data rows.</li>
     </ul>
 
-    <%= form_with url: admin_student_loans_data_uploads_path, multipart: true do |f| %>
-      <div class="govuk-form-group">
-        <%= f.label "file", "Upload a CSV file", class: "govuk-label" %>
+    <%= form_with model: @upload_form, scope: :student_loans_data_upload, url: admin_student_loans_data_uploads_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
 
-        <% @importer && @importer.errors.each do |error| %>
-          <span class="govuk-error-message">
-            <span class="govuk-visually-hidden">Error:</span> <%= error %>
-          </span>
-        <% end %>
+      <%= f.govuk_file_field :file,
+        label: { text: "Upload a CSV file" },
+        javascript: true %>
 
-        <%= f.file_field "file", class: "govuk-file-upload" %>
-      </div>
-      <%= f.submit "Upload", class: "govuk-button", data: {module: "govuk-button"} %>
+      <%= f.govuk_submit "Upload" %>
     <% end %>
   </div>
 </div>

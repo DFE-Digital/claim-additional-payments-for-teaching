@@ -15,23 +15,26 @@ module Admin
     )
 
     def new
+      @upload_form = StudentLoansCompanyDataForm.new(upload_params, admin_user)
     end
 
     def create
-      file = params[:file]
-      @importer = StudentLoansDataImporter.new(file)
+      @upload_form = StudentLoansCompanyDataForm.new(upload_params, admin_user)
 
-      if @importer.errors.any?
+      if @upload_form.invalid?
         render :new
       else
-        file_upload = FileUpload.create(uploaded_by: admin_user, body: File.read(file))
-        ImportStudentLoansDataJob.perform_later(file_upload.id)
+        @upload_form.run_import!
+        flash[:notice] = "SLC file uploaded and queued to be imported"
 
-        redirect_to admin_claims_path, notice: "SLC file uploaded and queued to be imported"
+        redirect_to admin_claims_path
       end
-    rescue => e
-      Rollbar.error(e)
-      redirect_to new_admin_student_loans_data_upload_path, alert: "There was a problem, please try again"
+    end
+
+    private
+
+    def upload_params
+      params.fetch(:student_loans_data_upload, {}).permit(:file)
     end
   end
 end
