@@ -609,9 +609,8 @@ RSpec.describe "Targeted retention incentives ineligible paths" do
       # See TargetedRetentionIncentivePayments POLICY_START_YEAR and
       # POLICY_END_YEAR for where the dates come form.
       expect(page).to have_content(
-        "your ITT course must have started (postgraduate) or finished " \
-        "(undergraduate) between the 2022 to 2023 and 2025 to 2026 years " \
-        "in chemistry, computing, mathematics, or physics."
+        "You do not qualify for a targeted retention incentive payment this " \
+        "year because you have not completed your initial teacher training."
       )
     end
   end
