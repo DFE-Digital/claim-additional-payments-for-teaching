@@ -45,18 +45,20 @@ jobs:
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
-          payload: |
-            text: "
-              <@U033AJ0A12P> Analytics Configuration Change Detected 🔍
-
-              *Commit:* <${{ env.COMMIT_LINK }}|${{ env.COMMIT_MSG }}>
-
-              *Author:* ${{ env.COMMIT_AUTHOR }}
-
-              *Branch:* ${{ github.ref_name }}
-
-              *Analytics Config Changes:*
-              ```diff
-              ${{ env.ANALYTICS_DIFF }}
-              ```
-              "
+          payload: >-
+            ${{
+              format(
+                '{{"text":{0}}}',
+                toJson(
+                  format(
+                    '{0}\n\n*Commit:* <{1}|{2}>\n\n*Author:* {3}\n\n*Branch:* {4}\n\n*Analytics Config Changes:*\n```diff\n{5}\n```',
+                    '<@U033AJ0A12P> Analytics Configuration Change Detected 🔍',
+                    steps.commit-info.outputs.link,
+                    steps.commit-info.outputs.msg,
+                    steps.commit-info.outputs.author,
+                    github.ref_name,
+                    steps.analytics-diff.outputs.diff
+                  )
+                )
+              )
+            }}
