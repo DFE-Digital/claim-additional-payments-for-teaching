@@ -5,9 +5,9 @@ FROM ruby:3.4.3-alpine AS base
 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-ENV APP_HOME /app
-ENV DEPS_HOME /deps
-ENV RAILS_ENV production
+ENV APP_HOME=/app
+ENV DEPS_HOME=/deps
+ENV RAILS_ENV=production
 
 RUN apk update
 RUN apk add postgresql16=~16.8-r0
@@ -54,7 +54,7 @@ WORKDIR ${APP_HOME}
 
 EXPOSE 3000
 
-CMD bundle exec rails db:migrate:ignore_concurrent_migration_exceptions && bundle exec rails server
+CMD ["sh", "-c", "bundle exec rails db:migrate:ignore_concurrent_migration_exceptions && bundle exec rails server"]
 
 # Copy dependencies (relying on dependencies using the same base image as this)
 COPY --from=dependencies ${DEPS_HOME}/Gemfile ${APP_HOME}/Gemfile
@@ -90,7 +90,7 @@ RUN chown -hR appuser:appgroup ${APP_HOME}
 USER appuser
 
 ARG GIT_COMMIT_HASH
-ENV GIT_COMMIT_HASH ${GIT_COMMIT_HASH}
+ENV GIT_COMMIT_HASH=${GIT_COMMIT_HASH}
 
 # ------------------------------------------------------------------------------
 # shellcheck
@@ -106,8 +106,8 @@ FROM base AS test
 USER root
 WORKDIR ${APP_HOME}
 
-ENV RAILS_ENV test
-ENV NODE_ENV test
+ENV RAILS_ENV=test
+ENV NODE_ENV=test
 CMD [ "bundle", "exec", "rake" ]
 
 RUN apk add chromium
