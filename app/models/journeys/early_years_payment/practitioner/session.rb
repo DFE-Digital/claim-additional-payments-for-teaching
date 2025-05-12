@@ -1,9 +1,7 @@
 module Journeys
   module EarlyYearsPayment
     module Practitioner
-      class Session < Journeys::Session
-        attribute :answers, SessionAnswersType.new
-      end
+      class Session < Journeys::Session; end
     end
   end
 end

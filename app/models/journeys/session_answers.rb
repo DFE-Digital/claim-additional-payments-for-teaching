@@ -7,6 +7,8 @@ module Journeys
     include Sessions::PiiAttributes
     include BooleanAttributes
 
+    attr_accessor :session
+
     attribute :service_access_code, :string, pii: false
 
     attribute :current_school_id, :string, pii: false # UUID
@@ -99,6 +101,20 @@ module Journeys
         address_line_4,
         postcode
       ].reject(&:blank?).join(separator)
+    end
+
+    def logged_in_with_tid_and_has_recent_tps_school?
+      trn_from_tid? && recent_tps_school.present?
+    end
+
+    # NOTE getting the trn from answers.teacher_id_user_info was the previous
+    # implementation, TODO switch to `answers.teacher_reference_number` as it's
+    # set in the sign in or continue form at the same time.
+    def recent_tps_school
+      @recent_tps_school ||= TeachersPensionsService.recent_tps_school(
+        claim_date: session.created_at,
+        teacher_reference_number: teacher_id_user_info["trn"]
+      )
     end
   end
 end
