@@ -1,4 +1,6 @@
 class ApplicationJob < ActiveJob::Base
+  include Rollbar::ActiveJob
+
   around_perform do |job, block|
     claim = job.arguments.find { |arg| arg.is_a?(Claim) }
 
