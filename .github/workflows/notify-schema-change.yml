@@ -45,20 +45,14 @@ jobs:
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
-          payload: >-
-            ${{
-              format(
-                '{{"text":{0}}}',
-                toJson(
-                  format(
-                    '{0}\n\n*Commit:* <{1}|{2}>\n\n*Author:* {3}\n\n*Branch:* {4}\n\n*Analytics Config Changes:*\n```diff\n{5}\n```',
-                    '<@U033AJ0A12P> Analytics Configuration Change Detected 🔍',
-                    steps.commit-info.outputs.link,
-                    steps.commit-info.outputs.msg,
-                    steps.commit-info.outputs.author,
-                    github.ref_name,
-                    steps.analytics-diff.outputs.diff
-                  )
-                )
-              )
-            }}
+          payload: |
+            {
+              "text": "${{ format(
+                '<@U033AJ0A12P> Analytics Configuration Change Detected 🔍\n\n*Commit:* <{0}|{1}>\n\n*Author:* {2}\n\n*Branch:* {3}\n\n*Analytics Config Changes:*\n```diff\n{4}\n```',
+                env.COMMIT_LINK,
+                env.COMMIT_MSG,
+                env.COMMIT_AUTHOR,
+                github.ref_name,
+                env.ANALYTICS_DIFF
+              ) }}"
+            }
