@@ -3,6 +3,14 @@ class ClaimsController < BasePublicController
 
   skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create, :signed_out]
 
+  before_action :create_session_if_skip_landing_page, if: :skip_landing_page?
+
+  def create_session_if_skip_landing_page
+    return unless journey.use_navigator?
+
+    journey_session || create_journey_session!
+  end
+
   before_action :initialize_session_slug_history
   before_action :check_page_is_in_sequence, only: [:show, :update]
   before_action :check_page_is_authorised, only: [:show]
