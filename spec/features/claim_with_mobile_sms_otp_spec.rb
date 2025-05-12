@@ -8,7 +8,6 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
     let(:otp_code) { rand(100_000..999_999).to_s }
 
     before do
-
       allow(NotifySmsMessage).to receive(:new).with(
         phone_number: mobile_number,
         template_id: NotifySmsMessage::OTP_PROMPT_TEMPLATE_ID,
