@@ -20,6 +20,12 @@ class TestDummyController < BasePublicController
     DummyNavigator.new(true, true)
   end
 
+  class DummySlugSequence < Struct.new(:slugs); end
+
+  def slug_sequence
+    DummySlugSequence.new(slugs)
+  end
+
   def slugs
     %w[first-slug second-slug]
   end
