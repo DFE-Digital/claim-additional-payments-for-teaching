@@ -48,10 +48,6 @@ module Journeys
         dfe_sign_out_redirect_uri.query = URI.encode_www_form(params)
         dfe_sign_out_redirect_uri.to_s
       end
-
-      def use_navigator?
-        true
-      end
     end
   end
 end

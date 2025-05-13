@@ -27,10 +27,6 @@ module Journeys
           }
         }
         START_WITH_MAGIC_LINK = true
-
-        def use_navigator?
-          true
-        end
       end
     end
   end

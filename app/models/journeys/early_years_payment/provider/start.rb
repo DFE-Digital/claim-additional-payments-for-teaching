@@ -17,10 +17,6 @@ module Journeys
             "ineligible" => IneligibleForm
           }
         }
-
-        def use_navigator?
-          true
-        end
       end
     end
   end

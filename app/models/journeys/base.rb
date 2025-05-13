@@ -87,10 +87,6 @@ module Journeys
       SessionAnswers.pii_attributes
     end
 
-    def use_navigator?
-      false
-    end
-
     def accessible?(code = nil)
       configuration.open_for_submissions? ||
         ServiceAccessCode.permits_access?(code: code, journey: self)

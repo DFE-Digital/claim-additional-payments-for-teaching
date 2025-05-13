@@ -11,6 +11,15 @@ class TestDummyController < BasePublicController
 
   skip_before_action :send_unstarted_claimants_to_the_start
 
+  class DummyNavigator < Struct.new(
+    :clear_impermissible_answers,
+    :clear_furthest_ineligible_answer
+  ); end
+
+  def navigator
+    DummyNavigator.new(true, true)
+  end
+
   def slugs
     %w[first-slug second-slug]
   end
@@ -48,10 +57,6 @@ RSpec.describe FormSubmittable, type: :request do
   after { Rails.application.reload_routes! }
 
   before { create(:journey_configuration, :targeted_retention_incentive_payments) }
-
-  before do
-    allow(Journeys::TargetedRetentionIncentivePayments).to receive(:use_navigator?).and_return(false)
-  end
 
   shared_context :define_filter do |filter_name|
     before { define_filter(filter_name) }

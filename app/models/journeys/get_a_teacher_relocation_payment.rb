@@ -29,9 +29,5 @@ module Journeys
     def requires_student_loan_details?
       true
     end
-
-    def use_navigator?
-      true
-    end
   end
 end

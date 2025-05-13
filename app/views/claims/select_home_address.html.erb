@@ -39,13 +39,9 @@
         <% end %>
 
         <p class="govuk-body">
-          <% if journey.use_navigator? %>
-            <button form="skip-postcode-search" class="govuk-link govuk-link--no-visited-state button-to-as-link">
-              <%= I18n.t("questions.address.home.i_cannot_find") %>
-            </button>
-          <% else %>
-            <%= link_to I18n.t("questions.address.home.i_cannot_find"), claim_path(current_journey_routing_name, "address"), class: "govuk-link", "aria-label": I18n.t("questions.address.home.i_cannot_find") %>
-          <% end %>
+          <button form="skip-postcode-search" class="govuk-link govuk-link--no-visited-state button-to-as-link">
+            <%= I18n.t("questions.address.home.i_cannot_find") %>
+          </button>
         </p>
       </div>
       <p class="govuk-!-padding-top-3">
