@@ -47,17 +47,9 @@
         <% end %>
 
         <p class="govuk-body">
-          <% if @form.journey.use_navigator? %>
-            <button form="skip-postcode-search" class="govuk-link govuk-link--no-visited-state button-to-as-link">
-              <%= I18n.t("questions.address.home.link_to_manual_address") %>
-            </button>
-          <% else %>
-            <%= govuk_link_to(
-              I18n.t("questions.address.home.link_to_manual_address"),
-              claim_path(current_journey_routing_name, "address"),
-              "aria-label": I18n.t("questions.address.home.link_to_manual_address")
-            ) %>
-          <% end %>
+          <button form="skip-postcode-search" class="govuk-link govuk-link--no-visited-state button-to-as-link">
+            <%= I18n.t("questions.address.home.link_to_manual_address") %>
+          </button>
         </p>
 
         <p class="govuk-!-padding-top-6">

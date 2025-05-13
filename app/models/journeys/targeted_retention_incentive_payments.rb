@@ -32,10 +32,6 @@ module Journeys
 
     NONE_OF_THE_ABOVE_ACADEMIC_YEAR = "itt_academic_year_none"
 
-    def use_navigator?
-      true
-    end
-
     def requires_student_loan_details?
       true
     end
