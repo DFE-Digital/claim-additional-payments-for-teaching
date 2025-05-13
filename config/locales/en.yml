@@ -1583,6 +1583,7 @@ en:
     journey_name: Early years financial incentive payment service
     feedback_email: "EY.Financial-Incentives@education.gov.uk"
     support_email: "EY.Financial-Incentives@education.gov.uk"
+    support_email_address: "EY.Financial-Incentives@education.gov.uk"
     claim_description: for early years financial incentive payment
     forms:
       find_reference:
