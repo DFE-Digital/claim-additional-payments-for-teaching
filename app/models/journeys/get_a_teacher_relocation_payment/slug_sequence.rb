@@ -38,6 +38,10 @@ module Journeys
         "ineligible"
       ].freeze
 
+      DEAD_END_SLUGS = [
+        "ineligible"
+      ]
+
       SLUGS = (
         ELIGIBILITY_SLUGS +
         PERSONAL_DETAILS_SLUGS +

@@ -50,6 +50,11 @@ module Journeys
 
       RESTRICTED_SLUGS = []
 
+      DEAD_END_SLUGS = [
+        "ineligible",
+        "future-eligibility"
+      ]
+
       SLUGS = (
         ELIGIBILITY_SLUGS +
         PERSONAL_DETAILS_SLUGS +

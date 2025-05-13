@@ -90,7 +90,7 @@ class ClaimsController < BasePublicController
   end
 
   def set_backlink_path
-    if previous_slug.present? && Journeys::PageSequence::DEAD_END_SLUGS.exclude?(current_slug)
+    if previous_slug.present? && slug_sequence.class::DEAD_END_SLUGS.exclude?(current_slug)
       @backlink_path = claim_path(current_journey_routing_name, previous_slug)
     end
   end

@@ -55,6 +55,8 @@ module Journeys
 
       RESTRICTED_SLUGS = [].freeze
 
+      DEAD_END_SLUGS = %w[]
+
       SLUGS = (
         ELIGIBILITY_SLUGS +
         PERSONAL_DETAILS_SLUGS +
