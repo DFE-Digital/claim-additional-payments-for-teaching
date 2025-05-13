@@ -26,6 +26,11 @@ module Journeys
 
           RESTRICTED_SLUGS = [].freeze
 
+          DEAD_END_SLUGS = %w[
+            expired-link
+            ineligible
+          ]
+
           MAGIC_LINK_SLUG = "consent"
 
           def self.start_page_url
