@@ -115,7 +115,7 @@ module FormSubmittable
     end
 
     def first_slug
-      slugs.first.to_sym
+      slug_sequence.slugs.first.to_sym
     end
 
     def execute_callback_if_exists(callback_name)

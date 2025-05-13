@@ -46,12 +46,14 @@ class ClaimsController < BasePublicController
 
   private
 
-  delegate :slugs, :next_required_slug, to: :page_sequence
+  def slug_sequence
+    @slug_sequence ||= journey::SlugSequence.new(journey_session)
+  end
 
   def navigator
     @navigator ||= Journeys::Navigator.new(
       current_slug: params[:slug],
-      slug_sequence: page_sequence.slug_sequence,
+      slug_sequence: slug_sequence,
       params:,
       session:
     )
@@ -124,14 +126,6 @@ class ClaimsController < BasePublicController
 
   def check_claim_not_in_progress
     redirect_to(existing_session_path(journey: current_journey_routing_name)) if eligible_claim_in_progress? && !journey.start_with_magic_link?
-  end
-
-  def page_sequence
-    @page_sequence ||= journey.page_sequence_for_claim(
-      journey_session,
-      session[:slugs],
-      params[:slug]
-    )
   end
 
   def prepend_view_path_for_journey
