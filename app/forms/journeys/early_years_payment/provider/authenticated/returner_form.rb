@@ -34,9 +34,6 @@ module Journeys
                 returner_worked_with_children: nil,
                 returner_contract_type: nil
               )
-
-              session.fetch(:slugs, {}).delete("returner-worked-with-children")
-              session.fetch(:slugs, {}).delete("returner-contract-type")
             end
           end
         end
