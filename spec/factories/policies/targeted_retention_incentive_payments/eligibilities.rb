@@ -42,13 +42,6 @@ FactoryBot.define do
       eligible_degree_subject { false }
     end
 
-    trait :eligible_later do
-      # TODO any_future_policy_years?
-      eligible_school
-      trainee_teacher
-      targeted_retention_incentive_itt_subject
-    end
-
     # Traits common to both ECP and Targeted Retention Incentive
     trait :common_eligible_attributes do
       eligible_school
