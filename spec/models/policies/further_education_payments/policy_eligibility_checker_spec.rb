@@ -13,7 +13,7 @@ RSpec.describe Policies::FurtherEducationPayments::PolicyEligibilityChecker do
 
   subject { described_class.new(answers: answers) }
 
-  describe "#status, #ineligible?, #ineligibility_reason" do
+  describe "#ineligible?, #ineligibility_reason" do
     context "when ineligible as lacking teaching responsibility" do
       let(:answers) do
         build(:further_education_payments_answers, teaching_responsibilities: false)
@@ -21,7 +21,6 @@ RSpec.describe Policies::FurtherEducationPayments::PolicyEligibilityChecker do
 
       it "is ineligble as :lack_teaching_responsibilities" do
         expect(subject).to be_ineligible
-        expect(subject.status).to eql(:ineligible)
         expect(subject.ineligibility_reason).to eql(:lack_teaching_responsibilities)
       end
     end
@@ -36,7 +35,6 @@ RSpec.describe Policies::FurtherEducationPayments::PolicyEligibilityChecker do
 
       it "is ineligble as :lack_teaching_responsibilities" do
         expect(subject).to be_ineligible
-        expect(subject.status).to eql(:ineligible)
         expect(subject.ineligibility_reason).to eql(:fe_provider)
       end
     end
@@ -52,7 +50,6 @@ RSpec.describe Policies::FurtherEducationPayments::PolicyEligibilityChecker do
 
       it "is ineligble as :must_teach_at_least_one_term" do
         expect(subject).to be_ineligible
-        expect(subject.status).to eql(:ineligible)
         expect(subject.ineligibility_reason).to eql(:must_teach_at_least_one_term)
       end
     end
@@ -68,7 +65,6 @@ RSpec.describe Policies::FurtherEducationPayments::PolicyEligibilityChecker do
 
       it "is ineligble as :subject" do
         expect(subject).to be_ineligible
-        expect(subject.status).to eql(:ineligible)
         expect(subject.ineligibility_reason).to eql(:subject)
       end
     end
@@ -85,7 +81,6 @@ RSpec.describe Policies::FurtherEducationPayments::PolicyEligibilityChecker do
 
       it "is ineligble as :lack_teaching_responsibilities" do
         expect(subject).to be_ineligible
-        expect(subject.status).to eql(:ineligible)
         expect(subject.ineligibility_reason).to eql(:courses)
       end
     end
