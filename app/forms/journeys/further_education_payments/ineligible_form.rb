@@ -1,8 +1,8 @@
 module Journeys
   module FurtherEducationPayments
     class IneligibleForm < Form
-      def journey_eligibility_checker
-        @journey_eligibility_checker ||= EligibilityChecker.new(journey_session:)
+      def ineligibility_reason
+        @ineligibility_reason ||= EligibilityChecker.new(journey_session:).ineligibility_reason
       end
     end
   end

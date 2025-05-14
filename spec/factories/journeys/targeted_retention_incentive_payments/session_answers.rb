@@ -177,11 +177,6 @@ FactoryBot.define do
       teaching_subject_now { nil }
     end
 
-    trait :targeted_retention_incentive_eligible_later do
-      targeted_retention_incentive_eligible
-      trainee_teacher
-    end
-
     trait :not_a_supply_teacher do
       employed_as_supply_teacher { false }
     end

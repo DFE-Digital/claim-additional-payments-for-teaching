@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Policies::EarlyYearsPayments::PolicyEligibilityChecker do
   subject { described_class.new(answers: answers) }
 
-  describe "#status, #ineligible?, #ineligibility_reason" do
+  describe "#ineligible?, #ineligibility_reason" do
     context "start date is before POLICY_START_DATE" do
       let(:answers) do
         build(
@@ -14,7 +14,6 @@ RSpec.describe Policies::EarlyYearsPayments::PolicyEligibilityChecker do
 
       it "is not eligible" do
         expect(subject).to be_ineligible
-        expect(subject.status).to eql(:ineligible)
         expect(subject.ineligibility_reason).to eql(:start_date_before_policy_start)
       end
     end
@@ -31,7 +30,6 @@ RSpec.describe Policies::EarlyYearsPayments::PolicyEligibilityChecker do
 
       it "is eligible" do
         expect(subject).to_not be_ineligible
-        expect(subject.status).to eql(:eligible_now)
       end
     end
 
@@ -47,7 +45,6 @@ RSpec.describe Policies::EarlyYearsPayments::PolicyEligibilityChecker do
 
       it "is eligible" do
         expect(subject).to_not be_ineligible
-        expect(subject.status).to eql(:eligible_now)
       end
     end
 
@@ -64,7 +61,6 @@ RSpec.describe Policies::EarlyYearsPayments::PolicyEligibilityChecker do
 
       it "is eligible" do
         expect(subject).to_not be_ineligible
-        expect(subject.status).to eql(:eligible_now)
       end
     end
 
@@ -80,7 +76,6 @@ RSpec.describe Policies::EarlyYearsPayments::PolicyEligibilityChecker do
 
       it "is ineligible as :returner" do
         expect(subject).to be_ineligible
-        expect(subject.status).to eql(:ineligible)
         expect(subject.ineligibility_reason).to eql(:returner)
       end
     end
@@ -95,7 +90,6 @@ RSpec.describe Policies::EarlyYearsPayments::PolicyEligibilityChecker do
 
       it "is ineligble as :nursery_is_not_listed" do
         expect(subject).to be_ineligible
-        expect(subject.status).to eql(:ineligible)
         expect(subject.ineligibility_reason).to eql(:nursery_is_not_listed)
       end
     end
@@ -110,7 +104,6 @@ RSpec.describe Policies::EarlyYearsPayments::PolicyEligibilityChecker do
 
       it "is ineligble as :reference_number_not_found" do
         expect(subject).to be_ineligible
-        expect(subject.status).to eql(:ineligible)
         expect(subject.ineligibility_reason).to eql(:reference_number_not_found)
       end
     end
@@ -125,7 +118,6 @@ RSpec.describe Policies::EarlyYearsPayments::PolicyEligibilityChecker do
 
       it "is ineligble as :claim_already_submitted" do
         expect(subject).to be_ineligible
-        expect(subject.status).to eql(:ineligible)
         expect(subject.ineligibility_reason).to eql(:claim_already_submitted)
       end
     end
