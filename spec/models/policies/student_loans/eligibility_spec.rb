@@ -319,10 +319,25 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
       it "sets the string column" do
         eligibility = create(
           :student_loans_eligibility,
-          qts_award_year: "before_cut_off_date"
+          qts_award_year: "before_cut_off_date",
+          employment_status: "claim_school"
         )
 
         expect(eligibility.qts_award_year_string).to eq("before_cut_off_date")
+        expect(eligibility.employment_status_string).to eq("claim_school")
+      end
+    end
+
+    context "when set by value" do
+      it "sets the string column" do
+        eligibility = create(
+          :student_loans_eligibility,
+          qts_award_year: 0,
+          employment_status: 0
+        )
+
+        expect(eligibility.qts_award_year_string).to eq("before_cut_off_date")
+        expect(eligibility.employment_status_string).to eq("claim_school")
       end
     end
   end

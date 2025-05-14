@@ -216,3 +216,4 @@
   - created_at
   :student_loans_eligibilities:
   - qts_award_year_string
+  - employment_status_string
