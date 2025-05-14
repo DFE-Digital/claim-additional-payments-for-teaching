@@ -11,8 +11,6 @@ module Journeys
     def status
       if anything_eligible_now?
         :eligible_now
-      elsif anything_eligible_later?
-        :eligible_later
       elsif everything_ineligible?
         :ineligible
       else
@@ -35,14 +33,6 @@ module Journeys
     # FIXME: duplication of #policies_eligible_now
     def eligible_now
       policies.select { |policy| policy::PolicyEligibilityChecker.new(answers: @journey_session.answers).status == :eligible_now }
-    end
-
-    def eligible_later
-      policies.select { |policy| policy::PolicyEligibilityChecker.new(answers: @journey_session.answers).status == :eligible_later }
-    end
-
-    def eligible_now_or_later
-      policies.select { |policy| [:eligible_now, :eligible_later].include?(policy::PolicyEligibilityChecker.new(answers: @journey_session.answers).status) }
     end
 
     def single_choice_only?
@@ -87,12 +77,7 @@ module Journeys
       eligible_now.any?
     end
 
-    def anything_eligible_later?
-      eligible_later.any?
-    end
-
     # NOTE: not to be confused with `ineligible?`
-    # e.g. having `eligible_later` is considered ineligible but not an overall status of :ineligible
     def everything_ineligible?
       policies.all? { |policy| policy::PolicyEligibilityChecker.new(answers: @journey_session.answers).status == :ineligible }
     end

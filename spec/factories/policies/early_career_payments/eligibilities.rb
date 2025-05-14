@@ -61,11 +61,6 @@ FactoryBot.define do
       ineligible_itt_subject
     end
 
-    trait :eligible_later do
-      eligible_now
-      eligible_itt_subject_later
-    end
-
     # TODO want to delete this but it's used by a feature spec
     trait :ineligible_feature do
       nqt_in_academic_year_after_itt { true }
