@@ -61,16 +61,6 @@ FactoryBot.define do
       ineligible_itt_subject
     end
 
-    # TODO want to delete this but it's used by a feature spec
-    trait :ineligible_feature do
-      nqt_in_academic_year_after_itt { true }
-      eligible_school
-      employed_as_supply_teacher { false }
-      subject_to_formal_performance_action { false }
-      subject_to_disciplinary_action { false }
-      qualification { :postgraduate_itt }
-    end
-
     # Traits common to both ECP and Targeted Retention Incentive
     trait :common_eligible_attributes do
       school_somewhere_else { nil }
