@@ -31,15 +31,6 @@ module RequestHelpers
     follow_redirect!
   end
 
-  def set_slug_sequence_in_session(journey_session, slug)
-    journey = Journeys.for_routing_name(journey_session.journey)
-    slug_sequence = journey.slug_sequence.new(journey_session).slugs
-    slug_index = slug_sequence.index(slug)
-    visited_slugs = slug_sequence.slice(0, slug_index)
-
-    set_session_data(slugs: visited_slugs)
-  end
-
   def set_session_data(data)
     put ::RackSessionAccess.path, params: {data: ::RackSessionAccess.encode(data)}
   end

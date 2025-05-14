@@ -9,6 +9,11 @@ module Journeys
             ineligible
           ].freeze
 
+          DEAD_END_SLUGS = %w[
+            check-your-email
+            ineligible
+          ].freeze
+
           RESTRICTED_SLUGS = [].freeze
 
           def self.start_page_url

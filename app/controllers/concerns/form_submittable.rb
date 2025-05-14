@@ -115,7 +115,7 @@ module FormSubmittable
     end
 
     def first_slug
-      slugs.first.to_sym
+      slug_sequence.slugs.first.to_sym
     end
 
     def execute_callback_if_exists(callback_name)
@@ -136,13 +136,8 @@ module FormSubmittable
         if @form.save
           return if execute_callback_if_exists(:after_form_save_success)
 
-          if journey.use_navigator?
-            navigator.clear_impermissible_answers
-          end
-
-          if journey.use_navigator?
-            navigator.clear_furthest_ineligible_answer
-          end
+          navigator.clear_impermissible_answers
+          navigator.clear_furthest_ineligible_answer
 
           redirect_to_next_slug
         else

@@ -9,7 +9,6 @@ class BasePublicController < ApplicationController
   private
 
   def clear_claim_session
-    session.delete(:slugs)
     clear_journey_sessions!
   end
 

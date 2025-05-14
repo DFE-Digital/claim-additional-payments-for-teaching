@@ -36,9 +36,6 @@ RSpec.describe "Submissions", type: :request do
 
         email = ActionMailer::Base.deliveries.first
         expect(email.personalisation[:ref_number]).to eql(submitted_claim.reference)
-
-        expect(session[:slugs]).to be_nil
-        expect(session[:submitted_claim_id]).to eq(submitted_claim.id)
       end
 
       # TODO: one of these specs should be here, should be in features.

@@ -118,18 +118,8 @@ module FeatureHelpers
   #
   # TODO: refactor all old feature specs which use this method
   def jump_to_claim_journey_page(journey_session:, slug:)
-    set_slug_sequence_in_session(journey_session:, slug:)
     journey = Journeys.for_routing_name(journey_session.journey)
     visit claim_path(journey::ROUTING_NAME, slug)
-  end
-
-  def set_slug_sequence_in_session(journey_session:, slug:)
-    journey = Journeys.for_routing_name(journey_session.journey)
-    slug_sequence = journey.slug_sequence.new(journey_session).slugs
-    slug_index = slug_sequence.index(slug)
-    visited_slugs = slug_sequence.slice(0, slug_index)
-
-    page.set_rack_session(slugs: visited_slugs)
   end
 
   def sign_in_with_one_login
