@@ -214,3 +214,5 @@
   - concurrency_key
   - expires_at
   - created_at
+  :student_loans_eligibilities:
+  - qts_award_year_string

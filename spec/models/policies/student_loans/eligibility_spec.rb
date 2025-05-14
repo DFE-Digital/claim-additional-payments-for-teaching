@@ -313,4 +313,17 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
       it { is_expected.to eq(true) }
     end
   end
+
+  describe "enum_methods" do
+    context "when set by name" do
+      it "sets the string column" do
+        eligibility = create(
+          :student_loans_eligibility,
+          qts_award_year: "before_cut_off_date"
+        )
+
+        expect(eligibility.qts_award_year_string).to eq("before_cut_off_date")
+      end
+    end
+  end
 end
