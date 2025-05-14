@@ -9,7 +9,6 @@ class ClaimsController < BasePublicController
     journey_session || create_journey_session!
   end
 
-  before_action :initialize_session_slug_history
   before_action :check_page_is_authorised, only: [:show]
   before_action :check_page_is_permissible, only: [:show]
   before_action :set_backlink_path, only: [:show, :update]
@@ -118,10 +117,6 @@ class ClaimsController < BasePublicController
     unless navigator.permissible_slug?
       redirect_to claim_path(current_journey_routing_name, navigator.furthest_permissible_slug)
     end
-  end
-
-  def initialize_session_slug_history
-    session[:slugs] ||= []
   end
 
   def check_claim_not_in_progress
