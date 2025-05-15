@@ -87,6 +87,28 @@ module Policies
         I18n.t("student_loans.questions.claim_school_select_error", financial_year: StudentLoans.current_financial_year)
       end
 
+      # NOTE - remove once string column is renamed
+      def qts_award_year=(value)
+        normalised_value = if value.is_a?(Integer)
+          self.class.qts_award_years.invert[value].to_s
+        else
+          value.to_s
+        end
+        self.qts_award_year_string = normalised_value
+        super
+      end
+
+      # NOTE - remove once string column is renamed
+      def employment_status=(value)
+        normalised_value = if value.is_a?(Integer)
+          self.class.employment_statuses.invert[value].to_s
+        else
+          value.to_s
+        end
+        self.employment_status_string = normalised_value
+        super
+      end
+
       private
 
       def eligibility_checker
