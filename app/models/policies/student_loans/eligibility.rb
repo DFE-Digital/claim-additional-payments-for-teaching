@@ -16,21 +16,21 @@ module Policies
 
       self.table_name = "student_loans_eligibilities"
 
-      # Note: these mapped values for the `qts_award_year` integer values are symbolic and not to be taken literally,
+      # Note: these mapped values for the `qts_award_year` values are symbolic and not to be taken literally,
       # in particular the "cut off date" is to be considered dynamic and based on the current financial/claim year.
-      # You should simply consider 0 as the ineligible value and 1 as the eligible one.
-      # We don't store claims with a `qts_award_year = 0` as the journey would have ended after the first question.
-      enum :qts_award_year, {
-        before_cut_off_date: 0,
-        on_or_after_cut_off_date: 1
-      }, prefix: :awarded_qualified_status
+      # You should simply consider 'before_cut_off_date' as the ineligible value and 'on_or_after_cut_off_date' as the eligible one.
+      # We don't store claims with a `qts_award_year = 'before_cut_off_date'` as the journey would have ended after the first question.
+      enum :qts_award_year, %w[
+        before_cut_off_date
+        on_or_after_cut_off_date
+      ].index_with(&:itself), prefix: :awarded_qualified_status
 
-      enum :employment_status, {
-        claim_school: 0,
-        different_school: 1,
-        no_school: 2,
-        recent_tps_school: 3
-      }, prefix: :employed_at
+      enum :employment_status, %w[
+        claim_school
+        different_school
+        no_school
+        recent_tps_school
+      ].index_with(&:itself), prefix: :employed_at
 
       has_one :claim, as: :eligibility, inverse_of: :eligibility
       belongs_to :claim_school, optional: true, class_name: "School"
@@ -85,28 +85,6 @@ module Policies
 
       def select_claim_school_presence_error_message
         I18n.t("student_loans.questions.claim_school_select_error", financial_year: StudentLoans.current_financial_year)
-      end
-
-      # NOTE - remove once string column is renamed
-      def qts_award_year=(value)
-        normalised_value = if value.is_a?(Integer)
-          self.class.qts_award_years.invert[value].to_s
-        else
-          value.to_s
-        end
-        self.qts_award_year_string = normalised_value
-        super
-      end
-
-      # NOTE - remove once string column is renamed
-      def employment_status=(value)
-        normalised_value = if value.is_a?(Integer)
-          self.class.employment_statuses.invert[value].to_s
-        else
-          value.to_s
-        end
-        self.employment_status_string = normalised_value
-        super
       end
 
       private
