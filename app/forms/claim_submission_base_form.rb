@@ -42,6 +42,7 @@ class ClaimSubmissionBaseForm
   def build_claim
     Claim.new.tap do |claim|
       claim.eligibility ||= main_eligibility
+      claim.policy ||= main_eligibility.policy
       claim.started_at = journey_session.created_at
       answers.attributes.each do |name, value|
         if claim.respond_to?(:"#{name}=")

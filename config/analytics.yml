@@ -85,6 +85,7 @@ shared:
     - started_at
     - verified_at
     - onelogin_idv_return_codes
+    - policy
   :decisions:
     - id
     - claim_id

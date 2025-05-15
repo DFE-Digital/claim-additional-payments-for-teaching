@@ -41,4 +41,8 @@ module Policies
   def self.with_attribute(attr)
     POLICIES.select { |policy| policy::Eligibility.has_attribute?(attr) }
   end
+
+  def self.from_policy_string(string)
+    Policies.all.find { |p| p.name == string }
+  end
 end

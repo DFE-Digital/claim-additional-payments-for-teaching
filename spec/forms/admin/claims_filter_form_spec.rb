@@ -28,7 +28,8 @@ RSpec.describe Admin::ClaimsFilterForm, type: :model do
       it "returns the expected claims" do
         claim_awaiting_provider_verification_1 = build(
           :claim,
-          :submitted
+          :submitted,
+          :further_education
         )
 
         create(
@@ -39,7 +40,8 @@ RSpec.describe Admin::ClaimsFilterForm, type: :model do
 
         claim_awaiting_provider_verification_2 = build(
           :claim,
-          :submitted
+          :submitted,
+          :further_education
         )
 
         create(

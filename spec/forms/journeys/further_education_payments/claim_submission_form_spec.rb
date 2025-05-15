@@ -37,6 +37,8 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
       claim = form.claim
       eligibility = form.claim.eligibility
 
+      expect(claim.policy).to eql(Policies::FurtherEducationPayments)
+
       expect(claim.identity_confirmed_with_onelogin).to eq(answers.identity_confirmed_with_onelogin)
       expect(claim.logged_in_with_onelogin).to eq(answers.logged_in_with_onelogin)
       expect(claim.onelogin_credentials).to eq(answers.onelogin_credentials)

@@ -2,10 +2,8 @@ require "rails_helper"
 
 RSpec.describe Journeys::FurtherEducationPayments::Provider::Authorisation do
   let(:eligibility) { create(:further_education_payments_eligibility) }
-
   let(:organisation) { eligibility.school }
-
-  let(:claim) { eligibility.claim }
+  let(:claim) { create(:claim, :further_education, eligibility:) }
 
   let(:journey_session) do
     create(

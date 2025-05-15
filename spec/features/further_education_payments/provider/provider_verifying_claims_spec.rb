@@ -943,20 +943,8 @@ RSpec.feature "Provider verifying claims" do
       ukprn: fe_provider.ukprn
     )
 
-    claim = create(
-      :claim,
-      first_name: "Edna",
-      surname: "Krabappel",
-      date_of_birth: Date.new(1945, 7, 3),
-      reference: "AB123456",
-      created_at: DateTime.new(2024, 8, 1, 9, 0, 0),
-      onelogin_idv_at: DateTime.new(2024, 8, 1, 9, 0, 0),
-      identity_confirmed_with_onelogin: false
-    )
-
-    create(
+    eligibility = create(
       :further_education_payments_eligibility,
-      claim: claim,
       school: fe_provider,
       teaching_hours_per_week: "between_2_5_and_12",
       contract_type: "fixed_term",
@@ -967,6 +955,19 @@ RSpec.feature "Provider verifying claims" do
         "level2_3_apprenticeship"
       ],
       teacher_reference_number: "1234567"
+    )
+
+    claim = create(
+      :claim,
+      :further_education,
+      eligibility:,
+      first_name: "Edna",
+      surname: "Krabappel",
+      date_of_birth: Date.new(1945, 7, 3),
+      reference: "AB123456",
+      created_at: DateTime.new(2024, 8, 1, 9, 0, 0),
+      onelogin_idv_at: DateTime.new(2024, 8, 1, 9, 0, 0),
+      identity_confirmed_with_onelogin: false
     )
 
     mock_dfe_sign_in_auth_session(
