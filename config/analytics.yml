@@ -1,5 +1,7 @@
 ---
 shared:
+  :test:
+    - drop_this
   :journey_configurations:
     - routing_name
     - open_for_submissions
