@@ -6,13 +6,17 @@ FactoryBot.define do
   factory :claim do
     started_at { Time.zone.now }
     reference { Reference.new.to_s }
+    policy { Policies::StudentLoans }
 
     trait :current_academic_year do
       academic_year { AcademicYear.current }
     end
 
+    trait :further_education do
+      policy { Policies::FurtherEducationPayments }
+    end
+
     transient do
-      policy { Policies::StudentLoans }
       eligibility_factory { :"#{policy.to_s.underscore}_eligibility" }
       eligibility_trait { nil }
       eligibility_attributes { nil }
@@ -31,6 +35,7 @@ FactoryBot.define do
       end
 
       claim.eligibility = build(evaluator.eligibility_factory, evaluator.eligibility_trait, **evaluator.eligibility_attributes || {}) unless claim.eligibility
+      claim.policy = claim.eligibility.policy
 
       raise "Policy of Claim (#{evaluator.policy}) must match Eligibility class (#{claim.eligibility.policy})" if evaluator.policy != claim.eligibility.policy
 

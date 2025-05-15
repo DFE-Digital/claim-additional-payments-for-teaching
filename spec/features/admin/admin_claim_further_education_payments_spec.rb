@@ -25,8 +25,18 @@ RSpec.feature "Admin claim further education payments" do
               name: "Springfield A and M"
             )
 
+            eligibility = create(
+              :further_education_payments_eligibility,
+              contract_type: "fixed_term",
+              school: fe_provider,
+              award_amount: 1500,
+              flagged_as_duplicate: true
+            )
+
             claim = create(
               :claim,
+              :further_education,
+              eligibility:,
               first_name: "Edna",
               surname: "Krabappel",
               email_address: "edna.krabappel@springfield-elementary.edu",
@@ -34,15 +44,6 @@ RSpec.feature "Admin claim further education payments" do
               reference: "AB123456",
               created_at: DateTime.new(2024, 8, 1, 9, 0, 0),
               submitted_at: DateTime.new(2024, 8, 1, 9, 0, 0)
-            )
-
-            create(
-              :further_education_payments_eligibility,
-              contract_type: "fixed_term",
-              claim: claim,
-              school: fe_provider,
-              award_amount: 1500,
-              flagged_as_duplicate: true
             )
 
             visit admin_claim_path(claim)
@@ -97,8 +98,18 @@ RSpec.feature "Admin claim further education payments" do
                 name: "Springfield A and M"
               )
 
+              eligibility = create(
+                :further_education_payments_eligibility,
+                contract_type: "fixed_term",
+                school: fe_provider,
+                award_amount: 1500,
+                provider_verification_email_last_sent_at: DateTime.new(2024, 8, 1, 9, 0, 0)
+              )
+
               claim = create(
                 :claim,
+                :further_education,
+                eligibility:,
                 first_name: "Edna",
                 surname: "Krabappel",
                 email_address: "edna.krabappel@springfield-elementary.edu",
@@ -106,15 +117,6 @@ RSpec.feature "Admin claim further education payments" do
                 reference: "AB123456",
                 created_at: DateTime.new(2024, 8, 1, 9, 0, 0),
                 submitted_at: DateTime.new(2024, 8, 1, 9, 0, 0)
-              )
-
-              create(
-                :further_education_payments_eligibility,
-                contract_type: "fixed_term",
-                claim: claim,
-                school: fe_provider,
-                award_amount: 1500,
-                provider_verification_email_last_sent_at: DateTime.new(2024, 8, 1, 9, 0, 0)
               )
 
               create(
@@ -177,8 +179,18 @@ RSpec.feature "Admin claim further education payments" do
                 name: "Springfield A and M"
               )
 
+              eligibility = create(
+                :further_education_payments_eligibility,
+                contract_type: "fixed_term",
+                school: fe_provider,
+                award_amount: 1500,
+                provider_verification_email_last_sent_at: DateTime.new(2024, 8, 1, 9, 0, 0)
+              )
+
               claim = create(
                 :claim,
+                :further_education,
+                eligibility:,
                 first_name: "Edna",
                 surname: "Krabappel",
                 email_address: "edna.krabappel@springfield-elementary.edu",
@@ -186,15 +198,6 @@ RSpec.feature "Admin claim further education payments" do
                 reference: "AB123456",
                 created_at: DateTime.new(2024, 8, 1, 9, 0, 0),
                 submitted_at: DateTime.new(2024, 8, 1, 9, 0, 0)
-              )
-
-              create(
-                :further_education_payments_eligibility,
-                contract_type: "fixed_term",
-                claim: claim,
-                school: fe_provider,
-                award_amount: 1500,
-                provider_verification_email_last_sent_at: DateTime.new(2024, 8, 1, 9, 0, 0)
               )
 
               visit admin_claim_path(claim)
@@ -249,8 +252,19 @@ RSpec.feature "Admin claim further education payments" do
                 name: "Springfield A and M"
               )
 
+              eligibility = create(
+                :further_education_payments_eligibility,
+                contract_type: "fixed_term",
+                school: fe_provider,
+                award_amount: 1500,
+                provider_verification_email_last_sent_at: DateTime.new(2024, 8, 1, 9, 0, 0),
+                provider_verification_email_count: 1
+              )
+
               claim = create(
                 :claim,
+                :further_education,
+                eligibility:,
                 first_name: "Edna",
                 surname: "Krabappel",
                 email_address: "edna.krabappel@springfield-elementary.edu",
@@ -258,16 +272,6 @@ RSpec.feature "Admin claim further education payments" do
                 reference: "AB123456",
                 created_at: DateTime.new(2024, 8, 1, 9, 0, 0),
                 submitted_at: DateTime.new(2024, 8, 1, 9, 0, 0)
-              )
-
-              create(
-                :further_education_payments_eligibility,
-                contract_type: "fixed_term",
-                claim: claim,
-                school: fe_provider,
-                award_amount: 1500,
-                provider_verification_email_last_sent_at: DateTime.new(2024, 8, 1, 9, 0, 0),
-                provider_verification_email_count: 1
               )
 
               perform_enqueued_jobs do
@@ -297,8 +301,18 @@ RSpec.feature "Admin claim further education payments" do
           it "shows the verification information and allows the admin to complete the task" do
             fe_provider = create(:school, :further_education, name: "Springfield A and M")
 
+            eligibility = create(
+              :further_education_payments_eligibility,
+              :verified,
+              contract_type: "fixed_term",
+              school: fe_provider,
+              award_amount: 1500
+            )
+
             claim = create(
               :claim,
+              :further_education,
+              eligibility:,
               first_name: "Edna",
               surname: "Krabappel",
               email_address: "edna.krabappel@springfield-elementary.edu",
@@ -306,15 +320,6 @@ RSpec.feature "Admin claim further education payments" do
               reference: "AB123456",
               created_at: DateTime.new(2024, 8, 1, 9, 0, 0),
               submitted_at: DateTime.new(2024, 8, 1, 9, 0, 0)
-            )
-
-            create(
-              :further_education_payments_eligibility,
-              :verified,
-              contract_type: "fixed_term",
-              claim: claim,
-              school: fe_provider,
-              award_amount: 1500
             )
 
             visit admin_claim_path(claim)
@@ -381,7 +386,6 @@ RSpec.feature "Admin claim further education payments" do
             click_on "Save and continue"
 
             visit admin_claim_tasks_path(claim)
-
             expect(task_status("Provider verification")).to eq "Passed"
           end
         end
@@ -390,8 +394,17 @@ RSpec.feature "Admin claim further education payments" do
           it "shows the verification information and allows the admin to complete the task" do
             fe_provider = create(:school, :further_education, name: "Springfield A and M")
 
+            eligibility = create(
+              :further_education_payments_eligibility,
+              :verified_variable_hours,
+              school: fe_provider,
+              award_amount: 1500
+            )
+
             claim = create(
               :claim,
+              :further_education,
+              eligibility:,
               first_name: "Edna",
               surname: "Krabappel",
               email_address: "edna.krabappel@springfield-elementary.edu",
@@ -401,16 +414,7 @@ RSpec.feature "Admin claim further education payments" do
               submitted_at: DateTime.new(2024, 8, 1, 9, 0, 0)
             )
 
-            create(
-              :further_education_payments_eligibility,
-              :verified_variable_hours,
-              claim: claim,
-              school: fe_provider,
-              award_amount: 1500
-            )
-
             visit admin_claim_path(claim)
-
             click_on "View tasks"
 
             click_on(
