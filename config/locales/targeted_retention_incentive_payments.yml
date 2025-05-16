@@ -169,9 +169,7 @@ en:
           assessment_only: "Assessment only"
           overseas_recognition: "Overseas recognition"
         hints:
-          postgraduate_itt:
-            "Postgraduate Certificate of Education (PGCE), Teach First, School Direct ITT and School Centered ITT
-            (SCITT)."
+          postgraduate_itt: "Postgraduate Certificate of Education (PGCE), School Centred ITT (SCITT), Postgraduate Teaching Apprenticeship, School Direct, Teach First"
           undergraduate_itt: "Bachelor of Arts (BA) or Bachelor of Science (BSc) degrees."
         errors:
           inclusion: Select the route you took into teaching
@@ -198,7 +196,7 @@ en:
             undergraduate_itt: "Which subject did you do your undergraduate initial teacher training (ITT) in?"
             assessment_only: "Which subject did you do your assessment in?"
             overseas_recognition: "Which subject did you do your teaching qualification in?"
-        hint: "The subjects listed are eligible for targeted retention incentive payment based on the school you teach in and the year you studied."
+        hint: "The subjects listed are eligible for a targeted retention incentive payment based on the school you teach in and the year you studied."
         options:
           chemistry: "Chemistry"
           computing: "Computing"
