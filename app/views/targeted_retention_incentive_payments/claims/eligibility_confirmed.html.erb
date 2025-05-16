@@ -1,0 +1,58 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:heading),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-panel govuk-panel--informational">
+      <h1 class="govuk-panel__title">
+        <%= @form.t(:heading) %>
+      </h1>
+    </div>
+
+    <p>
+      <span class="govuk-heading-m govuk-!-margin-bottom-0">
+        Based on what you told us, you can apply for a targeted retention
+        incentive payment of:
+      </span>
+
+      <br>
+
+      <span class="govuk-heading-l">
+        <%= number_to_currency(@form.answers.award_amount, precision: 0) %>
+      <span>
+    </p>
+
+    <p class="govuk-body">
+      Targeted retention incentive payments are offered to teachers in schools
+      identified as having a high need for teachers. If you teach in an
+      eligible school in an education investment area, you’ll receive a higher
+      payment.
+    </p>
+
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_submit "Apply now" %>
+    <% end %>
+
+    <p class="govuk-body">
+      For more information about why you are eligible, read about the
+      <%= govuk_link_to(
+        [
+          t("targeted_retention_incentive_payments.policy_short_name").downcase,
+          "(opens in new tab)"
+        ].join(" "),
+        Policies::TargetedRetentionIncentivePayments.eligibility_page_url,
+        target: "_blank"
+      )%>.
+    </p>
+  </div>
+</div>

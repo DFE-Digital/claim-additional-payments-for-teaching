@@ -62,6 +62,10 @@ module Policies
         !eligible_itt_subject_for_claim && !itt_academic_year_for_claim && !route_into_teaching && !eligible_degree_code?
       end
 
+      def has_data_for_claim?
+        !has_no_data_for_claim?
+      end
+
       private
 
       attr_reader :record, :answers

@@ -1,0 +1,8 @@
+<p class="govuk-body">
+  You are not eligible for a
+  <%= govuk_link_to(
+    I18n.t("targeted_retention_incentive_payments.policy_short_name").downcase,
+    Policies::TargetedRetentionIncentivePayments.eligibility_criteria_url
+  ) %> payment because of the year you studied.
+</p>
+

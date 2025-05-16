@@ -1,0 +1,26 @@
+<p class="govuk-body">
+  You are not eligible for a
+  <%= govuk_link_to(
+    I18n.t("targeted_retention_incentive_payments.policy_short_name").downcase,
+    Policies::TargetedRetentionIncentivePayments.eligibility_criteria_url
+  ) %> payment.
+</p>
+
+
+<p class="govuk-body">
+  To be eligible for a targeted retention incentive payment as a supply teacher,
+  you must:
+</p>
+
+<%= govuk_list(
+  [
+    "be employed directly by the school",
+    "have been working for at least one term before applying",
+  ],
+  type: :bullet,
+) %>
+
+<p class="govuk-body">
+  If you’re employed by a private supply-teaching agency or teach in an
+  independent school, you’re not eligible.
+</p>
