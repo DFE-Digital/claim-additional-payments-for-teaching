@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Payroll::PaymentCsvRow do
   before do
     create(:journey_configuration, :student_loans)
-    create(:journey_configuration, :additional_payments)
+    create(:journey_configuration, :targeted_retention_incentive_payments)
   end
 
   subject { described_class.new(payment) }
@@ -41,7 +41,7 @@ RSpec.describe Payroll::PaymentCsvRow do
     let(:claims) do
       [
         create(:claim, :approved, personal_details_for_student_loans_and_early_career_payments_claim.merge(policy: Policies::StudentLoans)),
-        create(:claim, :approved, personal_details_for_student_loans_and_early_career_payments_claim.merge(policy: Policies::EarlyCareerPayments))
+        create(:claim, :approved, personal_details_for_student_loans_and_early_career_payments_claim.merge(policy: Policies::TargetedRetentionIncentivePayments))
       ]
     end
 
@@ -52,7 +52,7 @@ RSpec.describe Payroll::PaymentCsvRow do
     # ADDR_LINE_4 - Town *
     # ADDR_LINE_5 - County *
     # ADDR_LINE_6 - Postcode *
-    context "with a StudentLoans and EarlyCareerPayments claim" do
+    context "with a StudentLoans and TargetedRetentionIncentivePayments claim" do
       context "with a four part address" do
         it "generates a csv row formatted to match DfE Payroll address" do
           travel_to Date.new(2019, 9, 26) do
@@ -98,11 +98,11 @@ RSpec.describe Payroll::PaymentCsvRow do
       end
     end
 
-    context "with a EarlyCareerPayments claim" do
+    context "with a TargetedRetentionIncentivePayments claim" do
       let(:payment) { create(:payment, award_amount: payment_award_amount, claims: claims) }
 
       context "with a six part address" do
-        let(:personal_details_for_ecp_claim_1) do
+        let(:personal_details_for_tri_claim_1) do
           {
             national_insurance_number: generate(:national_insurance_number),
             eligibility_attributes: {teacher_reference_number: generate(:teacher_reference_number)},
@@ -126,7 +126,7 @@ RSpec.describe Payroll::PaymentCsvRow do
         end
         let(:claims) do
           [
-            create(:claim, :approved, personal_details_for_ecp_claim_1.merge(policy: Policies::EarlyCareerPayments))
+            create(:claim, :approved, personal_details_for_tri_claim_1.merge(policy: Policies::TargetedRetentionIncentivePayments))
           ]
         end
 
@@ -174,7 +174,7 @@ RSpec.describe Payroll::PaymentCsvRow do
       end
 
       context "with a five part address" do
-        let(:personal_details_for_ecp_claim_2) do
+        let(:personal_details_for_tri_claim_2) do
           {
             national_insurance_number: generate(:national_insurance_number),
             eligibility_attributes: {teacher_reference_number: generate(:teacher_reference_number)},
@@ -199,7 +199,7 @@ RSpec.describe Payroll::PaymentCsvRow do
         end
         let(:claims) do
           [
-            create(:claim, :approved, personal_details_for_ecp_claim_2.merge(policy: Policies::EarlyCareerPayments))
+            create(:claim, :approved, personal_details_for_tri_claim_2.merge(policy: Policies::TargetedRetentionIncentivePayments))
           ]
         end
 

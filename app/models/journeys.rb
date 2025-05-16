@@ -6,7 +6,6 @@ module Journeys
   end
 
   JOURNEYS = [
-    AdditionalPaymentsForTeaching,
     TargetedRetentionIncentivePayments,
     TeacherStudentLoanReimbursement,
     GetATeacherRelocationPayment,

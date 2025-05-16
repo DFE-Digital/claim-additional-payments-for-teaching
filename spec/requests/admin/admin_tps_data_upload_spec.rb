@@ -54,10 +54,10 @@ RSpec.describe "TPS data upload" do
         end
       end
 
-      before { create(:journey_configuration, :additional_payments, current_academic_year: "2021/2022") }
+      before { create(:journey_configuration, :targeted_retention_incentive_payments, current_academic_year: "2021/2022") }
 
       context "when the claim is not TSLR" do
-        let(:school) { create(:school, :early_career_payments_eligible) }
+        let(:school) { create(:school, :targeted_retention_incentive_payments_eligible) }
         let(:current_school) { school }
         let(:csv) do
           <<~CSV
@@ -73,7 +73,7 @@ RSpec.describe "TPS data upload" do
           create(
             :claim,
             :submitted,
-            policy: Policies::EarlyCareerPayments,
+            policy: Policies::TargetedRetentionIncentivePayments,
             submitted_at: Date.new(2022, 7, 15),
             academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
             eligibility_attributes: {
@@ -87,7 +87,7 @@ RSpec.describe "TPS data upload" do
           create(
             :claim,
             :submitted,
-            policy: Policies::EarlyCareerPayments,
+            policy: Policies::TargetedRetentionIncentivePayments,
             submitted_at: Date.new(2022, 7, 15),
             academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
             eligibility_attributes: {teacher_reference_number: 1000107}
@@ -98,7 +98,7 @@ RSpec.describe "TPS data upload" do
           create(
             :claim,
             :submitted,
-            policy: Policies::EarlyCareerPayments,
+            policy: Policies::TargetedRetentionIncentivePayments,
             submitted_at: Date.new(2022, 7, 15),
             academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
             eligibility_attributes: {teacher_reference_number: 1000108}

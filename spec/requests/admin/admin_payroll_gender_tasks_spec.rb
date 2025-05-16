@@ -4,11 +4,11 @@ RSpec.describe "Admin tasks", type: :request do
   context "when signed in as a service operator" do
     before do
       create(:journey_configuration, :student_loans)
-      create(:journey_configuration, :additional_payments)
+      create(:journey_configuration, :targeted_retention_incentive_payments)
       @signed_in_user = sign_in_as_service_operator
     end
 
-    [Policies::StudentLoans, Policies::EarlyCareerPayments, Policies::TargetedRetentionIncentivePayments].each do |policy|
+    [Policies::StudentLoans, Policies::TargetedRetentionIncentivePayments].each do |policy|
       context "with a #{policy} claim" do
         describe "payroll_gender_tasks#create" do
           let(:claim) { create(:claim, :submitted, policy: policy, payroll_gender: :dont_know) }

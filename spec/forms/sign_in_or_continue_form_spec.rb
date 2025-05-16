@@ -314,10 +314,10 @@ RSpec.describe SignInOrContinueForm do
     )
   end
 
-  describe "for AdditionalPaymentsForTeaching journey" do
+  describe "for TargetedRetentionIncentivePayments journey" do
     include_examples(
       "sign_in_or_continue_form",
-      Journeys::AdditionalPaymentsForTeaching
+      Journeys::TargetedRetentionIncentivePayments
     )
   end
 end

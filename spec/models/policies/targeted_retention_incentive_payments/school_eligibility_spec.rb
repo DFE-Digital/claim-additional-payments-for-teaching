@@ -4,7 +4,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::SchoolEligibility d
   let(:eligible_school) { build(:school, :targeted_retention_incentive_payments_eligible) }
   let(:ineligible_school) { build(:school, :targeted_retention_incentive_payments_ineligible) }
 
-  before { create(:journey_configuration, :additional_payments) }
+  before { create(:journey_configuration, :targeted_retention_incentive_payments) }
 
   describe ".new" do
     specify { expect { described_class.new(nil) }.to raise_error("nil school") }
