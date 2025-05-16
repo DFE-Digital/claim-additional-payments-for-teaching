@@ -26,8 +26,6 @@ RSpec.describe Claims::ShowHelper do
   describe "#award_amount" do
     let(:award_amount) { 2000.0 }
 
-    before { create(:journey_configuration, :additional_payments) }
-
     it "returns a string currency representation" do
       expect(helper.award_amount(award_amount)).to eq("£2,000")
     end

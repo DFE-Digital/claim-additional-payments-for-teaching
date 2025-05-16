@@ -5,7 +5,7 @@ RSpec.feature "Combined journey with Teacher ID email check" do
   include ClaimsControllerHelper
 
   # create a school eligible for ECP and Targeted Retention Incentive so can walk the whole journey
-  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments_only) }
+  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments) }
   let(:school) { create(:school, :targeted_retention_incentive_payments_eligible) }
   let(:trn) { 1234567 }
   let(:date_of_birth) { "1981-01-01" }
@@ -14,7 +14,6 @@ RSpec.feature "Combined journey with Teacher ID email check" do
   let(:new_email) { "new.email@example" }
 
   before do
-    FeatureFlag.enable!(:tri_only_journey)
     school
     freeze_time
     set_mock_auth(trn, {date_of_birth:, nino:})

@@ -13,8 +13,6 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::EligibilityAdminAns
 
   subject(:presenter) { described_class.new(eligibility) }
 
-  before { create(:journey_configuration, :additional_payments) }
-
   describe "#answers" do
     it "returns an array of questions and answers for displaying to service operator" do
       expected_answers = [

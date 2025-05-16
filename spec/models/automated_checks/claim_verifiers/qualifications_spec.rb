@@ -3,7 +3,7 @@ require "rails_helper"
 module AutomatedChecks
   module ClaimVerifiers
     RSpec.describe Qualifications do
-      let(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments_only, current_academic_year: AcademicYear.new(2023)) }
+      let(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments, current_academic_year: AcademicYear.new(2023)) }
 
       before do
         if data
