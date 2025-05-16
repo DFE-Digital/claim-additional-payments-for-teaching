@@ -7,7 +7,6 @@ RSpec.describe Policies::EarlyCareerPayments, type: :model do
     expect(subject::VERIFIERS).to eq([
       AutomatedChecks::ClaimVerifiers::Identity,
       AutomatedChecks::ClaimVerifiers::Qualifications,
-      AutomatedChecks::ClaimVerifiers::Induction,
       AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
       AutomatedChecks::ClaimVerifiers::Employment,
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
