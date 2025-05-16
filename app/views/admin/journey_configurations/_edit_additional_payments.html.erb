@@ -32,28 +32,17 @@
       Upload <%= I18n.t("targeted_retention_incentive_payments.policy_short_name").pluralize %> School Awards
     </h2>
 
-    <%= render("shared/error_summary", instance: @csv_upload) if @csv_upload.errors.any? %>
+    <%= form_with model: @awards_upload_form, scope: :targeted_retention_incentive_payments_awards_upload, url: admin_targeted_retention_incentive_payments_awards_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
 
-    <%= form_with model: @csv_upload, url: admin_targeted_retention_incentive_payments_awards_path, multipart: true do |form| %>
-      <%= form_group_tag @csv_upload, :academic_year do %>
-        <label class="govuk-label" for="upload_academic_year">
-          Academic year
-        </label>
+      <%= f.govuk_select :academic_year, options_for_academic_year,
+        label: { text: "Academic year" } %>
 
-        <%= form.select :academic_year, options_for_academic_year, {}, class: "govuk-select", id: "upload_academic_year" %>
-      <% end %>
+      <%= f.govuk_file_field :csv_data,
+        label: { text: "CSV file" },
+        javascript: true %>
 
-      <%= form_group_tag @csv_upload, :csv_data do %>
-        <%= errors_tag @csv_upload, :csv_data %>
-
-        <%= form.label :csv_data, "CSV file", class: "govuk-label" %>
-
-        <%= form.file_field :csv_data, class: "govuk-file-upload#{" govuk-file-upload--error" if @csv_upload&.errors[:csv_data]&.any?}" %>
-      <% end %>
-
-      <div class="govuk-button-group">
-        <%= form.submit "Upload CSV", class: "govuk-button", data: { module: "govuk-button" } %>
-      </div>
+      <%= f.govuk_submit "Upload CSV" %>
     <% end %>
   </div>
 </div>
