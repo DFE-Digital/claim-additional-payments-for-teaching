@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - fix-slack-notification-5
     paths:
       - 'config/analytics_hidden_pii.yml'
       - 'config/analytics_blocklist.yml'
@@ -27,7 +28,7 @@ jobs:
         id: analytics-diff
         run: |
           echo "ANALYTICS_DIFF<<EOF" >> $GITHUB_ENV
-          git diff origin/master^..origin/master -- config/analytics_hidden_pii.yml config/analytics_blocklist.yml config/analytics.yml config/analytics_pii.yml >> $GITHUB_ENV
+          git diff head~ -- config/analytics_hidden_pii.yml config/analytics_blocklist.yml config/analytics.yml config/analytics_pii.yml >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
       - name: Get commit details
@@ -46,13 +47,18 @@ jobs:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            {
-              "text": "${{ format(
-                '<@U033AJ0A12P> Analytics Configuration Change Detected 🔍\n\n*Commit:* <{0}|{1}>\n\n*Author:* {2}\n\n*Branch:* {3}\n\n*Analytics Config Changes:*\n```diff\n{4}\n```',
-                env.COMMIT_LINK,
-                env.COMMIT_MSG,
-                env.COMMIT_AUTHOR,
-                github.ref_name,
-                env.ANALYTICS_DIFF
-              ) }}"
-            }
+            ${{
+              toJson(
+                {
+                  "text": format(
+                    '{0}\n\n*Commit:* <{1}|{2}>\n\n*Author:* {3}\n\n*Branch:* {4}\n\n*Analytics Config Changes:*\n```diff\n{5}\n```',
+                    '<@U06SL2FTQRH> Analytics Configuration Change Detected 🔍',
+                    env.COMMIT_LINK,
+                    env.COMMIT_MSG,
+                    env.COMMIT_AUTHOR,
+                    github.ref_name,
+                    env.ANALYTICS_DIFF
+                  )
+                }
+              )
+            }}
