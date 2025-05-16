@@ -4,10 +4,16 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::AlternativeIdentityVerification 
   describe "#perform" do
     context "when the claimant's identity has not been verified" do
       it "doesn't create a task" do
-        claim = create(
+        eligibility = create(
           :further_education_payments_eligibility,
           claimant_identity_verified_at: nil
-        ).claim
+        )
+
+        claim = create(
+          :claim,
+          :further_education,
+          eligibility:
+        )
 
         expect { described_class.new(claim: claim).perform }.not_to(
           change { claim.tasks.count }
@@ -18,10 +24,16 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::AlternativeIdentityVerification 
     context "when the claimant's identity has been verified" do
       context "when the task has already been performed" do
         it "doesn't create a new task" do
-          claim = create(
+          eligibility = create(
             :further_education_payments_eligibility,
             claimant_identity_verified_at: DateTime.now
-          ).claim
+          )
+
+          claim = create(
+            :claim,
+            :further_education,
+            eligibility:
+          )
 
           create(
             :task,

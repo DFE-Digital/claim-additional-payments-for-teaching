@@ -195,6 +195,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::ClaimSubmissionForm do
       expect(claim.reference).to match(/([A-HJ-NP-Z]|\d){8}/)
       expect(claim.submitted_at).to eq DateTime.new(2024, 3, 1, 9, 0, 0)
 
+      expect(claim.policy).to eql(Policies::StudentLoans)
       expect(claim.eligibility_type).to(
         eq("Policies::StudentLoans::Eligibility")
       )
