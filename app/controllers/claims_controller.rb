@@ -115,7 +115,19 @@ class ClaimsController < BasePublicController
       session[:slugs],
       params[:slug]
     )
-    redirect_to(claim_path(new_journey::ROUTING_NAME, slug: new_page_sequence.next_required_slug))
+
+    if new_journey.use_navigator?
+      new_navigator = Journeys::Navigator.new(
+        current_slug: "N/A",
+        slug_sequence: new_page_sequence.slug_sequence,
+        params:,
+        session:
+      )
+
+      redirect_to(claim_path(new_journey::ROUTING_NAME, slug: new_navigator.next_slug))
+    else
+      redirect_to(claim_path(new_journey::ROUTING_NAME, slug: new_page_sequence.next_required_slug))
+    end
   end
 
   def set_backlink_path
