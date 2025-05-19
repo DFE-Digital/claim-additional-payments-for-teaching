@@ -1,0 +1,101 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl"><%= t("additional_payments.landing_page") %></h1>
+    <p class="govuk-body">
+      Additional payments are to encourage early career teachers in state-funded secondary schools in England to continue teaching. Eligible subjects are:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li><span class="govuk-body">chemistry</span></li>
+      <li><span class="govuk-body">computing</span></li>
+      <li><span class="govuk-body">languages</span></li>
+      <li><span class="govuk-body">mathematics</span></li>
+      <li><span class="govuk-body">physics</span></li>
+    </ul>
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-6">Payment amount</h2>
+
+    <p class="govuk-body">
+      Teachers of eligible subjects can receive between £2,000 and £7,500. The amount you are eligible for depends on:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>the subject you teach</li>
+      <li>the school you teach in</li>
+      <li>when your initial teacher training (ITT) course started (postgraduate) or finished (undergraduate)</li>
+    </ul>
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-6">How to apply</h2>
+
+    <% if @journey_open %>
+      <p class="govuk-body">
+        The application checks your eligibility before you apply. Once you start the application you cannot save your progress.
+      </p>
+
+      <p class="govuk-body">
+        Answering questions about eligibility takes 5 minutes and applying for the payment takes another 5 minutes.
+      </p>
+
+      <p class="govuk-!-margin-top-8">
+        <a href="<%= claim_path(current_journey_routing_name, "claim", answers: { service_access_code: params[:service_access_code] }) %>" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
+          Start now
+          <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"/>
+          </svg>
+        </a>
+      </p>
+    <% else %>
+      <p class="govuk-body">
+        Applications are now closed for the <%= @academic_year.start_year.to_s %> to <%= @academic_year.end_year.to_s %> academic year.
+        You can apply for an additional payment between October <%= (@academic_year + 1).start_year.to_s %> and March <%= (@academic_year + 1).end_year.to_s %>.
+      </p>
+    <% end %>
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-4">Further information</h2>
+
+    <% if @journey_open %>
+      <p class="govuk-body">
+        You must apply between October <%= @academic_year.start_year.to_s %> and March <%= @academic_year.end_year.to_s %>.
+      </p>
+    <% end %>
+
+    <p class="govuk-body">
+      If you are eligible for an additional payment, we will collect personal information to verify your claim and process your payment.
+    </p>
+
+    <p class="govuk-body">
+      Payments are given up to 26 weeks from applying. You will receive an approval email with further information on your application.
+    </p>
+
+    <%= govuk_details(summary_text: "The different additional payments") do %>
+      <p class="govuk-body">
+        There are 2 types of additional payment. You may be eligible for both payments, but you will only be able to apply for one each year.
+      </p>
+
+      <ul class='govuk-list govuk-list--bullet'>
+        <li>
+          <%= govuk_link_to "Early-career payment (opens in new tab)", Policies::EarlyCareerPayments.eligibility_page_url, no_visited_state: true, target: "_blank" %> - payment of up to £7,500 for eligible teachers including language teachers.
+        </li>
+
+        <li>
+          <%= govuk_link_to(
+            "#{I18n.t("targeted_retention_incentive_payments.policy_short_name")} (opens in new tab)",
+            Policies::TargetedRetentionIncentivePayments.eligibility_page_url,
+            no_visited_state: true,
+            target: "_blank"
+          ) %> - payment of up to £6,000 for eligible teachers in certain schools, including computing teachers.
+        </li>
+      </ul>
+
+      <p class="govuk-body">
+        Both schemes offer the largest payments to those teaching in more disadvantaged areas and schools.
+      </p>
+    <% end %>
+
+    <h3 class="govuk-heading-s govuk-!-margin-top-6">Claim back your student loan repayments</h3>
+
+    <p class="govuk-body">
+    If you have a student loan, you may be able to <a href="https://www.gov.uk/guidance/teachers-claim-back-your-student-loan-repayments" class="govuk-link govuk-link--no-visited-state" target="_blank">claim back student loan repayments (opens in new tab)</a> made while employed as a teacher. This is separate and you can apply for this whether or not you receive an early-career payment or <%= I18n.t("targeted_retention_incentive_payments.policy_short_name").downcase %>.
+    </p>
+  </div>
+</div>
