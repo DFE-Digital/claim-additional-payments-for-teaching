@@ -3,15 +3,15 @@ require "rails_helper"
 RSpec.feature "Teacher Identity Sign in", js: true, flaky: true do
   include OmniauthMockHelper
 
-  # create a school eligible for ECP and Targeted Retention Incentive so can walk the whole journey
-  let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
-  let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
+  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments_only) }
+  let(:school) { create(:school, :targeted_retention_incentive_payments_eligible) }
   let(:current_academic_year) { journey_configuration.current_academic_year }
   let(:trn) { 1234567 }
   let(:date_of_birth) { "1981-01-01" }
   let(:nino) { "AB123123A" }
 
   before do
+    FeatureFlag.enable!(:tri_only_journey)
     set_mock_auth(trn, {date_of_birth:, nino:})
     stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
   end
@@ -20,29 +20,29 @@ RSpec.feature "Teacher Identity Sign in", js: true, flaky: true do
     set_mock_auth(nil)
   end
 
-  scenario "Teacher makes claim for 'Early-Career Payments' by logging in with teacher_id" do
+  scenario "Teacher makes claim for 'Targeted Retention Incentive' by logging in with teacher_id" do
     # - Teacher selects yes to details confirm
-    visit landing_page_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
+    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
 
     # - Landing (start)
-    expect(page).to have_text(I18n.t("additional_payments.landing_page"))
+    expect(page).to have_text("Find out if you are eligible for a targeted retention incentive payment")
     click_on "Start now"
 
     expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue with DfE Identity"
 
     # - Teacher details page
-    expect(page).to have_text(I18n.t("questions.check_and_confirm_details"))
-    expect(page).to have_text(I18n.t("questions.details_correct"))
+    expect(page).to have_text("Check and confirm your personal details")
+    expect(page).to have_text("Are these details correct?")
 
     choose "Yes"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
+    expect(page).to have_text("Which school do you teach at?")
     expect(page).to have_text("Enter the school name or postcode. Use at least three characters.")
 
     # check the teacher_id_user_info details are saved to the session
-    journey_session = Journeys::AdditionalPaymentsForTeaching::Session.last
+    journey_session = Journeys::TargetedRetentionIncentivePayments::Session.last
     expect(journey_session.answers.teacher_id_user_info).to eq({
       "trn" => "1234567",
       "birthdate" => "1981-01-01",
@@ -67,10 +67,10 @@ RSpec.feature "Teacher Identity Sign in", js: true, flaky: true do
 
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("additional_payments.forms.current_school.questions.current_school_search"))
+    expect(page).to have_text("Which school do you teach at?")
 
     # check the teacher_id_user_info details are saved to the session
-    journey_session = Journeys::AdditionalPaymentsForTeaching::Session.last
+    journey_session = Journeys::TargetedRetentionIncentivePayments::Session.last
     expect(journey_session.answers.teacher_id_user_info).to eq({
       "trn" => "1234567",
       "birthdate" => "1981-01-01",
@@ -84,10 +84,10 @@ RSpec.feature "Teacher Identity Sign in", js: true, flaky: true do
     })
   end
 
-  scenario "Teacher makes claim for 'Early-Career Payments' by logging in with teacher_id and selects yes to details confirm but trn missing" do
+  scenario "Teacher makes claim for 'Targeted Retention Incentive' by logging in with teacher_id and selects yes to details confirm but trn missing" do
     set_mock_auth("1234567", {returned_trn: nil})
 
-    visit landing_page_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
+    visit landing_page_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
     click_on "Start now"
     click_on "Continue with DfE Identity"
     choose "Yes"

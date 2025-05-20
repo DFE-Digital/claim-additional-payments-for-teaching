@@ -89,13 +89,14 @@ module FeatureHelpers
     end
   end
 
+  # FIXME RL - remove this
   # Early-Career Payment Policy specific helpers
   def start_early_career_payments_claim
     visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
   end
 
   def start_targeted_retention_incentive_payments_claim
-    visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
+    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
   end
 
   def get_otp_from_email

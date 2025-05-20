@@ -1,14 +1,18 @@
 require "rails_helper"
 
 RSpec.feature "Trainee teacher subjourney for Targeted Retention Incentive schools" do
-  let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2023)) }
+  before do
+    FeatureFlag.enable!(:tri_only_journey)
+  end
+
+  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments_only, current_academic_year: AcademicYear.new(2023)) }
   let(:academic_year) { journey_configuration.current_academic_year }
 
   scenario "non-Targeted Retention Incentive school" do
-    non_targeted_retention_incentive_school = create(:school, :early_career_payments_eligible, :targeted_retention_incentive_payments_ineligible)
+    non_targeted_retention_incentive_school = create(:school, :targeted_retention_incentive_payments_ineligible)
     expect(Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(non_targeted_retention_incentive_school)).not_to be_eligible
 
-    visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
+    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
 
     # - Sign in or continue page
     expect(page).to have_text("Use DfE Identity to sign in")
@@ -16,12 +20,8 @@ RSpec.feature "Trainee teacher subjourney for Targeted Retention Incentive schoo
 
     choose_school non_targeted_retention_incentive_school
 
-    expect(page).to have_text(I18n.t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"))
+    expect(page).to have_text("The school you have selected is not eligible")
 
-    choose "No"
-    click_on "Continue"
-
-    expect(page).to have_text(I18n.t("additional_payments.ineligible.heading"))
     expect(page).to have_no_link("Back")
   end
 
@@ -31,11 +31,11 @@ RSpec.feature "Trainee teacher subjourney for Targeted Retention Incentive schoo
     choose "Mathematics"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("additional_payments.ineligible.reason.trainee_teacher_future_eligibility"))
+    expect(page).to have_text("You are not eligible this year")
 
     click_on "Set reminder"
 
-    expect(page).to have_text(I18n.t("questions.personal_details"))
+    expect(page).to have_text("Personal details")
     expect(page).to have_text("Tell us the email you want us to send reminders to. We recommend you use a non-work email address in case your circumstances change.")
 
     fill_in "Full name", with: "David Tau"
@@ -61,16 +61,16 @@ RSpec.feature "Trainee teacher subjourney for Targeted Retention Incentive schoo
     choose "None of the above"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"))
+    expect(page).to have_text("Do you have a degree in an eligible subject?")
 
     choose "Yes"
     click_on "Continue"
 
-    I18n.t("additional_payments.ineligible.reason.trainee_teacher_future_eligibility")
+    expect(page).to have_text("You are not eligible this year")
 
     click_on "Set reminder"
 
-    expect(page).to have_text(I18n.t("questions.personal_details"))
+    expect(page).to have_text("Personal details")
     expect(page).to have_text("Tell us the email you want us to send reminders to. We recommend you use a non-work email address in case your circumstances change.")
 
     fill_in "Full name", with: "David Tau"
@@ -96,22 +96,22 @@ RSpec.feature "Trainee teacher subjourney for Targeted Retention Incentive schoo
     choose "None of the above"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("additional_payments.forms.eligible_degree_subject.questions.eligible_degree_subject"))
+    expect(page).to have_text("Do you have a degree in an eligible subject?")
 
     choose "No"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("additional_payments.ineligible.heading"))
+    expect(page).to have_text("You are not eligible")
     expect(page).to have_no_link("Back")
   end
 
   private
 
   def get_to_itt_subject_question
-    targeted_retention_incentive_school = create(:school, :combined_journey_eligibile_for_all)
+    targeted_retention_incentive_school = create(:school, :targeted_retention_incentive_payments_eligible)
     expect(Policies::TargetedRetentionIncentivePayments::SchoolEligibility.new(targeted_retention_incentive_school)).to be_eligible
 
-    visit new_claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
+    visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
 
     # - Sign in or continue page
     expect(page).to have_text("Use DfE Identity to sign in")
@@ -119,11 +119,11 @@ RSpec.feature "Trainee teacher subjourney for Targeted Retention Incentive schoo
 
     choose_school targeted_retention_incentive_school
 
-    expect(page).to have_text(I18n.t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"))
+    expect(page).to have_text("Are you currently teaching as a qualified teacher?")
 
     choose "No"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("additional_payments.forms.eligible_itt_subject.questions.which_subject_trainee_teacher"))
+    expect(page).to have_text("Which subject are you currently doing your initial teacher training (ITT) in?")
   end
 end
