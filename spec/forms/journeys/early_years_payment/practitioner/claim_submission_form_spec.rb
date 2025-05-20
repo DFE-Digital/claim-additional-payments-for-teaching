@@ -22,6 +22,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::ClaimSubmissionForm do
     it "saves some answers into the Claim model" do
       subject.save
 
+      expect(claim.policy).to eql(Policies::EarlyYearsPayments)
       expect(claim.submitted_at).to be_present
       expect(claim.eligibility_type).to eq "Policies::EarlyYearsPayments::Eligibility"
       expect(claim.first_name).to eq answers.first_name

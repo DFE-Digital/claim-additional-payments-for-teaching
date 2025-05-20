@@ -14,26 +14,8 @@ RSpec.feature "Admin views claim details for FurtherEducationPayments" do
         name: "Springfield Elementary"
       )
 
-      claim = create(
-        :claim,
-        first_name: "Edna",
-        surname: "Krabappel",
-        date_of_birth: Date.new(1945, 7, 3),
-        reference: "AB123456",
-        national_insurance_number: "QQ123456C",
-        address_line_1: "82 Evergreen Terrace",
-        address_line_2: "Springfield",
-        address_line_4: "Oregon",
-        postcode: "AB12 3CD",
-        email_address: "edna.krabappel@springfield-elementary.edu",
-        started_at: DateTime.new(2024, 8, 1, 9, 0, 0),
-        submitted_at: DateTime.new(2024, 8, 1, 11, 0, 0),
-        academic_year: AcademicYear.new(2024)
-      )
-
-      create(
+      eligibility = create(
         :further_education_payments_eligibility,
-        claim: claim,
         school: school,
         teacher_reference_number: nil,
         teaching_responsibilities: true,
@@ -50,6 +32,25 @@ RSpec.feature "Admin views claim details for FurtherEducationPayments" do
         subject_to_formal_performance_action: false,
         subject_to_disciplinary_action: false,
         award_amount: 6_000
+      )
+
+      claim = create(
+        :claim,
+        :further_education,
+        eligibility:,
+        first_name: "Edna",
+        surname: "Krabappel",
+        date_of_birth: Date.new(1945, 7, 3),
+        reference: "AB123456",
+        national_insurance_number: "QQ123456C",
+        address_line_1: "82 Evergreen Terrace",
+        address_line_2: "Springfield",
+        address_line_4: "Oregon",
+        postcode: "AB12 3CD",
+        email_address: "edna.krabappel@springfield-elementary.edu",
+        started_at: DateTime.new(2024, 8, 1, 9, 0, 0),
+        submitted_at: DateTime.new(2024, 8, 1, 11, 0, 0),
+        academic_year: AcademicYear.new(2024)
       )
 
       sign_in_as_service_operator

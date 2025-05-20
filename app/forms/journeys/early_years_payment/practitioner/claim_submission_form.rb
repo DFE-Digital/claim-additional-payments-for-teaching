@@ -25,6 +25,7 @@ module Journeys
         def build_claim
           existing_or_new_claim.tap do |claim|
             claim.eligibility ||= main_eligibility
+            claim.policy ||= main_eligibility.policy
             claim.eligibility.practitioner_claim_started_at = journey_session.answers.practitioner_claim_started_at
             answers.attributes.each do |name, value|
               if claim.respond_to?(:"#{name}=")

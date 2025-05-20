@@ -18,10 +18,16 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
       let(:verification) { {} }
 
       it "doesn't create a task" do
-        claim = create(
+        eligibility = create(
           :further_education_payments_eligibility,
           verification: verification
-        ).claim
+        )
+
+        claim = create(
+          :claim,
+          :further_education,
+          eligibility:
+        )
 
         expect { described_class.new(claim: claim).perform }.not_to(
           change { claim.tasks.count }
@@ -32,10 +38,16 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
     context "when the claim has been verified by the provider" do
       context "when the task has already been performed" do
         it "does not alter the task or create a new one" do
+          eligibility = create(
+            :further_education_payments_eligibility
+          )
+
           claim = create(
-            :further_education_payments_eligibility,
-            :verified
-          ).claim
+            :claim,
+            :further_education,
+            :verified,
+            eligibility:
+          )
 
           task = create(
             :task,
@@ -55,7 +67,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
       context "when the task has not been performed" do
         context "when the provider has not confirmed the claimants answers" do
           it "fails the task" do
-            claim = create(
+            eligibility = create(
               :further_education_payments_eligibility,
               verification: {
                 assertions: [
@@ -71,7 +83,13 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
                 },
                 created_at: Time.zone.now
               }
-            ).claim
+            )
+
+            claim = create(
+              :claim,
+              :further_education,
+              eligibility:
+            )
 
             expect { described_class.new(claim: claim).perform }.to(
               change { claim.tasks.count }.from(0).to(1).and(
@@ -104,7 +122,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
 
         context "when the provider has confirmed the claimants answers" do
           it "passes the task" do
-            claim = create(
+            eligibility = create(
               :further_education_payments_eligibility,
               verification: {
                 assertions: [
@@ -120,7 +138,13 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
                 },
                 created_at: Time.zone.now
               }
-            ).claim
+            )
+
+            claim = create(
+              :claim,
+              :further_education,
+              eligibility:
+            )
 
             expect { described_class.new(claim: claim).perform }.to(
               change { claim.tasks.count }.from(0).to(1).and(
@@ -158,7 +182,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
               dfe_sign_in_id: "123"
             )
 
-            claim = create(
+            eligibility = create(
               :further_education_payments_eligibility,
               verification: {
                 assertions: [
@@ -174,7 +198,13 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
                 },
                 created_at: Time.zone.now
               }
-            ).claim
+            )
+
+            claim = create(
+              :claim,
+              :further_education,
+              eligibility:
+            )
 
             expect { described_class.new(claim: claim).perform }.to(
               change { claim.tasks.count }.from(0).to(1).and(
