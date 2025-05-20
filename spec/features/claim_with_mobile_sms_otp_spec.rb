@@ -8,8 +8,6 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
     let(:otp_code) { rand(100_000..999_999).to_s }
 
     before do
-      create(:journey_configuration, policy.to_s.underscore)
-
       allow(NotifySmsMessage).to receive(:new).with(
         phone_number: mobile_number,
         template_id: NotifySmsMessage::OTP_PROMPT_TEMPLATE_ID,
@@ -21,14 +19,26 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
       allow(OneTimePassword::Validator).to receive(:new).and_return(instance_double("OneTimePassword::Validator", valid?: true))
     end
 
-    context "when Policies::EarlyCareerPayments" do
-      let(:policy) { Policies::EarlyCareerPayments }
+    context "when Policies::TargetedRetentionIncentivePayments" do
+      let(:policy) { Policies::TargetedRetentionIncentivePayments }
+
+      before do
+        FeatureFlag.enable!(:tri_only_journey)
+
+        create(:journey_configuration, :targeted_retention_incentive_payments_only)
+      end
 
       scenario "makes claim" do
         send(:"start_#{policy.to_s.underscore}_claim")
-        session = Journeys::AdditionalPaymentsForTeaching::Session.last
+        session = Journeys::TargetedRetentionIncentivePayments::Session.last
 
-        session.update!(answers: {provide_mobile_number: true})
+        session.update!(
+          answers: attributes_for(
+            :targeted_retention_incentive_payments_answers,
+            :submittable,
+            provide_mobile_number: true
+          )
+        )
 
         jump_to_claim_journey_page(
           slug: "mobile-number",
@@ -56,6 +66,10 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
     context "when Policies::StudentLoans" do
       let(:policy) { Policies::StudentLoans }
       let(:school) { create(:school, :student_loans_eligible) }
+
+      before do
+        create(:journey_configuration, :student_loans)
+      end
 
       scenario "when making a Policies::StudentLoans claim" do
         send(:"start_#{policy.to_s.underscore}_claim")

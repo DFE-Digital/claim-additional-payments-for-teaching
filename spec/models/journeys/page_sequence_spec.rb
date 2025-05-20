@@ -79,7 +79,6 @@ RSpec.describe Journeys::PageSequence do
 
     context "when address is populated from 'select-home-address'" do
       [
-        {policy: Policies::EarlyCareerPayments, next_slug: "email-address", slug_sequence: OpenStruct.new(slugs: ["postcode-search", "select-home-address", "address", "email-address"])},
         {policy: Policies::StudentLoans, next_slug: "date-of-birth", slug_sequence: OpenStruct.new(slugs: ["postcode-search", "select-home-address", "address", "date-of-birth"])}
       ].each do |scenario|
         context "#{scenario[:policy]} claim" do
