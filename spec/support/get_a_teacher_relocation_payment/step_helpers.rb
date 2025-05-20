@@ -52,6 +52,14 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
+    def and_i_complete_changed_workplace_or_new_contract_with(option:)
+      assert_on_changed_workplace_or_new_contract_page!
+
+      choose(option)
+
+      click_button("Continue")
+    end
+
     def and_i_complete_the_visa_screen_with(option:)
       assert_on_visa_page!
 
@@ -260,6 +268,10 @@ module GetATeacherRelocationPayment
       expect(page).to have_text(
         "What subject are you employed to teach at your school?"
       )
+    end
+
+    def assert_on_changed_workplace_or_new_contract_page!
+      expect(page).to have_text("Have you changed your workplace or started a new contract in the past year?")
     end
 
     def assert_on_visa_page!

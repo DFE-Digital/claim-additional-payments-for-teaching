@@ -20,6 +20,7 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
         :with_one_year_contract,
         :with_start_date,
         :with_subject,
+        :with_changed_workplace_or_new_contract,
         :with_visa,
         :with_entry_date,
         :with_nationality
@@ -62,6 +63,11 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
           "What subject are you employed to teach at your school?",
           "Physics",
           "subject"
+        ],
+        [
+          "Have you changed your workplace or started a new contract in the past year?",
+          "No",
+          "changed-workplace-or-new-contract"
         ],
         [
           "Select the visa you used to move to England",

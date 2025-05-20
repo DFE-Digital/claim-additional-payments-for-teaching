@@ -38,6 +38,7 @@ RSpec.describe "teacher route: completing the form" do
         date: contract_start_date
       )
       and_i_complete_the_subject_step_with(option: "Physics")
+      and_i_complete_changed_workplace_or_new_contract_with(option: "No")
       and_i_complete_the_visa_screen_with(option: "British National (Overseas) visa")
       and_i_complete_the_entry_date_page_with(date: entry_date)
       then_the_check_your_answers_part_one_page_shows_my_answers
@@ -122,6 +123,10 @@ RSpec.describe "teacher route: completing the form" do
 
     expect(page).to have_text(
       /What subject are you employed to teach at your school\?\s?Physics/
+    )
+
+    expect(page).to have_text(
+      /Have you changed your workplace or started a new contract in the past year\?\s?No/
     )
 
     expect(page).to have_text(

@@ -218,6 +218,7 @@ shared:
     - nationality
     - current_school_id
     - award_amount
+    - changed_workplace_or_new_contract
   :schools:
     - id
     - urn
