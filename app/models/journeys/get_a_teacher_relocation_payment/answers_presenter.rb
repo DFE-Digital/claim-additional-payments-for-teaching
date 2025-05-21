@@ -12,6 +12,7 @@ module Journeys
           a << contract_details
           a << start_date_details
           a << subject_details
+          a << changed_workplace_or_new_contract
           a << visa_details
           a << entry_date
         end.compact
@@ -67,6 +68,14 @@ module Journeys
           t("get_a_teacher_relocation_payment.forms.subject.question"),
           t("get_a_teacher_relocation_payment.forms.subject.answers.#{answers.subject}"),
           "subject"
+        ]
+      end
+
+      def changed_workplace_or_new_contract
+        [
+          t("get_a_teacher_relocation_payment.forms.changed_workplace_or_new_contract.question"),
+          t("get_a_teacher_relocation_payment.forms.changed_workplace_or_new_contract.answers.#{answers.changed_workplace_or_new_contract}.answer"),
+          "changed-workplace-or-new-contract"
         ]
       end
 

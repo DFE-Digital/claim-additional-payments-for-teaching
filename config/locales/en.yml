@@ -801,6 +801,16 @@ en:
           other: "Other"
         errors:
           inclusion: "Choose a subject"
+      changed_workplace_or_new_contract:
+        question: "Have you changed your workplace or started a new contract in the past year?"
+        hint: "This includes any changes since your last application"
+        answers:
+          true:
+            answer: "Yes"
+          false:
+            answer: "No"
+        errors:
+          inclusion: "Select yes if you have changed your workplace or started a new contract in the past year"
       visa:
         question: "Select the visa you used to move to England"
         errors:
