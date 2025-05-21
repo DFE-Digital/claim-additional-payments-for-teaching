@@ -14,7 +14,8 @@ module Policies
       def applicable_task_names
         tasks = []
 
-        tasks << "previous_payment"
+        tasks << "first_year_payment"
+        tasks << "previous_payment" # FIXME RL remove this
         tasks << "identity_confirmation"
         tasks << "visa"
         tasks << "arrival_date"

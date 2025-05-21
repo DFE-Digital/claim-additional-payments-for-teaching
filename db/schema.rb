@@ -127,6 +127,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_132501) do
     t.index ["submitted_at"], name: "index_claims_on_submitted_at"
   end
 
+  create_table "claims_matches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "source_claim_id", null: false
+    t.uuid "matching_claim_id", null: false
+    t.text "matching_attributes", default: [], null: false, array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["matching_claim_id"], name: "index_claims_matches_on_matching_claim_id"
+    t.index ["source_claim_id", "matching_claim_id"], name: "index_claims_matches_on_source_and_matching_claim", unique: true
+    t.index ["source_claim_id"], name: "index_claims_matches_on_source_claim_id"
+  end
+
   create_table "decisions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "claim_id"
     t.datetime "created_at", precision: nil, null: false
@@ -798,6 +809,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_132501) do
   add_foreign_key "claim_payments", "claims"
   add_foreign_key "claim_payments", "payments"
   add_foreign_key "claims", "journeys_sessions"
+  add_foreign_key "claims_matches", "claims", column: "matching_claim_id"
+  add_foreign_key "claims_matches", "claims", column: "source_claim_id"
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "early_career_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "eligible_ey_providers", "file_uploads"
