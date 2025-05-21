@@ -1,0 +1,156 @@
+<% content_for(:page_title) { "First year payment" } %>
+
+<% content_for :back_link do %>
+  <%= govuk_back_link href: admin_claim_tasks_path(@claim) %>
+<% end %>
+
+<%= render(
+  "shared/error_summary",
+  instance: @form.task,
+  errored_field_id_overrides: { "passed": "task_passed_true" }
+) if @form.task.errors.any? %>
+
+<div class="govuk-grid-row">
+  <%= render(
+    claim_summary_view,
+    claim: @claim,
+    heading: "First year payment"
+  ) %>
+
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-l"><%= @form.task.name.humanize %></h2>
+
+    <% matches = Claims::Match
+      .where(source_claim: @form.task.claim)
+      .includes(matching_claim: %i[eligibility decisions]) %>
+
+    <% if matches.none? %>
+      <%= govuk_inset_text do %>
+        <p>
+          No previous claims from this claimant have been found that have been
+          approved or rejected
+        </p>
+      <% end %>
+    <% else %>
+      <% matches.map { [it, it.matching_claim] }.each do |match, matching_claim| %>
+        <%= govuk_table do |table| %>
+          <% table.with_caption(text: "Matching details") %>
+
+          <% table.with_head do |head| %>
+            <% head.with_row do |row| %>
+              <% row.with_cell(text: "Claim") %>
+              <% row.with_cell(text: "Matching details") %>
+            <% end %>
+          <% end %>
+
+          <% table.with_body do |body| %>
+            <% body.with_row do |row| %>
+              <% row.with_cell {
+                govuk_link_to(
+                  matching_claim.reference,
+                  admin_claim_tasks_path(matching_claim)
+                )
+              } %>
+
+              <% row.with_cell(
+                text: match.matching_attributes.map do |attribute|
+                  I18n.t([
+                    "international_relocation_payments",
+                    "admin",
+                    "task_questions",
+                    "first_year_payment",
+                    "match_attributes",
+                    attribute
+                  ].join("."))
+                end.to_sentence
+              ) %>
+            <% end %>
+          <% end %>
+        <% end %>
+
+        <%= govuk_table do |table| %>
+          <% table.with_caption(text: "Previous information") %>
+
+          <% table.with_body do |body| %>
+            <% body.with_row do |row| %>
+              <% row.with_cell(header: true, text: "Nationality") %>
+              <% row.with_cell(text: matching_claim.eligibility.nationality) %>
+            <% end %>
+
+            <% body.with_row do |row| %>
+              <% row.with_cell(header: true, text: "Passport number") %>
+              <% row.with_cell(text: matching_claim.eligibility.passport_number) %>
+            <% end %>
+
+            <% body.with_row do |row| %>
+              <% row.with_cell(header: true, text: "Workplace") %>
+              <% row.with_cell {
+                display_school(
+                  matching_claim.eligibility.current_school,
+                  include_dfe_number: false
+                )
+              } %>
+            <% end %>
+
+            <% body.with_row do |row| %>
+              <% row.with_cell(header: true, text: "Employment contract of at least one year") %>
+              <% row.with_cell(text: matching_claim.eligibility.one_year ? "Yes" : "No") %>
+            <% end %>
+
+            <% body.with_row do |row| %>
+              <% row.with_cell(header: true, text: "Arrival date") %>
+              <% row.with_cell(text: l(matching_claim.eligibility.date_of_entry)) %>
+            <% end %>
+
+            <% body.with_row do |row| %>
+              <% row.with_cell(header: true, text: "Employment start date") %>
+              <% row.with_cell(text: l(matching_claim.eligibility.start_date)) %>
+            <% end %>
+
+            <% body.with_row do |row| %>
+              <% row.with_cell(header: true, text: "Visa type") %>
+              <% row.with_cell(text: matching_claim.eligibility.visa_type) %>
+            <% end %>
+
+            <% body.with_row do |row| %>
+              <% row.with_cell(header: true, text: "Subject employed to teach") %>
+              <% row.with_cell(text: matching_claim.eligibility.subject) %>
+            <% end %>
+
+            <% body.with_row do |row| %>
+              <% row.with_cell(header: true, text: "Met minimum teaching hours") %>
+              <% row.with_cell(text: matching_claim.tasks.teaching_hours.passed.any? ? "Yes" : "No") %>
+            <% end %>
+
+            <% body.with_row do |row| %>
+              <% row.with_cell(header: true, text: "Met previous residency rules") %>
+              <% row.with_cell(text: matching_claim.tasks.previous_residency.passed.any? ? "Yes" : "No") %>
+            <% end %>
+
+            <% body.with_row do |row| %>
+              <% row.with_cell(header: true, text: "Decision outcome") %>
+              <% row.with_cell(text: status(matching_claim)) %>
+            <% end %>
+
+            <% body.with_row do |row| %>
+              <% row.with_cell(header: true, text: "Decision date") %>
+              <% if matching_claim.latest_decision.present? %>
+                <% row.with_cell(text: l(matching_claim.latest_decision&.created_at&.to_date)) %>
+              <% else %>
+                -
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% if !@form.task.passed.nil? %>
+      <%= render "task_outcome", task: @form.task %>
+    <% else %>
+      <%= render "form", task_name: "first_year_payment", claim: @claim %>
+    <% end %>
+
+    <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>
+  </div>
+</div>
