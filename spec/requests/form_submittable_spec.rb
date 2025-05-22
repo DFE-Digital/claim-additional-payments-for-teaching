@@ -36,7 +36,7 @@ end
 RSpec.describe FormSubmittable, type: :request do
   before do
     Rails.application.routes.draw do
-      scope path: ":journey", constraints: {journey: "additional-payments"} do
+      scope path: ":journey", constraints: {journey: "targeted-retention-incentive-payments"} do
         get "/claim", to: "test_dummy#new"
         get "/:slug", as: :test_dummy, to: "test_dummy#show"
         post "/:slug", to: "test_dummy#create", as: :test_dummies
@@ -47,7 +47,11 @@ RSpec.describe FormSubmittable, type: :request do
 
   after { Rails.application.reload_routes! }
 
-  before { create(:journey_configuration, :additional_payments) }
+  before { create(:journey_configuration, :targeted_retention_incentive_payments) }
+
+  before do
+    allow(Journeys::TargetedRetentionIncentivePayments).to receive(:use_navigator?).and_return(false)
+  end
 
   shared_context :define_filter do |filter_name|
     before { define_filter(filter_name) }
@@ -70,8 +74,8 @@ RSpec.describe FormSubmittable, type: :request do
 
   describe "GET #new" do
     it "redirects to the first slug" do
-      get "/additional-payments/claim"
-      expect(response).to redirect_to("/additional-payments/first-slug")
+      get "/targeted-retention-incentive-payments/claim"
+      expect(response).to redirect_to("/targeted-retention-incentive-payments/first-slug")
     end
   end
 
@@ -80,14 +84,14 @@ RSpec.describe FormSubmittable, type: :request do
       include_context :define_filter, :first_slug_before_show
 
       it "executes the filter" do
-        get "/additional-payments/first-slug"
+        get "/targeted-retention-incentive-payments/first-slug"
         expect(response.body).to include("Triggered: `first_slug_before_show` filter")
       end
     end
 
     context "when the `{current_slug}_before_show` filter is not defined" do
       it "renders the template for the current slug" do
-        get "/additional-payments/first-slug"
+        get "/targeted-retention-incentive-payments/first-slug"
         expect(response.body).to include("Rendered template for current slug: first-slug")
       end
     end
@@ -103,13 +107,13 @@ RSpec.describe FormSubmittable, type: :request do
       context "when the `{current_slug}_before_update` filter is not defined" do
         if method == :post
           it "redirects to the first slug" do
-            submit "/additional-payments/first-slug"
-            expect(response).to redirect_to("/additional-payments/first-slug")
+            submit "/targeted-retention-incentive-payments/first-slug"
+            expect(response).to redirect_to("/targeted-retention-incentive-payments/first-slug")
           end
         elsif method == :patch
           it "redirects to the next slug" do
-            submit "/additional-payments/first-slug"
-            expect(response).to redirect_to("/additional-payments/second-slug")
+            submit "/targeted-retention-incentive-payments/first-slug"
+            expect(response).to redirect_to("/targeted-retention-incentive-payments/second-slug")
           end
         end
       end
@@ -118,7 +122,7 @@ RSpec.describe FormSubmittable, type: :request do
         include_context :define_filter, :first_slug_before_update
 
         it "executes the filter" do
-          submit "/additional-payments/first-slug"
+          submit "/targeted-retention-incentive-payments/first-slug"
           expect(response.body).to include("Triggered: `first_slug_before_update` filter")
         end
       end
@@ -126,7 +130,7 @@ RSpec.describe FormSubmittable, type: :request do
 
     context "when a form object is present for the current slug" do
       before do
-        stub_const("Journeys::AdditionalPaymentsForTeaching::FORMS",
+        stub_const("Journeys::TargetedRetentionIncentivePayments::FORMS",
           {"test_dummy" => {"first-slug" => TestDummyForm, "second-slug" => TestDummyForm}})
       end
 
@@ -139,20 +143,20 @@ RSpec.describe FormSubmittable, type: :request do
           include_context :define_filter, :first_slug_after_form_save_success
 
           it "executes the filter" do
-            submit "/additional-payments/first-slug"
+            submit "/targeted-retention-incentive-payments/first-slug"
             expect(response.body).to include("Triggered: `first_slug_after_form_save_success` filter")
           end
         end
 
         context "when the `{current_slug}_after_form_save_success` filter is not defined" do
           it "redirects to the next slug" do
-            submit "/additional-payments/first-slug"
-            expect(response).to redirect_to("/additional-payments/second-slug")
+            submit "/targeted-retention-incentive-payments/first-slug"
+            expect(response).to redirect_to("/targeted-retention-incentive-payments/second-slug")
           end
         end
 
         context "when it's the end of the sequence" do
-          it { expect { submit "/additional-payments/second-slug" }.to raise_error(NoMethodError, /End of sequence/) }
+          it { expect { submit "/targeted-retention-incentive-payments/second-slug" }.to raise_error(NoMethodError, /End of sequence/) }
         end
       end
 
@@ -165,14 +169,14 @@ RSpec.describe FormSubmittable, type: :request do
           include_context :define_filter, :first_slug_after_form_save_failure
 
           it "executes the filter" do
-            submit "/additional-payments/first-slug"
+            submit "/targeted-retention-incentive-payments/first-slug"
             expect(response.body).to include("Triggered: `first_slug_after_form_save_failure` filter")
           end
         end
 
         context "when the `{current_slug}_after_form_save_failure` filter is not defined" do
           it "renders to template for the current slug" do
-            submit "/additional-payments/second-slug"
+            submit "/targeted-retention-incentive-payments/second-slug"
             expect(response.body).to include("Rendered template for current slug: second-slug")
           end
         end

@@ -707,8 +707,8 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#below_min_qa_threshold_for_approval?" do
-    let(:policy) { Policies::EarlyCareerPayments }
-    let(:other_policy) { Policies::POLICIES.detect { |p| p != policy } }
+    let(:policy) { Policies::TargetedRetentionIncentivePayments }
+    let(:other_policy) { Policies::FurtherEducationPayments }
 
     subject { build(:claim, policy: policy).below_min_qa_threshold_for_approval? }
 

@@ -48,7 +48,7 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
       before do
         set_mock_auth("1234567")
 
-        allow_any_instance_of(OmniauthCallbacksController).to receive(:current_journey_routing_name).and_return(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME)
+        allow_any_instance_of(OmniauthCallbacksController).to receive(:current_journey_routing_name).and_return(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
       end
 
       it "redirects to the claim path with correct parameters" do
@@ -56,7 +56,7 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
 
         expect(response).to redirect_to(
           claim_path(
-            journey: "additional-payments",
+            journey: "targeted-retention-incentive-payments",
             slug: "sign-in-or-continue",
             claim: {
               logged_in_with_tid: true,

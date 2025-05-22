@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "Admin claims", type: :request do
   before do
     create(:journey_configuration, :student_loans)
-    create(:journey_configuration, :additional_payments)
+    create(:journey_configuration, :targeted_retention_incentive_payments)
     sign_in_as_service_operator
   end
 
@@ -25,8 +25,8 @@ RSpec.describe "Admin claims", type: :request do
     end
 
     it "can filter by policy" do
-      early_career_payments_claims = create_list(:claim, 3, :submitted, policy: Policies::EarlyCareerPayments)
-      get admin_claims_path, params: {filter: {policy: "early-career-payments"}}
+      early_career_payments_claims = create_list(:claim, 3, :submitted, policy: Policies::TargetedRetentionIncentivePayments)
+      get admin_claims_path, params: {filter: {policy: "targeted-retention-incentive-payments"}}
 
       early_career_payments_claims.each do |c|
         expect(response.body).to include(c.reference)
@@ -38,7 +38,7 @@ RSpec.describe "Admin claims", type: :request do
     end
 
     it "returns all claims if a policy does not exist" do
-      early_career_payments_claims = create_list(:claim, 3, :submitted, policy: Policies::EarlyCareerPayments)
+      early_career_payments_claims = create_list(:claim, 3, :submitted, policy: Policies::TargetedRetentionIncentivePayments)
 
       get admin_claims_path, params: {policy: "non-existent-policy"}
 
@@ -54,8 +54,8 @@ RSpec.describe "Admin claims", type: :request do
     it "can filter by team member" do
       student_loans_claims_for_mette = create_list(:claim, 3, :submitted, policy: Policies::StudentLoans)
       student_loans_claims_for_valentino = create_list(:claim, 2, :submitted, policy: Policies::StudentLoans)
-      early_career_payments_claims_for_mary = create_list(:claim, 4, :submitted, policy: Policies::EarlyCareerPayments)
-      early_career_payments_claims_for_mette = create_list(:claim, 6, :submitted, policy: Policies::EarlyCareerPayments)
+      early_career_payments_claims_for_mary = create_list(:claim, 4, :submitted, policy: Policies::TargetedRetentionIncentivePayments)
+      early_career_payments_claims_for_mette = create_list(:claim, 6, :submitted, policy: Policies::TargetedRetentionIncentivePayments)
 
       student_loans_claims_for_mette.each { |c|
         c.assigned_to = mette
@@ -94,7 +94,7 @@ RSpec.describe "Admin claims", type: :request do
   end
 
   # Compatible with claims from each policy
-  [Policies::StudentLoans, Policies::EarlyCareerPayments, Policies::TargetedRetentionIncentivePayments].each do |policy|
+  [Policies::StudentLoans, Policies::TargetedRetentionIncentivePayments].each do |policy|
     context "with a #{policy} claim" do
       describe "claims#show" do
         let(:claim) { create(:claim, :submitted, policy: policy) }

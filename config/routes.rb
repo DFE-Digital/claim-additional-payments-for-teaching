@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   # /early-career-payments is now /additional-payments - redirect old urls to a gov page
   get "early-career-payments(/*anything)", to: redirect("https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details")
 
+  get "additional-payments(/*anything)", to: redirect("/targeted-retention-incentive-payments/landing-page")
+
   # setup a simple healthcheck endpoint for monitoring purposes
   get "/healthcheck", to: proc { [200, {}, ["OK"]] }
 

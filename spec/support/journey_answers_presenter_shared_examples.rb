@@ -10,7 +10,7 @@ RSpec.shared_examples "journey answers presenter" do
 
     let(:journey_session) do
       build(
-        :additional_payments_session,
+        :targeted_retention_incentive_payments_session,
         answers: {
           logged_in_with_tid: logged_in_with_tid,
           teacher_id_user_info: teacher_id_user_info,
@@ -184,7 +184,7 @@ RSpec.shared_examples "journey answers presenter" do
   describe "#payment_answers" do
     let(:journey_session) do
       create(
-        :additional_payments_session,
+        :targeted_retention_incentive_payments_session,
         answers: {
           bank_sort_code: "123456",
           bank_account_number: "12345678",
