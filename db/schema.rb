@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_21_093719) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_22_132501) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -692,6 +692,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_21_093719) do
     t.string "teacher_reference_number", limit: 11
     t.string "qts_award_year"
     t.string "employment_status"
+    t.decimal "award_amount", precision: 7, scale: 2
     t.index ["claim_school_id"], name: "index_student_loans_eligibilities_on_claim_school_id"
     t.index ["created_at"], name: "index_student_loans_eligibilities_on_created_at"
     t.index ["current_school_id"], name: "index_student_loans_eligibilities_on_current_school_id"
