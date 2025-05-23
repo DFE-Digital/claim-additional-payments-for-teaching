@@ -25,7 +25,7 @@ Rails.application.config.assets.precompile += %w[
   google_analytics.js
   google_analytics/analytics.js
   accessible-autocomplete/src/autocomplete.css
-  ey-provider-practitioner-consent-form.pdf
+  admin.js
 ]
 
 # Add GOVUK assets by name, these are assets not loaded via sass
