@@ -9,12 +9,12 @@ task fix_tslr_student_loan_amounts: :environment do |task, args|
 
   puts "#{claims.count} claims to update"
   claims.each do |claim|
-    old_amount = claim.eligibility.student_loan_repayment_amount
+    old_amount = claim.eligibility.award_amount
     new_amount = StudentLoansData.where(nino: claim.national_insurance_number, date_of_birth: claim.date_of_birth).total_repayment_amount
 
     if new_amount != old_amount
       if ARGV[1] == "run"
-        claim.eligibility.update!(student_loan_repayment_amount: new_amount)
+        claim.eligibility.update!(award_amount: new_amount)
         puts "updated #{claim.reference} from #{old_amount} to #{new_amount}"
       else
         puts "should update #{claim.reference} from #{old_amount} to #{new_amount}"

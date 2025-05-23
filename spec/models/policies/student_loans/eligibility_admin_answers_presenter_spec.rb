@@ -11,7 +11,7 @@ RSpec.describe Policies::StudentLoans::EligibilityAdminAnswersPresenter, type: :
         physics_taught: true,
         had_leadership_position: true,
         mostly_performed_leadership_duties: false,
-        student_loan_repayment_amount: 1987.65))
+        award_amount: 1987.65))
   end
   subject(:presenter) { described_class.new(eligibility) }
 

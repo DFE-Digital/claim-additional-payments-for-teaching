@@ -11,17 +11,17 @@ RSpec.feature "Upload SLC data" do
 
   let!(:sl_claim_with_slc_data_no_student_loan) {
     create(:claim, :submitted, policy: Policies::StudentLoans, academic_year: AcademicYear.current,
-      eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 0),
+      eligibility: build(:student_loans_eligibility, :eligible, award_amount: 0),
       has_student_loan: false, student_loan_plan: "not_applicable", submitted_using_slc_data: false)
   }
   let!(:sl_claim_with_slc_data_with_student_loan) {
     create(:claim, :submitted, policy: Policies::StudentLoans, academic_year: AcademicYear.current,
-      eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 100),
+      eligibility: build(:student_loans_eligibility, :eligible, award_amount: 100),
       has_student_loan: true, student_loan_plan: "plan_1", submitted_using_slc_data: false)
   }
   let!(:sl_claim_no_slc_data) {
     create(:claim, :submitted, policy: Policies::StudentLoans, academic_year: AcademicYear.current,
-      eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 0),
+      eligibility: build(:student_loans_eligibility, :eligible, award_amount: 0),
       has_student_loan: false, student_loan_plan: "not_applicable", submitted_using_slc_data: false)
   }
 
@@ -88,7 +88,7 @@ RSpec.feature "Upload SLC data" do
     then_the_student_loan_amount_task_should_show_as(state: "No match", for_claim: claim)
     expect(claim.reload.student_loan_plan).to eq "not_applicable"
     expect(claim.has_student_loan).to be false
-    expect(claim.eligibility.student_loan_repayment_amount).to eq 0
+    expect(claim.eligibility.award_amount).to eq 0
 
     claim = sl_claim_with_slc_data_with_student_loan
     visit admin_claims_path
@@ -96,13 +96,13 @@ RSpec.feature "Upload SLC data" do
     then_the_student_loan_amount_task_should_show_as(state: "Passed", for_claim: claim)
     expect(claim.reload.student_loan_plan).to eq "plan_1"
     expect(claim.has_student_loan).to eq true
-    expect(claim.eligibility.student_loan_repayment_amount).to eq 100
+    expect(claim.eligibility.award_amount).to eq 100
 
     claim = sl_claim_no_slc_data
     then_the_student_loan_amount_task_should_show_as(state: "No data", for_claim: claim)
     expect(claim.reload.student_loan_plan).to be nil
     expect(claim.has_student_loan).to be nil
-    expect(claim.eligibility.student_loan_repayment_amount).to eq 0
+    expect(claim.eligibility.award_amount).to eq 0
 
     # Early Career Payments
 

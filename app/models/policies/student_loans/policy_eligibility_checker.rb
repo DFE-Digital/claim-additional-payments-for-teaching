@@ -71,7 +71,7 @@ module Policies
       def made_zero_repayments?
         return true if answers.has_student_loan == false
 
-        answers.has_student_loan == true && answers.student_loan_repayment_amount == 0
+        answers.has_student_loan == true && answers.award_amount == 0
       end
     end
   end

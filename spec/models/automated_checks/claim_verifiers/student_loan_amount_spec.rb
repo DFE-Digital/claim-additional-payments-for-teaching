@@ -74,7 +74,7 @@ module AutomatedChecks
 
         context "when the claim policy is TSLR" do
           let(:claim) { create(:claim, :submitted, policy:, national_insurance_number: "QQ123456A", has_student_loan: true, student_loan_plan: claim_student_loan_plan, eligibility:) }
-          let(:eligibility) { create(:student_loans_eligibility, student_loan_repayment_amount: claim_student_loan_repayment_amount) }
+          let(:eligibility) { create(:student_loans_eligibility, award_amount: claim_student_loan_repayment_amount) }
           let(:imported_slc_data) { create(:student_loans_data, nino: claim.national_insurance_number, date_of_birth: claim.date_of_birth, plan_type_of_deduction: slc_student_loan_plan, amount: slc_student_loan_repayment_amount) }
 
           let(:claim_student_loan_plan) { StudentLoan::PLAN_1 }

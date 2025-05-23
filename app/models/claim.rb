@@ -155,7 +155,7 @@ class Claim < ApplicationRecord
               "
                 SELECT
                 id,
-                #{policy.award_amount_column} AS award_amount,
+                award_amount AS award_amount,
                 '#{policy::Eligibility}' AS eligibility_type
                 FROM #{policy::Eligibility.table_name}
               "

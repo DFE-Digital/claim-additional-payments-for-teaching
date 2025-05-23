@@ -37,7 +37,7 @@ RSpec.describe "Admin views payment spec" do
       :approved,
       **personal_details,
       eligibility_attributes: {
-        student_loan_repayment_amount: 222.22
+        award_amount: 222.22
       }
     )
 

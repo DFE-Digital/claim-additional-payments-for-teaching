@@ -1,29 +1,6 @@
 {
   "ignored_warnings": [
     {
-      "warning_type": "File Access",
-      "warning_code": 16,
-      "fingerprint": "007f1c0e795b4a4c93ed5fd209e7ab64dc4198022360b69a91b5845b641f6385",
-      "check_name": "FileAccess",
-      "message": "Parameter value used in file name",
-      "file": "app/controllers/admin/school_workforce_census_data_uploads_controller.rb",
-      "line": 15,
-      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "File.read(params[:file])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Admin::SchoolWorkforceCensusDataUploadsController",
-        "method": "create"
-      },
-      "user_input": "params[:file]",
-      "confidence": "High",
-      "cwe_id": [
-        22
-      ],
-      "note": ""
-    },
-    {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
       "fingerprint": "23e1b8f42ab87b9f17f883de7ac8b7b11261ec3dd8f8ad11f06aaae2a3b6fc51",
@@ -49,11 +26,34 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
+      "fingerprint": "3bbfacb560de1ecdd48d06df0b19c86b9a26600714191e9f3120ab6b1ec62962",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/claim.rb",
+      "line": 154,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "joins(\"JOIN (\\n  #{Policies::POLICIES.map do\n \"\\n                SELECT\\n                id,\\n                award_amount AS award_amount,\\n                '#{policy::Eligibility}' AS eligibility_type\\n                FROM #{policy::Eligibility.table_name}\\n              \"\n end.join(\" UNION ALL \")}\\n) AS eligibilities\\nON claims.eligibility_id = eligibilities.id\\nAND claims.eligibility_type = eligibilities.eligibility_type\\n\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Claim",
+        "method": "with_award_amounts"
+      },
+      "user_input": "Policies::POLICIES.map do\n \"\\n                SELECT\\n                id,\\n                award_amount AS award_amount,\\n                '#{policy::Eligibility}' AS eligibility_type\\n                FROM #{policy::Eligibility.table_name}\\n              \"\n end.join(\" UNION ALL \")",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "no user input"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
       "fingerprint": "46bfd0a9d4a19eb048a883184b501b060aa4d6006accc3c76bbfc00722b44dbf",
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/claim/search.rb",
-      "line": 35,
+      "line": 55,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "Claim.where(\"LOWER(#{attribute}) = LOWER(?)\", search_term)",
       "render_path": null,
@@ -66,52 +66,6 @@
       "confidence": "Medium",
       "cwe_id": [
         89
-      ],
-      "note": ""
-    },
-    {
-      "warning_type": "File Access",
-      "warning_code": 16,
-      "fingerprint": "5dd00c83f42c938ef7d7b258265a155139952f96c141ffd98525d23230d9e6bc",
-      "check_name": "FileAccess",
-      "message": "Parameter value used in file name",
-      "file": "app/controllers/admin/student_loans_data_uploads_controller.rb",
-      "line": 15,
-      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "File.read(params[:file])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Admin::StudentLoansDataUploadsController",
-        "method": "create"
-      },
-      "user_input": "params[:file]",
-      "confidence": "High",
-      "cwe_id": [
-        22
-      ],
-      "note": ""
-    },
-    {
-      "warning_type": "File Access",
-      "warning_code": 16,
-      "fingerprint": "6a4206d355fcfb4a8c32cd37bd3511a5d31136565add04cf060e63a8a7aff810",
-      "check_name": "FileAccess",
-      "message": "Parameter value used in file name",
-      "file": "app/controllers/admin/tps_data_uploads_controller.rb",
-      "line": 15,
-      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "File.read(params[:file])",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Admin::TpsDataUploadsController",
-        "method": "create"
-      },
-      "user_input": "params[:file]",
-      "confidence": "High",
-      "cwe_id": [
-        22
       ],
       "note": ""
     },
@@ -141,29 +95,6 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "cddc34b96e07d19510d574438a1ce61b69d9c1f28c0d4e5eee631d17a9b38ba6",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/claim.rb",
-      "line": 229,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "joins(\"JOIN (\\n  #{Policies::POLICIES.map do\n \"\\n                SELECT\\n                id,\\n                #{policy.award_amount_column} AS award_amount,\\n                '#{policy::Eligibility}' AS eligibility_type\\n                FROM #{policy::Eligibility.table_name}\\n              \"\n end.join(\" UNION ALL \")}\\n) AS eligibilities\\nON claims.eligibility_id = eligibilities.id\\nAND claims.eligibility_type = eligibilities.eligibility_type\\n\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Claim",
-        "method": "with_award_amounts"
-      },
-      "user_input": "Policies::POLICIES.map do\n \"\\n                SELECT\\n                id,\\n                #{policy.award_amount_column} AS award_amount,\\n                '#{policy::Eligibility}' AS eligibility_type\\n                FROM #{policy::Eligibility.table_name}\\n              \"\n end.join(\" UNION ALL \")",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": "Non of the columns used in generating the join are user provided"
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
       "fingerprint": "f83635b54e1ce0088178d8082ffe632ab8aa81b10fce1026caf87f286cb4d81a",
       "check_name": "SQL",
       "message": "Possible SQL injection",
@@ -185,6 +116,5 @@
       "note": ""
     }
   ],
-  "updated": "2024-11-20 17:38:36 +0000",
-  "brakeman_version": "6.2.1"
+  "brakeman_version": "7.0.2"
 }

@@ -12,7 +12,7 @@ module Journeys
       attribute :languages_taught, :boolean, pii: false
       attribute :physics_taught, :boolean, pii: false
       attribute :taught_eligible_subjects, :boolean, pii: false
-      attribute :student_loan_repayment_amount, :decimal, pii: false
+      attribute :award_amount, :decimal, pii: false
       attribute :had_leadership_position, :boolean, pii: false
       attribute :mostly_performed_leadership_duties, :boolean, pii: false
       attribute :claim_school_somewhere_else, :boolean, pii: false

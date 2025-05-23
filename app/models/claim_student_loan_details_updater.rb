@@ -21,9 +21,9 @@ class ClaimStudentLoanDetailsUpdater
       claim_changes[:student_loan_plan] = student_loans_data.student_loan_plan
     end
 
-    if student_loan_repayment_amount_changed?
+    if award_amount_changed?
       claim_changes[:eligibility_attributes] = {
-        student_loan_repayment_amount: student_loans_data.total_repayment_amount
+        award_amount: student_loans_data.total_repayment_amount
       }
     end
 
@@ -37,17 +37,6 @@ class ClaimStudentLoanDetailsUpdater
   delegate :eligibility, to: :claim
   delegate :national_insurance_number, :date_of_birth, to: :claim
 
-  def eligibility_student_loan_attributes
-    {student_loan_repayment_amount: student_loans_data.total_repayment_amount}
-  end
-
-  def claim_student_loan_attributes
-    {
-      has_student_loan: student_loans_data.has_student_loan?,
-      student_loan_plan: student_loans_data.student_loan_plan
-    }
-  end
-
   def student_loans_data
     @student_loans_data ||= StudentLoansDataPresenter.new(
       national_insurance_number: national_insurance_number,
@@ -55,10 +44,10 @@ class ClaimStudentLoanDetailsUpdater
     )
   end
 
-  def student_loan_repayment_amount_changed?
+  def award_amount_changed?
     return false unless claim.has_tslr_policy?
 
-    claim.eligibility.student_loan_repayment_amount != student_loans_data.total_repayment_amount
+    claim.eligibility.award_amount != student_loans_data.total_repayment_amount
   end
 
   def amend_claim(claim_changes)
