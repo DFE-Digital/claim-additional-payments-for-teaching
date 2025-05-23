@@ -3,17 +3,15 @@
     <h1 class="govuk-heading-xl">
       Choose and upload TPS data
     </h1>
-    <%= form_with url: admin_tps_data_uploads_path, multipart: true do |f| %>
-      <div class="govuk-form-group">
-        <%= f.label "file", "Upload a CSV file", class: "govuk-label" %>
-        <% @tps_data_importer && @tps_data_importer.errors.each do |error| %>
-          <span class="govuk-error-message">
-            <span class="govuk-visually-hidden">Error:</span> <%= error %>
-          </span>
-        <% end %>
-        <%= f.file_field "file", class: "govuk-file-upload" %>
-      </div>
-      <%= f.submit "Upload", class: "govuk-button", data: {module: "govuk-button"} %>
+
+    <%= form_with model: @upload_form, scope: :tps_data_upload, url: admin_tps_data_uploads_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_file_field :file,
+        label: { text: "Upload a CSV file" },
+        javascript: true %>
+
+      <%= f.govuk_submit "Upload" %>
     <% end %>
   </div>
 </div>

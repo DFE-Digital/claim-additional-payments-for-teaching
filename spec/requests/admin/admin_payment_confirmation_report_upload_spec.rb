@@ -29,7 +29,7 @@ RSpec.describe "Admin Payment Confirmation Report upload" do
 
         it "records the values from the CSV against the claims' payments, sends emails" do
           perform_enqueued_jobs do
-            post admin_payroll_run_payment_confirmation_report_uploads_path(payroll_run), params: {file: file}
+            post admin_payroll_run_payment_confirmation_report_uploads_path(payroll_run), params: {payment_confirmation_report_upload: {file: file}}
           end
 
           expect(response).to redirect_to(admin_payroll_runs_path)
@@ -55,7 +55,7 @@ RSpec.describe "Admin Payment Confirmation Report upload" do
 
         it "displays errors and does not send emails" do
           perform_enqueued_jobs do
-            post admin_payroll_run_payment_confirmation_report_uploads_path(payroll_run), params: {file: file}
+            post admin_payroll_run_payment_confirmation_report_uploads_path(payroll_run), params: {payment_confirmation_report_upload: {file: file}}
           end
 
           expect(response).to have_http_status(:ok)
@@ -69,7 +69,7 @@ RSpec.describe "Admin Payment Confirmation Report upload" do
           post admin_payroll_run_payment_confirmation_report_uploads_path(payroll_run)
 
           expect(response).to have_http_status(:ok)
-          expect(response.body).to include("Select a file")
+          expect(response.body).to include("Choose a file to upload")
         end
       end
     end

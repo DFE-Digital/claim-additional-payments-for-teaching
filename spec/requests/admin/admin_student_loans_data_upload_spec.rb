@@ -22,7 +22,7 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
       let(:csv) { "Malformed CSV File\"," }
 
       it "displays an error" do
-        post admin_student_loans_data_uploads_path, params: {file: file}
+        post admin_student_loans_data_uploads_path, params: {student_loans_data_upload: {file: file}}
 
         expect(response.body).to include("The selected file must be a CSV")
       end
@@ -32,7 +32,7 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
       it "displays an error" do
         post admin_student_loans_data_uploads_path
 
-        expect(response.body).to include("Select a file")
+        expect(response.body).to include("Choose a CSV file of Student Loans data to upload")
       end
     end
 
@@ -46,7 +46,7 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
 
     context "when a valid CSV is uploaded" do
       subject(:upload) do
-        post admin_student_loans_data_uploads_path, params: {file: file}
+        post admin_student_loans_data_uploads_path, params: {student_loans_data_upload: {file: file}}
       end
 
       let(:csv) do

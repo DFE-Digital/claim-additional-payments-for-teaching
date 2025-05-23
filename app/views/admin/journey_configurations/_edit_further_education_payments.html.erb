@@ -27,7 +27,8 @@
 
   <%= f.govuk_file_field :file,
     label: { text: "Eligible FE providers" },
-    hint: { text: "This file should be a CSV" } %>
+    hint: { text: "This file should be a CSV" },
+    javascript: true %>
 
   <%= f.govuk_submit "Upload CSV" %>
 <% end %>
