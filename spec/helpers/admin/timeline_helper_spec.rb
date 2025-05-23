@@ -11,17 +11,17 @@ RSpec.describe Admin::TimelineHelper do
           "payroll_gender" => ["male", "dont_know"],
           "date_of_birth" => [Date.new(1995, 2, 25), Date.new(1990, 2, 25)],
           "student_loan_plan" => ["not_applicable", "plan_1"],
-          "student_loan_repayment_amount" => [123, 456]
+          "award_amount" => [123, 456]
         })
       }
 
       it "returns an array of arrays, each of which contains formatted attribute name and old and new values" do
         expect(helper.admin_amendment_details(amendment)).to eq([
+          ["Award amount", "£123.00", "£456.00"],
           ["Bank account number", "12345678", "87654321"],
           ["Bank sort code", "123456", "654321"],
           ["Date of birth", "25 February 1995", "25 February 1990"],
           ["Payroll gender", "male", "don’t know"],
-          ["Student loan repayment amount", "£123.00", "£456.00"],
           ["Student loan repayment plan", "not applicable", "Plan 1"],
           ["Teacher reference number", "1000000", "1000001"]
         ])

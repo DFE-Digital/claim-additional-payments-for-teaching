@@ -65,7 +65,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::ClaimSubmissionForm do
       languages_taught: false,
       physics_taught: true,
       taught_eligible_subjects: true,
-      student_loan_repayment_amount: 1000,
+      award_amount: 1000,
       had_leadership_position: true,
       mostly_performed_leadership_duties: false,
       claim_school_somewhere_else: false

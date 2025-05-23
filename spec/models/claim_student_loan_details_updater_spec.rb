@@ -39,7 +39,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
           let(:policy_attributes) do
             {
               policy: Policies::StudentLoans,
-              eligibility_attributes: {student_loan_repayment_amount: 0}
+              eligibility_attributes: {award_amount: 0}
             }
           end
 
@@ -47,7 +47,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
             expect { described_class.new(claim, admin).update_claim_with_latest_data }
               .to not_change { claim.reload.has_student_loan }
               .and not_change { claim.student_loan_plan }
-              .and not_change { claim.eligibility.student_loan_repayment_amount }
+              .and not_change { claim.eligibility.award_amount }
           end
 
           it "doesn't create an ammendment" do
@@ -91,7 +91,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
           let(:policy_attributes) do
             {
               policy: Policies::StudentLoans,
-              eligibility_attributes: {student_loan_repayment_amount: 0}
+              eligibility_attributes: {award_amount: 0}
             }
           end
 
@@ -99,7 +99,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
             expect { described_class.new(claim, admin).update_claim_with_latest_data }
               .to change { claim.reload.has_student_loan }.from(nil).to(true)
               .and change { claim.student_loan_plan }.from(nil).to(StudentLoan::PLAN_1)
-              .and change { claim.eligibility.student_loan_repayment_amount }.from(0).to(50)
+              .and change { claim.eligibility.award_amount }.from(0).to(50)
           end
 
           it "creates an ammendment" do
@@ -111,7 +111,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
             expect(amendment.claim_changes).to eq({
               "has_student_loan" => [nil, true],
               "student_loan_plan" => [nil, StudentLoan::PLAN_1],
-              "student_loan_repayment_amount" => [0, 50]
+              "award_amount" => [0, 50]
             })
 
             expect(amendment.notes).to eq(
@@ -182,7 +182,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
           let(:policy_attributes) do
             {
               policy: Policies::StudentLoans,
-              eligibility_attributes: {student_loan_repayment_amount: 50}
+              eligibility_attributes: {award_amount: 50}
             }
           end
 
@@ -190,7 +190,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
             expect { described_class.new(claim, admin).update_claim_with_latest_data }
               .to not_change { claim.reload.has_student_loan }
               .and change { claim.student_loan_plan }.from(StudentLoan::PLAN_1).to(StudentLoan::PLAN_2)
-              .and change { claim.eligibility.student_loan_repayment_amount }.from(50).to(100)
+              .and change { claim.eligibility.award_amount }.from(50).to(100)
           end
 
           it "creates an ammendment" do
@@ -201,7 +201,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
 
             expect(amendment.claim_changes).to eq({
               "student_loan_plan" => [StudentLoan::PLAN_1, StudentLoan::PLAN_2],
-              "student_loan_repayment_amount" => [50, 100]
+              "award_amount" => [50, 100]
             })
 
             expect(amendment.notes).to eq(
@@ -267,7 +267,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
           let(:policy_attributes) do
             {
               policy: Policies::StudentLoans,
-              eligibility_attributes: {student_loan_repayment_amount: 50}
+              eligibility_attributes: {award_amount: 50}
             }
           end
 
@@ -275,7 +275,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
             expect { described_class.new(claim, admin).update_claim_with_latest_data }
               .to not_change { claim.reload.has_student_loan }
               .and change { claim.student_loan_plan }.from(StudentLoan::PLAN_1).to(StudentLoan::PLAN_1_AND_2)
-              .and change { claim.eligibility.student_loan_repayment_amount }.from(50).to(300)
+              .and change { claim.eligibility.award_amount }.from(50).to(300)
           end
 
           it "creates an ammendment" do
@@ -286,7 +286,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
 
             expect(amendment.claim_changes).to eq({
               "student_loan_plan" => [StudentLoan::PLAN_1, StudentLoan::PLAN_1_AND_2],
-              "student_loan_repayment_amount" => [50, 300]
+              "award_amount" => [50, 300]
             })
 
             expect(amendment.notes).to eq(
@@ -329,19 +329,19 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
         end
       end
 
-      # This class should only be called with claims that are awaiting the
+      # This class should only be called with claims that are awaiting
       # either the student_loan_plan or student_loan_amount task.
-      # StudentLoans::Eligibility#student_loan_repayment_amount is validated
+      # StudentLoans::Eligibility#award_amount is validated
       # when an SLC claim is amended. This test is documenting the current
       # behaviour, we may want to do something else like return early if
-      # attempting to amend the `student_loan_repayment_amount` from some
+      # attempting to amend the `award_amount` from some
       # amount to £0.
       context "when no student loan data is found" do
         context "when the claim is a tslr claim" do
           let(:policy_attributes) do
             {
               policy: Policies::StudentLoans,
-              eligibility_attributes: {student_loan_repayment_amount: 100}
+              eligibility_attributes: {award_amount: 100}
             }
           end
 
@@ -349,12 +349,12 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
             expect { described_class.new(claim, admin).update_claim_with_latest_data }
               .to raise_error(described_class::StudentLoanUpdateError).with_message(
                 a_string_including(
-                  "Eligibility student loan repayment amount Enter a positive amount up to £5,000.00"
+                  "Eligibility award amount Enter a positive amount up to £5,000.00"
                 )
               )
               .and not_change { claim.reload.has_student_loan }
               .and not_change { claim.student_loan_plan }
-              .and not_change { claim.eligibility.student_loan_repayment_amount }
+              .and not_change { claim.eligibility.award_amount }
           end
         end
 
@@ -410,7 +410,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
           has_student_loan: true,
           student_loan_plan: StudentLoan::PLAN_1,
           policy: Policies::StudentLoans,
-          eligibility_attributes: {student_loan_repayment_amount: 50},
+          eligibility_attributes: {award_amount: 50},
           personal_data_removed_at: DateTime.now # make the claim unaamendable
         )
       end
@@ -420,7 +420,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
           .to raise_error(described_class::StudentLoanUpdateError).with_message(
             "Failed to update claim #{claim.id} student loan data. " \
             "amendment_error: \"Claim must be amendable\" " \
-            "SLC data: {student_loan_plan: \"plan_2\", eligibility_attributes: {student_loan_repayment_amount: 200.0}}"
+            "SLC data: {student_loan_plan: \"plan_2\", eligibility_attributes: {award_amount: 200.0}}"
           )
       end
     end

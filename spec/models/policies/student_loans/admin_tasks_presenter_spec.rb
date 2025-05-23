@@ -9,7 +9,7 @@ RSpec.describe Policies::StudentLoans::AdminTasksPresenter, type: :model do
       eligibility: build(
         :student_loans_eligibility,
         :eligible,
-        student_loan_repayment_amount: "670.99",
+        award_amount: "670.99",
         chemistry_taught: true,
         physics_taught: nil,
         languages_taught: true

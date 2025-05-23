@@ -2,7 +2,7 @@ require "rails_helper"
 
 class TestSlugForm < Form
   attribute :first_name
-  attribute :student_loan_repayment_amount
+  attribute :award_amount
 end
 
 module Journeys
@@ -65,7 +65,7 @@ RSpec.describe Form, type: :model do
             :student_loans_session,
             answers: {
               first_name: "existing-name",
-              student_loan_repayment_amount: 2000
+              award_amount: 2000
             }
           )
         end
@@ -73,7 +73,7 @@ RSpec.describe Form, type: :model do
         it "initialises the attributes with values from the journey session" do
           expect(form).to have_attributes(
             first_name: "existing-name",
-            student_loan_repayment_amount: 2000
+            award_amount: 2000
           )
         end
       end
@@ -85,7 +85,7 @@ RSpec.describe Form, type: :model do
               :claim,
               first_name: "existing-name",
               eligibility_attributes: {
-                student_loan_repayment_amount: 100
+                award_amount: 100
               },
               policy: Policies::StudentLoans
             )
@@ -97,7 +97,7 @@ RSpec.describe Form, type: :model do
             :student_loans_session,
             answers: {
               first_name: "existing-name",
-              student_loan_repayment_amount: nil
+              award_amount: nil
             }
           )
         end
@@ -105,7 +105,7 @@ RSpec.describe Form, type: :model do
         it "initialises the attributes with values from the journey session" do
           expect(form).to have_attributes(
             first_name: "existing-name",
-            student_loan_repayment_amount: nil
+            award_amount: nil
           )
         end
       end
@@ -114,7 +114,7 @@ RSpec.describe Form, type: :model do
         let(:claims) { [build(:claim, first_name: nil, policy: Policies::StudentLoans)] }
 
         it "initialises the attributes with nil" do
-          expect(form).to have_attributes(first_name: nil, student_loan_repayment_amount: nil)
+          expect(form).to have_attributes(first_name: nil, award_amount: nil)
         end
       end
     end

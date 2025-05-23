@@ -136,7 +136,7 @@ RSpec.feature "Admin amends a claim" do
 
   context "with a Student Loans claim" do
     let(:claim) do
-      create(:claim, :submitted, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 550))
+      create(:claim, :submitted, eligibility: build(:student_loans_eligibility, :eligible, award_amount: 550))
     end
 
     scenario "Service operator amends the student loan repayment amount" do
@@ -150,16 +150,16 @@ RSpec.feature "Admin amends a claim" do
 
       amendment = claim.amendments.last
       expect(amendment.claim_changes).to eq({
-        "student_loan_repayment_amount" => [550, 300]
+        "award_amount" => [550, 300]
       })
       expect(amendment.notes).to eq("The claimant calculated the incorrect student loan repayment amount")
       expect(amendment.created_by).to eq(@signed_in_user)
 
-      expect(claim.eligibility.student_loan_repayment_amount).to eq(300)
+      expect(claim.eligibility.award_amount).to eq(300)
 
       click_on "Claim amendments"
 
-      expect(page).to have_content("Student loan repayment amount\nchanged from £550.00 to £300.00")
+      expect(page).to have_content("Award amount\nchanged from £550.00 to £300.00")
 
       expect(page).to have_content("The claimant calculated the incorrect student loan repayment amount")
       expect(page).to have_content("by #{@signed_in_user.full_name} on #{I18n.l(Time.current)}")

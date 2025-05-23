@@ -209,7 +209,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       answers = journey_session.answers
 
       expect(answers).to have_student_loan
-      expect(answers.student_loan_repayment_amount).to eql(1_100)
+      expect(answers.award_amount).to eql(1_100)
       expect(answers.student_loan_plan).to eq(StudentLoan::PLAN_1)
 
       fill_in_remaining_personal_details_and_submit
@@ -229,7 +229,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       answers = journey_session.answers
 
       expect(answers).not_to have_student_loan
-      expect(answers.student_loan_repayment_amount).to eql(0)
+      expect(answers.award_amount).to eql(0)
       expect(answers.student_loan_plan).to be nil
 
       fill_in_remaining_personal_details_and_submit

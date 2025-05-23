@@ -12,7 +12,7 @@ module Admin
       @claims = Claim.payrollable.order(submitted_at: :asc)
 
       @topups = Topup.payrollable
-      @total_award_amount = @claims.sum(&:award_amount) + @topups.sum(&:award_amount)
+      @total_award_amount = @claims.reject { |c| c.award_amount.nil? }.sum(&:award_amount) + @topups.sum(&:award_amount)
     end
 
     def create

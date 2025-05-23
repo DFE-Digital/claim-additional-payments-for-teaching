@@ -136,7 +136,7 @@ RSpec.describe StudentLoanAmountCheckJob do
 
       it "does not update the student loan details or create a task or note" do
         expect { perform_job }.to not_change { claim.student_loan_plan }
-          .and not_change { claim.eligibility.student_loan_repayment_amount }
+          .and not_change { claim.eligibility.award_amount }
           .and not_change { claim.tasks.count }
           .and not_change { claim.notes.count }
       end
