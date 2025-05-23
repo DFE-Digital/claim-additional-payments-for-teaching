@@ -198,7 +198,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
         attributes_for(
           :student_loans_answers,
           :submittable,
-          student_loan_repayment_amount: 100
+          award_amount: 100
         )
       )
     journey_session.save!

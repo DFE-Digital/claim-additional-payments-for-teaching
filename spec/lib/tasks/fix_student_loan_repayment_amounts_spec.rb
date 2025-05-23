@@ -29,12 +29,12 @@ RSpec.describe "fix_tslr_student_loan_amounts" do
 
   let(:claim_1) do
     create(:claim, :submitted, policy: Policies::StudentLoans, academic_year: AcademicYear.current, national_insurance_number: "QQ123456A", date_of_birth: Date.new(1980, 1, 1),
-      eligibility_attributes: {student_loan_repayment_amount: 150})
+      eligibility_attributes: {award_amount: 150})
   end
 
   let(:claim_2) do
     create(:claim, :submitted, policy: Policies::StudentLoans, academic_year: AcademicYear.current, national_insurance_number: "QQ123456B", date_of_birth: Date.new(1990, 1, 1),
-      eligibility_attributes: {student_loan_repayment_amount: 120})
+      eligibility_attributes: {award_amount: 120})
   end
 
   context "with the run argument" do
@@ -44,8 +44,8 @@ RSpec.describe "fix_tslr_student_loan_amounts" do
 
     it "updates TSLR claims that have incorrect amounts" do
       subject
-      expect(claim_1.reload.eligibility.student_loan_repayment_amount).to eq 150
-      expect(claim_2.reload.eligibility.student_loan_repayment_amount).to eq 60
+      expect(claim_1.reload.eligibility.award_amount).to eq 150
+      expect(claim_2.reload.eligibility.award_amount).to eq 60
     end
   end
 end

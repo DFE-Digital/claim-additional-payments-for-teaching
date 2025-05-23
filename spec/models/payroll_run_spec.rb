@@ -25,8 +25,8 @@ RSpec.describe PayrollRun, type: :model do
 
   describe "#total_award_amount" do
     it "returns the sum of the award amounts of its claims" do
-      payment_1 = build(:payment, claims: [build(:claim, :approved, eligibility_attributes: {student_loan_repayment_amount: 1500})])
-      payment_2 = build(:payment, claims: [build(:claim, :approved, eligibility_attributes: {student_loan_repayment_amount: 2000})])
+      payment_1 = build(:payment, claims: [build(:claim, :approved, eligibility_attributes: {award_amount: 1500})])
+      payment_2 = build(:payment, claims: [build(:claim, :approved, eligibility_attributes: {award_amount: 2000})])
 
       payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2])
 
@@ -37,7 +37,7 @@ RSpec.describe PayrollRun, type: :model do
   describe "#number_of_claims_for_policy" do
     it "returns the correct number of claims under each policy" do
       payment_1 = build(:payment, claims: [
-        build(:claim, :approved, eligibility_attributes: {student_loan_repayment_amount: 1500})
+        build(:claim, :approved, eligibility_attributes: {award_amount: 1500})
       ])
       payment_2 = build(:payment, claims: [
         build(:claim, :approved, policy: Policies::EarlyCareerPayments)
@@ -57,7 +57,7 @@ RSpec.describe PayrollRun, type: :model do
   describe "#total_claim_amount_for_policy" do
     it "returns the correct total amount claimed under each policy" do
       payment_1 = build(:payment, claims: [
-        build(:claim, :approved, policy: Policies::StudentLoans, eligibility_attributes: {student_loan_repayment_amount: 1500})
+        build(:claim, :approved, policy: Policies::StudentLoans, eligibility_attributes: {award_amount: 1500})
       ])
       payment_2 = build(:payment, claims: [
         build(:claim, :approved, policy: Policies::EarlyCareerPayments)
@@ -66,11 +66,11 @@ RSpec.describe PayrollRun, type: :model do
         build(:claim, :approved, policy: Policies::EarlyCareerPayments)
       ])
       payment_4 = build(:payment, claims: [
-        build(:claim, :approved, eligibility_attributes: {student_loan_repayment_amount: 1000})
+        build(:claim, :approved, eligibility_attributes: {award_amount: 1000})
       ])
       payment_5 = build(:payment, claims: [
         build(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments, bank_sort_code: "123456", bank_account_number: "12345678", national_insurance_number: "1234567"),
-        build(:claim, :approved, bank_sort_code: "123456", bank_account_number: "12345678", national_insurance_number: "1234567", eligibility_attributes: {student_loan_repayment_amount: 1000})
+        build(:claim, :approved, bank_sort_code: "123456", bank_account_number: "12345678", national_insurance_number: "1234567", eligibility_attributes: {award_amount: 1000})
       ])
 
       payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2, payment_3, payment_4, payment_5])

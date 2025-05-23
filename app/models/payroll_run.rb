@@ -30,7 +30,7 @@ class PayrollRun < ApplicationRecord
   end
 
   def total_claim_amount_for_policy(policy, filter: :all)
-    line_items(policy, filter: filter).sum(&:award_amount)
+    line_items(policy, filter: filter).reject { |li| li.award_amount.nil? }.sum(&:award_amount)
   end
 
   def total_confirmed_payments

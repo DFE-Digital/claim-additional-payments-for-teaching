@@ -14,10 +14,6 @@ class StudentLoansDataPresenter
     student_loans_data.repaying_plan_types.present?
   end
 
-  def student_loan_repayment_amount
-    student_loans_data.total_repayment_amount
-  end
-
   def student_loan_plan
     return nil if student_loans_data.repaying_plan_types.nil? && !found_data?
 
