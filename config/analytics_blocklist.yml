@@ -214,3 +214,10 @@
   - concurrency_key
   - expires_at
   - created_at
+  :claims_matches:
+  - id
+  - source_claim_id
+  - matching_claim_id
+  - matching_attributes
+  - created_at
+  - updated_at
