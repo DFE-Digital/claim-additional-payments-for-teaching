@@ -23,13 +23,6 @@ jobs:
       - name: Fetch remote master for comparison
         run: git fetch origin master --depth=2
 
-      - name: Get analytics config changes
-        id: analytics-diff
-        run: |
-          echo "ANALYTICS_DIFF<<EOF" >> $GITHUB_ENV
-          git diff origin/master^..origin/master -- config/analytics_hidden_pii.yml config/analytics_blocklist.yml config/analytics.yml config/analytics_pii.yml >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-
       - name: Get commit details
         id: commit-info
         run: |
@@ -48,11 +41,10 @@ jobs:
           payload: |
             {
               "text": "${{ format(
-                '<@U033AJ0A12P> Analytics Configuration Change Detected 🔍\n\n*Commit:* <{0}|{1}>\n\n*Author:* {2}\n\n*Branch:* {3}\n\n*Analytics Config Changes:*\n```diff\n{4}\n```',
+                '<@U033AJ0A12P> Analytics Configuration Change Detected 🔍\n\n*Commit:* <{0}|{1}>\n\n*Author:* {2}\n\n*Branch:* {3}\n\n',
                 env.COMMIT_LINK,
                 env.COMMIT_MSG,
                 env.COMMIT_AUTHOR,
                 github.ref_name,
-                env.ANALYTICS_DIFF
               ) }}"
             }

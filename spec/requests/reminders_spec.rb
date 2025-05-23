@@ -3,18 +3,19 @@ require "rails_helper"
 RSpec.describe "Claims" do
   describe "#create" do
     before do
-      create(:journey_configuration, :additional_payments)
-      start_claim("additional-payments")
+      FeatureFlag.enable!(:tri_only_journey)
+      create(:journey_configuration, :targeted_retention_incentive_payments_only)
+      start_claim("targeted-retention-incentive-payments")
     end
 
-    let(:submit_form) { put reminder_path(journey: "additional-payments", slug: "personal-details", params: form_params) }
+    let(:submit_form) { put reminder_path(journey: "targeted-retention-incentive-payments", slug: "personal-details", params: form_params) }
 
     context "with full name and valid email address" do
       let(:form_params) { {claim: {reminder_full_name: "Joe Bloggs", reminder_email_address: "joe.bloggs@example.com"}} }
 
       it "redirects to /email-verfication slug" do
         submit_form
-        expect(response).to redirect_to("/additional-payments/reminders/email-verification")
+        expect(response).to redirect_to("/targeted-retention-incentive-payments/reminders/email-verification")
       end
     end
 
@@ -60,22 +61,28 @@ RSpec.describe "Claims" do
 
   # Rollbar error - confirmation page loaded without reminder that can be loaded from the session information
   describe "#show" do
-    shared_examples "confirmation_page_no_reminder" do |journey|
+    describe "for FurtherEducationPayments journey" do
       before do
-        create(:journey_configuration, journey::ROUTING_NAME.underscore.to_sym)
+        create(:journey_configuration, :further_education_payments)
       end
+
+      let(:journey) { Journeys::FurtherEducationPayments }
 
       subject { get reminder_path(journey: journey::ROUTING_NAME.to_sym, slug: "confirmation") }
 
       it { is_expected.to redirect_to(journey.start_page_url) }
     end
 
-    describe "for FurtherEducationPayments journey" do
-      include_examples "confirmation_page_no_reminder", Journeys::FurtherEducationPayments
-    end
+    describe "for TargetedRetentionIncentivePayments journey" do
+      before do
+        create(:journey_configuration, :targeted_retention_incentive_payments_only)
+      end
 
-    describe "for AdditionalPaymentsForTeaching journey" do
-      include_examples "confirmation_page_no_reminder", Journeys::AdditionalPaymentsForTeaching
+      let(:journey) { Journeys::TargetedRetentionIncentivePayments }
+
+      subject { get reminder_path(journey: journey::ROUTING_NAME.to_sym, slug: "confirmation") }
+
+      it { is_expected.to redirect_to(journey.start_page_url) }
     end
   end
 end

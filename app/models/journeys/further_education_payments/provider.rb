@@ -17,7 +17,8 @@ module Journeys
           "complete" => CompleteForm,
           "unauthorised" => UnauthorisedForm,
           "expired-link" => ExpiredLinkForm,
-          "already-verified" => AlreadyVerifiedForm
+          "already-verified" => AlreadyVerifiedForm,
+          "sign-in" => SignInForm
         }
       }
 

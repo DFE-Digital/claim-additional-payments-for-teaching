@@ -35,6 +35,10 @@ FactoryBot.define do
       subject { "physics" }
     end
 
+    trait :with_changed_workplace_or_new_contract do
+      changed_workplace_or_new_contract { false }
+    end
+
     trait :with_visa do
       visa_type { "British National (Overseas) visa" }
     end
@@ -81,6 +85,7 @@ FactoryBot.define do
       with_headteacher_details
       with_one_year_contract
       with_subject
+      with_changed_workplace_or_new_contract
       with_start_date
       with_visa
       with_entry_date

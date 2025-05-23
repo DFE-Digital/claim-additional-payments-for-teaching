@@ -1,17 +1,18 @@
 require "rails_helper"
 
 RSpec.feature "Confirming Claimant Contact details" do
-  before { create(:journey_configuration, :additional_payments) }
+  before { FeatureFlag.enable!(:tri_only_journey) }
+  before { create(:journey_configuration, :targeted_retention_incentive_payments_only) }
 
   it "redirects to 'email-address' if 'Change email address' is clicked on the One Time Password page" do
-    start_early_career_payments_claim
+    start_targeted_retention_incentive_payments_claim
 
-    journey_session = Journeys::AdditionalPaymentsForTeaching::Session.last
+    journey_session = Journeys::TargetedRetentionIncentivePayments::Session.last
     journey_session.answers.assign_attributes(
       attributes_for(
-        :additional_payments_answers,
-        :with_personal_details,
-        :with_email_details
+        :targeted_retention_incentive_payments_answers,
+        :submittable,
+        email_verified: false
       ).merge(email_address: "david.tau@gmail.com")
     )
     journey_session.save!
@@ -30,7 +31,7 @@ RSpec.feature "Confirming Claimant Contact details" do
     )
 
     expect(page).to have_text("Enter the 6-digit passcode")
-    expect(page).to have_link(href: claim_path(Journeys::AdditionalPaymentsForTeaching::ROUTING_NAME, "email-address"))
+    expect(page).to have_link(href: claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME, "email-address"))
 
     click_link("Change email address")
 

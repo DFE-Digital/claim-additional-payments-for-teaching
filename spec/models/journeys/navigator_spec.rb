@@ -144,7 +144,9 @@ RSpec.describe Journeys::Navigator do
           :further_education_payments_answers,
           :submittable,
           provision_search: school.name,
-          skip_postcode_search: true
+          skip_postcode_search: true,
+          onelogin_uid: "some-uid",
+          onelogin_idv_at: 1.second.ago
         )
       end
 

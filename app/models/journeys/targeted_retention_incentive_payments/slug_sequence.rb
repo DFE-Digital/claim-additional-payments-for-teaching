@@ -142,7 +142,7 @@ module Journeys
           sequence << "select-mobile" if answers.set_by_teacher_id?("phone_number")
           sequence << "provide-mobile-number" unless answers.set_by_teacher_id?("phone_number")
           sequence << "mobile-number" unless answers.using_mobile_number_from_tid? || answers.doesnt_want_to_provide_mobile_number?
-          sequence << "mobile-verification" unless answers.mobile_verified? || answers.using_mobile_number_from_tid? || answers.doesnt_want_to_provide_mobile_number?
+          sequence << "mobile-verification" unless answers.using_mobile_number_from_tid? || answers.doesnt_want_to_provide_mobile_number?
         end
       end
 

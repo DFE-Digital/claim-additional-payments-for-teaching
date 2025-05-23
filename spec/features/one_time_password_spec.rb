@@ -1,14 +1,27 @@
 require "rails_helper"
 
 RSpec.feature "One time password" do
-  let(:session) { Journeys::AdditionalPaymentsForTeaching::Session.order(:created_at).last }
+  let(:session) { Journeys::TargetedRetentionIncentivePayments::Session.order(:created_at).last }
 
   before do
-    create(:journey_configuration, :additional_payments)
-    start_early_career_payments_claim
+    FeatureFlag.enable!(:tri_only_journey)
+    create(:journey_configuration, :targeted_retention_incentive_payments_only)
+    start_targeted_retention_incentive_payments_claim
+    session.update!(
+      answers: attributes_for(
+        :targeted_retention_incentive_payments_answers,
+        :submittable,
+        email_address: nil,
+        email_verified: nil,
+        email_verification_secret: nil,
+        sent_one_time_password_at: nil,
+        provide_mobile_number: true,
+        mobile_number: nil
+      )
+    )
     jump_to_claim_journey_page(
       slug: "email-address",
-      journey_session: Journeys::AdditionalPaymentsForTeaching::Session.last
+      journey_session: Journeys::TargetedRetentionIncentivePayments::Session.last
     )
     fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
     click_on "Continue"

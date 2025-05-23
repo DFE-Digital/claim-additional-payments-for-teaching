@@ -14,6 +14,7 @@ module Journeys
         "contract-details" => ContractDetailsForm,
         "start-date" => StartDateForm,
         "subject" => SubjectForm,
+        "changed-workplace-or-new-contract" => ChangedWorkplaceOrNewContractForm,
         "visa" => VisaForm,
         "entry-date" => EntryDateForm,
         "nationality" => NationalityForm,

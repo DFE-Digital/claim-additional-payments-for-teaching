@@ -124,6 +124,7 @@ RSpec.describe "ineligible route: completing the form" do
           date: contract_start_date
         )
         and_i_complete_the_subject_step_with(option: "Physics")
+        and_i_complete_changed_workplace_or_new_contract_with(option: "Yes")
         and_i_complete_the_visa_screen_with(option: "Other")
         then_i_see_the_ineligible_page
       end
@@ -143,6 +144,7 @@ RSpec.describe "ineligible route: completing the form" do
           date: contract_start_date
         )
         and_i_complete_the_subject_step_with(option: "Physics")
+        and_i_complete_changed_workplace_or_new_contract_with(option: "Yes")
         and_i_complete_the_visa_screen_with(option: "British National (Overseas) visa")
         and_i_complete_the_entry_date_page_with(date: contract_start_date - 4.months)
         then_i_see_the_ineligible_page

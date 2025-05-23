@@ -26,6 +26,7 @@ class Claim < ApplicationRecord
 
   # Use AcademicYear as custom ActiveRecord attribute type
   attribute :academic_year, AcademicYear::Type.new
+  attribute :policy, Policies::ActiveRecordType.new
 
   attribute :date_of_birth_day, :integer
   attribute :date_of_birth_month, :integer
@@ -102,8 +103,8 @@ class Claim < ApplicationRecord
   scope :rejected, -> { joins(:decisions).merge(Decision.active.rejected) }
   scope :approaching_decision_deadline, -> { awaiting_decision.where("submitted_at < ? AND submitted_at > ?", DECISION_DEADLINE.ago + DECISION_DEADLINE_WARNING_POINT, DECISION_DEADLINE.ago) }
   scope :passed_decision_deadline, -> { awaiting_decision.where("submitted_at < ?", DECISION_DEADLINE.ago) }
-  scope :by_policy, ->(policy) { where(eligibility_type: policy::Eligibility.to_s) }
-  scope :by_policies, ->(policies) { where(eligibility_type: policies.map { |p| p::Eligibility.to_s }) }
+  scope :by_policy, ->(policy) { where(policy:) }
+  scope :by_policies, ->(policies) { where(policy: policies) }
   scope :by_policies_for_journey, ->(journey) { by_policies(journey.policies) }
   scope :by_academic_year, ->(academic_year) { where(academic_year: academic_year) }
   scope :assigned_to_team_member, ->(service_operator_id) { where(assigned_to_id: service_operator_id) }
@@ -349,10 +350,6 @@ class Claim < ApplicationRecord
 
   def full_name
     [first_name, middle_name, surname].reject(&:blank?).join(" ")
-  end
-
-  def policy
-    eligibility&.policy
   end
 
   def school

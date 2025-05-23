@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_12_180542) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_21_093719) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -115,11 +115,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_12_180542) do
     t.datetime "verified_at"
     t.text "onelogin_idv_full_name"
     t.text "onelogin_idv_return_codes", array: true
+    t.text "policy", null: false
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
     t.index ["held"], name: "index_claims_on_held"
     t.index ["journeys_session_id"], name: "index_claims_on_journeys_session_id"
+    t.index ["policy"], name: "index_claims_on_policy"
     t.index ["qa_required", "qa_completed_at"], name: "index_claims_on_qa_required_and_qa_completed_at", where: "qa_required"
     t.index ["reference"], name: "index_claims_on_reference", unique: true
     t.index ["submitted_at"], name: "index_claims_on_submitted_at"
@@ -313,6 +315,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_12_180542) do
     t.string "school_headteacher_name"
     t.uuid "current_school_id"
     t.decimal "award_amount", precision: 7, scale: 2
+    t.boolean "changed_workplace_or_new_contract"
     t.index ["current_school_id"], name: "index_irb_eligibilities_on_current_school_id"
   end
 

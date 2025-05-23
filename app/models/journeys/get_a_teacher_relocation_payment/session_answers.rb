@@ -11,6 +11,7 @@ module Journeys
       attribute :nationality, :string, pii: false
       attribute :passport_number, :string, pii: true
       attribute :school_headteacher_name, :string, pii: true
+      attribute :changed_workplace_or_new_contract, :boolean, pii: false
 
       def policy
         Policies::InternationalRelocationPayments
