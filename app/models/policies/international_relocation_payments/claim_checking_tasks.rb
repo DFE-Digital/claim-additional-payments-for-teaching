@@ -20,9 +20,9 @@ module Policies
         tasks << "arrival_date"
         tasks << "previous_residency"
         tasks << "employment"
-        tasks << "employment_contract"
-        tasks << "employment_start"
-        tasks << "subject"
+        tasks << "employment_contract" if claim.tasks.exists?(name: "employment_contract")
+        tasks << "employment_start" if claim.tasks.exists?(name: "employment_start")
+        tasks << "subject" if claim.tasks.exists?(name: "subject")
         tasks << "teaching_hours"
         tasks << "payroll_details" if claim.must_manually_validate_bank_details?
         tasks << "matching_details" if matching_claims.exists?
