@@ -6,7 +6,7 @@ RSpec.describe EmploymentCheckJob do
   describe "#perform" do
     subject(:job) { described_class.new }
     let(:verifier_instance) { instance_double("AutomatedChecks::ClaimVerifiers::Employment", perform: true) }
-    let(:policy) { Policies::EarlyCareerPayments }
+    let(:policy) { Policies::TargetedRetentionIncentivePayments }
 
     before do
       allow(AutomatedChecks::ClaimVerifiers::Employment).to receive(:new).with(claim:).and_return(verifier_instance)

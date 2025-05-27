@@ -4,8 +4,8 @@ FactoryBot.define do
     email_address { Faker::Internet.email }
     journey_class { Journeys.all.sample.to_s }
 
-    trait :with_additonal_payments_reminder do
-      journey_class { Journeys::AdditionalPaymentsForTeaching.to_s }
+    trait :with_targeted_retention_incentive_payments_reminder do
+      journey_class { Journeys::TargetedRetentionIncentivePayments.to_s }
     end
 
     trait :with_fe_reminder do

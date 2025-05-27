@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe GenderForm do
   shared_examples "gender_form" do |journey|
-    before { create(:journey_configuration, :additional_payments) }
+    before { create(:journey_configuration, :targeted_retention_incentive_payments) }
 
     let(:journey_session) do
       create(
@@ -81,7 +81,7 @@ RSpec.describe GenderForm do
     include_examples "gender_form", Journeys::TeacherStudentLoanReimbursement
   end
 
-  describe "for AdditionalPaymentsForTeaching journey" do
-    include_examples "gender_form", Journeys::AdditionalPaymentsForTeaching
+  describe "for TargetedRetentionIncentivePayments journey" do
+    include_examples "gender_form", Journeys::TargetedRetentionIncentivePayments
   end
 end

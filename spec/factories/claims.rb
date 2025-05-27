@@ -26,10 +26,14 @@ FactoryBot.define do
     end
 
     after(:build) do |claim, evaluator|
-      journey = Journeys.for_policy(evaluator.policy)
+      journey = if evaluator.policy == Policies::EarlyCareerPayments
+        Journeys::TargetedRetentionIncentivePayments
+      else
+        Journeys.for_policy(evaluator.policy)
+      end
 
       begin
-        raise ActiveRecord::RecordNotFound unless Journeys.for_policy(evaluator.policy)&.configuration.present?
+        raise ActiveRecord::RecordNotFound unless journey&.configuration.present?
       rescue ActiveRecord::RecordNotFound
         create(:journey_configuration, journey::I18N_NAMESPACE)
       end
@@ -40,8 +44,8 @@ FactoryBot.define do
       raise "Policy of Claim (#{evaluator.policy}) must match Eligibility class (#{claim.eligibility.policy})" if evaluator.policy != claim.eligibility.policy
 
       claim_academic_year =
-        if [Policies::EarlyCareerPayments, Policies::TargetedRetentionIncentivePayments].include?(evaluator.policy)
-          Journeys::AdditionalPaymentsForTeaching.configuration.current_academic_year
+        if [Policies::TargetedRetentionIncentivePayments].include?(evaluator.policy)
+          Journeys::TargetedRetentionIncentivePayments.configuration.current_academic_year
         elsif evaluator.policy == Policies::FurtherEducationPayments
           Journeys::FurtherEducationPayments.configuration.current_academic_year
         else

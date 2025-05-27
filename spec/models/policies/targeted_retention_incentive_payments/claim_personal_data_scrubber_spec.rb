@@ -7,7 +7,7 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::ClaimPersonalDataSc
   )
 
   subject(:personal_data_scrubber) { described_class.new.scrub_completed_claims }
-  let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
+  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments) }
   let(:current_academic_year) { AcademicYear.current }
   let(:last_academic_year) { Time.zone.local(current_academic_year.start_year, 8, 1) }
   let(:user) { create(:dfe_signin_user) }

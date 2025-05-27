@@ -12,12 +12,12 @@ RSpec.describe "Routes", type: :routing do
 
     it "routes POST /:policy/claim to the create action" do
       expect(post: "student-loans/claim").to route_to "claims#create", journey: "student-loans"
-      expect(post: "additional-payments/claim").to route_to "claims#create", journey: "additional-payments"
+      expect(post: "targeted-retention-incentive-payments/claim").to route_to "claims#create", journey: "targeted-retention-incentive-payments"
     end
 
     it "routes policy page sequence slugs to the update action" do
       expect(put: "student-loans/claim-school").to route_to "claims#update", slug: "claim-school", journey: "student-loans"
-      expect(put: "additional-payments/employed-directly").to route_to "claims#update", slug: "employed-directly", journey: "additional-payments"
+      expect(put: "targeted-retention-incentive-payments/employed-directly").to route_to "claims#update", slug: "employed-directly", journey: "targeted-retention-incentive-payments"
     end
 
     it "does not route for unrecognised policies" do
@@ -99,10 +99,10 @@ RSpec.describe "Routes", type: :routing do
     end
 
     context "misc head requests" do
-      before { create(:journey_configuration, :additional_payments) }
+      before { create(:journey_configuration, :targeted_retention_incentive_payments) }
 
       let(:some_app_url) do
-        Journeys::AdditionalPaymentsForTeaching::SlugSequence.start_page_url
+        Journeys::TargetedRetentionIncentivePayments::SlugSequence.start_page_url
       end
 
       it "returns a 400" do

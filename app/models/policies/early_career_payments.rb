@@ -78,96 +78,12 @@ module Policies
     # NOOP as PERSONAL_DATA_ATTRIBUTES_TO_RETAIN_FOR_EXTENDED_PERIOD is empty
     EXTENDED_PERIOD_END_DATE = ->(start_of_academic_year) {}
 
-    def eligibility_page_url
-      "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools"
-    end
-
-    def eligibility_criteria_url
-      eligibility_page_url + "#eligibility-criteria"
-    end
-
     def notify_reply_to_id
       "3f85a1f7-9400-4b48-9a31-eaa643d6b977"
     end
 
-    def student_loan_balance_url
-      "https://www.gov.uk/sign-in-to-manage-your-student-loan-balance"
-    end
-
-    def payment_and_deductions_info_url
-      eligibility_page_url + "#paying-income-tax-and-national-insurance"
-    end
-
     def auto_check_student_loan_plan_task?
       true
-    end
-
-    def current_subject_symbols(claim_year:, itt_year:)
-      subject_symbols(claim_year: claim_year, itt_year: itt_year)
-    end
-
-    def future_subject_symbols(claim_year:, itt_year:)
-      future_years(claim_year).flat_map do |year|
-        subject_symbols(claim_year: year, itt_year: itt_year)
-      end
-    end
-
-    def current_and_future_subject_symbols(claim_year:, itt_year:)
-      [
-        *current_subject_symbols(
-          claim_year: claim_year,
-          itt_year: itt_year
-        ),
-        *future_subject_symbols(
-          claim_year: claim_year,
-          itt_year: itt_year
-        )
-      ].uniq
-    end
-
-    def subject_symbols(claim_year:, itt_year:)
-      case AcademicYear.wrap(claim_year)
-      when AcademicYear.new(2022), AcademicYear.new(2024)
-        case AcademicYear.wrap(itt_year)
-        when AcademicYear.new(2019)
-          [:mathematics]
-        when AcademicYear.new(2020)
-          [:chemistry, :foreign_languages, :mathematics, :physics]
-        else
-          []
-        end
-      when AcademicYear.new(2023)
-        case AcademicYear.wrap(itt_year)
-        when AcademicYear.new(2018)
-          [:mathematics]
-        when AcademicYear.new(2020)
-          [:chemistry, :foreign_languages, :mathematics, :physics]
-        else
-          []
-        end
-      else
-        []
-      end
-    end
-
-    def current_and_future_years(year)
-      fail "year before policy start year" if year < POLICY_START_YEAR
-
-      [year] + future_years(year)
-    end
-
-    def future_years(year)
-      fail "year before policy start year" if year < POLICY_START_YEAR
-
-      year + 1..POLICY_END_YEAR
-    end
-
-    def selectable_itt_years_for_claim_year(claim_year)
-      (AcademicYear.new(claim_year - 5)...AcademicYear.new(claim_year)).to_a
-    end
-
-    def closed?(claim_year)
-      claim_year > POLICY_END_YEAR
     end
   end
 end

@@ -1,22 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Claims::ShowHelper do
-  describe "#fieldset_legend_css_class_for_journey" do
-    subject(:css_class) { helper.fieldset_legend_css_class_for_journey(journey) }
-
-    context "for Journeys::AdditionalPaymentsForTeaching" do
-      let(:journey) { Journeys::AdditionalPaymentsForTeaching }
-
-      it { is_expected.to eq("govuk-fieldset__legend--l") }
-    end
-
-    context "for Journeys::TeacherStudentLoanRepayment" do
-      let(:journey) { Journeys::TeacherStudentLoanReimbursement }
-
-      it { is_expected.to eq("govuk-fieldset__legend--xl") }
-    end
-  end
-
   describe "#policy_name" do
     subject(:name) { helper.policy_name(policy) }
 

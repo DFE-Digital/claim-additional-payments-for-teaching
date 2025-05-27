@@ -1,8 +1,6 @@
 module Policies
   module TargetedRetentionIncentivePayments
     class PolicyEligibilityChecker
-      include EligibilityCheckable
-
       attr_reader :answers
 
       delegate_missing_to :answers
@@ -57,12 +55,41 @@ module Policies
 
       private
 
+      def policy_closed?
+        policy.closed?(policy.current_academic_year)
+      end
+
       def premium_payment_award
         return unless current_school.present?
 
         current_school.targeted_retention_incentive_payments_awards
           .by_academic_year(claim_year)
           .first
+      end
+
+      def indicated_ineligible_school?
+        current_school.present? && !SchoolEligibility.new(current_school).eligible?
+      end
+
+      def supply_teacher_lacking_either_long_contract_or_direct_employment?
+        return false unless employed_as_supply_teacher?
+
+        has_entire_term_contract == false || employed_directly == false
+      end
+
+      def poor_performance?
+        subject_to_formal_performance_action? || subject_to_disciplinary_action?
+      end
+
+      def ineligible_cohort?
+        return false if itt_academic_year.nil?
+
+        eligible_itt_years = policy.selectable_itt_years_for_claim_year(policy.current_academic_year)
+        !itt_academic_year.in? eligible_itt_years
+      end
+
+      def insufficient_teaching?
+        teaching_subject_now == false
       end
 
       def indicated_ecp_only_itt_subject?
@@ -93,21 +120,12 @@ module Policies
         indicated_ineligible_itt_subject? && lacks_eligible_degree?
       end
 
-      # TODO in CAPT-2055 - remove this when we remove the AddtionalPayments
-      # journey. The only eligible later claimants are trainee teachers and we
-      # handle showing them the eligible later page using the trainee teacher
-      # sub journey in the slug sequence. Have left this in place for now as I
-      # don't want to remove any AP tests until we remove that journey.
-      def specific_eligible_later_attributes?
-        trainee_teacher? && eligible_itt_subject_or_relevant_degree?
-      end
-
       def lacks_eligible_degree?
         eligible_degree_subject == false
       end
 
       def trainee_in_last_policy_year?
-        trainee_teacher? && claim_year == TargetedRetentionIncentivePayments::POLICY_END_YEAR
+        trainee_teacher? && policy.current_academic_year == TargetedRetentionIncentivePayments::POLICY_END_YEAR
       end
     end
   end

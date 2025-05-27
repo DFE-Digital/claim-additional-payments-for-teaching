@@ -48,6 +48,6 @@ class QualificationsNoMatchCheckJob < ApplicationJob
   end
 
   def current_academic_year
-    Policies::EarlyCareerPayments.current_academic_year
+    Policies::TargetedRetentionIncentivePayments.current_academic_year
   end
 end

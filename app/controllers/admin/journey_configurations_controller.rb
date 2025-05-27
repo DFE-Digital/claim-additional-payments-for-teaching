@@ -11,7 +11,8 @@ module Admin
     }
 
     def index
-      @journey_configurations = Journeys::Configuration.order(created_at: :desc)
+      # FIXME RL - will remove the hardcoded routing name in a future commit
+      @journey_configurations = Journeys::Configuration.where.not(routing_name: "additional-payments").order(created_at: :desc)
     end
 
     def edit

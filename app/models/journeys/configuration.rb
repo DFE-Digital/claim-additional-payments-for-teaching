@@ -18,10 +18,6 @@ module Journeys
 
     validates :current_academic_year_before_type_cast, format: {with: AcademicYear::ACADEMIC_YEAR_REGEXP}
 
-    def additional_payments?
-      journey == Journeys::AdditionalPaymentsForTeaching
-    end
-
     def targeted_retention_incentive_payments?
       journey == Journeys::TargetedRetentionIncentivePayments
     end

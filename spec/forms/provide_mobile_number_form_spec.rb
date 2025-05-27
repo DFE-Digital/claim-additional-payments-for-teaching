@@ -4,7 +4,7 @@ RSpec.describe ProvideMobileNumberForm, type: :model do
   shared_examples "provide_mobile_number_form" do |journey|
     before {
       create(:journey_configuration, :student_loans)
-      create(:journey_configuration, :additional_payments)
+      create(:journey_configuration, :targeted_retention_incentive_payments)
     }
 
     let(:slug) { "provide-mobile-number" }
@@ -126,7 +126,7 @@ RSpec.describe ProvideMobileNumberForm, type: :model do
     include_examples "provide_mobile_number_form", Journeys::TeacherStudentLoanReimbursement
   end
 
-  describe "for AdditionalPaymentsForTeaching journey" do
-    include_examples "provide_mobile_number_form", Journeys::AdditionalPaymentsForTeaching
+  describe "for TargetedRetentionIncentivePayments journey" do
+    include_examples "provide_mobile_number_form", Journeys::TargetedRetentionIncentivePayments
   end
 end

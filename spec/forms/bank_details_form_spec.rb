@@ -4,7 +4,7 @@ RSpec.describe BankDetailsForm do
   shared_examples "bank_details_form" do |journey|
     before {
       create(:journey_configuration, :student_loans)
-      create(:journey_configuration, :additional_payments)
+      create(:journey_configuration, :targeted_retention_incentive_payments)
     }
 
     let(:hmrc_validation_attempt_count) { 0 }
@@ -263,7 +263,7 @@ RSpec.describe BankDetailsForm do
     include_examples "bank_details_form", Journeys::TeacherStudentLoanReimbursement
   end
 
-  describe "for AdditionalPaymentsForTeaching journey" do
-    include_examples "bank_details_form", Journeys::AdditionalPaymentsForTeaching
+  describe "for TargetedRetentionIncentivePayments journey" do
+    include_examples "bank_details_form", Journeys::TargetedRetentionIncentivePayments
   end
 end

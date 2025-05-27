@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Topup, type: :model do
   let(:user) { create(:dfe_signin_user) }
-  let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
+  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments) }
   let(:targeted_retention_incentive_claim) { create(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments, eligibility: targeted_retention_incentive_eligibility) }
   let(:targeted_retention_incentive_eligibility) { build(:targeted_retention_incentive_payments_eligibility, :eligible, award_amount: 2000.0) }
   let!(:payment) { create(:payment, claims: [targeted_retention_incentive_claim]) }

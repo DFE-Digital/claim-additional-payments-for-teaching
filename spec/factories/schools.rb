@@ -19,8 +19,8 @@ FactoryBot.define do
     trait :eligible_for_journey do
       after(:build) do |school, evaluator|
         case evaluator.journey
-        when Journeys::AdditionalPaymentsForTeaching
-          build(:school, :combined_journey_eligibile_for_all)
+        when Journeys::TargetedRetentionIncentivePayments
+          build(:school, :targeted_retention_incentive_payments_eligible)
         when Journeys::TeacherStudentLoanReimbursement
           build(:school, :student_loans_eligible)
         else
@@ -44,27 +44,10 @@ FactoryBot.define do
     end
 
     trait :early_career_payments_eligible do
-      association :local_authority_district, :early_career_payments_no_uplift
+      association :local_authority_district
       state_funded
       secondary_equivalent
       open
-    end
-
-    trait :early_career_payments_uplifted do
-      early_career_payments_eligible
-      association :local_authority_district, :early_career_payments_uplifted
-    end
-
-    trait :early_career_payments_explicitly_eligible do
-      early_career_payments_eligible
-      local_authority_district { nil }
-      urn { Policies::EarlyCareerPayments::SchoolEligibility::SCHOOL_URNS_CONSIDERED_AS_ELIGIBLE_LOCAL_AUTHORITY_DISTRICT.sample }
-    end
-
-    trait :early_career_payments_ineligible do
-      association :local_authority_district, :early_career_payments_ineligible
-      state_funded
-      not_secondary_equivalent
     end
 
     trait :targeted_retention_incentive_payments_eligible do

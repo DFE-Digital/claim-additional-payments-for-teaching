@@ -9,8 +9,8 @@ RSpec.describe PostcodeSearchForm, type: :model do
     )
   end
 
-  let(:journey) { Journeys::AdditionalPaymentsForTeaching }
-  let(:journey_session) { build(:additional_payments_session) }
+  let(:journey) { Journeys::TargetedRetentionIncentivePayments }
+  let(:journey_session) { build(:targeted_retention_incentive_payments_session) }
   let(:params) { ActionController::Parameters.new }
 
   before do
