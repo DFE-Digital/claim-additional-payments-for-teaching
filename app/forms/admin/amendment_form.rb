@@ -22,7 +22,6 @@ class Admin::AmendmentForm
   attribute :address_line_3, :string
   attribute :address_line_4, :string
   attribute :postcode, :string
-  attribute :student_loan_repayment_amount, :decimal
   attribute :award_amount, :decimal
   attribute :notes, :string
 
@@ -109,15 +108,12 @@ class Admin::AmendmentForm
     self.address_line_4 = claim.address_line_4
     self.postcode = claim.postcode
 
-    self.student_loan_repayment_amount = eligibility.student_loan_repayment_amount if show_student_loan_repayment_amount?
     self.award_amount = eligibility.award_amount if show_award_amount?
   end
 
-  def show_student_loan_repayment_amount?
-    claim.policy == Policies::StudentLoans
-  end
-
   def show_award_amount?
+    return true if claim.policy == Policies::StudentLoans
+
     claim.policy::Eligibility::AMENDABLE_ATTRIBUTES.include?(:award_amount)
   end
 

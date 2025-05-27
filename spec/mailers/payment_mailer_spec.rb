@@ -119,7 +119,7 @@ RSpec.describe PaymentMailer, type: :mailer do
             building_society_roll_number: nil
           }
           [
-            build(:claim, :approved, personal_details.merge(eligibility_attributes: {student_loan_repayment_amount: 500, teacher_reference_number: teacher_reference_number})),
+            build(:claim, :approved, personal_details.merge(eligibility_attributes: {award_amount: 500, teacher_reference_number: teacher_reference_number})),
             build(:claim, :approved, personal_details.merge(policy: second_claim_policy, eligibility_attributes: {award_amount: 5_000, teacher_reference_number: teacher_reference_number}))
           ]
         end

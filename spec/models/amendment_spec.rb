@@ -241,12 +241,12 @@ RSpec.describe Amendment, type: :model do
     context "when amending the claim's eligibility attributes" do
       context "with a Student Loans (TSLR) claim" do
         let(:claim) do
-          create(:claim, :submitted, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1000))
+          create(:claim, :submitted, eligibility: build(:student_loans_eligibility, :eligible, award_amount: 1000))
         end
 
         let(:claim_attributes) do
           {
-            eligibility_attributes: {student_loan_repayment_amount: 555}
+            eligibility_attributes: {award_amount: 555}
           }
         end
         let(:amendment_attributes) do
@@ -259,7 +259,7 @@ RSpec.describe Amendment, type: :model do
         it "stores the value in the amendment's claim_changes" do
           amendment = described_class.amend_claim(claim.reload, claim_attributes, amendment_attributes)
 
-          expect(amendment.claim_changes).to eq("student_loan_repayment_amount" => [1000, 555])
+          expect(amendment.claim_changes).to eq("award_amount" => [1000, 555])
         end
       end
 
@@ -270,7 +270,7 @@ RSpec.describe Amendment, type: :model do
         let(:claim_attributes) do
           {
             eligibility_attributes: {
-              student_loan_repayment_amount: 555
+              award_amount: 555
             }
           }
         end

@@ -22,7 +22,7 @@ module AutomatedChecks
 
       delegate :national_insurance_number, :date_of_birth, :eligibility, to: :claim
       delegate :student_loan_plan, to: :claim, prefix: :claim
-      delegate :student_loan_repayment_amount, to: :eligibility, prefix: :claim
+      delegate :award_amount, to: :eligibility, prefix: :claim
       delegate :repaying_plan_types, :total_repayment_amount, to: :student_loans_data, prefix: :slc
 
       alias_method :nino, :national_insurance_number
@@ -60,11 +60,11 @@ module AutomatedChecks
       end
 
       def student_loan_repayment_amount_greater_than_actual?
-        claim_student_loan_repayment_amount > slc_total_repayment_amount
+        claim_award_amount > slc_total_repayment_amount
       end
 
       def student_loan_repayment_amount_less_than_or_equal_to_actual?
-        claim_student_loan_repayment_amount <= slc_total_repayment_amount
+        claim_award_amount <= slc_total_repayment_amount
       end
 
       def student_loan_plan_type_exact_match?
@@ -102,7 +102,7 @@ module AutomatedChecks
             "[SLC Student loan amount] - The total SLC repayment amount is £0"
           elsif student_loan_repayment_amount_greater_than_actual?
             sprintf "[SLC Student loan amount] - The amount on the claim (%.2f) exceeded the SLC value (%.2f)",
-              claim_student_loan_repayment_amount,
+              claim_award_amount,
               slc_total_repayment_amount
           end
         when :all

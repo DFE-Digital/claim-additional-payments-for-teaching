@@ -152,7 +152,7 @@ class PersonalDetailsForm < Form
 
     if journey == Journeys::TeacherStudentLoanReimbursement
       journey_session.answers.assign_attributes(
-        student_loan_repayment_amount: nil
+        award_amount: nil
       )
 
       if national_insurance_number_changed?

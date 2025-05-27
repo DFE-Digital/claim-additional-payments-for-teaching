@@ -61,10 +61,6 @@ module BasePolicy
     (claim.submitted_at + Claim::DECISION_DEADLINE).to_date
   end
 
-  def award_amount_column
-    "award_amount"
-  end
-
   def mailer
     ClaimMailer
   end

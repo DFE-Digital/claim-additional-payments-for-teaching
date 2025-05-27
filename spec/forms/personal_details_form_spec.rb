@@ -414,7 +414,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
 
       before do
         journey_session.answers.assign_attributes(
-          student_loan_repayment_amount: 2000
+          award_amount: 2000
         )
 
         journey_session.save!
@@ -423,7 +423,7 @@ RSpec.describe PersonalDetailsForm, type: :model do
       it "resets tslr specific dependent answers" do
         form.save
 
-        expect(journey_session.reload.answers.student_loan_repayment_amount).to be_zero
+        expect(journey_session.reload.answers.award_amount).to be_zero
       end
     end
   end

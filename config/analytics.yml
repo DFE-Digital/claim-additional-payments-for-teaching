@@ -161,6 +161,7 @@ shared:
     - physics_taught
     - taught_eligible_subjects
     - student_loan_repayment_amount
+    - award_amount
     - had_leadership_position
     - mostly_performed_leadership_duties
     - claim_school_somewhere_else

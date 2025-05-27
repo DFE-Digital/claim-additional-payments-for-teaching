@@ -32,26 +32,26 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
     end
   end
 
-  describe "student_loan_repayment_amount attribute" do
+  describe "award_amount attribute" do
     it "validates that the loan repayment amount is numerical" do
-      expect(described_class.new(student_loan_repayment_amount: "don’t know")).not_to be_valid
-      expect(described_class.new(student_loan_repayment_amount: "£1,234.56")).not_to be_valid
+      expect(described_class.new(award_amount: "don’t know")).not_to be_valid
+      expect(described_class.new(award_amount: "£1,234.56")).not_to be_valid
     end
 
     it "validates that the loan repayment is under £99,999" do
-      expect(described_class.new(student_loan_repayment_amount: 100_000)).not_to be_valid
-      expect(described_class.new(student_loan_repayment_amount: 99_999)).to be_valid
+      expect(described_class.new(award_amount: 100_000)).not_to be_valid
+      expect(described_class.new(award_amount: 99_999)).to be_valid
     end
 
     it "validates that the loan repayment is greater than or equal to zero" do
-      expect(described_class.new(student_loan_repayment_amount: "-99")).not_to be_valid
-      expect(described_class.new(student_loan_repayment_amount: "0")).to be_valid
-      expect(described_class.new(student_loan_repayment_amount: "150")).to be_valid
+      expect(described_class.new(award_amount: "-99")).not_to be_valid
+      expect(described_class.new(award_amount: "0")).to be_valid
+      expect(described_class.new(award_amount: "150")).to be_valid
     end
 
     it "validates that the loan repayment less than £5000 when amending a claim" do
-      expect(described_class.new(teacher_reference_number: "1234567", student_loan_repayment_amount: "5001")).not_to be_valid(:amendment)
-      expect(described_class.new(teacher_reference_number: "1234567", student_loan_repayment_amount: "1200")).to be_valid(:amendment)
+      expect(described_class.new(teacher_reference_number: "1234567", award_amount: "5001")).not_to be_valid(:amendment)
+      expect(described_class.new(teacher_reference_number: "1234567", award_amount: "1200")).to be_valid(:amendment)
     end
   end
 
@@ -189,8 +189,8 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
       ).to eql false
     end
 
-    context "student_loan_repayment_amount eligibility" do
-      subject(:eligibility) { described_class.new(student_loan_repayment_amount: 0, claim:) }
+    context "award_amount eligibility" do
+      subject(:eligibility) { described_class.new(award_amount: 0, claim:) }
 
       context "when the has_student_loan claim flag is true" do
         let(:claim) { build(:claim, has_student_loan: true) }
@@ -264,7 +264,7 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
 
       expect(
         described_class.new(
-          student_loan_repayment_amount: 0,
+          award_amount: 0,
           claim: Claim.new(has_student_loan: true)
         ).ineligibility_reason
       ).to eq :made_zero_repayments
@@ -273,7 +273,7 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
 
   describe "#award_amount" do
     it "returns the student loan repayment amount" do
-      eligibility = described_class.new(student_loan_repayment_amount: 1000)
+      eligibility = described_class.new(award_amount: 1000)
       expect(eligibility.award_amount).to eq(1000)
     end
   end
@@ -287,8 +287,8 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
       expect(build(:student_loans_eligibility, :eligible, employment_status: nil)).not_to be_valid(:submit)
     end
 
-    it "is not valid without a value for student_loan_repayment_amount" do
-      expect(build(:student_loans_eligibility, student_loan_repayment_amount: nil)).not_to be_valid(:submit)
+    it "is not valid without a value for award_amount" do
+      expect(build(:student_loans_eligibility, award_amount: nil)).not_to be_valid(:submit)
     end
   end
 

@@ -146,9 +146,5 @@ module Policies
     def payroll_file_name
       "TSLR"
     end
-
-    def award_amount_column
-      "student_loan_repayment_amount"
-    end
   end
 end

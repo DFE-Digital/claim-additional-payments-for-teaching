@@ -72,7 +72,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
         it "updates the claim with the student plan and the repayment total" do
           expect { call }.to change { claim.reload.has_student_loan }.to(true)
             .and change { claim.student_loan_plan }.to(StudentLoan::PLAN_1_AND_2)
-            .and change { claim.eligibility.student_loan_repayment_amount }.to(110)
+            .and change { claim.eligibility.award_amount }.to(110)
         end
 
         it "creates an amendment" do
@@ -83,7 +83,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
           expect(amendment.claim_changes).to eq({
             "has_student_loan" => [false, true],
             "student_loan_plan" => [Claim::NO_STUDENT_LOAN, StudentLoan::PLAN_1_AND_2],
-            "student_loan_repayment_amount" => [0, 110]
+            "award_amount" => [0, 110]
           })
 
           expect(amendment.notes).to eq(
@@ -136,7 +136,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
         it "updates the claim with the student plan and the repayment total" do
           expect { call }.to change { claim.reload.has_student_loan }.to(false)
             .and change { claim.student_loan_plan }.to(Claim::NO_STUDENT_LOAN)
-            .and change { claim.eligibility.student_loan_repayment_amount }.to(0)
+            .and change { claim.eligibility.award_amount }.to(0)
         end
 
         it "creates an amendment with the student plan change" do
@@ -147,7 +147,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
           expect(amendment.claim_changes).to eq({
             "has_student_loan" => [true, false],
             "student_loan_plan" => [StudentLoan::PLAN_1_AND_2, Claim::NO_STUDENT_LOAN],
-            "student_loan_repayment_amount" => [110, 0]
+            "award_amount" => [110, 0]
           })
 
           expect(amendment.notes).to eq(
@@ -195,7 +195,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
           :with_no_student_loan,
           policy:,
           eligibility_attributes: {
-            student_loan_repayment_amount: 0
+            award_amount: 0
           }
         )
       end
@@ -207,7 +207,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
       it "updates the claim with the student plan and the repayment total" do
         expect { call }.to change { claim.reload.has_student_loan }.to(true)
           .and change { claim.student_loan_plan }.to(StudentLoan::PLAN_1)
-          .and change { claim.eligibility.student_loan_repayment_amount }.to(50)
+          .and change { claim.eligibility.award_amount }.to(50)
       end
 
       it "creates an amendment" do
@@ -218,7 +218,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
         expect(amendment.claim_changes).to eq({
           "has_student_loan" => [false, true],
           "student_loan_plan" => [nil, StudentLoan::PLAN_1],
-          "student_loan_repayment_amount" => [0, 50]
+          "award_amount" => [0, 50]
         })
 
         expect(amendment.notes).to eq(

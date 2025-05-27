@@ -105,8 +105,8 @@ FactoryBot.define do
       student_loan_plan { StudentLoan::PLAN_1 }
     end
 
-    trait :with_student_loan_repayment_amount do
-      student_loan_repayment_amount { 1000 }
+    trait :with_award_amount do
+      award_amount { 1000 }
     end
 
     trait :submittable do
@@ -130,7 +130,7 @@ FactoryBot.define do
       with_qualification_details_check
       with_academic_year
       with_student_loan
-      with_student_loan_repayment_amount
+      with_award_amount
     end
   end
 end
