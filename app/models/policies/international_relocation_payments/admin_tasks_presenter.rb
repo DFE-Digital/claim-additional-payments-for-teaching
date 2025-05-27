@@ -18,7 +18,10 @@ module Policies
 
       def employment
         [
-          [translate("admin.current_school"), display_school(eligibility.current_school)]
+          ["Workplace", display_school(eligibility.current_school, include_dfe_number: false)],
+          ["Employment contract of at least one year", eligibility.one_year? ? "Yes" : "No"],
+          ["Employment start date", eligibility.start_date&.to_fs(:govuk_date)],
+          ["Subject employed to teach", eligibility.subject.humanize]
         ]
       end
 
