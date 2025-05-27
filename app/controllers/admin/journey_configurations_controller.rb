@@ -5,7 +5,7 @@ module Admin
     after_action :send_reminders, only: [:update]
 
     FILE_UPLOAD_TARGET_DATA_MODELS = {
-      "additional-payments" => Policies::TargetedRetentionIncentivePayments::Award,
+      "targeted-retention-incentive-payments" => Policies::TargetedRetentionIncentivePayments::Award,
       "early-years-payment-provider" => EligibleEyProvider,
       "further-education-payments" => EligibleFeProvider
     }
@@ -15,7 +15,7 @@ module Admin
     end
 
     def edit
-      @awards_upload_form = Policies::TargetedRetentionIncentivePayments::AwardCsvImporter.new(awards_upload_params.merge({admin_user:})) if journey_configuration.additional_payments?
+      @awards_upload_form = Policies::TargetedRetentionIncentivePayments::AwardCsvImporter.new(awards_upload_params.merge({admin_user:})) if journey_configuration.targeted_retention_incentive_payments?
 
       @upload_form = EligibleFeProvidersForm.new(upload_params, admin_user)
       @download_form = EligibleFeProvidersForm.new({}, admin_user)

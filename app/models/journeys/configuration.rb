@@ -22,6 +22,10 @@ module Journeys
       journey == Journeys::AdditionalPaymentsForTeaching
     end
 
+    def targeted_retention_incentive_payments?
+      journey == Journeys::TargetedRetentionIncentivePayments
+    end
+
     def teacher_id_configurable?
       [
         AdditionalPaymentsForTeaching,
