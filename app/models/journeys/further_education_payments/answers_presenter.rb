@@ -20,7 +20,7 @@ module Journeys
           a << [text_for(:select_email), answers.email_address, "select-email"] if show_email_select?
           a << [t("questions.provide_mobile_number"), answers.provide_mobile_number? ? "Yes" : "No", "provide-mobile-number"] unless show_mobile_select?
           a << [t("questions.mobile_number"), answers.mobile_number, "mobile-number"] unless show_mobile_select? || !answers.provide_mobile_number?
-          a << [t("additional_payments.forms.select_mobile_form.questions.which_number"), answers.mobile_number.present? ? answers.mobile_number : t("additional_payments.forms.select_mobile_form.answers.decline"), "select-mobile"] if show_mobile_select?
+          a << [t("forms.select_mobile_form.questions.which_number"), answers.mobile_number.present? ? answers.mobile_number : t("forms.select_mobile_form.answers.decline"), "select-mobile"] if show_mobile_select?
         end
       end
 

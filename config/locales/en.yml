@@ -294,6 +294,18 @@ en:
       errors:
         select_email: Select an option to indicate whether the email is correct or not
         invalid_email: Invalid email address. Please select a different email address
+    select_mobile_form:
+      questions:
+        which_number: "Which mobile number should we use to contact you?"
+      answers:
+        alternative: "A different mobile number"
+        decline: "I do not want to be contacted by mobile"
+      hints:
+        usage:
+          "We will only use this number if we are unable to contact you via email. It may slow down your application
+          if we are unable to reach you."
+      errors:
+        mobile_check: "Select an option to indicate whether the mobile number is correct or not"
     email_address:
       label: "Email address"
       hint1:
@@ -479,209 +491,17 @@ en:
           title: "Does the claimant’s student loan amount and plan type match the information we hold about their loan?"
         matching_details:
           title: "Is this claim still valid despite having matching details with other claims?"
-  additional_payments: &additional_payments
-    forms:
-      correct_school:
-        questions:
-          which_school: "Which school do you teach at?"
-      current_school:
-        questions:
-          current_school_search: "Which school do you teach at?"
-          current_school_results: "Select the school you teach at"
-        errors:
-          enter_a_school_or_postcode: "Enter a school or postcode"
-          select_the_school_you_teach_at: "Select the school you teach at"
-          the_selected_school_is_closed: "The selected school is closed"
-          school_not_found: "School not found"
-      email_verification:
-        errors:
-          one_time_password:
-            invalid: An error occured while validating the passcode, please try generating a new one
-      nqt_in_academic_year_after_itt:
-        errors:
-          inclusion: Select yes if you are currently teaching as a qualified teacher
-      eligible_itt_subject:
-        questions:
-          which_subject: "Which subject did you do your %{qualification} in?"
-          single_subject: "Did you do your %{qualification} in %{subject}?"
-          which_subject_trainee_teacher: "Which subject are you currently doing your initial teacher training (ITT) in?"
-        answers:
-          chemistry: "Chemistry"
-          computing: "Computing"
-          mathematics: "Mathematics"
-          foreign_languages: "Languages"
-          physics: "Physics"
-          none_of_the_above: "None of the above"
-        hints:
-          subject:
-            "The subjects listed are eligible for additional payment based on the school you teach in and the year you
-            studied."
-        errors:
-          inclusion: "Select a subject"
-      eligible_degree_subject:
-        questions:
-          eligible_degree_subject: Do you have a degree in an eligible subject?
-        errors:
-          inclusion: Select yes if you have a degree in an eligible subject
-      employed_directly:
-        questions:
-          employed_directly: Are you employed directly by your school?
-        errors:
-          inclusion: Select yes if you are directly employed by your school
-      entire_term_contract:
-        questions:
-          has_entire_term_contract: Do you have a contract to teach at the same school for an entire term or longer?
-        errors:
-          inclusion: Select yes if you have a contract to teach at the same school for an entire term or longer
-      itt_academic_year:
-        errors:
-          undergraduate_itt: "Select the academic year you completed your undergraduate ITT"
-          postgraduate_itt: "Select the academic year you started your postgraduate ITT"
-          assessment_only: "Select the academic year you earned your QTS"
-          overseas_recognition: "Select the academic year you earned your QTS"
-      induction_completed:
-        errors:
-          blank: "Select yes if you have completed your induction"
-      poor_performance:
-        heading: Tell us if you are currently under any performance measures or disciplinary action
-        questions:
-          performance:
-            question: "Are you subject to any formal performance measures as a result of continuous poor teaching standards?"
-            hint:
-              "This will be as a result of your underperformance as a teacher over a period of time. It could put your
-              employment at the school at risk and is something we may check with your school as it will affect your
-              eligibility."
-          disciplinary:
-            question: "Are you currently subject to disciplinary action?"
-            hint:
-              "This is more serious than performance measures and could be because of misconduct. It is something we may
-              check with your school as it will affect your eligibility."
-        errors:
-          performance:
-            inclusion: Select yes if you are subject to formal action for poor performance at work
-          disciplinary:
-            inclusion: Select yes if you are subject to disciplinary action
-      qualification:
-        questions:
-          which_route: "Which route into teaching did you take?"
-        errors:
-          inclusion: Select the route you took into teaching
-        hints:
-          postgraduate_itt:
-            "Postgraduate Certificate of Education (PGCE), Teach First, School Direct ITT and School Centered ITT
-            (SCITT)."
-          undergraduate_itt: "Bachelor of Arts (BA) or Bachelor of Science (BSc) degrees."
-        answers:
-          postgraduate_itt: "Postgraduate initial teacher training (ITT)"
-          undergraduate_itt: "Undergraduate initial teacher training (ITT)"
-          assessment_only: "Assessment only"
-          overseas_recognition: "Overseas recognition"
-      qualification_details:
-        errors:
-          qualifications_details_check: "Select yes if your qualification details are correct"
-      select_mobile_form:
-        questions:
-          which_number: "Which mobile number should we use to contact you?"
-        answers:
-          alternative: "A different mobile number"
-          decline: "I do not want to be contacted by mobile"
-        hints:
-          usage:
-            "We will only use this number if we are unable to contact you via email. It may slow down your application
-            if we are unable to reach you."
-        errors:
-          mobile_check: "Select an option to indicate whether the mobile number is correct or not"
-      sign_in_or_continue:
-        errors:
-          details_check: "Select an option to whether the details are correct or not"
-      supply_teacher:
-        questions:
-          employed_as_supply_teacher: Are you currently employed as a supply teacher?
-        errors:
-          inclusion: Select yes if you are a supply teacher
-      teaching_subject_now:
-        questions:
-          teaching_subject_now: "Do you spend at least half of your contracted hours teaching eligible subjects?"
-        errors:
-          inclusion: Select yes if you spend at least half of your contracted hours teaching eligible subjects
-      eligibility_confirmed:
-        errors:
-          blank: Select an additional payment
-          inclusion: Select a valid additional payment
-      personal_details: &reminders_personal_details
-        errors:
-          full_name:
-            blank: Enter full name
-            length: Full name must be 100 characters or less
-          email_address:
-            blank: Enter an email address
-            invalid: Enter an email address in the correct format, like name@example.com
-            length: Email address must be %{length} characters or less
-            unauthorised: Only authorised email addresses can be used when using a team-only API key
-    check_your_answers:
-      part_one:
-        primary_heading: Check your answers
-        secondary_heading: Eligibility details
-        confirmation_notice:
-          By selecting continue you are confirming that, to the best of your knowledge, the details you are providing
-          are correct.
-      heading_send_application: Now send your application
-      statement:
-        By submitting this you are confirming that, to the best of your knowledge, the details you are providing are
-        correct.
-      btn_text: Accept and send
-    journey_name: "Claim additional payments for teaching"
-    claim_description: "for an additional payment for teaching"
-    landing_page: "Find out if you are eligible for any additional payments"
+  additional_payments:
     support_email_address: "additionalteachingpayment@digital.education.gov.uk"
-    feedback_email: "additionalteachingpayment@digital.education.gov.uk"
-    ineligible:
-      heading: "You are not eligible"
-      school_heading: "The school you have selected is not eligible"
-      reason:
-        itt_subject: "Early-career payments are only available for teachers who did their ITT in:"
-        not_teaching_subject:
-          "You are only eligible for this payment if you are qualified in, and are currently teaching either:"
-        trainee_teacher_future_eligibility: "You are not eligible this year"
-        generic: "Based on the answers you have provided you are not eligible for an early-career payment"
-    questions:
-      check_and_confirm_details: "Check and confirm your personal details"
-      details_correct: "Are these details correct?"
-      nqt_in_academic_year_after_itt:
-        heading: Are you currently teaching as a qualified teacher?
-        hint: Your induction years count as long as you have your qualified teacher status (QTS).
-      induction_completed:
-        heading: Have you completed your induction as an early-career teacher?
-        hint:
-          qualified:
-            title: If you qualified as a teacher in the 2020 to 2021 academic year
-            text_html: >
-              Select yes if you have completed at least 1 year of your induction period as an early-career teacher.<br/>
-              Select no if you have not completed 1 year of your induction period.<br/> Further information about
-              induction periods can be found at <a
-              href="https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools"
-              class="govuk-link govuk-link--no-visited-state" target="_blank">Early-career payments guidance for
-              teachers and schools</a>
-          overseas:
-            title: If you qualified overseas
-            text_html: >
-              Select yes if you have more than 2 years experience as a teacher.<br/> Select no if you have less than 2
-              years experience as a teacher.<br/> Further information can be found at <a
-              href="https://www.gov.uk/government/publications/apply-for-qualified-teacher-status-qts-if-you-teach-outside-the-uk/routes-to-qualified-teacher-status-qts-for-teachers-and-those-with-teaching-experience-outside-the-uk#early-career-teacher-ect-induction"
-              class="govuk-link govuk-link--no-visited-state" target="_blank">early-career teacher (ECT) induction
-              periods for teachers who qualified overseas</a>
-      itt_academic_year:
-        qualification:
-          undergraduate_itt: In which academic year did you complete your undergraduate initial teacher training (ITT)?
-          postgraduate_itt: In which academic year did you start your postgraduate initial teacher training (ITT)?
-          assessment_only: In which academic year did you earn your qualified teacher status (QTS)?
-          overseas_recognition: In which academic year did you earn your qualified teacher status (QTS)?
-        route_into_teaching:
-          undergraduate_itt: undergraduate ITT
-          postgraduate_itt: postgraduate ITT
-        itt_action:
-          undergraduate_itt: completed
-          postgraduate_itt: started
+  early_career_payments:
+    purpose: "For early career teachers who teach certain subjects."
+    policy_short_name: "Early-Career Payments"
+    policy_acronym: "ECP"
+    payment_name: "Early-career payment"
+    claim_subject: "Early-career payment"
+    claim_amount_description: "Additional payment for teaching"
+    support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
+    information_provided_further_details_link_text: early-career payment (opens in new tab)
     admin:
       degree_in_an_eligible_subject: "Do you have an UG or a PG degree in an eligible subject?"
       employed_as_supply_teacher: "Employed as a supply teacher?"
@@ -721,19 +541,56 @@ en:
           title: Does the claimant's subject match the schools workforce census subjects
         matching_details:
           title: "Is this claim still valid despite having matching details with other claims?"
-    reminders:
-      full_name: Full name
-    information_provided_further_details: For more details, you can read about payments and deductions for the %{link}
-  early_career_payments:
-    <<: *additional_payments
-    purpose: "For early career teachers who teach certain subjects."
-    policy_short_name: "Early-Career Payments"
-    policy_acronym: "ECP"
-    payment_name: "Early-career payment"
-    claim_subject: "Early-career payment"
-    claim_amount_description: "Additional payment for teaching"
-    support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
-    information_provided_further_details_link_text: early-career payment (opens in new tab)
+    forms:
+      correct_school:
+        questions:
+          which_school: "Which school do you teach at?"
+      current_school:
+        questions:
+          current_school_search: "Which school do you teach at?"
+          current_school_results: "Select the school you teach at"
+      eligible_itt_subject:
+        questions:
+          which_subject: "Which subject did you do your %{qualification} in?"
+          single_subject: "Did you do your %{qualification} in %{subject}?"
+          which_subject_trainee_teacher: "Which subject are you currently doing your initial teacher training (ITT) in?"
+        answers:
+          chemistry: "Chemistry"
+          computing: "Computing"
+          mathematics: "Mathematics"
+          foreign_languages: "Languages"
+          physics: "Physics"
+          none_of_the_above: "None of the above"
+      eligible_degree_subject:
+        questions:
+          eligible_degree_subject: Do you have a degree in an eligible subject?
+      employed_directly:
+        questions:
+          employed_directly: Are you employed directly by your school?
+      entire_term_contract:
+        questions:
+          has_entire_term_contract: Do you have a contract to teach at the same school for an entire term or longer?
+      poor_performance:
+        heading: Tell us if you are currently under any performance measures or disciplinary action
+        questions:
+          performance:
+            question: "Are you subject to any formal performance measures as a result of continuous poor teaching standards?"
+          disciplinary:
+            question: "Are you currently subject to disciplinary action?"
+      qualification:
+        questions:
+          which_route: "Which route into teaching did you take?"
+        answers:
+          postgraduate_itt: "Postgraduate initial teacher training (ITT)"
+          undergraduate_itt: "Undergraduate initial teacher training (ITT)"
+          assessment_only: "Assessment only"
+          overseas_recognition: "Overseas recognition"
+      supply_teacher:
+        questions:
+          employed_as_supply_teacher: Are you currently employed as a supply teacher?
+      teaching_subject_now:
+        questions:
+          teaching_subject_now: "Do you spend at least half of your contracted hours teaching eligible subjects?"
   get_a_teacher_relocation_payment: &get_a_teacher_relocation_payment
     accessibility_statement:
       test_date: "28 July 2022"
@@ -1270,7 +1127,16 @@ en:
         heading: Teacher reference number (TRN)
         questions:
           teacher_reference_number: "What is your TRN? (optional)"
-      personal_details: *reminders_personal_details
+      personal_details:
+        errors:
+          full_name:
+            blank: Enter full name
+            length: Full name must be 100 characters or less
+          email_address:
+            blank: Enter an email address
+            invalid: Enter an email address in the correct format, like name@example.com
+            length: Email address must be %{length} characters or less
+            unauthorised: Only authorised email addresses can be used when using a team-only API key
     check_your_answers:
       part_one:
         primary_heading: Check your answers
