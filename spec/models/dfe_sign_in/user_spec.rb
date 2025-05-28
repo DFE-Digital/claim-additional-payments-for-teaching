@@ -155,4 +155,36 @@ RSpec.describe DfeSignIn::User, type: :model do
       it { is_expected.not_to be_deleted }
     end
   end
+
+  describe "Slack notifications" do
+    let(:given_name) { "test first name" }
+    let(:family_name) { "test family name" }
+    let(:organisation_name) { "test org" }
+    let(:email) { "test@test.com" }
+
+    context "in the production environment" do
+      before do
+        allow(ENV).to receive(:fetch).with("ENVIRONMENT_NAME").and_return("production")
+        allow(ENV).to receive(:fetch).with("DFE_SIGN_IN_SLACK_NOTIFICATION_WEBHOOK_URL", nil).and_return("test")
+      end
+
+      it "sends a notification on record creation" do
+        expect_any_instance_of(Slack::Notifier).to receive(:ping).with("A new user has been granted access to the Claim admin panel: #{given_name} #{family_name} - #{organisation_name} (#{email})")
+        described_class.create!(given_name:, family_name:, organisation_name:, email:)
+      end
+    end
+
+    context "in any non-production environment" do
+      ["local", "test", "review"].each do |environment_name|
+        before do
+          allow(ENV).to receive(:fetch).with("ENVIRONMENT_NAME").and_return(environment_name)
+        end
+
+        it "does not send a notification on record creation" do
+          expect_any_instance_of(Slack::Notifier).not_to receive(:ping)
+          described_class.create!(given_name:, family_name:, organisation_name:, email:)
+        end
+      end
+    end
+  end
 end

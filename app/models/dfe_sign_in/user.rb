@@ -8,6 +8,8 @@ module DfeSignIn
 
     has_secure_token :session_token
 
+    after_create :send_slack_notification
+
     def self.table_name
       "dfe_sign_in_users"
     end
@@ -66,6 +68,13 @@ module DfeSignIn
 
     def unassign_claims
       assigned_claims.update(assigned_to_id: nil)
+    end
+
+    def send_slack_notification
+      if (ENV.fetch("ENVIRONMENT_NAME") == "production") && (url = ENV.fetch("DFE_SIGN_IN_SLACK_NOTIFICATION_WEBHOOK_URL", nil))
+        notifier = Slack::Notifier.new url
+        notifier.ping "A new user has been granted access to the Claim admin panel: #{given_name} #{family_name} - #{organisation_name} (#{email})"
+      end
     end
   end
 end
