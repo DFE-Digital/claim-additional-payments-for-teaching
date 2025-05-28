@@ -46,6 +46,15 @@ RSpec.describe "teacher route: completing the form" do
       and_i_dont_change_my_answers
     end
 
+    context "change answers" do
+      it "returns to check answers after changing answer" do
+        when_i_click_back_link
+        then_i_change_answer("Change have you had any breaks in employment over the past year?")
+        and_i_complete_breaks_in_employment_with(option: "Yes")
+        then_the_check_your_answers_part_one_page_shows
+      end
+    end
+
     context "with postcode search" do
       it "submits an application" do
         and_i_complete_the_nationality_step_with(option: "Australian")
@@ -93,6 +102,10 @@ RSpec.describe "teacher route: completing the form" do
         then_the_application_is_submitted_successfully
       end
     end
+  end
+
+  def then_the_check_your_answers_part_one_page_shows
+    assert_on_check_your_answers_part_one_page!
   end
 
   def then_the_check_your_answers_part_one_page_shows_my_answers

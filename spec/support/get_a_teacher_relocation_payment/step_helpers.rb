@@ -350,5 +350,13 @@ module GetATeacherRelocationPayment
         "We have sent you a confirmation email to seymour.skinner@springfieldelementary.edu"
       )
     end
+
+    def then_i_change_answer(question)
+      click_link question
+    end
+
+    def when_i_click_back_link
+      click_link "Back"
+    end
   end
 end
