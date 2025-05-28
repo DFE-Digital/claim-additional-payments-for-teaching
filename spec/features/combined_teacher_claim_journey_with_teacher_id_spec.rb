@@ -5,7 +5,7 @@ RSpec.feature "Combined journey with Teacher ID" do
 
   let(:notify) { instance_double("NotifySmsMessage", deliver!: true) }
 
-  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments_only, current_academic_year: AcademicYear.new(2023)) }
+  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments, current_academic_year: AcademicYear.new(2023)) }
   let(:school) { create(:school, :combined_journey_eligibile_for_all) }
   let(:eligible_itt_years) { Policies::TargetedRetentionIncentivePayments.selectable_itt_years_for_claim_year(journey_configuration.current_academic_year) }
   let(:academic_date) { Date.new(eligible_itt_years.first.start_year, 12, 1) }
@@ -22,7 +22,6 @@ RSpec.feature "Combined journey with Teacher ID" do
   end
 
   before do
-    FeatureFlag.enable!(:tri_only_journey)
     school
     stub_otp_verification
   end

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe TeacherReferenceNumberForm do
-  before { create(:journey_configuration, :additional_payments) }
+  before { create(:journey_configuration, :targeted_retention_incentive_payments) }
 
   let(:journey) { Journeys::TargetedRetentionIncentivePayments }
 

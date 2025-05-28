@@ -4,7 +4,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
   include OmniauthMockHelper
 
   # create a school eligible for ECP and Targeted Retention Incentive so can walk the whole journey
-  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments_only) }
+  let!(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments) }
   let(:eligible_school) { create(:school, :targeted_retention_incentive_payments_eligible) }
   let(:ineligible_school) { create(:school, :targeted_retention_incentive_payments_ineligible) }
   let(:trn) { 1234567 }
@@ -12,7 +12,6 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
   let(:nino) { "AB123123A" }
 
   before do
-    FeatureFlag.enable!(:tri_only_journey)
     eligible_school
     ineligible_school
     freeze_time

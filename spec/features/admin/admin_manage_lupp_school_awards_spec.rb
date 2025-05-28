@@ -2,8 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Managing targeted_retention_incentive Payments school awards" do
   let!(:journey_configuration) do
-    FeatureFlag.enable!(:tri_only_journey)
-    create(:journey_configuration, :targeted_retention_incentive_payments_only)
+    create(:journey_configuration, :targeted_retention_incentive_payments)
   end
 
   let(:csv_file) { "spec/fixtures/files/targeted_retention_incentive_school_awards_good.csv" }

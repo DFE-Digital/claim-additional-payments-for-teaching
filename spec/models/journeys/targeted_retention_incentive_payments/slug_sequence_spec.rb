@@ -2,12 +2,7 @@ require "rails_helper"
 
 RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
   before do
-    FeatureFlag.enable!(:tri_only_journey)
-
-    create(
-      :journey_configuration,
-      :targeted_retention_incentive_payments_only
-    )
+    create(:journey_configuration, :targeted_retention_incentive_payments)
   end
 
   let(:journey_session) do

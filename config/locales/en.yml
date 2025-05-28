@@ -480,10 +480,6 @@ en:
         matching_details:
           title: "Is this claim still valid despite having matching details with other claims?"
   additional_payments: &additional_payments
-    accessibility_statement:
-      test_date: "28 July 2022"
-      prepared_date: "31 July 2019"
-      updated_date: "28 July 2022"
     forms:
       correct_school:
         questions:

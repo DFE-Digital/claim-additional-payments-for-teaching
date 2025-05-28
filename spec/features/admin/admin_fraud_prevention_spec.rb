@@ -163,8 +163,7 @@ RSpec.feature "Admin fraud prevention" do
   end
 
   def submit_claim(national_insurance_number: "QQ123456C")
-    FeatureFlag.enable!(:tri_only_journey)
-    create(:journey_configuration, :targeted_retention_incentive_payments_only)
+    create(:journey_configuration, :targeted_retention_incentive_payments)
 
     school = create(:school, :targeted_retention_incentive_payments_eligible)
 

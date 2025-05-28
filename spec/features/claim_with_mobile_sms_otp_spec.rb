@@ -23,9 +23,7 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
       let(:policy) { Policies::TargetedRetentionIncentivePayments }
 
       before do
-        FeatureFlag.enable!(:tri_only_journey)
-
-        create(:journey_configuration, :targeted_retention_incentive_payments_only)
+        create(:journey_configuration, :targeted_retention_incentive_payments)
       end
 
       scenario "makes claim" do

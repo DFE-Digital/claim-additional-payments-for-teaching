@@ -85,5 +85,9 @@ module Policies
     def auto_check_student_loan_plan_task?
       true
     end
+
+    def active?
+      false
+    end
   end
 end

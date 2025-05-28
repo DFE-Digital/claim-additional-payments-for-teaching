@@ -263,8 +263,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
     end
 
     before do
-      FeatureFlag.enable! :tri_only_journey
-      create(:journey_configuration, :targeted_retention_incentive_payments_only)
+      create(:journey_configuration, :targeted_retention_incentive_payments)
       start_targeted_retention_incentive_payments_claim
 
       journey_session.answers.assign_attributes(

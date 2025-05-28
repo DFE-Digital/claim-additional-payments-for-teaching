@@ -1,8 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Combined claim journey dependent answers" do
-  before { FeatureFlag.enable!(:tri_only_journey) }
-  before { create(:journey_configuration, :targeted_retention_incentive_payments_only) }
+  before { create(:journey_configuration, :targeted_retention_incentive_payments) }
   let!(:school) { create(:school, :targeted_retention_incentive_payments_eligible) }
 
   scenario "Dependent answers reset" do

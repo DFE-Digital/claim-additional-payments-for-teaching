@@ -2,8 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Backlinking during a claim" do
   scenario "when there is an error" do
-    FeatureFlag.enable!(:tri_only_journey)
-    create(:journey_configuration, :targeted_retention_incentive_payments_only)
+    create(:journey_configuration, :targeted_retention_incentive_payments)
     targeted_retention_incentive_school = create(:school, :targeted_retention_incentive_payments_eligible)
 
     visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
@@ -96,11 +95,9 @@ RSpec.feature "Backlinking during a claim" do
   end
 
   scenario "Targeted Retention Incentive journey" do
-    FeatureFlag.enable!(:tri_only_journey)
-
     create(
       :journey_configuration,
-      :targeted_retention_incentive_payments_only,
+      :targeted_retention_incentive_payments,
       current_academic_year: AcademicYear.new(2023)
     )
 
@@ -131,11 +128,9 @@ RSpec.feature "Backlinking during a claim" do
   end
 
   scenario "Targeted Retention Incentive trainee mini journey" do
-    FeatureFlag.enable!(:tri_only_journey)
-
     create(
       :journey_configuration,
-      :targeted_retention_incentive_payments_only,
+      :targeted_retention_incentive_payments,
       current_academic_year: AcademicYear.new(2023)
     )
 
