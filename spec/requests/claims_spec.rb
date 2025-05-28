@@ -97,8 +97,6 @@ RSpec.describe "Claims", type: :request do
               )
             )
           journey_session.save!
-
-          set_slug_sequence_in_session(journey_session, "claim-school")
         end
 
         it "renders the requested page in the sequence" do
@@ -150,10 +148,7 @@ RSpec.describe "Claims", type: :request do
         Journeys::TeacherStudentLoanReimbursement::Session.order(:created_at).last
       end
 
-      before {
-        start_student_loans_claim
-        set_slug_sequence_in_session(journey_session, "qts-year")
-      }
+      before { start_student_loans_claim }
 
       it "updates the claim with the submitted form data" do
         put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "qts-year"), params: {claim: {qts_award_year: "on_or_after_cut_off_date"}}
@@ -179,10 +174,6 @@ RSpec.describe "Claims", type: :request do
           }
         end
         let(:request) { put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "personal-details"), params: }
-
-        before do
-          set_slug_sequence_in_session(journey_session, "personal-details")
-        end
 
         context "when there is no student loan data for the claimant" do
           it "does not update the student loan details" do
@@ -217,7 +208,6 @@ RSpec.describe "Claims", type: :request do
             journey_session.answers.assign_attributes(logged_in_with_tid: true)
             journey_session.save!
           end
-          set_slug_sequence_in_session(journey_session, "information-provided")
         end
 
         context "within the non-TID journey" do

@@ -54,15 +54,6 @@ module Journeys
       defined?(self::FORMS) ? self::FORMS : {}
     end
 
-    def page_sequence_for_claim(journey_session, completed_slugs, current_slug)
-      PageSequence.new(
-        slug_sequence.new(journey_session),
-        completed_slugs,
-        current_slug,
-        journey_session
-      )
-    end
-
     def answers_presenter
       self::AnswersPresenter
     end
@@ -85,10 +76,6 @@ module Journeys
 
     def pii_attributes
       SessionAnswers.pii_attributes
-    end
-
-    def use_navigator?
-      false
     end
 
     def accessible?(code = nil)

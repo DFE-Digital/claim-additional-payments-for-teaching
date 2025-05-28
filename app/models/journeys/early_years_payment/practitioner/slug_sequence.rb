@@ -28,6 +28,10 @@ module Journeys
 
         RESTRICTED_SLUGS = [].freeze
 
+        DEAD_END_SLUGS = %w[
+          ineligible
+        ]
+
         def self.start_page_url
           Rails.application.routes.url_helpers.claim_path("early-years-payment-practitioner", "find-reference", skip_landing_page: true)
         end

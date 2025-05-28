@@ -17,6 +17,11 @@ module Journeys
           "verify-identity"
         ]
 
+        DEAD_END_SLUGS = [
+          "complete",
+          "expired-link"
+        ]
+
         def self.verify_claim_url(claim)
           Rails.application.routes.url_helpers.new_claim_url(
             module_parent::ROUTING_NAME,
