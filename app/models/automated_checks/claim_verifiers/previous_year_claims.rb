@@ -6,14 +6,11 @@ module AutomatedChecks
       end
 
       def perform
-        matching_claims.each do |matching_claim|
-          Claims::Match.find_or_create_by!(
-            source_claim: claim,
-            matching_claim: matching_claim
-          ) do |match|
-            match.matching_attributes = %w[national_insurance_number]
-          end
-        end
+        return unless claim.policy == Policies::InternationalRelocationPayments
+
+        matching_claim_ids = matching_claims.pluck(:id)
+
+        @claim.eligibility.update!(previous_year_claim_ids: matching_claim_ids)
       end
 
       private

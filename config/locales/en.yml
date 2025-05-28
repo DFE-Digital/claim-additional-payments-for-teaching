@@ -748,8 +748,6 @@ en:
       task_questions:
         first_year_payment:
           title: "Has this person received their first year payment in 2024/2025?"
-          match_attributes:
-            national_insurance_number: "NINo"
         previous_payment:
           title: The claimant has not received an IRP payment in AY 2023/24?
         previous_residency:

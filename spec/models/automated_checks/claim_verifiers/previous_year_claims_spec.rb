@@ -71,16 +71,9 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::PreviousYearClaims do
 
       verifier.perform
 
-      matches = Claims::Match.where(source_claim: current_claim)
+      matching_claim_ids = current_claim.eligibility.previous_year_claim_ids
 
-      expect(matches.count).to eq(2)
-
-      expect(matches.pluck(:matching_attributes)).to eq([
-        %w[national_insurance_number],
-        %w[national_insurance_number]
-      ])
-
-      expect(matches.pluck(:matching_claim_id)).to eq([
+      expect(matching_claim_ids).to eq([
         previous_year_claim_same_claimant_same_policy_1.id,
         previous_year_claim_same_claimant_same_policy_2.id
       ])

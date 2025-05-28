@@ -20,11 +20,11 @@
   <div class="govuk-grid-column-two-thirds">
     <h2 class="govuk-heading-l"><%= @form.task.name.humanize %></h2>
 
-    <% matches = Claims::Match
-      .where(source_claim: @form.task.claim)
-      .includes(matching_claim: %i[eligibility decisions]) %>
+    <% matching_claims = Claim
+      .where(id: @form.task.claim.eligibility.previous_year_claim_ids)
+      .includes(%i[eligibility decisions]) %>
 
-    <% if matches.none? %>
+    <% if matching_claims.none? %>
       <%= govuk_inset_text do %>
         <p>
           No previous claims from this claimant have been found that have been
@@ -32,7 +32,7 @@
         </p>
       <% end %>
     <% else %>
-      <% matches.map { [it, it.matching_claim] }.each do |match, matching_claim| %>
+      <% matching_claims.each do |matching_claim| %>
         <%= govuk_table do |table| %>
           <% table.with_caption(text: "Matching details") %>
 
@@ -52,18 +52,7 @@
                 )
               } %>
 
-              <% row.with_cell(
-                text: match.matching_attributes.map do |attribute|
-                  I18n.t([
-                    "international_relocation_payments",
-                    "admin",
-                    "task_questions",
-                    "first_year_payment",
-                    "match_attributes",
-                    attribute
-                  ].join("."))
-                end.to_sentence
-              ) %>
+              <% row.with_cell(text: "NINo") %>
             <% end %>
           <% end %>
         <% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_22_132501) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_28_135658) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -125,17 +125,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_132501) do
     t.index ["qa_required", "qa_completed_at"], name: "index_claims_on_qa_required_and_qa_completed_at", where: "qa_required"
     t.index ["reference"], name: "index_claims_on_reference", unique: true
     t.index ["submitted_at"], name: "index_claims_on_submitted_at"
-  end
-
-  create_table "claims_matches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "source_claim_id", null: false
-    t.uuid "matching_claim_id", null: false
-    t.text "matching_attributes", default: [], null: false, array: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["matching_claim_id"], name: "index_claims_matches_on_matching_claim_id"
-    t.index ["source_claim_id", "matching_claim_id"], name: "index_claims_matches_on_source_and_matching_claim", unique: true
-    t.index ["source_claim_id"], name: "index_claims_matches_on_source_claim_id"
   end
 
   create_table "decisions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -327,6 +316,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_132501) do
     t.uuid "current_school_id"
     t.decimal "award_amount", precision: 7, scale: 2
     t.boolean "changed_workplace_or_new_contract"
+    t.text "previous_year_claim_ids", default: [], array: true
     t.index ["current_school_id"], name: "index_irb_eligibilities_on_current_school_id"
   end
 
@@ -809,8 +799,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_132501) do
   add_foreign_key "claim_payments", "claims"
   add_foreign_key "claim_payments", "payments"
   add_foreign_key "claims", "journeys_sessions"
-  add_foreign_key "claims_matches", "claims", column: "matching_claim_id"
-  add_foreign_key "claims_matches", "claims", column: "source_claim_id"
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "early_career_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "eligible_ey_providers", "file_uploads"
