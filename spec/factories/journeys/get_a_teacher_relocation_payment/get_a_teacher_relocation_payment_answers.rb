@@ -39,6 +39,10 @@ FactoryBot.define do
       changed_workplace_or_new_contract { false }
     end
 
+    trait :with_breaks_in_employment do
+      breaks_in_employment { true }
+    end
+
     trait :with_visa do
       visa_type { "British National (Overseas) visa" }
     end

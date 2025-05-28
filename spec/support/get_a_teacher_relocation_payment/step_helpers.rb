@@ -60,6 +60,14 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
+    def and_i_complete_breaks_in_employment_with(option:)
+      assert_on_breaks_in_employment_page!
+
+      choose(option)
+
+      click_button("Continue")
+    end
+
     def and_i_complete_the_visa_screen_with(option:)
       assert_on_visa_page!
 
@@ -272,6 +280,10 @@ module GetATeacherRelocationPayment
 
     def assert_on_changed_workplace_or_new_contract_page!
       expect(page).to have_text("Have you changed your workplace or started a new contract in the past year?")
+    end
+
+    def assert_on_breaks_in_employment_page!
+      expect(page).to have_text("Have you had any breaks in employment over the past year?")
     end
 
     def assert_on_visa_page!

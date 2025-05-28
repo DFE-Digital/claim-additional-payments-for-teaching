@@ -21,6 +21,7 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
         :with_start_date,
         :with_subject,
         :with_changed_workplace_or_new_contract,
+        :with_breaks_in_employment,
         :with_visa,
         :with_entry_date,
         :with_nationality
