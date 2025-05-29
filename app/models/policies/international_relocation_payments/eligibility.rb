@@ -10,6 +10,8 @@ module Policies
 
       attr_accessor :teacher_reference_number
 
+      attribute :employment_histories, EmploymentHistoriesType.new
+
       def ineligible?
         false
       end

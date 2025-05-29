@@ -21,6 +21,7 @@ module Policies
         tasks << "arrival_date"
         tasks << "previous_residency"
         tasks << "employment"
+        tasks << "employment_history" if claim.eligibility.changed_workplace_or_new_contract?
         tasks << "employment_contract"
         tasks << "employment_start"
         tasks << "subject"

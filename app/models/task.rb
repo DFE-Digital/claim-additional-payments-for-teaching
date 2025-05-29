@@ -21,6 +21,7 @@ class Task < ApplicationRecord
     induction_confirmation
     census_subjects_taught
     employment
+    employment_history
     employment_contract
     employment_start
     subject
