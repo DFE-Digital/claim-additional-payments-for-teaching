@@ -21,7 +21,7 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::BreaksInEmploymentForm do
     describe "#breaks_in_employment" do
       it "must be present" do
         expect(subject).to be_invalid
-        expect(subject.errors[:breaks_in_employment]).to eql(["Select yes if you have had any breaks in employment over the past year"])
+        expect(subject.errors[:breaks_in_employment]).to eql(["Select yes if you have had any breaks in employment during the last 3 academic terms"])
       end
     end
   end

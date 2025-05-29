@@ -49,7 +49,7 @@ RSpec.describe "teacher route: completing the form" do
     context "change answers" do
       it "returns to check answers after changing answer" do
         when_i_click_back_link
-        then_i_change_answer("Change have you had any breaks in employment over the past year?")
+        then_i_change_answer("Change have you had any breaks in employment during the last 3 academic terms?")
         and_i_complete_breaks_in_employment_with(option: "Yes")
         then_the_check_your_answers_part_one_page_shows
       end
@@ -144,7 +144,7 @@ RSpec.describe "teacher route: completing the form" do
     )
 
     expect(page).to have_text(
-      /Have you had any breaks in employment over the past year\?\s?No/
+      /Have you had any breaks in employment during the last 3 academic terms\?\s?No/
     )
 
     expect(page).to have_text(

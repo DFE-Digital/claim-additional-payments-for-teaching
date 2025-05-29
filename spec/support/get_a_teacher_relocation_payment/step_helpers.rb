@@ -283,7 +283,7 @@ module GetATeacherRelocationPayment
     end
 
     def assert_on_breaks_in_employment_page!
-      expect(page).to have_text("Have you had any breaks in employment over the past year?")
+      expect(page).to have_text("Have you had any breaks in employment during the last 3 academic terms?")
     end
 
     def assert_on_visa_page!
