@@ -1,0 +1,97 @@
+<%= form_with(
+  model: @form,
+  url: admin_claim_employment_histories_path(@form.claim),
+  builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+) do |f| %>
+  <%= f.govuk_error_summary %>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_label(:school_id, text: "Previous workplace") %>
+    </div>
+    <div class="govuk-grid-column-one-third">
+      <%= f.govuk_text_field(:school_id) %>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row" data-test-id="employment-contract-of-at-least-one-year">
+    <div class="govuk-grid-column-two-thirds">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+        <%= f.object.t(%i[employment_contract_of_at_least_one_year question]) %>
+      </legend>
+    </div>
+    <div class="govuk-grid-column-one-third">
+      <%= f.govuk_collection_radio_buttons(
+        :employment_contract_of_at_least_one_year,
+        f.object.employment_contract_of_at_least_one_year_options,
+        :id,
+        :name,
+        legend: nil,
+        inline: true,
+      ) %>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row" data-test-id="employment-start-date">
+    <div class="govuk-grid-column-two-thirds">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+        <%= f.object.t(%i[employment_start_date question]) %>
+      </legend>
+    </div>
+    <div class="govuk-grid-column-one-third">
+      <%= f.govuk_date_field(:employment_start_date, legend: nil) %>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row" data-test-id="employment-end-date">
+    <div class="govuk-grid-column-two-thirds">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+        <%= f.object.t(%i[employment_end_date question]) %>
+      </legend>
+    </div>
+    <div class="govuk-grid-column-one-third">
+      <%= f.govuk_date_field(:employment_end_date, legend: nil) %>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_label(
+        :subject_employed_to_teach,
+        text: f.object.t(%i[subject_employed_to_teach question]),
+      ) %>
+    </div>
+    <div class="govuk-grid-column-one-third">
+      <%= f.govuk_collection_select(
+        :subject_employed_to_teach,
+        f.object.subject_employed_to_teach_options,
+        :id,
+        :name,
+        label: nil,
+        options: {
+          include_blank: true,
+        },
+      ) %>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row" data-test-id="met-minimum-teaching-hours">
+    <div class="govuk-grid-column-two-thirds">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+        <%= f.object.t(%i[met_minimum_teaching_hours question]) %>
+      </legend>
+    </div>
+    <div class="govuk-grid-column-one-third">
+      <%= f.govuk_collection_radio_buttons(
+        :met_minimum_teaching_hours,
+        f.object.met_minimum_teaching_hours_options,
+        :id,
+        :name,
+        inline: true,
+        legend: nil,
+      ) %>
+    </div>
+  </div>
+
+  <%= f.submit "Save and continue", class: "govuk-button" %>
+<% end %>
