@@ -155,4 +155,28 @@ RSpec.describe DfeSignIn::User, type: :model do
       it { is_expected.not_to be_deleted }
     end
   end
+
+  describe "Slack notifications" do
+    context "in the production environment" do
+      before do
+        allow(ENV).to receive(:fetch).with("ENVIRONMENT_NAME").and_return("production")
+      end
+
+      it "sends a notification on record creation" do
+        expect { described_class.create! }.to have_enqueued_job(DfeSignIn::SlackNotificationJob)
+      end
+    end
+
+    context "in any non-production environment" do
+      ["local", "test", "review"].each do |environment_name|
+        before do
+          allow(ENV).to receive(:fetch).with("ENVIRONMENT_NAME").and_return(environment_name)
+        end
+
+        it "does not send a notification on record creation" do
+          expect { described_class.create! }.not_to have_enqueued_job(DfeSignIn::SlackNotificationJob)
+        end
+      end
+    end
+  end
 end
