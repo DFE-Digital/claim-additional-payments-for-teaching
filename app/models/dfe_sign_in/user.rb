@@ -71,10 +71,7 @@ module DfeSignIn
     end
 
     def send_slack_notification
-      if (ENV.fetch("ENVIRONMENT_NAME") == "production") && (url = ENV.fetch("DFE_SIGN_IN_SLACK_NOTIFICATION_WEBHOOK_URL", nil))
-        notifier = Slack::Notifier.new url
-        notifier.ping "A new user has been granted access to the Claim admin panel: #{given_name} #{family_name} - #{organisation_name} (#{email})"
-      end
+      SlackNotificationJob.perform_later(id) if ENV.fetch("ENVIRONMENT_NAME") == "production"
     end
   end
 end
