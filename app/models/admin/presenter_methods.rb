@@ -3,11 +3,14 @@ module Admin
     include ActionView::Helpers::UrlHelper
     include ActionView::Helpers::TranslationHelper
 
-    def display_school(school)
-      html = [
-        link_to_school(school),
-        tag.span("(#{school.dfe_number})", class: "govuk-body-s")
-      ].join(" ").html_safe
+    def display_school(school, include_dfe_number: true)
+      tags = [link_to_school(school)]
+
+      if include_dfe_number
+        tags << tag.span("(#{school.dfe_number})", class: "govuk-body-s")
+      end
+
+      html = tags.join(" ").html_safe
       ActionController::Base.helpers.sanitize(html, tags: %w[span a], attributes: %w[href class])
     end
 
