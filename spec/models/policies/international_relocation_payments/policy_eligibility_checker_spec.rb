@@ -14,40 +14,6 @@ RSpec.describe Policies::InternationalRelocationPayments::PolicyEligibilityCheck
 
   let(:checker) { described_class.new(answers: answers) }
 
-  describe "#status" do
-    subject { checker.status }
-
-    context "when the application route is 'other'" do
-      let(:attributes) do
-        {
-          application_route: "other"
-        }
-      end
-
-      it { is_expected.to eq(:ineligible) }
-    end
-
-    context "when the application route is 'teacher'" do
-      let(:attributes) do
-        {
-          application_route: "teacher"
-        }
-      end
-
-      it { is_expected.to eq(:eligible_now) }
-    end
-
-    context "when the application route is 'salaried_trainee'" do
-      let(:attributes) do
-        {
-          application_route: "salaried_trainee"
-        }
-      end
-
-      it { is_expected.to eq(:ineligible) }
-    end
-  end
-
   describe "#ineligible?" do
     subject { checker.ineligible? }
 

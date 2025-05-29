@@ -20,12 +20,6 @@ module Policies
         @answers = answers
       end
 
-      def status
-        return :ineligible if ineligible?
-
-        :eligible_now
-      end
-
       def ineligible?
         ineligible_reason.present?
       end
