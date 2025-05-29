@@ -1,0 +1,74 @@
+<% content_for(:page_title) { "Employment history" } %>
+
+<% content_for :back_link do %>
+  <%= govuk_back_link href: admin_claim_tasks_path(@task.claim) %>
+<% end %>
+
+<%= render(
+  "shared/error_summary",
+  instance: @task,
+  errored_field_id_overrides: { "passed": "task_passed_true" }
+) if @task.errors.any? %>
+
+<div class="govuk-grid-row">
+  <%= render(
+    claim_summary_view,
+    claim: @task.claim,
+    heading: "Employment history"
+  ) %>
+
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-l"><%= @task.name.humanize %></h2>
+  </div>
+
+  <% if @task.claim.eligibility.employment_histories.none? %>
+    <%= govuk_inset_text do %>
+      <p>
+        You can‘t check the claimant‘s employment until it has been uploaded
+      </p>
+    <% end %>
+  <% else %>
+    <% @task.claim.eligibility
+      .employment_histories
+      .sort_by(&:employment_end_date)
+      .each do |employment| %>
+      <%= govuk_summary_list do |summary_list| %>
+        <% summary_list.with_row do |row| %>
+          <% row.with_key text: "Previous workplace" %>
+          <% row.with_value { display_school(employment.school, include_dfe_number: false) } %>
+        <% end %>
+
+        <% summary_list.with_row do |row| %>
+          <% row.with_key text: "Employment contract of at least one year" %>
+          <% row.with_value { employment.employment_contract_of_at_least_one_year ? "Yes" : "No" } %>
+        <% end %>
+
+        <% summary_list.with_row do |row| %>
+          <% row.with_key text: "Employment start date" %>
+          <% row.with_value { employment.employment_start_date } %>
+        <% end %>
+
+        <% summary_list.with_row do |row| %>
+          <% row.with_key text: "Employment end date" %>
+          <% row.with_value { employment.employment_end_date } %>
+        <% end %>
+
+        <% summary_list.with_row do |row| %>
+          <% row.with_key text: "Subject employed to teach" %>
+          <% row.with_value { employment.subject_employed_to_teach } %>
+        <% end %>
+
+        <% summary_list.with_row do |row| %>
+          <% row.with_key text: "Met minimum teaching hours" %>
+          <% row.with_value { employment.met_minimum_teaching_hours ? "Yes" : "No" } %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= govuk_button_link_to(
+    "Add employment",
+    new_admin_claim_employment_history_path(@task.claim),
+    secondary: true
+  ) %>
+</div>

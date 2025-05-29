@@ -139,6 +139,7 @@ Rails.application.routes.draw do
       namespace :further_education_payments do
         resources :provider_verification_emails, only: [:create]
       end
+      resources :employment_histories, only: [:new, :create], module: :claims
     end
 
     resources :qualification_report_uploads, only: [:new, :create]
