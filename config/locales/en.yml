@@ -664,6 +664,16 @@ en:
             answer: "No"
         errors:
           inclusion: "Select yes if you have changed your workplace or started a new contract in the past year"
+      breaks_in_employment:
+        question: Have you had any breaks in employment during the last 3 academic terms?
+        hint: Include any time off from work longer than [INSERT TIME PERIOD HERE]
+        errors:
+          inclusion: Select yes if you have had any breaks in employment during the last 3 academic terms
+        answers:
+          true:
+            answer: "Yes"
+          false:
+            answer: "No"
       visa:
         question: "Select the visa you used to move to England"
         errors:

@@ -10,6 +10,7 @@ module Journeys
         "start-date",
         "subject",
         "changed-workplace-or-new-contract",
+        "breaks-in-employment",
         "visa",
         "entry-date",
         "check-your-answers-part-one"
