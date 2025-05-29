@@ -96,26 +96,6 @@ module Policies
         eligible_itt_subject.present? && (eligible_itt_subject.to_sym == :foreign_languages)
       end
 
-      def specific_eligible_now_attributes?
-        eligible_itt_subject_or_relevant_degree?
-      end
-
-      def eligible_itt_subject_or_relevant_degree?
-        good_itt_subject? || eligible_degree?
-      end
-
-      def good_itt_subject?
-        return false if eligible_itt_subject.blank?
-
-        TargetedRetentionIncentivePayments.fixed_subject_symbols.include?(
-          eligible_itt_subject.to_sym
-        )
-      end
-
-      def eligible_degree?
-        eligible_degree_subject?
-      end
-
       def ineligible_itt_subject_and_no_relevant_degree?
         indicated_ineligible_itt_subject? && lacks_eligible_degree?
       end
