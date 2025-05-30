@@ -327,7 +327,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_28_152757) do
     t.uuid "current_school_id"
     t.decimal "award_amount", precision: 7, scale: 2
     t.boolean "changed_workplace_or_new_contract"
-    t.jsonb "employment_histories", default: []
+    t.jsonb "employment_history", default: []
     t.index ["current_school_id"], name: "index_irb_eligibilities_on_current_school_id"
   end
 

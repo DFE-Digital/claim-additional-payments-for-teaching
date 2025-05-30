@@ -21,7 +21,7 @@
     <h2 class="govuk-heading-l"><%= @task.name.humanize %></h2>
   </div>
 
-  <% if @task.claim.eligibility.employment_histories.none? %>
+  <% if @task.claim.eligibility.employment_history.empty? %>
     <%= govuk_inset_text do %>
       <p>
         You can‘t check the claimant‘s employment until it has been uploaded
@@ -29,7 +29,7 @@
     <% end %>
   <% else %>
     <% @task.claim.eligibility
-      .employment_histories
+      .employment_history
       .sort_by(&:employment_end_date)
       .each do |employment| %>
       <%= govuk_summary_list do |summary_list| %>
@@ -68,7 +68,7 @@
 
   <%= govuk_button_link_to(
     "Add employment",
-    new_admin_claim_employment_history_path(@task.claim),
+    new_admin_claim_employment_history_employment_path(@task.claim),
     secondary: true
   ) %>
 </div>

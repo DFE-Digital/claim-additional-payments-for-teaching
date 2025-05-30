@@ -186,7 +186,7 @@ RSpec.describe "Admin employment history task" do
       :submitted,
       policy: Policies::InternationalRelocationPayments,
       eligibility_attributes: {
-        changed_workplace_or_new_contract: true,
+        changed_workplace_or_new_contract: true
       }
     )
 
@@ -217,7 +217,7 @@ RSpec.describe "Admin employment history task" do
             end_date: Date.new(2024, 4, 1),
             subject: "Physics",
             met_minimum_hours: true
-          },
+          }
         ]
       }
     )
