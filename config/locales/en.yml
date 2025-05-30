@@ -491,6 +491,8 @@ en:
           title: "Does the claimant’s student loan amount and plan type match the information we hold about their loan?"
         matching_details:
           title: "Is this claim still valid despite having matching details with other claims?"
+        payroll_details:
+          title: The claimant’s personal bank account details have not been automatically validated. Has the claimant confirmed their personal bank account details?
   additional_payments:
     support_email_address: "additionalteachingpayment@digital.education.gov.uk"
   early_career_payments:
@@ -764,6 +766,8 @@ en:
           title: "Does the claimant’s subject match the above information from their claim?"
         teaching_hours:
           title: "Does the teacher meet the minimum 50% teaching time requirement in their role?"
+        payroll_details:
+          title: "The claimant’s personal bank account details have not been automatically validated. Has the claimant confirmed their personal bank account details?"
   further_education_payments:
     accessibility_statement:
       test_date: "28 August 2024"

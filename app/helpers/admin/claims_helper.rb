@@ -155,7 +155,7 @@ module Admin
     end
 
     def task_status_tag(claim, task_name)
-      status, colour = Tasks.status(claim: claim, task_name: task_name)
+      status, colour = ::Tasks.status(claim: claim, task_name: task_name)
 
       task_status_content_tag(status_colour: colour, status: status)
     end

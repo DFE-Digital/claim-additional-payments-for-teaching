@@ -15,9 +15,7 @@ RSpec.describe "Admin EY tasks" do
         sign_in_as_service_operator
 
         visit admin_claim_tasks_path(claim)
-
         expect(task_status("Identity confirmation")).to eq("Incomplete")
-
         click_on "Confirm the claimant made the claim"
 
         expect(page).to have_content(
@@ -134,37 +132,29 @@ RSpec.describe "Admin EY tasks" do
 
           it "allows the admin to mark the task as passed" do
             visit admin_claim_task_path(claim, name: "identity_confirmation")
-
             choose "Yes"
-
             click_on "Save and continue"
 
             visit admin_claim_task_path(claim, name: "identity_confirmation")
-
             expect(page).to have_content(
               "This task was performed by Aaron Admin"
             )
 
             visit admin_claim_tasks_path(claim)
-
             expect(task_status("Identity confirmation")).to eq("Passed")
           end
 
           it "allows the admin to mark the task as failed" do
             visit admin_claim_task_path(claim, name: "identity_confirmation")
-
             choose "No"
-
             click_on "Save and continue"
 
             visit admin_claim_task_path(claim, name: "identity_confirmation")
-
             expect(page).to have_content(
               "This task was performed by Aaron Admin"
             )
 
             visit admin_claim_tasks_path(claim)
-
             expect(task_status("Identity confirmation")).to eq("Failed")
           end
         end
@@ -315,17 +305,13 @@ RSpec.describe "Admin EY tasks" do
           sign_in_as_service_operator
 
           visit admin_claim_tasks_path(claim)
-
           expect(task_status("Employment")).to eq("Incomplete")
-
           click_on "Check employment information"
 
           choose "Yes"
-
           click_on "Save and continue"
 
           visit admin_claim_tasks_path(claim)
-
           expect(task_status("Employment")).to eq("Passed")
         end
       end
@@ -412,17 +398,13 @@ RSpec.describe "Admin EY tasks" do
         sign_in_as_service_operator
 
         visit admin_claim_tasks_path(claim)
-
         expect(task_status("Payroll details")).to eq("Incomplete")
-
         click_on "Check bank account details"
 
         choose "Yes"
-
         click_on "Save and continue"
 
         visit admin_claim_tasks_path(claim)
-
         expect(task_status("Payroll details")).to eq("Passed")
       end
     end
@@ -464,17 +446,13 @@ RSpec.describe "Admin EY tasks" do
           sign_in_as_service_operator
 
           visit admin_claim_tasks_path(claim)
-
           expect(task_status("Payroll gender")).to eq("Incomplete")
-
           click_on "How is the claimant’s gender recorded for payroll purposes?"
 
           choose "Male"
-
           click_on "Save and continue"
 
           visit admin_claim_tasks_path(claim)
-
           expect(task_status("Payroll gender")).to eq("Passed")
         end
       end
