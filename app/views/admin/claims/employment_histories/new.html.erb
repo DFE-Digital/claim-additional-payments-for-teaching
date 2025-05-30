@@ -6,11 +6,49 @@
   <%= f.govuk_error_summary %>
 
   <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-xl">
+        Employment history
+      </h1>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <%= f.govuk_label(:school_id, text: "Previous workplace") %>
+      <%= f.govuk_label(
+        :school_search,
+        text: f.object.t(%i[school_search question]),
+        for: f.field_id(:school_search),
+        size: "s"
+      ) %>
     </div>
     <div class="govuk-grid-column-one-third">
-      <%= f.govuk_text_field(:school_id) %>
+      <div
+          data-school-search-container="true"
+          data-school-search-path="<%= school_search_index_path %>"
+          data-school-search-school-id-target="#<%= f.field_id(:school_id) %>"
+          data-school-search-search-box-target="#<%= f.field_id(:school_search) %>"
+          data-school-search-min_length="3"
+          data-school-search-display-menu="overlay"
+          data-school-search-input-classes="<%= class_names(
+            "govuk-input",
+            "govuk-input--error": f.object.errors[:school_search].present?
+          ) %>"
+          class="<%= class_names(
+            "govuk-form-group",
+            "govuk-form-group--error": f.object.errors[:school_search].present?
+          ) %>"
+        >
+        <%= f.hidden_field :school_id %>
+
+        <%= errors_tag f.object, :school_search %>
+
+        <%= f.text_field(
+          :school_search,
+          class: css_classes_for_input(f.object, :school_search),
+          label: nil,
+        ) %>
+      </div>
     </div>
   </div>
 
@@ -59,6 +97,7 @@
       <%= f.govuk_label(
         :subject_employed_to_teach,
         text: f.object.t(%i[subject_employed_to_teach question]),
+        size: "s",
       ) %>
     </div>
     <div class="govuk-grid-column-one-third">
