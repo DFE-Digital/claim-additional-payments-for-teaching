@@ -42,7 +42,7 @@ RSpec.describe "Admin employment history task" do
     end
   end
 
-  it "allows admins to add multiple employments" do
+  it "allows admins to add multiple employments", js: true do
     create(:school, name: "Springfield Elementary School")
 
     create(:school, name: "Enriched Learning Center for Gifted Children")
@@ -64,10 +64,12 @@ RSpec.describe "Admin employment history task" do
 
     click_on "Add employment"
 
-    # fill_in "Previous workplace", with: "Springfield Elementary School"
-    # FIXME RL - temp using the school id directly until I get feedback on the
-    # ui.
-    fill_in "Previous workplace", with: School.find_by!(name: "Springfield Elementary School").id
+    fill_in "Previous workplace", with: "Springfield Elementary School"
+
+    select_from_autocomplete(
+      "Previous workplace",
+      "Springfield Elementary School"
+    )
 
     within '[data-test-id="employment-contract-of-at-least-one-year"]' do
       choose "Yes"
@@ -95,14 +97,9 @@ RSpec.describe "Admin employment history task" do
 
     click_on "Add employment"
 
-    # fill_in(
-    #   "Previous workplace",
-    #   with: "Enriched Learning Center for Gifted Children"
-    # )
-
-    fill_in(
+    select_from_autocomplete(
       "Previous workplace",
-      with: School.find_by!(name: "Enriched Learning Center for Gifted Children").id
+      "Enriched Learning Center for Gifted Children"
     )
 
     within '[data-test-id="employment-contract-of-at-least-one-year"]' do
@@ -131,6 +128,108 @@ RSpec.describe "Admin employment history task" do
 
     expect(page).to have_text("Springfield Elementary School")
     expect(page).to have_text("Enriched Learning Center for Gifted Children")
+  end
+
+  xit "allows admins to remove employments" do
+    school_1 = create(:school, name: "Springfield Elementary School")
+
+    school_2 = create(
+      :school,
+      name: "Enriched Learning Center for Gifted Children"
+    )
+
+    claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::InternationalRelocationPayments,
+      eligibility_attributes: {
+        changed_workplace_or_new_contract: true,
+        employments: [
+          {
+            school_id: school_1.id,
+            start_date: Date.new(2023, 5, 1),
+            end_date: Date.new(2024, 4, 1),
+            subject: "Physics",
+            met_minimum_hours: true
+          },
+          {
+            school_id: school_2.id,
+            start_date: Date.new(2024, 5, 1),
+            end_date: Date.new(2025, 4, 1),
+            subject: "Physics",
+            met_minimum_hours: true
+          }
+        ]
+      }
+    )
+
+    visit admin_claim_tasks_path(claim)
+
+    click_on "Check employment history"
+
+    click_on "Remove employment"
+
+    within "some-identifier" do
+      check "Remove employment"
+    end
+
+    click_on "Remove employment"
+
+    expect(page).not_to have_text("Springfield Elementary School")
+
+    expect(page).to have_text("Enriched Learning Center for Gifted Children")
+  end
+
+  xit "doesn't allow completing the task until there is at least one employment" do
+    claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::InternationalRelocationPayments,
+      eligibility_attributes: {
+        changed_workplace_or_new_contract: true,
+      }
+    )
+
+    sign_in_as_service_operator
+
+    visit admin_claim_tasks_path(claim)
+
+    click_on "Check employment history"
+
+    expect(page).not_to have_text("Save and continue")
+
+    expect(page).to have_text(
+      "You can‘t check the claimant‘s employment until it has been uploaded"
+    )
+  end
+
+  xit "doesn't allow adding or removing employment if the task is completed" do
+    claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::InternationalRelocationPayments,
+      eligibility_attributes: {
+        changed_workplace_or_new_contract: true,
+        employments: [
+          {
+            school_id: create(:school).id,
+            start_date: Date.new(2023, 5, 1),
+            end_date: Date.new(2024, 4, 1),
+            subject: "Physics",
+            met_minimum_hours: true
+          },
+        ]
+      }
+    )
+
+    create(:task, :passed, name: "employment_history", claim: claim)
+
+    visit admin_claim_tasks_path(claim)
+
+    click_on "Employment history"
+
+    expect(page).not_to have_text("Add employment")
+    expect(page).not_to have_text("Remove employment")
   end
 
   def submit_irp_application(changed_work_place:)
@@ -168,5 +267,21 @@ RSpec.describe "Admin employment history task" do
     and_i_submit_the_application
 
     Claim.by_policy(Policies::InternationalRelocationPayments).last
+  end
+
+  def select_from_autocomplete(label, value)
+    fill_in label, with: value
+
+    sleep(1)
+
+    within "ul.autocomplete__menu" do
+      option = find("li", text: value)
+
+      Timeout.timeout(5) do
+        while option.visible?
+          option.click
+        end
+      end
+    end
   end
 end
