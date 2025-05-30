@@ -130,4 +130,11 @@ module FeatureHelpers
     expect(page).to have_content("You’ve successfully proved your identity with GOV.UK One Login")
     click_button "Continue"
   end
+
+  def task_status(task_name)
+    find(
+      :xpath,
+      "//h2[contains(@class, 'app-task-list__section') and contains(., '#{task_name}')]/following-sibling::ul//strong[contains(@class, 'govuk-tag')]"
+    ).text
+  end
 end

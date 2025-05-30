@@ -220,6 +220,7 @@ shared:
     - current_school_id
     - award_amount
     - changed_workplace_or_new_contract
+    - employment_histories
   :schools:
     - id
     - urn
