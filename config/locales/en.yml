@@ -130,7 +130,7 @@ en:
     unknown_payroll_gender_preventing_approval_message:
       This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
     forms:
-      create_employment_history:
+      create_employment:
         school_search:
           question: "Previous workplace"
         employment_contract_of_at_least_one_year:

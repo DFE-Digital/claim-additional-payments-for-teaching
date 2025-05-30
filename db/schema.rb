@@ -318,7 +318,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_03_151832) do
     t.boolean "changed_workplace_or_new_contract"
     t.text "previous_year_claim_ids", default: [], array: true
     t.boolean "breaks_in_employment"
-    t.jsonb "employment_histories", default: []
+    t.jsonb "employment_history", default: []
     t.index ["current_school_id"], name: "index_irb_eligibilities_on_current_school_id"
   end
 

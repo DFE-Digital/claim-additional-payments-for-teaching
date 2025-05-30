@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Admin::Claims::CreateEmploymentHistoryForm, type: :model do
+RSpec.describe Admin::Claims::EmploymentHistory::CreateEmploymentForm, type: :model do
   let(:claim) do
     create(
       :claim,
@@ -157,7 +157,7 @@ RSpec.describe Admin::Claims::CreateEmploymentHistoryForm, type: :model do
 
       eligibility = claim.reload.eligibility
 
-      employment_history = eligibility.employment_histories.first
+      employment_history = eligibility.employment_history.first
 
       expect(employment_history.school).to eq(school)
       expect(employment_history.employment_contract_of_at_least_one_year).to be true
@@ -167,8 +167,8 @@ RSpec.describe Admin::Claims::CreateEmploymentHistoryForm, type: :model do
       expect(employment_history.subject_employed_to_teach).to eq("physics")
     end
 
-    it "doesn't overwrite existing employment histories" do
-      employment = Policies::InternationalRelocationPayments::EmploymentHistory.new(
+    it "doesn't overwrite existing employment history" do
+      employment = Policies::InternationalRelocationPayments::EmploymentHistory::Employment.new(
         school: school,
         employment_contract_of_at_least_one_year: false,
         employment_start_date: Date.new(2022, 1, 1),
@@ -177,10 +177,10 @@ RSpec.describe Admin::Claims::CreateEmploymentHistoryForm, type: :model do
         subject_employed_to_teach: "physics"
       )
 
-      claim.eligibility.employment_histories = [employment]
+      claim.eligibility.employment_history = [employment]
 
       expect { form.save }.to(
-        change { claim.eligibility.employment_histories.count }.from(1).to(2)
+        change { claim.eligibility.employment_history.count }.from(1).to(2)
       )
     end
   end
