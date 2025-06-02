@@ -665,7 +665,7 @@ en:
           false:
             answer: "No"
         errors:
-          inclusion: "Select yes if you have changed your workplace or started a new contract in the past year"
+          inclusion: "Select yes if you have changed where you work or started a new contract since you last applied"
       breaks_in_employment:
         question: Have you had any breaks in employment during the last 3 academic terms?
         hint: Include any time off from work longer than [INSERT TIME PERIOD HERE]

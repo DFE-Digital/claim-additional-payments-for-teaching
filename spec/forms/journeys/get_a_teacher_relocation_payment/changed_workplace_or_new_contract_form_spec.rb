@@ -28,7 +28,7 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::ChangedWorkplaceOrNewCont
       is_expected.not_to(
         allow_value(nil)
         .for(:changed_workplace_or_new_contract)
-        .with_message("Select yes if you have changed your workplace or started a new contract in the past year")
+        .with_message("Select yes if you have changed where you work or started a new contract since you last applied")
       )
     end
   end
