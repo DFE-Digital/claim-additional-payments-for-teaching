@@ -130,7 +130,7 @@ RSpec.describe "Admin employment history task" do
     expect(page).to have_text("Enriched Learning Center for Gifted Children")
   end
 
-  xit "allows admins to remove employments" do
+  it "allows admins to remove employments" do
     school_1 = create(:school, name: "Springfield Elementary School")
 
     school_2 = create(
@@ -144,36 +144,36 @@ RSpec.describe "Admin employment history task" do
       policy: Policies::InternationalRelocationPayments,
       eligibility_attributes: {
         changed_workplace_or_new_contract: true,
-        employments: [
+        employment_history: [
           {
+            id: "1111-1111-1111-1111",
             school_id: school_1.id,
-            start_date: Date.new(2023, 5, 1),
-            end_date: Date.new(2024, 4, 1),
-            subject: "Physics",
-            met_minimum_hours: true
+            employment_start_date: Date.new(2023, 5, 1),
+            employment_end_date: Date.new(2024, 4, 1),
+            subject_employed_to_teach: "Physics",
+            met_minimum_teaching_hours: true
           },
           {
+            id: "1111-1111-1111-1112",
             school_id: school_2.id,
-            start_date: Date.new(2024, 5, 1),
-            end_date: Date.new(2025, 4, 1),
-            subject: "Physics",
-            met_minimum_hours: true
+            employment_start_date: Date.new(2024, 5, 1),
+            employment_end_date: Date.new(2025, 4, 1),
+            subject_employed_to_teach: "Physics",
+            met_minimum_teaching_hours: true
           }
         ]
       }
     )
 
+    sign_in_as_service_operator
+
     visit admin_claim_tasks_path(claim)
 
     click_on "Check employment history"
 
-    click_on "Remove employment"
-
-    within "some-identifier" do
-      check "Remove employment"
+    within '[data-test-id="employment-1111-1111-1111-1111"]' do
+      click_on "Remove employment"
     end
-
-    click_on "Remove employment"
 
     expect(page).not_to have_text("Springfield Elementary School")
 

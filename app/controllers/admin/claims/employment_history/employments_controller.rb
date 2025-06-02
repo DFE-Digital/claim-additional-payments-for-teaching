@@ -12,10 +12,29 @@ module Admin
           @form = CreateEmploymentForm.new(claim, params: employment_form_params)
 
           if @form.save
-            redirect_to admin_claim_task_path(claim, "employment_history")
+            redirect_to admin_claim_task_path(
+              claim,
+              "employment_history",
+              anchor: "employments"
+            )
           else
             render :new
           end
+        end
+
+        def destroy
+          @form = DestroyEmploymentForm.new(
+            claim,
+            params: {employment_id: params[:id]}
+          )
+
+          @form.save!
+
+          redirect_to admin_claim_task_path(
+            claim,
+            "employment_history",
+            anchor: "employments"
+          )
         end
 
         private

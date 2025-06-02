@@ -5,6 +5,7 @@ module Policies
         include ActiveModel::Model
         include ActiveModel::Attributes
 
+        attribute :id, :string
         attribute :school_id, :string
         attribute :employment_contract_of_at_least_one_year, :boolean
         attribute :employment_start_date, :date
@@ -12,12 +13,22 @@ module Policies
         attribute :met_minimum_teaching_hours, :boolean
         attribute :subject_employed_to_teach, :string
 
+        def initialize(attributes = {})
+          super
+
+          self.id ||= SecureRandom.uuid
+        end
+
         def school=(school)
           self.school_id = school.id
         end
 
         def school
           School.find(school_id)
+        end
+
+        def ==(other)
+          other.id == self.id
         end
       end
     end
