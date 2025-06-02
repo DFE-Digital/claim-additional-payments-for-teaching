@@ -180,7 +180,7 @@ RSpec.describe "Admin employment history task" do
     expect(page).to have_text("Enriched Learning Center for Gifted Children")
   end
 
-  xit "doesn't allow completing the task until there is at least one employment" do
+  it "doesn't allow completing the task until there is at least one employment" do
     claim = create(
       :claim,
       :submitted,
@@ -203,30 +203,33 @@ RSpec.describe "Admin employment history task" do
     )
   end
 
-  xit "doesn't allow adding or removing employment if the task is completed" do
+  it "doesn't allow adding or removing employment if the task is completed" do
     claim = create(
       :claim,
       :submitted,
       policy: Policies::InternationalRelocationPayments,
       eligibility_attributes: {
         changed_workplace_or_new_contract: true,
-        employments: [
+        employment_history: [
           {
-            school_id: create(:school).id,
-            start_date: Date.new(2023, 5, 1),
-            end_date: Date.new(2024, 4, 1),
-            subject: "Physics",
-            met_minimum_hours: true
-          }
+            id: "1111-1111-1111-1111",
+            school: create(:school),
+            employment_start_date: Date.new(2023, 5, 1),
+            employment_end_date: Date.new(2024, 4, 1),
+            subject_employed_to_teach: "Physics",
+            met_minimum_teaching_hours: true
+          },
         ]
       }
     )
 
     create(:task, :passed, name: "employment_history", claim: claim)
 
+    sign_in_as_service_operator
+
     visit admin_claim_tasks_path(claim)
 
-    click_on "Employment history"
+    click_on "Check employment history"
 
     expect(page).not_to have_text("Add employment")
     expect(page).not_to have_text("Remove employment")
