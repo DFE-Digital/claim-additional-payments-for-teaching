@@ -75,7 +75,13 @@ module Admin
 
         def subject_employed_to_teach_options
           [
-            Form::Option.new(id: "physics", name: "Physics")
+            Form::Option.new(id: "physics", name: "Physics"),
+            Form::Option.new(
+              id: "combined_with_physics",
+              name: "General or combined science, including physics"
+            ),
+            Form::Option.new(id: "languages", name: "Languages"),
+            Form::Option.new(id: "other", name: "Other")
           ]
         end
 
