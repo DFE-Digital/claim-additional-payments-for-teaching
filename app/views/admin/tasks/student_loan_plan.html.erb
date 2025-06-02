@@ -5,19 +5,18 @@
 <% end %>
 
 <div class="govuk-grid-row">
-
   <%= render claim_summary_view, claim: @claim, heading: "Student loan plan type" %>
 
   <div class="govuk-grid-column-two-thirds">
-    <h2 class="govuk-heading-l"><%= @current_task_name.humanize %></h2>
+    <h2 class="govuk-heading-l"><%= @form.task.name.humanize %></h2>
 
     <%= render "admin/claims/answers", answers: @tasks_presenter.student_loan_plan %>
   </div>
 
   <div class="govuk-grid-column-two-thirds">
-    <% if @task.persisted? %>
-      <%= render "task_outcome", task: @task %>
-    <% elsif @claim.policy.task_available?(@task) %>
+    <% if @form.task.persisted? %>
+      <%= render "task_outcome", task: @form.task %>
+    <% elsif @claim.policy.task_available?(@form.task) %>
       <%= render "admin/tasks/notes", notes: @notes, display_description: false %>
       <div class="govuk-inset-text task-outcome">
         <p class="govuk-body">
@@ -30,7 +29,7 @@
     <% else %>
       <%= govuk_inset_text(
         text: I18n.t(
-          "#{@claim.policy.to_s.underscore}.admin.task_questions.#{@task.name}.unavailable",
+          "#{@claim.policy.to_s.underscore}.admin.task_questions.#{@form.task.name}.unavailable",
         )
       ) %>
     <% end %>

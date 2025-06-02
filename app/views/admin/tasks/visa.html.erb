@@ -4,13 +4,15 @@
   <%= govuk_back_link href: admin_claim_tasks_path(@claim) %>
 <% end %>
 
-<%= render "shared/error_summary", instance: @task, errored_field_id_overrides: { "passed": "task_passed_true" } if @task.errors.any? %>
+<%= form_with model: @form, scope: :form, url: root_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+  <%= f.govuk_error_summary %>
+<% end %>
 
 <div class="govuk-grid-row">
   <%= render claim_summary_view, claim: @claim, heading: "Visa check" %>
 
   <div class="govuk-grid-column-two-thirds">
-    <h2 class="govuk-heading-l"><%= @current_task_name.humanize %></h2>
+    <h2 class="govuk-heading-l"><%= @form.task.name.humanize %></h2>
   </div>
 
   <div class="govuk-grid-column-two-thirds">
@@ -18,8 +20,8 @@
   </div>
 
   <div class="govuk-grid-column-two-thirds">
-    <% if !@task.passed.nil? %>
-      <%= render "task_outcome", task: @task %>
+    <% if !@form.task.passed.nil? %>
+      <%= render "task_outcome", task: @form.task %>
     <% else %>
       <%= render "form", task_name: "visa", claim: @claim %>
     <% end %>
