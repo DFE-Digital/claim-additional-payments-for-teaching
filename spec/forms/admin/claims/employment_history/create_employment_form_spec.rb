@@ -14,6 +14,18 @@ RSpec.describe Admin::Claims::EmploymentHistory::CreateEmploymentForm, type: :mo
   let(:form) { described_class.new(claim, params: params) }
 
   describe "validations" do
+    context "when created_by is missing" do
+      let(:params) do
+        {}
+      end
+
+      it "is invalid with an appropriate error message" do
+        expect(form).not_to be_valid
+
+        expect(form.errors[:created_by]).to include("can't be blank")
+      end
+    end
+
     context "when no school is selected" do
       let(:params) do
         {
@@ -140,6 +152,8 @@ RSpec.describe Admin::Claims::EmploymentHistory::CreateEmploymentForm, type: :mo
   end
 
   describe "#save" do
+    let(:created_by) { create(:dfe_signin_user) }
+
     let(:params) do
       {
         school_id: school.id,
@@ -148,12 +162,15 @@ RSpec.describe Admin::Claims::EmploymentHistory::CreateEmploymentForm, type: :mo
         employment_start_date: Date.new(2023, 1, 1),
         employment_end_date: Date.new(2023, 12, 31),
         met_minimum_teaching_hours: true,
-        subject_employed_to_teach: "physics"
+        subject_employed_to_teach: "physics",
+        created_by: created_by
       }
     end
 
     it "creates a new employment history" do
-      expect(form.save).to be true
+      travel_to DateTime.new(2025, 6, 1, 0, 0, 0) do
+        expect(form.save).to be true
+      end
 
       eligibility = claim.reload.eligibility
 
@@ -165,6 +182,8 @@ RSpec.describe Admin::Claims::EmploymentHistory::CreateEmploymentForm, type: :mo
       expect(employment_history.employment_end_date).to eq(Date.new(2023, 12, 31))
       expect(employment_history.met_minimum_teaching_hours).to be true
       expect(employment_history.subject_employed_to_teach).to eq("physics")
+      expect(employment_history.created_by).to eq(created_by)
+      expect(employment_history.created_at).to eq(DateTime.new(2025, 6, 1, 0, 0, 0))
     end
 
     it "doesn't overwrite existing employment history" do
@@ -174,7 +193,8 @@ RSpec.describe Admin::Claims::EmploymentHistory::CreateEmploymentForm, type: :mo
         employment_start_date: Date.new(2022, 1, 1),
         employment_end_date: Date.new(2022, 12, 31),
         met_minimum_teaching_hours: false,
-        subject_employed_to_teach: "physics"
+        subject_employed_to_teach: "physics",
+        created_by: create(:dfe_signin_user)
       )
 
       claim.eligibility.employment_history = [employment]

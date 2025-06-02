@@ -48,7 +48,7 @@ module Admin
             :employment_end_date,
             :met_minimum_teaching_hours,
             :subject_employed_to_teach
-          )
+          ).merge(created_by: current_admin)
         end
 
         def claim
