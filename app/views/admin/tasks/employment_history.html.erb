@@ -92,11 +92,33 @@
     <% end %>
   <% end %>
 
-  <% unless @form.task.completed? %>
-    <%= govuk_button_link_to(
-      "Add employment",
-      new_admin_claim_employment_history_employment_path(@form.task.claim),
-      secondary: true,
-    ) %>
+  <% if @form.task.completed? %>
+    <%= render "task_outcome", task: @form.task %>
+  <% else %>
+    <%= form_with(
+      model: @form,
+      scope: :form,
+      url: admin_claim_tasks_path(@claim),
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+      data: { "test-id": "task-form" }
+    ) do |f| %>
+
+      <% if @form.task.claim.eligibility.employment_history.reject(&:deleted?).any? %>
+        <%= render(partial: "form_body", locals: { f: f, notes: @notes }) %>
+
+        <%= f.submit(
+          "Save and continue",
+          class: "govuk-button",
+          data: { module: "govuk-button" }
+        ) %>
+      <% end %>
+
+      <%= govuk_button_link_to(
+        "Add employment",
+        new_admin_claim_employment_history_employment_path(@form.task.claim),
+        secondary: true,
+        class: "govuk-!-margin-left-3"
+      ) %>
+    <% end %>
   <% end %>
 </div>

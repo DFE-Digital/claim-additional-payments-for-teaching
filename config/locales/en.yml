@@ -787,6 +787,8 @@ en:
           title: "Does the claimant’s employment contract match the above information from their claim?"
         employment_start:
           title: "Does the claimant’s employment start date match the above information from their claim?"
+        employment_history:
+          title: "Have you checked the claimant‘s employment history with their previous employers?"
         subject:
           title: "Does the claimant’s subject match the above information from their claim?"
         teaching_hours:
