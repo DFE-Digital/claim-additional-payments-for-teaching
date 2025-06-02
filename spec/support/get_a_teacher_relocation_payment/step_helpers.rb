@@ -345,9 +345,9 @@ module GetATeacherRelocationPayment
     end
 
     def assert_application_is_submitted!
-      expect(page).to have_content("Claim submitted")
+      expect(page).to have_content("You applied for a second International Relocation Payment")
       expect(page).to have_content(
-        "We have sent you a confirmation email to seymour.skinner@springfieldelementary.edu"
+        "We’ve sent a confirmation email to seymour.skinner@springfieldelementary.edu"
       )
 
       claim = Claim.last
