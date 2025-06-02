@@ -205,6 +205,43 @@ RSpec.describe "Admin employment history task" do
     )
   end
 
+  it "allows completing the task when there is at least one employment" do
+    claim = create(
+      :claim,
+      :submitted,
+      policy: Policies::InternationalRelocationPayments,
+      eligibility_attributes: {
+        changed_workplace_or_new_contract: true,
+        employment_history: [
+          {
+            id: "1111-1111-1111-1111",
+            school: create(:school),
+            employment_start_date: Date.new(2023, 5, 1),
+            employment_end_date: Date.new(2024, 4, 1),
+            subject_employed_to_teach: "physics",
+            met_minimum_teaching_hours: true,
+            created_by: create(:dfe_signin_user)
+          }
+        ]
+      }
+    )
+
+    sign_in_as_service_operator
+
+    visit admin_claim_tasks_path(claim)
+
+    click_on "Check employment history"
+
+    within '[data-test-id="task-form"]' do
+      choose "Yes"
+      click_on "Save and continue"
+    end
+
+    visit admin_claim_tasks_path(claim)
+
+    expect(task_status("Employment history")).to eq("Passed")
+  end
+
   it "doesn't allow adding or removing employment if the task is completed" do
     claim = create(
       :claim,
