@@ -46,15 +46,17 @@
 
           <div data-test-id="employment-<%= employment.id %>">
             <%= govuk_summary_card(title: "Previous workplace#{index}") do |card| %>
-              <% card.with_action do %>
-                <%= govuk_link_to(
-                  "Remove employment",
-                  admin_claim_employment_history_employment_path(
-                    @task.claim,
-                    employment.id
-                  ),
-                  method: :delete,
-                ) %>
+              <% unless @task.completed? %>
+                <% card.with_action do %>
+                  <%= govuk_link_to(
+                    "Remove employment",
+                    admin_claim_employment_history_employment_path(
+                      @task.claim,
+                      employment.id
+                    ),
+                    method: :delete,
+                  ) %>
+                <% end %>
               <% end %>
 
               <% card.with_summary_list(actions: false) do |summary_list| %>
@@ -93,11 +95,13 @@
         <% end %>
       <% end %>
 
-      <%= govuk_button_link_to(
-        "Add employment",
-        new_admin_claim_employment_history_employment_path(@task.claim),
-        secondary: true
-      ) %>
+      <% unless @task.completed? %>
+        <%= govuk_button_link_to(
+          "Add employment",
+          new_admin_claim_employment_history_employment_path(@task.claim),
+          secondary: true
+        ) %>
+      <% end %>
     <% end %>
   </div>
 </div>
