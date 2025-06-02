@@ -9,6 +9,8 @@ module Admin
 
         attr_reader :claim
 
+        attr_accessor :created_by
+
         attribute :school_id, :string
 
         attribute :school_search, :string
@@ -22,6 +24,8 @@ module Admin
         attribute :met_minimum_teaching_hours, :boolean
 
         attribute :subject_employed_to_teach, :string
+
+        validates :created_by, presence: true
 
         validate :validate_school_selected
 
@@ -91,7 +95,9 @@ module Admin
             employment_start_date: employment_start_date,
             employment_end_date: employment_end_date,
             met_minimum_teaching_hours: met_minimum_teaching_hours,
-            subject_employed_to_teach: subject_employed_to_teach
+            subject_employed_to_teach: subject_employed_to_teach,
+            created_by: created_by,
+            created_at: DateTime.now,
           )
 
           eligibility = claim.eligibility

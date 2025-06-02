@@ -151,7 +151,8 @@ RSpec.describe "Admin employment history task" do
             employment_start_date: Date.new(2023, 5, 1),
             employment_end_date: Date.new(2024, 4, 1),
             subject_employed_to_teach: "Physics",
-            met_minimum_teaching_hours: true
+            met_minimum_teaching_hours: true,
+            created_by: create(:dfe_signin_user)
           },
           {
             id: "1111-1111-1111-1112",
@@ -159,7 +160,8 @@ RSpec.describe "Admin employment history task" do
             employment_start_date: Date.new(2024, 5, 1),
             employment_end_date: Date.new(2025, 4, 1),
             subject_employed_to_teach: "Physics",
-            met_minimum_teaching_hours: true
+            met_minimum_teaching_hours: true,
+            created_by: create(:dfe_signin_user)
           }
         ]
       }
@@ -217,8 +219,9 @@ RSpec.describe "Admin employment history task" do
             employment_start_date: Date.new(2023, 5, 1),
             employment_end_date: Date.new(2024, 4, 1),
             subject_employed_to_teach: "Physics",
-            met_minimum_teaching_hours: true
-          },
+            met_minimum_teaching_hours: true,
+            created_by: create(:dfe_signin_user)
+          }
         ]
       }
     )

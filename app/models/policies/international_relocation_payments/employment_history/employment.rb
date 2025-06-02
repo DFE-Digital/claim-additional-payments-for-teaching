@@ -6,6 +6,8 @@ module Policies
         include ActiveModel::Attributes
 
         attribute :id, :string
+        attribute :created_by_id, :string
+        attribute :created_at, :datetime
         attribute :school_id, :string
         attribute :employment_contract_of_at_least_one_year, :boolean
         attribute :employment_start_date, :date
@@ -25,6 +27,14 @@ module Policies
 
         def school
           School.find(school_id)
+        end
+
+        def created_by=(user)
+          self.created_by_id = user.id
+        end
+
+        def created_by
+          DfeSignIn::User.find(created_by_id)
         end
 
         def ==(other)
