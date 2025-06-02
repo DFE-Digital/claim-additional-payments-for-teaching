@@ -8,6 +8,8 @@ module Policies
         attribute :id, :string
         attribute :created_by_id, :string
         attribute :created_at, :datetime
+        attribute :deleted_by_id, :string
+        attribute :deleted_at, :datetime
         attribute :school_id, :string
         attribute :employment_contract_of_at_least_one_year, :boolean
         attribute :employment_start_date, :date
@@ -37,8 +39,20 @@ module Policies
           DfeSignIn::User.find(created_by_id)
         end
 
+        def deleted_by=(user)
+          self.deleted_by_id = user.id
+        end
+
+        def deleted_by
+          DfeSignIn::User.find(deleted_by_id) if deleted_by_id.present?
+        end
+
         def ==(other)
           other.id == self.id
+        end
+
+        def deleted?
+          deleted_at.present?
         end
       end
     end
