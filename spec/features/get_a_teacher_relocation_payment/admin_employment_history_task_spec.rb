@@ -278,14 +278,23 @@ RSpec.describe "Admin employment history task" do
   def select_from_autocomplete(label, value)
     fill_in label, with: value
 
-    sleep(1)
+    menu = nil
 
-    within "ul.autocomplete__menu" do
+    Timeout.timeout(5) do
+      until menu&.visible?
+        menu = find("ul.autocomplete__menu")
+        sleep 0.5
+      end
+    end
+
+    within menu do
       option = find("li", text: value)
 
       Timeout.timeout(5) do
         while option.visible?
           option.click
+
+          sleep 0.5
         end
       end
     end
