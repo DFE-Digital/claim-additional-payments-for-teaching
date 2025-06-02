@@ -25,7 +25,10 @@ module Admin
         def destroy
           @form = DestroyEmploymentForm.new(
             claim,
-            params: {employment_id: params[:id]}
+            params: {
+              employment_id: params[:id],
+              deleted_by: current_admin
+            }
           )
 
           @form.save!

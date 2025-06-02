@@ -7,7 +7,11 @@ module Admin
 
         attr_reader :claim
 
+        attr_accessor :deleted_by
+
         attribute :employment_id
+
+        validates :deleted_by, presence: true
 
         def initialize(claim, params: {})
           @claim = claim
@@ -16,21 +20,18 @@ module Admin
         end
 
         def save!
-          raise ActiveRecord::RecordInvalid unless employment_to_remove
+          eligibility = claim.eligibility
 
-          claim.eligibility.employment_history =
-            claim.eligibility.employment_history.reject do |employment|
-              employment == employment_to_remove
-            end
+          employment = eligibility.employment_history.find { |e| e.id == employment_id }
 
-          claim.save!
-        end
+          raise ActiveRecord::RecordInvalid unless employment
 
-        private
+          employment.deleted_by = deleted_by
+          employment.deleted_at = DateTime.now
 
-        def employment_to_remove
-          @employment_to_remove ||= @claim
-            .eligibility.employment_history.find { |e| e.id == employment_id }
+          eligibility.employment_history_will_change!
+
+          eligibility.save!
         end
       end
     end

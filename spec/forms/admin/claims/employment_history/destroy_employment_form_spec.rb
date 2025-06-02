@@ -27,6 +27,8 @@ RSpec.describe Admin::Claims::EmploymentHistory::DestroyEmploymentForm do
         met_minimum_teaching_hours: true
       )
 
+      dfe_signin_user = create(:dfe_signin_user)
+
       claim.eligibility.employment_history = [
         employment_1,
         employment_2
@@ -36,12 +38,31 @@ RSpec.describe Admin::Claims::EmploymentHistory::DestroyEmploymentForm do
 
       form = described_class.new(
         claim,
-        params: {employment_id: employment_1.id}
+        params: {
+          employment_id: employment_1.id,
+          deleted_by: dfe_signin_user
+        }
       )
 
-      form.save!
+      travel_to DateTime.new(2025, 6, 1, 0, 0, 0) do
+        form.save!
+      end
 
-      expect(claim.reload.eligibility.employment_history).to eq([employment_2])
+      claim.reload
+
+      expect(
+        claim.eligibility.employment_history.reject(&:deleted?)
+      ).to eq([employment_2])
+
+      deleted_employment = claim.eligibility.employment_history.find(&:deleted?)
+
+      expect(deleted_employment).to eq(employment_1)
+
+      expect(deleted_employment.deleted_by).to eq(dfe_signin_user)
+
+      expect(
+        deleted_employment.deleted_at
+      ).to eq(DateTime.new(2025, 6, 1, 0, 0, 0))
     end
   end
 end

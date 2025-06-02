@@ -39,6 +39,7 @@
       <% else %>
         <% @task.claim.eligibility
           .employment_history
+          .reject(&:deleted?)
           .sort_by(&:employment_end_date)
           .each
           .with_index(1) do |employment, i| %>

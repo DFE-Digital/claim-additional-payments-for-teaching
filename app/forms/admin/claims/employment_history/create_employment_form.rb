@@ -97,7 +97,7 @@ module Admin
             met_minimum_teaching_hours: met_minimum_teaching_hours,
             subject_employed_to_teach: subject_employed_to_teach,
             created_by: created_by,
-            created_at: DateTime.now,
+            created_at: DateTime.now
           )
 
           eligibility = claim.eligibility
