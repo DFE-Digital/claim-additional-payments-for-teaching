@@ -140,7 +140,7 @@ Rails.application.routes.draw do
         resources :provider_verification_emails, only: [:create]
       end
       resource :employment_history, only: [], module: :claims do
-        resources :employments, only: [:new, :create], module: :employment_history
+        resources :employments, only: [:new, :create, :destroy], module: :employment_history
       end
     end
 
