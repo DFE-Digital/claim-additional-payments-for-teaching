@@ -60,6 +60,14 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
+    def and_i_complete_breaks_in_employment_with(option:)
+      assert_on_breaks_in_employment_page!
+
+      choose(option)
+
+      click_button("Continue")
+    end
+
     def and_i_complete_the_visa_screen_with(option:)
       assert_on_visa_page!
 
@@ -274,6 +282,10 @@ module GetATeacherRelocationPayment
       expect(page).to have_text("Have you changed your workplace or started a new contract in the past year?")
     end
 
+    def assert_on_breaks_in_employment_page!
+      expect(page).to have_text("Have you had any breaks in employment during the last 3 academic terms?")
+    end
+
     def assert_on_visa_page!
       expect(page).to have_text("Select the visa you used to move to England")
     end
@@ -337,6 +349,14 @@ module GetATeacherRelocationPayment
       expect(page).to have_content(
         "We have sent you a confirmation email to seymour.skinner@springfieldelementary.edu"
       )
+    end
+
+    def then_i_change_answer(question)
+      click_link question
+    end
+
+    def when_i_click_back_link
+      click_link "Back"
     end
   end
 end

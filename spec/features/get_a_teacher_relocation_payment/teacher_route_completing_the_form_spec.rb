@@ -39,10 +39,20 @@ RSpec.describe "teacher route: completing the form" do
       )
       and_i_complete_the_subject_step_with(option: "Physics")
       and_i_complete_changed_workplace_or_new_contract_with(option: "No")
+      and_i_complete_breaks_in_employment_with(option: "No")
       and_i_complete_the_visa_screen_with(option: "British National (Overseas) visa")
       and_i_complete_the_entry_date_page_with(date: entry_date)
       then_the_check_your_answers_part_one_page_shows_my_answers
       and_i_dont_change_my_answers
+    end
+
+    context "change answers" do
+      it "returns to check answers after changing answer" do
+        when_i_click_back_link
+        then_i_change_answer("Change have you had any breaks in employment during the last 3 academic terms?")
+        and_i_complete_breaks_in_employment_with(option: "Yes")
+        then_the_check_your_answers_part_one_page_shows
+      end
     end
 
     context "with postcode search" do
@@ -94,6 +104,10 @@ RSpec.describe "teacher route: completing the form" do
     end
   end
 
+  def then_the_check_your_answers_part_one_page_shows
+    assert_on_check_your_answers_part_one_page!
+  end
+
   def then_the_check_your_answers_part_one_page_shows_my_answers
     assert_on_check_your_answers_part_one_page!
 
@@ -127,6 +141,10 @@ RSpec.describe "teacher route: completing the form" do
 
     expect(page).to have_text(
       /Have you changed your workplace or started a new contract in the past year\?\s?No/
+    )
+
+    expect(page).to have_text(
+      /Have you had any breaks in employment during the last 3 academic terms\?\s?No/
     )
 
     expect(page).to have_text(
