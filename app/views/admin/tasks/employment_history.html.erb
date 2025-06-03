@@ -54,7 +54,7 @@
 
           <% card.with_summary_list(actions: false) do |summary_list| %>
             <% summary_list.with_row do |row| %>
-              <% row.with_key text: "Previous workplace#{index}" %>
+              <% row.with_key text: "School" %>
               <% row.with_value { display_school(employment.school, include_dfe_number: false) } %>
             <% end %>
 
