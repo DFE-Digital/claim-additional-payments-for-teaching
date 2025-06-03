@@ -72,6 +72,14 @@ variable "worker_replicas" {
   description = "Number of replicas of the worker"
   default     = 1
 }
+variable "web_memory" {
+  description = "Max memory for web pods"
+  default     = "1Gi"
+}
+variable "worker_memory" {
+  description = "Max memory for worker podsr"
+  default     = "1Gi"
+}
 variable "azure_maintenance_window" {
   default = null
 }
