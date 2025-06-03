@@ -349,6 +349,10 @@ module GetATeacherRelocationPayment
       expect(page).to have_content(
         "We have sent you a confirmation email to seymour.skinner@springfieldelementary.edu"
       )
+
+      claim = Claim.last
+
+      expect(claim.eligibility.breaks_in_employment).to be_truthy
     end
 
     def then_i_change_answer(question)
