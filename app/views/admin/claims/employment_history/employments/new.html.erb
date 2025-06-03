@@ -133,4 +133,11 @@
   </div>
 
   <%= f.submit "Save and continue", class: "govuk-button" %>
+
+  <%= govuk_button_link_to(
+    "Cancel",
+    admin_claim_task_path(@form.claim, "employment_history"),
+    secondary: true,
+    class: "govuk-!-margin-left-3",
+  ) %>
 <% end %>
