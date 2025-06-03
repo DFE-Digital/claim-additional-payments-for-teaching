@@ -30,6 +30,7 @@ shared:
     - manual
     - claim_verifier_match
     - reason
+    - data
   :amendments:
     - id
     - claim_id
@@ -221,6 +222,7 @@ shared:
     - award_amount
     - changed_workplace_or_new_contract
     - previous_year_claim_ids
+    - breaks_in_employment
   :schools:
     - id
     - urn

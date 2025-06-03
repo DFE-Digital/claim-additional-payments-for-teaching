@@ -204,6 +204,9 @@ en:
       first_year_payment:
         name: First year payment
         title: "Confirm this user has claimed their first year payment"
+      continuous_employment:
+        name: Continuous employment
+        title: Check for breaks in employment
     undo_decision:
       approved: "Undo approval"
       rejected: "Undo rejection"
@@ -773,6 +776,8 @@ en:
           title: "Does the teacher meet the minimum 50% teaching time requirement in their role?"
         payroll_details:
           title: "The claimant’s personal bank account details have not been automatically validated. Has the claimant confirmed their personal bank account details?"
+        continuous_employment:
+          title: Has the claimant had any breaks in employment during the last 3 academic terms?
   further_education_payments:
     accessibility_statement:
       test_date: "28 August 2024"

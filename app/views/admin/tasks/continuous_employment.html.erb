@@ -1,0 +1,41 @@
+<% content_for(:page_title) { page_title("Claim #{@claim.reference} employment check for #{@claim.policy.short_name}") } %>
+
+<% content_for :back_link do %>
+  <%= govuk_back_link href: admin_claim_tasks_path(@claim) %>
+<% end %>
+
+<%= form_with model: @form, scope: :form, url: root_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+  <%= f.govuk_error_summary %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <%= render claim_summary_view, claim: @claim, heading: "Employment" %>
+
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-l"><%= @form.task.name.humanize %></h2>
+
+    <%= govuk_summary_list(card: {title: "Claimant answers"}) do |summary_list| %>
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Breaks in employment" } %>
+        <% row.with_value { display_boolean(@claim.eligibility.breaks_in_employment) } %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="govuk-grid-column-two-thirds">
+    <% if @form.task.persisted? %>
+      <%= render "task_outcome", task: @form.task, notes: @notes %>
+    <% elsif @claim.policy.task_available?(@form.task) %>
+      <%= render "continuous_employment_form", claim: @claim %>
+    <% else %>
+      <%= govuk_inset_text(
+        text: I18n.t(
+          "#{@claim.policy.to_s.underscore}.admin.task_questions.#{@form.task.name}.unavailable",
+          employment_task_available_at: l(@claim.eligibility.employment_task_available_at)
+        )
+      ) %>
+    <% end %>
+
+    <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>
+  </div>
+</div>

@@ -23,6 +23,7 @@ module Policies
         tasks << "employment"
         tasks << "employment_contract" if claim.tasks.exists?(name: "employment_contract")
         tasks << "employment_start" if claim.tasks.exists?(name: "employment_start")
+        tasks << "continuous_employment"
         tasks << "subject" if claim.tasks.exists?(name: "subject")
         tasks << "teaching_hours"
         tasks << "payroll_details" if claim.must_manually_validate_bank_details?

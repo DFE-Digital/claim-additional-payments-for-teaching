@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_02_154140) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_03_151832) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -758,6 +758,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_02_154140) do
     t.boolean "manual"
     t.integer "claim_verifier_match"
     t.text "reason"
+    t.jsonb "data"
     t.index ["claim_id"], name: "index_tasks_on_claim_id"
     t.index ["created_by_id"], name: "index_tasks_on_created_by_id"
     t.index ["name", "claim_id"], name: "index_tasks_on_name_and_claim_id", unique: true

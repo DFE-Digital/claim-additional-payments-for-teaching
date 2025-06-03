@@ -1,5 +1,5 @@
-class Admin::Tasks::GenericForm
-  PERMITTED_PARAMS = %w[name passed].freeze
+class Admin::Tasks::ContinuousEmploymentForm
+  PERMITTED_PARAMS = %w[name employment_breaks statutory].freeze
 
   include ActiveModel::Model
   include ActiveModel::Attributes
@@ -8,13 +8,21 @@ class Admin::Tasks::GenericForm
   attribute :admin_user
   attribute :name, :string # aka task_name
 
-  attribute :passed, :boolean
+  attribute :employment_breaks, :boolean
+  attribute :statutory, :boolean
 
-  validates :passed,
+  validates :employment_breaks,
     inclusion: {
       in: [true, false],
       message: "You must select ‘Yes’ or ‘No’"
     }
+
+  validates :statutory,
+    inclusion: {
+      in: [true, false],
+      message: "You must select ‘Yes’ or ‘No’"
+    },
+    if: proc { |form| form.employment_breaks }
 
   def self.permitted_params
     PERMITTED_PARAMS
@@ -26,7 +34,8 @@ class Admin::Tasks::GenericForm
     task.update(
       passed:,
       created_by: admin_user,
-      manual: true
+      manual: true,
+      data:
     )
   end
 
@@ -47,5 +56,18 @@ class Admin::Tasks::GenericForm
 
   def task
     @task ||= claim.tasks.where(name:).first || claim.tasks.build(name:)
+  end
+
+  private
+
+  def passed
+    !employment_breaks || (employment_breaks && statutory)
+  end
+
+  def data
+    {
+      employment_breaks: employment_breaks,
+      statutory: statutory
+    }
   end
 end
