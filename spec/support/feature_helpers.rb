@@ -7,7 +7,15 @@ module FeatureHelpers
   end
 
   def choose_qts_year(option = :on_or_after_cut_off_date)
-    choose "claim_qts_award_year_#{option}"
+    form = Journeys::TeacherStudentLoanReimbursement::QtsYearForm.new(
+      journey_session: Journeys::TeacherStudentLoanReimbursement::Session.new,
+      journey: Journeys::TeacherStudentLoanReimbursement,
+      params: ActionController::Parameters.new
+    )
+
+    label = form.radio_options.find { |opt| opt.id == option.to_s }.name
+
+    choose label
     click_on "Continue"
   end
 
