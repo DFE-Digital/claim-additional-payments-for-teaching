@@ -17,6 +17,19 @@ module Journeys
 
         journey_session.save!
       end
+
+      def radio_options
+        [
+          Option.new(
+            id: true,
+            name: "Yes"
+          ),
+          Option.new(
+            id: false,
+            name: "No"
+          )
+        ]
+      end
     end
   end
 end

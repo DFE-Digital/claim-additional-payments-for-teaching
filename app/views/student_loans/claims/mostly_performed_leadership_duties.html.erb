@@ -9,67 +9,24 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% if @form.errors.any? %>
-      <%= render(
-        "shared/error_summary",
-        instance: @form,
-        errored_field_id_overrides: {
-          "eligibility.mostly_performed_leadership_duties": "claim_eligibility_attributes_mostly_performed_leadership_duties_true"
-        }
-      ) %>
-    <% end %>
+    <%= form_with model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
 
-    <%= form_for @form, url: @form.url do |f| %>
-      <%= form_group_tag f.object do %>
-        <%= f.hidden_field :mostly_performed_leadership_duties %>
+      <%= f.govuk_collection_radio_buttons :mostly_performed_leadership_duties,
+        @form.radio_options,
+        :id,
+        :name,
+        inline: true,
+        legend: {
+          text: mostly_performed_leadership_duties_question,
+          tag: "h1",
+          size: "xl"
+        },
+        hint: {
+          text: I18n.t("student_loans.forms.mostly_performed_leadership_duties.hints.mostly_performed_leadership_duties")
+        } %>
 
-        <fieldset class="govuk-fieldset" aria-describedby="mostly_performed_leadership_duties-hint" role="group">
-
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-            <h1 class="govuk-fieldset__heading">
-              <%= mostly_performed_leadership_duties_question %>
-            </h1>
-          </legend>
-
-          <div class="govuk-hint" id="mostly_performed_leadership_duties-hint">
-            <%= I18n.t("student_loans.forms.mostly_performed_leadership_duties.hints.mostly_performed_leadership_duties") %>
-          </div>
-
-          <%= errors_tag f.object, :mostly_performed_leadership_duties %>
-
-          <div class="govuk-radios govuk-radios--inline">
-            <div class="govuk-radios__item">
-              <%= f.radio_button(
-                :mostly_performed_leadership_duties,
-                true,
-                class: "govuk-radios__input"
-              ) %>
-              <%= f.label(
-                :mostly_performed_leadership_duties_true,
-                "Yes",
-                class: "govuk-label govuk-radios__label"
-              ) %>
-            </div>
-
-            <div class="govuk-radios__item">
-              <%= f.radio_button(
-                :mostly_performed_leadership_duties,
-                false,
-                class: "govuk-radios__input"
-              ) %>
-
-              <%= f.label(
-                :mostly_performed_leadership_duties_false,
-                "No",
-                class: "govuk-label govuk-radios__label"
-              ) %>
-            </div>
-          </div>
-
-        </fieldset>
-      <% end %>
-
-      <%= f.submit "Continue", class: "govuk-button" %>
+      <%= f.govuk_submit "Continue" %>
     <% end %>
   </div>
 </div>
