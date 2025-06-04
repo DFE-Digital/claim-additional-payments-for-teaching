@@ -416,6 +416,9 @@ en:
           qts_award_year: When did you complete your initial teacher training (ITT)?
         errors:
           select_itt_year: Select when you completed your initial teacher training
+        on_or_after_cut_off_date:
+          Between the start of the %{year} academic year and the end of the 2020 to 2021 academic year
+        before_cut_off_date: A different academic year
       subjects_taught:
         questions:
           subjects_taught: Which of the following subjects did you teach at %{school} between %{financial_year}?

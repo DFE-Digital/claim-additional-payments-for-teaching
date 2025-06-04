@@ -19,6 +19,19 @@ module Journeys
         journey_session.save!
       end
 
+      def radio_options
+        [
+          Option.new(
+            id: "on_or_after_cut_off_date",
+            name: t("on_or_after_cut_off_date", year: first_eligible_qts_award_year)
+          ),
+          Option.new(
+            id: "before_cut_off_date",
+            name: t("before_cut_off_date")
+          )
+        ]
+      end
+
       def first_eligible_qts_award_year
         Policies::StudentLoans.first_eligible_qts_award_year.to_s(:long)
       end

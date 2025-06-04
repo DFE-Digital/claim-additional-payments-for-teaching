@@ -59,7 +59,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     click_link "Change when did you complete your initial teacher training (itt)?"
 
-    expect(find("#claim_qts_award_year_on_or_after_cut_off_date").checked?).to eq(true)
+    expect(find("#claim-qts-award-year-on-or-after-cut-off-date-field").checked?).to eq(true)
     choose_qts_year :before_cut_off_date
 
     expect(session.reload.answers.qts_award_year).to eq("before_cut_off_date")
