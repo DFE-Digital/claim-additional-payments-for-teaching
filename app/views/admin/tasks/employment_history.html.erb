@@ -29,67 +29,69 @@
       </p>
     <% end %>
   <% else %>
-    <% @form.task.claim.eligibility
-      .employment_history
-      .reject(&:deleted?)
-      .sort_by(&:employment_end_date)
-      .each
-      .with_index(1) do |employment, i| %>
-      <% index = " #{i}" if @form.task.claim.eligibility.employment_history.many? %>
+    <section id="employments">
+      <% @form.task.claim.eligibility
+        .employment_history
+        .reject(&:deleted?)
+        .sort_by(&:employment_end_date)
+        .each
+        .with_index(1) do |employment, i| %>
+        <% index = " #{i}" if @form.task.claim.eligibility.employment_history.many? %>
 
-      <div data-test-id="employment-<%= employment.id %>">
-        <%= govuk_summary_card(title: "Previous workplace#{index}") do |card| %>
-          <% unless @form.task.completed? %>
-            <% card.with_action do %>
-              <%= govuk_link_to(
-                "Remove employment",
-                admin_claim_employment_history_employment_path(
-                  @form.task.claim,
-                  employment.id
-                ),
-                method: :delete,
-              ) %>
+        <div data-test-id="employment-<%= employment.id %>">
+          <%= govuk_summary_card(title: "Previous workplace#{index}") do |card| %>
+            <% unless @form.task.completed? %>
+              <% card.with_action do %>
+                <%= govuk_link_to(
+                  "Remove employment",
+                  admin_claim_employment_history_employment_path(
+                    @form.task.claim,
+                    employment.id
+                  ),
+                  method: :delete,
+                ) %>
+              <% end %>
+            <% end %>
+
+            <% card.with_summary_list(actions: false) do |summary_list| %>
+              <% summary_list.with_row do |row| %>
+                <% row.with_key text: "School" %>
+                <% row.with_value { display_school(employment.school, include_dfe_number: false) } %>
+              <% end %>
+
+              <% summary_list.with_row do |row| %>
+                <% row.with_key text: "Employment contract of at least one year" %>
+                <% row.with_value { employment.employment_contract_of_at_least_one_year ? "Yes" : "No" } %>
+              <% end %>
+
+              <% summary_list.with_row do |row| %>
+                <% row.with_key text: "Employment start date" %>
+                <% row.with_value { employment.employment_start_date.to_s } %>
+              <% end %>
+
+              <% summary_list.with_row do |row| %>
+                <% row.with_key text: "Employment end date" %>
+                <% row.with_value { employment.employment_end_date.to_s } %>
+              <% end %>
+
+              <% summary_list.with_row do |row| %>
+                <% row.with_key text: "Subject employed to teach" %>
+                <% row.with_value {
+                  I18n.t(
+                    "get_a_teacher_relocation_payment.forms.subject.answers.#{employment.subject_employed_to_teach}"
+                  )
+                } %>
+              <% end %>
+
+              <% summary_list.with_row do |row| %>
+                <% row.with_key text: "Met minimum teaching hours" %>
+                <% row.with_value { employment.met_minimum_teaching_hours ? "Yes" : "No" } %>
+              <% end %>
             <% end %>
           <% end %>
-
-          <% card.with_summary_list(actions: false) do |summary_list| %>
-            <% summary_list.with_row do |row| %>
-              <% row.with_key text: "School" %>
-              <% row.with_value { display_school(employment.school, include_dfe_number: false) } %>
-            <% end %>
-
-            <% summary_list.with_row do |row| %>
-              <% row.with_key text: "Employment contract of at least one year" %>
-              <% row.with_value { employment.employment_contract_of_at_least_one_year ? "Yes" : "No" } %>
-            <% end %>
-
-            <% summary_list.with_row do |row| %>
-              <% row.with_key text: "Employment start date" %>
-              <% row.with_value { employment.employment_start_date.to_s } %>
-            <% end %>
-
-            <% summary_list.with_row do |row| %>
-              <% row.with_key text: "Employment end date" %>
-              <% row.with_value { employment.employment_end_date.to_s } %>
-            <% end %>
-
-            <% summary_list.with_row do |row| %>
-              <% row.with_key text: "Subject employed to teach" %>
-              <% row.with_value {
-                I18n.t(
-                  "get_a_teacher_relocation_payment.forms.subject.answers.#{employment.subject_employed_to_teach}"
-                )
-              } %>
-            <% end %>
-
-            <% summary_list.with_row do |row| %>
-              <% row.with_key text: "Met minimum teaching hours" %>
-              <% row.with_value { employment.met_minimum_teaching_hours ? "Yes" : "No" } %>
-            <% end %>
-          <% end %>
-        <% end %>
-      </div>
-    <% end %>
+        </div>
+      <% end %>
+    </section>
   <% end %>
 
   <% if @form.task.completed? %>
