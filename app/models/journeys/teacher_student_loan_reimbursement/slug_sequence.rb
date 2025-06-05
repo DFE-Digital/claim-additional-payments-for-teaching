@@ -76,12 +76,6 @@ module Journeys
 
       def slugs
         SLUGS.dup.tap do |sequence|
-          if ineligible?
-            sequence.delete("eligibility-confirmed")
-            sequence.delete("information-provided")
-            sequence.delete("check-your-answers")
-          end
-
           if !Journeys::TeacherStudentLoanReimbursement.configuration.teacher_id_enabled?
             sequence.delete("sign-in-or-continue")
             sequence.delete("reset-claim")
