@@ -757,7 +757,7 @@ en:
         arrival_date:
           title: Has the claimant arrived in the UK within 3 months of contract start date?
         employment:
-          title: "Does the claimant’s current school match the above information from their claim?"
+          title: "Have you confirmed with the claimant’s current employer that the details in their application are correct?"
         employment_contract:
           title: "Does the claimant’s employment contract match the above information from their claim?"
         employment_start:
