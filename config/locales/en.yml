@@ -201,6 +201,9 @@ en:
       teaching_hours:
         name: Teaching hours
         title: "Check teaching hours"
+      first_year_payment:
+        name: First year payment
+        title: "Confirm this user has claimed their first year payment"
     undo_decision:
       approved: "Undo approval"
       rejected: "Undo rejection"
@@ -743,6 +746,8 @@ en:
         identity_confirmation:
           title: Verify claimants’ identity
       task_questions:
+        first_year_payment:
+          title: "Did the claimant receive their first payment for the 2024 to 2025 academic year?"
         previous_payment:
           title: The claimant has not received an IRP payment in AY 2023/24?
         previous_residency:

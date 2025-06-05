@@ -4,7 +4,8 @@ module Policies
     extend self
 
     VERIFIERS = [
-      AutomatedChecks::ClaimVerifiers::FraudRisk
+      AutomatedChecks::ClaimVerifiers::FraudRisk,
+      AutomatedChecks::ClaimVerifiers::PreviousYearClaims
     ].freeze
 
     ELIGIBILITY_MATCHING_ATTRIBUTES = [["passport_number"]].freeze

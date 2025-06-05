@@ -156,7 +156,7 @@ RSpec.describe "teacher route: completing the form" do
     )
   end
 
-  def then_the_check_your_answers_part_page_shows_my_answers(school, mobile_number: false, building_society: false)
+  def then_the_check_your_answers_part_page_shows_my_answers(school, mobile_number: false, building_society: false, national_insurance_number: "QQ123456C")
     expect(page).to have_text(
       /What is your full name\?\s?Walter Seymour Skinner/
     )
@@ -166,7 +166,7 @@ RSpec.describe "teacher route: completing the form" do
     )
 
     expect(page).to have_text(
-      /What is your National Insurance number\?\s?QQ123456C/
+      /What is your National Insurance number\?\s?#{national_insurance_number}/
     )
 
     expect(page).to have_text(

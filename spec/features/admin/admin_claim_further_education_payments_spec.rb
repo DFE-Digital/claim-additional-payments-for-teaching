@@ -922,11 +922,4 @@ RSpec.feature "Admin claim further education payments" do
       yield(claimant_answer, provider_answer)
     end
   end
-
-  def task_status(task_name)
-    find(
-      :xpath,
-      "//h2[contains(@class, 'app-task-list__section') and contains(., '#{task_name}')]/following-sibling::ul//strong[contains(@class, 'govuk-tag')]"
-    ).text
-  end
 end

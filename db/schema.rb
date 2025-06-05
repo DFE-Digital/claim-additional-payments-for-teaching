@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_22_132501) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_28_135658) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -316,6 +316,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_132501) do
     t.uuid "current_school_id"
     t.decimal "award_amount", precision: 7, scale: 2
     t.boolean "changed_workplace_or_new_contract"
+    t.text "previous_year_claim_ids", default: [], array: true
     t.index ["current_school_id"], name: "index_irb_eligibilities_on_current_school_id"
   end
 
