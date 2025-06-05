@@ -679,7 +679,7 @@ en:
       visa:
         question: "Select the visa you currently have to live in England"
         errors:
-          inclusion: "Choose your visa type"
+          inclusion: "You must select the visa you currently have to live in England"
       entry_date:
         question: "Enter the date you moved to England to start your teaching job"
         errors:

@@ -28,7 +28,7 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::VisaForm, type: :model do
       is_expected.to(
         validate_inclusion_of(:visa_type)
         .in_array(described_class::VISA_OPTIONS)
-        .with_message("Choose your visa type")
+        .with_message("You must select the visa you currently have to live in England")
       )
     end
   end
