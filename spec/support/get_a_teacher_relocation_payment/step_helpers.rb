@@ -279,7 +279,7 @@ module GetATeacherRelocationPayment
     end
 
     def assert_on_changed_workplace_or_new_contract_page!
-      expect(page).to have_text("Have you changed your workplace or started a new contract in the past year?")
+      expect(page).to have_text("Have you changed where you work or started a new contract since you last applied?")
     end
 
     def assert_on_breaks_in_employment_page!

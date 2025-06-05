@@ -66,7 +66,7 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
           "subject"
         ],
         [
-          "Have you changed your workplace or started a new contract in the past year?",
+          "Have you changed where you work or started a new contract since you last applied?",
           "No",
           "changed-workplace-or-new-contract"
         ],

@@ -657,7 +657,7 @@ en:
         errors:
           inclusion: "Choose a subject"
       changed_workplace_or_new_contract:
-        question: "Have you changed your workplace or started a new contract in the past year?"
+        question: "Have you changed where you work or started a new contract since you last applied?"
         hint: "This includes any changes since your last application"
         answers:
           true:
