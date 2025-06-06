@@ -26,6 +26,10 @@ module Journeys
         )
       end
 
+      def has_dqt_data_for_claim?
+        dqt_teacher_record.present? && dqt_teacher_record.qts_award_date.present?
+      end
+
       def has_no_dqt_data_for_claim?
         dqt_teacher_status.blank? || dqt_teacher_record.has_no_data_for_claim?
       end
