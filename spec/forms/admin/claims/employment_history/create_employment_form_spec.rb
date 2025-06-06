@@ -149,6 +149,40 @@ RSpec.describe Admin::Claims::EmploymentHistory::CreateEmploymentForm, type: :mo
         )
       end
     end
+
+    context "when employment_start_date is in the future" do
+      let(:params) do
+        {
+          employment_start_date: Date.tomorrow,
+          employment_end_date: Date.today + 2.days
+        }
+      end
+
+      it "is invalid with an appropriate error message" do
+        expect(form).not_to be_valid
+
+        expect(form.errors[:employment_start_date]).to include(
+          "The employment start date must be in the past"
+        )
+      end
+    end
+
+    context "when employment_end_date is in the future" do
+      let(:params) do
+        {
+          employment_start_date: Date.yesterday,
+          employment_end_date: Date.tomorrow
+        }
+      end
+
+      it "is invalid with an appropriate error message" do
+        expect(form).not_to be_valid
+
+        expect(form.errors[:employment_end_date]).to include(
+          "The employment end date must be in the past"
+        )
+      end
+    end
   end
 
   describe "#save" do

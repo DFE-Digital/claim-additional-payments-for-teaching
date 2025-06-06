@@ -50,8 +50,22 @@ module Admin
         validates :employment_start_date,
           presence: {message: "Enter an employment start date"}
 
+        validates :employment_start_date,
+          comparison: {
+            less_than_or_equal_to: -> { Date.yesterday },
+            message: "The employment start date must be in the past"
+          },
+          if: :employment_start_date
+
         validates :employment_end_date,
           presence: {message: "Enter an employment end date"}
+
+        validates :employment_end_date,
+          comparison: {
+            less_than_or_equal_to: -> { Date.yesterday },
+            message: "The employment end date must be in the past"
+          },
+          if: :employment_end_date
 
         validates :employment_end_date,
           comparison: {
