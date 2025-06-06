@@ -71,7 +71,7 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
           "changed-workplace-or-new-contract"
         ],
         [
-          "Select the visa you used to move to England",
+          "Select the visa you currently have to live in England",
           "British National (Overseas) visa",
           "visa"
         ],

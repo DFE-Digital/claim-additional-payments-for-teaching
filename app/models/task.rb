@@ -30,6 +30,8 @@ class Task < ApplicationRecord
     payroll_details
     matching_details
     payroll_gender
+    first_year_payment
+    continuous_employment
   ].freeze
 
   NAMES.each { |name| scope name.to_sym, -> { where(name: name) } }
@@ -47,6 +49,8 @@ class Task < ApplicationRecord
 
   scope :automated, -> { where(manual: false) }
   scope :passed_automatically, -> { automated.where(passed: true) }
+
+  scope :passed, -> { where(passed: true) }
 
   scope :no_data_census_subjects_taught, -> { census_subjects_taught.where(passed: nil, claim_verifier_match: nil) }
 

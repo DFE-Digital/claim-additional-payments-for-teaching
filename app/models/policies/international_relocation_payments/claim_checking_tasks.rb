@@ -14,7 +14,8 @@ module Policies
       def applicable_task_names
         tasks = []
 
-        tasks << "previous_payment"
+        tasks << "first_year_payment" unless claim.tasks.previous_payment.exists?
+        tasks << "previous_payment" if claim.tasks.previous_payment.exists?
         tasks << "identity_confirmation"
         tasks << "visa"
         tasks << "arrival_date"
@@ -22,6 +23,7 @@ module Policies
         tasks << "employment"
         tasks << "employment_contract" if claim.tasks.exists?(name: "employment_contract")
         tasks << "employment_start" if claim.tasks.exists?(name: "employment_start")
+        tasks << "continuous_employment"
         tasks << "subject" if claim.tasks.exists?(name: "subject")
         tasks << "teaching_hours"
         tasks << "payroll_details" if claim.must_manually_validate_bank_details?
