@@ -38,6 +38,10 @@ module Journeys
         academic_year = AcademicYear.current + YEARS_BEFORE
         academic_year.start_year
       end
+
+      def eligible_start_year?
+        further_education_teaching_start_year.exclude?("pre-")
+      end
     end
   end
 end

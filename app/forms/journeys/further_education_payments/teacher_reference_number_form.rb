@@ -16,18 +16,10 @@ module Journeys
         }, if: -> { teacher_reference_number.present? }
 
       def save
-        return false unless valid?
+        return false if invalid?
 
         journey_session.answers.assign_attributes(
           teacher_reference_number: teacher_reference_number
-        )
-
-        journey_session.save!
-      end
-
-      def clear_answers_from_session
-        journey_session.answers.assign_attributes(
-          teacher_reference_number: nil
         )
 
         journey_session.save!

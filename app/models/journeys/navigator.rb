@@ -60,6 +60,9 @@ module Journeys
             return slug
           end
 
+          # if we are changing answer
+          # if possible to want to return to relevant check answer page
+          # though may not be possible if new unanswered questions are revealed
           if changing_answer?
             return slug if form == forms.last
             return slug if params[:change] == slug
@@ -172,6 +175,9 @@ module Journeys
 
     private
 
+    # returns truthy if changing answer
+    # the value is set to the slug of returning check answers page
+    # as a journey can have multiple check answer pages
     def changing_answer?
       params[:change].present?
     end

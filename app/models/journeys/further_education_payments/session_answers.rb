@@ -99,6 +99,16 @@ module Journeys
         end
       end
 
+      def eligible_course_selected?
+        groups = subjects_taught.reject { |e| e == "none" }
+
+        return if groups.empty?
+
+        groups.any? do |subject|
+          public_send(:"#{subject}_courses").count { |course| course != "none" } > 0
+        end
+      end
+
       def less_than_half_hours_teaching_eligible_courses?
         hours_teaching_eligible_subjects == false
       end
@@ -114,8 +124,8 @@ module Journeys
         end
       end
 
-      def performing_poorly?
-        subject_to_formal_performance_action || subject_to_disciplinary_action
+      def eligible_start_year?
+        further_education_teaching_start_year
       end
     end
   end

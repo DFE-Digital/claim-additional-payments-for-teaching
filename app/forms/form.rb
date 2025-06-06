@@ -74,6 +74,14 @@ class Form
     end
   end
 
+  def completed_or_valid?
+    if respond_to?(:completed?)
+      completed?
+    else
+      valid?
+    end
+  end
+
   private
 
   def permitted_attributes

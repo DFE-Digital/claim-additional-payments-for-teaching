@@ -110,6 +110,8 @@ FactoryBot.define do
       with_bank_details
       with_bank_details_validated
       with_payroll_gender
+
+      teacher_reference_number { "" }
     end
   end
 end
