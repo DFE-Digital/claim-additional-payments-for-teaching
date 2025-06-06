@@ -50,6 +50,10 @@ class AcademicYear
       current + 1
     end
 
+    def previous
+      current - 1
+    end
+
     # Returns the academic year for a given date, based on September 1st being
     # the start of the year.
     def for(date)
@@ -149,6 +153,10 @@ class AcademicYear
 
   def +(other)
     AcademicYear.new(start_year + other)
+  end
+
+  def previous
+    AcademicYear.new(start_year - 1)
   end
 
   def start_of_autumn_term

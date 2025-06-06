@@ -1,4 +1,6 @@
 class Admin::Tasks::PayrollGenderForm
+  PERMITTED_PARAMS = %w[name payroll_gender].freeze
+
   include ActiveModel::Model
   include ActiveModel::Attributes
 
@@ -13,6 +15,10 @@ class Admin::Tasks::PayrollGenderForm
       in: %w[female male],
       message: "You must select a gender that will be passed to HMRC"
     }
+
+  def self.permitted_params
+    PERMITTED_PARAMS
+  end
 
   def save
     return false if invalid?

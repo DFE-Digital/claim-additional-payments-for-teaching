@@ -1,0 +1,29 @@
+<%= form_with model: @form, scope: :form, url: admin_claim_tasks_path(@claim), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+  <%= f.hidden_field :name, value: @form.task.name %>
+
+  <%= f.govuk_radio_buttons_fieldset(
+    :employment_breaks,
+    legend: {
+      text: I18n.t("#{@form.translation}.title"),
+      tag: "h3",
+      size: "m",
+    }) do %>
+    <%= f.govuk_radio_button :employment_breaks, true, label: { text: "Yes" }, link_errors: true do %>
+      <%= f.govuk_radio_buttons_fieldset(:statutory, legend: { size: "m", text: "Were all the breaks taken for statutory reasons?" }) do %>
+        <%= f.govuk_radio_button :statutory, true, label: { text: "Yes" }, link_errors: true %>
+        <%= f.govuk_radio_button :statutory, false, label: { text: "No" } %>
+      <% end %>
+    <% end %>
+    <%= f.govuk_radio_button :employment_breaks, false, label: { text: "No" } %>
+  <% end %>
+
+  <% if @notes.present? %>
+    <div class="hmcts-timeline">
+      <% @notes.each do |note| %>
+        <%= render "admin/notes/note", note: note, display_description: true %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= f.govuk_submit "Save and continue" %>
+<% end %>

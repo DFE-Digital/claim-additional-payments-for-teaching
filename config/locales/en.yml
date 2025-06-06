@@ -201,6 +201,12 @@ en:
       teaching_hours:
         name: Teaching hours
         title: "Check teaching hours"
+      first_year_payment:
+        name: First year payment
+        title: "Confirm this user has claimed their first year payment"
+      continuous_employment:
+        name: Continuous employment
+        title: Check for breaks in employment
     undo_decision:
       approved: "Undo approval"
       rejected: "Undo rejection"
@@ -668,7 +674,7 @@ en:
           inclusion: "Select yes if you have changed your workplace or started a new contract in the past year"
       breaks_in_employment:
         question: Have you had any breaks in employment during the last 3 academic terms?
-        hint: Include any time off from work longer than [INSERT TIME PERIOD HERE]
+        hint: Include any breaks during term time when you were not working
         errors:
           inclusion: Select yes if you have had any breaks in employment during the last 3 academic terms
         answers:
@@ -743,6 +749,8 @@ en:
         identity_confirmation:
           title: Verify claimants’ identity
       task_questions:
+        first_year_payment:
+          title: "Did the claimant receive their first payment for the 2024 to 2025 academic year?"
         previous_payment:
           title: The claimant has not received an IRP payment in AY 2023/24?
         previous_residency:
@@ -768,6 +776,8 @@ en:
           title: "Does the teacher meet the minimum 50% teaching time requirement in their role?"
         payroll_details:
           title: "The claimant’s personal bank account details have not been automatically validated. Has the claimant confirmed their personal bank account details?"
+        continuous_employment:
+          title: Has the claimant had any breaks in employment during the last 3 academic terms?
   further_education_payments:
     accessibility_statement:
       test_date: "28 August 2024"

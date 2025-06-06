@@ -140,7 +140,7 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
-    def and_i_complete_the_personal_details_step
+    def and_i_complete_the_personal_details_step(national_insurance_number: "QQ123456C")
       assert_on_personal_details_page!
 
       fill_in("First name", with: "Walter")
@@ -149,7 +149,7 @@ module GetATeacherRelocationPayment
       fill_in("Day", with: "12")
       fill_in("Month", with: "7")
       fill_in("Year", with: "1945")
-      fill_in("What is your National Insurance number", with: "QQ123456C")
+      fill_in("What is your National Insurance number", with: national_insurance_number)
 
       click_button("Continue")
     end
@@ -349,6 +349,10 @@ module GetATeacherRelocationPayment
       expect(page).to have_content(
         "We have sent you a confirmation email to seymour.skinner@springfieldelementary.edu"
       )
+
+      claim = Claim.last
+
+      expect(claim.eligibility.breaks_in_employment).to be_truthy
     end
 
     def then_i_change_answer(question)

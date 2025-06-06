@@ -1,6 +1,7 @@
 module Admin
   module ClaimsHelper
     include Policies::StudentLoans::PresenterMethods
+    include PresenterMethods
     include Pagy::Frontend
 
     # Take user back to where View Claim was clicked from
