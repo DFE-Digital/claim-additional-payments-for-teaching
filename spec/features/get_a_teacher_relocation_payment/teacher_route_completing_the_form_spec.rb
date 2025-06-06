@@ -140,7 +140,7 @@ RSpec.describe "teacher route: completing the form" do
     )
 
     expect(page).to have_text(
-      /Have you changed your workplace or started a new contract in the past year\?\s?No/
+      /Have you changed where you work or started a new contract since you last applied\?\s?No/
     )
 
     expect(page).to have_text(
