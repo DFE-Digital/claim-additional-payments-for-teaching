@@ -105,9 +105,9 @@ class Admin::ClaimsFilterForm
 
     @claims = Claim.where(id: @claims.select("DISTINCT ON (claims.id) claims.id"))
 
-    @claims = @claims.includes(:tasks, eligibility: [:claim_school, :current_school])
-
+    @claims = @claims.includes(:tasks, :assigned_to, :eligibility)
     @claims = @claims.order(:submitted_at)
+
     @claims
   end
 
