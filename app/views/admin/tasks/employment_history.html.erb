@@ -22,6 +22,13 @@
     <%= @form.task.name.humanize %>
   </h2>
 
+  <%= govuk_summary_list(actions: false) do |summary_list| %>
+    <% summary_list.with_row do |row| %>
+      <% row.with_key(text: I18n.t("get_a_teacher_relocation_payment.forms.changed_workplace_or_new_contract.question")) %>
+      <% row.with_value(text: @form.task.claim.eligibility.changed_workplace_or_new_contract ? "Yes" : "No") %>
+    <% end %>
+  <% end %>
+
   <% if @form.task.claim.eligibility.employment_history.empty? %>
     <%= govuk_inset_text do %>
       <p>
