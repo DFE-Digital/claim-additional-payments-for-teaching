@@ -10,7 +10,7 @@ module Journeys
     # accounts for any changes that may have been made to the claim and always
     # reflects the sequence based on the claim's current state.
     class SlugSequence
-      ELIGIBILITY_SLUGS = [
+      SLUGS = [
         "sign-in-or-continue",
         "reset-claim",
         "qualification-details",
@@ -23,10 +23,7 @@ module Journeys
         "current-school",
         "leadership-position",
         "mostly-performed-leadership-duties",
-        "eligibility-confirmed"
-      ].freeze
-
-      PERSONAL_DETAILS_SLUGS = [
+        "eligibility-confirmed",
         "information-provided",
         "personal-details",
         "student-loan-amount",
@@ -39,16 +36,10 @@ module Journeys
         "select-mobile",
         "provide-mobile-number",
         "mobile-number",
-        "mobile-verification"
-      ].freeze
-
-      PAYMENT_DETAILS_SLUGS = [
+        "mobile-verification",
         "personal-bank-account",
         "gender",
-        "teacher-reference-number"
-      ].freeze
-
-      RESULTS_SLUGS = [
+        "teacher-reference-number",
         "check-your-answers",
         "ineligible"
       ].freeze
@@ -56,13 +47,6 @@ module Journeys
       DEAD_END_SLUGS = [
         "ineligible"
       ]
-
-      SLUGS = (
-        ELIGIBILITY_SLUGS +
-        PERSONAL_DETAILS_SLUGS +
-        PAYMENT_DETAILS_SLUGS +
-        RESULTS_SLUGS
-      ).freeze
 
       RESTRICTED_SLUGS = [].freeze
 
@@ -75,70 +59,11 @@ module Journeys
       end
 
       def slugs
-        SLUGS.dup.tap do |sequence|
-          if !Journeys::TeacherStudentLoanReimbursement.configuration.teacher_id_enabled?
-            sequence.delete("sign-in-or-continue")
-            sequence.delete("reset-claim")
-            sequence.delete("qualification-details")
-            sequence.delete("select-email")
-            sequence.delete("select-mobile")
-          end
-
-          sequence.delete("claim-school-results") if answers.claim_school_id.present? && answers.provision_search.blank?
-
-          sequence.delete("reset-claim") if skipped_dfe_sign_in? || answers.details_check?
-          sequence.delete("current-school") if answers.employed_at_claim_school? || answers.employed_at_recent_tps_school?
-          sequence.delete("mostly-performed-leadership-duties") unless answers.had_leadership_position?
-          sequence.delete("mobile-number") if answers.provide_mobile_number == false
-          sequence.delete("mobile-verification") if answers.provide_mobile_number == false
-          sequence.delete("ineligible") unless ineligible?
-          sequence.delete("personal-details") if answers.logged_in_with_tid? && personal_details_form.valid? && answers.all_personal_details_same_as_tid?
-          sequence.delete("select-email") unless set_by_teacher_id?("email")
-          if answers.logged_in_with_tid? && answers.email_address_check?
-            sequence.delete("email-address")
-            sequence.delete("email-verification")
-          end
-
-          if answers.email_verified == true
-            sequence.delete("email-verification")
-          end
-
-          if set_by_teacher_id?("phone_number")
-            sequence.delete("provide-mobile-number")
-          else
-            sequence.delete("select-mobile")
-          end
-          if answers.logged_in_with_tid? && (answers.mobile_check == "use" || answers.mobile_check == "declined")
-            sequence.delete("mobile-number")
-            sequence.delete("mobile-verification")
-          end
-          unless answers.trn_from_tid? && answers.has_tps_school_for_student_loan_in_previous_financial_year?
-            sequence.delete("select-claim-school")
-          end
-          sequence.delete("claim-school") if answers.claim_school_somewhere_else == false
-          sequence.delete("teacher-reference-number") if answers.logged_in_with_tid? && answers.teacher_reference_number.present?
-
-          if answers.logged_in_with_tid? && answers.details_check?
-            if answers.qualifications_details_check
-              sequence.delete("qts-year") if answers.dqt_teacher_record&.qts_award_date
-            elsif signed_in_with_dfe_identity_and_details_match? && answers.has_no_dqt_data_for_claim?
-              sequence.delete("qualification-details")
-            end
-          else
-            sequence.delete("qualification-details")
-          end
-
-          if answers.ordnance_survey_error == true
-            sequence.delete("select-home-address")
-          end
-
-          if answers.skip_postcode_search == true
-            sequence.delete("select-home-address")
-          end
-
-          if answers.address_line_1.present? && answers.postcode.present?
-            sequence.delete("address")
-          end
+        [].tap do |sequence|
+          sequence.push(*eligibility_slugs)
+          sequence.push(*personal_details_slugs)
+          sequence.push(*payment_details_slugs)
+          sequence.push(*results_slugs)
         end
       end
 
@@ -151,6 +76,90 @@ module Journeys
       end
 
       private
+
+      def eligibility_slugs
+        [].tap do |slugs|
+          slugs << "sign-in-or-continue" if teacher_id_enabled?
+          slugs << "reset-claim" if details_from_tid_did_not_match?
+          # If they confirm their TID details, and we have DQT data for them
+          # show it
+          slugs << "qualification-details" if answers.details_check? && answers.has_dqt_data_for_claim?
+          # We've got the qts-year from the confirmed dqt data, no need to ask
+          # for it again.
+          slugs << "qts-year" unless answers.qualifications_details_check? && answers.dqt_teacher_record&.qts_award_date
+          # Show them the school we've found based on their tid info
+          slugs << "select-claim-school" if answers.trn_from_tid? && answers.has_tps_school_for_student_loan_in_previous_financial_year?
+          # Don't show the select school page if they confirmed the school
+          # we found from tid data
+          slugs << "claim-school" if answers.claim_school_somewhere_else != false
+
+          slugs << "claim-school-results" if answers.claim_school_id.blank? || answers.provision_search.present?
+          slugs << "subjects-taught"
+          slugs << "still-teaching"
+          slugs << "current-school" unless answers.employed_at_claim_school? || answers.employed_at_recent_tps_school?
+          slugs << "leadership-position"
+          slugs << "mostly-performed-leadership-duties" if answers.had_leadership_position?
+          slugs << "eligibility-confirmed"
+        end
+      end
+
+      def personal_details_slugs
+        [].tap do |slugs|
+          slugs << "information-provided"
+          slugs << "personal-details" unless personal_details_from_tid_complete?
+          slugs << "student-loan-amount"
+          slugs << "postcode-search"
+          slugs << "select-home-address" unless answers.ordnance_survey_error || answers.skip_postcode_search?
+          slugs << "address" unless address_set_by_postcode_search?
+          slugs << "select-email" if set_by_teacher_id?("email")
+          slugs << "email-address" unless answers.email_address_check?
+          slugs << "email-verification" unless answers.email_address_check? || answers.email_verified?
+          slugs << "select-mobile" if set_by_teacher_id?("phone_number")
+          slugs << "provide-mobile-number" unless set_by_teacher_id?("phone_number")
+          slugs << "mobile-number" unless doesnt_want_to_provide_mobile_number? || use_mobile_number_from_tid?
+          slugs << "mobile-verification" unless doesnt_want_to_provide_mobile_number? || use_mobile_number_from_tid?
+        end
+      end
+
+      def payment_details_slugs
+        [].tap do |slugs|
+          slugs << "personal-bank-account"
+          slugs << "gender"
+          slugs << "teacher-reference-number" unless answers.trn_from_tid?
+        end
+      end
+
+      def results_slugs
+        ["check-your-answers"]
+      end
+
+      def details_from_tid_did_not_match?
+        # even though they've logged in with TID logged_in_with_tid is false
+        # unless they confirm their details. See SignInOrContinueForm
+        answers.logged_in_with_tid == false && answers.details_check == false
+      end
+
+      def address_set_by_postcode_search?
+        answers.address_line_1.present? && answers.postcode.present?
+      end
+
+      def personal_details_from_tid_complete?
+        answers.logged_in_with_tid? &&
+          personal_details_form.valid? &&
+          answers.all_personal_details_same_as_tid?
+      end
+
+      def use_mobile_number_from_tid?
+        answers.mobile_check == "use"
+      end
+
+      def doesnt_want_to_provide_mobile_number?
+        answers.provide_mobile_number == false || answers.mobile_check == "declined"
+      end
+
+      def teacher_id_enabled?
+        Journeys::TeacherStudentLoanReimbursement.configuration.teacher_id_enabled?
+      end
 
       def personal_details_form
         PersonalDetailsForm.new(

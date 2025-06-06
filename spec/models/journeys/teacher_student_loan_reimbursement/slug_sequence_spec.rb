@@ -75,10 +75,12 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
       let(:qts_award_date) { "test" }
 
       before do
-        allow_any_instance_of(
-          Journeys::TeacherStudentLoanReimbursement::SessionAnswers
-        ).to receive(:dqt_teacher_record).and_return(
-          double(qts_award_date:, has_no_data_for_claim?: false)
+        allow(Policies::StudentLoans::DqtRecord).to receive(:new).and_return(
+          instance_double(
+            "Policies::StudentLoans::DqtRecord",
+            qts_award_date: qts_award_date,
+            has_no_data_for_claim?: false
+          )
         )
       end
 
@@ -112,6 +114,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
 
       context "when the user confirmed DQT data is correct" do
         let(:qualifications_details_check) { true }
+        let(:dqt_teacher_status) { {test: true} }
 
         context "when the DQT record contains all required data" do
           it "removes the qualification questions" do
