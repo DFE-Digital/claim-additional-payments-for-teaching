@@ -21,6 +21,7 @@ class Task < ApplicationRecord
     induction_confirmation
     census_subjects_taught
     employment
+    employment_history
     employment_contract
     employment_start
     subject
@@ -64,5 +65,9 @@ class Task < ApplicationRecord
 
   def identity_confirmation?
     name == "identity_confirmation"
+  end
+
+  def completed?
+    persisted?
   end
 end
