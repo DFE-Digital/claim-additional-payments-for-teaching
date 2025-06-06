@@ -12,7 +12,7 @@ class Admin::TasksController < Admin::BaseAdminController
   def show
     @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
     @tasks_presenter = @claim.policy::AdminTasksPresenter.new(@claim)
-    @form = Admin::Tasks::FormFactory.form_for_task(name).new(name:, claim: @claim)
+    @form = form_class.new(name:, claim: @claim)
     @notes = @claim.notes.automated.by_label(params[:name])
     @task_pagination = Admin::TaskPagination.new(claim: @claim, current_task_name: @form.task.name)
 
@@ -21,7 +21,7 @@ class Admin::TasksController < Admin::BaseAdminController
 
   def create
     @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
-    @form = Admin::Tasks::FormFactory.form_for_task(name).new(form_params.merge(name:, claim: @claim))
+    @form = form_class.new(form_params.merge(name:, claim: @claim))
     @task_pagination = Admin::TaskPagination.new(claim: @claim, current_task_name: @form.task.name)
 
     if @form.save
@@ -35,7 +35,7 @@ class Admin::TasksController < Admin::BaseAdminController
 
   def update
     @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
-    @form = Admin::Tasks::FormFactory.form_for_task(name).new(form_params.merge(name:, claim: @claim))
+    @form = form_class.new(form_params.merge(name:, claim: @claim))
     @task_pagination = Admin::TaskPagination.new(claim: @claim, current_task_name: @form.task.name)
 
     if @form.task.update(form_params)
@@ -47,6 +47,10 @@ class Admin::TasksController < Admin::BaseAdminController
   end
 
   private
+
+  def form_class
+    Admin::Tasks::FormFactory.form_for_task(name)
+  end
 
   # task_name
   def name
@@ -67,7 +71,7 @@ class Admin::TasksController < Admin::BaseAdminController
 
   def form_params
     params.require(:form)
-      .permit(:passed, :name)
+      .permit(*form_class.permitted_params)
       .merge(
         admin_user:
       )

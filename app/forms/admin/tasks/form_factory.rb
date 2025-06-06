@@ -5,6 +5,8 @@ module Admin
         case name.to_s
         when "payroll_gender"
           PayrollGenderForm
+        when "continuous_employment"
+          ContinuousEmploymentForm
         else
           GenericForm
         end

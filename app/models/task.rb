@@ -31,6 +31,7 @@ class Task < ApplicationRecord
     matching_details
     payroll_gender
     first_year_payment
+    continuous_employment
   ].freeze
 
   NAMES.each { |name| scope name.to_sym, -> { where(name: name) } }
