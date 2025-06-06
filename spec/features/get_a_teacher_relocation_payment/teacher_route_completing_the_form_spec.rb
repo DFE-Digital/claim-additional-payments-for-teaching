@@ -148,7 +148,7 @@ RSpec.describe "teacher route: completing the form" do
     )
 
     expect(page).to have_text(
-      /Select the visa you used to move to England\s?British National \(Overseas\) visa/
+      /Select the visa you currently have to live in England\s?British National \(Overseas\) visa/
     )
 
     expect(page).to have_text(

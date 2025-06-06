@@ -287,7 +287,7 @@ module GetATeacherRelocationPayment
     end
 
     def assert_on_visa_page!
-      expect(page).to have_text("Select the visa you used to move to England")
+      expect(page).to have_text("Select the visa you currently have to live in England")
     end
 
     def assert_on_entry_date_page!
