@@ -22,22 +22,22 @@
       Your application will be reviewed by the Department for Education. We’ll contact you by email if you’ve:
     </p>
 
-    <ul class="govuk-list govuk-list--bullet">
-      <li>changed where you work or started a new contract since your last application</li>
-      <li>had any breaks in employment during the last 3 academic terms</li>
-    </ul>
+    <%= govuk_list [
+      "changed where you work or started a new contract since your last application",
+      "had any breaks in employment during the last 3 academic terms"
+    ], type: :bullet %>
 
     <p class="govuk-body">
       You’ll also receive emails to confirm:
     </p>
 
-    <ul class="govuk-list govuk-list--bullet">
-      <li>whether your claim is approved or rejected, usually within 20 weeks</li>
-      <li>when the second and final payment has been made, if your claim is approved</li>
-    </ul>
+    <%= govuk_list [
+      "whether your claim is approved or rejected, usually within 20 weeks",
+      "when the second and final payment has been made, if your claim is approved"
+    ], type: :bullet %>
 
     <p class="govuk-body">
-      <%= link_to "What do you think of this service? (opens in new tab)", done_page_url, class: "govuk-link", target: "_blank" %>
+      <%= govuk_link_to "What do you think of this service?", done_page_url, new_tab: true %>
     </p>
   </div>
 </div>
