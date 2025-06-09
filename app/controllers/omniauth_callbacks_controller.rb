@@ -11,9 +11,8 @@ class OmniauthCallbacksController < ApplicationController
     when "further-education-payments-provider"
       further_education_payments_provider_callback(auth)
     else
-      # The callback route for student loans and additional payments isn't
-      # namespaced under a journey
-      additional_payments_callback(auth)
+      # The callback route for student loans and STRI isn't namespaced under a journey
+      redirect_to_journey(auth)
     end
   end
 
@@ -227,7 +226,7 @@ class OmniauthCallbacksController < ApplicationController
     )
   end
 
-  def additional_payments_callback(auth)
+  def redirect_to_journey(auth)
     # Only keep the attributes permitted by the form
     teacher_id_user_info_attributes = auth.extra.raw_info.to_h.slice(
       *SignInOrContinueForm::TeacherIdUserInfoForm::DFE_IDENTITY_ATTRIBUTES.map(&:to_s)

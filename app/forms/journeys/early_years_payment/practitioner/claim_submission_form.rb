@@ -4,8 +4,6 @@ module Journeys
       class ClaimSubmissionForm < ::ClaimSubmissionBaseForm
         def calculate_award_amount(eligibility)
           # NOOP
-          # This is just for compatibility with the AdditionalPaymentsForTeaching
-          # claim submission form.
         end
 
         def main_policy
