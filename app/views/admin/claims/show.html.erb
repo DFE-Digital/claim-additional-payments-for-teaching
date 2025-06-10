@@ -5,10 +5,7 @@
 <% end %>
 
 <div class="govuk-grid-row">
-  <div class="<%= class_names(
-    "govuk-grid-column-two-thirds": !@claim.policy.further_education_payments?,
-    "govuk-grid-column-full": @claim.policy.further_education_payments?
-  ) %>">
+  <div class="govuk-grid-column-full">
     <%= render("shared/error_summary", instance: @decision, errored_field_id_overrides: { "result": "decision_result_approved" }) if @decision.errors.any? %>
 
     <% if @claim.personal_data_removed? %>
