@@ -34,7 +34,7 @@ Architecture decision records can be found in the
 
 ## Prerequisites
 
-- Ruby 3.4.3
+- Ruby 3.4.4
 - PostgreSQL
 - [ShellCheck](https://www.shellcheck.net/)
 - [Yarn](https://yarnpkg.com/en/docs/install)

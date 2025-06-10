@@ -963,7 +963,7 @@ DEPENDENCIES
   webmock
 
 RUBY VERSION
-   ruby 3.4.3p0
+   ruby 3.4.4p0
 
 BUNDLED WITH
    2.6.7
