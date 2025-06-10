@@ -39,10 +39,20 @@ RSpec.describe "teacher route: completing the form" do
       )
       and_i_complete_the_subject_step_with(option: "Physics")
       and_i_complete_changed_workplace_or_new_contract_with(option: "No")
+      and_i_complete_breaks_in_employment_with(option: "Yes")
       and_i_complete_the_visa_screen_with(option: "British National (Overseas) visa")
       and_i_complete_the_entry_date_page_with(date: entry_date)
       then_the_check_your_answers_part_one_page_shows_my_answers
       and_i_dont_change_my_answers
+    end
+
+    context "change answers" do
+      it "returns to check answers after changing answer" do
+        when_i_click_back_link
+        then_i_change_answer("Change have you had any breaks in employment during the last 3 academic terms?")
+        and_i_complete_breaks_in_employment_with(option: "No")
+        then_the_check_your_answers_part_one_page_shows
+      end
     end
 
     context "with postcode search" do
@@ -94,6 +104,10 @@ RSpec.describe "teacher route: completing the form" do
     end
   end
 
+  def then_the_check_your_answers_part_one_page_shows
+    assert_on_check_your_answers_part_one_page!
+  end
+
   def then_the_check_your_answers_part_one_page_shows_my_answers
     assert_on_check_your_answers_part_one_page!
 
@@ -126,11 +140,15 @@ RSpec.describe "teacher route: completing the form" do
     )
 
     expect(page).to have_text(
-      /Have you changed your workplace or started a new contract in the past year\?\s?No/
+      /Have you changed where you work or started a new contract since you last applied\?\s?No/
     )
 
     expect(page).to have_text(
-      /Select the visa you used to move to England\s?British National \(Overseas\) visa/
+      /Have you had any breaks in employment during the last 3 academic terms\?\s?Yes/
+    )
+
+    expect(page).to have_text(
+      /Select the visa you currently have to live in England\s?British National \(Overseas\) visa/
     )
 
     expect(page).to have_text(
@@ -138,7 +156,7 @@ RSpec.describe "teacher route: completing the form" do
     )
   end
 
-  def then_the_check_your_answers_part_page_shows_my_answers(school, mobile_number: false, building_society: false)
+  def then_the_check_your_answers_part_page_shows_my_answers(school, mobile_number: false, building_society: false, national_insurance_number: "QQ123456C")
     expect(page).to have_text(
       /What is your full name\?\s?Walter Seymour Skinner/
     )
@@ -148,7 +166,7 @@ RSpec.describe "teacher route: completing the form" do
     )
 
     expect(page).to have_text(
-      /What is your National Insurance number\?\s?QQ123456C/
+      /What is your National Insurance number\?\s?#{national_insurance_number}/
     )
 
     expect(page).to have_text(

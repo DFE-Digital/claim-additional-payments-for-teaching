@@ -12,63 +12,68 @@ class Admin::TasksController < Admin::BaseAdminController
   def show
     @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
     @tasks_presenter = @claim.policy::AdminTasksPresenter.new(@claim)
-    @task = @claim.tasks.find_or_initialize_by(name: params[:name])
-    @current_task_name = current_task_name
+    @form = form_class.new(name:, claim: @claim)
     @notes = @claim.notes.automated.by_label(params[:name])
-    @task_pagination = Admin::TaskPagination.new(claim: @claim, current_task_name:)
+    @task_pagination = Admin::TaskPagination.new(claim: @claim, current_task_name: @form.task.name)
 
-    render task_view(@task)
+    render task_view(@form.task)
   end
 
   def create
     @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
-    @task = @claim.tasks.build(check_params)
-    @current_task_name = current_task_name
-    @task_pagination = Admin::TaskPagination.new(claim: @claim, current_task_name:)
+    @form = form_class.new(form_params.merge(name:, claim: @claim))
+    @task_pagination = Admin::TaskPagination.new(claim: @claim, current_task_name: @form.task.name)
 
-    if @task.save
+    if @form.save
       redirect_to @task_pagination.next_task_path
     else
       load_matching_claims if load_matching_claims?
       @tasks_presenter = @claim.policy::AdminTasksPresenter.new(@claim)
-      render @task.name
+      render name
     end
   end
 
   def update
     @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
-    @task = @claim.tasks.where(name: params[:name]).first
-    @current_task_name = current_task_name
-    @task_pagination = Admin::TaskPagination.new(claim: @claim, current_task_name:)
+    @form = form_class.new(form_params.merge(name:, claim: @claim))
+    @task_pagination = Admin::TaskPagination.new(claim: @claim, current_task_name: @form.task.name)
 
-    if @task.update(check_params)
+    if @form.task.update(form_params)
       redirect_to @task_pagination.next_task_path
     else
       @tasks_presenter = @claim.policy::AdminTasksPresenter.new(@claim)
-      render @task.name
+      render name
     end
   end
 
   private
+
+  def form_class
+    Admin::Tasks::FormFactory.form_for_task(name)
+  end
+
+  # task_name
+  def name
+    params.fetch(:form, {})[:name] || params[:name]
+  end
 
   def load_claim
     @claim = Claim.includes(:tasks).find(params[:claim_id])
   end
 
   def ensure_task_has_not_already_been_completed
-    claim = @claim.tasks.find_by(name: params[:task][:name])
+    claim = @claim.tasks.find_by(name: params[:name])
 
     if claim && !claim.passed.nil?
       redirect_to admin_claim_task_path(@claim, name: params[:task][:name]), alert: "This task has already been completed"
     end
   end
 
-  def check_params
-    params.require(:task)
-      .permit(:passed, :name)
+  def form_params
+    params.require(:form)
+      .permit(*form_class.permitted_params)
       .merge(
-        created_by: admin_user,
-        manual: true
+        admin_user:
       )
   end
 
@@ -78,10 +83,6 @@ class Admin::TasksController < Admin::BaseAdminController
 
   def load_matching_claims?
     params[:name] == "matching_details"
-  end
-
-  def current_task_name
-    @task.name
   end
 
   def set_banner_messages

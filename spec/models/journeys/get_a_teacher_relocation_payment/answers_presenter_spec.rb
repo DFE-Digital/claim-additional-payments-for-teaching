@@ -21,6 +21,7 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
         :with_start_date,
         :with_subject,
         :with_changed_workplace_or_new_contract,
+        :with_breaks_in_employment,
         :with_visa,
         :with_entry_date,
         :with_nationality
@@ -65,12 +66,12 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
           "subject"
         ],
         [
-          "Have you changed your workplace or started a new contract in the past year?",
+          "Have you changed where you work or started a new contract since you last applied?",
           "No",
           "changed-workplace-or-new-contract"
         ],
         [
-          "Select the visa you used to move to England",
+          "Select the visa you currently have to live in England",
           "British National (Overseas) visa",
           "visa"
         ],

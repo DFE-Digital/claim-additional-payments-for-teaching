@@ -17,7 +17,7 @@ HMRC_API_BANK_VALIDATION_ENABLED: true
 
 ORDNANCE_SURVEY_API_BASE_URL: https://api.os.uk
 
-TID_BASE_URL: https://claim-additional-teaching-payment.service.gov.uk/additional-payments/claim
+TID_BASE_URL: https://claim-additional-teaching-payment.service.gov.uk/targeted-retention-incentive-payments/claim
 TID_SIGN_IN_API_ENDPOINT: https://teaching-identity.education.gov.uk/
 TID_SIGN_IN_CLIENT_ID: claim
 TID_SIGN_IN_ISSUER: https://teaching-identity.education.gov.uk/

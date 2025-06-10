@@ -1,6 +1,7 @@
 module Admin
   module ClaimsHelper
     include Policies::StudentLoans::PresenterMethods
+    include PresenterMethods
     include Pagy::Frontend
 
     # Take user back to where View Claim was clicked from
@@ -155,7 +156,7 @@ module Admin
     end
 
     def task_status_tag(claim, task_name)
-      status, colour = Tasks.status(claim: claim, task_name: task_name)
+      status, colour = ::Tasks.status(claim: claim, task_name: task_name)
 
       task_status_content_tag(status_colour: colour, status: status)
     end

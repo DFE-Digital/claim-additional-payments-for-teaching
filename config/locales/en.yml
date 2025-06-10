@@ -129,6 +129,20 @@ en:
       other: Details in this claim match other %{policy} claims
     unknown_payroll_gender_preventing_approval_message:
       This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
+    forms:
+      create_employment:
+        school_search:
+          question: "Previous workplace"
+        employment_contract_of_at_least_one_year:
+          question: "Employment contract of at least one year?"
+        employment_start_date:
+          question: "Employment start date"
+        employment_end_date:
+          question: "Employment end date"
+        subject_employed_to_teach:
+          question: "Subject employed to teach"
+        met_minimum_teaching_hours:
+          question: "Met minimum teaching hours?"
     tasks:
       one_login_identity:
         name: One Login identity check
@@ -151,6 +165,9 @@ en:
       employment:
         name: Employment
         title: "Check employment information"
+      employment_history:
+        name: Employment history
+        title: "Check employment history"
       matching_details:
         name: Matching details
         title: "Review matching details from other claims"
@@ -201,6 +218,12 @@ en:
       teaching_hours:
         name: Teaching hours
         title: "Check teaching hours"
+      first_year_payment:
+        name: First year payment
+        title: "Confirm this user has claimed their first year payment"
+      continuous_employment:
+        name: Continuous employment
+        title: Check for breaks in employment
     undo_decision:
       approved: "Undo approval"
       rejected: "Undo rejection"
@@ -393,6 +416,9 @@ en:
           qts_award_year: When did you complete your initial teacher training (ITT)?
         errors:
           select_itt_year: Select when you completed your initial teacher training
+        on_or_after_cut_off_date:
+          Between the start of the %{year} academic year and the end of the 2020 to 2021 academic year
+        before_cut_off_date: A different academic year
       subjects_taught:
         questions:
           subjects_taught: Which of the following subjects did you teach at %{school} between %{financial_year}?
@@ -491,6 +517,8 @@ en:
           title: "Does the claimant’s student loan amount and plan type match the information we hold about their loan?"
         matching_details:
           title: "Is this claim still valid despite having matching details with other claims?"
+        payroll_details:
+          title: The claimant’s personal bank account details have not been automatically validated. Has the claimant confirmed their personal bank account details?
   additional_payments:
     support_email_address: "additionalteachingpayment@digital.education.gov.uk"
   early_career_payments:
@@ -655,7 +683,7 @@ en:
         errors:
           inclusion: "Choose a subject"
       changed_workplace_or_new_contract:
-        question: "Have you changed your workplace or started a new contract in the past year?"
+        question: "Have you changed where you work or started a new contract since you last applied?"
         hint: "This includes any changes since your last application"
         answers:
           true:
@@ -663,11 +691,21 @@ en:
           false:
             answer: "No"
         errors:
-          inclusion: "Select yes if you have changed your workplace or started a new contract in the past year"
-      visa:
-        question: "Select the visa you used to move to England"
+          inclusion: "Select yes if you have changed where you work or started a new contract since you last applied"
+      breaks_in_employment:
+        question: Have you had any breaks in employment during the last 3 academic terms?
+        hint: Include any breaks during term time when you were not working
         errors:
-          inclusion: "Choose your visa type"
+          inclusion: Select yes if you have had any breaks in employment during the last 3 academic terms
+        answers:
+          true:
+            answer: "Yes"
+          false:
+            answer: "No"
+      visa:
+        question: "Select the visa you currently have to live in England"
+        errors:
+          inclusion: "You must select the visa you currently have to live in England"
       entry_date:
         question: "Enter the date you moved to England to start your teaching job"
         errors:
@@ -731,6 +769,8 @@ en:
         identity_confirmation:
           title: Verify claimants’ identity
       task_questions:
+        first_year_payment:
+          title: "Did the claimant receive their first payment for the 2024 to 2025 academic year?"
         previous_payment:
           title: The claimant has not received an IRP payment in AY 2023/24?
         previous_residency:
@@ -745,15 +785,21 @@ en:
         arrival_date:
           title: Has the claimant arrived in the UK within 3 months of contract start date?
         employment:
-          title: "Does the claimant’s current school match the above information from their claim?"
+          title: "Have you confirmed with the claimant’s current employer that the details in their application are correct?"
         employment_contract:
           title: "Does the claimant’s employment contract match the above information from their claim?"
         employment_start:
           title: "Does the claimant’s employment start date match the above information from their claim?"
+        employment_history:
+          title: "Have you checked the claimant‘s employment history with their previous employers?"
         subject:
           title: "Does the claimant’s subject match the above information from their claim?"
         teaching_hours:
           title: "Does the teacher meet the minimum 50% teaching time requirement in their role?"
+        payroll_details:
+          title: "The claimant’s personal bank account details have not been automatically validated. Has the claimant confirmed their personal bank account details?"
+        continuous_employment:
+          title: Has the claimant had any breaks in employment during the last 3 academic terms?
   further_education_payments:
     accessibility_statement:
       test_date: "28 August 2024"

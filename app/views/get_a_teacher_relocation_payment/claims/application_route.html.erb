@@ -13,7 +13,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= form_for(
       @form,
-      url: claim_path(current_journey_routing_name),
+      url: @form.url,
       builder: GOVUKDesignSystemFormBuilder::FormBuilder
     ) do |f| %>
       <%= f.govuk_error_summary %>

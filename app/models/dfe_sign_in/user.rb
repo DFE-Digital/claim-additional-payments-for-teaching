@@ -8,6 +8,8 @@ module DfeSignIn
 
     has_secure_token :session_token
 
+    after_create :send_slack_notification
+
     def self.table_name
       "dfe_sign_in_users"
     end
@@ -66,6 +68,10 @@ module DfeSignIn
 
     def unassign_claims
       assigned_claims.update(assigned_to_id: nil)
+    end
+
+    def send_slack_notification
+      SlackNotificationJob.perform_later(id) if ENV.fetch("ENVIRONMENT_NAME") == "production"
     end
   end
 end

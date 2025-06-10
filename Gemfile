@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.4.3"
+ruby "3.4.4"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "~> 8.0"
@@ -57,7 +57,7 @@ gem "rails_semantic_logger"
 gem "httpclient"
 
 # Gov form builder to structure claims
-gem "govuk_design_system_formbuilder", "~> 5.10.0"
+gem "govuk_design_system_formbuilder", "~> 5.10.1"
 gem "govuk-components", "~> 5.10.0"
 
 gem "govuk_publishing_components"
@@ -84,6 +84,8 @@ gem "ostruct"
 
 gem "solid_queue", "~> 1.1"
 gem "mission_control-jobs"
+
+gem "slack-notifier"
 
 group :development, :test do
   gem "pry"

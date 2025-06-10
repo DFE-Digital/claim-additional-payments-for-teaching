@@ -4,7 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
 
     <div class="govuk-panel govuk-panel--confirmation">
-      <h1 class="govuk-panel__title" id="submitted-title">Claim submitted</h1>
+      <h1 class="govuk-panel__title" id="submitted-title">You applied for a second International Relocation Payment</h1>
 
       <div class="govuk-panel__body">
         Your reference number<br>
@@ -13,18 +13,31 @@
     </div>
 
     <p class="govuk-body">
-      We have sent you a confirmation email to <%= submitted_claim.email_address %>.
+      We’ve sent a confirmation email to <%= submitted_claim.email_address %>.
     </p>
 
-    <h2 class="govuk-heading-m">What happens next</h2>
+    <h2 class="govuk-heading-m">What happens next?</h2>
 
     <p class="govuk-body">
-      Your application will be reviewed by the Department for Education. We will email you if we have any questions. If your application is approved, we will confirm your payment amount and payment date via email. We will also email you to let you know if your application has been rejected.
+      Your application will be reviewed by the Department for Education. We’ll contact you by email if you’ve:
     </p>
 
+    <%= govuk_list [
+      "changed where you work or started a new contract since your last application",
+      "had any breaks in employment during the last 3 academic terms"
+    ], type: :bullet %>
+
     <p class="govuk-body">
-      <%= link_to "What do you think of this service?", done_page_url, class: "govuk-link" %>
-      (takes 30 seconds)
+      You’ll also receive emails to confirm:
+    </p>
+
+    <%= govuk_list [
+      "whether your claim is approved or rejected, usually within 20 weeks",
+      "when the second and final payment has been made, if your claim is approved"
+    ], type: :bullet %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to "What do you think of this service?", done_page_url, new_tab: true %>
     </p>
   </div>
 </div>

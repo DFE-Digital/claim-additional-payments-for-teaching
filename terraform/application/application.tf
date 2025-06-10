@@ -44,7 +44,9 @@ module "web_application" {
   docker_image = var.docker_image
   command      = var.startup_command
 
-  replicas = var.web_replicas
+  replicas   = var.web_replicas
+  max_memory = var.web_memory
+
 
   enable_logit = var.enable_logit
 }
@@ -66,7 +68,8 @@ module "worker_application" {
   docker_image = var.docker_image
   command      = var.worker_command
 
-  replicas = var.worker_replicas
+  replicas   = var.worker_replicas
+  max_memory = var.worker_memory
 
   enable_logit = var.enable_logit
   enable_gcp_wif = true

@@ -22,22 +22,6 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
   let(:dqt_teacher_status) { nil }
 
   describe "The sequence as defined by #slugs" do
-    it "excludes the “ineligible” slug if the claim is not actually ineligible" do
-      expect(
-        Journeys::TeacherStudentLoanReimbursement::EligibilityChecker.new(
-          journey_session: journey_session
-        )
-      ).not_to be_ineligible
-      expect(slug_sequence.slugs).not_to include("ineligible")
-    end
-
-    it "includes the “ineligible” slug if the claim is actually ineligible" do
-      journey_session.answers.assign_attributes(
-        qts_award_year: "before_cut_off_date"
-      )
-      expect(slug_sequence.slugs).to include("ineligible")
-    end
-
     it "excludes “current-school” if the claimant still works at the school they are claiming against" do
       journey_session.answers.employment_status = :claim_school
 
@@ -91,10 +75,12 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
       let(:qts_award_date) { "test" }
 
       before do
-        allow_any_instance_of(
-          Journeys::TeacherStudentLoanReimbursement::SessionAnswers
-        ).to receive(:dqt_teacher_record).and_return(
-          double(qts_award_date:, has_no_data_for_claim?: false)
+        allow(Policies::StudentLoans::DqtRecord).to receive(:new).and_return(
+          instance_double(
+            "Policies::StudentLoans::DqtRecord",
+            qts_award_date: qts_award_date,
+            has_no_data_for_claim?: false
+          )
         )
       end
 
@@ -128,6 +114,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::SlugSequence do
 
       context "when the user confirmed DQT data is correct" do
         let(:qualifications_details_check) { true }
+        let(:dqt_teacher_status) { {test: true} }
 
         context "when the DQT record contains all required data" do
           it "removes the qualification questions" do

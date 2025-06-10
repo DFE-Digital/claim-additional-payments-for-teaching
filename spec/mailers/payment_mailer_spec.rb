@@ -105,7 +105,7 @@ RSpec.describe PaymentMailer, type: :mailer do
     end
   end
 
-  # NOTE: only happens for Additional Payments (ECP/Targeted Retention Incentive) + TSLR
+  # NOTE: only happens for Targeted Retention Incentive + TSLR
   context "payment breakdown email with multiple claims" do
     shared_examples :multiple_claims do |second_claim_policy|
       describe "#confirmation" do

@@ -1,49 +1,5 @@
-<% translation = "#{claim.policy.to_s.underscore}.admin.task_questions.#{task_name}" %>
-<%= form_with model: [:admin, @claim, @claim.tasks.where(name: task_name).first_or_initialize] do |f| %>
-  <div class="govuk-form-group">
-    <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l ">
-        <h3 class="govuk-heading-m">
-          <%= I18n.t("#{translation}.title", claim_full_name: @claim.full_name) %>
-        </h3>
-      </legend>
+<%= form_with model: @form, scope: :form, url: admin_claim_tasks_path(@claim), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+  <%= render(partial: "form_body", locals: { f: f, notes: @notes }) %>
 
-      <%
-          I18n.t(
-            "#{translation}.body.match.#{f.object.claim_verifier_match.presence || 'nil'}",
-            default: nil,
-            link: link_to("Notes", admin_claim_notes_path(@claim))
-          )&.html_safe.tap do |translation| %>
-        <% break unless translation %>
-
-        <p class="govuk-body">
-          <%= translation %>
-        </p>
-      <% end %>
-
-      <% if @notes.present? %>
-        <div class="hmcts-timeline">
-          <% @notes.each do |note| %>
-            <%= render "admin/notes/note", note: note, display_description: true %>
-          <% end %>
-        </div>
-      <% end %>
-
-      <%= f.hidden_field :passed %>
-      <%= f.hidden_field :name, value: task_name %>
-
-      <div class="govuk-radios govuk-radios--inline">
-        <div class="govuk-radios__item">
-          <%= f.radio_button(:passed, true, class: "govuk-radios__input") %>
-          <%= f.label "passed_true", "Yes", class: "govuk-label govuk-radios__label" %>
-        </div>
-
-        <div class="govuk-radios__item">
-          <%= f.radio_button(:passed, false, class: "govuk-radios__input") %>
-          <%= f.label "passed_false", "No", class: "govuk-label govuk-radios__label" %>
-        </div>
-      </div>
-    </fieldset>
-    <%= f.submit "Save and continue", class: "govuk-button", data: {module: "govuk-button"} %>
-  </div>
+  <%= f.govuk_submit "Save and continue" %>
 <% end %>

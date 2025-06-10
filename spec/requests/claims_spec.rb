@@ -310,7 +310,6 @@ RSpec.describe "Claims", type: :request do
     end
   end
 
-  # 2022/2023 onwards /additional-payments covers ECP and Targeted Retention Incentive claims
   describe "when navigating to /early-career-payments/* urls " do
     context "base url" do
       it "redirects to the additional-payments gov page" do

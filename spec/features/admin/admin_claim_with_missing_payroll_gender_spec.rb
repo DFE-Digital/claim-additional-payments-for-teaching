@@ -24,17 +24,14 @@ RSpec.feature "Admin checking a claim missing a payroll gender" do
     click_on I18n.t("admin.tasks.payroll_gender.title")
 
     expect(page).to have_content("How is the claimant’s gender recorded for payroll purposes?")
-
     click_on "Save and continue"
 
     expect(page).to have_content("You must select a gender that will be passed to HMRC")
-
     choose "Female"
     click_on "Save and continue"
 
     expect(claim.reload.payroll_gender).to eq("female")
     expect(claim.tasks.find_by!(name: "payroll_gender").passed?).to eq(true)
-
     expect(page).to have_content("Claim decision")
 
     choose "Approve"
@@ -62,11 +59,9 @@ RSpec.feature "Admin checking a claim missing a payroll gender" do
     )
 
     visit admin_claim_tasks_path(irp_claim)
-
     click_on "How is the claimant’s gender recorded for payroll purposes?"
 
     choose "Male"
-
     click_on "Save and continue"
 
     expect(page).to have_content("Claim decision")
@@ -76,7 +71,6 @@ RSpec.feature "Admin checking a claim missing a payroll gender" do
     click_on "How is the claimant’s gender recorded for payroll purposes?"
 
     choose "Male"
-
     click_on "Save and continue"
 
     expect(page).to have_content("Claim decision")

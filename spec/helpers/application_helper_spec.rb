@@ -53,7 +53,7 @@ RSpec.describe ApplicationHelper do
       expect(journey_service_name("student-loans")).to eq t("student_loans.journey_name")
     end
 
-    it "returns a policy-specific service name for additional payments" do
+    it "returns a policy-specific service name for STRI" do
       expect(journey_service_name("targeted-retention-incentive-payments")).to eq t("targeted_retention_incentive_payments.journey_name")
     end
   end

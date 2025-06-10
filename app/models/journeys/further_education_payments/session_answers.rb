@@ -113,10 +113,6 @@ module Journeys
           0
         end
       end
-
-      def performing_poorly?
-        subject_to_formal_performance_action || subject_to_disciplinary_action
-      end
     end
   end
 end

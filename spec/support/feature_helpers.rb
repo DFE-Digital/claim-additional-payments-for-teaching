@@ -7,7 +7,15 @@ module FeatureHelpers
   end
 
   def choose_qts_year(option = :on_or_after_cut_off_date)
-    choose "claim_qts_award_year_#{option}"
+    form = Journeys::TeacherStudentLoanReimbursement::QtsYearForm.new(
+      journey_session: Journeys::TeacherStudentLoanReimbursement::Session.new,
+      journey: Journeys::TeacherStudentLoanReimbursement,
+      params: ActionController::Parameters.new
+    )
+
+    label = form.radio_options.find { |opt| opt.id == option.to_s }.name
+
+    choose label
     click_on "Continue"
   end
 
@@ -129,5 +137,12 @@ module FeatureHelpers
 
     expect(page).to have_content("You’ve successfully proved your identity with GOV.UK One Login")
     click_button "Continue"
+  end
+
+  def task_status(task_name)
+    find(
+      :xpath,
+      "//h2[contains(@class, 'app-task-list__section') and contains(., '#{task_name}')]/following-sibling::ul//strong[contains(@class, 'govuk-tag')]"
+    ).text
   end
 end

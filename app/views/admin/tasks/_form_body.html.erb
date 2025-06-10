@@ -1,0 +1,32 @@
+<%= f.hidden_field :name, value: f.object.task.name %>
+
+<%= f.govuk_collection_radio_buttons :passed,
+  f.object.radio_options,
+  :id,
+  :name,
+  inline: true,
+  legend: {
+    text: I18n.t("#{f.object.translation}.title", claim_full_name: f.object.claim.full_name),
+    tag: "h3",
+    size: "m"
+  } do %>
+  <% I18n.t("#{f.object.translation}.body.match.#{f.object.claim_verifier_match.presence || 'nil'}",
+            default: nil,
+            link: link_to("Notes", admin_claim_notes_path(f.object.claim))
+           )&.html_safe.tap do |translation| %>
+           <% break unless translation %>
+
+    <p class="govuk-body">
+      <%= translation %>
+    </p>
+  <% end %>
+
+  <% if notes.present? %>
+    <div class="hmcts-timeline">
+      <% notes.each do |note| %>
+        <%= render "admin/notes/note", note: note, display_description: true %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+

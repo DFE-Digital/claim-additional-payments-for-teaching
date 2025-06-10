@@ -60,6 +60,14 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
+    def and_i_complete_breaks_in_employment_with(option:)
+      assert_on_breaks_in_employment_page!
+
+      choose(option)
+
+      click_button("Continue")
+    end
+
     def and_i_complete_the_visa_screen_with(option:)
       assert_on_visa_page!
 
@@ -132,7 +140,7 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
-    def and_i_complete_the_personal_details_step
+    def and_i_complete_the_personal_details_step(national_insurance_number: "QQ123456C")
       assert_on_personal_details_page!
 
       fill_in("First name", with: "Walter")
@@ -141,7 +149,7 @@ module GetATeacherRelocationPayment
       fill_in("Day", with: "12")
       fill_in("Month", with: "7")
       fill_in("Year", with: "1945")
-      fill_in("What is your National Insurance number", with: "QQ123456C")
+      fill_in("What is your National Insurance number", with: national_insurance_number)
 
       click_button("Continue")
     end
@@ -271,11 +279,15 @@ module GetATeacherRelocationPayment
     end
 
     def assert_on_changed_workplace_or_new_contract_page!
-      expect(page).to have_text("Have you changed your workplace or started a new contract in the past year?")
+      expect(page).to have_text("Have you changed where you work or started a new contract since you last applied?")
+    end
+
+    def assert_on_breaks_in_employment_page!
+      expect(page).to have_text("Have you had any breaks in employment during the last 3 academic terms?")
     end
 
     def assert_on_visa_page!
-      expect(page).to have_text("Select the visa you used to move to England")
+      expect(page).to have_text("Select the visa you currently have to live in England")
     end
 
     def assert_on_entry_date_page!
@@ -333,10 +345,22 @@ module GetATeacherRelocationPayment
     end
 
     def assert_application_is_submitted!
-      expect(page).to have_content("Claim submitted")
+      expect(page).to have_content("You applied for a second International Relocation Payment")
       expect(page).to have_content(
-        "We have sent you a confirmation email to seymour.skinner@springfieldelementary.edu"
+        "We’ve sent a confirmation email to seymour.skinner@springfieldelementary.edu"
       )
+
+      claim = Claim.last
+
+      expect(claim.eligibility.breaks_in_employment).to be_truthy
+    end
+
+    def then_i_change_answer(question)
+      click_link question
+    end
+
+    def when_i_click_back_link
+      click_link "Back"
     end
   end
 end
