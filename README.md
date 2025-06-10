@@ -58,10 +58,13 @@ Architecture decision records can be found in the
 4. Run `bundle exec rails db:setup` to set up the database development
 5. Run `bundle exec foreman start` to launch the app on https://localhost:3000/
 6. Visit one of the following urls in your browser to access the relevant
-   policy:
+   journey:
 
+- **Targeted Retention Payments:** https://localhost:3000/targeted-retention-incentive-payments/landing-page
 - **Student Loans:** https://localhost:3000/student-loans/claim
-- **Additional Payments:** https://localhost:3000/additional-payments/claim
+- **Further Education:** https://localhost:3000/further-education-payments/landing-page
+- **Early Years Payment:** https://localhost:3000/early-years-payment/landing-page
+- **Relocation Payments:** https://localhost:3000/get-a-teacher-relocation-payment/landing-page
 
 ### How to set up DfE Sign-In locally
 

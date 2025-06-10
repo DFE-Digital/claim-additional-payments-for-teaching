@@ -34,8 +34,7 @@ module Journeys
       end
 
       # We implicitly rely on AcademicYear type casting "none_of_the_above"
-      # into a "none" AcademicYear. This is the same behaviour as the in
-      # AdditionalPayments journey.
+      # into a "none" AcademicYear.
       def none_of_the_above
         Option.new(
           id: NONE_OF_THE_ABOVE_ACADEMIC_YEAR,

@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   delete "deauth/onelogin", to: "deauth#onelogin"
   get "deauth/onelogin/callback", to: "deauth#onelogin_callback"
 
-  # /early-career-payments is now /additional-payments - redirect old urls to a gov page
+  # /early-career-payments is now retired - redirect old urls to a gov page
   get "early-career-payments(/*anything)", to: redirect("https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details")
 
   get "additional-payments(/*anything)", to: redirect("/targeted-retention-incentive-payments/landing-page")

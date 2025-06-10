@@ -21,7 +21,7 @@ SUPPRESS_DFE_ANALYTICS_INIT: true
 TID_SIGN_IN_API_ENDPOINT: https://preprod.teaching-identity.education.gov.uk:433
 TID_SIGN_IN_CLIENT_ID: claim
 TID_SIGN_IN_ISSUER: https://preprod.teaching-identity.education.gov.uk/
-TID_BASE_URL: https://claim-additional-payments-for-teaching-review-*.test.teacherservices.cloud/additional-payments/claim
+TID_BASE_URL: https://claim-additional-payments-for-teaching-review-*.test.teacherservices.cloud/targeted-retention-incentive-payments/claim
 
 GOVUK_APP_DOMAIN: ""
 GOVUK_WEBSITE_ROOT: ""

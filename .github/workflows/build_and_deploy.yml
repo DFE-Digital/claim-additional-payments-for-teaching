@@ -89,7 +89,6 @@ jobs:
 
             | Journey                     | URL                                                                       |
             | --------------------------- | --------------------------------------------------------------------------|
-            | Additional Payments         | <${{ env.APP_URL }}/additional-payments/claim>                            |
             | Targeted Retention Payments | <${{ env.APP_URL }}/targeted-retention-incentive-payments/landing-page>   |
             | Student Loans               | <${{ env.APP_URL }}/student-loans/claim>                                  |
             | Further Education           | <${{ env.APP_URL }}/further-education-payments/landing-page>              |

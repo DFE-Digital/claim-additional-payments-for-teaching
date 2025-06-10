@@ -19,7 +19,7 @@ ORDNANCE_SURVEY_API_BASE_URL: https://api.os.uk
 
 SUPPRESS_DFE_ANALYTICS_INIT: true
 
-TID_BASE_URL: https://test.claim-additional-teaching-payment.service.gov.uk/additional-payments/claim
+TID_BASE_URL: https://test.claim-additional-teaching-payment.service.gov.uk/targeted-retention-incentive-payments/claim
 TID_SIGN_IN_API_ENDPOINT: https://preprod.teaching-identity.education.gov.uk:433
 TID_SIGN_IN_CLIENT_ID: claim
 TID_SIGN_IN_ISSUER: https://preprod.teaching-identity.education.gov.uk/
