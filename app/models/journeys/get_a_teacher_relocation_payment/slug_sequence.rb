@@ -1,7 +1,7 @@
 module Journeys
   module GetATeacherRelocationPayment
     class SlugSequence
-      ELIGIBILITY_SLUGS = [
+      SLUGS = [
         "application-route",
         "state-funded-secondary-school",
         "current-school",
@@ -13,10 +13,7 @@ module Journeys
         "breaks-in-employment",
         "visa",
         "entry-date",
-        "check-your-answers-part-one"
-      ]
-
-      PERSONAL_DETAILS_SLUGS = [
+        "check-your-answers-part-one",
         "nationality",
         "passport-number",
         "personal-details",
@@ -27,29 +24,16 @@ module Journeys
         "email-verification",
         "provide-mobile-number",
         "mobile-number",
-        "mobile-verification"
-      ]
-
-      PAYMENT_DETAILS_SLUGS = [
+        "mobile-verification",
         "personal-bank-account",
-        "gender"
-      ].freeze
-
-      RESULTS_SLUGS = [
+        "gender",
         "check-your-answers",
         "ineligible"
       ].freeze
 
       DEAD_END_SLUGS = [
         "ineligible"
-      ]
-
-      SLUGS = (
-        ELIGIBILITY_SLUGS +
-        PERSONAL_DETAILS_SLUGS +
-        PAYMENT_DETAILS_SLUGS +
-        RESULTS_SLUGS
-      ).freeze
+      ].freeze
 
       RESTRICTED_SLUGS = [].freeze
 
@@ -70,32 +54,62 @@ module Journeys
       end
 
       def slugs
-        SLUGS.dup.tap do |sequence|
-          if answers.skip_postcode_search == true
-            sequence.delete("select-home-address")
-          end
-
-          if answers.ordnance_survey_error == true
-            sequence.delete("select-home-address")
-          end
-
-          if answers.address_line_1.present? && answers.postcode.present?
-            sequence.delete("address")
-          end
-
-          if answers.email_verified == true
-            sequence.delete("email-verification")
-          end
-
-          if answers.provide_mobile_number == false
-            sequence.delete("mobile-number")
-            sequence.delete("mobile-verification")
-          end
-
-          if answers.mobile_verified == true
-            sequence.delete("mobile-verification")
-          end
+        [].tap do |sequence|
+          sequence.push(*eligibility_slugs)
+          sequence.push(*personal_details_slugs)
+          sequence.push(*payment_details_slugs)
+          sequence.push(*results)
         end
+      end
+
+      private
+
+      def eligibility_slugs
+        [].tap do |slugs|
+          slugs << "application-route"
+          slugs << "state-funded-secondary-school"
+          slugs << "current-school"
+          slugs << "headteacher-details"
+          slugs << "contract-details"
+          slugs << "start-date"
+          slugs << "subject"
+          slugs << "changed-workplace-or-new-contract"
+          slugs << "breaks-in-employment"
+          slugs << "visa"
+          slugs << "entry-date"
+          slugs << "check-your-answers-part-one"
+        end
+      end
+
+      def personal_details_slugs
+        [].tap do |slugs|
+          slugs << "nationality"
+          slugs << "passport-number"
+          slugs << "personal-details"
+          slugs << "postcode-search"
+          slugs << "select-home-address" unless answers.skip_postcode_search? || answers.ordnance_survey_error?
+          slugs << "address" unless address_set_by_postcode_search?
+          slugs << "email-address"
+          slugs << "email-verification" unless answers.email_verified?
+          slugs << "provide-mobile-number"
+          slugs << "mobile-number" unless answers.provide_mobile_number == false
+          slugs << "mobile-verification" unless answers.provide_mobile_number == false || answers.mobile_verified?
+        end
+      end
+
+      def payment_details_slugs
+        [].tap do |slugs|
+          slugs << "personal-bank-account"
+          slugs << "gender"
+        end
+      end
+
+      def results
+        ["check-your-answers"]
+      end
+
+      def address_set_by_postcode_search?
+        answers.address_line_1.present? && answers.postcode.present?
       end
     end
   end
