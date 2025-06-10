@@ -3,7 +3,9 @@ require "rails_helper"
 RSpec.describe "Admin EY tasks" do
   around do |example|
     travel_to DateTime.new(2024, 11, 18, 9, 0, 0) do
-      example.run
+      perform_enqueued_jobs do
+        example.run
+      end
     end
   end
 
