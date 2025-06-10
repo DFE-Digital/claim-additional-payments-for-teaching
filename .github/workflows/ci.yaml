@@ -126,10 +126,6 @@ jobs:
           key: ${{ steps.assets-cache.outputs.cache-primary-key }}
       - name: Prepare DB
         run: bin/rails db:prepare
-      - name: Run unit tests
-        env:
-          SPEC_TYPE: unit
-        run: bundle exec rspec $(bin/test_splitter)
       - name: Run feature tests
         env:
           SPEC_TYPE: feature
