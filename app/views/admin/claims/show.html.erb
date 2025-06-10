@@ -6,8 +6,6 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <%= render("shared/error_summary", instance: @decision, errored_field_id_overrides: { "result": "decision_result_approved" }) if @decision.errors.any? %>
-
     <% if @claim.personal_data_removed? %>
       <div class="govuk-body-l govuk-flash__notice">
         This claim had personal data removed on <%= l(@claim.personal_data_removed_at.to_date) %>.
