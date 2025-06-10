@@ -2,7 +2,7 @@ module Journeys
   module EarlyYearsPayment
     module Practitioner
       class SlugSequence
-        CLAIM_SLUGS = %w[
+        SLUGS = %w[
           find-reference
           how-we-use-your-information
           sign-in
@@ -17,14 +17,9 @@ module Journeys
           mobile-verification
           personal-bank-account
           gender
-        ].freeze
-
-        RESULTS_SLUGS = %w[
           check-your-answers
           ineligible
         ].freeze
-
-        SLUGS = (CLAIM_SLUGS + RESULTS_SLUGS).freeze
 
         RESTRICTED_SLUGS = [].freeze
 
@@ -49,24 +44,29 @@ module Journeys
         end
 
         def slugs
-          SLUGS.dup.tap do |sequence|
-            if answers.skip_postcode_search == true
-              sequence.delete("select-home-address")
-            end
-
-            if answers.address_line_1.present? && answers.postcode.present?
-              sequence.delete("address")
-            end
-
-            if answers.email_verified == true
-              sequence.delete("email-verification")
-            end
-
-            if answers.provide_mobile_number == false
-              sequence.delete("mobile-number")
-              sequence.delete("mobile-verification")
-            end
+          [].tap do |sequence|
+            sequence << "find-reference"
+            sequence << "how-we-use-your-information"
+            sequence << "sign-in"
+            sequence << "personal-details"
+            sequence << "postcode-search"
+            sequence << "select-home-address" unless answers.skip_postcode_search? || answers.ordnance_survey_error?
+            sequence << "address" unless address_set_by_postcode_search?
+            sequence << "email-address"
+            sequence << "email-verification" unless answers.email_verified?
+            sequence << "provide-mobile-number"
+            sequence << "mobile-number" unless answers.provide_mobile_number == false
+            sequence << "mobile-verification" unless answers.provide_mobile_number == false
+            sequence << "personal-bank-account"
+            sequence << "gender"
+            sequence << "check-your-answers"
           end
+        end
+
+        private
+
+        def address_set_by_postcode_search?
+          answers.address_line_1.present? && answers.postcode.present?
         end
       end
     end

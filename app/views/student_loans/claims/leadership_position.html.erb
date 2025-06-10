@@ -9,54 +9,24 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% if @form.errors.any? %>
-      <%= render(
-        "shared/error_summary",
-        instance: @form,
-        errored_field_id_overrides: {
-          "eligibility.had_leadership_position": "claim_eligibility_attributes_had_leadership_position_true"
-        }
-      ) %>
-    <% end %>
+    <%= form_for @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
 
-    <%= form_for @form, url: @form.url do |f| %>
-      <%= form_group_tag f.object do %>
+      <%= f.govuk_collection_radio_buttons :had_leadership_position,
+        @form.radio_options,
+        :id,
+        :name,
+        inline: true,
+        legend: {
+          text: leadership_position_question,
+          tag: "h1",
+          size: "xl"
+        },
+        hint: {
+          text: t("student_loans.forms.leadership_position.hints.leadership_position")
+        } %>
 
-        <%= f.hidden_field :had_leadership_position %>
-
-        <fieldset class="govuk-fieldset" aria-describedby="had_leadership_position-hint" role="group">
-
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-            <h1 class="govuk-fieldset__heading">
-              <%= leadership_position_question %>
-            </h1>
-          </legend>
-
-          <div class="govuk-hint" id="had_leadership_position-hint">
-            <%= t("student_loans.forms.leadership_position.hints.leadership_position") %>
-          </div>
-
-          <%= errors_tag f.object, :had_leadership_position %>
-
-          <div class="govuk-radios govuk-radios--inline">
-
-            <div class="govuk-radios__item">
-              <%= f.radio_button(:had_leadership_position, true, class: "govuk-radios__input") %>
-              <%= f.label :had_leadership_position_true, "Yes", class: "govuk-label govuk-radios__label" %>
-            </div>
-
-            <div class="govuk-radios__item">
-              <%= f.radio_button(:had_leadership_position, false, class: "govuk-radios__input") %>
-              <%= f.label :had_leadership_position_false, "No", class: "govuk-label govuk-radios__label" %>
-            </div>
-
-          </div>
-
-        </fieldset>
-
-      <% end %>
-
-      <%= f.submit "Continue", class: "govuk-button" %>
+      <%= f.govuk_submit "Continue" %>
     <% end %>
   </div>
 </div>

@@ -223,6 +223,7 @@ shared:
     - changed_workplace_or_new_contract
     - previous_year_claim_ids
     - breaks_in_employment
+    - employment_history
   :schools:
     - id
     - urn
