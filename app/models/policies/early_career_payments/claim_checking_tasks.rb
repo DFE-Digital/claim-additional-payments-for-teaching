@@ -27,12 +27,6 @@ module Policies
         tasks
       end
 
-      def applicable_task_objects
-        applicable_task_names.map do |name|
-          OpenStruct.new(name:, locale_key: name)
-        end
-      end
-
       private
 
       def matching_claims

@@ -21,9 +21,7 @@ class ClaimCheckingTasks
   delegate :policy, to: :claim
 
   def applicable_task_names
-    policy::ClaimCheckingTasks
-      .new(claim)
-      .applicable_task_names
+    claim.task_list
   end
 
   def locale_key_for_task_name(name)
@@ -38,10 +36,21 @@ class ClaimCheckingTasks
     end
   end
 
+  # FIXME RL: total mess, sort this out
   def applicable_task_objects
-    policy::ClaimCheckingTasks
-      .new(claim)
-      .applicable_task_objects
+    applicable_task_names.map do |name|
+      if claim.policy == Policies::FurtherEducationPayments
+        if FeatureFlag.disabled?(:alternative_idv) && name == "one_login_identity"
+          OpenStruct.new(name:, locale_key: "identity_confirmation")
+        elsif FeatureFlag.enabled?(:alternative_idv) && name == "provider_verification"
+          OpenStruct.new(name:, locale_key: "eligibility_check")
+        else
+          OpenStruct.new(name:, locale_key: name)
+        end
+      else
+        OpenStruct.new(name:, locale_key: name)
+      end
+    end
   end
 
   def pageable_tasks
