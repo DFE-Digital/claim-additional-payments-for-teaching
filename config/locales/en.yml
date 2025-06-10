@@ -129,6 +129,20 @@ en:
       other: Details in this claim match other %{policy} claims
     unknown_payroll_gender_preventing_approval_message:
       This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
+    forms:
+      create_employment:
+        school_search:
+          question: "Previous workplace"
+        employment_contract_of_at_least_one_year:
+          question: "Employment contract of at least one year?"
+        employment_start_date:
+          question: "Employment start date"
+        employment_end_date:
+          question: "Employment end date"
+        subject_employed_to_teach:
+          question: "Subject employed to teach"
+        met_minimum_teaching_hours:
+          question: "Met minimum teaching hours?"
     tasks:
       one_login_identity:
         name: One Login identity check
@@ -151,6 +165,9 @@ en:
       employment:
         name: Employment
         title: "Check employment information"
+      employment_history:
+        name: Employment history
+        title: "Check employment history"
       matching_details:
         name: Matching details
         title: "Review matching details from other claims"
@@ -770,6 +787,8 @@ en:
           title: "Does the claimant’s employment contract match the above information from their claim?"
         employment_start:
           title: "Does the claimant’s employment start date match the above information from their claim?"
+        employment_history:
+          title: "Have you checked the claimant‘s employment history with their previous employers?"
         subject:
           title: "Does the claimant’s subject match the above information from their claim?"
         teaching_hours:

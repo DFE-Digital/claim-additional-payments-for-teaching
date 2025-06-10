@@ -1,35 +1,5 @@
 <%= form_with model: @form, scope: :form, url: admin_claim_tasks_path(@claim), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
-  <%= f.hidden_field :name, value: @form.task.name %>
-
-  <%= f.govuk_collection_radio_buttons :passed,
-    @form.radio_options,
-    :id,
-    :name,
-    inline: true,
-    legend: {
-      text: I18n.t("#{@form.translation}.title", claim_full_name: @form.claim.full_name),
-      tag: "h3",
-      size: "m"
-    } do %>
-    <% I18n.t("#{@form.translation}.body.match.#{@form.claim_verifier_match.presence || 'nil'}",
-              default: nil,
-              link: link_to("Notes", admin_claim_notes_path(@claim))
-             )&.html_safe.tap do |translation| %>
-             <% break unless translation %>
-
-      <p class="govuk-body">
-        <%= translation %>
-      </p>
-    <% end %>
-
-    <% if @notes.present? %>
-      <div class="hmcts-timeline">
-        <% @notes.each do |note| %>
-          <%= render "admin/notes/note", note: note, display_description: true %>
-        <% end %>
-      </div>
-    <% end %>
-  <% end %>
+  <%= render(partial: "form_body", locals: { f: f, notes: @notes }) %>
 
   <%= f.govuk_submit "Save and continue" %>
 <% end %>

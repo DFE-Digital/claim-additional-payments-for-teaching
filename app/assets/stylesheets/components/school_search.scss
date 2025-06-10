@@ -3,6 +3,10 @@
   background-color: $govuk-link-colour;
 }
 
+.autocomplete__input.govuk-input--error {
+  border-color: $govuk-error-colour;
+}
+
 .school-search__suggestion {
   display: flex;
   justify-content: space-between;
