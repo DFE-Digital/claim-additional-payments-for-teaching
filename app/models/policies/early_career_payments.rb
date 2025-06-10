@@ -14,6 +14,7 @@ module Policies
     extend self
 
     VERIFIERS = [
+      AutomatedChecks::ClaimVerifiers::ClaimCheckingTasks,
       AutomatedChecks::ClaimVerifiers::Identity,
       AutomatedChecks::ClaimVerifiers::Qualifications,
       AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,

@@ -4,6 +4,7 @@ module Policies
     extend self
 
     VERIFIERS = [
+      AutomatedChecks::ClaimVerifiers::ClaimCheckingTasks,
       AutomatedChecks::ClaimVerifiers::FraudRisk,
       AutomatedChecks::ClaimVerifiers::PreviousYearClaims
     ].freeze

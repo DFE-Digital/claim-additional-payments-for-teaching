@@ -12,6 +12,7 @@ module Policies
     REJECTED_MIN_QA_THRESHOLD = 10
 
     VERIFIERS = [
+      AutomatedChecks::ClaimVerifiers::ClaimCheckingTasks,
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
       AutomatedChecks::ClaimVerifiers::EarlyYearsPayments::Identity
     ]

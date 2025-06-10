@@ -11,6 +11,7 @@ module Policies
     REJECTED_MIN_QA_THRESHOLD = 10
 
     VERIFIERS = [
+      AutomatedChecks::ClaimVerifiers::ClaimCheckingTasks,
       AutomatedChecks::ClaimVerifiers::OneLoginIdentity,
       AutomatedChecks::ClaimVerifiers::ProviderVerification,
       AutomatedChecks::ClaimVerifiers::AlternativeIdentityVerification,

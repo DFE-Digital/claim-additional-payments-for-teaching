@@ -3,7 +3,7 @@ module AutomatedChecks
     class ClaimCheckingTasks
       attr_reader :claim
 
-      def initialize(claim)
+      def initialize(claim:)
         @claim = claim
       end
 
