@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Journeys::Navigator do
   subject { described_class.new(current_slug:, slug_sequence:, params:, session:) }
 
-  let(:current_slug) { "teaching-responsibilities" }
+  let(:current_slug) { "previously-claimed" }
   let(:slug_sequence) { Journeys::FurtherEducationPayments::SlugSequence.new(journey_session) }
   let(:params) { ActionController::Parameters.new }
   let(:session) { {} }
@@ -20,42 +20,38 @@ RSpec.describe Journeys::Navigator do
       end
 
       it "returns first slug" do
-        expect(subject.next_slug).to eql("teaching-responsibilities")
+        expect(subject.next_slug).to eql("previously-claimed")
       end
     end
 
     context "when on first slug" do
-      let(:current_slug) { "teaching-responsibilities" }
+      let(:current_slug) { "previously-claimed" }
 
       let(:answers) do
         build(
           :further_education_payments_answers,
-          teaching_responsibilities: "true"
+          previously_claimed: false
         )
       end
 
       it "returns second slug" do
-        expect(subject.next_slug).to eql("further-education-provision-search")
+        expect(subject.next_slug).to eql("have-one-login-account")
       end
     end
 
     context "when on second slug" do
-      let(:current_slug) { "further-education-provision-search" }
+      let(:current_slug) { "have-one-login-account" }
 
       let(:answers) do
         build(
           :further_education_payments_answers,
-          teaching_responsibilities: true,
-          provision_search: "ply"
+          previously_claimed: false,
+          have_one_login_account: "false"
         )
       end
 
-      before do
-        create(:school, name: "Plymouth")
-      end
-
       it "returns third slug" do
-        expect(subject.next_slug).to eql("select-provision")
+        expect(subject.next_slug).to eql("teaching-responsibilities")
       end
     end
 
@@ -65,6 +61,8 @@ RSpec.describe Journeys::Navigator do
       let(:answers) do
         build(
           :further_education_payments_answers,
+          previously_claimed: false,
+          have_one_login_account: "false",
           teaching_responsibilities: false
         )
       end
@@ -111,7 +109,7 @@ RSpec.describe Journeys::Navigator do
       end
 
       it "returns first slug" do
-        expect(subject.furthest_permissible_slug).to eql("teaching-responsibilities")
+        expect(subject.furthest_permissible_slug).to eql("previously-claimed")
       end
     end
 
@@ -121,6 +119,8 @@ RSpec.describe Journeys::Navigator do
       let(:answers) do
         build(
           :further_education_payments_answers,
+          previously_claimed: false,
+          have_one_login_account: "false",
           teaching_responsibilities: true,
           provision_search: "ply"
         )
@@ -163,6 +163,8 @@ RSpec.describe Journeys::Navigator do
     let(:answers) do
       build(
         :further_education_payments_answers,
+        previously_claimed: false,
+        have_one_login_account: "false",
         teaching_responsibilities: "true",
         provision_search: school.name,
         school_id: school.id,

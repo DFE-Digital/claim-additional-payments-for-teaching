@@ -938,6 +938,22 @@ en:
           heading: You are not eligible
         claim_already_submitted_this_policy_year:
           heading: "You've already submited a claim in this claim window"
+      previously_claimed:
+        question: Have you previously received a Targeted Retention Incentive payment for work in further education?
+        hint: This would have been for the %{previous_academic_year} academic year.
+        options:
+          true: "Yes"
+          false: "No"
+        errors:
+          inclusion: Choose yes if you previously received a Targeted Retention Incentive payment for work in further education
+      have_one_login_account:
+        question: Do you have a GOV.UK One Login account?
+        options:
+          true: "Yes"
+          false: "No"
+          i_dont_know: I don’t know
+        errors:
+          inclusion: Choose yes if you have a GOV.UK One Login account
       teaching_responsibilities:
         heading: To apply for a targeted retention incentive payment, you must be employed as a member of staff with teaching responsibilities
         question: Are you a member of staff with teaching responsibilities?
