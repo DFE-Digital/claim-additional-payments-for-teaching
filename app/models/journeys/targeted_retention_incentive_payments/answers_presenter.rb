@@ -90,7 +90,7 @@ module Journeys
         [
           t("itt_academic_year.question.#{answers.qualification}"),
           answers.itt_academic_year.to_s(:long),
-          "itt_academic_year"
+          "itt-year"
         ]
       end
 
