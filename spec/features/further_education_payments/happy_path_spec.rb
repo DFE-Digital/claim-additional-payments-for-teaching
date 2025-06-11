@@ -6,7 +6,7 @@ RSpec.feature "Further education payments" do
   let(:college) { create(:school, :further_education, :fe_eligible) }
   let(:expected_award_amount) { college.eligible_fe_provider.max_award_amount }
 
-  scenario "happy path claim" do
+  scenario "happy path claim without OL at start" do
     when_student_loan_data_exists
     when_further_education_payments_journey_configuration_exists
     and_college_exists
@@ -14,6 +14,14 @@ RSpec.feature "Further education payments" do
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
     click_link "Start now"
+
+    expect(page).to have_content("Have you previously")
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_content("Do you have a")
+    choose "No"
+    click_button "Continue"
 
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"

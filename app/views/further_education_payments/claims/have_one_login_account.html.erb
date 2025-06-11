@@ -1,0 +1,26 @@
+<% content_for(:page_title, page_title(@form.t(:question), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_radio_buttons_fieldset(:have_one_login_account,
+                                         legend: {
+                                           text: @form.t(:question),
+                                           tag: "h1",
+                                           size: "l"
+                                         }) do %>
+        <% @form.radio_options[0..-2].each do |radio_option| %>
+          <%= f.govuk_radio_button :have_one_login_account, radio_option.id, label: { text: radio_option.name }, link_errors: @form.radio_options.first == radio_option %>
+        <% end %>
+
+        <%= f.govuk_radio_divider %>
+
+        <%= f.govuk_radio_button :have_one_login_account, @form.radio_options.last.id, label: { text: @form.radio_options.last.name } %>
+      <% end %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>
