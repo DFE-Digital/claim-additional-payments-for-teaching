@@ -1,0 +1,23 @@
+<% content_for(:page_title, page_title(@form.t(:question), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<% @backlink_path = landing_page_path %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_collection_radio_buttons :previously_claimed, @form.radio_options, :id, :name,
+        legend: {
+          text: @form.t(:question),
+          tag: "h1",
+          size: "l"
+        },
+        hint: {
+          text: @form.t(:hint, previous_academic_year: AcademicYear.previous.to_s(:long)),
+        } %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>
