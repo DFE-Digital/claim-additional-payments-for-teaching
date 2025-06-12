@@ -927,6 +927,8 @@ en:
           heading: You are not eligible
         subject:
           heading: You are not eligible
+        claim_already_submitted_this_policy_year:
+          heading: "You've already submited a claim in this claim window"
       teaching_responsibilities:
         heading: To apply for a targeted retention incentive payment, you must be employed as a member of staff with teaching responsibilities
         question: Are you a member of staff with teaching responsibilities?
