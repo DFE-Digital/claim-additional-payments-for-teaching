@@ -84,5 +84,31 @@ RSpec.describe Policies::FurtherEducationPayments::PolicyEligibilityChecker do
         expect(subject.ineligibility_reason).to eql(:courses)
       end
     end
+
+    context "when claim already submitted this policy year" do
+      let(:existing_claim) do
+        create(
+          :claim,
+          :further_education,
+          :submitted,
+          onelogin_uid: "1234567890"
+        )
+      end
+
+      let(:answers) do
+        build(
+          :further_education_payments_answers,
+          :eligible,
+          onelogin_uid: existing_claim.onelogin_uid
+        )
+      end
+
+      it "is ineligible as :claim_already_submitted_this_policy_year" do
+        expect(subject).to be_ineligible
+        expect(subject.ineligibility_reason).to(
+          eql(:claim_already_submitted_this_policy_year)
+        )
+      end
+    end
   end
 end
