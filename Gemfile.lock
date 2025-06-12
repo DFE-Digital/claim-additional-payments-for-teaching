@@ -9,13 +9,6 @@ GIT
       multi_xml (~> 0.6.0)
       request_store_rails (~> 2)
 
-GIT
-  remote: https://github.com/microsoft/ApplicationInsights-Ruby.git
-  revision: 5db6b4ad65262d23f26b678143a4a1fd7939e5c2
-  ref: 5db6b4ad65262d23f26b678143a4a1fd7939e5c2
-  specs:
-    application_insights (0.5.7)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -908,7 +901,6 @@ PLATFORMS
 DEPENDENCIES
   activerecord-copy
   activerecord-nulldb-adapter
-  application_insights!
   bootsnap (>= 1.1.0)
   brakeman
   bullet
@@ -968,4 +960,4 @@ RUBY VERSION
    ruby 3.4.4p0
 
 BUNDLED WITH
-   2.6.7
+   2.6.9
