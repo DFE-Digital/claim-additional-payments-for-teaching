@@ -3,7 +3,6 @@ module Dqt
     module General
       QUALIFICATION_MATCHING_TYPE = {
         postgraduate_itt: [
-          nil,
           "Degree",
           "Degree Equivalent (this will include foreign qualifications)",
           "Flexible - Assessment Only",

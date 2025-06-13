@@ -236,8 +236,8 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
             before do
               journey_session.answers.assign_attributes(
                 dqt_teacher_status: {
-                  qualified_teacher_status: {
-                    name: "Professional Graduate Diploma in Education" # route_into_teaching
+                  initial_teacher_training: {
+                    qualification: "Professional Graduate Diploma in Education" # route_into_teaching
                   }
                 }
               )
@@ -267,12 +267,10 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
             before do
               journey_session.answers.assign_attributes(
                 dqt_teacher_status: {
-                  qualified_teacher_status: {
-                    name: "Professional Graduate Diploma in Education" # route_into_teaching
-                  },
                   # qualification maps to postgraduate so we read the
                   # qualification date from the itt programme start date
                   initial_teacher_training: {
+                    qualification: "Professional Graduate Diploma in Education", # route_into_teaching
                     programme_start_date: "2024-01-01T00:00:00"
                   }
                 }
