@@ -48,4 +48,64 @@ RSpec.describe Journeys::FurtherEducationPayments::SessionAnswers do
       end
     end
   end
+
+  describe "#claim_already_submitted_this_policy_year?" do
+    subject do
+      described_class.new(
+        onelogin_uid: onelogin_uid
+      ).claim_already_submitted_this_policy_year?
+    end
+
+    context "when no claims exist with a matching one login id" do
+      let(:onelogin_uid) { "12345" }
+
+      it { is_expected.to be false }
+    end
+
+    context "when a claim exists with a matching one login id" do
+      before do
+        create(
+          :claim,
+          policy: policy,
+          onelogin_uid: onelogin_uid,
+          academic_year: academic_year
+        )
+      end
+
+      context "when the claim is from a different policy year" do
+        let(:policy) { Policies::FurtherEducationPayments }
+        let(:academic_year) { AcademicYear.previous }
+        let(:onelogin_uid) { "12345" }
+
+        it { is_expected.to be false }
+      end
+
+      context "when the claim is from the same policy year" do
+        let(:academic_year) { AcademicYear.current }
+
+        context "when the claim is for a different policy" do
+          let(:policy) { Policies::EarlyYearsPayments }
+          let(:onelogin_uid) { "12345" }
+
+          it { is_expected.to be false }
+        end
+
+        context "when the claim is for FE" do
+          context "when the one login id is nil" do
+            let(:policy) { Policies::FurtherEducationPayments }
+            let(:onelogin_uid) { nil }
+
+            it { is_expected.to be false }
+          end
+
+          context "when the one login id is present" do
+            let(:policy) { Policies::FurtherEducationPayments }
+            let(:onelogin_uid) { "12345" }
+
+            it { is_expected.to be true }
+          end
+        end
+      end
+    end
+  end
 end

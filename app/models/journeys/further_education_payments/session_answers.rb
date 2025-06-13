@@ -113,6 +113,18 @@ module Journeys
           0
         end
       end
+
+      def claim_already_submitted_this_policy_year?
+        previous_claim.present?
+      end
+
+      def previous_claim
+        @previous_claim ||= Claim
+          .by_policy(Policies::FurtherEducationPayments)
+          .current_academic_year
+          .where.not(onelogin_uid: nil)
+          .find_by(onelogin_uid: onelogin_uid)
+      end
     end
   end
 end

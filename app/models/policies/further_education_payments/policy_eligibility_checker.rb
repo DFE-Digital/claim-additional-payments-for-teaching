@@ -38,6 +38,8 @@ module Policies
           :courses
         elsif answers.less_than_half_hours_teaching_eligible_courses?
           :less_than_half_hours_teaching_eligible_courses
+        elsif answers.claim_already_submitted_this_policy_year?
+          :claim_already_submitted_this_policy_year
         end
       end
     end
