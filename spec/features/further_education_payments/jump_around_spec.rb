@@ -13,6 +13,14 @@ RSpec.feature "Further education payments" do
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     click_link "Start now"
 
+    expect(page).to have_content("Have you previously")
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_content("Do you have a")
+    choose "No"
+    click_button "Continue"
+
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
 
     visit claim_path(Journeys::FurtherEducationPayments::ROUTING_NAME, slug: "address")
@@ -32,6 +40,14 @@ RSpec.feature "Further education payments" do
 
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     click_link "Start now"
+
+    expect(page).to have_content("Have you previously")
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_content("Do you have a")
+    choose "No"
+    click_button "Continue"
 
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"
@@ -68,6 +84,14 @@ RSpec.feature "Further education payments" do
 
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     click_link "Start now"
+
+    expect(page).to have_content("Have you previously")
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_content("Do you have a")
+    choose "No"
+    click_button "Continue"
 
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"
@@ -127,6 +151,14 @@ RSpec.feature "Further education payments" do
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
     click_link "Start now"
+
+    expect(page).to have_content("Have you previously")
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_content("Do you have a")
+    choose "No"
+    click_button "Continue"
 
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"
@@ -228,6 +260,14 @@ RSpec.feature "Further education payments" do
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     expect(page).to have_link("Start now")
     click_link "Start now"
+
+    expect(page).to have_content("Have you previously")
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_content("Do you have a")
+    choose "No"
+    click_button "Continue"
 
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"
