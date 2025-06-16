@@ -45,7 +45,7 @@ module FormSubmittable
       redirect_to claim_path(
         current_journey_routing_name,
         navigator.next_slug,
-        query_parameters_to_include(slug)
+        navigator.query_params.presence || query_parameters_to_include(navigator.next_slug)
       )
     end
 

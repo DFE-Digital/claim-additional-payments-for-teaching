@@ -21,12 +21,10 @@ module Policies
       end
 
       def ineligible?
-        ineligible_reason.present?
+        ineligibility_reason.present?
       end
 
-      private
-
-      def ineligible_reason
+      def ineligibility_reason
         case answers.attributes.symbolize_keys
         in previous_payment_received: false
           "previous payment not received"
@@ -52,6 +50,8 @@ module Policies
           nil
         end
       end
+
+      private
 
       def contract_start_date_eligible?
         return false unless answers.start_date
