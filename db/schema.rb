@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_03_151832) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_16_162148) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -329,7 +329,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_03_151832) do
     t.datetime "updated_at", precision: nil, null: false
     t.string "current_academic_year", limit: 9
     t.boolean "teacher_id_enabled", default: true
-    t.index ["created_at"], name: "index_journey_configurations_on_created_at"
   end
 
   create_table "journeys_service_access_codes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -684,7 +683,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_03_151832) do
     t.datetime "updated_at", null: false
     t.index ["academic_year", "school_urn", "file_upload_id"], name: "idx_on_academic_year_school_urn_file_upload_id_e22f377ca3"
     t.index ["academic_year"], name: "idx_on_academic_year_d488a0f13b"
-    t.index ["award_amount"], name: "idx_on_award_amount_327151d288"
     t.index ["file_upload_id"], name: "idx_on_file_upload_id_f03e7df6df"
     t.index ["school_urn"], name: "idx_on_school_urn_4cd86bf61e"
   end
