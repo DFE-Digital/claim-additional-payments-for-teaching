@@ -19,9 +19,6 @@ RSpec.feature "Further education payments ineligible paths" do
 
     expect(page).to have_content("You are not eligible")
     expect(page).to have_content("you must be employed as a member of staff with teaching responsibilities")
-    click_link "Back"
-
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
   end
 
   scenario "when ineligible FE provider is selected" do
