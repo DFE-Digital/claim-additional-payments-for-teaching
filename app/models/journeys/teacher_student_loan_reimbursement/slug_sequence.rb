@@ -169,14 +169,6 @@ module Journeys
         )
       end
 
-      def ineligible?
-        eligibility_checker.ineligible?
-      end
-
-      def eligibility_checker
-        @eligibility_checker ||= Policies::StudentLoans::PolicyEligibilityChecker.new(answers: answers)
-      end
-
       def signed_in_with_dfe_identity_and_details_match?
         !!answers.dqt_teacher_status
       end
