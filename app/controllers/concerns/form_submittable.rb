@@ -49,7 +49,7 @@ module FormSubmittable
     end
 
     def redirect_to_next_slug
-      redirect_to_slug(next_slug)
+      redirect_to_slug(navigator.next_slug)
     end
 
     def path_helper_resource
