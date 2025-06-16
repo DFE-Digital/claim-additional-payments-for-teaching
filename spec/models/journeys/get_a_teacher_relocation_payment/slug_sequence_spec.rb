@@ -45,6 +45,7 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::SlugSequence do
             personal-bank-account
             gender
             check-your-answers
+            confirmation
           ]
         end
       end

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Journeys::GetATeacherRelocationPayment::ClaimSubmissionForm do
+RSpec.describe Journeys::GetATeacherRelocationPayment::CheckYourAnswersForm do
   let(:journey_configuration) do
     create(:journey_configuration, :get_a_teacher_relocation_payment)
   end
@@ -60,7 +60,14 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::ClaimSubmissionForm do
     )
   end
 
-  let(:form) { described_class.new(journey_session: journey_session) }
+  let(:form) do
+    described_class.new(
+      journey_session: journey_session,
+      session: {},
+      params: ActionController::Parameters.new,
+      journey: Journeys::GetATeacherRelocationPayment
+    )
+  end
 
   describe "#save" do
     let(:answers) do
