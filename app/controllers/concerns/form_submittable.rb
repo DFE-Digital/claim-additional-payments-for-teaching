@@ -14,7 +14,6 @@ module FormSubmittable
   #
   # Default behaviour summary for each action:
   #
-  #   controller#new: `redirect_to_first_slug`
   #   controller#show: `before_show` -> `render_template_for_current_slug`
   #   controller#update: `before_update` -> `handle_form_submission` ->
   #     -> `form#save` succeded? ->
@@ -47,7 +46,7 @@ module FormSubmittable
     around_action :handle_form_submission, only: [:update, :create]
 
     def new
-      redirect_to_first_slug
+      redirect_to_next_slug
     end
 
     def show
@@ -98,10 +97,6 @@ module FormSubmittable
       redirect_to_slug(next_slug)
     end
 
-    def redirect_to_first_slug
-      redirect_to_slug(first_slug)
-    end
-
     def path_helper_resource
       controller_name.singularize
     end
@@ -112,10 +107,6 @@ module FormSubmittable
 
     def current_template
       current_slug.underscore
-    end
-
-    def first_slug
-      slug_sequence.slugs.first.to_sym
     end
 
     def execute_callback_if_exists(callback_name)
@@ -152,11 +143,7 @@ module FormSubmittable
     end
 
     def no_form_fallback
-      if action_name == "create"
-        redirect_to_first_slug
-      elsif action_name == "update"
-        redirect_to_next_slug
-      end
+      redirect_to_next_slug
     end
 
     def log_event(callback_name)

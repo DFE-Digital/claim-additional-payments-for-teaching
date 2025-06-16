@@ -83,13 +83,6 @@ RSpec.describe FormSubmittable, type: :request do
     end
   end
 
-  describe "GET #new" do
-    it "redirects to the first slug" do
-      get "/targeted-retention-incentive-payments/claim"
-      expect(response).to redirect_to("/targeted-retention-incentive-payments/first-slug")
-    end
-  end
-
   describe "GET #show" do
     context "when the `{current_slug}_before_show` filter is defined" do
       include_context :define_filter, :first_slug_before_show
