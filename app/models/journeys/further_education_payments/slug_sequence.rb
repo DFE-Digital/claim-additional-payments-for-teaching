@@ -50,6 +50,7 @@ module Journeys
 
       RESULTS_SLUGS = %w[
         check-your-answers
+        confirmation
         ineligible
       ].freeze
 
@@ -206,15 +207,16 @@ module Journeys
         array << SLUGS_HASH["gender"]
         array << SLUGS_HASH["teacher-reference-number"]
         array << SLUGS_HASH["check-your-answers"]
+        array << SLUGS_HASH["confirmation"]
 
         array
       end
 
-      private
-
       def journey
         Journeys::FurtherEducationPayments
       end
+
+      private
 
       def form_for_slug(slug)
         form_class = journey.form_class_for_slug(slug:)

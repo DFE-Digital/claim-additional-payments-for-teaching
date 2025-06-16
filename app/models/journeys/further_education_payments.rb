@@ -36,7 +36,8 @@ module Journeys
         "passport" => PassportForm,
         "eligible" => EligibleForm,
         "ineligible" => IneligibleForm,
-        "teacher-reference-number" => TeacherReferenceNumberForm
+        "teacher-reference-number" => TeacherReferenceNumberForm,
+        "confirmation" => ConfirmationForm
       }
     }
 

@@ -125,7 +125,9 @@ module FormSubmittable
 
       if @form.present?
         if @form.save
-          return if execute_callback_if_exists(:after_form_save_success)
+          unless @form.skip_controller_callbacks?
+            return if execute_callback_if_exists(:after_form_save_success)
+          end
 
           navigator.clear_impermissible_answers
           navigator.clear_furthest_ineligible_answer

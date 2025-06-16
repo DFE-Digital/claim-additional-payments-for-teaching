@@ -1,7 +1,9 @@
 class ClaimsController < BasePublicController
   include PartOfClaimJourney
 
-  skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create, :signed_out]
+  skip_before_action :send_unstarted_claimants_to_the_start, if: -> do
+    %w{ new create signed_out }.include?(action_name) || navigator.current_slug == "confirmation"
+  end
 
   before_action :create_session_if_skip_landing_page, if: :skip_landing_page?
 
@@ -88,6 +90,8 @@ class ClaimsController < BasePublicController
   end
 
   def set_backlink_path
+    return if navigator.current_slug == "confirmation"
+
     if previous_slug.present? && slug_sequence.class::DEAD_END_SLUGS.exclude?(current_slug)
       @backlink_path = claim_path(current_journey_routing_name, previous_slug)
     end
@@ -113,6 +117,8 @@ class ClaimsController < BasePublicController
   end
 
   def check_page_is_permissible
+    return if navigator.current_slug == "confirmation"
+
     unless navigator.permissible_slug?
       redirect_to claim_path(current_journey_routing_name, navigator.furthest_permissible_slug)
     end

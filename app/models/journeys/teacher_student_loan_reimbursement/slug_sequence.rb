@@ -75,6 +75,10 @@ module Journeys
         end
       end
 
+      def journey
+        Journeys::TeacherStudentLoanReimbursement
+      end
+
       private
 
       def eligibility_slugs

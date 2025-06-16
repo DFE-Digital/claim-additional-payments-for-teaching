@@ -75,6 +75,10 @@ module Journeys
           array
         end
 
+        def journey
+          Journeys::FurtherEducationPayments::Provider
+        end
+
         private
 
         def already_verified?

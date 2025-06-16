@@ -82,6 +82,10 @@ class Form
     end
   end
 
+  def skip_controller_callbacks?
+    false
+  end
+
   private
 
   def permitted_attributes
