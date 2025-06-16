@@ -90,7 +90,7 @@ module FormSubmittable
       redirect_to claim_path(
         current_journey_routing_name,
         navigator.next_slug,
-        request.query_parameters
+        navigator.query_params.presence || request.query_parameters
       )
     end
 
