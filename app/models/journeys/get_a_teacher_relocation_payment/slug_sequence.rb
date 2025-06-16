@@ -28,6 +28,7 @@ module Journeys
         "personal-bank-account",
         "gender",
         "check-your-answers",
+        "confirmation",
         "ineligible"
       ].freeze
 
@@ -109,7 +110,10 @@ module Journeys
       end
 
       def results
-        ["check-your-answers"]
+        %w[
+          check-your-answers
+          confirmation
+        ]
       end
 
       def address_set_by_postcode_search?
