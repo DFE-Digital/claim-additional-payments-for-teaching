@@ -62,6 +62,10 @@ module Journeys
         end
       end
 
+      def journey
+        Journeys::GetATeacherRelocationPayment
+      end
+
       private
 
       def eligibility_slugs

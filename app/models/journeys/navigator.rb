@@ -233,7 +233,7 @@ module Journeys
     end
 
     def journey
-      Journeys.for_routing_name(slug_sequence.journey_session.journey)
+      slug_sequence.journey
     end
 
     def journey_session

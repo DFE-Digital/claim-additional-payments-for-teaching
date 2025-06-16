@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
+RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
   before do
     create(:journey_configuration, :further_education_payments, current_academic_year:)
   end
@@ -27,7 +27,14 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
   }
 
   let(:journey_session) { create(:further_education_payments_session, answers: answers) }
-  let(:form) { described_class.new(journey_session: journey_session) }
+  let(:form) do
+    described_class.new(
+      journey_session: journey_session,
+      params: ActionController::Parameters.new,
+      session: {},
+      journey: Journeys::FurtherEducationPayments
+    )
+  end
 
   describe "#save" do
     subject { form.save }
@@ -111,12 +118,22 @@ RSpec.describe Journeys::FurtherEducationPayments::ClaimSubmissionForm do
         receive(:further_education_payment_provider_verification_email)
       ).and_return(double(deliver_later: nil))
 
-      first_claim_form = described_class.new(journey_session: journey_session)
+      first_claim_form = described_class.new(
+        journey_session: journey_session,
+        params: ActionController::Parameters.new,
+        session: {},
+        journey: Journeys::FurtherEducationPayments
+      )
 
       first_claim_form.save
 
       journey_session.update! claim: nil
-      second_claim_form = described_class.new(journey_session: journey_session)
+      second_claim_form = described_class.new(
+        journey_session: journey_session,
+        params: ActionController::Parameters.new,
+        session: {},
+        journey: Journeys::FurtherEducationPayments
+      )
 
       second_claim_form.save
 

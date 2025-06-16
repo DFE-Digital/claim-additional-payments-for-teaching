@@ -31,6 +31,10 @@ module Journeys
           def slugs
             SLUGS
           end
+
+          def journey
+            Journeys::EarlyYearsPayment::Provider::Start
+          end
         end
       end
     end

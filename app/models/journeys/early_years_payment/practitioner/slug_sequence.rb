@@ -63,6 +63,10 @@ module Journeys
           end
         end
 
+        def journey
+          Journeys::EarlyYearsPayment::Practitioner
+        end
+
         private
 
         def address_set_by_postcode_search?

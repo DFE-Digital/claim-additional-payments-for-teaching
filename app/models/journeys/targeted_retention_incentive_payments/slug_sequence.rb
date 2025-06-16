@@ -93,6 +93,10 @@ module Journeys
         end
       end
 
+      def journey
+        Journeys::TargetedRetentionIncentivePayments
+      end
+
       private
 
       def initial_slugs
