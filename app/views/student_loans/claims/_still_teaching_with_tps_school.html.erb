@@ -1,5 +1,3 @@
-<%= form.hidden_field :current_school_id, value: school.id %>
-
 <div class="govuk-radios__item">
   <%= form.radio_button(:employment_status, :recent_tps_school, class: "govuk-radios__input") %>
   <%= form.label :employment_status_recent_tps_school, "Yes, at #{school.name}", class: "govuk-label govuk-radios__label" %>
