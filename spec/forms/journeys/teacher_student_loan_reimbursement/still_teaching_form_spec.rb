@@ -66,7 +66,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::StillTeachingForm, typ
     end
 
     context "when suggested school is the claim_school (non-TID)" do
-      let(:claim_params) { {current_school_id: claim_school.id, employment_status: "claim_school"} }
+      let(:claim_params) { {employment_status: "claim_school"} }
 
       it "set the current_school_id and saves employment status" do
         expect(form.save).to be true
@@ -76,7 +76,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::StillTeachingForm, typ
     end
 
     context "when suggested school is from TPS (TID journey)" do
-      let(:claim_params) { {current_school_id: claim_school.id, employment_status: "recent_tps_school"} }
+      let(:claim_params) { {employment_status: "recent_tps_school"} }
 
       it "set the current_school_id and saves employment status" do
         expect(form.save).to be true
