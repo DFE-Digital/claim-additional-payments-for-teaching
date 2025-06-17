@@ -84,6 +84,9 @@ gem "mission_control-jobs"
 
 gem "slack-notifier"
 
+gem "sentry-ruby"
+gem "sentry-rails"
+
 group :development, :test do
   gem "pry"
   gem "rspec-rails"

@@ -941,6 +941,8 @@ DEPENDENCIES
   rspec-rails
   rspec-retry
   sass-rails (~> 6.0)
+  sentry-rails
+  sentry-ruby
   shoulda-matchers
   simplecov
   slack-notifier

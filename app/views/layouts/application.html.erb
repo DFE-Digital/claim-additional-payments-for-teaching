@@ -28,6 +28,7 @@
     <% end %>
 
     <%= stylesheet_link_tag 'application', media: 'all' %>
+    <%= Sentry.get_trace_propagation_meta.html_safe %>
   </head>
 
   <body class="govuk-template__body">
