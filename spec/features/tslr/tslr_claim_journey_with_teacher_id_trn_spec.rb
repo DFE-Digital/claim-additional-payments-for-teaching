@@ -12,7 +12,7 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
 
   before do
     freeze_time
-    set_mock_auth(trn, {date_of_birth:, nino:})
+    set_mock_auth(trn, {date_of_birth:, nino:, email: "kelsie.oberbrunner@example.com"})
     stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
     mock_address_details_address_data
   end
@@ -99,7 +99,7 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
     expect(page).to have_text(I18n.t("forms.select_email.questions.select_email"))
 
     # - Select the suggested email address
-    find("#claim_email_address_check_true").click
+    choose "kelsie.oberbrunner@example.com"
     click_on "Continue"
 
     expect(page).to have_text(I18n.t("forms.select_mobile_form.questions.which_number"))
