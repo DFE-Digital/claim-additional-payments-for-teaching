@@ -13,7 +13,7 @@ RSpec.feature "TSLR journey with Teacher ID mobile check" do
   let(:otp_code) { "010101" }
 
   before do
-    set_mock_auth(trn, {date_of_birth:, nino:})
+    set_mock_auth(trn, {date_of_birth:, nino:, email: "kelsie.oberbrunner@example.com"})
     stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
     stub_otp_verification(otp_code:)
   end
@@ -148,7 +148,7 @@ RSpec.feature "TSLR journey with Teacher ID mobile check" do
     fill_in_address
 
     # - Select the suggested email address
-    find("#claim_email_address_check_true").click
+    choose "kelsie.oberbrunner@example.com"
     click_on "Continue"
   end
 

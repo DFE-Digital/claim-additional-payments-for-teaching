@@ -33,7 +33,7 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
     expect(page).to have_text(email)
 
     # - Select the suggested email address
-    find("#claim_email_address_check_true").click
+    choose email
     click_on "Continue"
 
     expect(page).to have_text(I18n.t("forms.select_mobile_form.questions.which_number"))
@@ -53,7 +53,7 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
     expect(page).to have_text("A different email address")
 
     # - Select A different email address
-    find("#claim_email_address_check_false").click
+    choose "A different email address"
     click_on "Continue"
 
     expect(page).to have_text(I18n.t("forms.email_address.hint1"))
@@ -73,12 +73,12 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
     expect(page).to have_text(email)
 
     # - Select the suggested email address
-    find("#claim_email_address_check_true").click
+    choose email
     click_on "Continue"
 
     click_on "Back"
 
-    find("#claim_email_address_check_false").click
+    choose "A different email address"
     click_on "Continue"
 
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(created_at: :desc).last
@@ -96,12 +96,12 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
     expect(page).to have_text(email)
 
     # - Select A different email address
-    find("#claim_email_address_check_false").click
+    choose "A different email address"
     click_on "Continue"
 
     click_on "Back"
 
-    find("#claim_email_address_check_true").click
+    choose email
     click_on "Continue"
 
     session = Journeys::TeacherStudentLoanReimbursement::Session.order(created_at: :desc).last
