@@ -1,65 +1,41 @@
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <% if @form.errors.any? %>
-      <%= render(
-        "shared/error_summary",
-        instance: @form,
-        errored_field_id_overrides: {
-          qualifications_details_check: "claim_qualifications_details_check_true"
-        }
-      ) %>
-    <% end %>
-  </div>
-</div>
-
 <div class="govuk-body" id="main-content" role="main">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l"><%= t("questions.check_and_confirm_qualification_details") %></h1>
+      <%= form_with(model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |f| %>
+        <%= f.govuk_error_summary %>
 
-      <div class="personal-details-section">
-        <h2 class="govuk-heading-m"><%= t("questions.qualification_details") %></h2>
-        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key"><%= t("student_loans.questions.academic_year") %></dt>
-            <dd class="govuk-summary-list__value">
-              <%= @form.dqt_qts_award_date %>
-            </dd>
-          </div>
-        </dl>
-      </div>
+        <h1 class="govuk-heading-l"><%= t("questions.check_and_confirm_qualification_details") %></h1>
+
+        <div class="personal-details-section">
+          <h2 class="govuk-heading-m"><%= t("questions.qualification_details") %></h2>
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key"><%= t("student_loans.questions.academic_year") %></dt>
+              <dd class="govuk-summary-list__value">
+                <%= @form.dqt_qts_award_date %>
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+
+        <%= f.govuk_collection_radio_buttons(
+          :qualifications_details_check,
+          f.object.radio_options,
+          :id,
+          :name,
+          inline: true,
+          legend: {
+            size: "m",
+            text: t("questions.details_correct")
+          },
+        ) %>
+
+        <p class="govuk-body"><%= t("questions.select_yes_confirm") %></p>
+
+        <%= f.govuk_submit t("questions.continue") %>
+
+      <% end %>
     </div>
   </div>
 </div>
-
-  <%= form_for @form, url: @form.url do |f| %>
-    <%= f.hidden_field :qualifications_details_check %>
-    <%= form_group_tag f.object do %>
-
-    <div class="govuk-radios">
-      <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m"><%= t("questions.details_correct") %></legend>
-
-        <%= errors_tag f.object, :qualifications_details_check %>
-
-        <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
-          <div class="govuk-radios__item">
-            <%= f.radio_button(:qualifications_details_check, true, class: "govuk-radios__input") %>
-            <%= f.label :qualifications_details_check_true, t("questions.radio_yes"), class: "govuk-label govuk-radios__label" %>
-          </div>
-          <div class="govuk-radios__item">
-          <%= f.radio_button(:qualifications_details_check, false, class: "govuk-radios__input") %>
-          <%= f.label :qualifications_details_check_false, t("questions.radio_no"), class: "govuk-label govuk-radios__label" %>
-          </div>
-        </div>
-      </fieldset>
-    </div>
-
-  <% end %>
-
-  <p class="govuk-body"><%= t("questions.select_yes_confirm") %></p>
-
-  <div class="govuk-form-group">
-    <%= f.submit t("questions.continue"), class: "govuk-button", data: {module: "govuk-button"} %>
-  </div>
-<% end %>
