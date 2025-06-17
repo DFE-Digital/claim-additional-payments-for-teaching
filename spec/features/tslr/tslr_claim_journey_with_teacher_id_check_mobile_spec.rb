@@ -2,7 +2,6 @@ require "rails_helper"
 
 RSpec.feature "TSLR journey with Teacher ID mobile check" do
   include OmniauthMockHelper
-  include StudentLoansHelper
 
   let!(:journey_configuration) { create(:journey_configuration, :student_loans) }
   let!(:school) { create(:school, :student_loans_eligible) }
