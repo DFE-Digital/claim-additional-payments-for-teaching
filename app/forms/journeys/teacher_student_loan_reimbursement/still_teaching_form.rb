@@ -3,60 +3,77 @@ module Journeys
     class StillTeachingForm < Form
       attribute :employment_status
 
-      validates :employment_status, presence: {message: ->(form, _) { form.error_message }}
+      validates(
+        :employment_status,
+        presence: {
+          message: ->(form, _) do
+            if form.school.open?
+              form.i18n_errors_path(
+                "select_which_school_currently",
+                school_name: form.school.name
+              )
+            else
+              form.i18n_errors_path("select_are_you_still_employed")
+            end
+          end
+        }
+      )
 
       def save
         return false unless valid?
 
         journey_session.answers.assign_attributes(
-          employment_status:,
-          current_school_id: save_current_school? ? school.id : nil
+          employment_status: employment_status
         )
+
+        if currently_at_school? && school.open?
+          journey_session.answers.assign_attributes(
+            current_school_id: school.id
+          )
+        else
+          journey_session.answers.assign_attributes(
+            current_school_id: nil
+          )
+        end
 
         journey_session.save!
       end
 
       def school
-        if school_from_tps?
-          answers.recent_tps_school
-        else
-          answers.claim_school
-        end
+        @school ||= answers.claim_school
       end
 
-      def error_message
+      def radio_options
         if school.open?
-          i18n_errors_path("select_which_school_currently", school_name: school.name)
+          [
+            Option.new(
+              id: :claim_school,
+              name: "Yes, at #{school.name}"
+            ),
+            Option.new(
+              id: :different_school,
+              name: "Yes, at another school"
+            ),
+            Option.new(
+              id: :no_school,
+              name: "No"
+            )
+          ]
         else
-          i18n_errors_path("select_are_you_still_employed")
-        end
-      end
-
-      # Helper used in the view to choose partials and locale keys
-      def tps_or_claim_school
-        if school_from_tps?
-          "tps_school"
-        else
-          "claim_school"
+          [
+            Option.new(
+              id: :different_school,
+              name: "Yes"
+            ),
+            Option.new(
+              id: :no_school,
+              name: "No"
+            )
+          ]
         end
       end
 
       private
-
-      def school_from_tps?
-        answers.logged_in_with_tid_and_has_recent_tps_school?
-      end
-
-      def school_from_claim?
-        !school_from_tps?
-      end
-
-      def save_current_school?
-        return false unless currently_at_school?
-        return false if school_from_claim? && !school.open?
-
-        true
-      end
 
       def currently_at_school?
         %w[claim_school recent_tps_school].include?(employment_status)

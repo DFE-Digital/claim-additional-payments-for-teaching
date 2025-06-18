@@ -18,6 +18,7 @@ module Journeys
         "qts-year" => QtsYearForm,
         "subjects-taught" => SubjectsTaughtForm,
         "still-teaching" => StillTeachingForm,
+        "still-teaching-tps" => StillTeachingTpsForm,
         "leadership-position" => LeadershipPositionForm,
         "mostly-performed-leadership-duties" => MostlyPerformedLeadershipDutiesForm,
         "reset-claim" => ResetClaimForm,

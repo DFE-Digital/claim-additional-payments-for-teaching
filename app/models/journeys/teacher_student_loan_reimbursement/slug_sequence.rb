@@ -20,6 +20,7 @@ module Journeys
         "claim-school-results",
         "subjects-taught",
         "still-teaching",
+        "still-teaching-tps",
         "current-school",
         "leadership-position",
         "mostly-performed-leadership-duties",
@@ -100,7 +101,10 @@ module Journeys
 
           slugs << "claim-school-results" if answers.claim_school_id.blank? || answers.provision_search.present?
           slugs << "subjects-taught"
-          slugs << "still-teaching"
+
+          slugs << "still-teaching-tps" if answers.logged_in_with_tid_and_has_recent_tps_school?
+          slugs << "still-teaching" unless answers.logged_in_with_tid_and_has_recent_tps_school?
+
           slugs << "current-school" unless answers.employed_at_claim_school? || answers.employed_at_recent_tps_school?
           slugs << "leadership-position"
           slugs << "mostly-performed-leadership-duties" if answers.had_leadership_position?
