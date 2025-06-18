@@ -102,7 +102,7 @@ module Journeys
           SLUGS_HASH["have-one-login-account"]
         end
 
-        if has_one_login_account?
+        if has_one_login_account? || may_have_one_login_account?
           array << SLUGS_HASH["sign-in"]
         end
 
@@ -186,8 +186,7 @@ module Journeys
         if poor_performance_form.completed_or_valid? && !answers.subject_to_problematic_actions?
           array << SLUGS_HASH["check-your-answers-part-one"]
           array << SLUGS_HASH["eligible"]
-          if !answers.previously_claimed? && answers.have_one_login_account == "no" ||
-              !answers.previously_claimed? && answers.have_one_login_account == "i_dont_know"
+          if !answers.previously_claimed? && does_not_have_one_login_account?
             array << SLUGS_HASH["sign-in"]
           end
           array << SLUGS_HASH["information-provided"]
@@ -254,6 +253,14 @@ module Journeys
 
       def has_one_login_account?
         answers.have_one_login_account == "yes"
+      end
+
+      def may_have_one_login_account?
+        answers.have_one_login_account == "i_dont_know"
+      end
+
+      def does_not_have_one_login_account?
+        answers.have_one_login_account == "no"
       end
     end
   end
