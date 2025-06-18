@@ -57,6 +57,7 @@ class PostcodeSearchForm < Form
     errors.add(:postcode, "Address not found")
   rescue OrdnanceSurvey::Client::ResponseError => e
     Rollbar.error(e)
+    Sentry.capture_exception(e)
 
     journey_session.answers.assign_attributes(ordnance_survey_error: true)
     journey_session.save!

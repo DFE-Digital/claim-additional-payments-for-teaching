@@ -156,5 +156,12 @@ class ClaimsController < BasePublicController
     return unless journey_session
 
     Rollbar.scope!(answers: journey_session.answers.attributes_with_pii_redacted)
+
+    Sentry.configure_scope do |scope|
+      scope.set_context(
+        "Journey session anwers",
+        journey_session.answers.attributes_with_pii_redacted
+      )
+    end
   end
 end
