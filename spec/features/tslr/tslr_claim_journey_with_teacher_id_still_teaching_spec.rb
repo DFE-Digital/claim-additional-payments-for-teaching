@@ -109,6 +109,6 @@ RSpec.feature "TSLR journey with Teacher ID still teaching school playback" do
     check "Biology"
     click_on "Continue"
 
-    expect(current_path).to eq("/student-loans/still-teaching")
+    expect(current_path).to eq("/student-loans/still-teaching-tps")
   end
 end
