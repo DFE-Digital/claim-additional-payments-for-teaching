@@ -9,6 +9,14 @@ RSpec.feature "Further education back link" do
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     click_link "Start now"
 
+    expect(page).to have_content("Have you previously")
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_content("Do you have a")
+    choose "No"
+    click_button "Continue"
+
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"
     click_button "Continue"
