@@ -6,6 +6,15 @@ class ApplicationJob < ActiveJob::Base
 
     if claim
       Rollbar.scope!(claim: {reference: claim.reference})
+
+      Sentry.configure_scope do |scope|
+        scope.set_context(
+          "Claim",
+          {
+            reference: claim.reference
+          }
+        )
+      end
     end
 
     block.call

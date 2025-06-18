@@ -25,3 +25,5 @@ TID_BASE_URL: https://claim-additional-payments-for-teaching-review-*.test.teach
 
 GOVUK_APP_DOMAIN: ""
 GOVUK_WEBSITE_ROOT: ""
+
+SENTRY_ENVIRONMENT: "review"

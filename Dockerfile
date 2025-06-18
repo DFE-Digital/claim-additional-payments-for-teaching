@@ -89,8 +89,8 @@ RUN chown -hR appuser:appgroup ${APP_HOME}
 
 USER appuser
 
-ARG GIT_COMMIT_HASH
-ENV GIT_COMMIT_HASH=${GIT_COMMIT_HASH}
+ARG COMMIT_SHA
+ENV GIT_COMMIT_HASH=${COMMIT_SHA}
 
 # ------------------------------------------------------------------------------
 # shellcheck

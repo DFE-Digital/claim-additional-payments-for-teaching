@@ -9,6 +9,7 @@ class StudentLoanAmountCheckJob < ApplicationJob
     rescue => e
       # If something goes wrong, log the error and continue
       Rollbar.error(e)
+      Sentry.capture_exception(e)
     end
   end
 

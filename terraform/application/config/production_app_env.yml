@@ -24,3 +24,5 @@ TID_SIGN_IN_ISSUER: https://teaching-identity.education.gov.uk/
 
 GOVUK_APP_DOMAIN: ""
 GOVUK_WEBSITE_ROOT: ""
+
+SENTRY_ENVIRONMENT: "production"
