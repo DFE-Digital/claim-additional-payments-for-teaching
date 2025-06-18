@@ -46,7 +46,7 @@ RSpec.describe Journeys::Navigator do
         build(
           :further_education_payments_answers,
           previously_claimed: false,
-          have_one_login_account: "false"
+          have_one_login_account: "no"
         )
       end
 
@@ -62,7 +62,7 @@ RSpec.describe Journeys::Navigator do
         build(
           :further_education_payments_answers,
           previously_claimed: false,
-          have_one_login_account: "false",
+          have_one_login_account: "no",
           teaching_responsibilities: false
         )
       end
@@ -120,7 +120,7 @@ RSpec.describe Journeys::Navigator do
         build(
           :further_education_payments_answers,
           previously_claimed: false,
-          have_one_login_account: "false",
+          have_one_login_account: "no",
           teaching_responsibilities: true,
           provision_search: "ply"
         )
@@ -164,7 +164,7 @@ RSpec.describe Journeys::Navigator do
       build(
         :further_education_payments_answers,
         previously_claimed: false,
-        have_one_login_account: "false",
+        have_one_login_account: "no",
         teaching_responsibilities: "true",
         provision_search: school.name,
         school_id: school.id,
