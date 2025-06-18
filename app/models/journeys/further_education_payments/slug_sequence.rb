@@ -102,7 +102,7 @@ module Journeys
           SLUGS_HASH["have-one-login-account"]
         end
 
-        if answers.have_one_login_account == "true"
+        if has_one_login_account?
           array << SLUGS_HASH["sign-in"]
         end
 
@@ -186,7 +186,7 @@ module Journeys
         if poor_performance_form.completed_or_valid? && !answers.subject_to_problematic_actions?
           array << SLUGS_HASH["check-your-answers-part-one"]
           array << SLUGS_HASH["eligible"]
-          if !answers.previously_claimed? && answers.have_one_login_account == "false" ||
+          if !answers.previously_claimed? && answers.have_one_login_account == "no" ||
               !answers.previously_claimed? && answers.have_one_login_account == "i_dont_know"
             array << SLUGS_HASH["sign-in"]
           end
@@ -250,6 +250,10 @@ module Journeys
           params: ActionController::Parameters.new,
           session: {}
         )
+      end
+
+      def has_one_login_account?
+        answers.have_one_login_account == "yes"
       end
     end
   end

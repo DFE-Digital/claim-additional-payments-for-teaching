@@ -101,7 +101,7 @@ FactoryBot.define do
 
     trait :submittable do
       previously_claimed { false }
-      have_one_login_account { "false" }
+      have_one_login_account { "no" }
 
       with_academic_year
       eligible

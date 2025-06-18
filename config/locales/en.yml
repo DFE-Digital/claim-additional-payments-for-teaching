@@ -949,9 +949,9 @@ en:
       have_one_login_account:
         question: Do you have a GOV.UK One Login account?
         options:
-          true: "Yes"
-          false: "No"
-          i_dont_know: I don’t know
+          "yes": "Yes"
+          "no": "No"
+          "i_dont_know": I don’t know
         errors:
           inclusion: Choose yes if you have a GOV.UK One Login account
       teaching_responsibilities:

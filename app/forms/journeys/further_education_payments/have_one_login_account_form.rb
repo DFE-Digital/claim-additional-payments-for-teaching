@@ -5,19 +5,19 @@ module Journeys
 
       validates :have_one_login_account,
         inclusion: {
-          in: ["true", "false", "i_dont_know"],
+          in: ["yes", "no", "i_dont_know"],
           message: i18n_error_message(:inclusion)
         }
 
       def radio_options
         [
           Option.new(
-            id: "true",
-            name: t("options.true")
+            id: "yes",
+            name: t("options.yes")
           ),
           Option.new(
-            id: "false",
-            name: t("options.false")
+            id: "no",
+            name: t("options.no")
           ),
           Option.new(
             id: "i_dont_know",
