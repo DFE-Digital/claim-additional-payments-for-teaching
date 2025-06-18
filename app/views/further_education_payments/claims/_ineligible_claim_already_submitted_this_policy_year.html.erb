@@ -12,5 +12,20 @@
       You will have received an email to your email address
       <%= @form.answers.previous_claim.email_address %>
     </p>
+
+    <section id="contact-support">
+      <h2 class="govuk-heading-m">
+        Contact
+      </h2>
+
+      <p class="govuk-body">
+        For further support, email <br>
+        <%= govuk_mail_to(I18n.t("further_education_payments.support_email_address")) %>
+      </p>
+
+      <p class="govuk-body">
+        You should receive a reply within 5 working days.
+      </p>
+    </section>
   </div>
 </div>
