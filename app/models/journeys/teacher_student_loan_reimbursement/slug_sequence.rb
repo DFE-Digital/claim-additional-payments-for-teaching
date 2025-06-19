@@ -41,6 +41,7 @@ module Journeys
         "gender",
         "teacher-reference-number",
         "check-your-answers",
+        "confirmation",
         "ineligible"
       ].freeze
 
@@ -134,7 +135,7 @@ module Journeys
       end
 
       def results_slugs
-        ["check-your-answers"]
+        ["check-your-answers", "confirmation"]
       end
 
       def details_from_tid_did_not_match?
