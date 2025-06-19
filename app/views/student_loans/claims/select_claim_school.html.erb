@@ -1,32 +1,34 @@
-<%= render("shared/error_summary", instance: @form) if @form.errors.any? %>
+<%= form_with(
+  model: @form,
+  url: @form.url,
+  builder: GOVUKDesignSystemFormBuilder::FormBuilder
+) do |f| %>
+  <%= f.govuk_error_summary %>
 
-<%= form_with model: @form, url: @form.url do |form| %>
-  <%= form_group_tag @form do %>
-    <fieldset class="govuk-fieldset">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-        <h1 class="govuk-fieldset__heading">
-          <%= claim_school_question %>
-        </h1>
-      </legend>
+  <%= f.govuk_radio_buttons_fieldset(
+    :claim_school_id,
+    legend: {
+      text: claim_school_question,
+      size: "l"
+    }
+  ) do %>
+    <%= f.govuk_radio_button(
+      :claim_school_id,
+      f.object.claim_school_id,
+      label: { text: f.object.claim_school_name },
+      hint: { text: f.object.claim_school_address },
+      link_errors: true,
+    ) %>
 
-      <%= errors_tag @form, :current_school %>
+    <%= f.govuk_radio_divider %>
 
-      <div class="govuk-radios">
-        <div class="govuk-radios__item">
-          <%= form.radio_button(:claim_school_id, @form.claim_school_id, class: "govuk-radios__input") %>
-          <%= form.label "claim_school_id_#{@form.claim_school_id}", @form.claim_school_name, class: "govuk-label govuk-radios__label" %>
-          <div id="school-checker-item-hint" class="govuk-hint govuk-radios__hint">
-            <%= @form.claim_school_address %>
-          </div>
-        </div>
-        <div class="govuk-radios__divider">or</div>
-        <div class="govuk-radios__item">
-          <%= form.radio_button(:claim_school_id, "somewhere_else", checked: @form.claim_school_somewhere_else?, class: "govuk-radios__input") %>
-          <%= form.label "claim_school_id_somewhere_else", "Somewhere else", class: "govuk-label govuk-radios__label" %>
-        </div>
-      </div>
-    </fieldset>
+    <%= f.govuk_radio_button(
+      :claim_school_id,
+      "somewhere_else",
+      label: { text: "Somewhere else" },
+      checked: f.object.claim_school_somewhere_else?,
+    ) %>
   <% end %>
 
-  <%= form.submit "Continue", class: "govuk-button" %>
+  <%= f.govuk_submit %>
 <% end %>

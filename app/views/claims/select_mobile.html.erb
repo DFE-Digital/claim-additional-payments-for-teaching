@@ -3,62 +3,53 @@
   page_title(
     t("forms.select_mobile_form.questions.which_number"),
     journey: current_journey_routing_name,
-    show_error: @form.errors.any?)
+    show_error: @form.errors.any?
+  )
 ) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% if @form.errors.any? %>
-      <%= render(
-        "shared/error_summary",
-        instance: @form,
-        errored_field_id_overrides: {
-          phone_number: "phone_number_true"
+    <%= form_with(model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_radio_buttons_fieldset(
+        :mobile_check,
+        caption: {
+          text: t("questions.personal_details"),
+          size: "xl"
+        },
+        legend: {
+          size: "xl",
+          text: t("forms.select_mobile_form.questions.which_number")
+        },
+        hint: {
+          text: t("forms.select_mobile_form.hints.usage")
         }
-      ) %>
-    <% end %>
+      ) do %>
+          <%= f.govuk_radio_button(
+            :mobile_check,
+            :use,
+            label: { text: f.object.phone_number },
+            link_errors: true
+          ) %>
 
-    <%= form_for @form, url: @form.url do |f| %>
-      <span class="govuk-caption-xl"><%= t("questions.personal_details") %></span>
-      <%= form_group_tag f.object do %>
+          <%= f.govuk_radio_button(
+            :mobile_check,
+            :alternative,
+            label: { text: t("forms.select_mobile_form.answers.alternative") },
+          ) %>
 
-        <fieldset class="govuk-fieldset" aria-describedby="phone-number-hint">
+          <%= f.govuk_radio_divider %>
 
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-            <h1 class="govuk-fieldset__heading">
-              <%= t("forms.select_mobile_form.questions.which_number") %>
-            </h1>
-          </legend>
+          <%= f.govuk_radio_button(
+            :mobile_check,
+            :declined,
+            label: { text: t("forms.select_mobile_form.answers.decline") },
+          ) %>
+        <% end %>
 
-          <div class="govuk-hint" id="phone-number-hint">
-              <%= t("forms.select_mobile_form.hints.usage") %>
-          </div>
+      <%= f.govuk_submit %>
 
-          <%= errors_tag f.object, :phone_number %>
-
-          <div class="govuk-radios">
-
-            <div class="govuk-radios__item">
-              <%= f.radio_button(:mobile_check, :use, class: "govuk-radios__input", required: true) %>
-              <%= f.label :mobile_check_use, f.object.phone_number, class: "govuk-label govuk-radios__label" %>
-            </div>
-            <div class="govuk-radios__item">
-              <%= f.radio_button(:mobile_check, :alternative, class: "govuk-radios__input", required: true) %>
-              <%= f.label :mobile_check_alternative, t("forms.select_mobile_form.answers.alternative"), class: "govuk-label govuk-radios__label" %>
-            </div>
-            <div class="govuk-radios__divider">or</div>
-            <div class="govuk-radios__item">
-              <%= f.radio_button(:mobile_check, :declined, class: "govuk-radios__input", required: true) %>
-              <%= f.label :mobile_check_declined, t("forms.select_mobile_form.answers.decline"), class: "govuk-label govuk-radios__label" %>
-            </div>
-
-          </div>
-
-        </fieldset>
-
-      <% end %>
-
-      <%= f.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
     <% end %>
   </div>
 </div>
