@@ -719,6 +719,97 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_content("half of your timetabled teaching hours must include")
   end
 
+  scenario "when the claimant has already submitted a claim" do
+    previous_claim = create(
+      :claim,
+      :further_education,
+      onelogin_uid: "12345"
+    )
+
+    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+
+    click_link "Start now"
+
+    # teaching-responsibilities
+    choose "Yes"
+    click_button "Continue"
+
+    # further-education-provision-search
+    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    click_button "Continue"
+
+    # select-provision
+    choose eligible_college.name
+    click_button "Continue"
+
+    # contract-type
+    choose "Permanent contract"
+    click_button "Continue"
+
+    # teaching-hours-per-week
+    choose "12 hours or more per week"
+    click_button "Continue"
+
+    # further-education-teaching-start-year
+    choose "September 2023 to August 2024"
+    click_button "Continue"
+
+    # subjects-taught
+    check "Building and construction"
+    click_button "Continue"
+
+    # building-construction-courses
+    check "T Level in onsite construction"
+    click_button "Continue"
+
+    # hours-teaching-eligible-subjects
+    choose "Yes"
+    click_button "Continue"
+
+    # half-teaching-hours
+    choose "Yes"
+    click_button "Continue"
+
+    # teaching-qualification
+    choose "Yes"
+    click_button "Continue"
+
+    # poor-performance
+    within all(".govuk-fieldset")[0] do
+      choose("No")
+    end
+
+    within all(".govuk-fieldset")[1] do
+      choose("No")
+    end
+
+    click_button "Continue"
+
+    # check-your-answers-part-one
+    click_button "Continue"
+
+    # eligible
+    click_button "Apply now"
+
+    # sign-in 1
+    mock_one_login_auth(uid: "12345")
+    click_button "Continue"
+
+    # sign-in 2
+    mock_one_login_idv(uid: "12345")
+    click_button "Continue"
+
+    # sign-in 3
+    click_button "Continue"
+
+    # ineligible
+    expect(page).to have_content(
+      "You've already submitted a claim in this claim window"
+    )
+
+    expect(page).to have_content(previous_claim.reference)
+  end
+
   def and_ineligible_college_exists
     ineligible_college
   end

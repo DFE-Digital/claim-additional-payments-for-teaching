@@ -1,7 +1,7 @@
 module OneLoginHelper
-  def mock_one_login_auth
+  def mock_one_login_auth(uid: "12345")
     hash = OmniAuth::AuthHash.new(
-      uid: "12345",
+      uid: uid,
       info: {
         email: "test@example.com"
       },
@@ -14,9 +14,9 @@ module OneLoginHelper
     Rails.application.env_config["omniauth.auth"] = hash
   end
 
-  def mock_one_login_idv
+  def mock_one_login_idv(uid: "12345")
     hash = OmniAuth::AuthHash.new(
-      uid: "12345",
+      uid: uid,
       info: {
         email: ""
       },
@@ -31,9 +31,9 @@ module OneLoginHelper
     Rails.application.env_config["omniauth.auth"] = hash
   end
 
-  def mock_one_login_idv_with_return_codes
+  def mock_one_login_idv_with_return_codes(uid: "12345")
     hash = OmniAuth::AuthHash.new(
-      uid: "12345",
+      uid: uid,
       info: {
         email: ""
       },
