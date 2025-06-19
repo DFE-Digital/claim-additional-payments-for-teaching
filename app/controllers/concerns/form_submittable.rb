@@ -86,19 +86,12 @@ module FormSubmittable
       end
     end
 
-    def redirect_to_slug(slug)
-      raise NoMethodError, "End of sequence: you must define #{current_slug.underscore}_after_form_save_success" unless next_slug
-      raise NoMethodError, "Missing path helper for resource: \"#{path_helper_resource}\"; try overriding it with #path_helper_resource" unless respond_to?(:"#{path_helper_resource}_path")
-
-      redirect_to send(:"#{path_helper_resource}_path", current_journey_routing_name, slug, request.query_parameters)
-    end
-
     def redirect_to_next_slug
-      redirect_to_slug(next_slug)
-    end
-
-    def path_helper_resource
-      controller_name.singularize
+      redirect_to claim_path(
+        current_journey_routing_name,
+        navigator.next_slug,
+        navigator.query_params.presence || request.query_parameters
+      )
     end
 
     def render_template_for_current_slug

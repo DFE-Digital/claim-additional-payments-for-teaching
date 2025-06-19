@@ -173,6 +173,12 @@ module Journeys
       end
     end
 
+    def query_params
+      if eligibility_checker.ineligible?
+        {ineligible_reason: eligibility_checker.ineligibility_reason}
+      end
+    end
+
     private
 
     # returns truthy if changing answer

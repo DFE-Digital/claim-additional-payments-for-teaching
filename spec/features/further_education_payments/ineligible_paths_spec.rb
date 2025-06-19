@@ -808,6 +808,10 @@ RSpec.feature "Further education payments ineligible paths" do
     )
 
     expect(page).to have_content(previous_claim.reference)
+
+    expect(current_url).to end_with(
+      "/ineligible?ineligible_reason=claim_already_submitted_this_policy_year"
+    )
   end
 
   def and_ineligible_college_exists

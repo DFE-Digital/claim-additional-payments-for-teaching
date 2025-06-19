@@ -21,12 +21,10 @@ module Policies
       end
 
       def ineligible?
-        ineligible_reason.present?
+        ineligibility_reason.present?
       end
 
-      private
-
-      def ineligible_reason
+      def ineligibility_reason
         case answers.attributes.symbolize_keys
         in application_route: "salaried_trainee"
           "application route salaried trainee not accecpted"
@@ -50,6 +48,8 @@ module Policies
           nil
         end
       end
+
+      private
 
       def contract_start_date_eligible?
         return false unless answers.start_date
