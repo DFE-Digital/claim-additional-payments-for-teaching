@@ -9,6 +9,7 @@ module Journeys
     POLICIES = [Policies::InternationalRelocationPayments]
     FORMS = {
       "claims" => {
+        "previous-payment-received" => PreviousPaymentReceivedForm,
         "application-route" => ApplicationRouteForm,
         "state-funded-secondary-school" => StateFundedSecondarySchoolForm,
         "contract-details" => ContractDetailsForm,

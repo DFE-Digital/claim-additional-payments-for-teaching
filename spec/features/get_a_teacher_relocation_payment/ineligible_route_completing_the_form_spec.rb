@@ -17,10 +17,19 @@ RSpec.describe "ineligible route: completing the form" do
   end
 
   describe "navigating forward" do
+    context "ineligible - previous irp payment" do
+      it "shows the ineligible page" do
+        when_i_start_the_form
+        and_i_complete_the_previous_irp_payment_question_with(option: "No")
+        then_i_see_the_ineligible_page
+      end
+    end
+
     context "ineligible - application route" do
       context "when choosing other" do
         it "shows the ineligible page" do
           when_i_start_the_form
+          and_i_complete_the_previous_irp_payment_question_with(option: "Yes")
           and_i_complete_application_route_question_with(option: "Other")
           then_i_see_the_ineligible_page
         end
@@ -29,6 +38,7 @@ RSpec.describe "ineligible route: completing the form" do
       context "when choosing trainee" do
         it "shows the ineligible page" do
           when_i_start_the_form
+          and_i_complete_the_previous_irp_payment_question_with(option: "Yes")
           and_i_complete_application_route_question_with(
             option: "I am enrolled on a salaried teacher training course in England"
           )
@@ -40,6 +50,7 @@ RSpec.describe "ineligible route: completing the form" do
     context "ineligible - non state funded school" do
       it "shows the ineligible page" do
         when_i_start_the_form
+        and_i_complete_the_previous_irp_payment_question_with(option: "Yes")
         and_i_complete_application_route_question_with(
           option: "I am employed as a teacher in a school in England"
         )
@@ -51,6 +62,7 @@ RSpec.describe "ineligible route: completing the form" do
     context "ineligible - school-choice" do
       it "shows the ineligible page" do
         when_i_start_the_form
+        and_i_complete_the_previous_irp_payment_question_with(option: "Yes")
         and_i_complete_application_route_question_with(
           option: "I am employed as a teacher in a school in England"
         )
@@ -63,6 +75,7 @@ RSpec.describe "ineligible route: completing the form" do
     context "ineligible - contract details" do
       it "shows the ineligible page" do
         when_i_start_the_form
+        and_i_complete_the_previous_irp_payment_question_with(option: "Yes")
         and_i_complete_application_route_question_with(
           option: "I am employed as a teacher in a school in England"
         )
@@ -77,6 +90,7 @@ RSpec.describe "ineligible route: completing the form" do
     context "ineligible - contract start date" do
       it "shows the ineligible page" do
         when_i_start_the_form
+        and_i_complete_the_previous_irp_payment_question_with(option: "Yes")
         and_i_complete_application_route_question_with(
           option: "I am employed as a teacher in a school in England"
         )
@@ -95,6 +109,7 @@ RSpec.describe "ineligible route: completing the form" do
     context "ineligible - subject" do
       it "shows the ineligible page" do
         when_i_start_the_form
+        and_i_complete_the_previous_irp_payment_question_with(option: "Yes")
         and_i_complete_application_route_question_with(
           option: "I am employed as a teacher in a school in England"
         )
@@ -113,6 +128,7 @@ RSpec.describe "ineligible route: completing the form" do
     context "ineligible - visa" do
       it "shows the ineligible page" do
         when_i_start_the_form
+        and_i_complete_the_previous_irp_payment_question_with(option: "Yes")
         and_i_complete_application_route_question_with(
           option: "I am employed as a teacher in a school in England"
         )
@@ -134,6 +150,7 @@ RSpec.describe "ineligible route: completing the form" do
     context "ineligible - entry date" do
       it "shows the ineligible page" do
         when_i_start_the_form
+        and_i_complete_the_previous_irp_payment_question_with(option: "Yes")
         and_i_complete_application_route_question_with(
           option: "I am employed as a teacher in a school in England"
         )

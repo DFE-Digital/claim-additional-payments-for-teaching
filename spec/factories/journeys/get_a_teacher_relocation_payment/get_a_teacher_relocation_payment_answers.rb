@@ -7,6 +7,10 @@ FactoryBot.define do
       national_insurance_number { generate(:national_insurance_number) }
     end
 
+    trait :with_previous_payment_received do
+      previous_payment_received { true }
+    end
+
     trait :with_teacher_application_route do
       application_route { "teacher" }
     end

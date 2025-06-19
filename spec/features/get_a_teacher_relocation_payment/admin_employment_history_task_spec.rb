@@ -281,6 +281,7 @@ RSpec.describe "Admin employment history task" do
     entry_date = contract_start_date - 1.week
 
     when_i_start_the_form
+    and_i_complete_the_previous_irp_payment_question_with(option: "Yes")
     and_i_complete_application_route_question_with(
       option: "I am employed as a teacher in a school in England"
     )

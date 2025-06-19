@@ -5,6 +5,7 @@ module Journeys
 
       def eligibility_answers
         [].tap do |a|
+          a << previous_payment_received
           a << application_route
           a << state_funded_secondary_school
           a << current_school
@@ -30,6 +31,14 @@ module Journeys
 
       def show_trn?
         false
+      end
+
+      def previous_payment_received
+        [
+          t("get_a_teacher_relocation_payment.forms.previous_payment_received.question"),
+          t("get_a_teacher_relocation_payment.forms.previous_payment_received.answers.#{answers.previous_payment_received}.answer"),
+          "previous-payment-received"
+        ]
       end
 
       def application_route
