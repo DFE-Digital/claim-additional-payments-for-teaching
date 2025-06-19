@@ -1,11 +1,18 @@
 require "rails_helper"
 
-RSpec.describe Journeys::EarlyYearsPayment::Practitioner::ClaimSubmissionForm do
+RSpec.describe Journeys::EarlyYearsPayment::Practitioner::CheckYourAnswersForm do
   before do
     create(:journey_configuration, :early_years_payment_practitioner)
   end
 
-  subject { described_class.new(journey_session: journey_session) }
+  subject do
+    described_class.new(
+      journey_session:,
+      journey: Journeys::EarlyYearsPayment::Practitioner,
+      session: {},
+      params: ActionController::Parameters.new
+    )
+  end
 
   let(:journey) { Journeys::EarlyYearsPayment::Practitioner }
   let(:journey_session) { create(:early_years_payment_practitioner_session, answers: answers) }
