@@ -23,10 +23,10 @@ module Policies
         tasks << "employment"
         tasks << "employment_contract" if claim.tasks.exists?(name: "employment_contract")
         tasks << "employment_start" if claim.tasks.exists?(name: "employment_start")
-        tasks << "continuous_employment"
         tasks << "subject" if claim.tasks.exists?(name: "subject")
-        tasks << "employment_history" if claim.eligibility.changed_workplace_or_new_contract?
         tasks << "teaching_hours"
+        tasks << "employment_history" if claim.eligibility.changed_workplace_or_new_contract?
+        tasks << "continuous_employment"
         tasks << "payroll_details" if claim.must_manually_validate_bank_details?
         tasks << "matching_details" if matching_claims.exists?
         tasks << "payroll_gender" if claim.payroll_gender_missing? || claim.tasks.exists?(name: "payroll_gender")
