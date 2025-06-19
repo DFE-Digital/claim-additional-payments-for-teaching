@@ -1,0 +1,61 @@
+<% content_for(
+  :page_title,
+  page_title(
+    t("student_loans.forms.still_teaching.questions.tps_school"),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_radio_buttons_fieldset(
+        :employment_status,
+        legend: {
+          text: t("student_loans.forms.still_teaching.questions.tps_school"),
+          size: "xl"
+        }
+      ) do %>
+        <%= f.govuk_radio_button(
+          :employment_status,
+          :recent_tps_school,
+          label: {
+            text: "Yes, at #{f.object.school.name}"
+          },
+          hint: {
+            text: f.object.school.address
+          },
+          link_errors: true,
+        ) %>
+
+        <%= f.govuk_radio_button(
+          :employment_status,
+          :different_school,
+          label: {
+            text: "Somewhere else"
+          },
+        ) %>
+
+        <%= f.govuk_radio_divider %>
+
+        <%= f.govuk_radio_button(
+          :employment_status,
+          :no_school,
+          label: {
+            text: "I'm no longer employed to teach at a state-funded secondary school in England"
+          },
+        ) %>
+      <% end %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>
