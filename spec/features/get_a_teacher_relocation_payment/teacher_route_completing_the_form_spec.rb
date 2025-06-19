@@ -27,6 +27,7 @@ RSpec.describe "teacher route: completing the form" do
   describe "navigating forward", flaky: true do
     before do
       when_i_start_the_form
+      and_i_complete_the_previous_irp_payment_question_with(option: "Yes")
       and_i_complete_application_route_question_with(
         option: "I am employed as a teacher in a school in England"
       )
@@ -110,6 +111,10 @@ RSpec.describe "teacher route: completing the form" do
 
   def then_the_check_your_answers_part_one_page_shows_my_answers
     assert_on_check_your_answers_part_one_page!
+
+    expect(page).to have_text(
+      /Have you previously received an international relocation payment\?\s?Yes/
+    )
 
     expect(page).to have_text(
       /What is your employment status\?\s?I am employed as a teacher in a school in England/

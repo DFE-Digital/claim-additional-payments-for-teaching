@@ -12,6 +12,16 @@ module GetATeacherRelocationPayment
       click_button("Confirm and send")
     end
 
+    def and_i_complete_the_previous_irp_payment_question_with(option:)
+      expect(page).to have_text(
+        "Have you previously received an international relocation payment?"
+      )
+
+      choose(option)
+
+      click_button("Continue")
+    end
+
     def and_i_complete_application_route_question_with(option:)
       choose(option)
 

@@ -1,6 +1,7 @@
 module Journeys
   module GetATeacherRelocationPayment
     class SessionAnswers < Journeys::SessionAnswers
+      attribute :previous_payment_received, :boolean, pii: false
       attribute :application_route, :string, pii: false
       attribute :state_funded_secondary_school, :boolean, pii: false
       attribute :one_year, :boolean, pii: false

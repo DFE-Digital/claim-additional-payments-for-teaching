@@ -17,6 +17,16 @@ RSpec.describe Policies::InternationalRelocationPayments::PolicyEligibilityCheck
   describe "#ineligible?" do
     subject { checker.ineligible? }
 
+    context "when the previous IRP payment question is answered 'no'" do
+      let(:attributes) do
+        {
+          previous_payment_received: false
+        }
+      end
+
+      it { is_expected.to eq(true) }
+    end
+
     context "when the application route is 'other'" do
       let(:attributes) do
         {

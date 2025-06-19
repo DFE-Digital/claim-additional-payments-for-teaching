@@ -2,6 +2,7 @@ module Journeys
   module GetATeacherRelocationPayment
     class SlugSequence
       SLUGS = [
+        "previous-payment-received",
         "application-route",
         "state-funded-secondary-school",
         "current-school",
@@ -66,6 +67,7 @@ module Journeys
 
       def eligibility_slugs
         [].tap do |slugs|
+          slugs << "previous-payment-received"
           slugs << "application-route"
           slugs << "state-funded-secondary-school"
           slugs << "current-school"

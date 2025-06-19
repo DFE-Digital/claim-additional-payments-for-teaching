@@ -28,6 +28,8 @@ module Policies
 
       def ineligible_reason
         case answers.attributes.symbolize_keys
+        in previous_payment_received: false
+          "previous payment not received"
         in application_route: "salaried_trainee"
           "application route salaried trainee not accecpted"
         in application_route: "other"

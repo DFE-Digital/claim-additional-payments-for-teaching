@@ -60,7 +60,7 @@ RSpec.feature "Switching policies" do
       click_on "Continue"
 
       expect(page.title).to include(
-        "What is your employment status? — Get a teacher relocation payment"
+        "Have you previously received an international relocation payment? — Get a teacher relocation payment"
       )
     end
 
