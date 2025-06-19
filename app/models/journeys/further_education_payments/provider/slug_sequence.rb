@@ -7,7 +7,7 @@ module Journeys
           "unauthorised",
           "verify-claim",
           "verify-identity",
-          "complete",
+          "confirmation",
           "expired-link",
           "already-verified"
         ]
@@ -18,7 +18,7 @@ module Journeys
         ]
 
         DEAD_END_SLUGS = [
-          "complete",
+          "confirmation",
           "expired-link"
         ]
 
@@ -71,7 +71,7 @@ module Journeys
 
           array << "verify-claim"
           array << "verify-identity" if answers.identity_verification_required?
-          array << "complete"
+          array << "confirmation"
           array
         end
 
