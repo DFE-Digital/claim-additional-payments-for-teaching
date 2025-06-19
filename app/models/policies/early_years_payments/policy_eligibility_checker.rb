@@ -20,7 +20,7 @@ module Policies
       def start_ineligibility_reason
         return nil unless answers.is_a?(Journeys::EarlyYearsPayment::Provider::Start::SessionAnswers)
 
-        if !EligibleEyProvider.eligible_email?(answers.email_address)
+        if answers.email_address && !EligibleEyProvider.eligible_email?(answers.email_address)
           :email_not_on_whitelist
         end
       end
