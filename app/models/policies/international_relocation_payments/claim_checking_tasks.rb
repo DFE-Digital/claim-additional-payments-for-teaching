@@ -18,8 +18,8 @@ module Policies
         tasks << "previous_payment" if claim.tasks.previous_payment.exists?
         tasks << "identity_confirmation"
         tasks << "visa"
-        tasks << "arrival_date"
-        tasks << "previous_residency"
+        tasks << "arrival_date" if claim.tasks.arrival_date.exists?
+        tasks << "previous_residency" if claim.tasks.previous_residency.exists?
         tasks << "employment"
         tasks << "employment_contract" if claim.tasks.exists?(name: "employment_contract")
         tasks << "employment_start" if claim.tasks.exists?(name: "employment_start")

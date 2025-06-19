@@ -159,7 +159,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     when Policies::EarlyCareerPayments
       ["Identity confirmation", "Qualifications", "Induction confirmation", "Census subjects taught", "Employment", "Student loan plan", "Decision"]
     when Policies::InternationalRelocationPayments
-      ["First year payment", "Identity confirmation", "Visa", "Arrival date", "Previous residency", "Employment", "Teaching hours", "Continuous employment", "Decision"]
+      ["First year payment", "Identity confirmation", "Visa", "Employment", "Teaching hours", "Continuous employment", "Decision"]
     when Policies::FurtherEducationPayments
       ["Identity confirmation", "Provider verification", "Student loan plan", "Decision"]
     when Policies::EarlyYearsPayments
