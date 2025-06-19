@@ -156,7 +156,7 @@ RSpec.describe "ineligible route: completing the form" do
 
   def then_i_see_the_ineligible_page
     expect(page).to have_content(
-      "We’re sorry, but you are not currently eligible for the international relocation payment"
+      "You are not currently eligible for the international relocation payment."
     )
   end
 end
