@@ -23,6 +23,8 @@ module Journeys
         "eligible-degree-subject" => EligibleDegreeSubjectForm,
         "teaching-subject-now" => TeachingSubjectNowForm,
         "check-your-answers-part-one" => CheckYourAnswersPartOneForm,
+        "check-your-answers" => CheckYourAnswersForm,
+        "confirmation" => ConfirmationForm,
         "eligibility-confirmed" => EligibilityConfirmedForm,
         "future-eligibility" => FutureEligibilityForm,
         "ineligible" => IneligibleForm,

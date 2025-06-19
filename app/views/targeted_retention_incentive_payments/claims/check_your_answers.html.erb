@@ -35,7 +35,8 @@
     ) %>
 
     <%= form_with(
-      url: claim_submission_path,
+      url: @form.url,
+      method: :patch,
       builder: GOVUKDesignSystemFormBuilder::FormBuilder
     ) do |f| %>
       <h2 class="govuk-heading-m">

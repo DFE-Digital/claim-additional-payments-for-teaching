@@ -45,6 +45,7 @@ module Journeys
 
       RESULTS_SLUGS = [
         "check-your-answers",
+        "confirmation",
         "ineligible"
       ]
 
@@ -166,6 +167,7 @@ module Journeys
       def results_slugs
         [].tap do |sequence|
           sequence << "check-your-answers"
+          sequence << "confirmation"
         end
       end
     end
