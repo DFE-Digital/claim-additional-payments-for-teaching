@@ -77,6 +77,8 @@ module Journeys
     attribute :reminder_otp_secret, :string, pii: true
     attribute :reminder_otp_confirmed, :boolean, default: false, pii: false # whether or not they have confirmed email via otp
 
+    attribute :submitted_claim_id, :string, pii: false
+
     def increment_hmrc_validation_attempt_count
       self.hmrc_validation_attempt_count = attributes["hmrc_validation_attempt_count"] + 1
     end
