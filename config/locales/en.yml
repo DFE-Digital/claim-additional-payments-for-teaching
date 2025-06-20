@@ -764,7 +764,6 @@ en:
           no_response_from_school: No response from school
           suspected_fraud: Suspected fraud
           information_mismatch_new_details_needed: "Information mismatch - new details needed"
-          ineligible_previous_residency: Ineligible previous residency
       eligibility_answers:
         nationality: "Nationality"
         passport_number: "Passport number"
