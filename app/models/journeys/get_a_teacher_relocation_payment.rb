@@ -18,6 +18,7 @@ module Journeys
         "breaks-in-employment" => BreaksInEmploymentForm,
         "visa" => VisaForm,
         "entry-date" => EntryDateForm,
+        "information-provided" => InformationProvidedForm,
         "nationality" => NationalityForm,
         "passport-number" => PassportNumberForm,
         "headteacher-details" => HeadteacherDetailsForm,

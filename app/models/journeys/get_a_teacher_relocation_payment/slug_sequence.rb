@@ -14,6 +14,7 @@ module Journeys
         "visa",
         "entry-date",
         "check-your-answers-part-one",
+        "information-provided",
         "nationality",
         "passport-number",
         "personal-details",
@@ -83,6 +84,7 @@ module Journeys
 
       def personal_details_slugs
         [].tap do |slugs|
+          slugs << "information-provided"
           slugs << "nationality"
           slugs << "passport-number"
           slugs << "personal-details"
