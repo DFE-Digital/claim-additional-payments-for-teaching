@@ -45,6 +45,7 @@ module Journeys
 
       RESULTS_SLUGS = [
         "check-your-answers",
+        "confirmation",
         "ineligible"
       ]
 
@@ -91,6 +92,10 @@ module Journeys
             sequence.push(*results_slugs)
           end
         end
+      end
+
+      def journey
+        Journeys::TargetedRetentionIncentivePayments
       end
 
       private
@@ -162,6 +167,7 @@ module Journeys
       def results_slugs
         [].tap do |sequence|
           sequence << "check-your-answers"
+          sequence << "confirmation"
         end
       end
     end

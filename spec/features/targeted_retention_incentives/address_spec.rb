@@ -150,12 +150,6 @@ RSpec.feature "TargetedRetentionIncentivePayments addres", slow: true do
     end
 
     scenario "with Ordnance Survey data" do
-      expect(
-        Journeys::TargetedRetentionIncentivePayments::ClaimSubmissionForm.new(
-          journey_session: journey_session
-        ).valid?
-      ).to eq false
-
       jump_to_claim_journey_page(
         slug: "check-your-answers-part-one",
         journey_session:

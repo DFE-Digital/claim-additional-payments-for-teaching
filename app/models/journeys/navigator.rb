@@ -173,14 +173,14 @@ module Journeys
       end
     end
 
-    private
-
     # returns truthy if changing answer
     # the value is set to the slug of returning check answers page
     # as a journey can have multiple check answer pages
     def changing_answer?
       params[:change].present?
     end
+
+    private
 
     def impermissible_forms
       all_forms.reject do |form|
@@ -233,7 +233,7 @@ module Journeys
     end
 
     def journey
-      Journeys.for_routing_name(slug_sequence.journey_session.journey)
+      slug_sequence.journey
     end
 
     def journey_session

@@ -14,7 +14,7 @@ module Journeys
         "claims" => {
           "verify-claim" => VerifyClaimForm,
           "verify-identity" => VerifyIdentityForm,
-          "complete" => CompleteForm,
+          "confirmation" => ConfirmationForm,
           "unauthorised" => UnauthorisedForm,
           "expired-link" => ExpiredLinkForm,
           "already-verified" => AlreadyVerifiedForm,

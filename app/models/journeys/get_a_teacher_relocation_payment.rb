@@ -23,6 +23,8 @@ module Journeys
         "headteacher-details" => HeadteacherDetailsForm,
         "personal-details" => PersonalDetailsForm,
         "check-your-answers-part-one" => CheckYourAnswersPartOneForm,
+        "check-your-answers" => CheckYourAnswersForm,
+        "confirmation" => ConfirmationForm,
         "ineligible" => IneligibleForm
       }
     }

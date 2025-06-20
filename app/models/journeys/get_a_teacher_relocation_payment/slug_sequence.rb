@@ -28,6 +28,7 @@ module Journeys
         "personal-bank-account",
         "gender",
         "check-your-answers",
+        "confirmation",
         "ineligible"
       ].freeze
 
@@ -60,6 +61,10 @@ module Journeys
           sequence.push(*payment_details_slugs)
           sequence.push(*results)
         end
+      end
+
+      def journey
+        Journeys::GetATeacherRelocationPayment
       end
 
       private
@@ -105,7 +110,10 @@ module Journeys
       end
 
       def results
-        ["check-your-answers"]
+        %w[
+          check-your-answers
+          confirmation
+        ]
       end
 
       def address_set_by_postcode_search?

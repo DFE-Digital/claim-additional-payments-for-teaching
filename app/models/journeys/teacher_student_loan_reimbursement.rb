@@ -25,6 +25,8 @@ module Journeys
         "select-home-address" => SelectHomeAddressForm,
         "eligibility-confirmed" => EligibilityConfirmedForm,
         "student-loan-amount" => StudentLoanAmountForm,
+        "check-your-answers" => CheckYourAnswersForm,
+        "confirmation" => ConfirmationForm,
         "ineligible" => IneligibleForm
       }
     }.freeze
