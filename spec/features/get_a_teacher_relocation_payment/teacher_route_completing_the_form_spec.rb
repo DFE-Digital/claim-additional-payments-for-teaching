@@ -58,6 +58,7 @@ RSpec.describe "teacher route: completing the form" do
 
     context "with postcode search" do
       it "submits an application" do
+        and_i_complete_the_information_provided_step
         and_i_complete_the_nationality_step_with(option: "Australian")
         and_i_complete_the_passport_number_step_with(options: "123456789")
         and_i_complete_the_personal_details_step
@@ -74,6 +75,7 @@ RSpec.describe "teacher route: completing the form" do
 
     context "without postcode search" do
       it "submits an application", js: true do
+        and_i_complete_the_information_provided_step
         and_i_complete_the_nationality_step_with(option: "Australian")
         and_i_complete_the_passport_number_step_with(options: "123456789")
         and_i_complete_the_personal_details_step
@@ -90,6 +92,7 @@ RSpec.describe "teacher route: completing the form" do
 
     context "with mobile verification" do
       it "submits an application" do
+        and_i_complete_the_information_provided_step
         and_i_complete_the_nationality_step_with(option: "Australian")
         and_i_complete_the_passport_number_step_with(options: "123456789")
         and_i_complete_the_personal_details_step
