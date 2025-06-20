@@ -47,7 +47,7 @@ RSpec.describe "Admin first year payment task" do
       visit admin_claim_tasks_path(second_year_claim)
 
       within ".app-task-list" do
-        expect(page).to have_content("First year payment")
+        expect(page).to have_content("First year application")
       end
 
       click_on "Confirm this user has claimed their first year payment"
@@ -62,7 +62,7 @@ RSpec.describe "Admin first year payment task" do
 
       visit admin_claim_tasks_path(second_year_claim)
 
-      expect(task_status("First year payment")).to eq("Passed")
+      expect(task_status("First year application")).to eq("Passed")
     end
   end
 
@@ -81,7 +81,7 @@ RSpec.describe "Admin first year payment task" do
       visit admin_claim_tasks_path(claim)
 
       within ".app-task-list" do
-        expect(page).to have_content("First year payment")
+        expect(page).to have_content("First year application")
       end
 
       click_on "Confirm this user has claimed their first year payment"
@@ -97,7 +97,7 @@ RSpec.describe "Admin first year payment task" do
 
       visit admin_claim_tasks_path(claim)
 
-      expect(task_status("First year payment")).to eq("Failed")
+      expect(task_status("First year application")).to eq("Failed")
     end
   end
 
