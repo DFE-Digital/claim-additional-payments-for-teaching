@@ -123,6 +123,7 @@ module Journeys
           .by_policy(Policies::FurtherEducationPayments)
           .current_academic_year
           .where.not(onelogin_uid: nil)
+          .where.not(id: submitted_claim_id)
           .find_by(onelogin_uid: onelogin_uid)
       end
     end

@@ -30,6 +30,9 @@ module Journeys
             .send_further_education_payment_provider_verification_email
         end
 
+        journey_session.answers.assign_attributes(submitted_claim_id: claim.id)
+        journey_session.save!
+
         session[:submitted_claim_id] = claim.id
         clear_claim_session
 
