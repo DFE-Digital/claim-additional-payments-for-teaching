@@ -5,12 +5,6 @@ module ClaimMailerHelper
     rejected_reasons_with_answers(reasons)
   end
 
-  def rejected_reason_claimed_last_year?
-    return false unless @claim.policy == Policies::InternationalRelocationPayments
-
-    @claim.latest_decision&.rejected_reasons_hash&.[](:reason_claimed_last_year) == "1"
-  end
-
   private
 
   def rejected_reasons_with_answers(reasons)

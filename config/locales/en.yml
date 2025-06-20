@@ -748,6 +748,7 @@ en:
       decision:
         rejected_reasons:
           duplicate: Duplicate application
+          previous_payment_not_received: "Did not receive first £5000 payment last year"
           ineligible_school: Ineligible school
           invalid_bank_details: Invalid bank details
           ineligible_visa_or_entry_date: "Visa/entry date ineligible"
@@ -755,8 +756,6 @@ en:
           no_response_from_school: No response from school
           suspected_fraud: Suspected fraud
           information_mismatch_new_details_needed: "Information mismatch - new details needed"
-          ineligible_previous_residency: Ineligible previous residency
-          claimed_last_year: "Claimed last year"
       eligibility_answers:
         nationality: "Nationality"
         passport_number: "Passport number"
