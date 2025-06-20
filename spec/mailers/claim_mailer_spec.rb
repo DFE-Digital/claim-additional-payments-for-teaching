@@ -221,13 +221,14 @@ RSpec.describe ClaimMailer, type: :mailer do
           let(:expected_rejected_reasons_keys) do
             {
               reason_duplicate: "yes",
+              reason_previous_payment_not_received: "no",
               reason_ineligible_school: "no",
               reason_invalid_bank_details: "no",
               reason_ineligible_visa_or_entry_date: "no",
               reason_ineligible_employment_terms: "no",
               reason_no_response_from_school: "no",
               reason_suspected_fraud: "no",
-              reason_information_mismatch_new_details_needed: "no",
+              reason_information_mismatch_new_details_needed: "no"
             }
           end
 

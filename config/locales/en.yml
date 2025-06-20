@@ -757,6 +757,7 @@ en:
       decision:
         rejected_reasons:
           duplicate: Duplicate application
+          previous_payment_not_received: "Did not receive first £5000 payment last year"
           ineligible_school: Ineligible school
           invalid_bank_details: Invalid bank details
           ineligible_visa_or_entry_date: "Visa/entry date ineligible"
