@@ -31,7 +31,7 @@ class Task < ApplicationRecord
     payroll_details
     matching_details
     payroll_gender
-    first_year_payment
+    first_year_application
     continuous_employment
   ].freeze
 

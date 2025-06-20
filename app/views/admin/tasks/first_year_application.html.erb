@@ -1,4 +1,4 @@
-<% content_for(:page_title) { "First year payment" } %>
+<% content_for(:page_title) { @form.task.name.humanize } %>
 
 <% content_for :back_link do %>
   <%= govuk_back_link href: admin_claim_tasks_path(@claim) %>
@@ -14,7 +14,7 @@
   <%= render(
     claim_summary_view,
     claim: @claim,
-    heading: "First year payment"
+    heading: @form.task.name.humanize
   ) %>
 
   <div class="govuk-grid-column-two-thirds">
@@ -137,7 +137,7 @@
     <% if !@form.task.passed.nil? %>
       <%= render "task_outcome", task: @form.task %>
     <% else %>
-      <%= render "form", task_name: "first_year_payment", claim: @claim %>
+      <%= render "form", task_name: @form.task.name, claim: @claim %>
     <% end %>
 
     <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>
