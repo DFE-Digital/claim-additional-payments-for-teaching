@@ -2,7 +2,7 @@ class ClaimsController < BasePublicController
   include PartOfClaimJourney
 
   skip_before_action :send_unstarted_claimants_to_the_start, if: -> do
-    %w{ new create signed_out }.include?(action_name) || navigator.current_slug == "confirmation"
+    %w[new create signed_out].include?(action_name) || navigator.current_slug == "confirmation"
   end
 
   before_action :create_session_if_skip_landing_page, if: :skip_landing_page?
