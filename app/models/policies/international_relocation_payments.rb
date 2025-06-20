@@ -54,7 +54,8 @@ module Policies
       :first_name,
       :middle_name,
       :surname,
-      :national_insurance_number
+      :national_insurance_number,
+      :passport_number
     ]
 
     # Claims from before this date will have their retained attributes deleted
