@@ -84,7 +84,7 @@ RSpec.feature "Early years payment provider" do
       .and change { Policies::EarlyYearsPayments::Eligibility.count }.by(1)
       .and change { ActionMailer::Base.deliveries.count }.by(2)
 
-    expect(page.current_path).to eq claim_confirmation_path(Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME)
+    expect(page.current_path).to eq claim_path(Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME, slug: "confirmation")
 
     claim = Claim.last
     expect(claim.provider_contact_name).to eq "John Doe"
