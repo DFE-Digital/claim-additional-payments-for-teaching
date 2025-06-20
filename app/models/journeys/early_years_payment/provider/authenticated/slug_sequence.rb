@@ -19,6 +19,7 @@ module Journeys
 
           RESULTS_SLUGS = %w[
             check-your-answers
+            confirmation
             ineligible
           ].freeze
 

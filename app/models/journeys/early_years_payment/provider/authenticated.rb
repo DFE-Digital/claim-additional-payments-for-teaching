@@ -22,6 +22,7 @@ module Journeys
             "returner-contract-type" => ReturnerContractTypeForm,
             "employee-email" => EmployeeEmailForm,
             "check-your-answers" => CheckYourAnswersForm,
+            "confirmation" => ConfirmationForm,
             "ineligible" => IneligibleForm,
             "expired-link" => ExpiredLinkForm
           }
