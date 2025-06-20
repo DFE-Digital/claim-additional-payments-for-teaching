@@ -765,7 +765,6 @@ en:
           suspected_fraud: Suspected fraud
           information_mismatch_new_details_needed: "Information mismatch - new details needed"
           ineligible_previous_residency: Ineligible previous residency
-          claimed_last_year: "Claimed last year"
       eligibility_answers:
         nationality: "Nationality"
         passport_number: "Passport number"

@@ -35,7 +35,6 @@ class ClaimMailer < ApplicationMailer
       ref_number: @claim.reference,
       support_email_address: @support_email_address,
       current_financial_year: (claim.policy == Policies::StudentLoans) ? Policies::StudentLoans.current_financial_year : "",
-      last_academic_year: rejected_reason_claimed_last_year? ? (AcademicYear.current - 1).to_s : "",
       **rejected_reasons_personalisation(@claim.latest_decision&.rejected_reasons_hash)
     }
 

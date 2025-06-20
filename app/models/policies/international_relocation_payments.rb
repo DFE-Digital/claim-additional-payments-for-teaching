@@ -25,8 +25,7 @@ module Policies
       :no_response_from_school,
       :suspected_fraud,
       :information_mismatch_new_details_needed,
-      :ineligible_previous_residency,
-      :claimed_last_year
+      :ineligible_previous_residency
     ]
 
     # Attributes to delete from claims submitted before the current academic
