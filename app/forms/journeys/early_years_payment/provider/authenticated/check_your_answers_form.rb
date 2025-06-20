@@ -23,7 +23,6 @@ module Journeys
               mark_service_access_code_as_used!
             end
 
-
             claim.policy.mailer.submitted(claim).deliver_later
             ClaimVerifierJob.perform_later(claim)
 

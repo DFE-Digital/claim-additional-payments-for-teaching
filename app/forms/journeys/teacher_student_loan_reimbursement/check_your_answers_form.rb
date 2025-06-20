@@ -36,9 +36,6 @@ module Journeys
       def clear_claim_session
         key = "#{Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME}_journeys_session_id"
         session.delete(key)
-
-        journey_session = nil
-        journey_sessions = []
       end
 
       def build_claim
