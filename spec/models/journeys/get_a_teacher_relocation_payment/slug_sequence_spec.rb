@@ -18,6 +18,7 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::SlugSequence do
       context "with default settings" do
         it do
           is_expected.to match_array %w[
+            previous-payment-received
             application-route
             state-funded-secondary-school
             current-school
