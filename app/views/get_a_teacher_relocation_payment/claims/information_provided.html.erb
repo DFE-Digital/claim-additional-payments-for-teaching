@@ -1,0 +1,67 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      How we’ll use the information you provide
+    </h1>
+
+    <h2 class="govuk-heading-m">
+      To check your eligibility for a second international relocation payment (IRP)
+    </h2>
+
+    <p class="govuk-body">
+      We’ll check the information you have provided with:
+    </p>
+
+    <%= govuk_list [
+      "the school where you currently work",
+      "any other schools you’ve worked in since you last claimed an IRP"
+    ], type: :bullet %>
+
+    <h2 class="govuk-heading-m">
+      To confirm your right to work in the UK
+    </h2>
+
+    <p class="govuk-body">
+      We’ll contact the Home Office to verify your immigration status and right to work in the UK.
+    </p>
+
+    <p class="govuk-body">
+      To complete the rest of the application, you’ll need to provide your:
+    </p>
+
+    <%= govuk_list [
+      "nationality",
+      "passport number"
+    ], type: :bullet %>
+
+    <h2 class="govuk-heading-m">
+      To pay you
+    </h2>
+
+    <p class="govuk-body">
+      The Department for Education (DfE) will make the payment directly to your bank account if your claim is approved.
+    </p>
+
+    <p class="govuk-body">
+      To do this, we’ll need your bank account details.
+    </p>
+
+    <%= govuk_inset_text(text: "The IRP must be paid into a UK bank account. It cannot be paid into a building society account.") %>
+
+    <h2 class="govuk-heading-m">
+      Income Tax and National Insurance
+    </h2>
+
+    <p class="govuk-body">
+      If your claim is approved, DfE will pay National Insurance and basic rate Income Tax on the IRP on your behalf.
+    </p>
+
+    <p class="govuk-body">
+      If you earn £50,270 or more a year, you’ll need to pay any Income Tax at the higher rate through PAYE.
+    </p>
+
+    <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

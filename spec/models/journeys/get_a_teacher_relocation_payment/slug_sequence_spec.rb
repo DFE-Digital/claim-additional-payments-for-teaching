@@ -30,6 +30,7 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::SlugSequence do
             visa
             entry-date
             check-your-answers-part-one
+            information-provided
             nationality
             passport-number
             personal-details
