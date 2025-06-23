@@ -1,10 +1,10 @@
 class ClaimsController < BasePublicController
   before_action :set_cache_headers
   before_action :check_whether_closed_for_submissions, if: :current_journey_routing_name
-  before_action :send_unstarted_claimants_to_the_start, if: :send_to_start?
-  helper_method :submitted_claim
-
   before_action :create_session_if_skip_landing_page, if: :skip_landing_page?
+  before_action :send_unstarted_claimants_to_the_start, if: :send_to_start?
+
+  helper_method :submitted_claim
 
   def create_session_if_skip_landing_page
     journey_session || create_journey_session!
