@@ -24,10 +24,6 @@ module Journeys
           true
         end
 
-        def skip_controller_callbacks?
-          true
-        end
-
         def completed?
           session[:submitted_claim_id].present?
         end

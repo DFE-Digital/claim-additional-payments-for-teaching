@@ -23,10 +23,6 @@ module Journeys
         true
       end
 
-      def skip_controller_callbacks?
-        true
-      end
-
       private
 
       def clear_claim_session
