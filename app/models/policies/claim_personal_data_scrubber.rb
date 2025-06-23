@@ -24,21 +24,23 @@ module Policies
 
       if policy_has_retained_attributes?
         claims_rejected_before(extended_period_end_date).where(
-          retained_personal_data_attributes_are_not_null
-        ).each do |claim|
+          retained_personal_data_removed_at: nil
+        ).includes(:amendments, :journey_session, :eligibility).each do |claim|
           Claim::Scrubber.scrub!(
             claim,
             personal_data_attributes_to_retain_for_extended_period
           )
+          claim.update!(retained_personal_data_removed_at: DateTime.now)
         end
 
         claims_paid_before(extended_period_end_date).where(
-          retained_personal_data_attributes_are_not_null
-        ).each do |claim|
+          retained_personal_data_removed_at: nil
+        ).includes(:amendments, :journey_session, :eligibility).each do |claim|
           Claim::Scrubber.scrub!(
             claim,
             personal_data_attributes_to_retain_for_extended_period
           )
+          claim.update!(retained_personal_data_removed_at: DateTime.now)
         end
       end
     end
@@ -63,14 +65,6 @@ module Policies
 
     def extended_period_end_date
       policy::EXTENDED_PERIOD_END_DATE.call(start_of_academic_year)
-    end
-
-    # If the policy defines an empty array of attributes to retain, return
-    # a scope that will be empty.
-    def retained_personal_data_attributes_are_not_null
-      personal_data_attributes_to_retain_for_extended_period.map do |attr|
-        "#{attr} IS NOT NULL"
-      end.join(" OR ").presence || "FALSE"
     end
 
     def claim_scope
