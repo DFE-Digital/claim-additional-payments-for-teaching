@@ -218,8 +218,8 @@ en:
       teaching_hours:
         name: Teaching hours
         title: "Check teaching hours"
-      first_year_payment:
-        name: First year payment
+      first_year_application:
+        name: First year application
         title: "Confirm this user has claimed their first year payment"
       continuous_employment:
         name: Continuous employment
@@ -778,7 +778,7 @@ en:
         identity_confirmation:
           title: Verify claimants’ identity
       task_questions:
-        first_year_payment:
+        first_year_application:
           title: "Did the claimant receive their first payment for the 2024 to 2025 academic year?"
         previous_payment:
           title: The claimant has not received an IRP payment in AY 2023/24?
