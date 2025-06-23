@@ -6,7 +6,7 @@ RSpec.describe Policies::InternationalRelocationPayments::ClaimPersonalDataScrub
     Policies::InternationalRelocationPayments
   )
 
-  it "retains name and national insurance number for 2 years" do
+  it "retains name, passport, and national insurance number for 2 years" do
     last_academic_year = Time.zone.local(AcademicYear.current.start_year, 8, 1, 12)
 
     approved_claim = create(
@@ -16,7 +16,10 @@ RSpec.describe Policies::InternationalRelocationPayments::ClaimPersonalDataScrub
       national_insurance_number: "AB123456C",
       first_name: "John",
       middle_name: "James",
-      surname: "Doe"
+      surname: "Doe",
+      eligibility_attributes: {
+        passport_number: "123456789"
+      }
     )
 
     create(
@@ -51,21 +54,44 @@ RSpec.describe Policies::InternationalRelocationPayments::ClaimPersonalDataScrub
       created_at: last_academic_year
     )
 
-    claim_expected_not_to_change = create(
+    claim_expected_not_to_change_1 = create(
       :claim,
       :submitted,
       policy: Policies::InternationalRelocationPayments,
       national_insurance_number: "AB123456D",
       first_name: "Jane",
-      surname: "Smith"
+      surname: "Smith",
+      eligibility_attributes: {
+        passport_number: "987654321"
+      }
     )
 
     create(
       :decision,
       :approved,
-      claim: claim_expected_not_to_change,
+      claim: claim_expected_not_to_change_1,
       created_at: last_academic_year,
       undone: true
+    )
+
+    # Claim rejected this year
+    claim_expected_not_to_change_2 = create(
+      :claim,
+      :submitted,
+      policy: Policies::InternationalRelocationPayments,
+      national_insurance_number: "AB123456D",
+      first_name: "Jane",
+      surname: "Smith",
+      eligibility_attributes: {
+        passport_number: "987654321"
+      }
+    )
+
+    create(
+      :decision,
+      :rejected,
+      claim: claim_expected_not_to_change_2,
+      created_at: AcademicYear.current.start_of_autumn_term
     )
 
     expect { described_class.new.scrub_completed_claims }.to(
@@ -76,6 +102,8 @@ RSpec.describe Policies::InternationalRelocationPayments::ClaimPersonalDataScrub
         not_change { approved_claim.reload.surname }
       ).and(
         not_change { approved_claim.reload.national_insurance_number }
+      ).and(
+        not_change { approved_claim.reload.eligibility.passport_number }
       ).and(
         not_change { rejected_claim.reload.first_name }
       ).and(
@@ -95,19 +123,31 @@ RSpec.describe Policies::InternationalRelocationPayments::ClaimPersonalDataScrub
         ).and(
           change { approved_claim.reload.national_insurance_number }.to(nil)
         ).and(
+          change { approved_claim.reload.eligibility.passport_number }.to(nil)
+        ).and(
           change { rejected_claim.reload.first_name }.to(nil)
         ).and(
           change { rejected_claim.reload.surname }.to(nil)
         ).and(
           change { rejected_claim.reload.national_insurance_number }.to(nil)
         ).and(
-          not_change { claim_expected_not_to_change.reload.first_name }
+          not_change { claim_expected_not_to_change_1.reload.first_name }
         ).and(
-          not_change { claim_expected_not_to_change.reload.middle_name }
+          not_change { claim_expected_not_to_change_1.reload.middle_name }
         ).and(
-          not_change { claim_expected_not_to_change.reload.surname }
+          not_change { claim_expected_not_to_change_1.reload.surname }
         ).and(
-          not_change { claim_expected_not_to_change.reload.national_insurance_number }
+          not_change { claim_expected_not_to_change_1.reload.national_insurance_number }
+        ).and(
+          not_change { claim_expected_not_to_change_1.reload.eligibility.passport_number }
+        ).and(
+          not_change { claim_expected_not_to_change_2.reload.first_name }
+        ).and(
+          not_change { claim_expected_not_to_change_2.reload.surname }
+        ).and(
+          not_change { claim_expected_not_to_change_2.reload.national_insurance_number }
+        ).and(
+          not_change { claim_expected_not_to_change_2.reload.eligibility.passport_number }
         )
       )
     end

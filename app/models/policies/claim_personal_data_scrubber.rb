@@ -23,23 +23,7 @@ module Policies
       end
 
       if policy_has_retained_attributes?
-        claims_rejected_before(extended_period_end_date).where(
-          retained_personal_data_attributes_are_not_null
-        ).each do |claim|
-          Claim::Scrubber.scrub!(
-            claim,
-            personal_data_attributes_to_retain_for_extended_period
-          )
-        end
-
-        claims_paid_before(extended_period_end_date).where(
-          retained_personal_data_attributes_are_not_null
-        ).each do |claim|
-          Claim::Scrubber.scrub!(
-            claim,
-            personal_data_attributes_to_retain_for_extended_period
-          )
-        end
+        scrub_retained_claims
       end
     end
 
@@ -63,14 +47,6 @@ module Policies
 
     def extended_period_end_date
       policy::EXTENDED_PERIOD_END_DATE.call(start_of_academic_year)
-    end
-
-    # If the policy defines an empty array of attributes to retain, return
-    # a scope that will be empty.
-    def retained_personal_data_attributes_are_not_null
-      personal_data_attributes_to_retain_for_extended_period.map do |attr|
-        "#{attr} IS NOT NULL"
-      end.join(" OR ").presence || "FALSE"
     end
 
     def claim_scope
@@ -105,6 +81,49 @@ module Policies
 
       claim_scope.approved.joins(payments: [:payroll_run])
         .where.not(id: claim_ids_with_payrollable_topups + claim_ids_with_payrolled_topups_without_payment_confirmation)
+    end
+
+    def scrub_retained_claims
+      # The eligibility attributes and claim attributes are defined in the same
+      # constant so we need to separate them to avoid undefined attribute
+      # errors.
+      eligibility_attributes = policy::Eligibility.attribute_names.select do |attr|
+        personal_data_attributes_to_retain_for_extended_period.include?(attr.to_sym)
+      end
+
+      claim_attributes = Claim.attribute_names.select do |attr|
+        personal_data_attributes_to_retain_for_extended_period.include?(attr.to_sym)
+      end
+
+      # Find the claims from before the extended period end date
+      old_claims = Claim.where(
+        id: claims_rejected_before(extended_period_end_date)
+      ).or(
+        Claim.where(id: claims_paid_before(extended_period_end_date))
+      )
+
+      # Generate the filter on eligibility attributes
+      eligibilities_with_unscrubbed_pii = eligibility_attributes.map do |attr|
+        policy::Eligibility.where.not(attr => nil)
+      end.reduce(:or)
+
+      # Generate the filter on claim attributes
+      claims_with_unscrubbed_pii = claim_attributes.map do |attr|
+        Claim.where.not(attr => nil)
+      end.reduce(:or)
+
+      policy::Eligibility
+        .joins(:claim)
+        .merge(old_claims)
+        .merge(eligibilities_with_unscrubbed_pii)
+        .merge(claims_with_unscrubbed_pii)
+        .includes(claim: [:amendments, :journey_session])
+        .each do |eligibility|
+          Claim::Scrubber.scrub!(
+            eligibility.claim,
+            policy::PERSONAL_DATA_ATTRIBUTES_TO_RETAIN_FOR_EXTENDED_PERIOD
+          )
+        end
     end
 
     def start_of_academic_year
