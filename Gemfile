@@ -84,6 +84,7 @@ gem "mission_control-jobs"
 
 gem "slack-notifier"
 
+gem "vernier"
 gem "sentry-ruby"
 gem "sentry-rails"
 

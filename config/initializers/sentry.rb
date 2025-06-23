@@ -4,6 +4,8 @@ Sentry.init do |config|
   config.breadcrumbs_logger = [:active_support_logger]
   config.dsn = ENV["SENTRY_DSN"]
   config.traces_sample_rate = 1.0
+  config.profiles_sample_rate = 0.05
+  config.profiler_class = Sentry::Vernier::Profiler
   config.release = ENV["GIT_COMMIT_HASH"]
 
   config.traces_sampler = lambda do |sampling_context|
