@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/DFE-Digital/dfe-analytics.git
-  revision: 53a373781df8ed73dbc8d42ffe31d40da8e284af
-  tag: v1.15.5
+  revision: 14be35cf91c1ca86a18bd87243444cb3e2d9fae2
+  tag: v1.15.6
   specs:
-    dfe-analytics (1.15.5)
+    dfe-analytics (1.15.6)
       google-cloud-bigquery (~> 1.38)
       httparty (~> 0.21)
       multi_xml (~> 0.6.0)
@@ -123,7 +123,7 @@ GEM
       bigdecimal
       rexml
     crass (1.0.6)
-    csv (3.3.4)
+    csv (3.3.5)
     cuprite (0.17)
       capybara (~> 3.0)
       ferrum (~> 0.17.0)
@@ -163,10 +163,10 @@ GEM
       faraday-retry (~> 1.0)
       ruby2_keywords (>= 0.0.4)
     faraday-em_http (1.0.0)
-    faraday-em_synchrony (1.0.0)
+    faraday-em_synchrony (1.0.1)
     faraday-excon (1.1.0)
     faraday-httpclient (1.0.1)
-    faraday-multipart (1.1.0)
+    faraday-multipart (1.1.1)
       multipart-post (~> 2.0)
     faraday-net_http (1.0.2)
     faraday-net_http_persistent (1.2.0)
@@ -188,9 +188,9 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    google-apis-bigquery_v2 (0.86.0)
+    google-apis-bigquery_v2 (0.89.0)
       google-apis-core (>= 0.15.0, < 2.a)
-    google-apis-core (0.16.0)
+    google-apis-core (0.18.0)
       addressable (~> 2.5, >= 2.5.1)
       googleauth (~> 1.9)
       httpclient (>= 2.8.3, < 3.a)
@@ -198,7 +198,7 @@ GEM
       mutex_m
       representable (~> 3.0)
       retriable (>= 2.0, < 4.a)
-    google-cloud-bigquery (1.52.0)
+    google-cloud-bigquery (1.52.1)
       bigdecimal (~> 3.0)
       concurrent-ruby (~> 1.0)
       google-apis-bigquery_v2 (~> 0.71)
@@ -209,11 +209,11 @@ GEM
     google-cloud-core (1.8.0)
       google-cloud-env (>= 1.0, < 3.a)
       google-cloud-errors (~> 1.0)
-    google-cloud-env (2.2.2)
+    google-cloud-env (2.3.1)
       base64 (~> 0.2)
       faraday (>= 1.0, < 3.a)
     google-cloud-errors (1.5.0)
-    google-logging-utils (0.1.0)
+    google-logging-utils (0.2.0)
     google-protobuf (4.31.1-arm64-darwin)
       bigdecimal
       rake (>= 13)
@@ -784,7 +784,7 @@ GEM
       concurrent-ruby (~> 1.0, >= 1.0.2)
     shoulda-matchers (6.5.0)
       activesupport (>= 5.2.0)
-    signet (0.19.0)
+    signet (0.20.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
       jwt (>= 1.5, < 3.0)
