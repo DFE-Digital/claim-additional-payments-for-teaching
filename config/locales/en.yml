@@ -630,6 +630,15 @@ en:
     claim_subject: "International relocation payment"
     support_email_address: "international.RELOCATIONPAYMENT@education.gov.uk"
     forms:
+      previous_payment_received:
+        question: "Have you previously received an international relocation payment?"
+        answers:
+          true:
+            answer: "Yes"
+          false:
+            answer: "No"
+        errors:
+          inclusion: "Select Yes if you have previously received an international relocation payment"
       application_route:
         question: "What is your employment status?"
         hint: "Select one of the following options"

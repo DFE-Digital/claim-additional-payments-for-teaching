@@ -13,6 +13,7 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
     let(:answers) do
       build(
         :get_a_teacher_relocation_payment_answers,
+        :with_previous_payment_received,
         :with_teacher_application_route,
         :with_state_funded_secondary_school,
         :with_current_school,
@@ -30,6 +31,11 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::AnswersPresenter do
 
     it do
       is_expected.to include(
+        [
+          "Have you previously received an international relocation payment?",
+          "Yes",
+          "previous-payment-received"
+        ],
         [
           "What is your employment status?",
           "I am employed as a teacher in a school in England",

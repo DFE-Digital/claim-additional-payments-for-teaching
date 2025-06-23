@@ -1,0 +1,36 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t("question"),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for(
+      @form,
+      url: @form.url,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_collection_radio_buttons(
+        :previous_payment_received,
+        f.object.radio_options,
+        :id,
+        :name,
+        legend: {
+          text: f.object.t("question"),
+          size: "l",
+          tag: "h1"
+        },
+        inline: true,
+      ) %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>
+
