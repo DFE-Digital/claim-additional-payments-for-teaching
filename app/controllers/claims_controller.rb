@@ -23,7 +23,6 @@ class ClaimsController < BasePublicController
   # ordering of these includes is important
   # moving them elsewhere will likely cause issues
   include FormSubmittable
-  include ClaimsFormCallbacks
 
   def existing_session
     @existing_session = journey_sessions.first
