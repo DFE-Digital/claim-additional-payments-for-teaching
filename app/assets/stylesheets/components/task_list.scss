@@ -28,8 +28,6 @@ https://design-system.service.gov.uk/patterns/task-list-pages/
 }
 
 .app-task-list__section-number {
-  display: table-cell;
-
   @include govuk-media-query($from: tablet) {
     min-width: govuk-spacing(6);
     padding-right: 0;
