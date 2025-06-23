@@ -1,32 +1,30 @@
-<%= render("shared/error_summary", instance: @form) if @form.errors.any? %>
+<%= form_with(model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |f| %>
+  <%= f.govuk_error_summary %>
 
-<%= form_for @form, url: @form.url do |form| %>
-  <%= form_group_tag form.object do %>
-    <fieldset class="govuk-fieldset" aria-describedby="school-search-result-hint">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-        <h1 class="govuk-fieldset__heading">
-          <%= t("targeted_retention_incentive_payments.forms.correct_school.questions.which_school") %>
-        </h1>
-      </legend>
+  <%= f.govuk_radio_buttons_fieldset(
+    :current_school_id,
+    legend: {
+      size: "xl",
+      text: t("targeted_retention_incentive_payments.forms.correct_school.questions.which_school")
+    }
+  ) do %>
+      <%= f.govuk_radio_button(
+        :current_school_id,
+        @form.current_school_id,
+        label: { text: @form.current_school_name },
+        hint: { text: @form.current_school_address },
+        link_errors: true
+      ) %>
 
-      <%= errors_tag @form, :current_school %>
+      <%= f.govuk_radio_divider %>
 
-      <div class="govuk-radios">
-        <div class="govuk-radios__item">
-          <%= form.radio_button(:current_school_id, @form.current_school_id, class: "govuk-radios__input") %>
-          <%= form.label "current_school_id_#{@form.current_school_id}", @form.current_school_name, class: "govuk-label govuk-radios__label" %>
-          <div id="school-checker-item-hint" class="govuk-hint govuk-radios__hint">
-            <%= @form.current_school_address %>
-          </div>
-        </div>
-        <div class="govuk-radios__divider">or</div>
-        <div class="govuk-radios__item">
-          <%= form.radio_button(:current_school_id, "somewhere_else", checked: @form.school_somewhere_else?, class: "govuk-radios__input") %>
-          <%= form.label "current_school_id_somewhere_else", "Somewhere else", class: "govuk-label govuk-radios__label" %>
-        </div>
-      </div>
-    </fieldset>
-  <% end %>
+      <%= f.govuk_radio_button(
+        :current_school_id,
+        "somewhere_else",
+        label: { text: "Somewhere else" }
+      ) %>
+    <% end %>
 
-  <%= form.submit "Continue", class: "govuk-button" %>
+  <%= f.govuk_submit %>
+
 <% end %>

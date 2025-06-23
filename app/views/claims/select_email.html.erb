@@ -1,45 +1,49 @@
-<% content_for(:page_title, page_title(t("forms.select_email.questions.select_email"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+<% content_for(
+  :page_title,
+  page_title(
+    t("forms.select_email.questions.select_email"),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: @form, errored_field_id_overrides: { email_address_check: "claim_email_address_check_true", email_address: "claim_email_address_check_false" }) if @form.errors.any? %>
-    <%= form_for @form, url: @form.url do |f| %>
-      <span class="govuk-caption-xl"><%= t("questions.personal_details") %></span>
-      <%= form_group_tag @form do %>
+    <%= form_with(model: @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |f| %>
+      <%= f.govuk_error_summary %>
 
-        <fieldset class="govuk-fieldset" aria-describedby="email-address-hint">
+      <%= f.govuk_radio_buttons_fieldset(
+        :email_address_check,
+        caption: {
+          text: t("questions.personal_details"),
+          size: "xl"
+        },
+        legend: {
+          size: "xl",
+          text: t("forms.select_email.questions.select_email")
+        },
+        hint: {
+          text: t("forms.select_email.hints.non_work_email_address")
+        }
+      ) do %>
+          <%= f.govuk_radio_button(
+            :email_address_check,
+            true,
+            label: { text: f.object.email_address_from_teacher_id },
+            link_errors: true
+          ) %>
 
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-            <h1 class="govuk-fieldset__heading">
-              <%= t("forms.select_email.questions.select_email") %>
-            </h1>
-          </legend>
+          <%= f.govuk_radio_divider %>
 
-          <div class="govuk-hint" id="email-address-hint">
-              <%= t("forms.select_email.hints.non_work_email_address") %>
-          </div>
+          <%= f.govuk_radio_button(
+            :email_address_check,
+            false,
+            label: { text: "A different email address" },
+          ) %>
+        <% end %>
 
-          <%= errors_tag f.object, :email_address %>
+      <%= f.govuk_submit %>
 
-          <div class="govuk-radios">
-
-            <div class="govuk-radios__item">
-              <%= f.radio_button(:email_address_check, true, class: "govuk-radios__input") %>
-              <%= f.label :email_address_check_true, f.object.email_address_from_teacher_id, class: "govuk-label govuk-radios__label" %>
-            </div>
-            <div class="govuk-radios__divider">or</div>
-            <div class="govuk-radios__item">
-              <%= f.radio_button(:email_address_check, false, class: "govuk-radios__input") %>
-              <%= f.label :email_address_check_false, "A different email address", class: "govuk-label govuk-radios__label" %>
-            </div>
-
-          </div>
-
-        </fieldset>
-
-      <% end %>
-
-      <%= f.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
     <% end %>
   </div>
 </div>

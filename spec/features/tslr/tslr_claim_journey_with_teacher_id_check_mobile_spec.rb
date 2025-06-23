@@ -13,7 +13,7 @@ RSpec.feature "TSLR journey with Teacher ID mobile check" do
   let(:otp_code) { "010101" }
 
   before do
-    set_mock_auth(trn, {date_of_birth:, nino:})
+    set_mock_auth(trn, {date_of_birth:, nino:, email: "kelsie.oberbrunner@example.com"}, phone_number: "01234567890")
     stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
     stub_otp_verification(otp_code:)
   end
@@ -148,7 +148,7 @@ RSpec.feature "TSLR journey with Teacher ID mobile check" do
     fill_in_address
 
     # - Select the suggested email address
-    find("#claim_email_address_check_true").click
+    choose "kelsie.oberbrunner@example.com"
     click_on "Continue"
   end
 
@@ -185,12 +185,12 @@ RSpec.feature "TSLR journey with Teacher ID mobile check" do
   end
 
   def use_teacher_id_number
-    find("#claim_mobile_check_use").click
+    choose "01234567890"
     click_on "Continue"
   end
 
   def provide_alternative_number
-    find("#claim_mobile_check_alternative").click
+    choose "A different mobile number"
     click_on "Continue"
 
     fill_in "Mobile number", with: alt_phone_number
@@ -201,7 +201,7 @@ RSpec.feature "TSLR journey with Teacher ID mobile check" do
   end
 
   def decline_to_be_contacted_by_mobile
-    find("#claim_mobile_check_declined").click
+    choose "I do not want to be contacted by mobile"
     click_on "Continue"
   end
 
