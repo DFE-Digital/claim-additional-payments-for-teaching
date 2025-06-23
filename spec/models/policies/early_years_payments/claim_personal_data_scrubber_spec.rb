@@ -322,4 +322,46 @@ RSpec.describe Policies::EarlyYearsPayments::ClaimPersonalDataScrubber do
       ).to be_blank
     end
   end
+
+  it "removes personal details from the eligibility" do
+    claim_1 = create(
+      :claim,
+      :submitted,
+      policy: policy,
+      eligibility_attributes: {
+        provider_email_address: "test@example.com",
+        practitioner_first_name: "John",
+        practitioner_surname: "Doe"
+      }
+    )
+
+    create(:decision, :rejected, claim: claim_1, created_at: over_1_ago)
+
+    claim_2 = create(
+      :claim,
+      :submitted,
+      policy: policy,
+      eligibility_attributes: {
+        provider_email_address: "test@example.com",
+        practitioner_first_name: "John",
+        practitioner_surname: "Doe"
+      }
+    )
+
+    create(:decision, :rejected, claim: claim_2, created_at: over_1_ago + 1.week)
+
+    personal_data_scrubber
+
+    eligibility_1 = claim_1.reload.eligibility
+
+    expect(eligibility_1.provider_email_address).to be_blank
+    expect(eligibility_1.practitioner_first_name).to be_blank
+    expect(eligibility_1.practitioner_surname).to be_blank
+
+    eligibility_2 = claim_2.reload.eligibility
+
+    expect(eligibility_2.provider_email_address).to eq "test@example.com"
+    expect(eligibility_2.practitioner_first_name).to eq "John"
+    expect(eligibility_2.practitioner_surname).to eq "Doe"
+  end
 end
