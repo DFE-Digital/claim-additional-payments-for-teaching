@@ -16,6 +16,7 @@ class Claim
       ApplicationRecord.transaction do
         claim.amendments.each { |amendment| scrub_amendment!(amendment) }
         scrub_claim!
+        scrub_eligibility!
         scrub_session!
       end
     end
@@ -31,11 +32,18 @@ class Claim
     end
 
     def scrub_claim!
-      personal_data_mask = attributes_to_delete.to_h { |attr| [attr, nil] }
+      attributes_to_scrub = attributes_to_delete & claim.attribute_names
+      personal_data_mask = attributes_to_scrub.to_h { |attr| [attr, nil] }
       attributes_to_set = personal_data_mask.merge(
         personal_data_removed_at: Time.zone.now
       )
       claim.update!(attributes_to_set)
+    end
+
+    def scrub_eligibility!
+      attributes_to_scrub = attributes_to_delete & claim.eligibility.attribute_names
+      attributes_to_set = attributes_to_scrub.to_h { |attr| [attr, nil] }
+      claim.eligibility.update!(attributes_to_set)
     end
 
     def scrub_session!

@@ -12,13 +12,13 @@ module Policies
     def scrub_completed_claims
       old_rejected_claims
         .unscrubbed
-        .includes(:amendments, :journey_session).each do |claim|
+        .includes(:amendments, :journey_session, :eligibility).each do |claim|
         Claim::Scrubber.scrub!(claim, personal_data_attributes_to_delete)
       end
 
       old_paid_claims
         .unscrubbed
-        .includes(:amendments, :journey_session).each do |claim|
+        .includes(:amendments, :journey_session, :eligibility).each do |claim|
         Claim::Scrubber.scrub!(claim, personal_data_attributes_to_delete)
       end
 
