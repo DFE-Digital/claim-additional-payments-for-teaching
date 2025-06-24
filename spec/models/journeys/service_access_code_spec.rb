@@ -55,8 +55,11 @@ RSpec.describe Journeys::ServiceAccessCode, type: :model do
         answers: answers
       )
 
-      form = Journeys::FurtherEducationPayments::ClaimSubmissionForm.new(
-        journey_session: journey_session
+      form = Journeys::FurtherEducationPayments::CheckYourAnswersForm.new(
+        journey_session: journey_session,
+        session: {},
+        journey: Journeys::FurtherEducationPayments,
+        params: ActionController::Parameters.new
       )
 
       expect(form.save).to be true

@@ -18,6 +18,7 @@ module Journeys
           personal-bank-account
           gender
           check-your-answers
+          confirmation
           ineligible
         ].freeze
 
@@ -60,7 +61,12 @@ module Journeys
             sequence << "personal-bank-account"
             sequence << "gender"
             sequence << "check-your-answers"
+            sequence << "confirmation"
           end
+        end
+
+        def journey
+          Journeys::EarlyYearsPayment::Practitioner
         end
 
         private

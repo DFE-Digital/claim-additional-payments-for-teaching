@@ -2,7 +2,7 @@
 module Journeys
   module FurtherEducationPayments
     module Provider
-      class CompleteForm < Form
+      class ConfirmationForm < Form
         def initialize(journey_session)
           @journey_session = journey_session
         end

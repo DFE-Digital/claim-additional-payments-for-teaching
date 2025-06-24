@@ -46,7 +46,8 @@
 
     <%= form_with(
       model: @form,
-      url: claim_path(current_journey_routing_name),
+      url: @form.url,
+      method: :patch,
       builder: GOVUKDesignSystemFormBuilder::FormBuilder,
       html: { novalidate: false }
     ) do |f| %>

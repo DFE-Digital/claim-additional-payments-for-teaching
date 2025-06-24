@@ -616,6 +616,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
             gender
             teacher-reference-number
             check-your-answers
+            confirmation
           ]
         end
       end

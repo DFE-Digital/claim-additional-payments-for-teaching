@@ -13,6 +13,8 @@ module Journeys
           "find-reference" => FindReferenceForm,
           "personal-bank-account" => BankDetailsForm,
           "how-we-use-your-information" => HowWeUseYourInformationForm,
+          "check-your-answers" => CheckYourAnswersForm,
+          "confirmation" => ConfirmationForm,
           "ineligible" => IneligibleForm
         }
       }

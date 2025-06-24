@@ -19,6 +19,7 @@ module Journeys
 
           RESULTS_SLUGS = %w[
             check-your-answers
+            confirmation
             ineligible
           ].freeze
 
@@ -66,6 +67,10 @@ module Journeys
 
           def magic_link?(slug)
             slug == MAGIC_LINK_SLUG
+          end
+
+          def journey
+            Journeys::EarlyYearsPayment::Provider::Authenticated
           end
         end
       end

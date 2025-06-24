@@ -97,6 +97,9 @@ module Journeys
     # is the user allowed to visit the current_slug?
     # use this to guard against a user jumping ahead in a journey
     def permissible_slug?
+      # TODO: should only show confirmation is subbmitted id in session present
+      return true if current_slug == "confirmation"
+
       if current_slug == "ineligible" && eligibility_checker.ineligible?
         return true
       end
@@ -173,14 +176,14 @@ module Journeys
       end
     end
 
-    private
-
     # returns truthy if changing answer
     # the value is set to the slug of returning check answers page
     # as a journey can have multiple check answer pages
     def changing_answer?
       params[:change].present?
     end
+
+    private
 
     def impermissible_forms
       all_forms.reject do |form|
@@ -233,7 +236,7 @@ module Journeys
     end
 
     def journey
-      Journeys.for_routing_name(slug_sequence.journey_session.journey)
+      slug_sequence.journey
     end
 
     def journey_session

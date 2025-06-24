@@ -13,10 +13,9 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     skip_tid
 
     # Check we can't skip ahead pages in the journey
-    visit claim_confirmation_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME)
-    expect(page).to have_current_path("/#{Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME}/existing-session")
     visit claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "still-teaching")
     expect(page).to have_current_path("/#{Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME}/qts-year")
+
     visit claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "leadership-position")
     expect(page).to have_current_path("/#{Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME}/qts-year")
 

@@ -341,8 +341,11 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
         expect(session.reload.answers.email_verified).to eq true
         expect(
-          Journeys::TargetedRetentionIncentivePayments::ClaimSubmissionForm.new(
-            journey_session: session
+          Journeys::TargetedRetentionIncentivePayments::CheckYourAnswersForm.new(
+            journey_session: session,
+            session: {},
+            params: ActionController::Parameters.new,
+            journey: Journeys::TargetedRetentionIncentivePayments
           )
         ).to be_valid
         expect(page).to have_content("Check your answers before sending your application")
@@ -399,8 +402,11 @@ RSpec.feature "Changing the answers on a submittable claim" do
         expect(page).not_to have_text("Some places are both a bank and a building society")
         expect(session.reload.answers.mobile_verified).to eq true
         expect(
-          Journeys::TargetedRetentionIncentivePayments::ClaimSubmissionForm.new(
-            journey_session: session
+          Journeys::TargetedRetentionIncentivePayments::CheckYourAnswersForm.new(
+            journey_session: session,
+            session: {},
+            params: ActionController::Parameters.new,
+            journey: Journeys::TargetedRetentionIncentivePayments
           )
         ).to be_valid
         expect(page).to have_content("Check your answers before sending your application")
@@ -449,8 +455,11 @@ RSpec.feature "Changing the answers on a submittable claim" do
         expect(page).not_to have_text("Some places are both a bank and a building society")
         expect(session.reload.answers.mobile_verified).to eq true
         expect(
-          Journeys::TargetedRetentionIncentivePayments::ClaimSubmissionForm.new(
-            journey_session: session
+          Journeys::TargetedRetentionIncentivePayments::CheckYourAnswersForm.new(
+            journey_session: session,
+            session: {},
+            params: ActionController::Parameters.new,
+            journey: Journeys::TargetedRetentionIncentivePayments
           )
         ).to be_valid
         expect(page).to have_content("Check your answers before sending your application")
