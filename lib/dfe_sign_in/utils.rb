@@ -2,11 +2,11 @@ module DfeSignIn
   module Utils
     def generate_jwt_token
       payload = {
-        iss: DfeSignIn.configuration.client_id,
+        iss: DfeSignIn.configuration_for_client_id(ENV.fetch("DFE_SIGN_IN_API_CLIENT_ID")).client_id,
         exp: (Time.now.getlocal + 60).to_i,
         aud: "signin.education.gov.uk"
       }
-      JWT.encode(payload, DfeSignIn.configuration.secret, "HS256")
+      JWT.encode(payload, DfeSignIn.configuration_for_client_id(ENV.fetch("DFE_SIGN_IN_API_CLIENT_ID")).secret, "HS256")
     end
 
     def get(uri)

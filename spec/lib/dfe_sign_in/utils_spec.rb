@@ -15,9 +15,9 @@ RSpec.describe DfeSignIn::Utils do
     end
 
     it "has the correct information" do
-      payload = JWT.decode(jwt_token, DfeSignIn.configuration.secret, true, {algorithm: "HS256"})
+      payload = JWT.decode(jwt_token, DfeSignIn.configuration_for_client_id(ENV.fetch("DFE_SIGN_IN_API_CLIENT_ID")).secret, true, {algorithm: "HS256"})
       expect(payload.first).to eq({
-        "iss" => DfeSignIn.configuration.client_id,
+        "iss" => DfeSignIn.configuration_for_client_id(ENV.fetch("DFE_SIGN_IN_API_CLIENT_ID")).client_id,
         "exp" => (Time.now.getlocal + 60).to_i,
         "aud" => "signin.education.gov.uk"
       })
