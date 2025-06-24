@@ -97,6 +97,9 @@ module Journeys
     # is the user allowed to visit the current_slug?
     # use this to guard against a user jumping ahead in a journey
     def permissible_slug?
+      # TODO: should only show confirmation is subbmitted id in session present
+      return true if current_slug == "confirmation"
+
       if current_slug == "ineligible" && eligibility_checker.ineligible?
         return true
       end

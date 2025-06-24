@@ -115,8 +115,6 @@ class ClaimsController < BasePublicController
   end
 
   def check_page_is_permissible
-    return if navigator.current_slug == "confirmation"
-
     unless navigator.permissible_slug?
       redirect_to claim_path(current_journey_routing_name, navigator.furthest_permissible_slug)
     end
