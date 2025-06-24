@@ -26,7 +26,7 @@ module DfeSignIn
         end
 
         def all_users_endpoint
-          URI.join(DfeSignIn.configuration.base_url, "/users")
+          URI.join(DfeSignIn.configuration_for_client_id(ENV.fetch("DFE_SIGN_IN_API_CLIENT_ID")).base_url, "/users")
         end
 
         def get_users
@@ -81,8 +81,8 @@ module DfeSignIn
 
       def response
         @response ||= begin
-          uri = URI(DfeSignIn.configuration.base_url)
-          uri.path = "/services/#{DfeSignIn.configuration.client_id}/organisations/#{organisation_id}/users/#{user_id}"
+          uri = URI(DfeSignIn.configuration_for_client_id(ENV.fetch("DFE_SIGN_IN_API_CLIENT_ID")).base_url)
+          uri.path = "/services/#{DfeSignIn.configuration_for_client_id(ENV.fetch("DFE_SIGN_IN_API_CLIENT_ID")).client_id}/organisations/#{organisation_id}/users/#{user_id}"
           dfe_sign_in_request(uri)
         end
       end
