@@ -113,7 +113,7 @@ module DfeSignInHelpers
   end
 
   def stub_dfe_sign_in_user_list_request(number_of_pages: 1, page_number: nil)
-    url = "#{DfeSignIn.configuration.base_url}/users"
+    url = "#{DfeSignIn.configuration_for_client_id(ENV.fetch("DFE_SIGN_IN_API_CLIENT_ID")).base_url}/users"
     url = "#{url}?page=#{page_number}" if page_number
 
     response = {
@@ -159,8 +159,11 @@ module DfeSignInHelpers
   end
 
   def dfe_sign_in_user_info_url(user_id, organisation_id)
-    api_client_id = DfeSignIn.configuration.client_id
-    api_base_url = DfeSignIn.configuration.base_url
+    config = DfeSignIn.configuration_for_client_id("teacherpayments")
+
+    api_client_id = config.client_id
+    api_base_url = config.base_url
+
     "#{api_base_url}/services/#{api_client_id}/organisations/#{organisation_id}/users/#{user_id}"
   end
 end

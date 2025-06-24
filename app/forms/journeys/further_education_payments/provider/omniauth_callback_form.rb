@@ -86,7 +86,7 @@ module Journeys
 
           ukprn = journey_session.answers.claim.school.ukprn
 
-          uri = URI(DfeSignIn.configuration.base_url)
+          uri = URI(DfeSignIn.configuration_for_client_id(ENV.fetch("DFE_SIGN_IN_API_CLIENT_ID")).base_url)
           uri.path = "/organisations/#{ukprn}/users"
           uri.query = {email: dfe_sign_in_email}.to_query
 

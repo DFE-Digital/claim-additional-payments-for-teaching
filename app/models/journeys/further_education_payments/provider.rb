@@ -29,7 +29,7 @@ module Journeys
       def self.request_service_access_url(dfe_sign_in_uid)
         [
           "https://services.signin.education.gov.uk",
-          "request-service", DfeSignIn.configuration.client_id,
+          "request-service", DfeSignIn.configuration_for_client_id(ENV.fetch("DFE_SIGN_IN_API_CLIENT_ID")).client_id,
           "users", dfe_sign_in_uid
         ].join("/")
       end
@@ -38,7 +38,7 @@ module Journeys
         dfe_sign_out_redirect_uri = URI.join(ENV.fetch("DFE_SIGN_IN_ISSUER"), "/session/end")
 
         post_logout_redirect_uri = URI.join(ENV.fetch("DFE_SIGN_IN_REDIRECT_BASE_URL"), "/further-education-payments-provider/auth/sign-out")
-        client_id = DfeSignIn.configuration.client_id
+        client_id = DfeSignIn.configuration_for_client_id(ENV.fetch("DFE_SIGN_IN_API_CLIENT_ID")).client_id
 
         params = {
           post_logout_redirect_uri:,
