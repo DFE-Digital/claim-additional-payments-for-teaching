@@ -8,12 +8,12 @@
 
       <div class="govuk-panel__body">
         Your reference number<br>
-        <strong><%= submitted_claim.reference %></strong>
+        <strong><%= @form.reference %></strong>
       </div>
     </div>
 
     <p class="govuk-body">
-      We’ve sent a confirmation email to <%= submitted_claim.email_address %>.
+      We’ve sent a confirmation email to <%= @form.email_address %>.
     </p>
 
     <h2 class="govuk-heading-m">What happens next?</h2>
