@@ -59,6 +59,9 @@ en:
     reminders:
       full_name: Full name
     forms:
+      sign_in_or_continue:
+        errors:
+          details_check: "Select an option to whether the details are correct or not"
       correct_school:
         question: "Which school do you teach at"
       current_school:

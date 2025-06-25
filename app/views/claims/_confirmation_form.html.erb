@@ -1,38 +1,34 @@
-  <%= form_for form, url: @form.url do |f| %>
-    <%= f.hidden_field :details_check %>
-    <%= f.hidden_field :logged_in_with_tid %>
-    <%= form_group_tag f.object do %>
+<%= form_with(
+  model: form,
+  url: @form.url,
+  builder: GOVUKDesignSystemFormBuilder::FormBuilder
+) do |f| %>
+  <%= f.hidden_field :details_check %>
 
-    <div class="govuk-radios">
-      <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Are these details correct?</legend>
+  <%= f.hidden_field :logged_in_with_tid %>
 
-        <%= errors_tag f.object, :details_check %>
-
-        <%= f.fields_for :teacher_id_user_info do |ff| %>
-          <% ff.object.attribute_names.each do |attribute| %>
-            <%= ff.hidden_field attribute %>
-          <% end %>
-        <% end %>
-
-        <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
-          <div class="govuk-radios__item">
-            <%= f.radio_button(:details_check, true, class: "govuk-radios__input") %>
-            <%= f.label :details_check_true, "Yes", class: "govuk-label govuk-radios__label" %>
-          </div>
-          <div class="govuk-radios__item">
-          <%= f.radio_button(:details_check, false, class: "govuk-radios__input") %>
-          <%= f.label :details_check_false, "No", class: "govuk-label govuk-radios__label" %>
-          </div>
-        </div>
-      </fieldset>
-    </div>
-
+  <%= f.fields_for :teacher_id_user_info do |ff| %>
+    <% ff.object.attribute_names.each do |attribute| %>
+      <%= ff.hidden_field attribute %>
+    <% end %>
   <% end %>
 
-  <p class="govuk-body">By selecting yes you are confirming that, to the best of your knowledge, the details above are correct.</p>
+  <%= f.govuk_collection_radio_buttons(
+    :details_check,
+    f.object.radio_options,
+    :id,
+    :name,
+    legend: {
+      text: "Are these details correct?",
+      size: "m",
+    },
+    inline: true
+  ) %>
 
-  <div class="govuk-form-group">
-    <%= f.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
-  </div>
+  <p class="govuk-body">
+    By selecting yes you are confirming that, to the best of your knowledge, the
+    details above are correct.
+  </p>
+
+  <%= f.govuk_submit("Continue") %>
 <% end %>

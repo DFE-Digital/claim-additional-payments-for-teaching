@@ -33,7 +33,7 @@ class SignInOrContinueForm < Form
 
   validates :details_check,
     inclusion: {
-      in: [true, false],
+      in: ->(form) { form.radio_options.map(&:id) },
       message: ->(form, _) { form.i18n_errors_path(:details_check) }
     }, if: :signed_in_with_dfe_identity?
 
@@ -66,6 +66,13 @@ class SignInOrContinueForm < Form
 
   def tid_bypassable?
     Rails.env.development?
+  end
+
+  def radio_options
+    [
+      Option.new(id: true, name: "Yes"),
+      Option.new(id: false, name: "No")
+    ]
   end
 
   private
