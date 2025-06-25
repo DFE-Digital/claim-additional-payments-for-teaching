@@ -45,7 +45,7 @@ module DfeSignIn
     end
 
     def has_admin_access?
-      is_service_operator? || is_support_agent?
+      is_service_operator? || is_support_agent? || is_service_admin?
     end
 
     def self.options_for_select
@@ -71,7 +71,7 @@ module DfeSignIn
     end
 
     def send_slack_notification
-      SlackNotificationJob.perform_later(id) if ENV.fetch("ENVIRONMENT_NAME") == "production"
+      SlackNotificationJob.perform_later(id) if has_admin_access? && (ENV.fetch("ENVIRONMENT_NAME") == "production")
     end
   end
 end

@@ -66,6 +66,11 @@ RSpec.describe DfeSignIn::User, type: :model do
       expect(user.has_admin_access?).to eq true
     end
 
+    it "returns true when user is a service admin" do
+      user.role_codes = [DfeSignIn::User::SERVICE_ADMIN_DFE_SIGN_IN_ROLE_CODE]
+      expect(user.has_admin_access?).to eq true
+    end
+
     it "returns true when user has multiple roles" do
       user.role_codes = [
         DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE,
@@ -162,8 +167,16 @@ RSpec.describe DfeSignIn::User, type: :model do
         allow(ENV).to receive(:fetch).with("ENVIRONMENT_NAME").and_return("production")
       end
 
-      it "sends a notification on record creation" do
-        expect { described_class.create! }.to have_enqueued_job(DfeSignIn::SlackNotificationJob)
+      context "when the user has admin access" do
+        it "sends a notification on record creation" do
+          expect { described_class.create!(role_codes: [described_class::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }.to have_enqueued_job(DfeSignIn::SlackNotificationJob)
+        end
+      end
+
+      context "when the user does not have admin access" do
+        it "sends a notification on record creation" do
+          expect { described_class.create!(role_codes: []) }.not_to have_enqueued_job(DfeSignIn::SlackNotificationJob)
+        end
       end
     end
 
@@ -174,7 +187,7 @@ RSpec.describe DfeSignIn::User, type: :model do
         end
 
         it "does not send a notification on record creation" do
-          expect { described_class.create! }.not_to have_enqueued_job(DfeSignIn::SlackNotificationJob)
+          expect { described_class.create!(role_codes: [described_class::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }.not_to have_enqueued_job(DfeSignIn::SlackNotificationJob)
         end
       end
     end
