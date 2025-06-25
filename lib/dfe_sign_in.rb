@@ -13,15 +13,15 @@ module DfeSignIn
 
       config
     end
-  end
 
-  def self.configure
-    self.configurations ||= []
+    def configure
+      self.configurations ||= []
 
-    new_config = Configuration.new
-    yield(new_config)
+      new_config = Configuration.new
+      yield(new_config)
 
-    self.configurations << new_config
+      self.configurations << new_config
+    end
   end
 
   class Configuration
