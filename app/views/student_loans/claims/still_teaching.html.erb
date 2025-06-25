@@ -1,26 +1,34 @@
-<% content_for(:page_title, page_title(t("student_loans.forms.still_teaching.questions.#{@form.tps_or_claim_school}"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+<% content_for(
+  :page_title,
+  page_title(
+    t("student_loans.forms.still_teaching.questions.claim_school"),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: @form, errored_field_id_overrides: { "employment_status": "claim_employment_status_claim_school" }) if @form.errors.any? %>
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
 
-    <%= form_for @form, url: @form.url do |form| %>
-      <%= form_group_tag @form do %>
-        <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-            <h1 class="govuk-fieldset__heading"><%= t("student_loans.forms.still_teaching.questions.#{@form.tps_or_claim_school}") %></h1>
-          </legend>
+      <%= f.govuk_error_summary %>
 
-          <%= errors_tag @form, :employment_status %>
+      <%= f.govuk_collection_radio_buttons(
+        :employment_status,
+        f.object.radio_options,
+        :id,
+        :name,
+        legend: {
+          text: t("student_loans.forms.still_teaching.questions.claim_school"),
+          size: "xl"
+        }
+      ) %>
 
-          <div class="govuk-radios">
-            <%= form.hidden_field :employment_status %>
-
-            <%= render partial: "still_teaching_with_#{@form.tps_or_claim_school}", locals: { form: form, school: @form.school }  %>
-          </div>
-        </fieldset>
-      <% end %>
-      <%= form.submit "Continue", class: "govuk-button" %>
+      <%= f.govuk_submit %>
     <% end %>
   </div>
 </div>
