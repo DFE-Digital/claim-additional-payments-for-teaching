@@ -62,14 +62,6 @@ class ClaimsController < BasePublicController
     params[:slug]
   end
 
-  def next_slug
-    navigator.next_slug
-  end
-
-  def previous_slug
-    navigator.previous_slug
-  end
-
   def redirect_to_existing_claim_journey
     # If other journey sessions is empty, then the claimant has hit the landing
     # page for the journey they're already on, so we need to look at the
@@ -90,8 +82,8 @@ class ClaimsController < BasePublicController
   def set_backlink_path
     return if navigator.current_slug == "confirmation"
 
-    if previous_slug.present? && slug_sequence.class::DEAD_END_SLUGS.exclude?(current_slug)
-      @backlink_path = claim_path(current_journey_routing_name, previous_slug)
+    if navigator.previous_slug.present? && slug_sequence.class::DEAD_END_SLUGS.exclude?(current_slug)
+      @backlink_path = claim_path(current_journey_routing_name, navigator.previous_slug)
     end
   end
 

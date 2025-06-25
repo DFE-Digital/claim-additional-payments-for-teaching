@@ -176,6 +176,12 @@ module Journeys
       end
     end
 
+    def query_params
+      if eligibility_checker.ineligible?
+        {ineligible_reason: eligibility_checker.ineligibility_reason}
+      end
+    end
+
     # returns truthy if changing answer
     # the value is set to the slug of returning check answers page
     # as a journey can have multiple check answer pages
