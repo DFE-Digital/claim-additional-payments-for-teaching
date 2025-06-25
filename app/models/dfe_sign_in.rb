@@ -30,7 +30,3 @@ module DfeSignIn
       :base_url
   end
 end
-
-require_relative "dfe_sign_in/authenticated_session"
-require_relative "dfe_sign_in/utils"
-require_relative "dfe_sign_in/api/user"
