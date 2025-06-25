@@ -58,7 +58,12 @@ module Policies
       :hmrc_bank_validation_responses,
       :mobile_number,
       :teacher_id_user_info,
-      :dqt_teacher_status
+      :dqt_teacher_status,
+      :claimant_date_of_birth,
+      :claimant_postcode,
+      :claimant_national_insurance_number,
+      :claimant_passport_number,
+      :passport_number
     ]
 
     # Attributes to retain on submitted claims until EXTENDED_PERIOD_END_DATE

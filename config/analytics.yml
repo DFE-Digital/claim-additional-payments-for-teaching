@@ -56,6 +56,7 @@ shared:
     - eligibility_type
     - eligibility_id
     - personal_data_removed_at
+    - retained_personal_data_removed_at
     - academic_year
     - bank_or_building_society
     - provide_mobile_number

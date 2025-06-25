@@ -37,7 +37,10 @@ module Policies
       :hmrc_bank_validation_responses,
       :mobile_number,
       :teacher_id_user_info,
-      :dqt_teacher_status
+      :dqt_teacher_status,
+      :provider_email_address,
+      :practitioner_first_name,
+      :practitioner_surname
     ]
 
     # Attributes to retain on submitted claims until EXTENDED_PERIOD_END_DATE

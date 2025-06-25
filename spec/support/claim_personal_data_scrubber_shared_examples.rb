@@ -117,7 +117,9 @@ RSpec.shared_examples "a claim personal data scrubber" do |policy|
       personal_data_scrubber
       cleaned_claim = Claim.find(claim.id)
 
-      policy::PERSONAL_DATA_ATTRIBUTES_TO_DELETE.each do |attribute|
+      policy::PERSONAL_DATA_ATTRIBUTES_TO_DELETE.select do |attribute|
+        claim.has_attribute?(attribute)
+      end.each do |attribute|
         expect(cleaned_claim.public_send(attribute)).to be_nil
       end
 
@@ -134,7 +136,9 @@ RSpec.shared_examples "a claim personal data scrubber" do |policy|
       personal_data_scrubber
       cleaned_claim = Claim.find(claim.id)
 
-      policy::PERSONAL_DATA_ATTRIBUTES_TO_DELETE.each do |attribute|
+      policy::PERSONAL_DATA_ATTRIBUTES_TO_DELETE.select do |attribute|
+        claim.has_attribute?(attribute)
+      end.each do |attribute|
         expect(cleaned_claim.public_send(attribute)).to be_nil
       end
       expect(cleaned_claim.personal_data_removed_at).to eq(Time.zone.now)
@@ -276,7 +280,9 @@ RSpec.shared_examples "a claim personal data scrubber" do |policy|
 
     personal_data_scrubber
 
-    policy::PERSONAL_DATA_ATTRIBUTES_TO_DELETE.each do |attribute|
+    policy::PERSONAL_DATA_ATTRIBUTES_TO_DELETE.select do |attribute|
+      session_for_approved_claim.answers.respond_to?(attribute)
+    end.each do |attribute|
       expect(
         session_for_approved_claim.reload.answers.public_send(attribute)
       ).to be_blank
