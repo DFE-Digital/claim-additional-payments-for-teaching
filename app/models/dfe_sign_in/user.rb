@@ -8,7 +8,7 @@ module DfeSignIn
 
     has_secure_token :session_token
 
-    after_create :send_slack_notification
+    after_save :send_slack_notification
 
     def self.table_name
       "dfe_sign_in_users"
@@ -45,7 +45,7 @@ module DfeSignIn
     end
 
     def has_admin_access?
-      is_service_operator? || is_support_agent?
+      is_service_operator? || is_support_agent? || is_service_admin?
     end
 
     def self.options_for_select
@@ -71,7 +71,14 @@ module DfeSignIn
     end
 
     def send_slack_notification
-      SlackNotificationJob.perform_later(id) if ENV.fetch("ENVIRONMENT_NAME") == "production"
+      SlackNotificationJob.perform_later(id) if granted_admin_access? && (ENV.fetch("ENVIRONMENT_NAME") == "production")
+    end
+
+    def granted_admin_access?
+      return false unless saved_change_to_role_codes.present?
+
+      new_roles = saved_change_to_role_codes.last - saved_change_to_role_codes.first
+      (new_roles & [SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, SERVICE_ADMIN_DFE_SIGN_IN_ROLE_CODE]).any?
     end
   end
 end
