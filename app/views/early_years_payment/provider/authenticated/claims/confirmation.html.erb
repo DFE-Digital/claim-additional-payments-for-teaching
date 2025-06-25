@@ -8,17 +8,17 @@
 
       <div class="govuk-panel__body">
         Your claim reference<br>
-        <strong><%= submitted_claim.reference %></strong>
+        <strong><%= @form.reference %></strong>
       </div>
     </div>
 
     <h2 class="govuk-heading-m">
       You’ve successfully submitted a claim for an early years financial
-      incentive payment on behalf of <%= submitted_claim.first_name %> <%= submitted_claim.surname %>.
+      incentive payment on behalf of <%= @form.first_name %> <%= @form.surname %>.
     </h2>
 
     <p class="govuk-body">
-      We’ve sent a confirmation email to <%= submitted_claim.practitioner_email_address %>.
+      We’ve sent a confirmation email to <%= @form.practitioner_email_address %>.
     </p>
 
     <h2 class="govuk-heading-m">What happens next</h2>

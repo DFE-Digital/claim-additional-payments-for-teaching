@@ -4,8 +4,6 @@ class ClaimsController < BasePublicController
   before_action :create_session_if_skip_landing_page, if: :skip_landing_page?
   before_action :send_unstarted_claimants_to_the_start, if: :send_to_start?
 
-  helper_method :submitted_claim
-
   def create_session_if_skip_landing_page
     journey_session || create_journey_session!
   end
@@ -191,12 +189,6 @@ class ClaimsController < BasePublicController
     return false if navigator.current_slug == "confirmation"
 
     !skip_landing_page? && journey_sessions.none?
-  end
-
-  def submitted_claim
-    return unless session[:submitted_claim_id]
-
-    Claim.by_policies_for_journey(journey).find_by(id: session[:submitted_claim_id])
   end
 
   def set_cache_headers
