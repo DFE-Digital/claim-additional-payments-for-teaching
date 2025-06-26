@@ -179,6 +179,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
           it "does not create a new verifier" do
             dfe_sign_in_user = create(
               :dfe_signin_user,
+              :provider,
               dfe_sign_in_id: "123"
             )
 
