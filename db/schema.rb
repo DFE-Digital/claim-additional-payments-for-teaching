@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_16_162148) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_26_123109) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -152,9 +152,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_16_162148) do
     t.string "role_codes", default: [], array: true
     t.datetime "deleted_at", precision: nil
     t.string "session_token"
+    t.text "user_type"
     t.index ["deleted_at"], name: "index_dfe_sign_in_users_on_deleted_at"
     t.index ["dfe_sign_in_id"], name: "index_dfe_sign_in_users_on_dfe_sign_in_id", unique: true
     t.index ["session_token"], name: "index_dfe_sign_in_users_on_session_token", unique: true
+    t.index ["user_type"], name: "index_dfe_sign_in_users_on_user_type"
   end
 
   create_table "early_career_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
