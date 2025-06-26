@@ -5,7 +5,7 @@ module DfeSignIn
     attr_accessor :configurations
 
     def configuration_for_client_id(client_id)
-      config = configurations.find{ |c| c.client_id == client_id }
+      config = configurations.find { |c| c.client_id == client_id }
 
       if config.nil?
         raise "No DfE Sign In config found for client_id: #{client_id}"

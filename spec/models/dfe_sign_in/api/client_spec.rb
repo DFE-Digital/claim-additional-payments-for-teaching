@@ -1,14 +1,17 @@
 require "rails_helper"
 
-RSpec.describe DfeSignIn::Utils do
-  let(:dummy_class) { Class.new { extend DfeSignIn::Utils } }
-
-  describe "generate_jwt_token" do
+RSpec.describe DfeSignIn::Api::Client, type: :model do
+  # legacy test for private method
+  describe "#generate_jwt_token" do
     around do |example|
       freeze_time { example.run }
     end
 
-    let(:jwt_token) { dummy_class.generate_jwt_token }
+    subject do
+      described_class.new(client_id: "teacherpayments")
+    end
+
+    let(:jwt_token) { subject.send(:generate_jwt_token) }
 
     it "generates a JWT token" do
       expect(jwt_token).to_not eq(nil)

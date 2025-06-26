@@ -14,7 +14,7 @@ module DfeSignIn
       organisation_hash = auth_hash.dig("extra", "raw_info", "organisation")
       organisation_id = organisation_hash.dig("id")
       organisation_ukprn = organisation_hash.dig("ukprn")
-      role_codes = DfeSignIn::Api::User.new(user_id: user_id, organisation_id: organisation_id).role_codes
+      role_codes = DfeSignIn::Api::User.admin.new(user_id: user_id, organisation_id: organisation_id).role_codes
 
       new(user_id:, organisation_id:, organisation_ukprn:, role_codes:)
     end
