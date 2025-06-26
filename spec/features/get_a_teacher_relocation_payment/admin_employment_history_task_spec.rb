@@ -298,6 +298,7 @@ RSpec.describe "Admin employment history task" do
     and_i_complete_the_visa_screen_with(option: "British National (Overseas) visa")
     and_i_complete_the_entry_date_page_with(date: entry_date)
     and_i_dont_change_my_answers
+    and_i_complete_the_information_provided_step
     and_i_complete_the_nationality_step_with(option: "Australian")
     and_i_complete_the_passport_number_step_with(options: "123456789")
     and_i_complete_the_personal_details_step(

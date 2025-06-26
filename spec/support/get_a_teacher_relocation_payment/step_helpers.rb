@@ -100,6 +100,11 @@ module GetATeacherRelocationPayment
       click_button("Continue")
     end
 
+    def and_i_complete_the_information_provided_step
+      assert_on_information_provided_page!
+      click_button("Continue")
+    end
+
     def and_i_complete_the_nationality_step_with(option:)
       assert_on_nationality_page!
 
@@ -304,6 +309,10 @@ module GetATeacherRelocationPayment
       expect(page).to have_text(
         "Enter the date you moved to England to start your teaching job"
       )
+    end
+
+    def assert_on_information_provided_page!
+      expect(page).to have_text("How we’ll use the information you provide")
     end
 
     def assert_on_nationality_page!
