@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :dfe_signin_user, class: "DfeSignIn::User" do
+    user_type { "admin" }
     dfe_sign_in_id { SecureRandom.uuid }
     given_name { "Aaron" }
     family_name { "Admin" }
@@ -32,6 +33,10 @@ FactoryBot.define do
           DfeSignIn::User::SERVICE_ADMIN_DFE_SIGN_IN_ROLE_CODE
         ]
       end
+    end
+
+    trait :provider do
+      user_type { "provider" }
     end
   end
 end
