@@ -4,7 +4,10 @@ module DfeSignIn
 
     def perform
       Rails.logger.info "Importing DfE Sign-in user data..."
-      UserDataImporter.new.run
+
+      DfeSignIn::User::USER_TYPES.each do |user_type|
+        UserDataImporter.new(user_type:).run
+      end
     end
   end
 end

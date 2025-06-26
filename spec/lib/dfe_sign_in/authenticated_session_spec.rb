@@ -22,7 +22,7 @@ RSpec.describe DfeSignIn::AuthenticatedSession do
     subject(:authenticated_session) { DfeSignIn::AuthenticatedSession.from_auth_hash(auth_hash) }
 
     before do
-      stub_dfe_sign_in_user_info_request(user_id, organisation_id, role_codes.first)
+      stub_dfe_sign_in_user_info_request(user_id, organisation_id, role_codes.first, user_type: "admin")
     end
 
     it "sets the user_id" do

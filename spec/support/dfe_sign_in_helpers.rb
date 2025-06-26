@@ -1,7 +1,7 @@
 module DfeSignInHelpers
   # Stubs the DfE Sign-in OpenID response and the call to the DfE Sign-in API
   # that we use to determine the roles that the user is authorised with.
-  def stub_dfe_sign_in_with_role(role_code, user_id = "123", organisation_id = "1234")
+  def stub_dfe_sign_in_with_role(role_code, user_id = "123", organisation_id = "1234", user_type = "admin")
     mock_dfe_sign_in_auth_session(
       auth_hash: {
         uid: user_id,
@@ -15,7 +15,7 @@ module DfeSignInHelpers
         }
       }
     )
-    stub_dfe_sign_in_user_info_request(user_id, organisation_id, role_code)
+    stub_dfe_sign_in_user_info_request(user_id, organisation_id, role_code, user_type:)
   end
 
   def mock_dfe_sign_in_auth_session(auth_hash: {}, provider: :dfe)
@@ -73,8 +73,8 @@ module DfeSignInHelpers
     }.deep_merge(attributes.deep_stringify_keys)
   end
 
-  def stub_dfe_sign_in_user_info_request(user_id, organisation_id, role_code, service_id: "XXXXXXX")
-    url = dfe_sign_in_user_info_url(user_id, organisation_id)
+  def stub_dfe_sign_in_user_info_request(user_id, organisation_id, role_code, service_id: "XXXXXXX", user_type:)
+    url = dfe_sign_in_user_info_url(user_id, organisation_id, user_type)
     api_response = {
       "userId" => user_id,
       "serviceId" => "XXXXXXX",
@@ -102,8 +102,8 @@ module DfeSignInHelpers
       .to_return(status: 200, body: api_response)
   end
 
-  def stub_failed_dfe_sign_in_user_info_request(user_id, organisation_id, status: 500)
-    url = dfe_sign_in_user_info_url(user_id, organisation_id)
+  def stub_failed_dfe_sign_in_user_info_request(user_id, organisation_id, status: 500, user_type:)
+    url = dfe_sign_in_user_info_url(user_id, organisation_id, user_type)
     api_response = {
       error: "An error occurred"
     }.to_json
@@ -158,8 +158,9 @@ module DfeSignInHelpers
       .to_return(body: response, status: 200)
   end
 
-  def dfe_sign_in_user_info_url(user_id, organisation_id)
-    config = DfeSignIn.configuration_for_client_id("teacherpayments")
+  def dfe_sign_in_user_info_url(user_id, organisation_id, user_type)
+    client_id = DfeSignIn::User.client_id_for_user_type(user_type)
+    config = DfeSignIn.configuration_for_client_id(client_id)
 
     api_client_id = config.client_id
     api_base_url = config.base_url

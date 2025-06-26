@@ -185,7 +185,7 @@ class Admin::ClaimsFilterForm
   def selected_team_member
     return if team_member.blank? || unassigned?
 
-    DfeSignIn::User.not_deleted.find(team_member)
+    DfeSignIn::User.admin.not_deleted.find(team_member)
   end
 
   def unassigned?

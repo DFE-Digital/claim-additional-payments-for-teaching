@@ -64,8 +64,8 @@ Rails.application.config.middleware.use OmniAuth::Builder do
         port: dfe_sign_in_issuer_uri&.port,
         scheme: dfe_sign_in_issuer_uri&.scheme,
         host: dfe_sign_in_issuer_uri&.host,
-        identifier: ENV["DFE_SIGN_IN_IDENTIFIER"],
-        secret: ENV["DFE_SIGN_IN_SECRET"],
+        identifier: ENV["DFE_SIGN_IN_INTERNAL_CLIENT_ID"],
+        secret: ENV["DFE_SIGN_IN_INTERNAL_SECRET"],
         redirect_uri: dfe_sign_in_redirect_uri&.to_s
       },
       issuer:
