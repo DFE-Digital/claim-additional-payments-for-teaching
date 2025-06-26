@@ -1,6 +1,11 @@
 module Journeys
   module FurtherEducationPayments
     class SlugSequence
+      INITIAL_SLUGS = %w[
+        previously-claimed
+        have-one-login-account
+      ]
+
       ELIGIBILITY_SLUGS = %w[
         teaching-responsibilities
         further-education-provision-search
@@ -61,6 +66,7 @@ module Journeys
       ]
 
       SLUGS = (
+        INITIAL_SLUGS +
         ELIGIBILITY_SLUGS +
         PERSONAL_DETAILS_SLUGS +
         PAYMENT_DETAILS_SLUGS +
@@ -87,6 +93,18 @@ module Journeys
 
       def slugs
         array = []
+
+        array << SLUGS_HASH["previously-claimed"]
+
+        array << if answers.previously_claimed?
+          SLUGS_HASH["sign-in"]
+        else
+          SLUGS_HASH["have-one-login-account"]
+        end
+
+        if has_one_login_account? || may_have_one_login_account?
+          array << SLUGS_HASH["sign-in"]
+        end
 
         array << SLUGS_HASH["teaching-responsibilities"]
         array << SLUGS_HASH["further-education-provision-search"]
@@ -168,7 +186,9 @@ module Journeys
         if poor_performance_form.completed_or_valid? && !answers.subject_to_problematic_actions?
           array << SLUGS_HASH["check-your-answers-part-one"]
           array << SLUGS_HASH["eligible"]
-          array << SLUGS_HASH["sign-in"]
+          if !answers.previously_claimed? && does_not_have_one_login_account?
+            array << SLUGS_HASH["sign-in"]
+          end
           array << SLUGS_HASH["information-provided"]
           array << SLUGS_HASH["personal-details"]
           array << SLUGS_HASH["postcode-search"]
@@ -229,6 +249,18 @@ module Journeys
           params: ActionController::Parameters.new,
           session: {}
         )
+      end
+
+      def has_one_login_account?
+        answers.have_one_login_account == "yes"
+      end
+
+      def may_have_one_login_account?
+        answers.have_one_login_account == "i_dont_know"
+      end
+
+      def does_not_have_one_login_account?
+        answers.have_one_login_account == "no"
       end
     end
   end

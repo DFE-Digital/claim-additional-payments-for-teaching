@@ -11,6 +11,9 @@ module Journeys
 
     attribute :service_access_code, :string, pii: false
 
+    attribute :previously_claimed, :boolean, pii: false
+    attribute :have_one_login_account, :string, pii: false # trinary option
+
     attribute :current_school_id, :string, pii: false # UUID
     attribute :address_line_1, :string, pii: true
     attribute :address_line_2, :string, pii: true

@@ -5,6 +5,15 @@ def when_further_education_journey_ready_to_submit
 
   visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
   click_link "Start now"
+
+  expect(page).to have_content("Have you previously")
+  choose "No"
+  click_button "Continue"
+
+  expect(page).to have_content("Do you have a")
+  choose "No"
+  click_button "Continue"
+
   choose "Yes"
   click_button "Continue"
   fill_in "Which FE provider are you employed by?", with: college.name
