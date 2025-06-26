@@ -866,6 +866,14 @@ RSpec.feature "Further education payments ineligible paths" do
 
     click_link "Start now"
 
+    expect(page).to have_text("Have you previously received a Targeted Retention Incentive payment for work in further education")
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_text("Do you have a GOV.UK One Login account")
+    choose "No"
+    click_button "Continue"
+
     # teaching-responsibilities
     choose "Yes"
     click_button "Continue"
