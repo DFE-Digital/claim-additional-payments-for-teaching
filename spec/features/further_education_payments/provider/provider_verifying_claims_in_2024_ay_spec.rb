@@ -7,7 +7,11 @@ RSpec.feature "Provider verifying claims" do
       enabled: true
     )
 
-    create(:journey_configuration, :further_education_payments_provider)
+    create(
+      :journey_configuration,
+      :further_education_payments_provider,
+      current_academic_year: AcademicYear.new(2024)
+    )
     # Stub fetching name from DSI, not required for these tests
     stub_request(
       :get,
@@ -1160,3 +1164,4 @@ RSpec.feature "Provider verifying claims" do
     expect(page).to have_text "Claim reference number AB123456"
   end
 end
+
