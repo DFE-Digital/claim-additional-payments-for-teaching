@@ -186,6 +186,14 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :further_education_payments do
+    namespace :providers do
+      resources :sessions, only: %i[new]
+      resources :authorisation_failures, only: [:show], param: :reason
+      resources :claims, only: %i[index]
+    end
+  end
+
   # We still want to know about 404s in case of missing a route, but silence a whitelist instead to reduce the noise in Rollbar
   # This is not exhastive, so add more if there are obvious requests to ignore
 
