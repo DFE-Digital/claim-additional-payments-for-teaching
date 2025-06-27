@@ -41,7 +41,12 @@ module Admin
     end
 
     def developer_session
-      DfeSignIn::AuthenticatedSession.new(nil, nil, params[:roles])
+      DfeSignIn::AuthenticatedSession.new(
+        user_id: nil,
+        organisation_id: nil,
+        organisation_ukprn: nil,
+        role_codes: params[:roles]
+      )
     end
   end
 end
