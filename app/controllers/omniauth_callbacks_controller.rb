@@ -210,20 +210,46 @@ class OmniauthCallbacksController < ApplicationController
     end
   end
 
+  # FIXME RL - probably want to move this to ProviderSessionsController#callback
   def further_education_payments_provider_callback(auth)
-    auth = params if DfESignIn.bypass?
+    if FeatureFlag.enabled?(:provider_dashboard)
+      if DfESignIn.bypass?
+        auth = params
 
-    Journeys::FurtherEducationPayments::Provider::OmniauthCallbackForm.new(
-      journey_session: journey_session,
-      auth: auth
-    ).save!
+        dfe_sign_in_session = DfeSignIn::AuthenticatedSession.new(
+          user_id: auth["uid"],
+          organisation_id: auth.dig("extra", "raw_info", "organisation", "id"),
+          organisation_ukprn: auth.dig("extra", "raw_info", "organisation", "ukprn"),
+          role_codes: auth["roles"]&.values
+        )
+      else
+        dfe_sign_in_session = DfeSignIn::AuthenticatedSession.from_auth_hash(auth)
+      end
 
-    redirect_to(
-      claim_path(
-        journey: current_journey_routing_name,
-        slug: "verify-claim"
+      dfe_sign_in_user = DfeSignIn::User.from_session(dfe_sign_in_session)
+
+      dfe_sign_in_user.regenerate_session_token
+      dfe_sign_in_user.save!
+
+      session[:user_id] = dfe_sign_in_user.id
+      session[:token] = dfe_sign_in_user.session_token
+
+      redirect_to further_education_payments_providers_claims_path
+    else
+      auth = params if DfESignIn.bypass?
+
+      Journeys::FurtherEducationPayments::Provider::OmniauthCallbackForm.new(
+        journey_session: journey_session,
+        auth: auth
+      ).save!
+
+      redirect_to(
+        claim_path(
+          journey: current_journey_routing_name,
+          slug: "verify-claim"
+        )
       )
-    )
+    end
   end
 
   def redirect_to_journey(auth)
