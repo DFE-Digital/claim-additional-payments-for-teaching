@@ -39,7 +39,8 @@ end
 
 module ::DfESignIn
   def self.bypass?
-    (Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")) && ENV["BYPASS_DFE_SIGN_IN"] == "true"
+    # (Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")) && ENV["BYPASS_DFE_SIGN_IN"] == "true"
+    false
   end
 end
 
