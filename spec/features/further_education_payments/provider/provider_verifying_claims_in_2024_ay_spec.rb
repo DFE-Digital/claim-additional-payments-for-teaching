@@ -1164,4 +1164,3 @@ RSpec.feature "Provider verifying claims" do
     expect(page).to have_text "Claim reference number AB123456"
   end
 end
-
