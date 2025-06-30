@@ -30,6 +30,9 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
+  boolean:
+    true: 'yes'
+    false: 'no'
   date:
     formats:
       default: "%-d %B %Y"
