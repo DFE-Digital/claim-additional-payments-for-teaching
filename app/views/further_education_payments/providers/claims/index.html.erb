@@ -1,1 +1,12 @@
 dashboard place holder
+
+<ul>
+<% @claims.each do |claim| %>
+  <li>
+    <%= link_to(
+      "Claim #{claim.reference}",
+      edit_further_education_payments_providers_claim_verification_path(claim)
+    ) %>
+  </li>
+<% end %>
+</ul>

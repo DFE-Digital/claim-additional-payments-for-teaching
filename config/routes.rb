@@ -190,7 +190,9 @@ Rails.application.routes.draw do
     namespace :providers do
       resources :sessions, only: %i[new]
       resources :authorisation_failures, only: [:show], param: :reason
-      resources :claims, only: %i[index]
+      resources :claims, only: %i[index] do
+        resource :verification, only: %i[edit update], module: :claims
+      end
     end
   end
 
