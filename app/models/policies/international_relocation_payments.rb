@@ -19,6 +19,7 @@ module Policies
     ADMIN_DECISION_REJECTED_REASONS = [
       :duplicate,
       :previous_payment_not_received,
+      :one_non_statutory_break,
       :ineligible_school,
       :invalid_bank_details,
       :ineligible_visa_or_entry_date,
