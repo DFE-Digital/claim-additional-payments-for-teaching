@@ -1,0 +1,2 @@
+class DqtHigherEducationQualification < ApplicationRecord
+end

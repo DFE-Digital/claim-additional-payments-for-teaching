@@ -214,3 +214,12 @@
   - concurrency_key
   - expires_at
   - created_at
+  :dqt_higher_education_qualifications:
+  - id
+  - teacher_reference_number
+  - date_of_birth
+  - national_insurance_number
+  - subject_code
+  - description
+  - created_at
+  - updated_at
