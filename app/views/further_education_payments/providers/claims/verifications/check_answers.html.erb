@@ -1,0 +1,66 @@
+<%= content_for(
+  :page_title,
+  "Review a targeted retention incentive payment claim"
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <span class="govuk-caption-xl">
+      <%= @form.claim.full_name %>
+    </span>
+
+    <h1 class="govuk-heading-l">
+      Claim reference: <%= @form.claim.reference %>
+      <%# FIXME RL - add status tag logic %>
+      <%= govuk_tag(text: "Not started", colour: "red") %>
+    </h1>
+
+    <%= govuk_summary_card(title: "Role and experience") do |card| %>
+      <%= card.with_summary_list do |summary_list| %>
+        <%= summary_list.with_row do |row| %>
+          <%= row.with_key(text: "Teaching responsibilities") %>
+          <%= row.with_value(
+            text: t(
+              @form.provider_verification_teaching_responsibilities,
+              scope: :boolean
+            )
+          ) %>
+        <% end %>
+
+        <%= summary_list.with_row do |row| %>
+          <%= row.with_key(text: "In first 5 years of FE teaching") %>
+          <%= row.with_value(
+            text: t(
+              @form.provider_verification_in_first_five_years,
+              scope: :boolean
+            )
+          ) %>
+        <% end %>
+
+        <%= summary_list.with_row do |row| %>
+          <%= row.with_key(text: "Teaching qualification") %>
+          <%= row.with_value(
+            text: @form.provider_verification_teaching_qualification,
+          ) %>
+        <% end %>
+
+        <%= summary_list.with_row do |row| %>
+          <%= row.with_key(text: "Type of contract") %>
+          <%= row.with_value(
+            text: @form.provider_verification_contract_type.capitalize
+          ) %>
+        <% end %>
+
+        <%= summary_list.with_row do |row| %>
+          <%= row.with_key(text: "Contract covers full academic year") %>
+          <%= row.with_value(
+            text: t(
+              @form.provider_verification_contract_covers_full_academic_year,
+              scope: :boolean
+            )
+          ) %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

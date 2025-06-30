@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_28_180055) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_30_123756) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -310,6 +310,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_28_180055) do
     t.datetime "claimant_identity_verified_at"
     t.boolean "valid_passport"
     t.text "passport_number"
+    t.boolean "provider_verification_teaching_responsibilities"
+    t.boolean "provider_verification_in_first_five_years"
+    t.string "provider_verification_teaching_qualification"
+    t.string "provider_verification_contract_type"
     t.index ["possible_school_id"], name: "index_fe_payments_eligibilities_on_possible_school_id"
     t.index ["school_id"], name: "index_fe_payments_eligibilities_on_school_id"
   end
