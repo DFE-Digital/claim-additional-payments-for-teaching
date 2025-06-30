@@ -20,6 +20,7 @@ module Policies
       :duplicate,
       :previous_payment_not_received,
       :one_non_statutory_break,
+      :ineligible_visa,
       :ineligible_school,
       :invalid_bank_details,
       :ineligible_visa_or_entry_date,

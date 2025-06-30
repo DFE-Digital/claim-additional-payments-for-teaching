@@ -759,6 +759,7 @@ en:
           duplicate: Duplicate application
           previous_payment_not_received: "Has not received first year payment"
           one_non_statutory_break: "Has taken at leat one non-statutory break"
+          ineligible_visa: "Ineligible visa"
           ineligible_school: Ineligible school
           invalid_bank_details: Invalid bank details
           ineligible_visa_or_entry_date: "Visa/entry date ineligible"

@@ -223,6 +223,7 @@ RSpec.describe ClaimMailer, type: :mailer do
               reason_duplicate: "yes",
               reason_previous_payment_not_received: "no",
               reason_one_non_statutory_break: "no",
+              reason_ineligible_visa: "no",
               reason_ineligible_school: "no",
               reason_invalid_bank_details: "no",
               reason_ineligible_visa_or_entry_date: "no",
