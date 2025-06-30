@@ -1,0 +1,17 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Choose and upload Higher Education Qualfications data
+    </h1>
+
+    <%= form_with model: @upload_form, id: 'upload', scope: :dqt_higher_education_qualification_upload, url: admin_dqt_higher_education_qualification_uploads_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_file_field :file,
+        label: { text: "Upload a CSV file" },
+        javascript: true %>
+
+      <%= f.govuk_submit "Upload" %>
+    <% end %>
+  </div>
+</div>

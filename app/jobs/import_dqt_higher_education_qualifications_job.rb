@@ -1,0 +1,3 @@
+class ImportDqtHigherEducationQualificationsJob < FileImporterJob
+  import_with DqtHigherEducationQualificationDataImporter
+end
