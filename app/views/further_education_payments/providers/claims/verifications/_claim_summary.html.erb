@@ -1,0 +1,29 @@
+<section id="claim-details">
+  <h2 class="govuk-heading-m">
+    Claim details
+    <%# FIXME RL - add status tag logic %>
+    <%= govuk_tag(text: "Not started", colour: "red") %>
+  </h2>
+
+  <%= govuk_summary_list do |summary_list| %>
+    <%= summary_list.with_row do |row| %>
+      <%= row.with_key(text: "Claim reference") %>
+      <%= row.with_value(text: claim.reference) %>
+    <% end %>
+
+    <%= summary_list.with_row do |row| %>
+      <%= row.with_key(text: "Claimant name") %>
+      <%= row.with_value(text: claim.full_name) %>
+    <% end %>
+
+    <%= summary_list.with_row do |row| %>
+      <%= row.with_key(text: "TRN") %>
+      <%= row.with_value(text: claim.eligibility.teacher_reference_number) %>
+    <% end %>
+
+    <%= summary_list.with_row do |row| %>
+      <%= row.with_key(text: "Date submitted") %>
+      <%= row.with_value(text: I18n.l(claim.submitted_at)) %>
+    <% end %>
+  <% end %>
+</section>
