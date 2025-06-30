@@ -4,6 +4,7 @@ module FurtherEducationPayments
       class VerificationsController < BaseController
         FORMS = [
           RoleAndExperienceForm,
+          ContractCoversFullAcademicYearForm,
           CheckAnswersForm,
         ]
 

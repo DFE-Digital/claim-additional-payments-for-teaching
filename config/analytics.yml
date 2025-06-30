@@ -329,6 +329,7 @@ shared:
     - provider_verification_in_first_five_years
     - provider_verification_teaching_qualification
     - provider_verification_contract_type
+    - provider_verification_contract_covers_full_academic_year
   :eligible_ey_providers:
     - id
     - nursery_name

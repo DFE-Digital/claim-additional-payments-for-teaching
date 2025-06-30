@@ -17,7 +17,7 @@ module FurtherEducationPayments
           :provider_verification_teaching_responsibilities,
           :provider_verification_in_first_five_years,
           :provider_verification_teaching_qualification,
-          :provider_verification_contract_type,
+          :provider_verification_contract_covers_full_academic_year,
           to: :eligibility
         )
 
@@ -40,9 +40,17 @@ module FurtherEducationPayments
           "check_answers"
         end
 
-        # TODO RL: remove this when we handle contract type branching
-        def provider_verification_contract_covers_full_academic_year
-          true
+        def provider_verification_contract_type
+          eligibility.provider_verification_contract_type.gsub("_", "-").capitalize
+        end
+
+        # FIXME RL: share this with contract_covers_full_academic_year_form
+        # prob move to eligibility model
+        def show_contract_type?
+          eligibility.provider_verification_contract_type.in? %w(
+            fixed_term
+            variable_hours
+          )
         end
       end
     end
