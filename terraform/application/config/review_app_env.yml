@@ -1,5 +1,5 @@
 ---
-BYPASS_DFE_SIGN_IN: false
+BYPASS_DFE_SIGN_IN: true
 BYPASS_ONELOGIN_SIGN_IN: true
 ONELOGIN_DID_URL: https://identity.integration.account.gov.uk/.well-known/did.json
 
