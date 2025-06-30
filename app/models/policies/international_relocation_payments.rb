@@ -23,7 +23,6 @@ module Policies
       :ineligible_visa,
       :ineligible_school,
       :invalid_bank_details,
-      :ineligible_visa_or_entry_date,
       :ineligible_employment_terms,
       :no_response_from_school,
       :suspected_fraud,
