@@ -22,6 +22,16 @@ module FurtherEducationPayments
         end
       end
 
+      def claim_scope
+        eligibilities = Policies::FurtherEducationPayments::Eligibility
+          .joins(:school)
+          .merge(School.where(ukprn: current_user.current_organisation.ukprn))
+
+        Claim
+          .by_policy(Policies::FurtherEducationPayments)
+          .where(eligibility_id: eligibilities.select(:id))
+      end
+
       def current_user
         @current_user ||= DfeSignIn::User
           .not_deleted
