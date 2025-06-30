@@ -18,15 +18,16 @@ module Policies
     # Options shown to admins when rejecting a claim
     ADMIN_DECISION_REJECTED_REASONS = [
       :duplicate,
+      :previous_payment_not_received,
+      :one_non_statutory_break,
+      :ineligible_visa,
       :ineligible_school,
       :invalid_bank_details,
       :ineligible_visa_or_entry_date,
       :ineligible_employment_terms,
       :no_response_from_school,
       :suspected_fraud,
-      :information_mismatch_new_details_needed,
-      :ineligible_previous_residency,
-      :claimed_last_year
+      :information_mismatch_new_details_needed
     ]
 
     # Attributes to delete from claims submitted before the current academic

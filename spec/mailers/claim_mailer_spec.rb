@@ -125,7 +125,6 @@ RSpec.describe ClaimMailer, type: :mailer do
       describe "#rejected" do
         let(:claim) { build(:claim, :rejected, policy: policy) }
         let(:mail) { ClaimMailer.rejected(claim) }
-        let(:expected_last_academic_year) { "" }
 
         it_behaves_like "an email related to a claim using GOVUK Notify templates", policy
 
@@ -135,8 +134,7 @@ RSpec.describe ClaimMailer, type: :mailer do
               first_name: claim.first_name,
               ref_number: claim.reference,
               support_email_address: I18n.t("#{claim.policy.locale_key}.support_email_address"),
-              current_financial_year: (policy == Policies::StudentLoans) ? Policies::StudentLoans.current_financial_year : "",
-              last_academic_year: expected_last_academic_year
+              current_financial_year: (policy == Policies::StudentLoans) ? Policies::StudentLoans.current_financial_year : ""
             }
           end
           let(:all_expected_keys) { expected_common_keys.merge(expected_rejected_reasons_keys) }
@@ -223,40 +221,16 @@ RSpec.describe ClaimMailer, type: :mailer do
           let(:expected_rejected_reasons_keys) do
             {
               reason_duplicate: "yes",
+              reason_previous_payment_not_received: "no",
+              reason_one_non_statutory_break: "no",
+              reason_ineligible_visa: "no",
               reason_ineligible_school: "no",
               reason_invalid_bank_details: "no",
               reason_ineligible_visa_or_entry_date: "no",
               reason_ineligible_employment_terms: "no",
               reason_no_response_from_school: "no",
               reason_suspected_fraud: "no",
-              reason_information_mismatch_new_details_needed: "no",
-              reason_ineligible_previous_residency: "no",
-              reason_claimed_last_year: "no"
-            }
-          end
-
-          include_examples "template id and personalisation keys"
-        end
-
-        context "when InternationalRelocationPayments, rejected with claimed_last_year", if: policy == Policies::InternationalRelocationPayments do
-          let(:claim) { build(:claim, :rejected, policy: policy, rejected_reasons: {claimed_last_year: "1"}) }
-
-          let(:expected_last_academic_year) { (journey_configuration.current_academic_year - 1).to_s }
-
-          let(:expected_template_id) { "1edc468c-a1bf-4bea-bb79-042740cd8547" }
-
-          let(:expected_rejected_reasons_keys) do
-            {
-              reason_duplicate: "no",
-              reason_ineligible_school: "no",
-              reason_invalid_bank_details: "no",
-              reason_ineligible_visa_or_entry_date: "no",
-              reason_ineligible_employment_terms: "no",
-              reason_no_response_from_school: "no",
-              reason_suspected_fraud: "no",
-              reason_information_mismatch_new_details_needed: "no",
-              reason_ineligible_previous_residency: "no",
-              reason_claimed_last_year: "yes"
+              reason_information_mismatch_new_details_needed: "no"
             }
           end
 
