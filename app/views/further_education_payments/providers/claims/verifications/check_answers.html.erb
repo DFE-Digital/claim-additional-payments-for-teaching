@@ -46,12 +46,11 @@
 
         <%= summary_list.with_row do |row| %>
           <%= row.with_key(text: "Type of contract") %>
-          <%= row.with_value(
-            text: @form.provider_verification_contract_type
-          ) %>
+          <%= row.with_value(text: @form.contract_type) %>
         <% end %>
 
-        <% if @form.show_contract_type? %>
+        <% case @form.provider_verification_contract_type %>
+        <% when "fixed_term" %>
           <%= summary_list.with_row do |row| %>
             <%= row.with_key(text: "Contract covers full academic year") %>
             <%= row.with_value(
@@ -61,6 +60,18 @@
               )
             ) %>
           <% end %>
+        <% when "variable_hours" %>
+          <%= summary_list.with_row do |row| %>
+            <%= row.with_key(text: "Variable hours in academic year") %>
+            <%= row.with_value(
+              text: t(
+                @form.provider_verification_taught_at_least_one_academic_term,
+                scope: :boolean
+              )
+            ) %>
+          <% end %>
+        <% else %>
+          <%# noop %>
         <% end %>
       <% end %>
     <% end %>

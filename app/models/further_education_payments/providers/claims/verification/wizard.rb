@@ -6,6 +6,7 @@ module FurtherEducationPayments
           FORMS = [
             RoleAndExperienceForm,
             ContractCoversFullAcademicYearForm,
+            TaughtAtLeastOneAcademicTermForm,
             CheckAnswersForm
           ]
 
@@ -47,6 +48,10 @@ module FurtherEducationPayments
 
             if eligibility.provider_verification_contract_type == "fixed_term"
               @reachable_steps << ContractCoversFullAcademicYearForm
+            end
+
+            if eligibility.provider_verification_contract_type == "variable_hours"
+              @reachable_steps << TaughtAtLeastOneAcademicTermForm
             end
 
             @reachable_steps << CheckAnswersForm

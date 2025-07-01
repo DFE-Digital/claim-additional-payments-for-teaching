@@ -185,6 +185,103 @@ RSpec.feature "Provider verifying claims" do
     end
   end
 
+  context "when a provider verifies a variable hours contract claim" do
+    it "allows them to verify the claim with additional questions" do
+      fe_provider = create(
+        :school,
+        :further_education,
+        name: "Springfield College"
+      )
+
+      sign_in_to(fe_provider)
+
+      claim = create(
+        :claim,
+        :submitted,
+        :further_education,
+        first_name: "Edna",
+        surname: "Krabappel",
+        reference: "AB123456",
+        submitted_at: DateTime.new(2025, 10, 1, 9, 0, 0),
+        eligibility_attributes: {
+          school: fe_provider,
+          teacher_reference_number: "1234567"
+        }
+      )
+
+      visit(
+        edit_further_education_payments_providers_claim_verification_path(claim)
+      )
+
+      within "#claim-details" do
+        expect(page).to have_text("Not started")
+      end
+
+      expect(summary_row("Claim reference")).to have_content("AB123456")
+      expect(summary_row("Claimant name")).to have_content("Edna Krabappel")
+      expect(summary_row("TRN")).to have_content("1234567")
+      expect(summary_row("Date submitted")).to have_content("1 October 2025")
+
+      within_fieldset(
+        "Is Edna Krabappel a member of staff with teaching responsibilities?"
+      ) { choose "Yes" }
+
+      within_fieldset(
+        "Is Edna Krabappel in the first 5 years of their further education " \
+        "(FE) teaching career in England?"
+      ) { choose "Yes" }
+
+      within_fieldset("Does Edna Krabappel have a teaching qualification?") do
+        choose "Yes"
+      end
+
+      within_fieldset(
+        "What type of contract does Edna Krabappel have with " \
+        "Springfield College?"
+      ) { choose "Variable hours" }
+
+      within_fieldset("Have you completed this section?") do
+        choose "Yes"
+      end
+
+      click_on "Save and continue"
+
+      # Second screen with additional questions for variable hours contracts
+      within_fieldset(
+        "Has Edna Krabappel taught at Springfield College for at least one " \
+        "academic term?"
+      ) { choose "Yes" }
+
+      within_fieldset("Have you completed this section?") do
+        choose "Yes"
+      end
+
+      click_on "Save and continue"
+
+      expect(page).to have_text("Claim reference: AB123456")
+
+      expect(
+        summary_row("Teaching responsibilities")
+      ).to have_content "yes"
+
+      expect(
+        summary_row("In first 5 years of FE teaching")
+      ).to have_content "yes"
+
+      expect(
+        summary_row("Teaching qualification")
+      ).to have_content "yes"
+
+      expect(
+        summary_row("Type of contract")
+      ).to have_content "Variable hours"
+
+      expect(
+        summary_row("Variable hours in academic year")
+      ).to have_content "yes"
+    end
+  end
+
   def summary_row(label)
     find("dt", text: label).sibling("dd")
   end
