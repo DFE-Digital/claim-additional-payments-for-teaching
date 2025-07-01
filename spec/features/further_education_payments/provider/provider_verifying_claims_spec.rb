@@ -24,18 +24,8 @@ RSpec.feature "Provider verifying claims" do
         date_of_birth: Date.new(1945, 7, 3),
         reference: "AB123456",
         submitted_at: DateTime.new(2025, 10, 1, 9, 0, 0),
-        onelogin_idv_at: DateTime.new(2025, 10, 1, 9, 0, 0),
-        identity_confirmed_with_onelogin: false,
         eligibility_attributes: {
           school: fe_provider,
-          teaching_hours_per_week: "between_2_5_and_12",
-          contract_type: "permanent",
-          fixed_term_full_year: false,
-          subjects_taught: ["engineering_manufacturing"],
-          engineering_manufacturing_courses: [
-            "approved_level_321_transportation",
-            "level2_3_apprenticeship"
-          ],
           teacher_reference_number: "1234567"
         }
       )
@@ -113,22 +103,11 @@ RSpec.feature "Provider verifying claims" do
         :further_education,
         first_name: "Edna",
         surname: "Krabappel",
-        date_of_birth: Date.new(1945, 7, 3),
         reference: "AB123456",
         submitted_at: DateTime.new(2025, 10, 1, 9, 0, 0),
-        onelogin_idv_at: DateTime.new(2025, 10, 1, 9, 0, 0),
-        identity_confirmed_with_onelogin: false,
         academic_year: AcademicYear.new(2025),
         eligibility_attributes: {
           school: fe_provider,
-          teaching_hours_per_week: "between_2_5_and_12",
-          contract_type: "fixed_term",
-          fixed_term_full_year: true,
-          subjects_taught: ["engineering_manufacturing"],
-          engineering_manufacturing_courses: [
-            "approved_level_321_transportation",
-            "level2_3_apprenticeship"
-          ],
           teacher_reference_number: "1234567"
         }
       )
