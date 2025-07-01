@@ -31,7 +31,7 @@ module FurtherEducationPayments
         end
 
         def incomplete?
-          required? && dup.invalid?
+          dup.invalid?
         end
 
         def template
@@ -48,10 +48,16 @@ module FurtherEducationPayments
 
           # TODO RL: - handle recording who made the change
           claim.eligibility.update!(
-            provider_verification_contract_covers_full_academic_year:,
+            provider_verification_contract_covers_full_academic_year:
           )
 
           true
+        end
+
+        def clear_answers!
+          claim.eligibility.update!(
+            provider_verification_contract_covers_full_academic_year: nil
+          )
         end
 
         def provider
@@ -69,7 +75,7 @@ module FurtherEducationPayments
         def academic_year_start_to_end
           [
             "September #{academic_year.start_year}",
-            "July #{academic_year.end_year}",
+            "July #{academic_year.end_year}"
           ].join(" to ")
         end
 
@@ -92,17 +98,7 @@ module FurtherEducationPayments
             )
           ]
         end
-
-        private
-
-        def required?
-          eligibility.provider_verification_contract_type.in? %w(
-            fixed_term
-            variable_hours
-          )
-        end
       end
     end
   end
 end
-
