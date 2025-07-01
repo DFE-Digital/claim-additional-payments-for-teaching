@@ -2,22 +2,17 @@ module FurtherEducationPayments
   module Providers
     module Claims
       class VerificationsController < BaseController
-        FORMS = [
-          RoleAndExperienceForm,
-          ContractCoversFullAcademicYearForm,
-          CheckAnswersForm,
-        ]
+        before_action :set_form
 
         def edit
-          @form = current_form
-
           render @form.template
         end
 
         def update
-          @form = current_form
-
           if @form.update(verification_form_params)
+
+            wizard.clear_impermissible_answers!
+
             redirect_to(
               edit_further_education_payments_providers_claim_verification_path(
                 claim
@@ -30,26 +25,17 @@ module FurtherEducationPayments
 
         private
 
-        # TODO RL: Handle change links, fetch the form from a param
-        def current_form
-          @current_form ||= forms.detect(&:incomplete?)
+        def set_form
+          @form = wizard.current_form
         end
 
-        def forms
-          @forms ||= FORMS.map do |form_class|
-            form_class.new(
-              claim: claim,
-              user: current_user,
-              params: claim.eligibility.attributes.slice(
-                *form_class.attribute_names.map(&:to_s)
-              )
-            )
-          end
+        def wizard
+          Verification::Wizard.new(claim: claim, user: current_user)
         end
 
         def verification_form_params
-          params.require(current_form.model_name.param_key).permit(
-            current_form.attribute_names.map(&:to_sym)
+          params.require(@form.model_name.param_key).permit(
+            @form.attribute_names.map(&:to_sym)
           )
         end
 
