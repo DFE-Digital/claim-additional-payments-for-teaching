@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe FurtherEducationPayments::Providers::Claims::RoleAndExperienceForm, type: :model do
+RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::RoleAndExperienceForm, type: :model do
   let(:fe_provider) do
     create(:school, :fe_eligible, name: "Springfield College")
   end
