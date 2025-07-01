@@ -4,7 +4,14 @@ RSpec.describe DfeSignIn::User, type: :model do
   let(:user) { build(:dfe_signin_user) }
 
   describe ".from_session" do
-    let(:session) { DfeSignIn::AuthenticatedSession.new(123, 456, ["some-role"]) }
+    let(:session) do
+      DfeSignIn::AuthenticatedSession.new(
+        user_id: 123,
+        organisation_id: 456,
+        organisation_ukprn: "10000000",
+        role_codes: ["some-role"]
+      )
+    end
     let(:user) { DfeSignIn::User.from_session(session) }
 
     it "initializes a user when the user does not exist" do
