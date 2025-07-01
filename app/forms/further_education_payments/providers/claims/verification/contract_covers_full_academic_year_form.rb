@@ -2,14 +2,7 @@ module FurtherEducationPayments
   module Providers
     module Claims
       module Verification
-        class ContractCoversFullAcademicYearForm
-          include ActiveModel::Model
-          include ActiveModel::Attributes
-
-          attr_reader :claim, :user
-
-          delegate :eligibility, to: :claim
-
+        class ContractCoversFullAcademicYearForm < BaseForm
           attribute(
             :provider_verification_contract_covers_full_academic_year,
             :boolean
@@ -23,47 +16,6 @@ module FurtherEducationPayments
               in: ->(form) { form.contract_covers_full_academic_year_options.map(&:id) }
             }
           )
-
-          def initialize(claim:, user:, params: {})
-            @claim = claim
-            @user = user
-
-            super(params)
-          end
-
-          def incomplete?
-            dup.invalid?
-          end
-
-          def template
-            "contract_covers_full_academic_year"
-          end
-
-          def update(params)
-            assign_attributes(params)
-            save
-          end
-
-          def save
-            return false unless valid?
-
-            # TODO RL: - handle recording who made the change
-            claim.eligibility.update!(
-              provider_verification_contract_covers_full_academic_year:
-            )
-
-            true
-          end
-
-          def clear_answers!
-            claim.eligibility.update!(
-              provider_verification_contract_covers_full_academic_year: nil
-            )
-          end
-
-          def provider
-            claim.eligibility.school
-          end
 
           def claimant_name
             claim.full_name

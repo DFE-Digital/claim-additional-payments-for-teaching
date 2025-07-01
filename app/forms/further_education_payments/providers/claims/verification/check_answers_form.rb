@@ -2,17 +2,10 @@ module FurtherEducationPayments
   module Providers
     module Claims
       module Verification
-        class CheckAnswersForm
-          include ActiveModel::Model
-          include ActiveModel::Attributes
-
-          attr_reader :claim, :user
-
+        class CheckAnswersForm < BaseForm
           attribute :provider_verification_declaration, :boolean, default: false
 
           validates :provider_verification_declaration, acceptance: true
-
-          delegate :eligibility, to: :claim
 
           delegate(
             :provider_verification_teaching_responsibilities,
@@ -21,25 +14,6 @@ module FurtherEducationPayments
             :provider_verification_contract_covers_full_academic_year,
             to: :eligibility
           )
-
-          def initialize(claim:, user:, params: {})
-            @claim = claim
-            @user = user
-
-            super(params)
-          end
-
-          def incomplete?
-            dup.invalid?
-          end
-
-          def provider
-            claim.eligibility.school
-          end
-
-          def template
-            "check_answers"
-          end
 
           def provider_verification_contract_type
             eligibility.provider_verification_contract_type.tr("_", "-").capitalize

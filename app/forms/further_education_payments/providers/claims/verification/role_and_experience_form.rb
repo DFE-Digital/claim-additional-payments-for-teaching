@@ -2,12 +2,7 @@ module FurtherEducationPayments
   module Providers
     module Claims
       module Verification
-        class RoleAndExperienceForm
-          include ActiveModel::Model
-          include ActiveModel::Attributes
-
-          attr_reader :claim, :user
-
+        class RoleAndExperienceForm < BaseForm
           attribute :provider_verification_teaching_responsibilities, :boolean
           attribute :provider_verification_in_first_five_years, :boolean
           attribute :provider_verification_teaching_qualification, :string
@@ -44,44 +39,6 @@ module FurtherEducationPayments
 
           # TBD decide how we want to handle this
           # validates :section_completed, inclusion: { in: [true, false] }
-
-          def initialize(claim:, user:, params: {})
-            @claim = claim
-            @user = user
-
-            super(params)
-          end
-
-          def incomplete?
-            dup.invalid?
-          end
-
-          def template
-            "role_and_experience"
-          end
-
-          def update(params)
-            assign_attributes(params)
-            save
-          end
-
-          def save
-            return false unless valid?
-
-            # TODO RL: - handle recording who made the change
-            claim.eligibility.update!(
-              provider_verification_teaching_responsibilities:,
-              provider_verification_in_first_five_years:,
-              provider_verification_teaching_qualification:,
-              provider_verification_contract_type:
-            )
-
-            true
-          end
-
-          def provider
-            claim.eligibility.school
-          end
 
           def provider_name
             provider.name
