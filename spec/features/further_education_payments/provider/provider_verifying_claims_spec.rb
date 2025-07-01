@@ -13,20 +13,7 @@ RSpec.feature "Provider verifying claims" do
         name: "Springfield College"
       )
 
-      mock_dfe_sign_in_auth_session(
-        provider: :dfe_fe_provider,
-        auth_hash: {
-          uid: "11111",
-          extra: {
-            raw_info: {
-              organisation: {
-                id: "22222",
-                ukprn: fe_provider.ukprn
-              }
-            }
-          }
-        }
-      )
+      sign_in_to(fe_provider)
 
       claim = create(
         :claim,
@@ -52,16 +39,6 @@ RSpec.feature "Provider verifying claims" do
           teacher_reference_number: "1234567"
         }
       )
-
-      stub_dfe_sign_in_user_info_request(
-        "11111",
-        "22222",
-        Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
-      )
-
-      visit new_further_education_payments_providers_session_path
-
-      click_on "Start now"
 
       visit(
         edit_further_education_payments_providers_claim_verification_path(claim)
@@ -128,20 +105,7 @@ RSpec.feature "Provider verifying claims" do
         name: "Springfield College"
       )
 
-      mock_dfe_sign_in_auth_session(
-        provider: :dfe_fe_provider,
-        auth_hash: {
-          uid: "11111",
-          extra: {
-            raw_info: {
-              organisation: {
-                id: "22222",
-                ukprn: fe_provider.ukprn
-              }
-            }
-          }
-        }
-      )
+      sign_in_to(fe_provider)
 
       claim = create(
         :claim,
@@ -168,16 +132,6 @@ RSpec.feature "Provider verifying claims" do
           teacher_reference_number: "1234567"
         }
       )
-
-      stub_dfe_sign_in_user_info_request(
-        "11111",
-        "22222",
-        Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
-      )
-
-      visit new_further_education_payments_providers_session_path
-
-      click_on "Start now"
 
       visit(
         edit_further_education_payments_providers_claim_verification_path(claim)
@@ -254,5 +208,32 @@ RSpec.feature "Provider verifying claims" do
 
   def summary_row(label)
     find("dt", text: label).sibling("dd")
+  end
+
+  def sign_in_to(fe_provider)
+    mock_dfe_sign_in_auth_session(
+      provider: :dfe_fe_provider,
+      auth_hash: {
+        uid: "11111",
+        extra: {
+          raw_info: {
+            organisation: {
+              id: "22222",
+              ukprn: fe_provider.ukprn
+            }
+          }
+        }
+      }
+    )
+
+    stub_dfe_sign_in_user_info_request(
+      "11111",
+      "22222",
+      Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
+    )
+
+    visit new_further_education_payments_providers_session_path
+
+    click_on "Start now"
   end
 end
