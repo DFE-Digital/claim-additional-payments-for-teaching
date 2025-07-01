@@ -330,6 +330,7 @@ shared:
     - provider_verification_teaching_qualification
     - provider_verification_contract_type
     - provider_verification_contract_covers_full_academic_year
+    - provider_verification_taught_at_least_one_academic_term
   :eligible_ey_providers:
     - id
     - nursery_name
