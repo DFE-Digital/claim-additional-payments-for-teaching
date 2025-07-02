@@ -13,7 +13,8 @@
       model: @form,
       url: further_education_payments_providers_claim_verification_path(
         @form.claim,
-        @form.provider
+        @form.provider,
+        slug: @form.slug
       ),
       builder: GOVUKDesignSystemFormBuilder::FormBuilder,
       method: :patch,

@@ -16,6 +16,15 @@
     </h1>
 
     <%= govuk_summary_card(title: "Role and experience") do |card| %>
+      <%= card.with_action do %>
+        <%= govuk_link_to(
+          "Change",
+          edit_further_education_payments_providers_claim_verification_path(
+            @form.claim,
+            slug: "role_and_experience"
+          )
+        ) %>
+      <% end %>
       <%= card.with_summary_list do |summary_list| %>
         <%= summary_list.with_row do |row| %>
           <%= row.with_key(text: "Teaching responsibilities") %>

@@ -15,7 +15,8 @@ module FurtherEducationPayments
 
             redirect_to(
               edit_further_education_payments_providers_claim_verification_path(
-                claim
+                claim,
+                slug: wizard.next_form.slug
               )
             )
           else
@@ -30,7 +31,11 @@ module FurtherEducationPayments
         end
 
         def wizard
-          Verification::Wizard.new(claim: claim, user: current_user)
+          Verification::Wizard.new(
+            claim: claim,
+            user: current_user,
+            current_slug: params[:slug] || Verification::Wizard.first_slug
+          )
         end
 
         def verification_form_params

@@ -282,6 +282,147 @@ RSpec.feature "Provider verifying claims" do
     end
   end
 
+  context "changing answers" do
+    it "allows the provider to change answers" do
+      fe_provider = create(
+        :school,
+        :further_education,
+        name: "Springfield College"
+      )
+
+      sign_in_to(fe_provider)
+
+      claim = create(
+        :claim,
+        :submitted,
+        :further_education,
+        first_name: "Edna",
+        surname: "Krabappel",
+        reference: "AB123456",
+        submitted_at: DateTime.new(2025, 10, 1, 9, 0, 0),
+        academic_year: AcademicYear.new(2025),
+        eligibility_attributes: {
+          school: fe_provider,
+          teacher_reference_number: "1234567"
+        }
+      )
+
+      visit(
+        edit_further_education_payments_providers_claim_verification_path(claim)
+      )
+
+      within_fieldset(
+        "Is Edna Krabappel a member of staff with teaching responsibilities?"
+      ) { choose "Yes" }
+
+      within_fieldset(
+        "Is Edna Krabappel in the first 5 years of their further education " \
+        "(FE) teaching career in England?"
+      ) { choose "Yes" }
+
+      within_fieldset("Does Edna Krabappel have a teaching qualification?") do
+        choose "Yes"
+      end
+
+      within_fieldset(
+        "What type of contract does Edna Krabappel have with " \
+        "Springfield College?"
+      ) { choose "Variable" }
+
+      within_fieldset("Have you completed this section?") do
+        choose "Yes"
+      end
+
+      click_on "Save and continue"
+
+      # Second variable hours screen
+      within_fieldset(
+        "Has Edna Krabappel taught at Springfield College for at least one " \
+        "academic term?"
+      ) { choose "Yes" }
+
+      within_fieldset("Have you completed this section?") do
+        choose "Yes"
+      end
+
+      click_on "Save and continue"
+
+      # Check answers page
+      expect(summary_row("Type of contract")).to have_content("Variable hours")
+
+      # Change contract type to Permanent
+      click_on "Change"
+
+      within_fieldset(
+        "What type of contract does Edna Krabappel have with " \
+        "Springfield College?"
+      ) { choose "Permanent" }
+
+      within_fieldset("Have you completed this section?") do
+        choose "Yes"
+      end
+
+      click_on "Save and continue"
+
+      expect(summary_row("Type of contract")).to have_content("Permanent")
+
+      # Change contract type to Fixed-term
+      click_on "Change"
+
+      within_fieldset(
+        "What type of contract does Edna Krabappel have with " \
+        "Springfield College?"
+      ) { choose "Fixed-term" }
+
+      within_fieldset("Have you completed this section?") do
+        choose "Yes"
+      end
+
+      click_on "Save and continue"
+
+      # Second screen with additional questions for fixed term contracts
+      within_fieldset(
+        "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
+        "academic year?"
+      ) { choose "No" }
+
+      within_fieldset("Have you completed this section?") do
+        choose "Yes"
+      end
+
+      click_on "Save and continue"
+
+      expect(summary_row("Type of contract")).to have_content("Fixed-term")
+
+      expect(
+        summary_row("Contract covers full academic year")
+      ).to have_content "no"
+
+      # Change answer on second page of fixed term contract
+      click_on "Change"
+
+      within_fieldset(
+        "What type of contract does Edna Krabappel have with " \
+        "Springfield College?"
+      ) { expect(page).to have_checked_field("Fixed-term") }
+
+      click_on "Save and continue"
+
+      within_fieldset(
+        "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
+        "academic year?"
+      ) { choose "Yes" }
+
+      click_on "Save and continue"
+
+      expect(summary_row("Type of contract")).to have_content("Fixed-term")
+
+      expect(
+        summary_row("Contract covers full academic year")
+      ).to have_content "yes"
+    end
+  end
+
   def summary_row(label)
     find("dt", text: label).sibling("dd")
   end

@@ -17,6 +17,10 @@ module FurtherEducationPayments
           end
 
           def template
+            slug
+          end
+
+          def slug
             model_name.element.remove("_form")
           end
 
