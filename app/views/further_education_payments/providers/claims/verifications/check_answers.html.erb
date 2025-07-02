@@ -11,8 +11,6 @@
 
     <h1 class="govuk-heading-l">
       Claim reference: <%= @form.claim.reference %>
-      <%# FIXME RL - add status tag logic %>
-      <%= govuk_tag(text: "Not started", colour: "red") %>
     </h1>
 
     <%= govuk_summary_card(title: "Role and experience") do |card| %>

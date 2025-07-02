@@ -34,10 +34,6 @@ RSpec.feature "Provider verifying claims" do
         edit_further_education_payments_providers_claim_verification_path(claim)
       )
 
-      within "#claim-details" do
-        expect(page).to have_text("Not started")
-      end
-
       expect(summary_row("Claim reference")).to have_content("AB123456")
       expect(summary_row("Claimant name")).to have_content("Edna Krabappel")
       expect(summary_row("TRN")).to have_content("1234567")
@@ -115,10 +111,6 @@ RSpec.feature "Provider verifying claims" do
       visit(
         edit_further_education_payments_providers_claim_verification_path(claim)
       )
-
-      within "#claim-details" do
-        expect(page).to have_text("Not started")
-      end
 
       expect(summary_row("Claim reference")).to have_content("AB123456")
       expect(summary_row("Claimant name")).to have_content("Edna Krabappel")
@@ -212,10 +204,6 @@ RSpec.feature "Provider verifying claims" do
       visit(
         edit_further_education_payments_providers_claim_verification_path(claim)
       )
-
-      within "#claim-details" do
-        expect(page).to have_text("Not started")
-      end
 
       expect(summary_row("Claim reference")).to have_content("AB123456")
       expect(summary_row("Claimant name")).to have_content("Edna Krabappel")
