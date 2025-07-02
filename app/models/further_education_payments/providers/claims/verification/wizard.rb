@@ -10,12 +10,35 @@ module FurtherEducationPayments
             CheckAnswersForm
           ]
 
-          def initialize(claim:, user:)
+          def self.first_slug
+            "role_and_experience"
+          end
+
+          def initialize(claim:, user:, current_slug:)
             @claim = claim
             @user = user
+            @current_slug = current_slug
           end
 
           def current_form
+            find_form(current_slug)
+          end
+
+          def next_form
+            # These guards are required to support changing the role and
+            # experience answers. If the contract type is non permanent, we need
+            # to show the additional screen, even if no answers were changed on
+            # the first screen.
+            if current_slug == "role_and_experience"
+              if reachable_steps.include?(ContractCoversFullAcademicYearForm)
+                return find_form("contract_covers_full_academic_year")
+              end
+
+              if reachable_steps.include?(TaughtAtLeastOneAcademicTermForm)
+                return find_form("taught_at_least_one_academic_term")
+              end
+            end
+
             reachable_forms.detect(&:incomplete?)
           end
 
@@ -27,9 +50,22 @@ module FurtherEducationPayments
 
           private
 
-          attr_reader :claim, :user, :forms
+          attr_reader :claim, :user, :current_slug
 
           delegate :eligibility, to: :claim
+
+          def find_form(slug)
+            form = reachable_forms.detect { it.slug == slug }
+
+            unless form
+              raise(
+                ActiveRecord::RecordNotFound,
+                "Reachable form not found: #{slug}"
+              )
+            end
+
+            form
+          end
 
           def reachable_forms
             @reachable_forms ||= build_forms(reachable_steps)
