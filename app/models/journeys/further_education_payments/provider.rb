@@ -26,11 +26,11 @@ module Journeys
 
       START_WITH_MAGIC_LINK = true
 
-      def self.request_service_access_url(session)
+      def self.request_service_access_url(dfe_sign_in_uid)
         [
           "https://services.signin.education.gov.uk",
           "request-service", DfeSignIn.configuration.client_id,
-          "users", session.answers.dfe_sign_in_uid
+          "users", dfe_sign_in_uid
         ].join("/")
       end
 
