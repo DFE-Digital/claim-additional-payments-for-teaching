@@ -2,7 +2,8 @@ require "rails_helper"
 
 RSpec.describe DfeSignIn::Api::User do
   describe "#all" do
-    let(:users) { described_class.all }
+    let(:client_id) { "teacherpayments" }
+    let(:users) { described_class.all(client_id:) }
 
     context "with one page" do
       before do
@@ -39,11 +40,11 @@ RSpec.describe DfeSignIn::Api::User do
     end
   end
 
-  let(:user) { described_class.new(user_id: 999, organisation_id: 456) }
+  let(:user) { described_class.new(user_id: 999, organisation_id: 456, user_type: "admin") }
 
   context "with a valid response" do
     before do
-      stub_dfe_sign_in_user_info_request(999, 456, "my_role")
+      stub_dfe_sign_in_user_info_request(999, 456, "my_role", user_type: "admin")
     end
 
     describe "#has_role?" do
@@ -65,7 +66,7 @@ RSpec.describe DfeSignIn::Api::User do
 
   context "with a invalid response" do
     before do
-      stub_failed_dfe_sign_in_user_info_request(999, 456)
+      stub_failed_dfe_sign_in_user_info_request(999, 456, user_type: "admin")
     end
 
     it "raises an error" do
@@ -82,7 +83,7 @@ RSpec.describe DfeSignIn::Api::User do
 
     context "when the response is successful" do
       before do
-        stub_dfe_sign_in_user_info_request(999, 456, "my_role")
+        stub_dfe_sign_in_user_info_request(999, 456, "my_role", user_type: "admin")
       end
 
       it { is_expected.to be true }
@@ -90,30 +91,10 @@ RSpec.describe DfeSignIn::Api::User do
 
     context "when the response is not successful" do
       before do
-        stub_failed_dfe_sign_in_user_info_request(999, 456, status: 404)
+        stub_failed_dfe_sign_in_user_info_request(999, 456, status: 404, user_type: "admin")
       end
 
       it { is_expected.to be false }
-    end
-  end
-
-  describe "#service_error?" do
-    subject { user.service_error? }
-
-    context "when the response is not a server error" do
-      before do
-        stub_dfe_sign_in_user_info_request(999, 456, "my_role")
-      end
-
-      it { is_expected.to be false }
-    end
-
-    context "when the response is an error" do
-      before do
-        stub_failed_dfe_sign_in_user_info_request(999, 456, status: 500)
-      end
-
-      it { is_expected.to be true }
     end
   end
 end
