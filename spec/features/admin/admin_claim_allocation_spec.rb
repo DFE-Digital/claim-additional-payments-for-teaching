@@ -111,7 +111,7 @@ RSpec.feature "Claims awaiting a decision" do
 
   context "with more than 25 claims" do
     scenario "assign first 25 to one Claim's checker" do
-      click_on "View claims"
+      click_on "Claims"
 
       within("#allocations") do
         expect(page).to have_select("allocate_to_team_member", options: ["Aaron Admin", "Sarah Strawbridge", "Frank Yee", "Abdul Rafiq"])
@@ -153,7 +153,7 @@ RSpec.feature "Claims awaiting a decision" do
     end
 
     scenario "assign 5 claims to one Claim's checker" do
-      click_on "View claims"
+      click_on "Claims"
 
       expect(@submitted_claims.size).to eq 40
 
@@ -190,7 +190,7 @@ RSpec.feature "Claims awaiting a decision" do
         expect(claim.reload.assigned_to.full_name).to eq "Aaron Admin"
       end
 
-      click_on "View claims"
+      click_on "Claims"
 
       select "Frank Yee", from: "allocate_to_team_member"
       select "All", from: "allocate_to_policy"
@@ -217,7 +217,7 @@ RSpec.feature "Claims awaiting a decision" do
 
   context "when assigning by policy" do
     scenario "Student Loans" do
-      click_on "View claims"
+      click_on "Claims"
 
       expect(@submitted_claims.size).to eq 40
 
@@ -256,7 +256,7 @@ RSpec.feature "Claims awaiting a decision" do
     end
 
     scenario "International Relocation Payments" do
-      click_on "View claims"
+      click_on "Claims"
 
       within("#allocations") do
         expect(page).to have_select("allocate_to_team_member", options: ["Aaron Admin", "Sarah Strawbridge", "Frank Yee", "Abdul Rafiq"])
@@ -286,7 +286,7 @@ RSpec.feature "Claims awaiting a decision" do
         expect(claim.reload.assigned_to.full_name).to eq frank.full_name
       end
 
-      click_on "View claims"
+      click_on "Claims"
 
       select "Sarah Strawbridge", from: "allocate_to_team_member"
       select "Student Loans", from: "allocate_to_policy"
@@ -313,7 +313,7 @@ RSpec.feature "Claims awaiting a decision" do
     scenario "unallocate All of Abdul Rafiq's claims" do
       Claim.awaiting_decision.update_all(assigned_to_id: abdul.id)
 
-      click_on "View claims"
+      click_on "Claims"
 
       @submitted_claims.each do |claim|
         expect(claim.reload.assigned_to.full_name).to eq "Abdul Rafiq"
@@ -342,7 +342,7 @@ RSpec.feature "Claims awaiting a decision" do
     scenario "unallocate Frank Yee's Early Career Payments claims" do
       Claim.awaiting_decision.update_all(assigned_to_id: frank.id)
 
-      click_on "View claims"
+      click_on "Claims"
 
       @submitted_claims.each do |claim|
         expect(claim.reload.assigned_to.full_name).to eq "Frank Yee"
@@ -376,7 +376,7 @@ RSpec.feature "Claims awaiting a decision" do
     scenario "when deallocation is not confirmed" do
       Claim.awaiting_decision.update_all(assigned_to_id: abdul.id)
 
-      click_on "View claims"
+      click_on "Claims"
 
       @submitted_claims.each do |claim|
         expect(claim.reload.assigned_to.full_name).to eq "Abdul Rafiq"
@@ -403,7 +403,7 @@ RSpec.feature "Claims awaiting a decision" do
     scenario "when zero claims for policy" do
       Claim.awaiting_decision.update_all(assigned_to_id: sarah.id)
 
-      click_on "View claims"
+      click_on "Claims"
 
       @submitted_claims.each do |claim|
         expect(claim.reload.assigned_to.full_name).to eq "Sarah Strawbridge"

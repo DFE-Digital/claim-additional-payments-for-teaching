@@ -1,6 +1,7 @@
 module Admin
   class AuthController < BaseAdminController
     skip_before_action :ensure_authenticated_user
+
     protect_from_forgery except: :bypass_callback
 
     def sign_in

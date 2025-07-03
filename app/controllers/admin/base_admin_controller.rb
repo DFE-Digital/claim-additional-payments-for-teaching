@@ -6,7 +6,8 @@ module Admin
 
     layout "admin"
 
-    before_action :end_expired_admin_sessions, :ensure_authenticated_user
+    before_action :end_expired_admin_sessions
+    before_action :ensure_authenticated_user
     before_action :set_cache_headers
     after_action :update_last_seen_at
     helper_method :admin_signed_in?, :admin_timeout_in_minutes, :service_operator_signed_in?
@@ -14,7 +15,7 @@ module Admin
     private
 
     def ensure_authenticated_user
-      unless admin_signed_in?
+      if current_admin.null_user?
         clear_session
         session[:requested_admin_path] = request.fullpath if store_requested_admin_path?
         redirect_to admin_sign_in_path
@@ -22,7 +23,7 @@ module Admin
     end
 
     def admin_user
-      @admin_user ||= DfeSignIn::User.not_deleted.find_by(id: session[:user_id], session_token: session[:token])
+      @admin_user ||= DfeSignIn::User.not_deleted.find_by(id: session[:user_id], session_token: session[:token]) || DfeSignIn::NullUser.new
     end
 
     def current_admin
@@ -55,6 +56,8 @@ module Admin
     end
 
     def clear_session
+      @admin_user = nil
+
       session.delete(:user_id)
       session.delete(:token)
       session.delete(:organisation_id)
