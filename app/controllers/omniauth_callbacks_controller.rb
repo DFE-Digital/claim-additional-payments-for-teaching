@@ -254,6 +254,17 @@ class OmniauthCallbacksController < ApplicationController
     session[:token] = dfe_sign_in_user.session_token
 
     redirect_to further_education_payments_providers_claims_path
+  rescue DfeSignIn::ExternalServerError => e
+    code = e.message.split(":").first
+
+    if code == "404"
+      redirect_to further_education_payments_providers_authorisation_failure_path(
+        reason: :no_service_access,
+        dfe_sign_in_uid: auth["uid"]
+      )
+    else
+      raise e
+    end
   end
 
   def redirect_to_journey(auth)
