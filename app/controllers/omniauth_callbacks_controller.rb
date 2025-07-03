@@ -213,28 +213,7 @@ class OmniauthCallbacksController < ApplicationController
   # FIXME RL - probably want to move this to ProviderSessionsController#callback
   def further_education_payments_provider_callback(auth)
     if FeatureFlag.enabled?(:provider_dashboard)
-      if DfESignIn.bypass?
-        auth = params
-
-        dfe_sign_in_session = DfeSignIn::AuthenticatedSession.new(
-          user_id: auth["uid"],
-          organisation_id: auth.dig("extra", "raw_info", "organisation", "id"),
-          organisation_ukprn: auth.dig("extra", "raw_info", "organisation", "ukprn"),
-          role_codes: auth["roles"]&.values
-        )
-      else
-        dfe_sign_in_session = DfeSignIn::AuthenticatedSession.from_auth_hash(auth)
-      end
-
-      dfe_sign_in_user = DfeSignIn::User.from_session(dfe_sign_in_session)
-
-      dfe_sign_in_user.regenerate_session_token
-      dfe_sign_in_user.save!
-
-      session[:user_id] = dfe_sign_in_user.id
-      session[:token] = dfe_sign_in_user.session_token
-
-      redirect_to further_education_payments_providers_claims_path
+      further_education_payments_provider_dashboard_callback(auth)
     else
       auth = params if DfESignIn.bypass?
 
@@ -250,6 +229,31 @@ class OmniauthCallbacksController < ApplicationController
         )
       )
     end
+  end
+
+  def further_education_payments_provider_dashboard_callback(auth)
+    if DfESignIn.bypass?
+      auth = params
+
+      dfe_sign_in_session = DfeSignIn::AuthenticatedSession.new(
+        user_id: auth["uid"],
+        organisation_id: auth.dig("extra", "raw_info", "organisation", "id"),
+        organisation_ukprn: auth.dig("extra", "raw_info", "organisation", "ukprn"),
+        role_codes: auth["roles"]&.values
+      )
+    else
+      dfe_sign_in_session = DfeSignIn::AuthenticatedSession.from_auth_hash(auth)
+    end
+
+    dfe_sign_in_user = DfeSignIn::User.from_session(dfe_sign_in_session)
+
+    dfe_sign_in_user.regenerate_session_token
+    dfe_sign_in_user.save!
+
+    session[:user_id] = dfe_sign_in_user.id
+    session[:token] = dfe_sign_in_user.session_token
+
+    redirect_to further_education_payments_providers_claims_path
   end
 
   def redirect_to_journey(auth)
