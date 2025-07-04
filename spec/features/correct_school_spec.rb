@@ -29,7 +29,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
 
     # - correct-school page
     expect(page).to have_text(eligible_school.name)
-    expect(page).not_to have_text("Enter the school name or postcode. Use at least three characters.")
+    expect(page).not_to have_text("Enter the school name or postcode using at least 3 characters")
 
     # - Select the suggested school
     choose(eligible_school.name)
@@ -45,7 +45,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
 
     # - current-school page
     expect(page).to have_text(eligible_school.name)
-    expect(page).not_to have_text("Enter the school name or postcode. Use at least three characters.")
+    expect(page).not_to have_text("Enter the school name or postcode using at least 3 characters")
 
     # - Select the suggested school
     choose("Somewhere else")
@@ -63,7 +63,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
     navigate_to_correct_school_page(tps: :outside_window, school: eligible_school)
 
     expect(page).to have_text("Which school do you teach at?")
-    expect(page).to have_text("Enter the school name or postcode. Use at least three characters.")
+    expect(page).to have_text("Enter the school name or postcode using at least 3 characters")
   end
 
   scenario "TPS school is ineligible, still suggested and TPS inside window" do
@@ -71,7 +71,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
 
     # - correct-school page
     expect(page).to have_text(ineligible_school.name)
-    expect(page).not_to have_text("Enter the school name or postcode. Use at least three characters.")
+    expect(page).not_to have_text("Enter the school name or postcode using at least 3 characters")
 
     # - Select the suggested school
     choose(ineligible_school.name)
@@ -84,7 +84,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
 
     # - Goes to current-school
     expect(page).to have_text("Which school do you teach at?")
-    expect(page).to have_text("Enter the school name or postcode. Use at least three characters.")
+    expect(page).to have_text("Enter the school name or postcode using at least 3 characters")
 
     session = Journeys::TargetedRetentionIncentivePayments::Session.last
     expect(session.answers.current_school).to be_nil
