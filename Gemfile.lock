@@ -300,7 +300,7 @@ GEM
       aes_key_wrap
       bindata
       httpclient
-    jwt (2.10.1)
+    jwt (2.10.2)
       base64
     kramdown (2.5.1)
       rexml (>= 3.3.9)
