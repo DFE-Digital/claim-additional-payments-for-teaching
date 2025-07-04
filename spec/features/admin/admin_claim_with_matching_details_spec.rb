@@ -11,7 +11,7 @@ RSpec.feature "Admin checking a claim with matching details" do
     claim = create(:claim, :submitted, policy: Policies::StudentLoans)
     claim_with_matching_details = create(:claim, :submitted, eligibility_attributes: {teacher_reference_number: claim.eligibility.teacher_reference_number})
 
-    click_on "View claims"
+    click_on "Claims"
     find("a[href='#{admin_claim_tasks_path(claim)}']").click
 
     expect(page).to have_content("1. Identity confirmation")

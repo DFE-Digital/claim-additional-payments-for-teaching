@@ -50,14 +50,14 @@ RSpec.feature "Admin claim filtering" do
     ecp_claims = early_career_payments_claims_for_mary + early_career_payments_claims_for_mette + early_career_payments_claims_failed_bank_validation
     targeted_retention_incentive_claims = targeted_retention_incentive_claims_unassigned
 
-    click_on "View claims"
+    click_on "Claims"
 
     expect(page).to have_selector("td[text()='ECP']", count: 10)
     expect(page).to have_selector("td[text()='TSLR']", count: 7)
     expect(page).to have_selector("td[text()='STRI']", count: 2)
     expect(page).to have_selector("td[text()='FE']", count: 2)
 
-    click_on "View claims"
+    click_on "Claims"
     select "Student Loans", from: "filter-policy-field"
     click_on "Apply filters"
 
@@ -75,7 +75,7 @@ RSpec.feature "Admin claim filtering" do
   end
 
   scenario "the service operator can filter by themselves or other team members" do
-    click_on "View claims"
+    click_on "Claims"
 
     expect(page).to have_selector("td[text()='TSLR']", count: 5)
     expect(page).to have_selector("td[text()='ECP']", count: 10)
@@ -108,7 +108,7 @@ RSpec.feature "Admin claim filtering" do
   end
 
   scenario "filter unassigned claims" do
-    click_on "View claims"
+    click_on "Claims"
     select "Unassigned", from: "filter-team-member-field"
     click_on "Apply filters"
 
@@ -118,7 +118,7 @@ RSpec.feature "Admin claim filtering" do
   end
 
   scenario "filter claims by status" do
-    click_on "View claims"
+    click_on "Claims"
 
     expect_page_to_show_claims(
       student_loans_claims_for_mette,

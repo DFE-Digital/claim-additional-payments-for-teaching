@@ -17,7 +17,7 @@ RSpec.feature "Switching policies" do
 
     scenario "a user can switch to a different policy after starting a claim on another" do
       expect(page.title).to have_text(I18n.t("targeted_retention_incentive_payments.journey_name"))
-      expect(page.find("header")).to have_text(I18n.t("targeted_retention_incentive_payments.journey_name"))
+      expect(page.find(".govuk-service-navigation")).to have_text(I18n.t("targeted_retention_incentive_payments.journey_name"))
 
       choose "Start a new eligibility check"
       click_on "Continue"
@@ -51,12 +51,11 @@ RSpec.feature "Switching policies" do
         I18n.t("get_a_teacher_relocation_payment.journey_name")
       )
 
-      expect(page.find("header")).to(
+      expect(page.find(".govuk-service-navigation")).to(
         have_text(I18n.t("get_a_teacher_relocation_payment.journey_name"))
       )
 
       choose "Start a new eligibility check"
-
       click_on "Continue"
 
       expect(page.title).to include(

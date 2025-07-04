@@ -17,7 +17,7 @@ RSpec.feature "Admin claim tasks update with DQT CSV" do
     claim_with_qualification_task = claim_from_example_dqt_report(:claim_with_qualification_task)
     existing_qualification_task = claim_with_qualification_task.tasks.find_by!(name: "qualifications")
 
-    click_on "View claims"
+    click_on "Claims"
     click_on "Upload DQT report"
 
     attach_file("Upload a CSV file", example_dqt_report_csv.path)

@@ -12,7 +12,7 @@ RSpec.feature "Admin checks a claim" do
         submitted_claims = create_list(:claim, 2, :submitted)
         claim_to_approve = submitted_claims.first
 
-        click_on "View claims"
+        click_on "Claims"
 
         expect(page).to have_content(claim_to_approve.reference)
         expect(page).to have_content("2 claims awaiting a decision")
@@ -42,7 +42,7 @@ RSpec.feature "Admin checks a claim" do
       submitted_claims = create_list(:claim, 2, :submitted)
       claim_to_reject = submitted_claims.first
 
-      click_on "View claims"
+      click_on "Claims"
 
       expect(page).to have_content(claim_to_reject.reference)
       expect(page).to have_content("2 claims awaiting a decision")

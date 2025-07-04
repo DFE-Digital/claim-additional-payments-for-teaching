@@ -19,7 +19,7 @@ RSpec.feature "Data report request" do
     create_list(:claim, 150, :approved) # Making sure CSV excludes approved claims in the download
     create_list(:claim, 4, :rejected) # Making sure CSV excludes rejected claims in the download
 
-    click_on "View claims"
+    click_on "Claims"
     click_on "Download report request file"
 
     expect(page.response_headers["Content-Type"]).to eq("text/csv")

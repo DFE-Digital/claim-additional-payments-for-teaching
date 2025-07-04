@@ -29,6 +29,10 @@ module DfeSignIn
       user
     end
 
+    def null_user?
+      false
+    end
+
     def full_name
       [given_name, family_name].join(" ")
     end

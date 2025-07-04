@@ -91,4 +91,53 @@ module ApplicationHelper
 
     hash["state"]
   end
+
+  def admin_nav_items
+    [
+      {text: "Claims", href: admin_claims_path, active_when: /^(?!#{search_admin_claims_path})#{admin_claims_path}/},
+      {text: "Search", href: search_admin_claims_path, active_when: search_admin_claims_path},
+      {text: "Payroll", href: admin_payroll_runs_path, active_when: admin_payroll_runs_path},
+      {text: "Manage services", href: admin_journey_configurations_path, active_when: admin_journey_configurations_path},
+      {text: "Reports", href: admin_reports_path, active_when: admin_reports_path},
+      {text: "Sign out", href: admin_sign_out_path}
+    ]
+  end
+
+  def footer_links
+    [
+      {
+        text: "Contact us",
+        href: contact_us_path(current_journey_routing_name)
+      },
+      {
+        text: "Cookies",
+        href: cookies_path(current_journey_routing_name)
+      },
+      {
+        text: "Terms and conditions",
+        href: terms_conditions_path(current_journey_routing_name)
+      },
+      {
+        text: "Privacy notice",
+        href: "https://www.gov.uk/government/publications/privacy-information-education-providers-workforce-including-teachers/privacy-information-education-providers-workforce-including-teachers"
+      },
+      {
+        text: "Accessibility statement",
+        href: accessibility_statement_path(current_journey_routing_name)
+      }
+    ]
+  end
+
+  def admin_footer_links
+    [
+      {
+        text: "Cookies",
+        href: admin_cookies_path
+      },
+      {
+        text: "Accessibility statement",
+        href: admin_accessibility_statement_path
+      }
+    ]
+  end
 end

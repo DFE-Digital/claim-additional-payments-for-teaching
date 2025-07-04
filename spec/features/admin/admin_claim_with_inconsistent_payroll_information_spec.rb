@@ -24,7 +24,7 @@ RSpec.feature "Admin checking a claim with inconsistent payroll information" do
     approved_claim = create(:claim, :approved, personal_details.merge(bank_sort_code: "112233", bank_account_number: "29482823"))
     second_inconsistent_claim = create(:claim, :submitted, personal_details.merge(bank_sort_code: "582939", bank_account_number: "74727752"))
 
-    click_on "View claims"
+    click_on "Claims"
     find("a[href='#{admin_claim_tasks_path(second_inconsistent_claim)}']").click
 
     click_on "Approve or reject this claim"
