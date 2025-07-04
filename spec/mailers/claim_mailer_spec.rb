@@ -216,7 +216,7 @@ RSpec.describe ClaimMailer, type: :mailer do
         end
 
         context "when InternationalRelocationPayments", if: policy == Policies::InternationalRelocationPayments do
-          let(:expected_template_id) { "1edc468c-a1bf-4bea-bb79-042740cd8547" }
+          let(:expected_template_id) { "8c20259b-1016-4330-9488-b82869f28c1c" }
 
           let(:expected_rejected_reasons_keys) do
             {
