@@ -411,6 +411,106 @@ RSpec.feature "Provider verifying claims" do
     end
   end
 
+  context "when the provider clicks a back link" do
+    it "takes them to the previous page" do
+      fe_provider = create(
+        :school,
+        :further_education,
+        name: "Springfield College"
+      )
+
+      sign_in_to(fe_provider)
+
+      claim = create(
+        :claim,
+        :submitted,
+        :further_education,
+        first_name: "Edna",
+        surname: "Krabappel",
+        reference: "AB123456",
+        submitted_at: DateTime.new(2025, 10, 1, 9, 0, 0),
+        academic_year: AcademicYear.new(2025),
+        eligibility_attributes: {
+          school: fe_provider,
+          teacher_reference_number: "1234567"
+        }
+      )
+
+      visit(
+        edit_further_education_payments_providers_claim_verification_path(claim)
+      )
+
+      within_fieldset(
+        "Is Edna Krabappel a member of staff with teaching responsibilities?"
+      ) { choose "Yes" }
+
+      within_fieldset(
+        "Is Edna Krabappel in the first 5 years of their further education " \
+        "(FE) teaching career in England?"
+      ) { choose "Yes" }
+
+      within_fieldset("Does Edna Krabappel have a teaching qualification?") do
+        choose "Yes"
+      end
+
+      within_fieldset(
+        "What type of contract does Edna Krabappel have with " \
+        "Springfield College?"
+      ) { choose "Variable" }
+
+      within_fieldset("Have you completed this section?") do
+        choose "Yes"
+      end
+
+      click_on "Save and continue"
+
+      # Expect to see variable hours specific question
+      expect(page).to have_content(
+        "Has Edna Krabappel taught at Springfield College for at least one " \
+        "academic term?"
+      )
+
+      click_on "Back"
+
+      within_fieldset(
+        "What type of contract does Edna Krabappel have with " \
+        "Springfield College?"
+      ) { choose "Fixed-term" }
+
+      within_fieldset("Have you completed this section?") do
+        choose "Yes"
+      end
+
+      click_on "Save and continue"
+
+      # Expect to see fixed term specific question
+      expect(page).to have_content(
+        "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
+        "academic year?"
+      )
+
+      within_fieldset(
+        "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
+        "academic year?"
+      ) { choose "Yes" }
+
+      within_fieldset("Have you completed this section?") do
+        choose "Yes"
+      end
+
+      click_on "Save and continue"
+
+      # Check answers page
+      click_on "Back"
+
+      # Expect to see fixed term specific question
+      expect(page).to have_content(
+        "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
+        "academic year?"
+      )
+    end
+  end
+
   def summary_row(label)
     find("dt", text: label).sibling("dd")
   end

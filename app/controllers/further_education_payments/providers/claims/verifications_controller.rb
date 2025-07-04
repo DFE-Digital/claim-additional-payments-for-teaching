@@ -41,6 +41,16 @@ module FurtherEducationPayments
           @form = wizard.current_form
         end
 
+        def backlink_path
+          previous_form = wizard.previous_form
+
+          edit_further_education_payments_providers_claim_verification_path(
+            claim,
+            slug: previous_form.slug
+          )
+        end
+        helper_method :backlink_path
+
         def wizard
           Verification::Wizard.new(
             claim: claim,
