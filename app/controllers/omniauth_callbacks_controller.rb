@@ -247,6 +247,14 @@ class OmniauthCallbacksController < ApplicationController
 
     dfe_sign_in_user = DfeSignIn::User.from_session(dfe_sign_in_session)
 
+    # If from_session returns nil, it means the user is deleted
+    unless dfe_sign_in_user.present?
+      return redirect_to further_education_payments_providers_authorisation_failure_path(
+        reason: :user_removed,
+        dfe_sign_in_uid: auth["uid"]
+      )
+    end
+
     dfe_sign_in_user.regenerate_session_token
     dfe_sign_in_user.save!
 

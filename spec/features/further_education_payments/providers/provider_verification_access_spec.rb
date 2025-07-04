@@ -242,4 +242,41 @@ RSpec.feature "Provider verification access control" do
       )
     end
   end
+
+  context "when the user was deleted" do
+    it "shows authorization failure page with no service access" do
+      create(
+        :dfe_signin_user,
+        dfe_sign_in_id: "11111",
+        deleted_at: Time.zone.now
+      )
+
+      mock_dfe_sign_in_auth_session(
+        provider: :dfe_fe_provider,
+        auth_hash: {
+          uid: "11111",
+          extra: {
+            raw_info: {
+              organisation: {
+                id: "22222",
+                ukprn: fe_provider.ukprn
+              }
+            }
+          }
+        }
+      )
+
+      stub_dfe_sign_in_user_info_request(
+        "11111",
+        "22222",
+        Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
+      )
+
+      visit new_further_education_payments_providers_session_path
+
+      click_on "Start now"
+
+      expect(page).to have_content("You do not have access to this service")
+    end
+  end
 end
