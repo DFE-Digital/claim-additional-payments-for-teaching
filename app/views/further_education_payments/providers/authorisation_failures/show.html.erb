@@ -9,6 +9,8 @@
       <%= render "organisation_mismatch" %>
     <% when "no_service_access" %>
       <%= render "no_service_access" %>
+    <% when "user_removed" %>
+      <%= render "no_service_access" %>
     <% else %>
       <%= render "generic" %>
     <% end %>
