@@ -40,8 +40,12 @@ module FurtherEducationPayments
             }
           )
 
-          # TBD decide how we want to handle this
-          # validates :section_completed, inclusion: { in: [true, false] }
+          validates(
+            :provider_verification_role_and_experience_section_completed,
+            inclusion: {
+              in: ->(form) { form.section_completed_options.map(&:id) }
+            }
+          )
 
           def provider_name
             provider.name

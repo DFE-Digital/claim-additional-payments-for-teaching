@@ -22,6 +22,13 @@ module FurtherEducationPayments
             }
           )
 
+          validates(
+            :provider_verification_taught_one_term_section_completed,
+            inclusion: {
+              in: ->(form) { form.section_completed_options.map(&:id) }
+            }
+          )
+
           def taught_at_least_one_academic_term_options
             [
               Form::Option.new(id: true, name: "Yes"),

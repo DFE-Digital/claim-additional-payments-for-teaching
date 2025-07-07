@@ -27,13 +27,22 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Taught
         )
       )
     end
+
+    it do
+      is_expected.not_to(
+        allow_value(nil).for(
+          :provider_verification_taught_one_term_section_completed
+        )
+      )
+    end
   end
 
   describe "#incomplete?" do
     context "when form is valid" do
       let(:params) do
         {
-          provider_verification_taught_at_least_one_academic_term: true
+          provider_verification_taught_at_least_one_academic_term: true,
+          provider_verification_taught_one_term_section_completed: true
         }
       end
 
@@ -55,7 +64,8 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Taught
     context "when form is valid" do
       let(:params) do
         {
-          provider_verification_taught_at_least_one_academic_term: true
+          provider_verification_taught_at_least_one_academic_term: true,
+          provider_verification_taught_one_term_section_completed: true
         }
       end
 
@@ -66,6 +76,10 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Taught
 
         expect(
           eligibility.provider_verification_taught_at_least_one_academic_term
+        ).to be(true)
+
+        expect(
+          eligibility.provider_verification_taught_one_term_section_completed
         ).to be(true)
       end
     end

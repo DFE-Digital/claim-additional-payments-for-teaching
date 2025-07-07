@@ -20,6 +20,13 @@ module FurtherEducationPayments
             }
           )
 
+          validates(
+            :provider_verification_contract_covers_section_completed,
+            inclusion: {
+              in: ->(form) { form.section_completed_options.map(&:id) }
+            }
+          )
+
           def claimant_name
             claim.full_name
           end

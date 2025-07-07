@@ -27,13 +27,22 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Contra
         )
       )
     end
+
+    it do
+      is_expected.not_to(
+        allow_value(nil).for(
+          :provider_verification_contract_covers_section_completed
+        )
+      )
+    end
   end
 
   describe "#save" do
     context "when form is valid" do
       let(:params) do
         {
-          provider_verification_contract_covers_full_academic_year: true
+          provider_verification_contract_covers_full_academic_year: true,
+          provider_verification_contract_covers_section_completed: true
         }
       end
 
@@ -44,6 +53,10 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Contra
 
         expect(
           eligibility.provider_verification_contract_covers_full_academic_year
+        ).to be(true)
+
+        expect(
+          eligibility.provider_verification_contract_covers_section_completed
         ).to be(true)
       end
     end
