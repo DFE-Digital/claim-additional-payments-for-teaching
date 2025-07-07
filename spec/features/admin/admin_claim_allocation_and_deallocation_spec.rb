@@ -11,23 +11,18 @@ RSpec.feature "Admin claim allocation and deallocation" do
 
     scenario "user can assign and unassign a claim" do
       visit admin_claim_tasks_path(claim)
-
       expect(page).to have_content "CAUTION: This claim is currently assigned to #{other_user_full_name}"
-
       click_link "Unassign"
 
       expect(page).to have_content "This claim is currently unassigned"
-
       click_link "Assign to yourself"
 
       expect(page).to have_content "You are currently assigned this claim"
-
       click_on "Back"
 
       expect(page).to have_content(current_user_full_name)
 
       visit admin_claim_tasks_path(claim)
-
       click_link "Unassign"
 
       expect(page).to have_content "This claim is currently unassigned"
