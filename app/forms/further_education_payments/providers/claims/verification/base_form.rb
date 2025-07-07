@@ -18,7 +18,11 @@ module FurtherEducationPayments
             @claim = claim
             @user = user
 
-            super(params)
+            exisiting_attributes = claim.eligibility.attributes.slice(
+              *self.class.attribute_names
+            )
+
+            super(params.reverse_merge(exisiting_attributes))
           end
 
           def template

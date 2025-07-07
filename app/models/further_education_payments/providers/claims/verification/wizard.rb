@@ -114,13 +114,7 @@ module FurtherEducationPayments
 
           def build_forms(form_classes)
             form_classes.map do |form_class|
-              form_class.new(
-                claim: claim,
-                user: user,
-                params: claim.eligibility.attributes.slice(
-                  *form_class.attribute_names.map(&:to_s)
-                )
-              )
+              form_class.new(claim: claim, user: user)
             end
           end
         end
