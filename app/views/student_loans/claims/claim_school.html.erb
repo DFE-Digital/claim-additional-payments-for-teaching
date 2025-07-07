@@ -23,16 +23,17 @@
             size: "xl"
           },
           hint: -> do %>
-            <p>
-              Enter the school name or postcode. Use at least three characters.
-            </p>
+          <p>
+            Enter the school name or postcode using at least 3 characters.
+          </p>
 
-            <% if @form.show_multiple_schools_content? %>
-              <p>
-                If you taught at multiple schools during this period, enter the first school you think might be eligible.
-              </p>
-            <% end %>
+          <% if @form.show_multiple_schools_content? %>
+            <p>
+              If you taught at multiple schools during this period, enter the
+              first school you think might be eligible.
+            </p>
           <% end %>
+        <% end %>
       </div>
 
       <%= f.govuk_submit %>
