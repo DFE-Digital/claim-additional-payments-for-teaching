@@ -26,24 +26,68 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::RoleAn
       ))
     end
 
-    it do
-      is_expected.not_to(
-        allow_value(nil).for(:provider_verification_in_first_five_years)
-      )
+    context "when submission" do
+      before do
+        form.provider_verification_role_and_experience_section_completed = true
+      end
+
+      it do
+        is_expected.not_to(
+          allow_value(nil).for(:provider_verification_teaching_responsibilities)
+        )
+      end
+
+      it do
+        is_expected.not_to(
+          allow_value(nil).for(:provider_verification_in_first_five_years)
+        )
+      end
+
+      it do
+        is_expected.to(
+          validate_inclusion_of(:provider_verification_teaching_qualification)
+            .in_array(%w[yes not_yet no_but_planned no_not_planned])
+        )
+      end
+
+      it do
+        is_expected.to(
+          validate_inclusion_of(:provider_verification_contract_type)
+            .in_array(%w[permanent fixed_term variable_hours])
+        )
+      end
     end
 
-    it do
-      is_expected.to(
-        validate_inclusion_of(:provider_verification_teaching_qualification)
-          .in_array(%w[yes not_yet no_but_planned no_not_planned])
-      )
-    end
+    context "when saving progress" do
+      before do
+        form.provider_verification_role_and_experience_section_completed = false
+      end
 
-    it do
-      is_expected.to(
-        validate_inclusion_of(:provider_verification_contract_type)
-          .in_array(%w[permanent fixed_term variable_hours])
-      )
+      it do
+        is_expected.to(
+          allow_value(nil).for(:provider_verification_teaching_responsibilities)
+        )
+      end
+
+      it do
+        is_expected.to(
+          allow_value(nil).for(:provider_verification_in_first_five_years)
+        )
+      end
+
+      it do
+        is_expected.to(
+          validate_inclusion_of(:provider_verification_teaching_qualification)
+            .in_array(["yes", "not_yet", "no_but_planned", "no_not_planned", nil])
+        )
+      end
+
+      it do
+        is_expected.to(
+          validate_inclusion_of(:provider_verification_contract_type)
+            .in_array(["permanent", "fixed_term", "variable_hours", nil])
+        )
+      end
     end
   end
 

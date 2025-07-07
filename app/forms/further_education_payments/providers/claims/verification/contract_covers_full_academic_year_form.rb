@@ -15,9 +15,10 @@ module FurtherEducationPayments
 
           validates(
             :provider_verification_contract_covers_full_academic_year,
-            inclusion: {
+            included: {
               in: ->(form) { form.contract_covers_full_academic_year_options.map(&:id) }
-            }
+            },
+            allow_nil: :save_and_exit?
           )
 
           validates(
@@ -60,6 +61,10 @@ module FurtherEducationPayments
                 name: "No, I want to come back to it later"
               )
             ]
+          end
+
+          def save_and_exit?
+            provider_verification_contract_covers_section_completed == false
           end
         end
       end

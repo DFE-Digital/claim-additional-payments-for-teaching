@@ -14,30 +14,34 @@ module FurtherEducationPayments
 
           validates(
             :provider_verification_teaching_responsibilities,
-            inclusion: {
+            included: {
               in: ->(form) { form.teaching_responsibilities_options.map(&:id) }
-            }
+            },
+            allow_nil: :save_and_exit?
           )
 
           validates(
             :provider_verification_in_first_five_years,
-            inclusion: {
+            included: {
               in: ->(form) { form.in_first_five_years_options.map(&:id) }
-            }
+            },
+            allow_nil: :save_and_exit?
           )
 
           validates(
             :provider_verification_teaching_qualification,
-            inclusion: {
+            included: {
               in: ->(form) { form.teaching_qualification_options.map(&:id) }
-            }
+            },
+            allow_nil: :save_and_exit?
           )
 
           validates(
             :provider_verification_contract_type,
-            inclusion: {
+            included: {
               in: ->(form) { form.contract_type_options.map(&:id) }
-            }
+            },
+            allow_nil: :save_and_exit?
           )
 
           validates(
@@ -109,6 +113,10 @@ module FurtherEducationPayments
                 name: "No, I want to come back to it later"
               )
             ]
+          end
+
+          def save_and_exit?
+            provider_verification_role_and_experience_section_completed == false
           end
         end
       end

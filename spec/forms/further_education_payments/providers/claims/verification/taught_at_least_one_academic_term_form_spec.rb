@@ -23,17 +23,37 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Taught
     it do
       is_expected.not_to(
         allow_value(nil).for(
-          :provider_verification_taught_at_least_one_academic_term
+          :provider_verification_taught_one_term_section_completed
         )
       )
     end
 
-    it do
-      is_expected.not_to(
-        allow_value(nil).for(
-          :provider_verification_taught_one_term_section_completed
+    context "when submission" do
+      before do
+        form.provider_verification_taught_one_term_section_completed = true
+      end
+
+      it do
+        is_expected.not_to(
+          allow_value(nil).for(
+            :provider_verification_taught_at_least_one_academic_term
+          )
         )
-      )
+      end
+    end
+
+    context "when not submission" do
+      before do
+        form.provider_verification_taught_one_term_section_completed = false
+      end
+
+      it do
+        is_expected.to(
+          allow_value(nil).for(
+            :provider_verification_taught_at_least_one_academic_term
+          )
+        )
+      end
     end
   end
 

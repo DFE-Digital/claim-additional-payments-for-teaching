@@ -1,0 +1,22 @@
+<%= content_for(
+  :page_title,
+  "Review a targeted retention incentive payment claim"
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Progress saved
+    </h1>
+
+    <p class="govuk-body">
+      You’ve saved your progress. You can come back and complete this later.
+    </p>
+
+    <%= govuk_button_link_to(
+      "Return to dashboard",
+      further_education_payments_providers_claims_path
+    ) %>
+  </div>
+</div>
+

@@ -15,11 +15,12 @@ module FurtherEducationPayments
 
           validates(
             :provider_verification_taught_at_least_one_academic_term,
-            inclusion: {
+            included: {
               in: ->(form) do
                 form.taught_at_least_one_academic_term_options.map(&:id)
               end
-            }
+            },
+            allow_nil: :save_and_exit?
           )
 
           validates(
@@ -47,6 +48,10 @@ module FurtherEducationPayments
                 name: "No, I want to come back to it later"
               )
             ]
+          end
+
+          def save_and_exit?
+            provider_verification_taught_one_term_section_completed == false
           end
         end
       end

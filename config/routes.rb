@@ -193,6 +193,7 @@ Rails.application.routes.draw do
       resources :authorisation_failures, only: [:show], param: :reason
       resources :claims, only: %i[index] do
         resource :verification, only: %i[edit update], module: :claims
+        resource :information, only: %i[show], module: :claims
       end
     end
   end
