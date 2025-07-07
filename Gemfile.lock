@@ -776,10 +776,10 @@ GEM
     securerandom (0.4.1)
     semantic_logger (4.16.1)
       concurrent-ruby (~> 1.0)
-    sentry-rails (5.25.0)
+    sentry-rails (5.26.0)
       railties (>= 5.0)
-      sentry-ruby (~> 5.25.0)
-    sentry-ruby (5.25.0)
+      sentry-ruby (~> 5.26.0)
+    sentry-ruby (5.26.0)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
     shoulda-matchers (6.5.0)
