@@ -1,0 +1,65 @@
+@use "sass:map";
+
+.status-card {
+  padding: govuk-spacing(2);
+  text-decoration: none;
+  border: none;
+  cursor: default;
+  background-color: $govuk-brand-colour;
+
+  @include govuk-font($size: 19, $weight: bold, $tabular: true);
+
+  @include govuk-media-query($from: desktop) {
+    padding: govuk-spacing(4);
+  }
+
+  // Remove all interactive behaviour
+  &, &:hover, &:focus, &:visited, &:active {
+    color: inherit;
+    background-color: inherit;
+    text-decoration: none;
+    outline: none;
+  }
+}
+
+// Colours per status (no hover states)
+$statuses: (
+  "check-required": (
+    "colour": govuk-shade(govuk-colour("blue"), 30),
+    "background-colour": govuk-tint(govuk-colour("blue"), 80)
+  ),
+  "in-progress": (
+    "colour": govuk-shade(govuk-colour("yellow"), 65),
+    "background-colour": govuk-tint(govuk-colour("yellow"), 75)
+  ),
+  "not-started": (
+    "colour": govuk-shade(govuk-colour("red"), 30),
+    "background-colour": govuk-tint(govuk-colour("red"), 80)
+  )
+);
+
+@each $status, $data in $statuses {
+  .status-card--#{$status} {
+    color: map-get($data, "colour");
+    background-color: map-get($data, "background-colour");
+
+    // Remove hover/focus styles just in case
+    &:hover, &:focus, &:visited, &:active {
+      color: map-get($data, "colour");
+      background-color: map-get($data, "background-colour");
+      text-decoration: none;
+    }
+  }
+}
+
+.status-card__value {
+  @include govuk-font($size: 36, $weight: bold, $tabular: true);
+  display: block;
+}
+
+.status-card__label {
+  text-decoration: none;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: none;
+}

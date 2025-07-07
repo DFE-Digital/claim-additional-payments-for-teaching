@@ -148,7 +148,7 @@ GEM
     factory_bot_rails (6.5.0)
       factory_bot (~> 6.5)
       railties (>= 6.1.0)
-    faker (3.5.1)
+    faker (3.5.2)
       i18n (>= 1.8.11, < 2)
     faraday (1.10.4)
       faraday-em_http (~> 1.0)
@@ -300,7 +300,7 @@ GEM
       aes_key_wrap
       bindata
       httpclient
-    jwt (2.10.1)
+    jwt (2.10.2)
       base64
     kramdown (2.5.1)
       rexml (>= 3.3.9)

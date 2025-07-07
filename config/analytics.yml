@@ -262,6 +262,7 @@ shared:
     - updated_at
     - role_codes
     - deleted_at
+    - current_organisation_ukprn
   :targeted_retention_incentive_payments_awards:
     - id
     - academic_year
