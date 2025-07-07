@@ -1,0 +1,16 @@
+<%= govuk_header(homepage_url: "https://www.gov.uk") %>
+
+<% nav_html = govuk_service_navigation(
+  service_name: "Claim additional payments for teaching",
+  service_url: admin_root_path,
+  navigation_items: admin_nav_items,
+  current_path: request.fullpath
+) %>
+
+<%
+  nav_document = Nokogiri::HTML.fragment(nav_html)
+  sign_out_link = nav_document.css("a").last
+  sign_out_link["data-method"] = "delete"
+%>
+
+<%= nav_document.to_s.html_safe %>
