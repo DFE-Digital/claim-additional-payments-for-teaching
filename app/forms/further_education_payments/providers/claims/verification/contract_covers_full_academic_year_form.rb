@@ -8,7 +8,10 @@ module FurtherEducationPayments
             :boolean
           )
 
-          attribute :section_completed, :boolean
+          attribute(
+            :provider_verification_contract_covers_section_completed,
+            :boolean
+          )
 
           validates(
             :provider_verification_contract_covers_full_academic_year,

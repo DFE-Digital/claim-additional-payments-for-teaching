@@ -8,7 +8,10 @@ module FurtherEducationPayments
             :boolean
           )
 
-          attribute :section_completed, :boolean
+          attribute(
+            :provider_verification_taught_one_term_section_completed,
+            :boolean
+          )
 
           validates(
             :provider_verification_taught_at_least_one_academic_term,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_01_145144) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_07_102059) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -316,6 +316,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_01_145144) do
     t.string "provider_verification_contract_type"
     t.boolean "provider_verification_contract_covers_full_academic_year"
     t.boolean "provider_verification_taught_at_least_one_academic_term"
+    t.boolean "provider_verification_role_and_experience_section_completed"
+    t.boolean "provider_verification_contract_covers_section_completed"
+    t.boolean "provider_verification_taught_one_term_section_completed"
     t.index ["possible_school_id"], name: "index_fe_payments_eligibilities_on_possible_school_id"
     t.index ["school_id"], name: "index_fe_payments_eligibilities_on_school_id"
   end

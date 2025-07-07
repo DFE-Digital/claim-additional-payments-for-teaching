@@ -7,7 +7,10 @@ module FurtherEducationPayments
           attribute :provider_verification_in_first_five_years, :boolean
           attribute :provider_verification_teaching_qualification, :string
           attribute :provider_verification_contract_type, :string
-          attribute :section_completed, :boolean
+          attribute(
+            :provider_verification_role_and_experience_section_completed,
+            :boolean
+          )
 
           validates(
             :provider_verification_teaching_responsibilities,
