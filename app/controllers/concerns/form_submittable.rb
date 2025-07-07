@@ -79,5 +79,10 @@ module FormSubmittable
     def load_form_if_exists
       @form ||= journey.form(journey_session:, params:, session:)
     end
+
+    def current_user
+      DfeSignIn::NullUser.new
+    end
+    helper_method :current_user
   end
 end

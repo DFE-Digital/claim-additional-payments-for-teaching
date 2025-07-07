@@ -6,6 +6,12 @@ module FurtherEducationPayments
 
       def new
       end
+
+      def destroy
+        reset_session
+
+        redirect_to new_further_education_payments_providers_session_path
+      end
     end
   end
 end

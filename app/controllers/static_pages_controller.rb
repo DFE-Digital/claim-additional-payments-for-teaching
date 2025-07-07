@@ -25,4 +25,11 @@ class StaticPagesController < BasePublicController
 
     render "#{journey::VIEW_PATH}/landing_page"
   end
+
+  private
+
+  def current_user
+    DfeSignIn::NullUser.new
+  end
+  helper_method :current_user
 end

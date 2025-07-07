@@ -30,8 +30,8 @@ class UnsubscribeController < ApplicationController
   end
   helper_method :current_journey_routing_name
 
-  def current_journey
+  def journey
     Journeys.for_routing_name(params[:journey])
   end
-  helper_method :current_journey
+  helper_method :journey
 end

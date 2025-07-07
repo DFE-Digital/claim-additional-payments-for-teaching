@@ -7,6 +7,7 @@ RSpec.describe "layouts/application.html.erb" do
 
     without_partial_double_verification do
       allow(view).to receive(:current_journey_routing_name).and_return("further-education-payments")
+      allow(view).to receive(:journey).and_return(Journeys::FurtherEducationPayments)
       allow(view).to receive(:journey_service_name).and_return("some-service")
     end
   end
