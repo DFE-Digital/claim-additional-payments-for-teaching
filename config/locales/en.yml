@@ -758,7 +758,7 @@ en:
         rejected_reasons:
           duplicate: Duplicate application
           previous_payment_not_received: "Has not received first year payment"
-          one_non_statutory_break: "Has taken at leat one non-statutory break"
+          one_non_statutory_break: "Has taken at least one non-statutory break"
           ineligible_visa: "Ineligible visa"
           ineligible_school: Ineligible school
           invalid_bank_details: Invalid bank details

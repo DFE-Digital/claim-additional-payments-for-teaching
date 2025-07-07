@@ -25,6 +25,7 @@ module DfeSignIn
       return if user.deleted?
 
       user.role_codes = session.role_codes
+      user.current_organisation_ukprn = session.organisation_ukprn
       user
     end
 
@@ -62,6 +63,14 @@ module DfeSignIn
     def mark_as_deleted!
       super
       unassign_claims
+    end
+
+    class Organisation < Struct.new(:ukprn, keyword_init: true); end
+
+    def current_organisation
+      @current_organisation ||= Organisation.new(
+        ukprn: current_organisation_ukprn
+      )
     end
 
     private
