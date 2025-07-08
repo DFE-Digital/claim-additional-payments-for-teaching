@@ -38,7 +38,7 @@ RSpec.feature "Teacher Identity Sign in", js: true, flaky: true do
     click_on "Continue"
 
     expect(page).to have_text("Which school do you teach at?")
-    expect(page).to have_text("Enter the school name or postcode. Use at least three characters.")
+    expect(page).to have_text("Enter the school name or postcode using at least 3 characters")
 
     # check the teacher_id_user_info details are saved to the session
     journey_session = Journeys::TargetedRetentionIncentivePayments::Session.last
