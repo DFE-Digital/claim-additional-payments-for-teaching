@@ -2,6 +2,7 @@ module FurtherEducationPayments
   module Providers
     module Claims
       class VerificationsController < BaseController
+        before_action :authorise_claim!
         before_action :set_form
 
         def edit
@@ -26,6 +27,16 @@ module FurtherEducationPayments
 
         private
 
+        def authorise_claim!
+          claim
+        rescue ActiveRecord::RecordNotFound
+          redirect_to(
+            further_education_payments_providers_authorisation_failure_path(
+              reason: :claim_not_found
+            )
+          )
+        end
+
         def set_form
           @form = wizard.current_form
         end
@@ -48,7 +59,7 @@ module FurtherEducationPayments
           @claim ||= claim_scope
             .strict_loading
             .includes(eligibility: :school)
-            .find_by(id: params[:claim_id])
+            .find(params[:claim_id])
         end
       end
     end

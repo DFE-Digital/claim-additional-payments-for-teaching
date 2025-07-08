@@ -2,10 +2,17 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">
-      You cannot verify this claim
-    </h1>
-
-    <p>FIXME RL - show reason here</p>
+    <% case @reason %>
+    <% when "incorrect_role" %>
+      <%= render "incorrect_role" %>
+    <% when "claim_not_found" %>
+      <%= render "organisation_mismatch" %>
+    <% when "no_service_access" %>
+      <%= render "no_service_access" %>
+    <% when "user_removed" %>
+      <%= render "no_service_access" %>
+    <% else %>
+      <%= render "generic" %>
+    <% end %>
   </div>
 </div>

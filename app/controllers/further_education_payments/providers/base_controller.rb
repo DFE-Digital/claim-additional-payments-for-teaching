@@ -25,7 +25,11 @@ module FurtherEducationPayments
       def claim_scope
         eligibilities = Policies::FurtherEducationPayments::Eligibility
           .joins(:school)
-          .merge(School.where(ukprn: current_user.current_organisation.ukprn))
+          .merge(
+            School
+              .where.not(ukprn: nil)
+              .where(ukprn: current_user.current_organisation.ukprn)
+          )
 
         Claim
           .by_policy(Policies::FurtherEducationPayments)
