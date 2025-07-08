@@ -5,6 +5,11 @@ module FurtherEducationPayments
         class BaseForm
           include ActiveModel::Model
           include ActiveModel::Attributes
+          include ActiveModel::Validations::Callbacks
+
+          before_validation do
+            attributes.each { |k, v| public_send("#{k}=", nil) if v == "" }
+          end
 
           attr_reader :claim, :user
           delegate :eligibility, to: :claim
@@ -13,7 +18,11 @@ module FurtherEducationPayments
             @claim = claim
             @user = user
 
-            super(params)
+            exisiting_attributes = claim.eligibility.attributes.slice(
+              *self.class.attribute_names
+            )
+
+            super(params.reverse_merge(exisiting_attributes))
           end
 
           def template

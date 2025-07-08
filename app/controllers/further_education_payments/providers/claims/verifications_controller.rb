@@ -14,12 +14,21 @@ module FurtherEducationPayments
 
             wizard.clear_impermissible_answers!
 
-            redirect_to(
-              edit_further_education_payments_providers_claim_verification_path(
-                claim,
-                slug: wizard.next_form.slug
+            if @form.save_and_exit?
+              redirect_to(
+                further_education_payments_providers_claim_information_path(
+                  claim,
+                  information: :progress_saved
+                )
               )
-            )
+            else
+              redirect_to(
+                edit_further_education_payments_providers_claim_verification_path(
+                  claim,
+                  slug: wizard.next_form.slug
+                )
+              )
+            end
           else
             render @form.template, status: :unprocessable_entity
           end

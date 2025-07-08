@@ -7,38 +7,49 @@ module FurtherEducationPayments
           attribute :provider_verification_in_first_five_years, :boolean
           attribute :provider_verification_teaching_qualification, :string
           attribute :provider_verification_contract_type, :string
-          attribute :section_completed, :boolean
+          attribute(
+            :provider_verification_role_and_experience_section_completed,
+            :boolean
+          )
 
           validates(
             :provider_verification_teaching_responsibilities,
-            inclusion: {
+            included: {
               in: ->(form) { form.teaching_responsibilities_options.map(&:id) }
-            }
+            },
+            allow_nil: :save_and_exit?
           )
 
           validates(
             :provider_verification_in_first_five_years,
-            inclusion: {
+            included: {
               in: ->(form) { form.in_first_five_years_options.map(&:id) }
-            }
+            },
+            allow_nil: :save_and_exit?
           )
 
           validates(
             :provider_verification_teaching_qualification,
-            inclusion: {
+            included: {
               in: ->(form) { form.teaching_qualification_options.map(&:id) }
-            }
+            },
+            allow_nil: :save_and_exit?
           )
 
           validates(
             :provider_verification_contract_type,
-            inclusion: {
+            included: {
               in: ->(form) { form.contract_type_options.map(&:id) }
-            }
+            },
+            allow_nil: :save_and_exit?
           )
 
-          # TBD decide how we want to handle this
-          # validates :section_completed, inclusion: { in: [true, false] }
+          validates(
+            :provider_verification_role_and_experience_section_completed,
+            inclusion: {
+              in: ->(form) { form.section_completed_options.map(&:id) }
+            }
+          )
 
           def provider_name
             provider.name
@@ -102,6 +113,10 @@ module FurtherEducationPayments
                 name: "No, I want to come back to it later"
               )
             ]
+          end
+
+          def save_and_exit?
+            provider_verification_role_and_experience_section_completed == false
           end
         end
       end

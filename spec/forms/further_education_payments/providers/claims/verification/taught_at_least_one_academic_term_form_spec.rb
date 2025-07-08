@@ -23,9 +23,37 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Taught
     it do
       is_expected.not_to(
         allow_value(nil).for(
-          :provider_verification_taught_at_least_one_academic_term
+          :provider_verification_taught_one_term_section_completed
         )
       )
+    end
+
+    context "when submission" do
+      before do
+        form.provider_verification_taught_one_term_section_completed = true
+      end
+
+      it do
+        is_expected.not_to(
+          allow_value(nil).for(
+            :provider_verification_taught_at_least_one_academic_term
+          )
+        )
+      end
+    end
+
+    context "when not submission" do
+      before do
+        form.provider_verification_taught_one_term_section_completed = false
+      end
+
+      it do
+        is_expected.to(
+          allow_value(nil).for(
+            :provider_verification_taught_at_least_one_academic_term
+          )
+        )
+      end
     end
   end
 
@@ -33,7 +61,8 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Taught
     context "when form is valid" do
       let(:params) do
         {
-          provider_verification_taught_at_least_one_academic_term: true
+          provider_verification_taught_at_least_one_academic_term: true,
+          provider_verification_taught_one_term_section_completed: true
         }
       end
 
@@ -55,7 +84,8 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Taught
     context "when form is valid" do
       let(:params) do
         {
-          provider_verification_taught_at_least_one_academic_term: true
+          provider_verification_taught_at_least_one_academic_term: true,
+          provider_verification_taught_one_term_section_completed: true
         }
       end
 
@@ -66,6 +96,10 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Taught
 
         expect(
           eligibility.provider_verification_taught_at_least_one_academic_term
+        ).to be(true)
+
+        expect(
+          eligibility.provider_verification_taught_one_term_section_completed
         ).to be(true)
       end
     end

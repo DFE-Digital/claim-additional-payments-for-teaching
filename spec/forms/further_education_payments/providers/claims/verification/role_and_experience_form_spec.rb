@@ -21,29 +21,73 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::RoleAn
 
   describe "validations" do
     it do
-      is_expected.not_to(
-        allow_value(nil).for(:provider_verification_teaching_responsibilities)
-      )
+      is_expected.not_to(allow_value(nil).for(
+        :provider_verification_role_and_experience_section_completed
+      ))
     end
 
-    it do
-      is_expected.not_to(
-        allow_value(nil).for(:provider_verification_in_first_five_years)
-      )
+    context "when submission" do
+      before do
+        form.provider_verification_role_and_experience_section_completed = true
+      end
+
+      it do
+        is_expected.not_to(
+          allow_value(nil).for(:provider_verification_teaching_responsibilities)
+        )
+      end
+
+      it do
+        is_expected.not_to(
+          allow_value(nil).for(:provider_verification_in_first_five_years)
+        )
+      end
+
+      it do
+        is_expected.to(
+          validate_inclusion_of(:provider_verification_teaching_qualification)
+            .in_array(%w[yes not_yet no_but_planned no_not_planned])
+        )
+      end
+
+      it do
+        is_expected.to(
+          validate_inclusion_of(:provider_verification_contract_type)
+            .in_array(%w[permanent fixed_term variable_hours])
+        )
+      end
     end
 
-    it do
-      is_expected.to(
-        validate_inclusion_of(:provider_verification_teaching_qualification)
-          .in_array(%w[yes not_yet no_but_planned no_not_planned])
-      )
-    end
+    context "when saving progress" do
+      before do
+        form.provider_verification_role_and_experience_section_completed = false
+      end
 
-    it do
-      is_expected.to(
-        validate_inclusion_of(:provider_verification_contract_type)
-          .in_array(%w[permanent fixed_term variable_hours])
-      )
+      it do
+        is_expected.to(
+          allow_value(nil).for(:provider_verification_teaching_responsibilities)
+        )
+      end
+
+      it do
+        is_expected.to(
+          allow_value(nil).for(:provider_verification_in_first_five_years)
+        )
+      end
+
+      it do
+        is_expected.to(
+          validate_inclusion_of(:provider_verification_teaching_qualification)
+            .in_array(["yes", "not_yet", "no_but_planned", "no_not_planned", nil])
+        )
+      end
+
+      it do
+        is_expected.to(
+          validate_inclusion_of(:provider_verification_contract_type)
+            .in_array(["permanent", "fixed_term", "variable_hours", nil])
+        )
+      end
     end
   end
 
@@ -54,7 +98,8 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::RoleAn
           provider_verification_teaching_responsibilities: true,
           provider_verification_in_first_five_years: true,
           provider_verification_teaching_qualification: "yes",
-          provider_verification_contract_type: "permanent"
+          provider_verification_contract_type: "permanent",
+          provider_verification_role_and_experience_section_completed: true
         }
       end
 
@@ -79,7 +124,8 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::RoleAn
           provider_verification_teaching_responsibilities: true,
           provider_verification_in_first_five_years: true,
           provider_verification_teaching_qualification: "yes",
-          provider_verification_contract_type: "permanent"
+          provider_verification_contract_type: "permanent",
+          provider_verification_role_and_experience_section_completed: true
         }
       end
 
@@ -103,6 +149,10 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::RoleAn
         expect(
           claim.eligibility.provider_verification_contract_type
         ).to eq("permanent")
+
+        expect(
+          claim.eligibility.provider_verification_role_and_experience_section_completed
+        ).to be(true)
       end
     end
   end
