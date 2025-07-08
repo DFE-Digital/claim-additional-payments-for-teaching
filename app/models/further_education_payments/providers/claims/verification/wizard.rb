@@ -42,6 +42,19 @@ module FurtherEducationPayments
             reachable_forms.detect(&:incomplete?)
           end
 
+          def previous_form
+            index = reachable_forms.index(current_form)
+
+            fail "Current form #{current_slug.slug} is not reachable" if index.nil?
+            fail "Current form #{current_slug.slug} is the first form" if index.zero?
+
+            previous_form = reachable_forms[index - 1]
+
+            fail "Previous form not found" if previous_form.nil?
+
+            previous_form
+          end
+
           def clear_impermissible_answers!
             ApplicationRecord.transaction do
               unreachable_forms.each(&:clear_answers!)
