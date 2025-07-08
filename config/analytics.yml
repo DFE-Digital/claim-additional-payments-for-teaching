@@ -334,6 +334,9 @@ shared:
     - provider_verification_role_and_experience_section_completed
     - provider_verification_contract_covers_section_completed
     - provider_verification_taught_one_term_section_completed
+    - provider_verification_performance_measures
+    - provider_verification_disciplinary_action
+    - provider_verification_performance_section_completed
   :eligible_ey_providers:
     - id
     - nursery_name

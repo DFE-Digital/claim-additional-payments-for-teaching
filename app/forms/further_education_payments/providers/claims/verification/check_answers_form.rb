@@ -14,6 +14,9 @@ module FurtherEducationPayments
             :provider_verification_contract_covers_full_academic_year,
             :provider_verification_contract_type,
             :provider_verification_taught_at_least_one_academic_term,
+            :provider_verification_performance_measures,
+            :provider_verification_disciplinary_action,
+            :provider_verification_performance_section_completed,
             to: :eligibility
           )
 

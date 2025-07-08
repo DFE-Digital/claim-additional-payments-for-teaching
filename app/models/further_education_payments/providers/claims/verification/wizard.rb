@@ -7,6 +7,7 @@ module FurtherEducationPayments
             RoleAndExperienceForm,
             ContractCoversFullAcademicYearForm,
             TaughtAtLeastOneAcademicTermForm,
+            PerformanceAndDisciplineForm,
             CheckAnswersForm
           ]
 
@@ -102,6 +103,8 @@ module FurtherEducationPayments
             if eligibility.provider_verification_contract_type == "variable_hours"
               @reachable_steps << TaughtAtLeastOneAcademicTermForm
             end
+
+            @reachable_steps << PerformanceAndDisciplineForm
 
             @reachable_steps << CheckAnswersForm
 
