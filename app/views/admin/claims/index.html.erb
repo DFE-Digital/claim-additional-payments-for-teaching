@@ -11,9 +11,10 @@
     </h1>
 
     <%= link_to "Download report request file", admin_claims_path(format: :csv), class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
-    <%= link_to "Upload DQT report", new_admin_qualification_report_upload_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
     <%= link_to "Upload School Workforce Census data", new_admin_school_workforce_census_data_upload_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
     <%= link_to "Upload TPS data", new_admin_tps_data_upload_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
+    <%= link_to "Upload DQT report", new_admin_qualification_report_upload_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
+    <%= link_to "Upload DQT HE Qualifications", new_admin_dqt_higher_education_qualification_upload_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
     <%= link_to "Upload SLC data", new_admin_student_loans_data_upload_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
     <%= link_to "Upload fraud prevention data", new_admin_fraud_risk_csv_upload_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
     <%= link_to "Reports", admin_reports_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>

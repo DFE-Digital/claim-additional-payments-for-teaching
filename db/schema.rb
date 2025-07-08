@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_27_101949) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_28_180055) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -157,6 +157,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_27_101949) do
     t.index ["deleted_at"], name: "index_dfe_sign_in_users_on_deleted_at"
     t.index ["dfe_sign_in_id"], name: "index_dfe_sign_in_users_on_dfe_sign_in_id", unique: true
     t.index ["session_token"], name: "index_dfe_sign_in_users_on_session_token", unique: true
+  end
+
+  create_table "dqt_higher_education_qualifications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "teacher_reference_number", limit: 11, null: false
+    t.date "date_of_birth", null: false
+    t.string "national_insurance_number", limit: 9
+    t.string "subject_code", null: false
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["teacher_reference_number", "date_of_birth", "subject_code"], name: "idx_on_teacher_reference_number_date_of_birth_subje_bba03d8c18", unique: true
+    t.index ["teacher_reference_number", "date_of_birth"], name: "idx_on_teacher_reference_number_date_of_birth_f789775ba6"
   end
 
   create_table "early_career_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
