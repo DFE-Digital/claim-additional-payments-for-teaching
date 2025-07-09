@@ -66,6 +66,10 @@ module FurtherEducationPayments
             claim.eligibility.school
           end
 
+          def claimant_name
+            claim.full_name
+          end
+
           private
 
           def attributes_to_save
