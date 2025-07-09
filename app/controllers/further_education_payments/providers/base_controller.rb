@@ -7,7 +7,7 @@ module FurtherEducationPayments
       private
 
       def authenticate_user!
-        unless current_user
+        if current_user.null_user?
           redirect_to new_further_education_payments_providers_session_path
         end
       end
@@ -39,8 +39,10 @@ module FurtherEducationPayments
       def current_user
         @current_user ||= DfeSignIn::User
           .not_deleted
-          .find_by(id: session[:user_id], session_token: session[:token])
+          .find_by(id: session[:user_id], session_token: session[:token]) ||
+          DfeSignIn::NullUser.new
       end
+      helper_method :current_user
 
       # FIXME RL: decide if this is the right approach
       # Required to get application layout to render
@@ -48,6 +50,11 @@ module FurtherEducationPayments
         "further-education-payments-provider"
       end
       helper_method :current_journey_routing_name
+
+      def journey
+        Journeys::FurtherEducationPayments::Provider
+      end
+      helper_method :journey
     end
   end
 end

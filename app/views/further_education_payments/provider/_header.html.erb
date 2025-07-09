@@ -1,0 +1,14 @@
+<%= govuk_header(homepage_url: "https://www.gov.uk") %>
+
+<% nav_html = govuk_service_navigation(
+  navigation_items: provider_nav_items,
+  current_path: request.fullpath
+) %>
+
+<%
+  nav_document = Nokogiri::HTML.fragment(nav_html)
+  sign_out_link = nav_document.css("a").last
+  sign_out_link["data-method"] = "delete" if sign_out_link
+%>
+
+<%= nav_document.to_s.html_safe %>

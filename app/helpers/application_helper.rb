@@ -1,3 +1,5 @@
+require "pathname"
+
 module ApplicationHelper
   def page_title(title, journey: nil, show_error: false)
     [].tap do |a|
@@ -139,5 +141,28 @@ module ApplicationHelper
         href: admin_accessibility_statement_path
       }
     ]
+  end
+
+  def provider_nav_items
+    if current_user.null_user?
+      []
+    else
+      [
+        {
+          text: "Unverified claims",
+          href: further_education_payments_providers_claims_path,
+          active_when: further_education_payments_providers_claims_path
+        },
+        {
+          text: "Verified claims",
+          href: further_education_payments_providers_verified_claims_path,
+          active_when: further_education_payments_providers_verified_claims_path
+        },
+        {
+          text: "Sign out",
+          href: further_education_payments_providers_session_path
+        }
+      ]
+    end
   end
 end

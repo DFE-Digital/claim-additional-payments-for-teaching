@@ -189,12 +189,13 @@ Rails.application.routes.draw do
 
   namespace :further_education_payments do
     namespace :providers do
-      resources :sessions, only: %i[new]
+      resource :session, only: %i[new destroy]
       resources :authorisation_failures, only: [:show], param: :reason
       resources :claims, only: %i[index] do
         resource :verification, only: %i[edit update], module: :claims
         resource :information, only: %i[show], module: :claims
       end
+      resources :verified_claims, path: "verified-claims", only: %i[index]
     end
   end
 
