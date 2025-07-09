@@ -28,10 +28,6 @@ module FurtherEducationPayments
             }
           )
 
-          def claimant_name
-            claim.full_name
-          end
-
           def academic_year
             claim.academic_year
           end
