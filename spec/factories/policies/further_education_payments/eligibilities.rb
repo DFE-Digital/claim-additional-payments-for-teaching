@@ -22,6 +22,7 @@ FactoryBot.define do
     end
 
     trait :verified do
+      provider_verification_completed_at { 1.second.ago }
       contract_type { "permanent" }
       teaching_responsibilities { true }
       further_education_teaching_start_year { "2023" }
