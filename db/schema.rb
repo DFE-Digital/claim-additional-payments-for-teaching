@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_09_125318) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_10_131813) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -326,7 +326,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_09_125318) do
     t.boolean "provider_verification_half_teaching_hours"
     t.boolean "provider_verification_subjects_taught"
     t.boolean "provider_verification_contracted_hours_section_completed"
+    t.boolean "provider_verification_declaration"
+    t.datetime "provider_verification_completed_at", precision: nil
+    t.uuid "provider_verification_verified_by_id"
     t.index ["possible_school_id"], name: "index_fe_payments_eligibilities_on_possible_school_id"
+    t.index ["provider_verification_verified_by_id"], name: "idx_on_provider_verification_verified_by_id_c38aef7b6c"
     t.index ["school_id"], name: "index_fe_payments_eligibilities_on_school_id"
   end
 
@@ -798,6 +802,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_09_125318) do
   add_foreign_key "eligible_ey_providers", "file_uploads"
   add_foreign_key "eligible_ey_providers", "local_authorities"
   add_foreign_key "eligible_fe_providers", "file_uploads"
+  add_foreign_key "further_education_payments_eligibilities", "dfe_sign_in_users", column: "provider_verification_verified_by_id"
   add_foreign_key "further_education_payments_eligibilities", "schools"
   add_foreign_key "further_education_payments_eligibilities", "schools", column: "possible_school_id"
   add_foreign_key "international_relocation_payments_eligibilities", "schools", column: "current_school_id"

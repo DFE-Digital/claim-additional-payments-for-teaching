@@ -341,6 +341,10 @@ shared:
     - provider_verification_half_teaching_hours
     - provider_verification_subjects_taught
     - provider_verification_contracted_hours_section_completed
+    - provider_verification_declaration
+    - provider_verification_completed_at
+    - provider_verification_verified_by_id
+
   :eligible_ey_providers:
     - id
     - nursery_name

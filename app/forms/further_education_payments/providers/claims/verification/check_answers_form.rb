@@ -3,9 +3,11 @@ module FurtherEducationPayments
     module Claims
       module Verification
         class CheckAnswersForm < BaseForm
-          attribute :provider_verification_declaration, :boolean, default: false
+          class IncompleteWizardError < StandardError; end
 
-          validates :provider_verification_declaration, acceptance: true
+          attribute :provider_verification_declaration, :boolean
+
+          validates :provider_verification_declaration, presence: true
 
           delegate(
             :provider_verification_teaching_responsibilities,
@@ -43,6 +45,43 @@ module FurtherEducationPayments
                 ]
               )
             end.map(&:downcase).to_sentence
+          end
+
+          def save
+            return false unless valid?
+
+            raise IncompleteWizardError unless wizard_completed?
+
+            super
+          end
+
+          def save_and_exit?
+            false
+          end
+
+          private
+
+          def wizard_completed?
+            Verification::Wizard.new(
+              claim: claim,
+              user: user,
+              current_slug: slug
+            ).completable?
+          end
+
+          def attributes_to_save
+            super + %w[
+              provider_verification_completed_at
+              provider_verification_verified_by_id
+            ]
+          end
+
+          def provider_verification_completed_at
+            DateTime.current
+          end
+
+          def provider_verification_verified_by_id
+            user.id
           end
         end
       end
