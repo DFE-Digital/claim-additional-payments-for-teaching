@@ -117,5 +117,56 @@
         <% end %>
       <% end %>
     <% end %>
+
+    <%= govuk_summary_card(title: "Contracted hours") do |card| %>
+      <%= card.with_action do %>
+        <%= govuk_link_to(
+          "Change",
+          edit_further_education_payments_providers_claim_verification_path(
+            @form.claim,
+            slug: "contracted_hours"
+          )
+        ) %>
+      <% end %>
+      <%= card.with_summary_list do |summary_list| %>
+        <%= summary_list.with_row do |row| %>
+          <%= row.with_key(text: "Timetabled hours per week") %>
+          <%= row.with_value(
+            text: t(
+              @form.provider_verification_teaching_hours_per_week,
+              scope: %w[
+                further_education_payments
+                forms
+                teaching_hours_per_week
+                options
+              ]
+            )
+          ) %>
+        <% end %>
+
+        <%= summary_list.with_row do |row| %>
+          <%= row.with_key(text: "Teaches 16-19-year-olds or those with EHCP") %>
+          <%= row.with_value(
+            text: t(
+              @form.provider_verification_half_teaching_hours,
+              scope: :boolean
+            )
+          ) %>
+        <% end %>
+
+        <%= summary_list.with_row do |row| %>
+          <%= row.with_key(
+            text: "Teaches approved qualification in #{@form.subject_names_sentence}"
+          ) %>
+
+          <%= row.with_value(
+            text: t(
+              @form.provider_verification_subjects_taught,
+              scope: :boolean
+            )
+          ) %>
+        <% end %>
+      <% end %>
+    <% end %>
   </div>
 </div>

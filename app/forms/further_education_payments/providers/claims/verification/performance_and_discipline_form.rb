@@ -34,10 +34,6 @@ module FurtherEducationPayments
             }
           )
 
-          def claimant_name
-            claim.full_name
-          end
-
           def performance_measures_options
             [
               Form::Option.new(id: true, name: "Yes"),

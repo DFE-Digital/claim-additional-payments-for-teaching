@@ -337,6 +337,10 @@ shared:
     - provider_verification_performance_measures
     - provider_verification_disciplinary_action
     - provider_verification_performance_section_completed
+    - provider_verification_teaching_hours_per_week
+    - provider_verification_half_teaching_hours
+    - provider_verification_subjects_taught
+    - provider_verification_contracted_hours_section_completed
   :eligible_ey_providers:
     - id
     - nursery_name
