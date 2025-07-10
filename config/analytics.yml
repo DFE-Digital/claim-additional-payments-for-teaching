@@ -337,6 +337,7 @@ shared:
     - provider_verification_performance_measures
     - provider_verification_disciplinary_action
     - provider_verification_performance_section_completed
+    - provider_verification_completed_at
   :eligible_ey_providers:
     - id
     - nursery_name
