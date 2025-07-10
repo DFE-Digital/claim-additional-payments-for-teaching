@@ -21,6 +21,10 @@ module FurtherEducationPayments
                   information: :progress_saved
                 )
               )
+            elsif wizard.completed?
+              flash[:success] = "Claim Verified for #{@form.claimant_name}"
+
+              redirect_to further_education_payments_providers_claims_path
             else
               redirect_to(
                 edit_further_education_payments_providers_claim_verification_path(

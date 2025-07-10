@@ -63,6 +63,16 @@ module FurtherEducationPayments
             end
           end
 
+          def completable?
+            build_forms(
+              reachable_steps.excluding(CheckAnswersForm)
+            ).none?(&:incomplete?)
+          end
+
+          def completed?
+            reachable_forms.none?(&:incomplete?)
+          end
+
           private
 
           attr_reader :claim, :user, :current_slug

@@ -168,5 +168,40 @@
         <% end %>
       <% end %>
     <% end %>
+
+    <%= form_with(
+      model: @form,
+      url: further_education_payments_providers_claim_verification_path(
+        @form.claim,
+        @form.provider,
+        slug: @form.slug,
+      ),
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+      method: :patch,
+    ) do |f| %>
+      <%= f.govuk_check_boxes_fieldset(
+        :provider_verification_declaration,
+        multiple: false,
+        legend: {
+          text: "Declaration",
+          size: "l"
+        }
+      ) do %>
+
+        <%= f.govuk_check_box(
+          :provider_verification_declaration,
+          1,
+          0,
+          multiple: false,
+          link_errors: true,
+          label: {
+            text: "To the best of my knowledge, I confirm that the " \
+                  "information provided in this form is correct."
+          }
+        ) %>
+      <% end %>
+
+      <%= f.govuk_submit("Continue") %>
+    <% end %>
   </div>
 </div>
