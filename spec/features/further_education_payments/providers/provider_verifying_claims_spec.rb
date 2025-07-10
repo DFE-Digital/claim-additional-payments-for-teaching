@@ -63,6 +63,21 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Save and continue"
 
+      # Performance and discipline
+      within_fieldset(
+        "Is Edna Krabappel currently subject to any performance measures?"
+      ) { choose "No" }
+
+      within_fieldset(
+        "Is Edna Krabappel currently subject to any disciplinary action?"
+      ) { choose "No" }
+
+      within_fieldset("Have you completed this section?") do
+        choose "Yes"
+      end
+
+      click_on "Save and continue"
+
       expect(page).to have_text("Claim reference: AB123456")
 
       expect(
@@ -80,6 +95,14 @@ RSpec.feature "Provider verifying claims" do
       expect(
         summary_row("Type of contract")
       ).to have_content("Permanent")
+
+      expect(
+        summary_row("Subject to performance measures")
+      ).to have_content("no")
+
+      expect(
+        summary_row("Subject to disciplinary action")
+      ).to have_content("no")
     end
   end
 
@@ -153,6 +176,21 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Save and continue"
 
+      # Performance and discipline
+      within_fieldset(
+        "Is Edna Krabappel currently subject to any performance measures?"
+      ) { choose "No" }
+
+      within_fieldset(
+        "Is Edna Krabappel currently subject to any disciplinary action?"
+      ) { choose "No" }
+
+      within_fieldset("Have you completed this section?") do
+        choose "Yes"
+      end
+
+      click_on "Save and continue"
+
       expect(page).to have_text("Claim reference: AB123456")
 
       expect(
@@ -174,6 +212,14 @@ RSpec.feature "Provider verifying claims" do
       expect(
         summary_row("Contract covers full academic year")
       ).to have_content "no"
+
+      expect(
+        summary_row("Subject to performance measures")
+      ).to have_content("no")
+
+      expect(
+        summary_row("Subject to disciplinary action")
+      ).to have_content("no")
     end
   end
 
@@ -246,6 +292,21 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Save and continue"
 
+      # Performance and discipline
+      within_fieldset(
+        "Is Edna Krabappel currently subject to any performance measures?"
+      ) { choose "No" }
+
+      within_fieldset(
+        "Is Edna Krabappel currently subject to any disciplinary action?"
+      ) { choose "No" }
+
+      within_fieldset("Have you completed this section?") do
+        choose "Yes"
+      end
+
+      click_on "Save and continue"
+
       expect(page).to have_text("Claim reference: AB123456")
 
       expect(
@@ -267,6 +328,14 @@ RSpec.feature "Provider verifying claims" do
       expect(
         summary_row("Variable hours in academic year")
       ).to have_content "yes"
+
+      expect(
+        summary_row("Subject to performance measures")
+      ).to have_content("no")
+
+      expect(
+        summary_row("Subject to disciplinary action")
+      ).to have_content("no")
     end
   end
 
@@ -335,11 +404,27 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Save and continue"
 
+      # Performance and discipline
+      within_fieldset(
+        "Is Edna Krabappel currently subject to any performance measures?"
+      ) { choose "No" }
+
+      within_fieldset(
+        "Is Edna Krabappel currently subject to any disciplinary action?"
+      ) { choose "No" }
+
+      within_fieldset("Have you completed this section?") do
+        choose "Yes"
+      end
+
+      click_on "Save and continue"
+
       # Check answers page
       expect(summary_row("Type of contract")).to have_content("Variable hours")
 
-      # Change contract type to Permanent
-      click_on "Change"
+      within(summary_card("Role and experience")) do
+        click_on "Change"
+      end
 
       within_fieldset(
         "What type of contract does Edna Krabappel have with " \
@@ -355,7 +440,9 @@ RSpec.feature "Provider verifying claims" do
       expect(summary_row("Type of contract")).to have_content("Permanent")
 
       # Change contract type to Fixed-term
-      click_on "Change"
+      within(summary_card("Role and experience")) do
+        click_on "Change"
+      end
 
       within_fieldset(
         "What type of contract does Edna Krabappel have with " \
@@ -387,7 +474,9 @@ RSpec.feature "Provider verifying claims" do
       ).to have_content "no"
 
       # Change answer on second page of fixed term contract
-      click_on "Change"
+      within(summary_card("Role and experience")) do
+        click_on "Change"
+      end
 
       within_fieldset(
         "What type of contract does Edna Krabappel have with " \
@@ -500,7 +589,7 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Save and continue"
 
-      # Check answers page
+      # Performance and discipline page
       click_on "Back"
 
       # Expect to see fixed term specific question
@@ -620,6 +709,16 @@ RSpec.feature "Provider verifying claims" do
 
   def summary_row(label)
     find("dt", text: label).sibling("dd")
+  end
+
+  def summary_card(heading)
+    match = all(".govuk-summary-card").detect do |card|
+      card.find(".govuk-summary-card__title").text == heading
+    end
+
+    raise "Couldn't find summary card with title #{heading}" unless match
+
+    match
   end
 
   def sign_in_to(fe_provider)

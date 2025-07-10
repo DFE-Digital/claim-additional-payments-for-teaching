@@ -1,0 +1,67 @@
+<%= content_for(
+  :page_title,
+  "Review a targeted retention incentive payment claim"
+) %>
+
+<%= govuk_back_link href: backlink_path %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Review a targeted retention incentive payment claim
+    </h1>
+
+    <%= form_with(
+      model: @form,
+      url: further_education_payments_providers_claim_verification_path(
+        @form.claim,
+        @form.provider,
+        slug: @form.slug
+      ),
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+      method: :patch,
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= render partial: "claim_summary", locals: { claim: f.object.claim } %>
+
+      <h2 class="govuk-heading-m">
+        Performance and discipline
+      </h2>
+
+      <%= f.govuk_collection_radio_buttons(
+        :provider_verification_performance_measures,
+        f.object.performance_measures_options,
+        :id,
+        :name,
+        legend: {
+          text: "Is #{f.object.claimant_name} currently subject to any " \
+                "performance measures?"
+        }
+      ) %>
+
+      <%= f.govuk_collection_radio_buttons(
+        :provider_verification_disciplinary_action,
+        f.object.disciplinary_action_options,
+        :id,
+        :name,
+        legend: {
+          text: "Is #{f.object.claimant_name} currently subject to any " \
+                "disciplinary action?"
+        }
+      ) %>
+
+      <%= f.govuk_collection_radio_buttons(
+        :provider_verification_performance_section_completed,
+        f.object.section_completed_options,
+        :id,
+        :name,
+        legend: {
+          text: "Have you completed this section?",
+        }
+      ) %>
+
+      <%= f.govuk_submit("Save and continue") %>
+    <% end %>
+  </div>
+</div>
