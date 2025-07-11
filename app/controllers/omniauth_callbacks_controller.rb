@@ -175,7 +175,7 @@ class OmniauthCallbacksController < ApplicationController
 
   def test_user_auth_hash
     if request.path == "/auth/onelogin"
-      OmniAuth::AuthHash.new(uid: "12345", info: {email: "test@example.com"}, extra: {raw_info: {}})
+      OmniAuth::AuthHash.new(uid: params[:uid] || "12345", info: {email: "test@example.com"}, extra: {raw_info: {}})
     elsif request.path == "/auth/onelogin_identity"
       return_codes_from_params = params
         .fetch(:claim, {})
@@ -188,7 +188,7 @@ class OmniauthCallbacksController < ApplicationController
 
       if return_codes_from_params.present?
         OmniAuth::AuthHash.new(
-          uid: "12345",
+          uid: journey_session.answers.onelogin_uid,
           info: {email: ""},
           extra: {
             raw_info: {
@@ -197,7 +197,7 @@ class OmniauthCallbacksController < ApplicationController
           }
         )
       else
-        OmniAuth::AuthHash.new(uid: "12345", info: {email: ""}, extra: {raw_info: {ONELOGIN_JWT_CORE_IDENTITY_HASH_KEY => "test"}})
+        OmniAuth::AuthHash.new(uid: journey_session.answers.onelogin_uid, info: {email: ""}, extra: {raw_info: {ONELOGIN_JWT_CORE_IDENTITY_HASH_KEY => "test"}})
       end
     end
   end
