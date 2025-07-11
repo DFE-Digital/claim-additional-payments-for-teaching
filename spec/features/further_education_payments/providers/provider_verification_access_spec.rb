@@ -109,7 +109,8 @@ RSpec.feature "Provider verification access control" do
       stub_dfe_sign_in_user_info_request(
         "11111",
         "22222",
-        Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
+        Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE,
+        user_type: "provider"
       )
 
       visit new_further_education_payments_providers_session_path
@@ -151,7 +152,8 @@ RSpec.feature "Provider verification access control" do
       stub_dfe_sign_in_user_info_request(
         "11111",
         "22222",
-        Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
+        Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE,
+        user_type: "provider"
       )
 
       visit new_further_education_payments_providers_session_path
@@ -194,7 +196,8 @@ RSpec.feature "Provider verification access control" do
       stub_failed_dfe_sign_in_user_info_request(
         "11111",
         "22222",
-        status: 404
+        status: 404,
+        user_type: "provider"
       )
 
       visit new_further_education_payments_providers_session_path
@@ -230,7 +233,8 @@ RSpec.feature "Provider verification access control" do
       stub_dfe_sign_in_user_info_request(
         "11111",
         "22222",
-        "incorrect_role_code"
+        "incorrect_role_code",
+        user_type: "provider"
       )
 
       visit new_further_education_payments_providers_session_path
@@ -269,7 +273,8 @@ RSpec.feature "Provider verification access control" do
       stub_dfe_sign_in_user_info_request(
         "11111",
         "22222",
-        Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
+        Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE,
+        user_type: "provider"
       )
 
       visit new_further_education_payments_providers_session_path

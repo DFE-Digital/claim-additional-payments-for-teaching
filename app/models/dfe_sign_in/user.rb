@@ -1,5 +1,7 @@
 module DfeSignIn
   class User < ApplicationRecord
+    USER_TYPES = %w[admin provider].freeze
+
     include Deletable
 
     SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE = "teacher_payments_access"
@@ -9,6 +11,9 @@ module DfeSignIn
     has_secure_token :session_token
 
     after_save :send_slack_notification
+
+    scope :admin, -> { where(user_type: "admin") }
+    scope :provider, -> { where(user_type: "provider") }
 
     def self.table_name
       "dfe_sign_in_users"
@@ -20,7 +25,7 @@ module DfeSignIn
       dependent: :nullify
 
     def self.from_session(session)
-      user = where(dfe_sign_in_id: session.user_id).first_or_initialize
+      user = where(dfe_sign_in_id: session.user_id, user_type: "admin").first_or_initialize
 
       return if user.deleted?
 
@@ -31,6 +36,28 @@ module DfeSignIn
 
     def null_user?
       false
+    end
+
+    def self.client_id_for_user_type(user_type)
+      case user_type
+      when "admin"
+        ENV.fetch("DFE_SIGN_IN_INTERNAL_CLIENT_ID")
+      when "provider"
+        ENV.fetch("DFE_SIGN_IN_API_CLIENT_ID")
+      else
+        raise "client_id not found for user_type: #{user_type}"
+      end
+    end
+
+    def self.user_type_for_client_id(client_id)
+      case client_id
+      when ENV.fetch("DFE_SIGN_IN_INTERNAL_CLIENT_ID")
+        "admin"
+      when ENV.fetch("DFE_SIGN_IN_API_CLIENT_ID")
+        "provider"
+      else
+        raise "user_type not found for client_id: #{client_id}"
+      end
     end
 
     def full_name
@@ -56,6 +83,7 @@ module DfeSignIn
     def self.options_for_select
       not_deleted
         .where(role_codes: ["teacher_payments_access"])
+        .where(user_type: "admin")
         .order(email: :asc)
         .collect do |user|
         [
