@@ -1,6 +1,12 @@
 <section id="claim-details">
   <h2 class="govuk-heading-m">
     Claim details
+    <% status = claim.eligibility.provider_verification_status %>
+    <% if status == "not_started" %>
+      <%= govuk_tag(text: "Not started", colour: "red") %>
+    <% elsif status == "in_progress" %>
+      <%= govuk_tag(text: "In progress", colour: "blue") %>
+    <% end %>
   </h2>
 
   <%= govuk_summary_list do |summary_list| %>
