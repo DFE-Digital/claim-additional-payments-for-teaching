@@ -98,6 +98,25 @@ module Policies
         assertion_hash[name]
       end
 
+      def provider_verification_status
+        if provider_verification_started?
+          "in_progress"
+        else
+          "not_started"
+        end
+      end
+
+      def provider_verification_started?
+        !provider_verification_teaching_responsibilities.nil? ||
+          !provider_verification_in_first_five_years.nil? ||
+          provider_verification_teaching_qualification.present? ||
+          provider_verification_contract_type.present? ||
+          !provider_verification_contract_covers_full_academic_year.nil? ||
+          !provider_verification_taught_at_least_one_academic_term.nil? ||
+          !provider_verification_performance_measures.nil? ||
+          !provider_verification_disciplinary_action.nil?
+      end
+
       private
 
       def provider_and_claimant_names_match?
