@@ -242,7 +242,7 @@ class OmniauthCallbacksController < ApplicationController
         role_codes: auth["roles"]&.values
       )
     else
-      dfe_sign_in_session = DfeSignIn::AuthenticatedSession.from_auth_hash(auth)
+      dfe_sign_in_session = DfeSignIn::AuthenticatedSession.from_auth_hash(auth, user_type: "provider")
     end
 
     dfe_sign_in_user = DfeSignIn::User.from_session(dfe_sign_in_session)
