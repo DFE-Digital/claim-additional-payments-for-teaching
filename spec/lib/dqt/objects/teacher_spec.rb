@@ -32,12 +32,15 @@ end
 RSpec.describe Dqt::Teacher do
   subject(:qualified_teaching_status) { described_class.new(qualified_teaching_status_response) }
 
+  let(:teacher_reference_number_str) { "1001000" }
+  let(:date_of_birth_str) { "1987-08-22" }
+
   let(:qualified_teaching_status_response) do
     {
-      trn: "1001000",
+      trn: teacher_reference_number_str,
       ni_number: "JR501209A",
       name: "Fenton Laing",
-      dob: "1987-08-22T00:00:00",
+      dob: "#{date_of_birth_str}T00:00:00",
       active_alert: false,
       state: 0,
       state_name: "Active",
@@ -68,34 +71,33 @@ RSpec.describe Dqt::Teacher do
         qualification: "Graduate Diploma",
         state: 0,
         state_name: "Active"
-      },
-      qualifications: [
-        {
-          name: "Higher Education",
-          date_awarded: "2022-02-10T00:00:00Z",
-          he_qualification_name: "BA (Hons) /Education",
-          he_subject1: "mathematics",
-          he_subject2: "accounting",
-          he_subject3: nil,
-          he_subject1_code: "100403",
-          he_subject2_code: "100105",
-          he_subject3_code: nil,
-          class: "FirstClassHonours"
-        },
-        {
-          name: "Mandatory Qualification",
-          date_awarded: "2022-01-01T00:00:00Z",
-          he_qualification_name: nil,
-          he_subject1: nil,
-          he_subject2: nil,
-          he_subject3: nil,
-          he_subject1_code: nil,
-          he_subject2_code: nil,
-          he_subject3_code: nil,
-          class: nil
-        }
-      ]
+      }
     }
+  end
+
+  let(:dqt_higher_education_qualification_mathematics) do
+    create(
+      :dqt_higher_education_qualification,
+      teacher_reference_number: teacher_reference_number_str,
+      date_of_birth: Date.parse(date_of_birth_str),
+      subject_code: "100403",
+      description: "mathematics"
+    )
+  end
+
+  let(:dqt_higher_education_qualification_accounting) do
+    create(
+      :dqt_higher_education_qualification,
+      teacher_reference_number: teacher_reference_number_str,
+      date_of_birth: Date.parse(date_of_birth_str),
+      subject_code: "100105",
+      description: "accounting"
+    )
+  end
+
+  before do
+    dqt_higher_education_qualification_mathematics
+    dqt_higher_education_qualification_accounting
   end
 
   shared_examples "string reader" do |response_keys|
@@ -458,9 +460,6 @@ RSpec.describe Dqt::Teacher do
   describe "#degree_names" do
     subject(:degree_names) { qualified_teaching_status.degree_names }
 
-    it_behaves_like(
-      "string reader",
-      (1..3).map { |n| "qualifications/0/he_subject#{n}" }
-    )
+    specify { expect(degree_names).to contain_exactly("mathematics", "accounting") }
   end
 end

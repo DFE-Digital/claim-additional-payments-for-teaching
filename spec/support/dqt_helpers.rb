@@ -14,7 +14,7 @@ module DqtHelpers
       trn: trn,
       ni_number: params[:nino],
       name: "Rick Sanchez",
-      dob: "66-06-06T00:00:00",
+      dob: "#{params[:birthdate]}T00:00:00",
       active_alert: false,
       state: 0,
       state_name: "Active",

@@ -1,12 +1,17 @@
 require "rails_helper"
 
 RSpec.describe Journeys::TargetedRetentionIncentivePayments::QualificationDetailsForm, type: :model do
+  let(:teacher_reference_number_str) { "1234567" }
+  let(:date_of_birth_str) { "1980-01-02" }
+
   let(:journey_session) do
     create(
       :targeted_retention_incentive_payments_session,
       answers: {
         details_check: true,
         dqt_teacher_status: {
+          trn: teacher_reference_number_str,
+          dob: "#{date_of_birth_str}T00:00:00",
           qualified_teacher_status: {
             qts_date: "2024-01-01"
           },
@@ -14,12 +19,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::QualificationDetail
             subject1: "mathematics",
             subject1_code: "G100",
             qualification: "BA (Hons)"
-          },
-          qualifications: [
-            {
-              he_subject1_code: "G100"
-            }
-          ]
+          }
         }
       }
     )
@@ -55,6 +55,20 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::QualificationDetail
         {
           qualifications_details_check: true
         }
+      end
+
+      let(:dqt_higher_education_qualification) do
+        create(
+          :dqt_higher_education_qualification,
+          teacher_reference_number: teacher_reference_number_str,
+          date_of_birth: Date.parse(date_of_birth_str),
+          subject_code: "G100",
+          description: "mathematics2"
+        )
+      end
+
+      before do
+        dqt_higher_education_qualification
       end
 
       it "sets the qualification answers from the dqt data" do

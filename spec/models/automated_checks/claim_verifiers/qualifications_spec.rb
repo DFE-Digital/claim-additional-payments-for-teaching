@@ -5,7 +5,11 @@ module AutomatedChecks
     RSpec.describe Qualifications do
       let(:journey_configuration) { create(:journey_configuration, :targeted_retention_incentive_payments, current_academic_year: AcademicYear.new(2023)) }
 
+      let(:dqt_higher_education_qualifications) { [] }
+
       before do
+        dqt_higher_education_qualifications
+
         if data
           body = data
 
@@ -195,18 +199,26 @@ module AutomatedChecks
                 end
 
                 context "with qualifications" do
-                  let(:data) do
-                    super().merge(
-                      {
-                        qualifications: [
-                          {
-                            he_subject1_code: "100403",
-                            he_subject2_code: "100105",
-                            he_subject3_code: nil
-                          }
-                        ]
-                      }
+                  let(:dqt_higher_education_qualification1) do
+                    create(
+                      :dqt_higher_education_qualification,
+                      teacher_reference_number: claim_arg.eligibility.teacher_reference_number,
+                      date_of_birth: claim_arg.date_of_birth,
+                      subject_code: "100403"
                     )
+                  end
+
+                  let(:dqt_higher_education_qualification2) do
+                    create(
+                      :dqt_higher_education_qualification,
+                      teacher_reference_number: claim_arg.eligibility.teacher_reference_number,
+                      date_of_birth: claim_arg.date_of_birth,
+                      subject_code: "100105"
+                    )
+                  end
+
+                  let(:dqt_higher_education_qualifications) do
+                    [dqt_higher_education_qualification1, dqt_higher_education_qualification2]
                   end
 
                   it do
