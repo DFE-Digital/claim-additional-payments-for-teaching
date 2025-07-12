@@ -55,23 +55,17 @@ module Dqt
     end
 
     def degree_codes
-      return [] unless qualifications&.first.respond_to?(:he_subject1_code)
-
-      qualifications.map do |qualification|
-        (1..3).filter_map do |n|
-          string_reader(qualification&.send("he_subject#{n}_code"))
-        end
-      end.flatten
+      DqtHigherEducationQualification.where(
+        teacher_reference_number: teacher_reference_number,
+        date_of_birth: date_of_birth
+      ).pluck(:subject_code)
     end
 
     def degree_names
-      return [] unless qualifications&.first.respond_to?(:he_subject1)
-
-      qualifications.map do |qualification|
-        (1..3).filter_map do |n|
-          string_reader(qualification&.send("he_subject#{n}"))
-        end
-      end.flatten
+      DqtHigherEducationQualification.where(
+        teacher_reference_number: teacher_reference_number,
+        date_of_birth: date_of_birth
+      ).pluck(:description)
     end
 
     def national_insurance_number
