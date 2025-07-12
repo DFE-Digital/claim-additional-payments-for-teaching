@@ -20,10 +20,20 @@ RSpec.feature "Combined journey with Teacher ID" do
       }
     }
   end
+  let(:dqt_higher_education_qualification) do
+    create(
+      :dqt_higher_education_qualification,
+      teacher_reference_number: trn,
+      date_of_birth: Date.parse(date_of_birth),
+      subject_code: "G100",
+      description: "Mathematics"
+    )
+  end
 
   before do
     school
     stub_otp_verification
+    dqt_higher_education_qualification
   end
 
   after do
@@ -304,12 +314,7 @@ RSpec.feature "Combined journey with Teacher ID" do
       initial_teacher_training: {
         subject1: "philosophy",
         subject1_code: "TEST"
-      },
-      qualifications: [
-        {
-          he_subject1: "mathematics"
-        }
-      ]
+      }
     }
     stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:}, body: missing_qts_date_body)
 

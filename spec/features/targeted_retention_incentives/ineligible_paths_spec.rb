@@ -336,12 +336,7 @@ RSpec.describe "Targeted retention incentives ineligible paths" do
             initial_teacher_training: {
               subject1: "physics",
               subject1_code: "F300"
-            },
-            qualifications: [
-              {
-                he_subject1_code: "F300"
-              }
-            ]
+            }
           }
         )
 
@@ -455,12 +450,7 @@ RSpec.describe "Targeted retention incentives ineligible paths" do
             },
             qualified_teacher_status: {
               qts_date: itt_year
-            },
-            qualifications: [
-              {
-                he_subject1_code: "ineligible"
-              }
-            ]
+            }
           }
         )
 
