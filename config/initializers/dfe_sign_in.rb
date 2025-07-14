@@ -7,7 +7,7 @@ DfeSignIn.configure do |config|
 end
 
 DfeSignIn.configure do |config|
-  config.client_id = ENV.fetch("DFE_SIGN_IN_INTERNAL_CLIENT_ID", "foo")
-  config.secret = ENV.fetch("DFE_SIGN_IN_INTERNAL_API_SECRET", "bar")
+  config.client_id = ENV.fetch("DFE_SIGN_IN_INTERNAL_CLIENT_ID")
+  config.secret = ENV.fetch("DFE_SIGN_IN_INTERNAL_API_SECRET")
   config.base_url = ENV.fetch("DFE_SIGN_IN_API_ENDPOINT")
 end
