@@ -170,7 +170,7 @@ RSpec.describe "teacher route: completing the form" do
     )
 
     expect(page).to have_text(
-      /What is your date of birth\?\s?12 July 1945/
+      /What is your date of birth\?\s?12 July #{(Date.today - 50.years).year}/
     )
 
     expect(page).to have_text(

@@ -163,7 +163,7 @@ module GetATeacherRelocationPayment
       fill_in("Last name", with: "Skinner")
       fill_in("Day", with: "12")
       fill_in("Month", with: "7")
-      fill_in("Year", with: "1945")
+      fill_in("Year", with: (Date.today - 50.years).year)
       fill_in("What is your National Insurance number", with: national_insurance_number)
 
       click_button("Continue")
