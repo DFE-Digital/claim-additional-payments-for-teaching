@@ -16,7 +16,6 @@ if Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")
   Journeys::Configuration.create!(routing_name: Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME, current_academic_year: AcademicYear.current)
   Journeys::Configuration.create!(routing_name: Journeys::EarlyYearsPayment::Practitioner::ROUTING_NAME, current_academic_year: AcademicYear.current)
 
-  FeatureFlag.enable!(:tri_only_journey)
   FeatureFlag.enable!(:provider_dashboard)
 
   ENV["FIXTURES_PATH"] = "spec/fixtures"
