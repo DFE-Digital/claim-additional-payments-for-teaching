@@ -16,7 +16,7 @@ module DfeSignIn
     private
 
     def client_id
-      @client ||= DfeSignIn::User.client_id_for_user_type(user_type)
+      @client_id ||= DfeSignIn::User.client_id_for_user_type(user_type)
     end
 
     def create_or_update_users
