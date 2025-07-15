@@ -92,6 +92,7 @@ jobs:
             | Targeted Retention Payments | <${{ env.APP_URL }}/targeted-retention-incentive-payments/landing-page>   |
             | Student Loans               | <${{ env.APP_URL }}/student-loans/claim>                                  |
             | Further Education           | <${{ env.APP_URL }}/further-education-payments/landing-page>              |
+            | Further Education Providers | <${{ env.APP_URL }}/further-education-payments/providers/claims>          |
             | Early Years Payment         | <${{ env.APP_URL }}/early-years-payment/landing-page>                     |
             | Relocation Payments         | <${{ env.APP_URL }}/get-a-teacher-relocation-payment/landing-page>        |
             | Admin                       | <${{ env.APP_URL }}/admin>                                                |
