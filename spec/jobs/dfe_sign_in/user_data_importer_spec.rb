@@ -22,11 +22,11 @@ RSpec.describe DfeSignIn::UserDataImporterJob do
       let(:importer) { double("DfeSignIn::User", run: true) }
 
       it "calls importer" do
-        expect(DfeSignIn::UserDataImporter).to receive(:new).and_return(importer)
+        expect(DfeSignIn::UserDataImporter).to receive(:new).twice.and_return(importer)
 
         subject.perform
 
-        expect(importer).to have_received(:run)
+        expect(importer).to have_received(:run).twice
       end
     end
   end
