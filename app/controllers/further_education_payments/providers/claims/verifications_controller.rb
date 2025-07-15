@@ -18,7 +18,7 @@ module FurtherEducationPayments
         end
 
         def update
-          if @form.update(verification_form_params)
+          if @form.update(verification_form_params, params[:save_and_exit])
 
             wizard.clear_impermissible_answers!
 

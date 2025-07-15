@@ -8,24 +8,12 @@ module FurtherEducationPayments
             :boolean
           )
 
-          attribute(
-            :provider_verification_contract_covers_section_completed,
-            :boolean
-          )
-
           validates(
             :provider_verification_contract_covers_full_academic_year,
             included: {
               in: ->(form) { form.contract_covers_full_academic_year_options.map(&:id) }
             },
             allow_nil: :save_and_exit?
-          )
-
-          validates(
-            :provider_verification_contract_covers_section_completed,
-            inclusion: {
-              in: ->(form) { form.section_completed_options.map(&:id) }
-            }
           )
 
           def academic_year
@@ -44,23 +32,6 @@ module FurtherEducationPayments
               Form::Option.new(id: true, name: "Yes"),
               Form::Option.new(id: false, name: "No")
             ]
-          end
-
-          def section_completed_options
-            [
-              Form::Option.new(
-                id: true,
-                name: "Yes"
-              ),
-              Form::Option.new(
-                id: false,
-                name: "No, I want to come back to it later"
-              )
-            ]
-          end
-
-          def save_and_exit?
-            provider_verification_contract_covers_section_completed == false
           end
         end
       end

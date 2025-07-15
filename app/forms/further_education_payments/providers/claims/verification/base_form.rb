@@ -37,7 +37,8 @@ module FurtherEducationPayments
             dup.invalid?
           end
 
-          def update(params)
+          def update(params, save_and_exit = false)
+            @save_and_exit = save_and_exit
             assign_attributes(params)
             save
           end
@@ -68,6 +69,10 @@ module FurtherEducationPayments
 
           def claimant_name
             claim.full_name
+          end
+
+          def save_and_exit?
+            !!@save_and_exit
           end
 
           private

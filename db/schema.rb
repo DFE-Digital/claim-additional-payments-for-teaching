@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_10_131813) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_15_134556) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -318,16 +318,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_10_131813) do
     t.string "provider_verification_contract_type"
     t.boolean "provider_verification_contract_covers_full_academic_year"
     t.boolean "provider_verification_taught_at_least_one_academic_term"
-    t.boolean "provider_verification_role_and_experience_section_completed"
-    t.boolean "provider_verification_contract_covers_section_completed"
-    t.boolean "provider_verification_taught_one_term_section_completed"
     t.boolean "provider_verification_performance_measures"
     t.boolean "provider_verification_disciplinary_action"
-    t.boolean "provider_verification_performance_section_completed"
     t.string "provider_verification_teaching_hours_per_week"
     t.boolean "provider_verification_half_teaching_hours"
     t.boolean "provider_verification_subjects_taught"
-    t.boolean "provider_verification_contracted_hours_section_completed"
     t.boolean "provider_verification_declaration"
     t.datetime "provider_verification_completed_at", precision: nil
     t.uuid "provider_verification_verified_by_id"
