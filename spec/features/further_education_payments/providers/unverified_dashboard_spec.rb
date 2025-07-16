@@ -6,7 +6,7 @@ RSpec.describe "Provider unverified claims dashboard", feature_flag: :provider_d
   end
 
   scenario "when no claims" do
-    visit "/further_education_payments/providers/claims"
+    visit "/further-education-payments/providers/claims"
     expect(page).to have_text "Sign in"
     click_button "Start now"
 
@@ -26,7 +26,7 @@ RSpec.describe "Provider unverified claims dashboard", feature_flag: :provider_d
       created_at: Date.new(2024, 12, 13)
     )
 
-    visit "/further_education_payments/providers/claims"
+    visit "/further-education-payments/providers/claims"
     expect(page).to have_text "Sign in"
     click_button "Start now"
 

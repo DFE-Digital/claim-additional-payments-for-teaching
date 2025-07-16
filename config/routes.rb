@@ -187,7 +187,7 @@ Rails.application.routes.draw do
     end
   end
 
-  namespace :further_education_payments do
+  namespace :further_education_payments, path: "further-education-payments" do
     namespace :providers do
       resource :session, only: %i[new destroy]
       resources :authorisation_failures, only: [:show], param: :reason
