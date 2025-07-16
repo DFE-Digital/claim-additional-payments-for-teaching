@@ -9,7 +9,9 @@ module FurtherEducationPayments
       private
 
       def claim_scope
-        super.merge(Claim.fe_provider_verified)
+        super
+          .merge(Claim.fe_provider_verified)
+          .order(:surname, :first_name)
       end
     end
   end
