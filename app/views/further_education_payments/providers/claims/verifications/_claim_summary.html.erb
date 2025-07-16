@@ -1,6 +1,7 @@
 <section id="claim-details">
   <h2 class="govuk-heading-m">
     Claim details
+    <%= claim_status_tag(claim) %>
   </h2>
 
   <%= govuk_summary_list do |summary_list| %>

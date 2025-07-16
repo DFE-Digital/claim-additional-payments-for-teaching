@@ -30,7 +30,7 @@
         <% row.with_cell(text: l(claim.submitted_at.to_date)) %>
         <% row.with_cell(text: l(Policies::FurtherEducationPayments.verification_due_date_for_claim(claim))) %>
         <% row.with_cell(text: "Unassigned") %>
-        <% row.with_cell(text: govuk_tag(text: "Not started", colour: "red")) %>
+        <% row.with_cell(text: claim_status_tag(claim)) %>
       <% end %>
     <% end %>
   <% end %>

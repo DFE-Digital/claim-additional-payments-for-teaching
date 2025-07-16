@@ -883,6 +883,82 @@ RSpec.feature "Provider verifying claims" do
     match
   end
 
+  context "status badge display" do
+    it "shows 'Not started' when no verification has been done" do
+      fe_provider = create(
+        :school,
+        :further_education,
+        name: "Springfield College"
+      )
+
+      sign_in_to(fe_provider)
+
+      claim = create(
+        :claim,
+        :submitted,
+        :further_education,
+        first_name: "Bart",
+        surname: "Simpson",
+        eligibility_attributes: {
+          school: fe_provider
+        }
+      )
+
+      visit(
+        edit_further_education_payments_providers_claim_verification_path(claim)
+      )
+
+      within("#claim-details") do
+        expect(page).to have_content("Not started")
+      end
+    end
+
+    it "shows 'In progress' after saving some verification data" do
+      fe_provider = create(
+        :school,
+        :further_education,
+        name: "Springfield College"
+      )
+
+      sign_in_to(fe_provider)
+
+      claim = create(
+        :claim,
+        :submitted,
+        :further_education,
+        first_name: "Lisa",
+        surname: "Simpson",
+        eligibility_attributes: {
+          school: fe_provider
+        }
+      )
+
+      visit(
+        edit_further_education_payments_providers_claim_verification_path(claim)
+      )
+
+      within("#claim-details") do
+        expect(page).to have_content("Not started")
+      end
+
+      within_fieldset(
+        "Is Lisa Simpson a member of staff with teaching responsibilities?"
+      ) { choose "Yes" }
+
+      within_fieldset("Have you completed this section?") { choose "No, I want to come back to it later" }
+
+      click_on "Save and continue"
+
+      visit(
+        edit_further_education_payments_providers_claim_verification_path(claim)
+      )
+
+      within("#claim-details") do
+        expect(page).to have_content("In progress")
+      end
+    end
+  end
+
   def sign_in_to(fe_provider)
     mock_dfe_sign_in_auth_session(
       provider: :dfe_fe_provider,
