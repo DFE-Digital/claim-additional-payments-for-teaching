@@ -55,10 +55,6 @@ module FurtherEducationPayments
             provider.name
           end
 
-          def claimant_name
-            claim.full_name
-          end
-
           def teaching_responsibilities_options
             [
               Form::Option.new(id: true, name: "Yes"),

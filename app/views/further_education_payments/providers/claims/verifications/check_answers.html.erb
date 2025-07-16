@@ -117,5 +117,91 @@
         <% end %>
       <% end %>
     <% end %>
+
+    <%= govuk_summary_card(title: "Contracted hours") do |card| %>
+      <%= card.with_action do %>
+        <%= govuk_link_to(
+          "Change",
+          edit_further_education_payments_providers_claim_verification_path(
+            @form.claim,
+            slug: "contracted_hours"
+          )
+        ) %>
+      <% end %>
+      <%= card.with_summary_list do |summary_list| %>
+        <%= summary_list.with_row do |row| %>
+          <%= row.with_key(text: "Timetabled hours per week") %>
+          <%= row.with_value(
+            text: t(
+              @form.provider_verification_teaching_hours_per_week,
+              scope: %w[
+                further_education_payments
+                forms
+                teaching_hours_per_week
+                options
+              ]
+            )
+          ) %>
+        <% end %>
+
+        <%= summary_list.with_row do |row| %>
+          <%= row.with_key(text: "Teaches 16-19-year-olds or those with EHCP") %>
+          <%= row.with_value(
+            text: t(
+              @form.provider_verification_half_teaching_hours,
+              scope: :boolean
+            )
+          ) %>
+        <% end %>
+
+        <%= summary_list.with_row do |row| %>
+          <%= row.with_key(
+            text: "Teaches approved qualification in #{@form.subject_names_sentence}"
+          ) %>
+
+          <%= row.with_value(
+            text: t(
+              @form.provider_verification_subjects_taught,
+              scope: :boolean
+            )
+          ) %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%= form_with(
+      model: @form,
+      url: further_education_payments_providers_claim_verification_path(
+        @form.claim,
+        @form.provider,
+        slug: @form.slug,
+      ),
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+      method: :patch,
+    ) do |f| %>
+      <%= f.govuk_check_boxes_fieldset(
+        :provider_verification_declaration,
+        multiple: false,
+        legend: {
+          text: "Declaration",
+          size: "l"
+        }
+      ) do %>
+
+        <%= f.govuk_check_box(
+          :provider_verification_declaration,
+          1,
+          0,
+          multiple: false,
+          link_errors: true,
+          label: {
+            text: "To the best of my knowledge, I confirm that the " \
+                  "information provided in this form is correct."
+          }
+        ) %>
+      <% end %>
+
+      <%= f.govuk_submit("Continue") %>
+    <% end %>
   </div>
 </div>

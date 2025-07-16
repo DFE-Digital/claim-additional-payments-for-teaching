@@ -8,6 +8,7 @@ module FurtherEducationPayments
             ContractCoversFullAcademicYearForm,
             TaughtAtLeastOneAcademicTermForm,
             PerformanceAndDisciplineForm,
+            ContractedHoursForm,
             CheckAnswersForm
           ]
 
@@ -62,6 +63,16 @@ module FurtherEducationPayments
             end
           end
 
+          def completable?
+            build_forms(
+              reachable_steps.excluding(CheckAnswersForm)
+            ).none?(&:incomplete?)
+          end
+
+          def completed?
+            reachable_forms.none?(&:incomplete?)
+          end
+
           private
 
           attr_reader :claim, :user, :current_slug
@@ -105,6 +116,8 @@ module FurtherEducationPayments
             end
 
             @reachable_steps << PerformanceAndDisciplineForm
+
+            @reachable_steps << ContractedHoursForm
 
             @reachable_steps << CheckAnswersForm
 

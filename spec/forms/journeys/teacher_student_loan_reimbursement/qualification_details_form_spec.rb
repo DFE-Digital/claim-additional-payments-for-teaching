@@ -153,12 +153,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::QualificationDetailsFo
                 qualification: "BA (Hons)",
                 state: 0,
                 state_name: "Active"
-              },
-              qualifications: [
-                {
-                  he_subject1_code: "G100"
-                }
-              ]
+              }
             }
           end
 

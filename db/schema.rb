@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_07_150443) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_10_131813) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -154,9 +154,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_07_150443) do
     t.datetime "deleted_at", precision: nil
     t.string "session_token"
     t.string "current_organisation_ukprn"
+    t.text "user_type"
     t.index ["deleted_at"], name: "index_dfe_sign_in_users_on_deleted_at"
-    t.index ["dfe_sign_in_id"], name: "index_dfe_sign_in_users_on_dfe_sign_in_id", unique: true
+    t.index ["dfe_sign_in_id", "user_type"], name: "index_dfe_sign_in_users_on_dfe_sign_in_id_and_user_type", unique: true
     t.index ["session_token"], name: "index_dfe_sign_in_users_on_session_token", unique: true
+    t.index ["user_type"], name: "index_dfe_sign_in_users_on_user_type"
   end
 
   create_table "dqt_higher_education_qualifications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -322,7 +324,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_07_150443) do
     t.boolean "provider_verification_performance_measures"
     t.boolean "provider_verification_disciplinary_action"
     t.boolean "provider_verification_performance_section_completed"
+    t.string "provider_verification_teaching_hours_per_week"
+    t.boolean "provider_verification_half_teaching_hours"
+    t.boolean "provider_verification_subjects_taught"
+    t.boolean "provider_verification_contracted_hours_section_completed"
+    t.boolean "provider_verification_declaration"
+    t.datetime "provider_verification_completed_at", precision: nil
+    t.uuid "provider_verification_verified_by_id"
     t.index ["possible_school_id"], name: "index_fe_payments_eligibilities_on_possible_school_id"
+    t.index ["provider_verification_verified_by_id"], name: "idx_on_provider_verification_verified_by_id_c38aef7b6c"
     t.index ["school_id"], name: "index_fe_payments_eligibilities_on_school_id"
   end
 
@@ -794,6 +804,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_07_150443) do
   add_foreign_key "eligible_ey_providers", "file_uploads"
   add_foreign_key "eligible_ey_providers", "local_authorities"
   add_foreign_key "eligible_fe_providers", "file_uploads"
+  add_foreign_key "further_education_payments_eligibilities", "dfe_sign_in_users", column: "provider_verification_verified_by_id"
   add_foreign_key "further_education_payments_eligibilities", "schools"
   add_foreign_key "further_education_payments_eligibilities", "schools", column: "possible_school_id"
   add_foreign_key "international_relocation_payments_eligibilities", "schools", column: "current_school_id"

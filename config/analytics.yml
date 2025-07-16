@@ -263,6 +263,7 @@ shared:
     - role_codes
     - deleted_at
     - current_organisation_ukprn
+    - user_type
   :targeted_retention_incentive_payments_awards:
     - id
     - academic_year
@@ -337,6 +338,14 @@ shared:
     - provider_verification_performance_measures
     - provider_verification_disciplinary_action
     - provider_verification_performance_section_completed
+    - provider_verification_teaching_hours_per_week
+    - provider_verification_half_teaching_hours
+    - provider_verification_subjects_taught
+    - provider_verification_contracted_hours_section_completed
+    - provider_verification_declaration
+    - provider_verification_completed_at
+    - provider_verification_verified_by_id
+
   :eligible_ey_providers:
     - id
     - nursery_name

@@ -79,7 +79,7 @@ gem "pagy"
 
 gem "ostruct"
 
-gem "solid_queue", "~> 1.1"
+gem "solid_queue", "~> 1.2"
 gem "mission_control-jobs"
 
 gem "slack-notifier"

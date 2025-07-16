@@ -23,7 +23,7 @@ module Admin
     end
 
     def admin_user
-      @admin_user ||= DfeSignIn::User.not_deleted.find_by(id: session[:user_id], session_token: session[:token]) || DfeSignIn::NullUser.new
+      @admin_user ||= DfeSignIn::User.admin.not_deleted.find_by(id: session[:user_id], session_token: session[:token]) || DfeSignIn::NullUser.new
     end
 
     def current_admin

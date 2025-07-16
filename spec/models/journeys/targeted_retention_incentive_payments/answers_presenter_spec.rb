@@ -119,12 +119,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::AnswersPresenter, t
                 subject1: "mathematics",
                 subject1_code: "G100",
                 qualification: "BA (Hons)"
-              },
-              qualifications: [
-                {
-                  he_subject1_code: "G100"
-                }
-              ]
+              }
             },
             current_school_id: school.id,
             nqt_in_academic_year_after_itt: true,

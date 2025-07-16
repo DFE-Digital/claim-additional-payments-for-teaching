@@ -13,7 +13,7 @@ module Admin
     end
 
     def callback
-      dfe_sign_in_user = DfeSignIn::User.from_session(admin_session)
+      dfe_sign_in_user = DfeSignIn::User.admin.from_session(admin_session)
 
       if dfe_sign_in_user&.has_admin_access?
         dfe_sign_in_user.regenerate_session_token
@@ -38,7 +38,7 @@ module Admin
     def admin_session
       return developer_session if DfESignIn.bypass?
 
-      DfeSignIn::AuthenticatedSession.from_auth_hash(request.env.fetch("omniauth.auth"))
+      DfeSignIn::AuthenticatedSession.from_auth_hash(request.env.fetch("omniauth.auth"), user_type: "admin")
     end
 
     def developer_session

@@ -1,0 +1,86 @@
+<%= content_for(
+  :page_title,
+  "Review a targeted retention incentive payment claim"
+) %>
+
+<%= govuk_back_link href: backlink_path %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Review a targeted retention incentive payment claim
+    </h1>
+
+    <%= form_with(
+      model: @form,
+      url: further_education_payments_providers_claim_verification_path(
+        @form.claim,
+        @form.provider,
+        slug: @form.slug,
+      ),
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+      method: :patch,
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= render partial: "claim_summary", locals: { claim: f.object.claim } %>
+
+      <h2 class="govuk-heading-m">
+        Contracted hours
+      </h2>
+
+      <%= f.govuk_collection_radio_buttons(
+        :provider_verification_teaching_hours_per_week,
+        f.object.provider_verification_teaching_hours_per_week_options,
+        :id,
+        :name,
+        legend: {
+          text: "On average, how many hours per week is "\
+          "#{f.object.claimant_name} timetabled to teach during the current term?",
+        }
+      ) %>
+
+      <%= f.govuk_collection_radio_buttons(
+        :provider_verification_half_teaching_hours,
+        f.object.provider_verification_half_teaching_hours_options,
+        :id,
+        :name,
+        legend: {
+          text: "For at least half of their timetabled teaching hours, does " \
+          "#{f.object.claimant_name} teach 16- to 19-year-olds, including " \
+          "those up to age 25 with an Education, Health and Care Plan (EHCP)?"
+        }
+      ) %>
+
+      <%= f.govuk_collection_radio_buttons(
+        :provider_verification_subjects_taught,
+        f.object.provider_verification_subjects_taught_options,
+        :id,
+        :name,
+        legend: {
+          text: "For at least half of their timetabled teaching hours, does " \
+          "#{f.object.claimant_name} teach:"
+        },
+        hint: -> do
+          govuk_list(
+            f.object.subjects_taught_descriptions.map(&:html_safe),
+            type: :bullet
+          )
+        end
+      ) %>
+
+      <%= f.govuk_collection_radio_buttons(
+        :provider_verification_contracted_hours_section_completed,
+        f.object.section_completed_options,
+        :id,
+        :name,
+        legend: {
+          text: "Have you completed this section?",
+        }
+      ) %>
+
+      <%= f.govuk_submit("Save and continue") %>
+    <% end %>
+  </div>
+</div>
+
