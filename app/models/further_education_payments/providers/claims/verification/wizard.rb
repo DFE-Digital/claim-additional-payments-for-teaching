@@ -4,7 +4,9 @@ module FurtherEducationPayments
       module Verification
         class Wizard
           FORMS = [
-            RoleAndExperienceForm,
+            TeachingResponsibilitiesForm,
+            QualificationForm,
+            ContractTypeForm,
             ContractCoversFullAcademicYearForm,
             TaughtAtLeastOneAcademicTermForm,
             PerformanceAndDisciplineForm,
@@ -87,7 +89,9 @@ module FurtherEducationPayments
 
             @reachable_steps = []
 
-            @reachable_steps << RoleAndExperienceForm
+            @reachable_steps << TeachingResponsibilitiesForm
+            @reachable_steps << QualificationForm
+            @reachable_steps << ContractTypeForm
 
             if eligibility.provider_verification_contract_type == "fixed_term"
               @reachable_steps << ContractCoversFullAcademicYearForm
