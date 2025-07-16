@@ -1,5 +1,5 @@
 <h1 class="govuk-heading-l">
-  Verified claims (<%= @claims.count %>)
+  Verified claims (<%= @all_claims.count %>)
 </h1>
 
 <div class="govuk-grid-row">
@@ -41,3 +41,5 @@
     <% end %>
   <% end %>
 <% end %>
+
+<%= govuk_pagination(pagy: @pagy) %>

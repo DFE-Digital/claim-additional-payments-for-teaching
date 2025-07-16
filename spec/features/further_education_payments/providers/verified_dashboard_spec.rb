@@ -6,7 +6,7 @@ RSpec.describe "Provider verified claims dashboard", feature_flag: :provider_das
   end
 
   scenario "when no claims" do
-    visit "/further_education_payments/providers/verified-claims"
+    visit "/further-education-payments/providers/verified-claims"
     expect(page).to have_text "Sign in"
     click_button "Start now"
 
