@@ -749,10 +749,10 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Continue"
 
-      within_fieldset(
+      expect(page).to have_content(
         "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
         "academic year?"
-      ) { choose "Yes" }
+      )
 
       click_on "Save and come back later"
 
@@ -762,8 +762,11 @@ RSpec.feature "Provider verifying claims" do
         edit_further_education_payments_providers_claim_verification_path(claim)
       )
 
-      # Role and experience form
-      click_on "Continue"
+      # First incomplete form
+      expect(page).to have_content(
+        "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
+        "academic year?"
+      )
     end
   end
 
