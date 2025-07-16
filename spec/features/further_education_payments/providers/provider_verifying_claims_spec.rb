@@ -46,6 +46,8 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel a member of staff with teaching responsibilities?"
       ) { choose "Yes" }
 
+      click_on "Continue"
+
       within_fieldset(
         "Is Edna Krabappel in the first 5 years of their further education " \
         "(FE) teaching career in England?"
@@ -54,6 +56,8 @@ RSpec.feature "Provider verifying claims" do
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"
       end
+
+      click_on "Continue"
 
       within_fieldset(
         "What type of contract does Edna Krabappel have with " \
@@ -182,6 +186,8 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel a member of staff with teaching responsibilities?"
       ) { choose "Yes" }
 
+      click_on "Continue"
+
       within_fieldset(
         "Is Edna Krabappel in the first 5 years of their further education " \
         "(FE) teaching career in England?"
@@ -190,6 +196,8 @@ RSpec.feature "Provider verifying claims" do
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"
       end
+
+      click_on "Continue"
 
       within_fieldset(
         "What type of contract does Edna Krabappel have with " \
@@ -330,6 +338,8 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel a member of staff with teaching responsibilities?"
       ) { choose "Yes" }
 
+      click_on "Continue"
+
       within_fieldset(
         "Is Edna Krabappel in the first 5 years of their further education " \
         "(FE) teaching career in England?"
@@ -338,6 +348,8 @@ RSpec.feature "Provider verifying claims" do
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"
       end
+
+      click_on "Continue"
 
       within_fieldset(
         "What type of contract does Edna Krabappel have with " \
@@ -467,6 +479,8 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel a member of staff with teaching responsibilities?"
       ) { choose "Yes" }
 
+      click_on "Continue"
+
       within_fieldset(
         "Is Edna Krabappel in the first 5 years of their further education " \
         "(FE) teaching career in England?"
@@ -475,6 +489,8 @@ RSpec.feature "Provider verifying claims" do
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"
       end
+
+      click_on "Continue"
 
       within_fieldset(
         "What type of contract does Edna Krabappel have with " \
@@ -622,6 +638,8 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel a member of staff with teaching responsibilities?"
       ) { choose "Yes" }
 
+      click_on "Continue"
+
       within_fieldset(
         "Is Edna Krabappel in the first 5 years of their further education " \
         "(FE) teaching career in England?"
@@ -630,6 +648,8 @@ RSpec.feature "Provider verifying claims" do
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"
       end
+
+      click_on "Continue"
 
       within_fieldset(
         "What type of contract does Edna Krabappel have with " \
@@ -646,6 +666,7 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Back"
 
+      # Now we're back to the contract type page
       within_fieldset(
         "What type of contract does Edna Krabappel have with " \
         "Springfield College?"
@@ -710,6 +731,8 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel a member of staff with teaching responsibilities?"
       ) { choose "Yes" }
 
+      click_on "Continue"
+
       within_fieldset(
         "Is Edna Krabappel in the first 5 years of their further education " \
         "(FE) teaching career in England?"
@@ -729,19 +752,7 @@ RSpec.feature "Provider verifying claims" do
         edit_further_education_payments_providers_claim_verification_path(claim)
       )
 
-      within_fieldset(
-        "Is Edna Krabappel a member of staff with teaching responsibilities?"
-      ) { expect(page).to have_checked_field("Yes") }
-
-      within_fieldset(
-        "Is Edna Krabappel in the first 5 years of their further education " \
-        "(FE) teaching career in England?"
-      ) { expect(page).to have_checked_field("Yes") }
-
-      within_fieldset("Does Edna Krabappel have a teaching qualification?") do
-        expect(page).to have_checked_field("Yes")
-      end
-
+      # Should go to the contract type page since the first two pages are completed
       within_fieldset(
         "What type of contract does Edna Krabappel have with " \
         "Springfield College?"

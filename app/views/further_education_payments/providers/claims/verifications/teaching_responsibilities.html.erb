@@ -3,9 +3,7 @@
   "Review a targeted retention incentive payment claim"
 ) %>
 
-<% content_for :back_link do %>
-  <%= govuk_back_link href: further_education_payments_providers_claims_path %>
-<% end %>
+<%= govuk_back_link href: further_education_payments_providers_claims_path %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -37,37 +35,13 @@
         :id,
         :name,
         legend: {
-          text: "Is #{f.object.claimant_name} a member of staff with teaching responsibilities?",
-        }
-      ) %>
-
-      <%= f.govuk_collection_radio_buttons(
-        :provider_verification_in_first_five_years,
-        f.object.in_first_five_years_options,
-        :id,
-        :name,
-        legend: {
-          text: "Is #{f.object.claimant_name} in the first 5 years of their further education (FE) teaching career in England?",
-        }
-      ) %>
-
-      <%= f.govuk_collection_radio_buttons(
-        :provider_verification_teaching_qualification,
-        f.object.teaching_qualification_options,
-        :id,
-        :name,
-        legend: {
-          text: "Does #{f.object.claimant_name} have a teaching qualification?",
-        }
-      ) %>
-
-      <%= f.govuk_collection_radio_buttons(
-        :provider_verification_contract_type,
-        f.object.contract_type_options,
-        :id,
-        :name,
-        legend: {
-          text: "What type of contract does #{f.object.claimant_name} have with #{f.object.provider_name}?",
+          text: "Is #{f.object.claimant_name} a member of staff with teaching " \
+                "responsibilities?",
+          size: "s",
+        },
+        hint: {
+          text: "This includes all job titles where the role involves teaching " \
+                "further education students"
         }
       ) %>
 
@@ -80,6 +54,19 @@
         value: true,
         class: "govuk-!-margin-left-2"
       ) %>
+
+      <%= govuk_details(
+        summary_text: "Who counts as a teacher for this payment",
+      ) do %>
+        <p class="govuk-body">
+          An FE teacher is someone who teaches, even if it's not their main job.
+          This payment isn't for support staff like assistants or technicians.
+          <br />
+          <br />
+          They're likely to have a teaching contract, teach groups of students,
+          plan and mark work, or be working towards a teaching qualification.
+        </p>
+      <% end %>
     <% end %>
   </div>
 </div>
