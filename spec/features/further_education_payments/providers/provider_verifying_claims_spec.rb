@@ -142,6 +142,15 @@ RSpec.feature "Provider verifying claims" do
       expect(
         summary_row("Teaches approved qualification in maths and physics")
       ).to have_content("yes")
+
+      check(
+        "To the best of my knowledge, I confirm that the information " \
+        "provided in this form is correct."
+      )
+
+      click_on "Continue"
+
+      expect(page).to have_content("Claim Verified for Edna Krabappel")
     end
   end
 
@@ -297,6 +306,15 @@ RSpec.feature "Provider verifying claims" do
       expect(
         summary_row("Teaches approved qualification in building and construction")
       ).to have_content("yes")
+
+      check(
+        "To the best of my knowledge, I confirm that the information " \
+        "provided in this form is correct."
+      )
+
+      click_on "Continue"
+
+      expect(page).to have_content("Claim Verified for Edna Krabappel")
     end
   end
 
@@ -448,6 +466,15 @@ RSpec.feature "Provider verifying claims" do
           "and ict and chemistry"
         )
       ).to have_content("yes")
+
+      check(
+        "To the best of my knowledge, I confirm that the information " \
+        "provided in this form is correct."
+      )
+
+      click_on "Continue"
+
+      expect(page).to have_content("Claim Verified for Edna Krabappel")
     end
   end
 
