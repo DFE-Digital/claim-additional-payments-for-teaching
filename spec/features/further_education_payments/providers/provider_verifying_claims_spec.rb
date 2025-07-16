@@ -521,10 +521,9 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Continue"
 
-      # Check answers page
       expect(summary_row("Type of contract")).to have_content("Variable hours")
 
-      within(summary_card("Role and experience")) do
+      within(summary_row("Type of contract")) do
         click_on "Change"
       end
 
@@ -538,7 +537,7 @@ RSpec.feature "Provider verifying claims" do
       expect(summary_row("Type of contract")).to have_content("Permanent")
 
       # Change contract type to Fixed-term
-      within(summary_card("Role and experience")) do
+      within(summary_row("Type of contract")) do
         click_on "Change"
       end
 
@@ -563,30 +562,30 @@ RSpec.feature "Provider verifying claims" do
         summary_row("Contract covers full academic year")
       ).to have_content "no"
 
-      # Change answer on second page of fixed term contract
-      within(summary_card("Role and experience")) do
+      # Change contract type to Variable hours
+
+      within(summary_row("Type of contract")) do
         click_on "Change"
       end
 
       within_fieldset(
         "What type of contract does Edna Krabappel have with " \
         "Springfield College?"
-      ) { expect(page).to have_checked_field("Fixed-term") }
+      ) { choose "Variable hours" }
 
       click_on "Continue"
 
       within_fieldset(
-        "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
-        "academic year?"
+        "Has Edna Krabappel taught at Springfield College for at least one " \
+        "academic term?"
       ) { choose "Yes" }
 
       click_on "Continue"
 
-      expect(summary_row("Type of contract")).to have_content("Fixed-term")
-
+      expect(summary_row("Type of contract")).to have_content("Variable hours")
       expect(
-        summary_row("Contract covers full academic year")
-      ).to have_content "yes"
+        summary_row("Variable hours in academic year")
+      ).to have_content("yes")
     end
   end
 
@@ -765,11 +764,6 @@ RSpec.feature "Provider verifying claims" do
 
       # Role and experience form
       click_on "Continue"
-
-      expect(page).to have_content(
-        "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
-        "academic year?"
-      )
     end
   end
 
@@ -804,17 +798,7 @@ RSpec.feature "Provider verifying claims" do
   end
 
   def summary_row(label)
-    find("dt", text: label).sibling("dd")
-  end
-
-  def summary_card(heading)
-    match = all(".govuk-summary-card").detect do |card|
-      card.find(".govuk-summary-card__title").text == heading
-    end
-
-    raise "Couldn't find summary card with title #{heading}" unless match
-
-    match
+    find("div.govuk-summary-list__row", text: label)
   end
 
   context "status badge display" do

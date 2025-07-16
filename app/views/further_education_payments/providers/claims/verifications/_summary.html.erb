@@ -7,17 +7,6 @@
 </h1>
 
 <%= govuk_summary_card(title: "Role and experience") do |card| %>
-  <% if editable %>
-    <%= card.with_action do %>
-      <%= govuk_link_to(
-        "Change",
-        edit_further_education_payments_providers_claim_verification_path(
-          form.claim,
-          slug: "role_and_experience"
-        )
-      ) %>
-    <% end %>
-  <% end %>
   <%= card.with_summary_list do |summary_list| %>
     <%= summary_list.with_row do |row| %>
       <%= row.with_key(text: "Teaching responsibilities") %>
@@ -27,6 +16,15 @@
           scope: :boolean
         )
       ) %>
+      <% if editable %>
+        <%= row.with_action(
+          text: "Change",
+          href: edit_further_education_payments_providers_claim_verification_path(
+            form.claim,
+            slug: "role_and_experience"
+          )
+        ) %>
+      <% end %>
     <% end %>
 
     <%= summary_list.with_row do |row| %>
@@ -37,6 +35,15 @@
           scope: :boolean
         )
       ) %>
+      <% if editable %>
+        <%= row.with_action(
+          text: "Change",
+          href: edit_further_education_payments_providers_claim_verification_path(
+            form.claim,
+            slug: "role_and_experience"
+          )
+        ) %>
+      <% end %>
     <% end %>
 
     <%= summary_list.with_row do |row| %>
@@ -44,11 +51,29 @@
       <%= row.with_value(
         text: form.provider_verification_teaching_qualification,
       ) %>
+      <% if editable %>
+        <%= row.with_action(
+          text: "Change",
+          href: edit_further_education_payments_providers_claim_verification_path(
+            form.claim,
+            slug: "role_and_experience"
+          )
+        ) %>
+      <% end %>
     <% end %>
 
     <%= summary_list.with_row do |row| %>
       <%= row.with_key(text: "Type of contract") %>
       <%= row.with_value(text: form.contract_type) %>
+      <% if editable %>
+        <%= row.with_action(
+          text: "Change",
+          href: edit_further_education_payments_providers_claim_verification_path(
+            form.claim,
+            slug: "role_and_experience"
+          )
+        ) %>
+      <% end %>
     <% end %>
 
     <% case form.provider_verification_contract_type %>
@@ -61,6 +86,15 @@
             scope: :boolean
           )
         ) %>
+        <% if editable %>
+          <%= row.with_action(
+            text: "Change",
+            href: edit_further_education_payments_providers_claim_verification_path(
+              form.claim,
+              slug: "contract_covers_full_academic_year"
+            )
+          ) %>
+        <% end %>
       <% end %>
     <% when "variable_hours" %>
       <%= summary_list.with_row do |row| %>
@@ -71,6 +105,15 @@
             scope: :boolean
           )
         ) %>
+        <% if editable %>
+          <%= row.with_action(
+            text: "Change",
+            href: edit_further_education_payments_providers_claim_verification_path(
+              form.claim,
+              slug: "taught_at_least_one_academic_term"
+            )
+          ) %>
+        <% end %>
       <% end %>
     <% else %>
       <%# noop %>
@@ -79,17 +122,6 @@
 <% end %>
 
 <%= govuk_summary_card(title: "Performance and discipline") do |card| %>
-  <% if editable %>
-    <%= card.with_action do %>
-      <%= govuk_link_to(
-        "Change",
-        edit_further_education_payments_providers_claim_verification_path(
-          form.claim,
-          slug: "performance_and_discipline"
-        )
-      ) %>
-    <% end %>
-  <% end %>
   <%= card.with_summary_list do |summary_list| %>
     <%= summary_list.with_row do |row| %>
       <%= row.with_key(text: "Subject to performance measures") %>
@@ -99,6 +131,15 @@
           scope: :boolean
         )
       ) %>
+      <% if editable %>
+        <%= row.with_action(
+          text: "Change",
+          href: edit_further_education_payments_providers_claim_verification_path(
+            form.claim,
+            slug: "performance_and_discipline"
+          )
+        ) %>
+      <% end %>
     <% end %>
 
     <%= summary_list.with_row do |row| %>
@@ -109,22 +150,20 @@
           scope: :boolean
         )
       ) %>
+      <% if editable %>
+        <%= row.with_action(
+          text: "Change",
+          href: edit_further_education_payments_providers_claim_verification_path(
+            form.claim,
+            slug: "performance_and_discipline"
+          )
+        ) %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>
 
 <%= govuk_summary_card(title: "Contracted hours") do |card| %>
-  <% if editable %>
-    <%= card.with_action do %>
-      <%= govuk_link_to(
-        "Change",
-        edit_further_education_payments_providers_claim_verification_path(
-          form.claim,
-          slug: "contracted_hours"
-        )
-      ) %>
-    <% end %>
-  <% end %>
   <%= card.with_summary_list do |summary_list| %>
     <%= summary_list.with_row do |row| %>
       <%= row.with_key(text: "Timetabled hours per week") %>
@@ -139,6 +178,15 @@
           ]
         )
       ) %>
+      <% if editable %>
+        <%= row.with_action(
+          text: "Change",
+          href: edit_further_education_payments_providers_claim_verification_path(
+            form.claim,
+            slug: "contracted_hours"
+          )
+        ) %>
+      <% end %>
     <% end %>
 
     <%= summary_list.with_row do |row| %>
@@ -149,6 +197,15 @@
           scope: :boolean
         )
       ) %>
+      <% if editable %>
+        <%= row.with_action(
+          text: "Change",
+          href: edit_further_education_payments_providers_claim_verification_path(
+            form.claim,
+            slug: "contracted_hours"
+          )
+        ) %>
+      <% end %>
     <% end %>
 
     <%= summary_list.with_row do |row| %>
@@ -162,6 +219,16 @@
           scope: :boolean
         )
       ) %>
+
+      <% if editable %>
+        <%= row.with_action(
+          text: "Change",
+          href: edit_further_education_payments_providers_claim_verification_path(
+            form.claim,
+            slug: "contracted_hours"
+          )
+        ) %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>
