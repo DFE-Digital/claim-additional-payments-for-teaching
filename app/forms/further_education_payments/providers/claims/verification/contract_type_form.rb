@@ -17,7 +17,11 @@ module FurtherEducationPayments
             [
               Form::Option.new(id: "permanent", name: "Permanent"),
               Form::Option.new(id: "fixed_term", name: "Fixed-term"),
-              Form::Option.new(id: "variable_hours", name: "Variable hours")
+              Form::Option.new(id: "variable_hours", name: "Variable hours"),
+              Form::Option.new(
+                id: "employed_by_another_organisation",
+                name: "Employed by another organisation (for example, an agency or contractor)"
+              )
             ]
           end
         end

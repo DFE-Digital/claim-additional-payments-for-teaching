@@ -579,7 +579,6 @@ RSpec.feature "Provider verifying claims" do
       ).to have_content "no"
 
       # Change contract type to Variable hours
-
       within(summary_row("Type of contract")) do
         click_on "Change"
       end
@@ -602,6 +601,30 @@ RSpec.feature "Provider verifying claims" do
       expect(
         summary_row("Variable hours in academic year")
       ).to have_content("yes")
+
+      # Change contract type to Employed by another organisation
+      within(summary_row("Type of contract")) do
+        click_on "Change"
+      end
+
+      within_fieldset(
+        "What type of contract does Edna Krabappel have with " \
+        "Springfield College?"
+      ) do
+        choose(
+          "Employed by another organisation (for example, an agency or contractor)"
+        )
+      end
+
+      click_on "Continue"
+
+      expect(summary_row("Type of contract")).to have_content(
+        "Employed by another organisation (for example, an agency or contractor)"
+      )
+
+      expect(page).not_to have_content("Variable hours in academic year")
+
+      expect(page).not_to have_content("Contract covers full academic year")
     end
   end
 

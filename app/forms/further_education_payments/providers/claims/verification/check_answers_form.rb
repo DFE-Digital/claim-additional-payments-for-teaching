@@ -29,6 +29,8 @@ module FurtherEducationPayments
             when "fixed_term" then "Fixed-term"
             when "variable_hours" then "Variable hours"
             when "permanent" then "Permanent"
+            when "employed_by_another_organisation"
+              "Employed by another organisation (for example, an agency or contractor)"
             else fail "Unknown contract type"
             end
           end
