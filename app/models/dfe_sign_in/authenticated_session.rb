@@ -9,12 +9,16 @@ module DfeSignIn
       @role_codes = role_codes
     end
 
-    def self.from_auth_hash(auth_hash)
+    def self.from_auth_hash(auth_hash, user_type:)
       user_id = auth_hash["uid"]
       organisation_hash = auth_hash.dig("extra", "raw_info", "organisation")
       organisation_id = organisation_hash.dig("id")
       organisation_ukprn = organisation_hash.dig("ukprn")
-      role_codes = DfeSignIn::Api::User.new(user_id: user_id, organisation_id: organisation_id).role_codes
+      role_codes = DfeSignIn::Api::User.new(
+        user_id: user_id,
+        organisation_id: organisation_id,
+        user_type:
+      ).role_codes
 
       new(user_id:, organisation_id:, organisation_ukprn:, role_codes:)
     end

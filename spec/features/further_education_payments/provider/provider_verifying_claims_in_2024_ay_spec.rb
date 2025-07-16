@@ -59,7 +59,8 @@ RSpec.feature "Provider verifying claims" do
     stub_failed_dfe_sign_in_user_info_request(
       "11111",
       "22222",
-      status: 404
+      status: 404,
+      user_type: "provider"
     )
 
     claim_link = Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
@@ -124,7 +125,8 @@ RSpec.feature "Provider verifying claims" do
     stub_dfe_sign_in_user_info_request(
       "11111",
       "22222",
-      "some-role"
+      "some-role",
+      user_type: "provider"
     )
 
     claim_link = Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
@@ -183,7 +185,8 @@ RSpec.feature "Provider verifying claims" do
     stub_dfe_sign_in_user_info_request(
       "11111",
       "22222",
-      "some-other-role"
+      "some-other-role",
+      user_type: "provider"
     )
 
     claim_link = Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
@@ -246,7 +249,8 @@ RSpec.feature "Provider verifying claims" do
       "22222",
       [
         DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE
-      ]
+      ],
+      user_type: "provider"
     )
 
     claim_link = Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
@@ -326,7 +330,8 @@ RSpec.feature "Provider verifying claims" do
     stub_dfe_sign_in_user_info_request(
       "11111",
       "22222",
-      Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
+      Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE,
+      user_type: "provider"
     )
 
     claim_1_link = Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim_1)
@@ -383,7 +388,8 @@ RSpec.feature "Provider verifying claims" do
     stub_dfe_sign_in_user_info_request(
       "11111",
       "22222",
-      Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
+      Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE,
+      user_type: "provider"
     )
 
     claim_link = Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
@@ -444,7 +450,8 @@ RSpec.feature "Provider verifying claims" do
     stub_dfe_sign_in_user_info_request(
       "11111",
       "22222",
-      Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
+      Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE,
+      user_type: "provider"
     )
 
     claim_link = Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
@@ -599,7 +606,8 @@ RSpec.feature "Provider verifying claims" do
     stub_dfe_sign_in_user_info_request(
       "11111",
       "22222",
-      Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
+      Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE,
+      user_type: "provider"
     )
 
     claim_link = Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
@@ -771,7 +779,8 @@ RSpec.feature "Provider verifying claims" do
     stub_dfe_sign_in_user_info_request(
       "11111",
       "22222",
-      Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
+      Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE,
+      user_type: "provider"
     )
 
     claim_link = Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
@@ -992,7 +1001,8 @@ RSpec.feature "Provider verifying claims" do
     stub_dfe_sign_in_user_info_request(
       "11111",
       "22222",
-      Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
+      Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE,
+      user_type: "provider"
     )
 
     allow(ClaimVerifierJob).to receive(:perform_later)

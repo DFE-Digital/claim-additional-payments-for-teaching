@@ -2,8 +2,6 @@ module Journeys
   module FurtherEducationPayments
     module Provider
       class OmniauthCallbackForm
-        include DfeSignIn::Utils
-
         def initialize(journey_session:, auth:)
           @journey_session = journey_session
           @auth = auth
@@ -55,6 +53,7 @@ module Journeys
             StubApiUser.new(auth)
           else
             DfeSignIn::Api::User.new(
+              user_type: "provider",
               organisation_id: dfe_sign_in_organisation_id,
               user_id: dfe_sign_in_uid
             )
@@ -86,11 +85,13 @@ module Journeys
 
           ukprn = journey_session.answers.claim.school.ukprn
 
-          uri = URI(DfeSignIn.configuration.base_url)
+          client = DfeSignIn::Api::Client.new(client_id: ENV.fetch("DFE_SIGN_IN_API_CLIENT_ID"))
+
+          uri = URI(DfeSignIn.configuration_for_client_id(ENV.fetch("DFE_SIGN_IN_API_CLIENT_ID")).base_url)
           uri.path = "/organisations/#{ukprn}/users"
           uri.query = {email: dfe_sign_in_email}.to_query
 
-          response = dfe_sign_in_request(uri)
+          response = client.dfe_sign_in_request(uri)
 
           return unless response.code == "200"
 

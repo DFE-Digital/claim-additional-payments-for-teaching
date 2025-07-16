@@ -7,6 +7,9 @@ DFE_SIGN_IN_API_CLIENT_ID: teacherpayments
 DFE_SIGN_IN_API_ENDPOINT: https://pp-api.signin.education.gov.uk
 DFE_SIGN_IN_IDENTIFIER: teacherpayments
 DFE_SIGN_IN_ISSUER: https://pp-oidc.signin.education.gov.uk:443
+DFE_SIGN_IN_REDIRECT_BASE_URL: https://claim-additional-payments-for-teaching-review-3902-web.test.teacherservices.cloud
+
+DFE_SIGN_IN_INTERNAL_CLIENT_ID: teacherpaymentsadmin
 
 DQT_API_URL: https://preprod.teacher-qualifications-api.education.gov.uk/v1
 DQT_BASE_URL: https://test-api-customerengagement.platform.education.gov.uk/dqt-crm/v1/

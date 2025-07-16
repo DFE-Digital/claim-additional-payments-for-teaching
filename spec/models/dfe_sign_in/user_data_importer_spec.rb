@@ -3,8 +3,12 @@ require "rails_helper"
 RSpec.describe DfeSignIn::UserDataImporter, type: :model do
   before { stub_dfe_sign_in_user_list_request }
 
+  subject do
+    DfeSignIn::UserDataImporter.new(user_type: "admin")
+  end
+
   it "imports all user data" do
-    DfeSignIn::UserDataImporter.new.run
+    subject.run
 
     users = DfeSignIn::User.all
 
@@ -29,10 +33,10 @@ RSpec.describe DfeSignIn::UserDataImporter, type: :model do
   context "when a user already exists" do
     context "when the user is present in the DfE Sign In API response" do
       context "when the user is not deleted" do
-        let!(:existing_user) { create(:dfe_signin_user, dfe_sign_in_id: "5b0e3686-1db7-11ea-978f-2e728ce88125") }
+        let!(:existing_user) { create(:dfe_signin_user, dfe_sign_in_id: "5b0e3686-1db7-11ea-978f-2e728ce88125", user_type: "admin") }
 
         it "updates the user" do
-          DfeSignIn::UserDataImporter.new.run
+          subject.run
 
           expect(DfeSignIn::User.count).to eq(3)
 
@@ -46,29 +50,29 @@ RSpec.describe DfeSignIn::UserDataImporter, type: :model do
       end
 
       context "when the user was previously deleted" do
-        let!(:existing_user) { create(:dfe_signin_user, :deleted, dfe_sign_in_id: "5b0e3686-1db7-11ea-978f-2e728ce88125") }
+        let!(:existing_user) { create(:dfe_signin_user, :deleted, dfe_sign_in_id: "5b0e3686-1db7-11ea-978f-2e728ce88125", user_type: "admin") }
 
         it "marks the user as not deleted" do
-          DfeSignIn::UserDataImporter.new.run
+          subject.run
           expect(existing_user.reload.deleted_at).to be_nil
         end
       end
     end
 
     context "when the user is not present in the DfE Sign In API response" do
-      let!(:existing_user) { create(:dfe_signin_user) }
+      let!(:existing_user) { create(:dfe_signin_user, user_type: "admin") }
 
       it "deletes the user" do
-        DfeSignIn::UserDataImporter.new.run
+        subject.run
         expect(existing_user.reload).to be_deleted
       end
 
       # This scenario happens after first login when using the 'bypass DfE Sign-in' button
       context "when the user does not have a dfe_sign_in_id (dummy user)" do
-        let!(:existing_user) { create(:dfe_signin_user, dfe_sign_in_id: nil) }
+        let!(:existing_user) { create(:dfe_signin_user, dfe_sign_in_id: nil, user_type: "admin") }
 
         it "does not delete the user" do
-          DfeSignIn::UserDataImporter.new.run
+          subject.run
           expect(existing_user.reload).not_to be_deleted
         end
       end
