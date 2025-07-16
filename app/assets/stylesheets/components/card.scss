@@ -24,10 +24,6 @@
 
 // Colours per status (no hover states)
 $statuses: (
-  "check-required": (
-    "colour": govuk-shade(govuk-colour("blue"), 30),
-    "background-colour": govuk-tint(govuk-colour("blue"), 80)
-  ),
   "in-progress": (
     "colour": govuk-shade(govuk-colour("yellow"), 65),
     "background-colour": govuk-tint(govuk-colour("yellow"), 75)
