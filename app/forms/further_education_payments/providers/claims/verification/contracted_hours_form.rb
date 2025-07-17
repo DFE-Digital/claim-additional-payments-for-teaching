@@ -6,10 +6,6 @@ module FurtherEducationPayments
           attribute :provider_verification_teaching_hours_per_week, :string
           attribute :provider_verification_half_teaching_hours, :boolean
           attribute :provider_verification_subjects_taught, :boolean
-          attribute(
-            :provider_verification_contracted_hours_section_completed,
-            :boolean
-          )
 
           validates(
             :provider_verification_teaching_hours_per_week,
@@ -39,13 +35,6 @@ module FurtherEducationPayments
               end
             },
             allow_nil: :save_and_exit?
-          )
-
-          validates(
-            :provider_verification_contracted_hours_section_completed,
-            inclusion: {
-              in: ->(form) { form.section_completed_options.map(&:id) }
-            }
           )
 
           def provider_verification_teaching_hours_per_week_options
@@ -79,22 +68,8 @@ module FurtherEducationPayments
             ]
           end
 
-          def section_completed_options
-            [
-              Form::Option.new(id: true, name: "Yes"),
-              Form::Option.new(
-                id: false,
-                name: "No, I want to come back to it later"
-              )
-            ]
-          end
-
           def subjects_taught_descriptions
             claim.eligibility.courses_taught.map(&:description)
-          end
-
-          def save_and_exit?
-            provider_verification_contracted_hours_section_completed == false
           end
         end
       end

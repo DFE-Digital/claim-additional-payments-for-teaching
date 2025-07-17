@@ -60,11 +60,7 @@ RSpec.feature "Provider verifying claims" do
         "Springfield College?"
       ) { choose "Permanent" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       # Performance and discipline
       within_fieldset(
@@ -75,11 +71,7 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel currently subject to any disciplinary action?"
       ) { choose "No" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       # Contracted hours
       within_fieldset(
@@ -98,11 +90,7 @@ RSpec.feature "Provider verifying claims" do
         "Edna Krabappel teach:"
       ) { choose "Yes" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       # Check answers
       expect(page).to have_text("Claim reference: AB123456")
@@ -208,11 +196,7 @@ RSpec.feature "Provider verifying claims" do
         "Springfield College?"
       ) { choose "Fixed-term" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       # Second screen with additional questions for fixed term contracts
       within_fieldset(
@@ -220,11 +204,7 @@ RSpec.feature "Provider verifying claims" do
         "academic year?"
       ) { choose "No" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       # Performance and discipline
       within_fieldset(
@@ -235,11 +215,7 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel currently subject to any disciplinary action?"
       ) { choose "No" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       # Contracted hours
       within_fieldset(
@@ -258,11 +234,7 @@ RSpec.feature "Provider verifying claims" do
         "Krabappel teach:"
       ) { choose "Yes" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       # Check answers
       expect(page).to have_text("Claim reference: AB123456")
@@ -372,11 +344,7 @@ RSpec.feature "Provider verifying claims" do
         "Springfield College?"
       ) { choose "Variable hours" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       # Second screen with additional questions for variable hours contracts
       within_fieldset(
@@ -384,11 +352,7 @@ RSpec.feature "Provider verifying claims" do
         "academic term?"
       ) { choose "Yes" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       # Performance and discipline
       within_fieldset(
@@ -399,11 +363,7 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel currently subject to any disciplinary action?"
       ) { choose "No" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       # Contracted hours
       within_fieldset(
@@ -422,11 +382,7 @@ RSpec.feature "Provider verifying claims" do
         "Krabappel teach:"
       ) { choose "Yes" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       # Check answers
 
@@ -525,11 +481,7 @@ RSpec.feature "Provider verifying claims" do
         "Springfield College?"
       ) { choose "Variable" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       # Second variable hours screen
       within_fieldset(
@@ -537,11 +489,7 @@ RSpec.feature "Provider verifying claims" do
         "academic term?"
       ) { choose "Yes" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       # Performance and discipline
       within_fieldset(
@@ -552,11 +500,7 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel currently subject to any disciplinary action?"
       ) { choose "No" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       # Contracted hours
       within_fieldset(
@@ -575,11 +519,7 @@ RSpec.feature "Provider verifying claims" do
         "Krabappel teach:"
       ) { choose "Yes" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       # Check answers page
       expect(summary_row("Type of contract")).to have_content("Variable hours")
@@ -593,11 +533,7 @@ RSpec.feature "Provider verifying claims" do
         "Springfield College?"
       ) { choose "Permanent" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       expect(summary_row("Type of contract")).to have_content("Permanent")
 
@@ -611,11 +547,7 @@ RSpec.feature "Provider verifying claims" do
         "Springfield College?"
       ) { choose "Fixed-term" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       # Second screen with additional questions for fixed term contracts
       within_fieldset(
@@ -623,11 +555,7 @@ RSpec.feature "Provider verifying claims" do
         "academic year?"
       ) { choose "No" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       expect(summary_row("Type of contract")).to have_content("Fixed-term")
 
@@ -645,14 +573,14 @@ RSpec.feature "Provider verifying claims" do
         "Springfield College?"
       ) { expect(page).to have_checked_field("Fixed-term") }
 
-      click_on "Save and continue"
+      click_on "Continue"
 
       within_fieldset(
         "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
         "academic year?"
       ) { choose "Yes" }
 
-      click_on "Save and continue"
+      click_on "Continue"
 
       expect(summary_row("Type of contract")).to have_content("Fixed-term")
 
@@ -709,11 +637,7 @@ RSpec.feature "Provider verifying claims" do
         "Springfield College?"
       ) { choose "Variable" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       # Expect to see variable hours specific question
       expect(page).to have_content(
@@ -728,11 +652,7 @@ RSpec.feature "Provider verifying claims" do
         "Springfield College?"
       ) { choose "Fixed-term" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       # Expect to see fixed term specific question
       expect(page).to have_content(
@@ -745,11 +665,7 @@ RSpec.feature "Provider verifying claims" do
         "academic year?"
       ) { choose "Yes" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       # Performance and discipline page
       click_on "Back"
@@ -804,11 +720,7 @@ RSpec.feature "Provider verifying claims" do
         choose "Yes"
       end
 
-      within_fieldset("Have you completed this section?") do
-        choose "No, I want to come back to it later"
-      end
-
-      click_on "Save and continue"
+      click_on "Save and come back later"
 
       expect(page).to have_content("Progress saved")
 
@@ -836,22 +748,14 @@ RSpec.feature "Provider verifying claims" do
         "Springfield College?"
       ) { choose "Fixed-term" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "Yes"
-      end
-
-      click_on "Save and continue"
+      click_on "Continue"
 
       within_fieldset(
         "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
         "academic year?"
       ) { choose "Yes" }
 
-      within_fieldset("Have you completed this section?") do
-        choose "No"
-      end
-
-      click_on "Save and continue"
+      click_on "Save and come back later"
 
       expect(page).to have_content("Progress saved")
 
@@ -860,7 +764,7 @@ RSpec.feature "Provider verifying claims" do
       )
 
       # Role and experience form
-      click_on "Save and continue"
+      click_on "Continue"
 
       expect(page).to have_content(
         "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
@@ -894,7 +798,7 @@ RSpec.feature "Provider verifying claims" do
       )
 
       expect(page).to have_content("This claim has already been verified")
-      expect(page).not_to have_button("Save and continue")
+      expect(page).not_to have_button("Continue")
       expect(page).to have_text("Claim: read only mode")
     end
   end
@@ -975,9 +879,7 @@ RSpec.feature "Provider verifying claims" do
         "Is Lisa Simpson a member of staff with teaching responsibilities?"
       ) { choose "Yes" }
 
-      within_fieldset("Have you completed this section?") { choose "No, I want to come back to it later" }
-
-      click_on "Save and continue"
+      click_on "Save and come back later"
 
       visit(
         edit_further_education_payments_providers_claim_verification_path(claim)

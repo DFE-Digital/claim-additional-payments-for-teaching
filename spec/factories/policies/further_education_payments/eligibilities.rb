@@ -154,16 +154,11 @@ FactoryBot.define do
       provider_verification_contract_type { "fixed_term" }
       provider_verification_contract_covers_full_academic_year { true }
       provider_verification_taught_at_least_one_academic_term { nil }
-      provider_verification_role_and_experience_section_completed { true }
-      provider_verification_contract_covers_section_completed { true }
-      provider_verification_taught_one_term_section_completed { true }
       provider_verification_performance_measures { false }
       provider_verification_disciplinary_action { false }
-      provider_verification_performance_section_completed { true }
       provider_verification_teaching_hours_per_week { "more_than_12" }
       provider_verification_half_teaching_hours { true }
       provider_verification_subjects_taught { true }
-      provider_verification_contracted_hours_section_completed { true }
     end
 
     trait :provider_verification_completed do

@@ -20,17 +20,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::RoleAn
   end
 
   describe "validations" do
-    it do
-      is_expected.not_to(allow_value(nil).for(
-        :provider_verification_role_and_experience_section_completed
-      ))
-    end
-
     context "when submission" do
-      before do
-        form.provider_verification_role_and_experience_section_completed = true
-      end
-
       it do
         is_expected.not_to(
           allow_value(nil).for(:provider_verification_teaching_responsibilities)
@@ -60,7 +50,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::RoleAn
 
     context "when saving progress" do
       before do
-        form.provider_verification_role_and_experience_section_completed = false
+        allow(form).to receive(:save_and_exit?).and_return(true)
       end
 
       it do
@@ -98,8 +88,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::RoleAn
           provider_verification_teaching_responsibilities: true,
           provider_verification_in_first_five_years: true,
           provider_verification_teaching_qualification: "yes",
-          provider_verification_contract_type: "permanent",
-          provider_verification_role_and_experience_section_completed: true
+          provider_verification_contract_type: "permanent"
         }
       end
 
@@ -124,8 +113,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::RoleAn
           provider_verification_teaching_responsibilities: true,
           provider_verification_in_first_five_years: true,
           provider_verification_teaching_qualification: "yes",
-          provider_verification_contract_type: "permanent",
-          provider_verification_role_and_experience_section_completed: true
+          provider_verification_contract_type: "permanent"
         }
       end
 
@@ -149,10 +137,6 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::RoleAn
         expect(
           claim.eligibility.provider_verification_contract_type
         ).to eq("permanent")
-
-        expect(
-          claim.eligibility.provider_verification_role_and_experience_section_completed
-        ).to be(true)
       end
     end
   end

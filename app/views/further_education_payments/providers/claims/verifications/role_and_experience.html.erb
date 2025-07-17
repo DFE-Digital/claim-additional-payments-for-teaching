@@ -69,17 +69,15 @@
         }
       ) %>
 
-      <%= f.govuk_collection_radio_buttons(
-        :provider_verification_role_and_experience_section_completed,
-        f.object.section_completed_options,
-        :id,
-        :name,
-        legend: {
-          text: "Have you completed this section?",
-        }
-      ) %>
+      <%= f.govuk_submit("Continue") %>
 
-      <%= f.govuk_submit("Save and continue") %>
+      <%= f.govuk_submit(
+        "Save and come back later",
+        secondary: true,
+        name: "save_and_exit",
+        value: true,
+        class: "govuk-!-margin-left-2"
+      ) %>
     <% end %>
   </div>
 </div>
