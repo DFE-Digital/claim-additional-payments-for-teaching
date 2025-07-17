@@ -24,6 +24,7 @@ module Policies
 
       belongs_to :possible_school, optional: true, class_name: "School"
       belongs_to :school, optional: true
+      belongs_to :provider_assigned_to, class_name: "DfeSignIn::User", optional: true
 
       scope :unverified, -> { where(verification: {}) }
       scope :provider_verification_email_last_sent_over, ->(older_than) { where("provider_verification_email_last_sent_at < ?", older_than) }
