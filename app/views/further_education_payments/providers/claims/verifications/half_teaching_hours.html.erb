@@ -3,9 +3,7 @@
   "Review a targeted retention incentive payment claim"
 ) %>
 
-<% content_for :back_link do %>
-  <%= govuk_back_link href: backlink_path %>
-<% end %>
+<%= govuk_back_link href: backlink_path %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -32,18 +30,6 @@
       </h2>
 
       <%= f.govuk_collection_radio_buttons(
-        :provider_verification_teaching_hours_per_week,
-        f.object.provider_verification_teaching_hours_per_week_options,
-        :id,
-        :name,
-        legend: {
-          text: "On average, how many hours per week is "\
-          "#{f.object.claimant_name} timetabled to teach during the current term?",
-          size: "s",
-        }
-      ) %>
-
-      <%= f.govuk_collection_radio_buttons(
         :provider_verification_half_teaching_hours,
         f.object.provider_verification_half_teaching_hours_options,
         :id,
@@ -54,24 +40,6 @@
           "those up to age 25 with an Education, Health and Care Plan (EHCP)?",
           size: "s",
         }
-      ) %>
-
-      <%= f.govuk_collection_radio_buttons(
-        :provider_verification_subjects_taught,
-        f.object.provider_verification_subjects_taught_options,
-        :id,
-        :name,
-        legend: {
-          text: "For at least half of their timetabled teaching hours, does " \
-          "#{f.object.claimant_name} teach:",
-          size: "s",
-        },
-        hint: -> do
-          govuk_list(
-            f.object.subjects_taught_descriptions.map(&:html_safe),
-            type: :bullet
-          )
-        end
       ) %>
 
       <%= f.govuk_submit("Continue") %>

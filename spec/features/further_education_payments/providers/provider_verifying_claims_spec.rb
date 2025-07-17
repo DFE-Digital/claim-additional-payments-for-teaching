@@ -85,11 +85,15 @@ RSpec.feature "Provider verifying claims" do
         "to teach during the current term?"
       ) { choose "12 hours or more per week" }
 
+      click_on "Continue"
+
       within_fieldset(
         "For at least half of their timetabled teaching hours, does " \
         "Edna Krabappel teach 16- to 19-year-olds, including those up to " \
         "age 25 with an Education, Health and Care Plan (EHCP)?"
       ) { choose "Yes" }
+
+      click_on "Continue"
 
       within_fieldset(
         "For at least half of their timetabled teaching hours, does " \
@@ -243,11 +247,15 @@ RSpec.feature "Provider verifying claims" do
         "to teach during the current term?"
       ) { choose "12 hours or more per week" }
 
+      click_on "Continue"
+
       within_fieldset(
         "For at least half of their timetabled teaching hours, does " \
         "Edna Krabappel teach 16- to 19-year-olds, including those up to " \
         "age 25 with an Education, Health and Care Plan (EHCP)?"
       ) { choose "Yes" }
+
+      click_on "Continue"
 
       within_fieldset(
         "For at least half of their timetabled teaching hours, does Edna " \
@@ -398,11 +406,15 @@ RSpec.feature "Provider verifying claims" do
         "to teach during the current term?"
       ) { choose "12 hours or more per week" }
 
+      click_on "Continue"
+
       within_fieldset(
         "For at least half of their timetabled teaching hours, does " \
         "Edna Krabappel teach 16- to 19-year-olds, including those up to " \
         "age 25 with an Education, Health and Care Plan (EHCP)?"
       ) { choose "Yes" }
+
+      click_on "Continue"
 
       within_fieldset(
         "For at least half of their timetabled teaching hours, does Edna " \
@@ -542,11 +554,15 @@ RSpec.feature "Provider verifying claims" do
         "to teach during the current term?"
       ) { choose "12 hours or more per week" }
 
+      click_on "Continue"
+
       within_fieldset(
         "For at least half of their timetabled teaching hours, does " \
         "Edna Krabappel teach 16- to 19-year-olds, including those up to " \
         "age 25 with an Education, Health and Care Plan (EHCP)?"
       ) { choose "Yes" }
+
+      click_on "Continue"
 
       within_fieldset(
         "For at least half of their timetabled teaching hours, does Edna " \

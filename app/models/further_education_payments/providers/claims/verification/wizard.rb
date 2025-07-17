@@ -11,7 +11,9 @@ module FurtherEducationPayments
             ContractCoversFullAcademicYearForm,
             TaughtAtLeastOneAcademicTermForm,
             PerformanceAndDisciplineForm,
-            ContractedHoursForm,
+            TeachingHoursPerWeekForm,
+            HalfTeachingHoursForm,
+            SubjectsTaughtForm,
             CheckAnswersForm
           ]
 
@@ -105,7 +107,9 @@ module FurtherEducationPayments
 
             @reachable_steps << PerformanceAndDisciplineForm
 
-            @reachable_steps << ContractedHoursForm
+            @reachable_steps << TeachingHoursPerWeekForm
+            @reachable_steps << HalfTeachingHoursForm
+            @reachable_steps << SubjectsTaughtForm
 
             @reachable_steps << CheckAnswersForm
 
