@@ -345,7 +345,6 @@ shared:
     - provider_verification_declaration
     - provider_verification_completed_at
     - provider_verification_verified_by_id
-
   :eligible_ey_providers:
     - id
     - nursery_name

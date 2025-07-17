@@ -31,7 +31,23 @@ $statuses: (
   "not-started": (
     "colour": govuk-shade(govuk-colour("red"), 30),
     "background-colour": govuk-tint(govuk-colour("red"), 80)
-  )
+  ),
+  "pending": (
+    "colour": govuk-shade(govuk-colour("yellow"), 65),
+    "background-colour": govuk-tint(govuk-colour("yellow"), 75)
+  ),
+  "approved": (
+    "colour": govuk-shade(govuk-colour("turquoise"), 60),
+    "background-colour": govuk-tint(govuk-colour("turquoise"), 70)
+  ),
+  "rejected": (
+    "colour": govuk-shade(govuk-colour("red"), 30),
+    "background-colour": govuk-tint(govuk-colour("red"), 80)
+  ),
+  "paid": (
+    "colour": govuk-shade(govuk-colour("blue"), 30),
+    "background-colour": govuk-tint(govuk-colour("blue"), 80)
+  ),
 );
 
 @each $status, $data in $statuses {

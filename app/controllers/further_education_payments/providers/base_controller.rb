@@ -1,6 +1,8 @@
 module FurtherEducationPayments
   module Providers
     class BaseController < ApplicationController
+      include Pagy::Backend
+
       before_action :authenticate_user!
       before_action :authorize_user!, if: :current_user
 
