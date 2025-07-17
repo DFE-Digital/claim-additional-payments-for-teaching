@@ -611,7 +611,7 @@ GEM
     opentelemetry-semantic_conventions (1.11.0)
       opentelemetry-api (~> 1.0)
     os (1.1.4)
-    ostruct (0.6.2)
+    ostruct (0.6.3)
     pagy (9.3.5)
     parallel (1.27.0)
     parallel_tests (4.10.1)
