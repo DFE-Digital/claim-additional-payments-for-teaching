@@ -22,7 +22,6 @@ FactoryBot.define do
     end
 
     trait :verified do
-      provider_verification_completed_at { 1.second.ago }
       contract_type { "permanent" }
       teaching_responsibilities { true }
       further_education_teaching_start_year { "2023" }
@@ -165,6 +164,12 @@ FactoryBot.define do
       provider_verification_half_teaching_hours { true }
       provider_verification_subjects_taught { true }
       provider_verification_contracted_hours_section_completed { true }
+    end
+
+    trait :provider_verification_completed do
+      provider_verifiable
+      provider_verification_completed_at { Time.zone.now }
+      provider_verification_verified_by_id { create(:dfe_signin_user).id }
     end
   end
 end

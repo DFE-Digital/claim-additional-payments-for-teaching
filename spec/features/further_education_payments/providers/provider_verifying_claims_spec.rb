@@ -869,6 +869,36 @@ RSpec.feature "Provider verifying claims" do
     end
   end
 
+  context "when a provider attempts to edit an already verified claim" do
+    it "prevents editing of the claim" do
+      fe_provider = create(
+        :school,
+        :further_education,
+        name: "Springfield College"
+      )
+
+      sign_in_to(fe_provider)
+
+      claim = create(
+        :claim,
+        :further_education,
+        :submitted,
+        eligibility_trait: :provider_verification_completed,
+        eligibility_attributes: {
+          school: fe_provider
+        }
+      )
+
+      visit(
+        edit_further_education_payments_providers_claim_verification_path(claim)
+      )
+
+      expect(page).to have_content("This claim has already been verified")
+      expect(page).not_to have_button("Save and continue")
+      expect(page).to have_text("Claim: read only mode")
+    end
+  end
+
   def summary_row(label)
     find("dt", text: label).sibling("dd")
   end

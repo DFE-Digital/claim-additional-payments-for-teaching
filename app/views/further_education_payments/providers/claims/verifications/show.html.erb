@@ -1,0 +1,27 @@
+<%= content_for(
+  :page_title,
+  "Review a targeted retention incentive payment claim"
+) %>
+
+<%= govuk_back_link href: further_education_payments_providers_claims_path %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <%= govuk_notification_banner(title_text: "Important") do |banner| %>
+      <% banner.with_heading(text: "Claim: read only mode") %>
+    <% end %>
+
+    <%= render(
+      partial: "summary",
+      locals: {
+        form: @form,
+        editable: false,
+      }
+    ) %>
+
+  <%= govuk_button_link_to(
+    "Close",
+    further_education_payments_providers_claims_path,
+  ) %>
+  </div>
+</div>

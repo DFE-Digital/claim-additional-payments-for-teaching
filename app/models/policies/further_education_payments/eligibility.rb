@@ -117,6 +117,10 @@ module Policies
           !provider_verification_disciplinary_action.nil?
       end
 
+      def provider_verification_completed?
+        provider_verification_completed_at.present?
+      end
+
       private
 
       def provider_and_claimant_names_match?

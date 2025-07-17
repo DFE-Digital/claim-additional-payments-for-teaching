@@ -3,7 +3,15 @@ module FurtherEducationPayments
     module Claims
       class VerificationsController < BaseController
         before_action :authorise_claim!
-        before_action :set_form
+        before_action :set_form, except: %i[show]
+        before_action :redirect_if_verified, except: %i[show]
+
+        def show
+          @form = Verification::CheckAnswersForm.new(
+            claim: claim,
+            user: current_user
+          )
+        end
 
         def edit
           render @form.template
@@ -52,6 +60,16 @@ module FurtherEducationPayments
 
         def set_form
           @form = wizard.current_form
+        end
+
+        def redirect_if_verified
+          if claim.eligibility.provider_verification_completed?
+            flash[:notice] = "This claim has already been verified."
+
+            redirect_to(
+              further_education_payments_providers_claim_verification_path(claim)
+            )
+          end
         end
 
         def backlink_path
