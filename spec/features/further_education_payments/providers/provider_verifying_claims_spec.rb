@@ -79,8 +79,8 @@ RSpec.feature "Provider verifying claims" do
 
       # Contracted hours
       within_fieldset(
-        "On average, how many hours per week is Edna Krabappel timetabled " \
-        "to teach during the current term?"
+        "On average, how many hours per week was Edna Krabappel timetabled " \
+        "to teach during the autumn term?"
       ) { choose "12 hours or more per week" }
 
       click_on "Continue"
@@ -167,7 +167,7 @@ RSpec.feature "Provider verifying claims" do
         first_name: "Edna",
         surname: "Krabappel",
         reference: "AB123456",
-        submitted_at: DateTime.new(2025, 10, 1, 9, 0, 0),
+        submitted_at: DateTime.new(2025, 3, 1, 9, 0, 0),
         academic_year: AcademicYear.new(2025),
         eligibility_attributes: {
           school: fe_provider,
@@ -184,7 +184,7 @@ RSpec.feature "Provider verifying claims" do
       expect(summary_row("Claim reference")).to have_content("AB123456")
       expect(summary_row("Claimant name")).to have_content("Edna Krabappel")
       expect(summary_row("TRN")).to have_content("1234567")
-      expect(summary_row("Date submitted")).to have_content("1 October 2025")
+      expect(summary_row("Date submitted")).to have_content("1 March 2025")
 
       within_fieldset(
         "Is Edna Krabappel a member of staff with teaching responsibilities?"
@@ -231,8 +231,8 @@ RSpec.feature "Provider verifying claims" do
 
       # Contracted hours
       within_fieldset(
-        "On average, how many hours per week is Edna Krabappel timetabled " \
-        "to teach during the current term?"
+        "On average, how many hours per week was Edna Krabappel timetabled " \
+        "to teach during the spring term?"
       ) { choose "12 hours or more per week" }
 
       click_on "Continue"
@@ -323,7 +323,7 @@ RSpec.feature "Provider verifying claims" do
         first_name: "Edna",
         surname: "Krabappel",
         reference: "AB123456",
-        submitted_at: DateTime.new(2025, 10, 1, 9, 0, 0),
+        submitted_at: DateTime.new(2025, 5, 1, 9, 0, 0),
         eligibility_attributes: {
           school: fe_provider,
           teacher_reference_number: "1234567",
@@ -340,7 +340,7 @@ RSpec.feature "Provider verifying claims" do
       expect(summary_row("Claim reference")).to have_content("AB123456")
       expect(summary_row("Claimant name")).to have_content("Edna Krabappel")
       expect(summary_row("TRN")).to have_content("1234567")
-      expect(summary_row("Date submitted")).to have_content("1 October 2025")
+      expect(summary_row("Date submitted")).to have_content("1 May 2025")
 
       within_fieldset(
         "Is Edna Krabappel a member of staff with teaching responsibilities?"
@@ -387,8 +387,8 @@ RSpec.feature "Provider verifying claims" do
 
       # Contracted hours
       within_fieldset(
-        "On average, how many hours per week is Edna Krabappel timetabled " \
-        "to teach during the current term?"
+        "On average, how many hours per week was Edna Krabappel timetabled " \
+        "to teach during the summer term?"
       ) { choose "12 hours or more per week" }
 
       click_on "Continue"
@@ -532,8 +532,8 @@ RSpec.feature "Provider verifying claims" do
 
       # Contracted hours
       within_fieldset(
-        "On average, how many hours per week is Edna Krabappel timetabled " \
-        "to teach during the current term?"
+        "On average, how many hours per week was Edna Krabappel timetabled " \
+        "to teach during the autumn term?"
       ) { choose "12 hours or more per week" }
 
       click_on "Continue"
