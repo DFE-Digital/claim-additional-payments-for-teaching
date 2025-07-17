@@ -3,3 +3,9 @@
     <%= govuk_back_link href: @backlink_path %>
   </nav>
 <% end %>
+
+<% if content_for?(:back_link) %>
+  <nav aria-label="Page navigation">
+    <%= yield :back_link %>
+  </nav>
+<% end %>
