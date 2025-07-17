@@ -1,0 +1,55 @@
+<%= content_for(
+  :page_title,
+  "Review a targeted retention incentive payment claim"
+) %>
+
+<%= govuk_back_link href: backlink_path %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Review a targeted retention incentive payment claim
+    </h1>
+
+    <%= form_with(
+      model: @form,
+      url: further_education_payments_providers_claim_verification_path(
+        @form.claim,
+        @form.provider,
+        slug: @form.slug,
+      ),
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+      method: :patch,
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= render partial: "claim_summary", locals: { claim: f.object.claim } %>
+
+      <h2 class="govuk-heading-m">
+        Contracted hours
+      </h2>
+
+      <%= f.govuk_collection_radio_buttons(
+        :provider_verification_teaching_hours_per_week,
+        f.object.provider_verification_teaching_hours_per_week_options,
+        :id,
+        :name,
+        legend: {
+          text: "On average, how many hours per week is "\
+          "#{f.object.claimant_name} timetabled to teach during the current term?",
+          size: "s",
+        }
+      ) %>
+
+      <%= f.govuk_submit("Continue") %>
+
+      <%= f.govuk_submit(
+        "Save and come back later",
+        secondary: true,
+        name: "save_and_exit",
+        value: true,
+        class: "govuk-!-margin-left-2"
+      ) %>
+    <% end %>
+  </div>
+</div>
