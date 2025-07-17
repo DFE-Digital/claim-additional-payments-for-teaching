@@ -1,5 +1,21 @@
 # NOTE: Not used in specs, only used for seeding development and review environments
 
+# FE eligible school
+smb_group_college:
+  name: The SMB Group
+  urn: 130754
+  phase: sixteen_plus
+  school_type_group: colleges
+  school_type: further_education
+  local_authority: Leicestershire
+  local_authority_district_id: North West Leicestershire,
+  street: C/O Stephenson Campus, Thornborough Road
+  town: Coalville
+  postcode: LE67 3TN
+  phone_number: "01530836136"
+  ukprn: "10000952"
+  establishment_number: 8300
+
 # Student loans and Maths and Physics Eligible
 penistone_grammar_school:
   name: Penistone Grammar School
