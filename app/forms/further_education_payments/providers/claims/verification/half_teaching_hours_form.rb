@@ -10,7 +10,10 @@ module FurtherEducationPayments
             included: {
               in: ->(form) do
                 form.provider_verification_half_teaching_hours_options.map(&:id)
-              end
+              end,
+              message: "Tell us if they spend at least half of their " \
+              "timetabled teaching hours delivering 16 to 19 study programmes, " \
+              "T Levels or 16 to 19 apprenticeships"
             },
             allow_nil: :save_and_exit?
           )
