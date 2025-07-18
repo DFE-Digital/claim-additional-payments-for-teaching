@@ -39,6 +39,7 @@
         legend: {
           text: "On average, how many hours per week is "\
           "#{f.object.claimant_name} timetabled to teach during the current term?",
+          size: "s",
         }
       ) %>
 
@@ -50,7 +51,8 @@
         legend: {
           text: "For at least half of their timetabled teaching hours, does " \
           "#{f.object.claimant_name} teach 16- to 19-year-olds, including " \
-          "those up to age 25 with an Education, Health and Care Plan (EHCP)?"
+          "those up to age 25 with an Education, Health and Care Plan (EHCP)?",
+          size: "s",
         }
       ) %>
 
@@ -61,7 +63,8 @@
         :name,
         legend: {
           text: "For at least half of their timetabled teaching hours, does " \
-          "#{f.object.claimant_name} teach:"
+          "#{f.object.claimant_name} teach:",
+          size: "s",
         },
         hint: -> do
           govuk_list(

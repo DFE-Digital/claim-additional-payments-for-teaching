@@ -86,7 +86,7 @@ module FurtherEducationPayments
           Verification::Wizard.new(
             claim: claim,
             user: current_user,
-            current_slug: params[:slug] || Verification::Wizard.first_slug
+            current_slug: params[:slug]
           )
         end
 

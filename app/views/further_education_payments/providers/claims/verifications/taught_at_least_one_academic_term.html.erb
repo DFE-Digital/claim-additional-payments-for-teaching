@@ -28,7 +28,7 @@
       <%= render partial: "claim_summary", locals: { claim: f.object.claim } %>
 
       <h2 class="govuk-heading-m">
-        Role and experience
+        Type of contract
       </h2>
 
       <%= f.govuk_collection_radio_buttons(
@@ -39,6 +39,7 @@
         legend: {
           text: "Has #{f.object.claim.full_name} taught at "\
                 "#{f.object.provider.name} for at least one academic term?",
+          size: "s",
         }
       ) %>
 

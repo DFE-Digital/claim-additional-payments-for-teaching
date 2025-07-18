@@ -18,7 +18,7 @@
       url: further_education_payments_providers_claim_verification_path(
         @form.claim,
         @form.provider,
-        slug: @form.slug,
+        slug: @form.slug
       ),
       builder: GOVUKDesignSystemFormBuilder::FormBuilder,
       method: :patch,
@@ -32,17 +32,16 @@
       </h2>
 
       <%= f.govuk_collection_radio_buttons(
-        :provider_verification_contract_covers_full_academic_year,
-        f.object.contract_covers_full_academic_year_options,
+        :provider_verification_contract_type,
+        f.object.contract_type_options,
         :id,
         :name,
         legend: {
-          text: "Does #{f.object.claimant_name} fixed-term contract cover " \
-                "the full #{f.object.academic_year.to_s(:long)} academic year?",
+          text: "What type of contract does #{f.object.claimant_name} have with #{f.object.provider_name}?",
           size: "s",
         },
         hint: {
-          text: "This academic year runs from #{f.object.academic_year_start_to_end}"
+          text: "This includes full-time and part-time contracts"
         }
       ) %>
 

@@ -46,14 +46,20 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel a member of staff with teaching responsibilities?"
       ) { choose "Yes" }
 
+      click_on "Continue"
+
       within_fieldset(
         "Is Edna Krabappel in the first 5 years of their further education " \
         "(FE) teaching career in England?"
       ) { choose "Yes" }
 
+      click_on "Continue"
+
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"
       end
+
+      click_on "Continue"
 
       within_fieldset(
         "What type of contract does Edna Krabappel have with " \
@@ -97,15 +103,15 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Teaching responsibilities")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       expect(
         summary_row("In first 5 years of FE teaching")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       expect(
         summary_row("Teaching qualification")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       expect(
         summary_row("Type of contract")
@@ -113,11 +119,11 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Subject to performance measures")
-      ).to have_content("no")
+      ).to have_content("No")
 
       expect(
         summary_row("Subject to disciplinary action")
-      ).to have_content("no")
+      ).to have_content("No")
 
       expect(
         summary_row("Timetabled hours per week")
@@ -125,11 +131,11 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Teaches 16-19-year-olds or those with EHCP")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       expect(
         summary_row("Teaches approved qualification in maths and physics")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       check(
         "To the best of my knowledge, I confirm that the information " \
@@ -182,14 +188,20 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel a member of staff with teaching responsibilities?"
       ) { choose "Yes" }
 
+      click_on "Continue"
+
       within_fieldset(
         "Is Edna Krabappel in the first 5 years of their further education " \
         "(FE) teaching career in England?"
       ) { choose "Yes" }
 
+      click_on "Continue"
+
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"
       end
+
+      click_on "Continue"
 
       within_fieldset(
         "What type of contract does Edna Krabappel have with " \
@@ -241,15 +253,15 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Teaching responsibilities")
-      ).to have_content "yes"
+      ).to have_content "Yes"
 
       expect(
         summary_row("In first 5 years of FE teaching")
-      ).to have_content "yes"
+      ).to have_content "Yes"
 
       expect(
         summary_row("Teaching qualification")
-      ).to have_content "yes"
+      ).to have_content "Yes"
 
       expect(
         summary_row("Type of contract")
@@ -257,15 +269,15 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Contract covers full academic year")
-      ).to have_content "no"
+      ).to have_content "No"
 
       expect(
         summary_row("Subject to performance measures")
-      ).to have_content("no")
+      ).to have_content("No")
 
       expect(
         summary_row("Subject to disciplinary action")
-      ).to have_content("no")
+      ).to have_content("No")
 
       expect(
         summary_row("Timetabled hours per week")
@@ -273,11 +285,11 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Teaches 16-19-year-olds or those with EHCP")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       expect(
         summary_row("Teaches approved qualification in building and construction")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       check(
         "To the best of my knowledge, I confirm that the information " \
@@ -330,14 +342,20 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel a member of staff with teaching responsibilities?"
       ) { choose "Yes" }
 
+      click_on "Continue"
+
       within_fieldset(
         "Is Edna Krabappel in the first 5 years of their further education " \
         "(FE) teaching career in England?"
       ) { choose "Yes" }
 
+      click_on "Continue"
+
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"
       end
+
+      click_on "Continue"
 
       within_fieldset(
         "What type of contract does Edna Krabappel have with " \
@@ -390,15 +408,15 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Teaching responsibilities")
-      ).to have_content "yes"
+      ).to have_content "Yes"
 
       expect(
         summary_row("In first 5 years of FE teaching")
-      ).to have_content "yes"
+      ).to have_content "Yes"
 
       expect(
         summary_row("Teaching qualification")
-      ).to have_content "yes"
+      ).to have_content "Yes"
 
       expect(
         summary_row("Type of contract")
@@ -406,22 +424,22 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Variable hours in academic year")
-      ).to have_content "yes"
+      ).to have_content "Yes"
 
       expect(
         summary_row("Subject to performance measures")
-      ).to have_content("no")
+      ).to have_content("No")
 
       expect(
         summary_row("Subject to disciplinary action")
-      ).to have_content("no")
+      ).to have_content("No")
 
       expect(
         summary_row(
           "Teaches approved qualification in computing, including digital " \
           "and ict and chemistry"
         )
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       check(
         "To the best of my knowledge, I confirm that the information " \
@@ -467,14 +485,20 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel a member of staff with teaching responsibilities?"
       ) { choose "Yes" }
 
+      click_on "Continue"
+
       within_fieldset(
         "Is Edna Krabappel in the first 5 years of their further education " \
         "(FE) teaching career in England?"
       ) { choose "Yes" }
 
+      click_on "Continue"
+
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"
       end
+
+      click_on "Continue"
 
       within_fieldset(
         "What type of contract does Edna Krabappel have with " \
@@ -521,10 +545,9 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Continue"
 
-      # Check answers page
       expect(summary_row("Type of contract")).to have_content("Variable hours")
 
-      within(summary_card("Role and experience")) do
+      within(summary_row("Type of contract")) do
         click_on "Change"
       end
 
@@ -538,7 +561,7 @@ RSpec.feature "Provider verifying claims" do
       expect(summary_row("Type of contract")).to have_content("Permanent")
 
       # Change contract type to Fixed-term
-      within(summary_card("Role and experience")) do
+      within(summary_row("Type of contract")) do
         click_on "Change"
       end
 
@@ -561,32 +584,55 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Contract covers full academic year")
-      ).to have_content "no"
+      ).to have_content "No"
 
-      # Change answer on second page of fixed term contract
-      within(summary_card("Role and experience")) do
+      # Change contract type to Variable hours
+      within(summary_row("Type of contract")) do
         click_on "Change"
       end
 
       within_fieldset(
         "What type of contract does Edna Krabappel have with " \
         "Springfield College?"
-      ) { expect(page).to have_checked_field("Fixed-term") }
+      ) { choose "Variable hours" }
 
       click_on "Continue"
 
       within_fieldset(
-        "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
-        "academic year?"
+        "Has Edna Krabappel taught at Springfield College for at least one " \
+        "academic term?"
       ) { choose "Yes" }
 
       click_on "Continue"
 
-      expect(summary_row("Type of contract")).to have_content("Fixed-term")
-
+      expect(summary_row("Type of contract")).to have_content("Variable hours")
       expect(
-        summary_row("Contract covers full academic year")
-      ).to have_content "yes"
+        summary_row("Variable hours in academic year")
+      ).to have_content("Yes")
+
+      # Change contract type to Employed by another organisation
+      within(summary_row("Type of contract")) do
+        click_on "Change"
+      end
+
+      within_fieldset(
+        "What type of contract does Edna Krabappel have with " \
+        "Springfield College?"
+      ) do
+        choose(
+          "Employed by another organisation (for example, an agency or contractor)"
+        )
+      end
+
+      click_on "Continue"
+
+      expect(summary_row("Type of contract")).to have_content(
+        "Employed by another organisation (for example, an agency or contractor)"
+      )
+
+      expect(page).not_to have_content("Variable hours in academic year")
+
+      expect(page).not_to have_content("Contract covers full academic year")
     end
   end
 
@@ -623,14 +669,20 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel a member of staff with teaching responsibilities?"
       ) { choose "Yes" }
 
+      click_on "Continue"
+
       within_fieldset(
         "Is Edna Krabappel in the first 5 years of their further education " \
         "(FE) teaching career in England?"
       ) { choose "Yes" }
 
+      click_on "Continue"
+
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"
       end
+
+      click_on "Continue"
 
       within_fieldset(
         "What type of contract does Edna Krabappel have with " \
@@ -647,6 +699,7 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Back"
 
+      # Now we're back to the contract type page
       within_fieldset(
         "What type of contract does Edna Krabappel have with " \
         "Springfield College?"
@@ -711,10 +764,14 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel a member of staff with teaching responsibilities?"
       ) { choose "Yes" }
 
+      click_on "Continue"
+
       within_fieldset(
         "Is Edna Krabappel in the first 5 years of their further education " \
         "(FE) teaching career in England?"
       ) { choose "Yes" }
+
+      click_on "Continue"
 
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"
@@ -730,19 +787,7 @@ RSpec.feature "Provider verifying claims" do
         edit_further_education_payments_providers_claim_verification_path(claim)
       )
 
-      within_fieldset(
-        "Is Edna Krabappel a member of staff with teaching responsibilities?"
-      ) { expect(page).to have_checked_field("Yes") }
-
-      within_fieldset(
-        "Is Edna Krabappel in the first 5 years of their further education " \
-        "(FE) teaching career in England?"
-      ) { expect(page).to have_checked_field("Yes") }
-
-      within_fieldset("Does Edna Krabappel have a teaching qualification?") do
-        expect(page).to have_checked_field("Yes")
-      end
-
+      # Should go to the contract type page since the first two pages are completed
       within_fieldset(
         "What type of contract does Edna Krabappel have with " \
         "Springfield College?"
@@ -750,10 +795,10 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Continue"
 
-      within_fieldset(
+      expect(page).to have_content(
         "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
         "academic year?"
-      ) { choose "Yes" }
+      )
 
       click_on "Save and come back later"
 
@@ -763,9 +808,7 @@ RSpec.feature "Provider verifying claims" do
         edit_further_education_payments_providers_claim_verification_path(claim)
       )
 
-      # Role and experience form
-      click_on "Continue"
-
+      # First incomplete form
       expect(page).to have_content(
         "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
         "academic year?"
@@ -804,17 +847,7 @@ RSpec.feature "Provider verifying claims" do
   end
 
   def summary_row(label)
-    find("dt", text: label).sibling("dd")
-  end
-
-  def summary_card(heading)
-    match = all(".govuk-summary-card").detect do |card|
-      card.find(".govuk-summary-card__title").text == heading
-    end
-
-    raise "Couldn't find summary card with title #{heading}" unless match
-
-    match
+    find("div.govuk-summary-list__row", text: label)
   end
 
   context "status badge display" do

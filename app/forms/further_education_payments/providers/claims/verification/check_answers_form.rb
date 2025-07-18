@@ -29,6 +29,8 @@ module FurtherEducationPayments
             when "fixed_term" then "Fixed-term"
             when "variable_hours" then "Variable hours"
             when "permanent" then "Permanent"
+            when "employed_by_another_organisation"
+              "Employed by another organisation (for example, an agency or contractor)"
             else fail "Unknown contract type"
             end
           end
@@ -45,6 +47,12 @@ module FurtherEducationPayments
                 ]
               )
             end.map(&:downcase).to_sentence
+          end
+
+          def teaching_qualification
+            TeachingQualificationForm::TEACHING_QUALIFICATION_OPTIONS
+              .find { it.id == provider_verification_teaching_qualification }
+              .name
           end
 
           def save

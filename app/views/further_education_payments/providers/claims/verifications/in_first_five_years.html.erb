@@ -4,7 +4,7 @@
 ) %>
 
 <% content_for :back_link do %>
-  <%= govuk_back_link href: further_education_payments_providers_claims_path %>
+  <%= govuk_back_link href: backlink_path %>
 <% end %>
 
 <div class="govuk-grid-row">
@@ -32,44 +32,31 @@
       </h2>
 
       <%= f.govuk_collection_radio_buttons(
-        :provider_verification_teaching_responsibilities,
-        f.object.teaching_responsibilities_options,
-        :id,
-        :name,
-        legend: {
-          text: "Is #{f.object.claimant_name} a member of staff with teaching responsibilities?",
-        }
-      ) %>
-
-      <%= f.govuk_collection_radio_buttons(
         :provider_verification_in_first_five_years,
         f.object.in_first_five_years_options,
         :id,
         :name,
         legend: {
-          text: "Is #{f.object.claimant_name} in the first 5 years of their further education (FE) teaching career in England?",
+          text: "Is #{f.object.claimant_name} in the first 5 years of their " \
+                "further education (FE) teaching career in England?",
+          size: "s",
         }
       ) %>
 
-      <%= f.govuk_collection_radio_buttons(
-        :provider_verification_teaching_qualification,
-        f.object.teaching_qualification_options,
-        :id,
-        :name,
-        legend: {
-          text: "Does #{f.object.claimant_name} have a teaching qualification?",
-        }
-      ) %>
-
-      <%= f.govuk_collection_radio_buttons(
-        :provider_verification_contract_type,
-        f.object.contract_type_options,
-        :id,
-        :name,
-        legend: {
-          text: "What type of contract does #{f.object.claimant_name} have with #{f.object.provider_name}?",
-        }
-      ) %>
+      <%= govuk_details(
+        summary_text: "What counts torwards the first 5 years of an FE " \
+                      "teaching career",
+      ) do %>
+        <p class="govuk-body">
+          Only teaching at post-16 providers in England counts. It includes
+          independent training providers. Teaching in schools, outside England
+          or overseas does not count.
+          <br />
+          <br />
+          Teachers who taught in FE before August 2020 are not eligible, even if
+          they've since returned.
+        </p>
+      <% end %>
 
       <%= f.govuk_submit("Continue") %>
 
