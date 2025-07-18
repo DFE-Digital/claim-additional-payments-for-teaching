@@ -7,7 +7,13 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Teachi
 
   let(:user) { create(:dfe_signin_user) }
 
-  let(:claim) { create(:claim, :further_education) }
+  let(:claim) do
+    create(
+      :claim,
+      :further_education,
+      submitted_at: DateTime.new(2025, 5, 1, 12, 0, 0)
+    )
+  end
 
   let(:params) { {} }
 
@@ -24,8 +30,10 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Teachi
       it do
         is_expected.to(
           validate_inclusion_of(:provider_verification_teaching_hours_per_week)
-          .in_array(
-            %w[more_than_12 between_2_5_and_12 less_than_2_5]
+          .in_array(%w[more_than_12 between_2_5_and_12 less_than_2_5])
+          .with_message(
+            "Enter how many hours they were timetabled to teach during the " \
+            "summer term"
           )
         )
       end
@@ -39,8 +47,10 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Teachi
       it do
         is_expected.to(
           validate_inclusion_of(:provider_verification_teaching_hours_per_week)
-          .in_array(
-            ["more_than_12", "between_2_5_and_12", "less_than_2_5", nil]
+          .in_array(["more_than_12", "between_2_5_and_12", "less_than_2_5", nil])
+          .with_message(
+            "Enter how many hours they were timetabled to teach during the " \
+            "summer term"
           )
         )
       end
