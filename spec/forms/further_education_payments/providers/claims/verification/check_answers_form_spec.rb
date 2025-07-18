@@ -23,7 +23,13 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::CheckA
 
   describe "validations" do
     it do
-      is_expected.to(validate_presence_of(:provider_verification_declaration))
+      is_expected.to(
+        validate_presence_of(:provider_verification_declaration)
+        .with_message(
+          "Tick the box to confirm that the information provided in this " \
+          "form is correct to the best of your knowledge"
+        )
+      )
     end
   end
 

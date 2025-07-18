@@ -173,8 +173,4 @@ RSpec.feature "Admin views claim details for FurtherEducationPayments" do
       expect(summary_row("Decision deadline")).to have_content("24 October 2024")
     end
   end
-
-  def summary_row(label)
-    find("dt", text: label).sibling("dd")
-  end
 end

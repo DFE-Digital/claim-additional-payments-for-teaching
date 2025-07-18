@@ -97,15 +97,15 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Teaching responsibilities")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       expect(
         summary_row("In first 5 years of FE teaching")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       expect(
         summary_row("Teaching qualification")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       expect(
         summary_row("Type of contract")
@@ -113,11 +113,11 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Subject to performance measures")
-      ).to have_content("no")
+      ).to have_content("No")
 
       expect(
         summary_row("Subject to disciplinary action")
-      ).to have_content("no")
+      ).to have_content("No")
 
       expect(
         summary_row("Timetabled hours per week")
@@ -125,20 +125,28 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Teaches 16-19-year-olds or those with EHCP")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       expect(
         summary_row("Teaches approved qualification in maths and physics")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       check(
-        "To the best of my knowledge, I confirm that the information " \
-        "provided in this form is correct."
+        "I have read the provider guidance I was sent by email and to the " \
+        "best of my knowledge confirm the information I have provided in " \
+        "this form is correct."
       )
 
       click_on "Continue"
 
       expect(page).to have_content("Claim Verified for Edna Krabappel")
+      expect(
+        page.current_path
+      ).to eql("/further-education-payments/providers/verified-claims")
+      expect(page).to have_css(
+        "table tbody tr:first-child td:nth-child(4)",
+        text: "Pending"
+      )
     end
   end
 
@@ -241,15 +249,15 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Teaching responsibilities")
-      ).to have_content "yes"
+      ).to have_content "Yes"
 
       expect(
         summary_row("In first 5 years of FE teaching")
-      ).to have_content "yes"
+      ).to have_content "Yes"
 
       expect(
         summary_row("Teaching qualification")
-      ).to have_content "yes"
+      ).to have_content "Yes"
 
       expect(
         summary_row("Type of contract")
@@ -257,15 +265,15 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Contract covers full academic year")
-      ).to have_content "no"
+      ).to have_content "No"
 
       expect(
         summary_row("Subject to performance measures")
-      ).to have_content("no")
+      ).to have_content("No")
 
       expect(
         summary_row("Subject to disciplinary action")
-      ).to have_content("no")
+      ).to have_content("No")
 
       expect(
         summary_row("Timetabled hours per week")
@@ -273,15 +281,16 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Teaches 16-19-year-olds or those with EHCP")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       expect(
         summary_row("Teaches approved qualification in building and construction")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       check(
-        "To the best of my knowledge, I confirm that the information " \
-        "provided in this form is correct."
+        "I have read the provider guidance I was sent by email and to the " \
+        "best of my knowledge confirm the information I have provided in " \
+        "this form is correct."
       )
 
       click_on "Continue"
@@ -390,15 +399,15 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Teaching responsibilities")
-      ).to have_content "yes"
+      ).to have_content "Yes"
 
       expect(
         summary_row("In first 5 years of FE teaching")
-      ).to have_content "yes"
+      ).to have_content "Yes"
 
       expect(
         summary_row("Teaching qualification")
-      ).to have_content "yes"
+      ).to have_content "Yes"
 
       expect(
         summary_row("Type of contract")
@@ -406,26 +415,27 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Variable hours in academic year")
-      ).to have_content "yes"
+      ).to have_content "Yes"
 
       expect(
         summary_row("Subject to performance measures")
-      ).to have_content("no")
+      ).to have_content("No")
 
       expect(
         summary_row("Subject to disciplinary action")
-      ).to have_content("no")
+      ).to have_content("No")
 
       expect(
         summary_row(
           "Teaches approved qualification in computing, including digital " \
           "and ict and chemistry"
         )
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       check(
-        "To the best of my knowledge, I confirm that the information " \
-        "provided in this form is correct."
+        "I have read the provider guidance I was sent by email and to the " \
+        "best of my knowledge confirm the information I have provided in " \
+        "this form is correct."
       )
 
       click_on "Continue"
@@ -561,7 +571,7 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Contract covers full academic year")
-      ).to have_content "no"
+      ).to have_content "No"
 
       # Change answer on second page of fixed term contract
       within(summary_card("Role and experience")) do
@@ -586,7 +596,7 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Contract covers full academic year")
-      ).to have_content "yes"
+      ).to have_content "Yes"
     end
   end
 
@@ -801,20 +811,6 @@ RSpec.feature "Provider verifying claims" do
       expect(page).not_to have_button("Continue")
       expect(page).to have_text("Claim: read only mode")
     end
-  end
-
-  def summary_row(label)
-    find("dt", text: label).sibling("dd")
-  end
-
-  def summary_card(heading)
-    match = all(".govuk-summary-card").detect do |card|
-      card.find(".govuk-summary-card__title").text == heading
-    end
-
-    raise "Couldn't find summary card with title #{heading}" unless match
-
-    match
   end
 
   context "status badge display" do
