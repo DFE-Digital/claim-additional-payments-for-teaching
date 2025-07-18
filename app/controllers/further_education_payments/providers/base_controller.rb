@@ -1,6 +1,7 @@
 module FurtherEducationPayments
   module Providers
     class BaseController < ApplicationController
+      include HttpAuthConcern
       include Pagy::Backend
 
       before_action :authenticate_user!
