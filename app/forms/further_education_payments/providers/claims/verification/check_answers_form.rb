@@ -49,6 +49,12 @@ module FurtherEducationPayments
             end.map(&:downcase).to_sentence
           end
 
+          def teaching_qualification
+            TeachingQualificationForm::TEACHING_QUALIFICATION_OPTIONS
+              .find { it.id == provider_verification_teaching_qualification }
+              .name
+          end
+
           def save
             return false unless valid?
 

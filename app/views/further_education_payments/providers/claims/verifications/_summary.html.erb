@@ -48,9 +48,7 @@
 
     <%= summary_list.with_row do |row| %>
       <%= row.with_key(text: "Teaching qualification") %>
-      <%= row.with_value(
-        text: form.provider_verification_teaching_qualification,
-      ) %>
+      <%= row.with_value(text: form.teaching_qualification) %>
       <% if editable %>
         <%= row.with_action(
           text: "Change",

@@ -103,15 +103,15 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Teaching responsibilities")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       expect(
         summary_row("In first 5 years of FE teaching")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       expect(
         summary_row("Teaching qualification")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       expect(
         summary_row("Type of contract")
@@ -119,11 +119,11 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Subject to performance measures")
-      ).to have_content("no")
+      ).to have_content("No")
 
       expect(
         summary_row("Subject to disciplinary action")
-      ).to have_content("no")
+      ).to have_content("No")
 
       expect(
         summary_row("Timetabled hours per week")
@@ -131,11 +131,11 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Teaches 16-19-year-olds or those with EHCP")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       expect(
         summary_row("Teaches approved qualification in maths and physics")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       check(
         "To the best of my knowledge, I confirm that the information " \
@@ -253,15 +253,15 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Teaching responsibilities")
-      ).to have_content "yes"
+      ).to have_content "Yes"
 
       expect(
         summary_row("In first 5 years of FE teaching")
-      ).to have_content "yes"
+      ).to have_content "Yes"
 
       expect(
         summary_row("Teaching qualification")
-      ).to have_content "yes"
+      ).to have_content "Yes"
 
       expect(
         summary_row("Type of contract")
@@ -269,15 +269,15 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Contract covers full academic year")
-      ).to have_content "no"
+      ).to have_content "No"
 
       expect(
         summary_row("Subject to performance measures")
-      ).to have_content("no")
+      ).to have_content("No")
 
       expect(
         summary_row("Subject to disciplinary action")
-      ).to have_content("no")
+      ).to have_content("No")
 
       expect(
         summary_row("Timetabled hours per week")
@@ -285,11 +285,11 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Teaches 16-19-year-olds or those with EHCP")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       expect(
         summary_row("Teaches approved qualification in building and construction")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       check(
         "To the best of my knowledge, I confirm that the information " \
@@ -408,15 +408,15 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Teaching responsibilities")
-      ).to have_content "yes"
+      ).to have_content "Yes"
 
       expect(
         summary_row("In first 5 years of FE teaching")
-      ).to have_content "yes"
+      ).to have_content "Yes"
 
       expect(
         summary_row("Teaching qualification")
-      ).to have_content "yes"
+      ).to have_content "Yes"
 
       expect(
         summary_row("Type of contract")
@@ -424,22 +424,22 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Variable hours in academic year")
-      ).to have_content "yes"
+      ).to have_content "Yes"
 
       expect(
         summary_row("Subject to performance measures")
-      ).to have_content("no")
+      ).to have_content("No")
 
       expect(
         summary_row("Subject to disciplinary action")
-      ).to have_content("no")
+      ).to have_content("No")
 
       expect(
         summary_row(
           "Teaches approved qualification in computing, including digital " \
           "and ict and chemistry"
         )
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       check(
         "To the best of my knowledge, I confirm that the information " \
@@ -584,7 +584,7 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Contract covers full academic year")
-      ).to have_content "no"
+      ).to have_content "No"
 
       # Change contract type to Variable hours
       within(summary_row("Type of contract")) do
@@ -608,7 +608,7 @@ RSpec.feature "Provider verifying claims" do
       expect(summary_row("Type of contract")).to have_content("Variable hours")
       expect(
         summary_row("Variable hours in academic year")
-      ).to have_content("yes")
+      ).to have_content("Yes")
 
       # Change contract type to Employed by another organisation
       within(summary_row("Type of contract")) do
