@@ -8,6 +8,7 @@ RSpec.describe "Provider verified claims dashboard", feature_flag: :provider_das
   scenario "when no claims" do
     visit "/further-education-payments/providers/verified-claims"
     expect(page).to have_text "Sign in"
+    fill_in "UKPRN", with: "12345678"
     click_button "Start now"
 
     expect(page).to have_text "Verified claims"
@@ -16,6 +17,7 @@ RSpec.describe "Provider verified claims dashboard", feature_flag: :provider_das
 
   scenario "when provider has verified claims" do
     school = create(:school, :fe_eligible, ukprn: "12345678")
+
     eligibility1 = create(
       :further_education_payments_eligibility,
       :verified,
@@ -50,11 +52,31 @@ RSpec.describe "Provider verified claims dashboard", feature_flag: :provider_das
       surname: "B"
     )
 
+    eligibility3 = create(
+      :further_education_payments_eligibility,
+      :verified,
+      school: create(:school, :fe_eligible, ukprn: "87654321"),
+      provider_verification_completed_at: Date.new(2024, 12, 14)
+    )
+    create(
+      :claim,
+      :further_education,
+      :submitted,
+      eligibility: eligibility3,
+      submitted_at: Date.new(2024, 12, 13),
+      created_at: Date.new(2024, 12, 13),
+      first_name: "Claimant",
+      surname: "From Another Provider"
+    )
+
     visit "/further-education-payments/providers/verified-claims"
     expect(page).to have_text "Sign in"
+    fill_in "UKPRN", with: "12345678"
     click_button "Start now"
 
     click_link "Verified claims"
+
+    expect(page).not_to have_text("Claimant From Another Provider")
 
     expect(page).to have_text "Verified claims"
     expect(page).to have_selector("table tbody tr", count: 2)
