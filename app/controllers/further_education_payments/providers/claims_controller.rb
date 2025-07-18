@@ -8,7 +8,7 @@ module FurtherEducationPayments
       private
 
       def claim_scope
-        super.merge(Claim.fe_provider_unverified)
+        super.where(id: Claim.fe_provider_unverified.select(:id))
       end
     end
   end
