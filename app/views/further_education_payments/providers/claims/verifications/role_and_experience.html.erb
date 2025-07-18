@@ -38,6 +38,9 @@
         :name,
         legend: {
           text: "Is #{f.object.claimant_name} a member of staff with teaching responsibilities?",
+        },
+         hint: {
+          text: "This includes all job titles where the role involves teaching further education students"
         }
       ) %>
 
@@ -80,6 +83,17 @@
         value: true,
         class: "govuk-!-margin-left-2"
       ) %>
+
+      <%= govuk_details(summary_text: "Who counts as a teacher for this payment") do %>
+        <p>
+        An FE teacher is someone who teaches, even if it's not their main job. This payment
+        isn't for support like assistants or technicians.
+        </p>
+        <p>
+        They are likely to have a teaching contract, teach groups of students, plan and mark work, 
+        or be working towards a teaching qualification.
+        </p>
+      <% end %>
     <% end %>
   </div>
 </div>
