@@ -88,9 +88,9 @@ RSpec.feature "Provider verifying claims" do
       click_on "Continue"
 
       within_fieldset(
-        "For at least half of their timetabled teaching hours, does " \
-        "Edna Krabappel teach 16- to 19-year-olds, including those up to " \
-        "age 25 with an Education, Health and Care Plan (EHCP)?"
+        "Does Edna Krabappel spend at least half of their timetabled teaching " \
+        "hours delivering 16 to 19 study programmes, T Levels, or 16 to 19 " \
+        "apprenticeships?"
       ) { choose "Yes" }
 
       click_on "Continue"
@@ -250,9 +250,9 @@ RSpec.feature "Provider verifying claims" do
       click_on "Continue"
 
       within_fieldset(
-        "For at least half of their timetabled teaching hours, does " \
-        "Edna Krabappel teach 16- to 19-year-olds, including those up to " \
-        "age 25 with an Education, Health and Care Plan (EHCP)?"
+        "Does Edna Krabappel spend at least half of their timetabled teaching " \
+        "hours delivering 16 to 19 study programmes, T Levels, or 16 to 19 " \
+        "apprenticeships?"
       ) { choose "Yes" }
 
       click_on "Continue"
@@ -409,9 +409,9 @@ RSpec.feature "Provider verifying claims" do
       click_on "Continue"
 
       within_fieldset(
-        "For at least half of their timetabled teaching hours, does " \
-        "Edna Krabappel teach 16- to 19-year-olds, including those up to " \
-        "age 25 with an Education, Health and Care Plan (EHCP)?"
+        "Does Edna Krabappel spend at least half of their timetabled teaching " \
+        "hours delivering 16 to 19 study programmes, T Levels, or 16 to 19 " \
+        "apprenticeships?"
       ) { choose "Yes" }
 
       click_on "Continue"
@@ -557,9 +557,9 @@ RSpec.feature "Provider verifying claims" do
       click_on "Continue"
 
       within_fieldset(
-        "For at least half of their timetabled teaching hours, does " \
-        "Edna Krabappel teach 16- to 19-year-olds, including those up to " \
-        "age 25 with an Education, Health and Care Plan (EHCP)?"
+        "Does Edna Krabappel spend at least half of their timetabled teaching " \
+        "hours delivering 16 to 19 study programmes, T Levels, or 16 to 19 " \
+        "apprenticeships?"
       ) { choose "Yes" }
 
       click_on "Continue"

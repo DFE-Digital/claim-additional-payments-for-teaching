@@ -35,11 +35,31 @@
         :id,
         :name,
         legend: {
-          text: "For at least half of their timetabled teaching hours, does " \
-          "#{f.object.claimant_name} teach 16- to 19-year-olds, including " \
-          "those up to age 25 with an Education, Health and Care Plan (EHCP)?",
+          text: "Does #{f.object.claimant_name} spend at least half of their " \
+          "timetabled teaching hours delivering 16 to 19 study programmes, " \
+          "T Levels, or 16 to 19 apprenticeships?",
           size: "s",
-        }
+        },
+        hint: -> do
+          <<~HTML.html_safe
+          <p class="govuk-body">
+            This means spending over half of their timetabled hours teaching
+            classes that include:
+          </p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>apprenticeships to those aged 16- to 19-year-olds</li>
+            <li>
+              students funded in the 16 to 19 education funding system including those:
+              <ul class="govuk-list govuk-list--bullet">
+                 <li>aged 16 to 19</li>
+                 <li>aged up to 25 if they have an EHCP plan</li>
+                 <li>aged 19 or over who started their programme before turning 19</li>
+                 <li>aged 14 to 16 but only if directly enrolled on a funded study programme at an FE provider</li>
+              </ul>
+            </li>
+          </ul>
+          HTML
+        end
       ) %>
 
       <%= f.govuk_submit("Continue") %>
