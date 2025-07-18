@@ -51,6 +51,20 @@
         value: true,
         class: "govuk-!-margin-left-2"
       ) %>
+
+      <%= govuk_details(
+        summary_text: "How to work out timetabled teaching hours",
+      ) do %>
+        <p class="govuk-body">
+          ‘Timetabled teaching hours‘ means time spent teaching groups of
+          students in lessons or classes.
+          <br />
+          <br />
+          If these hours vary during the term (for example, on a variable hours
+          contract), use the average number of hours per week for the current
+          term.
+        </p>
+      <% end %>
     <% end %>
   </div>
 </div>
