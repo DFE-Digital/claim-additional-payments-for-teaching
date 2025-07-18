@@ -4,7 +4,7 @@
   "dependencies": {
     "a11y-dialog": "^8.1.4",
     "accessible-autocomplete": "^3.0.1",
-    "govuk-frontend": "^5.11.0",
+    "govuk-frontend": "^5.11.1",
     "govuk-one-login-service-header": "https://github.com/govuk-one-login/service-header.git"
   },
   "devDependencies": {

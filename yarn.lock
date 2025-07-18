@@ -34,10 +34,10 @@ focusable-selectors@^0.8.0:
   resolved "https://registry.yarnpkg.com/focusable-selectors/-/focusable-selectors-0.8.4.tgz#2ee34129b29371766ce201499e3b88c6f79ea4c1"
   integrity sha512-0XxbkD0KhOnX10qmnfF9U8DkDD8N/e4M77wMYw2Itoi4vdcoRjSkqXLZFIzkrLIOxzmzCGy88fNG1EbeXMD/zw==
 
-govuk-frontend@^5.11.0, govuk-frontend@^5.4.0:
-  version "5.11.0"
-  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-5.11.0.tgz#01364ca98e4f5f86102dcb93f7d811d5387d2fec"
-  integrity sha512-RYZDEF1J6nVw5XauQGH+91qplExgHUXfXII7dtIme6I4u3eSvU59yZ0/EFKEwRgTslSqlhJODOnAi5rnQFU5Gw==
+govuk-frontend@^5.11.1, govuk-frontend@^5.4.0:
+  version "5.11.1"
+  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-5.11.1.tgz#06cd64d2bbe0bfd26aa8ce393a348bff14c59f4f"
+  integrity sha512-hJJFpaer4MZLvz/2F9RZ7xZ6FqlzpxL9aw6YWOGK3F1tn419xj2WcVXwOC8Bcj/dc/LanknbWJDGkb+IdkuhTQ==
 
 "govuk-one-login-service-header@https://github.com/govuk-one-login/service-header.git":
   version "1.1.0"
