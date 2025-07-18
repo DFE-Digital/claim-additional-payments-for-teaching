@@ -7,7 +7,12 @@ module FurtherEducationPayments
 
           attribute :provider_verification_declaration, :boolean
 
-          validates :provider_verification_declaration, presence: true
+          validates :provider_verification_declaration,
+            presence: {
+              message: "Tick the box to confirm that the information " \
+                       "provided in this form is correct to the best of " \
+                       "your knowledge"
+            }
 
           delegate(
             :provider_verification_teaching_responsibilities,

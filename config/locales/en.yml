@@ -31,8 +31,8 @@
 
 en:
   boolean:
-    true: 'Yes'
-    false: 'No'
+    true: "Yes"
+    false: "No"
   date:
     formats:
       default: "%-d %B %Y"

@@ -32,7 +32,7 @@ module FurtherEducationPayments
             elsif wizard.completed?
               flash[:success] = "Claim Verified for #{@form.claimant_name}"
 
-              redirect_to further_education_payments_providers_claims_path
+              redirect_to further_education_payments_providers_verified_claims_path
             else
               redirect_to(
                 edit_further_education_payments_providers_claim_verification_path(
@@ -67,7 +67,7 @@ module FurtherEducationPayments
             flash[:notice] = "This claim has already been verified."
 
             redirect_to(
-              further_education_payments_providers_claim_verification_path(claim)
+              further_education_payments_providers_verified_claim_path(claim)
             )
           end
         end
