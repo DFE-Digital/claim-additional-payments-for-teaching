@@ -53,6 +53,8 @@ RSpec.feature "Provider verifying claims" do
         "(FE) teaching career in England?"
       ) { choose "Yes" }
 
+      click_on "Continue"
+
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"
       end
@@ -192,6 +194,8 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel in the first 5 years of their further education " \
         "(FE) teaching career in England?"
       ) { choose "Yes" }
+
+      click_on "Continue"
 
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"
@@ -345,6 +349,8 @@ RSpec.feature "Provider verifying claims" do
         "(FE) teaching career in England?"
       ) { choose "Yes" }
 
+      click_on "Continue"
+
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"
       end
@@ -485,6 +491,8 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel in the first 5 years of their further education " \
         "(FE) teaching career in England?"
       ) { choose "Yes" }
+
+      click_on "Continue"
 
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"
@@ -668,6 +676,8 @@ RSpec.feature "Provider verifying claims" do
         "(FE) teaching career in England?"
       ) { choose "Yes" }
 
+      click_on "Continue"
+
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"
       end
@@ -760,6 +770,8 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel in the first 5 years of their further education " \
         "(FE) teaching career in England?"
       ) { choose "Yes" }
+
+      click_on "Continue"
 
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::ContractTypeForm, type: :model do
+RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::InFirstFiveYearsForm, type: :model do
   let(:fe_provider) do
     create(:school, :fe_eligible, name: "Springfield College")
   end
@@ -22,10 +22,20 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Contra
   describe "validations" do
     context "when submission" do
       it do
+        is_expected.not_to(
+          allow_value(nil).for(:provider_verification_in_first_five_years)
+        )
+      end
+
+      it do
         is_expected.to(
-          validate_inclusion_of(:provider_verification_contract_type)
-            .in_array(%w[permanent fixed_term variable_hours])
-            .with_message("Enter the type of contract they have")
+          allow_value(true).for(:provider_verification_in_first_five_years)
+        )
+      end
+
+      it do
+        is_expected.to(
+          allow_value(false).for(:provider_verification_in_first_five_years)
         )
       end
     end
@@ -37,9 +47,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Contra
 
       it do
         is_expected.to(
-          validate_inclusion_of(:provider_verification_contract_type)
-            .in_array(["permanent", "fixed_term", "variable_hours", nil])
-            .with_message("Enter the type of contract they have")
+          allow_value(nil).for(:provider_verification_in_first_five_years)
         )
       end
     end
@@ -49,7 +57,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Contra
     context "when form is valid" do
       let(:params) do
         {
-          provider_verification_contract_type: "permanent"
+          provider_verification_in_first_five_years: true
         }
       end
 
@@ -71,7 +79,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Contra
     context "when form is valid" do
       let(:params) do
         {
-          provider_verification_contract_type: "permanent"
+          provider_verification_in_first_five_years: true
         }
       end
 
@@ -81,8 +89,8 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Contra
         claim.eligibility.reload
 
         expect(
-          claim.eligibility.provider_verification_contract_type
-        ).to eq("permanent")
+          claim.eligibility.provider_verification_in_first_five_years
+        ).to be(true)
       end
     end
 

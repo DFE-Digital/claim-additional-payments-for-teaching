@@ -8,7 +8,9 @@ module FurtherEducationPayments
           validates(
             :provider_verification_teaching_responsibilities,
             included: {
-              in: ->(form) { form.teaching_responsibilities_options.map(&:id) }
+              in: ->(form) { form.teaching_responsibilities_options.map(&:id) },
+              message: "Tell us if they are a member of staff with teaching " \
+                       "responsibilities"
             },
             allow_nil: :save_and_exit?
           )

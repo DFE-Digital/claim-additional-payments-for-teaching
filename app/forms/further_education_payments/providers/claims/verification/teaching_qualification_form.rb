@@ -2,32 +2,17 @@ module FurtherEducationPayments
   module Providers
     module Claims
       module Verification
-        class QualificationForm < BaseForm
-          attribute :provider_verification_in_first_five_years, :boolean
+        class TeachingQualificationForm < BaseForm
           attribute :provider_verification_teaching_qualification, :string
-
-          validates(
-            :provider_verification_in_first_five_years,
-            included: {
-              in: ->(form) { form.in_first_five_years_options.map(&:id) }
-            },
-            allow_nil: :save_and_exit?
-          )
 
           validates(
             :provider_verification_teaching_qualification,
             included: {
-              in: ->(form) { form.teaching_qualification_options.map(&:id) }
+              in: ->(form) { form.teaching_qualification_options.map(&:id) },
+              message: "Tell us if they have a teaching qualification"
             },
             allow_nil: :save_and_exit?
           )
-
-          def in_first_five_years_options
-            [
-              Form::Option.new(id: true, name: "Yes"),
-              Form::Option.new(id: false, name: "No")
-            ]
-          end
 
           def teaching_qualification_options
             [

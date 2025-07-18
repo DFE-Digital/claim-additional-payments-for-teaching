@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::QualificationForm, type: :model do
+RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::TeachingQualificationForm, type: :model do
   let(:fe_provider) do
     create(:school, :fe_eligible, name: "Springfield College")
   end
@@ -22,27 +22,10 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Qualif
   describe "validations" do
     context "when submission" do
       it do
-        is_expected.not_to(
-          allow_value(nil).for(:provider_verification_in_first_five_years)
-        )
-      end
-
-      it do
-        is_expected.to(
-          allow_value(true).for(:provider_verification_in_first_five_years)
-        )
-      end
-
-      it do
-        is_expected.to(
-          allow_value(false).for(:provider_verification_in_first_five_years)
-        )
-      end
-
-      it do
         is_expected.to(
           validate_inclusion_of(:provider_verification_teaching_qualification)
             .in_array(%w[yes not_yet no_but_planned no_not_planned])
+            .with_message("Tell us if they have a teaching qualification")
         )
       end
     end
@@ -54,14 +37,9 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Qualif
 
       it do
         is_expected.to(
-          allow_value(nil).for(:provider_verification_in_first_five_years)
-        )
-      end
-
-      it do
-        is_expected.to(
           validate_inclusion_of(:provider_verification_teaching_qualification)
             .in_array(["yes", "not_yet", "no_but_planned", "no_not_planned", nil])
+            .with_message("Tell us if they have a teaching qualification")
         )
       end
     end
@@ -71,7 +49,6 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Qualif
     context "when form is valid" do
       let(:params) do
         {
-          provider_verification_in_first_five_years: true,
           provider_verification_teaching_qualification: "yes"
         }
       end
@@ -94,7 +71,6 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Qualif
     context "when form is valid" do
       let(:params) do
         {
-          provider_verification_in_first_five_years: true,
           provider_verification_teaching_qualification: "yes"
         }
       end
@@ -103,10 +79,6 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Qualif
         expect(form.save).to be(true)
 
         claim.eligibility.reload
-
-        expect(
-          claim.eligibility.provider_verification_in_first_five_years
-        ).to be(true)
 
         expect(
           claim.eligibility.provider_verification_teaching_qualification

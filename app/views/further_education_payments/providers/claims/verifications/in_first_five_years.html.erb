@@ -58,17 +58,6 @@
         </p>
       <% end %>
 
-      <%= f.govuk_collection_radio_buttons(
-        :provider_verification_teaching_qualification,
-        f.object.teaching_qualification_options,
-        :id,
-        :name,
-        legend: {
-          text: "Does #{f.object.claimant_name} have a teaching qualification?",
-          size: "s",
-        }
-      ) %>
-
       <%= f.govuk_submit("Continue") %>
 
       <%= f.govuk_submit(
