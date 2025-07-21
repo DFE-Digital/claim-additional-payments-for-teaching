@@ -1,13 +1,17 @@
 module FurtherEducationPayments
   module ProvidersHelper
+    include Policies::FurtherEducationPayments::ProviderVerificationConstants
+
     def claim_status_tag(claim)
       status = claim.eligibility.provider_verification_status
 
       tag_attributes = case status
-      when "not_started"
+      when STATUS_NOT_STARTED
         {text: "Not started", colour: "red"}
-      when "in_progress"
+      when STATUS_IN_PROGRESS
         {text: "In progress", colour: "yellow"}
+      when STATUS_COMPLETED
+        {text: "Completed", colour: "green"}
       else
         {text: "Unknown", colour: "grey"}
       end
