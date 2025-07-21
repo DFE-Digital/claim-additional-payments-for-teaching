@@ -11,12 +11,8 @@ RSpec.describe "Status and Processed by labels", feature_flag: :provider_dashboa
       eligibility: build(:further_education_payments_eligibility, school: fe_provider))
   end
 
-  before do
-    allow(DfESignIn).to receive(:bypass?).and_return(true)
-  end
-
   scenario "Default status and processed_by labels when claim is submitted" do
-    sign_in_as_provider
+    sign_in_to(fe_provider)
 
     expect(page).to have_content("Unverified claims")
 
@@ -27,7 +23,7 @@ RSpec.describe "Status and Processed by labels", feature_flag: :provider_dashboa
   end
 
   scenario "Status and processed_by change when verification starts" do
-    sign_in_as_provider
+    sign_in_to(fe_provider)
 
     click_link claim.full_name
 
@@ -44,7 +40,7 @@ RSpec.describe "Status and Processed by labels", feature_flag: :provider_dashboa
   end
 
   scenario "Save and come back later changes status" do
-    sign_in_as_provider
+    sign_in_to(fe_provider)
 
     click_link claim.full_name
 
@@ -58,7 +54,7 @@ RSpec.describe "Status and Processed by labels", feature_flag: :provider_dashboa
   end
 
   scenario "Back button does not change status" do
-    sign_in_as_provider
+    sign_in_to(fe_provider)
 
     click_link claim.full_name
 
@@ -73,7 +69,7 @@ RSpec.describe "Status and Processed by labels", feature_flag: :provider_dashboa
   end
 
   scenario "Error message does not change status" do
-    sign_in_as_provider
+    sign_in_to(fe_provider)
 
     click_link claim.full_name
 
@@ -109,7 +105,7 @@ RSpec.describe "Status and Processed by labels", feature_flag: :provider_dashboa
         school: other_provider,
         provider_verification_started_at: nil))
 
-    sign_in_as_provider
+    sign_in_to(fe_provider)
 
     within(".status-card--not-started") do
       expect(page).to have_content("2")
@@ -132,25 +128,75 @@ RSpec.describe "Status and Processed by labels", feature_flag: :provider_dashboa
         provider_verification_started_at: 1.hour.ago,
         provider_verification_completed_at: Time.current))
 
-    sign_in_as_provider
+    sign_in_to(fe_provider)
 
     expect(page).not_to have_content(completed_claim.full_name)
   end
 
+  scenario "'Processed by' column displays correct provider name", js: true do
+    provider_user = create(:dfe_signin_user,
+      given_name: "Jane",
+      family_name: "Doe",
+      current_organisation_ukprn: fe_provider.ukprn,
+      role_codes: ["teacher_payments_claim_verifier"])
+
+    create(:claim, :submitted,
+      first_name: "John",
+      surname: "Smith",
+      policy: Policies::FurtherEducationPayments,
+      eligibility: build(:further_education_payments_eligibility,
+        school: fe_provider,
+        provider_assigned_to: nil))
+
+    create(:claim, :submitted,
+      first_name: "Mary",
+      surname: "Jones",
+      policy: Policies::FurtherEducationPayments,
+      eligibility: build(:further_education_payments_eligibility,
+        school: fe_provider,
+        provider_assigned_to: provider_user,
+        provider_verification_started_at: Time.current))
+
+    sign_in_to(fe_provider)
+
+    within("table tbody") do
+      within("tr", text: "John Smith") do
+        expect(page).to have_content("Unassigned")
+      end
+
+      within("tr", text: "Mary Jones") do
+        expect(page).to have_content("Jane Doe")
+      end
+    end
+  end
+
   private
 
-  def sign_in_as_provider
-    visit "/further-education-payments/providers/claims"
+  def sign_in_to(fe_provider)
+    mock_dfe_sign_in_auth_session(
+      provider: :dfe_fe_provider,
+      auth_hash: {
+        uid: "11111",
+        extra: {
+          raw_info: {
+            organisation: {
+              id: "22222",
+              ukprn: fe_provider.ukprn
+            }
+          }
+        }
+      }
+    )
 
-    if page.has_button?("Accept additional cookies", wait: 1)
-      click_button "Accept additional cookies"
-      click_button "Hide cookie message" if page.has_button?("Hide cookie message", wait: 1)
-    end
+    stub_dfe_sign_in_user_info_request(
+      "11111",
+      "22222",
+      Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE,
+      user_type: "provider"
+    )
 
-    expect(page).to have_text "Sign in"
-    fill_in "UKPRN", with: fe_provider.ukprn
-    click_button "Start now"
+    visit new_further_education_payments_providers_session_path
 
-    expect(page).to have_current_path("/further-education-payments/providers/claims")
+    click_on "Start now"
   end
 end
