@@ -379,6 +379,14 @@ RSpec.feature "Provider verifying claims" do
 
       # Second screen with additional questions for variable hours contracts
       within_fieldset(
+        "Is Edna Krabappel timetabled to teach at least 2.5 hours per week at " \
+        "Springfield College in the [spring_or_summer] term?"
+      ) { choose "Yes" }
+
+      click_on "Continue"
+
+      # Third screen with additional questions for variable hours contracts
+      within_fieldset(
         "Has Edna Krabappel taught at Springfield College for at least one " \
         "academic term?"
       ) { choose "Yes" }
@@ -440,7 +448,11 @@ RSpec.feature "Provider verifying claims" do
       ).to have_content "Variable hours"
 
       expect(
-        summary_row("Variable hours in academic year")
+        summary_row("Timetabled hours in term")
+      ).to have_content "Yes"
+
+      expect(
+        summary_row("Variable contract academic term")
       ).to have_content "Yes"
 
       expect(
@@ -521,6 +533,14 @@ RSpec.feature "Provider verifying claims" do
       click_on "Continue"
 
       # Second variable hours screen
+      within_fieldset(
+        "Is Edna Krabappel timetabled to teach at least 2.5 hours per week at " \
+        "Springfield College in the [spring_or_summer] term?"
+      ) { choose "Yes" }
+
+      click_on "Continue"
+
+      # Third variable hours screen
       within_fieldset(
         "Has Edna Krabappel taught at Springfield College for at least one " \
         "academic term?"
@@ -616,6 +636,13 @@ RSpec.feature "Provider verifying claims" do
       click_on "Continue"
 
       within_fieldset(
+        "Is Edna Krabappel timetabled to teach at least 2.5 hours per week at " \
+        "Springfield College in the [spring_or_summer] term?"
+      ) { choose "Yes" }
+
+      click_on "Continue"
+
+      within_fieldset(
         "Has Edna Krabappel taught at Springfield College for at least one " \
         "academic term?"
       ) { choose "Yes" }
@@ -623,8 +650,11 @@ RSpec.feature "Provider verifying claims" do
       click_on "Continue"
 
       expect(summary_row("Type of contract")).to have_content("Variable hours")
+
+      expect(summary_row("Timetabled hours in term")).to have_content("Yes")
+
       expect(
-        summary_row("Variable hours in academic year")
+        summary_row("Variable contract academic term")
       ).to have_content("Yes")
 
       # Change contract type to Employed by another organisation
@@ -646,6 +676,8 @@ RSpec.feature "Provider verifying claims" do
       expect(summary_row("Type of contract")).to have_content(
         "Employed by another organisation (for example, an agency or contractor)"
       )
+
+      expect(page).not_to have_content("At least 2.5 hours per week")
 
       expect(page).not_to have_content("Variable hours in academic year")
 
@@ -708,10 +740,10 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Continue"
 
-      # Expect to see variable hours specific question
+      # Expect to see the first variable hours specific question
       expect(page).to have_content(
-        "Has Edna Krabappel taught at Springfield College for at least one " \
-        "academic term?"
+        "Is Edna Krabappel timetabled to teach at least 2.5 hours per week at " \
+        "Springfield College in the [spring_or_summer] term?"
       )
 
       click_on "Back"

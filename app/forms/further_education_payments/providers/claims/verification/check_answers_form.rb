@@ -20,6 +20,7 @@ module FurtherEducationPayments
             :provider_verification_teaching_qualification,
             :provider_verification_contract_covers_full_academic_year,
             :provider_verification_contract_type,
+            :provider_verification_timetabled_teaching_hours,
             :provider_verification_taught_at_least_one_academic_term,
             :provider_verification_performance_measures,
             :provider_verification_disciplinary_action,
