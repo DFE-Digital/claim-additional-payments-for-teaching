@@ -1,6 +1,7 @@
 module Policies
   module FurtherEducationPayments
     class Eligibility < ApplicationRecord
+      include ProviderVerificationConstants
       AMENDABLE_ATTRIBUTES = [:award_amount, :teacher_reference_number].freeze
 
       self.table_name = "further_education_payments_eligibilities"
@@ -100,22 +101,25 @@ module Policies
       end
 
       def provider_verification_status
-        if provider_verification_started?
-          "in_progress"
+        if provider_verification_completed?
+          STATUS_COMPLETED
+        elsif provider_verification_started?
+          STATUS_IN_PROGRESS
         else
-          "not_started"
+          STATUS_NOT_STARTED
+        end
+      end
+
+      def processed_by_label
+        if provider_assigned_to
+          provider_assigned_to.full_name
+        else
+          PROCESSED_BY_NOT_PROCESSED
         end
       end
 
       def provider_verification_started?
-        !provider_verification_teaching_responsibilities.nil? ||
-          !provider_verification_in_first_five_years.nil? ||
-          provider_verification_teaching_qualification.present? ||
-          provider_verification_contract_type.present? ||
-          !provider_verification_contract_covers_full_academic_year.nil? ||
-          !provider_verification_taught_at_least_one_academic_term.nil? ||
-          !provider_verification_performance_measures.nil? ||
-          !provider_verification_disciplinary_action.nil?
+        provider_verification_started_at.present?
       end
 
       def provider_verification_completed?
