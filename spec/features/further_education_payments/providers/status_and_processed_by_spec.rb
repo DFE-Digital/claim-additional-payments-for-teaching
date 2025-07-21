@@ -12,7 +12,6 @@ RSpec.describe "Status and Processed by labels", feature_flag: :provider_dashboa
   end
 
   before do
-    FeatureFlag.enable!(:provider_dashboard)
     allow(DfESignIn).to receive(:bypass?).and_return(true)
   end
 
@@ -91,23 +90,38 @@ RSpec.describe "Status and Processed by labels", feature_flag: :provider_dashboa
   end
 
   scenario "Claim count cards show correct values" do
-    create(:claim, :submitted,
+    create_list(:claim, 2, :submitted,
+      policy: Policies::FurtherEducationPayments,
+      eligibility: build(:further_education_payments_eligibility,
+        school: fe_provider,
+        provider_verification_started_at: nil))
+
+    create_list(:claim, 3, :submitted,
       policy: Policies::FurtherEducationPayments,
       eligibility: build(:further_education_payments_eligibility,
         school: fe_provider,
         provider_verification_started_at: Time.current))
 
+    other_provider = create(:school, :fe_eligible, ukprn: "87654321")
     create(:claim, :submitted,
       policy: Policies::FurtherEducationPayments,
       eligibility: build(:further_education_payments_eligibility,
-        school: fe_provider))
+        school: other_provider,
+        provider_verification_started_at: nil))
 
     sign_in_as_provider
 
-    within(".govuk-grid-row") do
+    within(".status-card--not-started") do
       expect(page).to have_content("2")
-      expect(page).to have_content("1")
+      expect(page).to have_content("Not started")
     end
+
+    within(".status-card--in-progress") do
+      expect(page).to have_content("3")
+      expect(page).to have_content("In progress")
+    end
+
+    expect(page).to have_selector("table tbody tr", count: 5)
   end
 
   scenario "Completed claims do not appear on unverified claims page" do
