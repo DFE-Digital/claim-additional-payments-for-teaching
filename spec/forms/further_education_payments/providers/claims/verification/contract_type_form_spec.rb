@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::RoleAndExperienceForm, type: :model do
+RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::ContractTypeForm, type: :model do
   let(:fe_provider) do
     create(:school, :fe_eligible, name: "Springfield College")
   end
@@ -22,28 +22,10 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::RoleAn
   describe "validations" do
     context "when submission" do
       it do
-        is_expected.not_to(
-          allow_value(nil).for(:provider_verification_teaching_responsibilities)
-        )
-      end
-
-      it do
-        is_expected.not_to(
-          allow_value(nil).for(:provider_verification_in_first_five_years)
-        )
-      end
-
-      it do
-        is_expected.to(
-          validate_inclusion_of(:provider_verification_teaching_qualification)
-            .in_array(%w[yes not_yet no_but_planned no_not_planned])
-        )
-      end
-
-      it do
         is_expected.to(
           validate_inclusion_of(:provider_verification_contract_type)
             .in_array(%w[permanent fixed_term variable_hours])
+            .with_message("Enter the type of contract they have")
         )
       end
     end
@@ -55,27 +37,9 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::RoleAn
 
       it do
         is_expected.to(
-          allow_value(nil).for(:provider_verification_teaching_responsibilities)
-        )
-      end
-
-      it do
-        is_expected.to(
-          allow_value(nil).for(:provider_verification_in_first_five_years)
-        )
-      end
-
-      it do
-        is_expected.to(
-          validate_inclusion_of(:provider_verification_teaching_qualification)
-            .in_array(["yes", "not_yet", "no_but_planned", "no_not_planned", nil])
-        )
-      end
-
-      it do
-        is_expected.to(
           validate_inclusion_of(:provider_verification_contract_type)
             .in_array(["permanent", "fixed_term", "variable_hours", nil])
+            .with_message("Enter the type of contract they have")
         )
       end
     end
@@ -85,9 +49,6 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::RoleAn
     context "when form is valid" do
       let(:params) do
         {
-          provider_verification_teaching_responsibilities: true,
-          provider_verification_in_first_five_years: true,
-          provider_verification_teaching_qualification: "yes",
           provider_verification_contract_type: "permanent"
         }
       end
@@ -110,9 +71,6 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::RoleAn
     context "when form is valid" do
       let(:params) do
         {
-          provider_verification_teaching_responsibilities: true,
-          provider_verification_in_first_five_years: true,
-          provider_verification_teaching_qualification: "yes",
           provider_verification_contract_type: "permanent"
         }
       end
@@ -123,20 +81,16 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::RoleAn
         claim.eligibility.reload
 
         expect(
-          claim.eligibility.provider_verification_teaching_responsibilities
-        ).to be(true)
-
-        expect(
-          claim.eligibility.provider_verification_in_first_five_years
-        ).to be(true)
-
-        expect(
-          claim.eligibility.provider_verification_teaching_qualification
-        ).to eq("yes")
-
-        expect(
           claim.eligibility.provider_verification_contract_type
         ).to eq("permanent")
+      end
+    end
+
+    context "when form is invalid" do
+      let(:params) { {} }
+
+      it "returns false" do
+        expect(form.save).to be(false)
       end
     end
   end

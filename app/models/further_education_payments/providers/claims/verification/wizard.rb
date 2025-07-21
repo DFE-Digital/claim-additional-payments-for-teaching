@@ -4,7 +4,10 @@ module FurtherEducationPayments
       module Verification
         class Wizard
           FORMS = [
-            RoleAndExperienceForm,
+            TeachingResponsibilitiesForm,
+            InFirstFiveYearsForm,
+            TeachingQualificationForm,
+            ContractTypeForm,
             ContractCoversFullAcademicYearForm,
             TaughtAtLeastOneAcademicTermForm,
             PerformanceAndDisciplineForm,
@@ -12,14 +15,10 @@ module FurtherEducationPayments
             CheckAnswersForm
           ]
 
-          def self.first_slug
-            "role_and_experience"
-          end
-
           def initialize(claim:, user:, current_slug:)
             @claim = claim
             @user = user
-            @current_slug = current_slug
+            @current_slug = current_slug || next_form.slug
           end
 
           def current_form
@@ -27,20 +26,6 @@ module FurtherEducationPayments
           end
 
           def next_form
-            # These guards are required to support changing the role and
-            # experience answers. If the contract type is non permanent, we need
-            # to show the additional screen, even if no answers were changed on
-            # the first screen.
-            if current_slug == "role_and_experience"
-              if reachable_steps.include?(ContractCoversFullAcademicYearForm)
-                return find_form("contract_covers_full_academic_year")
-              end
-
-              if reachable_steps.include?(TaughtAtLeastOneAcademicTermForm)
-                return find_form("taught_at_least_one_academic_term")
-              end
-            end
-
             reachable_forms.detect(&:incomplete?)
           end
 
@@ -105,7 +90,10 @@ module FurtherEducationPayments
 
             @reachable_steps = []
 
-            @reachable_steps << RoleAndExperienceForm
+            @reachable_steps << TeachingResponsibilitiesForm
+            @reachable_steps << InFirstFiveYearsForm
+            @reachable_steps << TeachingQualificationForm
+            @reachable_steps << ContractTypeForm
 
             if eligibility.provider_verification_contract_type == "fixed_term"
               @reachable_steps << ContractCoversFullAcademicYearForm

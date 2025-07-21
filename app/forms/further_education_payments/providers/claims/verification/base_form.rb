@@ -67,6 +67,10 @@ module FurtherEducationPayments
             claim.eligibility.school
           end
 
+          def provider_name
+            provider.name
+          end
+
           def claimant_name
             claim.full_name
           end

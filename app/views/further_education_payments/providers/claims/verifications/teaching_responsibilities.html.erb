@@ -4,7 +4,7 @@
 ) %>
 
 <% content_for :back_link do %>
-  <%= govuk_back_link href: backlink_path %>
+  <%= govuk_back_link href: further_education_payments_providers_claims_path %>
 <% end %>
 
 <div class="govuk-grid-row">
@@ -28,34 +28,22 @@
       <%= render partial: "claim_summary", locals: { claim: f.object.claim } %>
 
       <h2 class="govuk-heading-m">
-        Performance and discipline
+        Role and experience
       </h2>
 
       <%= f.govuk_collection_radio_buttons(
-        :provider_verification_performance_measures,
-        f.object.performance_measures_options,
+        :provider_verification_teaching_responsibilities,
+        f.object.teaching_responsibilities_options,
         :id,
         :name,
         legend: {
-          text: "Is #{f.object.claimant_name} currently subject to any " \
-                "performance measures?",
+          text: "Is #{f.object.claimant_name} a member of staff with teaching " \
+                "responsibilities?",
           size: "s",
         },
         hint: {
-          text: "Being in a probationary period is not classed as being " \
-                "subject to performance measures."
-        }
-      ) %>
-
-      <%= f.govuk_collection_radio_buttons(
-        :provider_verification_disciplinary_action,
-        f.object.disciplinary_action_options,
-        :id,
-        :name,
-        legend: {
-          text: "Is #{f.object.claimant_name} currently subject to any " \
-                "disciplinary action?",
-          size: "s",
+          text: "This includes all job titles where the role involves teaching " \
+                "further education students"
         }
       ) %>
 
@@ -68,6 +56,19 @@
         value: true,
         class: "govuk-!-margin-left-2"
       ) %>
+
+      <%= govuk_details(
+        summary_text: "Who counts as a teacher for this payment",
+      ) do %>
+        <p class="govuk-body">
+          An FE teacher is someone who teaches, even if it's not their main job.
+          This payment isn't for support staff like assistants or technicians.
+          <br />
+          <br />
+          They're likely to have a teaching contract, teach groups of students,
+          plan and mark work, or be working towards a teaching qualification.
+        </p>
+      <% end %>
     <% end %>
   </div>
 </div>

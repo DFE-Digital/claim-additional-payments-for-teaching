@@ -28,33 +28,16 @@
       <%= render partial: "claim_summary", locals: { claim: f.object.claim } %>
 
       <h2 class="govuk-heading-m">
-        Performance and discipline
+        Role and experience
       </h2>
 
       <%= f.govuk_collection_radio_buttons(
-        :provider_verification_performance_measures,
-        f.object.performance_measures_options,
+        :provider_verification_teaching_qualification,
+        f.object.teaching_qualification_options,
         :id,
         :name,
         legend: {
-          text: "Is #{f.object.claimant_name} currently subject to any " \
-                "performance measures?",
-          size: "s",
-        },
-        hint: {
-          text: "Being in a probationary period is not classed as being " \
-                "subject to performance measures."
-        }
-      ) %>
-
-      <%= f.govuk_collection_radio_buttons(
-        :provider_verification_disciplinary_action,
-        f.object.disciplinary_action_options,
-        :id,
-        :name,
-        legend: {
-          text: "Is #{f.object.claimant_name} currently subject to any " \
-                "disciplinary action?",
+          text: "Does #{f.object.claimant_name} have a teaching qualification?",
           size: "s",
         }
       ) %>

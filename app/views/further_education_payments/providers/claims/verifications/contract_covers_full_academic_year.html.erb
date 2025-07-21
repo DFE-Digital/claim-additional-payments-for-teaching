@@ -28,7 +28,7 @@
       <%= render partial: "claim_summary", locals: { claim: f.object.claim } %>
 
       <h2 class="govuk-heading-m">
-        Role and experience
+        Type of contract
       </h2>
 
       <%= f.govuk_collection_radio_buttons(
@@ -39,6 +39,7 @@
         legend: {
           text: "Does #{f.object.claimant_name} fixed-term contract cover " \
                 "the full #{f.object.academic_year.to_s(:long)} academic year?",
+          size: "s",
         },
         hint: {
           text: "This academic year runs from #{f.object.academic_year_start_to_end}"

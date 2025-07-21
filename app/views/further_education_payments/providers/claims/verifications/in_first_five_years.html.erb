@@ -28,36 +28,35 @@
       <%= render partial: "claim_summary", locals: { claim: f.object.claim } %>
 
       <h2 class="govuk-heading-m">
-        Performance and discipline
+        Role and experience
       </h2>
 
       <%= f.govuk_collection_radio_buttons(
-        :provider_verification_performance_measures,
-        f.object.performance_measures_options,
+        :provider_verification_in_first_five_years,
+        f.object.in_first_five_years_options,
         :id,
         :name,
         legend: {
-          text: "Is #{f.object.claimant_name} currently subject to any " \
-                "performance measures?",
+          text: "Is #{f.object.claimant_name} in the first 5 years of their " \
+                "further education (FE) teaching career in England?",
           size: "s",
-        },
-        hint: {
-          text: "Being in a probationary period is not classed as being " \
-                "subject to performance measures."
         }
       ) %>
 
-      <%= f.govuk_collection_radio_buttons(
-        :provider_verification_disciplinary_action,
-        f.object.disciplinary_action_options,
-        :id,
-        :name,
-        legend: {
-          text: "Is #{f.object.claimant_name} currently subject to any " \
-                "disciplinary action?",
-          size: "s",
-        }
-      ) %>
+      <%= govuk_details(
+        summary_text: "What counts torwards the first 5 years of an FE " \
+                      "teaching career",
+      ) do %>
+        <p class="govuk-body">
+          Only teaching at post-16 providers in England counts. It includes
+          independent training providers. Teaching in schools, outside England
+          or overseas does not count.
+          <br />
+          <br />
+          Teachers who taught in FE before August 2020 are not eligible, even if
+          they've since returned.
+        </p>
+      <% end %>
 
       <%= f.govuk_submit("Continue") %>
 
