@@ -28,7 +28,7 @@
       <%= render partial: "claim_summary", locals: { claim: f.object.claim } %>
 
       <h2 class="govuk-heading-m">
-        Contracted hours
+        Subject hours
       </h2>
 
       <%= f.govuk_collection_radio_buttons(
@@ -38,15 +38,11 @@
         :name,
         legend: {
           text: "For at least half of their timetabled teaching hours, does " \
-          "#{f.object.claimant_name} teach:",
+          "#{h(f.object.claimant_name)} teach: qualifications approved for " \
+          "funding at level 3 and below in the " \
+          "#{f.object.subjects_taught_description} sector subject area?".html_safe,
           size: "s",
         },
-        hint: -> do
-          govuk_list(
-            f.object.subjects_taught_descriptions.map(&:html_safe),
-            type: :bullet
-          )
-        end
       ) %>
 
       <%= f.govuk_submit("Continue") %>

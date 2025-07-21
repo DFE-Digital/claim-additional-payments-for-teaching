@@ -40,20 +40,6 @@ module FurtherEducationPayments
             end
           end
 
-          def subject_names_sentence
-            claim.eligibility.subjects_taught.map do |subject|
-              I18n.t(
-                subject,
-                scope: %w[
-                  further_education_payments
-                  forms
-                  subjects_taught
-                  options
-                ]
-              )
-            end.map(&:downcase).to_sentence
-          end
-
           def teaching_qualification
             TeachingQualificationForm::TEACHING_QUALIFICATION_OPTIONS
               .find { it.id == provider_verification_teaching_qualification }

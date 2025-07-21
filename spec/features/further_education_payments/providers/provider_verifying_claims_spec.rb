@@ -137,9 +137,7 @@ RSpec.feature "Provider verifying claims" do
         summary_row("Teaches 16-19-year-olds or those with EHCP")
       ).to have_content("Yes")
 
-      expect(
-        summary_row("Teaches approved qualification in maths and physics")
-      ).to have_content("Yes")
+      expect(summary_row("Teaches Level 3 courses")).to have_content("Yes")
 
       check(
         "I have read the provider guidance I was sent by email and to the " \
@@ -303,9 +301,7 @@ RSpec.feature "Provider verifying claims" do
         summary_row("Teaches 16-19-year-olds or those with EHCP")
       ).to have_content("Yes")
 
-      expect(
-        summary_row("Teaches approved qualification in building and construction")
-      ).to have_content("Yes")
+      expect(summary_row("Teaches Level 3 courses")).to have_content("Yes")
 
       check(
         "I have read the provider guidance I was sent by email and to the " \
@@ -455,12 +451,7 @@ RSpec.feature "Provider verifying claims" do
         summary_row("Subject to disciplinary action")
       ).to have_content("No")
 
-      expect(
-        summary_row(
-          "Teaches approved qualification in computing, including digital " \
-          "and ict and chemistry"
-        )
-      ).to have_content("Yes")
+      expect(summary_row("Teaches Level 3 courses")).to have_content("Yes")
 
       check(
         "I have read the provider guidance I was sent by email and to the " \
