@@ -3,6 +3,25 @@ module FurtherEducationPayments
     module Claims
       module Verification
         class TeachingHoursPerWeekForm < BaseForm
+          TEACHING_HOURS_PER_WEEK_OPTIONS = [
+            Form::Option.new(
+              id: "20_or_more_hours_per_week",
+              name: "20 hours or more each week"
+            ),
+            Form::Option.new(
+              id: "12_to_20_hours_per_week",
+              name: "12 hours to 20 hours each week"
+            ),
+            Form::Option.new(
+              id: "2_and_a_half_to_12_hours_per_week",
+              name: "2.5 to 12 hours each week"
+            ),
+            Form::Option.new(
+              id: "fewer_than_2_and_a_half_hours_per_week",
+              name: "Fewer than 2.5 hours each week"
+            )
+          ]
+
           attribute :provider_verification_teaching_hours_per_week, :string
 
           validates(
@@ -20,20 +39,7 @@ module FurtherEducationPayments
           )
 
           def provider_verification_teaching_hours_per_week_options
-            [
-              Form::Option.new(
-                id: "more_than_12",
-                name: "12 hours or more per week"
-              ),
-              Form::Option.new(
-                id: "between_2_5_and_12",
-                name: "2.5 hours or more but less than 12 hours per week"
-              ),
-              Form::Option.new(
-                id: "less_than_2_5",
-                name: "Less than 2.5 hours per week"
-              )
-            ]
+            TEACHING_HOURS_PER_WEEK_OPTIONS
           end
 
           def claimant_term

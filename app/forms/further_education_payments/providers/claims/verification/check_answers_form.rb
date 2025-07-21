@@ -46,6 +46,12 @@ module FurtherEducationPayments
               .name
           end
 
+          def teaching_hours_per_week
+            TeachingHoursPerWeekForm::TEACHING_HOURS_PER_WEEK_OPTIONS
+              .find { it.id == provider_verification_teaching_hours_per_week }
+              .name
+          end
+
           def save
             return false unless valid?
 
