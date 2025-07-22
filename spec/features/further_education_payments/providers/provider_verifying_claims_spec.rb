@@ -118,7 +118,7 @@ RSpec.feature "Provider verifying claims" do
       ).to have_content("Yes")
 
       expect(
-        summary_row("Type of contract")
+        summary_row("Contract type")
       ).to have_content("Permanent")
 
       expect(
@@ -278,7 +278,7 @@ RSpec.feature "Provider verifying claims" do
       ).to have_content "Yes"
 
       expect(
-        summary_row("Type of contract")
+        summary_row("Contract type")
       ).to have_content "Fixed-term"
 
       expect(
@@ -444,7 +444,7 @@ RSpec.feature "Provider verifying claims" do
       ).to have_content "Yes"
 
       expect(
-        summary_row("Type of contract")
+        summary_row("Contract type")
       ).to have_content "Variable hours"
 
       expect(
@@ -582,9 +582,9 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Continue"
 
-      expect(summary_row("Type of contract")).to have_content("Variable hours")
+      expect(summary_row("Contract type")).to have_content("Variable hours")
 
-      within(summary_row("Type of contract")) do
+      within(summary_row("Contract type")) do
         click_on "Change"
       end
 
@@ -595,10 +595,10 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Continue"
 
-      expect(summary_row("Type of contract")).to have_content("Permanent")
+      expect(summary_row("Contract type")).to have_content("Permanent")
 
       # Change contract type to Fixed-term
-      within(summary_row("Type of contract")) do
+      within(summary_row("Contract type")) do
         click_on "Change"
       end
 
@@ -617,14 +617,14 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Continue"
 
-      expect(summary_row("Type of contract")).to have_content("Fixed-term")
+      expect(summary_row("Contract type")).to have_content("Fixed-term")
 
       expect(
         summary_row("Contract covers full academic year")
       ).to have_content "No"
 
       # Change contract type to Variable hours
-      within(summary_row("Type of contract")) do
+      within(summary_row("Contract type")) do
         click_on "Change"
       end
 
@@ -649,7 +649,7 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Continue"
 
-      expect(summary_row("Type of contract")).to have_content("Variable hours")
+      expect(summary_row("Contract type")).to have_content("Variable hours")
 
       expect(summary_row("Timetabled hours in term")).to have_content("Yes")
 
@@ -658,7 +658,7 @@ RSpec.feature "Provider verifying claims" do
       ).to have_content("Yes")
 
       # Change contract type to Employed by another organisation
-      within(summary_row("Type of contract")) do
+      within(summary_row("Contract type")) do
         click_on "Change"
       end
 
@@ -673,7 +673,7 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Continue"
 
-      expect(summary_row("Type of contract")).to have_content(
+      expect(summary_row("Contract type")).to have_content(
         "Employed by another organisation (for example, an agency or contractor)"
       )
 
