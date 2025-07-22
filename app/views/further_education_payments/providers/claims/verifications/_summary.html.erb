@@ -65,7 +65,7 @@
 <%= govuk_summary_card(title: "Type of contract") do |card| %>
   <%= card.with_summary_list do |summary_list| %>
     <%= summary_list.with_row do |row| %>
-      <%= row.with_key(text: "Type of contract") %>
+      <%= row.with_key(text: "Contract type") %>
       <%= row.with_value(text: form.contract_type) %>
       <% if editable %>
         <%= row.with_action(
