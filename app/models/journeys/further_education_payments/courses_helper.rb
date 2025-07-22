@@ -101,6 +101,23 @@ module Journeys
           dont_link ? text : govuk_link_to(text, url, new_tab: true)
         end
       end
+
+      def courses_to_sentence(subject_area:, courses:, none_text: nil)
+        scope = "further_education_payments.forms.#{subject_area}_courses"
+
+        courses_list = courses.map do |course|
+          body = if course == "none" && none_text
+            none_text
+          else
+            I18n.t("options.#{course}", scope: scope, link: link_for_course(subject_area, course, link: false))
+          end
+          content_tag(:p, body, class: "govuk-body")
+        end.join("").html_safe
+
+        return nil if courses_list.empty?
+
+        courses_list
+      end
     end
   end
 end

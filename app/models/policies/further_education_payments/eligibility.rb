@@ -126,6 +126,18 @@ module Policies
         provider_verification_completed_at.present?
       end
 
+      def provider_verification_selected_at_least_one_eligible_course?
+        [
+          provider_verification_building_construction_courses,
+          provider_verification_chemistry_courses,
+          provider_verification_computing_courses,
+          provider_verification_early_years_courses,
+          provider_verification_engineering_manufacturing_courses,
+          provider_verification_maths_courses,
+          provider_verification_physics_courses
+        ].flatten.count { |course| course != "none" } > 0
+      end
+
       private
 
       def provider_and_claimant_names_match?

@@ -1,10 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Provider verification access control" do
-  before do
-    FeatureFlag.enable!(:provider_dashboard)
-  end
-
+RSpec.feature "Provider verification access control", feature_flag: :provider_dashboard do
   let(:fe_provider) do
     create(
       :school,

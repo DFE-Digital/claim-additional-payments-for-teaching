@@ -159,6 +159,7 @@ FactoryBot.define do
       provider_verification_teaching_hours_per_week { "20_or_more_hours_per_week" }
       provider_verification_half_teaching_hours { true }
       provider_verification_subjects_taught { true }
+      provider_verification_half_timetabled_teaching_time { true }
     end
 
     trait :provider_verification_completed do

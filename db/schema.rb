@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_21_125622) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_24_153719) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -329,6 +329,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_21_125622) do
     t.uuid "provider_assigned_to_id"
     t.datetime "provider_verification_started_at"
     t.boolean "provider_verification_timetabled_teaching_hours"
+    t.jsonb "provider_verification_actual_subjects_taught", default: []
+    t.jsonb "provider_verification_building_construction_courses", default: []
+    t.jsonb "provider_verification_chemistry_courses", default: []
+    t.jsonb "provider_verification_computing_courses", default: []
+    t.jsonb "provider_verification_early_years_courses", default: []
+    t.jsonb "provider_verification_engineering_manufacturing_courses", default: []
+    t.jsonb "provider_verification_maths_courses", default: []
+    t.jsonb "provider_verification_physics_courses", default: []
+    t.boolean "provider_verification_half_timetabled_teaching_time"
     t.index ["possible_school_id"], name: "index_fe_payments_eligibilities_on_possible_school_id"
     t.index ["provider_assigned_to_id"], name: "idx_on_provider_assigned_to_id_5db250f0fe"
     t.index ["provider_verification_verified_by_id"], name: "idx_on_provider_verification_verified_by_id_c38aef7b6c"

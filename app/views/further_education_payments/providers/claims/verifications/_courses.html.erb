@@ -31,19 +31,32 @@
         Subject area
       </h2>
 
-      <%= f.govuk_collection_radio_buttons(
-        :provider_verification_subjects_taught,
-        f.object.provider_verification_subjects_taught_options,
-        :id,
-        :name,
+      <%= f.govuk_check_boxes_fieldset @form.course_field,
         legend: {
-          text: "For at least half of their timetabled teaching hours, does " \
-          "#{h(f.object.claimant_name)} teach: qualifications approved for " \
-          "funding at level 3 and below in the " \
-          "#{f.object.subjects_taught_description} sector subject area?".html_safe,
-          size: "s",
+          text: "Which #{@form.subject_area_name} courses does #{f.object.claim.full_name} teach?",
+          tag: "h3",
+          size: "s"
         },
-      ) %>
+        hint: {
+          text: "Select all that apply"
+        } do %>
+        <% @form.checkbox_options[0..-2].each do |option| %>
+          <%= f.govuk_check_box @form.course_field, option.id,
+            link_errors: @form.checkbox_options.first == option,
+            label: {
+              text: option.name.html_safe
+          } %>
+        <% end %>
+
+        <%= f.govuk_check_box_divider %>
+
+        <% option = @form.checkbox_options.last %>
+        <%= f.govuk_check_box @form.course_field, option.id,
+          exclusive: true,
+          label: {
+            text: option.name.html_safe
+        } %>
+      <% end %>
 
       <%= f.govuk_submit("Continue") %>
 

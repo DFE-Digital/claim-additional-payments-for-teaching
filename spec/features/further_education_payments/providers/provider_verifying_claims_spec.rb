@@ -238,14 +238,17 @@ RSpec.feature "Provider verifying claims" do
         "hours delivering 16 to 19 study programmes, T Levels, or 16 to 19 " \
         "apprenticeships?"
       ) { choose "Yes" }
-
       click_on "Continue"
 
       within_fieldset(
         "For at least half of their timetabled teaching hours, does " \
         "Edna Krabappel teach:"
       ) { choose "Yes" }
+      click_on "Continue"
 
+      expect(page).to have_text "Does Edna Krabappel spend at least half of " \
+        "their timetabled teaching time teaching these courses?"
+      choose "Yes"
       click_on "Continue"
 
       # Check answers
@@ -405,7 +408,11 @@ RSpec.feature "Provider verifying claims" do
         "For at least half of their timetabled teaching hours, does Edna " \
         "Krabappel teach:"
       ) { choose "Yes" }
+      click_on "Continue"
 
+      expect(page).to have_text "Does Edna Krabappel spend at least half of " \
+        "their timetabled teaching time teaching these courses?"
+      choose "Yes"
       click_on "Continue"
 
       # Check answers
@@ -570,11 +577,14 @@ RSpec.feature "Provider verifying claims" do
         "For at least half of their timetabled teaching hours, does Edna " \
         "Krabappel teach:"
       ) { choose "Yes" }
+      click_on "Continue"
 
+      expect(page).to have_text "Does Edna Krabappel spend at least half of " \
+        "their timetabled teaching time teaching these courses?"
+      choose "Yes"
       click_on "Continue"
 
       # Check answers
-
       expect(page).to have_text("Claim reference: AB123456")
 
       expect(
@@ -725,7 +735,11 @@ RSpec.feature "Provider verifying claims" do
         "For at least half of their timetabled teaching hours, does Edna " \
         "Krabappel teach:"
       ) { choose "Yes" }
+      click_on "Continue"
 
+      expect(page).to have_text "Does Edna Krabappel spend at least half of " \
+        "their timetabled teaching time teaching these courses?"
+      choose "Yes"
       click_on "Continue"
 
       expect(summary_row("Contract type")).to have_content("Variable hours")
