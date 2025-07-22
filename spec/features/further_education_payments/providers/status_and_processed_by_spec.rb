@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "Status and Processed by labels", feature_flag: :provider_dashboard do
+  before do
+    allow(DfESignIn).to receive(:bypass?).and_return(true)
+  end
+
   let(:fe_provider) do
     create(:school, :fe_eligible, name: "Springfield College")
   end
@@ -173,30 +177,9 @@ RSpec.describe "Status and Processed by labels", feature_flag: :provider_dashboa
   private
 
   def sign_in_to(fe_provider)
-    mock_dfe_sign_in_auth_session(
-      provider: :dfe_fe_provider,
-      auth_hash: {
-        uid: "11111",
-        extra: {
-          raw_info: {
-            organisation: {
-              id: "22222",
-              ukprn: fe_provider.ukprn
-            }
-          }
-        }
-      }
-    )
-
-    stub_dfe_sign_in_user_info_request(
-      "11111",
-      "22222",
-      Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE,
-      user_type: "provider"
-    )
-
     visit new_further_education_payments_providers_session_path
-
-    click_on "Start now"
+    expect(page).to have_text "Sign in"
+    fill_in "UKPRN", with: fe_provider.ukprn
+    click_button "Start now"
   end
 end
