@@ -16,6 +16,7 @@ RSpec.describe "Status and Processed by labels", feature_flag: :provider_dashboa
   end
 
   scenario "Default status and processed_by labels when claim is submitted" do
+    claim
     sign_in_to(fe_provider)
 
     expect(page).to have_content("Unverified claims")
@@ -27,7 +28,20 @@ RSpec.describe "Status and Processed by labels", feature_flag: :provider_dashboa
   end
 
   scenario "Status and processed_by change when verification starts" do
-    sign_in_to(fe_provider)
+    provider_user = create(:dfe_signin_user,
+      dfe_sign_in_id: "test-provider-123",
+      given_name: "Test",
+      family_name: "Provider",
+      current_organisation_ukprn: fe_provider.ukprn,
+      role_codes: ["teacher_payments_claim_verifier"])
+
+    claim
+
+    visit new_further_education_payments_providers_session_path
+    expect(page).to have_text "Sign in"
+    fill_in "UKPRN", with: fe_provider.ukprn
+    fill_in "DfE sign in UID", with: provider_user.dfe_sign_in_id
+    click_button "Start now"
 
     click_link claim.full_name
 
@@ -39,11 +53,12 @@ RSpec.describe "Status and Processed by labels", feature_flag: :provider_dashboa
 
     within("table") do
       expect(page).to have_content("In progress")
-      expect(page).to have_content("Not processed")
+      expect(page).to have_content("Test Provider")
     end
   end
 
   scenario "Save and come back later changes status" do
+    claim
     sign_in_to(fe_provider)
 
     click_link claim.full_name
@@ -58,6 +73,7 @@ RSpec.describe "Status and Processed by labels", feature_flag: :provider_dashboa
   end
 
   scenario "Back button does not change status" do
+    claim
     sign_in_to(fe_provider)
 
     click_link claim.full_name
@@ -73,6 +89,7 @@ RSpec.describe "Status and Processed by labels", feature_flag: :provider_dashboa
   end
 
   scenario "Error message does not change status" do
+    claim
     sign_in_to(fe_provider)
 
     click_link claim.full_name
@@ -165,7 +182,7 @@ RSpec.describe "Status and Processed by labels", feature_flag: :provider_dashboa
 
     within("table tbody") do
       within("tr", text: "John Smith") do
-        expect(page).to have_content("Unassigned")
+        expect(page).to have_content("Not processed")
       end
 
       within("tr", text: "Mary Jones") do

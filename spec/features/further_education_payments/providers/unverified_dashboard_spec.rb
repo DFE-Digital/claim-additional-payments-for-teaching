@@ -53,7 +53,7 @@ RSpec.describe "Provider unverified claims dashboard", feature_flag: :provider_d
     expect(page).to have_selector("table tbody tr:first-child td:nth-child(1)", text: "Jo Bloggs")
     expect(page).to have_selector("table tbody tr:first-child td:nth-child(2)", text: "13 December 2024")
     expect(page).to have_selector("table tbody tr:first-child td:nth-child(3)", text: "27 December 2024")
-    expect(page).to have_selector("table tbody tr:first-child td:nth-child(4)", text: "Unassigned")
+    expect(page).to have_selector("table tbody tr:first-child td:nth-child(4)", text: "Not processed")
     expect(page).to have_selector("table tbody tr:first-child td:nth-child(5)", text: "Not started")
   end
 end
