@@ -4,13 +4,14 @@ class IncludedValidator < ActiveModel::EachValidator
     attributes.each do |attribute|
       value = record.read_attribute_for_validation(attribute)
       next if value.nil? && allow_nil?(record)
+      next if value.blank? && allow_blank?(record)
       validate_each(record, attribute, value)
     end
   end
 
   def validate_each(record, attribute, value)
     ActiveModel::Validations::InclusionValidator
-      .new(options.except(:allow_nil).merge(attributes: [attribute]))
+      .new(options.except(:allow_nil, :allow_blank).merge(attributes: [attribute]))
       .validate_each(record, attribute, value)
   end
 
@@ -21,6 +22,14 @@ class IncludedValidator < ActiveModel::EachValidator
       options[:allow_nil].to_proc.call(record)
     else
       options[:allow_nil]
+    end
+  end
+
+  def allow_blank?(record)
+    if options[:allow_blank].respond_to?(:to_proc)
+      options[:allow_blank].to_proc.call(record)
+    else
+      options[:allow_blank]
     end
   end
 end

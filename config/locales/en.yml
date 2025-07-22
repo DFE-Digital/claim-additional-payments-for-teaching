@@ -1033,6 +1033,16 @@ en:
           none: I do not teach any of these subjects
         errors:
           inclusion: Select the subject areas that you teach, or select ‘I do not teach any of these subjects’
+      actual_subjects_taught:
+        options:
+          building_construction: Building and construction
+          chemistry: Chemistry
+          computing: Computing, including digital and ICT
+          early_years: Early years
+          engineering_manufacturing: Engineering and manufacturing, including transport engineering and electronics
+          maths: Maths
+          physics: Physics
+          none: They do not teach any of these subjects
       courses: &courses
         hint: |
           <p>If you are unsure whether the course(s) you teach is eligible, please email: <br/>%{email}</p>

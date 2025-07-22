@@ -8,7 +8,9 @@ module FurtherEducationPayments
           include ActiveModel::Validations::Callbacks
 
           before_validation do
-            attributes.each { |k, v| public_send("#{k}=", nil) if v == "" }
+            attributes.each do |k, v|
+              public_send("#{k}=", nil) if v == ""
+            end
           end
 
           attr_reader :claim, :user
@@ -47,7 +49,7 @@ module FurtherEducationPayments
             return false unless valid?
 
             attributes_to_save.each do |attribute|
-              claim.eligibility.send("#{attribute}=", send(attribute))
+              claim.eligibility.public_send("#{attribute}=", send(attribute))
             end
 
             claim.eligibility.save!
@@ -57,7 +59,12 @@ module FurtherEducationPayments
 
           def clear_answers!
             attributes_to_save.each do |attribute|
-              claim.eligibility.send("#{attribute}=", nil)
+              case @attributes[attribute].value_before_type_cast
+              when Array
+                claim.eligibility.public_send("#{attribute}=", [])
+              else
+                claim.eligibility.public_send("#{attribute}=", nil)
+              end
             end
 
             claim.eligibility.save!
