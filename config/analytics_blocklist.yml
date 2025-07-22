@@ -85,7 +85,6 @@
   - claimant_valid_passport
   - claimant_passport_number
   - passport_number
-  - provider_verification_timetabled_teaching_hours
   :journeys_sessions:
   - answers
   :early_years_payment_eligibilities:
