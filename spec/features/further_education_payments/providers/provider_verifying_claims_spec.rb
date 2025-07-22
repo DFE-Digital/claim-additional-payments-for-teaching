@@ -138,13 +138,21 @@ RSpec.feature "Provider verifying claims" do
       ).to have_content("Yes")
 
       check(
-        "To the best of my knowledge, I confirm that the information " \
-        "provided in this form is correct."
+        "I have read the provider guidance I was sent by email and to the " \
+        "best of my knowledge confirm the information I have provided in " \
+        "this form is correct."
       )
 
       click_on "Continue"
 
       expect(page).to have_content("Claim Verified for Edna Krabappel")
+      expect(
+        page.current_path
+      ).to eql("/further-education-payments/providers/verified-claims")
+      expect(page).to have_css(
+        "table tbody tr:first-child td:nth-child(4)",
+        text: "Pending"
+      )
     end
   end
 
@@ -292,8 +300,9 @@ RSpec.feature "Provider verifying claims" do
       ).to have_content("Yes")
 
       check(
-        "To the best of my knowledge, I confirm that the information " \
-        "provided in this form is correct."
+        "I have read the provider guidance I was sent by email and to the " \
+        "best of my knowledge confirm the information I have provided in " \
+        "this form is correct."
       )
 
       click_on "Continue"
@@ -442,8 +451,9 @@ RSpec.feature "Provider verifying claims" do
       ).to have_content("Yes")
 
       check(
-        "To the best of my knowledge, I confirm that the information " \
-        "provided in this form is correct."
+        "I have read the provider guidance I was sent by email and to the " \
+        "best of my knowledge confirm the information I have provided in " \
+        "this form is correct."
       )
 
       click_on "Continue"
@@ -842,12 +852,7 @@ RSpec.feature "Provider verifying claims" do
 
       expect(page).to have_content("This claim has already been verified")
       expect(page).not_to have_button("Continue")
-      expect(page).to have_text("Claim: read only mode")
     end
-  end
-
-  def summary_row(label)
-    find("div.govuk-summary-list__row", text: label)
   end
 
   context "status badge display" do
@@ -950,5 +955,9 @@ RSpec.feature "Provider verifying claims" do
     visit new_further_education_payments_providers_session_path
 
     click_on "Start now"
+  end
+
+  def summary_row(label)
+    find("div.govuk-summary-list__row", text: label)
   end
 end

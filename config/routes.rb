@@ -195,7 +195,7 @@ Rails.application.routes.draw do
         resource :verification, only: %i[show edit update], module: :claims
         resource :information, only: %i[show], module: :claims
       end
-      resources :verified_claims, path: "verified-claims", only: %i[index]
+      resources :verified_claims, path: "verified-claims", only: %i[index show]
     end
   end
 
