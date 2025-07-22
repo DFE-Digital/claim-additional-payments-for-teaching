@@ -6,12 +6,21 @@ module FurtherEducationPayments
         @pagy, @claims = pagy(claim_scope)
       end
 
+      def show
+        @claim = claim_scope.find(params[:id])
+        @answers_presenter =
+          FurtherEducationPayments::
+          Providers::
+          Claims::
+          AnswersPresenter.new(claim: @claim)
+      end
+
       private
 
       def claim_scope
         super
           .where(id: Claim.fe_provider_verified.select(:id))
-          .order(:surname, :first_name)
+          .order(:first_name, :surname)
       end
     end
   end

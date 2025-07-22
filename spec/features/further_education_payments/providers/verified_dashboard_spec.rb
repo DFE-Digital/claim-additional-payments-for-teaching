@@ -38,6 +38,7 @@ RSpec.describe "Provider verified claims dashboard", feature_flag: :provider_das
     eligibility2 = create(
       :further_education_payments_eligibility,
       :verified,
+      :provider_verification_completed,
       school:,
       provider_verification_completed_at: Date.new(2024, 12, 14)
     )
@@ -84,11 +85,15 @@ RSpec.describe "Provider verified claims dashboard", feature_flag: :provider_das
     expect(page).to have_selector("table tbody tr:first-child td:nth-child(1)", text: "A B")
     expect(page).to have_selector("table tbody tr:first-child td:nth-child(2)", text: claim2.reference)
     expect(page).to have_selector("table tbody tr:first-child td:nth-child(3)", text: "14 December 2024")
-    expect(page).to have_selector("table tbody tr:first-child td:nth-child(4)", text: "Not implemented")
+    expect(page).to have_selector("table tbody tr:first-child td:nth-child(4)", text: "Pending")
 
     expect(page).to have_selector("table tbody tr:nth-child(2) td:nth-child(1)", text: "C D")
     expect(page).to have_selector("table tbody tr:nth-child(2) td:nth-child(2)", text: claim1.reference)
     expect(page).to have_selector("table tbody tr:nth-child(2) td:nth-child(3)", text: "14 December 2024")
-    expect(page).to have_selector("table tbody tr:nth-child(2) td:nth-child(4)", text: "Not implemented")
+    expect(page).to have_selector("table tbody tr:nth-child(2) td:nth-child(4)", text: "Pending")
+
+    click_link "A B"
+
+    expect(page).to have_text "Claim reference: #{claim2.reference}"
   end
 end

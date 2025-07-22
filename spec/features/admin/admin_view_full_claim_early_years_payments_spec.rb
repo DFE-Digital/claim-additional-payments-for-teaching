@@ -135,8 +135,4 @@ RSpec.feature "Admin views claim details for EarlyYearsPayments" do
       expect(summary_row("Overdue")).to have_content("-580 days")
     end
   end
-
-  def summary_row(label)
-    find("dt", text: label).sibling("dd")
-  end
 end

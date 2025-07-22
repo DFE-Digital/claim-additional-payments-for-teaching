@@ -33,10 +33,10 @@
   <% table.with_body do |body| %>
     <% @claims.each do |claim| %>
       <% body.with_row do |row| %>
-        <% row.with_cell(text: claim.full_name) %>
+        <% row.with_cell(text: link_to(claim.full_name, further_education_payments_providers_verified_claim_path(claim))) %>
         <% row.with_cell(text: claim.reference) %>
         <% row.with_cell(text: l(claim.eligibility.provider_verification_completed_at)) %>
-        <% row.with_cell(text: govuk_tag(text: "Not implemented", colour: "red")) %>
+        <% row.with_cell(text: govuk_tag(text: "Pending", colour: "yellow")) %>
       <% end %>
     <% end %>
   <% end %>
