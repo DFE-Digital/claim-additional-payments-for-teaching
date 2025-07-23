@@ -41,6 +41,8 @@ RSpec.describe "Status and Processed by labels", feature_flag: :provider_dashboa
     expect(page).to have_text "Sign in"
     fill_in "UKPRN", with: fe_provider.ukprn
     fill_in "DfE sign in UID", with: provider_user.dfe_sign_in_id
+    fill_in "First name", with: provider_user.given_name
+    fill_in "Last name", with: provider_user.family_name
     click_button "Start now"
 
     click_link claim.full_name
