@@ -156,7 +156,7 @@ FactoryBot.define do
       provider_verification_taught_at_least_one_academic_term { nil }
       provider_verification_performance_measures { false }
       provider_verification_disciplinary_action { false }
-      provider_verification_teaching_hours_per_week { "more_than_12" }
+      provider_verification_teaching_hours_per_week { "20_or_more_hours_per_week" }
       provider_verification_half_teaching_hours { true }
       provider_verification_subjects_taught { true }
     end
