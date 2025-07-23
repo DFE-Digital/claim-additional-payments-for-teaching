@@ -169,23 +169,13 @@
   <%= card.with_summary_list do |summary_list| %>
     <%= summary_list.with_row do |row| %>
       <%= row.with_key(text: "Timetabled hours per week") %>
-      <%= row.with_value(
-        text: t(
-          form.provider_verification_teaching_hours_per_week,
-          scope: %w[
-            further_education_payments
-            forms
-            teaching_hours_per_week
-            options
-          ]
-        )
-      ) %>
+      <%= row.with_value(text: form.teaching_hours_per_week) %>
       <% if editable %>
         <%= row.with_action(
           text: "Change",
           href: edit_further_education_payments_providers_claim_verification_path(
             form.claim,
-            slug: "contracted_hours"
+            slug: "teaching_hours_per_week"
           )
         ) %>
       <% end %>
@@ -204,16 +194,18 @@
           text: "Change",
           href: edit_further_education_payments_providers_claim_verification_path(
             form.claim,
-            slug: "contracted_hours"
+            slug: "half_teaching_hours"
           )
         ) %>
       <% end %>
     <% end %>
+  <% end %>
+<% end %>
 
+<%= govuk_summary_card(title: "Subject area") do |card| %>
+  <%= card.with_summary_list do |summary_list| %>
     <%= summary_list.with_row do |row| %>
-      <%= row.with_key(
-        text: "Teaches approved qualification in #{form.subject_names_sentence}"
-      ) %>
+      <%= row.with_key(text: "Teaches Level 3 courses") %>
 
       <%= row.with_value(
         text: t(
@@ -227,7 +219,7 @@
           text: "Change",
           href: edit_further_education_payments_providers_claim_verification_path(
             form.claim,
-            slug: "contracted_hours"
+            slug: "subjects_taught"
           )
         ) %>
       <% end %>

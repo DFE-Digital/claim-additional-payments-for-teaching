@@ -28,33 +28,8 @@
       <%= render partial: "claim_summary", locals: { claim: f.object.claim } %>
 
       <h2 class="govuk-heading-m">
-        Contracted hours
+        Subject hours
       </h2>
-
-      <%= f.govuk_collection_radio_buttons(
-        :provider_verification_teaching_hours_per_week,
-        f.object.provider_verification_teaching_hours_per_week_options,
-        :id,
-        :name,
-        legend: {
-          text: "On average, how many hours per week is "\
-          "#{f.object.claimant_name} timetabled to teach during the current term?",
-          size: "s",
-        }
-      ) %>
-
-      <%= f.govuk_collection_radio_buttons(
-        :provider_verification_half_teaching_hours,
-        f.object.provider_verification_half_teaching_hours_options,
-        :id,
-        :name,
-        legend: {
-          text: "For at least half of their timetabled teaching hours, does " \
-          "#{f.object.claimant_name} teach 16- to 19-year-olds, including " \
-          "those up to age 25 with an Education, Health and Care Plan (EHCP)?",
-          size: "s",
-        }
-      ) %>
 
       <%= f.govuk_collection_radio_buttons(
         :provider_verification_subjects_taught,
@@ -63,15 +38,11 @@
         :name,
         legend: {
           text: "For at least half of their timetabled teaching hours, does " \
-          "#{f.object.claimant_name} teach:",
+          "#{h(f.object.claimant_name)} teach: qualifications approved for " \
+          "funding at level 3 and below in the " \
+          "#{f.object.subjects_taught_description} sector subject area?".html_safe,
           size: "s",
         },
-        hint: -> do
-          govuk_list(
-            f.object.subjects_taught_descriptions.map(&:html_safe),
-            type: :bullet
-          )
-        end
       ) %>
 
       <%= f.govuk_submit("Continue") %>

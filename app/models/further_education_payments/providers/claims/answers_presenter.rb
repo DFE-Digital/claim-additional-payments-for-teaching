@@ -121,6 +121,7 @@ module FurtherEducationPayments
                   claim.eligibility.provider_verification_teaching_hours_per_week,
                   scope: %w[
                     further_education_payments
+                    providers
                     forms
                     teaching_hours_per_week
                     options
