@@ -5,6 +5,152 @@ RSpec.feature "Provider verifying claims" do
     FeatureFlag.enable!(:provider_dashboard)
   end
 
+  context "when a provider opens a claim assigned to another user wants to continue verifiying" do
+    it "allows them to re-assign to themself" do
+      fe_provider = create(
+        :school,
+        :further_education,
+        name: "Springfield College"
+      )
+
+      sign_in_to(fe_provider)
+
+      another_user = create(:dfe_signin_user, given_name: "Boris", family_name: "Admin")
+
+      claim = create(
+        :claim,
+        :submitted,
+        :further_education,
+        first_name: "Edna",
+        surname: "Krabappel",
+        date_of_birth: Date.new(1945, 7, 3),
+        reference: "AB123456",
+        submitted_at: DateTime.new(2025, 10, 1, 9, 0, 0),
+        eligibility_attributes: {
+          school: fe_provider,
+          teacher_reference_number: "1234567",
+          subjects_taught: ["maths", "physics"],
+          maths_courses: ["approved_level_321_maths", "gcse_maths"],
+          physics_courses: ["gcse_physics"],
+          provider_assigned_to_id: another_user.id
+        }
+      )
+
+      visit(
+        edit_further_education_payments_providers_claim_verification_path(claim)
+      )
+
+      expect(page).to have_content("Do you want to continue verifying this claim?")
+      expect(page).to have_content("This claim was started by Boris Admin")
+
+      choose "Yes"
+      click_on "Continue"
+
+      expect(page).to have_content("Role and experience")
+
+      visit(
+        edit_further_education_payments_providers_claim_verification_path(claim)
+      )
+
+      # Shouldn't hit the "Do you want to continue verifying this claim?" page as it's now assigned
+      expect(page).to have_content("Role and experience")
+    end
+  end
+
+  context "when a provider opens a claim assigned to another user and wants to read only" do
+    it "allows them to view it read-only" do
+      fe_provider = create(
+        :school,
+        :further_education,
+        name: "Springfield College"
+      )
+
+      sign_in_to(fe_provider)
+
+      another_user = create(:dfe_signin_user, given_name: "Boris", family_name: "Admin")
+
+      claim = create(
+        :claim,
+        :submitted,
+        :further_education,
+        first_name: "Edna",
+        surname: "Krabappel",
+        date_of_birth: Date.new(1945, 7, 3),
+        reference: "AB123456",
+        submitted_at: DateTime.new(2025, 10, 1, 9, 0, 0),
+        eligibility_attributes: {
+          school: fe_provider,
+          teacher_reference_number: "1234567",
+          subjects_taught: ["maths", "physics"],
+          maths_courses: ["approved_level_321_maths", "gcse_maths"],
+          physics_courses: ["gcse_physics"],
+          provider_assigned_to_id: another_user.id,
+          # For it to be assigned the 1st question would have been answered
+          # to trigger the initial assignment
+          provider_verification_teaching_responsibilities: true
+        }
+      )
+
+      visit(
+        edit_further_education_payments_providers_claim_verification_path(claim)
+      )
+
+      expect(page).to have_content("Do you want to continue verifying this claim?")
+      expect(page).to have_content("This claim was started by Boris Admin")
+
+      choose "No, I just want to see the claim"
+      click_on "Continue"
+
+      expect(page).to have_text("Claim: read only mode")
+      expect(page).to have_text("Claim reference: AB123456")
+      expect(page).to have_content("This claim was started by Boris Admin")
+
+      expect(
+        summary_row("Teaching responsibilities")
+      ).to have_content("Yes")
+
+      expect(
+        summary_row("In first 5 years of FE teaching")
+      ).to have_content("Not answered")
+
+      expect(
+        summary_row("Teaching qualification")
+      ).to have_content("Not answered")
+
+      expect(
+        summary_row("Contract type")
+      ).to have_content("Not answered")
+
+      expect(
+        summary_row("Subject to performance measures")
+      ).to have_content("Not answered")
+
+      expect(
+        summary_row("Subject to disciplinary action")
+      ).to have_content("Not answered")
+
+      expect(
+        summary_row("Timetabled hours per week")
+      ).to have_content("Not answered")
+
+      expect(
+        summary_row("Teaches 16-19-year-olds or those with EHCP")
+      ).to have_content("Not answered")
+
+      expect(
+        summary_row("Teaches Level 3 courses")
+      ).to have_content("Not answered")
+
+      # Go back to the claim, it should still be assigned to the previous user and asks again
+      visit(
+        edit_further_education_payments_providers_claim_verification_path(claim)
+      )
+
+      expect(page).to have_content("Do you want to continue verifying this claim?")
+      expect(page).to have_content("This claim was started by Boris Admin")
+    end
+  end
+
   context "when a provider verifies a permanent contract claim" do
     it "allows them to verify the claim" do
       fe_provider = create(
