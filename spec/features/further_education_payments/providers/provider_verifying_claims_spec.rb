@@ -963,8 +963,4 @@ RSpec.feature "Provider verifying claims" do
 
     click_on "Start now"
   end
-
-  def summary_row(label)
-    find("div.govuk-summary-list__row", text: label)
-  end
 end
