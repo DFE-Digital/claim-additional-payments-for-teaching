@@ -222,7 +222,7 @@ RSpec.feature "Provider verifying claims" do
 
       # Second screen with additional questions for fixed term contracts
       within_fieldset(
-        "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
+        "Is Edna Krabappel's fixed-term contract for the full 2025 to 2026 " \
         "academic year?"
       ) { choose "No" }
 
@@ -591,7 +591,7 @@ RSpec.feature "Provider verifying claims" do
 
       # Second screen with additional questions for fixed term contracts
       within_fieldset(
-        "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
+        "Is Edna Krabappel's fixed-term contract for the full 2025 to 2026 " \
         "academic year?"
       ) { choose "No" }
 
@@ -726,12 +726,12 @@ RSpec.feature "Provider verifying claims" do
 
       # Expect to see fixed term specific question
       expect(page).to have_content(
-        "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
+        "Is Edna Krabappel's fixed-term contract for the full 2025 to 2026 " \
         "academic year?"
       )
 
       within_fieldset(
-        "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
+        "Is Edna Krabappel's fixed-term contract for the full 2025 to 2026 " \
         "academic year?"
       ) { choose "Yes" }
 
@@ -742,7 +742,7 @@ RSpec.feature "Provider verifying claims" do
 
       # Expect to see fixed term specific question
       expect(page).to have_content(
-        "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
+        "Is Edna Krabappel's fixed-term contract for the full 2025 to 2026 " \
         "academic year?"
       )
     end
@@ -813,7 +813,7 @@ RSpec.feature "Provider verifying claims" do
       click_on "Continue"
 
       expect(page).to have_content(
-        "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
+        "Is Edna Krabappel's fixed-term contract for the full 2025 to 2026 " \
         "academic year?"
       )
 
@@ -827,7 +827,7 @@ RSpec.feature "Provider verifying claims" do
 
       # First incomplete form
       expect(page).to have_content(
-        "Does Edna Krabappel fixed-term contract cover the full 2025 to 2026 " \
+        "Is Edna Krabappel's fixed-term contract for the full 2025 to 2026 " \
         "academic year?"
       )
     end
