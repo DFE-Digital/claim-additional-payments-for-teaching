@@ -76,11 +76,11 @@ RSpec.describe "Accessing a closed service" do
   def complete_fe_practitioner_journey
     college = create(:school, :further_education, :fe_eligible)
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Do you have a")
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Do you have a")
+    expect(page).to have_content("Have you previously")
     choose "No"
     click_button "Continue"
 
