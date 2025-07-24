@@ -2,8 +2,8 @@ module Journeys
   module FurtherEducationPayments
     class SlugSequence
       INITIAL_SLUGS = %w[
-        previously-claimed
         have-one-login-account
+        previously-claimed
       ]
 
       ELIGIBILITY_SLUGS = %w[
@@ -94,16 +94,12 @@ module Journeys
       def slugs
         array = []
 
-        array << SLUGS_HASH["previously-claimed"]
+        array << SLUGS_HASH["have-one-login-account"]
 
-        array << if answers.previously_claimed?
+        array << if has_one_login_account?
           SLUGS_HASH["sign-in"]
         else
-          SLUGS_HASH["have-one-login-account"]
-        end
-
-        if has_one_login_account? || may_have_one_login_account?
-          array << SLUGS_HASH["sign-in"]
+          SLUGS_HASH["previously-claimed"]
         end
 
         array << SLUGS_HASH["teaching-responsibilities"]
@@ -186,7 +182,7 @@ module Journeys
         if poor_performance_form.completed_or_valid? && !answers.subject_to_problematic_actions?
           array << SLUGS_HASH["check-your-answers-part-one"]
           array << SLUGS_HASH["eligible"]
-          if !answers.previously_claimed? && does_not_have_one_login_account?
+          if !answers.previously_claimed? && (does_not_have_one_login_account? || may_have_one_login_account?)
             array << SLUGS_HASH["sign-in"]
           end
           array << SLUGS_HASH["information-provided"]
