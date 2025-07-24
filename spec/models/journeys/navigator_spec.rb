@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Journeys::Navigator do
   subject { described_class.new(current_slug:, slug_sequence:, params:, session:) }
 
-  let(:current_slug) { "previously-claimed" }
+  let(:current_slug) { "have-one-login-account" }
   let(:slug_sequence) { Journeys::FurtherEducationPayments::SlugSequence.new(journey_session) }
   let(:params) { ActionController::Parameters.new }
   let(:session) { {} }
@@ -20,33 +20,33 @@ RSpec.describe Journeys::Navigator do
       end
 
       it "returns first slug" do
-        expect(subject.next_slug).to eql("previously-claimed")
-      end
-    end
-
-    context "when on first slug" do
-      let(:current_slug) { "previously-claimed" }
-
-      let(:answers) do
-        build(
-          :further_education_payments_answers,
-          previously_claimed: false
-        )
-      end
-
-      it "returns second slug" do
         expect(subject.next_slug).to eql("have-one-login-account")
       end
     end
 
-    context "when on second slug" do
+    context "when on first slug" do
       let(:current_slug) { "have-one-login-account" }
 
       let(:answers) do
         build(
           :further_education_payments_answers,
-          previously_claimed: false,
           have_one_login_account: "no"
+        )
+      end
+
+      it "returns second slug" do
+        expect(subject.next_slug).to eql("previously-claimed")
+      end
+    end
+
+    context "when on second slug" do
+      let(:current_slug) { "previously-claimed" }
+
+      let(:answers) do
+        build(
+          :further_education_payments_answers,
+          have_one_login_account: "no",
+          previously_claimed: false
         )
       end
 
@@ -61,8 +61,8 @@ RSpec.describe Journeys::Navigator do
       let(:answers) do
         build(
           :further_education_payments_answers,
-          previously_claimed: false,
           have_one_login_account: "no",
+          previously_claimed: false,
           teaching_responsibilities: false
         )
       end
@@ -109,7 +109,7 @@ RSpec.describe Journeys::Navigator do
       end
 
       it "returns first slug" do
-        expect(subject.furthest_permissible_slug).to eql("previously-claimed")
+        expect(subject.furthest_permissible_slug).to eql("have-one-login-account")
       end
     end
 
@@ -119,8 +119,8 @@ RSpec.describe Journeys::Navigator do
       let(:answers) do
         build(
           :further_education_payments_answers,
-          previously_claimed: false,
           have_one_login_account: "no",
+          previously_claimed: false,
           teaching_responsibilities: true,
           provision_search: "ply"
         )
@@ -163,8 +163,8 @@ RSpec.describe Journeys::Navigator do
     let(:answers) do
       build(
         :further_education_payments_answers,
-        previously_claimed: false,
         have_one_login_account: "no",
+        previously_claimed: false,
         teaching_responsibilities: "true",
         provision_search: school.name,
         school_id: school.id,
