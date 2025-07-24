@@ -5,117 +5,26 @@
     <h1 class="govuk-heading-xl"><%= t("further_education_payments.landing_page") %></h1>
 
     <p class="govuk-body">
-      Use this service to check your eligibility for a targeted retention incentive payment before you apply.
+      Use this service to check if you’re eligible for the additional payments
+      we give to some further education (FE) teachers to teach certain subjects
+      in areas that have a high need for teachers.
     </p>
 
     <p class="govuk-body">
-      Before starting the eligibility check, it may be useful to have the following information to hand:
-    </p>
-
-    <%= govuk_list [
-      "your contract or written statement of employment",
-      "your teaching timetable"
-    ], type: :bullet %>
-
-    <p class="govuk-body">
-      Answering questions about eligibility takes 10 minutes and applying for the payment takes another 5 minutes.
+      If you meet the eligibility criteria, you can then apply for the money.
     </p>
 
     <%= govuk_inset_text do %>
-      </p>
-        You will need a GOV.UK One Login account to apply for a targeted retention incentive payment. If you don’t have an account yet, we will help you create one. You will also need to have a form of photo ID to hand to <%= govuk_link_to "prove your identity", "https://www.gov.uk/using-your-gov-uk-one-login/proving-your-identity" %>.
-      </p>
-
       <p>
-        You must prove your identity using the GOV.UK One Login service in order to submit a claim for an incentive payment.
+        This service uses GOV.UK One Login to prove your identity. You’ll be
+        able to create a GOV.UK One Login if you do not already have one.
+        You will need photo ID to prove your identity.
       </p>
     <% end %>
-
 
     <%# TODO: There isn't any journey closed content, for now hide the button %>
     <% if @journey_open %>
       <%= govuk_start_button(text: "Start now", href: claim_path(current_journey_routing_name, "claim", answers: { service_access_code: params[:service_access_code] })) %>
     <% end %>
-
-    <h2 class="govuk-heading-m govuk-!-margin-top-6">Eligibility criteria</h2>
-
-    <p class="govuk-body">
-      Claimants should be in the first 5 years of their FE teaching career in England and teach specific FE courses in the following subject areas:
-    </p>
-
-    <%= govuk_list [
-      "building and construction",
-      "chemistry",
-      "computing, including digital and ICT",
-      "early years",
-      "engineering and manufacturing, including transport engineering and electronics",
-      "maths",
-      "physics"
-    ], type: :bullet %>
-
-    <p class="govuk-body">
-      Further information about the eligibility criteria can be found in the <%= govuk_link_to "targeted retention incentive payments for FE teachers guidance", t("further_education_payments.eligibility_criteria_link.url"), target: "_blank" %>.
-    </p>
-
-    <h2 class="govuk-heading-m govuk-!-margin-top-6">Application process</h2>
-
-    <p class="govuk-body">
-      You must apply between October 2024 and March 2025.
-    </p>
-
-    <p class="govuk-body">
-      If you are eligible for a targeted retention incentive payment, we will collect some personal information to:
-    </p>
-
-    <%= govuk_list [
-      "prove your identity - this will be done via GOV.UK One Login",
-      "verify your claim",
-      "process your payment"
-    ], type: :bullet %>
-
-    <p class="govuk-body">
-      If you don’t have a GOV.UK One Login account yet, you will need to create one. To do this, you will need:
-    </p>
-
-    <%= govuk_list [
-      "an email address",
-      "a way to get security codes - this can be a mobile phone number or an authenticator app"
-    ], type: :bullet %>
-
-    <p class="govuk-body">
-      You can <%= govuk_link_to "prove your identity" ,"https://www.gov.uk/using-your-gov-uk-one-login/proving-your-identity", target: "_blank" %> using the GOV.UK One Login application, by answering questions online or by visiting a Post Office.
-    </p>
-
-    <%= govuk_inset_text do %>
-      <p>
-        If you need to visit a Post Office to prove your identity, this process can take up to 10 working days.
-        Your application details will not be saved and you will need to start your application again.
-      </p>
-    <% end %>
-
-    <h2 class="govuk-heading-m govuk-!-margin-top-6">Payments and deductions</h2>
-
-    <p class="govuk-body">
-      If you meet the eligibility criteria, you could be eligible for between £2,000 and £6,000. The amount you are eligible for depends on:
-    </p>
-
-    <%= govuk_list [
-      govuk_link_to("the FE provider you teach in", t("further_education_payments.fe_provider_list_url")),
-      "the number of hours you teach"
-    ], type: :bullet %>
-
-    <p class="govuk-body">
-      Payments are given up to 26 weeks from applying. You will receive an approval email with further information on your application.
-    </p>
-
-    <h2 class="govuk-heading-m govuk-!-margin-top-6">Contact</h2>
-
-    <p class="govuk-body">
-      For further support, email
-      <br />
-      <%= govuk_mail_to t("further_education_payments.support_email_address"), no_visited_state: true %>.
-    </p>
-
-    <p class="govuk-body">You should receive a reply within 5 working days.</p>
   </div>
 </div>
