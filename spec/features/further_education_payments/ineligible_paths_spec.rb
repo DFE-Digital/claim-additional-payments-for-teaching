@@ -17,7 +17,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -42,7 +42,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -85,7 +85,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -135,7 +135,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -177,7 +177,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -220,7 +220,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -268,7 +268,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -307,7 +307,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -359,7 +359,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -415,7 +415,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -459,7 +459,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -533,7 +533,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -607,7 +607,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -671,7 +671,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -711,7 +711,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -759,7 +759,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -803,7 +803,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -866,7 +866,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_text("Have you previously received a Targeted Retention Incentive payment for work in further education")
+    expect(page).to have_text("Did you apply for a targeted retention incentive payment for your work in further education")
     choose "No"
     click_button "Continue"
 

@@ -7,12 +7,12 @@
 
       <%= f.govuk_collection_radio_buttons :previously_claimed, @form.radio_options, :id, :name,
         legend: {
-          text: @form.t(:question),
+          text: @form.t(:question, previous_claim_window_start: @form.previous_claim_window_start, previous_claim_window_end: @form.previous_claim_window_end),
           tag: "h1",
           size: "l"
         },
         hint: {
-          text: @form.t(:hint, previous_academic_year: AcademicYear.previous.to_s(:long)),
+          text: @form.t(:hint),
         } %>
 
       <%= f.govuk_submit %>
