@@ -19,7 +19,7 @@ RSpec.feature "Further education payments" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -143,7 +143,7 @@ RSpec.feature "Further education payments" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
