@@ -942,8 +942,8 @@ en:
         claim_already_submitted_this_policy_year:
           heading: "You've already submited a claim in this claim window"
       previously_claimed:
-        question: Have you previously received a Targeted Retention Incentive payment for work in further education?
-        hint: This would have been for the %{previous_academic_year} academic year.
+        question: "Did you apply for a targeted retention incentive payment for your work in further education between %{previous_claim_window_start} and %{previous_claim_window_end}?"
+        hint: Tell us if you applied for the payment. Not whether it was approved or paid.
         options:
           true: "Yes"
           false: "No"

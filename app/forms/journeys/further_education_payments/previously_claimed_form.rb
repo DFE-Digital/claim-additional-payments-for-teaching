@@ -28,6 +28,14 @@ module Journeys
         journey_session.answers.assign_attributes(previously_claimed:)
         journey_session.save!
       end
+
+      def previous_claim_window_start
+        "1 Sept #{AcademicYear.previous.start_year}"
+      end
+
+      def previous_claim_window_end
+        "31 May #{AcademicYear.previous.end_year}"
+      end
     end
   end
 end
