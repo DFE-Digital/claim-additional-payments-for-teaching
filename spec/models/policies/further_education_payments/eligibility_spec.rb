@@ -4,51 +4,27 @@ RSpec.describe Policies::FurtherEducationPayments::Eligibility do
   describe "#provider_verification_status" do
     let(:eligibility) { build(:further_education_payments_eligibility) }
 
-    context "when no provider verification fields are set" do
+    context "when provider verification has not started" do
       it "returns 'not_started'" do
-        expect(eligibility.provider_verification_status).to eq("not_started")
+        eligibility.provider_verification_started_at = nil
+        eligibility.provider_verification_completed_at = nil
+        expect(eligibility.provider_verification_status).to eq(Policies::FurtherEducationPayments::ProviderVerificationConstants::STATUS_NOT_STARTED)
       end
     end
 
-    context "when any provider verification field is set" do
-      it "returns 'in_progress' when teaching_responsibilities is set" do
-        eligibility.provider_verification_teaching_responsibilities = true
-        expect(eligibility.provider_verification_status).to eq("in_progress")
+    context "when provider verification is in progress" do
+      it "returns 'in_progress'" do
+        eligibility.provider_verification_started_at = Time.current
+        eligibility.provider_verification_completed_at = nil
+        expect(eligibility.provider_verification_status).to eq(Policies::FurtherEducationPayments::ProviderVerificationConstants::STATUS_IN_PROGRESS)
       end
+    end
 
-      it "returns 'in_progress' when in_first_five_years is set" do
-        eligibility.provider_verification_in_first_five_years = false
-        expect(eligibility.provider_verification_status).to eq("in_progress")
-      end
-
-      it "returns 'in_progress' when teaching_qualification is set" do
-        eligibility.provider_verification_teaching_qualification = "yes"
-        expect(eligibility.provider_verification_status).to eq("in_progress")
-      end
-
-      it "returns 'in_progress' when contract_type is set" do
-        eligibility.provider_verification_contract_type = "permanent"
-        expect(eligibility.provider_verification_status).to eq("in_progress")
-      end
-
-      it "returns 'in_progress' when contract_covers_full_academic_year is set" do
-        eligibility.provider_verification_contract_covers_full_academic_year = true
-        expect(eligibility.provider_verification_status).to eq("in_progress")
-      end
-
-      it "returns 'in_progress' when taught_at_least_one_academic_term is set" do
-        eligibility.provider_verification_taught_at_least_one_academic_term = true
-        expect(eligibility.provider_verification_status).to eq("in_progress")
-      end
-
-      it "returns 'in_progress' when performance_measures is set" do
-        eligibility.provider_verification_performance_measures = true
-        expect(eligibility.provider_verification_status).to eq("in_progress")
-      end
-
-      it "returns 'in_progress' when disciplinary_action is set" do
-        eligibility.provider_verification_disciplinary_action = false
-        expect(eligibility.provider_verification_status).to eq("in_progress")
+    context "when provider verification is completed" do
+      it "returns 'completed'" do
+        eligibility.provider_verification_started_at = 1.hour.ago
+        eligibility.provider_verification_completed_at = Time.current
+        expect(eligibility.provider_verification_status).to eq(Policies::FurtherEducationPayments::ProviderVerificationConstants::STATUS_COMPLETED)
       end
     end
   end
@@ -56,13 +32,33 @@ RSpec.describe Policies::FurtherEducationPayments::Eligibility do
   describe "#provider_verification_started?" do
     let(:eligibility) { build(:further_education_payments_eligibility) }
 
-    it "returns false when no provider verification fields are set" do
+    it "returns false when provider_verification_started_at is nil" do
+      eligibility.provider_verification_started_at = nil
       expect(eligibility.provider_verification_started?).to be false
     end
 
-    it "returns true when at least one provider verification field is set" do
-      eligibility.provider_verification_teaching_responsibilities = true
+    it "returns true when provider_verification_started_at is present" do
+      eligibility.provider_verification_started_at = Time.current
       expect(eligibility.provider_verification_started?).to be true
+    end
+  end
+
+  describe "#processed_by_label" do
+    let(:eligibility) { build(:further_education_payments_eligibility) }
+    let(:user) { build(:dfe_signin_user, given_name: "John", family_name: "Smith") }
+
+    context "when no provider is assigned" do
+      it "returns 'Not processed'" do
+        eligibility.provider_assigned_to = nil
+        expect(eligibility.processed_by_label).to eq(Policies::FurtherEducationPayments::ProviderVerificationConstants::PROCESSED_BY_NOT_PROCESSED)
+      end
+    end
+
+    context "when a provider is assigned" do
+      it "returns the provider's full name" do
+        eligibility.provider_assigned_to = user
+        expect(eligibility.processed_by_label).to eq("John Smith")
+      end
     end
   end
 end
