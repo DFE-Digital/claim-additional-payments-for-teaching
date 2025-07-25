@@ -241,19 +241,11 @@ class OmniauthCallbacksController < ApplicationController
         organisation_ukprn: auth.dig("extra", "raw_info", "organisation", "ukprn"),
         role_codes: auth["roles"]&.values
       )
-
-      # Pass the user info from the bypass form
-      user_info = {
-        given_name: auth.dig("info", "first_name"),
-        family_name: auth.dig("info", "last_name"),
-        email: auth.dig("info", "email")
-      }
     else
       dfe_sign_in_session = DfeSignIn::AuthenticatedSession.from_auth_hash(auth, user_type: "provider")
-      user_info = nil
     end
 
-    dfe_sign_in_user = DfeSignIn::User.from_session(dfe_sign_in_session, bypass_user_info: user_info)
+    dfe_sign_in_user = DfeSignIn::User.from_session(dfe_sign_in_session)
 
     # If from_session returns nil, it means the user is deleted
     unless dfe_sign_in_user.present?
@@ -261,6 +253,13 @@ class OmniauthCallbacksController < ApplicationController
         reason: :user_removed,
         dfe_sign_in_uid: auth["uid"]
       )
+    end
+
+    if DfESignIn.bypass?
+      # Set user info from the bypass form
+      dfe_sign_in_user.given_name = auth.dig("info", "first_name") if auth.dig("info", "first_name").present?
+      dfe_sign_in_user.family_name = auth.dig("info", "last_name") if auth.dig("info", "last_name").present?
+      dfe_sign_in_user.email = auth.dig("info", "email") if auth.dig("info", "email").present?
     end
 
     dfe_sign_in_user.regenerate_session_token

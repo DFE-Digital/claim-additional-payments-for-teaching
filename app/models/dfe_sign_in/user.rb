@@ -24,20 +24,13 @@ module DfeSignIn
       inverse_of: :assigned_to,
       dependent: :nullify
 
-    def self.from_session(session, bypass_user_info: nil)
+    def self.from_session(session)
       user = where(dfe_sign_in_id: session.user_id, user_type: "admin").first_or_initialize
 
       return if user.deleted?
 
       user.role_codes = session.role_codes
       user.current_organisation_ukprn = session.organisation_ukprn
-
-      # In bypass mode, set the user info from the form
-      if bypass_user_info.present?
-        user.given_name = bypass_user_info[:given_name] if bypass_user_info[:given_name].present?
-        user.family_name = bypass_user_info[:family_name] if bypass_user_info[:family_name].present?
-        user.email = bypass_user_info[:email] if bypass_user_info[:email].present?
-      end
 
       user
     end

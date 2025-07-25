@@ -195,32 +195,6 @@ def claim_attrs
 end
 
 if Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")
-  # Create some DfE signin users for provider verification
-  provider_users = [
-    {
-      dfe_sign_in_id: "provider-1",
-      given_name: "John",
-      family_name: "Smith",
-      email: "john.smith@example.com",
-      role_codes: ["teacher_payments_claim_verifier"],
-      current_organisation_ukprn: "10000952"
-    },
-    {
-      dfe_sign_in_id: "provider-2",
-      given_name: "Jane",
-      family_name: "Doe",
-      email: "jane.doe@example.com",
-      role_codes: ["teacher_payments_claim_verifier"],
-      current_organisation_ukprn: "10000952"
-    }
-  ]
-
-  provider_users.each do |user_attrs|
-    DfeSignIn::User.find_or_create_by!(dfe_sign_in_id: user_attrs[:dfe_sign_in_id]) do |user|
-      user.attributes = user_attrs
-    end
-  end
-
   20.times do
     eligibility = Policies::FurtherEducationPayments::Eligibility.create!(eligibility_attrs)
     Claim.create! claim_attrs.merge(eligibility: eligibility)
