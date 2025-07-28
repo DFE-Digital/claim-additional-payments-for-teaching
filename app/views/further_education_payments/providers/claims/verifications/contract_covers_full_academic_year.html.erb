@@ -37,12 +37,9 @@
         :id,
         :name,
         legend: {
-          text: "Does #{f.object.claimant_name} fixed-term contract cover " \
-                "the full #{f.object.academic_year.to_s(:long)} academic year?",
+          text: "Is #{f.object.claimant_name}'s fixed-term contract for the " \
+                "full #{f.object.academic_year.to_s(:long)} academic year?",
           size: "s",
-        },
-        hint: {
-          text: "This academic year runs from #{f.object.academic_year_start_to_end}"
         }
       ) %>
 
