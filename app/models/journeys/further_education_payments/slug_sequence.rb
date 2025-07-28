@@ -102,6 +102,8 @@ module Journeys
           SLUGS_HASH["previously-claimed"]
         end
 
+        array << SLUGS_HASH["sign-in"] if answers.previously_claimed?
+
         array << SLUGS_HASH["teaching-responsibilities"]
         array << SLUGS_HASH["further-education-provision-search"]
         array << SLUGS_HASH["select-provision"]
