@@ -327,6 +327,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_21_125622) do
     t.datetime "provider_verification_completed_at", precision: nil
     t.uuid "provider_verification_verified_by_id"
     t.uuid "provider_assigned_to_id"
+    t.datetime "provider_verification_started_at"
     t.boolean "provider_verification_timetabled_teaching_hours"
     t.index ["possible_school_id"], name: "index_fe_payments_eligibilities_on_possible_school_id"
     t.index ["provider_assigned_to_id"], name: "idx_on_provider_assigned_to_id_5db250f0fe"

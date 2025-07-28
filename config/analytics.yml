@@ -341,6 +341,7 @@ shared:
     - provider_verification_completed_at
     - provider_verification_verified_by_id
     - provider_assigned_to_id
+    - provider_verification_started_at
     - provider_verification_timetabled_teaching_hours
   :eligible_ey_providers:
     - id

@@ -4,11 +4,11 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-third-from-desktop govuk-!-margin-bottom-5">
-    <%= render "components/card", value: 999, label: "Not started", status: "not-started" %>
+    <%= render "components/card", value: @not_started_count, label: "Not started", status: "not-started" %>
   </div>
 
   <div class="govuk-grid-column-one-third-from-desktop govuk-!-margin-bottom-5">
-    <%= render "components/card", value: 999, label: "In progress", status: "in-progress" %>
+    <%= render "components/card", value: @in_progress_count, label: "In progress", status: "in-progress" %>
   </div>
 </div>
 
@@ -25,12 +25,13 @@
 
   <% table.with_body do |body| %>
     <% @claims.each do |claim| %>
+      <% presenter = FurtherEducationPayments::Providers::Claims::ClaimPresenter.new(claim) %>
       <% body.with_row do |row| %>
         <% row.with_cell(text: govuk_link_to(claim.full_name, edit_further_education_payments_providers_claim_verification_path(claim))) %>
         <% row.with_cell(text: l(claim.submitted_at.to_date)) %>
         <% row.with_cell(text: l(Policies::FurtherEducationPayments.verification_due_date_for_claim(claim))) %>
-        <% row.with_cell(text: "Unassigned") %>
-        <% row.with_cell(text: claim_status_tag(claim)) %>
+        <% row.with_cell(text: presenter.processed_by) %>
+        <% row.with_cell(text: govuk_tag(text: presenter.status, colour: presenter.colour)) %>
       <% end %>
     <% end %>
   <% end %>

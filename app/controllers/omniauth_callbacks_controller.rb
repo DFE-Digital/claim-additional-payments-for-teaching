@@ -255,6 +255,13 @@ class OmniauthCallbacksController < ApplicationController
       )
     end
 
+    if DfESignIn.bypass?
+      # Set user info from the bypass form
+      dfe_sign_in_user.given_name = auth.dig("info", "first_name") if auth.dig("info", "first_name").present?
+      dfe_sign_in_user.family_name = auth.dig("info", "last_name") if auth.dig("info", "last_name").present?
+      dfe_sign_in_user.email = auth.dig("info", "email") if auth.dig("info", "email").present?
+    end
+
     dfe_sign_in_user.regenerate_session_token
     dfe_sign_in_user.save!
 

@@ -31,6 +31,7 @@ module DfeSignIn
 
       user.role_codes = session.role_codes
       user.current_organisation_ukprn = session.organisation_ukprn
+
       user
     end
 

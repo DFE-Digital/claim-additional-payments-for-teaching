@@ -46,6 +46,11 @@ module FurtherEducationPayments
           def save
             return false unless valid?
 
+            if claim.eligibility.provider_verification_started_at.nil?
+              claim.eligibility.provider_verification_started_at = Time.current
+              claim.eligibility.provider_assigned_to_id = user.id
+            end
+
             attributes_to_save.each do |attribute|
               claim.eligibility.send("#{attribute}=", send(attribute))
             end
