@@ -862,9 +862,9 @@ en:
           contract_type:
             label: "Contract of employment"
             claimant_answers:
-              permanent: "Permanent"
-              fixed_term: "Fixed term"
-              variable_hours: "Variable hours"
+              permanent: "Permanent contract"
+              fixed_term: "Fixed term contract"
+              variable_hours: "Variable hours contract"
           teaching_responsibilities:
             label: "Teaching responsibilities"
             claimant_answers:
@@ -990,10 +990,10 @@ en:
       taught_at_least_one_term:
         question: Have you taught at %{school_name} for at least one academic term?
         options:
-          true: Yes, I have taught at %{school_name} for at least one academic term
-          false: No, I have not taught at %{school_name} for at least one academic term
+          true: "Yes"
+          false: "No"
         errors:
-          inclusion: Select yes if you have taught at %{school_name} for at least one academic term
+          inclusion: Tell us if you have taught at %{school_name} for more than one academic term
       teaching_hours_per_week:
         question:
           On average, how many hours per week are you timetabled to teach at %{school_name} during the current term?
@@ -1006,12 +1006,12 @@ en:
           inclusion: Select the number of hours you are timetabled to teach per week at %{school_name} during the current term
       teaching_hours_per_week_next_term:
         question: Are you timetabled to teach at least 2.5 hours per week at %{school_name} next term?
-        hint: If you are unsure, you should speak to HR or apply when you know your arrangements for next term.
+        hint: If you don’t know, you should speak to HR or apply when you know your arrangements for next term.
         options:
-          at_least_2_5: Yes, I am timetabled to teach at least 2.5 hours per week at %{school_name} next term
-          less_than_2_5: No, I’m not timetabled to teach at least 2.5 hours per week at %{school_name} next term
+          at_least_2_5: "Yes"
+          less_than_2_5: "No"
         errors:
-          inclusion: Select yes if you are timetabled to teach at least 2.5 hours per week next term at %{school_name}
+          inclusion: Tell us if you are timetabled to teach for at least 2.5 hours per week at %{school_name} next term
       further_education_teaching_start_year:
         question: Which academic year did you start teaching in further education (FE) in England?
         options:

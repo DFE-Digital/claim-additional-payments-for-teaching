@@ -202,7 +202,7 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Have you taught at #{eligible_college.name} for at least one academic term?")
-    choose("No, I have not taught at #{eligible_college.name} for at least one academic term")
+    choose("No")
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible for a targeted retention incentive payment yet")
@@ -289,7 +289,7 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Have you taught at #{eligible_college.name} for at least one academic term?")
-    choose("No, I have not taught at #{eligible_college.name} for at least one academic term")
+    choose("No")
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible for a targeted retention incentive payment yet")
@@ -740,7 +740,7 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Are you timetabled to teach at least 2.5 hours per week at #{eligible_college.name} next term?")
-    choose("No, I’m not timetabled to teach at least 2.5 hours per week at #{eligible_college.name} next term")
+    choose("No")
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible")
@@ -780,15 +780,11 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Have you taught at #{eligible_college.name} for at least one academic term?")
-    choose("Yes, I have taught at #{eligible_college.name} for at least one academic term")
-    click_button "Continue"
-
-    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{eligible_college.name} during the current term?")
-    choose("12 hours or more per week")
+    choose("Yes")
     click_button "Continue"
 
     expect(page).to have_content("Are you timetabled to teach at least 2.5 hours per week at #{eligible_college.name} next term?")
-    choose("No, I’m not timetabled to teach at least 2.5 hours per week at #{eligible_college.name} next term")
+    choose("No")
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible")

@@ -105,7 +105,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
             ],
             [
               "Have you taught at Springfield Elementary for at least one academic term?",
-              "Yes, I have taught at Springfield Elementary for at least one academic term"
+              "Yes"
             ],
             [
               "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the current term?",
@@ -113,7 +113,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
             ],
             [
               "Are you timetabled to teach at least 2.5 hours per week at Springfield Elementary next term?",
-              "Yes, I am timetabled to teach at least 2.5 hours per week at Springfield Elementary next term"
+              "Yes"
             ]
           ]
         )
@@ -145,7 +145,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
               ],
               [
                 "Are you timetabled to teach at least 2.5 hours per week at Springfield Elementary next term?",
-                "Yes, I am timetabled to teach at least 2.5 hours per week at Springfield Elementary next term"
+                "Yes"
               ]
             ]
           )
@@ -166,7 +166,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
               ],
               [
                 "Have you taught at Springfield Elementary for at least one academic term?",
-                "No, I have not taught at Springfield Elementary for at least one academic term"
+                "No"
               ],
               [
                 "Does your fixed-term contract cover the full 2024 to 2025 academic year?",
@@ -178,7 +178,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
               ],
               [
                 "Are you timetabled to teach at least 2.5 hours per week at Springfield Elementary next term?",
-                "No, I’m not timetabled to teach at least 2.5 hours per week at Springfield Elementary next term"
+                "No"
               ]
             ]
           )

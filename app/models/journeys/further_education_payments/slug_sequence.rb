@@ -135,10 +135,10 @@ module Journeys
           select_provision_form = form_for_slug(SLUGS_HASH["select-provision"])
 
           if select_provision_form.completed_or_valid? && answers.taught_at_least_one_term == true
+            array << SLUGS_HASH["teaching-hours-per-week-next-term"]
             array << SLUGS_HASH["teaching-hours-per-week"]
 
             if select_provision_form.completed_or_valid? && ["more_than_12", "between_2_5_and_12"].include?(answers.teaching_hours_per_week)
-              array << SLUGS_HASH["teaching-hours-per-week-next-term"]
               array << SLUGS_HASH["further-education-teaching-start-year"]
             end
           end

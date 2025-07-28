@@ -14,7 +14,7 @@ module Journeys
           Option.new(
             id: "permanent",
             name: t("options.permanent"),
-            hint: "This includes full-time and part-time contracts"
+            hint: "This includes full-time and part-time permanent contracts"
           ),
           Option.new(
             id: "fixed_term",
