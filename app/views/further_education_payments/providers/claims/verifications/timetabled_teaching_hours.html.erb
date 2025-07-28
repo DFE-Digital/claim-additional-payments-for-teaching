@@ -32,13 +32,14 @@
       </h2>
 
       <%= f.govuk_collection_radio_buttons(
-        :provider_verification_contract_covers_full_academic_year,
-        f.object.contract_covers_full_academic_year_options,
+        :provider_verification_timetabled_teaching_hours,
+        f.object.provider_verification_timetabled_teaching_hours_options,
         :id,
         :name,
         legend: {
-          text: "Is #{f.object.claimant_name}'s fixed-term contract for the " \
-                "full #{f.object.academic_year.to_s(:long)} academic year?",
+          text: "Is #{f.object.claim.full_name} timetabled to teach at least "\
+                "2.5 hours per week at #{f.object.provider.name} in the "\
+                "#{f.object.term} term?",
           size: "s",
         }
       ) %>

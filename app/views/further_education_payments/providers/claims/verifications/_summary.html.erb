@@ -65,7 +65,7 @@
 <%= govuk_summary_card(title: "Type of contract") do |card| %>
   <%= card.with_summary_list do |summary_list| %>
     <%= summary_list.with_row do |row| %>
-      <%= row.with_key(text: "Type of contract") %>
+      <%= row.with_key(text: "Contract type") %>
       <%= row.with_value(text: form.contract_type) %>
       <% if editable %>
         <%= row.with_action(
@@ -100,7 +100,25 @@
       <% end %>
     <% when "variable_hours" %>
       <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: "Variable hours in academic year") %>
+        <%= row.with_key(text: "Timetabled hours in term") %>
+        <%= row.with_value(
+          text: t(
+            form.provider_verification_timetabled_teaching_hours,
+            scope: :boolean
+          )
+        ) %>
+        <% if editable %>
+          <%= row.with_action(
+            text: "Change",
+            href: edit_further_education_payments_providers_claim_verification_path(
+              form.claim,
+              slug: "timetabled_teaching_hours"
+            )
+          ) %>
+        <% end %>
+      <% end %>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: "Variable contract academic term") %>
         <%= row.with_value(
           text: t(
             form.provider_verification_taught_at_least_one_academic_term,

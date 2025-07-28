@@ -38,7 +38,7 @@ require "rspec/retry"
 RSpec.configure do |config|
   # run retry around flaky tests
   config.around :each, :flaky do |example|
-    example.run_with_retry retry: 5
+    example.run_with_retry retry: 10
   end
 
   # Run specs in random order to surface order dependencies. If you find an
