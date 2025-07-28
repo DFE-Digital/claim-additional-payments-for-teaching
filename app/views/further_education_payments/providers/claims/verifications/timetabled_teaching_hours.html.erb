@@ -1,0 +1,58 @@
+<%= content_for(
+  :page_title,
+  "Review a targeted retention incentive payment claim"
+) %>
+
+<% content_for :back_link do %>
+  <%= govuk_back_link href: backlink_path %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Review a targeted retention incentive payment claim
+    </h1>
+
+    <%= form_with(
+      model: @form,
+      url: further_education_payments_providers_claim_verification_path(
+        @form.claim,
+        @form.provider,
+        slug: @form.slug,
+      ),
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+      method: :patch,
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= render partial: "claim_summary", locals: { claim: f.object.claim } %>
+
+      <h2 class="govuk-heading-m">
+        Type of contract
+      </h2>
+
+      <%= f.govuk_collection_radio_buttons(
+        :provider_verification_timetabled_teaching_hours,
+        f.object.provider_verification_timetabled_teaching_hours_options,
+        :id,
+        :name,
+        legend: {
+          text: "Is #{f.object.claim.full_name} timetabled to teach at least "\
+                "2.5 hours per week at #{f.object.provider.name} in the "\
+                "#{f.object.term} term?",
+          size: "s",
+        }
+      ) %>
+
+      <%= f.govuk_submit("Continue") %>
+
+      <%= f.govuk_submit(
+        "Save and come back later",
+        secondary: true,
+        name: "save_and_exit",
+        value: true,
+        class: "govuk-!-margin-left-2"
+      ) %>
+    <% end %>
+  </div>
+</div>
