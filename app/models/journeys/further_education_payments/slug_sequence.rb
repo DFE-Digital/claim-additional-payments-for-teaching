@@ -7,6 +7,8 @@ module Journeys
       ]
 
       ELIGIBILITY_SLUGS = %w[
+        further-education-teaching-start-year
+        teaching-qualification
         teaching-responsibilities
         further-education-provision-search
         select-provision
@@ -15,7 +17,6 @@ module Journeys
         taught-at-least-one-term
         teaching-hours-per-week
         teaching-hours-per-week-next-term
-        further-education-teaching-start-year
         subjects-taught
         building-construction-courses
         chemistry-courses
@@ -26,7 +27,6 @@ module Journeys
         physics-courses
         hours-teaching-eligible-subjects
         half-teaching-hours
-        teaching-qualification
         poor-performance
         check-your-answers-part-one
         eligible
@@ -104,7 +104,10 @@ module Journeys
 
         array << SLUGS_HASH["sign-in"] if answers.previously_claimed?
 
+        array << SLUGS_HASH["further-education-teaching-start-year"]
+        array << SLUGS_HASH["teaching-qualification"]
         array << SLUGS_HASH["teaching-responsibilities"]
+
         array << SLUGS_HASH["further-education-provision-search"]
         array << SLUGS_HASH["select-provision"]
         array << SLUGS_HASH["contract-type"]
@@ -112,20 +115,17 @@ module Journeys
         case answers.contract_type
         when "permanent"
           array << SLUGS_HASH["teaching-hours-per-week"]
-          array << SLUGS_HASH["further-education-teaching-start-year"]
         when "fixed_term"
           array << SLUGS_HASH["fixed-term-contract"]
 
           if answers.fixed_term_full_year == true
             array << SLUGS_HASH["teaching-hours-per-week"]
             array << SLUGS_HASH["teaching-hours-per-week-next-term"]
-            array << SLUGS_HASH["further-education-teaching-start-year"]
           end
 
           if answers.fixed_term_full_year == false
             array << SLUGS_HASH["taught-at-least-one-term"]
             array << SLUGS_HASH["teaching-hours-per-week-next-term"]
-            array << SLUGS_HASH["further-education-teaching-start-year"]
           end
         when "variable_hours"
           array << SLUGS_HASH["taught-at-least-one-term"]
@@ -135,10 +135,6 @@ module Journeys
           if select_provision_form.completed_or_valid? && answers.taught_at_least_one_term == true
             array << SLUGS_HASH["teaching-hours-per-week-next-term"]
             array << SLUGS_HASH["teaching-hours-per-week"]
-
-            if select_provision_form.completed_or_valid? && ["more_than_12", "between_2_5_and_12"].include?(answers.teaching_hours_per_week)
-              array << SLUGS_HASH["further-education-teaching-start-year"]
-            end
           end
         end
 
@@ -177,7 +173,6 @@ module Journeys
 
         array << SLUGS_HASH["hours-teaching-eligible-subjects"]
         array << SLUGS_HASH["half-teaching-hours"]
-        array << SLUGS_HASH["teaching-qualification"]
         array << SLUGS_HASH["poor-performance"]
 
         poor_performance_form = form_for_slug(SLUGS_HASH["poor-performance"])
