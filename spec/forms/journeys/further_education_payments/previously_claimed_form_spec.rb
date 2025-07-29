@@ -27,7 +27,13 @@ RSpec.describe Journeys::FurtherEducationPayments::PreviouslyClaimedForm, type: 
     context "when no option selected" do
       it "is not valid" do
         expect(subject).not_to be_valid
-        expect(subject.errors[:previously_claimed]).to eql(["Choose yes if you previously received a Targeted Retention Incentive payment for work in further education"])
+        expect(subject.errors[:previously_claimed]).to eql(
+          [
+            "Tell us if you applied for a targeted retention incentive " \
+            "payment for your work in further education between 1 Sept 2024 " \
+            "and 31 May 2025"
+          ]
+        )
       end
     end
   end

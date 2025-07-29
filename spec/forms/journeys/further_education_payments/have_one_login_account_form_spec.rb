@@ -27,7 +27,9 @@ RSpec.describe Journeys::FurtherEducationPayments::HaveOneLoginAccountForm, type
     context "when no option selected" do
       it "is not valid" do
         expect(subject).not_to be_valid
-        expect(subject.errors[:have_one_login_account]).to eql(["Choose yes if you have a GOV.UK One Login account"])
+        expect(subject.errors[:have_one_login_account]).to eql(
+          ["Tell us if you have a GOV.UK One Login account"]
+        )
       end
     end
   end
