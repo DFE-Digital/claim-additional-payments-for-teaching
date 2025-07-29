@@ -5,13 +5,17 @@
     <%= form_with model: @form, url: claim_path(current_journey_routing_name), method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
       <%= f.govuk_error_summary %>
 
-      <%= f.govuk_collection_radio_buttons :teaching_qualification, @form.radio_options, :id, :name,
+      <%= f.govuk_collection_radio_buttons(
+        :teaching_qualification,
+        @form.radio_options,
+        :id,
+        :name,
         legend: {
           text: @form.t(:question),
           tag: "h1",
           size: "l"
-        },
-        hint: { text: t("further_education_payments.forms.teaching_qualification.hint_html") } %>
+        }
+      ) %>
 
       <%= f.govuk_submit %>
     <% end %>

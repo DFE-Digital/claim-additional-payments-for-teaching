@@ -1145,23 +1145,13 @@ en:
             invalid: An error occured while validating the passcode, please try generating a new one
       teaching_qualification:
         question: Do you have a teaching qualification?
-        hint_html: >
-          <p>Your response will be noted for future claims.</p>
-          <p>If you don’t have a teaching qualification yet, to remain eligible for a retention payment next year,
-          make sure you either:</p>
-          <p>
-            <ul>
-              <li>complete a teaching qualification in the next 12 months</li>
-              <li>enrol on a teaching qualification in the next 12 months</li>
-            </ul>
-          </p>
         options:
           "yes": "Yes"
           not_yet: Not yet, I am currently enrolled on one and working towards completing it
           no_but_planned: No, but I plan to enrol on one in the next 12 months
           no_not_planned: No, and I do not plan to enrol on one in the next 12 months
         errors:
-          inclusion: Select if you have a teaching qualification, or are currently enrolled on one or are planning to enrol on one
+          inclusion: Tell us if you have a teaching qualification
       poor_performance:
         heading: Tell us if you are currently under any performance measures or disciplinary action
         questions:
