@@ -41,7 +41,7 @@ RSpec.feature "Further education payments" do
     choose("12 hours or more per week")
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
@@ -250,7 +250,7 @@ RSpec.feature "Further education payments" do
     choose("12 hours or more per week")
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
