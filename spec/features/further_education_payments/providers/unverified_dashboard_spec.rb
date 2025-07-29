@@ -56,4 +56,98 @@ RSpec.describe "Provider unverified claims dashboard", feature_flag: :provider_d
     expect(page).to have_selector("table tbody tr:first-child td:nth-child(4)", text: "Not processed")
     expect(page).to have_selector("table tbody tr:first-child td:nth-child(5)", text: "Not started")
   end
+
+  scenario "claims are ordered with unstarted claims first, then by creation date" do
+    school = create(:school, :fe_eligible, ukprn: "12345678")
+
+    older_unstarted_eligibility = create(
+      :further_education_payments_eligibility,
+      school: school,
+      provider_verification_started_at: nil
+    )
+
+    create(
+      :claim,
+      :further_education,
+      :submitted,
+      eligibility: older_unstarted_eligibility,
+      created_at: 3.days.ago,
+      first_name: "Alice",
+      surname: "Older"
+    )
+
+    newer_unstarted_eligibility = create(
+      :further_education_payments_eligibility,
+      school: school,
+      provider_verification_started_at: nil
+    )
+
+    create(
+      :claim,
+      :further_education,
+      :submitted,
+      eligibility: newer_unstarted_eligibility,
+      created_at: 1.day.ago,
+      first_name: "Bob",
+      surname: "Newer"
+    )
+
+    older_started_eligibility = create(
+      :further_education_payments_eligibility,
+      school: school,
+      provider_verification_started_at: 4.days.ago
+    )
+
+    create(
+      :claim,
+      :further_education,
+      :submitted,
+      eligibility: older_started_eligibility,
+      created_at: 4.days.ago,
+      first_name: "Charlie",
+      surname: "OlderStarted"
+    )
+
+    newer_started_eligibility = create(
+      :further_education_payments_eligibility,
+      school: school,
+      provider_verification_started_at: 2.days.ago
+    )
+
+    create(
+      :claim,
+      :further_education,
+      :submitted,
+      eligibility: newer_started_eligibility,
+      created_at: 2.days.ago,
+      first_name: "Diana",
+      surname: "NewerStarted"
+    )
+
+    visit "/further-education-payments/providers/claims"
+    fill_in "UKPRN", with: "12345678"
+    click_button "Start now"
+
+    expect(page).to have_selector("table tbody tr", count: 4)
+
+    expect(page).to have_selector(
+      "table tbody tr:nth-child(1) td:nth-child(1)",
+      text: "Alice Older"
+    )
+
+    expect(page).to have_selector(
+      "table tbody tr:nth-child(2) td:nth-child(1)",
+      text: "Bob Newer"
+    )
+
+    expect(page).to have_selector(
+      "table tbody tr:nth-child(3) td:nth-child(1)",
+      text: "Charlie OlderStarted"
+    )
+
+    expect(page).to have_selector(
+      "table tbody tr:nth-child(4) td:nth-child(1)",
+      text: "Diana NewerStarted"
+    )
+  end
 end
