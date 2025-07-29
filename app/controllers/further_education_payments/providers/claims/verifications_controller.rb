@@ -22,7 +22,11 @@ module FurtherEducationPayments
 
             wizard.clear_impermissible_answers!
 
-            if @form.save_and_exit?
+            if @form.read_only?
+              redirect_to(
+                further_education_payments_providers_claim_verification_path(claim)
+              )
+            elsif @form.save_and_exit?
               redirect_to(
                 further_education_payments_providers_claim_information_path(
                   claim,

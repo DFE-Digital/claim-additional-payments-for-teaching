@@ -84,6 +84,10 @@ module FurtherEducationPayments
             !!@save_and_exit
           end
 
+          def read_only?
+            false
+          end
+
           private
 
           def attributes_to_save

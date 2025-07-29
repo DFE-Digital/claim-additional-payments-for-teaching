@@ -4,6 +4,7 @@ module FurtherEducationPayments
       module Verification
         class Wizard
           FORMS = [
+            ContinueVerificationForm,
             TeachingResponsibilitiesForm,
             InFirstFiveYearsForm,
             TeachingQualificationForm,
@@ -93,6 +94,7 @@ module FurtherEducationPayments
 
             @reachable_steps = []
 
+            @reachable_steps << ContinueVerificationForm
             @reachable_steps << TeachingResponsibilitiesForm
             @reachable_steps << InFirstFiveYearsForm
             @reachable_steps << TeachingQualificationForm
