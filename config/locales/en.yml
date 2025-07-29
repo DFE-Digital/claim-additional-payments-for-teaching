@@ -958,10 +958,9 @@ en:
         errors:
           inclusion: Choose yes if you have a GOV.UK One Login account
       teaching_responsibilities:
-        heading: To apply for a targeted retention incentive payment, you must be employed as a member of staff with teaching responsibilities
         question: Are you a member of staff with teaching responsibilities?
         errors:
-          inclusion: Select yes if you are a member of staff with teaching responsibilities
+          inclusion: Tell us if you are a member of staff with teaching responsibilities
       further_education_provision_search:
         heading: An eligible further education (FE) provider in England must employ you as a teacher
         question: Which FE provider are you employed by?

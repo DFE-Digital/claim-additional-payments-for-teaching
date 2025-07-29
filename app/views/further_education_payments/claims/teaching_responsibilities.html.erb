@@ -1,30 +1,34 @@
-<% content_for(:page_title, page_title(@form.t(:heading), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+<% content_for(:page_title, page_title(@form.t(:question), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l">
-        <%= @form.t(:heading) %>
-      </h1>
+      <%= f.govuk_collection_radio_buttons(
+        :teaching_responsibilities,
+        @form.radio_options,
+        :id,
+        :name,
+        legend: {
+          text: @form.t(:question),
+          tag: "h1",
+          size: "l"
+        }
+      ) %>
 
-      <p class="govuk-body">
-        Your job title could include:
-      </p>
-
-      <%= govuk_list [
-        "advanced practitioner",
-        "practitioner",
-        "instructor",
-        "lecturer",
-        "teacher",
-        "trainer",
-        "tutor"
-      ], type: :bullet %>
-
-      <%= f.govuk_collection_radio_buttons :teaching_responsibilities, @form.radio_options, :id, :name,
-        legend: { text: @form.t(:question) } %>
+      <%= govuk_details(
+        summary_text: "Who counts as a teacher for this payment"
+      ) do %>
+        <p class="govuk-body">
+          You must be currently employed with teaching responsibilities.
+          Teaching responsibilities include teaching timetabled guided learning
+          hours and planning, delivering and assessing learning.
+          <br />
+          This payment is not for non-teaching assessors, non-teaching leaders
+          or support staff like assistants or technicians.
+        </p>
+      <% end %>
 
       <%= f.govuk_submit %>
     <% end %>
