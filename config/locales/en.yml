@@ -1013,12 +1013,12 @@ en:
         errors:
           inclusion: Select yes if you are timetabled to teach at least 2.5 hours per week next term at %{school_name}
       further_education_teaching_start_year:
-        question: Which academic year did you start teaching in further education (FE) in England?
+        question: Which academic year did you start teaching in further education in England?
         options:
           between_dates: September %{start_year} to August %{end_year}
-          before_date: I started before September %{year}
+          before_date: Before September %{year}
         errors:
-          blank: Select the academic year you started teaching further education in England, or select ‘I started before September %{before_year}’
+          blank: Select the academic year you started teaching further education in England, or select ‘Before September %{before_year}’
       subjects_taught:
         question: Which subject areas do you teach?
         hint: Select all that apply
