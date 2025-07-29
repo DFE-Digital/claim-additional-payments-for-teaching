@@ -19,6 +19,14 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     choose "No"
     click_button "Continue"
 
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    choose("September 2023 to August 2024")
+    click_button "Continue"
+
+    expect(page).to have_content("Do you have a teaching qualification?")
+    choose("Yes")
+    click_button "Continue"
+
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"
     click_button "Continue"
@@ -43,10 +51,6 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     choose("12 hours or more per week")
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
-    choose("September 2023 to August 2024")
-    click_button "Continue"
-
     expect(page).to have_content("Which subject areas do you teach?")
     check("Building and construction")
     click_button "Continue"
@@ -62,10 +66,6 @@ RSpec.feature "Further education payments", js: true, flaky: true do
 
     expect(page).to have_content("Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?")
     choose "Yes"
-    click_button "Continue"
-
-    expect(page).to have_content("Do you have a teaching qualification?")
-    choose("Yes")
     click_button "Continue"
 
     expect(page).to have_content("Are you subject to any formal performance measures as a result of continuous poor teaching standards")
