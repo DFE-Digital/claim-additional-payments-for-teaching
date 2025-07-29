@@ -50,8 +50,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: ineligible_college.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: ineligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
@@ -61,8 +61,8 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_content("The further education (FE) provider you have entered is not eligible")
     click_link "Change FE provider"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
@@ -93,8 +93,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: ineligible_college.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: ineligible_college.name
     within("#claim-provision-search-field__listbox") do
       sleep(1) # seems to aid in success, as if click happens before event is bound
       find("li", text: ineligible_college.name).click
@@ -108,8 +108,8 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_content("The further education (FE) provider you have entered is not eligible")
     click_link "Change FE provider"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: eligible_college.name
     within("#claim-provision-search-field__listbox") do
       sleep(1) # seems to aid in success, as if click happens before event is bound
       find("li", text: eligible_college.name).click
@@ -143,8 +143,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: closed_eligible_college.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: closed_eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
@@ -154,8 +154,8 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_content("The further education (FE) provider you have entered is not eligible")
     click_link "Change FE provider"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
@@ -185,8 +185,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
@@ -228,8 +228,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
@@ -276,8 +276,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
@@ -315,8 +315,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
@@ -367,8 +367,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
@@ -423,8 +423,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
@@ -467,8 +467,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
@@ -541,8 +541,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
@@ -615,8 +615,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
@@ -679,8 +679,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
@@ -719,8 +719,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
@@ -767,8 +767,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
@@ -811,8 +811,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: eligible_college.name
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
@@ -875,7 +875,7 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     # further-education-provision-search
-    fill_in "Which FE provider are you employed by?", with: eligible_college.name
+    fill_in "claim[provision_search]", with: eligible_college.name
     click_button "Continue"
 
     # select-provision

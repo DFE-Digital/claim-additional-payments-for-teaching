@@ -53,8 +53,8 @@ RSpec.feature "Further education payments" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: school.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: school.name
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
@@ -97,8 +97,8 @@ RSpec.feature "Further education payments" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: school.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: school.name
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
@@ -164,8 +164,8 @@ RSpec.feature "Further education payments" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: school.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: school.name
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")
@@ -273,8 +273,8 @@ RSpec.feature "Further education payments" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider are you employed by?")
-    fill_in "Which FE provider are you employed by?", with: school.name
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: school.name
     click_button "Continue"
 
     expect(page).to have_content("Select where you are employed")

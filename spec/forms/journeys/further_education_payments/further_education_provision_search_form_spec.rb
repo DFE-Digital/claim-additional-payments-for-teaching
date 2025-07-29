@@ -35,7 +35,7 @@ RSpec.describe Journeys::FurtherEducationPayments::FurtherEducationProvisionSear
         is_expected.not_to(
           allow_value(provision_search)
           .for(:provision_search)
-          .with_message("Enter the name of the FE provider you are employed by")
+          .with_message("Select which FE provider directly employs you")
         )
       end
     end
