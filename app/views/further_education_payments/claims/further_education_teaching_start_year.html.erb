@@ -24,6 +24,18 @@
           label: { text: option.name } %>
       <% end %>
 
+      <%= govuk_details(
+        summary_text: "What counts towards the first 5 years of a further education (FE) teaching career"
+      ) do %>
+        <p class="govuk-body">
+          This is the first academic year when you started your first role with 
+          teaching responsibilities at any post-16 only FE provider in England. 
+          It is when you formally took on teaching responsibilities, including 
+          teaching timetabled guided learning hours and for planning, delivering 
+          and assessing learning.
+        </p>
+      <% end %>
+
       <%= f.govuk_submit %>
     <% end %>
   </div>

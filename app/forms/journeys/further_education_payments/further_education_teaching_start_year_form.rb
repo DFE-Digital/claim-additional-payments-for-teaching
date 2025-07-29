@@ -17,7 +17,7 @@ module Journeys
             id: academic_year.start_year.to_s,
             name: t("options.between_dates", start_year: academic_year.start_year, end_year: academic_year.end_year)
           )
-        end
+        end.reverse
 
         array << Option.new(
           id: "pre-#{before_year}",
