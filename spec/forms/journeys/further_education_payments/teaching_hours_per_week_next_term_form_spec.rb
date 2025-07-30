@@ -31,7 +31,7 @@ RSpec.describe Journeys::FurtherEducationPayments::TeachingHoursPerWeekNextTermF
       is_expected.not_to(
         allow_value(nil)
         .for(:teaching_hours_per_week_next_term)
-        .with_message("Select yes if you are timetabled to teach at least 2.5 hours per week next term at #{college.name}")
+        .with_message("Tell us if you are timetabled to teach for at least 2.5 hours per week at #{college.name} next term")
       )
     end
   end

@@ -31,7 +31,7 @@ RSpec.describe Journeys::FurtherEducationPayments::TaughtAtLeastOneTermForm, typ
       is_expected.not_to(
         allow_value(nil)
         .for(:taught_at_least_one_term)
-        .with_message("Select yes if you have taught at #{school.name} for at least one academic term")
+        .with_message("Tell us if you have taught at #{school.name} for more than one academic term")
       )
     end
   end
