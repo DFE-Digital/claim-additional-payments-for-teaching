@@ -87,10 +87,12 @@ class OmniauthCallbacksController < ApplicationController
     )
     journey_session.save!
 
+    redirector = journey::OneLoginRedirector.new(journey_session:)
+
     redirect_to(
       claim_path(
         journey: current_journey_routing_name,
-        slug: "sign-in"
+        slug: redirector.slug
       )
     )
   end
@@ -119,10 +121,12 @@ class OmniauthCallbacksController < ApplicationController
     journey_session.answers.date_of_birth ||= date_of_birth
     journey_session.save!
 
+    redirector = journey::OneLoginRedirector.new(journey_session:)
+
     redirect_to(
       claim_path(
         journey: current_journey_routing_name,
-        slug: "sign-in"
+        slug: redirector.slug
       )
     )
   end
@@ -139,10 +143,12 @@ class OmniauthCallbacksController < ApplicationController
       Stats::OneLogin.create!(one_login_return_code: code)
     end
 
+    redirector = journey::OneLoginRedirector.new(journey_session:)
+
     redirect_to(
       claim_path(
         journey: current_journey_routing_name,
-        slug: "sign-in"
+        slug: redirector.slug
       )
     )
   end
