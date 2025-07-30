@@ -9,10 +9,6 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">
-      Review a targeted retention incentive payment claim
-    </h1>
-
     <%= form_with(
       model: @form,
       url: further_education_payments_providers_claim_verification_path(
@@ -25,6 +21,10 @@
     ) do |f| %>
       <%= f.govuk_error_summary %>
 
+      <h1 class="govuk-heading-xl">
+        Review a targeted retention incentive payment claim
+      </h1>
+
       <%= render partial: "claim_summary", locals: { claim: f.object.claim } %>
 
       <h2 class="govuk-heading-m">
@@ -32,18 +32,18 @@
       </h2>
 
       <%= f.govuk_collection_radio_buttons(
-        :provider_verification_subjects_taught,
-        f.object.provider_verification_subjects_taught_options,
+        :provider_verification_half_timetabled_teaching_time,
+        f.object.radio_options,
         :id,
         :name,
         legend: {
-          text: "For at least half of their timetabled teaching hours, does " \
-          "#{h(f.object.claimant_name)} teach: qualifications approved for " \
-          "funding at level 3 and below in the " \
-          "#{f.object.subjects_taught_description} sector subject area?".html_safe,
+          text: "Does #{f.object.claimant_name} spend at least half of their timetabled teaching time teaching these courses?",
           size: "s",
         },
-      ) %>
+        hint: -> do %>
+        <%= govuk_list f.object.course_descriptions, type: :bullet %>
+        <% end %>
+      <% ) %>
 
       <%= f.govuk_submit("Continue") %>
 

@@ -3,6 +3,8 @@ module FurtherEducationPayments
     module Claims
       module Verification
         class CheckAnswersForm < BaseForm
+          include Journeys::FurtherEducationPayments::CoursesHelper
+
           class IncompleteWizardError < StandardError; end
           NOT_ANSWERED = "Not answered"
 
@@ -28,6 +30,17 @@ module FurtherEducationPayments
             :provider_verification_teaching_hours_per_week,
             :provider_verification_half_teaching_hours,
             :provider_verification_subjects_taught,
+            :provider_verification_subjects_taught?,
+            :provider_verification_actual_subjects_taught,
+            :provider_verification_building_construction_courses,
+            :provider_verification_chemistry_courses,
+            :provider_verification_computing_courses,
+            :provider_verification_early_years_courses,
+            :provider_verification_engineering_manufacturing_courses,
+            :provider_verification_maths_courses,
+            :provider_verification_physics_courses,
+            :provider_verification_half_timetabled_teaching_time,
+            :provider_verification_selected_at_least_one_eligible_course?,
             to: :eligibility
           )
 
@@ -142,6 +155,25 @@ module FurtherEducationPayments
           def started_by
             DfeSignIn::User
               .find_by(id: claim.eligibility.provider_assigned_to_id)&.full_name
+          end
+
+          def actual_subjects_taught_sentence
+            provider_verification_actual_subjects_taught.map do |subject|
+              I18n.t(subject, scope: "further_education_payments.forms.actual_subjects_taught.options")
+            end.to_sentence(last_word_connector: " and ")
+          end
+
+          def includes_subject_area?(subject_area)
+            provider_verification_actual_subjects_taught
+              .include?(subject_area.to_s)
+          end
+
+          def courses_for_subject_area(subject_area)
+            courses_to_sentence(
+              subject_area:,
+              courses: public_send("provider_verification_#{subject_area}_courses"),
+              none_text: "They do not teach any of these courses"
+            )
           end
 
           private

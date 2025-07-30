@@ -94,10 +94,23 @@ module FurtherEducationPayments
           )
         end
 
+        def permitted_attributes
+          @form.attributes.keys.map do |key|
+            field = @form.instance_variable_get(:@attributes)[key]
+
+            case field.value_before_type_cast
+            when Array
+              {key => []}
+            else
+              key
+            end
+          end
+        end
+
         def verification_form_params
-          params.require(@form.model_name.param_key).permit(
-            @form.attribute_names.map(&:to_sym)
-          )
+          params
+            .require(@form.model_name.param_key)
+            .permit(*permitted_attributes)
         end
 
         def claim
