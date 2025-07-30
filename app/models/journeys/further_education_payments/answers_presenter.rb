@@ -35,13 +35,14 @@ module Journeys
       # [2]: slug for changing the answer.
       def eligibility_answers
         [].tap do |a|
+          a << further_education_teaching_start_year
+          a << teaching_qualification
           a << teaching_responsibilities
           a << school
           a << contract_type
           a << taught_at_least_one_term
           a << teaching_hours_per_week_next_term
           a << teaching_hours_per_week
-          a << further_education_teaching_start_year
           a << subjects_taught
           a << building_construction_courses
           a << chemistry_courses
@@ -52,7 +53,6 @@ module Journeys
           a << physics_courses
           a << hours_teaching_eligible_subjects
           a << half_teaching_hours
-          a << teaching_qualification
           a << subject_to_formal_performance_action
           a << subject_to_disciplinary_action
         end.compact
