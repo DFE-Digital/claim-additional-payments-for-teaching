@@ -333,6 +333,10 @@ RSpec.feature "Combined journey with Teacher ID" do
     visit landing_page_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
     click_on "Start now"
 
+    # - Check eligibility intro
+    expect(page).to have_text("Check you're eligible for a targeted retention incentive payment")
+    click_on "Start eligibility check"
+
     # - Sign in or continue page
     click_on "Continue with DfE Identity"
 

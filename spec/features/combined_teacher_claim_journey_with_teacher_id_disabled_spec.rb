@@ -12,10 +12,13 @@ RSpec.feature "Combined journey" do
     )
     click_on "Start now"
 
+    # - Check eligibility intro
+    expect(page).to have_text("Check you're eligible for a targeted retention incentive payment")
+    expect(page).not_to have_link "Back"
+    click_on "Start eligibility check"
+
     # - Which school do you teach at
     expect(page).to have_text("Which school do you teach at?")
     expect(page.title).to have_text("Which school do you teach at?")
-
-    expect(page).not_to have_link "Back"
   end
 end
