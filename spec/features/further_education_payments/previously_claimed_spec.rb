@@ -15,7 +15,7 @@ RSpec.feature "Further education payments" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Do you have a")
     choose "Yes"
     click_button "Continue"
 

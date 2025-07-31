@@ -6,11 +6,11 @@ def when_further_education_journey_ready_to_submit
   visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
   click_link "Start now"
 
-  expect(page).to have_content("Have you previously")
+  expect(page).to have_content("Do you have a")
   choose "No"
   click_button "Continue"
 
-  expect(page).to have_content("Do you have a")
+  expect(page).to have_content("Did you apply for a")
   choose "No"
   click_button "Continue"
 
