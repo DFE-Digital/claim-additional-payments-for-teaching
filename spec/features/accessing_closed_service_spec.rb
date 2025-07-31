@@ -89,7 +89,7 @@ RSpec.describe "Accessing a closed service" do
     click_button "Continue"
 
     # further-education-provision-search
-    fill_in "Which FE provider are you employed by?", with: college.name
+    fill_in "claim[provision_search]", with: college.name
     click_button "Continue"
 
     # select-provision

@@ -60,7 +60,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
           "Yes"
         ],
         [
-          "Which FE provider are you employed by?",
+          "Which FE provider directly employs you?",
           "Springfield Elementary"
         ]
       )
