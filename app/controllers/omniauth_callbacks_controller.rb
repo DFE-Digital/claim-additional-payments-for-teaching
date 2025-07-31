@@ -92,7 +92,7 @@ class OmniauthCallbacksController < ApplicationController
     redirect_to(
       claim_path(
         journey: current_journey_routing_name,
-        slug: redirector.slug
+        slug: redirector.auth_slug
       )
     )
   end
@@ -126,7 +126,7 @@ class OmniauthCallbacksController < ApplicationController
     redirect_to(
       claim_path(
         journey: current_journey_routing_name,
-        slug: redirector.slug
+        slug: redirector.idv_slug
       )
     )
   end
@@ -148,7 +148,7 @@ class OmniauthCallbacksController < ApplicationController
     redirect_to(
       claim_path(
         journey: current_journey_routing_name,
-        slug: redirector.slug
+        slug: redirector.idv_slug
       )
     )
   end

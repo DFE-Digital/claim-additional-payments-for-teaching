@@ -1,0 +1,22 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds govuk-body">
+    <h1 class="govuk-heading-l">
+      Identity verification
+    </h1>
+
+    <p class="govuk-body">
+      Before you can continue your claim, you’ll need to prove your identity through
+      GOV.UK One Login.
+    </p>
+
+    <p class="govuk-body">
+      PROCEED WITH IDV
+    </p>
+
+    <% if OneLoginSignIn.bypass? %>
+      <%= render "sign_in_2_bypass" %>
+    <% else %>
+      <%= govuk_button_to "Continue", "/auth/onelogin_identity" %>
+    <% end %>
+  </div>
+</div>

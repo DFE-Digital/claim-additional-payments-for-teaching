@@ -34,6 +34,7 @@ module Journeys
 
       PERSONAL_DETAILS_SLUGS = %w[
         sign-in
+        identity-verification
         information-provided
         personal-details
         postcode-search
@@ -185,6 +186,8 @@ module Journeys
           if !answers.previously_claimed? && (does_not_have_one_login_account? || may_have_one_login_account?)
             array << SLUGS_HASH["sign-in"]
           end
+
+          array << SLUGS_HASH["identity-verification"]
           array << SLUGS_HASH["information-provided"]
           array << SLUGS_HASH["personal-details"]
           array << SLUGS_HASH["postcode-search"]

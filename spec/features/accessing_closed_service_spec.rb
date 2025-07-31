@@ -145,6 +145,7 @@ RSpec.describe "Accessing a closed service" do
     click_button "Apply now"
 
     sign_in_with_one_login
+    idv_with_one_login
 
     click_button "Continue"
 

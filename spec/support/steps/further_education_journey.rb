@@ -61,6 +61,8 @@ def when_further_education_journey_ready_to_submit
   click_button "Apply now"
 
   sign_in_with_one_login
+  idv_with_one_login
+
   click_button "Continue"
 
   fill_in "First name", with: "John"

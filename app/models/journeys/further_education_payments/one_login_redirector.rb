@@ -10,8 +10,12 @@ module Journeys
         @journey_session = journey_session
       end
 
-      def slug
+      def auth_slug
         "sign-in"
+      end
+
+      def idv_slug
+        "identity-verification"
       end
     end
   end

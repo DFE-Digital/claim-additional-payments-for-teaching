@@ -86,6 +86,7 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     click_button "Apply now"
 
     sign_in_with_one_login
+    idv_with_one_login
 
     expect(page).to have_content("How we will use the information you provide")
     click_button "Continue"
