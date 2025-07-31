@@ -244,7 +244,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "12 hours or more per week"
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
     choose "September 2023 to August 2024"
     click_button "Continue"
 
@@ -331,7 +331,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "12 hours or more per week"
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
     choose "September 2023 to August 2024"
     click_button "Continue"
 
@@ -383,7 +383,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "12 hours or more per week"
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
     choose "September 2023 to August 2024"
     click_button "Continue"
 
@@ -439,8 +439,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("12 hours or more per week")
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
-    choose("I started before September #{current_academic_year.start_year - 4}")
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    choose("Before September #{current_academic_year.start_year - 4}")
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible")
@@ -483,7 +483,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "12 hours or more per week"
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
     choose "September 2023 to August 2024"
     click_button "Continue"
 
@@ -557,7 +557,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "12 hours or more per week"
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
     choose "September 2023 to August 2024"
     click_button "Continue"
 
@@ -631,7 +631,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "12 hours or more per week"
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
     choose "September 2023 to August 2024"
     click_button "Continue"
 
@@ -827,7 +827,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("12 hours or more per week")
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
