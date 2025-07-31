@@ -49,6 +49,8 @@ def when_further_education_journey_ready_to_submit
   sign_in_with_one_login
   click_button "Continue"
 
+  idv_with_one_login
+
   fill_in "First name", with: "John"
   fill_in "Last name", with: "Doe"
   fill_in "Day", with: "28"

@@ -931,15 +931,13 @@ RSpec.feature "Further education payments ineligible paths" do
     # eligible
     click_button "Apply now"
 
-    # sign-in 1
+    # sign-in
     mock_one_login_auth(uid: "12345")
     click_button "Continue"
 
-    # sign-in 2
-    mock_one_login_idv(uid: "12345")
-    click_button "Continue"
-
-    # sign-in 3
+    expect(page).to have_content(
+      "You’ve successfully signed in to GOV.UK One Login"
+    )
     click_button "Continue"
 
     # ineligible

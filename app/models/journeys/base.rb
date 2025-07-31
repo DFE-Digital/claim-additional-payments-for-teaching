@@ -2,7 +2,6 @@ module Journeys
   module Base
     SHARED_FORMS = {
       "claims" => {
-        "sign-in" => SignInForm,
         "sign-in-or-continue" => SignInOrContinueForm,
         "current-school" => CurrentSchoolForm,
         "information-provided" => InformationProvidedForm,

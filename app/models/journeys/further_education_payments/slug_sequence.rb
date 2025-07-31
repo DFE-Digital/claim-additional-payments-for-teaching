@@ -34,6 +34,7 @@ module Journeys
 
       PERSONAL_DETAILS_SLUGS = %w[
         sign-in
+        identity-verification
         information-provided
         personal-details
         postcode-search
@@ -186,10 +187,13 @@ module Journeys
         if poor_performance_form.completed_or_valid? && !answers.subject_to_problematic_actions?
           array << SLUGS_HASH["check-your-answers-part-one"]
           array << SLUGS_HASH["eligible"]
+
           if !answers.previously_claimed? && does_not_have_one_login_account?
             array << SLUGS_HASH["sign-in"]
           end
+
           array << SLUGS_HASH["information-provided"]
+          array << SLUGS_HASH["identity-verification"]
           array << SLUGS_HASH["personal-details"]
           array << SLUGS_HASH["postcode-search"]
         end

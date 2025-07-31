@@ -152,13 +152,13 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
       expect(duplicate_claim.eligibility.provider_verification_email_last_sent_at).to be_nil
     end
 
-    context "when one login IDV mismatch" do
+    context "when one login IDV failed" do
       let(:answers) do
         build(
           :further_education_payments_answers,
           :submittable,
           :with_onelogin_credentials,
-          identity_confirmed_with_onelogin: true,
+          identity_confirmed_with_onelogin: false,
           logged_in_with_onelogin: true,
           onelogin_idv_first_name: "John",
           onelogin_idv_last_name: "Doe",
