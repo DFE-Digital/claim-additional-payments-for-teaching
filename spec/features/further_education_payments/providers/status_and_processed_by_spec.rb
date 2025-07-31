@@ -140,6 +140,8 @@ RSpec.describe "Status and Processed by labels", feature_flag: :provider_dashboa
       expect(page).to have_content("In progress")
     end
 
+    expect(page).to have_content("Unverified claims ( 5 )")
+
     expect(page).to have_selector("table tbody tr", count: 5)
   end
 
