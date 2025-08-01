@@ -42,7 +42,7 @@ RSpec.feature "Teacher Identity Sign in" do
 
     # - Teacher makes claim after signing in
     click_on "Back"
-    
+
     # - Should be back at Sign in or continue page
     expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue with DfE Identity"

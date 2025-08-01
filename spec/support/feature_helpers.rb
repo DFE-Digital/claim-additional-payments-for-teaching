@@ -113,7 +113,7 @@ module FeatureHelpers
     if page.has_text?("Check you're eligible for a targeted retention incentive payment", wait: 0)
       click_on "Start eligibility check"
     end
-    
+
     expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue without signing in"
   end

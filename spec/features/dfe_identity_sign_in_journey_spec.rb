@@ -92,11 +92,11 @@ RSpec.feature "Teacher Identity Sign in", js: true, flaky: true do
 
     visit landing_page_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
     click_on "Start now"
-    
+
     # - Check eligibility intro
     expect(page).to have_text("Check you're eligible for a targeted retention incentive payment")
     click_on "Start eligibility check"
-    
+
     click_on "Continue with DfE Identity"
     choose "Yes"
     click_on "Continue"

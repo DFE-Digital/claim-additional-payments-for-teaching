@@ -170,7 +170,7 @@ RSpec.feature "Admin fraud prevention" do
     visit landing_page_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
     # - Landing (start)
     click_on "Start now"
-    
+
     # - Check eligibility intro
     click_on "Start eligibility check"
 

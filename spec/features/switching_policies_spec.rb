@@ -21,7 +21,7 @@ RSpec.feature "Switching policies" do
 
       choose "Start a new eligibility check"
       click_on "Continue"
-      
+
       # - Check eligibility intro
       expect(page).to have_text("Check you're eligible for a targeted retention incentive payment")
       click_on "Start eligibility check"
