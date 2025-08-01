@@ -171,6 +171,9 @@ RSpec.feature "Admin fraud prevention" do
     # - Landing (start)
     click_on "Start now"
 
+    # - Check eligibility intro
+    click_on "Start eligibility check"
+
     click_on "Continue without signing in"
 
     # /targeted-retention-incentive-payments/current-school

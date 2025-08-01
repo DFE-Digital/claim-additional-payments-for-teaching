@@ -13,6 +13,10 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
   def get_to_bank_details_page
     visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
 
+    # - Check eligibility intro
+    expect(page).to have_text("Check you're eligible for a targeted retention incentive payment")
+    click_on "Start eligibility check"
+
     # - Sign in or continue page
     expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue without signing in"

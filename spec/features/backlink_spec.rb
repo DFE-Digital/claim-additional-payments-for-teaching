@@ -6,6 +6,10 @@ RSpec.feature "Backlinking during a claim" do
     targeted_retention_incentive_school = create(:school, :targeted_retention_incentive_payments_eligible)
 
     visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+    # - Check eligibility intro
+    expect(page).to have_text("Check you're eligible for a targeted retention incentive payment")
+    expect(page).not_to have_link("Back")
+    click_on "Start eligibility check"
     # - Sign in or continue page
     expect(page).to have_text("Use DfE Identity to sign in")
     expect(page).to have_link("Back")
@@ -107,6 +111,10 @@ RSpec.feature "Backlinking during a claim" do
     )
 
     visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+    # - Check eligibility intro
+    expect(page).to have_text("Check you're eligible for a targeted retention incentive payment")
+    expect(page).not_to have_link("Back")
+    click_on "Start eligibility check"
     # - Sign in or continue page
     expect(page).to have_text("Use DfE Identity to sign in")
     expect(page).to have_link("Back")
@@ -140,6 +148,11 @@ RSpec.feature "Backlinking during a claim" do
     )
 
     visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
+
+    # - Check eligibility intro
+    expect(page).to have_text("Check you're eligible for a targeted retention incentive payment")
+    expect(page).not_to have_link("Back")
+    click_on "Start eligibility check"
 
     # - Sign in or continue page
     expect(page).to have_text("Use DfE Identity to sign in")
