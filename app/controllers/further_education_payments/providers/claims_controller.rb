@@ -11,6 +11,7 @@ module FurtherEducationPayments
           )
         )
 
+        @unverified_count = claim_scope.count
         @not_started_count = claim_scope
           .where(further_education_payments_eligibilities: {provider_verification_started_at: nil})
           .count

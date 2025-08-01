@@ -1,4 +1,4 @@
-<% content_for(:page_title, page_title(@form.t(:heading), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+<% content_for(:page_title, page_title(@form.t(:question), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -14,39 +14,35 @@
       <%= f.hidden_field :possible_school_id %>
 
       <h1 class="govuk-heading-l">
-        <%= @form.t(:heading) %>
+        <%= @form.t(:question) %>
       </h1>
-
-      <p class="govuk-body">
-        Eligible FE providers include:
-      </p>
-
-      <%= govuk_list [
-        "statutory FE providers, such as FE colleges, sixth-form colleges or designated institutions",
-        "16 to 19 only academies and schools"
-      ], type: :bullet %>
-
-      <p class="govuk-body">
-        If you are unsure if your FE provider is eligible, you can refer to the <%= govuk_link_to "full list of eligible FE providers", t("further_education_payments.fe_provider_list_url") %> for more information.
-      </p>
 
       <div id="autocomplete-container" class="govuk-!-margin-bottom-9">
         <%= f.govuk_text_field :provision_search,
           class: "js-remove",
-          label: {
-            text: @form.t(:question),
-            size: "m"
-          },
+          label: nil,
           hint: -> do %>
             <p>
-              Enter the name of your employer. If you work at an FE provider with multiple campuses, enter the name of the FE provider group.
+              If you work at an FE provider with multiple campuses, enter the name of the FE provider group.
             </p>
 
             <p>
-              Use at least three characters.
+              Enter at least 3 characters.
             </p>
           <% end %>
       </div>
+
+      <%= govuk_details(
+        summary_text: "What FE providers are eligible?"
+      ) do %>
+        <p class="govuk-body">
+          A
+          <%= govuk_link_to("list of eligible further education providers and payment values",
+            "https://assets.publishing.service.gov.uk/media/682ddb93c054883884bff39e/list-of-eligible-further-education-providers-and-payment-values-for-targeted-retention-incentive-2025-2026.xlsx")
+          %>
+          (MS Excel Spreadsheet, 34KB) is available
+        </p>
+      <% end %>
 
       <%= f.govuk_submit %>
     <% end %>

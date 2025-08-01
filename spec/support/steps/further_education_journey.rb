@@ -16,7 +16,7 @@ def when_further_education_journey_ready_to_submit
 
   choose "Yes"
   click_button "Continue"
-  fill_in "Which FE provider are you employed by?", with: college.name
+  fill_in "claim[provision_search]", with: college.name
   click_button "Continue"
   choose college.name
   click_button "Continue"
