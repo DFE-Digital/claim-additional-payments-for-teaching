@@ -1,0 +1,5 @@
+<% if @journey_session.answers.logged_in_with_onelogin %>
+  <%= render "sign_in_2_complete" %>
+<% else %>
+  <%= render "sign_in_1_start" %>
+<% end %>

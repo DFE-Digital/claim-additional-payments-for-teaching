@@ -22,7 +22,7 @@ module Journeys
         elsif FeatureFlag.enabled?(:alternative_idv) && !claim.identity_confirmed_with_onelogin?
           Policies::FurtherEducationPayments::ProviderVerificationEmails.new(claim)
             .send_further_education_payment_provider_verification_email
-        elsif claim.one_login_idv_mismatch?
+        elsif !claim.identity_confirmed_with_onelogin
           # noop
           # do not send provider verification email
         else

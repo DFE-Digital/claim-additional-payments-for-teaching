@@ -147,6 +147,8 @@ RSpec.describe "Accessing a closed service" do
 
     click_button "Continue"
 
+    idv_with_one_login
+
     # personal-details
     fill_in "First name", with: "John"
     fill_in "Last name", with: "Doe"

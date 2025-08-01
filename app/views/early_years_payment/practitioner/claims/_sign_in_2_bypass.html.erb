@@ -1,0 +1,58 @@
+<h2 class="govuk-heading-m">
+  Set GOVUK One Login payload details
+</h2>
+
+<p class="govuk-body">
+  In environments where GOVUK One Login is not enabled you can use this form
+  to set payload parameters to test different identity verification scenarios.
+</p>
+
+<p class="govuk-body">
+  If a return code is entered the user will fail IDV.
+</p>
+
+<%# `govuk_date_field` expects to have an object to work with when setting field
+  names and assigning default values, hence why we're using the
+  `PersonalDetailsForm` here %>
+<%= form_with(
+  url: "/auth/onelogin_identity",
+  method: :post,
+  model: PersonalDetailsForm.new(
+    journey_session: journey_session,
+    journey: nil,
+    params: ActionController::Parameters.new(
+      claim: {
+        first_name: "TEST",
+        surname: "USER",
+        :"date_of_birth(3i)" => 1,
+        :"date_of_birth(2i)" => 1,
+        :"date_of_birth(1i)" => 1970
+      }
+    )
+  ),
+  builder: GOVUKDesignSystemFormBuilder::FormBuilder
+) do |f| %>
+  <%= f.govuk_text_field(
+    :first_name,
+    label: { text: "First name" }
+  ) %>
+
+  <%= f.govuk_text_field(
+    :surname,
+    label: { text: "Last name" }
+  ) %>
+
+  <%= f.govuk_date_field(
+    :date_of_birth,
+    date_of_birth: true,
+    legend: { text: "Date of birth" }
+  ) %>
+
+  <%= f.govuk_text_field(
+    :one_login_return_codes,
+    label: { text: "One Login return codes" },
+    hint: { text: 'Separate multiple codes with a comma eg "A,B,C"' }
+  ) %>
+
+  <%= f.govuk_submit "Continue" %>
+<% end %>

@@ -125,6 +125,8 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("the Student Loans Company")
     click_button "Continue"
 
+    idv_with_one_login
+
     expect(page).to have_content("Personal details")
     fill_in "First name", with: "John"
     fill_in "Last name", with: "Doe"

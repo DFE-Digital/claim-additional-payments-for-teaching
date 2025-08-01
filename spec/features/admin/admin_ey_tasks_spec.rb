@@ -647,7 +647,7 @@ RSpec.describe "Admin EY tasks" do
 
     click_on "Continue"
 
-    sign_in_with_one_login
+    sign_in_and_idv_with_one_login
 
     expect(page).to have_content("Personal details")
     fill_in "Day", with: date_of_birth.day
