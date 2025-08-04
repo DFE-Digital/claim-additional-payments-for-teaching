@@ -78,7 +78,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
         is_expected.to match_array(
           [
             [
-              "What type of contract do you have with Springfield Elementary?",
+              "What type of contract do you have directly with Springfield Elementary?",
               "Permanent contract (including full-time and part-time contracts)"
             ],
             [
@@ -100,7 +100,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
         is_expected.to match_array(
           [
             [
-              "What type of contract do you have with Springfield Elementary?",
+              "What type of contract do you have directly with Springfield Elementary?",
               "Variable hours contract (This includes zero hours contracts)"
             ],
             [
@@ -132,7 +132,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
           is_expected.to match_array(
             [
               [
-                "What type of contract do you have with Springfield Elementary?",
+                "What type of contract do you have directly with Springfield Elementary?",
                 "Fixed term contract"
               ],
               [
@@ -161,7 +161,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
           is_expected.to match_array(
             [
               [
-                "What type of contract do you have with Springfield Elementary?",
+                "What type of contract do you have directly with Springfield Elementary?",
                 "Fixed term contract"
               ],
               [

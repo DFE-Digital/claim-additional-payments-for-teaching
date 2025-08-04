@@ -111,7 +111,7 @@ RSpec.describe "Accessing a closed service" do
     click_button "Continue"
 
     # contract-type
-    choose("Permanent contract")
+    choose("Permanent")
     click_button "Continue"
 
     # teaching-hours-per-week

@@ -32,7 +32,7 @@ def when_further_education_journey_ready_to_submit
   choose college.name
   click_button "Continue"
 
-  choose("Permanent contract")
+  choose("Permanent")
   click_button "Continue"
 
   choose("More than 12 hours per week")
