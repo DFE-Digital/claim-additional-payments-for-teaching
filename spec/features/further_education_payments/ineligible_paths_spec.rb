@@ -213,7 +213,7 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_content("What type of contract do you have directly with #{eligible_college.name}?")
   end
 
-  scenario "when fixed term contract and just one academic term taught" do
+  scenario "when fixed term contract and fixed term contract does not cover full academic year" do
     when_further_education_payments_journey_configuration_exists
     and_eligible_college_exists
 
@@ -261,15 +261,10 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("No, it does not cover the full #{current_academic_year.to_s(:long)} academic year")
     click_button "Continue"
 
-    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
-    choose "Yes"
-    click_button "Continue"
-
-    expect(page).to have_content("Have you taught at #{eligible_college.name} for at least one academic term?")
-    choose("No")
-    click_button "Continue"
-
-    expect(page).to have_content("You are not eligible for a targeted retention incentive payment yet")
+    expect(page).to have_content(
+      "In order to claim a targeted retention incentive payment, " \
+      "you must be employed for the full academic year."
+    )
   end
 
   scenario "when contract_type is Employed by another organisation" do

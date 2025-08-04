@@ -921,6 +921,8 @@ en:
           heading: You are not eligible
         employed_by_another_organisation:
           heading: You are not eligible
+        fixed_term_must_cover_full_academic_year:
+          heading: You are not eligible
         lacks_teacher_qualification_or_enrolment:
           heading: You are not eligible
         must_at_least_half_hours_teaching_fe:
@@ -987,7 +989,7 @@ en:
           true: Yes, it covers the full %{current_academic_year} academic year
           false: No, it does not cover the full %{current_academic_year} academic year
         errors:
-          inclusion: Select yes if your fixed-term contract covers the full %{current_academic_year} academic year
+          inclusion: Tell us if your fixed-term contract covers the full academic year
       taught_at_least_one_term:
         question: Have you taught at %{school_name} for at least one academic term?
         options:
