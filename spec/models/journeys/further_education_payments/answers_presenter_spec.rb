@@ -126,7 +126,7 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
             "Permanent contract",
             "contract-type"],
           ["On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?",
-            "12 hours or more per week",
+            "More than 12 hours per week",
             "teaching-hours-per-week"],
           ["Which academic year did you start teaching in further education in England?",
             "September 2023 to August 2024",

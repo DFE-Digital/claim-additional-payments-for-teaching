@@ -126,7 +126,7 @@ RSpec.feature "Further education payments" do
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach")
-    choose "12 hours or more per week"
+    choose "More than 12 hours per week"
     click_button "Continue"
 
     expect(page).to have_content("Which subject areas do you teach?")
@@ -197,7 +197,7 @@ RSpec.feature "Further education payments" do
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
-    choose("12 hours or more per week")
+    choose("More than 12 hours per week")
     click_button "Continue"
 
     expect(page).to have_content("Which subject areas do you teach?")
@@ -306,7 +306,7 @@ RSpec.feature "Further education payments" do
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
-    choose("12 hours or more per week")
+    choose("More than 12 hours per week")
     click_button "Continue"
 
     expect(page).to have_content("Which subject areas do you teach?")

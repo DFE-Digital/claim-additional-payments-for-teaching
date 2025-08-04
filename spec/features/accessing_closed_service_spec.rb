@@ -110,7 +110,7 @@ RSpec.describe "Accessing a closed service" do
     click_button "Continue"
 
     # teaching-hours-per-week
-    choose("12 hours or more per week")
+    choose("More than 12 hours per week")
     click_button "Continue"
 
     # subjects-taught

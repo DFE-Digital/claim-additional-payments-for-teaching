@@ -103,7 +103,7 @@ RSpec.feature "Admin views claim details for FurtherEducationPayments" do
           "On average, how many hours per week are you timetabled to teach at " \
           "Springfield Elementary during the current term?"
         )
-      ).to have_content("12 hours or more per week")
+      ).to have_content("More than 12 hours per week")
 
       expect(
         summary_row(

@@ -26,7 +26,7 @@ def when_further_education_journey_ready_to_submit
   click_button "Continue"
   choose("Permanent contract")
   click_button "Continue"
-  choose("12 hours or more per week")
+  choose("More than 12 hours per week")
   click_button "Continue"
   check("Physics")
   click_button "Continue"

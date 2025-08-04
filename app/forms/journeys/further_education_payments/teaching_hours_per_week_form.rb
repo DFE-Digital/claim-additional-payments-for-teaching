@@ -6,7 +6,7 @@ module Journeys
       validates :teaching_hours_per_week,
         inclusion: {
           in: ->(form) { form.radio_options.map(&:id) },
-          message: ->(object, data) { i18n_error_message(:inclusion, school_name: object.school.name).call(object, data) }
+          message: i18n_error_message(:inclusion)
         }
 
       def radio_options
