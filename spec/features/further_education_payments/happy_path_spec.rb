@@ -15,11 +15,11 @@ RSpec.feature "Further education payments" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Do you have a")
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Do you have a")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -215,6 +215,30 @@ RSpec.feature "Further education payments" do
     expect(reminder.journey_class).to eql("Journeys::FurtherEducationPayments")
 
     expect(page).to have_content("We have set your reminder")
+  end
+
+  context "When the claimant has claimed previously" do
+    it "asks them to sign in with One Login" do
+      when_student_loan_data_exists
+      when_further_education_payments_journey_configuration_exists
+      and_college_exists
+
+      visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+      expect(page).to have_link("Start now")
+      click_link "Start now"
+
+      # No to OL account
+      expect(page).to have_content("Do you have a")
+      choose "No"
+      click_button "Continue"
+
+      # Yes to previous claim
+      expect(page).to have_content("Did you apply for a")
+      choose "Yes"
+      click_button "Continue"
+
+      expect(page).to have_content("Sign in with GOV.UK One Login")
+    end
   end
 
   def and_college_exists

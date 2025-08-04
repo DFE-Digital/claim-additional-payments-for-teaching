@@ -15,10 +15,6 @@ RSpec.feature "Further education payments" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Have you previously")
-    choose "No"
-    click_button "Continue"
-
     expect(page).to have_content("Do you have a")
     choose "Yes"
     click_button "Continue"
@@ -226,15 +222,13 @@ RSpec.feature "Further education payments" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Have you previously")
-    choose "No"
-    click_button "Continue"
-
     expect(page).to have_content("Do you have a")
     choose "I don’t know"
     click_button "Continue"
 
-    sign_in_with_one_login
+    expect(page).to have_content("Did you apply for a")
+    choose "No"
+    click_button "Continue"
 
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"
@@ -335,6 +329,8 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content(number_to_currency(expected_award_amount, precision: 0))
     expect(page).to have_content("Apply now")
     click_button "Apply now"
+
+    sign_in_with_one_login
 
     expect(page).to have_content("How we will use the information you provide")
     expect(page).to have_content("the Student Loans Company")
