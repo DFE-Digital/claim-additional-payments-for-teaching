@@ -88,7 +88,7 @@ RSpec.feature "Admin views claim details for FurtherEducationPayments" do
 
       expect(
         summary_row(
-          "What type of contract do you have with Springfield Elementary?"
+          "What type of contract do you have directly with Springfield Elementary?"
         )
       ).to have_content(
         "Permanent contract (including full-time and part-time contracts)"

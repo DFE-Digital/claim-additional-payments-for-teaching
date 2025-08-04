@@ -919,6 +919,8 @@ en:
           heading: You are not eligible
         lack_teaching_responsibilities:
           heading: You are not eligible
+        employed_by_another_organisation:
+          heading: You are not eligible
         lacks_teacher_qualification_or_enrolment:
           heading: You are not eligible
         must_at_least_half_hours_teaching_fe:
@@ -971,13 +973,14 @@ en:
         errors:
           blank: Select the further education provider you are employed by
       contract_type:
-        question: What type of contract do you have with %{school_name}?
+        question: What type of contract do you have directly with %{school_name}?
         options:
-          permanent: Permanent contract
-          fixed_term: Fixed-term contract
-          variable_hours: Variable hours contract
+          permanent: Permanent
+          fixed_term: Fixed-term
+          variable_hours: Variable hours
+          employed_by_another_organisation: Employed by another organisation (for example, an agency or contractor)
         errors:
-          inclusion: Select the type of contract you have with %{school_name}
+          inclusion: Tell us the type of contract you have
       fixed_term_contract:
         question: Does your fixed-term contract cover the full %{academic_year} academic year?
         options:
@@ -1251,7 +1254,7 @@ en:
         assertions:
           fixed_contract:
             contract_type:
-              label: "Does %{claimant} have a %{type_of_contract} of employment %{duration}at %{provider}?"
+              label: "Does %{claimant} have a %{type_of_contract} contract of employment %{duration}at %{provider}?"
               errors:
                 inclusion: "Select yes if %{claimant} has a fixed term contract of employment at %{provider}"
             teaching_responsibilities:
@@ -1284,7 +1287,7 @@ en:
                 inclusion: "Select yes if %{claimant} is not currently subject to disciplinary action"
           variable_contract:
             contract_type:
-              label: "Does %{claimant} have a %{type_of_contract} of employment at %{provider}?"
+              label: "Does %{claimant} have a %{type_of_contract} contract of employment at %{provider}?"
               errors:
                 inclusion: "Select yes if %{claimant} has a variable hours contract of employment at %{provider}"
             teaching_responsibilities:

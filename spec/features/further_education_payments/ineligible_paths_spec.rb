@@ -85,7 +85,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
+    expect(page).to have_content("What type of contract do you have directly with #{eligible_college.name}?")
   end
 
   scenario "when ineligible FE provider is selected with js", js: true, flaky: true do
@@ -144,7 +144,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
+    expect(page).to have_content("What type of contract do you have directly with #{eligible_college.name}?")
   end
 
   scenario "when closed FE provider selected" do
@@ -194,7 +194,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
+    expect(page).to have_content("What type of contract do you have directly with #{eligible_college.name}?")
   end
 
   scenario "when fixed term contract and just one academic term taught" do
@@ -233,8 +233,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
-    choose("Fixed-term contract")
+    expect(page).to have_content("What type of contract do you have directly with #{eligible_college.name}?")
+    choose("Fixed-term")
     click_button "Continue"
 
     expect(page).to have_content("Does your fixed-term contract cover the full #{current_academic_year.to_s(:long)} academic year?")
@@ -250,6 +250,52 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible for a targeted retention incentive payment yet")
+  end
+
+  scenario "when contract_type is Employed by another organisation" do
+    when_further_education_payments_journey_configuration_exists
+    and_eligible_college_exists
+
+    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    expect(page).to have_link("Start now")
+    click_link "Start now"
+
+    expect(page).to have_content("Do you have a")
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_content("Did you apply for a")
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    choose("September 2023 to August 2024")
+    click_button "Continue"
+
+    expect(page).to have_content("Do you have a teaching qualification?")
+    choose("Yes")
+    click_button "Continue"
+
+    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: eligible_college.name
+    click_button "Continue"
+
+    expect(page).to have_content("Select where you are employed")
+    choose eligible_college.name
+    click_button "Continue"
+
+    expect(page).to have_content("What type of contract do you have directly with #{eligible_college.name}?")
+    choose("Employed by another organisation (for example, an agency or contractor)")
+    click_button "Continue"
+
+    expect(page).to have_content(
+      "In order to claim a targeted retention incentive payment, " \
+      "you must be directly employed by the FE provider where you work."
+    )
   end
 
   scenario "when lacking subjects" do
@@ -288,8 +334,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
-    choose "Permanent contract"
+    expect(page).to have_content("What type of contract do you have directly with #{eligible_college.name}?")
+    choose "Permanent"
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week")
@@ -344,8 +390,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
-    choose("Variable hours contract")
+    expect(page).to have_content("What type of contract do you have directly with #{eligible_college.name}?")
+    choose("Variable hours")
     click_button "Continue"
 
     expect(page).to have_content("Have you taught at #{eligible_college.name} for at least one academic term?")
@@ -391,8 +437,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
-    choose "Permanent contract"
+    expect(page).to have_content("What type of contract do you have directly with #{eligible_college.name}?")
+    choose "Permanent"
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week")
@@ -451,8 +497,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
-    choose "Permanent contract"
+    expect(page).to have_content("What type of contract do you have directly with #{eligible_college.name}?")
+    choose "Permanent"
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week")
@@ -539,8 +585,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
-    choose "Permanent contract"
+    expect(page).to have_content("What type of contract do you have directly with #{eligible_college.name}?")
+    choose "Permanent"
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{eligible_college.name} during the current term?")
@@ -613,8 +659,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
-    choose "Permanent contract"
+    expect(page).to have_content("What type of contract do you have directly with #{eligible_college.name}?")
+    choose "Permanent"
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{eligible_college.name} during the current term?")
@@ -714,8 +760,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
-    choose "Permanent contract"
+    expect(page).to have_content("What type of contract do you have directly with #{eligible_college.name}?")
+    choose "Permanent"
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{eligible_college.name} during the current term?")
@@ -762,8 +808,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
-    choose "Fixed-term contract"
+    expect(page).to have_content("What type of contract do you have directly with #{eligible_college.name}?")
+    choose "Fixed-term"
     click_button "Continue"
 
     expect(page).to have_content("Does your fixed-term contract cover the full #{current_academic_year.to_s(:long)} academic year?")
@@ -822,8 +868,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
-    choose("Variable hours contract")
+    expect(page).to have_content("What type of contract do you have directly with #{eligible_college.name}?")
+    choose("Variable hours")
     click_button "Continue"
 
     expect(page).to have_content("Have you taught at #{eligible_college.name} for at least one academic term?")
@@ -874,8 +920,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose eligible_college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{eligible_college.name}?")
-    choose("Permanent contract")
+    expect(page).to have_content("What type of contract do you have directly with #{eligible_college.name}?")
+    choose("Permanent")
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{eligible_college.name} during the current term?")
@@ -932,7 +978,7 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     # contract-type
-    choose "Permanent contract"
+    choose "Permanent"
     click_button "Continue"
 
     # teaching-hours-per-week
