@@ -13,27 +13,58 @@ RSpec.describe Policies::EarlyYearsPayments::ClaimPersonalDataScrubber do
   it "scrubs claims rejected over a year ago, Academic Year is irrelevant" do
     scrubber = described_class.new
 
-    # During this Academic Year
-    travel_to(Time.zone.local(current_academic_year.start_year, 9, 2)) do
-      claim = create(:claim, :submitted, policy: policy)
-      create(:decision, :rejected, claim: claim)
-    end
+    # Travel to some date in the current academic year
+    travel_to(current_academic_year.start_of_autumn_term + 3.days) do
+      # During this Academic Year
+      during_current_academic_year = Time.zone.local(current_academic_year.start_year, 9, 2)
+      claim = create(
+        :claim,
+        :submitted,
+        policy: policy,
+        submitted_at: during_current_academic_year,
+        created_at: during_current_academic_year
+      )
+      create(
+        :decision,
+        :rejected,
+        claim: claim,
+        created_at: during_current_academic_year
+      )
 
-    # Last AY but less than 1 year ago
-    last_academic_year = Time.zone.local(current_academic_year.start_year, 8, 2)
+      # Last AY but less than 1 year ago
+      last_academic_year = Time.zone.local(current_academic_year.start_year, 8, 2)
 
-    travel_to(last_academic_year) do
-      claim = create(:claim, :submitted, policy: policy)
-      create(:decision, :rejected, claim: claim)
-    end
+      claim = create(
+        :claim,
+        :submitted,
+        policy: policy,
+        submitted_at: last_academic_year,
+        created_at: last_academic_year
+      )
 
-    # Over 1 year ago
-    travel_to(over_1_ago) do
-      claim = create(:claim, :submitted, policy: policy)
-      create(:decision, :rejected, claim: claim)
-    end
+      create(
+        :decision,
+        :rejected,
+        claim: claim,
+        created_at: last_academic_year
+      )
 
-    freeze_time do
+      # Over 1 year ago
+      claim = create(
+        :claim,
+        :submitted,
+        policy: policy,
+        submitted_at: over_1_ago,
+        created_at: over_1_ago
+      )
+
+      create(
+        :decision,
+        :rejected,
+        claim: claim,
+        created_at: over_1_ago
+      )
+
       scrubber.scrub_completed_claims
       claims = Claim.order(created_at: :asc)
       expect(claims[0].personal_data_removed_at).to eq(Time.zone.now)
