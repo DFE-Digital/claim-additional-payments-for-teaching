@@ -113,6 +113,10 @@ RSpec.describe "Accessing a closed service" do
     choose("More than 12 hours per week")
     click_button "Continue"
 
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
+    choose "Yes"
+    click_button "Continue"
+
     # subjects-taught
     check("Building and construction")
     click_button "Continue"
@@ -123,10 +127,6 @@ RSpec.describe "Accessing a closed service" do
 
     # hours-teaching-eligible-subjects
     choose("Yes")
-    click_button "Continue"
-
-    # half-teaching-hours
-    choose "Yes"
     click_button "Continue"
 
     # poor-performance

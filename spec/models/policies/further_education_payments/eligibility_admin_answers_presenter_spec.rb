@@ -241,7 +241,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
             "Yes"
           ],
           [
-            "Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?",
+            "Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?",
             "Yes"
           ]
         ]

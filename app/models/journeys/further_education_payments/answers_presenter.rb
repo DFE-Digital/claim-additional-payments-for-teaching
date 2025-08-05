@@ -43,6 +43,7 @@ module Journeys
           a << taught_at_least_one_term
           a << teaching_hours_per_week_next_term
           a << teaching_hours_per_week
+          a << half_teaching_hours
           a << subjects_taught
           a << building_construction_courses
           a << chemistry_courses
@@ -52,7 +53,6 @@ module Journeys
           a << maths_courses
           a << physics_courses
           a << hours_teaching_eligible_subjects
-          a << half_teaching_hours
           a << subject_to_formal_performance_action
           a << subject_to_disciplinary_action
         end.compact

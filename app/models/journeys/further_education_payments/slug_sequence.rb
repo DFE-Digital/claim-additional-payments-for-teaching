@@ -16,6 +16,7 @@ module Journeys
         fixed-term-contract
         taught-at-least-one-term
         teaching-hours-per-week
+        half-teaching-hours
         teaching-hours-per-week-next-term
         subjects-taught
         building-construction-courses
@@ -26,7 +27,6 @@ module Journeys
         maths-courses
         physics-courses
         hours-teaching-eligible-subjects
-        half-teaching-hours
         poor-performance
         check-your-answers-part-one
         eligible
@@ -115,15 +115,18 @@ module Journeys
         case answers.contract_type
         when "permanent"
           array << SLUGS_HASH["teaching-hours-per-week"]
+          array << SLUGS_HASH["half-teaching-hours"]
         when "fixed_term"
           array << SLUGS_HASH["fixed-term-contract"]
 
           if answers.fixed_term_full_year == true
             array << SLUGS_HASH["teaching-hours-per-week"]
+            array << SLUGS_HASH["half-teaching-hours"]
             array << SLUGS_HASH["teaching-hours-per-week-next-term"]
           end
 
           if answers.fixed_term_full_year == false
+            array << SLUGS_HASH["half-teaching-hours"]
             array << SLUGS_HASH["taught-at-least-one-term"]
             array << SLUGS_HASH["teaching-hours-per-week-next-term"]
           end
@@ -135,6 +138,7 @@ module Journeys
           if select_provision_form.completed_or_valid? && answers.taught_at_least_one_term == true
             array << SLUGS_HASH["teaching-hours-per-week-next-term"]
             array << SLUGS_HASH["teaching-hours-per-week"]
+            array << SLUGS_HASH["half-teaching-hours"]
           end
         end
 
@@ -172,7 +176,6 @@ module Journeys
         end
 
         array << SLUGS_HASH["hours-teaching-eligible-subjects"]
-        array << SLUGS_HASH["half-teaching-hours"]
         array << SLUGS_HASH["poor-performance"]
 
         poor_performance_form = form_for_slug(SLUGS_HASH["poor-performance"])

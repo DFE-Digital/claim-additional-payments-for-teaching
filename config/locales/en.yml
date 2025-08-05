@@ -1172,12 +1172,10 @@ en:
             inclusion: Select yes if you are currently subject to disciplinary action
       half_teaching_hours:
         question:
-          Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to
-          age 25 with an Education, Health and Care Plan (EHCP)?
+          Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?
         errors:
           inclusion:
-            Select yes if at least half your timetabled teaching hours are spent teaching 16-19-year-olds, including
-            those up to 25 with an Education, Health and Care Plan
+            Tell us if you spend at least half your timetabled teaching hours working with students aged 16 to 19
       eligible:
         heading: You’re eligible for a targeted retention incentive payment
       gender:

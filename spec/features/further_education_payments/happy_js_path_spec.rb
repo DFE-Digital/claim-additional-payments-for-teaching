@@ -51,6 +51,10 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     choose("More than 12 hours per week")
     click_button "Continue"
 
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
+    choose "Yes"
+    click_button "Continue"
+
     expect(page).to have_content("Which subject areas do you teach?")
     check("Building and construction")
     click_button "Continue"
@@ -62,10 +66,6 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching these eligible courses?")
     expect(page).to have_content("T Level in building services engineering for construction")
     choose("Yes")
-    click_button "Continue"
-
-    expect(page).to have_content("Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?")
-    choose "Yes"
     click_button "Continue"
 
     expect(page).to have_content("Are you subject to any formal performance measures as a result of continuous poor teaching standards")
