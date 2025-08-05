@@ -13,11 +13,11 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Do you have a")
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Do you have a")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -38,11 +38,11 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Do you have a")
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Do you have a")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -81,11 +81,11 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Do you have a")
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Do you have a")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -131,11 +131,11 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Do you have a")
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Do you have a")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -173,11 +173,11 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Do you have a")
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Do you have a")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -216,11 +216,11 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Do you have a")
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Do you have a")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -244,7 +244,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "12 hours or more per week"
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
     choose "September 2023 to August 2024"
     click_button "Continue"
 
@@ -264,11 +264,11 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Do you have a")
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Do you have a")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -303,11 +303,11 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Do you have a")
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Do you have a")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -331,7 +331,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "12 hours or more per week"
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
     choose "September 2023 to August 2024"
     click_button "Continue"
 
@@ -355,11 +355,11 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Do you have a")
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Do you have a")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -383,7 +383,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "12 hours or more per week"
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
     choose "September 2023 to August 2024"
     click_button "Continue"
 
@@ -411,11 +411,11 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Do you have a")
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Do you have a")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -439,8 +439,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("12 hours or more per week")
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
-    choose("I started before September #{current_academic_year.start_year - 4}")
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    choose("Before September #{current_academic_year.start_year - 4}")
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible")
@@ -455,11 +455,11 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Do you have a")
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Do you have a")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -483,7 +483,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "12 hours or more per week"
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
     choose "September 2023 to August 2024"
     click_button "Continue"
 
@@ -529,11 +529,11 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Do you have a")
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Do you have a")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -557,7 +557,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "12 hours or more per week"
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
     choose "September 2023 to August 2024"
     click_button "Continue"
 
@@ -603,11 +603,11 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Do you have a")
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Do you have a")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -631,7 +631,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "12 hours or more per week"
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
     choose "September 2023 to August 2024"
     click_button "Continue"
 
@@ -667,11 +667,11 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Do you have a")
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Do you have a")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -707,11 +707,11 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Do you have a")
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Do you have a")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -755,11 +755,11 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Do you have a")
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Do you have a")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -799,11 +799,11 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Have you previously")
+    expect(page).to have_content("Do you have a")
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Do you have a")
+    expect(page).to have_content("Did you apply for a")
     choose "No"
     click_button "Continue"
 
@@ -827,7 +827,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("12 hours or more per week")
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education (FE) in England?")
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
     choose("September 2023 to August 2024")
     click_button "Continue"
 
@@ -862,11 +862,11 @@ RSpec.feature "Further education payments ineligible paths" do
 
     click_link "Start now"
 
-    expect(page).to have_text("Have you previously received a Targeted Retention Incentive payment for work in further education")
+    expect(page).to have_text("Do you have a GOV.UK One Login account")
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_text("Do you have a GOV.UK One Login account")
+    expect(page).to have_text("Did you apply for a targeted retention incentive payment for your work in further education")
     choose "No"
     click_button "Continue"
 

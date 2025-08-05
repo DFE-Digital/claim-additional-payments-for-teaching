@@ -108,7 +108,7 @@ RSpec.feature "Admin views claim details for FurtherEducationPayments" do
       expect(
         summary_row(
           "Which academic year did you start teaching in " \
-          "further education (FE) in England?"
+          "further education in England?"
         )
       ).to have_content("September 2023 to August 2024")
 
