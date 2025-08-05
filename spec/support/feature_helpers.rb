@@ -139,9 +139,6 @@ module FeatureHelpers
 
     expect(page).to have_content("PROCEED WITH IDV")
     click_button "Continue"
-
-    expect(page).to have_content("IDENTITY PROVED")
-    click_button "Continue"
   end
 
   def sign_in_and_idv_with_one_login
@@ -163,9 +160,6 @@ module FeatureHelpers
     mock_one_login_idv_with_return_codes
 
     expect(page).to have_content("PROCEED WITH IDV")
-    click_button "Continue"
-
-    expect(page).to have_content("IDENTITY PROVED")
     click_button "Continue"
   end
 

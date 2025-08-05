@@ -46,6 +46,12 @@ class Form
     assign_attributes(attributes_with_current_value)
   end
 
+  # by default do not redirect to next slug
+  # override to true if when loading this screen you wish to skip to next page
+  def redirect_to_next_slug?
+    false
+  end
+
   def view_path
     journey::VIEW_PATH
   end
