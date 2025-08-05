@@ -137,7 +137,7 @@ module FeatureHelpers
   def idv_with_one_login
     mock_one_login_idv
 
-    expect(page).to have_content("PROCEED WITH IDV")
+    expect(page).to have_content("prove your identity through GOV.UK One Login")
     click_button "Continue"
   end
 
@@ -159,7 +159,7 @@ module FeatureHelpers
   def idv_with_one_login_with_return_codes
     mock_one_login_idv_with_return_codes
 
-    expect(page).to have_content("PROCEED WITH IDV")
+    expect(page).to have_content("prove your identity through GOV.UK One Login")
     click_button "Continue"
   end
 
