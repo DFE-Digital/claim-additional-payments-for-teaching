@@ -14,6 +14,10 @@ def when_further_education_journey_ready_to_submit
   choose "No"
   click_button "Continue"
 
+  choose("September 2023 to August 2024")
+  click_button "Continue"
+  choose "Yes"
+  click_button "Continue"
   choose "Yes"
   click_button "Continue"
   fill_in "claim[provision_search]", with: college.name
@@ -24,8 +28,6 @@ def when_further_education_journey_ready_to_submit
   click_button "Continue"
   choose("12 hours or more per week")
   click_button "Continue"
-  choose("September 2023 to August 2024")
-  click_button "Continue"
   check("Physics")
   click_button "Continue"
   check "A or AS level physics"
@@ -33,8 +35,6 @@ def when_further_education_journey_ready_to_submit
   choose("Yes")
   click_button "Continue"
   choose "Yes"
-  click_button "Continue"
-  choose("Yes")
   click_button "Continue"
   within all(".govuk-fieldset")[0] do
     choose("No")
