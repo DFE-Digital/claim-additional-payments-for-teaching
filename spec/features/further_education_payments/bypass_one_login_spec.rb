@@ -252,13 +252,19 @@ RSpec.feature "Further education payments" do
     mock_one_login_auth
 
     visit claim_path(Journeys::FurtherEducationPayments::ROUTING_NAME, "information-provided")
+    expect(page).to have_content("Sign in with GOV.UK One Login")
     click_button "Continue"
 
     expect(page).to have_content("You’ve successfully signed in to GOV.UK One Login")
 
-    visit claim_path(Journeys::FurtherEducationPayments::ROUTING_NAME, "information-provided")
+    mock_one_login_idv
 
-    expect(page).to have_content("You’ve successfully signed in to GOV.UK One Login")
+    visit claim_path(Journeys::FurtherEducationPayments::ROUTING_NAME, "information-provided")
+    expect(page).to have_content("Identity verification")
+    click_button "Continue"
+
+    visit claim_path(Journeys::FurtherEducationPayments::ROUTING_NAME, "information-provided")
+    expect(page).to have_content("How we will use the information you provide")
   end
 
   def and_college_exists

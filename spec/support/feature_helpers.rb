@@ -130,12 +130,36 @@ module FeatureHelpers
     expect(page).to have_content("Sign in with GOV.UK One Login")
     click_button "Continue"
 
+    expect(page).to have_content("You’ve successfully signed in to GOV.UK One Login")
+    click_button "Continue"
+  end
+
+  def idv_with_one_login
+    mock_one_login_idv
+
+    expect(page).to have_content("prove your identity through GOV.UK One Login")
+    click_button "Continue"
+  end
+
+  def sign_in_and_idv_with_one_login
+    mock_one_login_auth
+
+    expect(page).to have_content("Sign in with GOV.UK One Login")
+    click_button "Continue"
+
     mock_one_login_idv
 
     expect(page).to have_content("You’ve successfully signed in to GOV.UK One Login")
     click_button "Continue"
 
     expect(page).to have_content("You’ve successfully proved your identity with GOV.UK One Login")
+    click_button "Continue"
+  end
+
+  def idv_with_one_login_with_return_codes
+    mock_one_login_idv_with_return_codes
+
+    expect(page).to have_content("prove your identity through GOV.UK One Login")
     click_button "Continue"
   end
 

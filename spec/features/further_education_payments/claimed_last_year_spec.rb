@@ -6,7 +6,7 @@ RSpec.feature "Further education payments" do
   let(:college) { create(:school, :further_education, :fe_eligible) }
   let(:expected_award_amount) { college.eligible_fe_provider.max_award_amount }
 
-  scenario "previously claimed" do
+  scenario "happy path claimed last year" do
     when_student_loan_data_exists
     when_further_education_payments_journey_configuration_exists
     and_college_exists
@@ -15,7 +15,11 @@ RSpec.feature "Further education payments" do
     expect(page).to have_link("Start now")
     click_link "Start now"
 
-    expect(page).to have_content("Do you have a")
+    expect(page).to have_content("Do you have a GOV.UK One Login account?")
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_content("Did you apply for a targeted retention incentive payment")
     choose "Yes"
     click_button "Continue"
 
@@ -50,7 +54,7 @@ RSpec.feature "Further education payments" do
     click_button "Continue"
 
     expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
-    choose "Yes"
+    choose("Yes")
     click_button "Continue"
 
     expect(page).to have_content("Which subject areas do you teach?")

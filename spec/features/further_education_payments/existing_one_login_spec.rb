@@ -121,6 +121,8 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Apply now")
     click_button "Apply now"
 
+    idv_with_one_login
+
     expect(page).to have_content("How we will use the information you provide")
     expect(page).to have_content("the Student Loans Company")
     click_button "Continue"
@@ -331,6 +333,7 @@ RSpec.feature "Further education payments" do
     click_button "Apply now"
 
     sign_in_with_one_login
+    idv_with_one_login
 
     expect(page).to have_content("How we will use the information you provide")
     expect(page).to have_content("the Student Loans Company")

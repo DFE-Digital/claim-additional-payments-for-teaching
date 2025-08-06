@@ -1,0 +1,17 @@
+<h1 class="govuk-heading-l">
+  You’ve successfully signed in to GOV.UK One Login
+</h1>
+
+<p class="govuk-body">
+  You can now continue with your claim.
+</p>
+
+<p class="govuk-body">
+  If you leave the page before you’ve completed your application, you can log in again to continue where you left off.
+</p>
+
+<%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+  <%= f.govuk_error_summary %>
+
+  <%= f.govuk_submit %>
+<% end %>
