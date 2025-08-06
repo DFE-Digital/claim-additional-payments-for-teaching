@@ -508,8 +508,8 @@ RSpec.feature "Provider verifying claims" do
     end
 
     within_fieldset(
-      "Is Edna timetabled to teach an average of 12 hours or more " \
-      "per week during the current term?"
+      "Is Edna timetabled to teach an average of more than 12 hours per " \
+      "week during the current term?"
     ) do
       choose "Yes"
     end
@@ -671,8 +671,8 @@ RSpec.feature "Provider verifying claims" do
     end
 
     within_fieldset(
-      "Is Edna timetabled to teach an average of 2.5 hours or " \
-      "more but less than 12 hours per week"
+      "Is Edna timetabled to teach an average of between 2.5 and 12 hours " \
+      "per week during the current term?"
     ) do
       choose "Yes"
     end
@@ -844,8 +844,8 @@ RSpec.feature "Provider verifying claims" do
     end
 
     within_fieldset(
-      "Is Edna timetabled to teach an average of 2.5 hours or " \
-      "more but less than 12 hours per week during the current term?"
+      "Is Edna timetabled to teach an average of between 2.5 and 12 hours " \
+      "per week during the current term?"
     ) do
       choose "Yes"
     end
@@ -1067,8 +1067,8 @@ RSpec.feature "Provider verifying claims" do
     end
 
     within_fieldset(
-      "Is Edna timetabled to teach an average of 2.5 hours or " \
-      "more but less than 12 hours per week"
+      "Is Edna timetabled to teach an average of between 2.5 and 12 hours " \
+      "per week during the current term?"
     ) do
       choose "Yes"
     end

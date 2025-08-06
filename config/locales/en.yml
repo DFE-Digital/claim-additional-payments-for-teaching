@@ -875,9 +875,9 @@ en:
           teaching_hours_per_week:
             label: "Timetabled teaching hours"
             claimant_answers:
-              more_than_12: "12 hours or more per week"
-              between_2_5_and_12: "2.5 hours or more but less than 12 hours per week"
-              less_than_2_5: "Less than 2.5 hours per week"
+              more_than_12: More than 12 hours per week
+              between_2_5_and_12: Between 2.5 and 12 hours per week
+              less_than_2_5: Less than 2.5 hours per week
           half_teaching_hours:
             label: "Age range taught"
             claimant_answers:
@@ -997,11 +997,11 @@ en:
           On average, how many hours per week are you timetabled to teach at %{school_name} during the current term?
         hint: ‘Timetabled teaching hours’ refers to the time you spend teaching lessons to students of all ages.
         options:
-          more_than_12: 12 hours or more per week
-          between_2_5_and_12: 2.5 hours or more but less than 12 hours per week
+          more_than_12: More than 12 hours per week
+          between_2_5_and_12: Between 2.5 and 12 hours per week
           less_than_2_5: Less than 2.5 hours per week
         errors:
-          inclusion: Select the number of hours you are timetabled to teach per week at %{school_name} during the current term
+          inclusion: Tell us, on average, how many hours you are timetabled to teach during the current term
       teaching_hours_per_week_next_term:
         question: Are you timetabled to teach at least 2.5 hours per week at %{school_name} next term?
         hint: If you don’t know, you should speak to HR or apply when you know your arrangements for next term.
@@ -1172,12 +1172,10 @@ en:
             inclusion: Select yes if you are currently subject to disciplinary action
       half_teaching_hours:
         question:
-          Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to
-          age 25 with an Education, Health and Care Plan (EHCP)?
+          Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?
         errors:
           inclusion:
-            Select yes if at least half your timetabled teaching hours are spent teaching 16-19-year-olds, including
-            those up to 25 with an Education, Health and Care Plan
+            Tell us if you spend at least half your timetabled teaching hours working with students aged 16 to 19
       eligible:
         heading: You’re eligible for a targeted retention incentive payment
       gender:

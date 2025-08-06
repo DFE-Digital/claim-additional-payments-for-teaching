@@ -103,7 +103,7 @@ RSpec.feature "Admin views claim details for FurtherEducationPayments" do
           "On average, how many hours per week are you timetabled to teach at " \
           "Springfield Elementary during the current term?"
         )
-      ).to have_content("12 hours or more per week")
+      ).to have_content("More than 12 hours per week")
 
       expect(
         summary_row(
@@ -141,9 +141,7 @@ RSpec.feature "Admin views claim details for FurtherEducationPayments" do
 
       expect(
         summary_row(
-          "Are at least half of your timetabled teaching hours spent teaching " \
-          "16 to 19-year-olds, including those up to age 25 with an Education, " \
-          "Health and Care Plan (EHCP)?"
+          "Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?"
         )
       ).to have_content("Yes")
 
