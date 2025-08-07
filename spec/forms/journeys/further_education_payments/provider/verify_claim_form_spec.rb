@@ -233,7 +233,8 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
       context "when more that 12" do
         it do
           is_expected.not_to(allow_value(nil).for(:outcome).with_message(
-            "Select yes if Edna is timetabled to teach an average of 12 hours or more per week during the current term"
+            "Select yes if Edna is timetabled to teach an average of more " \
+            "than 12 hours per week during the current term"
           ))
         end
       end
@@ -243,7 +244,8 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyClaimForm, ty
 
         it do
           is_expected.not_to(allow_value(nil).for(:outcome).with_message(
-            "Select yes if Edna is timetabled to teach an average of 2.5 hours or more but less than 12 hours per week during the current term"
+            "Select yes if Edna is timetabled to teach an average of " \
+            "between 2.5 and 12 hours per week during the current term"
           ))
         end
       end

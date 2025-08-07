@@ -1,0 +1,41 @@
+<h1 class="govuk-heading-l">
+  Sign in with GOV.UK One Login
+</h1>
+
+<p class="govuk-body">
+  You will need to sign in to your GOV.UK One Login account to apply. If you don’t have an account yet, we will help you create one. 
+</p>
+
+<p class="govuk-body">
+  To create a GOV.UK One Login account, you will need: 
+</p>
+
+<%= govuk_list [
+  "an email address",
+  "a way to get security codes - this can be a mobile phone number or an authenticator app"
+], type: :bullet %>
+
+<p class="govuk-body">
+  When you have signed in to GOV.UK One Login, you will return to this service to complete your application. 
+</p>
+
+<p class="govuk-body">
+  You must prove your identity using the GOV.UK One Login service in order to submit a claim for an incentive payment.
+</p>
+
+<% if ENV["ENVIRONMENT_NAME"] != "production" && ENV["BYPASS_ONELOGIN_SIGN_IN"] == "true" %>
+  <%= form_with url: "/auth/onelogin", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+    <%= f.govuk_text_field :uid,
+      value: SecureRandom.uuid,
+      label: {
+        text: "One Login UID"
+      },
+      hint: {
+        text: "Debugging variable. Set to specific value if you want to authenticate as same user. Otherwise use default randomly generated value."
+      } %>
+
+    <%= f.govuk_submit "Continue" %>
+  <% end %>
+<% else %>
+  <%= govuk_button_to "Continue", "/auth/onelogin" %>
+<% end %>

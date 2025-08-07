@@ -875,9 +875,9 @@ en:
           teaching_hours_per_week:
             label: "Timetabled teaching hours"
             claimant_answers:
-              more_than_12: "12 hours or more per week"
-              between_2_5_and_12: "2.5 hours or more but less than 12 hours per week"
-              less_than_2_5: "Less than 2.5 hours per week"
+              more_than_12: More than 12 hours per week
+              between_2_5_and_12: Between 2.5 and 12 hours per week
+              less_than_2_5: Less than 2.5 hours per week
           half_teaching_hours:
             label: "Age range taught"
             claimant_answers:
@@ -958,10 +958,9 @@ en:
         errors:
           inclusion: 'Tell us if you have a GOV.UK One Login account'
       teaching_responsibilities:
-        heading: To apply for a targeted retention incentive payment, you must be employed as a member of staff with teaching responsibilities
         question: Are you a member of staff with teaching responsibilities?
         errors:
-          inclusion: Select yes if you are a member of staff with teaching responsibilities
+          inclusion: Tell us if you are a member of staff with teaching responsibilities
       further_education_provision_search:
         question: Which FE provider directly employs you?
         errors:
@@ -998,11 +997,11 @@ en:
           On average, how many hours per week are you timetabled to teach at %{school_name} during the current term?
         hint: ‘Timetabled teaching hours’ refers to the time you spend teaching lessons to students of all ages.
         options:
-          more_than_12: 12 hours or more per week
-          between_2_5_and_12: 2.5 hours or more but less than 12 hours per week
+          more_than_12: More than 12 hours per week
+          between_2_5_and_12: Between 2.5 and 12 hours per week
           less_than_2_5: Less than 2.5 hours per week
         errors:
-          inclusion: Select the number of hours you are timetabled to teach per week at %{school_name} during the current term
+          inclusion: Tell us, on average, how many hours you are timetabled to teach during the current term
       teaching_hours_per_week_next_term:
         question: Are you timetabled to teach at least 2.5 hours per week at %{school_name} next term?
         hint: If you don’t know, you should speak to HR or apply when you know your arrangements for next term.
@@ -1017,7 +1016,7 @@ en:
           between_dates: September %{start_year} to August %{end_year}
           before_date: Before September %{year}
         errors:
-          blank: Select the academic year you started teaching further education in England, or select ‘Before September %{before_year}’
+          blank: Tell us when you started teaching in further education in England
       subjects_taught:
         question: Which subject areas do you teach?
         hint: Select all that apply
@@ -1145,23 +1144,13 @@ en:
             invalid: An error occured while validating the passcode, please try generating a new one
       teaching_qualification:
         question: Do you have a teaching qualification?
-        hint_html: >
-          <p>Your response will be noted for future claims.</p>
-          <p>If you don’t have a teaching qualification yet, to remain eligible for a retention payment next year,
-          make sure you either:</p>
-          <p>
-            <ul>
-              <li>complete a teaching qualification in the next 12 months</li>
-              <li>enrol on a teaching qualification in the next 12 months</li>
-            </ul>
-          </p>
         options:
           "yes": "Yes"
           not_yet: Not yet, I am currently enrolled on one and working towards completing it
           no_but_planned: No, but I plan to enrol on one in the next 12 months
           no_not_planned: No, and I do not plan to enrol on one in the next 12 months
         errors:
-          inclusion: Select if you have a teaching qualification, or are currently enrolled on one or are planning to enrol on one
+          inclusion: Tell us if you have a teaching qualification
       poor_performance:
         heading: Tell us if you are currently under any performance measures or disciplinary action
         questions:
@@ -1183,12 +1172,10 @@ en:
             inclusion: Select yes if you are currently subject to disciplinary action
       half_teaching_hours:
         question:
-          Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to
-          age 25 with an Education, Health and Care Plan (EHCP)?
+          Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?
         errors:
           inclusion:
-            Select yes if at least half your timetabled teaching hours are spent teaching 16-19-year-olds, including
-            those up to 25 with an Education, Health and Care Plan
+            Tell us if you spend at least half your timetabled teaching hours working with students aged 16 to 19
       eligible:
         heading: You’re eligible for a targeted retention incentive payment
       gender:

@@ -51,7 +51,7 @@ RSpec.describe Journeys::Navigator do
       end
 
       it "returns third slug" do
-        expect(subject.next_slug).to eql("teaching-responsibilities")
+        expect(subject.next_slug).to eql("further-education-teaching-start-year")
       end
     end
 
@@ -131,7 +131,7 @@ RSpec.describe Journeys::Navigator do
       end
 
       it "returns relevant slug" do
-        expect(subject.furthest_permissible_slug).to eql("select-provision")
+        expect(subject.furthest_permissible_slug).to eql("further-education-teaching-start-year")
       end
     end
 

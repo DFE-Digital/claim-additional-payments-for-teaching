@@ -29,7 +29,7 @@ RSpec.describe Journeys::FurtherEducationPayments::TeachingResponsibilitiesForm,
       is_expected.not_to(
         allow_value(nil)
         .for(:teaching_responsibilities)
-        .with_message("Select yes if you are a member of staff with teaching responsibilities")
+        .with_message("Tell us if you are a member of staff with teaching responsibilities")
       )
     end
   end

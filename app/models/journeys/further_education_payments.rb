@@ -9,6 +9,8 @@ module Journeys
     POLICIES = [Policies::FurtherEducationPayments]
     FORMS = {
       "claims" => {
+        "sign-in" => SignInForm,
+        "identity-verification" => IdentityVerificationForm,
         "previously-claimed" => PreviouslyClaimedForm,
         "have-one-login-account" => HaveOneLoginAccountForm,
         "teaching-responsibilities" => TeachingResponsibilitiesForm,

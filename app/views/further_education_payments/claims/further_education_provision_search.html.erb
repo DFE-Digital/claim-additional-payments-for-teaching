@@ -3,7 +3,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: @form,
-      url: claim_path(current_journey_routing_name),
+      url: @form.url,
       method: :patch,
       builder: GOVUKDesignSystemFormBuilder::FormBuilder,
       id: "further-education-provision-search-form",

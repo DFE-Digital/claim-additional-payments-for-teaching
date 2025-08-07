@@ -14,39 +14,55 @@ def when_further_education_journey_ready_to_submit
   choose "No"
   click_button "Continue"
 
-  choose "Yes"
-  click_button "Continue"
-  fill_in "claim[provision_search]", with: college.name
-  click_button "Continue"
-  choose college.name
-  click_button "Continue"
-  choose("Permanent contract")
-  click_button "Continue"
-  choose("12 hours or more per week")
-  click_button "Continue"
   choose("September 2023 to August 2024")
   click_button "Continue"
-  check("Physics")
-  click_button "Continue"
-  check "A or AS level physics"
-  click_button "Continue"
-  choose("Yes")
+  choose "Yes"
   click_button "Continue"
   choose "Yes"
   click_button "Continue"
+
+  fill_in "claim[provision_search]", with: college.name
+  click_button "Continue"
+
+  choose college.name
+  click_button "Continue"
+
+  choose("Permanent contract")
+  click_button "Continue"
+
+  choose("More than 12 hours per week")
+  click_button "Continue"
+
+  expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
+  choose "Yes"
+  click_button "Continue"
+
+  check("Physics")
+  click_button "Continue"
+
+  check "A or AS level physics"
+  click_button "Continue"
+
   choose("Yes")
   click_button "Continue"
+
   within all(".govuk-fieldset")[0] do
     choose("No")
   end
+
   within all(".govuk-fieldset")[1] do
     choose("No")
   end
+
   click_button "Continue"
+
   click_button "Continue"
+
   click_button "Apply now"
 
   sign_in_with_one_login
+  idv_with_one_login
+
   click_button "Continue"
 
   fill_in "First name", with: "John"

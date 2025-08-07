@@ -21,11 +21,11 @@ RSpec.feature "Further education payments" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
 
     visit claim_path(Journeys::FurtherEducationPayments::ROUTING_NAME, slug: "address")
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
   end
 
   # user reaches an ineligible state
@@ -47,6 +47,14 @@ RSpec.feature "Further education payments" do
 
     expect(page).to have_content("Did you apply for a")
     choose "No"
+    click_button "Continue"
+
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    choose("September 2023 to August 2024")
+    click_button "Continue"
+
+    expect(page).to have_content("Do you have a teaching qualification?")
+    choose("Yes")
     click_button "Continue"
 
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
@@ -93,6 +101,14 @@ RSpec.feature "Further education payments" do
     choose "No"
     click_button "Continue"
 
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    choose("September 2023 to August 2024")
+    click_button "Continue"
+
+    expect(page).to have_content("Do you have a teaching qualification?")
+    choose("Yes")
+    click_button "Continue"
+
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"
     click_button "Continue"
@@ -110,11 +126,11 @@ RSpec.feature "Further education payments" do
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach")
-    choose "12 hours or more per week"
+    choose "More than 12 hours per week"
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
-    choose "September 2024 to August 2025"
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
+    choose "Yes"
     click_button "Continue"
 
     expect(page).to have_content("Which subject areas do you teach?")
@@ -160,6 +176,14 @@ RSpec.feature "Further education payments" do
     choose "No"
     click_button "Continue"
 
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    choose("September 2023 to August 2024")
+    click_button "Continue"
+
+    expect(page).to have_content("Do you have a teaching qualification?")
+    choose("Yes")
+    click_button "Continue"
+
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"
     click_button "Continue"
@@ -177,11 +201,11 @@ RSpec.feature "Further education payments" do
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
-    choose("12 hours or more per week")
+    choose("More than 12 hours per week")
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
-    choose("September 2023 to August 2024")
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
+    choose "Yes"
     click_button "Continue"
 
     expect(page).to have_content("Which subject areas do you teach?")
@@ -194,14 +218,6 @@ RSpec.feature "Further education payments" do
 
     expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching these eligible courses?")
     expect(page).to have_content("T Level in building services engineering for construction")
-    choose("Yes")
-    click_button "Continue"
-
-    expect(page).to have_content("Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?")
-    choose "Yes"
-    click_button "Continue"
-
-    expect(page).to have_content("Do you have a teaching qualification?")
     choose("Yes")
     click_button "Continue"
 
@@ -224,6 +240,7 @@ RSpec.feature "Further education payments" do
     click_button "Apply now"
 
     sign_in_with_one_login
+    idv_with_one_login
 
     expect(page).to have_content("How we will use the information you provide")
     expect(page).to have_content("the Student Loans Company")
@@ -269,6 +286,14 @@ RSpec.feature "Further education payments" do
     choose "No"
     click_button "Continue"
 
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    choose("September 2023 to August 2024")
+    click_button "Continue"
+
+    expect(page).to have_content("Do you have a teaching qualification?")
+    choose("Yes")
+    click_button "Continue"
+
     expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
     choose "Yes"
     click_button "Continue"
@@ -286,11 +311,11 @@ RSpec.feature "Further education payments" do
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
-    choose("12 hours or more per week")
+    choose("More than 12 hours per week")
     click_button "Continue"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
-    choose("September 2023 to August 2024")
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
+    choose "Yes"
     click_button "Continue"
 
     expect(page).to have_content("Which subject areas do you teach?")
@@ -303,14 +328,6 @@ RSpec.feature "Further education payments" do
 
     expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching these eligible courses?")
     expect(page).to have_content("T Level in building services engineering for construction")
-    choose("Yes")
-    click_button "Continue"
-
-    expect(page).to have_content("Are at least half of your timetabled teaching hours spent teaching 16 to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?")
-    choose "Yes"
-    click_button "Continue"
-
-    expect(page).to have_content("Do you have a teaching qualification?")
     choose("Yes")
     click_button "Continue"
 
@@ -333,6 +350,7 @@ RSpec.feature "Further education payments" do
     click_button "Apply now"
 
     sign_in_with_one_login
+    idv_with_one_login
 
     expect(page).to have_content("How we will use the information you provide")
     expect(page).to have_content("the Student Loans Company")

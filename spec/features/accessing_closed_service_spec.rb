@@ -84,6 +84,15 @@ RSpec.describe "Accessing a closed service" do
     choose "No"
     click_button "Continue"
 
+    # further-education-teaching-start-year
+    previous_year = AcademicYear.previous.start_year
+    choose "September #{previous_year - 1} to August #{previous_year}"
+    click_button "Continue"
+
+    # teaching-qualification
+    choose("Yes")
+    click_button "Continue"
+
     # teaching-responsibilities
     choose "Yes"
     click_button "Continue"
@@ -101,11 +110,11 @@ RSpec.describe "Accessing a closed service" do
     click_button "Continue"
 
     # teaching-hours-per-week
-    choose("12 hours or more per week")
+    choose("More than 12 hours per week")
     click_button "Continue"
 
-    # further-education-teaching-start-year
-    choose("September 2023 to August 2024")
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
+    choose "Yes"
     click_button "Continue"
 
     # subjects-taught
@@ -117,14 +126,6 @@ RSpec.describe "Accessing a closed service" do
     click_button "Continue"
 
     # hours-teaching-eligible-subjects
-    choose("Yes")
-    click_button "Continue"
-
-    # half-teaching-hours
-    choose "Yes"
-    click_button "Continue"
-
-    # teaching-qualification
     choose("Yes")
     click_button "Continue"
 
@@ -144,6 +145,7 @@ RSpec.describe "Accessing a closed service" do
     click_button "Apply now"
 
     sign_in_with_one_login
+    idv_with_one_login
 
     click_button "Continue"
 
