@@ -22,6 +22,8 @@ module FurtherEducationPayments
             "In progress"
           when STATUS_COMPLETED
             "Completed"
+          when STATUS_REJECTED
+            "Rejected"
           else
             "Unknown"
           end
@@ -29,7 +31,7 @@ module FurtherEducationPayments
 
         def colour
           case provider_verification_status
-          when STATUS_NOT_STARTED
+          when STATUS_NOT_STARTED, STATUS_REJECTED
             "red"
           when STATUS_IN_PROGRESS
             "yellow"

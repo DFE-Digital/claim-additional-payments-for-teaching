@@ -4,6 +4,10 @@ module FurtherEducationPayments
       module Verification
         class Wizard
           FORMS = [
+            ClaimantEmploymentCheckNeededForm,
+            ClaimantEmployedByCollegeForm,
+            ClaimantPersonalDetailsForm,
+            ClaimantEmploymentCheckDeclarationForm,
             ContinueVerificationForm,
             TeachingResponsibilitiesForm,
             InFirstFiveYearsForm,
@@ -45,8 +49,8 @@ module FurtherEducationPayments
           def previous_form
             index = reachable_forms.index(current_form)
 
-            fail "Current form #{current_slug.slug} is not reachable" if index.nil?
-            fail "Current form #{current_slug.slug} is the first form" if index.zero?
+            fail "Current form #{current_slug} is not reachable" if index.nil?
+            fail "Current form #{current_slug} is the first form" if index.zero?
 
             previous_form = reachable_forms[index - 1]
 
@@ -69,6 +73,21 @@ module FurtherEducationPayments
 
           def completed?
             reachable_forms.none?(&:incomplete?)
+          end
+
+          def message
+            if completed? && eligibility.claimant_not_employed_by_college?
+              return "Employment check for #{claim.full_name} submitted"
+            end
+
+            if completed?
+              return "Claim Verified for #{claim.full_name}"
+            end
+
+            # We've just finished the employyment check section of the wizard
+            if current_slug == "claimant_employment_check_declaration"
+              "Employment check for #{claim.full_name} submitted"
+            end
           end
 
           private
@@ -102,6 +121,20 @@ module FurtherEducationPayments
             return @reachable_steps if @reachable_steps
 
             @reachable_steps = []
+
+            if eligibility.employment_check_required?
+              @reachable_steps << ClaimantEmploymentCheckNeededForm
+              @reachable_steps << ClaimantEmployedByCollegeForm
+            end
+
+            if eligibility.claimant_not_employed_by_college?
+              return @reachable_steps
+            end
+
+            if eligibility.employment_check_required?
+              @reachable_steps << ClaimantPersonalDetailsForm
+              @reachable_steps << ClaimantEmploymentCheckDeclarationForm
+            end
 
             @reachable_steps << ContinueVerificationForm
             @reachable_steps << TeachingResponsibilitiesForm

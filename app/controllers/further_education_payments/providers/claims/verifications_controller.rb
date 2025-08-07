@@ -22,6 +22,8 @@ module FurtherEducationPayments
 
             wizard.clear_impermissible_answers!
 
+            flash[:success] = wizard.message if wizard.message
+
             if @form.read_only?
               redirect_to(
                 further_education_payments_providers_claim_verification_path(claim)
@@ -34,9 +36,16 @@ module FurtherEducationPayments
                 )
               )
             elsif wizard.completed?
-              flash[:success] = "Claim Verified for #{@form.claimant_name}"
-
-              redirect_to further_education_payments_providers_verified_claims_path
+              if @form.claim.eligibility.claimant_not_employed_by_college?
+                redirect_to(
+                  further_education_payments_providers_claim_information_path(
+                    claim,
+                    information: :claim_rejected
+                  )
+                )
+              else
+                redirect_to further_education_payments_providers_verified_claims_path
+              end
             else
               redirect_to(
                 edit_further_education_payments_providers_claim_verification_path(
@@ -109,7 +118,7 @@ module FurtherEducationPayments
 
         def verification_form_params
           params
-            .require(@form.model_name.param_key)
+            .fetch(@form.model_name.param_key, {})
             .permit(*permitted_attributes)
         end
 

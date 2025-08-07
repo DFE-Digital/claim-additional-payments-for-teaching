@@ -200,6 +200,21 @@ module FurtherEducationPayments
           def provider_verification_verified_by_id
             user.id
           end
+
+          # If the claimant isn't employed by the college we exit the wizard
+          # early. We use the same columns to indicate a completed verification
+          # in that scenario, so we don't want to clear them when this form
+          # becomes unreachable.
+          def attributes_to_clear
+            if claim.eligibility.claimant_not_employed_by_college?
+              super.excluding(
+                "provider_verification_completed_at",
+                "provider_verification_verified_by_id"
+              )
+            else
+              super
+            end
+          end
         end
       end
     end
