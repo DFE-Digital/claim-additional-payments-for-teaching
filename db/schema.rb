@@ -348,6 +348,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_19_091828) do
     t.jsonb "provider_verification_maths_courses", default: []
     t.jsonb "provider_verification_physics_courses", default: []
     t.boolean "provider_verification_half_timetabled_teaching_time"
+    t.boolean "provider_verification_claimant_employed_by_college"
+    t.date "provider_verification_claimant_date_of_birth"
+    t.string "provider_verification_claimant_postcode"
+    t.string "provider_verification_claimant_national_insurance_number"
+    t.boolean "provider_verification_claimant_bank_details_match"
+    t.string "provider_verification_claimant_email"
+    t.boolean "provider_verification_claimant_employment_check_declaration"
     t.citext "work_email"
     t.boolean "work_email_verified"
     t.index ["possible_school_id"], name: "index_fe_payments_eligibilities_on_possible_school_id"

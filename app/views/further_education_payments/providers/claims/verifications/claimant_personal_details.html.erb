@@ -1,0 +1,129 @@
+<%= content_for(:page_title, "About #{@form.claimant_name}?") %>
+
+<% content_for :back_link do %>
+  <%= govuk_back_link href: backlink_path %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      About <%= @form.claimant_name %>
+    </h1>
+
+    <%= govuk_details(
+      summary_text: "Why we need this information",
+    ) do %>
+      <p class="govuk-body">
+        The applicant was not able to prove their identity using GOV.UK One Login,
+        so we need to do an employment check.
+      </p>
+
+      <p class="govuk-body">
+        The applicant has already provided this information and understands it
+        will be verified by their employer.
+      </p>
+
+      <p class="govuk-body">
+        Providing this information does not break General Data Protection
+        Regulation (GDPR) rules.
+      </p>
+    <% end %>
+
+    <%= form_with(
+      model: @form,
+      url: further_education_payments_providers_claim_verification_path(
+        @form.claim,
+        @form.provider,
+        slug: @form.slug
+      ),
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+      method: :patch,
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_date_field(
+        :provider_verification_claimant_date_of_birth,
+        date_of_birth: true,
+        legend: {
+          text: "Enter their date of birth",
+          tag: "h2",
+          size: "m"
+        },
+        hint: {
+          text: "For example, 27 3 2007"
+        }
+      ) %>
+
+      <%= f.govuk_text_field(
+        :provider_verification_claimant_postcode,
+        label: {
+          text: "Enter their postcode",
+          size: "m"
+        },
+        hint: {
+          text: "For example ’AA1 2BC’."
+        }
+      ) %>
+
+      <%= f.govuk_text_field(
+        :provider_verification_claimant_national_insurance_number,
+        label: {
+          text: "Enter their National Insurance number",
+          size: "m"
+        },
+        hint: {
+          text: "For example, QQ123456C"
+        },
+        extra_letter_spacing: true
+      ) %>
+
+      <%= f.govuk_collection_radio_buttons(
+        :provider_verification_claimant_bank_details_match,
+        f.object.claimant_bank_details_match_options,
+        :id,
+        :name,
+        legend: {
+          text: "Do these bank details match what you have for #{f.object.claimant_name}?",
+          size: "m"
+        }
+      ) do %>
+        <%= govuk_table do |table| %>
+          <% table.with_body do |body| %>
+            <% body.with_row do |row| %>
+              <% row.with_cell(header: true, text: "Account name") %>
+              <% row.with_cell(text: f.object.claimant_banking_name) %>
+            <% end %>
+
+            <% body.with_row do |row| %>
+              <% row.with_cell(header: true, text: "Bank sort code") %>
+              <% row.with_cell(text: f.object.claimant_bank_sort_code) %>
+            <% end %>
+
+            <% body.with_row do |row| %>
+              <% row.with_cell(header: true, text: "Account number ending in") %>
+              <% row.with_cell(text: f.object.claimant_bank_account_number_obfuscated) %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <h3 class="govuk-heading-m">
+        Enter their work email
+      </h3>
+
+      <%= govuk_inset_text(
+        text: "This must be their work email address. Generic email domains, " \
+        "for example Gmail, Outlook or Hotmail, will not be accepted."
+      ) %>
+
+      <%= f.govuk_email_field(
+        :provider_verification_claimant_email,
+        label: {
+          text: "Email address",
+        }
+      ) %>
+
+      <%= f.govuk_submit("Continue") %>
+    <% end %>
+  </div>
+</div>
