@@ -1,0 +1,63 @@
+<%= content_for(:page_title, "Claim reference: #{@form.claim.reference}") %>
+
+<% content_for :back_link do %>
+  <%= govuk_back_link href: backlink_path %>
+<% end %>
+
+<span class="govuk-caption-xl">
+  <%= @form.claim.full_name %>
+</span>
+
+<h1 class="govuk-heading-l">
+  Claim reference: <%= @form.claim.reference %>
+</h1>
+
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <%= form_with(
+      model: @form,
+      url: further_education_payments_providers_claim_verification_path(
+        @form.claim,
+        @form.provider,
+        slug: @form.slug,
+      ),
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+      method: :patch,
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= govuk_summary_card(title: "Employment status") do |card| %>
+        <%= card.with_summary_list(rows: f.object.employment_status_rows) %>
+      <% end %>
+
+      <%= govuk_summary_card(title: "Personal details") do |card| %>
+        <%= card.with_summary_list(rows: f.object.personal_details_rows) %>
+      <% end %>
+
+      <%= f.govuk_check_boxes_fieldset(
+        :provider_verification_claimant_employment_check_declaration,
+        multiple: false,
+        legend: {
+          text: "Declaration",
+          size: "l"
+        }
+      ) do %>
+
+        <%= f.govuk_check_box(
+          :provider_verification_claimant_employment_check_declaration,
+          1,
+          0,
+          multiple: false,
+          link_errors: true,
+          label: {
+            text: "To the best of my knowledge, I confirm that the information " \
+                  "provided in this form is correct."
+          }
+        ) %>
+      <% end %>
+
+      <%= f.govuk_submit("Confirm and send") %>
+    <% end %>
+  </div>
+</div>
