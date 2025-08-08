@@ -24,6 +24,13 @@ module Journeys
       attribute :subject_to_formal_performance_action, :boolean, pii: false
       attribute :subject_to_disciplinary_action, :boolean, pii: false
       attribute :half_teaching_hours, :boolean, pii: false
+
+      attribute :work_email_access, :boolean, pii: false
+      attribute :work_email, :string, pii: true
+      attribute :work_email_otp_secret, :string, pii: true
+      attribute :work_email_otp_timestamp, :datetime, pii: true
+      attribute :work_email_verified, :boolean, pii: false
+
       attribute :award_amount, :decimal, pii: false
       attribute :valid_passport, :boolean, pii: false
       attribute :passport_number, :string, pii: true
