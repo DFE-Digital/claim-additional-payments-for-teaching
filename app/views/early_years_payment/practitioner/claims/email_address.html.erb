@@ -1,1 +1,37 @@
-<%= render partial: "email_address", locals: { show_caption: false, heading_size: "l", show_help_with_access_codes: false } %>
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t("label"),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_email_field :email_address,
+        autocomplete: "email",
+        spellcheck: "false",
+        caption: {
+          text: t("questions.personal_details"),
+          size: "xl"
+        },
+        label: {
+          text: @form.t("label"),
+          tag: "h1",
+          size: "l"
+        },
+        hint: -> do %>
+          <%= @form.t("hint_html").html_safe %>
+        <% end %>
+      <%= f.hidden_field :resend, value: params[:resend] %>
+
+      <%= render "help_with_access_codes", communication_type: "Email" %>
+
+      <%= f.govuk_submit "Continue" %>
+    <% end %>
+  </div>
+</div>

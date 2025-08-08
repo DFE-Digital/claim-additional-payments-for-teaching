@@ -667,7 +667,7 @@ RSpec.describe "Admin EY tasks" do
     fill_in "Postcode", with: "DE22 4BS"
     click_on "Continue"
 
-    expect(page).to have_content("Your email address")
+    expect(page).to have_content("What is your personal email address?")
     fill_in "claim-email-address-field", with: "johndoe@example.com"
     click_on "Continue"
 

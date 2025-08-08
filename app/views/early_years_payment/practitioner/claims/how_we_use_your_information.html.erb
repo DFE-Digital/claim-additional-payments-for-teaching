@@ -1,29 +1,48 @@
-<% title = "How we’ll process your claim" %>
+<% title = "How we will use your information" %>
 <% content_for(:page_title, page_title(title, journey: current_journey_routing_name)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
-      <%= title %>
+      How we will use your information
     </h1>
 
     <h2 class="govuk-heading-m">
-      How we check the information you’ve provided
+      To process your application
     </h2>
 
     <p class="govuk-body">
-      We’ll check the information you’ve given us with the nursery where you
-      currently work.
+      We will check the information you have provided with the:
     </p>
 
+    <%= govuk_list [
+      "early years provider where you currently teach",
+      "Student Loans Company, if you have a student loan"
+    ], type: :bullet %>
+
     <h2 class="govuk-heading-m">
-      How we pay you
+      To pay you
     </h2>
 
     <p class="govuk-body">
-      The Department for Education will pay the money into your bank account.
-      This will happen around 6 weeks after we’ve confirmed you’re still
-      working in your role at 6 months.
+      The Department of Education (DfE) will make the payment directly to you.
+    </p>
+
+    <p class="govuk-body">
+      To complete the rest of your application, you will need your:
+    </p>
+
+    <%= govuk_list [
+      "National Insurance number",
+      "bank account details"
+    ], type: :bullet %>
+
+    <h2 class="govuk-heading-m">
+      Student loan deductions
+    </h2>
+
+    <p class="govuk-body">
+      If you are currently paying off a student loan, a deduction from your payment will go towards repaying it.
     </p>
 
     <h2 class="govuk-heading-m">
@@ -31,87 +50,11 @@
     </h2>
 
     <p class="govuk-body">
-      The Department for Education will pay Income Tax and National Insurance
-      on your payment if your total annual income is less than £50,270.
-    </p>
-
-    <h2 class="govuk-heading-m">
-      Universal Credit
-    </h2>
-
-    <p class="govuk-body">
-      If you claim Universal Credit, your £1,000 payment may affect the amount
-      of Universal Credit you receive.
+      DfE will pay National Insurance and basic rate Income Tax on the recruitment bonus on your behalf. If you earn £50,270 or more a year, you'll need to pay any Income Tax at the higher rate through PAYE.
     </p>
 
     <p class="govuk-body">
-      Read more about <%= govuk_link_to(
-        "how changes to your earnings can affect your Universal Credit",
-        "https://www.gov.uk/guidance/universal-credit-and-earnings"
-      ) %>.
-    </p>
-
-    <h2 class="govuk-heading-m">
-      Student loan
-    </h2>
-
-    <p class="govuk-body">
-      Your £1,000 payment will not be affected by any funding you have
-      previously received to study for a college course or apprenticeship.
-    </p>
-
-    <p class="govuk-body">
-      If you have previously studied at university and have a student loan,
-      your £1,000 payment may affect your repayments.
-    </p>
-
-    <h3 class="govuk-heading-s">
-      If you’re currently repaying a student loan
-    </h3>
-
-    <p class="govuk-body">
-      If your payslip shows that you’re repaying a student loan, a deduction
-      towards it may come out of your £1,000 payment.
-    </p>
-
-    <p class="govuk-body">
-      You may be able to claim any deductions back at the end of the tax
-      year. Read more about how you can
-      <%= govuk_link_to(
-        "claim back student loan deductions",
-        "https://www.gov.uk/repaying-your-student-loan/getting-a-refund"
-      ) %>.
-    </p>
-
-    <h3 class="govuk-heading-s">
-      If you have a student loan but are not currently repaying it
-    </h3>
-
-    <p class="govuk-body">
-      If your payment takes you over the amount you must earn to start paying
-      back a student loan, a deduction may go towards repaying it.
-    </p>
-
-    <p class="govuk-body">
-      Read more about
-      <%= govuk_link_to(
-        "when you start paying back a student loan",
-        "https://www.gov.uk/repaying-your-student-loan/when-you-start-repaying"
-      ) %>
-      and
-      <%= govuk_link_to(
-        "what you’ll pay",
-        "https://www.gov.uk/repaying-your-student-loan/what-you-pay"
-      ) %>
-    </p>
-
-    <p class="govuk-body">
-      You may be able to claim any deductions back at the end of the tax
-      year. Read more about how you can
-      <%= govuk_link_to(
-        "claim back student loan deductions",
-        "https://www.gov.uk/repaying-your-student-loan/getting-a-refund"
-      ) %>
+    For more details, you can read about payments and deductions for the <%= govuk_link_to "early years financial incentive payment", "#", new_tab: true %>
     </p>
 
     <%= govuk_button_to(
