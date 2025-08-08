@@ -43,8 +43,8 @@ RSpec.feature "Further education change answers" do
     choose college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{college.name}?")
-    choose("Permanent contract")
+    expect(page).to have_content("What type of contract do you have directly with #{college.name}?")
+    choose("Permanent")
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
@@ -228,8 +228,8 @@ RSpec.feature "Further education change answers" do
     choose college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{college.name}?")
-    choose("Permanent contract")
+    expect(page).to have_content("What type of contract do you have directly with #{college.name}?")
+    choose("Permanent")
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
@@ -332,8 +332,8 @@ RSpec.feature "Further education change answers" do
     choose college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{college.name}?")
-    choose("Permanent contract")
+    expect(page).to have_content("What type of contract do you have directly with #{college.name}?")
+    choose("Permanent")
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
