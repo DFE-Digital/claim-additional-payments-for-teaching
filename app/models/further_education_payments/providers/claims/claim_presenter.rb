@@ -6,6 +6,10 @@ module FurtherEducationPayments
 
         attr_reader :claim
 
+        delegate :full_name, :reference, :eligibility, to: :claim
+
+        delegate :provider_verification_completed_at, to: :eligibility
+
         def initialize(claim)
           @claim = claim
         end
@@ -37,13 +41,13 @@ module FurtherEducationPayments
         end
 
         def processed_by
-          claim.eligibility.processed_by_label
+          eligibility.processed_by_label
         end
 
         private
 
         def provider_verification_status
-          claim.eligibility.provider_verification_status
+          eligibility.provider_verification_status
         end
       end
     end
