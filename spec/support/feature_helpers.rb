@@ -109,8 +109,19 @@ module FeatureHelpers
   end
 
   def skip_tid
+    # First click through the new eligibility intro page if present
+    if page.has_text?("Check you’re eligible for a targeted retention incentive payment", wait: 0)
+      click_on "Start eligibility check"
+    end
+
     expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue without signing in"
+  end
+
+  def click_through_check_eligibility_intro
+    if page.has_text?("Check you’re eligible for a targeted retention incentive payment", wait: 0)
+      click_on "Start eligibility check"
+    end
   end
 
   # This is a workaround for some poorly written older feature specs which

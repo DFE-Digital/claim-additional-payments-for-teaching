@@ -125,5 +125,9 @@ module Policies
         end
       end
     end
+
+    def eligibility_page_url
+      "https://www.gov.uk/guidance/targeted-retention-incentive-payments-for-fe-teachers"
+    end
   end
 end

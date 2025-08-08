@@ -1,0 +1,60 @@
+<% content_for(
+  :page_title,
+  page_title(
+    "Check you’re eligible for a targeted retention incentive payment for further education",
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Check you’re eligible for a targeted retention incentive payment for further education
+    </h1>
+
+    <p class="govuk-body">
+      Answer the questions in the next section to find out if you’re eligible to claim a payment for the academic year 2025 to 2026.
+    </p>
+
+    <h2 class="govuk-heading-m">If you applied last year</h2>
+
+    <p class="govuk-body">
+      We review eligibility every year, so you'll need to complete a new eligibility check each time you apply.
+    </p>
+
+    <h2 class="govuk-heading-m">Before starting your eligibility check</h2>
+
+    <p class="govuk-body">
+      You'll also be asked to enter details about your:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>contract or written statement of employment</li>
+      <li>teaching timetable</li>
+    </ul>
+
+    <p class="govuk-body">
+      The details you enter will be checked and verified by your employer.
+    </p>
+
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_submit "Start eligibility check" %>
+    <% end %>
+
+    <h2 class="govuk-heading-m">Full eligibility criteria</h2>
+
+    <p class="govuk-body">
+      Read the <%= govuk_link_to(
+        "eligibility guidance for the targeted retention incentive payment",
+        Policies::FurtherEducationPayments.eligibility_page_url,
+        target: "_blank",
+        no_visited_state: true
+      ) %>.
+    </p>
+  </div>
+</div>

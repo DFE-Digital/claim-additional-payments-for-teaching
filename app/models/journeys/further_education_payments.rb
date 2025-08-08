@@ -13,6 +13,7 @@ module Journeys
         "identity-verification" => IdentityVerificationForm,
         "previously-claimed" => PreviouslyClaimedForm,
         "have-one-login-account" => HaveOneLoginAccountForm,
+        "check-eligibility-intro" => CheckEligibilityIntroForm,
         "teaching-responsibilities" => TeachingResponsibilitiesForm,
         "further-education-provision-search" => FurtherEducationProvisionSearchForm,
         "select-provision" => SelectProvisionForm,

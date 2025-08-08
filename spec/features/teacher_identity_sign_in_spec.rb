@@ -29,6 +29,10 @@ RSpec.feature "Teacher Identity Sign in" do
     expect(page).to have_text("Find out if you are eligible for a targeted retention incentive payment")
     click_on "Start now"
 
+    # - Check eligibility intro
+    expect(page).to have_text("Check you’re eligible for a targeted retention incentive payment")
+    click_on "Start eligibility check"
+
     # - Sign in or continue page
     click_on "Continue without signing in"
 
@@ -39,6 +43,8 @@ RSpec.feature "Teacher Identity Sign in" do
     # - Teacher makes claim after signing in
     click_on "Back"
 
+    # - Should be back at Sign in or continue page
+    expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue with DfE Identity"
 
     # - Teacher details page

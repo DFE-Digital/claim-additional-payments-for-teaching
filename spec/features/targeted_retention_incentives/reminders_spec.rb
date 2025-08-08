@@ -23,6 +23,9 @@ RSpec.describe "Targeted retention incentives reminders" do
 
       click_on "Start now"
 
+      # check-eligibility-intro
+      click_through_check_eligibility_intro
+
       # sign-in-or-continue
       click_on "Continue without signing in"
 
@@ -100,6 +103,9 @@ RSpec.describe "Targeted retention incentives reminders" do
       visit Journeys::TargetedRetentionIncentivePayments.start_page_url
 
       click_on "Start now"
+
+      # check-eligibility-intro
+      click_through_check_eligibility_intro
 
       # sign-in-or-continue
       click_on "Continue without signing in"
