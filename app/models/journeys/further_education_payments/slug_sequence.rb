@@ -36,6 +36,10 @@ module Journeys
       PERSONAL_DETAILS_SLUGS = %w[
         sign-in
         identity-verification
+        work-email-access
+        no-work-email-access
+        work-email
+        work-email-verification
         information-provided
         personal-details
         postcode-search
@@ -65,6 +69,7 @@ module Journeys
 
       DEAD_END_SLUGS = %w[
         ineligible
+        no-work-email-access
       ]
 
       SLUGS = (
@@ -187,6 +192,18 @@ module Journeys
           end
 
           array << SLUGS_HASH["identity-verification"]
+
+          if answers.onelogin_idv_return_codes.present?
+            array << SLUGS_HASH["work-email-access"]
+
+            if answers.work_email_access
+              array << SLUGS_HASH["work-email"]
+              array << SLUGS_HASH["work-email-verification"]
+            else
+              array << SLUGS_HASH["no-work-email-access"]
+            end
+          end
+
           array << SLUGS_HASH["information-provided"]
           array << SLUGS_HASH["personal-details"]
           array << SLUGS_HASH["postcode-search"]

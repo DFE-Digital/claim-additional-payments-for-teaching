@@ -130,7 +130,8 @@ RSpec.feature "Further education payments" do
     sign_in_with_one_login
     idv_with_one_login
 
-    expect(page).to have_content("How we will use the information you provide")
+    expect(page).not_to have_link "Back"
+    expect(page).to have_content("How we will use your information")
     expect(page).to have_content("the Student Loans Company")
     click_button "Continue"
 

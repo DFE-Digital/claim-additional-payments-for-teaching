@@ -1,0 +1,41 @@
+<% content_for(:page_title, page_title(@form.t(:question, school_name: journey_session.answers.school.name), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <span class="govuk-caption-l">Email address verification</span>
+      <h1 class="govuk-heading-l">
+        <%= @form.t(:heading, school_name: @form.school.name) %>
+      </h1>
+
+      <p class="govuk-body">
+        We have sent a 6-digit passcode to <strong><%= @form.work_email %></strong>.
+      </p>
+
+      <p class="govuk-body">
+        The passcode will expire 15 minutes after you receive it.
+      </p>
+
+      <%= f.govuk_email_field :work_email_otp,
+        width: 10,
+        label: {
+          text: @form.t(:question, school_name: journey_session.answers.school.name),
+        }
+      %>
+
+      <p class="govuk-body">
+        <%= govuk_link_to(
+          "Resend passcode (you will be sent back to the email address page)",
+          claim_path(current_journey_routing_name, "work-email", resend: true)
+        ) %>
+      </p>
+
+      <div class="govuk-button-group">
+        <%= f.govuk_submit "Confirm" %>
+        <%= govuk_button_link_to "Change email address", claim_path(current_journey_routing_name, "work-email"), secondary: true %>
+      </div>
+    <% end %>
+  </div>
+</div>

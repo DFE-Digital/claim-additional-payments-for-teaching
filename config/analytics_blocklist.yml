@@ -85,6 +85,7 @@
   - claimant_valid_passport
   - claimant_passport_number
   - passport_number
+  - work_email
   :journeys_sessions:
   - answers
   :early_years_payment_eligibilities:

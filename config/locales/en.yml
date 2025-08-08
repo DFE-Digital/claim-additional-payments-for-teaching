@@ -1183,6 +1183,27 @@ en:
             Tell us if you spend at least half your timetabled teaching hours working with students aged 16 to 19
       eligible:
         heading: You’re eligible for a targeted retention incentive payment
+      work_email_access:
+        question: Can you access your work email account for %{school_name}?
+        hint: If you cannot access your work email right now, we’ll save all your answers, sign you out and you’ll return to this page when you sign in again later.
+        errors:
+          inclusion: Select yes if you can access your work email account for %{school_name}
+      no_work_email_access:
+        title: We’ve signed you out
+      work_email:
+        question: Enter work email
+        hint: To verify your further education (FE) work email address we will send you an email with a 6-digit passcode.
+        errors:
+          presence: Enter an email address
+        details:
+          title: How we’ll use this information
+          body: We’ll only use this email address to confirm your employment. We will not use it to send any updates about your application or link it to your GOV.UK One Login account.
+      work_email_verification:
+        caption: Email address verification
+        heading: Check your %{school_name} work email
+        question: Enter the 6-digit security code
+        errors:
+          presence: Enter a passcode
       gender:
         questions:
           payroll_gender: "How is your gender recorded on your employer’s payroll system?"
