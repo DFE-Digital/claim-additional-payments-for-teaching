@@ -47,8 +47,8 @@ module Journeys
         def slugs
           [].tap do |sequence|
             sequence << "find-reference"
-            sequence << "how-we-use-your-information"
             sequence << "sign-in"
+            sequence << "how-we-use-your-information"
             sequence << "personal-details"
             sequence << "postcode-search"
             sequence << "select-home-address" unless answers.skip_postcode_search? || answers.ordnance_survey_error?

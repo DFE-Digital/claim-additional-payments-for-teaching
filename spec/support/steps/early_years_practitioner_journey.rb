@@ -3,9 +3,6 @@ def when_personal_details_entered_up_to_address
   fill_in "Enter your claim reference", with: claim.reference
   click_button "Submit"
 
-  expect(page).to have_content "How we’ll process your claim"
-  click_on "Continue"
-
   mock_one_login_auth
 
   expect(page).to have_content "Sign in with GOV.UK One Login"
@@ -17,6 +14,9 @@ def when_personal_details_entered_up_to_address
   click_on "Continue"
 
   expect(page).to have_content "You’ve successfully proved your identity with GOV.UK One Login"
+  click_on "Continue"
+
+  expect(page).to have_content "How we will use your information"
   click_on "Continue"
 
   fill_in "First name", with: "John"

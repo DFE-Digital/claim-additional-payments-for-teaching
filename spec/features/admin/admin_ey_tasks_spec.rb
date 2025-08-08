@@ -642,12 +642,16 @@ RSpec.describe "Admin EY tasks" do
     visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=practitioner@example.com"
 
     fill_in "Enter your claim reference", with: claim.reference
-
     click_button "Submit"
 
+    sign_in_with_one_login
+    idv_with_one_login
+
+    expect(page).to have_content("You’ve successfully proved your identity with GOV.UK One Login")
     click_on "Continue"
 
-    sign_in_and_idv_with_one_login
+    expect(page).to have_content("How we will use your information")
+    click_on "Continue"
 
     expect(page).to have_content("Personal details")
     fill_in "Day", with: date_of_birth.day
@@ -667,7 +671,7 @@ RSpec.describe "Admin EY tasks" do
     fill_in "Postcode", with: "DE22 4BS"
     click_on "Continue"
 
-    expect(page).to have_content("Your email address")
+    expect(page).to have_content("What is your personal email address?")
     fill_in "claim-email-address-field", with: "johndoe@example.com"
     click_on "Continue"
 
