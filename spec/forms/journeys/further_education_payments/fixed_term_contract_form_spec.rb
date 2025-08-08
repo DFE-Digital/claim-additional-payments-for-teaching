@@ -29,7 +29,7 @@ RSpec.describe Journeys::FurtherEducationPayments::FixedTermContractForm, type: 
         is_expected.not_to(
           allow_value(fixed_term_full_year)
           .for(:fixed_term_full_year)
-          .with_message("Select yes if your fixed-term contract covers the full 2024 to 2025 academic year")
+          .with_message("Tell us if your fixed-term contract covers the full academic year")
         )
       end
     end

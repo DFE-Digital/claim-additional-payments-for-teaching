@@ -18,6 +18,8 @@ module Policies
           :lack_teaching_responsibilities
         elsif answers.ineligible_fe_provider? || answers.fe_provider_closed?
           :fe_provider
+        elsif answers.fixed_term_full_year == false
+          :fixed_term_must_cover_full_academic_year
         elsif answers.taught_at_least_one_term == false
           :must_teach_at_least_one_term
         elsif !answers.recent_further_education_teacher?
