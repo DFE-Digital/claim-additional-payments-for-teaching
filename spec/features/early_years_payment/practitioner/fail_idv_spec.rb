@@ -32,7 +32,7 @@ RSpec.feature "Early years payment practitioner" do
     expect(page).to have_content "You’ve successfully signed in to GOV.UK One Login"
     click_on "Continue"
 
-    expect(page).to have_content "We cannot progress your application"
-    expect(page).not_to have_button "Continue"
+    expect(page).to have_content "We have not been able to confirm your identity via GOV.UK One Login"
+    expect(page).to have_button "Continue"
   end
 end
