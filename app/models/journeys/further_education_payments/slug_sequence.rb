@@ -7,6 +7,7 @@ module Journeys
       ]
 
       ELIGIBILITY_SLUGS = %w[
+        check-eligibility-intro
         further-education-teaching-start-year
         teaching-qualification
         teaching-responsibilities
@@ -104,6 +105,10 @@ module Journeys
         end
 
         array << SLUGS_HASH["sign-in"] if answers.previously_claimed?
+
+        # Show check-eligibility-intro if they explicitly answered "No" to previously claimed
+        # (not when they have One Login and skipped the question entirely)
+        array << SLUGS_HASH["check-eligibility-intro"] if !has_one_login_account? && !answers.previously_claimed?
 
         array << SLUGS_HASH["further-education-teaching-start-year"]
         array << SLUGS_HASH["teaching-qualification"]

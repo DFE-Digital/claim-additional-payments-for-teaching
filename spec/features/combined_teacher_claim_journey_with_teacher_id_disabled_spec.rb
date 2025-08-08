@@ -13,7 +13,7 @@ RSpec.feature "Combined journey" do
     click_on "Start now"
 
     # - Check eligibility intro
-    expect(page).to have_text("Check you’re elegible for a targeted retention incentive payment")
+    expect(page).to have_text("Check you’re eligible for a targeted retention incentive payment")
     expect(page).not_to have_link "Back"
     click_on "Start eligibility check"
 

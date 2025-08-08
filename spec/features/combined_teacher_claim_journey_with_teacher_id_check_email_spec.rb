@@ -70,7 +70,7 @@ RSpec.feature "Combined journey with Teacher ID email check" do
     click_on "Start now"
 
     # - Check eligibility intro
-    expect(page).to have_text("Check you’re elegible for a targeted retention incentive payment")
+    expect(page).to have_text("Check you’re eligible for a targeted retention incentive payment")
     click_on "Start eligibility check"
 
     expect(page).to have_text("Use DfE Identity to sign in")

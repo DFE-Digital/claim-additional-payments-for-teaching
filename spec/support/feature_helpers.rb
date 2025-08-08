@@ -110,7 +110,7 @@ module FeatureHelpers
 
   def skip_tid
     # First click through the new eligibility intro page if present
-    if page.has_text?("Check you’re elegible for a targeted retention incentive payment", wait: 0)
+    if page.has_text?("Check you’re eligible for a targeted retention incentive payment", wait: 0)
       click_on "Start eligibility check"
     end
 
@@ -119,7 +119,7 @@ module FeatureHelpers
   end
 
   def click_through_check_eligibility_intro
-    if page.has_text?("Check you’re elegible for a targeted retention incentive payment", wait: 0)
+    if page.has_text?("Check you’re eligible for a targeted retention incentive payment", wait: 0)
       click_on "Start eligibility check"
     end
   end

@@ -193,7 +193,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
       visit new_claim_path(Journeys::TargetedRetentionIncentivePayments::ROUTING_NAME)
 
       # - Check eligibility intro
-      expect(page).to have_text("Check you’re elegible for a targeted retention incentive payment")
+      expect(page).to have_text("Check you’re eligible for a targeted retention incentive payment")
       click_on "Start eligibility check"
 
       # - Sign in or continue page

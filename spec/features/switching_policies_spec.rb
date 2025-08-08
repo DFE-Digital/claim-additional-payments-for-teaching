@@ -23,7 +23,7 @@ RSpec.feature "Switching policies" do
       click_on "Continue"
 
       # - Check eligibility intro
-      expect(page).to have_text("Check you’re elegible for a targeted retention incentive payment")
+      expect(page).to have_text("Check you’re eligible for a targeted retention incentive payment")
       click_on "Start eligibility check"
 
       expect(page).to have_text("You can sign in or set up a DfE Identity account to make it easier to claim additional payments.")
