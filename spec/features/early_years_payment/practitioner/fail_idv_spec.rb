@@ -18,8 +18,8 @@ RSpec.feature "Early years payment practitioner" do
     fill_in "Enter your claim reference", with: claim.reference
     click_button "Submit"
 
-    expect(page.title).to have_text("How we’ll process your claim")
-    expect(page).to have_content("How we’ll process your claim")
+    expect(page.title).to have_text("How we will use your information")
+    expect(page).to have_content("How we will use your information")
     click_on "Continue"
 
     mock_one_login_auth
@@ -32,7 +32,7 @@ RSpec.feature "Early years payment practitioner" do
     expect(page).to have_content "You’ve successfully signed in to GOV.UK One Login"
     click_on "Continue"
 
-    expect(page).to have_content "We cannot progress your application"
-    expect(page).not_to have_button "Continue"
+    expect(page).to have_content "We have not been able to confirm your identity via GOV.UK One Login"
+    expect(page).to have_button "Continue"
   end
 end

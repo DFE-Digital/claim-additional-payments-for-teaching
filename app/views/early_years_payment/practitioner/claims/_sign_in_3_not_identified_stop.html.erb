@@ -1,11 +1,13 @@
 <h1 class="govuk-heading-l">
-  We cannot progress your application
+  We have not been able to confirm your identity via GOV.UK One Login
 </h1>
 
 <p class="govuk-body">
-  You need to be able to prove your identity in GOV.UK One Login to continue your application. You can find more information about <%= govuk_link_to "proving your identity", "https://www.gov.uk/using-your-gov-uk-one-login" %> on GOV.UK.
+  We’ll use your personal details to confirm who you are.
 </p>
 
-<p class="govuk-body">
-  If you have any queries about the application process, contact us at <%= govuk_link_to t("#{journey::I18N_NAMESPACE}.support_email_address"), "mailto:#{t("#{journey::I18N_NAMESPACE}.support_email_address")}" %>.
-</p>
+<%= govuk_button_to(
+  "Continue",
+  claim_path(current_journey_routing_name),
+  method: :patch
+) %>

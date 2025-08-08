@@ -3,7 +3,7 @@ def when_personal_details_entered_up_to_address
   fill_in "Enter your claim reference", with: claim.reference
   click_button "Submit"
 
-  expect(page).to have_content "How we’ll process your claim"
+  expect(page).to have_content "How we will use your information"
   click_on "Continue"
 
   mock_one_login_auth
