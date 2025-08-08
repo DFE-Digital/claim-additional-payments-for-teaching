@@ -302,7 +302,7 @@ RSpec.feature "Provider verifying claims" do
       ).to eql("/further-education-payments/providers/verified-claims")
       expect(page).to have_css(
         "table tbody tr:first-child td:nth-child(4)",
-        text: "Pending"
+        text: "Completed"
       )
     end
   end
