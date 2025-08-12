@@ -1,0 +1,40 @@
+<% content_for(:page_title, page_title(t("questions.personal_details"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <span class="govuk-caption-xl">Personal details</span>
+      <%= f.govuk_fieldset legend: {
+        text: "Enter your full name",
+        tag: "h1",
+        size: "l"
+      } do %>
+        <p class="govuk-body">
+          Enter your full name as it appears on any official documents, for example, your passport.
+        </p>
+
+        <%= f.govuk_text_field :first_name,
+          width: "two-thirds",
+          label: { text: "First name(s)" },
+          autocomplete: "given-name"
+        %>
+
+        <%= f.govuk_text_field :middle_name,
+          width: "two-thirds",
+          label: { text: "Middle name(s) Optional" },
+          autocomplete: "additional-name"
+        %>
+
+        <%= f.govuk_text_field :surname,
+          width: "two-thirds",
+          label: { text: "Last name" },
+          autocomplete: "family-name"
+        %>
+      <% end %>
+
+      <%= f.govuk_submit "Continue" %>
+    <% end %>
+  </div>
+</div>

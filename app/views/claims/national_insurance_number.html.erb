@@ -1,0 +1,25 @@
+<% content_for(:page_title, page_title(t("questions.personal_details"), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <span class="govuk-caption-xl">Personal details</span>
+      <%= f.govuk_text_field :national_insurance_number,
+        width: 10,
+        spellcheck: false,
+        autocomplete: "off",
+        label: {
+          text: "Enter your National Insurance number",
+          tag: "h1",
+          size: "l"
+        },
+        hint: -> do %>
+          It’s on your National Insurance card, benefit letter, payslip or P60. For example ‘QQ123456C’.
+        <% end %>
+
+      <%= f.govuk_submit "Continue" %>
+    <% end %>
+  </div>
+</div>

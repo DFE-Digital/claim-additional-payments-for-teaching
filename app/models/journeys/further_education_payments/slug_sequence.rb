@@ -41,7 +41,9 @@ module Journeys
         work-email
         work-email-verification
         information-provided
-        personal-details
+        full-name
+        date-of-birth
+        national-insurance-number
         postcode-search
         select-home-address
         address
@@ -205,7 +207,9 @@ module Journeys
           end
 
           array << SLUGS_HASH["information-provided"]
-          array << SLUGS_HASH["personal-details"]
+          array << SLUGS_HASH["full-name"]
+          array << SLUGS_HASH["date-of-birth"]
+          array << SLUGS_HASH["national-insurance-number"]
           array << SLUGS_HASH["postcode-search"]
         end
 
