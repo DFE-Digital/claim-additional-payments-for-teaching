@@ -28,15 +28,15 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::AnswersPresenter do
     subject { described_class.new(journey_session).identity_answers }
 
     context "Full name" do
-      it { is_expected.to include(["Full name", "John Doe", "personal-details"]) }
+      it { is_expected.to include(["Full name", "John Doe", "full-name"]) }
     end
 
     context "Date of birth" do
-      it { is_expected.to include(["Date of birth", "1 January 1970", "personal-details"]) }
+      it { is_expected.to include(["Date of birth", "1 January 1970", "date-of-birth"]) }
     end
 
     context "National Insurance number" do
-      it { is_expected.to include(["National Insurance number", "QQ123456C", "personal-details"]) }
+      it { is_expected.to include(["National Insurance number", "QQ123456C", "national-insurance-number"]) }
     end
 
     context "Home address" do

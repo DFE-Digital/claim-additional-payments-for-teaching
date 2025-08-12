@@ -6,7 +6,9 @@ module Journeys
           find-reference
           how-we-use-your-information
           sign-in
-          personal-details
+          full-name
+          date-of-birth
+          national-insurance-number
           postcode-search
           select-home-address
           address
@@ -49,7 +51,9 @@ module Journeys
             sequence << "find-reference"
             sequence << "sign-in"
             sequence << "how-we-use-your-information"
-            sequence << "personal-details"
+            sequence << "full-name"
+            sequence << "date-of-birth"
+            sequence << "national-insurance-number"
             sequence << "postcode-search"
             sequence << "select-home-address" unless answers.skip_postcode_search? || answers.ordnance_survey_error?
             sequence << "address" unless address_set_by_postcode_search?
