@@ -6,22 +6,19 @@ module Journeys
 
       def identity_answers
         [].tap do |a|
-          a << ["Full name", answers.full_name, "full-name"] if show_name?
-          a << ["Date of birth", date_of_birth_string, "date-of-birth"] if show_dob?
-          a << ["National Insurance number", answers.national_insurance_number, "national-insurance-number"] if show_nino?
+          a << ["Full name", answers.full_name, "full-name"]
+          a << ["Date of birth", date_of_birth_string, "date-of-birth"]
+          a << ["National Insurance number", answers.national_insurance_number, "national-insurance-number"]
 
-          a << [t("forms.address.questions.your_address"), answers.address, "address"]
+          a << ["Address", answers.address, "address"]
 
-          a << [t("further_education_payments.forms.passport.question"), (answers.valid_passport ? "Yes" : "No"), "passport"] if !answers.valid_passport.nil?
-          a << [t("further_education_payments.forms.passport.conditional_question"), answers.passport_number, "passport"] if answers.passport_number.present?
+          a << ["Email address", answers.email_address, "email-address"]
+
+          a << [t("questions.provide_mobile_number"), answers.provide_mobile_number? ? "Yes" : "No", "provide-mobile-number"]
+          a << ["Mobile number", answers.mobile_number, "mobile-number"] if answers.provide_mobile_number?
 
           a << payroll_gender
-          a << teacher_reference_number if show_trn?
-          a << [t("questions.email_address"), answers.email_address, "email-address"] unless show_email_select?
-          a << [text_for(:select_email), answers.email_address, "select-email"] if show_email_select?
-          a << [t("questions.provide_mobile_number"), answers.provide_mobile_number? ? "Yes" : "No", "provide-mobile-number"] unless show_mobile_select?
-          a << [t("questions.mobile_number"), answers.mobile_number, "mobile-number"] unless show_mobile_select? || !answers.provide_mobile_number?
-          a << [t("forms.select_mobile_form.questions.which_number"), answers.mobile_number.present? ? answers.mobile_number : t("forms.select_mobile_form.answers.decline"), "select-mobile"] if show_mobile_select?
+          a << teacher_reference_number
         end
       end
 
