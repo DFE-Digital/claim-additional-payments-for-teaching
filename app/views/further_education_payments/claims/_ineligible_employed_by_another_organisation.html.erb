@@ -1,0 +1,20 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <%= @form.t(["courses", "heading"]) %>
+    </h1>
+
+    <p class="govuk-body">
+      In order to claim a targeted retention incentive payment, you must be directly employed by the FE provider where you work.
+      You can not be employed through an agency or subsidiary of the FE provider, or as a contractor.
+    </p>
+
+    <p class="govuk-body">
+      For more information, check the eligibility criteria for <%= govuk_link_to t("further_education_payments.eligibility_criteria_link.text"), t("further_education_payments.eligibility_criteria_link.url"), new_tab: true %>.
+    </p>
+
+    <p class="govuk-body">
+      If you are unsure your information is correct, you can <%= govuk_link_to "go back", claim_path(current_journey_routing_name, navigator.previous_slug) %> and review your answers. You can also <%= govuk_link_to "start the application again", claim_path(current_journey_routing_name, "landing-page") %>.
+    </p>
+  </div>
+</div>

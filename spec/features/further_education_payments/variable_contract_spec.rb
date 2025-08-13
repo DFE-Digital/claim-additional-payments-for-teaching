@@ -47,8 +47,8 @@ RSpec.feature "Further education payments" do
     choose college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{college.name}?")
-    choose("Variable hours contract")
+    expect(page).to have_content("What type of contract do you have directly with #{college.name}?")
+    choose("Variable hours")
     click_button "Continue"
 
     expect(page).to have_content("Have you taught at #{college.name} for at least one academic term?")

@@ -122,8 +122,8 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
           ["Which FE provider directly employs you?",
             college.name,
             "further-education-provision-search"],
-          ["What type of contract do you have with #{college.name}?",
-            "Permanent contract",
+          ["What type of contract do you have directly with #{college.name}?",
+            "Permanent",
             "contract-type"],
           ["On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?",
             "More than 12 hours per week",
@@ -204,13 +204,13 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
     context "contract_type - fixed_term" do
       let(:contract_type) { "fixed_term" }
 
-      it { is_expected.to include(["What type of contract do you have with #{college.name}?", "Fixed-term contract", "contract-type"]) }
+      it { is_expected.to include(["What type of contract do you have directly with #{college.name}?", "Fixed-term", "contract-type"]) }
     end
 
     context "contract_type - variable_hours" do
       let(:contract_type) { "variable_hours" }
 
-      it { is_expected.to include(["What type of contract do you have with #{college.name}?", "Variable hours contract", "contract-type"]) }
+      it { is_expected.to include(["What type of contract do you have directly with #{college.name}?", "Variable hours", "contract-type"]) }
     end
 
     context "subjects-taught - just one" do

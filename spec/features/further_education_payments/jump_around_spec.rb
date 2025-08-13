@@ -78,7 +78,7 @@ RSpec.feature "Further education payments" do
     click_button "Continue"
 
     expect(page).to have_content("What type of contract do you have")
-    choose "Permanent contract"
+    choose "Permanent"
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach")
@@ -89,7 +89,7 @@ RSpec.feature "Further education payments" do
 
     visit claim_path(Journeys::FurtherEducationPayments::ROUTING_NAME, "contract-type")
     expect(page).to have_content("What type of contract do you have")
-    choose "Fixed-term contract"
+    choose "Fixed-term"
     click_button "Continue"
 
     expect(page).not_to have_content "You are not eligible"
@@ -134,7 +134,7 @@ RSpec.feature "Further education payments" do
     click_button "Continue"
 
     expect(page).to have_content("What type of contract do you have")
-    choose "Permanent contract"
+    choose "Permanent"
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach")
@@ -212,8 +212,8 @@ RSpec.feature "Further education payments" do
     choose college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{college.name}?")
-    choose("Permanent contract")
+    expect(page).to have_content("What type of contract do you have directly with #{college.name}?")
+    choose("Permanent")
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
@@ -326,8 +326,8 @@ RSpec.feature "Further education payments" do
     choose college.name
     click_button "Continue"
 
-    expect(page).to have_content("What type of contract do you have with #{college.name}?")
-    choose("Permanent contract")
+    expect(page).to have_content("What type of contract do you have directly with #{college.name}?")
+    choose("Permanent")
     click_button "Continue"
 
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")

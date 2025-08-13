@@ -6,7 +6,7 @@ module Journeys
       validates :contract_type,
         inclusion: {
           in: ->(form) { form.radio_options.map(&:id) },
-          message: ->(object, data) { i18n_error_message(:inclusion, school_name: object.school.name).call(object, data) }
+          message: i18n_error_message(:inclusion)
         }
 
       def radio_options
@@ -24,6 +24,11 @@ module Journeys
             id: "variable_hours",
             name: t("options.variable_hours"),
             hint: "This includes zero hours contracts"
+          ),
+          Option.new(
+            id: "employed_by_another_organisation",
+            name: t("options.employed_by_another_organisation"),
+            hint: "For example, through an agency, as a contractor or a subsidiary of the FE provider"
           )
         ]
       end
