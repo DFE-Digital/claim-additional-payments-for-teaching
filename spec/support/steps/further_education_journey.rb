@@ -14,6 +14,11 @@ def when_further_education_journey_ready_to_submit
   choose "No"
   click_button "Continue"
 
+  # check-eligibility-intro
+  expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
+  expect(page).to have_content("Answer the questions in the next section")
+  click_button "Start eligibility check"
+
   choose("September 2023 to August 2024")
   click_button "Continue"
   choose "Yes"

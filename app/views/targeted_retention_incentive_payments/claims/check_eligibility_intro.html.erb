@@ -1,0 +1,51 @@
+<% content_for(
+  :page_title,
+  page_title(
+    "Check you’re eligible for a targeted retention incentive payment",
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Check you’re eligible for a targeted retention incentive payment
+    </h1>
+
+    <p class="govuk-body">
+      By completing this short form, you’ll quickly find out:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>if you’re eligible to receive the payment in the 2024 to 2025 academic year</li>
+      <li>how much money you could get</li>
+    </ul>
+
+    <p class="govuk-body">
+      If you are eligible, we’ll help you apply for the payment.
+    </p>
+
+    <p class="govuk-body">
+      It will take around 5 minutes to check if you’re eligible.
+    </p>
+
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_submit "Start eligibility check" %>
+    <% end %>
+
+    <p class="govuk-body">
+      To find out about the eligibility criteria, you can read the
+      <%= govuk_link_to(
+        "eligibility guidance for the targeted retention incentive payment",
+        Policies::TargetedRetentionIncentivePayments.eligibility_page_url,
+        target: "_blank",
+        no_visited_state: true
+      ) %>.
+    </p>
+  </div>
+</div>

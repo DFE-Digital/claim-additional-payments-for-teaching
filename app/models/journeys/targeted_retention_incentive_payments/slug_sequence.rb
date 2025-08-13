@@ -2,6 +2,7 @@ module Journeys
   module TargetedRetentionIncentivePayments
     class SlugSequence
       ELIGIBILITY_SLUGS = [
+        "check-eligibility-intro",
         "sign-in-or-continue",
         "reset-claim",
         "correct-school",
@@ -102,6 +103,7 @@ module Journeys
 
       def initial_slugs
         [].tap do |sequence|
+          sequence << "check-eligibility-intro"
           sequence << "sign-in-or-continue" if Journeys::TargetedRetentionIncentivePayments.configuration.teacher_id_enabled?
           sequence << "reset-claim" if answers.details_check == false
           sequence << "correct-school" if answers.logged_in_with_tid_and_has_recent_tps_school?

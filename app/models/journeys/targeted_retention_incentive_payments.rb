@@ -9,6 +9,7 @@ module Journeys
     POLICIES = [Policies::TargetedRetentionIncentivePayments]
     FORMS = {
       "claims" => {
+        "check-eligibility-intro" => CheckEligibilityIntroForm,
         "current-school" => CurrentSchoolForm,
         "correct-school" => CorrectSchoolForm,
         "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm,
