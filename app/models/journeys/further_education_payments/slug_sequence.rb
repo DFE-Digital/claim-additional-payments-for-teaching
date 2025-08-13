@@ -130,12 +130,6 @@ module Journeys
             array << SLUGS_HASH["half-teaching-hours"]
             array << SLUGS_HASH["teaching-hours-per-week-next-term"]
           end
-
-          if answers.fixed_term_full_year == false
-            array << SLUGS_HASH["half-teaching-hours"]
-            array << SLUGS_HASH["taught-at-least-one-term"]
-            array << SLUGS_HASH["teaching-hours-per-week-next-term"]
-          end
         when "variable_hours"
           array << SLUGS_HASH["taught-at-least-one-term"]
 
