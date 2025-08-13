@@ -6,8 +6,8 @@ module Journeys
 
         def identity_answers
           [].tap do |a|
-            a << ["Full name", answers.full_name, "full-name"]
-            a << ["Date of birth", date_of_birth_string, "date-of-birth"]
+            a << ["Full name", answers.full_name, "full-name"] if show_full_name?
+            a << ["Date of birth", date_of_birth_string, "date-of-birth"] if show_date_of_birth?
             a << ["National Insurance number", answers.national_insurance_number, "national-insurance-number"]
             a << ["Home address", answers.address, "address"]
             a << ["Preferred email address", answers.email_address, "email-address"]
@@ -23,6 +23,16 @@ module Journeys
             a << ["Account number", answers.bank_account_number, "personal-bank-account"]
             a << ["Payroll gender", t("answers.payroll_gender.#{answers.payroll_gender}"), "gender"]
           end
+        end
+
+        private
+
+        def show_full_name?
+          !answers.identity_confirmed_with_onelogin?
+        end
+
+        def show_date_of_birth?
+          !answers.identity_confirmed_with_onelogin?
         end
       end
     end

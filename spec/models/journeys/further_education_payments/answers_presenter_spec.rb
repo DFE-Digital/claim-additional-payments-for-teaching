@@ -259,4 +259,50 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
       end
     end
   end
+
+  describe "#identity_answers" do
+    subject { described_class.new(journey_session) }
+
+    context "when OL idv passed" do
+      let(:answers) do
+        build(
+          :further_education_payments_answers,
+          identity_confirmed_with_onelogin: true
+        )
+      end
+
+      it "does not show full name" do
+        expect(subject.identity_answers.find { |a| a[0] == "Full name" }).to be_blank
+      end
+
+      it "does not show date of birth" do
+        expect(subject.identity_answers.find { |a| a[0] == "Date of birth" }).to be_blank
+      end
+
+      it "does show national insurance number" do
+        expect(subject.identity_answers.find { |a| a[0] == "National Insurance number" }).to be_present
+      end
+    end
+
+    context "when OL idv failed" do
+      let(:answers) do
+        build(
+          :further_education_payments_answers,
+          identity_confirmed_with_onelogin: false
+        )
+      end
+
+      it "does show full name" do
+        expect(subject.identity_answers.find { |a| a[0] == "Full name" }).to be_present
+      end
+
+      it "does show date of birth" do
+        expect(subject.identity_answers.find { |a| a[0] == "Date of birth" }).to be_present
+      end
+
+      it "does show national insurance number" do
+        expect(subject.identity_answers.find { |a| a[0] == "National Insurance number" }).to be_present
+      end
+    end
+  end
 end
