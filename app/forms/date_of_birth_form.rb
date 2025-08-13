@@ -38,13 +38,7 @@ class DateOfBirthForm < Form
     journey_session.answers.assign_attributes(
       date_of_birth:
     )
-
-    reset_dependent_answers_attributes
     journey_session.save!
-
-    if journey.requires_student_loan_details?
-      journey::AnswersStudentLoansDetailsUpdater.call(journey_session)
-    end
 
     true
   end
@@ -83,12 +77,5 @@ class DateOfBirthForm < Form
 
   def number_of_date_components
     [day, month, year].compact_blank.size
-  end
-
-  def reset_dependent_answers_attributes
-    journey_session.answers.assign_attributes(
-      has_student_loan: nil,
-      student_loan_plan: nil
-    )
   end
 end

@@ -207,8 +207,8 @@ module Journeys
           end
 
           array << SLUGS_HASH["information-provided"]
-          array << SLUGS_HASH["full-name"]
-          array << SLUGS_HASH["date-of-birth"]
+          array << SLUGS_HASH["full-name"] if show_full_name?
+          array << SLUGS_HASH["date-of-birth"] if show_date_of_birth?
           array << SLUGS_HASH["national-insurance-number"]
           array << SLUGS_HASH["postcode-search"]
         end
@@ -256,6 +256,14 @@ module Journeys
       end
 
       private
+
+      def show_full_name?
+        !answers.identity_confirmed_with_onelogin?
+      end
+
+      def show_date_of_birth?
+        !answers.identity_confirmed_with_onelogin?
+      end
 
       def form_for_slug(slug)
         form_class = journey.form_class_for_slug(slug:)

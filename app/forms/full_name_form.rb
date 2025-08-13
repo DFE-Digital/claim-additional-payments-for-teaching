@@ -20,25 +20,10 @@ class FullNameForm < Form
     journey_session.answers.assign_attributes(
       first_name:,
       middle_name:,
-      surname:,
+      surname:
     )
-
-    reset_dependent_answers_attributes
     journey_session.save!
 
-    if journey.requires_student_loan_details?
-      journey::AnswersStudentLoansDetailsUpdater.call(journey_session)
-    end
-
     true
-  end
-
-  private
-
-  def reset_dependent_answers_attributes
-    journey_session.answers.assign_attributes(
-      has_student_loan: nil,
-      student_loan_plan: nil
-    )
   end
 end

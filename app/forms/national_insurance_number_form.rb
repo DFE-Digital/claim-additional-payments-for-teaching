@@ -18,13 +18,7 @@ class NationalInsuranceNumberForm < Form
     journey_session.answers.assign_attributes(
       national_insurance_number: normalised_ni_number
     )
-
-    reset_dependent_answers_attributes
     journey_session.save!
-
-    if journey.requires_student_loan_details?
-      journey::AnswersStudentLoansDetailsUpdater.call(journey_session)
-    end
 
     true
   end
@@ -33,12 +27,5 @@ class NationalInsuranceNumberForm < Form
 
   def normalised_ni_number
     national_insurance_number.gsub(/\s/, "").upcase
-  end
-
-  def reset_dependent_answers_attributes
-    journey_session.answers.assign_attributes(
-      has_student_loan: nil,
-      student_loan_plan: nil
-    )
   end
 end

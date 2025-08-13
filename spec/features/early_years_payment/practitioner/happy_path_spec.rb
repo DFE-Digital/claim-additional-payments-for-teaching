@@ -23,29 +23,16 @@ RSpec.feature "Early years payment practitioner" do
     expect(page).to have_content "Sign in with GOV.UK One Login"
     click_on "Continue"
 
-    mock_one_login_idv
-
     expect(page).to have_content "You’ve successfully signed in to GOV.UK One Login"
     click_on "Continue"
+
+    idv_with_one_login
 
     expect(page).to have_content "You’ve successfully proved your identity with GOV.UK One Login"
     click_on "Continue"
 
     expect(page.title).to have_text("How we will use your information")
     expect(page).to have_content("How we will use your information")
-    click_on "Continue"
-
-    expect(page).to have_content("Personal details")
-    expect(page).to have_content("Enter your full name")
-    fill_in "First name", with: "John"
-    fill_in "Last name", with: "Doe"
-    click_on "Continue"
-
-    expect(page).to have_content("Personal details")
-    expect(page).to have_content("Enter your date of birth")
-    fill_in "Day", with: "28"
-    fill_in "Month", with: "2"
-    fill_in "Year", with: "1988"
     click_on "Continue"
 
     expect(page).to have_content("Personal details")
@@ -84,29 +71,16 @@ RSpec.feature "Early years payment practitioner" do
     expect(page).to have_content "Sign in with GOV.UK One Login"
     click_on "Continue"
 
-    mock_one_login_idv
-
     expect(page).to have_content "You’ve successfully signed in to GOV.UK One Login"
     click_on "Continue"
+
+    idv_with_one_login
 
     expect(page).to have_content "You’ve successfully proved your identity with GOV.UK One Login"
     click_on "Continue"
 
     expect(page.title).to have_text("How we will use your information")
     expect(page).to have_content("How we will use your information")
-    click_on "Continue"
-
-    expect(page).to have_content("Personal details")
-    expect(page).to have_content("Enter your full name")
-    fill_in "First name", with: "John"
-    fill_in "Last name", with: "Doe"
-    click_on "Continue"
-
-    expect(page).to have_content("Personal details")
-    expect(page).to have_content("Enter your date of birth")
-    fill_in "Day", with: "28"
-    fill_in "Month", with: "2"
-    fill_in "Year", with: "1988"
     click_on "Continue"
 
     expect(page).to have_content("Personal details")

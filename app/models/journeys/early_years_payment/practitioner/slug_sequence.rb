@@ -51,8 +51,8 @@ module Journeys
             sequence << "find-reference"
             sequence << "sign-in"
             sequence << "how-we-use-your-information"
-            sequence << "full-name"
-            sequence << "date-of-birth"
+            sequence << "full-name" if show_full_name?
+            sequence << "date-of-birth" if show_date_of_birth?
             sequence << "national-insurance-number"
             sequence << "postcode-search"
             sequence << "select-home-address" unless answers.skip_postcode_search? || answers.ordnance_survey_error?
@@ -74,6 +74,14 @@ module Journeys
         end
 
         private
+
+        def show_full_name?
+          !answers.identity_confirmed_with_onelogin?
+        end
+
+        def show_date_of_birth?
+          !answers.identity_confirmed_with_onelogin?
+        end
 
         def address_set_by_postcode_search?
           answers.address_line_1.present? && answers.postcode.present?

@@ -6,6 +6,10 @@ module Journeys
       def save
         return false if invalid?
 
+        if journey.requires_student_loan_details?
+          journey::AnswersStudentLoansDetailsUpdater.call(journey_session)
+        end
+
         @claim = build_claim
 
         ApplicationRecord.transaction do

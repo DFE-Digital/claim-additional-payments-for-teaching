@@ -151,19 +151,6 @@ RSpec.feature "Further education payments" do
     click_button "Continue"
 
     expect(page).to have_content("Personal details")
-    expect(page).to have_content("Enter your full name")
-    fill_in "First name", with: "John"
-    fill_in "Last name", with: "Doe"
-    click_on "Continue"
-
-    expect(page).to have_content("Personal details")
-    expect(page).to have_content("Enter your date of birth")
-    fill_in "Day", with: "28"
-    fill_in "Month", with: "2"
-    fill_in "Year", with: "1988"
-    click_on "Continue"
-
-    expect(page).to have_content("Personal details")
     expect(page).to have_content("Enter your National Insurance number")
     fill_in "National Insurance number", with: "PX321499A " # deliberate trailing space
     click_on "Continue"
@@ -219,8 +206,8 @@ RSpec.feature "Further education payments" do
 
     claim = Claim.last
 
-    expect(claim.first_name).to eql("John")
-    expect(claim.surname).to eql("Doe")
+    expect(claim.first_name).to eql("TEST")
+    expect(claim.surname).to eql("USER")
     expect(claim.onelogin_idv_full_name).to eql("TEST USER")
     expect(claim.student_loan_plan).to eq "plan_1"
 

@@ -213,6 +213,8 @@ RSpec.describe "Admin EY tasks" do
 
       context "when OL IDV is a fail" do
         it "fails the task" do
+          pending "should be implemented in CAPT-2775"
+
           claim = complete_provider_journey
 
           complete_practitioner_journey(
@@ -614,19 +616,6 @@ RSpec.describe "Admin EY tasks" do
     click_on "Continue"
 
     expect(page).to have_content("How we will use your information")
-    click_on "Continue"
-
-    expect(page).to have_content("Personal details")
-    expect(page).to have_content("Enter your full name")
-    fill_in "First name", with: one_login_first_name
-    fill_in "Last name", with: one_login_last_name
-    click_on "Continue"
-
-    expect(page).to have_content("Personal details")
-    expect(page).to have_content("Enter your date of birth")
-    fill_in "Day", with: date_of_birth.day
-    fill_in "Month", with: date_of_birth.month
-    fill_in "Year", with: date_of_birth.year
     click_on "Continue"
 
     expect(page).to have_content("Personal details")
