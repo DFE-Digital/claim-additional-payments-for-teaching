@@ -32,7 +32,7 @@ module Policies
           :nursery_is_not_listed
         elsif answers.child_facing_confirmation_given == false
           :not_child_facing_enough
-        elsif answers.start_date && (answers.start_date < Policies::EarlyYearsPayments::POLICY_START_DATE)
+        elsif answers.start_date && (answers.start_date < Policies::EarlyYearsPayments::ELIGIBLE_START_DATE)
           :start_date_before_policy_start
         elsif ineligible_returner?
           :returner

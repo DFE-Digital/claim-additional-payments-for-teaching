@@ -11,7 +11,7 @@ FactoryBot.define do
       surname { "Doe" }
       practitioner_first_name { "John" }
       practitioner_surname { "Doe" }
-      start_date { Policies::EarlyYearsPayments::POLICY_START_DATE + 1.day }
+      start_date { Policies::EarlyYearsPayments::ELIGIBLE_START_DATE + 1.day }
       child_facing_confirmation_given { true }
       returning_within_6_months { true }
       practitioner_email_address { "johndoe@example.com" }

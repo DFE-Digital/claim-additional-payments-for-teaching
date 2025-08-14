@@ -4,11 +4,11 @@ RSpec.describe Policies::EarlyYearsPayments::PolicyEligibilityChecker do
   subject { described_class.new(answers: answers) }
 
   describe "#ineligible?, #ineligibility_reason" do
-    context "start date is before POLICY_START_DATE" do
+    context "start date is before ELIGIBLE_START_DATE" do
       let(:answers) do
         build(
           :early_years_payment_answers,
-          start_date: Policies::EarlyYearsPayments::POLICY_START_DATE - 1.day
+          start_date: Policies::EarlyYearsPayments::ELIGIBLE_START_DATE - 1.day
         )
       end
 

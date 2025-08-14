@@ -36,7 +36,7 @@ RSpec.feature "Early years payment provider" do
     click_button "Continue"
 
     expect(page.current_path).to eq "/early-years-payment-provider/start-date"
-    date = Policies::EarlyYearsPayments::POLICY_START_DATE - 10.days
+    date = Policies::EarlyYearsPayments::ELIGIBLE_START_DATE - 10.days
     fill_in("Day", with: date.day)
     fill_in("Month", with: date.month)
     fill_in("Year", with: date.year)

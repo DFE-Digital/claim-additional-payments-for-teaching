@@ -31,7 +31,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::AnswersPres
         ],
         [
           "Employee’s start date",
-          (Policies::EarlyYearsPayments::POLICY_START_DATE + 1.day).strftime("%d %B %Y"),
+          (Policies::EarlyYearsPayments::ELIGIBLE_START_DATE + 1.day).strftime("%d %B %Y"),
           "start-date"
         ],
         [
