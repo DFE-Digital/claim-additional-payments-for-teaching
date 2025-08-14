@@ -6,7 +6,7 @@ RSpec.feature "Further education payments" do
   let(:college) { create(:school, :further_education, :fe_eligible) }
   let(:expected_award_amount) { college.eligible_fe_provider.max_award_amount }
 
-  scenario "claim with failed OL idv" do
+  scenario "claim with failed OL idv with work email access" do
     when_student_loan_data_exists
     when_further_education_payments_journey_configuration_exists
     and_college_exists
@@ -137,7 +137,24 @@ RSpec.feature "Further education payments" do
 
     idv_with_one_login_with_return_codes
 
-    expect(page).to have_content("How we will use the information you provide")
+    expect(page).not_to have_link "Back"
+    expect(page).to have_content("We need to do an employment check")
+    choose "Yes"
+    click_button "Continue"
+
+    perform_enqueued_jobs do
+      fill_in "Enter work email", with: "john.smith@example.com"
+      click_button "Continue"
+    end
+
+    mail = ActionMailer::Base.deliveries.last
+    otp_in_mail_sent = mail.personalisation[:one_time_password]
+
+    expect(page).to have_content("Email address verification")
+    fill_in "Enter the 6-digit security code", with: otp_in_mail_sent
+    click_button "Confirm"
+
+    expect(page).to have_content("How we will use your information")
     expect(page).to have_content("the Student Loans Company")
     click_button "Continue"
 
@@ -211,6 +228,8 @@ RSpec.feature "Further education payments" do
     eligibility = Policies::FurtherEducationPayments::Eligibility.last
 
     expect(eligibility.teacher_reference_number).to eql("1234567")
+    expect(eligibility.work_email).to eql("john.smith@example.com")
+    expect(eligibility.work_email_verified).to be_truthy
 
     expect(page).to have_content("You applied for a further education targeted retention incentive payment")
 
@@ -229,6 +248,309 @@ RSpec.feature "Further education payments" do
     expect(reminder.journey_class).to eql("Journeys::FurtherEducationPayments")
 
     expect(page).to have_content("We have set your reminder")
+  end
+
+  scenario "claim with failed OL idv with work email access + resend otp" do
+    when_student_loan_data_exists
+    when_further_education_payments_journey_configuration_exists
+    and_college_exists
+
+    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    expect(page).to have_link("Start now")
+    click_link "Start now"
+
+    expect(page).to have_content("Do you have a")
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_content("Did you apply for a")
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
+    click_button "Start eligibility check"
+
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    choose("September 2023 to August 2024")
+    click_button "Continue"
+
+    expect(page).to have_content("Do you have a teaching qualification?")
+    choose("Yes")
+    click_button "Continue"
+
+    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: college.name
+    click_button "Continue"
+
+    expect(page).to have_content("Select where you are employed")
+    choose college.name
+    click_button "Continue"
+
+    expect(page).to have_content("What type of contract do you have directly with #{college.name}?")
+    choose("Permanent")
+    click_button "Continue"
+
+    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
+    choose("More than 12 hours per week")
+    click_button "Continue"
+
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_content("Which subject areas do you teach?")
+    check("Building and construction")
+    check("Chemistry")
+    check("Computing, including digital and ICT")
+    check("Early years")
+    check("Engineering and manufacturing, including transport engineering and electronics")
+    check("Maths")
+    check("Physics")
+    click_button "Continue"
+
+    expect(page).to have_content("Which building and construction courses do you teach?")
+    check "T Level in building services engineering for construction"
+    click_button "Continue"
+
+    expect(page).to have_content("Which chemistry courses do you teach?")
+    check "GCSE chemistry"
+    click_button "Continue"
+
+    expect(page).to have_content("Which computing courses do you teach?")
+    check "T Level in digital support services"
+    click_button "Continue"
+
+    expect(page).to have_content("Which early years courses do you teach?")
+    check "T Level in education and early years (early years educator)"
+    click_button "Continue"
+
+    expect(page).to have_content("Which engineering and manufacturing courses do you teach?")
+    check "T Level in design and development for engineering and manufacturing"
+    click_button "Continue"
+
+    expect(page).to have_content("Which maths courses do you teach?")
+
+    check("claim-maths-courses-approved-level-321-maths-field")
+    click_button "Continue"
+
+    expect(page).to have_content("Which physics courses do you teach?")
+    check "A or AS level physics"
+    click_button "Continue"
+
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching these eligible courses?")
+    expect(page).to have_content("T Level in building services engineering for construction")
+    expect(page).to have_content("GCSE chemistry")
+    expect(page).to have_content("T Level in digital support services")
+    expect(page).to have_content("T Level in education and early years (early years educator)")
+    expect(page).to have_content("T Level in design and development for engineering and manufacturing")
+    expect(page).to have_content("Qualifications approved for funding at level 3 and below in the")
+    expect(page).to have_content("A or AS level physics")
+    choose("Yes")
+    click_button "Continue"
+
+    expect(page).to have_content("Are you subject to any formal performance measures as a result of continuous poor teaching standards")
+    within all(".govuk-fieldset")[0] do
+      choose("No")
+    end
+    expect(page).to have_content("Are you currently subject to disciplinary action?")
+    within all(".govuk-fieldset")[1] do
+      choose("No")
+    end
+    click_button "Continue"
+
+    expect(page).to have_content("Check your answers")
+    click_button "Continue"
+
+    expect(page).to have_content("You’re eligible for a targeted retention incentive payment")
+    expect(page).to have_content(number_to_currency(expected_award_amount, precision: 0))
+    expect(page).to have_content("Apply now")
+    click_button "Apply now"
+
+    mock_one_login_auth
+
+    expect(page).to have_content("Sign in with GOV.UK One Login")
+    click_button "Continue"
+
+    expect(page).to have_content("You’ve successfully signed in to GOV.UK One Login")
+    click_button "Continue"
+
+    idv_with_one_login_with_return_codes
+
+    expect(page).to have_content("We need to do an employment check")
+    choose "Yes"
+    click_button "Continue"
+
+    perform_enqueued_jobs do
+      fill_in "Enter work email", with: "john.smith@example.com"
+      click_button "Continue"
+    end
+
+    mail = ActionMailer::Base.deliveries.last
+    first_otp_in_mail_sent = mail.personalisation[:one_time_password]
+
+    expect(page).to have_content("Email address verification")
+    click_link "Resend passcode (you will be sent back to the email address page)"
+
+    perform_enqueued_jobs do
+      click_button "Continue"
+    end
+
+    mail = ActionMailer::Base.deliveries.last
+    second_otp_in_mail_sent = mail.personalisation[:one_time_password]
+
+    expect(first_otp_in_mail_sent).not_to eql(second_otp_in_mail_sent)
+
+    expect(page).to have_content("Email address verification")
+    fill_in "Enter the 6-digit security code", with: second_otp_in_mail_sent
+    click_button "Confirm"
+
+    expect(page).to have_content("How we will use your information")
+    expect(page).to have_content("the Student Loans Company")
+    click_button "Continue"
+  end
+
+  scenario "claim with failed OL idv without work email access" do
+    when_student_loan_data_exists
+    when_further_education_payments_journey_configuration_exists
+    and_college_exists
+
+    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    expect(page).to have_link("Start now")
+    click_link "Start now"
+
+    expect(page).to have_content("Do you have a")
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_content("Did you apply for a")
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
+    click_button "Start eligibility check"
+
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    choose("September 2023 to August 2024")
+    click_button "Continue"
+
+    expect(page).to have_content("Do you have a teaching qualification?")
+    choose("Yes")
+    click_button "Continue"
+
+    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: college.name
+    click_button "Continue"
+
+    expect(page).to have_content("Select where you are employed")
+    choose college.name
+    click_button "Continue"
+
+    expect(page).to have_content("What type of contract do you have directly with #{college.name}?")
+    choose("Permanent")
+    click_button "Continue"
+
+    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
+    choose("More than 12 hours per week")
+    click_button "Continue"
+
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_content("Which subject areas do you teach?")
+    check("Building and construction")
+    check("Chemistry")
+    check("Computing, including digital and ICT")
+    check("Early years")
+    check("Engineering and manufacturing, including transport engineering and electronics")
+    check("Maths")
+    check("Physics")
+    click_button "Continue"
+
+    expect(page).to have_content("Which building and construction courses do you teach?")
+    check "T Level in building services engineering for construction"
+    click_button "Continue"
+
+    expect(page).to have_content("Which chemistry courses do you teach?")
+    check "GCSE chemistry"
+    click_button "Continue"
+
+    expect(page).to have_content("Which computing courses do you teach?")
+    check "T Level in digital support services"
+    click_button "Continue"
+
+    expect(page).to have_content("Which early years courses do you teach?")
+    check "T Level in education and early years (early years educator)"
+    click_button "Continue"
+
+    expect(page).to have_content("Which engineering and manufacturing courses do you teach?")
+    check "T Level in design and development for engineering and manufacturing"
+    click_button "Continue"
+
+    expect(page).to have_content("Which maths courses do you teach?")
+
+    check("claim-maths-courses-approved-level-321-maths-field")
+    click_button "Continue"
+
+    expect(page).to have_content("Which physics courses do you teach?")
+    check "A or AS level physics"
+    click_button "Continue"
+
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching these eligible courses?")
+    expect(page).to have_content("T Level in building services engineering for construction")
+    expect(page).to have_content("GCSE chemistry")
+    expect(page).to have_content("T Level in digital support services")
+    expect(page).to have_content("T Level in education and early years (early years educator)")
+    expect(page).to have_content("T Level in design and development for engineering and manufacturing")
+    expect(page).to have_content("Qualifications approved for funding at level 3 and below in the")
+    expect(page).to have_content("A or AS level physics")
+    choose("Yes")
+    click_button "Continue"
+
+    expect(page).to have_content("Are you subject to any formal performance measures as a result of continuous poor teaching standards")
+    within all(".govuk-fieldset")[0] do
+      choose("No")
+    end
+    expect(page).to have_content("Are you currently subject to disciplinary action?")
+    within all(".govuk-fieldset")[1] do
+      choose("No")
+    end
+    click_button "Continue"
+
+    expect(page).to have_content("Check your answers")
+    click_button "Continue"
+
+    expect(page).to have_content("You’re eligible for a targeted retention incentive payment")
+    expect(page).to have_content(number_to_currency(expected_award_amount, precision: 0))
+    expect(page).to have_content("Apply now")
+    click_button "Apply now"
+
+    mock_one_login_auth
+
+    expect(page).to have_content("Sign in with GOV.UK One Login")
+    click_button "Continue"
+
+    expect(page).to have_content("You’ve successfully signed in to GOV.UK One Login")
+    click_button "Continue"
+
+    idv_with_one_login_with_return_codes
+
+    expect(page).to have_content("We need to do an employment check")
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_content("signed you out")
+
+    visit "/further-education-payments/work-email-access"
+    expect(page.current_path).to eql("/further-education-payments/landing-page")
   end
 
   def and_college_exists

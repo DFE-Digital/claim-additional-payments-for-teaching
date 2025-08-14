@@ -352,6 +352,7 @@ shared:
     - provider_verification_maths_courses
     - provider_verification_physics_courses
     - provider_verification_half_timetabled_teaching_time
+    - work_email_verified
   :eligible_ey_providers:
     - id
     - nursery_name

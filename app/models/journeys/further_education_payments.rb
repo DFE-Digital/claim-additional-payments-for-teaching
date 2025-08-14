@@ -10,7 +10,6 @@ module Journeys
     FORMS = {
       "claims" => {
         "sign-in" => SignInForm,
-        "identity-verification" => IdentityVerificationForm,
         "previously-claimed" => PreviouslyClaimedForm,
         "have-one-login-account" => HaveOneLoginAccountForm,
         "check-eligibility-intro" => CheckEligibilityIntroForm,
@@ -32,6 +31,11 @@ module Journeys
         "maths-courses" => MathsCoursesForm,
         "physics-courses" => PhysicsCoursesForm,
         "check-your-answers-part-one" => CheckYourAnswersPartOneForm,
+        "identity-verification" => IdentityVerificationForm,
+        "work-email-access" => WorkEmailAccessForm,
+        "no-work-email-access" => NoWorkEmailAccessForm,
+        "work-email" => WorkEmailForm,
+        "work-email-verification" => WorkEmailVerificationForm,
         "information-provided" => InformationProvidedForm,
         "teaching-qualification" => TeachingQualificationForm,
         "poor-performance" => PoorPerformanceForm,

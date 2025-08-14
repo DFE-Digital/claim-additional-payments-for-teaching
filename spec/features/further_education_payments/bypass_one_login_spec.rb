@@ -272,7 +272,7 @@ RSpec.feature "Further education payments" do
     click_button "Continue"
 
     visit claim_path(Journeys::FurtherEducationPayments::ROUTING_NAME, "information-provided")
-    expect(page).to have_content("How we will use the information you provide")
+    expect(page).to have_content("How we will use your information")
   end
 
   def and_college_exists

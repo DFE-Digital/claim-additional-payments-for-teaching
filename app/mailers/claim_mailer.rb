@@ -92,6 +92,18 @@ class ClaimMailer < ApplicationMailer
     send_mail(OTP_EMAIL_NOTIFY_TEMPLATE_ID, personalisation)
   end
 
+  def email_verification_v2(email:, otp:, journey_name:, policy:)
+    @claim = OpenStruct.new(email_address: email)
+    @policy = policy
+
+    personalisation = {
+      one_time_password: otp,
+      journey_name:
+    }
+
+    send_mail(OTP_EMAIL_NOTIFY_TEMPLATE_ID, personalisation)
+  end
+
   def early_years_payment_provider_email(claim, one_time_password, email)
     unknown_policy_check(claim)
     set_common_instance_variables(claim)

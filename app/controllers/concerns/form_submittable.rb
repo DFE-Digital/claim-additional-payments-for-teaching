@@ -12,6 +12,8 @@ module FormSubmittable
       return redirect_to_next_slug if @form.redirect_to_next_slug?
 
       render_template_for_current_slug
+
+      @form.after_render
     end
 
     def create

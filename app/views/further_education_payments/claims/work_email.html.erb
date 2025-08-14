@@ -1,0 +1,31 @@
+<% content_for(:page_title, page_title(@form.t(:question, school_name: journey_session.answers.school.name), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= f.hidden_field :resend, value: params[:resend] %>
+
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_email_field :work_email,
+        label: {
+          text: @form.t(:question, school_name: journey_session.answers.school.name),
+          tag: "h1",
+          size: "l"
+        },
+        hint: -> { %>
+          <p class="govuk-body">
+            <%= @form.t(:hint).html_safe %>
+          </p>
+        <% }
+      %>
+
+      <%= govuk_details(
+        summary_text: @form.t("details.title"),
+        text: @form.t("details.body")
+      ) %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>
