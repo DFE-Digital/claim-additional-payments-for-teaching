@@ -1539,9 +1539,19 @@ en:
         errors:
           presence: Enter your claim reference number
       email_address:
-        label: Your email address
-        hint1: We’ll use this to update you with progress on your claim.
-        hint2: We recommend you use a non-work email address in case your circumstances change while we process your claim.
+        label: What is your personal email address?
+        hint_html: |
+          <p>
+            This should match the email address your employer has on file for you.
+          </p>
+
+          <p>
+            We need it so that we can still contact you if your circumstances change while we process your payment.
+          </p>
+
+          <p>
+            To verify your email address, we will send you an email with a 6-digit passcode. You can enter the passcode on the next screen.
+          </p>
       personal_details:
         date_of_birth:
           hint: "For example, 31 03 1990"
