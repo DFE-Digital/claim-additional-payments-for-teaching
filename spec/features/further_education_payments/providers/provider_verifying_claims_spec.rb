@@ -302,7 +302,7 @@ RSpec.feature "Provider verifying claims" do
       ).to eql("/further-education-payments/providers/verified-claims")
       expect(page).to have_css(
         "table tbody tr:first-child td:nth-child(4)",
-        text: "Pending"
+        text: "Completed"
       )
     end
   end
@@ -1128,6 +1128,164 @@ RSpec.feature "Provider verifying claims" do
     end
   end
 
+  context "when the provider verifies a claim which has failed idv" do
+    context "when the claim has not started employment checks" do
+      context "when the claimant does not work at the school" do
+        it "allows the provider to mark the claim as not eligible" do
+          fe_provider = create(
+            :school,
+            :further_education,
+            name: "Springfield College"
+          )
+
+          claim = create(
+            :claim,
+            :submitted,
+            :further_education,
+            :failed_onelogin_idv,
+            first_name: "Edna",
+            surname: "Krabappel",
+            eligibility_attributes: {
+              school: fe_provider
+            }
+          )
+
+          sign_in_to(fe_provider)
+
+          click_on claim.full_name
+
+          expect(page).to have_content("Employment check needed for this claim")
+
+          click_on "Continue"
+
+          within_fieldset("Does Springfield College employ Edna Krabappel?") do
+            choose "No"
+          end
+
+          click_on "Continue"
+
+          expect(page).to have_content(
+            "You've told us this applicant does not work at Springfield College"
+          )
+
+          visit further_education_payments_providers_claims_path
+
+          expect(page).not_to have_content(claim.full_name)
+
+          visit further_education_payments_providers_verified_claims_path
+
+          expect(page).to have_content(claim.full_name)
+          expect(page).to have_content(claim.reference)
+
+          within table_row(claim.reference) do
+            expect(page).to have_content("Rejected")
+          end
+
+          click_on claim.full_name
+
+          expect(page).to have_content("Claim reference: #{claim.reference}")
+
+          expect(page).to have_content(
+            "You‘ve told us this applicant does not work at Springfield College. " \
+            "We‘ll let the claimant know this claim has been unsuccessful."
+          )
+        end
+      end
+
+      context "when the claimant works at the school" do
+        it "allows the provider to verify employment" do
+          fe_provider = create(
+            :school,
+            :further_education,
+            name: "Springfield College"
+          )
+
+          claim = create(
+            :claim,
+            :submitted,
+            :further_education,
+            :failed_onelogin_idv,
+            first_name: "Edna",
+            surname: "Krabappel",
+            eligibility_attributes: {
+              school: fe_provider
+            }
+          )
+
+          sign_in_to(fe_provider)
+
+          click_on claim.full_name
+
+          expect(page).to have_content("Employment check needed for this claim")
+
+          click_on "Continue"
+
+          within_fieldset("Does Springfield College employ Edna Krabappel?") do
+            choose "Yes"
+          end
+
+          click_on "Continue"
+
+          expect(page).to have_content("About Edna Krabappel")
+
+          within_fieldset("Enter their date of birth") do
+            fill_in "Day", with: "3"
+            fill_in "Month", with: "7"
+            fill_in "Year", with: "1945"
+          end
+
+          fill_in("Enter their postcode", with: "TE57 1NG")
+
+          fill_in("Enter their National Insurance number", with: "QQ123456C")
+
+          within_fieldset(
+            "Do these bank details match what you have for Edna Krabappel?"
+          ) { choose "Yes" }
+
+          fill_in(
+            "Email address",
+            with: "edna.krabbappel@springfield-college.edu"
+          )
+
+          click_on "Continue"
+
+          expect(page).to have_content("Claim reference: #{claim.reference}")
+
+          check(
+            "To the best of my knowledge, I confirm that the information " \
+            "provided in this form is correct."
+          )
+
+          click_on "Confirm and send"
+
+          expect(page).to have_content("Success")
+          expect(page).to have_content(
+            "Employment check for Edna Krabappel submitted"
+          )
+
+          # Expect to be on the first page of the verification journey
+          expect(page).to have_content(
+            "Review a targeted retention incentive payment claim"
+          )
+
+          expect(page).to have_content(
+            "Is Edna Krabappel a member of staff with teaching responsibilities?"
+          )
+
+          # Check that subsequent visits to the claim redirect to the first step
+          # of the verification flow
+          visit further_education_payments_providers_claims_path
+
+          click_on claim.full_name
+
+          expect(page).to have_content(
+            "Is Edna Krabappel a member of staff with teaching responsibilities?"
+          )
+        end
+      end
+    end
+  end
+
   def sign_in_to(fe_provider)
     mock_dfe_sign_in_auth_session(
       provider: :dfe_fe_provider,
@@ -1154,5 +1312,9 @@ RSpec.feature "Provider verifying claims" do
     visit new_further_education_payments_providers_session_path
 
     click_on "Start now"
+  end
+
+  def table_row(claim_reference)
+    find("table tbody tr", text: claim_reference)
   end
 end
