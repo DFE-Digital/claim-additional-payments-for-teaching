@@ -77,6 +77,38 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
     click_on "Confirm and send"
 
     expect(page).to have_content "Employment check complete"
+
+    eligibility = claim.reload.eligibility
+
+    expect(
+      eligibility.alternative_idv_claimant_employed_by_nursery
+    ).to be true
+
+    expect(
+      eligibility.alternative_idv_claimant_date_of_birth
+    ).to eq Date.new(1970, 1, 1)
+
+    expect(
+      eligibility.alternative_idv_claimant_postcode
+    ).to eq "TE57 1NG"
+
+    expect(
+      eligibility.alternative_idv_claimant_national_insurance_number
+    ).to eq "QQ123456C"
+
+    expect(
+      eligibility.alternative_idv_claimant_bank_details_match
+    ).to be true
+
+    expect(
+      eligibility.alternative_idv_claimant_email
+    ).to eq "edna.k@gmail.com"
+
+    expect(
+      eligibility.alternative_idv_claimant_employment_check_declaration
+    ).to be true
+
+    expect(eligibility.alternative_idv_completed_at).to be_present
   end
 
   it "allows the provider to reject a claim" do
@@ -121,6 +153,11 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
     expect(page).to have_content(
       "You've told us this applicant does not work at Springfield Nursery"
     )
+
+    eligibility = claim.reload.eligibility
+
+    expect(eligibility.alternative_idv_claimant_employed_by_nursery).to be false
+    expect(eligibility.alternative_idv_completed_at).to be_present
   end
 
   def table_row(claim_reference)

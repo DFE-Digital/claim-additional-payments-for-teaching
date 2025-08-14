@@ -382,6 +382,10 @@ shared:
     - updated_at
     - provider_claim_submitted_at
     - practitioner_claim_started_at
+    - alternative_idv_claimant_employed_by_nursery
+    - alternative_idv_claimant_bank_details_match
+    - alternative_idv_claimant_employment_check_declaration
+    - alternative_idv_completed_at
   :school_workforce_censuses:
     - id
     - teacher_reference_number
