@@ -1,0 +1,39 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:question, nursery_name: @form.nursery_name, claimant_name: @form.claimant_name),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?)
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      method: :patch,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+      html: { novalidate: false }
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_collection_radio_buttons(
+        :claimant_employed_by_nursery,
+        f.object.claimant_employed_by_nursery_options,
+        :id,
+        :name,
+        legend: {
+          text: f.object.t(
+            :question,
+            nursery_name: f.object.nursery_name,
+            claimant_name: f.object.claimant_name
+          ),
+          tag: "h1",
+          size: "l"
+        },
+      ) %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

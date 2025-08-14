@@ -1,0 +1,32 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= govuk_panel(
+      title_text: "Employment check complete"
+    ) %>
+
+    <p class="govuk-body">
+      You‘ve completed an employment check for <%= @form.claimant_name %>.
+    </p>
+
+    <h2 class="govuk-heading-m">
+      What happens next
+    </h2>
+
+    <p class="govuk-body">
+      We’ll continue reviewing <%= @form.claimant_name %>’s claim.
+    </p>
+
+    <p class="govuk-body">
+      Once they have been in their role for 6 months, we’ll email you to check
+      that they’re still working for you. If they are, we’ll:
+    </p>
+
+    <%= govuk_list(
+      [
+        "make the payment into their bank account around 6 weeks later",
+        "email them to confirm the payment"
+      ],
+      type: :bullet
+    ) %>
+  </div>
+</div>

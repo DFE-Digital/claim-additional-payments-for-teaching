@@ -38,6 +38,10 @@ FactoryBot.define do
       routing_name { Journeys::EarlyYearsPayment::Practitioner::ROUTING_NAME }
     end
 
+    trait :early_years_payment_provider_alternative_idv do
+      routing_name { Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ROUTING_NAME }
+    end
+
     trait :early_years_payments do
       routing_name { Journeys::EarlyYearsPayment::Practitioner::ROUTING_NAME }
     end

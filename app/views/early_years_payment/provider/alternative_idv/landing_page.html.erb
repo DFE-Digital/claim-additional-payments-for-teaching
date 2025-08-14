@@ -1,0 +1,30 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Employment check needed for this claim
+    </h1>
+
+    <p class="govuk-body">
+      The applicant was not able to prove their identity when making their
+      claim.
+    </p>
+
+    <p class="govuk-body">
+      Before we review this claim, we need to do an employment check against
+      the information that the applicant submitted.
+    </p>
+
+    <p class="govuk-body">
+      You will not need to send any documents to the Department for Education.
+    </p>
+
+    <%= govuk_start_button(
+      text: "Start now",
+      href: claim_path(
+        current_journey_routing_name,
+        "claim",
+        answers: { claim_reference: params[:claim_reference] }
+      )
+    ) %>
+  </div>
+</div>

@@ -13,6 +13,7 @@ RSpec.describe Journeys do
         Journeys::FurtherEducationPayments::Provider,
         Journeys::EarlyYearsPayment::Provider::Start,
         Journeys::EarlyYearsPayment::Provider::Authenticated,
+        Journeys::EarlyYearsPayment::Provider::AlternativeIdv,
         Journeys::EarlyYearsPayment::Practitioner
       ])
     end
@@ -28,6 +29,7 @@ RSpec.describe Journeys do
         Journeys::FurtherEducationPayments::Provider::ROUTING_NAME,
         Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME,
         Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME,
+        Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ROUTING_NAME,
         Journeys::EarlyYearsPayment::Practitioner::ROUTING_NAME
       ])
     end
