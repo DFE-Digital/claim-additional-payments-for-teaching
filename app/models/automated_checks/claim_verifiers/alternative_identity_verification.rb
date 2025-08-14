@@ -8,11 +8,10 @@ module AutomatedChecks
       end
 
       def perform
-        return unless eligibility.claimant_identity_verified_at?
-        return if task_exists?
-        return unless all_details_match?
-
-        create_task!
+        # do nothing
+        # this is a legacy task
+        # originally used for FE at end of Y1
+        # when alternative idv journey was introduced
       end
 
       private
