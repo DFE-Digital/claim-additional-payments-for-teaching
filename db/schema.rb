@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_14_140558) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_14_154834) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -210,6 +210,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_14_140558) do
     t.decimal "award_amount", precision: 7, scale: 2
     t.string "practitioner_first_name"
     t.string "practitioner_surname"
+    t.boolean "alternative_idv_claimant_employed_by_nursery"
+    t.date "alternative_idv_claimant_date_of_birth"
+    t.string "alternative_idv_claimant_postcode"
+    t.string "alternative_idv_claimant_national_insurance_number"
+    t.boolean "alternative_idv_claimant_bank_details_match"
+    t.string "alternative_idv_claimant_email"
+    t.boolean "alternative_idv_claimant_employment_check_declaration"
+    t.datetime "alternative_idv_completed_at"
   end
 
   create_table "eligible_ey_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
