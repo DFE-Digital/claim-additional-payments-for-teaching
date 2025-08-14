@@ -17,29 +17,14 @@ module AutomatedChecks
       def perform
         return unless awaiting_task?(TASK_NAME)
 
-        if claim.identity_confirmed_with_onelogin?
-          one_login
-        elsif FeatureFlag.enabled?(:alternative_idv) && claim.onelogin_idv_at.present? && !claim.identity_confirmed_with_onelogin?
-          # noop
-          # TODO: tbd what happens when OL user that fails OL idv comes thru
-        else
-          # Order of matching matters so that subsequent conditions in methods fall through to execute the right thing
-          no_match || partial_match || complete_match
-        end
+        # Order of matching matters so that subsequent conditions in methods fall through to execute the right thing
+        no_match || partial_match || complete_match
       end
 
       private
 
       attr_accessor :admin_user, :claim
       attr_reader :dqt_teacher_status
-
-      def one_login
-        if claim.one_login_idv_mismatch?
-          create_task(match: nil, passed: false)
-        else
-          create_task(match: nil, passed: true)
-        end
-      end
 
       def dqt_teacher_status=(dqt_teacher_status)
         @dqt_teacher_status = if dqt_teacher_status.instance_of?(Array)
