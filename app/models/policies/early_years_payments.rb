@@ -3,7 +3,7 @@ module Policies
     include BasePolicy
     extend self
 
-    POLICY_START_DATE = Date.new(2024, 11, 11)
+    POLICY_START_DATE = Date.new(2025, 7, 15)
     RETENTION_PERIOD = 6.months
 
     # Percentage of approved claims to QA
