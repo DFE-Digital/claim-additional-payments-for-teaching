@@ -41,11 +41,12 @@ module Journeys
         work-email
         work-email-verification
         information-provided
-        personal-details
+        full-name
+        date-of-birth
+        national-insurance-number
         postcode-search
         select-home-address
         address
-        passport
         email-address
         email-verification
         provide-mobile-number
@@ -205,7 +206,9 @@ module Journeys
           end
 
           array << SLUGS_HASH["information-provided"]
-          array << SLUGS_HASH["personal-details"]
+          array << SLUGS_HASH["full-name"] if show_full_name?
+          array << SLUGS_HASH["date-of-birth"] if show_date_of_birth?
+          array << SLUGS_HASH["national-insurance-number"]
           array << SLUGS_HASH["postcode-search"]
         end
 
@@ -216,10 +219,6 @@ module Journeys
 
         if answers.skip_postcode_search? || answers.ordnance_survey_error
           array << SLUGS_HASH["address"]
-        end
-
-        if FeatureFlag.enabled?(:alternative_idv)
-          array << SLUGS_HASH["passport"]
         end
 
         array << SLUGS_HASH["email-address"]
@@ -252,6 +251,14 @@ module Journeys
       end
 
       private
+
+      def show_full_name?
+        !answers.identity_confirmed_with_onelogin?
+      end
+
+      def show_date_of_birth?
+        !answers.identity_confirmed_with_onelogin?
+      end
 
       def form_for_slug(slug)
         form_class = journey.form_class_for_slug(slug:)

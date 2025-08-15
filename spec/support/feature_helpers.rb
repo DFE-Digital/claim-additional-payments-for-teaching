@@ -145,10 +145,13 @@ module FeatureHelpers
     click_button "Continue"
   end
 
-  def idv_with_one_login
+  def idv_with_one_login(date_of_birth: Date.new(1988, 2, 28))
     mock_one_login_idv
 
     expect(page).to have_content("prove your identity through GOV.UK One Login")
+    fill_in "Day", with: date_of_birth.day
+    fill_in "Month", with: date_of_birth.month
+    fill_in "Year", with: date_of_birth.year
     click_button "Continue"
   end
 

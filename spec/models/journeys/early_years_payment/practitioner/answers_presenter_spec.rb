@@ -28,15 +28,15 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::AnswersPresenter do
     subject { described_class.new(journey_session).identity_answers }
 
     context "Full name" do
-      it { is_expected.to include(["Full name", "John Doe", "personal-details"]) }
+      it { is_expected.to include(["Full name", "John Doe", "full-name"]) }
     end
 
     context "Date of birth" do
-      it { is_expected.to include(["Date of birth", "1 January 1970", "personal-details"]) }
+      it { is_expected.to include(["Date of birth", "1 January 1970", "date-of-birth"]) }
     end
 
     context "National Insurance number" do
-      it { is_expected.to include(["National Insurance number", "QQ123456C", "personal-details"]) }
+      it { is_expected.to include(["National Insurance number", "QQ123456C", "national-insurance-number"]) }
     end
 
     context "Home address" do
@@ -70,6 +70,52 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::AnswersPresenter do
 
     context "Payroll gender" do
       it { is_expected.to include(["Payroll gender", "Don’t know", "gender"]) }
+    end
+  end
+
+  describe "#identity_answers" do
+    subject { described_class.new(journey_session) }
+
+    context "when OL idv passed" do
+      let(:answers) do
+        build(
+          :early_years_payment_practitioner_answers,
+          identity_confirmed_with_onelogin: true
+        )
+      end
+
+      it "does not show full name" do
+        expect(subject.identity_answers.find { |a| a[0] == "Full name" }).to be_blank
+      end
+
+      it "does not show date of birth" do
+        expect(subject.identity_answers.find { |a| a[0] == "Date of birth" }).to be_blank
+      end
+
+      it "does show national insurance number" do
+        expect(subject.identity_answers.find { |a| a[0] == "National Insurance number" }).to be_present
+      end
+    end
+
+    context "when OL idv failed" do
+      let(:answers) do
+        build(
+          :early_years_payment_practitioner_answers,
+          identity_confirmed_with_onelogin: false
+        )
+      end
+
+      it "does show full name" do
+        expect(subject.identity_answers.find { |a| a[0] == "Full name" }).to be_present
+      end
+
+      it "does show date of birth" do
+        expect(subject.identity_answers.find { |a| a[0] == "Date of birth" }).to be_present
+      end
+
+      it "does show national insurance number" do
+        expect(subject.identity_answers.find { |a| a[0] == "National Insurance number" }).to be_present
+      end
     end
   end
 end

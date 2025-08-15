@@ -135,11 +135,7 @@ RSpec.feature "Further education change answers" do
     click_button "Continue"
 
     expect(page).to have_content("Personal details")
-    fill_in "First name", with: "John"
-    fill_in "Last name", with: "Doe"
-    fill_in "Day", with: "28"
-    fill_in "Month", with: "2"
-    fill_in "Year", with: "1988"
+    expect(page).to have_content("Enter your National Insurance number")
     fill_in "National Insurance number", with: "PX321499A " # deliberate trailing space
     click_on "Continue"
 
@@ -426,11 +422,7 @@ RSpec.feature "Further education change answers" do
     click_button "Continue"
 
     expect(page).to have_content("Personal details")
-    fill_in "First name", with: "John"
-    fill_in "Last name", with: "Doe"
-    fill_in "Day", with: "28"
-    fill_in "Month", with: "2"
-    fill_in "Year", with: "1988"
+    expect(page).to have_content("Enter your National Insurance number")
     fill_in "National Insurance number", with: "PX321499A " # deliberate trailing space
     click_on "Continue"
 

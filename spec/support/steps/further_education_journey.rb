@@ -70,12 +70,9 @@ def when_further_education_journey_ready_to_submit
 
   click_button "Continue"
 
-  fill_in "First name", with: "John"
-  fill_in "Last name", with: "Doe"
-  fill_in "Day", with: "28"
-  fill_in "Month", with: "2"
-  fill_in "Year", with: "1988"
-  fill_in "National Insurance number", with: "PX321499A"
+  expect(page).to have_content("Personal details")
+  expect(page).to have_content("Enter your National Insurance number")
+  fill_in "National Insurance number", with: "PX321499A " # deliberate trailing space
   click_on "Continue"
 
   click_button("Enter your address manually")
