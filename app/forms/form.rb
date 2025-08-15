@@ -20,6 +20,7 @@ class Form
   include ActiveModel::Model
   include ActiveModel::Attributes
   include ActiveModel::Serialization
+  extend ActiveModel::Callbacks
   include ActiveModel::Validations::Callbacks
   include FormHelpers
   include Rails.application.routes.url_helpers
@@ -31,6 +32,8 @@ class Form
 
   delegate :answers, to: :journey_session
 
+  define_model_callbacks :initialize, only: :after
+
   def self.model_name
     Claim.model_name
   end
@@ -41,9 +44,11 @@ class Form
 
   # TODO RL: remove journey param and pull it from the journey_session
   def initialize(journey_session:, journey:, params:, session: {})
-    super
+    run_callbacks :initialize do
+      super
 
-    assign_attributes(attributes_with_current_value)
+      assign_attributes(attributes_with_current_value)
+    end
   end
 
   # by default does nothing
