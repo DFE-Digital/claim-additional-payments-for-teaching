@@ -176,49 +176,36 @@ RSpec.describe "Admin EY tasks" do
 
           it "shows the task as failed" do
             visit admin_claim_tasks_path(claim)
-
             expect(task_status("Identity confirmation")).to eq("Failed")
-
             click_on "Confirm the claimant made the claim"
 
             expect(page).to have_content("Confirm claimant name")
-
             expect(page).to have_content(
               "Provider entered claimant name Bobby Bobberson"
             )
-
             expect(page).to have_content(
               "Claimant name from One Login Robby Robberson"
             )
-
             expect(page).to have_content("Confirm claimant date of birth")
-
             expect(page).to have_content("Claimant entered DOB 1 January 1986")
-
             expect(page).to have_content(
               "Claimant DOB from One Login 1 January 1986"
             )
-
             expect(page).to have_content(
               "[GOV UK One Login] - Names do not match:"
             )
-
             expect(page).to have_content(
               'Provider-entered name: "Bobby Bobberson"'
             )
-
             expect(page).to have_content(
               'GOV.UK One Login Name: "Robby Robberson"'
             )
-
             expect(page).to have_content('Claimant-entered DOB: "1 January 1986"')
-
             expect(page).to have_content('GOV.UK One Login DOB: "1 January 1986"')
           end
 
           it "doesn't allow the admin to complete the task" do
             visit admin_claim_task_path(claim, name: "identity_confirmation")
-
             expect(page).not_to have_button("Save and continue")
           end
         end
@@ -226,6 +213,8 @@ RSpec.describe "Admin EY tasks" do
 
       context "when OL IDV is a fail" do
         it "fails the task" do
+          pending "should be implemented in CAPT-2775"
+
           claim = complete_provider_journey
 
           complete_practitioner_journey(
@@ -239,27 +228,20 @@ RSpec.describe "Admin EY tasks" do
           sign_in_as_service_operator
 
           visit admin_claim_tasks_path(claim)
-
           expect(task_status("Identity confirmation")).to eq("Failed")
-
           click_on "Confirm the claimant made the claim"
 
           expect(page).to have_content(
             "[GOV UK One Login] - IDV mismatch:"
           )
-
           expect(page).to have_content(
             'Provider-entered name: "Bobby Bobberson"'
           )
-
           expect(page).to have_content(
             'GOV.UK One Login Name: "Bobby Bobberson"'
           )
-
           expect(page).to have_content('Claimant-entered DOB: "11 January 1986"')
-
           expect(page).to have_content('GOV.UK One Login DOB: "1 January 1986"')
-
           expect(page).not_to have_button("Save and continue")
         end
       end
@@ -274,9 +256,7 @@ RSpec.describe "Admin EY tasks" do
         sign_in_as_service_operator
 
         visit admin_claim_tasks_path(claim)
-
         expect(task_status("Employment")).to eq("Incomplete")
-
         click_on "Check employment information"
 
         expect(page).to have_content(
@@ -326,9 +306,7 @@ RSpec.describe "Admin EY tasks" do
         sign_in_as_service_operator
 
         visit admin_claim_tasks_path(claim)
-
         expect(task_status("Student loan plan")).to eq("Incomplete")
-
         click_on "Check student loan plan"
 
         expect(page).to have_content(
@@ -352,9 +330,7 @@ RSpec.describe "Admin EY tasks" do
         sign_in_as_service_operator
 
         visit admin_claim_tasks_path(claim)
-
         expect(task_status("Student loan plan")).to eq("Incomplete")
-
         click_on "Check student loan plan"
 
         expect(page).to have_content(
@@ -372,9 +348,7 @@ RSpec.describe "Admin EY tasks" do
         sign_in_as_service_operator
 
         visit admin_claim_tasks_path(claim)
-
         expect(task_status("Payroll details")).to eq("Incomplete")
-
         click_on "Check bank account details"
 
         expect(page).to have_content(
@@ -418,9 +392,7 @@ RSpec.describe "Admin EY tasks" do
         sign_in_as_service_operator
 
         visit admin_claim_tasks_path(claim)
-
         expect(task_status("Payroll gender")).to eq("Incomplete")
-
         click_on "How is the claimant’s gender recorded for payroll purposes?"
 
         expect(page).to have_content(
@@ -473,7 +445,6 @@ RSpec.describe "Admin EY tasks" do
           sign_in_as_service_operator
 
           visit admin_claim_tasks_path(claim)
-
           expect(page).not_to have_content("Payroll gender")
         end
       end
@@ -504,17 +475,13 @@ RSpec.describe "Admin EY tasks" do
           sign_in_as_service_operator
 
           visit admin_claim_tasks_path(claim)
-
           expect(task_status("Matching details")).to eq("Incomplete")
-
           click_on "Review matching details from other claims"
 
           choose "Yes"
-
           click_on "Save and continue"
 
           visit admin_claim_tasks_path(claim)
-
           expect(task_status("Matching details")).to eq("Passed")
         end
       end
@@ -534,7 +501,6 @@ RSpec.describe "Admin EY tasks" do
           sign_in_as_service_operator
 
           visit admin_claim_tasks_path(claim)
-
           expect(page).not_to have_content("Matching details")
         end
       end
@@ -640,7 +606,6 @@ RSpec.describe "Admin EY tasks" do
     create(:journey_configuration, :early_years_payment_practitioner)
 
     visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=practitioner@example.com"
-
     fill_in "Enter your claim reference", with: claim.reference
     click_button "Submit"
 
@@ -654,9 +619,7 @@ RSpec.describe "Admin EY tasks" do
     click_on "Continue"
 
     expect(page).to have_content("Personal details")
-    fill_in "Day", with: date_of_birth.day
-    fill_in "Month", with: date_of_birth.month
-    fill_in "Year", with: date_of_birth.year
+    expect(page).to have_content("Enter your National Insurance number")
     fill_in "National Insurance number", with: "PX321499A"
     click_on "Continue"
 

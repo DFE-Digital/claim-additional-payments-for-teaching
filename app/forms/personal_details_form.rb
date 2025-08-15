@@ -1,26 +1,13 @@
 class PersonalDetailsForm < Form
   include ActiveModel::Dirty
-
-  InvalidDate = Struct.new(:day, :month, :year, keyword_init: true) do
-    def future?
-      false
-    end
-  end
+  include DateOfBirth
+  self.date_of_birth_field = :date_of_birth
 
   NINO_REGEX_FILTER = /\A[A-Z]{2}[0-9]{6}[A-D]{1}\Z/
-  DOB_PARAM_CONVERSION = {
-    "date_of_birth(3i)" => "day",
-    "date_of_birth(2i)" => "month",
-    "date_of_birth(1i)" => "year"
-  }
 
   attribute :first_name
   attribute :middle_name
   attribute :surname
-  attribute :day
-  attribute :month
-  attribute :year
-  attribute :date_of_birth
   attribute :national_insurance_number
 
   validates :first_name, presence: {message: "Enter your first name"}
@@ -34,7 +21,6 @@ class PersonalDetailsForm < Form
   validates :surname, length: {maximum: 100, message: "Last name must be less than 100 characters"}, if: -> { surname.present? }
   validates :surname, name_format: {message: "Last name cannot contain special characters"}
 
-  validate :date_of_birth_criteria
   validates :national_insurance_number, presence: {message: "Enter a National Insurance number in the correct format"}
   validates(
     :national_insurance_number,
@@ -43,18 +29,6 @@ class PersonalDetailsForm < Form
     },
     if: -> { national_insurance_number.present? }
   )
-
-  def initialize(journey_session:, journey:, params:, session: {})
-    super
-    assign_date_attributes
-  end
-
-  def date_of_birth
-    date_hash = {year:, month:, day:}
-    date_args = date_hash.values.map(&:to_i)
-
-    Date.valid_date?(*date_args) ? Date.new(*date_args) : InvalidDate.new(date_hash)
-  end
 
   def save
     return false if invalid?
@@ -91,42 +65,8 @@ class PersonalDetailsForm < Form
 
   private
 
-  def permitted_params
-    @permitted_params ||= params.fetch(:claim, {})
-      .permit(*attributes, *DOB_PARAM_CONVERSION.keys)
-      .transform_keys { |key| DOB_PARAM_CONVERSION.has_key?(key) ? DOB_PARAM_CONVERSION[key] : key }
-  end
-
-  def assign_date_attributes
-    self.day = permitted_params.fetch(:day, answers.date_of_birth&.day)
-    self.month = permitted_params.fetch(:month, answers.date_of_birth&.month)
-    self.year = permitted_params.fetch(:year, answers.date_of_birth&.year)
-  end
-
   def normalised_ni_number
     national_insurance_number.gsub(/\s/, "").upcase
-  end
-
-  def date_of_birth_criteria
-    if date_of_birth.future?
-      errors.add(:date_of_birth, "Date of birth must be in the past")
-    elsif number_of_date_components.between?(1, 2)
-      errors.add(:date_of_birth, "Date of birth must include a day, month and year in the correct format, for example 01 01 1980")
-    elsif number_of_date_components.zero?
-      errors.add(:date_of_birth, "Enter your date of birth")
-    elsif date_of_birth.is_a?(InvalidDate)
-      errors.add(:date_of_birth, "Enter a date of birth in the correct format")
-    elsif date_of_birth.year < 1000
-      errors.add(:date_of_birth, "Year must include 4 numbers")
-    elsif date_of_birth.year <= 1900
-      errors.add(:date_of_birth, "Year must be after 1900")
-    end
-
-    errors[:date_of_birth].empty?
-  end
-
-  def number_of_date_components
-    [day, month, year].compact_blank.size
   end
 
   def has_valid_name?

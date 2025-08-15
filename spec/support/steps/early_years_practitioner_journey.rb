@@ -8,10 +8,10 @@ def when_personal_details_entered_up_to_address
   expect(page).to have_content "Sign in with GOV.UK One Login"
   click_on "Continue"
 
-  mock_one_login_idv
-
   expect(page).to have_content "You’ve successfully signed in to GOV.UK One Login"
   click_on "Continue"
+
+  idv_with_one_login
 
   expect(page).to have_content "You’ve successfully proved your identity with GOV.UK One Login"
   click_on "Continue"
@@ -19,12 +19,9 @@ def when_personal_details_entered_up_to_address
   expect(page).to have_content "How we will use your information"
   click_on "Continue"
 
-  fill_in "First name", with: "John"
-  fill_in "Last name", with: "Doe"
-  fill_in "Day", with: "28"
-  fill_in "Month", with: "2"
-  fill_in "Year", with: "1988"
-  fill_in "National Insurance number", with: "PX321499A"
+  expect(page).to have_content("Personal details")
+  expect(page).to have_content("Enter your National Insurance number")
+  fill_in "National Insurance number", with: "PX321499A " # deliberate trailing space
   click_on "Continue"
 
   expect(page.title).to have_text("What is your home address?")
