@@ -47,7 +47,6 @@ module Journeys
         postcode-search
         select-home-address
         address
-        passport
         email-address
         email-verification
         provide-mobile-number
@@ -220,10 +219,6 @@ module Journeys
 
         if answers.skip_postcode_search? || answers.ordnance_survey_error
           array << SLUGS_HASH["address"]
-        end
-
-        if FeatureFlag.enabled?(:alternative_idv)
-          array << SLUGS_HASH["passport"]
         end
 
         array << SLUGS_HASH["email-address"]
