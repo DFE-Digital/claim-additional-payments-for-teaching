@@ -8,7 +8,8 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ClaimantPe
       :claim,
       policy: Policies::EarlyYearsPayments,
       first_name: "Edna",
-      surname: "Krabappel"
+      surname: "Krabappel",
+      identity_confirmed_with_onelogin: false
     )
   end
 
