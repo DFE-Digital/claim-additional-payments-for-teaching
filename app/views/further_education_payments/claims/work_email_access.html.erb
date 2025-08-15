@@ -1,0 +1,26 @@
+<% content_for(:page_title, page_title(@form.t(:question, school_name: journey_session.answers.school.name), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<% @backlink_path = nil %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">We need to do an employment check</h1>
+
+      <%= f.govuk_collection_radio_buttons :work_email_access, @form.radio_options, :id, :name, :hint,
+        legend: {
+          text: @form.t(:question, school_name: journey_session.answers.school.name),
+          tag: "h2",
+          size: "m"
+        },
+        hint: {
+          text: @form.t(:hint)
+        }
+      %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

@@ -92,7 +92,7 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     sign_in_with_one_login
     idv_with_one_login
 
-    expect(page).to have_content("How we will use the information you provide")
+    expect(page).to have_content("How we will use your information")
     click_button "Continue"
 
     expect(page).to have_content("Personal details")
