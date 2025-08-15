@@ -439,6 +439,10 @@ class Claim < ApplicationRecord
     !one_login_idv_match?
   end
 
+  def one_login_idv_failed?
+    identity_confirmed_with_onelogin == false
+  end
+
   def awaiting_provider_verification?
     return false unless has_further_education_policy?
 
