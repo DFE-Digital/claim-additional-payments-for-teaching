@@ -17,7 +17,7 @@ module Policies
         tasks << "one_login_identity"
         tasks << "provider_verification"
         tasks << "provider_details" if claim.eligibility.provider_and_claimant_details_match?
-        tasks << "alternative_identity_verification" if FurtherEducationPayments.alternative_identity_verification_required?(claim)
+        tasks << "alternative_identity_verification" if show_alternative_identity_verification_task?
         tasks << "employment" if claim.eligibility.teacher_reference_number.present?
         tasks << "student_loan_plan" if claim.submitted_without_slc_data?
         tasks << "payroll_details" if claim.must_manually_validate_bank_details?
@@ -51,6 +51,12 @@ module Policies
 
       def task_names_for_claim
         claim.tasks.pluck(:name)
+      end
+
+      def show_alternative_identity_verification_task?
+        y1_fe_claim = claim.academic_year == AcademicYear.new("2024/2025")
+
+        claim.failed_one_login_idv? && y1_fe_claim
       end
     end
   end
