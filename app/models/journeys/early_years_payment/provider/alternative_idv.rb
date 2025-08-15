@@ -15,7 +15,8 @@ module Journeys
             "claimant-personal-details" => ClaimantPersonalDetailsForm,
             "check-answers" => CheckAnswersForm,
             "confirmation" => ConfirmationForm,
-            "claimant-not-employed-by-nursery" => ClaimantNotEmployedByNurseryForm
+            "claimant-not-employed-by-nursery" => ClaimantNotEmployedByNurseryForm,
+            "ineligible" => IneligibleForm
           }
         }
 

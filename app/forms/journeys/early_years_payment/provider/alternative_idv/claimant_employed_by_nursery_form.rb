@@ -38,10 +38,7 @@ module Journeys
             if !claimant_employed_by_nursery
               # We exit the journey early, so we need to mark the verification
               # as complete
-              answers.claim.eligibility.update!(
-                alternative_idv_claimant_employed_by_nursery: false,
-                alternative_idv_completed_at: DateTime.current.utc
-              )
+              journey_session.answers.alternative_idv_completed!
             end
 
             true

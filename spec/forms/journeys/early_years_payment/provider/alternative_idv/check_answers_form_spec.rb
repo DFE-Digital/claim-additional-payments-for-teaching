@@ -13,6 +13,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::CheckAnswe
       policy: Policies::EarlyYearsPayments,
       first_name: "Edna",
       surname: "Krabappel",
+      identity_confirmed_with_onelogin: false,
       eligibility_attributes: {
         nursery_urn: nursery.urn
       }

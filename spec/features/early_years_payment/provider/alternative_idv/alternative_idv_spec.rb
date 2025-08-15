@@ -160,6 +160,61 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
     expect(eligibility.alternative_idv_completed_at).to be_present
   end
 
+  it "doesn't allow the provider to verify a claim that has already been verified" do
+    create(
+      :journey_configuration,
+      :early_years_payment_provider_alternative_idv
+    )
+
+    nursery = create(
+      :eligible_ey_provider,
+      nursery_name: "Springfield Nursery"
+    )
+
+    claim = create(
+      :claim,
+      policy: Policies::EarlyYearsPayments,
+      onelogin_idv_at: 1.day.ago,
+      identity_confirmed_with_onelogin: false,
+      first_name: "Edna",
+      surname: "Krabappel",
+      bank_account_number: "00000000",
+      bank_sort_code: "001001",
+      banking_name: "Edna Krabappel",
+      eligibility_attributes: {
+        nursery_urn: nursery.urn,
+        alternative_idv_completed_at: Time.zone.now
+      }
+    )
+
+    idv_url = Journeys::EarlyYearsPayment::Provider::AlternativeIdv.verification_url(claim)
+
+    visit idv_url
+
+    click_on "Start now"
+
+    expect(page).to have_content(
+      "Alternative IDV checks have already been completed for this claim"
+    )
+  end
+
+  it "informs the provider if the url is invalid" do
+    create(
+      :journey_configuration,
+      :early_years_payment_provider_alternative_idv
+    )
+
+    idv_url = Journeys::EarlyYearsPayment::Provider::AlternativeIdv.verification_url(
+      OpenStruct.new(reference: nil)
+    )
+
+    visit idv_url
+
+    click_on "Start now"
+
+    expect(page).to have_content("We can't find this claim")
+  end
+
   def table_row(claim_reference)
     find("table tbody tr", text: claim_reference)
   end

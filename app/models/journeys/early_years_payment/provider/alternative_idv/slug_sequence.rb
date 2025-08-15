@@ -9,11 +9,14 @@ module Journeys
             claimant-not-employed-by-nursery
             check-answers
             confirmation
+            ineligible
+
           ]
 
           RESTRICTED_SLUGS = []
           DEAD_END_SLUGS = %w[
             claimant-not-employed-by-nursery
+            ineligible
           ]
 
           def self.start_page_url

@@ -119,16 +119,7 @@ module Journeys
 
             journey_session.save!
 
-            answers.claim.eligibility.update!(
-              alternative_idv_claimant_employed_by_nursery: answers.claimant_employed_by_nursery,
-              alternative_idv_claimant_date_of_birth: answers.claimant_date_of_birth,
-              alternative_idv_claimant_postcode: answers.claimant_postcode,
-              alternative_idv_claimant_national_insurance_number: answers.claimant_national_insurance_number,
-              alternative_idv_claimant_bank_details_match: answers.claimant_bank_details_match,
-              alternative_idv_claimant_email: answers.claimant_email,
-              alternative_idv_claimant_employment_check_declaration: claimant_employment_check_declaration,
-              alternative_idv_completed_at: DateTime.current.utc
-            )
+            journey_session.answers.alternative_idv_completed!
 
             true
           end
