@@ -54,6 +54,10 @@ module Policies
         claim.submitted_at.present?
       end
 
+      def alternative_idv_completed?
+        alternative_idv_completed_at.present?
+      end
+
       private
 
       def first_names_match?

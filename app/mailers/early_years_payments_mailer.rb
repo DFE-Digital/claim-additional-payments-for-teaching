@@ -83,6 +83,23 @@ class EarlyYearsPaymentsMailer < ApplicationMailer
     )
   end
 
+  def provider_alternative_idv_request(claim)
+    personalisation = {
+      claim_reference: claim.reference,
+      provider_name: claim.provider_contact_name,
+      practitioner_first_name: claim.first_name,
+      practitioner_full_name: claim.full_name,
+      verification_url: Journeys::EarlyYearsPayment::Provider::AlternativeIdv.verification_url(claim)
+    }
+
+    template_mail(
+      EARLY_YEARS_PAYMENTS[:CLAIM_ALTERNATIVE_IDV_NOTIFY_TEMPLATE_ID],
+      to: claim.eligibility.eligible_ey_provider.primary_key_contact_email_address,
+      reply_to_id: claim.policy.notify_reply_to_id,
+      personalisation: personalisation
+    )
+  end
+
   private
 
   def submitted_by_practitioner_and_send_to_practitioner(claim)

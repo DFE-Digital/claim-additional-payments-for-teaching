@@ -1,0 +1,61 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?)
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      method: :patch,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+      html: { novalidate: false }
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <span class="govuk-caption-l">
+        <%= f.object.claimant_name %>
+      </span>
+
+      <h1 class="govuk-heading-l">
+        <%= f.object.t(:title) %>
+      </h1>
+
+      <h2 class="govuk-heading-m">
+        Employment status
+      </h2>
+
+      <%= govuk_summary_list(rows: f.object.employment_status_rows) %>
+
+      <h2 class="govuk-heading-m">
+        Personal details
+      </h2>
+
+      <%= govuk_summary_list(rows: f.object.personal_details_rows) %>
+
+      <div class="govuk-!-margin-bottom-6 govuk-!-margin-top-9">
+        <%= f.govuk_check_boxes_fieldset(
+          :claimant_employment_check_declaration,
+          multiple: false,
+          legend: nil
+        ) do %>
+          <%= f.govuk_check_box(
+            :claimant_employment_check_declaration,
+            1,
+            0,
+            multiple: false,
+            label: {
+              text: f.object.t("claimant_employment_check_declaration.question"),
+            }
+          ) %>
+        <% end %>
+      </div>
+
+      <%= f.govuk_submit("Confirm and send") %>
+    <% end %>
+  </div>
+</div>
