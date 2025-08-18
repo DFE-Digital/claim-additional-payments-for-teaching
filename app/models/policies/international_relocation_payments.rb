@@ -32,7 +32,6 @@ module Policies
     # Attributes to delete from claims submitted before the current academic
     # year
     PERSONAL_DATA_ATTRIBUTES_TO_DELETE = [
-      :date_of_birth,
       :address_line_1,
       :address_line_2,
       :address_line_3,
@@ -54,6 +53,7 @@ module Policies
       :first_name,
       :middle_name,
       :surname,
+      :date_of_birth,
       :national_insurance_number,
       :passport_number
     ]
