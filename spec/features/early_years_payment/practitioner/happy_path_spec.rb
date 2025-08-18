@@ -124,7 +124,7 @@ RSpec.feature "Early years payment practitioner" do
     choose "No"
     click_on "Continue"
 
-    expect(page).to have_text("Your personal bank account details")
+    expect(page).to have_text("Enter the bank account details your salary is paid into")
     fill_in "Name on the account", with: "Jo Bloggs"
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "87654321"
