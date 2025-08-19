@@ -14,7 +14,7 @@ module Journeys
           validates(
             :claimant_national_insurance_number,
             presence: {
-              message: i18n_error_message("claimant_national_insurance_number.invalid")
+              message: i18n_error_message("claimant_national_insurance_number.blank")
             }
           )
 
@@ -68,7 +68,7 @@ module Journeys
           validates(
             :claimant_email,
             email_address_format: {
-              message: "Enter an email address in the correct format, like name@example.com"
+              message: i18n_error_message("claimant_email.invalid")
             },
             length: {
               maximum: Rails.application.config.email_max_length,
@@ -126,10 +126,15 @@ module Journeys
           end
 
           def date_of_birth_blank_error_message
-            i18n_errors_path(
-              "claimant_date_of_birth.blank",
-              claimant_name: claimant_name
-            )
+            i18n_errors_path("claimant_date_of_birth.blank")
+          end
+
+          def date_of_birth_invalid_error_message
+            i18n_errors_path("claimant_date_of_birth.format")
+          end
+
+          def date_of_birth_missing_components_error_message
+            i18n_errors_path("claimant_date_of_birth.format")
           end
         end
       end

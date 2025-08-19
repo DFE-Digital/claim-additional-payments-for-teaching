@@ -1520,17 +1520,20 @@ en:
           question: "Enter their personal email address"
         errors:
           claimant_date_of_birth:
-            blank: "Enter %{claimant_name}’s date of birth"
+            blank: "Enter the applicant’s date of birth"
+            format: "Enter the applicant’s date of birth in the correct format"
           claimant_postcode:
-            blank: "Enter a real postcode, for example NE1 6EE"
+            blank: "Enter the applicant’s postcode"
             length: "Postcode must be 11 characters or less"
-            format: "Enter a postcode in the correct format"
+            format: "Enter the applicant’s postcode in the correct format"
           claimant_national_insurance_number:
-            invalid: "Enter a National Insurance number in the correct format"
+            blank: "Enter the applicant’s National Insurance number"
+            invalid: "Enter the applicant’s National Insurance number in the correct format"
           claimant_bank_details_match:
-            inclusion: "Tell us if these bank details match what you have for %{claimant_name}?"
+            inclusion: "Select yes if these bank details match what you have for %{claimant_name}"
           claimant_email:
-            blank: "Enter an email address"
+            blank: "Enter the applicant’s personal email address"
+            invalid: "Enter the applicant’s email address in the correct format"
             length: "Email address must be %{max_length} characters or less"
 
       check_answers:

@@ -55,7 +55,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ClaimantPe
         it "is invalid" do
           expect(form).not_to be_valid
           expect(form.errors[:claimant_date_of_birth]).to include(
-            "Enter Edna Krabappel’s date of birth"
+            "Enter the applicant’s date of birth"
           )
         end
       end
@@ -71,8 +71,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ClaimantPe
         it "is invalid" do
           expect(form).not_to be_valid
           expect(form.errors[:claimant_date_of_birth]).to include(
-            "Date of birth must include a day, month and year in the correct " \
-            "format, for example 01 01 1980"
+            "Enter the applicant’s date of birth in the correct format"
           )
         end
       end
@@ -89,7 +88,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ClaimantPe
         it "is invalid" do
           expect(form).not_to be_valid
           expect(form.errors[:claimant_date_of_birth]).to include(
-            "Enter a date of birth in the correct format"
+            "Enter the applicant’s date of birth in the correct format"
           )
         end
       end
@@ -105,8 +104,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ClaimantPe
         it "is invalid" do
           expect(form).not_to be_valid
           expect(form.errors[:claimant_date_of_birth]).to include(
-            "Date of birth must include a day, month and year in the correct " \
-            "format, for example 01 01 1980"
+            "Enter the applicant’s date of birth in the correct format"
           )
         end
       end
@@ -123,7 +121,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ClaimantPe
         it "is invalid" do
           expect(form).not_to be_valid
           expect(form.errors[:claimant_date_of_birth]).to include(
-            "Enter a date of birth in the correct format"
+            "Enter the applicant’s date of birth in the correct format"
           )
         end
       end
@@ -139,8 +137,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ClaimantPe
         it "is invalid" do
           expect(form).not_to be_valid
           expect(form.errors[:claimant_date_of_birth]).to include(
-            "Date of birth must include a day, month and year in the correct " \
-            "format, for example 01 01 1980"
+            "Enter the applicant’s date of birth in the correct format"
           )
         end
       end
@@ -157,7 +154,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ClaimantPe
         it "is invalid" do
           expect(form).not_to be_valid
           expect(form.errors[:claimant_date_of_birth]).to include(
-            "Enter a date of birth in the correct format"
+            "Enter the applicant’s date of birth in the correct format"
           )
         end
       end
@@ -223,7 +220,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ClaimantPe
         is_expected.to(
           validate_presence_of(
             :claimant_national_insurance_number
-          ).with_message("Enter a National Insurance number in the correct format")
+          ).with_message("Enter the applicant’s National Insurance number")
         )
       end
 
@@ -264,14 +261,14 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ClaimantPe
       it do
         is_expected.to(
           validate_presence_of(:claimant_postcode)
-            .with_message("Enter a real postcode, for example NE1 6EE")
+            .with_message("Enter the applicant’s postcode")
         )
       end
 
       it do
         is_expected.not_to(
           allow_value("SW1A").for(:claimant_postcode)
-            .with_message("Enter a postcode in the correct format")
+            .with_message("Enter the applicant’s postcode in the correct format")
         )
       end
     end
@@ -286,7 +283,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ClaimantPe
           form.claimant_email = ""
           expect(form).not_to be_valid
           expect(form.errors[:claimant_email]).to include(
-            "Enter an email address"
+            "Enter the applicant’s personal email address"
           )
         end
       end
@@ -296,7 +293,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ClaimantPe
           form.claimant_email = "invalid-email"
           expect(form).not_to be_valid
           expect(form.errors[:claimant_email]).to include(
-            "Enter an email address in the correct format, like name@example.com"
+            "Enter the applicant’s email address in the correct format"
           )
         end
       end
