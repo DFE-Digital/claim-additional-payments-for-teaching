@@ -151,8 +151,11 @@ en:
         name: One Login identity check
         title: Confirm the claimant made the claim
       alternative_identity_verification:
-        name: "Alternative identity verification"
-        title: "Confirm the provider has verified the claimant's identity"
+        name: Alternative identity verification
+        title: confirm the provider has verified the claimant’s identity
+      alternative_verification:
+        name: Alternative verification
+        title: confirm the provider has verified the claimant’s identity
       previous_payment:
         name: Previous payment
         title: Check for previous payment
@@ -847,6 +850,8 @@ en:
           no_response_from_employer: "No response from employer"
           other: "Other"
       task_questions:
+        alternative_verification:
+          title: Do the details provided by the claimant match the provider’s responses?
         one_login_identity:
           title: Do the One Login details match the personal details entered by the claimant?
         identity_confirmation:
