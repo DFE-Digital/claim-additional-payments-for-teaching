@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Admin::Tasks::AlternativeVerificationForm do
+RSpec.describe Admin::Tasks::FeAlternativeVerificationForm do
   subject { described_class.new claim: }
 
   describe "#data_table_rows" do
