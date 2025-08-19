@@ -12,7 +12,7 @@ class Task < ApplicationRecord
     previous_payment
     identity_confirmation
     alternative_identity_verification
-    alternative_verification
+    fe_alternative_verification
     provider_verification
     provider_details
     visa
