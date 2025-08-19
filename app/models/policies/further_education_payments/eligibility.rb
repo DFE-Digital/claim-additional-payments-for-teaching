@@ -148,6 +148,10 @@ module Policies
         claim.failed_one_login_idv?
       end
 
+      def alternative_identity_verification_required?
+        employment_check_required?
+      end
+
       def claimant_not_employed_by_college?
         provider_verification_claimant_employed_by_college == false
       end
