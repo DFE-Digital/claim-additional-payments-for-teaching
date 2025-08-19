@@ -36,6 +36,10 @@ module Journeys
               alternative_idv_claimant_employment_check_declaration: claimant_employment_check_declaration,
               alternative_idv_completed_at: alternative_idv_completed_at
             )
+
+            Policies::EarlyYearsPayments.alternative_idv_completed!(claim)
+
+            true
           end
 
           private
