@@ -10,6 +10,8 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ClaimantPe
       first_name: "Edna",
       surname: "Krabappel",
       identity_confirmed_with_onelogin: false,
+      bank_account_number: "12345678",
+      bank_sort_code: "123456",
       eligibility_attributes: {
         alternative_idv_reference: "1234567890"
       }
@@ -23,6 +25,10 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ClaimantPe
         alternative_idv_reference: claim.eligibility.alternative_idv_reference
       }
     )
+  end
+
+  let(:params) do
+    {}
   end
 
   let(:form) do
@@ -335,6 +341,18 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ClaimantPe
           allow_value(false).for(:claimant_bank_details_match)
         )
       end
+    end
+  end
+
+  describe "#claimant_bank_account_number" do
+    it "returns the obfuscated bank account number" do
+      expect(form.claimant_bank_account_number).to eq("****5678")
+    end
+  end
+
+  describe "#claimant_bank_sort_code" do
+    it "returns the formatted bank sort code" do
+      expect(form.claimant_bank_sort_code).to eq("12-34-56")
     end
   end
 end

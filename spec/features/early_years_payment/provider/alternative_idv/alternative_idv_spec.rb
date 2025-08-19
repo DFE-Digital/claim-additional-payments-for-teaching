@@ -55,8 +55,8 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
 
     within_fieldset "Do these bank details match what you have for Edna Krabappel" do
       expect(table_row("Name on the account")).to have_content "Edna Krabappel"
-      expect(table_row("Sort code")).to have_content "001001"
-      expect(table_row("Account number")).to have_content "00000000"
+      expect(table_row("Sort code")).to have_content "00-10-01"
+      expect(table_row("Account number")).to have_content "****0000"
 
       choose "Yes"
     end

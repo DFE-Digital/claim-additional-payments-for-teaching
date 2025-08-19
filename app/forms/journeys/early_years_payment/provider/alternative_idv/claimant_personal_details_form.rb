@@ -98,11 +98,18 @@ module Journeys
           end
 
           def claimant_bank_sort_code
-            answers.claim.bank_sort_code
+            answers
+              .claim
+              .bank_sort_code
+              .remove("-")
+              .chars
+              .each_slice(2)
+              .map(&:join)
+              .join("-")
           end
 
           def claimant_bank_account_number
-            answers.claim.bank_account_number
+            "****" + answers.claim.bank_account_number.chars.last(4).join("")
           end
 
           def save
