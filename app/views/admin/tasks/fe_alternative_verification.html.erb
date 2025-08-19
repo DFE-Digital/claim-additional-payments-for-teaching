@@ -16,7 +16,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <h2 class="govuk-heading-xl"><%= @form.task.name.humanize %></h2>
+    <h2 class="govuk-heading-xl"><%= I18n.t(:name, scope: @form.translation) %></h2>
 
     <%= render(
       partial: "alternative_verification_data",

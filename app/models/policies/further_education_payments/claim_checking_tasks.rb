@@ -18,7 +18,7 @@ module Policies
         tasks << "provider_verification"
         tasks << "provider_details" if claim.eligibility.provider_and_claimant_details_match?
         tasks << "alternative_identity_verification" if show_alternative_identity_verification_task?
-        tasks << "alternative_verification" if show_alternative_verification_task?
+        tasks << "fe_alternative_verification" if show_alternative_verification_task?
         tasks << "employment" if claim.eligibility.teacher_reference_number.present?
         tasks << "student_loan_plan" if claim.submitted_without_slc_data?
         tasks << "payroll_details" if claim.must_manually_validate_bank_details?
