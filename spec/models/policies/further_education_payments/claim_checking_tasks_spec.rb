@@ -154,7 +154,7 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks, feature_f
       end
 
       it "shows alternative_verification task" do
-        expect(subject.applicable_task_names).to include("alternative_verification")
+        expect(subject.applicable_task_names).to include("fe_alternative_verification")
       end
     end
   end

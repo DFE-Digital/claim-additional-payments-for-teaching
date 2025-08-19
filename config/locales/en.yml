@@ -152,10 +152,10 @@ en:
         title: Confirm the claimant made the claim
       alternative_identity_verification:
         name: Alternative identity verification
-        title: confirm the provider has verified the claimant’s identity
+        title: Confirm the provider has verified the claimant’s identity
       fe_alternative_verification:
         name: Alternative verification
-        title: confirm the provider has verified the claimant’s identity
+        title: Confirm the provider has verified the claimant’s identity
       previous_payment:
         name: Previous payment
         title: Check for previous payment
