@@ -135,5 +135,9 @@ module Policies
     def eligibility_page_url
       "https://www.gov.uk/guidance/targeted-retention-incentive-payments-for-fe-teachers"
     end
+
+    def alternative_idv_completed!(claim)
+      # NOOP
+    end
   end
 end

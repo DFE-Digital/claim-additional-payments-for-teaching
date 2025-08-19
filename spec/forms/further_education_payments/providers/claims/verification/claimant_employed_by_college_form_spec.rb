@@ -40,4 +40,46 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Claima
       )
     end
   end
+
+  describe "#save" do
+    context "when not employed by college" do
+      let(:params) do
+        {
+          provider_verification_claimant_employed_by_college: false
+        }
+      end
+
+      it "calls alternative IDV completed hook" do
+        allow(Policies::FurtherEducationPayments).to(
+          receive(:alternative_idv_completed!)
+        )
+
+        expect(form.save).to be true
+
+        expect(Policies::FurtherEducationPayments).to have_received(
+          :alternative_idv_completed!
+        ).with(claim)
+      end
+    end
+
+    context "when employed by college" do
+      let(:params) do
+        {
+          provider_verification_claimant_employed_by_college: true
+        }
+      end
+
+      it "does not call alternative IDV completed hook" do
+        allow(Policies::FurtherEducationPayments).to(
+          receive(:alternative_idv_completed!)
+        )
+
+        expect(form.save).to be true
+
+        expect(Policies::FurtherEducationPayments).not_to have_received(
+          :alternative_idv_completed!
+        )
+      end
+    end
+  end
 end

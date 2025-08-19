@@ -146,6 +146,14 @@ module FurtherEducationPayments
             raise IncompleteWizardError unless wizard_completed?
 
             super
+
+            # If the provider completed alternative IDV, then notify hook that
+            # this has been completed.
+            if claim.eligibility.provider_verification_claimant_employment_check_declaration
+              Policies::FurtherEducationPayments.alternative_idv_completed!(claim)
+            end
+
+            true
           end
 
           def save_and_exit?

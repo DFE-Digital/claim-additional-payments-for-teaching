@@ -22,6 +22,20 @@ module FurtherEducationPayments
             ]
           end
 
+          def save
+            return false unless super
+
+            # We only see this form if alternative IDV is required.
+            # If the proider has indicated that the claimant is not employed by
+            # the college this is the last form in the verification flow so we
+            # call the alternative IDV completed hook.
+            if not_employed_by_college?
+              Policies::FurtherEducationPayments.alternative_idv_completed!(claim)
+            end
+
+            true
+          end
+
           private
 
           # If the provider has indicated that the claimant is not employed by

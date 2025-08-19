@@ -75,5 +75,41 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::CheckA
         ).to eq(user.id)
       end
     end
+
+    context "when alternative IDV was completed" do
+      it "calls the alternative IDV completed hook" do
+        claim.eligibility.update!(
+          provider_verification_claimant_employment_check_declaration: true
+        )
+
+        allow(Policies::FurtherEducationPayments).to(
+          receive(:alternative_idv_completed!)
+        )
+
+        form.save
+
+        expect(Policies::FurtherEducationPayments).to(
+          have_received(:alternative_idv_completed!).with(claim)
+        )
+      end
+    end
+
+    context "when alternative IDV was not completed" do
+      it "calls the alternative IDV completed hook" do
+        claim.eligibility.update!(
+          provider_verification_claimant_employment_check_declaration: false
+        )
+
+        allow(Policies::FurtherEducationPayments).to(
+          receive(:alternative_idv_completed!)
+        )
+
+        form.save
+
+        expect(Policies::FurtherEducationPayments).not_to(
+          have_received(:alternative_idv_completed!).with(claim)
+        )
+      end
+    end
   end
 end
