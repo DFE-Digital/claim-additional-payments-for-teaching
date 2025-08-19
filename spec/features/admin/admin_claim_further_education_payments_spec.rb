@@ -503,7 +503,8 @@ RSpec.feature "Admin claim further education payments" do
               :submitted,
               policy: Policies::FurtherEducationPayments,
               onelogin_idv_at: 1.day.ago,
-              identity_confirmed_with_onelogin: false
+              identity_confirmed_with_onelogin: false,
+              academic_year: AcademicYear.new("2025/2026")
             )
 
             create(
@@ -514,67 +515,11 @@ RSpec.feature "Admin claim further education payments" do
             )
 
             visit admin_claim_tasks_path(claim)
-
-            expect(page).to have_content("Alternative identity verification")
-
-            click_on "Confirm the provider has verified the claimant's identity"
+            expect(page).to have_content("Alternative verification")
+            click_on "Confirm the provider has verified the claimant’s identity"
 
             expect(page).to have_content(
-              "Resend provider verification request"
-            )
-          end
-
-          it "shows the option to send the verificaiton email for duplicates" do
-            claim = create(
-              :claim,
-              :submitted,
-              policy: Policies::FurtherEducationPayments,
-              onelogin_idv_at: 1.day.ago,
-              identity_confirmed_with_onelogin: false
-            )
-
-            fe_provider = create(
-              :school,
-              :further_education,
-              :fe_eligible,
-              name: "Springfield A and M"
-            )
-
-            create(
-              :further_education_payments_eligibility,
-              claim: claim,
-              school: fe_provider,
-              flagged_as_duplicate: true
-            )
-
-            visit admin_claim_tasks_path(claim)
-
-            expect(page).to have_content("Alternative identity verification")
-
-            click_on "Confirm the provider has verified the claimant's identity"
-
-            expect(page).to have_content(
-              "This task has not been sent to the provider yet."
-            )
-
-            expect(page).not_to have_content(
-              "The verification request was sent to the provider"
-            )
-
-            perform_enqueued_jobs do
-              click_on "Send provider verification request"
-            end
-
-            expect(page).to have_content(
-              "The verification request was sent to the provider by " \
-              "Aaron Admin on 9 September #{AcademicYear.current.start_year} " \
-              "11:00am"
-            )
-
-            provider_email_address = fe_provider.eligible_fe_provider.primary_key_contact_email_address
-
-            expect(provider_email_address).to(
-              have_received_email("9a25fe46-2ee4-4a5c-8d47-0f04f058a87d")
+              "Awaiting provider response"
             )
           end
         end
@@ -589,48 +534,58 @@ RSpec.feature "Admin claim further education payments" do
               identity_confirmed_with_onelogin: false,
               national_insurance_number: "QQ123456B",
               postcode: "TE57 2NG",
-              date_of_birth: Date.new(1990, 2, 1)
+              date_of_birth: Date.new(1990, 2, 1),
+              academic_year: AcademicYear.new("2025/2026")
             )
 
             create(
               :further_education_payments_eligibility,
               claim: claim,
               flagged_as_duplicate: true,
-              claimant_date_of_birth: Date.new(1990, 1, 1),
-              claimant_postcode: "TE57 1NG",
-              claimant_national_insurance_number: "QQ123456C",
-              claimant_valid_passport: true,
-              claimant_passport_number: "123456789",
-              claimant_identity_verified_at: DateTime.now,
-              valid_passport: true,
-              passport_number: "123456780"
+              provider_verification_claimant_employed_by_college: true,
+              provider_verification_claimant_date_of_birth: Date.new(1990, 1, 1),
+              provider_verification_claimant_postcode: "TE57 1NG",
+              provider_verification_claimant_national_insurance_number: "QQ123456C",
+              provider_verification_claimant_bank_details_match: true,
+              provider_verification_claimant_email: "claimant@example.com"
             )
 
             AutomatedChecks::ClaimVerifiers::AlternativeIdentityVerification
               .new(claim: claim).perform
 
             visit admin_claim_tasks_path(claim)
+            click_on "Confirm the provider has verified the claimant’s identity"
 
-            click_on "Confirm the provider has verified the claimant's identity"
+            within_table_row("Does #{claim.school.name} employ Jo Bloggs?") do |claimant, provider|
+              expect(claimant).to have_text("Jo Bloggs")
+              expect(provider).to have_text("Yes")
+            end
+
+            within_table_row("Date of birth") do |claimant, provider|
+              expect(claimant).to have_text("1 February 1990")
+              expect(provider).to have_text("1 January 1990")
+            end
+
+            within_table_row("Postcode") do |claimant, provider|
+              expect(claimant).to have_text("TE57 2NG")
+              expect(provider).to have_text("TE57 1NG")
+            end
 
             within_table_row("National Insurance number") do |claimant, provider|
               expect(claimant).to have_text("QQ123456B")
               expect(provider).to have_text("QQ123456C")
             end
 
-            within_table_row("Post code") do |claimant, provider|
-              expect(claimant).to have_text("TE57 2NG")
-              expect(provider).to have_text("TE57 1NG")
+            within_table_row("Do claimant’s bank details match provider’s records?") do |claimant, provider|
+              expect(claimant).to have_text(claim.banking_name)
+              expect(claimant).to have_text(claim.bank_sort_code)
+              expect(claimant).to have_text(claim.bank_account_number)
+              expect(provider).to have_text("Yes")
             end
 
-            within_table_row("Date of Birth") do |claimant, provider|
-              expect(claimant).to have_text("1 February 1990")
-              expect(provider).to have_text("1 January 1990")
-            end
-
-            within_table_row("Passport number") do |claimant, provider|
-              expect(claimant).to have_text("123456780")
-              expect(provider).to have_text("123456789")
+            within_table_row("Email") do |claimant, provider|
+              expect(claimant).to have_text("person1@example.com")
+              expect(provider).to have_text("claimant@example.com")
             end
           end
 
@@ -682,7 +637,7 @@ RSpec.feature "Admin claim further education payments" do
               ).to eq("Passed")
 
               click_on(
-                "Confirm the provider has verified the claimant's identity"
+                "Confirm the provider has verified the claimant’s identity"
               )
 
               expect(page).not_to have_content(
@@ -709,7 +664,8 @@ RSpec.feature "Admin claim further education payments" do
                 identity_confirmed_with_onelogin: false,
                 national_insurance_number: "QQ123456B",
                 postcode: "TE57 2NG",
-                date_of_birth: Date.new(1990, 2, 1)
+                date_of_birth: Date.new(1990, 2, 1),
+                academic_year: AcademicYear.new("2025/2026")
               )
 
               create(
@@ -730,185 +686,35 @@ RSpec.feature "Admin claim further education payments" do
                 .new(claim: claim).perform
 
               visit admin_claim_tasks_path(claim)
-
-              expect(
-                task_status("Alternative identity verification")
-              ).to eq("No match")
-
               click_on(
-                "Confirm the provider has verified the claimant's identity"
+                "Confirm the provider has verified the claimant’s identity"
               )
 
               expect(page).to have_content(
-                "Do the details entered by the claimant match the personal " \
-                "details entered by the provider?"
+                "Do the details provided by the claimant match the " \
+                "provider’s responses?"
               )
-
               choose "No"
-
               click_on "Save and continue"
 
               visit admin_claim_tasks_path(claim)
-
               expect(
-                task_status("Alternative identity verification")
+                task_status("Alternative verification")
               ).to eq("Failed")
-
               click_on(
-                "Confirm the provider has verified the claimant's identity"
+                "Confirm the provider has verified the claimant’s identity"
               )
 
               expect(page).not_to have_content(
-                "Do the details entered by the claimant match the personal " \
-                "details entered by the provider?"
+                "Do the details provided by the claimant match the " \
+                "provider’s responses?"
               )
-
               expect(find(".govuk-tag")).to have_text("Failed")
-
               expect(page).to have_content(
                 "This task was performed by Aaron Admin on 9 September " \
                 "#{AcademicYear.current.start_year} 11:00am"
               )
             end
-          end
-        end
-      end
-    end
-
-    describe "FE claim decisions" do
-      context "when the claim is flagged for alternative idv" do
-        context "when the alternative idv task has not been completed" do
-          it "shows the admins a warning" do
-            claim = create(
-              :claim,
-              :submitted,
-              policy: Policies::FurtherEducationPayments,
-              onelogin_idv_at: 1.day.ago,
-              identity_confirmed_with_onelogin: false
-            )
-
-            visit new_admin_claim_decision_path(claim)
-
-            task_warning = find(".govuk-error-summary:first-of-type")
-
-            within(task_warning) do
-              expect(page).to have_content(
-                "Some tasks have not yet been completed"
-              )
-
-              expect(page).to have_content(
-                "Confirm the provider has verified the claimant's identity"
-              )
-            end
-
-            approve_button = find("#decision_approved_true")
-
-            expect(approve_button).to be_disabled
-
-            reject_button = find("#decision_approved_false")
-
-            expect(reject_button).to be_disabled
-          end
-        end
-
-        context "when the alternative idv task is a fail" do
-          it "only allows admins to reject the claim" do
-            stub_const(
-              "Policies::FurtherEducationPayments::REJECTED_MIN_QA_THRESHOLD",
-              0
-            )
-
-            claim = create(
-              :claim,
-              :submitted,
-              policy: Policies::FurtherEducationPayments,
-              onelogin_idv_at: 1.day.ago,
-              identity_confirmed_with_onelogin: false,
-              email_address: "edna-krabappel@springfield-elementary.edu"
-            )
-
-            create(
-              :task,
-              :claim_verifier_context,
-              claim: claim,
-              name: "alternative_identity_verification",
-              manual: true,
-              passed: false,
-              claim_verifier_match: "none"
-            )
-
-            visit new_admin_claim_decision_path(claim)
-
-            task_warning = find(".govuk-error-summary:first-of-type")
-
-            within(task_warning) do
-              expect(page).not_to have_content(
-                "Confirm the provider has verified the claimant's identity"
-              )
-            end
-
-            approve_button = find("#decision_approved_true")
-
-            expect(approve_button).to be_disabled
-
-            reject_button = find("#decision_approved_false")
-
-            expect(reject_button).not_to be_disabled
-
-            choose "Reject"
-
-            check "Provider-led identity check failed"
-
-            perform_enqueued_jobs do
-              click_on "Confirm decision"
-            end
-
-            expect("edna-krabappel@springfield-elementary.edu").to(
-              have_received_email(
-                "a1bb5f64-585f-4b03-b9db-0b20ad801b34",
-                reason_alternative_identity_verification_check_failed: "yes"
-              )
-            )
-          end
-        end
-
-        context "when the alternative idv task is a pass" do
-          it "allows admins to approve or reject the claim" do
-            claim = create(
-              :claim,
-              :submitted,
-              policy: Policies::FurtherEducationPayments,
-              onelogin_idv_at: 1.day.ago,
-              identity_confirmed_with_onelogin: false
-            )
-
-            create(
-              :task,
-              :claim_verifier_context,
-              claim: claim,
-              name: "alternative_identity_verification",
-              manual: true,
-              passed: true,
-              claim_verifier_match: "none"
-            )
-
-            visit new_admin_claim_decision_path(claim)
-
-            task_warning = find(".govuk-error-summary:first-of-type")
-
-            within(task_warning) do
-              expect(page).not_to have_content(
-                "Confirm the provider has verified the claimant's identity"
-              )
-            end
-
-            approve_button = find("#decision_approved_true")
-
-            expect(approve_button).not_to be_disabled
-
-            reject_button = find("#decision_approved_false")
-
-            expect(reject_button).not_to be_disabled
           end
         end
       end
