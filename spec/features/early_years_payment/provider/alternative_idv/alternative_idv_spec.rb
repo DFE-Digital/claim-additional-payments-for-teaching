@@ -23,7 +23,8 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
       bank_sort_code: "001001",
       banking_name: "Edna Krabappel",
       eligibility_attributes: {
-        nursery_urn: nursery.urn
+        nursery_urn: nursery.urn,
+        alternative_idv_reference: "1234567890"
       }
     )
 
@@ -133,7 +134,8 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
       bank_sort_code: "001001",
       banking_name: "Chester Turley",
       eligibility_attributes: {
-        nursery_urn: nursery.urn
+        nursery_urn: nursery.urn,
+        alternative_idv_reference: "1234567890"
       }
     )
 
@@ -183,7 +185,8 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
       banking_name: "Edna Krabappel",
       eligibility_attributes: {
         nursery_urn: nursery.urn,
-        alternative_idv_completed_at: Time.zone.now
+        alternative_idv_completed_at: Time.zone.now,
+        alternative_idv_reference: "1234567890"
       }
     )
 
@@ -204,8 +207,14 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
       :early_years_payment_provider_alternative_idv
     )
 
+    stub_claim = OpenStruct.new(
+      eligibility: OpenStruct.new(
+        alternative_idv_reference: "invalid_reference"
+      )
+    )
+
     idv_url = Journeys::EarlyYearsPayment::Provider::AlternativeIdv.verification_url(
-      OpenStruct.new(reference: nil)
+      stub_claim
     )
 
     visit idv_url

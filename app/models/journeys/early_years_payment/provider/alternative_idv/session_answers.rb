@@ -3,7 +3,7 @@ module Journeys
     module Provider
       module AlternativeIdv
         class SessionAnswers < Journeys::SessionAnswers
-          attribute :claim_reference, :string, pii: false
+          attribute :alternative_idv_reference, :string, pii: false
           attribute :claimant_employed_by_nursery, :boolean, pii: false
           attribute :claimant_date_of_birth, :date, pii: true
           attribute :claimant_postcode, :string, pii: true
@@ -14,14 +14,11 @@ module Journeys
           attribute :alternative_idv_completed_at, :datetime, pii: false
 
           def claim
-            @claim ||= Claim
-              .by_policy(Policies::EarlyYearsPayments)
-              .where(identity_confirmed_with_onelogin: false)
-              .find_by(reference: claim_reference)
+            @claim ||= eligibility&.claim
           end
 
           def nursery
-            @nursery ||= claim.eligibility.eligible_ey_provider
+            @nursery ||= eligibility.eligible_ey_provider
           end
 
           def alternative_idv_completed!
@@ -29,7 +26,7 @@ module Journeys
 
             session.save!
 
-            claim.eligibility.update!(
+            eligibility.update!(
               alternative_idv_claimant_employed_by_nursery: claimant_employed_by_nursery,
               alternative_idv_claimant_date_of_birth: claimant_date_of_birth,
               alternative_idv_claimant_postcode: claimant_postcode,
@@ -39,6 +36,15 @@ module Journeys
               alternative_idv_claimant_employment_check_declaration: claimant_employment_check_declaration,
               alternative_idv_completed_at: alternative_idv_completed_at
             )
+          end
+
+          private
+
+          def eligibility
+            @eligibility ||= Policies::EarlyYearsPayments::Eligibility
+              .joins(:claim)
+              .where(claims: {identity_confirmed_with_onelogin: false})
+              .find_by(alternative_idv_reference: alternative_idv_reference)
           end
         end
       end

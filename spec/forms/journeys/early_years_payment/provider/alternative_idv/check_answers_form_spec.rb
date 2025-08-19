@@ -15,7 +15,8 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::CheckAnswe
       surname: "Krabappel",
       identity_confirmed_with_onelogin: false,
       eligibility_attributes: {
-        nursery_urn: nursery.urn
+        nursery_urn: nursery.urn,
+        alternative_idv_reference: "1234567890"
       }
     )
   end
@@ -24,7 +25,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::CheckAnswe
     create(
       :early_years_payment_provider_alternative_idv_session,
       answers: {
-        claim_reference: claim.reference
+        alternative_idv_reference: claim.eligibility.alternative_idv_reference
       }
     )
   end

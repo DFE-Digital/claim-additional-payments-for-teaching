@@ -9,7 +9,10 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ClaimantPe
       policy: Policies::EarlyYearsPayments,
       first_name: "Edna",
       surname: "Krabappel",
-      identity_confirmed_with_onelogin: false
+      identity_confirmed_with_onelogin: false,
+      eligibility_attributes: {
+        alternative_idv_reference: "1234567890"
+      }
     )
   end
 
@@ -17,7 +20,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ClaimantPe
     create(
       :early_years_payment_provider_alternative_idv_session,
       answers: {
-        claim_reference: claim.reference
+        alternative_idv_reference: claim.eligibility.alternative_idv_reference
       }
     )
   end

@@ -22,9 +22,29 @@ module Journeys
         }
 
         def self.verification_url(claim)
-          params = {claim_reference: claim.reference}.to_query
+          params = {
+            alternative_idv_reference: claim.eligibility.alternative_idv_reference
+          }.to_query
 
           "https://#{ENV["CANONICAL_HOSTNAME"]}/#{start_page_url}?#{params}"
+        end
+
+        def self.send_alternative_idv_request!(claim)
+          reference = nil
+
+          loop do
+            reference = SecureRandom.urlsafe_base64(16)
+
+            break unless Policies::EarlyYearsPayments::Eligibility.exists?(
+              alternative_idv_reference: reference
+            )
+          end
+
+          claim.eligibility.update!(alternative_idv_reference: reference)
+
+          EarlyYearsPaymentsMailer
+            .provider_alternative_idv_request(claim)
+            .deliver_later
         end
       end
     end
