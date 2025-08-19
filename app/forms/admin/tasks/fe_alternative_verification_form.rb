@@ -1,4 +1,4 @@
-class Admin::Tasks::AlternativeVerificationForm
+class Admin::Tasks::FeAlternativeVerificationForm
   PERMITTED_PARAMS = %w[passed].freeze
 
   include ActiveModel::Model

@@ -153,7 +153,7 @@ en:
       alternative_identity_verification:
         name: Alternative identity verification
         title: confirm the provider has verified the claimant’s identity
-      alternative_verification:
+      fe_alternative_verification:
         name: Alternative verification
         title: confirm the provider has verified the claimant’s identity
       previous_payment:
@@ -850,7 +850,8 @@ en:
           no_response_from_employer: "No response from employer"
           other: "Other"
       task_questions:
-        alternative_verification:
+        fe_alternative_verification:
+          name: Alternative verification
           title: Do the details provided by the claimant match the provider’s responses?
         one_login_identity:
           title: Do the One Login details match the personal details entered by the claimant?
