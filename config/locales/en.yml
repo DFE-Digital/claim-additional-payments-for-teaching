@@ -1534,7 +1534,7 @@ en:
             length: "Email address must be %{max_length} characters or less"
 
       check_answers:
-        title: "Employment Check"
+        title: "Employment check"
         claimant_employment_check_declaration:
           question: "To the best of my knowledge, I confirm that the information provided in this form is correct."
         errors:

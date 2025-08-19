@@ -64,7 +64,7 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
     fill_in "Enter their personal email address", with: "edna.k@gmail.com"
     click_on "Continue"
 
-    expect(page).to have_content "Employment Check"
+    expect(page).to have_content "Employment check"
 
     expect(summary_row("Date of birth")).to have_content("1 January 1970")
     expect(summary_row("Postcode")).to have_content("TE57 1NG")
