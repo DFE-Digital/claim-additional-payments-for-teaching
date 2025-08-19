@@ -22,11 +22,15 @@ module Journeys
         }
 
         def self.verification_url(claim)
+          "https://#{ENV["CANONICAL_HOSTNAME"]}#{verification_path(claim)}"
+        end
+
+        def self.verification_path(claim)
           params = {
             alternative_idv_reference: claim.eligibility.alternative_idv_reference
           }.to_query
 
-          "https://#{ENV["CANONICAL_HOSTNAME"]}/#{start_page_url}?#{params}"
+          "#{start_page_url}?#{params}"
         end
 
         def self.send_alternative_idv_request!(claim)

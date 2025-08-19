@@ -10,10 +10,6 @@ module Journeys
           def claimant_name
             answers.claim.full_name
           end
-
-          def nursery_name
-            answers.nursery.nursery_name
-          end
         end
       end
     end
