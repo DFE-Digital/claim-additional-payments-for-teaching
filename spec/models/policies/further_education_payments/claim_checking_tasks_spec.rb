@@ -152,6 +152,10 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks, feature_f
       it "does not show alternative_identity_verification task" do
         expect(subject.applicable_task_names).not_to include("alternative_identity_verification")
       end
+
+      it "shows alternative_verification task" do
+        expect(subject.applicable_task_names).to include("alternative_verification")
+      end
     end
   end
 end
