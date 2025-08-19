@@ -5,47 +5,52 @@
     <%= form_for @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l">Personal details</h1>
+      <span class="govuk-caption-l">Personal details</span>
+      <h1 class="govuk-heading-l">Enter the bank account details your salary is paid into</h1>
 
-      <%= f.govuk_fieldset legend: {
-        text: "Enter the bank account details your salary is paid into",
-        tag: "h2",
-        size: "m"
-      } do %>
-        <p class="govuk-body">
-          Enter the details for the account that your employer pays your salary into. We may need to check these details with your employer so we can make sure it's you.
-        </p>
+      <p class="govuk-body">
+        Enter the details for the account that your employer pays your salary into. We may need to check these details with your employer so we can make sure it's you.
+      </p>
 
-        <%= f.govuk_text_field(
-          :banking_name,
-          spellcheck: "false",
-          autocomplete: "name",
-          label: {
-            text: "Name on the account"
-          },
-          hint: {
-            text: "Enter your name as it appears on your bank statement or bank card"
-          }
-        ) %>
+      <%= f.govuk_text_field(
+        :banking_name,
+        spellcheck: "false",
+        autocomplete: "name",
+        label: {
+          text: "Name on the account",
+          size: "s",
+          tag: "strong"
+        },
+        hint: {
+          text: "Enter your name as it appears on your bank statement or bank card"
+        }
+      ) %>
 
-        <%= f.govuk_text_field :bank_sort_code,
-          width: "one-quarter",
-          autocomplete: "off",
-          inputmode: "numeric",
-          label: { text: "Sort code" },
-          hint: {
-            text: "For example: 123456"
-          } %>
+      <%= f.govuk_text_field :bank_sort_code,
+        width: "one-quarter",
+        autocomplete: "off",
+        inputmode: "numeric",
+        label: { 
+          text: "Sort code",
+          size: "s",
+          tag: "strong"
+        },
+        hint: {
+          text: "For example: 123456"
+        } %>
 
-        <%= f.govuk_text_field :bank_account_number,
-          width: 20,
-          autocomplete: "off",
-          inputmode: "numeric",
-          label: { text: "Account number" },
-          hint: {
-            text: "For example: 00103694"
-          } %>
-      <% end %>
+      <%= f.govuk_text_field :bank_account_number,
+        width: 20,
+        autocomplete: "off",
+        inputmode: "numeric",
+        label: { 
+          text: "Account number",
+          size: "s",
+          tag: "strong"
+        },
+        hint: {
+          text: "For example: 00103694"
+        } %>
 
       <details class="govuk-details" data-module="govuk-details">
         <summary class="govuk-details__summary">
