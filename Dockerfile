@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
 # base
 # ------------------------------------------------------------------------------
-FROM ruby:3.4.4-alpine AS base
+FROM ruby:3.4.5-alpine AS base
 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
@@ -11,7 +11,7 @@ ENV RAILS_ENV=production
 
 RUN apk update
 RUN apk add icu=~76.1-r1 # force vulnerability fix
-RUN apk add postgresql16=~16.9-r0
+RUN apk add postgresql16=~16.10-r0
 RUN apk add bash postgresql-dev tzdata nodejs curl libc6-compat shared-mime-info
 
 # ------------------------------------------------------------------------------
