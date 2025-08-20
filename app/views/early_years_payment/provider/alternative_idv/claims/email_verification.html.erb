@@ -1,0 +1,24 @@
+<% content_for(
+  :page_title,
+  page_title(
+    t("one_time_password.title"),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<% content_for(:back_link) do %>
+  <%= govuk_back_link href: @form.back_link_path %>
+<% end %>
+
+<%= render(
+  partial: "one_time_password",
+  locals: {
+    form: @form,
+    current_journey_routing_name: current_journey_routing_name,
+    email_or_mobile: "email",
+    email_or_text_message: "an email",
+    show_caption: true,
+    show_change_email_address_button: false
+  }
+) %>

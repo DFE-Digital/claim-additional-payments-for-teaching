@@ -51,10 +51,6 @@ module Journeys
           def claimant_name
             answers.claim.full_name
           end
-
-          def back_link_path
-            AlternativeIdv.verification_path(answers.claim)
-          end
         end
       end
     end

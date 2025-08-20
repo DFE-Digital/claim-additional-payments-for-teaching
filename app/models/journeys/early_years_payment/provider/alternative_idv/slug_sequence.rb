@@ -4,6 +4,7 @@ module Journeys
       module AlternativeIdv
         class SlugSequence
           SLUGS = %w[
+            email-verification
             claimant-employed-by-nursery
             claimant-personal-details
             claimant-not-employed-by-nursery
@@ -35,6 +36,8 @@ module Journeys
 
           def slugs
             array = []
+
+            array << "email-verification"
 
             if answers.claimant_employed_by_nursery == false
               return ["claimant-not-employed-by-nursery"]

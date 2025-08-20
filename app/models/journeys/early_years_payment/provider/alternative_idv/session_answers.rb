@@ -13,6 +13,10 @@ module Journeys
           attribute :claimant_employment_check_declaration, :boolean, pii: false
           attribute :alternative_idv_completed_at, :datetime, pii: false
 
+          attribute :provider_email_verified, :boolean, pii: false
+          attribute :provider_email_verification_secret, :string, pii: true
+          attribute :provider_sent_one_time_password_at, :datetime, pii: false
+
           def claim
             @claim ||= eligibility&.claim
           end

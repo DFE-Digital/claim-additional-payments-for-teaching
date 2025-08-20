@@ -12,6 +12,7 @@ module Journeys
         POLICIES = [Policies::EarlyYearsPayments]
         FORMS = {
           "claims" => {
+            "email-verification" => EmailVerificationForm,
             "claimant-employed-by-nursery" => ClaimantEmployedByNurseryForm,
             "claimant-personal-details" => ClaimantPersonalDetailsForm,
             "check-answers" => CheckAnswersForm,

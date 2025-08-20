@@ -100,6 +100,20 @@ class EarlyYearsPaymentsMailer < ApplicationMailer
     )
   end
 
+  def provider_alternative_idv_email_verification(receipient_email_address:, one_time_password:)
+    personalisation = {
+      journey_name: "Early Years Payments - Employment check",
+      one_time_password: one_time_password
+    }
+
+    template_mail(
+      OTP_EMAIL_NOTIFY_TEMPLATE_ID,
+      to: receipient_email_address,
+      reply_to_id: Policies::EarlyYearsPayments.notify_reply_to_id,
+      personalisation: personalisation
+    )
+  end
+
   private
 
   def submitted_by_practitioner_and_send_to_practitioner(claim)
