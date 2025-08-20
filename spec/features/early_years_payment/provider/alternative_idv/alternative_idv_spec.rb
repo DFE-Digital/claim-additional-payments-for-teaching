@@ -197,7 +197,7 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
     click_on "Start now"
 
     expect(page).to have_content(
-      "Alternative IDV checks have already been completed for this claim"
+      "An employment check has already been completed for this claim"
     )
   end
 
