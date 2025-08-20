@@ -153,7 +153,7 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
     click_on "Continue"
 
     expect(page).to have_content(
-      "You've told us this applicant does not work at Springfield Nursery"
+      "You’ve told us this applicant does not work at Springfield Nursery"
     )
 
     eligibility = claim.reload.eligibility
@@ -221,7 +221,7 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
 
     click_on "Start now"
 
-    expect(page).to have_content("We can't find this claim")
+    expect(page).to have_content("We can’t find this claim")
   end
 
   def table_row(claim_reference)
