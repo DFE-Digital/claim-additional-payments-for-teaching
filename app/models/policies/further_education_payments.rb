@@ -73,6 +73,10 @@ module Policies
     # NOOP as PERSONAL_DATA_ATTRIBUTES_TO_RETAIN_FOR_EXTENDED_PERIOD is empty
     EXTENDED_PERIOD_END_DATE = ->(start_of_academic_year) {}
 
+    def alternative_idv_completed!(claim)
+      Tasks::FeAlternativeVerificationJob.perform_later(claim)
+    end
+
     def notify_reply_to_id
       "89939786-7078-4267-b197-ee505dfad8ae"
     end
