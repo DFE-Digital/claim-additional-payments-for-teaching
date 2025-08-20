@@ -98,6 +98,14 @@ class Admin::Tasks::FeAlternativeVerificationForm
 
   private
 
+  def answer_not_applicable?
+    eligibility.provider_verification_claimant_employed_by_college == false
+  end
+
+  def not_applicable_answer
+    "N/A"
+  end
+
   def provider_response_employed_by_school
     if eligibility.provider_verification_claimant_employed_by_college.nil?
       empty_provider_response
@@ -107,6 +115,8 @@ class Admin::Tasks::FeAlternativeVerificationForm
   end
 
   def provider_response_date_of_birth
+    return not_applicable_answer if answer_not_applicable?
+
     if eligibility.provider_verification_claimant_date_of_birth.nil?
       empty_provider_response
     else
@@ -115,16 +125,22 @@ class Admin::Tasks::FeAlternativeVerificationForm
   end
 
   def provider_response_postcode
+    return not_applicable_answer if answer_not_applicable?
+
     eligibility.provider_verification_claimant_postcode.presence ||
       empty_provider_response
   end
 
   def provider_response_national_insurance_number
+    return not_applicable_answer if answer_not_applicable?
+
     eligibility.provider_verification_claimant_national_insurance_number.presence ||
       empty_provider_response
   end
 
   def provider_response_bank_details_match
+    return not_applicable_answer if answer_not_applicable?
+
     if eligibility.provider_verification_claimant_bank_details_match.nil?
       empty_provider_response
     else
@@ -133,6 +149,8 @@ class Admin::Tasks::FeAlternativeVerificationForm
   end
 
   def provider_response_email
+    return not_applicable_answer if answer_not_applicable?
+
     eligibility.provider_verification_claimant_email.presence ||
       empty_provider_response
   end
