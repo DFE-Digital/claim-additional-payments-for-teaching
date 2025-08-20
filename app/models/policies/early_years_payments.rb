@@ -100,5 +100,9 @@ module Policies
     def payroll_file_name
       "EYFinancialIncentive"
     end
+
+    def alternative_idv_completed!(claim)
+      # NOOP for the minute
+    end
   end
 end

@@ -22,6 +22,10 @@ module Journeys
           claim.policy.mailer.submitted(claim).deliver_later
           ClaimVerifierJob.perform_later(claim)
 
+          if claim.one_login_idv_failed?
+            Provider::AlternativeIdv.send_alternative_idv_request!(claim)
+          end
+
           session[:submitted_claim_id] = claim.id
           clear_claim_session
 

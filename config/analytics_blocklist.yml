@@ -92,6 +92,10 @@
   - provider_email_address
   - practitioner_first_name
   - practitioner_surname
+  - alternative_idv_claimant_date_of_birth
+  - alternative_idv_claimant_postcode
+  - alternative_idv_claimant_national_insurance_number
+  - alternative_idv_claimant_email
   :risk_indicators:
   - id
   - field
