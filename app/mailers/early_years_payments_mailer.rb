@@ -117,4 +117,16 @@ class EarlyYearsPaymentsMailer < ApplicationMailer
       personalisation:
     )
   end
+
+  def template_mail(template_id, options)
+    if Rails.env.development?
+      puts
+      puts "Template ID: #{template_id}"
+      puts "To: #{options[:to]}"
+      puts "Personalisation: #{options[:personalisation]}"
+      puts
+    end
+
+    super
+  end
 end
