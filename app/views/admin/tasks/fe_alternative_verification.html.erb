@@ -33,11 +33,13 @@
           <%= task_status_tag(@form.task.claim, @form.task.name) %>
         </p>
         <p class="govuk-body">
-          <% # TODO: IF AUTO PASSED ADD HERE %>
-
-          This task was performed by
-          <%= user_details(@form.task.created_by, include_line_break: false) %>
-          on <%= l(@form.task.updated_at) %>
+          <% if @form.task.manual? %>
+            This task was performed by
+            <%= user_details(@form.task.created_by, include_line_break: false) %>
+            on <%= l(@form.task.updated_at) %>
+          <% else %>
+            This task was performed by an automated check on <%= l(@form.task.created_at) %>
+          <% end %>
         </p>
       </div>
     <% else %>

@@ -590,50 +590,40 @@ RSpec.feature "Admin claim further education payments" do
           end
 
           context "when the provider and claimant details match" do
-            xit "shows the task as passed" do
+            it "shows the task as passed" do
               claim = create(
                 :claim,
                 :submitted,
                 policy: Policies::FurtherEducationPayments,
+                email_address: "claimant@example.com",
                 onelogin_idv_at: 1.day.ago,
                 identity_confirmed_with_onelogin: false,
-                national_insurance_number: "QQ123456C",
+                national_insurance_number: "QQ123456B",
                 postcode: "TE57 1NG",
-                date_of_birth: Date.new(1990, 1, 1)
+                date_of_birth: Date.new(1990, 1, 1),
+                academic_year: AcademicYear.new("2025/2026")
               )
 
               create(
                 :further_education_payments_eligibility,
                 claim: claim,
                 flagged_as_duplicate: true,
-                claimant_date_of_birth: Date.new(1990, 1, 1),
-                claimant_postcode: "TE57 1NG",
-                claimant_national_insurance_number: "QQ123456C",
-                claimant_valid_passport: true,
-                claimant_passport_number: "123456789",
-                claimant_identity_verified_at: DateTime.now,
-                valid_passport: true,
-                passport_number: "123456789",
-                verification: {
-                  verifier: {
-                    dfe_sign_in_uid: "123",
-                    first_name: "Seymour",
-                    last_name: "Skinner",
-                    email: "seymore.skinner@springfield-elementary.edu",
-                    dfe_sign_in_organisation_name: "Springfield Elementary",
-                    dfe_sign_in_role_codes: ["teacher_payments_claim_verifier"]
-                  }
-                }
+                provider_verification_claimant_employed_by_college: true,
+                provider_verification_claimant_date_of_birth: Date.new(1990, 1, 1),
+                provider_verification_claimant_postcode: "TE57 1NG",
+                provider_verification_claimant_national_insurance_number: "QQ123456B",
+                provider_verification_claimant_bank_details_match: true,
+                provider_verification_claimant_email: "claimant@example.com"
               )
 
-              AutomatedChecks::ClaimVerifiers::AlternativeIdentityVerification
-                .new(claim: claim).perform
+              perform_enqueued_jobs do
+                Policies::FurtherEducationPayments.alternative_idv_completed!(claim)
+              end
 
               visit admin_claim_tasks_path(claim)
 
-              # FAILS HERE
               expect(
-                task_status("Alternative identity verification")
+                task_status("Alternative verification")
               ).to eq("Passed")
 
               click_on(
@@ -648,23 +638,24 @@ RSpec.feature "Admin claim further education payments" do
               expect(find(".govuk-tag")).to have_text("Passed")
 
               expect(page).to have_content(
-                "This task was performed by the provider (Seymour Skinner) on " \
-                "9 September #{AcademicYear.current.start_year} 11:00am"
+                "This task was performed by an automated check on 9 " \
+                "September 2024 11:00am"
               )
             end
           end
 
-          context "when the provider and claimant details don't match" do
-            it "shows the task as no match and shows the manual approval form" do
+          context "when the provider and claimant partially match" do
+            it "shows the task with manual approval form" do
               claim = create(
                 :claim,
                 :submitted,
                 policy: Policies::FurtherEducationPayments,
+                email_address: "claimant@example.com",
                 onelogin_idv_at: 1.day.ago,
                 identity_confirmed_with_onelogin: false,
                 national_insurance_number: "QQ123456B",
-                postcode: "TE57 2NG",
-                date_of_birth: Date.new(1990, 2, 1),
+                postcode: "TE57 1NG",
+                date_of_birth: Date.new(1990, 1, 1),
                 academic_year: AcademicYear.new("2025/2026")
               )
 
@@ -672,18 +663,17 @@ RSpec.feature "Admin claim further education payments" do
                 :further_education_payments_eligibility,
                 claim: claim,
                 flagged_as_duplicate: true,
-                claimant_date_of_birth: Date.new(1990, 1, 1),
-                claimant_postcode: "TE57 1NG",
-                claimant_national_insurance_number: "QQ123456C",
-                claimant_valid_passport: true,
-                claimant_passport_number: "123456789",
-                claimant_identity_verified_at: DateTime.now,
-                valid_passport: false,
-                passport_number: nil
+                provider_verification_claimant_employed_by_college: true,
+                provider_verification_claimant_date_of_birth: Date.new(1990, 1, 2),
+                provider_verification_claimant_postcode: "TE57 1NG",
+                provider_verification_claimant_national_insurance_number: "QQ123456B",
+                provider_verification_claimant_bank_details_match: true,
+                provider_verification_claimant_email: "claimant@example.com"
               )
 
-              AutomatedChecks::ClaimVerifiers::AlternativeIdentityVerification
-                .new(claim: claim).perform
+              perform_enqueued_jobs do
+                Policies::FurtherEducationPayments.alternative_idv_completed!(claim)
+              end
 
               visit admin_claim_tasks_path(claim)
               click_on(
@@ -713,6 +703,53 @@ RSpec.feature "Admin claim further education payments" do
               expect(page).to have_content(
                 "This task was performed by Aaron Admin on 9 September " \
                 "#{AcademicYear.current.start_year} 11:00am"
+              )
+            end
+          end
+
+          context "when the claimant does not work at establishment" do
+            it "shows the task as failed" do
+              claim = create(
+                :claim,
+                :submitted,
+                policy: Policies::FurtherEducationPayments,
+                email_address: "claimant@example.com",
+                onelogin_idv_at: 1.day.ago,
+                identity_confirmed_with_onelogin: false,
+                national_insurance_number: "QQ123456B",
+                postcode: "TE57 1NG",
+                date_of_birth: Date.new(1990, 1, 1),
+                academic_year: AcademicYear.new("2025/2026")
+              )
+
+              create(
+                :further_education_payments_eligibility,
+                claim: claim,
+                flagged_as_duplicate: true,
+                provider_verification_claimant_employed_by_college: false
+              )
+
+              perform_enqueued_jobs do
+                Policies::FurtherEducationPayments
+                  .alternative_idv_completed!(claim)
+              end
+
+              visit admin_claim_tasks_path(claim)
+              expect(
+                task_status("Alternative verification")
+              ).to eq("Failed")
+              click_on(
+                "Confirm the provider has verified the claimant’s identity"
+              )
+
+              expect(page).not_to have_content(
+                "Do the details provided by the claimant match the " \
+                "provider’s responses?"
+              )
+              expect(find(".govuk-tag")).to have_text("Failed")
+              expect(page).to have_content(
+                "This task was performed by an automated check on 9 " \
+                "September 2024 11:00am"
               )
             end
           end
