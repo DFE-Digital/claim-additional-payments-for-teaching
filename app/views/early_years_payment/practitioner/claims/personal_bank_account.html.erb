@@ -9,7 +9,7 @@
       <h1 class="govuk-heading-l">Enter the bank account details your salary is paid into</h1>
 
       <p class="govuk-body">
-        Enter the details for the account that your employer pays your salary into. We may need to check these details with your employer so we can make sure it's you.
+        Enter the details for the account that your employer pays your salary into. We may need to check these details with your employer so we can make sure it’s you.
       </p>
 
       <%= f.govuk_text_field(
@@ -52,16 +52,10 @@
           text: "For example: 00103694"
         } %>
 
-      <details class="govuk-details" data-module="govuk-details">
-        <summary class="govuk-details__summary">
-          <span class="govuk-details__summary-text">
-            Problems entering these details
-          </span>
-        </summary>
-        <div class="govuk-details__text">
-          If you keep entering your bank details without success and you know the details you are entering are correct, you will be able to confirm these on the next screen.
-        </div>
-      </details>
+      <%= govuk_details(
+        summary_text: "Problems entering these details",
+        text: "If you keep entering your bank details without success and you know the details you are entering are correct, you will be able to confirm these on the next screen."
+      ) %>
 
       <%= f.govuk_submit "Continue" %>
     <% end %>
