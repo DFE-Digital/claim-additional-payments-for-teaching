@@ -153,8 +153,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_07_111855) do
     t.string "role_codes", default: [], array: true
     t.datetime "deleted_at", precision: nil
     t.string "session_token"
-    t.string "current_organisation_ukprn"
     t.text "user_type"
+    t.string "current_organisation_ukprn"
     t.index ["deleted_at"], name: "index_dfe_sign_in_users_on_deleted_at"
     t.index ["dfe_sign_in_id", "user_type"], name: "index_dfe_sign_in_users_on_dfe_sign_in_id_and_user_type", unique: true
     t.index ["session_token"], name: "index_dfe_sign_in_users_on_session_token", unique: true
@@ -327,8 +327,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_07_111855) do
     t.datetime "provider_verification_completed_at", precision: nil
     t.uuid "provider_verification_verified_by_id"
     t.uuid "provider_assigned_to_id"
-    t.datetime "provider_verification_started_at"
-    t.boolean "provider_verification_timetabled_teaching_hours"
     t.jsonb "provider_verification_actual_subjects_taught", default: []
     t.jsonb "provider_verification_building_construction_courses", default: []
     t.jsonb "provider_verification_chemistry_courses", default: []
@@ -338,8 +336,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_07_111855) do
     t.jsonb "provider_verification_maths_courses", default: []
     t.jsonb "provider_verification_physics_courses", default: []
     t.boolean "provider_verification_half_timetabled_teaching_time"
+    t.boolean "provider_verification_timetabled_teaching_hours"
+    t.datetime "provider_verification_started_at"
     t.citext "work_email"
     t.boolean "work_email_verified"
+    t.boolean "provider_verification_claimant_employed_by_college"
+    t.date "provider_verification_claimant_date_of_birth"
+    t.string "provider_verification_claimant_postcode"
+    t.string "provider_verification_claimant_national_insurance_number"
+    t.boolean "provider_verification_claimant_bank_details_match"
+    t.string "provider_verification_claimant_email"
+    t.boolean "provider_verification_claimant_employment_check_declaration"
     t.index ["possible_school_id"], name: "index_fe_payments_eligibilities_on_possible_school_id"
     t.index ["provider_assigned_to_id"], name: "idx_on_provider_assigned_to_id_5db250f0fe"
     t.index ["provider_verification_verified_by_id"], name: "idx_on_provider_verification_verified_by_id_c38aef7b6c"
@@ -362,8 +369,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_07_111855) do
     t.uuid "current_school_id"
     t.decimal "award_amount", precision: 7, scale: 2
     t.boolean "changed_workplace_or_new_contract"
-    t.text "previous_year_claim_ids", default: [], array: true
     t.boolean "breaks_in_employment"
+    t.text "previous_year_claim_ids", default: [], array: true
     t.jsonb "employment_history", default: []
     t.index ["current_school_id"], name: "index_irb_eligibilities_on_current_school_id"
   end
