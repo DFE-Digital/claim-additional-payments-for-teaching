@@ -37,7 +37,9 @@ module Journeys
           def slugs
             array = []
 
-            array << "email-verification"
+            unless answers.provider_email_verified?
+              array << "email-verification"
+            end
 
             if answers.claimant_employed_by_nursery == false
               return ["claimant-not-employed-by-nursery"]
