@@ -69,6 +69,53 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
     )
   end
 
+  it "allows resending the verification code" do
+    create(
+      :journey_configuration,
+      :early_years_payment_provider_alternative_idv
+    )
+
+    nursery = create(
+      :eligible_ey_provider,
+      nursery_name: "Springfield Nursery",
+      primary_key_contact_email_address: "seymor.skinner@springfield-elementary.edu"
+    )
+
+    claim = create(
+      :claim,
+      policy: Policies::EarlyYearsPayments,
+      onelogin_idv_at: 1.day.ago,
+      identity_confirmed_with_onelogin: false,
+      first_name: "Edna",
+      surname: "Krabappel",
+      eligibility_attributes: {
+        nursery_urn: nursery.urn,
+        alternative_idv_reference: "1234567890"
+      }
+    )
+
+    idv_url = Journeys::EarlyYearsPayment::Provider::AlternativeIdv.verification_url(claim)
+
+    visit idv_url
+
+    expect(page).to have_content("Employment check needed for this claim")
+
+    perform_enqueued_jobs { click_on "Start now" }
+
+    allow(OneTimePassword::Generator).to receive(:new).and_return(
+      double("OneTimePassword::Generator", code: "123456")
+    )
+
+    perform_enqueued_jobs { click_on "Resend passcode" }
+
+    expect(page).to have_content("Verification code sent")
+
+    expect("seymor.skinner@springfield-elementary.edu").to have_received_email(
+      "89e8c33a-1863-4fdd-a73c-1ca01efc0c76",
+      one_time_password: "123456"
+    )
+  end
+
   it "allows a provider to verify a practitioner's identity" do
     create(
       :journey_configuration,

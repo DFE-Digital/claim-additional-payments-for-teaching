@@ -11,14 +11,57 @@
   <%= govuk_back_link href: @form.back_link_path %>
 <% end %>
 
-<%= render(
-  partial: "one_time_password",
-  locals: {
-    form: @form,
-    current_journey_routing_name: current_journey_routing_name,
-    email_or_mobile: "email",
-    email_or_text_message: "an email",
-    show_caption: true,
-    show_change_email_address_button: false
-  }
-) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_text_field :one_time_password,
+        width: 5,
+        autocomplete: "one-time-code",
+        inputmode: "numeric",
+        label: {
+          text: t("one_time_password.title"),
+          tag: "h1",
+          size: "l"
+        },
+        caption: { text: "Email address", size: "xl" },
+        hint: -> do %>
+          <p class="govuk-body">
+            <%= t(
+              "one_time_password.hint1_html",
+              email_or_mobile_message: "an email",
+              email_or_mobile_value: @form.email_address
+            ) %>
+          </p>
+
+          <p class="govuk-body">
+            <%= t(
+              "one_time_password.validity_duration",
+              duration_valid: one_time_password_validity_duration
+            ) %>
+          </p>
+        <% end %>
+
+      <div class="govuk-!-margin-bottom-6 govuk-body">
+        <% if f.object.verification_code_resent? %>
+          <%= govuk_inset_text(
+            text: "Verification code sent to #{@form.email_address}.",
+          ) %>
+        <% else %>
+          <%= f.submit(
+            "Resend passcode",
+            name: f.object.model_name.param_key + "[resend]",
+            class: "button-link govuk-!-padding-0"
+          ) %>
+        <% end %>
+      </div>
+
+      <%= f.govuk_submit "Confirm" %>
+    <% end %>
+  </div>
+</div>

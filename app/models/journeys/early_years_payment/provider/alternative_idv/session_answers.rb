@@ -46,6 +46,24 @@ module Journeys
             true
           end
 
+          def send_verification_email!
+            otp_secret = ROTP::Base32.random
+            otp_code = OneTimePassword::Generator.new(secret: otp_secret).code
+
+            assign_attributes(
+              provider_email_verified: false,
+              provider_email_verification_secret: otp_secret,
+              provider_sent_one_time_password_at: Time.now
+            )
+
+            session.save!
+
+            EarlyYearsPaymentsMailer.provider_alternative_idv_email_verification(
+              receipient_email_address: nursery.primary_key_contact_email_address,
+              one_time_password: otp_code
+            ).deliver_later
+          end
+
           private
 
           def eligibility

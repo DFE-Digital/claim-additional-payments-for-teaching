@@ -5,6 +5,8 @@ module Journeys
         class EmailVerificationForm < Form
           attribute :one_time_password, :string
 
+          attribute :resend, :boolean, default: false
+
           validate :one_time_password_is_valid
 
           before_validation do
@@ -20,6 +22,11 @@ module Journeys
           end
 
           def save
+            if resend
+              answers.send_verification_email!
+              return false
+            end
+
             return false unless valid?
 
             journey_session.answers.assign_attributes(
@@ -33,6 +40,10 @@ module Journeys
 
           def back_link_path
             AlternativeIdv.verification_path(answers.claim)
+          end
+
+          def verification_code_resent?
+            !!resend
           end
 
           private
