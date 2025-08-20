@@ -49,5 +49,31 @@ RSpec.describe Admin::Tasks::FeAlternativeVerificationForm do
         expect(values).to eql(expected)
       end
     end
+
+    context "when claimant not employed by FE provider" do
+      let(:claim) do
+        create(
+          :claim,
+          :submitted,
+          :further_education,
+          eligibility_attributes: {
+            provider_verification_claimant_employed_by_college: false
+          }
+        )
+      end
+
+      it "returns mostly N/A answers" do
+        values = subject.data_table_rows.map { |row| row[2] }
+        expected = [
+          "No",
+          "N/A",
+          "N/A",
+          "N/A",
+          "N/A",
+          "N/A"
+        ]
+        expect(values).to eql(expected)
+      end
+    end
   end
 end
