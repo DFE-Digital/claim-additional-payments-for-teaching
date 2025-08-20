@@ -29,5 +29,12 @@
     <% else  %>
       This task was performed by an automated check on <%= l(@form.task.created_at) %>
     <% end %>
+
+    <% if @form.task.failed? %>
+      <% case @claim.policy %>
+      <% when Policies::FurtherEducationPayments %>
+        <%= govuk_link_to "Confirm the provider has verified the claimant’s employment", admin_claim_task_path(claim_id: @claim.id, name: "fe_alternative_verification") %>
+      <% end %>
+    <% end %>
   </p>
 </div>
