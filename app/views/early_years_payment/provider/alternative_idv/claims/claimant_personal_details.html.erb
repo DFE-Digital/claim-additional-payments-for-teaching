@@ -1,0 +1,133 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title, claimant_name: @form.claimant_name),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?)
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      method: :patch,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+      html: { novalidate: false }
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <%= f.object.t(:title, claimant_name: f.object.claimant_name) %>
+      </h1>
+
+      <div class="govuk-!-margin-bottom-9">
+        <%= govuk_details(summary_text: "How we’ll use this information") do %>
+          <p class="govuk-body">
+            The applicant was not able to prove their identity using GOV.UK One
+            Login, so we need to do an employment check.
+          </p>
+
+          <p class="govuk-body">
+            The applicant has already provided this information and understands
+            it may be verified by their employer.
+          </p>
+
+          <p class="govuk-body">
+            Providing this information does not break General Data Protection
+            Regulation (GDPR) rules.
+          </p>
+        <% end %>
+      </div>
+
+      <div class="govuk-!-margin-bottom-9">
+        <%= f.govuk_date_field(
+          :claimant_date_of_birth,
+          date_of_birth: true,
+          legend: {
+            text: f.object.t('claimant_date_of_birth.question'),
+            tag: "h2",
+            size: "m"
+          },
+          hint: {
+            text: f.object.t("claimant_date_of_birth.hint")
+          },
+        ) %>
+      </div>
+
+      <div class="govuk-!-margin-bottom-9">
+        <%= f.govuk_text_field(
+          :claimant_postcode,
+          label: {
+            text: f.object.t('claimant_postcode.question'),
+            size: "m"
+          },
+          hint: {
+            text: f.object.t("claimant_postcode.hint")
+          },
+        ) %>
+      </div>
+
+      <div class="govuk-!-margin-bottom-9">
+        <%= f.govuk_text_field(
+          :claimant_national_insurance_number,
+          label: {
+            text: f.object.t('claimant_national_insurance_number.question'),
+            size: "m"
+          },
+          hint: {
+            text: f.object.t("claimant_national_insurance_number.hint")
+          },
+          extra_letter_spacing: true,
+        ) %>
+      </div>
+
+      <div class="govuk-!-margin-bottom-9">
+        <%= f.govuk_collection_radio_buttons(
+          :claimant_bank_details_match,
+          f.object.claimant_bank_details_match_options,
+          :id,
+          :name,
+          legend: {
+            text: f.object.t(
+              'claimant_bank_details_match.question',
+              claimant_name: f.object.claimant_name
+            ),
+            size: "m"
+          }
+        ) do %>
+          <%= govuk_table(classes: "govuk-!-margin-bottom-3") do |table| %>
+            <% table.with_body do |body| %>
+              <% body.with_row do |row| %>
+                <% row.with_cell(header: true, text: "Name on the account") %>
+                <% row.with_cell(text: f.object.claimant_banking_name) %>
+              <% end %>
+
+              <% body.with_row do |row| %>
+                <% row.with_cell(header: true, text: "Sort code") %>
+                <% row.with_cell(text: f.object.claimant_bank_sort_code) %>
+              <% end %>
+
+              <% body.with_row do |row| %>
+                <% row.with_cell(header: true, text: "Account number") %>
+                <% row.with_cell(text: f.object.claimant_bank_account_number) %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+
+      <div class="govuk-!-margin-bottom-9">
+        <%= f.govuk_email_field(
+          :claimant_email,
+          label: {
+            text: f.object.t('claimant_email.question'),
+            size: "m"
+          }
+        ) %>
+      </div>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

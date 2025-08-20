@@ -6,7 +6,9 @@ module AutomatedChecks
           return unless claim.eligibility.practitioner_journey_completed?
           return unless awaiting_task?(TASK_NAME)
 
-          if one_login_idv_match_details_from_provider?
+          if claim.one_login_idv_failed?
+            # FIXME - create a task for OL failure CAPT-2776
+          elsif one_login_idv_match_details_from_provider?
             create_task(match: nil, passed: true)
           elsif one_login_idv_partially_match_details_from_provider?
             create_task(match: :any, passed: nil)

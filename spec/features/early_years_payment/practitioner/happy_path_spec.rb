@@ -54,6 +54,12 @@ RSpec.feature "Early years payment practitioner" do
     click_on "Continue"
 
     rest_of_the_journey
+
+    ey_provider = claim.eligibility.eligible_ey_provider
+
+    expect(
+      ey_provider.primary_key_contact_email_address
+    ).not_to have_received_email("b9bdff56-c0f7-4967-924d-2f9e65c77fa5")
   end
 
   scenario "Happy path - with postcode lookup" do
@@ -106,6 +112,109 @@ RSpec.feature "Early years payment practitioner" do
     click_on "Continue"
 
     rest_of_the_journey
+  end
+
+  scenario "Happy path - with alt idv failure" do
+    when_student_loan_data_exists
+    when_early_years_payment_provider_authenticated_journey_submitted
+    when_early_years_payment_practitioner_journey_configuration_exists
+
+    visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=practitioner@example.com"
+    expect(page).to have_content "Enter your claim reference"
+    fill_in "Enter your claim reference", with: claim.reference
+    click_button "Submit"
+
+    mock_one_login_auth
+
+    expect(page).to have_content "Sign in with GOV.UK One Login"
+    click_on "Continue"
+
+    expect(page).to have_content "You’ve successfully signed in to GOV.UK One Login"
+    click_on "Continue"
+
+    idv_with_one_login_with_return_codes
+
+    expect(page).to have_content(
+      "We have not been able to confirm your identity via GOV.UK One Login"
+    )
+    expect(page).to have_content(
+      "We’ll use your personal details to confirm who you are."
+    )
+
+    click_on "Continue"
+
+    expect(page).to have_content("How we will use your information")
+    click_on "Continue"
+
+    fill_in "First name(s)", with: "Jo"
+    fill_in "Last name", with: "Bloggs"
+    click_on "Continue"
+
+    fill_in "Day", with: "28"
+    fill_in "Month", with: "2"
+    fill_in "Year", with: "1988"
+    click_on "Continue"
+
+    fill_in "National Insurance number", with: "PX321499A " # deliberate trailing space
+    click_on "Continue"
+
+    expect(page.title).to have_text("What is your home address?")
+    expect(page).to have_content("What is your home address?")
+
+    stub_search_places_index(claim: OpenStruct.new(postcode: "SO16 9FX"))
+
+    expect(page).to have_content("What is your home address?")
+    fill_in "Postcode", with: "SO16 9FX"
+    click_on "Search"
+
+    expect(page.title).to have_text("What is your home address?")
+    expect(page).to have_content("What is your home address?")
+    expect(page).to have_text "Flat 1, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX"
+    expect(page).to have_text "Flat 10, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX"
+    expect(page).to have_text "Flat 11, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX"
+    choose "Flat 1, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX"
+    click_on "Continue"
+
+    expect(page.title).to have_text("What is your personal email address?")
+    expect(page).to have_content("What is your personal email address?")
+    fill_in "claim-email-address-field", with: "johndoe@example.com"
+    click_on "Continue"
+
+    expect(page).to have_content("Enter the 6-digit passcode")
+    mail = ActionMailer::Base.deliveries.last
+    otp_in_mail_sent = mail.personalisation[:one_time_password]
+    fill_in "claim-one-time-password-field", with: otp_in_mail_sent
+    click_on "Confirm"
+
+    expect(page).to have_content("Can we use your mobile number to contact you?")
+    choose "No"
+    click_on "Continue"
+
+    expect(page).to have_text("Your personal bank account details")
+    fill_in "Name on the account", with: "Jo Bloggs"
+    fill_in "Sort code", with: "123456"
+    fill_in "Account number", with: "87654321"
+    click_on "Continue"
+
+    expect(page).to have_text(
+      "How is your gender recorded on your employer’s payroll system?"
+    )
+    choose "Female"
+    click_on "Continue"
+
+    expect(page).to have_content("Check your answers before submitting this claim")
+    perform_enqueued_jobs { click_on "Accept and send" }
+
+    ey_provider = claim.eligibility.eligible_ey_provider
+
+    expect(ey_provider.primary_key_contact_email_address).to have_received_email(
+      "b9bdff56-c0f7-4967-924d-2f9e65c77fa5",
+      claim_reference: claim.reference,
+      provider_name: "John Doe",
+      practitioner_full_name: "Jo Bloggs",
+      practitioner_first_name: "Jo",
+      verification_url: Journeys::EarlyYearsPayment::Provider::AlternativeIdv.verification_url(claim)
+    )
   end
 
   def rest_of_the_journey

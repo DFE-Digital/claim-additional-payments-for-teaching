@@ -1493,6 +1493,56 @@ en:
       statement:
         By submitting this claim you’re confirming that, to the best of your knowledge, the details you’re providing are correct.
       btn_text: Accept and send
+  early_years_payment_provider_alternative_idv:
+    journey_name: "Early years financial incentive payment service"
+    feedback_email: "earlycareerteacherpayments@digital.education.gov.uk"
+    support_email_address: "EY.Financial-Incentives@education.gov.uk"
+    forms:
+      claimant_employed_by_nursery:
+        question: "Does %{nursery_name} employ %{claimant_name}?"
+        errors:
+          claimant_employed_by_nursery:
+            inclusion: "Select yes if %{nursery_name} employs %{claimant_name}"
+      claimant_personal_details:
+        title: "About %{claimant_name}"
+        claimant_date_of_birth:
+          question: "Enter their date of birth"
+          hint: "For example, 27 3 2007"
+        claimant_postcode:
+          question: "Enter their postcode"
+          hint: "For example ’AA1 2BC’."
+        claimant_national_insurance_number:
+          question: "Enter their National Insurance number"
+          hint: "For example, QQ123456C"
+        claimant_bank_details_match:
+          question: "Do these bank details match what you have for %{claimant_name}?"
+        claimant_email:
+          question: "Enter their personal email address"
+        errors:
+          claimant_date_of_birth:
+            blank: "Enter the applicant’s date of birth"
+            format: "Enter the applicant’s date of birth in the correct format"
+          claimant_postcode:
+            blank: "Enter the applicant’s postcode"
+            length: "Postcode must be 11 characters or less"
+            format: "Enter the applicant’s postcode in the correct format"
+          claimant_national_insurance_number:
+            blank: "Enter the applicant’s National Insurance number"
+            invalid: "Enter the applicant’s National Insurance number in the correct format"
+          claimant_bank_details_match:
+            inclusion: "Select yes if these bank details match what you have for %{claimant_name}"
+          claimant_email:
+            blank: "Enter the applicant’s personal email address"
+            invalid: "Enter the applicant’s email address in the correct format"
+            length: "Email address must be %{max_length} characters or less"
+
+      check_answers:
+        title: "Employment check"
+        claimant_employment_check_declaration:
+          question: "To the best of my knowledge, I confirm that the information provided in this form is correct."
+        errors:
+          claimant_employment_check_declaration:
+            acceptance: "Tick the box to declare that the information provided in this form is correct"
   early_years_payments:
     claim_subject: "Early Years Payment"
     policy_acronym: EY

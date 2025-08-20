@@ -13,6 +13,7 @@ module Journeys
     FurtherEducationPayments::Provider,
     EarlyYearsPayment::Provider::Start,
     EarlyYearsPayment::Provider::Authenticated,
+    EarlyYearsPayment::Provider::AlternativeIdv,
     EarlyYearsPayment::Practitioner
   ].freeze
 
