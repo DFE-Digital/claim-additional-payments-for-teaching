@@ -5,6 +5,8 @@ module Admin
         case name.to_s
         when "fe_alternative_verification"
           FeAlternativeVerificationForm
+        when "ey_alternative_verification"
+          EyAlternativeVerificationForm
         when "payroll_gender"
           PayrollGenderForm
         when "continuous_employment"

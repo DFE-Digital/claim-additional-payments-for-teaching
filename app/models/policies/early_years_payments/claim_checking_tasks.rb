@@ -14,7 +14,12 @@ module Policies
       def applicable_task_names
         tasks = []
 
-        tasks << "identity_confirmation"
+        if year_1_of_ey?
+          tasks << "identity_confirmation"
+        else
+          tasks << "one_login_identity"
+          tasks << "ey_alternative_verification" if claim.failed_one_login_idv?
+        end
         tasks << "employment"
         tasks << "student_loan_plan" if claim.submitted_without_slc_data?
         tasks << "payroll_details" if claim.must_manually_validate_bank_details?
@@ -31,6 +36,10 @@ module Policies
       end
 
       private
+
+      def year_1_of_ey?
+        claim.academic_year == AcademicYear.new("2024/2025")
+      end
 
       def matching_claims
         @matching_claims ||= Claim::MatchingAttributeFinder.new(claim).matching_claims
