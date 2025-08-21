@@ -91,6 +91,10 @@ module Policies
       (claim.eligibility.provider_verification_email_last_sent_at + 2.weeks).to_date
     end
 
+    def verification_overdue?(claim)
+      verification_due_date_for_claim(claim) < Time.zone.today
+    end
+
     def duplicate_claim?(claim)
       Claim::MatchingAttributeFinder.new(claim).matching_claims.exists?
     end

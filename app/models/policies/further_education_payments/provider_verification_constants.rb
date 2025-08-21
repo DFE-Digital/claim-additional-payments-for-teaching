@@ -5,6 +5,7 @@ module Policies
       STATUS_IN_PROGRESS = "in_progress".freeze
       STATUS_COMPLETED = "completed".freeze
       STATUS_REJECTED = "rejected".freeze
+      STATUS_OVERDUE = "overdue".freeze
 
       PROCESSED_BY_NOT_PROCESSED = "Not processed".freeze
       PROCESSED_BY_UNASSIGNED = "Unassigned".freeze
@@ -13,6 +14,8 @@ module Policies
         STATUS_NOT_STARTED,
         STATUS_IN_PROGRESS,
         STATUS_COMPLETED,
+        STATUS_COMPLETED,
+        STATUS_OVERDUE,
         STATUS_REJECTED
       ].freeze
     end
