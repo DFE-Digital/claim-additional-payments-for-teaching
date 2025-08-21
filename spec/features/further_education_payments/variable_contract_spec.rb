@@ -180,8 +180,8 @@ RSpec.feature "Further education payments" do
     choose "No"
     click_on "Continue"
 
-    expect(page).to have_content("Enter your personal bank account details")
-    fill_in "Name on your account", with: "Jo Bloggs"
+    expect(page).to have_content("Enter the bank account details your salary is paid into")
+    fill_in "Name on the account", with: "Jo Bloggs"
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "87654321"
     click_on "Continue"

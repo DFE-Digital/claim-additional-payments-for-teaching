@@ -42,7 +42,7 @@ RSpec.feature "Early years payment practitioner mobile number" do
     expect(journey_session.answers.mobile_number).to eq "07700900001"
     expect(journey_session.answers.mobile_verified).to be true
 
-    expect(page).to have_content("Your personal bank account details")
+    expect(page).to have_content("Enter the bank account details your salary is paid into")
   end
 
   scenario "Resend passcode" do

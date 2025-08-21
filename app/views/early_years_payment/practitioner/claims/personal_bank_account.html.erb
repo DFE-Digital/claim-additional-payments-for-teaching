@@ -1,0 +1,63 @@
+<% content_for(:page_title, page_title("Personal details", journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <span class="govuk-caption-l">Personal details</span>
+      <h1 class="govuk-heading-l">Enter the bank account details your salary is paid into</h1>
+
+      <p class="govuk-body">
+        Enter the details for the account that your employer pays your salary into. We may need to check these details with your employer so we can make sure it’s you.
+      </p>
+
+      <%= f.govuk_text_field(
+        :banking_name,
+        spellcheck: "false",
+        autocomplete: "name",
+        label: {
+          text: "Name on the account",
+          size: "s",
+          tag: "strong"
+        },
+        hint: {
+          text: "Enter your name as it appears on your bank statement or bank card"
+        }
+      ) %>
+
+      <%= f.govuk_text_field :bank_sort_code,
+        width: "one-quarter",
+        autocomplete: "off",
+        inputmode: "numeric",
+        label: { 
+          text: "Sort code",
+          size: "s",
+          tag: "strong"
+        },
+        hint: {
+          text: "For example: 123456"
+        } %>
+
+      <%= f.govuk_text_field :bank_account_number,
+        width: 20,
+        autocomplete: "off",
+        inputmode: "numeric",
+        label: { 
+          text: "Account number",
+          size: "s",
+          tag: "strong"
+        },
+        hint: {
+          text: "For example: 00103694"
+        } %>
+
+      <%= govuk_details(
+        summary_text: "Problems entering these details",
+        text: "If you keep entering your bank details without success and you know the details you are entering are correct, you will be able to confirm these on the next screen."
+      ) %>
+
+      <%= f.govuk_submit "Continue" %>
+    <% end %>
+  </div>
+</div>
