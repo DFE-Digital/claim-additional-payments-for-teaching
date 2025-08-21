@@ -58,6 +58,13 @@
       <% end %>
 
       <%= f.govuk_submit("Confirm and send") %>
+
+      <%= govuk_button_link_to(
+        "Cancel",
+        further_education_payments_providers_claims_path,
+        secondary: true,
+        class: "govuk-!-margin-left-2"
+      ) %>
     <% end %>
   </div>
 </div>
