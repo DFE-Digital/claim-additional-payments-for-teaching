@@ -4,27 +4,39 @@
       Employment check needed for this claim
     </h1>
 
-    <p class="govuk-body">
-      The applicant was not able to prove their identity when making their
-      claim.
-    </p>
+    <% if Policies::EarlyYearsPayments::Eligibility
+      .where(alternative_idv_reference: params[:alternative_idv_reference])
+      .where.not(alternative_idv_completed_at: nil)
+      .exists?
+    %>
+      <p class="govuk-body">
+        An employment check has already been completed for this claim
+      </p>
+    <% else %>
+      <p class="govuk-body">
+        The applicant was not able to prove their identity when making their
+        claim.
+      </p>
 
-    <p class="govuk-body">
-      Before we review this claim, we need to do an employment check against
-      the information that the applicant submitted.
-    </p>
+      <p class="govuk-body">
+        Before we review this claim, we need to do an employment check against
+        the information that the applicant submitted.
+      </p>
 
-    <p class="govuk-body">
-      You will not need to send any documents to the Department for Education.
-    </p>
+      <p class="govuk-body">
+        You will not need to send any documents to the Department for Education.
+      </p>
 
-    <%= govuk_start_button(
-      text: "Start now",
-      href: claim_path(
-        current_journey_routing_name,
-        "claim",
-        answers: { alternative_idv_reference: params[:alternative_idv_reference] }
-      )
-    ) %>
+      <%= govuk_start_button(
+        text: "Start now",
+        href: claim_path(
+          current_journey_routing_name,
+          "claim",
+          answers: {
+            alternative_idv_reference: params[:alternative_idv_reference]
+          }
+        )
+      ) %>
+    <% end %>
   </div>
 </div>
