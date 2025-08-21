@@ -100,6 +100,17 @@ class EarlyYearsPaymentsMailer < ApplicationMailer
     )
   end
 
+  def provider_alternative_idv_email_verification(receipient_email_address:, one_time_password:)
+    template_mail(
+      EARLY_YEARS_PAYMENTS[:CLAIM_ALTERNATIVE_IDV_EMAIL_VERIFICATION_TEMPLATE_ID],
+      to: receipient_email_address,
+      reply_to_id: Policies::EarlyYearsPayments.notify_reply_to_id,
+      personalisation: {
+        one_time_password: one_time_password
+      }
+    )
+  end
+
   private
 
   def submitted_by_practitioner_and_send_to_practitioner(claim)
@@ -116,5 +127,17 @@ class EarlyYearsPaymentsMailer < ApplicationMailer
       reply_to_id: claim.policy.notify_reply_to_id,
       personalisation:
     )
+  end
+
+  def template_mail(template_id, options)
+    if Rails.env.development?
+      puts
+      puts "Template ID: #{template_id}"
+      puts "To: #{options[:to]}"
+      puts "Personalisation: #{options[:personalisation]}"
+      puts
+    end
+
+    super
   end
 end

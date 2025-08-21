@@ -1,6 +1,121 @@
 require "rails_helper"
 
 RSpec.describe "Early years payment provider - Alternative IDV" do
+  it "requires email verification code" do
+    create(
+      :journey_configuration,
+      :early_years_payment_provider_alternative_idv
+    )
+
+    nursery = create(
+      :eligible_ey_provider,
+      nursery_name: "Springfield Nursery",
+      primary_key_contact_email_address: "seymor.skinner@springfield-elementary.edu"
+    )
+
+    claim = create(
+      :claim,
+      policy: Policies::EarlyYearsPayments,
+      onelogin_idv_at: 1.day.ago,
+      identity_confirmed_with_onelogin: false,
+      first_name: "Edna",
+      surname: "Krabappel",
+      eligibility_attributes: {
+        nursery_urn: nursery.urn,
+        alternative_idv_reference: "1234567890"
+      }
+    )
+
+    idv_url = Journeys::EarlyYearsPayment::Provider::AlternativeIdv.verification_url(claim)
+
+    visit idv_url
+
+    expect(page).to have_content("Employment check needed for this claim")
+
+    click_on "Start now"
+
+    expect(page).to have_content(
+      "We have sent an email to seymor.skinner@springfield-elementary.edu " \
+      "with a 6-digit passcode"
+    )
+
+    fill_in "Enter the 6-digit passcode", with: "123456"
+    click_on "Confirm"
+
+    expect(page).to have_content("Enter a valid passcode")
+
+    # Attempt to skip ahead
+
+    visit "/early-years-payment-provider-alternative-idv/claimant-employed-by-nursery"
+
+    expect(page.current_url).to end_with(
+      "/early-years-payment-provider-alternative-idv/email-verification"
+    )
+
+    expect(page).to have_content(
+      "We have sent an email to seymor.skinner@springfield-elementary.edu " \
+      "with a 6-digit passcode"
+    )
+
+    visit "/early-years-payment-provider-alternative-idv/claimant-personal-details"
+
+    expect(page.current_url).to end_with(
+      "/early-years-payment-provider-alternative-idv/email-verification"
+    )
+
+    expect(page).to have_content(
+      "We have sent an email to seymor.skinner@springfield-elementary.edu " \
+      "with a 6-digit passcode"
+    )
+  end
+
+  it "allows resending the verification code" do
+    create(
+      :journey_configuration,
+      :early_years_payment_provider_alternative_idv
+    )
+
+    nursery = create(
+      :eligible_ey_provider,
+      nursery_name: "Springfield Nursery",
+      primary_key_contact_email_address: "seymor.skinner@springfield-elementary.edu"
+    )
+
+    claim = create(
+      :claim,
+      policy: Policies::EarlyYearsPayments,
+      onelogin_idv_at: 1.day.ago,
+      identity_confirmed_with_onelogin: false,
+      first_name: "Edna",
+      surname: "Krabappel",
+      eligibility_attributes: {
+        nursery_urn: nursery.urn,
+        alternative_idv_reference: "1234567890"
+      }
+    )
+
+    idv_url = Journeys::EarlyYearsPayment::Provider::AlternativeIdv.verification_url(claim)
+
+    visit idv_url
+
+    expect(page).to have_content("Employment check needed for this claim")
+
+    perform_enqueued_jobs { click_on "Start now" }
+
+    allow(OneTimePassword::Generator).to receive(:new).and_return(
+      double("OneTimePassword::Generator", code: "123456")
+    )
+
+    perform_enqueued_jobs { click_on "Resend passcode" }
+
+    expect(page).to have_content("Verification code sent")
+
+    expect("seymor.skinner@springfield-elementary.edu").to have_received_email(
+      "345736a7-b72d-4fc6-bc34-27f40f85cf3f",
+      one_time_password: "123456"
+    )
+  end
+
   it "allows a provider to verify a practitioner's identity" do
     create(
       :journey_configuration,
@@ -9,7 +124,8 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
 
     nursery = create(
       :eligible_ey_provider,
-      nursery_name: "Springfield Nursery"
+      nursery_name: "Springfield Nursery",
+      primary_key_contact_email_address: "seymor.skinner@springfield-elementary.edu"
     )
 
     claim = create(
@@ -33,7 +149,21 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
     visit idv_url
 
     expect(page).to have_content("Employment check needed for this claim")
-    click_on "Start now"
+
+    perform_enqueued_jobs do
+      click_on "Start now"
+    end
+
+    expect(page).to have_content(
+      "We have sent an email to seymor.skinner@springfield-elementary.edu " \
+      "with a 6-digit passcode"
+    )
+
+    mail = ActionMailer::Base.deliveries.last
+    otp_in_mail_sent = mail.personalisation[:one_time_password]
+
+    fill_in "Enter the 6-digit passcode", with: otp_in_mail_sent
+    click_on "Confirm"
 
     expect(page).to have_content(
       "Does Springfield Nursery employ Edna Krabappel?"
@@ -144,7 +274,16 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
     visit idv_url
 
     expect(page).to have_content("Employment check needed for this claim")
-    click_on "Start now"
+
+    perform_enqueued_jobs do
+      click_on "Start now"
+    end
+
+    mail = ActionMailer::Base.deliveries.last
+    otp_in_mail_sent = mail.personalisation[:one_time_password]
+
+    fill_in "Enter the 6-digit passcode", with: otp_in_mail_sent
+    click_on "Confirm"
 
     expect(page).to have_content(
       "Does Springfield Nursery employ Snake Jailbird?"
