@@ -42,7 +42,9 @@ RSpec.describe "EY claim and alternative verification task" do
 
       expect(task_status("One Login identity check")).to eql "No data"
       expect(task_status("Alternative verification")).to eql "Incomplete"
-      click_link "Confirm the provider has verified the claimant’s identity"
+      click_link "Confirm the claimant made the claim"
+
+      click_link "Confirm the provider has verified the claimant’s employment"
 
       expect(page).to have_text "Awaiting provider response"
       expect(page).to have_text "Do the details provided by the claimant match the provider’s responses?"

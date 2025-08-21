@@ -20,6 +20,8 @@
       <% case @claim.policy %>
       <% when Policies::FurtherEducationPayments %>
         <%= govuk_link_to "Confirm the provider has verified the claimant’s employment", admin_claim_task_path(claim_id: @claim.id, name: "fe_alternative_verification") %>
+      <% when Policies::EarlyYearsPayments %>
+        <%= govuk_link_to "Confirm the provider has verified the claimant’s employment", admin_claim_task_path(claim_id: @claim.id, name: "ey_alternative_verification") %>
       <% end %>
     </p>
   <% end %>
