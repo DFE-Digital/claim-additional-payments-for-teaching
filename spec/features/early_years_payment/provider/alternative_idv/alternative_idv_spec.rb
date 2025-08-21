@@ -111,7 +111,7 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
     expect(page).to have_content("Verification code sent")
 
     expect("seymor.skinner@springfield-elementary.edu").to have_received_email(
-      "89e8c33a-1863-4fdd-a73c-1ca01efc0c76",
+      "345736a7-b72d-4fc6-bc34-27f40f85cf3f",
       one_time_password: "123456"
     )
   end
