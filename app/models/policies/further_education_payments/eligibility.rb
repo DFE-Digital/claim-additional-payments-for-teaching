@@ -103,6 +103,8 @@ module Policies
       def provider_verification_status
         if provider_verification_completed?
           STATUS_COMPLETED
+        elsif provider_verification_overdue?
+          STATUS_OVERDUE
         elsif provider_verification_started?
           STATUS_IN_PROGRESS
         else
@@ -124,6 +126,10 @@ module Policies
 
       def provider_verification_completed?
         provider_verification_completed_at.present?
+      end
+
+      def provider_verification_overdue?
+        Policies::FurtherEducationPayments.verification_overdue?(claim)
       end
 
       def provider_verification_selected_at_least_one_eligible_course?
