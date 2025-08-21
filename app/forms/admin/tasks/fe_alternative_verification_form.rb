@@ -61,7 +61,7 @@ class Admin::Tasks::FeAlternativeVerificationForm
       ],
       [
         "Email",
-        claim.email_address,
+        claim.eligibility.work_email,
         provider_response_email
       ]
     ]

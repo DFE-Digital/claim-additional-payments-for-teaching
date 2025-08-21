@@ -47,7 +47,7 @@ module AutomatedChecks
           claim.eligibility.provider_verification_claimant_date_of_birth == claim.date_of_birth &&
           claim.eligibility.provider_verification_claimant_postcode == claim.postcode &&
           claim.eligibility.provider_verification_claimant_national_insurance_number == claim.national_insurance_number &&
-          claim.eligibility.provider_verification_claimant_email == claim.email_address &&
+          claim.eligibility.provider_verification_claimant_email == claim.eligibility.work_email &&
           claim.eligibility.provider_verification_claimant_bank_details_match == true
       end
 

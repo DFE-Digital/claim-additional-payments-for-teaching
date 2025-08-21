@@ -584,7 +584,7 @@ RSpec.feature "Admin claim further education payments" do
             end
 
             within_table_row("Email") do |claimant, provider|
-              expect(claimant).to have_text("person1@example.com")
+              expect(claimant).to have_text("claimant@example.com")
               expect(provider).to have_text("claimant@example.com")
             end
           end
@@ -608,6 +608,7 @@ RSpec.feature "Admin claim further education payments" do
                 :further_education_payments_eligibility,
                 claim: claim,
                 flagged_as_duplicate: true,
+                work_email: "claimant@example.com",
                 provider_verification_claimant_employed_by_college: true,
                 provider_verification_claimant_date_of_birth: Date.new(1990, 1, 1),
                 provider_verification_claimant_postcode: "TE57 1NG",
