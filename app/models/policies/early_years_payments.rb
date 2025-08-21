@@ -13,7 +13,7 @@ module Policies
 
     VERIFIERS = [
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
-      AutomatedChecks::ClaimVerifiers::EarlyYearsPayments::Identity
+      AutomatedChecks::ClaimVerifiers::OneLoginIdentity
     ]
 
     # Attributes to delete from claims submitted before the current academic
@@ -102,7 +102,7 @@ module Policies
     end
 
     def alternative_idv_completed!(claim)
-      # NOOP for the minute
+      Tasks::EyAlternativeVerificationJob.perform_later(claim)
     end
   end
 end

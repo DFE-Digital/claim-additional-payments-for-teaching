@@ -156,6 +156,9 @@ en:
       fe_alternative_verification:
         name: Alternative verification
         title: Confirm the provider has verified the claimant’s identity
+      ey_alternative_verification:
+        name: Alternative verification
+        title: Confirm the provider has verified the claimant’s identity
       previous_payment:
         name: Previous payment
         title: Check for previous payment
@@ -1584,6 +1587,9 @@ en:
           no_response: No response
           other: Other
       task_questions:
+        ey_alternative_verification:
+          name: Alternative verification
+          title: Do the details provided by the claimant match the provider’s responses?
         employment:
           title: Is the claimant still working at the current nursery above?
           unavailable: This task will be available from %{employment_task_available_at}

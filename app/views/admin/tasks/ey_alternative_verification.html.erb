@@ -1,0 +1,58 @@
+<% content_for(:page_title) do %>
+  <% page_title("Claim #{@claim.reference} alternative verification") %>
+<% end %>
+
+<% content_for :back_link do %>
+  <%= govuk_back_link href: admin_claim_tasks_path(@claim) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <%= render(
+    "claim_summary_early_years_payments",
+    claim: @claim,
+    heading: "Alternative identity verification"
+  ) %>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h2 class="govuk-heading-xl"><%= I18n.t(:name, scope: @form.translation) %></h2>
+
+    <%= render(
+      partial: "alternative_verification_data",
+      locals: { claim: @claim }
+    ) %>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <% if @form.task.completed? %>
+      <div class="govuk-inset-text task-outcome">
+        <p class="govuk-body">
+          <%= task_status_tag(@form.task.claim, @form.task.name) %>
+        </p>
+        <p class="govuk-body">
+          <% if @form.task.manual? %>
+            This task was performed by
+            <%= user_details(@form.task.created_by, include_line_break: false) %>
+            on <%= l(@form.task.updated_at) %>
+          <% else %>
+            This task was performed by an automated check on <%= l(@form.task.created_at) %>
+          <% end %>
+        </p>
+      </div>
+    <% else %>
+      <%= render(
+        "form",
+        task_name: "alternative_verification",
+        claim: @claim
+      ) %>
+    <% end %>
+
+    <%= render(
+      partial: "admin/task_pagination",
+      locals: { task_pagination: @task_pagination }
+    ) %>
+  </div>
+</div>
