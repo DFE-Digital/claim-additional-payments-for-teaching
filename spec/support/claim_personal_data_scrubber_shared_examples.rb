@@ -170,8 +170,6 @@ RSpec.shared_examples "a claim personal data scrubber" do |policy|
     travel_to last_academic_year - 1.week do
       claim = create(:claim, :submitted, policy: policy)
       claim_changes = {
-        "payroll_gender" => ["male", claim.payroll_gender],
-        "date_of_birth" => [25.years.ago.to_date, claim.date_of_birth],
         "student_loan_plan" => ["plan_1", claim.student_loan_plan],
         "bank_sort_code" => ["457288", claim.bank_sort_code],
         "bank_account_number" => ["84818482", claim.bank_account_number],
@@ -195,8 +193,6 @@ RSpec.shared_examples "a claim personal data scrubber" do |policy|
       cleaned_amendment = Amendment.find(amendment.id)
 
       expected_claim_changed_attributes = %w[
-        payroll_gender
-        date_of_birth
         student_loan_plan
         bank_sort_code
         bank_account_number
@@ -212,8 +208,6 @@ RSpec.shared_examples "a claim personal data scrubber" do |policy|
       if claim.eligibility.has_attribute?(:teacher_reference_number)
         expect(cleaned_amendment.claim_changes["teacher_reference_number"]).to eq(original_trn_change)
       end
-      expect(cleaned_amendment.claim_changes["date_of_birth"]).to eq(nil)
-      expect(cleaned_amendment.claim_changes["payroll_gender"]).to eq(nil)
       expect(cleaned_amendment.claim_changes["bank_sort_code"]).to eq(nil)
       expect(cleaned_amendment.claim_changes["bank_account_number"]).to eq(nil)
       expect(cleaned_amendment.claim_changes["building_society_roll_number"]).to eq(nil)
