@@ -333,8 +333,6 @@ RSpec.describe "Early years payment provider - Alternative IDV" do
 
     visit idv_url
 
-    click_on "Start now"
-
     expect(page).to have_content(
       "An employment check has already been completed for this claim"
     )
