@@ -6,7 +6,7 @@ RSpec.describe Policies::InternationalRelocationPayments::ClaimPersonalDataScrub
     Policies::InternationalRelocationPayments
   )
 
-  it "retains name, passport, and national insurance number for 2 years" do
+  it "retains name, passport, date of birth, and national insurance number for 2 years" do
     last_academic_year = Time.zone.local(AcademicYear.current.start_year, 8, 1, 12)
 
     approved_claim = create(
@@ -17,6 +17,7 @@ RSpec.describe Policies::InternationalRelocationPayments::ClaimPersonalDataScrub
       first_name: "John",
       middle_name: "James",
       surname: "Doe",
+      date_of_birth: Date.new(1980, 1, 1),
       eligibility_attributes: {
         passport_number: "123456789"
       }
@@ -61,6 +62,7 @@ RSpec.describe Policies::InternationalRelocationPayments::ClaimPersonalDataScrub
       national_insurance_number: "AB123456D",
       first_name: "Jane",
       surname: "Smith",
+      date_of_birth: Date.new(1980, 1, 1),
       eligibility_attributes: {
         passport_number: "987654321"
       }
@@ -101,6 +103,8 @@ RSpec.describe Policies::InternationalRelocationPayments::ClaimPersonalDataScrub
       ).and(
         not_change { approved_claim.reload.surname }
       ).and(
+        not_change { approved_claim.reload.date_of_birth }
+      ).and(
         not_change { approved_claim.reload.national_insurance_number }
       ).and(
         not_change { approved_claim.reload.eligibility.passport_number }
@@ -121,6 +125,8 @@ RSpec.describe Policies::InternationalRelocationPayments::ClaimPersonalDataScrub
         ).and(
           change { approved_claim.reload.surname }.to(nil)
         ).and(
+          change { approved_claim.reload.date_of_birth }.to(nil)
+        ).and(
           change { approved_claim.reload.national_insurance_number }.to(nil)
         ).and(
           change { approved_claim.reload.eligibility.passport_number }.to(nil)
@@ -136,6 +142,8 @@ RSpec.describe Policies::InternationalRelocationPayments::ClaimPersonalDataScrub
           not_change { claim_expected_not_to_change_1.reload.middle_name }
         ).and(
           not_change { claim_expected_not_to_change_1.reload.surname }
+        ).and(
+          not_change { claim_expected_not_to_change_1.reload.date_of_birth }
         ).and(
           not_change { claim_expected_not_to_change_1.reload.national_insurance_number }
         ).and(

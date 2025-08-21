@@ -6,37 +6,59 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimPersonalDataScrubber do
     Policies::FurtherEducationPayments
   )
 
-  it "removes claimant personal details and passport number from the eligibility" do
-    last_academic_year = AcademicYear.previous.start_of_autumn_term.beginning_of_day
+  it "stores claimant personal data for the full duration of the policy" do
+    travel_to AcademicYear.current.start_of_autumn_term + 1.day
 
     claim = create(
       :claim,
       :submitted,
       policy: Policies::FurtherEducationPayments,
+      first_name: "Edna",
+      middle_name: "Marie",
+      surname: "Krabappel",
+      date_of_birth: Date.new(1970, 1, 1),
+      address_line_1: "Flat 12",
+      address_line_2: "82",
+      address_line_3: "Evergreen Terrace",
+      address_line_4: "Springfield",
+      postcode: "AB12 3CD",
+      national_insurance_number: "QQ123456C",
+      mobile_number: "07123456789",
+      hmrc_bank_validation_responses: [{code: 200, body: "Test response"}],
+      payroll_gender: "female",
       eligibility_attributes: {
-        claimant_date_of_birth: "1970-01-01",
-        claimant_postcode: "AB12 3CD",
-        claimant_national_insurance_number: "QQ123456C",
-        claimant_passport_number: "123456789",
-        passport_number: "987654321"
+        teacher_reference_number: "1234567"
       }
     )
 
-    create(
-      :decision,
-      :rejected,
-      claim: claim,
-      created_at: last_academic_year
-    )
+    create(:decision, :rejected, claim: claim)
 
     described_class.new.scrub_completed_claims
 
-    eligibility = claim.reload.eligibility
+    claim.reload
 
-    expect(eligibility.claimant_date_of_birth).to be_nil
-    expect(eligibility.claimant_postcode).to be_nil
-    expect(eligibility.claimant_national_insurance_number).to be_nil
-    expect(eligibility.claimant_passport_number).to be_nil
-    expect(eligibility.passport_number).to be_nil
+    Policies::FurtherEducationPayments::PERSONAL_DATA_ATTRIBUTES_TO_RETAIN_FOR_EXTENDED_PERIOD.each do |attribute|
+      expect(claim.send(attribute)).to be_present
+    end
+
+    travel_to AcademicYear.current.start_of_autumn_term + 5.years - 1.day
+
+    described_class.new.scrub_completed_claims
+
+    claim.reload
+
+    Policies::FurtherEducationPayments::PERSONAL_DATA_ATTRIBUTES_TO_RETAIN_FOR_EXTENDED_PERIOD.each do |attribute|
+      expect(claim.send(attribute)).to be_present
+    end
+
+    travel_to AcademicYear.current.start_of_autumn_term + 5.years
+
+    described_class.new.scrub_completed_claims
+
+    claim.reload
+
+    Policies::FurtherEducationPayments::PERSONAL_DATA_ATTRIBUTES_TO_RETAIN_FOR_EXTENDED_PERIOD.each do |attribute|
+      expect(claim.send(attribute)).to be_blank
+    end
   end
 end
