@@ -101,7 +101,9 @@ module Policies
       end
 
       def provider_verification_status
-        if provider_verification_completed?
+        if provider_verification_rejected?
+          STATUS_REJECTED
+        elsif provider_verification_completed?
           STATUS_COMPLETED
         elsif provider_verification_started?
           STATUS_IN_PROGRESS
@@ -122,6 +124,10 @@ module Policies
         provider_verification_started_at.present?
       end
 
+      def provider_verification_rejected?
+        claimant_not_employed_by_college?
+      end
+
       def provider_verification_completed?
         provider_verification_completed_at.present?
       end
@@ -136,6 +142,18 @@ module Policies
           provider_verification_maths_courses,
           provider_verification_physics_courses
         ].flatten.count { |course| course != "none" } > 0
+      end
+
+      def employment_check_required?
+        claim.failed_one_login_idv?
+      end
+
+      def alternative_identity_verification_required?
+        employment_check_required?
+      end
+
+      def claimant_not_employed_by_college?
+        provider_verification_claimant_employed_by_college == false
       end
 
       private
