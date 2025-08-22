@@ -117,37 +117,65 @@ module Admin
     end
 
     def identity_confirmation_task_claim_verifier_match_status_tag(claim)
-      task = if claim.policy == Policies::FurtherEducationPayments
-        claim.tasks.detect { |t| t.name == "one_login_identity" }
-      else
-        claim.tasks.detect { |t| t.name == "identity_confirmation" }
-      end
+      case claim.policy
+      when Policies::FurtherEducationPayments
+        identity_tasks = []
+        identity_tasks << (claim.tasks.detect { |t| t.name == "one_login_identity" } || Task.new)
+        identity_tasks << (claim.tasks.detect { |t| t.name == "fe_alternative_verification" } || Task.new)
 
-      if claim.policy == Policies::EarlyYearsPayments && !claim.eligibility.practitioner_journey_completed?
-        status = "Incomplete"
-        status_colour = "grey"
-      elsif task.nil?
-        status = "Unverified"
-        status_colour = "grey"
-      elsif task.passed?
-        status = "Passed"
-        status_colour = "green"
-      elsif task.passed == false
-        status = "Failed"
-        status_colour = "red"
-      elsif task.claim_verifier_match_all?
-        status = "Full match"
-        status_colour = "green"
-      elsif task.claim_verifier_match_any?
-        status = "Partial match"
-        status_colour = "yellow"
-      elsif task.claim_verifier_match_none?
-        status = "No match"
-        status_colour = "red"
+        if identity_tasks.any? { |t| t.passed? }
+          status = "Passed"
+          status_colour = "green"
+        elsif identity_tasks.all? { |t| t.failed? }
+          status = "Failed"
+          status_colour = "red"
+        else
+          status = "Unverified"
+          status_colour = "grey"
+        end
+      when Policies::EarlyYearsPayments
+        identity_tasks = []
+        identity_tasks << (claim.tasks.detect { |t| t.name == "one_login_identity" } || Task.new)
+        identity_tasks << (claim.tasks.detect { |t| t.name == "ey_alternative_verification" } || Task.new)
+
+        if !claim.eligibility.practitioner_journey_completed?
+          status = "Incomplete"
+          status_colour = "grey"
+        elsif identity_tasks.any? { |t| t.passed? }
+          status = "Passed"
+          status_colour = "green"
+        elsif identity_tasks.all? { |t| t.failed? }
+          status = "Failed"
+          status_colour = "red"
+        else
+          status = "Unverified"
+          status_colour = "grey"
+        end
+      else
+        task = claim.tasks.detect { |t| t.name == "identity_confirmation" }
+
+        if task.nil?
+          status = "Unverified"
+          status_colour = "grey"
+        elsif task.passed?
+          status = "Passed"
+          status_colour = "green"
+        elsif task.passed == false
+          status = "Failed"
+          status_colour = "red"
+        elsif task.claim_verifier_match_all?
+          status = "Full match"
+          status_colour = "green"
+        elsif task.claim_verifier_match_any?
+          status = "Partial match"
+          status_colour = "yellow"
+        elsif task.claim_verifier_match_none?
+          status = "No match"
+          status_colour = "red"
+        end
       end
 
       tag_classes = "govuk-tag app-task-list__task-completed govuk-tag--#{status_colour}"
-
       content_tag("strong", status, class: tag_classes)
     end
 

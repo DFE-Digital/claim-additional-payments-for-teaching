@@ -75,6 +75,10 @@ module Policies
       start_of_academic_year - 5.years
     }
 
+    def alternative_idv_completed!(claim)
+      Tasks::FeAlternativeVerificationJob.perform_later(claim)
+    end
+
     def notify_reply_to_id
       "89939786-7078-4267-b197-ee505dfad8ae"
     end

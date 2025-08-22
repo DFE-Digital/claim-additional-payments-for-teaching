@@ -4,6 +4,8 @@ RSpec.feature "Admin performs identity confirmation task" do
   let(:claim) { create(:claim, :submitted, :with_onelogin_idv_data, policy: Policies::FurtherEducationPayments) }
 
   before do
+    AutomatedChecks::ClaimVerifiers::OneLoginIdentity.new(claim:).perform
+
     sign_in_as_service_operator
   end
 

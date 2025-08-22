@@ -8,28 +8,8 @@ RSpec.describe "Admin EY tasks" do
   end
 
   describe "identity_confirmation" do
-    context "when the practitioner hasn't completed their half of the claim" do
-      it "shows that the task is unavailable" do
-        claim = complete_provider_journey
-
-        sign_in_as_service_operator
-
-        visit admin_claim_tasks_path(claim)
-        expect(task_status("Identity confirmation")).to eq("Incomplete")
-        click_on "Confirm the claimant made the claim"
-
-        expect(page).to have_content(
-          "Provider entered claimant name Bobby Bobberson"
-        )
-
-        expect(page).to have_content(
-          "This task is not available until the claimant has submitted their claim"
-        )
-      end
-    end
-
     context "when the practitioner has completed their half of the claim" do
-      context "when OL IDV is a pass and the names match" do
+      context "when OL IDV is a pass" do
         it "passes the task" do
           claim = complete_provider_journey
 
@@ -44,26 +24,8 @@ RSpec.describe "Admin EY tasks" do
           sign_in_as_service_operator
 
           visit admin_claim_tasks_path(claim)
-
-          expect(task_status("Identity confirmation")).to eq("Passed")
-
+          expect(task_status("One Login identity check")).to eq("Passed")
           click_on "Confirm the claimant made the claim"
-
-          expect(page).to have_content(
-            "Provider entered claimant name Bobby Bobberson"
-          )
-
-          expect(page).to have_content(
-            "Claimant name from One Login Bobby Bobberson"
-          )
-
-          expect(page).to have_content(
-            "Claimant entered DOB 1 January 1986"
-          )
-
-          expect(page).to have_content(
-            "Claimant DOB from One Login 1 January 1986"
-          )
 
           expect(page).to have_content(
             "This task was performed by GOV.UK One Login on " \
@@ -72,149 +34,8 @@ RSpec.describe "Admin EY tasks" do
         end
       end
 
-      context "when OL IDV is a pass and the names don't match" do
-        context "when the names are a parital match" do
-          let(:claim) { complete_provider_journey }
-
-          before do
-            complete_practitioner_journey(
-              claim: claim,
-              one_login_first_name: "Robby",
-              one_login_last_name: "Bobberson",
-              one_login_date_of_birth: Date.new(1986, 1, 1),
-              date_of_birth: Date.new(1986, 1, 1)
-            )
-
-            sign_in_as_service_operator
-          end
-
-          it "shows the task as a partial match" do
-            visit admin_claim_tasks_path(claim)
-
-            expect(task_status("Identity confirmation")).to eq("Partial match")
-
-            click_on "Confirm the claimant made the claim"
-
-            expect(page).to have_content("Confirm claimant name")
-
-            expect(page).to have_content(
-              "Provider entered claimant name Bobby Bobberson"
-            )
-
-            expect(page).to have_content(
-              "Claimant name from One Login Robby Bobberson"
-            )
-
-            expect(page).to have_content("Confirm claimant date of birth")
-
-            expect(page).to have_content("Claimant entered DOB 1 January 1986")
-
-            expect(page).to have_content(
-              "Claimant DOB from One Login 1 January 1986"
-            )
-
-            expect(page).to have_content(
-              "[GOV UK One Login] - Names partially match:"
-            )
-
-            expect(page).to have_content(
-              'Provider-entered name: "Bobby Bobberson"'
-            )
-
-            expect(page).to have_content(
-              'GOV.UK One Login Name: "Robby Bobberson"'
-            )
-
-            expect(page).to have_content('Claimant-entered DOB: "1 January 1986"')
-
-            expect(page).to have_content('GOV.UK One Login DOB: "1 January 1986"')
-          end
-
-          it "allows the admin to mark the task as passed" do
-            visit admin_claim_task_path(claim, name: "identity_confirmation")
-            choose "Yes"
-            click_on "Save and continue"
-
-            visit admin_claim_task_path(claim, name: "identity_confirmation")
-            expect(page).to have_content(
-              "This task was performed by Aaron Admin"
-            )
-
-            visit admin_claim_tasks_path(claim)
-            expect(task_status("Identity confirmation")).to eq("Passed")
-          end
-
-          it "allows the admin to mark the task as failed" do
-            visit admin_claim_task_path(claim, name: "identity_confirmation")
-            choose "No"
-            click_on "Save and continue"
-
-            visit admin_claim_task_path(claim, name: "identity_confirmation")
-            expect(page).to have_content(
-              "This task was performed by Aaron Admin"
-            )
-
-            visit admin_claim_tasks_path(claim)
-            expect(task_status("Identity confirmation")).to eq("Failed")
-          end
-        end
-
-        context "when the names don't match" do
-          let(:claim) { complete_provider_journey }
-
-          before do
-            complete_practitioner_journey(
-              claim: claim,
-              one_login_first_name: "Robby",
-              one_login_last_name: "Robberson",
-              one_login_date_of_birth: Date.new(1986, 1, 1),
-              date_of_birth: Date.new(1986, 1, 1)
-            )
-
-            sign_in_as_service_operator
-          end
-
-          it "shows the task as failed" do
-            visit admin_claim_tasks_path(claim)
-            expect(task_status("Identity confirmation")).to eq("Failed")
-            click_on "Confirm the claimant made the claim"
-
-            expect(page).to have_content("Confirm claimant name")
-            expect(page).to have_content(
-              "Provider entered claimant name Bobby Bobberson"
-            )
-            expect(page).to have_content(
-              "Claimant name from One Login Robby Robberson"
-            )
-            expect(page).to have_content("Confirm claimant date of birth")
-            expect(page).to have_content("Claimant entered DOB 1 January 1986")
-            expect(page).to have_content(
-              "Claimant DOB from One Login 1 January 1986"
-            )
-            expect(page).to have_content(
-              "[GOV UK One Login] - Names do not match:"
-            )
-            expect(page).to have_content(
-              'Provider-entered name: "Bobby Bobberson"'
-            )
-            expect(page).to have_content(
-              'GOV.UK One Login Name: "Robby Robberson"'
-            )
-            expect(page).to have_content('Claimant-entered DOB: "1 January 1986"')
-            expect(page).to have_content('GOV.UK One Login DOB: "1 January 1986"')
-          end
-
-          it "doesn't allow the admin to complete the task" do
-            visit admin_claim_task_path(claim, name: "identity_confirmation")
-            expect(page).not_to have_button("Save and continue")
-          end
-        end
-      end
-
       context "when OL IDV is a fail" do
-        it "fails the task" do
-          pending "should be implemented in CAPT-2775"
-
+        it "marks task as No data" do
           claim = complete_provider_journey
 
           complete_practitioner_journey(
@@ -222,27 +43,17 @@ RSpec.describe "Admin EY tasks" do
             one_login_first_name: "Bobby",
             one_login_last_name: "Bobberson",
             date_of_birth: Date.new(1986, 1, 11),
-            one_login_date_of_birth: Date.new(1986, 1, 1)
+            one_login_date_of_birth: Date.new(1986, 1, 1),
+            fail_idv: true
           )
 
           sign_in_as_service_operator
 
           visit admin_claim_tasks_path(claim)
-          expect(task_status("Identity confirmation")).to eq("Failed")
+          expect(task_status("One Login identity check")).to eq("No data")
           click_on "Confirm the claimant made the claim"
 
-          expect(page).to have_content(
-            "[GOV UK One Login] - IDV mismatch:"
-          )
-          expect(page).to have_content(
-            'Provider-entered name: "Bobby Bobberson"'
-          )
-          expect(page).to have_content(
-            'GOV.UK One Login Name: "Bobby Bobberson"'
-          )
-          expect(page).to have_content('Claimant-entered DOB: "11 January 1986"')
-          expect(page).to have_content('GOV.UK One Login DOB: "1 January 1986"')
-          expect(page).not_to have_button("Save and continue")
+          expect(page).to have_text "This claimant was unable to verify their identity with GOV.UK One Login on"
         end
       end
     end
@@ -591,7 +402,8 @@ RSpec.describe "Admin EY tasks" do
     one_login_first_name:,
     one_login_last_name:,
     one_login_date_of_birth:,
-    payroll_gender: "Male"
+    payroll_gender: "Male",
+    fail_idv: false
   )
     allow(OmniauthCallbacksController::OneLoginTestUser).to(
       receive(:new).and_return(
@@ -610,13 +422,37 @@ RSpec.describe "Admin EY tasks" do
     click_button "Submit"
 
     sign_in_with_one_login
-    idv_with_one_login
 
-    expect(page).to have_content("You’ve successfully proved your identity with GOV.UK One Login")
+    if fail_idv
+      idv_with_one_login_with_return_codes
+    else
+      idv_with_one_login
+    end
+
+    if fail_idv
+      expect(page).to have_content "We have not been able to confirm your identity via GOV.UK One Login"
+    else
+      expect(page).to have_content("You’ve successfully proved your identity with GOV.UK One Login")
+    end
     click_on "Continue"
 
     expect(page).to have_content("How we will use your information")
     click_on "Continue"
+
+    if fail_idv
+      expect(page).to have_content("Personal details")
+      expect(page).to have_content("Enter your full name")
+      fill_in "First name(s)", with: one_login_first_name
+      fill_in "Last name", with: one_login_last_name
+      click_on "Continue"
+
+      expect(page).to have_content("Personal details")
+      expect(page).to have_content("Enter your date of birth")
+      fill_in "Day", with: date_of_birth.day
+      fill_in "Month", with: date_of_birth.month
+      fill_in "Year", with: date_of_birth.year
+      click_on "Continue"
+    end
 
     expect(page).to have_content("Personal details")
     expect(page).to have_content("Enter your National Insurance number")
