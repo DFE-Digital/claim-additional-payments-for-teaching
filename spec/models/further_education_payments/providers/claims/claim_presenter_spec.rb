@@ -12,9 +12,9 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::ClaimPresenter do
           provider_verification_completed_at: nil)
       end
 
-      it "returns 'Not started' status with red colour" do
+      it "returns 'Not started' status with yellow colour" do
         expect(presenter.status).to eq("Not started")
-        expect(presenter.colour).to eq("red")
+        expect(presenter.colour).to eq("yellow")
       end
     end
 
@@ -25,9 +25,9 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::ClaimPresenter do
           provider_verification_completed_at: nil)
       end
 
-      it "returns 'In progress' status with yellow colour" do
+      it "returns 'In progress' status with blue colour" do
         expect(presenter.status).to eq("In progress")
-        expect(presenter.colour).to eq("yellow")
+        expect(presenter.colour).to eq("blue")
       end
     end
 

@@ -54,13 +54,13 @@ RSpec.describe "Provider unverified claims dashboard", feature_flag: :provider_d
     expect(page).to have_selector("table tbody tr:first-child td:nth-child(2)", text: "13 December 2024")
     expect(page).to have_selector("table tbody tr:first-child td:nth-child(3)", text: "27 December 2024")
     expect(page).to have_selector("table tbody tr:first-child td:nth-child(4)", text: "Not processed")
-    expect(page).to have_selector("table tbody tr:first-child td:nth-child(5)", text: "Not started")
+    expect(page).to have_selector("table tbody tr:first-child td:nth-child(5)", text: "Overdue")
   end
 
-  scenario "claims are ordered with unstarted claims first, then by creation date" do
+  scenario "claims are ordered by creation (due) date" do
     school = create(:school, :fe_eligible, ukprn: "12345678")
 
-    older_unstarted_eligibility = create(
+    alice_eligibility = create(
       :further_education_payments_eligibility,
       school: school,
       provider_verification_started_at: nil
@@ -70,13 +70,13 @@ RSpec.describe "Provider unverified claims dashboard", feature_flag: :provider_d
       :claim,
       :further_education,
       :submitted,
-      eligibility: older_unstarted_eligibility,
-      created_at: 3.days.ago,
+      eligibility: alice_eligibility,
+      created_at: 5.days.ago,
       first_name: "Alice",
-      surname: "Older"
+      surname: "Oldest"
     )
 
-    newer_unstarted_eligibility = create(
+    bob_eligibility = create(
       :further_education_payments_eligibility,
       school: school,
       provider_verification_started_at: nil
@@ -86,29 +86,13 @@ RSpec.describe "Provider unverified claims dashboard", feature_flag: :provider_d
       :claim,
       :further_education,
       :submitted,
-      eligibility: newer_unstarted_eligibility,
-      created_at: 1.day.ago,
+      eligibility: bob_eligibility,
+      created_at: 4.day.ago,
       first_name: "Bob",
-      surname: "Newer"
+      surname: "Old"
     )
 
-    older_started_eligibility = create(
-      :further_education_payments_eligibility,
-      school: school,
-      provider_verification_started_at: 4.days.ago
-    )
-
-    create(
-      :claim,
-      :further_education,
-      :submitted,
-      eligibility: older_started_eligibility,
-      created_at: 4.days.ago,
-      first_name: "Charlie",
-      surname: "OlderStarted"
-    )
-
-    newer_started_eligibility = create(
+    charlie_eligibility = create(
       :further_education_payments_eligibility,
       school: school,
       provider_verification_started_at: 2.days.ago
@@ -118,10 +102,26 @@ RSpec.describe "Provider unverified claims dashboard", feature_flag: :provider_d
       :claim,
       :further_education,
       :submitted,
-      eligibility: newer_started_eligibility,
+      eligibility: charlie_eligibility,
+      created_at: 3.days.ago,
+      first_name: "Charlie",
+      surname: "New"
+    )
+
+    diana_eligibility = create(
+      :further_education_payments_eligibility,
+      school: school,
+      provider_verification_started_at: 1.day.ago
+    )
+
+    create(
+      :claim,
+      :further_education,
+      :submitted,
+      eligibility: diana_eligibility,
       created_at: 2.days.ago,
       first_name: "Diana",
-      surname: "NewerStarted"
+      surname: "Newest"
     )
 
     visit "/further-education-payments/providers/claims"
@@ -132,22 +132,22 @@ RSpec.describe "Provider unverified claims dashboard", feature_flag: :provider_d
 
     expect(page).to have_selector(
       "table tbody tr:nth-child(1) td:nth-child(1)",
-      text: "Alice Older"
+      text: "Alice Oldest"
     )
 
     expect(page).to have_selector(
       "table tbody tr:nth-child(2) td:nth-child(1)",
-      text: "Bob Newer"
+      text: "Bob Old"
     )
 
     expect(page).to have_selector(
       "table tbody tr:nth-child(3) td:nth-child(1)",
-      text: "Charlie OlderStarted"
+      text: "Charlie New"
     )
 
     expect(page).to have_selector(
       "table tbody tr:nth-child(4) td:nth-child(1)",
-      text: "Diana NewerStarted"
+      text: "Diana Newest"
     )
   end
 end

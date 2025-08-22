@@ -18,6 +18,8 @@ module FurtherEducationPayments
             "In progress"
           when STATUS_COMPLETED
             "Completed"
+          when STATUS_OVERDUE
+            "Overdue"
           else
             "Unknown"
           end
@@ -26,11 +28,13 @@ module FurtherEducationPayments
         def colour
           case provider_verification_status
           when STATUS_NOT_STARTED
-            "red"
-          when STATUS_IN_PROGRESS
             "yellow"
+          when STATUS_IN_PROGRESS
+            "blue"
           when STATUS_COMPLETED
             "green"
+          when STATUS_OVERDUE
+            "red"
           else
             "grey"
           end

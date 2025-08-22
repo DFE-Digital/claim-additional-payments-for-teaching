@@ -3,6 +3,11 @@ require "rails_helper"
 RSpec.describe Policies::FurtherEducationPayments::Eligibility do
   describe "#provider_verification_status" do
     let(:eligibility) { build(:further_education_payments_eligibility) }
+    let(:claim_verification_overdue) { false }
+
+    before do
+      allow(Policies::FurtherEducationPayments).to receive(:verification_overdue?).and_return(claim_verification_overdue)
+    end
 
     context "when provider verification has not started" do
       it "returns 'not_started'" do
@@ -25,6 +30,16 @@ RSpec.describe Policies::FurtherEducationPayments::Eligibility do
         eligibility.provider_verification_started_at = 1.hour.ago
         eligibility.provider_verification_completed_at = Time.current
         expect(eligibility.provider_verification_status).to eq(Policies::FurtherEducationPayments::ProviderVerificationConstants::STATUS_COMPLETED)
+      end
+    end
+
+    context "when provider verification is overdue" do
+      let(:claim_verification_overdue) { true }
+
+      it "returns 'overdue'" do
+        eligibility.provider_verification_started_at = nil
+        eligibility.provider_verification_completed_at = nil
+        expect(eligibility.provider_verification_status).to eq(Policies::FurtherEducationPayments::ProviderVerificationConstants::STATUS_OVERDUE)
       end
     end
   end
