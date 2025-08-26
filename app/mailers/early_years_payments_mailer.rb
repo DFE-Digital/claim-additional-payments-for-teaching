@@ -112,6 +112,24 @@ class EarlyYearsPaymentsMailer < ApplicationMailer
     )
   end
 
+  def provider_six_month_employment_reminder
+    claim = params[:claim]
+
+    template_mail(
+      EARLY_YEARS_PAYMENTS[:PROVIDER_SIX_MONTH_EMPLOYMENT_REMINDER_TEMPLATE_ID],
+      to: claim.eligibility.eligible_ey_provider.primary_key_contact_email_address,
+      reply_to_id: claim.policy.notify_reply_to_id,
+      personalisation: {
+        ref_number: claim.reference,
+        provider_contact_name: claim.provider_contact_name,
+        practitioner_first_name: claim.first_name,
+        practitioner_last_name: claim.surname,
+        provider_submission_date: I18n.l(claim.eligibility.provider_claim_submitted_at.to_date),
+        nursery_name: claim.eligibility.eligible_ey_provider.nursery_name
+      }
+    )
+  end
+
   private
 
   def submitted_by_practitioner_and_send_to_practitioner(claim)
