@@ -8,6 +8,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
         :claim,
         :submitted,
         :with_student_loan,
+        :with_onelogin_idv_data,
         policy: policy,
         eligibility: build(:"#{policy.to_s.underscore}_eligibility", :eligible),
         onelogin_idv_at: 10.minutes.ago
@@ -256,14 +257,10 @@ RSpec.shared_examples "Admin Checks" do |policy|
 
     click_on I18n.t("admin.tasks.one_login_identity.title")
 
-    expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.identity_confirmation.title"))
     expect(page).to have_link("Next:Provider verification")
     expect(page).not_to have_link("Previous")
 
-    choose "Yes"
-    click_on "Save and continue"
-
-    expect(claim.tasks.find_by!(name: "one_login_identity")).to be_passed
+    click_link("Next:Provider verification")
 
     expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.provider_verification.title"))
     expect(page).to have_link("Next:Student loan plan")

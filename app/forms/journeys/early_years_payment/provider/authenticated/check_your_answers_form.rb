@@ -24,7 +24,6 @@ module Journeys
             end
 
             claim.policy.mailer.submitted(claim).deliver_later
-            ClaimVerifierJob.perform_later(claim)
 
             ClaimMailer.early_years_payment_practitioner_email(claim).deliver_later
 

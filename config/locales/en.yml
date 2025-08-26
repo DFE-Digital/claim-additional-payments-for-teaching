@@ -151,8 +151,14 @@ en:
         name: One Login identity check
         title: Confirm the claimant made the claim
       alternative_identity_verification:
-        name: "Alternative identity verification"
-        title: "Confirm the provider has verified the claimant's identity"
+        name: Alternative identity verification
+        title: Confirm the provider has verified the claimant’s identity
+      fe_alternative_verification:
+        name: Alternative verification
+        title: Confirm the provider has verified the claimant’s identity
+      ey_alternative_verification:
+        name: Alternative verification
+        title: Confirm the provider has verified the claimant’s identity
       previous_payment:
         name: Previous payment
         title: Check for previous payment
@@ -847,6 +853,9 @@ en:
           no_response_from_employer: "No response from employer"
           other: "Other"
       task_questions:
+        fe_alternative_verification:
+          name: Alternative verification
+          title: Do the details provided by the claimant match the provider’s responses?
         one_login_identity:
           title: Do the One Login details match the personal details entered by the claimant?
         identity_confirmation:
@@ -1578,6 +1587,9 @@ en:
           no_response: No response
           other: Other
       task_questions:
+        ey_alternative_verification:
+          name: Alternative verification
+          title: Do the details provided by the claimant match the provider’s responses?
         employment:
           title: Is the claimant still working at the current nursery above?
           unavailable: This task will be available from %{employment_task_available_at}
