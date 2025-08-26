@@ -54,6 +54,7 @@ class EarlyYearsPaymentsMailer < ApplicationMailer
       nursery_name: claim.eligibility.eligible_ey_provider.nursery_name,
       practitioner_first_name: claim.eligibility.practitioner_first_name,
       practitioner_last_name: claim.eligibility.practitioner_surname,
+      provider_contact_name: claim.provider_contact_name,
       ref_number: claim.reference
     }
 
