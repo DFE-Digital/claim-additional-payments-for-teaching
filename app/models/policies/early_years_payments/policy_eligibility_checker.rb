@@ -36,6 +36,8 @@ module Policies
           :start_date_before_policy_start
         elsif ineligible_returner?
           :returner
+        elsif answers.provider_entered_contract_type.present? && answers.provider_entered_contract_type != "permanent"
+          :ineligible_contract_type
         end
       end
 

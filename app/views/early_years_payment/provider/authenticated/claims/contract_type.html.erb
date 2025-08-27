@@ -1,0 +1,57 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:question),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      method: :patch,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_collection_radio_buttons(
+        :provider_entered_contract_type,
+        @form.radio_options,
+        :id,
+        :name,
+        legend: {
+          text: @form.t(
+            :question,
+            nursery_name: f.object.nursery_name,
+            practitioner_first_name: f.object.practitioner_first_name
+          ),
+          tag: "h1",
+          size: "l"
+        }
+      ) %>
+
+      <%= govuk_details(
+        summary_text: "What does casual or temporary work include?"
+      ) do %>
+        <p class="govuk-body">
+          Casual or temporary work could include:
+          <%= govuk_list(
+            [
+              "zero-hour contracts",
+              "guaranteed minimum hour contracts",
+              "self-employed or freelance contracts",
+              "fixed term contracts (FTCs)",
+              "agency work and apprenticeship roles"
+            ],
+            type: :bullet
+          ) %>
+        </p>
+      <% end %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

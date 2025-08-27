@@ -7,6 +7,7 @@ module Journeys
           attribute :nursery_urn, pii: true
           attribute :paye_reference, pii: true
           attribute :start_date, :date, pii: false
+          attribute :provider_entered_contract_type, :string, pii: false
           attribute :child_facing_confirmation_given, :boolean, pii: false
           attribute :returning_within_6_months, :boolean, pii: false
           attribute :returner_worked_with_children, :boolean, pii: false
