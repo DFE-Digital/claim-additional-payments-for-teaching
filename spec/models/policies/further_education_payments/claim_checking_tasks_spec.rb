@@ -1,12 +1,8 @@
 require "rails_helper"
 
-RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks do
-  before do
-    FeatureFlag.create!(name: :fe_provider_identity_verification, enabled: true)
-  end
-
+RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks, feature_flag: :fe_provider_identity_verification do
   describe "#applicable_task_names" do
-    subject { described_class.new(claim).applicable_task_names }
+    subject { described_class.new(claim) }
 
     let(:payroll_gender) { "male" }
     let(:teacher_reference_number) { "1234567" }
@@ -62,70 +58,104 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks do
     end
 
     context "when the claim has a teacher reference number" do
-      it { is_expected.to include("employment") }
-      it { is_expected.to include(*invariant_tasks) }
+      it { expect(subject.applicable_task_names).to include("employment") }
+      it { expect(subject.applicable_task_names).to include(*invariant_tasks) }
     end
 
     context "when the claim does not have a teacher reference number" do
       let(:teacher_reference_number) { nil }
-      it { is_expected.not_to include("employment") }
-      it { is_expected.to include(*invariant_tasks) }
+      it { expect(subject.applicable_task_names).not_to include("employment") }
+      it { expect(subject.applicable_task_names).to include(*invariant_tasks) }
     end
 
     context "when there are matching claims" do
       let(:matching_claims) { Claim.all }
-      it { is_expected.to include("matching_details") }
-      it { is_expected.to include(*invariant_tasks) }
+      it { expect(subject.applicable_task_names).to include("matching_details") }
+      it { expect(subject.applicable_task_names).to include(*invariant_tasks) }
     end
 
     context "when there are no matching claims" do
-      it { is_expected.not_to include("matching_details") }
-      it { is_expected.to include(*invariant_tasks) }
+      it { expect(subject.applicable_task_names).not_to include("matching_details") }
+      it { expect(subject.applicable_task_names).to include(*invariant_tasks) }
     end
 
     context "when the payroll_gender is missing" do
       let(:payroll_gender) { nil }
-      it { is_expected.to include("payroll_gender") }
-      it { is_expected.to include(*invariant_tasks) }
+      it { expect(subject.applicable_task_names).to include("payroll_gender") }
+      it { expect(subject.applicable_task_names).to include(*invariant_tasks) }
     end
 
     context "when the payroll_gender is present" do
-      it { is_expected.not_to include("payroll_gender") }
-      it { is_expected.to include(*invariant_tasks) }
+      it { expect(subject.applicable_task_names).not_to include("payroll_gender") }
+      it { expect(subject.applicable_task_names).to include(*invariant_tasks) }
     end
 
     context "when the bank details need validating" do
       let(:hmrc_bank_validation_succeeded) { false }
-      it { is_expected.to include("payroll_details") }
-      it { is_expected.to include(*invariant_tasks) }
+      it { expect(subject.applicable_task_names).to include("payroll_details") }
+      it { expect(subject.applicable_task_names).to include(*invariant_tasks) }
     end
 
     context "when the bank details do not need validating" do
-      it { is_expected.not_to include("payroll_details") }
-      it { is_expected.to include(*invariant_tasks) }
+      it { expect(subject.applicable_task_names).not_to include("payroll_details") }
+      it { expect(subject.applicable_task_names).to include(*invariant_tasks) }
     end
 
     context "when the claimant and provider names match" do
       let(:claimant_first_name) { "Walter" }
       let(:claimant_surname) { "Skinner" }
-      it { is_expected.to include("provider_details") }
-      it { is_expected.to include(*invariant_tasks) }
+      it { expect(subject.applicable_task_names).to include("provider_details") }
+      it { expect(subject.applicable_task_names).to include(*invariant_tasks) }
     end
 
     context "when the claimant and provider emails match" do
       let(:claimant_email_address) { "w.s.skinner@springfield-elementary.edu" }
-      it { is_expected.to include("provider_details") }
-      it { is_expected.to include(*invariant_tasks) }
+      it { expect(subject.applicable_task_names).to include("provider_details") }
+      it { expect(subject.applicable_task_names).to include(*invariant_tasks) }
     end
 
     context "when the claim and provider details are different" do
-      it { is_expected.not_to include("provider_details") }
-      it { is_expected.to include(*invariant_tasks) }
+      it { expect(subject.applicable_task_names).not_to include("provider_details") }
+      it { expect(subject.applicable_task_names).to include(*invariant_tasks) }
     end
 
     context "when the claimant fails IDV" do
       let(:identity_confirmed_with_onelogin) { false }
-      it { is_expected.to include("alternative_identity_verification") }
+      it { expect(subject.applicable_task_names).to include("alternative_identity_verification") }
+    end
+
+    context "when Y1 claim and failed OL idv" do
+      let(:claim) do
+        create(
+          :claim,
+          :further_education,
+          :with_failed_ol_idv,
+          academic_year: AcademicYear.new("2024/2025")
+        )
+      end
+
+      it "shows alternative_identity_verification task" do
+        expect(subject.applicable_task_names).to include("alternative_identity_verification")
+      end
+    end
+
+    context "when not Y1 claim and failed OL idv" do
+      let(:claim) do
+        create(
+          :claim,
+          :further_education,
+          :with_failed_ol_idv,
+          academic_year: AcademicYear.new("2025/2026")
+        )
+      end
+
+      it "does not show alternative_identity_verification task" do
+        expect(subject.applicable_task_names).not_to include("alternative_identity_verification")
+      end
+
+      it "shows alternative_verification task" do
+        expect(subject.applicable_task_names).to include("fe_alternative_verification")
+      end
     end
   end
 end

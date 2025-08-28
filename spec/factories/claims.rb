@@ -70,6 +70,12 @@ FactoryBot.define do
       onelogin_idv_date_of_birth { date_of_birth }
     end
 
+    trait :with_failed_ol_idv do
+      onelogin_auth_at { rand(14.days.ago..1.day.ago).to_datetime }
+      onelogin_idv_at { (onelogin_auth_at + 1.hour) }
+      identity_confirmed_with_onelogin { false }
+    end
+
     trait :with_details_from_dfe_identity do
       first_name { "Jo" }
       surname { "Bloggs" }

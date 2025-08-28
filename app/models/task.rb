@@ -12,6 +12,8 @@ class Task < ApplicationRecord
     previous_payment
     identity_confirmation
     alternative_identity_verification
+    fe_alternative_verification
+    ey_alternative_verification
     provider_verification
     provider_details
     visa

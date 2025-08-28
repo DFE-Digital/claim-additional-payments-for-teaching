@@ -234,25 +234,163 @@ RSpec.describe Admin::ClaimsHelper do
           ]
         end
 
-        it "is faied in red" do
+        it "is unverified in grey" do
+          expect(subject).to match("Unverified")
+          expect(subject).to match("grey")
+        end
+      end
+
+      context "when fe_alterantive_verfication task passed" do
+        let(:claim_tasks) do
+          [
+            create(
+              :task,
+              name: "one_login_identity",
+              passed: false
+            ),
+            create(
+              :task,
+              name: "fe_alternative_verification",
+              passed: true
+            )
+          ]
+        end
+
+        it "is passed in green" do
+          expect(subject).to match("Passed")
+          expect(subject).to match("green")
+        end
+      end
+
+      context "when fe_alterantive_verfication task also failed" do
+        let(:claim_tasks) do
+          [
+            create(
+              :task,
+              name: "one_login_identity",
+              passed: false
+            ),
+            create(
+              :task,
+              name: "fe_alternative_verification",
+              passed: false
+            )
+          ]
+        end
+
+        it "is failed in red" do
           expect(subject).to match("Failed")
           expect(subject).to match("red")
         end
       end
     end
 
-    context "EY specific and practitioner yet to complete their half" do
+    context "EY claim" do
       let(:claim) do
-        build(
+        create(
           :claim,
-          :awaiting_practitioner,
-          policy: Policies::EarlyYearsPayments
+          :submitted,
+          policy: Policies::EarlyYearsPayments,
+          tasks: claim_tasks
         )
       end
 
-      it "return incomplete grey tag" do
-        expect(subject).to match("Incomplete")
-        expect(subject).to match("grey")
+      let(:claim_tasks) do
+        []
+      end
+
+      context "practitioner yet to complete their half" do
+        let(:claim) do
+          create(
+            :claim,
+            :awaiting_practitioner,
+            policy: Policies::EarlyYearsPayments,
+            tasks: claim_tasks
+          )
+        end
+
+        it "return incomplete grey tag" do
+          expect(subject).to match("Incomplete")
+          expect(subject).to match("grey")
+        end
+      end
+
+      context "OL passed" do
+        let(:claim_tasks) do
+          [
+            create(
+              :task,
+              name: "one_login_identity",
+              passed: true
+            )
+          ]
+        end
+
+        it "return passed green tag" do
+          expect(subject).to match("Passed")
+          expect(subject).to match("green")
+        end
+      end
+
+      context "OL failed" do
+        let(:claim_tasks) do
+          [
+            create(
+              :task,
+              name: "one_login_identity",
+              passed: false
+            )
+          ]
+        end
+
+        it "return unverified grey tag" do
+          expect(subject).to match("Unverified")
+          expect(subject).to match("grey")
+        end
+      end
+
+      context "OL failed + alt idv fail" do
+        let(:claim_tasks) do
+          [
+            create(
+              :task,
+              name: "one_login_identity",
+              passed: false
+            ),
+            create(
+              :task,
+              name: "ey_alternative_verification",
+              passed: false
+            )
+          ]
+        end
+
+        it "return failed red tag" do
+          expect(subject).to match("Failed")
+          expect(subject).to match("red")
+        end
+      end
+
+      context "OL failed + alt idv pass" do
+        let(:claim_tasks) do
+          [
+            create(
+              :task,
+              name: "one_login_identity",
+              passed: false
+            ),
+            create(
+              :task,
+              name: "ey_alternative_verification",
+              passed: true
+            )
+          ]
+        end
+
+        it "return passed green tag" do
+          expect(subject).to match("Passed")
+          expect(subject).to match("green")
+        end
       end
     end
 

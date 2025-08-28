@@ -6,8 +6,10 @@
     show_error: @form.errors.any?)
 ) %>
 
-<% content_for(:back_link) do %>
-  <%= govuk_back_link href: @form.back_link_path %>
+<% if @back_link_path.nil? %>
+  <% content_for(:back_link) do %>
+    <%= govuk_back_link href: @form.back_link_path %>
+  <% end %>
 <% end %>
 
 <div class="govuk-grid-row">
