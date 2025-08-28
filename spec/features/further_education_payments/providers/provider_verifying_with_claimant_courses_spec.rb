@@ -32,10 +32,19 @@ RSpec.feature "Provider verifying claims", feature_flag: :provider_dashboard do
       edit_further_education_payments_providers_claim_verification_path(claim)
     )
 
-    expect(summary_row("Claim reference")).to have_content("AB123456")
-    expect(summary_row("Claimant name")).to have_content("Edna Krabappel")
-    expect(summary_row("TRN")).to have_content("1234567")
-    expect(summary_row("Date submitted")).to have_content("1 October 2025")
+    # Check claim reference appears in the caption
+    expect(page).to have_content("Review claim - AB123456")
+    # Check claimant name appears in the heading
+    expect(page).to have_selector("h1", text: "Edna Krabappel")
+
+    # Open the collapsible details section and check its content
+    find("summary", text: "Claim details").click
+    within("details[open]") do
+      expect(page).to have_content("TRN")
+      expect(page).to have_content("1234567")
+      expect(page).to have_content("Date submitted")
+      expect(page).to have_content("1 October 2025")
+    end
 
     within_fieldset(
       "Is Edna Krabappel a member of staff with teaching responsibilities?"

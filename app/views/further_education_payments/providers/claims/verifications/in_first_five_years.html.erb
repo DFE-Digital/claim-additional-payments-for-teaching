@@ -9,9 +9,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">
-      Review a targeted retention incentive payment claim
-    </h1>
+    <%= render partial: "verification_header", locals: { claim: @form.claim } %>
 
     <%= form_with(
       model: @form,
@@ -24,8 +22,6 @@
       method: :patch,
     ) do |f| %>
       <%= f.govuk_error_summary %>
-
-      <%= render partial: "claim_summary", locals: { claim: f.object.claim } %>
 
       <h2 class="govuk-heading-m">
         Role and experience
