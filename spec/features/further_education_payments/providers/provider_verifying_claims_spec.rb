@@ -137,9 +137,8 @@ RSpec.feature "Provider verifying claims" do
         summary_row("Teaches 16-19-year-olds or those with EHCP")
       ).to have_content("Not answered")
 
-      expect(
-        summary_row("Teaches Level 3 courses")
-      ).to have_content("Not answered")
+      expect(summary_row("Spend at least half timetabled teaching time teaching relevant courses"))
+        .to have_content("Not answered")
 
       # Go back to the claim, it should still be assigned to the previous user and asks again
       visit(
@@ -250,16 +249,22 @@ RSpec.feature "Provider verifying claims" do
         "hours delivering 16 to 19 study programmes, T Levels, or 16 to 19 " \
         "apprenticeships?"
       ) { choose "Yes" }
-      click_on "Continue"
 
-      within_fieldset(
-        "For at least half of their timetabled teaching hours, does " \
-        "Edna Krabappel teach:"
-      ) { choose "Yes" }
       click_on "Continue"
 
       expect(page).to have_text "Does Edna Krabappel spend at least half of " \
         "their timetabled teaching time teaching these courses?"
+
+      # list of courses by the claimaint
+      expect(page).to have_text("Qualifications approved for funding at level 3 " \
+        "and below in the mathematics and statistics (opens in new tab) sector subject area")
+
+      expect(page).to have_text("GCSE in maths, functional skills qualifications " \
+        "and other maths qualifications (opens in new tab) approved for teaching to " \
+        "16 to 19-year-olds who meet the condition of funding")
+
+      expect(page).to have_text("GCSE physics")
+
       choose "Yes"
       click_on "Continue"
 
@@ -298,7 +303,8 @@ RSpec.feature "Provider verifying claims" do
         summary_row("Teaches 16-19-year-olds or those with EHCP")
       ).to have_content("Yes")
 
-      expect(summary_row("Teaches Level 3 courses")).to have_content("Yes")
+      expect(summary_row("Spend at least half timetabled teaching time teaching relevant courses"))
+        .to have_content("Yes")
 
       check(
         "I have read the provider guidance I was sent by email and to the " \
@@ -428,14 +434,13 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Continue"
 
-      within_fieldset(
-        "For at least half of their timetabled teaching hours, does Edna " \
-        "Krabappel teach:"
-      ) { choose "Yes" }
-      click_on "Continue"
-
       expect(page).to have_text "Does Edna Krabappel spend at least half of " \
         "their timetabled teaching time teaching these courses?"
+
+      # list of courses by the claimaint
+      expect(page).to have_text("Qualifications approved for funding at level 3 " \
+        "and below in the building and construction (opens in new tab) sector subject area")
+
       choose "Yes"
       click_on "Continue"
 
@@ -478,7 +483,8 @@ RSpec.feature "Provider verifying claims" do
         summary_row("Teaches 16-19-year-olds or those with EHCP")
       ).to have_content("Yes")
 
-      expect(summary_row("Teaches Level 3 courses")).to have_content("Yes")
+      expect(summary_row("Spend at least half timetabled teaching time teaching relevant courses"))
+        .to have_content("Yes")
 
       check(
         "I have read the provider guidance I was sent by email and to the " \
@@ -609,14 +615,15 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Continue"
 
-      within_fieldset(
-        "For at least half of their timetabled teaching hours, does Edna " \
-        "Krabappel teach:"
-      ) { choose "Yes" }
-      click_on "Continue"
-
       expect(page).to have_text "Does Edna Krabappel spend at least half of " \
         "their timetabled teaching time teaching these courses?"
+
+      # list of courses by the claimaint
+      expect(page).to have_text("Level 2 or level 3 apprenticeships in the " \
+        "digital occupational route (opens in new tab)")
+
+      expect(page).to have_text("A or AS level chemistry")
+
       choose "Yes"
       click_on "Continue"
 
@@ -655,7 +662,8 @@ RSpec.feature "Provider verifying claims" do
         summary_row("Subject to disciplinary action")
       ).to have_content("No")
 
-      expect(summary_row("Teaches Level 3 courses")).to have_content("Yes")
+      expect(summary_row("Spend at least half timetabled teaching time teaching relevant courses"))
+        .to have_content("Yes")
 
       check(
         "I have read the provider guidance I was sent by email and to the " \
@@ -767,14 +775,19 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Continue"
 
-      within_fieldset(
-        "For at least half of their timetabled teaching hours, does Edna " \
-        "Krabappel teach:"
-      ) { choose "Yes" }
-      click_on "Continue"
-
       expect(page).to have_text "Does Edna Krabappel spend at least half of " \
         "their timetabled teaching time teaching these courses?"
+
+      # list of courses by the claimaint
+      expect(page).to have_text("Qualifications approved for funding at level 3 " \
+        "and below in the mathematics and statistics (opens in new tab) sector subject area")
+
+      expect(page).to have_text("GCSE in maths, functional skills qualifications " \
+        "and other maths qualifications (opens in new tab) approved for teaching to " \
+        "16 to 19-year-olds who meet the condition of funding")
+
+      expect(page).to have_text("GCSE physics")
+
       choose "Yes"
       click_on "Continue"
 
