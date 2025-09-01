@@ -1,3 +1,4 @@
+# THINK WE CAN LOSE THIS
 module AutomatedChecks
   module ClaimVerifiers
     class EyAlternativeVerification

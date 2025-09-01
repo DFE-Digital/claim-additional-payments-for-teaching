@@ -1583,4 +1583,75 @@ RSpec.describe Claim, type: :model do
       end
     end
   end
+
+  describe "hmrc_name_match" do
+    it "returns the name match from the latest response" do
+      claim = build(
+        :claim,
+        hmrc_bank_validation_responses: [
+          {
+            "body" => {
+              "iban" => "TEST BANK 123",
+              "nameMatches" => "partial",
+              "accountExists" => "yes",
+              "sortCodeBankName" => "TEST BANK",
+              "sortCodeIsPresentOnEISCD" => "yes",
+              "sortCodeSupportsDirectDebit" => "yes",
+              "accountNumberIsWellFormatted" => "yes",
+              "sortCodeSupportsDirectCredit" => "yes",
+              "nonStandardAccountDetailsRequiredForBacs" => "no"
+            },
+            "code" => 200
+          },
+          {
+            "body" => {
+              "iban" => "TEST BANK 123",
+              "nameMatches" => "yes",
+              "accountExists" => "yes",
+              "sortCodeBankName" => "TEST BANK",
+              "sortCodeIsPresentOnEISCD" => "yes",
+              "sortCodeSupportsDirectDebit" => "yes",
+              "accountNumberIsWellFormatted" => "yes",
+              "sortCodeSupportsDirectCredit" => "yes",
+              "nonStandardAccountDetailsRequiredForBacs" => "no"
+            },
+            "code" => 200
+          }
+        ]
+      )
+
+      expect(claim.hmrc_name_match).to eq "yes"
+    end
+
+    it "returns nil if the body is missing" do
+      claim = build(
+        :claim,
+        hmrc_bank_validation_responses: [
+          {}
+        ]
+      )
+
+      expect(claim.hmrc_name_match).to be_nil
+    end
+
+    it "returns nil if the doesn't contain nameMatches" do
+      claim = build(
+        :claim,
+        hmrc_bank_validation_responses: [
+          {
+            "body" => '{"error":"invalid_request","error_description":"client_id is required"}',
+            "code" => 400
+          }
+        ]
+      )
+
+      expect(claim.hmrc_name_match).to be_nil
+    end
+
+    it "returns nil if there are no hmrc responses" do
+      claim = build(:claim)
+
+      expect(claim.hmrc_name_match).to be_nil
+    end
+  end
 end
