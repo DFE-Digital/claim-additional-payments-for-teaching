@@ -18,7 +18,7 @@ module Policies
     SEARCHABLE_ELIGIBILITY_ATTRIBUTES = %w[teacher_reference_number].freeze
 
     POLICY_START_YEAR = AcademicYear.new(2022).freeze
-    POLICY_END_YEAR = AcademicYear.new(2025).freeze
+    POLICY_END_YEAR = AcademicYear.new(2026).freeze
     POLICY_RANGE = POLICY_START_YEAR..POLICY_END_YEAR
 
     # Percentage of approved claims to QA
