@@ -41,7 +41,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::AnswersPresenter, t
             ["Are you subject to any formal performance measures as a result of continuous poor teaching standards?", "No", "poor-performance"],
             ["Are you currently subject to disciplinary action?", "No", "poor-performance"],
             ["Which route into teaching did you take?", "Postgraduate initial teacher training (ITT)", "qualification"],
-            ["In which academic year did you start your postgraduate initial teacher training (ITT)?", "2024 to 2025", "itt-year"],
+            ["In which academic year did you start your postgraduate initial teacher training (ITT)?", Journeys::TargetedRetentionIncentivePayments.configuration.current_academic_year.to_s(:long), "itt-year"],
             ["Which subject did you do your postgraduate initial teacher training (ITT) in?", "Physics", "eligible-itt-subject"],
             ["Do you spend at least half of your contracted hours teaching eligible subjects?", "Yes", "teaching-subject-now"]
           ]
@@ -59,7 +59,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::AnswersPresenter, t
             ["Are you subject to any formal performance measures as a result of continuous poor teaching standards?", "No", "poor-performance"],
             ["Are you currently subject to disciplinary action?", "No", "poor-performance"],
             ["Which route into teaching did you take?", "Postgraduate initial teacher training (ITT)", "qualification"],
-            ["In which academic year did you start your postgraduate initial teacher training (ITT)?", "2024 to 2025", "itt-year"],
+            ["In which academic year did you start your postgraduate initial teacher training (ITT)?", Journeys::TargetedRetentionIncentivePayments.configuration.current_academic_year.to_s(:long), "itt-year"],
             ["Which subject did you do your postgraduate initial teacher training (ITT) in?", "None of the above", "eligible-itt-subject"],
             ["Do you have a degree in an eligible subject?", "No", "eligible-degree-subject"],
             ["Do you spend at least half of your contracted hours teaching eligible subjects?", "Yes", "teaching-subject-now"]
@@ -98,7 +98,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::AnswersPresenter, t
           ["Are you subject to any formal performance measures as a result of continuous poor teaching standards?", "No", "poor-performance"],
           ["Are you currently subject to disciplinary action?", "No", "poor-performance"],
           ["Which route into teaching did you take?", "Postgraduate initial teacher training (ITT)", "qualification"],
-          ["In which academic year did you start your postgraduate initial teacher training (ITT)?", "2024 to 2025", "itt-year"],
+          ["In which academic year did you start your postgraduate initial teacher training (ITT)?", Journeys::TargetedRetentionIncentivePayments.configuration.current_academic_year.to_s(:long), "itt-year"],
           ["Which subject did you do your postgraduate initial teacher training (ITT) in?", "Physics", "eligible-itt-subject"],
           ["Do you spend at least half of your contracted hours teaching eligible subjects?", "Yes", "teaching-subject-now"]
         ]

@@ -67,7 +67,7 @@ RSpec.feature "Admin claim further education payments" do
 
             expect(page).to have_content(
               "The verification request was sent to the provider by " \
-              "Aaron Admin on 9 September 2024 11:00am"
+              "Aaron Admin on 9 September 2025 11:00am"
             )
 
             provider_email_address = claim.school.eligible_fe_provider.primary_key_contact_email_address
@@ -145,7 +145,7 @@ RSpec.feature "Admin claim further education payments" do
 
               expect(page).to have_content(
                 "The verification request was sent to the provider by " \
-                "Some Admin on 9 September 2024 11:00am"
+                "Some Admin on 9 September 2025 11:00am"
               )
 
               perform_enqueued_jobs do
@@ -224,7 +224,7 @@ RSpec.feature "Admin claim further education payments" do
               # This is the user we're logged in as
               expect(page).to have_content(
                 "The verification request was sent to the provider by " \
-                "Aaron Admin on 9 September 2024 11:00am"
+                "Aaron Admin on 9 September 2025 11:00am"
               )
 
               provider_email_address = claim.school.eligible_fe_provider.primary_key_contact_email_address
@@ -289,7 +289,7 @@ RSpec.feature "Admin claim further education payments" do
 
               expect(page).to have_content(
                 "The verification request was sent to the provider by " \
-                "an automated process on 9 September 2024 11:00am"
+                "an automated process on 9 September 2025 11:00am"
               )
             end
           end
@@ -640,7 +640,7 @@ RSpec.feature "Admin claim further education payments" do
 
               expect(page).to have_content(
                 "This task was performed by an automated check on 9 " \
-                "September 2024 11:00am"
+                "September 2025 11:00am"
               )
             end
           end
@@ -750,7 +750,7 @@ RSpec.feature "Admin claim further education payments" do
               expect(find(".govuk-tag")).to have_text("Failed")
               expect(page).to have_content(
                 "This task was performed by an automated check on 9 " \
-                "September 2024 11:00am"
+                "September 2025 11:00am"
               )
             end
           end

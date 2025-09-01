@@ -729,7 +729,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         let(:data) do
           {
             qts_award_date: Date.new( # 1st September is start of academic year
-              policy.first_eligible_qts_award_year(claim.academic_year).start_year,
+              2014,
               9,
               1
             ),
