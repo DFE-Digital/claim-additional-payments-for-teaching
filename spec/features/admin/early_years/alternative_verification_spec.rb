@@ -50,48 +50,6 @@ RSpec.describe "EY claim and alternative verification task" do
       expect(page).to have_text "Do the personal details provided by the claimant match the details from the provider?"
     end
 
-    xcontext "when claimant does not work at provider" do
-      let(:claim) do
-        create(
-          :claim,
-          :submitted,
-          :with_failed_ol_idv,
-          policy: Policies::EarlyYearsPayments,
-          eligibility:
-        )
-      end
-
-      let(:eligibility) do
-        create(
-          :early_years_payments_eligibility,
-          :with_eligible_ey_provider,
-          :provider_claim_submitted,
-          alternative_idv_claimant_employed_by_nursery: false
-        )
-      end
-
-      before do
-        perform_enqueued_jobs do
-          Policies::EarlyYearsPayments.alternative_idv_completed!(claim)
-        end
-      end
-
-      scenario "task is auto failed" do
-        visit admin_claim_path(claim)
-        click_on "View tasks"
-
-        expect(task_status("One Login identity check")).to eql "No data"
-        expect(task_status("Alternative verification")).to eql "Failed"
-        click_link "Confirm the provider has verified the claimant’s identity"
-
-        expect(page).to have_text(
-          "The provider told us that they do not employ Edna Krabapple"
-        )
-
-        expect(page).to have_text "This task was performed by an automated check on"
-      end
-    end
-
     context "provider agrees with claimant personal and bank details answers" do
       let(:claim) do
         create(
