@@ -154,6 +154,28 @@ module FurtherEducationPayments
           ]
         end
 
+        def claimant_not_employed_by_college?
+          @claim.eligibility.claimant_not_employed_by_college?
+        end
+
+        def provider_name
+          @claim.eligibility.school.name
+        end
+
+        def claimant_name
+          @claim.full_name
+        end
+
+        def provider_verification_completed_at
+          @claim.eligibility.provider_verification_completed_at
+        end
+
+        def teacher_reference_number
+          @claim.eligibility.teacher_reference_number.presence || "Not provided"
+        end
+
+        delegate :reference, :submitted_at, to: :claim
+
         private
 
         def subject_names_sentence
