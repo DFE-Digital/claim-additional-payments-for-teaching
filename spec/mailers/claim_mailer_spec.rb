@@ -390,7 +390,7 @@ RSpec.describe ClaimMailer, type: :mailer do
         full_name: "Test Practitioner",
         setting_name: "Test Nursery",
         ref_number: "TEST123",
-        complete_claim_url: "https://www.example.com/early-years-payment-practitioner/find-reference?skip_landing_page=true"
+        complete_claim_url: "https://www.example.com/early-years-payment-practitioner/landing-page"
       }
 
       expect(mail.personalisation).to eql(expected_personalisation)

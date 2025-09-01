@@ -1,1 +1,70 @@
-landing pages goes here
+<% content_for(:page_title, page_title(t("early_years_payment_practitioner.forms.landing_page.title"), journey: current_journey_routing_name)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl"><%= t("early_years_payment_practitioner.forms.landing_page.title") %></h1>
+
+    <div class="govuk-body-l">
+      Use this service to complete a claim for a £1,000 recruitment bonus.
+    </div>
+
+    <h2 class="govuk-heading-l">What you’ll need to complete a claim</h2>
+
+    <div class="govuk-body">
+      Once your employer has started a claim on your behalf, you’ll receive an email inviting you to complete it. The email will contain a claim reference number, which you’ll be asked to enter in the next step.
+    </div>
+
+    <div class="govuk-body">
+      You’ll also need:
+    </div>
+
+    <%= govuk_list [
+      "a form of photo ID, such as a passport or driving licence - this is so that we can #{govuk_link_to "verify your identity", "https://www.gov.uk/using-your-gov-uk-one-login/proving-your-identity" } via GOV.UK One Login".html_safe,
+      "your address, email address and National Insurance number",
+      "your bank details – this is so that we can pay your recruitment bonus to you directly",
+    ], type: :bullet %>
+
+    <div class="govuk-body">
+      The online application should take no longer than 15 minutes to complete. To protect your information, each page will time out after 30 minutes.
+    </div>
+
+    <%= govuk_inset_text(text: "If you cannot prove your identity online using GOV.UK One Login, you’ll need to visit a Post Office that offers #{govuk_link_to "‛in branch verification’", "https://www.postoffice.co.uk/identity/in-branch-verification-service" }. It could take up to 10 working days to complete a claim application using this route.".html_safe) %>
+
+    <h2 class="govuk-heading-l">What happens after you complete your claim</h2>
+
+    <div class="govuk-body">
+      Your claim will be approved once we confirm with your employer that you’ve:
+    </div>
+
+    <%= govuk_list [
+      "been in your role for 6 months",
+      "met all the eligibility criteria",
+    ], type: :bullet %>
+
+    <div class="govuk-body">
+      The recruitment bonus will be paid up to 6 weeks after your claim is approved.
+    </div>
+
+    <div class="govuk-body">
+      We’ll email you and your employer:
+    </div>
+
+    <%= govuk_list [
+      "to let you know we're still processing your claim",
+      "when we approve or reject your claim",
+      "once your recruitment bonus has been paid, if your claim is approved"
+    ], type: :bullet %>
+
+    <h2 class="govuk-heading-l">Get help with your claim</h2>
+
+    <div class="govuk-body">
+      You can get help with your claim by contacting <%= govuk_mail_to t("early_years_payment_practitioner.support_email"), t("early_years_payment_practitioner.support_email") %>.
+    </div>
+
+    <div class="govuk-body">
+      Read more about the <%= govuk_link_to "early years incentive payment for new and returning practitioners guidance", "https://www.claim-additional-teaching-payment.service.gov.uk/early-years-payment/guidance" %>.
+    </div>
+
+    <%= govuk_start_button(text: "Start now", href: claim_path(current_journey_routing_name, "claim")) %>
+  </div>
+</div>

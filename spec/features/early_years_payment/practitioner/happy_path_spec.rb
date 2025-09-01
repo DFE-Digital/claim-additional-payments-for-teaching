@@ -11,9 +11,16 @@ RSpec.feature "Early years payment practitioner" do
   scenario "Happy path" do
     when_student_loan_data_exists
     when_early_years_payment_provider_authenticated_journey_submitted
+
+    # ensure provider journey does not leak into practitioner journey
+    page.reset!
+
     when_early_years_payment_practitioner_journey_configuration_exists
 
-    visit "/early-years-payment-practitioner/find-reference?skip_landing_page=true&email=practitioner@example.com"
+    visit "/early-years-payment-practitioner/landing-page"
+    expect(page).to have_text "Complete a claim for an early years"
+    click_link "Start now"
+
     expect(page).to have_content "Enter your claim reference"
     fill_in "Enter your claim reference", with: claim.reference
     click_button "Submit"
