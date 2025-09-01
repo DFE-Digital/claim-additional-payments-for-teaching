@@ -1,3 +1,4 @@
+# THINK WE CAN LOSE THIS
 module Tasks
   class EyAlternativeVerificationJob < ApplicationJob
     def perform(claim)
