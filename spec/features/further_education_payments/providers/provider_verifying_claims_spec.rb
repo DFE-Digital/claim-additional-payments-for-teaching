@@ -1298,7 +1298,7 @@ RSpec.feature "Provider verifying claims" do
 
           # Expect to be on the first page of the verification journey
           expect(page).to have_content(
-            "Review a targeted retention incentive payment claim"
+            "Review claim - #{claim.reference}"
           )
 
           expect(page).to have_content(
