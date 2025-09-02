@@ -1,7 +1,7 @@
 module Policies
   module InternationalRelocationPayments
     class PolicyEligibilityChecker
-      PRE_ACADEMIC_YEAR_WINDOW_LIMIT = 6.months
+      PRE_ACADEMIC_YEAR_WINDOW_LIMIT = 18.months
 
       def self.earliest_eligible_contract_start_date
         Journeys::GetATeacherRelocationPayment

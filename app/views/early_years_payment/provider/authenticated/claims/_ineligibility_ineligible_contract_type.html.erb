@@ -1,0 +1,45 @@
+<% title = "#{answers.practitioner_first_name} is not eligible for this payment" %>
+<% content_for(:page_title, page_title(title, journey: current_journey_routing_name)) %>
+<% @backlink_path = claim_path(current_journey_routing_name, "contract-type") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= title %></h1>
+    <p class="govuk-body">
+      Based on the information you have provided,
+      <%= answers.practitioner_first_name %> is not eligible to claim an early
+      years incentive payment.
+    </p>
+
+    <p class="govuk-body">
+      For further guidance, you should refer to the
+      <%= govuk_link_to(
+        "full eligibility criteria",
+        claim_path(
+          Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME,
+          "landing-page"
+        )
+      ) %>
+      at the start of this service.
+    </p>
+
+    <h2 class="govuk-heading-m">Get help with your claim</h2>
+
+    <p class="govuk-body">
+      If you have any questions, contact us for help at
+      <%= mail_to(
+        support_email_address(current_journey_routing_name),
+        support_email_address(current_journey_routing_name),
+        class: "govuk-link"
+      ) %>
+    </p>
+
+    <%= govuk_button_link_to(
+      "Start a new claim",
+      claim_path(
+        Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME,
+        "landing-page"
+      )
+    ) %>
+  </div>
+</div>

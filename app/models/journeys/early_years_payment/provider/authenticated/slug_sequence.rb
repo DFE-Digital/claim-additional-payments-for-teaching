@@ -10,6 +10,7 @@ module Journeys
             paye-reference
             claimant-name
             start-date
+            contract-type
             child-facing
             returner
             returner-worked-with-children

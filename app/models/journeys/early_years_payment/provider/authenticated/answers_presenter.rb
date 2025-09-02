@@ -11,6 +11,7 @@ module Journeys
               a << paye_reference
               a << employee_name
               a << start_date
+              a << provider_entered_contract_type
               a << child_facing_confirmation_given
               a << returner
               a << returner_worked_with_children if journey_session.answers.returning_within_6_months
@@ -50,6 +51,22 @@ module Journeys
               "Employee’s start date",
               answers.start_date.to_fs(:long_date),
               "start-date"
+            ]
+          end
+
+          def provider_entered_contract_type
+            [
+              "Employee’s contract type",
+              I18n.t(
+                answers.provider_entered_contract_type,
+                scope: %w[
+                  early_years_payment_provider_authenticated
+                  forms
+                  provider_entered_contract_type
+                  options
+                ].join(".")
+              ),
+              "contract-type"
             ]
           end
 

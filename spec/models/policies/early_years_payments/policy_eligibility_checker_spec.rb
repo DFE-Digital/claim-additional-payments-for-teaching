@@ -18,6 +18,20 @@ RSpec.describe Policies::EarlyYearsPayments::PolicyEligibilityChecker do
       end
     end
 
+    context "provider_entered_contract_type is not permanent" do
+      let(:answers) do
+        build(
+          :early_years_payment_answers,
+          provider_entered_contract_type: "casual_or_temporary"
+        )
+      end
+
+      it "is not eligible" do
+        expect(subject).to be_ineligible
+        expect(subject.ineligibility_reason).to eql(:ineligible_contract_type)
+      end
+    end
+
     context "not a returner" do
       let(:answers) do
         build(
