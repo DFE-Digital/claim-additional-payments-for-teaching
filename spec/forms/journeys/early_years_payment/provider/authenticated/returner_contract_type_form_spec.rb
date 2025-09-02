@@ -2,7 +2,15 @@ require "rails_helper"
 
 RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::ReturnerContractTypeForm, type: :model do
   let(:journey) { Journeys::EarlyYearsPayment::Provider::Authenticated }
-  let(:journey_session) { create(:early_years_payment_provider_authenticated_session) }
+  let(:journey_session) do
+    create(
+      :early_years_payment_provider_authenticated_session,
+      answers: {
+        first_name: "John",
+        surname: "Doe"
+      }
+    )
+  end
   let(:returner_contract_type) { nil }
 
   let(:params) do
@@ -23,7 +31,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::ReturnerCon
         is_expected.not_to(
           allow_value(nil)
           .for(:returner_contract_type)
-          .with_message("You must select an option below to continue")
+          .with_message("Select the type of contract John Doe had in their previous role")
         )
       end
     end

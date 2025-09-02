@@ -1476,17 +1476,17 @@ en:
           "%{first_name}’s job must involve spending most of their contracted hours (approximately 70% or more) directly working
           with children."
         errors:
-          inclusion: You must select an option below to continue
+          inclusion: Select yes if %{claimant_full_name} spends most of their time in their job working directly with children
       returner:
         question:
           Did %{first_name} work in early years between %{six_months_before_start_date} and %{start_date}?
         errors:
-          inclusion: You must select an option below to continue
+          inclusion: Select yes if %{claimant_full_name} worked in early years between %{six_months_before_start_date} and %{start_date}
       returner_worked_with_children:
         question:
           Did %{first_name}’s previous role in an early years setting involve mostly working directly with children?
         errors:
-          inclusion: You must select an option below to continue
+          inclusion: Select yes if %{claimant_full_name}’s previous role in an early years setting involved mostly working directly with children
       returner_contract_type:
         question: Select the contract type for %{first_name}’s previous role in an early years setting
         options:
@@ -1495,7 +1495,7 @@ en:
           voluntary_or_unpaid: Voluntary or unpaid
           agency_work_and_apprenticeships: Agency work and apprenticeship roles
         errors:
-          inclusion: You must select an option below to continue
+          inclusion: Select the type of contract %{claimant_full_name} had in their previous role
       employee_email:
         question: What is %{first_name}’s email address?
         hint: We’ll use this to ask your employee to provide their payment details.

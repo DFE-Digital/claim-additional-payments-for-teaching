@@ -6,7 +6,15 @@ module Journeys
           attribute :returner_worked_with_children, :boolean
 
           validates :returner_worked_with_children,
-            inclusion: {in: [true, false], message: i18n_error_message(:inclusion)}
+            inclusion: {
+              in: [true, false],
+              message: ->(form, data) {
+                i18n_error_message(
+                  :inclusion,
+                  claimant_full_name: form.claimant_full_name
+                ).call(form, data)
+              }
+            }
 
           def save
             return false if invalid?
@@ -16,6 +24,10 @@ module Journeys
             reset_dependent_answers
 
             journey_session.save!
+          end
+
+          def claimant_full_name
+            journey_session.answers.full_name
           end
 
           private

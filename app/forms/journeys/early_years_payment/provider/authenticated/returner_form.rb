@@ -6,7 +6,17 @@ module Journeys
           attribute :returning_within_6_months, :boolean
 
           validates :returning_within_6_months,
-            inclusion: {in: [true, false], message: i18n_error_message(:inclusion)}
+            inclusion: {
+              in: [true, false],
+              message: ->(form, data) {
+                i18n_error_message(
+                  :inclusion,
+                  claimant_full_name: form.claimant_full_name,
+                  start_date: I18n.l(form.start_date),
+                  six_months_before_start_date: I18n.l(form.six_months_before_start_date)
+                ).call(form, data)
+              }
+            }
 
           def save
             return false if invalid?
@@ -24,6 +34,10 @@ module Journeys
 
           def six_months_before_start_date
             start_date - 6.months
+          end
+
+          def claimant_full_name
+            journey_session.answers.full_name
           end
 
           private
