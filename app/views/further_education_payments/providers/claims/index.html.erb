@@ -4,11 +4,17 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-third-from-desktop govuk-!-margin-bottom-5">
-    <%= render "components/card", value: @not_started_count, label: "Not started", status: "not-started" %>
+    <% label = ["Not started"] %>
+    <% label << "(#{@not_started_overdue_count} Overdue)" if @not_started_overdue_count > 0 %>
+
+    <%= render "components/card", value: @not_started_count, label: label.join(" "), status: "not-started" %>
   </div>
 
   <div class="govuk-grid-column-one-third-from-desktop govuk-!-margin-bottom-5">
-    <%= render "components/card", value: @in_progress_count, label: "In progress", status: "in-progress" %>
+    <% label = ["In progress"] %>
+    <% label << "(#{@in_progress_overdue_count} Overdue)" if @in_progress_overdue_count > 0 %>
+
+    <%= render "components/card", value: @in_progress_count, label: label.join(" "), status: "in-progress" %>
   </div>
 </div>
 
