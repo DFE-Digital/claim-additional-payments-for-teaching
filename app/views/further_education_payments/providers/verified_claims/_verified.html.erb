@@ -1,0 +1,53 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <span class="govuk-caption-xl">
+      <%= @claim.full_name %>
+    </span>
+
+    <h1 class="govuk-heading-l">
+      Claim reference: <%= @claim.reference %>
+    </h1>
+
+    <div class="govuk-!-margin-bottom-6">
+      <%= govuk_tag(text: "Pending", colour: "yellow") %>
+    </div>
+
+    <h2 class="govuk-heading-m">
+      Claim details
+    </h2>
+
+    <%= govuk_summary_list do |summary_list| %>
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "TRN" } %>
+        <% row.with_value { @claim.eligibility.teacher_reference_number } %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Date submitted" } %>
+        <% row.with_value { l(@claim.submitted_at.to_date) } %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Verified by provider" } %>
+        <% row.with_value { l(@claim.eligibility.provider_verification_completed_at.to_date) } %>
+      <% end %>
+    <% end %>
+
+    <%= govuk_summary_card(title: "Role and experience") do |card| %>
+      <% card.with_summary_list(rows: @answers_presenter.role_and_experience) %>
+    <% end %>
+
+    <%= govuk_summary_card(title: "Performance and discipline") do |card| %>
+      <% card.with_summary_list(rows: @answers_presenter.performance_and_discipline) %>
+    <% end %>
+
+    <%= govuk_summary_card(title: "Contracted hours") do |card| %>
+      <% card.with_summary_list(rows: @answers_presenter.contracted_hours) %>
+    <% end %>
+
+    <%= govuk_button_link_to(
+      "Close claim",
+      further_education_payments_providers_verified_claims_path,
+    ) %>
+  </div>
+</div>

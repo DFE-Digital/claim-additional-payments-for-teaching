@@ -31,11 +31,18 @@ module Journeys
         ]
 
         def self.start_page_url
-          Rails.application.routes.url_helpers.claim_path("early-years-payment-practitioner", "find-reference", skip_landing_page: true)
+          Rails
+            .application.routes
+            .url_helpers
+            .landing_page_path("early-years-payment-practitioner")
         end
 
         def self.signed_out_path
-          Rails.application.routes.url_helpers.claim_path("early-years-payment-practitioner", "signed-out")
+          Rails
+            .application
+            .routes
+            .url_helpers
+            .claim_path("early-years-payment-practitioner", "signed-out")
         end
 
         attr_reader :journey_session

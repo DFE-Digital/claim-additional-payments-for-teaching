@@ -24,7 +24,7 @@ module FurtherEducationPayments
               *self.class.attribute_names
             )
 
-            super(params.reverse_merge(exisiting_attributes))
+            super(params.reverse_merge(exisiting_attributes).with_indifferent_access)
           end
 
           def template
@@ -63,7 +63,7 @@ module FurtherEducationPayments
           end
 
           def clear_answers!
-            attributes_to_save.each do |attribute|
+            attributes_to_clear.each do |attribute|
               case @attributes[attribute].value_before_type_cast
               when Array
                 claim.eligibility.public_send("#{attribute}=", [])
@@ -96,6 +96,10 @@ module FurtherEducationPayments
           end
 
           private
+
+          def attributes_to_clear
+            attributes_to_save
+          end
 
           def attributes_to_save
             attribute_names.select do |name|

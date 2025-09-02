@@ -1410,7 +1410,7 @@ en:
     claim_description: for an early years financial incentive payment
     journey_name: Early years financial incentive payment service
     landing_page:
-      title: Claim an early years financial incentive payment
+      title: Claim an early years financial incentive payment on behalf of your employee
     feedback_email: "EY.Financial-Incentives@education.gov.uk"
     check_your_email_page:
       title: Check your email
@@ -1616,6 +1616,8 @@ en:
     support_email_address: "EY.Financial-Incentives@education.gov.uk"
     claim_description: for early years financial incentive payment
     forms:
+      landing_page:
+        title: Complete a claim for an early years financial incentive payment
       find_reference:
         question: Enter your claim reference
         hint: Your claim reference is in the claim invite email from your employer. It’s a series of letters and numbers, like ABC1234E.

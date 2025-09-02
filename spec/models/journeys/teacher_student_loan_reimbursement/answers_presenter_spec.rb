@@ -31,7 +31,7 @@ RSpec.describe Journeys::TeacherStudentLoanReimbursement::AnswersPresenter, type
 
     it "returns an array of questions, answers, and slugs for displaying to the user for review" do
       expected_answers = [
-        [I18n.t("student_loans.forms.qts_year.questions.qts_award_year"), "Between the start of the 2013 to 2014 academic year and the end of the 2020 to 2021 academic year", "qts-year"],
+        [I18n.t("student_loans.forms.qts_year.questions.qts_award_year"), "Between the start of the #{(journey_configuration.current_academic_year - 11).to_s(:long)} academic year and the end of the 2020 to 2021 academic year", "qts-year"],
         [claim_school_question, journey_session.answers.claim_school.name, "claim-school"],
         [I18n.t("student_loans.forms.current_school.questions.current_school_search"), journey_session.answers.current_school.name, "still-teaching"],
         [subjects_taught_question(school_name: journey_session.answers.claim_school.name), "Chemistry and Physics", "subjects-taught"],

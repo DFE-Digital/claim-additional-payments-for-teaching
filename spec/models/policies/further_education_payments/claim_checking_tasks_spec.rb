@@ -121,7 +121,7 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks, feature_f
 
     context "when the claimant fails IDV" do
       let(:identity_confirmed_with_onelogin) { false }
-      it { expect(subject.applicable_task_names).to include("alternative_identity_verification") }
+      it { expect(subject.applicable_task_names).to include("fe_alternative_verification") }
     end
 
     context "when Y1 claim and failed OL idv" do

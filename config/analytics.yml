@@ -394,6 +394,7 @@ shared:
     - alternative_idv_claimant_employment_check_declaration
     - alternative_idv_completed_at
     - alternative_idv_reference
+    - provider_six_month_employment_reminder_sent_at
   :school_workforce_censuses:
     - id
     - teacher_reference_number

@@ -5,7 +5,7 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
     create(:journey_configuration, :further_education_payments, current_academic_year:)
   end
 
-  let(:current_academic_year) { AcademicYear.new(2024) }
+  let(:current_academic_year) { AcademicYear.new(2025) }
   let(:journey) { Journeys::FurtherEducationPayments }
   let(:school) { create(:school, :further_education, :fe_eligible) }
 
@@ -90,7 +90,7 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
     it "emails the claim provider" do
       allow(ClaimVerifierJob).to receive(:perform_later)
 
-      travel_to DateTime.new(2024, 10, 1, 0, 0, 0) do
+      travel_to DateTime.new(2025, 10, 1, 0, 0, 0) do
         perform_enqueued_jobs { subject }
       end
 
@@ -102,13 +102,13 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
           recipient_name: claim.school.name,
           claimant_name: [answers.first_name, answers.surname].join(" "),
           claim_reference: claim.reference,
-          claim_submission_date: "1 October 2024",
-          verification_due_date: "15 October 2024",
+          claim_submission_date: "1 October 2025",
+          verification_due_date: "15 October 2025",
           verification_url: Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
         )
       )
 
-      expect(claim.eligibility.reload.provider_verification_email_last_sent_at).to eq DateTime.new(2024, 10, 1, 0, 0, 0)
+      expect(claim.eligibility.reload.provider_verification_email_last_sent_at).to eq DateTime.new(2025, 10, 1, 0, 0, 0)
     end
 
     it "doesn't email the provider if the claim is a duplicate" do

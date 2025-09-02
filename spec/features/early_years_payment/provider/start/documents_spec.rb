@@ -8,7 +8,7 @@ RSpec.feature "Early years payment provider" do
     click_link "Start now"
 
     # landing page
-    expect(page).to have_text("Employee eligibility")
+    expect(page).to have_text("Claim an early years financial incentive payment on behalf of your employee")
     all("a", text: "consent form").sample.click
 
     expect(page).to have_text("We need your consent to share your personal details")

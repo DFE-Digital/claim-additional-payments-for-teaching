@@ -1,0 +1,39 @@
+<%= content_for(
+  :page_title,
+  "Does #{@form.provider_name} employ #{@form.claimant_name}?"
+) %>
+
+<% content_for :back_link do %>
+  <%= govuk_back_link href: backlink_path %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @form,
+      url: further_education_payments_providers_claim_verification_path(
+        @form.claim,
+        @form.provider,
+        slug: @form.slug
+      ),
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+      method: :patch,
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_collection_radio_buttons(
+        :provider_verification_claimant_employed_by_college,
+        f.object.claimant_employed_by_college,
+        :id,
+        :name,
+        legend: {
+          text: "Does #{@form.provider_name} employ #{@form.claimant_name}?",
+          tag: "h1",
+          size: "l"
+        }
+      ) %>
+
+      <%= f.govuk_submit("Continue") %>
+    <% end %>
+  </div>
+</div>
