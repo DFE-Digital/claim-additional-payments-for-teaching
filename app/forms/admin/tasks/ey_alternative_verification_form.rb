@@ -134,14 +134,16 @@ class Admin::Tasks::EyAlternativeVerificationForm
   def save
     return false if invalid?
 
+    task_data = task.data || {}
+
+    task_data["personal_details_match"] = personal_details_match
+    task_data["bank_details_match"] = bank_details_match
+
     task.update(
       passed: personal_details_match && bank_details_match,
       created_by: admin_user,
       manual: true,
-      data: {
-        personal_details_match: personal_details_match,
-        bank_details_match: bank_details_match
-      }
+      data: task_data
     )
   end
 
@@ -155,6 +157,14 @@ class Admin::Tasks::EyAlternativeVerificationForm
 
   def claimant_name
     claim.full_name
+  end
+
+  def personal_details_were_passed_automatically?
+    task.persisted? && task.data["personal_details_were_passed_automatically"] == true
+  end
+
+  def task_completed?
+    task.persisted? && !task.passed.nil?
   end
 
   private

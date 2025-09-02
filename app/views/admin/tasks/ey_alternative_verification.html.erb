@@ -41,7 +41,7 @@
         ) %>
 
         <div class="govuk-!-width-one-half">
-          <% if f.object.task.completed? %>
+          <% if f.object.task_completed? || f.object.personal_details_were_passed_automatically? %>
             <p class="govuk-body">
               <span class="govuk-fieldset__legend govuk-fieldset__legend--s">
                 Do the personal details provided by the claimant match the 
@@ -80,7 +80,7 @@
         ) %>
 
         <div class="govuk-!-width-one-half">
-          <% if f.object.task.completed? %>
+          <% if f.object.task_completed? %>
             <p class="govuk-body">
               <span class="govuk-fieldset__legend govuk-fieldset__legend--s">
                 Has <%= f.object.claimant_name %> provided their own bank
@@ -106,27 +106,10 @@
       </section>
 
       <section id="task-outcome">
-        <% if @form.task.completed? %>
-          <div class="govuk-inset-text task-outcome">
-            <p class="govuk-body">
-              <%= task_status_tag(@form.task.claim, @form.task.name) %>
-            </p>
-            <p class="govuk-body">
-              This task was performed by
-              <%= user_details(@form.task.created_by, include_line_break: false) %>
-              on <%= l(@form.task.updated_at) %>
-            </p>
-          </div>
+        <% if @form.task_completed? %>
+          <%= render "admin/tasks/task_outcome" %>
         <% else %>
           <%= f.govuk_submit "Save and continue" %>
-        <% end %>
-
-        <% if @notes.present? %>
-          <div class="hmcts-timeline">
-            <% @notes.each do |note| %>
-              <%= render "admin/notes/note", note: note, display_description: true %>
-            <% end %>
-          </div>
         <% end %>
       </section>
 
