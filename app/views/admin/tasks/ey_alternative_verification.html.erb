@@ -80,7 +80,7 @@
         ) %>
 
         <div class="govuk-!-width-one-half">
-          <% if f.object.task_completed? %>
+          <% if f.object.task_completed? || f.object.bank_details_were_passed_automatically? %>
             <p class="govuk-body">
               <span class="govuk-fieldset__legend govuk-fieldset__legend--s">
                 Has <%= f.object.claimant_name %> provided their own bank

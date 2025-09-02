@@ -163,6 +163,10 @@ class Admin::Tasks::EyAlternativeVerificationForm
     task.persisted? && task.data["personal_details_were_passed_automatically"] == true
   end
 
+  def bank_details_were_passed_automatically?
+    task.persisted? && task.data["bank_details_were_passed_automatically"] == true
+  end
+
   def task_completed?
     task.persisted? && !task.passed.nil?
   end

@@ -65,14 +65,18 @@ RSpec.describe "EY claim and alternative verification task" do
           first_name: "Edna",
           surname: "Krabappel",
           banking_name: "Edna J Krabappel",
-          hmrc_bank_validation_responses: [
-            {
-              "body" => {
-                "nameMatches" => "yes"
-              }
-            }
-          ]
+          hmrc_bank_validation_responses: hmrc_bank_validation_responses
         )
+      end
+
+      let(:hmrc_bank_validation_responses) do
+        [
+          {
+            "body" => {
+              "nameMatches" => "yes"
+            }
+          }
+        ]
       end
 
       before do
@@ -151,6 +155,17 @@ RSpec.describe "EY claim and alternative verification task" do
       end
 
       context "when provider and claimant personal details match" do
+        # Set some hmrc response so we don't auto pass the bank details check
+        let(:hmrc_bank_validation_responses) do
+          [
+            {
+              "body" => {
+                "nameMatches" => "partial"
+              }
+            }
+          ]
+        end
+
         let(:eligibility) do
           create(
             :early_years_payments_eligibility,
@@ -211,7 +226,7 @@ RSpec.describe "EY claim and alternative verification task" do
 
             expect(table_row("Edna J Krabappel")).to eq([
               "Edna Krabappel", # Claimant's name
-              "yes" # From HMRC response
+              "partial" # From HMRC response
             ])
 
             within_fieldset(
@@ -259,12 +274,6 @@ RSpec.describe "EY claim and alternative verification task" do
           expect(task_status("One Login identity check")).to eql "No data"
           expect(task_status("Alternative verification")).to eql "Incomplete"
           click_link "Confirm the provider has verified the claimant’s identity"
-
-          within_fieldset(
-            "Has Edna Krabappel provided their own bank account details?"
-          ) do
-            choose "Yes"
-          end
 
           # Try submitting without selecting an option for personal details
           click_button "Save and continue"
@@ -349,6 +358,88 @@ RSpec.describe "EY claim and alternative verification task" do
           within "#task-outcome" do
             expect(page).to have_content("Failed")
             expect(page).to have_content("This task was performed by Aaron Admin")
+          end
+        end
+      end
+
+      context "when the bank details match but the personal details do not" do
+        let(:eligibility) do
+          create(
+            :early_years_payments_eligibility,
+            :with_eligible_ey_provider,
+            :provider_claim_submitted,
+            alternative_idv_claimant_employed_by_nursery: true,
+            alternative_idv_claimant_date_of_birth: Date.new(1970, 1, 1),
+            alternative_idv_claimant_postcode: "TE57 1NG",
+            alternative_idv_claimant_national_insurance_number: "AB123456C",
+            alternative_idv_claimant_bank_details_match: true,
+            alternative_idv_claimant_email: "CLAIMANT@example.com",
+            alternative_idv_claimant_employment_check_declaration: true,
+            alternative_idv_completed_at: 2.days.ago
+          )
+        end
+
+        it "allows the admin to make a decision" do
+          visit admin_claim_path(claim)
+          click_on "View tasks"
+
+          expect(task_status("One Login identity check")).to eql "No data"
+          expect(task_status("Alternative verification")).to eql "Incomplete"
+          click_link "Confirm the provider has verified the claimant’s identity"
+
+          within "#bank-details" do
+            expect(page).not_to have_selector("input[type=radio]")
+          end
+
+          # Attempt to submit without selecting an option for personal details
+          click_button "Save and continue"
+
+          expect(page).to have_content("You must select ‘Yes’ or ‘No’")
+
+          within_fieldset(
+            "Do the personal details provided by the claimant match the details from the provider?"
+          ) do
+            choose "Yes"
+          end
+
+          click_button "Save and continue"
+
+          visit admin_claim_path(claim)
+          click_on "View tasks"
+          expect(task_status("Alternative verification")).to eql "Passed"
+          click_link "Confirm the provider has verified the claimant’s identity"
+        end
+      end
+
+      context "when personal details and bank details match" do
+        let(:eligibility) do
+          create(
+            :early_years_payments_eligibility,
+            :with_eligible_ey_provider,
+            :provider_claim_submitted,
+            alternative_idv_claimant_employed_by_nursery: true,
+            alternative_idv_claimant_date_of_birth: Date.new(1970, 1, 1),
+            alternative_idv_claimant_postcode: "EC1N 2TD",
+            alternative_idv_claimant_national_insurance_number: "AB123456C",
+            alternative_idv_claimant_bank_details_match: true,
+            alternative_idv_claimant_email: "CLAIMANT@example.com",
+            alternative_idv_claimant_employment_check_declaration: true,
+            alternative_idv_completed_at: 2.days.ago
+          )
+        end
+
+        it "passes the task automatically" do
+          visit admin_claim_path(claim)
+          click_on "View tasks"
+
+          expect(task_status("Alternative verification")).to eql "Passed"
+          click_link "Confirm the provider has verified the claimant’s identity"
+
+          within "#task-outcome" do
+            expect(page).to have_content("Passed")
+            expect(page).to have_content(
+              "This task was performed by an automated check"
+            )
           end
         end
       end
