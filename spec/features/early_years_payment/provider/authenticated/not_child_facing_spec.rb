@@ -31,6 +31,9 @@ RSpec.feature "Early years payment provider child facing" do
     fill_in("Year", with: date.year)
     click_button "Continue"
 
+    choose "Permanent"
+    click_button "Continue"
+
     expect(page.current_path).to eq "/early-years-payment-provider/child-facing"
     click_button "Continue"
 

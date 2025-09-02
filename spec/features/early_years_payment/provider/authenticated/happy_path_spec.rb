@@ -42,6 +42,10 @@ RSpec.feature "Early years payment provider" do
     fill_in("Year", with: date.year)
     click_button "Continue"
 
+    expect(page.current_path).to eq "/early-years-payment-provider/contract-type"
+    choose "Permanent"
+    click_button "Continue"
+
     expect(page.current_path).to eq "/early-years-payment-provider/child-facing"
     choose "Yes"
     click_button "Continue"
@@ -93,6 +97,7 @@ RSpec.feature "Early years payment provider" do
     expect(claim.eligibility.reload.provider_claim_submitted_at).to be_present
     expect(claim.eligibility.provider_email_address).to eq email_address
     expect(claim.eligibility.award_amount).to eq 1000
+    expect(claim.eligibility.provider_entered_contract_type).to eq "permanent"
   end
 
   scenario "using magic link after having completed some of the journey" do

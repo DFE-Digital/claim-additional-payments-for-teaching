@@ -1462,6 +1462,15 @@ en:
           presence: Provide a date in the format 27 3 2024
           date_not_in_future: Start date cannot be in the future
           year_must_have_4_digits: Year must include 4 numbers
+      provider_entered_contract_type:
+        question: Select the contract type for %{practitioner_first_name}’s current role at %{nursery_name}
+        options:
+          permanent: Permanent
+          casual_or_temporary: Casual or temporary
+          voluntary_or_unpaid: Voluntary or unpaid
+          agency_work_and_apprenticeship_roles: Agency work and apprenticeship roles
+        errors:
+          inclusion: You must select an option below to continue
       child_facing:
         question: Does %{first_name} spend most of their time in their job working directly with children?
         hint:
@@ -1570,6 +1579,7 @@ en:
       provider_email_address: Provider email address
       provider_name: Provider name
       consent_given: Declaration of collected consent
+      provider_entered_contract_type: What is the employee’s current job contract type?
       child_facing_confirmation_given: Does the employee spend more than 70% in the job working with children?
       returning_within_6_months: Did the employee work in an early years setting in the previous 6 months?
       returner_worked_with_children: Did the employee’s previous job involve working directly with children?

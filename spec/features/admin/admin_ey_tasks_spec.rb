@@ -365,6 +365,10 @@ RSpec.describe "Admin EY tasks" do
     fill_in("Year", with: date.year)
     click_button "Continue"
 
+    # /early-years-payment-provider/contract-type
+    choose "Permanent"
+    click_button "Continue"
+
     # /early-years-payment-provider/child-facing
     choose "Yes"
     click_button "Continue"

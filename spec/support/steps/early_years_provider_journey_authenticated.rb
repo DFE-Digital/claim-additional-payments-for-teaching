@@ -21,6 +21,9 @@ def when_early_years_payment_provider_authenticated_journey_ready_to_submit
   fill_in("Year", with: date.year)
   click_button "Continue"
 
+  choose "Permanent"
+  click_button "Continue"
+
   expect(page).to have_content "most of their time in their job working directly with children?"
   choose "Yes"
   click_button "Continue"

@@ -35,6 +35,11 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::AnswersPres
           "start-date"
         ],
         [
+          "Employee’s contract type",
+          "Permanent",
+          "contract-type"
+        ],
+        [
           "Confirmation that employee spends most of their time in their job working directly with children",
           "Yes",
           "child-facing"

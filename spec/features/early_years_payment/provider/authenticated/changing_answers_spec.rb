@@ -45,6 +45,9 @@ RSpec.feature "Early years payment provider" do
     fill_in("Year", with: date.year)
     click_button "Continue"
 
+    choose "Permanent"
+    click_button "Continue"
+
     expect(page).to have_content "most of their time in their job working directly with children?"
     choose "Yes"
     click_button "Continue"
