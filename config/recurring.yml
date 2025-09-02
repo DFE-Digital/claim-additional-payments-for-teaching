@@ -14,6 +14,9 @@ production: &production
   early_years_progress_emails:
     class: EarlyYearsProgressEmailsJob
     schedule: "0 8 * * *" # Every day at 08:00
+  provider_six_month_employment_reminder_emails:
+    class: EarlyYearsPayments::ProviderSixMonthEmploymentReminderJob
+    schedule: "0 8 * * *" # Daily at 8am
   provider_verification_chase_email:
     class: FurtherEducationPayments::ProviderVerificationChaseEmailJob
     schedule: "0 8 * * *" # Daily 8am
