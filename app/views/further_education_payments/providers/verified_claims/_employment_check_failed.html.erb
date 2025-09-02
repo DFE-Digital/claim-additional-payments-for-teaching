@@ -1,0 +1,40 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">
+      <%= @answers_presenter.claimant_name %>
+    </span>
+
+    <h1 class="govuk-heading-l">
+      Claim reference: <%= @answers_presenter.reference %>
+      <%= govuk_tag(text: "Rejected", colour: "red") %>
+    </h1>
+
+    <%= govuk_inset_text(
+      text: "You‘ve told us this applicant does not work at " \
+      "#{@answers_presenter.provider_name}. We‘ll let the claimant know this " \
+      "claim has been unsuccessful."
+    ) %>
+
+    <h2 class="govuk-heading-m">
+      Claim details
+    </h2>
+
+    <%= govuk_summary_list do |summary_list| %>
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "TRN" } %>
+        <% row.with_value { @answers_presenter.teacher_reference_number } %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Date submitted" } %>
+        <% row.with_value { l(@answers_presenter.submitted_at.to_date) } %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { "Verified by provider" } %>
+        <% row.with_value { l(@answers_presenter.provider_verification_completed_at.to_date) } %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+

@@ -5,7 +5,12 @@ task fix_tslr_student_loan_amounts: :environment do |task, args|
   ninos = results.map { |result| result["nino"] }
 
   # claims affected
-  claims = Claim.left_joins(:payments).by_policy(Policies::StudentLoans).by_academic_year("2024/2025").where(national_insurance_number: ninos).where.not(payments: nil)
+  claims = Claim
+    .left_joins(:payments)
+    .by_policy(Policies::StudentLoans)
+    .by_academic_year("2025/2026")
+    .where(national_insurance_number: ninos)
+    .where.not(payments: nil)
 
   puts "#{claims.count} claims to update"
   claims.each do |claim|

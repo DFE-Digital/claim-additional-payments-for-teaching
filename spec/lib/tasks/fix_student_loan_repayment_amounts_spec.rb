@@ -33,8 +33,17 @@ RSpec.describe "fix_tslr_student_loan_amounts" do
   end
 
   let(:claim_2) do
-    create(:claim, :submitted, policy: Policies::StudentLoans, academic_year: AcademicYear.current, national_insurance_number: "QQ123456B", date_of_birth: Date.new(1990, 1, 1),
-      eligibility_attributes: {award_amount: 120})
+    create(
+      :claim,
+      :submitted,
+      policy: Policies::StudentLoans,
+      academic_year: AcademicYear.current,
+      national_insurance_number: "QQ123456B",
+      date_of_birth: Date.new(1990, 1, 1),
+      eligibility_attributes: {
+        award_amount: 120
+      }
+    )
   end
 
   context "with the run argument" do

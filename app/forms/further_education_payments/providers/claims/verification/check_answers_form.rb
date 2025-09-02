@@ -146,6 +146,14 @@ module FurtherEducationPayments
             raise IncompleteWizardError unless wizard_completed?
 
             super
+
+            # If the provider completed alternative IDV, then notify hook that
+            # this has been completed.
+            if claim.eligibility.provider_verification_claimant_employment_check_declaration
+              Policies::FurtherEducationPayments.alternative_idv_completed!(claim)
+            end
+
+            true
           end
 
           def save_and_exit?
@@ -199,6 +207,21 @@ module FurtherEducationPayments
 
           def provider_verification_verified_by_id
             user.id
+          end
+
+          # If the claimant isn't employed by the college we exit the wizard
+          # early. We use the same columns to indicate a completed verification
+          # in that scenario, so we don't want to clear them when this form
+          # becomes unreachable.
+          def attributes_to_clear
+            if claim.eligibility.claimant_not_employed_by_college?
+              super.excluding(
+                "provider_verification_completed_at",
+                "provider_verification_verified_by_id"
+              )
+            else
+              super
+            end
           end
         end
       end

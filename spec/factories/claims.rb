@@ -76,6 +76,13 @@ FactoryBot.define do
       identity_confirmed_with_onelogin { false }
     end
 
+    trait :failed_onelogin_idv do
+      identity_confirmed_with_onelogin { false }
+      onelogin_uid { SecureRandom.uuid }
+      onelogin_auth_at { rand(14.days.ago..1.day.ago).to_datetime }
+      onelogin_idv_at { (onelogin_auth_at + 1.hour) }
+    end
+
     trait :with_details_from_dfe_identity do
       first_name { "Jo" }
       surname { "Bloggs" }

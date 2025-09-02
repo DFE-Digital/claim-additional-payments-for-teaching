@@ -3,85 +3,62 @@
     <h1 class="govuk-heading-xl"><%= t("early_years_payment_provider_start.landing_page.title") %></h1>
 
     <p class="govuk-body-l">
-      Use this service to make an early years financial incentive payment claim
-      for an employee.
+      Use this service to make a claim for a £1,000 recruitment bonus for an employee.
     </p>
 
-    <h2 class="govuk-heading-l govuk-!-margin-top-7">Employee eligibility</h2>
+    <h2 class="govuk-heading-l">What you’ll need to start a claim</h2>
 
     <p class="govuk-body">
-      To make a claim for an employee, they must:
+      You’ll need to provide some information about your employee and your nursery.
     </p>
 
-    <%= govuk_list [
-      "have applied for a permanent part or full-time role with an incentive attached",
-      "have started the role on or after #{l(Policies::EarlyYearsPayments::ELIGIBLE_START_DATE)}",
-      "not have had a permanent role working directly with children in an early years setting in the 6 months before starting their current role",
-      "spend most of the time in their role (70% or more) working directly with children"
-    ], type: :bullet %>
-
-    <h2 class="govuk-heading-l">Information you’ll need to provide</h2>
+    <h2 class="govuk-heading-m">Information from your employee</h2>
 
     <p class="govuk-body">
-      You’ll need to provide some details about your employee and your nursery.
+      Make sure you’ve collected written consent from your employee before you share their information.
+      To do this, you’ll need to provide them with a:
     </p>
-
-    <h3 class="govuk-heading-m">Information from your employee</h3>
-
-    <p class="govuk-body">
-      You should make sure you’ve collected written consent from your employee before you give us their information. You can use our <%= govuk_link_to("consent form", claim_path(current_journey_routing_name, "consent-form"), new_tab: true) %> to do this.
-    </p>
-
-    <p class="govuk-body">
-      You’ll need their:
-    </p>
-
-    <%= govuk_list [
-      "full name",
-      "email address",
-      "start date"
-    ], type: :bullet %>
-
-    <p class="govuk-body">
-      You must also provide your employee with a privacy notice that explains what information will be collected, why it’s being collected and who it will be shared with. You can view our <%= govuk_link_to("privacy notice", "https://www.gov.uk/government/publications/privacy-information-education-providers-workforce-including-teachers/5a254207-a566-44f7-ac77-6ba59fd26e04", new_tab: true) %> here, as an example.
-    </p>
-
-    <p class="govuk-body">
-      We’ll also ask you to confirm that they meet the eligibility criteria.
-    </p>
-
-    <h4 class="govuk-heading-s">Documents</h4>
 
     <%= govuk_list [
       "#{govuk_link_to("privacy notice", "https://www.gov.uk/government/publications/privacy-information-education-providers-workforce-including-teachers/5a254207-a566-44f7-ac77-6ba59fd26e04", new_tab: true)} that explains what information will be collected, why it’s being collected and who it will be shared with".html_safe,
-      "#{govuk_link_to("consent form", claim_path(current_journey_routing_name, "consent-form"), new_tab: true)} to collect their written consent to share their full name, email address and start date with the Department for Education (DfE)".html_safe,
+      "#{govuk_link_to("consent form", claim_path(current_journey_routing_name, "consent-form"), new_tab: true)} to collect their written consent to share their full name, email address and start date with the Department for Education (DfE)".html_safe
     ], type: :bullet %>
 
-    <h3 class="govuk-heading-m">Information from your organisation</h3>
+    <%= govuk_inset_text(
+      text: "You do not need to send the consent form to DfE, however you should keep it for your own records."
+    ) %>
 
     <p class="govuk-body">
-      We’ll need your organisation’s PAYE reference number. Your payroll or human resources can normally provide this.
+      We’ll also ask you some questions to confirm your employee meets the eligibility criteria.
+      They should take no longer than 10 minutes to complete.
+    </p>
+
+    <h2 class="govuk-heading-m">Information from your nursery</h2>
+
+    <p class="govuk-body">
+      We’ll need your organisation’s PAYE reference number. Your payroll or human resources department can normally provide this.
     </p>
 
     <h2 class="govuk-heading-l">Cancel or get help with your claim</h2>
 
     <p class="govuk-body">
-      If your employee leaves their role before they’ve been in it for 6 months, you need to cancel their claim.
+      If your employee leaves their role before they’ve been in it for 6 months, you’ll need to cancel their claim.
     </p>
 
     <p class="govuk-body">
-      You can cancel a claim or get help on this service by contacting us at
-      <%= govuk_link_to t("early_years_payment_provider_start.feedback_email"), "mailto:#{t("early_years_payment_provider_start.feedback_email")}", no_visited_state: true %>.
+      You can cancel a claim or get help with the application by contacting <%= govuk_link_to t("early_years_payment_provider_start.feedback_email"), "mailto:#{t("early_years_payment_provider_start.feedback_email")}", no_visited_state: true %>.
     </p>
 
     <p class="govuk-body">
       Read more about the
-      <%= govuk_link_to("early years incentive payment for new and returning practitioners guidance", claim_path(current_journey_routing_name, "guidance")) %>.
+      <%= govuk_link_to("early years incentive payment for new and returning practitioners", claim_path(current_journey_routing_name, "guidance")) %>.
     </p>
 
     <%# TODO: There isn't any journey closed content, for now hide the button %>
     <% if @journey_open %>
-      <%= govuk_start_button(text: "Start now", href: claim_path(current_journey_routing_name, "claim", answers: { service_access_code: params[:service_access_code] })) %>
+      <p class="govuk-!-margin-top-8">
+        <%= govuk_start_button(text: "Start now", href: claim_path(current_journey_routing_name, "claim", answers: { service_access_code: params[:service_access_code] })) %>
+      </div>
     <% end %>
   </div>
 </div>
