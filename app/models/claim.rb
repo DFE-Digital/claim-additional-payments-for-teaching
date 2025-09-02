@@ -476,6 +476,10 @@ class Claim < ApplicationRecord
     end.last
   end
 
+  def hmrc_name_match?
+    hmrc_name_match == "yes"
+  end
+
   private
 
   def one_login_idv_name_match?
