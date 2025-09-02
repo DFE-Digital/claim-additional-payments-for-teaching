@@ -102,7 +102,7 @@ module Policies
     end
 
     def alternative_idv_completed!(claim)
-      # NOOP
+      Tasks::EyAlternativeVerificationJob.perform_later(claim)
     end
   end
 end
