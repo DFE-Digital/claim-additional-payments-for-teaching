@@ -382,7 +382,7 @@ RSpec.describe "Admin EY tasks" do
     click_button "Continue"
 
     # /early-years-payment-provider/returner-contract-type
-    choose "casual or temporary"
+    choose "Casual or temporary"
     click_button "Continue"
 
     # /early-years-payment-provider/employee-email

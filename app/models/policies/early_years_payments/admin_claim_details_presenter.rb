@@ -37,7 +37,7 @@ module Policies
           [translate("#{claim.policy.locale_key}.admin.child_facing_confirmation_given"), display_boolean(claim.eligibility.child_facing_confirmation_given)],
           [translate("#{claim.policy.locale_key}.admin.returning_within_6_months"), display_boolean(claim.eligibility.returning_within_6_months)],
           [translate("#{claim.policy.locale_key}.admin.returner_worked_with_children"), display_boolean(claim.eligibility.returner_worked_with_children)],
-          [translate("#{claim.policy.locale_key}.admin.returner_contract_type"), claim.eligibility.returner_contract_type]
+          [translate("#{claim.policy.locale_key}.admin.returner_contract_type"), returner_contract_type_value]
         ]
       end
 
@@ -59,6 +59,20 @@ module Policies
       end
 
       private
+
+      def returner_contract_type_value
+        return if claim.eligibility.returner_contract_type.blank?
+
+        I18n.t(
+          claim.eligibility.returner_contract_type.tr(" ", "_"),
+          scope: %w[
+            early_years_payment_provider_authenticated
+            forms
+            returner_contract_type
+            options
+          ]
+        )
+      end
 
       def personal_data(data)
         return personal_data_removed_text if claim.personal_data_removed?

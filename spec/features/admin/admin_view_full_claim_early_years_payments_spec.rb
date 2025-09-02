@@ -52,7 +52,7 @@ RSpec.feature "Admin views claim details for EarlyYearsPayments" do
       expect(summary_row("Does the employee spend more than 70% in the job working with children?")).to have_content("Yes")
       expect(summary_row("Did the employee work in an early years setting in the previous 6 months?")).to have_content("Yes")
       expect(summary_row("Did the employee’s previous job involve working directly with children?")).to have_content("No")
-      expect(summary_row("What was the employee’s previous job contract type?")).to have_content("casual or temporary")
+      expect(summary_row("What was the employee’s previous job contract type?")).to have_content("Casual or temporary")
 
       expect(summary_row("Early years financial incentive payment")).to have_content("£1,000")
 
@@ -121,7 +121,7 @@ RSpec.feature "Admin views claim details for EarlyYearsPayments" do
       expect(summary_row("Does the employee spend more than 70% in the job working with children?")).to have_content("Yes")
       expect(summary_row("Did the employee work in an early years setting in the previous 6 months?")).to have_content("Yes")
       expect(summary_row("Did the employee’s previous job involve working directly with children?")).to have_content("No")
-      expect(summary_row("What was the employee’s previous job contract type?")).to have_content("casual or temporary")
+      expect(summary_row("What was the employee’s previous job contract type?")).to have_content("Casual or temporary")
 
       expect(summary_row("Early years financial incentive payment")).to have_content("£1,000")
 
