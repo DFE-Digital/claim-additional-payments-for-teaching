@@ -13,7 +13,7 @@ class Admin::Tasks::GenericForm
   validates :passed,
     inclusion: {
       in: [true, false],
-      message: "You must select ‘Yes’ or ‘No’"
+      message: ->(form, _data) { form.passed_inclusion_error_message }
     }
 
   def self.permitted_params
@@ -47,5 +47,9 @@ class Admin::Tasks::GenericForm
 
   def task
     @task ||= claim.tasks.where(name:).first || claim.tasks.build(name:)
+  end
+
+  def passed_inclusion_error_message
+    "You must select ‘Yes’ or ‘No’"
   end
 end

@@ -31,7 +31,7 @@ RSpec.describe Decision, type: :model do
     decision = build(:decision, :rejected, rejected_reasons: {})
 
     expect(decision).not_to be_valid
-    expect(decision.errors.messages[:rejected_reasons]).to eq(["At least one reason is required"])
+    expect(decision.errors.messages[:rejected_reasons]).to eq(["Select at least one rejection reason"])
   end
 
   it "validates that the selected rejected reasons are valid when rejecting a claim" do

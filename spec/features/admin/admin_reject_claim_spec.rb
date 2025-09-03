@@ -80,7 +80,7 @@ RSpec.feature "Admin rejects a claim" do
     choose "Reject"
     click_button "Confirm decision"
 
-    expect(page).to have_content("At least one reason is required")
+    expect(page).to have_content("Select at least one rejection reason")
   end
 
   scenario "Rejecting a claim with Other selected requires a note" do

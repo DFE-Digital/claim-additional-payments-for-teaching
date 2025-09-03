@@ -71,4 +71,16 @@ RSpec.feature "Admin checking a claim with matching details" do
       expect(page).not_to have_content "Bank sort code"
     end
   end
+
+  scenario "admin forgets to select an option" do
+    claim = create(:claim, :submitted, policy: Policies::StudentLoans)
+    create(:claim, :submitted, eligibility_attributes: {teacher_reference_number: claim.eligibility.teacher_reference_number})
+
+    click_on "Claims"
+    find("a[href='#{admin_claim_tasks_path(claim)}']").click
+
+    click_on I18n.t("admin.tasks.matching_details.title")
+
+    click_on "Save and continue"
+  end
 end

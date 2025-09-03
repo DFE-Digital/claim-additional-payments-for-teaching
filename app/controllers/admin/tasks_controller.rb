@@ -2,7 +2,7 @@ class Admin::TasksController < Admin::BaseAdminController
   before_action :ensure_service_operator
   before_action :load_claim
   before_action :ensure_task_has_not_already_been_completed, only: [:create]
-  before_action :load_matching_claims, only: [:show], if: :load_matching_claims?
+  before_action :load_matching_claims, only: [:show, :create], if: :load_matching_claims?
 
   def index
     @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
@@ -82,7 +82,7 @@ class Admin::TasksController < Admin::BaseAdminController
   end
 
   def load_matching_claims?
-    params[:name] == "matching_details"
+    params[:name] == "matching_details" || action_name == "create"
   end
 
   def set_banner_messages

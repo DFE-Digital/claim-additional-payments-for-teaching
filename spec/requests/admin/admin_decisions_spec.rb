@@ -160,7 +160,7 @@ RSpec.describe "Admin decisions", type: :request do
         it "shows an error and doesn't save the decision" do
           post admin_claim_decisions_path(claim_id: claim.id, decision: {notes: "Something"})
 
-          expect(response.body).to include("Make a decision to approve or reject the claim")
+          expect(response.body).to include("Select if you approve or reject the claim")
           expect(claim.reload.latest_decision).to be_nil
         end
       end
