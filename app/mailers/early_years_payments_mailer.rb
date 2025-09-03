@@ -152,13 +152,10 @@ class EarlyYearsPaymentsMailer < ApplicationMailer
   private
 
   def submitted_by_practitioner_and_send_to_practitioner(claim)
-    complete_claim_url = "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Practitioner::ROUTING_NAME}/claims?claim_id=#{claim.id}"
-
     personalisation = {
       first_name: claim.first_name,
       nursery_name: claim.eligibility.eligible_ey_provider.nursery_name,
-      ref_number: claim.reference,
-      complete_claim_url: complete_claim_url
+      ref_number: claim.reference
     }
 
     template_mail(
