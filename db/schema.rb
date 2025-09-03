@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_27_140510) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_03_083853) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -153,8 +153,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_27_140510) do
     t.string "role_codes", default: [], array: true
     t.datetime "deleted_at", precision: nil
     t.string "session_token"
-    t.text "user_type"
     t.string "current_organisation_ukprn"
+    t.text "user_type"
     t.index ["deleted_at"], name: "index_dfe_sign_in_users_on_deleted_at"
     t.index ["dfe_sign_in_id", "user_type"], name: "index_dfe_sign_in_users_on_dfe_sign_in_id_and_user_type", unique: true
     t.index ["session_token"], name: "index_dfe_sign_in_users_on_session_token", unique: true
@@ -221,7 +221,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_27_140510) do
     t.string "alternative_idv_reference"
     t.datetime "provider_six_month_employment_reminder_sent_at"
     t.string "provider_entered_contract_type"
+    t.integer "practitioner_reminder_email_sent_count", default: 0, null: false
+    t.datetime "practitioner_reminder_email_last_sent_at"
     t.index ["alternative_idv_reference"], name: "idx_on_alternative_idv_reference_1053f9bce9", unique: true
+    t.index ["practitioner_reminder_email_last_sent_at"], name: "index_ey_eligibilities_on_pract_reminder_last_sent"
+    t.index ["practitioner_reminder_email_sent_count"], name: "index_ey_eligibilities_on_pract_reminder_count"
   end
 
   create_table "eligible_ey_providers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -339,6 +343,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_27_140510) do
     t.datetime "provider_verification_completed_at", precision: nil
     t.uuid "provider_verification_verified_by_id"
     t.uuid "provider_assigned_to_id"
+    t.datetime "provider_verification_started_at"
+    t.boolean "provider_verification_timetabled_teaching_hours"
     t.jsonb "provider_verification_actual_subjects_taught", default: []
     t.jsonb "provider_verification_building_construction_courses", default: []
     t.jsonb "provider_verification_chemistry_courses", default: []
@@ -348,8 +354,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_27_140510) do
     t.jsonb "provider_verification_maths_courses", default: []
     t.jsonb "provider_verification_physics_courses", default: []
     t.boolean "provider_verification_half_timetabled_teaching_time"
-    t.boolean "provider_verification_timetabled_teaching_hours"
-    t.datetime "provider_verification_started_at"
     t.citext "work_email"
     t.boolean "work_email_verified"
     t.boolean "provider_verification_claimant_employed_by_college"
@@ -381,8 +385,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_27_140510) do
     t.uuid "current_school_id"
     t.decimal "award_amount", precision: 7, scale: 2
     t.boolean "changed_workplace_or_new_contract"
-    t.boolean "breaks_in_employment"
     t.text "previous_year_claim_ids", default: [], array: true
+    t.boolean "breaks_in_employment"
     t.jsonb "employment_history", default: []
     t.index ["current_school_id"], name: "index_irb_eligibilities_on_current_school_id"
   end
