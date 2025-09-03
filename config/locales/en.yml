@@ -314,7 +314,7 @@ en:
         address_line_3_blank: Enter a town or city
         address_line_max_chars: Address lines must be 100 characters or less
         address_format: Address lines cannot contain special characters
-        postcode_blank: Enter a real postcode, for example NE1 6EE
+        postcode_blank: Enter a postcode, for example NE1 6EE
         postcode_max_chars: Postcode must be 11 characters or less
         postcode_format: Enter a postcode in the correct format
     select_email:
