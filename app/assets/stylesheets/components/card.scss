@@ -25,12 +25,12 @@
 // Colours per status (no hover states)
 $statuses: (
   "in-progress": (
-    "colour": govuk-shade(govuk-colour("yellow"), 65),
-    "background-colour": govuk-tint(govuk-colour("yellow"), 75)
+    "colour": govuk-shade(govuk-colour("blue"), 30),
+    "background-colour": govuk-tint(govuk-colour("blue"), 80)
   ),
   "not-started": (
-    "colour": govuk-shade(govuk-colour("red"), 30),
-    "background-colour": govuk-tint(govuk-colour("red"), 80)
+    "colour": govuk-shade(govuk-colour("yellow"), 65),
+    "background-colour": govuk-tint(govuk-colour("yellow"), 75)
   ),
   "pending": (
     "colour": govuk-shade(govuk-colour("yellow"), 65),
