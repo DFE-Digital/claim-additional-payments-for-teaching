@@ -396,6 +396,8 @@ shared:
     - alternative_idv_reference
     - provider_six_month_employment_reminder_sent_at
     - provider_entered_contract_type
+    - practitioner_reminder_email_sent_count
+    - practitioner_reminder_email_last_sent_at
   :school_workforce_censuses:
     - id
     - teacher_reference_number

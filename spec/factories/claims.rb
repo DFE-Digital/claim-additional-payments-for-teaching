@@ -133,6 +133,14 @@ FactoryBot.define do
       reference { Reference.new.to_s }
     end
 
+    trait :submitted_by_provider do
+      policy { Policies::EarlyYearsPayments }
+      reference { Reference.new.to_s }
+      practitioner_email_address { "practitioner@example.com" }
+      eligibility_factory { :early_years_payments_eligibility }
+      eligibility_trait { :eligible }
+    end
+
     trait :policy_options_provided_with_both do
       policy_options_provided {
         [

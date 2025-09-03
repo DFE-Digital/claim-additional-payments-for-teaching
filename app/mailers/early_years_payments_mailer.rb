@@ -130,6 +130,25 @@ class EarlyYearsPaymentsMailer < ApplicationMailer
     )
   end
 
+  def practitioner_claim_reminder
+    claim = params[:claim]
+
+    complete_claim_url = "https://#{ENV["CANONICAL_HOSTNAME"]}/#{Journeys::EarlyYearsPayment::Practitioner::ROUTING_NAME}/landing-page"
+
+    template_mail(
+      EARLY_YEARS_PAYMENTS[:PRACTITIONER_CLAIM_REMINDER_TEMPLATE_ID],
+      to: claim.practitioner_email_address,
+      reply_to_id: claim.policy.notify_reply_to_id,
+      personalisation: {
+        practitioner_first_name: claim.first_name,
+        practitioner_second_name: claim.surname,
+        nursery_name: claim.eligibility.eligible_ey_provider.nursery_name,
+        complete_claim_url: complete_claim_url,
+        ref_number: claim.reference
+      }
+    )
+  end
+
   private
 
   def submitted_by_practitioner_and_send_to_practitioner(claim)
