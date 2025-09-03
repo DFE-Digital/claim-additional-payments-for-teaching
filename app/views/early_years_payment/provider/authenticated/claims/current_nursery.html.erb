@@ -11,9 +11,6 @@
           text: @form.t(:question),
           tag: "h1",
           size: "l"
-        },
-        hint: {
-          text: "Select the nursery where your employee works below."
         }) do %>
         <% @form.selectable_nurseries.each do |nursery| %>
           <%= f.govuk_radio_button :nursery_urn, nursery.urn, label: { text: nursery.nursery_name }, hint: { text: nursery.nursery_address }, link_errors: @form.selectable_nurseries.first == nursery %>
