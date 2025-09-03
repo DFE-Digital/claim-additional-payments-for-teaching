@@ -122,7 +122,7 @@ RSpec.describe Policies::EarlyYearsPayments::AdminClaimDetailsPresenter do
         [I18n.t("early_years_payments.admin.child_facing_confirmation_given"), "Yes"],
         [I18n.t("early_years_payments.admin.returning_within_6_months"), "Yes"],
         [I18n.t("early_years_payments.admin.returner_worked_with_children"), "No"],
-        [I18n.t("early_years_payments.admin.returner_contract_type"), "casual or temporary"]
+        [I18n.t("early_years_payments.admin.returner_contract_type"), "Casual or temporary"]
       ]
 
       expect(subject).to eq expected_answers

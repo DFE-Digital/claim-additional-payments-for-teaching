@@ -1491,10 +1491,10 @@ en:
       returner_contract_type:
         question: Select the contract type for %{first_name}’s previous role in an early years setting
         options:
-          permanent: permanent
-          casual_or_temporary: casual or temporary
-          voluntary_or_unpaid: voluntary or unpaid
-          agency_work_and_apprenticeships: agency work and apprenticeship roles
+          permanent: Permanent
+          casual_or_temporary: Casual or temporary
+          voluntary_or_unpaid: Voluntary or unpaid
+          agency_work_and_apprenticeships: Agency work and apprenticeship roles
         errors:
           inclusion: You must select an option below to continue
       employee_email:

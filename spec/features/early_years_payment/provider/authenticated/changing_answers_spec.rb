@@ -61,7 +61,7 @@ RSpec.feature "Early years payment provider" do
     click_button "Continue"
 
     expect(page).to have_content "Select the contract type"
-    choose "casual or temporary"
+    choose "Casual or temporary"
     click_button "Continue"
 
     fill_in "claim-practitioner-email-address-field", with: "practitioner@example.com"
@@ -83,7 +83,7 @@ RSpec.feature "Early years payment provider" do
     click_button "Continue"
 
     expect(page).to have_content "Select the contract type"
-    choose "casual or temporary"
+    choose "Casual or temporary"
     click_button "Continue"
 
     expect(page).to have_content "Check your answers before submitting this claim"

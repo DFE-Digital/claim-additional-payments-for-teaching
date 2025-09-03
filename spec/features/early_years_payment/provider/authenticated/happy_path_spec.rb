@@ -71,7 +71,7 @@ RSpec.feature "Early years payment provider" do
     click_button "Continue"
 
     expect(page.current_path).to eq "/early-years-payment-provider/returner-contract-type"
-    choose "casual or temporary"
+    choose "Casual or temporary"
     click_button "Continue"
     expect(page.current_path).to eq "/early-years-payment-provider/employee-email"
 
