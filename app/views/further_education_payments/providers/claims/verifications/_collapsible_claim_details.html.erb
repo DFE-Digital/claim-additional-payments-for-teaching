@@ -1,0 +1,22 @@
+<%= govuk_details(
+  summary_text: "Claim details"
+) do %>
+  <%= govuk_summary_list(classes: "govuk-!-margin-bottom-0") do |summary_list| %>
+    <%= summary_list.with_row do |row| %>
+      <%= row.with_key(text: "TRN") %>
+      <%= row.with_value(text: claim.eligibility.teacher_reference_number) %>
+    <% end %>
+
+    <%= summary_list.with_row do |row| %>
+      <%= row.with_key(text: "Date submitted") %>
+      <%= row.with_value(text: I18n.l(claim.submitted_at.to_date)) %>
+    <% end %>
+
+    <%= summary_list.with_row do |row| %>
+      <%= row.with_key(text: "Due date") %>
+      <% due_date = Policies::FurtherEducationPayments.verification_due_date_for_claim(claim) %>
+      <%= row.with_value(text: I18n.l(due_date)) %>
+    <% end %>
+  <% end %>
+<% end %>
+

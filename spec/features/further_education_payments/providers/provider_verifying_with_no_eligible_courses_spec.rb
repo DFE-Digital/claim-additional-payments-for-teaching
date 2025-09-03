@@ -32,8 +32,20 @@ RSpec.feature "Provider verifying claims", feature_flag: :provider_dashboard do
       edit_further_education_payments_providers_claim_verification_path(claim)
     )
 
-    expect(summary_row("Claim reference")).to have_content("AB123456")
-    expect(summary_row("Claimant name")).to have_content("Edna Krabappel")
+    # Check claim reference in header
+    expect(page).to have_content("Review claim - AB123456")
+
+    # Check claimant name in heading
+    expect(page).to have_css("h1", text: "Edna Krabappel")
+
+    # Check if claim details are visible (govuk_details might already be expanded in tests)
+    # Try to find the summary element first
+    if page.has_css?("summary", text: "Claim details", wait: 0)
+      # Expand claim details dropdown if it exists
+      find("summary", text: "Claim details").click
+    end
+
+    # Check details in the dropdown
     expect(summary_row("TRN")).to have_content("1234567")
     expect(summary_row("Date submitted")).to have_content("1 October 2025")
 

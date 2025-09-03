@@ -1,0 +1,12 @@
+<span class="govuk-caption-xl">
+  Review claim - <%= claim.reference %>
+  <% presenter = FurtherEducationPayments::Providers::Claims::ClaimPresenter.new(claim) %>
+  <%= govuk_tag(text: presenter.status, colour: presenter.colour) %>
+</span>
+
+<h1 class="govuk-heading-xl">
+  <%= claim.full_name %>
+</h1>
+
+<%= render partial: "collapsible_claim_details", locals: { claim: claim } %>
+
