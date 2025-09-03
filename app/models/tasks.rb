@@ -5,6 +5,8 @@ module Tasks
     case task_name
     when "alternative_identity_verification"
       _alternative_identity_verification(task: task, claim: claim)
+    when "ey_alternative_verification"
+      _ey_alternative_verification(task: task, claim: claim)
     else
       _generic(task)
     end
@@ -42,6 +44,23 @@ module Tasks
       status = "No match"
       status_colour = "red"
     elsif task.nil?
+      status = "Incomplete"
+      status_colour = "grey"
+    elsif task.passed?
+      status = "Passed"
+      status_colour = "green"
+    elsif task.passed == false
+      status = "Failed"
+      status_colour = "red"
+    else
+      fail "Unknown status for task #{task.inspect}"
+    end
+
+    [status, status_colour]
+  end
+
+  def self._ey_alternative_verification(task:, claim:)
+    if task.nil? || task.passed.nil?
       status = "Incomplete"
       status_colour = "grey"
     elsif task.passed?
