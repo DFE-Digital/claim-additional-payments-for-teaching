@@ -64,7 +64,7 @@ RSpec.describe "EY claim and alternative verification task" do
           email_address: "claimant@example.com",
           first_name: "Edna",
           surname: "Krabappel",
-          banking_name: "Edna J Krabappel",
+          banking_name: "Edna Krabappel",
           hmrc_bank_validation_responses: hmrc_bank_validation_responses
         )
       end
@@ -139,7 +139,7 @@ RSpec.describe "EY claim and alternative verification task" do
           within "#bank-details" do
             expect(page).to have_content("Not applicable")
 
-            expect(table_row("Edna J Krabappel")).to eq([
+            expect(table_row("Edna Krabappel")).to eq([
               "Edna Krabappel", # Claimant's name
               "yes" # From HMRC response
             ])
@@ -224,7 +224,7 @@ RSpec.describe "EY claim and alternative verification task" do
               "The provider told us that they recognise the bank account details that Edna Krabappel submitted."
             )
 
-            expect(table_row("Edna J Krabappel")).to eq([
+            expect(table_row("Edna Krabappel")).to eq([
               "Edna Krabappel", # Claimant's name
               "partial" # From HMRC response
             ])
@@ -336,7 +336,7 @@ RSpec.describe "EY claim and alternative verification task" do
               "The provider told us that they do not recognise the bank account details that Edna Krabappel submitted."
             )
 
-            expect(table_row("Edna J Krabappel")).to eq([
+            expect(table_row("Edna Krabappel")).to eq([
               "Edna Krabappel", # Claimant's name
               "yes" # From HMRC response
             ])

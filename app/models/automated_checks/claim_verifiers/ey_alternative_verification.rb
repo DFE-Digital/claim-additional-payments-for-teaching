@@ -70,11 +70,9 @@ module AutomatedChecks
 
       def banking_names_match?
         normalised_banking_name = claim.banking_name.strip.downcase
-        normalised_first_name = claim.first_name.strip.downcase
-        normalised_surname = claim.surname.strip.downcase
+        normalised_claim_name = claim.full_name.strip.downcase
 
-        normalised_banking_name.start_with?(normalised_first_name) &&
-          normalised_banking_name.end_with?(normalised_surname)
+        normalised_banking_name == normalised_claim_name
       end
 
       def passable?
