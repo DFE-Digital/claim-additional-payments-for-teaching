@@ -465,6 +465,17 @@ class Claim < ApplicationRecord
     ((onelogin_idv_return_codes || []) & OneLogin::ReturnCode::HIGH_RISK_CODES).size > 0
   end
 
+  def hmrc_name_match
+    hmrc_bank_validation_responses.map do |response|
+      body = response.fetch("body", {})
+      if body.is_a?(Hash)
+        body.fetch("nameMatches", nil)
+      else
+        nil # if there's an error response it's stored as a JSON encoded string
+      end
+    end.last
+  end
+
   private
 
   def one_login_idv_name_match?
