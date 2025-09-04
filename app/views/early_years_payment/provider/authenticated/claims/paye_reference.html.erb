@@ -8,11 +8,11 @@
       <%= f.govuk_text_field :paye_reference,
         label: { text: @form.t(:question, nursery_name: @form.nursery_name), tag: "h1", size: "l" },
         hint: -> { %>
-          <p>
+          <p class="govuk-body">
             This is a series of numbers and letters separated with a slash, like 123/AB456. Your organisation’s payroll or human resources can provide this.
           </p>
 
-          <p>
+          <p class="govuk-body">
             We need this to check that the employee is still working at your setting after 6 months.
           </p>
         <% },
