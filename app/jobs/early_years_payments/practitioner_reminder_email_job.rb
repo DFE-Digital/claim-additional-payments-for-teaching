@@ -8,7 +8,7 @@ module EarlyYearsPayments
 
     # Safeguard: Only send reminders for claims submitted by providers within the last 6 months
     # This prevents historical claims from suddenly receiving emails when deployed to production
-    CUTOFF_DATE = 6.months.ago.freeze
+    CUTOFF_PERIOD = 6.months
 
     queue_as :user_data
 
@@ -53,7 +53,7 @@ module EarlyYearsPayments
           practitioner_reminder_email_sent_count: reminder_number - 1
         })
         # Safeguard: Only send reminders for recent claims
-        .where("early_years_payment_eligibilities.provider_claim_submitted_at > ?", CUTOFF_DATE)
+        .where("early_years_payment_eligibilities.provider_claim_submitted_at > ?", CUTOFF_PERIOD.ago)
         # Move rejected check to SQL: exclude claims with rejected decisions
         .where("decisions.id IS NULL OR decisions.approved = true OR decisions.approved IS NULL")
 
