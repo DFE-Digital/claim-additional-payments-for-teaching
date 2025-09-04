@@ -21,11 +21,13 @@ RSpec.describe EarlyYearsPayments::ProviderSixMonthEmploymentReminderJob, type: 
   let(:claim) do
     create(
       :claim,
+      :submitted,
       policy: Policies::EarlyYearsPayments,
       eligibility: eligibility,
       first_name: "Edna",
       surname: "Krabappel",
-      provider_contact_name: "Seymour Skinner"
+      provider_contact_name: "Seymour Skinner",
+      academic_year: AcademicYear.new("2025/2026")
     )
   end
 
@@ -47,6 +49,61 @@ RSpec.describe EarlyYearsPayments::ProviderSixMonthEmploymentReminderJob, type: 
     end
 
     context "after 6 months have passed" do
+      context "when a rejected claim" do
+        before do
+          create(:decision, :rejected, claim: claim)
+        end
+
+        it "doesn't send an email" do
+          travel_to(eligibility.start_date + 6.months) do
+            perform_enqueued_jobs do
+              described_class.perform_now
+            end
+          end
+
+          expect(
+            "seymor.skinner@springfield-elementary.edu"
+          ).not_to have_received_email("bc7faa96-8a19-4765-9d7a-6a6fd02aee9e")
+        end
+      end
+
+      context "when an approved claim" do
+        before do
+          create(:task, name: "employment", passed: true, claim: claim)
+          create(:decision, :approved, claim: claim)
+        end
+
+        it "doesn't send an email" do
+          travel_to(eligibility.start_date + 6.months) do
+            perform_enqueued_jobs do
+              described_class.perform_now
+            end
+          end
+
+          expect(
+            "seymor.skinner@springfield-elementary.edu"
+          ).not_to have_received_email("bc7faa96-8a19-4765-9d7a-6a6fd02aee9e")
+        end
+      end
+
+      context "when a year 1 claim" do
+        before do
+          claim.update!(academic_year: AcademicYear.new("2024/2025"))
+        end
+
+        it "doesn't send an email" do
+          travel_to(eligibility.start_date + 6.months) do
+            perform_enqueued_jobs do
+              described_class.perform_now
+            end
+          end
+
+          expect(
+            "seymor.skinner@springfield-elementary.edu"
+          ).not_to have_received_email("bc7faa96-8a19-4765-9d7a-6a6fd02aee9e")
+        end
+      end
+
       context "when a reminder email has been sent" do
         it "doesn't send another email" do
           travel_to(eligibility.start_date + 6.months) do
