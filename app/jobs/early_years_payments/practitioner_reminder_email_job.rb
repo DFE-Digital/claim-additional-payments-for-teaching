@@ -6,6 +6,10 @@ module EarlyYearsPayments
       3 => 4.weeks
     }.freeze
 
+    # Safeguard: Only send reminders for claims submitted by providers within the last 6 months
+    # This prevents historical claims from suddenly receiving emails when deployed to production
+    CUTOFF_DATE = 6.months.ago.freeze
+
     queue_as :user_data
 
     def perform
@@ -13,6 +17,12 @@ module EarlyYearsPayments
 
       REMINDER_INTERVALS.each do |reminder_number, interval|
         batch_for_interval(reminder_number, interval).each do |claim|
+          # Update count BEFORE sending to prevent duplicates if job fails
+          claim.eligibility.update!(
+            practitioner_reminder_email_sent_count: reminder_number,
+            practitioner_reminder_email_last_sent_at: DateTime.current
+          )
+
           claim.notes.create!(
             label: "practitioner_reminder",
             body: "Reminder #{reminder_number} email sent to practitioner #{claim.practitioner_email_address}"
@@ -22,11 +32,6 @@ module EarlyYearsPayments
             .with(claim: claim)
             .practitioner_claim_reminder
             .deliver_later
-
-          claim.eligibility.update!(
-            practitioner_reminder_email_sent_count: reminder_number,
-            practitioner_reminder_email_last_sent_at: DateTime.current
-          )
         end
       end
     end
@@ -34,16 +39,25 @@ module EarlyYearsPayments
     private
 
     def batch_for_interval(reminder_number, interval)
+      # Explicit guard against attempting to send more than 3 reminders
+      return Claim.none if reminder_number > 3
+
       base_query = Claim
         .joins("INNER JOIN early_years_payment_eligibilities ON early_years_payment_eligibilities.id = claims.eligibility_id AND claims.eligibility_type = 'Policies::EarlyYearsPayments::Eligibility'")
+        .joins("LEFT OUTER JOIN decisions ON decisions.claim_id = claims.id AND decisions.undone = false")
         .where(policy: Policies::EarlyYearsPayments)
         .where(submitted_at: nil)
+        .where(held: false) # Move held check to SQL
         .where.not(practitioner_email_address: [nil, ""])
         .where(early_years_payment_eligibilities: {
           practitioner_reminder_email_sent_count: reminder_number - 1
         })
+        # Safeguard: Only send reminders for recent claims
+        .where("early_years_payment_eligibilities.provider_claim_submitted_at > ?", CUTOFF_DATE)
+        # Move rejected check to SQL: exclude claims with rejected decisions
+        .where("decisions.id IS NULL OR decisions.approved = true OR decisions.approved IS NULL")
 
-      query = if reminder_number == 1
+      if reminder_number == 1
         # First reminder: 1 week after provider submission
         base_query
           .where(early_years_payment_eligibilities: {provider_claim_submitted_at: ..interval.ago})
@@ -53,11 +67,6 @@ module EarlyYearsPayments
         base_query
           .where(early_years_payment_eligibilities: {practitioner_reminder_email_last_sent_at: ..interval.ago})
       end
-
-      # Preload the eligibility to avoid N+1 queries
-      query
-        .includes(:eligibility, :decisions)
-        .reject { |claim| claim.held? || claim.latest_decision&.rejected? }
     end
   end
 end

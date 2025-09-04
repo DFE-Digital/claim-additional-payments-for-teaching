@@ -47,7 +47,18 @@ RSpec.describe EarlyYearsPayments::PractitionerReminderEmailJob, type: :job do
           )
         end
 
-        it "updates the reminder count and timestamp" do
+        it "updates the reminder count and timestamp before sending email" do
+          # Spy on the mailer to verify the count was updated before the email was sent
+          mailer_double = double("mailer")
+          allow(EarlyYearsPaymentsMailer).to receive(:with).and_return(mailer_double)
+
+          expect(mailer_double).to receive(:practitioner_claim_reminder) do
+            # At this point, the count should already be updated
+            claim_needing_first_reminder.eligibility.reload
+            expect(claim_needing_first_reminder.eligibility.practitioner_reminder_email_sent_count).to eq(1)
+            double("mail", deliver_later: nil)
+          end
+
           perform_job
 
           claim_needing_first_reminder.eligibility.reload
@@ -261,6 +272,64 @@ RSpec.describe EarlyYearsPayments::PractitionerReminderEmailJob, type: :job do
           expect(practitioner_email).not_to have_received_email(
             "cf03a3c7-587a-48c4-83b9-0cd762d103f6"
           )
+        end
+      end
+
+      context "when claim is too old (historical data safeguard)" do
+        let!(:old_claim) do
+          claim = create(:claim, :submitted_by_provider, policy: Policies::EarlyYearsPayments)
+          claim.update!(practitioner_email_address: practitioner_email)
+          claim.eligibility.update!(
+            provider_claim_submitted_at: 7.months.ago, # Older than 6 month cutoff
+            practitioner_reminder_email_sent_count: 0,
+            practitioner_reminder_email_last_sent_at: nil
+          )
+          claim
+        end
+
+        it "does not send reminders to claims older than 6 months" do
+          perform_enqueued_jobs { perform_job }
+
+          expect(practitioner_email).not_to have_received_email(
+            "cf03a3c7-587a-48c4-83b9-0cd762d103f6"
+          )
+        end
+      end
+
+      context "when email count is updated before sending" do
+        let!(:claim_needing_reminder) do
+          claim = create(:claim, :submitted_by_provider, policy: Policies::EarlyYearsPayments)
+          claim.update!(practitioner_email_address: practitioner_email)
+          claim.eligibility.update!(
+            provider_claim_submitted_at: 8.days.ago,
+            practitioner_reminder_email_sent_count: 0,
+            practitioner_reminder_email_last_sent_at: nil
+          )
+          claim
+        end
+
+        it "updates count before sending email to prevent duplicates on failure" do
+          # Mock the mailer to raise an error after the count is updated
+          allow(EarlyYearsPaymentsMailer).to receive_message_chain(:with, :practitioner_claim_reminder, :deliver_later)
+            .and_raise(StandardError, "Email service failure")
+
+          expect {
+            begin
+              perform_job
+            rescue
+              StandardError
+            end
+          }.to change {
+            claim_needing_reminder.eligibility.reload.practitioner_reminder_email_sent_count
+          }.from(0).to(1)
+        end
+      end
+
+      context "explicit max reminder check" do
+        it "returns empty collection for reminder numbers greater than 3" do
+          job = described_class.new
+          result = job.send(:batch_for_interval, 4, 1.week)
+          expect(result).to eq(Claim.none)
         end
       end
     end
