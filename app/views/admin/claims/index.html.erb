@@ -56,8 +56,6 @@
     <% end %>
 
     <% if @claims.any? %>
-      <% claims_with_warning = Claim.approaching_decision_deadline.count + Claim.passed_decision_deadline.count %>
-
       <h2 class="govuk-heading-m"><%= pluralize(@filter_form.count, "claim") %> <%= index_status_filter(@filter_form.status) %></h2>
 
       <table class="govuk-table">
@@ -67,9 +65,7 @@
             <th scope="col" class="govuk-table__header">Applicant Name</th>
             <th scope="col" class="govuk-table__header">ID Verification</th>
             <th scope="col" class="govuk-table__header">Policy</th>
-            <% if claims_with_warning.nonzero? %>
-              <th scope="col" class="govuk-table__header">Decision warning</th>
-            <% end %>
+            <th scope="col" class="govuk-table__header">Submitted</th>
             <th scope="col" class="govuk-table__header">Decision deadline</th>
             <th scope="col" class="govuk-table__header">Assigned to</th>
           </tr>
@@ -81,9 +77,7 @@
               <td class="govuk-table__cell"><%= claim.full_name %></td>
               <td class="govuk-table__cell"><%= identity_confirmation_task_claim_verifier_match_status_tag(claim) %></td>
               <td class="govuk-table__cell"><%= I18n.t("#{claim.policy.locale_key}.policy_acronym") %></td>
-              <% if claims_with_warning.nonzero? %>
-                <td class="govuk-table__cell"><%= decision_deadline_warning(claim) %></td>
-              <% end %>
+              <td class="govuk-table__cell"><%= claim_submitted_at(claim) %></td>
               <td class="govuk-table__cell"><%= l(claim.decision_deadline_date) if claim.decision_deadline_date %></td>
               <td class="govuk-table__cell"><%= claim.assigned_to.present? ? claim.assigned_to.full_name.titleize : nil %></td>
             </tr>

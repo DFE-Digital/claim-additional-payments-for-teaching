@@ -13,6 +13,16 @@ module Admin
       claims.map { |claim| link_to(claim.reference, admin_claim_path(claim), class: "govuk-link") }.to_sentence.html_safe
     end
 
+    def claim_submitted_at(claim)
+      submitted_at = if claim.policy == Policies::EarlyYearsPayments
+        claim.eligibility.provider_claim_submitted_at
+      else
+        claim.submitted_at
+      end
+
+      l(submitted_at.to_date)
+    end
+
     def confirming_identity_playbook_url
       "https://docs.google.com/document/d/1wZh68_RV_FTJLxXIDPr3XFtJHW3vRgiXGaBDUo1Q1ZU"
     end
