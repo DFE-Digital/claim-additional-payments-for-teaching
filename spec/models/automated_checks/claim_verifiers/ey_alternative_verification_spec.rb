@@ -62,7 +62,10 @@ module AutomatedChecks
             expect(task).to be_present
             expect(task.passed).to eq(false)
             expect(task.manual).to eq(false)
-            expect(task.data).to eq({})
+            expect(task.data).to eq({
+              "personal_details_match" => false,
+              "personal_details_task_completed_automatically" => true
+            })
           end
         end
 
@@ -76,9 +79,9 @@ module AutomatedChecks
               expect(task.passed).to eq(true)
               expect(task.manual).to eq(false)
               expect(task.data).to eq(
-                "personal_details_were_passed_automatically" => true,
+                "personal_details_task_completed_automatically" => true,
                 "personal_details_match" => true,
-                "bank_details_were_passed_automatically" => true,
+                "bank_details_task_completed_automatically" => true,
                 "bank_details_match" => true
               )
             end
@@ -87,14 +90,16 @@ module AutomatedChecks
           context "when bank details don't match what the provider has" do
             let(:provider_bank_details_match) { false }
 
-            it "is incomplete with personal auto-pass only" do
+            it "fails the task" do
               verifier.perform
               task = claim.tasks.find_by(name: "ey_alternative_verification")
-              expect(task.passed).to be_nil
-              expect(task.manual).to be_nil
+              expect(task.passed).to eq false
+              expect(task.manual).to eq false
               expect(task.data).to eq(
-                "personal_details_were_passed_automatically" => true,
-                "personal_details_match" => true
+                "personal_details_task_completed_automatically" => true,
+                "personal_details_match" => true,
+                "bank_details_task_completed_automatically" => true,
+                "bank_details_match" => false
               )
             end
           end
@@ -108,7 +113,7 @@ module AutomatedChecks
               expect(task.passed).to be_nil
               expect(task.manual).to be_nil
               expect(task.data).to eq(
-                "personal_details_were_passed_automatically" => true,
+                "personal_details_task_completed_automatically" => true,
                 "personal_details_match" => true
               )
             end
@@ -125,7 +130,7 @@ module AutomatedChecks
               expect(task.passed).to be_nil
               expect(task.manual).to be_nil
               expect(task.data).to eq(
-                "personal_details_were_passed_automatically" => true,
+                "personal_details_task_completed_automatically" => true,
                 "personal_details_match" => true
               )
             end
@@ -141,7 +146,7 @@ module AutomatedChecks
             expect(task.passed).to be_nil
             expect(task.manual).to be_nil
             expect(task.data).to eq(
-              "bank_details_were_passed_automatically" => true,
+              "bank_details_task_completed_automatically" => true,
               "bank_details_match" => true
             )
           end

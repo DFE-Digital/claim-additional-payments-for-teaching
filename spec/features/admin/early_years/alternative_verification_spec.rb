@@ -317,18 +317,25 @@ RSpec.describe "EY claim and alternative verification task" do
           )
         end
 
-        it "shows that the provider does not recognise the bank details" do
+        it "fails the task" do
           visit admin_claim_path(claim)
           click_on "View tasks"
 
           expect(task_status("One Login identity check")).to eql "No data"
-          expect(task_status("Alternative verification")).to eql "Incomplete"
+          expect(task_status("Alternative verification")).to eql "Failed"
           click_link "Confirm the provider has verified the claimant’s identity"
 
-          within_fieldset(
-            "Do the personal details provided by the claimant match the details from the provider?"
-          ) do
-            choose "Yes"
+          expect(page).not_to have_selector("input[type=radio]")
+          expect(page).not_to have_button("Save and continue")
+
+          within "#personal-details" do
+            expect(page).to have_content(
+              "The provider told us that they employ Edna Krabappel."
+            )
+
+            expect(page).to have_content(
+              "Do the personal details provided by the claimant match the details from the provider? N/A"
+            )
           end
 
           within "#bank-details" do
@@ -336,28 +343,14 @@ RSpec.describe "EY claim and alternative verification task" do
               "The provider told us that they do not recognise the bank account details that Edna Krabappel submitted."
             )
 
-            expect(table_row("Edna Krabappel")).to eq([
-              "Edna Krabappel", # Claimant's name
-              "yes" # From HMRC response
-            ])
-
-            within_fieldset(
-              "Has Edna Krabappel provided their own bank account details?"
-            ) do
-              choose "No"
-            end
+            expect(page).to have_content(
+              "Has Edna Krabappel provided their own bank account details? No"
+            )
           end
-
-          click_button "Save and continue"
-
-          visit admin_claim_path(claim)
-          click_on "View tasks"
-          expect(task_status("Alternative verification")).to eql "Failed"
-          click_link "Confirm the provider has verified the claimant’s identity"
 
           within "#task-outcome" do
             expect(page).to have_content("Failed")
-            expect(page).to have_content("This task was performed by Aaron Admin")
+            expect(page).to have_content("This task was performed by an automated check")
           end
         end
       end

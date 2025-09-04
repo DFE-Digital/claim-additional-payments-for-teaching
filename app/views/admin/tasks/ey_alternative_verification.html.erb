@@ -41,14 +41,14 @@
         ) %>
 
         <div class="govuk-!-width-one-half">
-          <% if f.object.task_completed? || f.object.personal_details_were_passed_automatically? %>
+          <% if f.object.task_completed? || f.object.personal_details_task_completed_automatically? %>
             <p class="govuk-body">
               <span class="govuk-fieldset__legend govuk-fieldset__legend--s">
                 Do the personal details provided by the claimant match the 
                 details from the provider?
               </span>
 
-              <%= I18n.t(f.object.personal_details_match, scope: :boolean) %>
+              <%= f.object.personal_details_result %>
             </p>
           <% else %>
             <%= f.govuk_collection_radio_buttons(
@@ -80,14 +80,14 @@
         ) %>
 
         <div class="govuk-!-width-one-half">
-          <% if f.object.task_completed? || f.object.bank_details_were_passed_automatically? %>
+          <% if f.object.task_completed? || f.object.bank_details_task_completed_automatically? %>
             <p class="govuk-body">
               <span class="govuk-fieldset__legend govuk-fieldset__legend--s">
                 Has <%= f.object.claimant_name %> provided their own bank
                 account details?
               </span>
 
-              <%= I18n.t(f.object.bank_details_match, scope: :boolean) %>
+              <%= f.object.bank_details_result %>
             </p>
           <% else %>
             <%= f.govuk_collection_radio_buttons(

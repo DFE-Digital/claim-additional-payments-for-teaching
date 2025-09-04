@@ -14,13 +14,19 @@ module AutomatedChecks
         data = {}
 
         if personal_details_match?
-          data[:personal_details_were_passed_automatically] = true
+          data[:personal_details_task_completed_automatically] = true
           data[:personal_details_match] = true
+        elsif personal_details_failable?
+          data[:personal_details_task_completed_automatically] = true
+          data[:personal_details_match] = false
         end
 
         if bank_details_match?
-          data[:bank_details_were_passed_automatically] = true
+          data[:bank_details_task_completed_automatically] = true
           data[:bank_details_match] = true
+        elsif bank_details_failable?
+          data[:bank_details_task_completed_automatically] = true
+          data[:bank_details_match] = false
         end
 
         task = claim.tasks.build(
@@ -60,8 +66,8 @@ module AutomatedChecks
       end
 
       def bank_details_match?
-        return false unless eligibility.alternative_idv_claimant_employed_by_nursery == true
-        return false unless eligibility.alternative_idv_claimant_bank_details_match
+        return false if personal_details_failable?
+        return false if bank_details_failable?
         return false unless claim.hmrc_name_match?
         return false unless banking_names_match?
 
@@ -79,8 +85,16 @@ module AutomatedChecks
         personal_details_match? && bank_details_match?
       end
 
-      def failable?
+      def personal_details_failable?
         eligibility.alternative_idv_claimant_employed_by_nursery == false
+      end
+
+      def bank_details_failable?
+        eligibility.alternative_idv_claimant_bank_details_match == false
+      end
+
+      def failable?
+        personal_details_failable? || bank_details_failable?
       end
     end
   end
