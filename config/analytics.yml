@@ -123,8 +123,6 @@ shared:
     - updated_at
     - payroll_reference
     - gross_value
-    - national_insurance
-    - employers_national_insurance
     - student_loan_repayment
     - tax
     - net_pay
@@ -353,11 +351,7 @@ shared:
     - provider_verification_physics_courses
     - provider_verification_half_timetabled_teaching_time
     - provider_verification_claimant_employed_by_college
-    - provider_verification_claimant_date_of_birth
-    - provider_verification_claimant_postcode
-    - provider_verification_claimant_national_insurance_number
     - provider_verification_claimant_bank_details_match
-    - provider_verification_claimant_email
     - provider_verification_claimant_employment_check_declaration
     - work_email_verified
   :eligible_ey_providers:
