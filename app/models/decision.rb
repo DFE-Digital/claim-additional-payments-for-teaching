@@ -15,7 +15,7 @@ class Decision < ApplicationRecord
 
   validates :approved, inclusion: {
     in: [true, false],
-    message: "Make a decision to approve or reject the claim"
+    message: "Select if you approve or reject the claim"
   }
   validate :claim_must_be_approvable, if: :approved?, on: :create
   validate :claim_must_be_rejectable, if: :rejected?, on: :create
@@ -84,7 +84,7 @@ class Decision < ApplicationRecord
   def rejected_reasons_required
     return if rejected_reasons.value?("1")
 
-    errors.add(:rejected_reasons, "At least one reason is required")
+    errors.add(:rejected_reasons, "Select at least one rejection reason")
   end
 
   def rejected_reasons_selectable

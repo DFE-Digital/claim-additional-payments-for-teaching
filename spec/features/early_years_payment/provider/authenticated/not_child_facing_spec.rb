@@ -37,7 +37,7 @@ RSpec.feature "Early years payment provider child facing" do
     expect(page.current_path).to eq "/early-years-payment-provider/child-facing"
     click_button "Continue"
 
-    expect(page).to have_content "You must select an option below to continue"
+    expect(page).to have_content "Select yes if Bobby Bobberson spends most of their time in their job working directly with children"
     choose "No"
     click_button "Continue"
 

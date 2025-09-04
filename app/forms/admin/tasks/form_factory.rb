@@ -11,6 +11,10 @@ module Admin
           PayrollGenderForm
         when "continuous_employment"
           ContinuousEmploymentForm
+        when "payroll_details"
+          PayrollDetailsForm
+        when "matching_details"
+          MatchingDetailsForm
         else
           GenericForm
         end

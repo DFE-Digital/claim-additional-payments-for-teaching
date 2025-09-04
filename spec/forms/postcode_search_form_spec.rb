@@ -17,7 +17,7 @@ RSpec.describe PostcodeSearchForm, type: :model do
     allow_any_instance_of(OrdnanceSurvey::Client).to receive_message_chain(:api, :search_places, :index).and_return([double])
   end
 
-  it { is_expected.to validate_presence_of(:postcode).with_message("Enter a real postcode, for example NE1 6EE") }
+  it { is_expected.to validate_presence_of(:postcode).with_message("Enter a postcode, for example NE1 6EE") }
 
   context "when the postcode is too long" do
     let(:params) { ActionController::Parameters.new(claim: {postcode: "SW1A1AAAAAAA"}) }
