@@ -86,6 +86,10 @@
   - claimant_passport_number
   - passport_number
   - work_email
+  - provider_verification_claimant_date_of_birth
+  - provider_verification_claimant_email
+  - provider_verification_claimant_national_insurance_number
+  - provider_verification_claimant_postcode
   :journeys_sessions:
   - answers
   :early_years_payment_eligibilities:
@@ -228,3 +232,6 @@
   - description
   - created_at
   - updated_at
+  :payments:
+  - national_insurance
+  - employers_national_insurance
