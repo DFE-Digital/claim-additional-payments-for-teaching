@@ -338,21 +338,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_03_083853) do
     t.boolean "provider_verification_disciplinary_action"
     t.string "provider_verification_teaching_hours_per_week"
     t.boolean "provider_verification_half_teaching_hours"
-    t.boolean "provider_verification_subjects_taught"
     t.boolean "provider_verification_declaration"
     t.datetime "provider_verification_completed_at", precision: nil
     t.uuid "provider_verification_verified_by_id"
     t.uuid "provider_assigned_to_id"
     t.datetime "provider_verification_started_at"
     t.boolean "provider_verification_timetabled_teaching_hours"
-    t.jsonb "provider_verification_actual_subjects_taught", default: []
-    t.jsonb "provider_verification_building_construction_courses", default: []
-    t.jsonb "provider_verification_chemistry_courses", default: []
-    t.jsonb "provider_verification_computing_courses", default: []
-    t.jsonb "provider_verification_early_years_courses", default: []
-    t.jsonb "provider_verification_engineering_manufacturing_courses", default: []
-    t.jsonb "provider_verification_maths_courses", default: []
-    t.jsonb "provider_verification_physics_courses", default: []
     t.boolean "provider_verification_half_timetabled_teaching_time"
     t.citext "work_email"
     t.boolean "work_email_verified"

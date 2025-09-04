@@ -142,11 +142,11 @@ module FurtherEducationPayments
             },
             {
               key: {
-                text: "Teaches approved qualification in #{subject_names_sentence}"
+                text: "Spend at least half timetabled teaching time teaching relevant courses"
               },
               value: {
                 text: I18n.t(
-                  claim.eligibility.provider_verification_subjects_taught,
+                  claim.eligibility.provider_verification_half_timetabled_teaching_time,
                   scope: :boolean
                 )
               }
