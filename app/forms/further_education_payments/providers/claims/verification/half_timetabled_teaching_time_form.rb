@@ -25,20 +25,12 @@ module FurtherEducationPayments
           end
 
           def course_descriptions
-            courses.map do |subject_area, course|
+            claimant_selected_courses.map do |subject_area, course|
               course_option_description(course, i18n_form_namespace: "#{subject_area}_courses").html_safe
             end
           end
 
           private
-
-          def courses
-            if eligibility.provider_verification_subjects_taught?
-              claimant_selected_courses
-            else
-              provider_selected_courses
-            end
-          end
 
           def claimant_selected_courses
             eligibility
@@ -62,18 +54,6 @@ module FurtherEducationPayments
               maths_courses
               physics_courses
             ]
-          end
-
-          def provider_selected_courses
-            eligibility
-              .provider_verification_actual_subjects_taught
-              .flat_map do |subject_area|
-                area_courses = eligibility.public_send("provider_verification_#{subject_area}_courses").reject { |subject| subject == "none" }
-
-                area_courses.map do |course|
-                  [subject_area, course]
-                end
-              end
           end
 
           def journey
