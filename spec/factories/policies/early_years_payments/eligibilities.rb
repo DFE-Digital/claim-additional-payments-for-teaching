@@ -5,6 +5,7 @@ FactoryBot.define do
       child_facing_confirmation_given { true }
       returning_within_6_months { false }
       with_eligible_ey_provider
+      provider_claim_submitted_at { Time.zone.now }
     end
 
     trait :with_eligible_ey_provider do
