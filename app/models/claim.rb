@@ -477,7 +477,7 @@ class Claim < ApplicationRecord
   end
 
   def hmrc_name_match?
-    hmrc_name_match == "yes"
+    hmrc_name_match&.downcase == "yes"
   end
 
   private
