@@ -102,6 +102,22 @@ class Admin::Tasks::EyAlternativeVerificationForm
     ]
   end
 
+  def personal_details_result
+    # If the task has been auto failed because bank details were not confirmed
+    # by provider, we don't have a personal_details_match value saved.
+    return not_applicable_answer if personal_details_match.nil?
+
+    I18n.t(personal_details_match, scope: :boolean)
+  end
+
+  def bank_details_result
+    # If the task has been auto failed because bank details were not confirmed
+    # by provider, we don't have a bank_details_match value saved.
+    return not_applicable_answer if bank_details_match.nil?
+
+    I18n.t(bank_details_match, scope: :boolean)
+  end
+
   def bank_details_match_options
     [
       Form::Option.new(id: true, name: "Yes"),
@@ -134,14 +150,16 @@ class Admin::Tasks::EyAlternativeVerificationForm
   def save
     return false if invalid?
 
+    task_data = task.data || {}
+
+    task_data["personal_details_match"] = personal_details_match
+    task_data["bank_details_match"] = bank_details_match
+
     task.update(
       passed: personal_details_match && bank_details_match,
       created_by: admin_user,
       manual: true,
-      data: {
-        personal_details_match: personal_details_match,
-        bank_details_match: bank_details_match
-      }
+      data: task_data
     )
   end
 
@@ -155,6 +173,18 @@ class Admin::Tasks::EyAlternativeVerificationForm
 
   def claimant_name
     claim.full_name
+  end
+
+  def personal_details_task_completed_automatically?
+    task.persisted? && task.data["personal_details_task_completed_automatically"] == true
+  end
+
+  def bank_details_task_completed_automatically?
+    task.persisted? && task.data["bank_details_task_completed_automatically"] == true
+  end
+
+  def task_completed?
+    task.persisted? && !task.passed.nil?
   end
 
   private
