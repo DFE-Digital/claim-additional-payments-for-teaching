@@ -55,4 +55,19 @@ RSpec.describe Policies::FurtherEducationPayments do
       end
     end
   end
+
+  describe "#decision_deadline_date" do
+    let(:claim) do
+      build(
+        :claim,
+        :further_education,
+        :submitted,
+        submitted_at: Date.new(2025, 9, 2)
+      )
+    end
+
+    it "is 13 weeks after claim has been submitted" do
+      expect(subject.decision_deadline_date(claim)).to eql(Date.new(2025, 12, 2))
+    end
+  end
 end

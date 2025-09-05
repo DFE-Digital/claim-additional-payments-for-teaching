@@ -168,7 +168,7 @@ RSpec.feature "Admin views claim details for FurtherEducationPayments" do
 
       expect(summary_row("Submitted at")).to have_content("1 August 2024 12:00pm")
 
-      expect(summary_row("Decision deadline")).to have_content("24 October 2024")
+      expect(summary_row("Decision deadline")).to have_content("31 October 2024")
     end
   end
 end
