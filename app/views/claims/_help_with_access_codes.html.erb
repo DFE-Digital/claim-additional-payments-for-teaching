@@ -1,13 +1,4 @@
-<details class="govuk-details" data-module="govuk-details">
-  <summary class="govuk-details__summary">
-    <span class="govuk-details__summary-text">
-      Get help with access codes
-    </span>
-  </summary>
-  <div class="govuk-details__text">
-    <p class="govuk-body">
-      If you have any issues with the passcode, email us at:
-      <%= mail_to support_email_address, support_email_address, subject: "#{communication_type} verification", class: "govuk-link" -%>.
-    </p>
-  </div>
-</details>
+<%= govuk_details(summary_text: "Get help with access codes") do %>
+  If you have any issues with the passcode, email us at:
+  <%= govuk_mail_to support_email_address(journey.routing_name), support_email_address(journey.routing_name), subject: "#{communication_type} verification" %>.
+<% end %>

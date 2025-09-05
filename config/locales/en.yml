@@ -1635,15 +1635,15 @@ en:
       email_address:
         label: What is your personal email address?
         hint_html: |
-          <p>
+          <p class="govuk-body">
             This should match the email address your employer has on file for you.
           </p>
 
-          <p>
+          <p class="govuk-body">
             We need it so that we can still contact you if your circumstances change while we process your payment.
           </p>
 
-          <p>
+          <p class="govuk-body">
             To verify your email address, we will send you an email with a 6-digit passcode. You can enter the passcode on the next screen.
           </p>
       personal_details:
