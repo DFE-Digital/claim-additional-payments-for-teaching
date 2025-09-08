@@ -20,8 +20,6 @@ module Policies
           :fe_provider
         elsif answers.contract_type == "employed_by_another_organisation"
           :employed_by_another_organisation
-        elsif answers.fixed_term_full_year == false
-          :fixed_term_must_cover_full_academic_year
         elsif answers.taught_at_least_one_term == false
           :must_teach_at_least_one_term
         elsif !answers.recent_further_education_teacher?

@@ -5,6 +5,7 @@ RSpec.feature "Further education payments" do
 
   let(:college) { create(:school, :further_education, :fe_eligible) }
   let(:expected_award_amount) { college.eligible_fe_provider.max_award_amount }
+  let(:current_academic_year) { AcademicYear.current }
 
   scenario "variable contract" do
     when_student_loan_data_exists
@@ -216,6 +217,105 @@ RSpec.feature "Further education payments" do
     expect(eligibility.teacher_reference_number).to eql("1234567")
 
     expect(page).to have_content("You applied for a further education targeted retention incentive payment")
+  end
+
+  scenario "fixed term contract not covering the academic year" do
+    when_student_loan_data_exists
+    when_further_education_payments_journey_configuration_exists
+    and_college_exists
+
+    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    expect(page).to have_link("Start now")
+    click_link "Start now"
+
+    expect(page).to have_content("Do you have a")
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_content("Did you apply for a")
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
+    expect(page).to have_content("Answer the questions in the next section")
+    click_button "Start eligibility check"
+
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    choose("September 2023 to August 2024")
+    click_button "Continue"
+
+    expect(page).to have_content("Do you have a teaching qualification?")
+    choose("Yes")
+    click_button "Continue"
+
+    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: college.name
+    click_button "Continue"
+
+    expect(page).to have_content("Select where you are employed")
+    choose college.name
+    click_button "Continue"
+
+    choose("Fixed-term")
+    click_button "Continue"
+
+    expect(page).to have_content("Does your fixed-term contract cover the full #{current_academic_year.to_s(:long)} academic year?")
+    choose("No, it does not cover the full #{current_academic_year.to_s(:long)} academic year")
+    click_button "Continue"
+
+    expect(page).to have_content("Have you taught at #{college.name} for at least one academic term?")
+    choose("Yes")
+    click_button "Continue"
+
+    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
+    choose("More than 12 hours per week")
+    click_button "Continue"
+
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_content("Are you timetabled to teach at least 2.5 hours per week at #{college.name} next term?")
+    choose("Yes")
+    click_button "Continue"
+
+    expect(page).to have_content("Which subject areas do you teach?")
+    check("Building and construction")
+    click_button "Continue"
+
+    expect(page).to have_content("Which building and construction courses do you teach?")
+    check "T Level in building services engineering for construction"
+    click_button "Continue"
+
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching these eligible courses?")
+    choose("Yes")
+    click_button "Continue"
+
+    expect(page).to have_content("Are you subject to any formal performance measures as a result of continuous poor teaching standards")
+    within all(".govuk-fieldset")[0] do
+      choose("No")
+    end
+    expect(page).to have_content("Are you currently subject to disciplinary action?")
+    within all(".govuk-fieldset")[1] do
+      choose("No")
+    end
+    click_button "Continue"
+
+    expect(page).to have_content("Check your answers")
+
+    expect(page).to have_summary_item(
+      key: "Have you taught at #{college.name} for at least one academic term?",
+      value: "Yes"
+    )
+
+    expect(page).to have_summary_item(
+      key: "Are you timetabled to teach at least 2.5 hours per week at #{college.name} next term?",
+      value: "Yes"
+    )
   end
 
   def and_college_exists
