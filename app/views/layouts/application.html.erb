@@ -78,6 +78,8 @@
         <% flash.each do |name, msg| %>
           <% if name == "success" %>
             <%= govuk_notification_banner(title_text: "Success", success: true) { |nb| nb.with_heading(text: msg) } %>
+          <% elsif name == "done" %>
+            <%= govuk_notification_banner(title_text: "Done", success: true) { |nb| nb.with_heading(text: msg) } %>
           <% else %>
             <div class="govuk-body-l govuk-flash__<%= name %>">
               <%= msg %>

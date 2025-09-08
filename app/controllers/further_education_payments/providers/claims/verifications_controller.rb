@@ -22,7 +22,7 @@ module FurtherEducationPayments
 
             wizard.clear_impermissible_answers!
 
-            flash[:success] = wizard.message if wizard.message
+            flash[:done] = wizard.message if wizard.message
 
             if @form.read_only?
               redirect_to(

@@ -314,7 +314,7 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Continue"
 
-      expect(page).to have_content("Claim Verified for Edna Krabappel")
+      expect(page).to have_content("Verification form for Edna Krabappel sent to DfE")
       expect(
         page.current_path
       ).to eql("/further-education-payments/providers/verified-claims")
@@ -494,7 +494,7 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Continue"
 
-      expect(page).to have_content("Claim Verified for Edna Krabappel")
+      expect(page).to have_content("Verification form for Edna Krabappel sent to DfE")
     end
   end
 
@@ -673,7 +673,7 @@ RSpec.feature "Provider verifying claims" do
 
       click_on "Continue"
 
-      expect(page).to have_content("Claim Verified for Edna Krabappel")
+      expect(page).to have_content("Verification form for Edna Krabappel sent to DfE")
     end
   end
 
@@ -1210,6 +1210,10 @@ RSpec.feature "Provider verifying claims" do
 
           click_on "Continue"
 
+          expect(page).to have_content("Done")
+          expect(page).to have_content(
+            "Employment check for Edna Krabappel complete"
+          )
           expect(page).to have_content(
             "You've told us this applicant does not work at Springfield College"
           )
@@ -1304,9 +1308,9 @@ RSpec.feature "Provider verifying claims" do
 
           click_on "Confirm and send"
 
-          expect(page).to have_content("Success")
+          expect(page).to have_content("Done")
           expect(page).to have_content(
-            "Employment check for Edna Krabappel submitted"
+            "Employment check for Edna Krabappel complete"
           )
 
           # Expect to be on the first page of the verification journey
