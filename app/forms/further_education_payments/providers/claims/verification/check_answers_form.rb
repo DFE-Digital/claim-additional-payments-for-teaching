@@ -19,7 +19,7 @@ module FurtherEducationPayments
 
           delegate(
             :provider_verification_teaching_responsibilities,
-            :provider_verification_in_first_five_years,
+            :provider_verification_teaching_start_year_matches_claim,
             :provider_verification_teaching_qualification,
             :provider_verification_contract_covers_full_academic_year,
             :provider_verification_contract_type,
@@ -43,10 +43,10 @@ module FurtherEducationPayments
           end
 
           def in_first_five_years
-            if provider_verification_in_first_five_years.nil?
+            if provider_verification_teaching_start_year_matches_claim.nil?
               NOT_ANSWERED
             else
-              I18n.t(provider_verification_in_first_five_years, scope: :boolean)
+              I18n.t(provider_verification_teaching_start_year_matches_claim, scope: :boolean)
             end
           end
 
