@@ -19,6 +19,8 @@ RSpec.feature "Further education payments" do
     choose "Yes"
     click_button "Continue"
 
+    mock_one_login_auth(uid: one_login_uid)
+
     expect(page).to have_content("Sign in with GOV.UK One Login")
     fill_in "One Login UID", with: one_login_uid
     click_button "Continue"
@@ -46,6 +48,8 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Do you have a")
     choose "Yes"
     click_button "Continue"
+
+    mock_one_login_auth(uid: one_login_uid)
 
     expect(page).to have_content("Sign in with GOV.UK One Login")
     fill_in "One Login UID", with: one_login_uid
@@ -73,6 +77,8 @@ RSpec.feature "Further education payments" do
     choose "Yes"
     click_button "Continue"
 
+    mock_one_login_auth(uid: one_login_uid)
+
     expect(page).to have_content("Sign in with GOV.UK One Login")
     fill_in "One Login UID", with: one_login_uid
     click_button "Continue"
@@ -100,6 +106,8 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Do you have a")
     choose "Yes"
     click_button "Continue"
+
+    mock_one_login_auth(uid: one_login_uid)
 
     expect(page).to have_content("Sign in with GOV.UK One Login")
     fill_in "One Login UID", with: one_login_uid
@@ -130,6 +138,8 @@ RSpec.feature "Further education payments" do
     choose "Yes"
     click_button "Continue"
 
+    mock_one_login_auth(uid: one_login_uid)
+
     expect(page).to have_content("Sign in with GOV.UK One Login")
     fill_in "One Login UID", with: one_login_uid
     click_button "Continue"
@@ -157,6 +167,8 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Do you have a")
     choose "Yes"
     click_button "Continue"
+
+    mock_one_login_auth(uid: one_login_uid)
 
     expect(page).to have_content("Sign in with GOV.UK One Login")
     fill_in "One Login UID", with: one_login_uid
