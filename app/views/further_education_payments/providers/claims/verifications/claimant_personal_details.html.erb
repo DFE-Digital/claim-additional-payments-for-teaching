@@ -10,22 +10,10 @@
       About <%= @form.claimant_name %>
     </h1>
 
-    <%= govuk_details(
-      summary_text: "Why we need this information",
-    ) do %>
-      <p class="govuk-body">
-        The applicant was not able to prove their identity using GOV.UK One Login,
-        so we need to do an employment check.
-      </p>
-
+    <%= govuk_inset_text do %>
       <p class="govuk-body">
         The applicant has already provided this information and understands it
-        will be verified by their employer.
-      </p>
-
-      <p class="govuk-body">
-        Providing this information does not break General Data Protection
-        Regulation (GDPR) rules.
+        may be verified by their employer.
       </p>
     <% end %>
 
