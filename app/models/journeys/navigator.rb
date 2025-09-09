@@ -70,6 +70,12 @@ module Journeys
             next
           end
 
+          # check if want to resume an existing session
+          # if so carry on where we left off
+          if form.resume?
+            return furthest_permissible_slug
+          end
+
           if current_slug == slug
             current_index = forms.index(form)
             next_index = current_index + 1

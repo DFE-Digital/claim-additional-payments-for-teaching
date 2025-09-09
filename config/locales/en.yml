@@ -973,6 +973,10 @@ en:
           "i_dont_know": I don’t know
         errors:
           inclusion: 'Tell us if you have a GOV.UK One Login account'
+      existing_progress:
+        question: You have already started an eligibility check
+        errors:
+          inclusion: Choose if you want to continue your existing eligibility check or start a new eligibility check
       teaching_responsibilities:
         question: Are you a member of staff with teaching responsibilities?
         errors:
