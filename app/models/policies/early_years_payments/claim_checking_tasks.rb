@@ -14,12 +14,12 @@ module Policies
       def applicable_task_names
         tasks = []
 
-        if year_1_of_ey?
-          tasks << "identity_confirmation"
+        tasks << if year_1_of_ey?
+          "identity_confirmation"
         else
-          tasks << "one_login_identity"
-          tasks << "ey_alternative_verification" if claim.failed_one_login_idv?
+          "one_login_identity"
         end
+        tasks << "ey_alternative_verification" if include_ey_alternative_verification_task?
         tasks << "employment"
         tasks << "student_loan_plan" if claim.submitted_without_slc_data?
         tasks << "payroll_details" if claim.must_manually_validate_bank_details?
@@ -36,6 +36,10 @@ module Policies
       end
 
       private
+
+      def include_ey_alternative_verification_task?
+        claim.tasks.exists?(name: "ey_alternative_verification") || (!year_1_of_ey? && claim.failed_one_login_idv?)
+      end
 
       def year_1_of_ey?
         claim.academic_year == AcademicYear.new("2024/2025")
