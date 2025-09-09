@@ -29,7 +29,7 @@ module FurtherEducationPayments
             },
             value: {
               text: I18n.t(
-                claim.eligibility.provider_verification_in_first_five_years,
+                claim.eligibility.provider_verification_teaching_start_year_matches_claim,
                 scope: :boolean
               )
             }

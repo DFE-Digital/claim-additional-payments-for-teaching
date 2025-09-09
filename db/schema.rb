@@ -329,7 +329,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_11_092038) do
     t.boolean "valid_passport"
     t.text "passport_number"
     t.boolean "provider_verification_teaching_responsibilities"
-    t.boolean "provider_verification_in_first_five_years"
+    t.boolean "provider_verification_teaching_start_year_matches_claim"
     t.string "provider_verification_teaching_qualification"
     t.string "provider_verification_contract_type"
     t.boolean "provider_verification_contract_covers_full_academic_year"
