@@ -98,6 +98,10 @@ class Form
     end
   end
 
+  def resume?
+    false
+  end
+
   private
 
   def permitted_attributes

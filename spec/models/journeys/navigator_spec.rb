@@ -1,7 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Journeys::Navigator do
-  subject { described_class.new(current_slug:, slug_sequence:, params:, session:) }
+  subject do
+    described_class.new(current_slug:, slug_sequence:, params:, session:)
+  end
 
   let(:current_slug) { "have-one-login-account" }
   let(:slug_sequence) { Journeys::FurtherEducationPayments::SlugSequence.new(journey_session) }
@@ -9,6 +11,10 @@ RSpec.describe Journeys::Navigator do
   let(:session) { {} }
   let(:journey_session) do
     create(:further_education_payments_session, answers: answers)
+  end
+
+  before do
+    create(:journey_configuration, :further_education_payments)
   end
 
   describe "#next_slug" do
