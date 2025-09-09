@@ -95,6 +95,10 @@ module FurtherEducationPayments
             false
           end
 
+          def claimant_further_education_teaching_start_year
+            claim.eligibility.further_education_teaching_start_year
+          end
+
           private
 
           def attributes_to_clear
