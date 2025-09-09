@@ -15,6 +15,19 @@ class OneLoginAccount
       .order(updated_at: :asc)
   end
 
+  # ignore sessions that are ineligible
+  def resumable_journey_sessions(journey:, academic_year: nil)
+    academic_year ||= journey.configuration.current_academic_year
+
+    sessions = journey_sessions(journey:, academic_year:).to_a
+    sessions.reject! do |session|
+      journey.policies.all? do |policy|
+        policy::PolicyEligibilityChecker.new(answers: session.answers).ineligible?
+      end
+    end
+    sessions
+  end
+
   def claims
     raise NotImplementedError
   end

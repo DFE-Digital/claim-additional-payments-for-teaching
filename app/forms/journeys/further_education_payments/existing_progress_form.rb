@@ -49,8 +49,8 @@ module Journeys
 
       def existing_journey_session_to_migrate_from
         one_login_account
-          .journey_sessions(journey: Journeys::FurtherEducationPayments)
-          .where.not(id: journey_session.id)
+          .resumable_journey_sessions(journey: Journeys::FurtherEducationPayments)
+          .reject { |js| js.id == journey_session.id }
           .last
       end
 

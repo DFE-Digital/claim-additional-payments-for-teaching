@@ -147,7 +147,7 @@ module Policies
       return if journey_session.answers.onelogin_uid.blank?
 
       account = OneLoginAccount.new(uid: journey_session.answers.onelogin_uid)
-      journey_sessions = account.journey_sessions(journey: Journeys::FurtherEducationPayments)
+      journey_sessions = account.resumable_journey_sessions(journey: Journeys::FurtherEducationPayments)
       journey_sessions.count > 1
     end
   end
