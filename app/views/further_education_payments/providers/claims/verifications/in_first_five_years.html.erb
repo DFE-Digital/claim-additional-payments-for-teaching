@@ -33,8 +33,8 @@
         :id,
         :name,
         legend: {
-          text: "Is #{f.object.claimant_name} in the first 5 years of their " \
-                "further education (FE) teaching career in England?",
+          text: "Did #{f.object.claimant_name} start their FE teaching career " \
+                "in England during #{f.object.claimant_further_education_teaching_start_year}",
           size: "s",
         }
       ) %>
@@ -44,14 +44,19 @@
                       "teaching career",
       ) do %>
         <p class="govuk-body">
-          Only teaching at post-16 providers in England counts. It includes
-          independent training providers. Teaching in schools, outside England
-          or overseas does not count.
-          <br />
-          <br />
-          Teachers who taught in FE before August 2020 are not eligible, even if
-          they've since returned.
+          This is the first academic year the teacher took on FE teaching
+          responsibilities in England. We define this as the academic year when
+          the teacher took on the following teaching responsibilities at a
+          post-16 education provider in England:
         </p>
+        <%= govuk_list(
+          [
+            "independently teaching timetabled guided learning hours to classes of students",
+            "planning and preparing lessons for classes of students",
+            "assessing learning and reporting on progress for classes of students"
+          ],
+          type: :bullet
+        ) %>
       <% end %>
 
       <%= f.govuk_submit("Continue") %>
