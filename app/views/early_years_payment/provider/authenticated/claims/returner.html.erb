@@ -1,4 +1,9 @@
-<% question = @form.t("question", first_name: answers.first_name, six_months_before_start_date: @form.six_months_before_start_date.to_fs(:long_date), start_date: @form.start_date.to_fs(:long_date)) %>
+<% question = @form.t(
+  "question",
+  first_name: answers.first_name,
+  six_months_before_start_date: @form.six_months_before_start_date.to_fs(:long_date),
+  start_date: (@form.start_date - 1.day).to_fs(:long_date)
+) %>
 <% content_for(:page_title, page_title(question, journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
 <div class="govuk-grid-row">
