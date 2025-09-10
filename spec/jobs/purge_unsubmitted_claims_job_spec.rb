@@ -10,7 +10,9 @@ RSpec.describe PurgeUnsubmittedClaimsJob do
       unsubmitted_fresh_journeys = []
       unsubmitted_expired_journeys = []
 
-      Journeys::JOURNEYS.each do |journey|
+      Journeys::JOURNEYS
+        .excluding(Journeys::FurtherEducationPayments)
+        .each do |journey|
         submitted_journeys << journey::Session.create!(
           journey: journey::ROUTING_NAME,
           claim: create(:claim),
@@ -37,6 +39,28 @@ RSpec.describe PurgeUnsubmittedClaimsJob do
       expect(
         Journeys::Session.where(id: unsubmitted_expired_journeys.map(&:id))
       ).to be_empty
+    end
+
+    context "FE sessions" do
+      it "deletes unsubmitted sessions over a year old" do
+        Journeys::FurtherEducationPayments::Session.create!(
+          journey: Journeys::FurtherEducationPayments::ROUTING_NAME,
+          updated_at: 11.months.ago
+        )
+
+        expect {
+          PurgeUnsubmittedClaimsJob.new.perform
+        }.not_to change(Journeys::FurtherEducationPayments::Session, :count)
+
+        Journeys::FurtherEducationPayments::Session.create!(
+          journey: Journeys::FurtherEducationPayments::ROUTING_NAME,
+          updated_at: 13.months.ago
+        )
+
+        expect {
+          PurgeUnsubmittedClaimsJob.new.perform
+        }.to change(Journeys::FurtherEducationPayments::Session, :count).by(-1)
+      end
     end
   end
 end

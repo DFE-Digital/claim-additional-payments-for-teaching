@@ -28,7 +28,11 @@ module Journeys
     scope :submitted, -> { joins(:claim) }
 
     scope :purgeable, -> do
-      unsubmitted.where(journeys_sessions: {updated_at: ..24.hours.ago})
+      unsubmitted.where(journeys_sessions: {updated_at: ..purgeable_age})
+    end
+
+    def self.purgeable_age
+      24.hours.ago
     end
 
     def journey_class
