@@ -55,8 +55,8 @@ module FurtherEducationPayments
             when "fixed_term" then "Fixed-term"
             when "variable_hours" then "Variable hours"
             when "permanent" then "Permanent"
-            when "employed_by_another_organisation"
-              "Employed by another organisation (for example, an agency or contractor)"
+            when "no_direct_contract"
+              "Does not currently have a direct contract of employment"
             when nil then NOT_ANSWERED
             else fail "Unknown contract type"
             end

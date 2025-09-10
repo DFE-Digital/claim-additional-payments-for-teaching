@@ -20,8 +20,9 @@ module FurtherEducationPayments
               Form::Option.new(id: "fixed_term", name: "Fixed-term"),
               Form::Option.new(id: "variable_hours", name: "Variable hours"),
               Form::Option.new(
-                id: "employed_by_another_organisation",
-                name: "Employed by another organisation (for example, an agency or contractor)"
+                id: "no_direct_contract",
+                name: "Does not currently have a direct contract of employment with #{provider_name}",
+                hint: "For example, they have left #{provider_name} or they are employed through an agency, as a contractor, or through a subsidiary of #{provider_name}."
               )
             ]
           end

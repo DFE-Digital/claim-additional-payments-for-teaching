@@ -209,20 +209,17 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel in the first 5 years of their further education " \
         "(FE) teaching career in England?"
       ) { choose "Yes" }
-
       click_on "Continue"
 
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"
       end
-
       click_on "Continue"
 
       within_fieldset(
-        "What type of contract does Edna Krabappel have with " \
+        "What type of contract does Edna Krabappel have directly with " \
         "Springfield College?"
       ) { choose "Permanent" }
-
       click_on "Continue"
 
       # Performance and discipline
@@ -376,27 +373,23 @@ RSpec.feature "Provider verifying claims" do
       within_fieldset(
         "Is Edna Krabappel a member of staff with teaching responsibilities?"
       ) { choose "Yes" }
-
       click_on "Continue"
 
       within_fieldset(
         "Is Edna Krabappel in the first 5 years of their further education " \
         "(FE) teaching career in England?"
       ) { choose "Yes" }
-
       click_on "Continue"
 
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"
       end
-
       click_on "Continue"
 
       within_fieldset(
-        "What type of contract does Edna Krabappel have with " \
+        "What type of contract does Edna Krabappel have directly with " \
         "Springfield College?"
       ) { choose "Fixed-term" }
-
       click_on "Continue"
 
       # Second screen with additional questions for fixed term contracts
@@ -404,7 +397,6 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel's fixed-term contract for the full 2025 to 2026 " \
         "academic year?"
       ) { choose "No" }
-
       click_on "Continue"
 
       # Performance and discipline
@@ -566,7 +558,7 @@ RSpec.feature "Provider verifying claims" do
       click_on "Continue"
 
       within_fieldset(
-        "What type of contract does Edna Krabappel have with " \
+        "What type of contract does Edna Krabappel have directly with " \
         "Springfield College?"
       ) { choose "Variable hours" }
 
@@ -709,27 +701,23 @@ RSpec.feature "Provider verifying claims" do
       within_fieldset(
         "Is Edna Krabappel a member of staff with teaching responsibilities?"
       ) { choose "Yes" }
-
       click_on "Continue"
 
       within_fieldset(
         "Is Edna Krabappel in the first 5 years of their further education " \
         "(FE) teaching career in England?"
       ) { choose "Yes" }
-
       click_on "Continue"
 
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"
       end
-
       click_on "Continue"
 
       within_fieldset(
-        "What type of contract does Edna Krabappel have with " \
+        "What type of contract does Edna Krabappel have directly with " \
         "Springfield College?"
       ) { choose "Variable" }
-
       click_on "Continue"
 
       # Second variable hours screen
@@ -798,10 +786,9 @@ RSpec.feature "Provider verifying claims" do
       end
 
       within_fieldset(
-        "What type of contract does Edna Krabappel have with " \
+        "What type of contract does Edna Krabappel have directly with " \
         "Springfield College?"
       ) { choose "Permanent" }
-
       click_on "Continue"
 
       expect(summary_row("Contract type")).to have_content("Permanent")
@@ -812,10 +799,9 @@ RSpec.feature "Provider verifying claims" do
       end
 
       within_fieldset(
-        "What type of contract does Edna Krabappel have with " \
+        "What type of contract does Edna Krabappel have directly with " \
         "Springfield College?"
       ) { choose "Fixed-term" }
-
       click_on "Continue"
 
       # Second screen with additional questions for fixed term contracts
@@ -823,7 +809,6 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel's fixed-term contract for the full 2025 to 2026 " \
         "academic year?"
       ) { choose "No" }
-
       click_on "Continue"
 
       expect(summary_row("Contract type")).to have_content("Fixed-term")
@@ -838,24 +823,21 @@ RSpec.feature "Provider verifying claims" do
       end
 
       within_fieldset(
-        "What type of contract does Edna Krabappel have with " \
+        "What type of contract does Edna Krabappel have directly with " \
         "Springfield College?"
       ) { choose "Variable hours" }
-
       click_on "Continue"
 
       within_fieldset(
         "Is Edna Krabappel timetabled to teach at least 2.5 hours per week at " \
         "Springfield College in the [spring_or_summer] term?"
       ) { choose "Yes" }
-
       click_on "Continue"
 
       within_fieldset(
         "Has Edna Krabappel taught at Springfield College for at least one " \
         "full academic term?"
       ) { choose "Yes" }
-
       click_on "Continue"
 
       expect(summary_row("Contract type")).to have_content("Variable hours")
@@ -872,18 +854,17 @@ RSpec.feature "Provider verifying claims" do
       end
 
       within_fieldset(
-        "What type of contract does Edna Krabappel have with " \
+        "What type of contract does Edna Krabappel have directly with " \
         "Springfield College?"
       ) do
         choose(
-          "Employed by another organisation (for example, an agency or contractor)"
+          "Does not currently have a direct contract of employment with Springfield College"
         )
       end
-
       click_on "Continue"
 
       expect(summary_row("Contract type")).to have_content(
-        "Employed by another organisation (for example, an agency or contractor)"
+        "Does not currently have a direct contract of employment"
       )
 
       expect(page).not_to have_content("At least 2.5 hours per week")
@@ -926,27 +907,23 @@ RSpec.feature "Provider verifying claims" do
       within_fieldset(
         "Is Edna Krabappel a member of staff with teaching responsibilities?"
       ) { choose "Yes" }
-
       click_on "Continue"
 
       within_fieldset(
         "Is Edna Krabappel in the first 5 years of their further education " \
         "(FE) teaching career in England?"
       ) { choose "Yes" }
-
       click_on "Continue"
 
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"
       end
-
       click_on "Continue"
 
       within_fieldset(
-        "What type of contract does Edna Krabappel have with " \
+        "What type of contract does Edna Krabappel have directly with " \
         "Springfield College?"
       ) { choose "Variable" }
-
       click_on "Continue"
 
       # Expect to see the first variable hours specific question
@@ -954,15 +931,13 @@ RSpec.feature "Provider verifying claims" do
         "Is Edna Krabappel timetabled to teach at least 2.5 hours per week at " \
         "Springfield College in the [spring_or_summer] term?"
       )
-
       click_on "Back"
 
       # Now we're back to the contract type page
       within_fieldset(
-        "What type of contract does Edna Krabappel have with " \
+        "What type of contract does Edna Krabappel have directly with " \
         "Springfield College?"
       ) { choose "Fixed-term" }
-
       click_on "Continue"
 
       # Expect to see fixed term specific question
@@ -1034,11 +1009,9 @@ RSpec.feature "Provider verifying claims" do
       within_fieldset("Does Edna Krabappel have a teaching qualification?") do
         choose "Yes"
       end
-
       click_on "Save and come back later"
 
       expect(page).to have_content("Progress saved")
-
       click_on "Return to dashboard"
 
       visit(
@@ -1047,17 +1020,15 @@ RSpec.feature "Provider verifying claims" do
 
       # Should go to the contract type page since the first two pages are completed
       within_fieldset(
-        "What type of contract does Edna Krabappel have with " \
+        "What type of contract does Edna Krabappel have directly with " \
         "Springfield College?"
       ) { choose "Fixed-term" }
-
       click_on "Continue"
 
       expect(page).to have_content(
         "Is Edna Krabappel's fixed-term contract for the full 2025 to 2026 " \
         "academic year?"
       )
-
       click_on "Save and come back later"
 
       expect(page).to have_content("Progress saved")
