@@ -98,6 +98,11 @@ module Admin
     end
 
     def decision_deadline_warning(claim, opts = {})
+      if claim.decision_deadline_date.nil?
+        # EY claim where the practitioner journey hasn't been completed
+        return I18n.t("admin.decision_overdue_not_applicable")
+      end
+
       days_until_decision_deadline = days_between(Date.today, claim.decision_deadline_date)
 
       if days_until_decision_deadline.days > Claim::DECISION_DEADLINE_WARNING_POINT
