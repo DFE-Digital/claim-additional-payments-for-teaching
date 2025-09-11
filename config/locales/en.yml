@@ -881,6 +881,11 @@ en:
               false: "No"
           further_education_teaching_start_year:
             label: "First 5 years of teaching"
+          in_first_five_years:
+            label: "Within first 5 years of teaching"
+            claimant_answers:
+              true: "Yes"
+              false: "No"
           teaching_hours_per_week:
             label: "Timetabled teaching hours"
             claimant_answers:
@@ -907,15 +912,32 @@ en:
               true: "Yes"
               false: "No"
           subject_to_formal_performance_action:
-            label: "No performance measures"
+            label: "Subject to performance measures"
             claimant_answers:
               true: "Yes"
               false: "No"
           subject_to_disciplinary_action:
-            label: "No disciplinary action"
+            label: "Subject to disciplinary action"
             claimant_answers:
               true: "Yes"
               false: "No"
+          performance_measures:
+            label: "Subject to performance measures"
+            claimant_answers:
+              true: "Yes"
+              false: "No"
+          disciplinary_action:
+            label: "Subject to disciplinary action"
+            claimant_answers:
+              true: "Yes"
+              false: "No"
+          teaching_qualification:
+            label: "Teaching qualification"
+            claimant_answers:
+              yes: "Yes"
+              not_yet: "Not yet, I am currently enrolled on one and working towards completing it"
+              no_but_planned: "No, but I plan to enrol on one in the next 12 months"
+              no_not_planned: "No, and I do not plan to enrol on one in the next 12 months"
         employment:
           title: Does the claimant’s place of work match the above information on their claim?
         provider_details:

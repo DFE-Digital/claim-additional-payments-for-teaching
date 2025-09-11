@@ -7,7 +7,7 @@ module FurtherEducationPayments
 
           validates(
             :provider_verification_timetabled_teaching_hours,
-            included: {
+            inclusion: {
               in: ->(form) do
                 form.provider_verification_timetabled_teaching_hours_options.map(&:id)
               end,
@@ -16,7 +16,7 @@ module FurtherEducationPayments
                 "per week in the #{form.term} term"
               end
             },
-            allow_nil: :save_and_exit?
+            unless: :save_and_exit?
           )
 
           def provider_verification_timetabled_teaching_hours_options

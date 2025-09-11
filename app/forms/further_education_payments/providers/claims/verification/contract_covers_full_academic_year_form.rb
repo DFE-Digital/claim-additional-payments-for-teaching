@@ -10,10 +10,10 @@ module FurtherEducationPayments
 
           validates(
             :provider_verification_contract_covers_full_academic_year,
-            included: {
+            inclusion: {
               in: ->(form) { form.contract_covers_full_academic_year_options.map(&:id) }
             },
-            allow_nil: :save_and_exit?
+            unless: :save_and_exit?
           )
 
           def academic_year

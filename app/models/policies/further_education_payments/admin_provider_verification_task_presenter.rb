@@ -47,18 +47,28 @@ module Policies
       # that assertion is different to the others.
       # We need to make sure that when presenting the list of assertions to the
       # admin that the courses taught assertion is displayed after the subjects
-      # taught assertion.
+      # taught assertion, and we need to add the teaching qualification assertion.
       def assertions
         return @assertions if @assertions
 
-        subjects_taught_index = verification["assertions"].find_index do |h|
+        base_assertions = verification["assertions"].dup
+
+        # Insert courses taught after subjects taught
+        subjects_taught_index = base_assertions.find_index do |h|
           h["name"] == "subjects_taught"
         end
 
-        @assertions = verification["assertions"].dup.insert(
-          subjects_taught_index + 1,
-          courses_taught_assertion
-        )
+        if subjects_taught_index
+          base_assertions.insert(
+            subjects_taught_index + 1,
+            courses_taught_assertion
+          )
+        end
+
+        # Add teaching qualification assertion
+        base_assertions << teaching_qualification_assertion
+
+        @assertions = base_assertions
       end
 
       # The provider verifies the courses taught question as part of verifying the
@@ -73,6 +83,15 @@ module Policies
         {
           "name" => "courses_taught",
           "outcome" => subjects_taught_outcome
+        }
+      end
+
+      # Teaching qualification is stored directly on the eligibility model, not in assertions,
+      # so we create a synthetic assertion for display purposes
+      def teaching_qualification_assertion
+        {
+          "name" => "teaching_qualification",
+          "outcome" => true  # We always show the teaching qualification value, not a yes/no
         }
       end
 
@@ -99,6 +118,34 @@ module Policies
         when "further_education_teaching_start_year"
           "September #{further_education_teaching_start_year.to_i} " \
             "to August #{further_education_teaching_start_year.to_i + 1}"
+        when "teaching_qualification"
+          # Show claimant's teaching qualification answer
+          claimant_teaching_qualification = claim.eligibility.teaching_qualification
+          case claimant_teaching_qualification
+          when "yes"
+            "Yes"
+          when "not_yet"
+            "Not yet, I am currently enrolled on one and working towards completing it"
+          when "no_but_planned"
+            "No, but I plan to enrol on one in the next 12 months"
+          when "no_not_planned"
+            "No, and I do not plan to enrol on one in the next 12 months"
+          else
+            claimant_teaching_qualification&.humanize || "Not provided"
+          end
+        when "in_first_five_years"
+          # Map to the actual eligibility field - this doesn't have a claimant answer
+          # Return a calculated value based on their start year
+          in_first_five = claim.eligibility.further_education_teaching_start_year.to_i >= (AcademicYear.current.start_year - 5)
+          in_first_five ? "Yes" : "No"
+        when "performance_measures"
+          # Map to the actual eligibility field
+          value = claim.eligibility.subject_to_formal_performance_action
+          value ? "Yes" : "No"
+        when "disciplinary_action"
+          # Map to the actual eligibility field
+          value = claim.eligibility.subject_to_disciplinary_action
+          value ? "Yes" : "No"
         else
           I18n.t(
             [
@@ -115,7 +162,82 @@ module Policies
       end
 
       def provider_answer(assertion)
-        assertion["outcome"] ? "Yes" : "No"
+        key = assertion["name"]
+        case key
+        when "contract_type"
+          # Show actual contract type instead of Yes/No
+          contract_type_display_value(claim.eligibility.provider_verification_contract_type)
+        when "teaching_hours_per_week"
+          # Show actual teaching hours instead of Yes/No
+          teaching_hours_display_value(claim.eligibility.provider_verification_teaching_hours_per_week)
+        when "teaching_qualification"
+          # Show actual teaching qualification instead of Yes/No
+          teaching_qualification_display_value(claim.eligibility.provider_verification_teaching_qualification)
+        when "performance_measures", "disciplinary_action"
+          # Show inverted logic for performance/disciplinary (Yes means subject to, No means not subject to)
+          provider_performance_disciplinary_answer(key)
+        else
+          assertion["outcome"] ? "Yes" : "No"
+        end
+      end
+
+      private
+
+      def contract_type_display_value(contract_type)
+        case contract_type
+        when "permanent"
+          "Permanent"
+        when "fixed_term"
+          "Fixed-term"
+        when "variable_hours"
+          "Variable hours"
+        when "employed_by_another_organisation"
+          "Employed by another organisation (for example, an agency or contractor)"
+        else
+          contract_type&.humanize || "Not provided"
+        end
+      end
+
+      def teaching_hours_display_value(hours)
+        case hours
+        when "20_or_more_hours_per_week"
+          "20 hours or more each week"
+        when "12_to_20_hours_per_week"
+          "12 hours to 20 hours each week"
+        when "2_and_a_half_to_12_hours_per_week"
+          "2.5 to 12 hours each week"
+        when "fewer_than_2_and_a_half_hours_per_week"
+          "Fewer than 2.5 hours each week"
+        else
+          hours&.humanize || "Not provided"
+        end
+      end
+
+      def teaching_qualification_display_value(qualification)
+        case qualification
+        when "yes"
+          "Yes"
+        when "not_yet"
+          "Not yet, I am currently enrolled on one and working towards completing it"
+        when "no_but_planned"
+          "No, but I plan to enrol on one in the next 12 months"
+        when "no_not_planned"
+          "No, and I do not plan to enrol on one in the next 12 months"
+        else
+          qualification&.humanize || "Not provided"
+        end
+      end
+
+      def provider_performance_disciplinary_answer(field)
+        eligibility = claim.eligibility
+        case field
+        when "performance_measures"
+          # Provider field is "subject to performance measures" - show Yes if true, No if false
+          eligibility.provider_verification_performance_measures ? "Yes" : "No"
+        when "disciplinary_action"
+          # Provider field is "subject to disciplinary action" - show Yes if true, No if false
+          eligibility.provider_verification_disciplinary_action ? "Yes" : "No"
+        end
       end
 
       def subjects_taught

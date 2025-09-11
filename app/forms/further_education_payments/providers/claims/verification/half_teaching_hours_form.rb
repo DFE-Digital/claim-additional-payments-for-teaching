@@ -7,7 +7,7 @@ module FurtherEducationPayments
 
           validates(
             :provider_verification_half_teaching_hours,
-            included: {
+            inclusion: {
               in: ->(form) do
                 form.provider_verification_half_teaching_hours_options.map(&:id)
               end,
@@ -15,7 +15,7 @@ module FurtherEducationPayments
               "timetabled teaching hours delivering 16 to 19 study programmes, " \
               "T Levels or 16 to 19 apprenticeships"
             },
-            allow_nil: :save_and_exit?
+            unless: :save_and_exit?
           )
 
           def provider_verification_half_teaching_hours_options

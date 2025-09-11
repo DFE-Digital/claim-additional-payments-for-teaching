@@ -37,9 +37,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Teachi
 
       it do
         is_expected.to(
-          validate_inclusion_of(:provider_verification_teaching_qualification)
-            .in_array(["yes", "not_yet", "no_but_planned", "no_not_planned", nil])
-            .with_message("Tell us if they have a teaching qualification")
+          allow_value(nil).for(:provider_verification_teaching_qualification)
         )
       end
     end

@@ -10,11 +10,11 @@ module FurtherEducationPayments
 
           validates(
             :provider_verification_half_timetabled_teaching_time,
-            included: {
+            inclusion: {
               in: ->(form) { form.radio_options.map(&:id) },
               message: "Tell us if they spend at least half their timetabled teaching time teaching these courses"
             },
-            allow_nil: :save_and_exit?
+            unless: :save_and_exit?
           )
 
           def radio_options

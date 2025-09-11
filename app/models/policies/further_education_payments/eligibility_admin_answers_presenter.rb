@@ -60,10 +60,14 @@ module Policies
         [
           [
             question(:teaching_qualification),
-            selected_option(
-              :teaching_qualification,
-              eligibility.teaching_qualification
-            )
+            if eligibility.teaching_qualification.present?
+              selected_option(
+                :teaching_qualification,
+                eligibility.teaching_qualification
+              )
+            else
+              "Not provided"
+            end
           ]
         ]
       end
