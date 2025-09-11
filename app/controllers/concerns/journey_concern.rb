@@ -56,7 +56,7 @@ module JourneyConcern
   private
 
   def find_journey_session
-    journey::Session.find_by(id: session[journey_session_key])
+    journey::Session.not_expired.find_by(id: session[journey_session_key])
   end
 
   def journey_session_key
@@ -65,7 +65,7 @@ module JourneyConcern
 
   def journey_sessions
     @journey_sessions ||= Journeys::JOURNEYS.map do |journey|
-      journey::Session.find_by(id: session[:"#{journey::ROUTING_NAME}_journeys_session_id"])
+      journey::Session.not_expired.find_by(id: session[:"#{journey::ROUTING_NAME}_journeys_session_id"])
     end.compact
   end
 
