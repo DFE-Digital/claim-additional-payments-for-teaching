@@ -65,23 +65,27 @@ module Policies
           )
         end
 
-        # Add Year 2 specific fields
-        base_assertions << teaching_qualification_assertion
-        base_assertions << contract_type_assertion
-        base_assertions << teaching_hours_assertion
+        # Only add Year 2 specific fields for Year 2+ claims (2025/2026 and later)
+        # Year 1 claims are from academic year 2024/2025
+        if claim.academic_year != AcademicYear.new("2024/2025")
+          # Add Year 2 specific fields
+          base_assertions << teaching_qualification_assertion
+          base_assertions << contract_type_assertion
+          base_assertions << teaching_hours_assertion
 
-        # Add conditional fields for fixed-term contracts
-        if claim.eligibility.provider_verification_contract_type == "fixed_term"
-          base_assertions << contract_covers_full_year_assertion
+          # Add conditional fields for fixed-term contracts
+          if claim.eligibility.provider_verification_contract_type == "fixed_term"
+            base_assertions << contract_covers_full_year_assertion
+          end
+
+          # Add conditional fields for variable hours contracts
+          if claim.eligibility.provider_verification_contract_type == "variable_hours"
+            base_assertions << teaching_hours_next_term_assertion
+          end
+
+          base_assertions << performance_measures_assertion
+          base_assertions << disciplinary_action_assertion
         end
-
-        # Add conditional fields for variable hours contracts
-        if claim.eligibility.provider_verification_contract_type == "variable_hours"
-          base_assertions << teaching_hours_next_term_assertion
-        end
-
-        base_assertions << performance_measures_assertion
-        base_assertions << disciplinary_action_assertion
 
         @assertions = base_assertions
       end
