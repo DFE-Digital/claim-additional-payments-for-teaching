@@ -216,6 +216,18 @@ module Policies
           # Map to the actual eligibility field
           value = claim.eligibility.subject_to_disciplinary_action
           value ? "Yes" : "No"
+        when "teaching_responsibilities"
+          # Map to the actual eligibility field
+          value = claim.eligibility.teaching_responsibilities
+          value ? "Yes" : "No"
+        when "half_teaching_hours"
+          # Map to the actual eligibility field
+          value = claim.eligibility.half_teaching_hours
+          value ? "Yes" : "No"
+        when "taught_at_least_one_term"
+          # Map to the actual eligibility field
+          value = claim.eligibility.taught_at_least_one_term
+          value ? "Yes" : "No"
         else
           I18n.t(
             [
