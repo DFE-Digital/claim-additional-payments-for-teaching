@@ -281,7 +281,7 @@ module Policies
         when "permanent"
           "Permanent"
         when "fixed_term"
-          "Fixed-term"
+          "Fixed term"
         when "variable_hours"
           "Variable hours"
         when "employed_by_another_organisation"
