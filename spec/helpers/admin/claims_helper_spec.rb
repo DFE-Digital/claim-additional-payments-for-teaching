@@ -170,6 +170,13 @@ RSpec.describe Admin::ClaimsHelper do
 
       it { is_expected.to eq "" }
     end
+
+    context "when an ey claim with no submitted_at" do
+      subject { helper.decision_deadline_warning(claim, {na_text: ""}) }
+      let(:claim) { build(:claim, policy: Policies::EarlyYearsPayments, submitted_at: nil) }
+
+      it { is_expected.to eq "N/A" }
+    end
   end
 
   describe "#identity_confirmation_task_claim_verifier_match_status_tag" do

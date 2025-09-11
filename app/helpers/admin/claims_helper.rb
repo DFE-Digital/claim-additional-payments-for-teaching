@@ -13,6 +13,16 @@ module Admin
       claims.map { |claim| link_to(claim.reference, admin_claim_path(claim), class: "govuk-link") }.to_sentence.html_safe
     end
 
+    def claim_submitted_at(claim)
+      submitted_at = if claim.policy == Policies::EarlyYearsPayments
+        claim.eligibility.provider_claim_submitted_at
+      else
+        claim.submitted_at
+      end
+
+      l(submitted_at.to_date)
+    end
+
     def confirming_identity_playbook_url
       "https://docs.google.com/document/d/1wZh68_RV_FTJLxXIDPr3XFtJHW3vRgiXGaBDUo1Q1ZU"
     end
@@ -98,6 +108,11 @@ module Admin
     end
 
     def decision_deadline_warning(claim, opts = {})
+      if claim.decision_deadline_date.nil?
+        # EY claim where the practitioner journey hasn't been completed
+        return I18n.t("admin.decision_overdue_not_applicable")
+      end
+
       days_until_decision_deadline = days_between(Date.today, claim.decision_deadline_date)
 
       if days_until_decision_deadline.days > Claim::DECISION_DEADLINE_WARNING_POINT
