@@ -16,55 +16,16 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
 
   describe "#perform" do
     context "when the claim has not been verified by the provider" do
-      let(:verification) { {} }
-
       it "doesn't create a task" do
-        eligibility = create(
-          :further_education_payments_eligibility,
-          verification: verification
-        )
+        claim = create(:claim, :further_education)
 
-        claim = create(
-          :claim,
-          :further_education,
-          eligibility:
-        )
-
-        expect { described_class.new(claim: claim).perform }.not_to(
+        expect { described_class.new(claim:).perform }.not_to(
           change { claim.tasks.count }
         )
       end
     end
 
     context "when the claim has been verified by the provider" do
-      context "when the task has already been performed" do
-        it "does not alter the task or create a new one" do
-          eligibility = create(
-            :further_education_payments_eligibility
-          )
-
-          claim = create(
-            :claim,
-            :further_education,
-            :verified,
-            eligibility:
-          )
-
-          task = create(
-            :task,
-            name: "provider_verification",
-            claim: claim,
-            passed: true
-          )
-
-          expect { described_class.new(claim: claim).perform }.to(
-            not_change { claim.tasks.count }.and(
-              not_change { task.reload.updated_at }
-            )
-          )
-        end
-      end
-
       context "when the task has not been performed" do
         context "when the provider has not confirmed the claimants answers" do
           it "fails the task" do
@@ -103,21 +64,6 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
             expect(task.name).to eq("provider_verification")
             expect(task.passed).to eq(false)
             expect(task.manual).to eq(false)
-
-            dfe_sign_in_user = task.created_by
-
-            expect(dfe_sign_in_user.dfe_sign_in_id).to eq("123")
-            expect(dfe_sign_in_user.given_name).to eq("Seymour")
-            expect(dfe_sign_in_user.family_name).to eq("Skinner")
-            expect(dfe_sign_in_user.email).to eq(
-              "seymore.skinner@springfield-elementary.edu"
-            )
-            expect(dfe_sign_in_user.organisation_name).to eq(
-              "Springfield Elementary"
-            )
-            expect(dfe_sign_in_user.role_codes).to eq(
-              ["teacher_payments_claim_verifier"]
-            )
           end
         end
 

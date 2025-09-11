@@ -938,6 +938,18 @@ en:
               not_yet: "Not yet, I am currently enrolled on one and working towards completing it"
               no_but_planned: "No, but I plan to enrol on one in the next 12 months"
               no_not_planned: "No, and I do not plan to enrol on one in the next 12 months"
+          contract_covers_full_academic_year:
+            label: "Does the contract cover the full academic year?"
+            claimant_answers:
+              true: "Yes"
+              false: "No"
+          teaching_hours_per_week_next_term:
+            label: "Teaching hours per week next term"
+            claimant_answers:
+              "20_or_more_hours_per_week": "20 hours or more each week"
+              "12_to_19_hours_per_week": "12 to 19 hours each week"
+              "2_and_a_half_to_12_hours_per_week": "2.5 to 12 hours each week"
+              "fewer_than_2_and_a_half_hours_per_week": "Fewer than 2.5 hours each week"
         employment:
           title: Does the claimant’s place of work match the above information on their claim?
         provider_details:

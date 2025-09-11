@@ -65,8 +65,23 @@ module Policies
           )
         end
 
-        # Add teaching qualification assertion
+        # Add Year 2 specific fields
         base_assertions << teaching_qualification_assertion
+        base_assertions << contract_type_assertion
+        base_assertions << teaching_hours_assertion
+
+        # Add conditional fields for fixed-term contracts
+        if claim.eligibility.provider_verification_contract_type == "fixed_term"
+          base_assertions << contract_covers_full_year_assertion
+        end
+
+        # Add conditional fields for variable hours contracts
+        if claim.eligibility.provider_verification_contract_type == "variable_hours"
+          base_assertions << teaching_hours_next_term_assertion
+        end
+
+        base_assertions << performance_measures_assertion
+        base_assertions << disciplinary_action_assertion
 
         @assertions = base_assertions
       end
@@ -92,6 +107,48 @@ module Policies
         {
           "name" => "teaching_qualification",
           "outcome" => true  # We always show the teaching qualification value, not a yes/no
+        }
+      end
+
+      def contract_type_assertion
+        {
+          "name" => "contract_type",
+          "outcome" => true
+        }
+      end
+
+      def teaching_hours_assertion
+        {
+          "name" => "teaching_hours_per_week",
+          "outcome" => true
+        }
+      end
+
+      def contract_covers_full_year_assertion
+        {
+          "name" => "contract_covers_full_academic_year",
+          "outcome" => true
+        }
+      end
+
+      def teaching_hours_next_term_assertion
+        {
+          "name" => "teaching_hours_per_week_next_term",
+          "outcome" => true
+        }
+      end
+
+      def performance_measures_assertion
+        {
+          "name" => "performance_measures",
+          "outcome" => true
+        }
+      end
+
+      def disciplinary_action_assertion
+        {
+          "name" => "disciplinary_action",
+          "outcome" => true
         }
       end
 
@@ -138,6 +195,19 @@ module Policies
           # Return a calculated value based on their start year
           in_first_five = claim.eligibility.further_education_teaching_start_year.to_i >= (AcademicYear.current.start_year - 5)
           in_first_five ? "Yes" : "No"
+        when "contract_type"
+          # Show claimant's contract type answer
+          contract_type_display_value(claim.eligibility.contract_type)
+        when "teaching_hours_per_week"
+          # Show claimant's teaching hours answer
+          teaching_hours_display_value((claim.eligibility.teaching_hours_per_week == "more_than_12") ? "20_or_more_hours_per_week" : "12_to_20_hours_per_week")
+        when "contract_covers_full_academic_year"
+          # Show claimant's answer for fixed-term contract full year coverage
+          value = claim.eligibility.fixed_term_full_year
+          value ? "Yes" : "No"
+        when "teaching_hours_per_week_next_term"
+          # Variable hours contracts don't have claimant input for next term hours
+          "Not provided"
         when "performance_measures"
           # Map to the actual eligibility field
           value = claim.eligibility.subject_to_formal_performance_action
@@ -170,6 +240,13 @@ module Policies
         when "teaching_hours_per_week"
           # Show actual teaching hours instead of Yes/No
           teaching_hours_display_value(claim.eligibility.provider_verification_teaching_hours_per_week)
+        when "contract_covers_full_academic_year"
+          # Show provider's answer for fixed-term contract full year coverage
+          value = claim.eligibility.provider_verification_contract_covers_full_academic_year
+          value ? "Yes" : "No"
+        when "teaching_hours_per_week_next_term"
+          # Show provider's answer for variable hours next term teaching hours
+          teaching_hours_display_value(claim.eligibility.provider_verification_teaching_hours_per_week_next_term)
         when "teaching_qualification"
           # Show actual teaching qualification instead of Yes/No
           teaching_qualification_display_value(claim.eligibility.provider_verification_teaching_qualification)
