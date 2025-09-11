@@ -1124,6 +1124,7 @@ en:
         question: Which computing courses do you teach?
         question_check_your_answers: Computing courses
         options:
+          level3_and_below: Qualifications approved for funding at level 3 and below
           level3_and_below_ict_for_practitioners:
             Qualifications approved for funding at level 3 and below in the %{link} sector subject area
           level3_and_below_ict_for_users:
