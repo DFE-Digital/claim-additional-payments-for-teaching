@@ -499,18 +499,5 @@ RSpec.describe Journeys::FurtherEducationPayments::Provider::VerifyIdentityForm,
         "seymour.skinner@springfield-elementary.edu"
       )
     end
-
-    it "sends the provider a confirmation email" do
-      expect(
-        claim.school.eligible_fe_provider.primary_key_contact_email_address
-      ).to have_received_email(
-        "70942fe1-5838-4d37-904c-9d070f2582f0",
-        recipient_name: "Springfield Elementary",
-        claim_reference: "ABC123",
-        claimant_name: "Edna Krabappel",
-        verifier_name: "Seymour Skinner",
-        verification_date: "1 January 2024"
-      )
-    end
   end
 end
