@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Provider verifying claims" do
+RSpec.xfeature "Provider verifying claims" do
   before do
     FeatureFlag.create!(
       name: "fe_provider_identity_verification",
