@@ -224,7 +224,9 @@ RSpec.feature "Provider verifying claims" do
 
       # Performance and discipline
       within_fieldset(
-        "Is Edna Krabappel currently subject to any performance measures?"
+        "Is Edna Krabappel currently subject to any " \
+        "formal performance measures as a result of continuous poor " \
+        "teaching standards?"
       ) { choose "No" }
 
       within_fieldset(
@@ -401,7 +403,9 @@ RSpec.feature "Provider verifying claims" do
 
       # Performance and discipline
       within_fieldset(
-        "Is Edna Krabappel currently subject to any performance measures?"
+        "Is Edna Krabappel currently subject to any " \
+        "formal performance measures as a result of continuous poor " \
+        "teaching standards?"
       ) { choose "No" }
 
       within_fieldset(
@@ -582,7 +586,9 @@ RSpec.feature "Provider verifying claims" do
 
       # Performance and discipline
       within_fieldset(
-        "Is Edna Krabappel currently subject to any performance measures?"
+        "Is Edna Krabappel currently subject to any " \
+        "formal performance measures as a result of continuous poor " \
+        "teaching standards?"
       ) { choose "No" }
 
       within_fieldset(
@@ -738,7 +744,9 @@ RSpec.feature "Provider verifying claims" do
 
       # Performance and discipline
       within_fieldset(
-        "Is Edna Krabappel currently subject to any performance measures?"
+        "Is Edna Krabappel currently subject to any " \
+        "formal performance measures as a result of continuous poor " \
+        "teaching standards?"
       ) { choose "No" }
 
       within_fieldset(
