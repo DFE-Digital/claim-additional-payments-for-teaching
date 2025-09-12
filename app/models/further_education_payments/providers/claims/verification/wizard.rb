@@ -137,7 +137,8 @@ module FurtherEducationPayments
               @reachable_steps << ContractCoversFullAcademicYearForm
             end
 
-            if eligibility.provider_verification_contract_type == "variable_hours"
+            if eligibility.provider_verification_contract_type == "variable_hours" ||
+                eligibility.provider_verification_contract_covers_full_academic_year == false
               @reachable_steps << TimetabledTeachingHoursForm
               @reachable_steps << TaughtAtLeastOneAcademicTermForm
             end
