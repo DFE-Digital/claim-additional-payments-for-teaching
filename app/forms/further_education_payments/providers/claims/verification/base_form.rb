@@ -96,7 +96,16 @@ module FurtherEducationPayments
           end
 
           def claimant_further_education_teaching_start_year
-            claim.eligibility.further_education_teaching_start_year
+            academic_year = AcademicYear.new(
+              claim.eligibility.further_education_teaching_start_year
+            )
+
+            I18n.t(
+              "options.between_dates",
+              start_year: academic_year.start_year,
+              end_year: academic_year.end_year,
+              scope: "further_education_payments.forms.further_education_teaching_start_year"
+            )
           end
 
           private

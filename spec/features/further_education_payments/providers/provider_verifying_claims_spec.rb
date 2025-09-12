@@ -206,7 +206,8 @@ RSpec.feature "Provider verifying claims" do
       click_on "Continue"
 
       within_fieldset(
-        "Did Edna Krabappel start their FE teaching career in England during 2023"
+        "Did Edna Krabappel start their FE teaching career in England during " \
+        "September 2023 to August 2024?"
       ) { choose "Yes" }
 
       click_on "Continue"
@@ -379,7 +380,8 @@ RSpec.feature "Provider verifying claims" do
       click_on "Continue"
 
       within_fieldset(
-        "Did Edna Krabappel start their FE teaching career in England during 2023"
+        "Did Edna Krabappel start their FE teaching career in England during " \
+        "September 2023 to August 2024?"
       ) { choose "Yes" }
 
       click_on "Continue"
@@ -551,7 +553,8 @@ RSpec.feature "Provider verifying claims" do
       click_on "Continue"
 
       within_fieldset(
-        "Did Edna Krabappel start their FE teaching career in England during 2023"
+        "Did Edna Krabappel start their FE teaching career in England during " \
+        "September 2023 to August 2024?"
       ) { choose "Yes" }
 
       click_on "Continue"
@@ -710,7 +713,8 @@ RSpec.feature "Provider verifying claims" do
       click_on "Continue"
 
       within_fieldset(
-        "Did Edna Krabappel start their FE teaching career in England during 2023"
+        "Did Edna Krabappel start their FE teaching career in England during " \
+        "September 2023 to August 2024?"
       ) { choose "Yes" }
 
       click_on "Continue"
@@ -926,7 +930,8 @@ RSpec.feature "Provider verifying claims" do
       click_on "Continue"
 
       within_fieldset(
-        "Did Edna Krabappel start their FE teaching career in England during 2023"
+        "Did Edna Krabappel start their FE teaching career in England during " \
+        "September 2023 to August 2024?"
       ) { choose "Yes" }
 
       click_on "Continue"
@@ -1020,7 +1025,8 @@ RSpec.feature "Provider verifying claims" do
       click_on "Continue"
 
       within_fieldset(
-        "Did Edna Krabappel start their FE teaching career in England during 2023"
+        "Did Edna Krabappel start their FE teaching career in England during " \
+        "September 2023 to August 2024?"
       ) { choose "Yes" }
 
       click_on "Continue"
