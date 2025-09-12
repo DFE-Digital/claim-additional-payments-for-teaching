@@ -139,9 +139,9 @@ module Journeys
             array << SLUGS_HASH["taught-at-least-one-term"]
           end
 
+          array << SLUGS_HASH["teaching-hours-per-week-next-term"]
           array << SLUGS_HASH["teaching-hours-per-week"]
           array << SLUGS_HASH["half-teaching-hours"]
-          array << SLUGS_HASH["teaching-hours-per-week-next-term"]
         when "variable_hours"
           array << SLUGS_HASH["taught-at-least-one-term"]
 

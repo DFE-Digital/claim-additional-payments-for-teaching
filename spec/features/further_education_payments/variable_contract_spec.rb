@@ -271,16 +271,16 @@ RSpec.feature "Further education payments" do
     choose("Yes")
     click_button "Continue"
 
+    expect(page).to have_content("Are you timetabled to teach at least 2.5 hours per week at #{college.name} next term?")
+    choose("Yes")
+    click_button "Continue"
+
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
     choose("More than 12 hours per week")
     click_button "Continue"
 
     expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
     choose "Yes"
-    click_button "Continue"
-
-    expect(page).to have_content("Are you timetabled to teach at least 2.5 hours per week at #{college.name} next term?")
-    choose("Yes")
     click_button "Continue"
 
     expect(page).to have_content("Which subject areas do you teach?")
