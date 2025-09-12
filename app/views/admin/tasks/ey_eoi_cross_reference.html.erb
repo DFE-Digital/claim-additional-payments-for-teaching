@@ -1,0 +1,24 @@
+<% content_for(:page_title) do %>
+  <%= page_title("Claim #{@claim.reference} expression of interest check for #{@claim.policy.short_name}") %>
+<% end %>
+
+<% content_for :back_link do %>
+  <%= govuk_back_link href: admin_claim_tasks_path(@claim) %>
+<% end %>
+
+
+<div class="govuk-grid-row">
+  <%= render claim_summary_view, claim: @claim, heading: "Subject check" %>
+
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-l"><%= I18n.t(:name, scope: @form.translation) %></h2>
+
+    <% if !@form.task.passed.nil? %>
+      <%= render "task_outcome", task: @form.task %>
+    <% else %>
+      <%= render "form", task_name: @form.task.name, claim: @claim %>
+    <% end %>
+
+    <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>
+  </div>
+</div>
