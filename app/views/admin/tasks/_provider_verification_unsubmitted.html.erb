@@ -14,27 +14,8 @@
       <% end %>
     </div>
   <% end %>
-
-  <%= govuk_button_to(
-    "Resend provider verification request",
-    admin_claim_further_education_payments_provider_verification_emails_path(@claim),
-    class: "govuk-!-margin-bottom-2"
-  ) %>
 <% else %>
   <p class="govuk-body">
     This task has not been sent to the provider yet.
   </p>
-
-  <div class="govuk-inset-text">
-    <p>
-      You need to check the matching details and confirm if this is a
-      duplicate claim. If it isn't a duplicate claim, send the verification
-      request to the provider.
-    </p>
-    <%= govuk_button_to(
-      "Send provider verification request",
-      admin_claim_further_education_payments_provider_verification_emails_path(@claim),
-      class: "govuk-!-margin-bottom-0"
-    ) %>
-  </div>
 <% end %>
