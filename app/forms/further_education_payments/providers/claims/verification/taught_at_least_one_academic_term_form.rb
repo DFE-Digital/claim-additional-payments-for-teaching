@@ -10,12 +10,12 @@ module FurtherEducationPayments
 
           validates(
             :provider_verification_taught_at_least_one_academic_term,
-            included: {
+            inclusion: {
               in: ->(form) do
                 form.taught_at_least_one_academic_term_options.map(&:id)
               end
             },
-            allow_nil: :save_and_exit?
+            unless: :save_and_exit?
           )
 
           def taught_at_least_one_academic_term_options
