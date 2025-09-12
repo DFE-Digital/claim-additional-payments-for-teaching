@@ -289,6 +289,7 @@ shared:
     - journey
     - created_at
     - updated_at
+    - expired
   :further_education_payments_eligibilities:
     - id
     - created_at

@@ -12,6 +12,7 @@ module Journeys
         "sign-in" => SignInForm,
         "previously-claimed" => PreviouslyClaimedForm,
         "have-one-login-account" => HaveOneLoginAccountForm,
+        "existing-progress" => ExistingProgressForm,
         "check-eligibility-intro" => CheckEligibilityIntroForm,
         "teaching-responsibilities" => TeachingResponsibilitiesForm,
         "further-education-provision-search" => FurtherEducationProvisionSearchForm,

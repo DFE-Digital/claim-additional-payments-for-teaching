@@ -1,0 +1,34 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:question),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <div class="govuk-panel govuk-panel--interruption">
+        <%= f.govuk_collection_radio_buttons :start_new_claim, @form.radio_options, :id, :name,
+          legend: {
+            text: "You have already started an eligibility check",
+            tag: "h1",
+            size: "xl",
+            class: "govuk-!-margin-bottom-9"
+          } do %>
+          <h2 class="govuk-heading-m">
+            You can only have one eligibility check in progress at any time. If you want to start another check, we will delete the data on the check you have already started.
+          </h2>
+
+          <h2 class="govuk-heading-m">
+            Choose what you want to do:
+          </h2>
+        <% end %>
+
+        <%= f.govuk_submit "Continue" %>
+      </div>
+    <% end %>
+  </div>
+</div>

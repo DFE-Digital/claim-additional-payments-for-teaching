@@ -139,5 +139,16 @@ module Policies
     def eligibility_page_url
       "https://www.gov.uk/guidance/targeted-retention-incentive-payments-for-fe-teachers"
     end
+
+    # given a journey session
+    # does the claimant have an existing journey session in play
+    # based on their one login uid
+    def existing_in_progress_claim?(journey_session:)
+      return if journey_session.answers.onelogin_uid.blank?
+
+      account = OneLoginAccount.new(uid: journey_session.answers.onelogin_uid)
+      journey_sessions = account.resumable_journey_sessions(journey: Journeys::FurtherEducationPayments)
+      journey_sessions.count > 1
+    end
   end
 end

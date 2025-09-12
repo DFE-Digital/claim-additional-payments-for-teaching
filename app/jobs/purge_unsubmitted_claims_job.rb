@@ -3,13 +3,9 @@
 # to.
 class PurgeUnsubmittedClaimsJob < ApplicationJob
   def perform
-    Rails.logger.info "Purging #{old_unsubmitted_journeys.count} old and unsubmitted journeys from the database"
-    old_unsubmitted_journeys.destroy_all
-  end
-
-  private
-
-  def old_unsubmitted_journeys
-    Journeys::Session.purgeable
+    Journeys::JOURNEYS.each do |journey|
+      Rails.logger.info "Purging #{journey::Session.purgeable.count} old and unsubmitted #{journey::Session} journeys from the database"
+      journey::Session.where(journey: journey::ROUTING_NAME).purgeable.destroy_all
+    end
   end
 end

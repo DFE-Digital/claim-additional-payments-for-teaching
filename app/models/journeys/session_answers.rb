@@ -13,6 +13,7 @@ module Journeys
 
     attribute :previously_claimed, :boolean, pii: false
     attribute :have_one_login_account, :string, pii: false # trinary option
+    attribute :start_new_claim, :boolean, pii: false
 
     attribute :current_school_id, :string, pii: false # UUID
     attribute :address_line_1, :string, pii: true

@@ -44,5 +44,8 @@ production: &production
   purge_old_jobs:
     class: PurgeOldJobsJob
     schedule: "0 4 * * *" # 4AM daily
+  expire_journey_sessions_jobs:
+    class: ExpireJourneySessionsJob
+    schedule: "0 * * * *" # hourly on the hour
 development:
   <<: *production
