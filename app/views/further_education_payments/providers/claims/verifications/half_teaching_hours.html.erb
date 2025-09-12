@@ -21,9 +21,8 @@
     ) do |f| %>
       <%= f.govuk_error_summary %>
 
-
       <h2 class="govuk-heading-m">
-        Contracted hours
+        Age cohort taught over the <%= @claim.submitted_at.term %> term
       </h2>
 
       <%= f.govuk_collection_radio_buttons(
@@ -32,31 +31,23 @@
         :id,
         :name,
         legend: {
-          text: "Does #{f.object.claimant_name} spend at least half of their " \
-          "timetabled teaching hours delivering 16 to 19 study programmes, " \
-          "T Levels, or 16 to 19 apprenticeships?",
+          text: "Did #{f.object.claimant_name} spend at least half of their " \
+          "timetabled teaching hours teaching students funded through the " \
+          "16 to 19 education funding system or apprentices aged 16 to 19?",
           size: "s",
         },
-        hint: -> do
-          <<~HTML.html_safe
+        hint: -> do %>
           <p class="govuk-body">
-            This means spending over half of their timetabled hours teaching
-            classes that include:
+            This includes students:
           </p>
-          <ul class="govuk-list govuk-list--bullet">
-            <li>apprenticeships to those aged 16- to 19-year-olds</li>
-            <li>
-              students funded in the 16 to 19 education funding system including those:
-              <ul class="govuk-list govuk-list--bullet">
-                 <li>aged 16 to 19</li>
-                 <li>aged up to 25 if they have an EHCP plan</li>
-                 <li>aged 19 or over who started their programme before turning 19</li>
-                 <li>aged 14 to 16 but only if directly enrolled on a funded study programme at an FE provider</li>
-              </ul>
-            </li>
-          </ul>
-          HTML
-        end
+          <%= govuk_list [
+            "studying T Levels",
+            "on apprenticeships and aged 16 to 19",
+            "aged 16 to 19 and funded through the 16 to 19 system",
+            "aged up to 25 with an Education, Health and Care Plan (EHCP) funded through the 16 to 19 system",
+            "aged 14 to 16 and directly enrolled into eligible FE institutions"
+          ], type: :bullet %>
+        <% end
       ) %>
 
       <%= f.govuk_submit("Continue") %>
