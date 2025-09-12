@@ -66,7 +66,7 @@ RSpec.feature "Provider verifying claims", feature_flag: :provider_dashboard do
     click_on "Continue"
 
     within_fieldset(
-      "What type of contract does Edna Krabappel have with " \
+      "What type of contract does Edna Krabappel have directly with " \
       "Springfield College?"
     ) { choose "Permanent" }
 
@@ -226,7 +226,7 @@ RSpec.feature "Provider verifying claims", feature_flag: :provider_dashboard do
     click_on "Continue"
 
     within_fieldset(
-      "What type of contract does Edna Krabappel have with " \
+      "What type of contract does Edna Krabappel have directly with " \
       "Springfield College?"
     ) { choose "Permanent" }
 
