@@ -160,7 +160,7 @@ RSpec.feature "Provider verifying claims", feature_flag: :provider_dashboard do
 
     click_on "Continue"
 
-    expect(page).to have_content("Claim Verified for Edna Krabappel")
+    expect(page).to have_content("Verification form for Edna Krabappel sent to DfE")
   end
 
   scenario "with custom subjects and courses - No to teaching listed courses" do
@@ -323,7 +323,7 @@ RSpec.feature "Provider verifying claims", feature_flag: :provider_dashboard do
 
     click_on "Continue"
 
-    expect(page).to have_content("Claim Verified for Edna Krabappel")
+    expect(page).to have_content("Verification form for Edna Krabappel sent to DfE")
   end
 
   def summary_row(label)

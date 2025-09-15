@@ -68,16 +68,16 @@ module FurtherEducationPayments
 
           def message
             if completed? && eligibility.claimant_not_employed_by_college?
-              return "Employment check for #{claim.full_name} submitted"
+              return "Employment check for #{claim.full_name} complete"
             end
 
             if completed?
-              return "Claim Verified for #{claim.full_name}"
+              return "Verification form for #{claim.full_name} sent to DfE"
             end
 
             # We've just finished the employyment check section of the wizard
             if current_slug == "claimant_employment_check_declaration"
-              "Employment check for #{claim.full_name} submitted"
+              "Employment check for #{claim.full_name} complete"
             end
           end
 
