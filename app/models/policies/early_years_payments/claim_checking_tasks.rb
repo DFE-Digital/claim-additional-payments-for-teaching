@@ -17,6 +17,7 @@ module Policies
         if year_1_of_ey?
           tasks << "identity_confirmation"
         else
+          tasks << "ey_eoi_cross_reference"
           tasks << "one_login_identity"
           tasks << "ey_alternative_verification" if claim.failed_one_login_idv?
         end

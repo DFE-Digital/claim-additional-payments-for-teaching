@@ -156,6 +156,9 @@ en:
       fe_alternative_verification:
         name: Alternative verification
         title: Confirm the provider has verified the claimant’s identity
+      ey_eoi_cross_reference:
+        name: EOI cross reference
+        title: Confirm the claim is within the allocation limit for this provider
       ey_alternative_verification:
         name: Alternative verification
         title: Confirm the provider has verified the claimant’s identity
@@ -1596,6 +1599,10 @@ en:
           no_response: No response
           other: Other
       task_questions:
+        ey_eoi_cross_reference:
+          name: EOI cross-reference
+          title: Is this claim within the allocation limit for this provider?
+          hint: Check the provider’s allocation limit in the EOI spreadsheet. The claim must have an Approved outcome in order to count towards the limit.
         ey_alternative_verification:
           name: Alternative verification
           title: Do the details provided by the claimant match the provider’s responses?
