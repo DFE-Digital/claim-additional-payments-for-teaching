@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Provider unverified claims dashboard", feature_flag: :provider_dashboard do
+RSpec.describe "Provider unverified claims dashboard" do
   before do
     allow(DfESignIn).to receive(:bypass?).and_return(true)
   end

@@ -218,26 +218,6 @@ class OmniauthCallbacksController < ApplicationController
 
   # FIXME RL - probably want to move this to ProviderSessionsController#callback
   def further_education_payments_provider_callback(auth)
-    if FeatureFlag.enabled?(:provider_dashboard)
-      further_education_payments_provider_dashboard_callback(auth)
-    else
-      auth = params if DfESignIn.bypass?
-
-      Journeys::FurtherEducationPayments::Provider::OmniauthCallbackForm.new(
-        journey_session: journey_session,
-        auth: auth
-      ).save!
-
-      redirect_to(
-        claim_path(
-          journey: current_journey_routing_name,
-          slug: "verify-claim"
-        )
-      )
-    end
-  end
-
-  def further_education_payments_provider_dashboard_callback(auth)
     if DfESignIn.bypass?
       auth = params
 

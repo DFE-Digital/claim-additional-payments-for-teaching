@@ -20,8 +20,6 @@ if Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")
   Journeys::Configuration.create!(routing_name: Journeys::EarlyYearsPayment::Practitioner::ROUTING_NAME, current_academic_year: AcademicYear.current)
   Journeys::Configuration.create!(routing_name: Journeys::EarlyYearsPayment::Provider::AlternativeIdv::ROUTING_NAME, current_academic_year: AcademicYear.current)
 
-  FeatureFlag.enable!(:provider_dashboard)
-
   ENV["FIXTURES_PATH"] = "spec/fixtures"
   ENV["FIXTURES"] = "local_authorities,local_authority_districts,schools"
   Rake::Task["db:fixtures:load"].invoke
