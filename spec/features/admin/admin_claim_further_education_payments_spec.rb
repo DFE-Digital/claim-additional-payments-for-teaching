@@ -305,6 +305,8 @@ RSpec.feature "Admin claim further education payments" do
               :further_education_payments_eligibility,
               :verified,
               contract_type: "fixed_term",
+              provider_verification_contract_type: "fixed_term",
+              provider_verification_teaching_hours_per_week: "20_or_more_hours_per_week",
               school: fe_provider,
               award_amount: 1500
             )
@@ -337,7 +339,7 @@ RSpec.feature "Admin claim further education payments" do
 
             within_table_row("Contract of employment") do |claimant, provider|
               expect(claimant).to have_text("Fixed term")
-              expect(provider).to have_text("Yes")
+              expect(provider).to have_text("Fixed term")
             end
 
             within_table_row("Teaching responsibilities") do |claimant, provider|
@@ -351,8 +353,8 @@ RSpec.feature "Admin claim further education payments" do
             end
 
             within_table_row("Timetabled teaching hours") do |claimant, provider|
-              expect(claimant).to have_text("More than 12 hours per week")
-              expect(provider).to have_text("Yes")
+              expect(claimant).to have_text("20 hours or more each week")
+              expect(provider).to have_text("20 hours or more each week")
             end
 
             within_table_row("Age range taught") do |claimant, provider|
@@ -397,6 +399,9 @@ RSpec.feature "Admin claim further education payments" do
             eligibility = create(
               :further_education_payments_eligibility,
               :verified_variable_hours,
+              provider_verification_contract_type: "variable_hours",
+              provider_verification_teaching_hours_per_week: "20_or_more_hours_per_week",
+              provider_verification_teaching_hours_per_week_next_term: "20_or_more_hours_per_week",
               school: fe_provider,
               award_amount: 1500
             )
@@ -428,7 +433,7 @@ RSpec.feature "Admin claim further education payments" do
 
             within_table_row("Contract of employment") do |claimant, provider|
               expect(claimant).to have_text("Variable hours")
-              expect(provider).to have_text("Yes")
+              expect(provider).to have_text("Variable hours")
             end
 
             within_table_row("Teaching responsibilities") do |claimant, provider|
@@ -447,8 +452,8 @@ RSpec.feature "Admin claim further education payments" do
             end
 
             within_table_row("Timetabled teaching hours") do |claimant, provider|
-              expect(claimant).to have_text("More than 12 hours per week")
-              expect(provider).to have_text("Yes")
+              expect(claimant).to have_text("20 hours or more each week")
+              expect(provider).to have_text("20 hours or more each week")
             end
 
             within_table_row("Age range taught") do |claimant, provider|
@@ -475,9 +480,9 @@ RSpec.feature "Admin claim further education payments" do
               expect(provider).to have_text("Yes")
             end
 
-            within_table_row("Timetabled teaching hours next term") do |claimant, provider|
-              expect(claimant).to have_text("At least 2.5 hours per week")
-              expect(provider).to have_text("No")
+            within_table_row("Teaching hours per week next term") do |claimant, provider|
+              expect(claimant).to have_text("Not provided")
+              expect(provider).to have_text("20 hours or more each week")
             end
 
             within_fieldset("Has the provider confirmed the claimant's details?") do

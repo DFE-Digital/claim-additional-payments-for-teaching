@@ -7,7 +7,7 @@ module FurtherEducationPayments
 
           validates(
             :continue_verification,
-            included: {
+            inclusion: {
               in: ->(form) { form.continue_verification_options.map(&:id) },
               message: "Tell us if you want to continue verifying this claim"
             }

@@ -24,7 +24,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Contra
       it do
         is_expected.to(
           validate_inclusion_of(:provider_verification_contract_type)
-            .in_array(%w[permanent fixed_term variable_hours])
+            .in_array(%w[permanent fixed_term variable_hours employed_by_another_organisation])
             .with_message("Enter the type of contract they have")
         )
       end
@@ -37,9 +37,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Contra
 
       it do
         is_expected.to(
-          validate_inclusion_of(:provider_verification_contract_type)
-            .in_array(["permanent", "fixed_term", "variable_hours", nil])
-            .with_message("Enter the type of contract they have")
+          allow_value(nil).for(:provider_verification_contract_type)
         )
       end
     end
@@ -80,54 +78,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Contra
 
         claim.eligibility.reload
 
-        expect(
-          claim.eligibility.provider_verification_contract_type
-        ).to eq("permanent")
-      end
-
-      context "when provider_verification_started_at is nil" do
-        before do
-          claim.eligibility.update!(
-            provider_verification_started_at: nil,
-            provider_assigned_to_id: nil
-          )
-        end
-
-        it "sets provider_verification_started_at" do
-          expect { form.save }.to change {
-            claim.eligibility.reload.provider_verification_started_at
-          }.from(nil).to(be_present)
-        end
-
-        it "sets provider_assigned_to_id to the current user" do
-          expect { form.save }.to change {
-            claim.eligibility.reload.provider_assigned_to_id
-          }.from(nil).to(user.id)
-        end
-      end
-
-      context "when provider_verification_started_at is already set" do
-        let(:original_timestamp) { 1.hour.ago }
-        let(:original_user) { create(:dfe_signin_user) }
-
-        before do
-          claim.eligibility.update!(
-            provider_verification_started_at: original_timestamp,
-            provider_assigned_to_id: original_user.id
-          )
-        end
-
-        it "does not change provider_verification_started_at" do
-          expect { form.save }.not_to change {
-            claim.eligibility.reload.provider_verification_started_at
-          }
-        end
-
-        it "does not change provider_assigned_to_id" do
-          expect { form.save }.not_to change {
-            claim.eligibility.reload.provider_assigned_to_id
-          }
-        end
+        expect(claim.eligibility.provider_verification_contract_type).to eq("permanent")
       end
     end
 

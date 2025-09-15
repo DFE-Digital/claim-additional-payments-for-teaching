@@ -7,12 +7,12 @@ module FurtherEducationPayments
 
           validates(
             :provider_verification_in_first_five_years,
-            included: {
+            inclusion: {
               in: ->(form) { form.in_first_five_years_options.map(&:id) },
               message: "Tell us if they are in the first 5 years of their " \
                        "further education (FE) teaching career in England"
             },
-            allow_nil: :save_and_exit?
+            unless: :save_and_exit?
           )
 
           def in_first_five_years_options

@@ -10,15 +10,15 @@ module FurtherEducationPayments
             ),
             Form::Option.new(
               id: "not_yet",
-              name: "Not yet, but is enrolled on one"
+              name: "Not yet, I am currently enrolled on one and working towards completing it"
             ),
             Form::Option.new(
               id: "no_but_planned",
-              name: "No, but is planning to enrol on one"
+              name: "No, but I plan to enrol on one in the next 12 months"
             ),
             Form::Option.new(
               id: "no_not_planned",
-              name: "No, and has no plan to enrol on one in the next 12 months"
+              name: "No, and I do not plan to enrol on one in the next 12 months"
             )
           ]
 
@@ -26,11 +26,11 @@ module FurtherEducationPayments
 
           validates(
             :provider_verification_teaching_qualification,
-            included: {
+            inclusion: {
               in: ->(form) { form.teaching_qualification_options.map(&:id) },
               message: "Tell us if they have a teaching qualification"
             },
-            allow_nil: :save_and_exit?
+            unless: :save_and_exit?
           )
 
           def teaching_qualification_options

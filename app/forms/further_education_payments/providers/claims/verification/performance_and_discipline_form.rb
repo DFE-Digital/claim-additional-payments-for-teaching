@@ -8,18 +8,18 @@ module FurtherEducationPayments
 
           validates(
             :provider_verification_performance_measures,
-            included: {
+            inclusion: {
               in: ->(form) { form.performance_measures_options.map(&:id) }
             },
-            allow_nil: :save_and_exit?
+            unless: :save_and_exit?
           )
 
           validates(
             :provider_verification_disciplinary_action,
-            included: {
+            inclusion: {
               in: ->(form) { form.disciplinary_action_options.map(&:id) }
             },
-            allow_nil: :save_and_exit?
+            unless: :save_and_exit?
           )
 
           def performance_measures_options

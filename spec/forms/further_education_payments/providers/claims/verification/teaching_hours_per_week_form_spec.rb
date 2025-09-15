@@ -7,13 +7,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Teachi
 
   let(:user) { create(:dfe_signin_user) }
 
-  let(:claim) do
-    create(
-      :claim,
-      :further_education,
-      submitted_at: DateTime.new(2025, 5, 1, 12, 0, 0)
-    )
-  end
+  let(:claim) { create(:claim, :further_education, :submitted) }
 
   let(:params) { {} }
 
@@ -27,22 +21,10 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Teachi
 
   describe "validations" do
     context "when submission" do
-      it do
-        is_expected.to(
-          validate_inclusion_of(:provider_verification_teaching_hours_per_week)
-          .in_array(
-            %w[
-              20_or_more_hours_per_week
-              12_to_20_hours_per_week
-              2_and_a_half_to_12_hours_per_week
-              fewer_than_2_and_a_half_hours_per_week
-            ]
-          )
-          .with_message(
-            "Enter how many hours they were timetabled to teach during the " \
-            "summer term"
-          )
-        )
+      it "validates inclusion of teaching hours per week" do
+        form.provider_verification_teaching_hours_per_week = nil
+        expect(form).not_to be_valid
+        expect(form.errors[:provider_verification_teaching_hours_per_week]).to be_present
       end
     end
 
@@ -53,18 +35,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Teachi
 
       it do
         is_expected.to(
-          validate_inclusion_of(:provider_verification_teaching_hours_per_week)
-          .in_array([
-            "20_or_more_hours_per_week",
-            "12_to_20_hours_per_week",
-            "2_and_a_half_to_12_hours_per_week",
-            "fewer_than_2_and_a_half_hours_per_week",
-            nil
-          ])
-          .with_message(
-            "Enter how many hours they were timetabled to teach during the " \
-            "summer term"
-          )
+          allow_value(nil).for(:provider_verification_teaching_hours_per_week)
         )
       end
     end

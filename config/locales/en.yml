@@ -884,6 +884,11 @@ en:
               false: "No"
           further_education_teaching_start_year:
             label: "First 5 years of teaching"
+          in_first_five_years:
+            label: "Within first 5 years of teaching"
+            claimant_answers:
+              true: "Yes"
+              false: "No"
           teaching_hours_per_week:
             label: "Timetabled teaching hours"
             claimant_answers:
@@ -910,15 +915,44 @@ en:
               true: "Yes"
               false: "No"
           subject_to_formal_performance_action:
-            label: "No performance measures"
+            label: "Subject to performance measures"
             claimant_answers:
               true: "Yes"
               false: "No"
           subject_to_disciplinary_action:
-            label: "No disciplinary action"
+            label: "Subject to disciplinary action"
             claimant_answers:
               true: "Yes"
               false: "No"
+          performance_measures:
+            label: "Subject to performance measures"
+            claimant_answers:
+              true: "Yes"
+              false: "No"
+          disciplinary_action:
+            label: "Subject to disciplinary action"
+            claimant_answers:
+              true: "Yes"
+              false: "No"
+          teaching_qualification:
+            label: "Teaching qualification"
+            claimant_answers:
+              yes: "Yes"
+              not_yet: "Not yet, I am currently enrolled on one and working towards completing it"
+              no_but_planned: "No, but I plan to enrol on one in the next 12 months"
+              no_not_planned: "No, and I do not plan to enrol on one in the next 12 months"
+          contract_covers_full_academic_year:
+            label: "Does the contract cover the full academic year?"
+            claimant_answers:
+              true: "Yes"
+              false: "No"
+          teaching_hours_per_week_next_term:
+            label: "Teaching hours per week next term"
+            claimant_answers:
+              "20_or_more_hours_per_week": "20 hours or more each week"
+              "12_to_19_hours_per_week": "12 to 19 hours each week"
+              "2_and_a_half_to_12_hours_per_week": "2.5 to 12 hours each week"
+              "fewer_than_2_and_a_half_hours_per_week": "Fewer than 2.5 hours each week"
         employment:
           title: Does the claimant’s place of work match the above information on their claim?
         provider_details:
@@ -1093,6 +1127,7 @@ en:
         question: Which computing courses do you teach?
         question_check_your_answers: Computing courses
         options:
+          level3_and_below: Qualifications approved for funding at level 3 and below
           level3_and_below_ict_for_practitioners:
             Qualifications approved for funding at level 3 and below in the %{link} sector subject area
           level3_and_below_ict_for_users:
