@@ -50,12 +50,12 @@ module FurtherEducationPayments
       # FIXME RL: decide if this is the right approach
       # Required to get application layout to render
       def current_journey_routing_name
-        "further-education-payments-provider"
+        "further-education-payments"
       end
       helper_method :current_journey_routing_name
 
       def journey
-        Journeys::FurtherEducationPayments::Provider
+        Journeys::FurtherEducationPayments
       end
       helper_method :journey
     end
