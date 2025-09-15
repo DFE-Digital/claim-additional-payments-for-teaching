@@ -3,6 +3,8 @@ module Policies
     include BasePolicy
     extend self
 
+    CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE = "teacher_payments_claim_verifier"
+
     ELIGIBILITY_MATCHING_ATTRIBUTES = [["teacher_reference_number"]].freeze
 
     # Percentage of approved claims to QA
