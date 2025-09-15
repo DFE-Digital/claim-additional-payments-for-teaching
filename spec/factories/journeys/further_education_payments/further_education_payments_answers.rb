@@ -99,12 +99,17 @@ FactoryBot.define do
       postcode { "WIA OAA" }
     end
 
+    trait :checked_answers_part_one do
+      check_your_answers_part_one_completed { true }
+    end
+
     trait :submittable do
       previously_claimed { false }
       have_one_login_account { "no" }
 
       with_academic_year
       eligible
+      checked_answers_part_one
       with_award_amount
       with_personal_details
       with_address
