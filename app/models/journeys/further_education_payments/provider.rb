@@ -11,15 +11,7 @@ module Journeys
       POLICIES = []
 
       FORMS = {
-        "claims" => {
-          "verify-claim" => VerifyClaimForm,
-          "verify-identity" => VerifyIdentityForm,
-          "confirmation" => ConfirmationForm,
-          "unauthorised" => UnauthorisedForm,
-          "expired-link" => ExpiredLinkForm,
-          "already-verified" => AlreadyVerifiedForm,
-          "sign-in" => SignInForm
-        }
+        "claims" => {}
       }
 
       CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE = "teacher_payments_claim_verifier"
