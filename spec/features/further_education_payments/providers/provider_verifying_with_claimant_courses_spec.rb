@@ -155,7 +155,12 @@ RSpec.feature "Provider verifying claims", feature_flag: :provider_dashboard do
       .to have_content("Yes")
 
     check(
-      "I have read the provider guidance I was sent by email and to the best of my knowledge confirm the information I have provided in this form is correct."
+      "Please ensure your answers are accurate to the best of " \
+      "your knowledge. While the DfE runs its own checks, this " \
+      "claim is approved or rejected based on your answers. DfE " \
+      "will audit approved claims. If any of your teachers receive " \
+      "payments that are later found to be ineligible, we will take " \
+      "steps to recover the payment."
     )
 
     click_on "Continue"
@@ -318,7 +323,12 @@ RSpec.feature "Provider verifying claims", feature_flag: :provider_dashboard do
       .to have_content("No")
 
     check(
-      "I have read the provider guidance I was sent by email and to the best of my knowledge confirm the information I have provided in this form is correct."
+      "Please ensure your answers are accurate to the best of " \
+      "your knowledge. While the DfE runs its own checks, this " \
+      "claim is approved or rejected based on your answers. DfE " \
+      "will audit approved claims. If any of your teachers receive " \
+      "payments that are later found to be ineligible, we will take " \
+      "steps to recover the payment."
     )
 
     click_on "Continue"
