@@ -30,18 +30,7 @@ class OmniauthCallbacksController < ApplicationController
   end
 
   def sign_out
-    case current_journey_routing_name
-    when "further-education-payments-provider"
-      claim = journey_session.answers.claim
-      clear_journey_sessions!
-
-      flash[:success] = "You have signed out of DfE Sign-in"
-      redirect_to(
-        Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
-      )
-    else
-      render file: Rails.root.join("public", "404.html"), status: :not_found, layout: false
-    end
+    render file: Rails.root.join("public", "404.html"), status: :not_found, layout: false
   end
 
   # unfortunely this method has dual responsibilites
