@@ -252,7 +252,7 @@ RSpec.feature "Provider verifying claims" do
       click_on "Continue"
 
       expect(page).to have_text "Does Edna Krabappel spend at least half of " \
-        "their timetabled teaching time teaching these courses?"
+        "their spring term timetabled teaching time teaching these courses?"
 
       # list of courses by the claimaint
       expect(page).to have_text("Qualifications approved for funding at level 3 " \
@@ -431,7 +431,7 @@ RSpec.feature "Provider verifying claims" do
       click_on "Continue"
 
       expect(page).to have_text "Does Edna Krabappel spend at least half of " \
-        "their timetabled teaching time teaching these courses?"
+        "their spring term timetabled teaching time teaching these courses?"
 
       # list of courses by the claimaint
       expect(page).to have_text("Qualifications approved for funding at level 3 " \
@@ -614,7 +614,7 @@ RSpec.feature "Provider verifying claims" do
       click_on "Continue"
 
       expect(page).to have_text "Does Edna Krabappel spend at least half of " \
-        "their timetabled teaching time teaching these courses?"
+        "their spring term timetabled teaching time teaching these courses?"
 
       # list of courses by the claimaint
       expect(page).to have_text("Level 2 or level 3 apprenticeships in the " \
@@ -772,7 +772,7 @@ RSpec.feature "Provider verifying claims" do
       click_on "Continue"
 
       expect(page).to have_text "Does Edna Krabappel spend at least half of " \
-        "their timetabled teaching time teaching these courses?"
+        "their spring term timetabled teaching time teaching these courses?"
 
       # list of courses by the claimaint
       expect(page).to have_text("Qualifications approved for funding at level 3 " \
