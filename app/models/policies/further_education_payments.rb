@@ -109,12 +109,6 @@ module Policies
       "FELUPEXPANSION"
     end
 
-    def alternative_identity_verification_required?(claim)
-      return false unless FeatureFlag.enabled?(:fe_provider_identity_verification)
-
-      claim.failed_one_login_idv?
-    end
-
     def approvable?(claim)
       ClaimCheckingTasks.new(claim).incomplete_task_names.exclude?(
         "alternative_identity_verification"
@@ -131,7 +125,7 @@ module Policies
       ADMIN_DECISION_REJECTED_REASONS.select do |reason|
         case reason
         when :alternative_identity_verification_check_failed
-          alternative_identity_verification_required?(claim)
+          claim.failed_one_login_idv?
         else
           true
         end

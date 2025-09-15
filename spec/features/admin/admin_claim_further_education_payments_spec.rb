@@ -8,8 +8,6 @@ RSpec.feature "Admin claim further education payments" do
   end
 
   before do
-    FeatureFlag.create!(name: :fe_provider_identity_verification, enabled: true)
-    create(:journey_configuration, :further_education_payments_provider)
     sign_in_as_service_operator
   end
 
