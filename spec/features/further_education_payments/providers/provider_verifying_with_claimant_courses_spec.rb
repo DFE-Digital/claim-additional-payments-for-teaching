@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Provider verifying claims", feature_flag: :provider_dashboard do
+RSpec.feature "Provider verifying claims" do
   scenario "with custom subjects and courses - Yes to teaching listed courses" do
     fe_provider = create(
       :school,
