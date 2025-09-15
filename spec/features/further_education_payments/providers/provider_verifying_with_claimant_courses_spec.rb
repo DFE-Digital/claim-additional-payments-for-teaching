@@ -359,7 +359,7 @@ RSpec.feature "Provider verifying claims" do
     stub_dfe_sign_in_user_info_request(
       "11111",
       "22222",
-      Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE,
+      Policies::FurtherEducationPayments::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE,
       user_type: "provider"
     )
 
