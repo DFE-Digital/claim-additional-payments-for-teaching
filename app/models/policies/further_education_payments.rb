@@ -136,7 +136,6 @@ module Policies
       "https://www.gov.uk/guidance/targeted-retention-incentive-payments-for-fe-teachers"
     end
 
-
     # given a journey session
     # does the claimant have an existing journey session in play
     # based on their one login uid
