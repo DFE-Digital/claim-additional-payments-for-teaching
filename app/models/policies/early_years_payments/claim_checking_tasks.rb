@@ -16,6 +16,7 @@ module Policies
 
         if year_1_of_ey?
           tasks << "identity_confirmation"
+          tasks << "ey_alternative_verification" if claim.tasks.exists?(name: "ey_alternative_verification")
         else
           tasks << "ey_eoi_cross_reference"
           tasks << "one_login_identity"
