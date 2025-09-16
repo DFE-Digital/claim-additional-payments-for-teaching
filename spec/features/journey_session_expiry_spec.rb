@@ -18,7 +18,7 @@ RSpec.describe "Journey session expiry" do
 
     sign_in_with_one_login
 
-    expect(page).to have_text("Check you’re eligible for a targeted retention incentive payment for further education")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_text("Which academic year did you start teaching in further education in England?")
