@@ -664,8 +664,7 @@ RSpec.feature "Provider verifying claims" do
     end
 
     within_fieldset(
-      "Has Edna taught for at least one academic term at " \
-      "Springfield A and M?"
+      "Has Edna worked at Springfield A and M for the whole of the spring term?"
     ) do
       choose "Yes"
     end
@@ -837,8 +836,7 @@ RSpec.feature "Provider verifying claims" do
     end
 
     within_fieldset(
-      "Has Edna taught for at least one academic term at " \
-      "Springfield A and M?"
+      "Has Edna worked at Springfield A and M for the whole of the spring term?"
     ) do
       choose "Yes"
     end
@@ -1060,8 +1058,7 @@ RSpec.feature "Provider verifying claims" do
     end
 
     within_fieldset(
-      "Has Edna taught for at least one academic term at " \
-      "Springfield A and M?"
+      "Has Edna worked at Springfield A and M for the whole of the spring term?"
     ) do
       choose "Yes"
     end

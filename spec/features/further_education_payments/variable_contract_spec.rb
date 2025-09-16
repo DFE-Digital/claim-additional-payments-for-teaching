@@ -51,7 +51,7 @@ RSpec.feature "Further education payments" do
     choose("Variable hours")
     click_button "Continue"
 
-    expect(page).to have_content("Have you taught at #{college.name} for at least one academic term?")
+    expect(page).to have_content("Have you taught at #{college.name} for the whole of the spring academic term?")
     choose("Yes")
     click_button "Continue"
 
@@ -129,7 +129,7 @@ RSpec.feature "Further education payments" do
 
     expect(page).to have_content("Check your answers")
     expect(page).to have_summary_item(
-      key: "Have you taught at #{college.name} for at least one academic term?",
+      key: "Have you taught at #{college.name} for the whole of the spring academic term?",
       value: "Yes"
     )
     expect(page).to have_summary_item(
@@ -265,7 +265,7 @@ RSpec.feature "Further education payments" do
     choose("No, it does not cover the full #{current_academic_year.to_s(:long)} academic year")
     click_button "Continue"
 
-    expect(page).to have_content("Have you taught at #{college.name} for at least one academic term?")
+    expect(page).to have_content("Have you taught at #{college.name} for the whole of the spring academic term?")
     choose("Yes")
     click_button "Continue"
 
@@ -306,7 +306,7 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Check your answers")
 
     expect(page).to have_summary_item(
-      key: "Have you taught at #{college.name} for at least one academic term?",
+      key: "Have you taught at #{college.name} for the whole of the spring academic term?",
       value: "Yes"
     )
 
