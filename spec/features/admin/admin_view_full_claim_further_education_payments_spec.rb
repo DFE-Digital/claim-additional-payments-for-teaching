@@ -79,7 +79,7 @@ RSpec.feature "Admin views claim details for FurtherEducationPayments" do
       )
 
       expect(
-        summary_row("Are you a member of staff with teaching responsibilities?")
+        summary_row("Are you a member of staff with the responsibilities of a teacher?")
       ).to have_content("Yes")
 
       expect(

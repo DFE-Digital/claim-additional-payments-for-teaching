@@ -14,21 +14,20 @@
           text: @form.t(:question),
           tag: "h1",
           size: "l"
-        }
-      ) %>
+        },
+        hint: -> do %>
 
-      <%= govuk_details(
-        summary_text: "Who counts as a teacher for this payment"
-      ) do %>
         <p class="govuk-body">
-          You must be currently employed with teaching responsibilities.
-          Teaching responsibilities include teaching timetabled guided learning
-          hours and planning, delivering and assessing learning.
-          <br />
-          This payment is not for non-teaching assessors, non-teaching leaders
-          or support staff like assistants or technicians.
+          This means you must be doing all these:
         </p>
+
+        <%= govuk_list [
+          "independently teaching timetabled guided learning hours to classes of students",
+          "planning and preparing lessons for classes of students",
+          "assessing learning and reporting on progress for classes of students"
+        ], type: :bullet %>
       <% end %>
+      <% ) %>
 
       <%= f.govuk_submit %>
     <% end %>

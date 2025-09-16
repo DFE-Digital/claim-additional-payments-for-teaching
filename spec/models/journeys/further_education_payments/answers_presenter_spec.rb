@@ -116,7 +116,7 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
     it {
       is_expected.to match_array(
         [
-          ["Are you a member of staff with teaching responsibilities?",
+          ["Are you a member of staff with the responsibilities of a teacher?",
             "Yes",
             "teaching-responsibilities"],
           ["Which FE provider directly employs you?",
