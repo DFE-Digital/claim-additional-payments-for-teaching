@@ -15,7 +15,8 @@ class EligibleEyProvider < ApplicationRecord
       "LA Code" => :local_authority_code,
       "Nursery Address" => :nursery_address,
       "Primary Key Contact Email Address" => :primary_key_contact_email_address,
-      "Secondary Contact Email Address (Optional)" => :secondary_contact_email_address
+      "Secondary Contact Email Address (Optional)" => :secondary_contact_email_address,
+      "Maximum Number Of Claims" => :max_claims
     }
 
     CSV.generate(headers: true) do |csv|
@@ -37,6 +38,15 @@ class EligibleEyProvider < ApplicationRecord
     where(primary_key_contact_email_address: email_address).or(
       where(secondary_contact_email_address: email_address)
     )
+  end
+
+  def claims
+    claim_ids = Policies::EarlyYearsPayments::Eligibility
+      .joins(:claim)
+      .where(nursery_urn: urn)
+      .select("claims.id")
+
+    Claim.where(id: claim_ids)
   end
 
   def email_addresses

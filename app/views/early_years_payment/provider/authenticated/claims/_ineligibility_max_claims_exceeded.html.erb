@@ -1,0 +1,16 @@
+<% content_for(:page_title, page_title("Claim limit exceeded", journey: current_journey_routing_name)) %>
+<% @backlink_path = claim_path(current_journey_routing_name, "current-nursery") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">This nursery is not eligible</h1>
+
+    <p class="govuk-body">
+      This claims exceeds the maximum number of claims allowed for this nursery.
+    </p>
+
+    <p class="govuk-body">
+      For support, contact: <%= govuk_mail_to t("early_years_payment_provider_authenticated.support_email_address"), t("early_years_payment_provider_authenticated.support_email_address") %>.
+    </p>
+  </div>
+</div>

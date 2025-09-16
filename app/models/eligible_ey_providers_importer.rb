@@ -9,7 +9,8 @@ class EligibleEyProvidersImporter < CsvImporter::Base
       "LA Code",
       "Nursery Address",
       "Primary Key Contact Email Address",
-      "Secondary Contact Email Address (Optional)"
+      "Secondary Contact Email Address (Optional)",
+      "Maximum Number Of Claims"
     ]
   )
 
@@ -35,6 +36,7 @@ class EligibleEyProvidersImporter < CsvImporter::Base
       nursery_address: row.fetch("Nursery Address"),
       primary_key_contact_email_address: row.fetch("Primary Key Contact Email Address"),
       secondary_contact_email_address: row.fetch("Secondary Contact Email Address (Optional)"),
+      max_claims: Integer(row.fetch("Maximum Number Of Claims")),
       file_upload_id:
     }
   end
