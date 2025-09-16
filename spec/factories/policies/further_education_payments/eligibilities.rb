@@ -149,7 +149,7 @@ FactoryBot.define do
 
     trait :provider_verifiable do
       provider_verification_teaching_responsibilities { true }
-      provider_verification_in_first_five_years { true }
+      provider_verification_teaching_start_year_matches_claim { true }
       provider_verification_teaching_qualification { "yes" }
       provider_verification_contract_type { "fixed_term" }
       provider_verification_contract_covers_full_academic_year { true }

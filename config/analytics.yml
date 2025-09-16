@@ -326,7 +326,7 @@ shared:
     - claimant_identity_verified_at
     - valid_passport
     - provider_verification_teaching_responsibilities
-    - provider_verification_in_first_five_years
+    - provider_verification_teaching_start_year_matches_claim
     - provider_verification_teaching_qualification
     - provider_verification_contract_type
     - provider_verification_contract_covers_full_academic_year

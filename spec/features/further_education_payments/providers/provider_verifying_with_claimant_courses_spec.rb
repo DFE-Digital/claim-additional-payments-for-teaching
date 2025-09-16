@@ -53,8 +53,8 @@ RSpec.feature "Provider verifying claims", feature_flag: :provider_dashboard do
     click_on "Continue"
 
     within_fieldset(
-      "Is Edna Krabappel in the first 5 years of their further education " \
-      "(FE) teaching career in England?"
+      "Did Edna Krabappel start their FE teaching career in England during " \
+      "September 2023 to August 2024?"
     ) { choose "Yes" }
 
     click_on "Continue"
@@ -215,8 +215,8 @@ RSpec.feature "Provider verifying claims", feature_flag: :provider_dashboard do
     click_on "Continue"
 
     within_fieldset(
-      "Is Edna Krabappel in the first 5 years of their further education " \
-      "(FE) teaching career in England?"
+      "Did Edna Krabappel start their FE teaching career in England during " \
+      "September 2023 to August 2024?"
     ) { choose "Yes" }
 
     click_on "Continue"
