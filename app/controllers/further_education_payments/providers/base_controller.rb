@@ -36,6 +36,7 @@ module FurtherEducationPayments
 
         Claim
           .by_policy(Policies::FurtherEducationPayments)
+          .by_academic_year(AcademicYear.current)
           .where(eligibility_id: eligibilities.select(:id))
       end
 
