@@ -26,6 +26,13 @@ module Journeys
           def provide_mobile_number
             false
           end
+
+          def eligible_ey_provider
+            EligibleEyProvider
+              .unscoped
+              .order(created_at: :desc)
+              .find_by(urn: nursery_urn)
+          end
         end
       end
     end
