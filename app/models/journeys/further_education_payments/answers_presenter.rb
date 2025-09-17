@@ -38,6 +38,7 @@ module Journeys
           a << teaching_responsibilities
           a << school
           a << contract_type
+          a << fixed_term_contract
           a << taught_at_least_one_term
           a << teaching_hours_per_week_next_term
           a << teaching_hours_per_week
@@ -103,6 +104,16 @@ module Journeys
           t("further_education_payments.forms.contract_type.question", school_name: answers.school.name),
           t(answers.contract_type, scope: "further_education_payments.forms.contract_type.options"),
           "contract-type"
+        ]
+      end
+
+      def fixed_term_contract
+        return nil unless answers.contract_type == "fixed_term"
+
+        [
+          t("further_education_payments.forms.fixed_term_contract.question", academic_year: answers.academic_year),
+          t(answers.fixed_term_full_year, scope: "further_education_payments.forms.fixed_term_contract.options", current_academic_year: answers.academic_year),
+          "fixed-term-contract"
         ]
       end
 
