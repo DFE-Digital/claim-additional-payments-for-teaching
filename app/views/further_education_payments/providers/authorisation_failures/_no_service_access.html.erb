@@ -5,7 +5,7 @@
 <p class="govuk-body govuk-!-margin-top-6">
   You can <%= govuk_link_to(
     "request access",
-    Journeys::FurtherEducationPayments::Provider.request_service_access_url(
+    Policies::FurtherEducationPayments.request_service_access_url(
       params[:dfe_sign_in_uid]
     )
   ) %> to verify retention payments for further
