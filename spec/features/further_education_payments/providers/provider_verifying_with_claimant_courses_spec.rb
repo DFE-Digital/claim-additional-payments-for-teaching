@@ -101,7 +101,7 @@ RSpec.feature "Provider verifying claims", feature_flag: :provider_dashboard do
 
     click_on "Continue"
 
-    expect(page).to have_text("Does Edna Krabappel spend at least half of their timetabled teaching time teaching these courses?")
+    expect(page).to have_text("Does Edna Krabappel spend at least half of their spring term timetabled teaching time teaching these courses?")
 
     # list of courses by the claimaint
     expect(page).to have_text("Qualifications approved for funding at level 3 " \
@@ -263,7 +263,7 @@ RSpec.feature "Provider verifying claims", feature_flag: :provider_dashboard do
 
     click_on "Continue"
 
-    expect(page).to have_text("Does Edna Krabappel spend at least half of their timetabled teaching time teaching these courses?")
+    expect(page).to have_text("Does Edna Krabappel spend at least half of their spring term timetabled teaching time teaching these courses?")
 
     # list of courses by the claimaint
     expect(page).to have_text("Qualifications approved for funding at level 3 " \
