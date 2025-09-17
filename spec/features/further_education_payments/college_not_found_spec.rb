@@ -31,11 +31,11 @@ RSpec.feature "Further education payments" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider directly employs you?")
+    expect(page).to have_content("Which further education provider directly employs you?")
     fill_in "claim[provision_search]", with: "foo"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider directly employs you?")
+    expect(page).to have_content("Which further education provider directly employs you?")
     expect(page).to have_content("No results match that search term. Try again.")
   end
 
@@ -69,11 +69,11 @@ RSpec.feature "Further education payments" do
     choose "Yes"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider directly employs you?")
+    expect(page).to have_content("Which further education provider directly employs you?")
     fill_in "claim[provision_search]", with: "foo"
     click_button "Continue"
 
-    expect(page).to have_content("Which FE provider directly employs you?")
+    expect(page).to have_content("Which further education provider directly employs you?")
     expect(page).to have_content("No results match that search term. Try again.")
   end
 end

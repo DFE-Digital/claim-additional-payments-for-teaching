@@ -33,14 +33,14 @@ RSpec.describe "Journey session expiry" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_text("Which FE provider directly employs you?")
+    expect(page).to have_text("Which further education provider directly employs you?")
     last_path = current_path
 
     travel(2.days)
     ExpireJourneySessionsJob.perform_now
 
     visit last_path
-    expect(page).not_to have_text("Which FE provider directly employs you?")
+    expect(page).not_to have_text("Which further education provider directly employs you?")
     expect(page).to have_link "Start now"
   end
 end

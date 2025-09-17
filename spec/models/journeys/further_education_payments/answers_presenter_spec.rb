@@ -119,7 +119,7 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
           ["Are you a member of staff with the responsibilities of a teacher?",
             "Yes",
             "teaching-responsibilities"],
-          ["Which FE provider directly employs you?",
+          ["Which further education provider directly employs you?",
             college.name,
             "further-education-provision-search"],
           ["What type of contract do you have directly with #{college.name}?",

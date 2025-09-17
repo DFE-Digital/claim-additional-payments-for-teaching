@@ -982,7 +982,7 @@ en:
         errors:
           inclusion: Tell us if you are a member of staff with teaching responsibilities
       further_education_provision_search:
-        question: Which FE provider directly employs you?
+        question: Which further education provider directly employs you?
         errors:
           blank: Select which FE provider directly employs you
           min_length: Enter a college name or postcode that is at least 3 characters long
