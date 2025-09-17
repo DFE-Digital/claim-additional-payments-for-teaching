@@ -239,7 +239,7 @@ RSpec.feature "Provider verifying claims" do
       within_fieldset(
         "On average, how many hours per week was Edna Krabappel timetabled " \
         "to teach during the autumn term?"
-      ) { choose "20 hours or more each week" }
+      ) { choose "20 hours or more per week" }
 
       click_on "Continue"
 
@@ -296,7 +296,7 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Timetabled hours per week")
-      ).to have_content("20 hours or more each week")
+      ).to have_content("20 hours or more per week")
 
       expect(
         summary_row("Teaches 16-19-year-olds or those with EHCP")
@@ -421,7 +421,7 @@ RSpec.feature "Provider verifying claims" do
       within_fieldset(
         "On average, how many hours per week was Edna Krabappel timetabled " \
         "to teach during the spring term?"
-      ) { choose "20 hours or more each week" }
+      ) { choose "20 hours or more per week" }
 
       click_on "Continue"
 
@@ -476,7 +476,7 @@ RSpec.feature "Provider verifying claims" do
 
       expect(
         summary_row("Timetabled hours per week")
-      ).to have_content("20 hours or more each week")
+      ).to have_content("20 hours or more per week")
 
       expect(
         summary_row("Teaches 16-19-year-olds or those with EHCP")
@@ -607,7 +607,7 @@ RSpec.feature "Provider verifying claims" do
       within_fieldset(
         "On average, how many hours per week was Edna Krabappel timetabled " \
         "to teach during the summer term?"
-      ) { choose "20 hours or more each week" }
+      ) { choose "20 hours or more per week" }
 
       click_on "Continue"
 
@@ -768,7 +768,7 @@ RSpec.feature "Provider verifying claims" do
       within_fieldset(
         "On average, how many hours per week was Edna Krabappel timetabled " \
         "to teach during the autumn term?"
-      ) { choose "20 hours or more each week" }
+      ) { choose "20 hours or more per week" }
 
       click_on "Continue"
 
