@@ -35,7 +35,7 @@ RSpec.feature "Further education payments" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 
@@ -287,7 +287,7 @@ RSpec.feature "Further education payments" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 
@@ -450,7 +450,7 @@ RSpec.feature "Further education payments" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 

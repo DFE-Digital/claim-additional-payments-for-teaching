@@ -56,7 +56,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
     it do
       is_expected.to include(
         [
-          "Are you a member of staff with teaching responsibilities?",
+          "Are you a member of staff with the responsibilities of a teacher?",
           "Yes"
         ],
         [

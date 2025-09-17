@@ -29,7 +29,7 @@ RSpec.describe "Journey session expiry" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_text("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_text("Are you a member of staff with the responsibilities of a teacher?")
     choose("Yes")
     click_button "Continue"
 

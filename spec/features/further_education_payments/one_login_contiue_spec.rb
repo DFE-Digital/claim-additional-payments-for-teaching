@@ -39,7 +39,7 @@ RSpec.feature "Further education payments" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     click_button "Sign out"
 
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
@@ -62,7 +62,7 @@ RSpec.feature "Further education payments" do
     choose "Continue with the eligibility check that you have already started"
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
   end
 
   scenario "has OL account with existing partial eligibility but starts anew" do
@@ -97,7 +97,7 @@ RSpec.feature "Further education payments" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     click_button "Sign out"
 
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)

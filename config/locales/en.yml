@@ -978,7 +978,7 @@ en:
         errors:
           inclusion: Choose if you want to continue your existing eligibility check or start a new eligibility check
       teaching_responsibilities:
-        question: Are you a member of staff with teaching responsibilities?
+        question: Are you a member of staff with the responsibilities of a teacher?
         errors:
           inclusion: Tell us if you are a member of staff with teaching responsibilities
       further_education_provision_search:
