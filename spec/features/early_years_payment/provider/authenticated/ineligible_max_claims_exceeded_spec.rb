@@ -11,10 +11,12 @@ RSpec.feature "Early years payment provider" do
       nursery_name: "Springfield Elementary Nursery"
     )
 
+    # Existing claim in the current academic year
     create(
       :claim,
       policy: Policies::EarlyYearsPayments,
       academic_year: AcademicYear.current,
+      journey_session: create(:early_years_payment_provider_authenticated_session),
       eligibility_attributes: {
         nursery_urn: eligible_ey_provider.urn
       }

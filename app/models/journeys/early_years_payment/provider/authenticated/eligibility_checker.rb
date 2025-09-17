@@ -30,7 +30,7 @@ module Journeys
           def claims_in_academic_year
             eligible_ey_provider
               .claims
-              .where("journeys_session_id IS NULL OR journeys_session_id != ?", journey_session.id)
+              .where.not(journeys_session_id: journey_session.id)
               .where(academic_year: journey_session.answers.academic_year)
           end
 

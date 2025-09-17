@@ -31,7 +31,8 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::Eligibility
           academic_year: AcademicYear.new("2024/2025"),
           eligibility_attributes: {
             nursery_urn: eligible_ey_provider.urn
-          }
+          },
+          journey_session: create(:early_years_payment_provider_authenticated_session) # Different journey session
         )
 
         create(
@@ -40,7 +41,8 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::Eligibility
           academic_year: AcademicYear.new("2025/2026"),
           eligibility_attributes: {
             nursery_urn: eligible_ey_provider.urn
-          }
+          },
+          journey_session: create(:early_years_payment_provider_authenticated_session) # Different journey session
         )
 
         # Claim belonging to the current journey session, not counted
@@ -65,6 +67,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Provider::Authenticated::Eligibility
             :claim,
             policy: Policies::EarlyYearsPayments,
             academic_year: AcademicYear.new("2025/2026"),
+            journey_session: create(:early_years_payment_provider_authenticated_session),
             eligibility_attributes: {
               nursery_urn: eligible_ey_provider.urn
             }
