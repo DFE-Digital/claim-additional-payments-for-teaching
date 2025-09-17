@@ -28,14 +28,14 @@
         summary_text: "What counts towards the first 5 years of a further education (FE) teaching career"
       ) do %>
         <p class="govuk-body">
-          This is the first academic year when you started your first role with 
-          teaching responsibilities at any post-16 only education (FE) provider 
-          in England.
-          <br />
-          It is when you formally took on teaching responsibilities, including 
-          teaching timetabled guided learning hours and for planning, delivering 
-          and assessing learning.
+          This is the first academic year that you took on FE teaching responsibilities in England. We define this as the academic year when you took on the following teaching responsibilities at a post-16 education provider in England:
         </p>
+
+        <%= govuk_list [
+          "independently teaching timetabled guided learning hours to classes of students",
+          "planning and preparing lessons for classes of students",
+          "assessing learning and reporting on progress for classes of students"
+        ], type: :bullet %>
       <% end %>
 
       <%= f.govuk_submit %>
