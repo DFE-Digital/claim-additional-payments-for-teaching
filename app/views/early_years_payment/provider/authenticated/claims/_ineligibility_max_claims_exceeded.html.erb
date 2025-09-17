@@ -3,14 +3,19 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">This nursery is not eligible</h1>
+    <h1 class="govuk-heading-l">Application limit reached</h1>
 
     <p class="govuk-body">
-      This claims exceeds the maximum number of claims allowed for this nursery.
+      You cannot submit any more early years financial incentive payment
+      applications for this nursery. All available expressions of interest have
+      been used.
     </p>
 
+  </div>
+
+  <div class="govuk-grid-column-full">
     <p class="govuk-body">
-      For support, contact: <%= govuk_mail_to t("early_years_payment_provider_authenticated.support_email_address"), t("early_years_payment_provider_authenticated.support_email_address") %>.
+      For support or further guidance, contact <%= govuk_mail_to t("early_years_payment_provider_authenticated.support_email_address"), t("early_years_payment_provider_authenticated.support_email_address") %>.
     </p>
   </div>
 </div>

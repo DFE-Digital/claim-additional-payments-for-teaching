@@ -39,6 +39,8 @@ RSpec.feature "Early years payment provider" do
     click_button "Continue"
 
     expect(page.current_path).to eq "/early-years-payment-provider/ineligible"
-    expect(page).to have_content("This claims exceeds the maximum number of claims allowed for this nursery.")
+    expect(page).to have_content(
+      "You cannot submit any more early years financial incentive payment applications for this nursery. All available expressions of interest have been used."
+    )
   end
 end
