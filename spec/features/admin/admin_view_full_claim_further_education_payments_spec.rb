@@ -151,7 +151,7 @@ RSpec.feature "Admin views claim details for FurtherEducationPayments" do
 
       expect(
         summary_row(
-          "Are you subject to any formal performance measures as a result of " \
+          "Are you currently subject to any formal performance measures as a result of " \
           "continuous poor teaching standards?"
         )
       ).to have_content("No")
