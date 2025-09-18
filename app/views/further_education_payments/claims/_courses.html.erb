@@ -12,7 +12,12 @@
           size: "l"
         },
         hint: {
-          text: @form.t(:hint, email: govuk_link_to(t("support_email_address", scope: @form.i18n_namespace))).html_safe
+          text: @form.t(
+            :hint,
+            email_snippet: govuk_mail_to(
+              t("support_email_address", scope: @form.i18n_namespace)
+            )
+          ).html_safe
         } do %>
         <% @form.checkbox_options[0..-2].each do |option| %>
           <%= f.govuk_check_box @form.course_field, option.id,
