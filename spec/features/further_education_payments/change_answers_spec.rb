@@ -108,7 +108,7 @@ RSpec.feature "Further education change answers" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you subject to any formal performance measures as a result of continuous poor teaching standards")
+    expect(page).to have_content("Are you currently subject to any formal performance measures as a result of continuous poor teaching standards")
     within all(".govuk-fieldset")[0] do
       choose("No")
     end
@@ -261,7 +261,7 @@ RSpec.feature "Further education change answers" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you subject to any formal performance measures as a result of continuous poor teaching standards")
+    expect(page).to have_content("Are you currently subject to any formal performance measures as a result of continuous poor teaching standards")
     within all(".govuk-fieldset")[0] do
       choose("No")
     end
@@ -393,7 +393,7 @@ RSpec.feature "Further education change answers" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you subject to any formal performance measures as a result of continuous poor teaching standards")
+    expect(page).to have_content("Are you currently subject to any formal performance measures as a result of continuous poor teaching standards")
     within all(".govuk-fieldset")[0] do
       choose("No")
     end
