@@ -32,7 +32,10 @@
          "https://getintoteaching.education.gov.uk/non-uk-teachers/get-an-international-relocation-payment",
          target: "_blank"
        ) %>
-       to check the criteria you must meet to receive the IRP. You need to have started your job before you can apply.
+       to check the criteria you must meet to receive the IRP. This application
+       window is only for teachers who have received their first payment of
+       £5,000 and are applying after completing 3 full academic terms with a
+       contract lasting at least 1 more year.
      </p>
 
      <p class="govuk-body">
@@ -49,8 +52,8 @@
      </p>
 
      <%= govuk_list [
-       "your teaching subject and the terms of your employment contract",
-       "your visa type and when you entered the UK",
+       "your current teaching subject and the terms of your employment contract",
+       "your current visa type",
        "your passport",
        "your address in England",
        "your national insurance number",
@@ -77,16 +80,8 @@
      </p>
 
      <%= govuk_list [
-       "30 September 2024 to 30 June 2025"
+       "22 September 2025 to 30 June 2026"
      ], type: :bullet %>
-
-     <p class="govuk-body">
-       If you start your teaching job between 1 March 2024 and 31 May 2025 you should apply now. If you are eligible, you should receive the money following successful completion of our eligibility checks. You must apply by 30 June 2025 to remain eligible.
-     </p>
-
-     <p class="govuk-body">
-       If you start your qualifying teaching role between 1 March 2024 and 31 May 2025, you must apply before the window closes on 30 June 2025.
-     </p>
 
      <p class="govuk-body">
        DfE may not be able to process late applications if you do not apply during the correct application window. If you miss the correct application window, then contact <%= govuk_link_to(t("get_a_teacher_relocation_payment.support_email_address"), "mailto:#{t("get_a_teacher_relocation_payment.support_email_address")}") %> explaining your circumstances and we will review your eligibility.
@@ -95,7 +90,7 @@
      <h2 class="govuk-heading-m">Contact us</h2>
 
      <p class="govuk-body">
-       For help, please email us at <%= govuk_link_to(t("get_a_teacher_relocation_payment.support_email_address"), "mailto:#{t("get_a_teacher_relocation_payment.support_email_address")}") %>.
+       For help, email us at <%= govuk_link_to(t("get_a_teacher_relocation_payment.support_email_address"), "mailto:#{t("get_a_teacher_relocation_payment.support_email_address")}") %>.
      </p>
    </div>
  </div>
