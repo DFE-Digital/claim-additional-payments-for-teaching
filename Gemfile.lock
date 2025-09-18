@@ -716,7 +716,7 @@ GEM
     request_store_rails (2.0.0)
       concurrent-ruby (~> 1.0)
     retriable (3.1.2)
-    rexml (3.4.1)
+    rexml (3.4.2)
     rollbar (3.6.2)
     rotp (6.3.0)
     rouge (4.5.2)
