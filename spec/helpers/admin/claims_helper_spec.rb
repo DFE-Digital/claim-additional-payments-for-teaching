@@ -350,6 +350,13 @@ RSpec.describe Admin::ClaimsHelper do
           ]
         end
 
+        before do
+          claim.update!(
+            onelogin_idv_at: DateTime.current,
+            identity_confirmed_with_onelogin: false
+          )
+        end
+
         it "return unverified grey tag" do
           expect(subject).to match("Unverified")
           expect(subject).to match("grey")
@@ -394,7 +401,35 @@ RSpec.describe Admin::ClaimsHelper do
           ]
         end
 
+        before do
+          claim.update!(
+            onelogin_idv_at: DateTime.current,
+            identity_confirmed_with_onelogin: false
+          )
+        end
+
         it "return passed green tag" do
+          expect(subject).to match("Passed")
+          expect(subject).to match("green")
+        end
+      end
+
+      context "with a year 1 claim that passsed idv" do
+        let(:claim_tasks) do
+          [
+            create(
+              :task,
+              name: "identity_confirmation",
+              passed: true
+            )
+          ]
+        end
+
+        before do
+          claim.update!(academic_year: AcademicYear.new("2024/2025"))
+        end
+
+        it "returns passed green tag" do
           expect(subject).to match("Passed")
           expect(subject).to match("green")
         end

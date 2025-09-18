@@ -149,9 +149,9 @@ module Admin
           status_colour = "grey"
         end
       when Policies::EarlyYearsPayments
-        identity_tasks = []
-        identity_tasks << (claim.tasks.detect { |t| t.name == "one_login_identity" } || Task.new)
-        identity_tasks << (claim.tasks.detect { |t| t.name == "ey_alternative_verification" } || Task.new)
+        identity_tasks = Policies::EarlyYearsPayments::ClaimCheckingTasks.new(claim).identity_tasks.map do |name|
+          claim.tasks.detect { |t| t.name == name } || Task.new
+        end
 
         if !claim.eligibility.practitioner_journey_completed?
           status = "Incomplete"
