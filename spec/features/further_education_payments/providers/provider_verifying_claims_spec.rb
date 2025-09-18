@@ -584,8 +584,8 @@ RSpec.feature "Provider verifying claims" do
 
       # Third screen with additional questions for variable hours contracts
       within_fieldset(
-        "Has Edna Krabappel taught at Springfield College for at least one " \
-        "full academic term?"
+        "Has Edna Krabappel worked at Springfield College for the whole of " \
+        "the spring term?"
       ) { choose "Yes" }
 
       click_on "Continue"
@@ -655,7 +655,9 @@ RSpec.feature "Provider verifying claims" do
       ).to have_content "Yes"
 
       expect(
-        summary_row("Variable contract academic term")
+        summary_row(
+          "Worked at Springfield College for the whole of the spring term"
+        )
       ).to have_content "Yes"
 
       expect(
@@ -745,8 +747,8 @@ RSpec.feature "Provider verifying claims" do
 
       # Third variable hours screen
       within_fieldset(
-        "Has Edna Krabappel taught at Springfield College for at least one " \
-        "full academic term?"
+        "Has Edna Krabappel worked at Springfield College for the whole of " \
+        "the spring term?"
       ) { choose "Yes" }
 
       click_on "Continue"
@@ -852,8 +854,8 @@ RSpec.feature "Provider verifying claims" do
       click_on "Continue"
 
       within_fieldset(
-        "Has Edna Krabappel taught at Springfield College for at least one " \
-        "full academic term?"
+        "Has Edna Krabappel worked at Springfield College for the whole of " \
+        "the spring term?"
       ) { choose "Yes" }
       click_on "Continue"
 
@@ -862,7 +864,9 @@ RSpec.feature "Provider verifying claims" do
       expect(summary_row("Timetabled hours in term")).to have_content("Yes")
 
       expect(
-        summary_row("Variable contract academic term")
+        summary_row(
+          "Worked at Springfield College for the whole of the spring term"
+        )
       ).to have_content("Yes")
 
       # Change contract type to Employed by another organisation

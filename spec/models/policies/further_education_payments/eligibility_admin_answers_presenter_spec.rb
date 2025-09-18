@@ -104,7 +104,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
               "Variable hours contract (This includes zero hours contracts)"
             ],
             [
-              "Have you taught at Springfield Elementary for at least one academic term?",
+              "Have you taught at Springfield Elementary for the whole of the spring academic term?",
               "Yes"
             ],
             [
@@ -165,7 +165,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
                 "Fixed term contract"
               ],
               [
-                "Have you taught at Springfield Elementary for at least one academic term?",
+                "Have you taught at Springfield Elementary for the whole of the spring academic term?",
                 "No"
               ],
               [

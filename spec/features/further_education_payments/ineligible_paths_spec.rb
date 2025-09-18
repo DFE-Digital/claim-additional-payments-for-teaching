@@ -256,7 +256,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("No, it does not cover the full #{current_academic_year.to_s(:long)} academic year")
     click_button "Continue"
 
-    expect(page).to have_content("Have you taught at #{eligible_college.name} for at least one academic term?")
+    expect(page).to have_content("Have you taught at #{eligible_college.name} for the whole of the spring academic term?")
     choose("No")
     click_button "Continue"
 
@@ -312,7 +312,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("No, it does not cover the full #{current_academic_year.to_s(:long)} academic year")
     click_button "Continue"
 
-    expect(page).to have_content("Have you taught at #{eligible_college.name} for at least one academic term?")
+    expect(page).to have_content("Have you taught at #{eligible_college.name} for the whole of the spring academic term?")
     choose("Yes")
     click_button "Continue"
 
@@ -474,7 +474,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Variable hours")
     click_button "Continue"
 
-    expect(page).to have_content("Have you taught at #{eligible_college.name} for at least one academic term?")
+    expect(page).to have_content("Have you taught at #{eligible_college.name} for the whole of the spring academic term")
     choose("No")
     click_button "Continue"
 
@@ -971,7 +971,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Variable hours")
     click_button "Continue"
 
-    expect(page).to have_content("Have you taught at #{eligible_college.name} for at least one academic term?")
+    expect(page).to have_content("Have you taught at #{eligible_college.name} for the whole of the spring academic term")
     choose("Yes")
     click_button "Continue"
 
