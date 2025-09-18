@@ -1064,8 +1064,21 @@ en:
           none: They do not teach any of these subjects
       courses: &courses
         hint: |
-          <p>If you are unsure whether the course(s) you teach is eligible, please email: <br/>%{email}</p>
-          <p>Select all that apply</p>
+          <p>
+            Contact your provider if you are unsure which one to pick. Or you cannot find the one you teach.
+          </p>
+
+          <p>
+            You can then email the helpdesk to check if it is eligible.
+          </p>
+
+          <p>
+            %{email_snippet}
+          </p>
+
+          <p>
+            Select all that apply
+          </p>
         errors:
           inclusion: Select the courses that you teach, or select ‘I do not teach any of these courses’
       building_construction_courses:
