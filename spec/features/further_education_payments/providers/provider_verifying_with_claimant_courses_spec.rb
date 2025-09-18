@@ -94,9 +94,9 @@ RSpec.feature "Provider verifying claims", feature_flag: :provider_dashboard do
     click_on "Continue"
 
     within_fieldset(
-      "Does Edna Krabappel spend at least half of their timetabled teaching " \
-      "hours delivering 16 to 19 study programmes, T Levels, or 16 to 19 " \
-      "apprenticeships?"
+      "Did Edna Krabappel spend at least half of their " \
+      "timetabled teaching hours teaching students funded through the " \
+      "16 to 19 education funding system or apprentices aged 16 to 19?"
     ) { choose "Yes" }
 
     click_on "Continue"
@@ -261,9 +261,9 @@ RSpec.feature "Provider verifying claims", feature_flag: :provider_dashboard do
     click_on "Continue"
 
     within_fieldset(
-      "Does Edna Krabappel spend at least half of their timetabled teaching " \
-      "hours delivering 16 to 19 study programmes, T Levels, or 16 to 19 " \
-      "apprenticeships?"
+      "Did Edna Krabappel spend at least half of their " \
+      "timetabled teaching hours teaching students funded through the " \
+      "16 to 19 education funding system or apprentices aged 16 to 19?"
     ) { choose "Yes" }
 
     click_on "Continue"
