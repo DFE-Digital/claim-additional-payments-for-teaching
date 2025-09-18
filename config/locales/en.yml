@@ -996,7 +996,7 @@ en:
           permanent: Permanent
           fixed_term: Fixed-term
           variable_hours: Variable hours
-          employed_by_another_organisation: Employed by another organisation (for example, an agency or contractor)
+          employed_by_another_organisation: I do not have a direct contract of employment with %{school_name}
         errors:
           inclusion: Tell us the type of contract you have
       fixed_term_contract:

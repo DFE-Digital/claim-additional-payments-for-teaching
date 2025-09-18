@@ -363,7 +363,7 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("What type of contract do you have directly with #{eligible_college.name}?")
-    choose("Employed by another organisation (for example, an agency or contractor)")
+    choose("I do not have a direct contract of employment with #{eligible_college.name}")
     click_button "Continue"
 
     expect(page).to have_content(
