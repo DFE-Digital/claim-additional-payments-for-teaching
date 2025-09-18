@@ -85,8 +85,7 @@ RSpec.describe "Accessing a closed service" do
     click_button "Continue"
 
     # check-eligibility-intro
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     # further-education-teaching-start-year

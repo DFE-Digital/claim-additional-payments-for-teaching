@@ -147,14 +147,14 @@ RSpec.describe Admin::ClaimsHelper do
     context "when a claim is approaching its deadline" do
       let(:claim) { build(:claim, :submitted, submitted_at: 11.weeks.ago) }
 
-      it { is_expected.to have_content("7 days") }
+      it { is_expected.to have_content("14 days") }
       it { is_expected.to have_selector(".tag--information") }
     end
 
     context "when a claim has passed its deadline" do
       let(:claim) { build(:claim, :submitted, submitted_at: 16.weeks.ago) }
 
-      it { is_expected.to have_content("-28 days") }
+      it { is_expected.to have_content("-21 days") }
       it { is_expected.to have_selector(".tag--alert") }
     end
 
@@ -169,6 +169,13 @@ RSpec.describe Admin::ClaimsHelper do
       let(:claim) { build(:claim, :submitted, submitted_at: 1.day.ago) }
 
       it { is_expected.to eq "" }
+    end
+
+    context "when an ey claim with no submitted_at" do
+      subject { helper.decision_deadline_warning(claim, {na_text: ""}) }
+      let(:claim) { build(:claim, policy: Policies::EarlyYearsPayments, submitted_at: nil) }
+
+      it { is_expected.to eq "N/A" }
     end
   end
 
@@ -343,6 +350,13 @@ RSpec.describe Admin::ClaimsHelper do
           ]
         end
 
+        before do
+          claim.update!(
+            onelogin_idv_at: DateTime.current,
+            identity_confirmed_with_onelogin: false
+          )
+        end
+
         it "return unverified grey tag" do
           expect(subject).to match("Unverified")
           expect(subject).to match("grey")
@@ -387,7 +401,35 @@ RSpec.describe Admin::ClaimsHelper do
           ]
         end
 
+        before do
+          claim.update!(
+            onelogin_idv_at: DateTime.current,
+            identity_confirmed_with_onelogin: false
+          )
+        end
+
         it "return passed green tag" do
+          expect(subject).to match("Passed")
+          expect(subject).to match("green")
+        end
+      end
+
+      context "with a year 1 claim that passsed idv" do
+        let(:claim_tasks) do
+          [
+            create(
+              :task,
+              name: "identity_confirmation",
+              passed: true
+            )
+          ]
+        end
+
+        before do
+          claim.update!(academic_year: AcademicYear.new("2024/2025"))
+        end
+
+        it "returns passed green tag" do
           expect(subject).to match("Passed")
           expect(subject).to match("green")
         end

@@ -156,6 +156,9 @@ en:
       fe_alternative_verification:
         name: Alternative verification
         title: Confirm the provider has verified the claimant’s identity
+      ey_eoi_cross_reference:
+        name: EOI cross reference
+        title: Confirm the claim is within the allocation limit for this provider
       ey_alternative_verification:
         name: Alternative verification
         title: Confirm the provider has verified the claimant’s identity
@@ -970,8 +973,12 @@ en:
           "i_dont_know": I don’t know
         errors:
           inclusion: 'Tell us if you have a GOV.UK One Login account'
+      existing_progress:
+        question: You have already started an eligibility check
+        errors:
+          inclusion: Choose if you want to continue your existing eligibility check or start a new eligibility check
       teaching_responsibilities:
-        question: Are you a member of staff with teaching responsibilities?
+        question: Are you a member of staff with the responsibilities of a teacher?
         errors:
           inclusion: Tell us if you are a member of staff with teaching responsibilities
       further_education_provision_search:
@@ -1000,7 +1007,7 @@ en:
         errors:
           inclusion: Tell us if your fixed-term contract covers the full academic year
       taught_at_least_one_term:
-        question: Have you taught at %{school_name} for at least one academic term?
+        question: Have you taught at %{school_name} for the whole of the spring academic term?
         options:
           true: "Yes"
           false: "No"
@@ -1259,9 +1266,9 @@ en:
       forms:
         teaching_hours_per_week:
           options:
-            20_or_more_hours_per_week: "20 hours or more each week"
-            12_to_20_hours_per_week: "12 hours to 20 hours each week"
-            2_and_a_half_to_12_hours_per_week: "2.5 to 12 hours each week"
+            20_or_more_hours_per_week: "20 hours or more per week"
+            12_to_20_hours_per_week: "12 or more hours per week, but fewer than 20"
+            2_and_a_half_to_12_hours_per_week: "2.5 or more hours per week, but fewer than 12"
             fewer_than_2_and_a_half_hours_per_week: "Fewer than 2.5 hours each week"
   further_education_payments_provider:
     accessibility_statement:
@@ -1331,7 +1338,7 @@ en:
               errors:
                 inclusion: "Select yes if %{claimant} is in the first 5 years of their further education teaching career in England"
             taught_at_least_one_term:
-              label: "Has %{claimant} taught for at least one academic term at %{provider}?"
+              label: "Has %{claimant} worked at %{provider} for the whole of the spring term?"
               errors:
                 inclusion: "Select yes if %{claimant} has taught at least one academic term at %{provider}"
             teaching_hours_per_week:
@@ -1596,6 +1603,10 @@ en:
           no_response: No response
           other: Other
       task_questions:
+        ey_eoi_cross_reference:
+          name: EOI cross-reference
+          title: Is this claim within the allocation limit for this provider?
+          hint: Check the provider’s allocation limit in the EOI spreadsheet. The claim must have an Approved outcome in order to count towards the limit.
         ey_alternative_verification:
           name: Alternative verification
           title: Do the details provided by the claimant match the provider’s responses?
@@ -1635,15 +1646,15 @@ en:
       email_address:
         label: What is your personal email address?
         hint_html: |
-          <p>
+          <p class="govuk-body">
             This should match the email address your employer has on file for you.
           </p>
 
-          <p>
+          <p class="govuk-body">
             We need it so that we can still contact you if your circumstances change while we process your payment.
           </p>
 
-          <p>
+          <p class="govuk-body">
             To verify your email address, we will send you an email with a 6-digit passcode. You can enter the passcode on the next screen.
           </p>
       personal_details:

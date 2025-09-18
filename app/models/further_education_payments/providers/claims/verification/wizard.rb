@@ -19,15 +19,6 @@ module FurtherEducationPayments
             PerformanceAndDisciplineForm,
             TeachingHoursPerWeekForm,
             HalfTeachingHoursForm,
-            SubjectsTaughtForm,
-            ActualSubjectsTaughtForm,
-            BuildingConstructionCoursesForm,
-            ChemistryCoursesForm,
-            ComputingCoursesForm,
-            EarlyYearsCoursesForm,
-            EngineeringManufacturingCoursesForm,
-            MathsCoursesForm,
-            PhysicsCoursesForm,
             HalfTimetabledTeachingTimeForm,
             CheckAnswersForm
           ]
@@ -77,16 +68,16 @@ module FurtherEducationPayments
 
           def message
             if completed? && eligibility.claimant_not_employed_by_college?
-              return "Employment check for #{claim.full_name} submitted"
+              return "Employment check for #{claim.full_name} complete"
             end
 
             if completed?
-              return "Claim Verified for #{claim.full_name}"
+              return "Verification form for #{claim.full_name} sent to DfE"
             end
 
             # We've just finished the employyment check section of the wizard
             if current_slug == "claimant_employment_check_declaration"
-              "Employment check for #{claim.full_name} submitted"
+              "Employment check for #{claim.full_name} complete"
             end
           end
 
@@ -152,47 +143,9 @@ module FurtherEducationPayments
             end
 
             @reachable_steps << PerformanceAndDisciplineForm
-
             @reachable_steps << TeachingHoursPerWeekForm
             @reachable_steps << HalfTeachingHoursForm
-            @reachable_steps << SubjectsTaughtForm
-
-            unless eligibility.provider_verification_subjects_taught
-              @reachable_steps << ActualSubjectsTaughtForm
-            end
-
-            if eligibility.provider_verification_actual_subjects_taught.include?("building_construction")
-              @reachable_steps << BuildingConstructionCoursesForm
-            end
-
-            if eligibility.provider_verification_actual_subjects_taught.include?("chemistry")
-              @reachable_steps << ChemistryCoursesForm
-            end
-
-            if eligibility.provider_verification_actual_subjects_taught.include?("computing")
-              @reachable_steps << ComputingCoursesForm
-            end
-
-            if eligibility.provider_verification_actual_subjects_taught.include?("early_years")
-              @reachable_steps << EarlyYearsCoursesForm
-            end
-
-            if eligibility.provider_verification_actual_subjects_taught.include?("engineering_manufacturing")
-              @reachable_steps << EngineeringManufacturingCoursesForm
-            end
-
-            if eligibility.provider_verification_actual_subjects_taught.include?("maths")
-              @reachable_steps << MathsCoursesForm
-            end
-
-            if eligibility.provider_verification_actual_subjects_taught.include?("physics")
-              @reachable_steps << PhysicsCoursesForm
-            end
-
-            if eligibility.provider_verification_subjects_taught? || eligibility.provider_verification_selected_at_least_one_eligible_course?
-              @reachable_steps << HalfTimetabledTeachingTimeForm
-            end
-
+            @reachable_steps << HalfTimetabledTeachingTimeForm
             @reachable_steps << CheckAnswersForm
             @reachable_steps
           end

@@ -9,6 +9,9 @@
     text: I18n.t("#{f.object.translation}.title", claim_full_name: f.object.claim.full_name),
     tag: "h3",
     size: "m"
+  },
+  hint: {
+    text: I18n.t("#{f.object.translation}.hint", default: nil),
   } do %>
   <% I18n.t("#{f.object.translation}.body.match.#{f.object.claim_verifier_match.presence || 'nil'}",
             default: nil,

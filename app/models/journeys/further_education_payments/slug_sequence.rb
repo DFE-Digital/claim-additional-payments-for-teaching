@@ -7,6 +7,7 @@ module Journeys
       ]
 
       ELIGIBILITY_SLUGS = %w[
+        existing-progress
         check-eligibility-intro
         further-education-teaching-start-year
         teaching-qualification
@@ -112,9 +113,12 @@ module Journeys
 
         array << SLUGS_HASH["sign-in"] if answers.previously_claimed?
 
-        # Show check-eligibility-intro if they explicitly answered "No" to previously claimed
-        # (not when they have One Login and skipped the question entirely)
-        array << SLUGS_HASH["check-eligibility-intro"] if !has_one_login_account? && !answers.previously_claimed?
+        # check if existing claim in progress
+        if Policies::FurtherEducationPayments.existing_in_progress_claim?(journey_session:)
+          array << SLUGS_HASH["existing-progress"]
+        end
+
+        array << SLUGS_HASH["check-eligibility-intro"]
 
         array << SLUGS_HASH["further-education-teaching-start-year"]
         array << SLUGS_HASH["teaching-qualification"]
@@ -131,11 +135,13 @@ module Journeys
         when "fixed_term"
           array << SLUGS_HASH["fixed-term-contract"]
 
-          if answers.fixed_term_full_year == true
-            array << SLUGS_HASH["teaching-hours-per-week"]
-            array << SLUGS_HASH["half-teaching-hours"]
-            array << SLUGS_HASH["teaching-hours-per-week-next-term"]
+          if answers.fixed_term_full_year == false
+            array << SLUGS_HASH["taught-at-least-one-term"]
           end
+
+          array << SLUGS_HASH["teaching-hours-per-week-next-term"]
+          array << SLUGS_HASH["teaching-hours-per-week"]
+          array << SLUGS_HASH["half-teaching-hours"]
         when "variable_hours"
           array << SLUGS_HASH["taught-at-least-one-term"]
 

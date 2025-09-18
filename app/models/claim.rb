@@ -18,7 +18,7 @@ class Claim < ApplicationRecord
     address_line_4
     postcode
   ].freeze
-  DECISION_DEADLINE = 12.weeks
+  DECISION_DEADLINE = 13.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
   CLAIMANT_MATCHING_ATTRIBUTES = %i[
     national_insurance_number
@@ -463,6 +463,21 @@ class Claim < ApplicationRecord
 
   def high_risk_ol_idv?
     ((onelogin_idv_return_codes || []) & OneLogin::ReturnCode::HIGH_RISK_CODES).size > 0
+  end
+
+  def hmrc_name_match
+    hmrc_bank_validation_responses.map do |response|
+      body = response.fetch("body", {})
+      if body.is_a?(Hash)
+        body.fetch("nameMatches", nil)
+      else
+        nil # if there's an error response it's stored as a JSON encoded string
+      end
+    end.last
+  end
+
+  def hmrc_name_match?
+    hmrc_name_match&.downcase == "yes"
   end
 
   private

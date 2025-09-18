@@ -21,8 +21,7 @@ RSpec.feature "Further education payments" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -53,8 +52,7 @@ RSpec.feature "Further education payments" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -65,7 +63,7 @@ RSpec.feature "Further education payments" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 
@@ -109,8 +107,7 @@ RSpec.feature "Further education payments" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -121,7 +118,7 @@ RSpec.feature "Further education payments" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 
@@ -188,8 +185,7 @@ RSpec.feature "Further education payments" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -200,7 +196,7 @@ RSpec.feature "Further education payments" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 
@@ -298,8 +294,7 @@ RSpec.feature "Further education payments" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -310,7 +305,7 @@ RSpec.feature "Further education payments" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 

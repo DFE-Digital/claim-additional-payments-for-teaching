@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_03_083853) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_11_092038) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -329,7 +329,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_03_083853) do
     t.boolean "valid_passport"
     t.text "passport_number"
     t.boolean "provider_verification_teaching_responsibilities"
-    t.boolean "provider_verification_in_first_five_years"
+    t.boolean "provider_verification_teaching_start_year_matches_claim"
     t.string "provider_verification_teaching_qualification"
     t.string "provider_verification_contract_type"
     t.boolean "provider_verification_contract_covers_full_academic_year"
@@ -338,21 +338,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_03_083853) do
     t.boolean "provider_verification_disciplinary_action"
     t.string "provider_verification_teaching_hours_per_week"
     t.boolean "provider_verification_half_teaching_hours"
-    t.boolean "provider_verification_subjects_taught"
     t.boolean "provider_verification_declaration"
     t.datetime "provider_verification_completed_at", precision: nil
     t.uuid "provider_verification_verified_by_id"
     t.uuid "provider_assigned_to_id"
     t.datetime "provider_verification_started_at"
     t.boolean "provider_verification_timetabled_teaching_hours"
-    t.jsonb "provider_verification_actual_subjects_taught", default: []
-    t.jsonb "provider_verification_building_construction_courses", default: []
-    t.jsonb "provider_verification_chemistry_courses", default: []
-    t.jsonb "provider_verification_computing_courses", default: []
-    t.jsonb "provider_verification_early_years_courses", default: []
-    t.jsonb "provider_verification_engineering_manufacturing_courses", default: []
-    t.jsonb "provider_verification_maths_courses", default: []
-    t.jsonb "provider_verification_physics_courses", default: []
     t.boolean "provider_verification_half_timetabled_teaching_time"
     t.citext "work_email"
     t.boolean "work_email_verified"
@@ -414,6 +405,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_03_083853) do
     t.string "journey", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "expired", default: false, null: false
   end
 
   create_table "local_authorities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

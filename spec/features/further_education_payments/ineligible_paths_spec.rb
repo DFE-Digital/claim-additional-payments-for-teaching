@@ -21,8 +21,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -33,7 +32,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "No"
     click_button "Continue"
 
@@ -58,8 +57,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -70,7 +68,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 
@@ -113,8 +111,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -125,7 +122,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 
@@ -175,8 +172,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -187,7 +183,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 
@@ -213,7 +209,7 @@ RSpec.feature "Further education payments ineligible paths" do
     expect(page).to have_content("What type of contract do you have directly with #{eligible_college.name}?")
   end
 
-  scenario "when fixed term contract and fixed term contract does not cover full academic year" do
+  scenario "when fixed term contract and has not taught one term" do
     when_further_education_payments_journey_configuration_exists
     and_eligible_college_exists
 
@@ -229,8 +225,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -241,7 +236,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 
@@ -261,10 +256,71 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("No, it does not cover the full #{current_academic_year.to_s(:long)} academic year")
     click_button "Continue"
 
+    expect(page).to have_content("Have you taught at #{eligible_college.name} for the whole of the spring academic term?")
+    choose("No")
+    click_button "Continue"
+
     expect(page).to have_content(
-      "In order to claim a targeted retention incentive payment, " \
-      "you must be employed for the full academic year."
+      "You are not eligible for a targeted retention incentive payment yet"
     )
+  end
+
+  scenario "when fixed term contract and has not teaching 2.5 hours" do
+    when_further_education_payments_journey_configuration_exists
+    and_eligible_college_exists
+
+    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    expect(page).to have_link("Start now")
+    click_link "Start now"
+
+    expect(page).to have_content("Do you have a")
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_content("Did you apply for a")
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
+    click_button "Start eligibility check"
+
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    choose("September 2023 to August 2024")
+    click_button "Continue"
+
+    expect(page).to have_content("Do you have a teaching qualification?")
+    choose("Yes")
+    click_button "Continue"
+
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_content("Which FE provider directly employs you?")
+    fill_in "claim[provision_search]", with: eligible_college.name
+    click_button "Continue"
+
+    expect(page).to have_content("Select where you are employed")
+    choose eligible_college.name
+    click_button "Continue"
+
+    expect(page).to have_content("What type of contract do you have directly with #{eligible_college.name}?")
+    choose("Fixed-term")
+    click_button "Continue"
+
+    expect(page).to have_content("Does your fixed-term contract cover the full #{current_academic_year.to_s(:long)} academic year?")
+    choose("No, it does not cover the full #{current_academic_year.to_s(:long)} academic year")
+    click_button "Continue"
+
+    expect(page).to have_content("Have you taught at #{eligible_college.name} for the whole of the spring academic term?")
+    choose("Yes")
+    click_button "Continue"
+
+    expect(page).to have_content("Are you timetabled to teach at least 2.5 hours per week at #{eligible_college.name} next term?")
+    choose("No")
+    click_button "Continue"
+
+    expect(page).to have_content("You are not eligible")
   end
 
   scenario "when contract_type is Employed by another organisation" do
@@ -283,7 +339,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -294,7 +350,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 
@@ -332,8 +388,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -344,7 +399,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 
@@ -392,8 +447,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -404,7 +458,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 
@@ -420,7 +474,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Variable hours")
     click_button "Continue"
 
-    expect(page).to have_content("Have you taught at #{eligible_college.name} for at least one academic term?")
+    expect(page).to have_content("Have you taught at #{eligible_college.name} for the whole of the spring academic term")
     choose("No")
     click_button "Continue"
 
@@ -443,8 +497,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -455,7 +508,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 
@@ -507,8 +560,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -519,7 +571,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 
@@ -575,8 +627,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -603,8 +654,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -615,7 +665,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 
@@ -681,8 +731,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -693,7 +742,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 
@@ -759,8 +808,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -790,8 +838,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -802,7 +849,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 
@@ -842,8 +889,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -854,7 +900,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 
@@ -872,14 +918,6 @@ RSpec.feature "Further education payments ineligible paths" do
 
     expect(page).to have_content("Does your fixed-term contract cover the full #{current_academic_year.to_s(:long)} academic year?")
     choose "Yes, it covers the full #{current_academic_year.to_s(:long)} academic year"
-    click_button "Continue"
-
-    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{eligible_college.name} during the current term?")
-    choose "More than 12 hours per week"
-    click_button "Continue"
-
-    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
-    choose "Yes"
     click_button "Continue"
 
     expect(page).to have_content("Are you timetabled to teach at least 2.5 hours per week at #{eligible_college.name} next term?")
@@ -906,8 +944,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -918,7 +955,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 
@@ -934,7 +971,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Variable hours")
     click_button "Continue"
 
-    expect(page).to have_content("Have you taught at #{eligible_college.name} for at least one academic term?")
+    expect(page).to have_content("Have you taught at #{eligible_college.name} for the whole of the spring academic term")
     choose("Yes")
     click_button "Continue"
 
@@ -962,8 +999,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "No"
     click_button "Continue"
 
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     expect(page).to have_content("Which academic year did you start teaching in further education in England?")
@@ -974,7 +1010,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you a member of staff with teaching responsibilities?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
 
@@ -1022,8 +1058,7 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     # check-eligibility-intro
-    expect(page).to have_content("Check you’re eligible for a targeted retention incentive payment for further education")
-    expect(page).to have_content("Answer the questions in the next section")
+    expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
     # further-education-teaching-start-year

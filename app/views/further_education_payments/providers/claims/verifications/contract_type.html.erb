@@ -32,12 +32,10 @@
         f.object.contract_type_options,
         :id,
         :name,
+        :hint,
         legend: {
-          text: "What type of contract does #{f.object.claimant_name} have with #{f.object.provider_name}?",
+          text: "What type of contract does #{f.object.claimant_name} have directly with #{f.object.provider_name}?",
           size: "s",
-        },
-        hint: {
-          text: "This includes full-time and part-time contracts"
         }
       ) %>
 

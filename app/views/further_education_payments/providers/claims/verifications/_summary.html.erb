@@ -113,7 +113,7 @@
         <% end %>
       <% end %>
       <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: "Variable contract academic term") %>
+        <%= row.with_key(text: "Worked at #{form.eligibility.school.name} for the whole of the spring term") %>
         <%= row.with_value(
           text: form.taught_at_least_one_academic_term
         ) %>
@@ -208,10 +208,10 @@
 <%= govuk_summary_card(title: "Subject area") do |card| %>
   <%= card.with_summary_list do |summary_list| %>
     <%= summary_list.with_row do |row| %>
-      <%= row.with_key(text: "Teaches Level 3 courses") %>
+      <%= row.with_key(text: "Spend at least half timetabled teaching time teaching relevant courses") %>
 
       <%= row.with_value(
-        text: form.subjects_taught
+        text: form.half_timetabled_teaching_time
       ) %>
 
       <% if editable %>
@@ -219,175 +219,9 @@
           text: "Change",
           href: edit_further_education_payments_providers_claim_verification_path(
             form.claim,
-            slug: "subjects_taught"
+            slug: "half_timetabled_teaching_time"
           )
         ) %>
-      <% end %>
-    <% end %>
-
-    <% if form.provider_verification_actual_subjects_taught.present? %>
-      <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: "Subject area") %>
-
-        <%= row.with_value(text: form.actual_subjects_taught_sentence) %>
-
-        <% if editable %>
-          <%= row.with_action(
-            text: "Change",
-            href: edit_further_education_payments_providers_claim_verification_path(
-              form.claim,
-              slug: "actual_subjects_taught"
-            )
-          ) %>
-        <% end %>
-      <% end %>
-    <% end %>
-
-    <% if form.includes_subject_area?(:building_construction) %>
-      <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: "Building and construction courses") %>
-
-        <%= row.with_value(text: form.courses_for_subject_area(:building_construction)) %>
-
-        <% if editable %>
-          <%= row.with_action(
-            text: "Change",
-            href: edit_further_education_payments_providers_claim_verification_path(
-              form.claim,
-              slug: "building_construction_courses"
-            )
-          ) %>
-        <% end %>
-      <% end %>
-    <% end %>
-
-    <% if form.includes_subject_area?(:chemistry) %>
-      <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: "Chemistry courses") %>
-
-        <%= row.with_value(text: form.courses_for_subject_area(:chemistry)) %>
-
-        <% if editable %>
-          <%= row.with_action(
-            text: "Change",
-            href: edit_further_education_payments_providers_claim_verification_path(
-              form.claim,
-              slug: "chemistry_courses"
-            )
-          ) %>
-        <% end %>
-      <% end %>
-    <% end %>
-
-    <% if form.includes_subject_area?(:computing) %>
-      <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: "Computing courses") %>
-
-        <%= row.with_value(text: form.courses_for_subject_area(:computing)) %>
-
-        <% if editable %>
-          <%= row.with_action(
-            text: "Change",
-            href: edit_further_education_payments_providers_claim_verification_path(
-              form.claim,
-              slug: "computing_courses"
-            )
-          ) %>
-        <% end %>
-      <% end %>
-    <% end %>
-
-    <% if form.includes_subject_area?(:early_years) %>
-      <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: "Early years courses") %>
-
-        <%= row.with_value(text: form.courses_for_subject_area(:early_years)) %>
-
-        <% if editable %>
-          <%= row.with_action(
-            text: "Change",
-            href: edit_further_education_payments_providers_claim_verification_path(
-              form.claim,
-              slug: "early_years_courses"
-            )
-          ) %>
-        <% end %>
-      <% end %>
-    <% end %>
-
-    <% if form.includes_subject_area?(:engineering_manufacturing) %>
-      <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: "Engineering and manufacturing courses") %>
-
-        <%= row.with_value(text: form.courses_for_subject_area(:engineering_manufacturing)) %>
-
-        <% if editable %>
-          <%= row.with_action(
-            text: "Change",
-            href: edit_further_education_payments_providers_claim_verification_path(
-              form.claim,
-              slug: "engineering_manufacturing_courses"
-            )
-          ) %>
-        <% end %>
-      <% end %>
-    <% end %>
-
-    <% if form.includes_subject_area?(:maths) %>
-      <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: "Maths courses") %>
-
-        <%= row.with_value(text: form.courses_for_subject_area(:maths)) %>
-
-        <% if editable %>
-          <%= row.with_action(
-            text: "Change",
-            href: edit_further_education_payments_providers_claim_verification_path(
-              form.claim,
-              slug: "maths_courses"
-            )
-          ) %>
-        <% end %>
-      <% end %>
-    <% end %>
-
-    <% if form.includes_subject_area?(:physics) %>
-      <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: "Physics courses") %>
-
-        <%= row.with_value(text: form.courses_for_subject_area(:physics)) %>
-
-        <% if editable %>
-          <%= row.with_action(
-            text: "Change",
-            href: edit_further_education_payments_providers_claim_verification_path(
-              form.claim,
-              slug: "physics_courses"
-            )
-          ) %>
-        <% end %>
-      <% end %>
-    <% end %>
-
-    <% if form.provider_verification_subjects_taught? || form.provider_verification_selected_at_least_one_eligible_course? %>
-      <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: "Spend at least half timetabled teaching time teaching relevant courses") %>
-        <%= row.with_value(
-          text: t(
-            form.provider_verification_half_timetabled_teaching_time,
-            scope: :boolean
-          )
-        ) %>
-
-        <% if editable %>
-          <%= row.with_action(
-            text: "Change",
-            href: edit_further_education_payments_providers_claim_verification_path(
-              form.claim,
-              slug: "half_timetabled_teaching_time"
-            )
-          ) %>
-        <% end %>
       <% end %>
     <% end %>
   <% end %>

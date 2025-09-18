@@ -6,15 +6,15 @@ module FurtherEducationPayments
           TEACHING_HOURS_PER_WEEK_OPTIONS = [
             Form::Option.new(
               id: "20_or_more_hours_per_week",
-              name: "20 hours or more each week"
+              name: "20 hours or more per week"
             ),
             Form::Option.new(
               id: "12_to_20_hours_per_week",
-              name: "12 hours to 20 hours each week"
+              name: "12 or more hours per week, but fewer than 20"
             ),
             Form::Option.new(
               id: "2_and_a_half_to_12_hours_per_week",
-              name: "2.5 to 12 hours each week"
+              name: "2.5 or more hours per week, but fewer than 12"
             ),
             Form::Option.new(
               id: "fewer_than_2_and_a_half_hours_per_week",
@@ -43,21 +43,7 @@ module FurtherEducationPayments
           end
 
           def claimant_term
-            year = claim.submitted_at.year
-
-            autumn_start = Date.new(year, 9, 1)
-            autumn_end = Date.new(year, 12, 31)
-            spring_start = Date.new(year, 1, 1)
-            spring_end = Date.new(year, 4, 12)
-            summer_start = Date.new(year, 4, 13)
-            summer_end = Date.new(year, 8, 31)
-
-            case claim.submitted_at
-            when spring_start..spring_end then "spring"
-            when summer_start..summer_end then "summer"
-            when autumn_start..autumn_end then "autumn"
-            else raise "Unexpected date: #{claim.submitted_at}"
-            end
+            claim.submitted_at.term
           end
         end
       end

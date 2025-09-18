@@ -70,14 +70,14 @@ RSpec.describe "Provider verified claims dashboard", feature_flag: :provider_das
     # contracted hours
     expect(page).to have_summary_item(
       key: "Timetabled hours per week",
-      value: "20 hours or more each week"
+      value: "20 hours or more per week"
     )
     expect(page).to have_summary_item(
       key: "Teaches 16-19-year-olds or those with EHCP",
       value: "Yes"
     )
     expect(page).to have_summary_item(
-      key: "Teaches approved qualification in maths and physics",
+      key: "Spend at least half timetabled teaching time teaching relevant courses",
       value: "Yes"
     )
   end

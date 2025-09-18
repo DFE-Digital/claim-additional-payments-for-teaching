@@ -13,18 +13,27 @@ module Policies
 
       def applicable_task_names
         tasks = []
+        tasks << "ey_eoi_cross_reference" unless year_1_of_ey?
+        tasks += identity_tasks
+        tasks << "employment"
+        tasks << "student_loan_plan" if claim.submitted_without_slc_data?
+        tasks << "payroll_details" if claim.must_manually_validate_bank_details?
+        tasks << "payroll_gender" if claim.payroll_gender_missing? || task_exists?("payroll_gender")
+        tasks << "matching_details" if matching_claims.exists?
+
+        tasks
+      end
+
+      def identity_tasks
+        tasks = []
 
         if year_1_of_ey?
           tasks << "identity_confirmation"
+          tasks << "ey_alternative_verification" if task_exists?("ey_alternative_verification")
         else
           tasks << "one_login_identity"
           tasks << "ey_alternative_verification" if claim.failed_one_login_idv?
         end
-        tasks << "employment"
-        tasks << "student_loan_plan" if claim.submitted_without_slc_data?
-        tasks << "payroll_details" if claim.must_manually_validate_bank_details?
-        tasks << "payroll_gender" if claim.payroll_gender_missing? || claim.tasks.exists?(name: "payroll_gender")
-        tasks << "matching_details" if matching_claims.exists?
 
         tasks
       end
@@ -43,6 +52,14 @@ module Policies
 
       def matching_claims
         @matching_claims ||= Claim::MatchingAttributeFinder.new(claim).matching_claims
+      end
+
+      def task_exists?(name)
+        if claim.tasks.loaded?
+          claim.tasks.any? { |task| task.name == name }
+        else
+          claim.tasks.exists?(name: name)
+        end
       end
     end
   end
