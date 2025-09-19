@@ -9,10 +9,13 @@
     <h2 class="govuk-heading-l">What you’ll need to start a claim</h2>
 
     <p class="govuk-body">
-      You received an email from the DfE on Wednesday 30 July 2025.
-      This contained a link to reserve your incentive.
-      You must have reserved an incentive to make a claim.
+      To apply on behalf of your employee, you must have:
     </p>
+
+    <%= govuk_list [
+      "submitted an expression of interest to the Department for Education (DfE) between July and September 2025",
+      "received confirmation you can apply on their behalf and a link to the online service"
+    ], type: :bullet %>
 
     <p class="govuk-body">
       You’ll need to provide some information about your employee and your nursery.
@@ -27,7 +30,7 @@
 
     <%= govuk_list [
       "#{govuk_link_to("privacy notice", "https://www.gov.uk/government/publications/privacy-information-education-providers-workforce-including-teachers/5a254207-a566-44f7-ac77-6ba59fd26e04", new_tab: true)} that explains what information will be collected, why it’s being collected and who it will be shared with".html_safe,
-      "#{govuk_link_to("consent form", claim_path(current_journey_routing_name, "consent-form"), new_tab: true)} to collect their written consent to share their full name, email address and start date with the Department for Education (DfE)".html_safe
+      "#{govuk_link_to("consent form", claim_path(current_journey_routing_name, "consent-form"), new_tab: true)} to collect their written consent to share their full name, email address and start date with DfE".html_safe
     ], type: :bullet %>
 
     <%= govuk_inset_text(
@@ -57,7 +60,7 @@
 
     <p class="govuk-body">
       Read more about the
-      <%= govuk_link_to("early years incentive payment for new and returning practitioners", claim_path(current_journey_routing_name, "guidance")) %>.
+      <%= govuk_link_to("early years incentive payment for new and returning educators", claim_path(current_journey_routing_name, "guidance")) %>.
     </p>
 
     <%# TODO: There isn't any journey closed content, for now hide the button %>

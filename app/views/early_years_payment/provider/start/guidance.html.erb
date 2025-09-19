@@ -55,7 +55,7 @@
     </p>
 
     <%= govuk_inset_text(
-      text: "You received an email from the DfE on Wednesday 30 July 2025. This contained a link to reserve your incentive. You must have reserved an incentive to make a claim."
+      text: "To start an application on behalf of an educator, nurseries must have made an expression of interest to DfE between July and September 2025. Nurseries will receive a link to the online service via email on a first-come, first-served basis."
     ) %>
 
     <h2 id="eligibility-criteria" class="govuk-heading-m">Eligibility criteria</h2>
@@ -169,7 +169,7 @@
     </p>
 
     <%= govuk_list [
-      "The nursery has to #{govuk_link_to("start the claim on behalf of the early years educator", landing_page_path(Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME))}.".html_safe,
+      "The nursery has to start the claim on behalf of the early years educator",
       "DfE will reserve the money for the early years educator, who will receive an email inviting them to complete the claim.",
       "DfE will contact the nursery after 6 months to see if the early years educator is still in the role.",
       "If the early years educator is still in the role, DfE will pay the bonus into their bank account.",
@@ -182,7 +182,7 @@
     </p>
 
     <p class="govuk-body">
-      The early years educator should <%= govuk_link_to "complete the claim", landing_page_path(Journeys::EarlyYearsPayment::Practitioner::ROUTING_NAME) %> as soon as possible.
+      The early years educator should complete the claim as soon as possible.
     </p>
 
     <p class="govuk-body">
