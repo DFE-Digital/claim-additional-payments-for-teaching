@@ -352,6 +352,7 @@ shared:
     - urn
     - local_authority_id
     - nursery_address
+    - max_claims
     - created_at
     - updated_at
   :eligible_fe_providers:

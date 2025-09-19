@@ -1,0 +1,21 @@
+<% content_for(:page_title, page_title("Claim limit exceeded", journey: current_journey_routing_name)) %>
+<% @backlink_path = claim_path(current_journey_routing_name, "current-nursery") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Application limit reached</h1>
+
+    <p class="govuk-body">
+      You cannot submit any more early years financial incentive payment
+      applications for this nursery. All available expressions of interest have
+      been used.
+    </p>
+
+  </div>
+
+  <div class="govuk-grid-column-full">
+    <p class="govuk-body">
+      For support or further guidance, contact <%= govuk_mail_to t("early_years_payment_provider_authenticated.support_email_address"), t("early_years_payment_provider_authenticated.support_email_address") %>.
+    </p>
+  </div>
+</div>
