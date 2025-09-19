@@ -12,10 +12,7 @@ RSpec.feature "Early years payment provider" do
     when_early_years_payment_provider_start_journey_configuration_exists
     when_eligible_ey_provider_exists
 
-    visit guidance_path(Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME)
-    click_link "start the claim on behalf of the early years educator"
-
-    # landing page
+    visit landing_page_path(Journeys::EarlyYearsPayment::Provider::Start::ROUTING_NAME)
     expect(page).to have_text("Claim an early years financial incentive payment on behalf of your employee")
     click_link "Start now"
 
