@@ -76,8 +76,7 @@
       <% end %>
     <% end %>
 
-    <% case form.provider_verification_contract_type %>
-    <% when "fixed_term" %>
+    <% if form.provider_verification_contract_type == "fixed_term" %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: "Contract covers full academic year") %>
         <%= row.with_value(
@@ -93,14 +92,13 @@
           ) %>
         <% end %>
       <% end %>
-    <% when "variable_hours" %>
+    <% end %>
+
+    <% if form.provider_verification_contract_type == "variable_hours" || form.provider_verification_contract_covers_full_academic_year == false %>
       <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: "Timetabled hours in term") %>
         <%= row.with_value(
-          text: t(
-            form.provider_verification_timetabled_teaching_hours,
-            scope: :boolean
-          )
+          text: form.timetabled_teaching_hours
         ) %>
         <% if editable %>
           <%= row.with_action(
@@ -127,8 +125,6 @@
           ) %>
         <% end %>
       <% end %>
-    <% else %>
-      <%# noop %>
     <% end %>
   <% end %>
 <% end %>
