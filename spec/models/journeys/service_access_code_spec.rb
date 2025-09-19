@@ -59,7 +59,11 @@ RSpec.describe Journeys::ServiceAccessCode, type: :model do
         journey_session: journey_session,
         session: {},
         journey: Journeys::FurtherEducationPayments,
-        params: ActionController::Parameters.new
+        params: ActionController::Parameters.new(
+          claim: {
+            claimant_declaration: "1"
+          }
+        )
       )
 
       expect(form.save).to be true

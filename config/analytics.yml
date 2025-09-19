@@ -88,6 +88,7 @@ shared:
     - verified_at
     - onelogin_idv_return_codes
     - policy
+    - claimant_declaration # boolean, did claimant agree to declaration
   :decisions:
     - id
     - claim_id

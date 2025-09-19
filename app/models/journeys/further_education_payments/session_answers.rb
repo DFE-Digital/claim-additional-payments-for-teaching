@@ -35,6 +35,8 @@ module Journeys
       attribute :valid_passport, :boolean, pii: false
       attribute :passport_number, :string, pii: true
 
+      attribute :claimant_declaration, :boolean, pii: false
+
       def policy
         Policies::FurtherEducationPayments
       end
