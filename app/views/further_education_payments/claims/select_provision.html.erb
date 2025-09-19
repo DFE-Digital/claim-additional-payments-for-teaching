@@ -10,7 +10,18 @@
           text: @form.t("heading"),
           tag: "h1",
           size: "l"
-        } %>
+        },
+        hint: -> { %>
+          <p class="govuk-body">
+            You must be directly employed by the provider. You are not eligible for a targeted retention incentive if:
+          </p>
+
+          <%= govuk_list [
+            "you are employed through a subsidiary",
+            "you are employed through an agency",
+            "you are subcontracting"
+          ], type: :bullet %>
+        <% } %>
 
       <%= f.govuk_submit %>
     <% end %>
