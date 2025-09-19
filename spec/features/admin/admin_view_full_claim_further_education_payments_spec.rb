@@ -83,7 +83,7 @@ RSpec.feature "Admin views claim details for FurtherEducationPayments" do
       ).to have_content("Yes")
 
       expect(
-        summary_row("Which FE provider directly employs you?")
+        summary_row("Which further education provider directly employs you?")
       ).to have_content("Springfield Elementary")
 
       expect(
