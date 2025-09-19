@@ -216,6 +216,8 @@ RSpec.feature "Further education payments" do
 
     expect(page).to have_content("Check your answers before sending your application")
 
+    check "claim-claimant-declaration-1-field"
+
     expect do
       click_on "Accept and send"
     end.to change { Claim.count }.by(1)

@@ -30,7 +30,11 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
   let(:form) do
     described_class.new(
       journey_session: journey_session,
-      params: ActionController::Parameters.new,
+      params: ActionController::Parameters.new(
+        claim: {
+          claimant_declaration: "1"
+        }
+      ),
       session: {},
       journey: Journeys::FurtherEducationPayments
     )
@@ -120,7 +124,11 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
 
       first_claim_form = described_class.new(
         journey_session: journey_session,
-        params: ActionController::Parameters.new,
+        params: ActionController::Parameters.new(
+          claim: {
+            claimant_declaration: "1"
+          }
+        ),
         session: {},
         journey: Journeys::FurtherEducationPayments
       )
@@ -130,7 +138,11 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
       journey_session.update! claim: nil
       second_claim_form = described_class.new(
         journey_session: journey_session,
-        params: ActionController::Parameters.new,
+        params: ActionController::Parameters.new(
+          claim: {
+            claimant_declaration: "1"
+          }
+        ),
         session: {},
         journey: Journeys::FurtherEducationPayments
       )

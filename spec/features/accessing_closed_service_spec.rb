@@ -197,6 +197,7 @@ RSpec.describe "Accessing a closed service" do
     click_on "Continue"
 
     # check-your-answers
+    check "claim-claimant-declaration-1-field"
     click_on "Accept and send"
   end
 end

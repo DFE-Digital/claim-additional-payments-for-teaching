@@ -9,9 +9,8 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%# Errors are from the SubmissionsController %>
-    <% if @form.errors.any? %>
-      <%= render("shared/error_summary", instance: @form) %>
+    <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
     <% end %>
 
     <h1 class="govuk-heading-xl">
@@ -30,14 +29,27 @@
         answers: journey.answers_for_claim(@form.journey_session).payment_answers
       } %>
 
-    <%= form_with url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
-      <h2 class="govuk-heading-m">
-        <%= t("further_education_payments.check_your_answers.heading_send_application") %>
-      </h2>
+    <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_check_boxes_fieldset(
+        :claimant_declaration,
+        multiple: false,
+        legend: {
+          text: t("further_education_payments.check_your_answers.heading_send_application"),
+          size: "m"
+        }
+      ) do %>
 
-      <p class="govuk-body">
-        <%= t("further_education_payments.check_your_answers.statement") %>
-      </p>
+        <%= f.govuk_check_box(
+          :claimant_declaration,
+          1,
+          0,
+          multiple: false,
+          link_errors: true,
+          label: {
+            text: t("further_education_payments.check_your_answers.statement")
+          }
+        ) %>
+      <% end %>
 
       <%= f.govuk_submit t("further_education_payments.check_your_answers.btn_text") %>
     <% end %>
