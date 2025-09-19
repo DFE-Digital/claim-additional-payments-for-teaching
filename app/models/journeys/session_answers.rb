@@ -83,6 +83,8 @@ module Journeys
 
     attribute :submitted_claim_id, :string, pii: false
 
+    attribute :information_provided_completed, :boolean, pii: false
+
     def increment_hmrc_validation_attempt_count
       self.hmrc_validation_attempt_count = attributes["hmrc_validation_attempt_count"] + 1
     end
