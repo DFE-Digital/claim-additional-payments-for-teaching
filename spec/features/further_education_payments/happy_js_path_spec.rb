@@ -139,6 +139,7 @@ RSpec.feature "Further education payments", js: true, flaky: true do
     click_on "Continue"
 
     expect(page).to have_content("Check your answers before sending your application")
+    check "claim-claimant-declaration-1-field"
     click_on "Accept and send"
 
     expect(page).to have_content("You applied for a further education targeted retention incentive payment")
