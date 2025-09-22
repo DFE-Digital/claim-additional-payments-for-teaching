@@ -33,6 +33,8 @@ module Policies
         start_date + RETENTION_PERIOD
       end
 
+      alias_method :employment_check_date, :employment_task_available_at
+
       def employment_task_available?
         Date.today >= employment_task_available_at
       end
