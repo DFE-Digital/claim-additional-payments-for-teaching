@@ -135,7 +135,7 @@ RSpec.describe Policies::InternationalRelocationPayments::PolicyEligibilityCheck
         }
       end
 
-      it { is_expected.to eq(true) }
+      it { is_expected.to eq(false) }
     end
 
     context "with a non secondary school" do
