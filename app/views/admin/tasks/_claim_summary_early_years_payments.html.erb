@@ -110,6 +110,20 @@
 
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
+        Employment check
+      </dt>
+      <dd class="govuk-summary-list__value">
+        <% if claim.eligibility.employment_check_date %>
+          <%= l(claim.eligibility.employment_check_date) %>
+          <%= decision_deadline_warning_lozenge(
+            days_between(claim.eligibility.employment_check_date, Date.today)
+          ) %>
+        <% end %>
+      </dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
         Decision due
       </dt>
       <dd class="govuk-summary-list__value">
