@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Provider session and authentication" do
+RSpec.describe "Provider session and authentication", feature_flag: :provider_dashboard do
   before do
     allow(DfESignIn).to receive(:bypass?).and_return(true)
   end

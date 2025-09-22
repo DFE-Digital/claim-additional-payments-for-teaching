@@ -23,6 +23,15 @@ module Journeys
 
         if Policies::FurtherEducationPayments.duplicate_claim?(claim)
           claim.eligibility.update!(flagged_as_duplicate: true)
+        elsif FeatureFlag.enabled?(:alternative_idv) && !claim.identity_confirmed_with_onelogin?
+          Policies::FurtherEducationPayments::ProviderVerificationEmails.new(claim)
+            .send_further_education_payment_provider_verification_email
+        elsif !claim.identity_confirmed_with_onelogin
+          # noop
+          # do not send provider verification email
+        else
+          Policies::FurtherEducationPayments::ProviderVerificationEmails.new(claim)
+            .send_further_education_payment_provider_verification_email
         end
 
         journey_session.answers.assign_attributes(submitted_claim_id: claim.id)

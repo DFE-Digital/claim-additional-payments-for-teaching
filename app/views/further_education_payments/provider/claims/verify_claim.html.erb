@@ -1,0 +1,114 @@
+<% content_for(
+  :page_title,
+  page_title(
+    @form.t(:title),
+    journey: current_journey_routing_name,
+    show_error: @form.errors.any?
+  )
+) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl"><%= @form.t(:title) %></h1>
+
+    <%= govuk_summary_list do |summary_list| %>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: @form.t(:claim_reference)) %>
+        <%= row.with_value(text: @form.claim_reference) %>
+      <% end %>
+
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: @form.t(:claimant_name)) %>
+        <%= row.with_value(text: @form.claimant_name) %>
+      <% end %>
+
+      <% unless @form.answers.identity_verification_required? %>
+        <%= summary_list.with_row do |row| %>
+          <%= row.with_key(text: @form.t(:claimant_date_of_birth)) %>
+          <%= row.with_value(text: @form.claimant_date_of_birth) %>
+        <% end %>
+      <% end %>
+
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: @form.t(:claimant_trn)) %>
+        <%= row.with_value(text: @form.claimant_trn) %>
+      <% end %>
+
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: @form.t(:claim_date)) %>
+        <%= row.with_value(text: @form.claim_date) %>
+      <% end %>
+    <% end %>
+
+    <h2 class="govuk-heading-l">
+      We need you to verify some information
+    </h2>
+
+    <%= form_with(
+      model: @form,
+      url: @form.url,
+      method: :patch,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+      html: { novalidate: false }
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.fields_for :assertions do |ff| %>
+        <%= ff.govuk_collection_radio_buttons(
+          :outcome,
+          ff.object.radio_options,
+          :id,
+          :name,
+          nil,
+          legend: {
+            size: "s",
+            text: f.object.t(
+              [:assertions, f.object.contract_type, ff.object.name, :label],
+              claimant: f.object.claimant_first_name,
+              provider: f.object.claim.school.name,
+              hours: f.object.teaching_hours_per_week,
+              type_of_contract: f.object.claimant_contract_of_employment,
+              duration: f.object.claimant_contract_duration
+            ),
+          },
+          hint: -> do
+            if ff.object.name.to_s == "subjects_taught"
+              govuk_list(
+                f.object.course_descriptions.map(&:html_safe),
+                type: :bullet
+              )
+            end
+          end
+        ) %>
+
+        <%= ff.hidden_field :name %>
+      <% end %>
+
+      <% if f.object.answers.identity_verification_required? %>
+        <%= f.govuk_submit "Continue" %>
+      <% else %>
+        <%= f.govuk_check_boxes_fieldset(
+          :declaration,
+          multiple: false,
+          legend: {
+            text: f.object.t(:declaration_title),
+            size: "m"
+          }
+        ) do %>
+          <%= f.govuk_check_box(
+            :declaration,
+            "1",
+            "0",
+            multiple: false,
+            link_errors: true,
+            label: {
+              text: f.object.t(:declaration)
+            }
+          ) %>
+        <% end %>
+
+        <%= f.govuk_submit "Submit" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

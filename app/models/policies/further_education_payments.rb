@@ -3,8 +3,6 @@ module Policies
     include BasePolicy
     extend self
 
-    CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE = "teacher_payments_claim_verifier"
-
     ELIGIBILITY_MATCHING_ATTRIBUTES = [["teacher_reference_number"]].freeze
 
     # Percentage of approved claims to QA
@@ -109,6 +107,12 @@ module Policies
       "FELUPEXPANSION"
     end
 
+    def alternative_identity_verification_required?(claim)
+      return false unless FeatureFlag.enabled?(:fe_provider_identity_verification)
+
+      claim.failed_one_login_idv?
+    end
+
     def approvable?(claim)
       ClaimCheckingTasks.new(claim).incomplete_task_names.exclude?(
         "alternative_identity_verification"
@@ -125,7 +129,7 @@ module Policies
       ADMIN_DECISION_REJECTED_REASONS.select do |reason|
         case reason
         when :alternative_identity_verification_check_failed
-          claim.failed_one_login_idv?
+          alternative_identity_verification_required?(claim)
         else
           true
         end
@@ -145,29 +149,6 @@ module Policies
       account = OneLoginAccount.new(uid: journey_session.answers.onelogin_uid)
       journey_sessions = account.resumable_journey_sessions(journey: Journeys::FurtherEducationPayments)
       journey_sessions.count > 1
-    end
-
-    def request_service_access_url(dfe_sign_in_uid)
-      [
-        "https://services.signin.education.gov.uk",
-        "request-service", DfeSignIn.configuration_for_client_id(ENV.fetch("DFE_SIGN_IN_API_CLIENT_ID")).client_id,
-        "users", dfe_sign_in_uid
-      ].join("/")
-    end
-
-    def sign_out_url
-      dfe_sign_out_redirect_uri = URI.join(ENV.fetch("DFE_SIGN_IN_ISSUER"), "/session/end")
-
-      post_logout_redirect_uri = URI.join(ENV.fetch("DFE_SIGN_IN_REDIRECT_BASE_URL"), "/further-education-payments-provider/auth/sign-out")
-      client_id = DfeSignIn.configuration_for_client_id(ENV.fetch("DFE_SIGN_IN_API_CLIENT_ID")).client_id
-
-      params = {
-        post_logout_redirect_uri:,
-        client_id:
-      }
-
-      dfe_sign_out_redirect_uri.query = URI.encode_www_form(params)
-      dfe_sign_out_redirect_uri.to_s
     end
   end
 end

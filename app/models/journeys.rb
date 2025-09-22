@@ -10,6 +10,7 @@ module Journeys
     TeacherStudentLoanReimbursement,
     GetATeacherRelocationPayment,
     FurtherEducationPayments,
+    FurtherEducationPayments::Provider,
     EarlyYearsPayment::Provider::Start,
     EarlyYearsPayment::Provider::Authenticated,
     EarlyYearsPayment::Provider::AlternativeIdv,

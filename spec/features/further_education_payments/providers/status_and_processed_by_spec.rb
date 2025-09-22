@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Status and Processed by labels" do
+RSpec.describe "Status and Processed by labels", feature_flag: :provider_dashboard do
   before do
     allow(DfESignIn).to receive(:bypass?).and_return(true)
   end

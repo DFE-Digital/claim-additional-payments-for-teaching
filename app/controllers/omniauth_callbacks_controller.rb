@@ -30,7 +30,18 @@ class OmniauthCallbacksController < ApplicationController
   end
 
   def sign_out
-    render file: Rails.root.join("public", "404.html"), status: :not_found, layout: false
+    case current_journey_routing_name
+    when "further-education-payments-provider"
+      claim = journey_session.answers.claim
+      clear_journey_sessions!
+
+      flash[:success] = "You have signed out of DfE Sign-in"
+      redirect_to(
+        Journeys::FurtherEducationPayments::Provider::SlugSequence.verify_claim_url(claim)
+      )
+    else
+      render file: Rails.root.join("public", "404.html"), status: :not_found, layout: false
+    end
   end
 
   # unfortunely this method has dual responsibilites
@@ -207,6 +218,26 @@ class OmniauthCallbacksController < ApplicationController
 
   # FIXME RL - probably want to move this to ProviderSessionsController#callback
   def further_education_payments_provider_callback(auth)
+    if FeatureFlag.enabled?(:provider_dashboard)
+      further_education_payments_provider_dashboard_callback(auth)
+    else
+      auth = params if DfESignIn.bypass?
+
+      Journeys::FurtherEducationPayments::Provider::OmniauthCallbackForm.new(
+        journey_session: journey_session,
+        auth: auth
+      ).save!
+
+      redirect_to(
+        claim_path(
+          journey: current_journey_routing_name,
+          slug: "verify-claim"
+        )
+      )
+    end
+  end
+
+  def further_education_payments_provider_dashboard_callback(auth)
     if DfESignIn.bypass?
       auth = params
 

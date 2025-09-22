@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Provider verifying claims" do
+RSpec.feature "Provider verifying claims", feature_flag: :provider_dashboard do
   scenario "with custom subjects and courses - Yes to teaching listed courses" do
     fe_provider = create(
       :school,
@@ -359,7 +359,7 @@ RSpec.feature "Provider verifying claims" do
     stub_dfe_sign_in_user_info_request(
       "11111",
       "22222",
-      Policies::FurtherEducationPayments::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE,
+      Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE,
       user_type: "provider"
     )
 
