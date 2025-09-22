@@ -20,9 +20,6 @@ production: &production
   practitioner_reminder_emails:
     class: EarlyYearsPayments::PractitionerReminderEmailJob
     schedule: "0 8 * * *" # Daily at 8am
-  provider_verification_chase_email:
-    class: FurtherEducationPayments::ProviderVerificationChaseEmailJob
-    schedule: "0 8 * * *" # Daily 8am
   heartbeat:
     class: HeartbeatJob
     schedule: "* * * * *"
