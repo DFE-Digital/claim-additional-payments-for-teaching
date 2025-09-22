@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Provider verification access control", feature_flag: :provider_dashboard do
+RSpec.feature "Provider verification access control" do
   let(:fe_provider) do
     create(
       :school,
@@ -105,7 +105,7 @@ RSpec.feature "Provider verification access control", feature_flag: :provider_da
       stub_dfe_sign_in_user_info_request(
         "11111",
         "22222",
-        Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE,
+        Policies::FurtherEducationPayments::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE,
         user_type: "provider"
       )
 
@@ -148,7 +148,7 @@ RSpec.feature "Provider verification access control", feature_flag: :provider_da
       stub_dfe_sign_in_user_info_request(
         "11111",
         "22222",
-        Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE,
+        Policies::FurtherEducationPayments::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE,
         user_type: "provider"
       )
 
@@ -269,7 +269,7 @@ RSpec.feature "Provider verification access control", feature_flag: :provider_da
       stub_dfe_sign_in_user_info_request(
         "11111",
         "22222",
-        Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE,
+        Policies::FurtherEducationPayments::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE,
         user_type: "provider"
       )
 

@@ -136,9 +136,6 @@ Rails.application.routes.draw do
       get "search", on: :collection
       patch "hold"
       patch "unhold"
-      namespace :further_education_payments do
-        resources :provider_verification_emails, only: [:create]
-      end
       resource :employment_history, only: [], module: :claims do
         resources :employments, only: [:new, :create, :destroy], module: :employment_history
       end

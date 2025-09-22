@@ -17,7 +17,7 @@ module FurtherEducationPayments
 
       def authorize_user!
         unless current_user.role_codes.include?(
-          Journeys::FurtherEducationPayments::Provider::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
+          Policies::FurtherEducationPayments::CLAIM_VERIFIER_DFE_SIGN_IN_ROLE_CODE
         )
           redirect_to further_education_payments_providers_authorisation_failure_path(
             reason: :incorrect_role
@@ -50,12 +50,16 @@ module FurtherEducationPayments
       # FIXME RL: decide if this is the right approach
       # Required to get application layout to render
       def current_journey_routing_name
-        "further-education-payments-provider"
+        "further-education-payments"
       end
       helper_method :current_journey_routing_name
 
+      class Journey
+        VIEW_PATH = "further_education_payments/providers"
+      end
+
       def journey
-        Journeys::FurtherEducationPayments::Provider
+        Journey
       end
       helper_method :journey
     end
