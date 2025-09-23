@@ -1392,6 +1392,147 @@ RSpec.feature "Provider verifying claims" do
     end
   end
 
+  context "when provider verification when claimant hasn't started teaching qualification" do
+    it "asks the provider why the claimant hasn't started their teaching qualification" do
+      fe_provider = create(
+        :school,
+        :further_education,
+        name: "Springfield College"
+      )
+
+      create(
+        :claim,
+        :further_education,
+        :submitted,
+        onelogin_uid: "123",
+        academic_year: AcademicYear.new("2024/2025"),
+        submitted_at: DateTime.new(2024, 4, 1, 9, 0, 0),
+        first_name: "Edna",
+        surname: "Krabappel",
+        eligibility_attributes: {
+          teaching_qualification: "no_but_planned",
+          school: fe_provider
+        }
+      )
+
+      # The requirement is to show the additional question based on the
+      # teaching_qualification of the year 1 claim. What the claimant selects in
+      # year 2 is not relevant.
+      year_2_claim = create(
+        :claim,
+        :further_education,
+        :submitted,
+        onelogin_uid: "123",
+        academic_year: AcademicYear.new("2025/2026"),
+        submitted_at: DateTime.new(2025, 4, 1, 9, 0, 0),
+        first_name: "Edna",
+        surname: "Krabappel",
+        eligibility_attributes: {
+          teaching_qualification: "yes",
+          school: fe_provider
+        }
+      )
+
+      sign_in_to(fe_provider)
+
+      click_on year_2_claim.full_name
+
+      within_fieldset(
+        "Is Edna Krabappel a member of staff with teaching responsibilities?"
+      ) { choose "Yes" }
+      click_on "Continue"
+
+      within_fieldset(
+        "Did Edna Krabappel start their FE teaching career in England during " \
+        "September 2023 to August 2024?"
+      ) { choose "Yes" }
+      click_on "Continue"
+
+      within_fieldset("Does Edna Krabappel have a teaching qualification?") do
+        choose "No, but is planning to enrol on one"
+      end
+      click_on "Continue"
+
+      expect(page).to have_content("Role and experience")
+      check "Another reason"
+      fill_in "Enter the reason", with: "Has extensive prior experience"
+
+      click_on "Continue"
+
+      within_fieldset(
+        "What type of contract does Edna Krabappel have directly with " \
+        "Springfield College?"
+      ) { choose "Permanent" }
+      click_on "Continue"
+
+      # Performance and discipline
+      within_fieldset(
+        "Is Edna Krabappel currently subject to any formal performance " \
+        "measures as a result of continuous poor teaching standards?"
+      ) { choose "No" }
+
+      within_fieldset(
+        "Is Edna Krabappel currently subject to any disciplinary action?"
+      ) { choose "No" }
+
+      click_on "Continue"
+
+      # Contracted hours
+      within_fieldset(
+        "On average, how many hours per week was Edna Krabappel timetabled " \
+        "to teach during the spring term?"
+      ) { choose "20 hours or more per week" }
+
+      click_on "Continue"
+
+      within_fieldset(
+        "Did Edna Krabappel spend at least half of their timetabled teaching " \
+        "hours teaching students funded through the 16 to 19 education funding " \
+        "system or apprentices aged 16 to 19?"
+      ) { choose "Yes" }
+
+      click_on "Continue"
+
+      # list of courses by the claimaint
+      expect(page).to have_text(
+        "Qualifications approved for funding at level 3 and below"
+      )
+
+      choose "Yes"
+      click_on "Continue"
+
+      expect(page).to have_text(
+        "Is Edna Krabappel expected to continue to be employed at Springfield " \
+        "College until the end of the academic year"
+      )
+
+      choose "Yes"
+      click_on "Continue"
+
+      # Check answers
+      expect(page).to have_text("Claim reference: #{year_2_claim.reference}")
+
+      expect(
+        summary_row("Mitigating circumstances for qualification")
+      ).to have_content "Has extensive prior experience"
+
+      check(
+        "Please ensure your answers are accurate to the best of " \
+        "your knowledge. While the DfE runs its own checks, this " \
+        "claim is approved or rejected based on your answers. DfE " \
+        "will audit approved claims. If any of your teachers receive " \
+        "payments that are later found to be ineligible, we will take " \
+        "steps to recover the payment."
+      )
+
+      click_on "Continue"
+
+      expect(page).to have_content(
+        "Verification form for Edna Krabappel sent to DfE"
+      )
+    end
+  end
+
   def sign_in_to(fe_provider)
     mock_dfe_sign_in_auth_session(
       provider: :dfe_fe_provider,
