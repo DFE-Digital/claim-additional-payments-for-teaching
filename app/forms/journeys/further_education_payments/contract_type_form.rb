@@ -27,8 +27,8 @@ module Journeys
           ),
           Option.new(
             id: "employed_by_another_organisation",
-            name: t("options.employed_by_another_organisation"),
-            hint: "For example, through an agency, as a contractor or a subsidiary of the FE provider"
+            name: t("options.employed_by_another_organisation", school_name: school.name),
+            hint: "For example, you are employed through a subsidiary, by an agency, or you are subcontracting"
           )
         ]
       end
