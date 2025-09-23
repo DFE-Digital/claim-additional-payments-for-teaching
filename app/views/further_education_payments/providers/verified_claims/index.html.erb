@@ -4,19 +4,19 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-quarter-from-desktop govuk-!-margin-bottom-5">
-    <%= render "components/card", value: 999, label: "Rejected by DfE", status: "rejected" %>
+    <%= render "components/card", value: @stats.rejected_count, label: "Rejected by DfE", status: "rejected" %>
   </div>
 
   <div class="govuk-grid-column-one-quarter-from-desktop govuk-!-margin-bottom-5">
-    <%= render "components/card", value: 999, label: "Pending DfE decision", status: "pending" %>
+    <%= render "components/card", value: @stats.pending_decision_count, label: "Pending DfE decision", status: "pending" %>
   </div>
 
   <div class="govuk-grid-column-one-quarter-from-desktop govuk-!-margin-bottom-5">
-    <%= render "components/card", value: 999, label: "Approved by DfE", status: "approved" %>
+    <%= render "components/card", value: @stats.approved_count, label: "Approved by DfE", status: "approved" %>
   </div>
 
   <div class="govuk-grid-column-one-quarter-from-desktop govuk-!-margin-bottom-5">
-    <%= render "components/card", value: "£999,999", label: "Paid out by DfE", status: "paid" %>
+    <%= render "components/card", value: number_to_currency(@stats.approved_amount, precision: 0), label: "Total value of approved claims", status: "paid" %>
   </div>
 </div>
 

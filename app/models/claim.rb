@@ -135,6 +135,7 @@ class Claim < ApplicationRecord
   scope :not_awaiting_qa, -> { approved.where("qa_required = false OR (qa_required = true AND qa_completed_at IS NOT NULL)") }
   scope :awaiting_qa, -> { approved.qa_required.where(qa_completed_at: nil) }
   scope :rejected_awaiting_qa, -> { rejected.qa_required.where(qa_completed_at: nil) }
+  scope :rejected_not_awaiting_qa, -> { rejected.where("qa_required = false OR (qa_required = true AND qa_completed_at IS NOT NULL)") }
   scope :qa_required, -> { where(qa_required: true) }
   scope :awaiting_further_education_provider_verification, -> do
     by_policy(Policies::FurtherEducationPayments)
