@@ -57,6 +57,22 @@
         ) %>
       <% end %>
     <% end %>
+
+    <% if form.not_started_qualification_reasons.present? %>
+      <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: "Mitigating circumstances for qualification") %>
+        <%= row.with_value(text: form.not_started_qualification_reasons) %>
+        <% if editable %>
+          <%= row.with_action(
+            text: "Change",
+            href: edit_further_education_payments_providers_claim_verification_path(
+              form.claim,
+              slug: "not_started_qualification_reason"
+            )
+          ) %>
+        <% end %>
+      <% end %>
+    <% end %>
   <% end %>
 <% end %>
 

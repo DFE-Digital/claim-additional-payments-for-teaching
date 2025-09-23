@@ -1,0 +1,77 @@
+<%= content_for(:page_title, "Role and Experience") %>
+
+<% content_for :back_link do %>
+  <%= govuk_back_link href: backlink_path %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("verification_header", claim: @form.claim) do %>
+      <%= govuk_inset_text(
+        text: "#{@form.claim.full_name} said last year that they planned to " \
+              "start a teaching qualification within 12 months. They’ve " \
+              "confirmed the same intention in their application this year. Tell " \
+              "us why they have not yest started or finished a teaching qualification"
+      ) %>
+    <% end %>
+
+    <%= form_with(
+      model: @form,
+      url: further_education_payments_providers_claim_verification_path(
+        @form.claim,
+        @form.provider,
+        slug: @form.slug
+      ),
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+      method: :patch,
+    ) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_check_boxes_fieldset(
+        :countries,
+        legend: {
+          text: "Role and experience",
+          size: "m"
+        }
+      ) do %>
+        <p class="govuk-body govuk-!-font-weight-bold">
+          Select all that apply
+        </p>
+
+        <% f.object.provider_verification_not_started_qualification_reason_options.each_with_index do |reason, i| %>
+          <%= f.govuk_check_box(
+            :provider_verification_not_started_qualification_reasons,
+            reason,
+            label: {
+              text: f.object.label_for(reason)
+            },
+            link_errors: i.zero?
+          ) %>
+        <% end %>
+
+        <%= f.govuk_check_box_divider %>
+
+        <%= f.govuk_check_box(
+          :provider_verification_not_started_qualification_reasons,
+          "other",
+          label: {
+            text: f.object.label_for("other")
+          },
+          exclusive: true
+        ) do %>
+          <%= f.govuk_text_area(
+            :provider_verification_not_started_qualification_reason_other,
+            label: {
+              text: "Enter the reason",
+              hidden: true
+            },
+            max_length: 500,
+            rows: 5,
+          ) %>
+        <% end %>
+      <% end %>
+
+      <%= f.govuk_submit("Continue") %>
+    <% end %>
+  </div>
+</div>
