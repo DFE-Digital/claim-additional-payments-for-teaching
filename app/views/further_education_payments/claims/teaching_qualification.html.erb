@@ -17,6 +17,17 @@
         }
       ) %>
 
+      <%= govuk_details(summary_text: "If you do not have a teaching qualification") do %>
+        <p class="govuk-body">
+          To remain eligible for a retention payment next year, make sure you either:
+        </p>
+
+        <%= govuk_list [
+          "complete a teaching qualification in the next 12 months",
+          "enrol on a teaching qualification in the next 12 months"
+        ], type: :bullet %>
+      <% end %>
+
       <%= f.govuk_submit %>
     <% end %>
   </div>
