@@ -3,8 +3,20 @@ module Journeys
     class CheckYourAnswersForm < Form
       attr_reader :claim
 
+      attribute :claimant_declaration, :boolean
+
+      validates :claimant_declaration,
+        presence: {
+          message: "Tick the box to confirm that the information " \
+          "provided in this form is correct to the best of " \
+          "your knowledge"
+        }
+
       def save
         return false if invalid?
+
+        journey_session.answers.assign_attributes(claimant_declaration:)
+        journey_session.save!
 
         if journey.requires_student_loan_details?
           journey::AnswersStudentLoansDetailsUpdater.call(journey_session)

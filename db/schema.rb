@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_16_153109) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_19_121023) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -117,6 +117,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_16_153109) do
     t.text "onelogin_idv_return_codes", array: true
     t.text "policy", null: false
     t.datetime "retained_personal_data_removed_at"
+    t.boolean "claimant_declaration"
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"

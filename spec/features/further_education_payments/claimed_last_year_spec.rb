@@ -182,6 +182,8 @@ RSpec.feature "Further education payments" do
     expect(page).not_to have_content("Do you have a valid passport?")
     expect(page).not_to have_content("Passport number")
 
+    check "claim-claimant-declaration-1-field"
+
     expect do
       click_on "Accept and send"
     end.to change { Claim.count }.by(1)

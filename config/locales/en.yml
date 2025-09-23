@@ -1270,10 +1270,9 @@ en:
         confirmation_notice:
           By selecting continue you are confirming that, to the best of your knowledge, the details you are providing
           are correct.
-      heading_send_application: Now send your application
+      heading_send_application: Declaration
       statement:
-        By submitting this you are confirming that, to the best of your knowledge, the details you are providing are
-        correct.
+        I have checked the details I’ve provided and I’m confident they are correct and the bank details match those held by my FE employer for the account my wages are paid into. I understand that submitting incorrect information may cause a delay to any payment.
       btn_text: Accept and send
     providers:
       forms:
