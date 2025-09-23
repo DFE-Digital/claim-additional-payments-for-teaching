@@ -46,10 +46,10 @@ RSpec.feature "Admin of eligible ey providers" do
 
     @eligible_ey_providers_csv_file = Tempfile.new
     @eligible_ey_providers_csv_file.write <<~CSV
-      Nursery Name,EYURN / Ofsted URN,LA Code,Nursery Address,Primary Key Contact Email Address,Secondary Contact Email Address (Optional)
-      First Nursery,1000001,101,"1 Test Street, Test Town, TE1 1ST",primary@example.com,secondary@example.com
-      Second Nursery,1000002,101,"2 Test Street, Test Town, TE1 1ST",primary@example.com,
-      Third Nursery,1000003,101,"3 Test Street, Test Town, TE1 1ST",other@example.com,
+      Nursery Name,EYURN / Ofsted URN,LA Code,Nursery Address,Primary Key Contact Email Address,Secondary Contact Email Address (Optional),Maximum Number Of Claims
+      First Nursery,1000001,101,"1 Test Street, Test Town, TE1 1ST",primary@example.com,secondary@example.com,1
+      Second Nursery,1000002,101,"2 Test Street, Test Town, TE1 1ST",primary@example.com,,2
+      Third Nursery,1000003,101,"3 Test Street, Test Town, TE1 1ST",other@example.com,,3
     CSV
     @eligible_ey_providers_csv_file.rewind
 
@@ -63,10 +63,10 @@ RSpec.feature "Admin of eligible ey providers" do
 
     @eligible_ey_providers_csv_file_v2 = Tempfile.new
     @eligible_ey_providers_csv_file_v2.write <<~CSV
-      Nursery Name,EYURN / Ofsted URN,LA Code,Nursery Address,Primary Key Contact Email Address,Secondary Contact Email Address (Optional)
-      First Nursery 2,1000001,101,"1 Test Street, Test Town, TE1 1ST",primary@example.com,secondary@example.com
-      Second Nursery 2,1000002,101,"2 Test Street, Test Town, TE1 1ST",primary@example.com,
-      Third Nursery 2,1000003,101,"3 Test Street, Test Town, TE1 1ST",other@example.com,
+      Nursery Name,EYURN / Ofsted URN,LA Code,Nursery Address,Primary Key Contact Email Address,Secondary Contact Email Address (Optional),Maximum Number Of Claims
+      First Nursery 2,1000001,101,"1 Test Street, Test Town, TE1 1ST",primary@example.com,secondary@example.com,3
+      Second Nursery 2,1000002,101,"2 Test Street, Test Town, TE1 1ST",primary@example.com,,2
+      Third Nursery 2,1000003,101,"3 Test Street, Test Town, TE1 1ST",other@example.com,,1
     CSV
     @eligible_ey_providers_csv_file_v2.rewind
 

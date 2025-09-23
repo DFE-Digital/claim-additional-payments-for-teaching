@@ -15,7 +15,8 @@ RSpec.describe EligibleEyProvidersImporter do
       local_authority.code,
       "\"#{hash[:nursery_address]}\"",
       hash[:primary_key_contact_email_address],
-      hash[:secondary_contact_email_address]
+      hash[:secondary_contact_email_address],
+      hash[:max_claims]
     ].join(",") + "\n"
   end
 
@@ -30,7 +31,7 @@ RSpec.describe EligibleEyProvidersImporter do
         subject.run(file_upload.id)
 
         expect(subject.errors).to be_present
-        expect(subject.errors).to include("The selected file is missing some expected columns: Nursery Name, EYURN / Ofsted URN, LA Code, Nursery Address, Primary Key Contact Email Address, Secondary Contact Email Address (Optional)")
+        expect(subject.errors).to include("The selected file is missing some expected columns: Nursery Name, EYURN / Ofsted URN, LA Code, Nursery Address, Primary Key Contact Email Address, Secondary Contact Email Address (Optional), Maximum Number Of Claims")
       end
     end
 

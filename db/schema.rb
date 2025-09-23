@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_11_092038) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_16_153109) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -238,6 +238,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_11_092038) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "file_upload_id"
+    t.integer "max_claims", default: 0, null: false
     t.index ["file_upload_id"], name: "index_eligible_ey_providers_on_file_upload_id"
     t.index ["local_authority_id"], name: "index_eligible_ey_providers_on_local_authority_id"
     t.index ["primary_key_contact_email_address"], name: "index_eligible_ey_providers_on_primary_contact_email_address"
