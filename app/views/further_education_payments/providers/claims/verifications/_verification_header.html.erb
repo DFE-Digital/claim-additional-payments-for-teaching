@@ -8,5 +8,7 @@
   <%= claim.full_name %>
 </h1>
 
+<%= yield if block_given? %>
+
 <%= render partial: "collapsible_claim_details", locals: { claim: claim } %>
 
