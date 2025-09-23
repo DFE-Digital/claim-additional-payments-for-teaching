@@ -1267,6 +1267,19 @@ en:
             12_to_20_hours_per_week: "12 or more hours per week, but fewer than 20"
             2_and_a_half_to_12_hours_per_week: "2.5 or more hours per week, but fewer than 12"
             fewer_than_2_and_a_half_hours_per_week: "Fewer than 2.5 hours each week"
+      claims:
+        verification:
+          forms:
+            not_started_qualification_reason:
+              options:
+                workload: "Workload"
+                funding_issues: "Funding issues"
+                course_not_available_at_the_right_time: "Course not available at the right time"
+                cant_access_suitable_course: "Can't access suitable course"
+                new_member_of_staff: "They’re a new member of staff"
+                no_valid_reason: "No valid reason"
+                other: "Another reason"
+
   further_education_payments_provider:
     accessibility_statement:
       test_date: "20 September 2024"
