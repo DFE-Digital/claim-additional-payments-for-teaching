@@ -40,6 +40,7 @@ module FurtherEducationPayments
             Journeys::FurtherEducationPayments.configuration.current_academic_year
           )
           .where(eligibility_id: eligibilities.select(:id))
+          .where(academic_year: journey_configuration.current_academic_year)
       end
 
       def current_user
@@ -67,6 +68,10 @@ module FurtherEducationPayments
         Journey
       end
       helper_method :journey
+
+      def journey_configuration
+        @journey_configuration ||= Journeys::Configuration.find(current_journey_routing_name)
+      end
     end
   end
 end
