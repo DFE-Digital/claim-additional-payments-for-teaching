@@ -20,6 +20,7 @@ module FurtherEducationPayments
             TeachingHoursPerWeekForm,
             HalfTeachingHoursForm,
             HalfTimetabledTeachingTimeForm,
+            ContinuedEmploymentForm,
             CheckAnswersForm
           ]
 
@@ -147,6 +148,7 @@ module FurtherEducationPayments
             @reachable_steps << TeachingHoursPerWeekForm
             @reachable_steps << HalfTeachingHoursForm
             @reachable_steps << HalfTimetabledTeachingTimeForm
+            @reachable_steps << ContinuedEmploymentForm
             @reachable_steps << CheckAnswersForm
             @reachable_steps
           end

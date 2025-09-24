@@ -30,6 +30,7 @@ module FurtherEducationPayments
             :provider_verification_teaching_hours_per_week,
             :provider_verification_half_teaching_hours,
             :provider_verification_half_timetabled_teaching_time,
+            :provider_verification_continued_employment,
             :provider_verification_selected_at_least_one_eligible_course?,
             to: :eligibility
           )
@@ -135,6 +136,14 @@ module FurtherEducationPayments
               NOT_ANSWERED
             else
               I18n.t(provider_verification_half_timetabled_teaching_time, scope: :boolean)
+            end
+          end
+
+          def continued_employment
+            if provider_verification_continued_employment.nil?
+              NOT_ANSWERED
+            else
+              I18n.t(provider_verification_continued_employment, scope: :boolean)
             end
           end
 
