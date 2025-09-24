@@ -105,13 +105,19 @@ RSpec.feature "Provider verifying claims" do
 
     # list of courses by the claimaint
     expect(page).to have_text("Qualifications approved for funding at level 3 " \
-        "and below in the mathematics and statistics (opens in new tab) sector subject area")
+      "and below in the mathematics and statistics (opens in new tab) sector subject area")
 
     expect(page).to have_text("GCSE in maths, functional skills qualifications " \
       "and other maths qualifications (opens in new tab) approved for teaching to " \
       "16 to 19-year-olds who meet the condition of funding")
 
     expect(page).to have_text("GCSE physics")
+
+    choose "Yes"
+    click_on "Continue"
+
+    expect(page).to have_text("Is Edna Krabappel expected to continue to be employed at " \
+      "Springfield College until the end of the academic year")
 
     choose "Yes"
     click_on "Continue"
@@ -153,6 +159,10 @@ RSpec.feature "Provider verifying claims" do
 
     expect(summary_row("Spend at least half timetabled teaching time teaching relevant courses"))
       .to have_content("Yes")
+
+    expect(
+      summary_row("Employed until end of academic year")
+    ).to have_content("Yes")
 
     check(
       "Please ensure your answers are accurate to the best of " \
@@ -272,7 +282,7 @@ RSpec.feature "Provider verifying claims" do
 
     # list of courses by the claimaint
     expect(page).to have_text("Qualifications approved for funding at level 3 " \
-        "and below in the mathematics and statistics (opens in new tab) sector subject area")
+      "and below in the mathematics and statistics (opens in new tab) sector subject area")
 
     expect(page).to have_text("GCSE in maths, functional skills qualifications " \
       "and other maths qualifications (opens in new tab) approved for teaching to " \
@@ -281,6 +291,12 @@ RSpec.feature "Provider verifying claims" do
     expect(page).to have_text("GCSE physics")
 
     choose "No"
+    click_on "Continue"
+
+    expect(page).to have_text("Is Edna Krabappel expected to continue to be employed at " \
+      "Springfield College until the end of the academic year")
+
+    choose "Yes"
     click_on "Continue"
 
     # Check answers
@@ -321,6 +337,10 @@ RSpec.feature "Provider verifying claims" do
     # Subject areas answers
     expect(summary_row("Spend at least half timetabled teaching time teaching relevant courses"))
       .to have_content("No")
+
+    expect(
+      summary_row("Employed until end of academic year")
+    ).to have_content("Yes")
 
     check(
       "Please ensure your answers are accurate to the best of " \
