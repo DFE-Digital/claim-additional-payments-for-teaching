@@ -7,7 +7,7 @@ class Admin::PayrollGenderTasksController < Admin::TasksController
     if @form.save
       redirect_to @task_pagination.next_task_path
     else
-      @tasks_presenter = @claim.policy::AdminTasksPresenter.new(@claim)
+      @tasks_presenter = @claim.policy.admin_tasks_presenter(@claim)
       render "payroll_gender"
     end
   end
