@@ -168,5 +168,9 @@ module Policies
       dfe_sign_out_redirect_uri.query = URI.encode_www_form(params)
       dfe_sign_out_redirect_uri.to_s
     end
+
+    def admin_tasks_presenter(claim)
+      self::YearOneAdminTasksPresenter.new(claim)
+    end
   end
 end
