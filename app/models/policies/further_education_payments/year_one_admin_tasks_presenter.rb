@@ -1,6 +1,6 @@
 module Policies
   module FurtherEducationPayments
-    class AdminTasksPresenter
+    class YearOneAdminTasksPresenter
       include Admin::PresenterMethods
 
       attr_reader :claim
