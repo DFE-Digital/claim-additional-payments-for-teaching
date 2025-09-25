@@ -45,7 +45,7 @@ RSpec.describe "admin/tasks/one_login_identity.html.erb" do
   it "renders correct text" do
     assign(:claim, claim)
     assign(:claim_checking_tasks, claim_checking_tasks)
-    assign(:tasks_presenter, claim.policy::AdminTasksPresenter.new(claim))
+    assign(:tasks_presenter, claim.policy.admin_tasks_presenter(claim))
     assign(:form, form)
     assign(:notes, [])
     assign(:task_pagination, Admin::TaskPagination.new(claim:, current_task_name: "one_login_identity"))
