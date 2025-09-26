@@ -263,6 +263,12 @@ RSpec.feature "Provider verifying claims" do
       choose "Yes"
       click_on "Continue"
 
+      expect(page).to have_text("Is Edna Krabappel expected to continue to be employed at " \
+        "Springfield College until the end of the academic year")
+
+      choose "Yes"
+      click_on "Continue"
+
       # Check answers
       expect(page).to have_text("Claim reference: AB123456")
 
@@ -300,6 +306,10 @@ RSpec.feature "Provider verifying claims" do
 
       expect(summary_row("Spend at least half timetabled teaching time teaching relevant courses"))
         .to have_content("Yes")
+
+      expect(
+        summary_row("Employed until end of academic year")
+      ).to have_content("Yes")
 
       check(
         "Please ensure your answers are accurate to the best of " \
@@ -440,6 +450,12 @@ RSpec.feature "Provider verifying claims" do
       choose "Yes"
       click_on "Continue"
 
+      expect(page).to have_text("Is Edna Krabappel expected to continue to be employed at " \
+        "Springfield College until the end of the academic year")
+
+      choose "No"
+      click_on "Continue"
+
       # Check answers
       expect(page).to have_text("Claim reference: AB123456")
 
@@ -481,6 +497,10 @@ RSpec.feature "Provider verifying claims" do
 
       expect(summary_row("Spend at least half timetabled teaching time teaching relevant courses"))
         .to have_content("Yes")
+
+      expect(
+        summary_row("Employed until end of academic year")
+      ).to have_content("No")
 
       check(
         "Please ensure your answers are accurate to the best of " \
@@ -628,6 +648,12 @@ RSpec.feature "Provider verifying claims" do
       choose "Yes"
       click_on "Continue"
 
+      expect(page).to have_text("Is Edna Krabappel expected to continue to be employed at " \
+        "Springfield College until the end of the academic year")
+
+      choose "Yes"
+      click_on "Continue"
+
       # Check answers
       expect(page).to have_text("Claim reference: AB123456")
 
@@ -667,6 +693,10 @@ RSpec.feature "Provider verifying claims" do
 
       expect(summary_row("Spend at least half timetabled teaching time teaching relevant courses"))
         .to have_content("Yes")
+
+      expect(
+        summary_row("Employed until end of academic year")
+      ).to have_content("Yes")
 
       check(
         "Please ensure your answers are accurate to the best of " \
@@ -795,6 +825,12 @@ RSpec.feature "Provider verifying claims" do
       choose "Yes"
       click_on "Continue"
 
+      expect(page).to have_text("Is Edna Krabappel expected to continue to be employed at " \
+        "Springfield College until the end of the academic year")
+
+      choose "Yes"
+      click_on "Continue"
+
       expect(summary_row("Contract type")).to have_content("Variable hours")
 
       within(summary_row("Contract type")) do
@@ -902,6 +938,25 @@ RSpec.feature "Provider verifying claims" do
       expect(page).not_to have_content("Variable hours in academic year")
 
       expect(page).not_to have_content("Contract covers full academic year")
+
+      # Change continued employment answer from Yes to No
+      expect(
+        summary_row("Employed until end of academic year")
+      ).to have_content("Yes")
+
+      within(summary_row("Employed until end of academic year")) do
+        click_on "Change"
+      end
+
+      expect(page).to have_text("Is Edna Krabappel expected to continue to be employed at " \
+        "Springfield College until the end of the academic year")
+
+      choose "No"
+      click_on "Continue"
+
+      expect(
+        summary_row("Employed until end of academic year")
+      ).to have_content("No")
     end
   end
 
