@@ -16,6 +16,10 @@ module Policies
         eligibility.provider_assigned_to&.full_name || "Not assigned"
       end
 
+      def provider_email
+        eligibility.provider_assigned_to&.email || "Not assigned"
+      end
+
       def provider_verification_rows
         return [] unless provider_verification_submitted?
 
@@ -77,6 +81,15 @@ module Policies
       def student_loan_plan
         [
           ["Student loan plan", claim.student_loan_plan&.humanize]
+        ]
+      end
+
+      def provider_details
+        [
+          ["Provider name", provider_name],
+          ["Provider email", provider_email],
+          ["Claimant name", claim.full_name],
+          ["Claimant email", claim.email_address]
         ]
       end
 
