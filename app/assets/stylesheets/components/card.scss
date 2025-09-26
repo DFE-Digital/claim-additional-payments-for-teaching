@@ -7,6 +7,8 @@
   cursor: default;
   background-color: $govuk-brand-colour;
 
+  min-height: 100px;
+
   @include govuk-font($size: 19, $weight: bold, $tabular: true);
 
   @include govuk-media-query($from: desktop) {
