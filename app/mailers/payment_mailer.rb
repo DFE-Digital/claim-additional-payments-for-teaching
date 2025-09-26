@@ -1,5 +1,6 @@
 class PaymentMailer < ApplicationMailer
   include PaymentMailerHelper
+
   helper :application
 
   def confirmation(payment)

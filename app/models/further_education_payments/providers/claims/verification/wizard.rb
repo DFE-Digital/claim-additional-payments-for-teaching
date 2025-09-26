@@ -14,7 +14,6 @@ module FurtherEducationPayments
             TeachingQualificationForm,
             ContractTypeForm,
             ContractCoversFullAcademicYearForm,
-            TimetabledTeachingHoursForm,
             TaughtAtLeastOneAcademicTermForm,
             PerformanceAndDisciplineForm,
             TeachingHoursPerWeekForm,
@@ -139,7 +138,6 @@ module FurtherEducationPayments
 
             if eligibility.provider_verification_contract_type == "variable_hours" ||
                 eligibility.provider_verification_contract_covers_full_academic_year == false
-              @reachable_steps << TimetabledTeachingHoursForm
               @reachable_steps << TaughtAtLeastOneAcademicTermForm
             end
 

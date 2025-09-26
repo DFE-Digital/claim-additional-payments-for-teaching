@@ -1,6 +1,7 @@
 class ClaimMailer < ApplicationMailer
   include ClaimMailerHelper
   include JourneyHelper
+
   helper :application
 
   def submitted(claim)

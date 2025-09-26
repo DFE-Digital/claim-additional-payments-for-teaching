@@ -82,7 +82,6 @@ FactoryBot.define do
       subjects_taught { ["maths", "physics"] }
       maths_courses { ["approved_level_321_maths", "gcse_maths"] }
       physics_courses { ["gcse_physics"] }
-      teaching_hours_per_week_next_term { "at_least_2_5" }
       taught_at_least_one_term { true }
       verification do
         {
@@ -114,10 +113,6 @@ FactoryBot.define do
             {
               "name" => "subjects_taught",
               "outcome" => true
-            },
-            {
-              "name" => "teaching_hours_per_week_next_term",
-              "outcome" => false
             }
           ],
           "verifier" => {

@@ -55,10 +55,6 @@ RSpec.feature "Further education payments" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you timetabled to teach at least 2.5 hours per week at #{college.name} next term?")
-    choose("Yes")
-    click_button "Continue"
-
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
     choose("More than 12 hours per week")
     click_button "Continue"
@@ -130,10 +126,6 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Check your answers")
     expect(page).to have_summary_item(
       key: "Have you taught at #{college.name} for the whole of the spring academic term?",
-      value: "Yes"
-    )
-    expect(page).to have_summary_item(
-      key: "Are you timetabled to teach at least 2.5 hours per week at #{college.name} next term?",
       value: "Yes"
     )
     click_button "Continue"
@@ -271,10 +263,6 @@ RSpec.feature "Further education payments" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you timetabled to teach at least 2.5 hours per week at #{college.name} next term?")
-    choose("Yes")
-    click_button "Continue"
-
     expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{college.name} during the current term?")
     choose("More than 12 hours per week")
     click_button "Continue"
@@ -309,11 +297,6 @@ RSpec.feature "Further education payments" do
 
     expect(page).to have_summary_item(
       key: "Have you taught at #{college.name} for the whole of the spring academic term?",
-      value: "Yes"
-    )
-
-    expect(page).to have_summary_item(
-      key: "Are you timetabled to teach at least 2.5 hours per week at #{college.name} next term?",
       value: "Yes"
     )
   end

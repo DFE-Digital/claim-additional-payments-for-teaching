@@ -304,7 +304,6 @@ shared:
     - fixed_term_full_year
     - taught_at_least_one_term
     - teaching_hours_per_week
-    - teaching_hours_per_week_next_term
     - further_education_teaching_start_year
     - subjects_taught
     - building_construction_courses
@@ -341,7 +340,6 @@ shared:
     - provider_verification_verified_by_id
     - provider_assigned_to_id
     - provider_verification_started_at
-    - provider_verification_timetabled_teaching_hours
     - provider_verification_half_timetabled_teaching_time
     - provider_verification_claimant_employed_by_college
     - provider_verification_claimant_bank_details_match
