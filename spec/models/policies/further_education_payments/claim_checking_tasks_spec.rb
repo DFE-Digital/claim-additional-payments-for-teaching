@@ -31,6 +31,7 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks, feature_f
     let(:claim) do
       create(
         :claim,
+        academic_year: AcademicYear.new(2024),
         policy: Policies::FurtherEducationPayments,
         payroll_gender: payroll_gender,
         hmrc_bank_validation_succeeded: hmrc_bank_validation_succeeded,

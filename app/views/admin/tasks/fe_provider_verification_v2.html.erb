@@ -1,0 +1,76 @@
+<% content_for(:page_title) { page_title("Claim #{@claim.reference} provider verification check for #{@claim.policy.short_name}") } %>
+
+<% content_for :back_link do %>
+  <%= govuk_back_link href: admin_claim_tasks_path(@claim) %>
+<% end %>
+
+<%= form_with model: @form, scope: :form, url: root_path, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+  <%= f.govuk_error_summary %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <%= render "claim_summary_further_education_payments", claim: @claim, heading: "Provider verification" %>
+
+  <div class="govuk-grid-column-three-quarters">
+    <h2 class="govuk-heading-xl">
+      <%= I18n.t(:name, scope: "admin.tasks.#{@form.task.name}") %>
+    </h2>
+
+    <% if @tasks_presenter.provider_verification_submitted? %>
+      <p class="govuk-body">
+        This task was verified by the provider
+        (<%= @tasks_presenter.provider_name %>).
+      </p>
+
+      <table class="govuk-table govuk-!-margin-bottom-9">
+        <caption class="govuk-table__caption govuk-visually-hidden">
+          <%= I18n.t(:name, scope: "admin.tasks.#{@form.task.name}") %>
+        </caption>
+        <thead>
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">
+              Eligibility check
+            </th>
+            <th scope="col" class="govuk-table__header">
+              Claimant submitted
+            </th>
+            <th scope="col" class="govuk-table__header">
+              Provider response
+            </th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <% @tasks_presenter.provider_verification_rows.each do |question, claimant_answer, provider_answer| %>
+            <tr class="govuk-table__row govuk-!-width-one-quarter">
+              <th scope="row" class="govuk-table__header">
+                <%= question %>
+              </th>
+              <td class="govuk-table__cell govuk-!-width-one-half">
+                <%= claimant_answer %>
+              </td>
+              <td class="govuk-table__cell govuk-!-width-one-quarter">
+                <%= provider_answer %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p class="govuk-body">
+        The provider has not completed this check yet.
+      </p>
+    <% end %>
+  </div>
+
+  <div class="govuk-grid-column-two-thirds">
+    <% if @tasks_presenter.provider_verification_submitted? %>
+      <% if @form.task.persisted? %>
+        <%= render "task_outcome", task: @form.task, notes: @notes %>
+      <% else %>
+        <%= render "form", task_name: "provider_verification", claim: @claim %>
+      <% end %>
+    <% end %>
+    <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>
+  </div>
+</div>
+

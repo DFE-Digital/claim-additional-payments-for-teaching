@@ -18,6 +18,7 @@ RSpec.feature "Admin checks an Further Education Payments claim" do
           surname: "Skinner",
           email_address: "w.s.skinner@example.com",
           policy: Policies::FurtherEducationPayments,
+          academic_year: AcademicYear.new(2024),
           eligibility_attributes: {
             verification: {
               verifier: {
@@ -50,6 +51,7 @@ RSpec.feature "Admin checks an Further Education Payments claim" do
           surname: "Tamzarian",
           email_address: "w.s.skinner@springfield-elementary.edu",
           policy: Policies::FurtherEducationPayments,
+          academic_year: AcademicYear.new(2024),
           eligibility_attributes: {
             verification: {
               verifier: {
@@ -82,6 +84,7 @@ RSpec.feature "Admin checks an Further Education Payments claim" do
           surname: "Krabappel",
           email_address: "e.krabappel@springfield-elementary.edu",
           policy: Policies::FurtherEducationPayments,
+          academic_year: AcademicYear.new(2024),
           eligibility_attributes: {
             verification: {
               verifier: {
