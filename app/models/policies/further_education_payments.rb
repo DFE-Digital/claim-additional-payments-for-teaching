@@ -170,7 +170,11 @@ module Policies
     end
 
     def admin_tasks_presenter(claim)
-      self::YearOneAdminTasksPresenter.new(claim)
+      if claim.academic_year == AcademicYear.new("2024/2025")
+        self::YearOneAdminTasksPresenter.new(claim)
+      else
+        self::AdminTasksPresenter.new(claim)
+      end
     end
   end
 end
