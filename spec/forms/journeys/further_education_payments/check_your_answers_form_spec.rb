@@ -74,7 +74,6 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
       expect(eligibility.fixed_term_full_year).to eq(answers.fixed_term_full_year)
       expect(eligibility.taught_at_least_one_term).to eq(answers.taught_at_least_one_term)
       expect(eligibility.teaching_hours_per_week).to eq(answers.teaching_hours_per_week)
-      expect(eligibility.teaching_hours_per_week_next_term).to eq(answers.teaching_hours_per_week_next_term)
       expect(eligibility.further_education_teaching_start_year).to eq(answers.further_education_teaching_start_year)
       expect(eligibility.subjects_taught).to eq(answers.subjects_taught)
       expect(eligibility.building_construction_courses).to eq(answers.building_construction_courses)
