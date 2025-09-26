@@ -16,6 +16,7 @@ class Task < ApplicationRecord
     ey_eoi_cross_reference
     ey_alternative_verification
     provider_verification
+    fe_provider_verification_v2
     provider_details
     visa
     arrival_date
