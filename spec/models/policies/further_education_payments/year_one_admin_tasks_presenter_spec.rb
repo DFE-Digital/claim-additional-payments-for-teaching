@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
+RSpec.describe Policies::FurtherEducationPayments::YearOneAdminTasksPresenter do
   describe "#employment" do
     let(:claim) { create(:claim, :submitted) }
 
