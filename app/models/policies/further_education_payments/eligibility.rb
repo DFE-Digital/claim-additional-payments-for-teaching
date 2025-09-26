@@ -162,7 +162,23 @@ module Policies
         provider_verification_claimant_employed_by_college == false
       end
 
+      def planned_to_start_qualification_but_hasnt?
+        previous_year_claim.present? &&
+          previous_year_claim.eligibility.teaching_qualification == "no_but_planned" &&
+          provider_verification_teaching_qualification.present? &&
+          provider_verification_teaching_qualification == "no_but_planned"
+      end
+
       private
+
+      def previous_year_claim
+        Claim
+          .by_policy(Policies::FurtherEducationPayments)
+          .where(onelogin_uid: claim.onelogin_uid)
+          .where(academic_year: claim.academic_year - 1)
+          .order(created_at: :desc)
+          .first
+      end
 
       def provider_and_claimant_names_match?
         return false unless verified?
