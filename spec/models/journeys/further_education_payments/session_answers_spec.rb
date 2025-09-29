@@ -6,6 +6,20 @@ RSpec.describe Journeys::FurtherEducationPayments::SessionAnswers do
   let(:school) { create(:school, :further_education, :fe_eligible) }
 
   describe "#calculate_award_amount" do
+    context "when teaching over 20 hours per week" do
+      let(:answers) do
+        build(
+          :further_education_payments_answers,
+          school_id: school.id,
+          teaching_hours_per_week: "more_than_20"
+        )
+      end
+
+      it "returns max award amount" do
+        expect(subject.calculate_award_amount).to eql(school.eligible_fe_provider.max_award_amount)
+      end
+    end
+
     context "when teaching over 12 hours per week" do
       let(:answers) do
         build(

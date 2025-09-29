@@ -882,9 +882,10 @@ en:
           teaching_hours_per_week:
             label: "Timetabled teaching hours"
             claimant_answers:
-              more_than_12: More than 12 hours per week
-              between_2_5_and_12: Between 2.5 and 12 hours per week
-              less_than_2_5: Less than 2.5 hours per week
+              more_than_20: 20 hours or more per week
+              more_than_12: 12 or more hours per week, but fewer than 20
+              between_2_5_and_12: 2.5 or more hours per week, but fewer than 12
+              less_than_2_5: Fewer than 2.5 hours each week
           half_teaching_hours:
             label: "Age range taught"
             claimant_answers:
@@ -1009,11 +1010,12 @@ en:
       teaching_hours_per_week:
         question:
           On average, how many hours per week are you timetabled to teach at %{school_name} during the current term?
-        hint: ‘Timetabled teaching hours’ refers to the time you spend teaching lessons to students of all ages.
+        hint: ‘Timetabled teaching hours’ refer to the time you independently spend teaching lessons to students of all ages.
         options:
-          more_than_12: More than 12 hours per week
-          between_2_5_and_12: Between 2.5 and 12 hours per week
-          less_than_2_5: Less than 2.5 hours per week
+          more_than_20: 20 hours or more per week
+          more_than_12: 12 or more hours per week, but fewer than 20
+          between_2_5_and_12: 2.5 or more hours per week, but fewer than 12
+          less_than_2_5: Fewer than 2.5 hours each week
         errors:
           inclusion: Tell us, on average, how many hours you are timetabled to teach during the current term
       further_education_teaching_start_year:
