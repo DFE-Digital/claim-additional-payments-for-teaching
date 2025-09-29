@@ -31,6 +31,21 @@ module Policies
       scope :provider_verification_email_last_sent_over, ->(older_than) { where("provider_verification_email_last_sent_at < ?", older_than) }
       scope :provider_verification_chase_email_not_sent, -> { where(provider_verification_chase_email_last_sent_at: nil) }
 
+      scope :awaiting_provider_verification_year_1, -> do
+        where(verification: {}, flagged_as_duplicate: false)
+          .or(
+            where(
+              id: left_joins(claim: :notes)
+              .where(
+                verification: {},
+                flagged_as_duplicate: true,
+                notes: {label: "provider_verification"}
+              )
+              .select(:id)
+            )
+          )
+      end
+
       # Claim#school expects this
       alias_method :current_school, :school
 

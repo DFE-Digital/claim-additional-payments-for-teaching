@@ -134,12 +134,9 @@ class Claim < ApplicationRecord
   scope :rejected_awaiting_qa, -> { rejected.qa_required.where(qa_completed_at: nil) }
   scope :qa_required, -> { where(qa_required: true) }
   scope :awaiting_further_education_provider_verification, -> do
-    joins("INNER JOIN further_education_payments_eligibilities ON further_education_payments_eligibilities.id = claims.eligibility_id")
-      .left_outer_joins(:notes)
-      .where("further_education_payments_eligibilities.verification = '{}'")
-      .and(
-        Claim.where("further_education_payments_eligibilities.flagged_as_duplicate = FALSE")
-        .or(Claim.where("further_education_payments_eligibilities.flagged_as_duplicate = TRUE").and(Claim.where(notes: {label: "provider_verification"})))
+    by_policy(Policies::FurtherEducationPayments)
+      .where(
+        eligibility_id: Policies::FurtherEducationPayments::Eligibility.awaiting_provider_verification_year_1.select(:id)
       )
   end
   scope :not_awaiting_further_education_provider_verification, -> do
