@@ -1011,11 +1011,13 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "awaiting further education provider verification scopes" do
-    let!(:year_1_claim_not_verified_provider_email_automatically_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible) }
-    let!(:year_1_claim_not_verified_has_duplicates_provider_email_not_sent_has_other_note) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
-    let!(:year_1_claim_not_verified_has_duplicates_provider_email_not_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
-    let!(:year_1_claim_not_verified_has_duplicates_provider_email_manually_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
-    let!(:year_1_claim_with_fe_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_trait: :verified) }
+    let!(:year_1_claim_not_verified_provider_email_automatically_sent) { create(:claim, :submitted, academic_year: AcademicYear.new(2024), policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible) }
+    let!(:year_1_claim_not_verified_has_duplicates_provider_email_not_sent_has_other_note) { create(:claim, :submitted, academic_year: AcademicYear.new(2024), policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
+    let!(:year_1_claim_not_verified_has_duplicates_provider_email_not_sent) { create(:claim, :submitted, academic_year: AcademicYear.new(2024), policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
+    let!(:year_1_claim_not_verified_has_duplicates_provider_email_manually_sent) { create(:claim, :submitted, academic_year: AcademicYear.new(2024), policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
+    let!(:year_1_claim_with_fe_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, academic_year: AcademicYear.new(2024), eligibility_trait: :verified) }
+    let!(:year_2_claim_awaiting_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments) }
+    let!(:year_2_claim_with_completed_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_attributes: {provider_verification_completed_at: DateTime.now}) }
     let!(:non_fe_claim) { create(:claim, policy: Policies::StudentLoans) }
 
     before do
@@ -1030,7 +1032,8 @@ RSpec.describe Claim, type: :model do
         is_expected.to match_array(
           [
             year_1_claim_not_verified_provider_email_automatically_sent,
-            year_1_claim_not_verified_has_duplicates_provider_email_manually_sent
+            year_1_claim_not_verified_has_duplicates_provider_email_manually_sent,
+            year_2_claim_awaiting_provider_verification
           ]
         )
       end
@@ -1045,6 +1048,7 @@ RSpec.describe Claim, type: :model do
             year_1_claim_not_verified_has_duplicates_provider_email_not_sent_has_other_note,
             year_1_claim_not_verified_has_duplicates_provider_email_not_sent,
             year_1_claim_with_fe_provider_verification,
+            year_2_claim_with_completed_provider_verification,
             non_fe_claim
           ]
         )

@@ -10,7 +10,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
         :with_student_loan,
         :with_onelogin_idv_data,
         policy: policy,
-        eligibility: build(:"#{policy.to_s.underscore}_eligibility", :eligible, :verified),
+        eligibility: build(:"#{policy.to_s.underscore}_eligibility", :eligible, :provider_verification_completed),
         onelogin_idv_at: 10.minutes.ago
       )
     else

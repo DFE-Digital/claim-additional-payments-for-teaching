@@ -32,7 +32,8 @@ module Policies
       scope :provider_verification_chase_email_not_sent, -> { where(provider_verification_chase_email_last_sent_at: nil) }
 
       scope :awaiting_provider_verification_year_1, -> do
-        where(verification: {}, flagged_as_duplicate: false)
+        joins(:claim).merge(Claim.by_academic_year(AcademicYear.new(2024)))
+          .where(verification: {}, flagged_as_duplicate: false)
           .or(
             where(
               id: left_joins(claim: :notes)
@@ -44,6 +45,20 @@ module Policies
               .select(:id)
             )
           )
+      end
+
+      scope :awaiting_provider_verification_year_2, -> do
+        joins(:claim).merge(Claim.after_academic_year(AcademicYear.new(2024)))
+          .where(provider_verification_completed_at: nil)
+          .where(flagged_as_duplicate: false)
+      end
+
+      scope :awaiting_provider_verification, -> do
+        where(
+          id: awaiting_provider_verification_year_1.select(:id)
+        ).or(
+          where(id: awaiting_provider_verification_year_2.select(:id))
+        )
       end
 
       # Claim#school expects this
