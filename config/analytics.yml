@@ -1,415 +1,417 @@
 ---
 shared:
   :journey_configurations:
-    - routing_name
-    - open_for_submissions
-    - availability_message
-    - created_at
-    - updated_at
-    - current_academic_year
-    - teacher_id_enabled
+    - routing_name # string, path used in URL for this journey
+    - open_for_submissions # boolean, can this journey accept claims
+    - availability_message # string, optional message users see when journey is closed
+    - created_at # datetime, when was this journey configuration created
+    - updated_at # datetime, when was this journey configuration last updated
+    - current_academic_year # string, configured academic year for this journey
+    - teacher_id_enabled # boolean, is teacher ID enabled for this journey
   :reminders:
-    - id
-    - created_at
-    - updated_at
-    - email_verified
-    - email_sent_at
-    - itt_academic_year
-    - itt_subject
-    - sent_one_time_password_at
-    - journey_class
-    - deleted_at
+    - id # uuid, that uniquely this reminder
+    - created_at # datetime, when this reminder was created
+    - updated_at # datetime, when this reminder was last updated
+    - email_verified # boolean, has this email address been verified by OTP
+    - email_sent_at # datetime, when was reminder sent
+    - itt_academic_year # string, year completed ITT if relevant for reminder
+    - itt_subject # string, ITT subject if relevant for reminder
+    - sent_one_time_password_at # datetime, when OTP was sent
+    - journey_class # string, what journey does this reminde relate to
+    - deleted_at # datetime, when was this reminder soft deleted via unsubscription
   :tasks:
-    - id
-    - name
-    - claim_id
-    - created_by_id
-    - created_at
-    - updated_at
-    - passed
-    - manual
-    - claim_verifier_match
-    - reason
-    - data
+    - id # uuid, that uniquely identifies this task
+    - name # string, name that identifies type of task
+    - claim_id # uuid, reference to claim associated to this task
+    - created_by_id # uuid, admin that created this task
+    - created_at # datetime, the task was created
+    - updated_at # datetime, the task tas last updated
+    - passed # boolean, has this task been passed
+    - manual # boolean, was this a manual or automated task
+    - claim_verifier_match # integer, do given details in task match
+    - reason # string, rationale why task passed or failed
+    - data # jsonb, additional meta data stored for the task
   :amendments:
-    - id
-    - claim_id
-    - notes
-    - claim_changes
-    - dfe_sign_in_users_id
-    - created_by_id
-    - created_at
-    - updated_at
-    - personal_data_removed_at
+    - id # uuid, that uniquely identifies this amendment
+    - claim_id # uuid, references claim associated with this amendment
+    - notes # string, rationale for the amendment
+    - claim_changes # string, structured data representing data changes
+    - dfe_sign_in_users_id # uuid, the DSI user that made this amendment
+    - created_by_id # uuid, the admin that made this amendment
+    - created_at # datetime, when this amendment was created
+    - updated_at # datetime, when this amendment was last updated
+    - personal_data_removed_at # datetime, when pii was stripped
   :claims:
-    - id
-    - created_at
-    - updated_at
-    - submitted_at
-    - reference
-    - has_student_loan
-    - student_loan_country
-    - student_loan_courses
-    - student_loan_start_date
-    - student_loan_plan
-    - govuk_verify_fields
-    - eligibility_type
-    - eligibility_id
-    - personal_data_removed_at
-    - retained_personal_data_removed_at
-    - academic_year
-    - bank_or_building_society
-    - provide_mobile_number
-    - postgraduate_masters_loan
-    - postgraduate_doctoral_loan
-    - email_verified
-    - has_masters_doctoral_loan
-    - mobile_verified
-    - assigned_to_id
-    - policy_options_provided
-    - sent_one_time_password_at
-    - held
-    - hmrc_bank_validation_succeeded
-    - logged_in_with_tid
-    - qa_required
-    - qa_completed_at
-    - details_check
-    - email_address_check
-    - mobile_check
-    - qualifications_details_check
-    - submitted_using_slc_data
-    - journeys_session_id
-    - identity_confirmed_with_onelogin
-    - logged_in_with_onelogin
-    - onelogin_auth_at
-    - onelogin_idv_at
-    - onelogin_uid
-    - started_at
-    - verified_at
-    - onelogin_idv_return_codes
-    - policy
+    - id # uuid, that uniquely identifies this claim
+    - created_at # datetime, when claim was create
+    - updated_at # datetime, when claim was last updated
+    - submitted_at # datetime, when claim was submitted by claimant
+    - reference # string, alphanumeric string to identify claim
+    - has_student_loan # boolean, do they have a student loan
+    - student_loan_country # integer, ???
+    - student_loan_courses # integer, ???
+    - student_loan_start_date # integer, ???
+    - student_loan_plan # string, plan type of their student loan
+    - govuk_verify_fields # string, DEPRECATED
+    - eligibility_type # string, used to identify type of eligibility
+    - eligibility_id # uuid, references associated eligibility
+    - personal_data_removed_at # datetime, when pii was stripped
+    - retained_personal_data_removed_at # datetime, when extra pii was stripped
+    - academic_year # string, academic year of this claim
+    - bank_or_building_society # integer, DEPRECATED
+    - provide_mobile_number # boolean, will claimant provide mobile number
+    - postgraduate_masters_loan # boolean, does claimant have postgrad master loan
+    - postgraduate_doctoral_loan # boolean, does claimant have postgrad doctoral loan
+    - email_verified # boolean, has email been verfied via OTP
+    - has_masters_doctoral_loan # boolean, does claimant have a master doctoral loan
+    - mobile_verified # boolean, has mobile been verified by OTP
+    - assigned_to_id # string, which admin claim is assigned to for processing
+    - policy_options_provided # jsonb, DEPRECATED
+    - sent_one_time_password_at # datetime, when OTP was sent
+    - held # boolean, is this claim on hold for processing
+    - hmrc_bank_validation_succeeded # boolean, did bank details pass HMRC checks
+    - logged_in_with_tid # boolean, did claimant sign in with teacher ID
+    - qa_required # boolean, does this claim require quality assurance checking
+    - qa_completed_at # datetime, when quality assurance was completed
+    - details_check # boolean, use details sourced from teacher ID
+    - email_address_check # boolean, use email address sourced from teacher ID
+    - mobile_check # string, which source to use for mobile number
+    - qualifications_details_check # boolean, claimant agrees that displayed qualifications correct
+    - submitted_using_slc_data # boolean, was claim submitted with SLC data
+    - journeys_session_id # uuid, references the journey session associated
+    - identity_confirmed_with_onelogin # boolean, claimants identity was confirmed by OL
+    - logged_in_with_onelogin # boolean, did claimant sign in with OL
+    - onelogin_auth_at # datetime, timestamp when user signed in with OL
+    - onelogin_idv_at # datetime, time when OL ID verification occurred regardless of pass/fail state
+    - onelogin_uid # uuid, OL identifier
+    - started_at # datetime, when claimant started the journey
+    - verified_at # datetime, DEPRECATED, for old alternative idv journey
+    - onelogin_idv_return_codes # string, array of return codes from OL
+    - policy # string, which policy this claim is for
     - claimant_declaration # boolean, did claimant agree to declaration
   :decisions:
-    - id
-    - claim_id
-    - created_at
-    - updated_at
-    - notes
-    - created_by_id
-    - undone
-    - rejected_reasons
-    - approved
+    - id # uuid, identifies the decision
+    - claim_id # uuid, references the associated claim
+    - created_at # datetime, when the decision was created
+    - updated_at # datetime, when the decision was last updated
+    - notes # string, reason for decision
+    - created_by_id # uuid, admin that created the decision
+    - undone # boolean, has this decision been reverted
+    - rejected_reasons # jsonb, rationale for rejecting this claim
+    - approved # boolean, was the claim approved
   :local_authorities:
-    - id
-    - code
-    - name
+    - id # uuid, identifies the LA
+    - code # integer, identifies the LA via external identifier
+    - name # string, name of the LA
   :local_authority_districts:
-    - id
-    - name
-    - code
+    - id # uuid, identifies the LA district
+    - name # string, name of the LA district
+    - code # string, external identifier of the LA district
   :notes:
-    - id
-    - body
-    - claim_id
-    - created_by_id
-    - created_at
-    - updated_at
-    - important
-    - label
+    - id # uuid, identifies the note
+    - body # string, the note
+    - claim_id # uuid, references the claim
+    - created_by_id # uuid, admin that created the note
+    - created_at # datetime, timestamp when note was created
+    - updated_at # datetime, timestamp when note was last updated
+    - important # boolean, is the note of importance
+    - label # string, category of note
   :payments:
-    - id
-    - payroll_run_id
-    - award_amount
-    - created_at
-    - updated_at
-    - payroll_reference
-    - gross_value
-    - student_loan_repayment
-    - tax
-    - net_pay
-    - gross_pay
-    - postgraduate_loan_repayment
-    - confirmation_id
-    - scheduled_payment_date
+    - id # uuid, that identifies the payment
+    - payroll_run_id # uuid, references associated payroll run
+    - award_amount # decimal, amount being awarded
+    - created_at # datetime, timestamp when payment was created
+    - updated_at # datetime, timestamp when payment was last updated
+    - payroll_reference # string, external identifier from payroll confirmation
+    - gross_value # decimal, gross value of payment
+    - student_loan_repayment # decimal, ???
+    - tax # decimal, the amount of tax that was paid on the payment
+    - net_pay # decimal, amount paid after deductions
+    - gross_pay # decimal, amount paid before deductions
+    - postgraduate_loan_repayment # decimal, amount paid towards postgrad loan
+    - confirmation_id # uuid, that references the confirmation of the payment
+    - scheduled_payment_date # date, when payment is scheduled for
   :payment_confirmations:
-    - id
-    - payroll_run_id
-    - created_by_id
-    - created_at
-    - updated_at
+    - id # uuid, that identifies the payment confirmation
+    - payroll_run_id # uuid, references associated payroll run
+    - created_by_id # uuid, references admin that create payment confirmation
+    - created_at # datetime, timestamp when payment confirmation was created
+    - updated_at # datetime, timestamp when payment confirmation was last updated
   :payroll_runs:
-    - id
-    - created_at
-    - updated_at
-    - downloaded_at
-    - created_by_id
-    - downloaded_by_id
-    - scheduled_payment_date
-    - confirmation_report_uploaded_by_id
-    - status
+    - id # uuid, identifies the payroll run
+    - created_at # datetime, timestamp when payroll run was created
+    - updated_at # datetime, timestamp when payroll run was last updated
+    - downloaded_at # datetime, when payroll run was downloaded
+    - created_by_id # uuid, references admin that created the payroll run
+    - downloaded_by_id # uuid, references admin that downloaded payroll run
+    - scheduled_payment_date # date, when the payment is scheduled to happen
+    - confirmation_report_uploaded_by_id # uuid, references admin that uploaded the confirmation
+    - status # string, state of the payroll run, defaults to pending
   :student_loans_eligibilities:
-    - id
-    - created_at
-    - updated_at
-    - qts_award_year
-    - claim_school_id
-    - current_school_id
-    - employment_status
-    - biology_taught
-    - chemistry_taught
-    - computing_taught
-    - languages_taught
-    - physics_taught
-    - taught_eligible_subjects
-    - student_loan_repayment_amount
-    - award_amount
-    - had_leadership_position
-    - mostly_performed_leadership_duties
-    - claim_school_somewhere_else
-    - teacher_reference_number
+    - id # uuid, that identifies the eligibility
+    - created_at # datetime, timestamp when eligibility was created
+    - updated_at # datetime, timestamp when eligibility was last updated
+    - qts_award_year # string, the year teacher attained Qualified Teacher Status
+    - claim_school_id # uuid, references school sourced from existing data
+    - current_school_id # uuid, references school if different from sourced
+    - employment_status # string, whether working at sourced school or elsewhere
+    - biology_taught # boolean, does claimant teach biology
+    - chemistry_taught # boolean, does claimant teach chemistry
+    - computing_taught # boolean, does claimant teach computing
+    - languages_taught # boolean, does claimant teach languages
+    - physics_taught # boolean, does claimant teach physics
+    - taught_eligible_subjects # boolean, does claimaint teach an eligible subject
+    - student_loan_repayment_amount # decimal, ???
+    - award_amount # decimal, amount being awarded
+    - had_leadership_position # boolean, does the claimant hold a leadership position
+    - mostly_performed_leadership_duties # boolean, was the claimant mostly fulfilling leadship duties
+    - claim_school_somewhere_else # boolean, are they claiming against another school
+    - teacher_reference_number # string, TRN external identifier
   :early_career_payments_eligibilities:
-    - id
-    - nqt_in_academic_year_after_itt
-    - created_at
-    - updated_at
-    - employed_as_supply_teacher
-    - qualification
-    - has_entire_term_contract
-    - employed_directly
-    - subject_to_disciplinary_action
-    - subject_to_formal_performance_action
-    - eligible_itt_subject
-    - teaching_subject_now
-    - itt_academic_year
-    - current_school_id
-    - award_amount
-    - induction_completed
-    - school_somewhere_else
-    - teacher_reference_number
+    - id # uuid, that identifies the eligiblity
+    - nqt_in_academic_year_after_itt # boolean, is claimant teaching as newly qualified teacher
+    - created_at # datetime, timestamp when eligibility was created
+    - updated_at # datetime, timestamp when eligibility was last updated
+    - employed_as_supply_teacher # boolean, is claimant employed as a supply teacher
+    - qualification # string, what route into teaching did claimant take
+    - has_entire_term_contract # boolean, claimants contract cover at least a single term
+    - employed_directly # boolean, is claimant employed directly by school
+    - subject_to_disciplinary_action # boolean, is claimant subject to discplinary action
+    - subject_to_formal_performance_action # boolean, is claimant subject to formal performance action
+    - eligible_itt_subject # string, which eligible subject was trained for in ITT
+    - teaching_subject_now # boolean, is claimant teaching eligible subjects now
+    - itt_academic_year # string, academic year when ITT was completed
+    - current_school_id # uuid, references school for claim
+    - award_amount # decimal, amount being awarded
+    - induction_completed # boolean, has claimant completed the ITT
+    - school_somewhere_else # boolean, is claimant teaching at a different school
+    - teacher_reference_number # string, external identifier
   :targeted_retention_incentive_payments_eligibilities:
-    - id
-    - created_at
-    - updated_at
-    - nqt_in_academic_year_after_itt
-    - employed_as_supply_teacher
-    - qualification
-    - has_entire_term_contract
-    - employed_directly
-    - subject_to_disciplinary_action
-    - subject_to_formal_performance_action
-    - eligible_itt_subject
-    - teaching_subject_now
-    - itt_academic_year
-    - current_school_id
-    - award_amount
-    - eligible_degree_subject
-    - induction_completed
-    - school_somewhere_else
-    - teacher_reference_number
+    - id # uuid, that identifies the eligiblity
+    - created_at # datetime, timestamp when eligibility was created
+    - updated_at # datetime, timestamp when eligibility was last updated
+    - nqt_in_academic_year_after_itt # boolean, is claimant teaching as newly qualified teacher
+    - employed_as_supply_teacher # boolean, is claimant employed as supply teacher
+    - qualification # string, what route into teaching did claimant take
+    - has_entire_term_contract # boolean, does contract cover entire term or longer
+    - employed_directly # boolean, is claimant employed directly by school
+    - subject_to_disciplinary_action # boolean, is claimant subject to discplinary action
+    - subject_to_formal_performance_action # boolean, is claimant subject to formal performance action
+    - eligible_itt_subject # string, which eligible subject was trained for in ITT
+    - teaching_subject_now # boolean, is claimant teaching eligible subjects now
+    - itt_academic_year # string, academic year when ITT was completed
+    - current_school_id # uuid, references school for claim
+    - award_amount # decimal, amount being awarded
+    - eligible_degree_subject # boolean, has claimant a degree in eligible subject
+    - induction_completed # boolean, has claimaint completed their ITT
+    - school_somewhere_else # boolean, is claimant teaching at a different school
+    - teacher_reference_number # string, external identifier
   :international_relocation_payments_eligibilities:
-    - id
-    - created_at
-    - updated_at
-    - application_route
-    - state_funded_secondary_school
-    - one_year
-    - start_date
-    - subject
-    - visa_type
-    - date_of_entry
-    - nationality
-    - current_school_id
-    - award_amount
-    - changed_workplace_or_new_contract
-    - previous_year_claim_ids
-    - breaks_in_employment
-    - employment_history
+    - id # uuid, that identifies the eligiblity
+    - created_at # datetime, timestamp when eligibility was created
+    - updated_at # datetime, timestamp when eligibility was last updated
+    - application_route # string, claiming as teacher or salaried trainee or other
+    - state_funded_secondary_school # boolean, is claimant employed by state funded secondary school
+    - one_year # boolean, is claimant contract at least for one year
+    - start_date # date, when does claimant employment start
+    - subject # string, what subject does claimant teach
+    - visa_type # string, what type of visa does the claimant hold
+    - date_of_entry # string, when did claimant enter the UK
+    - nationality # string, claimant nationality
+    - current_school_id # uuid, references school the claimant is teaching
+    - award_amount # decimal, amount being awarded
+    - changed_workplace_or_new_contract # boolean, has claimant change workplace or started a new contract
+    - previous_year_claim_ids # uuid, references previous claims from claimant
+    - breaks_in_employment # boolean, did claimant have any large gaps in employment
+    - employment_history # jsonb, claimants employment history
   :schools:
-    - id
-    - urn
-    - name
-    - street
-    - locality
-    - town
-    - county
-    - postcode
-    - phase
-    - school_type_group
-    - school_type
-    - local_authority_id
-    - created_at
-    - updated_at
-    - local_authority_district_id
-    - close_date
-    - establishment_number
-    - statutory_high_age
-    - phone_number
-    - open_date
-    - ukprn
+    - id # uuid, that internally idenitfies the school
+    - urn # string, external school identifier
+    - name # string, name of the school
+    - street # string, location
+    - locality # string, location
+    - town # string, location
+    - county # string, location
+    - postcode # string, location
+    - phase # string, phase of school from GIAS
+    - school_type_group # string, school type group from GIAS
+    - school_type # string, school type from GIAS
+    - local_authority_id # uuid, that references the LA of the school
+    - created_at # datetime, timestamp when school was created
+    - updated_at # datetime, timestamp when school was last updated
+    - local_authority_district_id # uuid, that references the LA district
+    - close_date # date, when the school closed
+    - establishment_number # integer, external identifier of school
+    - statutory_high_age # integer, data from GIAS
+    - phone_number # string, school contact number from GIAS
+    - open_date # date, when the school opend
+    - ukprn # string, external identifier of school
   :support_tickets:
-    - id
-    - url
-    - claim_id
-    - created_by_id
-    - created_at
-    - updated_at
+    - id # uuid, identifies the support ticket
+    - url # string, location of the support ticket
+    - claim_id # uuid, references the associated claim
+    - created_by_id # uuid, references admin that created the support ticket
+    - created_at # datetime, timestamp when support ticket was created
+    - updated_at # datetime, timestamp when support ticket was last updated
   :dfe_sign_in_users:
-    - id
-    - dfe_sign_in_id
-    - organisation_name
-    - created_at
-    - updated_at
-    - role_codes
-    - deleted_at
-    - current_organisation_ukprn
-    - user_type
+    - id # uuid, identifies DSI user
+    - dfe_sign_in_id # string, external identifier
+    - organisation_name # string, name of DSI organisation when signing in
+    - created_at # datetime, timestamp when DSI user was created
+    - updated_at # datetime, timestamp when DSI user was last updated
+    - role_codes # string, array of roles the user holds from DSI
+    - deleted_at # datetime, when record was soft deleted
+    - current_organisation_ukprn # string, UKPRN identifier of organisation
+    - user_type # string, internally what type of user are they
   :targeted_retention_incentive_payments_awards:
-    - id
-    - academic_year
-    - school_urn
-    - award_amount
-    - created_at
-    - updated_at
+    - id # integer, identifies the award
+    - academic_year # string, the acdemic year for the award
+    - school_urn # integer, external identifier of school for the award
+    - award_amount # decimal, amount being awarded
+    - created_at # datetime, when award was created
+    - updated_at # datetime, when award was last updated
   :claim_payments:
-    - id
-    - claim_id
-    - payment_id
-    - created_at
-    - updated_at
+    - id # uuid, identifies the join table record
+    - claim_id # uuid, references the claim
+    - payment_id # uuid, reference the payment
+    - created_at # datetime, when the record was created
+    - updated_at # datetime, when the record was last updated
   :topups:
-    - id
-    - claim_id
-    - award_amount
-    - payment_id
-    - dfe_sign_in_users_id
-    - created_by_id
-    - created_at
-    - updated_at
+    - id # uuid, identifies the topup
+    - claim_id # uuid, references the claim for this top up
+    - award_amount # decimal, amount being awarded
+    - payment_id # uuid, references the payment
+    - dfe_sign_in_users_id # uuid, references the DSI user that created the topup
+    - created_by_id # uuid, references the admin that created the topup
+    - created_at # datetime, when the topup was created
+    - updated_at # datetime, when the topup was last updated
   :journeys_sessions:
-    - id
-    - journey
-    - created_at
-    - updated_at
-    - expired
+    - id # uuid, identifies the journey session
+    - journey # string, identifies which journey session is for
+    - created_at # datetime, timestamp when journey session was created
+    - updated_at # datetime, timestamp when journey session was last updated
+    - expired # boolean, has this session expired
   :further_education_payments_eligibilities:
-    - id
-    - created_at
-    - updated_at
-    - award_amount
-    - teaching_responsibilities
-    - provision_search
-    - possible_school_id
-    - school_id
-    - contract_type
-    - fixed_term_full_year
-    - taught_at_least_one_term
-    - teaching_hours_per_week
-    - further_education_teaching_start_year
-    - subjects_taught
-    - building_construction_courses
-    - chemistry_courses
-    - computing_courses
-    - early_years_courses
-    - engineering_manufacturing_courses
-    - maths_courses
-    - physics_courses
-    - hours_teaching_eligible_subjects
-    - teaching_qualification
-    - subject_to_formal_performance_action
-    - subject_to_disciplinary_action
-    - half_teaching_hours
-    - flagged_as_duplicate
-    - provider_verification_email_last_sent_at
-    - provider_verification_chase_email_last_sent_at
-    - teacher_reference_number
-    - provider_verification_email_count
-    - claimant_identity_verified_at
-    - valid_passport
-    - provider_verification_teaching_responsibilities
-    - provider_verification_teaching_start_year_matches_claim
-    - provider_verification_teaching_qualification
-    - provider_verification_contract_type
-    - provider_verification_contract_covers_full_academic_year
-    - provider_verification_taught_at_least_one_academic_term
-    - provider_verification_performance_measures
-    - provider_verification_disciplinary_action
-    - provider_verification_teaching_hours_per_week
-    - provider_verification_half_teaching_hours
-    - provider_verification_declaration
-    - provider_verification_completed_at
-    - provider_verification_verified_by_id
-    - provider_assigned_to_id
-    - provider_verification_started_at
-    - provider_verification_half_timetabled_teaching_time
-    - provider_verification_claimant_employed_by_college
-    - provider_verification_claimant_bank_details_match
-    - provider_verification_claimant_employment_check_declaration
-    - work_email_verified
+    - id # uuid, that identifies the eligibility
+    - created_at # datetime, timestamp when eligibility was created
+    - updated_at # datetime, timestamp when eligibility was last updated
+    - award_amount # decimal, amount being awarded
+    - teaching_responsibilities # boolean, does the claimant having teaching responsibilities
+    - provision_search # string, text entered when searching for school
+    - possible_school_id # uuid, that references the school we think they search for
+    - school_id # uuid, that references the actual school they selected
+    - contract_type # string, contract type claimant has with school
+    - fixed_term_full_year # boolean, does claimant fixed term contract cover entire academic year
+    - taught_at_least_one_term # boolean, has claimant taught for at least one term
+    - teaching_hours_per_week # string, claimants teaching hours per week
+    - teaching_hours_per_week_next_term # string, claimants teaching hours per week next term
+    - further_education_teaching_start_year # string, academic year claimant started teaching FE
+    - subjects_taught # jsonb, what subjects does the claimant teach
+    - building_construction_courses # jsonb, what building and construction courses does claimant teach
+    - chemistry_courses # jsonb, what chemistry courses does claimant teach
+    - computing_courses # jsonb, what computing courses does claimant teach
+    - early_years_courses # jsonb, what EY courses does claimant teach
+    - engineering_manufacturing_courses # jsonb, what engineering and manufacturing courses does claimant teach
+    - maths_courses # jsonb, what maths courses does claimant teach
+    - physics_courses # jsonb, what physics courses does claimant teach
+    - hours_teaching_eligible_subjects # boolean, does claimant spend enough time teaching eligible subjects
+    - teaching_qualification # string, does claimant have a teaching qualification
+    - subject_to_formal_performance_action # boolean, is claimant subject to performance action
+    - subject_to_disciplinary_action # boolean, is claimant subject to discplinary action
+    - half_teaching_hours # boolean, claimant spend at least half teaching hours to relevant groups
+    - flagged_as_duplicate # boolean, is this possibly a duplicate
+    - provider_verification_email_last_sent_at # datetime, DEPRECATED
+    - provider_verification_chase_email_last_sent_at # datetime, DEPRECATED
+    - teacher_reference_number # string, external identifier
+    - provider_verification_email_count # integer, DEPRECATED, how many times have we reminded provider to verify claim
+    - claimant_identity_verified_at # datetime, DEPRECATED
+    - valid_passport # boolean, DEPRECATED, does the claimant have a valid passport
+    - provider_verification_teaching_responsibilities # boolean, does provider think claimant has teaching responsibilities
+    - provider_verification_teaching_start_year_matches_claim # boolean, does provider agree with claimants teaching start year
+    - provider_verification_teaching_qualification # string, does provider think claimant has teaching qualification
+    - provider_verification_contract_type # string, what contract type does claimant have according to provider
+    - provider_verification_contract_covers_full_academic_year # boolean, does provider think claimant contract covers entire academic year
+    - provider_verification_taught_at_least_one_academic_term # boolean, does provider think claimant has worked at least one academic term
+    - provider_verification_performance_measures # boolean, does provider think claimant under performance measures
+    - provider_verification_disciplinary_action # boolean, does provider think claimant under discplinary action
+    - provider_verification_teaching_hours_per_week # string, what does provider think claimant teaching hours per week are
+    - provider_verification_half_teaching_hours # boolean, does provider think claimant teaches more than half hours in relevant courses
+    - provider_verification_declaration # boolean, does provider agree to verification declaration
+    - provider_verification_completed_at # datetime, when was provider verification was completed
+    - provider_verification_verified_by_id # uuid, which user from provider verified this claim
+    - provider_assigned_to_id # uuid, which user from provider currently assigned to verify this claim
+    - provider_verification_started_at # datetime, when did provider start verifying this claim
+    - provider_verification_timetabled_teaching_hours # boolean, does provider think claimants timetabled teaching hours are above threshold
+    - provider_verification_half_timetabled_teaching_time # boolean, does provider think claimant teaches relevant courses for at least half timetabled time
+    - provider_verification_claimant_employed_by_college # boolean, does provider employ claimant
+    - provider_verification_claimant_bank_details_match # boolean, does provider agree claimants bank details match
+    - provider_verification_claimant_employment_check_declaration # boolean, does provider agree with employment declaration
+    - work_email_verified # boolean, has claimants work email been verified via OTP
   :eligible_ey_providers:
-    - id
-    - nursery_name
-    - urn
-    - local_authority_id
-    - nursery_address
-    - max_claims
-    - created_at
-    - updated_at
+    - id # uuid, that identifies eligible EY provider
+    - nursery_name # string, name of school
+    - urn # string, external identifier of school
+    - local_authority_id # uuid, that references the LA of school
+    - nursery_address # string, address of school
+    - max_claims # integer, max permitted claims for school
+    - created_at # datetime, timestamp when record was created
+    - updated_at # datetime, timestamp when record was last updated
   :eligible_fe_providers:
-    - id
-    - ukprn
-    - academic_year
-    - max_award_amount
-    - lower_award_amount
-    - created_at
-    - updated_at
+    - id # uuid, that identifies eligible FE provider
+    - ukprn # integer, external identifier for school
+    - academic_year # string, which academic year the eligibility record is for
+    - max_award_amount # decimal, max amount that can be awarded to claimant
+    - lower_award_amount # decimal, lower amound that can be awarded to claimant
+    - created_at # datetime, timestamp when record was created
+    - updated_at # datetime, timestamp when record was last updated
   :early_years_payment_eligibilities:
-    - id
-    - nursery_urn
-    - start_date
-    - child_facing_confirmation_given
-    - returning_within_6_months
-    - returner_worked_with_children
-    - returner_contract_type
-    - award_amount
-    - created_at
-    - updated_at
-    - provider_claim_submitted_at
-    - practitioner_claim_started_at
-    - alternative_idv_claimant_employed_by_nursery
-    - alternative_idv_claimant_bank_details_match
-    - alternative_idv_claimant_employment_check_declaration
-    - alternative_idv_completed_at
-    - alternative_idv_reference
-    - provider_six_month_employment_reminder_sent_at
-    - provider_entered_contract_type
-    - practitioner_reminder_email_sent_count
-    - practitioner_reminder_email_last_sent_at
+    - id # uuid, identifies the eligibility
+    - nursery_urn # string, external identifier
+    - start_date # date, when did claimant start
+    - child_facing_confirmation_given # boolean, is claimant mostly performing child facing duties
+    - returning_within_6_months # boolean, did claimant work in EY within last 6 months
+    - returner_worked_with_children # boolean, did claimant previous role directly work with children
+    - returner_contract_type # string, what type of contract does claimant have
+    - award_amount # decimal, amount being awarded
+    - created_at # datetime, timestamp when eligibility was created
+    - updated_at # datetime, timestamp when eligibility was last updated
+    - provider_claim_submitted_at # datetime, when provider submitted the claim
+    - practitioner_claim_started_at # datetime, when practitioner started the claim
+    - alternative_idv_claimant_employed_by_nursery # boolean, if OL idv failed, did nursery employ claimant
+    - alternative_idv_claimant_bank_details_match # boolean, if OL idv failed, do nursery agree claimants bank details match
+    - alternative_idv_claimant_employment_check_declaration # boolean, if OL idv failed, did nurset agree to declaration
+    - alternative_idv_completed_at # datetime, if OL idv failed, when was alternative checks completed
+    - alternative_idv_reference # string, DEPRECATED, reference used for old alternative idv journey
+    - provider_six_month_employment_reminder_sent_at # datetime, when was nursery 6 month reminder sent
+    - provider_entered_contract_type # string, nursery supplies claimants contract type
+    - practitioner_reminder_email_sent_count # integer, number of times practitioner has been reminded to complete claim
+    - practitioner_reminder_email_last_sent_at # datetime, when last reminder was sent to practitioner
   :school_workforce_censuses:
-    - id
-    - teacher_reference_number
-    - school_urn
-    - totfte
-    - contract_agreement_type
-    - subject_description_sfr
-    - general_subject_code
-    - hours_taught
-    - created_at
-    - updated_at
+    - id # uuid, identifies the school workforce census record
+    - teacher_reference_number # string, external identifier for teacher
+    - school_urn # integer, external identifier for school
+    - totfte # float, ???
+    - contract_agreement_type # string, contract type teacher has
+    - subject_description_sfr # string, ???
+    - general_subject_code # string, ???
+    - hours_taught # integer, hours taught by teacher
+    - created_at # datetime, when was school workforce census uploaded
+    - updated_at # datetime, when was record last updated
   :teachers_pensions_service:
-    - id
-    - teacher_reference_number
-    - start_date
-    - end_date
-    - la_urn
-    - school_urn
-    - employer_id
-    - nino
-    - created_at
-    - updated_at
-    - gender_digit
+    - id # uuid, that identifies the TPS upload
+    - teacher_reference_number # string, external identifier of teacher
+    - start_date # datetime, ???
+    - end_date # datetime, ???
+    - la_urn # integer, external identifier of LA
+    - school_urn # integer, external identifier of school
+    - employer_id # integer, external identifier
+    - nino # string, national insurance number
+    - created_at # datetime, when was TPS data created
+    - updated_at # datetime, when was TPS date last updated
+    - gender_digit # integer, represents gender of teacher
   :stats:
-    - id
-    - one_login_return_code
-    - created_at
-    - updated_at
-    - type
+    - id # uuid, identifies this data point
+    - one_login_return_code # string, OL return code
+    - created_at # datetime, when this datapoint was recorded
+    - updated_at # datetime, when this datapoint was last updated
+    - type # string, type of datapoint
