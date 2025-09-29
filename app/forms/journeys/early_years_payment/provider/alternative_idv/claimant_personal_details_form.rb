@@ -4,6 +4,7 @@ module Journeys
       module AlternativeIdv
         class ClaimantPersonalDetailsForm < Form
           include DateOfBirth
+
           self.date_of_birth_field = :claimant_date_of_birth
 
           attribute :claimant_postcode, :string
