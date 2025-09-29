@@ -1011,26 +1011,26 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "awaiting further education provider verification scopes" do
-    let!(:claim_not_verified_provider_email_automatically_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible) }
-    let!(:claim_not_verified_has_duplicates_provider_email_not_sent_has_other_note) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
-    let!(:claim_not_verified_has_duplicates_provider_email_not_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
-    let!(:claim_not_verified_has_duplicates_provider_email_manually_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
-    let!(:claim_with_fe_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_trait: :verified) }
+    let!(:year_1_claim_not_verified_provider_email_automatically_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible) }
+    let!(:year_1_claim_not_verified_has_duplicates_provider_email_not_sent_has_other_note) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
+    let!(:year_1_claim_not_verified_has_duplicates_provider_email_not_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
+    let!(:year_1_claim_not_verified_has_duplicates_provider_email_manually_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
+    let!(:year_1_claim_with_fe_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_trait: :verified) }
     let!(:non_fe_claim) { create(:claim, policy: Policies::StudentLoans) }
 
     before do
-      create(:note, claim: claim_not_verified_has_duplicates_provider_email_manually_sent, label: "provider_verification")
-      create(:note, claim: claim_not_verified_has_duplicates_provider_email_not_sent_has_other_note, label: "student_loan_plan")
+      create(:note, claim: year_1_claim_not_verified_has_duplicates_provider_email_manually_sent, label: "provider_verification")
+      create(:note, claim: year_1_claim_not_verified_has_duplicates_provider_email_not_sent_has_other_note, label: "student_loan_plan")
     end
 
     describe ".awaiting_further_education_provider_verification" do
       subject { described_class.awaiting_further_education_provider_verification }
 
-      it "returns claims that have not been verified by the provider, and have had a provider email sent" do
+      it do
         is_expected.to match_array(
           [
-            claim_not_verified_provider_email_automatically_sent,
-            claim_not_verified_has_duplicates_provider_email_manually_sent
+            year_1_claim_not_verified_provider_email_automatically_sent,
+            year_1_claim_not_verified_has_duplicates_provider_email_manually_sent
           ]
         )
       end
@@ -1039,12 +1039,12 @@ RSpec.describe Claim, type: :model do
     describe ".not_awaiting_further_education_provider_verification" do
       subject { described_class.not_awaiting_further_education_provider_verification }
 
-      it "returns claims that have no FE eligiblity, or FE claims that have been verified by the provider, or non-verified claims where a provider email has not been sent" do
+      it do
         is_expected.to match_array(
           [
-            claim_not_verified_has_duplicates_provider_email_not_sent_has_other_note,
-            claim_not_verified_has_duplicates_provider_email_not_sent,
-            claim_with_fe_provider_verification,
+            year_1_claim_not_verified_has_duplicates_provider_email_not_sent_has_other_note,
+            year_1_claim_not_verified_has_duplicates_provider_email_not_sent,
+            year_1_claim_with_fe_provider_verification,
             non_fe_claim
           ]
         )
