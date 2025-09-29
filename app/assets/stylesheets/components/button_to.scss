@@ -3,7 +3,9 @@
 }
 
 .rebranded-one-login-header__nav__link.button-to-as-link:hover {
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 0.1578em;
 }
 
 .govuk-button.button-to-as-link, .button-to-as-link {
