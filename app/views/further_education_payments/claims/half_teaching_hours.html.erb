@@ -16,14 +16,17 @@
         },
         hint: -> { %>
           <p class="govuk-body">
-            This also includes students aged:
+            This includes students:
           </p>
 
           <%= govuk_list [
-            "19 or over, if they started their course before turning 19",
-            "up to 25 if they have an Education, Health and Care Plan (EHCP)",
-            "14 to 16 funded through the 16 to 19 funding system"
+            "aged up to 25 with an EHCP (education, health and care plan)",
+            "aged 14 to 19 on these programmes funded through the 16 to 19 funding formula"
           ], type: :bullet %>
+
+          <p class="govuk-body">
+            If you are unsure, speak to your HR department before proceeding with your application.
+          </p>
         <% } %>
 
       <%= f.govuk_submit %>

@@ -101,7 +101,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
               "Variable hours contract (This includes zero hours contracts)"
             ],
             [
-              "Have you taught at Springfield Elementary for the whole of the spring academic term?",
+              "Have you taught at Springfield Elementary for the whole of the spring term?",
               "Yes"
             ],
             [
@@ -129,7 +129,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
               ],
               [
                 "Does your fixed-term contract cover the full 2024 to 2025 academic year?",
-                "Yes, it covers the full 2024 to 2025 academic year"
+                "Yes"
               ],
               [
                 "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the current term?",
@@ -152,12 +152,12 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
                 "Fixed term contract"
               ],
               [
-                "Have you taught at Springfield Elementary for the whole of the spring academic term?",
+                "Have you taught at Springfield Elementary for the whole of the spring term?",
                 "No"
               ],
               [
                 "Does your fixed-term contract cover the full 2024 to 2025 academic year?",
-                "No, it does not cover the full 2024 to 2025 academic year"
+                "No"
               ],
               [
                 "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the current term?",
@@ -224,7 +224,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
             "Yes"
           ],
           [
-            "Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?",
+            "Do you spend at least half of your timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships?",
             "Yes"
           ]
         ]

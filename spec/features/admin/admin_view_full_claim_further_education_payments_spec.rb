@@ -141,7 +141,7 @@ RSpec.feature "Admin views claim details for FurtherEducationPayments" do
 
       expect(
         summary_row(
-          "Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?"
+          "Do you spend at least half of your timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships?"
         )
       ).to have_content("Yes")
 
