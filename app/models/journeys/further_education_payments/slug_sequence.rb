@@ -9,11 +9,11 @@ module Journeys
       ELIGIBILITY_SLUGS = %w[
         existing-progress
         check-eligibility-intro
-        further-education-teaching-start-year
-        teaching-qualification
         teaching-responsibilities
         further-education-provision-search
         select-provision
+        further-education-teaching-start-year
+        teaching-qualification
         contract-type
         fixed-term-contract
         taught-at-least-one-term
@@ -119,13 +119,11 @@ module Journeys
         end
 
         array << SLUGS_HASH["check-eligibility-intro"]
-
-        array << SLUGS_HASH["further-education-teaching-start-year"]
-        array << SLUGS_HASH["teaching-qualification"]
         array << SLUGS_HASH["teaching-responsibilities"]
-
         array << SLUGS_HASH["further-education-provision-search"]
         array << SLUGS_HASH["select-provision"]
+        array << SLUGS_HASH["further-education-teaching-start-year"]
+        array << SLUGS_HASH["teaching-qualification"]
         array << SLUGS_HASH["contract-type"]
 
         case answers.contract_type

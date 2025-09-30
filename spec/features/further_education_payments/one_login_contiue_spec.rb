@@ -31,14 +31,6 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
-    choose("September 2023 to August 2024")
-    click_button "Continue"
-
-    expect(page).to have_content("Do you have a teaching qualification?")
-    choose("Yes")
-    click_button "Continue"
-
     expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     click_button "Sign out"
 
@@ -89,14 +81,6 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
-    choose("September 2023 to August 2024")
-    click_button "Continue"
-
-    expect(page).to have_content("Do you have a teaching qualification?")
-    choose("Yes")
-    click_button "Continue"
-
     expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     click_button "Sign out"
 
@@ -123,7 +107,7 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
   end
 
   scenario "has OL account with existing ineligible check and continues" do
@@ -150,12 +134,8 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
-    choose("September 2023 to August 2024")
-    click_button "Continue"
-
-    expect(page).to have_content("Do you have a teaching qualification?")
-    choose("No, and I do not plan to enrol on one in the next 12 months")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
+    choose "No"
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible")
@@ -180,7 +160,7 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
   end
 
   def and_college_exists
