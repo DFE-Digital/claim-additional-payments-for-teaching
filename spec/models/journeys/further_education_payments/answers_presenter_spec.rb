@@ -185,7 +185,7 @@ RSpec.describe Journeys::FurtherEducationPayments::AnswersPresenter do
           ["Do you spend at least half of your timetabled teaching hours teaching these eligible courses?",
             "Yes",
             "hours-teaching-eligible-subjects"],
-          ["Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?",
+          ["Do you spend at least half of your timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships?",
             "Yes",
             "half-teaching-hours"],
           ["Do you have a teaching qualification?",
