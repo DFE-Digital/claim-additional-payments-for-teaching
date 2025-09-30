@@ -15,7 +15,7 @@ RSpec.feature "Admin view claim for FurtherEducationPayments" do
       :claim,
       :submitted,
       policy: Policies::FurtherEducationPayments,
-      eligibility_trait: :with_trn
+      eligibility_trait: [:eligible, :with_trn]
     )
   }
   let!(:claim_not_verified) {

@@ -14,7 +14,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
 
   let!(:multiple_claim) {
     eligibility_trait = if policy == Policies::FurtherEducationPayments
-      :with_trn
+      [:eligible, :with_trn]
     else
       :eligible
     end
