@@ -61,7 +61,9 @@ module Policies
       end
 
       def show_alternative_verification_task?
-        claim.failed_one_login_idv?
+        y2_or_later_fe_claim = claim.academic_year != AcademicYear.new("2024/2025")
+
+        claim.failed_one_login_idv? && y2_or_later_fe_claim
       end
     end
   end
