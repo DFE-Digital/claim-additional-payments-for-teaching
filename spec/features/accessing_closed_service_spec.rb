@@ -88,15 +88,6 @@ RSpec.describe "Accessing a closed service" do
     expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
-    # further-education-teaching-start-year
-    previous_year = AcademicYear.previous.start_year
-    choose "September #{previous_year - 1} to August #{previous_year}"
-    click_button "Continue"
-
-    # teaching-qualification
-    choose("Yes")
-    click_button "Continue"
-
     # teaching-responsibilities
     choose "Yes"
     click_button "Continue"
@@ -107,6 +98,15 @@ RSpec.describe "Accessing a closed service" do
 
     # select-provision
     choose college.name
+    click_button "Continue"
+
+    # further-education-teaching-start-year
+    previous_year = AcademicYear.previous.start_year
+    choose "September #{previous_year - 1} to August #{previous_year}"
+    click_button "Continue"
+
+    # teaching-qualification
+    choose("Yes")
     click_button "Continue"
 
     # contract-type
