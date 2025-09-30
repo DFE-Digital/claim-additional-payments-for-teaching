@@ -73,6 +73,10 @@ module Journeys
           # check if want to resume an existing session
           # if so carry on where we left off
           if form.resume?
+            journey_session.answers.before_resume_callback
+
+            @forms = nil
+
             return furthest_permissible_slug
           end
 
