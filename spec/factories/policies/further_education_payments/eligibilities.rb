@@ -5,7 +5,14 @@ FactoryBot.define do
     trait :eligible do
       eligible_school
       contract_type { "permanent" }
-      verified
+      teaching_responsibilities { true }
+      further_education_teaching_start_year { "2023" }
+      teaching_hours_per_week { "more_than_12" }
+      hours_teaching_eligible_subjects { false }
+      half_teaching_hours { true }
+      subjects_taught { ["maths", "physics"] }
+      maths_courses { ["approved_level_321_maths", "gcse_maths"] }
+      physics_courses { ["gcse_physics"] }
     end
 
     trait :not_verified do
@@ -22,15 +29,6 @@ FactoryBot.define do
     end
 
     trait :verified do
-      contract_type { "permanent" }
-      teaching_responsibilities { true }
-      further_education_teaching_start_year { "2023" }
-      teaching_hours_per_week { "more_than_12" }
-      hours_teaching_eligible_subjects { false }
-      half_teaching_hours { true }
-      subjects_taught { ["maths", "physics"] }
-      maths_courses { ["approved_level_321_maths", "gcse_maths"] }
-      physics_courses { ["gcse_physics"] }
       verification do
         {
           "assertions" => [

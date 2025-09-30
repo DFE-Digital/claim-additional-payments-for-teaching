@@ -20,6 +20,7 @@ RSpec.feature "Admin claim further education payments" do
 
             eligibility = create(
               :further_education_payments_eligibility,
+              :eligible,
               :verified,
               contract_type: "fixed_term",
               school: fe_provider,
