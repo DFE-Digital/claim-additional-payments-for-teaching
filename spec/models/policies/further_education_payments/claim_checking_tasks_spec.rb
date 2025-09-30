@@ -17,14 +17,14 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks, feature_f
     let(:eligibility) do
       build(
         :further_education_payments_eligibility,
+        :provider_verification_completed,
         teacher_reference_number: teacher_reference_number,
-        verification: {
-          verifier: {
-            first_name: "Walter",
-            last_name: "Skinner",
-            email: "w.s.skinner@springfield-elementary.edu"
-          }
-        }
+        verified_by: create(
+          :dfe_signin_user,
+          given_name: "Walter",
+          family_name: "Skinner",
+          email: "w.s.skinner@springfield-elementary.edu"
+        )
       )
     end
 

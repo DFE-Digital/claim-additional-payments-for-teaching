@@ -3,7 +3,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
 
   let(:eligibility_trait) do
     if policy == Policies::FurtherEducationPayments
-      [:eligible, :with_trn, :verified]
+      [:eligible, :with_trn, :provider_verification_completed]
     else
       :eligible
     end

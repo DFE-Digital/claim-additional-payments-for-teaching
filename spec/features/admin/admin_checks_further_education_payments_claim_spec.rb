@@ -4,6 +4,15 @@ RSpec.feature "Admin checks an Further Education Payments claim" do
   it_behaves_like "Admin Checks", Policies::FurtherEducationPayments
 
   describe "further education specific checks" do
+    let(:dfe_sign_in_user) do
+      create(
+        :dfe_signin_user,
+        given_name: "Walter",
+        family_name: "Skinner",
+        email: "w.s.skinner@springfield-elementary.edu"
+      )
+    end
+
     before do
       sign_in_as_service_operator
     end
@@ -19,13 +28,8 @@ RSpec.feature "Admin checks an Further Education Payments claim" do
           email_address: "w.s.skinner@example.com",
           policy: Policies::FurtherEducationPayments,
           eligibility_attributes: {
-            verification: {
-              verifier: {
-                first_name: "Walter",
-                last_name: "Skinner",
-                email: "w.s.skinner@springfield-elementary.edu"
-              }
-            }
+            provider_verification_completed_at: 1.day.ago,
+            provider_verification_verified_by_id: dfe_sign_in_user.id
           }
         )
 
@@ -51,13 +55,8 @@ RSpec.feature "Admin checks an Further Education Payments claim" do
           email_address: "w.s.skinner@springfield-elementary.edu",
           policy: Policies::FurtherEducationPayments,
           eligibility_attributes: {
-            verification: {
-              verifier: {
-                first_name: "Walter",
-                last_name: "Skinner",
-                email: "w.s.skinner@springfield-elementary.edu"
-              }
-            }
+            provider_verification_completed_at: 1.day.ago,
+            provider_verification_verified_by_id: dfe_sign_in_user.id
           }
         )
 
@@ -83,13 +82,8 @@ RSpec.feature "Admin checks an Further Education Payments claim" do
           email_address: "e.krabappel@springfield-elementary.edu",
           policy: Policies::FurtherEducationPayments,
           eligibility_attributes: {
-            verification: {
-              verifier: {
-                first_name: "Walter",
-                last_name: "Skinner",
-                email: "w.s.skinner@springfield-elementary.edu"
-              }
-            }
+            provider_verification_completed_at: 1.day.ago,
+            provider_verification_verified_by_id: dfe_sign_in_user.id
           }
         )
 

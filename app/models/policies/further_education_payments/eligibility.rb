@@ -26,6 +26,7 @@ module Policies
       belongs_to :possible_school, optional: true, class_name: "School"
       belongs_to :school, optional: true
       belongs_to :provider_assigned_to, class_name: "DfeSignIn::User", optional: true
+      belongs_to :verified_by, class_name: "DfeSignIn::User", optional: true, foreign_key: :provider_verification_verified_by_id
 
       scope :unverified, -> { where(verification: {}) }
       scope :provider_verification_email_last_sent_over, ->(older_than) { where("provider_verification_email_last_sent_at < ?", older_than) }
@@ -100,7 +101,7 @@ module Policies
       end
 
       def verified?
-        if claim.academic_year == AcademicYear.new(2024)
+        if year_1_claim?
           verification.present?
         else
           provider_verification_completed_at.present?
@@ -110,7 +111,7 @@ module Policies
       def awaiting_provider_verification?
         return false if verified?
 
-        if claim.academic_year == AcademicYear.new(2024)
+        if year_1_claim?
           # when a provider verification email is sent by the admin team, a note is created
           !flagged_as_duplicate? || claim.notes.where(label: "provider_verification").any?
         else
@@ -127,7 +128,7 @@ module Policies
       end
 
       def provider_email
-        verification.dig("verifier", "email")
+        provider_user.email
       end
 
       def eligible_itt_subject
@@ -202,25 +203,41 @@ module Policies
 
       private
 
+      def year_1_claim?
+        claim.academic_year == AcademicYear.new(2024)
+      end
+
+      def provider_user
+        if year_1_claim?
+          @provider ||= OpenStruct.new(
+            given_name: verification.dig("verifier", "first_name"),
+            family_name: verification.dig("verifier", "last_name"),
+            email: verification.dig("verifier", "email")
+          )
+        else
+          verified_by
+        end
+      end
+
       def provider_and_claimant_names_match?
         return false unless verified?
 
-        provider_first_name&.downcase == claim.first_name.downcase &&
-          provider_last_name&.downcase == claim.surname.downcase
+        provider_user.given_name&.downcase == claim.first_name.downcase &&
+          provider_user.family_name&.downcase == claim.surname.downcase
       end
 
       def provider_and_claimant_emails_match?
         return false unless verified?
 
-        provider_email&.downcase == claim.email_address.downcase
+        provider_user&.email&.downcase == claim.email_address.downcase
       end
 
       def provider_first_name
-        verification.dig("verifier", "first_name")
+        provider_user.given_name
       end
 
       def provider_last_name
-        verification.dig("verifier", "last_name")
+        provider_user.family_name
       end
 
       def assertion_hash

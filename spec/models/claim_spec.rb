@@ -1490,44 +1490,6 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe "#awaiting_provider_verification?" do
-    subject { claim.awaiting_provider_verification? }
-
-    context "when the eligiblity is not verified" do
-      context "when there are no duplicates" do
-        let(:claim) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible) }
-
-        it { is_expected.to be true }
-      end
-
-      context "when there are duplicates" do
-        let(:claim) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
-
-        context "the provider email has not been sent" do
-          it { is_expected.to be false }
-        end
-
-        context "when the provider email has been sent" do
-          before { create(:note, claim: claim, label: "provider_verification") }
-
-          it { is_expected.to be true }
-        end
-      end
-    end
-
-    context "when the eligiblity is verified" do
-      let(:claim) { build(:claim, policy: Policies::FurtherEducationPayments, eligibility_trait: :verified) }
-
-      it { is_expected.to be false }
-    end
-
-    context "when the eligiblity is not further education payments" do
-      let(:claim) { build(:claim, policy: Policies::StudentLoans) }
-
-      it { is_expected.to be false }
-    end
-  end
-
   describe "#decision_deadline_date" do
     let(:policy) { Policies.all.sample }
     let(:claim) { create(:claim, :eligible, :early_years_provider_submitted, policy:) }
