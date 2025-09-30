@@ -53,41 +53,86 @@ module Policies
 
         base_assertions = verification["assertions"].dup
 
-        # Insert courses taught after subjects taught
-        subjects_taught_index = base_assertions.find_index do |h|
-          h["name"] == "subjects_taught"
-        end
-
-        if subjects_taught_index
-          base_assertions.insert(
-            subjects_taught_index + 1,
-            courses_taught_assertion
-          )
-        end
-
         # Only add Year 2 specific fields for Year 2+ claims (2025/2026 and later)
         # Year 1 claims are from academic year 2024/2025
         if claim.academic_year != AcademicYear.new("2024/2025")
-          # Add Year 2 specific fields
-          base_assertions << teaching_qualification_assertion
-          base_assertions << contract_type_assertion
-          base_assertions << teaching_hours_assertion
+          # Build ordered assertions list for Year 2
+          ordered_assertions = []
 
-          # Add conditional fields for fixed-term contracts
-          if claim.eligibility.provider_verification_contract_type == "fixed_term"
-            base_assertions << contract_covers_full_year_assertion
+          # 1. Teaching responsibilities
+          if (assertion = find_assertion(base_assertions, "teaching_responsibilities"))
+            ordered_assertions << assertion
           end
 
-          # Add conditional fields for variable hours contracts
+          # 2. First 5 years of teaching
+          # Handle both new name (in_first_five_years) and legacy name (further_education_teaching_start_year)
+          if (assertion = find_assertion(base_assertions, "in_first_five_years") || find_assertion(base_assertions, "further_education_teaching_start_year"))
+            ordered_assertions << assertion
+          end
+
+          # 3. Teaching qualification (NEW for Year 2)
+          ordered_assertions << teaching_qualification_assertion
+
+          # 4. Contract type (NEW for Year 2)
+          ordered_assertions << contract_type_assertion
+
+          # 5. Performance measures (NEW for Year 2)
+          ordered_assertions << performance_measures_assertion
+
+          # 6. Disciplinary action (NEW for Year 2)
+          ordered_assertions << disciplinary_action_assertion
+
+          # 7. Timetabled teaching hours (NEW for Year 2)
+          ordered_assertions << teaching_hours_assertion
+
+          # 7a. Hours per week next term (conditional for variable hours)
           if claim.eligibility.provider_verification_contract_type == "variable_hours"
-            base_assertions << teaching_hours_next_term_assertion
+            ordered_assertions << teaching_hours_next_term_assertion
           end
 
-          base_assertions << performance_measures_assertion
-          base_assertions << disciplinary_action_assertion
-        end
+          # 7b. Contract covers full academic year (conditional for fixed term)
+          if claim.eligibility.provider_verification_contract_type == "fixed_term"
+            ordered_assertions << contract_covers_full_year_assertion
+          end
 
-        @assertions = base_assertions
+          # 8. Age range taught (half_teaching_hours)
+          if (assertion = find_assertion(base_assertions, "half_teaching_hours"))
+            ordered_assertions << assertion
+          end
+
+          # 9. Subjects taught
+          if (assertion = find_assertion(base_assertions, "subjects_taught"))
+            ordered_assertions << assertion
+          end
+
+          # 10. Courses taught (synthetic assertion)
+          ordered_assertions << courses_taught_assertion
+
+          # 11. Taught at least one term (for variable hours)
+          if (assertion = find_assertion(base_assertions, "taught_at_least_one_term"))
+            ordered_assertions << assertion
+          end
+
+          @assertions = ordered_assertions
+        else
+          # Year 1 logic - keep original ordering with courses taught inserted
+          subjects_taught_index = base_assertions.find_index do |h|
+            h["name"] == "subjects_taught"
+          end
+
+          if subjects_taught_index
+            base_assertions.insert(
+              subjects_taught_index + 1,
+              courses_taught_assertion
+            )
+          end
+
+          @assertions = base_assertions
+        end
+      end
+
+      def find_assertion(assertions, name)
+        assertions.find { |a| a["name"] == name }
       end
 
       # The provider verifies the courses taught question as part of verifying the
