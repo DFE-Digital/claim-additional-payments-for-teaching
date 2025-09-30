@@ -23,7 +23,7 @@ RSpec.feature "Admin view claim for FurtherEducationPayments" do
       :claim,
       :submitted,
       policy: Policies::FurtherEducationPayments,
-      eligibility_trait: :not_verified
+      eligibility_trait: :eligible
     )
   }
   let!(:claim_with_duplicates_no_provider_email_sent) {

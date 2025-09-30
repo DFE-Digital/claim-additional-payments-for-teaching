@@ -365,7 +365,7 @@ FactoryBot.define do
     end
 
     trait :awaiting_provider_verification do
-      eligibility_trait { :not_verified }
+      eligibility_trait { :eligible }
 
       after(:create) do |claim, _|
         create(:note, claim:, label: "provider_verification")

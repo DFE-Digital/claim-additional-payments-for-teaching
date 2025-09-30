@@ -15,11 +15,6 @@ FactoryBot.define do
       physics_courses { ["gcse_physics"] }
     end
 
-    trait :not_verified do
-      eligible_school
-      contract_type { "permanent" }
-    end
-
     trait :eligible_school do
       association :school, factory: :fe_eligible_school
     end
