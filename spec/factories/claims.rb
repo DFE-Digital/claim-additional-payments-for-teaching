@@ -38,7 +38,7 @@ FactoryBot.define do
         create(:journey_configuration, journey::I18N_NAMESPACE)
       end
 
-      claim.eligibility = build(evaluator.eligibility_factory, evaluator.eligibility_trait, **evaluator.eligibility_attributes || {}) unless claim.eligibility
+      claim.eligibility = build(evaluator.eligibility_factory, *Array.wrap(evaluator.eligibility_trait), **evaluator.eligibility_attributes || {}) unless claim.eligibility
       claim.policy = claim.eligibility.policy
 
       raise "Policy of Claim (#{evaluator.policy}) must match Eligibility class (#{claim.eligibility.policy})" if evaluator.policy != claim.eligibility.policy
@@ -365,7 +365,7 @@ FactoryBot.define do
     end
 
     trait :awaiting_provider_verification do
-      eligibility_trait { :not_verified }
+      eligibility_trait { :eligible }
 
       after(:create) do |claim, _|
         create(:note, claim:, label: "provider_verification")

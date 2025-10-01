@@ -1011,7 +1011,7 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "awaiting further education provider verification scopes" do
-    let!(:claim_not_verified_provider_email_automatically_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :not_verified) }
+    let!(:claim_not_verified_provider_email_automatically_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible) }
     let!(:claim_not_verified_has_duplicates_provider_email_not_sent_has_other_note) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
     let!(:claim_not_verified_has_duplicates_provider_email_not_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
     let!(:claim_not_verified_has_duplicates_provider_email_manually_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
@@ -1491,7 +1491,7 @@ RSpec.describe Claim, type: :model do
 
     context "when the eligiblity is not verified" do
       context "when there are no duplicates" do
-        let(:claim) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :not_verified) }
+        let(:claim) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible) }
 
         it { is_expected.to be true }
       end
