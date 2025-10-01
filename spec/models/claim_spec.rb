@@ -1011,26 +1011,29 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "awaiting further education provider verification scopes" do
-    let!(:claim_not_verified_provider_email_automatically_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible) }
-    let!(:claim_not_verified_has_duplicates_provider_email_not_sent_has_other_note) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
-    let!(:claim_not_verified_has_duplicates_provider_email_not_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
-    let!(:claim_not_verified_has_duplicates_provider_email_manually_sent) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
-    let!(:claim_with_fe_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_trait: :verified) }
+    let!(:year_1_claim_not_verified_provider_email_automatically_sent) { create(:claim, :submitted, academic_year: AcademicYear.new(2024), policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible) }
+    let!(:year_1_claim_not_verified_has_duplicates_provider_email_not_sent_has_other_note) { create(:claim, :submitted, academic_year: AcademicYear.new(2024), policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
+    let!(:year_1_claim_not_verified_has_duplicates_provider_email_not_sent) { create(:claim, :submitted, academic_year: AcademicYear.new(2024), policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
+    let!(:year_1_claim_not_verified_has_duplicates_provider_email_manually_sent) { create(:claim, :submitted, academic_year: AcademicYear.new(2024), policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
+    let!(:year_1_claim_with_fe_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, academic_year: AcademicYear.new(2024), eligibility_trait: :verified) }
+    let!(:year_2_claim_awaiting_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments) }
+    let!(:year_2_claim_with_completed_provider_verification) { create(:claim, policy: Policies::FurtherEducationPayments, eligibility_attributes: {provider_verification_completed_at: DateTime.now}) }
     let!(:non_fe_claim) { create(:claim, policy: Policies::StudentLoans) }
 
     before do
-      create(:note, claim: claim_not_verified_has_duplicates_provider_email_manually_sent, label: "provider_verification")
-      create(:note, claim: claim_not_verified_has_duplicates_provider_email_not_sent_has_other_note, label: "student_loan_plan")
+      create(:note, claim: year_1_claim_not_verified_has_duplicates_provider_email_manually_sent, label: "provider_verification")
+      create(:note, claim: year_1_claim_not_verified_has_duplicates_provider_email_not_sent_has_other_note, label: "student_loan_plan")
     end
 
     describe ".awaiting_further_education_provider_verification" do
       subject { described_class.awaiting_further_education_provider_verification }
 
-      it "returns claims that have not been verified by the provider, and have had a provider email sent" do
+      it do
         is_expected.to match_array(
           [
-            claim_not_verified_provider_email_automatically_sent,
-            claim_not_verified_has_duplicates_provider_email_manually_sent
+            year_1_claim_not_verified_provider_email_automatically_sent,
+            year_1_claim_not_verified_has_duplicates_provider_email_manually_sent,
+            year_2_claim_awaiting_provider_verification
           ]
         )
       end
@@ -1039,12 +1042,13 @@ RSpec.describe Claim, type: :model do
     describe ".not_awaiting_further_education_provider_verification" do
       subject { described_class.not_awaiting_further_education_provider_verification }
 
-      it "returns claims that have no FE eligiblity, or FE claims that have been verified by the provider, or non-verified claims where a provider email has not been sent" do
+      it do
         is_expected.to match_array(
           [
-            claim_not_verified_has_duplicates_provider_email_not_sent_has_other_note,
-            claim_not_verified_has_duplicates_provider_email_not_sent,
-            claim_with_fe_provider_verification,
+            year_1_claim_not_verified_has_duplicates_provider_email_not_sent_has_other_note,
+            year_1_claim_not_verified_has_duplicates_provider_email_not_sent,
+            year_1_claim_with_fe_provider_verification,
+            year_2_claim_with_completed_provider_verification,
             non_fe_claim
           ]
         )
@@ -1481,44 +1485,6 @@ RSpec.describe Claim, type: :model do
 
     context "with a different claimant" do
       let(:other_claim) { create(:claim, national_insurance_number: "BB12345B") }
-
-      it { is_expected.to be false }
-    end
-  end
-
-  describe "#awaiting_provider_verification?" do
-    subject { claim.awaiting_provider_verification? }
-
-    context "when the eligiblity is not verified" do
-      context "when there are no duplicates" do
-        let(:claim) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :eligible) }
-
-        it { is_expected.to be true }
-      end
-
-      context "when there are duplicates" do
-        let(:claim) { create(:claim, :submitted, policy: Policies::FurtherEducationPayments, eligibility_trait: :duplicate) }
-
-        context "the provider email has not been sent" do
-          it { is_expected.to be false }
-        end
-
-        context "when the provider email has been sent" do
-          before { create(:note, claim: claim, label: "provider_verification") }
-
-          it { is_expected.to be true }
-        end
-      end
-    end
-
-    context "when the eligiblity is verified" do
-      let(:claim) { build(:claim, policy: Policies::FurtherEducationPayments, eligibility_trait: :verified) }
-
-      it { is_expected.to be false }
-    end
-
-    context "when the eligiblity is not further education payments" do
-      let(:claim) { build(:claim, policy: Policies::StudentLoans) }
 
       it { is_expected.to be false }
     end

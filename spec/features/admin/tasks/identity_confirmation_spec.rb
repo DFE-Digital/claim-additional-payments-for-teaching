@@ -7,7 +7,7 @@ RSpec.feature "Admin performs identity confirmation task" do
       :submitted,
       :with_onelogin_idv_data,
       policy: Policies::FurtherEducationPayments,
-      eligibility_trait: [:eligible, :verified]
+      eligibility_trait: [:eligible, :provider_verification_completed]
     )
   end
 

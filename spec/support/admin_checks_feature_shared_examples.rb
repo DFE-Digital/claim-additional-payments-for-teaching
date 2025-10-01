@@ -11,6 +11,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
         :with_onelogin_idv_data,
         policy: policy,
         eligibility: build(:"#{policy.to_s.underscore}_eligibility", :eligible, :verified),
+        academic_year: AcademicYear.new(2024),
         onelogin_idv_at: 10.minutes.ago
       )
     else
