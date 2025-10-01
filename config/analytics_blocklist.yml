@@ -90,6 +90,7 @@
   - provider_verification_claimant_email
   - provider_verification_claimant_national_insurance_number
   - provider_verification_claimant_postcode
+  - provider_verification_continued_employment
   :journeys_sessions:
   - answers
   :early_years_payment_eligibilities:
