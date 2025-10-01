@@ -33,15 +33,16 @@
         :id,
         :name,
         legend: {
-          text: "Did #{f.object.claimant_name} start their FE teaching career " \
-                "in England during #{f.object.claimant_further_education_teaching_start_year}?",
+          text: "Did #{f.object.claimant_name} start their further " \
+                "education (FE) teaching career in England during " \
+                "#{f.object.claimant_further_education_teaching_start_year}?",
           size: "s",
         }
       ) %>
 
       <%= govuk_details(
-        summary_text: "What counts torwards the first 5 years of an FE " \
-                      "teaching career",
+        summary_text: "What counts torwards the first 5 years of a further " \
+                      "education (FE) teaching career",
       ) do %>
         <p class="govuk-body">
           This is the first academic year the teacher took on FE teaching

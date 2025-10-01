@@ -96,7 +96,7 @@
 
     <% if form.provider_verification_contract_type == "variable_hours" || form.provider_verification_contract_covers_full_academic_year == false %>
       <%= summary_list.with_row do |row| %>
-        <%= row.with_key(text: "Worked at #{form.eligibility.school.name} for the whole of the spring term") %>
+        <%= row.with_key(text: "Worked at #{form.eligibility.school.name} for the full spring term") %>
         <%= row.with_value(
           text: form.taught_at_least_one_academic_term
         ) %>
