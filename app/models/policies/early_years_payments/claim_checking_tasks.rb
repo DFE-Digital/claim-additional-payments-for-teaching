@@ -28,7 +28,13 @@ module Policies
         tasks = []
 
         if year_1_of_ey?
-          tasks << "identity_confirmation"
+          tasks << if task_exists?("one_login_identity")
+            # Handle Y1 claims where practitioner submitted their part after we
+            # replaced the Identity claim verifier with the OneLogin verifier.
+            "one_login_identity"
+          else
+            "identity_confirmation"
+          end
           tasks << "ey_alternative_verification" if task_exists?("ey_alternative_verification")
         else
           tasks << "one_login_identity"
