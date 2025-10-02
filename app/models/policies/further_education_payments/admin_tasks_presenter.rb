@@ -24,57 +24,15 @@ module Policies
         return [] unless provider_verification_submitted?
 
         [
-          [
-            "Contract of employment",
-            I18n.t(
-              eligibility.contract_type,
-              scope: "further_education_payments.forms.contract_type.options"
-            ),
-            provider_answers.contract_type
-          ],
-          [
-            "Teaching responsibilities",
-            I18n.t(eligibility.teaching_responsibilities, scope: :boolean),
-            provider_answers.teaching_responsibilities
-          ],
-          [
-            "First 5 years of teaching",
-            AcademicYear.new(eligibility.further_education_teaching_start_year),
-            provider_answers.in_first_five_years
-          ],
-          [
-            "Timetabled teaching hours",
-            I18n.t(
-              eligibility.teaching_hours_per_week,
-              scope: "further_education_payments.forms.teaching_hours_per_week.options"
-            ),
-            provider_answers.teaching_hours_per_week
-          ],
-          [
-            "Age range taught",
-            I18n.t(eligibility.half_teaching_hours, scope: :boolean),
-            provider_answers.half_teaching_hours
-          ],
-          [
-            "Subject",
-            claimant_subjects_taught.join("<br><br>").html_safe,
-            provider_answers.half_timetabled_teaching_time
-          ],
-          [
-            "Course",
-            eligibility.courses_taught.map(&:description).join("<br><br>").html_safe,
-            provider_answers.half_timetabled_teaching_time
-          ],
-          [
-            "Performance measures",
-            I18n.t(eligibility.subject_to_formal_performance_action, scope: :boolean),
-            provider_answers.performance_measures
-          ],
-          [
-            "Disciplinary action",
-            I18n.t(eligibility.subject_to_disciplinary_action, scope: :boolean),
-            provider_answers.disciplinary_action
-          ]
+          contract_of_employment,
+          teaching_responsibilities,
+          first_five_years_of_teaching,
+          timetabled_teaching_hours,
+          age_range_taught,
+          subject,
+          course,
+          performance_measure,
+          disciplinary_action
         ]
       end
 
@@ -114,6 +72,84 @@ module Policies
             ].join(".")
           )
         end
+      end
+
+      def contract_of_employment
+        [
+          "Contract of employment",
+          I18n.t(
+            eligibility.contract_type,
+            scope: "further_education_payments.forms.contract_type.options"
+          ),
+          provider_answers.contract_type
+        ]
+      end
+
+      def teaching_responsibilities
+        [
+          "Teaching responsibilities",
+          I18n.t(eligibility.teaching_responsibilities, scope: :boolean),
+          provider_answers.teaching_responsibilities
+        ]
+      end
+
+      def first_five_years_of_teaching
+        [
+          "First 5 years of teaching",
+          AcademicYear.new(eligibility.further_education_teaching_start_year),
+          provider_answers.in_first_five_years
+        ]
+      end
+
+      def timetabled_teaching_hours
+        [
+          "Timetabled teaching hours",
+          I18n.t(
+            eligibility.teaching_hours_per_week,
+            scope: "further_education_payments.forms.teaching_hours_per_week.options"
+          ),
+          provider_answers.teaching_hours_per_week
+        ]
+      end
+
+      def age_range_taught
+        [
+          "Age range taught",
+          I18n.t(eligibility.half_teaching_hours, scope: :boolean),
+          provider_answers.half_teaching_hours
+        ]
+      end
+
+      def subject
+        [
+          "Subject",
+          claimant_subjects_taught.join("<br><br>").html_safe,
+          provider_answers.half_timetabled_teaching_time
+        ]
+      end
+
+      def course
+        [
+          "Course",
+          eligibility.courses_taught.map(&:description).join("<br><br>").html_safe,
+          provider_answers.half_timetabled_teaching_time
+        ]
+      end
+
+      def performance_measure
+        [
+          "Performance measures",
+          I18n.t(eligibility.subject_to_formal_performance_action, scope: :boolean),
+          provider_answers.performance_measures
+        ]
+      end
+
+      def disciplinary_action
+        [
+          "Disciplinary action",
+          I18n.t(eligibility.subject_to_disciplinary_action, scope: :boolean),
+          provider_answers.disciplinary_action
+        ]
       end
     end
   end
