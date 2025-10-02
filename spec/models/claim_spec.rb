@@ -624,37 +624,6 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe "#name_verified?" do
-    it "returns true if the name is present in the list of GOV.UK Verify fields" do
-      expect(Claim.new.name_verified?).to eq false
-      expect(Claim.new(govuk_verify_fields: ["first_name"]).name_verified?).to eq true
-    end
-  end
-
-  describe "#address_from_govuk_verify?" do
-    it "returns true if any address attributes are in the list of GOV.UK Verify fields" do
-      expect(Claim.new.address_from_govuk_verify?).to eq false
-      expect(Claim.new(govuk_verify_fields: ["payroll_gender"]).address_from_govuk_verify?).to eq false
-
-      expect(Claim.new(govuk_verify_fields: ["address_line_1"]).address_from_govuk_verify?).to eq true
-      expect(Claim.new(govuk_verify_fields: ["address_line_1", "postcode"]).address_from_govuk_verify?).to eq true
-    end
-  end
-
-  describe "#date_of_birth_verified?" do
-    it "returns true if date_of_birth is in the list of GOV.UK Verify fields" do
-      expect(Claim.new(govuk_verify_fields: ["date_of_birth"]).date_of_birth_verified?).to eq true
-      expect(Claim.new(govuk_verify_fields: ["address_line_1"]).date_of_birth_verified?).to eq false
-    end
-  end
-
-  describe "#payroll_gender_verified?" do
-    it "returns true if payroll_gender is in the list of GOV.UK Verify fields" do
-      expect(Claim.new(govuk_verify_fields: ["payroll_gender"]).payroll_gender_verified?).to eq true
-      expect(Claim.new(govuk_verify_fields: ["address_line_1"]).payroll_gender_verified?).to eq false
-    end
-  end
-
   describe "#personal_data_removed?" do
     it "returns false if a claim has not had its personal data removed" do
       claim = create(:claim, :approved)

@@ -24,10 +24,10 @@ RSpec.describe Admin::ClaimsHelper do
     it "includes an array of questions and answers" do
       expected_answers = [
         [I18n.t("admin.teacher_reference_number"), "1234567"],
-        [I18n.t("govuk_verify_fields.full_name").capitalize, "Bruce Wayne"],
-        [I18n.t("govuk_verify_fields.date_of_birth").capitalize, "1 January 1901"],
+        ["Full name", "Bruce Wayne"],
+        ["Date of birth", "1 January 1901"],
         [I18n.t("admin.national_insurance_number"), "QQ123456C"],
-        [I18n.t("govuk_verify_fields.address").capitalize, "Flat 1<br>1 Test Road<br>Test Town<br>AB1 2CD"],
+        ["Address", "Flat 1<br>1 Test Road<br>Test Town<br>AB1 2CD"],
         [I18n.t("admin.email_address"), "test@email.com"]
       ]
 
@@ -40,10 +40,10 @@ RSpec.describe Admin::ClaimsHelper do
       it "returns the expected strings" do
         expected_answers = [
           [I18n.t("admin.teacher_reference_number"), "1234567"],
-          [I18n.t("govuk_verify_fields.full_name").capitalize, helper.personal_data_removed_text],
-          [I18n.t("govuk_verify_fields.date_of_birth").capitalize, helper.personal_data_removed_text],
+          ["Full name", helper.personal_data_removed_text],
+          ["Date of birth", helper.personal_data_removed_text],
           [I18n.t("admin.national_insurance_number"), helper.personal_data_removed_text],
-          [I18n.t("govuk_verify_fields.address").capitalize, helper.personal_data_removed_text],
+          ["Address".capitalize, helper.personal_data_removed_text],
           [I18n.t("admin.email_address"), "test@email.com"]
         ]
 

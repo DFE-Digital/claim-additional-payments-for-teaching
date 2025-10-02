@@ -272,14 +272,6 @@ en:
       male: "Male"
       female: "Female"
       dont_know: "Don’t know"
-  govuk_verify_fields:
-    first_name: "first name"
-    middle_name: "middle name"
-    surname: "surname"
-    date_of_birth: "date of birth"
-    payroll_gender: "gender"
-    address: "address"
-    full_name: "Full name"
   forms:
     teacher_reference_number:
       questions:
@@ -1592,8 +1584,6 @@ en:
     policy_full_name: Early years financial incentive payment
     support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
     claim_description: for an early years financial incentive payment
-    govuk_verify_fields:
-      full_name: Applicant name
     admin:
       email_address: Contact email
       practitioner_email_address: Provider-input contact email
