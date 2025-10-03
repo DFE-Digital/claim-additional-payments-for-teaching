@@ -332,22 +332,6 @@ class Claim < ApplicationRecord
     govuk_verify_fields.any?
   end
 
-  def name_verified?
-    govuk_verify_fields.include?("first_name")
-  end
-
-  def date_of_birth_verified?
-    govuk_verify_fields.include?("date_of_birth")
-  end
-
-  def payroll_gender_verified?
-    govuk_verify_fields.include?("payroll_gender")
-  end
-
-  def address_from_govuk_verify?
-    (ADDRESS_ATTRIBUTES & govuk_verify_fields).any?
-  end
-
   def personal_data_removed?
     personal_data_removed_at.present?
   end

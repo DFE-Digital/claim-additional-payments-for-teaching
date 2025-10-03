@@ -48,10 +48,10 @@ module Admin
     def admin_personal_details(claim)
       [
         [translate("admin.teacher_reference_number"), claim.eligibility.teacher_reference_number.presence || "Not provided"],
-        [translate("#{claim.policy.locale_key}.govuk_verify_fields.full_name", default: :"govuk_verify_fields.full_name").capitalize, claim.personal_data_removed? ? personal_data_removed_text : claim.full_name],
-        [translate("govuk_verify_fields.date_of_birth").capitalize, claim.personal_data_removed? ? personal_data_removed_text : l(claim.date_of_birth)],
+        ["Full name", claim.personal_data_removed? ? personal_data_removed_text : claim.full_name],
+        ["Date of birth", claim.personal_data_removed? ? personal_data_removed_text : l(claim.date_of_birth)],
         [translate("admin.national_insurance_number"), claim.personal_data_removed? ? personal_data_removed_text : claim.national_insurance_number],
-        [translate("govuk_verify_fields.address").capitalize, claim.personal_data_removed? ? personal_data_removed_text : sanitize(claim.address("<br>").html_safe, tags: %w[br])],
+        ["Address", claim.personal_data_removed? ? personal_data_removed_text : sanitize(claim.address("<br>").html_safe, tags: %w[br])],
         [translate("#{claim.policy.locale_key}.admin.email_address", default: :"admin.email_address"), claim.email_address]
       ]
     end
