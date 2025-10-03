@@ -189,6 +189,9 @@ en:
       provider_verification:
         name: Provider verification
         title: "Confirm the provider has responded and verified the claimant’s information"
+      fe_provider_verification_v2:
+        name: Provider verification
+        title: "Confirm the provider has responded and verified the claimant’s information"
       eligibility_check:
         name: Eligibility check
         title: "Confirm the provider has responded and verified the claimant’s information"
@@ -919,6 +922,9 @@ en:
             claimant_answers:
               true: "Yes"
               false: "No"
+        fe_provider_verification_v2:
+          name: Alternative verification
+          title: Do the details provided by the claimant match the provider’s responses?
         employment:
           title: Does the claimant’s place of work match the above information on their claim?
         provider_details:

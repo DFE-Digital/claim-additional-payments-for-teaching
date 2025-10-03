@@ -37,7 +37,8 @@ RSpec.feature "Admin claim further education payments" do
               date_of_birth: Date.new(1945, 7, 3),
               reference: "AB123456",
               created_at: DateTime.new(2024, 8, 1, 9, 0, 0),
-              submitted_at: DateTime.new(2024, 8, 1, 9, 0, 0)
+              submitted_at: DateTime.new(2024, 8, 1, 9, 0, 0),
+              academic_year: AcademicYear.new("2024/2025")
             )
 
             visit admin_claim_path(claim)
@@ -129,7 +130,8 @@ RSpec.feature "Admin claim further education payments" do
               date_of_birth: Date.new(1945, 7, 3),
               reference: "AB123456",
               created_at: DateTime.new(2024, 8, 1, 9, 0, 0),
-              submitted_at: DateTime.new(2024, 8, 1, 9, 0, 0)
+              submitted_at: DateTime.new(2024, 8, 1, 9, 0, 0),
+              academic_year: AcademicYear.new("2024/2025")
             )
 
             visit admin_claim_path(claim)

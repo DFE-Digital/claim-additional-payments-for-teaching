@@ -15,7 +15,7 @@ module Policies
         tasks = []
 
         tasks << "one_login_identity"
-        tasks << "provider_verification"
+        tasks << provider_verification_task
         tasks << "provider_details" if claim.eligibility.provider_and_claimant_details_match?
         tasks << "alternative_identity_verification" if show_alternative_identity_verification_task?
         tasks << "fe_alternative_verification" if show_alternative_verification_task?
@@ -32,7 +32,7 @@ module Policies
         applicable_task_names.map do |name|
           if FeatureFlag.disabled?(:alternative_idv) && name == "one_login_identity"
             OpenStruct.new(name:, locale_key: "identity_confirmation")
-          elsif FeatureFlag.enabled?(:alternative_idv) && name == "provider_verification"
+          elsif FeatureFlag.enabled?(:alternative_idv) && (name == "provider_verification" || name == "fe_provider_verification_v2")
             OpenStruct.new(name:, locale_key: "eligibility_check")
           else
             OpenStruct.new(name:, locale_key: name)
@@ -46,6 +46,10 @@ module Policies
 
       private
 
+      def y1_fe_claim?
+        claim.academic_year == AcademicYear.new("2024/2025")
+      end
+
       def matching_claims
         @matching_claims ||= Claim::MatchingAttributeFinder.new(claim).matching_claims
       end
@@ -55,13 +59,19 @@ module Policies
       end
 
       def show_alternative_identity_verification_task?
-        y1_fe_claim = claim.academic_year == AcademicYear.new("2024/2025")
-
-        claim.failed_one_login_idv? && y1_fe_claim
+        claim.failed_one_login_idv? && y1_fe_claim?
       end
 
       def show_alternative_verification_task?
         claim.failed_one_login_idv?
+      end
+
+      def provider_verification_task
+        if y1_fe_claim?
+          "provider_verification"
+        else
+          "fe_provider_verification_v2"
+        end
       end
     end
   end

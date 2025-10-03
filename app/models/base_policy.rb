@@ -89,4 +89,8 @@ module BasePolicy
   def active?
     true
   end
+
+  def admin_tasks_presenter(claim)
+    self::AdminTasksPresenter.new(claim)
+  end
 end
