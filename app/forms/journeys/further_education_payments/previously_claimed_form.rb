@@ -30,7 +30,7 @@ module Journeys
       end
 
       def previous_claim_window_start
-        "1 Sept #{AcademicYear.previous.start_year}"
+        "1 September #{AcademicYear.previous.start_year}"
       end
 
       def previous_claim_window_end

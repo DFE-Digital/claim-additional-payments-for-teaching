@@ -253,10 +253,10 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Does your fixed-term contract cover the full #{current_academic_year.to_s(:long)} academic year?")
-    choose("No, it does not cover the full #{current_academic_year.to_s(:long)} academic year")
+    choose("No")
     click_button "Continue"
 
-    expect(page).to have_content("Have you taught at #{eligible_college.name} for the whole of the spring academic term?")
+    expect(page).to have_content("Have you taught at #{eligible_college.name} for the full spring term?")
     choose("No")
     click_button "Continue"
 
@@ -309,10 +309,10 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Does your fixed-term contract cover the full #{current_academic_year.to_s(:long)} academic year?")
-    choose("No, it does not cover the full #{current_academic_year.to_s(:long)} academic year")
+    choose("No")
     click_button "Continue"
 
-    expect(page).to have_content("Have you taught at #{eligible_college.name} for the whole of the spring academic term?")
+    expect(page).to have_content("Have you taught at #{eligible_college.name} for the full spring term?")
     choose("Yes")
     click_button "Continue"
 
@@ -419,7 +419,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "More than 12 hours per week"
     click_button "Continue"
 
-    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships?")
     choose "Yes"
     click_button "Continue"
 
@@ -474,7 +474,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Variable hours")
     click_button "Continue"
 
-    expect(page).to have_content("Have you taught at #{eligible_college.name} for the whole of the spring academic term")
+    expect(page).to have_content("Have you taught at #{eligible_college.name} for the full spring term")
     choose("No")
     click_button "Continue"
 
@@ -528,7 +528,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "More than 12 hours per week"
     click_button "Continue"
 
-    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships?")
     choose "Yes"
     click_button "Continue"
 
@@ -591,7 +591,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "More than 12 hours per week"
     click_button "Continue"
 
-    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships?")
     choose "Yes"
     click_button "Continue"
 
@@ -685,7 +685,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "More than 12 hours per week"
     click_button "Continue"
 
-    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships?")
     choose "Yes"
     click_button "Continue"
 
@@ -762,7 +762,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "More than 12 hours per week"
     click_button "Continue"
 
-    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships?")
     choose "Yes"
     click_button "Continue"
 
@@ -917,7 +917,7 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("Does your fixed-term contract cover the full #{current_academic_year.to_s(:long)} academic year?")
-    choose "Yes, it covers the full #{current_academic_year.to_s(:long)} academic year"
+    choose "Yes"
     click_button "Continue"
 
     expect(page).to have_content("Are you timetabled to teach at least 2.5 hours per week at #{eligible_college.name} next term?")
@@ -971,7 +971,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Variable hours")
     click_button "Continue"
 
-    expect(page).to have_content("Have you taught at #{eligible_college.name} for the whole of the spring academic term")
+    expect(page).to have_content("Have you taught at #{eligible_college.name} for the full spring term")
     choose("Yes")
     click_button "Continue"
 
@@ -1030,7 +1030,7 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("More than 12 hours per week")
     click_button "Continue"
 
-    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships?")
     choose "No"
     click_button "Continue"
 
