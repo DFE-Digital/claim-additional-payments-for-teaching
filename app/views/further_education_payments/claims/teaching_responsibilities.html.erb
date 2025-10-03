@@ -5,7 +5,7 @@
     <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
       <%= f.govuk_error_summary %>
 
-      <%= f.govuk_collection_radio_buttons(
+      <%= f.govuk_collection_radio_buttons \
         :teaching_responsibilities,
         @form.radio_options,
         :id,
@@ -27,7 +27,6 @@
           "assessing learning and reporting on progress for classes of students"
         ], type: :bullet %>
       <% end %>
-      <% ) %>
 
       <%= f.govuk_submit %>
     <% end %>

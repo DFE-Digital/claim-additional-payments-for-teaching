@@ -27,7 +27,7 @@
         Subject area
       </h2>
 
-      <%= f.govuk_collection_radio_buttons(
+      <%= f.govuk_collection_radio_buttons \
         :provider_verification_half_timetabled_teaching_time,
         f.object.radio_options,
         :id,
@@ -37,9 +37,8 @@
           size: "s",
         },
         hint: -> do %>
-        <%= govuk_list f.object.course_descriptions, type: :bullet %>
+          <%= govuk_list f.object.course_descriptions, type: :bullet %>
         <% end %>
-      <% ) %>
 
       <%= f.govuk_submit("Continue") %>
 
