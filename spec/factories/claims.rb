@@ -264,6 +264,10 @@ FactoryBot.define do
       held { true }
     end
 
+    trait :does_not_require_qa do
+      qa_required { false }
+    end
+
     trait :flagged_for_qa do
       qa_required { true }
       qa_completed_at { nil }
