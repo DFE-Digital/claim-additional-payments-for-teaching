@@ -25,7 +25,7 @@
 
       <span class="govuk-heading-l">
         <%= number_to_currency(@form.answers.award_amount, precision: 0) %>
-      <span>
+      </span>
     </p>
 
     <p class="govuk-body">
@@ -52,7 +52,7 @@
         ].join(" "),
         Policies::TargetedRetentionIncentivePayments.eligibility_page_url,
         target: "_blank"
-      )%>.
+      ) %>.
     </p>
   </div>
 </div>

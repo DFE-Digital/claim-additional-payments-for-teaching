@@ -67,7 +67,7 @@
     <% if @journey_open %>
       <p class="govuk-!-margin-top-8">
         <%= govuk_start_button(text: "Start now", href: claim_path(current_journey_routing_name, "claim", answers: { service_access_code: params[:service_access_code] })) %>
-      </div>
+      </p>
     <% end %>
   </div>
 </div>
