@@ -11,7 +11,11 @@ Rails.application.config.content_security_policy do |policy|
   policy.object_src :none
   policy.script_src :self, "https://www.googletagmanager.com/gtm.js"
   policy.connect_src :self, "https://www.google-analytics.com"
-  policy.style_src :self
+  if Rails.env.development?
+    policy.style_src :self, :unsafe_inline
+  else
+    policy.style_src :self
+  end
 
   # Specify URI for violation reports
   # policy.report_uri "/csp-violation-report-endpoint"
