@@ -298,7 +298,7 @@ RSpec.feature "Further education payments" do
 
     expect(page).to have_text "We’ve signed you out"
 
-    # resume
+    # resume attempt 1
 
     visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
     click_link "Start now"
@@ -321,6 +321,38 @@ RSpec.feature "Further education payments" do
     click_button "Continue"
 
     expect(page).to have_text "Can you access your work email account for"
+    choose "No"
+    click_button "Continue"
+
+    expect(page).to have_text "We’ve signed you out"
+
+    # resume attempt 2
+
+    visit landing_page_path(Journeys::FurtherEducationPayments::ROUTING_NAME)
+    click_link "Start now"
+
+    expect(page).to have_content("Do you have a")
+    choose "Yes"
+    click_button "Continue"
+
+    mock_one_login_auth(uid: one_login_uid)
+
+    expect(page).to have_content("Sign in with GOV.UK One Login")
+    fill_in "One Login UID", with: one_login_uid
+    click_button "Continue"
+
+    expect(page).to have_content("You’ve successfully signed in to GOV.UK One Login")
+    click_button "Continue"
+
+    expect(page).to have_content("You have already started an eligibility check")
+    choose "Continue with the eligibility check that you have already started"
+    click_button "Continue"
+
+    expect(page).to have_text "Can you access your work email account for"
+    choose "Yes"
+    click_button "Continue"
+
+    expect(page).to have_text "Enter work email"
   end
 
   def and_college_exists
