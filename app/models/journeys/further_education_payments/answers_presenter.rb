@@ -33,10 +33,10 @@ module Journeys
       # [2]: slug for changing the answer.
       def eligibility_answers
         [].tap do |a|
-          a << further_education_teaching_start_year
-          a << teaching_qualification
           a << teaching_responsibilities
           a << school
+          a << further_education_teaching_start_year
+          a << teaching_qualification
           a << contract_type
           a << fixed_term_contract
           a << taught_at_least_one_term

@@ -26,14 +26,6 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
-    choose("September 2023 to August 2024")
-    click_button "Continue"
-
-    expect(page).to have_content("Do you have a teaching qualification?")
-    choose("Yes")
-    click_button "Continue"
-
     expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
@@ -44,6 +36,14 @@ RSpec.feature "Further education payments" do
 
     expect(page).to have_content("Select where you are employed")
     choose college.name
+    click_button "Continue"
+
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    choose("September 2023 to August 2024")
+    click_button "Continue"
+
+    expect(page).to have_content("Do you have a teaching qualification?")
+    choose("Yes")
     click_button "Continue"
 
     expect(page).to have_content("What type of contract do you have directly with #{college.name}?")
@@ -280,14 +280,6 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
-    choose("September 2023 to August 2024")
-    click_button "Continue"
-
-    expect(page).to have_content("Do you have a teaching qualification?")
-    choose("Yes")
-    click_button "Continue"
-
     expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
@@ -298,6 +290,14 @@ RSpec.feature "Further education payments" do
 
     expect(page).to have_content("Select where you are employed")
     choose college.name
+    click_button "Continue"
+
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    choose("September 2023 to August 2024")
+    click_button "Continue"
+
+    expect(page).to have_content("Do you have a teaching qualification?")
+    choose("Yes")
     click_button "Continue"
 
     expect(page).to have_content("What type of contract do you have directly with #{college.name}?")
@@ -443,14 +443,6 @@ RSpec.feature "Further education payments" do
     expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
     click_button "Start eligibility check"
 
-    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
-    choose("September 2023 to August 2024")
-    click_button "Continue"
-
-    expect(page).to have_content("Do you have a teaching qualification?")
-    choose("Yes")
-    click_button "Continue"
-
     expect(page).to have_content("Are you a member of staff with the responsibilities of a teacher?")
     choose "Yes"
     click_button "Continue"
@@ -461,6 +453,14 @@ RSpec.feature "Further education payments" do
 
     expect(page).to have_content("Select where you are employed")
     choose college.name
+    click_button "Continue"
+
+    expect(page).to have_content("Which academic year did you start teaching in further education in England?")
+    choose("September 2023 to August 2024")
+    click_button "Continue"
+
+    expect(page).to have_content("Do you have a teaching qualification?")
+    choose("Yes")
     click_button "Continue"
 
     expect(page).to have_content("What type of contract do you have directly with #{college.name}?")
