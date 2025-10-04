@@ -971,7 +971,7 @@ en:
           "no": "No"
           "i_dont_know": I don’t know
         errors:
-          inclusion: 'Tell us if you have a GOV.UK One Login account'
+          inclusion: 'Select yes if you have a GOV.UK One Login account'
       existing_progress:
         question: You have already started an eligibility check
         errors:
