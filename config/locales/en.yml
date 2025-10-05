@@ -1029,7 +1029,7 @@ en:
           between_dates: September %{start_year} to August %{end_year}
           before_date: Before September %{year}
         errors:
-          blank: Tell us when you started teaching in further education in England
+          blank: Select the academic year you started teaching in further education in England
       subjects_taught:
         question: Which subject areas do you teach?
         hint: Select all that apply
