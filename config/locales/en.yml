@@ -979,7 +979,7 @@ en:
       teaching_responsibilities:
         question: Are you a member of staff with the responsibilities of a teacher?
         errors:
-          inclusion: Tell us if you are a member of staff with teaching responsibilities
+          inclusion: Select yes if you are a member of staff with the responsibilities of a teacher
       further_education_provision_search:
         question: Which further education provider directly employs you?
         errors:
