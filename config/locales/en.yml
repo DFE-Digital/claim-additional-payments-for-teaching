@@ -1176,7 +1176,7 @@ en:
           no_but_planned: No, but I plan to enrol on one in the next 12 months
           no_not_planned: No, and I do not plan to enrol on one in the next 12 months
         errors:
-          inclusion: Tell us if you have a teaching qualification
+          inclusion: Select if you have a teaching qualification
       poor_performance:
         heading: Tell us if you are currently under any performance measures or disciplinary action
         questions:
