@@ -52,7 +52,7 @@ RSpec.describe Journeys::FurtherEducationPayments::FurtherEducationTeachingStart
         is_expected.not_to(
           allow_value(further_education_teaching_start_year)
           .for(:further_education_teaching_start_year)
-          .with_message("Tell us when you started teaching in further education in England")
+          .with_message("Select the academic year you started teaching in further education in England")
         )
       end
     end
