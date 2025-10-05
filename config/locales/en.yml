@@ -963,7 +963,7 @@ en:
           true: "Yes"
           false: "No"
         errors:
-          inclusion: Tell us if you applied for a targeted retention incentive payment for your work in further education between 1 Sept 2024 and 31 May 2025
+          inclusion: Select yes if you applied for a targeted retention incentive payment between 1 September 2024 and 31 May 2025
       have_one_login_account:
         question: Do you have a GOV.UK One Login account?
         options:
