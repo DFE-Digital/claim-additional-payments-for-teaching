@@ -983,8 +983,8 @@ en:
       further_education_provision_search:
         question: Which further education provider directly employs you?
         errors:
-          blank: Select which FE provider directly employs you
-          min_length: Enter a college name or postcode that is at least 3 characters long
+          blank: Enter the name or postcode of the further education provider that directly employs you
+          min_length: Enter a name or postcode that is at least 3 characters long
       select_provision:
         heading: Select where you are employed
         errors:
