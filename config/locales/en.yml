@@ -997,7 +997,7 @@ en:
           variable_hours: Variable hours
           employed_by_another_organisation: I do not have a direct contract of employment with %{school_name}
         errors:
-          inclusion: Tell us the type of contract you have
+          inclusion: Select the type of contract you have directly with %{school_name}
       fixed_term_contract:
         question: Does your fixed-term contract cover the full %{academic_year} academic year?
         options:
