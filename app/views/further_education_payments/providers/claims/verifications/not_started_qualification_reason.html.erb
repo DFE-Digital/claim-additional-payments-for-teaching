@@ -69,6 +69,17 @@
             rows: 5,
           ) %>
         <% end %>
+
+        <%= f.govuk_check_box_divider %>
+
+        <%= f.govuk_check_box(
+          :provider_verification_not_started_qualification_reasons,
+          "no_valid_reason",
+          label: {
+            text: f.object.label_for("no_valid_reason")
+          },
+          exclusive: true
+        ) %>
       <% end %>
 
       <%= f.govuk_submit("Continue") %>
