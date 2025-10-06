@@ -208,6 +208,10 @@ module Policies
           provider_verification_teaching_qualification == "no_but_planned"
       end
 
+      def valid_reason_for_not_starting_qualification?
+        provider_verification_not_started_qualification_reasons.exclude?("no_valid_reason")
+      end
+
       private
 
       def year_1_claim?

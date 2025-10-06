@@ -24,16 +24,18 @@ module Policies
         return [] unless provider_verification_submitted?
 
         [
-          contract_of_employment,
           teaching_responsibilities,
           first_five_years_of_teaching,
+          teaching_qualification,
+          reason_for_not_enrolling,
+          contract_of_employment,
           timetabled_teaching_hours,
           age_range_taught,
           subject,
           course,
           performance_measure,
           disciplinary_action
-        ]
+        ].compact_blank
       end
 
       def student_loan_plan
@@ -98,6 +100,33 @@ module Policies
           "First 5 years of teaching",
           AcademicYear.new(eligibility.further_education_teaching_start_year),
           provider_answers.in_first_five_years
+        ]
+      end
+
+      def teaching_qualification
+        [
+          "Teaching qualification",
+          I18n.t(
+            eligibility.teaching_qualification,
+            scope: "further_education_payments.forms.teaching_qualification.options"
+          ),
+          provider_answers.teaching_qualification
+        ]
+      end
+
+      def reason_for_not_enrolling
+        return [] if eligibility.provider_verification_not_started_qualification_reasons.empty?
+
+        reason = if eligibility.valid_reason_for_not_starting_qualification?
+          "Valid reason"
+        else
+          "No valid reason"
+        end
+
+        [
+          "Reason for not enrolling",
+          "N/A",
+          reason
         ]
       end
 
