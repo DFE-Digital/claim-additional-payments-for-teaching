@@ -988,7 +988,7 @@ en:
       select_provision:
         heading: Select where you are employed
         errors:
-          blank: Select the further education provider you are employed by
+          blank: Select where you are employed
       contract_type:
         question: What type of contract do you have directly with %{school_name}?
         options:
