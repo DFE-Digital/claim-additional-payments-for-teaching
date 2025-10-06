@@ -1011,7 +1011,7 @@ en:
           true: "Yes"
           false: "No"
         errors:
-          inclusion: Tell us if you have taught at %{school_name} for more than one academic term
+          inclusion: Select yes if you have taught at %{school_name} for the full spring term
       teaching_hours_per_week:
         question:
           On average, how many hours per week are you timetabled to teach at %{school_name} during the current term?
