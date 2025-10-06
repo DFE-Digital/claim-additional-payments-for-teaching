@@ -1004,7 +1004,7 @@ en:
           true: "Yes"
           false: "No"
         errors:
-          inclusion: Tell us if your fixed-term contract covers the full academic year
+          inclusion: Select yes if your fixed-term contract covers the full %{current_academic_year} academic year
       taught_at_least_one_term:
         question: Have you taught at %{school_name} for the full spring term?
         options:
