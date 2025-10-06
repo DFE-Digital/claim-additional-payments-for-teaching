@@ -18,6 +18,8 @@ class ClaimsController < BasePublicController
   before_action :handle_magic_link, only: [:new], if: -> { journey.start_with_magic_link? }
   before_action :add_answers_to_rollbar_context, only: [:show, :update]
 
+  before_action :sign_out, only: [:signed_out]
+
   # ordering of these includes is important
   # moving them elsewhere will likely cause issues
   include FormSubmittable
@@ -38,9 +40,20 @@ class ClaimsController < BasePublicController
   end
 
   def signed_out
+    case params[:reason]
+    when "fe-no-work-email-access"
+      render "signed_out_fe_no_work_email_access"
+    when nil
+      render
+    end
   end
 
   private
+
+  def sign_out
+    session.destroy
+    @journey_session = nil
+  end
 
   def slug_sequence
     @slug_sequence ||= journey::SlugSequence.new(journey_session)
