@@ -1201,7 +1201,7 @@ en:
           Do you spend at least half of your timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships?
         errors:
           inclusion:
-            Tell us if you spend at least half your timetabled teaching hours working with students aged 16 to 19
+            Select yes if you spend at least half of your timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships
       eligible:
         heading: You’re eligible for a targeted retention incentive payment
       work_email_access:

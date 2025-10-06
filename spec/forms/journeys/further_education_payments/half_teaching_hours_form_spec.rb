@@ -28,7 +28,9 @@ RSpec.describe Journeys::FurtherEducationPayments::HalfTeachingHoursForm, type: 
       is_expected.not_to(
         allow_value(nil)
         .for(:half_teaching_hours)
-        .with_message("Tell us if you spend at least half your timetabled teaching hours working with students aged 16 to 19")
+        .with_message("Select yes if you spend at least half of your timetabled " \
+          "teaching hours teaching students on 16 to 19 study programmes, T Levels " \
+          "or 16 to 19 apprenticeships")
       )
     end
   end
