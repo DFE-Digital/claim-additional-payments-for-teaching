@@ -29,7 +29,7 @@ RSpec.describe Journeys::FurtherEducationPayments::EngineeringManufacturingCours
         is_expected.not_to(
           allow_value([""])
           .for(:engineering_manufacturing_courses)
-          .with_message("Select the courses that you teach, or select ‘I do not teach any of these courses’")
+          .with_message("Select the courses you teach")
         )
       end
     end
@@ -39,7 +39,7 @@ RSpec.describe Journeys::FurtherEducationPayments::EngineeringManufacturingCours
         is_expected.not_to(
           allow_value(["foo"])
           .for(:engineering_manufacturing_courses)
-          .with_message("Select the courses that you teach, or select ‘I do not teach any of these courses’")
+          .with_message("Select the courses you teach")
         )
       end
     end

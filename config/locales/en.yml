@@ -1072,7 +1072,7 @@ en:
             Select all that apply
           </p>
         errors:
-          inclusion: Select the courses that you teach, or select ‘I do not teach any of these courses’
+          inclusion: Select the courses you teach
       building_construction_courses:
         <<: *courses
         question: Which building and construction courses do you teach?
