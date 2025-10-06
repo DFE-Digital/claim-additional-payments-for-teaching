@@ -17,10 +17,6 @@ def when_further_education_journey_ready_to_submit
   expect(page).to have_content("Make a claim for a targeted retention incentive payment for further education")
   click_button "Start eligibility check"
 
-  choose("September 2023 to August 2024")
-  click_button "Continue"
-  choose "Yes"
-  click_button "Continue"
   choose "Yes"
   click_button "Continue"
 
@@ -28,6 +24,11 @@ def when_further_education_journey_ready_to_submit
   click_button "Continue"
 
   choose college.name
+  click_button "Continue"
+
+  choose("September 2023 to August 2024")
+  click_button "Continue"
+  choose "Yes"
   click_button "Continue"
 
   choose("Permanent")
