@@ -17,119 +17,120 @@
     heading: "Employment history"
   ) %>
 
-<div class="govuk-grid-column-full">
-  <h2 class="govuk-heading-l">
-    <%= @form.task.name.humanize %>
-  </h2>
+  <div class="govuk-grid-column-full">
+    <h2 class="govuk-heading-l">
+      <%= @form.task.name.humanize %>
+    </h2>
 
-  <%= govuk_summary_list(actions: false) do |summary_list| %>
-    <% summary_list.with_row do |row| %>
-      <% row.with_key(text: I18n.t("get_a_teacher_relocation_payment.forms.changed_workplace_or_new_contract.question")) %>
-      <% row.with_value(text: @form.task.claim.eligibility.changed_workplace_or_new_contract ? "Yes" : "No") %>
-    <% end %>
-  <% end %>
-
-  <% if @form.task.claim.eligibility.employment_history.empty? %>
-    <%= govuk_inset_text do %>
-      <p>
-        You can‘t check the claimant‘s employment until it has been uploaded
-      </p>
-    <% end %>
-  <% else %>
-    <section id="employments">
-      <% @form.task.claim.eligibility
-        .employment_history
-        .reject(&:deleted?)
-        .sort_by(&:employment_end_date)
-        .each
-        .with_index(1) do |employment, i| %>
-        <% index = " #{i}" if @form.task.claim.eligibility.employment_history.many? %>
-
-        <div data-test-id="employment-<%= employment.id %>">
-          <%= govuk_summary_card(title: "Previous workplace#{index}") do |card| %>
-            <% unless @form.task.completed? %>
-              <% card.with_action do %>
-                <%= govuk_link_to(
-                  "Remove employment",
-                  admin_claim_employment_history_employment_path(
-                    @form.task.claim,
-                    employment.id
-                  ),
-                  method: :delete,
-                ) %>
-              <% end %>
-            <% end %>
-
-            <% card.with_summary_list(actions: false) do |summary_list| %>
-              <% summary_list.with_row do |row| %>
-                <% row.with_key text: "School" %>
-                <% row.with_value { display_school(employment.school, include_dfe_number: false) } %>
-              <% end %>
-
-              <% summary_list.with_row do |row| %>
-                <% row.with_key text: "Employment contract of at least one year" %>
-                <% row.with_value { employment.employment_contract_of_at_least_one_year ? "Yes" : "No" } %>
-              <% end %>
-
-              <% summary_list.with_row do |row| %>
-                <% row.with_key text: "Employment start date" %>
-                <% row.with_value { employment.employment_start_date.to_s } %>
-              <% end %>
-
-              <% summary_list.with_row do |row| %>
-                <% row.with_key text: "Employment end date" %>
-                <% row.with_value { employment.employment_end_date.to_s } %>
-              <% end %>
-
-              <% summary_list.with_row do |row| %>
-                <% row.with_key text: "Subject employed to teach" %>
-                <% row.with_value {
-                  I18n.t(
-                    "get_a_teacher_relocation_payment.forms.subject.answers.#{employment.subject_employed_to_teach}"
-                  )
-                } %>
-              <% end %>
-
-              <% summary_list.with_row do |row| %>
-                <% row.with_key text: "Met minimum teaching hours" %>
-                <% row.with_value { employment.met_minimum_teaching_hours ? "Yes" : "No" } %>
-              <% end %>
-            <% end %>
-          <% end %>
-        </div>
+    <%= govuk_summary_list(actions: false) do |summary_list| %>
+      <% summary_list.with_row do |row| %>
+        <% row.with_key(text: I18n.t("get_a_teacher_relocation_payment.forms.changed_workplace_or_new_contract.question")) %>
+        <% row.with_value(text: @form.task.claim.eligibility.changed_workplace_or_new_contract ? "Yes" : "No") %>
       <% end %>
-    </section>
-  <% end %>
+    <% end %>
 
-  <% if @form.task.completed? %>
-    <%= render "task_outcome", task: @form.task %>
-  <% else %>
-    <%= form_with(
-      model: @form,
-      scope: :form,
-      url: admin_claim_tasks_path(@claim),
-      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
-      data: { "test-id": "task-form" }
-    ) do |f| %>
+    <% if @form.task.claim.eligibility.employment_history.empty? %>
+      <%= govuk_inset_text do %>
+        <p>
+          You can‘t check the claimant‘s employment until it has been uploaded
+        </p>
+      <% end %>
+    <% else %>
+      <section id="employments">
+        <% @form.task.claim.eligibility
+          .employment_history
+          .reject(&:deleted?)
+          .sort_by(&:employment_end_date)
+          .each
+          .with_index(1) do |employment, i| %>
+          <% index = " #{i}" if @form.task.claim.eligibility.employment_history.many? %>
 
-      <% if @form.task.claim.eligibility.employment_history.reject(&:deleted?).any? %>
-        <%= render(partial: "form_body", locals: { f: f, notes: @notes }) %>
+          <div data-test-id="employment-<%= employment.id %>">
+            <%= govuk_summary_card(title: "Previous workplace#{index}") do |card| %>
+              <% unless @form.task.completed? %>
+                <% card.with_action do %>
+                  <%= govuk_link_to(
+                    "Remove employment",
+                    admin_claim_employment_history_employment_path(
+                      @form.task.claim,
+                      employment.id
+                    ),
+                    method: :delete,
+                  ) %>
+                <% end %>
+              <% end %>
 
-        <%= f.submit(
-          "Save and continue",
-          class: "govuk-button",
-          data: { module: "govuk-button" }
+              <% card.with_summary_list(actions: false) do |summary_list| %>
+                <% summary_list.with_row do |row| %>
+                  <% row.with_key text: "School" %>
+                  <% row.with_value { display_school(employment.school, include_dfe_number: false) } %>
+                <% end %>
+
+                <% summary_list.with_row do |row| %>
+                  <% row.with_key text: "Employment contract of at least one year" %>
+                  <% row.with_value { employment.employment_contract_of_at_least_one_year ? "Yes" : "No" } %>
+                <% end %>
+
+                <% summary_list.with_row do |row| %>
+                  <% row.with_key text: "Employment start date" %>
+                  <% row.with_value { employment.employment_start_date.to_s } %>
+                <% end %>
+
+                <% summary_list.with_row do |row| %>
+                  <% row.with_key text: "Employment end date" %>
+                  <% row.with_value { employment.employment_end_date.to_s } %>
+                <% end %>
+
+                <% summary_list.with_row do |row| %>
+                  <% row.with_key text: "Subject employed to teach" %>
+                  <% row.with_value {
+                    I18n.t(
+                      "get_a_teacher_relocation_payment.forms.subject.answers.#{employment.subject_employed_to_teach}"
+                    )
+                  } %>
+                <% end %>
+
+                <% summary_list.with_row do |row| %>
+                  <% row.with_key text: "Met minimum teaching hours" %>
+                  <% row.with_value { employment.met_minimum_teaching_hours ? "Yes" : "No" } %>
+                <% end %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      </section>
+    <% end %>
+
+    <% if @form.task.completed? %>
+      <%= render "task_outcome", task: @form.task %>
+    <% else %>
+      <%= form_with(
+        model: @form,
+        scope: :form,
+        url: admin_claim_tasks_path(@claim),
+        builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+        data: { "test-id": "task-form" }
+      ) do |f| %>
+
+        <% if @form.task.claim.eligibility.employment_history.reject(&:deleted?).any? %>
+          <%= render(partial: "form_body", locals: { f: f, notes: @notes }) %>
+
+          <%= f.submit(
+            "Save and continue",
+            class: "govuk-button",
+            data: { module: "govuk-button" }
+          ) %>
+        <% end %>
+
+        <%= govuk_button_link_to(
+          "Add employment",
+          new_admin_claim_employment_history_employment_path(@form.task.claim),
+          secondary: true,
+          class: "govuk-!-margin-left-3"
         ) %>
       <% end %>
-
-      <%= govuk_button_link_to(
-        "Add employment",
-        new_admin_claim_employment_history_employment_path(@form.task.claim),
-        secondary: true,
-        class: "govuk-!-margin-left-3"
-      ) %>
     <% end %>
-  <% end %>
 
-  <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>
+    <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>
+  </div>
 </div>
