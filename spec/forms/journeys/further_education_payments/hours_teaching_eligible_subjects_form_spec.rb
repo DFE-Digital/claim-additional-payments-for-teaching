@@ -28,7 +28,7 @@ RSpec.describe Journeys::FurtherEducationPayments::HoursTeachingEligibleSubjects
       is_expected.not_to(
         allow_value(nil)
         .for(:hours_teaching_eligible_subjects)
-        .with_message("Select yes if you spend at least half of your timetabled teaching hours teaching these eligible courses")
+        .with_message("Select yes if you spend at least half of your timetabled teaching hours teaching these courses")
       )
     end
   end

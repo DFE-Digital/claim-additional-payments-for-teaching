@@ -1235,7 +1235,7 @@ en:
         question: Do you spend at least half of your timetabled teaching hours teaching these eligible courses?
         errors:
           inclusion:
-            Select yes if you spend at least half of your timetabled teaching hours teaching these eligible courses
+            Select yes if you spend at least half of your timetabled teaching hours teaching these courses
       passport:
         question: Do you have a valid passport?
         conditional_question: Passport number
