@@ -35,7 +35,6 @@ module FurtherEducationPayments
               course_not_available_at_the_right_time
               cant_access_suitable_course
               new_member_of_staff
-              no_valid_reason
             ]
           end
 
@@ -72,7 +71,7 @@ module FurtherEducationPayments
               return false
             end
 
-            valid_reasons = provider_verification_not_started_qualification_reason_options + ["other"]
+            valid_reasons = provider_verification_not_started_qualification_reason_options + ["other", "no_valid_reason"]
 
             provider_verification_not_started_qualification_reasons.all? do |option|
               valid_reasons.include?(option)
