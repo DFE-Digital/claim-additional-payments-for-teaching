@@ -28,7 +28,7 @@ RSpec.describe Journeys::FurtherEducationPayments::SelectProvisionForm, type: :m
       is_expected.not_to(
         allow_value("")
         .for(:possible_school_id)
-        .with_message("Select the further education provider you are employed by")
+        .with_message("Select where you are employed")
       )
     end
   end
