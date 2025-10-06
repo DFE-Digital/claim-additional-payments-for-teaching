@@ -1020,7 +1020,7 @@ en:
           between_2_5_and_12: Between 2.5 and 12 hours per week
           less_than_2_5: Less than 2.5 hours per week
         errors:
-          inclusion: Tell us, on average, how many hours you are timetabled to teach during the current term
+          inclusion: Select how many hours you are timetabled to teach during the current term
       teaching_hours_per_week_next_term:
         question: Are you timetabled to teach at least 2.5 hours per week at %{school_name} next term?
         hint: If you don’t know, you should speak to HR or apply when you know your arrangements for next term.
