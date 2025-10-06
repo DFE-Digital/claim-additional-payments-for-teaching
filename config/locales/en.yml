@@ -1043,7 +1043,7 @@ en:
           physics: Physics
           none: I do not teach any of these subjects
         errors:
-          inclusion: Select the subject areas that you teach, or select ‘I do not teach any of these subjects’
+          inclusion: Select the subject areas you teach
       actual_subjects_taught:
         options:
           building_construction: Building and construction
