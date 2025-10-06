@@ -1022,7 +1022,7 @@ en:
           between_2_5_and_12: 2.5 or more hours per week, but fewer than 12
           less_than_2_5: Fewer than 2.5 hours each week
         errors:
-          inclusion: Tell us, on average, how many hours you are timetabled to teach during the current term
+          inclusion: Select how many hours you are timetabled to teach during the current term
       further_education_teaching_start_year:
         question: Which academic year did you start teaching in further education in England?
         options:
