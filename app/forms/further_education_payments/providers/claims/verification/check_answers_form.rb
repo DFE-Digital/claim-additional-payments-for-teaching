@@ -183,6 +183,10 @@ module FurtherEducationPayments
               Policies::FurtherEducationPayments.alternative_idv_completed!(claim)
             end
 
+            AutomatedChecks::ClaimVerifiers::FurtherEducationPayments::ProviderVerification.new(
+              claim: claim
+            ).perform
+
             true
           end
 
