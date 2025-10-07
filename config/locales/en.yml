@@ -1215,7 +1215,7 @@ en:
         question: Enter work email
         hint: To verify your further education (FE) work email address we will send you an email with a 6-digit passcode.
         errors:
-          presence: Enter an email address
+          presence: Enter your work email address
         details:
           title: How we’ll use this information
           body: We’ll only use this email address to confirm your employment. We will not use it to send any updates about your application or link it to your GOV.UK One Login account.
@@ -1224,7 +1224,7 @@ en:
         heading: Check your %{school_name} work email
         question: Enter the 6-digit security code
         errors:
-          presence: Enter a passcode
+          presence: Enter the 6-digit security code
       gender:
         questions:
           payroll_gender: "How is your gender recorded on your employer’s payroll system?"
