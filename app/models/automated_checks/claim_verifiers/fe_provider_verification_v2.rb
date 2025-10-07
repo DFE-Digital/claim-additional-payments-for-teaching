@@ -12,20 +12,31 @@ module AutomatedChecks
       def perform
         return if task_already_persisted?
 
+        failed_checks = []
+
         if claim.eligibility.provider_verification_continued_employment == false
-          create_task
+          failed_checks << "no_continued_employment"
         end
+
+        unless claim.eligibility.valid_reason_for_not_starting_qualification?
+          failed_checks << "no_valid_reason_for_not_starting_qualification"
+        end
+
+        create_task(failed_checks) if failed_checks.any?
       end
 
       private
 
-      def create_task
+      def create_task(failed_checks)
         task = claim.tasks.build(
           {
             name: TASK_NAME,
             claim_verifier_match: nil,
             passed: false,
-            manual: false
+            manual: false,
+            data: {
+              failed_checks: failed_checks
+            }
           }
         )
 
