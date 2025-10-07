@@ -1193,7 +1193,7 @@ en:
               check with your FE provider as it affects your eligibility.
         errors:
           performance:
-            inclusion: Select yes if any performance measures have been started against you
+            inclusion: Select yes if you are currently subject to any formal performance measures as a result of continuous poor teaching standards
           disciplinary:
             inclusion: Select yes if you are currently subject to disciplinary action
       half_teaching_hours:
