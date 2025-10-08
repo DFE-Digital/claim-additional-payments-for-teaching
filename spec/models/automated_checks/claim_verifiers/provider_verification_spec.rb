@@ -93,7 +93,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
 
               task = claim.tasks.last
 
-              expect(task.name).to eq("provider_verification")
+              expect(task.name).to eq("fe_provider_verification_v2")
               expect(task.passed).to eq(false)
               expect(task.manual).to eq(false)
             end
@@ -146,7 +146,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
 
               task = claim.tasks.last
 
-              expect(task.name).to eq("provider_verification")
+              expect(task.name).to eq("fe_provider_verification_v2")
               expect(task.passed).to eq(true)
               expect(task.manual).to eq(false)
 
@@ -217,7 +217,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
 
                 task = claim.tasks.last
 
-                expect(task.name).to eq("provider_verification")
+                expect(task.name).to eq("fe_provider_verification_v2")
                 expect(task.passed).to eq(true)
                 expect(task.manual).to eq(false)
                 expect(task.created_by).to eq(user)
@@ -501,7 +501,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
             existing_task = create(
               :task,
               claim:,
-              name: "provider_verification",
+              name: "fe_provider_verification_v2",
               created_by: user,
               passed: false
             )
