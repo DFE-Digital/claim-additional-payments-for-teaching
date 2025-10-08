@@ -22,7 +22,8 @@ module Reports
       "Course",
       "Continued employment",
       "Performance",
-      "Disciplinary"
+      "Disciplinary",
+      "Not started qualification reason"
     ]
 
     def initialize
@@ -78,13 +79,26 @@ module Reports
           present(claim.eligibility.provider_verification_half_timetabled_teaching_time), # Subject area
           present(claim.eligibility.provider_verification_continued_employment), # Teaching until end of academic year
           present(claim.eligibility.provider_verification_performance_measures),
-          present(claim.eligibility.provider_verification_disciplinary_action)
+          present(claim.eligibility.provider_verification_disciplinary_action),
+          not_started_qualification_reason
         ]
       end
 
       private
 
       attr_reader :claim
+
+      def not_started_qualification_reason
+        if claim.eligibility.provider_verification_not_started_qualification_reasons.empty?
+          return "N/A"
+        end
+
+        if claim.eligibility.valid_reason_for_not_starting_qualification?
+          "Valid reason"
+        else
+          "No valid reason"
+        end
+      end
 
       def approval_date
         I18n.l(approval.created_at.to_date, format: :day_month_year)

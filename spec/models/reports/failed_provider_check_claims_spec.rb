@@ -99,7 +99,8 @@ RSpec.describe Reports::FailedProviderCheckClaims do
           "Course",
           "Continued employment",
           "Performance",
-          "Disciplinary"
+          "Disciplinary",
+          "Not started qualification reason"
         ],
         [
           fe_claim_with_failing_provider_check_1.reference,
@@ -109,6 +110,7 @@ RSpec.describe Reports::FailedProviderCheckClaims do
           "01/11/2025",
           "Aaron Admin",
           "No",
+          "N/A",
           "N/A",
           "N/A",
           "N/A",
@@ -137,7 +139,8 @@ RSpec.describe Reports::FailedProviderCheckClaims do
           "Yes",
           "Yes",
           "No",
-          "No"
+          "No",
+          "No valid reason"
         ]
       ])
     end
