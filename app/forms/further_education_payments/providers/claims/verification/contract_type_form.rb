@@ -9,7 +9,10 @@ module FurtherEducationPayments
             :provider_verification_contract_type,
             included: {
               in: ->(form) { form.contract_type_options.map(&:id) },
-              message: "Enter the type of contract they have"
+              message: ->(form, _) do
+                "Select the type of contract #{form.claimant_name} has directly " \
+                "with #{form.provider_name}"
+              end
             },
             allow_nil: :save_and_exit?
           )
