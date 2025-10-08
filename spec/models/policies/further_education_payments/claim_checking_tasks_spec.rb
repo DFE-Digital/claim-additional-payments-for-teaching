@@ -13,18 +13,19 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks, feature_f
     let(:claimant_email_address) { "e.krabappel@springfield-elementary.edu" }
     let(:onelogin_idv_at) { 1.day.ago }
     let(:identity_confirmed_with_onelogin) { true }
+    let(:academic_year) { AcademicYear.current }
 
     let(:eligibility) do
       build(
         :further_education_payments_eligibility,
+        :provider_verification_completed,
         teacher_reference_number: teacher_reference_number,
-        verification: {
-          verifier: {
-            first_name: "Walter",
-            last_name: "Skinner",
-            email: "w.s.skinner@springfield-elementary.edu"
-          }
-        }
+        verified_by: create(
+          :dfe_signin_user,
+          given_name: "Walter",
+          family_name: "Skinner",
+          email: "w.s.skinner@springfield-elementary.edu"
+        )
       )
     end
 
@@ -32,6 +33,7 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks, feature_f
       create(
         :claim,
         policy: Policies::FurtherEducationPayments,
+        academic_year: academic_year,
         payroll_gender: payroll_gender,
         hmrc_bank_validation_succeeded: hmrc_bank_validation_succeeded,
         eligibility: eligibility,
@@ -46,7 +48,7 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks, feature_f
     let(:invariant_tasks) do
       [
         "one_login_identity",
-        "provider_verification",
+        "fe_provider_verification_v2",
         "student_loan_plan"
       ]
     end
@@ -55,6 +57,16 @@ RSpec.describe Policies::FurtherEducationPayments::ClaimCheckingTasks, feature_f
       allow(Claim::MatchingAttributeFinder).to(
         receive(:new).and_return(double(matching_claims: matching_claims))
       )
+    end
+
+    context "when a year 1 fe claim" do
+      let(:academic_year) { AcademicYear.new(2024) }
+      it { expect(subject.applicable_task_names).to include("provider_verification") }
+      it { expect(subject.applicable_task_names).not_to include("fe_provider_verification_v2") }
+    end
+
+    context "when not a year 1 fe claim" do
+      it { expect(subject.applicable_task_names).not_to include("provider_verification") }
     end
 
     context "when the claim has a teacher reference number" do

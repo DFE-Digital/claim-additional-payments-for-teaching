@@ -1,7 +1,15 @@
 require "rails_helper"
 
 RSpec.feature "Admin performs identity confirmation task" do
-  let(:claim) { create(:claim, :submitted, :with_onelogin_idv_data, policy: Policies::FurtherEducationPayments) }
+  let(:claim) do
+    create(
+      :claim,
+      :submitted,
+      :with_onelogin_idv_data,
+      policy: Policies::FurtherEducationPayments,
+      eligibility_trait: [:eligible, :provider_verification_completed]
+    )
+  end
 
   before do
     AutomatedChecks::ClaimVerifiers::OneLoginIdentity.new(claim:).perform

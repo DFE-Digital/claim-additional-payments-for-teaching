@@ -15,7 +15,7 @@ RSpec.feature "Admin view claim for FurtherEducationPayments" do
       :claim,
       :submitted,
       policy: Policies::FurtherEducationPayments,
-      eligibility_trait: :with_trn
+      eligibility_trait: [:eligible, :with_trn]
     )
   }
   let!(:claim_not_verified) {
@@ -23,18 +23,10 @@ RSpec.feature "Admin view claim for FurtherEducationPayments" do
       :claim,
       :submitted,
       policy: Policies::FurtherEducationPayments,
-      eligibility_trait: :not_verified
+      eligibility_trait: :eligible
     )
   }
   let!(:claim_with_duplicates_no_provider_email_sent) {
-    create(
-      :claim,
-      :submitted,
-      policy: Policies::FurtherEducationPayments,
-      eligibility_trait: :duplicate
-    )
-  }
-  let!(:claim_with_duplicates_provider_email_sent) {
     create(
       :claim,
       :submitted,
@@ -47,13 +39,12 @@ RSpec.feature "Admin view claim for FurtherEducationPayments" do
       :claim,
       :submitted,
       policy: Policies::FurtherEducationPayments,
-      eligibility_trait: :verified
+      eligibility_trait: :provider_verification_completed
     )
   }
 
   before do
     sign_in_as_service_operator
-    create(:note, claim: claim_with_duplicates_provider_email_sent, label: "provider_verification")
   end
 
   scenario "view claim summary for claim with no TRN" do
@@ -83,12 +74,7 @@ RSpec.feature "Admin view claim for FurtherEducationPayments" do
     find("a[href='#{admin_claim_tasks_path(claim_with_duplicates_no_provider_email_sent)}']").click
     expect(page).to have_content("Awaiting decision - not on hold")
 
-    visit admin_claims_path(filter: {status: "awaiting_provider_verification"})
-    find("a[href='#{admin_claim_tasks_path(claim_with_duplicates_provider_email_sent)}']").click
-    expect(page).to have_content("Awaiting provider verification")
-
     visit admin_claims_path
-    click_link "Clear filters"
     find("a[href='#{admin_claim_tasks_path(verified_claim)}']").click
     expect(page).to have_content("Awaiting decision - not on hold")
   end

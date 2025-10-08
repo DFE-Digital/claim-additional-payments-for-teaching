@@ -205,5 +205,22 @@
         ) %>
       <% end %>
     <% end %>
+    <%= summary_list.with_row do |row| %>
+      <%= row.with_key(text: "Employed until end of academic year") %>
+
+      <%= row.with_value(
+        text: form.continued_employment
+      ) %>
+
+      <% if editable %>
+        <%= row.with_action(
+          text: "Change",
+          href: edit_further_education_payments_providers_claim_verification_path(
+            form.claim,
+            slug: "continued_employment"
+          )
+        ) %>
+      <% end %>
+    <% end %>
   <% end %>
 <% end %>

@@ -15,10 +15,10 @@ module Policies
 
       def personal_details
         [
-          [translate("#{claim.policy.locale_key}.govuk_verify_fields.full_name").capitalize, personal_data(claim.full_name)],
-          [translate("govuk_verify_fields.date_of_birth").capitalize, personal_data(formatted_date(claim.date_of_birth))],
+          ["Applicant name", personal_data(claim.full_name)],
+          ["Date of birth", personal_data(formatted_date(claim.date_of_birth))],
           [translate("admin.national_insurance_number"), personal_data(claim.national_insurance_number)],
-          [translate("govuk_verify_fields.address").capitalize, personal_data(sanitize(claim.address("<br>").html_safe, tags: %w[br]))],
+          ["Address", personal_data(sanitize(claim.address("<br>").html_safe, tags: %w[br]))],
           [translate("#{claim.policy.locale_key}.admin.email_address"), claim.email_address],
           [translate("#{claim.policy.locale_key}.admin.practitioner_email_address"), claim.practitioner_email_address],
           [translate("admin.mobile_number"), claim.mobile_number],

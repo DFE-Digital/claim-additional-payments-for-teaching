@@ -137,7 +137,7 @@ RSpec.describe Journeys::Navigator do
       end
 
       it "returns relevant slug" do
-        expect(subject.furthest_permissible_slug).to eql("further-education-teaching-start-year")
+        expect(subject.furthest_permissible_slug).to eql("select-provision")
       end
     end
 

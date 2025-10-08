@@ -17,6 +17,52 @@ RSpec.describe Policies::EarlyYearsPayments::ClaimCheckingTasks do
       end
     end
 
+    describe "one_login_identity" do
+      context "with a year 1 claim" do
+        context "when the claim was submitted before we switched to one login" do
+          # It doesn't have the one login task as the OL claim verifier didn't
+          # run
+          let(:claim) do
+            create(
+              :claim,
+              policy: Policies::EarlyYearsPayments,
+              academic_year: AcademicYear.new(2024)
+            )
+          end
+
+          it "includes identity_confirmation task" do
+            expect(subject.applicable_task_names).to include("identity_confirmation")
+          end
+
+          it "does not include one_login_identity task" do
+            expect(subject.applicable_task_names).not_to include("one_login_identity")
+          end
+        end
+
+        context "when the claim was submitted after we switched to one login" do
+          let(:claim) do
+            create(
+              :claim,
+              policy: Policies::EarlyYearsPayments,
+              academic_year: AcademicYear.new(2024)
+            )
+          end
+
+          before do
+            create(:task, name: "one_login_identity", claim: claim)
+          end
+
+          it "includes one_login_identity task" do
+            expect(subject.applicable_task_names).to include("one_login_identity")
+          end
+
+          it "does not include identity_confirmation task" do
+            expect(subject.applicable_task_names).not_to include("identity_confirmation")
+          end
+        end
+      end
+    end
+
     describe "ey_alternative_verification task" do
       let(:claim) do
         build(

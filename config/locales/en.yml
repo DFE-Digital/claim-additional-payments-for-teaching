@@ -189,6 +189,9 @@ en:
       provider_verification:
         name: Provider verification
         title: "Confirm the provider has responded and verified the claimant’s information"
+      fe_provider_verification_v2:
+        name: Provider verification
+        title: "Confirm the provider has responded and verified the claimant’s information"
       eligibility_check:
         name: Eligibility check
         title: "Confirm the provider has responded and verified the claimant’s information"
@@ -269,14 +272,6 @@ en:
       male: "Male"
       female: "Female"
       dont_know: "Don’t know"
-  govuk_verify_fields:
-    first_name: "first name"
-    middle_name: "middle name"
-    surname: "surname"
-    date_of_birth: "date of birth"
-    payroll_gender: "gender"
-    address: "address"
-    full_name: "Full name"
   forms:
     teacher_reference_number:
       questions:
@@ -914,6 +909,9 @@ en:
             claimant_answers:
               true: "Yes"
               false: "No"
+        fe_provider_verification_v2:
+          name: Alternative verification
+          title: Do the details provided by the claimant match the provider’s responses?
         employment:
           title: Does the claimant’s place of work match the above information on their claim?
         provider_details:
@@ -1569,8 +1567,6 @@ en:
     policy_full_name: Early years financial incentive payment
     support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
     claim_description: for an early years financial incentive payment
-    govuk_verify_fields:
-      full_name: Applicant name
     admin:
       email_address: Contact email
       practitioner_email_address: Provider-input contact email

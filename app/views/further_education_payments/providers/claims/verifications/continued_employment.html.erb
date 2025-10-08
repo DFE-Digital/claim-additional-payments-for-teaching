@@ -16,7 +16,7 @@
       url: further_education_payments_providers_claim_verification_path(
         @form.claim,
         @form.provider,
-        slug: @form.slug,
+        slug: @form.slug
       ),
       builder: GOVUKDesignSystemFormBuilder::FormBuilder,
       method: :patch,
@@ -24,21 +24,20 @@
       <%= f.govuk_error_summary %>
 
       <h2 class="govuk-heading-m">
-        Subject area
+        Continued employment
       </h2>
 
-      <%= f.govuk_collection_radio_buttons \
-        :provider_verification_half_timetabled_teaching_time,
-        f.object.radio_options,
+      <%= f.govuk_collection_radio_buttons(
+        :provider_verification_continued_employment,
+        f.object.continued_employment_options,
         :id,
         :name,
         legend: {
-          text: "Does #{f.object.claimant_name} spend at least half of their spring term timetabled teaching time teaching these courses?",
+          text: "Is #{f.object.claimant_name} expected to continue to be employed at " \
+                "#{f.object.provider_name} until the end of the academic year",
           size: "s",
-        },
-        hint: -> do %>
-          <%= govuk_list f.object.course_descriptions, type: :bullet %>
-        <% end %>
+        }
+      ) %>
 
       <%= f.govuk_submit("Continue") %>
 

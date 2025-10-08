@@ -4,6 +4,7 @@ RSpec.describe "Viewing year 1 claims in the admin area" do
   it "shows year 1 verification details" do
     eligibility = create(
       :further_education_payments_eligibility,
+      :eligible,
       :verified,
       :identity_verified_by_provider
     )

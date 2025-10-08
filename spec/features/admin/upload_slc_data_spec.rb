@@ -43,32 +43,32 @@ RSpec.feature "Upload SLC data" do
 
   let!(:fe_claim_with_slc_data_no_student_loan_nil_submitted_using_slc_data) {
     create(:claim, :submitted, policy: Policies::FurtherEducationPayments,
-      eligibility: build(:further_education_payments_eligibility, :eligible),
+      eligibility: build(:further_education_payments_eligibility, :eligible, :provider_verification_completed),
       has_student_loan: nil, student_loan_plan: nil, submitted_using_slc_data: nil) # having nil submitted_using_slc_data won't happen after LUPEYALPHA-1010 merged
   }
   let!(:fe_claim_with_slc_data_with_student_loan_nil_submitted_using_slc_data) {
     create(:claim, :submitted, policy: Policies::FurtherEducationPayments,
-      eligibility: build(:further_education_payments_eligibility, :eligible),
+      eligibility: build(:further_education_payments_eligibility, :eligible, :provider_verification_completed),
       has_student_loan: nil, student_loan_plan: nil, submitted_using_slc_data: nil) # having nil submitted_using_slc_data won't happen after LUPEYALPHA-1010 merged
   }
   let!(:fe_claim_no_slc_data_nil_submitted_using_slc_data) {
     create(:claim, :submitted, :with_student_loan, policy: Policies::FurtherEducationPayments,
-      eligibility: build(:further_education_payments_eligibility, :eligible),
+      eligibility: build(:further_education_payments_eligibility, :eligible, :provider_verification_completed),
       has_student_loan: nil, student_loan_plan: nil, submitted_using_slc_data: nil) # having nil submitted_using_slc_data won't happen after LUPEYALPHA-1010 merged
   }
   let!(:fe_claim_with_slc_data_no_student_loan) {
     create(:claim, :submitted, policy: Policies::FurtherEducationPayments,
-      eligibility: build(:further_education_payments_eligibility, :eligible),
+      eligibility: build(:further_education_payments_eligibility, :eligible, :provider_verification_completed),
       has_student_loan: nil, student_loan_plan: nil, submitted_using_slc_data: false)
   }
   let!(:fe_claim_with_slc_data_with_student_loan) {
     create(:claim, :submitted, policy: Policies::FurtherEducationPayments,
-      eligibility: build(:further_education_payments_eligibility, :eligible),
+      eligibility: build(:further_education_payments_eligibility, :eligible, :provider_verification_completed),
       has_student_loan: nil, student_loan_plan: nil, submitted_using_slc_data: false)
   }
   let!(:fe_claim_no_slc_data) {
     create(:claim, :submitted, :with_student_loan, policy: Policies::FurtherEducationPayments,
-      eligibility: build(:further_education_payments_eligibility, :eligible),
+      eligibility: build(:further_education_payments_eligibility, :eligible, :provider_verification_completed),
       has_student_loan: nil, student_loan_plan: nil, submitted_using_slc_data: false)
   }
 

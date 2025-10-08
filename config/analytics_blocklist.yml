@@ -1,238 +1,238 @@
 ---
 :shared:
-  :claims:
-    - first_name
-    - middle_name
-    - surname
-    - date_of_birth
-    - date_of_birth_day
-    - date_of_birth_month
-    - date_of_birth_year
-    - address_line_1
-    - address_line_2
-    - address_line_3
-    - address_line_4
-    - postcode
-    - national_insurance_number
-    - bank_sort_code
-    - bank_account_number
-    - building_society_roll_number
-    - banking_name
-    - mobile_number
-    - column_to_remove_teacher_reference_number
-    - email_address
-    - payroll_gender
-    - one_time_password
-    - hmrc_bank_validation_responses
-    - dqt_teacher_status
-    - teacher_id_user_info
-    - onelogin_credentials
-    - onelogin_user_info
-    - paye_reference
-    - practitioner_email_address
-    - provider_contact_name
-    - onelogin_idv_first_name
-    - onelogin_idv_last_name
-    - onelogin_idv_full_name
-    - onelogin_idv_date_of_birth
-  :dfe_sign_in_users:
-    - given_name
-    - family_name
-    - email
-    - session_token
-  :eligible_ey_providers:
-    - primary_key_contact_email_address
-    - secondary_contact_email_address
-    - file_upload_id
-  :eligible_fe_providers:
-    - primary_key_contact_email_address
-    - file_upload_id
-  :schools:
-    - postcode_sanitised
-  :file_uploads:
-    - id
-    - uploaded_by_id
-    - body
-    - created_at
-    - updated_at
-    - target_data_model
-    - completed_processing_at
-    - academic_year
-  :reminders:
-    - full_name
-    - email_address
-    - one_time_password
-  :student_loans_data:
-    - id
-    - claim_reference
-    - nino
-    - full_name
-    - date_of_birth
-    - policy_name
-    - no_of_plans_currently_repaying
-    - plan_type_of_deduction
-    - amount
-    - created_at
-    - updated_at
-  :international_relocation_payments_eligibilities:
-    - passport_number
-    - school_headteacher_name
-  :further_education_payments_eligibilities:
-    - verification
-    - claimant_date_of_birth
-    - claimant_postcode
-    - claimant_national_insurance_number
-    - claimant_valid_passport
-    - claimant_passport_number
-    - passport_number
-    - work_email
-    - provider_verification_claimant_date_of_birth
-    - provider_verification_claimant_email
-    - provider_verification_claimant_national_insurance_number
-    - provider_verification_claimant_postcode
-    - provider_verification_continued_employment
-  :journeys_sessions:
-    - answers
-  :early_years_payment_eligibilities:
-    - provider_email_address
-    - practitioner_first_name
-    - practitioner_surname
-    - alternative_idv_claimant_date_of_birth
-    - alternative_idv_claimant_postcode
-    - alternative_idv_claimant_national_insurance_number
-    - alternative_idv_claimant_email
-  :risk_indicators:
-    - id
-    - field
-    - value
-    - created_at
-    - updated_at
-  :reports:
-    - id
-    - name
-    - csv
-    - created_at
-    - updated_at
-    - number_of_rows
-  :targeted_retention_incentive_payments_awards:
-    - file_upload_id
-  :journeys_service_access_codes:
-    - id
-    - code
-    - used
-    - journey
-    - created_at
-    - updated_at
-  :feature_flags:
-    - id
-    - name
-    - enabled
-    - created_at
-    - updated_at
-  :file_downloads:
-    - id
-    - downloaded_by_id
-    - body
-    - filename
-    - content_type
-    - source_data_model
-    - source_data_model_id
-    - created_at
-    - updated_at
-  :payment_confirmations:
-    - file_upload_id
   :solid_queue_semaphores:
-    - id
-    - key
-    - value
-    - expires_at
-    - created_at
-    - updated_at
+  - id
+  - key
+  - value
+  - expires_at
+  - created_at
+  - updated_at
   :solid_queue_recurring_tasks:
-    - id
-    - key
-    - schedule
-    - command
-    - class_name
-    - arguments
-    - queue_name
-    - priority
-    - static
-    - description
-    - created_at
-    - updated_at
+  - id
+  - key
+  - schedule
+  - command
+  - class_name
+  - arguments
+  - queue_name
+  - priority
+  - static
+  - description
+  - created_at
+  - updated_at
   :solid_queue_processes:
-    - id
-    - kind
-    - last_heartbeat_at
-    - supervisor_id
-    - pid
-    - hostname
-    - metadata
-    - created_at
-    - name
+  - id
+  - kind
+  - last_heartbeat_at
+  - supervisor_id
+  - pid
+  - hostname
+  - metadata
+  - created_at
+  - name
   :solid_queue_pauses:
-    - id
-    - queue_name
-    - created_at
+  - id
+  - queue_name
+  - created_at
   :solid_queue_jobs:
-    - id
-    - queue_name
-    - class_name
-    - arguments
-    - priority
-    - active_job_id
-    - scheduled_at
-    - finished_at
-    - concurrency_key
-    - created_at
-    - updated_at
+  - id
+  - queue_name
+  - class_name
+  - arguments
+  - priority
+  - active_job_id
+  - scheduled_at
+  - finished_at
+  - concurrency_key
+  - created_at
+  - updated_at
   :solid_queue_scheduled_executions:
-    - id
-    - job_id
-    - queue_name
-    - priority
-    - scheduled_at
-    - created_at
+  - id
+  - job_id
+  - queue_name
+  - priority
+  - scheduled_at
+  - created_at
   :solid_queue_recurring_executions:
-    - id
-    - job_id
-    - task_key
-    - run_at
-    - created_at
+  - id
+  - job_id
+  - task_key
+  - run_at
+  - created_at
   :solid_queue_ready_executions:
-    - id
-    - job_id
-    - queue_name
-    - priority
-    - created_at
+  - id
+  - job_id
+  - queue_name
+  - priority
+  - created_at
   :solid_queue_failed_executions:
-    - id
-    - job_id
-    - error
-    - created_at
+  - id
+  - job_id
+  - error
+  - created_at
   :solid_queue_claimed_executions:
-    - id
-    - job_id
-    - process_id
-    - created_at
+  - id
+  - job_id
+  - process_id
+  - created_at
   :solid_queue_blocked_executions:
-    - id
-    - job_id
-    - queue_name
-    - priority
-    - concurrency_key
-    - expires_at
-    - created_at
-  :dqt_higher_education_qualifications:
-    - id
-    - teacher_reference_number
-    - date_of_birth
-    - national_insurance_number
-    - subject_code
-    - description
-    - created_at
-    - updated_at
+  - id
+  - job_id
+  - queue_name
+  - priority
+  - concurrency_key
+  - expires_at
+  - created_at
+  :journeys_service_access_codes:
+  - id
+  - code
+  - journey
+  - created_at
+  - updated_at
+  - used
+  :dfe_sign_in_users:
+  - given_name
+  - family_name
+  - email
+  - session_token
+  :schools:
+  - postcode_sanitised
+  :risk_indicators:
+  - id
+  - field
+  - value
+  - created_at
+  - updated_at
+  :reports:
+  - id
+  - name
+  - csv
+  - number_of_rows
+  - created_at
+  - updated_at
+  :reminders:
+  - full_name
+  - email_address
+  - one_time_password
+  :payment_confirmations:
+  - file_upload_id
   :payments:
-    - national_insurance
-    - employers_national_insurance
+  - national_insurance
+  - employers_national_insurance
+  :file_uploads:
+  - id
+  - uploaded_by_id
+  - body
+  - created_at
+  - updated_at
+  - target_data_model
+  - completed_processing_at
+  - academic_year
+  :file_downloads:
+  - id
+  - downloaded_by_id
+  - body
+  - filename
+  - content_type
+  - source_data_model
+  - source_data_model_id
+  - created_at
+  - updated_at
+  :feature_flags:
+  - id
+  - name
+  - enabled
+  - created_at
+  - updated_at
+  :student_loans_data:
+  - id
+  - claim_reference
+  - nino
+  - full_name
+  - date_of_birth
+  - policy_name
+  - no_of_plans_currently_repaying
+  - plan_type_of_deduction
+  - amount
+  - created_at
+  - updated_at
+  :dqt_higher_education_qualifications:
+  - id
+  - teacher_reference_number
+  - date_of_birth
+  - national_insurance_number
+  - subject_code
+  - description
+  - created_at
+  - updated_at
+  :eligible_fe_providers:
+  - primary_key_contact_email_address
+  - file_upload_id
+  :eligible_ey_providers:
+  - primary_key_contact_email_address
+  - secondary_contact_email_address
+  - file_upload_id
+  :targeted_retention_incentive_payments_awards:
+  - file_upload_id
+  :early_years_payment_eligibilities:
+  - provider_email_address
+  - practitioner_first_name
+  - practitioner_surname
+  - alternative_idv_claimant_date_of_birth
+  - alternative_idv_claimant_postcode
+  - alternative_idv_claimant_national_insurance_number
+  - alternative_idv_claimant_email
+  :further_education_payments_eligibilities:
+  - verification
+  - claimant_date_of_birth
+  - claimant_postcode
+  - claimant_national_insurance_number
+  - claimant_valid_passport
+  - claimant_passport_number
+  - passport_number
+  - work_email
+  - provider_verification_claimant_date_of_birth
+  - provider_verification_claimant_postcode
+  - provider_verification_claimant_national_insurance_number
+  - provider_verification_claimant_email
+  - provider_verification_teaching_hours_per_week_next_term
+  - provider_verification_continued_employment
+  :international_relocation_payments_eligibilities:
+  - passport_number
+  - school_headteacher_name
+  :claims:
+  - address_line_1
+  - address_line_2
+  - address_line_3
+  - address_line_4
+  - postcode
+  - date_of_birth
+  - column_to_remove_teacher_reference_number
+  - national_insurance_number
+  - email_address
+  - bank_sort_code
+  - bank_account_number
+  - payroll_gender
+  - first_name
+  - middle_name
+  - surname
+  - banking_name
+  - building_society_roll_number
+  - mobile_number
+  - hmrc_bank_validation_responses
+  - teacher_id_user_info
+  - dqt_teacher_status
+  - onelogin_credentials
+  - onelogin_user_info
+  - paye_reference
+  - practitioner_email_address
+  - provider_contact_name
+  - onelogin_idv_first_name
+  - onelogin_idv_last_name
+  - onelogin_idv_date_of_birth
+  - onelogin_idv_full_name
+  - date_of_birth_day
+  - date_of_birth_month
+  - date_of_birth_year
+  :journeys_sessions:
+  - answers

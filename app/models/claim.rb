@@ -107,6 +107,9 @@ class Claim < ApplicationRecord
   scope :by_policies, ->(policies) { where(policy: policies) }
   scope :by_policies_for_journey, ->(journey) { by_policies(journey.policies) }
   scope :by_academic_year, ->(academic_year) { where(academic_year: academic_year) }
+  scope :after_academic_year, ->(academic_year) do
+    where("academic_year > ?", academic_year.to_s)
+  end
   scope :assigned_to_team_member, ->(service_operator_id) { where(assigned_to_id: service_operator_id) }
   scope :by_claims_team_member, ->(service_operator_id, status) do
     if %w[approved approved_awaiting_payroll rejected].include?(status)
@@ -134,12 +137,9 @@ class Claim < ApplicationRecord
   scope :rejected_awaiting_qa, -> { rejected.qa_required.where(qa_completed_at: nil) }
   scope :qa_required, -> { where(qa_required: true) }
   scope :awaiting_further_education_provider_verification, -> do
-    joins("INNER JOIN further_education_payments_eligibilities ON further_education_payments_eligibilities.id = claims.eligibility_id")
-      .left_outer_joins(:notes)
-      .where("further_education_payments_eligibilities.verification = '{}'")
-      .and(
-        Claim.where("further_education_payments_eligibilities.flagged_as_duplicate = FALSE")
-        .or(Claim.where("further_education_payments_eligibilities.flagged_as_duplicate = TRUE").and(Claim.where(notes: {label: "provider_verification"})))
+    by_policy(Policies::FurtherEducationPayments)
+      .where(
+        eligibility_id: Policies::FurtherEducationPayments::Eligibility.awaiting_provider_verification.select(:id)
       )
   end
   scope :not_awaiting_further_education_provider_verification, -> do
@@ -330,22 +330,6 @@ class Claim < ApplicationRecord
   # TODO: We no longer use GOV.UK Verify these verified? methods aren't used anymore.
   def identity_verified?
     govuk_verify_fields.any?
-  end
-
-  def name_verified?
-    govuk_verify_fields.include?("first_name")
-  end
-
-  def date_of_birth_verified?
-    govuk_verify_fields.include?("date_of_birth")
-  end
-
-  def payroll_gender_verified?
-    govuk_verify_fields.include?("payroll_gender")
-  end
-
-  def address_from_govuk_verify?
-    (ADDRESS_ATTRIBUTES & govuk_verify_fields).any?
   end
 
   def personal_data_removed?

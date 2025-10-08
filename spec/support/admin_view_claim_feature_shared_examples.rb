@@ -1,6 +1,14 @@
 RSpec.shared_examples "Admin View Claim Feature" do |policy|
   let(:academic_year) { AcademicYear.current }
 
+  let(:eligibility_trait) do
+    if policy == Policies::FurtherEducationPayments
+      [:eligible, :with_trn, :provider_verification_completed]
+    else
+      :eligible
+    end
+  end
+
   let!(:claim) {
     create(
       :claim,
@@ -8,17 +16,11 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
       policy: policy,
       first_name: Faker::Name.first_name,
       surname: Faker::Name.last_name,
-      eligibility_trait: :eligible
+      eligibility_trait: eligibility_trait
     )
   }
 
   let!(:multiple_claim) {
-    eligibility_trait = if policy == Policies::FurtherEducationPayments
-      :with_trn
-    else
-      :eligible
-    end
-
     create(
       :claim,
       :submitted,
@@ -37,7 +39,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
       :claim,
       :submitted,
       policy: policy,
-      eligibility_trait: :eligible,
+      eligibility_trait: eligibility_trait,
       eligibility_attributes: duplicate_attribute
     )
   }
@@ -47,7 +49,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
       :claim,
       :payrollable,
       policy: policy,
-      eligibility_trait: :eligible
+      eligibility_trait: eligibility_trait
     )
   }
 
@@ -56,7 +58,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
       :claim,
       :approved,
       policy: policy,
-      eligibility_trait: :eligible
+      eligibility_trait: eligibility_trait
     )
   }
 
@@ -65,7 +67,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
       :claim,
       :rejected,
       policy: policy,
-      eligibility_trait: :eligible
+      eligibility_trait: eligibility_trait
     )
   }
 
@@ -161,7 +163,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     when Policies::InternationalRelocationPayments
       ["First year application", "Identity confirmation", "Visa", "Employment", "Teaching hours", "Continuous employment", "Decision"]
     when Policies::FurtherEducationPayments
-      ["Identity confirmation", "Provider verification", "Student loan plan", "Decision"]
+      ["Identity confirmation", "Provider verification", "Employment", "Student loan plan", "Decision"]
     when Policies::EarlyYearsPayments
       ["EOI cross reference", "One Login identity check", "Employment", "Student loan plan", "Decision"]
     else
