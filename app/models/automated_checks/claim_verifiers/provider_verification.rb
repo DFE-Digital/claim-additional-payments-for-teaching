@@ -3,8 +3,6 @@ module AutomatedChecks
     class ProviderVerification
       attr_reader :claim
 
-      TASK_NAME = "provider_verification"
-
       def initialize(claim:)
         raise ArgumentError, "Claim must be an Further Education claim" unless claim.policy == Policies::FurtherEducationPayments
 
@@ -26,13 +24,17 @@ module AutomatedChecks
 
       private
 
+      def task_name
+        "fe_provider_verification_v2"
+      end
+
       def task_exists?
-        claim.tasks.exists?(name: TASK_NAME)
+        claim.tasks.exists?(name: task_name)
       end
 
       def create_task!
         claim.tasks.create!(
-          name: TASK_NAME,
+          name: task_name,
           passed: passed?,
           manual: false,
           created_by: verifier_user
