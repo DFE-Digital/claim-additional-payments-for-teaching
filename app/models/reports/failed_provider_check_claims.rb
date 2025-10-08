@@ -12,28 +12,26 @@ module Reports
       "Claim status",
       "Decision date",
       "Decision agent",
-      "Contract of employment",
       "Teaching responsibilities",
+      "Contract of employment",
       "First 5 years of teaching",
       "One full term",
       "Timetabled teaching hours",
       "Age range taught",
       "Subject",
       "Course",
-      "2.5 hours weekly teaching",
+      "Continued employment",
       "Performance",
       "Disciplinary"
     ]
 
-    # Update the task name to the year two name
-    # Update the body to pull the data from the new location.
     def initialize
       @claims = Claim
         .by_policy(Policies::FurtherEducationPayments)
         .approved
         .where(academic_year: AcademicYear.current)
         .joins(:tasks)
-        .merge(Task.where(name: "provider_verification", passed: false))
+        .merge(Task.where(name: "fe_provider_verification_v2", passed: false))
         .includes(:eligibility, decisions: :created_by)
     end
 
@@ -67,20 +65,20 @@ module Reports
           status(claim),
           approval_date,
           approval.created_by.full_name,
-          provider_answer("contract_type"),
-          provider_answer("teaching_responsibilities"),
-          provider_answer("further_education_teaching_start_year"),
-          provider_answer("taught_at_least_one_term"),
-          provider_answer("teaching_hours_per_week"),
-          provider_answer("half_teaching_hours"),
-          provider_answer("subjects_taught"),
+          present(claim.eligibility.provider_verification_teaching_responsibilities),
+          present(claim.eligibility.provider_verification_contract_type),
+          present(claim.eligibility.provider_verification_teaching_start_year_matches_claim),
+          present(claim.eligibility.provider_verification_taught_at_least_one_academic_term),
+          present(claim.eligibility.provider_verification_teaching_hours_per_week), # Contracted hours
+          present(claim.eligibility.provider_verification_half_teaching_hours), # Did they teach 16 year olds
+          present(claim.eligibility.provider_verification_half_timetabled_teaching_time), # Subject area
           # The provider verifies the courses taught question as part of
           # verifying the subjects taught question, so these two columns will
           # always be the same.
-          provider_answer("subjects_taught"),
-          provider_answer("teaching_hours_per_week_next_term"),
-          provider_answer("subject_to_formal_performance_action"),
-          provider_answer("subject_to_disciplinary_action")
+          present(claim.eligibility.provider_verification_half_timetabled_teaching_time), # Subject area
+          present(claim.eligibility.provider_verification_continued_employment), # Teaching until end of academic year
+          present(claim.eligibility.provider_verification_performance_measures),
+          present(claim.eligibility.provider_verification_disciplinary_action)
         ]
       end
 
@@ -96,11 +94,12 @@ module Reports
         @approval ||= claim.decisions.reject(&:undone).last
       end
 
-      def provider_answer(name)
-        case claim.eligibility.verification_assertion(name)
+      def present(value)
+        case value
         when true then "Yes"
         when false then "No"
-        else "N/A" # fixed and variable contracts have different assertions
+        when nil then "N/A"
+        else value
         end
       end
     end
