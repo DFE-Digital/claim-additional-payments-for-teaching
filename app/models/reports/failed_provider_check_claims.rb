@@ -25,6 +25,8 @@ module Reports
       "Disciplinary"
     ]
 
+    # Update the task name to the year two name
+    # Update the body to pull the data from the new location.
     def initialize
       @claims = Claim
         .by_policy(Policies::FurtherEducationPayments)
@@ -65,20 +67,20 @@ module Reports
           status(claim),
           approval_date,
           approval.created_by.full_name,
-          present_assertion("contract_type"),
-          present_assertion("teaching_responsibilities"),
-          present_assertion("further_education_teaching_start_year"),
-          present_assertion("taught_at_least_one_term"),
-          present_assertion("teaching_hours_per_week"),
-          present_assertion("half_teaching_hours"),
-          present_assertion("subjects_taught"),
+          provider_answer("contract_type"),
+          provider_answer("teaching_responsibilities"),
+          provider_answer("further_education_teaching_start_year"),
+          provider_answer("taught_at_least_one_term"),
+          provider_answer("teaching_hours_per_week"),
+          provider_answer("half_teaching_hours"),
+          provider_answer("subjects_taught"),
           # The provider verifies the courses taught question as part of
           # verifying the subjects taught question, so these two columns will
           # always be the same.
-          present_assertion("subjects_taught"),
-          present_assertion("teaching_hours_per_week_next_term"),
-          present_assertion("subject_to_formal_performance_action"),
-          present_assertion("subject_to_disciplinary_action")
+          provider_answer("subjects_taught"),
+          provider_answer("teaching_hours_per_week_next_term"),
+          provider_answer("subject_to_formal_performance_action"),
+          provider_answer("subject_to_disciplinary_action")
         ]
       end
 
@@ -94,7 +96,7 @@ module Reports
         @approval ||= claim.decisions.reject(&:undone).last
       end
 
-      def present_assertion(name)
+      def provider_answer(name)
         case claim.eligibility.verification_assertion(name)
         when true then "Yes"
         when false then "No"
