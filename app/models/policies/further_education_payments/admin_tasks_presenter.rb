@@ -10,7 +10,12 @@ module Policies
       end
 
       def provider_verification
-        AdminProviderVerificationTaskPresenter.new(claim)
+        # Use Year 2 presenter for 2025/2026 onwards, Year 1 presenter for 2024/2025
+        if claim.academic_year == AcademicYear.new("2024/2025")
+          AdminProviderVerificationTaskPresenter.new(claim)
+        else
+          AdminProviderVerificationYear2TaskPresenter.new(claim)
+        end
       end
 
       def alternative_identity_verification

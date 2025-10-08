@@ -79,6 +79,10 @@ module Policies
       Tasks::FeAlternativeVerificationJob.perform_later(claim)
     end
 
+    def provider_verification_completed!(claim)
+      Tasks::ProviderVerificationJob.perform_later(claim)
+    end
+
     def notify_reply_to_id
       "89939786-7078-4267-b197-ee505dfad8ae"
     end

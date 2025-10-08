@@ -172,6 +172,7 @@
   - primary_key_contact_email_address
   - secondary_contact_email_address
   - file_upload_id
+  - max_claims
   :targeted_retention_incentive_payments_awards:
   - file_upload_id
   :early_years_payment_eligibilities:
@@ -190,12 +191,14 @@
   - claimant_valid_passport
   - claimant_passport_number
   - passport_number
+  - provider_verification_teaching_start_year_matches_claim
   - work_email
   - provider_verification_claimant_date_of_birth
   - provider_verification_claimant_postcode
   - provider_verification_claimant_national_insurance_number
   - provider_verification_claimant_email
   - provider_verification_teaching_hours_per_week_next_term
+  - provider_verification_continued_employment
   :international_relocation_payments_eligibilities:
   - passport_number
   - school_headteacher_name
@@ -230,8 +233,10 @@
   - onelogin_idv_last_name
   - onelogin_idv_date_of_birth
   - onelogin_idv_full_name
+  - claimant_declaration
   - date_of_birth_day
   - date_of_birth_month
   - date_of_birth_year
   :journeys_sessions:
   - answers
+  - expired

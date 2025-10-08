@@ -7,11 +7,11 @@ module FurtherEducationPayments
 
           validates(
             :provider_verification_contract_type,
-            inclusion: {
+            included: {
               in: ->(form) { form.contract_type_options.map(&:id) },
               message: "Enter the type of contract they have"
             },
-            unless: :save_and_exit?
+            allow_nil: :save_and_exit?
           )
 
           def contract_type_options
