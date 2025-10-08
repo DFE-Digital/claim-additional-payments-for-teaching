@@ -9,8 +9,10 @@ module FurtherEducationPayments
             :provider_verification_teaching_responsibilities,
             included: {
               in: ->(form) { form.teaching_responsibilities_options.map(&:id) },
-              message: "Tell us if they are a member of staff with teaching " \
-                       "responsibilities"
+              message: ->(form, _) do
+                "Select yes if #{form.claimant_name} is a member of staff with " \
+                "the responsibilities of a teacher"
+              end
             },
             allow_nil: :save_and_exit?
           )

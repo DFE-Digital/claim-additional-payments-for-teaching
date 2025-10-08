@@ -40,7 +40,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Claima
         it "is invalid" do
           expect(form).not_to be_valid
           expect(form.errors[:provider_verification_claimant_date_of_birth]).to include(
-            "Enter the applicant’s date of birth"
+            "Enter their date of birth"
           )
         end
       end
@@ -74,7 +74,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Claima
         it "is invalid" do
           expect(form).not_to be_valid
           expect(form.errors[:provider_verification_claimant_date_of_birth]).to include(
-            "Enter the applicant’s date of birth in the correct format"
+            "Enter a valid date of birth"
           )
         end
       end
@@ -108,7 +108,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Claima
         it "is invalid" do
           expect(form).not_to be_valid
           expect(form.errors[:provider_verification_claimant_date_of_birth]).to include(
-            "Enter the applicant’s date of birth in the correct format"
+            "Enter a valid date of birth"
           )
         end
       end
@@ -142,7 +142,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Claima
         it "is invalid" do
           expect(form).not_to be_valid
           expect(form.errors[:provider_verification_claimant_date_of_birth]).to include(
-            "Enter the applicant’s date of birth in the correct format"
+            "Enter a valid date of birth"
           )
         end
       end
@@ -204,7 +204,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Claima
         is_expected.to(
           validate_presence_of(
             :provider_verification_claimant_national_insurance_number
-          ).with_message("Enter the applicant’s National Insurance number")
+          ).with_message("Enter their National Insurance number")
         )
       end
 
@@ -241,14 +241,14 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Claima
       it do
         is_expected.to(
           validate_presence_of(:provider_verification_claimant_postcode)
-            .with_message("Enter the applicant’s postcode")
+            .with_message("Enter their postcode")
         )
       end
 
       it do
         is_expected.not_to(
           allow_value("SW1A").for(:provider_verification_claimant_postcode)
-            .with_message("Enter the applicant’s postcode in the correct format")
+            .with_message("Enter a valid postcode")
         )
       end
     end
@@ -259,7 +259,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Claima
           form.provider_verification_claimant_email = ""
           expect(form).not_to be_valid
           expect(form.errors[:provider_verification_claimant_email]).to include(
-            "Enter the applicant’s work email address"
+            "Enter their work email address"
           )
         end
       end
@@ -269,7 +269,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Claima
           form.provider_verification_claimant_email = "invalid-email"
           expect(form).not_to be_valid
           expect(form.errors[:provider_verification_claimant_email]).to include(
-            "Enter the applicant’s email address in the correct format, like name@example.com"
+            "Enter a valid email address"
           )
         end
       end

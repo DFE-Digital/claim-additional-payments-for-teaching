@@ -25,7 +25,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Teachi
         is_expected.to(
           validate_inclusion_of(:provider_verification_teaching_qualification)
             .in_array(%w[yes not_yet no_but_planned no_not_planned])
-            .with_message("Tell us if they have a teaching qualification")
+            .with_message("Select if #{form.claimant_name} has a teaching qualification")
         )
       end
     end
@@ -39,7 +39,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Teachi
         is_expected.to(
           validate_inclusion_of(:provider_verification_teaching_qualification)
             .in_array(["yes", "not_yet", "no_but_planned", "no_not_planned", nil])
-            .with_message("Tell us if they have a teaching qualification")
+            .with_message("Select if #{form.claimant_name} has a teaching qualification")
         )
       end
     end

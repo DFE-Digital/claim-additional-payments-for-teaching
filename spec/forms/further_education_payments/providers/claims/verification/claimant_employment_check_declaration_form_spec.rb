@@ -23,10 +23,7 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Claima
     it do
       is_expected.to validate_presence_of(
         :provider_verification_claimant_employment_check_declaration
-      ).with_message(
-        "Tick the box to declare that the information provided in this form " \
-        "is correct"
-      )
+      ).with_message("Check the box once you have read the declaration")
     end
   end
 end
