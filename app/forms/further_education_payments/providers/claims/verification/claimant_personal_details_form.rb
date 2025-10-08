@@ -22,14 +22,14 @@ module FurtherEducationPayments
           validates(
             :provider_verification_claimant_national_insurance_number,
             presence: {
-              message: "Enter the applicant’s National Insurance number"
+              message: "Enter their National Insurance number"
             }
           )
 
           validates(
             :provider_verification_claimant_national_insurance_number,
             national_insurance_number_format: {
-              message: "Enter the applicant’s National Insurance number in the correct format"
+              message: "Enter a valid National Insurance number"
             },
             if: -> { provider_verification_claimant_national_insurance_number.present? }
           )
@@ -37,7 +37,7 @@ module FurtherEducationPayments
           validates(
             :provider_verification_claimant_postcode,
             presence: {
-              message: "Enter the applicant’s postcode"
+              message: "Enter their postcode"
             }
           )
 
@@ -45,10 +45,10 @@ module FurtherEducationPayments
             :provider_verification_claimant_postcode,
             length: {
               maximum: AddressForm::POSTCODE_MAX_CHARS,
-              message: "Applicant’s postcode must be 11 characters or less"
+              message: "Postcode must be 11 characters or less"
             },
             postcode_format: {
-              message: "Enter the applicant’s postcode in the correct format"
+              message: "Enter a valid postcode"
             },
             if: -> { provider_verification_claimant_postcode.present? }
           )
@@ -66,14 +66,14 @@ module FurtherEducationPayments
           validates(
             :provider_verification_claimant_email,
             presence: {
-              message: "Enter the applicant’s work email address"
+              message: "Enter their work email address"
             }
           )
 
           validates(
             :provider_verification_claimant_email,
             email_address_format: {
-              message: "Enter the applicant’s email address in the correct format, like name@example.com"
+              message: "Enter a valid email address"
             },
             length: {
               maximum: Rails.application.config.email_max_length,
@@ -143,7 +143,7 @@ module FurtherEducationPayments
             if date_parts.all?(&:blank?)
               errors.add(
                 :provider_verification_claimant_date_of_birth,
-                "Enter the applicant’s date of birth"
+                "Enter their date of birth"
               )
             elsif date_parts.any?(&:blank?)
               errors.add(
@@ -154,7 +154,7 @@ module FurtherEducationPayments
             elsif provider_verification_claimant_date_of_birth.is_a?(InvalidDate)
               errors.add(
                 :provider_verification_claimant_date_of_birth,
-                "Enter the applicant’s date of birth in the correct format"
+                "Enter a valid date of birth"
               )
             elsif provider_verification_claimant_date_of_birth.future?
               errors.add(
