@@ -14,6 +14,12 @@ module FormSubmittable
       render_template_for_current_slug
 
       @form.after_render
+    rescue ActionView::Template::Error => e
+      if e.cause.is_a?(Journeys::ConfirmationForm::SubmittedClaimNotFound)
+        redirect_to landing_page_path(current_journey_routing_name)
+      else
+        raise e
+      end
     end
 
     def create
