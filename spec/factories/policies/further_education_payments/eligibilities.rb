@@ -6,6 +6,7 @@ FactoryBot.define do
       eligible_school
       contract_type { "permanent" }
       teaching_responsibilities { true }
+      teaching_qualification { "yes" }
       further_education_teaching_start_year { "2023" }
       teaching_hours_per_week { "more_than_12" }
       hours_teaching_eligible_subjects { false }
@@ -13,6 +14,8 @@ FactoryBot.define do
       subjects_taught { ["maths", "physics"] }
       maths_courses { ["approved_level_321_maths", "gcse_maths"] }
       physics_courses { ["gcse_physics"] }
+      subject_to_formal_performance_action { false }
+      subject_to_disciplinary_action { false }
     end
 
     trait :eligible_school do
