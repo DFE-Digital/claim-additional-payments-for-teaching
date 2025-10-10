@@ -48,7 +48,7 @@ RSpec.describe "Viewing year 1 claims in the admin area" do
     end
 
     within_table_row("Timetabled teaching hours") do |claimant_answer, provider_answer|
-      expect(claimant_answer).to have_content("More than 12 hours per week")
+      expect(claimant_answer).to have_content("12 or more hours per week, but fewer than 20")
       expect(provider_answer).to have_content("Yes")
     end
 
