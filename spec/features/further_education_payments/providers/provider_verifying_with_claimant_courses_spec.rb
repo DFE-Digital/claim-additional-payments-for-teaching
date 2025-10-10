@@ -48,14 +48,14 @@ RSpec.feature "Provider verifying claims" do
     end
 
     within_fieldset(
-      "Is Edna Krabappel a member of staff with teaching responsibilities?"
+      "Is Edna Krabappel a member of staff with the responsibilities of a teacher?"
     ) { choose "Yes" }
 
     click_on "Continue"
 
     within_fieldset(
-      "Did Edna Krabappel start their FE teaching career in England during " \
-      "September 2023 to August 2024?"
+      "Did Edna Krabappel start their further education (FE) teaching " \
+      "career in England during September 2023 to August 2024?"
     ) { choose "Yes" }
 
     click_on "Continue"
@@ -89,20 +89,24 @@ RSpec.feature "Provider verifying claims" do
     # Contracted hours
     within_fieldset(
       "On average, how many hours per week was Edna Krabappel timetabled " \
-      "to teach during the autumn term?"
+      "to teach at Springfield College during the spring term?"
     ) { choose "20 hours or more per week" }
 
     click_on "Continue"
 
     within_fieldset(
       "Did Edna Krabappel spend at least half of their " \
-      "timetabled teaching hours teaching students funded through the " \
-      "16 to 19 education funding system or apprentices aged 16 to 19?"
+      "timetabled teaching hours teaching students on 16 to 19 study " \
+      "programmes, T Levels or 16 to 19 apprenticeships?"
     ) { choose "Yes" }
 
     click_on "Continue"
 
-    expect(page).to have_text("Does Edna Krabappel spend at least half of their spring term timetabled teaching time teaching these courses?")
+    expect(page).to have_text(
+      "During the spring term, did Edna Krabappel " \
+      "spend at least half of their timetabled teaching hours teaching " \
+      "these courses?"
+    )
 
     # list of courses by the claimaint
     expect(page).to have_text("Qualifications approved for funding at level 3 " \
@@ -117,8 +121,8 @@ RSpec.feature "Provider verifying claims" do
     choose "Yes"
     click_on "Continue"
 
-    expect(page).to have_text("Is Edna Krabappel expected to continue to be employed at " \
-      "Springfield College until the end of the academic year")
+    expect(page).to have_text("Is Edna Krabappel expected to work at " \
+      "Springfield College until the end of the academic year?")
 
     choose "Yes"
     click_on "Continue"
@@ -166,7 +170,7 @@ RSpec.feature "Provider verifying claims" do
     ).to have_content("Yes")
 
     check(
-      "Please ensure your answers are accurate to the best of " \
+      "Check to make sure your answers are accurate to the best of " \
       "your knowledge. While the DfE runs its own checks, this " \
       "claim is approved or rejected based on your answers. DfE " \
       "will audit approved claims. If any of your teachers receive " \
@@ -226,14 +230,14 @@ RSpec.feature "Provider verifying claims" do
     end
 
     within_fieldset(
-      "Is Edna Krabappel a member of staff with teaching responsibilities?"
+      "Is Edna Krabappel a member of staff with the responsibilities of a teacher?"
     ) { choose "Yes" }
 
     click_on "Continue"
 
     within_fieldset(
-      "Did Edna Krabappel start their FE teaching career in England during " \
-      "September 2023 to August 2024?"
+      "Did Edna Krabappel start their further education (FE) teaching " \
+      "career in England during September 2023 to August 2024?"
     ) { choose "Yes" }
 
     click_on "Continue"
@@ -267,20 +271,24 @@ RSpec.feature "Provider verifying claims" do
     # Contracted hours
     within_fieldset(
       "On average, how many hours per week was Edna Krabappel timetabled " \
-      "to teach during the autumn term?"
+      "to teach at Springfield College during the spring term?"
     ) { choose "20 hours or more per week" }
 
     click_on "Continue"
 
     within_fieldset(
       "Did Edna Krabappel spend at least half of their " \
-      "timetabled teaching hours teaching students funded through the " \
-      "16 to 19 education funding system or apprentices aged 16 to 19?"
+      "timetabled teaching hours teaching students on 16 to 19 study " \
+      "programmes, T Levels or 16 to 19 apprenticeships?"
     ) { choose "Yes" }
 
     click_on "Continue"
 
-    expect(page).to have_text("Does Edna Krabappel spend at least half of their spring term timetabled teaching time teaching these courses?")
+    expect(page).to have_text(
+      "During the spring term, did Edna Krabappel " \
+      "spend at least half of their timetabled teaching hours teaching " \
+      "these courses?"
+    )
 
     # list of courses by the claimaint
     expect(page).to have_text("Qualifications approved for funding at level 3 " \
@@ -295,8 +303,8 @@ RSpec.feature "Provider verifying claims" do
     choose "No"
     click_on "Continue"
 
-    expect(page).to have_text("Is Edna Krabappel expected to continue to be employed at " \
-      "Springfield College until the end of the academic year")
+    expect(page).to have_text("Is Edna Krabappel expected to work at " \
+      "Springfield College until the end of the academic year?")
 
     choose "Yes"
     click_on "Continue"
@@ -345,7 +353,7 @@ RSpec.feature "Provider verifying claims" do
     ).to have_content("Yes")
 
     check(
-      "Please ensure your answers are accurate to the best of " \
+      "Check to make sure your answers are accurate to the best of " \
       "your knowledge. While the DfE runs its own checks, this " \
       "claim is approved or rejected based on your answers. DfE " \
       "will audit approved claims. If any of your teachers receive " \
