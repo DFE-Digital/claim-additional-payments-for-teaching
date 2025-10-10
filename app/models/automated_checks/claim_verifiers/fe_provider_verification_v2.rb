@@ -26,6 +26,10 @@ module AutomatedChecks
           failed_checks << "insufficient_teaching_hours_per_week"
         end
 
+        if claim.eligibility.teaching_hours_mismatch?
+          failed_checks << "mismatch_in_teaching_hours"
+        end
+
         create_task(failed_checks) if failed_checks.any?
       end
 

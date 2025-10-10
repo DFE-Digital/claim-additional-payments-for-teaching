@@ -217,6 +217,17 @@ module Policies
         provider_verification_teaching_hours_per_week == "fewer_than_2_and_a_half_hours_per_week"
       end
 
+      def teaching_hours_mismatch?
+        (
+          provider_verification_teaching_hours_per_week == "2_and_a_half_to_12_hours_per_week" &&
+          teaching_hours_per_week.in?(%w[more_than_20 more_than_12])
+        ) ||
+          (
+            teaching_hours_per_week == "between_2_5_and_12" &&
+            provider_verification_teaching_hours_per_week.in?(%w[12_to_20_hours_per_week 20_or_more_hours_per_week])
+          )
+      end
+
       private
 
       def year_1_claim?
