@@ -195,11 +195,6 @@ RSpec.feature "Admin claim further education payments" do
               expect(provider).to have_text("Yes")
             end
 
-            within_table_row("Timetabled teaching hours next term") do |claimant, provider|
-              expect(claimant).to have_text("At least 2.5 hours per week")
-              expect(provider).to have_text("No")
-            end
-
             within_fieldset("Has the provider confirmed the claimant's details?") do
               choose "No"
             end

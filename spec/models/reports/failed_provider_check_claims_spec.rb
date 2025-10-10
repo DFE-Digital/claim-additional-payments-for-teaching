@@ -118,10 +118,6 @@ RSpec.describe Reports::FailedProviderCheckClaims do
                 outcome: true
               },
               {
-                name: "teaching_hours_per_week_next_term",
-                outcome: true
-              },
-              {
                 name: "subject_to_formal_performance_action",
                 outcome: true
               },
@@ -159,7 +155,6 @@ RSpec.describe Reports::FailedProviderCheckClaims do
           "Age range taught",
           "Subject",
           "Course",
-          "2.5 hours weekly teaching",
           "Performance",
           "Disciplinary"
         ],
@@ -178,7 +173,6 @@ RSpec.describe Reports::FailedProviderCheckClaims do
           "No", # age range taught
           "No", # subject
           "No", # course
-          "N/A", # 2.5 hours weekly teaching
           "Yes", # performance
           "Yes" # disciplinary
         ],
@@ -197,7 +191,6 @@ RSpec.describe Reports::FailedProviderCheckClaims do
           "Yes", # age range taught
           "Yes", # subject
           "Yes", # course
-          "Yes", # 2.5 hours weekly teaching
           "Yes", # performance
           "No" # disciplinary
         ]

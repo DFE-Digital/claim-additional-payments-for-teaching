@@ -28,8 +28,7 @@ module Policies
           contract_type,
           taught_at_least_one_term,
           fixed_term_full_year,
-          teaching_hours_per_week,
-          teaching_hours_per_week_next_term
+          teaching_hours_per_week
         ].compact
       end
 
@@ -155,22 +154,6 @@ module Policies
           selected_option(
             :teaching_hours_per_week,
             eligibility.teaching_hours_per_week
-          )
-        ]
-      end
-
-      def teaching_hours_per_week_next_term
-        return nil if eligibility.permanent_contract?
-
-        [
-          question(
-            :teaching_hours_per_week_next_term,
-            school_name: eligibility.school.name
-          ),
-          selected_option(
-            :teaching_hours_per_week_next_term,
-            eligibility.teaching_hours_per_week_next_term,
-            school_name: eligibility.school.name
           )
         ]
       end
