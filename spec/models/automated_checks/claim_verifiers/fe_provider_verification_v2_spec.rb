@@ -96,5 +96,26 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
         expect { subject.perform }.not_to change { claim.tasks.count }
       end
     end
+
+    context "when the provider states the claimant teaches fewer than 2.5 hours" do
+      let(:eligibility) do
+        build(
+          :further_education_payments_eligibility,
+          :eligible,
+          :provider_verification_completed,
+          provider_verification_teaching_hours_per_week: "fewer_than_2_and_a_half_hours_per_week"
+        )
+      end
+
+      it "creates a failed task" do
+        subject.perform
+
+        task = claim.tasks.find_by!(name: "fe_provider_verification_v2")
+
+        expect(task.failed?).to be true
+        expect(task.manual?).to be false
+        expect(task.data).to eq({"failed_checks" => ["insufficient_teaching_hours_per_week"]})
+      end
+    end
   end
 end

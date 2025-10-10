@@ -213,6 +213,10 @@ module Policies
         provider_verification_not_started_qualification_reasons.exclude?("no_valid_reason")
       end
 
+      def insufficient_teaching_hours_per_week?
+        provider_verification_teaching_hours_per_week == "fewer_than_2_and_a_half_hours_per_week"
+      end
+
       private
 
       def year_1_claim?
