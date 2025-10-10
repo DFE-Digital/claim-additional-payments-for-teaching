@@ -85,7 +85,7 @@ RSpec.feature "Viewing the FE provider verification year 2 task" do
 
       within_table_row("Timetabled teaching hours") do |claimant_answer, provider_answer|
         expect(claimant_answer).to have_content("More than 12 hours per week")
-        expect(provider_answer).to have_content("12 or more hours per week, but fewer than 20")
+        expect(provider_answer).to have_content("More than 12 hours per week")
       end
 
       within_table_row("Age range taught") do |claimant_answer, provider_answer|
