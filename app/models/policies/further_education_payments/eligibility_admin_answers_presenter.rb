@@ -88,7 +88,8 @@ module Policies
 
         [
           provider_verification_teaching_qualification,
-          provider_verification_not_started_qualification_reasons
+          provider_verification_not_started_qualification_reasons,
+          provider_verification_teaching_hours_per_week
         ].compact_blank
       end
 
@@ -135,6 +136,13 @@ module Policies
         [
           "Reason for not enrolling",
           provider_answers.not_started_qualification_reasons
+        ]
+      end
+
+      def provider_verification_teaching_hours_per_week
+        [
+          "Provider entered teaching hours per week",
+          provider_answers.teaching_hours_per_week
         ]
       end
 
