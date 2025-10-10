@@ -22,6 +22,10 @@ module AutomatedChecks
           failed_checks << "no_valid_reason_for_not_starting_qualification"
         end
 
+        if claim.eligibility.insufficient_teaching_hours_per_week?
+          failed_checks << "insufficient_teaching_hours_per_week"
+        end
+
         create_task(failed_checks) if failed_checks.any?
       end
 
