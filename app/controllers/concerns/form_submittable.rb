@@ -10,10 +10,9 @@ module FormSubmittable
 
     def show
       return redirect_to_next_slug if @form.redirect_to_next_slug?
+      return redirect_to @form.redirect_to if @form.redirect?
 
       render_template_for_current_slug
-
-      @form.after_render
     end
 
     def create

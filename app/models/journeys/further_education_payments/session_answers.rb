@@ -35,6 +35,8 @@ module Journeys
       attribute :valid_passport, :boolean, pii: false
       attribute :passport_number, :string, pii: true
 
+      attribute :check_your_answers_part_one_completed, :boolean, pii: false
+
       attribute :claimant_declaration, :boolean, pii: false
 
       def policy
@@ -134,6 +136,12 @@ module Journeys
           .where.not(onelogin_uid: nil)
           .where.not(id: submitted_claim_id)
           .find_by(onelogin_uid: onelogin_uid)
+      end
+
+      def before_resume_callback
+        if work_email_access == false
+          self.work_email_access = nil
+        end
       end
     end
   end

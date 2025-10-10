@@ -83,6 +83,8 @@ module Journeys
 
     attribute :submitted_claim_id, :string, pii: false
 
+    attribute :information_provided_completed, :boolean, pii: false
+
     def increment_hmrc_validation_attempt_count
       self.hmrc_validation_attempt_count = attributes["hmrc_validation_attempt_count"] + 1
     end
@@ -121,6 +123,11 @@ module Journeys
         claim_date: session.created_at,
         teacher_reference_number: teacher_id_user_info["trn"]
       )
+    end
+
+    # this callback is fired before resuming takes place
+    def before_resume_callback
+      # NOOP
     end
   end
 end
