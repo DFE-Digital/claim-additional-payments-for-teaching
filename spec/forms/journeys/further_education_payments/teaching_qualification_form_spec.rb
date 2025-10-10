@@ -31,7 +31,7 @@ RSpec.describe Journeys::FurtherEducationPayments::TeachingQualificationForm, ty
         is_expected.not_to(
           allow_value(nil)
           .for(:teaching_qualification)
-          .with_message("Tell us if you have a teaching qualification")
+          .with_message("Select if you have a teaching qualification")
         )
       end
     end
@@ -43,7 +43,7 @@ RSpec.describe Journeys::FurtherEducationPayments::TeachingQualificationForm, ty
         is_expected.not_to(
           allow_value("foo")
           .for(:teaching_qualification)
-          .with_message("Tell us if you have a teaching qualification")
+          .with_message("Select if you have a teaching qualification")
         )
       end
     end

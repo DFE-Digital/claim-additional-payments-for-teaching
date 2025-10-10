@@ -31,7 +31,7 @@ RSpec.describe Journeys::FurtherEducationPayments::SubjectsTaughtForm, type: :mo
         is_expected.not_to(
           allow_value([])
           .for(:subjects_taught)
-          .with_message("Select the subject areas that you teach, or select ‘I do not teach any of these subjects’")
+          .with_message("Select the subject areas you teach")
         )
       end
     end
@@ -43,7 +43,7 @@ RSpec.describe Journeys::FurtherEducationPayments::SubjectsTaughtForm, type: :mo
         is_expected.not_to(
           allow_value(["foo"])
           .for(:subjects_taught)
-          .with_message("Select the subject areas that you teach, or select ‘I do not teach any of these subjects’")
+          .with_message("Select the subject areas you teach")
         )
       end
     end
