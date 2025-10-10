@@ -14,6 +14,7 @@ module Policies
 
     VERIFIERS = [
       AutomatedChecks::ClaimVerifiers::OneLoginIdentity,
+      AutomatedChecks::ClaimVerifiers::ProviderVerification, # Year 2+ only
       AutomatedChecks::ClaimVerifiers::AlternativeIdentityVerification,
       AutomatedChecks::ClaimVerifiers::Employment,
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
@@ -78,6 +79,10 @@ module Policies
 
     def alternative_idv_completed!(claim)
       Tasks::FeAlternativeVerificationJob.perform_later(claim)
+    end
+
+    def provider_verification_completed!(claim)
+      Tasks::ProviderVerificationJob.perform_later(claim)
     end
 
     def notify_reply_to_id

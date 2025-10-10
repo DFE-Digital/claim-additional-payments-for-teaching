@@ -104,7 +104,7 @@ RSpec.feature "Admin amends a claim" do
     expect(page).to have_content("Postcode\nchanged from AB12 3CD to TE57 1NG")
 
     expect(page).to have_content("This claimant got some of their details wrong and then contacted us")
-    expect(page).to have_content("by #{@signed_in_user.full_name} on #{I18n.l(Time.current)}")
+    expect(page).to have_content("by #{@signed_in_user.full_name} on #{I18n.l(amendment.created_at)}")
   end
 
   scenario "Service operator cancels amending a claim" do
@@ -162,7 +162,7 @@ RSpec.feature "Admin amends a claim" do
       expect(page).to have_content("Award amount\nchanged from £550.00 to £300.00")
 
       expect(page).to have_content("The claimant calculated the incorrect student loan repayment amount")
-      expect(page).to have_content("by #{@signed_in_user.full_name} on #{I18n.l(Time.current)}")
+      expect(page).to have_content("by #{@signed_in_user.full_name} on #{I18n.l(amendment.created_at)}")
     end
   end
 
