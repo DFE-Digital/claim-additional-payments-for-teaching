@@ -65,6 +65,16 @@
       }
     ) %>
 
+    <% if admin_answers_presenter.provider_verification.present? %>
+      <%= render(
+        "admin/claims/answer_section",
+        {
+          heading: "Provider verification",
+          answers: admin_answers_presenter.provider_verification
+        }
+      ) %>
+    <% end %>
+
     <%= render(
       "admin/claims/answer_section",
       {
