@@ -117,5 +117,97 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2 do
         expect(task.data).to eq({"failed_checks" => ["insufficient_teaching_hours_per_week"]})
       end
     end
+
+    context "when the provider states the claimant teaches 2.5 hours or more" do
+      context "when the the claimant selects 12 or more hours" do
+        let(:eligibility) do
+          build(
+            :further_education_payments_eligibility,
+            :eligible,
+            :provider_verification_completed,
+            provider_verification_teaching_hours_per_week: "2_and_a_half_to_12_hours_per_week",
+            teaching_hours_per_week: "more_than_12"
+          )
+        end
+
+        it "creates a failed task" do
+          subject.perform
+
+          task = claim.tasks.find_by!(name: "fe_provider_verification_v2")
+
+          expect(task.failed?).to be true
+          expect(task.manual?).to be false
+          expect(task.data).to eq({"failed_checks" => ["mismatch_in_teaching_hours"]})
+        end
+      end
+
+      context "when the claimant select 20 hours or more" do
+        let(:eligibility) do
+          build(
+            :further_education_payments_eligibility,
+            :eligible,
+            :provider_verification_completed,
+            provider_verification_teaching_hours_per_week: "2_and_a_half_to_12_hours_per_week",
+            teaching_hours_per_week: "more_than_20"
+          )
+        end
+
+        it "creates a failed task" do
+          subject.perform
+
+          task = claim.tasks.find_by!(name: "fe_provider_verification_v2")
+
+          expect(task.failed?).to be true
+          expect(task.manual?).to be false
+          expect(task.data).to eq({"failed_checks" => ["mismatch_in_teaching_hours"]})
+        end
+      end
+    end
+
+    context "when the claimant teaches between_2_5_and_12" do
+      context "when the provider selects 12 or more hours" do
+        let(:eligibility) do
+          build(
+            :further_education_payments_eligibility,
+            :eligible,
+            :provider_verification_completed,
+            provider_verification_teaching_hours_per_week: "12_to_20_hours_per_week",
+            teaching_hours_per_week: "between_2_5_and_12"
+          )
+        end
+
+        it "creates a failed task" do
+          subject.perform
+
+          task = claim.tasks.find_by!(name: "fe_provider_verification_v2")
+
+          expect(task.failed?).to be true
+          expect(task.manual?).to be false
+          expect(task.data).to eq({"failed_checks" => ["mismatch_in_teaching_hours"]})
+        end
+      end
+
+      context "when the provider selects 20 hours or more" do
+        let(:eligibility) do
+          build(
+            :further_education_payments_eligibility,
+            :eligible,
+            :provider_verification_completed,
+            provider_verification_teaching_hours_per_week: "20_or_more_hours_per_week",
+            teaching_hours_per_week: "between_2_5_and_12"
+          )
+        end
+
+        it "creates a failed task" do
+          subject.perform
+
+          task = claim.tasks.find_by!(name: "fe_provider_verification_v2")
+
+          expect(task.failed?).to be true
+          expect(task.manual?).to be false
+          expect(task.data).to eq({"failed_checks" => ["mismatch_in_teaching_hours"]})
+        end
+      end
+    end
   end
 end
