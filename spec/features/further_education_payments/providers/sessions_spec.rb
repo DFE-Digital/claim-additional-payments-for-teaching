@@ -3,6 +3,8 @@ require "rails_helper"
 RSpec.describe "Provider session and authentication" do
   before do
     allow(DfESignIn).to receive(:bypass?).and_return(true)
+
+    when_further_education_payments_journey_configuration_exists
   end
 
   scenario "when authed can visit auth walled areas", js: true do
