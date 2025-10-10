@@ -66,8 +66,8 @@ RSpec.describe Policies::FurtherEducationPayments do
       )
     end
 
-    it "is 13 weeks after claim has been submitted" do
-      expect(subject.decision_deadline_date(claim)).to eql(Date.new(2025, 12, 2))
+    it "is 19 weeks after claim has been submitted" do
+      expect(subject.decision_deadline_date(claim)).to eql(Date.new(2026, 1, 13))
     end
   end
 
