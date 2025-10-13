@@ -137,12 +137,6 @@ module Journeys
           .where.not(id: submitted_claim_id)
           .find_by(onelogin_uid: onelogin_uid)
       end
-
-      def before_resume_callback
-        if work_email_access == false
-          self.work_email_access = nil
-        end
-      end
     end
   end
 end

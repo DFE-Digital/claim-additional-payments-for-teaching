@@ -124,10 +124,5 @@ module Journeys
         teacher_reference_number: teacher_id_user_info["trn"]
       )
     end
-
-    # this callback is fired before resuming takes place
-    def before_resume_callback
-      # NOOP
-    end
   end
 end
