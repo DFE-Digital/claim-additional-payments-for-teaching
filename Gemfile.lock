@@ -642,7 +642,7 @@ GEM
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (3.2.1)
+    rack (3.2.2)
     rack-mini-profiler (4.0.0)
       rack (>= 1.2.0)
     rack-oauth2 (1.21.3)
@@ -968,7 +968,7 @@ DEPENDENCIES
   webmock
 
 RUBY VERSION
-   ruby 3.4.5p51
+   ruby 3.4.7p58
 
 BUNDLED WITH
    2.6.9
