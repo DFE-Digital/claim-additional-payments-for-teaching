@@ -304,7 +304,6 @@ shared:
     - fixed_term_full_year # boolean, does claimant fixed term contract cover entire academic year
     - taught_at_least_one_term # boolean, has claimant taught for at least one term
     - teaching_hours_per_week # string, claimants teaching hours per week
-    - teaching_hours_per_week_next_term # string, claimants teaching hours per week next term
     - further_education_teaching_start_year # string, academic year claimant started teaching FE
     - subjects_taught # jsonb, what subjects does the claimant teach
     - building_construction_courses # jsonb, what building and construction courses does claimant teach
@@ -341,7 +340,6 @@ shared:
     - provider_verification_verified_by_id # uuid, which user from provider verified this claim
     - provider_assigned_to_id # uuid, which user from provider currently assigned to verify this claim
     - provider_verification_started_at # datetime, when did provider start verifying this claim
-    - provider_verification_timetabled_teaching_hours # boolean, does provider think claimants timetabled teaching hours are above threshold
     - provider_verification_half_timetabled_teaching_time # boolean, does provider think claimant teaches relevant courses for at least half timetabled time
     - provider_verification_claimant_employed_by_college # boolean, does provider employ claimant
     - provider_verification_claimant_bank_details_match # boolean, does provider agree claimants bank details match

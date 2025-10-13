@@ -354,12 +354,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_25_112536) do
     t.boolean "provider_verification_claimant_bank_details_match"
     t.string "provider_verification_claimant_email"
     t.boolean "provider_verification_claimant_employment_check_declaration"
-    t.string "provider_verification_teaching_hours_per_week_next_term"
     t.boolean "provider_verification_continued_employment"
     t.index ["possible_school_id"], name: "index_fe_payments_eligibilities_on_possible_school_id"
     t.index ["provider_assigned_to_id"], name: "idx_on_provider_assigned_to_id_5db250f0fe"
-    t.index ["provider_verification_contract_type"], name: "idx_fe_provider_contract_type"
-    t.index ["provider_verification_teaching_qualification"], name: "idx_fe_provider_teaching_qualification"
     t.index ["provider_verification_verified_by_id"], name: "idx_on_provider_verification_verified_by_id_c38aef7b6c"
     t.index ["school_id"], name: "index_fe_payments_eligibilities_on_school_id"
   end
