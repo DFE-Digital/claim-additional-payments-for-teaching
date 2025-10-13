@@ -20,6 +20,15 @@ module FurtherEducationPayments
           pending_decision.count
         end
 
+        # this is a fudged number
+        # consists of approved amount
+        # plus topups
+        def amount
+          approved_amount + topups
+        end
+
+        private
+
         def approved_amount
           approved_eligibilities = Policies::FurtherEducationPayments::Eligibility.where(
             claim: approved
@@ -28,23 +37,21 @@ module FurtherEducationPayments
           approved_eligibilities.sum(:award_amount)
         end
 
-        private
-
         # not used
         def amount_paid
-          payments = Payment
+          Payment
             .confirmed
             .joins(:claims)
             .where(claims: claims)
             .sum(:award_amount)
+        end
 
-          topups = Topup
+        def topups
+          Topup
             .joins(:claim, :payment)
             .where(claim: claims)
             .where("payments.confirmation_id IS NOT NULL")
             .sum(:award_amount)
-
-          payments + topups
         end
 
         def claims

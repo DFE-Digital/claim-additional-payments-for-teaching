@@ -284,10 +284,10 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
     end
   end
 
-  describe "#approved_amount" do
+  describe "#amount" do
     context "when no claims" do
       it "returns zero" do
-        expect(subject.approved_amount).to be_zero
+        expect(subject.amount).to be_zero
       end
     end
 
@@ -309,19 +309,11 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
         )
       end
 
-      expect(subject.approved_amount).to eql(claims.sum { |c| c.award_amount }.to_i)
-    end
-  end
-
-  xdescribe "#amount_paid" do
-    context "when no claims" do
-      it "returns zero" do
-        expect(subject.amount_paid).to be_zero
-      end
+      expect(subject.amount).to eql(claims.sum { |c| c.award_amount }.to_i)
     end
 
-    context "when paid" do
-      it "returns paid amount" do
+    context "when there are confirmed topups" do
+      it "includes them" do
         eligibility = create(
           :further_education_payments_eligibility,
           :provider_verification_completed,
@@ -332,78 +324,25 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Stats do
         claim = create(
           :claim,
           :further_education,
-          :rejected,
+          :approved,
           eligibility:,
           academic_year: journey_configuration.current_academic_year
         )
 
-        create(
+        payment = create(
           :payment,
           :confirmed,
           claims: [claim]
         )
 
-        expect(subject.amount_paid).to eql(eligibility.award_amount)
-      end
+        topup = create(
+          :topup,
+          claim:,
+          payment:
+        )
 
-      context "when payment not confirmed" do
-        it "is not included" do
-          eligibility = create(
-            :further_education_payments_eligibility,
-            :provider_verification_completed,
-            :with_award_amount,
-            school:
-          )
-
-          claim = create(
-            :claim,
-            :further_education,
-            :rejected,
-            eligibility:,
-            academic_year: journey_configuration.current_academic_year
-          )
-
-          create(
-            :payment,
-            claims: [claim]
-          )
-
-          expect(subject.amount_paid).to be_zero
-        end
-      end
-
-      context "when there are topups" do
-        it "includes topups" do
-          eligibility = create(
-            :further_education_payments_eligibility,
-            :provider_verification_completed,
-            :with_award_amount,
-            school:
-          )
-
-          claim = create(
-            :claim,
-            :further_education,
-            :rejected,
-            eligibility:,
-            academic_year: journey_configuration.current_academic_year
-          )
-
-          payment = create(
-            :payment,
-            :confirmed,
-            claims: [claim]
-          )
-
-          topup = create(
-            :topup,
-            claim:,
-            payment:
-          )
-
-          expected = eligibility.award_amount + topup.award_amount
-          expect(subject.amount_paid).to eql(expected)
-        end
+        expected = eligibility.award_amount + topup.award_amount
+        expect(subject.amount).to eql(expected)
       end
     end
   end

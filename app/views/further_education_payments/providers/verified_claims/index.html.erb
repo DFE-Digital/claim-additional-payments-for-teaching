@@ -16,7 +16,7 @@
   </div>
 
   <div class="govuk-grid-column-one-quarter-from-desktop govuk-!-margin-bottom-5">
-    <%= render "components/card", value: number_to_currency(@stats.approved_amount, precision: 0), label: "Total value of approved claims", status: "paid" %>
+    <%= render "components/card", value: number_to_currency(@stats.amount, precision: 0), label: "Total value of approved claims", status: "paid" %>
   </div>
 </div>
 
