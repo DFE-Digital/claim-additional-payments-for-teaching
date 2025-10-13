@@ -13,6 +13,13 @@ module Journeys
 
       def call
         to.answers.assign_attributes(from.answers.attributes)
+
+        # handle blanking of answers prior to resuming
+        if to.answers.respond_to?(:work_email_access) &&
+            to.answers.work_email_access == false
+          to.answers.work_email_access = nil
+        end
+
         to.save!
       end
     end
