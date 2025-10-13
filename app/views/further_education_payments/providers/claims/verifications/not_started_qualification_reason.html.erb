@@ -11,7 +11,7 @@
         text: "#{@form.claim.full_name} said last year that they planned to " \
               "start a teaching qualification within 12 months. They’ve " \
               "confirmed the same intention in their application this year. Tell " \
-              "us why they have not yest started or finished a teaching qualification"
+              "us why they have not yet started or finished a teaching qualification"
       ) %>
     <% end %>
 
@@ -83,6 +83,14 @@
       <% end %>
 
       <%= f.govuk_submit("Continue") %>
+
+      <%= f.govuk_submit(
+        "Save and come back later",
+        secondary: true,
+        name: "save_and_exit",
+        value: true,
+        class: "govuk-!-margin-left-2"
+      ) %>
     <% end %>
   </div>
 </div>
