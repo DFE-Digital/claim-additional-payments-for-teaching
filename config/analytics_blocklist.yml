@@ -233,6 +233,3 @@
   - description
   - created_at
   - updated_at
-  :payments:
-  - national_insurance
-  - employers_national_insurance

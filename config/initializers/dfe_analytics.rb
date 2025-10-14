@@ -53,4 +53,7 @@ DfE::Analytics.configure do |config|
   # config.environment = ENV.fetch('RAILS_ENV', 'development')
 
   config.azure_federated_auth = ENV.include? "GOOGLE_CLOUD_CREDENTIALS"
+
+  # Allow sending soft deleted records - e.g. EligibleEyProvider
+  config.ignore_default_scope = true
 end
