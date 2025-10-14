@@ -6,7 +6,10 @@ module Journeys
       validates :fixed_term_full_year,
         inclusion: {
           in: ->(form) { form.radio_options.map(&:id) },
-          message: i18n_error_message(:inclusion)
+          message: ->(object, data) do
+            i18n_error_message(:inclusion, current_academic_year: object.current_academic_year)
+              .call(object, data)
+          end
         }
 
       def radio_options

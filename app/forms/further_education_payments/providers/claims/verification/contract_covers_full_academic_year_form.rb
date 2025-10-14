@@ -11,7 +11,11 @@ module FurtherEducationPayments
           validates(
             :provider_verification_contract_covers_full_academic_year,
             included: {
-              in: ->(form) { form.contract_covers_full_academic_year_options.map(&:id) }
+              in: ->(form) { form.contract_covers_full_academic_year_options.map(&:id) },
+              message: ->(form, _) do
+                "Select yes if #{form.claimant_name} has a fixed-term contract for " \
+                "the full #{form.academic_year_start_to_end} academic year"
+              end
             },
             allow_nil: :save_and_exit?
           )

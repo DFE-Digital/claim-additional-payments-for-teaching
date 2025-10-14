@@ -6,7 +6,9 @@ module Journeys
       validates :contract_type,
         inclusion: {
           in: ->(form) { form.radio_options.map(&:id) },
-          message: i18n_error_message(:inclusion)
+          message: ->(object, data) do
+            i18n_error_message(:inclusion, school_name: object.school.name).call(object, data)
+          end
         }
 
       def radio_options

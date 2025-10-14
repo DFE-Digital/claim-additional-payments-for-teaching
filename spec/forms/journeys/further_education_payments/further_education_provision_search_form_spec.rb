@@ -35,7 +35,7 @@ RSpec.describe Journeys::FurtherEducationPayments::FurtherEducationProvisionSear
         is_expected.not_to(
           allow_value(provision_search)
           .for(:provision_search)
-          .with_message("Select which FE provider directly employs you")
+          .with_message("Enter the name or postcode of the further education provider that directly employs you")
         )
       end
     end
@@ -47,7 +47,7 @@ RSpec.describe Journeys::FurtherEducationPayments::FurtherEducationProvisionSear
         is_expected.not_to(
           allow_value(provision_search)
           .for(:provision_search)
-          .with_message("Enter a college name or postcode that is at least 3 characters long")
+          .with_message("Enter a name or postcode that is at least 3 characters long")
         )
       end
     end

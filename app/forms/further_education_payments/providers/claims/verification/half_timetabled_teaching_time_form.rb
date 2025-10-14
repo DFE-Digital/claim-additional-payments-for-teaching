@@ -12,7 +12,10 @@ module FurtherEducationPayments
             :provider_verification_half_timetabled_teaching_time,
             included: {
               in: ->(form) { form.radio_options.map(&:id) },
-              message: "Tell us if they spend at least half their timetabled teaching time teaching these courses"
+              message: ->(form, _data) do
+                "Select yes if #{form.claimant_name} spent at least half of " \
+                "their timetabled teaching hours teaching these courses"
+              end
             },
             allow_nil: :save_and_exit?
           )

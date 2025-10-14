@@ -25,7 +25,10 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Contra
         is_expected.to(
           validate_inclusion_of(:provider_verification_contract_type)
             .in_array(%w[permanent fixed_term variable_hours])
-            .with_message("Enter the type of contract they have")
+            .with_message(
+              "Select the type of contract #{form.claimant_name} has directly " \
+              "with #{form.provider_name}"
+            )
         )
       end
     end
@@ -39,7 +42,10 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Contra
         is_expected.to(
           validate_inclusion_of(:provider_verification_contract_type)
             .in_array(["permanent", "fixed_term", "variable_hours", nil])
-            .with_message("Enter the type of contract they have")
+            .with_message(
+              "Select the type of contract #{form.claimant_name} has directly " \
+              "with #{form.provider_name}"
+            )
         )
       end
     end
