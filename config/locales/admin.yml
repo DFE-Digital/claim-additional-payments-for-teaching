@@ -1,0 +1,163 @@
+en:
+  admin:
+    qts_award_year: "Award year"
+    current_school: "Current school"
+    address: "Address"
+    teacher_reference_number: "Teacher reference number"
+    national_insurance_number: "National Insurance number"
+    email_address: "Email address"
+    mobile_number: Mobile number
+    personal_bank_account: "bank account"
+    started_at: "Started at"
+    submitted_at: "Submitted at"
+    decision_deadline: "Decision deadline"
+    decision_overdue: "Overdue"
+    decision_overdue_not_applicable: "N/A"
+    claim_route: "Claim route"
+    claim_route_not_tid: "Not signed in with DfE Identity"
+    claim_route_with_tid: "Signed in with DfE Identity"
+    passport_number: "Passport number"
+    nationality: "Nationality"
+    arrival_date: "Date of entry"
+    decision:
+      created_at: "Created at"
+      result: "Result"
+      notes: "Notes"
+      created_by: "Created by"
+      reasons: Reasons
+    duplicate_attributes_message:
+      one: Details in this claim match another %{policy} claim
+      other: Details in this claim match other %{policy} claims
+    unknown_payroll_gender_preventing_approval_message:
+      This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
+    forms:
+      create_employment:
+        school_search:
+          question: "Previous workplace"
+        employment_contract_of_at_least_one_year:
+          question: "Employment contract of at least one year?"
+        employment_start_date:
+          question: "Employment start date"
+        employment_end_date:
+          question: "Employment end date"
+        subject_employed_to_teach:
+          question: "Subject employed to teach"
+        met_minimum_teaching_hours:
+          question: "Met minimum teaching hours?"
+    tasks:
+      one_login_identity:
+        name: One Login identity check
+        title: Confirm the claimant made the claim
+      alternative_identity_verification:
+        name: Alternative identity verification
+        title: Confirm the provider has verified the claimant’s identity
+      fe_alternative_verification:
+        name: Alternative verification
+        title: Confirm the provider has verified the claimant’s identity
+      ey_eoi_cross_reference:
+        name: EOI cross reference
+        title: Confirm the claim is within the allocation limit for this provider
+      ey_alternative_verification:
+        name: Alternative verification
+        title: Confirm the provider has verified the claimant’s identity
+      previous_payment:
+        name: Previous payment
+        title: Check for previous payment
+      previous_residency:
+        name: Previous residency
+        title: Check previous residency
+      qualifications:
+        name: Qualifications
+        title: "Check qualification information"
+      induction_confirmation:
+        name: Induction confirmation
+        title: "Check induction information"
+      employment:
+        name: Employment
+        title: "Check employment information"
+      employment_history:
+        name: Employment history
+        title: "Check employment history"
+      matching_details:
+        name: Matching details
+        title: "Review matching details from other claims"
+      identity_confirmation:
+        name: Identity confirmation
+        title: "Confirm the claimant made the claim"
+      provider_verification:
+        name: Provider verification
+        title: "Confirm the provider has responded and verified the claimant’s information"
+      fe_provider_verification_v2:
+        name: Provider verification
+        title: "Confirm the provider has responded and verified the claimant’s information"
+      eligibility_check:
+        name: Eligibility check
+        title: "Confirm the provider has responded and verified the claimant’s information"
+      provider_details:
+        name: Provider details
+        title: "Check the provider details"
+      payroll_gender:
+        name: Payroll gender
+        title: "How is the claimant’s gender recorded for payroll purposes?"
+        hint: "The claimant answered ‘don’t know’ to the question ‘how is your gender recorded on your employer’s payroll system?’"
+      student_loan_amount:
+        name: Student loan amount
+        title: "Check student loan amount"
+      student_loan_plan:
+        name: Student loan plan
+        title: "Check student loan plan"
+      payroll_details:
+        name: Payroll details
+        title: "Check bank account details"
+        question: "The claimant’s personal bank account details have not been automatically validated. Has the claimant confirmed their personal bank account details?"
+      census_subjects_taught:
+        name: Census subjects taught
+        title: "Check eligible subjects are taught"
+      visa:
+        name: Visa
+        title: "Check visa"
+      arrival_date:
+        name: Arrival date
+        title: "Check arrival date"
+      employment_contract:
+        name: Employment contract
+        title: "Check employment contract"
+      employment_start:
+        name: Employment start
+        title: "Check employment start date"
+      subject:
+        name: Subject
+        title: "Check subject"
+      teaching_hours:
+        name: Teaching hours
+        title: "Check teaching hours"
+      first_year_application:
+        name: First year application
+        title: "Confirm this user has claimed their first year payment"
+      continuous_employment:
+        name: Continuous employment
+        title: Check for breaks in employment
+    undo_decision:
+      approved: "Undo approval"
+      rejected: "Undo rejection"
+    journey_configuration:
+      reminder_warning: "Setting the service status to open will send %{count} reminder emails."
+    assigned_user_banner:
+      assigned_to_self: You are currently assigned this claim
+      assigned_to_other: "CAUTION: This claim is currently assigned to %{dfe_user}"
+      unassigned: This claim is currently unassigned
+      unassign: Unassign
+      assign_to_self: Assign to yourself
+    allocations:
+      bulk_allocate:
+        success: "Assigned %{quantity} %{allocate_to_policy} %{pluralized_or_singular_claim} to %{dfe_user}"
+        info:
+          "No additional claims were assigned to %{dfe_user}. There are not any %{allocate_to_policy} awaiting
+          assignment"
+      bulk_deallocate:
+        confirmation: Are you sure you want to unassign %{allocate_to_policy} claims from %{dfe_user}?
+        success: All %{allocate_to_policy} claims for %{dfe_user} have been unassigned
+        info: There are not any %{allocate_to_policy} claims to unassign for %{dfe_user}
+    payment_confirmation_report_uploads:
+      create:
+        success: Payment Confirmation Report (%{counter}) successfully uploaded

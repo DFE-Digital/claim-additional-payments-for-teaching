@@ -1,0 +1,602 @@
+en:
+  further_education_payments:
+    accessibility_statement:
+      test_date: "28 August 2024"
+      prepared_date: "24 September 2024"
+    landing_page: Targeted retention incentive payment for further education teachers
+    claim_description: for further education payments
+    claim_amount_description: Further education targeted retention incentive payment
+    journey_name: Claim a targeted retention incentive payment for further education teachers
+    feedback_email: "FE-targeted.retention-incentive@education.gov.uk"
+    support_email_address: "FE-targeted.retention-incentive@education.gov.uk"
+    claim_subject: "Further education payment"
+    policy_acronym: FE
+    policy_short_name: Further Education Targeted Retention Incentive
+    eligibility_criteria_link:
+      text: targeted retention incentive payments for further education teachers
+      url: "https://www.gov.uk/guidance/targeted-retention-incentive-payments-for-fe-teachers"
+    fe_provider_list_url: "https://assets.publishing.service.gov.uk/media/66d70f9c701781e1b341dba7/List_of_eligible_FE_providers_and_payment_values_for_targeted_retention_incentives.xlsx"
+    admin:
+      decision:
+        rejected_reasons:
+          no_teaching_responsibilities: "No teaching responsibilities"
+          no_eligible_contract_of_employment: "No eligible contract of employment"
+          works_less_than_2_point_5_hours_per_week: "Works less than 2.5 hours per week (either currently or next term)"
+          has_worked_in_further_education_for_more_than_5_years: "Has worked in further education for more than 5 years"
+          ineligible_subject_or_courses: "Ineligible subjects or courses"
+          insufficient_time_spent_teaching_eligibble_students: "Insufficient time spent teaching eligible students"
+          subject_to_performance_measures: "Subject to performance measures"
+          subject_to_disciplinary_action: "Subject to disciplinary action"
+          identity_check_failed: "GOV One Login identity check failed"
+          alternative_identity_verification_check_failed: "Provider-led identity check failed"
+          duplicate_claim: "Duplicate claim"
+          no_response: "No response"
+          no_response_from_employer: "No response from employer"
+          other: "Other"
+      task_questions:
+        fe_alternative_verification:
+          name: Alternative verification
+          title: Do the details provided by the claimant match the provider’s responses?
+        one_login_identity:
+          title: Do the One Login details match the personal details entered by the claimant?
+        identity_confirmation:
+          title: Do the One Login details match the personal details entered by the claimant?
+        alternative_identity_verification:
+          title: "Do the details entered by the claimant match the personal details entered by the provider?"
+        matching_details:
+          title: Is this claim still valid despite having matching details with other claims?
+        payroll_details:
+          title: "Check bank account details"
+        provider_verification:
+          title: "Has the provider confirmed the claimant's details?"
+          contract_type:
+            label: "Contract of employment"
+            claimant_answers:
+              permanent: "Permanent contract"
+              fixed_term: "Fixed term contract"
+              variable_hours: "Variable hours contract"
+          teaching_responsibilities:
+            label: "Teaching responsibilities"
+            claimant_answers:
+              true: "Yes"
+              false: "No"
+          further_education_teaching_start_year:
+            label: "First 5 years of teaching"
+          teaching_hours_per_week:
+            label: "Timetabled teaching hours"
+            claimant_answers:
+              more_than_12: More than 12 hours per week
+              between_2_5_and_12: Between 2.5 and 12 hours per week
+              less_than_2_5: Less than 2.5 hours per week
+          half_teaching_hours:
+            label: "Age range taught"
+            claimant_answers:
+              true: "Yes"
+              false: "No"
+          subjects_taught:
+            label: "Subject"
+          courses_taught:
+            label: "Course"
+          teaching_hours_per_week_next_term:
+            label: "Timetabled teaching hours next term"
+            claimant_answers:
+              at_least_2_5: "At least 2.5 hours per week"
+              less_than_2_5: "Less than 2.5 hours per week"
+          taught_at_least_one_term:
+            label: "Taught at least one term"
+            claimant_answers:
+              true: "Yes"
+              false: "No"
+          subject_to_formal_performance_action:
+            label: "No performance measures"
+            claimant_answers:
+              true: "Yes"
+              false: "No"
+          subject_to_disciplinary_action:
+            label: "No disciplinary action"
+            claimant_answers:
+              true: "Yes"
+              false: "No"
+        fe_provider_verification_v2:
+          name: Alternative verification
+          title: Do the details provided by the claimant match the provider’s responses?
+        employment:
+          title: Does the claimant’s place of work match the above information on their claim?
+        provider_details:
+          title: "Is the claim still valid even though the claimant and provider have matching details?"
+        student_loan_plan:
+          title: "Does the claimant’s student loan plan match the information we hold about their loan?"
+    forms:
+      ineligible:
+        courses:
+          heading: You are not eligible
+        lack_teaching_responsibilities:
+          heading: You are not eligible
+        employed_by_another_organisation:
+          heading: You are not eligible
+        fixed_term_must_cover_full_academic_year:
+          heading: You are not eligible
+        lacks_teacher_qualification_or_enrolment:
+          heading: You are not eligible
+        must_at_least_half_hours_teaching_fe:
+          heading: You are not eligible
+        must_be_recent_further_education_teacher:
+          heading: You are not eligible
+        must_teach_at_least_one_term:
+          heading: You are not eligible for a targeted retention incentive payment yet
+        subject_to_problematic_actions:
+          heading: You are not eligible
+        teaching_less_than_2_5:
+          heading: You are not eligible
+        teaching_less_than_2_5_next_term:
+          heading: You are not eligible
+        fe_provider:
+          heading: The further education (FE) provider you have entered is not eligible
+        less_than_half_hours_teaching_eligible_courses:
+          heading: You are not eligible
+        subject:
+          heading: You are not eligible
+        claim_already_submitted_this_policy_year:
+          heading: "You've already submited a claim in this claim window"
+      previously_claimed:
+        question: "Did you apply for a targeted retention incentive payment for your work in further education between %{previous_claim_window_start} and %{previous_claim_window_end}?"
+        hint: Tell us if you applied for the payment. Not whether it was approved or paid.
+        options:
+          true: "Yes"
+          false: "No"
+        errors:
+          inclusion: Tell us if you applied for a targeted retention incentive payment for your work in further education between 1 Sept 2024 and 31 May 2025
+      have_one_login_account:
+        question: Do you have a GOV.UK One Login account?
+        options:
+          "yes": "Yes"
+          "no": "No"
+          "i_dont_know": I don’t know
+        errors:
+          inclusion: 'Tell us if you have a GOV.UK One Login account'
+      existing_progress:
+        question: You have already started an eligibility check
+        errors:
+          inclusion: Choose if you want to continue your existing eligibility check or start a new eligibility check
+      teaching_responsibilities:
+        question: Are you a member of staff with the responsibilities of a teacher?
+        errors:
+          inclusion: Tell us if you are a member of staff with teaching responsibilities
+      further_education_provision_search:
+        question: Which further education provider directly employs you?
+        errors:
+          blank: Select which FE provider directly employs you
+          min_length: Enter a college name or postcode that is at least 3 characters long
+      select_provision:
+        heading: Select where you are employed
+        errors:
+          blank: Select the further education provider you are employed by
+      contract_type:
+        question: What type of contract do you have directly with %{school_name}?
+        options:
+          permanent: Permanent
+          fixed_term: Fixed-term
+          variable_hours: Variable hours
+          employed_by_another_organisation: I do not have a direct contract of employment with %{school_name}
+        errors:
+          inclusion: Tell us the type of contract you have
+      fixed_term_contract:
+        question: Does your fixed-term contract cover the full %{academic_year} academic year?
+        options:
+          true: Yes, it covers the full %{current_academic_year} academic year
+          false: No, it does not cover the full %{current_academic_year} academic year
+        errors:
+          inclusion: Tell us if your fixed-term contract covers the full academic year
+      taught_at_least_one_term:
+        question: Have you taught at %{school_name} for the whole of the spring academic term?
+        options:
+          true: "Yes"
+          false: "No"
+        errors:
+          inclusion: Tell us if you have taught at %{school_name} for more than one academic term
+      teaching_hours_per_week:
+        question:
+          On average, how many hours per week are you timetabled to teach at %{school_name} during the current term?
+        hint: ‘Timetabled teaching hours’ refers to the time you spend teaching lessons to students of all ages.
+        options:
+          more_than_12: More than 12 hours per week
+          between_2_5_and_12: Between 2.5 and 12 hours per week
+          less_than_2_5: Less than 2.5 hours per week
+        errors:
+          inclusion: Tell us, on average, how many hours you are timetabled to teach during the current term
+      teaching_hours_per_week_next_term:
+        question: Are you timetabled to teach at least 2.5 hours per week at %{school_name} next term?
+        hint: If you don’t know, you should speak to HR or apply when you know your arrangements for next term.
+        options:
+          at_least_2_5: "Yes"
+          less_than_2_5: "No"
+        errors:
+          inclusion: Tell us if you are timetabled to teach for at least 2.5 hours per week at %{school_name} next term
+      further_education_teaching_start_year:
+        question: Which academic year did you start teaching in further education in England?
+        options:
+          between_dates: September %{start_year} to August %{end_year}
+          before_date: Before September %{year}
+        errors:
+          blank: Tell us when you started teaching in further education in England
+      subjects_taught:
+        question: Which subject areas do you teach?
+        hint: Select all that apply
+        options:
+          building_construction: Building and construction
+          chemistry: Chemistry
+          computing: Computing, including digital and ICT
+          early_years: Early years
+          engineering_manufacturing: Engineering and manufacturing, including transport engineering and electronics
+          maths: Maths
+          physics: Physics
+          none: I do not teach any of these subjects
+        errors:
+          inclusion: Select the subject areas that you teach, or select ‘I do not teach any of these subjects’
+      actual_subjects_taught:
+        options:
+          building_construction: Building and construction
+          chemistry: Chemistry
+          computing: Computing, including digital and ICT
+          early_years: Early years
+          engineering_manufacturing: Engineering and manufacturing, including transport engineering and electronics
+          maths: Maths
+          physics: Physics
+          none: They do not teach any of these subjects
+      courses: &courses
+        hint: |
+          <p>
+            Contact your provider if you are unsure which one to pick. Or you cannot find the one you teach.
+          </p>
+
+          <p>
+            You can then email the helpdesk to check if it is eligible.
+          </p>
+
+          <p>
+            %{email_snippet}
+          </p>
+
+          <p>
+            Select all that apply
+          </p>
+        errors:
+          inclusion: Select the courses that you teach, or select ‘I do not teach any of these courses’
+      building_construction_courses:
+        <<: *courses
+        question: Which building and construction courses do you teach?
+        question_check_your_answers: Building and construction courses
+        options:
+          level3_buildingconstruction_approved:
+            Qualifications approved for funding at level 3 and below in the %{link} sector subject area
+          tlevel_building: T Level in building services engineering for construction
+          tlevel_onsiteconstruction: T Level in onsite construction
+          tlevel_design_surveying: T Level in design, surveying and planning for construction
+          level2_3_apprenticeship: Level 2 or level 3 apprenticeships in the %{link}
+          none: I do not teach any of these courses
+      chemistry_courses:
+        <<: *courses
+        question: Which chemistry courses do you teach?
+        question_check_your_answers: Chemistry courses
+        options:
+          alevel_chemistry: A or AS level chemistry
+          gcse_chemistry: GCSE chemistry
+          ibo_level_3_chemistry:
+            IBO level 3 SL and HL chemistry, taught as part of a diploma or career related programme or as a standalone
+            certificate
+          ibo_level_1_2_myp_chemistry: IBO level 1 / level 2 MYP chemistry
+          none: I do not teach any of these courses
+      computing_courses:
+        <<: *courses
+        question: Which computing courses do you teach?
+        question_check_your_answers: Computing courses
+        options:
+          level3_and_below_ict_for_practitioners:
+            Qualifications approved for funding at level 3 and below in the %{link} sector subject area
+          level3_and_below_ict_for_users:
+            Qualifications approved for funding at level 3 and below in the %{link} sector subject area
+          digitalskills_quals: Digital functional skills qualifications and essential digital skills qualifications
+          tlevel_digitalsupport: T Level in digital support services
+          tlevel_digitalbusiness: T Level in digital business services
+          tlevel_digitalproduction: T Level in digital production, design and development
+          ibo_level3_compsci:
+            IBO level 3 SL and HL computer science, taught as part of a diploma or career related programme or as a
+            standalone certificate
+          level2_3_apprenticeship: Level 2 or level 3 apprenticeships in the %{link}
+          none: I do not teach any of these courses
+      early_years_courses:
+        <<: *courses
+        question: Which early years courses do you teach?
+        question_check_your_answers: Early years courses
+        options:
+          eylevel2: Early years practitioner (level 2) apprenticeship
+          eylevel3: Early years educator (level 3) apprenticeship
+          eytlevel: T Level in education and early years (early years educator)
+          coursetoeyq: "%{link}"
+          none: I do not teach any of these courses
+      engineering_manufacturing_courses:
+        <<: *courses
+        question: Which engineering and manufacturing courses do you teach?
+        question_check_your_answers: Engineering and manufacturing courses
+        options:
+          approved_level_321_engineering:
+            Qualifications approved for funding at level 3 and below in the %{link} sector subject area
+          approved_level_321_manufacturing:
+            Qualifications approved for funding at level 3 and below in the %{link} sector subject area
+          approved_level_321_transportation:
+            Qualifications approved for funding at level 3 and below in the %{link} sector subject area
+          tlevel_design: T Level in design and development for engineering and manufacturing
+          tlevel_maintenance: T Level in maintenance, installation and repair for engineering and manufacturing
+          tlevel_engineering: T Level in engineering, manufacturing, processing and control
+          level2_3_apprenticeship: Level 2 or level 3 apprenticeships in the %{link}
+          none: I do not teach any of these courses
+      maths_courses:
+        <<: *courses
+        question: Which maths courses do you teach?
+        question_check_your_answers: Maths courses
+        options:
+          approved_level_321_maths:
+            Qualifications approved for funding at level 3 and below in the %{link} sector subject area
+          gcse_maths:
+            GCSE in maths, functional skills qualifications and %{link} approved for teaching to 16 to 19-year-olds who
+            meet the condition of funding
+          none: I do not teach any of these courses
+      physics_courses:
+        <<: *courses
+        question: Which physics courses do you teach?
+        question_check_your_answers: Physics courses
+        options:
+          alevel_physics: A or AS level physics
+          gcse_physics: GCSE physics
+          ibo_level_1_2_myp_physics: IBO level 1 / level 2 MYP physics
+          ibo_level_3_physics:
+            IBO level 3 in SL and HL physics, taught as part of a diploma or career related programme or as a standalone
+            certificate
+          none: I do not teach any of these courses
+      email_verification:
+        errors:
+          one_time_password:
+            invalid: An error occured while validating the passcode, please try generating a new one
+      teaching_qualification:
+        question: Do you have a teaching qualification?
+        options:
+          "yes": "Yes"
+          not_yet: Not yet, I am currently enrolled on one and working towards completing it
+          no_but_planned: No, but I plan to enrol on one in the next 12 months
+          no_not_planned: No, and I do not plan to enrol on one in the next 12 months
+        errors:
+          inclusion: Tell us if you have a teaching qualification
+      poor_performance:
+        heading: Tell us if you are currently under any performance measures or disciplinary action
+        questions:
+          performance:
+            question: Are you currently subject to any formal performance measures as a result of continuous poor teaching standards?
+            hint:
+              This will be as a result of your underperformance as a teacher over a period of time. It could put your
+              employment at the further education (FE) provider at risk and is something we will check with them as it
+              will affect your eligibility.
+          disciplinary:
+            question: Are you currently subject to disciplinary action?
+            hint:
+              This is more serious than performance measures and could be because of misconduct. It is something we will
+              check with your FE provider as it affects your eligibility.
+        errors:
+          performance:
+            inclusion: Select yes if any performance measures have been started against you
+          disciplinary:
+            inclusion: Select yes if you are currently subject to disciplinary action
+      half_teaching_hours:
+        question:
+          Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?
+        errors:
+          inclusion:
+            Tell us if you spend at least half your timetabled teaching hours working with students aged 16 to 19
+      eligible:
+        heading: You’re eligible for a targeted retention incentive payment
+      work_email_access:
+        question: Can you access your work email account for %{school_name}?
+        hint: If you cannot access your work email right now, we’ll save all your answers, sign you out and you’ll return to this page when you sign in again later.
+        errors:
+          inclusion: Select yes if you can access your work email account for %{school_name}
+      no_work_email_access:
+        title: We’ve signed you out
+      work_email:
+        question: Enter work email
+        hint: To verify your further education (FE) work email address we will send you an email with a 6-digit passcode.
+        errors:
+          presence: Enter an email address
+        details:
+          title: How we’ll use this information
+          body: We’ll only use this email address to confirm your employment. We will not use it to send any updates about your application or link it to your GOV.UK One Login account.
+      work_email_verification:
+        caption: Email address verification
+        heading: Check your %{school_name} work email
+        question: Enter the 6-digit security code
+        errors:
+          presence: Enter a passcode
+      gender:
+        questions:
+          payroll_gender: "How is your gender recorded on your employer’s payroll system?"
+        errors:
+          select_gender:
+            "Select the gender recorded on your employer’s payroll system or select whether you do not know"
+      hours_teaching_eligible_subjects:
+        question: Do you spend at least half of your timetabled teaching hours teaching these eligible courses?
+        errors:
+          inclusion:
+            Select yes if you spend at least half of your timetabled teaching hours teaching these eligible courses
+      passport:
+        question: Do you have a valid passport?
+        conditional_question: Passport number
+        errors:
+          inclusion: Select yes if you have a valid passport
+          length: Passport number should be between 8 and 9 characters long
+      teacher_reference_number:
+        heading: Teacher reference number (TRN)
+        questions:
+          teacher_reference_number: "What is your TRN? (optional)"
+      personal_details:
+        errors:
+          full_name:
+            blank: Enter full name
+            length: Full name must be 100 characters or less
+          email_address:
+            blank: Enter an email address
+            invalid: Enter an email address in the correct format, like name@example.com
+            length: Email address must be %{length} characters or less
+            unauthorised: Only authorised email addresses can be used when using a team-only API key
+    check_your_answers:
+      part_one:
+        primary_heading: Check your answers
+        confirmation_notice:
+          By selecting continue you are confirming that, to the best of your knowledge, the details you are providing
+          are correct.
+      heading_send_application: Declaration
+      statement:
+        I have checked the details I’ve provided and I’m confident they are correct and the bank details match those held by my FE employer for the account my wages are paid into. I understand that submitting incorrect information may cause a delay to any payment.
+      btn_text: Accept and send
+    providers:
+      forms:
+        teaching_hours_per_week:
+          options:
+            20_or_more_hours_per_week: "20 hours or more per week"
+            12_to_20_hours_per_week: "12 or more hours per week, but fewer than 20"
+            2_and_a_half_to_12_hours_per_week: "2.5 or more hours per week, but fewer than 12"
+            fewer_than_2_and_a_half_hours_per_week: "Fewer than 2.5 hours each week"
+  further_education_payments_provider:
+    accessibility_statement:
+      test_date: "20 September 2024"
+      prepared_date: "24 September 2024"
+    journey_name: Claim a targeted retention incentive payment for further education teachers - provider
+    feedback_email: "FE-targeted.retention-incentive@education.gov.uk"
+    support_email_address: "FE-targeted.retention-incentive@education.gov.uk"
+    forms:
+      verify_claim:
+        title: "Review a targeted retention incentive payment claim"
+        declaration_title: "Declaration"
+        declaration: "To the best of my knowledge, I confirm that the information provided in this form is correct."
+        claim_reference: "Claim reference"
+        claimant_name: "Claimant name"
+        claimant_date_of_birth: "Claimant date of birth"
+        claimant_trn: "Claimant teacher reference number (TRN)"
+        claim_date: "Claim date"
+        errors:
+          declaration:
+            acceptance: "Tick the box to confirm that the information provided in this form is correct to the best of your knowledge"
+        assertions:
+          fixed_contract:
+            contract_type:
+              label: "Does %{claimant} have a %{type_of_contract} contract of employment %{duration}at %{provider}?"
+              errors:
+                inclusion: "Select yes if %{claimant} has a fixed term contract of employment at %{provider}"
+            teaching_responsibilities:
+              label: "Is %{claimant} a member of staff with teaching responsibilities?"
+              errors:
+                inclusion: "Select yes if %{claimant} is a member of staff with teaching responsibilities"
+            further_education_teaching_start_year:
+              label: "Is %{claimant} in the first 5 years of their further education teaching career in England?"
+              errors:
+                inclusion: "Select yes if %{claimant} is in the first 5 years of their further education teaching career in England"
+            teaching_hours_per_week:
+              label: "Is %{claimant} timetabled to teach an average of %{hours} during the current term?"
+              errors:
+                inclusion: "Select yes if %{claimant} is timetabled to teach an average of %{hours} during the current term"
+            half_teaching_hours:
+              label: "For at least half of their timetabled teaching hours, does %{claimant} teach 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?"
+              errors:
+                inclusion: "Select yes if %{claimant} teaches 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP), for at least half of their timetabled teaching hours"
+            subjects_taught:
+              label: "For at least half of their timetabled teaching hours, does %{claimant} teach:"
+              errors:
+                inclusion: "Select yes if %{claimant} teaches this course for at least half their timetabled teaching hours"
+            subject_to_formal_performance_action:
+              label: "Can you confirm that %{claimant} is not currently subject to any performance measures as a result of continuous poor teaching standards?"
+              errors:
+                inclusion: "Select yes if %{claimant} is not currently subject to any performance measures"
+            subject_to_disciplinary_action:
+              label: "Can you confirm that %{claimant} is not currently subject to disciplinary action?"
+              errors:
+                inclusion: "Select yes if %{claimant} is not currently subject to disciplinary action"
+          variable_contract:
+            contract_type:
+              label: "Does %{claimant} have a %{type_of_contract} contract of employment at %{provider}?"
+              errors:
+                inclusion: "Select yes if %{claimant} has a variable hours contract of employment at %{provider}"
+            teaching_responsibilities:
+              label: "Is %{claimant} a member of staff with teaching responsibilities?"
+              errors:
+                inclusion: "Select yes if %{claimant} is a member of staff with teaching responsibilities"
+            further_education_teaching_start_year:
+              label: "Is %{claimant} in the first 5 years of their further education teaching career in England?"
+              errors:
+                inclusion: "Select yes if %{claimant} is in the first 5 years of their further education teaching career in England"
+            taught_at_least_one_term:
+              label: "Has %{claimant} worked at %{provider} for the whole of the spring term?"
+              errors:
+                inclusion: "Select yes if %{claimant} has taught at least one academic term at %{provider}"
+            teaching_hours_per_week:
+              label: "Is %{claimant} timetabled to teach an average of %{hours} during the current term?"
+              errors:
+                inclusion: "Select yes if %{claimant} is timetabled to teach an average of %{hours} during the current term"
+            half_teaching_hours:
+              label: "For at least half of their timetabled teaching hours, does %{claimant} teach 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP)?"
+              errors:
+                inclusion: "Select yes if %{claimant} teaches 16- to 19-year-olds, including those up to age 25 with an Education, Health and Care Plan (EHCP), for at least half of their timetabled teaching hours"
+            subjects_taught:
+              label: "For at least half of their timetabled teaching hours, does %{claimant} teach:"
+              errors:
+                inclusion: "Select yes if %{claimant} teaches this course for at least half their timetabled teaching hours"
+            teaching_hours_per_week_next_term:
+              label: "Will %{claimant} be timetabled to teach at least 2.5 hours per week next term?"
+              errors:
+                inclusion: "Select yes if %{claimant} will be timetabled to teach at least 2.5 hours per week next term"
+            subject_to_formal_performance_action:
+              label: "Can you confirm that %{claimant} is not currently subject to any performance measures as a result of continuous poor teaching standards?"
+              errors:
+                inclusion: "Select yes if %{claimant} is not currently subject to any performance measures"
+            subject_to_disciplinary_action:
+              label: "Can you confirm that %{claimant} is not currently subject to disciplinary action?"
+              errors:
+                inclusion: "Select yes if %{claimant} is not currently subject to disciplinary action"
+      verify_identity:
+        title: "We need you to verify the claimant’s identity"
+        claimant_date_of_birth:
+          label: "What is %{claimant}’s date of birth?"
+          errors:
+            blank: "Enter %{claimant}’s date of birth"
+            invalid: "Enter a date of birth in the correct format"
+            in_future: "Date of birth must be in the past"
+            format: "Date of birth must include a day, month and year in the correct format, for example 01 01 1980"
+            four_digits: "Year must include 4 numbers"
+            before_1900: "Year must be after 1900"
+        claimant_postcode:
+          label: "What is the postcode of %{claimant}’s current home address?"
+          hint: "For example ’AA1 2BC’"
+          errors:
+            blank: "Enter %{claimant}’s postcode"
+            invalid: "Enter a postcode in the correct format"
+        claimant_national_insurance_number:
+          label: "What is %{claimant}’s National Insurance number?"
+          hint: "For example ’QQ123456C’"
+          errors:
+            blank: "Enter %{claimant}’s National Insurance number"
+            invalid: "Enter a National Insurance number in the correct format"
+        claimant_valid_passport:
+          label: "Does %{claimant} have a valid passport?"
+          hint: "You can check if a passport is valid by looking at the expiration date on the passport photo page"
+          options:
+            true: "Yes"
+            false: "No"
+          errors:
+            inclusion: "Select yes if %{claimant} has a valid passport"
+        claimant_passport_number:
+          label: "Passport number"
+          hint: "This is the number in the top right hand corner of the photo page in the passport"
+          errors:
+            blank: "Enter %{claimant}’s passport number"
+        declaration:
+          legend: "Declaration"
+          label: "To the best of my knowledge, I confirm that I have verified the claimant’s identity and the information provided in this form is correct."
+          errors:
+            acceptance: "Tick the box to confirm that you have verified the claimant’s identity and the information provided in this form is correct"
+
