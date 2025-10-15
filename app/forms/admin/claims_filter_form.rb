@@ -65,17 +65,28 @@ class Admin::ClaimsFilterForm
           .where.not(qa_completed_at: nil)
           .rejected
       when "automatically_approved_awaiting_payroll"
-        Claim.current_academic_year.payrollable.auto_approved
+        Claim
+          .current_academic_year.payrollable.auto_approved
       when "rejected"
-        Claim.current_academic_year.rejected
+        Claim
+          .current_academic_year.rejected
       when "rejected_awaiting_qa"
-        Claim.rejected_awaiting_qa
+        Claim
+          .rejected_awaiting_qa
       when "held"
-        Claim.includes(:decisions).held.awaiting_decision
+        Claim
+          .includes(:decisions)
+          .held.awaiting_decision
       when "failed_bank_validation"
-        Claim.includes(:decisions).failed_bank_validation.awaiting_decision
+        Claim
+          .includes(:decisions)
+          .failed_bank_validation
+          .awaiting_decision
       when "awaiting_provider_verification"
-        Claim.by_policy(Policies::FurtherEducationPayments).awaiting_further_education_provider_verification.awaiting_decision
+        Claim
+          .by_policy(Policies::FurtherEducationPayments)
+          .awaiting_further_education_provider_verification
+          .awaiting_decision
       when "awaiting_claimant_data"
         Claim
           .by_policy(Policies::EarlyYearsPayments)
@@ -85,6 +96,7 @@ class Admin::ClaimsFilterForm
         Claim
           .by_policy(Policies::EarlyYearsPayments)
           .joins(:early_years_payment_eligibility)
+          .includes(:early_years_payment_eligibility)
           .where.not(submitted_at: nil)
           .awaiting_decision
           .where("early_years_payment_eligibilities.start_date > ?", Policies::EarlyYearsPayments::RETENTION_PERIOD.ago)
@@ -92,11 +104,16 @@ class Admin::ClaimsFilterForm
         Claim
           .by_policy(Policies::EarlyYearsPayments)
           .joins(:early_years_payment_eligibility)
+          .includes(:early_years_payment_eligibility)
           .where.not(submitted_at: nil)
           .awaiting_decision
           .where("early_years_payment_eligibilities.start_date < ?", Policies::EarlyYearsPayments::RETENTION_PERIOD.ago)
       else
-        Claim.includes(:decisions).not_held.awaiting_decision.not_awaiting_further_education_provider_verification
+        Claim
+          .includes(:decisions)
+          .not_held
+          .awaiting_decision
+          .not_awaiting_further_education_provider_verification
       end
 
     @claims = @claims.by_policy(selected_policy) if selected_policy
@@ -105,7 +122,7 @@ class Admin::ClaimsFilterForm
 
     @claims = Claim.where(id: @claims.select("DISTINCT ON (claims.id) claims.id"))
 
-    @claims = @claims.includes(:tasks, :assigned_to, :eligibility)
+    @claims = @claims.includes(:tasks, :assigned_to)
     @claims = @claims.order(:submitted_at)
 
     @claims

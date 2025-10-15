@@ -61,7 +61,7 @@ module AutomatedChecks
     private
 
     def claims
-      @claims ||= Claim.awaiting_decision.includes(:tasks)
+      @claims ||= Claim.awaiting_decision.includes(:tasks, :eligibility)
     end
 
     def claim_for_record(record)

@@ -23,7 +23,7 @@ class Admin::AllocationsController < Admin::BaseAdminController
   def bulk_allocate
     claims = Claim
       .where(assigned_to: nil)
-      .includes(:decisions, eligibility: [:claim_school, :current_school])
+      .includes(:eligibility)
       .awaiting_decision
       .order(:submitted_at)
       .limit(params[:allocate_claim_count])

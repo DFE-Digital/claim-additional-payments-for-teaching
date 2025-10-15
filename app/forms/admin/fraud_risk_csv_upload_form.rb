@@ -77,6 +77,7 @@ module Admin
       end
 
       Claim
+        .includes(:eligibility)
         .where(
           "LOWER(national_insurance_number) IN (?)",
           RiskIndicator.national_insurance_number.select("LOWER(value)")

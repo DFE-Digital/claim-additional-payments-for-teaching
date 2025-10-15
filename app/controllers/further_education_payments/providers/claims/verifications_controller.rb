@@ -124,8 +124,7 @@ module FurtherEducationPayments
 
         def claim
           @claim ||= claim_scope
-            .strict_loading
-            .includes(eligibility: :school)
+            .includes(:eligibility)
             .find(params[:claim_id])
         end
       end

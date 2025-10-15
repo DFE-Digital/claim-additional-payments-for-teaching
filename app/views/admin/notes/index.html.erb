@@ -46,7 +46,7 @@
           <h2 class="govuk-heading-m">Notes</h2>
 
           <div class="hmcts-timeline">
-            <% @claim.notes.order(created_at: :desc).each do |note| %>
+            <% @claim.notes.includes(:created_by).order(created_at: :desc).each do |note| %>
               <%= render "admin/notes/note", note: note, display_description: true %>
             <% end %>
           </div>
