@@ -35,6 +35,8 @@ module Journeys
       attribute :valid_passport, :boolean, pii: false
       attribute :passport_number, :string, pii: true
 
+      attribute :check_your_answers_part_one_completed, :boolean, pii: false
+
       attribute :claimant_declaration, :boolean, pii: false
 
       def policy

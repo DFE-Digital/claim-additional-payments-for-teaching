@@ -10,11 +10,11 @@ module JourneyConcern
   end
 
   def journey
-    Journeys.for_routing_name(current_journey_routing_name)
+    @journey ||= Journeys.for_routing_name(current_journey_routing_name)
   end
 
   def journey_configuration
-    journey.configuration
+    @journey_configuration ||= journey.configuration
   end
 
   def journey_session

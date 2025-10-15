@@ -126,6 +126,8 @@ shared:
     - gross_value # decimal, gross value of payment
     - student_loan_repayment # decimal, ???
     - tax # decimal, the amount of tax that was paid on the payment
+    - national_insurance # decimal, the amount of employee national insurance paid
+    - employers_national_insurance # decimal, the amount of employer's national insurance paid
     - net_pay # decimal, amount paid after deductions
     - gross_pay # decimal, amount paid before deductions
     - postgraduate_loan_repayment # decimal, amount paid towards postgrad loan

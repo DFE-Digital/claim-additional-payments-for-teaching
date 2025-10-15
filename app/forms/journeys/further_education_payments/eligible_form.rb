@@ -14,6 +14,10 @@ module Journeys
       def award_amount
         journey_session.answers.calculate_award_amount
       end
+
+      def completed?
+        journey_session.answers.award_amount.present?
+      end
     end
   end
 end
