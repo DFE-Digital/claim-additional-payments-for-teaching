@@ -87,8 +87,8 @@ RSpec.describe BasePolicy, type: :model do
   describe "#decision_deadline_date" do
     let(:claim) { build(:claim, :submitted) }
 
-    it "is 13 weeks after submitted date" do
-      expect(Policies::TestPolicy.decision_deadline_date(claim)).to eql((claim.submitted_at + 13.weeks).to_date)
+    it "is 19 weeks after submitted date" do
+      expect(Policies::TestPolicy.decision_deadline_date(claim)).to eql((claim.submitted_at + 19.weeks).to_date)
     end
   end
 end
