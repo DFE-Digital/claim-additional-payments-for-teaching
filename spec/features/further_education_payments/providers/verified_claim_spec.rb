@@ -9,7 +9,6 @@ RSpec.describe "Provider verified claims dashboard" do
     school = create(:school, :fe_eligible, ukprn: "10000952")
     eligibility = create(
       :further_education_payments_eligibility,
-      :verified,
       :provider_verification_completed,
       school:,
       provider_verification_completed_at: Date.new(2024, 12, 14)
