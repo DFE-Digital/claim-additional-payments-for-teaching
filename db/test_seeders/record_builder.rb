@@ -1,5 +1,6 @@
 class RecordBuilder
   include Seeder
+
   attr_reader :records
 
   def initialize(quantity:)

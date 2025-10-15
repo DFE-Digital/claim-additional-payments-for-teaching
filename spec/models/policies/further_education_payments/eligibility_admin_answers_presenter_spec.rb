@@ -13,7 +13,6 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
   let(:contract_type) { "permanent" }
   let(:fixed_term_full_year) { nil }
   let(:teaching_hours_per_week) { "more_than_12" }
-  let(:teaching_hours_per_week_next_term) { nil }
   let(:taught_at_least_one_term) { nil }
 
   let(:claim) do
@@ -33,7 +32,6 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
       contract_type: contract_type,
       fixed_term_full_year: fixed_term_full_year,
       teaching_hours_per_week: teaching_hours_per_week,
-      teaching_hours_per_week_next_term: teaching_hours_per_week_next_term,
       taught_at_least_one_term: taught_at_least_one_term,
       further_education_teaching_start_year: "2023",
       subjects_taught: ["maths", "engineering_manufacturing"],
@@ -93,7 +91,6 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
     context "with a variable_hours contract claim" do
       let(:contract_type) { "variable_hours" }
       let(:teaching_hours_per_week) { "less_than_2_5" }
-      let(:teaching_hours_per_week_next_term) { "at_least_2_5" }
       let(:taught_at_least_one_term) { true }
 
       it do
@@ -110,10 +107,6 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
             [
               "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the current term?",
               "Less than 2.5 hours per week"
-            ],
-            [
-              "Are you timetabled to teach at least 2.5 hours per week at Springfield Elementary next term?",
-              "Yes"
             ]
           ]
         )
@@ -123,7 +116,6 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
     context "with a fixed term contract claim" do
       let(:contract_type) { "fixed_term" }
       let(:teaching_hours_per_week) { "between_2_5_and_12" }
-      let(:teaching_hours_per_week_next_term) { "at_least_2_5" }
 
       context "with a full year contract" do
         let(:fixed_term_full_year) { true }
@@ -142,10 +134,6 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
               [
                 "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the current term?",
                 "Between 2.5 and 12 hours per week"
-              ],
-              [
-                "Are you timetabled to teach at least 2.5 hours per week at Springfield Elementary next term?",
-                "Yes"
               ]
             ]
           )
@@ -154,7 +142,6 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
 
       context "without a full year contract" do
         let(:fixed_term_full_year) { false }
-        let(:teaching_hours_per_week_next_term) { "less_than_2_5" }
         let(:taught_at_least_one_term) { false }
 
         it do
@@ -175,10 +162,6 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
               [
                 "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the current term?",
                 "Between 2.5 and 12 hours per week"
-              ],
-              [
-                "Are you timetabled to teach at least 2.5 hours per week at Springfield Elementary next term?",
-                "No"
               ]
             ]
           )

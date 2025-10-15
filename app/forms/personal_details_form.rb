@@ -1,6 +1,7 @@
 class PersonalDetailsForm < Form
   include ActiveModel::Dirty
   include DateOfBirth
+
   self.date_of_birth_field = :date_of_birth
 
   NINO_REGEX_FILTER = /\A[A-Z]{2}[0-9]{6}[A-D]{1}\Z/

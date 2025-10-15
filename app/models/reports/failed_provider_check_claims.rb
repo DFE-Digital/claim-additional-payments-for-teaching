@@ -20,7 +20,6 @@ module Reports
       "Age range taught",
       "Subject",
       "Course",
-      "2.5 hours weekly teaching",
       "Performance",
       "Disciplinary"
     ]
@@ -76,7 +75,6 @@ module Reports
           # verifying the subjects taught question, so these two columns will
           # always be the same.
           present_assertion("subjects_taught"),
-          present_assertion("teaching_hours_per_week_next_term"),
           present_assertion("subject_to_formal_performance_action"),
           present_assertion("subject_to_disciplinary_action")
         ]

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_22_184500) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_25_112536) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -302,7 +302,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_22_184500) do
     t.boolean "fixed_term_full_year"
     t.boolean "taught_at_least_one_term"
     t.text "teaching_hours_per_week"
-    t.text "teaching_hours_per_week_next_term"
     t.text "further_education_teaching_start_year"
     t.jsonb "subjects_taught", default: []
     t.jsonb "building_construction_courses", default: []
@@ -345,7 +344,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_22_184500) do
     t.uuid "provider_verification_verified_by_id"
     t.uuid "provider_assigned_to_id"
     t.datetime "provider_verification_started_at"
-    t.boolean "provider_verification_timetabled_teaching_hours"
     t.boolean "provider_verification_half_timetabled_teaching_time"
     t.citext "work_email"
     t.boolean "work_email_verified"
