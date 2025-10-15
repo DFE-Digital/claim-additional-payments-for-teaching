@@ -110,15 +110,11 @@ module Policies
       end
 
       def teaching_qualification
-        claimant_value = case eligibility.teaching_qualification
-        when "yes"
-          "Yes"
-        when "not_yet"
-          "Not yet, I am currently enrolled on one and working towards completing it"
-        when "no_but_planned"
-          "No, but I plan to enrol on one in the next 12 months"
-        when "no_not_planned"
-          "No, and I do not plan to enrol on one in the next 12 months"
+        claimant_value = if eligibility.teaching_qualification.present?
+          I18n.t(
+            eligibility.teaching_qualification,
+            scope: "further_education_payments.forms.teaching_qualification.options"
+          )
         else
           "Not provided"
         end
@@ -192,7 +188,7 @@ module Policies
       def timetabled_teaching_hours
         claimant_mapped = case eligibility.teaching_hours_per_week
         when "more_than_12"
-          "20 hours or more each week"
+          "12 hours or more each week"
         when "between_2_5_and_12"
           "2.5 to 12 hours each week"
         when "less_than_2_5"

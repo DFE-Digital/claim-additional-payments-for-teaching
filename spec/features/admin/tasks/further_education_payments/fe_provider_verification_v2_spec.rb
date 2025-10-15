@@ -5,10 +5,6 @@ RSpec.feature "Viewing the FE provider verification year 2 task" do
     sign_in_as_service_operator
   end
 
-  before(:each) do
-    FactoryBot.reload
-  end
-
   context "when the provider hasn't completed the verification" do
     it "shows that the provider hasn't completed verification" do
       claim = create(
@@ -74,29 +70,12 @@ RSpec.feature "Viewing the FE provider verification year 2 task" do
           subject_to_disciplinary_action: false,
           provider_verification_disciplinary_action: false,
           teaching_qualification: "yes",
-          provider_verification_teaching_qualification: "yes",
-          verification: {
-            "assertions" => [
-              {"name" => "teaching_responsibilities", "outcome" => true},
-              {"name" => "teaching_start_year_matches_claim", "outcome" => true},
-              {"name" => "half_teaching_hours", "outcome" => true},
-              {"name" => "subjects_taught", "outcome" => true},
-              {"name" => "taught_at_least_one_term", "outcome" => true}
-            ],
-            "verifier" => {
-              "dfe_sign_in_uid" => "test-provider-uid",
-              "first_name" => "Provider",
-              "last_name" => "Verifier",
-              "email" => "provider@example.com",
-              "dfe_sign_in_organisation_name" => "Test College",
-              "dfe_sign_in_role_codes" => ["fe_provider"]
-            }
-          }
+          provider_verification_teaching_qualification: "yes"
         )
       )
 
       # Trigger the job to create the fe_provider_verification_v2 task
-      Tasks::ProviderVerificationJob.new.perform(claim)
+      Tasks::FeProviderVerificationV2Job.new.perform(claim)
 
       visit admin_claim_tasks_path(claim)
 
@@ -136,7 +115,7 @@ RSpec.feature "Viewing the FE provider verification year 2 task" do
       end
 
       within_table_row("Timetabled teaching hours") do |claimant_answer, provider_answer|
-        expect(claimant_answer).to have_content("20 hours or more each week")
+        expect(claimant_answer).to have_content("12 hours or more each week")
         expect(provider_answer).to have_content("12 or more hours per week, but fewer than 20")
       end
 

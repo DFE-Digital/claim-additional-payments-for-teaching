@@ -172,12 +172,10 @@ module FurtherEducationPayments
             # this has been completed.
             if claim.eligibility.provider_verification_claimant_employment_check_declaration
               Policies::FurtherEducationPayments.alternative_idv_completed!(claim)
-            elsif claim.academic_year != AcademicYear.new("2024/2025")
-              # Regular provider verification completed (Year 2+ claims only)
-              # This triggers the auto-pass logic for the provider_verification task
-              Policies::FurtherEducationPayments.provider_verification_completed!(claim)
             end
 
+            # Provider verification completed (runs for all Year 2+ claims)
+            # The verifier will determine if it should process based on academic year
             Policies::FurtherEducationPayments.provider_verification_completed!(claim)
 
             true
