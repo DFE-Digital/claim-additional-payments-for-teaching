@@ -28,7 +28,11 @@ class StudentLoanAmountCheckJob < ApplicationJob
   end
 
   def current_year_tslr_claims_awaiting_decision
-    Claim.by_academic_year(current_academic_year).by_policy(Policies::StudentLoans).awaiting_decision
+    Claim
+      .includes(:payments)
+      .by_academic_year(current_academic_year)
+      .by_policy(Policies::StudentLoans)
+      .awaiting_decision
       .where.not(submitted_using_slc_data: nil) # exclude older claims submitted using the student loan questions
     # TODO: This last condition won't be needed once we have processed all the existing TSLR claims submitted using
     # the student loan questions in the journey

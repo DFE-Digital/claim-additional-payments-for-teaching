@@ -22,7 +22,7 @@
 
     <% matching_claims = Claim
       .where(id: @form.task.claim.eligibility.previous_year_claim_ids)
-      .includes(%i[eligibility decisions]) %>
+      .includes(%i[eligibility]) %>
 
     <% if matching_claims.none? %>
       <%= govuk_inset_text do %>

@@ -5,7 +5,7 @@ class Topup < ApplicationRecord
   belongs_to :payment, optional: true
   belongs_to :created_by, class_name: "DfeSignIn::User"
 
-  scope :payrollable, -> { includes(:claim).where(payment: nil) }
+  scope :payrollable, -> { where(payment: nil) }
 
   validates :award_amount, presence: {message: "Enter top up amount"}
   validate :award_amount_must_be_in_range, on: :create

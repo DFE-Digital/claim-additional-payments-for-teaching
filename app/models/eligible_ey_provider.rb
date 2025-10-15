@@ -22,7 +22,7 @@ class EligibleEyProvider < ApplicationRecord
     CSV.generate(headers: true) do |csv|
       csv << csv_columns.keys
 
-      all.each do |row|
+      all.includes(:local_authority).each do |row|
         csv << csv_columns.values.map { |attr| row.send(attr) }
       end
     end

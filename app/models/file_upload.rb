@@ -18,6 +18,7 @@ class FileUpload < ApplicationRecord
   def self.upload_history(target_data_model)
     by_target_data_model(target_data_model)
       .completed_processing
+      .includes(:uploaded_by)
       .order(completed_processing_at: :desc)
   end
 

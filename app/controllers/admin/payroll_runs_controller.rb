@@ -5,11 +5,16 @@ module Admin
     before_action :ensure_service_operator
 
     def index
-      @payroll_runs = PayrollRun.order(created_at: :desc)
+      @payroll_runs = PayrollRun
+        .includes(:payments, :payment_confirmations)
+        .order(created_at: :desc)
     end
 
     def new
-      @claims = Claim.payrollable.order(submitted_at: :asc)
+      @claims = Claim
+        .includes(:eligibility)
+        .payrollable
+        .order(submitted_at: :asc)
 
       @topups = Topup.payrollable
       @total_award_amount = @claims.sum(&:award_amount) + @topups.sum(&:award_amount)
@@ -35,7 +40,7 @@ module Admin
 
     def show
       @payroll_run = PayrollRun.find(params[:id])
-      @pagy, @payments = pagy(@payroll_run.payments.ordered.includes(claims: [:eligibility]).includes(:topups))
+      @pagy, @payments = pagy(@payroll_run.payments.ordered.includes(:confirmation, claims: [:eligibility]).includes(:topups))
     end
 
     def destroy

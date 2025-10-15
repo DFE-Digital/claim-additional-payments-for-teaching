@@ -16,7 +16,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
       format.html
       format.csv {
         # "Download report request file" button (doesn't use the filters)
-        report_request_claims = Claim.includes(:decisions).awaiting_decision
+        report_request_claims = Claim.includes(:eligibility).awaiting_decision
         send_data Claim::DataReportRequest.new(report_request_claims).to_csv,
           filename: "dqt_report_request_#{Date.today.iso8601}.csv"
       }
@@ -33,7 +33,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
   def search
     return unless params[:query].present?
 
-    @claims = Claim::Search.new(params[:query]).claims.includes(:eligibility)
+    @claims = Claim::Search.new(params[:query]).claims
 
     if @claims.none?
       flash.now[:notice] = "Cannot find a claim for query \"#{params[:query]}\""

@@ -1,6 +1,6 @@
 class PayrollRunJob < ApplicationJob
   def perform(payroll_run, claim_ids, topup_ids)
-    claims = Claim.where(id: claim_ids)
+    claims = Claim.includes(:eligibility).where(id: claim_ids)
     topups = Topup.where(id: topup_ids)
 
     ActiveRecord::Base.transaction do
