@@ -894,11 +894,6 @@ en:
             label: "Subject"
           courses_taught:
             label: "Course"
-          teaching_hours_per_week_next_term:
-            label: "Timetabled teaching hours next term"
-            claimant_answers:
-              at_least_2_5: "At least 2.5 hours per week"
-              less_than_2_5: "Less than 2.5 hours per week"
           taught_at_least_one_term:
             label: "Taught at least one term"
             claimant_answers:
@@ -1021,14 +1016,6 @@ en:
           less_than_2_5: Less than 2.5 hours per week
         errors:
           inclusion: Tell us, on average, how many hours you are timetabled to teach during the current term
-      teaching_hours_per_week_next_term:
-        question: Are you timetabled to teach at least 2.5 hours per week at %{school_name} next term?
-        hint: If you don’t know, you should speak to HR or apply when you know your arrangements for next term.
-        options:
-          at_least_2_5: "Yes"
-          less_than_2_5: "No"
-        errors:
-          inclusion: Tell us if you are timetabled to teach for at least 2.5 hours per week at %{school_name} next term
       further_education_teaching_start_year:
         question: Which academic year did you start teaching in further education in England?
         options:
@@ -1363,10 +1350,6 @@ en:
               label: "For at least half of their timetabled teaching hours, does %{claimant} teach:"
               errors:
                 inclusion: "Select yes if %{claimant} teaches this course for at least half their timetabled teaching hours"
-            teaching_hours_per_week_next_term:
-              label: "Will %{claimant} be timetabled to teach at least 2.5 hours per week next term?"
-              errors:
-                inclusion: "Select yes if %{claimant} will be timetabled to teach at least 2.5 hours per week next term"
             subject_to_formal_performance_action:
               label: "Can you confirm that %{claimant} is not currently subject to any performance measures as a result of continuous poor teaching standards?"
               errors:

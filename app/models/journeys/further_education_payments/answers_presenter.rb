@@ -40,7 +40,6 @@ module Journeys
           a << contract_type
           a << fixed_term_contract
           a << taught_at_least_one_term
-          a << teaching_hours_per_week_next_term
           a << teaching_hours_per_week
           a << half_teaching_hours
           a << subjects_taught
@@ -123,16 +122,6 @@ module Journeys
             t("further_education_payments.forms.taught_at_least_one_term.question", school_name: answers.school.name),
             t(answers.taught_at_least_one_term, scope: "further_education_payments.forms.taught_at_least_one_term.options"),
             "taught-at-least-one-term"
-          ]
-        end
-      end
-
-      def teaching_hours_per_week_next_term
-        if !answers.teaching_hours_per_week_next_term.nil?
-          [
-            t("further_education_payments.forms.teaching_hours_per_week_next_term.question", school_name: answers.school.name),
-            t(answers.teaching_hours_per_week_next_term, scope: "further_education_payments.forms.teaching_hours_per_week_next_term.options", school_name: answers.school.name),
-            "teaching-hours-per-week-next-term"
           ]
         end
       end

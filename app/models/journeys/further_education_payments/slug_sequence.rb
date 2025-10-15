@@ -19,7 +19,6 @@ module Journeys
         taught-at-least-one-term
         teaching-hours-per-week
         half-teaching-hours
-        teaching-hours-per-week-next-term
         subjects-taught
         building-construction-courses
         chemistry-courses
@@ -137,7 +136,6 @@ module Journeys
             array << SLUGS_HASH["taught-at-least-one-term"]
           end
 
-          array << SLUGS_HASH["teaching-hours-per-week-next-term"]
           array << SLUGS_HASH["teaching-hours-per-week"]
           array << SLUGS_HASH["half-teaching-hours"]
         when "variable_hours"
@@ -146,7 +144,6 @@ module Journeys
           select_provision_form = form_for_slug(SLUGS_HASH["select-provision"])
 
           if select_provision_form.completed_or_valid? && answers.taught_at_least_one_term == true
-            array << SLUGS_HASH["teaching-hours-per-week-next-term"]
             array << SLUGS_HASH["teaching-hours-per-week"]
             array << SLUGS_HASH["half-teaching-hours"]
           end

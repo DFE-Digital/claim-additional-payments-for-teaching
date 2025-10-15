@@ -284,8 +284,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you timetabled to teach at least 2.5 hours per week at #{eligible_college.name} next term?")
-    choose("No")
+    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{eligible_college.name} during the current term?")
+    choose("Less than 2.5 hours per week")
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible")
@@ -862,7 +862,6 @@ RSpec.feature "Further education payments ineligible paths" do
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible")
-    expect(page).to have_content("teach at least 2.5 hours per week")
   end
 
   scenario "when fixed-term contract and not enough hours" do
@@ -912,8 +911,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose "Yes, it covers the full #{current_academic_year.to_s(:long)} academic year"
     click_button "Continue"
 
-    expect(page).to have_content("Are you timetabled to teach at least 2.5 hours per week at #{eligible_college.name} next term?")
-    choose("No")
+    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{eligible_college.name} during the current term?")
+    choose("Less than 2.5 hours per week")
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible")
@@ -967,8 +966,8 @@ RSpec.feature "Further education payments ineligible paths" do
     choose("Yes")
     click_button "Continue"
 
-    expect(page).to have_content("Are you timetabled to teach at least 2.5 hours per week at #{eligible_college.name} next term?")
-    choose("No")
+    expect(page).to have_content("On average, how many hours per week are you timetabled to teach at #{eligible_college.name} during the current term?")
+    choose("Less than 2.5 hours per week")
     click_button "Continue"
 
     expect(page).to have_content("You are not eligible")
