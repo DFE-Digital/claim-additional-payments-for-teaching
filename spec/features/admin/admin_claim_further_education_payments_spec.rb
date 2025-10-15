@@ -21,7 +21,7 @@ RSpec.feature "Admin claim further education payments" do
             eligibility = create(
               :further_education_payments_eligibility,
               :eligible,
-              :verified,
+              :year_one_verified,
               contract_type: "fixed_term",
               school: fe_provider,
               award_amount: 1500
@@ -115,7 +115,7 @@ RSpec.feature "Admin claim further education payments" do
 
             eligibility = create(
               :further_education_payments_eligibility,
-              :verified_variable_hours,
+              :year_one_verified_variable_hours,
               school: fe_provider,
               award_amount: 1500
             )

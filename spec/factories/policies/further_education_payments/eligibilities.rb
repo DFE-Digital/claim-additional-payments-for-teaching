@@ -26,7 +26,7 @@ FactoryBot.define do
       flagged_as_duplicate { true }
     end
 
-    trait :verified do
+    trait :year_one_verified do
       verification do
         {
           "assertions" => [
@@ -68,7 +68,7 @@ FactoryBot.define do
       end
     end
 
-    trait :verified_variable_hours do
+    trait :year_one_verified_variable_hours do
       contract_type { "variable_hours" }
       teaching_responsibilities { true }
       further_education_teaching_start_year { "2023" }
