@@ -1,6 +1,6 @@
 module AutomatedChecks
   module ClaimVerifiers
-    class ProviderVerification
+    class ProviderVerificationV2
       attr_reader :claim
 
       def initialize(claim:)
@@ -42,18 +42,10 @@ module AutomatedChecks
       end
 
       def passed?
-        provider_yes_required = %w[
-          teaching_responsibilities
-          teaching_start_year_matches_claim
-          half_teaching_hours
-          subjects_taught
-          taught_at_least_one_term
-        ]
-
-        provider_yes_pass = provider_yes_required.all? do |field|
-          assertion = verification.fetch("assertions").find { |a| a["name"] == field }
-          assertion && assertion.fetch("outcome") == true
-        end
+        # Check Year 2+ provider verification columns
+        provider_yes_pass = eligibility.provider_verification_teaching_responsibilities == true &&
+          eligibility.provider_verification_teaching_start_year_matches_claim == true &&
+          eligibility.provider_verification_half_teaching_hours == true
 
         performance_disciplinary_pass = check_performance_and_disciplinary_responses
         matching_responses_pass = check_matching_responses
@@ -88,8 +80,6 @@ module AutomatedChecks
           "2_and_a_half_to_12_hours_per_week"
         when "less_than_2_5"
           "fewer_than_2_and_a_half_hours_per_week"
-        else
-          provider_hours
         end
 
         claimant_mapped == provider_hours
@@ -106,27 +96,9 @@ module AutomatedChecks
         @eligibility ||= claim.eligibility
       end
 
-      def verification
-        @verification ||= eligibility.verification
-      end
-
       def verifier_user
-        @verifier_user ||= find_or_create_verifier_user
-      end
-
-      def find_or_create_verifier_user
-        verifier_data = verification.fetch("verifier")
-
-        DfeSignIn::User.find_or_create_by!(
-          dfe_sign_in_id: verifier_data.fetch("dfe_sign_in_uid"),
-          user_type: "provider"
-        ) do |user|
-          user.given_name = verifier_data.fetch("first_name")
-          user.family_name = verifier_data.fetch("last_name")
-          user.email = verifier_data.fetch("email")
-          user.organisation_name = verifier_data.fetch("dfe_sign_in_organisation_name")
-          user.role_codes = verifier_data.fetch("dfe_sign_in_role_codes")
-        end
+        # Year 2+ uses provider_verification_verified_by_id instead of verification column
+        DfeSignIn::User.find(eligibility.provider_verification_verified_by_id)
       end
     end
   end

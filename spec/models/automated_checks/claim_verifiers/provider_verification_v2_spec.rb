@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
+RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerificationV2 do
   describe "#initialize" do
     context "with a non FE claim" do
       it "errors" do
@@ -59,23 +59,12 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
         context "when the task has not been performed" do
           context "when the provider has not confirmed the claimants answers" do
             it "fails the task" do
+              user = create(:dfe_signin_user, user_type: "provider")
+
               eligibility = create(
                 :further_education_payments_eligibility,
                 provider_verification_completed_at: Time.zone.now,
-                verification: {
-                  assertions: [
-                    {name: "contract_type", outcome: false}
-                  ],
-                  verifier: {
-                    dfe_sign_in_uid: "123",
-                    first_name: "Seymour",
-                    last_name: "Skinner",
-                    email: "seymore.skinner@springfield-elementary.edu",
-                    dfe_sign_in_organisation_name: "Springfield Elementary",
-                    dfe_sign_in_role_codes: ["teacher_payments_claim_verifier"]
-                  },
-                  created_at: Time.zone.now
-                }
+                provider_verification_verified_by_id: user.id
               )
 
               claim = create(
@@ -86,9 +75,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
               )
 
               expect { described_class.new(claim:).perform }.to(
-                change { claim.tasks.count }.from(0).to(1).and(
-                  change(DfeSignIn::User, :count).from(0).to(1)
-                )
+                change { claim.tasks.count }.from(0).to(1)
               )
 
               task = claim.tasks.last
@@ -96,11 +83,14 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
               expect(task.name).to eq("fe_provider_verification_v2")
               expect(task.passed).to eq(false)
               expect(task.manual).to eq(false)
+              expect(task.created_by).to eq(user)
             end
           end
 
           context "when the provider has confirmed the claimants answers" do
             it "passes the task" do
+              user = create(:dfe_signin_user, user_type: "provider")
+
               eligibility = create(
                 :further_education_payments_eligibility,
                 contract_type: "permanent",
@@ -110,25 +100,11 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
                 provider_verification_teaching_qualification: "yes",
                 provider_verification_performance_measures: false,
                 provider_verification_disciplinary_action: false,
+                provider_verification_teaching_responsibilities: true,
+                provider_verification_teaching_start_year_matches_claim: true,
+                provider_verification_half_teaching_hours: true,
                 provider_verification_completed_at: Time.zone.now,
-                verification: {
-                  assertions: [
-                    {name: "teaching_responsibilities", outcome: true},
-                    {name: "teaching_start_year_matches_claim", outcome: true},
-                    {name: "half_teaching_hours", outcome: true},
-                    {name: "subjects_taught", outcome: true},
-                    {name: "taught_at_least_one_term", outcome: true}
-                  ],
-                  verifier: {
-                    dfe_sign_in_uid: "123",
-                    first_name: "Seymour",
-                    last_name: "Skinner",
-                    email: "seymore.skinner@springfield-elementary.edu",
-                    dfe_sign_in_organisation_name: "Springfield Elementary",
-                    dfe_sign_in_role_codes: ["teacher_payments_claim_verifier"]
-                  },
-                  created_at: Time.zone.now
-                }
+                provider_verification_verified_by_id: user.id
               )
 
               claim = create(
@@ -139,9 +115,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
               )
 
               expect { described_class.new(claim:).perform }.to(
-                change { claim.tasks.count }.from(0).to(1).and(
-                  change(DfeSignIn::User, :count).from(0).to(1)
-                )
+                change { claim.tasks.count }.from(0).to(1)
               )
 
               task = claim.tasks.last
@@ -149,17 +123,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
               expect(task.name).to eq("fe_provider_verification_v2")
               expect(task.passed).to eq(true)
               expect(task.manual).to eq(false)
-
-              dfe_sign_in_user = task.created_by
-
-              expect(dfe_sign_in_user.dfe_sign_in_id).to eq("123")
-              expect(dfe_sign_in_user.given_name).to eq("Seymour")
-              expect(dfe_sign_in_user.family_name).to eq("Skinner")
-              expect(dfe_sign_in_user.email).to eq(
-                "seymore.skinner@springfield-elementary.edu"
-              )
-              expect(dfe_sign_in_user.organisation_name).to eq("Springfield Elementary")
-              expect(dfe_sign_in_user.role_codes).to eq(["teacher_payments_claim_verifier"])
+              expect(task.created_by).to eq(user)
             end
 
             context "when the verifier already exists" do
@@ -181,25 +145,11 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
                   provider_verification_teaching_qualification: "yes",
                   provider_verification_performance_measures: false,
                   provider_verification_disciplinary_action: false,
+                  provider_verification_teaching_responsibilities: true,
+                  provider_verification_teaching_start_year_matches_claim: true,
+                  provider_verification_half_teaching_hours: true,
                   provider_verification_completed_at: Time.zone.now,
-                  verification: {
-                    assertions: [
-                      {name: "teaching_responsibilities", outcome: true},
-                      {name: "teaching_start_year_matches_claim", outcome: true},
-                      {name: "half_teaching_hours", outcome: true},
-                      {name: "subjects_taught", outcome: true},
-                      {name: "taught_at_least_one_term", outcome: true}
-                    ],
-                    verifier: {
-                      dfe_sign_in_uid: "123",
-                      first_name: "Seymour",
-                      last_name: "Skinner",
-                      email: "seymore.skinner@springfield-elementary.edu",
-                      dfe_sign_in_organisation_name: "Springfield Elementary",
-                      dfe_sign_in_role_codes: ["teacher_payments_claim_verifier"]
-                    },
-                    created_at: Time.zone.now
-                  }
+                  provider_verification_verified_by_id: user.id
                 )
 
                 claim = create(
@@ -226,6 +176,8 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
 
             context "with variable hours contract" do
               it "passes the task" do
+                user = create(:dfe_signin_user, user_type: "provider")
+
                 eligibility = create(
                   :further_education_payments_eligibility,
                   contract_type: "variable_hours",
@@ -236,25 +188,11 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
                   provider_verification_teaching_qualification: "yes",
                   provider_verification_performance_measures: false,
                   provider_verification_disciplinary_action: false,
+                  provider_verification_teaching_responsibilities: true,
+                  provider_verification_teaching_start_year_matches_claim: true,
+                  provider_verification_half_teaching_hours: true,
                   provider_verification_completed_at: Time.zone.now,
-                  verification: {
-                    assertions: [
-                      {name: "teaching_responsibilities", outcome: true},
-                      {name: "teaching_start_year_matches_claim", outcome: true},
-                      {name: "half_teaching_hours", outcome: true},
-                      {name: "subjects_taught", outcome: true},
-                      {name: "taught_at_least_one_term", outcome: true}
-                    ],
-                    verifier: {
-                      dfe_sign_in_uid: "123",
-                      first_name: "Seymour",
-                      last_name: "Skinner",
-                      email: "seymore.skinner@springfield-elementary.edu",
-                      dfe_sign_in_organisation_name: "Springfield Elementary",
-                      dfe_sign_in_role_codes: ["teacher_payments_claim_verifier"]
-                    },
-                    created_at: Time.zone.now
-                  }
+                  provider_verification_verified_by_id: user.id
                 )
 
                 claim = create(
@@ -274,6 +212,8 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
 
             context "with fixed term contract" do
               it "passes the task" do
+                user = create(:dfe_signin_user, user_type: "provider")
+
                 eligibility = create(
                   :further_education_payments_eligibility,
                   contract_type: "fixed_term",
@@ -285,25 +225,11 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
                   provider_verification_performance_measures: false,
                   provider_verification_disciplinary_action: false,
                   provider_verification_contract_covers_full_academic_year: true,
+                  provider_verification_teaching_responsibilities: true,
+                  provider_verification_teaching_start_year_matches_claim: true,
+                  provider_verification_half_teaching_hours: true,
                   provider_verification_completed_at: Time.zone.now,
-                  verification: {
-                    assertions: [
-                      {name: "teaching_responsibilities", outcome: true},
-                      {name: "teaching_start_year_matches_claim", outcome: true},
-                      {name: "half_teaching_hours", outcome: true},
-                      {name: "subjects_taught", outcome: true},
-                      {name: "taught_at_least_one_term", outcome: true}
-                    ],
-                    verifier: {
-                      dfe_sign_in_uid: "123",
-                      first_name: "Seymour",
-                      last_name: "Skinner",
-                      email: "seymore.skinner@springfield-elementary.edu",
-                      dfe_sign_in_organisation_name: "Springfield Elementary",
-                      dfe_sign_in_role_codes: ["teacher_payments_claim_verifier"]
-                    },
-                    created_at: Time.zone.now
-                  }
+                  provider_verification_verified_by_id: user.id
                 )
 
                 claim = create(
@@ -323,6 +249,8 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
 
             context "when teaching qualification is not planned" do
               it "fails the task" do
+                user = create(:dfe_signin_user, user_type: "provider")
+
                 eligibility = create(
                   :further_education_payments_eligibility,
                   contract_type: "permanent",
@@ -332,25 +260,11 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
                   provider_verification_teaching_qualification: "no_not_planned",
                   provider_verification_performance_measures: false,
                   provider_verification_disciplinary_action: false,
+                  provider_verification_teaching_responsibilities: true,
+                  provider_verification_teaching_start_year_matches_claim: true,
+                  provider_verification_half_teaching_hours: true,
                   provider_verification_completed_at: Time.zone.now,
-                  verification: {
-                    assertions: [
-                      {name: "teaching_responsibilities", outcome: true},
-                      {name: "teaching_start_year_matches_claim", outcome: true},
-                      {name: "half_teaching_hours", outcome: true},
-                      {name: "subjects_taught", outcome: true},
-                      {name: "taught_at_least_one_term", outcome: true}
-                    ],
-                    verifier: {
-                      dfe_sign_in_uid: "123",
-                      first_name: "Seymour",
-                      last_name: "Skinner",
-                      email: "seymore.skinner@springfield-elementary.edu",
-                      dfe_sign_in_organisation_name: "Springfield Elementary",
-                      dfe_sign_in_role_codes: ["teacher_payments_claim_verifier"]
-                    },
-                    created_at: Time.zone.now
-                  }
+                  provider_verification_verified_by_id: user.id
                 )
 
                 claim = create(
@@ -370,6 +284,8 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
 
             context "when contract types don't match" do
               it "fails the task" do
+                user = create(:dfe_signin_user, user_type: "provider")
+
                 eligibility = create(
                   :further_education_payments_eligibility,
                   contract_type: "permanent",
@@ -379,25 +295,11 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
                   provider_verification_teaching_qualification: "yes",
                   provider_verification_performance_measures: false,
                   provider_verification_disciplinary_action: false,
+                  provider_verification_teaching_responsibilities: true,
+                  provider_verification_teaching_start_year_matches_claim: true,
+                  provider_verification_half_teaching_hours: true,
                   provider_verification_completed_at: Time.zone.now,
-                  verification: {
-                    assertions: [
-                      {name: "teaching_responsibilities", outcome: true},
-                      {name: "teaching_start_year_matches_claim", outcome: true},
-                      {name: "half_teaching_hours", outcome: true},
-                      {name: "subjects_taught", outcome: true},
-                      {name: "taught_at_least_one_term", outcome: true}
-                    ],
-                    verifier: {
-                      dfe_sign_in_uid: "123",
-                      first_name: "Seymour",
-                      last_name: "Skinner",
-                      email: "seymore.skinner@springfield-elementary.edu",
-                      dfe_sign_in_organisation_name: "Springfield Elementary",
-                      dfe_sign_in_role_codes: ["teacher_payments_claim_verifier"]
-                    },
-                    created_at: Time.zone.now
-                  }
+                  provider_verification_verified_by_id: user.id
                 )
 
                 claim = create(
@@ -417,6 +319,8 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
 
             context "when teaching hours don't match" do
               it "fails the task" do
+                user = create(:dfe_signin_user, user_type: "provider")
+
                 eligibility = create(
                   :further_education_payments_eligibility,
                   contract_type: "permanent",
@@ -426,25 +330,11 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerification do
                   provider_verification_teaching_qualification: "yes",
                   provider_verification_performance_measures: false,
                   provider_verification_disciplinary_action: false,
+                  provider_verification_teaching_responsibilities: true,
+                  provider_verification_teaching_start_year_matches_claim: true,
+                  provider_verification_half_teaching_hours: true,
                   provider_verification_completed_at: Time.zone.now,
-                  verification: {
-                    assertions: [
-                      {name: "teaching_responsibilities", outcome: true},
-                      {name: "teaching_start_year_matches_claim", outcome: true},
-                      {name: "half_teaching_hours", outcome: true},
-                      {name: "subjects_taught", outcome: true},
-                      {name: "taught_at_least_one_term", outcome: true}
-                    ],
-                    verifier: {
-                      dfe_sign_in_uid: "123",
-                      first_name: "Seymour",
-                      last_name: "Skinner",
-                      email: "seymore.skinner@springfield-elementary.edu",
-                      dfe_sign_in_organisation_name: "Springfield Elementary",
-                      dfe_sign_in_role_codes: ["teacher_payments_claim_verifier"]
-                    },
-                    created_at: Time.zone.now
-                  }
+                  provider_verification_verified_by_id: user.id
                 )
 
                 claim = create(
