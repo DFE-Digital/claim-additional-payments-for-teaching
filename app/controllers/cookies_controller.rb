@@ -28,6 +28,10 @@ class CookiesController < BasePublicController
   end
 
   def hide
+    if cookies.encrypted[:accept_cookies].blank?
+      return redirect_to request.env["HTTP_REFERER"]
+    end
+
     state = JSON.parse(cookies.encrypted[:accept_cookies])["state"]
 
     cookies.encrypted[:accept_cookies] = {

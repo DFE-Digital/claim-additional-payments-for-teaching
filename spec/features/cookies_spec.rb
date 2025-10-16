@@ -4,6 +4,8 @@ require "rails_helper"
   text = with_js ? "with JS" : "without JS"
 
   RSpec.feature "Cookies #{text}", js: with_js, flaky: with_js do
+    let(:with_js) { with_js }
+
     before do
       when_further_education_payments_journey_configuration_exists
     end
@@ -96,6 +98,26 @@ require "rails_helper"
 
       expect(page).not_to have_content "We use some essential cookies to make this service work"
       expect(page).not_to have_content "You have rejected additional cookies"
+    end
+
+    scenario "hiding cookie message edge case" do
+      visit "/further-education-payments/cookies"
+
+      within('[aria-label="Cookie banner"]') do
+        click_on "Accept additional cookies"
+      end
+
+      if with_js
+        page.driver.clear_cookies
+      else
+        page.driver.browser.clear_cookies
+      end
+
+      expect do
+        within('[aria-label="Cookie banner"]') do
+          click_on "Hide cookie message"
+        end
+      end.not_to raise_error
     end
   end
 end
