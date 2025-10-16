@@ -2,7 +2,7 @@ module Journeys
   module EarlyYearsPayment
     module Provider
       module Authenticated
-        class ConfirmationForm < Form
+        class ConfirmationForm < Journeys::ConfirmationForm
           delegate(
             :reference,
             :first_name,
@@ -10,14 +10,6 @@ module Journeys
             :practitioner_email_address,
             to: :submitted_claim
           )
-
-          private
-
-          def submitted_claim
-            @submitted_claim ||= Claim
-              .by_policies_for_journey(journey)
-              .find(session[:submitted_claim_id])
-          end
         end
       end
     end
