@@ -4,7 +4,12 @@
   <%= govuk_back_link href: claims_backlink_path %>
 <% end %>
 
-<%= render("shared/error_summary", instance: @note) if @note.errors.any? %>
+<% if !(@claim.support_ticket || SupportTicket.new).persisted? %>
+  <%= form_with model: [:admin, @claim, (@claim.support_ticket || SupportTicket.new)], builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+    <%= f.govuk_error_summary  %>
+  <% end %>
+<% end %>
+
 <%= render("shared/error_summary", instance: @hold_note, errored_field_id_overrides: {body: "hold_body"}) if @hold_note.errors.any? %>
 
 <div class="govuk-grid-row">
