@@ -14,6 +14,10 @@
   <%= f.govuk_error_summary  %>
 <% end %>
 
+<%= form_with model: @note, url: admin_claim_notes_path(@claim), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+  <%= f.govuk_error_summary  %>
+<% end %>
+
 <div class="govuk-grid-row">
   <%= render "admin/tasks/#{claim_summary_view}", claim: @claim, heading: @claim.reference %>
 </div>
