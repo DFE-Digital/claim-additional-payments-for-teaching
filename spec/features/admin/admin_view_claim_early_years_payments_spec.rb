@@ -54,6 +54,7 @@ RSpec.feature "Admin view claim for EarlyYearsPayments" do
     expect(page).to have_summary_item(key: "Mobile number", value: practitioner_claim.mobile_number)
     expect(page).to have_summary_item(key: "Reference", value: practitioner_claim.reference)
     expect(page).to have_summary_item(key: "Submitted", value: practitioner_claim.submitted_at.strftime(I18n.t("time.formats.default")))
+    expect(page).to have_summary_item(key: "Employment check", value: practitioner_claim.eligibility.employment_check_date.strftime(I18n.t("date.formats.default")), exact_text: false)
     expect(page).to have_summary_item(key: "Decision due", value: practitioner_claim.decision_deadline_date.strftime(I18n.t("date.formats.default")), exact_text: false)
     expect(page).to have_summary_item(key: "Status", value: "Awaiting decision - not on hold")
     expect(page).to have_summary_item(key: "Claim amount", value: "£0.00")

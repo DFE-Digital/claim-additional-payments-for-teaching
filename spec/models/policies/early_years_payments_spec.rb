@@ -62,7 +62,9 @@ RSpec.describe Policies::EarlyYearsPayments do
         :claim,
         :eligible,
         policy: Policies::EarlyYearsPayments,
-        submitted_at: Date.new(2025, 9, 1)
+        eligibility_attributes: {
+          start_date: Date.new(2025, 9, 1)
+        }
       )
     end
 

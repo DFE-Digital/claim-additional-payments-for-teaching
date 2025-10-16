@@ -87,7 +87,7 @@ RSpec.feature "Admin views claim details for EarlyYearsPayments" do
         student_loan_plan: "not_applicable",
         eligibility_attributes: {
           nursery_urn: eligible_ey_provider.urn,
-          start_date: Date.new(2018, 1, 1),
+          start_date: Date.new(2026, 1, 1),
           award_amount: 1000,
           provider_email_address: "provider@example.com",
           child_facing_confirmation_given: true,
@@ -112,7 +112,7 @@ RSpec.feature "Admin views claim details for EarlyYearsPayments" do
       expect(summary_row("Provider-input contact email")).to have_content("practitioner@example.com")
       expect(summary_row("Mobile number")).to have_content("07700900000")
       expect(summary_row("Nursery name")).to have_content(eligible_ey_provider.nursery_name)
-      expect(summary_row("Start date")).to have_content("1 January 2018")
+      expect(summary_row("Start date")).to have_content("1 January 2026")
       expect(summary_row("PAYE reference")).to have_content("123/A")
 
       expect(summary_row("Provider email address")).to have_content("provider@example.com")
@@ -131,7 +131,7 @@ RSpec.feature "Admin views claim details for EarlyYearsPayments" do
       expect(summary_row("Provider submitted at")).to have_content("2 January 2020 12:00pm")
       expect(summary_row("Claimant started at")).to have_content("3 January 2020 12:00pm")
       expect(summary_row("Claimant submitted at")).to have_content("4 January 2020 12:00")
-      expect(page).to have_summary_item(key: "Decision deadline", value: "3 October 2020")
+      expect(page).to have_summary_item(key: "Decision deadline", value: "30 September 2026")
       expect(summary_row("Overdue")).to have_content("N/A")
     end
   end
