@@ -355,6 +355,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_25_112536) do
     t.string "provider_verification_claimant_email"
     t.boolean "provider_verification_claimant_employment_check_declaration"
     t.boolean "provider_verification_continued_employment"
+    t.jsonb "provider_verification_not_started_qualification_reasons", default: []
+    t.string "provider_verification_not_started_qualification_reason_other"
     t.index ["possible_school_id"], name: "index_fe_payments_eligibilities_on_possible_school_id"
     t.index ["provider_assigned_to_id"], name: "idx_on_provider_assigned_to_id_5db250f0fe"
     t.index ["provider_verification_verified_by_id"], name: "idx_on_provider_verification_verified_by_id_c38aef7b6c"

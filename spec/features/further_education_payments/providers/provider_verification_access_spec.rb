@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Provider verification access control" do
+  before do
+    create(:journey_configuration, :further_education_payments)
+  end
+
   let(:fe_provider) do
     create(
       :school,

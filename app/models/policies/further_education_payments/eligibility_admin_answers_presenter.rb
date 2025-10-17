@@ -83,6 +83,15 @@ module Policies
         ]
       end
 
+      def provider_verification
+        return unless eligibility.provider_verification_completed_at.present?
+
+        [
+          provider_verification_teaching_qualification,
+          provider_verification_not_started_qualification_reasons
+        ].compact_blank
+      end
+
       private
 
       def current_school
@@ -103,6 +112,29 @@ module Policies
         [
           question(:further_education_provision_search),
           eligibility.school.name
+        ]
+      end
+
+      def provider_answers
+        @provider_answers ||= ::FurtherEducationPayments::Providers::Claims::Verification::CheckAnswersForm.new(
+          claim: eligibility.claim,
+          user: nil
+        )
+      end
+
+      def provider_verification_teaching_qualification
+        [
+          "Provider entered teaching qualification",
+          provider_answers.teaching_qualification
+        ]
+      end
+
+      def provider_verification_not_started_qualification_reasons
+        return [] unless provider_answers.not_started_qualification_reasons.present?
+
+        [
+          "Reason for not enrolling",
+          provider_answers.not_started_qualification_reasons
         ]
       end
 
