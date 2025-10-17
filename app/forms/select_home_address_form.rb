@@ -7,12 +7,19 @@ class SelectHomeAddressForm < Form
   validate :validate_address_selected, unless: -> { skip_postcode_search? }
   validate :validate_address_entered, if: -> { skip_postcode_search? }
 
-  def address_data
-    return [] if postcode.blank?
+  def radio_options
+    address_data.map do |option|
+      id = [
+        option[:address],
+        option[:address_line_1],
+        option[:address_line_2],
+        option[:address_line_3],
+        option[:postcode]
+      ].join(":")
 
-    @address_data ||= Rails.cache.fetch("address_data/#{postcode}", expires_in: 1.hour) do
-      OrdnanceSurvey::Client.new.api.search_places.index(
-        params: {postcode:}
+      Option.new(
+        id:,
+        name: option[:address]
       )
     end
   end
@@ -43,6 +50,16 @@ class SelectHomeAddressForm < Form
   end
 
   private
+
+  def address_data
+    return [] if postcode.blank?
+
+    @address_data ||= Rails.cache.fetch("address_data/#{postcode}", expires_in: 1.hour) do
+      OrdnanceSurvey::Client.new.api.search_places.index(
+        params: {postcode:}
+      )
+    end
+  end
 
   def skip_postcode_search?
     journey_session.answers.skip_postcode_search || skip_postcode_search
