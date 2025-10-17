@@ -2,41 +2,26 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_for @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
-      <%= form.govuk_error_summary %>
+    <%= form_for @form, url: @form.url, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
 
       <div class="govuk-!-margin-bottom-5">
         <h1 class="govuk-heading-xl"><%= t("questions.address.home.title") %></h1>
         <h2 class="govuk-heading-l govuk-!-margin-bottom-1">Postcode</h2>
         <p class="govuk-body">
           <%= @form.postcode %>
-          <%= link_to "Change", claim_path(current_journey_routing_name, "postcode-search"), class: "govuk-link govuk-!-margin-left-3", "aria-label": "Change" %>
+          <%= govuk_link_to "Change", claim_path(current_journey_routing_name, "postcode-search"), class: "govuk-!-margin-left-3", "aria-label": "Change" %>
         </p>
-        <%= form_group_tag @form do %>
-          <fieldset class="govuk-fieldset" aria-describedby="address-search-result-hint">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-              <h2 class="govuk-fieldset__heading govuk-!-margin-top-3">
-                Select an address
-              </h2>
-            </legend>
 
-            <%= errors_tag @form, :address %>
-
-            <div class="govuk-radios">
-              <% @form.address_data.each do |option| %>
-                <% address = option[:address].gsub(",", "").gsub(" ", "_").downcase %>
-                <% checked = params.dig(:claim, :address_line_1) == option[:address_line_1] %>
-
-                <%= form.govuk_radio_button(
-                  :address,
-                  [option[:address], option[:address_line_1], option[:address_line_2], option[:address_line_3], option[:postcode]].join(":"),
-                  label: { text: option[:address] },
-                  checked: checked
-                ) %>
-              <% end %>
-            </div>
-          </fieldset>
-        <% end %>
+        <%= f.govuk_collection_radio_buttons :address,
+          @form.radio_options,
+          :id,
+          :name,
+          legend: {
+            text: "Select an address",
+            tag: "h2",
+            size: "l"
+          } %>
 
         <p class="govuk-body">
           <button form="skip-postcode-search" class="govuk-link govuk-link--no-visited-state button-to-as-link">
@@ -45,7 +30,7 @@
         </p>
       </div>
       <p class="govuk-!-padding-top-3">
-        <%= form.submit "Continue", class: "govuk-button" %>
+        <%= f.govuk_submit "Continue" %>
       </p>
     <% end %>
   </div>
