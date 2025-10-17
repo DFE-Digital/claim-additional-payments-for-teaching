@@ -81,7 +81,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
             ],
             [
               "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the current term?",
-              "More than 12 hours per week"
+              "12 or more hours per week, but fewer than 20"
             ]
           ]
         )
@@ -106,7 +106,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
             ],
             [
               "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the current term?",
-              "Less than 2.5 hours per week"
+              "Fewer than 2.5 hours each week"
             ]
           ]
         )
@@ -133,7 +133,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
               ],
               [
                 "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the current term?",
-                "Between 2.5 and 12 hours per week"
+                "2.5 or more hours per week, but fewer than 12"
               ]
             ]
           )
@@ -161,7 +161,7 @@ RSpec.describe Policies::FurtherEducationPayments::EligibilityAdminAnswersPresen
               ],
               [
                 "On average, how many hours per week are you timetabled to teach at Springfield Elementary during the current term?",
-                "Between 2.5 and 12 hours per week"
+                "2.5 or more hours per week, but fewer than 12"
               ]
             ]
           )
