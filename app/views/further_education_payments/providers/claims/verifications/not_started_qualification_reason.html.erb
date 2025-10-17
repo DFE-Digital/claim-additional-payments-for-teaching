@@ -1,4 +1,4 @@
-<%= content_for(:page_title, "Role and Experience") %>
+<%= content_for(:page_title, "Role and Experience", show_error: @form.errors.any?) %>
 
 <% content_for :back_link do %>
   <%= govuk_back_link href: backlink_path %>
