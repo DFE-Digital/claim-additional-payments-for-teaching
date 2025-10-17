@@ -138,7 +138,7 @@ RSpec.feature "Further education payments" do
     choose "More than 12 hours per week"
     click_button "Continue"
 
-    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships?")
     choose "Yes"
     click_button "Continue"
 
@@ -216,7 +216,7 @@ RSpec.feature "Further education payments" do
     choose("More than 12 hours per week")
     click_button "Continue"
 
-    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships?")
     choose "Yes"
     click_button "Continue"
 
@@ -325,7 +325,7 @@ RSpec.feature "Further education payments" do
     choose("More than 12 hours per week")
     click_button "Continue"
 
-    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?")
+    expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships?")
     choose "Yes"
     click_button "Continue"
 

@@ -995,12 +995,12 @@ en:
       fixed_term_contract:
         question: Does your fixed-term contract cover the full %{academic_year} academic year?
         options:
-          true: Yes, it covers the full %{current_academic_year} academic year
-          false: No, it does not cover the full %{current_academic_year} academic year
+          true: "Yes"
+          false: "No"
         errors:
           inclusion: Tell us if your fixed-term contract covers the full academic year
       taught_at_least_one_term:
-        question: Have you taught at %{school_name} for the whole of the spring academic term?
+        question: Have you taught at %{school_name} for the full spring term?
         options:
           true: "Yes"
           false: "No"
@@ -1191,7 +1191,7 @@ en:
             inclusion: Select yes if you are currently subject to disciplinary action
       half_teaching_hours:
         question:
-          Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?
+          Do you spend at least half of your timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships?
         errors:
           inclusion:
             Tell us if you spend at least half your timetabled teaching hours working with students aged 16 to 19
@@ -1335,7 +1335,7 @@ en:
               errors:
                 inclusion: "Select yes if %{claimant} is in the first 5 years of their further education teaching career in England"
             taught_at_least_one_term:
-              label: "Has %{claimant} worked at %{provider} for the whole of the spring term?"
+              label: "Has %{claimant} worked at %{provider} for the full spring term?"
               errors:
                 inclusion: "Select yes if %{claimant} has taught at least one academic term at %{provider}"
             teaching_hours_per_week:
