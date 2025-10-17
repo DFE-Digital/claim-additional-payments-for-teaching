@@ -151,6 +151,8 @@ module FurtherEducationPayments
               Policies::FurtherEducationPayments.alternative_idv_completed!(claim)
             end
 
+            Policies::FurtherEducationPayments.provider_verification_completed!(claim)
+
             true
           end
 

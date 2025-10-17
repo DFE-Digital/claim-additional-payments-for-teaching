@@ -32,7 +32,8 @@ module Policies
           subject,
           course,
           performance_measure,
-          disciplinary_action
+          disciplinary_action,
+          continued_employment
         ]
       end
 
@@ -149,6 +150,14 @@ module Policies
           "Disciplinary action",
           I18n.t(eligibility.subject_to_disciplinary_action, scope: :boolean),
           provider_answers.disciplinary_action
+        ]
+      end
+
+      def continued_employment
+        [
+          "Continued employment",
+          "N/A",
+          provider_answers.continued_employment
         ]
       end
     end

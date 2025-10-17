@@ -70,4 +70,14 @@ RSpec.describe Policies::FurtherEducationPayments do
       expect(subject.decision_deadline_date(claim)).to eql(Date.new(2025, 12, 2))
     end
   end
+
+  describe "#provider_verification_completed!" do
+    let(:claim) { create(:claim) }
+
+    it "invokes Tasks::FeProviderVerificationV2Job" do
+      expect(Tasks::FeProviderVerificationV2Job).to receive(:perform_later)
+
+      subject.provider_verification_completed!(claim)
+    end
+  end
 end
