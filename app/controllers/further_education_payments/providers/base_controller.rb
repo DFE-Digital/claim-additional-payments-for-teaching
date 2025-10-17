@@ -36,7 +36,9 @@ module FurtherEducationPayments
 
         Claim
           .by_policy(Policies::FurtherEducationPayments)
-          .by_academic_year(AcademicYear.current)
+          .by_academic_year(
+            Journeys::FurtherEducationPayments.configuration.current_academic_year
+          )
           .where(eligibility_id: eligibilities.select(:id))
       end
 

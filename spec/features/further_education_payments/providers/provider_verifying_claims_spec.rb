@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Provider verifying claims" do
+  before do
+    create(:journey_configuration, :further_education_payments)
+  end
+
   context "when a provider opens a claim assigned to another user wants to continue verifiying" do
     it "allows them to re-assign to themself" do
       fe_provider = create(

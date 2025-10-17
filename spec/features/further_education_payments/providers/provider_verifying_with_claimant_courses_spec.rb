@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Provider verifying claims" do
+  before do
+    create(:journey_configuration, :further_education_payments)
+  end
+
   scenario "with custom subjects and courses - Yes to teaching listed courses" do
     fe_provider = create(
       :school,
