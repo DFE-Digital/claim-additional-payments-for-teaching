@@ -26,7 +26,7 @@ module Journeys
       private
 
       def clear_claim_session
-        key = "#{Journeys::FurtherEducationPayments::ROUTING_NAME}_journeys_session_id"
+        key = "#{Journeys::GetATeacherRelocationPayment::ROUTING_NAME}_journeys_session_id"
         session.delete(key)
       end
 
