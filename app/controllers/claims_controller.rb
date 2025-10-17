@@ -55,19 +55,23 @@ class ClaimsController < BasePublicController
     @journey_session = nil
   end
 
-  def slug_sequence
-    @slug_sequence ||= journey::SlugSequence.new(journey_session)
-  end
-
   def navigator
     @navigator ||= Journeys::Navigator.new(
       current_slug: params[:slug],
-      slug_sequence: slug_sequence,
+      journey_session: journey_session || completed_journey_session,
       params:,
       session:
     )
   end
   helper_method :navigator
+
+  class CompletedSession < Struct.new(:journey_class); end
+
+  def completed_journey_session
+    return unless session[:submitted_claim_id]
+
+    CompletedSession.new(journey)
+  end
 
   def current_slug
     params[:slug]
@@ -82,7 +86,7 @@ class ClaimsController < BasePublicController
 
     temp_navigator = Journeys::Navigator.new(
       current_slug: nil,
-      slug_sequence: new_journey::SlugSequence.new(other_journey_session),
+      journey_session: other_journey_session,
       params:,
       session:
     )
@@ -91,9 +95,7 @@ class ClaimsController < BasePublicController
   end
 
   def set_backlink_path
-    return if navigator.current_slug == "confirmation"
-
-    if navigator.previous_slug.present? && slug_sequence.class::DEAD_END_SLUGS.exclude?(current_slug)
+    if navigator.previous_slug.present?
       @backlink_path = claim_path(current_journey_routing_name, navigator.previous_slug)
     end
   end
