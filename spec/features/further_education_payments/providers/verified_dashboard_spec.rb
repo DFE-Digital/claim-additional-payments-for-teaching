@@ -3,6 +3,8 @@ require "rails_helper"
 RSpec.describe "Provider verified claims dashboard" do
   before do
     allow(DfESignIn).to receive(:bypass?).and_return(true)
+
+    when_further_education_payments_journey_configuration_exists
   end
 
   scenario "when no claims" do
