@@ -6,7 +6,7 @@ class Admin::DecisionsController < Admin::BaseAdminController
   before_action :reject_if_claims_preventing_payment, only: [:create]
 
   def index
-    @decisions = @claim.decisions.order(created_at: :asc)
+    @decisions = @claim.decisions.includes(:created_by).order(created_at: :asc)
     @task_pagination = Admin::TaskPagination.new(claim: @claim, current_task_name:)
   end
 
@@ -32,7 +32,7 @@ class Admin::DecisionsController < Admin::BaseAdminController
   private
 
   def load_claim
-    @claim = Claim.includes(:tasks).find(params[:claim_id])
+    @claim = Claim.find(params[:claim_id])
     @matching_claims = Claim::MatchingAttributeFinder.new(@claim).matching_claims
   end
 
