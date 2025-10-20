@@ -114,7 +114,7 @@ RSpec.describe "Accessing a closed service" do
     click_button "Continue"
 
     # teaching-hours-per-week
-    choose("More than 12 hours per week")
+    choose("12 or more hours per week, but fewer than 20")
     click_button "Continue"
 
     expect(page).to have_content("Do you spend at least half of your timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships?")

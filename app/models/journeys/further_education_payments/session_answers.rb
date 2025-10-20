@@ -116,7 +116,7 @@ module Journeys
 
       def calculate_award_amount
         case teaching_hours_per_week
-        when "more_than_12"
+        when "more_than_12", "more_than_20"
           school.eligible_fe_provider.max_award_amount
         when "between_2_5_and_12"
           school.eligible_fe_provider.lower_award_amount

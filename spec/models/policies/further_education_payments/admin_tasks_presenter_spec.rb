@@ -91,7 +91,7 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
 
         expect(rows).to include([
           "Timetabled teaching hours",
-          "More than 12 hours per week",
+          "12 or more hours per week, but fewer than 20",
           "20 hours or more per week"
         ])
 

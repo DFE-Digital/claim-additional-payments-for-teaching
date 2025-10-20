@@ -12,6 +12,10 @@ module Journeys
       def radio_options
         @radio_options ||= [
           Option.new(
+            id: "more_than_20",
+            name: t("options.more_than_20")
+          ),
+          Option.new(
             id: "more_than_12",
             name: t("options.more_than_12")
           ),

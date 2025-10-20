@@ -94,7 +94,7 @@ RSpec.describe "Journey session expiry" do
     click_button "Continue"
 
     expect(page).to have_text("On average, how many hours per week are you timetabled to teach")
-    choose "More than 12 hours per week"
+    choose("12 or more hours per week, but fewer than 20")
     click_button "Continue"
 
     expect(page).to have_text("Do you spend at least half of your timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships?")
