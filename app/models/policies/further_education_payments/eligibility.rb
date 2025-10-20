@@ -228,6 +228,16 @@ module Policies
           )
       end
 
+      def previous_approved_claim
+        Claim
+          .by_policy(Policies::FurtherEducationPayments)
+          .where(onelogin_uid: claim.onelogin_uid)
+          .where("academic_year <= ?", (claim.academic_year - 1).to_s)
+          .approved
+          .order(created_at: :desc)
+          .first
+      end
+
       private
 
       def year_1_claim?
