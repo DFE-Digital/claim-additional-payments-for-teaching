@@ -2,8 +2,6 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: journey_session) if journey_session.errors.any? %>
-
     <% if answers.has_student_loan? %>
       <h1 class="govuk-heading-l">Your student loan repayment amount is <%= number_to_currency(answers.award_amount, precision: 2, strip_insignificant_zeros: true) %> for the <%= Policies::StudentLoans.current_financial_year(:to) %> financial year</h1>
       <p class="govuk-body">This information is provided by the Student Loans Company (SLC).</p>
