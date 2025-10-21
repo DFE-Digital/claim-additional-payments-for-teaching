@@ -23,7 +23,7 @@ RSpec.feature "Provider verifying claims" do
       date_of_birth: Date.new(1945, 7, 3),
       reference: "AB123456",
       submitted_at: DateTime.new(2025, 10, 1, 9, 0, 0),
-      eligibility_trait: [:eligible, :verified],
+      eligibility_trait: [:eligible],
       eligibility_attributes: {
         school: fe_provider,
         teacher_reference_number: "1234567",
@@ -205,7 +205,7 @@ RSpec.feature "Provider verifying claims" do
       date_of_birth: Date.new(1945, 7, 3),
       reference: "AB123456",
       submitted_at: DateTime.new(2025, 10, 1, 9, 0, 0),
-      eligibility_trait: [:eligible, :verified],
+      eligibility_trait: [:eligible],
       eligibility_attributes: {
         school: fe_provider,
         teacher_reference_number: "1234567",

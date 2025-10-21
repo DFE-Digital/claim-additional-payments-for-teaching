@@ -66,7 +66,7 @@ RSpec.describe Admin::ClaimsFilterForm, type: :model do
 
         create(
           :further_education_payments_eligibility,
-          :verified
+          :provider_verification_completed
         )
 
         form = described_class.new(
