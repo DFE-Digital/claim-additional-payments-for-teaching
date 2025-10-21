@@ -155,12 +155,19 @@ class ClaimsController < BasePublicController
   def add_answers_to_rollbar_context
     return unless journey_session
 
-    Rollbar.scope!(answers: journey_session.answers.attributes_with_pii_redacted)
+    Rollbar.scope!(
+      answers: journey_session.answers.attributes_with_pii_redacted,
+      steps: journey_session.steps
+    )
 
     Sentry.configure_scope do |scope|
       scope.set_context(
         "Journey session anwers",
         journey_session.answers.attributes_with_pii_redacted
+      )
+
+      scope.set_context(
+        "Journey session steps", steps: journey_session.steps
       )
     end
   end

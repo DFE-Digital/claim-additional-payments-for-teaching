@@ -91,6 +91,7 @@ RSpec.feature "Early years payment provider" do
     expect(page.current_path).to eq claim_path(Journeys::EarlyYearsPayment::Provider::Authenticated::ROUTING_NAME, slug: "confirmation")
 
     claim = Claim.last
+
     expect(claim.provider_contact_name).to eq "John Doe"
     expect(page).to have_content(claim.reference)
     expect(claim.submitted_at).to be_nil
@@ -98,6 +99,24 @@ RSpec.feature "Early years payment provider" do
     expect(claim.eligibility.provider_email_address).to eq email_address
     expect(claim.eligibility.award_amount).to eq 1000
     expect(claim.eligibility.provider_entered_contract_type).to eq "permanent"
+
+    # Note the spec revisits some steps
+    expect(claim.journey_session.steps).to eq %w[
+      consent
+      current-nursery
+      paye-reference
+      claimant-name
+      start-date
+      contract-type
+      child-facing
+      returner
+      returner
+      returner-worked-with-children
+      returner-worked-with-children
+      returner-contract-type
+      employee-email
+      check-your-answers
+    ]
   end
 
   scenario "using magic link after having completed some of the journey" do
