@@ -15,7 +15,7 @@
     </p>
 
     <p class="govuk-body">
-      <%= govuk_link_to "Resend email", claim_path(Journeys::EarlyYearsPayment::Provider::Start.routing_name, "email-address") %>
+      <%= govuk_link_to "Resend email", claim_path(Journeys::EarlyYearsPayment::Provider::Start.routing_name, "email-address", skip_landing_page: true) %>
     </p>
   </div>
 </div>
