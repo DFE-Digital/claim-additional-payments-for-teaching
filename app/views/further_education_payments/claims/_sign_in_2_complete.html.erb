@@ -11,7 +11,5 @@
 </p>
 
 <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
-  <%= f.govuk_error_summary %>
-
   <%= f.govuk_submit %>
 <% end %>

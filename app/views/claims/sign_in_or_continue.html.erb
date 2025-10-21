@@ -3,10 +3,9 @@
 <% if @form.errors.any? %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <%= render(
-        "shared/error_summary",
-        instance: @form,
-        errored_field_id_overrides: { details_check: "claim_details_check_true" }) %>
+      <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+        <%= f.govuk_error_summary %>
+      <% end %>
     </div>
   </div>
 <% end %>
