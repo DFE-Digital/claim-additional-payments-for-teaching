@@ -22,7 +22,7 @@
       <%= f.govuk_error_summary %>
 
       <h2 class="govuk-heading-m">
-        Age cohort taught over the spring term
+        Age of cohort taught over the spring term
       </h2>
 
       <%= f.govuk_collection_radio_buttons(
@@ -32,20 +32,17 @@
         :name,
         legend: {
           text: "Did #{f.object.claimant_name} spend at least half of their " \
-          "timetabled teaching hours teaching students funded through the " \
-          "16 to 19 education funding system or apprentices aged 16 to 19?",
+          "timetabled teaching hours teaching students on 16 to 19 study " \
+          "programmes, T Levels or 16 to 19 apprenticeships?",
           size: "s",
         },
         hint: -> do %>
           <p class="govuk-body">
-            This includes students:
+            This also includes teaching:
           </p>
           <%= govuk_list [
-            "studying T Levels",
-            "on apprenticeships and aged 16 to 19",
-            "aged 16 to 19 and funded through the 16 to 19 system",
-            "aged up to 25 with an Education, Health and Care Plan (EHCP) funded through the 16 to 19 system",
-            "aged 14 to 16 and directly enrolled into eligible FE institutions"
+            "students enrolled on these programmes who are 25 years old or younger with an Education, Health and Care Plan (EHCP)",
+            "14 to 16 year olds enrolled on 16 to 19 funded study programmes"
           ], type: :bullet %>
         <% end
       ) %>

@@ -346,6 +346,8 @@ shared:
     - provider_verification_claimant_employed_by_college # boolean, does provider employ claimant
     - provider_verification_claimant_bank_details_match # boolean, does provider agree claimants bank details match
     - provider_verification_claimant_employment_check_declaration # boolean, does provider agree with employment declaration
+    - provider_verification_not_started_qualification_reasons # jsonb, why hasn't practitioner started a qualification yet (given by the provider)
+    - provider_verification_not_started_qualification_reason_other # string, if provider_verification_not_started_qualification_reasons is other, provides detail (given by the provider)
     - work_email_verified # boolean, has claimants work email been verified via OTP
   :eligible_ey_providers:
     - id # uuid, that identifies eligible EY provider

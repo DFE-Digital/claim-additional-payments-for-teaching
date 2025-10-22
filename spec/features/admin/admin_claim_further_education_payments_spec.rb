@@ -21,7 +21,7 @@ RSpec.feature "Admin claim further education payments" do
             eligibility = create(
               :further_education_payments_eligibility,
               :eligible,
-              :verified,
+              :year_one_verified,
               contract_type: "fixed_term",
               school: fe_provider,
               award_amount: 1500
@@ -70,7 +70,7 @@ RSpec.feature "Admin claim further education payments" do
             end
 
             within_table_row("Timetabled teaching hours") do |claimant, provider|
-              expect(claimant).to have_text("More than 12 hours per week")
+              expect(claimant).to have_text("12 or more hours per week, but fewer than 20")
               expect(provider).to have_text("Yes")
             end
 
@@ -115,7 +115,7 @@ RSpec.feature "Admin claim further education payments" do
 
             eligibility = create(
               :further_education_payments_eligibility,
-              :verified_variable_hours,
+              :year_one_verified_variable_hours,
               school: fe_provider,
               award_amount: 1500
             )
@@ -167,7 +167,7 @@ RSpec.feature "Admin claim further education payments" do
             end
 
             within_table_row("Timetabled teaching hours") do |claimant, provider|
-              expect(claimant).to have_text("More than 12 hours per week")
+              expect(claimant).to have_text("12 or more hours per week, but fewer than 20")
               expect(provider).to have_text("Yes")
             end
 

@@ -3,6 +3,8 @@ require "rails_helper"
 RSpec.describe "Provider verified claims dashboard" do
   before do
     allow(DfESignIn).to receive(:bypass?).and_return(true)
+
+    create(:journey_configuration, :further_education_payments)
   end
 
   scenario "when no claims" do
@@ -20,7 +22,6 @@ RSpec.describe "Provider verified claims dashboard" do
 
     eligibility1 = create(
       :further_education_payments_eligibility,
-      :verified,
       school:,
       provider_verification_completed_at: Date.new(2024, 12, 14)
     )
@@ -37,7 +38,6 @@ RSpec.describe "Provider verified claims dashboard" do
 
     eligibility2 = create(
       :further_education_payments_eligibility,
-      :verified,
       :provider_verification_completed,
       school:,
       provider_verification_completed_at: Date.new(2024, 12, 14)
@@ -55,7 +55,6 @@ RSpec.describe "Provider verified claims dashboard" do
 
     eligibility3 = create(
       :further_education_payments_eligibility,
-      :verified,
       school: create(:school, :fe_eligible, ukprn: "87654321"),
       provider_verification_completed_at: Date.new(2024, 12, 14)
     )

@@ -45,6 +45,10 @@ module FurtherEducationPayments
           def claimant_term
             claim.submitted_at.term
           end
+
+          def school
+            claim.school
+          end
         end
       end
     end

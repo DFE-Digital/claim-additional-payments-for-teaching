@@ -24,16 +24,19 @@ module Policies
         return [] unless provider_verification_submitted?
 
         [
-          contract_of_employment,
           teaching_responsibilities,
           first_five_years_of_teaching,
+          teaching_qualification,
+          reason_for_not_enrolling,
+          contract_of_employment,
           timetabled_teaching_hours,
           age_range_taught,
           subject,
           course,
           performance_measure,
-          disciplinary_action
-        ]
+          disciplinary_action,
+          continued_employment
+        ].compact_blank
       end
 
       def student_loan_plan
@@ -101,6 +104,33 @@ module Policies
         ]
       end
 
+      def teaching_qualification
+        [
+          "Teaching qualification",
+          I18n.t(
+            eligibility.teaching_qualification,
+            scope: "further_education_payments.forms.teaching_qualification.options"
+          ),
+          provider_answers.teaching_qualification
+        ]
+      end
+
+      def reason_for_not_enrolling
+        return [] if eligibility.provider_verification_not_started_qualification_reasons.empty?
+
+        reason = if eligibility.valid_reason_for_not_starting_qualification?
+          "Valid reason"
+        else
+          "No valid reason"
+        end
+
+        [
+          "Reason for not enrolling",
+          "N/A",
+          reason
+        ]
+      end
+
       def timetabled_teaching_hours
         [
           "Timetabled teaching hours",
@@ -149,6 +179,14 @@ module Policies
           "Disciplinary action",
           I18n.t(eligibility.subject_to_disciplinary_action, scope: :boolean),
           provider_answers.disciplinary_action
+        ]
+      end
+
+      def continued_employment
+        [
+          "Continued employment",
+          "N/A",
+          provider_answers.continued_employment
         ]
       end
     end

@@ -20,5 +20,33 @@ RSpec.feature "Early years payment provider" do
 
     expect(page).to have_content("This link has expired")
     expect(page.current_path).to eq "/early-years-payment-provider/expired-link"
+
+    click_link "Resend email"
+
+    fill_in "Enter your email address", with: email_address
+    click_button "Submit"
+
+    expect(email_address).to have_received_email(
+      ApplicationMailer::EARLY_YEARS_PAYMENTS[:CLAIM_PROVIDER_EMAIL_TEMPLATE_ID]
+    )
+  end
+
+  scenario "attempting to resend expired magic link in different browser" do
+    when_early_years_payment_provider_start_journey_configuration_exists
+    when_early_years_payment_provider_authenticated_journey_configuration_exists
+
+    # If the code isn't expected we show the expired link page.
+    visit "/early-years-payment-provider/claim?code=383323&email=test@example.com"
+
+    expect(page).to have_content("This link has expired")
+
+    click_link "Resend email"
+
+    fill_in "Enter your email address", with: email_address
+    click_button "Submit"
+
+    expect(email_address).to have_received_email(
+      ApplicationMailer::EARLY_YEARS_PAYMENTS[:CLAIM_PROVIDER_EMAIL_TEMPLATE_ID]
+    )
   end
 end

@@ -12,6 +12,7 @@ module FurtherEducationPayments
             TeachingResponsibilitiesForm,
             InFirstFiveYearsForm,
             TeachingQualificationForm,
+            NotStartedQualificationReasonForm,
             ContractTypeForm,
             ContractCoversFullAcademicYearForm,
             TaughtAtLeastOneAcademicTermForm,
@@ -131,6 +132,11 @@ module FurtherEducationPayments
             @reachable_steps << TeachingResponsibilitiesForm
             @reachable_steps << InFirstFiveYearsForm
             @reachable_steps << TeachingQualificationForm
+
+            if eligibility.planned_to_start_qualification_but_hasnt?
+              @reachable_steps << NotStartedQualificationReasonForm
+            end
+
             @reachable_steps << ContractTypeForm
 
             if eligibility.provider_verification_contract_type == "fixed_term"

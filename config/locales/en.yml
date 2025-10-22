@@ -882,9 +882,10 @@ en:
           teaching_hours_per_week:
             label: "Timetabled teaching hours"
             claimant_answers:
-              more_than_12: More than 12 hours per week
-              between_2_5_and_12: Between 2.5 and 12 hours per week
-              less_than_2_5: Less than 2.5 hours per week
+              more_than_20: 20 hours or more per week
+              more_than_12: 12 or more hours per week, but fewer than 20
+              between_2_5_and_12: 2.5 or more hours per week, but fewer than 12
+              less_than_2_5: Fewer than 2.5 hours each week
           half_teaching_hours:
             label: "Age range taught"
             claimant_answers:
@@ -995,12 +996,12 @@ en:
       fixed_term_contract:
         question: Does your fixed-term contract cover the full %{academic_year} academic year?
         options:
-          true: Yes, it covers the full %{current_academic_year} academic year
-          false: No, it does not cover the full %{current_academic_year} academic year
+          true: "Yes"
+          false: "No"
         errors:
           inclusion: Tell us if your fixed-term contract covers the full academic year
       taught_at_least_one_term:
-        question: Have you taught at %{school_name} for the whole of the spring academic term?
+        question: Have you taught at %{school_name} for the full spring term?
         options:
           true: "Yes"
           false: "No"
@@ -1009,11 +1010,12 @@ en:
       teaching_hours_per_week:
         question:
           On average, how many hours per week are you timetabled to teach at %{school_name} during the current term?
-        hint: ‘Timetabled teaching hours’ refers to the time you spend teaching lessons to students of all ages.
+        hint: ‘Timetabled teaching hours’ refer to the time you independently spend teaching lessons to students of all ages.
         options:
-          more_than_12: More than 12 hours per week
-          between_2_5_and_12: Between 2.5 and 12 hours per week
-          less_than_2_5: Less than 2.5 hours per week
+          more_than_20: 20 hours or more per week
+          more_than_12: 12 or more hours per week, but fewer than 20
+          between_2_5_and_12: 2.5 or more hours per week, but fewer than 12
+          less_than_2_5: Fewer than 2.5 hours each week
         errors:
           inclusion: Tell us, on average, how many hours you are timetabled to teach during the current term
       further_education_teaching_start_year:
@@ -1191,7 +1193,7 @@ en:
             inclusion: Select yes if you are currently subject to disciplinary action
       half_teaching_hours:
         question:
-          Do you spend at least half of your timetabled teaching hours working with students aged 16 to 19?
+          Do you spend at least half of your timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships?
         errors:
           inclusion:
             Tell us if you spend at least half your timetabled teaching hours working with students aged 16 to 19
@@ -1267,6 +1269,19 @@ en:
             12_to_20_hours_per_week: "12 or more hours per week, but fewer than 20"
             2_and_a_half_to_12_hours_per_week: "2.5 or more hours per week, but fewer than 12"
             fewer_than_2_and_a_half_hours_per_week: "Fewer than 2.5 hours each week"
+      claims:
+        verification:
+          forms:
+            not_started_qualification_reason:
+              options:
+                workload: "Workload"
+                funding_issues: "Funding issues"
+                course_not_available_at_the_right_time: "Course not available at the right time"
+                cant_access_suitable_course: "Can’t access suitable course"
+                new_member_of_staff: "They’re a new member of staff"
+                no_valid_reason: "No valid reason"
+                other: "Another reason"
+
   further_education_payments_provider:
     accessibility_statement:
       test_date: "20 September 2024"
@@ -1335,7 +1350,7 @@ en:
               errors:
                 inclusion: "Select yes if %{claimant} is in the first 5 years of their further education teaching career in England"
             taught_at_least_one_term:
-              label: "Has %{claimant} worked at %{provider} for the whole of the spring term?"
+              label: "Has %{claimant} worked at %{provider} for the full spring term?"
               errors:
                 inclusion: "Select yes if %{claimant} has taught at least one academic term at %{provider}"
             teaching_hours_per_week:

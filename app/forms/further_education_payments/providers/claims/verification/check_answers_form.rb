@@ -138,6 +138,29 @@ module FurtherEducationPayments
             end
           end
 
+          def not_started_qualification_reasons
+            reasons = eligibility.provider_verification_not_started_qualification_reasons
+
+            if reasons.include?("other")
+              eligibility.provider_verification_not_started_qualification_reason_other
+            else
+              reasons.map do |reason|
+                I18n.t(
+                  reason,
+                  scope: %w[
+                    further_education_payments
+                    providers
+                    claims
+                    verification
+                    forms
+                    not_started_qualification_reason
+                    options
+                  ].join(".")
+                )
+              end.join(", ").presence
+            end
+          end
+
           def save
             return false unless valid?
 
@@ -150,6 +173,8 @@ module FurtherEducationPayments
             if claim.eligibility.provider_verification_claimant_employment_check_declaration
               Policies::FurtherEducationPayments.alternative_idv_completed!(claim)
             end
+
+            Policies::FurtherEducationPayments.provider_verification_completed!(claim)
 
             true
           end
