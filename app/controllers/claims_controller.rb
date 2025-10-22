@@ -12,7 +12,7 @@ class ClaimsController < BasePublicController
   before_action :check_page_is_permissible, only: [:show]
   before_action :set_backlink_path, only: [:show, :update]
   before_action :check_claim_not_in_progress, only: [:new]
-  before_action :clear_claim_session, only: [:new], unless: -> { journey.start_with_magic_link? }
+  before_action :clear_claim_session, only: [:new]
   before_action :prepend_view_path_for_journey
   before_action :persist_claim, only: [:new, :create]
   before_action :handle_magic_link, only: [:new], if: -> { journey.start_with_magic_link? }
