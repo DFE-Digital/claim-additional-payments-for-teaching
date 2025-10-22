@@ -4,8 +4,9 @@
   <%= govuk_back_link href: claims_backlink_path %>
 <% end %>
 
-<%= render("shared/error_summary", instance: @note) if @note.errors.any? %>
-<%= render("shared/error_summary", instance: @hold_note, errored_field_id_overrides: {body: "hold_body"}) if @hold_note.errors.any? %>
+<%= govuk_error_summary(@claim.support_ticket || SupportTicket.new) %>
+<%= govuk_error_summary(@hold_note || Note.new) %>
+<%= govuk_error_summary(@note || Note.new) %>
 
 <div class="govuk-grid-row">
   <%= render "admin/tasks/#{claim_summary_view}", claim: @claim, heading: @claim.reference %>
@@ -25,21 +26,31 @@
           <% if @claim.held? %>
             <h2 class="govuk-heading-m">On hold</h2>
 
-            <%= form_with url: admin_claim_unhold_path(@claim), scope: :hold, method: :patch do |form| %>
-              <%= form.submit "Remove on hold status", class: "govuk-button" %>
+            <%= form_with url: admin_claim_unhold_path(@claim),
+              scope: :hold,
+              method: :patch,
+              builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+              <%= f.govuk_submit "Remove on hold status" %>
             <% end %>
-
           <% elsif @claim.holdable? %>
+            <%= form_with model: @hold_note,
+              url: admin_claim_hold_path(@claim),
+              scope: :hold,
+              method: :patch,
+              builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+              <%= f.govuk_text_area :body,
+                rows: 2,
+                label: {
+                  text: "On hold",
+                  tag: "h2",
+                  size: "m"
+                },
+                hint: {
+                  text: "Enter a reason for the claim to be put on hold"
+                }
+              %>
 
-            <%= form_with model: @hold_note, url: admin_claim_hold_path(@claim), scope: :hold, method: :patch do |form| %>
-              <%= form_group_tag @hold_note, :body do %>
-                <%= form.label :body, "On hold", class: "govuk-label govuk-label--m" %>
-                <%= errors_tag @hold_note, :body %>
-                <p class="govuk-hint" id="hold-hint">Enter a reason for the claim to be put on hold</p>
-                <%= form.text_area :body, class: "govuk-textarea", "aria-describedby" => "hold-hint", rows: 2 %>
-              <% end %>
-
-              <%= form.submit "Save on hold status", class: "govuk-button" %>
+              <%= f.govuk_submit "Save on hold status" %>
             <% end %>
           <% end %>
 

@@ -9,11 +9,6 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%# Errors are from the SubmissionsController %>
-    <% if @form.errors.any? %>
-      <%= render("shared/error_summary", instance: @form) %>
-    <% end %>
-
     <h1 class="govuk-heading-xl">
       <%= t("early_years_payment_practitioner.check_your_answers.title") %>
     </h1>

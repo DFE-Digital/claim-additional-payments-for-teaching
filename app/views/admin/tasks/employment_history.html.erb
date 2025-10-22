@@ -4,11 +4,7 @@
   <%= govuk_back_link href: admin_claim_tasks_path(@form.task.claim) %>
 <% end %>
 
-<%= render(
-  "shared/error_summary",
-  instance: @form.task,
-  errored_field_id_overrides: { "passed": "task_passed_true" }
-) if @form.task.errors.any? %>
+<%= govuk_error_summary(@form) %>
 
 <div class="govuk-grid-row">
   <%= render(
