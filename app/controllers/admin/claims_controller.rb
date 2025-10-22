@@ -47,6 +47,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
 
   def hold
     @claim = Claim.find(params[:claim_id])
+    @notes = @claim.notes.includes(:created_by).order(created_at: :desc)
     @hold_note = Note.new(hold_params)
 
     if @hold_note.valid?(:hold_claim)

@@ -25,4 +25,22 @@ RSpec.feature "Admin claim notes" do
     expect(note.body).to have_content("No data for this teacher in TPS, needs a manual employment check")
     expect(note.created_by).to eq(@signed_in_user)
   end
+
+  scenario "with validation error" do
+    claim = create(:claim, :submitted)
+    existing_note = create(:note, body: "Some note about claim", claim: claim)
+
+    visit admin_claims_path
+    find("a[href='#{admin_claim_tasks_path(claim)}']").click
+
+    click_on "Notes and support"
+
+    expect(page).to have_content(existing_note.body)
+    expect(page).to have_content(existing_note.created_by.full_name)
+
+    fill_in "Add note", with: ""
+    expect { click_on "Add note" }.not_to change { claim.notes.count }
+
+    expect(page).to have_content("Enter a note")
+  end
 end
