@@ -15,6 +15,7 @@ module Policies
         tasks = []
 
         tasks << "one_login_identity"
+        tasks << "fe_repeat_applicant_check"
         tasks << provider_verification_task
         tasks << "provider_details" if claim.eligibility.provider_and_claimant_details_match?
         tasks << "alternative_identity_verification" if show_alternative_identity_verification_task?
