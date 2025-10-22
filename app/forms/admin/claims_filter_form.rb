@@ -66,7 +66,7 @@ class Admin::ClaimsFilterForm
           .rejected
       when "automatically_approved_awaiting_payroll"
         Claim
-          .current_academic_year.payrollable.auto_approved
+          .payrollable.auto_approved
       when "rejected"
         Claim
           .current_academic_year.rejected
@@ -192,7 +192,7 @@ class Admin::ClaimsFilterForm
   def approved_awaiting_payroll
     claim_ids_with_payrollable_topups = Topup.payrollable.pluck(:claim_id)
 
-    Claim.current_academic_year.payrollable.or(Claim.current_academic_year.where(id: claim_ids_with_payrollable_topups))
+    Claim.payrollable.or(Claim.where(id: claim_ids_with_payrollable_topups))
   end
 
   def selected_policy
