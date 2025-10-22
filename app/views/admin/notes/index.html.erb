@@ -4,19 +4,9 @@
   <%= govuk_back_link href: claims_backlink_path %>
 <% end %>
 
-<% if !(@claim.support_ticket || SupportTicket.new).persisted? %>
-  <%= form_with model: [:admin, @claim, (@claim.support_ticket || SupportTicket.new)], builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
-    <%= f.govuk_error_summary  %>
-  <% end %>
-<% end %>
-
-<%= form_with model: @hold_note, url: admin_claim_hold_path(@claim), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
-  <%= f.govuk_error_summary  %>
-<% end %>
-
-<%= form_with model: @note, url: admin_claim_notes_path(@claim), builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
-  <%= f.govuk_error_summary  %>
-<% end %>
+<%= govuk_error_summary(@claim.support_ticket || SupportTicket.new) %>
+<%= govuk_error_summary(@hold_note || Note.new) %>
+<%= govuk_error_summary(@note || Note.new) %>
 
 <div class="govuk-grid-row">
   <%= render "admin/tasks/#{claim_summary_view}", claim: @claim, heading: @claim.reference %>

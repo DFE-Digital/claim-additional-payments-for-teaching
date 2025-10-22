@@ -1,17 +1,9 @@
 <% @backlink_path = landing_page_path %>
 
-<% if @form.errors.any? %>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
-        <%= f.govuk_error_summary %>
-      <% end %>
-    </div>
-  </div>
-<% end %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds govuk-body">
+    <%= govuk_error_summary(@form) %>
+
     <% if @form.signed_in_with_dfe_identity? %>
       <%= render partial: "confirm_detail", locals: { form: @form } %>
     <% else %>

@@ -4,13 +4,7 @@
   <%= govuk_back_link href: admin_claim_tasks_path(@form.task.claim) %>
 <% end %>
 
-<%= form_with(
-  model: @form,
-  scope: :form,
-  url: admin_claim_tasks_path(@claim),
-  builder: GOVUKDesignSystemFormBuilder::FormBuilder) do |f| %>
-  <%= f.govuk_error_summary %>
-<% end %>
+<%= govuk_error_summary(@form) %>
 
 <div class="govuk-grid-row">
   <%= render(
