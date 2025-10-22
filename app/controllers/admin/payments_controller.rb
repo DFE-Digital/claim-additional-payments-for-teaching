@@ -11,7 +11,7 @@ module Admin
     def show
       @payment = Payment.includes(
         non_topup_claims: :eligibility,
-        topups: [:created_by, {claim: :eligibility}]
+        topups: [:created_by, :claim]
       ).find(params[:id])
     end
 

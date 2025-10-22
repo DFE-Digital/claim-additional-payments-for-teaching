@@ -20,9 +20,11 @@ module Admin
       @upload_form = EligibleFeProvidersForm.new(upload_params, admin_user)
       @download_form = EligibleFeProvidersForm.new({}, admin_user)
 
-      @file_upload_history = FileUpload.upload_history(
-        FILE_UPLOAD_TARGET_DATA_MODELS[journey_configuration.routing_name]
-      )
+      @file_upload_history = FileUpload
+        .upload_history(
+          FILE_UPLOAD_TARGET_DATA_MODELS[journey_configuration.routing_name]
+        )
+        .includes(:uploaded_by)
     end
 
     def update
