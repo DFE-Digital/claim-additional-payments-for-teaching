@@ -101,5 +101,38 @@ RSpec.describe EligibleEyProvidersImporter do
         end
       end
     end
+
+    context "with trailing whitespace" do
+      before do
+        file.write correct_headers
+        file.write(
+          [
+            "Springfield Nursery   ",
+            " 123456",
+            "#{local_authority.code}  ",
+            "Springfield   ",
+            " s.skinner@springfield-elementary.edu ",
+            "",
+            " 10"
+          ].join(",") + "\n"
+        )
+        file.close
+      end
+
+      it "imports new records correctly" do
+        subject.run(file_upload.id)
+        file_upload.completed_processing!
+
+        provider = EligibleEyProvider.first
+
+        expect(provider.nursery_name).to eq("Springfield Nursery")
+        expect(provider.urn).to eq("123456")
+        expect(provider.local_authority).to eq(local_authority)
+        expect(provider.nursery_address).to eq("Springfield")
+        expect(provider.primary_key_contact_email_address).to eq("s.skinner@springfield-elementary.edu")
+        expect(provider.secondary_contact_email_address).to be_nil
+        expect(provider.max_claims).to eq(10)
+      end
+    end
   end
 end
