@@ -72,6 +72,9 @@ module FormSubmittable
           navigator.clear_impermissible_answers
           navigator.clear_furthest_ineligible_answer
 
+          @form.journey_session.steps << @navigator.current_slug
+          @form.journey_session.save!
+
           redirect_to_next_slug
         else
           render_template_for_current_slug
