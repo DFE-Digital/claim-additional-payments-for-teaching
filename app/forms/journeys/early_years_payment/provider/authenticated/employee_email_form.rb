@@ -7,6 +7,12 @@ module Journeys
 
           validates :practitioner_email_address, presence: {message: i18n_error_message(:valid)}
 
+          validates(
+            :practitioner_email_address,
+            email_address_format: {message: i18n_error_message(:valid)},
+            if: -> { practitioner_email_address.present? }
+          )
+
           def save
             return false if invalid?
 
