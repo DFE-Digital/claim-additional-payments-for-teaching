@@ -30,13 +30,13 @@ class EligibleEyProvidersImporter < CsvImporter::Base
 
   def row_to_hash(row)
     {
-      nursery_name: row.fetch("Nursery Name"),
-      urn: row.fetch("EYURN / Ofsted URN"),
-      local_authority_id: LocalAuthority.find_by(code: row.fetch("LA Code")).try(:id),
-      nursery_address: row.fetch("Nursery Address"),
-      primary_key_contact_email_address: row.fetch("Primary Key Contact Email Address"),
-      secondary_contact_email_address: row.fetch("Secondary Contact Email Address (Optional)"),
-      max_claims: Integer(row.fetch("Maximum Number Of Claims")),
+      nursery_name: row.fetch("Nursery Name").strip,
+      urn: row.fetch("EYURN / Ofsted URN").strip,
+      local_authority_id: LocalAuthority.find_by(code: row.fetch("LA Code").strip).try(:id),
+      nursery_address: row.fetch("Nursery Address").strip,
+      primary_key_contact_email_address: row.fetch("Primary Key Contact Email Address").strip,
+      secondary_contact_email_address: row.fetch("Secondary Contact Email Address (Optional)").try(:strip),
+      max_claims: Integer(row.fetch("Maximum Number Of Claims").strip),
       file_upload_id:
     }
   end
