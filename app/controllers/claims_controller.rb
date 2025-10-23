@@ -131,10 +131,6 @@ class ClaimsController < BasePublicController
     prepend_view_path("app/views/#{current_journey_routing_name.underscore}")
   end
 
-  def correct_journey_for_claim_in_progress?
-    journey == Journeys.for_routing_name(journey_session.journey) if journey_session
-  end
-
   def handle_magic_link
     return unless params[:code] && params[:email]
 
