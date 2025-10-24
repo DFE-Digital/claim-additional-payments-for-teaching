@@ -19,7 +19,7 @@ module FurtherEducationPayments
         .where(eligibility_id: unverified_eligibility_ids)
         .by_academic_year(AcademicYear.current)
         .where("claims.created_at > ?", CUTOFF_PERIOD.ago)
-        .includes(:eligibility)
+        .includes(eligibility: :provider_assigned_to)
 
       # Filter out claims that have already been sent today (idempotency check)
       claims_to_send = claims.reject do |claim|
@@ -32,11 +32,11 @@ module FurtherEducationPayments
       end
 
       unverified_claims.each do |provider_id, claims|
-        provider = DfeSignIn::User.find(provider_id)
+        provider_user = claims.first.eligibility.provider_assigned_to
 
         # Send weekly update email
         FurtherEducationPaymentsMailer
-          .with(provider: provider, claims: claims)
+          .with(provider: provider_user, claims: claims)
           .provider_weekly_update
           .deliver_later
 

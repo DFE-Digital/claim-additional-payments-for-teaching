@@ -63,13 +63,12 @@ module FurtherEducationPayments
           end
 
           def teaching_qualification
-            if provider_verification_teaching_qualification.nil?
-              NOT_ANSWERED
-            else
-              TeachingQualificationForm::TEACHING_QUALIFICATION_OPTIONS
-                .find { it.id == provider_verification_teaching_qualification }
-                .name
-            end
+            return NOT_ANSWERED if provider_verification_teaching_qualification.nil?
+
+            I18n.t(
+              provider_verification_teaching_qualification,
+              scope: "further_education_payments.forms.teaching_qualification.options"
+            )
           end
 
           def contract_covers_full_academic_year
@@ -113,13 +112,12 @@ module FurtherEducationPayments
           end
 
           def teaching_hours_per_week
-            if provider_verification_teaching_hours_per_week.nil?
-              NOT_ANSWERED
-            else
-              TeachingHoursPerWeekForm::TEACHING_HOURS_PER_WEEK_OPTIONS
-                .find { it.id == provider_verification_teaching_hours_per_week }
-                .name
-            end
+            return NOT_ANSWERED if provider_verification_teaching_hours_per_week.nil?
+
+            I18n.t(
+              provider_verification_teaching_hours_per_week,
+              scope: "further_education_payments.providers.forms.teaching_hours_per_week.options"
+            )
           end
 
           def half_timetabled_teaching_time
@@ -174,6 +172,7 @@ module FurtherEducationPayments
               Policies::FurtherEducationPayments.alternative_idv_completed!(claim)
             end
 
+            # Trigger provider verification hook - the verifier will decide if it should run
             Policies::FurtherEducationPayments.provider_verification_completed!(claim)
 
             true

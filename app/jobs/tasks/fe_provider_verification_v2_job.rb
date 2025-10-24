@@ -1,10 +1,10 @@
 module Tasks
   class FeProviderVerificationV2Job < ApplicationJob
     def perform(claim)
-      task = AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2
-        .new(claim)
+      verifier = AutomatedChecks::ClaimVerifiers::ProviderVerificationV2
+        .new(claim:)
 
-      task.perform
+      verifier.perform
     end
   end
 end
