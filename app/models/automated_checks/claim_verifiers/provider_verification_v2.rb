@@ -91,7 +91,14 @@ module AutomatedChecks
         acceptable_qualifications = %w[yes not_yet no_but_planned]
         provider_qualification = eligibility.provider_verification_teaching_qualification
 
-        acceptable_qualifications.include?(provider_qualification)
+        return false unless acceptable_qualifications.include?(provider_qualification)
+
+        # If qualification is "no_but_planned", must have a valid reason
+        if provider_qualification == "no_but_planned"
+          return eligibility.valid_reason_for_not_starting_qualification?
+        end
+
+        true
       end
 
       def check_contract_specific_requirements

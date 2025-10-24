@@ -183,7 +183,7 @@ module Policies
         else
           I18n.t(
             eligibility.teaching_hours_per_week,
-            scope: "further_education_payments.forms.teaching_hours_per_week.options"
+            scope: "further_education_payments.providers.forms.teaching_hours_per_week.options"
           )
         end
 
