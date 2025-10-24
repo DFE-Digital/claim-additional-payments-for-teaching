@@ -4,14 +4,14 @@ RSpec.describe Tasks::FeProviderVerificationV2Job do
   let(:claim) { create(:claim) }
 
   describe "#perform" do
-    let(:mock_task) { instance_double(AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2, perform: true) }
+    let(:mock_verifier) { instance_double(AutomatedChecks::ClaimVerifiers::ProviderVerificationV2, perform: true) }
 
-    it "calls perform on the task" do
-      allow(AutomatedChecks::ClaimVerifiers::FeProviderVerificationV2).to receive(:new).with(claim).and_return(mock_task)
+    it "calls perform on the verifier" do
+      allow(AutomatedChecks::ClaimVerifiers::ProviderVerificationV2).to receive(:new).with(claim:).and_return(mock_verifier)
 
       subject.perform(claim)
 
-      expect(mock_task).to have_received(:perform)
+      expect(mock_verifier).to have_received(:perform)
     end
   end
 end
