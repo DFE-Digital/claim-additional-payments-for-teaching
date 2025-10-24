@@ -12,7 +12,7 @@ class ClaimsController < BasePublicController
   before_action :check_page_is_permissible, only: [:show]
   before_action :set_backlink_path, only: [:show, :update]
   before_action :check_claim_not_in_progress, only: [:new]
-  before_action :clear_claim_session, only: [:new], unless: -> { journey.start_with_magic_link? }
+  before_action :clear_claim_session, only: [:new]
   before_action :prepend_view_path_for_journey
   before_action :persist_claim, only: [:new, :create]
   before_action :handle_magic_link, only: [:new], if: -> { journey.start_with_magic_link? }
@@ -131,10 +131,6 @@ class ClaimsController < BasePublicController
     prepend_view_path("app/views/#{current_journey_routing_name.underscore}")
   end
 
-  def correct_journey_for_claim_in_progress?
-    journey == Journeys.for_routing_name(journey_session.journey) if journey_session
-  end
-
   def handle_magic_link
     return unless params[:code] && params[:email]
 
@@ -159,12 +155,19 @@ class ClaimsController < BasePublicController
   def add_answers_to_rollbar_context
     return unless journey_session
 
-    Rollbar.scope!(answers: journey_session.answers.attributes_with_pii_redacted)
+    Rollbar.scope!(
+      answers: journey_session.answers.attributes_with_pii_redacted,
+      steps: journey_session.steps
+    )
 
     Sentry.configure_scope do |scope|
       scope.set_context(
         "Journey session anwers",
         journey_session.answers.attributes_with_pii_redacted
+      )
+
+      scope.set_context(
+        "Journey session steps", steps: journey_session.steps
       )
     end
   end

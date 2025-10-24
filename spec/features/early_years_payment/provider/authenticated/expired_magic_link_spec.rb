@@ -5,7 +5,13 @@ RSpec.feature "Early years payment provider" do
   let(:journey_session) { Journeys::EarlyYearsPayment::Provider::Authenticated::Session.last }
   let(:mail) { ActionMailer::Base.deliveries.last }
   let(:magic_link) { mail.personalisation[:magic_link] }
-  let!(:nursery) { create(:eligible_ey_provider, primary_key_contact_email_address: email_address) }
+  let!(:nursery) do
+    create(
+      :eligible_ey_provider,
+      primary_key_contact_email_address: email_address,
+      nursery_name: "Springfield Nursery"
+    )
+  end
 
   scenario "expired magic link" do
     travel(-20.minutes) do
@@ -48,5 +54,25 @@ RSpec.feature "Early years payment provider" do
     expect(email_address).to have_received_email(
       ApplicationMailer::EARLY_YEARS_PAYMENTS[:CLAIM_PROVIDER_EMAIL_TEMPLATE_ID]
     )
+  end
+
+  scenario "visiting the magic link twice" do
+    when_early_years_payment_provider_authenticated_journey_configuration_exists
+    when_early_years_payment_provider_start_journey_completed
+
+    2.times do
+      visit magic_link
+    end
+
+    check "I confirm that I’ve obtained consent from my employee and have " \
+      "provided them with the relevant privacy notice."
+
+    click_button "Continue"
+
+    expect(page).to have_text(
+      "Select the name of the nursery where your employee works"
+    )
+
+    expect(page).to have_content "Springfield Nursery"
   end
 end

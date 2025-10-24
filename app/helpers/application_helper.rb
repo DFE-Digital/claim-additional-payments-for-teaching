@@ -1,6 +1,8 @@
 require "pathname"
 
 module ApplicationHelper
+  include GOVUKDesignSystemFormBuilder::BuilderHelper
+
   def page_title(title, journey: nil, show_error: false)
     [].tap do |a|
       a << "Error" if show_error

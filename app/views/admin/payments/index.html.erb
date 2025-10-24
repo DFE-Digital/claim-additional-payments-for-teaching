@@ -4,9 +4,6 @@
   <%= govuk_back_link href: claims_backlink_path %>
 <% end %>
 
-<%# render("shared/error_summary", instance: @note) if @note.errors.any? %>
-<%# render("shared/error_summary", instance: @hold_note, errored_field_id_overrides: {body: "hold_body"}) if @hold_note.errors.any? %>
-
 <div class="govuk-grid-row">
   <%= render "admin/tasks/#{claim_summary_view}", claim: @claim, heading: @claim.reference %>
 </div>

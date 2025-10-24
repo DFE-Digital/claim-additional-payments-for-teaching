@@ -2,7 +2,7 @@ module FurtherEducationPayments
   module Providers
     class VerifiedClaimsController < BaseController
       def index
-        @all_claims = claim_scope
+        @all_claims = claim_scope.includes(:eligibility)
         @pagy, @claims = pagy(claim_scope)
       end
 

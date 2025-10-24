@@ -5,6 +5,7 @@ module Admin
 
     def create
       @support_ticket = @claim.build_support_ticket(support_ticket_params)
+      @notes = @claim.notes.includes(:created_by).order(created_at: :desc)
       if @support_ticket.save
         redirect_to admin_claim_notes_url(@claim)
       else

@@ -169,5 +169,125 @@ RSpec.describe Admin::ClaimsFilterForm, type: :model do
         end
       end
     end
+
+    context "when approved awaiting QA" do
+      let(:current_academic_year) { AcademicYear.current }
+
+      let!(:claim) do
+        create(
+          :claim,
+          :approved,
+          qa_required: true,
+          academic_year: current_academic_year,
+          policy: Policies::EarlyYearsPayments
+        )
+      end
+
+      let!(:claim_previous_ay) do
+        create(
+          :claim,
+          :approved,
+          qa_required: true,
+          academic_year: current_academic_year.previous,
+          policy: Policies::EarlyYearsPayments
+        )
+      end
+
+      let(:filters) { {status: "approved_awaiting_qa"} }
+
+      it "filtering by status approved_awaiting_qa includes them" do
+        expect(subject.claims).to include(claim)
+        expect(subject.claims).to include(claim_previous_ay)
+      end
+    end
+
+    context "when rejected awaiting QA" do
+      let(:current_academic_year) { AcademicYear.current }
+
+      let!(:claim) do
+        create(
+          :claim,
+          :rejected,
+          qa_required: true,
+          academic_year: current_academic_year,
+          policy: Policies::EarlyYearsPayments
+        )
+      end
+
+      let!(:claim_previous_ay) do
+        create(
+          :claim,
+          :rejected,
+          qa_required: true,
+          academic_year: current_academic_year.previous,
+          policy: Policies::EarlyYearsPayments
+        )
+      end
+
+      let(:filters) { {status: "rejected_awaiting_qa"} }
+
+      it "filtering by status rejected_awaiting_qa includes them" do
+        expect(subject.claims).to include(claim)
+        expect(subject.claims).to include(claim_previous_ay)
+      end
+    end
+
+    context "when approved awaiting payroll" do
+      let(:current_academic_year) { AcademicYear.current }
+
+      let!(:claim) do
+        create(
+          :claim,
+          :payrollable,
+          academic_year: current_academic_year,
+          policy: Policies::EarlyYearsPayments
+        )
+      end
+
+      let!(:claim_previous_ay) do
+        create(
+          :claim,
+          :payrollable,
+          academic_year: current_academic_year.previous,
+          policy: Policies::EarlyYearsPayments
+        )
+      end
+
+      let(:filters) { {status: "approved_awaiting_payroll"} }
+
+      it "filtering by status approved_awaiting_payroll includes them" do
+        expect(subject.claims).to include(claim)
+        expect(subject.claims).to include(claim_previous_ay)
+      end
+    end
+
+    context "when automatically approved awaiting payroll" do
+      let(:current_academic_year) { AcademicYear.current }
+
+      let!(:claim) do
+        create(
+          :claim,
+          :auto_approved,
+          academic_year: current_academic_year,
+          policy: Policies::FurtherEducationPayments
+        )
+      end
+
+      let!(:claim_previous_ay) do
+        create(
+          :claim,
+          :auto_approved,
+          academic_year: current_academic_year.previous,
+          policy: Policies::FurtherEducationPayments
+        )
+      end
+
+      let(:filters) { {status: "automatically_approved_awaiting_payroll"} }
+
+      it "filtering by status automatically_approved_awaiting_payroll includes them" do
+        expect(subject.claims).to include(claim)
+        expect(subject.claims).to include(claim_previous_ay)
+      end
+    end
   end
 end

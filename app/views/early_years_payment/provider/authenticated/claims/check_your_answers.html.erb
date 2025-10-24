@@ -9,16 +9,15 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% if @form.errors.any? %>
-      <%= render("shared/error_summary", instance: @form, errored_field_id_overrides: {"provider_contact_name":"claim-provider-contact-name-field-error"}) %>
-    <% end %>
-    <h1 class="govuk-heading-xl">
-      <%= t("early_years_payment_provider_authenticated.check_your_answers.title") %>
-    </h1>
-
-    <%= render partial: "claims/check_your_answers_section", locals: {heading: nil, answers: journey.answers_for_claim(@form.journey_session).claim_answers} %>
-
     <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-xl">
+        <%= t("early_years_payment_provider_authenticated.check_your_answers.title") %>
+      </h1>
+
+      <%= render partial: "claims/check_your_answers_section", locals: {heading: nil, answers: journey.answers_for_claim(@form.journey_session).claim_answers} %>
+
       <h2 class="govuk-heading-m">
         <%= t("early_years_payment_provider_authenticated.check_your_answers.heading_send_application") %>
       </h2>

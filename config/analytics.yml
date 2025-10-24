@@ -293,6 +293,7 @@ shared:
     - created_at # datetime, timestamp when journey session was created
     - updated_at # datetime, timestamp when journey session was last updated
     - expired # boolean, has this session expired
+    - steps # jsonb, array of steps taken in the journey
   :further_education_payments_eligibilities:
     - id # uuid, that identifies the eligibility
     - created_at # datetime, timestamp when eligibility was created
