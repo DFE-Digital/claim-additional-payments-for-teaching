@@ -5,13 +5,18 @@
 <% end %>
 
 <div class="govuk-grid-row">
-  <%= render("shared/error_summary", instance: @decision, errored_field_id_overrides: { "approved": "decision_approved_true" }) if @decision.errors.any? %>
+  <%= form_with model: @decision_form,
+    url: admin_claim_decisions_path(@claim),
+    scope: "decision",
+    builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+    <%= f.govuk_error_summary %>
+  <% end %>
 
   <%= render "admin/tasks/#{claim_summary_view}", claim: @claim, heading: "Claim decision" %>
 
   <div class="govuk-grid-column-two-thirds">
     <%= render("incomplete_tasks", claim: @claim, incomplete_task_names: @claim_checking_tasks.incomplete_task_names) if @claim_checking_tasks.incomplete_task_names.any? %>
-    <%= render "decision_form", claim: @claim, decision: @decision, claims_preventing_payment: @claims_preventing_payment %>
+    <%= render "decision_form", claim: @claim, decision_form: @decision_form, claims_preventing_payment: @claims_preventing_payment %>
 
     <%= render partial: "admin/task_pagination", locals: { task_pagination: @task_pagination } %>
   </div>

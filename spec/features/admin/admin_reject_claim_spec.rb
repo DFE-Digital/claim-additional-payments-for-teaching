@@ -218,43 +218,31 @@ RSpec.feature "Admin rejects a claim" do
     context "when approving during QA" do
       it "approves the claim" do
         visit admin_claim_tasks_path(claim)
-
         click_on "Approve or reject this claim"
-
         choose "Reject"
-
         check "No teaching responsibilities"
-
         click_button "Confirm decision"
 
         expect(claim.email_address).not_to have_received_email(
           ApplicationMailer::FURTHER_EDUCATION_PAYMENTS[:CLAIM_REJECTED_NOTIFY_TEMPLATE_ID]
         )
-
         expect(page).to have_content(
           "This claim has been marked for a quality assurance review"
         )
 
         visit admin_claim_tasks_path(claim)
-
         click_on "Approve or reject quality assurance of this claim"
-
         choose "Approve"
-
         fill_in "Decision notes", with: "QA passed"
-
         click_button "Confirm decision"
 
         expect(page).to have_content("Claim has been approved successfully")
-
         expect(claim.email_address).to have_received_email(
           ApplicationMailer::FURTHER_EDUCATION_PAYMENTS[:CLAIM_APPROVED_NOTIFY_TEMPLATE_ID]
         )
 
         visit admin_claim_decisions_path(claim)
-
         expect(page).to have_content("Result Rejected").once
-
         expect(page).to have_content("Result Approved").once
       end
     end
