@@ -12,7 +12,7 @@ RSpec.describe "Status and Processed by labels" do
   let(:claim) do
     create(:claim, :submitted,
       policy: Policies::FurtherEducationPayments,
-      eligibility: build(:further_education_payments_eligibility, school: fe_provider))
+      eligibility: build(:further_education_payments_eligibility, :eligible, school: fe_provider))
   end
 
   scenario "Default status and processed_by labels when claim is submitted" do
@@ -111,20 +111,20 @@ RSpec.describe "Status and Processed by labels" do
   scenario "Claim count cards show correct values" do
     create_list(:claim, 2, :submitted,
       policy: Policies::FurtherEducationPayments,
-      eligibility: build(:further_education_payments_eligibility,
+      eligibility: build(:further_education_payments_eligibility, :eligible,
         school: fe_provider,
         provider_verification_started_at: nil))
 
     create_list(:claim, 3, :submitted,
       policy: Policies::FurtherEducationPayments,
-      eligibility: build(:further_education_payments_eligibility,
+      eligibility: build(:further_education_payments_eligibility, :eligible,
         school: fe_provider,
         provider_verification_started_at: Time.current))
 
     other_provider = create(:school, :fe_eligible, ukprn: "87654321")
     create(:claim, :submitted,
       policy: Policies::FurtherEducationPayments,
-      eligibility: build(:further_education_payments_eligibility,
+      eligibility: build(:further_education_payments_eligibility, :eligible,
         school: other_provider,
         provider_verification_started_at: nil))
 
@@ -148,7 +148,7 @@ RSpec.describe "Status and Processed by labels" do
   scenario "Completed claims do not appear on unverified claims page" do
     completed_claim = create(:claim, :submitted,
       policy: Policies::FurtherEducationPayments,
-      eligibility: build(:further_education_payments_eligibility,
+      eligibility: build(:further_education_payments_eligibility, :eligible,
         school: fe_provider,
         provider_verification_started_at: 1.hour.ago,
         provider_verification_completed_at: Time.current))
@@ -169,7 +169,7 @@ RSpec.describe "Status and Processed by labels" do
       first_name: "John",
       surname: "Smith",
       policy: Policies::FurtherEducationPayments,
-      eligibility: build(:further_education_payments_eligibility,
+      eligibility: build(:further_education_payments_eligibility, :eligible,
         school: fe_provider,
         provider_assigned_to: nil))
 
@@ -177,7 +177,7 @@ RSpec.describe "Status and Processed by labels" do
       first_name: "Mary",
       surname: "Jones",
       policy: Policies::FurtherEducationPayments,
-      eligibility: build(:further_education_payments_eligibility,
+      eligibility: build(:further_education_payments_eligibility, :eligible,
         school: fe_provider,
         provider_assigned_to: provider_user,
         provider_verification_started_at: Time.current))
