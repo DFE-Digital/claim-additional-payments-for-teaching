@@ -39,8 +39,8 @@ RSpec.feature "Admin holds a claim" do
     end
 
     expect(page).to have_text "You cannot approve or reject a claim that is on hold"
-    expect(page.find("#decision_approved_true")).to be_disabled
-    expect(page.find("#decision_approved_false")).to be_disabled
+    expect(page.find("#decision-approved-true-field")).to be_disabled
+    expect(page.find("#decision-approved-field")).to be_disabled
 
     click_on "Back"
     click_on "Notes and support"

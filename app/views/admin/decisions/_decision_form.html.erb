@@ -27,92 +27,63 @@
   <% end %>
 <% end %>
 
-<%= form_for decision, url: admin_claim_decisions_path(claim), html: { id: "claim_decision_form" }, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+<%= form_with model: decision_form,
+  url: admin_claim_decisions_path(claim),
+  scope: "decision",
+  builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
   <%= hidden_field_tag :qa, params[:qa] %>
 
-  <%= form_group_tag decision do %>
-    <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-6">
-        <h2 class="govuk-fieldset__heading">
-          <%= @qa_decision_task ? "Quality assurance" : "Claim" %> decision
-        </h2>
-      </legend>
+  <%= f.govuk_radio_buttons_fieldset(:approved,
+                                     legend: {
+                                       tag: "h2",
+                                       size: "l",
+                                       text: decision_form.heading }) do %>
 
-      <% if claim.high_risk_ol_idv? %>
-        <% if current_admin.is_service_admin? %>
-          <%= govuk_warning_text(icon_fallback_text: "Danger") do %>
-            This claim cannot be approved or rejected without approval from the Senior Responsible Officer.
-          <% end %>
-        <% else %>
-          <%= govuk_warning_text(icon_fallback_text: "Danger") do %>
-            This claim cannot be approved or rejected without approval from the Senior Responsible Officer. Refer this claim to your line manager and the Claim Product Team.
-          <% end %>
+    <% if claim.high_risk_ol_idv? %>
+      <% if current_admin.is_service_admin? %>
+        <%= govuk_warning_text do %>
+          This claim cannot be approved or rejected without approval from the Senior Responsible Officer.
+        <% end %>
+      <% else %>
+        <%= govuk_warning_text do %>
+          This claim cannot be approved or rejected without approval from the Senior Responsible Officer. Refer this claim to your line manager and the Claim Product Team.
         <% end %>
       <% end %>
+    <% end %>
 
-      <%= errors_tag decision, :approved %>
-
-      <div class="govuk-radios" data-module="govuk-radios">
-        <%= f.hidden_field :approved %>
-        <div class="govuk-radios__item">
-          <%= f.radio_button(:approved, true, class: "govuk-radios__input", disabled: !claim.approvable?(current_admin:)) %>
-          <%= f.label(
-            "approved_true",
-            (
-              @qa_decision_task && claim.rejected? ? "Claim meets eligibility criteria. Approve claim for payment" : "Approve"
-            ),
-            class: "govuk-label govuk-radios__label"
-          ) %>
-        </div>
-
-        <div class="govuk-radios__item">
-          <%= f.radio_button(:approved, false, class: "govuk-radios__input", disabled: !claim.rejectable?(current_admin:), data: { aria_controls: "conditional-rejected-reasons" }) %>
-          <%= f.label(
-            "approved_false",
-            (
-              @qa_decision_task && claim.rejected? ? "Claim does not meet eligibility criteria. Reject claim" : "Reject"
-            ),
-            class: "govuk-label govuk-radios__label"
-          ) %>
-        </div>
-
-        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-rejected-reasons">
-          <div class="govuk-form-group">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-!-margin-bottom-2">
-              <h3 class="govuk-fieldset__heading">
-                Reasons for rejection
-              </h3>
-            </legend>
-
-            <%= errors_tag decision, :rejected_reasons %>
-
-            <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
-              <% Decision.rejected_reasons_for(claim).each do |reason| %>
-                <% reason_prefixed = "rejected_reasons_#{reason}" %>
-                <div class="govuk-checkboxes__item">
-                  <%= f.hidden_field reason_prefixed, value: false %>
-                  <%= f.check_box reason_prefixed, class: "govuk-checkboxes__input subject", id: reason_prefixed %>
-                  <%= f.label reason_prefixed, t("#{claim.policy.locale_key}.admin.decision.rejected_reasons.#{reason}"), class: "govuk-label govuk-checkboxes__label", for: reason_prefixed %>
-                </div>
-              <% end %>
-            </div>
-          </div>
-        </div>
-      </div>
-    </fieldset>
-
-    <%= f.govuk_text_area :notes,
-      rows: 5,
-      disabled: !claim.approvable?(current_admin:) && !claim.rejectable?(current_admin:),
+    <%= f.govuk_radio_button :approved, true,
       label: {
-        text: "Decision notes",
-        size: "m"
+        text: decision_form.approve_label_text
       },
-      hint: {
-        text: "Please write a brief note explaining why this claim has been rejected or approved."
-      }
-    %>
-
-    <%= f.govuk_submit "Confirm decision", disabled: !claim.approvable?(current_admin:) && !claim.rejectable?(current_admin:) %>
+      disabled: decision_form.approved_button_disabled?,
+      link_errors: true %>
+    <%= f.govuk_radio_button :approved, false,
+      label: { text: decision_form.reject_label_text },
+      disabled: decision_form.reject_button_disabled? do %>
+      <%= f.govuk_collection_check_boxes :rejected_reasons,
+        decision_form.checkbox_options,
+        :id,
+        :name,
+        small: true,
+        legend: {
+          text: "Reasons for rejection",
+          tag: "h3",
+          size: "s"
+        } %>
+    <% end %>
   <% end %>
+
+  <%= f.govuk_text_area :notes,
+    rows: 5,
+    disabled: !claim.approvable?(current_admin:) && !claim.rejectable?(current_admin:),
+    label: {
+      text: "Decision notes",
+      size: "m"
+    },
+    hint: {
+      text: "Please write a brief note explaining why this claim has been rejected or approved."
+    }
+  %>
+
+  <%= f.govuk_submit "Confirm decision", disabled: !claim.approvable?(current_admin:) && !claim.rejectable?(current_admin:) %>
 <% end %>
