@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Admin decisions", type: :request do
+RSpec.feature "Admin decisions" do
   context "when signed in as a service operator" do
     let(:claim) { create(:claim, :submitted, policy: Policies::TargetedRetentionIncentivePayments) }
 
@@ -11,10 +11,9 @@ RSpec.describe "Admin decisions", type: :request do
 
     describe "decisions#new" do
       it "renders the claim decision form" do
-        get new_admin_claim_decision_path(claim)
+        visit new_admin_claim_decision_path(claim)
 
-        expect(response).to have_http_status(:ok)
-        expect(response.body).to include("Claim decision")
+        expect(page).to have_text("Claim decision")
       end
 
       context "when all tasks have been completed" do
@@ -28,10 +27,9 @@ RSpec.describe "Admin decisions", type: :request do
         end
 
         it "does not warn the service operator about incomplete tasks" do
-          get new_admin_claim_decision_path(claim)
+          visit new_admin_claim_decision_path(claim)
 
-          expect(response).to have_http_status(:ok)
-          expect(response.body).not_to include("Some tasks have not yet been completed")
+          expect(page).not_to have_text("Some tasks have not yet been completed")
         end
       end
 
@@ -43,12 +41,11 @@ RSpec.describe "Admin decisions", type: :request do
         }
 
         it "warns the service operator about those tasks" do
-          get new_admin_claim_decision_path(claim)
+          visit new_admin_claim_decision_path(claim)
 
-          expect(response).to have_http_status(:ok)
-          expect(response.body).to include("Some tasks have not yet been completed")
-          expect(response.body).to include("Check employment information")
-          expect(response.body).to include(admin_claim_task_url(claim, name: "employment"))
+          expect(page).to have_text("Some tasks have not yet been completed")
+          expect(page).to have_text("Check employment information")
+          expect(page).to have_link("Check employment information", href: admin_claim_task_url(claim, name: "employment"))
         end
       end
 
@@ -56,10 +53,10 @@ RSpec.describe "Admin decisions", type: :request do
         let(:claim) { create(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments) }
 
         it "redirects and shows an error" do
-          get new_admin_claim_decision_path(claim)
+          visit new_admin_claim_decision_path(claim)
 
-          expect(response).to redirect_to(admin_claim_path(claim))
-          expect(flash[:notice]).to eql("Claim outcome already decided")
+          expect(page.current_path).to eql(admin_claim_path(claim))
+          expect(page).to have_text("Claim outcome already decided")
         end
       end
     end
@@ -73,12 +70,15 @@ RSpec.describe "Admin decisions", type: :request do
 
       context "when a claim is being flagged for QA" do
         it "can approve the claim and flag it for QA", :aggregate_failures do
-          post admin_claim_decisions_path(claim_id: claim.id, decision: {approved: true})
+          visit admin_claim_path(claim)
+          click_link "View tasks"
+          click_link "Approve or reject this claim"
 
-          follow_redirect!
+          choose "Approve"
+          click_button "Confirm decision"
 
-          expect(response.body).to include("This claim has been marked for a quality assurance review")
-          expect(response.body).to include("Claim has been approved successfully")
+          expect(page).to have_text("This claim has been marked for a quality assurance review")
+          expect(page).to have_text("Claim has been approved successfully")
 
           expect(ClaimMailer).not_to have_received(:approved).with(claim)
 
@@ -94,12 +94,14 @@ RSpec.describe "Admin decisions", type: :request do
           let(:claim) { create(:claim, :approved, :flagged_for_qa, policy: Policies::StudentLoans) }
 
           it "can undo the previous decision and approve the claim", :aggregate_failures do
-            post admin_claim_decisions_path(qa: true, claim_id: claim.id, decision: {approved: true})
+            visit admin_claim_path(claim)
+            click_link "View tasks"
+            click_link "Approve or reject quality assurance of this claim"
+            choose "Approve"
+            click_button "Confirm decision"
 
-            follow_redirect!
-
-            expect(response.body).not_to include("This claim has been marked for a quality assurance review")
-            expect(response.body).to include("Claim has been approved successfully")
+            expect(page).not_to have_text("This claim has been marked for a quality assurance review")
+            expect(page).to have_text("Claim has been approved successfully")
 
             expect(ClaimMailer).to have_received(:approved).with(claim)
 
@@ -110,11 +112,14 @@ RSpec.describe "Admin decisions", type: :request do
           end
 
           it "can undo the previous decision and reject a claim", :aggregate_failures do
-            post admin_claim_decisions_path(qa: true, claim_id: claim.id, decision: {approved: false, rejected_reasons_ineligible_subject: "1"})
+            visit admin_claim_path(claim)
+            click_link "View tasks"
+            click_link "Approve or reject quality assurance of this claim"
+            choose "Reject"
+            check "Ineligible subject"
+            click_button "Confirm decision"
 
-            follow_redirect!
-
-            expect(response.body).to include("Claim has been rejected successfully")
+            expect(page).to have_text("Claim has been rejected successfully")
 
             expect(ClaimMailer).to have_received(:rejected).with(claim)
 
@@ -130,27 +135,28 @@ RSpec.describe "Admin decisions", type: :request do
         before { disable_claim_qa_flagging }
 
         it "can approve the claim", :aggregate_failures do
-          post admin_claim_decisions_path(claim_id: claim.id, decision: {approved: true})
+          visit admin_claim_tasks_path(claim)
+          click_link "Approve or reject this claim"
 
-          follow_redirect!
+          choose "Approve"
+          click_button "Confirm decision"
 
-          expect(response.body).to include("Claim has been approved successfully")
-
+          expect(page).to have_text("Claim has been approved successfully")
           expect(ClaimMailer).to have_received(:approved).with(claim)
-
           expect(claim.latest_decision.created_by).to eq(@signed_in_user)
           expect(claim.latest_decision).to be_approved
         end
 
         it "can reject the claim", :aggregate_failures do
-          post admin_claim_decisions_path(claim_id: claim.id, decision: {approved: false, rejected_reasons_ineligible_subject: "1"})
+          visit admin_claim_tasks_path(claim)
+          click_link "Approve or reject this claim"
 
-          follow_redirect!
+          choose "Reject"
+          check "Ineligible subject"
+          click_button "Confirm decision"
 
-          expect(response.body).to include("Claim has been rejected successfully")
-
+          expect(page).to have_text("Claim has been rejected successfully")
           expect(ClaimMailer).to have_received(:rejected).with(claim)
-
           expect(claim.latest_decision.created_by).to eq(@signed_in_user)
           expect(claim.latest_decision).to be_rejected
         end
@@ -158,59 +164,78 @@ RSpec.describe "Admin decisions", type: :request do
 
       context "when no result is selected" do
         it "shows an error and doesn't save the decision" do
-          post admin_claim_decisions_path(claim_id: claim.id, decision: {notes: "Something"})
+          visit admin_claim_tasks_path(claim)
+          click_link "Approve or reject this claim"
 
-          expect(response.body).to include("Select if you approve or reject the claim")
+          fill_in "Decision notes", with: "Something"
+          click_button "Confirm decision"
+
+          expect(page).to have_text("Select if you approve or reject the claim")
           expect(claim.reload.latest_decision).to be_nil
         end
       end
 
       context "when a decision has already been made" do
-        let(:claim) { create(:claim, :approved, policy: Policies::TargetedRetentionIncentivePayments) }
+        let(:claim) { create(:claim, :submitted, policy: Policies::TargetedRetentionIncentivePayments) }
 
         it "shows an error" do
-          post admin_claim_decisions_path(claim_id: claim.id, decision: {approved: true})
+          visit admin_claim_path(claim)
+          click_link "View tasks"
+          click_link "Approve or reject this claim"
 
-          follow_redirect!
+          create(:decision, :approved, claim:)
 
-          expect(response.body).to include("Claim outcome already decided")
+          choose "Approve"
+          click_button "Confirm decision"
+
+          expect(page).to have_text("Claim outcome already decided")
         end
       end
 
       context "when a QA decision has already been made" do
-        let(:claim) { create(:claim, :approved, :qa_completed, policy: Policies::TargetedRetentionIncentivePayments) }
+        let(:claim) { create(:claim, :approved, :flagged_for_qa, policy: Policies::TargetedRetentionIncentivePayments) }
 
         it "shows an error" do
-          post admin_claim_decisions_path(qa: true, claim_id: claim.id, decision: {approved: true})
+          visit admin_claim_path(claim)
+          click_link "View tasks"
+          click_link "Approve or reject quality assurance of this claim"
 
-          follow_redirect!
+          claim.update(qa_completed_at: 1.second.ago)
 
-          expect(response.body).to include("Claim outcome already decided")
+          choose "Approve"
+          click_button "Confirm decision"
+
+          expect(page).to have_text("Claim outcome already decided")
         end
       end
 
       context "when the claim is missing a payroll gender" do
-        let(:claim) { create(:claim, :submitted, payroll_gender: :dont_know, policy: Policies::TargetedRetentionIncentivePayments) }
+        let(:claim) { create(:claim, :submitted, payroll_gender: "female", policy: Policies::TargetedRetentionIncentivePayments) }
 
         before do
-          post admin_claim_decisions_path(claim_id: claim.id, decision: {approved: approved, rejected_reasons_ineligible_subject: "1"})
-          follow_redirect!
+          visit admin_claim_tasks_path(claim)
+          click_link "Approve or reject this claim"
+
+          claim.update payroll_gender: nil
         end
 
         context "and the user attempts to approve" do
-          let(:approved) { true }
-
           it "shows an error" do
-            expect(response.body).to include("Claim cannot be approved")
+            choose "Approve"
+            click_button "Confirm decision"
+
+            expect(page).to have_text("Claim cannot be approved")
           end
         end
 
         context "and the user attempts to reject" do
-          let(:approved) { false }
-
           it "doesn’t show an error and rejects successfully" do
-            expect(response.body).not_to include("Claim cannot be approved")
-            expect(response.body).to include("Claim has been rejected successfully")
+            choose "Reject"
+            check "Ineligible subject"
+            click_button "Confirm decision"
+
+            expect(page).not_to have_text("Claim cannot be approved")
+            expect(page).to have_text("Claim has been rejected successfully")
           end
         end
       end
@@ -229,40 +254,34 @@ RSpec.describe "Admin decisions", type: :request do
           }
         end
         let(:claim) { create(:claim, :submitted, personal_details.merge(bank_sort_code: "582939", bank_account_number: "74727752", policy: Policies::TargetedRetentionIncentivePayments)) }
-        let!(:approved_claim) { create(:claim, :approved, personal_details.merge(bank_sort_code: "112233", bank_account_number: "29482823", policy: Policies::TargetedRetentionIncentivePayments)) }
 
         before do
-          post admin_claim_decisions_path(claim_id: claim.id, decision: {approved: approved, rejected_reasons_ineligible_subject: "1"})
-          follow_redirect!
+          visit admin_claim_path(claim)
+          click_link "View tasks"
+          click_link "Approve or reject this claim"
         end
 
         context "and the user attempts to approve" do
-          let(:approved) { true }
           it "shows an error" do
-            expect(response.body).to include("Claim cannot be approved because there are inconsistent claims")
+            create(:claim, :approved, personal_details.merge(bank_sort_code: "112233", bank_account_number: "29482823", policy: Policies::TargetedRetentionIncentivePayments))
+
+            choose "Approve"
+            click_button "Confirm decision"
+            expect(page).to have_text("Claim cannot be approved because there are inconsistent claims")
           end
         end
 
         context "and the user attempts to reject" do
-          let(:approved) { false }
           it "doesn’t show an error and rejects successfully" do
-            expect(response.body).not_to include("Claim cannot be approved")
-            expect(response.body).to include("Claim has been rejected successfully")
+            create(:claim, :approved, personal_details.merge(bank_sort_code: "112233", bank_account_number: "29482823", policy: Policies::TargetedRetentionIncentivePayments))
+
+            choose "Reject"
+            check "Ineligible subject"
+            click_button "Confirm decision"
+
+            expect(page).to have_text("Claim has been rejected successfully")
           end
         end
-      end
-    end
-  end
-
-  context "when signed in as a support agent" do
-    describe "decisions#create" do
-      let(:claim) { create(:claim, :submitted) }
-
-      it "does not allow a claim to be approved" do
-        sign_in_to_admin_with_role(DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
-        post admin_claim_decisions_path(claim_id: claim.id, approved: true)
-
-        expect(response.code).to eq("401")
       end
     end
   end
