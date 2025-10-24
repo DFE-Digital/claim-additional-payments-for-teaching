@@ -48,7 +48,7 @@ RSpec.feature "Viewing the FE provider verification year 2 task" do
           provider_verification_teaching_responsibilities: true,
           further_education_teaching_start_year: "2023",
           provider_verification_teaching_start_year_matches_claim: true,
-          teaching_hours_per_week: "more_than_12",
+          teaching_hours_per_week: "more_than_20",
           provider_verification_teaching_hours_per_week: "12_to_20_hours_per_week",
           half_teaching_hours: true,
           provider_verification_half_teaching_hours: true,
@@ -84,8 +84,8 @@ RSpec.feature "Viewing the FE provider verification year 2 task" do
       end
 
       within_table_row("Timetabled teaching hours") do |claimant_answer, provider_answer|
-        expect(claimant_answer).to have_content("12 or more hours per week, but fewer than 20")
-        expect(provider_answer).to have_content("12 or more hours per week, but fewer than 20")
+        expect(claimant_answer).to have_content("12 or more hours")
+        expect(provider_answer).to have_content("12 or more hours")
       end
 
       within_table_row("Age range taught") do |claimant_answer, provider_answer|

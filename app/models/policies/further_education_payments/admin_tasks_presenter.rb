@@ -132,13 +132,34 @@ module Policies
       end
 
       def timetabled_teaching_hours
+        # Map the option the provider selected to the equivalent claimant option
+        provider_teaching_hours_per_week =
+          case eligibility.provider_verification_teaching_hours_per_week
+          when "20_or_more_hours_per_week", "12_to_20_hours_per_week" then "more_than_12"
+          when "2_and_a_half_to_12_hours_per_week" then "between_2_5_and_12"
+          when "fewer_than_2_and_a_half_hours_per_week" then "less_than_2_5"
+          else fail "Unexpected value #{eligibility.provider_verification_teaching_hours_per_week} for provider_verification_teaching_hours_per_week"
+          end
+
+        # The max we want to show admins is "12 or more hours"
+        claimant_teaching_hours_per_week =
+          case eligibility.teaching_hours_per_week
+          when "more_than_20" then "more_than_12"
+          else eligibility.teaching_hours_per_week
+          end
+
+        locale_scope = %w[
+          further_education_payments
+          admin
+          task_questions
+          fe_provider_verification_v2
+          timetabled_teaching_hours
+        ].join(".")
+
         [
           "Timetabled teaching hours",
-          I18n.t(
-            eligibility.teaching_hours_per_week,
-            scope: "further_education_payments.forms.teaching_hours_per_week.options"
-          ),
-          provider_answers.teaching_hours_per_week
+          I18n.t(claimant_teaching_hours_per_week, scope: locale_scope),
+          I18n.t(provider_teaching_hours_per_week, scope: locale_scope)
         ]
       end
 
