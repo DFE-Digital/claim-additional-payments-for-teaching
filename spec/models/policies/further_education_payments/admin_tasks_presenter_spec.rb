@@ -24,9 +24,9 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
         end
 
         it "returns Yes" do
-          expect(subject.provider_verification_rows[10][0]).to eql("Continued employment")
-          expect(subject.provider_verification_rows[10][1]).to eql("N/A")
-          expect(subject.provider_verification_rows[10][2]).to eql("Yes")
+          rows = subject.provider_verification_rows
+          continued_employment_row = rows.find { |row| row[0] == "Continued employment" }
+          expect(continued_employment_row).to eql(["Continued employment", "N/A", "Yes"])
         end
       end
 
@@ -40,9 +40,9 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
         end
 
         it "returns No" do
-          expect(subject.provider_verification_rows[10][0]).to eql("Continued employment")
-          expect(subject.provider_verification_rows[10][1]).to eql("N/A")
-          expect(subject.provider_verification_rows[10][2]).to eql("No")
+          rows = subject.provider_verification_rows
+          continued_employment_row = rows.find { |row| row[0] == "Continued employment" }
+          expect(continued_employment_row).to eql(["Continued employment", "N/A", "No"])
         end
       end
     end
@@ -68,7 +68,10 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
           :claim,
           :submitted,
           policy: Policies::FurtherEducationPayments,
-          eligibility_trait: %i[eligible provider_verification_completed]
+          eligibility_trait: %i[eligible provider_verification_completed],
+          eligibility_attributes: {
+            teaching_hours_per_week: "12_to_20_hours_per_week"
+          }
         )
 
         rows = described_class.new(claim).provider_verification_rows
@@ -109,9 +112,9 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
           "Yes"
         ])
 
-        expect(rows).to include(["Performance measures", "No", "No"])
+        expect(rows).to include(["Subject to performance measures", "No", "No"])
 
-        expect(rows).to include(["Disciplinary action", "No", "No"])
+        expect(rows).to include(["Subject to disciplinary action", "No", "No"])
       end
 
       it "returns the reason for not enrolling if applicable" do
