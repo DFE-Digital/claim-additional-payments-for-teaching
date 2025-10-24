@@ -50,9 +50,11 @@ module AutomatedChecks
         performance_disciplinary_pass = check_performance_and_disciplinary_responses
         matching_responses_pass = check_matching_responses
         teaching_qualification_pass = check_teaching_qualification
+        contract_specific_pass = check_contract_specific_requirements
 
         provider_yes_pass && performance_disciplinary_pass &&
-          matching_responses_pass && teaching_qualification_pass
+          matching_responses_pass && teaching_qualification_pass &&
+          contract_specific_pass
       end
 
       def check_performance_and_disciplinary_responses
@@ -90,6 +92,33 @@ module AutomatedChecks
         provider_qualification = eligibility.provider_verification_teaching_qualification
 
         acceptable_qualifications.include?(provider_qualification)
+      end
+
+      def check_contract_specific_requirements
+        case eligibility.provider_verification_contract_type
+        when "variable_hours"
+          check_variable_hours_requirements
+        when "fixed_term"
+          check_fixed_term_requirements
+        else
+          true
+        end
+      end
+
+      def check_variable_hours_requirements
+        # Variable hours contracts must have taught at least one academic term
+        eligibility.provider_verification_taught_at_least_one_academic_term == true
+      end
+
+      def check_fixed_term_requirements
+        # Fixed-term must either:
+        # - Cover full academic year, OR
+        # - Have worked for whole of spring term (taught_at_least_one_academic_term)
+        full_year = eligibility.provider_verification_contract_covers_full_academic_year
+        spring_term = eligibility.provider_verification_taught_at_least_one_academic_term
+
+        # Pass if either condition is true
+        full_year == true || spring_term == true
       end
 
       def eligibility

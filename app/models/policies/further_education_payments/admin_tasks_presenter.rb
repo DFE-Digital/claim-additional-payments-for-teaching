@@ -34,11 +34,6 @@ module Policies
           timetabled_teaching_hours
         ]
 
-        # Conditional: Hours per week next term (variable hours only)
-        if eligibility.provider_verification_contract_type == "variable_hours"
-          rows << teaching_hours_per_week_next_term
-        end
-
         # Conditional: Contract covers full year (fixed term only)
         if eligibility.provider_verification_contract_type == "fixed_term"
           rows << contract_covers_full_academic_year
@@ -123,14 +118,6 @@ module Policies
           "Teaching qualification",
           claimant_value,
           provider_answers.teaching_qualification
-        ]
-      end
-
-      def teaching_hours_per_week_next_term
-        [
-          "Hours per week next term",
-          "Not provided",  # Claimant doesn't answer this question
-          provider_answers.teaching_hours_per_week.present? ? provider_answers.teaching_hours_per_week : "Not answered"
         ]
       end
 

@@ -191,6 +191,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::ProviderVerificationV2 do
                   provider_verification_teaching_responsibilities: true,
                   provider_verification_teaching_start_year_matches_claim: true,
                   provider_verification_half_teaching_hours: true,
+                  provider_verification_taught_at_least_one_academic_term: true,
                   provider_verification_completed_at: Time.zone.now,
                   provider_verification_verified_by_id: user.id
                 )
