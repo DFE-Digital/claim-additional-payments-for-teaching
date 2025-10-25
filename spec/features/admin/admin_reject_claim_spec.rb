@@ -109,6 +109,54 @@ RSpec.feature "Admin rejects a claim" do
     expect(page).not_to have_content("Reasons")
   end
 
+  context "when a further education claim is rejected" do
+    let!(:claim) do
+      create(
+        :claim,
+        :submitted,
+        policy: Policies::FurtherEducationPayments
+      )
+    end
+
+    around do |example|
+      perform_enqueued_jobs { example.run }
+    end
+
+    scenario "rejecting sends the generic rejection email" do
+      visit admin_claim_tasks_path(claim)
+
+      click_on "Approve or reject this claim"
+      choose "Reject"
+
+      check "Ineligible subject"
+
+      click_button "Confirm decision"
+
+      expect(page).to have_content("Claim has been rejected successfully")
+
+      expect(claim.email_address).to have_received_email(
+        ApplicationMailer::FURTHER_EDUCATION_PAYMENTS[:CLAIM_REJECTED_NOTIFY_TEMPLATE_ID]
+      )
+    end
+
+    scenario "rejecting with a reason of year 1 mismatch sends a year 1 mismatch email (not the generic rejection email)" do
+      visit admin_claim_tasks_path(claim)
+
+      click_on "Approve or reject this claim"
+      choose "Reject"
+
+      check "Information mismatch against year 1 application"
+
+      click_button "Confirm decision"
+
+      expect(page).to have_content("Claim has been rejected successfully")
+
+      expect(claim.email_address).to have_received_email(
+        ApplicationMailer::FURTHER_EDUCATION_PAYMENTS[:CLAIM_REJECTED_MISMATCH_YEAR1_NOTIFY_TEMPLATE_ID]
+      )
+    end
+  end
+
   context "early years claim" do
     context "claimant has not completed their half" do
       let!(:claim) do

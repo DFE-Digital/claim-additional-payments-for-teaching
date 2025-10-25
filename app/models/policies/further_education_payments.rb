@@ -38,6 +38,7 @@ module Policies
       :duplicate_claim,
       :no_response,
       :no_response_from_employer,
+      :information_mismatch_against_year_1_application,
       :other
     ]
 

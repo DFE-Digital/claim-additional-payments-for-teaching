@@ -862,6 +862,7 @@ en:
           duplicate_claim: "Duplicate claim"
           no_response: "No response"
           no_response_from_employer: "No response from employer"
+          information_mismatch_against_year_1_application: "Information mismatch against year 1 application"
           other: "Other"
       task_questions:
         fe_alternative_verification:
