@@ -65,7 +65,7 @@ class SignInOrContinueForm < Form
   end
 
   def tid_bypassable?
-    Rails.env.development?
+    Rails.env.development? || Rails.env["BYPASS_DFE_SIGN_IN"]
   end
 
   def radio_options
