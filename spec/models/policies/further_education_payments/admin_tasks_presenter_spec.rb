@@ -77,7 +77,7 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
 
         expect(rows).to include([
           "First 5 years of teaching",
-          AcademicYear.new(2023),
+          "September 2023 to 2024",
           "Yes"
         ])
 
@@ -109,9 +109,9 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
           "Yes"
         ])
 
-        expect(rows).to include(["Performance measures", "No", "No"])
+        expect(rows).to include(["Subject to performance measures", "No", "No"])
 
-        expect(rows).to include(["Disciplinary action", "No", "No"])
+        expect(rows).to include(["Subject to disciplinary action", "No", "No"])
       end
 
       it "returns the reason for not enrolling if applicable" do
@@ -151,7 +151,7 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
         subject do
           described_class
             .new(claim)
-            .provider_verification_rows[4]
+            .provider_verification_rows[6]
             .last
         end
 
