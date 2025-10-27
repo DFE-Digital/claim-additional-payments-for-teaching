@@ -40,21 +40,18 @@ RSpec.feature "Admin fraud prevention" do
       )
 
       visit admin_claim_tasks_path(flagged_claim_trn)
-
       expect(page).to have_content(
         "This claim has been flagged as the " \
         "teacher reference number is included on the fraud prevention list."
       )
 
       visit admin_claim_tasks_path(flagged_claim_nino)
-
       expect(page).to have_content(
         "This claim has been flagged as the " \
         "national insurance number is included on the fraud prevention list."
       )
 
       visit admin_claim_tasks_path(flagged_claim_trn_and_nino)
-
       expect(page).to have_content(
         "This claim has been flagged as the " \
         "national insurance number and teacher reference number are included " \
@@ -62,40 +59,30 @@ RSpec.feature "Admin fraud prevention" do
       )
 
       visit new_admin_claim_decision_path(flagged_claim_trn)
-
-      approval_option = find("#decision_approved_true")
-
+      approval_option = find("#decision-approved-true-field")
       expect(approval_option).to be_disabled
-
       expect(page).to have_content(
         "This claim cannot be approved because the teacher reference number " \
         "is included on the fraud prevention list."
       )
 
       visit new_admin_claim_decision_path(flagged_claim_nino)
-
-      approval_option = find("#decision_approved_true")
-
+      approval_option = find("#decision-approved-true-field")
       expect(approval_option).to be_disabled
-
       expect(page).to have_content(
         "This claim cannot be approved because the national insurance number " \
         "is included on the fraud prevention list."
       )
 
       visit new_admin_claim_decision_path(flagged_claim_trn_and_nino)
-
-      approval_option = find("#decision_approved_true")
-
+      approval_option = find("#decision-approved-true-field")
       expect(approval_option).to be_disabled
-
       expect(page).to have_content(
         "This claim cannot be approved because the national insurance number " \
         "and teacher reference number are included on the fraud prevention list."
       )
 
       visit admin_claim_notes_path(flagged_claim_trn)
-
       within(".hmcts-timeline:first-of-type") do
         expect(page).to have_content(
           "This claim has been flagged as the " \
@@ -104,7 +91,6 @@ RSpec.feature "Admin fraud prevention" do
       end
 
       visit admin_claim_notes_path(flagged_claim_nino)
-
       within(".hmcts-timeline:first-of-type") do
         expect(page).to have_content(
           "This claim has been flagged as the " \
@@ -113,7 +99,6 @@ RSpec.feature "Admin fraud prevention" do
       end
 
       visit admin_claim_notes_path(flagged_claim_trn_and_nino)
-
       within(".hmcts-timeline:first-of-type") do
         expect(page).to have_content(
           "This claim has been flagged as the " \
