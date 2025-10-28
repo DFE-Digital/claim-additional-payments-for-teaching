@@ -29,6 +29,7 @@ module Journeys
           RESTRICTED_SLUGS = [].freeze
 
           DEAD_END_SLUGS = %w[
+            confirmation
             expired-link
             ineligible
           ]

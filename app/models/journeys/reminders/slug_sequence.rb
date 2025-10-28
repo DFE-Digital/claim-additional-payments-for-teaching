@@ -7,7 +7,7 @@ module Journeys
         "confirmation"
       ].freeze
 
-      DEAD_END_SLUGS = []
+      DEAD_END_SLUGS = ["confirmation"].freeze
 
       def slugs
         SLUGS
