@@ -2,7 +2,7 @@ module Journeys
   module Base
     SHARED_FORMS = {
       "claims" => {
-        "sign-in-or-continue" => SignInOrContinueForm,
+        "sign-in-or-continue" => TeacherId.bypass? ? SignInOrContinueTestingForm : SignInOrContinueForm,
         "current-school" => CurrentSchoolForm,
         "select-current-school" => SelectCurrentSchoolForm,
         "information-provided" => InformationProvidedForm,
