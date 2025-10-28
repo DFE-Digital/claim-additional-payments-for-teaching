@@ -45,6 +45,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
             check-eligibility-intro
             sign-in-or-continue
             current-school
+            select-current-school
             nqt-in-academic-year-after-itt
             supply-teacher
             poor-performance
@@ -72,6 +73,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
             check-eligibility-intro
             sign-in-or-continue
             current-school
+            select-current-school
             nqt-in-academic-year-after-itt
             supply-teacher
             entire-term-contract
@@ -101,6 +103,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
             check-eligibility-intro
             sign-in-or-continue
             current-school
+            select-current-school
             nqt-in-academic-year-after-itt
             eligible-itt-subject
             future-eligibility
@@ -123,6 +126,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::SlugSequence do
             check-eligibility-intro
             sign-in-or-continue
             current-school
+            select-current-school
             nqt-in-academic-year-after-itt
             eligible-itt-subject
             eligible-degree-subject

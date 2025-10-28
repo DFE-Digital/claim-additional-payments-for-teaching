@@ -22,6 +22,7 @@ module Journeys
         "still-teaching",
         "still-teaching-tps",
         "current-school",
+        "select-current-school",
         "leadership-position",
         "mostly-performed-leadership-duties",
         "eligibility-confirmed",
@@ -106,6 +107,7 @@ module Journeys
           slugs << "still-teaching" unless answers.logged_in_with_tid_and_has_recent_tps_school?
 
           slugs << "current-school" unless answers.employed_at_claim_school? || answers.employed_at_recent_tps_school?
+          slugs << "select-current-school" unless answers.employed_at_claim_school? || answers.employed_at_recent_tps_school?
           slugs << "leadership-position"
           slugs << "mostly-performed-leadership-duties" if answers.had_leadership_position?
           slugs << "eligibility-confirmed"

@@ -7,6 +7,7 @@ module Journeys
         "reset-claim",
         "correct-school",
         "current-school",
+        "select-current-school",
         "nqt-in-academic-year-after-itt",
         "supply-teacher",
         "entire-term-contract",
@@ -108,6 +109,7 @@ module Journeys
           sequence << "reset-claim" if answers.details_check == false
           sequence << "correct-school" if answers.logged_in_with_tid_and_has_recent_tps_school?
           sequence << "current-school" unless answers.chose_recent_tps_school?
+          sequence << "select-current-school" unless answers.chose_recent_tps_school?
           sequence << "nqt-in-academic-year-after-itt"
         end
       end

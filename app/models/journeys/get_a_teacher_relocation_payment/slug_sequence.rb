@@ -6,6 +6,7 @@ module Journeys
         "application-route",
         "state-funded-secondary-school",
         "current-school",
+        "select-current-school",
         "headteacher-details",
         "contract-details",
         "start-date",
@@ -77,6 +78,7 @@ module Journeys
           slugs << "application-route"
           slugs << "state-funded-secondary-school"
           slugs << "current-school"
+          slugs << "select-current-school"
           slugs << "headteacher-details"
           slugs << "contract-details"
           slugs << "start-date"

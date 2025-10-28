@@ -2,8 +2,6 @@ module Journeys
   module FurtherEducationPayments
     class SessionAnswers < Journeys::SessionAnswers
       attribute :teaching_responsibilities, :boolean, pii: false
-      attribute :provision_search, :string, pii: false
-      attribute :possible_school_id, :string, pii: false # GUID
       attribute :school_id, :string, pii: false # GUID
       attribute :contract_type, :string, pii: false
       attribute :fixed_term_full_year, :boolean, pii: false

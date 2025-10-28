@@ -298,7 +298,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(session.reload.answers.employment_status).to eql("different_school")
 
-    fill_in :school_search, with: different_school.name
+    fill_in "Which school are you currently employed to teach at?", with: different_school.name
     click_on "Continue"
 
     choose different_school.name
