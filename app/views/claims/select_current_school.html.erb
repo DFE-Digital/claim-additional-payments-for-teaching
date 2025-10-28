@@ -1,0 +1,21 @@
+<% content_for(:page_title, page_title(@form.t(:heading), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @form, url: @form.url, method: :patch, builder: GOVUKDesignSystemFormBuilder::FormBuilder, html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_collection_radio_buttons :possible_school_id, @form.radio_options, :id, :name, :address,
+        legend: {
+          text: @form.t("heading"),
+          tag: "h1",
+          size: "l"
+        },
+        hint: {
+          text: "Select your school from the search results."
+        } %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

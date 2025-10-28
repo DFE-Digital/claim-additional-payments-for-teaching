@@ -63,16 +63,16 @@ en:
         errors:
           details_check: "Select an option to whether the details are correct or not"
       correct_school:
-        question: "Which school do you teach at"
+        question: Which school do you teach at
       current_school:
-        questions:
-          current_school_search: "Which school do you teach at?"
-          current_school_results: "Select the school you teach at"
+        question: Which school do you teach at?
         errors:
-          enter_a_school_or_postcode: "Enter a school or postcode"
-          select_the_school_you_teach_at: "Select the school you teach at"
-          the_selected_school_is_closed: "The selected school is closed"
-          school_not_found: "School not found"
+          blank: Enter a school or postcode
+          min_length: Enter a school name or postcode that is at least 3 characters long
+      select_current_school:
+        heading: Which school do you teach at?
+        errors:
+          blank: Select the school you teach at
       nqt_in_academic_year_after_itt:
         question: "Are you currently teaching as a qualified teacher?"
         hint: "Your induction years count as long as you have your qualified teacher status (QTS)."

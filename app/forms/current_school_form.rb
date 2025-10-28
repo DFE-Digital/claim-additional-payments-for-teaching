@@ -1,52 +1,75 @@
 class CurrentSchoolForm < Form
-  attribute :current_school_id
-  attribute :change_school
+  MIN_LENGTH = 3
 
-  attr_reader :schools
+  attribute :provision_search, :string
+  attribute :possible_school_id, :string
 
-  validates :current_school_id, presence: {message: i18n_error_message(:select_the_school_you_teach_at)}
-  validate :current_school_must_be_open, if: -> { current_school_id.present? }
+  validates :provision_search,
+    presence: {message: i18n_error_message(:blank)},
+    length: {minimum: MIN_LENGTH, message: i18n_error_message(:min_length)},
+    if: proc { |object| object.possible_school_id.blank? || changed_query? }
 
-  def initialize(journey_session:, journey:, params:, session: {})
-    super
-
-    load_schools
-  end
+  validate :validate_possible_school_exists
+  validate :validate_possible_school_must_be_open
 
   def save
-    return false unless valid?
+    return false if invalid? || no_results?
 
-    journey_session.answers.assign_attributes(current_school_id:)
+    if possible_school_id.present? && changed_possible_school?
+      journey_session.answers.assign_attributes(
+        possible_school_id:
+      )
+      reset_dependent_answers
+    end
+
+    if changed_query?
+      journey_session.answers.assign_attributes(
+        possible_school_id: nil,
+        provision_search:
+      )
+      reset_dependent_answers
+    end
+
     journey_session.save!
-  end
-
-  delegate :name, to: :current_school, prefix: true, allow_nil: true
-
-  def no_search_results?
-    params[:school_search].present? && errors.empty?
   end
 
   private
 
-  def current_school
-    @current_school ||= School.find_by(id: current_school_id)
+  def no_results?
+    provision_search.present? && provision_search.size >= MIN_LENGTH && !has_results
   end
 
-  def load_schools
-    return unless params[:school_search]
-
-    @schools = School.open.search(params[:school_search])
-  rescue ArgumentError => e
-    raise unless e.message == School::SEARCH_NOT_ENOUGH_CHARACTERS_ERROR
-
-    errors.add(:school_search, i18n_errors_path("enter_a_school_or_postcode"))
+  def has_results
+    @has_results ||= School.open.search(provision_search).count > 0
   end
 
-  def current_school_must_be_open
-    if current_school
-      errors.add(:current_school_id, i18n_errors_path("the_selected_school_is_closed")) unless current_school.open?
-    else
-      errors.add(:current_school_id, i18n_errors_path("school_not_found"))
+  def possible_school
+    @possible_school ||= School.find_by(id: possible_school_id)
+  end
+
+  def changed_possible_school?
+    possible_school_id != journey_session.answers.current_school_id
+  end
+
+  def changed_query?
+    provision_search != journey_session.answers.provision_search
+  end
+
+  def reset_dependent_answers
+    journey_session.answers.assign_attributes(
+      current_school_id: nil
+    )
+  end
+
+  def validate_possible_school_exists
+    if possible_school_id.present? && possible_school.blank?
+      errors.add(:possible_school_id, "School not found")
+    end
+  end
+
+  def validate_possible_school_must_be_open
+    if possible_school_id.present? && possible_school&.closed?
+      errors.add(:possible_school_id, "The selected school is closed")
     end
   end
 end

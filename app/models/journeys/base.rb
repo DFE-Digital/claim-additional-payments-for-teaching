@@ -4,6 +4,7 @@ module Journeys
       "claims" => {
         "sign-in-or-continue" => SignInOrContinueForm,
         "current-school" => CurrentSchoolForm,
+        "select-current-school" => SelectCurrentSchoolForm,
         "information-provided" => InformationProvidedForm,
         "gender" => GenderForm,
         "full-name" => FullNameForm,

@@ -24,7 +24,7 @@ module Journeys
 
       def current_school
         [
-          t("current_school.questions.current_school_search"),
+          t("current_school.question"),
           answers.current_school.name,
           (answers.chose_recent_tps_school? ? "correct-school" : "current-school")
         ]
