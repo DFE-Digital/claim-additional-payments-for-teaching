@@ -197,7 +197,6 @@ module Journeys
 
     def set_backlink?
       return false if slug_sequence.class::DEAD_END_SLUGS.include?(current_slug)
-      return false if current_slug == "confirmation"
       return false if previous_slug.nil?
       true
     end

@@ -16,6 +16,7 @@ module Journeys
 
           RESTRICTED_SLUGS = []
           DEAD_END_SLUGS = %w[
+            confirmation
             claimant-not-employed-by-nursery
             ineligible
           ]
