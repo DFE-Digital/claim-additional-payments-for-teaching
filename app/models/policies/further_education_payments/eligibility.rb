@@ -33,17 +33,23 @@ module Policies
       scope :provider_verification_email_last_sent_over, ->(older_than) { where("provider_verification_email_last_sent_at < ?", older_than) }
       scope :provider_verification_chase_email_not_sent, -> { where(provider_verification_chase_email_last_sent_at: nil) }
 
+      # NOTE: only applicable to Year 1, AY 2024/2025 FE claims
+      scope :duplicate_claim_provider_verification_email_manually_sent_by_ops_team, -> do
+        where(
+          verification: {},
+          flagged_as_duplicate: true,
+          notes: {label: "provider_verification"}
+        )
+      end
+
       scope :awaiting_provider_verification_year_1, -> do
         joins(:claim).merge(Claim.by_academic_year(AcademicYear.new(2024)))
           .where(verification: {}, flagged_as_duplicate: false)
           .or(
             where(
               id: left_joins(claim: :notes)
-              .where(
-                verification: {},
-                flagged_as_duplicate: true,
-                notes: {label: "provider_verification"}
-              )
+              .merge(Claim.by_academic_year(AcademicYear.new(2024)))
+              .duplicate_claim_provider_verification_email_manually_sent_by_ops_team
               .select(:id)
             )
           )
@@ -53,6 +59,7 @@ module Policies
         joins(:claim).merge(Claim.after_academic_year(AcademicYear.new(2024)))
           .where(provider_verification_completed_at: nil)
           .where(flagged_as_duplicate: false)
+          .where(repeat_applicant_check_passed: true)
       end
 
       scope :awaiting_provider_verification, -> do
