@@ -598,7 +598,7 @@ RSpec.describe "Targeted retention incentives eligible paths" do
     click_on "Continue"
 
     # poor-performance
-    all(".govuk-radios__label").select { |it| it.text == "No" }.each(&:click)
+    all(".govuk-radios__label").select { |label| label.text == "No" }.each(&:click)
     click_on "Continue"
 
     # Qualification details confirmation page (instead of qualification questions)
