@@ -1,6 +1,6 @@
 <% link = pagy_anchor(pagy) -%>
 
-<nav class="govuk-pagination" aria-label="Results">
+<nav class="govuk-pagination" aria-label="results">
 <% if pagy.prev %>
   <div class="govuk-pagination__prev">
     <a class="govuk-link govuk-pagination__link" href="<%== pagy_prev_url(pagy) %>" rel="prev">
@@ -24,7 +24,7 @@
         </a>
       </li>
     <% elsif item == :gap %>
-      <li class="govuk-pagination__item govuk-pagination__item--ellipses">&ctdot;</li>
+      <li class="govuk-pagination__item govuk-pagination__item--ellipsis">&ctdot;</li>
     <% end %>
   <% end %>
 </ul>

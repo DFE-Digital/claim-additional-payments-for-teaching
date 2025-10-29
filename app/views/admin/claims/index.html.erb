@@ -85,7 +85,7 @@
         </tbody>
       </table>
 
-      <%== render partial: 'pagination', locals: { pagy: @pagy } %>
+      <%== render partial: "admin/shared/pagination", locals: { pagy: @pagy } %>
     <% else %>
       <h2 class="govuk-heading-m"><%= no_claims(params[:status])%></h2>
     <% end %>
