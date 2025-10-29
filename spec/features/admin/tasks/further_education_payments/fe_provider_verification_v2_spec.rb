@@ -79,7 +79,7 @@ RSpec.feature "Viewing the FE provider verification year 2 task" do
       end
 
       within_table_row("First 5 years of teaching") do |claimant_answer, provider_answer|
-        expect(claimant_answer).to have_content("2023/2024")
+        expect(claimant_answer).to have_content("September 2023 to 2024")
         expect(provider_answer).to have_content("Yes")
       end
 
@@ -107,12 +107,12 @@ RSpec.feature "Viewing the FE provider verification year 2 task" do
         expect(provider_answer).to have_content("Yes")
       end
 
-      within_table_row("Performance measures") do |claimant_answer, provider_answer|
+      within_table_row("Subject to performance measures") do |claimant_answer, provider_answer|
         expect(claimant_answer).to have_content("No")
         expect(provider_answer).to have_content("No")
       end
 
-      within_table_row("Disciplinary action") do |claimant_answer, provider_answer|
+      within_table_row("Subject to disciplinary action") do |claimant_answer, provider_answer|
         expect(claimant_answer).to have_content("No")
         expect(provider_answer).to have_content("No")
       end
@@ -120,7 +120,7 @@ RSpec.feature "Viewing the FE provider verification year 2 task" do
   end
 
   def within_table_row(label, &block)
-    within(first("tr", text: label)) do
+    within(all("tr", text: label).last) do
       claimant_answer = find("td:first-of-type")
       provider_answer = find("td:last-of-type")
 
