@@ -44,8 +44,6 @@ module Policies
 
         return :insufficient_teaching if insufficient_teaching?
 
-        return :subject_invalid_for_tslr if indicated_ecp_only_itt_subject?
-
         if ineligible_itt_subject_and_no_relevant_degree?
           return :subject_and_degree_ineligible
         end
@@ -90,10 +88,6 @@ module Policies
 
       def insufficient_teaching?
         teaching_subject_now == false
-      end
-
-      def indicated_ecp_only_itt_subject?
-        eligible_itt_subject.present? && (eligible_itt_subject.to_sym == :foreign_languages)
       end
 
       def ineligible_itt_subject_and_no_relevant_degree?

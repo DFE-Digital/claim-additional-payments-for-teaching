@@ -122,17 +122,6 @@ RSpec.describe Policies::TargetedRetentionIncentivePayments::PolicyEligibilityCh
       it { is_expected.to eq(:insufficient_teaching) }
     end
 
-    context "when not a tslr subject" do
-      let(:answers) do
-        build(
-          :targeted_retention_incentive_payments_answers,
-          eligible_itt_subject: :foreign_languages
-        )
-      end
-
-      it { is_expected.to eq(:subject_invalid_for_tslr) }
-    end
-
     context "when ineligible subject and no eligible degree subject" do
       let(:answers) do
         build(
