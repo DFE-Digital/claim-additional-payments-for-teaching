@@ -97,6 +97,13 @@ module Journeys
       self::POLICIES
     end
 
+    def full_name
+      [
+        I18n.t(:journey_name, scope: self::I18N_NAMESPACE),
+        I18n.t(:journey_description, scope: self::I18N_NAMESPACE, default: "")
+      ].reject(&:blank?).join(" - ")
+    end
+
     private
 
     def all_forms

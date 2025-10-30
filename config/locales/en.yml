@@ -1424,6 +1424,7 @@ en:
       updated_date: "28 July 2022"
     claim_description: for an early years financial incentive payment
     journey_name: Early years financial incentive payment service
+    journey_description: Provider start journey
     landing_page:
       title: Claim an early years financial incentive payment on behalf of your employee
     feedback_email: "EY.Financial-Incentives@education.gov.uk"
@@ -1439,6 +1440,7 @@ en:
       updated_date: "28 July 2022"
     claim_description: for an early years financial incentive payment
     journey_name: Early years financial incentive payment service
+    journey_description: Provider authenticated journey
     feedback_email: "EY.Financial-Incentives@education.gov.uk"
     support_email_address: "EY.Financial-Incentives@education.gov.uk"
     forms:
@@ -1526,7 +1528,8 @@ en:
         By submitting this claim you’re confirming that, to the best of your knowledge, the details you’re providing are correct.
       btn_text: Accept and send
   early_years_payment_provider_alternative_idv:
-    journey_name: "Early years financial incentive payment service"
+    journey_name: Early years financial incentive payment service
+    journey_description: Provider alternative IDV journey
     feedback_email: "earlycareerteacherpayments@digital.education.gov.uk"
     support_email_address: "EY.Financial-Incentives@education.gov.uk"
     forms:
@@ -1637,6 +1640,7 @@ en:
           unavailable: This task is not available until the claimant has submitted their claim
   early_years_payment_practitioner:
     journey_name: Early years financial incentive payment service
+    journey_description: Practitioner journey
     feedback_email: "EY.Financial-Incentives@education.gov.uk"
     support_email: "EY.Financial-Incentives@education.gov.uk"
     support_email_address: "EY.Financial-Incentives@education.gov.uk"
