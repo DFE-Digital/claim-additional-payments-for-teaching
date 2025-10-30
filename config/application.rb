@@ -73,8 +73,6 @@ module DfeTeachersPaymentService
     # https://www.gov.uk/government/publications/real-time-information-internet-submissions-2024-to-2025-technical-specifications
     config.email_max_length = 129
 
-    config.active_support.to_time_preserves_timezone = :offset
-
     config.mission_control.jobs.base_controller_class = "Admin::MissionControlController"
     config.mission_control.jobs.http_basic_auth_enabled = false
   end
