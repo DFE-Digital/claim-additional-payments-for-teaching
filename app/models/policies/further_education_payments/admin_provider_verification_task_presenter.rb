@@ -99,6 +99,9 @@ module Policies
         when "further_education_teaching_start_year"
           "September #{further_education_teaching_start_year.to_i} " \
             "to August #{further_education_teaching_start_year.to_i + 1}"
+        when "teaching_hours_per_week_next_term"
+          # NOTE - this column was erroneously deleted
+          "-"
         else
           I18n.t(
             [
