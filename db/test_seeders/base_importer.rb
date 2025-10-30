@@ -1,5 +1,4 @@
 require "csv"
-require "benchmark"
 
 if ENV["ENVIRONMENT_NAME"] == "development" ||
     ENV["ENVIRONMENT_NAME"] == "test" ||
