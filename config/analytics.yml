@@ -350,6 +350,8 @@ shared:
     - provider_verification_not_started_qualification_reasons # jsonb, why hasn't practitioner started a qualification yet (given by the provider)
     - provider_verification_not_started_qualification_reason_other # string, if provider_verification_not_started_qualification_reasons is other, provides detail (given by the provider)
     - work_email_verified # boolean, has claimants work email been verified via OTP
+    - flagged_as_mismatch_on_teaching_start_year # boolean, previous claim has a further_education_teaching_start_year of 2020 (for year2 claims) or there is a mismatch (for year3 and onwards)
+    - repeat_applicant_check_passed # boolean, repeat applicant task has automatically passed or manually passed
   :eligible_ey_providers:
     - id # uuid, that identifies eligible EY provider
     - nursery_name # string, name of school

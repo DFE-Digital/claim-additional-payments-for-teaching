@@ -37,6 +37,10 @@ module Journeys
           claim.eligibility.update!(flagged_as_duplicate: true)
         end
 
+        if Policies::FurtherEducationPayments.teaching_start_year_mismatch?(claim)
+          claim.eligibility.update!(flagged_as_mismatch_on_teaching_start_year: true)
+        end
+
         journey_session.answers.assign_attributes(submitted_claim_id: claim.id)
         journey_session.save!
 

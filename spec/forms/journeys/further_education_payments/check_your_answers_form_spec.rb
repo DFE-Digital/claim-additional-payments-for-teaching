@@ -9,11 +9,9 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
   let(:journey) { Journeys::FurtherEducationPayments }
   let(:school) { create(:school, :further_education, :fe_eligible) }
 
-  let(:answers) {
-    build(
-      :further_education_payments_answers,
-      :submittable,
-      :with_onelogin_credentials,
+  let(:answers_params) do
+    {
+      academic_year: current_academic_year,
       identity_confirmed_with_onelogin: true,
       logged_in_with_onelogin: true,
       onelogin_idv_first_name: "John",
@@ -23,6 +21,15 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
       first_name: "John",
       surname: "Doe",
       date_of_birth: Date.new(1970, 1, 1)
+    }
+  end
+
+  let(:answers) {
+    build(
+      :further_education_payments_answers,
+      :submittable,
+      :with_onelogin_credentials,
+      **answers_params
     )
   }
 
@@ -88,6 +95,135 @@ RSpec.describe Journeys::FurtherEducationPayments::CheckYourAnswersForm do
       expect(eligibility.subject_to_formal_performance_action).to eq(answers.subject_to_formal_performance_action)
       expect(eligibility.subject_to_disciplinary_action).to eq(answers.subject_to_disciplinary_action)
       expect(eligibility.half_teaching_hours).to eq(answers.half_teaching_hours)
+    end
+
+    context "when in year 2" do
+      let(:previous_year_1_claim) do
+        create(
+          :claim,
+          :further_education,
+          :approved,
+          academic_year: AcademicYear.new(2024),
+          onelogin_uid: answers.onelogin_uid
+        )
+      end
+
+      context "when a year 1 claim exists with a teaching start year of 2020" do
+        before do
+          previous_year_1_claim.eligibility.update!(
+            further_education_teaching_start_year: "2020"
+          )
+        end
+
+        it "flags the eligibility as a teaching start year mismatch" do
+          subject
+          eligibility = form.claim.eligibility
+
+          expect(eligibility.flagged_as_mismatch_on_teaching_start_year).to be true
+        end
+      end
+
+      context "when a year 1 claim exists with a teaching start year of 2021 (or above)" do
+        before do
+          previous_year_1_claim.eligibility.update!(
+            further_education_teaching_start_year: "2021"
+          )
+        end
+
+        it "DOES NOT flag the eligibility as a teaching start year mismatch" do
+          subject
+          eligibility = form.claim.eligibility
+
+          expect(eligibility.flagged_as_mismatch_on_teaching_start_year).to be false
+        end
+      end
+    end
+
+    context "when in year 3 (or later)" do
+      let(:current_academic_year) { AcademicYear.new(2026) }
+
+      let(:previous_year_2_claim) do
+        create(
+          :claim,
+          :further_education,
+          :approved,
+          academic_year: AcademicYear.new(2025),
+          onelogin_uid: answers.onelogin_uid
+        )
+      end
+
+      context "when a year 2 claim exists with a teaching start year of 2023 AND year 3 teaching start year is also 2023" do
+        let(:answers_params) do
+          super().merge(
+            further_education_teaching_start_year: "2023"
+          )
+        end
+
+        before do
+          previous_year_2_claim.eligibility.update!(
+            further_education_teaching_start_year: "2023"
+          )
+        end
+
+        it "DOES NOT flag the eligibility as a teaching start year mismatch" do
+          subject
+          eligibility = form.claim.eligibility
+
+          expect(eligibility.flagged_as_mismatch_on_teaching_start_year).to be false
+        end
+      end
+
+      context "when a year 2 claim exists with a teaching start year of 2022 AND year 3 teaching start year is 2023" do
+        let(:answers_params) do
+          super().merge(
+            further_education_teaching_start_year: "2023"
+          )
+        end
+
+        before do
+          previous_year_2_claim.eligibility.update!(
+            further_education_teaching_start_year: "2022"
+          )
+        end
+
+        it "flags the eligibility as a teaching start year mismatch" do
+          subject
+          eligibility = form.claim.eligibility
+
+          expect(eligibility.flagged_as_mismatch_on_teaching_start_year).to be true
+        end
+      end
+
+      context "where a year 1 claim exists with a teaching start year of 2021" do
+        let(:answers_params) do
+          super().merge(
+            further_education_teaching_start_year: "2023"
+          )
+        end
+
+        let(:previous_year_1_claim) do
+          create(
+            :claim,
+            :further_education,
+            :approved,
+            academic_year: AcademicYear.new(2024),
+            onelogin_uid: answers.onelogin_uid
+          )
+        end
+
+        before do
+          previous_year_1_claim.eligibility.update!(
+            further_education_teaching_start_year: "2021"
+          )
+        end
+
+        it "flags the eligibility as a teaching start year mismatch" do
+          subject
+          eligibility = form.claim.eligibility
+
+          expect(eligibility.flagged_as_mismatch_on_teaching_start_year).to be true
+        end
+      end
     end
   end
 end
