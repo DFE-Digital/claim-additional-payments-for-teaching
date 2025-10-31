@@ -77,7 +77,7 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
 
         expect(rows).to include([
           "First 5 years of teaching",
-          AcademicYear.new(2023),
+          "September 2023 to 2024",
           "Yes"
         ])
 
@@ -91,8 +91,8 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
 
         expect(rows).to include([
           "Timetabled teaching hours",
-          "12 or more hours per week, but fewer than 20",
-          "20 hours or more per week"
+          "12 or more hours per week",
+          "12 or more hours per week"
         ])
 
         expect(rows).to include(["Age range taught", "Yes", "Yes"])
@@ -109,9 +109,9 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
           "Yes"
         ])
 
-        expect(rows).to include(["Performance measures", "No", "No"])
+        expect(rows).to include(["Subject to performance measures", "No", "No"])
 
-        expect(rows).to include(["Disciplinary action", "No", "No"])
+        expect(rows).to include(["Subject to disciplinary action", "No", "No"])
       end
 
       it "returns the reason for not enrolling if applicable" do
@@ -133,6 +133,67 @@ RSpec.describe Policies::FurtherEducationPayments::AdminTasksPresenter do
           "N/A",
           "No valid reason"
         ])
+      end
+    end
+
+    describe "timetabled_teaching_hours" do
+      let(:claim) do
+        create(
+          :claim,
+          :submitted,
+          policy: Policies::FurtherEducationPayments,
+          eligibility_trait: %i[eligible provider_verification_completed],
+          eligibility_attributes: eligibility_attributes
+        )
+      end
+
+      describe "provider answers" do
+        subject do
+          described_class
+            .new(claim)
+            .provider_verification_rows[6]
+            .last
+        end
+
+        context "when provider answers '20_or_more_hours_per_week" do
+          let(:eligibility_attributes) do
+            {
+              provider_verification_teaching_hours_per_week: "20_or_more_hours_per_week"
+            }
+          end
+
+          it { is_expected.to eq("12 or more hours per week") }
+        end
+
+        context "when provider answers '12_to_20_hours_per_week" do
+          let(:eligibility_attributes) do
+            {
+              provider_verification_teaching_hours_per_week: "12_to_20_hours_per_week"
+            }
+          end
+
+          it { is_expected.to eq("12 or more hours per week") }
+        end
+
+        context "when provider answers '2_and_a_half_to_12_hours_per_week" do
+          let(:eligibility_attributes) do
+            {
+              provider_verification_teaching_hours_per_week: "2_and_a_half_to_12_hours_per_week"
+            }
+          end
+
+          it { is_expected.to eq("2.5 or more hours per week, but fewer than 12") }
+        end
+
+        context "when provider answers 'fewer_than_2_and_a_half_hours_per_week" do
+          let(:eligibility_attributes) do
+            {
+              provider_verification_teaching_hours_per_week: "fewer_than_2_and_a_half_hours_per_week"
+            }
+          end
+
+          it { is_expected.to eq("Fewer than 2.5 hours each week") }
+        end
       end
     end
   end

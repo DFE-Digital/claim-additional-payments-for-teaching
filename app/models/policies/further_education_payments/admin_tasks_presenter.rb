@@ -29,12 +29,12 @@ module Policies
           teaching_qualification,
           reason_for_not_enrolling,
           contract_of_employment,
+          performance_measure,
+          disciplinary_action,
           timetabled_teaching_hours,
           age_range_taught,
           subject,
           course,
-          performance_measure,
-          disciplinary_action,
           continued_employment
         ].compact_blank
       end
@@ -99,7 +99,7 @@ module Policies
       def first_five_years_of_teaching
         [
           "First 5 years of teaching",
-          AcademicYear.new(eligibility.further_education_teaching_start_year),
+          "September " + AcademicYear.new(eligibility.further_education_teaching_start_year).to_s(:long),
           provider_answers.in_first_five_years
         ]
       end
@@ -132,13 +132,34 @@ module Policies
       end
 
       def timetabled_teaching_hours
+        # Map the option the provider selected to the equivalent claimant option
+        provider_teaching_hours_per_week =
+          case eligibility.provider_verification_teaching_hours_per_week
+          when "20_or_more_hours_per_week", "12_to_20_hours_per_week" then "more_than_12"
+          when "2_and_a_half_to_12_hours_per_week" then "between_2_5_and_12"
+          when "fewer_than_2_and_a_half_hours_per_week" then "less_than_2_5"
+          else fail "Unexpected value #{eligibility.provider_verification_teaching_hours_per_week} for provider_verification_teaching_hours_per_week"
+          end
+
+        # The max we want to show admins is "12 or more hours"
+        claimant_teaching_hours_per_week =
+          case eligibility.teaching_hours_per_week
+          when "more_than_20" then "more_than_12"
+          else eligibility.teaching_hours_per_week
+          end
+
+        locale_scope = %w[
+          further_education_payments
+          admin
+          task_questions
+          fe_provider_verification_v2
+          timetabled_teaching_hours
+        ].join(".")
+
         [
           "Timetabled teaching hours",
-          I18n.t(
-            eligibility.teaching_hours_per_week,
-            scope: "further_education_payments.forms.teaching_hours_per_week.options"
-          ),
-          provider_answers.teaching_hours_per_week
+          I18n.t(claimant_teaching_hours_per_week, scope: locale_scope),
+          I18n.t(provider_teaching_hours_per_week, scope: locale_scope)
         ]
       end
 
@@ -168,7 +189,7 @@ module Policies
 
       def performance_measure
         [
-          "Performance measures",
+          "Subject to performance measures",
           I18n.t(eligibility.subject_to_formal_performance_action, scope: :boolean),
           provider_answers.performance_measures
         ]
@@ -176,7 +197,7 @@ module Policies
 
       def disciplinary_action
         [
-          "Disciplinary action",
+          "Subject to disciplinary action",
           I18n.t(eligibility.subject_to_disciplinary_action, scope: :boolean),
           provider_answers.disciplinary_action
         ]
