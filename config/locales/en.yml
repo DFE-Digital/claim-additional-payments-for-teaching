@@ -963,7 +963,7 @@ en:
           true: "Yes"
           false: "No"
         errors:
-          inclusion: Tell us if you applied for a targeted retention incentive payment for your work in further education between 1 Sept 2024 and 31 May 2025
+          inclusion: Select yes if you applied for a targeted retention incentive payment between 1 September 2024 and 31 May 2025
       have_one_login_account:
         question: Do you have a GOV.UK One Login account?
         options:
@@ -971,7 +971,7 @@ en:
           "no": "No"
           "i_dont_know": I don’t know
         errors:
-          inclusion: 'Tell us if you have a GOV.UK One Login account'
+          inclusion: 'Select yes if you have a GOV.UK One Login account'
       existing_progress:
         question: You have already started an eligibility check
         errors:
@@ -979,16 +979,16 @@ en:
       teaching_responsibilities:
         question: Are you a member of staff with the responsibilities of a teacher?
         errors:
-          inclusion: Tell us if you are a member of staff with teaching responsibilities
+          inclusion: Select yes if you are a member of staff with the responsibilities of a teacher
       further_education_provision_search:
         question: Which further education provider directly employs you?
         errors:
-          blank: Select which FE provider directly employs you
-          min_length: Enter a college name or postcode that is at least 3 characters long
+          blank: Enter the name or postcode of the further education provider that directly employs you
+          min_length: Enter a name or postcode that is at least 3 characters long
       select_provision:
         heading: Select where you are employed
         errors:
-          blank: Select the further education provider you are employed by
+          blank: Select where you are employed
       contract_type:
         question: What type of contract do you have directly with %{school_name}?
         options:
@@ -997,21 +997,21 @@ en:
           variable_hours: Variable hours
           employed_by_another_organisation: I do not have a direct contract of employment with %{school_name}
         errors:
-          inclusion: Tell us the type of contract you have
+          inclusion: Select the type of contract you have directly with %{school_name}
       fixed_term_contract:
         question: Does your fixed-term contract cover the full %{academic_year} academic year?
         options:
           true: "Yes"
           false: "No"
         errors:
-          inclusion: Tell us if your fixed-term contract covers the full academic year
+          inclusion: Select yes if your fixed-term contract covers the full %{current_academic_year} academic year
       taught_at_least_one_term:
         question: Have you taught at %{school_name} for the full spring term?
         options:
           true: "Yes"
           false: "No"
         errors:
-          inclusion: Tell us if you have taught at %{school_name} for more than one academic term
+          inclusion: Select yes if you have taught at %{school_name} for the full spring term
       teaching_hours_per_week:
         question:
           On average, how many hours per week are you timetabled to teach at %{school_name} during the current term?
@@ -1022,14 +1022,14 @@ en:
           between_2_5_and_12: 2.5 or more hours per week, but fewer than 12
           less_than_2_5: Fewer than 2.5 hours each week
         errors:
-          inclusion: Tell us, on average, how many hours you are timetabled to teach during the current term
+          inclusion: Select how many hours you are timetabled to teach during the current term
       further_education_teaching_start_year:
         question: Which academic year did you start teaching in further education in England?
         options:
           between_dates: September %{start_year} to August %{end_year}
           before_date: Before September %{year}
         errors:
-          blank: Tell us when you started teaching in further education in England
+          blank: Select the academic year you started teaching in further education in England
       subjects_taught:
         question: Which subject areas do you teach?
         hint: Select all that apply
@@ -1043,7 +1043,7 @@ en:
           physics: Physics
           none: I do not teach any of these subjects
         errors:
-          inclusion: Select the subject areas that you teach, or select ‘I do not teach any of these subjects’
+          inclusion: Select the subject areas you teach
       actual_subjects_taught:
         options:
           building_construction: Building and construction
@@ -1072,7 +1072,7 @@ en:
             Select all that apply
           </p>
         errors:
-          inclusion: Select the courses that you teach, or select ‘I do not teach any of these courses’
+          inclusion: Select the courses you teach
       building_construction_courses:
         <<: *courses
         question: Which building and construction courses do you teach?
@@ -1176,7 +1176,7 @@ en:
           no_but_planned: No, but I plan to enrol on one in the next 12 months
           no_not_planned: No, and I do not plan to enrol on one in the next 12 months
         errors:
-          inclusion: Tell us if you have a teaching qualification
+          inclusion: Select if you have a teaching qualification
       poor_performance:
         heading: Tell us if you are currently under any performance measures or disciplinary action
         questions:
@@ -1193,7 +1193,7 @@ en:
               check with your FE provider as it affects your eligibility.
         errors:
           performance:
-            inclusion: Select yes if any performance measures have been started against you
+            inclusion: Select yes if you are currently subject to any formal performance measures as a result of continuous poor teaching standards
           disciplinary:
             inclusion: Select yes if you are currently subject to disciplinary action
       half_teaching_hours:
@@ -1201,7 +1201,7 @@ en:
           Do you spend at least half of your timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships?
         errors:
           inclusion:
-            Tell us if you spend at least half your timetabled teaching hours working with students aged 16 to 19
+            Select yes if you spend at least half of your timetabled teaching hours teaching students on 16 to 19 study programmes, T Levels or 16 to 19 apprenticeships
       eligible:
         heading: You’re eligible for a targeted retention incentive payment
       work_email_access:
@@ -1215,7 +1215,7 @@ en:
         question: Enter work email
         hint: To verify your further education (FE) work email address we will send you an email with a 6-digit passcode.
         errors:
-          presence: Enter an email address
+          presence: Enter your work email address
         details:
           title: How we’ll use this information
           body: We’ll only use this email address to confirm your employment. We will not use it to send any updates about your application or link it to your GOV.UK One Login account.
@@ -1224,7 +1224,7 @@ en:
         heading: Check your %{school_name} work email
         question: Enter the 6-digit security code
         errors:
-          presence: Enter a passcode
+          presence: Enter the 6-digit security code
       gender:
         questions:
           payroll_gender: "How is your gender recorded on your employer’s payroll system?"
@@ -1235,7 +1235,7 @@ en:
         question: Do you spend at least half of your timetabled teaching hours teaching these eligible courses?
         errors:
           inclusion:
-            Select yes if you spend at least half of your timetabled teaching hours teaching these eligible courses
+            Select yes if you spend at least half of your timetabled teaching hours teaching these courses
       passport:
         question: Do you have a valid passport?
         conditional_question: Passport number
