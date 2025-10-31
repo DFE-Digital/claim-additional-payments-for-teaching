@@ -9,6 +9,14 @@ GIT
       multi_xml (~> 0.6.0)
       request_store_rails (~> 2)
 
+GIT
+  remote: https://github.com/simpl1g/nulldb.git
+  revision: 3986f43f1680ee098ec51af1dc763bfe2d579efe
+  ref: 3986f43f1680ee098ec51af1dc763bfe2d579efe
+  specs:
+    activerecord-nulldb-adapter (1.1.1)
+      activerecord (>= 6.1, < 8.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -69,8 +77,6 @@ GEM
       timeout (>= 0.4.0)
     activerecord-copy (1.1.0)
       activerecord (>= 3.1)
-    activerecord-nulldb-adapter (0.5.1)
-      activerecord (>= 5.2.0)
     activestorage (8.1.1)
       actionpack (= 8.1.1)
       activejob (= 8.1.1)
@@ -912,7 +918,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-copy
-  activerecord-nulldb-adapter
+  activerecord-nulldb-adapter!
   bootsnap (>= 1.1.0)
   brakeman
   bullet

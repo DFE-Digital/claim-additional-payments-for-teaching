@@ -122,7 +122,7 @@ group :test do
   gem "rack_session_access"
   gem "simplecov", require: false
   # Return null object for active record connection rather than raising error
-  gem "activerecord-nulldb-adapter"
+  gem "activerecord-nulldb-adapter", github: "simpl1g/nulldb", ref: "3986f43f1680ee098ec51af1dc763bfe2d579efe"
   gem "cuprite"
 end
 
