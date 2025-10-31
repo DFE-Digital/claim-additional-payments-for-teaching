@@ -5,11 +5,11 @@ module FurtherEducationPayments
         class TeachingHoursPerWeekForm < BaseForm
           TEACHING_HOURS_PER_WEEK_OPTIONS = [
             Form::Option.new(
-              id: "20_or_more_hours_per_week",
+              id: "more_than_20",
               name: "20 hours or more per week"
             ),
             Form::Option.new(
-              id: "12_to_20_hours_per_week",
+              id: "more_than_12",
               name: "12 or more hours per week, but fewer than 20"
             ),
             Form::Option.new(
