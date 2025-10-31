@@ -377,14 +377,14 @@ en:
         errors:
           blank: Select a school from the list or search again for a different school
       current_school:
-        questions:
-          current_school_search: "Which school are you currently employed to teach at?"
-          current_school_results: "Which school are you currently employed to teach at?"
+        question: Which school are you currently employed to teach at?
         errors:
-          enter_a_school_or_postcode: "Enter a school or postcode"
-          select_the_school_you_teach_at: "Select the school you teach at"
-          the_selected_school_is_closed: "The selected school is closed"
-          school_not_found: "School not found"
+          blank: Enter a school or postcode
+          min_length: Enter a school name or postcode that is at least 3 characters long
+      select_current_school:
+        heading: Which school are you currently employed to teach at?
+        errors:
+          blank: Select which school are you currently employed to teach at
       leadership_position:
         questions:
           leadership_position: "Were you employed in a leadership position between %{financial_year}?"
@@ -581,9 +581,14 @@ en:
         questions:
           which_school: "Which school do you teach at?"
       current_school:
-        questions:
-          current_school_search: "Which school do you teach at?"
-          current_school_results: "Select the school you teach at"
+        question: Which school do you teach at?
+        errors:
+          blank: Enter a school or postcode
+          min_length: Enter a school name or postcode that is at least 3 characters long
+      select_current_school:
+        heading: Which school do you teach at?
+        errors:
+          blank: Select the school you teach at
       eligible_itt_subject:
         questions:
           which_subject: "Which subject did you do your %{qualification} in?"
@@ -737,9 +742,14 @@ en:
           presence: "Enter your passport number"
           invalid: "Invalid passport number"
       current_school:
-        questions:
-          current_school_search: "Which school are you currently employed to teach at?"
-          current_school_results: "Which school are you currently employed to teach at?"
+        question: Which school are you currently employed to teach at?
+        errors:
+          blank: No results match that search term. Try again.
+          min_length: Enter a school name or postcode that is at least 3 characters long
+      select_current_school:
+        heading: Which school are you currently employed to teach at?
+        errors:
+          blank: Select the school you teach at
       headteacher_details:
         questions:
           school_headteacher_name: "Enter the name of the headteacher of the school where you are employed as a teacher"

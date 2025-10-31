@@ -11,6 +11,7 @@ module Journeys
       "claims" => {
         "check-eligibility-intro" => CheckEligibilityIntroForm,
         "current-school" => CurrentSchoolForm,
+        "select-current-school" => SelectCurrentSchoolForm,
         "correct-school" => CorrectSchoolForm,
         "nqt-in-academic-year-after-itt" => NqtInAcademicYearAfterIttForm,
         "supply-teacher" => SupplyTeacherForm,

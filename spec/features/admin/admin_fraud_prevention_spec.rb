@@ -162,7 +162,7 @@ RSpec.feature "Admin fraud prevention" do
     click_on "Continue without signing in"
 
     # /targeted-retention-incentive-payments/current-school
-    fill_in :school_search, with: school.name
+    fill_in "Which school do you teach at?", with: school.name
     click_on "Continue"
 
     # /targeted-retention-incentive-payments/current-school

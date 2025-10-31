@@ -71,21 +71,17 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
 
       choose_still_teaching "Yes, at another school"
 
-      expect(page).to have_text(I18n.t("student_loans.forms.current_school.questions.current_school_search"))
+      expect(page).to have_text(I18n.t("student_loans.forms.current_school.question"))
       expect(page).to have_button("Continue")
 
-      fill_in :school_search, with: search_keywords(school)
+      fill_in I18n.t("student_loans.forms.current_school.question"), with: search_keywords(school)
       find("li", text: school.name).click
-
-      expect(page).to have_button("Continue")
-
       click_button "Continue"
-      # flaky test workaround in case the first click on Continue submitted the form
-      click_button "Continue" unless /current-school\?_method=patch/.match?(current_url)
 
       # Backlink is to the same slug as current (current-school)
       expect(page).to have_link("Back", href: claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "current-school"))
 
+      choose school.name
       click_button "Continue"
 
       expect(page).to have_text(leadership_position_question)
@@ -148,10 +144,10 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
         choose_subjects_taught
         choose_still_teaching "Yes, at another school"
 
-        expect(page).to have_text(I18n.t("student_loans.forms.current_school.questions.current_school_search"))
+        expect(page).to have_text(I18n.t("student_loans.forms.current_school.question"))
         expect(page).to have_button("Continue")
 
-        fill_in :school_search, with: search_keywords(closed_school)
+        fill_in I18n.t("student_loans.forms.current_school.question"), with: search_keywords(closed_school)
         click_button "Continue"
 
         expect(page).not_to have_text(closed_school.name)
@@ -175,10 +171,10 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
         choose_subjects_taught
         choose_still_teaching "Yes, at another school"
 
-        expect(page).to have_text(I18n.t("student_loans.forms.current_school.questions.current_school_search"))
+        expect(page).to have_text(I18n.t("student_loans.forms.current_school.question"))
         expect(page).to have_button("Continue")
 
-        fill_in :school_search, with: search_keywords(closed_school)
+        fill_in I18n.t("student_loans.forms.current_school.question"), with: search_keywords(closed_school)
         expect(page).not_to have_text(closed_school.name)
       end
     end

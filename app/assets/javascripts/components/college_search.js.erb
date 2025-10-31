@@ -1,13 +1,14 @@
 "use strict";
 
 document.addEventListener("DOMContentLoaded", function () {
-  var form = document.querySelector("form#further-education-provision-search-form");
+  var form = document.querySelector("form#further-education-provision-search-form, form#provision-search-form");
 
   if (!form) {
     return;
   }
 
   var feOnly = form.dataset.feOnly || false;
+  var excludeClosed = form.dataset.excludeClosed || false;
 
   var searchInputContainer = form.querySelector("#autocomplete-container");
 
@@ -59,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
       Rails.ajax({
         type: "post",
         url: "<%= Rails.application.routes.url_helpers.school_search_index_path %>",
-        data: "query=" + query + "&fe_only=" + feOnly.toString(),
+        data: "query=" + query + "&exclude_closed=" + excludeClosed.toString() + "&fe_only=" + feOnly.toString(),
         success: handleResponse,
         error: handleResponse
       });

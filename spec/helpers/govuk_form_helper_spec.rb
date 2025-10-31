@@ -3,32 +3,6 @@ require "rails_helper"
 RSpec.describe GovukFormHelper do
   let(:claim) { Claim.new }
 
-  describe "#form_group_tag" do
-    it "wraps the supplied block in a form group <div> tag" do
-      expect(helper.form_group_tag(claim) { content_tag(:div) }).to eq('<div class="govuk-form-group"><div></div></div>')
-    end
-
-    context "when supplied with an object that has errors" do
-      before do
-        claim.errors.add(:attribute, "Test error")
-      end
-
-      it "adds the error class" do
-        expect(helper.form_group_tag(claim) {}).to have_css(".govuk-form-group--error")
-      end
-
-      context "and an attribute is supplied" do
-        it "does not add error class when there are no errors on the attribute" do
-          expect(helper.form_group_tag(claim, :a_different_attribute) {}).not_to have_css(".govuk-form-group--error")
-        end
-
-        it "adds the error class when there are errors on the attribute" do
-          expect(helper.form_group_tag(claim, :attribute) {}).to have_css(".govuk-form-group--error")
-        end
-      end
-    end
-  end
-
   describe "#errors_tag" do
     let(:claim) { Claim.new }
 
