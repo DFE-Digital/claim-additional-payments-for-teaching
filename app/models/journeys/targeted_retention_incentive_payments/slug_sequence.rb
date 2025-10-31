@@ -53,6 +53,7 @@ module Journeys
       RESTRICTED_SLUGS = []
 
       DEAD_END_SLUGS = [
+        "confirmation",
         "ineligible",
         "future-eligibility"
       ]
