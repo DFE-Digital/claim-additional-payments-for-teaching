@@ -1,5 +1,7 @@
 module Policies
   module FurtherEducationPayments
+    DECISION_DEADLINE = 25.weeks.freeze
+
     include BasePolicy
     extend self
 
@@ -179,6 +181,10 @@ module Policies
       else
         self::AdminTasksPresenter.new(claim)
       end
+    end
+
+    def decision_deadline_date(claim)
+      (claim.submitted_at + DECISION_DEADLINE).to_date
     end
   end
 end

@@ -68,8 +68,8 @@ RSpec.describe Policies::EarlyYearsPayments do
       )
     end
 
-    it "is 6 months + 13 weeks from when claimant submits their half" do
-      expected = Date.new(2026, 5, 31)
+    it "is 6 months + 19 weeks from when claimant submits their half" do
+      expected = Date.new(2026, 7, 12)
       expect(described_class.decision_deadline_date(claim)).to eql(expected)
     end
 
