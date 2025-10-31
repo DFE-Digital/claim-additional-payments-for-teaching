@@ -1,0 +1,157 @@
+<p class="govuk-body govuk-!-margin-bottom-6">
+  In testing environments these fields allow setting the payload returned from
+  the DQT api.
+</p>
+
+<%= f.govuk_check_boxes_fieldset(
+  :dqt_active_alert,
+  multiple: false,
+  legend: {
+    text: "DQT active alert",
+    size: "s",
+  }
+) do %>
+  <%= f.govuk_check_box(
+    :dqt_active_alert,
+    true,
+    false,
+    label: {
+      text: "Active alert",
+    },
+    multiple: false,
+  ) %>
+<% end %>
+
+<%= f.govuk_text_field(
+  :dqt_qts_name,
+  value: "Qualified teacher (trained)",
+  label: {
+    text: "QTS name",
+    size: "s"
+  },
+) %>
+
+<%= f.govuk_text_field(
+  :dqt_qts_date,
+  label: {
+    text: "QTS date",
+    size: "s",
+  },
+  hint: { text: "yyyy-mm-dd" }
+) %>
+
+<%= f.govuk_text_field(
+  :dqt_induction_start_date,
+  label: {
+    text: "Induction start date",
+    size: "s",
+  },
+  hint: { text: "yyyy-mm-dd" }
+) %>
+
+<%= f.govuk_text_field(
+  :dqt_induction_completion_date,
+  label: {
+    text: "Induction completion date",
+    size: "s",
+  },
+  hint: { text: "yyyy-mm-dd" }
+) %>
+
+<%= f.govuk_collection_radio_buttons(
+  :dqt_induction_status,
+  f.object.dqt_induction_status_options,
+  :id,
+  :name,
+  legend: {
+    text: "Inducation status",
+    size: "s",
+  },
+  inline: true,
+) %>
+
+<%= f.govuk_text_field(
+  :dqt_itt_programme_start_date,
+  label: {
+    text: "ITT programme start date",
+    size: "s",
+  },
+  hint: { text: "yyyy-mm-dd" }
+) %>
+
+<%= f.govuk_text_field(
+  :dqt_itt_programme_end_date,
+  label: {
+    text: "ITT programme end date",
+    size: "s",
+  },
+  hint: { text: "yyyy-mm-dd" }
+) %>
+
+<%= f.govuk_collection_radio_buttons(
+  :dqt_itt_result,
+  f.object.dqt_itt_result_options,
+  :id,
+  :name,
+  legend: {
+    text: "ITT result",
+    size: "s",
+  },
+  inline: true,
+) %>
+
+<%= f.govuk_select(
+  :dqt_qualification,
+  label: {
+    text: "Qualification",
+    size: "s",
+  },
+  options: {
+    include_blank: true,
+  },
+) do %>
+  <% f.object.dqt_grouped_qualification_options.each do |group_name, options| %>
+    <optgroup label="<%= group_name.to_s.humanize %>">
+      <% options.each do |option| %>
+        <option value="<%= option %>" <%= 'selected="selected"' if option == f.object.dqt_qualification %>>
+          <%= option %>
+        </option>
+      <% end %>
+    </optgroup>
+  <% end %>
+<% end %>
+
+<% [1, 2, 3].each do |n| %>
+  <%= f.govuk_select(
+    :"dqt_itt_subject_#{n}_name",
+    label: {
+      text: "ITT subject #{n} name",
+      size: "s",
+    },
+    options: {
+      include_blank: true,
+    },
+  ) do %>
+    <% f.object.dqt_grouped_itt_subject_name_options.each do |group_name, options| %>
+      <optgroup label="<%= group_name.to_s.humanize %>">
+        <% options.each do |option| %>
+          <option value="<%= option %>" <%= 'selected="selected"' if option == f.object.send(:"dqt_itt_subject_#{n}_name") %>>
+            <%= option %>
+          </option>
+        <% end %>
+      </optgroup>
+    <% end %>
+  <% end %>
+
+  <%= f.govuk_select(
+    :"dqt_itt_subject_#{n}_code",
+    options_for_select(f.object.dqt_itt_subject_code_options),
+    label: {
+      text: "ITT subject #{n} code",
+      size: "s",
+    },
+    options: {
+      include_blank: true,
+    },
+  ) %>
+<% end %>

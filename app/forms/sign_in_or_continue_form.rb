@@ -65,7 +65,7 @@ class SignInOrContinueForm < Form
   end
 
   def tid_bypassable?
-    Rails.env.development?
+    false
   end
 
   def radio_options
@@ -100,7 +100,7 @@ class SignInOrContinueForm < Form
 
         journey_session.save!
 
-        Dqt::RetrieveClaimQualificationsData.call(journey_session)
+        retrieve_qualifications_data!
       else
         journey_session.answers.assign_attributes(
           logged_in_with_tid: true,
@@ -140,5 +140,9 @@ class SignInOrContinueForm < Form
     )
 
     journey_session.save!
+  end
+
+  def retrieve_qualifications_data!
+    Dqt::RetrieveClaimQualificationsData.call(journey_session)
   end
 end
