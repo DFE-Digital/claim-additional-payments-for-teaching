@@ -43,6 +43,6 @@ pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 plugin :tmp_restart
 
 # Re-open log appenders after forking the process
-on_worker_boot do
+before_worker_boot do
   SemanticLogger.reopen
 end
