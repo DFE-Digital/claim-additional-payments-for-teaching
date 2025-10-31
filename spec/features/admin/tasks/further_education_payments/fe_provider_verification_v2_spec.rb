@@ -49,7 +49,7 @@ RSpec.feature "Viewing the FE provider verification year 2 task" do
           further_education_teaching_start_year: "2023",
           provider_verification_teaching_start_year_matches_claim: true,
           teaching_hours_per_week: "more_than_12",
-          provider_verification_teaching_hours_per_week: "12_to_20_hours_per_week",
+          provider_verification_teaching_hours_per_week: "more_than_12",
           half_teaching_hours: true,
           provider_verification_half_teaching_hours: true,
           subjects_taught: %w[maths physics],
