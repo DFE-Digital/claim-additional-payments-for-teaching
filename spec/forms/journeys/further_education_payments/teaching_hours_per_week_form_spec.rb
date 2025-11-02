@@ -33,7 +33,7 @@ RSpec.describe Journeys::FurtherEducationPayments::TeachingHoursPerWeekForm, typ
       is_expected.not_to(
         allow_value(nil)
         .for(:teaching_hours_per_week)
-        .with_message("Tell us, on average, how many hours you are timetabled to teach during the current term")
+        .with_message("Select how many hours you are timetabled to teach during the current term")
       )
     end
   end

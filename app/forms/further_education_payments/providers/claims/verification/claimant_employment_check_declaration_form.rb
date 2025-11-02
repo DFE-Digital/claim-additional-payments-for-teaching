@@ -9,8 +9,7 @@ module FurtherEducationPayments
 
           validates :provider_verification_claimant_employment_check_declaration,
             presence: {
-              message: "Tick the box to declare that the information provided " \
-                       "in this form is correct"
+              message: "Check the box once you have read the declaration"
             }
 
           def employment_status_rows

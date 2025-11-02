@@ -29,7 +29,7 @@ RSpec.describe Journeys::FurtherEducationPayments::ContractTypeForm, type: :mode
         is_expected.not_to(
           allow_value(nil)
           .for(:contract_type)
-          .with_message("Tell us the type of contract you have")
+          .with_message("Select the type of contract you have directly with #{college.name}")
         )
       end
     end

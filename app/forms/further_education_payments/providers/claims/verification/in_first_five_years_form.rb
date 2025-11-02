@@ -9,8 +9,10 @@ module FurtherEducationPayments
             :provider_verification_teaching_start_year_matches_claim,
             included: {
               in: ->(form) { form.teaching_start_year_matches_claim_options.map(&:id) },
-              message: "Tell us if they are in the first 5 years of their " \
-                       "further education (FE) teaching career in England"
+              message: ->(form, _) do
+                "Select yes if #{form.claimant_name} started their FE teaching career " \
+                "in England during #{form.claimant_further_education_teaching_start_year}"
+              end
             },
             allow_nil: :save_and_exit?
           )

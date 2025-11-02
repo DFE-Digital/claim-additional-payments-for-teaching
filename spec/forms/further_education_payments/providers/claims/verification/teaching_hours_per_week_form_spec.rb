@@ -39,8 +39,8 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Teachi
             ]
           )
           .with_message(
-            "Enter how many hours they were timetabled to teach during the " \
-            "summer term"
+            "Select how many hours #{form.claimant_name} was timetabled to " \
+            "teach at #{form.provider_name} during the spring term"
           )
         )
       end
@@ -62,8 +62,8 @@ RSpec.describe FurtherEducationPayments::Providers::Claims::Verification::Teachi
             nil
           ])
           .with_message(
-            "Enter how many hours they were timetabled to teach during the " \
-            "summer term"
+            "Select how many hours #{form.claimant_name} was timetabled to " \
+            "teach at #{form.provider_name} during the spring term"
           )
         )
       end

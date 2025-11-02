@@ -12,9 +12,9 @@ module FurtherEducationPayments
 
           validates :provider_verification_declaration,
             presence: {
-              message: "Tick the box to confirm that the information " \
-                       "provided in this form is correct to the best of " \
-                       "your knowledge"
+              message: ->(form, _) do
+                "Check the box once you have read the declaration"
+              end
             }
 
           delegate(

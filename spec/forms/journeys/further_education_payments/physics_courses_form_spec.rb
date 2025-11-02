@@ -27,7 +27,7 @@ RSpec.describe Journeys::FurtherEducationPayments::PhysicsCoursesForm, type: :mo
         is_expected.not_to(
           allow_value([""])
           .for(:physics_courses)
-          .with_message("Select the courses that you teach, or select ‘I do not teach any of these courses’")
+          .with_message("Select the courses you teach")
         )
       end
     end
@@ -37,7 +37,7 @@ RSpec.describe Journeys::FurtherEducationPayments::PhysicsCoursesForm, type: :mo
         is_expected.not_to(
           allow_value(["foo"])
           .for(:physics_courses)
-          .with_message("Select the courses that you teach, or select ‘I do not teach any of these courses’")
+          .with_message("Select the courses you teach")
         )
       end
     end

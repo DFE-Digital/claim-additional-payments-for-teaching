@@ -28,7 +28,9 @@ module FurtherEducationPayments
             :provider_verification_teaching_qualification,
             included: {
               in: ->(form) { form.teaching_qualification_options.map(&:id) },
-              message: "Tell us if they have a teaching qualification"
+              message: ->(form, _) do
+                "Select if #{form.claimant_name} has a teaching qualification"
+              end
             },
             allow_nil: :save_and_exit?
           )

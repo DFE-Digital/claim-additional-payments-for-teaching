@@ -31,8 +31,8 @@ module FurtherEducationPayments
                 form.provider_verification_teaching_hours_per_week_options.map(&:id)
               end,
               message: ->(form, _) do
-                "Enter how many hours they were timetabled to teach during " \
-                "the #{form.claimant_term} term"
+                "Select how many hours #{form.claimant_name} was timetabled to " \
+                "teach at #{form.provider_name} during the spring term"
               end
             },
             allow_nil: :save_and_exit?
