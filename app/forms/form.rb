@@ -59,7 +59,7 @@ class Form
   end
 
   def view_path
-    journey::VIEW_PATH
+    journey.view_path
   end
 
   def permitted_params

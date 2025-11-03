@@ -56,8 +56,8 @@
 
     <% if @journey_session&.answers&.logged_in_with_onelogin? %>
       <%= render "shared/one_login_header" %>
-    <% elsif lookup_context.exists?(Pathname.new(journey::VIEW_PATH).join("_header")) %>
-      <%= render Pathname.new(journey::VIEW_PATH).join("header").to_s %>
+    <% elsif lookup_context.exists?(Pathname.new(journey.view_path).join("_header")) %>
+      <%= render Pathname.new(journey.view_path).join("header").to_s %>
     <% else %>
       <%= render "shared/header" %>
     <% end %>

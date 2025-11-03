@@ -90,6 +90,14 @@ module Journeys
       false
     end
 
+    def view_path
+      if defined?(self::VIEW_PATH)
+        self::VIEW_PATH
+      else
+        self.name.demodulize.underscore
+      end
+    end
+
     def routing_name
       if defined?(self::ROUTING_NAME)
         self::ROUTING_NAME

@@ -3,7 +3,6 @@ module Journeys
     extend Base
     extend self
 
-    VIEW_PATH = "further_education_payments"
     I18N_NAMESPACE = "further_education_payments"
     POLICIES = [Policies::FurtherEducationPayments]
     FORMS = {
