@@ -11,7 +11,10 @@ RSpec.describe NationalInsuranceNumberFormatValidator do
 
       attr_accessor :nino
 
-      validates :nino, national_insurance_number_format: true
+      validates :nino,
+        national_insurance_number_format: {
+          message: "NI error goes here"
+        }
     end
   end
 
@@ -92,6 +95,15 @@ RSpec.describe NationalInsuranceNumberFormatValidator do
         value[8] = suffix
         expect(klass.new(nino: value)).to be_invalid
       end
+    end
+  end
+
+  context "when multiple validation issues" do
+    subject { klass.new(nino: "DD123456A") }
+
+    it "prevents cumulative errors" do
+      expect(subject).to be_invalid
+      expect(subject.errors.size).to eql(1)
     end
   end
 end
