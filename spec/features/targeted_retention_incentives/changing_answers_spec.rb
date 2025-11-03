@@ -338,7 +338,7 @@ RSpec.describe "Changing answers" do
     fill_in "Month", with: "10"
     fill_in "Year", with: "1953"
 
-    fill_in "National Insurance number", with: "QQ123456C"
+    fill_in "National Insurance number", with: "AB123456C"
     click_on "Continue"
 
     click_on "Enter your address manually"

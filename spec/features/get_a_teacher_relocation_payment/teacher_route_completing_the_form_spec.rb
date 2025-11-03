@@ -164,7 +164,7 @@ RSpec.describe "teacher route: completing the form" do
     )
   end
 
-  def then_the_check_your_answers_part_page_shows_my_answers(school, mobile_number: false, building_society: false, national_insurance_number: "QQ123456C")
+  def then_the_check_your_answers_part_page_shows_my_answers(school, mobile_number: false, building_society: false, national_insurance_number: "AB123456C")
     expect(page).to have_text(
       /What is your full name\?\s?Walter Seymour Skinner/
     )

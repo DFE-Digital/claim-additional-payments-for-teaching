@@ -14,7 +14,7 @@ RSpec.describe AutomatedChecks::DqtReportCsv do
     let(:csv) do
       <<~CSV
         dfeta text1,dfeta text2,dfeta trn,fullname,birthdate,dfeta ninumber,dfeta qtsdate,HESubject1Value,HESubject2Value,HESubject3Value,ITTSub1Value,ITTSub2Value,ITTSub3Value
-        1234567,ABC12345,1234567,Fred Smith,23/8/1990,QQ123456C,23/8/2017,L200,,,G100,,
+        1234567,ABC12345,1234567,Fred Smith,23/8/1990,AB123456C,23/8/2017,L200,,,G100,,
       CSV
     end
 
@@ -43,7 +43,7 @@ RSpec.describe AutomatedChecks::DqtReportCsv do
     let(:csv) do
       <<~CSV
         dfeta text1,dfeta trn,fullname,birthdate,dfeta ninumber,HESubject1Value,HESubject2Value,HESubject3Value,ITTSub1Value,ITTSub2Value,ITTSub3Value
-        1234567,ABC12345,1234567,Fred Smith,23/8/1990,QQ123456C,23/8/2017,L200,,,G100,,
+        1234567,ABC12345,1234567,Fred Smith,23/8/1990,AB123456C,23/8/2017,L200,,,G100,,
       CSV
     end
 
@@ -71,7 +71,7 @@ RSpec.describe AutomatedChecks::DqtReportCsv do
     let(:csv) do
       <<~CSV
         dfeta text1,dfeta text2,dfeta trn,fullname,birthdate,dfeta ninumber,dfeta qtsdate,HESubject1Value,HESubject2Value,HESubject3Value,ITTSub1Value,ITTSub2Value,ITTSub3Value
-        1234567,ABC12345,1234567,Fred Smith,23/8/1990,QQ123456C,23/8/2017,L200,,,G100,,
+        1234567,ABC12345,1234567,Fred Smith,23/8/1990,AB123456C,23/8/2017,L200,,,G100,,
       CSV
     end
 

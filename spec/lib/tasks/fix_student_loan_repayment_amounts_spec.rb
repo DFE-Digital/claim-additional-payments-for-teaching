@@ -17,10 +17,10 @@ RSpec.describe "fix_tslr_student_loan_amounts" do
   end
 
   before do
-    create(:student_loans_data, nino: "QQ123456A", date_of_birth: Date.new(1980, 1, 1), amount: 100, plan_type_of_deduction: 2)
-    create(:student_loans_data, nino: "QQ123456A", date_of_birth: Date.new(1980, 1, 1), amount: 50, plan_type_of_deduction: 1)
-    create(:student_loans_data, nino: "QQ123456B", date_of_birth: Date.new(1990, 1, 1), amount: 60, plan_type_of_deduction: 1)
-    create(:student_loans_data, nino: "QQ123456B", date_of_birth: Date.new(1990, 1, 1), amount: 60, plan_type_of_deduction: 1) # duplicate
+    create(:student_loans_data, nino: "AB123456A", date_of_birth: Date.new(1980, 1, 1), amount: 100, plan_type_of_deduction: 2)
+    create(:student_loans_data, nino: "AB123456A", date_of_birth: Date.new(1980, 1, 1), amount: 50, plan_type_of_deduction: 1)
+    create(:student_loans_data, nino: "AB123456B", date_of_birth: Date.new(1990, 1, 1), amount: 60, plan_type_of_deduction: 1)
+    create(:student_loans_data, nino: "AB123456B", date_of_birth: Date.new(1990, 1, 1), amount: 60, plan_type_of_deduction: 1) # duplicate
     claim_1
     claim_2
     create(:payment, :confirmed, claims: [claim_1])
@@ -28,7 +28,7 @@ RSpec.describe "fix_tslr_student_loan_amounts" do
   end
 
   let(:claim_1) do
-    create(:claim, :submitted, policy: Policies::StudentLoans, academic_year: AcademicYear.current, national_insurance_number: "QQ123456A", date_of_birth: Date.new(1980, 1, 1),
+    create(:claim, :submitted, policy: Policies::StudentLoans, academic_year: AcademicYear.current, national_insurance_number: "AB123456A", date_of_birth: Date.new(1980, 1, 1),
       eligibility_attributes: {award_amount: 150})
   end
 
@@ -38,7 +38,7 @@ RSpec.describe "fix_tslr_student_loan_amounts" do
       :submitted,
       policy: Policies::StudentLoans,
       academic_year: AcademicYear.current,
-      national_insurance_number: "QQ123456B",
+      national_insurance_number: "AB123456B",
       date_of_birth: Date.new(1990, 1, 1),
       eligibility_attributes: {
         award_amount: 120

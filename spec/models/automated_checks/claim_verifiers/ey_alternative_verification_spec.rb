@@ -15,7 +15,7 @@ module AutomatedChecks
           eligibility: eligibility,
           date_of_birth: Date.new(1990, 1, 15),
           postcode: "SW1A 1AA",
-          national_insurance_number: "QQ123456C",
+          national_insurance_number: "AB123456C",
           email_address: "teacher@example.com",
           first_name: "John",
           surname: "Smith",
@@ -40,7 +40,7 @@ module AutomatedChecks
       let(:employed_by_nursery) { true }
       let(:provider_date_of_birth) { Date.new(1990, 1, 15) }
       let(:provider_postcode) { "SW1A 1AA" }
-      let(:provider_nino) { "QQ123456C" }
+      let(:provider_nino) { "AB123456C" }
       let(:provider_email) { "teacher@example.com" }
       let(:provider_bank_details_match) { true }
 

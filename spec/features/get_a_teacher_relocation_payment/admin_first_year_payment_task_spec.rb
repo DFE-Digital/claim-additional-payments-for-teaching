@@ -29,7 +29,7 @@ RSpec.describe "Admin first year payment task" do
         :approved,
         policy: Policies::InternationalRelocationPayments,
         academic_year: AcademicYear.previous,
-        national_insurance_number: "QQ123456C"
+        national_insurance_number: "AB123456C"
       )
 
       create(:payment, claims: [first_year_claim])
@@ -37,7 +37,7 @@ RSpec.describe "Admin first year payment task" do
       second_year_claim = submit_irp_application(
         school: school,
         contract_start_date: AcademicYear.previous.start_of_autumn_term,
-        national_insurance_number: "QQ123456C"
+        national_insurance_number: "AB123456C"
       )
 
       perform_enqueued_jobs
@@ -71,7 +71,7 @@ RSpec.describe "Admin first year payment task" do
       claim = submit_irp_application(
         school: create(:school),
         contract_start_date: AcademicYear.previous.start_of_autumn_term,
-        national_insurance_number: "QQ123456C"
+        national_insurance_number: "AB123456C"
       )
 
       perform_enqueued_jobs

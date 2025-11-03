@@ -8,7 +8,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::PreviousYearClaims do
         :submitted,
         academic_year: AcademicYear.current,
         policy: Policies::InternationalRelocationPayments,
-        national_insurance_number: "QQ123456C"
+        national_insurance_number: "AB123456C"
       )
 
       previous_year_claim_same_claimant_same_policy_1 = create(
@@ -16,7 +16,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::PreviousYearClaims do
         :submitted,
         academic_year: AcademicYear.previous,
         policy: Policies::InternationalRelocationPayments,
-        national_insurance_number: "QQ123456C"
+        national_insurance_number: "AB123456C"
       )
 
       previous_year_claim_same_claimant_same_policy_2 = create(
@@ -24,7 +24,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::PreviousYearClaims do
         :submitted,
         academic_year: AcademicYear.previous,
         policy: Policies::InternationalRelocationPayments,
-        national_insurance_number: "QQ123456C"
+        national_insurance_number: "AB123456C"
       )
 
       create(
@@ -32,7 +32,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::PreviousYearClaims do
         :submitted,
         academic_year: AcademicYear.previous,
         policy: Policies::InternationalRelocationPayments,
-        national_insurance_number: "QQ123456B"
+        national_insurance_number: "AB123456B"
       )
 
       create(
@@ -40,7 +40,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::PreviousYearClaims do
         :submitted,
         academic_year: AcademicYear.previous,
         policy: Policies::FurtherEducationPayments,
-        national_insurance_number: "QQ123456C"
+        national_insurance_number: "AB123456C"
       )
 
       create(
@@ -48,7 +48,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::PreviousYearClaims do
         :submitted,
         academic_year: AcademicYear.previous,
         policy: Policies::FurtherEducationPayments,
-        national_insurance_number: "QQ123456B"
+        national_insurance_number: "AB123456B"
       )
 
       create(
@@ -56,7 +56,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::PreviousYearClaims do
         :submitted,
         academic_year: AcademicYear.current,
         policy: Policies::InternationalRelocationPayments,
-        national_insurance_number: "QQ123456C"
+        national_insurance_number: "AB123456C"
       )
 
       create(
@@ -64,7 +64,7 @@ RSpec.describe AutomatedChecks::ClaimVerifiers::PreviousYearClaims do
         :submitted,
         academic_year: AcademicYear.current,
         policy: Policies::FurtherEducationPayments,
-        national_insurance_number: "QQ123456C"
+        national_insurance_number: "AB123456C"
       )
 
       verifier = described_class.new(claim: current_claim)

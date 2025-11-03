@@ -18,7 +18,7 @@ RSpec.feature "Admin fraud prevention" do
       flagged_claim_nino = create(
         :claim,
         :submitted,
-        national_insurance_number: "QQ123456C"
+        national_insurance_number: "AB123456C"
       )
 
       flagged_claim_trn_and_nino = create(
@@ -27,7 +27,7 @@ RSpec.feature "Admin fraud prevention" do
         eligibility_attributes: {
           teacher_reference_number: "1234567"
         },
-        national_insurance_number: "QQ123456C"
+        national_insurance_number: "AB123456C"
       )
 
       sign_in_as_service_operator
@@ -123,10 +123,10 @@ RSpec.feature "Admin fraud prevention" do
     create(
       :risk_indicator,
       field: "national_insurance_number",
-      value: "QQ123456C"
+      value: "AB123456C"
     )
 
-    claim = submit_claim(national_insurance_number: "QQ123456C")
+    claim = submit_claim(national_insurance_number: "AB123456C")
 
     # Stub dqt api call in verifiers job
     dqt_teacher_resource = instance_double(Dqt::TeacherResource, find: nil)
@@ -147,7 +147,7 @@ RSpec.feature "Admin fraud prevention" do
     end
   end
 
-  def submit_claim(national_insurance_number: "QQ123456C")
+  def submit_claim(national_insurance_number: "AB123456C")
     create(:journey_configuration, :targeted_retention_incentive_payments)
 
     school = create(:school, :targeted_retention_incentive_payments_eligible)

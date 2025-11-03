@@ -1320,7 +1320,7 @@ RSpec.feature "Provider verifying claims" do
 
           fill_in("Enter their postcode", with: "TE57 1NG")
 
-          fill_in("Enter their National Insurance number", with: "QQ123456C")
+          fill_in("Enter their National Insurance number", with: "AB123456C")
 
           within_fieldset(
             "Do these bank details match what you have for Edna Krabappel?"

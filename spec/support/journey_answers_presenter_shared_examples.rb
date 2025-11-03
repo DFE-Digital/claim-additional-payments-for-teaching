@@ -5,7 +5,7 @@ RSpec.shared_examples "journey answers presenter" do
     let(:first_name) { "Jo" }
     let(:surname) { "Bloggs" }
     let(:trn) { "1234567" }
-    let(:nino) { "QQ123456C" }
+    let(:nino) { "AB123456C" }
     let(:dob) { Date.new(1980, 1, 10) }
 
     let(:journey_session) do
@@ -154,7 +154,7 @@ RSpec.shared_examples "journey answers presenter" do
           [I18n.t("questions.date_of_birth"), "10 January 1980", "personal-details"],
           [I18n.t("forms.gender.questions.payroll_gender"), "Don’t know", "gender"],
           [I18n.t("forms.teacher_reference_number.questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
-          [I18n.t("questions.national_insurance_number"), "QQ123456C", "personal-details"],
+          [I18n.t("questions.national_insurance_number"), "AB123456C", "personal-details"],
           [I18n.t("questions.email_address"), "test@email.com", "email-address"],
           [I18n.t("questions.provide_mobile_number"), "Yes", "provide-mobile-number"],
           [I18n.t("questions.mobile_number"), "01234567890", "mobile-number"]

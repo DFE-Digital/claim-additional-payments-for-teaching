@@ -79,8 +79,8 @@ RSpec.describe "Viewing year 1 claims in the admin area" do
     expect(page).to have_content("Alternative identity verification")
 
     within_table_row("National Insurance number") do |claimant_answer, provider_answer|
-      expect(claimant_answer).to have_content("QQ100000C")
-      expect(provider_answer).to have_content("QQ123456C")
+      expect(claimant_answer).to have_content("AB100000C")
+      expect(provider_answer).to have_content("AB123456C")
     end
 
     within_table_row("Post code") do |claimant_answer, provider_answer|

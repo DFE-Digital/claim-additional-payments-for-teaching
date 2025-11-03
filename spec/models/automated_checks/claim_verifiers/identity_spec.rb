@@ -37,7 +37,7 @@ module AutomatedChecks
           :submitted,
           date_of_birth: Date.new(1990, 8, 23),
           first_name: "Fred",
-          national_insurance_number: "QQ100000C",
+          national_insurance_number: "AB100000C",
           reference: "AB123456",
           surname: "ELIGIBLE",
           policy: policy,
@@ -127,7 +127,7 @@ module AutomatedChecks
               end
 
               context "without matching national insurance number" do
-                let(:data) { super().merge({ni_number: "QQ100000B"}) }
+                let(:data) { super().merge({ni_number: "AB100000B"}) }
 
                 it { is_expected.to be_an_instance_of(Task) }
 
@@ -174,8 +174,8 @@ module AutomatedChecks
                         <<~HTML
                           [DQT Identity] - National Insurance number not matched:
                           <pre>
-                            Claimant: <span class="dark-grey">"</span><span class="red">QQ100000C</span><span class="dark-grey">"</span>
-                            DQT:      <span class="dark-grey">"</span><span class="green">QQ100000B</span><span class="dark-grey">"</span>
+                            Claimant: <span class="dark-grey">"</span><span class="red">AB100000C</span><span class="dark-grey">"</span>
+                            DQT:      <span class="dark-grey">"</span><span class="green">AB100000B</span><span class="dark-grey">"</span>
                           </pre>
                         HTML
                       )
@@ -555,7 +555,7 @@ module AutomatedChecks
                     :submitted,
                     date_of_birth: Date.new(1990, 8, 23),
                     first_name: "Fred",
-                    national_insurance_number: "QQ100000C",
+                    national_insurance_number: "AB100000C",
                     reference: "AB123456",
                     surname: "ELIGIBLE",
                     tasks: [build(:task, name: :identity_confirmation, claim_verifier_match: :all)],
@@ -677,7 +677,7 @@ module AutomatedChecks
                     :submitted,
                     date_of_birth: Date.new(1990, 8, 23),
                     first_name: "   Fred",
-                    national_insurance_number: " QQ100000C ",
+                    national_insurance_number: " AB100000C ",
                     reference: "AB123456",
                     surname: "ELIGIBLE ",
                     policy: policy

@@ -10,7 +10,7 @@ RSpec.describe Admin::ClaimsHelper do
         :claim,
         first_name: "Bruce",
         surname: "Wayne",
-        national_insurance_number: "QQ123456C",
+        national_insurance_number: "AB123456C",
         email_address: "test@email.com",
         address_line_1: "Flat 1",
         address_line_2: "1 Test Road",
@@ -26,7 +26,7 @@ RSpec.describe Admin::ClaimsHelper do
         [I18n.t("admin.teacher_reference_number"), "1234567"],
         ["Full name", "Bruce Wayne"],
         ["Date of birth", "1 January 1901"],
-        [I18n.t("admin.national_insurance_number"), "QQ123456C"],
+        [I18n.t("admin.national_insurance_number"), "AB123456C"],
         ["Address", "Flat 1<br>1 Test Road<br>Test Town<br>AB1 2CD"],
         [I18n.t("admin.email_address"), "test@email.com"]
       ]

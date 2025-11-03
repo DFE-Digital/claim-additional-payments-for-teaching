@@ -123,7 +123,7 @@ RSpec.describe Claim::Search do
         :submitted,
         bank_account_number: "12345678",
         bank_sort_code: "123456",
-        national_insurance_number: "QQ123456C"
+        national_insurance_number: "AB123456C"
       )
     end
 
@@ -133,7 +133,7 @@ RSpec.describe Claim::Search do
         :submitted,
         bank_account_number: "12345678",
         bank_sort_code: "123456",
-        national_insurance_number: "QQ123456C"
+        national_insurance_number: "AB123456C"
       )
     end
 
@@ -143,7 +143,7 @@ RSpec.describe Claim::Search do
         :submitted,
         bank_account_number: "12345678",
         bank_sort_code: "123456",
-        national_insurance_number: "QQ123456C"
+        national_insurance_number: "AB123456C"
       )
     end
 
@@ -153,7 +153,7 @@ RSpec.describe Claim::Search do
         :submitted,
         bank_account_number: "12345678",
         bank_sort_code: "123456",
-        national_insurance_number: "QQ123456C"
+        national_insurance_number: "AB123456C"
       )
     end
 

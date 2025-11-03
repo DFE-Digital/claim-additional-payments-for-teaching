@@ -165,7 +165,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           answers: {
             date_of_birth: Date.new(1990, 8, 23),
             first_name: "Fred",
-            national_insurance_number: "QQ100000C",
+            national_insurance_number: "AB100000C",
             surname: "ELIGIBLE",
             teacher_reference_number: "1234567"
           },
@@ -219,7 +219,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             {
               date_of_birth: claim.date_of_birth,
               name: "#{claim.first_name} #{claim.surname}",
-              national_insurance_number: "QQ100000B",
+              national_insurance_number: "AB100000B",
               teacher_reference_number: claim.eligibility.teacher_reference_number
             }
           end
@@ -244,7 +244,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               expect(notes).to include(
                 have_text("National Insurance number not matched").and(
                   have_text("Claimant: \"#{claim.national_insurance_number}\"").and(
-                    have_text("DQT: \"QQ100000B\"").and(
+                    have_text("DQT: \"AB100000B\"").and(
                       have_text("by an automated check")
                     )
                   )
@@ -539,7 +539,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               answers: {
                 date_of_birth: Date.new(1990, 8, 23),
                 first_name: "Fred",
-                national_insurance_number: "QQ100000C",
+                national_insurance_number: "AB100000C",
                 surname: "ELIGIBLE",
                 teacher_reference_number: "1234567"
               },
@@ -844,7 +844,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               answers: {
                 date_of_birth: Date.new(1990, 8, 23),
                 first_name: "Fred",
-                national_insurance_number: "QQ100000C",
+                national_insurance_number: "AB100000C",
                 surname: "ELIGIBLE",
                 teacher_reference_number: "1234567"
               },

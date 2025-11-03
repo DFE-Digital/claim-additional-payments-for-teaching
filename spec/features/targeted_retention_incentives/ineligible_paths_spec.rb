@@ -331,7 +331,7 @@ RSpec.describe "Targeted retention incentives ineligible paths" do
           "1234567",
           {
             date_of_birth: "1953-10-23",
-            nino: "QQ123456C",
+            nino: "AB123456C",
             given_name: "Seymour",
             family_name: "Skinner",
             email: "seymoure.skinner@springfield-elementary.edu",
@@ -346,7 +346,7 @@ RSpec.describe "Targeted retention incentives ineligible paths" do
         # so we end up showing them the itt year form
         stub_qualified_teaching_statuses_show(
           trn: "1234567",
-          params: {birthdate: "1953-10-23", nino: "QQ123456C"},
+          params: {birthdate: "1953-10-23", nino: "AB123456C"},
           body: {
             qualified_teacher_status: {
               qts_date: "1990-07-01"

@@ -9,7 +9,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::AnswersPresenter do
       first_name: "John",
       surname: "Doe",
       date_of_birth: Date.new(1970, 1, 1),
-      national_insurance_number: "QQ123456C",
+      national_insurance_number: "AB123456C",
       address_line_1: "1",
       address_line_2: "Some Street",
       address_line_3: "Some City",
@@ -36,7 +36,7 @@ RSpec.describe Journeys::EarlyYearsPayment::Practitioner::AnswersPresenter do
     end
 
     context "National Insurance number" do
-      it { is_expected.to include(["National Insurance number", "QQ123456C", "national-insurance-number"]) }
+      it { is_expected.to include(["National Insurance number", "AB123456C", "national-insurance-number"]) }
     end
 
     context "Home address" do

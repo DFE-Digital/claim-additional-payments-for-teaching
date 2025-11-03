@@ -146,7 +146,7 @@ RSpec.describe "Targeted retention incentives eligible paths" do
     fill_in "Month", with: "10"
     fill_in "Year", with: "1953"
 
-    fill_in "National Insurance number", with: "QQ123456C"
+    fill_in "National Insurance number", with: "AB123456C"
     click_on "Continue"
 
     click_on "Enter your address manually"
@@ -216,7 +216,7 @@ RSpec.describe "Targeted retention incentives eligible paths" do
 
     expect(page).to have_summary_item(
       key: "What is your National Insurance number?",
-      value: "QQ123456C"
+      value: "AB123456C"
     )
 
     expect(page).to have_summary_item(
@@ -526,7 +526,7 @@ RSpec.describe "Targeted retention incentives eligible paths" do
       "1234567",
       {
         date_of_birth: "1953-10-23",
-        nino: "QQ123456C",
+        nino: "AB123456C",
         given_name: "Seymour",
         family_name: "Skinner",
         email: "seymoure.skinner@springfield-elementary.edu",
@@ -537,7 +537,7 @@ RSpec.describe "Targeted retention incentives eligible paths" do
 
     stub_qualified_teaching_statuses_show(
       trn: "1234567",
-      params: {birthdate: "1953-10-23", nino: "QQ123456C"},
+      params: {birthdate: "1953-10-23", nino: "AB123456C"},
       body: {
         qualified_teacher_status: {
           qts_date: "2023-07-01"
@@ -579,7 +579,7 @@ RSpec.describe "Targeted retention incentives eligible paths" do
 
     expect(page).to have_summary_item(
       key: "National Insurance number",
-      value: "QQ123456C"
+      value: "AB123456C"
     )
 
     choose "Yes"
@@ -714,7 +714,7 @@ RSpec.describe "Targeted retention incentives eligible paths" do
     expect(claim.first_name).to eq("Seymour")
     expect(claim.surname).to eq("Skinner")
     expect(claim.date_of_birth).to eq(Date.new(1953, 10, 23))
-    expect(claim.national_insurance_number).to eq("QQ123456C")
+    expect(claim.national_insurance_number).to eq("AB123456C")
     expect(claim.email_address).to eq("seymoure.skinner@springfield-elementary.edu")
     expect(claim.mobile_number).to eq("07700900000")
     expect(claim.logged_in_with_tid).to be true
@@ -739,7 +739,7 @@ RSpec.describe "Targeted retention incentives eligible paths" do
       "1234567",
       {
         date_of_birth: "1953-10-23",
-        nino: "QQ123456C",
+        nino: "AB123456C",
         given_name: "Seymour",
         family_name: "Skinner",
         email: "seymoure.skinner@springfield-elementary.edu",
@@ -785,7 +785,7 @@ RSpec.describe "Targeted retention incentives eligible paths" do
       {
         returned_trn: nil,
         date_of_birth: "1953-10-23",
-        nino: "QQ123456C",
+        nino: "AB123456C",
         given_name: "Seymour",
         family_name: "Skinner",
         email: "seymoure.skinner@springfield-elementary.edu",

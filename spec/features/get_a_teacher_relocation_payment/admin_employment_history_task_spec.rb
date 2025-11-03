@@ -302,7 +302,7 @@ RSpec.describe "Admin employment history task" do
     and_i_complete_the_nationality_step_with(option: "Australian")
     and_i_complete_the_passport_number_step_with(options: "123456789")
     and_i_complete_the_personal_details_step(
-      national_insurance_number: "QQ123456C"
+      national_insurance_number: "AB123456C"
     )
     and_i_complete_the_manual_address_step
     and_i_complete_the_email_address_step

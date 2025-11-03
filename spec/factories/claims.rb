@@ -1,7 +1,7 @@
 FactoryBot.define do
   sequence(:email_address) { |n| "person#{n}@example.com" }
   sequence(:teacher_reference_number, 1000000) { |n| n }
-  sequence(:national_insurance_number, 100000) { |n| "QQ#{n}C" }
+  sequence(:national_insurance_number, 100000) { |n| "AB#{n}C" }
 
   factory :claim do
     started_at { Time.zone.now }

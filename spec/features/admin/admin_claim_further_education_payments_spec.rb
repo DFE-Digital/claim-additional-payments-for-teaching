@@ -247,7 +247,7 @@ RSpec.feature "Admin claim further education payments" do
               policy: Policies::FurtherEducationPayments,
               onelogin_idv_at: 1.day.ago,
               identity_confirmed_with_onelogin: false,
-              national_insurance_number: "QQ123456B",
+              national_insurance_number: "AB123456B",
               postcode: "TE57 2NG",
               date_of_birth: Date.new(1990, 2, 1),
               academic_year: AcademicYear.new("2025/2026")
@@ -260,7 +260,7 @@ RSpec.feature "Admin claim further education payments" do
               provider_verification_claimant_employed_by_college: true,
               provider_verification_claimant_date_of_birth: Date.new(1990, 1, 1),
               provider_verification_claimant_postcode: "TE57 1NG",
-              provider_verification_claimant_national_insurance_number: "QQ123456C",
+              provider_verification_claimant_national_insurance_number: "AB123456C",
               provider_verification_claimant_bank_details_match: true,
               provider_verification_claimant_email: "claimant@example.com"
             )
@@ -287,8 +287,8 @@ RSpec.feature "Admin claim further education payments" do
             end
 
             within_table_row("National Insurance number") do |claimant, provider|
-              expect(claimant).to have_text("QQ123456B")
-              expect(provider).to have_text("QQ123456C")
+              expect(claimant).to have_text("AB123456B")
+              expect(provider).to have_text("AB123456C")
             end
 
             within_table_row("Do claimant’s bank details match provider’s records?") do |claimant, provider|
@@ -313,7 +313,7 @@ RSpec.feature "Admin claim further education payments" do
                 email_address: "claimant@example.com",
                 onelogin_idv_at: 1.day.ago,
                 identity_confirmed_with_onelogin: false,
-                national_insurance_number: "QQ123456B",
+                national_insurance_number: "AB123456B",
                 postcode: "TE57 1NG",
                 date_of_birth: Date.new(1990, 1, 1),
                 academic_year: AcademicYear.new("2025/2026")
@@ -327,7 +327,7 @@ RSpec.feature "Admin claim further education payments" do
                 provider_verification_claimant_employed_by_college: true,
                 provider_verification_claimant_date_of_birth: Date.new(1990, 1, 1),
                 provider_verification_claimant_postcode: "TE57 1NG",
-                provider_verification_claimant_national_insurance_number: "QQ123456B",
+                provider_verification_claimant_national_insurance_number: "AB123456B",
                 provider_verification_claimant_bank_details_match: true,
                 provider_verification_claimant_email: "claimant@example.com"
               )
@@ -369,7 +369,7 @@ RSpec.feature "Admin claim further education payments" do
                 email_address: "claimant@example.com",
                 onelogin_idv_at: 1.day.ago,
                 identity_confirmed_with_onelogin: false,
-                national_insurance_number: "QQ123456B",
+                national_insurance_number: "AB123456B",
                 postcode: "TE57 1NG",
                 date_of_birth: Date.new(1990, 1, 1),
                 academic_year: AcademicYear.new("2025/2026")
@@ -382,7 +382,7 @@ RSpec.feature "Admin claim further education payments" do
                 provider_verification_claimant_employed_by_college: true,
                 provider_verification_claimant_date_of_birth: Date.new(1990, 1, 2),
                 provider_verification_claimant_postcode: "TE57 1NG",
-                provider_verification_claimant_national_insurance_number: "QQ123456B",
+                provider_verification_claimant_national_insurance_number: "AB123456B",
                 provider_verification_claimant_bank_details_match: true,
                 provider_verification_claimant_email: "claimant@example.com"
               )
@@ -432,7 +432,7 @@ RSpec.feature "Admin claim further education payments" do
                 email_address: "claimant@example.com",
                 onelogin_idv_at: 1.day.ago,
                 identity_confirmed_with_onelogin: false,
-                national_insurance_number: "QQ123456B",
+                national_insurance_number: "AB123456B",
                 postcode: "TE57 1NG",
                 date_of_birth: Date.new(1990, 1, 1),
                 academic_year: AcademicYear.new("2025/2026")
