@@ -2,7 +2,7 @@ module JourneyConcern
   extend ActiveSupport::Concern
 
   included do
-    helper_method :current_journey_routing_name, :journey, :journey_configuration, :journey_session, :answers, :claim_in_progress?
+    helper_method :current_journey_routing_name, :journey, :journey_configuration, :journey_session, :answers
   end
 
   def current_journey_routing_name
@@ -23,10 +23,6 @@ module JourneyConcern
 
   def answers
     journey_session&.answers
-  end
-
-  def claim_in_progress?
-    session[journey_session_key].present?
   end
 
   def eligible_claim_in_progress?
