@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_21_132108) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_23_165521) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -357,6 +357,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_21_132108) do
     t.boolean "provider_verification_continued_employment"
     t.jsonb "provider_verification_not_started_qualification_reasons", default: []
     t.string "provider_verification_not_started_qualification_reason_other"
+    t.boolean "flagged_as_mismatch_on_teaching_start_year", default: false
+    t.boolean "repeat_applicant_check_passed"
     t.index ["possible_school_id"], name: "index_fe_payments_eligibilities_on_possible_school_id"
     t.index ["provider_assigned_to_id"], name: "idx_on_provider_assigned_to_id_5db250f0fe"
     t.index ["provider_verification_verified_by_id"], name: "idx_on_provider_verification_verified_by_id_c38aef7b6c"

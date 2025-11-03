@@ -17,7 +17,8 @@ module Policies
       AutomatedChecks::ClaimVerifiers::AlternativeIdentityVerification,
       AutomatedChecks::ClaimVerifiers::Employment,
       AutomatedChecks::ClaimVerifiers::StudentLoanPlan,
-      AutomatedChecks::ClaimVerifiers::FraudRisk
+      AutomatedChecks::ClaimVerifiers::FraudRisk,
+      AutomatedChecks::ClaimVerifiers::FeRepeatApplicantCheck
     ]
 
     # Options shown to admins when rejecting a claim
@@ -35,6 +36,7 @@ module Policies
       :duplicate_claim,
       :no_response,
       :no_response_from_employer,
+      :information_mismatch_against_year_1_application,
       :other
     ]
 
@@ -102,6 +104,19 @@ module Policies
 
     def duplicate_claim?(claim)
       Claim::MatchingAttributeFinder.new(claim).matching_claims.exists?
+    end
+
+    def teaching_start_year_mismatch?(claim)
+      previous_approved_claim = claim.eligibility.previous_approved_claim
+
+      return false if previous_approved_claim.nil?
+
+      if year_2_claim?(claim)
+        previous_approved_claim.eligibility.further_education_teaching_start_year == "2020"
+      else
+        previous_approved_claim.eligibility.further_education_teaching_start_year !=
+          claim.eligibility.further_education_teaching_start_year
+      end
     end
 
     def auto_check_student_loan_plan_task?
@@ -174,11 +189,19 @@ module Policies
     end
 
     def admin_tasks_presenter(claim)
-      if claim.academic_year == AcademicYear.new("2024/2025")
+      if year_1_claim?(claim)
         self::YearOneAdminTasksPresenter.new(claim)
       else
         self::AdminTasksPresenter.new(claim)
       end
+    end
+
+    def year_1_claim?(claim)
+      claim.academic_year == AcademicYear.new(2024)
+    end
+
+    def year_2_claim?(claim)
+      claim.academic_year == AcademicYear.new(2025)
     end
   end
 end

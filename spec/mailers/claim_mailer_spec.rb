@@ -123,7 +123,7 @@ RSpec.describe ClaimMailer, type: :mailer do
       end
 
       describe "#rejected" do
-        let(:claim) { build(:claim, :rejected, policy: policy) }
+        let(:claim) { build(:claim, :rejected, policy:) }
         let(:mail) { ClaimMailer.rejected(claim) }
 
         it_behaves_like "an email related to a claim using GOVUK Notify templates", policy
@@ -234,6 +234,49 @@ RSpec.describe ClaimMailer, type: :mailer do
           end
 
           include_examples "template id and personalisation keys"
+        end
+
+        context "when FurtherEducationPayments", if: policy == Policies::FurtherEducationPayments do
+          let(:expected_template_id) { "a1bb5f64-585f-4b03-b9db-0b20ad801b34" }
+
+          let(:expected_rejected_reasons_keys) do
+            {
+              reason_alternative_identity_verification_check_failed: "no",
+              reason_duplicate_claim: "no",
+              reason_has_worked_in_further_education_for_more_than_5_years: "no",
+              reason_identity_check_failed: "no",
+              reason_ineligible_subject_or_courses: "no",
+              reason_information_mismatch_against_year_1_application: "no",
+              reason_insufficient_time_spent_teaching_eligibble_students: "no",
+              reason_no_eligible_contract_of_employment: "no",
+              reason_no_response: "no",
+              reason_no_response_from_employer: "no",
+              reason_no_teaching_responsibilities: "yes",
+              reason_other: "no",
+              reason_subject_to_disciplinary_action: "no",
+              reason_subject_to_performance_measures: "no",
+              reason_works_less_than_2_point_5_hours_per_week: "no"
+            }
+          end
+
+          include_examples "template id and personalisation keys"
+
+          context "rejected reason includes information_mismatch_against_year_1_application" do
+            let(:expected_template_id) { "0887d174-59c8-4e28-acdf-79097c8d54c3" }
+
+            let(:claim) do
+              build(
+                :claim,
+                :rejected,
+                policy:,
+                rejected_reasons: {information_mismatch_against_year_1_application: "1"}
+              )
+            end
+
+            let(:expected_rejected_reasons_keys) { {} }
+
+            include_examples "template id and personalisation keys"
+          end
         end
       end
 

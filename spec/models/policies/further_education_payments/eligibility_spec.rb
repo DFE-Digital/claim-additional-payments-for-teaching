@@ -76,4 +76,45 @@ RSpec.describe Policies::FurtherEducationPayments::Eligibility do
       end
     end
   end
+
+  describe "#awaiting_provider_verification?" do
+    subject { claim.eligibility.awaiting_provider_verification? }
+
+    let(:claim) do
+      create(
+        :claim,
+        :further_education,
+        :eligible,
+        eligibility:,
+        academic_year: AcademicYear.new(2025)
+      )
+    end
+
+    let(:eligibility) do
+      build(
+        :further_education_payments_eligibility,
+        repeat_applicant_check_passed:
+      )
+    end
+
+    context "when not verified" do
+      context "when repeat_applicant_check_passed=true" do
+        let(:repeat_applicant_check_passed) { true }
+
+        it { is_expected.to be true }
+      end
+
+      context "when repeat_applicant_check_passed=false" do
+        let(:repeat_applicant_check_passed) { false }
+
+        it { is_expected.to be false }
+      end
+
+      context "when repeat_applicant_check_passed=nil" do
+        let(:repeat_applicant_check_passed) { nil }
+
+        it { is_expected.to be false }
+      end
+    end
+  end
 end
