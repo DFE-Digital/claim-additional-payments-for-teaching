@@ -30,5 +30,11 @@
     details above are correct.
   </p>
 
+  <% if f.object.tid_bypassable? %>
+    <%= govuk_details(summary_text: "Developer bypass - DQT payload data") do %>
+      <%= render(partial: "dqt_bypass", locals: { f: f }) %>
+    <% end %>
+  <% end %>
+
   <%= f.govuk_submit("Continue") %>
 <% end %>

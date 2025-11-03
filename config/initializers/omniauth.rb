@@ -49,6 +49,12 @@ module ::OneLoginSignIn
   end
 end
 
+module ::TeacherId
+  def self.bypass?
+    (Rails.env.development? || ENV["ENVIRONMENT_NAME"].start_with?("review")) && ENV["BYPASS_DFE_SIGN_IN"] == "true"
+  end
+end
+
 Rails.application.config.middleware.use OmniAuth::Builder do
   if DfESignIn.bypass?
     provider :developer
