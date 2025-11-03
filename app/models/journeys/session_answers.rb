@@ -85,6 +85,9 @@ module Journeys
 
     attribute :information_provided_completed, :boolean, pii: false
 
+    attribute :possible_school_id, :string, pii: false
+    attribute :provision_search, :string, pii: false
+
     def increment_hmrc_validation_attempt_count
       self.hmrc_validation_attempt_count = attributes["hmrc_validation_attempt_count"] + 1
     end

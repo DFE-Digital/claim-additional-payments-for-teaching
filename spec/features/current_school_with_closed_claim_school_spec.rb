@@ -21,7 +21,7 @@ RSpec.feature "Current school with closed claim school" do
 
     session = Journeys::TeacherStudentLoanReimbursement::Session.last
     expect(session.answers.employment_status).to eq("different_school")
-    expect(page).to have_text(I18n.t("student_loans.forms.current_school.questions.current_school_search"))
+    expect(page).to have_text(I18n.t("student_loans.forms.current_school.question"))
     expect(page).to have_button("Continue")
   end
 end

@@ -1,18 +1,34 @@
-<% if params[:school_search]&.present? %>
-  <% @backlink_path = claim_path(current_journey_routing_name, @navigator.current_slug) %>
-<% end %>
+<% content_for(:page_title, page_title(@form.t(:question), journey: current_journey_routing_name, show_error: @form.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% if @form.schools.blank? %>
-      <%= render "current_school_search",
-                question: t("#{@form.i18n_namespace}.forms.current_school.questions.current_school_search"),
-                school_search_value: @form.current_school_name
-      %>
-    <% else %>
-      <%= render "current_school_search_results",
-                 question: t("#{@form.i18n_namespace}.forms.current_school.questions.current_school_results")
-      %>
+    <%= form_with model: @form,
+      url: @form.url,
+      method: :patch,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+      id: "provision-search-form",
+      data: {
+        "exclude-closed": true
+      },
+      html: { novalidate: false } do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.hidden_field :possible_school_id %>
+
+      <div id="autocomplete-container" class="govuk-!-margin-bottom-9">
+        <%= f.govuk_text_field :provision_search,
+          class: "js-remove",
+          label: {
+            text: @form.t(:question),
+            tag: "h1",
+            size: "l"
+          },
+          hint: -> do %>
+            Enter the school name or postcode using at least 3 characters
+          <% end %>
+      </div>
+
+      <%= f.govuk_submit %>
     <% end %>
   </div>
 </div>

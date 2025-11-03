@@ -105,6 +105,7 @@ FactoryBot.define do
       first_targeted_retention_incentive_claim_year
       itt_year_good_for_life_of_targeted_retention_incentive_policy
       current_school_id { create(:school, :targeted_retention_incentive_payments_eligible).id }
+      provision_search { "some school" }
       nqt_in_academic_year_after_itt { true }
       employed_as_supply_teacher { false }
       subject_to_formal_performance_action { false }

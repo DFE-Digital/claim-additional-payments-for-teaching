@@ -22,6 +22,7 @@ RSpec.describe Journeys::GetATeacherRelocationPayment::SlugSequence do
             application-route
             state-funded-secondary-school
             current-school
+            select-current-school
             headteacher-details
             contract-details
             start-date

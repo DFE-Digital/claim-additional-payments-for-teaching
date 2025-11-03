@@ -131,7 +131,7 @@ module Journeys
 
       def current_school
         [
-          t("get_a_teacher_relocation_payment.forms.current_school.questions.current_school_search"),
+          t("get_a_teacher_relocation_payment.forms.current_school.question"),
           answers.current_school.name,
           "current-school"
         ]

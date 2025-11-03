@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Journeys::TargetedRetentionIncentivePayments::CurrentSchoolForm, type: :model do
+RSpec.describe Journeys::TargetedRetentionIncentivePayments::SelectCurrentSchoolForm, type: :model do
   before do
     create(:journey_configuration, :targeted_retention_incentive_payments)
   end
@@ -40,7 +40,7 @@ RSpec.describe Journeys::TargetedRetentionIncentivePayments::CurrentSchoolForm, 
 
     context "when valid" do
       let(:params) do
-        {current_school_id: school.id}
+        {possible_school_id: school.id}
       end
 
       it "sets the award amount" do
